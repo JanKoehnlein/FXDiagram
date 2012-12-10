@@ -1,0 +1,63 @@
+package de.itemis.javafx.diagram;
+
+import de.itemis.javafx.diagram.ShapeContainer;
+import java.util.ArrayList;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
+@SuppressWarnings("all")
+public class MyNode extends ShapeContainer {
+  public MyNode(final String name) {
+    StackPane _stackPane = new StackPane();
+    final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+        public void apply(final StackPane it) {
+          ObservableList<Node> _children = it.getChildren();
+          Rectangle _rectangle = new Rectangle();
+          final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+              public void apply(final Rectangle it) {
+                it.setWidth(100);
+                it.setHeight(30);
+                LinearGradient _createFill = MyNode.this.createFill();
+                it.setFill(_createFill);
+                it.setStroke(Color.BLACK);
+              }
+            };
+          Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
+          _children.add(_doubleArrow);
+          ObservableList<Node> _children_1 = it.getChildren();
+          Label _label = new Label();
+          final Procedure1<Label> _function_1 = new Procedure1<Label>() {
+              public void apply(final Label it) {
+                it.setText(name);
+              }
+            };
+          Label _doubleArrow_1 = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_1);
+          _children_1.add(_doubleArrow_1);
+        }
+      };
+    StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
+    this.setNode(_doubleArrow);
+  }
+  
+  protected LinearGradient createFill() {
+    LinearGradient _xblockexpression = null;
+    {
+      Stop _stop = new Stop(0, Color.LIGHTGRAY);
+      Stop _stop_1 = new Stop(1, Color.DARKGRAY);
+      final ArrayList<Stop> stops = CollectionLiterals.<Stop>newArrayList(_stop, _stop_1);
+      LinearGradient _linearGradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE, stops);
+      _xblockexpression = (_linearGradient);
+    }
+    return _xblockexpression;
+  }
+}

@@ -22,28 +22,7 @@ class ShapeContainer extends Group {
 	
 	DragContext dragContext
 	
-	def getSelectedProperty() {
-		isSelected
-	}
-	
-	def isSelected() {
-		isSelected.get
-	}
-
-	def setSelected(boolean isSelected) {
-		this.isSelected.set(isSelected)
-	}
-	
-	def getSelectionEffect() {
-		if(selectionEffect == null)
-			selectionEffect = new DropShadow() => [
-				offsetX = 5.0
-				offsetY = 5.0
-			]
-		selectionEffect
-	}
-	
-	new(Node node) {
+	def setNode(Node node) {
 		this.node = node
 		this.children += node
 		val ChangeListener<Boolean> selectionListener = [
@@ -66,6 +45,27 @@ class ShapeContainer extends Group {
 			mouseDragged	
 		]
 		anchorPoints = new AnchorPoints(node)
+	}
+	
+	def getSelectedProperty() {
+		isSelected
+	}
+	
+	def isSelected() {
+		isSelected.get
+	}
+
+	def setSelected(boolean isSelected) {
+		this.isSelected.set(isSelected)
+	}
+	
+	def getSelectionEffect() {
+		if(selectionEffect == null)
+			selectionEffect = new DropShadow() => [
+				offsetX = 5.0
+				offsetY = 5.0
+			]
+		selectionEffect
 	}
 	
 	def mousePressed(MouseEvent it) {
