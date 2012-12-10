@@ -41,7 +41,9 @@ class ShapeContainer extends Group {
 			isSelected.set(true)
 		]
 		node.onMouseReleased = [
-			if(dragContext.mouseAnchorX == screenX && dragContext.mouseAnchorY == screenY && controlDown)
+			if(dragContext.mouseAnchorX == screenX
+					&& dragContext.mouseAnchorY == screenY 
+					&& shortcutDown)
 				isSelected.set(!dragContext.wasSeleceted)
 		]
 		node.onMouseDragged = [

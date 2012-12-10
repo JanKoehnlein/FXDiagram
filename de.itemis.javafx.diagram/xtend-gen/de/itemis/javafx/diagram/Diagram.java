@@ -80,8 +80,8 @@ public class Diagram {
             if (!_not) {
               _and = false;
             } else {
-              boolean _isControlDown = it.isControlDown();
-              boolean _not_1 = (!_isControlDown);
+              boolean _isShortcutDown = it.isShortcutDown();
+              boolean _not_1 = (!_isShortcutDown);
               _and = (_not && _not_1);
             }
             _or = (_equals || _and);

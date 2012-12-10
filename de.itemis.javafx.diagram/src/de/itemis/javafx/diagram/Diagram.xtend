@@ -27,7 +27,7 @@ class Diagram {
 		shapes += shape
 		rootPane.addEventFilter(MouseEvent::MOUSE_PRESSED) [
 			val targetShape = getTargetShape(it)
-			if(targetShape == null || (!targetShape.selected && !controlDown))
+			if(targetShape == null || (!targetShape.selected && !shortcutDown))
 				shapes.filter[selected].forEach[selected = false]				
 			for(s: shapes.filter[selected]) {
 				s.mousePressed(it)				

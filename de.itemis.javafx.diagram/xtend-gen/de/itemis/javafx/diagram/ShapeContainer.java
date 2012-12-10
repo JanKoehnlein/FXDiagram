@@ -97,8 +97,8 @@ public class ShapeContainer extends Group {
             if (!_and_1) {
               _and = false;
             } else {
-              boolean _isControlDown = it.isControlDown();
-              _and = (_and_1 && _isControlDown);
+              boolean _isShortcutDown = it.isShortcutDown();
+              _and = (_and_1 && _isShortcutDown);
             }
             if (_and) {
               boolean _isWasSeleceted = ShapeContainer.this.dragContext.isWasSeleceted();
