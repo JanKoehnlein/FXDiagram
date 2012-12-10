@@ -1,25 +1,37 @@
-package de.itemis.javafx.diagram;
+package de.itemis.javafx.diagram.behavior;
 
-import com.google.common.base.Objects;
+import de.itemis.javafx.diagram.ShapeContainer;
+import de.itemis.javafx.diagram.behavior.Placer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
+import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
-public class RapidButton extends Button {
+public class RapidButton extends ImageView {
   private Timeline timeline;
   
-  public RapidButton(final String text) {
-    super(text);
+  private ShapeContainer host;
+  
+  private Placer placer;
+  
+  public RapidButton(final ShapeContainer host, final double xPos, final double yPos, final String file, final Procedure1<? super ShapeContainer> action) {
+    this.host = host;
+    Image _image = new Image(file);
+    this.setImage(_image);
     this.setVisible(false);
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
@@ -41,6 +53,42 @@ public class RapidButton extends Button {
           _function_1.apply(arg0);
         }
     });
+    final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
+        public void apply(final MouseEvent it) {
+          action.apply(host);
+        }
+      };
+    this.setOnMousePressed(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent arg0) {
+          _function_2.apply(arg0);
+        }
+    });
+    Placer _placer = new Placer(this, xPos, yPos);
+    this.placer = _placer;
+    Point2D _value = this.placer.getValue();
+    this.setPosition(_value);
+    final Procedure3<ObservableValue<? extends Point2D>,Point2D,Point2D> _function_3 = new Procedure3<ObservableValue<? extends Point2D>,Point2D,Point2D>() {
+        public void apply(final ObservableValue<? extends Point2D> element, final Point2D oldVal, final Point2D newVal) {
+          RapidButton.this.setPosition(newVal);
+        }
+      };
+    final ChangeListener<Point2D> listener = new ChangeListener<Point2D>() {
+        public void changed(ObservableValue<? extends Point2D> arg0,Point2D arg1,Point2D arg2) {
+          _function_3.apply(arg0,arg1,arg2);
+        }
+    };
+    this.placer.addListener(listener);
+  }
+  
+  protected void setPosition(final Point2D position) {
+    double _x = position.getX();
+    this.setTranslateX(_x);
+    double _y = position.getY();
+    this.setTranslateY(_y);
+  }
+  
+  public ShapeContainer getHost() {
+    return this.host;
   }
   
   public void show() {
@@ -58,7 +106,7 @@ public class RapidButton extends Button {
   protected Timeline getTimeline() {
     Timeline _xblockexpression = null;
     {
-      boolean _equals = Objects.equal(this.timeline, null);
+      boolean _equals = ObjectExtensions.operator_equals(this.timeline, null);
       if (_equals) {
         Timeline _timeline = new Timeline();
         final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
@@ -71,13 +119,13 @@ public class RapidButton extends Button {
               KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
               _keyFrames.add(_keyFrame);
               ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
-              Duration _millis_1 = Duration.millis(1500);
+              Duration _millis_1 = Duration.millis(1000);
               DoubleProperty _opacityProperty_1 = RapidButton.this.opacityProperty();
               KeyValue _keyValue_1 = new KeyValue(_opacityProperty_1, Double.valueOf(0.0));
               KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
               _keyFrames_1.add(_keyFrame_1);
               ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
-              Duration _millis_2 = Duration.millis(1500);
+              Duration _millis_2 = Duration.millis(1000);
               BooleanProperty _visibleProperty = RapidButton.this.visibleProperty();
               KeyValue _keyValue_2 = new KeyValue(_visibleProperty, Boolean.valueOf(false));
               KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);

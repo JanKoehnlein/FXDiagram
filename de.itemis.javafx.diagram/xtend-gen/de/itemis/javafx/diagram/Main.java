@@ -3,6 +3,8 @@ package de.itemis.javafx.diagram;
 import de.itemis.javafx.diagram.Connection;
 import de.itemis.javafx.diagram.Diagram;
 import de.itemis.javafx.diagram.MyNode;
+import de.itemis.javafx.diagram.tools.SelectionTool;
+import de.itemis.javafx.diagram.tools.ZoomTool;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,10 +18,13 @@ public class Main extends Application {
   
   public void start(final Stage primaryStage) {
     primaryStage.setTitle("Diagram Demo");
-    Diagram _diagram = this.getDiagram();
-    Group _rootPane = _diagram.getRootPane();
+    final Diagram diagram = this.getDiagram();
+    Group _rootPane = diagram.getRootPane();
     Scene _scene = new Scene(_rootPane, 300, 250);
-    primaryStage.setScene(_scene);
+    final Scene scene = _scene;
+    primaryStage.setScene(scene);
+    new ZoomTool(diagram);
+    new SelectionTool(diagram);
     primaryStage.show();
   }
   

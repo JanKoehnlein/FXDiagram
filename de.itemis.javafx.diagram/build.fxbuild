@@ -1,2 +1,8 @@
-jfx.build.stagingdir = ${workspace}/de.itemis.javafx.graph/build
-jfx.build.apptitle = de.itemis.javafx.graph
+<?xml version="1.0" encoding="UTF-8"?>
+<anttasks:AntTask xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:anttasks="http://at.bestsolution.efxclipse.tooling.jdt/1.0" buildDirectory="${workspace}/de.itemis.javafx.graph/build">
+  <deploy>
+    <application name="de.itemis.javafx.graph"/>
+    <info/>
+  </deploy>
+  <signjar/>
+</anttasks:AntTask>

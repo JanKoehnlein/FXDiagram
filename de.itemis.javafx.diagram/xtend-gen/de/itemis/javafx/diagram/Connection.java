@@ -51,6 +51,7 @@ public class Connection extends Polyline {
     _anchorPoints.addListener(changeListener);
     AnchorPoints _anchorPoints_1 = target.getAnchorPoints();
     _anchorPoints_1.addListener(changeListener);
+    this.calculatePoints();
   }
   
   protected boolean calculatePoints() {

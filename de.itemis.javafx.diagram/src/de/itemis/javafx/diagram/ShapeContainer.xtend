@@ -1,73 +1,63 @@
 package de.itemis.javafx.diagram
 
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.SimpleBooleanProperty
+import de.itemis.javafx.diagram.behavior.AddRapidButtonBehavior
 import javafx.beans.value.ChangeListener
+import javafx.geometry.Insets
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
-import javafx.scene.input.MouseEvent
-import org.eclipse.xtend.lib.Data
+import javafx.scene.layout.BorderPane
+import de.itemis.javafx.diagram.behavior.SelectionBehavior
 
 class ShapeContainer extends Group {
 	
 	Node node
 	
-	BooleanProperty isSelected = new SimpleBooleanProperty
+	Diagram diagram
 	
 	Effect selectionEffect 
 	
 	AnchorPoints anchorPoints
 	
-	DragContext dragContext
+	SelectionBehavior selectionBehavior
 	
-	RapidButton rapidButton = new RapidButton('R')
+	AddRapidButtonBehavior rapidButtonBehavior 
 	
 	def setNode(Node node) {
 		this.node = node
-		this.children += node
-		this.children += rapidButton
+		children += node		
+		BorderPane::setMargin(node, new Insets(3,3,3,3))
 		val ChangeListener<Boolean> selectionListener = [
 			observable, oldValue, newValue |
 			if(newValue) 
-				effect = getSelectionEffect
+				effect = selectionEffect
 			else
 				effect = null
 		]
-		isSelected.addListener(selectionListener)
-		node.onMousePressed = [
-			mousePressed
-			isSelected.set(true)
-		]
-		node.onMouseReleased = [
-			if(dragContext.mouseAnchorX == screenX
-					&& dragContext.mouseAnchorY == screenY 
-					&& shortcutDown)
-				isSelected.set(!dragContext.wasSeleceted)
-		]
-		node.onMouseDragged = [
-			mouseDragged	
-		]
-		node.onMouseEntered = [
-			rapidButton.show
-		]
-		node.onMouseExited = [
-			rapidButton.fade
-		]
+		selectionBehavior = new SelectionBehavior(this)
+		selectionBehavior.selectedProperty.addListener(selectionListener)
 		anchorPoints = new AnchorPoints(this)
+		rapidButtonBehavior = new AddRapidButtonBehavior(this)
 	}
-	
-	def getSelectedProperty() {
-		isSelected
+
+
+	def setDiagram(Diagram diagram) {
+		this.diagram = diagram
+		selectionBehavior.activate(diagram)
+		rapidButtonBehavior.activate(diagram)
 	}
 	
 	def isSelected() {
-		isSelected.get
+		selectionBehavior.selectedProperty.get
 	}
 
 	def setSelected(boolean isSelected) {
-		this.isSelected.set(isSelected)
+		selectionBehavior.selectedProperty.set(isSelected)
+	}
+	
+	def getSelectionBehavior() {
+		selectionBehavior
 	}
 	
 	def protected getSelectionEffect() {
@@ -79,15 +69,6 @@ class ShapeContainer extends Group {
 		selectionEffect
 	}
 	
-	def mousePressed(MouseEvent it) {
-		dragContext = new DragContext(screenX, screenY, translateX, translateY, isSelected.get)
-	}
-	
-	def mouseDragged(MouseEvent it) {
-		translateX = dragContext.initialX - dragContext.mouseAnchorX + screenX
-		translateY = dragContext.initialY - dragContext.mouseAnchorY + screenY
-	}
-	
 	def getAnchorPoints() {
 		anchorPoints
 	}	
@@ -97,11 +78,5 @@ class ShapeContainer extends Group {
 	}
 }
 
-@Data 
-class DragContext {
-	double mouseAnchorX 
-	double mouseAnchorY
-	double initialX
-	double initialY
-	boolean wasSeleceted 
-}
+
+

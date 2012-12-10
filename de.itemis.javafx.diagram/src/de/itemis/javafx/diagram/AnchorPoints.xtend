@@ -9,7 +9,7 @@ class AnchorPoints extends ObjectBinding<List<Point2D>> {
 	ShapeContainer host
 
 	new(ShapeContainer host) {
-		bind(host.translateXProperty, host.translateYProperty)
+		bind(host.translateXProperty, host.translateYProperty, host.node.boundsInLocalProperty)
 		this.host = host
 	}
 
@@ -23,6 +23,5 @@ class AnchorPoints extends ObjectBinding<List<Point2D>> {
 			new Point2D(middleX, bounds.minY),
 			new Point2D(middleX, bounds.maxY))
 	}
-	
 }
 

@@ -1,4 +1,4 @@
-package de.itemis.javafx.diagram;
+package de.itemis.javafx.diagram.behavior;
 
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;

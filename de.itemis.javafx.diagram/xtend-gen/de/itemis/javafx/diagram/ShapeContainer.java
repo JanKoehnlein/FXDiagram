@@ -1,21 +1,19 @@
 package de.itemis.javafx.diagram;
 
-import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.AnchorPoints;
-import de.itemis.javafx.diagram.DragContext;
-import de.itemis.javafx.diagram.RapidButton;
+import de.itemis.javafx.diagram.Diagram;
+import de.itemis.javafx.diagram.behavior.AddRapidButtonBehavior;
+import de.itemis.javafx.diagram.behavior.SelectionBehavior;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
-import javafx.scene.input.MouseEvent;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import javafx.scene.layout.BorderPane;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
@@ -24,39 +22,28 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 public class ShapeContainer extends Group {
   private Node node;
   
-  private BooleanProperty isSelected = new Function0<BooleanProperty>() {
-    public BooleanProperty apply() {
-      SimpleBooleanProperty _simpleBooleanProperty = new SimpleBooleanProperty();
-      return _simpleBooleanProperty;
-    }
-  }.apply();
+  private Diagram diagram;
   
   private Effect selectionEffect;
   
   private AnchorPoints anchorPoints;
   
-  private DragContext dragContext;
+  private SelectionBehavior selectionBehavior;
   
-  private RapidButton rapidButton = new Function0<RapidButton>() {
-    public RapidButton apply() {
-      RapidButton _rapidButton = new RapidButton("R");
-      return _rapidButton;
-    }
-  }.apply();
+  private AddRapidButtonBehavior rapidButtonBehavior;
   
-  public AnchorPoints setNode(final Node node) {
-    AnchorPoints _xblockexpression = null;
+  public AddRapidButtonBehavior setNode(final Node node) {
+    AddRapidButtonBehavior _xblockexpression = null;
     {
       this.node = node;
       ObservableList<Node> _children = this.getChildren();
       _children.add(node);
-      ObservableList<Node> _children_1 = this.getChildren();
-      _children_1.add(this.rapidButton);
+      Insets _insets = new Insets(3, 3, 3, 3);
+      BorderPane.setMargin(node, _insets);
       final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
           public void apply(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
             if ((newValue).booleanValue()) {
-              Effect _selectionEffect = ShapeContainer.this.getSelectionEffect();
-              ShapeContainer.this.setEffect(_selectionEffect);
+              ShapeContainer.this.setEffect(ShapeContainer.this.selectionEffect);
             } else {
               ShapeContainer.this.setEffect(null);
             }
@@ -67,105 +54,44 @@ public class ShapeContainer extends Group {
             _function.apply(arg0,arg1,arg2);
           }
       };
-      this.isSelected.addListener(selectionListener);
-      final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
-          public void apply(final MouseEvent it) {
-            ShapeContainer.this.mousePressed(it);
-            ShapeContainer.this.isSelected.set(true);
-          }
-        };
-      node.setOnMousePressed(new EventHandler<MouseEvent>() {
-          public void handle(MouseEvent arg0) {
-            _function_1.apply(arg0);
-          }
-      });
-      final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
-          public void apply(final MouseEvent it) {
-            boolean _and = false;
-            boolean _and_1 = false;
-            double _mouseAnchorX = ShapeContainer.this.dragContext.getMouseAnchorX();
-            double _screenX = it.getScreenX();
-            boolean _equals = (_mouseAnchorX == _screenX);
-            if (!_equals) {
-              _and_1 = false;
-            } else {
-              double _mouseAnchorY = ShapeContainer.this.dragContext.getMouseAnchorY();
-              double _screenY = it.getScreenY();
-              boolean _equals_1 = (_mouseAnchorY == _screenY);
-              _and_1 = (_equals && _equals_1);
-            }
-            if (!_and_1) {
-              _and = false;
-            } else {
-              boolean _isShortcutDown = it.isShortcutDown();
-              _and = (_and_1 && _isShortcutDown);
-            }
-            if (_and) {
-              boolean _isWasSeleceted = ShapeContainer.this.dragContext.isWasSeleceted();
-              boolean _not = (!_isWasSeleceted);
-              ShapeContainer.this.isSelected.set(_not);
-            }
-          }
-        };
-      node.setOnMouseReleased(new EventHandler<MouseEvent>() {
-          public void handle(MouseEvent arg0) {
-            _function_2.apply(arg0);
-          }
-      });
-      final Procedure1<MouseEvent> _function_3 = new Procedure1<MouseEvent>() {
-          public void apply(final MouseEvent it) {
-            ShapeContainer.this.mouseDragged(it);
-          }
-        };
-      node.setOnMouseDragged(new EventHandler<MouseEvent>() {
-          public void handle(MouseEvent arg0) {
-            _function_3.apply(arg0);
-          }
-      });
-      final Procedure1<MouseEvent> _function_4 = new Procedure1<MouseEvent>() {
-          public void apply(final MouseEvent it) {
-            ShapeContainer.this.rapidButton.show();
-          }
-        };
-      node.setOnMouseEntered(new EventHandler<MouseEvent>() {
-          public void handle(MouseEvent arg0) {
-            _function_4.apply(arg0);
-          }
-      });
-      final Procedure1<MouseEvent> _function_5 = new Procedure1<MouseEvent>() {
-          public void apply(final MouseEvent it) {
-            ShapeContainer.this.rapidButton.fade();
-          }
-        };
-      node.setOnMouseExited(new EventHandler<MouseEvent>() {
-          public void handle(MouseEvent arg0) {
-            _function_5.apply(arg0);
-          }
-      });
+      SelectionBehavior _selectionBehavior = new SelectionBehavior(this);
+      this.selectionBehavior = _selectionBehavior;
+      BooleanProperty _selectedProperty = this.selectionBehavior.getSelectedProperty();
+      _selectedProperty.addListener(selectionListener);
       AnchorPoints _anchorPoints = new AnchorPoints(this);
-      AnchorPoints _anchorPoints_1 = this.anchorPoints = _anchorPoints;
-      _xblockexpression = (_anchorPoints_1);
+      this.anchorPoints = _anchorPoints;
+      AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
+      AddRapidButtonBehavior _rapidButtonBehavior = this.rapidButtonBehavior = _addRapidButtonBehavior;
+      _xblockexpression = (_rapidButtonBehavior);
     }
     return _xblockexpression;
   }
   
-  public BooleanProperty getSelectedProperty() {
-    return this.isSelected;
+  public void setDiagram(final Diagram diagram) {
+    this.diagram = diagram;
+    this.selectionBehavior.activate(diagram);
+    this.rapidButtonBehavior.activate(diagram);
   }
   
   public boolean isSelected() {
-    boolean _get = this.isSelected.get();
+    BooleanProperty _selectedProperty = this.selectionBehavior.getSelectedProperty();
+    boolean _get = _selectedProperty.get();
     return _get;
   }
   
   public void setSelected(final boolean isSelected) {
-    this.isSelected.set(isSelected);
+    BooleanProperty _selectedProperty = this.selectionBehavior.getSelectedProperty();
+    _selectedProperty.set(isSelected);
+  }
+  
+  public SelectionBehavior getSelectionBehavior() {
+    return this.selectionBehavior;
   }
   
   protected Effect getSelectionEffect() {
     Effect _xblockexpression = null;
     {
-      boolean _equals = Objects.equal(this.selectionEffect, null);
+      boolean _equals = ObjectExtensions.operator_equals(this.selectionEffect, null);
       if (_equals) {
         DropShadow _dropShadow = new DropShadow();
         final Procedure1<DropShadow> _function = new Procedure1<DropShadow>() {
@@ -180,32 +106,6 @@ public class ShapeContainer extends Group {
       _xblockexpression = (this.selectionEffect);
     }
     return _xblockexpression;
-  }
-  
-  public DragContext mousePressed(final MouseEvent it) {
-    double _screenX = it.getScreenX();
-    double _screenY = it.getScreenY();
-    double _translateX = this.getTranslateX();
-    double _translateY = this.getTranslateY();
-    boolean _get = this.isSelected.get();
-    DragContext _dragContext = new DragContext(_screenX, _screenY, _translateX, _translateY, _get);
-    DragContext _dragContext_1 = this.dragContext = _dragContext;
-    return _dragContext_1;
-  }
-  
-  public void mouseDragged(final MouseEvent it) {
-    double _initialX = this.dragContext.getInitialX();
-    double _mouseAnchorX = this.dragContext.getMouseAnchorX();
-    double _minus = (_initialX - _mouseAnchorX);
-    double _screenX = it.getScreenX();
-    double _plus = (_minus + _screenX);
-    this.setTranslateX(_plus);
-    double _initialY = this.dragContext.getInitialY();
-    double _mouseAnchorY = this.dragContext.getMouseAnchorY();
-    double _minus_1 = (_initialY - _mouseAnchorY);
-    double _screenY = it.getScreenY();
-    double _plus_1 = (_minus_1 + _screenY);
-    this.setTranslateY(_plus_1);
   }
   
   public AnchorPoints getAnchorPoints() {

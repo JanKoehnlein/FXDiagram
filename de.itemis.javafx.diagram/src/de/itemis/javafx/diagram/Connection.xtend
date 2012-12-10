@@ -21,6 +21,7 @@ class Connection extends Polyline {
 		]  
 		source.anchorPoints.addListener(changeListener)
 		target.anchorPoints.addListener(changeListener)
+		calculatePoints
 	}
 	
 	def protected calculatePoints() {

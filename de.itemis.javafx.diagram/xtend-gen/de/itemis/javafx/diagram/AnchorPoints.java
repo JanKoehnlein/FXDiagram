@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -17,7 +18,9 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
   public AnchorPoints(final ShapeContainer host) {
     DoubleProperty _translateXProperty = host.translateXProperty();
     DoubleProperty _translateYProperty = host.translateYProperty();
-    this.bind(_translateXProperty, _translateYProperty);
+    Node _node = host.getNode();
+    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _node.boundsInLocalProperty();
+    this.bind(_translateXProperty, _translateYProperty, _boundsInLocalProperty);
     this.host = host;
   }
   
