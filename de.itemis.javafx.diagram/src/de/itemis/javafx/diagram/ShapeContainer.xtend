@@ -22,9 +22,12 @@ class ShapeContainer extends Group {
 	
 	DragContext dragContext
 	
+	RapidButton rapidButton = new RapidButton('R')
+	
 	def setNode(Node node) {
 		this.node = node
 		this.children += node
+		this.children += rapidButton
 		val ChangeListener<Boolean> selectionListener = [
 			observable, oldValue, newValue |
 			if(newValue) 
@@ -44,7 +47,13 @@ class ShapeContainer extends Group {
 		node.onMouseDragged = [
 			mouseDragged	
 		]
-		anchorPoints = new AnchorPoints(node)
+		node.onMouseEntered = [
+			rapidButton.show
+		]
+		node.onMouseExited = [
+			rapidButton.fade
+		]
+		anchorPoints = new AnchorPoints(this)
 	}
 	
 	def getSelectedProperty() {
@@ -59,7 +68,7 @@ class ShapeContainer extends Group {
 		this.isSelected.set(isSelected)
 	}
 	
-	def getSelectionEffect() {
+	def protected getSelectionEffect() {
 		if(selectionEffect == null)
 			selectionEffect = new DropShadow() => [
 				offsetX = 5.0
@@ -69,17 +78,21 @@ class ShapeContainer extends Group {
 	}
 	
 	def mousePressed(MouseEvent it) {
-		dragContext = new DragContext(screenX, screenY, node.translateX, node.translateY, isSelected.get)
+		dragContext = new DragContext(screenX, screenY, translateX, translateY, isSelected.get)
 	}
 	
 	def mouseDragged(MouseEvent it) {
-		node.translateX = dragContext.initialX - dragContext.mouseAnchorX + screenX
-		node.translateY = dragContext.initialY - dragContext.mouseAnchorY + screenY
+		translateX = dragContext.initialX - dragContext.mouseAnchorX + screenX
+		translateY = dragContext.initialY - dragContext.mouseAnchorY + screenY
 	}
 	
 	def getAnchorPoints() {
 		anchorPoints
 	}	
+	
+	def getNode() {
+		node
+	}
 }
 
 @Data 

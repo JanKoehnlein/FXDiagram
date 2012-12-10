@@ -3,6 +3,7 @@ package de.itemis.javafx.diagram;
 import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.AnchorPoints;
 import de.itemis.javafx.diagram.DragContext;
+import de.itemis.javafx.diagram.RapidButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -36,12 +37,21 @@ public class ShapeContainer extends Group {
   
   private DragContext dragContext;
   
+  private RapidButton rapidButton = new Function0<RapidButton>() {
+    public RapidButton apply() {
+      RapidButton _rapidButton = new RapidButton("R");
+      return _rapidButton;
+    }
+  }.apply();
+  
   public AnchorPoints setNode(final Node node) {
     AnchorPoints _xblockexpression = null;
     {
       this.node = node;
       ObservableList<Node> _children = this.getChildren();
       _children.add(node);
+      ObservableList<Node> _children_1 = this.getChildren();
+      _children_1.add(this.rapidButton);
       final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
           public void apply(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
             if ((newValue).booleanValue()) {
@@ -112,7 +122,27 @@ public class ShapeContainer extends Group {
             _function_3.apply(arg0);
           }
       });
-      AnchorPoints _anchorPoints = new AnchorPoints(node);
+      final Procedure1<MouseEvent> _function_4 = new Procedure1<MouseEvent>() {
+          public void apply(final MouseEvent it) {
+            ShapeContainer.this.rapidButton.show();
+          }
+        };
+      node.setOnMouseEntered(new EventHandler<MouseEvent>() {
+          public void handle(MouseEvent arg0) {
+            _function_4.apply(arg0);
+          }
+      });
+      final Procedure1<MouseEvent> _function_5 = new Procedure1<MouseEvent>() {
+          public void apply(final MouseEvent it) {
+            ShapeContainer.this.rapidButton.fade();
+          }
+        };
+      node.setOnMouseExited(new EventHandler<MouseEvent>() {
+          public void handle(MouseEvent arg0) {
+            _function_5.apply(arg0);
+          }
+      });
+      AnchorPoints _anchorPoints = new AnchorPoints(this);
       AnchorPoints _anchorPoints_1 = this.anchorPoints = _anchorPoints;
       _xblockexpression = (_anchorPoints_1);
     }
@@ -132,7 +162,7 @@ public class ShapeContainer extends Group {
     this.isSelected.set(isSelected);
   }
   
-  public Effect getSelectionEffect() {
+  protected Effect getSelectionEffect() {
     Effect _xblockexpression = null;
     {
       boolean _equals = Objects.equal(this.selectionEffect, null);
@@ -155,8 +185,8 @@ public class ShapeContainer extends Group {
   public DragContext mousePressed(final MouseEvent it) {
     double _screenX = it.getScreenX();
     double _screenY = it.getScreenY();
-    double _translateX = this.node.getTranslateX();
-    double _translateY = this.node.getTranslateY();
+    double _translateX = this.getTranslateX();
+    double _translateY = this.getTranslateY();
     boolean _get = this.isSelected.get();
     DragContext _dragContext = new DragContext(_screenX, _screenY, _translateX, _translateY, _get);
     DragContext _dragContext_1 = this.dragContext = _dragContext;
@@ -169,16 +199,20 @@ public class ShapeContainer extends Group {
     double _minus = (_initialX - _mouseAnchorX);
     double _screenX = it.getScreenX();
     double _plus = (_minus + _screenX);
-    this.node.setTranslateX(_plus);
+    this.setTranslateX(_plus);
     double _initialY = this.dragContext.getInitialY();
     double _mouseAnchorY = this.dragContext.getMouseAnchorY();
     double _minus_1 = (_initialY - _mouseAnchorY);
     double _screenY = it.getScreenY();
     double _plus_1 = (_minus_1 + _screenY);
-    this.node.setTranslateY(_plus_1);
+    this.setTranslateY(_plus_1);
   }
   
   public AnchorPoints getAnchorPoints() {
     return this.anchorPoints;
+  }
+  
+  public Node getNode() {
+    return this.node;
   }
 }

@@ -3,19 +3,18 @@ package de.itemis.javafx.diagram
 import java.util.List
 import javafx.beans.binding.ObjectBinding
 import javafx.geometry.Point2D
-import javafx.scene.Node
 
 class AnchorPoints extends ObjectBinding<List<Point2D>> {
 	
-	Node host
+	ShapeContainer host
 
-	new(Node host) {
+	new(ShapeContainer host) {
 		bind(host.translateXProperty, host.translateYProperty)
 		this.host = host
 	}
 
 	override protected computeValue() {
-		val bounds = host.localToScene(host.boundsInLocal)
+		val bounds = host.node.localToScene(host.node.boundsInLocal)
 		val middleX = (bounds.maxX + bounds.minX) / 2
 		val middleY = (bounds.maxY + bounds.minY) / 2
 		newArrayList(

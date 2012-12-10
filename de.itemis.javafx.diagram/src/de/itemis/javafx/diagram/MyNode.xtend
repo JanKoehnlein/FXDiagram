@@ -12,7 +12,7 @@ class MyNode extends ShapeContainer {
 	 new(String name) {
     	setNode(new StackPane => [
 	    	children += new Rectangle => [
-	    		width=100
+	    		width=80
 	    		height=30
 	    		fill=createFill
 	    		stroke=Color::BLACK

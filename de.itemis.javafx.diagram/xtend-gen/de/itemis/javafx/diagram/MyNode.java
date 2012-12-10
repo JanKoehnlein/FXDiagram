@@ -25,7 +25,7 @@ public class MyNode extends ShapeContainer {
           Rectangle _rectangle = new Rectangle();
           final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
               public void apply(final Rectangle it) {
-                it.setWidth(100);
+                it.setWidth(80);
                 it.setHeight(30);
                 LinearGradient _createFill = MyNode.this.createFill();
                 it.setFill(_createFill);
