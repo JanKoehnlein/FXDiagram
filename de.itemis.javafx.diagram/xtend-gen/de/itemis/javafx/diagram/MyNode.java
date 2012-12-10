@@ -52,8 +52,10 @@ public class MyNode extends ShapeContainer {
   protected LinearGradient createFill() {
     LinearGradient _xblockexpression = null;
     {
-      Stop _stop = new Stop(0, Color.LIGHTGRAY);
-      Stop _stop_1 = new Stop(1, Color.DARKGRAY);
+      Color _gray = Color.gray(0.6);
+      Stop _stop = new Stop(0, _gray);
+      Color _gray_1 = Color.gray(0.9);
+      Stop _stop_1 = new Stop(1, _gray_1);
       final ArrayList<Stop> stops = CollectionLiterals.<Stop>newArrayList(_stop, _stop_1);
       LinearGradient _linearGradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE, stops);
       _xblockexpression = (_linearGradient);

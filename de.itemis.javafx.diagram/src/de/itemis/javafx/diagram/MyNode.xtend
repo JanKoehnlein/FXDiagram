@@ -24,7 +24,7 @@ class MyNode extends ShapeContainer {
     }
     
     def protected createFill() {
-    	val stops = newArrayList(new Stop(0, Color::LIGHTGRAY), new Stop(1, Color::DARKGRAY))
+    	val stops = newArrayList(new Stop(0, Color::gray(0.6)), new Stop(1, Color::gray(0.9)))
 		new LinearGradient(0, 0, 1, 1, true, CycleMethod::NO_CYCLE, stops);
     }
 }

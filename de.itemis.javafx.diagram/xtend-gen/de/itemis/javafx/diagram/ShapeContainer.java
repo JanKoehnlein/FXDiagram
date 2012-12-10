@@ -8,12 +8,14 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.effect.Light.Distant;
+import javafx.scene.effect.Lighting;
+import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
@@ -24,7 +26,9 @@ public class ShapeContainer extends Group {
   
   private Diagram diagram;
   
-  private Effect selectionEffect;
+  private DropShadow selectionEffect;
+  
+  private Lighting mouseOverEffect;
   
   private AnchorPoints anchorPoints;
   
@@ -32,45 +36,81 @@ public class ShapeContainer extends Group {
   
   private AddRapidButtonBehavior rapidButtonBehavior;
   
-  public AddRapidButtonBehavior setNode(final Node node) {
-    AddRapidButtonBehavior _xblockexpression = null;
-    {
-      this.node = node;
-      ObservableList<Node> _children = this.getChildren();
-      _children.add(node);
-      Insets _insets = new Insets(3, 3, 3, 3);
-      BorderPane.setMargin(node, _insets);
-      final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
-          public void apply(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
-            if ((newValue).booleanValue()) {
-              ShapeContainer.this.setEffect(ShapeContainer.this.selectionEffect);
-            } else {
-              ShapeContainer.this.setEffect(null);
-            }
-          }
-        };
-      final ChangeListener<Boolean> selectionListener = new ChangeListener<Boolean>() {
-          public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
-            _function.apply(arg0,arg1,arg2);
-          }
-      };
-      SelectionBehavior _selectionBehavior = new SelectionBehavior(this);
-      this.selectionBehavior = _selectionBehavior;
-      BooleanProperty _selectedProperty = this.selectionBehavior.getSelectedProperty();
-      _selectedProperty.addListener(selectionListener);
-      AnchorPoints _anchorPoints = new AnchorPoints(this);
-      this.anchorPoints = _anchorPoints;
-      AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
-      AddRapidButtonBehavior _rapidButtonBehavior = this.rapidButtonBehavior = _addRapidButtonBehavior;
-      _xblockexpression = (_rapidButtonBehavior);
-    }
-    return _xblockexpression;
+  public void setNode(final Node node) {
+    this.node = node;
+    ObservableList<Node> _children = this.getChildren();
+    _children.add(node);
+    SelectionBehavior _selectionBehavior = new SelectionBehavior(this);
+    this.selectionBehavior = _selectionBehavior;
+    AnchorPoints _anchorPoints = new AnchorPoints(this);
+    this.anchorPoints = _anchorPoints;
+    AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
+    this.rapidButtonBehavior = _addRapidButtonBehavior;
   }
   
   public void setDiagram(final Diagram diagram) {
     this.diagram = diagram;
+    final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
+        public void apply(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
+          if ((newValue).booleanValue()) {
+            DropShadow _selectionEffect = ShapeContainer.this.getSelectionEffect();
+            ShapeContainer.this.setEffect(_selectionEffect);
+          } else {
+            ShapeContainer.this.setEffect(null);
+          }
+        }
+      };
+    final ChangeListener<Boolean> selectionListener = new ChangeListener<Boolean>() {
+        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
+          _function.apply(arg0,arg1,arg2);
+        }
+    };
+    BooleanProperty _selectedProperty = this.selectionBehavior.getSelectedProperty();
+    _selectedProperty.addListener(selectionListener);
     this.selectionBehavior.activate(diagram);
     this.rapidButtonBehavior.activate(diagram);
+    final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
+        public void apply(final MouseEvent it) {
+          DropShadow _selectionEffect = ShapeContainer.this.getSelectionEffect();
+          Lighting _mouseOverEffect = ShapeContainer.this.getMouseOverEffect();
+          _selectionEffect.setInput(_mouseOverEffect);
+          Effect _xifexpression = null;
+          boolean _isSelected = ShapeContainer.this.isSelected();
+          if (_isSelected) {
+            DropShadow _selectionEffect_1 = ShapeContainer.this.getSelectionEffect();
+            _xifexpression = _selectionEffect_1;
+          } else {
+            Lighting _mouseOverEffect_1 = ShapeContainer.this.getMouseOverEffect();
+            _xifexpression = _mouseOverEffect_1;
+          }
+          ShapeContainer.this.setEffect(_xifexpression);
+        }
+      };
+    this.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent arg0) {
+          _function_1.apply(arg0);
+        }
+    });
+    final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
+        public void apply(final MouseEvent it) {
+          DropShadow _selectionEffect = ShapeContainer.this.getSelectionEffect();
+          _selectionEffect.setInput(null);
+          DropShadow _xifexpression = null;
+          boolean _isSelected = ShapeContainer.this.isSelected();
+          if (_isSelected) {
+            DropShadow _selectionEffect_1 = ShapeContainer.this.getSelectionEffect();
+            _xifexpression = _selectionEffect_1;
+          } else {
+            _xifexpression = null;
+          }
+          ShapeContainer.this.setEffect(_xifexpression);
+        }
+      };
+    this.setOnMouseExited(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent arg0) {
+          _function_2.apply(arg0);
+        }
+    });
   }
   
   public boolean isSelected() {
@@ -88,8 +128,8 @@ public class ShapeContainer extends Group {
     return this.selectionBehavior;
   }
   
-  protected Effect getSelectionEffect() {
-    Effect _xblockexpression = null;
+  protected DropShadow getSelectionEffect() {
+    DropShadow _xblockexpression = null;
     {
       boolean _equals = ObjectExtensions.operator_equals(this.selectionEffect, null);
       if (_equals) {
@@ -104,6 +144,35 @@ public class ShapeContainer extends Group {
         this.selectionEffect = _doubleArrow;
       }
       _xblockexpression = (this.selectionEffect);
+    }
+    return _xblockexpression;
+  }
+  
+  protected Lighting getMouseOverEffect() {
+    Lighting _xblockexpression = null;
+    {
+      boolean _equals = ObjectExtensions.operator_equals(this.mouseOverEffect, null);
+      if (_equals) {
+        Lighting _lighting = new Lighting();
+        final Procedure1<Lighting> _function = new Procedure1<Lighting>() {
+            public void apply(final Lighting it) {
+              Distant _distant = new Distant();
+              final Procedure1<Distant> _function = new Procedure1<Distant>() {
+                  public void apply(final Distant it) {
+                    it.setElevation(48);
+                    int _minus = (-135);
+                    it.setAzimuth(_minus);
+                  }
+                };
+              Distant _doubleArrow = ObjectExtensions.<Distant>operator_doubleArrow(_distant, _function);
+              it.setLight(_doubleArrow);
+              it.setSurfaceScale(0.1);
+            }
+          };
+        Lighting _doubleArrow = ObjectExtensions.<Lighting>operator_doubleArrow(_lighting, _function);
+        this.mouseOverEffect = _doubleArrow;
+      }
+      _xblockexpression = (this.mouseOverEffect);
     }
     return _xblockexpression;
   }
