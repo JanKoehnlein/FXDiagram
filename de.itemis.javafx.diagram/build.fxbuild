@@ -1,0 +1,2 @@
+jfx.build.stagingdir = ${workspace}/de.itemis.javafx.graph/build
+jfx.build.apptitle = de.itemis.javafx.graph

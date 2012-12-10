@@ -1,0 +1,21 @@
+SMAP
+AnchorPoints.java
+Xtend
+*S Xtend
+*F
++ 0 AnchorPoints.xtend
+src/de/itemis/javafx/diagram/AnchorPoints.xtend
+*L
+13:18,5
+14:23
+17:27,2
+18:29,2
+19:31,4
+20:35,4
+22:39,2
+23:41,2
+24:43,2
+25:45,2
+21:47
+17:48,3
+*E
