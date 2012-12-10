@@ -15,7 +15,8 @@ class MyNode extends ShapeContainer {
 	    		width=80
 	    		height=30
 	    		fill=createFill
-	    		stroke=Color::BLACK
+	    		stroke=Color::gray(0.4)
+	    		strokeWidth = 1.5
 	    	]
     		children += new Label => [
     			text = name

@@ -29,7 +29,9 @@ public class MyNode extends ShapeContainer {
                 it.setHeight(30);
                 LinearGradient _createFill = MyNode.this.createFill();
                 it.setFill(_createFill);
-                it.setStroke(Color.BLACK);
+                Color _gray = Color.gray(0.4);
+                it.setStroke(_gray);
+                it.setStrokeWidth(1.5);
               }
             };
           Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
