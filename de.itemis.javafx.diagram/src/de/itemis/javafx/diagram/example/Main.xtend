@@ -1,8 +1,10 @@
-package de.itemis.javafx.diagram
+package de.itemis.javafx.diagram.example
 
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
+import de.itemis.javafx.diagram.XDiagram
+import de.itemis.javafx.diagram.XConnection
 
 class Main extends Application {
 	

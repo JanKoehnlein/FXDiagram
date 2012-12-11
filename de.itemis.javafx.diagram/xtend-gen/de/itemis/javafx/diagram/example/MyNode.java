@@ -1,6 +1,7 @@
-package de.itemis.javafx.diagram;
+package de.itemis.javafx.diagram.example;
 
 import de.itemis.javafx.diagram.XNode;
+import de.itemis.javafx.diagram.example.AddRapidButtonBehavior;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -18,6 +19,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class MyNode extends XNode {
+  private AddRapidButtonBehavior rapidButtonBehavior;
+  
   public MyNode(final String name) {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
@@ -61,6 +64,13 @@ public class MyNode extends XNode {
       };
     InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
     _node.setEffect(_doubleArrow_1);
+  }
+  
+  public void activate() {
+    super.activate();
+    AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
+    this.rapidButtonBehavior = _addRapidButtonBehavior;
+    this.rapidButtonBehavior.activate();
   }
   
   protected LinearGradient createFill() {

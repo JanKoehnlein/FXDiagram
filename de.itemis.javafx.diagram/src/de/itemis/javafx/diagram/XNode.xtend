@@ -1,6 +1,5 @@
 package de.itemis.javafx.diagram
 
-import de.itemis.javafx.diagram.behavior.AddRapidButtonBehavior
 import de.itemis.javafx.diagram.behavior.MoveBehavior
 import de.itemis.javafx.diagram.behavior.SelectionBehavior
 import javafx.scene.Group
@@ -22,7 +21,6 @@ class XNode extends Group implements Activateable {
 	
 	MoveBehavior moveBehavior
 	
-	AddRapidButtonBehavior rapidButtonBehavior
 	
 	@Property XDiagram diagram
 	
@@ -39,10 +37,8 @@ class XNode extends Group implements Activateable {
 		selectionBehavior = new SelectionBehavior(this)
 		moveBehavior = new MoveBehavior(this)
 		anchorPoints = new AnchorPoints(this)
-		rapidButtonBehavior = new AddRapidButtonBehavior(this)
 		selectionBehavior.activate()
 		moveBehavior.activate()
-		rapidButtonBehavior.activate()
 		onMouseEntered = [ 
 			originalEffect = node.effect
 			node.effect = mouseOverEffect

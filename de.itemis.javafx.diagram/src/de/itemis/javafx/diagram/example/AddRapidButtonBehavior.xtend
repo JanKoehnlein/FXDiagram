@@ -1,9 +1,10 @@
-package de.itemis.javafx.diagram.behavior
+package de.itemis.javafx.diagram.example
 
-import de.itemis.javafx.diagram.MyNode
 import de.itemis.javafx.diagram.XConnection
 import de.itemis.javafx.diagram.XNode
 import java.util.List
+import de.itemis.javafx.diagram.behavior.RapidButton
+import de.itemis.javafx.diagram.behavior.AbstractBehavior
 
 class AddRapidButtonBehavior extends AbstractBehavior {
 	
@@ -20,11 +21,8 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 			val connection = new XConnection(source, target)
 			source.diagram.addNode(target)
 			source.diagram.addConnection(connection)
-			println(source.translateX + ", " + source.translateY)
-			println(button.placer.XPos + ", " + button.placer.YPos)
 			target.translateX = 200 * (button.placer.XPos - 0.5) + source.translateX 
 			target.translateY = 150 * (button.placer.YPos - 0.5) + source.translateY
-			println(target.translateX + ", " + target.translateY)
 			return
 		]
 		rapidButtons = newArrayList(

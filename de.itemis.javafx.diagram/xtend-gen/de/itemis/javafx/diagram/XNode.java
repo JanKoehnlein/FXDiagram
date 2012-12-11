@@ -3,7 +3,6 @@ package de.itemis.javafx.diagram;
 import de.itemis.javafx.diagram.Activateable;
 import de.itemis.javafx.diagram.AnchorPoints;
 import de.itemis.javafx.diagram.XDiagram;
-import de.itemis.javafx.diagram.behavior.AddRapidButtonBehavior;
 import de.itemis.javafx.diagram.behavior.MoveBehavior;
 import de.itemis.javafx.diagram.behavior.SelectionBehavior;
 import javafx.collections.ObservableList;
@@ -28,8 +27,6 @@ public class XNode extends Group implements Activateable {
   private SelectionBehavior selectionBehavior;
   
   private MoveBehavior moveBehavior;
-  
-  private AddRapidButtonBehavior rapidButtonBehavior;
   
   private XDiagram _diagram;
   
@@ -59,11 +56,8 @@ public class XNode extends Group implements Activateable {
     this.moveBehavior = _moveBehavior;
     AnchorPoints _anchorPoints = new AnchorPoints(this);
     this.anchorPoints = _anchorPoints;
-    AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
-    this.rapidButtonBehavior = _addRapidButtonBehavior;
     this.selectionBehavior.activate();
     this.moveBehavior.activate();
-    this.rapidButtonBehavior.activate();
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
           Effect _effect = XNode.this.node.getEffect();

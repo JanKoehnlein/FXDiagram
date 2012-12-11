@@ -1,8 +1,8 @@
-package de.itemis.javafx.diagram;
+package de.itemis.javafx.diagram.example;
 
-import de.itemis.javafx.diagram.MyNode;
 import de.itemis.javafx.diagram.XConnection;
 import de.itemis.javafx.diagram.XDiagram;
+import de.itemis.javafx.diagram.example.MyNode;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
