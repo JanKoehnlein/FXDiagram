@@ -1,19 +1,17 @@
 package de.itemis.javafx.diagram.behavior
 
-import de.itemis.javafx.diagram.ShapeContainer
-import de.itemis.javafx.diagram.Diagram
+import de.itemis.javafx.diagram.Activateable
+import de.itemis.javafx.diagram.XNode
 
-abstract class AbstractBehavior {
+abstract class AbstractBehavior implements Activateable {
 	
-	ShapeContainer host 
+	XNode host 
 	
-	new(ShapeContainer host) {
+	new(XNode host) {
 		this.host = host	
 	}
 	
 	def getHost() {
 		host
 	}
-	
-	def protected void activate(Diagram diagram)
 }

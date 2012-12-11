@@ -3,25 +3,17 @@ package de.itemis.javafx.diagram
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Point2D
 import javafx.scene.shape.Polyline
-import org.eclipse.xtend.lib.Property
 import org.eclipse.xtext.xbase.lib.Pair
 
-class Connection extends Polyline {
+class XConnection extends Polyline implements Activateable {
 	
-	@Property ShapeContainer source
+	@Property XNode source
 
-	@Property ShapeContainer target
+	@Property XNode target
 	
-	new(ShapeContainer source, ShapeContainer target) {
+	new(XNode source, XNode target) {
 		this.source = source
 		this.target = target
-		val ChangeListener changeListener = [
-			element, oldValue, newValue | 
-			calculatePoints()
-		]  
-		source.anchorPoints.addListener(changeListener)
-		target.anchorPoints.addListener(changeListener)
-		calculatePoints
 	}
 	
 	def protected calculatePoints() {
@@ -39,5 +31,15 @@ class Connection extends Polyline {
 		}
 		points.setAll(nearestAnchors.key.x, nearestAnchors.key.y,
 			nearestAnchors.value.x, nearestAnchors.value.y)
+	}
+
+	override activate() {
+		val ChangeListener changeListener = [
+			element, oldValue, newValue | 
+			calculatePoints()
+		]  
+		source.anchorPoints.addListener(changeListener)
+		target.anchorPoints.addListener(changeListener)
+		calculatePoints
 	}
 }

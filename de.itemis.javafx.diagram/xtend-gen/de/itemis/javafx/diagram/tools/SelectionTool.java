@@ -1,8 +1,9 @@
 package de.itemis.javafx.diagram.tools;
 
-import de.itemis.javafx.diagram.Diagram;
-import de.itemis.javafx.diagram.GraphUtil;
-import de.itemis.javafx.diagram.ShapeContainer;
+import de.itemis.javafx.diagram.Extensions;
+import de.itemis.javafx.diagram.XDiagram;
+import de.itemis.javafx.diagram.XNode;
+import de.itemis.javafx.diagram.behavior.MoveBehavior;
 import de.itemis.javafx.diagram.behavior.SelectionBehavior;
 import java.util.List;
 import javafx.event.EventHandler;
@@ -15,21 +16,20 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class SelectionTool {
-  private Diagram diagram;
+  private XDiagram diagram;
   
-  public SelectionTool(final Diagram diagram) {
+  public SelectionTool(final XDiagram diagram) {
     this.diagram = diagram;
     Group _rootPane = diagram.getRootPane();
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
-          final ShapeContainer targetShape = GraphUtil.getTargetShape(it);
-          boolean _or = false;
-          boolean _equals = ObjectExtensions.operator_equals(targetShape, null);
-          if (_equals) {
-            _or = true;
-          } else {
+          final XNode targetShape = Extensions.getTargetShape(it);
+          SelectionBehavior _selectionBehavior = targetShape==null?(SelectionBehavior)null:targetShape.getSelectionBehavior();
+          boolean _notEquals = ObjectExtensions.operator_notEquals(_selectionBehavior, null);
+          if (_notEquals) {
             boolean _and = false;
-            boolean _isSelected = targetShape.isSelected();
+            SelectionBehavior _selectionBehavior_1 = targetShape.getSelectionBehavior();
+            boolean _isSelected = _selectionBehavior_1.isSelected();
             boolean _not = (!_isSelected);
             if (!_not) {
               _and = false;
@@ -38,21 +38,23 @@ public class SelectionTool {
               boolean _not_1 = (!_isShortcutDown);
               _and = (_not && _not_1);
             }
-            _or = (_equals || _and);
-          }
-          if (_or) {
-            Iterable<ShapeContainer> _selection = SelectionTool.this.getSelection();
-            final Procedure1<ShapeContainer> _function = new Procedure1<ShapeContainer>() {
-                public void apply(final ShapeContainer it) {
-                  it.setSelected(false);
-                }
-              };
-            IterableExtensions.<ShapeContainer>forEach(_selection, _function);
-          }
-          Iterable<ShapeContainer> _selection_1 = SelectionTool.this.getSelection();
-          for (final ShapeContainer shape : _selection_1) {
-            SelectionBehavior _selectionBehavior = shape.getSelectionBehavior();
-            _selectionBehavior.mousePressed(it);
+            if (_and) {
+              Iterable<XNode> _selection = SelectionTool.this.getSelection();
+              final Procedure1<XNode> _function = new Procedure1<XNode>() {
+                  public void apply(final XNode it) {
+                    SelectionBehavior _selectionBehavior = it.getSelectionBehavior();
+                    _selectionBehavior.setSelected(false);
+                  }
+                };
+              IterableExtensions.<XNode>forEach(_selection, _function);
+            }
+            Iterable<XNode> _selection_1 = SelectionTool.this.getSelection();
+            for (final XNode shape : _selection_1) {
+              MoveBehavior _moveBehavior = shape.getMoveBehavior();
+              if (_moveBehavior!=null) _moveBehavior.mousePressed(it);
+            }
+            SelectionBehavior _selectionBehavior_2 = targetShape.getSelectionBehavior();
+            _selectionBehavior_2.mousePressed(it);
           }
         }
       };
@@ -64,10 +66,10 @@ public class SelectionTool {
     Group _rootPane_1 = diagram.getRootPane();
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
-          Iterable<ShapeContainer> _selection = SelectionTool.this.getSelection();
-          for (final ShapeContainer shape : _selection) {
-            SelectionBehavior _selectionBehavior = shape.getSelectionBehavior();
-            _selectionBehavior.mouseDragged(it);
+          Iterable<XNode> _selection = SelectionTool.this.getSelection();
+          for (final XNode shape : _selection) {
+            MoveBehavior _moveBehavior = shape==null?(MoveBehavior)null:shape.getMoveBehavior();
+            if (_moveBehavior!=null) _moveBehavior.mouseDragged(it);
           }
         }
       };
@@ -78,15 +80,16 @@ public class SelectionTool {
     });
   }
   
-  public Iterable<ShapeContainer> getSelection() {
-    List<ShapeContainer> _shapes = this.diagram.getShapes();
-    final Function1<ShapeContainer,Boolean> _function = new Function1<ShapeContainer,Boolean>() {
-        public Boolean apply(final ShapeContainer it) {
-          boolean _isSelected = it.isSelected();
+  public Iterable<XNode> getSelection() {
+    List<XNode> _shapes = this.diagram.getShapes();
+    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
+        public Boolean apply(final XNode it) {
+          SelectionBehavior _selectionBehavior = it.getSelectionBehavior();
+          boolean _isSelected = _selectionBehavior==null?false:_selectionBehavior.isSelected();
           return Boolean.valueOf(_isSelected);
         }
       };
-    Iterable<ShapeContainer> _filter = IterableExtensions.<ShapeContainer>filter(_shapes, _function);
+    Iterable<XNode> _filter = IterableExtensions.<XNode>filter(_shapes, _function);
     return _filter;
   }
 }

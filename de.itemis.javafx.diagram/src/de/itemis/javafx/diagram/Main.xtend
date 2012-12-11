@@ -3,8 +3,6 @@ package de.itemis.javafx.diagram
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
-import de.itemis.javafx.diagram.tools.ZoomTool
-import de.itemis.javafx.diagram.tools.SelectionTool
 
 class Main extends Application {
 	
@@ -14,21 +12,20 @@ class Main extends Application {
 
     override start(Stage primaryStage) {
         primaryStage.setTitle("Diagram Demo")
-        val diagram = getDiagram
-        val scene = new Scene(diagram.getRootPane, 300, 250)
+        val diagram = createDiagram
+        val scene = new Scene(diagram.getRootPane, 400, 400)
+        diagram.activate
         primaryStage.scene = scene
-		new ZoomTool(diagram)   
-		new SelectionTool(diagram)     
         primaryStage.show
     }
 
-	def getDiagram() {
-		val diagram = new Diagram
+	def createDiagram() {
+		val diagram = new XDiagram
         val source = new MyNode('source')
         val target = new MyNode('target')
-        diagram.addShape(source)
-        diagram.addShape(target)
-        diagram.addConnection(new Connection(source, target))
+        diagram.addNode(source)
+        diagram.addNode(target)
+        diagram.addConnection(new XConnection(source, target))
 		diagram
 	}    
 }

@@ -1,56 +1,62 @@
 package de.itemis.javafx.diagram.behavior
 
+import de.itemis.javafx.diagram.XNode
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
-import de.itemis.javafx.diagram.ShapeContainer
+import javafx.beans.value.ChangeListener
+import javafx.scene.effect.DropShadow
+import javafx.scene.effect.Effect
 import javafx.scene.input.MouseEvent
-import de.itemis.javafx.diagram.Diagram
 
 class SelectionBehavior extends AbstractBehavior {
 	
 	BooleanProperty isSelected = new SimpleBooleanProperty
 	
-	DragContext dragContext
+	Effect selectionEffect
 	
-	new(ShapeContainer host) {
+	boolean wasSelected
+	
+	new(XNode host) {
 		super(host)
+		selectionEffect = new DropShadow() => [
+			offsetX = 5.0
+			offsetY = 5.0
+		]
 	}
 	
-	override activate(Diagram diagram) {
+	override activate() {
 		host.node.onMousePressed = [
 			mousePressed
-			isSelected.set(true)
 		]
 		host.node.onMouseReleased = [
-			if(dragContext.mouseAnchorX == screenX
-					&& dragContext.mouseAnchorY == screenY 
-					&& shortcutDown)
-				isSelected.set(!dragContext.wasSeleceted)
+			if(shortcutDown)
+				isSelected.set(!wasSelected)
 		]
-		host.node.onMouseDragged = [
-			mouseDragged	
+		val ChangeListener<Boolean> selectionListener = [
+			observable, oldValue, newValue |
+			if(newValue) 
+				host.effect = selectionEffect
+			else
+				host.effect = null
 		]
+		selectedProperty.addListener(selectionListener)
 	}	
 	
 	def mousePressed(MouseEvent it) {
-		dragContext = new DragContext(screenX, screenY, host.translateX, host.translateY, isSelected.get)
-	}
-	
-	def mouseDragged(MouseEvent it) {
-		host.translateX = dragContext.initialX - dragContext.mouseAnchorX + screenX
-		host.translateY = dragContext.initialY - dragContext.mouseAnchorY + screenY
+		wasSelected = isSelected.get
+		isSelected.set(true)
 	}
 	
 	def getSelectedProperty() {
 		isSelected
 	}
+	
+	def isSelected() {
+		selectedProperty.get
+	}
+
+	def setSelected(boolean isSelected) {
+		selectedProperty.set(isSelected)
+	}
 }
 
-@Data 
-class DragContext {
-	double mouseAnchorX 
-	double mouseAnchorY
-	double initialX
-	double initialY
-	boolean wasSeleceted 
-}

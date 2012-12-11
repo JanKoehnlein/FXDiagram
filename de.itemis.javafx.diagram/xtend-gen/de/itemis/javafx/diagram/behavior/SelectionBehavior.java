@@ -1,16 +1,20 @@
 package de.itemis.javafx.diagram.behavior;
 
-import de.itemis.javafx.diagram.Diagram;
-import de.itemis.javafx.diagram.ShapeContainer;
+import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.behavior.AbstractBehavior;
-import de.itemis.javafx.diagram.behavior.DragContext;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class SelectionBehavior extends AbstractBehavior {
@@ -21,19 +25,29 @@ public class SelectionBehavior extends AbstractBehavior {
     }
   }.apply();
   
-  private DragContext dragContext;
+  private Effect selectionEffect;
   
-  public SelectionBehavior(final ShapeContainer host) {
+  private boolean wasSelected;
+  
+  public SelectionBehavior(final XNode host) {
     super(host);
+    DropShadow _dropShadow = new DropShadow();
+    final Procedure1<DropShadow> _function = new Procedure1<DropShadow>() {
+        public void apply(final DropShadow it) {
+          it.setOffsetX(5.0);
+          it.setOffsetY(5.0);
+        }
+      };
+    DropShadow _doubleArrow = ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
+    this.selectionEffect = _doubleArrow;
   }
   
-  public void activate(final Diagram diagram) {
-    ShapeContainer _host = this.getHost();
+  public void activate() {
+    XNode _host = this.getHost();
     Node _node = _host.getNode();
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
           SelectionBehavior.this.mousePressed(it);
-          SelectionBehavior.this.isSelected.set(true);
         }
       };
     _node.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -41,32 +55,13 @@ public class SelectionBehavior extends AbstractBehavior {
           _function.apply(arg0);
         }
     });
-    ShapeContainer _host_1 = this.getHost();
+    XNode _host_1 = this.getHost();
     Node _node_1 = _host_1.getNode();
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
-          boolean _and = false;
-          boolean _and_1 = false;
-          double _mouseAnchorX = SelectionBehavior.this.dragContext.getMouseAnchorX();
-          double _screenX = it.getScreenX();
-          boolean _equals = (_mouseAnchorX == _screenX);
-          if (!_equals) {
-            _and_1 = false;
-          } else {
-            double _mouseAnchorY = SelectionBehavior.this.dragContext.getMouseAnchorY();
-            double _screenY = it.getScreenY();
-            boolean _equals_1 = (_mouseAnchorY == _screenY);
-            _and_1 = (_equals && _equals_1);
-          }
-          if (!_and_1) {
-            _and = false;
-          } else {
-            boolean _isShortcutDown = it.isShortcutDown();
-            _and = (_and_1 && _isShortcutDown);
-          }
-          if (_and) {
-            boolean _isWasSeleceted = SelectionBehavior.this.dragContext.isWasSeleceted();
-            boolean _not = (!_isWasSeleceted);
+          boolean _isShortcutDown = it.isShortcutDown();
+          if (_isShortcutDown) {
+            boolean _not = (!SelectionBehavior.this.wasSelected);
             SelectionBehavior.this.isSelected.set(_not);
           }
         }
@@ -76,51 +71,44 @@ public class SelectionBehavior extends AbstractBehavior {
           _function_1.apply(arg0);
         }
     });
-    ShapeContainer _host_2 = this.getHost();
-    Node _node_2 = _host_2.getNode();
-    final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
-          SelectionBehavior.this.mouseDragged(it);
+    final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function_2 = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
+        public void apply(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
+          if ((newValue).booleanValue()) {
+            XNode _host = SelectionBehavior.this.getHost();
+            _host.setEffect(SelectionBehavior.this.selectionEffect);
+          } else {
+            XNode _host_1 = SelectionBehavior.this.getHost();
+            _host_1.setEffect(null);
+          }
         }
       };
-    _node_2.setOnMouseDragged(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_2.apply(arg0);
+    final ChangeListener<Boolean> selectionListener = new ChangeListener<Boolean>() {
+        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
+          _function_2.apply(arg0,arg1,arg2);
         }
-    });
+    };
+    BooleanProperty _selectedProperty = this.getSelectedProperty();
+    _selectedProperty.addListener(selectionListener);
   }
   
-  public DragContext mousePressed(final MouseEvent it) {
-    double _screenX = it.getScreenX();
-    double _screenY = it.getScreenY();
-    ShapeContainer _host = this.getHost();
-    double _translateX = _host.getTranslateX();
-    ShapeContainer _host_1 = this.getHost();
-    double _translateY = _host_1.getTranslateY();
+  public void mousePressed(final MouseEvent it) {
     boolean _get = this.isSelected.get();
-    DragContext _dragContext = new DragContext(_screenX, _screenY, _translateX, _translateY, _get);
-    DragContext _dragContext_1 = this.dragContext = _dragContext;
-    return _dragContext_1;
-  }
-  
-  public void mouseDragged(final MouseEvent it) {
-    ShapeContainer _host = this.getHost();
-    double _initialX = this.dragContext.getInitialX();
-    double _mouseAnchorX = this.dragContext.getMouseAnchorX();
-    double _minus = (_initialX - _mouseAnchorX);
-    double _screenX = it.getScreenX();
-    double _plus = (_minus + _screenX);
-    _host.setTranslateX(_plus);
-    ShapeContainer _host_1 = this.getHost();
-    double _initialY = this.dragContext.getInitialY();
-    double _mouseAnchorY = this.dragContext.getMouseAnchorY();
-    double _minus_1 = (_initialY - _mouseAnchorY);
-    double _screenY = it.getScreenY();
-    double _plus_1 = (_minus_1 + _screenY);
-    _host_1.setTranslateY(_plus_1);
+    this.wasSelected = _get;
+    this.isSelected.set(true);
   }
   
   public BooleanProperty getSelectedProperty() {
     return this.isSelected;
+  }
+  
+  public boolean isSelected() {
+    BooleanProperty _selectedProperty = this.getSelectedProperty();
+    boolean _get = _selectedProperty.get();
+    return _get;
+  }
+  
+  public void setSelected(final boolean isSelected) {
+    BooleanProperty _selectedProperty = this.getSelectedProperty();
+    _selectedProperty.set(isSelected);
   }
 }

@@ -8,7 +8,7 @@ import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 import javafx.scene.paint.CycleMethod
 
-class MyNode extends ShapeContainer {
+class MyNode extends XNode {
 	 new(String name) {
     	setNode(new StackPane => [
 	    	children += new Rectangle => [
@@ -16,7 +16,9 @@ class MyNode extends ShapeContainer {
 	    		height=30
 	    		fill=createFill
 	    		stroke=Color::gray(0.4)
-	    		strokeWidth = 1.5
+	    		strokeWidth = 1.2
+	    		arcWidth = 12
+	    		arcHeight = 12
 	    	]
     		children += new Label => [
     			text = name

@@ -1,10 +1,8 @@
 package de.itemis.javafx.diagram;
 
-import de.itemis.javafx.diagram.Connection;
-import de.itemis.javafx.diagram.Diagram;
 import de.itemis.javafx.diagram.MyNode;
-import de.itemis.javafx.diagram.tools.SelectionTool;
-import de.itemis.javafx.diagram.tools.ZoomTool;
+import de.itemis.javafx.diagram.XConnection;
+import de.itemis.javafx.diagram.XDiagram;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,29 +16,28 @@ public class Main extends Application {
   
   public void start(final Stage primaryStage) {
     primaryStage.setTitle("Diagram Demo");
-    final Diagram diagram = this.getDiagram();
+    final XDiagram diagram = this.createDiagram();
     Group _rootPane = diagram.getRootPane();
-    Scene _scene = new Scene(_rootPane, 300, 250);
+    Scene _scene = new Scene(_rootPane, 400, 400);
     final Scene scene = _scene;
+    diagram.activate();
     primaryStage.setScene(scene);
-    new ZoomTool(diagram);
-    new SelectionTool(diagram);
     primaryStage.show();
   }
   
-  public Diagram getDiagram() {
-    Diagram _xblockexpression = null;
+  public XDiagram createDiagram() {
+    XDiagram _xblockexpression = null;
     {
-      Diagram _diagram = new Diagram();
-      final Diagram diagram = _diagram;
+      XDiagram _xDiagram = new XDiagram();
+      final XDiagram diagram = _xDiagram;
       MyNode _myNode = new MyNode("source");
       final MyNode source = _myNode;
       MyNode _myNode_1 = new MyNode("target");
       final MyNode target = _myNode_1;
-      diagram.addShape(source);
-      diagram.addShape(target);
-      Connection _connection = new Connection(source, target);
-      diagram.addConnection(_connection);
+      diagram.addNode(source);
+      diagram.addNode(target);
+      XConnection _xConnection = new XConnection(source, target);
+      diagram.addConnection(_xConnection);
       _xblockexpression = (diagram);
     }
     return _xblockexpression;

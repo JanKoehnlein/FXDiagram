@@ -30,19 +30,12 @@ public class DragContext {
     return this._initialY;
   }
   
-  private final boolean _wasSeleceted;
-  
-  public boolean isWasSeleceted() {
-    return this._wasSeleceted;
-  }
-  
-  public DragContext(final double mouseAnchorX, final double mouseAnchorY, final double initialX, final double initialY, final boolean wasSeleceted) {
+  public DragContext(final double mouseAnchorX, final double mouseAnchorY, final double initialX, final double initialY) {
     super();
     this._mouseAnchorX = mouseAnchorX;
     this._mouseAnchorY = mouseAnchorY;
     this._initialX = initialX;
     this._initialY = initialY;
-    this._wasSeleceted = wasSeleceted;
   }
   
   @Override
@@ -53,7 +46,6 @@ public class DragContext {
     result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorY) ^ (Double.doubleToLongBits(_mouseAnchorY) >>> 32));
     result = prime * result + (int) (Double.doubleToLongBits(_initialX) ^ (Double.doubleToLongBits(_initialX) >>> 32));
     result = prime * result + (int) (Double.doubleToLongBits(_initialY) ^ (Double.doubleToLongBits(_initialY) >>> 32));
-    result = prime * result + (_wasSeleceted ? 1231 : 1237);
     return result;
   }
   
@@ -73,8 +65,6 @@ public class DragContext {
     if (Double.doubleToLongBits(other._initialX) != Double.doubleToLongBits(_initialX))
       return false;
     if (Double.doubleToLongBits(other._initialY) != Double.doubleToLongBits(_initialY))
-      return false;
-    if (other._wasSeleceted != _wasSeleceted)
       return false;
     return true;
   }

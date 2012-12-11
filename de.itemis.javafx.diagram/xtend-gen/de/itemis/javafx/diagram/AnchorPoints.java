@@ -1,6 +1,7 @@
 package de.itemis.javafx.diagram;
 
-import de.itemis.javafx.diagram.ShapeContainer;
+import de.itemis.javafx.diagram.Extensions;
+import de.itemis.javafx.diagram.XNode;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.ObjectBinding;
@@ -13,9 +14,9 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
 public class AnchorPoints extends ObjectBinding<List<Point2D>> {
-  private ShapeContainer host;
+  private XNode host;
   
-  public AnchorPoints(final ShapeContainer host) {
+  public AnchorPoints(final XNode host) {
     DoubleProperty _translateXProperty = host.translateXProperty();
     DoubleProperty _translateYProperty = host.translateYProperty();
     Node _node = host.getNode();
@@ -30,7 +31,7 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
       Node _node = this.host.getNode();
       Node _node_1 = this.host.getNode();
       Bounds _boundsInLocal = _node_1.getBoundsInLocal();
-      final Bounds bounds = _node.localToScene(_boundsInLocal);
+      final Bounds bounds = Extensions.localToRoot(_node, _boundsInLocal);
       double _maxX = bounds.getMaxX();
       double _minX = bounds.getMinX();
       double _plus = (_maxX + _minX);

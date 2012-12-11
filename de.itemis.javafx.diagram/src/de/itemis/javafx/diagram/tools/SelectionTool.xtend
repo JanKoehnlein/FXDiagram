@@ -1,32 +1,35 @@
 package de.itemis.javafx.diagram.tools
 
-import de.itemis.javafx.diagram.Diagram
+import de.itemis.javafx.diagram.XDiagram
 import javafx.scene.input.MouseEvent
 
-import static de.itemis.javafx.diagram.GraphUtil.*
+import static de.itemis.javafx.diagram.Extensions.*
 
 class SelectionTool {
 	
-	Diagram diagram 
+	XDiagram diagram 
 	
-	new(Diagram diagram) {
+	new(XDiagram diagram) {
 		this.diagram = diagram
 		diagram.rootPane.addEventFilter(MouseEvent::MOUSE_PRESSED) [
 			val targetShape = getTargetShape(it)
-			if(targetShape == null || (!targetShape.selected && !shortcutDown))
-				selection.forEach[selected = false]				
-			for(shape: selection) {
-				shape.selectionBehavior.mousePressed(it)				
+			if(targetShape?.selectionBehavior != null) {
+				if(!targetShape.selectionBehavior.selected && !shortcutDown)
+					selection.forEach[selectionBehavior.setSelected(false)]		
+				for(shape: selection) {
+					shape.moveBehavior?.mousePressed(it)				
+				}
+				targetShape.selectionBehavior.mousePressed(it)
 			}
 		]
 		diagram.rootPane.addEventFilter(MouseEvent::MOUSE_DRAGGED) [
 			for(shape: selection) {
-				shape.selectionBehavior.mouseDragged(it)				
+				shape?.moveBehavior?.mouseDragged(it)				
 			}
 		]
 	}
 	
 	def getSelection() {
-		diagram.shapes.filter[selected]
+		diagram.shapes.filter[selectionBehavior?.selected]
 	}
 }

@@ -1,6 +1,6 @@
 package de.itemis.javafx.diagram;
 
-import de.itemis.javafx.diagram.ShapeContainer;
+import de.itemis.javafx.diagram.XNode;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -16,7 +16,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class MyNode extends ShapeContainer {
+public class MyNode extends XNode {
   public MyNode(final String name) {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
@@ -31,7 +31,9 @@ public class MyNode extends ShapeContainer {
                 it.setFill(_createFill);
                 Color _gray = Color.gray(0.4);
                 it.setStroke(_gray);
-                it.setStrokeWidth(1.5);
+                it.setStrokeWidth(1.2);
+                it.setArcWidth(12);
+                it.setArcHeight(12);
               }
             };
           Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
