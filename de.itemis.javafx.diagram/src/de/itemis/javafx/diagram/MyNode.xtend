@@ -7,15 +7,16 @@ import javafx.scene.control.Label
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 import javafx.scene.paint.CycleMethod
+import javafx.scene.effect.InnerShadow
 
 class MyNode extends XNode {
 	 new(String name) {
-    	setNode(new StackPane => [
+    	node = new StackPane => [
 	    	children += new Rectangle => [
 	    		width=80
 	    		height=30
 	    		fill=createFill
-	    		stroke=Color::gray(0.4)
+	    		stroke=Color::gray(0.5)
 	    		strokeWidth = 1.2
 	    		arcWidth = 12
 	    		arcHeight = 12
@@ -23,7 +24,10 @@ class MyNode extends XNode {
     		children += new Label => [
     			text = name
     		]
-    	])
+    	]
+    	node.effect = new InnerShadow => [
+    		radius = 7
+    	]
     }
     
     def protected createFill() {

@@ -10,7 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.effect.Lighting;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -18,7 +19,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class XNode extends Group implements Activateable {
   private Node node;
   
-  private Lighting mouseOverEffect;
+  private Effect mouseOverEffect;
+  
+  private Effect originalEffect;
   
   private AnchorPoints anchorPoints;
   
@@ -39,6 +42,8 @@ public class XNode extends Group implements Activateable {
   }
   
   public XNode() {
+    InnerShadow _innerShadow = new InnerShadow();
+    this.mouseOverEffect = _innerShadow;
   }
   
   public void setNode(final Node node) {
@@ -61,6 +66,8 @@ public class XNode extends Group implements Activateable {
     this.rapidButtonBehavior.activate();
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
+          Effect _effect = XNode.this.node.getEffect();
+          XNode.this.originalEffect = _effect;
           XNode.this.node.setEffect(XNode.this.mouseOverEffect);
         }
       };
@@ -71,7 +78,7 @@ public class XNode extends Group implements Activateable {
     });
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
-          XNode.this.node.setEffect(null);
+          XNode.this.node.setEffect(XNode.this.originalEffect);
         }
       };
     this.setOnMouseExited(new EventHandler<MouseEvent>() {

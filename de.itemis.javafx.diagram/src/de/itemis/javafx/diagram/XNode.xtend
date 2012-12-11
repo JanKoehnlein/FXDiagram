@@ -1,18 +1,20 @@
 package de.itemis.javafx.diagram
 
 import de.itemis.javafx.diagram.behavior.AddRapidButtonBehavior
+import de.itemis.javafx.diagram.behavior.MoveBehavior
 import de.itemis.javafx.diagram.behavior.SelectionBehavior
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.effect.Light$Distant
-import javafx.scene.effect.Lighting
-import de.itemis.javafx.diagram.behavior.MoveBehavior
+import javafx.scene.effect.Effect
+import javafx.scene.effect.InnerShadow
 
 class XNode extends Group implements Activateable {
 	
 	Node node
 	
-	Lighting mouseOverEffect
+	Effect mouseOverEffect
+	
+	Effect originalEffect
 	
 	AnchorPoints anchorPoints
 	
@@ -25,13 +27,7 @@ class XNode extends Group implements Activateable {
 	@Property XDiagram diagram
 	
 	new() {
-//		mouseOverEffect = new Lighting => [
-//        	light = new Distant => [
-//				elevation = 48
-//				azimuth = -135
-//   			]
-//   			surfaceScale = 0.1
-//		]
+		mouseOverEffect = new InnerShadow
 	}
 	
 	def void setNode(Node node) {
@@ -48,10 +44,11 @@ class XNode extends Group implements Activateable {
 		moveBehavior.activate()
 		rapidButtonBehavior.activate()
 		onMouseEntered = [ 
+			originalEffect = node.effect
 			node.effect = mouseOverEffect
 		]
 		onMouseExited = [ 
-			node.effect = null
+			node.effect = originalEffect
 		]
 	}
 	

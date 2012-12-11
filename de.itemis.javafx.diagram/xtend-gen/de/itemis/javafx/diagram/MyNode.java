@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -29,7 +30,7 @@ public class MyNode extends XNode {
                 it.setHeight(30);
                 LinearGradient _createFill = MyNode.this.createFill();
                 it.setFill(_createFill);
-                Color _gray = Color.gray(0.4);
+                Color _gray = Color.gray(0.5);
                 it.setStroke(_gray);
                 it.setStrokeWidth(1.2);
                 it.setArcWidth(12);
@@ -51,6 +52,15 @@ public class MyNode extends XNode {
       };
     StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     this.setNode(_doubleArrow);
+    Node _node = this.getNode();
+    InnerShadow _innerShadow = new InnerShadow();
+    final Procedure1<InnerShadow> _function_1 = new Procedure1<InnerShadow>() {
+        public void apply(final InnerShadow it) {
+          it.setRadius(7);
+        }
+      };
+    InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
+    _node.setEffect(_doubleArrow_1);
   }
   
   protected LinearGradient createFill() {
