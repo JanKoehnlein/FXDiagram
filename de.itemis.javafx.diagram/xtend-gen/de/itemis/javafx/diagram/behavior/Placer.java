@@ -13,6 +13,8 @@ import javafx.scene.Node;
 
 @SuppressWarnings("all")
 public class Placer extends ObjectBinding<Point2D> implements Activateable {
+  private Extensions _extensions;
+  
   private RapidButton button;
   
   private double xPos;
@@ -40,9 +42,9 @@ public class Placer extends ObjectBinding<Point2D> implements Activateable {
       final Node node = _host.getNode();
       double _translateX = node.getTranslateX();
       double _translateY = node.getTranslateY();
-      final Point2D absPosition = Extensions.localToRoot(node, _translateX, _translateY);
+      final Point2D absPosition = this._extensions.localToRoot(node, _translateX, _translateY);
       Bounds _boundsInLocal = node.getBoundsInLocal();
-      final Bounds absBounds = Extensions.localToRoot(node, _boundsInLocal);
+      final Bounds absBounds = this._extensions.localToRoot(node, _boundsInLocal);
       double _width = absBounds.getWidth();
       Bounds _layoutBounds = this.button.getLayoutBounds();
       double _width_1 = _layoutBounds.getWidth();

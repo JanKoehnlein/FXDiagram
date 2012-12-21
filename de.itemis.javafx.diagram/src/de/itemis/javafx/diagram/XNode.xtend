@@ -37,7 +37,7 @@ class XNode extends Group implements Activateable {
 		selectionBehavior = new SelectionBehavior(this)
 		moveBehavior = new MoveBehavior(this)
 		anchorPoints = new AnchorPoints(this)
-		selectionBehavior.activate()
+ 		selectionBehavior.activate()
 		moveBehavior.activate()
 		onMouseEntered = [ 
 			originalEffect = node.effect

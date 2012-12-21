@@ -4,9 +4,9 @@ import java.util.List
 import javafx.beans.binding.ObjectBinding
 import javafx.geometry.Point2D
 
-import static extension de.itemis.javafx.diagram.Extensions.*
-
 class AnchorPoints extends ObjectBinding<List<Point2D>> {
+	
+	extension Extensions
 	
 	XNode host
 

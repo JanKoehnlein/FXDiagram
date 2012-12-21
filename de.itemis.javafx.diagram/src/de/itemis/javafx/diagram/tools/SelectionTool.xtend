@@ -2,10 +2,11 @@ package de.itemis.javafx.diagram.tools
 
 import de.itemis.javafx.diagram.XDiagram
 import javafx.scene.input.MouseEvent
-
-import static de.itemis.javafx.diagram.Extensions.*
+import de.itemis.javafx.diagram.Extensions
 
 class SelectionTool {
+	
+	extension Extensions
 	
 	XDiagram diagram 
 	

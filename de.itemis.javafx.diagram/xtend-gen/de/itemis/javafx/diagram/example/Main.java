@@ -16,20 +16,20 @@ public class Main extends Application {
   
   public void start(final Stage primaryStage) {
     primaryStage.setTitle("Diagram Demo");
-    final XDiagram diagram = this.createDiagram();
-    Group _rootPane = diagram.getRootPane();
-    Scene _scene = new Scene(_rootPane, 400, 400);
-    final Scene scene = _scene;
-    diagram.activate();
-    primaryStage.setScene(scene);
+    Scene _createScene = this.createScene();
+    primaryStage.setScene(_createScene);
     primaryStage.show();
   }
   
-  public XDiagram createDiagram() {
-    XDiagram _xblockexpression = null;
+  public Scene createScene() {
+    Scene _xblockexpression = null;
     {
       XDiagram _xDiagram = new XDiagram();
       final XDiagram diagram = _xDiagram;
+      Group _rootPane = diagram.getRootPane();
+      Scene _scene = new Scene(_rootPane, 400, 400);
+      final Scene scene = _scene;
+      diagram.activate();
       MyNode _myNode = new MyNode("source");
       final MyNode source = _myNode;
       MyNode _myNode_1 = new MyNode("target");
@@ -38,7 +38,7 @@ public class Main extends Application {
       diagram.addNode(target);
       XConnection _xConnection = new XConnection(source, target);
       diagram.addConnection(_xConnection);
-      _xblockexpression = (diagram);
+      _xblockexpression = (scene);
     }
     return _xblockexpression;
   }

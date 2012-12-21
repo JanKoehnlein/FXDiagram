@@ -11,11 +11,10 @@ import javafx.geometry.Point2D
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.util.Duration
-
-import static extension de.itemis.javafx.diagram.Extensions.*
+import de.itemis.javafx.diagram.Extensions
 
 class RapidButton extends ImageView implements Activateable {
-		
+	
 	XNode host
 	
 	Placer placer
@@ -82,6 +81,9 @@ class RapidButton extends ImageView implements Activateable {
 }
 
 class Placer extends ObjectBinding<Point2D> implements Activateable {
+	
+	extension Extensions
+	
 	RapidButton button
 	double xPos
 	double yPos

@@ -14,20 +14,19 @@ class Main extends Application {
 
     override start(Stage primaryStage) {
         primaryStage.setTitle("Diagram Demo")
-        val diagram = createDiagram
-        val scene = new Scene(diagram.getRootPane, 400, 400)
-        diagram.activate
-        primaryStage.scene = scene
+        primaryStage.scene = createScene
         primaryStage.show
     }
 
-	def createDiagram() {
+	def createScene() {
 		val diagram = new XDiagram
+        val scene = new Scene(diagram.getRootPane, 400, 400)
+        diagram.activate
         val source = new MyNode('source')
         val target = new MyNode('target')
         diagram.addNode(source)
         diagram.addNode(target)
         diagram.addConnection(new XConnection(source, target))
-		diagram
+		scene
 	}    
 }

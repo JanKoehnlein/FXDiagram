@@ -16,6 +16,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class SelectionTool {
+  private Extensions _extensions;
+  
   private XDiagram diagram;
   
   public SelectionTool(final XDiagram diagram) {
@@ -23,7 +25,7 @@ public class SelectionTool {
     Group _rootPane = diagram.getRootPane();
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
-          final XNode targetShape = Extensions.getTargetShape(it);
+          final XNode targetShape = SelectionTool.this._extensions.getTargetShape(it);
           SelectionBehavior _selectionBehavior = targetShape==null?(SelectionBehavior)null:targetShape.getSelectionBehavior();
           boolean _notEquals = ObjectExtensions.operator_notEquals(_selectionBehavior, null);
           if (_notEquals) {

@@ -14,6 +14,8 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
 public class AnchorPoints extends ObjectBinding<List<Point2D>> {
+  private Extensions _extensions;
+  
   private XNode host;
   
   public AnchorPoints(final XNode host) {
@@ -31,7 +33,7 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
       Node _node = this.host.getNode();
       Node _node_1 = this.host.getNode();
       Bounds _boundsInLocal = _node_1.getBoundsInLocal();
-      final Bounds bounds = Extensions.localToRoot(_node, _boundsInLocal);
+      final Bounds bounds = this._extensions.localToRoot(_node, _boundsInLocal);
       double _maxX = bounds.getMaxX();
       double _minX = bounds.getMinX();
       double _plus = (_maxX + _minX);

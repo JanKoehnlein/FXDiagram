@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings("all")
 public class Extensions {
-  public static Point2D localToRoot(final Node node, final double x, final double y) {
+  public Point2D localToRoot(final Node node, final double x, final double y) {
     Scene _scene = node.getScene();
     Parent _root = _scene.getRoot();
     Point2D _localToScene = node.localToScene(x, y);
@@ -20,7 +20,7 @@ public class Extensions {
     return _parentToLocal;
   }
   
-  public static Point2D localToRoot(final Node node, final Point2D point) {
+  public Point2D localToRoot(final Node node, final Point2D point) {
     Scene _scene = node.getScene();
     Parent _root = _scene.getRoot();
     Point2D _localToScene = node.localToScene(point);
@@ -28,7 +28,7 @@ public class Extensions {
     return _parentToLocal;
   }
   
-  public static Bounds localToRoot(final Node node, final Bounds bounds) {
+  public Bounds localToRoot(final Node node, final Bounds bounds) {
     Scene _scene = node.getScene();
     Parent _root = _scene.getRoot();
     Bounds _localToScene = node.localToScene(bounds);
@@ -36,12 +36,12 @@ public class Extensions {
     return _parentToLocal;
   }
   
-  public static XNode getTargetShape(final MouseEvent event) {
+  public XNode getTargetShape(final MouseEvent event) {
     XNode _xifexpression = null;
     EventTarget _target = event.getTarget();
     if ((_target instanceof Node)) {
       EventTarget _target_1 = event.getTarget();
-      XNode _containerShape = Extensions.getContainerShape(((Node) _target_1));
+      XNode _containerShape = this.getContainerShape(((Node) _target_1));
       _xifexpression = _containerShape;
     } else {
       _xifexpression = null;
@@ -49,7 +49,7 @@ public class Extensions {
     return _xifexpression;
   }
   
-  public static XNode getContainerShape(final Node it) {
+  public XNode getContainerShape(final Node it) {
     XNode _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
@@ -67,7 +67,7 @@ public class Extensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XNode _containerShape = Extensions.getContainerShape(_parent);
+      XNode _containerShape = this.getContainerShape(_parent);
       _switchResult = _containerShape;
     }
     return _switchResult;

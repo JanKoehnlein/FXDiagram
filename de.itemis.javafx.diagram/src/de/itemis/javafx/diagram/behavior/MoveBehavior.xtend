@@ -13,7 +13,7 @@ class MoveBehavior extends AbstractBehavior {
 	
 	override activate() {
 		host.node.onMousePressed = [
-			mousePressed
+			mousePressed  
 		]
 		host.node.onMouseDragged = [
 			mouseDragged	
