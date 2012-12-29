@@ -5,7 +5,6 @@ import de.itemis.javafx.diagram.XNestedDiagram;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.behavior.LevelOfDetailBehavior;
 import de.itemis.javafx.diagram.example.AddRapidButtonBehavior;
-import de.itemis.javafx.diagram.example.MyNode;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -41,8 +40,24 @@ public class MyContainerNode extends XNode {
       };
     Label _doubleArrow = ObjectExtensions.<Label>operator_doubleArrow(_label, _function);
     this.label = _doubleArrow;
+    XNestedDiagram _xNestedDiagram = new XNestedDiagram();
+    final Procedure1<XNestedDiagram> _function_1 = new Procedure1<XNestedDiagram>() {
+        public void apply(final XNestedDiagram it) {
+          final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
+              public void apply(final XNestedDiagram it) {
+                MyContainerNode _myContainerNode = new MyContainerNode("Inner");
+                final MyContainerNode innerNode = _myContainerNode;
+                it.addNode(innerNode);
+                innerNode.relocate(96, 35);
+              }
+            };
+          it.setContentsInitializer(_function);
+        }
+      };
+    XNestedDiagram _doubleArrow_1 = ObjectExtensions.<XNestedDiagram>operator_doubleArrow(_xNestedDiagram, _function_1);
+    this.innerDiagram = _doubleArrow_1;
     StackPane _stackPane = new StackPane();
-    final Procedure1<StackPane> _function_1 = new Procedure1<StackPane>() {
+    final Procedure1<StackPane> _function_2 = new Procedure1<StackPane>() {
         public void apply(final StackPane it) {
           Rectangle _rectangle = new Rectangle();
           final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
@@ -63,6 +78,8 @@ public class MyContainerNode extends XNode {
           _children.add(rectangle);
           ObservableList<Node> _children_1 = it.getChildren();
           _children_1.add(MyContainerNode.this.label);
+          ObservableList<Node> _children_2 = it.getChildren();
+          _children_2.add(MyContainerNode.this.innerDiagram);
           Rectangle _rectangle_1 = new Rectangle();
           final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
               public void apply(final Rectangle it) {
@@ -80,42 +97,28 @@ public class MyContainerNode extends XNode {
           it.setClip(_doubleArrow);
         }
       };
-    StackPane _doubleArrow_1 = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function_1);
-    this.setNode(_doubleArrow_1);
+    StackPane _doubleArrow_2 = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function_2);
+    this.setNode(_doubleArrow_2);
     Node _node = this.getNode();
     InnerShadow _innerShadow = new InnerShadow();
-    final Procedure1<InnerShadow> _function_2 = new Procedure1<InnerShadow>() {
+    final Procedure1<InnerShadow> _function_3 = new Procedure1<InnerShadow>() {
         public void apply(final InnerShadow it) {
           it.setRadius(7);
         }
       };
-    InnerShadow _doubleArrow_2 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_2);
-    _node.setEffect(_doubleArrow_2);
+    InnerShadow _doubleArrow_3 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_3);
+    _node.setEffect(_doubleArrow_3);
   }
   
-  public void activate() {
-    super.activate();
-    XNestedDiagram _xNestedDiagram = new XNestedDiagram();
-    this.innerDiagram = _xNestedDiagram;
+  public void doActivate() {
+    super.doActivate();
     XAbstractDiagram _diagram = this.getDiagram();
     this.innerDiagram.setParentDiagram(_diagram);
-    this.innerDiagram.activate();
-    final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
-        public void apply(final XNestedDiagram it) {
-          MyNode _myNode = new MyNode("Inner");
-          it.addNode(_myNode);
-        }
-      };
-    ObjectExtensions.<XNestedDiagram>operator_doubleArrow(
-      this.innerDiagram, _function);
-    Node _node = this.getNode();
-    ObservableList<Node> _children = ((StackPane) _node).getChildren();
-    _children.add(this.innerDiagram);
     AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
     this.rapidButtonBehavior = _addRapidButtonBehavior;
     this.rapidButtonBehavior.activate();
-    Node _node_1 = this.getNode();
-    LevelOfDetailBehavior _levelOfDetailBehavior = new LevelOfDetailBehavior(this, ((Pane) _node_1), this.label);
+    Node _node = this.getNode();
+    LevelOfDetailBehavior _levelOfDetailBehavior = new LevelOfDetailBehavior(this, ((Pane) _node), this.label);
     this.levelOfDetailBehavior = _levelOfDetailBehavior;
     this.levelOfDetailBehavior.addChildForThreshold(10000.0, this.innerDiagram);
     this.levelOfDetailBehavior.activate();

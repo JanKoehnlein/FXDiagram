@@ -34,6 +34,16 @@ public class XRapidButton extends ImageView implements XActivatable {
     this._diagram = diagram;
   }
   
+  private boolean _isActive;
+  
+  public boolean isIsActive() {
+    return this._isActive;
+  }
+  
+  public void setIsActive(final boolean isActive) {
+    this._isActive = isActive;
+  }
+  
   private XNode host;
   
   private Placer placer;
@@ -53,6 +63,15 @@ public class XRapidButton extends ImageView implements XActivatable {
   }
   
   public void activate() {
+    boolean _isIsActive = this.isIsActive();
+    boolean _not = (!_isIsActive);
+    if (_not) {
+      this.doActivate();
+    }
+    this.setIsActive(true);
+  }
+  
+  public void doActivate() {
     this.setVisible(false);
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {

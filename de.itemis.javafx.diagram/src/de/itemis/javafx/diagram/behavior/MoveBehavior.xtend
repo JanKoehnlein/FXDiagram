@@ -11,7 +11,7 @@ class MoveBehavior extends AbstractBehavior {
 		super(host)
 	}
 	
-	override activate() {
+	override doActivate() {
 		host.node.onMousePressed = [
 			mousePressed  
 		]

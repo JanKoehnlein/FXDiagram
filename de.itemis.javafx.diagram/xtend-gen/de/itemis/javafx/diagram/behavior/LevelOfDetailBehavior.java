@@ -2,6 +2,7 @@ package de.itemis.javafx.diagram.behavior;
 
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XAbstractDiagram;
+import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.behavior.AbstractBehavior;
 import java.util.ArrayList;
@@ -41,10 +42,13 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
     super(host);
     this.parent = parent;
     this.children.add(defaultChild);
+    if ((defaultChild instanceof XActivatable)) {
+      ((XActivatable) defaultChild).activate();
+    }
     defaultChild.setVisible(true);
   }
   
-  public void activate() {
+  public void doActivate() {
     final Procedure3<ObservableValue<? extends Bounds>,Bounds,Bounds> _function = new Procedure3<ObservableValue<? extends Bounds>,Bounds,Bounds>() {
         public void apply(final ObservableValue<? extends Bounds> bounds, final Bounds oldBounds, final Bounds newBounds) {
           XNode _host = LevelOfDetailBehavior.this.getHost();
@@ -54,6 +58,9 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
           double _value = LevelOfDetailBehavior.this.getValue(_localToScene);
           final int newIndex = LevelOfDetailBehavior.this.getChildIndexForValue(_value);
           final Node child = LevelOfDetailBehavior.this.children.get(newIndex);
+          if ((child instanceof XActivatable)) {
+            ((XActivatable) child).activate();
+          }
           final Procedure1<Node> _function = new Procedure1<Node>() {
               public void apply(final Node it) {
                 boolean _equals = ObjectExtensions.operator_equals(it, child);

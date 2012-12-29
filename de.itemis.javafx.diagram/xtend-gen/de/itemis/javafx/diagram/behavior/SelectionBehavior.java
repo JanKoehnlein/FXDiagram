@@ -41,7 +41,7 @@ public class SelectionBehavior extends AbstractBehavior {
     this.selectionEffect = _doubleArrow;
   }
   
-  public void activate() {
+  public void doActivate() {
     XNode _host = this.getHost();
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {

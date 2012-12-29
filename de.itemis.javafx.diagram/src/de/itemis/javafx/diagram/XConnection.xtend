@@ -13,6 +13,8 @@ class XConnection extends Polyline implements XActivatable {
 	
 	@Property XAbstractDiagram diagram
 	
+	@Property boolean isActive
+	
 	new(XNode source, XNode target) {
 		this.source = source
 		this.target = target
@@ -36,6 +38,12 @@ class XConnection extends Polyline implements XActivatable {
 	}
 
 	override activate() {
+		if(!isActive)
+			doActivate
+		isActive = true
+	}
+	
+	def doActivate() {
 		val ChangeListener changeListener = [
 			element, oldValue, newValue | 
 			calculatePoints()

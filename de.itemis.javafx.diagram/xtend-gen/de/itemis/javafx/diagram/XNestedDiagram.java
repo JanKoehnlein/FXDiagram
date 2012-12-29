@@ -13,6 +13,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
@@ -42,6 +43,8 @@ public class XNestedDiagram extends XAbstractDiagram {
     }
   }.apply();
   
+  private Procedure1<? super XNestedDiagram> contentsInitializer;
+  
   public XNestedDiagram() {
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.nodeLayer);
@@ -70,6 +73,19 @@ public class XNestedDiagram extends XAbstractDiagram {
     _visibleProperty.addListener(visibilityListener);
   }
   
+  public Procedure1<? super XNestedDiagram> setContentsInitializer(final Procedure1<? super XNestedDiagram> contentsInitializer) {
+    Procedure1<? super XNestedDiagram> _contentsInitializer = this.contentsInitializer = contentsInitializer;
+    return _contentsInitializer;
+  }
+  
+  public void doActivate() {
+    boolean _notEquals = ObjectExtensions.operator_notEquals(this.contentsInitializer, null);
+    if (_notEquals) {
+      ObjectExtensions.<XNestedDiagram>operator_doubleArrow(this, this.contentsInitializer);
+    }
+    super.doActivate();
+  }
+  
   public Group getNodeLayer() {
     return this.nodeLayer;
   }
@@ -85,14 +101,24 @@ public class XNestedDiagram extends XAbstractDiagram {
   }
   
   public boolean internalAddNode(final XNode node) {
-    XAbstractDiagram _parentDiagram = this.getParentDiagram();
-    boolean _internalAddNode = _parentDiagram.internalAddNode(node);
-    return _internalAddNode;
+    boolean _xblockexpression = false;
+    {
+      super.internalAddNode(node);
+      XAbstractDiagram _parentDiagram = this.getParentDiagram();
+      boolean _internalAddNode = _parentDiagram.internalAddNode(node);
+      _xblockexpression = (_internalAddNode);
+    }
+    return _xblockexpression;
   }
   
   public boolean internalAddButton(final XRapidButton button) {
-    XAbstractDiagram _parentDiagram = this.getParentDiagram();
-    boolean _internalAddButton = _parentDiagram.internalAddButton(button);
-    return _internalAddButton;
+    boolean _xblockexpression = false;
+    {
+      super.internalAddButton(button);
+      XAbstractDiagram _parentDiagram = this.getParentDiagram();
+      boolean _internalAddButton = _parentDiagram.internalAddButton(button);
+      _xblockexpression = (_internalAddButton);
+    }
+    return _xblockexpression;
   }
 }

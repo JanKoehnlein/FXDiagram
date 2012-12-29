@@ -24,7 +24,7 @@ class SelectionBehavior extends AbstractBehavior {
 		]
 	}
 	
-	override activate() {
+	override doActivate() {
 		host.onMousePressed = [
 			mousePressed
 		]

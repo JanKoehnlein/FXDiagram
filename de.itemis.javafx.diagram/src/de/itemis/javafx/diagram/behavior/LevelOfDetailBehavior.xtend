@@ -8,6 +8,7 @@ import javafx.scene.Node
 import javafx.scene.layout.Pane
 
 import static extension de.itemis.javafx.diagram.Extensions.*
+import de.itemis.javafx.diagram.XActivatable
 
 class LevelOfDetailBehavior extends AbstractBehavior {
 
@@ -21,14 +22,18 @@ class LevelOfDetailBehavior extends AbstractBehavior {
 		super(host)
 		this.parent = parent
 		children += defaultChild
+		if(defaultChild instanceof XActivatable)
+			(defaultChild as XActivatable).activate
 		defaultChild.visible = true
 	}
 	
-	override activate() {
+	override doActivate() {
 		val ChangeListener<Bounds> boundsListener = [
 			bounds, oldBounds, newBounds |
 			val newIndex = host.localToScene(host.boundsInLocal).value.childIndexForValue
 			val child = children.get(newIndex)
+			if(child instanceof XActivatable)
+				(child as XActivatable).activate
 			children.forEach[visible = it == child]
 		]
 		host.diagram.boundsInParentProperty.addListener(boundsListener)		

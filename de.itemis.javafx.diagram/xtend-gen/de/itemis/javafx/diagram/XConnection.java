@@ -46,6 +46,16 @@ public class XConnection extends Polyline implements XActivatable {
     this._diagram = diagram;
   }
   
+  private boolean _isActive;
+  
+  public boolean isIsActive() {
+    return this._isActive;
+  }
+  
+  public void setIsActive(final boolean isActive) {
+    this._isActive = isActive;
+  }
+  
   public XConnection(final XNode source, final XNode target) {
     this.setSource(source);
     this.setTarget(target);
@@ -99,22 +109,36 @@ public class XConnection extends Polyline implements XActivatable {
   }
   
   public void activate() {
-    final Procedure3<ObservableValue,Object,Object> _function = new Procedure3<ObservableValue,Object,Object>() {
-        public void apply(final ObservableValue element, final Object oldValue, final Object newValue) {
-          XConnection.this.calculatePoints();
-        }
+    boolean _isIsActive = this.isIsActive();
+    boolean _not = (!_isIsActive);
+    if (_not) {
+      this.doActivate();
+    }
+    this.setIsActive(true);
+  }
+  
+  public boolean doActivate() {
+    boolean _xblockexpression = false;
+    {
+      final Procedure3<ObservableValue,Object,Object> _function = new Procedure3<ObservableValue,Object,Object>() {
+          public void apply(final ObservableValue element, final Object oldValue, final Object newValue) {
+            XConnection.this.calculatePoints();
+          }
+        };
+      final ChangeListener changeListener = new ChangeListener<Object>() {
+          public void changed(ObservableValue<? extends Object> observable,Object oldValue,Object newValue) {
+            _function.apply(observable,oldValue,newValue);
+          }
       };
-    final ChangeListener changeListener = new ChangeListener<Object>() {
-        public void changed(ObservableValue<? extends Object> observable,Object oldValue,Object newValue) {
-          _function.apply(observable,oldValue,newValue);
-        }
-    };
-    XNode _source = this.getSource();
-    AnchorPoints _anchorPoints = _source.getAnchorPoints();
-    _anchorPoints.addListener(changeListener);
-    XNode _target = this.getTarget();
-    AnchorPoints _anchorPoints_1 = _target.getAnchorPoints();
-    _anchorPoints_1.addListener(changeListener);
-    this.calculatePoints();
+      XNode _source = this.getSource();
+      AnchorPoints _anchorPoints = _source.getAnchorPoints();
+      _anchorPoints.addListener(changeListener);
+      XNode _target = this.getTarget();
+      AnchorPoints _anchorPoints_1 = _target.getAnchorPoints();
+      _anchorPoints_1.addListener(changeListener);
+      boolean _calculatePoints = this.calculatePoints();
+      _xblockexpression = (_calculatePoints);
+    }
+    return _xblockexpression;
   }
 }

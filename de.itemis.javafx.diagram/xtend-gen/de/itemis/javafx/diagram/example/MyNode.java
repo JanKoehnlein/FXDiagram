@@ -66,8 +66,8 @@ public class MyNode extends XNode {
     _node.setEffect(_doubleArrow_1);
   }
   
-  public void activate() {
-    super.activate();
+  public void doActivate() {
+    super.doActivate();
     AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
     this.rapidButtonBehavior = _addRapidButtonBehavior;
     this.rapidButtonBehavior.activate();

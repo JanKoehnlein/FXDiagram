@@ -1,4 +1,2 @@
 - connection behavior
 - continuous zoom
-- make diagram a node
-- constructors and live tree vs activate method and DI

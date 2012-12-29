@@ -15,9 +15,9 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 		super(host)
 	}	
 	
-	override activate() {
+	override doActivate() {
 		val addAction = [ XRapidButton button | 
-			val target = new MyNode("new")
+			val target = new MyContainerNode("new")
 			val source = button.host
 			val connection = new XConnection(source, target)
 			host.diagram.addNode(target)

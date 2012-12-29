@@ -1,7 +1,7 @@
 package de.itemis.javafx.diagram
 
-import javafx.scene.Group
 import javafx.beans.value.ChangeListener
+import javafx.scene.Group
 
 class XNestedDiagram extends XAbstractDiagram {
 
@@ -9,6 +9,8 @@ class XNestedDiagram extends XAbstractDiagram {
 
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
+
+	var (XNestedDiagram)=>void contentsInitializer 
 
 	new() {
 		children += nodeLayer
@@ -21,6 +23,16 @@ class XNestedDiagram extends XAbstractDiagram {
 			connections.forEach[ visible = newVal ]
 		]
 		visibleProperty.addListener(visibilityListener)
+	}
+	
+	def setContentsInitializer((XNestedDiagram)=>void contentsInitializer) {
+		this.contentsInitializer = contentsInitializer
+	}
+	
+	override doActivate() {
+		if(contentsInitializer != null)
+			this => contentsInitializer
+		super.doActivate()
 	}
 	
 	override getNodeLayer() {
@@ -36,11 +48,12 @@ class XNestedDiagram extends XAbstractDiagram {
 	}
 	
 	override internalAddNode(XNode node) {
+		super.internalAddNode(node)
 		parentDiagram.internalAddNode(node)
 	}
 	
 	override internalAddButton(XRapidButton button) {
+		super.internalAddButton(button)
 		parentDiagram.internalAddButton(button)
 	}
-	
 }

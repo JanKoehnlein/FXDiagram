@@ -28,6 +28,16 @@ public class XNode extends Group implements XActivatable {
     this._diagram = diagram;
   }
   
+  private boolean _isActive;
+  
+  public boolean isIsActive() {
+    return this._isActive;
+  }
+  
+  public void setIsActive(final boolean isActive) {
+    this._isActive = isActive;
+  }
+  
   private Effect mouseOverEffect;
   
   private Effect originalEffect;
@@ -44,6 +54,15 @@ public class XNode extends Group implements XActivatable {
   }
   
   public void activate() {
+    boolean _isIsActive = this.isIsActive();
+    boolean _not = (!_isIsActive);
+    if (_not) {
+      this.doActivate();
+    }
+    this.setIsActive(true);
+  }
+  
+  public void doActivate() {
     SelectionBehavior _selectionBehavior = new SelectionBehavior(this);
     this.selectionBehavior = _selectionBehavior;
     MoveBehavior _moveBehavior = new MoveBehavior(this);

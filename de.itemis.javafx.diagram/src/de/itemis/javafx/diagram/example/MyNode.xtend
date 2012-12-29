@@ -34,8 +34,8 @@ class MyNode extends XNode {
 		]
 	}
 	
-	override activate() {
-		super.activate()
+	override doActivate() {
+		super.doActivate()
 		rapidButtonBehavior = new AddRapidButtonBehavior(this)
 		rapidButtonBehavior.activate()
 	}

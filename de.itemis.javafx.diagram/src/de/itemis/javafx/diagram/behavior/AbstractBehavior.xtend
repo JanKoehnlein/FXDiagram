@@ -7,6 +7,8 @@ abstract class AbstractBehavior implements XActivatable {
 	
 	XNode host 
 	
+	@Property boolean isActive
+	
 	new(XNode host) {
 		this.host = host	
 	}
@@ -14,4 +16,12 @@ abstract class AbstractBehavior implements XActivatable {
 	def getHost() {
 		host
 	}
+	
+	override activate() {
+		if(!isActive)
+			doActivate
+		isActive = true
+	}
+	
+	def protected void doActivate()
 }

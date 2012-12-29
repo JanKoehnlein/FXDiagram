@@ -16,6 +16,8 @@ class XRapidButton extends ImageView implements XActivatable {
 	
 	@Property XAbstractDiagram diagram
 	
+	@Property boolean isActive
+	
 	XNode host
 	
 	Placer placer
@@ -34,6 +36,12 @@ class XRapidButton extends ImageView implements XActivatable {
 	}
 	
 	override activate() {
+		if(!isActive)
+			doActivate
+		isActive = true
+	}
+	
+	def doActivate() {
 		visible = false
 		onMouseEntered = [ show ]
 		onMouseExited = [ fade ]

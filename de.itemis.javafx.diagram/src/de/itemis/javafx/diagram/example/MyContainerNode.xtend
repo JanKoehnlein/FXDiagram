@@ -28,6 +28,13 @@ class MyContainerNode extends XNode {
 		label = new Label => [
 				text = name
 		]
+		innerDiagram = new XNestedDiagram => [
+			contentsInitializer = [
+				val innerNode = new MyContainerNode("Inner")
+				addNode(innerNode)
+				innerNode.relocate(96, 35)
+			]
+		]
 		node = new StackPane => [
 			val rectangle = new Rectangle => [
 				width = 80
@@ -40,6 +47,8 @@ class MyContainerNode extends XNode {
 			]
 			children += rectangle
 			children += label
+			children += innerDiagram
+			
 			clip = new Rectangle => [
 				width = rectangle.width + rectangle.strokeWidth
 				height = rectangle.height + rectangle.strokeWidth			
@@ -50,15 +59,9 @@ class MyContainerNode extends XNode {
 		]
 	}
 	
-	override activate() {
-		super.activate()
-		innerDiagram = new XNestedDiagram
-		innerDiagram.parentDiagram = diagram 
-		innerDiagram.activate	
-		innerDiagram => [
-			addNode(new MyNode("Inner"))
-		]
-		(node as StackPane).children += innerDiagram
+	override doActivate() {
+		super.doActivate()
+		innerDiagram.parentDiagram = diagram
 		rapidButtonBehavior = new AddRapidButtonBehavior(this)
 		rapidButtonBehavior.activate
 		levelOfDetailBehavior = new LevelOfDetailBehavior(this, node as Pane, label)

@@ -6,7 +6,7 @@ import de.itemis.javafx.diagram.XConnection;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.XRapidButton;
 import de.itemis.javafx.diagram.behavior.AbstractBehavior;
-import de.itemis.javafx.diagram.example.MyNode;
+import de.itemis.javafx.diagram.example.MyContainerNode;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.event.EventHandler;
@@ -24,11 +24,11 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     super(host);
   }
   
-  public void activate() {
+  public void doActivate() {
     final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
-          MyNode _myNode = new MyNode("new");
-          final MyNode target = _myNode;
+          MyContainerNode _myContainerNode = new MyContainerNode("new");
+          final MyContainerNode target = _myContainerNode;
           final XNode source = button.getHost();
           XConnection _xConnection = new XConnection(source, target);
           final XConnection connection = _xConnection;

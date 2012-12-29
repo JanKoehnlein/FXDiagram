@@ -16,7 +16,7 @@ public class MoveBehavior extends AbstractBehavior {
     super(host);
   }
   
-  public void activate() {
+  public void doActivate() {
     XNode _host = this.getHost();
     Node _node = _host.getNode();
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {

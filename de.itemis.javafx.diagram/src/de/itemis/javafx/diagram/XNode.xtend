@@ -13,6 +13,8 @@ class XNode extends Group implements XActivatable {
 	
 	@Property XAbstractDiagram diagram
 	
+	@Property boolean isActive
+	
 	Effect mouseOverEffect
 	
 	Effect originalEffect
@@ -27,7 +29,13 @@ class XNode extends Group implements XActivatable {
 		mouseOverEffect = new InnerShadow
 	}
 	
-	override activate() {	
+	override activate() {
+		if(!isActive)
+			doActivate
+		isActive = true
+	}
+	
+	def doActivate() {	
 		selectionBehavior = new SelectionBehavior(this)
 		moveBehavior = new MoveBehavior(this)
 		anchorPoints = new AnchorPoints(this)
