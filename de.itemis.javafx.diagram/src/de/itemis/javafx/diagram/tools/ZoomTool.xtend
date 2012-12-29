@@ -1,6 +1,6 @@
 package de.itemis.javafx.diagram.tools
 
-import de.itemis.javafx.diagram.XDiagram
+import de.itemis.javafx.diagram.XRootDiagram
 import javafx.event.EventHandler
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.ZoomEvent
@@ -9,23 +9,22 @@ class ZoomTool {
 	
 	double initialScale
 	
-	new(XDiagram diagram) {
-		val scene = diagram.rootPane.scene
-		val rootPane = diagram.rootPane
+	new(XRootDiagram diagram) {
+		val scene = diagram.scene
 		
 		scene.onZoomStarted = [
-			initialScale = rootPane.scaleX
+			initialScale = diagram.scaleX
 		]
 		val EventHandler<ZoomEvent> zoomHandler = [
-			rootPane.scaleX = totalZoomFactor * initialScale
-			rootPane.scaleY = totalZoomFactor * initialScale
+			diagram.scaleX = totalZoomFactor * initialScale
+			diagram.scaleY = totalZoomFactor * initialScale
 		]
 		scene.onZoom = zoomHandler 
 		scene.onZoomFinished = zoomHandler
 		
 		val EventHandler<ScrollEvent> scrollHandler = [
-			rootPane.translateX = rootPane.translateX + deltaX		
-			rootPane.translateY = rootPane.translateY + deltaY		
+			diagram.translateX = diagram.translateX + deltaX		
+			diagram.translateY = diagram.translateY + deltaY		
 		] 
 		scene.onScrollStarted = scrollHandler 
 		scene.onScroll = scrollHandler

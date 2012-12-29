@@ -3,8 +3,7 @@ package de.itemis.javafx.diagram.example
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
-import de.itemis.javafx.diagram.XDiagram
-import de.itemis.javafx.diagram.XConnection
+import de.itemis.javafx.diagram.XRootDiagram
 
 class Main extends Application {
 	
@@ -19,14 +18,15 @@ class Main extends Application {
     }
 
 	def createScene() {
-		val diagram = new XDiagram
-        val scene = new Scene(diagram.getRootPane, 400, 400)
-        diagram.activate
-        val source = new MyNode('source')
-        val target = new MyNode('target')
+		val diagram = new XRootDiagram
+        val scene = new Scene(diagram, 400, 400)
+        diagram.activate()
+        val source = new MyContainerNode('source')
+//        val target = new MyContainerNode('target')
         diagram.addNode(source)
-        diagram.addNode(target)
-        diagram.addConnection(new XConnection(source, target))
+//        diagram.addNode(target)
+//        val connection = new XConnection(source, target)
+//		diagram.addConnection(connection)
 		scene
 	}    
 }

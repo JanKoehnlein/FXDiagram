@@ -1,36 +1,40 @@
 package de.itemis.javafx.diagram.tools
 
-import de.itemis.javafx.diagram.XDiagram
 import javafx.scene.input.MouseEvent
-import de.itemis.javafx.diagram.Extensions
+import de.itemis.javafx.diagram.XRootDiagram
+import de.itemis.javafx.diagram.XRapidButton
+import static extension de.itemis.javafx.diagram.Extensions.*
 
 class SelectionTool {
 	
-	extension Extensions
+	XRootDiagram diagram 
 	
-	XDiagram diagram 
-	
-	new(XDiagram diagram) {
+	new(XRootDiagram diagram) {
 		this.diagram = diagram
-		diagram.rootPane.addEventFilter(MouseEvent::MOUSE_PRESSED) [
-			val targetShape = getTargetShape(it)
-			if(targetShape?.selectionBehavior != null) {
-				if(!targetShape.selectionBehavior.selected && !shortcutDown)
-					selection.forEach[selectionBehavior.setSelected(false)]		
-				for(shape: selection) {
-					shape.moveBehavior?.mousePressed(it)				
+		diagram.addEventFilter(MouseEvent::MOUSE_PRESSED) [
+			if(!(target instanceof XRapidButton)) { 
+				val targetShape = it.targetShape
+				if(targetShape?.selectionBehavior != null) {
+					if(!targetShape.selectionBehavior.selected && !shortcutDown)
+						selection.forEach[selectionBehavior.selected = false]		
+					for(shape: selection) {
+						shape?.moveBehavior?.mousePressed(it)				
+					}
+					targetShape.moveBehavior?.mousePressed(it)				
+					targetShape.selectionBehavior.mousePressed(it)
+					it.consume
 				}
-				targetShape.selectionBehavior.mousePressed(it)
 			}
 		]
-		diagram.rootPane.addEventFilter(MouseEvent::MOUSE_DRAGGED) [
+		diagram.addEventFilter(MouseEvent::MOUSE_DRAGGED) [
 			for(shape: selection) {
 				shape?.moveBehavior?.mouseDragged(it)				
 			}
+			it.consume
 		]
 	}
 	
 	def getSelection() {
-		diagram.shapes.filter[selectionBehavior?.selected]
+		diagram.nodes.filter[selectionBehavior?.selected]
 	}
 }

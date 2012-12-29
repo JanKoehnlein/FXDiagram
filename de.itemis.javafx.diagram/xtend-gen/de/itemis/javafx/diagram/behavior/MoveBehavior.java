@@ -25,8 +25,8 @@ public class MoveBehavior extends AbstractBehavior {
         }
       };
     _node.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function.apply(event);
         }
     });
     XNode _host_1 = this.getHost();
@@ -37,8 +37,8 @@ public class MoveBehavior extends AbstractBehavior {
         }
       };
     _node_1.setOnMouseDragged(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function_1.apply(event);
         }
     });
   }
@@ -47,10 +47,10 @@ public class MoveBehavior extends AbstractBehavior {
     double _screenX = it.getScreenX();
     double _screenY = it.getScreenY();
     XNode _host = this.getHost();
-    double _translateX = _host.getTranslateX();
+    double _layoutX = _host.getLayoutX();
     XNode _host_1 = this.getHost();
-    double _translateY = _host_1.getTranslateY();
-    DragContext _dragContext = new DragContext(_screenX, _screenY, _translateX, _translateY);
+    double _layoutY = _host_1.getLayoutY();
+    DragContext _dragContext = new DragContext(_screenX, _screenY, _layoutX, _layoutY);
     DragContext _dragContext_1 = this.dragContext = _dragContext;
     return _dragContext_1;
   }
@@ -62,13 +62,11 @@ public class MoveBehavior extends AbstractBehavior {
     double _minus = (_initialX - _mouseAnchorX);
     double _screenX = it.getScreenX();
     double _plus = (_minus + _screenX);
-    _host.setTranslateX(_plus);
-    XNode _host_1 = this.getHost();
     double _initialY = this.dragContext.getInitialY();
     double _mouseAnchorY = this.dragContext.getMouseAnchorY();
     double _minus_1 = (_initialY - _mouseAnchorY);
     double _screenY = it.getScreenY();
     double _plus_1 = (_minus_1 + _screenY);
-    _host_1.setTranslateY(_plus_1);
+    _host.relocate(_plus, _plus_1);
   }
 }

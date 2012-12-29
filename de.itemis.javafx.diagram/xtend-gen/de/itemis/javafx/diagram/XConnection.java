@@ -1,7 +1,8 @@
 package de.itemis.javafx.diagram;
 
-import de.itemis.javafx.diagram.Activateable;
 import de.itemis.javafx.diagram.AnchorPoints;
+import de.itemis.javafx.diagram.XAbstractDiagram;
+import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XNode;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
@@ -14,7 +15,7 @@ import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
-public class XConnection extends Polyline implements Activateable {
+public class XConnection extends Polyline implements XActivatable {
   private XNode _source;
   
   public XNode getSource() {
@@ -33,6 +34,16 @@ public class XConnection extends Polyline implements Activateable {
   
   public void setTarget(final XNode target) {
     this._target = target;
+  }
+  
+  private XAbstractDiagram _diagram;
+  
+  public XAbstractDiagram getDiagram() {
+    return this._diagram;
+  }
+  
+  public void setDiagram(final XAbstractDiagram diagram) {
+    this._diagram = diagram;
   }
   
   public XConnection(final XNode source, final XNode target) {
@@ -94,8 +105,8 @@ public class XConnection extends Polyline implements Activateable {
         }
       };
     final ChangeListener changeListener = new ChangeListener<Object>() {
-        public void changed(ObservableValue<? extends Object> arg0,Object arg1,Object arg2) {
-          _function.apply(arg0,arg1,arg2);
+        public void changed(ObservableValue<? extends Object> observable,Object oldValue,Object newValue) {
+          _function.apply(observable,oldValue,newValue);
         }
     };
     XNode _source = this.getSource();

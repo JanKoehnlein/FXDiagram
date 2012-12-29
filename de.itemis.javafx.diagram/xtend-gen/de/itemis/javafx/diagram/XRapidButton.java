@@ -1,8 +1,9 @@
-package de.itemis.javafx.diagram.behavior;
+package de.itemis.javafx.diagram;
 
-import de.itemis.javafx.diagram.Activateable;
+import de.itemis.javafx.diagram.Placer;
+import de.itemis.javafx.diagram.XAbstractDiagram;
+import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XNode;
-import de.itemis.javafx.diagram.behavior.Placer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -22,22 +23,81 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
-public class RapidButton extends ImageView implements Activateable {
+public class XRapidButton extends ImageView implements XActivatable {
+  private XAbstractDiagram _diagram;
+  
+  public XAbstractDiagram getDiagram() {
+    return this._diagram;
+  }
+  
+  public void setDiagram(final XAbstractDiagram diagram) {
+    this._diagram = diagram;
+  }
+  
   private XNode host;
   
   private Placer placer;
   
-  private Procedure1<? super RapidButton> action;
+  private Procedure1<? super XRapidButton> action;
   
   private Timeline timeline;
   
-  public RapidButton(final XNode host, final double xPos, final double yPos, final String file, final Procedure1<? super RapidButton> action) {
+  public XRapidButton(final XNode host, final double xPos, final double yPos, final String file, final Procedure1<? super XRapidButton> action) {
     this.host = host;
     this.action = action;
     Image _image = new Image(file);
     this.setImage(_image);
     Placer _placer = new Placer(this, xPos, yPos);
     this.placer = _placer;
+    this.setManaged(false);
+  }
+  
+  public void activate() {
+    this.setVisible(false);
+    final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
+        public void apply(final MouseEvent it) {
+          XRapidButton.this.show();
+        }
+      };
+    this.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent event) {
+          _function.apply(event);
+        }
+    });
+    final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
+        public void apply(final MouseEvent it) {
+          XRapidButton.this.fade();
+        }
+      };
+    this.setOnMouseExited(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent event) {
+          _function_1.apply(event);
+        }
+    });
+    final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
+        public void apply(final MouseEvent it) {
+          XRapidButton.this.action.apply(XRapidButton.this);
+        }
+      };
+    this.setOnMousePressed(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent event) {
+          _function_2.apply(event);
+        }
+    });
+    this.placer.activate();
+    final Procedure3<ObservableValue<? extends Point2D>,Point2D,Point2D> _function_3 = new Procedure3<ObservableValue<? extends Point2D>,Point2D,Point2D>() {
+        public void apply(final ObservableValue<? extends Point2D> element, final Point2D oldVal, final Point2D newVal) {
+          double _x = newVal.getX();
+          double _y = newVal.getY();
+          XRapidButton.this.relocate(_x, _y);
+        }
+      };
+    final ChangeListener<Point2D> listener = new ChangeListener<Point2D>() {
+        public void changed(ObservableValue<? extends Point2D> observable,Point2D oldValue,Point2D newValue) {
+          _function_3.apply(observable,oldValue,newValue);
+        }
+    };
+    this.placer.addListener(listener);
   }
   
   protected void setPosition(final Point2D position) {
@@ -78,19 +138,19 @@ public class RapidButton extends ImageView implements Activateable {
               it.setAutoReverse(true);
               ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
               Duration _millis = Duration.millis(500);
-              DoubleProperty _opacityProperty = RapidButton.this.opacityProperty();
+              DoubleProperty _opacityProperty = XRapidButton.this.opacityProperty();
               KeyValue _keyValue = new KeyValue(_opacityProperty, Double.valueOf(1.0));
               KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
               _keyFrames.add(_keyFrame);
               ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
               Duration _millis_1 = Duration.millis(1000);
-              DoubleProperty _opacityProperty_1 = RapidButton.this.opacityProperty();
+              DoubleProperty _opacityProperty_1 = XRapidButton.this.opacityProperty();
               KeyValue _keyValue_1 = new KeyValue(_opacityProperty_1, Double.valueOf(0.0));
               KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
               _keyFrames_1.add(_keyFrame_1);
               ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
               Duration _millis_2 = Duration.millis(1000);
-              BooleanProperty _visibleProperty = RapidButton.this.visibleProperty();
+              BooleanProperty _visibleProperty = XRapidButton.this.visibleProperty();
               KeyValue _keyValue_2 = new KeyValue(_visibleProperty, Boolean.valueOf(false));
               KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
               _keyFrames_2.add(_keyFrame_2);
@@ -102,53 +162,5 @@ public class RapidButton extends ImageView implements Activateable {
       _xblockexpression = (this.timeline);
     }
     return _xblockexpression;
-  }
-  
-  public void activate() {
-    this.setVisible(false);
-    final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
-          RapidButton.this.show();
-        }
-      };
-    this.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
-        }
-    });
-    final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
-          RapidButton.this.fade();
-        }
-      };
-    this.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
-        }
-    });
-    final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
-          RapidButton.this.action.apply(RapidButton.this);
-        }
-      };
-    this.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_2.apply(arg0);
-        }
-    });
-    this.placer.activate();
-    Point2D _value = this.placer.getValue();
-    this.setPosition(_value);
-    final Procedure3<ObservableValue<? extends Point2D>,Point2D,Point2D> _function_3 = new Procedure3<ObservableValue<? extends Point2D>,Point2D,Point2D>() {
-        public void apply(final ObservableValue<? extends Point2D> element, final Point2D oldVal, final Point2D newVal) {
-          RapidButton.this.setPosition(newVal);
-        }
-      };
-    final ChangeListener<Point2D> listener = new ChangeListener<Point2D>() {
-        public void changed(ObservableValue<? extends Point2D> arg0,Point2D arg1,Point2D arg2) {
-          _function_3.apply(arg0,arg1,arg2);
-        }
-    };
-    this.placer.addListener(listener);
   }
 }

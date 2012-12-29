@@ -1,8 +1,8 @@
 package de.itemis.javafx.diagram;
 
-import de.itemis.javafx.diagram.Activateable;
 import de.itemis.javafx.diagram.AnchorPoints;
-import de.itemis.javafx.diagram.XDiagram;
+import de.itemis.javafx.diagram.XAbstractDiagram;
+import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.behavior.MoveBehavior;
 import de.itemis.javafx.diagram.behavior.SelectionBehavior;
 import javafx.collections.ObservableList;
@@ -15,8 +15,18 @@ import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class XNode extends Group implements Activateable {
+public class XNode extends Group implements XActivatable {
   private Node node;
+  
+  private XAbstractDiagram _diagram;
+  
+  public XAbstractDiagram getDiagram() {
+    return this._diagram;
+  }
+  
+  public void setDiagram(final XAbstractDiagram diagram) {
+    this._diagram = diagram;
+  }
   
   private Effect mouseOverEffect;
   
@@ -28,25 +38,9 @@ public class XNode extends Group implements Activateable {
   
   private MoveBehavior moveBehavior;
   
-  private XDiagram _diagram;
-  
-  public XDiagram getDiagram() {
-    return this._diagram;
-  }
-  
-  public void setDiagram(final XDiagram diagram) {
-    this._diagram = diagram;
-  }
-  
   public XNode() {
     InnerShadow _innerShadow = new InnerShadow();
     this.mouseOverEffect = _innerShadow;
-  }
-  
-  public void setNode(final Node node) {
-    this.node = node;
-    ObservableList<Node> _children = this.getChildren();
-    _children.add(node);
   }
   
   public void activate() {
@@ -66,8 +60,8 @@ public class XNode extends Group implements Activateable {
         }
       };
     this.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function.apply(event);
         }
     });
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
@@ -76,10 +70,20 @@ public class XNode extends Group implements Activateable {
         }
       };
     this.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function_1.apply(event);
         }
     });
+  }
+  
+  public Node getNode() {
+    return this.node;
+  }
+  
+  public void setNode(final Node node) {
+    this.node = node;
+    ObservableList<Node> _children = this.getChildren();
+    _children.add(node);
   }
   
   public SelectionBehavior getSelectionBehavior() {
@@ -92,9 +96,5 @@ public class XNode extends Group implements Activateable {
   
   public AnchorPoints getAnchorPoints() {
     return this.anchorPoints;
-  }
-  
-  public Node getNode() {
-    return this.node;
   }
 }

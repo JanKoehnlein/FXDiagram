@@ -1,7 +1,5 @@
-package de.itemis.javafx.diagram.behavior
+package de.itemis.javafx.diagram
 
-import de.itemis.javafx.diagram.Activateable
-import de.itemis.javafx.diagram.XNode
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline
@@ -11,29 +9,45 @@ import javafx.geometry.Point2D
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.util.Duration
-import de.itemis.javafx.diagram.Extensions
 
-class RapidButton extends ImageView implements Activateable {
+import static extension de.itemis.javafx.diagram.Extensions.*
+
+class XRapidButton extends ImageView implements XActivatable {
+	
+	@Property XAbstractDiagram diagram
 	
 	XNode host
 	
 	Placer placer
 	
-	(RapidButton)=>void action
+	(XRapidButton)=>void action
 
 	Timeline timeline
 	
 	new(XNode host, double xPos, double yPos, 
-		String file, (RapidButton)=>void action) {
+		String file, (XRapidButton)=>void action) {
 		this.host = host
 		this.action = action
 		image = new Image(file)
 		placer = new Placer(this, xPos, yPos)
+		managed = false
 	}
 	
+	override activate() {
+		visible = false
+		onMouseEntered = [ show ]
+		onMouseExited = [ fade ]
+		onMousePressed = [ action.apply(this) ]
+		placer.activate
+		val ChangeListener<Point2D> listener = [
+			element, oldVal, newVal | relocate(newVal.x, newVal.y)
+		] 
+		placer.addListener(listener)
+	}
+
 	def protected setPosition(Point2D position) {
 		translateX = position.x
-		translateY = position.y
+		translateY = position.y			
 	}
 	
 	def getHost() {	host }
@@ -65,48 +79,38 @@ class RapidButton extends ImageView implements Activateable {
 		timeline
 	}
 
-	override activate() {
-		visible = false
-		onMouseEntered = [ show ]
-		onMouseExited = [ fade ]
-		onMousePressed = [ action.apply(this) ]
-		placer.activate()
-		position = placer.value
-		val ChangeListener<Point2D> listener = [
-			element, oldVal, newVal | position = newVal
-		] 
-		placer.addListener(listener)
-	}
-	
 }
 
-class Placer extends ObjectBinding<Point2D> implements Activateable {
+class Placer extends ObjectBinding<Point2D> {
 	
-	extension Extensions
-	
-	RapidButton button
+	XRapidButton button
 	double xPos
 	double yPos
 	
-	new(RapidButton button, double xPos, double yPos) {
+	new(XRapidButton button, double xPos, double yPos) {
 		this.button = button
 		this.xPos = xPos
 		this.yPos = yPos
+		activate
 	}
 	
-	override activate() {
+	def activate() {
 		val node = button.host
-		bind(node.translateXProperty, node.translateYProperty, node.boundsInLocalProperty)
+		bind(node.layoutXProperty, node.layoutYProperty, node.layoutBoundsProperty)
 	}
 
 	override protected computeValue() {
-		val node = button.host.node
-		val absPosition = node.localToRoot(node.translateX, node.translateY)
-		val absBounds = node.localToRoot(node.boundsInLocal)
-		val totalWidth = absBounds.width + 2 * button.layoutBounds.width
-		val totalHeight = absBounds.height + 2 * button.layoutBounds.height
-		new Point2D(absPosition.x - 1.5 * button.layoutBounds.width + xPos * totalWidth,
-				absPosition.y - 1.5 * button.layoutBounds.height + yPos * totalHeight)
+		val node = button.host
+		val boundsInDiagram = node.localToDiagram(node.layoutBounds)
+		if(boundsInDiagram != null) {
+			val totalWidth = boundsInDiagram.width + 2 * button.layoutBounds.width
+			val totalHeight = boundsInDiagram.height + 2 * button.layoutBounds.height
+			val position = new Point2D(boundsInDiagram.minX - 1.5 * button.layoutBounds.width + xPos * totalWidth,
+					boundsInDiagram.minY - 1.5 * button.layoutBounds.height + yPos * totalHeight)
+			position
+		} else {
+			null
+		}
 	}
 	
 	def getXPos() { xPos }

@@ -1,5 +1,5 @@
 package de.itemis.javafx.diagram;
 
-public interface Activateable {
+public interface XActivatable {
 	void activate();
 }

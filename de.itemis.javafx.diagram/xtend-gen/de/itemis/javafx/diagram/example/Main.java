@@ -1,10 +1,8 @@
 package de.itemis.javafx.diagram.example;
 
-import de.itemis.javafx.diagram.XConnection;
-import de.itemis.javafx.diagram.XDiagram;
-import de.itemis.javafx.diagram.example.MyNode;
+import de.itemis.javafx.diagram.XRootDiagram;
+import de.itemis.javafx.diagram.example.MyContainerNode;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -24,20 +22,14 @@ public class Main extends Application {
   public Scene createScene() {
     Scene _xblockexpression = null;
     {
-      XDiagram _xDiagram = new XDiagram();
-      final XDiagram diagram = _xDiagram;
-      Group _rootPane = diagram.getRootPane();
-      Scene _scene = new Scene(_rootPane, 400, 400);
+      XRootDiagram _xRootDiagram = new XRootDiagram();
+      final XRootDiagram diagram = _xRootDiagram;
+      Scene _scene = new Scene(diagram, 400, 400);
       final Scene scene = _scene;
       diagram.activate();
-      MyNode _myNode = new MyNode("source");
-      final MyNode source = _myNode;
-      MyNode _myNode_1 = new MyNode("target");
-      final MyNode target = _myNode_1;
+      MyContainerNode _myContainerNode = new MyContainerNode("source");
+      final MyContainerNode source = _myContainerNode;
       diagram.addNode(source);
-      diagram.addNode(target);
-      XConnection _xConnection = new XConnection(source, target);
-      diagram.addConnection(_xConnection);
       _xblockexpression = (scene);
     }
     return _xblockexpression;

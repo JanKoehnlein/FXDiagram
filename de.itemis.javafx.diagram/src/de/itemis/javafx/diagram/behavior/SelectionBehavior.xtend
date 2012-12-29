@@ -25,10 +25,10 @@ class SelectionBehavior extends AbstractBehavior {
 	}
 	
 	override activate() {
-		host.node.onMousePressed = [
+		host.onMousePressed = [
 			mousePressed
 		]
-		host.node.onMouseReleased = [
+		host.onMouseReleased = [
 			if(shortcutDown)
 				isSelected.set(!wasSelected)
 		]

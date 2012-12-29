@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.input.MouseEvent;
@@ -44,19 +43,17 @@ public class SelectionBehavior extends AbstractBehavior {
   
   public void activate() {
     XNode _host = this.getHost();
-    Node _node = _host.getNode();
     final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
           SelectionBehavior.this.mousePressed(it);
         }
       };
-    _node.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
+    _host.setOnMousePressed(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent event) {
+          _function.apply(event);
         }
     });
     XNode _host_1 = this.getHost();
-    Node _node_1 = _host_1.getNode();
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
           boolean _isShortcutDown = it.isShortcutDown();
@@ -66,9 +63,9 @@ public class SelectionBehavior extends AbstractBehavior {
           }
         }
       };
-    _node_1.setOnMouseReleased(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
+    _host_1.setOnMouseReleased(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent event) {
+          _function_1.apply(event);
         }
     });
     final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function_2 = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
@@ -83,8 +80,8 @@ public class SelectionBehavior extends AbstractBehavior {
         }
       };
     final ChangeListener<Boolean> selectionListener = new ChangeListener<Boolean>() {
-        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
-          _function_2.apply(arg0,arg1,arg2);
+        public void changed(ObservableValue<? extends Boolean> observable,Boolean oldValue,Boolean newValue) {
+          _function_2.apply(observable,oldValue,newValue);
         }
     };
     BooleanProperty _selectedProperty = this.getSelectedProperty();

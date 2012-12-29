@@ -7,9 +7,11 @@ import javafx.scene.Node
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
 
-class XNode extends Group implements Activateable {
+class XNode extends Group implements XActivatable {
 	
 	Node node
+	
+	@Property XAbstractDiagram diagram
 	
 	Effect mouseOverEffect
 	
@@ -21,18 +23,10 @@ class XNode extends Group implements Activateable {
 	
 	MoveBehavior moveBehavior
 	
-	
-	@Property XDiagram diagram
-	
 	new() {
 		mouseOverEffect = new InnerShadow
 	}
 	
-	def void setNode(Node node) {
-		this.node = node
-		children += node		
-	}
-
 	override activate() {	
 		selectionBehavior = new SelectionBehavior(this)
 		moveBehavior = new MoveBehavior(this)
@@ -47,22 +41,19 @@ class XNode extends Group implements Activateable {
 			node.effect = originalEffect
 		]
 	}
+
+	def getNode() { node }
 	
-	def getSelectionBehavior() {
-		selectionBehavior
+	def void setNode(Node node) {
+		this.node = node
+		children += node	
 	}
 	
-	def getMoveBehavior() {
-		moveBehavior
-	}
+	def getSelectionBehavior() { selectionBehavior }
 	
-	def getAnchorPoints() {
-		anchorPoints
-	}	
+	def getMoveBehavior() { moveBehavior }
 	
-	def getNode() {
-		node
-	}
+	def getAnchorPoints() { anchorPoints }	
 }
 
 

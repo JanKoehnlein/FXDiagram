@@ -21,12 +21,13 @@ class MoveBehavior extends AbstractBehavior {
 	}
 	
 	def mousePressed(MouseEvent it) {
-		dragContext = new DragContext(screenX, screenY, host.translateX, host.translateY)
+		dragContext = new DragContext(screenX, screenY, host.layoutX, host.layoutY)
 	}
 	
 	def mouseDragged(MouseEvent it) {
-		host.translateX = dragContext.initialX - dragContext.mouseAnchorX + screenX
-		host.translateY = dragContext.initialY - dragContext.mouseAnchorY + screenY
+		host.relocate(
+			dragContext.initialX - dragContext.mouseAnchorX + screenX,
+			dragContext.initialY - dragContext.mouseAnchorY + screenY)
 	}
 }
 

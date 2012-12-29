@@ -5,11 +5,13 @@ import javafx.geometry.Point2D
 import javafx.scene.shape.Polyline
 import org.eclipse.xtext.xbase.lib.Pair
 
-class XConnection extends Polyline implements Activateable {
+class XConnection extends Polyline implements XActivatable {
 	
 	@Property XNode source
 
 	@Property XNode target
+	
+	@Property XAbstractDiagram diagram
 	
 	new(XNode source, XNode target) {
 		this.source = source
