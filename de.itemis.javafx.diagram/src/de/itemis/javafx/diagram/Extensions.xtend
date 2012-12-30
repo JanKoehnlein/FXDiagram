@@ -39,13 +39,6 @@ class Extensions {
 		} 
 	}	
 	
-	def static getTargetShape(MouseEvent event) {
-		if(event.target instanceof Node) 
-			getContainerShape(event.target as Node)
-		else
-			null
-	}
-
 	def static XAbstractDiagram getDiagram(Node it) {
 		switch it {
 			case null: null
@@ -62,6 +55,13 @@ class Extensions {
 		}
 	}	
 	
+	def static getTargetShape(MouseEvent event) {
+		if(event.target instanceof Node) 
+			getContainerShape(event.target as Node)
+		else
+			null
+	}
+
 	def static XNode getContainerShape(Node it) {
 		switch it {
 			case null: null

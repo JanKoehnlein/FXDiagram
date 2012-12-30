@@ -29,8 +29,7 @@ class XNestedDiagram extends XAbstractDiagram {
 	}
 	
 	override doActivate() {
-		if(contentsInitializer != null)
-			this => contentsInitializer
+		contentsInitializer?.apply(this)
 		super.doActivate()
 	}
 	

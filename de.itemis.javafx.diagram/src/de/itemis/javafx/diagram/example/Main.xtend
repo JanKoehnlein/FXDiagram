@@ -4,6 +4,7 @@ import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
 import de.itemis.javafx.diagram.XRootDiagram
+import de.itemis.javafx.diagram.XConnection
 
 class Main extends Application {
 	
@@ -19,14 +20,18 @@ class Main extends Application {
 
 	def createScene() {
 		val diagram = new XRootDiagram
-        val scene = new Scene(diagram, 400, 400)
+        val scene = new Scene(diagram, 640, 480)
         diagram.activate()
         val source = new MyContainerNode('source')
-//        val target = new MyContainerNode('target')
+        val target = new MyContainerNode('target')
+        val connection = new XConnection(source, target)
+        source.layoutX = 280
+        source.layoutY = 170
+        target.layoutX = 280
+        target.layoutY = 280
         diagram.addNode(source)
-//        diagram.addNode(target)
-//        val connection = new XConnection(source, target)
-//		diagram.addConnection(connection)
+        diagram.addNode(target)
+		diagram.addConnection(connection)
 		scene
 	}    
 }

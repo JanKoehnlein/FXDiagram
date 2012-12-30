@@ -5,7 +5,6 @@ import de.itemis.javafx.diagram.XNode
 import de.itemis.javafx.diagram.behavior.LevelOfDetailBehavior
 import javafx.scene.control.Label
 import javafx.scene.effect.InnerShadow
-import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
@@ -17,15 +16,10 @@ import static extension de.itemis.javafx.diagram.example.MyContainerNode.*
 
 class MyContainerNode extends XNode {
 
-	AddRapidButtonBehavior rapidButtonBehavior
-
-	LevelOfDetailBehavior levelOfDetailBehavior
-	
-	Label label
-	
-	XNestedDiagram innerDiagram
-	
 	static int nr = 0
+
+	Label label
+	XNestedDiagram innerDiagram
 
 	new(String name) {
 		label = new Label => [
@@ -54,8 +48,8 @@ class MyContainerNode extends XNode {
 			children += innerDiagram
 			
 			clip = new Rectangle => [
-				width = rectangle.width + rectangle.strokeWidth
-				height = rectangle.height + rectangle.strokeWidth			
+				width = rectangle.width + 2 * rectangle.strokeWidth
+				height = rectangle.height + 2 * rectangle.strokeWidth			
 			]
 		]
 		node.effect = new InnerShadow => [
@@ -65,9 +59,9 @@ class MyContainerNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate()
-		rapidButtonBehavior = new AddRapidButtonBehavior(this)
+		val rapidButtonBehavior = new AddRapidButtonBehavior(this)
 		rapidButtonBehavior.activate
-		levelOfDetailBehavior = new LevelOfDetailBehavior(this, node as Pane, label)
+		val levelOfDetailBehavior = new LevelOfDetailBehavior(this, label)
 		levelOfDetailBehavior.addChildForThreshold(10000.0, innerDiagram)
 		levelOfDetailBehavior.activate
 	}

@@ -1,1 +1,2 @@
+- adaptive connection width
 - connection behavior

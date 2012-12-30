@@ -6,20 +6,17 @@ import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.scene.Node
-import javafx.scene.layout.Pane
+
 import static extension de.itemis.javafx.diagram.Extensions.*
 
 class LevelOfDetailBehavior extends AbstractBehavior {
-
-	Pane parent
 
 	List<Double> thresholds = newArrayList
 	
 	List<Node> children = newArrayList 
 
-	new(XNode host, Pane parent, Node defaultChild) {
+	new(XNode host, Node defaultChild) {
 		super(host)
-		this.parent = parent
 		children += defaultChild
 		if(defaultChild instanceof XActivatable)
 			(defaultChild as XActivatable).activate
@@ -46,9 +43,9 @@ class LevelOfDetailBehavior extends AbstractBehavior {
 	}
 	
 	def protected getValue(Bounds bounds) {
-		if(bounds != null) {
+		if(bounds != null) 
 			bounds.width * bounds.height
-		} else 
+		else 
 			0.0
 	}
 	

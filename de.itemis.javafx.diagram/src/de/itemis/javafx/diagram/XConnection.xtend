@@ -8,7 +8,6 @@ import org.eclipse.xtext.xbase.lib.Pair
 class XConnection extends Polyline implements XActivatable {
 	
 	@Property XNode source
-
 	@Property XNode target
 	
 	boolean isActive

@@ -12,7 +12,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -22,8 +21,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class LevelOfDetailBehavior extends AbstractBehavior {
-  private Pane parent;
-  
   private List<Double> thresholds = new Function0<List<Double>>() {
     public List<Double> apply() {
       ArrayList<Double> _newArrayList = CollectionLiterals.<Double>newArrayList();
@@ -38,9 +35,8 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
     }
   }.apply();
   
-  public LevelOfDetailBehavior(final XNode host, final Pane parent, final Node defaultChild) {
+  public LevelOfDetailBehavior(final XNode host, final Node defaultChild) {
     super(host);
-    this.parent = parent;
     this.children.add(defaultChild);
     if ((defaultChild instanceof XActivatable)) {
       ((XActivatable) defaultChild).activate();

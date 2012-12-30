@@ -12,8 +12,6 @@ import javafx.scene.shape.Rectangle
 
 class MyNode extends XNode {
 
-	AddRapidButtonBehavior rapidButtonBehavior
-
 	new(String name) {
 		node = new StackPane => [
 			children += new Rectangle => [
@@ -36,7 +34,7 @@ class MyNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate()
-		rapidButtonBehavior = new AddRapidButtonBehavior(this)
+		val rapidButtonBehavior = new AddRapidButtonBehavior(this)
 		rapidButtonBehavior.activate()
 	}
 

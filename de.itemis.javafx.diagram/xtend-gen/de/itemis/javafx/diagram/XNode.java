@@ -23,11 +23,11 @@ public class XNode extends Group implements XActivatable {
   
   private Effect originalEffect;
   
-  private AnchorPoints anchorPoints;
-  
   private SelectionBehavior selectionBehavior;
   
   private MoveBehavior moveBehavior;
+  
+  private AnchorPoints anchorPoints;
   
   public XNode() {
     InnerShadow _innerShadow = new InnerShadow();

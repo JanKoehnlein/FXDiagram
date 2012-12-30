@@ -30,7 +30,6 @@ class XRapidButton extends ImageView implements XActivatable {
 		this.action = action
 		image = new Image(file)
 		placer = new Placer(this, xPos, yPos)
-		managed = false
 	}
 	
 	override activate() {

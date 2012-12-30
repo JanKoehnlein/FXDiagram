@@ -19,8 +19,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class MyNode extends XNode {
-  private AddRapidButtonBehavior rapidButtonBehavior;
-  
   public MyNode(final String name) {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
@@ -69,8 +67,8 @@ public class MyNode extends XNode {
   public void doActivate() {
     super.doActivate();
     AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
-    this.rapidButtonBehavior = _addRapidButtonBehavior;
-    this.rapidButtonBehavior.activate();
+    final AddRapidButtonBehavior rapidButtonBehavior = _addRapidButtonBehavior;
+    rapidButtonBehavior.activate();
   }
   
   protected LinearGradient createFill() {

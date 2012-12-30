@@ -40,7 +40,6 @@ public class XRapidButton extends ImageView implements XActivatable {
     this.setImage(_image);
     Placer _placer = new Placer(this, xPos, yPos);
     this.placer = _placer;
-    this.setManaged(false);
   }
   
   public void activate() {

@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -22,15 +21,11 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class MyContainerNode extends XNode {
-  private AddRapidButtonBehavior rapidButtonBehavior;
-  
-  private LevelOfDetailBehavior levelOfDetailBehavior;
+  private static int nr = 0;
   
   private Label label;
   
   private XNestedDiagram innerDiagram;
-  
-  private static int nr = 0;
   
   public MyContainerNode(final String name) {
     Label _label = new Label();
@@ -89,11 +84,13 @@ public class MyContainerNode extends XNode {
               public void apply(final Rectangle it) {
                 double _width = rectangle.getWidth();
                 double _strokeWidth = rectangle.getStrokeWidth();
-                double _plus = (_width + _strokeWidth);
+                double _multiply = (2 * _strokeWidth);
+                double _plus = (_width + _multiply);
                 it.setWidth(_plus);
                 double _height = rectangle.getHeight();
                 double _strokeWidth_1 = rectangle.getStrokeWidth();
-                double _plus_1 = (_height + _strokeWidth_1);
+                double _multiply_1 = (2 * _strokeWidth_1);
+                double _plus_1 = (_height + _multiply_1);
                 it.setHeight(_plus_1);
               }
             };
@@ -117,13 +114,12 @@ public class MyContainerNode extends XNode {
   public void doActivate() {
     super.doActivate();
     AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
-    this.rapidButtonBehavior = _addRapidButtonBehavior;
-    this.rapidButtonBehavior.activate();
-    Node _node = this.getNode();
-    LevelOfDetailBehavior _levelOfDetailBehavior = new LevelOfDetailBehavior(this, ((Pane) _node), this.label);
-    this.levelOfDetailBehavior = _levelOfDetailBehavior;
-    this.levelOfDetailBehavior.addChildForThreshold(10000.0, this.innerDiagram);
-    this.levelOfDetailBehavior.activate();
+    final AddRapidButtonBehavior rapidButtonBehavior = _addRapidButtonBehavior;
+    rapidButtonBehavior.activate();
+    LevelOfDetailBehavior _levelOfDetailBehavior = new LevelOfDetailBehavior(this, this.label);
+    final LevelOfDetailBehavior levelOfDetailBehavior = _levelOfDetailBehavior;
+    levelOfDetailBehavior.addChildForThreshold(10000.0, this.innerDiagram);
+    levelOfDetailBehavior.activate();
   }
   
   protected LinearGradient createFill() {

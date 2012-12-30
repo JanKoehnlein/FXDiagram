@@ -15,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
@@ -71,10 +70,7 @@ public class XNestedDiagram extends XAbstractDiagram {
   }
   
   public void doActivate() {
-    boolean _notEquals = ObjectExtensions.operator_notEquals(this.contentsInitializer, null);
-    if (_notEquals) {
-      ObjectExtensions.<XNestedDiagram>operator_doubleArrow(this, this.contentsInitializer);
-    }
+    if (this.contentsInitializer!=null) this.contentsInitializer.apply(this);
     super.doActivate();
   }
   

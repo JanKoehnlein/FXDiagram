@@ -14,14 +14,11 @@ class XNode extends Group implements XActivatable {
 	boolean isActive
 	
 	Effect mouseOverEffect
-	
 	Effect originalEffect
 	
-	AnchorPoints anchorPoints
-	
 	SelectionBehavior selectionBehavior
-	
 	MoveBehavior moveBehavior
+	AnchorPoints anchorPoints
 	
 	new() {
 		mouseOverEffect = new InnerShadow

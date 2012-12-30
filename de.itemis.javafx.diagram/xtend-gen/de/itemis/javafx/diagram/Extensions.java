@@ -94,19 +94,6 @@ public class Extensions {
     return _switchResult;
   }
   
-  public static XNode getTargetShape(final MouseEvent event) {
-    XNode _xifexpression = null;
-    EventTarget _target = event.getTarget();
-    if ((_target instanceof Node)) {
-      EventTarget _target_1 = event.getTarget();
-      XNode _containerShape = Extensions.getContainerShape(((Node) _target_1));
-      _xifexpression = _containerShape;
-    } else {
-      _xifexpression = null;
-    }
-    return _xifexpression;
-  }
-  
   public static XAbstractDiagram getDiagram(final Node it) {
     XAbstractDiagram _switchResult = null;
     boolean _matched = false;
@@ -153,6 +140,19 @@ public class Extensions {
       _switchResult = _rootDiagram;
     }
     return _switchResult;
+  }
+  
+  public static XNode getTargetShape(final MouseEvent event) {
+    XNode _xifexpression = null;
+    EventTarget _target = event.getTarget();
+    if ((_target instanceof Node)) {
+      EventTarget _target_1 = event.getTarget();
+      XNode _containerShape = Extensions.getContainerShape(((Node) _target_1));
+      _xifexpression = _containerShape;
+    } else {
+      _xifexpression = null;
+    }
+    return _xifexpression;
   }
   
   public static XNode getContainerShape(final Node it) {
