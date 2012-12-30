@@ -19,8 +19,8 @@ class SelectionBehavior extends AbstractBehavior {
 	new(XNode host) {
 		super(host)
 		selectionEffect = new DropShadow() => [
-			offsetX = 5.0
-			offsetY = 5.0
+			offsetX = 4.0
+			offsetY = 4.0
 		]
 	}
 	
@@ -34,10 +34,15 @@ class SelectionBehavior extends AbstractBehavior {
 		]
 		val ChangeListener<Boolean> selectionListener = [
 			observable, oldValue, newValue |
-			if(newValue) 
+			if(newValue) {
 				host.effect = selectionEffect
-			else
+				host.scaleX = 1.05
+				host.scaleY = 1.05
+			} else {
 				host.effect = null
+				host.scaleX = 1.0
+				host.scaleY = 1.0
+			}
 		]
 		selectedProperty.addListener(selectionListener)
 	}	

@@ -33,8 +33,8 @@ public class SelectionBehavior extends AbstractBehavior {
     DropShadow _dropShadow = new DropShadow();
     final Procedure1<DropShadow> _function = new Procedure1<DropShadow>() {
         public void apply(final DropShadow it) {
-          it.setOffsetX(5.0);
-          it.setOffsetY(5.0);
+          it.setOffsetX(4.0);
+          it.setOffsetY(4.0);
         }
       };
     DropShadow _doubleArrow = ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
@@ -73,9 +73,17 @@ public class SelectionBehavior extends AbstractBehavior {
           if ((newValue).booleanValue()) {
             XNode _host = SelectionBehavior.this.getHost();
             _host.setEffect(SelectionBehavior.this.selectionEffect);
-          } else {
             XNode _host_1 = SelectionBehavior.this.getHost();
-            _host_1.setEffect(null);
+            _host_1.setScaleX(1.05);
+            XNode _host_2 = SelectionBehavior.this.getHost();
+            _host_2.setScaleY(1.05);
+          } else {
+            XNode _host_3 = SelectionBehavior.this.getHost();
+            _host_3.setEffect(null);
+            XNode _host_4 = SelectionBehavior.this.getHost();
+            _host_4.setScaleX(1.0);
+            XNode _host_5 = SelectionBehavior.this.getHost();
+            _host_5.setScaleY(1.0);
           }
         }
       };

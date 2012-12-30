@@ -22,13 +22,15 @@ class Main extends Application {
 		val diagram = new XRootDiagram
         val scene = new Scene(diagram, 640, 480)
         diagram.activate()
-        val source = new MyContainerNode('source')
-        val target = new MyContainerNode('target')
+        val source = new MyContainerNode('source') => [
+        	layoutX = 280
+        	layoutY = 170
+        ]
+        val target = new MyContainerNode('target') => [
+	        layoutX = 280
+	        layoutY = 280
+        ]
         val connection = new XConnection(source, target)
-        source.layoutX = 280
-        source.layoutY = 170
-        target.layoutX = 280
-        target.layoutY = 280
         diagram.addNode(source)
         diagram.addNode(target)
 		diagram.addConnection(connection)
