@@ -10,23 +10,20 @@ class ZoomTool {
 	
 	ZoomContext zoomContext
 	
-	def foo() {
-		val x=newArrayList()
-		println('''«x.size»''')
-	}
 	new(XRootDiagram diagram) {
 		val scene = diagram.scene
 		scene.onZoomStarted = [
 			zoomContext = new ZoomContext(diagram.scaleX, diagram.sceneToLocal(sceneX, sceneY))
 		]
 		val EventHandler<ZoomEvent> zoomHandler = [ 
-			println(diagram.localToParentTransform)
 			val scale = totalZoomFactor * zoomContext.initialScale
-			diagram.scaleX = scale
-			diagram.scaleY = scale
-			val pivotInScene = diagram.localToScene(zoomContext.initialDiagramPos)
-			diagram.translateX = diagram.translateX + (sceneX - pivotInScene.x) / scale
-			diagram.translateY = diagram.translateX + (sceneY - pivotInScene.y) / scale
+			if(scale > 0) {
+				diagram.scaleX = scale
+				diagram.scaleY = scale
+				val pivotInScene = diagram.localToScene(zoomContext.initialDiagramPos)
+				diagram.translateX = diagram.translateX + sceneX - pivotInScene.x
+				diagram.translateY = diagram.translateY + sceneY - pivotInScene.y
+			}
 		]
 		scene.onZoom = zoomHandler 
 		scene.onZoomFinished = zoomHandler
