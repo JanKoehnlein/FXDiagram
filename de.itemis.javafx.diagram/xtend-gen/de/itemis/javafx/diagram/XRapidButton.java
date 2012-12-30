@@ -34,15 +34,7 @@ public class XRapidButton extends ImageView implements XActivatable {
     this._diagram = diagram;
   }
   
-  private boolean _isActive;
-  
-  public boolean isIsActive() {
-    return this._isActive;
-  }
-  
-  public void setIsActive(final boolean isActive) {
-    this._isActive = isActive;
-  }
+  private boolean isActive;
   
   private XNode host;
   
@@ -63,12 +55,11 @@ public class XRapidButton extends ImageView implements XActivatable {
   }
   
   public void activate() {
-    boolean _isIsActive = this.isIsActive();
-    boolean _not = (!_isIsActive);
+    boolean _not = (!this.isActive);
     if (_not) {
       this.doActivate();
     }
-    this.setIsActive(true);
+    this.isActive = true;
   }
   
   public void doActivate() {
@@ -79,8 +70,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     this.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function.apply(event);
         }
     });
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
@@ -89,8 +80,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     this.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function_1.apply(event);
         }
     });
     final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
@@ -99,8 +90,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     this.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_2.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function_2.apply(event);
         }
     });
     this.placer.activate();
@@ -112,8 +103,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     final ChangeListener<Point2D> listener = new ChangeListener<Point2D>() {
-        public void changed(ObservableValue<? extends Point2D> arg0,Point2D arg1,Point2D arg2) {
-          _function_3.apply(arg0,arg1,arg2);
+        public void changed(ObservableValue<? extends Point2D> observable,Point2D oldValue,Point2D newValue) {
+          _function_3.apply(observable,oldValue,newValue);
         }
     };
     this.placer.addListener(listener);

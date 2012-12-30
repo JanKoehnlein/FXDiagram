@@ -13,7 +13,7 @@ class XNode extends Group implements XActivatable {
 	
 	@Property XAbstractDiagram diagram
 	
-	@Property boolean isActive
+	boolean isActive
 	
 	Effect mouseOverEffect
 	

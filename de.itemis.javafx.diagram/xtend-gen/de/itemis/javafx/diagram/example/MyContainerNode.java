@@ -27,9 +27,11 @@ public class MyContainerNode extends XNode {
   
   private LevelOfDetailBehavior levelOfDetailBehavior;
   
-  private Node label;
+  private Label label;
   
   private XNestedDiagram innerDiagram;
+  
+  private static int nr = 0;
   
   public MyContainerNode(final String name) {
     Label _label = new Label();
@@ -45,8 +47,11 @@ public class MyContainerNode extends XNode {
         public void apply(final XNestedDiagram it) {
           final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
               public void apply(final XNestedDiagram it) {
-                MyContainerNode _myContainerNode = new MyContainerNode("Inner");
+                String _plus = ("Inner " + Integer.valueOf(MyContainerNode.nr));
+                MyContainerNode _myContainerNode = new MyContainerNode(_plus);
                 final MyContainerNode innerNode = _myContainerNode;
+                int _plus_1 = (MyContainerNode.nr + 1);
+                MyContainerNode.nr = _plus_1;
                 it.addNode(innerNode);
                 innerNode.relocate(96, 35);
               }
@@ -136,5 +141,10 @@ public class MyContainerNode extends XNode {
       _xblockexpression = (_linearGradient);
     }
     return _xblockexpression;
+  }
+  
+  public String toString() {
+    String _text = this.label.getText();
+    return _text;
   }
 }

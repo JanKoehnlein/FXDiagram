@@ -1,9 +1,9 @@
 package de.itemis.javafx.diagram.behavior;
 
 import de.itemis.javafx.diagram.Extensions;
-import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XNode;
+import de.itemis.javafx.diagram.XRootDiagram;
 import de.itemis.javafx.diagram.behavior.AbstractBehavior;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,13 +71,13 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
         }
       };
     final ChangeListener<Bounds> boundsListener = new ChangeListener<Bounds>() {
-        public void changed(ObservableValue<? extends Bounds> arg0,Bounds arg1,Bounds arg2) {
-          _function.apply(arg0,arg1,arg2);
+        public void changed(ObservableValue<? extends Bounds> observable,Bounds oldValue,Bounds newValue) {
+          _function.apply(observable,oldValue,newValue);
         }
     };
     XNode _host = this.getHost();
-    XAbstractDiagram _diagram = _host.getDiagram();
-    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _diagram.boundsInParentProperty();
+    XRootDiagram _rootDiagram = Extensions.getRootDiagram(_host);
+    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _rootDiagram.boundsInParentProperty();
     _boundsInParentProperty.addListener(boundsListener);
   }
   
@@ -90,27 +90,17 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
   }
   
   protected double getValue(final Bounds bounds) {
-    double _xblockexpression = (double) 0;
-    {
-      XNode _host = this.getHost();
-      final Bounds absBounds = _host==null?(Bounds)null:Extensions.localToRoot(_host, bounds);
-      double _xifexpression = (double) 0;
-      boolean _notEquals = ObjectExtensions.operator_notEquals(absBounds, null);
-      if (_notEquals) {
-        double _xblockexpression_1 = (double) 0;
-        {
-          double _width = absBounds.getWidth();
-          double _height = absBounds.getHeight();
-          final double area = (_width * _height);
-          _xblockexpression_1 = (area);
-        }
-        _xifexpression = _xblockexpression_1;
-      } else {
-        _xifexpression = 0.0;
-      }
-      _xblockexpression = (_xifexpression);
+    double _xifexpression = (double) 0;
+    boolean _notEquals = ObjectExtensions.operator_notEquals(bounds, null);
+    if (_notEquals) {
+      double _width = bounds.getWidth();
+      double _height = bounds.getHeight();
+      double _multiply = (_width * _height);
+      _xifexpression = _multiply;
+    } else {
+      _xifexpression = 0.0;
     }
-    return _xblockexpression;
+    return _xifexpression;
   }
   
   protected int getChildIndexForValue(final double value) {

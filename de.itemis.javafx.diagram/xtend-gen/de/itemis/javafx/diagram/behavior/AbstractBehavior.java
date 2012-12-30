@@ -7,15 +7,7 @@ import de.itemis.javafx.diagram.XNode;
 public abstract class AbstractBehavior implements XActivatable {
   private XNode host;
   
-  private boolean _isActive;
-  
-  public boolean isIsActive() {
-    return this._isActive;
-  }
-  
-  public void setIsActive(final boolean isActive) {
-    this._isActive = isActive;
-  }
+  private boolean isActive;
   
   public AbstractBehavior(final XNode host) {
     this.host = host;
@@ -26,12 +18,11 @@ public abstract class AbstractBehavior implements XActivatable {
   }
   
   public void activate() {
-    boolean _isIsActive = this.isIsActive();
-    boolean _not = (!_isIsActive);
+    boolean _not = (!this.isActive);
     if (_not) {
       this.doActivate();
     }
-    this.setIsActive(true);
+    this.isActive = true;
   }
   
   protected abstract void doActivate();

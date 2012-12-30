@@ -46,15 +46,7 @@ public class XConnection extends Polyline implements XActivatable {
     this._diagram = diagram;
   }
   
-  private boolean _isActive;
-  
-  public boolean isIsActive() {
-    return this._isActive;
-  }
-  
-  public void setIsActive(final boolean isActive) {
-    this._isActive = isActive;
-  }
+  private boolean isActive;
   
   public XConnection(final XNode source, final XNode target) {
     this.setSource(source);
@@ -109,12 +101,11 @@ public class XConnection extends Polyline implements XActivatable {
   }
   
   public void activate() {
-    boolean _isIsActive = this.isIsActive();
-    boolean _not = (!_isIsActive);
+    boolean _not = (!this.isActive);
     if (_not) {
       this.doActivate();
     }
-    this.setIsActive(true);
+    this.isActive = true;
   }
   
   public boolean doActivate() {
@@ -126,8 +117,8 @@ public class XConnection extends Polyline implements XActivatable {
           }
         };
       final ChangeListener changeListener = new ChangeListener<Object>() {
-          public void changed(ObservableValue<? extends Object> arg0,Object arg1,Object arg2) {
-            _function.apply(arg0,arg1,arg2);
+          public void changed(ObservableValue<? extends Object> observable,Object oldValue,Object newValue) {
+            _function.apply(observable,oldValue,newValue);
           }
       };
       XNode _source = this.getSource();

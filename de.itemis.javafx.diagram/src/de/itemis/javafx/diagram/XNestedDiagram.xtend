@@ -7,10 +7,10 @@ class XNestedDiagram extends XAbstractDiagram {
 
 	@Property XAbstractDiagram parentDiagram
 
+	(XNestedDiagram)=>void contentsInitializer 
+
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
-
-	var (XNestedDiagram)=>void contentsInitializer 
 
 	new() {
 		children += nodeLayer

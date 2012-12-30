@@ -1,14 +1,13 @@
 package de.itemis.javafx.diagram.behavior
 
+import de.itemis.javafx.diagram.XActivatable
 import de.itemis.javafx.diagram.XNode
 import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.scene.Node
 import javafx.scene.layout.Pane
-
 import static extension de.itemis.javafx.diagram.Extensions.*
-import de.itemis.javafx.diagram.XActivatable
 
 class LevelOfDetailBehavior extends AbstractBehavior {
 
@@ -36,7 +35,7 @@ class LevelOfDetailBehavior extends AbstractBehavior {
 				(child as XActivatable).activate
 			children.forEach[visible = it == child]
 		]
-		host.diagram.boundsInParentProperty.addListener(boundsListener)		
+		host.rootDiagram.boundsInParentProperty.addListener(boundsListener)		
 	}
 	
 	def addChildForThreshold(double threshold, Node child) {
@@ -47,10 +46,8 @@ class LevelOfDetailBehavior extends AbstractBehavior {
 	}
 	
 	def protected getValue(Bounds bounds) {
-		val absBounds = host?.localToRoot(bounds)
-		if(absBounds != null) { 
-			val area = absBounds.width * absBounds.height
-			area
+		if(bounds != null) {
+			bounds.width * bounds.height
 		} else 
 			0.0
 	}

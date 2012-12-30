@@ -29,6 +29,8 @@ public class XNestedDiagram extends XAbstractDiagram {
     this._parentDiagram = parentDiagram;
   }
   
+  private Procedure1<? super XNestedDiagram> contentsInitializer;
+  
   private Group nodeLayer = new Function0<Group>() {
     public Group apply() {
       Group _group = new Group();
@@ -42,8 +44,6 @@ public class XNestedDiagram extends XAbstractDiagram {
       return _group;
     }
   }.apply();
-  
-  private Procedure1<? super XNestedDiagram> contentsInitializer;
   
   public XNestedDiagram() {
     ObservableList<Node> _children = this.getChildren();
@@ -65,8 +65,8 @@ public class XNestedDiagram extends XAbstractDiagram {
         }
       };
     final ChangeListener<Boolean> visibilityListener = new ChangeListener<Boolean>() {
-        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
-          _function.apply(arg0,arg1,arg2);
+        public void changed(ObservableValue<? extends Boolean> observable,Boolean oldValue,Boolean newValue) {
+          _function.apply(observable,oldValue,newValue);
         }
     };
     BooleanProperty _visibleProperty = this.visibleProperty();

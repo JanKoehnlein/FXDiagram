@@ -16,7 +16,7 @@ class XRapidButton extends ImageView implements XActivatable {
 	
 	@Property XAbstractDiagram diagram
 	
-	@Property boolean isActive
+	boolean isActive
 	
 	XNode host
 	

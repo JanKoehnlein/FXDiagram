@@ -13,7 +13,7 @@ class XConnection extends Polyline implements XActivatable {
 	
 	@Property XAbstractDiagram diagram
 	
-	@Property boolean isActive
+	boolean isActive
 	
 	new(XNode source, XNode target) {
 		this.source = source

@@ -3,7 +3,6 @@ package de.itemis.javafx.diagram.example
 import de.itemis.javafx.diagram.XNestedDiagram
 import de.itemis.javafx.diagram.XNode
 import de.itemis.javafx.diagram.behavior.LevelOfDetailBehavior
-import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.effect.InnerShadow
 import javafx.scene.layout.Pane
@@ -14,23 +13,28 @@ import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 import javafx.scene.shape.Rectangle
 
+import static extension de.itemis.javafx.diagram.example.MyContainerNode.*
+
 class MyContainerNode extends XNode {
 
 	AddRapidButtonBehavior rapidButtonBehavior
 
 	LevelOfDetailBehavior levelOfDetailBehavior
 	
-	Node label
+	Label label
 	
 	XNestedDiagram innerDiagram
+	
+	static int nr = 0
 
 	new(String name) {
 		label = new Label => [
-				text = name
+			text = name
 		]
 		innerDiagram = new XNestedDiagram => [
 			contentsInitializer = [
-				val innerNode = new MyContainerNode("Inner")
+				val innerNode = new MyContainerNode("Inner " + nr)
+				nr = nr + 1
 				addNode(innerNode)
 				innerNode.relocate(96, 35)
 			]
@@ -76,4 +80,9 @@ class MyContainerNode extends XNode {
 		)
 		new LinearGradient(0, 0, 1, 1, true, CycleMethod::NO_CYCLE, stops)
 	}
+	
+	override toString() {
+		label.text
+	}
+	
 }

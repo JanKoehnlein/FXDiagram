@@ -7,7 +7,7 @@ abstract class AbstractBehavior implements XActivatable {
 	
 	XNode host 
 	
-	@Property boolean isActive
+	boolean isActive
 	
 	new(XNode host) {
 		this.host = host	

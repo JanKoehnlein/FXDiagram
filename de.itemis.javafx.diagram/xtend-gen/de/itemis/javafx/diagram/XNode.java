@@ -28,15 +28,7 @@ public class XNode extends Group implements XActivatable {
     this._diagram = diagram;
   }
   
-  private boolean _isActive;
-  
-  public boolean isIsActive() {
-    return this._isActive;
-  }
-  
-  public void setIsActive(final boolean isActive) {
-    this._isActive = isActive;
-  }
+  private boolean isActive;
   
   private Effect mouseOverEffect;
   
@@ -54,12 +46,11 @@ public class XNode extends Group implements XActivatable {
   }
   
   public void activate() {
-    boolean _isIsActive = this.isIsActive();
-    boolean _not = (!_isIsActive);
+    boolean _not = (!this.isActive);
     if (_not) {
       this.doActivate();
     }
-    this.setIsActive(true);
+    this.isActive = true;
   }
   
   public void doActivate() {
@@ -79,8 +70,8 @@ public class XNode extends Group implements XActivatable {
         }
       };
     this.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function.apply(event);
         }
     });
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
@@ -89,8 +80,8 @@ public class XNode extends Group implements XActivatable {
         }
       };
     this.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
+        public void handle(MouseEvent event) {
+          _function_1.apply(event);
         }
     });
   }
