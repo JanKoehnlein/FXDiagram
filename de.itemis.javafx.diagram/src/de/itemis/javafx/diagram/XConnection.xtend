@@ -11,8 +11,6 @@ class XConnection extends Polyline implements XActivatable {
 
 	@Property XNode target
 	
-	@Property XAbstractDiagram diagram
-	
 	boolean isActive
 	
 	new(XNode source, XNode target) {

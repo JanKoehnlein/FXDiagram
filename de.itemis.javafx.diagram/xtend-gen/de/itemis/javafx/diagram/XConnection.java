@@ -1,7 +1,6 @@
 package de.itemis.javafx.diagram;
 
 import de.itemis.javafx.diagram.AnchorPoints;
-import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XNode;
 import java.util.List;
@@ -34,16 +33,6 @@ public class XConnection extends Polyline implements XActivatable {
   
   public void setTarget(final XNode target) {
     this._target = target;
-  }
-  
-  private XAbstractDiagram _diagram;
-  
-  public XAbstractDiagram getDiagram() {
-    return this._diagram;
-  }
-  
-  public void setDiagram(final XAbstractDiagram diagram) {
-    this._diagram = diagram;
   }
   
   private boolean isActive;

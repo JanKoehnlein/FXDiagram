@@ -65,7 +65,6 @@ class MyContainerNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate()
-		innerDiagram.parentDiagram = diagram
 		rapidButtonBehavior = new AddRapidButtonBehavior(this)
 		rapidButtonBehavior.activate
 		levelOfDetailBehavior = new LevelOfDetailBehavior(this, node as Pane, label)

@@ -2,10 +2,9 @@ package de.itemis.javafx.diagram
 
 import javafx.beans.value.ChangeListener
 import javafx.scene.Group
+import static extension de.itemis.javafx.diagram.Extensions.*
 
 class XNestedDiagram extends XAbstractDiagram {
-
-	@Property XAbstractDiagram parentDiagram
 
 	(XNestedDiagram)=>void contentsInitializer 
 
@@ -42,7 +41,7 @@ class XNestedDiagram extends XAbstractDiagram {
 	override getConnectionLayer() {
 		parentDiagram.connectionLayer
 	}
-	
+
 	override getButtonLayer() {
 		buttonLayer
 	}
@@ -55,5 +54,9 @@ class XNestedDiagram extends XAbstractDiagram {
 	override internalAddButton(XRapidButton button) {
 		super.internalAddButton(button)
 		parentDiagram.internalAddButton(button)
+	}
+	
+	def protected getParentDiagram() {
+		parent?.diagram
 	}
 }

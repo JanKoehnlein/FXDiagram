@@ -46,13 +46,19 @@ class Extensions {
 			null
 	}
 
-	def static XRootDiagram getRootDiagram(Object it) {
+	def static XAbstractDiagram getDiagram(Node it) {
 		switch it {
 			case null: null
-			XNestedDiagram: getRootDiagram(it.parentDiagram)
+			XAbstractDiagram: it
+			default: getDiagram(it.parent)
+		}
+	}	
+	
+	def static XRootDiagram getRootDiagram(Node it) {
+		switch it {
+			case null: null
 			XRootDiagram: it
-			Node: getRootDiagram(it.parent)
-			default: null
+			default: getRootDiagram(it.parent)
 		}
 	}	
 	

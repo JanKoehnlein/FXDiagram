@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram.example;
 
+import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.Placer;
 import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XConnection;
@@ -33,10 +34,10 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
           XConnection _xConnection = new XConnection(source, target);
           final XConnection connection = _xConnection;
           XNode _host = AddRapidButtonBehavior.this.getHost();
-          XAbstractDiagram _diagram = _host.getDiagram();
+          XAbstractDiagram _diagram = Extensions.getDiagram(_host);
           _diagram.addNode(target);
           XNode _host_1 = AddRapidButtonBehavior.this.getHost();
-          XAbstractDiagram _diagram_1 = _host_1.getDiagram();
+          XAbstractDiagram _diagram_1 = Extensions.getDiagram(_host_1);
           _diagram_1.addConnection(connection);
           Placer _placer = button.getPlacer();
           double _xPos = _placer.getXPos();
@@ -69,7 +70,7 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton it) {
           XNode _host = it.getHost();
-          XAbstractDiagram _diagram = _host.getDiagram();
+          XAbstractDiagram _diagram = Extensions.getDiagram(_host);
           _diagram.addButton(it);
         }
       };

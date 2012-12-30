@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram;
 
+import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XConnection;
 import de.itemis.javafx.diagram.XNode;
@@ -11,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -19,16 +21,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class XNestedDiagram extends XAbstractDiagram {
-  private XAbstractDiagram _parentDiagram;
-  
-  public XAbstractDiagram getParentDiagram() {
-    return this._parentDiagram;
-  }
-  
-  public void setParentDiagram(final XAbstractDiagram parentDiagram) {
-    this._parentDiagram = parentDiagram;
-  }
-  
   private Procedure1<? super XNestedDiagram> contentsInitializer;
   
   private Group nodeLayer = new Function0<Group>() {
@@ -120,5 +112,11 @@ public class XNestedDiagram extends XAbstractDiagram {
       _xblockexpression = (_internalAddButton);
     }
     return _xblockexpression;
+  }
+  
+  protected XAbstractDiagram getParentDiagram() {
+    Parent _parent = this.getParent();
+    XAbstractDiagram _diagram = _parent==null?(XAbstractDiagram)null:Extensions.getDiagram(_parent);
+    return _diagram;
   }
 }

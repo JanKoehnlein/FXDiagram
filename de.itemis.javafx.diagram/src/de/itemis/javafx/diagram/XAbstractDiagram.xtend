@@ -28,7 +28,6 @@ abstract class XAbstractDiagram extends Pane implements XActivatable {
 	 	 
 	def addNode(XNode node) {
 		nodeLayer.children += node
-		node.diagram = this
 		internalAddNode(node)
 		if(isActive)
 			node.activate
@@ -40,7 +39,6 @@ abstract class XAbstractDiagram extends Pane implements XActivatable {
 	
 	def addConnection(XConnection connection) {
 		connectionLayer.children += connection
-		connection.diagram = this
 		internalAddConnection(connection)
 		if(isActive)
 			connection.activate
@@ -52,7 +50,6 @@ abstract class XAbstractDiagram extends Pane implements XActivatable {
 	
 	def addButton(XRapidButton button) {
 		buttonLayer.children += button
-		button.diagram = this
 		internalAddButton(button)
 		if(isActive)
 			button.activate

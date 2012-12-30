@@ -1,6 +1,5 @@
 package de.itemis.javafx.diagram.example;
 
-import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XNestedDiagram;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.behavior.LevelOfDetailBehavior;
@@ -117,8 +116,6 @@ public class MyContainerNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    XAbstractDiagram _diagram = this.getDiagram();
-    this.innerDiagram.setParentDiagram(_diagram);
     AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
     this.rapidButtonBehavior = _addRapidButtonBehavior;
     this.rapidButtonBehavior.activate();

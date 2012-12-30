@@ -14,8 +14,6 @@ import static extension de.itemis.javafx.diagram.Extensions.*
 
 class XRapidButton extends ImageView implements XActivatable {
 	
-	@Property XAbstractDiagram diagram
-	
 	boolean isActive
 	
 	XNode host

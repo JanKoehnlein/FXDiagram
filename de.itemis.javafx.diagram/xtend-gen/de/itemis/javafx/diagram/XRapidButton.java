@@ -1,7 +1,6 @@
 package de.itemis.javafx.diagram;
 
 import de.itemis.javafx.diagram.Placer;
-import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XNode;
 import javafx.animation.KeyFrame;
@@ -24,16 +23,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class XRapidButton extends ImageView implements XActivatable {
-  private XAbstractDiagram _diagram;
-  
-  public XAbstractDiagram getDiagram() {
-    return this._diagram;
-  }
-  
-  public void setDiagram(final XAbstractDiagram diagram) {
-    this._diagram = diagram;
-  }
-  
   private boolean isActive;
   
   private XNode host;

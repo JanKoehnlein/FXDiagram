@@ -11,8 +11,6 @@ class XNode extends Group implements XActivatable {
 	
 	Node node
 	
-	@Property XAbstractDiagram diagram
-	
 	boolean isActive
 	
 	Effect mouseOverEffect

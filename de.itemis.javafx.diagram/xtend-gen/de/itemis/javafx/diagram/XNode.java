@@ -1,7 +1,6 @@
 package de.itemis.javafx.diagram;
 
 import de.itemis.javafx.diagram.AnchorPoints;
-import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.behavior.MoveBehavior;
 import de.itemis.javafx.diagram.behavior.SelectionBehavior;
@@ -17,16 +16,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class XNode extends Group implements XActivatable {
   private Node node;
-  
-  private XAbstractDiagram _diagram;
-  
-  public XAbstractDiagram getDiagram() {
-    return this._diagram;
-  }
-  
-  public void setDiagram(final XAbstractDiagram diagram) {
-    this._diagram = diagram;
-  }
   
   private boolean isActive;
   

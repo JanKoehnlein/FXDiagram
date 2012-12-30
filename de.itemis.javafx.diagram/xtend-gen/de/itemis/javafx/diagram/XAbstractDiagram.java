@@ -70,7 +70,6 @@ public abstract class XAbstractDiagram extends Pane implements XActivatable {
     Group _nodeLayer = this.getNodeLayer();
     ObservableList<Node> _children = _nodeLayer.getChildren();
     _children.add(node);
-    node.setDiagram(this);
     this.internalAddNode(node);
     if (this.isActive) {
       node.activate();
@@ -86,7 +85,6 @@ public abstract class XAbstractDiagram extends Pane implements XActivatable {
     Group _connectionLayer = this.getConnectionLayer();
     ObservableList<Node> _children = _connectionLayer.getChildren();
     _children.add(connection);
-    connection.setDiagram(this);
     this.internalAddConnection(connection);
     if (this.isActive) {
       connection.activate();
@@ -102,7 +100,6 @@ public abstract class XAbstractDiagram extends Pane implements XActivatable {
     Group _buttonLayer = this.getButtonLayer();
     ObservableList<Node> _children = _buttonLayer.getChildren();
     _children.add(button);
-    button.setDiagram(this);
     this.internalAddButton(button);
     if (this.isActive) {
       button.activate();

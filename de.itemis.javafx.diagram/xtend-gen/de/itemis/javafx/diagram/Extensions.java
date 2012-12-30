@@ -2,7 +2,6 @@ package de.itemis.javafx.diagram;
 
 import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.XAbstractDiagram;
-import de.itemis.javafx.diagram.XNestedDiagram;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.XRootDiagram;
 import javafx.event.EventTarget;
@@ -108,8 +107,8 @@ public class Extensions {
     return _xifexpression;
   }
   
-  public static XRootDiagram getRootDiagram(final Object it) {
-    XRootDiagram _switchResult = null;
+  public static XAbstractDiagram getDiagram(final Node it) {
+    XAbstractDiagram _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
       if (Objects.equal(it,null)) {
@@ -118,12 +117,27 @@ public class Extensions {
       }
     }
     if (!_matched) {
-      if (it instanceof XNestedDiagram) {
-        final XNestedDiagram _xNestedDiagram = (XNestedDiagram)it;
+      if (it instanceof XAbstractDiagram) {
+        final XAbstractDiagram _xAbstractDiagram = (XAbstractDiagram)it;
         _matched=true;
-        XAbstractDiagram _parentDiagram = _xNestedDiagram.getParentDiagram();
-        XRootDiagram _rootDiagram = Extensions.getRootDiagram(_parentDiagram);
-        _switchResult = _rootDiagram;
+        _switchResult = _xAbstractDiagram;
+      }
+    }
+    if (!_matched) {
+      Parent _parent = it.getParent();
+      XAbstractDiagram _diagram = Extensions.getDiagram(_parent);
+      _switchResult = _diagram;
+    }
+    return _switchResult;
+  }
+  
+  public static XRootDiagram getRootDiagram(final Node it) {
+    XRootDiagram _switchResult = null;
+    boolean _matched = false;
+    if (!_matched) {
+      if (Objects.equal(it,null)) {
+        _matched=true;
+        _switchResult = null;
       }
     }
     if (!_matched) {
@@ -134,16 +148,9 @@ public class Extensions {
       }
     }
     if (!_matched) {
-      if (it instanceof Node) {
-        final Node _node = (Node)it;
-        _matched=true;
-        Parent _parent = _node.getParent();
-        XRootDiagram _rootDiagram = Extensions.getRootDiagram(_parent);
-        _switchResult = _rootDiagram;
-      }
-    }
-    if (!_matched) {
-      _switchResult = null;
+      Parent _parent = it.getParent();
+      XRootDiagram _rootDiagram = Extensions.getRootDiagram(_parent);
+      _switchResult = _rootDiagram;
     }
     return _switchResult;
   }
