@@ -49,8 +49,8 @@ public class SelectionBehavior extends AbstractBehavior {
         }
       };
     _host.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function.apply(arg0);
         }
     });
     XNode _host_1 = this.getHost();
@@ -64,8 +64,8 @@ public class SelectionBehavior extends AbstractBehavior {
         }
       };
     _host_1.setOnMouseReleased(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function_1.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function_1.apply(arg0);
         }
     });
     final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function_2 = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
@@ -80,8 +80,8 @@ public class SelectionBehavior extends AbstractBehavior {
         }
       };
     final ChangeListener<Boolean> selectionListener = new ChangeListener<Boolean>() {
-        public void changed(ObservableValue<? extends Boolean> observable,Boolean oldValue,Boolean newValue) {
-          _function_2.apply(observable,oldValue,newValue);
+        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
+          _function_2.apply(arg0,arg1,arg2);
         }
     };
     BooleanProperty _selectedProperty = this.getSelectedProperty();

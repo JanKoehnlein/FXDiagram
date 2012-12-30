@@ -25,8 +25,8 @@ public class MoveBehavior extends AbstractBehavior {
         }
       };
     _node.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function.apply(arg0);
         }
     });
     XNode _host_1 = this.getHost();
@@ -37,8 +37,8 @@ public class MoveBehavior extends AbstractBehavior {
         }
       };
     _node_1.setOnMouseDragged(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function_1.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function_1.apply(arg0);
         }
     });
   }

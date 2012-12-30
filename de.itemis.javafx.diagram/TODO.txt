@@ -1,2 +1,2 @@
+- fix LOD condition
 - connection behavior
-- continuous zoom

@@ -65,8 +65,8 @@ public class XNestedDiagram extends XAbstractDiagram {
         }
       };
     final ChangeListener<Boolean> visibilityListener = new ChangeListener<Boolean>() {
-        public void changed(ObservableValue<? extends Boolean> observable,Boolean oldValue,Boolean newValue) {
-          _function.apply(observable,oldValue,newValue);
+        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
+          _function.apply(arg0,arg1,arg2);
         }
     };
     BooleanProperty _visibleProperty = this.visibleProperty();

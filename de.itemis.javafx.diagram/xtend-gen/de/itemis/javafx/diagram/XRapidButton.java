@@ -79,8 +79,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     this.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function.apply(arg0);
         }
     });
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
@@ -89,8 +89,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     this.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function_1.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function_1.apply(arg0);
         }
     });
     final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
@@ -99,8 +99,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     this.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function_2.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function_2.apply(arg0);
         }
     });
     this.placer.activate();
@@ -112,8 +112,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     final ChangeListener<Point2D> listener = new ChangeListener<Point2D>() {
-        public void changed(ObservableValue<? extends Point2D> observable,Point2D oldValue,Point2D newValue) {
-          _function_3.apply(observable,oldValue,newValue);
+        public void changed(ObservableValue<? extends Point2D> arg0,Point2D arg1,Point2D arg2) {
+          _function_3.apply(arg0,arg1,arg2);
         }
     };
     this.placer.addListener(listener);

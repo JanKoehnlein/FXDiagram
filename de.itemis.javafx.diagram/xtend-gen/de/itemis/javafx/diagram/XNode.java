@@ -79,8 +79,8 @@ public class XNode extends Group implements XActivatable {
         }
       };
     this.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function.apply(arg0);
         }
     });
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
@@ -89,8 +89,8 @@ public class XNode extends Group implements XActivatable {
         }
       };
     this.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function_1.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function_1.apply(arg0);
         }
     });
   }
