@@ -4,6 +4,8 @@ import javafx.beans.value.ChangeListener
 import javafx.geometry.Point2D
 import javafx.scene.shape.Polyline
 import org.eclipse.xtext.xbase.lib.Pair
+import static extension de.itemis.javafx.diagram.Extensions.*
+import static extension de.itemis.javafx.diagram.binding.DoubleExpressionExtensions.*
 
 class XConnection extends Polyline implements XActivatable {
 	
@@ -41,6 +43,7 @@ class XConnection extends Polyline implements XActivatable {
 	}
 	
 	def doActivate() {
+		strokeWidthProperty.bind(3.0 / (this.diagram.scaleXProperty + this.diagram.scaleYProperty))
 		val ChangeListener changeListener = [
 			element, oldValue, newValue | 
 			calculatePoints()
