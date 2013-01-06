@@ -119,8 +119,8 @@ public class XConnection extends Polyline implements XActivatable {
           }
         };
       final ChangeListener changeListener = new ChangeListener<Object>() {
-          public void changed(ObservableValue<? extends Object> observable,Object oldValue,Object newValue) {
-            _function.apply(observable,oldValue,newValue);
+          public void changed(ObservableValue<? extends Object> arg0,Object arg1,Object arg2) {
+            _function.apply(arg0,arg1,arg2);
           }
       };
       XNode _source = this.getSource();

@@ -1,8 +1,8 @@
 package de.itemis.javafx.diagram.binding
 
+import javafx.beans.value.ObservableNumberValue
 import org.eclipse.xtext.xbase.lib.Pure
 import javafx.beans.binding.NumberExpressionBase
-import javafx.beans.value.ObservableNumberValue
 
 class NumberExpressionExtensions {
 		

@@ -88,8 +88,8 @@ public class SelectionBehavior extends AbstractBehavior {
         }
       };
     final ChangeListener<Boolean> selectionListener = new ChangeListener<Boolean>() {
-        public void changed(ObservableValue<? extends Boolean> observable,Boolean oldValue,Boolean newValue) {
-          _function_2.apply(observable,oldValue,newValue);
+        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
+          _function_2.apply(arg0,arg1,arg2);
         }
     };
     BooleanProperty _selectedProperty = this.getSelectedProperty();

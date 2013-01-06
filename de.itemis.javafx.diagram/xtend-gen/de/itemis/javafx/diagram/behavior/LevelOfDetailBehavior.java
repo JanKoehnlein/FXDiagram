@@ -67,8 +67,8 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
         }
       };
     final ChangeListener<Bounds> boundsListener = new ChangeListener<Bounds>() {
-        public void changed(ObservableValue<? extends Bounds> observable,Bounds oldValue,Bounds newValue) {
-          _function.apply(observable,oldValue,newValue);
+        public void changed(ObservableValue<? extends Bounds> arg0,Bounds arg1,Bounds arg2) {
+          _function.apply(arg0,arg1,arg2);
         }
     };
     XNode _host = this.getHost();

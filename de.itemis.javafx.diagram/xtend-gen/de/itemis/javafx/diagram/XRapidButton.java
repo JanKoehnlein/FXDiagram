@@ -91,8 +91,8 @@ public class XRapidButton extends ImageView implements XActivatable {
         }
       };
     final ChangeListener<Point2D> listener = new ChangeListener<Point2D>() {
-        public void changed(ObservableValue<? extends Point2D> observable,Point2D oldValue,Point2D newValue) {
-          _function_3.apply(observable,oldValue,newValue);
+        public void changed(ObservableValue<? extends Point2D> arg0,Point2D arg1,Point2D arg2) {
+          _function_3.apply(arg0,arg1,arg2);
         }
     };
     this.placer.addListener(listener);

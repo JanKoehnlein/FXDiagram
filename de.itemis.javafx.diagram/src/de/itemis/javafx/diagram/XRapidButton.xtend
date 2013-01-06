@@ -1,7 +1,6 @@
 package de.itemis.javafx.diagram
 
 import javafx.animation.KeyFrame
-import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.beans.binding.ObjectBinding
 import javafx.beans.value.ChangeListener
@@ -11,6 +10,7 @@ import javafx.scene.image.ImageView
 import javafx.util.Duration
 
 import static extension de.itemis.javafx.diagram.Extensions.*
+import javafx.animation.KeyValue
 
 class XRapidButton extends ImageView implements XActivatable {
 	
