@@ -5,6 +5,7 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 import de.itemis.javafx.diagram.XRootDiagram
 import de.itemis.javafx.diagram.XConnection
+import de.itemis.javafx.diagram.XConnectionLabel
 
 class Main extends Application {
 	
@@ -31,6 +32,8 @@ class Main extends Application {
 	        layoutY = 280
         ]
         val connection = new XConnection(source, target)
+        val connectionLabel = new XConnectionLabel(connection)
+		connectionLabel.text = 'label'
         diagram.addNode(source)
         diagram.addNode(target)
 		diagram.addConnection(connection)

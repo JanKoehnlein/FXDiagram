@@ -3,6 +3,7 @@ package de.itemis.javafx.diagram;
 import com.google.common.collect.Iterables;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XConnection;
+import de.itemis.javafx.diagram.XConnectionLabel;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.XRapidButton;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import javafx.scene.layout.Pane;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -85,6 +87,14 @@ public abstract class XAbstractDiagram extends Pane implements XActivatable {
     Group _connectionLayer = this.getConnectionLayer();
     ObservableList<Node> _children = _connectionLayer.getChildren();
     _children.add(connection);
+    XConnectionLabel _label = connection.getLabel();
+    boolean _notEquals = ObjectExtensions.operator_notEquals(_label, null);
+    if (_notEquals) {
+      Group _connectionLayer_1 = this.getConnectionLayer();
+      ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();
+      XConnectionLabel _label_1 = connection.getLabel();
+      _children_1.add(_label_1);
+    }
     this.internalAddConnection(connection);
     if (this.isActive) {
       connection.activate();

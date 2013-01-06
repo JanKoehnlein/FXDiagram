@@ -39,6 +39,8 @@ abstract class XAbstractDiagram extends Pane implements XActivatable {
 	
 	def addConnection(XConnection connection) {
 		connectionLayer.children += connection
+		if(connection.label != null)
+			connectionLayer.children += connection.label
 		internalAddConnection(connection)
 		if(isActive)
 			connection.activate

@@ -1,6 +1,7 @@
 package de.itemis.javafx.diagram.example;
 
 import de.itemis.javafx.diagram.XConnection;
+import de.itemis.javafx.diagram.XConnectionLabel;
 import de.itemis.javafx.diagram.XRootDiagram;
 import de.itemis.javafx.diagram.example.MyContainerNode;
 import javafx.application.Application;
@@ -48,6 +49,9 @@ public class Main extends Application {
       final MyContainerNode target = ObjectExtensions.<MyContainerNode>operator_doubleArrow(_myContainerNode_1, _function_1);
       XConnection _xConnection = new XConnection(source, target);
       final XConnection connection = _xConnection;
+      XConnectionLabel _xConnectionLabel = new XConnectionLabel(connection);
+      final XConnectionLabel connectionLabel = _xConnectionLabel;
+      connectionLabel.setText("label");
       diagram.addNode(source);
       diagram.addNode(target);
       diagram.addConnection(connection);

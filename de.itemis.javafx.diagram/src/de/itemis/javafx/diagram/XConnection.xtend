@@ -11,6 +11,7 @@ class XConnection extends Polyline implements XActivatable {
 	
 	@Property XNode source
 	@Property XNode target
+	@Property XConnectionLabel label
 	
 	boolean isActive
 	
@@ -51,5 +52,7 @@ class XConnection extends Polyline implements XActivatable {
 		source.anchorPoints.addListener(changeListener)
 		target.anchorPoints.addListener(changeListener)
 		calculatePoints
+		if(label != null)
+			label.activate
 	}
 }

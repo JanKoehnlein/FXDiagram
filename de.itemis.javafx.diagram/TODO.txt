@@ -1,2 +1,1 @@
 - connection behavior
-- connection labels

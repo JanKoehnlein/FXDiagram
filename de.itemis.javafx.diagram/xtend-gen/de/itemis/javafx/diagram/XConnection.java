@@ -4,6 +4,7 @@ import de.itemis.javafx.diagram.AnchorPoints;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XActivatable;
+import de.itemis.javafx.diagram.XConnectionLabel;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.binding.DoubleExpressionExtensions;
 import java.util.List;
@@ -15,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polyline;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
@@ -38,6 +40,16 @@ public class XConnection extends Polyline implements XActivatable {
   
   public void setTarget(final XNode target) {
     this._target = target;
+  }
+  
+  private XConnectionLabel _label;
+  
+  public XConnectionLabel getLabel() {
+    return this._label;
+  }
+  
+  public void setLabel(final XConnectionLabel label) {
+    this._label = label;
   }
   
   private boolean isActive;
@@ -102,36 +114,37 @@ public class XConnection extends Polyline implements XActivatable {
     this.isActive = true;
   }
   
-  public boolean doActivate() {
-    boolean _xblockexpression = false;
-    {
-      DoubleProperty _strokeWidthProperty = this.strokeWidthProperty();
-      XAbstractDiagram _diagram = Extensions.getDiagram(this);
-      DoubleProperty _scaleXProperty = _diagram.scaleXProperty();
-      XAbstractDiagram _diagram_1 = Extensions.getDiagram(this);
-      DoubleProperty _scaleYProperty = _diagram_1.scaleYProperty();
-      DoubleBinding _plus = DoubleExpressionExtensions.operator_plus(_scaleXProperty, _scaleYProperty);
-      DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(3.0, _plus);
-      _strokeWidthProperty.bind(_divide);
-      final Procedure3<ObservableValue,Object,Object> _function = new Procedure3<ObservableValue,Object,Object>() {
-          public void apply(final ObservableValue element, final Object oldValue, final Object newValue) {
-            XConnection.this.calculatePoints();
-          }
-        };
-      final ChangeListener changeListener = new ChangeListener<Object>() {
-          public void changed(ObservableValue<? extends Object> arg0,Object arg1,Object arg2) {
-            _function.apply(arg0,arg1,arg2);
-          }
+  public void doActivate() {
+    DoubleProperty _strokeWidthProperty = this.strokeWidthProperty();
+    XAbstractDiagram _diagram = Extensions.getDiagram(this);
+    DoubleProperty _scaleXProperty = _diagram.scaleXProperty();
+    XAbstractDiagram _diagram_1 = Extensions.getDiagram(this);
+    DoubleProperty _scaleYProperty = _diagram_1.scaleYProperty();
+    DoubleBinding _plus = DoubleExpressionExtensions.operator_plus(_scaleXProperty, _scaleYProperty);
+    DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(3.0, _plus);
+    _strokeWidthProperty.bind(_divide);
+    final Procedure3<ObservableValue,Object,Object> _function = new Procedure3<ObservableValue,Object,Object>() {
+        public void apply(final ObservableValue element, final Object oldValue, final Object newValue) {
+          XConnection.this.calculatePoints();
+        }
       };
-      XNode _source = this.getSource();
-      AnchorPoints _anchorPoints = _source.getAnchorPoints();
-      _anchorPoints.addListener(changeListener);
-      XNode _target = this.getTarget();
-      AnchorPoints _anchorPoints_1 = _target.getAnchorPoints();
-      _anchorPoints_1.addListener(changeListener);
-      boolean _calculatePoints = this.calculatePoints();
-      _xblockexpression = (_calculatePoints);
+    final ChangeListener changeListener = new ChangeListener<Object>() {
+        public void changed(ObservableValue<? extends Object> arg0,Object arg1,Object arg2) {
+          _function.apply(arg0,arg1,arg2);
+        }
+    };
+    XNode _source = this.getSource();
+    AnchorPoints _anchorPoints = _source.getAnchorPoints();
+    _anchorPoints.addListener(changeListener);
+    XNode _target = this.getTarget();
+    AnchorPoints _anchorPoints_1 = _target.getAnchorPoints();
+    _anchorPoints_1.addListener(changeListener);
+    this.calculatePoints();
+    XConnectionLabel _label = this.getLabel();
+    boolean _notEquals = ObjectExtensions.operator_notEquals(_label, null);
+    if (_notEquals) {
+      XConnectionLabel _label_1 = this.getLabel();
+      _label_1.activate();
     }
-    return _xblockexpression;
   }
 }
