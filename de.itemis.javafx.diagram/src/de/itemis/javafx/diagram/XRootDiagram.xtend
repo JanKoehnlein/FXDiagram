@@ -1,8 +1,8 @@
 package de.itemis.javafx.diagram
 
 import de.itemis.javafx.diagram.tools.SelectionTool
-import de.itemis.javafx.diagram.tools.ZoomTool
 import javafx.scene.Group
+import de.itemis.javafx.diagram.tools.DiagramGestureTool
 
 class XRootDiagram extends XAbstractDiagram {
 	
@@ -18,7 +18,7 @@ class XRootDiagram extends XAbstractDiagram {
 	
 	override doActivate() {
 		super.doActivate
-		new ZoomTool(this)   
+		new DiagramGestureTool(this)   
 		new SelectionTool(this)     
 	}
 

@@ -30,9 +30,7 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
     ArrayList<Point2D> _xblockexpression = null;
     {
       Node _node = this.host==null?(Node)null:this.host.getNode();
-      Node _node_1 = this.host.getNode();
-      Bounds _boundsInLocal = _node_1.getBoundsInLocal();
-      final Bounds bounds = _node==null?(Bounds)null:Extensions.localToRoot(_node, _boundsInLocal);
+      final Bounds bounds = _node==null?(Bounds)null:_node.getBoundsInLocal();
       ArrayList<Point2D> _xifexpression = null;
       boolean _notEquals = ObjectExtensions.operator_notEquals(bounds, null);
       if (_notEquals) {
@@ -46,15 +44,19 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
           double _minY = bounds.getMinY();
           double _plus_1 = (_maxY + _minY);
           final double middleY = (_plus_1 / 2);
+          Node _node_1 = this.host.getNode();
           double _minX_1 = bounds.getMinX();
-          Point2D _point2D = new Point2D(_minX_1, middleY);
+          Point2D _localToRoot = Extensions.localToRoot(_node_1, _minX_1, middleY);
+          Node _node_2 = this.host.getNode();
           double _maxX_1 = bounds.getMaxX();
-          Point2D _point2D_1 = new Point2D(_maxX_1, middleY);
+          Point2D _localToRoot_1 = Extensions.localToRoot(_node_2, _maxX_1, middleY);
+          Node _node_3 = this.host.getNode();
           double _minY_1 = bounds.getMinY();
-          Point2D _point2D_2 = new Point2D(middleX, _minY_1);
+          Point2D _localToRoot_2 = Extensions.localToRoot(_node_3, middleX, _minY_1);
+          Node _node_4 = this.host.getNode();
           double _maxY_1 = bounds.getMaxY();
-          Point2D _point2D_3 = new Point2D(middleX, _maxY_1);
-          ArrayList<Point2D> _newArrayList = CollectionLiterals.<Point2D>newArrayList(_point2D, _point2D_1, _point2D_2, _point2D_3);
+          Point2D _localToRoot_3 = Extensions.localToRoot(_node_4, middleX, _maxY_1);
+          ArrayList<Point2D> _newArrayList = CollectionLiterals.<Point2D>newArrayList(_localToRoot, _localToRoot_1, _localToRoot_2, _localToRoot_3);
           _xblockexpression_1 = (_newArrayList);
         }
         _xifexpression = _xblockexpression_1;

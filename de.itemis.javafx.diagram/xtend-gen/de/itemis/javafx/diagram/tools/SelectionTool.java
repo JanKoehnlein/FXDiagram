@@ -66,8 +66,8 @@ public class SelectionTool {
         }
       };
     diagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function.apply(arg0);
         }
     });
     final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
@@ -81,8 +81,8 @@ public class SelectionTool {
         }
       };
     diagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function_1.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function_1.apply(arg0);
         }
     });
   }

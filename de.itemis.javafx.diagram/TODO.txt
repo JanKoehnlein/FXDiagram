@@ -1,3 +1,2 @@
 - connection behavior
 - connection labels
-- use matrix multiplication in ZoomTool

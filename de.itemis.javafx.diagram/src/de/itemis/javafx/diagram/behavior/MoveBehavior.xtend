@@ -2,6 +2,8 @@ package de.itemis.javafx.diagram.behavior
 
 import de.itemis.javafx.diagram.XNode
 import javafx.scene.input.MouseEvent
+import javafx.geometry.Point2D
+import static extension de.itemis.javafx.diagram.Extensions.*
 
 class MoveBehavior extends AbstractBehavior {
 	
@@ -21,13 +23,15 @@ class MoveBehavior extends AbstractBehavior {
 	}
 	
 	def mousePressed(MouseEvent it) {
-		dragContext = new DragContext(screenX, screenY, host.layoutX, host.layoutY)
+		dragContext = new DragContext(screenX, screenY, host.diagram.localToScene(host.layoutX, host.layoutY))
 	}
 	
 	def mouseDragged(MouseEvent it) {
-		host.relocate(
-			dragContext.initialX - dragContext.mouseAnchorX + screenX,
-			dragContext.initialY - dragContext.mouseAnchorY + screenY)
+		val newPositionInScene = new Point2D(
+			dragContext.initialPosInScene.x + screenX - dragContext.mouseAnchorX,
+			dragContext.initialPosInScene.y + screenY - dragContext.mouseAnchorY)
+		val newPositionInDiagram = host.diagram.sceneToLocal(newPositionInScene)
+		host.relocate(newPositionInDiagram.x, newPositionInDiagram.y)
 	}
 }
 
@@ -35,6 +39,5 @@ class MoveBehavior extends AbstractBehavior {
 class DragContext {
 	double mouseAnchorX 
 	double mouseAnchorY
-	double initialX
-	double initialY
+	Point2D initialPosInScene
 }

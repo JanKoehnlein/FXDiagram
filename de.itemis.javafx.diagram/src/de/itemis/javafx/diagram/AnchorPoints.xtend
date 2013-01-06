@@ -15,15 +15,15 @@ class AnchorPoints extends ObjectBinding<List<Point2D>> {
 	}
 
 	override protected computeValue() {
-		val bounds = host?.node?.localToRoot(host.node.boundsInLocal)
+		val bounds = host?.node?.boundsInLocal
 		if(bounds != null) {
 			val middleX = (bounds.maxX + bounds.minX) / 2
 			val middleY = (bounds.maxY + bounds.minY) / 2
 			newArrayList(
-				new Point2D(bounds.minX, middleY),
-				new Point2D(bounds.maxX, middleY),
-				new Point2D(middleX, bounds.minY),
-				new Point2D(middleX, bounds.maxY))
+				host.node.localToRoot(bounds.minX, middleY),
+				host.node.localToRoot(bounds.maxX, middleY),
+				host.node.localToRoot(middleX, bounds.minY),
+				host.node.localToRoot(middleX, bounds.maxY))
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram.behavior;
 
+import javafx.geometry.Point2D;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
@@ -18,24 +19,17 @@ public class DragContext {
     return this._mouseAnchorY;
   }
   
-  private final double _initialX;
+  private final Point2D _initialPosInScene;
   
-  public double getInitialX() {
-    return this._initialX;
+  public Point2D getInitialPosInScene() {
+    return this._initialPosInScene;
   }
   
-  private final double _initialY;
-  
-  public double getInitialY() {
-    return this._initialY;
-  }
-  
-  public DragContext(final double mouseAnchorX, final double mouseAnchorY, final double initialX, final double initialY) {
+  public DragContext(final double mouseAnchorX, final double mouseAnchorY, final Point2D initialPosInScene) {
     super();
     this._mouseAnchorX = mouseAnchorX;
     this._mouseAnchorY = mouseAnchorY;
-    this._initialX = initialX;
-    this._initialY = initialY;
+    this._initialPosInScene = initialPosInScene;
   }
   
   @Override
@@ -44,8 +38,7 @@ public class DragContext {
     int result = 1;
     result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorX) ^ (Double.doubleToLongBits(_mouseAnchorX) >>> 32));
     result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorY) ^ (Double.doubleToLongBits(_mouseAnchorY) >>> 32));
-    result = prime * result + (int) (Double.doubleToLongBits(_initialX) ^ (Double.doubleToLongBits(_initialX) >>> 32));
-    result = prime * result + (int) (Double.doubleToLongBits(_initialY) ^ (Double.doubleToLongBits(_initialY) >>> 32));
+    result = prime * result + ((_initialPosInScene== null) ? 0 : _initialPosInScene.hashCode());
     return result;
   }
   
@@ -62,9 +55,10 @@ public class DragContext {
       return false;
     if (Double.doubleToLongBits(other._mouseAnchorY) != Double.doubleToLongBits(_mouseAnchorY))
       return false;
-    if (Double.doubleToLongBits(other._initialX) != Double.doubleToLongBits(_initialX))
-      return false;
-    if (Double.doubleToLongBits(other._initialY) != Double.doubleToLongBits(_initialY))
+    if (_initialPosInScene == null) {
+      if (other._initialPosInScene != null)
+        return false;
+    } else if (!_initialPosInScene.equals(other._initialPosInScene))
       return false;
     return true;
   }

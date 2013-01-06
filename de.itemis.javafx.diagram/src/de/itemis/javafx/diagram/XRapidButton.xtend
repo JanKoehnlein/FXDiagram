@@ -83,7 +83,6 @@ class XRapidButton extends ImageView implements XActivatable {
 			]
 		timeline
 	}
-
 }
 
 class Placer extends ObjectBinding<Point2D> {

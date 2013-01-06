@@ -88,8 +88,8 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
         }
       };
     _node.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function_2.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function_2.apply(arg0);
         }
     });
     XNode _host_5 = this.getHost();
@@ -105,8 +105,8 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
         }
       };
     _node_1.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-          _function_3.apply(event);
+        public void handle(MouseEvent arg0) {
+          _function_3.apply(arg0);
         }
     });
   }
