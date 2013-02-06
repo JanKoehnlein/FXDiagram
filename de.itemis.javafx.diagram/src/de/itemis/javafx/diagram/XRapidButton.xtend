@@ -42,7 +42,7 @@ class XRapidButton extends ImageView implements XActivatable {
 		visible = false
 		onMouseEntered = [ show ]
 		onMouseExited = [ fade ]
-		onMousePressed = [ action.apply(this) ]
+		onMousePressed = [ action.apply(this) consume ]
 		placer.activate
 		val ChangeListener<Point2D> listener = [
 			element, oldVal, newVal | relocate(newVal.x, newVal.y)

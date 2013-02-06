@@ -21,7 +21,11 @@ class XNode extends Group implements XActivatable {
 	AnchorPoints anchorPoints
 	
 	new() {
-		mouseOverEffect = new InnerShadow
+		mouseOverEffect = createMouseOverEffect 
+	}
+	
+	protected def createMouseOverEffect() {
+		new InnerShadow
 	}
 	
 	override activate() {
@@ -36,9 +40,9 @@ class XNode extends Group implements XActivatable {
 		anchorPoints = new AnchorPoints(this)
  		selectionBehavior.activate()
 		moveBehavior.activate()
-		onMouseEntered = [ 
+		onMouseEntered = [
 			originalEffect = node.effect
-			node.effect = mouseOverEffect
+			node.effect = mouseOverEffect ?: originalEffect
 		]
 		onMouseExited = [ 
 			node.effect = originalEffect

@@ -75,6 +75,7 @@ public class XRapidButton extends ImageView implements XActivatable {
     final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
         public void apply(final MouseEvent it) {
           XRapidButton.this.action.apply(XRapidButton.this);
+          it.consume();
         }
       };
     this.setOnMousePressed(new EventHandler<MouseEvent>() {

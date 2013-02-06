@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram;
 
+@SuppressWarnings("all")
 public interface XActivatable {
-	void activate();
+  public abstract void activate();
 }

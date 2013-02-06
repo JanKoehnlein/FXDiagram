@@ -22,7 +22,9 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
     DoubleProperty _layoutYProperty = host.layoutYProperty();
     Node _node = host.getNode();
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _node.boundsInLocalProperty();
-    this.bind(_layoutXProperty, _layoutYProperty, _boundsInLocalProperty);
+    DoubleProperty _scaleXProperty = host.scaleXProperty();
+    DoubleProperty _scaleYProperty = host.scaleYProperty();
+    this.bind(_layoutXProperty, _layoutYProperty, _boundsInLocalProperty, _scaleXProperty, _scaleYProperty);
     this.host = host;
   }
   

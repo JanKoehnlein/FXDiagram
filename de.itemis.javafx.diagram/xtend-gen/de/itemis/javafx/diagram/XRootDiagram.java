@@ -3,6 +3,8 @@ package de.itemis.javafx.diagram;
 import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.tools.DiagramGestureTool;
 import de.itemis.javafx.diagram.tools.SelectionTool;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -31,6 +33,13 @@ public class XRootDiagram extends XAbstractDiagram {
     }
   }.apply();
   
+  private DoubleProperty scaleProperty = new Function0<DoubleProperty>() {
+    public DoubleProperty apply() {
+      SimpleDoubleProperty _simpleDoubleProperty = new SimpleDoubleProperty(1.0);
+      return _simpleDoubleProperty;
+    }
+  }.apply();
+  
   public XRootDiagram() {
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.nodeLayer);
@@ -56,5 +65,9 @@ public class XRootDiagram extends XAbstractDiagram {
   
   public Group getButtonLayer() {
     return this.buttonLayer;
+  }
+  
+  public DoubleProperty getScaleProperty() {
+    return this.scaleProperty;
   }
 }

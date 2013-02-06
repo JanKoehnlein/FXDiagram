@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -30,8 +31,13 @@ public class XNode extends Group implements XActivatable {
   private AnchorPoints anchorPoints;
   
   public XNode() {
+    InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
+    this.mouseOverEffect = _createMouseOverEffect;
+  }
+  
+  protected InnerShadow createMouseOverEffect() {
     InnerShadow _innerShadow = new InnerShadow();
-    this.mouseOverEffect = _innerShadow;
+    return _innerShadow;
   }
   
   public void activate() {
@@ -55,7 +61,8 @@ public class XNode extends Group implements XActivatable {
         public void apply(final MouseEvent it) {
           Effect _effect = XNode.this.node.getEffect();
           XNode.this.originalEffect = _effect;
-          XNode.this.node.setEffect(XNode.this.mouseOverEffect);
+          Effect _elvis = ObjectExtensions.<Effect>operator_elvis(XNode.this.mouseOverEffect, XNode.this.originalEffect);
+          XNode.this.node.setEffect(_elvis);
         }
       };
     this.setOnMouseEntered(new EventHandler<MouseEvent>() {

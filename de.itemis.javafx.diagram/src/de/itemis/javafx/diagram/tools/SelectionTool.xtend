@@ -7,34 +7,39 @@ import static extension de.itemis.javafx.diagram.Extensions.*
 
 class SelectionTool {
 	
-	XRootDiagram diagram 
+	XRootDiagram rootDiagram 
 	
-	new(XRootDiagram diagram) {
-		this.diagram = diagram
-		diagram.addEventFilter(MouseEvent::MOUSE_PRESSED) [
-			if(!(target instanceof XRapidButton)) { 
-				val targetShape = it.targetShape
+	new(XRootDiagram rootDiagram) {
+		this.rootDiagram = rootDiagram
+		rootDiagram.addEventFilter(MouseEvent::MOUSE_PRESSED) [ 
+			event |
+			if(!(event.target instanceof XRapidButton)) { 
+				val targetShape = event.targetShape
 				if(targetShape?.selectionBehavior != null) {
-					if(!targetShape.selectionBehavior.selected && !shortcutDown)
-						selection.forEach[selectionBehavior.selected = false]		
-					for(shape: selection) {
-						shape?.moveBehavior?.mousePressed(it)				
+					if(!targetShape.selectionBehavior.selected && !event.shortcutDown) {
+						selection.forEach[selectionBehavior.selected = false]	
 					}
-					targetShape.moveBehavior?.mousePressed(it)				
-					targetShape.selectionBehavior.mousePressed(it)
-					it.consume
+					selection.filter[it.diagram != targetShape.diagram].forEach[
+						selectionBehavior.selected = false
+					]
+					selection.forEach[
+						moveBehavior?.mousePressed(event)				
+					]
+					targetShape.moveBehavior?.mousePressed(event)				
+					targetShape.selectionBehavior.mousePressed(event)
 				}
+				event.consume
 			}
 		]
-		diagram.addEventFilter(MouseEvent::MOUSE_DRAGGED) [
+		rootDiagram.addEventFilter(MouseEvent::MOUSE_DRAGGED) [
 			for(shape: selection) {
 				shape?.moveBehavior?.mouseDragged(it)				
 			}
-			it.consume
+			consume
 		]
 	}
 	
 	def getSelection() {
-		diagram.nodes.filter[selectionBehavior?.selected]
+		rootDiagram.nodes.filter[selectionBehavior?.selected]
 	}
 }

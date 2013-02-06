@@ -44,7 +44,7 @@ class XConnection extends Polyline implements XActivatable {
 	}
 	
 	def doActivate() {
-		strokeWidthProperty.bind(3.0 / (this.diagram.scaleXProperty + this.diagram.scaleYProperty))
+		strokeWidthProperty.bind(1.5 / this.rootDiagram.scaleProperty)
 		val ChangeListener changeListener = [
 			element, oldValue, newValue | 
 			calculatePoints()

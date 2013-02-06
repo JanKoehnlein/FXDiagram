@@ -26,6 +26,7 @@ class DiagramGestureTool {
 		]
 		val EventHandler<ZoomEvent> zoomHandler = [
 			val scale = totalZoomFactor / zoomContext.previousScale
+			diagram.scaleProperty.set(scale * diagram.scaleProperty.get)
 			diagramTransform.scale(scale, scale)
 			val pivotInScene = diagram.localToScene(zoomContext.pivotInDiagram)
 			diagramTransform.translate(sceneX - pivotInScene.x, sceneY - pivotInScene.y)

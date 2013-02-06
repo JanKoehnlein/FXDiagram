@@ -27,13 +27,16 @@ class SelectionBehavior extends AbstractBehavior {
 	override doActivate() {
 		host.onMousePressed = [
 			mousePressed
+			consume
 		]
 		host.onMouseReleased = [
 			if(shortcutDown)
 				isSelected.set(!wasSelected)
+			consume
 		]
 		val ChangeListener<Boolean> selectionListener = [
 			observable, oldValue, newValue |
+			println("Selection of " + host + " " + newValue)
 			if(newValue) {
 				host.effect = selectionEffect
 				host.scaleX = 1.05

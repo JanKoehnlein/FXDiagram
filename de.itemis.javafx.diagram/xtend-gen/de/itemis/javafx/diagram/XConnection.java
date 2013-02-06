@@ -2,10 +2,10 @@ package de.itemis.javafx.diagram;
 
 import de.itemis.javafx.diagram.AnchorPoints;
 import de.itemis.javafx.diagram.Extensions;
-import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XConnectionLabel;
 import de.itemis.javafx.diagram.XNode;
+import de.itemis.javafx.diagram.XRootDiagram;
 import de.itemis.javafx.diagram.binding.DoubleExpressionExtensions;
 import java.util.List;
 import javafx.beans.binding.DoubleBinding;
@@ -116,12 +116,9 @@ public class XConnection extends Polyline implements XActivatable {
   
   public void doActivate() {
     DoubleProperty _strokeWidthProperty = this.strokeWidthProperty();
-    XAbstractDiagram _diagram = Extensions.getDiagram(this);
-    DoubleProperty _scaleXProperty = _diagram.scaleXProperty();
-    XAbstractDiagram _diagram_1 = Extensions.getDiagram(this);
-    DoubleProperty _scaleYProperty = _diagram_1.scaleYProperty();
-    DoubleBinding _plus = DoubleExpressionExtensions.operator_plus(_scaleXProperty, _scaleYProperty);
-    DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(3.0, _plus);
+    XRootDiagram _rootDiagram = Extensions.getRootDiagram(this);
+    DoubleProperty _scaleProperty = _rootDiagram.getScaleProperty();
+    DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(1.5, _scaleProperty);
     _strokeWidthProperty.bind(_divide);
     final Procedure3<ObservableValue,Object,Object> _function = new Procedure3<ObservableValue,Object,Object>() {
         public void apply(final ObservableValue element, final Object oldValue, final Object newValue) {

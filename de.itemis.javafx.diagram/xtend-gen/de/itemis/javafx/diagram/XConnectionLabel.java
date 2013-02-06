@@ -47,8 +47,8 @@ public class XConnectionLabel extends Label implements XActivatable {
         }
       };
     final ListChangeListener<Double> listChangeListener = new ListChangeListener<Double>() {
-        public void onChanged(Change<? extends Double> arg0) {
-          _function.apply(arg0);
+        public void onChanged(Change<? extends Double> c) {
+          _function.apply(c);
         }
     };
     ObservableList<Double> _points_1 = this.connection.getPoints();
