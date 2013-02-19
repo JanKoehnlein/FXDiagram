@@ -23,7 +23,11 @@ abstract class XAbstractDiagram extends Pane implements XActivatable {
 	}
 	
 	def void doActivate() {
-		(nodes + connections + buttons).forEach[activate]
+		// TODO: should be
+		// (nodes +connections + buttons).forEach[activate]
+		nodes.forEach[activate] 
+		connections.forEach[activate]
+		buttons.forEach[activate]
 	} 
 	 	 
 	def addNode(XNode node) {

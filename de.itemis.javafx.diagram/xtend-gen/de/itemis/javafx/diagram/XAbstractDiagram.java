@@ -1,6 +1,5 @@
 package de.itemis.javafx.diagram;
 
-import com.google.common.collect.Iterables;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XConnection;
 import de.itemis.javafx.diagram.XConnectionLabel;
@@ -58,14 +57,24 @@ public abstract class XAbstractDiagram extends Pane implements XActivatable {
   }
   
   public void doActivate() {
-    Iterable<Object> _plus = Iterables.<Object>concat(this.nodes, this.connections);
-    Iterable<Object> _plus_1 = Iterables.<Object>concat(_plus, this.buttons);
-    final Procedure1<Object> _function = new Procedure1<Object>() {
-        public void apply(final Object it) {
-          XAbstractDiagram.this.activate();
+    final Procedure1<XNode> _function = new Procedure1<XNode>() {
+        public void apply(final XNode it) {
+          it.activate();
         }
       };
-    IterableExtensions.<Object>forEach(_plus_1, _function);
+    IterableExtensions.<XNode>forEach(this.nodes, _function);
+    final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
+        public void apply(final XConnection it) {
+          it.activate();
+        }
+      };
+    IterableExtensions.<XConnection>forEach(this.connections, _function_1);
+    final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
+        public void apply(final XRapidButton it) {
+          it.activate();
+        }
+      };
+    IterableExtensions.<XRapidButton>forEach(this.buttons, _function_2);
   }
   
   public void addNode(final XNode node) {
