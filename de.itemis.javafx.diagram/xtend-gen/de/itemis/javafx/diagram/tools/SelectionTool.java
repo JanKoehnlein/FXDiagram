@@ -22,8 +22,8 @@ public class SelectionTool {
   
   public SelectionTool(final XRootDiagram rootDiagram) {
     this.rootDiagram = rootDiagram;
-    final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent event) {
+    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent event) {
           EventTarget _target = event.getTarget();
           boolean _not = (!(_target instanceof XRapidButton));
           if (_not) {
@@ -86,13 +86,9 @@ public class SelectionTool {
           }
         }
       };
-    rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
-        }
-    });
-    final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, _function);
+    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           Iterable<XNode> _selection = SelectionTool.this.getSelection();
           for (final XNode shape : _selection) {
             MoveBehavior _moveBehavior = shape==null?(MoveBehavior)null:shape.getMoveBehavior();
@@ -101,11 +97,7 @@ public class SelectionTool {
           it.consume();
         }
       };
-    rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
-        }
-    });
+    rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, _function_1);
   }
   
   public Iterable<XNode> getSelection() {

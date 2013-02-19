@@ -1,9 +1,6 @@
 package de.itemis.javafx.diagram
 
 import java.util.List
-import javafx.beans.value.ChangeListener
-import javafx.collections.ListChangeListener
-import javafx.geometry.Bounds
 import javafx.scene.control.Label
 import javafx.scene.transform.Affine
 
@@ -28,15 +25,13 @@ class XConnectionLabel extends Label implements XActivatable {
 	
 	def doActivate() {
 		place(connection.points)
-		val ListChangeListener<Double> listChangeListener = [
+		connection.points.addListener [
 			place(list)
-		] 
-		connection.points.addListener(listChangeListener)
-		val ChangeListener<Bounds> boundsChangeListener = [
+		]
+		boundsInLocalProperty.addListener [
 			element, oldVlaue, newValue |
 			place(connection.points)
 		] 
-		boundsInLocalProperty.addListener(boundsChangeListener) 
 	}
 
 	def protected place(List<? extends Double> list) {

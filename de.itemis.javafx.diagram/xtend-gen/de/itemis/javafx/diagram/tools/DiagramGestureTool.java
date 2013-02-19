@@ -13,7 +13,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class DiagramGestureTool {
@@ -29,8 +28,8 @@ public class DiagramGestureTool {
     _transforms.clear();
     ObservableList<Transform> _transforms_1 = diagram.getTransforms();
     _transforms_1.add(this.diagramTransform);
-    final Procedure1<ZoomEvent> _function = new Procedure1<ZoomEvent>() {
-        public void apply(final ZoomEvent it) {
+    final EventHandler<ZoomEvent> _function = new EventHandler<ZoomEvent>() {
+        public void handle(final ZoomEvent it) {
           double _sceneX = it.getSceneX();
           double _sceneY = it.getSceneY();
           Point2D _sceneToLocal = diagram.sceneToLocal(_sceneX, _sceneY);
@@ -38,13 +37,9 @@ public class DiagramGestureTool {
           DiagramGestureTool.this.zoomContext = _zoomContext;
         }
       };
-    scene.setOnZoomStarted(new EventHandler<ZoomEvent>() {
-        public void handle(ZoomEvent arg0) {
-          _function.apply(arg0);
-        }
-    });
-    final Procedure1<ZoomEvent> _function_1 = new Procedure1<ZoomEvent>() {
-        public void apply(final ZoomEvent it) {
+    scene.setOnZoomStarted(_function);
+    final EventHandler<ZoomEvent> _function_1 = new EventHandler<ZoomEvent>() {
+        public void handle(final ZoomEvent it) {
           double _totalZoomFactor = it.getTotalZoomFactor();
           double _previousScale = DiagramGestureTool.this.zoomContext.getPreviousScale();
           final double scale = (_totalZoomFactor / _previousScale);
@@ -67,30 +62,22 @@ public class DiagramGestureTool {
           DiagramGestureTool.this.zoomContext.setPreviousScale(_totalZoomFactor_1);
         }
       };
-    final EventHandler<ZoomEvent> zoomHandler = new EventHandler<ZoomEvent>() {
-        public void handle(ZoomEvent arg0) {
-          _function_1.apply(arg0);
-        }
-    };
+    final EventHandler<ZoomEvent> zoomHandler = _function_1;
     scene.setOnZoom(zoomHandler);
     scene.setOnZoomFinished(zoomHandler);
-    final Procedure1<ScrollEvent> _function_2 = new Procedure1<ScrollEvent>() {
-        public void apply(final ScrollEvent it) {
+    final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
+        public void handle(final ScrollEvent it) {
           double _deltaX = it.getDeltaX();
           double _deltaY = it.getDeltaY();
           TransformExtensions.translate(DiagramGestureTool.this.diagramTransform, _deltaX, _deltaY);
         }
       };
-    final EventHandler<ScrollEvent> scrollHandler = new EventHandler<ScrollEvent>() {
-        public void handle(ScrollEvent arg0) {
-          _function_2.apply(arg0);
-        }
-    };
+    final EventHandler<ScrollEvent> scrollHandler = _function_2;
     scene.setOnScrollStarted(scrollHandler);
     scene.setOnScroll(scrollHandler);
     scene.setOnScrollFinished(scrollHandler);
-    final Procedure1<RotateEvent> _function_3 = new Procedure1<RotateEvent>() {
-        public void apply(final RotateEvent it) {
+    final EventHandler<RotateEvent> _function_3 = new EventHandler<RotateEvent>() {
+        public void handle(final RotateEvent it) {
           boolean _isShortcutDown = it.isShortcutDown();
           if (_isShortcutDown) {
             double _angle = it.getAngle();
@@ -100,11 +87,7 @@ public class DiagramGestureTool {
           }
         }
       };
-    final EventHandler<RotateEvent> rotateHandler = new EventHandler<RotateEvent>() {
-        public void handle(RotateEvent arg0) {
-          _function_3.apply(arg0);
-        }
-    };
+    final EventHandler<RotateEvent> rotateHandler = _function_3;
     scene.setOnRotationStarted(rotateHandler);
     scene.setOnRotate(rotateHandler);
     scene.setOnRotationFinished(rotateHandler);

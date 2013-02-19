@@ -9,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class MoveBehavior extends AbstractBehavior {
@@ -22,28 +21,20 @@ public class MoveBehavior extends AbstractBehavior {
   public void doActivate() {
     XNode _host = this.getHost();
     Node _node = _host.getNode();
-    final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           MoveBehavior.this.mousePressed(it);
         }
       };
-    _node.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
-        }
-    });
+    _node.setOnMousePressed(_function);
     XNode _host_1 = this.getHost();
     Node _node_1 = _host_1.getNode();
-    final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           MoveBehavior.this.mouseDragged(it);
         }
       };
-    _node_1.setOnMouseDragged(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
-        }
-    });
+    _node_1.setOnMouseDragged(_function_1);
   }
   
   public DragContext mousePressed(final MouseEvent it) {

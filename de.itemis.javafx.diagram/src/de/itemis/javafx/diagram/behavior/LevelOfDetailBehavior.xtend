@@ -3,7 +3,6 @@ package de.itemis.javafx.diagram.behavior
 import de.itemis.javafx.diagram.XActivatable
 import de.itemis.javafx.diagram.XNode
 import java.util.List
-import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.scene.Node
 
@@ -24,15 +23,14 @@ class LevelOfDetailBehavior extends AbstractBehavior {
 	}
 	
 	override doActivate() {
-		val ChangeListener<Bounds> boundsListener = [
+		host.rootDiagram.boundsInParentProperty.addListener [
 			bounds, oldBounds, newBounds |
 			val newIndex = host.localToScene(host.boundsInLocal).value.childIndexForValue
 			val child = children.get(newIndex)
 			if(child instanceof XActivatable)
 				(child as XActivatable).activate
 			children.forEach[visible = it == child]
-		]
-		host.rootDiagram.boundsInParentProperty.addListener(boundsListener)		
+		]		
 	}
 	
 	def addChildForThreshold(double threshold, Node child) {

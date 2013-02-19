@@ -1,7 +1,7 @@
 package de.itemis.javafx.diagram
 
-import javafx.beans.value.ChangeListener
 import javafx.scene.Group
+
 import static extension de.itemis.javafx.diagram.Extensions.*
 
 class XNestedDiagram extends XAbstractDiagram {
@@ -17,11 +17,10 @@ class XNestedDiagram extends XAbstractDiagram {
 		scaleX = 0.3
 		scaleY = 0.3
 		managed = false
-		val ChangeListener<Boolean> visibilityListener = [ 
+		visibleProperty.addListener [ 
 			property, oldVal, newVal |
 			connections.forEach[ visible = newVal ]
 		]
-		visibleProperty.addListener(visibilityListener)
 	}
 	
 	def setContentsInitializer((XNestedDiagram)=>void contentsInitializer) {

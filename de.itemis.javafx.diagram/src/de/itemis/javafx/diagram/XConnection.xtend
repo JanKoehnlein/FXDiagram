@@ -1,9 +1,9 @@
 package de.itemis.javafx.diagram
 
-import javafx.beans.value.ChangeListener
 import javafx.geometry.Point2D
 import javafx.scene.shape.Polyline
 import org.eclipse.xtext.xbase.lib.Pair
+
 import static extension de.itemis.javafx.diagram.Extensions.*
 import static extension de.itemis.javafx.diagram.binding.DoubleExpressionExtensions.*
 
@@ -45,12 +45,14 @@ class XConnection extends Polyline implements XActivatable {
 	
 	def doActivate() {
 		strokeWidthProperty.bind(1.5 / this.rootDiagram.scaleProperty)
-		val ChangeListener changeListener = [
+		source.anchorPoints.addListener [
 			element, oldValue, newValue | 
 			calculatePoints()
-		]  
-		source.anchorPoints.addListener(changeListener)
-		target.anchorPoints.addListener(changeListener)
+		]
+		target.anchorPoints.addListener[
+			element, oldValue, newValue | 
+			calculatePoints()
+		]
 		calculatePoints
 		if(label != null)
 			label.activate

@@ -17,7 +17,6 @@ import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class LevelOfDetailBehavior extends AbstractBehavior {
@@ -45,8 +44,11 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
   }
   
   public void doActivate() {
-    final Procedure3<ObservableValue<? extends Bounds>,Bounds,Bounds> _function = new Procedure3<ObservableValue<? extends Bounds>,Bounds,Bounds>() {
-        public void apply(final ObservableValue<? extends Bounds> bounds, final Bounds oldBounds, final Bounds newBounds) {
+    XNode _host = this.getHost();
+    XRootDiagram _rootDiagram = Extensions.getRootDiagram(_host);
+    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _rootDiagram.boundsInParentProperty();
+    final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
+        public void changed(final ObservableValue<? extends Bounds> bounds, final Bounds oldBounds, final Bounds newBounds) {
           XNode _host = LevelOfDetailBehavior.this.getHost();
           XNode _host_1 = LevelOfDetailBehavior.this.getHost();
           Bounds _boundsInLocal = _host_1.getBoundsInLocal();
@@ -66,15 +68,7 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
           IterableExtensions.<Node>forEach(LevelOfDetailBehavior.this.children, _function);
         }
       };
-    final ChangeListener<Bounds> boundsListener = new ChangeListener<Bounds>() {
-        public void changed(ObservableValue<? extends Bounds> arg0,Bounds arg1,Bounds arg2) {
-          _function.apply(arg0,arg1,arg2);
-        }
-    };
-    XNode _host = this.getHost();
-    XRootDiagram _rootDiagram = Extensions.getRootDiagram(_host);
-    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _rootDiagram.boundsInParentProperty();
-    _boundsInParentProperty.addListener(boundsListener);
+    _boundsInParentProperty.addListener(_function);
   }
   
   public void addChildForThreshold(final double threshold, final Node child) {
@@ -114,6 +108,6 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
       }
       _xblockexpression = (index);
     }
-    return Integer.valueOf(_xblockexpression);
+    return _xblockexpression;
   }
 }

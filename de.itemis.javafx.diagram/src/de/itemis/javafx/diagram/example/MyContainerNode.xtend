@@ -4,7 +4,6 @@ import de.itemis.javafx.diagram.XActivatable
 import de.itemis.javafx.diagram.XNestedDiagram
 import de.itemis.javafx.diagram.XNode
 import de.itemis.javafx.diagram.behavior.LevelOfDetailBehavior
-import javafx.beans.value.ChangeListener
 import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.effect.InnerShadow
@@ -102,10 +101,9 @@ class ActivateableStackPane extends StackPane implements XActivatable {
 	
 	override activate() {
 		children.filter(typeof(XActivatable)).forEach[activate]
-		val ChangeListener<Boolean> changeListener = [
+		visibleProperty.addListener [
 			element, oldVal, newVal | children.forEach[visible = newVal]
 		] 
-		visibleProperty.addListener(changeListener)
 	}
 	
 }

@@ -19,7 +19,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class XRapidButton extends ImageView implements XActivatable {
@@ -52,51 +51,34 @@ public class XRapidButton extends ImageView implements XActivatable {
   
   public void doActivate() {
     this.setVisible(false);
-    final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           XRapidButton.this.show();
         }
       };
-    this.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
-        }
-    });
-    final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    this.setOnMouseEntered(_function);
+    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           XRapidButton.this.fade();
         }
       };
-    this.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
-        }
-    });
-    final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    this.setOnMouseExited(_function_1);
+    final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           XRapidButton.this.action.apply(XRapidButton.this);
           it.consume();
         }
       };
-    this.setOnMousePressed(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_2.apply(arg0);
-        }
-    });
+    this.setOnMousePressed(_function_2);
     this.placer.activate();
-    final Procedure3<ObservableValue<? extends Point2D>,Point2D,Point2D> _function_3 = new Procedure3<ObservableValue<? extends Point2D>,Point2D,Point2D>() {
-        public void apply(final ObservableValue<? extends Point2D> element, final Point2D oldVal, final Point2D newVal) {
+    final ChangeListener<Point2D> _function_3 = new ChangeListener<Point2D>() {
+        public void changed(final ObservableValue<? extends Point2D> element, final Point2D oldVal, final Point2D newVal) {
           double _x = newVal.getX();
           double _y = newVal.getY();
           XRapidButton.this.relocate(_x, _y);
         }
       };
-    final ChangeListener<Point2D> listener = new ChangeListener<Point2D>() {
-        public void changed(ObservableValue<? extends Point2D> arg0,Point2D arg1,Point2D arg2) {
-          _function_3.apply(arg0,arg1,arg2);
-        }
-    };
-    this.placer.addListener(listener);
+    this.placer.addListener(_function_3);
   }
   
   protected void setPosition(final Point2D position) {
@@ -138,7 +120,8 @@ public class XRapidButton extends ImageView implements XActivatable {
               ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
               Duration _millis = Duration.millis(500);
               DoubleProperty _opacityProperty = XRapidButton.this.opacityProperty();
-              KeyValue _keyValue = new KeyValue(_opacityProperty, Double.valueOf(1.0));
+              Double _double = new Double(1.0);
+              KeyValue _keyValue = new KeyValue(_opacityProperty, _double);
               KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
               _keyFrames.add(_keyFrame);
               ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();

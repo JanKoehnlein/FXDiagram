@@ -3,7 +3,6 @@ package de.itemis.javafx.diagram.behavior
 import de.itemis.javafx.diagram.XNode
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.value.ChangeListener
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.input.MouseEvent
@@ -34,9 +33,8 @@ class SelectionBehavior extends AbstractBehavior {
 				isSelected.set(!wasSelected)
 			consume
 		]
-		val ChangeListener<Boolean> selectionListener = [
+		selectedProperty.addListener [
 			observable, oldValue, newValue |
-			println("Selection of " + host + " " + newValue)
 			if(newValue) {
 				host.effect = selectionEffect
 				host.scaleX = 1.05
@@ -47,7 +45,6 @@ class SelectionBehavior extends AbstractBehavior {
 				host.scaleY = 1.0
 			}
 		]
-		selectedProperty.addListener(selectionListener)
 	}	
 	
 	def mousePressed(MouseEvent it) {

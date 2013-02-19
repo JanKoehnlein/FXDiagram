@@ -15,8 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class XConnectionLabel extends Label implements XActivatable {
@@ -40,36 +38,26 @@ public class XConnectionLabel extends Label implements XActivatable {
   public void doActivate() {
     ObservableList<Double> _points = this.connection.getPoints();
     this.place(_points);
-    final Procedure1<Change<? extends Double>> _function = new Procedure1<Change<? extends Double>>() {
-        public void apply(final Change<? extends Double> it) {
+    ObservableList<Double> _points_1 = this.connection.getPoints();
+    final ListChangeListener<Double> _function = new ListChangeListener<Double>() {
+        public void onChanged(final Change<? extends Double> it) {
           ObservableList<? extends Double> _list = it.getList();
           XConnectionLabel.this.place(_list);
         }
       };
-    final ListChangeListener<Double> listChangeListener = new ListChangeListener<Double>() {
-        public void onChanged(Change<? extends Double> c) {
-          _function.apply(c);
-        }
-    };
-    ObservableList<Double> _points_1 = this.connection.getPoints();
-    _points_1.addListener(listChangeListener);
-    final Procedure3<ObservableValue<? extends Bounds>,Bounds,Bounds> _function_1 = new Procedure3<ObservableValue<? extends Bounds>,Bounds,Bounds>() {
-        public void apply(final ObservableValue<? extends Bounds> element, final Bounds oldVlaue, final Bounds newValue) {
+    _points_1.addListener(_function);
+    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.boundsInLocalProperty();
+    final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
+        public void changed(final ObservableValue<? extends Bounds> element, final Bounds oldVlaue, final Bounds newValue) {
           ObservableList<Double> _points = XConnectionLabel.this.connection.getPoints();
           XConnectionLabel.this.place(_points);
         }
       };
-    final ChangeListener<Bounds> boundsChangeListener = new ChangeListener<Bounds>() {
-        public void changed(ObservableValue<? extends Bounds> arg0,Bounds arg1,Bounds arg2) {
-          _function_1.apply(arg0,arg1,arg2);
-        }
-    };
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.boundsInLocalProperty();
-    _boundsInLocalProperty.addListener(boundsChangeListener);
+    _boundsInLocalProperty.addListener(_function_1);
   }
   
-  protected boolean place(final List<? extends Double> list) {
-    boolean _xifexpression = false;
+  protected Boolean place(final List<? extends Double> list) {
+    Boolean _xifexpression = null;
     int _size = list.size();
     boolean _greaterEqualsThan = (_size >= 4);
     if (_greaterEqualsThan) {

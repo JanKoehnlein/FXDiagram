@@ -12,7 +12,6 @@ import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class XNode extends Group implements XActivatable {
@@ -57,29 +56,26 @@ public class XNode extends Group implements XActivatable {
     this.anchorPoints = _anchorPoints;
     this.selectionBehavior.activate();
     this.moveBehavior.activate();
-    final Procedure1<MouseEvent> _function = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           Effect _effect = XNode.this.node.getEffect();
           XNode.this.originalEffect = _effect;
-          Effect _elvis = ObjectExtensions.<Effect>operator_elvis(XNode.this.mouseOverEffect, XNode.this.originalEffect);
+          Effect _elvis = null;
+          if (XNode.this.mouseOverEffect != null) {
+            _elvis = XNode.this.mouseOverEffect;
+          } else {
+            _elvis = ObjectExtensions.<Effect>operator_elvis(XNode.this.mouseOverEffect, XNode.this.originalEffect);
+          }
           XNode.this.node.setEffect(_elvis);
         }
       };
-    this.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function.apply(arg0);
-        }
-    });
-    final Procedure1<MouseEvent> _function_1 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    this.setOnMouseEntered(_function);
+    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           XNode.this.node.setEffect(XNode.this.originalEffect);
         }
       };
-    this.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_1.apply(arg0);
-        }
-    });
+    this.setOnMouseExited(_function_1);
   }
   
   public Node getNode() {

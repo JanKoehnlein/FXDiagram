@@ -77,8 +77,8 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     IterableExtensions.<XRapidButton>forEach(this.rapidButtons, _function_1);
     XNode _host_4 = this.getHost();
     Node _node = _host_4.getNode();
-    final Procedure1<MouseEvent> _function_2 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
               public void apply(final XRapidButton it) {
                 it.show();
@@ -87,15 +87,11 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
           IterableExtensions.<XRapidButton>forEach(AddRapidButtonBehavior.this.rapidButtons, _function);
         }
       };
-    _node.setOnMouseEntered(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_2.apply(arg0);
-        }
-    });
+    _node.setOnMouseEntered(_function_2);
     XNode _host_5 = this.getHost();
     Node _node_1 = _host_5.getNode();
-    final Procedure1<MouseEvent> _function_3 = new Procedure1<MouseEvent>() {
-        public void apply(final MouseEvent it) {
+    final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
           final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
               public void apply(final XRapidButton it) {
                 it.fade();
@@ -104,10 +100,6 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
           IterableExtensions.<XRapidButton>forEach(AddRapidButtonBehavior.this.rapidButtons, _function);
         }
       };
-    _node_1.setOnMouseExited(new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent arg0) {
-          _function_3.apply(arg0);
-        }
-    });
+    _node_1.setOnMouseExited(_function_3);
   }
 }

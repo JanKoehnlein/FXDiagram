@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class ActivateableStackPane extends StackPane implements XActivatable {
@@ -23,8 +22,9 @@ public class ActivateableStackPane extends StackPane implements XActivatable {
         }
       };
     IterableExtensions.<XActivatable>forEach(_filter, _function);
-    final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function_1 = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
-        public void apply(final ObservableValue<? extends Boolean> element, final Boolean oldVal, final Boolean newVal) {
+    BooleanProperty _visibleProperty = this.visibleProperty();
+    final ChangeListener<Boolean> _function_1 = new ChangeListener<Boolean>() {
+        public void changed(final ObservableValue<? extends Boolean> element, final Boolean oldVal, final Boolean newVal) {
           ObservableList<Node> _children = ActivateableStackPane.this.getChildren();
           final Procedure1<Node> _function = new Procedure1<Node>() {
               public void apply(final Node it) {
@@ -34,12 +34,6 @@ public class ActivateableStackPane extends StackPane implements XActivatable {
           IterableExtensions.<Node>forEach(_children, _function);
         }
       };
-    final ChangeListener<Boolean> changeListener = new ChangeListener<Boolean>() {
-        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
-          _function_1.apply(arg0,arg1,arg2);
-        }
-    };
-    BooleanProperty _visibleProperty = this.visibleProperty();
-    _visibleProperty.addListener(changeListener);
+    _visibleProperty.addListener(_function_1);
   }
 }

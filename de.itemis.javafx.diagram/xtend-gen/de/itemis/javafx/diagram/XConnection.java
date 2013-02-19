@@ -18,7 +18,6 @@ import javafx.scene.shape.Polyline;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class XConnection extends Polyline implements XActivatable {
@@ -120,22 +119,22 @@ public class XConnection extends Polyline implements XActivatable {
     DoubleProperty _scaleProperty = _rootDiagram.getScaleProperty();
     DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(1.5, _scaleProperty);
     _strokeWidthProperty.bind(_divide);
-    final Procedure3<ObservableValue,Object,Object> _function = new Procedure3<ObservableValue,Object,Object>() {
-        public void apply(final ObservableValue element, final Object oldValue, final Object newValue) {
+    XNode _source = this.getSource();
+    AnchorPoints _anchorPoints = _source.getAnchorPoints();
+    final ChangeListener<List<Point2D>> _function = new ChangeListener<List<Point2D>>() {
+        public void changed(final ObservableValue<? extends List<Point2D>> element, final List<Point2D> oldValue, final List<Point2D> newValue) {
           XConnection.this.calculatePoints();
         }
       };
-    final ChangeListener changeListener = new ChangeListener<Object>() {
-        public void changed(ObservableValue<? extends Object> arg0,Object arg1,Object arg2) {
-          _function.apply(arg0,arg1,arg2);
-        }
-    };
-    XNode _source = this.getSource();
-    AnchorPoints _anchorPoints = _source.getAnchorPoints();
-    _anchorPoints.addListener(changeListener);
+    _anchorPoints.addListener(_function);
     XNode _target = this.getTarget();
     AnchorPoints _anchorPoints_1 = _target.getAnchorPoints();
-    _anchorPoints_1.addListener(changeListener);
+    final ChangeListener<List<Point2D>> _function_1 = new ChangeListener<List<Point2D>>() {
+        public void changed(final ObservableValue<? extends List<Point2D>> element, final List<Point2D> oldValue, final List<Point2D> newValue) {
+          XConnection.this.calculatePoints();
+        }
+      };
+    _anchorPoints_1.addListener(_function_1);
     this.calculatePoints();
     XConnectionLabel _label = this.getLabel();
     boolean _notEquals = ObjectExtensions.operator_notEquals(_label, null);

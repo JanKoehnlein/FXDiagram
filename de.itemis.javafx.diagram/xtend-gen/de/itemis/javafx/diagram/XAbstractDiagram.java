@@ -62,7 +62,7 @@ public abstract class XAbstractDiagram extends Pane implements XActivatable {
     Iterable<Object> _plus_1 = Iterables.<Object>concat(_plus, this.buttons);
     final Procedure1<Object> _function = new Procedure1<Object>() {
         public void apply(final Object it) {
-          ((XActivatable)it).activate();
+          XAbstractDiagram.this.activate();
         }
       };
     IterableExtensions.<Object>forEach(_plus_1, _function);

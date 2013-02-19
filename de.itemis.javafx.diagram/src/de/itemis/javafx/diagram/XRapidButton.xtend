@@ -1,16 +1,15 @@
 package de.itemis.javafx.diagram
 
 import javafx.animation.KeyFrame
+import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.beans.binding.ObjectBinding
-import javafx.beans.value.ChangeListener
 import javafx.geometry.Point2D
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.util.Duration
 
 import static extension de.itemis.javafx.diagram.Extensions.*
-import javafx.animation.KeyValue
 
 class XRapidButton extends ImageView implements XActivatable {
 	
@@ -44,10 +43,9 @@ class XRapidButton extends ImageView implements XActivatable {
 		onMouseExited = [ fade ]
 		onMousePressed = [ action.apply(this) consume ]
 		placer.activate
-		val ChangeListener<Point2D> listener = [
+		placer.addListener [
 			element, oldVal, newVal | relocate(newVal.x, newVal.y)
 		] 
-		placer.addListener(listener)
 	}
 
 	def protected setPosition(Point2D position) {
@@ -74,7 +72,7 @@ class XRapidButton extends ImageView implements XActivatable {
 			timeline = new Timeline => [
 				autoReverse = true
 				keyFrames += new KeyFrame(Duration::millis(500), 
-					new KeyValue(this.opacityProperty, 1.0))
+					new KeyValue(this.opacityProperty, new Double(1.0)))
 				keyFrames += new KeyFrame(Duration::millis(1000), 
 					new KeyValue(this.opacityProperty, 0.0))
 				keyFrames += new KeyFrame(Duration::millis(1000), 

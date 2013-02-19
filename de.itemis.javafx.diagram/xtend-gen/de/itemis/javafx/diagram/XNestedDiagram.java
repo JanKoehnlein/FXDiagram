@@ -16,7 +16,6 @@ import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure3;
 
 @SuppressWarnings("all")
 public class XNestedDiagram extends XAbstractDiagram {
@@ -44,8 +43,9 @@ public class XNestedDiagram extends XAbstractDiagram {
     this.setScaleX(0.3);
     this.setScaleY(0.3);
     this.setManaged(false);
-    final Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean> _function = new Procedure3<ObservableValue<? extends Boolean>,Boolean,Boolean>() {
-        public void apply(final ObservableValue<? extends Boolean> property, final Boolean oldVal, final Boolean newVal) {
+    BooleanProperty _visibleProperty = this.visibleProperty();
+    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
+        public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVal, final Boolean newVal) {
           List<XConnection> _connections = XNestedDiagram.this.getConnections();
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
@@ -55,13 +55,7 @@ public class XNestedDiagram extends XAbstractDiagram {
           IterableExtensions.<XConnection>forEach(_connections, _function);
         }
       };
-    final ChangeListener<Boolean> visibilityListener = new ChangeListener<Boolean>() {
-        public void changed(ObservableValue<? extends Boolean> arg0,Boolean arg1,Boolean arg2) {
-          _function.apply(arg0,arg1,arg2);
-        }
-    };
-    BooleanProperty _visibleProperty = this.visibleProperty();
-    _visibleProperty.addListener(visibilityListener);
+    _visibleProperty.addListener(_function);
   }
   
   public Procedure1<? super XNestedDiagram> setContentsInitializer(final Procedure1<? super XNestedDiagram> contentsInitializer) {
