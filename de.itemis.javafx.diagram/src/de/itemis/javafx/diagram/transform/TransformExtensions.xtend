@@ -9,7 +9,7 @@ import javafx.scene.transform.Scale
 class TransformExtensions {
 	
 	/**
-	 * Integrates another {@link Transform} in a given {@link Affine} using matrix multiplication. 
+	 * Accumulates another {@link Transform} in a given {@link Affine} using matrix multiplication. 
 	 * When applying the combined transform, the original trafo is applied first.
 	 */
 	def static leftMultiply(Affine it, Transform l) {
@@ -75,6 +75,9 @@ class TransformExtensions {
 		)
 	}
 
+	/**
+	 * Adds a translation to the given {@link Affine}
+	 */
 	def static translate(Affine it, double x, double y) {
 		tx = tx + x		
 		ty = ty + y

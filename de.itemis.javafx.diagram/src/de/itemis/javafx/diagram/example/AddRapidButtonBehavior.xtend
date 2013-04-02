@@ -26,11 +26,11 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 			target.layoutY = 150 * (button.placer.YPos - 0.5) + source.layoutY
 			return
 		]
-		rapidButtons = newArrayList(
+		rapidButtons = #[
 			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', addAction),
 			new XRapidButton(host, 0.5, 1, 'icons/add_16.png', addAction),
 			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', addAction),
-			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addAction))
+			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addAction)]
 		rapidButtons.forEach[host.diagram.addButton(it)]
 		host.node.onMouseEntered = [
 			rapidButtons.forEach[show]

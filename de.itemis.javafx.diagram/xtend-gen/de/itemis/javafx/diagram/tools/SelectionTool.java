@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram.tools;
 
+import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XNode;
@@ -13,7 +14,6 @@ import javafx.event.EventTarget;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -29,7 +29,7 @@ public class SelectionTool {
           if (_not) {
             final XNode targetShape = Extensions.getTargetShape(event);
             SelectionBehavior _selectionBehavior = targetShape==null?(SelectionBehavior)null:targetShape.getSelectionBehavior();
-            boolean _notEquals = ObjectExtensions.operator_notEquals(_selectionBehavior, null);
+            boolean _notEquals = (!Objects.equal(_selectionBehavior, null));
             if (_notEquals) {
               boolean _and = false;
               SelectionBehavior _selectionBehavior_1 = targetShape.getSelectionBehavior();
@@ -57,7 +57,7 @@ public class SelectionTool {
                   public Boolean apply(final XNode it) {
                     XAbstractDiagram _diagram = Extensions.getDiagram(it);
                     XAbstractDiagram _diagram_1 = Extensions.getDiagram(targetShape);
-                    boolean _notEquals = ObjectExtensions.operator_notEquals(_diagram, _diagram_1);
+                    boolean _notEquals = (!Objects.equal(_diagram, _diagram_1));
                     return Boolean.valueOf(_notEquals);
                   }
                 };

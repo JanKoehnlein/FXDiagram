@@ -9,7 +9,7 @@ import javafx.scene.transform.Transform;
 @SuppressWarnings("all")
 public class TransformExtensions {
   /**
-   * Integrates another {@link Transform} in a given {@link Affine} using matrix multiplication.
+   * Accumulates another {@link Transform} in a given {@link Affine} using matrix multiplication.
    * When applying the combined transform, the original trafo is applied first.
    */
   public static void leftMultiply(final Affine it, final Transform l) {
@@ -359,6 +359,9 @@ public class TransformExtensions {
     return _point3D;
   }
   
+  /**
+   * Adds a translation to the given {@link Affine}
+   */
   public static void translate(final Affine it, final double x, final double y) {
     double _tx = it.getTx();
     double _plus = (_tx + x);

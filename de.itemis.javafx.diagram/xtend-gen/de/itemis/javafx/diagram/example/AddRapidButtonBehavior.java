@@ -1,5 +1,7 @@
 package de.itemis.javafx.diagram.example;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.Placer;
 import de.itemis.javafx.diagram.XAbstractDiagram;
@@ -8,12 +10,10 @@ import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.XRapidButton;
 import de.itemis.javafx.diagram.behavior.AbstractBehavior;
 import de.itemis.javafx.diagram.example.MyContainerNode;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -65,8 +65,14 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     XRapidButton _xRapidButton_2 = new XRapidButton(_host_2, 0, 0.5, "icons/add_16.png", addAction);
     XNode _host_3 = this.getHost();
     XRapidButton _xRapidButton_3 = new XRapidButton(_host_3, 1, 0.5, "icons/add_16.png", addAction);
-    ArrayList<XRapidButton> _newArrayList = CollectionLiterals.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3);
-    this.rapidButtons = _newArrayList;
+    List<XRapidButton> _xlistliteral = null;
+    Builder<XRapidButton> _builder = ImmutableList.builder();
+    _builder.add(_xRapidButton);
+    _builder.add(_xRapidButton_1);
+    _builder.add(_xRapidButton_2);
+    _builder.add(_xRapidButton_3);
+    _xlistliteral = _builder.build();
+    this.rapidButtons = _xlistliteral;
     final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton it) {
           XNode _host = it.getHost();

@@ -19,11 +19,12 @@ class AnchorPoints extends ObjectBinding<List<Point2D>> {
 		if(bounds != null) {
 			val middleX = (bounds.maxX + bounds.minX) / 2
 			val middleY = (bounds.maxY + bounds.minY) / 2
-			newArrayList(
+			#[
 				host.node.localToRoot(bounds.minX, middleY),
 				host.node.localToRoot(bounds.maxX, middleY),
 				host.node.localToRoot(middleX, bounds.minY),
-				host.node.localToRoot(middleX, bounds.maxY))
+				host.node.localToRoot(middleX, bounds.maxY)
+				]
 		}
 	}
 }

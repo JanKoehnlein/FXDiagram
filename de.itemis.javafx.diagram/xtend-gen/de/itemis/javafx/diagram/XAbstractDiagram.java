@@ -1,5 +1,7 @@
 package de.itemis.javafx.diagram;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XConnection;
 import de.itemis.javafx.diagram.XConnectionLabel;
@@ -14,7 +16,6 @@ import javafx.scene.layout.Pane;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -57,24 +58,14 @@ public abstract class XAbstractDiagram extends Pane implements XActivatable {
   }
   
   public void doActivate() {
-    final Procedure1<XNode> _function = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
-          it.activate();
+    Iterable<Object> _plus = Iterables.<Object>concat(this.nodes, this.connections);
+    Iterable<Object> _plus_1 = Iterables.<Object>concat(_plus, this.buttons);
+    final Procedure1<Object> _function = new Procedure1<Object>() {
+        public void apply(final Object it) {
+          ((XActivatable)it).activate();
         }
       };
-    IterableExtensions.<XNode>forEach(this.nodes, _function);
-    final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
-        public void apply(final XConnection it) {
-          it.activate();
-        }
-      };
-    IterableExtensions.<XConnection>forEach(this.connections, _function_1);
-    final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
-        public void apply(final XRapidButton it) {
-          it.activate();
-        }
-      };
-    IterableExtensions.<XRapidButton>forEach(this.buttons, _function_2);
+    IterableExtensions.<Object>forEach(_plus_1, _function);
   }
   
   public void addNode(final XNode node) {
@@ -97,7 +88,7 @@ public abstract class XAbstractDiagram extends Pane implements XActivatable {
     ObservableList<Node> _children = _connectionLayer.getChildren();
     _children.add(connection);
     XConnectionLabel _label = connection.getLabel();
-    boolean _notEquals = ObjectExtensions.operator_notEquals(_label, null);
+    boolean _notEquals = (!Objects.equal(_label, null));
     if (_notEquals) {
       Group _connectionLayer_1 = this.getConnectionLayer();
       ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();

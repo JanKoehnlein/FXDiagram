@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram;
 
+import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.AnchorPoints;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XActivatable;
@@ -16,7 +17,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polyline;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 @SuppressWarnings("all")
@@ -137,7 +137,7 @@ public class XConnection extends Polyline implements XActivatable {
     _anchorPoints_1.addListener(_function_1);
     this.calculatePoints();
     XConnectionLabel _label = this.getLabel();
-    boolean _notEquals = ObjectExtensions.operator_notEquals(_label, null);
+    boolean _notEquals = (!Objects.equal(_label, null));
     if (_notEquals) {
       XConnectionLabel _label_1 = this.getLabel();
       _label_1.activate();

@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram;
 
+import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.Placer;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XNode;
@@ -111,7 +112,7 @@ public class XRapidButton extends ImageView implements XActivatable {
   protected Timeline getTimeline() {
     Timeline _xblockexpression = null;
     {
-      boolean _equals = ObjectExtensions.operator_equals(this.timeline, null);
+      boolean _equals = Objects.equal(this.timeline, null);
       if (_equals) {
         Timeline _timeline = new Timeline();
         final Procedure1<Timeline> _function = new Procedure1<Timeline>() {

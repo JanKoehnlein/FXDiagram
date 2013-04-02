@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram;
 
+import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.XRapidButton;
@@ -8,7 +9,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 
 @SuppressWarnings("all")
 public class Placer extends ObjectBinding<Point2D> {
@@ -40,7 +40,7 @@ public class Placer extends ObjectBinding<Point2D> {
       Bounds _layoutBounds = node.getLayoutBounds();
       final Bounds boundsInDiagram = Extensions.localToDiagram(node, _layoutBounds);
       Point2D _xifexpression = null;
-      boolean _notEquals = ObjectExtensions.operator_notEquals(boundsInDiagram, null);
+      boolean _notEquals = (!Objects.equal(boundsInDiagram, null));
       if (_notEquals) {
         Point2D _xblockexpression_1 = null;
         {

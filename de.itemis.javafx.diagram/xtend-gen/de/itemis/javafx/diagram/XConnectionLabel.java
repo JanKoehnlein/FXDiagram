@@ -107,7 +107,7 @@ public class XConnectionLabel extends Label implements XActivatable {
         boolean _add = _transforms_1.add(transform);
         _xblockexpression = (_add);
       }
-      _xifexpression = _xblockexpression;
+      _xifexpression = Boolean.valueOf(_xblockexpression);
     }
     return _xifexpression;
   }

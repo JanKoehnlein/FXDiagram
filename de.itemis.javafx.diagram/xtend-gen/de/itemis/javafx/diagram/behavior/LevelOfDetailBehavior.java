@@ -1,5 +1,6 @@
 package de.itemis.javafx.diagram.behavior;
 
+import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XActivatable;
 import de.itemis.javafx.diagram.XNode;
@@ -15,7 +16,6 @@ import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -61,7 +61,7 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
           }
           final Procedure1<Node> _function = new Procedure1<Node>() {
               public void apply(final Node it) {
-                boolean _equals = ObjectExtensions.operator_equals(it, child);
+                boolean _equals = Objects.equal(it, child);
                 it.setVisible(_equals);
               }
             };
@@ -81,7 +81,7 @@ public class LevelOfDetailBehavior extends AbstractBehavior {
   
   protected double getValue(final Bounds bounds) {
     double _xifexpression = (double) 0;
-    boolean _notEquals = ObjectExtensions.operator_notEquals(bounds, null);
+    boolean _notEquals = (!Objects.equal(bounds, null));
     if (_notEquals) {
       double _width = bounds.getWidth();
       double _height = bounds.getHeight();

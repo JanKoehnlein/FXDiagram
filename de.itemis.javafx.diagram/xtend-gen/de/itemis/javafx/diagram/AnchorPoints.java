@@ -1,8 +1,10 @@
 package de.itemis.javafx.diagram;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XNode;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
@@ -10,8 +12,6 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 
 @SuppressWarnings("all")
 public class AnchorPoints extends ObjectBinding<List<Point2D>> {
@@ -29,14 +29,14 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
   }
   
   protected List<Point2D> computeValue() {
-    ArrayList<Point2D> _xblockexpression = null;
+    List<Point2D> _xblockexpression = null;
     {
       Node _node = this.host==null?(Node)null:this.host.getNode();
       final Bounds bounds = _node==null?(Bounds)null:_node.getBoundsInLocal();
-      ArrayList<Point2D> _xifexpression = null;
-      boolean _notEquals = ObjectExtensions.operator_notEquals(bounds, null);
+      List<Point2D> _xifexpression = null;
+      boolean _notEquals = (!Objects.equal(bounds, null));
       if (_notEquals) {
-        ArrayList<Point2D> _xblockexpression_1 = null;
+        List<Point2D> _xblockexpression_1 = null;
         {
           double _maxX = bounds.getMaxX();
           double _minX = bounds.getMinX();
@@ -58,8 +58,14 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
           Node _node_4 = this.host.getNode();
           double _maxY_1 = bounds.getMaxY();
           Point2D _localToRoot_3 = Extensions.localToRoot(_node_4, middleX, _maxY_1);
-          ArrayList<Point2D> _newArrayList = CollectionLiterals.<Point2D>newArrayList(_localToRoot, _localToRoot_1, _localToRoot_2, _localToRoot_3);
-          _xblockexpression_1 = (_newArrayList);
+          List<Point2D> _xlistliteral = null;
+          Builder<Point2D> _builder = ImmutableList.builder();
+          _builder.add(_localToRoot);
+          _builder.add(_localToRoot_1);
+          _builder.add(_localToRoot_2);
+          _builder.add(_localToRoot_3);
+          _xlistliteral = _builder.build();
+          _xblockexpression_1 = (_xlistliteral);
         }
         _xifexpression = _xblockexpression_1;
       }
