@@ -4,14 +4,18 @@ import javafx.scene.input.MouseEvent
 import de.itemis.javafx.diagram.XRootDiagram
 import de.itemis.javafx.diagram.XRapidButton
 import static extension de.itemis.javafx.diagram.Extensions.*
+import javafx.event.EventHandler
 
-class SelectionTool {
+class SelectionTool implements XDiagramTool {
 	
 	XRootDiagram rootDiagram 
 	
+	EventHandler<MouseEvent> mousePressedHandler
+	EventHandler<MouseEvent> mouseDraggedHandler
+	
 	new(XRootDiagram rootDiagram) {
 		this.rootDiagram = rootDiagram
-		rootDiagram.addEventFilter(MouseEvent::MOUSE_PRESSED) [ 
+		this.mousePressedHandler = [ 
 			event |
 			if(!(event.target instanceof XRapidButton)) { 
 				val targetShape = event.targetShape
@@ -31,7 +35,7 @@ class SelectionTool {
 				event.consume
 			}
 		]
-		rootDiagram.addEventFilter(MouseEvent::MOUSE_DRAGGED) [
+		this.mouseDraggedHandler = [
 			for(shape: selection) {
 				shape?.moveBehavior?.mouseDragged(it)				
 			}
@@ -42,4 +46,17 @@ class SelectionTool {
 	def getSelection() {
 		rootDiagram.nodes.filter[selectionBehavior?.selected]
 	}
+	
+	override activate() {
+		rootDiagram.addEventFilter(MouseEvent::MOUSE_PRESSED, mousePressedHandler) 
+		rootDiagram.addEventFilter(MouseEvent::MOUSE_DRAGGED, mouseDraggedHandler) 
+		true
+	}
+	
+	override deactivate() {
+		rootDiagram.removeEventFilter(MouseEvent::MOUSE_PRESSED, mousePressedHandler) 
+		rootDiagram.removeEventFilter(MouseEvent::MOUSE_DRAGGED, mouseDraggedHandler)
+		true 
+	}
+	
 }

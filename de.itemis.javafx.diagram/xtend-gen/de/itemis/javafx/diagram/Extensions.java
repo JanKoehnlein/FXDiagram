@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.XRootDiagram;
+import java.util.logging.Logger;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -177,5 +178,12 @@ public class Extensions {
       _switchResult = _containerShape;
     }
     return _switchResult;
+  }
+  
+  public static Logger getLogger(final Object it) {
+    Class<? extends Object> _class = it.getClass();
+    String _canonicalName = _class.getCanonicalName();
+    Logger _logger = Logger.getLogger(_canonicalName);
+    return _logger;
   }
 }

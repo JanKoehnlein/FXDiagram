@@ -4,6 +4,7 @@ import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.input.MouseEvent
+import java.util.logging.Logger
 
 class Extensions {
 	
@@ -68,5 +69,9 @@ class Extensions {
 			XNode: it
 			default: getContainerShape(parent)
 		}
+	}
+	
+	def static Logger getLogger(Object it) {
+		Logger::getLogger(class.canonicalName)
 	}
 }

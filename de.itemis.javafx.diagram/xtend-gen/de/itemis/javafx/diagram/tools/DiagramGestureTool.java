@@ -1,6 +1,7 @@
 package de.itemis.javafx.diagram.tools;
 
 import de.itemis.javafx.diagram.XRootDiagram;
+import de.itemis.javafx.diagram.tools.XDiagramTool;
 import de.itemis.javafx.diagram.tools.ZoomContext;
 import de.itemis.javafx.diagram.transform.TransformExtensions;
 import javafx.beans.property.DoubleProperty;
@@ -15,13 +16,23 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
 @SuppressWarnings("all")
-public class DiagramGestureTool {
+public class DiagramGestureTool implements XDiagramTool {
+  private XRootDiagram diagram;
+  
   private ZoomContext zoomContext;
   
   private Affine diagramTransform;
   
+  private EventHandler<ZoomEvent> zoomStartHandler;
+  
+  private EventHandler<ZoomEvent> zoomHandler;
+  
+  private EventHandler<ScrollEvent> scrollHandler;
+  
+  private EventHandler<RotateEvent> rotateHandler;
+  
   public DiagramGestureTool(final XRootDiagram diagram) {
-    final Scene scene = diagram.getScene();
+    this.diagram = diagram;
     Affine _affine = new Affine();
     this.diagramTransform = _affine;
     ObservableList<Transform> _transforms = diagram.getTransforms();
@@ -37,7 +48,7 @@ public class DiagramGestureTool {
           DiagramGestureTool.this.zoomContext = _zoomContext;
         }
       };
-    scene.setOnZoomStarted(_function);
+    this.zoomStartHandler = _function;
     final EventHandler<ZoomEvent> _function_1 = new EventHandler<ZoomEvent>() {
         public void handle(final ZoomEvent it) {
           double _totalZoomFactor = it.getTotalZoomFactor();
@@ -62,9 +73,7 @@ public class DiagramGestureTool {
           DiagramGestureTool.this.zoomContext.setPreviousScale(_totalZoomFactor_1);
         }
       };
-    final EventHandler<ZoomEvent> zoomHandler = _function_1;
-    scene.setOnZoom(zoomHandler);
-    scene.setOnZoomFinished(zoomHandler);
+    this.zoomHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
         public void handle(final ScrollEvent it) {
           double _deltaX = it.getDeltaX();
@@ -72,10 +81,7 @@ public class DiagramGestureTool {
           TransformExtensions.translate(DiagramGestureTool.this.diagramTransform, _deltaX, _deltaY);
         }
       };
-    final EventHandler<ScrollEvent> scrollHandler = _function_2;
-    scene.setOnScrollStarted(scrollHandler);
-    scene.setOnScroll(scrollHandler);
-    scene.setOnScrollFinished(scrollHandler);
+    this.scrollHandler = _function_2;
     final EventHandler<RotateEvent> _function_3 = new EventHandler<RotateEvent>() {
         public void handle(final RotateEvent it) {
           boolean _isShortcutDown = it.isShortcutDown();
@@ -87,9 +93,40 @@ public class DiagramGestureTool {
           }
         }
       };
-    final EventHandler<RotateEvent> rotateHandler = _function_3;
-    scene.setOnRotationStarted(rotateHandler);
-    scene.setOnRotate(rotateHandler);
-    scene.setOnRotationFinished(rotateHandler);
+    this.rotateHandler = _function_3;
+  }
+  
+  public boolean activate() {
+    boolean _xblockexpression = false;
+    {
+      final Scene scene = this.diagram.getScene();
+      scene.<ZoomEvent>addEventHandler(ZoomEvent.ZOOM_STARTED, this.zoomStartHandler);
+      scene.<ZoomEvent>addEventHandler(ZoomEvent.ZOOM, this.zoomHandler);
+      scene.<ZoomEvent>addEventHandler(ZoomEvent.ZOOM_FINISHED, this.zoomHandler);
+      scene.<ScrollEvent>addEventHandler(ScrollEvent.SCROLL, this.scrollHandler);
+      scene.<ScrollEvent>addEventHandler(ScrollEvent.SCROLL_FINISHED, this.scrollHandler);
+      scene.<RotateEvent>addEventHandler(RotateEvent.ROTATION_STARTED, this.rotateHandler);
+      scene.<RotateEvent>addEventHandler(RotateEvent.ROTATE, this.rotateHandler);
+      scene.<RotateEvent>addEventHandler(RotateEvent.ROTATION_FINISHED, this.rotateHandler);
+      _xblockexpression = (true);
+    }
+    return _xblockexpression;
+  }
+  
+  public boolean deactivate() {
+    boolean _xblockexpression = false;
+    {
+      final Scene scene = this.diagram.getScene();
+      scene.<ZoomEvent>removeEventHandler(ZoomEvent.ZOOM_STARTED, this.zoomStartHandler);
+      scene.<ZoomEvent>removeEventHandler(ZoomEvent.ZOOM, this.zoomHandler);
+      scene.<ZoomEvent>removeEventHandler(ZoomEvent.ZOOM_FINISHED, this.zoomHandler);
+      scene.<ScrollEvent>removeEventHandler(ScrollEvent.SCROLL, this.scrollHandler);
+      scene.<ScrollEvent>removeEventHandler(ScrollEvent.SCROLL_FINISHED, this.scrollHandler);
+      scene.<RotateEvent>removeEventHandler(RotateEvent.ROTATION_STARTED, this.rotateHandler);
+      scene.<RotateEvent>removeEventHandler(RotateEvent.ROTATE, this.rotateHandler);
+      scene.<RotateEvent>removeEventHandler(RotateEvent.ROTATION_FINISHED, this.rotateHandler);
+      _xblockexpression = (true);
+    }
+    return _xblockexpression;
   }
 }

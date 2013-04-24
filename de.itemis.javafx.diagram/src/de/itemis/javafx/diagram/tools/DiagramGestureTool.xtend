@@ -10,21 +10,31 @@ import javafx.scene.transform.Affine
 
 import static extension de.itemis.javafx.diagram.transform.TransformExtensions.*
 
-class DiagramGestureTool {
+class DiagramGestureTool implements XDiagramTool {
+	
+	XRootDiagram diagram
 	
 	ZoomContext zoomContext
 	
 	Affine diagramTransform
 	
+	EventHandler<ZoomEvent> zoomStartHandler
+
+	EventHandler<ZoomEvent> zoomHandler
+	
+	EventHandler<ScrollEvent> scrollHandler
+	
+	EventHandler<RotateEvent> rotateHandler
+	
 	new(XRootDiagram diagram) {
-		val scene = diagram.scene
+		this.diagram = diagram
 		diagramTransform = new Affine
 		diagram.transforms.clear
 		diagram.transforms += diagramTransform
-		scene.onZoomStarted = [
+		zoomStartHandler = [
  			zoomContext = new ZoomContext(diagram.sceneToLocal(sceneX, sceneY))
 		]
-		val EventHandler<ZoomEvent> zoomHandler = [
+		zoomHandler = [
 			val scale = totalZoomFactor / zoomContext.previousScale
 			diagram.scaleProperty.set(scale * diagram.scaleProperty.get)
 			diagramTransform.scale(scale, scale)
@@ -32,23 +42,39 @@ class DiagramGestureTool {
 			diagramTransform.translate(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
 			zoomContext.previousScale = totalZoomFactor
 		]
-		scene.onZoom = zoomHandler 
-		scene.onZoomFinished = zoomHandler
-
-		val EventHandler<ScrollEvent> scrollHandler = [
+		scrollHandler = [
 			diagramTransform.translate(deltaX, deltaY)
 		] 
-		scene.onScrollStarted = scrollHandler 
-		scene.onScroll = scrollHandler
-		scene.onScrollFinished = scrollHandler
-		
-		val EventHandler<RotateEvent> rotateHandler = [
+		rotateHandler = [
 			if(shortcutDown)
 				diagramTransform.rotate(angle, sceneX, sceneY)
 		] 
-		scene.onRotationStarted = rotateHandler
-		scene.onRotate = rotateHandler
-		scene.onRotationFinished = rotateHandler
+	}
+	
+	override activate() {
+		val scene = diagram.scene
+		scene.addEventHandler(ZoomEvent::ZOOM_STARTED, zoomStartHandler)
+		scene.addEventHandler(ZoomEvent::ZOOM, zoomHandler)
+		scene.addEventHandler(ZoomEvent::ZOOM_FINISHED, zoomHandler)
+		scene.addEventHandler(ScrollEvent::SCROLL, scrollHandler)
+		scene.addEventHandler(ScrollEvent::SCROLL_FINISHED, scrollHandler)
+		scene.addEventHandler(RotateEvent::ROTATION_STARTED, rotateHandler)
+		scene.addEventHandler(RotateEvent::ROTATE, rotateHandler)
+		scene.addEventHandler(RotateEvent::ROTATION_FINISHED, rotateHandler)
+		true
+	}
+	
+	override deactivate() {
+		val scene = diagram.scene
+		scene.removeEventHandler(ZoomEvent::ZOOM_STARTED, zoomStartHandler)
+		scene.removeEventHandler(ZoomEvent::ZOOM, zoomHandler)
+		scene.removeEventHandler(ZoomEvent::ZOOM_FINISHED, zoomHandler)
+		scene.removeEventHandler(ScrollEvent::SCROLL, scrollHandler)
+		scene.removeEventHandler(ScrollEvent::SCROLL_FINISHED, scrollHandler)
+		scene.removeEventHandler(RotateEvent::ROTATION_STARTED, rotateHandler)
+		scene.removeEventHandler(RotateEvent::ROTATE, rotateHandler)
+		scene.removeEventHandler(RotateEvent::ROTATION_FINISHED, rotateHandler)
+		true
 	}
 }
 

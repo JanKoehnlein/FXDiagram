@@ -1,11 +1,11 @@
 package de.itemis.javafx.diagram.example
 
+import de.itemis.javafx.diagram.XConnection
+import de.itemis.javafx.diagram.XConnectionLabel
+import de.itemis.javafx.diagram.XRootDiagram
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
-import de.itemis.javafx.diagram.XRootDiagram
-import de.itemis.javafx.diagram.XConnection
-import de.itemis.javafx.diagram.XConnectionLabel
 
 class Main extends Application {
 	

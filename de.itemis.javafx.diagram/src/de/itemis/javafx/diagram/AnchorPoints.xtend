@@ -10,7 +10,12 @@ class AnchorPoints extends ObjectBinding<List<Point2D>> {
 	XNode host
 
 	new(XNode host) {
-		bind(host.layoutXProperty, host.layoutYProperty, host.node.boundsInLocalProperty, host.scaleXProperty, host.scaleYProperty)
+		bind(host.layoutXProperty, 
+			host.layoutYProperty, 
+			host.node.boundsInLocalProperty, 
+			host.scaleXProperty, 
+			host.scaleYProperty
+		)
 		this.host = host  
 	}
 

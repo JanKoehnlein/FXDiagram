@@ -8,6 +8,7 @@ import de.itemis.javafx.diagram.XRapidButton;
 import de.itemis.javafx.diagram.XRootDiagram;
 import de.itemis.javafx.diagram.behavior.MoveBehavior;
 import de.itemis.javafx.diagram.behavior.SelectionBehavior;
+import de.itemis.javafx.diagram.tools.XDiagramTool;
 import java.util.List;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
@@ -17,8 +18,12 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class SelectionTool {
+public class SelectionTool implements XDiagramTool {
   private XRootDiagram rootDiagram;
+  
+  private EventHandler<MouseEvent> mousePressedHandler;
+  
+  private EventHandler<MouseEvent> mouseDraggedHandler;
   
   public SelectionTool(final XRootDiagram rootDiagram) {
     this.rootDiagram = rootDiagram;
@@ -86,7 +91,7 @@ public class SelectionTool {
           }
         }
       };
-    rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, _function);
+    this.mousePressedHandler = _function;
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent it) {
           Iterable<XNode> _selection = SelectionTool.this.getSelection();
@@ -97,7 +102,7 @@ public class SelectionTool {
           it.consume();
         }
       };
-    rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, _function_1);
+    this.mouseDraggedHandler = _function_1;
   }
   
   public Iterable<XNode> getSelection() {
@@ -111,5 +116,25 @@ public class SelectionTool {
       };
     Iterable<XNode> _filter = IterableExtensions.<XNode>filter(_nodes, _function);
     return _filter;
+  }
+  
+  public boolean activate() {
+    boolean _xblockexpression = false;
+    {
+      this.rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
+      this.rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
+      _xblockexpression = (true);
+    }
+    return _xblockexpression;
+  }
+  
+  public boolean deactivate() {
+    boolean _xblockexpression = false;
+    {
+      this.rootDiagram.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
+      this.rootDiagram.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
+      _xblockexpression = (true);
+    }
+    return _xblockexpression;
   }
 }
