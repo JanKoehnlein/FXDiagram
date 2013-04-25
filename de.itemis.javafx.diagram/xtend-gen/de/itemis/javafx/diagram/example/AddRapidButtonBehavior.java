@@ -67,7 +67,7 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
           Placer _placer = button.getPlacer();
           double _xPos = _placer.getXPos();
           double _minus = (_xPos - 0.5);
-          double _multiply = (200 * _minus);
+          double _multiply = (250 * _minus);
           XNode _host = button.getHost();
           double _layoutX = _host.getLayoutX();
           double _plus = (_multiply + _layoutX);

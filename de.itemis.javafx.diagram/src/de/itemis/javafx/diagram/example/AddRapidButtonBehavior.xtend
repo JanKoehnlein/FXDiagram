@@ -28,7 +28,7 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 			target.layoutY = 150 * (button.placer.YPos - 0.5) + source.layoutY
 		]
 		val chooseAction = [ XRapidButton button | 
-			val layoutX = 200 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
+			val layoutX = 250 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
 			val layoutY = button.host.layoutY + 0.5 * button.host.layoutBounds.height 
 			val chooser = new CarusselChooser(host, new Point2D(layoutX, layoutY))
 			for(i:0..<20)

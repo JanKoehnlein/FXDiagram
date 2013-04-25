@@ -46,7 +46,7 @@ class MyContainerNode extends XNode {
 					val innerNode = new MyContainerNode("Inner " + nr)
 					nr = nr + 1
 					addNode(innerNode)
-					innerNode.relocate(96, 35)
+					innerNode.relocate(370, 150)
 				]
 			]
 			clip = createRectangle => [

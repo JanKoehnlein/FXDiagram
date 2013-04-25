@@ -91,7 +91,7 @@ public class MyContainerNode extends XNode {
                       int _plus_1 = (MyContainerNode.nr + 1);
                       MyContainerNode.nr = _plus_1;
                       it.addNode(innerNode);
-                      innerNode.relocate(96, 35);
+                      innerNode.relocate(370, 150);
                     }
                   };
                 it.setContentsInitializer(_function);
