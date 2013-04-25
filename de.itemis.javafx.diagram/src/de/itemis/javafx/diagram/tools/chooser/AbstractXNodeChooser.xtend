@@ -114,7 +114,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 						spinToPosition.targetPosition = nodes.indexOf(node)
 					case 2: {
 						nodeChosen(currentNode)
-						diagram.restoreDefaultTool
+						host.rootDiagram.restoreDefaultTool
 					}
 				}
 			]
@@ -141,7 +141,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	protected def nodeChosen(XNode choice) {
 		if (choice != null) {
-			var bounds = choice.localToRoot(choice.layoutBounds)
+			var bounds = choice.localToDiagram(choice.layoutBounds)
 			choice.transforms.clear
 			group.children.remove(choice)
 			diagram.addNode(choice)
@@ -153,7 +153,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	}
 	
 	protected def cancel() {
-		diagram.restoreDefaultTool		
+		host.rootDiagram.restoreDefaultTool		
 	}
 
 	protected abstract def void setInterpolatedPosition(double interpolatedPosition)
@@ -179,7 +179,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	}
 
 	def getDiagram() {
-		host.rootDiagram
+		host.diagram
 	}
 }
 

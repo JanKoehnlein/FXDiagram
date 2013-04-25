@@ -1,8 +1,6 @@
 package de.itemis.javafx.diagram
 
-import javafx.geometry.Point2D
 import javafx.scene.shape.Polyline
-import org.eclipse.xtext.xbase.lib.Pair
 
 import static extension de.itemis.javafx.diagram.Extensions.*
 import static extension de.itemis.javafx.diagram.binding.DoubleExpressionExtensions.*
@@ -22,8 +20,7 @@ class XConnection extends Polyline implements XActivatable {
 	
 	def protected calculatePoints() {
 		var shortestDistance = Double::POSITIVE_INFINITY
-		var Pair<Point2D, Point2D> nearestAnchors = 
-			source.anchorPoints.get.head -> target.anchorPoints.get.head 
+		var nearestAnchors = source.anchorPoints.get.head -> target.anchorPoints.get.head 
 		for(sourceAnchor: source.anchorPoints.get) {
 			for(targetAnchor: target.anchorPoints.get) {
 				val currentDistance = sourceAnchor.distance(targetAnchor)

@@ -2,6 +2,7 @@ package de.itemis.javafx.diagram.tools.chooser;
 
 import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.Extensions;
+import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XConnection;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.XRootDiagram;
@@ -205,7 +206,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         return false;
       }
       this.isActive = true;
-      XRootDiagram _diagram = this.getDiagram();
+      XAbstractDiagram _diagram = this.getDiagram();
       Group _nodeLayer = _diagram.getNodeLayer();
       ObservableList<Node> _children = _nodeLayer.getChildren();
       _children.add(this.group);
@@ -241,8 +242,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
                       _matched=true;
                       XNode _currentNode = AbstractXNodeChooser.this.getCurrentNode();
                       AbstractXNodeChooser.this.nodeChosen(_currentNode);
-                      XRootDiagram _diagram = AbstractXNodeChooser.this.getDiagram();
-                      _diagram.restoreDefaultTool();
+                      XRootDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+                      _rootDiagram.restoreDefaultTool();
                     }
                   }
                 }
@@ -251,13 +252,13 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
           }
         };
       IterableExtensions.<XNode>forEach(_nodes_3, _function);
-      XRootDiagram _diagram_1 = this.getDiagram();
+      XAbstractDiagram _diagram_1 = this.getDiagram();
       Scene _scene = _diagram_1.getScene();
       _scene.<SwipeEvent>addEventHandler(SwipeEvent.ANY, this.swipeHandler);
-      XRootDiagram _diagram_2 = this.getDiagram();
+      XAbstractDiagram _diagram_2 = this.getDiagram();
       Scene _scene_1 = _diagram_2.getScene();
       _scene_1.<ScrollEvent>addEventHandler(ScrollEvent.ANY, this.scrollHandler);
-      XRootDiagram _diagram_3 = this.getDiagram();
+      XAbstractDiagram _diagram_3 = this.getDiagram();
       Scene _scene_2 = _diagram_3.getScene();
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       this._currentPosition.addListener(this.positionListener);
@@ -274,18 +275,18 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         return false;
       }
       this.isActive = false;
-      XRootDiagram _diagram = this.getDiagram();
+      XAbstractDiagram _diagram = this.getDiagram();
       Scene _scene = _diagram.getScene();
       _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-      XRootDiagram _diagram_1 = this.getDiagram();
+      XAbstractDiagram _diagram_1 = this.getDiagram();
       Scene _scene_1 = _diagram_1.getScene();
       _scene_1.<ScrollEvent>removeEventHandler(ScrollEvent.ANY, this.scrollHandler);
-      XRootDiagram _diagram_2 = this.getDiagram();
+      XAbstractDiagram _diagram_2 = this.getDiagram();
       Scene _scene_2 = _diagram_2.getScene();
       _scene_2.<SwipeEvent>removeEventHandler(SwipeEvent.ANY, this.swipeHandler);
       this.spinToPosition.stop();
       this._currentPosition.removeListener(this.positionListener);
-      XRootDiagram _diagram_3 = this.getDiagram();
+      XAbstractDiagram _diagram_3 = this.getDiagram();
       Group _nodeLayer = _diagram_3.getNodeLayer();
       ObservableList<Node> _children = _nodeLayer.getChildren();
       _children.remove(this.group);
@@ -298,12 +299,12 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     boolean _notEquals = (!Objects.equal(choice, null));
     if (_notEquals) {
       Bounds _layoutBounds = choice.getLayoutBounds();
-      Bounds bounds = Extensions.localToRoot(choice, _layoutBounds);
+      Bounds bounds = Extensions.localToDiagram(choice, _layoutBounds);
       ObservableList<Transform> _transforms = choice.getTransforms();
       _transforms.clear();
       ObservableList<Node> _children = this.group.getChildren();
       _children.remove(choice);
-      XRootDiagram _diagram = this.getDiagram();
+      XAbstractDiagram _diagram = this.getDiagram();
       _diagram.addNode(choice);
       double _minX = bounds.getMinX();
       choice.setLayoutX(_minX);
@@ -311,14 +312,14 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       choice.setLayoutY(_minY);
       XConnection _xConnection = new XConnection(this.host, choice);
       final XConnection connection = _xConnection;
-      XRootDiagram _diagram_1 = this.getDiagram();
+      XAbstractDiagram _diagram_1 = this.getDiagram();
       _diagram_1.addConnection(connection);
     }
   }
   
   protected void cancel() {
-    XRootDiagram _diagram = this.getDiagram();
-    _diagram.restoreDefaultTool();
+    XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
+    _rootDiagram.restoreDefaultTool();
   }
   
   protected abstract void setInterpolatedPosition(final double interpolatedPosition);
@@ -368,8 +369,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _xblockexpression;
   }
   
-  public XRootDiagram getDiagram() {
-    XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
-    return _rootDiagram;
+  public XAbstractDiagram getDiagram() {
+    XAbstractDiagram _diagram = Extensions.getDiagram(this.host);
+    return _diagram;
   }
 }

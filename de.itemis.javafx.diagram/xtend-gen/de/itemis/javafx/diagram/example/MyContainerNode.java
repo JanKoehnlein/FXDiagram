@@ -82,6 +82,7 @@ public class MyContainerNode extends XNode {
           XNestedDiagram _xNestedDiagram = new XNestedDiagram();
           final Procedure1<XNestedDiagram> _function_1 = new Procedure1<XNestedDiagram>() {
               public void apply(final XNestedDiagram it) {
+                it.setScale(0.1);
                 final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
                     public void apply(final XNestedDiagram it) {
                       String _plus = ("Inner " + Integer.valueOf(MyContainerNode.nr));
@@ -101,16 +102,14 @@ public class MyContainerNode extends XNode {
           Rectangle _createRectangle_1 = MyContainerNode.this.createRectangle();
           final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
               public void apply(final Rectangle it) {
-                double _width = it.getWidth();
                 double _strokeWidth = it.getStrokeWidth();
-                double _multiply = (2 * _strokeWidth);
-                double _plus = (_width + _multiply);
-                it.setWidth(_plus);
-                double _height = it.getHeight();
+                it.setX(_strokeWidth);
                 double _strokeWidth_1 = it.getStrokeWidth();
-                double _multiply_1 = (2 * _strokeWidth_1);
-                double _plus_1 = (_height + _multiply_1);
-                it.setHeight(_plus_1);
+                it.setY(_strokeWidth_1);
+                double _width = it.getWidth();
+                it.setWidth(_width);
+                double _height = it.getHeight();
+                it.setHeight(_height);
               }
             };
           Rectangle _doubleArrow_2 = ObjectExtensions.<Rectangle>operator_doubleArrow(_createRectangle_1, _function_2);
@@ -139,7 +138,7 @@ public class MyContainerNode extends XNode {
     rapidButtonBehavior.activate();
     LevelOfDetailBehavior _levelOfDetailBehavior = new LevelOfDetailBehavior(this, this.label);
     final LevelOfDetailBehavior levelOfDetailBehavior = _levelOfDetailBehavior;
-    levelOfDetailBehavior.addChildForThreshold(20000.0, this.innerDiagram);
+    levelOfDetailBehavior.addChildForThreshold(100000.0, this.innerDiagram);
     levelOfDetailBehavior.activate();
   }
   

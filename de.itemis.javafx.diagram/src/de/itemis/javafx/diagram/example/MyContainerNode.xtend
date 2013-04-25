@@ -41,6 +41,7 @@ class MyContainerNode extends XNode {
 				fill = Color::WHITE
 			] 
 			children += new XNestedDiagram => [
+				scale = 0.1
 				contentsInitializer = [
 					val innerNode = new MyContainerNode("Inner " + nr)
 					nr = nr + 1
@@ -49,8 +50,10 @@ class MyContainerNode extends XNode {
 				]
 			]
 			clip = createRectangle => [
-				width = width + 2 * strokeWidth
-				height = height + 2 * strokeWidth
+				x = strokeWidth
+				y = strokeWidth
+				width = width
+				height = height
 			]
 		]
 		node = new StackPane => [
@@ -64,7 +67,7 @@ class MyContainerNode extends XNode {
 		val rapidButtonBehavior = new AddRapidButtonBehavior(this)
 		rapidButtonBehavior.activate
 		val levelOfDetailBehavior = new LevelOfDetailBehavior(this, label)
-		levelOfDetailBehavior.addChildForThreshold(20000.0, innerDiagram)
+		levelOfDetailBehavior.addChildForThreshold(100000.0, innerDiagram)
 		levelOfDetailBehavior.activate
 	}
 	

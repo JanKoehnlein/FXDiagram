@@ -40,8 +40,7 @@ public class XNestedDiagram extends XAbstractDiagram {
     _children.add(this.nodeLayer);
     ObservableList<Node> _children_1 = this.getChildren();
     _children_1.add(this.buttonLayer);
-    this.setScaleX(0.3);
-    this.setScaleY(0.3);
+    this.setScale(0.2);
     this.setManaged(false);
     BooleanProperty _visibleProperty = this.visibleProperty();
     final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
@@ -56,6 +55,11 @@ public class XNestedDiagram extends XAbstractDiagram {
         }
       };
     _visibleProperty.addListener(_function);
+  }
+  
+  public void setScale(final double scale) {
+    this.setScaleX(scale);
+    this.setScaleY(scale);
   }
   
   public Procedure1<? super XNestedDiagram> setContentsInitializer(final Procedure1<? super XNestedDiagram> contentsInitializer) {

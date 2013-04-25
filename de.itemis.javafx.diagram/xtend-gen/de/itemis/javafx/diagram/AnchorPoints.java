@@ -5,27 +5,49 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XNode;
+import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.Observable;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
 
 @SuppressWarnings("all")
 public class AnchorPoints extends ObjectBinding<List<Point2D>> {
   private XNode host;
   
   public AnchorPoints(final XNode host) {
-    DoubleProperty _layoutXProperty = host.layoutXProperty();
-    DoubleProperty _layoutYProperty = host.layoutYProperty();
-    Node _node = host.getNode();
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _node.boundsInLocalProperty();
-    DoubleProperty _scaleXProperty = host.scaleXProperty();
-    DoubleProperty _scaleYProperty = host.scaleYProperty();
-    this.bind(_layoutXProperty, _layoutYProperty, _boundsInLocalProperty, _scaleXProperty, _scaleYProperty);
     this.host = host;
+    ArrayList<ReadOnlyProperty<? extends Object>> dependencies = CollectionLiterals.<ReadOnlyProperty<? extends Object>>newArrayList();
+    Node current = host;
+    boolean _dowhile = false;
+    do {
+      {
+        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = current.boundsInLocalProperty();
+        dependencies.add(_boundsInLocalProperty);
+        DoubleProperty _layoutXProperty = current.layoutXProperty();
+        dependencies.add(_layoutXProperty);
+        DoubleProperty _layoutYProperty = current.layoutYProperty();
+        dependencies.add(_layoutYProperty);
+        DoubleProperty _scaleXProperty = current.scaleXProperty();
+        dependencies.add(_scaleXProperty);
+        DoubleProperty _scaleYProperty = current.scaleYProperty();
+        dependencies.add(_scaleYProperty);
+        Parent _parent = current.getParent();
+        current = _parent;
+      }
+      boolean _notEquals = (!Objects.equal(current, null));
+      _dowhile = _notEquals;
+    } while(_dowhile);
+    final ArrayList<ReadOnlyProperty<? extends Object>> _converted_dependencies = (ArrayList<ReadOnlyProperty<? extends Object>>)dependencies;
+    this.bind(((Observable[])Conversions.unwrapArray(_converted_dependencies, Observable.class)));
   }
   
   protected List<Point2D> computeValue() {

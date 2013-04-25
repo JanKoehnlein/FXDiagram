@@ -14,13 +14,17 @@ class XNestedDiagram extends XAbstractDiagram {
 	new() {
 		children += nodeLayer
 		children += buttonLayer
-		scaleX = 0.3
-		scaleY = 0.3
+		scale = 0.2
 		managed = false
 		visibleProperty.addListener [ 
 			property, oldVal, newVal |
 			connections.forEach[ visible = newVal ]
 		]
+	}
+	
+	def setScale(double scale) {
+		scaleX = scale 
+		scaleY = scale
 	}
 	
 	def setContentsInitializer((XNestedDiagram)=>void contentsInitializer) {
