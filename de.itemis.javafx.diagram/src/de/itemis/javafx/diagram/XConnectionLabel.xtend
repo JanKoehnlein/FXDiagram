@@ -36,16 +36,20 @@ class XConnectionLabel extends Label implements XActivatable {
 
 	def protected place(List<? extends Double> list) {
 		if (list.size >= 4) {
-			val transform = new Affine
-			transform.translate(-boundsInLocal.width / 2, -boundsInLocal.height - 2)
-
 			val dx = list.get(list.size - 2) - list.get(0)
 			val dy = list.get(list.size - 1) - list.get(1)
 			var angle = atan2(dy, dx)
-			if (angle < - PI / 2) 
-				angle = angle + PI
-			else if (angle > PI /2)
-				angle = angle - PI
+			val labelDx = -boundsInLocal.width / 2
+			var labelDy = -boundsInLocal.height - 2
+			if(abs(angle) > PI / 2) {				
+				if (angle < 0) 
+					angle = angle + PI
+				else if (angle > 0)
+					angle = angle - PI
+				labelDy = 2
+			}
+			val transform = new Affine
+			transform.translate(labelDx, labelDy)
 			transform.rotate(angle * 180 / PI)
 
 			val xPos = (list.get(0) + list.get(list.size - 2)) / 2

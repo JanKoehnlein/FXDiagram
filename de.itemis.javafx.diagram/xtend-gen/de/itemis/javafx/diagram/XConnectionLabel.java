@@ -63,55 +63,58 @@ public class XConnectionLabel extends Label implements XActivatable {
     if (_greaterEqualsThan) {
       boolean _xblockexpression = false;
       {
-        Affine _affine = new Affine();
-        final Affine transform = _affine;
-        Bounds _boundsInLocal = this.getBoundsInLocal();
-        double _width = _boundsInLocal.getWidth();
-        double _minus = (-_width);
-        double _divide = (_minus / 2);
-        Bounds _boundsInLocal_1 = this.getBoundsInLocal();
-        double _height = _boundsInLocal_1.getHeight();
-        double _minus_1 = (-_height);
-        double _minus_2 = (_minus_1 - 2);
-        TransformExtensions.translate(transform, _divide, _minus_2);
         int _size_1 = list.size();
-        int _minus_3 = (_size_1 - 2);
-        Double _get = list.get(_minus_3);
+        int _minus = (_size_1 - 2);
+        Double _get = list.get(_minus);
         Double _get_1 = list.get(0);
         final double dx = DoubleExtensions.operator_minus(_get, _get_1);
         int _size_2 = list.size();
-        int _minus_4 = (_size_2 - 1);
-        Double _get_2 = list.get(_minus_4);
+        int _minus_1 = (_size_2 - 1);
+        Double _get_2 = list.get(_minus_1);
         Double _get_3 = list.get(1);
         final double dy = DoubleExtensions.operator_minus(_get_2, _get_3);
         double angle = Math.atan2(dy, dx);
-        double _minus_5 = (-Math.PI);
-        double _divide_1 = (_minus_5 / 2);
-        boolean _lessThan = (angle < _divide_1);
-        if (_lessThan) {
-          double _plus = (angle + Math.PI);
-          angle = _plus;
-        } else {
-          double _divide_2 = (Math.PI / 2);
-          boolean _greaterThan = (angle > _divide_2);
-          if (_greaterThan) {
-            double _minus_6 = (angle - Math.PI);
-            angle = _minus_6;
+        Bounds _boundsInLocal = this.getBoundsInLocal();
+        double _width = _boundsInLocal.getWidth();
+        double _minus_2 = (-_width);
+        final double labelDx = (_minus_2 / 2);
+        Bounds _boundsInLocal_1 = this.getBoundsInLocal();
+        double _height = _boundsInLocal_1.getHeight();
+        double _minus_3 = (-_height);
+        double labelDy = (_minus_3 - 2);
+        double _abs = Math.abs(angle);
+        double _divide = (Math.PI / 2);
+        boolean _greaterThan = (_abs > _divide);
+        if (_greaterThan) {
+          boolean _lessThan = (angle < 0);
+          if (_lessThan) {
+            double _plus = (angle + Math.PI);
+            angle = _plus;
+          } else {
+            boolean _greaterThan_1 = (angle > 0);
+            if (_greaterThan_1) {
+              double _minus_4 = (angle - Math.PI);
+              angle = _minus_4;
+            }
           }
+          labelDy = 2;
         }
+        Affine _affine = new Affine();
+        final Affine transform = _affine;
+        TransformExtensions.translate(transform, labelDx, labelDy);
         double _multiply = (angle * 180);
-        double _divide_3 = (_multiply / Math.PI);
-        TransformExtensions.rotate(transform, _divide_3);
+        double _divide_1 = (_multiply / Math.PI);
+        TransformExtensions.rotate(transform, _divide_1);
         Double _get_4 = list.get(0);
         int _size_3 = list.size();
-        int _minus_7 = (_size_3 - 2);
-        Double _get_5 = list.get(_minus_7);
+        int _minus_5 = (_size_3 - 2);
+        Double _get_5 = list.get(_minus_5);
         double _plus_1 = DoubleExtensions.operator_plus(_get_4, _get_5);
         final double xPos = (_plus_1 / 2);
         Double _get_6 = list.get(1);
         int _size_4 = list.size();
-        int _minus_8 = (_size_4 - 1);
-        Double _get_7 = list.get(_minus_8);
+        int _minus_6 = (_size_4 - 1);
+        Double _get_7 = list.get(_minus_6);
         double _plus_2 = DoubleExtensions.operator_plus(_get_6, _get_7);
         final double yPos = (_plus_2 / 2);
         TransformExtensions.translate(transform, xPos, yPos);
