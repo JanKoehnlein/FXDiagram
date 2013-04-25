@@ -84,22 +84,36 @@ public class XConnectionLabel extends Label implements XActivatable {
         Double _get_2 = list.get(_minus_4);
         Double _get_3 = list.get(1);
         final double dy = DoubleExtensions.operator_minus(_get_2, _get_3);
-        final double angle = Math.atan2(dy, dx);
+        double angle = Math.atan2(dy, dx);
+        double _minus_5 = (-Math.PI);
+        double _divide_1 = (_minus_5 / 2);
+        boolean _lessThan = (angle < _divide_1);
+        if (_lessThan) {
+          double _plus = (angle + Math.PI);
+          angle = _plus;
+        } else {
+          double _divide_2 = (Math.PI / 2);
+          boolean _greaterThan = (angle > _divide_2);
+          if (_greaterThan) {
+            double _minus_6 = (angle - Math.PI);
+            angle = _minus_6;
+          }
+        }
         double _multiply = (angle * 180);
-        double _divide_1 = (_multiply / Math.PI);
-        TransformExtensions.rotate(transform, _divide_1);
+        double _divide_3 = (_multiply / Math.PI);
+        TransformExtensions.rotate(transform, _divide_3);
         Double _get_4 = list.get(0);
         int _size_3 = list.size();
-        int _minus_5 = (_size_3 - 2);
-        Double _get_5 = list.get(_minus_5);
-        double _plus = DoubleExtensions.operator_plus(_get_4, _get_5);
-        final double xPos = (_plus / 2);
+        int _minus_7 = (_size_3 - 2);
+        Double _get_5 = list.get(_minus_7);
+        double _plus_1 = DoubleExtensions.operator_plus(_get_4, _get_5);
+        final double xPos = (_plus_1 / 2);
         Double _get_6 = list.get(1);
         int _size_4 = list.size();
-        int _minus_6 = (_size_4 - 1);
-        Double _get_7 = list.get(_minus_6);
-        double _plus_1 = DoubleExtensions.operator_plus(_get_6, _get_7);
-        final double yPos = (_plus_1 / 2);
+        int _minus_8 = (_size_4 - 1);
+        Double _get_7 = list.get(_minus_8);
+        double _plus_2 = DoubleExtensions.operator_plus(_get_6, _get_7);
+        final double yPos = (_plus_2 / 2);
         TransformExtensions.translate(transform, xPos, yPos);
         ObservableList<Transform> _transforms = this.getTransforms();
         _transforms.clear();
