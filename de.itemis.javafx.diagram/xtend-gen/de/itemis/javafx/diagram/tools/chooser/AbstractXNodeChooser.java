@@ -80,7 +80,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> element, final Number oldValue, final Number newValue) {
           final double newVal = newValue.doubleValue();
-          AbstractXNodeChooser.this.setInterpolatedPosition(newVal);
+          List<XNode> _nodes = AbstractXNodeChooser.this.getNodes();
+          int _size = _nodes.size();
+          double _modulo = (newVal % _size);
+          AbstractXNodeChooser.this.setInterpolatedPosition(_modulo);
         }
       };
     this.positionListener = _function;
@@ -125,8 +128,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             AbstractXNodeChooser.this.spinToPosition.setTargetPosition(((int) _plus));
           } else {
             double _currentPosition_1 = AbstractXNodeChooser.this.getCurrentPosition();
+            double _deltaX = it.getDeltaX();
             double _deltaY = it.getDeltaY();
-            double _divide = (_deltaY / 100);
+            double _plus_1 = (_deltaX + _deltaY);
+            double _divide = (_plus_1 / 100);
             double _minus = (_currentPosition_1 - _divide);
             AbstractXNodeChooser.this.setCurrentPosition(_minus);
           }
@@ -158,9 +163,31 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             }
           }
           if (!_matched) {
+            if (Objects.equal(getCode,KeyCode.LEFT)) {
+              _matched=true;
+              int _minus_1 = (-1);
+              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus_1);
+            }
+          }
+          if (!_matched) {
             if (Objects.equal(getCode,KeyCode.DOWN)) {
               _matched=true;
               AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(1);
+            }
+          }
+          if (!_matched) {
+            if (Objects.equal(getCode,KeyCode.RIGHT)) {
+              _matched=true;
+              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(1);
+            }
+          }
+          if (!_matched) {
+            if (Objects.equal(getCode,KeyCode.ENTER)) {
+              _matched=true;
+              XNode _currentNode = AbstractXNodeChooser.this.getCurrentNode();
+              AbstractXNodeChooser.this.nodeChosen(_currentNode);
+              XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
+              _rootDiagram.restoreDefaultTool();
             }
           }
         }
@@ -298,18 +325,32 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   protected void nodeChosen(final XNode choice) {
     boolean _notEquals = (!Objects.equal(choice, null));
     if (_notEquals) {
-      Bounds _layoutBounds = choice.getLayoutBounds();
-      Bounds bounds = Extensions.localToDiagram(choice, _layoutBounds);
+      List<XNode> _nodes = this.getNodes();
+      final Procedure1<XNode> _function = new Procedure1<XNode>() {
+          public void apply(final XNode it) {
+            it.setOnMouseClicked(null);
+          }
+        };
+      IterableExtensions.<XNode>forEach(_nodes, _function);
+      choice.setEffect(null);
+      Point2D center = Extensions.localToDiagram(this.group, 0, 0);
       ObservableList<Transform> _transforms = choice.getTransforms();
       _transforms.clear();
       ObservableList<Node> _children = this.group.getChildren();
       _children.remove(choice);
       XAbstractDiagram _diagram = this.getDiagram();
       _diagram.addNode(choice);
-      double _minX = bounds.getMinX();
-      choice.setLayoutX(_minX);
-      double _minY = bounds.getMinY();
-      choice.setLayoutY(_minY);
+      final Bounds bounds = choice.getLayoutBounds();
+      double _x = center.getX();
+      double _width = bounds.getWidth();
+      double _multiply = (0.5 * _width);
+      double _minus = (_x - _multiply);
+      choice.setLayoutX(_minus);
+      double _y = center.getY();
+      double _height = bounds.getHeight();
+      double _multiply_1 = (0.5 * _height);
+      double _minus_1 = (_y - _multiply_1);
+      choice.setLayoutY(_minus_1);
       XConnection _xConnection = new XConnection(this.host, choice);
       final XConnection connection = _xConnection;
       XAbstractDiagram _diagram_1 = this.getDiagram();

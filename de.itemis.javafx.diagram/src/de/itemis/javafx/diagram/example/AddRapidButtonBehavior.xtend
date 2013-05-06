@@ -2,12 +2,15 @@ package de.itemis.javafx.diagram.example
 
 import de.itemis.javafx.diagram.XConnection
 import de.itemis.javafx.diagram.XNode
-import java.util.List
 import de.itemis.javafx.diagram.XRapidButton
 import de.itemis.javafx.diagram.behavior.AbstractBehavior
-import static extension de.itemis.javafx.diagram.Extensions.*
-import javafx.geometry.Point2D
 import de.itemis.javafx.diagram.tools.chooser.CarusselChooser
+import de.itemis.javafx.diagram.tools.chooser.CoverFlowChooser
+import de.itemis.javafx.diagram.tools.chooser.CubeChooser
+import java.util.List
+import javafx.geometry.Point2D
+
+import static extension de.itemis.javafx.diagram.Extensions.*
 
 class AddRapidButtonBehavior extends AbstractBehavior {
 	
@@ -29,17 +32,33 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 		]
 		val chooseAction = [ XRapidButton button | 
 			val layoutX = 250 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
-			val layoutY = button.host.layoutY + 0.5 * button.host.layoutBounds.height 
+			val layoutY = 200 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height 
 			val chooser = new CarusselChooser(host, new Point2D(layoutX, layoutY))
 			for(i:0..<20)
 				chooser += new MyNode("node " +  i)
 			host.rootDiagram.currentTool = chooser
 		]
+		val cubeChooseAction = [ XRapidButton button | 
+			val layoutX = 250 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
+			val layoutY = 200 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height 
+			val chooser = new CubeChooser(host, new Point2D(layoutX, layoutY))
+			for(i:0..<20)
+				chooser += new MyNode("node " +  i)
+			host.rootDiagram.currentTool = chooser
+		]
+		val coverFlowChooseAction = [ XRapidButton button | 
+			val layoutX = 250 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
+			val layoutY = 200 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height 
+			val chooser = new CoverFlowChooser(host, new Point2D(layoutX, layoutY))
+			for(i:0..<20)
+				chooser += new MyNode("node " +  i)
+			host.rootDiagram.currentTool = chooser
+		]
 		rapidButtons = #[
-			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', addAction),
-			new XRapidButton(host, 0.5, 1, 'icons/add_16.png', addAction),
+			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', cubeChooseAction),
+			new XRapidButton(host, 0.5, 1, 'icons/add_16.png', coverFlowChooseAction),
 			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', chooseAction),
-			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', chooseAction)]
+			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addAction)]
 		rapidButtons.forEach[host.diagram.addButton(it)]
 		host.node.onMouseEntered = [
 			rapidButtons.forEach[show]
@@ -48,4 +67,5 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 			rapidButtons.forEach[fade]
 		]
 	}
+	
 }

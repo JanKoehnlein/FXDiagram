@@ -49,7 +49,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		group.layoutY = position.y
 		positionListener = [ element, oldValue, newValue |
 			val newVal = newValue.doubleValue
-			setInterpolatedPosition(newVal)
+			setInterpolatedPosition(newVal % nodes.size)
 		]
 		spinToPosition = new SpinTransition(this)
 		swipeHandler = [
@@ -67,7 +67,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			if (eventType == ScrollEvent::SCROLL_FINISHED)
 				spinToPosition.targetPosition = (currentPosition + 0.5) as int
 			else
-				currentPosition = currentPosition - deltaY / 100
+				currentPosition = currentPosition - (deltaX + deltaY) / 100
 		]
 		keyHandler = [
 			switch code {
@@ -77,8 +77,16 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 					cancel
 				case KeyCode::UP:
 					spinToPosition.targetPositionDelta = -1
+				case KeyCode::LEFT:
+					spinToPosition.targetPositionDelta = -1
 				case KeyCode::DOWN:
 					spinToPosition.targetPositionDelta = 1
+				case KeyCode::RIGHT:
+					spinToPosition.targetPositionDelta = 1
+				case KeyCode::ENTER: {
+					nodeChosen(currentNode)
+					host.rootDiagram.restoreDefaultTool
+				}
 			}
 		]
 	}
@@ -141,12 +149,15 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	protected def nodeChosen(XNode choice) {
 		if (choice != null) {
-			var bounds = choice.localToDiagram(choice.layoutBounds)
+			nodes.forEach[onMouseClicked = null]
+			choice.effect = null
+			var center = group.localToDiagram(0, 0)
 			choice.transforms.clear
 			group.children.remove(choice)
 			diagram.addNode(choice)
-			choice.layoutX = bounds.minX
-			choice.layoutY = bounds.minY
+			val bounds = choice.layoutBounds
+			choice.layoutX = center.x - 0.5 * bounds.width
+			choice.layoutY = center.y - 0.5 * bounds.height
 			val connection = new XConnection(host, choice)
 			diagram.addConnection(connection)
 		}

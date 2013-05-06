@@ -10,7 +10,7 @@ import static java.lang.Math.*
 
 class CarusselChooser extends AbstractXNodeChooser {
 
-	static final double spacing = 6
+	@Property double spacing = 6
 
 	double angle
 	double radius

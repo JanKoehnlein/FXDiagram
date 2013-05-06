@@ -17,7 +17,15 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class CarusselChooser extends AbstractXNodeChooser {
-  private final static double spacing = 6;
+  private double _spacing = 6;
+  
+  public double getSpacing() {
+    return this._spacing;
+  }
+  
+  public void setSpacing(final double spacing) {
+    this._spacing = spacing;
+  }
   
   private double angle;
   
@@ -44,7 +52,8 @@ public class CarusselChooser extends AbstractXNodeChooser {
           }
         };
       Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
-      final double maxHeight = ((_fold).doubleValue() + CarusselChooser.spacing);
+      double _spacing = this.getSpacing();
+      final double maxHeight = ((_fold).doubleValue() + _spacing);
       List<XNode> _nodes_1 = this.getNodes();
       int _size = _nodes_1.size();
       double _divide = (Math.PI / _size);
@@ -98,7 +107,8 @@ public class CarusselChooser extends AbstractXNodeChooser {
           double _width = _layoutBounds.getWidth();
           double _minus_2 = (-_width);
           double _divide = (_minus_2 / 2);
-          double _divide_1 = (CarusselChooser.spacing / 2);
+          double _spacing = this.getSpacing();
+          double _divide_1 = (_spacing / 2);
           Translate _translate_1 = Transform.translate(_divide, _divide_1);
           _transforms_3.add(_translate_1);
           double _multiply_3 = (scaleY * scaleY);
