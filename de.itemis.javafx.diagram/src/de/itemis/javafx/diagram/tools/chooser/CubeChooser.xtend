@@ -39,16 +39,25 @@ class CubeChooser extends AbstractXNodeChooser {
 	
 	protected def applyTransform(int nodeIndex, double angle) {
 		val node = nodes.get(nodeIndex)
-		val transform = new Affine
-		transform.translate(0, 0, - maxWidth * 0.5)
-		transform.rotate(angle, new Point3D(0,1,0))
-		transform.translate(0, 0, 200 + maxWidth * 0.5)
-		val width = node.layoutBounds.width
-		val height = node.layoutBounds.height
-		val perspectiveTransform = new BoundingBox(-0.5 * width, -0.5 * height, width, height)
-			.mapPerspective(transform, 200)
-		node.visible = perspectiveTransform != null
-		node.effect = perspectiveTransform
+		if(abs(angle) < 1E-5) {
+			node.effect = null
+			node.layoutX = - 0.5 * node.layoutBounds.width
+			node.layoutY = - 0.5 * node.layoutBounds.height
+			node.visible = true
+		} else {
+			node.layoutX = 0
+			node.layoutY = 0
+			val transform = new Affine
+			transform.translate(0, 0, - maxWidth * 0.5)
+			transform.rotate(angle, new Point3D(0,1,0))
+			transform.translate(0, 0, 200 + maxWidth * 0.5)
+			val width = node.layoutBounds.width
+			val height = node.layoutBounds.height
+			val perspectiveTransform = new BoundingBox(-0.5 * width, -0.5 * height, width, height)
+				.mapPerspective(transform, 200)
+			node.visible = perspectiveTransform != null
+			node.effect = perspectiveTransform
+		}
 	} 
 	
 }

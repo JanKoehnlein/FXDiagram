@@ -117,8 +117,8 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
   
   protected void transform(final XNode node, final int i, final double interpolatedPosition, final boolean isLeft, final double fraction) {
     double _minus = (i - interpolatedPosition);
-    double _abs = Math.abs(_minus);
-    double _multiply = (0.2 * _abs);
+    final double distanceFromSelection = Math.abs(_minus);
+    double _multiply = (0.2 * distanceFromSelection);
     final double opacity = (1 - _multiply);
     boolean _lessThan = (opacity < 0);
     if (_lessThan) {
@@ -127,55 +127,74 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
       node.setOpacity(opacity);
       node.setVisible(true);
     }
-    Affine _affine = new Affine();
-    final Affine trafo = _affine;
-    int _xifexpression = (int) 0;
-    if (isLeft) {
-      int _minus_1 = (-1);
-      _xifexpression = _minus_1;
+    boolean _lessThan_1 = (distanceFromSelection < 1E-5);
+    if (_lessThan_1) {
+      List<XNode> _nodes = this.getNodes();
+      XNode _get = _nodes.get(i);
+      _get.setEffect(null);
+      double _minus_1 = (-0.5);
+      Bounds _layoutBounds = node.getLayoutBounds();
+      double _width = _layoutBounds.getWidth();
+      double _multiply_1 = (_minus_1 * _width);
+      node.setLayoutX(_multiply_1);
+      double _minus_2 = (-0.5);
+      Bounds _layoutBounds_1 = node.getLayoutBounds();
+      double _height = _layoutBounds_1.getHeight();
+      double _multiply_2 = (_minus_2 * _height);
+      node.setLayoutY(_multiply_2);
     } else {
-      _xifexpression = 1;
+      node.setLayoutX(0);
+      node.setLayoutY(0);
+      Affine _affine = new Affine();
+      final Affine trafo = _affine;
+      int _xifexpression = (int) 0;
+      if (isLeft) {
+        int _minus_3 = (-1);
+        _xifexpression = _minus_3;
+      } else {
+        _xifexpression = 1;
+      }
+      final int direction = _xifexpression;
+      double _minus_4 = (-0.5);
+      List<XNode> _nodes_1 = this.getNodes();
+      XNode _get_1 = _nodes_1.get(i);
+      Bounds _layoutBounds_2 = _get_1.getLayoutBounds();
+      double _width_1 = _layoutBounds_2.getWidth();
+      double _multiply_3 = (_minus_4 * _width_1);
+      double _minus_5 = (-0.5);
+      List<XNode> _nodes_2 = this.getNodes();
+      XNode _get_2 = _nodes_2.get(i);
+      Bounds _layoutBounds_3 = _get_2.getLayoutBounds();
+      double _height_1 = _layoutBounds_3.getHeight();
+      double _multiply_4 = (_minus_5 * _height_1);
+      TransformExtensions.translate(trafo, _multiply_3, _multiply_4, 0);
+      double _angle = this.getAngle();
+      double _multiply_5 = (direction * _angle);
+      double _multiply_6 = (_multiply_5 * fraction);
+      Point3D _point3D = new Point3D(0, 1, 0);
+      TransformExtensions.rotate(trafo, _multiply_6, _point3D);
+      double _minus_6 = (i - interpolatedPosition);
+      double _deltaX = this.getDeltaX();
+      double _multiply_7 = (_minus_6 * _deltaX);
+      double _multiply_8 = (0.5 * fraction);
+      double _multiply_9 = (_multiply_8 * direction);
+      double _gap = this.getGap();
+      double _multiply_10 = (_multiply_9 * _gap);
+      double _plus = (_multiply_7 + _multiply_10);
+      double _deltaZ = this.getDeltaZ();
+      double _multiply_11 = (fraction * _deltaZ);
+      double _plus_1 = (_multiply_11 + 200);
+      TransformExtensions.translate(trafo, _plus, 0, _plus_1);
+      List<XNode> _nodes_3 = this.getNodes();
+      XNode _get_3 = _nodes_3.get(i);
+      List<XNode> _nodes_4 = this.getNodes();
+      XNode _get_4 = _nodes_4.get(i);
+      Bounds _layoutBounds_4 = _get_4.getLayoutBounds();
+      PerspectiveTransform _mapPerspective = PerspectiveExtensions.mapPerspective(_layoutBounds_4, trafo, 200);
+      _get_3.setEffect(_mapPerspective);
     }
-    final int direction = _xifexpression;
-    double _minus_2 = (-0.5);
-    List<XNode> _nodes = this.getNodes();
-    XNode _get = _nodes.get(i);
-    Bounds _layoutBounds = _get.getLayoutBounds();
-    double _width = _layoutBounds.getWidth();
-    double _multiply_1 = (_minus_2 * _width);
-    double _minus_3 = (-0.5);
-    List<XNode> _nodes_1 = this.getNodes();
-    XNode _get_1 = _nodes_1.get(i);
-    Bounds _layoutBounds_1 = _get_1.getLayoutBounds();
-    double _height = _layoutBounds_1.getHeight();
-    double _multiply_2 = (_minus_3 * _height);
-    TransformExtensions.translate(trafo, _multiply_1, _multiply_2, 0);
-    double _angle = this.getAngle();
-    double _multiply_3 = (direction * _angle);
-    double _multiply_4 = (_multiply_3 * fraction);
-    Point3D _point3D = new Point3D(0, 1, 0);
-    TransformExtensions.rotate(trafo, _multiply_4, _point3D);
-    double _minus_4 = (i - interpolatedPosition);
-    double _deltaX = this.getDeltaX();
-    double _multiply_5 = (_minus_4 * _deltaX);
-    double _multiply_6 = (0.5 * fraction);
-    double _multiply_7 = (_multiply_6 * direction);
-    double _gap = this.getGap();
-    double _multiply_8 = (_multiply_7 * _gap);
-    double _plus = (_multiply_5 + _multiply_8);
-    double _deltaZ = this.getDeltaZ();
-    double _multiply_9 = (fraction * _deltaZ);
-    double _plus_1 = (_multiply_9 + 200);
-    TransformExtensions.translate(trafo, _plus, 0, _plus_1);
-    List<XNode> _nodes_2 = this.getNodes();
-    XNode _get_2 = _nodes_2.get(i);
-    List<XNode> _nodes_3 = this.getNodes();
-    XNode _get_3 = _nodes_3.get(i);
-    Bounds _layoutBounds_2 = _get_3.getLayoutBounds();
-    PerspectiveTransform _mapPerspective = PerspectiveExtensions.mapPerspective(_layoutBounds_2, trafo, 200);
-    _get_2.setEffect(_mapPerspective);
-    List<XNode> _nodes_4 = this.getNodes();
-    XNode _get_4 = _nodes_4.get(i);
-    _get_4.toFront();
+    List<XNode> _nodes_5 = this.getNodes();
+    XNode _get_5 = _nodes_5.get(i);
+    _get_5.toFront();
   }
 }

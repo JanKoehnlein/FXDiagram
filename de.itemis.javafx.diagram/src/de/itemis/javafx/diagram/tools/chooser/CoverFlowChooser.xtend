@@ -40,19 +40,28 @@ class CoverFlowChooser extends AbstractXNodeChooser {
 	}
 	
 	protected def transform(XNode node, int i, double interpolatedPosition, boolean isLeft, double fraction) {
-		val opacity = 1 - 0.2 * abs(i-interpolatedPosition)
+		val distanceFromSelection = abs(i-interpolatedPosition)
+		val opacity = 1 - 0.2 * distanceFromSelection
 		if(opacity < 0)
 			node.visible = false
 		else {
 			node.opacity = opacity
 			node.visible = true
 		}
-		val trafo = new Affine()
-		val direction = if(isLeft) -1 else 1
-		trafo.translate(-0.5 * nodes.get(i).layoutBounds.width, -0.5 * nodes.get(i).layoutBounds.height, 0)
-		trafo.rotate(direction * angle * fraction, new Point3D(0,1,0))
-		trafo.translate((i - interpolatedPosition) * deltaX + 0.5 * fraction * direction * gap, 0, fraction * deltaZ + 200)
-		nodes.get(i).effect = nodes.get(i).layoutBounds.mapPerspective(trafo, 200);
+		if(distanceFromSelection < 1E-5) {
+			nodes.get(i).effect = null
+			node.layoutX = - 0.5 * node.layoutBounds.width
+			node.layoutY = - 0.5 * node.layoutBounds.height
+		} else {
+			node.layoutX = 0
+			node.layoutY = 0
+			val trafo = new Affine()
+			val direction = if(isLeft) -1 else 1
+			trafo.translate(-0.5 * nodes.get(i).layoutBounds.width, -0.5 * nodes.get(i).layoutBounds.height, 0)
+			trafo.rotate(direction * angle * fraction, new Point3D(0,1,0))
+			trafo.translate((i - interpolatedPosition) * deltaX + 0.5 * fraction * direction * gap, 0, fraction * deltaZ + 200)
+			nodes.get(i).effect = nodes.get(i).layoutBounds.mapPerspective(trafo, 200);
+		}
 		nodes.get(i).toFront
 	}
 	
