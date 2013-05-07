@@ -7,9 +7,9 @@ import javafx.beans.binding.ObjectBinding
 import javafx.geometry.Point2D
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import javafx.util.Duration
 
 import static extension de.itemis.javafx.diagram.Extensions.*
+import static extension javafx.util.Duration.*
 
 class XRapidButton extends ImageView implements XActivatable {
 	
@@ -71,11 +71,11 @@ class XRapidButton extends ImageView implements XActivatable {
 		if(timeline == null) 
 			timeline = new Timeline => [
 				autoReverse = true
-				keyFrames += new KeyFrame(Duration::millis(500), 
+				keyFrames += new KeyFrame(500.millis, 
 					new KeyValue(this.opacityProperty, new Double(1.0)))
-				keyFrames += new KeyFrame(Duration::millis(1000), 
+				keyFrames += new KeyFrame(1000.millis, 
 					new KeyValue(this.opacityProperty, 0.0))
-				keyFrames += new KeyFrame(Duration::millis(1000), 
+				keyFrames += new KeyFrame(1000.millis, 
 					new KeyValue(this.visibleProperty, false)
 				)
 			]
