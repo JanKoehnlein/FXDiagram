@@ -11,6 +11,7 @@ import java.util.List
 import javafx.geometry.Point2D
 
 import static extension de.itemis.javafx.diagram.Extensions.*
+import de.itemis.javafx.diagram.tools.chooser.AbstractXNodeChooser
 
 class AddRapidButtonBehavior extends AbstractBehavior {
 	
@@ -31,27 +32,18 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 			target.layoutY = 150 * (button.placer.YPos - 0.5) + source.layoutY
 		]
 		val chooseAction = [ XRapidButton button | 
-			val layoutX = 250 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
-			val layoutY = 200 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height 
-			val chooser = new CarusselChooser(host, new Point2D(layoutX, layoutY))
-			for(i:0..<20)
-				chooser += new MyNode("node " +  i)
+			val chooser = new CarusselChooser(host, button.chooserPosition)
+			chooser.addChoices
 			host.rootDiagram.currentTool = chooser
 		]
 		val cubeChooseAction = [ XRapidButton button | 
-			val layoutX = 250 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
-			val layoutY = 200 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height 
-			val chooser = new CubeChooser(host, new Point2D(layoutX, layoutY))
-			for(i:0..<20)
-				chooser += new MyNode("node " +  i)
+			val chooser = new CubeChooser(host, button.chooserPosition)
+			chooser.addChoices
 			host.rootDiagram.currentTool = chooser
 		]
 		val coverFlowChooseAction = [ XRapidButton button | 
-			val layoutX = 250 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
-			val layoutY = 200 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height 
-			val chooser = new CoverFlowChooser(host, new Point2D(layoutX, layoutY))
-			for(i:0..<20)
-				chooser += new MyNode("node " +  i)
+			val chooser = new CoverFlowChooser(host, button.chooserPosition)
+			chooser.addChoices
 			host.rootDiagram.currentTool = chooser
 		]
 		rapidButtons = #[
@@ -68,4 +60,14 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 		]
 	}
 	
+	protected def getChooserPosition(XRapidButton button) {
+		val x = 200 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
+		val y = 150 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height
+		new Point2D(x, y) 
+	}
+	
+	protected def addChoices(AbstractXNodeChooser chooser) {
+		for(i:0..<20)
+			chooser += new MyNode("node " +  i)
+	} 
 }

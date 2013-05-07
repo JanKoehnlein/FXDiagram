@@ -35,7 +35,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	ChangeListener<Number> positionListener
 
-	SpinTransition spinToPosition
+	protected SpinTransition spinToPosition
 
 	EventHandler<SwipeEvent> swipeHandler
 
@@ -43,10 +43,10 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	EventHandler<KeyEvent> keyHandler
 
-	new(XNode host, Point2D position) {
+	new(XNode host, Point2D center) {
 		this.host = host
-		group.layoutX = position.x
-		group.layoutY = position.y
+		group.layoutX = center.x
+		group.layoutY = center.y
 		positionListener = [ element, oldValue, newValue |
 			val newVal = newValue.doubleValue
 			setInterpolatedPosition(newVal % nodes.size)

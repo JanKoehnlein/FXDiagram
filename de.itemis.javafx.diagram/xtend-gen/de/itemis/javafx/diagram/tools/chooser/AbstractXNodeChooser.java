@@ -63,7 +63,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   private ChangeListener<Number> positionListener;
   
-  private SpinTransition spinToPosition;
+  protected SpinTransition spinToPosition;
   
   private EventHandler<SwipeEvent> swipeHandler;
   
@@ -71,11 +71,11 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   private EventHandler<KeyEvent> keyHandler;
   
-  public AbstractXNodeChooser(final XNode host, final Point2D position) {
+  public AbstractXNodeChooser(final XNode host, final Point2D center) {
     this.host = host;
-    double _x = position.getX();
+    double _x = center.getX();
     this.group.setLayoutX(_x);
-    double _y = position.getY();
+    double _y = center.getY();
     this.group.setLayoutY(_y);
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> element, final Number oldValue, final Number newValue) {
