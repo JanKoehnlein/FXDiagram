@@ -1,11 +1,11 @@
 package de.itemis.javafx.diagram;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.Lists;
 import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XNode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javafx.beans.Observable;
 import javafx.beans.binding.ObjectBinding;
@@ -80,14 +80,7 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
           Node _node_4 = this.host.getNode();
           double _maxY_1 = bounds.getMaxY();
           Point2D _localToRoot_3 = Extensions.localToRoot(_node_4, middleX, _maxY_1);
-          List<Point2D> _xlistliteral = null;
-          Builder<Point2D> _builder = ImmutableList.builder();
-          _builder.add(_localToRoot);
-          _builder.add(_localToRoot_1);
-          _builder.add(_localToRoot_2);
-          _builder.add(_localToRoot_3);
-          _xlistliteral = _builder.build();
-          _xblockexpression_1 = (_xlistliteral);
+          _xblockexpression_1 = (Collections.<Point2D>unmodifiableList(Lists.<Point2D>newArrayList(_localToRoot, _localToRoot_1, _localToRoot_2, _localToRoot_3)));
         }
         _xifexpression = _xblockexpression_1;
       }

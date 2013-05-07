@@ -1,8 +1,8 @@
 package de.itemis.javafx.diagram.transform;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.Lists;
 import de.itemis.javafx.diagram.transform.TransformExtensions;
+import java.util.Collections;
 import java.util.List;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -28,14 +28,7 @@ public class PerspectiveExtensions {
     double _minX_1 = source.getMinX();
     double _maxY_1 = source.getMaxY();
     Point3D _point3D_3 = new Point3D(_minX_1, _maxY_1, 0);
-    List<Point3D> _xlistliteral = null;
-    Builder<Point3D> _builder = ImmutableList.builder();
-    _builder.add(_point3D);
-    _builder.add(_point3D_1);
-    _builder.add(_point3D_2);
-    _builder.add(_point3D_3);
-    _xlistliteral = _builder.build();
-    final List<Point3D> points = _xlistliteral;
+    final List<Point3D> points = Collections.<Point3D>unmodifiableList(Lists.<Point3D>newArrayList(_point3D, _point3D_1, _point3D_2, _point3D_3));
     final Function1<Point3D,Point2D> _function = new Function1<Point3D,Point2D>() {
         public Point2D apply(final Point3D it) {
           Point3D _multiply = TransformExtensions.operator_multiply(transform, it);
