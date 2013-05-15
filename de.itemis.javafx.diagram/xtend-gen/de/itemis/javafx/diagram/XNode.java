@@ -99,4 +99,9 @@ public class XNode extends Group implements XActivatable {
   public AnchorPoints getAnchorPoints() {
     return this.anchorPoints;
   }
+  
+  public String getKey() {
+    String _string = this.toString();
+    return _string;
+  }
 }

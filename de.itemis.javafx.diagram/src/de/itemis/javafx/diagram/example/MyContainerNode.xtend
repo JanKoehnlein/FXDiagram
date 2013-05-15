@@ -97,7 +97,6 @@ class MyContainerNode extends XNode {
 	override toString() {
 		name
 	}
-	
 }
 
 class ActivateableStackPane extends StackPane implements XActivatable {

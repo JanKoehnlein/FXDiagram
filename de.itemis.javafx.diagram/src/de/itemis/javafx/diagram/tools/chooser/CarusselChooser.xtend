@@ -12,9 +12,6 @@ class CarusselChooser extends AbstractXNodeChooser {
 
 	@Property double spacing = 6
 
-	double angle
-	double radius
-	 
 	Effect currentNodeEffect  
 	 
 	new(XNode host, Point2D position) {
@@ -23,13 +20,13 @@ class CarusselChooser extends AbstractXNodeChooser {
 	}
 	
 	override activate() {
-		val maxHeight = nodes.fold(0.0, [a, b|max(a, b.layoutBounds.height)]) + spacing
-		angle = PI / nodes.size
-		radius = maxHeight / 2 / sin(angle)
 		super.activate()
 	}
 
  	protected override setInterpolatedPosition(double interpolatedPosition) {
+		val maxHeight = nodes.fold(0.0, [a, b|max(a, b.layoutBounds.height)]) + spacing
+		val angle = PI / nodes.size
+		val radius = maxHeight / 2 / sin(angle)
 		for (i : 0 ..< nodes.size) {
 			val node = nodes.get(i)
 			val nodeCenterAngle = 2 * PI * (i - interpolatedPosition) / nodes.size

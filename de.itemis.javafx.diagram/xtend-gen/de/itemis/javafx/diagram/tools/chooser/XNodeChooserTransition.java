@@ -2,7 +2,7 @@ package de.itemis.javafx.diagram.tools.chooser;
 
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.tools.chooser.AbstractXNodeChooser;
-import java.util.List;
+import java.util.ArrayList;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.event.ActionEvent;
@@ -10,14 +10,14 @@ import javafx.event.EventHandler;
 import javafx.util.Duration;
 
 @SuppressWarnings("all")
-public class SpinTransition extends Transition {
+public class XNodeChooserTransition extends Transition {
   private AbstractXNodeChooser tool;
   
   private double startPosition;
   
   private double endPosition;
   
-  public SpinTransition(final AbstractXNodeChooser tool) {
+  public XNodeChooserTransition(final AbstractXNodeChooser tool) {
     this.tool = tool;
     final Interpolator _function = new Interpolator() {
         @Override
@@ -32,7 +32,7 @@ public class SpinTransition extends Transition {
     this.setInterpolator(_function);
     final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
         public void handle(final ActionEvent it) {
-          tool.setCurrentPosition(SpinTransition.this.endPosition);
+          tool.setCurrentPosition(XNodeChooserTransition.this.endPosition);
         }
       };
     this.setOnFinished(_function_1);
@@ -47,11 +47,11 @@ public class SpinTransition extends Transition {
     boolean _while = _lessThan;
     while (_while) {
       {
-        List<XNode> _nodes = this.tool.getNodes();
+        ArrayList<XNode> _nodes = this.tool.getNodes();
         int _size = _nodes.size();
         double _plus_1 = (this.startPosition + _size);
         this.startPosition = _plus_1;
-        List<XNode> _nodes_1 = this.tool.getNodes();
+        ArrayList<XNode> _nodes_1 = this.tool.getNodes();
         int _size_1 = _nodes_1.size();
         double _plus_2 = (this.endPosition + _size_1);
         this.endPosition = _plus_2;
@@ -64,7 +64,7 @@ public class SpinTransition extends Transition {
   }
   
   public void setTargetPosition(final double targetPosition) {
-    List<XNode> _nodes = this.tool.getNodes();
+    ArrayList<XNode> _nodes = this.tool.getNodes();
     int _size = _nodes.size();
     boolean _lessThan = (targetPosition < _size);
     if (_lessThan) {
@@ -73,19 +73,19 @@ public class SpinTransition extends Transition {
       this.endPosition = ((int) targetPosition);
       double _minus = (targetPosition - this.startPosition);
       double _abs = Math.abs(_minus);
-      List<XNode> _nodes_1 = this.tool.getNodes();
+      ArrayList<XNode> _nodes_1 = this.tool.getNodes();
       int _size_1 = _nodes_1.size();
       int _divide = (_size_1 / 2);
       boolean _greaterThan = (_abs > _divide);
       if (_greaterThan) {
         boolean _greaterThan_1 = (targetPosition > this.startPosition);
         if (_greaterThan_1) {
-          List<XNode> _nodes_2 = this.tool.getNodes();
+          ArrayList<XNode> _nodes_2 = this.tool.getNodes();
           int _size_2 = _nodes_2.size();
           double _plus = (this.startPosition + _size_2);
           this.startPosition = _plus;
         } else {
-          List<XNode> _nodes_3 = this.tool.getNodes();
+          ArrayList<XNode> _nodes_3 = this.tool.getNodes();
           int _size_3 = _nodes_3.size();
           double _plus_1 = (this.endPosition + _size_3);
           this.endPosition = _plus_1;
@@ -96,9 +96,13 @@ public class SpinTransition extends Transition {
     }
   }
   
+  public void resetTargetPosition() {
+    this.setTargetPosition(this.endPosition);
+  }
+  
   protected void setDuration(final double max) {
     double _minus = (this.endPosition - this.startPosition);
-    List<XNode> _nodes = this.tool.getNodes();
+    ArrayList<XNode> _nodes = this.tool.getNodes();
     int _size = _nodes.size();
     double _modulo = (_minus % _size);
     double _abs = Math.abs(_modulo);

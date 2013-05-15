@@ -1,25 +1,24 @@
 package de.itemis.javafx.diagram.tools.chooser
 
+import de.itemis.javafx.diagram.XConnection
 import de.itemis.javafx.diagram.XNode
 import de.itemis.javafx.diagram.tools.XDiagramTool
-import java.util.List
-import javafx.animation.Transition
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
 import javafx.beans.value.ChangeListener
 import javafx.event.EventHandler
 import javafx.geometry.Point2D
 import javafx.scene.Group
+import javafx.scene.control.Label
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.SwipeEvent
-import javafx.util.Duration
-
-import static java.lang.Math.*
 
 import static extension de.itemis.javafx.diagram.Extensions.*
-import de.itemis.javafx.diagram.XConnection
-import javafx.scene.input.KeyEvent
-import javafx.scene.input.KeyCode
+import static extension de.itemis.javafx.diagram.binding.StringExpressionExtensions.*
 
 abstract class AbstractXNodeChooser implements XDiagramTool {
 
@@ -27,21 +26,29 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	Group group = new Group
 
-	List<XNode> _nodes = newArrayList
-
+	val nodeMap = <String, XNode> newLinkedHashMap
+	
 	boolean isActive = false
 
 	DoubleProperty _currentPosition = new SimpleDoubleProperty
 
 	ChangeListener<Number> positionListener
 
-	protected SpinTransition spinToPosition
+	protected XNodeChooserTransition spinToPosition
 
 	EventHandler<SwipeEvent> swipeHandler
 
 	EventHandler<ScrollEvent> scrollHandler
 
 	EventHandler<KeyEvent> keyHandler
+	
+	ChangeListener<String> filterChangeListener
+	
+	val visibleNodes = <XNode> newArrayList
+
+	StringProperty _filterString = new SimpleStringProperty('')
+	
+	Label filterLabel
 
 	new(XNode host, Point2D center) {
 		this.host = host
@@ -51,7 +58,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			val newVal = newValue.doubleValue
 			setInterpolatedPosition(newVal % nodes.size)
 		]
-		spinToPosition = new SpinTransition(this)
+		spinToPosition = new XNodeChooserTransition(this)
 		swipeHandler = [
 			val direction = switch eventType {
 				case SwipeEvent::SWIPE_DOWN:
@@ -87,19 +94,49 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 					nodeChosen(currentNode)
 					host.rootDiagram.restoreDefaultTool
 				}
+				case KeyCode::BACK_SPACE: {
+					val oldFilter = _filterString.get
+					if(!oldFilter.empty)
+						_filterString.set(oldFilter.substring(0, oldFilter.length-1))
+					}
+				default: {
+					_filterString.set(_filterString.get + text)
+				}
 			}
+		]
+		filterChangeListener = [
+			property, oldValue, newValue | calculateVisibleNodes
 		]
 	}
 
 	def operator_add(XNode node) {
-		if (!isActive) {
-			nodes += node
+		if(!nodeMap.containsKey(node.key)) {
+			nodeMap.put(node.key, node)
+			calculateVisibleNodes
 			group.children += node
+			true
+		} else {
+			false
 		}
 	}
 
 	def operator_add(Iterable<XNode> nodes) {
-		nodes.forEach[this += it]
+		nodes.map[this += it].reduce[a, b | a || b]
+	}
+
+	def operator_remove(XNode node) {
+		if (nodeMap.remove(node.key) != null) {
+			group.children += node
+			visibleNodes.remove(node)
+			calculateVisibleNodes
+			true	
+		} else {
+			false
+		} 
+	}
+
+	def operator_remove(Iterable<XNode> nodes) {
+		nodes.map[this -= it].reduce[a, b | a || b]
 	}
 
 	override activate() {
@@ -119,7 +156,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			node.onMouseClicked = [
 				switch (clickCount) {
 					case 1:
-						spinToPosition.targetPosition = nodes.indexOf(node)
+						spinToPosition.targetPosition = nodes.toList.indexOf(node)
 					case 2: {
 						nodeChosen(currentNode)
 						host.rootDiagram.restoreDefaultTool
@@ -131,18 +168,23 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		diagram.scene.addEventHandler(ScrollEvent::ANY, scrollHandler)
 		diagram.scene.addEventHandler(KeyEvent::KEY_PRESSED, keyHandler)
 		_currentPosition.addListener(positionListener)
+		_filterString.addListener(filterChangeListener)
+		filterLabel = new Label => [
+			textProperty.bind("Filter: " +  _filterString + "")
+		]
+		host.rootDiagram.buttonLayer.children += filterLabel
 		true
 	}
 
 	override deactivate() {
 		if (!isActive)
 			return false
+		host.rootDiagram.buttonLayer.children -= filterLabel
 		isActive = false
 		diagram.scene.removeEventHandler(KeyEvent::KEY_PRESSED, keyHandler)
 		diagram.scene.removeEventHandler(ScrollEvent::ANY, scrollHandler)
 		diagram.scene.removeEventHandler(SwipeEvent::ANY, swipeHandler)
 		spinToPosition.stop
-		_currentPosition.removeListener(positionListener)
 		diagram.nodeLayer.children -= group
 		true
 	}
@@ -181,7 +223,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	}
 
 	def getNodes() {
-		_nodes
+		visibleNodes
 	}
 
 	def getCurrentNode() {
@@ -192,56 +234,29 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	def getDiagram() {
 		host.diagram
 	}
-}
-
-class SpinTransition extends Transition {
-
-	AbstractXNodeChooser tool
-
-	double startPosition
-	double endPosition
-
-	new(AbstractXNodeChooser tool) {
-		this.tool = tool
-		interpolator = [alpha|1 - (1 - alpha) * (1 - alpha)]
-		onFinished = [
-			tool.currentPosition = endPosition
-		]
-	}
-
-	def setTargetPositionDelta(int targetPositionDelta) {
-		startPosition = tool.currentPosition
-		endPosition = (startPosition + targetPositionDelta) as int
-		while (endPosition < 0) {
-			startPosition = startPosition + tool.nodes.size
-			endPosition = endPosition + tool.nodes.size
-		}
-		setDuration(2000)
-		playFromStart
-	}
-
-	def setTargetPosition(double targetPosition) {
-		if (targetPosition < tool.nodes.size) {
-			startPosition = tool.currentPosition
-			endPosition = targetPosition as int
-			if (abs(targetPosition - startPosition) > tool.nodes.size / 2) {
-				if (targetPosition > startPosition)
-					startPosition = startPosition + tool.nodes.size()
-				else
-					endPosition = endPosition + tool.nodes.size()
+	
+	def calculateVisibleNodes() {
+		var currentVisibleIndex = 0
+		var currentVisibleNode = visibleNodes.head
+		var mapIndex = 0
+		for(entry: nodeMap.entrySet) {
+			if(entry.key.contains(_filterString.get)) {
+				if(currentVisibleNode != entry.value)  
+					visibleNodes.add(currentVisibleIndex, entry.value)
+				currentVisibleIndex = currentVisibleIndex + 1
+				currentVisibleNode = if (currentVisibleIndex < visibleNodes.size) visibleNodes.get(currentVisibleIndex) else null
+			} else {
+				if(currentVisibleNode == entry.value) {
+					visibleNodes.remove(currentVisibleIndex)
+					currentVisibleNode.visible = false
+					currentVisibleNode = if (currentVisibleIndex < visibleNodes.size) visibleNodes.get(currentVisibleIndex) else null
+				}
 			}
-			setDuration(1000)
-			playFromStart
+			mapIndex = mapIndex + 1
 		}
+		interpolatedPosition = _currentPosition.get
+		spinToPosition.resetTargetPosition
 	}
-
-	protected def setDuration(double max) {
-		val duration = min(max, abs((endPosition - startPosition) % tool.nodes.size) * 200)
-		cycleDuration = Duration::millis(duration)
-	}
-
-	override protected interpolate(double alpha) {
-		tool.currentPosition = interpolator.interpolate(startPosition, endPosition, alpha)
-	}
-
 }
+
+

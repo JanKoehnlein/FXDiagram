@@ -17,14 +17,11 @@ class CoverFlowChooser extends AbstractXNodeChooser {
 	@Property double deltaX = 20 
 	@Property double gap = 120
 	
-	double maxWidth
-	
 	new(XNode host, Point2D position) {
 		super(host, position)
 	}
 	
 	override activate() {
-		maxWidth = nodes.fold(0.0, [a, b|max(a, b.layoutBounds.width)])
 		super.activate()
 	}
 	

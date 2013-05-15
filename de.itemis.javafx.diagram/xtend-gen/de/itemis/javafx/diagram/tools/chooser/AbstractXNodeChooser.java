@@ -6,12 +6,19 @@ import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.XConnection;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.XRootDiagram;
+import de.itemis.javafx.diagram.binding.StringExpressionExtensions;
 import de.itemis.javafx.diagram.tools.XDiagramTool;
-import de.itemis.javafx.diagram.tools.chooser.SpinTransition;
+import de.itemis.javafx.diagram.tools.chooser.XNodeChooserTransition;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -23,6 +30,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -31,7 +39,10 @@ import javafx.scene.input.SwipeEvent;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -45,10 +56,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     }
   }.apply();
   
-  private List<XNode> _nodes = new Function0<List<XNode>>() {
-    public List<XNode> apply() {
-      ArrayList<XNode> _newArrayList = CollectionLiterals.<XNode>newArrayList();
-      return _newArrayList;
+  private final LinkedHashMap<String,XNode> nodeMap = new Function0<LinkedHashMap<String,XNode>>() {
+    public LinkedHashMap<String,XNode> apply() {
+      LinkedHashMap<String,XNode> _newLinkedHashMap = CollectionLiterals.<String, XNode>newLinkedHashMap();
+      return _newLinkedHashMap;
     }
   }.apply();
   
@@ -63,13 +74,31 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   private ChangeListener<Number> positionListener;
   
-  protected SpinTransition spinToPosition;
+  protected XNodeChooserTransition spinToPosition;
   
   private EventHandler<SwipeEvent> swipeHandler;
   
   private EventHandler<ScrollEvent> scrollHandler;
   
   private EventHandler<KeyEvent> keyHandler;
+  
+  private ChangeListener<String> filterChangeListener;
+  
+  private final ArrayList<XNode> visibleNodes = new Function0<ArrayList<XNode>>() {
+    public ArrayList<XNode> apply() {
+      ArrayList<XNode> _newArrayList = CollectionLiterals.<XNode>newArrayList();
+      return _newArrayList;
+    }
+  }.apply();
+  
+  private StringProperty _filterString = new Function0<StringProperty>() {
+    public StringProperty apply() {
+      SimpleStringProperty _simpleStringProperty = new SimpleStringProperty("");
+      return _simpleStringProperty;
+    }
+  }.apply();
+  
+  private Label filterLabel;
   
   public AbstractXNodeChooser(final XNode host, final Point2D center) {
     this.host = host;
@@ -80,15 +109,15 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> element, final Number oldValue, final Number newValue) {
           final double newVal = newValue.doubleValue();
-          List<XNode> _nodes = AbstractXNodeChooser.this.getNodes();
+          ArrayList<XNode> _nodes = AbstractXNodeChooser.this.getNodes();
           int _size = _nodes.size();
           double _modulo = (newVal % _size);
           AbstractXNodeChooser.this.setInterpolatedPosition(_modulo);
         }
       };
     this.positionListener = _function;
-    SpinTransition _spinTransition = new SpinTransition(this);
-    this.spinToPosition = _spinTransition;
+    XNodeChooserTransition _xNodeChooserTransition = new XNodeChooserTransition(this);
+    this.spinToPosition = _xNodeChooserTransition;
     final EventHandler<SwipeEvent> _function_1 = new EventHandler<SwipeEvent>() {
         public void handle(final SwipeEvent it) {
           int _switchResult = (int) 0;
@@ -190,35 +219,124 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
               _rootDiagram.restoreDefaultTool();
             }
           }
+          if (!_matched) {
+            if (Objects.equal(getCode,KeyCode.BACK_SPACE)) {
+              _matched=true;
+              final String oldFilter = AbstractXNodeChooser.this._filterString.get();
+              boolean _isEmpty = oldFilter.isEmpty();
+              boolean _not = (!_isEmpty);
+              if (_not) {
+                int _length = oldFilter.length();
+                int _minus_2 = (_length - 1);
+                String _substring = oldFilter.substring(0, _minus_2);
+                AbstractXNodeChooser.this._filterString.set(_substring);
+              }
+            }
+          }
+          if (!_matched) {
+            String _get = AbstractXNodeChooser.this._filterString.get();
+            String _text = it.getText();
+            String _plus = (_get + _text);
+            AbstractXNodeChooser.this._filterString.set(_plus);
+          }
         }
       };
     this.keyHandler = _function_3;
+    final ChangeListener<String> _function_4 = new ChangeListener<String>() {
+        public void changed(final ObservableValue<? extends String> property, final String oldValue, final String newValue) {
+          AbstractXNodeChooser.this.calculateVisibleNodes();
+        }
+      };
+    this.filterChangeListener = _function_4;
   }
   
-  public Boolean operator_add(final XNode node) {
-    Boolean _xifexpression = null;
-    boolean _not = (!this.isActive);
+  public boolean operator_add(final XNode node) {
+    boolean _xifexpression = false;
+    String _key = node.getKey();
+    boolean _containsKey = this.nodeMap.containsKey(_key);
+    boolean _not = (!_containsKey);
     if (_not) {
       boolean _xblockexpression = false;
       {
-        List<XNode> _nodes = this.getNodes();
-        _nodes.add(node);
+        String _key_1 = node.getKey();
+        this.nodeMap.put(_key_1, node);
+        this.calculateVisibleNodes();
         ObservableList<Node> _children = this.group.getChildren();
-        boolean _add = _children.add(node);
-        _xblockexpression = (_add);
+        _children.add(node);
+        _xblockexpression = (true);
       }
-      _xifexpression = Boolean.valueOf(_xblockexpression);
+      _xifexpression = _xblockexpression;
+    } else {
+      _xifexpression = false;
     }
     return _xifexpression;
   }
   
-  public void operator_add(final Iterable<XNode> nodes) {
-    final Procedure1<XNode> _function = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
-          AbstractXNodeChooser.this.operator_add(it);
+  public Boolean operator_add(final Iterable<XNode> nodes) {
+    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
+        public Boolean apply(final XNode it) {
+          boolean _add = AbstractXNodeChooser.this.operator_add(it);
+          return Boolean.valueOf(_add);
         }
       };
-    IterableExtensions.<XNode>forEach(nodes, _function);
+    Iterable<Boolean> _map = IterableExtensions.<XNode, Boolean>map(nodes, _function);
+    final Function2<Boolean,Boolean,Boolean> _function_1 = new Function2<Boolean,Boolean,Boolean>() {
+        public Boolean apply(final Boolean a, final Boolean b) {
+          boolean _or = false;
+          if ((a).booleanValue()) {
+            _or = true;
+          } else {
+            _or = ((a).booleanValue() || (b).booleanValue());
+          }
+          return Boolean.valueOf(_or);
+        }
+      };
+    Boolean _reduce = IterableExtensions.<Boolean>reduce(_map, _function_1);
+    return _reduce;
+  }
+  
+  public boolean operator_remove(final XNode node) {
+    boolean _xifexpression = false;
+    String _key = node.getKey();
+    XNode _remove = this.nodeMap.remove(_key);
+    boolean _notEquals = (!Objects.equal(_remove, null));
+    if (_notEquals) {
+      boolean _xblockexpression = false;
+      {
+        ObservableList<Node> _children = this.group.getChildren();
+        _children.add(node);
+        this.visibleNodes.remove(node);
+        this.calculateVisibleNodes();
+        _xblockexpression = (true);
+      }
+      _xifexpression = _xblockexpression;
+    } else {
+      _xifexpression = false;
+    }
+    return _xifexpression;
+  }
+  
+  public Boolean operator_remove(final Iterable<XNode> nodes) {
+    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
+        public Boolean apply(final XNode it) {
+          boolean _remove = AbstractXNodeChooser.this.operator_remove(it);
+          return Boolean.valueOf(_remove);
+        }
+      };
+    Iterable<Boolean> _map = IterableExtensions.<XNode, Boolean>map(nodes, _function);
+    final Function2<Boolean,Boolean,Boolean> _function_1 = new Function2<Boolean,Boolean,Boolean>() {
+        public Boolean apply(final Boolean a, final Boolean b) {
+          boolean _or = false;
+          if ((a).booleanValue()) {
+            _or = true;
+          } else {
+            _or = ((a).booleanValue() || (b).booleanValue());
+          }
+          return Boolean.valueOf(_or);
+        }
+      };
+    Boolean _reduce = IterableExtensions.<Boolean>reduce(_map, _function_1);
+    return _reduce;
   }
   
   public boolean activate() {
@@ -227,7 +345,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       if (this.isActive) {
         return false;
       }
-      List<XNode> _nodes = this.getNodes();
+      ArrayList<XNode> _nodes = this.getNodes();
       boolean _isEmpty = _nodes.isEmpty();
       if (_isEmpty) {
         return false;
@@ -239,16 +357,16 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       _children.add(this.group);
       this._currentPosition.set(0);
       this.setInterpolatedPosition(0);
-      List<XNode> _nodes_1 = this.getNodes();
+      ArrayList<XNode> _nodes_1 = this.getNodes();
       int _size = _nodes_1.size();
       boolean _equals = (_size == 1);
       if (_equals) {
-        List<XNode> _nodes_2 = this.getNodes();
+        ArrayList<XNode> _nodes_2 = this.getNodes();
         XNode _head = IterableExtensions.<XNode>head(_nodes_2);
         this.nodeChosen(_head);
         return false;
       }
-      List<XNode> _nodes_3 = this.getNodes();
+      ArrayList<XNode> _nodes_3 = this.getNodes();
       final Procedure1<XNode> _function = new Procedure1<XNode>() {
           public void apply(final XNode node) {
             final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
@@ -259,8 +377,9 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
                   if (!_matched) {
                     if (Objects.equal(getClickCount,1)) {
                       _matched=true;
-                      List<XNode> _nodes = AbstractXNodeChooser.this.getNodes();
-                      int _indexOf = _nodes.indexOf(node);
+                      ArrayList<XNode> _nodes = AbstractXNodeChooser.this.getNodes();
+                      List<XNode> _list = IterableExtensions.<XNode>toList(_nodes);
+                      int _indexOf = _list.indexOf(node);
                       AbstractXNodeChooser.this.spinToPosition.setTargetPosition(_indexOf);
                     }
                   }
@@ -289,6 +408,22 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Scene _scene_2 = _diagram_3.getScene();
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       this._currentPosition.addListener(this.positionListener);
+      this._filterString.addListener(this.filterChangeListener);
+      Label _label = new Label();
+      final Procedure1<Label> _function_1 = new Procedure1<Label>() {
+          public void apply(final Label it) {
+            StringProperty _textProperty = it.textProperty();
+            StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractXNodeChooser.this._filterString);
+            StringExpression _plus_1 = StringExpressionExtensions.operator_plus(_plus, "");
+            _textProperty.bind(_plus_1);
+          }
+        };
+      Label _doubleArrow = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_1);
+      this.filterLabel = _doubleArrow;
+      XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
+      Group _buttonLayer = _rootDiagram.getButtonLayer();
+      ObservableList<Node> _children_1 = _buttonLayer.getChildren();
+      _children_1.add(this.filterLabel);
       _xblockexpression = (true);
     }
     return _xblockexpression;
@@ -301,6 +436,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       if (_not) {
         return false;
       }
+      XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
+      Group _buttonLayer = _rootDiagram.getButtonLayer();
+      ObservableList<Node> _children = _buttonLayer.getChildren();
+      _children.remove(this.filterLabel);
       this.isActive = false;
       XAbstractDiagram _diagram = this.getDiagram();
       Scene _scene = _diagram.getScene();
@@ -312,11 +451,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Scene _scene_2 = _diagram_2.getScene();
       _scene_2.<SwipeEvent>removeEventHandler(SwipeEvent.ANY, this.swipeHandler);
       this.spinToPosition.stop();
-      this._currentPosition.removeListener(this.positionListener);
       XAbstractDiagram _diagram_3 = this.getDiagram();
       Group _nodeLayer = _diagram_3.getNodeLayer();
-      ObservableList<Node> _children = _nodeLayer.getChildren();
-      _children.remove(this.group);
+      ObservableList<Node> _children_1 = _nodeLayer.getChildren();
+      _children_1.remove(this.group);
       _xblockexpression = (true);
     }
     return _xblockexpression;
@@ -325,7 +463,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   protected void nodeChosen(final XNode choice) {
     boolean _notEquals = (!Objects.equal(choice, null));
     if (_notEquals) {
-      List<XNode> _nodes = this.getNodes();
+      ArrayList<XNode> _nodes = this.getNodes();
       final Procedure1<XNode> _function = new Procedure1<XNode>() {
           public void apply(final XNode it) {
             it.setOnMouseClicked(null);
@@ -369,16 +507,16 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     double _xblockexpression = (double) 0;
     {
       Double _value = this._currentPosition.getValue();
-      List<XNode> _nodes = this.getNodes();
+      ArrayList<XNode> _nodes = this.getNodes();
       int _size = _nodes.size();
       double result = ((_value).doubleValue() % _size);
       boolean _lessThan = (result < 0);
       if (_lessThan) {
-        List<XNode> _nodes_1 = this.getNodes();
+        ArrayList<XNode> _nodes_1 = this.getNodes();
         int _size_1 = _nodes_1.size();
         double _divide = (result / _size_1);
         int _plus = (((int) _divide) + 1);
-        List<XNode> _nodes_2 = this.getNodes();
+        ArrayList<XNode> _nodes_2 = this.getNodes();
         int _size_2 = _nodes_2.size();
         int _multiply = (_plus * _size_2);
         double _plus_1 = (result + _multiply);
@@ -393,8 +531,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     this._currentPosition.set(value);
   }
   
-  public List<XNode> getNodes() {
-    return this._nodes;
+  public ArrayList<XNode> getNodes() {
+    return this.visibleNodes;
   }
   
   public XNode getCurrentNode() {
@@ -403,7 +541,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       double _currentPosition = this.getCurrentPosition();
       double _plus = (_currentPosition + 0.5);
       int currentPosition = ((int) _plus);
-      List<XNode> _nodes = this.getNodes();
+      ArrayList<XNode> _nodes = this.getNodes();
       XNode _get = _nodes.get(currentPosition);
       _xblockexpression = (_get);
     }
@@ -413,5 +551,61 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   public XAbstractDiagram getDiagram() {
     XAbstractDiagram _diagram = Extensions.getDiagram(this.host);
     return _diagram;
+  }
+  
+  public void calculateVisibleNodes() {
+    int currentVisibleIndex = 0;
+    XNode currentVisibleNode = IterableExtensions.<XNode>head(this.visibleNodes);
+    int mapIndex = 0;
+    Set<Entry<String,XNode>> _entrySet = this.nodeMap.entrySet();
+    for (final Entry<String,XNode> entry : _entrySet) {
+      {
+        String _key = entry.getKey();
+        String _get = this._filterString.get();
+        boolean _contains = _key.contains(_get);
+        if (_contains) {
+          XNode _value = entry.getValue();
+          boolean _notEquals = (!Objects.equal(currentVisibleNode, _value));
+          if (_notEquals) {
+            XNode _value_1 = entry.getValue();
+            this.visibleNodes.add(currentVisibleIndex, _value_1);
+          }
+          int _plus = (currentVisibleIndex + 1);
+          currentVisibleIndex = _plus;
+          XNode _xifexpression = null;
+          int _size = this.visibleNodes.size();
+          boolean _lessThan = (currentVisibleIndex < _size);
+          if (_lessThan) {
+            XNode _get_1 = this.visibleNodes.get(currentVisibleIndex);
+            _xifexpression = _get_1;
+          } else {
+            _xifexpression = null;
+          }
+          currentVisibleNode = _xifexpression;
+        } else {
+          XNode _value_2 = entry.getValue();
+          boolean _equals = Objects.equal(currentVisibleNode, _value_2);
+          if (_equals) {
+            this.visibleNodes.remove(currentVisibleIndex);
+            currentVisibleNode.setVisible(false);
+            XNode _xifexpression_1 = null;
+            int _size_1 = this.visibleNodes.size();
+            boolean _lessThan_1 = (currentVisibleIndex < _size_1);
+            if (_lessThan_1) {
+              XNode _get_2 = this.visibleNodes.get(currentVisibleIndex);
+              _xifexpression_1 = _get_2;
+            } else {
+              _xifexpression_1 = null;
+            }
+            currentVisibleNode = _xifexpression_1;
+          }
+        }
+        int _plus_1 = (mapIndex + 1);
+        mapIndex = _plus_1;
+      }
+    }
+    double _get = this._currentPosition.get();
+    this.setInterpolatedPosition(_get);
+    this.spinToPosition.resetTargetPosition();
   }
 }

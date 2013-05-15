@@ -19,7 +19,10 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class MyNode extends XNode {
+  private String name;
+  
   public MyNode(final String name) {
+    this.name = name;
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
         public void apply(final StackPane it) {
@@ -83,5 +86,9 @@ public class MyNode extends XNode {
       _xblockexpression = (_linearGradient);
     }
     return _xblockexpression;
+  }
+  
+  public String toString() {
+    return this.name;
   }
 }

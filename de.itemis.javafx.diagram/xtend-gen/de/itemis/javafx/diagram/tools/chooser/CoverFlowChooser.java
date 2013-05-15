@@ -4,15 +4,13 @@ import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.tools.chooser.AbstractXNodeChooser;
 import de.itemis.javafx.diagram.transform.PerspectiveExtensions;
 import de.itemis.javafx.diagram.transform.TransformExtensions;
-import java.util.List;
+import java.util.ArrayList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.transform.Affine;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
-import org.eclipse.xtext.xbase.lib.Functions.Function2;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class CoverFlowChooser extends AbstractXNodeChooser {
@@ -56,60 +54,43 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
     this._gap = gap;
   }
   
-  private double maxWidth;
-  
   public CoverFlowChooser(final XNode host, final Point2D position) {
     super(host, position);
   }
   
   public boolean activate() {
-    boolean _xblockexpression = false;
-    {
-      List<XNode> _nodes = this.getNodes();
-      final Function2<Double,XNode,Double> _function = new Function2<Double,XNode,Double>() {
-          public Double apply(final Double a, final XNode b) {
-            Bounds _layoutBounds = b.getLayoutBounds();
-            double _width = _layoutBounds.getWidth();
-            double _max = Math.max((a).doubleValue(), _width);
-            return Double.valueOf(_max);
-          }
-        };
-      Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
-      this.maxWidth = (_fold).doubleValue();
-      boolean _activate = super.activate();
-      _xblockexpression = (_activate);
-    }
-    return _xblockexpression;
+    boolean _activate = super.activate();
+    return _activate;
   }
   
   protected void setInterpolatedPosition(final double interpolatedPosition) {
-    List<XNode> _nodes = this.getNodes();
+    ArrayList<XNode> _nodes = this.getNodes();
     int _size = _nodes.size();
     final int leftIndex = (((int) interpolatedPosition) % _size);
     int _plus = (leftIndex + 1);
-    List<XNode> _nodes_1 = this.getNodes();
+    ArrayList<XNode> _nodes_1 = this.getNodes();
     int _size_1 = _nodes_1.size();
     final int rightIndex = (_plus % _size_1);
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, leftIndex, true);
     for (final Integer i : _doubleDotLessThan) {
-      List<XNode> _nodes_2 = this.getNodes();
+      ArrayList<XNode> _nodes_2 = this.getNodes();
       XNode _get = _nodes_2.get((i).intValue());
       this.transform(_get, (i).intValue(), interpolatedPosition, true, 1);
     }
-    List<XNode> _nodes_3 = this.getNodes();
+    ArrayList<XNode> _nodes_3 = this.getNodes();
     int _size_2 = _nodes_3.size();
     int _plus_1 = (rightIndex + 1);
     ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_size_2, _plus_1, false);
     for (final Integer i_1 : _greaterThanDoubleDot) {
-      List<XNode> _nodes_4 = this.getNodes();
+      ArrayList<XNode> _nodes_4 = this.getNodes();
       XNode _get_1 = _nodes_4.get((i_1).intValue());
       this.transform(_get_1, (i_1).intValue(), interpolatedPosition, false, 1);
     }
-    List<XNode> _nodes_5 = this.getNodes();
+    ArrayList<XNode> _nodes_5 = this.getNodes();
     XNode _get_2 = _nodes_5.get(rightIndex);
     double _minus = (rightIndex - interpolatedPosition);
     this.transform(_get_2, rightIndex, interpolatedPosition, false, _minus);
-    List<XNode> _nodes_6 = this.getNodes();
+    ArrayList<XNode> _nodes_6 = this.getNodes();
     XNode _get_3 = _nodes_6.get(leftIndex);
     double _minus_1 = (interpolatedPosition - leftIndex);
     this.transform(_get_3, leftIndex, interpolatedPosition, true, _minus_1);
@@ -129,7 +110,7 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
     }
     boolean _lessThan_1 = (distanceFromSelection < 1E-5);
     if (_lessThan_1) {
-      List<XNode> _nodes = this.getNodes();
+      ArrayList<XNode> _nodes = this.getNodes();
       XNode _get = _nodes.get(i);
       _get.setEffect(null);
       double _minus_1 = (-0.5);
@@ -156,13 +137,13 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
       }
       final int direction = _xifexpression;
       double _minus_4 = (-0.5);
-      List<XNode> _nodes_1 = this.getNodes();
+      ArrayList<XNode> _nodes_1 = this.getNodes();
       XNode _get_1 = _nodes_1.get(i);
       Bounds _layoutBounds_2 = _get_1.getLayoutBounds();
       double _width_1 = _layoutBounds_2.getWidth();
       double _multiply_3 = (_minus_4 * _width_1);
       double _minus_5 = (-0.5);
-      List<XNode> _nodes_2 = this.getNodes();
+      ArrayList<XNode> _nodes_2 = this.getNodes();
       XNode _get_2 = _nodes_2.get(i);
       Bounds _layoutBounds_3 = _get_2.getLayoutBounds();
       double _height_1 = _layoutBounds_3.getHeight();
@@ -185,15 +166,15 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
       double _multiply_11 = (fraction * _deltaZ);
       double _plus_1 = (_multiply_11 + 200);
       TransformExtensions.translate(trafo, _plus, 0, _plus_1);
-      List<XNode> _nodes_3 = this.getNodes();
+      ArrayList<XNode> _nodes_3 = this.getNodes();
       XNode _get_3 = _nodes_3.get(i);
-      List<XNode> _nodes_4 = this.getNodes();
+      ArrayList<XNode> _nodes_4 = this.getNodes();
       XNode _get_4 = _nodes_4.get(i);
       Bounds _layoutBounds_4 = _get_4.getLayoutBounds();
       PerspectiveTransform _mapPerspective = PerspectiveExtensions.mapPerspective(_layoutBounds_4, trafo, 200);
       _get_3.setEffect(_mapPerspective);
     }
-    List<XNode> _nodes_5 = this.getNodes();
+    ArrayList<XNode> _nodes_5 = this.getNodes();
     XNode _get_5 = _nodes_5.get(i);
     _get_5.toFront();
   }

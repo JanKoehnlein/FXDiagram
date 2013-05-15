@@ -61,6 +61,10 @@ class XNode extends Group implements XActivatable {
 	def getMoveBehavior() { moveBehavior }
 	
 	def getAnchorPoints() { anchorPoints }	
+	
+	def getKey() {
+		toString
+	}
 }
 
 

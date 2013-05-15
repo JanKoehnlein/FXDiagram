@@ -12,7 +12,10 @@ import javafx.scene.shape.Rectangle
 
 class MyNode extends XNode {
 
+	String name
+
 	new(String name) {
+		this.name = name
 		node = new StackPane => [
 			children += new Rectangle => [
 				width = 80
@@ -44,5 +47,9 @@ class MyNode extends XNode {
 			new Stop(1, Color::gray(0.9))
 		)
 		new LinearGradient(0, 0, 1, 1, true, CycleMethod::NO_CYCLE, stops)
+	}
+	
+	override toString() {
+		name
 	}
 }
