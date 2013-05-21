@@ -11,13 +11,13 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 
 @SuppressWarnings("all")
-public class XConnectionLabel extends Label implements XActivatable {
+public class XConnectionLabel extends Text implements XActivatable {
   private XConnection connection;
   
   private boolean isActive;
@@ -78,10 +78,7 @@ public class XConnectionLabel extends Label implements XActivatable {
         double _width = _boundsInLocal.getWidth();
         double _minus_2 = (-_width);
         final double labelDx = (_minus_2 / 2);
-        Bounds _boundsInLocal_1 = this.getBoundsInLocal();
-        double _height = _boundsInLocal_1.getHeight();
-        double _minus_3 = (-_height);
-        double labelDy = (_minus_3 - 2);
+        int labelDy = (-2);
         double _abs = Math.abs(angle);
         double _divide = (Math.PI / 2);
         boolean _greaterThan = (_abs > _divide);
@@ -93,11 +90,12 @@ public class XConnectionLabel extends Label implements XActivatable {
           } else {
             boolean _greaterThan_1 = (angle > 0);
             if (_greaterThan_1) {
-              double _minus_4 = (angle - Math.PI);
-              angle = _minus_4;
+              double _minus_3 = (angle - Math.PI);
+              angle = _minus_3;
             }
           }
-          labelDy = 2;
+          int _minus_4 = (-2);
+          labelDy = _minus_4;
         }
         Affine _affine = new Affine();
         final Affine transform = _affine;

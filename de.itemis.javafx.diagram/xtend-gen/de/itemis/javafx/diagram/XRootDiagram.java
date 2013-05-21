@@ -5,6 +5,7 @@ import de.itemis.javafx.diagram.Extensions;
 import de.itemis.javafx.diagram.XAbstractDiagram;
 import de.itemis.javafx.diagram.tools.CompositeTool;
 import de.itemis.javafx.diagram.tools.DiagramGestureTool;
+import de.itemis.javafx.diagram.tools.KeyTool;
 import de.itemis.javafx.diagram.tools.SelectionTool;
 import de.itemis.javafx.diagram.tools.XDiagramTool;
 import java.util.ArrayList;
@@ -72,6 +73,8 @@ public class XRootDiagram extends XAbstractDiagram {
     this.defaultTool.operator_add(_selectionTool);
     DiagramGestureTool _diagramGestureTool = new DiagramGestureTool(this);
     this.defaultTool.operator_add(_diagramGestureTool);
+    KeyTool _keyTool = new KeyTool(this);
+    this.defaultTool.operator_add(_keyTool);
     this.tools.add(this.defaultTool);
   }
   

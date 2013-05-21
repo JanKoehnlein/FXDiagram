@@ -4,15 +4,15 @@ import de.itemis.javafx.diagram.XActivatable
 import de.itemis.javafx.diagram.XNestedDiagram
 import de.itemis.javafx.diagram.XNode
 import de.itemis.javafx.diagram.behavior.LevelOfDetailBehavior
+import javafx.geometry.VPos
 import javafx.scene.Node
-import javafx.scene.control.Label
-import javafx.scene.effect.InnerShadow
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 import javafx.scene.shape.Rectangle
+import javafx.scene.text.Text
 
 class MyContainerNode extends XNode {
 
@@ -26,14 +26,12 @@ class MyContainerNode extends XNode {
 	new(String name) {
 		this.name = name
 		label = new StackPane => [
-			effect = new InnerShadow => [
-				radius = 7
-			]
 			children += createRectangle => [
 				fill = createFill
 			]
-			children += new Label => [
+			children += new Text => [
 				text = name
+				textOrigin = VPos::TOP
 			]
 		]
 		innerDiagram = new ActivateableStackPane => [
@@ -80,10 +78,6 @@ class MyContainerNode extends XNode {
 				arcWidth = 12
 				arcHeight = 12
 		] 
-	}
-
-	override protected createMouseOverEffect() {
-		null
 	}
 
 	def protected createFill() {

@@ -1,7 +1,7 @@
 package de.itemis.javafx.diagram.example
 
 import de.itemis.javafx.diagram.XNode
-import javafx.scene.control.Label
+import javafx.geometry.VPos
 import javafx.scene.effect.InnerShadow
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
@@ -9,6 +9,7 @@ import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 import javafx.scene.shape.Rectangle
+import javafx.scene.text.Text
 
 class MyNode extends XNode {
 
@@ -26,8 +27,9 @@ class MyNode extends XNode {
 				arcWidth = 12
 				arcHeight = 12
 			]
-			children += new Label => [
+			children += new Text => [
 				text = name
+				textOrigin = VPos::TOP
 			]
 		]
 		node.effect = new InnerShadow => [

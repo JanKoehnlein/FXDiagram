@@ -7,15 +7,15 @@ import de.itemis.javafx.diagram.example.ActivateableStackPane;
 import de.itemis.javafx.diagram.example.AddRapidButtonBehavior;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -35,33 +35,26 @@ public class MyContainerNode extends XNode {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
         public void apply(final StackPane it) {
-          InnerShadow _innerShadow = new InnerShadow();
-          final Procedure1<InnerShadow> _function = new Procedure1<InnerShadow>() {
-              public void apply(final InnerShadow it) {
-                it.setRadius(7);
-              }
-            };
-          InnerShadow _doubleArrow = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function);
-          it.setEffect(_doubleArrow);
           ObservableList<Node> _children = it.getChildren();
           Rectangle _createRectangle = MyContainerNode.this.createRectangle();
-          final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
+          final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
               public void apply(final Rectangle it) {
                 LinearGradient _createFill = MyContainerNode.this.createFill();
                 it.setFill(_createFill);
               }
             };
-          Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_createRectangle, _function_1);
-          _children.add(_doubleArrow_1);
+          Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_createRectangle, _function);
+          _children.add(_doubleArrow);
           ObservableList<Node> _children_1 = it.getChildren();
-          Label _label = new Label();
-          final Procedure1<Label> _function_2 = new Procedure1<Label>() {
-              public void apply(final Label it) {
+          Text _text = new Text();
+          final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+              public void apply(final Text it) {
                 it.setText(name);
+                it.setTextOrigin(VPos.TOP);
               }
             };
-          Label _doubleArrow_2 = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_2);
-          _children_1.add(_doubleArrow_2);
+          Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+          _children_1.add(_doubleArrow_1);
         }
       };
     StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
@@ -157,10 +150,6 @@ public class MyContainerNode extends XNode {
       };
     Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
     return _doubleArrow;
-  }
-  
-  protected InnerShadow createMouseOverEffect() {
-    return null;
   }
   
   protected LinearGradient createFill() {

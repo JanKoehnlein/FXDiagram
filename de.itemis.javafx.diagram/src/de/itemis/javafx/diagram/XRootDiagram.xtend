@@ -2,6 +2,7 @@ package de.itemis.javafx.diagram
 
 import de.itemis.javafx.diagram.tools.CompositeTool
 import de.itemis.javafx.diagram.tools.DiagramGestureTool
+import de.itemis.javafx.diagram.tools.KeyTool
 import de.itemis.javafx.diagram.tools.SelectionTool
 import de.itemis.javafx.diagram.tools.XDiagramTool
 import java.util.List
@@ -32,6 +33,7 @@ class XRootDiagram extends XAbstractDiagram {
 		defaultTool = new CompositeTool
 		defaultTool += new SelectionTool(this)
 		defaultTool += new DiagramGestureTool(this)
+		defaultTool += new KeyTool(this)
 		tools += defaultTool
 	}
 	

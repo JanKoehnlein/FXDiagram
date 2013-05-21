@@ -1,13 +1,14 @@
 package de.itemis.javafx.diagram
 
 import java.util.List
-import javafx.scene.control.Label
+import javafx.scene.text.Text
 import javafx.scene.transform.Affine
 
-import static extension de.itemis.javafx.diagram.transform.TransformExtensions.*
 import static java.lang.Math.*
 
-class XConnectionLabel extends Label implements XActivatable {
+import static extension de.itemis.javafx.diagram.transform.TransformExtensions.*
+
+class XConnectionLabel extends Text implements XActivatable {
 
 	XConnection connection
 
@@ -40,13 +41,13 @@ class XConnectionLabel extends Label implements XActivatable {
 			val dy = list.get(list.size - 1) - list.get(1)
 			var angle = atan2(dy, dx)
 			val labelDx = -boundsInLocal.width / 2
-			var labelDy = -boundsInLocal.height - 2
+			var labelDy = - 2
 			if(abs(angle) > PI / 2) {				
 				if (angle < 0) 
 					angle = angle + PI
 				else if (angle > 0)
 					angle = angle - PI
-				labelDy = 2
+				labelDy = - 2
 			}
 			val transform = new Affine
 			transform.translate(labelDx, labelDy)

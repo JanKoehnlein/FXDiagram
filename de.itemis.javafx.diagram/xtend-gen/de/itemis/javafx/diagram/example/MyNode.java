@@ -4,8 +4,8 @@ import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.example.AddRapidButtonBehavior;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -13,6 +13,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -44,13 +45,14 @@ public class MyNode extends XNode {
           Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
           _children.add(_doubleArrow);
           ObservableList<Node> _children_1 = it.getChildren();
-          Label _label = new Label();
-          final Procedure1<Label> _function_1 = new Procedure1<Label>() {
-              public void apply(final Label it) {
+          Text _text = new Text();
+          final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+              public void apply(final Text it) {
                 it.setText(name);
+                it.setTextOrigin(VPos.TOP);
               }
             };
-          Label _doubleArrow_1 = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_1);
+          Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
           _children_1.add(_doubleArrow_1);
         }
       };
