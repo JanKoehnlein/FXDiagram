@@ -48,14 +48,14 @@ class SelectionTool implements XDiagramTool {
 	}
 	
 	override activate() {
-		rootDiagram.addEventFilter(MouseEvent::MOUSE_PRESSED, mousePressedHandler) 
-		rootDiagram.addEventFilter(MouseEvent::MOUSE_DRAGGED, mouseDraggedHandler) 
+		rootDiagram.addEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler) 
+		rootDiagram.addEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler) 
 		true
 	}
 	
 	override deactivate() {
-		rootDiagram.removeEventFilter(MouseEvent::MOUSE_PRESSED, mousePressedHandler) 
-		rootDiagram.removeEventFilter(MouseEvent::MOUSE_DRAGGED, mouseDraggedHandler)
+		rootDiagram.removeEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler) 
+		rootDiagram.removeEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
 		true 
 	}
 	

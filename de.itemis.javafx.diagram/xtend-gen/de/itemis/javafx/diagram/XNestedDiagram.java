@@ -68,7 +68,9 @@ public class XNestedDiagram extends XAbstractDiagram {
   }
   
   public void doActivate() {
-    if (this.contentsInitializer!=null) this.contentsInitializer.apply(this);
+    if (this.contentsInitializer!=null) {
+      this.contentsInitializer.apply(this);
+    }
     super.doActivate();
   }
   
@@ -109,8 +111,11 @@ public class XNestedDiagram extends XAbstractDiagram {
   }
   
   protected XAbstractDiagram getParentDiagram() {
+    XAbstractDiagram _diagram = null;
     Parent _parent = this.getParent();
-    XAbstractDiagram _diagram = _parent==null?(XAbstractDiagram)null:Extensions.getDiagram(_parent);
+    if (_parent!=null) {
+      _diagram=Extensions.getDiagram(_parent);
+    }
     return _diagram;
   }
 }

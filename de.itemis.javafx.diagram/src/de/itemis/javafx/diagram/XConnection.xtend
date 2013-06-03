@@ -19,7 +19,7 @@ class XConnection extends Polyline implements XActivatable {
 	}
 	
 	def protected calculatePoints() {
-		var shortestDistance = Double::POSITIVE_INFINITY
+		var shortestDistance = Double.POSITIVE_INFINITY
 		var nearestAnchors = source.anchorPoints.get.head -> target.anchorPoints.get.head 
 		for(sourceAnchor: source.anchorPoints.get) {
 			for(targetAnchor: target.anchorPoints.get) {

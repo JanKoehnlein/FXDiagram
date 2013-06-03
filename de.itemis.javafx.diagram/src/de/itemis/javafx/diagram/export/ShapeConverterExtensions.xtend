@@ -46,7 +46,7 @@ class ShapeConverterExtensions {
 	}
 
 	protected static def dispatch String internalToSvgString(Text text) {
-		val path = (Shape::subtract(text, new Rectangle(0, 0))) as Path
+		val path = (Shape.subtract(text, new Rectangle(0, 0))) as Path
 		path.toSvgString
 	}
 
@@ -80,11 +80,11 @@ class ShapeConverterExtensions {
 		val sweep = if((length > 0)) 1 else 0
 		'''
 			M «centerX» «centerY» 
-			«IF (ArcType::ROUND == arc.type)»
+			«IF (ArcType.ROUND == arc.type)»
 				h «startX - centerX» v «startY - centerY»
 			«ENDIF»
 			A «radiusX» «radiusY» «xAxisRot» «largeArc» «sweep» «endX» «endY» 
-			«IF (ArcType::CHORD == arc.type || ArcType::ROUND == arc.type)»
+			«IF (ArcType.CHORD == arc.type || ArcType.ROUND == arc.type)»
 				Z
 		  	«ENDIF»
 		'''

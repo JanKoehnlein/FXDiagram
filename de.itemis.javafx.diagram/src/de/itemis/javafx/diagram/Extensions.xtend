@@ -72,6 +72,6 @@ class Extensions {
 	}
 	
 	def static Logger getLogger(Object it) {
-		Logger::getLogger(class.canonicalName)
+		Logger.getLogger(class.canonicalName)
 	}
 }

@@ -93,7 +93,7 @@ class SvgExporter {
 	}
 	
 	protected def toSvgString(Shape shape) {
-		ShapeConverterExtensions::toSvgString(shape)	
+		ShapeConverterExtensions.toSvgString(shape)	
 	}
 	
 	protected def toSvgString(Transform it) {
@@ -129,9 +129,9 @@ class SvgExporter {
 	
 	protected def toSvgString(CycleMethod it) {
 		switch it {
-			case CycleMethod::NO_CYCLE: 'pad'
-			case CycleMethod::REFLECT: 'reflect'
-			case CycleMethod::REPEAT: 'repeat'
+			case CycleMethod.NO_CYCLE: 'pad'
+			case CycleMethod.REFLECT: 'reflect'
+			case CycleMethod.REPEAT: 'repeat'
 		}
 	}
 	

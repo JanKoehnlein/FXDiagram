@@ -33,7 +33,10 @@ public class SelectionTool implements XDiagramTool {
           boolean _not = (!(_target instanceof XRapidButton));
           if (_not) {
             final XNode targetShape = Extensions.getTargetShape(event);
-            SelectionBehavior _selectionBehavior = targetShape==null?(SelectionBehavior)null:targetShape.getSelectionBehavior();
+            SelectionBehavior _selectionBehavior = null;
+            if (targetShape!=null) {
+              _selectionBehavior=targetShape.getSelectionBehavior();
+            }
             boolean _notEquals = (!Objects.equal(_selectionBehavior, null));
             if (_notEquals) {
               boolean _and = false;
@@ -78,12 +81,16 @@ public class SelectionTool implements XDiagramTool {
               final Procedure1<XNode> _function_3 = new Procedure1<XNode>() {
                   public void apply(final XNode it) {
                     MoveBehavior _moveBehavior = it.getMoveBehavior();
-                    if (_moveBehavior!=null) _moveBehavior.mousePressed(event);
+                    if (_moveBehavior!=null) {
+                      _moveBehavior.mousePressed(event);
+                    }
                   }
                 };
               IterableExtensions.<XNode>forEach(_selection_2, _function_3);
               MoveBehavior _moveBehavior = targetShape.getMoveBehavior();
-              if (_moveBehavior!=null) _moveBehavior.mousePressed(event);
+              if (_moveBehavior!=null) {
+                _moveBehavior.mousePressed(event);
+              }
               SelectionBehavior _selectionBehavior_2 = targetShape.getSelectionBehavior();
               _selectionBehavior_2.mousePressed(event);
             }
@@ -96,8 +103,13 @@ public class SelectionTool implements XDiagramTool {
         public void handle(final MouseEvent it) {
           Iterable<XNode> _selection = SelectionTool.this.getSelection();
           for (final XNode shape : _selection) {
-            MoveBehavior _moveBehavior = shape==null?(MoveBehavior)null:shape.getMoveBehavior();
-            if (_moveBehavior!=null) _moveBehavior.mouseDragged(it);
+            MoveBehavior _moveBehavior = null;
+            if (shape!=null) {
+              _moveBehavior=shape.getMoveBehavior();
+            }
+            if (_moveBehavior!=null) {
+              _moveBehavior.mouseDragged(it);
+            }
           }
           it.consume();
         }
@@ -110,7 +122,10 @@ public class SelectionTool implements XDiagramTool {
     final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
         public Boolean apply(final XNode it) {
           SelectionBehavior _selectionBehavior = it.getSelectionBehavior();
-          boolean _isSelected = _selectionBehavior==null?false:_selectionBehavior.isSelected();
+          boolean _isSelected = false;
+          if (_selectionBehavior!=null) {
+            _isSelected=_selectionBehavior.isSelected();
+          }
           return Boolean.valueOf(_isSelected);
         }
       };

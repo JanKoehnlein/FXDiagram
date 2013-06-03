@@ -51,7 +51,7 @@ class XNodeChooserTransition extends Transition {
 
 	protected def setDuration(double max) {
 		val duration = min(max, abs((endPosition - startPosition) % tool.nodes.size) * 200)
-		cycleDuration = Duration::millis(duration)
+		cycleDuration = Duration.millis(duration)
 	}
 
 	override protected interpolate(double alpha) {

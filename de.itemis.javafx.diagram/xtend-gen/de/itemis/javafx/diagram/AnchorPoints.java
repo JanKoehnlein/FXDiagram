@@ -53,8 +53,15 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
   protected List<Point2D> computeValue() {
     List<Point2D> _xblockexpression = null;
     {
-      Node _node = this.host==null?(Node)null:this.host.getNode();
-      final Bounds bounds = _node==null?(Bounds)null:_node.getBoundsInLocal();
+      Node _node = null;
+      if (this.host!=null) {
+        _node=this.host.getNode();
+      }
+      Bounds _boundsInLocal = null;
+      if (_node!=null) {
+        _boundsInLocal=_node.getBoundsInLocal();
+      }
+      final Bounds bounds = _boundsInLocal;
       List<Point2D> _xifexpression = null;
       boolean _notEquals = (!Objects.equal(bounds, null));
       if (_notEquals) {

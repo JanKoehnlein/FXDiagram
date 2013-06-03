@@ -47,7 +47,7 @@ class TransformExtensions {
 	 * When applying the transform, <code>r</code> is applied first.
 	 */
 	def static Transform operator_multiply(Transform l, Transform r) {
-		Transform::affine(
+		Transform.affine(
 			l.mxx * r.mxx + l.mxy * r.myx + l.mxz * r.mzx,
 			l.mxx * r.mxy + l.mxy * r.myy + l.mxz * r.mzy,
 			l.mxx * r.mxz + l.mxy * r.myz + l.mxz * r.mzz,

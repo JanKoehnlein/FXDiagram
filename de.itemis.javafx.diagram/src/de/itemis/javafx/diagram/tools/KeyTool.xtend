@@ -19,10 +19,10 @@ class KeyTool implements XDiagramTool {
 		this.diagram = diagram
 		keyHandler = [
 			switch code {
-				case KeyCode::E: 
+				case KeyCode.E: 
 					if(shortcutDown) {
 						val svgCode = new SvgExporter().toSvg(diagram)
-						Files::write(svgCode, new File("Diagram.svg"), Charsets::UTF_8)
+						Files.write(svgCode, new File("Diagram.svg"), Charsets.UTF_8)
 						consume
 					}
 			}
@@ -30,12 +30,12 @@ class KeyTool implements XDiagramTool {
 	}	
 	
 	override activate() {
-		diagram.scene.addEventHandler(KeyEvent::KEY_PRESSED, keyHandler)
+		diagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		true
 	}
 	
 	override deactivate() {
-		diagram.scene.removeEventHandler(KeyEvent::KEY_PRESSED, keyHandler)
+		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		true
 	}
 	

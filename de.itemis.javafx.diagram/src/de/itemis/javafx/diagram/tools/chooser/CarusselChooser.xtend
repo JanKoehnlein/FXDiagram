@@ -37,9 +37,9 @@ class CarusselChooser extends AbstractXNodeChooser {
 				node.transforms.clear
 				val scaleY = cos(nodeCenterAngle)
 				val scaleX = (scaleY + 0.5) / 1.5
-				node.transforms.add(Transform::translate(0, radius * sin(nodeCenterAngle - angle)))
-				node.transforms.add(Transform::scale(scaleX, scaleY))
-				node.transforms.add(Transform::translate(- node.layoutBounds.width / 2, spacing / 2))
+				node.transforms.add(Transform.translate(0, radius * sin(nodeCenterAngle - angle)))
+				node.transforms.add(Transform.scale(scaleX, scaleY))
+				node.transforms.add(Transform.translate(- node.layoutBounds.width / 2, spacing / 2))
 				node.opacity = scaleY * scaleY * scaleY
 				if(abs(nodeCenterAngle) < angle)
 					node.effect = currentNodeEffect

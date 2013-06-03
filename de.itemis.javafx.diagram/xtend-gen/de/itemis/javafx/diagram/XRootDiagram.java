@@ -117,7 +117,10 @@ public class XRootDiagram extends XAbstractDiagram {
       boolean _not_1 = (!_activate);
       if (_not_1) {
         this._currentTool = previousTool;
-        boolean _activate_1 = previousTool==null?false:previousTool.activate();
+        boolean _activate_1 = false;
+        if (previousTool!=null) {
+          _activate_1=previousTool.activate();
+        }
         boolean _not_2 = (!_activate_1);
         if (_not_2) {
           Logger _logger_1 = Extensions.getLogger(this);

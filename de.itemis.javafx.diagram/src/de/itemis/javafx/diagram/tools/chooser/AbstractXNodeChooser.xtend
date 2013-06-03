@@ -61,9 +61,9 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		spinToPosition = new XNodeChooserTransition(this)
 		swipeHandler = [
 			val direction = switch eventType {
-				case SwipeEvent::SWIPE_DOWN:
+				case SwipeEvent.SWIPE_DOWN:
 					-1
-				case SwipeEvent::SWIPE_RIGHT:
+				case SwipeEvent.SWIPE_RIGHT:
 					-1
 				default:
 					1
@@ -71,30 +71,30 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			spinToPosition.targetPositionDelta = direction * 10
 		]
 		scrollHandler = [
-			if (eventType == ScrollEvent::SCROLL_FINISHED)
+			if (eventType == ScrollEvent.SCROLL_FINISHED)
 				spinToPosition.targetPosition = (currentPosition + 0.5) as int
 			else
 				currentPosition = currentPosition - (deltaX + deltaY) / 100
 		]
 		keyHandler = [
 			switch code {
-				case KeyCode::CANCEL:
+				case KeyCode.CANCEL:
 					cancel
-				case KeyCode::ESCAPE:
+				case KeyCode.ESCAPE:
 					cancel
-				case KeyCode::UP:
+				case KeyCode.UP:
 					spinToPosition.targetPositionDelta = -1
-				case KeyCode::LEFT:
+				case KeyCode.LEFT:
 					spinToPosition.targetPositionDelta = -1
-				case KeyCode::DOWN:
+				case KeyCode.DOWN:
 					spinToPosition.targetPositionDelta = 1
-				case KeyCode::RIGHT:
+				case KeyCode.RIGHT:
 					spinToPosition.targetPositionDelta = 1
-				case KeyCode::ENTER: {
+				case KeyCode.ENTER: {
 					nodeChosen(currentNode)
 					host.rootDiagram.restoreDefaultTool
 				}
-				case KeyCode::BACK_SPACE: {
+				case KeyCode.BACK_SPACE: {
 					val oldFilter = _filterString.get
 					if(!oldFilter.empty)
 						_filterString.set(oldFilter.substring(0, oldFilter.length-1))
@@ -164,9 +164,9 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 				}
 			]
 		]
-		diagram.scene.addEventHandler(SwipeEvent::ANY, swipeHandler)
-		diagram.scene.addEventHandler(ScrollEvent::ANY, scrollHandler)
-		diagram.scene.addEventHandler(KeyEvent::KEY_PRESSED, keyHandler)
+		diagram.scene.addEventHandler(SwipeEvent.ANY, swipeHandler)
+		diagram.scene.addEventHandler(ScrollEvent.ANY, scrollHandler)
+		diagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		_currentPosition.addListener(positionListener)
 		_filterString.addListener(filterChangeListener)
 		filterLabel = new Label => [
@@ -181,9 +181,9 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			return false
 		host.rootDiagram.buttonLayer.children -= filterLabel
 		isActive = false
-		diagram.scene.removeEventHandler(KeyEvent::KEY_PRESSED, keyHandler)
-		diagram.scene.removeEventHandler(ScrollEvent::ANY, scrollHandler)
-		diagram.scene.removeEventHandler(SwipeEvent::ANY, swipeHandler)
+		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
+		diagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)
+		diagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)
 		spinToPosition.stop
 		diagram.nodeLayer.children -= group
 		true
