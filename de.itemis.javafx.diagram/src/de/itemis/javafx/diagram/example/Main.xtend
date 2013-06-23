@@ -6,6 +6,7 @@ import de.itemis.javafx.diagram.XRootDiagram
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
+import javafx.scene.PerspectiveCamera
 
 class Main extends Application {
 	
@@ -22,6 +23,7 @@ class Main extends Application {
 	def createScene() {
 		val diagram = new XRootDiagram
         val scene = new Scene(diagram, 640, 480)
+        scene.setCamera(new PerspectiveCamera)
         diagram.activate()
         val source = new MyContainerNode('source') => [
         	layoutX = 280

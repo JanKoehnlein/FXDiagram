@@ -5,6 +5,7 @@ import de.itemis.javafx.diagram.XConnectionLabel;
 import de.itemis.javafx.diagram.XRootDiagram;
 import de.itemis.javafx.diagram.example.MyContainerNode;
 import javafx.application.Application;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -30,6 +31,8 @@ public class Main extends Application {
       final XRootDiagram diagram = _xRootDiagram;
       Scene _scene = new Scene(diagram, 640, 480);
       final Scene scene = _scene;
+      PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
+      scene.setCamera(_perspectiveCamera);
       diagram.activate();
       MyContainerNode _myContainerNode = new MyContainerNode("source");
       final Procedure1<MyContainerNode> _function = new Procedure1<MyContainerNode>() {

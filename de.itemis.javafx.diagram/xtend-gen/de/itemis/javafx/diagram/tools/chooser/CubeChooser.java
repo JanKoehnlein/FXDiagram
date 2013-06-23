@@ -1,17 +1,15 @@
 package de.itemis.javafx.diagram.tools.chooser;
 
-import com.google.common.base.Objects;
 import de.itemis.javafx.diagram.XNode;
 import de.itemis.javafx.diagram.tools.chooser.AbstractXNodeChooser;
-import de.itemis.javafx.diagram.transform.PerspectiveExtensions;
 import de.itemis.javafx.diagram.transform.TransformExtensions;
 import java.util.ArrayList;
-import javafx.geometry.BoundingBox;
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
-import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
@@ -101,50 +99,47 @@ public class CubeChooser extends AbstractXNodeChooser {
     IterableExtensions.<XNode>forEach(_nodes_3, _function_1);
   }
   
-  protected void applyTransform(final int nodeIndex, final double angle, final double maxWidth) {
-    ArrayList<XNode> _nodes = this.getNodes();
-    final XNode node = _nodes.get(nodeIndex);
-    double _abs = Math.abs(angle);
-    boolean _lessThan = (_abs < 1E-5);
-    if (_lessThan) {
-      node.setEffect(null);
-      double _minus = (-0.5);
-      Bounds _layoutBounds = node.getLayoutBounds();
-      double _width = _layoutBounds.getWidth();
-      double _multiply = (_minus * _width);
-      node.setLayoutX(_multiply);
-      double _minus_1 = (-0.5);
-      Bounds _layoutBounds_1 = node.getLayoutBounds();
-      double _height = _layoutBounds_1.getHeight();
-      double _multiply_1 = (_minus_1 * _height);
-      node.setLayoutY(_multiply_1);
-      node.setVisible(true);
-    } else {
-      node.setLayoutX(0);
-      node.setLayoutY(0);
-      Affine _affine = new Affine();
-      final Affine transform = _affine;
-      double _minus_2 = (-maxWidth);
-      double _multiply_2 = (_minus_2 * 0.5);
-      TransformExtensions.translate(transform, 0, 0, _multiply_2);
-      Point3D _point3D = new Point3D(0, 1, 0);
-      TransformExtensions.rotate(transform, angle, _point3D);
-      double _multiply_3 = (maxWidth * 0.5);
-      double _plus = (200 + _multiply_3);
-      TransformExtensions.translate(transform, 0, 0, _plus);
-      Bounds _layoutBounds_2 = node.getLayoutBounds();
-      final double width = _layoutBounds_2.getWidth();
-      Bounds _layoutBounds_3 = node.getLayoutBounds();
-      final double height = _layoutBounds_3.getHeight();
-      double _minus_3 = (-0.5);
-      double _multiply_4 = (_minus_3 * width);
-      double _minus_4 = (-0.5);
-      double _multiply_5 = (_minus_4 * height);
-      BoundingBox _boundingBox = new BoundingBox(_multiply_4, _multiply_5, width, height);
-      final PerspectiveTransform perspectiveTransform = PerspectiveExtensions.mapPerspective(_boundingBox, transform, 200);
-      boolean _notEquals = (!Objects.equal(perspectiveTransform, null));
-      node.setVisible(_notEquals);
-      node.setEffect(perspectiveTransform);
+  protected Boolean applyTransform(final int nodeIndex, final double angle, final double maxWidth) {
+    boolean _xblockexpression = false;
+    {
+      ArrayList<XNode> _nodes = this.getNodes();
+      final XNode node = _nodes.get(nodeIndex);
+      boolean _xifexpression = false;
+      double _abs = Math.abs(angle);
+      boolean _greaterThan = (_abs > 86);
+      if (_greaterThan) {
+        node.setVisible(false);
+      } else {
+        boolean _xblockexpression_1 = false;
+        {
+          Bounds _layoutBounds = node.getLayoutBounds();
+          final double width = _layoutBounds.getWidth();
+          Bounds _layoutBounds_1 = node.getLayoutBounds();
+          final double height = _layoutBounds_1.getHeight();
+          Affine _affine = new Affine();
+          final Affine transform = _affine;
+          double _minus = (-0.5);
+          double _multiply = (_minus * width);
+          double _minus_1 = (-0.5);
+          double _multiply_1 = (_minus_1 * height);
+          double _minus_2 = (-maxWidth);
+          double _multiply_2 = (_minus_2 * 0.5);
+          TransformExtensions.translate(transform, _multiply, _multiply_1, _multiply_2);
+          Point3D _point3D = new Point3D(0, 1, 0);
+          TransformExtensions.rotate(transform, angle, _point3D);
+          double _multiply_3 = (maxWidth * 0.5);
+          TransformExtensions.translate(transform, 0, 0, _multiply_3);
+          node.setVisible(true);
+          ObservableList<Transform> _transforms = node.getTransforms();
+          _transforms.clear();
+          ObservableList<Transform> _transforms_1 = node.getTransforms();
+          boolean _add = _transforms_1.add(transform);
+          _xblockexpression_1 = (_add);
+        }
+        _xifexpression = _xblockexpression_1;
+      }
+      _xblockexpression = (_xifexpression);
     }
+    return _xblockexpression;
   }
 }
