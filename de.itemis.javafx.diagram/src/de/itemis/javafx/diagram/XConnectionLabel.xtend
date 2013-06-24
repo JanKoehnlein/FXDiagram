@@ -41,13 +41,13 @@ class XConnectionLabel extends Text implements XActivatable {
 			val dy = list.get(list.size - 1) - list.get(1)
 			var angle = atan2(dy, dx)
 			val labelDx = -boundsInLocal.width / 2
-			var labelDy = - 2
+			var labelDy = - 4
 			if(abs(angle) > PI / 2) {				
 				if (angle < 0) 
 					angle = angle + PI
 				else if (angle > 0)
 					angle = angle - PI
-				labelDy = - 2
+				labelDy = - 4
 			}
 			val transform = new Affine
 			transform.translate(labelDx, labelDy)

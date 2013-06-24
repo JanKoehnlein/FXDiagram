@@ -56,18 +56,18 @@ class Extensions {
 		}
 	}	
 	
-	def static getTargetShape(MouseEvent event) {
+	def static getTargetNode(MouseEvent event) {
 		if(event.target instanceof Node) 
-			getContainerShape(event.target as Node)
+			getContainerNode(event.target as Node)
 		else
 			null
 	}
 
-	def static XNode getContainerShape(Node it) {
+	def static XNode getContainerNode(Node it) {
 		switch it {
 			case null: null
 			XNode: it
-			default: getContainerShape(parent)
+			default: getContainerNode(parent)
 		}
 	}
 	

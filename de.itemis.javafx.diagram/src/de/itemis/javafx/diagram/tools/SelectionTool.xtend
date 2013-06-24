@@ -3,8 +3,8 @@ package de.itemis.javafx.diagram.tools
 import javafx.scene.input.MouseEvent
 import de.itemis.javafx.diagram.XRootDiagram
 import de.itemis.javafx.diagram.XRapidButton
-import static extension de.itemis.javafx.diagram.Extensions.*
 import javafx.event.EventHandler
+import static extension de.itemis.javafx.diagram.Extensions.*
 
 class SelectionTool implements XDiagramTool {
 	
@@ -18,7 +18,7 @@ class SelectionTool implements XDiagramTool {
 		this.mousePressedHandler = [ 
 			event |
 			if(!(event.target instanceof XRapidButton)) { 
-				val targetShape = event.targetShape
+				val targetShape = event.getTargetNode
 				if(targetShape?.selectionBehavior != null) {
 					if(!targetShape.selectionBehavior.selected && !event.shortcutDown) {
 						selection.forEach[selectionBehavior.selected = false]	

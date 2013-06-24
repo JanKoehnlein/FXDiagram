@@ -78,7 +78,7 @@ public class XConnectionLabel extends Text implements XActivatable {
         double _width = _boundsInLocal.getWidth();
         double _minus_2 = (-_width);
         final double labelDx = (_minus_2 / 2);
-        int labelDy = (-2);
+        int labelDy = (-4);
         double _abs = Math.abs(angle);
         double _divide = (Math.PI / 2);
         boolean _greaterThan = (_abs > _divide);
@@ -94,7 +94,7 @@ public class XConnectionLabel extends Text implements XActivatable {
               angle = _minus_3;
             }
           }
-          int _minus_4 = (-2);
+          int _minus_4 = (-4);
           labelDy = _minus_4;
         }
         Affine _affine = new Affine();

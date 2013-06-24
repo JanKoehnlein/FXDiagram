@@ -32,7 +32,7 @@ public class SelectionTool implements XDiagramTool {
           EventTarget _target = event.getTarget();
           boolean _not = (!(_target instanceof XRapidButton));
           if (_not) {
-            final XNode targetShape = Extensions.getTargetShape(event);
+            final XNode targetShape = Extensions.getTargetNode(event);
             SelectionBehavior _selectionBehavior = null;
             if (targetShape!=null) {
               _selectionBehavior=targetShape.getSelectionBehavior();

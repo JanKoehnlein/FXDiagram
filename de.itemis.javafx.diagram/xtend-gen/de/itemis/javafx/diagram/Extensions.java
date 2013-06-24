@@ -143,20 +143,20 @@ public class Extensions {
     return _switchResult;
   }
   
-  public static XNode getTargetShape(final MouseEvent event) {
+  public static XNode getTargetNode(final MouseEvent event) {
     XNode _xifexpression = null;
     EventTarget _target = event.getTarget();
     if ((_target instanceof Node)) {
       EventTarget _target_1 = event.getTarget();
-      XNode _containerShape = Extensions.getContainerShape(((Node) _target_1));
-      _xifexpression = _containerShape;
+      XNode _containerNode = Extensions.getContainerNode(((Node) _target_1));
+      _xifexpression = _containerNode;
     } else {
       _xifexpression = null;
     }
     return _xifexpression;
   }
   
-  public static XNode getContainerShape(final Node it) {
+  public static XNode getContainerNode(final Node it) {
     XNode _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
@@ -174,8 +174,8 @@ public class Extensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XNode _containerShape = Extensions.getContainerShape(_parent);
-      _switchResult = _containerShape;
+      XNode _containerNode = Extensions.getContainerNode(_parent);
+      _switchResult = _containerNode;
     }
     return _switchResult;
   }

@@ -1,15 +1,17 @@
 package de.itemis.javafx.diagram.transform
 
-import org.junit.Test
-import javafx.scene.shape.Circle
-import static extension de.itemis.javafx.diagram.export.ShapeConverterExtensions.*
-import static extension org.junit.Assert.*
-import javafx.scene.shape.Line
-import javafx.scene.shape.Shape
 import javafx.scene.shape.Arc
-import javafx.scene.shape.QuadCurve
+import javafx.scene.shape.Circle
 import javafx.scene.shape.CubicCurve
+import javafx.scene.shape.Line
+import javafx.scene.shape.QuadCurve
 import javafx.scene.shape.Rectangle
+import javafx.scene.shape.Shape
+import org.junit.Test
+
+import static org.junit.Assert.*
+
+import static extension de.itemis.javafx.diagram.export.ShapeConverterExtensions.*
 
 class ShapeConverterTest {
 	
