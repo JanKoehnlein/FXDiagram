@@ -8,6 +8,8 @@ import java.io.File
 import javafx.event.EventHandler
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import de.itemis.javafx.diagram.layout.Layouter
+import static extension javafx.util.Duration.*
 
 class KeyTool implements XDiagramTool {
 
@@ -24,6 +26,10 @@ class KeyTool implements XDiagramTool {
 						val svgCode = new SvgExporter().toSvg(diagram)
 						Files.write(svgCode, new File("Diagram.svg"), Charsets.UTF_8)
 						consume
+					}
+				case KeyCode.L: 
+					if(shortcutDown) {
+						new Layouter().layout(diagram, 2.seconds)
 					}
 			}
 		]

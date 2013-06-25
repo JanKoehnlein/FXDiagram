@@ -40,6 +40,8 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
         dependencies.add(_scaleXProperty);
         DoubleProperty _scaleYProperty = current.scaleYProperty();
         dependencies.add(_scaleYProperty);
+        DoubleProperty _rotateProperty = current.rotateProperty();
+        dependencies.add(_rotateProperty);
         Parent _parent = current.getParent();
         current = _parent;
       }

@@ -5,12 +5,14 @@ import com.google.common.base.Objects;
 import com.google.common.io.Files;
 import de.itemis.javafx.diagram.XRootDiagram;
 import de.itemis.javafx.diagram.export.SvgExporter;
+import de.itemis.javafx.diagram.layout.Layouter;
 import de.itemis.javafx.diagram.tools.XDiagramTool;
 import java.io.File;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
@@ -37,6 +39,17 @@ public class KeyTool implements XDiagramTool {
                   File _file = new File("Diagram.svg");
                   Files.write(svgCode, _file, Charsets.UTF_8);
                   it.consume();
+                }
+              }
+            }
+            if (!_matched) {
+              if (Objects.equal(getCode,KeyCode.L)) {
+                _matched=true;
+                boolean _isShortcutDown_1 = it.isShortcutDown();
+                if (_isShortcutDown_1) {
+                  Layouter _layouter = new Layouter();
+                  Duration _seconds = Duration.seconds(2);
+                  _layouter.layout(diagram, _seconds);
                 }
               }
             }

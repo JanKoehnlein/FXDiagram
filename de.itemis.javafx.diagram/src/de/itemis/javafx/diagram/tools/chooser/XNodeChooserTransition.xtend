@@ -1,7 +1,7 @@
 package de.itemis.javafx.diagram.tools.chooser
 
 import javafx.animation.Transition
-import javafx.util.Duration
+import static extension javafx.util.Duration.*
 import static java.lang.Math.*
 
 class XNodeChooserTransition extends Transition {
@@ -51,7 +51,7 @@ class XNodeChooserTransition extends Transition {
 
 	protected def setDuration(double max) {
 		val duration = min(max, abs((endPosition - startPosition) % tool.nodes.size) * 200)
-		cycleDuration = Duration.millis(duration)
+		cycleDuration = duration.millis
 	}
 
 	override protected interpolate(double alpha) {

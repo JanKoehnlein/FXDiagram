@@ -20,6 +20,7 @@ class AnchorPoints extends ObjectBinding<List<Point2D>> {
 			dependencies.add(current.layoutYProperty)
 			dependencies.add(current.scaleXProperty)
 			dependencies.add(current.scaleYProperty)
+			dependencies.add(current.rotateProperty)
 			current = current.parent
 		} while (current != null)
 		bind(dependencies)
