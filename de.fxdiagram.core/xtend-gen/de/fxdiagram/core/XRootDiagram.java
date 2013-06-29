@@ -42,13 +42,6 @@ public class XRootDiagram extends XAbstractDiagram {
     }
   }.apply();
   
-  private DoubleProperty scaleProperty = new Function0<DoubleProperty>() {
-    public DoubleProperty apply() {
-      SimpleDoubleProperty _simpleDoubleProperty = new SimpleDoubleProperty(1.0);
-      return _simpleDoubleProperty;
-    }
-  }.apply();
-  
   private List<XDiagramTool> tools = new Function0<List<XDiagramTool>>() {
     public List<XDiagramTool> apply() {
       ArrayList<XDiagramTool> _newArrayList = CollectionLiterals.<XDiagramTool>newArrayList();
@@ -95,10 +88,6 @@ public class XRootDiagram extends XAbstractDiagram {
     return this.buttonLayer;
   }
   
-  public DoubleProperty getScaleProperty() {
-    return this.scaleProperty;
-  }
-  
   public void setCurrentTool(final XDiagramTool tool) {
     XDiagramTool previousTool = this._currentTool;
     boolean _notEquals = (!Objects.equal(previousTool, null));
@@ -132,5 +121,26 @@ public class XRootDiagram extends XAbstractDiagram {
   
   public void restoreDefaultTool() {
     this.setCurrentTool(this.defaultTool);
+  }
+  
+  private SimpleDoubleProperty scaleProperty = new SimpleDoubleProperty(this, "scale",_initScale());
+  
+  private static final double _initScale() {
+    return 1.0;
+  }
+  
+  public double getScale() {
+    return this.scaleProperty.get();
+    
+  }
+  
+  public void setScale(final double scale) {
+    this.scaleProperty.set(scale);
+    
+  }
+  
+  public DoubleProperty scaleProperty() {
+    return this.scaleProperty;
+    
   }
 }

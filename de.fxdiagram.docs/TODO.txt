@@ -1,0 +1,17 @@
+ENHANCEMENT
+- Implement Java API for properties of RectangleBorderPane
+- Embed JavaFX demos in XNodes
+- SwitchNode
+- Open subdiagram
+- Connection auto-layout
+- Connection behavior
+- Fancy context menus
+- more controls for MovieNode
+
+BUG
+- Make SVG export work with RectangleBorderPane
+- Fix fluctuations in layout of RecursiveImageNode
+
+MINOR
+- Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
+  such that shadows are not clipped. 

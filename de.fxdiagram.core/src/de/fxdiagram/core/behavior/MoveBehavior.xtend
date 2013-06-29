@@ -1,9 +1,8 @@
 package de.fxdiagram.core.behavior
 
 import de.fxdiagram.core.XNode
-import javafx.scene.input.MouseEvent
 import javafx.geometry.Point2D
-import static extension de.fxdiagram.core.Extensions.*
+import javafx.scene.input.MouseEvent
 
 class MoveBehavior extends AbstractBehavior {
 	
@@ -23,14 +22,14 @@ class MoveBehavior extends AbstractBehavior {
 	}
 	
 	def mousePressed(MouseEvent it) {
-		dragContext = new DragContext(screenX, screenY, host.diagram.localToScene(host.layoutX, host.layoutY))
+		dragContext = new DragContext(screenX, screenY, host.parent.localToScene(host.layoutX, host.layoutY))
 	}
 	
 	def mouseDragged(MouseEvent it) {
 		val newPositionInScene = new Point2D(
 			dragContext.initialPosInScene.x + screenX - dragContext.mouseAnchorX,
 			dragContext.initialPosInScene.y + screenY - dragContext.mouseAnchorY)
-		val newPositionInDiagram = host.diagram.sceneToLocal(newPositionInScene)
+		val newPositionInDiagram = host.parent.sceneToLocal(newPositionInScene)
 		host.relocate(newPositionInDiagram.x, newPositionInDiagram.y)
 	}
 }

@@ -7,12 +7,14 @@ import javafx.scene.transform.Affine
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.transform.TransformExtensions.*
+import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ReadOnly
 
 class XConnectionLabel extends Text implements XActivatable {
 
-	XConnection connection
+	@FxProperty XConnection connection
 
-	boolean isActive
+	@FxProperty@ReadOnly boolean isActive
 
 	new(XConnection connection) {
 		this.connection = connection
@@ -22,7 +24,7 @@ class XConnectionLabel extends Text implements XActivatable {
 	override activate() {
 		if (!isActive)
 			doActivate
-		isActive = true
+		isActiveProperty.set(true)
 	}
 
 	def doActivate() {

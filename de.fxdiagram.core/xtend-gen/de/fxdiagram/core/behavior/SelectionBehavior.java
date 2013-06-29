@@ -10,19 +10,11 @@ import javafx.event.EventHandler;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.input.MouseEvent;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class SelectionBehavior extends AbstractBehavior {
-  private BooleanProperty isSelected = new Function0<BooleanProperty>() {
-    public BooleanProperty apply() {
-      SimpleBooleanProperty _simpleBooleanProperty = new SimpleBooleanProperty();
-      return _simpleBooleanProperty;
-    }
-  }.apply();
-  
   private Effect selectionEffect;
   
   private boolean wasSelected;
@@ -55,13 +47,12 @@ public class SelectionBehavior extends AbstractBehavior {
           boolean _isShortcutDown = it.isShortcutDown();
           if (_isShortcutDown) {
             boolean _not = (!SelectionBehavior.this.wasSelected);
-            SelectionBehavior.this.isSelected.set(_not);
+            SelectionBehavior.this.selectedProperty.set(_not);
           }
           it.consume();
         }
       };
     _host_1.setOnMouseReleased(_function_1);
-    BooleanProperty _selectedProperty = this.getSelectedProperty();
     final ChangeListener<Boolean> _function_2 = new ChangeListener<Boolean>() {
         public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
           if ((newValue).booleanValue()) {
@@ -81,27 +72,29 @@ public class SelectionBehavior extends AbstractBehavior {
           }
         }
       };
-    _selectedProperty.addListener(_function_2);
+    this.selectedProperty.addListener(_function_2);
   }
   
   public void mousePressed(final MouseEvent it) {
-    boolean _get = this.isSelected.get();
-    this.wasSelected = _get;
-    this.isSelected.set(true);
+    boolean _selected = this.getSelected();
+    this.wasSelected = _selected;
+    this.setSelected(true);
   }
   
-  public BooleanProperty getSelectedProperty() {
-    return this.isSelected;
+  private SimpleBooleanProperty selectedProperty = new SimpleBooleanProperty(this, "selected");
+  
+  public boolean getSelected() {
+    return this.selectedProperty.get();
+    
   }
   
-  public boolean isSelected() {
-    BooleanProperty _selectedProperty = this.getSelectedProperty();
-    boolean _get = _selectedProperty.get();
-    return _get;
+  public void setSelected(final boolean selected) {
+    this.selectedProperty.set(selected);
+    
   }
   
-  public void setSelected(final boolean isSelected) {
-    BooleanProperty _selectedProperty = this.getSelectedProperty();
-    _selectedProperty.set(isSelected);
+  public BooleanProperty selectedProperty() {
+    return this.selectedProperty;
+    
   }
 }

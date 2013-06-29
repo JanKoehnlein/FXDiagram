@@ -1,12 +1,10 @@
 package de.fxdiagram.core.tools.chooser
 
+import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.tools.XDiagramTool
-import javafx.beans.property.DoubleProperty
-import javafx.beans.property.SimpleDoubleProperty
-import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
 import javafx.beans.value.ChangeListener
 import javafx.event.EventHandler
 import javafx.geometry.Point2D
@@ -19,18 +17,24 @@ import javafx.scene.input.SwipeEvent
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.binding.StringExpressionExtensions.*
+import javafx.beans.property.DoubleProperty
+import javafx.beans.property.SimpleDoubleProperty
 
 abstract class AbstractXNodeChooser implements XDiagramTool {
+
+	@FxProperty@ReadOnly boolean isActive = false
+
+	@FxProperty String filterString = ''
+	
+	DoubleProperty currentPositionProperty = new SimpleDoubleProperty(0.0)
+
+	val visibleNodes = <XNode>newArrayList
 
 	XNode host
 
 	Group group = new Group
 
-	val nodeMap = <String, XNode> newLinkedHashMap
-	
-	boolean isActive = false
-
-	DoubleProperty _currentPosition = new SimpleDoubleProperty
+	val nodeMap = <String, XNode> newLinkedHashMap	
 
 	ChangeListener<Number> positionListener
 
@@ -43,10 +47,6 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	EventHandler<KeyEvent> keyHandler
 	
 	ChangeListener<String> filterChangeListener
-	
-	val visibleNodes = <XNode> newArrayList
-
-	StringProperty _filterString = new SimpleStringProperty('')
 	
 	Label filterLabel
 
@@ -95,12 +95,12 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 					host.rootDiagram.restoreDefaultTool
 				}
 				case KeyCode.BACK_SPACE: {
-					val oldFilter = _filterString.get
+					val oldFilter = filterString
 					if(!oldFilter.empty)
-						_filterString.set(oldFilter.substring(0, oldFilter.length-1))
+						filterString = oldFilter.substring(0, oldFilter.length-1)
 					}
 				default: {
-					_filterString.set(_filterString.get + text)
+					filterString = filterString + text
 				}
 			}
 		]
@@ -144,9 +144,9 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			return false
 		if (nodes.empty)
 			return false
-		isActive = true
+		isActiveProperty.set(true)
 		diagram.nodeLayer.children += group
-		_currentPosition.set(0)
+		currentPosition = 0
 		interpolatedPosition = 0
 		if(nodes.size == 1) {
 			nodeChosen(nodes.head)
@@ -167,10 +167,10 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		diagram.scene.addEventHandler(SwipeEvent.ANY, swipeHandler)
 		diagram.scene.addEventHandler(ScrollEvent.ANY, scrollHandler)
 		diagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
-		_currentPosition.addListener(positionListener)
-		_filterString.addListener(filterChangeListener)
+		currentPositionProperty.addListener(positionListener)
+		filterStringProperty.addListener(filterChangeListener)
 		filterLabel = new Label => [
-			textProperty.bind("Filter: " +  _filterString + "")
+			textProperty.bind("Filter: " +  filterStringProperty + "")
 		]
 		host.rootDiagram.buttonLayer.children += filterLabel
 		true
@@ -180,7 +180,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		if (!isActive)
 			return false
 		host.rootDiagram.buttonLayer.children -= filterLabel
-		isActive = false
+		isActiveProperty.set(false)
 		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		diagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)
 		diagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)
@@ -212,14 +212,14 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	protected abstract def void setInterpolatedPosition(double interpolatedPosition)
 
 	def getCurrentPosition() {
-		var result = _currentPosition.value % nodes.size
+		var result = currentPositionProperty.get % nodes.size
 		if (result < 0)
 			result = result + ((result / nodes.size) as int + 1) * nodes.size
 		result
 	}
 
-	def setCurrentPosition(double value) {
-		_currentPosition.set(value)
+	def setCurrentPosition(double currentPosition) {
+		currentPositionProperty.set(currentPosition)
 	}
 
 	def getNodes() {
@@ -240,7 +240,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		var currentVisibleNode = visibleNodes.head
 		var mapIndex = 0
 		for(entry: nodeMap.entrySet) {
-			if(entry.key.contains(_filterString.get)) {
+			if(entry.key.contains(filterString)) {
 				if(currentVisibleNode != entry.value)  
 					visibleNodes.add(currentVisibleIndex, entry.value)
 				currentVisibleIndex = currentVisibleIndex + 1
@@ -254,7 +254,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			}
 			mapIndex = mapIndex + 1
 		}
-		interpolatedPosition = _currentPosition.get
+		interpolatedPosition = currentPosition
 		spinToPosition.resetTargetPosition
 	}
 }

@@ -4,12 +4,14 @@ import javafx.scene.shape.Polyline
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
+import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.Lazy
 
 class XConnection extends Polyline implements XActivatable {
 	
-	@Property XNode source
-	@Property XNode target
-	@Property XConnectionLabel label
+	@FxProperty XNode source
+	@FxProperty XNode target
+	@FxProperty@Lazy XConnectionLabel label
 	
 	boolean isActive
 	

@@ -10,10 +10,12 @@ import javafx.scene.image.ImageView
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.annotations.properties.FxProperty
 
 class XRapidButton extends ImageView implements XActivatable {
 	
-	boolean isActive
+	@FxProperty@ReadOnly boolean isActive
 	
 	XNode host
 	
@@ -34,7 +36,7 @@ class XRapidButton extends ImageView implements XActivatable {
 	override activate() {
 		if(!isActive)
 			doActivate
-		isActive = true
+		isActiveProperty.set(true)
 	}
 	
 	def doActivate() {

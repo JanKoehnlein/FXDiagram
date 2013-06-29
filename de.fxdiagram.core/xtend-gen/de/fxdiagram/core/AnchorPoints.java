@@ -26,7 +26,7 @@ public class AnchorPoints extends ObjectBinding<List<Point2D>> {
   public AnchorPoints(final XNode host) {
     this.host = host;
     ArrayList<ReadOnlyProperty<? extends Object>> dependencies = CollectionLiterals.<ReadOnlyProperty<? extends Object>>newArrayList();
-    Node current = host;
+    Node current = host.getNode();
     boolean _dowhile = false;
     do {
       {

@@ -54,8 +54,8 @@ public class DiagramGestureTool implements XDiagramTool {
           double _totalZoomFactor = it.getTotalZoomFactor();
           double _previousScale = DiagramGestureTool.this.zoomContext.getPreviousScale();
           final double scale = (_totalZoomFactor / _previousScale);
-          DoubleProperty _scaleProperty = diagram.getScaleProperty();
-          DoubleProperty _scaleProperty_1 = diagram.getScaleProperty();
+          DoubleProperty _scaleProperty = diagram.scaleProperty();
+          DoubleProperty _scaleProperty_1 = diagram.scaleProperty();
           double _get = _scaleProperty_1.get();
           double _multiply = (scale * _get);
           _scaleProperty.set(_multiply);

@@ -4,7 +4,11 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.transform.TransformExtensions;
 import java.util.List;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -18,27 +22,26 @@ import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 
 @SuppressWarnings("all")
 public class XConnectionLabel extends Text implements XActivatable {
-  private XConnection connection;
-  
-  private boolean isActive;
-  
   public XConnectionLabel(final XConnection connection) {
-    this.connection = connection;
+    this.setConnection(connection);
     connection.setLabel(this);
   }
   
   public void activate() {
-    boolean _not = (!this.isActive);
+    boolean _isActive = this.getIsActive();
+    boolean _not = (!_isActive);
     if (_not) {
       this.doActivate();
     }
-    this.isActive = true;
+    this.isActiveProperty.set(true);
   }
   
   public void doActivate() {
-    ObservableList<Double> _points = this.connection.getPoints();
+    XConnection _connection = this.getConnection();
+    ObservableList<Double> _points = _connection.getPoints();
     this.place(_points);
-    ObservableList<Double> _points_1 = this.connection.getPoints();
+    XConnection _connection_1 = this.getConnection();
+    ObservableList<Double> _points_1 = _connection_1.getPoints();
     final ListChangeListener<Double> _function = new ListChangeListener<Double>() {
         public void onChanged(final Change<? extends Double> it) {
           ObservableList<? extends Double> _list = it.getList();
@@ -49,7 +52,8 @@ public class XConnectionLabel extends Text implements XActivatable {
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.boundsInLocalProperty();
     final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
         public void changed(final ObservableValue<? extends Bounds> element, final Bounds oldVlaue, final Bounds newValue) {
-          ObservableList<Double> _points = XConnectionLabel.this.connection.getPoints();
+          XConnection _connection = XConnectionLabel.this.getConnection();
+          ObservableList<Double> _points = _connection.getPoints();
           XConnectionLabel.this.place(_points);
         }
       };
@@ -125,5 +129,34 @@ public class XConnectionLabel extends Text implements XActivatable {
       _xifexpression = Boolean.valueOf(_xblockexpression);
     }
     return _xifexpression;
+  }
+  
+  private SimpleObjectProperty<XConnection> connectionProperty = new SimpleObjectProperty<XConnection>(this, "connection");
+  
+  public XConnection getConnection() {
+    return this.connectionProperty.get();
+    
+  }
+  
+  public void setConnection(final XConnection connection) {
+    this.connectionProperty.set(connection);
+    
+  }
+  
+  public ObjectProperty<XConnection> connectionProperty() {
+    return this.connectionProperty;
+    
+  }
+  
+  private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
+  
+  public boolean getIsActive() {
+    return this.isActiveProperty.get();
+    
+  }
+  
+  public ReadOnlyBooleanProperty isActiveProperty() {
+    return this.isActiveProperty.getReadOnlyProperty();
+    
   }
 }

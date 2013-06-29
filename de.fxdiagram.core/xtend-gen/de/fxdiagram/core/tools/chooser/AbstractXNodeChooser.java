@@ -16,6 +16,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -47,6 +49,20 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public abstract class AbstractXNodeChooser implements XDiagramTool {
+  private DoubleProperty currentPositionProperty = new Function0<DoubleProperty>() {
+    public DoubleProperty apply() {
+      SimpleDoubleProperty _simpleDoubleProperty = new SimpleDoubleProperty(0.0);
+      return _simpleDoubleProperty;
+    }
+  }.apply();
+  
+  private final ArrayList<XNode> visibleNodes = new Function0<ArrayList<XNode>>() {
+    public ArrayList<XNode> apply() {
+      ArrayList<XNode> _newArrayList = CollectionLiterals.<XNode>newArrayList();
+      return _newArrayList;
+    }
+  }.apply();
+  
   private XNode host;
   
   private Group group = new Function0<Group>() {
@@ -63,15 +79,6 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     }
   }.apply();
   
-  private boolean isActive = false;
-  
-  private DoubleProperty _currentPosition = new Function0<DoubleProperty>() {
-    public DoubleProperty apply() {
-      SimpleDoubleProperty _simpleDoubleProperty = new SimpleDoubleProperty();
-      return _simpleDoubleProperty;
-    }
-  }.apply();
-  
   private ChangeListener<Number> positionListener;
   
   protected XNodeChooserTransition spinToPosition;
@@ -83,20 +90,6 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   private EventHandler<KeyEvent> keyHandler;
   
   private ChangeListener<String> filterChangeListener;
-  
-  private final ArrayList<XNode> visibleNodes = new Function0<ArrayList<XNode>>() {
-    public ArrayList<XNode> apply() {
-      ArrayList<XNode> _newArrayList = CollectionLiterals.<XNode>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
-  
-  private StringProperty _filterString = new Function0<StringProperty>() {
-    public StringProperty apply() {
-      SimpleStringProperty _simpleStringProperty = new SimpleStringProperty("");
-      return _simpleStringProperty;
-    }
-  }.apply();
   
   private Label filterLabel;
   
@@ -222,22 +215,22 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
           if (!_matched) {
             if (Objects.equal(getCode,KeyCode.BACK_SPACE)) {
               _matched=true;
-              final String oldFilter = AbstractXNodeChooser.this._filterString.get();
+              final String oldFilter = AbstractXNodeChooser.this.getFilterString();
               boolean _isEmpty = oldFilter.isEmpty();
               boolean _not = (!_isEmpty);
               if (_not) {
                 int _length = oldFilter.length();
                 int _minus_2 = (_length - 1);
                 String _substring = oldFilter.substring(0, _minus_2);
-                AbstractXNodeChooser.this._filterString.set(_substring);
+                AbstractXNodeChooser.this.setFilterString(_substring);
               }
             }
           }
           if (!_matched) {
-            String _get = AbstractXNodeChooser.this._filterString.get();
+            String _filterString = AbstractXNodeChooser.this.getFilterString();
             String _text = it.getText();
-            String _plus = (_get + _text);
-            AbstractXNodeChooser.this._filterString.set(_plus);
+            String _plus = (_filterString + _text);
+            AbstractXNodeChooser.this.setFilterString(_plus);
           }
         }
       };
@@ -342,7 +335,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   public boolean activate() {
     boolean _xblockexpression = false;
     {
-      if (this.isActive) {
+      boolean _isActive = this.getIsActive();
+      if (_isActive) {
         return false;
       }
       ArrayList<XNode> _nodes = this.getNodes();
@@ -350,12 +344,12 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       if (_isEmpty) {
         return false;
       }
-      this.isActive = true;
+      this.isActiveProperty.set(true);
       XAbstractDiagram _diagram = this.getDiagram();
       Group _nodeLayer = _diagram.getNodeLayer();
       ObservableList<Node> _children = _nodeLayer.getChildren();
       _children.add(this.group);
-      this._currentPosition.set(0);
+      this.setCurrentPosition(0);
       this.setInterpolatedPosition(0);
       ArrayList<XNode> _nodes_1 = this.getNodes();
       int _size = _nodes_1.size();
@@ -407,13 +401,13 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       XAbstractDiagram _diagram_3 = this.getDiagram();
       Scene _scene_2 = _diagram_3.getScene();
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-      this._currentPosition.addListener(this.positionListener);
-      this._filterString.addListener(this.filterChangeListener);
+      this.currentPositionProperty.addListener(this.positionListener);
+      this.filterStringProperty.addListener(this.filterChangeListener);
       Label _label = new Label();
       final Procedure1<Label> _function_1 = new Procedure1<Label>() {
           public void apply(final Label it) {
             StringProperty _textProperty = it.textProperty();
-            StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractXNodeChooser.this._filterString);
+            StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractXNodeChooser.this.filterStringProperty);
             StringExpression _plus_1 = StringExpressionExtensions.operator_plus(_plus, "");
             _textProperty.bind(_plus_1);
           }
@@ -432,7 +426,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
-      boolean _not = (!this.isActive);
+      boolean _isActive = this.getIsActive();
+      boolean _not = (!_isActive);
       if (_not) {
         return false;
       }
@@ -440,7 +435,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Group _buttonLayer = _rootDiagram.getButtonLayer();
       ObservableList<Node> _children = _buttonLayer.getChildren();
       _children.remove(this.filterLabel);
-      this.isActive = false;
+      this.isActiveProperty.set(false);
       XAbstractDiagram _diagram = this.getDiagram();
       Scene _scene = _diagram.getScene();
       _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
@@ -506,10 +501,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   public double getCurrentPosition() {
     double _xblockexpression = (double) 0;
     {
-      Double _value = this._currentPosition.getValue();
+      double _get = this.currentPositionProperty.get();
       ArrayList<XNode> _nodes = this.getNodes();
       int _size = _nodes.size();
-      double result = ((_value).doubleValue() % _size);
+      double result = (_get % _size);
       boolean _lessThan = (result < 0);
       if (_lessThan) {
         ArrayList<XNode> _nodes_1 = this.getNodes();
@@ -527,8 +522,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _xblockexpression;
   }
   
-  public void setCurrentPosition(final double value) {
-    this._currentPosition.set(value);
+  public void setCurrentPosition(final double currentPosition) {
+    this.currentPositionProperty.set(currentPosition);
   }
   
   public ArrayList<XNode> getNodes() {
@@ -561,8 +556,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     for (final Entry<String,XNode> entry : _entrySet) {
       {
         String _key = entry.getKey();
-        String _get = this._filterString.get();
-        boolean _contains = _key.contains(_get);
+        String _filterString = this.getFilterString();
+        boolean _contains = _key.contains(_filterString);
         if (_contains) {
           XNode _value = entry.getValue();
           boolean _notEquals = (!Objects.equal(currentVisibleNode, _value));
@@ -576,8 +571,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
           int _size = this.visibleNodes.size();
           boolean _lessThan = (currentVisibleIndex < _size);
           if (_lessThan) {
-            XNode _get_1 = this.visibleNodes.get(currentVisibleIndex);
-            _xifexpression = _get_1;
+            XNode _get = this.visibleNodes.get(currentVisibleIndex);
+            _xifexpression = _get;
           } else {
             _xifexpression = null;
           }
@@ -592,8 +587,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             int _size_1 = this.visibleNodes.size();
             boolean _lessThan_1 = (currentVisibleIndex < _size_1);
             if (_lessThan_1) {
-              XNode _get_2 = this.visibleNodes.get(currentVisibleIndex);
-              _xifexpression_1 = _get_2;
+              XNode _get_1 = this.visibleNodes.get(currentVisibleIndex);
+              _xifexpression_1 = _get_1;
             } else {
               _xifexpression_1 = null;
             }
@@ -604,8 +599,45 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         mapIndex = _plus_1;
       }
     }
-    double _get = this._currentPosition.get();
-    this.setInterpolatedPosition(_get);
+    double _currentPosition = this.getCurrentPosition();
+    this.setInterpolatedPosition(_currentPosition);
     this.spinToPosition.resetTargetPosition();
+  }
+  
+  private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive",_initIsActive());
+  
+  private static final boolean _initIsActive() {
+    return false;
+  }
+  
+  public boolean getIsActive() {
+    return this.isActiveProperty.get();
+    
+  }
+  
+  public ReadOnlyBooleanProperty isActiveProperty() {
+    return this.isActiveProperty.getReadOnlyProperty();
+    
+  }
+  
+  private SimpleStringProperty filterStringProperty = new SimpleStringProperty(this, "filterString",_initFilterString());
+  
+  private static final String _initFilterString() {
+    return "";
+  }
+  
+  public String getFilterString() {
+    return this.filterStringProperty.get();
+    
+  }
+  
+  public void setFilterString(final String filterString) {
+    this.filterStringProperty.set(filterString);
+    
+  }
+  
+  public StringProperty filterStringProperty() {
+    return this.filterStringProperty;
+    
   }
 }

@@ -4,6 +4,7 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.behavior.AbstractBehavior
+import de.fxdiagram.core.tools.chooser.AbstractXNodeChooser
 import de.fxdiagram.core.tools.chooser.CarusselChooser
 import de.fxdiagram.core.tools.chooser.CoverFlowChooser
 import de.fxdiagram.core.tools.chooser.CubeChooser
@@ -11,7 +12,6 @@ import java.util.List
 import javafx.geometry.Point2D
 
 import static extension de.fxdiagram.core.Extensions.*
-import de.fxdiagram.core.tools.chooser.AbstractXNodeChooser
 
 class AddRapidButtonBehavior extends AbstractBehavior {
 	
@@ -23,7 +23,7 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 	
 	override doActivate() {
 		val addAction = [ XRapidButton button | 
-			val target = new MyContainerNode("new")
+			val target = new NestedDiagramNode("new")
 			val source = button.getHost
 			val connection = new XConnection(source, target)
 			getHost.getDiagram.addNode(target)
@@ -67,7 +67,7 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 	}
 	
 	protected def addChoices(AbstractXNodeChooser chooser) {
-		for(i:0..<20)
-			chooser += new MyNode("node " +  i)
+		for (i: 0..<20)
+			chooser += new SimpleNode("node " +  i)
 	} 
 }

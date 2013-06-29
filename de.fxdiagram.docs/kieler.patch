@@ -1,0 +1,38 @@
+diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
+index 334a4ce..5168415 100644
+--- a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
++++ b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
+@@ -148,10 +148,10 @@
+      */
+     public static String getDotExecutable() {
+         // get a string to the dot executable
+-        IPreferenceStore preferenceStore =
+-                GraphvizLayouterPlugin.getDefault().getPreferenceStore();
+-        String dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
+-        if (!new File(dotExecutable).exists()) {
++//        IPreferenceStore preferenceStore =
++//                GraphvizLayouterPlugin.getDefault().getPreferenceStore();
++        String dotExecutable = null;// = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
++//        if (!new File(dotExecutable).exists()) {
+             boolean foundExec = false;
+             for (String location : DEFAULT_LOCS) {
+                 dotExecutable = location + "dot";
+@@ -159,12 +159,12 @@
+                     foundExec = true;
+                     break;
+                 }
+-            }
+-            if (!foundExec) {
+-                handleExecPath();
+-                // fetch the executable string again after the user has entered a new path
+-                dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
+-            }
++//            }
++//            if (!foundExec) {
++//                handleExecPath();
++//                // fetch the executable string again after the user has entered a new path
++//                dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
++//            }
+         }
+         
+         return dotExecutable;

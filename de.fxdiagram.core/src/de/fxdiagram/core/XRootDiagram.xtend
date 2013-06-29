@@ -1,13 +1,12 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramGestureTool
 import de.fxdiagram.core.tools.KeyTool
 import de.fxdiagram.core.tools.SelectionTool
 import de.fxdiagram.core.tools.XDiagramTool
 import java.util.List
-import javafx.beans.property.DoubleProperty
-import javafx.beans.property.SimpleDoubleProperty
 import javafx.scene.Group
 
 import static extension de.fxdiagram.core.Extensions.*
@@ -18,7 +17,7 @@ class XRootDiagram extends XAbstractDiagram {
 	Group connectionLayer = new Group
 	Group buttonLayer = new Group
 	
-	DoubleProperty scaleProperty = new SimpleDoubleProperty(1.0)
+	@FxProperty double scale = 1.0
 	
 	List<XDiagramTool> tools = newArrayList
 	
@@ -53,11 +52,7 @@ class XRootDiagram extends XAbstractDiagram {
 	override getButtonLayer() {
 		buttonLayer
 	}
-	
-	def getScaleProperty() {
-		scaleProperty
-	}
-	
+		
 	def setCurrentTool(XDiagramTool tool) {
 		var previousTool = _currentTool
 		if(previousTool != null) {

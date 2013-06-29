@@ -1,9 +1,14 @@
 package de.fxdiagram.core;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.AnchorPoints;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.behavior.SelectionBehavior;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -16,8 +21,6 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 @SuppressWarnings("all")
 public class XNode extends Group implements XActivatable {
   private Node node;
-  
-  private boolean isActive;
   
   private Effect mouseOverEffect;
   
@@ -40,11 +43,12 @@ public class XNode extends Group implements XActivatable {
   }
   
   public void activate() {
-    boolean _not = (!this.isActive);
+    boolean _isActive = this.getIsActive();
+    boolean _not = (!_isActive);
     if (_not) {
       this.doActivate();
     }
-    this.isActive = true;
+    this.isActiveProperty.set(true);
   }
   
   public void doActivate() {
@@ -76,6 +80,15 @@ public class XNode extends Group implements XActivatable {
         }
       };
     this.setOnMouseExited(_function_1);
+    final Node node = this.node;
+    boolean _matched = false;
+    if (!_matched) {
+      if (node instanceof XActivatable) {
+        final XActivatable _xActivatable = (XActivatable)node;
+        _matched=true;
+        ((XActivatable)_xActivatable).activate();
+      }
+    }
   }
   
   public Node getNode() {
@@ -103,5 +116,139 @@ public class XNode extends Group implements XActivatable {
   public String getKey() {
     String _string = this.toString();
     return _string;
+  }
+  
+  public double minWidth(final double height) {
+    double _xifexpression = (double) 0;
+    boolean _notEquals = (!Objects.equal(this.widthProperty, null));
+    if (_notEquals) {
+      double _get = this.widthProperty.get();
+      _xifexpression = _get;
+    } else {
+      double _minWidth = super.minWidth(height);
+      _xifexpression = _minWidth;
+    }
+    return _xifexpression;
+  }
+  
+  public double minHeight(final double width) {
+    double _xifexpression = (double) 0;
+    boolean _notEquals = (!Objects.equal(this.heightProperty, null));
+    if (_notEquals) {
+      double _get = this.heightProperty.get();
+      _xifexpression = _get;
+    } else {
+      double _minHeight = super.minHeight(width);
+      _xifexpression = _minHeight;
+    }
+    return _xifexpression;
+  }
+  
+  public double prefWidth(final double height) {
+    double _xifexpression = (double) 0;
+    boolean _notEquals = (!Objects.equal(this.widthProperty, null));
+    if (_notEquals) {
+      double _get = this.widthProperty.get();
+      _xifexpression = _get;
+    } else {
+      double _prefWidth = super.prefWidth(height);
+      _xifexpression = _prefWidth;
+    }
+    return _xifexpression;
+  }
+  
+  public double prefHeight(final double width) {
+    double _xifexpression = (double) 0;
+    boolean _notEquals = (!Objects.equal(this.heightProperty, null));
+    if (_notEquals) {
+      double _get = this.heightProperty.get();
+      _xifexpression = _get;
+    } else {
+      double _prefHeight = super.prefHeight(width);
+      _xifexpression = _prefHeight;
+    }
+    return _xifexpression;
+  }
+  
+  public double maxWidth(final double height) {
+    double _xifexpression = (double) 0;
+    boolean _notEquals = (!Objects.equal(this.widthProperty, null));
+    if (_notEquals) {
+      double _get = this.widthProperty.get();
+      _xifexpression = _get;
+    } else {
+      double _maxWidth = super.maxWidth(height);
+      _xifexpression = _maxWidth;
+    }
+    return _xifexpression;
+  }
+  
+  public double maxHeight(final double width) {
+    double _xifexpression = (double) 0;
+    boolean _notEquals = (!Objects.equal(this.heightProperty, null));
+    if (_notEquals) {
+      double _get = this.heightProperty.get();
+      _xifexpression = _get;
+    } else {
+      double _maxHeight = super.maxHeight(width);
+      _xifexpression = _maxHeight;
+    }
+    return _xifexpression;
+  }
+  
+  private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
+  
+  public boolean getIsActive() {
+    return this.isActiveProperty.get();
+    
+  }
+  
+  public ReadOnlyBooleanProperty isActiveProperty() {
+    return this.isActiveProperty.getReadOnlyProperty();
+    
+  }
+  
+  private final static double DEFAULT_WIDTH = 0d;
+  
+  private SimpleDoubleProperty widthProperty;
+  
+  public double getWidth() {
+    return (this.widthProperty != null)? this.widthProperty.get() : DEFAULT_WIDTH;
+    
+  }
+  
+  public void setWidth(final double width) {
+    this.widthProperty().set(width);
+    
+  }
+  
+  public DoubleProperty widthProperty() {
+    if (this.widthProperty == null) { 
+    	this.widthProperty = new SimpleDoubleProperty(this, "width", DEFAULT_WIDTH);
+    }
+    return this.widthProperty;
+    
+  }
+  
+  private final static double DEFAULT_HEIGHT = 0d;
+  
+  private SimpleDoubleProperty heightProperty;
+  
+  public double getHeight() {
+    return (this.heightProperty != null)? this.heightProperty.get() : DEFAULT_HEIGHT;
+    
+  }
+  
+  public void setHeight(final double height) {
+    this.heightProperty().set(height);
+    
+  }
+  
+  public DoubleProperty heightProperty() {
+    if (this.heightProperty == null) { 
+    	this.heightProperty = new SimpleDoubleProperty(this, "height", DEFAULT_HEIGHT);
+    }
+    return this.heightProperty;
+    
   }
 }

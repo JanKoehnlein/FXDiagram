@@ -13,7 +13,7 @@ class AnchorPoints extends ObjectBinding<List<Point2D>> {
 	new(XNode host) {
 		this.host = host  
 		var dependencies = newArrayList
-		var Node current = host
+		var Node current = host.node
 		do {
 			dependencies.add(current.boundsInLocalProperty)
 			dependencies.add(current.layoutXProperty)

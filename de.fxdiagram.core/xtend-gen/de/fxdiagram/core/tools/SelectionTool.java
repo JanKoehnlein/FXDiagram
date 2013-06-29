@@ -41,8 +41,8 @@ public class SelectionTool implements XDiagramTool {
             if (_notEquals) {
               boolean _and = false;
               SelectionBehavior _selectionBehavior_1 = targetShape.getSelectionBehavior();
-              boolean _isSelected = _selectionBehavior_1.isSelected();
-              boolean _not_1 = (!_isSelected);
+              boolean _selected = _selectionBehavior_1.getSelected();
+              boolean _not_1 = (!_selected);
               if (!_not_1) {
                 _and = false;
               } else {
@@ -122,11 +122,11 @@ public class SelectionTool implements XDiagramTool {
     final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
         public Boolean apply(final XNode it) {
           SelectionBehavior _selectionBehavior = it.getSelectionBehavior();
-          boolean _isSelected = false;
+          boolean _selected = false;
           if (_selectionBehavior!=null) {
-            _isSelected=_selectionBehavior.isSelected();
+            _selected=_selectionBehavior.getSelected();
           }
-          return Boolean.valueOf(_isSelected);
+          return Boolean.valueOf(_selected);
         }
       };
     Iterable<XNode> _filter = IterableExtensions.<XNode>filter(_nodes, _function);

@@ -9,6 +9,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -23,8 +25,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class XRapidButton extends ImageView implements XActivatable {
-  private boolean isActive;
-  
   private XNode host;
   
   private Placer placer;
@@ -43,11 +43,12 @@ public class XRapidButton extends ImageView implements XActivatable {
   }
   
   public void activate() {
-    boolean _not = (!this.isActive);
+    boolean _isActive = this.getIsActive();
+    boolean _not = (!_isActive);
     if (_not) {
       this.doActivate();
     }
-    this.isActive = true;
+    this.isActiveProperty.set(true);
   }
   
   public void doActivate() {
@@ -145,5 +146,17 @@ public class XRapidButton extends ImageView implements XActivatable {
       _xblockexpression = (this.timeline);
     }
     return _xblockexpression;
+  }
+  
+  private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
+  
+  public boolean getIsActive() {
+    return this.isActiveProperty.get();
+    
+  }
+  
+  public ReadOnlyBooleanProperty isActiveProperty() {
+    return this.isActiveProperty.getReadOnlyProperty();
+    
   }
 }

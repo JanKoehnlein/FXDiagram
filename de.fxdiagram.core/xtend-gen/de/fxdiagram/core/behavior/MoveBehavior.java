@@ -1,13 +1,12 @@
 package de.fxdiagram.core.behavior;
 
-import de.fxdiagram.core.Extensions;
-import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.behavior.DragContext;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings("all")
@@ -41,12 +40,12 @@ public class MoveBehavior extends AbstractBehavior {
     double _screenX = it.getScreenX();
     double _screenY = it.getScreenY();
     XNode _host = this.getHost();
-    XAbstractDiagram _diagram = Extensions.getDiagram(_host);
+    Parent _parent = _host.getParent();
     XNode _host_1 = this.getHost();
     double _layoutX = _host_1.getLayoutX();
     XNode _host_2 = this.getHost();
     double _layoutY = _host_2.getLayoutY();
-    Point2D _localToScene = _diagram.localToScene(_layoutX, _layoutY);
+    Point2D _localToScene = _parent.localToScene(_layoutX, _layoutY);
     DragContext _dragContext = new DragContext(_screenX, _screenY, _localToScene);
     DragContext _dragContext_1 = this.dragContext = _dragContext;
     return _dragContext_1;
@@ -68,8 +67,8 @@ public class MoveBehavior extends AbstractBehavior {
     Point2D _point2D = new Point2D(_minus, _minus_1);
     final Point2D newPositionInScene = _point2D;
     XNode _host = this.getHost();
-    XAbstractDiagram _diagram = Extensions.getDiagram(_host);
-    final Point2D newPositionInDiagram = _diagram.sceneToLocal(newPositionInScene);
+    Parent _parent = _host.getParent();
+    final Point2D newPositionInDiagram = _parent.sceneToLocal(newPositionInScene);
     XNode _host_1 = this.getHost();
     double _x_1 = newPositionInDiagram.getX();
     double _y_1 = newPositionInDiagram.getY();

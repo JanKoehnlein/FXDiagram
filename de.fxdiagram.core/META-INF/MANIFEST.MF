@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.core.runtime,
  de.cau.cs.kieler.kiml.service;bundle-version="0.4.0",
  com.google.inject,
  de.cau.cs.kieler.kiml.graphviz.dot;bundle-version="0.6.1",
- de.cau.cs.kieler.kiml.graphviz.layouter;bundle-version="0.6.2"
+ de.cau.cs.kieler.kiml.graphviz.layouter;bundle-version="0.6.2",
+ de.fxdiagram.annotations;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.behavior,
@@ -24,4 +25,5 @@ Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.layout,
  de.fxdiagram.core.tools,
  de.fxdiagram.core.tools.chooser,
- de.fxdiagram.core.transform
+ de.fxdiagram.core.transform,
+ de.fxdiagram.core.debug

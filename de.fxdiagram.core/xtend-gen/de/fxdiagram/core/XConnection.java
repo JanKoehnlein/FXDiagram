@@ -1,6 +1,8 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.properties.FxProperty;
+import de.fxdiagram.annotations.properties.Lazy;
 import de.fxdiagram.core.AnchorPoints;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XActivatable;
@@ -11,6 +13,8 @@ import de.fxdiagram.core.binding.DoubleExpressionExtensions;
 import java.util.List;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -21,35 +25,9 @@ import org.eclipse.xtext.xbase.lib.Pair;
 
 @SuppressWarnings("all")
 public class XConnection extends Polyline implements XActivatable {
-  private XNode _source;
-  
-  public XNode getSource() {
-    return this._source;
-  }
-  
-  public void setSource(final XNode source) {
-    this._source = source;
-  }
-  
-  private XNode _target;
-  
-  public XNode getTarget() {
-    return this._target;
-  }
-  
-  public void setTarget(final XNode target) {
-    this._target = target;
-  }
-  
-  private XConnectionLabel _label;
-  
-  public XConnectionLabel getLabel() {
-    return this._label;
-  }
-  
-  public void setLabel(final XConnectionLabel label) {
-    this._label = label;
-  }
+  @FxProperty
+  @Lazy
+  private XConnectionLabel label;
   
   private boolean isActive;
   
@@ -116,7 +94,7 @@ public class XConnection extends Polyline implements XActivatable {
   public void doActivate() {
     DoubleProperty _strokeWidthProperty = this.strokeWidthProperty();
     XRootDiagram _rootDiagram = Extensions.getRootDiagram(this);
-    DoubleProperty _scaleProperty = _rootDiagram.getScaleProperty();
+    DoubleProperty _scaleProperty = _rootDiagram.scaleProperty();
     DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(1.5, _scaleProperty);
     _strokeWidthProperty.bind(_divide);
     XNode _source = this.getSource();
@@ -136,11 +114,67 @@ public class XConnection extends Polyline implements XActivatable {
       };
     _anchorPoints_1.addListener(_function_1);
     this.calculatePoints();
-    XConnectionLabel _label = this.getLabel();
-    boolean _notEquals = (!Objects.equal(_label, null));
+    boolean _notEquals = (!Objects.equal(this.label, null));
     if (_notEquals) {
-      XConnectionLabel _label_1 = this.getLabel();
-      _label_1.activate();
+      this.label.activate();
     }
+  }
+  
+  private SimpleObjectProperty<XNode> sourceProperty = new SimpleObjectProperty<XNode>(this, "source");
+  
+  public XNode getSource() {
+    return this.sourceProperty.get();
+    
+  }
+  
+  public void setSource(final XNode source) {
+    this.sourceProperty.set(source);
+    
+  }
+  
+  public ObjectProperty<XNode> sourceProperty() {
+    return this.sourceProperty;
+    
+  }
+  
+  private SimpleObjectProperty<XNode> targetProperty = new SimpleObjectProperty<XNode>(this, "target");
+  
+  public XNode getTarget() {
+    return this.targetProperty.get();
+    
+  }
+  
+  public void setTarget(final XNode target) {
+    this.targetProperty.set(target);
+    
+  }
+  
+  public ObjectProperty<XNode> targetProperty() {
+    return this.targetProperty;
+    
+  }
+  
+  private SimpleObjectProperty<XConnectionLabel> labelProperty;
+  
+  public XConnectionLabel getLabel() {
+    return (this.labelProperty != null)? this.labelProperty.get() : this.label;
+    
+  }
+  
+  public void setLabel(final XConnectionLabel label) {
+    if (labelProperty != null) {
+    	this.labelProperty.set(label);
+    } else {
+    	this.label = label;
+    }
+    
+  }
+  
+  public ObjectProperty<XConnectionLabel> labelProperty() {
+    if (this.labelProperty == null) { 
+    	this.labelProperty = new SimpleObjectProperty<XConnectionLabel>(this, "label", this.label);
+    }
+    return this.labelProperty;
+    
   }
 }

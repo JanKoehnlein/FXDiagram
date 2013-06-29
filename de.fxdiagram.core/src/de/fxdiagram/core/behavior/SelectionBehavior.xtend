@@ -1,15 +1,14 @@
 package de.fxdiagram.core.behavior
 
+import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XNode
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.input.MouseEvent
 
 class SelectionBehavior extends AbstractBehavior {
 	
-	BooleanProperty isSelected = new SimpleBooleanProperty
+	@FxProperty boolean selected
 	
 	Effect selectionEffect
 	
@@ -30,7 +29,7 @@ class SelectionBehavior extends AbstractBehavior {
 		]
 		host.onMouseReleased = [
 			if(shortcutDown)
-				isSelected.set(!wasSelected)
+				selectedProperty.set(!wasSelected)
 			consume
 		]
 		selectedProperty.addListener [
@@ -48,20 +47,10 @@ class SelectionBehavior extends AbstractBehavior {
 	}	
 	
 	def mousePressed(MouseEvent it) {
-		wasSelected = isSelected.get
-		isSelected.set(true)
+		wasSelected = selected
+		selected = true
 	}
 	
-	def getSelectedProperty() {
-		isSelected
-	}
 	
-	def isSelected() {
-		selectedProperty.get
-	}
-
-	def setSelected(boolean isSelected) {
-		selectedProperty.set(isSelected)
-	}
 }
 
