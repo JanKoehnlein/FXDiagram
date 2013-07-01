@@ -4,6 +4,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.lib.shapes.BrickBreakerNode;
 import de.fxdiagram.lib.shapes.MovieNode;
 import de.fxdiagram.lib.shapes.NestedDiagramNode;
 import de.fxdiagram.lib.shapes.RecursiveImageNode;
@@ -119,6 +120,17 @@ public class Main extends Application {
         };
       final RecursiveImageNode recursive = ObjectExtensions.<RecursiveImageNode>operator_doubleArrow(_recursiveImageNode, _function_4);
       diagram.addNode(recursive);
+      BrickBreakerNode _brickBreakerNode = new BrickBreakerNode();
+      final Procedure1<BrickBreakerNode> _function_5 = new Procedure1<BrickBreakerNode>() {
+          public void apply(final BrickBreakerNode it) {
+            it.setWidth(160);
+            it.setHeight(120);
+            it.setLayoutX(0);
+            it.setLayoutY(0);
+          }
+        };
+      final BrickBreakerNode brickBreakerNode = ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function_5);
+      diagram.addNode(brickBreakerNode);
       _xblockexpression = (scene);
     }
     return _xblockexpression;

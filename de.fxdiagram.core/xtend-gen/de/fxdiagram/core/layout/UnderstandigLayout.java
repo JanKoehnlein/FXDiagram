@@ -1,19 +1,26 @@
 package de.fxdiagram.core.layout;
 
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.debug.Debug;
+import de.fxdiagram.core.layout.GroupWithFixedSize;
+import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("all")
-public class UnderstandigLayout {
+public class UnderstandigLayout extends Application {
   private final static double EPS = 1e-6;
   
   @Test
@@ -372,5 +379,128 @@ public class UnderstandigLayout {
     int _minus_14 = (-1);
     double _maxHeight_1 = stackPane.maxHeight(_minus_14);
     Assert.assertEquals(Double.MAX_VALUE, _maxHeight_1, UnderstandigLayout.EPS);
+  }
+  
+  @Test
+  public void groupLyingAboutItsSizes() {
+    StackPane _stackPane = new StackPane();
+    final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+        public void apply(final StackPane it) {
+          ObservableList<Node> _children = it.getChildren();
+          GroupWithFixedSize _groupWithFixedSize = new GroupWithFixedSize();
+          final Procedure1<GroupWithFixedSize> _function = new Procedure1<GroupWithFixedSize>() {
+              public void apply(final GroupWithFixedSize it) {
+                ObservableList<Node> _children = it.getChildren();
+                Rectangle _rectangle = new Rectangle();
+                final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+                    public void apply(final Rectangle it) {
+                      it.setWidth(3);
+                      it.setHeight(3);
+                      int _minus = (-1);
+                      int _minus_1 = (-1);
+                      it.relocate(_minus, _minus_1);
+                    }
+                  };
+                Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
+                _children.add(_doubleArrow);
+              }
+            };
+          GroupWithFixedSize _doubleArrow = ObjectExtensions.<GroupWithFixedSize>operator_doubleArrow(_groupWithFixedSize, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+    final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
+    int _minus = (-1);
+    double _minWidth = stackPane.minWidth(_minus);
+    Assert.assertEquals(1, _minWidth, UnderstandigLayout.EPS);
+    int _minus_1 = (-1);
+    double _minHeight = stackPane.minHeight(_minus_1);
+    Assert.assertEquals(1, _minHeight, UnderstandigLayout.EPS);
+    int _minus_2 = (-1);
+    double _prefWidth = stackPane.prefWidth(_minus_2);
+    Assert.assertEquals(1, _prefWidth, UnderstandigLayout.EPS);
+    int _minus_3 = (-1);
+    double _prefHeight = stackPane.prefHeight(_minus_3);
+    Assert.assertEquals(1, _prefHeight, UnderstandigLayout.EPS);
+    int _minus_4 = (-1);
+    double _maxWidth = stackPane.maxWidth(_minus_4);
+    Assert.assertEquals(Double.MAX_VALUE, _maxWidth, UnderstandigLayout.EPS);
+    int _minus_5 = (-1);
+    double _maxHeight = stackPane.maxHeight(_minus_5);
+    Assert.assertEquals(Double.MAX_VALUE, _maxHeight, UnderstandigLayout.EPS);
+    stackPane.layout();
+    int _minus_6 = (-1);
+    double _minWidth_1 = stackPane.minWidth(_minus_6);
+    Assert.assertEquals(1, _minWidth_1, UnderstandigLayout.EPS);
+    int _minus_7 = (-1);
+    double _minHeight_1 = stackPane.minHeight(_minus_7);
+    Assert.assertEquals(1, _minHeight_1, UnderstandigLayout.EPS);
+    int _minus_8 = (-1);
+    double _prefWidth_1 = stackPane.prefWidth(_minus_8);
+    Assert.assertEquals(1, _prefWidth_1, UnderstandigLayout.EPS);
+    int _minus_9 = (-1);
+    double _prefHeight_1 = stackPane.prefHeight(_minus_9);
+    Assert.assertEquals(1, _prefHeight_1, UnderstandigLayout.EPS);
+    int _minus_10 = (-1);
+    double _maxWidth_1 = stackPane.maxWidth(_minus_10);
+    Assert.assertEquals(Double.MAX_VALUE, _maxWidth_1, UnderstandigLayout.EPS);
+    int _minus_11 = (-1);
+    double _maxHeight_1 = stackPane.maxHeight(_minus_11);
+    Assert.assertEquals(Double.MAX_VALUE, _maxHeight_1, UnderstandigLayout.EPS);
+  }
+  
+  public static void main(final String... args) {
+    Application.launch();
+  }
+  
+  public void start(final Stage stage) throws Exception {
+    Rectangle _rectangle = new Rectangle();
+    final Rectangle innerRectangle = _rectangle;
+    StackPane _stackPane = new StackPane();
+    final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+        public void apply(final StackPane it) {
+          ObservableList<Node> _children = it.getChildren();
+          GroupWithFixedSize _groupWithFixedSize = new GroupWithFixedSize();
+          final Procedure1<GroupWithFixedSize> _function = new Procedure1<GroupWithFixedSize>() {
+              public void apply(final GroupWithFixedSize it) {
+                ObservableList<Node> _children = it.getChildren();
+                final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+                    public void apply(final Rectangle it) {
+                      it.setWidth(300);
+                      it.setHeight(300);
+                    }
+                  };
+                Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(innerRectangle, _function);
+                _children.add(_doubleArrow);
+              }
+            };
+          GroupWithFixedSize _doubleArrow = ObjectExtensions.<GroupWithFixedSize>operator_doubleArrow(_groupWithFixedSize, _function);
+          _children.add(_doubleArrow);
+          ObservableList<Node> _children_1 = it.getChildren();
+          Rectangle _rectangle = new Rectangle();
+          final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
+              public void apply(final Rectangle it) {
+                it.setWidth(100);
+                it.setHeight(100);
+                it.relocate(250, 250);
+                it.setFill(Color.GREEN);
+              }
+            };
+          Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_1);
+          _children_1.add(_doubleArrow_1);
+        }
+      };
+    final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
+    Scene _scene = new Scene(stackPane, 640, 480);
+    stage.setScene(_scene);
+    stage.show();
+    Debug.dumpLayout(stackPane);
+    ObservableList<Node> _children = stackPane.getChildren();
+    Node _head = IterableExtensions.<Node>head(_children);
+    Debug.dumpLayout(_head);
+    ObservableList<Node> _children_1 = stackPane.getChildren();
+    Node _last = IterableExtensions.<Node>last(_children_1);
+    Debug.dumpLayout(_last);
+    Debug.dumpBounds(innerRectangle);
   }
 }

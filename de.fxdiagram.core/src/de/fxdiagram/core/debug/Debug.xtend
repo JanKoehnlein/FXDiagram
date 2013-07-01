@@ -4,9 +4,16 @@ import de.fxdiagram.core.XRootDiagram
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.scene.Node
+import java.util.logging.Logger
+import java.util.logging.Level
+import javafx.geometry.Point2D
 
 class Debug {
 	
+	static val LOG = Logger.getLogger(Debug.canonicalName) => [
+		level = Level.INFO
+	]
+	 
 	def static debugTranslation(Node node) {
 		val ChangeListener<Number> debugger = [
 			element, oldVal, newVal |
@@ -36,8 +43,30 @@ class Debug {
 		var currentNode = node
 		while(currentNode != null && !(currentNode instanceof XRootDiagram)) {
 			currentNode.boundsInLocalProperty.addListener(debugger)
-//			currentNode.boundsInParentProperty.addListener(debugger)
 			currentNode = currentNode.parent
 		}
+	}
+	
+	def static dumpLayout(Node it) {
+		LOG.info('''Layout of «class.simpleName»: («layoutX»:«layoutY») «layoutBounds»''')
+	}
+
+	def static dumpBounds(Node it) {
+		var message = '''
+			Bounds of «class.simpleName»:
+				(«layoutX»:«layoutY») «layoutBounds»
+		 '''
+		 var current = it
+		 var currentPosition = new Point2D(layoutX, layoutY)
+		 var currentBounds = layoutBounds
+		 while(current.parent != null) {
+		 	currentBounds = current.localToParent(currentBounds)
+		 	currentPosition = current.localToParent(currentPosition)
+		 	message = message + '''
+		 		«null»	in «current.parent.class.simpleName»: («currentPosition.x»:«currentPosition.y») «currentBounds»
+		 	'''
+		 	current = current.parent
+		 }
+		 LOG.info(message)
 	}
 }

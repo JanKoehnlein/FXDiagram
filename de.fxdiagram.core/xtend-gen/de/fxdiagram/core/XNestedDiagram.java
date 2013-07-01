@@ -292,36 +292,6 @@ public class XNestedDiagram extends XAbstractDiagram {
     return _diagram;
   }
   
-  public double minWidth(final double hint) {
-    double _width = this.getWidth();
-    return _width;
-  }
-  
-  public double minHeight(final double hint) {
-    double _height = this.getHeight();
-    return _height;
-  }
-  
-  public double prefWidth(final double hint) {
-    double _width = this.getWidth();
-    return _width;
-  }
-  
-  public double prefHeight(final double hint) {
-    double _height = this.getHeight();
-    return _height;
-  }
-  
-  public double maxWidth(final double hint) {
-    double _width = this.getWidth();
-    return _width;
-  }
-  
-  public double maxHeight(final double hint) {
-    double _height = this.getHeight();
-    return _height;
-  }
-  
   private SimpleDoubleProperty widthProperty = new SimpleDoubleProperty(this, "width",_initWidth());
   
   private static final double _initWidth() {

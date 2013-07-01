@@ -17,7 +17,6 @@ import javafx.scene.shape.Rectangle
 class XNestedDiagram extends XAbstractDiagram {
 
 	@FxProperty double width = 80
-
 	@FxProperty double height = 60
 
 	(XNestedDiagram)=>void contentsInitializer
@@ -129,29 +128,5 @@ class XNestedDiagram extends XAbstractDiagram {
 
 	def protected getParentDiagram() {
 		parent?.diagram
-	}
-
-	override minWidth(double hint) {
-		width
-	}
-	
-	override minHeight(double hint) {
-		height
-	}
-	
-	override prefWidth(double hint) {
-		width
-	}
-	
-	override prefHeight(double hint) {
-		height
-	}
-	
-	override maxWidth(double hint) {
-		width
-	}
-	
-	override maxHeight(double hint) {
-		height
 	}
 }

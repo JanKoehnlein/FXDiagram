@@ -4,6 +4,11 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.lib.shapes.BrickBreakerNode
+import de.fxdiagram.lib.shapes.MovieNode
+import de.fxdiagram.lib.shapes.NestedDiagramNode
+import de.fxdiagram.lib.shapes.RecursiveImageNode
+import de.fxdiagram.lib.shapes.SimpleNode
 import javafx.application.Application
 import javafx.geometry.Rectangle2D
 import javafx.scene.PerspectiveCamera
@@ -30,7 +35,7 @@ class Main extends Application {
 		scene.setCamera(new PerspectiveCamera)
 		diagram.activate()
 		
-		val source = new de.fxdiagram.lib.shapes.NestedDiagramNode('source') => [
+		val source = new NestedDiagramNode('source') => [
 			layoutX = 280
 			layoutY = 170
 			width = 80
@@ -38,7 +43,7 @@ class Main extends Application {
 		]
 		diagram.addNode(source)
 
-		val target = new de.fxdiagram.lib.shapes.SimpleNode('target') => [
+		val target = new SimpleNode('target') => [
 			layoutX = 280
 			layoutY = 280
 			width = 80
@@ -63,7 +68,7 @@ class Main extends Application {
 		]
 		diagram.addNode(image)
 
-		val movie = new de.fxdiagram.lib.shapes.MovieNode(class.classLoader.getResource("media/ScreenFlow.mp4")) => [
+		val movie = new MovieNode(class.classLoader.getResource("media/ScreenFlow.mp4")) => [
 			width = 160
 			height = 90
 			getView.viewport = new Rectangle2D(0, 60, 640, 360)
@@ -72,11 +77,20 @@ class Main extends Application {
 		]
 		diagram.addNode(movie)
 
-		val recursive = new de.fxdiagram.lib.shapes.RecursiveImageNode(new Image("media/seltsam.jpg", true), 10, 0, 0.5) => [
+		val recursive = new RecursiveImageNode(new Image("media/seltsam.jpg", true), 10, 0, 0.5) => [
 			width = 120
 			height = 90
 		]
 		diagram.addNode(recursive)
+		
+		val brickBreakerNode = new BrickBreakerNode => [
+			width = 160
+			height = 120
+			layoutX = 0
+			layoutY = 0
+			
+		]
+		diagram.addNode(brickBreakerNode)
 		scene
 	}
 }

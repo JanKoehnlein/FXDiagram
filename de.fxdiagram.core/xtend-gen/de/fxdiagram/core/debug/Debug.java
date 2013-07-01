@@ -2,17 +2,37 @@ package de.fxdiagram.core.debug;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XRootDiagram;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class Debug {
+  private final static Logger LOG = new Function0<Logger>() {
+    public Logger apply() {
+      String _canonicalName = Debug.class.getCanonicalName();
+      Logger _logger = Logger.getLogger(_canonicalName);
+      final Procedure1<Logger> _function = new Procedure1<Logger>() {
+          public void apply(final Logger it) {
+            it.setLevel(Level.INFO);
+          }
+        };
+      Logger _doubleArrow = ObjectExtensions.<Logger>operator_doubleArrow(_logger, _function);
+      return _doubleArrow;
+    }
+  }.apply();
+  
   public static void debugTranslation(final Node node) {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> element, final Number oldVal, final Number newVal) {
@@ -107,5 +127,86 @@ public class Debug {
       }
       _while = _and_1;
     }
+  }
+  
+  public static void dumpLayout(final Node it) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Layout of ");
+    Class<? extends Node> _class = it.getClass();
+    String _simpleName = _class.getSimpleName();
+    _builder.append(_simpleName, "");
+    _builder.append(": (");
+    double _layoutX = it.getLayoutX();
+    _builder.append(_layoutX, "");
+    _builder.append(":");
+    double _layoutY = it.getLayoutY();
+    _builder.append(_layoutY, "");
+    _builder.append(") ");
+    Bounds _layoutBounds = it.getLayoutBounds();
+    _builder.append(_layoutBounds, "");
+    Debug.LOG.info(_builder.toString());
+  }
+  
+  public static void dumpBounds(final Node it) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Bounds of ");
+    Class<? extends Node> _class = it.getClass();
+    String _simpleName = _class.getSimpleName();
+    _builder.append(_simpleName, "");
+    _builder.append(":");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
+    _builder.append("(");
+    double _layoutX = it.getLayoutX();
+    _builder.append(_layoutX, "	");
+    _builder.append(":");
+    double _layoutY = it.getLayoutY();
+    _builder.append(_layoutY, "	");
+    _builder.append(") ");
+    Bounds _layoutBounds = it.getLayoutBounds();
+    _builder.append(_layoutBounds, "	");
+    _builder.newLineIfNotEmpty();
+    String message = _builder.toString();
+    Node current = it;
+    double _layoutX_1 = it.getLayoutX();
+    double _layoutY_1 = it.getLayoutY();
+    Point2D _point2D = new Point2D(_layoutX_1, _layoutY_1);
+    Point2D currentPosition = _point2D;
+    Bounds currentBounds = it.getLayoutBounds();
+    Parent _parent = current.getParent();
+    boolean _notEquals = (!Objects.equal(_parent, null));
+    boolean _while = _notEquals;
+    while (_while) {
+      {
+        Bounds _localToParent = current.localToParent(currentBounds);
+        currentBounds = _localToParent;
+        Point2D _localToParent_1 = current.localToParent(currentPosition);
+        currentPosition = _localToParent_1;
+        StringConcatenation _builder_1 = new StringConcatenation();
+        _builder_1.append(null, "");
+        _builder_1.append("\tin ");
+        Parent _parent_1 = current.getParent();
+        Class<? extends Parent> _class_1 = _parent_1.getClass();
+        String _simpleName_1 = _class_1.getSimpleName();
+        _builder_1.append(_simpleName_1, "");
+        _builder_1.append(": (");
+        double _x = currentPosition.getX();
+        _builder_1.append(_x, "");
+        _builder_1.append(":");
+        double _y = currentPosition.getY();
+        _builder_1.append(_y, "");
+        _builder_1.append(") ");
+        _builder_1.append(currentBounds, "");
+        _builder_1.newLineIfNotEmpty();
+        String _plus = (message + _builder_1);
+        message = _plus;
+        Parent _parent_2 = current.getParent();
+        current = _parent_2;
+      }
+      Parent _parent_1 = current.getParent();
+      boolean _notEquals_1 = (!Objects.equal(_parent_1, null));
+      _while = _notEquals_1;
+    }
+    Debug.LOG.info(message);
   }
 }
