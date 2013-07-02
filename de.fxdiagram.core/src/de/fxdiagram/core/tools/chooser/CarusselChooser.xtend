@@ -25,7 +25,6 @@ class CarusselChooser extends AbstractXNodeChooser {
 
 	protected override setInterpolatedPosition(double interpolatedPosition) {
 		val maxHeight = nodes.fold(0.0, [a, b|max(a, b.layoutBounds.height)]) + spacing
-		println(maxHeight)
 		val angle = PI / nodes.size
 		val radius = maxHeight / 2 / sin(angle)
 		for (i : 0 ..< nodes.size) {

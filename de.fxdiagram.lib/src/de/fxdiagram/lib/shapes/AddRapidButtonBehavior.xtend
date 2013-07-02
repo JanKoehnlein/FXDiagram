@@ -1,4 +1,4 @@
-package de.fxdiagram.lib.shapes
+	package de.fxdiagram.lib.shapes
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
@@ -24,45 +24,45 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 	override doActivate() {
 		val addAction = [ XRapidButton button | 
 			val target = new NestedDiagramNode("new")
-			val source = button.getHost
+			val source = button.host
 			val connection = new XConnection(source, target)
-			getHost.getDiagram.addNode(target)
-			getHost.getDiagram.addConnection(connection)
-			target.layoutX = 200 * (button.getPlacer.getXPos - 0.5) + source.layoutX 
-			target.layoutY = 150 * (button.getPlacer.getYPos - 0.5) + source.layoutY
+			host.diagram.addNode(target)
+			host.diagram.addConnection(connection)
+			target.layoutX = 200 * (button.placer.XPos - 0.5) + source.layoutX 
+			target.layoutY = 150 * (button.placer.YPos - 0.5) + source.layoutY
 		]
 		val chooseAction = [ XRapidButton button | 
-			val chooser = new CarusselChooser(getHost, button.getChooserPosition)
+			val chooser = new CarusselChooser(host, button.chooserPosition)
 			chooser.addChoices
-			getHost.getRootDiagram.currentTool = chooser
+			host.rootDiagram.currentTool = chooser
 		]
 		val cubeChooseAction = [ XRapidButton button | 
-			val chooser = new CubeChooser(getHost, button.getChooserPosition)
+			val chooser = new CubeChooser(host, button.chooserPosition)
 			chooser.addChoices
-			getHost.getRootDiagram.currentTool = chooser
+			host.rootDiagram.currentTool = chooser
 		]
 		val coverFlowChooseAction = [ XRapidButton button | 
-			val chooser = new CoverFlowChooser(getHost, button.getChooserPosition)
+			val chooser = new CoverFlowChooser(host, button.chooserPosition)
 			chooser.addChoices
-			getHost.getRootDiagram.currentTool = chooser
+			host.rootDiagram.currentTool = chooser
 		]
 		rapidButtons = #[
-			new XRapidButton(getHost, 0.5, 0, 'icons/add_16.png', cubeChooseAction),
-			new XRapidButton(getHost, 0.5, 1, 'icons/add_16.png', coverFlowChooseAction),
-			new XRapidButton(getHost, 0, 0.5, 'icons/add_16.png', chooseAction),
-			new XRapidButton(getHost, 1, 0.5, 'icons/add_16.png', addAction)]
-		rapidButtons.forEach[getHost.getDiagram.addButton(it)]
-		getHost.getNode.onMouseEntered = [
+			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', cubeChooseAction),
+			new XRapidButton(host, 0.5, 1, 'icons/add_16.png', coverFlowChooseAction),
+			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', chooseAction),
+			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addAction)]
+		rapidButtons.forEach[host.diagram.addButton(it)]
+		host.node.onMouseEntered = [
 			rapidButtons.forEach[show]
 		]
-		getHost.getNode.onMouseExited = [
+		host.node.onMouseExited = [
 			rapidButtons.forEach[fade]
 		]
 	}
 	
 	protected def getChooserPosition(XRapidButton button) {
-		val x = 200 * (button.getPlacer.getXPos - 0.5) + button.getHost.layoutX + 0.5 * button.getHost.layoutBounds.width 
-		val y = 150 * (button.getPlacer.getYPos - 0.5) + button.getHost.layoutY + 0.5 * button.getHost.layoutBounds.height
+		val x = 200 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
+		val y = 150 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height
 		new Point2D(x, y) 
 	}
 	
