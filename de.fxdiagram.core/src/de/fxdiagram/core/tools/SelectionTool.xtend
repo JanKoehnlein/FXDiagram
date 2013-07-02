@@ -26,12 +26,16 @@ class SelectionTool implements XDiagramTool {
 					selection.filter[it.diagram != targetShape.diagram].forEach [
 						selectionBehavior.selected = false
 					]
+					if(event.shortcutDown)
+						targetShape.selectionBehavior.toggleSelect(event)
+					else 
+						targetShape.selectionBehavior.select(event)
+						
 					selection.forEach [
 						moveBehavior?.mousePressed(event)
 					]
 					targetShape.moveBehavior?.mousePressed(event)
-					targetShape.selectionBehavior.mousePressed(event)
-					event.consume
+					//event.consume
 				}
 			}
 		]

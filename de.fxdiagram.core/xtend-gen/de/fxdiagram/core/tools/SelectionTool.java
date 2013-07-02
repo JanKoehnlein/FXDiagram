@@ -76,6 +76,14 @@ public class SelectionTool implements XDiagramTool {
                   }
                 };
               IterableExtensions.<XNode>forEach(_filter, _function_2);
+              boolean _isShortcutDown_1 = event.isShortcutDown();
+              if (_isShortcutDown_1) {
+                SelectionBehavior _selectionBehavior_2 = targetShape.getSelectionBehavior();
+                _selectionBehavior_2.toggleSelect(event);
+              } else {
+                SelectionBehavior _selectionBehavior_3 = targetShape.getSelectionBehavior();
+                _selectionBehavior_3.select(event);
+              }
               Iterable<XNode> _selection_2 = SelectionTool.this.getSelection();
               final Procedure1<XNode> _function_3 = new Procedure1<XNode>() {
                   public void apply(final XNode it) {
@@ -90,9 +98,6 @@ public class SelectionTool implements XDiagramTool {
               if (_moveBehavior!=null) {
                 _moveBehavior.mousePressed(event);
               }
-              SelectionBehavior _selectionBehavior_2 = targetShape.getSelectionBehavior();
-              _selectionBehavior_2.mousePressed(event);
-              event.consume();
             }
           }
         }

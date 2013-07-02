@@ -6,7 +6,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.input.MouseEvent;
@@ -16,8 +15,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class SelectionBehavior extends AbstractBehavior {
   private Effect selectionEffect;
-  
-  private boolean wasSelected;
   
   public SelectionBehavior(final XNode host) {
     super(host);
@@ -33,25 +30,7 @@ public class SelectionBehavior extends AbstractBehavior {
   }
   
   public void doActivate() {
-    XNode _host = this.getHost();
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          SelectionBehavior.this.mousePressed(it);
-        }
-      };
-    _host.setOnMousePressed(_function);
-    XNode _host_1 = this.getHost();
-    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          boolean _isShortcutDown = it.isShortcutDown();
-          if (_isShortcutDown) {
-            boolean _not = (!SelectionBehavior.this.wasSelected);
-            SelectionBehavior.this.selectedProperty.set(_not);
-          }
-        }
-      };
-    _host_1.setOnMouseReleased(_function_1);
-    final ChangeListener<Boolean> _function_2 = new ChangeListener<Boolean>() {
+    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
         public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
           if ((newValue).booleanValue()) {
             XNode _host = SelectionBehavior.this.getHost();
@@ -70,13 +49,20 @@ public class SelectionBehavior extends AbstractBehavior {
           }
         }
       };
-    this.selectedProperty.addListener(_function_2);
+    this.selectedProperty.addListener(_function);
   }
   
-  public void mousePressed(final MouseEvent it) {
-    boolean _selected = this.getSelected();
-    this.wasSelected = _selected;
+  public void select(final MouseEvent it) {
     this.setSelected(true);
+  }
+  
+  public void toggleSelect(final MouseEvent it) {
+    boolean _isShortcutDown = it.isShortcutDown();
+    if (_isShortcutDown) {
+      boolean _selected = this.getSelected();
+      boolean _not = (!_selected);
+      this.setSelected(_not);
+    }
   }
   
   private SimpleBooleanProperty selectedProperty = new SimpleBooleanProperty(this, "selected");
