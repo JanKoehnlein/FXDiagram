@@ -17,7 +17,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -53,9 +52,9 @@ public class BrickBreakerNode extends XNode {
             };
           RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
           it.setFront(_doubleArrow);
-          Pane _pane = new Pane();
-          final Procedure1<Pane> _function_1 = new Procedure1<Pane>() {
-              public void apply(final Pane it) {
+          Group _group = new Group();
+          final Procedure1<Group> _function_1 = new Procedure1<Group>() {
+              public void apply(final Group it) {
                 ObservableList<Node> _children = it.getChildren();
                 Group _group = new Group();
                 final Procedure1<Group> _function = new Procedure1<Group>() {
@@ -77,7 +76,7 @@ public class BrickBreakerNode extends XNode {
                 _children.add(_doubleArrow);
               }
             };
-          Pane _doubleArrow_1 = ObjectExtensions.<Pane>operator_doubleArrow(_pane, _function_1);
+          Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
           it.setBack(_doubleArrow_1);
         }
       };

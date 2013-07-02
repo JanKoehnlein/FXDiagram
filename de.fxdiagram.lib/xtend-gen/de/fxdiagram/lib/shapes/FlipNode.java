@@ -103,14 +103,12 @@ public class FlipNode extends StackPane {
                         it.setToAngle(90);
                         final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                             public void handle(final ActionEvent it) {
-                              ObservableList<Node> _children = FlipNode.this.getChildren();
                               Node _currentVisible = FlipNode.this.getCurrentVisible();
-                              _children.remove(_currentVisible);
+                              _currentVisible.setVisible(false);
                               boolean _not = (!FlipNode.this.isCurrentFront);
                               FlipNode.this.isCurrentFront = _not;
-                              ObservableList<Node> _children_1 = FlipNode.this.getChildren();
                               Node _currentVisible_1 = FlipNode.this.getCurrentVisible();
-                              _children_1.add(_currentVisible_1);
+                              _currentVisible_1.setVisible(true);
                             }
                           };
                         it.setOnFinished(_function);
@@ -144,21 +142,21 @@ public class FlipNode extends StackPane {
     this.setOnMousePressed(this.clickHandler);
   }
   
-  public boolean setFront(final Node front) {
-    boolean _xblockexpression = false;
-    {
-      this.front = front;
-      front.setOnMousePressed(this.clickHandler);
-      ObservableList<Node> _children = this.getChildren();
-      boolean _add = _children.add(front);
-      _xblockexpression = (_add);
-    }
-    return _xblockexpression;
+  public void setFront(final Node front) {
+    this.front = front;
+    front.setOnMousePressed(this.clickHandler);
+    ObservableList<Node> _children = this.getChildren();
+    _children.add(front);
+    front.setVisible(this.isCurrentFront);
   }
   
   public void setBack(final Node back) {
     this.back = back;
     back.setOnMousePressed(this.clickHandler);
+    ObservableList<Node> _children = this.getChildren();
+    _children.add(back);
+    boolean _not = (!this.isCurrentFront);
+    back.setVisible(_not);
   }
   
   public Node getCurrentVisible() {

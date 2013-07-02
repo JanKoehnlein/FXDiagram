@@ -19,13 +19,13 @@ class SimpleNode extends XNode {
 				text = name
 				textOrigin = VPos.TOP
 			]
-			StackPane.setMargin(label, new Insets(10,20,10,20))
+			StackPane.setMargin(label, new Insets(10, 20, 10, 20))
 		]
 		node.effect = new InnerShadow => [
 			radius = 7
 		]
 	}
-	
+
 	override doActivate() {
 		super.doActivate()
 		val rapidButtonBehavior = new AddRapidButtonBehavior(this)

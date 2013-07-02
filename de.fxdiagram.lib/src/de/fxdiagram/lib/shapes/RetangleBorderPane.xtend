@@ -1,25 +1,73 @@
 package de.fxdiagram.lib.shapes
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.Lazy
+import de.fxdiagram.core.export.SvgExportable
+import de.fxdiagram.core.export.SvgExporter
+import javafx.geometry.Insets
 import javafx.scene.layout.Region
 import javafx.scene.layout.StackPane
+import javafx.scene.paint.Color
+import javafx.scene.paint.CycleMethod
+import javafx.scene.paint.LinearGradient
+import javafx.scene.paint.Paint
+import javafx.scene.paint.Stop
 
-class RectangleBorderPane extends StackPane {
-	
-	@FxProperty@Lazy double borderWidth = 1.2
-	
-	@FxProperty@Lazy double borderRadius = 12
+import static extension de.fxdiagram.core.css.JavaToCss.*
 
+class RectangleBorderPane extends StackPane implements SvgExportable {
+
+	@FxProperty double borderWidth = 1.2
+	
+	@FxProperty double borderRadius = 12.0
+
+	@FxProperty Insets borderInsets = new Insets(1, 1, 1, 1)
+
+	@FxProperty Paint borderPaint = Color.GRAY
+
+	@FxProperty Paint backgroundPaint = new LinearGradient(
+		0, 0, 1, 1, 
+		true, CycleMethod.NO_CYCLE,
+		#[
+			new Stop(0, Color.gray(0.6)), 
+			new Stop(1, Color.gray(0.9))
+		])
+		
+	@FxProperty double backgroundRadius = 12.0
+
+	
 	new() {
 		setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE)
+		borderWidthProperty.addListener[ prop, oldVal, newVal | updateStyle]
+		borderRadiusProperty.addListener[ prop, oldVal, newVal | updateStyle]
+		borderInsetsProperty.addListener[ prop, oldVal, newVal | updateStyle]
+		borderPaintProperty.addListener[ prop, oldVal, newVal | updateStyle]
+		backgroundPaintProperty.addListener[ prop, oldVal, newVal | updateStyle]
+		backgroundRadiusProperty.addListener[ prop, oldVal, newVal | updateStyle]
+		updateStyle
+	}
+	
+	protected def updateStyle() {
 		style = '''
-				-fx-border-color: gray;
-				-fx-border-width: 1.2;
-				-fx-border-radius: 12;
-				-fx-background-color: linear-gradient(to bottom right, lightgray, darkgray);
-				-fx-background-radius: 12;
-				-fx-background-insets: 1 1 1 1;
+			-fx-border-color: «borderPaint.toCss»;
+			-fx-border-width: «borderWidth»;
+			-fx-border-radius: «borderRadius»;
+			-fx-background-color: «backgroundPaint.toCss»;
+			-fx-background-radius: «backgroundRadius»;
+			-fx-background-insets: «borderInsets.toCss»;
 		'''
 	}
+	
+	override toSvgElement(extension SvgExporter exporter) '''
+		<!-- «class.name» -->
+		<rect
+			«toSvgString(localToSceneTransform)» 
+			width="«width»" height="«height»"
+			rx="«borderRadius»" ry="«borderRadius»"
+			fill="«backgroundPaint.toSvgString»"
+			stroke="«borderPaint.toSvgString»"
+			strokeWidth="«borderWidth»"
+			«opacity.toSvgAttribute("opacity", 1.0)»
+		/>
+		«this.parentToSvgElement»
+	'''
 }

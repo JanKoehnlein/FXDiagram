@@ -2,9 +2,9 @@ package de.fxdiagram.lib.example;
 
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.lib.shapes.BrickBreakerNode;
+import de.fxdiagram.lib.shapes.ImageNode;
 import de.fxdiagram.lib.shapes.MovieNode;
 import de.fxdiagram.lib.shapes.NestedDiagramNode;
 import de.fxdiagram.lib.shapes.RecursiveImageNode;
@@ -15,7 +15,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -72,33 +71,25 @@ public class Main extends Application {
       final XConnectionLabel connectionLabel = _xConnectionLabel;
       connectionLabel.setText("label");
       diagram.addConnection(connection);
-      XNode _xNode = new XNode();
-      final Procedure1<XNode> _function_2 = new Procedure1<XNode>() {
-          public void apply(final XNode it) {
-            ImageView _imageView = new ImageView();
-            final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-                public void apply(final ImageView it) {
-                  Image _image = new Image("media/seltsam.jpg", true);
-                  it.setImage(_image);
-                  it.setPreserveRatio(true);
-                  it.setFitWidth(100);
-                  it.setFitHeight(75);
-                }
-              };
-            ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
-            it.setNode(_doubleArrow);
+      ImageNode _imageNode = new ImageNode();
+      final Procedure1<ImageNode> _function_2 = new Procedure1<ImageNode>() {
+          public void apply(final ImageNode it) {
+            Image _image = new Image("media/seltsam.jpg", true);
+            it.setImage(_image);
             it.setLayoutX(100);
             it.setLayoutY(100);
+            it.setWidth(100);
           }
         };
-      final XNode image = ObjectExtensions.<XNode>operator_doubleArrow(_xNode, _function_2);
+      final ImageNode image = ObjectExtensions.<ImageNode>operator_doubleArrow(_imageNode, _function_2);
       diagram.addNode(image);
-      Class<? extends Main> _class = this.getClass();
-      ClassLoader _classLoader = _class.getClassLoader();
-      URL _resource = _classLoader.getResource("media/ScreenFlow.mp4");
-      MovieNode _movieNode = new MovieNode(_resource);
+      MovieNode _movieNode = new MovieNode();
       final Procedure1<MovieNode> _function_3 = new Procedure1<MovieNode>() {
           public void apply(final MovieNode it) {
+            Class<? extends Main> _class = Main.this.getClass();
+            ClassLoader _classLoader = _class.getClassLoader();
+            URL _resource = _classLoader.getResource("media/ScreenFlow.mp4");
+            it.setMovieUrl(_resource);
             it.setWidth(160);
             it.setHeight(90);
             MediaView _view = it.getView();

@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.transform.TransformExtensions;
 import java.util.logging.Logger;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
@@ -12,6 +13,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 
 @SuppressWarnings("all")
 public class Extensions {
@@ -93,6 +96,34 @@ public class Extensions {
       _switchResult = _localToDiagram;
     }
     return _switchResult;
+  }
+  
+  public static Transform localToDiagramTransform(final Node node) {
+    Transform _xblockexpression = null;
+    {
+      Affine _affine = new Affine();
+      final Affine transform = _affine;
+      Node currentNode = node;
+      Parent _parent = currentNode.getParent();
+      boolean _notEquals = (!Objects.equal(_parent, null));
+      boolean _while = _notEquals;
+      while (_while) {
+        {
+          Transform _localToParentTransform = currentNode.getLocalToParentTransform();
+          TransformExtensions.leftMultiply(transform, _localToParentTransform);
+          Parent _parent_1 = currentNode.getParent();
+          currentNode = _parent_1;
+          if ((currentNode instanceof XAbstractDiagram)) {
+            return transform;
+          }
+        }
+        Parent _parent_1 = currentNode.getParent();
+        boolean _notEquals_1 = (!Objects.equal(_parent_1, null));
+        _while = _notEquals_1;
+      }
+      _xblockexpression = (null);
+    }
+    return _xblockexpression;
   }
   
   public static XAbstractDiagram getDiagram(final Node it) {

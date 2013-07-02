@@ -2,9 +2,9 @@ package de.fxdiagram.lib.example
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
-import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRootDiagram
 import de.fxdiagram.lib.shapes.BrickBreakerNode
+import de.fxdiagram.lib.shapes.ImageNode
 import de.fxdiagram.lib.shapes.MovieNode
 import de.fxdiagram.lib.shapes.NestedDiagramNode
 import de.fxdiagram.lib.shapes.RecursiveImageNode
@@ -14,7 +14,6 @@ import javafx.geometry.Rectangle2D
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
 import javafx.scene.image.Image
-import javafx.scene.image.ImageView
 import javafx.stage.Stage
 
 class Main extends Application {
@@ -56,22 +55,20 @@ class Main extends Application {
 		connectionLabel.text = 'label'
 		diagram.addConnection(connection)
 
-		val image = new XNode => [
-			node = new ImageView => [
-				image = new Image("media/seltsam.jpg", true)
-				preserveRatio = true
-				fitWidth = 100
-				fitHeight = 75
-			]
+
+		val image = new ImageNode => [
+			image = new Image("media/seltsam.jpg", true)
 			layoutX = 100
 			layoutY = 100
+			width = 100
 		]
 		diagram.addNode(image)
 
-		val movie = new MovieNode(class.classLoader.getResource("media/ScreenFlow.mp4")) => [
+		val movie = new MovieNode => [
+			movieUrl = this.class.classLoader.getResource("media/ScreenFlow.mp4")
 			width = 160
 			height = 90
-			getView.viewport = new Rectangle2D(0, 60, 640, 360)
+			view.viewport = new Rectangle2D(0, 60, 640, 360)
 			layoutX = 100
 			layoutY = 200
 		]

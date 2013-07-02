@@ -16,26 +16,25 @@ import static extension javafx.util.Duration.*
 class FlipNode extends StackPane {
 
 	Node front
-	
+
 	Node back
-	
+
 	boolean isCurrentFront = true
-	
+
 	EventHandler<MouseEvent> clickHandler
-	
+
 	new() {
 		clickHandler = [ event |
-			if(front != null && back != null) {
+			if (front != null && back != null) {
 				val clickInScene = new Point2D(event.sceneX, event.sceneY)
 				val clickInLocal = currentVisible.sceneToLocal(clickInScene)
 				val center = boundsInLocal.center
 				val direction = new Point3D(clickInLocal.x - center.x, clickInLocal.y - center.y, 0)
-				val turnAxis = 
-					if(direction.x * direction.x + direction.y * direction.y < 1E-6)
-						new Point3D(1,0,0)
-					else if(direction.x.abs > direction.y.abs) 
+				val turnAxis = if (direction.x * direction.x + direction.y * direction.y < 1E-6)
+						new Point3D(1, 0, 0)
+					else if (direction.x.abs > direction.y.abs)
 						new Point3D(0, direction.y, 0)
-					else 
+					else
 						new Point3D(direction.x, 0, 0)
 				new SequentialTransition => [
 					children += new RotateTransition => [
@@ -45,12 +44,12 @@ class FlipNode extends StackPane {
 						fromAngle = 0
 						toAngle = 90
 						onFinished = [
-							children -= currentVisible
+							currentVisible.visible = false
 							isCurrentFront = ! isCurrentFront
-							children += currentVisible
+							currentVisible.visible = true
 						]
 					]
-					children += new RotateTransition  => [
+					children += new RotateTransition => [
 						node = currentInvisible
 						duration = 250.millis
 						axis = turnAxis
@@ -60,21 +59,24 @@ class FlipNode extends StackPane {
 					play
 				]
 			}
-		]			
-		onMousePressed = clickHandler 
+		]
+		onMousePressed = clickHandler
 	}
 
 	def setFront(Node front) {
 		this.front = front
 		front.onMousePressed = clickHandler
 		children.add(front)
+		front.visible = isCurrentFront
 	}
-	
+
 	def setBack(Node back) {
 		this.back = back
 		back.onMousePressed = clickHandler
+		children.add(back)
+		back.visible = !isCurrentFront
 	}
-	
+
 	def getCurrentVisible() {
 		if(isCurrentFront) front else back
 	}
@@ -82,5 +84,5 @@ class FlipNode extends StackPane {
 	def getCurrentInvisible() {
 		if(isCurrentFront) back else front
 	}
-	
+
 }

@@ -8,6 +8,8 @@ import de.fxdiagram.core.behavior.SelectionBehavior;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -101,6 +103,10 @@ public class XNode extends Parent implements XActivatable {
     _children.add(node);
   }
   
+  protected void setKey(final String key) {
+    this.keyProperty.set(key);
+  }
+  
   public SelectionBehavior getSelectionBehavior() {
     return this.selectionBehavior;
   }
@@ -111,11 +117,6 @@ public class XNode extends Parent implements XActivatable {
   
   public AnchorPoints getAnchorPoints() {
     return this.anchorPoints;
-  }
-  
-  public String getKey() {
-    String _string = this.toString();
-    return _string;
   }
   
   public double minWidth(final double height) {
@@ -249,6 +250,18 @@ public class XNode extends Parent implements XActivatable {
     	this.heightProperty = new SimpleDoubleProperty(this, "height", DEFAULT_HEIGHT);
     }
     return this.heightProperty;
+    
+  }
+  
+  private ReadOnlyStringWrapper keyProperty = new ReadOnlyStringWrapper(this, "key");
+  
+  public String getKey() {
+    return this.keyProperty.get();
+    
+  }
+  
+  public ReadOnlyStringProperty keyProperty() {
+    return this.keyProperty.getReadOnlyProperty();
     
   }
 }

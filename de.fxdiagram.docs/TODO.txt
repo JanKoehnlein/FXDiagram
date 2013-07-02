@@ -8,12 +8,11 @@ ENHANCEMENT
 - Fancy context menus
 - more controls for MovieNode
 - BrowserNode
+- rename and don't export test packages
 
 BUG
 - Initial layout of choosers is broken  
-- Make SVG export work with RectangleBorderPane
 - Fix fluctuations in layout of RecursiveImageNode
-- Fix layout position of BrickBreakerNode
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
@@ -21,3 +20,5 @@ MINOR
   
 DONE 
 - Inherit from Parent, not Group
+- Fix layout position of BrickBreakerNode
+- Make SVG export work with RectangleBorderPane

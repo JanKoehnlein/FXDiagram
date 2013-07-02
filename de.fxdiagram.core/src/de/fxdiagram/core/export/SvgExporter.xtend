@@ -1,9 +1,16 @@
 package de.fxdiagram.core.export
 
+import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.core.debug.Debug
+import java.io.File
+import java.io.IOException
 import java.util.List
-import javafx.scene.Node
+import java.util.logging.Level
+import java.util.logging.Logger
+import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Parent
+import javafx.scene.image.Image
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
@@ -11,23 +18,29 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Shape
 import javafx.scene.text.Text
 import javafx.scene.transform.Transform
+import javax.imageio.ImageIO
 
 class SvgExporter {
 	
+	static val Logger LOG = Logger.getLogger(SvgExporter.canonicalName)
+	
 	int currentID
+	
+	int imageCounter 
 	
 	List<String> defs
 	
 	def toSvg(XRootDiagram diagram) {
 		defs = newArrayList
 		currentID = 0
-		val bounds = diagram.boundsInLocal
+		val bounds = diagram.boundsInParent
+		Debug.dumpBounds(diagram)
 		'''
 			<?xml version="1.0" standalone="no"?>
 			<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
 				"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 			<svg viewBox="«bounds.minX» «bounds.minY» «bounds.width» «bounds.height»"
-				xmlns="http://www.w3.org/2000/svg" version="1.1">
+				xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 				«FOR child: diagram.childrenUnmodifiable.filter[visible]»
 					«child.toSvgElement»
 				«ENDFOR»
@@ -40,7 +53,19 @@ class SvgExporter {
 		'''
 	}
 	
-	protected def dispatch CharSequence toSvgElement(Text it) '''
+	def toSvgElement(Object o) {
+		switch o {
+			SvgExportable: o.toSvgElement(this)
+			Text: o.textToSvgElement
+			Shape: o.shapeToSvgElement
+			Parent: o.parentToSvgElement
+			default: '''
+				<!-- «o.class.name» not exportable -->
+			'''
+		}
+	}
+	
+	def CharSequence textToSvgElement(Text it) '''
 		<!-- «class.name» -->
 		<path d="«toSvgString»"
 			fill="«fill.toSvgString»"
@@ -53,7 +78,7 @@ class SvgExporter {
 		/>
 	'''
 	
-	protected def dispatch CharSequence toSvgElement(Shape it) '''
+	def CharSequence shapeToSvgElement(Shape it) '''
 		<!-- «class.name» -->
 		<path d="«toSvgString»"
 			«toSvgString(localToSceneTransform)»
@@ -69,38 +94,52 @@ class SvgExporter {
 	'''
 	// TODO: clip, cursor, smooth, strokeType
 	 
-	protected def dispatch CharSequence toSvgElement(Parent it) '''
+	def CharSequence parentToSvgElement(Parent it) '''
 		«IF !childrenUnmodifiable.filter[visible].empty»
 			«FOR child: childrenUnmodifiable.filter[visible]»
 				«child.toSvgElement»
 			«ENDFOR»
 		«ENDIF»
 	'''
-
-	protected def dispatch CharSequence toSvgElement(Node node) '''
-		<!-- «node.class.name» not yet implemented -->
-	'''
 	
-	protected def toSvgAttribute(Object value, String name, Object defaultValue) {
+	def CharSequence toSvgImage(XNode node, Image image) {
+	 	val fileName = (node.key ?: 'image' + nextImageNumber) + '.png'
+		try {
+			ImageIO.write(SwingFXUtils.fromFXImage(image, null), 'png', new File(fileName));
+    	} catch (IOException e) {
+    		LOG.log(Level.SEVERE, "Error exporting " + class.name + " to SVG", e)
+    	}
+    	'''
+    		<!-- «node.class.name» -->
+    		<image «toSvgString(node.localToSceneTransform)» width="«node.layoutBounds.width»" height="«node.layoutBounds.height»" xlink:href="«fileName»"/>
+    	'''
+	}
+
+	def nextImageNumber() {
+		imageCounter = imageCounter + 1
+		imageCounter 
+	}
+
+	public def toSvgAttribute(Object value, String name, Object defaultValue) {
 		value.toSvgAttribute(name, defaultValue, '')
 	}
 	
-	protected def toSvgAttribute(Object value, String name, Object defaultValue, String unit) {
+	public def toSvgAttribute(Object value, String name, Object defaultValue, String unit) {
 		if(value.toSvgString != defaultValue.toString)
 			'''«name»="«value.toSvgString»«unit»" '''
 		else 
 			''
 	}
 	
-	protected def toSvgString(Shape shape) {
+	public def toSvgString(Shape shape) {
 		ShapeConverterExtensions.toSvgString(shape)	
 	}
 	
-	protected def toSvgString(Transform it) {
+	public def toSvgString(Transform it) {
 		'''«toSvgAttribute('''matrix(«mxx»,«myx»,«mxy»,«myy»,«tx»,«ty»)''', "transform", 'matrix(1.0,0.0,0.0,1.0,0.0,0.0)')»'''
 	} 
 	
-	protected def CharSequence toSvgString(Paint paint) {
+	public def CharSequence toSvgString(Paint paint) {
 		switch paint {
 			Color:
 				'''rgb(«(255*paint.red) as int»,«(255*paint.green) as int»,«(255*paint.blue) as int»)''' 
@@ -127,7 +166,7 @@ class SvgExporter {
 		}
 	}
 	
-	protected def toSvgString(CycleMethod it) {
+	public def toSvgString(CycleMethod it) {
 		switch it {
 			case CycleMethod.NO_CYCLE: 'pad'
 			case CycleMethod.REFLECT: 'reflect'
@@ -135,7 +174,7 @@ class SvgExporter {
 		}
 	}
 	
-	protected def toSvgString(Object it) {
+	public def toSvgString(Object it) {
 		toString.toLowerCase
 	}
 }

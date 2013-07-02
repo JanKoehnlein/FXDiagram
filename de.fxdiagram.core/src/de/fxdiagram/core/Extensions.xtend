@@ -5,6 +5,10 @@ import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.input.MouseEvent
 import java.util.logging.Logger
+import javafx.scene.transform.Transform
+import javafx.scene.transform.Affine
+
+import static extension de.fxdiagram.core.transform.TransformExtensions.*
 
 class Extensions {
 	
@@ -39,6 +43,18 @@ class Extensions {
 			default: localToDiagram(node.parent, node.localToParent(bounds))
 		} 
 	}	
+
+	def static Transform localToDiagramTransform(Node node) {
+		val transform = new Affine
+		var currentNode = node
+		while (currentNode.parent != null) {
+			transform.leftMultiply(currentNode.localToParentTransform)
+			currentNode = currentNode.parent
+			if(currentNode instanceof XAbstractDiagram)
+				return transform  
+		}
+		null
+	}
 	
 	def static XAbstractDiagram getDiagram(Node it) {
 		switch it {

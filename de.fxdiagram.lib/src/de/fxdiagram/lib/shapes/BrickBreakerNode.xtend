@@ -4,15 +4,14 @@ import brickbreaker.Config
 import brickbreaker.Main
 import brickbreaker.Main.MainFrame
 import de.fxdiagram.core.XNode
+import javafx.geometry.Insets
+import javafx.geometry.VPos
 import javafx.scene.Group
-import javafx.scene.layout.Pane
+import javafx.scene.layout.StackPane
 import javafx.scene.shape.Rectangle
+import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
-import javafx.scene.text.Text
-import javafx.geometry.VPos
-import javafx.scene.layout.StackPane
-import javafx.geometry.Insets
 
 class BrickBreakerNode extends XNode {
 
@@ -25,7 +24,7 @@ class BrickBreakerNode extends XNode {
 					StackPane.setMargin(it, new Insets(10,20,10,20))
 				]
 			]
-			back = new Pane => [
+			back = new Group => [
 				children += new Group => [
 					children += createRoot
 					scaleXProperty.bind(widthProperty / Config.SCREEN_WIDTH)
@@ -51,7 +50,6 @@ class BrickBreakerNode extends XNode {
 		val mainFrameField = Main.declaredFields.filter[name == "mainFrame"].head
 		mainFrameField.accessible = true
 		mainFrameField.set(main, mainFrame)	
-			
 		mainFrame.changeState(MainFrame.SPLASH)
 		root
 	}

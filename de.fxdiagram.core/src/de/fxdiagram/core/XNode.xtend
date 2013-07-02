@@ -15,6 +15,9 @@ class XNode extends Parent implements XActivatable {
 	Node node
 	
 	@FxProperty@ReadOnly boolean isActive
+	@FxProperty@Lazy double width 
+	@FxProperty@Lazy double height
+	@FxProperty@ReadOnly String key
 	
 	Effect mouseOverEffect
 	Effect originalEffect
@@ -23,11 +26,9 @@ class XNode extends Parent implements XActivatable {
 	MoveBehavior moveBehavior
 	AnchorPoints anchorPoints
 	
-	@FxProperty@Lazy double width 
-	@FxProperty@Lazy double height
 	
 	new() {
-		mouseOverEffect = createMouseOverEffect 
+		mouseOverEffect = createMouseOverEffect
 	}
 	
 	protected def createMouseOverEffect() {
@@ -63,15 +64,15 @@ class XNode extends Parent implements XActivatable {
 		children += node	
 	}
 	
+	protected def setKey(String key) {
+		keyProperty.set(key)	
+	}
+	
 	def getSelectionBehavior() { selectionBehavior }
 	
 	def getMoveBehavior() { moveBehavior }
 	
 	def getAnchorPoints() { anchorPoints }	
-	
-	def getKey() {
-		toString
-	}
 	
 	override minWidth(double height) {
 		if(widthProperty != null)

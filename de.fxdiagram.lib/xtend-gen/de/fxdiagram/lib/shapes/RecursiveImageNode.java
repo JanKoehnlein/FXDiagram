@@ -4,6 +4,9 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.export.SvgExportable;
+import de.fxdiagram.core.export.SvgExporter;
+import de.fxdiagram.core.transform.TransformExtensions;
 import de.fxdiagram.lib.shapes.AddRapidButtonBehavior;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -16,9 +19,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -26,7 +34,9 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class RecursiveImageNode extends XNode {
+public class RecursiveImageNode extends XNode implements SvgExportable {
+  private static int instanceCount;
+  
   private Image image;
   
   private double x;
@@ -49,6 +59,10 @@ public class RecursiveImageNode extends XNode {
     this.scale = scale;
     Pane _createPane = this.createPane();
     this.setNode(_createPane);
+    String _plus = ("RecursiveImageNode" + Integer.valueOf(RecursiveImageNode.instanceCount));
+    this.setKey(_plus);
+    int _plus_1 = (RecursiveImageNode.instanceCount + 1);
+    RecursiveImageNode.instanceCount = _plus_1;
   }
   
   public void doActivate() {
@@ -213,5 +227,59 @@ public class RecursiveImageNode extends XNode {
       boolean _greaterThan_1 = (_size_1 > 0);
       _while = _greaterThan_1;
     }
+  }
+  
+  public CharSequence toSvgElement(@Extension final SvgExporter exporter) {
+    String _xblockexpression = null;
+    {
+      Node _head = null;
+      Pane _head_1 = null;
+      if (this.panes!=null) {
+        _head_1=IterableExtensions.<Pane>head(this.panes);
+      }
+      ObservableList<Node> _children = null;
+      if (_head_1!=null) {
+        _children=_head_1.getChildren();
+      }
+      if (_children!=null) {
+        _head=IterableExtensions.<Node>head(_children);
+      }
+      final ImageView view = ((ImageView) _head);
+      boolean _notEquals = (!Objects.equal(view, null));
+      if (_notEquals) {
+        double _fitWidth = view.getFitWidth();
+        double _width = this.image.getWidth();
+        double _divide = (_fitWidth / _width);
+        double _fitHeight = view.getFitHeight();
+        double _height = this.image.getHeight();
+        double _divide_1 = (_fitHeight / _height);
+        final double imageScale = Math.min(_divide, _divide_1);
+        double _width_1 = this.image.getWidth();
+        double _divide_2 = (_width_1 / imageScale);
+        final int imageWidth = ((int) _divide_2);
+        double _height_1 = this.image.getHeight();
+        double _divide_3 = (_height_1 / imageScale);
+        final int imageHeight = ((int) _divide_3);
+        WritableImage _writableImage = new WritableImage(imageWidth, imageHeight);
+        final WritableImage image = _writableImage;
+        Bounds _layoutBounds = this.getLayoutBounds();
+        double _width_2 = _layoutBounds.getWidth();
+        final double renderScale = (imageWidth / _width_2);
+        Transform _localToDiagramTransform = Extensions.localToDiagramTransform(this);
+        Scale _scale = new Scale(renderScale, renderScale, renderScale);
+        final Transform t = TransformExtensions.operator_multiply(_localToDiagramTransform, _scale);
+        SnapshotParameters _snapshotParameters = new SnapshotParameters();
+        final Procedure1<SnapshotParameters> _function = new Procedure1<SnapshotParameters>() {
+            public void apply(final SnapshotParameters it) {
+              it.setTransform(t);
+            }
+          };
+        SnapshotParameters _doubleArrow = ObjectExtensions.<SnapshotParameters>operator_doubleArrow(_snapshotParameters, _function);
+        this.snapshot(_doubleArrow, image);
+        return exporter.toSvgImage(this, image);
+      }
+      _xblockexpression = ("");
+    }
+    return _xblockexpression;
   }
 }
