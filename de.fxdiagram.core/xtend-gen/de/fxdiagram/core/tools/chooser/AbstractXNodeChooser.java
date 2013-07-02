@@ -335,13 +335,16 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   public boolean activate() {
     boolean _xblockexpression = false;
     {
+      boolean _or = false;
       boolean _isActive = this.getIsActive();
       if (_isActive) {
-        return false;
+        _or = true;
+      } else {
+        ArrayList<XNode> _nodes = this.getNodes();
+        boolean _isEmpty = _nodes.isEmpty();
+        _or = (_isActive || _isEmpty);
       }
-      ArrayList<XNode> _nodes = this.getNodes();
-      boolean _isEmpty = _nodes.isEmpty();
-      if (_isEmpty) {
+      if (_or) {
         return false;
       }
       this.isActiveProperty.set(true);
@@ -349,6 +352,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Group _nodeLayer = _diagram.getNodeLayer();
       ObservableList<Node> _children = _nodeLayer.getChildren();
       _children.add(this.group);
+      this.group.layout();
       this.setCurrentPosition(0);
       this.setInterpolatedPosition(0);
       ArrayList<XNode> _nodes_1 = this.getNodes();

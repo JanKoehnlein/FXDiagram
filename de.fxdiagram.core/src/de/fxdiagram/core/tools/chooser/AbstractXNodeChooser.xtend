@@ -140,12 +140,11 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	}
 
 	override activate() {
-		if (isActive)
-			return false
-		if (nodes.empty)
+		if (isActive || nodes.empty)
 			return false
 		isActiveProperty.set(true)
 		diagram.nodeLayer.children += group
+		group.layout
 		currentPosition = 0
 		interpolatedPosition = 0
 		if(nodes.size == 1) {

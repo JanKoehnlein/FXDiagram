@@ -13,6 +13,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
@@ -53,6 +54,7 @@ public class CarusselChooser extends AbstractXNodeChooser {
     Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
     double _spacing = this.getSpacing();
     final double maxHeight = ((_fold).doubleValue() + _spacing);
+    InputOutput.<Double>println(Double.valueOf(maxHeight));
     ArrayList<XNode> _nodes_1 = this.getNodes();
     int _size = _nodes_1.size();
     final double angle = (Math.PI / _size);
