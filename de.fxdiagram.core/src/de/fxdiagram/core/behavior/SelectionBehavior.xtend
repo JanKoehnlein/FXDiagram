@@ -25,12 +25,12 @@ class SelectionBehavior extends AbstractBehavior {
 	override doActivate() {
 		host.onMousePressed = [
 			mousePressed
-			consume
+//			consume
 		]
 		host.onMouseReleased = [
 			if(shortcutDown)
 				selectedProperty.set(!wasSelected)
-			consume
+//			consume
 		]
 		selectedProperty.addListener [
 			observable, oldValue, newValue |

@@ -2,7 +2,7 @@ package de.fxdiagram.core.transform;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 
 @SuppressWarnings("all")
 public class BoundsExtensions {
@@ -36,48 +36,6 @@ public class BoundsExtensions {
     return _xblockexpression;
   }
   
-  public static BoundingBox operator_plus(final Bounds it, final Insets insets) {
-    double _minX = it.getMinX();
-    double _left = insets.getLeft();
-    double _minus = (_minX - _left);
-    double _minY = it.getMinY();
-    double _top = insets.getTop();
-    double _minus_1 = (_minY - _top);
-    double _width = it.getWidth();
-    double _left_1 = insets.getLeft();
-    double _plus = (_width + _left_1);
-    double _right = insets.getRight();
-    double _plus_1 = (_plus + _right);
-    double _height = it.getHeight();
-    double _top_1 = insets.getTop();
-    double _plus_2 = (_height + _top_1);
-    double _bottom = insets.getBottom();
-    double _plus_3 = (_plus_2 + _bottom);
-    BoundingBox _boundingBox = new BoundingBox(_minus, _minus_1, _plus_1, _plus_3);
-    return _boundingBox;
-  }
-  
-  public static BoundingBox operator_minus(final Bounds it, final Insets insets) {
-    double _minX = it.getMinX();
-    double _left = insets.getLeft();
-    double _plus = (_minX + _left);
-    double _minY = it.getMinY();
-    double _top = insets.getTop();
-    double _plus_1 = (_minY + _top);
-    double _width = it.getWidth();
-    double _left_1 = insets.getLeft();
-    double _minus = (_width - _left_1);
-    double _right = insets.getRight();
-    double _minus_1 = (_minus - _right);
-    double _height = it.getHeight();
-    double _top_1 = insets.getTop();
-    double _minus_2 = (_height - _top_1);
-    double _bottom = insets.getBottom();
-    double _minus_3 = (_minus_2 - _bottom);
-    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _minus_1, _minus_3);
-    return _boundingBox;
-  }
-  
   public static BoundingBox translate(final Bounds bounds, final double tx, final double ty, final double tz) {
     double _minX = bounds.getMinX();
     double _plus = (_minX + tx);
@@ -101,5 +59,18 @@ public class BoundsExtensions {
     double _height = bounds.getHeight();
     BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _width, _height);
     return _boundingBox;
+  }
+  
+  public static Point2D center(final Bounds it) {
+    double _minX = it.getMinX();
+    double _width = it.getWidth();
+    double _multiply = (0.5 * _width);
+    double _plus = (_minX + _multiply);
+    double _minY = it.getMinY();
+    double _height = it.getHeight();
+    double _multiply_1 = (0.5 * _height);
+    double _plus_1 = (_minY + _multiply_1);
+    Point2D _point2D = new Point2D(_plus, _plus_1);
+    return _point2D;
   }
 }

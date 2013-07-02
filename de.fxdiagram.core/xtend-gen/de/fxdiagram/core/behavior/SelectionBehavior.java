@@ -37,7 +37,6 @@ public class SelectionBehavior extends AbstractBehavior {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent it) {
           SelectionBehavior.this.mousePressed(it);
-          it.consume();
         }
       };
     _host.setOnMousePressed(_function);
@@ -49,7 +48,6 @@ public class SelectionBehavior extends AbstractBehavior {
             boolean _not = (!SelectionBehavior.this.wasSelected);
             SelectionBehavior.this.selectedProperty.set(_not);
           }
-          it.consume();
         }
       };
     _host_1.setOnMouseReleased(_function_1);

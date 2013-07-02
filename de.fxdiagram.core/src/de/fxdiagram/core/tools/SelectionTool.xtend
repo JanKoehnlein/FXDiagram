@@ -32,7 +32,7 @@ class SelectionTool implements XDiagramTool {
 					targetShape.moveBehavior?.mousePressed(event)				
 					targetShape.selectionBehavior.mousePressed(event)
 				}
-				event.consume
+				//event.consume
 			}
 		]
 		this.mouseDraggedHandler = [

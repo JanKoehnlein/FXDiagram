@@ -9,15 +9,28 @@ import javafx.scene.layout.Pane
 import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
+import javafx.scene.text.Text
+import javafx.geometry.VPos
+import javafx.scene.layout.StackPane
+import javafx.geometry.Insets
 
 class BrickBreakerNode extends XNode {
 
 	new() {
-		node = new Pane => [
-			children += new Group => [
-				children += createRoot
-				scaleXProperty.bind(widthProperty / Config.SCREEN_WIDTH)
-				scaleYProperty.bind(heightProperty / Config.SCREEN_HEIGHT)
+		node = new FlipNode => [
+			front = new RectangleBorderPane => [
+				children += new Text => [
+					text = "BrickBreaker"
+					textOrigin = VPos.TOP
+					StackPane.setMargin(it, new Insets(10,20,10,20))
+				]
+			]
+			back = new Pane => [
+				children += new Group => [
+					children += createRoot
+					scaleXProperty.bind(widthProperty / Config.SCREEN_WIDTH)
+					scaleYProperty.bind(heightProperty / Config.SCREEN_HEIGHT)
+				]
 			]
 		]
 	}

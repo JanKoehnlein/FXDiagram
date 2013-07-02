@@ -1,9 +1,10 @@
 package de.fxdiagram.core.transform
 
-import javafx.geometry.Bounds
-import static java.lang.Math.*
 import javafx.geometry.BoundingBox
-import javafx.geometry.Insets
+import javafx.geometry.Bounds
+
+import static java.lang.Math.*
+import javafx.geometry.Point2D
 
 class BoundsExtensions {
 
@@ -17,14 +18,6 @@ class BoundsExtensions {
 		new BoundingBox(minX, minY, minZ, maxX - minX, maxY-minY, maxZ - minZ)
 	}
 	
-	def static operator_plus(Bounds it, Insets insets) {
-		new BoundingBox(minX - insets.left, minY - insets.top, width + insets.left + insets.right, height + insets.top + insets.bottom)
-	}
-	
-	def static operator_minus(Bounds it, Insets insets) {
-		new BoundingBox(minX + insets.left, minY + insets.top, width - insets.left - insets.right, height - insets.top - insets.bottom)
-	}
-	
 	def static translate(Bounds bounds, double tx, double ty, double tz) {
 		new BoundingBox(bounds.minX + tx, bounds.minY + ty, bounds.minZ + tz, bounds.width, bounds.height, bounds.depth)
 	}	
@@ -32,6 +25,9 @@ class BoundsExtensions {
 	def static translate(Bounds bounds, double tx, double ty) {
 		new BoundingBox(bounds.minX + tx, bounds.minY + ty, bounds.width, bounds.height)
 	}
-	
+
+	def static center(Bounds it) {
+		new Point2D(minX + 0.5 * width, minY + 0.5 * height)
+	}	
 		
 }

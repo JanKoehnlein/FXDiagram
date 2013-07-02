@@ -94,7 +94,6 @@ public class SelectionTool implements XDiagramTool {
               SelectionBehavior _selectionBehavior_2 = targetShape.getSelectionBehavior();
               _selectionBehavior_2.mousePressed(event);
             }
-            event.consume();
           }
         }
       };

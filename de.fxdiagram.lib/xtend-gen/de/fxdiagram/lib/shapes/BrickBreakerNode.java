@@ -6,15 +6,21 @@ import brickbreaker.Main.MainFrame;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.binding.DoubleExpressionExtensions;
+import de.fxdiagram.lib.shapes.FlipNode;
+import de.fxdiagram.lib.shapes.RectangleBorderPane;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -25,31 +31,57 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class BrickBreakerNode extends XNode {
   public BrickBreakerNode() {
-    Pane _pane = new Pane();
-    final Procedure1<Pane> _function = new Procedure1<Pane>() {
-        public void apply(final Pane it) {
-          ObservableList<Node> _children = it.getChildren();
-          Group _group = new Group();
-          final Procedure1<Group> _function = new Procedure1<Group>() {
-              public void apply(final Group it) {
+    FlipNode _flipNode = new FlipNode();
+    final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
+        public void apply(final FlipNode it) {
+          RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+          final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+              public void apply(final RectangleBorderPane it) {
                 ObservableList<Node> _children = it.getChildren();
-                Group _createRoot = BrickBreakerNode.this.createRoot();
-                _children.add(_createRoot);
-                DoubleProperty _scaleXProperty = it.scaleXProperty();
-                DoubleProperty _widthProperty = BrickBreakerNode.this.widthProperty();
-                DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(_widthProperty, Config.SCREEN_WIDTH);
-                _scaleXProperty.bind(_divide);
-                DoubleProperty _scaleYProperty = it.scaleYProperty();
-                DoubleProperty _heightProperty = BrickBreakerNode.this.heightProperty();
-                DoubleBinding _divide_1 = DoubleExpressionExtensions.operator_divide(_heightProperty, Config.SCREEN_HEIGHT);
-                _scaleYProperty.bind(_divide_1);
+                Text _text = new Text();
+                final Procedure1<Text> _function = new Procedure1<Text>() {
+                    public void apply(final Text it) {
+                      it.setText("BrickBreaker");
+                      it.setTextOrigin(VPos.TOP);
+                      Insets _insets = new Insets(10, 20, 10, 20);
+                      StackPane.setMargin(it, _insets);
+                    }
+                  };
+                Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+                _children.add(_doubleArrow);
               }
             };
-          Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-          _children.add(_doubleArrow);
+          RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+          it.setFront(_doubleArrow);
+          Pane _pane = new Pane();
+          final Procedure1<Pane> _function_1 = new Procedure1<Pane>() {
+              public void apply(final Pane it) {
+                ObservableList<Node> _children = it.getChildren();
+                Group _group = new Group();
+                final Procedure1<Group> _function = new Procedure1<Group>() {
+                    public void apply(final Group it) {
+                      ObservableList<Node> _children = it.getChildren();
+                      Group _createRoot = BrickBreakerNode.this.createRoot();
+                      _children.add(_createRoot);
+                      DoubleProperty _scaleXProperty = it.scaleXProperty();
+                      DoubleProperty _widthProperty = BrickBreakerNode.this.widthProperty();
+                      DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(_widthProperty, Config.SCREEN_WIDTH);
+                      _scaleXProperty.bind(_divide);
+                      DoubleProperty _scaleYProperty = it.scaleYProperty();
+                      DoubleProperty _heightProperty = BrickBreakerNode.this.heightProperty();
+                      DoubleBinding _divide_1 = DoubleExpressionExtensions.operator_divide(_heightProperty, Config.SCREEN_HEIGHT);
+                      _scaleYProperty.bind(_divide_1);
+                    }
+                  };
+                Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+                _children.add(_doubleArrow);
+              }
+            };
+          Pane _doubleArrow_1 = ObjectExtensions.<Pane>operator_doubleArrow(_pane, _function_1);
+          it.setBack(_doubleArrow_1);
         }
       };
-    Pane _doubleArrow = ObjectExtensions.<Pane>operator_doubleArrow(_pane, _function);
+    FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
     this.setNode(_doubleArrow);
   }
   
