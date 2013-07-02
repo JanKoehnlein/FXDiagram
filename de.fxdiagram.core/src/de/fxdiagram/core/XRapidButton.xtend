@@ -1,19 +1,20 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ReadOnly
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.beans.binding.ObjectBinding
 import javafx.geometry.Point2D
+import javafx.scene.Parent
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.annotations.properties.ReadOnly
-import de.fxdiagram.annotations.properties.FxProperty
 
-class XRapidButton extends ImageView implements XActivatable {
+class XRapidButton extends Parent implements XActivatable {
 	
 	@FxProperty@ReadOnly boolean isActive
 	
@@ -29,7 +30,9 @@ class XRapidButton extends ImageView implements XActivatable {
 		String file, (XRapidButton)=>void action) {
 		this.host = host
 		this.action = action
-		image = new Image(file)
+		children += new ImageView => [
+			image = new Image(file)
+		]
 		placer = new Placer(this, xPos, yPos)
 	}
 	

@@ -10,7 +10,6 @@ ENHANCEMENT
 - BrowserNode
 
 BUG
-- Inherit from Parent, not Group
 - Initial layout of choosers is broken  
 - Make SVG export work with RectangleBorderPane
 - Fix fluctuations in layout of RecursiveImageNode
@@ -18,4 +17,7 @@ BUG
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
-  such that shadows are not clipped. 
+  such that shadows are not clipped.
+  
+DONE 
+- Inherit from Parent, not Group

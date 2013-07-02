@@ -1,16 +1,16 @@
 package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.Lazy
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.behavior.SelectionBehavior
-import javafx.scene.Group
 import javafx.scene.Node
+import javafx.scene.Parent
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
-import de.fxdiagram.annotations.properties.Lazy
 
-class XNode extends Group implements XActivatable {
+class XNode extends Parent implements XActivatable {
 	
 	Node node
 	

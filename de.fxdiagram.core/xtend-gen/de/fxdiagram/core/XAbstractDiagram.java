@@ -14,6 +14,7 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -23,7 +24,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * A diagram is a group, as such not resizable from the outside.
  */
 @SuppressWarnings("all")
-public abstract class XAbstractDiagram extends Group implements XActivatable {
+public abstract class XAbstractDiagram extends Parent implements XActivatable {
   private List<XNode> nodes = new Function0<List<XNode>>() {
     public List<XNode> apply() {
       ArrayList<XNode> _newArrayList = CollectionLiterals.<XNode>newArrayList();

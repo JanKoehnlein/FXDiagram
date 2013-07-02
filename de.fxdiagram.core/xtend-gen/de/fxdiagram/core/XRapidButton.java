@@ -16,6 +16,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,7 +26,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class XRapidButton extends ImageView implements XActivatable {
+public class XRapidButton extends Parent implements XActivatable {
   private XNode host;
   
   private Placer placer;
@@ -36,8 +38,16 @@ public class XRapidButton extends ImageView implements XActivatable {
   public XRapidButton(final XNode host, final double xPos, final double yPos, final String file, final Procedure1<? super XRapidButton> action) {
     this.host = host;
     this.action = action;
-    Image _image = new Image(file);
-    this.setImage(_image);
+    ObservableList<Node> _children = this.getChildren();
+    ImageView _imageView = new ImageView();
+    final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+        public void apply(final ImageView it) {
+          Image _image = new Image(file);
+          it.setImage(_image);
+        }
+      };
+    ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
+    _children.add(_doubleArrow);
     Placer _placer = new Placer(this, xPos, yPos);
     this.placer = _placer;
   }

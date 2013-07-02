@@ -1,26 +1,44 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ReadOnly
 import java.util.List
+import javafx.beans.property.StringProperty
+import javafx.scene.Parent
 import javafx.scene.text.Text
 import javafx.scene.transform.Affine
 
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.transform.TransformExtensions.*
-import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
 
-class XConnectionLabel extends Text implements XActivatable {
+class XConnectionLabel extends Parent implements XActivatable {
 
 	@FxProperty XConnection connection
 
 	@FxProperty@ReadOnly boolean isActive
+	
+	Text text
 
 	new(XConnection connection) {
 		this.connection = connection
 		connection.label = this
+		text = new Text
+		children += text
 	}
 
+	def getText() {
+		text.text
+	}
+	
+	def setText(String text) {
+		this.text.text = text
+	}
+
+	def StringProperty textProperty() {
+		text.textProperty
+	}
+	
 	override activate() {
 		if (!isActive)
 			doActivate

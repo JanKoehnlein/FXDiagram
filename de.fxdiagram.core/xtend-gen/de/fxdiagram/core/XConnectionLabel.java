@@ -9,22 +9,45 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 
 @SuppressWarnings("all")
-public class XConnectionLabel extends Text implements XActivatable {
+public class XConnectionLabel extends Parent implements XActivatable {
+  private Text text;
+  
   public XConnectionLabel(final XConnection connection) {
     this.setConnection(connection);
     connection.setLabel(this);
+    Text _text = new Text();
+    this.text = _text;
+    ObservableList<Node> _children = this.getChildren();
+    _children.add(this.text);
+  }
+  
+  public String getText() {
+    String _text = this.text.getText();
+    return _text;
+  }
+  
+  public void setText(final String text) {
+    this.text.setText(text);
+  }
+  
+  public StringProperty textProperty() {
+    StringProperty _textProperty = this.text.textProperty();
+    return _textProperty;
   }
   
   public void activate() {

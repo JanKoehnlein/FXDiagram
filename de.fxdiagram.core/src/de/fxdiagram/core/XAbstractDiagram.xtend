@@ -4,11 +4,12 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
 import java.util.List
 import javafx.scene.Group
+import javafx.scene.Parent
 
 /**
  * A diagram is a group, as such not resizable from the outside. 
  */
-abstract class XAbstractDiagram extends Group implements XActivatable {
+abstract class XAbstractDiagram extends Parent implements XActivatable {
 	
 	// TODO: convert to properties
 	List<XNode> nodes = newArrayList
