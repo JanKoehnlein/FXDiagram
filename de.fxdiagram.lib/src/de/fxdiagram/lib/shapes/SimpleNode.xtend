@@ -24,6 +24,7 @@ class SimpleNode extends XNode {
 		node.effect = new InnerShadow => [
 			radius = 7
 		]
+		key = name
 	}
 
 	override doActivate() {

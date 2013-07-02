@@ -48,6 +48,7 @@ public class SimpleNode extends XNode {
       };
     InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
     _node.setEffect(_doubleArrow_1);
+    this.setKey(name);
   }
   
   public void doActivate() {

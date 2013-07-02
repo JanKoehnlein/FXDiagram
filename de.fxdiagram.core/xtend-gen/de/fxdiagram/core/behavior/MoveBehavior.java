@@ -1,5 +1,6 @@
 package de.fxdiagram.core.behavior;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.behavior.DragContext;
@@ -69,9 +70,12 @@ public class MoveBehavior extends AbstractBehavior {
     XNode _host = this.getHost();
     Parent _parent = _host.getParent();
     final Point2D newPositionInDiagram = _parent.sceneToLocal(newPositionInScene);
-    XNode _host_1 = this.getHost();
-    double _x_1 = newPositionInDiagram.getX();
-    double _y_1 = newPositionInDiagram.getY();
-    _host_1.relocate(_x_1, _y_1);
+    boolean _notEquals = (!Objects.equal(newPositionInDiagram, null));
+    if (_notEquals) {
+      XNode _host_1 = this.getHost();
+      double _x_1 = newPositionInDiagram.getX();
+      double _y_1 = newPositionInDiagram.getY();
+      _host_1.relocate(_x_1, _y_1);
+    }
   }
 }

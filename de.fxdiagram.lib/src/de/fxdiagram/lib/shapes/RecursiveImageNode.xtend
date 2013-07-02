@@ -19,8 +19,6 @@ import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 
 class RecursiveImageNode extends XNode implements SvgExportable {
 
-	static int instanceCount
-
 	// TODO convert to FxProperties
 	Image image
 	double x
@@ -35,8 +33,6 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		this.y = y
 		this.scale = scale
 		node = createPane()
-		key = 'RecursiveImageNode' + instanceCount
-		instanceCount = instanceCount + 1
 	}
 
 	override doActivate() {

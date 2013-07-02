@@ -35,8 +35,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class RecursiveImageNode extends XNode implements SvgExportable {
-  private static int instanceCount;
-  
   private Image image;
   
   private double x;
@@ -59,10 +57,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     this.scale = scale;
     Pane _createPane = this.createPane();
     this.setNode(_createPane);
-    String _plus = ("RecursiveImageNode" + Integer.valueOf(RecursiveImageNode.instanceCount));
-    this.setKey(_plus);
-    int _plus_1 = (RecursiveImageNode.instanceCount + 1);
-    RecursiveImageNode.instanceCount = _plus_1;
   }
   
   public void doActivate() {

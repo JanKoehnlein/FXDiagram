@@ -30,7 +30,8 @@ class MoveBehavior extends AbstractBehavior {
 			dragContext.initialPosInScene.x + screenX - dragContext.mouseAnchorX,
 			dragContext.initialPosInScene.y + screenY - dragContext.mouseAnchorY)
 		val newPositionInDiagram = host.parent.sceneToLocal(newPositionInScene)
-		host.relocate(newPositionInDiagram.x, newPositionInDiagram.y)
+		if(newPositionInDiagram != null)
+			host.relocate(newPositionInDiagram.x, newPositionInDiagram.y)
 	}
 }
 

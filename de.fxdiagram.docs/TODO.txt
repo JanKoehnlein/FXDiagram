@@ -6,11 +6,13 @@ ENHANCEMENT
 - more controls for MovieNode
 - BrowserNode
 - Embed more JavaFX demos in XNodes
+- FlipNode control
+- unify Logger 
 
 BUG
 - Initial layout of choosers is broken  
 - Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
-- FlipNode control
+- Fix rapid buttons in nested diagram
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,

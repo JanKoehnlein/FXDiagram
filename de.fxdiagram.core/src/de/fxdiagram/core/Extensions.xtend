@@ -87,6 +87,21 @@ class Extensions {
 		}
 	}
 
+	def static getTargetButton(MouseEvent event) {
+		if (event.target instanceof Node)
+			getContainerButton(event.target as Node)
+		else
+			null
+	}
+	
+	def static XRapidButton getContainerButton(Node it) {
+		switch it {
+			case null: null
+			XRapidButton: it
+			default: getContainerButton(parent)
+		}
+	}
+
 	def static Logger getLogger(Object it) {
 		Logger.getLogger(class.canonicalName)
 	}

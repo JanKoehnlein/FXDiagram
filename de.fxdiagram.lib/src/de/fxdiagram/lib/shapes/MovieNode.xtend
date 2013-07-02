@@ -22,8 +22,6 @@ import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 
 class MovieNode extends XNode implements SvgExportable {
 
-	static int instanceCount
-
 	@FxProperty @ReadOnly Media media
 
 	MediaPlayer player
@@ -38,8 +36,6 @@ class MovieNode extends XNode implements SvgExportable {
 			padding = new Insets(border, border, border, border)
 			children += view = new MediaView
 		]
-		key = 'MovieNode' + instanceCount
-		instanceCount = instanceCount + 1
 	}
 
 	override setWidth(double width) {

@@ -144,6 +144,7 @@ public class NestedDiagramNode extends XNode {
       };
     Pane _doubleArrow = ObjectExtensions.<Pane>operator_doubleArrow(this.pane, _function);
     this.setNode(_doubleArrow);
+    this.setKey(name);
   }
   
   public void doActivate() {

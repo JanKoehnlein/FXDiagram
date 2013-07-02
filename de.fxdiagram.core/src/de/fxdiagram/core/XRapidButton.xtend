@@ -46,7 +46,9 @@ class XRapidButton extends Parent implements XActivatable {
 		visible = false
 		onMouseEntered = [ show ]
 		onMouseExited = [ fade ]
-		onMousePressed = [ action.apply(this) consume ]
+		onMousePressed = [ 
+			action.apply(this) consume
+		]
 		placer.activate
 		placer.addListener [
 			element, oldVal, newVal | relocate(newVal.x, newVal.y)

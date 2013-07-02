@@ -30,8 +30,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class MovieNode extends XNode implements SvgExportable {
-  private static int instanceCount;
-  
   private MediaPlayer player;
   
   private MediaView view;
@@ -53,10 +51,6 @@ public class MovieNode extends XNode implements SvgExportable {
       };
     StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     this.setNode(_doubleArrow);
-    String _plus = ("MovieNode" + Integer.valueOf(MovieNode.instanceCount));
-    this.setKey(_plus);
-    int _plus_1 = (MovieNode.instanceCount + 1);
-    MovieNode.instanceCount = _plus_1;
   }
   
   public void setWidth(final double width) {

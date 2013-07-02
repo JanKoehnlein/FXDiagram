@@ -11,7 +11,6 @@ import de.fxdiagram.core.behavior.SelectionBehavior;
 import de.fxdiagram.core.tools.XDiagramTool;
 import java.util.List;
 import javafx.event.EventHandler;
-import javafx.event.EventTarget;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -29,8 +28,8 @@ public class SelectionTool implements XDiagramTool {
     this.rootDiagram = rootDiagram;
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent event) {
-          EventTarget _target = event.getTarget();
-          boolean _not = (!(_target instanceof XRapidButton));
+          XRapidButton _targetButton = Extensions.getTargetButton(event);
+          boolean _not = (!(_targetButton instanceof XRapidButton));
           if (_not) {
             final XNode targetShape = Extensions.getTargetNode(event);
             SelectionBehavior _selectionBehavior = null;
@@ -93,6 +92,7 @@ public class SelectionTool implements XDiagramTool {
               }
               SelectionBehavior _selectionBehavior_2 = targetShape.getSelectionBehavior();
               _selectionBehavior_2.mousePressed(event);
+              event.consume();
             }
           }
         }

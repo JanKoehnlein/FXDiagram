@@ -3,6 +3,7 @@ package de.fxdiagram.core;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.geometry.TransformExtensions;
 import java.util.logging.Logger;
@@ -207,6 +208,43 @@ public class Extensions {
       Parent _parent = it.getParent();
       XNode _containerNode = Extensions.getContainerNode(_parent);
       _switchResult = _containerNode;
+    }
+    return _switchResult;
+  }
+  
+  public static XRapidButton getTargetButton(final MouseEvent event) {
+    XRapidButton _xifexpression = null;
+    EventTarget _target = event.getTarget();
+    if ((_target instanceof Node)) {
+      EventTarget _target_1 = event.getTarget();
+      XRapidButton _containerButton = Extensions.getContainerButton(((Node) _target_1));
+      _xifexpression = _containerButton;
+    } else {
+      _xifexpression = null;
+    }
+    return _xifexpression;
+  }
+  
+  public static XRapidButton getContainerButton(final Node it) {
+    XRapidButton _switchResult = null;
+    boolean _matched = false;
+    if (!_matched) {
+      if (Objects.equal(it,null)) {
+        _matched=true;
+        _switchResult = null;
+      }
+    }
+    if (!_matched) {
+      if (it instanceof XRapidButton) {
+        final XRapidButton _xRapidButton = (XRapidButton)it;
+        _matched=true;
+        _switchResult = _xRapidButton;
+      }
+    }
+    if (!_matched) {
+      Parent _parent = it.getParent();
+      XRapidButton _containerButton = Extensions.getContainerButton(_parent);
+      _switchResult = _containerButton;
     }
     return _switchResult;
   }

@@ -21,7 +21,7 @@ class BrickBreakerNode extends XNode {
 				children += new Text => [
 					text = "BrickBreaker"
 					textOrigin = VPos.TOP
-					StackPane.setMargin(it, new Insets(10,20,10,20))
+					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
 			]
 			back = new Group => [
@@ -32,6 +32,7 @@ class BrickBreakerNode extends XNode {
 				]
 			]
 		]
+		key = 'BrickBreaker'
 	}
 
 	def createRoot() {
@@ -42,6 +43,7 @@ class BrickBreakerNode extends XNode {
 				height = Config.SCREEN_HEIGHT
 			]
 		]
+
 		// some reflection hassle to deal with private members 
 		val main = new Main
 		val constructor = MainFrame.getDeclaredConstructor(Main, Group)
@@ -49,9 +51,8 @@ class BrickBreakerNode extends XNode {
 		val mainFrame = constructor.newInstance(main, root)
 		val mainFrameField = Main.declaredFields.filter[name == "mainFrame"].head
 		mainFrameField.accessible = true
-		mainFrameField.set(main, mainFrame)	
+		mainFrameField.set(main, mainFrame)
 		mainFrame.changeState(MainFrame.SPLASH)
 		root
 	}
 }
-

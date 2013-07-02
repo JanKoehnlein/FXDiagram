@@ -12,13 +12,13 @@ import javafx.scene.effect.InnerShadow
 
 class XNode extends Parent implements XActivatable {
 	
-	Node node
-	
 	@FxProperty@ReadOnly boolean isActive
 	@FxProperty@Lazy double width 
 	@FxProperty@Lazy double height
 	@FxProperty@ReadOnly String key
 	
+	Node node
+
 	Effect mouseOverEffect
 	Effect originalEffect
 	

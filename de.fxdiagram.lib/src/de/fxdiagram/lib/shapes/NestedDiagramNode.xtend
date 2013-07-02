@@ -69,6 +69,7 @@ class NestedDiagramNode extends XNode {
 				StackPane.setMargin(it, new Insets(3, 3, 3, 3))
 			]
 		]
+		key = name
 	}
 
 	override doActivate() {

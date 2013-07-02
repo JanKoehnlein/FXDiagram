@@ -82,6 +82,7 @@ public class BrickBreakerNode extends XNode {
       };
     FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
     this.setNode(_doubleArrow);
+    this.setKey("BrickBreaker");
   }
   
   public Group createRoot() {
