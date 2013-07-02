@@ -32,12 +32,20 @@ public class FlipNode extends StackPane {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent event) {
           boolean _and = false;
+          boolean _and_1 = false;
           boolean _notEquals = (!Objects.equal(FlipNode.this.front, null));
           if (!_notEquals) {
-            _and = false;
+            _and_1 = false;
           } else {
             boolean _notEquals_1 = (!Objects.equal(FlipNode.this.back, null));
-            _and = (_notEquals && _notEquals_1);
+            _and_1 = (_notEquals && _notEquals_1);
+          }
+          if (!_and_1) {
+            _and = false;
+          } else {
+            int _clickCount = event.getClickCount();
+            boolean _equals = (_clickCount == 2);
+            _and = (_and_1 && _equals);
           }
           if (_and) {
             double _sceneX = event.getSceneX();
@@ -139,12 +147,11 @@ public class FlipNode extends StackPane {
         }
       };
     this.clickHandler = _function;
-    this.setOnMousePressed(this.clickHandler);
+    this.setOnMouseClicked(this.clickHandler);
   }
   
   public void setFront(final Node front) {
     this.front = front;
-    front.setOnMousePressed(this.clickHandler);
     ObservableList<Node> _children = this.getChildren();
     _children.add(front);
     front.setVisible(this.isCurrentFront);
@@ -152,7 +159,6 @@ public class FlipNode extends StackPane {
   
   public void setBack(final Node back) {
     this.back = back;
-    back.setOnMousePressed(this.clickHandler);
     ObservableList<Node> _children = this.getChildren();
     _children.add(back);
     boolean _not = (!this.isCurrentFront);

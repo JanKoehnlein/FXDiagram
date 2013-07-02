@@ -25,7 +25,7 @@ class FlipNode extends StackPane {
 
 	new() {
 		clickHandler = [ event |
-			if (front != null && back != null) {
+			if (front != null && back != null && event.clickCount == 2) {
 				val clickInScene = new Point2D(event.sceneX, event.sceneY)
 				val clickInLocal = currentVisible.sceneToLocal(clickInScene)
 				val center = boundsInLocal.center
@@ -60,19 +60,17 @@ class FlipNode extends StackPane {
 				]
 			}
 		]
-		onMousePressed = clickHandler
+		onMouseClicked = clickHandler
 	}
 
 	def setFront(Node front) {
 		this.front = front
-		front.onMousePressed = clickHandler
 		children.add(front)
 		front.visible = isCurrentFront
 	}
 
 	def setBack(Node back) {
 		this.back = back
-		back.onMousePressed = clickHandler
 		children.add(back)
 		back.visible = !isCurrentFront
 	}

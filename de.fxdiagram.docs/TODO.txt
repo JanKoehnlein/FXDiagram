@@ -6,7 +6,6 @@ ENHANCEMENT
 - more controls for MovieNode
 - BrowserNode
 - Embed more JavaFX demos in XNodes
-- FlipNode control
 - unify Logger 
 
 BUG
@@ -26,3 +25,4 @@ DONE
 - Implement Java API for properties of RectangleBorderPane
 - Initial layout of choosers is broken  
 - Fix rapid buttons in nested diagram
+- FlipNode control
