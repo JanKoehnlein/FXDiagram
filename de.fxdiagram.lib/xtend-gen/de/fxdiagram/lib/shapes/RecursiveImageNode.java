@@ -6,7 +6,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
-import de.fxdiagram.core.transform.TransformExtensions;
+import de.fxdiagram.core.geometry.TransformExtensions;
 import de.fxdiagram.lib.shapes.AddRapidButtonBehavior;
 import java.util.Deque;
 import java.util.LinkedList;

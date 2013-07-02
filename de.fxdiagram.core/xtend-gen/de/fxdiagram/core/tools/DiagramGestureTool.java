@@ -1,9 +1,9 @@
 package de.fxdiagram.core.tools;
 
 import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.geometry.TransformExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.ZoomContext;
-import de.fxdiagram.core.transform.TransformExtensions;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;

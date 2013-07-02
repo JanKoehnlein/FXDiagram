@@ -1,18 +1,16 @@
 ENHANCEMENT
-- Implement Java API for properties of RectangleBorderPane
-- Embed JavaFX demos in XNodes
-- SwitchNode
 - Open subdiagram
 - Connection auto-layout
 - Connection behavior
 - Fancy context menus
 - more controls for MovieNode
 - BrowserNode
-- rename and don't export test packages
+- Embed more JavaFX demos in XNodes
 
 BUG
 - Initial layout of choosers is broken  
-- Fix fluctuations in layout of RecursiveImageNode
+- Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
+- FlipNode control
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
@@ -22,3 +20,7 @@ DONE
 - Inherit from Parent, not Group
 - Fix layout position of BrickBreakerNode
 - Make SVG export work with RectangleBorderPane
+- rename and don't export test packages
+- FlipNode
+- Embed JavaFX demos in XNodes
+- Implement Java API for properties of RectangleBorderPane

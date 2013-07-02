@@ -5,7 +5,7 @@ import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
-import de.fxdiagram.core.transform.TransformExtensions;
+import de.fxdiagram.core.geometry.TransformExtensions;
 import java.net.URL;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;

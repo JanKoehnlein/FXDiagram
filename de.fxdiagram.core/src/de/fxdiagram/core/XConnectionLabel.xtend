@@ -10,14 +10,14 @@ import javafx.scene.transform.Affine
 
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.transform.TransformExtensions.*
+import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 
 class XConnectionLabel extends Parent implements XActivatable {
 
 	@FxProperty XConnection connection
 
-	@FxProperty@ReadOnly boolean isActive
-	
+	@FxProperty @ReadOnly boolean isActive
+
 	Text text
 
 	new(XConnection connection) {
@@ -30,7 +30,7 @@ class XConnectionLabel extends Parent implements XActivatable {
 	def getText() {
 		text.text
 	}
-	
+
 	def setText(String text) {
 		this.text.text = text
 	}
@@ -38,7 +38,7 @@ class XConnectionLabel extends Parent implements XActivatable {
 	def StringProperty textProperty() {
 		text.textProperty
 	}
-	
+
 	override activate() {
 		if (!isActive)
 			doActivate
@@ -62,8 +62,8 @@ class XConnectionLabel extends Parent implements XActivatable {
 			var angle = atan2(dy, dx)
 			val labelDx = -boundsInLocal.width / 2
 			var labelDy = - 4
-			if(abs(angle) > PI / 2) {				
-				if (angle < 0) 
+			if (abs(angle) > PI / 2) {
+				if (angle < 0)
 					angle = angle + PI
 				else if (angle > 0)
 					angle = angle - PI

@@ -1,7 +1,7 @@
 package de.fxdiagram.lib.shapes;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.transform.BoundsExtensions;
+import de.fxdiagram.core.geometry.BoundsExtensions;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;

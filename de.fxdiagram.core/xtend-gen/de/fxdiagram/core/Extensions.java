@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
-import de.fxdiagram.core.transform.TransformExtensions;
+import de.fxdiagram.core.geometry.TransformExtensions;
 import java.util.logging.Logger;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;

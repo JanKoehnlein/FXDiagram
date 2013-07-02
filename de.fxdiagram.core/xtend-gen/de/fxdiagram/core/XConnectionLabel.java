@@ -2,7 +2,7 @@ package de.fxdiagram.core;
 
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.transform.TransformExtensions;
+import de.fxdiagram.core.geometry.TransformExtensions;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;

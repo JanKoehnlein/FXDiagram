@@ -5,7 +5,7 @@ import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
-import de.fxdiagram.core.transform.BoundsExtensions;
+import de.fxdiagram.core.geometry.BoundsExtensions;
 import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;

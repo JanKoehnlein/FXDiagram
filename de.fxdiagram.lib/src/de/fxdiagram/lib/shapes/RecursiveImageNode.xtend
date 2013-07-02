@@ -10,16 +10,17 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.WritableImage
 import javafx.scene.layout.Pane
+import javafx.scene.transform.Scale
+
+import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.Extensions.*
-import static java.lang.Math.*
-import static extension de.fxdiagram.core.transform.TransformExtensions.*
-import javafx.scene.transform.Scale
+import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 
 class RecursiveImageNode extends XNode implements SvgExportable {
 
 	static int instanceCount
-	
+
 	// TODO convert to FxProperties
 	Image image
 	double x

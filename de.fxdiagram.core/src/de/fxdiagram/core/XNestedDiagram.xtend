@@ -4,12 +4,12 @@ import de.fxdiagram.annotations.properties.FxProperty
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.scene.Group
+import javafx.scene.shape.Rectangle
 
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.transform.BoundsExtensions.*
-import javafx.scene.shape.Rectangle
+import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 
 /**
  * A nested diagram needs a width and a height to be set in order to rescale itself.
@@ -33,10 +33,10 @@ class XNestedDiagram extends XAbstractDiagram {
 		visibleProperty.addListener [ property, oldVal, newVal |
 			connections.forEach[visible = newVal]
 		]
-		boundsInLocalListener = [ prop, oldVal, newVal | scaleToFit ]
-		layoutListener = [ prop, oldVal, newVal | scaleToFit ]
-		widthProperty.addListener [ prop, oldVal, newVal | scaleToFit ]
-		heightProperty.addListener [ prop, oldVal, newVal | scaleToFit ]
+		boundsInLocalListener = [prop, oldVal, newVal|scaleToFit]
+		layoutListener = [prop, oldVal, newVal|scaleToFit]
+		widthProperty.addListener[prop, oldVal, newVal|scaleToFit]
+		heightProperty.addListener[prop, oldVal, newVal|scaleToFit]
 	}
 
 	def setScale(double scale) {
@@ -45,7 +45,7 @@ class XNestedDiagram extends XAbstractDiagram {
 	}
 
 	def scaleToFit() {
-		if(nodes.empty) {
+		if (nodes.empty) {
 			scale = 1
 			clip = null
 		} else {
@@ -63,14 +63,14 @@ class XNestedDiagram extends XAbstractDiagram {
 			clip = new Rectangle => [
 				x = myBounds.minX
 				width = myBounds.width
-				if(newScaleX == 1) {
+				if (newScaleX == 1) {
 					val delta = width / newScale - myBounds.width
 					x = x - 0.5 * delta
 					width = width + delta
-				} 
+				}
 				y = myBounds.minY
 				height = myBounds.height
-				if(newScaleY == 1) {
+				if (newScaleY == 1) {
 					val delta = height / newScale - myBounds.height
 					y = y - 0.5 * delta
 					height = height + delta

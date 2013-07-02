@@ -9,7 +9,7 @@ import javafx.scene.Node
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 
-import static extension de.fxdiagram.core.transform.BoundsExtensions.*
+import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
 

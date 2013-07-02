@@ -8,31 +8,31 @@ import javafx.scene.input.ScrollEvent
 import javafx.scene.input.ZoomEvent
 import javafx.scene.transform.Affine
 
-import static extension de.fxdiagram.core.transform.TransformExtensions.*
+import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 
 class DiagramGestureTool implements XDiagramTool {
-	
+
 	XRootDiagram diagram
-	
+
 	ZoomContext zoomContext
-	
+
 	Affine diagramTransform
-	
+
 	EventHandler<ZoomEvent> zoomStartHandler
 
 	EventHandler<ZoomEvent> zoomHandler
-	
+
 	EventHandler<ScrollEvent> scrollHandler
-	
+
 	EventHandler<RotateEvent> rotateHandler
-	
+
 	new(XRootDiagram diagram) {
 		this.diagram = diagram
 		diagramTransform = new Affine
 		diagram.transforms.clear
 		diagram.transforms += diagramTransform
 		zoomStartHandler = [
- 			zoomContext = new ZoomContext(diagram.sceneToLocal(sceneX, sceneY))
+			zoomContext = new ZoomContext(diagram.sceneToLocal(sceneX, sceneY))
 		]
 		zoomHandler = [
 			val scale = totalZoomFactor / zoomContext.previousScale
@@ -44,13 +44,13 @@ class DiagramGestureTool implements XDiagramTool {
 		]
 		scrollHandler = [
 			diagramTransform.translate(deltaX, deltaY)
-		] 
+		]
 		rotateHandler = [
-			if(shortcutDown)
+			if (shortcutDown)
 				diagramTransform.rotate(angle, sceneX, sceneY)
-		] 
+		]
 	}
-	
+
 	override activate() {
 		val scene = diagram.scene
 		scene.addEventHandler(ZoomEvent.ZOOM_STARTED, zoomStartHandler)
@@ -63,7 +63,7 @@ class DiagramGestureTool implements XDiagramTool {
 		scene.addEventHandler(RotateEvent.ROTATION_FINISHED, rotateHandler)
 		true
 	}
-	
+
 	override deactivate() {
 		val scene = diagram.scene
 		scene.removeEventHandler(ZoomEvent.ZOOM_STARTED, zoomStartHandler)
