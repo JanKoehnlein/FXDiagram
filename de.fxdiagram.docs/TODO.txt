@@ -3,17 +3,19 @@ ENHANCEMENT
 - Connection auto-layout
 - Connection behavior
 - Fancy context menus
-- more controls for MovieNode
 - BrowserNode
 - Embed more JavaFX demos in XNodes
-- unify Logger 
+- Play diagram
 
 BUG
 - Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
+- Location of filter text
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
   such that shadows are not clipped.
+- Unify Logging 
+- Transparent stage?
   
 DONE 
 - Inherit from Parent, not Group
@@ -26,3 +28,4 @@ DONE
 - Initial layout of choosers is broken  
 - Fix rapid buttons in nested diagram
 - FlipNode control
+- more controls for MovieNode

@@ -1,8 +1,8 @@
 package de.fxdiagram.core.tools.chooser
 
 import de.fxdiagram.core.XNode
-import javafx.geometry.Point2D
 import javafx.geometry.Point3D
+import javafx.geometry.Pos
 import javafx.scene.transform.Affine
 
 import static java.lang.Math.*
@@ -15,8 +15,8 @@ class CubeChooser extends AbstractXNodeChooser {
 	@Property var distance = 250.0
 	@Property var screenDistance = 250.0
 
-	new(XNode host, Point2D position) {
-		super(host, position)
+	new(XNode host, Pos layoutPosition) {
+		super(host, layoutPosition)
 	}
 
 	override activate() {

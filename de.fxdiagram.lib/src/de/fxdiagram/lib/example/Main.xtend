@@ -5,16 +5,21 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRootDiagram
 import de.fxdiagram.lib.shapes.BrickBreakerNode
 import de.fxdiagram.lib.shapes.ImageNode
+import de.fxdiagram.lib.shapes.JavaTypeNode
 import de.fxdiagram.lib.shapes.MovieNode
 import de.fxdiagram.lib.shapes.NestedDiagramNode
 import de.fxdiagram.lib.shapes.RecursiveImageNode
 import de.fxdiagram.lib.shapes.SimpleNode
 import javafx.application.Application
+import javafx.beans.property.BooleanProperty
 import javafx.geometry.Rectangle2D
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.stage.Stage
+import javafx.scene.Node
+import javafx.scene.Parent
+import javafx.scene.control.Button
 
 class Main extends Application {
 
@@ -22,15 +27,15 @@ class Main extends Application {
 		launch(args)
 	}
 
-	override start(Stage primaryStage) {
-		primaryStage.setTitle("FX Diagram Demo")
-		primaryStage.scene = createScene
-		primaryStage.show
+	override start(Stage it) {
+		title = "FX Diagram Demo"
+		scene = createScene
+		show
 	}
 
 	def createScene() {
 		val diagram = new XRootDiagram
-		val scene = new Scene(diagram, 640, 480)
+		val scene = new Scene(diagram, 1024, 768)
 		scene.setCamera(new PerspectiveCamera)
 		diagram.activate()
 		
@@ -55,7 +60,6 @@ class Main extends Application {
 		connectionLabel.text = 'label'
 		diagram.addConnection(connection)
 
-
 		val image = new ImageNode => [
 			image = new Image("media/seltsam.jpg", true)
 			layoutX = 100
@@ -66,8 +70,8 @@ class Main extends Application {
 
 		val movie = new MovieNode => [
 			movieUrl = this.class.classLoader.getResource("media/ScreenFlow.mp4")
-			width = 160
-			height = 90
+			width = 640
+			height = 360
 			view.viewport = new Rectangle2D(0, 60, 640, 360)
 			layoutX = 100
 			layoutY = 200
@@ -81,13 +85,22 @@ class Main extends Application {
 		diagram.addNode(recursive)
 		
 		val brickBreakerNode = new BrickBreakerNode => [
-			width = 160
-			height = 120
-			layoutX = 0
-			layoutY = 0
-			
+			width = 640
+			height = 480
+			layoutX = 500
+			layoutY = 100
 		]
 		diagram.addNode(brickBreakerNode)
+
+		val javaTypeNode = new JavaTypeNode => [
+			javaType = Button
+			width = 160
+			height = 120
+			layoutX = 500
+			layoutY = 200
+		]
+		diagram.addNode(javaTypeNode)
+
 		scene
 	}
 }

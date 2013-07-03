@@ -15,7 +15,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -59,6 +62,20 @@ public class XRapidButton extends Parent implements XActivatable {
       this.doActivate();
     }
     this.isActiveProperty.set(true);
+    Node _node = this.host.getNode();
+    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
+          XRapidButton.this.show();
+        }
+      };
+    _node.<MouseEvent>addEventHandler(MouseEvent.MOUSE_ENTERED, _function);
+    Node _node_1 = this.host.getNode();
+    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
+          XRapidButton.this.fade();
+        }
+      };
+    _node_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_EXITED, _function_1);
   }
   
   public void doActivate() {
@@ -154,6 +171,51 @@ public class XRapidButton extends Parent implements XActivatable {
         this.timeline = _doubleArrow;
       }
       _xblockexpression = (this.timeline);
+    }
+    return _xblockexpression;
+  }
+  
+  public Pos getChooserPosition() {
+    Pos _xblockexpression = null;
+    {
+      HPos _xifexpression = null;
+      double _xPos = this.placer.getXPos();
+      boolean _lessThan = (_xPos < 0.25);
+      if (_lessThan) {
+        _xifexpression = HPos.LEFT;
+      } else {
+        HPos _xifexpression_1 = null;
+        double _xPos_1 = this.placer.getXPos();
+        boolean _lessThan_1 = (_xPos_1 < 0.75);
+        if (_lessThan_1) {
+          _xifexpression_1 = HPos.CENTER;
+        } else {
+          _xifexpression_1 = HPos.RIGHT;
+        }
+        _xifexpression = _xifexpression_1;
+      }
+      final HPos hpos = _xifexpression;
+      Enum<? extends Object> _xifexpression_2 = null;
+      double _yPos = this.placer.getYPos();
+      boolean _lessThan_2 = (_yPos < 0.25);
+      if (_lessThan_2) {
+        _xifexpression_2 = VPos.TOP;
+      } else {
+        Enum<? extends Object> _xifexpression_3 = null;
+        double _yPos_1 = this.placer.getYPos();
+        boolean _lessThan_3 = (_yPos_1 < 0.75);
+        if (_lessThan_3) {
+          _xifexpression_3 = HPos.CENTER;
+        } else {
+          _xifexpression_3 = VPos.BOTTOM;
+        }
+        _xifexpression_2 = _xifexpression_3;
+      }
+      final Enum<? extends Object> vpos = _xifexpression_2;
+      String _plus = (vpos + "_");
+      String _plus_1 = (_plus + hpos);
+      Pos _valueOf = Pos.valueOf(_plus_1);
+      _xblockexpression = (_valueOf);
     }
     return _xblockexpression;
   }

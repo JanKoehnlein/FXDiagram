@@ -5,6 +5,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.lib.shapes.BrickBreakerNode;
 import de.fxdiagram.lib.shapes.ImageNode;
+import de.fxdiagram.lib.shapes.JavaTypeNode;
 import de.fxdiagram.lib.shapes.MovieNode;
 import de.fxdiagram.lib.shapes.NestedDiagramNode;
 import de.fxdiagram.lib.shapes.RecursiveImageNode;
@@ -14,6 +15,7 @@ import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
@@ -26,11 +28,11 @@ public class Main extends Application {
     Application.launch(args);
   }
   
-  public void start(final Stage primaryStage) {
-    primaryStage.setTitle("FX Diagram Demo");
+  public void start(final Stage it) {
+    it.setTitle("FX Diagram Demo");
     Scene _createScene = this.createScene();
-    primaryStage.setScene(_createScene);
-    primaryStage.show();
+    it.setScene(_createScene);
+    it.show();
   }
   
   public Scene createScene() {
@@ -38,7 +40,7 @@ public class Main extends Application {
     {
       XRootDiagram _xRootDiagram = new XRootDiagram();
       final XRootDiagram diagram = _xRootDiagram;
-      Scene _scene = new Scene(diagram, 640, 480);
+      Scene _scene = new Scene(diagram, 1024, 768);
       final Scene scene = _scene;
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       scene.setCamera(_perspectiveCamera);
@@ -90,8 +92,8 @@ public class Main extends Application {
             ClassLoader _classLoader = _class.getClassLoader();
             URL _resource = _classLoader.getResource("media/ScreenFlow.mp4");
             it.setMovieUrl(_resource);
-            it.setWidth(160);
-            it.setHeight(90);
+            it.setWidth(640);
+            it.setHeight(360);
             MediaView _view = it.getView();
             Rectangle2D _rectangle2D = new Rectangle2D(0, 60, 640, 360);
             _view.setViewport(_rectangle2D);
@@ -114,14 +116,26 @@ public class Main extends Application {
       BrickBreakerNode _brickBreakerNode = new BrickBreakerNode();
       final Procedure1<BrickBreakerNode> _function_5 = new Procedure1<BrickBreakerNode>() {
           public void apply(final BrickBreakerNode it) {
-            it.setWidth(160);
-            it.setHeight(120);
-            it.setLayoutX(0);
-            it.setLayoutY(0);
+            it.setWidth(640);
+            it.setHeight(480);
+            it.setLayoutX(500);
+            it.setLayoutY(100);
           }
         };
       final BrickBreakerNode brickBreakerNode = ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function_5);
       diagram.addNode(brickBreakerNode);
+      JavaTypeNode _javaTypeNode = new JavaTypeNode();
+      final Procedure1<JavaTypeNode> _function_6 = new Procedure1<JavaTypeNode>() {
+          public void apply(final JavaTypeNode it) {
+            it.setJavaType(Button.class);
+            it.setWidth(160);
+            it.setHeight(120);
+            it.setLayoutX(500);
+            it.setLayoutY(200);
+          }
+        };
+      final JavaTypeNode javaTypeNode = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_6);
+      diagram.addNode(javaTypeNode);
       _xblockexpression = (scene);
     }
     return _xblockexpression;

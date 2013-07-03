@@ -30,6 +30,7 @@ class KeyTool implements XDiagramTool {
 				case KeyCode.L: 
 					if(shortcutDown) {
 						new Layouter().layout(diagram, 2.seconds)
+						consume
 					}
 			}
 		]

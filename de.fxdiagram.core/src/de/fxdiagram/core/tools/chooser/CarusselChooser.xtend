@@ -1,7 +1,7 @@
 package de.fxdiagram.core.tools.chooser
 
 import de.fxdiagram.core.XNode
-import javafx.geometry.Point2D
+import javafx.geometry.Pos
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
 import javafx.scene.transform.Transform
@@ -14,8 +14,8 @@ class CarusselChooser extends AbstractXNodeChooser {
 
 	Effect currentNodeEffect
 
-	new(XNode host, Point2D position) {
-		super(host, position)
+	new(XNode host, Pos layoutPosition) {
+		super(host, layoutPosition)
 		currentNodeEffect = new InnerShadow
 	}
 

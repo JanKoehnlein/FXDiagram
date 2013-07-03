@@ -17,11 +17,7 @@ import de.fxdiagram.lib.shapes.NestedDiagramNode;
 import de.fxdiagram.lib.shapes.SimpleNode;
 import java.util.Collections;
 import java.util.List;
-import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
+import javafx.geometry.Pos;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -68,7 +64,7 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
           XNode _host = AddRapidButtonBehavior.this.getHost();
-          Point2D _chooserPosition = AddRapidButtonBehavior.this.getChooserPosition(button);
+          Pos _chooserPosition = button.getChooserPosition();
           CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
           final CarusselChooser chooser = _carusselChooser;
           AddRapidButtonBehavior.this.addChoices(chooser);
@@ -81,7 +77,7 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
           XNode _host = AddRapidButtonBehavior.this.getHost();
-          Point2D _chooserPosition = AddRapidButtonBehavior.this.getChooserPosition(button);
+          Pos _chooserPosition = button.getChooserPosition();
           CubeChooser _cubeChooser = new CubeChooser(_host, _chooserPosition);
           final CubeChooser chooser = _cubeChooser;
           AddRapidButtonBehavior.this.addChoices(chooser);
@@ -94,7 +90,7 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     final Procedure1<XRapidButton> _function_3 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
           XNode _host = AddRapidButtonBehavior.this.getHost();
-          Point2D _chooserPosition = AddRapidButtonBehavior.this.getChooserPosition(button);
+          Pos _chooserPosition = button.getChooserPosition();
           CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
           final CoverFlowChooser chooser = _coverFlowChooser;
           AddRapidButtonBehavior.this.addChoices(chooser);
@@ -121,65 +117,6 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
         }
       };
     IterableExtensions.<XRapidButton>forEach(this.rapidButtons, _function_4);
-    XNode _host_4 = this.getHost();
-    Node _node = _host_4.getNode();
-    final EventHandler<MouseEvent> _function_5 = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
-              public void apply(final XRapidButton it) {
-                it.show();
-              }
-            };
-          IterableExtensions.<XRapidButton>forEach(AddRapidButtonBehavior.this.rapidButtons, _function);
-        }
-      };
-    _node.setOnMouseEntered(_function_5);
-    XNode _host_5 = this.getHost();
-    Node _node_1 = _host_5.getNode();
-    final EventHandler<MouseEvent> _function_6 = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
-              public void apply(final XRapidButton it) {
-                it.fade();
-              }
-            };
-          IterableExtensions.<XRapidButton>forEach(AddRapidButtonBehavior.this.rapidButtons, _function);
-        }
-      };
-    _node_1.setOnMouseExited(_function_6);
-  }
-  
-  protected Point2D getChooserPosition(final XRapidButton button) {
-    Point2D _xblockexpression = null;
-    {
-      Placer _placer = button.getPlacer();
-      double _xPos = _placer.getXPos();
-      double _minus = (_xPos - 0.5);
-      double _multiply = (200 * _minus);
-      XNode _host = button.getHost();
-      double _layoutX = _host.getLayoutX();
-      double _plus = (_multiply + _layoutX);
-      XNode _host_1 = button.getHost();
-      Bounds _layoutBounds = _host_1.getLayoutBounds();
-      double _width = _layoutBounds.getWidth();
-      double _multiply_1 = (0.5 * _width);
-      final double x = (_plus + _multiply_1);
-      Placer _placer_1 = button.getPlacer();
-      double _yPos = _placer_1.getYPos();
-      double _minus_1 = (_yPos - 0.5);
-      double _multiply_2 = (150 * _minus_1);
-      XNode _host_2 = button.getHost();
-      double _layoutY = _host_2.getLayoutY();
-      double _plus_1 = (_multiply_2 + _layoutY);
-      XNode _host_3 = button.getHost();
-      Bounds _layoutBounds_1 = _host_3.getLayoutBounds();
-      double _height = _layoutBounds_1.getHeight();
-      double _multiply_3 = (0.5 * _height);
-      final double y = (_plus_1 + _multiply_3);
-      Point2D _point2D = new Point2D(x, y);
-      _xblockexpression = (_point2D);
-    }
-    return _xblockexpression;
   }
   
   protected void addChoices(final AbstractXNodeChooser chooser) {

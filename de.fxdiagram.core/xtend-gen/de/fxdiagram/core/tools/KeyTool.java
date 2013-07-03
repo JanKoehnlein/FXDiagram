@@ -50,6 +50,7 @@ public class KeyTool implements XDiagramTool {
                   Layouter _layouter = new Layouter();
                   Duration _seconds = Duration.seconds(2);
                   _layouter.layout(diagram, _seconds);
+                  it.consume();
                 }
               }
             }

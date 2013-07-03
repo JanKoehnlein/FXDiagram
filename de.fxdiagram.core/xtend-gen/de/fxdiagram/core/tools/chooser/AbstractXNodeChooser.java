@@ -28,7 +28,10 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Bounds;
+import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -93,12 +96,11 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   private Label filterLabel;
   
-  public AbstractXNodeChooser(final XNode host, final Point2D center) {
+  private Pos layoutPosition;
+  
+  public AbstractXNodeChooser(final XNode host, final Pos layoutPosition) {
     this.host = host;
-    double _x = center.getX();
-    this.group.setLayoutX(_x);
-    double _y = center.getY();
-    this.group.setLayoutY(_y);
+    this.layoutPosition = layoutPosition;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> element, final Number oldValue, final Number newValue) {
           final double newVal = newValue.doubleValue();
@@ -253,6 +255,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       {
         String _key_1 = node.getKey();
         this.nodeMap.put(_key_1, node);
+        node.layout();
         this.calculateVisibleNodes();
         ObservableList<Node> _children = this.group.getChildren();
         _children.add(node);
@@ -265,14 +268,14 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _xifexpression;
   }
   
-  public Boolean operator_add(final Iterable<XNode> nodes) {
+  public Boolean operator_add(final Iterable<? extends XNode> nodes) {
     final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
         public Boolean apply(final XNode it) {
           boolean _add = AbstractXNodeChooser.this.operator_add(it);
           return Boolean.valueOf(_add);
         }
       };
-    Iterable<Boolean> _map = IterableExtensions.<XNode, Boolean>map(nodes, _function);
+    Iterable<Boolean> _map = IterableExtensions.map(nodes, _function);
     final Function2<Boolean,Boolean,Boolean> _function_1 = new Function2<Boolean,Boolean,Boolean>() {
         public Boolean apply(final Boolean a, final Boolean b) {
           boolean _or = false;
@@ -354,7 +357,6 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       _children.add(this.group);
       this.group.layout();
       this.setCurrentPosition(0);
-      this.setInterpolatedPosition(0);
       ArrayList<XNode> _nodes_1 = this.getNodes();
       int _size = _nodes_1.size();
       boolean _equals = (_size == 1);
@@ -365,6 +367,12 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         return false;
       }
       ArrayList<XNode> _nodes_3 = this.getNodes();
+      int _size_1 = _nodes_3.size();
+      boolean _notEquals = (_size_1 != 0);
+      if (_notEquals) {
+        this.setInterpolatedPosition(0);
+      }
+      ArrayList<XNode> _nodes_4 = this.getNodes();
       final Procedure1<XNode> _function = new Procedure1<XNode>() {
           public void apply(final XNode node) {
             final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
@@ -395,7 +403,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             node.setOnMouseClicked(_function);
           }
         };
-      IterableExtensions.<XNode>forEach(_nodes_3, _function);
+      IterableExtensions.<XNode>forEach(_nodes_4, _function);
       XAbstractDiagram _diagram_1 = this.getDiagram();
       Scene _scene = _diagram_1.getScene();
       _scene.<SwipeEvent>addEventHandler(SwipeEvent.ANY, this.swipeHandler);
@@ -556,6 +564,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     int currentVisibleIndex = 0;
     XNode currentVisibleNode = IterableExtensions.<XNode>head(this.visibleNodes);
     int mapIndex = 0;
+    double maxWidth = 0.0;
+    double maxHeight = 0.0;
     Set<Entry<String,XNode>> _entrySet = this.nodeMap.entrySet();
     for (final Entry<String,XNode> entry : _entrySet) {
       {
@@ -569,6 +579,14 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             XNode _value_1 = entry.getValue();
             this.visibleNodes.add(currentVisibleIndex, _value_1);
           }
+          XNode _value_2 = entry.getValue();
+          final Bounds layoutBounds = _value_2.getLayoutBounds();
+          double _width = layoutBounds.getWidth();
+          double _max = Math.max(maxWidth, _width);
+          maxWidth = _max;
+          double _height = layoutBounds.getHeight();
+          double _max_1 = Math.max(maxHeight, _height);
+          maxHeight = _max_1;
           int _plus = (currentVisibleIndex + 1);
           currentVisibleIndex = _plus;
           XNode _xifexpression = null;
@@ -582,8 +600,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
           }
           currentVisibleNode = _xifexpression;
         } else {
-          XNode _value_2 = entry.getValue();
-          boolean _equals = Objects.equal(currentVisibleNode, _value_2);
+          XNode _value_3 = entry.getValue();
+          boolean _equals = Objects.equal(currentVisibleNode, _value_3);
           if (_equals) {
             this.visibleNodes.remove(currentVisibleIndex);
             currentVisibleNode.setVisible(false);
@@ -603,6 +621,82 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         mapIndex = _plus_1;
       }
     }
+    double _switchResult = (double) 0;
+    HPos _hpos = this.layoutPosition.getHpos();
+    final HPos _switchValue = _hpos;
+    boolean _matched = false;
+    if (!_matched) {
+      if (Objects.equal(_switchValue,HPos.LEFT)) {
+        _matched=true;
+        double _layoutX = this.host.getLayoutX();
+        double _layoutDistance = this.getLayoutDistance();
+        double _minus = (_layoutX - _layoutDistance);
+        double _multiply = (0.5 * maxWidth);
+        double _minus_1 = (_minus - _multiply);
+        _switchResult = _minus_1;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(_switchValue,HPos.RIGHT)) {
+        _matched=true;
+        double _layoutX_1 = this.host.getLayoutX();
+        Bounds _layoutBounds = this.host.getLayoutBounds();
+        double _width = _layoutBounds.getWidth();
+        double _plus = (_layoutX_1 + _width);
+        double _layoutDistance_1 = this.getLayoutDistance();
+        double _plus_1 = (_plus + _layoutDistance_1);
+        double _multiply_1 = (0.5 * maxWidth);
+        double _plus_2 = (_plus_1 + _multiply_1);
+        _switchResult = _plus_2;
+      }
+    }
+    if (!_matched) {
+      double _layoutX_2 = this.host.getLayoutX();
+      Bounds _layoutBounds_1 = this.host.getLayoutBounds();
+      double _width_1 = _layoutBounds_1.getWidth();
+      double _multiply_2 = (0.5 * _width_1);
+      double _plus_3 = (_layoutX_2 + _multiply_2);
+      _switchResult = _plus_3;
+    }
+    this.group.setLayoutX(_switchResult);
+    double _switchResult_1 = (double) 0;
+    VPos _vpos = this.layoutPosition.getVpos();
+    final VPos _switchValue_1 = _vpos;
+    boolean _matched_1 = false;
+    if (!_matched_1) {
+      if (Objects.equal(_switchValue_1,VPos.TOP)) {
+        _matched_1=true;
+        double _layoutY = this.host.getLayoutY();
+        double _layoutDistance_2 = this.getLayoutDistance();
+        double _minus_2 = (_layoutY - _layoutDistance_2);
+        double _multiply_3 = (0.5 * maxHeight);
+        double _minus_3 = (_minus_2 - _multiply_3);
+        _switchResult_1 = _minus_3;
+      }
+    }
+    if (!_matched_1) {
+      if (Objects.equal(_switchValue_1,VPos.BOTTOM)) {
+        _matched_1=true;
+        double _layoutY_1 = this.host.getLayoutY();
+        Bounds _layoutBounds_2 = this.host.getLayoutBounds();
+        double _height = _layoutBounds_2.getHeight();
+        double _plus_4 = (_layoutY_1 + _height);
+        double _layoutDistance_3 = this.getLayoutDistance();
+        double _plus_5 = (_plus_4 + _layoutDistance_3);
+        double _multiply_4 = (0.5 * maxHeight);
+        double _plus_6 = (_plus_5 + _multiply_4);
+        _switchResult_1 = _plus_6;
+      }
+    }
+    if (!_matched_1) {
+      double _layoutY_2 = this.host.getLayoutY();
+      Bounds _layoutBounds_3 = this.host.getLayoutBounds();
+      double _height_1 = _layoutBounds_3.getHeight();
+      double _multiply_5 = (0.5 * _height_1);
+      double _plus_7 = (_layoutY_2 + _multiply_5);
+      _switchResult_1 = _plus_7;
+    }
+    this.group.setLayoutY(_switchResult_1);
     double _currentPosition = this.getCurrentPosition();
     this.setInterpolatedPosition(_currentPosition);
     this.spinToPosition.resetTargetPosition();
@@ -642,6 +736,27 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   public StringProperty filterStringProperty() {
     return this.filterStringProperty;
+    
+  }
+  
+  private SimpleDoubleProperty layoutDistanceProperty = new SimpleDoubleProperty(this, "layoutDistance",_initLayoutDistance());
+  
+  private static final double _initLayoutDistance() {
+    return 40;
+  }
+  
+  public double getLayoutDistance() {
+    return this.layoutDistanceProperty.get();
+    
+  }
+  
+  public void setLayoutDistance(final double layoutDistance) {
+    this.layoutDistanceProperty.set(layoutDistance);
+    
+  }
+  
+  public DoubleProperty layoutDistanceProperty() {
+    return this.layoutDistanceProperty;
     
   }
 }

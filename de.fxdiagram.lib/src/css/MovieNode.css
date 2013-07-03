@@ -1,0 +1,75 @@
+#pane {
+	-fx-background-color: #888888;
+}
+
+.button {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ButtonSkin";
+    -fx-background-color: null;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: graphic-only;
+}
+
+#back-button {
+    -fx-graphic: url("images/button_default_back.png");
+}
+
+#back-button:hover {
+    -fx-graphic: url("images/button_hover_back.png");
+}
+
+#back-button:armed {
+    -fx-graphic: url("images/button_pressed_back.png");
+}
+
+#stop-button {
+    -fx-graphic: url("images/button_default_stop.png");
+}
+
+#stop-button:hover {
+    -fx-graphic: url("images/button_hover_stop.png");
+}
+
+#stop-button:armed {
+    -fx-graphic: url("images/button_pressed_stop.png");
+}
+
+#play-button {
+    -fx-graphic: url("images/button_default_play.png");
+}
+
+#play-button:hover {
+    -fx-graphic: url("images/button_hover_play.png");
+}
+
+#play-button:armed {
+    -fx-graphic: url("images/button_pressed_play.png");
+}
+
+#pause-button {
+    -fx-graphic: url("images/button_default_pause.png");
+}
+
+#pause-button:hover {
+    -fx-graphic: url("images/button_hover_pause.png");
+}
+
+#pause-button:armed {
+    -fx-graphic: url("images/button_pressed_pause.png");
+}
+
+#forward-button {
+    -fx-graphic: url("images/button_default_forward.png");
+}
+
+#forward-button:hover {
+    -fx-graphic: url("images/button_hover_forward.png");
+}
+
+#forward-button:armed {
+    -fx-graphic: url("images/button_pressed_forward.png");
+}
+

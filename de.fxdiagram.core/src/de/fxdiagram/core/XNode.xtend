@@ -12,6 +12,8 @@ import javafx.scene.effect.InnerShadow
 
 class XNode extends Parent implements XActivatable {
 	
+	static int instanceCount
+	
 	@FxProperty@ReadOnly boolean isActive
 	@FxProperty@Lazy double width 
 	@FxProperty@Lazy double height
@@ -29,6 +31,9 @@ class XNode extends Parent implements XActivatable {
 	
 	new() {
 		mouseOverEffect = createMouseOverEffect
+		key = class.simpleName + instanceCount
+		instanceCount = instanceCount + 1
+		
 	}
 	
 	protected def createMouseOverEffect() {

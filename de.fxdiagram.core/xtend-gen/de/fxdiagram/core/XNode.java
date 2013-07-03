@@ -22,6 +22,8 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 
 @SuppressWarnings("all")
 public class XNode extends Parent implements XActivatable {
+  private static int instanceCount;
+  
   private Node node;
   
   private Effect mouseOverEffect;
@@ -37,6 +39,12 @@ public class XNode extends Parent implements XActivatable {
   public XNode() {
     InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
     this.mouseOverEffect = _createMouseOverEffect;
+    Class<? extends XNode> _class = this.getClass();
+    String _simpleName = _class.getSimpleName();
+    String _plus = (_simpleName + Integer.valueOf(XNode.instanceCount));
+    this.setKey(_plus);
+    int _plus_1 = (XNode.instanceCount + 1);
+    XNode.instanceCount = _plus_1;
   }
   
   protected InnerShadow createMouseOverEffect() {

@@ -28,9 +28,9 @@ class SimpleNode extends XNode {
 	}
 
 	override doActivate() {
-		super.doActivate()
+		super.doActivate
 		val rapidButtonBehavior = new AddRapidButtonBehavior(this)
-		rapidButtonBehavior.activate()
+		rapidButtonBehavior.activate
 	}
 
 	override toString() {

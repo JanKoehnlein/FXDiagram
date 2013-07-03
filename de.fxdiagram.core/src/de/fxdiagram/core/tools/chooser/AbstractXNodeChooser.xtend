@@ -5,9 +5,11 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.tools.XDiagramTool
+import javafx.beans.property.DoubleProperty
+import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.value.ChangeListener
 import javafx.event.EventHandler
-import javafx.geometry.Point2D
+import javafx.geometry.Pos
 import javafx.scene.Group
 import javafx.scene.control.Label
 import javafx.scene.input.KeyCode
@@ -15,16 +17,20 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.SwipeEvent
 
+import static java.lang.Math.*
+import static javafx.geometry.HPos.*
+import static javafx.geometry.VPos.*
+
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.binding.StringExpressionExtensions.*
-import javafx.beans.property.DoubleProperty
-import javafx.beans.property.SimpleDoubleProperty
 
 abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	@FxProperty@ReadOnly boolean isActive = false
 
 	@FxProperty String filterString = ''
+	
+	@FxProperty double layoutDistance = 40 
 	
 	DoubleProperty currentPositionProperty = new SimpleDoubleProperty(0.0)
 
@@ -49,11 +55,12 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	ChangeListener<String> filterChangeListener
 	
 	Label filterLabel
+	
+	Pos layoutPosition
 
-	new(XNode host, Point2D center) {
+	new(XNode host, Pos layoutPosition) {
 		this.host = host
-		group.layoutX = center.x
-		group.layoutY = center.y
+		this.layoutPosition = layoutPosition
 		positionListener = [ element, oldValue, newValue |
 			val newVal = newValue.doubleValue
 			setInterpolatedPosition(newVal % nodes.size)
@@ -112,6 +119,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	def operator_add(XNode node) {
 		if(!nodeMap.containsKey(node.key)) {
 			nodeMap.put(node.key, node)
+			node.layout
 			calculateVisibleNodes
 			group.children += node
 			true
@@ -120,7 +128,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		}
 	}
 
-	def operator_add(Iterable<XNode> nodes) {
+	def operator_add(Iterable<? extends XNode> nodes) {
 		nodes.map[this += it].reduce[a, b | a || b]
 	}
 
@@ -146,11 +154,12 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		diagram.nodeLayer.children += group
 		group.layout
 		currentPosition = 0
-		interpolatedPosition = 0
 		if(nodes.size == 1) {
 			nodeChosen(nodes.head)
 			return false
 		}
+		if(nodes.size != 0)
+			interpolatedPosition = 0
 		nodes.forEach [ node |
 			node.onMouseClicked = [
 				switch (clickCount) {
@@ -238,10 +247,15 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		var currentVisibleIndex = 0
 		var currentVisibleNode = visibleNodes.head
 		var mapIndex = 0
+		var maxWidth = 0.0
+		var maxHeight = 0.0
 		for(entry: nodeMap.entrySet) {
 			if(entry.key.contains(filterString)) {
 				if(currentVisibleNode != entry.value)  
 					visibleNodes.add(currentVisibleIndex, entry.value)
+				val layoutBounds = entry.value.layoutBounds
+				maxWidth = max(maxWidth, layoutBounds.width)
+				maxHeight = max(maxHeight, layoutBounds.height)
 				currentVisibleIndex = currentVisibleIndex + 1
 				currentVisibleNode = if (currentVisibleIndex < visibleNodes.size) visibleNodes.get(currentVisibleIndex) else null
 			} else {
@@ -253,6 +267,17 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			}
 			mapIndex = mapIndex + 1
 		}
+		group.layoutX = switch layoutPosition.hpos {
+			case LEFT: host.layoutX - layoutDistance - 0.5 * maxWidth
+			case RIGHT: host.layoutX + host.layoutBounds.width + layoutDistance + 0.5 * maxWidth
+			default: host.layoutX + 0.5 * host.layoutBounds.width 
+		}
+		group.layoutY = switch layoutPosition.vpos {
+			case TOP: host.layoutY - layoutDistance - 0.5 * maxHeight
+			case BOTTOM: host.layoutY + host.layoutBounds.height + layoutDistance + 0.5 * maxHeight
+			default: host.layoutY + 0.5 * host.layoutBounds.height
+		}
+		
 		interpolatedPosition = currentPosition
 		spinToPosition.resetTargetPosition
 	}

@@ -6,8 +6,8 @@ import de.fxdiagram.core.tools.chooser.AbstractXNodeChooser;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.geometry.Pos;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
@@ -46,8 +46,8 @@ public class CubeChooser extends AbstractXNodeChooser {
     this._screenDistance = screenDistance;
   }
   
-  public CubeChooser(final XNode host, final Point2D position) {
-    super(host, position);
+  public CubeChooser(final XNode host, final Pos layoutPosition) {
+    super(host, layoutPosition);
   }
   
   public boolean activate() {

@@ -8,8 +8,6 @@ import javafx.scene.image.ImageView
 
 class ImageNode extends XNode implements SvgExportable {
 
-	static int instanceCount
-	
 	ImageView imageView
 
 	new() {
@@ -18,8 +16,6 @@ class ImageNode extends XNode implements SvgExportable {
 			fitWidthProperty.bind(widthProperty) 
 			fitHeightProperty.bind(heightProperty)
 		]
-		key = 'ImageNode' + instanceCount
-		instanceCount = instanceCount + 1
 	}
 	
 	def setImage(Image image) {

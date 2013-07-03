@@ -9,7 +9,6 @@ import de.fxdiagram.core.tools.chooser.CarusselChooser
 import de.fxdiagram.core.tools.chooser.CoverFlowChooser
 import de.fxdiagram.core.tools.chooser.CubeChooser
 import java.util.List
-import javafx.geometry.Point2D
 
 import static extension de.fxdiagram.core.Extensions.*
 
@@ -52,18 +51,6 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', chooseAction),
 			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addAction)]
 		rapidButtons.forEach[host.diagram.addButton(it)]
-		host.node.onMouseEntered = [
-			rapidButtons.forEach[show]
-		]
-		host.node.onMouseExited = [
-			rapidButtons.forEach[fade]
-		]
-	}
-	
-	protected def getChooserPosition(XRapidButton button) {
-		val x = 200 * (button.placer.XPos - 0.5) + button.host.layoutX + 0.5 * button.host.layoutBounds.width 
-		val y = 150 * (button.placer.YPos - 0.5) + button.host.layoutY + 0.5 * button.host.layoutBounds.height
-		new Point2D(x, y) 
 	}
 	
 	protected def addChoices(AbstractXNodeChooser chooser) {

@@ -10,9 +10,14 @@ import javafx.geometry.Point2D
 import javafx.scene.Parent
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import javafx.scene.input.MouseEvent
+
+import static javafx.geometry.HPos.*
+import static javafx.geometry.VPos.*
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension javafx.util.Duration.*
+import javafx.geometry.Pos
 
 class XRapidButton extends Parent implements XActivatable {
 	
@@ -40,6 +45,12 @@ class XRapidButton extends Parent implements XActivatable {
 		if(!isActive)
 			doActivate
 		isActiveProperty.set(true)
+		host.node.addEventHandler(MouseEvent.MOUSE_ENTERED, [
+			show
+		]) 
+		host.node.addEventHandler(MouseEvent.MOUSE_EXITED, [
+			fade
+		])
 	}
 	
 	def doActivate() {
@@ -87,6 +98,22 @@ class XRapidButton extends Parent implements XActivatable {
 				)
 			]
 		timeline
+	}
+	
+	def getChooserPosition() {
+		val hpos = if(placer.XPos < 0.25)
+				LEFT
+			else if (placer.XPos < 0.75)
+				CENTER
+			else 
+				RIGHT		
+		val vpos = if(placer.YPos < 0.25)
+				TOP
+			else if (placer.YPos < 0.75)
+				CENTER
+			else 
+				BOTTOM		
+		Pos.valueOf(vpos + '_' + hpos)
 	}
 }
 

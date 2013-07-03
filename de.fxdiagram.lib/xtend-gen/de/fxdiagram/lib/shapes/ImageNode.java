@@ -12,8 +12,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class ImageNode extends XNode implements SvgExportable {
-  private static int instanceCount;
-  
   private ImageView imageView;
   
   public ImageNode() {
@@ -32,10 +30,6 @@ public class ImageNode extends XNode implements SvgExportable {
     ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
     ImageView _imageView_1 = this.imageView = _doubleArrow;
     this.setNode(_imageView_1);
-    String _plus = ("ImageNode" + Integer.valueOf(ImageNode.instanceCount));
-    this.setKey(_plus);
-    int _plus_1 = (ImageNode.instanceCount + 1);
-    ImageNode.instanceCount = _plus_1;
   }
   
   public void setImage(final Image image) {

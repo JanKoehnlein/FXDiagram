@@ -5,7 +5,7 @@ import de.fxdiagram.core.tools.chooser.AbstractXNodeChooser;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.transform.Scale;
@@ -29,8 +29,8 @@ public class CarusselChooser extends AbstractXNodeChooser {
   
   private Effect currentNodeEffect;
   
-  public CarusselChooser(final XNode host, final Point2D position) {
-    super(host, position);
+  public CarusselChooser(final XNode host, final Pos layoutPosition) {
+    super(host, layoutPosition);
     InnerShadow _innerShadow = new InnerShadow();
     this.currentNodeEffect = _innerShadow;
   }
