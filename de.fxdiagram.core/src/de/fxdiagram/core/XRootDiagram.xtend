@@ -34,6 +34,7 @@ class XRootDiagram extends XAbstractDiagram {
 		defaultTool += new DiagramGestureTool(this)
 		defaultTool += new KeyTool(this)
 		tools += defaultTool
+		stylesheets += "de/fxdiagram/core/XRootDiagram.css"
 	}
 	
 	override doActivate() {

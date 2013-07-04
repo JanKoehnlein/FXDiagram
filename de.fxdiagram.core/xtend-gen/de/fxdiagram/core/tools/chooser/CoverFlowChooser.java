@@ -44,8 +44,10 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
     this._deltaX = deltaX;
   }
   
+  private double gap;
+  
   public CoverFlowChooser(final XNode host, final Pos layoutPosition) {
-    super(host, layoutPosition);
+    super(host, layoutPosition, false);
   }
   
   public boolean activate() {
@@ -56,91 +58,91 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
   protected void setInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _nodes = this.getNodes();
     int _size = _nodes.size();
-    boolean _equals = (_size == 0);
-    if (_equals) {
-      return;
-    }
-    ArrayList<XNode> _nodes_1 = this.getNodes();
-    final Function1<XNode,Double> _function = new Function1<XNode,Double>() {
-        public Double apply(final XNode it) {
-          Bounds _layoutBounds = it.getLayoutBounds();
-          double _width = _layoutBounds.getWidth();
-          return Double.valueOf(_width);
-        }
-      };
-    List<Double> _map = ListExtensions.<XNode, Double>map(_nodes_1, _function);
-    final Function2<Double,Double,Double> _function_1 = new Function2<Double,Double,Double>() {
-        public Double apply(final Double a, final Double b) {
-          double _plus = DoubleExtensions.operator_plus(a, b);
-          return Double.valueOf(_plus);
-        }
-      };
-    Double _reduce = IterableExtensions.<Double>reduce(_map, _function_1);
-    ArrayList<XNode> _nodes_2 = this.getNodes();
-    int _size_1 = _nodes_2.size();
-    final double gap = ((_reduce).doubleValue() / _size_1);
-    ArrayList<XNode> _nodes_3 = this.getNodes();
-    int _size_2 = _nodes_3.size();
-    final int currentIndex = (((int) interpolatedPosition) % _size_2);
-    int _xifexpression = (int) 0;
-    ArrayList<XNode> _nodes_4 = this.getNodes();
-    int _size_3 = _nodes_4.size();
-    int _minus = (_size_3 - 1);
-    boolean _equals_1 = (currentIndex == _minus);
-    if (_equals_1) {
-      int _minus_1 = (currentIndex - 1);
-      _xifexpression = _minus_1;
-    } else {
-      _xifexpression = currentIndex;
-    }
-    final int leftIndex = _xifexpression;
-    int _xifexpression_1 = (int) 0;
-    ArrayList<XNode> _nodes_5 = this.getNodes();
-    int _size_4 = _nodes_5.size();
-    int _minus_2 = (_size_4 - 1);
-    boolean _equals_2 = (currentIndex == _minus_2);
-    if (_equals_2) {
-      _xifexpression_1 = currentIndex;
-    } else {
-      int _plus = (currentIndex + 1);
-      _xifexpression_1 = _plus;
-    }
-    final int rightIndex = _xifexpression_1;
-    ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, leftIndex, true);
-    for (final Integer i : _doubleDotLessThan) {
-      this.transformNode((i).intValue(), interpolatedPosition, true, 1, gap);
-    }
-    ArrayList<XNode> _nodes_6 = this.getNodes();
-    int _size_5 = _nodes_6.size();
-    int _plus_1 = (rightIndex + 1);
-    ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_size_5, _plus_1, false);
-    for (final Integer i_1 : _greaterThanDoubleDot) {
-      this.transformNode((i_1).intValue(), interpolatedPosition, false, 1, gap);
-    }
-    double _minus_3 = (rightIndex - interpolatedPosition);
-    this.transformNode(rightIndex, interpolatedPosition, false, _minus_3, gap);
-    double _minus_4 = (interpolatedPosition - leftIndex);
-    this.transformNode(leftIndex, interpolatedPosition, true, _minus_4, gap);
-    boolean _and = false;
-    boolean _greaterThan = (rightIndex > 0);
-    if (!_greaterThan) {
-      _and = false;
-    } else {
-      double _minus_5 = (leftIndex - interpolatedPosition);
-      double _abs = Math.abs(_minus_5);
-      double _minus_6 = (rightIndex - interpolatedPosition);
-      double _abs_1 = Math.abs(_minus_6);
-      boolean _greaterThan_1 = (_abs > _abs_1);
-      _and = (_greaterThan && _greaterThan_1);
-    }
-    if (_and) {
-      ArrayList<XNode> _nodes_7 = this.getNodes();
-      XNode _get = _nodes_7.get(rightIndex);
-      _get.toFront();
+    boolean _notEquals = (_size != 0);
+    if (_notEquals) {
+      ArrayList<XNode> _nodes_1 = this.getNodes();
+      final Function1<XNode,Double> _function = new Function1<XNode,Double>() {
+          public Double apply(final XNode it) {
+            Bounds _layoutBounds = it.getLayoutBounds();
+            double _width = _layoutBounds.getWidth();
+            return Double.valueOf(_width);
+          }
+        };
+      List<Double> _map = ListExtensions.<XNode, Double>map(_nodes_1, _function);
+      final Function2<Double,Double,Double> _function_1 = new Function2<Double,Double,Double>() {
+          public Double apply(final Double a, final Double b) {
+            double _plus = DoubleExtensions.operator_plus(a, b);
+            return Double.valueOf(_plus);
+          }
+        };
+      Double _reduce = IterableExtensions.<Double>reduce(_map, _function_1);
+      ArrayList<XNode> _nodes_2 = this.getNodes();
+      int _size_1 = _nodes_2.size();
+      double _divide = ((_reduce).doubleValue() / _size_1);
+      this.gap = _divide;
+      ArrayList<XNode> _nodes_3 = this.getNodes();
+      int _size_2 = _nodes_3.size();
+      final int currentIndex = (((int) interpolatedPosition) % _size_2);
+      int _xifexpression = (int) 0;
+      ArrayList<XNode> _nodes_4 = this.getNodes();
+      int _size_3 = _nodes_4.size();
+      int _minus = (_size_3 - 1);
+      boolean _equals = (currentIndex == _minus);
+      if (_equals) {
+        int _minus_1 = (currentIndex - 1);
+        _xifexpression = _minus_1;
+      } else {
+        _xifexpression = currentIndex;
+      }
+      final int leftIndex = _xifexpression;
+      int _xifexpression_1 = (int) 0;
+      ArrayList<XNode> _nodes_5 = this.getNodes();
+      int _size_4 = _nodes_5.size();
+      int _minus_2 = (_size_4 - 1);
+      boolean _equals_1 = (currentIndex == _minus_2);
+      if (_equals_1) {
+        _xifexpression_1 = currentIndex;
+      } else {
+        int _plus = (currentIndex + 1);
+        _xifexpression_1 = _plus;
+      }
+      final int rightIndex = _xifexpression_1;
+      ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, leftIndex, true);
+      for (final Integer i : _doubleDotLessThan) {
+        this.transformNode((i).intValue(), interpolatedPosition, true, 1);
+      }
+      ArrayList<XNode> _nodes_6 = this.getNodes();
+      int _size_5 = _nodes_6.size();
+      int _plus_1 = (rightIndex + 1);
+      ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_size_5, _plus_1, false);
+      for (final Integer i_1 : _greaterThanDoubleDot) {
+        this.transformNode((i_1).intValue(), interpolatedPosition, false, 1);
+      }
+      double _minus_3 = (rightIndex - interpolatedPosition);
+      this.transformNode(rightIndex, interpolatedPosition, false, _minus_3);
+      double _minus_4 = (interpolatedPosition - leftIndex);
+      this.transformNode(leftIndex, interpolatedPosition, true, _minus_4);
+      boolean _and = false;
+      boolean _greaterThan = (rightIndex > 0);
+      if (!_greaterThan) {
+        _and = false;
+      } else {
+        double _minus_5 = (leftIndex - interpolatedPosition);
+        double _abs = Math.abs(_minus_5);
+        double _minus_6 = (rightIndex - interpolatedPosition);
+        double _abs_1 = Math.abs(_minus_6);
+        boolean _greaterThan_1 = (_abs > _abs_1);
+        _and = (_greaterThan && _greaterThan_1);
+      }
+      if (_and) {
+        ArrayList<XNode> _nodes_7 = this.getNodes();
+        XNode _get = _nodes_7.get(rightIndex);
+        _get.toFront();
+      }
     }
   }
   
-  protected void transformNode(final int i, final double interpolatedPosition, final boolean isLeft, final double fraction, final double gap) {
+  protected void transformNode(final int i, final double interpolatedPosition, final boolean isLeft, final double fraction) {
     boolean _greaterEqualsThan = (i >= 0);
     if (_greaterEqualsThan) {
       ArrayList<XNode> _nodes = this.getNodes();
@@ -185,7 +187,7 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
         double _multiply_5 = (_minus_4 * _deltaX);
         double _multiply_6 = (0.5 * fraction);
         double _multiply_7 = (_multiply_6 * direction);
-        double _multiply_8 = (_multiply_7 * gap);
+        double _multiply_8 = (_multiply_7 * this.gap);
         double _plus = (_multiply_5 + _multiply_8);
         double _minus_5 = (-fraction);
         TransformExtensions.translate(trafo, _plus, 0, _minus_5);

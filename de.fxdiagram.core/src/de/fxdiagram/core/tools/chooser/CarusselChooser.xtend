@@ -2,6 +2,7 @@ package de.fxdiagram.core.tools.chooser
 
 import de.fxdiagram.core.XNode
 import javafx.geometry.Pos
+import javafx.scene.control.Button
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
 import javafx.scene.transform.Transform
@@ -14,8 +15,10 @@ class CarusselChooser extends AbstractXNodeChooser {
 
 	Effect currentNodeEffect
 
+	double radius
+	
 	new(XNode host, Pos layoutPosition) {
-		super(host, layoutPosition)
+		super(host, layoutPosition, true)
 		currentNodeEffect = new InnerShadow
 	}
 
@@ -26,7 +29,7 @@ class CarusselChooser extends AbstractXNodeChooser {
 	protected override setInterpolatedPosition(double interpolatedPosition) {
 		val maxHeight = nodes.fold(0.0, [a, b|max(a, b.layoutBounds.height)]) + spacing
 		val angle = PI / nodes.size
-		val radius = maxHeight / 2 / sin(angle)
+		radius = maxHeight / 2 / sin(angle)
 		for (i : 0 ..< nodes.size) {
 			val node = nodes.get(i)
 			val nodeCenterAngle = 2 * PI * (i - interpolatedPosition) / nodes.size
@@ -52,6 +55,13 @@ class CarusselChooser extends AbstractXNodeChooser {
 	override protected nodeChosen(XNode choice) {
 		choice.effect = null
 		super.nodeChosen(choice)
+	}
+	
+	override relocateButtons(Button minusButton, Button plusButton) {
+		minusButton.layoutX = group.layoutX - 0.5 * minusButton.layoutBounds.width
+		minusButton.layoutY = group.layoutY + radius
+		plusButton.layoutX = group.layoutX - 0.5 * plusButton.layoutBounds.width
+		plusButton.layoutY = group.layoutY - radius - plusButton.layoutBounds.height
 	}
 
 }

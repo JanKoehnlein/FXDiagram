@@ -1,0 +1,58 @@
+.button {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ButtonSkin";
+    -fx-background-color: null;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: graphic-only;
+}
+
+#button-up {
+    -fx-graphic: url("images/blue_arrow_up_32.png");
+}
+
+#button-down {
+    -fx-graphic: url("images/blue_arrow_down_32.png");
+}
+
+#button-left {
+    -fx-graphic: url("images/blue_arrow_left_32.png");
+}
+
+#button-right {
+    -fx-graphic: url("images/blue_arrow_right_32.png");
+}
+
+#button-up:hover {
+    -fx-graphic: url("images/blue_arrow_up_32.png");
+}
+
+#button-down:hover {
+    -fx-graphic: url("images/blue_arrow_down_32.png");
+}
+
+#button-left:hover {
+    -fx-graphic: url("images/blue_arrow_left_32.png");
+}
+
+#button-right:hover {
+    -fx-graphic: url("images/blue_arrow_right_32.png");
+}
+
+#button-up:armed {
+    -fx-graphic: url("images/blue_arrow_up_32.png");
+}
+
+#button-down:armed {
+    -fx-graphic: url("images/blue_arrow_down_32.png");
+}
+
+#button-left:armed {
+    -fx-graphic: url("images/blue_arrow_left_32.png");
+}
+
+#button-right:armed {
+    -fx-graphic: url("images/blue_arrow_right_32.png");
+}

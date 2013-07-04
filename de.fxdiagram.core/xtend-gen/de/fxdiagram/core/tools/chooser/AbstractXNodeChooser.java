@@ -14,16 +14,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import javafx.animation.FadeTransition;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -35,6 +38,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -42,6 +46,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.SwipeEvent;
 import javafx.scene.transform.Transform;
+import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -98,7 +103,11 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   private Pos layoutPosition;
   
-  public AbstractXNodeChooser(final XNode host, final Pos layoutPosition) {
+  private Button plusButton;
+  
+  private Button minusButton;
+  
+  public AbstractXNodeChooser(final XNode host, final Pos layoutPosition, final boolean hasButtons) {
     this.host = host;
     this.layoutPosition = layoutPosition;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
@@ -182,21 +191,21 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
           if (!_matched) {
             if (Objects.equal(getCode,KeyCode.UP)) {
               _matched=true;
-              int _minus = (-1);
-              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus);
+              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(1);
             }
           }
           if (!_matched) {
             if (Objects.equal(getCode,KeyCode.LEFT)) {
               _matched=true;
-              int _minus_1 = (-1);
-              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus_1);
+              int _minus = (-1);
+              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus);
             }
           }
           if (!_matched) {
             if (Objects.equal(getCode,KeyCode.DOWN)) {
               _matched=true;
-              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(1);
+              int _minus_1 = (-1);
+              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus_1);
             }
           }
           if (!_matched) {
@@ -243,6 +252,66 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         }
       };
     this.filterChangeListener = _function_4;
+    if (hasButtons) {
+      boolean _and = false;
+      HPos _hpos = layoutPosition.getHpos();
+      boolean _notEquals = (!Objects.equal(_hpos, HPos.CENTER));
+      if (!_notEquals) {
+        _and = false;
+      } else {
+        HPos _hpos_1 = layoutPosition.getHpos();
+        boolean _notEquals_1 = (!Objects.equal(_hpos_1, null));
+        _and = (_notEquals && _notEquals_1);
+      }
+      final boolean isVertical = _and;
+      Button _button = new Button();
+      final Procedure1<Button> _function_5 = new Procedure1<Button>() {
+          public void apply(final Button it) {
+            String _xifexpression = null;
+            if (isVertical) {
+              _xifexpression = "button-down";
+            } else {
+              _xifexpression = "button-right";
+            }
+            it.setId(_xifexpression);
+            String _id = it.getId();
+            it.setText(_id);
+            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                public void handle(final ActionEvent it) {
+                  int _minus = (-1);
+                  AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus);
+                }
+              };
+            it.setOnAction(_function);
+            it.setFocusTraversable(false);
+          }
+        };
+      Button _doubleArrow = ObjectExtensions.<Button>operator_doubleArrow(_button, _function_5);
+      this.minusButton = _doubleArrow;
+      Button _button_1 = new Button();
+      final Procedure1<Button> _function_6 = new Procedure1<Button>() {
+          public void apply(final Button it) {
+            String _xifexpression = null;
+            if (isVertical) {
+              _xifexpression = "button-up";
+            } else {
+              _xifexpression = "button-left";
+            }
+            it.setId(_xifexpression);
+            String _id = it.getId();
+            it.setText(_id);
+            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                public void handle(final ActionEvent it) {
+                  AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(1);
+                }
+              };
+            it.setOnAction(_function);
+            it.setFocusTraversable(false);
+          }
+        };
+      Button _doubleArrow_1 = ObjectExtensions.<Button>operator_doubleArrow(_button_1, _function_6);
+      this.plusButton = _doubleArrow_1;
+    }
   }
   
   public boolean operator_add(final XNode node) {
@@ -352,10 +421,55 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       }
       this.isActiveProperty.set(true);
       XAbstractDiagram _diagram = this.getDiagram();
-      Group _nodeLayer = _diagram.getNodeLayer();
-      ObservableList<Node> _children = _nodeLayer.getChildren();
+      Group _buttonLayer = _diagram.getButtonLayer();
+      ObservableList<Node> _children = _buttonLayer.getChildren();
       _children.add(this.group);
-      this.group.layout();
+      FadeTransition _fadeTransition = new FadeTransition();
+      final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+          public void apply(final FadeTransition it) {
+            XAbstractDiagram _diagram = AbstractXNodeChooser.this.getDiagram();
+            Group _nodeLayer = _diagram.getNodeLayer();
+            it.setNode(_nodeLayer);
+            it.setToValue(0.3);
+            Duration _millis = Duration.millis(300);
+            it.setDuration(_millis);
+            it.play();
+          }
+        };
+      ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
+      boolean _notEquals = (!Objects.equal(this.minusButton, null));
+      if (_notEquals) {
+        XAbstractDiagram _diagram_1 = this.getDiagram();
+        Group _buttonLayer_1 = _diagram_1.getButtonLayer();
+        ObservableList<Node> _children_1 = _buttonLayer_1.getChildren();
+        _children_1.add(this.plusButton);
+        XAbstractDiagram _diagram_2 = this.getDiagram();
+        Group _buttonLayer_2 = _diagram_2.getButtonLayer();
+        ObservableList<Node> _children_2 = _buttonLayer_2.getChildren();
+        _children_2.add(this.minusButton);
+        final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
+            public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
+              AbstractXNodeChooser.this.relocateButtons(AbstractXNodeChooser.this.minusButton, AbstractXNodeChooser.this.plusButton);
+            }
+          };
+        final ChangeListener<Bounds> relocateButtons_0 = _function_1;
+        final ChangeListener<Number> _function_2 = new ChangeListener<Number>() {
+            public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
+              AbstractXNodeChooser.this.relocateButtons(AbstractXNodeChooser.this.minusButton, AbstractXNodeChooser.this.plusButton);
+            }
+          };
+        final ChangeListener<Number> relocateButtons_1 = _function_2;
+        ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = this.minusButton.layoutBoundsProperty();
+        _layoutBoundsProperty.addListener(relocateButtons_0);
+        ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty_1 = this.plusButton.layoutBoundsProperty();
+        _layoutBoundsProperty_1.addListener(relocateButtons_0);
+        ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty_2 = this.group.layoutBoundsProperty();
+        _layoutBoundsProperty_2.addListener(relocateButtons_0);
+        DoubleProperty _layoutXProperty = this.group.layoutXProperty();
+        _layoutXProperty.addListener(relocateButtons_1);
+        DoubleProperty _layoutYProperty = this.group.layoutYProperty();
+        _layoutYProperty.addListener(relocateButtons_1);
+      }
       this.setCurrentPosition(0);
       ArrayList<XNode> _nodes_1 = this.getNodes();
       int _size = _nodes_1.size();
@@ -368,12 +482,12 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       }
       ArrayList<XNode> _nodes_3 = this.getNodes();
       int _size_1 = _nodes_3.size();
-      boolean _notEquals = (_size_1 != 0);
-      if (_notEquals) {
+      boolean _notEquals_1 = (_size_1 != 0);
+      if (_notEquals_1) {
         this.setInterpolatedPosition(0);
       }
       ArrayList<XNode> _nodes_4 = this.getNodes();
-      final Procedure1<XNode> _function = new Procedure1<XNode>() {
+      final Procedure1<XNode> _function_3 = new Procedure1<XNode>() {
           public void apply(final XNode node) {
             final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
                 public void handle(final MouseEvent it) {
@@ -403,20 +517,20 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             node.setOnMouseClicked(_function);
           }
         };
-      IterableExtensions.<XNode>forEach(_nodes_4, _function);
-      XAbstractDiagram _diagram_1 = this.getDiagram();
-      Scene _scene = _diagram_1.getScene();
-      _scene.<SwipeEvent>addEventHandler(SwipeEvent.ANY, this.swipeHandler);
-      XAbstractDiagram _diagram_2 = this.getDiagram();
-      Scene _scene_1 = _diagram_2.getScene();
-      _scene_1.<ScrollEvent>addEventHandler(ScrollEvent.ANY, this.scrollHandler);
+      IterableExtensions.<XNode>forEach(_nodes_4, _function_3);
       XAbstractDiagram _diagram_3 = this.getDiagram();
-      Scene _scene_2 = _diagram_3.getScene();
+      Scene _scene = _diagram_3.getScene();
+      _scene.<SwipeEvent>addEventHandler(SwipeEvent.ANY, this.swipeHandler);
+      XAbstractDiagram _diagram_4 = this.getDiagram();
+      Scene _scene_1 = _diagram_4.getScene();
+      _scene_1.<ScrollEvent>addEventHandler(ScrollEvent.ANY, this.scrollHandler);
+      XAbstractDiagram _diagram_5 = this.getDiagram();
+      Scene _scene_2 = _diagram_5.getScene();
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       this.currentPositionProperty.addListener(this.positionListener);
       this.filterStringProperty.addListener(this.filterChangeListener);
       Label _label = new Label();
-      final Procedure1<Label> _function_1 = new Procedure1<Label>() {
+      final Procedure1<Label> _function_4 = new Procedure1<Label>() {
           public void apply(final Label it) {
             StringProperty _textProperty = it.textProperty();
             StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractXNodeChooser.this.filterStringProperty);
@@ -424,12 +538,12 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             _textProperty.bind(_plus_1);
           }
         };
-      Label _doubleArrow = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_1);
+      Label _doubleArrow = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_4);
       this.filterLabel = _doubleArrow;
       XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
-      Group _buttonLayer = _rootDiagram.getButtonLayer();
-      ObservableList<Node> _children_1 = _buttonLayer.getChildren();
-      _children_1.add(this.filterLabel);
+      Group _buttonLayer_3 = _rootDiagram.getButtonLayer();
+      ObservableList<Node> _children_3 = _buttonLayer_3.getChildren();
+      _children_3.add(this.filterLabel);
       _xblockexpression = (true);
     }
     return _xblockexpression;
@@ -458,10 +572,34 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Scene _scene_2 = _diagram_2.getScene();
       _scene_2.<SwipeEvent>removeEventHandler(SwipeEvent.ANY, this.swipeHandler);
       this.spinToPosition.stop();
-      XAbstractDiagram _diagram_3 = this.getDiagram();
-      Group _nodeLayer = _diagram_3.getNodeLayer();
-      ObservableList<Node> _children_1 = _nodeLayer.getChildren();
-      _children_1.remove(this.group);
+      FadeTransition _fadeTransition = new FadeTransition();
+      final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+          public void apply(final FadeTransition it) {
+            XAbstractDiagram _diagram = AbstractXNodeChooser.this.getDiagram();
+            Group _nodeLayer = _diagram.getNodeLayer();
+            it.setNode(_nodeLayer);
+            it.setToValue(1);
+            Duration _millis = Duration.millis(300);
+            it.setDuration(_millis);
+            it.play();
+          }
+        };
+      ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
+      boolean _notEquals = (!Objects.equal(this.minusButton, null));
+      if (_notEquals) {
+        XAbstractDiagram _diagram_3 = this.getDiagram();
+        Group _buttonLayer_1 = _diagram_3.getButtonLayer();
+        ObservableList<Node> _children_1 = _buttonLayer_1.getChildren();
+        _children_1.remove(this.minusButton);
+        XAbstractDiagram _diagram_4 = this.getDiagram();
+        Group _buttonLayer_2 = _diagram_4.getButtonLayer();
+        ObservableList<Node> _children_2 = _buttonLayer_2.getChildren();
+        _children_2.remove(this.plusButton);
+      }
+      XAbstractDiagram _diagram_5 = this.getDiagram();
+      Group _buttonLayer_3 = _diagram_5.getButtonLayer();
+      ObservableList<Node> _children_3 = _buttonLayer_3.getChildren();
+      _children_3.remove(this.group);
       _xblockexpression = (true);
     }
     return _xblockexpression;
@@ -560,7 +698,11 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _diagram;
   }
   
-  public void calculateVisibleNodes() {
+  protected Group getGroup() {
+    return this.group;
+  }
+  
+  protected void calculateVisibleNodes() {
     int currentVisibleIndex = 0;
     XNode currentVisibleNode = IterableExtensions.<XNode>head(this.visibleNodes);
     int mapIndex = 0;
@@ -700,6 +842,9 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     double _currentPosition = this.getCurrentPosition();
     this.setInterpolatedPosition(_currentPosition);
     this.spinToPosition.resetTargetPosition();
+  }
+  
+  public void relocateButtons(final Button minusButton, final Button plusButton) {
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive",_initIsActive());

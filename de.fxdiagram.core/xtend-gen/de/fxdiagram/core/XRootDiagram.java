@@ -69,6 +69,8 @@ public class XRootDiagram extends XAbstractDiagram {
     KeyTool _keyTool = new KeyTool(this);
     this.defaultTool.operator_add(_keyTool);
     this.tools.add(this.defaultTool);
+    ObservableList<String> _stylesheets = this.getStylesheets();
+    _stylesheets.add("de/fxdiagram/core/XRootDiagram.css");
   }
   
   public void doActivate() {

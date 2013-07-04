@@ -15,9 +15,11 @@ class CoverFlowChooser extends AbstractXNodeChooser {
 
 	@Property double angle = 60
 	@Property double deltaX = 20
+	
+	double gap
 
 	new(XNode host, Pos layoutPosition) {
-		super(host, layoutPosition)
+		super(host, layoutPosition, false)
 	}
 
 	override activate() {
@@ -25,29 +27,29 @@ class CoverFlowChooser extends AbstractXNodeChooser {
 	}
 
 	override protected setInterpolatedPosition(double interpolatedPosition) {
-		if(nodes.size == 0)
-			return
-		val gap = nodes.map[layoutBounds.width].reduce[a,b|a+b] / nodes.size
-		val currentIndex = (interpolatedPosition as int) % nodes.size()
-		val leftIndex = if (currentIndex == nodes.size - 1)
-				currentIndex - 1
-			else
-				currentIndex
-		val rightIndex = if (currentIndex == nodes.size - 1)
-				currentIndex
-			else
-				currentIndex + 1
-		for (i : 0 ..< leftIndex)
-			transformNode(i, interpolatedPosition, true, 1, gap)
-		for (i : nodes.size() >.. rightIndex + 1)
-			transformNode(i, interpolatedPosition, false, 1, gap)
-		transformNode(rightIndex, interpolatedPosition, false, rightIndex - interpolatedPosition, gap)
-		transformNode(leftIndex, interpolatedPosition, true, interpolatedPosition - leftIndex, gap)
-		if(rightIndex > 0 && abs(leftIndex - interpolatedPosition) > abs(rightIndex - interpolatedPosition))
-			nodes.get(rightIndex).toFront
+		if(nodes.size != 0) {
+			gap = nodes.map[layoutBounds.width].reduce[a,b|a+b] / nodes.size
+			val currentIndex = (interpolatedPosition as int) % nodes.size()
+			val leftIndex = if (currentIndex == nodes.size - 1)
+					currentIndex - 1
+				else
+					currentIndex
+			val rightIndex = if (currentIndex == nodes.size - 1)
+					currentIndex
+				else
+					currentIndex + 1
+			for (i : 0 ..< leftIndex)
+				transformNode(i, interpolatedPosition, true, 1)
+			for (i : nodes.size() >.. rightIndex + 1)
+				transformNode(i, interpolatedPosition, false, 1)
+			transformNode(rightIndex, interpolatedPosition, false, rightIndex - interpolatedPosition)
+			transformNode(leftIndex, interpolatedPosition, true, interpolatedPosition - leftIndex)
+			if(rightIndex > 0 && abs(leftIndex - interpolatedPosition) > abs(rightIndex - interpolatedPosition))
+				nodes.get(rightIndex).toFront
+		}
 	}
 
-	protected def transformNode(int i, double interpolatedPosition, boolean isLeft, double fraction, double gap) {
+	protected def transformNode(int i, double interpolatedPosition, boolean isLeft, double fraction) {
 		if (i >= 0) {
 			val node = nodes.get(i)
 			val distanceFromSelection = abs(i - interpolatedPosition)
@@ -71,5 +73,4 @@ class CoverFlowChooser extends AbstractXNodeChooser {
 			}
 		}
 	}
-
 }
