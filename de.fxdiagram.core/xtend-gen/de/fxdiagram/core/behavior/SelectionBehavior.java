@@ -39,13 +39,15 @@ public class SelectionBehavior extends AbstractBehavior {
             _host_1.setScaleX(1.05);
             XNode _host_2 = SelectionBehavior.this.getHost();
             _host_2.setScaleY(1.05);
-          } else {
             XNode _host_3 = SelectionBehavior.this.getHost();
-            _host_3.setEffect(null);
+            _host_3.toFront();
+          } else {
             XNode _host_4 = SelectionBehavior.this.getHost();
-            _host_4.setScaleX(1.0);
+            _host_4.setEffect(null);
             XNode _host_5 = SelectionBehavior.this.getHost();
-            _host_5.setScaleY(1.0);
+            _host_5.setScaleX(1.0);
+            XNode _host_6 = SelectionBehavior.this.getHost();
+            _host_6.setScaleY(1.0);
           }
         }
       };

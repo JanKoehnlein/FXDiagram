@@ -26,6 +26,7 @@ class SelectionBehavior extends AbstractBehavior {
 				host.effect = selectionEffect
 				host.scaleX = 1.05
 				host.scaleY = 1.05
+				host.toFront
 			} else {
 				host.effect = null
 				host.scaleX = 1.0
@@ -39,7 +40,8 @@ class SelectionBehavior extends AbstractBehavior {
 	}
 
 	def toggleSelect(MouseEvent it) {
-		if (shortcutDown)
+		if (shortcutDown) {
 			selected = !selected
+		}
 	}
 }
