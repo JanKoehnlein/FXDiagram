@@ -1,29 +1,34 @@
 package de.fxdiagram.lib.shapes
 
+import de.fxdiagram.core.debug.Debug
 import javafx.animation.RotateTransition
 import javafx.animation.SequentialTransition
 import javafx.event.EventHandler
 import javafx.geometry.Point2D
 import javafx.geometry.Point3D
+import javafx.scene.Group
 import javafx.scene.Node
+import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
-import javafx.scene.layout.StackPane
 
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
 
-class FlipNode extends StackPane {
+class FlipNode extends Parent {
 
 	Node front
 
 	Node back
+	
+	Group pane = new Group
 
 	boolean isCurrentFront = true
 
 	EventHandler<MouseEvent> clickHandler
 
 	new() {
+		children += pane
 		clickHandler = [ event |
 			if (front != null && back != null && event.clickCount == 2) {
 				val clickInScene = new Point2D(event.sceneX, event.sceneY)
@@ -65,14 +70,22 @@ class FlipNode extends StackPane {
 
 	def setFront(Node front) {
 		this.front = front
-		children.add(front)
+		pane.children += front
 		front.visible = isCurrentFront
 	}
 
 	def setBack(Node back) {
 		this.back = back
-		children.add(back)
+		pane.children += back
 		back.visible = !isCurrentFront
+	}
+
+	override layoutChildren() {
+		super.layoutChildren
+		if(front != null && back != null) {
+			back.layoutX = front.layoutX - (back.layoutBounds.width - front.layoutBounds.width) / 2 - back.layoutBounds.minX	
+			back.layoutY = front.layoutY - (back.layoutBounds.height - front.layoutBounds.height) / 2 - back.layoutBounds.minY
+		}
 	}
 
 	def getCurrentVisible() {

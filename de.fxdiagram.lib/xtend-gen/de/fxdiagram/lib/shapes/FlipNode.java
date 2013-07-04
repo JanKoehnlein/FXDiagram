@@ -11,24 +11,35 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class FlipNode extends StackPane {
+public class FlipNode extends Parent {
   private Node front;
   
   private Node back;
+  
+  private Group pane = new Function0<Group>() {
+    public Group apply() {
+      Group _group = new Group();
+      return _group;
+    }
+  }.apply();
   
   private boolean isCurrentFront = true;
   
   private EventHandler<MouseEvent> clickHandler;
   
   public FlipNode() {
+    ObservableList<Node> _children = this.getChildren();
+    _children.add(this.pane);
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent event) {
           boolean _and = false;
@@ -152,17 +163,55 @@ public class FlipNode extends StackPane {
   
   public void setFront(final Node front) {
     this.front = front;
-    ObservableList<Node> _children = this.getChildren();
+    ObservableList<Node> _children = this.pane.getChildren();
     _children.add(front);
     front.setVisible(this.isCurrentFront);
   }
   
   public void setBack(final Node back) {
     this.back = back;
-    ObservableList<Node> _children = this.getChildren();
+    ObservableList<Node> _children = this.pane.getChildren();
     _children.add(back);
     boolean _not = (!this.isCurrentFront);
     back.setVisible(_not);
+  }
+  
+  public void layoutChildren() {
+    super.layoutChildren();
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(this.front, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _notEquals_1 = (!Objects.equal(this.back, null));
+      _and = (_notEquals && _notEquals_1);
+    }
+    if (_and) {
+      double _layoutX = this.front.getLayoutX();
+      Bounds _layoutBounds = this.back.getLayoutBounds();
+      double _width = _layoutBounds.getWidth();
+      Bounds _layoutBounds_1 = this.front.getLayoutBounds();
+      double _width_1 = _layoutBounds_1.getWidth();
+      double _minus = (_width - _width_1);
+      double _divide = (_minus / 2);
+      double _minus_1 = (_layoutX - _divide);
+      Bounds _layoutBounds_2 = this.back.getLayoutBounds();
+      double _minX = _layoutBounds_2.getMinX();
+      double _minus_2 = (_minus_1 - _minX);
+      this.back.setLayoutX(_minus_2);
+      double _layoutY = this.front.getLayoutY();
+      Bounds _layoutBounds_3 = this.back.getLayoutBounds();
+      double _height = _layoutBounds_3.getHeight();
+      Bounds _layoutBounds_4 = this.front.getLayoutBounds();
+      double _height_1 = _layoutBounds_4.getHeight();
+      double _minus_3 = (_height - _height_1);
+      double _divide_1 = (_minus_3 / 2);
+      double _minus_4 = (_layoutY - _divide_1);
+      Bounds _layoutBounds_5 = this.back.getLayoutBounds();
+      double _minY = _layoutBounds_5.getMinY();
+      double _minus_5 = (_minus_4 - _minY);
+      this.back.setLayoutY(_minus_5);
+    }
   }
   
   public Node getCurrentVisible() {

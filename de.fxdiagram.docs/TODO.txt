@@ -16,6 +16,7 @@ MINOR
   such that shadows are not clipped.
 - Unify Logging 
 - Transparent stage?
+- need for connection layer?
   
 DONE 
 - Inherit from Parent, not Group
@@ -29,3 +30,4 @@ DONE
 - Fix rapid buttons in nested diagram
 - FlipNode control
 - more controls for MovieNode
+- Location and layout of chooser buttons
