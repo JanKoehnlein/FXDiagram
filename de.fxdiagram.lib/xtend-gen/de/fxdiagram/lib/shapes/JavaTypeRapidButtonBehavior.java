@@ -118,13 +118,13 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior {
       };
     final Procedure1<XRapidButton> addReferencesAction = _function_1;
     XNode _host = this.getHost();
-    XRapidButton _xRapidButton = new XRapidButton(_host, 0.5, 0, "icons/blue_arrow_up_32.png", addSuperTypeAction);
+    XRapidButton _xRapidButton = new XRapidButton(_host, 0.5, 0, "icons/add_16.png", addSuperTypeAction);
     XNode _host_1 = this.getHost();
-    XRapidButton _xRapidButton_1 = new XRapidButton(_host_1, 0.5, 1, "icons/blue_arrow_down_32.png", addSuperTypeAction);
+    XRapidButton _xRapidButton_1 = new XRapidButton(_host_1, 0.5, 1, "icons/add_16.png", addSuperTypeAction);
     XNode _host_2 = this.getHost();
-    XRapidButton _xRapidButton_2 = new XRapidButton(_host_2, 0, 0.5, "icons/blue_arrow_left_32.png", addReferencesAction);
+    XRapidButton _xRapidButton_2 = new XRapidButton(_host_2, 0, 0.5, "icons/add_16.png", addReferencesAction);
     XNode _host_3 = this.getHost();
-    XRapidButton _xRapidButton_3 = new XRapidButton(_host_3, 1, 0.5, "icons/blue_arrow_right_32.png", addReferencesAction);
+    XRapidButton _xRapidButton_3 = new XRapidButton(_host_3, 1, 0.5, "icons/add_16.png", addReferencesAction);
     final List<XRapidButton> buttons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
     final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton it) {

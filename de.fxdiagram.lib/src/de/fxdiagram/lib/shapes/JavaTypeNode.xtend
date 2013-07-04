@@ -114,10 +114,10 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior {
 			host.rootDiagram.currentTool = chooser
 		]
 		val buttons = #[
-			new XRapidButton(host, 0.5, 0, 'icons/blue_arrow_up_32.png', addSuperTypeAction),
-			new XRapidButton(host, 0.5, 1, 'icons/blue_arrow_down_32.png', addSuperTypeAction),
-			new XRapidButton(host, 0, 0.5, 'icons/blue_arrow_left_32.png', addReferencesAction),
-			new XRapidButton(host, 1, 0.5, 'icons/blue_arrow_right_32.png', addReferencesAction)
+			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', addSuperTypeAction),
+			new XRapidButton(host, 0.5, 1, 'icons/add_16.png', addSuperTypeAction),
+			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', addReferencesAction),
+			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addReferencesAction)
 		]
 		buttons.forEach[ host.diagram.addButton(it) ]
 	}
