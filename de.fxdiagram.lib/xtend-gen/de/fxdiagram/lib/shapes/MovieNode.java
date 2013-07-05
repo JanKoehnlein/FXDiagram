@@ -249,8 +249,6 @@ public class MovieNode extends XNode implements SvgExportable {
     int _multiply = (2 * this.border);
     double _minus = (width - _multiply);
     this.view.setFitWidth(_minus);
-    this.controlBar.setScaleX(0.2);
-    this.controlBar.setScaleY(0.2);
   }
   
   public void setHeight(final double height) {
@@ -258,8 +256,6 @@ public class MovieNode extends XNode implements SvgExportable {
     int _multiply = (2 * this.border);
     double _minus = (height - _multiply);
     this.view.setFitHeight(_minus);
-    this.controlBar.setScaleX(0.2);
-    this.controlBar.setScaleY(0.2);
   }
   
   public void setMovieUrl(final URL movieUrl) {

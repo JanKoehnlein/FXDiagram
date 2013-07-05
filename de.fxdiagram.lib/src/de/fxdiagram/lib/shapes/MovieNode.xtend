@@ -122,15 +122,11 @@ class MovieNode extends XNode implements SvgExportable {
 	override setWidth(double width) {
 		super.width = width
 		view.fitWidth = width - 2 * border
-		controlBar.scaleX = 0.2
-		controlBar.scaleY = 0.2
 	}
 
 	override setHeight(double height) {
 		super.height = height
 		view.fitHeight = height - 2 * border
-		controlBar.scaleX = 0.2
-		controlBar.scaleY = 0.2
 	}
 
 	def setMovieUrl(URL movieUrl) {
