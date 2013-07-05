@@ -71,29 +71,23 @@ public class LayoutTests extends Application {
     final Procedure1<XRootDiagram> _function_1 = new Procedure1<XRootDiagram>() {
         public void apply(final XRootDiagram it) {
           it.activate();
-          XNode _xNode = new XNode();
-          final Procedure1<XNode> _function = new Procedure1<XNode>() {
-              public void apply(final XNode it) {
-                final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-                    public void apply(final StackPane it) {
+          final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+              public void apply(final StackPane it) {
+                ObservableList<Node> _children = it.getChildren();
+                Group _group = new Group();
+                final Procedure1<Group> _function = new Procedure1<Group>() {
+                    public void apply(final Group it) {
                       ObservableList<Node> _children = it.getChildren();
-                      Group _group = new Group();
-                      final Procedure1<Group> _function = new Procedure1<Group>() {
-                          public void apply(final Group it) {
-                            ObservableList<Node> _children = it.getChildren();
-                            _children.add(LayoutTests.this.nestedDiagram);
-                          }
-                        };
-                      Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-                      _children.add(_doubleArrow);
+                      _children.add(LayoutTests.this.nestedDiagram);
                     }
                   };
-                StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(rectangleBorderPane, _function);
-                it.setNode(_doubleArrow);
+                Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+                _children.add(_doubleArrow);
               }
             };
-          XNode _doubleArrow = ObjectExtensions.<XNode>operator_doubleArrow(_xNode, _function);
-          it.addNode(_doubleArrow);
+          StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(rectangleBorderPane, _function);
+          XNode _xNode = new XNode(_doubleArrow);
+          it.addNode(_xNode);
           LayoutTests.this.nestedDiagram.activate();
         }
       };

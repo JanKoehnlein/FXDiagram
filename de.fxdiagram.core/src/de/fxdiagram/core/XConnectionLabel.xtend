@@ -46,12 +46,13 @@ class XConnectionLabel extends Parent implements XActivatable {
 	}
 
 	def doActivate() {
-		place(connection.points)
-		connection.points.addListener [
+		val points = connection.polyline.points
+		place(points)
+		points.addListener [
 			place(list)
 		]
 		boundsInLocalProperty.addListener [ element, oldVlaue, newValue |
-			place(connection.points)
+			place(points)
 		]
 	}
 
@@ -76,7 +77,6 @@ class XConnectionLabel extends Parent implements XActivatable {
 			val xPos = (list.get(0) + list.get(list.size - 2)) / 2
 			val yPos = (list.get(1) + list.get(list.size - 1)) / 2
 			transform.translate(xPos, yPos)
-
 			transforms.clear
 			transforms += transform
 		}

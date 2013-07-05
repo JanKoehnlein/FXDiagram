@@ -1,19 +1,19 @@
 package de.fxdiagram.core.behavior;
 
 import de.fxdiagram.core.XActivatable;
-import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XShape;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 
 @SuppressWarnings("all")
 public abstract class AbstractBehavior implements XActivatable {
-  private XNode host;
+  private XShape host;
   
-  public AbstractBehavior(final XNode host) {
+  public AbstractBehavior(final XShape host) {
     this.host = host;
   }
   
-  public XNode getHost() {
+  public XShape getHost() {
     return this.host;
   }
   

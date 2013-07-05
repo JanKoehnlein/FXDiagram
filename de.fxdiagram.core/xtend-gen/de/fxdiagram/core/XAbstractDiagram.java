@@ -7,6 +7,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XShape;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -63,14 +64,14 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public void doActivate() {
     this.isActiveProperty.set(true);
-    Iterable<Node> _plus = Iterables.<Node>concat(this.nodes, this.connections);
-    Iterable<Node> _plus_1 = Iterables.<Node>concat(_plus, this.buttons);
-    final Procedure1<Node> _function = new Procedure1<Node>() {
-        public void apply(final Node it) {
+    Iterable<XShape> _plus = Iterables.<XShape>concat(this.nodes, this.connections);
+    Iterable<Parent> _plus_1 = Iterables.<Parent>concat(_plus, this.buttons);
+    final Procedure1<Parent> _function = new Procedure1<Parent>() {
+        public void apply(final Parent it) {
           ((XActivatable)it).activate();
         }
       };
-    IterableExtensions.<Node>forEach(_plus_1, _function);
+    IterableExtensions.<Parent>forEach(_plus_1, _function);
   }
   
   public void addNode(final XNode node) {

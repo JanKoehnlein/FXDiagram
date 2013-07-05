@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.shapes
 
-import de.fxdiagram.core.debug.Debug
 import javafx.animation.RotateTransition
 import javafx.animation.SequentialTransition
 import javafx.event.EventHandler

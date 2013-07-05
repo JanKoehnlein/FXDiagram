@@ -1,17 +1,19 @@
 package de.fxdiagram.core.layout
 
-import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XShape
 import javafx.animation.PathTransition
 import javafx.scene.Group
+import javafx.scene.shape.LineTo
 import javafx.scene.shape.MoveTo
 import javafx.scene.shape.Path
 import javafx.scene.shape.QuadCurveTo
 import javafx.util.Duration
+
 import static java.lang.Math.*
 
 class LayoutTransitionFactory {
 	
-	def createTransition(XNode node, double endX, double endY, Duration duration) {
+	def createTransition(XShape shape, double endX, double endY, boolean curve, Duration duration) {
 		// hack: a PathTransition modifies translateX/Y but we need to modify layoutX/Y
 		// we use a dummy node instead and bind its translate properties to the layout properties 
 		// for the duration of the Transition
@@ -21,24 +23,28 @@ class LayoutTransitionFactory {
 			it.duration = duration
 			cycleCount = 1
 			path = new Path => [
-				var double controlX
-				var double controlY
-				if(random > 0.5) {
-					controlX = node.layoutX
-					controlY = endY
+				elements += new MoveTo(shape.layoutX, shape.layoutY)
+				if(curve) {
+					var double controlX
+					var double controlY
+					if(random > 0.5) {
+						controlX = shape.layoutX
+						controlY = endY
+					} else {
+						controlX = endX
+						controlY = shape.layoutY
+					}
+						elements += new QuadCurveTo(controlX, controlY, endX, endY)
 				} else {
-					controlX = endX
-					controlY = node.layoutY
+					elements += new LineTo(endX, endY)
 				}
-				elements += new MoveTo(node.layoutX, node.layoutY)
-				elements += new QuadCurveTo(controlX, controlY, endX, endY)
 			]
 		]
-		node.layoutXProperty.bind(dummyNode.translateXProperty)
-		node.layoutYProperty.bind(dummyNode.translateYProperty)
+		shape.layoutXProperty.bind(dummyNode.translateXProperty)
+		shape.layoutYProperty.bind(dummyNode.translateYProperty)
 		delegate.onFinished = [
-			node.layoutXProperty.unbind
-			node.layoutYProperty.unbind
+			shape.layoutXProperty.unbind
+			shape.layoutYProperty.unbind
 		]
 		delegate
 	}

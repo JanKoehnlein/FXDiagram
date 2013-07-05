@@ -1,6 +1,6 @@
 package de.fxdiagram.core.behavior
 
-import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XShape
 import javafx.geometry.Point2D
 import javafx.scene.input.MouseEvent
 
@@ -8,7 +8,7 @@ class MoveBehavior extends AbstractBehavior {
 	
 	DragContext dragContext
 	
-	new(XNode host) {
+	new(XShape host) {
 		super(host)
 	}
 	

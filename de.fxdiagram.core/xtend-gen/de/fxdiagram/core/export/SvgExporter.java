@@ -3,7 +3,6 @@ package de.fxdiagram.core.export;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
-import de.fxdiagram.core.debug.Debug;
 import de.fxdiagram.core.export.ShapeConverterExtensions;
 import de.fxdiagram.core.export.SvgExportable;
 import java.awt.image.BufferedImage;
@@ -61,7 +60,6 @@ public class SvgExporter {
       this.defs = _newArrayList;
       this.currentID = 0;
       final Bounds bounds = diagram.getBoundsInParent();
-      Debug.dumpBounds(diagram);
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<?xml version=\"1.0\" standalone=\"no\"?>");
       _builder.newLine();
@@ -553,7 +551,7 @@ public class SvgExporter {
       }
     }
     if (!_matched) {
-      _switchResult = "gray";
+      _switchResult = "none";
     }
     return _switchResult;
   }

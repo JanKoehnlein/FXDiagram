@@ -6,6 +6,7 @@ import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 
 import static extension de.fxdiagram.core.Extensions.*
+import de.fxdiagram.core.XControlPoint
 
 class SelectionTool implements XDiagramTool {
 
@@ -18,18 +19,22 @@ class SelectionTool implements XDiagramTool {
 		this.rootDiagram = rootDiagram
 		this.mousePressedHandler = [ event |
 			if (!(event.targetButton instanceof XRapidButton)) {
-				val targetShape = event.targetNode
-				if (targetShape?.selectionBehavior != null) {
-					if (!targetShape.selectionBehavior.selected && !event.shortcutDown) {
-						selection.forEach[selectionBehavior.selected = false]
-					}
+				val targetShape = event.targetShape
+				if (targetShape?.isSelectable) {
+					if (!targetShape.selected && !event.shortcutDown) {
+						val skip = switch targetShape {
+							XControlPoint: targetShape.parent.containerShape
+							default: null
+						}
+						selection.filter[it != skip].forEach[selected = false]						
+					} 
 					selection.filter[it.diagram != targetShape.diagram].forEach [
-						selectionBehavior.selected = false
+						selected = false
 					]
 					if(event.shortcutDown)
-						targetShape.selectionBehavior.toggleSelect(event)
+						targetShape.toggleSelect(event)
 					else 
-						targetShape.selectionBehavior.select(event)
+						targetShape.select(event)
 						
 					selection.forEach [
 						moveBehavior?.mousePressed(event)
@@ -48,7 +53,8 @@ class SelectionTool implements XDiagramTool {
 	}
 
 	def getSelection() {
-		rootDiagram.nodes.filter[selectionBehavior?.selected]
+		(rootDiagram.nodes + rootDiagram.connections + rootDiagram.connections.map[controlPoints].flatten)
+			.filter[isSelectable && selected]
 	}
 
 	override activate() {

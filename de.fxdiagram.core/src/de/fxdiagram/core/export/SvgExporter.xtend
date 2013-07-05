@@ -34,7 +34,6 @@ class SvgExporter {
 		defs = newArrayList
 		currentID = 0
 		val bounds = diagram.boundsInParent
-		Debug.dumpBounds(diagram)
 		'''
 			<?xml version="1.0" standalone="no"?>
 			<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
@@ -162,7 +161,7 @@ class SvgExporter {
 			}
 			//	TODO: RadialGradient, ImagePattern
 			default: 
-				"gray"
+				"none"
 		}
 	}
 	

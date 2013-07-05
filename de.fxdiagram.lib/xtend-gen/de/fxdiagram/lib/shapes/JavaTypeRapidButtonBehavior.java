@@ -8,6 +8,7 @@ import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.tools.chooser.CarusselChooser;
 import de.fxdiagram.core.tools.chooser.CoverFlowChooser;
@@ -32,14 +33,14 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior {
   }
   
   protected void doActivate() {
+    XShape _host = this.getHost();
+    final XNode host = ((XNode) _host);
     final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
-          XNode _host = JavaTypeRapidButtonBehavior.this.getHost();
           Pos _chooserPosition = button.getChooserPosition();
-          CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
+          CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(host, _chooserPosition);
           final CoverFlowChooser chooser = _coverFlowChooser;
-          XNode _host_1 = JavaTypeRapidButtonBehavior.this.getHost();
-          final Class<? extends Object> javaType = ((JavaTypeNode) _host_1).getJavaType();
+          final Class<? extends Object> javaType = ((JavaTypeNode) host).getJavaType();
           final ArrayList<Class<? extends Object>> supertypes = CollectionLiterals.<Class<?>>newArrayList();
           Class<? extends Object> _superclass = javaType.getSuperclass();
           boolean _notEquals = (!Objects.equal(_superclass, null));
@@ -63,20 +64,17 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior {
             };
           List<JavaTypeNode> _map = ListExtensions.<Class<? extends Object>, JavaTypeNode>map(supertypes, _function);
           chooser.operator_add(_map);
-          XNode _host_2 = JavaTypeRapidButtonBehavior.this.getHost();
-          XRootDiagram _rootDiagram = Extensions.getRootDiagram(_host_2);
+          XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
           _rootDiagram.setCurrentTool(chooser);
         }
       };
     final Procedure1<XRapidButton> addSuperTypeAction = _function;
     final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
-          XNode _host = JavaTypeRapidButtonBehavior.this.getHost();
           Pos _chooserPosition = button.getChooserPosition();
-          CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
+          CarusselChooser _carusselChooser = new CarusselChooser(host, _chooserPosition);
           final CarusselChooser chooser = _carusselChooser;
-          XNode _host_1 = JavaTypeRapidButtonBehavior.this.getHost();
-          final Class<? extends Object> javaType = ((JavaTypeNode) _host_1).getJavaType();
+          final Class<? extends Object> javaType = ((JavaTypeNode) host).getJavaType();
           Field[] _declaredFields = javaType.getDeclaredFields();
           final Function1<Field,Boolean> _function = new Function1<Field,Boolean>() {
               public Boolean apply(final Field it) {
@@ -111,25 +109,19 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior {
             };
           Iterable<JavaTypeNode> _map = IterableExtensions.<Field, JavaTypeNode>map(references, _function_1);
           chooser.operator_add(_map);
-          XNode _host_2 = JavaTypeRapidButtonBehavior.this.getHost();
-          XRootDiagram _rootDiagram = Extensions.getRootDiagram(_host_2);
+          XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
           _rootDiagram.setCurrentTool(chooser);
         }
       };
     final Procedure1<XRapidButton> addReferencesAction = _function_1;
-    XNode _host = this.getHost();
-    XRapidButton _xRapidButton = new XRapidButton(_host, 0.5, 0, "icons/add_16.png", addSuperTypeAction);
-    XNode _host_1 = this.getHost();
-    XRapidButton _xRapidButton_1 = new XRapidButton(_host_1, 0.5, 1, "icons/add_16.png", addSuperTypeAction);
-    XNode _host_2 = this.getHost();
-    XRapidButton _xRapidButton_2 = new XRapidButton(_host_2, 0, 0.5, "icons/add_16.png", addReferencesAction);
-    XNode _host_3 = this.getHost();
-    XRapidButton _xRapidButton_3 = new XRapidButton(_host_3, 1, 0.5, "icons/add_16.png", addReferencesAction);
+    XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, "icons/add_16.png", addSuperTypeAction);
+    XRapidButton _xRapidButton_1 = new XRapidButton(host, 0.5, 1, "icons/add_16.png", addSuperTypeAction);
+    XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, "icons/add_16.png", addReferencesAction);
+    XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, "icons/add_16.png", addReferencesAction);
     final List<XRapidButton> buttons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
     final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton it) {
-          XNode _host = it.getHost();
-          XAbstractDiagram _diagram = Extensions.getDiagram(_host);
+          XAbstractDiagram _diagram = Extensions.getDiagram(host);
           _diagram.addButton(it);
         }
       };

@@ -43,13 +43,11 @@ class LayoutTests extends Application {
 		diagram => [
 			activate
 			addNode(
-				new XNode => [
-					node = rectangleBorderPane => [
-						children += new Group => [ // why the hell is this additional group necessary
-							children += nestedDiagram
-						]
+				new XNode(rectangleBorderPane => [
+					children += new Group => [ // why the hell is this additional group necessary
+						children += nestedDiagram
 					]
-				])
+				]))
 			nestedDiagram.activate
 		]
 		stage.show

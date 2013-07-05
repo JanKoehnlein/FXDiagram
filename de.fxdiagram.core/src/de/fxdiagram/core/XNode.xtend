@@ -4,53 +4,56 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.Lazy
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.behavior.MoveBehavior
-import de.fxdiagram.core.behavior.SelectionBehavior
 import javafx.scene.Node
-import javafx.scene.Parent
+import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
 
-class XNode extends Parent implements XActivatable {
+class XNode extends XShape {
 	
 	static int instanceCount
 	
-	@FxProperty@ReadOnly boolean isActive
 	@FxProperty@Lazy double width 
 	@FxProperty@Lazy double height
 	@FxProperty@ReadOnly String key
 	
-	Node node
-
 	Effect mouseOverEffect
+	Effect selectionEffect
 	Effect originalEffect
 	
-	SelectionBehavior selectionBehavior
 	MoveBehavior moveBehavior
-	AnchorPoints anchorPoints
-	
+	Anchors anchors
 	
 	new() {
 		mouseOverEffect = createMouseOverEffect
 		key = class.simpleName + instanceCount
 		instanceCount = instanceCount + 1
-		
+		selectionEffect = createSelectionEffect
+	}
+	
+	new(Node node) {
+		this()
+		this.node = node 
 	}
 	
 	protected def createMouseOverEffect() {
 		new InnerShadow
 	}
 	
-	override activate() {
-		if(!isActive)
-			doActivate
-		isActiveProperty.set(true)
+	protected def createSelectionEffect() {
+		new DropShadow() => [
+				offsetX = 4.0
+				offsetY = 4.0
+		]
 	}
 	
-	def doActivate() {	
-		selectionBehavior = new SelectionBehavior(this)
+	protected def createAnchors() {
+		new CompassAnchors(this, 3)
+	}
+	
+	override doActivate() {	
 		moveBehavior = new MoveBehavior(this)
-		anchorPoints = new AnchorPoints(this)
- 		selectionBehavior.activate()
+		anchors = createAnchors
 		moveBehavior.activate()
 		onMouseEntered = [
 			originalEffect = node.effect
@@ -59,25 +62,28 @@ class XNode extends Parent implements XActivatable {
 		onMouseExited = [ 
 			node.effect = originalEffect
 		]
-		switch node { XActivatable: node.activate }
+		switch n:node { XActivatable: n.activate }
+		selectedProperty.addListener [ observable, oldValue, newValue |
+			if (newValue) {
+				effect = selectionEffect
+				scaleX = 1.05
+				scaleY = 1.05
+				toFront
+			} else {
+				effect = null
+				scaleX = 1.0
+				scaleY = 1.0
+			}
+		]
 	}
 
-	def getNode() { node }
-	
-	def void setNode(Node node) {
-		this.node = node
-		children += node	
-	}
-	
 	protected def setKey(String key) {
 		keyProperty.set(key)	
 	}
 	
-	def getSelectionBehavior() { selectionBehavior }
+	override getMoveBehavior() { moveBehavior }
 	
-	def getMoveBehavior() { moveBehavior }
-	
-	def getAnchorPoints() { anchorPoints }	
+	def getAnchors() { anchors }	
 	
 	override minWidth(double height) {
 		if(widthProperty != null)

@@ -8,6 +8,8 @@ import de.cau.cs.kieler.core.kgraph.KGraphElement;
 import de.cau.cs.kieler.core.kgraph.KGraphFactory;
 import de.cau.cs.kieler.core.kgraph.KLabel;
 import de.cau.cs.kieler.core.kgraph.KNode;
+import de.cau.cs.kieler.core.math.KVector;
+import de.cau.cs.kieler.core.math.KVectorChain;
 import de.cau.cs.kieler.kiml.graphviz.layouter.GraphvizLayoutProvider;
 import de.cau.cs.kieler.kiml.klayoutdata.KEdgeLayout;
 import de.cau.cs.kieler.kiml.klayoutdata.KInsets;
@@ -18,6 +20,7 @@ import de.cau.cs.kieler.kiml.options.LayoutOptions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
+import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.layout.LayoutTransitionFactory;
 import de.fxdiagram.core.layout.LoggingTransformationService;
@@ -29,12 +32,17 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.util.Duration;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -101,8 +109,80 @@ public class Layouter {
             final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
             float _xpos = shapeLayout.getXpos();
             float _ypos = shapeLayout.getYpos();
-            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xNode, _xpos, _ypos, duration);
+            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xNode, _xpos, _ypos, true, duration);
             animations.add(_createTransition);
+          }
+        }
+        if (!_matched) {
+          if (xElement instanceof XConnection) {
+            final XConnection _xConnection = (XConnection)xElement;
+            _matched=true;
+            EList<KGraphData> _data = kElement.getData();
+            Iterable<KEdgeLayout> _filter = Iterables.<KEdgeLayout>filter(_data, KEdgeLayout.class);
+            final KEdgeLayout edgeLayout = IterableExtensions.<KEdgeLayout>head(_filter);
+            final KVectorChain layoutPoints = edgeLayout.createVectorChain();
+            final ObservableList<XControlPoint> controlPoints = _xConnection.getControlPoints();
+            int _size = layoutPoints.size();
+            int _size_1 = controlPoints.size();
+            final int nodeDiff = (_size - _size_1);
+            boolean _greaterThan = (nodeDiff > 0);
+            if (_greaterThan) {
+              int _plus = (nodeDiff + 1);
+              final double delta = (1.0 / _plus);
+              final XControlPoint first = IterableExtensions.<XControlPoint>head(controlPoints);
+              final XControlPoint last = IterableExtensions.<XControlPoint>last(controlPoints);
+              IntegerRange _upTo = new IntegerRange(1, nodeDiff);
+              for (final Integer i : _upTo) {
+                int _size_2 = controlPoints.size();
+                int _minus = (_size_2 - 1);
+                XControlPoint _xControlPoint = new XControlPoint();
+                final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+                    public void apply(final XControlPoint it) {
+                      final double lambda = (delta * (i).intValue());
+                      double _minus = (1 - lambda);
+                      double _layoutX = first.getLayoutX();
+                      double _multiply = (_minus * _layoutX);
+                      double _layoutX_1 = last.getLayoutX();
+                      double _multiply_1 = (lambda * _layoutX_1);
+                      double _plus = (_multiply + _multiply_1);
+                      it.setLayoutX(_plus);
+                      double _minus_1 = (1 - lambda);
+                      double _layoutY = first.getLayoutY();
+                      double _multiply_2 = (_minus_1 * _layoutY);
+                      double _layoutY_1 = last.getLayoutY();
+                      double _multiply_3 = (lambda * _layoutY_1);
+                      double _plus_1 = (_multiply_2 + _multiply_3);
+                      it.setLayoutY(_plus_1);
+                    }
+                  };
+                XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
+                controlPoints.add(_minus, _doubleArrow);
+              }
+            }
+            int _size_3 = controlPoints.size();
+            int _minus_1 = (_size_3 - 1);
+            ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus_1, true);
+            for (final Integer i_1 : _doubleDotLessThan) {
+              {
+                int _size_4 = layoutPoints.size();
+                int _minus_2 = (_size_4 - 1);
+                int _min = Math.min(_minus_2, (i_1).intValue());
+                final KVector layoutPoint = layoutPoints.get(_min);
+                final XControlPoint currentControlPoint = controlPoints.get((i_1).intValue());
+                final PathTransition transition = this._layoutTransitionFactory.createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, false, duration);
+                int _size_5 = layoutPoints.size();
+                boolean _greaterEqualsThan = ((i_1).intValue() >= _size_5);
+                if (_greaterEqualsThan) {
+                  final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
+                      public void handle(final ActionEvent it) {
+                        controlPoints.remove(currentControlPoint);
+                      }
+                    };
+                  transition.setOnFinished(_function_1);
+                }
+                animations.add(transition);
+              }
+            }
           }
         }
       }

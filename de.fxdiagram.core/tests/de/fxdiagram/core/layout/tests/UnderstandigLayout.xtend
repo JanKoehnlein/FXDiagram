@@ -73,7 +73,7 @@ class UnderstandigLayout extends Application {
 
 	@Test def stackPaneWithAnXNodeSizes() {
 		val stackPane = new StackPane => [
-			children += new XNode => [
+			children += new XNode(new Rectangle) => [
 				width = 1
 				height = 2
 				relocate(-3, -4)

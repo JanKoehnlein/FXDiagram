@@ -1,7 +1,5 @@
 ENHANCEMENT
 - Open subdiagram
-- Connection auto-layout
-- Connection behavior
 - Fancy context menus
 - BrowserNode
 - Embed more JavaFX demos in XNodes
@@ -10,6 +8,12 @@ ENHANCEMENT
 BUG
 - Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
 - Location of filter text
+- displace of control points on move
+- moving of anchor points
+- distinguish between anchor and control points
+- don't loose autolayouted anchors
+- click on nothing should deselect all
+- connection labels: behavior and layout
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
@@ -31,3 +35,5 @@ DONE
 - FlipNode control
 - more controls for MovieNode
 - Location and layout of chooser buttons
+- Connection auto-layout
+- Connection behavior

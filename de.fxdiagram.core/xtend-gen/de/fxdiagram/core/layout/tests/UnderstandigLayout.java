@@ -146,7 +146,8 @@ public class UnderstandigLayout extends Application {
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
         public void apply(final StackPane it) {
           ObservableList<Node> _children = it.getChildren();
-          XNode _xNode = new XNode();
+          Rectangle _rectangle = new Rectangle();
+          XNode _xNode = new XNode(_rectangle);
           final Procedure1<XNode> _function = new Procedure1<XNode>() {
               public void apply(final XNode it) {
                 it.setWidth(1);

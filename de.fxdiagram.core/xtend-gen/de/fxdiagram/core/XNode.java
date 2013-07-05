@@ -1,40 +1,40 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.AnchorPoints;
+import de.fxdiagram.core.Anchors;
+import de.fxdiagram.core.CompassAnchors;
 import de.fxdiagram.core.XActivatable;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.behavior.SelectionBehavior;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.ObservableList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class XNode extends Parent implements XActivatable {
+public class XNode extends XShape {
   private static int instanceCount;
-  
-  private Node node;
   
   private Effect mouseOverEffect;
   
-  private Effect originalEffect;
+  private Effect selectionEffect;
   
-  private SelectionBehavior selectionBehavior;
+  private Effect originalEffect;
   
   private MoveBehavior moveBehavior;
   
-  private AnchorPoints anchorPoints;
+  private Anchors anchors;
   
   public XNode() {
     InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
@@ -45,6 +45,13 @@ public class XNode extends Parent implements XActivatable {
     this.setKey(_plus);
     int _plus_1 = (XNode.instanceCount + 1);
     XNode.instanceCount = _plus_1;
+    DropShadow _createSelectionEffect = this.createSelectionEffect();
+    this.selectionEffect = _createSelectionEffect;
+  }
+  
+  public XNode(final Node node) {
+    this();
+    this.setNode(node);
   }
   
   protected InnerShadow createMouseOverEffect() {
@@ -52,79 +59,90 @@ public class XNode extends Parent implements XActivatable {
     return _innerShadow;
   }
   
-  public void activate() {
-    boolean _isActive = this.getIsActive();
-    boolean _not = (!_isActive);
-    if (_not) {
-      this.doActivate();
-    }
-    this.isActiveProperty.set(true);
+  protected DropShadow createSelectionEffect() {
+    DropShadow _dropShadow = new DropShadow();
+    final Procedure1<DropShadow> _function = new Procedure1<DropShadow>() {
+        public void apply(final DropShadow it) {
+          it.setOffsetX(4.0);
+          it.setOffsetY(4.0);
+        }
+      };
+    DropShadow _doubleArrow = ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
+    return _doubleArrow;
+  }
+  
+  protected CompassAnchors createAnchors() {
+    CompassAnchors _compassAnchors = new CompassAnchors(this, 3);
+    return _compassAnchors;
   }
   
   public void doActivate() {
-    SelectionBehavior _selectionBehavior = new SelectionBehavior(this);
-    this.selectionBehavior = _selectionBehavior;
     MoveBehavior _moveBehavior = new MoveBehavior(this);
     this.moveBehavior = _moveBehavior;
-    AnchorPoints _anchorPoints = new AnchorPoints(this);
-    this.anchorPoints = _anchorPoints;
-    this.selectionBehavior.activate();
+    CompassAnchors _createAnchors = this.createAnchors();
+    this.anchors = _createAnchors;
     this.moveBehavior.activate();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent it) {
-          Effect _effect = XNode.this.node.getEffect();
+          Node _node = XNode.this.getNode();
+          Effect _effect = _node.getEffect();
           XNode.this.originalEffect = _effect;
+          Node _node_1 = XNode.this.getNode();
           Effect _elvis = null;
           if (XNode.this.mouseOverEffect != null) {
             _elvis = XNode.this.mouseOverEffect;
           } else {
             _elvis = ObjectExtensions.<Effect>operator_elvis(XNode.this.mouseOverEffect, XNode.this.originalEffect);
           }
-          XNode.this.node.setEffect(_elvis);
+          _node_1.setEffect(_elvis);
         }
       };
     this.setOnMouseEntered(_function);
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent it) {
-          XNode.this.node.setEffect(XNode.this.originalEffect);
+          Node _node = XNode.this.getNode();
+          _node.setEffect(XNode.this.originalEffect);
         }
       };
     this.setOnMouseExited(_function_1);
-    final Node node = this.node;
+    Node _node = this.getNode();
+    final Node n = _node;
     boolean _matched = false;
     if (!_matched) {
-      if (node instanceof XActivatable) {
-        final XActivatable _xActivatable = (XActivatable)node;
+      if (n instanceof XActivatable) {
+        final XActivatable _xActivatable = (XActivatable)n;
         _matched=true;
         ((XActivatable)_xActivatable).activate();
       }
     }
-  }
-  
-  public Node getNode() {
-    return this.node;
-  }
-  
-  public void setNode(final Node node) {
-    this.node = node;
-    ObservableList<Node> _children = this.getChildren();
-    _children.add(node);
+    BooleanProperty _selectedProperty = this.selectedProperty();
+    final ChangeListener<Boolean> _function_2 = new ChangeListener<Boolean>() {
+        public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
+          if ((newValue).booleanValue()) {
+            XNode.this.setEffect(XNode.this.selectionEffect);
+            XNode.this.setScaleX(1.05);
+            XNode.this.setScaleY(1.05);
+            XNode.this.toFront();
+          } else {
+            XNode.this.setEffect(null);
+            XNode.this.setScaleX(1.0);
+            XNode.this.setScaleY(1.0);
+          }
+        }
+      };
+    _selectedProperty.addListener(_function_2);
   }
   
   protected void setKey(final String key) {
     this.keyProperty.set(key);
   }
   
-  public SelectionBehavior getSelectionBehavior() {
-    return this.selectionBehavior;
-  }
-  
   public MoveBehavior getMoveBehavior() {
     return this.moveBehavior;
   }
   
-  public AnchorPoints getAnchorPoints() {
-    return this.anchorPoints;
+  public Anchors getAnchors() {
+    return this.anchors;
   }
   
   public double minWidth(final double height) {
@@ -203,18 +221,6 @@ public class XNode extends Parent implements XActivatable {
       _xifexpression = _maxHeight;
     }
     return _xifexpression;
-  }
-  
-  private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
-  
-  public boolean getIsActive() {
-    return this.isActiveProperty.get();
-    
-  }
-  
-  public ReadOnlyBooleanProperty isActiveProperty() {
-    return this.isActiveProperty.getReadOnlyProperty();
-    
   }
   
   private final static double DEFAULT_WIDTH = 0d;

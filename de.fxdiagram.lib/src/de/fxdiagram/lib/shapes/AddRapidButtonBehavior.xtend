@@ -21,6 +21,7 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 	}	
 	
 	override doActivate() {
+		val host = this.host as XNode
 		val addAction = [ XRapidButton button | 
 			val target = new NestedDiagramNode("new")
 			val source = button.host

@@ -1,17 +1,17 @@
 package de.fxdiagram.core.behavior
 
-import de.fxdiagram.core.XNode
-import de.fxdiagram.core.XActivatable
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.XActivatable
+import de.fxdiagram.core.XShape
 
 abstract class AbstractBehavior implements XActivatable {
 	
-	XNode host 
+	XShape host 
 	
 	@FxProperty@ReadOnly boolean isActive
 	
-	new(XNode host) {
+	new(XShape host) {
 		this.host = host	
 	}
 	

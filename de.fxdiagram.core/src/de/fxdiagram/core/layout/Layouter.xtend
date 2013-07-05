@@ -5,16 +5,20 @@ import de.cau.cs.kieler.core.kgraph.KGraphElement
 import de.cau.cs.kieler.core.kgraph.KGraphFactory
 import de.cau.cs.kieler.core.kgraph.KNode
 import de.cau.cs.kieler.kiml.graphviz.layouter.GraphvizLayoutProvider
+import de.cau.cs.kieler.kiml.klayoutdata.KEdgeLayout
 import de.cau.cs.kieler.kiml.klayoutdata.KLayoutDataFactory
 import de.cau.cs.kieler.kiml.klayoutdata.KShapeLayout
 import de.cau.cs.kieler.kiml.options.LayoutOptions
 import de.fxdiagram.core.XAbstractDiagram
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
+import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XNode
 import java.util.Map
 import javafx.animation.Animation
 import javafx.util.Duration
+
+import static java.lang.Math.*
 
 class Layouter { 
 
@@ -54,7 +58,36 @@ class Layouter {
 			switch xElement { 
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
-						animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, duration)
+						animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, true, duration)
+				}
+				XConnection: {
+					val edgeLayout = kElement.data.filter(KEdgeLayout).head
+					val layoutPoints = edgeLayout.createVectorChain
+					val controlPoints = xElement.controlPoints
+					val nodeDiff = layoutPoints.size - controlPoints.size
+					if(nodeDiff > 0) {
+						val delta = 1.0 / (nodeDiff + 1)
+						val first = controlPoints.head
+						val last = controlPoints.last
+						for(i: 1..nodeDiff) 
+							controlPoints.add(controlPoints.size - 1,
+								new XControlPoint => [
+									val lambda = delta * i
+									layoutX = (1-lambda) * first.layoutX + (lambda) * last.layoutX 
+									layoutY = (1-lambda) * first.layoutY + (lambda) * last.layoutY
+								]
+							)
+					}	
+					for(i: 1..<controlPoints.size-1) {
+						val layoutPoint = layoutPoints.get(min(layoutPoints.size-1, i))
+						val currentControlPoint = controlPoints.get(i)
+						val transition = createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, false, duration)
+						if (i >= layoutPoints.size)
+							transition.onFinished = [
+								controlPoints.remove(currentControlPoint)
+							] 						
+						animations += transition
+					}
 				}
 			}
 		}

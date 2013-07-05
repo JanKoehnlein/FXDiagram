@@ -1,7 +1,7 @@
 package de.fxdiagram.core.behavior;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.behavior.DragContext;
 import javafx.event.EventHandler;
@@ -14,12 +14,12 @@ import javafx.scene.input.MouseEvent;
 public class MoveBehavior extends AbstractBehavior {
   private DragContext dragContext;
   
-  public MoveBehavior(final XNode host) {
+  public MoveBehavior(final XShape host) {
     super(host);
   }
   
   public void doActivate() {
-    XNode _host = this.getHost();
+    XShape _host = this.getHost();
     Node _node = _host.getNode();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent it) {
@@ -27,7 +27,7 @@ public class MoveBehavior extends AbstractBehavior {
         }
       };
     _node.setOnMousePressed(_function);
-    XNode _host_1 = this.getHost();
+    XShape _host_1 = this.getHost();
     Node _node_1 = _host_1.getNode();
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
         public void handle(final MouseEvent it) {
@@ -40,11 +40,11 @@ public class MoveBehavior extends AbstractBehavior {
   public DragContext mousePressed(final MouseEvent it) {
     double _screenX = it.getScreenX();
     double _screenY = it.getScreenY();
-    XNode _host = this.getHost();
+    XShape _host = this.getHost();
     Parent _parent = _host.getParent();
-    XNode _host_1 = this.getHost();
+    XShape _host_1 = this.getHost();
     double _layoutX = _host_1.getLayoutX();
-    XNode _host_2 = this.getHost();
+    XShape _host_2 = this.getHost();
     double _layoutY = _host_2.getLayoutY();
     Point2D _localToScene = _parent.localToScene(_layoutX, _layoutY);
     DragContext _dragContext = new DragContext(_screenX, _screenY, _localToScene);
@@ -67,12 +67,12 @@ public class MoveBehavior extends AbstractBehavior {
     double _minus_1 = (_plus_1 - _mouseAnchorY);
     Point2D _point2D = new Point2D(_minus, _minus_1);
     final Point2D newPositionInScene = _point2D;
-    XNode _host = this.getHost();
+    XShape _host = this.getHost();
     Parent _parent = _host.getParent();
     final Point2D newPositionInDiagram = _parent.sceneToLocal(newPositionInScene);
     boolean _notEquals = (!Objects.equal(newPositionInDiagram, null));
     if (_notEquals) {
-      XNode _host_1 = this.getHost();
+      XShape _host_1 = this.getHost();
       double _x_1 = newPositionInDiagram.getX();
       double _y_1 = newPositionInDiagram.getY();
       _host_1.relocate(_x_1, _y_1);

@@ -2,9 +2,9 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XAbstractDiagram;
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.geometry.TransformExtensions;
 import java.util.logging.Logger;
 import javafx.event.EventTarget;
@@ -175,21 +175,21 @@ public class Extensions {
     return _switchResult;
   }
   
-  public static XNode getTargetNode(final MouseEvent event) {
-    XNode _xifexpression = null;
+  public static XShape getTargetShape(final MouseEvent event) {
+    XShape _xifexpression = null;
     EventTarget _target = event.getTarget();
     if ((_target instanceof Node)) {
       EventTarget _target_1 = event.getTarget();
-      XNode _containerNode = Extensions.getContainerNode(((Node) _target_1));
-      _xifexpression = _containerNode;
+      XShape _containerShape = Extensions.getContainerShape(((Node) _target_1));
+      _xifexpression = _containerShape;
     } else {
       _xifexpression = null;
     }
     return _xifexpression;
   }
   
-  public static XNode getContainerNode(final Node it) {
-    XNode _switchResult = null;
+  public static XShape getContainerShape(final Node it) {
+    XShape _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
       if (Objects.equal(it,null)) {
@@ -198,16 +198,16 @@ public class Extensions {
       }
     }
     if (!_matched) {
-      if (it instanceof XNode) {
-        final XNode _xNode = (XNode)it;
+      if (it instanceof XShape) {
+        final XShape _xShape = (XShape)it;
         _matched=true;
-        _switchResult = _xNode;
+        _switchResult = _xShape;
       }
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XNode _containerNode = Extensions.getContainerNode(_parent);
-      _switchResult = _containerNode;
+      XShape _containerShape = Extensions.getContainerShape(_parent);
+      _switchResult = _containerShape;
     }
     return _switchResult;
   }

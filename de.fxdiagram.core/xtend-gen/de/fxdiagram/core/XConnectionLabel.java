@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
@@ -61,23 +62,20 @@ public class XConnectionLabel extends Parent implements XActivatable {
   
   public void doActivate() {
     XConnection _connection = this.getConnection();
-    ObservableList<Double> _points = _connection.getPoints();
-    this.place(_points);
-    XConnection _connection_1 = this.getConnection();
-    ObservableList<Double> _points_1 = _connection_1.getPoints();
+    Polyline _polyline = _connection.getPolyline();
+    final ObservableList<Double> points = _polyline.getPoints();
+    this.place(points);
     final ListChangeListener<Double> _function = new ListChangeListener<Double>() {
         public void onChanged(final Change<? extends Double> it) {
           ObservableList<? extends Double> _list = it.getList();
           XConnectionLabel.this.place(_list);
         }
       };
-    _points_1.addListener(_function);
+    points.addListener(_function);
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.boundsInLocalProperty();
     final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
         public void changed(final ObservableValue<? extends Bounds> element, final Bounds oldVlaue, final Bounds newValue) {
-          XConnection _connection = XConnectionLabel.this.getConnection();
-          ObservableList<Double> _points = _connection.getPoints();
-          XConnectionLabel.this.place(_points);
+          XConnectionLabel.this.place(points);
         }
       };
     _boundsInLocalProperty.addListener(_function_1);

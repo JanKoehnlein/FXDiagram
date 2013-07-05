@@ -90,6 +90,7 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior {
 	}
 	
 	override protected doActivate() {
+		val host = this.host as XNode
 		val addSuperTypeAction = [
 			XRapidButton button |
 			val chooser = new CoverFlowChooser(host, button.chooserPosition)
