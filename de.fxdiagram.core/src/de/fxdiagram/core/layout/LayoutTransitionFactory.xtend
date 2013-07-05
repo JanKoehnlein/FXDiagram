@@ -17,7 +17,10 @@ class LayoutTransitionFactory {
 		// hack: a PathTransition modifies translateX/Y but we need to modify layoutX/Y
 		// we use a dummy node instead and bind its translate properties to the layout properties 
 		// for the duration of the Transition
-		val dummyNode = new Group
+		val dummyNode = new Group => [
+			translateX = shape.layoutX
+			translateY = shape.layoutY
+		]
 		val delegate = new PathTransition => [
 			it.node = dummyNode
 			it.duration = duration

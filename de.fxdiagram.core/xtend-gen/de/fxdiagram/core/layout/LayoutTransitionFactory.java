@@ -22,9 +22,17 @@ public class LayoutTransitionFactory {
     PathTransition _xblockexpression = null;
     {
       Group _group = new Group();
-      final Group dummyNode = _group;
+      final Procedure1<Group> _function = new Procedure1<Group>() {
+          public void apply(final Group it) {
+            double _layoutX = shape.getLayoutX();
+            it.setTranslateX(_layoutX);
+            double _layoutY = shape.getLayoutY();
+            it.setTranslateY(_layoutY);
+          }
+        };
+      final Group dummyNode = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
       PathTransition _pathTransition = new PathTransition();
-      final Procedure1<PathTransition> _function = new Procedure1<PathTransition>() {
+      final Procedure1<PathTransition> _function_1 = new Procedure1<PathTransition>() {
           public void apply(final PathTransition it) {
             it.setNode(dummyNode);
             it.setDuration(duration);
@@ -65,14 +73,14 @@ public class LayoutTransitionFactory {
             it.setPath(_doubleArrow);
           }
         };
-      final PathTransition delegate = ObjectExtensions.<PathTransition>operator_doubleArrow(_pathTransition, _function);
+      final PathTransition delegate = ObjectExtensions.<PathTransition>operator_doubleArrow(_pathTransition, _function_1);
       DoubleProperty _layoutXProperty = shape.layoutXProperty();
       DoubleProperty _translateXProperty = dummyNode.translateXProperty();
       _layoutXProperty.bind(_translateXProperty);
       DoubleProperty _layoutYProperty = shape.layoutYProperty();
       DoubleProperty _translateYProperty = dummyNode.translateYProperty();
       _layoutYProperty.bind(_translateYProperty);
-      final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
+      final EventHandler<ActionEvent> _function_2 = new EventHandler<ActionEvent>() {
           public void handle(final ActionEvent it) {
             DoubleProperty _layoutXProperty = shape.layoutXProperty();
             _layoutXProperty.unbind();
@@ -80,7 +88,7 @@ public class LayoutTransitionFactory {
             _layoutYProperty.unbind();
           }
         };
-      delegate.setOnFinished(_function_1);
+      delegate.setOnFinished(_function_2);
       _xblockexpression = (delegate);
     }
     return _xblockexpression;
