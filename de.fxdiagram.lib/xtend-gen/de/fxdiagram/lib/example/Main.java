@@ -4,6 +4,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.lib.shapes.BrickBreakerNode;
+import de.fxdiagram.lib.shapes.BrowserNode;
 import de.fxdiagram.lib.shapes.ImageNode;
 import de.fxdiagram.lib.shapes.JavaTypeNode;
 import de.fxdiagram.lib.shapes.MovieNode;
@@ -19,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -113,8 +115,25 @@ public class Main extends Application {
         };
       final RecursiveImageNode recursive = ObjectExtensions.<RecursiveImageNode>operator_doubleArrow(_recursiveImageNode, _function_4);
       diagram.addNode(recursive);
+      BrowserNode _browserNode = new BrowserNode();
+      final Procedure1<BrowserNode> _function_5 = new Procedure1<BrowserNode>() {
+          public void apply(final BrowserNode it) {
+            try {
+              it.setWidth(120);
+              it.setHeight(160);
+              it.setLayoutX(100);
+              it.setLayoutY(500);
+              URL _uRL = new URL("http://koehnlein.blogspot.de/");
+              it.setPageUrl(_uRL);
+            } catch (Throwable _e) {
+              throw Exceptions.sneakyThrow(_e);
+            }
+          }
+        };
+      final BrowserNode browser = ObjectExtensions.<BrowserNode>operator_doubleArrow(_browserNode, _function_5);
+      diagram.addNode(browser);
       BrickBreakerNode _brickBreakerNode = new BrickBreakerNode();
-      final Procedure1<BrickBreakerNode> _function_5 = new Procedure1<BrickBreakerNode>() {
+      final Procedure1<BrickBreakerNode> _function_6 = new Procedure1<BrickBreakerNode>() {
           public void apply(final BrickBreakerNode it) {
             it.setWidth(640);
             it.setHeight(480);
@@ -122,10 +141,10 @@ public class Main extends Application {
             it.setLayoutY(100);
           }
         };
-      final BrickBreakerNode brickBreakerNode = ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function_5);
+      final BrickBreakerNode brickBreakerNode = ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function_6);
       diagram.addNode(brickBreakerNode);
       JavaTypeNode _javaTypeNode = new JavaTypeNode();
-      final Procedure1<JavaTypeNode> _function_6 = new Procedure1<JavaTypeNode>() {
+      final Procedure1<JavaTypeNode> _function_7 = new Procedure1<JavaTypeNode>() {
           public void apply(final JavaTypeNode it) {
             it.setJavaType(Button.class);
             it.setWidth(160);
@@ -134,7 +153,7 @@ public class Main extends Application {
             it.setLayoutY(200);
           }
         };
-      final JavaTypeNode javaTypeNode = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_6);
+      final JavaTypeNode javaTypeNode = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_7);
       diagram.addNode(javaTypeNode);
       _xblockexpression = (scene);
     }

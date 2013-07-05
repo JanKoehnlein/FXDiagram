@@ -20,6 +20,8 @@ import javafx.stage.Stage
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.Button
+import de.fxdiagram.lib.shapes.BrowserNode
+import java.net.URL
 
 class Main extends Application {
 
@@ -83,6 +85,15 @@ class Main extends Application {
 			height = 90
 		]
 		diagram.addNode(recursive)
+		
+		val browser = new BrowserNode => [
+			width = 120
+			height = 160
+			layoutX = 100
+			layoutY = 500
+			pageUrl = new URL("http://koehnlein.blogspot.de/")
+		]
+		diagram.addNode(browser)
 		
 		val brickBreakerNode = new BrickBreakerNode => [
 			width = 640
