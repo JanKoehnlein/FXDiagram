@@ -14,6 +14,7 @@ import de.fxdiagram.core.tools.chooser.CarusselChooser;
 import de.fxdiagram.core.tools.chooser.CoverFlowChooser;
 import de.fxdiagram.lib.shapes.JavaTypeNode;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -79,16 +80,24 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior {
           final Function1<Field,Boolean> _function = new Function1<Field,Boolean>() {
               public Boolean apply(final Field it) {
                 boolean _and = false;
-                Class<? extends Object> _type = it.getType();
-                boolean _isPrimitive = _type.isPrimitive();
-                boolean _not = (!_isPrimitive);
-                if (!_not) {
+                boolean _and_1 = false;
+                int _modifiers = it.getModifiers();
+                boolean _isPublic = Modifier.isPublic(_modifiers);
+                if (!_isPublic) {
+                  _and_1 = false;
+                } else {
+                  Class<? extends Object> _type = it.getType();
+                  boolean _isPrimitive = _type.isPrimitive();
+                  boolean _not = (!_isPrimitive);
+                  _and_1 = (_isPublic && _not);
+                }
+                if (!_and_1) {
                   _and = false;
                 } else {
                   Class<? extends Object> _type_1 = it.getType();
                   boolean _equals = String.class.equals(_type_1);
                   boolean _not_1 = (!_equals);
-                  _and = (_not && _not_1);
+                  _and = (_and_1 && _not_1);
                 }
                 return Boolean.valueOf(_and);
               }

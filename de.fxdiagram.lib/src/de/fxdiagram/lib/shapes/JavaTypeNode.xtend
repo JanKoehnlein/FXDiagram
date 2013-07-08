@@ -15,6 +15,7 @@ import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.Extensions.*
+import static java.lang.reflect.Modifier.*
 
 class JavaTypeNode extends XNode {
 
@@ -49,20 +50,20 @@ class JavaTypeNode extends XNode {
 	def setJavaType(Class<?> javaType) {
 		this.javaType = javaType
 		name.text = javaType.simpleName
-		javaType.declaredFields.filter[type.primitive || String.equals(type)].forEach [ 
+		javaType.declaredFields.filter[isPublic(it.modifiers) && (type.primitive || String.equals(type))].forEach [ 
 			attribute |
 			attributeCompartment.children += new Text => [
 				text = attribute.name + ': ' + attribute.type.simpleName
 				textOrigin = VPos.TOP
 			]				
 		]
-		javaType.declaredConstructors.forEach [
+		javaType.declaredConstructors.filter[isPublic(it.modifiers)].forEach [
 			constructor |
 			operationCompartment.children += new Text => [
 				text = '''«javaType.simpleName»(«constructor.parameterTypes.map[simpleName].join(', ')»)''' 
 			]
 		]
-		javaType.declaredMethods.forEach [
+		javaType.declaredMethods.filter[isPublic(it.modifiers)].forEach [
 			method |
 			operationCompartment.children += new Text => [
 				text = '''«method.name»(«method.parameterTypes.map[simpleName].join(', ')»): «method.returnType.simpleName»''' 
@@ -108,7 +109,7 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior {
 			XRapidButton button |
 			val chooser = new CarusselChooser(host, button.chooserPosition)
 			val javaType = (host as JavaTypeNode).javaType
-			val references = javaType.declaredFields.filter[!type.primitive && !String.equals(type)]
+			val references = javaType.declaredFields.filter[isPublic(it.modifiers) && !type.primitive && !String.equals(type)]
 			chooser += references.map[
 				reference | new JavaTypeNode => [ it.javaType = reference.type ]
 			] 
