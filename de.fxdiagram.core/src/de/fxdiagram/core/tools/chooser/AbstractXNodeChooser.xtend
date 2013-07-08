@@ -179,13 +179,6 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			return false
 		isActiveProperty.set(true)
 		diagram.buttonLayer.children += group
-		new FadeTransition => [
-			node = diagram.nodeLayer
-			toValue = 0.3
-			duration = 300.millis
-			play
-		]
-		
 		if(minusButton != null) {
 			diagram.buttonLayer.children += plusButton
 			diagram.buttonLayer.children += minusButton
@@ -206,6 +199,13 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			nodeChosen(nodes.head)
 			return false
 		}
+		new FadeTransition => [
+			node = diagram.nodeLayer
+			toValue = 0.3
+			duration = 300.millis
+			play
+		]
+		
 		if (nodes.size != 0) {
 			interpolatedPosition = 0
 		}
