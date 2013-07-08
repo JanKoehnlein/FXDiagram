@@ -22,7 +22,8 @@ class MoveBehavior extends AbstractBehavior {
 	}
 	
 	def mousePressed(MouseEvent it) {
-		dragContext = new DragContext(screenX, screenY, host.parent.localToScene(host.layoutX, host.layoutY))
+		val initialPositionInScene = host.parent.localToScene(host.layoutX, host.layoutY)
+		dragContext = new DragContext(screenX, screenY, initialPositionInScene)
 	}
 	
 	def mouseDragged(MouseEvent it) {
@@ -30,8 +31,10 @@ class MoveBehavior extends AbstractBehavior {
 			dragContext.initialPosInScene.x + screenX - dragContext.mouseAnchorX,
 			dragContext.initialPosInScene.y + screenY - dragContext.mouseAnchorY)
 		val newPositionInDiagram = host.parent.sceneToLocal(newPositionInScene)
-		if(newPositionInDiagram != null)
-			host.relocate(newPositionInDiagram.x, newPositionInDiagram.y)
+		if(newPositionInDiagram != null) {
+			host.layoutX = newPositionInDiagram.x
+			host.layoutY = newPositionInDiagram.y			
+		}
 	}
 }
 

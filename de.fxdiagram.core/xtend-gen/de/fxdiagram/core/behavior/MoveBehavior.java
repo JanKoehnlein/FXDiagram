@@ -38,18 +38,22 @@ public class MoveBehavior extends AbstractBehavior {
   }
   
   public DragContext mousePressed(final MouseEvent it) {
-    double _screenX = it.getScreenX();
-    double _screenY = it.getScreenY();
-    XShape _host = this.getHost();
-    Parent _parent = _host.getParent();
-    XShape _host_1 = this.getHost();
-    double _layoutX = _host_1.getLayoutX();
-    XShape _host_2 = this.getHost();
-    double _layoutY = _host_2.getLayoutY();
-    Point2D _localToScene = _parent.localToScene(_layoutX, _layoutY);
-    DragContext _dragContext = new DragContext(_screenX, _screenY, _localToScene);
-    DragContext _dragContext_1 = this.dragContext = _dragContext;
-    return _dragContext_1;
+    DragContext _xblockexpression = null;
+    {
+      XShape _host = this.getHost();
+      Parent _parent = _host.getParent();
+      XShape _host_1 = this.getHost();
+      double _layoutX = _host_1.getLayoutX();
+      XShape _host_2 = this.getHost();
+      double _layoutY = _host_2.getLayoutY();
+      final Point2D initialPositionInScene = _parent.localToScene(_layoutX, _layoutY);
+      double _screenX = it.getScreenX();
+      double _screenY = it.getScreenY();
+      DragContext _dragContext = new DragContext(_screenX, _screenY, initialPositionInScene);
+      DragContext _dragContext_1 = this.dragContext = _dragContext;
+      _xblockexpression = (_dragContext_1);
+    }
+    return _xblockexpression;
   }
   
   public void mouseDragged(final MouseEvent it) {
@@ -74,8 +78,10 @@ public class MoveBehavior extends AbstractBehavior {
     if (_notEquals) {
       XShape _host_1 = this.getHost();
       double _x_1 = newPositionInDiagram.getX();
+      _host_1.setLayoutX(_x_1);
+      XShape _host_2 = this.getHost();
       double _y_1 = newPositionInDiagram.getY();
-      _host_1.relocate(_x_1, _y_1);
+      _host_2.setLayoutY(_y_1);
     }
   }
 }

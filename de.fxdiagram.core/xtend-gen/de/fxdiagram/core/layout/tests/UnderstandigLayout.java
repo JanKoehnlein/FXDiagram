@@ -5,12 +5,14 @@ import de.fxdiagram.core.debug.Debug;
 import de.fxdiagram.core.layout.tests.GroupWithFixedSize;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -413,16 +415,16 @@ public class UnderstandigLayout extends Application {
     final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     int _minus = (-1);
     double _minWidth = stackPane.minWidth(_minus);
-    Assert.assertEquals(1, _minWidth, UnderstandigLayout.EPS);
+    Assert.assertEquals(100, _minWidth, UnderstandigLayout.EPS);
     int _minus_1 = (-1);
     double _minHeight = stackPane.minHeight(_minus_1);
-    Assert.assertEquals(1, _minHeight, UnderstandigLayout.EPS);
+    Assert.assertEquals(100, _minHeight, UnderstandigLayout.EPS);
     int _minus_2 = (-1);
     double _prefWidth = stackPane.prefWidth(_minus_2);
-    Assert.assertEquals(1, _prefWidth, UnderstandigLayout.EPS);
+    Assert.assertEquals(100, _prefWidth, UnderstandigLayout.EPS);
     int _minus_3 = (-1);
     double _prefHeight = stackPane.prefHeight(_minus_3);
-    Assert.assertEquals(1, _prefHeight, UnderstandigLayout.EPS);
+    Assert.assertEquals(100, _prefHeight, UnderstandigLayout.EPS);
     int _minus_4 = (-1);
     double _maxWidth = stackPane.maxWidth(_minus_4);
     Assert.assertEquals(Double.MAX_VALUE, _maxWidth, UnderstandigLayout.EPS);
@@ -432,22 +434,66 @@ public class UnderstandigLayout extends Application {
     stackPane.layout();
     int _minus_6 = (-1);
     double _minWidth_1 = stackPane.minWidth(_minus_6);
-    Assert.assertEquals(1, _minWidth_1, UnderstandigLayout.EPS);
+    Assert.assertEquals(100, _minWidth_1, UnderstandigLayout.EPS);
     int _minus_7 = (-1);
     double _minHeight_1 = stackPane.minHeight(_minus_7);
-    Assert.assertEquals(1, _minHeight_1, UnderstandigLayout.EPS);
+    Assert.assertEquals(100, _minHeight_1, UnderstandigLayout.EPS);
     int _minus_8 = (-1);
     double _prefWidth_1 = stackPane.prefWidth(_minus_8);
-    Assert.assertEquals(1, _prefWidth_1, UnderstandigLayout.EPS);
+    Assert.assertEquals(100, _prefWidth_1, UnderstandigLayout.EPS);
     int _minus_9 = (-1);
     double _prefHeight_1 = stackPane.prefHeight(_minus_9);
-    Assert.assertEquals(1, _prefHeight_1, UnderstandigLayout.EPS);
+    Assert.assertEquals(100, _prefHeight_1, UnderstandigLayout.EPS);
     int _minus_10 = (-1);
     double _maxWidth_1 = stackPane.maxWidth(_minus_10);
     Assert.assertEquals(Double.MAX_VALUE, _maxWidth_1, UnderstandigLayout.EPS);
     int _minus_11 = (-1);
     double _maxHeight_1 = stackPane.maxHeight(_minus_11);
     Assert.assertEquals(Double.MAX_VALUE, _maxHeight_1, UnderstandigLayout.EPS);
+  }
+  
+  @Test
+  public void testRelocateMovesFiguresIntoPositive() {
+    Group _group = new Group();
+    final Procedure1<Group> _function = new Procedure1<Group>() {
+        public void apply(final Group it) {
+          ObservableList<Node> _children = it.getChildren();
+          Circle _circle = new Circle();
+          final Procedure1<Circle> _function = new Procedure1<Circle>() {
+              public void apply(final Circle it) {
+                it.setRadius(2);
+              }
+            };
+          Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+    final Group group = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+    double _layoutX = group.getLayoutX();
+    Assert.assertEquals(0, _layoutX, UnderstandigLayout.EPS);
+    double _layoutY = group.getLayoutY();
+    Assert.assertEquals(0, _layoutY, UnderstandigLayout.EPS);
+    int _minus = (-2);
+    Bounds _layoutBounds = group.getLayoutBounds();
+    double _minX = _layoutBounds.getMinX();
+    Assert.assertEquals(_minus, _minX, UnderstandigLayout.EPS);
+    int _minus_1 = (-2);
+    Bounds _layoutBounds_1 = group.getLayoutBounds();
+    double _minY = _layoutBounds_1.getMinY();
+    Assert.assertEquals(_minus_1, _minY, UnderstandigLayout.EPS);
+    group.relocate(2, 2);
+    double _layoutX_1 = group.getLayoutX();
+    Assert.assertEquals(4, _layoutX_1, UnderstandigLayout.EPS);
+    double _layoutY_1 = group.getLayoutY();
+    Assert.assertEquals(4, _layoutY_1, UnderstandigLayout.EPS);
+    int _minus_2 = (-2);
+    Bounds _layoutBounds_2 = group.getLayoutBounds();
+    double _minX_1 = _layoutBounds_2.getMinX();
+    Assert.assertEquals(_minus_2, _minX_1, UnderstandigLayout.EPS);
+    int _minus_3 = (-2);
+    Bounds _layoutBounds_3 = group.getLayoutBounds();
+    double _minY_1 = _layoutBounds_3.getMinY();
+    Assert.assertEquals(_minus_3, _minY_1, UnderstandigLayout.EPS);
   }
   
   public static void main(final String... args) {

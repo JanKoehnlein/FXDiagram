@@ -2,7 +2,6 @@ package de.fxdiagram.core.export
 
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRootDiagram
-import de.fxdiagram.core.debug.Debug
 import java.io.File
 import java.io.IOException
 import java.util.List

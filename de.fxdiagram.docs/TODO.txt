@@ -1,14 +1,12 @@
 ENHANCEMENT
 - Open subdiagram
 - Fancy context menus
-- BrowserNode
 - Embed more JavaFX demos in XNodes
 - Play diagram
 
 BUG
 - Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
 - Location of filter text
-- displace of control points on move
 - moving of anchor points
 - distinguish between anchor and control points
 - don't loose autolayouted anchors
@@ -21,6 +19,7 @@ MINOR
 - Unify Logging 
 - Transparent stage?
 - need for connection layer?
+- can't set size of browser node
   
 DONE 
 - Inherit from Parent, not Group
@@ -37,3 +36,5 @@ DONE
 - Location and layout of chooser buttons
 - Connection auto-layout
 - Connection behavior
+- BrowserNode
+- displace of control points on move

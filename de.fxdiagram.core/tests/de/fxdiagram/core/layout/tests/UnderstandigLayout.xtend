@@ -14,6 +14,8 @@ import org.junit.Test
 import static org.junit.Assert.*
 
 import static extension de.fxdiagram.core.debug.Debug.*
+import javafx.scene.shape.Circle
+import de.fxdiagram.core.debug.Debug
 
 class UnderstandigLayout extends Application {
 
@@ -182,20 +184,38 @@ class UnderstandigLayout extends Application {
 				]
 			]
 		]
-		assertEquals(1, stackPane.minWidth(-1), EPS)
-		assertEquals(1, stackPane.minHeight(-1), EPS)
-		assertEquals(1, stackPane.prefWidth(-1), EPS)
-		assertEquals(1, stackPane.prefHeight(-1), EPS)
+		assertEquals(100, stackPane.minWidth(-1), EPS)
+		assertEquals(100, stackPane.minHeight(-1), EPS)
+		assertEquals(100, stackPane.prefWidth(-1), EPS)
+		assertEquals(100, stackPane.prefHeight(-1), EPS)
 		assertEquals(Double.MAX_VALUE, stackPane.maxWidth(-1), EPS)
 		assertEquals(Double.MAX_VALUE, stackPane.maxHeight(-1), EPS)
 
 		stackPane.layout
-		assertEquals(1, stackPane.minWidth(-1), EPS)
-		assertEquals(1, stackPane.minHeight(-1), EPS)
-		assertEquals(1, stackPane.prefWidth(-1), EPS)
-		assertEquals(1, stackPane.prefHeight(-1), EPS)
+		assertEquals(100, stackPane.minWidth(-1), EPS)
+		assertEquals(100, stackPane.minHeight(-1), EPS)
+		assertEquals(100, stackPane.prefWidth(-1), EPS)
+		assertEquals(100, stackPane.prefHeight(-1), EPS)
 		assertEquals(Double.MAX_VALUE, stackPane.maxWidth(-1), EPS)
 		assertEquals(Double.MAX_VALUE, stackPane.maxHeight(-1), EPS)
+	}
+
+	@Test
+	def testRelocateMovesFiguresIntoPositive() {
+		val group = new Group => [
+			children += new Circle => [
+				radius = 2
+			]
+		]
+		assertEquals(0, group.layoutX, EPS)
+		assertEquals(0, group.layoutY, EPS)
+		assertEquals(-2, group.layoutBounds.minX, EPS)
+		assertEquals(-2, group.layoutBounds.minY, EPS)
+		group.relocate(2,2)
+		assertEquals(4, group.layoutX, EPS)
+		assertEquals(4, group.layoutY, EPS)
+		assertEquals(-2, group.layoutBounds.minX, EPS)
+		assertEquals(-2, group.layoutBounds.minY, EPS)
 	}
 
 	def static main(String... args) {
@@ -224,10 +244,7 @@ class UnderstandigLayout extends Application {
 		stackPane.children.head.dumpLayout
 		stackPane.children.last.dumpLayout
 		innerRectangle.dumpBounds
-	} //	INFO: Bounds of Rectangle:
-//	(-200.0:-200.0) BoundingBox [minX:0.0, minY:0.0, minZ:0.0, width:300.0, height:300.0, depth:0.0, maxX:300.0, maxY:300.0, maxZ:0.0]
-//	in GroupWithFixedSize: (-400.0:-400.0) BoundingBox [minX:-200.0, minY:-200.0, minZ:0.0, width:300.0, height:300.0, depth:0.0, maxX:100.0, maxY:100.0, maxZ:0.0]
-//	in Group: (-400.0:-400.0) BoundingBox [minX:-200.0, minY:-200.0, minZ:0.0, width:300.0, height:300.0, depth:0.0, maxX:100.0, maxY:100.0, maxZ:0.0]
+	} 
 }
 
 class GroupWithFixedSize extends Group {
