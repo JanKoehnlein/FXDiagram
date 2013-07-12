@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -54,5 +55,17 @@ public class XControlPoint extends XShape {
   public Circle getCircle() {
     Node _node = this.getNode();
     return ((Circle) _node);
+  }
+  
+  public String toString() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("XControlPoint at (");
+    double _layoutX = this.getLayoutX();
+    _builder.append(_layoutX, "");
+    _builder.append(",");
+    double _layoutY = this.getLayoutY();
+    _builder.append(_layoutY, "");
+    _builder.append(")");
+    return _builder.toString();
   }
 }

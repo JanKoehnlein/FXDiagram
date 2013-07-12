@@ -200,7 +200,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			return false
 		}
 		new FadeTransition => [
-			node = diagram.nodeLayer
+			node = host.rootDiagram
 			toValue = 0.3
 			duration = 300.millis
 			play
@@ -243,7 +243,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		diagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)
 		spinToPosition.stop
 		new FadeTransition => [
-			node = diagram.nodeLayer
+			node = host.rootDiagram
 			toValue = 1
 			duration = 300.millis
 			play
@@ -269,6 +269,8 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			choice.layoutY = center.y - 0.5 * bounds.height
 			val connection = new XConnection(host, choice)
 			diagram.addConnection(connection)
+			choice.toFront
+			connection.toFront
 		}
 	}
 

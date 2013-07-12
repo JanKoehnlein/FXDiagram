@@ -3,7 +3,7 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramGestureTool
-import de.fxdiagram.core.tools.KeyTool
+import de.fxdiagram.core.tools.MenuTool
 import de.fxdiagram.core.tools.SelectionTool
 import de.fxdiagram.core.tools.XDiagramTool
 import java.util.List
@@ -25,14 +25,17 @@ class XRootDiagram extends XAbstractDiagram {
 	
 	XDiagramTool _currentTool
 	
-	new() {
+	XRoot root
+	
+	new(XRoot root) {
+		this.root = root
 		children += nodeLayer
 		children += connectionLayer
 		children += buttonLayer
 		defaultTool = new CompositeTool
 		defaultTool += new SelectionTool(this)
 		defaultTool += new DiagramGestureTool(this)
-		defaultTool += new KeyTool(this)
+		defaultTool += new MenuTool(this)
 		tools += defaultTool
 		stylesheets += "de/fxdiagram/core/XRootDiagram.css"
 	}
@@ -42,12 +45,16 @@ class XRootDiagram extends XAbstractDiagram {
 		currentTool = defaultTool		
 	}
 
+	def getRoot() {
+		root
+	}
+
 	override getNodeLayer() {
 		nodeLayer
 	}
 	
 	override getConnectionLayer() {
-		connectionLayer
+		connectionLayer		
 	}
 	
 	override getButtonLayer() {
@@ -73,4 +80,6 @@ class XRootDiagram extends XAbstractDiagram {
 	def restoreDefaultTool() {
 		currentTool = defaultTool
 	}
+	
+	
 }

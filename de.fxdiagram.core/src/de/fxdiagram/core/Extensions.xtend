@@ -12,16 +12,24 @@ import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 
 class Extensions {
 
-	def static localToRoot(Node node, double x, double y) {
-		node.scene.root.parentToLocal(node.localToScene(x, y))
+	def static localToRootDiagram(Node node, double x, double y) {
+		localToRootDiagram(node, new Point2D(x, y))
 	}
 
-	def static localToRoot(Node node, Point2D point) {
-		node.scene.root.parentToLocal(node.localToScene(point))
+	def static Point2D localToRootDiagram(Node node, Point2D point) {
+		switch node {
+			case null: null
+			XRootDiagram: point
+			default: localToRootDiagram(node.parent, node.localToParent(point))
+		}
 	}
 
-	def static localToRoot(Node node, Bounds bounds) {
-		node.scene.root.parentToLocal(node.localToScene(bounds))
+	def static Bounds localToRootDiagram(Node node, Bounds bounds) {
+		switch node {
+			case null: null
+			XRootDiagram: bounds
+			default: localToRootDiagram(node.parent, node.localToParent(bounds))
+		}
 	}
 
 	def static localToDiagram(Node node, double x, double y) {

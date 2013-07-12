@@ -2,8 +2,9 @@ package de.fxdigram.lib.layout.tests
 
 import de.fxdiagram.core.XNestedDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XRootDiagram
-import de.fxdiagram.lib.shapes.SimpleNode
+import de.fxdiagram.lib.simple.SimpleNode
 import javafx.application.Application
 import javafx.scene.Group
 import javafx.scene.Node
@@ -37,7 +38,7 @@ class LayoutTests extends Application {
 				scaleToFit
 			]
 		]
-		diagram = new XRootDiagram
+		diagram = new XRoot().diagram
 		stage.scene = new Scene(diagram, 1024, 768)
 		val rectangleBorderPane = new StackPane
 		diagram => [

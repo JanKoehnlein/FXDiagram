@@ -7,6 +7,7 @@ import javafx.scene.Scene
 import javafx.scene.layout.Region
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
+import javafx.scene.shape.Circle
 import javafx.scene.shape.Rectangle
 import javafx.stage.Stage
 import org.junit.Test
@@ -14,8 +15,6 @@ import org.junit.Test
 import static org.junit.Assert.*
 
 import static extension de.fxdiagram.core.debug.Debug.*
-import javafx.scene.shape.Circle
-import de.fxdiagram.core.debug.Debug
 
 class UnderstandigLayout extends Application {
 

@@ -2,8 +2,9 @@ package de.fxdigram.lib.layout.tests;
 
 import de.fxdiagram.core.XNestedDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
-import de.fxdiagram.lib.shapes.SimpleNode;
+import de.fxdiagram.lib.simple.SimpleNode;
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -62,8 +63,9 @@ public class LayoutTests extends Application {
       };
     XNestedDiagram _doubleArrow = ObjectExtensions.<XNestedDiagram>operator_doubleArrow(_xNestedDiagram, _function);
     this.nestedDiagram = _doubleArrow;
-    XRootDiagram _xRootDiagram = new XRootDiagram();
-    this.diagram = _xRootDiagram;
+    XRoot _xRoot = new XRoot();
+    XRootDiagram _diagram = _xRoot.getDiagram();
+    this.diagram = _diagram;
     Scene _scene = new Scene(this.diagram, 1024, 768);
     stage.setScene(_scene);
     StackPane _stackPane = new StackPane();

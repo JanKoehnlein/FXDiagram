@@ -3,9 +3,10 @@ package de.fxdiagram.core;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
-import de.fxdiagram.core.tools.KeyTool;
+import de.fxdiagram.core.tools.MenuTool;
 import de.fxdiagram.core.tools.SelectionTool;
 import de.fxdiagram.core.tools.XDiagramTool;
 import java.util.ArrayList;
@@ -53,7 +54,10 @@ public class XRootDiagram extends XAbstractDiagram {
   
   private XDiagramTool _currentTool;
   
-  public XRootDiagram() {
+  private XRoot root;
+  
+  public XRootDiagram(final XRoot root) {
+    this.root = root;
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.nodeLayer);
     ObservableList<Node> _children_1 = this.getChildren();
@@ -66,8 +70,8 @@ public class XRootDiagram extends XAbstractDiagram {
     this.defaultTool.operator_add(_selectionTool);
     DiagramGestureTool _diagramGestureTool = new DiagramGestureTool(this);
     this.defaultTool.operator_add(_diagramGestureTool);
-    KeyTool _keyTool = new KeyTool(this);
-    this.defaultTool.operator_add(_keyTool);
+    MenuTool _menuTool = new MenuTool(this);
+    this.defaultTool.operator_add(_menuTool);
     this.tools.add(this.defaultTool);
     ObservableList<String> _stylesheets = this.getStylesheets();
     _stylesheets.add("de/fxdiagram/core/XRootDiagram.css");
@@ -76,6 +80,10 @@ public class XRootDiagram extends XAbstractDiagram {
   public void doActivate() {
     super.doActivate();
     this.setCurrentTool(this.defaultTool);
+  }
+  
+  public XRoot getRoot() {
+    return this.root;
   }
   
   public Group getNodeLayer() {

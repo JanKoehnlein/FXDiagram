@@ -91,7 +91,7 @@ class XNestedDiagram extends XAbstractDiagram {
 	override getNodeLayer() {
 		nodeLayer
 	}
-
+	
 	override getConnectionLayer() {
 		parentDiagram.connectionLayer
 	}

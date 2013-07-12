@@ -9,13 +9,15 @@ import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.QuadCurve
 import javafx.scene.paint.Color
 import javafx.scene.shape.Shape
+import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
 
 class XConnection extends XShape {
 
 	@FxProperty XNode source
 	@FxProperty XNode target
 	@FxProperty @Lazy XConnectionLabel label
-	@FxProperty double strokeWidth = 1.5
+	@FxProperty double strokeWidth = 2
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
@@ -115,7 +117,7 @@ class XConnection extends XShape {
 	
 	def protected setShape(Shape shape) {
 		shapeGroup.children.setAll(shape)
-		shape.strokeWidthProperty.bind(this.strokeWidthProperty)
+		shape.strokeWidthProperty.bind(this.strokeWidthProperty / rootDiagram.scaleProperty)
 		shape => [
 			fill = null
 			stroke = Color.BLACK
@@ -132,5 +134,10 @@ class XConnection extends XShape {
 	
 	override getMoveBehavior() {
 		null
+	}
+	
+	override layoutChildren() {
+		super.layoutChildren
+		connectionRouter.calculatePoints	
 	}
 }

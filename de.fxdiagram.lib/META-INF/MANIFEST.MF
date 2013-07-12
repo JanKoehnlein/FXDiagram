@@ -9,5 +9,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.xtend.lib;bundle-version="2.4.2",
  de.fxdiagram.annotations;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: .,
- lib/BrickBreaker.jar
+Bundle-ClassPath: .
+Export-Package: de.fxdiagram.lib.java,
+ de.fxdiagram.lib.media,
+ de.fxdiagram.lib.nodes,
+ de.fxdiagram.lib.simple

@@ -36,4 +36,7 @@ class XControlPoint extends XShape {
 		node as Circle
 	}
 	
+	override toString() {
+		'''XControlPoint at («layoutX»,«layoutY»)'''
+	}
 }

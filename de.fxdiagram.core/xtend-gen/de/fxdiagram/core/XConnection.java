@@ -6,13 +6,17 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.properties.FxProperty;
 import de.fxdiagram.annotations.properties.Lazy;
 import de.fxdiagram.core.ConnectionRouter;
+import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.binding.DoubleExpressionExtensions;
 import java.util.Collections;
 import java.util.List;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -294,7 +298,10 @@ public class XConnection extends XShape {
       ObservableList<Node> _children = this.shapeGroup.getChildren();
       _children.setAll(shape);
       DoubleProperty _strokeWidthProperty = shape.strokeWidthProperty();
-      _strokeWidthProperty.bind(this.strokeWidthProperty);
+      XRootDiagram _rootDiagram = Extensions.getRootDiagram(this);
+      DoubleProperty _scaleProperty = _rootDiagram.scaleProperty();
+      DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(this.strokeWidthProperty, _scaleProperty);
+      _strokeWidthProperty.bind(_divide);
       final Procedure1<Shape> _function = new Procedure1<Shape>() {
           public void apply(final Shape it) {
             it.setFill(null);
@@ -318,6 +325,11 @@ public class XConnection extends XShape {
   
   public MoveBehavior getMoveBehavior() {
     return null;
+  }
+  
+  public void layoutChildren() {
+    super.layoutChildren();
+    this.connectionRouter.calculatePoints();
   }
   
   private SimpleObjectProperty<XNode> sourceProperty = new SimpleObjectProperty<XNode>(this, "source");
@@ -381,7 +393,7 @@ public class XConnection extends XShape {
   private SimpleDoubleProperty strokeWidthProperty = new SimpleDoubleProperty(this, "strokeWidth",_initStrokeWidth());
   
   private static final double _initStrokeWidth() {
-    return 1.5;
+    return 2;
   }
   
   public double getStrokeWidth() {

@@ -38,3 +38,4 @@ DONE
 - Connection behavior
 - BrowserNode
 - displace of control points on move
+- Fix zoomin position

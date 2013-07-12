@@ -34,10 +34,10 @@ class CompassAnchors implements Anchors {
 			val deltaY = (bounds.maxY + bounds.minY) / (numAnchorsPerSide + 1)
 			val anchors = newArrayList
 			for(i: 1..numAnchorsPerSide) {
-				anchors += host.node.localToRoot(bounds.minX, bounds.minY + i * deltaY)
-				anchors += host.node.localToRoot(bounds.maxX, bounds.minY + i * deltaY)
-				anchors += host.node.localToRoot(bounds.minX + i * deltaX, bounds.minY)
-				anchors += host.node.localToRoot(bounds.minX + i * deltaX, bounds.maxY)
+				anchors += host.node.localToRootDiagram(bounds.minX, bounds.minY + i * deltaY)
+				anchors += host.node.localToRootDiagram(bounds.maxX, bounds.minY + i * deltaY)
+				anchors += host.node.localToRootDiagram(bounds.minX + i * deltaX, bounds.minY)
+				anchors += host.node.localToRootDiagram(bounds.minX + i * deltaX, bounds.maxY)
 			}
 			anchors
 		}

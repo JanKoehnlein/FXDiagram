@@ -21,12 +21,10 @@ class ConnectionRouter implements XActivatable {
 	ChangeListener<Number> scalarListener  
 	ChangeListener<Bounds> boundsListener
 	
-	boolean isPaused
-	  
 	new(XConnection connection) {
 		this.connection = connection
-		scalarListener = [ prop, oldVal, newVal | calculatePoints ]
-		boundsListener = [ prop, oldVal, newVal | calculatePoints ]
+		scalarListener = [ prop, oldVal, newVal | connection.requestLayout ]
+		boundsListener = [ prop, oldVal, newVal | connection.requestLayout ]
 	}
 	
 	override activate() {
@@ -47,41 +45,31 @@ class ConnectionRouter implements XActivatable {
 			current.scaleYProperty.addListener(scalarListener)
 			current.rotateProperty.addListener(scalarListener)
 			current = current.parent
-		} while (current != null)
+		} while (current != null && !(current instanceof XRootDiagram))
 	}
 
-	def pause() {
-		isPaused = true
-	}
-	
-	def resume() {
-		isPaused = false
-	}
-	
 	def protected calculatePoints() {
-		if(!isPaused) {
-			val anchors = findClosestAnchors
-			val sourcePoint = anchors.key
-			val targetPoint = anchors.value
-			if (controlPoints.size < 2)
-				controlPoints.setAll(
-					#[new XControlPoint => [
-						layoutX = sourcePoint.x
-						layoutY = sourcePoint.y
-					], new XControlPoint => [
-						layoutX = targetPoint.x
-						layoutY = targetPoint.y
-					]])
-			else {
-				controlPoints.head => [
+		val anchors = findClosestAnchors
+		val sourcePoint = anchors.key
+		val targetPoint = anchors.value
+		if (controlPoints.size < 2) {
+			controlPoints.setAll(
+				#[new XControlPoint => [
 					layoutX = sourcePoint.x
 					layoutY = sourcePoint.y
-				]
-				controlPoints.last => [
+				], new XControlPoint => [
 					layoutX = targetPoint.x
 					layoutY = targetPoint.y
-				]
-			}
+				]])
+		} else {
+			controlPoints.head => [
+				layoutX = sourcePoint.x
+				layoutY = sourcePoint.y
+			]
+			controlPoints.last => [
+				layoutX = targetPoint.x
+				layoutY = targetPoint.y
+			]
 		}
 	}
 
@@ -96,7 +84,7 @@ class ConnectionRouter implements XActivatable {
 	}
 	
 	protected def midPoint(XNode node) {
-		node.localToDiagram(
+		node.localToRootDiagram(
 			0.5 * (node.boundsInLocal.minX + node.boundsInLocal.maxX),
 			0.5 * (node.boundsInLocal.minY + node.boundsInLocal.maxY)
 		)

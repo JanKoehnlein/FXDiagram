@@ -470,9 +470,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function_2 = new Procedure1<FadeTransition>() {
           public void apply(final FadeTransition it) {
-            XAbstractDiagram _diagram = AbstractXNodeChooser.this.getDiagram();
-            Group _nodeLayer = _diagram.getNodeLayer();
-            it.setNode(_nodeLayer);
+            XRootDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+            it.setNode(_rootDiagram);
             it.setToValue(0.3);
             Duration _millis = Duration.millis(300);
             it.setDuration(_millis);
@@ -575,9 +574,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
           public void apply(final FadeTransition it) {
-            XAbstractDiagram _diagram = AbstractXNodeChooser.this.getDiagram();
-            Group _nodeLayer = _diagram.getNodeLayer();
-            it.setNode(_nodeLayer);
+            XRootDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+            it.setNode(_rootDiagram);
             it.setToValue(1);
             Duration _millis = Duration.millis(300);
             it.setDuration(_millis);
@@ -638,6 +636,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       final XConnection connection = _xConnection;
       XAbstractDiagram _diagram_1 = this.getDiagram();
       _diagram_1.addConnection(connection);
+      choice.toFront();
+      connection.toFront();
     }
   }
   

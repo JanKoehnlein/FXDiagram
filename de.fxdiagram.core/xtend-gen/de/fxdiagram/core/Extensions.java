@@ -12,35 +12,66 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
 @SuppressWarnings("all")
 public class Extensions {
-  public static Point2D localToRoot(final Node node, final double x, final double y) {
-    Scene _scene = node.getScene();
-    Parent _root = _scene.getRoot();
-    Point2D _localToScene = node.localToScene(x, y);
-    Point2D _parentToLocal = _root.parentToLocal(_localToScene);
-    return _parentToLocal;
+  public static Point2D localToRootDiagram(final Node node, final double x, final double y) {
+    Point2D _point2D = new Point2D(x, y);
+    Point2D _localToRootDiagram = Extensions.localToRootDiagram(node, _point2D);
+    return _localToRootDiagram;
   }
   
-  public static Point2D localToRoot(final Node node, final Point2D point) {
-    Scene _scene = node.getScene();
-    Parent _root = _scene.getRoot();
-    Point2D _localToScene = node.localToScene(point);
-    Point2D _parentToLocal = _root.parentToLocal(_localToScene);
-    return _parentToLocal;
+  public static Point2D localToRootDiagram(final Node node, final Point2D point) {
+    Point2D _switchResult = null;
+    boolean _matched = false;
+    if (!_matched) {
+      if (Objects.equal(node,null)) {
+        _matched=true;
+        _switchResult = null;
+      }
+    }
+    if (!_matched) {
+      if (node instanceof XRootDiagram) {
+        final XRootDiagram _xRootDiagram = (XRootDiagram)node;
+        _matched=true;
+        _switchResult = point;
+      }
+    }
+    if (!_matched) {
+      Parent _parent = node.getParent();
+      Point2D _localToParent = node.localToParent(point);
+      Point2D _localToRootDiagram = Extensions.localToRootDiagram(_parent, _localToParent);
+      _switchResult = _localToRootDiagram;
+    }
+    return _switchResult;
   }
   
-  public static Bounds localToRoot(final Node node, final Bounds bounds) {
-    Scene _scene = node.getScene();
-    Parent _root = _scene.getRoot();
-    Bounds _localToScene = node.localToScene(bounds);
-    Bounds _parentToLocal = _root.parentToLocal(_localToScene);
-    return _parentToLocal;
+  public static Bounds localToRootDiagram(final Node node, final Bounds bounds) {
+    Bounds _switchResult = null;
+    boolean _matched = false;
+    if (!_matched) {
+      if (Objects.equal(node,null)) {
+        _matched=true;
+        _switchResult = null;
+      }
+    }
+    if (!_matched) {
+      if (node instanceof XRootDiagram) {
+        final XRootDiagram _xRootDiagram = (XRootDiagram)node;
+        _matched=true;
+        _switchResult = bounds;
+      }
+    }
+    if (!_matched) {
+      Parent _parent = node.getParent();
+      Bounds _localToParent = node.localToParent(bounds);
+      Bounds _localToRootDiagram = Extensions.localToRootDiagram(_parent, _localToParent);
+      _switchResult = _localToRootDiagram;
+    }
+    return _switchResult;
   }
   
   public static Point2D localToDiagram(final Node node, final double x, final double y) {

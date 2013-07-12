@@ -20,9 +20,9 @@ abstract class XAbstractDiagram extends Parent implements XActivatable {
 
 	def Group getNodeLayer()
 
-	def Group getButtonLayer()
-
 	def Group getConnectionLayer()
+	
+	def Group getButtonLayer()
 
 	override activate() {
 		if (!isActive)

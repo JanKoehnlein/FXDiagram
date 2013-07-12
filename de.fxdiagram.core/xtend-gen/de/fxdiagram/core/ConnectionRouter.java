@@ -7,6 +7,7 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRootDiagram;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -34,19 +35,17 @@ public class ConnectionRouter implements XActivatable {
   
   private ChangeListener<Bounds> boundsListener;
   
-  private boolean isPaused;
-  
   public ConnectionRouter(final XConnection connection) {
     this.connection = connection;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-          ConnectionRouter.this.calculatePoints();
+          connection.requestLayout();
         }
       };
     this.scalarListener = _function;
     final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
         public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-          ConnectionRouter.this.calculatePoints();
+          connection.requestLayout();
         }
       };
     this.boundsListener = _function_1;
@@ -84,38 +83,59 @@ public class ConnectionRouter implements XActivatable {
         Parent _parent = current.getParent();
         current = _parent;
       }
+      boolean _and = false;
       boolean _notEquals = (!Objects.equal(current, null));
-      _dowhile = _notEquals;
+      if (!_notEquals) {
+        _and = false;
+      } else {
+        boolean _not = (!(current instanceof XRootDiagram));
+        _and = (_notEquals && _not);
+      }
+      _dowhile = _and;
     } while(_dowhile);
   }
   
-  public boolean pause() {
-    boolean _isPaused = this.isPaused = true;
-    return _isPaused;
-  }
-  
-  public boolean resume() {
-    boolean _isPaused = this.isPaused = false;
-    return _isPaused;
-  }
-  
   protected Object calculatePoints() {
-    Object _xifexpression = null;
-    boolean _not = (!this.isPaused);
-    if (_not) {
-      Object _xblockexpression = null;
-      {
-        final Pair<Point2D,Point2D> anchors = this.findClosestAnchors();
-        final Point2D sourcePoint = anchors.getKey();
-        final Point2D targetPoint = anchors.getValue();
-        Object _xifexpression_1 = null;
-        ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-        int _size = _controlPoints.size();
-        boolean _lessThan = (_size < 2);
-        if (_lessThan) {
-          ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-          XControlPoint _xControlPoint = new XControlPoint();
-          final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+    Object _xblockexpression = null;
+    {
+      final Pair<Point2D,Point2D> anchors = this.findClosestAnchors();
+      final Point2D sourcePoint = anchors.getKey();
+      final Point2D targetPoint = anchors.getValue();
+      Object _xifexpression = null;
+      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+      int _size = _controlPoints.size();
+      boolean _lessThan = (_size < 2);
+      if (_lessThan) {
+        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+        XControlPoint _xControlPoint = new XControlPoint();
+        final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+            public void apply(final XControlPoint it) {
+              double _x = sourcePoint.getX();
+              it.setLayoutX(_x);
+              double _y = sourcePoint.getY();
+              it.setLayoutY(_y);
+            }
+          };
+        XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
+        XControlPoint _xControlPoint_1 = new XControlPoint();
+        final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
+            public void apply(final XControlPoint it) {
+              double _x = targetPoint.getX();
+              it.setLayoutX(_x);
+              double _y = targetPoint.getY();
+              it.setLayoutY(_y);
+            }
+          };
+        XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
+        boolean _setAll = _controlPoints_1.setAll(
+          new XControlPoint[] { _doubleArrow, _doubleArrow_1 });
+        _xifexpression = Boolean.valueOf(_setAll);
+      } else {
+        XControlPoint _xblockexpression_1 = null;
+        {
+          ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
+          XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_2);
+          final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
               public void apply(final XControlPoint it) {
                 double _x = sourcePoint.getX();
                 it.setLayoutX(_x);
@@ -123,9 +143,10 @@ public class ConnectionRouter implements XActivatable {
                 it.setLayoutY(_y);
               }
             };
-          XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
-          XControlPoint _xControlPoint_1 = new XControlPoint();
-          final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
+          ObjectExtensions.<XControlPoint>operator_doubleArrow(_head, _function_2);
+          ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
+          XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_3);
+          final Procedure1<XControlPoint> _function_3 = new Procedure1<XControlPoint>() {
               public void apply(final XControlPoint it) {
                 double _x = targetPoint.getX();
                 it.setLayoutX(_x);
@@ -133,44 +154,14 @@ public class ConnectionRouter implements XActivatable {
                 it.setLayoutY(_y);
               }
             };
-          XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
-          boolean _setAll = _controlPoints_1.setAll(
-            new XControlPoint[] { _doubleArrow, _doubleArrow_1 });
-          _xifexpression_1 = Boolean.valueOf(_setAll);
-        } else {
-          XControlPoint _xblockexpression_1 = null;
-          {
-            ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-            XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_2);
-            final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
-                public void apply(final XControlPoint it) {
-                  double _x = sourcePoint.getX();
-                  it.setLayoutX(_x);
-                  double _y = sourcePoint.getY();
-                  it.setLayoutY(_y);
-                }
-              };
-            ObjectExtensions.<XControlPoint>operator_doubleArrow(_head, _function_2);
-            ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-            XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_3);
-            final Procedure1<XControlPoint> _function_3 = new Procedure1<XControlPoint>() {
-                public void apply(final XControlPoint it) {
-                  double _x = targetPoint.getX();
-                  it.setLayoutX(_x);
-                  double _y = targetPoint.getY();
-                  it.setLayoutY(_y);
-                }
-              };
-            XControlPoint _doubleArrow_2 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
-            _xblockexpression_1 = (_doubleArrow_2);
-          }
-          _xifexpression_1 = _xblockexpression_1;
+          XControlPoint _doubleArrow_2 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
+          _xblockexpression_1 = (_doubleArrow_2);
         }
-        _xblockexpression = (_xifexpression_1);
+        _xifexpression = _xblockexpression_1;
       }
-      _xifexpression = _xblockexpression;
+      _xblockexpression = (_xifexpression);
     }
-    return _xifexpression;
+    return _xblockexpression;
   }
   
   protected Pair<Point2D,Point2D> findClosestAnchors() {
@@ -220,8 +211,8 @@ public class ConnectionRouter implements XActivatable {
     double _maxY = _boundsInLocal_3.getMaxY();
     double _plus_1 = (_minY + _maxY);
     double _multiply_1 = (0.5 * _plus_1);
-    Point2D _localToDiagram = Extensions.localToDiagram(node, _multiply, _multiply_1);
-    return _localToDiagram;
+    Point2D _localToRootDiagram = Extensions.localToRootDiagram(node, _multiply, _multiply_1);
+    return _localToRootDiagram;
   }
   
   protected Point2D getNearestAnchor(final XNode node, final XControlPoint controlPoint) {

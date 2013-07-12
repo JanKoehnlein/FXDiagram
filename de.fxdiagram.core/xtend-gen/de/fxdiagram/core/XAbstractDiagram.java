@@ -49,9 +49,9 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public abstract Group getNodeLayer();
   
-  public abstract Group getButtonLayer();
-  
   public abstract Group getConnectionLayer();
+  
+  public abstract Group getButtonLayer();
   
   public void activate() {
     boolean _isActive = this.getIsActive();
