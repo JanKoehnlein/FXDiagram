@@ -27,6 +27,7 @@ import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.binding.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
 import javafx.geometry.Bounds
+import javafx.animation.ParallelTransition
 
 abstract class AbstractXNodeChooser implements XDiagramTool {
 
@@ -199,12 +200,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			nodeChosen(nodes.head)
 			return false
 		}
-		new FadeTransition => [
-			node = host.rootDiagram
-			toValue = 0.3
-			duration = 300.millis
-			play
-		]
+		blurDiagram = true
 		
 		if (nodes.size != 0) {
 			interpolatedPosition = 0
@@ -242,12 +238,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		diagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)
 		diagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)
 		spinToPosition.stop
-		new FadeTransition => [
-			node = host.rootDiagram
-			toValue = 1
-			duration = 300.millis
-			play
-		]
+		blurDiagram = false
 		if(minusButton != null) {
 			diagram.buttonLayer.children -= minusButton
 			diagram.buttonLayer.children -= plusButton
@@ -272,6 +263,18 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			choice.toFront
 			connection.toFront
 		}
+	}
+
+	protected def setBlurDiagram(boolean isBlur) {
+		new ParallelTransition => [
+			for(layer: #[host.rootDiagram.nodeLayer, host.rootDiagram.connectionLayer])
+				children += new FadeTransition => [
+					node = layer
+					toValue = if(isBlur) 0.3 else 1
+					duration = 300.millis
+					play
+				]
+		]
 	}
 
 	protected def cancel() {

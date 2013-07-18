@@ -1,6 +1,7 @@
 package de.fxdiagram.core.tools.chooser;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
@@ -10,11 +11,14 @@ import de.fxdiagram.core.binding.StringExpressionExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.chooser.XNodeChooserTransition;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -467,18 +471,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         this.nodeChosen(_head);
         return false;
       }
-      FadeTransition _fadeTransition = new FadeTransition();
-      final Procedure1<FadeTransition> _function_2 = new Procedure1<FadeTransition>() {
-          public void apply(final FadeTransition it) {
-            XRootDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
-            it.setNode(_rootDiagram);
-            it.setToValue(0.3);
-            Duration _millis = Duration.millis(300);
-            it.setDuration(_millis);
-            it.play();
-          }
-        };
-      ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function_2);
+      this.setBlurDiagram(true);
       ArrayList<XNode> _nodes_3 = this.getNodes();
       int _size_1 = _nodes_3.size();
       boolean _notEquals_1 = (_size_1 != 0);
@@ -486,7 +479,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         this.setInterpolatedPosition(0);
       }
       ArrayList<XNode> _nodes_4 = this.getNodes();
-      final Procedure1<XNode> _function_3 = new Procedure1<XNode>() {
+      final Procedure1<XNode> _function_2 = new Procedure1<XNode>() {
           public void apply(final XNode node) {
             final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
                 public void handle(final MouseEvent it) {
@@ -516,7 +509,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             node.setOnMouseClicked(_function);
           }
         };
-      IterableExtensions.<XNode>forEach(_nodes_4, _function_3);
+      IterableExtensions.<XNode>forEach(_nodes_4, _function_2);
       XAbstractDiagram _diagram_3 = this.getDiagram();
       Scene _scene = _diagram_3.getScene();
       _scene.<SwipeEvent>addEventHandler(SwipeEvent.ANY, this.swipeHandler);
@@ -529,7 +522,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       this.currentPositionProperty.addListener(this.positionListener);
       this.filterStringProperty.addListener(this.filterChangeListener);
       Label _label = new Label();
-      final Procedure1<Label> _function_4 = new Procedure1<Label>() {
+      final Procedure1<Label> _function_3 = new Procedure1<Label>() {
           public void apply(final Label it) {
             StringProperty _textProperty = it.textProperty();
             StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractXNodeChooser.this.filterStringProperty);
@@ -537,7 +530,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             _textProperty.bind(_plus_1);
           }
         };
-      Label _doubleArrow = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_4);
+      Label _doubleArrow = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_3);
       this.filterLabel = _doubleArrow;
       XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
       Group _buttonLayer_3 = _rootDiagram.getButtonLayer();
@@ -571,18 +564,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Scene _scene_2 = _diagram_2.getScene();
       _scene_2.<SwipeEvent>removeEventHandler(SwipeEvent.ANY, this.swipeHandler);
       this.spinToPosition.stop();
-      FadeTransition _fadeTransition = new FadeTransition();
-      final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-          public void apply(final FadeTransition it) {
-            XRootDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
-            it.setNode(_rootDiagram);
-            it.setToValue(1);
-            Duration _millis = Duration.millis(300);
-            it.setDuration(_millis);
-            it.play();
-          }
-        };
-      ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
+      this.setBlurDiagram(false);
       boolean _notEquals = (!Objects.equal(this.minusButton, null));
       if (_notEquals) {
         XAbstractDiagram _diagram_3 = this.getDiagram();
@@ -639,6 +621,41 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       choice.toFront();
       connection.toFront();
     }
+  }
+  
+  protected ParallelTransition setBlurDiagram(final boolean isBlur) {
+    ParallelTransition _parallelTransition = new ParallelTransition();
+    final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+        public void apply(final ParallelTransition it) {
+          XRootDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+          Group _nodeLayer = _rootDiagram.getNodeLayer();
+          XRootDiagram _rootDiagram_1 = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+          Group _connectionLayer = _rootDiagram_1.getConnectionLayer();
+          for (final Group layer : Collections.<Group>unmodifiableList(Lists.<Group>newArrayList(_nodeLayer, _connectionLayer))) {
+            ObservableList<Animation> _children = it.getChildren();
+            FadeTransition _fadeTransition = new FadeTransition();
+            final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+                public void apply(final FadeTransition it) {
+                  it.setNode(layer);
+                  double _xifexpression = (double) 0;
+                  if (isBlur) {
+                    _xifexpression = 0.3;
+                  } else {
+                    _xifexpression = 1;
+                  }
+                  it.setToValue(_xifexpression);
+                  Duration _millis = Duration.millis(300);
+                  it.setDuration(_millis);
+                  it.play();
+                }
+              };
+            FadeTransition _doubleArrow = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
+            _children.add(_doubleArrow);
+          }
+        }
+      };
+    ParallelTransition _doubleArrow = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
+    return _doubleArrow;
   }
   
   protected void cancel() {

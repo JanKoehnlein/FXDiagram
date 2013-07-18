@@ -1,10 +1,13 @@
 package de.fxdiagram.examples;
 
+import com.mongodb.DBObject;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.examples.BrickBreakerNode;
+import de.fxdiagram.examples.lcars.LcarsAccess;
+import de.fxdiagram.examples.lcars.LcarsNode;
 import de.fxdiagram.lib.java.JavaTypeNode;
 import de.fxdiagram.lib.media.BrowserNode;
 import de.fxdiagram.lib.media.ImageNode;
@@ -13,6 +16,7 @@ import de.fxdiagram.lib.media.RecursiveImageNode;
 import de.fxdiagram.lib.simple.NestedDiagramNode;
 import de.fxdiagram.lib.simple.SimpleNode;
 import java.net.URL;
+import java.util.List;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.PerspectiveCamera;
@@ -157,6 +161,17 @@ public class Main extends Application {
         };
       final JavaTypeNode javaTypeNode = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_7);
       diagram.addNode(javaTypeNode);
+      LcarsAccess _get = LcarsAccess.get();
+      List<DBObject> _query = _get.query("name", "James T. Kirk");
+      final DBObject kirk = _query.get(0);
+      LcarsNode _lcarsNode = new LcarsNode(kirk);
+      final Procedure1<LcarsNode> _function_8 = new Procedure1<LcarsNode>() {
+          public void apply(final LcarsNode it) {
+            it.setWidth(120);
+          }
+        };
+      LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function_8);
+      diagram.addNode(_doubleArrow);
       _xblockexpression = (scene);
     }
     return _xblockexpression;
