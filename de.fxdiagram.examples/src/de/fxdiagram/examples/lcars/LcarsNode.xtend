@@ -171,20 +171,24 @@ class LcarsNode extends XNode {
 			imageView => [
 				it.image = image
 				val ratio = image.width / image.height
-				if (ratio < imageRatio)
+				if (ratio < imageRatio) {
+					val newHeight = image.width / imageRatio
 					viewport = new Rectangle2D(
 						0,
-						0.5 * (image.height - imageRatio / image.width),
+						0.5 * (image.height - newHeight),
 						image.width,
-						imageRatio / image.width
+						newHeight
 					)
-				else
+				}
+				else {
+					val newWidth = imageRatio * image.height
 					viewport = new Rectangle2D(
-						0.5 * (image.width - imageRatio * image.height),
+						0.5 * (image.width - newWidth),
 						0,
-						image.height * imageRatio,
+						newWidth,
 						image.height
 					)
+				}
 			] 
 		}
 	}

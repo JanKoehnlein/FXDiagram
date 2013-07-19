@@ -402,32 +402,26 @@ public class LcarsNode extends XNode {
                 double _imageRatio = LcarsNode.this.getImageRatio();
                 boolean _lessThan = (ratio < _imageRatio);
                 if (_lessThan) {
-                  double _height_1 = image.getHeight();
-                  double _imageRatio_1 = LcarsNode.this.getImageRatio();
                   double _width_1 = image.getWidth();
-                  double _divide = (_imageRatio_1 / _width_1);
-                  double _minus = (_height_1 - _divide);
+                  double _imageRatio_1 = LcarsNode.this.getImageRatio();
+                  final double newHeight = (_width_1 / _imageRatio_1);
+                  double _height_1 = image.getHeight();
+                  double _minus = (_height_1 - newHeight);
                   double _multiply = (0.5 * _minus);
                   double _width_2 = image.getWidth();
-                  double _imageRatio_2 = LcarsNode.this.getImageRatio();
-                  double _width_3 = image.getWidth();
-                  double _divide_1 = (_imageRatio_2 / _width_3);
                   Rectangle2D _rectangle2D = new Rectangle2D(
-                    0, _multiply, _width_2, _divide_1);
+                    0, _multiply, _width_2, newHeight);
                   it.setViewport(_rectangle2D);
                 } else {
-                  double _width_4 = image.getWidth();
-                  double _imageRatio_3 = LcarsNode.this.getImageRatio();
+                  double _imageRatio_2 = LcarsNode.this.getImageRatio();
                   double _height_2 = image.getHeight();
-                  double _multiply_1 = (_imageRatio_3 * _height_2);
-                  double _minus_1 = (_width_4 - _multiply_1);
-                  double _multiply_2 = (0.5 * _minus_1);
+                  final double newWidth = (_imageRatio_2 * _height_2);
+                  double _width_3 = image.getWidth();
+                  double _minus_1 = (_width_3 - newWidth);
+                  double _multiply_1 = (0.5 * _minus_1);
                   double _height_3 = image.getHeight();
-                  double _imageRatio_4 = LcarsNode.this.getImageRatio();
-                  double _multiply_3 = (_height_3 * _imageRatio_4);
-                  double _height_4 = image.getHeight();
-                  Rectangle2D _rectangle2D_1 = new Rectangle2D(_multiply_2, 
-                    0, _multiply_3, _height_4);
+                  Rectangle2D _rectangle2D_1 = new Rectangle2D(_multiply_1, 
+                    0, newWidth, _height_3);
                   it.setViewport(_rectangle2D_1);
                 }
               }

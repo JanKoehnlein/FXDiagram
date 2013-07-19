@@ -1,11 +1,9 @@
 package de.fxdiagram.examples
 
-import com.mongodb.BasicDBObject
-import com.mongodb.Mongo
-import de.fxdiagram.core.XAbstractDiagram
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.examples.lcars.LcarsAccess
 import de.fxdiagram.examples.lcars.LcarsNode
 import de.fxdiagram.lib.java.JavaTypeNode
 import de.fxdiagram.lib.media.BrowserNode
@@ -22,7 +20,6 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.image.Image
 import javafx.stage.Stage
-import de.fxdiagram.examples.lcars.LcarsAccess
 
 class Main extends Application {
 
