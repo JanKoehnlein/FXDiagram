@@ -6,6 +6,7 @@ import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.binding.StringExpressionExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
@@ -21,10 +22,12 @@ import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -102,8 +105,6 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   private EventHandler<KeyEvent> keyHandler;
   
   private ChangeListener<String> filterChangeListener;
-  
-  private Label filterLabel;
   
   private Pos layoutPosition;
   
@@ -316,6 +317,17 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Button _doubleArrow_1 = ObjectExtensions.<Button>operator_doubleArrow(_button_1, _function_6);
       this.plusButton = _doubleArrow_1;
     }
+    Label _label = new Label();
+    final Procedure1<Label> _function_7 = new Procedure1<Label>() {
+        public void apply(final Label it) {
+          StringProperty _textProperty = it.textProperty();
+          StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractXNodeChooser.this.filterStringProperty);
+          StringExpression _plus_1 = StringExpressionExtensions.operator_plus(_plus, "");
+          _textProperty.bind(_plus_1);
+        }
+      };
+    Label _doubleArrow_2 = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_7);
+    this.setFilterLabel(_doubleArrow_2);
   }
   
   public boolean operator_add(final XNode node) {
@@ -521,21 +533,13 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       this.currentPositionProperty.addListener(this.positionListener);
       this.filterStringProperty.addListener(this.filterChangeListener);
-      Label _label = new Label();
-      final Procedure1<Label> _function_3 = new Procedure1<Label>() {
-          public void apply(final Label it) {
-            StringProperty _textProperty = it.textProperty();
-            StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractXNodeChooser.this.filterStringProperty);
-            StringExpression _plus_1 = StringExpressionExtensions.operator_plus(_plus, "");
-            _textProperty.bind(_plus_1);
-          }
-        };
-      Label _doubleArrow = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_3);
-      this.filterLabel = _doubleArrow;
       XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
-      Group _buttonLayer_3 = _rootDiagram.getButtonLayer();
-      ObservableList<Node> _children_3 = _buttonLayer_3.getChildren();
-      _children_3.add(this.filterLabel);
+      XRoot _root = _rootDiagram.getRoot();
+      ObservableList<Node> _children_3 = _root.getChildren();
+      Label _filterLabel = this.getFilterLabel();
+      _children_3.add(_filterLabel);
+      Label _filterLabel_1 = this.getFilterLabel();
+      _filterLabel_1.toFront();
       _xblockexpression = (true);
     }
     return _xblockexpression;
@@ -550,9 +554,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         return false;
       }
       XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
-      Group _buttonLayer = _rootDiagram.getButtonLayer();
-      ObservableList<Node> _children = _buttonLayer.getChildren();
-      _children.remove(this.filterLabel);
+      XRoot _root = _rootDiagram.getRoot();
+      ObservableList<Node> _children = _root.getChildren();
+      Label _filterLabel = this.getFilterLabel();
+      _children.remove(_filterLabel);
       this.isActiveProperty.set(false);
       XAbstractDiagram _diagram = this.getDiagram();
       Scene _scene = _diagram.getScene();
@@ -568,17 +573,17 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       boolean _notEquals = (!Objects.equal(this.minusButton, null));
       if (_notEquals) {
         XAbstractDiagram _diagram_3 = this.getDiagram();
-        Group _buttonLayer_1 = _diagram_3.getButtonLayer();
-        ObservableList<Node> _children_1 = _buttonLayer_1.getChildren();
+        Group _buttonLayer = _diagram_3.getButtonLayer();
+        ObservableList<Node> _children_1 = _buttonLayer.getChildren();
         _children_1.remove(this.minusButton);
         XAbstractDiagram _diagram_4 = this.getDiagram();
-        Group _buttonLayer_2 = _diagram_4.getButtonLayer();
-        ObservableList<Node> _children_2 = _buttonLayer_2.getChildren();
+        Group _buttonLayer_1 = _diagram_4.getButtonLayer();
+        ObservableList<Node> _children_2 = _buttonLayer_1.getChildren();
         _children_2.remove(this.plusButton);
       }
       XAbstractDiagram _diagram_5 = this.getDiagram();
-      Group _buttonLayer_3 = _diagram_5.getButtonLayer();
-      ObservableList<Node> _children_3 = _buttonLayer_3.getChildren();
+      Group _buttonLayer_2 = _diagram_5.getButtonLayer();
+      ObservableList<Node> _children_3 = _buttonLayer_2.getChildren();
       _children_3.remove(this.group);
       _xblockexpression = (true);
     }
@@ -877,6 +882,23 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
+    
+  }
+  
+  private SimpleObjectProperty<Label> filterLabelProperty = new SimpleObjectProperty<Label>(this, "filterLabel");
+  
+  public Label getFilterLabel() {
+    return this.filterLabelProperty.get();
+    
+  }
+  
+  public void setFilterLabel(final Label filterLabel) {
+    this.filterLabelProperty.set(filterLabel);
+    
+  }
+  
+  public ObjectProperty<Label> filterLabelProperty() {
+    return this.filterLabelProperty;
     
   }
   

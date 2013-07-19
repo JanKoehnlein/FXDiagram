@@ -33,6 +33,8 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	@FxProperty @ReadOnly boolean isActive = false
 
+	@FxProperty Label filterLabel
+	
 	@FxProperty String filterString = ''
 
 	@FxProperty double layoutDistance = 40
@@ -59,7 +61,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	ChangeListener<String> filterChangeListener
 
-	Label filterLabel
+	
 
 	Pos layoutPosition
 
@@ -142,6 +144,9 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 				focusTraversable = false
 			]
 		}
+		filterLabel = new Label => [
+			textProperty.bind("Filter: " + filterStringProperty + "")
+		]
 	}
 
 	def operator_add(XNode node) {
@@ -222,17 +227,15 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		diagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		currentPositionProperty.addListener(positionListener)
 		filterStringProperty.addListener(filterChangeListener)
-		filterLabel = new Label => [
-			textProperty.bind("Filter: " + filterStringProperty + "")
-		]
-		host.rootDiagram.buttonLayer.children += filterLabel
+		host.rootDiagram.root.children += filterLabel
+		filterLabel.toFront
 		true
 	}
 
 	override deactivate() {
 		if (!isActive)
 			return false
-		host.rootDiagram.buttonLayer.children -= filterLabel
+		host.rootDiagram.root.children -= filterLabel
 		isActiveProperty.set(false)
 		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		diagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)
