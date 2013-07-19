@@ -3,6 +3,8 @@ ENHANCEMENT
 - Fancy context menus
 - Embed more JavaFX demos in XNodes
 - Play diagram
+- Center node
+- Zoom node
 
 BUG
 - Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
@@ -12,6 +14,8 @@ BUG
 - don't loose autolayouted anchors
 - click on nothing should deselect all
 - connection labels: behavior and layout
+- LCARS positioning of new nodes
+- LCARS reenable text animation
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,

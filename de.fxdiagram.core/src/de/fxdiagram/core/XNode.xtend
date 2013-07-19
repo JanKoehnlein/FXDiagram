@@ -48,7 +48,7 @@ class XNode extends XShape {
 	}
 	
 	protected def createAnchors() {
-		new CompassAnchors(this, 3)
+		new DefaultAnchors(this, 3)
 	}
 	
 	override doActivate() {	

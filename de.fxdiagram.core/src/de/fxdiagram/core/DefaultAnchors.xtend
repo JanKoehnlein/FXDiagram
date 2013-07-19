@@ -4,7 +4,7 @@ import javafx.geometry.Point2D
 
 import static extension de.fxdiagram.core.Extensions.*
 
-class CompassAnchors implements Anchors {
+class DefaultAnchors implements Anchors {
 	
 	XNode host
 	int numAnchorsPerSide

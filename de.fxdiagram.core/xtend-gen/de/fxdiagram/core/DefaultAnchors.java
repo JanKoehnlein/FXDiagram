@@ -12,12 +12,12 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
 
 @SuppressWarnings("all")
-public class CompassAnchors implements Anchors {
+public class DefaultAnchors implements Anchors {
   private XNode host;
   
   private int numAnchorsPerSide;
   
-  public CompassAnchors(final XNode host, final int numAnchorsPerSide) {
+  public DefaultAnchors(final XNode host, final int numAnchorsPerSide) {
     this.host = host;
     this.numAnchorsPerSide = numAnchorsPerSide;
   }
