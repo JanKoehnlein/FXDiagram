@@ -16,9 +16,11 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -139,6 +141,14 @@ public class SvgExporter {
         _matched=true;
         CharSequence _shapeToSvgElement = this.shapeToSvgElement(_shape);
         _switchResult = _shapeToSvgElement;
+      }
+    }
+    if (!_matched) {
+      if (o instanceof ImageView) {
+        final ImageView _imageView = (ImageView)o;
+        _matched=true;
+        CharSequence _imageToSvgElement = this.imageToSvgElement(_imageView);
+        _switchResult = _imageToSvgElement;
       }
     }
     if (!_matched) {
@@ -280,6 +290,66 @@ public class SvgExporter {
     _builder.append("/>");
     _builder.newLine();
     return _builder;
+  }
+  
+  public CharSequence imageToSvgElement(final ImageView it) {
+    CharSequence _xblockexpression = null;
+    {
+      int _nextImageNumber = this.nextImageNumber();
+      String _plus = ("image" + Integer.valueOf(_nextImageNumber));
+      final String fileName = (_plus + ".png");
+      try {
+        Image _image = it.getImage();
+        final BufferedImage buffered = SwingFXUtils.fromFXImage(_image, null);
+        Rectangle2D _viewport = it.getViewport();
+        double _minX = _viewport.getMinX();
+        Rectangle2D _viewport_1 = it.getViewport();
+        double _minY = _viewport_1.getMinY();
+        Rectangle2D _viewport_2 = it.getViewport();
+        double _width = _viewport_2.getWidth();
+        Rectangle2D _viewport_3 = it.getViewport();
+        double _height = _viewport_3.getHeight();
+        final BufferedImage visible = buffered.getSubimage(((int) _minX), ((int) _minY), ((int) _width), ((int) _height));
+        File _file = new File(fileName);
+        ImageIO.write(visible, "png", _file);
+      } catch (final Throwable _t) {
+        if (_t instanceof IOException) {
+          final IOException e = (IOException)_t;
+          Class<? extends ImageView> _class = it.getClass();
+          String _name = _class.getName();
+          String _plus_1 = ("Error exporting " + _name);
+          String _plus_2 = (_plus_1 + " to SVG");
+          SvgExporter.LOG.log(Level.SEVERE, _plus_2, e);
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("<!-- ");
+      Class<? extends ImageView> _class_1 = it.getClass();
+      String _name_1 = _class_1.getName();
+      _builder.append(_name_1, "");
+      _builder.append(" -->");
+      _builder.newLineIfNotEmpty();
+      _builder.append("<image ");
+      Transform _localToSceneTransform = it.getLocalToSceneTransform();
+      CharSequence _svgString = this.toSvgString(_localToSceneTransform);
+      _builder.append(_svgString, "");
+      _builder.append(" width=\"");
+      Bounds _layoutBounds = it.getLayoutBounds();
+      double _width_1 = _layoutBounds.getWidth();
+      _builder.append(_width_1, "");
+      _builder.append("\" height=\"");
+      Bounds _layoutBounds_1 = it.getLayoutBounds();
+      double _height_1 = _layoutBounds_1.getHeight();
+      _builder.append(_height_1, "");
+      _builder.append("\" xlink:href=\"");
+      _builder.append(fileName, "");
+      _builder.append("\"/>");
+      _builder.newLineIfNotEmpty();
+      _xblockexpression = (_builder);
+    }
+    return _xblockexpression;
   }
   
   public CharSequence parentToSvgElement(final Parent it) {

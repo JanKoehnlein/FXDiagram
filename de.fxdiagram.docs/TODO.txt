@@ -6,13 +6,14 @@ ENHANCEMENT
 - Center node
 - Zoom node
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
+- connection labels 
 
 BUG
 - Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
 - distinguish between anchor and control points
 - click on nothing should deselect all
 - recalculate anchor when moving closest control point 
-- check SVGExport 
+- SVGExport: clipping 
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,

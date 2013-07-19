@@ -9,7 +9,6 @@ import de.fxdiagram.core.Anchors;
 import de.fxdiagram.core.RectangleAnchors;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.binding.DoubleExpressionExtensions;
-import de.fxdiagram.core.export.SvgExporter;
 import de.fxdiagram.examples.lcars.LcarsAccess;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsField;
@@ -40,6 +39,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -48,7 +48,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -95,14 +94,6 @@ public class LcarsNode extends XNode {
   
   private ImageView imageView;
   
-  @Extension
-  private SvgExporter _svgExporter = new Function0<SvgExporter>() {
-    public SvgExporter apply() {
-      SvgExporter _svgExporter = new SvgExporter();
-      return _svgExporter;
-    }
-  }.apply();
-  
   public LcarsNode(final DBObject data) {
     this.data = data;
     Object _get = data.get("name");
@@ -136,9 +127,9 @@ public class LcarsNode extends XNode {
                 it.setSpacing(2);
                 it.setFillWidth(true);
                 ObservableList<Node> _children = it.getChildren();
-                HBox _createBox = LcarsNode.this.createBox(LcarsExtensions.DARKBLUE);
-                final Procedure1<HBox> _function = new Procedure1<HBox>() {
-                    public void apply(final HBox it) {
+                RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.DARKBLUE);
+                final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+                    public void apply(final RectangleBorderPane it) {
                       VBox.setVgrow(it, Priority.ALWAYS);
                       it.setAlignment(Pos.TOP_RIGHT);
                       ObservableList<Node> _children = it.getChildren();
@@ -150,23 +141,23 @@ public class LcarsNode extends XNode {
                             Font _lcarsFont = LcarsExtensions.lcarsFont(28);
                             it.setFont(_lcarsFont);
                             Insets _insets = new Insets(0, 5, 0, 0);
-                            HBox.setMargin(it, _insets);
+                            StackPane.setMargin(it, _insets);
                           }
                         };
                       Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
                       _children.add(_doubleArrow);
                     }
                   };
-                HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(_createBox, _function);
+                RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox, _function);
                 _children.add(_doubleArrow);
                 ObservableList<Node> _children_1 = it.getChildren();
-                HBox _createBox_1 = LcarsNode.this.createBox(LcarsExtensions.VIOLET);
-                final Procedure1<HBox> _function_1 = new Procedure1<HBox>() {
-                    public void apply(final HBox it) {
+                RectangleBorderPane _createBox_1 = LcarsNode.this.createBox(LcarsExtensions.VIOLET);
+                final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+                    public void apply(final RectangleBorderPane it) {
                       VBox.setVgrow(it, Priority.ALWAYS);
                     }
                   };
-                HBox _doubleArrow_1 = ObjectExtensions.<HBox>operator_doubleArrow(_createBox_1, _function_1);
+                RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox_1, _function_1);
                 _children_1.add(_doubleArrow_1);
                 Rectangle _rectangle = new Rectangle();
                 final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
@@ -237,7 +228,7 @@ public class LcarsNode extends XNode {
                       _children_1.add(_imageView_1);
                       String _last = IterableExtensions.<String>last(LcarsNode.this.imageUrls);
                       LcarsNode.this.showImage(_last);
-                      Insets _insets = new Insets(5, 8, 5, 5);
+                      Insets _insets = new Insets(5, 6, 5, 5);
                       StackPane.setMargin(it, _insets);
                     }
                   };
@@ -273,17 +264,19 @@ public class LcarsNode extends XNode {
     return _rectangleAnchors;
   }
   
-  protected HBox createBox(final Color color) {
-    HBox _hBox = new HBox();
-    final Procedure1<HBox> _function = new Procedure1<HBox>() {
-        public void apply(final HBox it) {
-          CharSequence _svgString = LcarsNode.this._svgExporter.toSvgString(color);
-          String _plus = ("-fx-background-color: " + _svgString);
-          String _plus_1 = (_plus + ";");
-          it.setStyle(_plus_1);
+  protected RectangleBorderPane createBox(final Color color) {
+    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+        public void apply(final RectangleBorderPane it) {
+          it.setBorderPaint(color);
+          it.setBackgroundPaint(color);
+          it.setBorderRadius(0);
+          it.setBackgroundRadius(0);
+          it.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+          it.setAlignment(Pos.CENTER_LEFT);
         }
       };
-    HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
+    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
     return _doubleArrow;
   }
   
@@ -294,24 +287,26 @@ public class LcarsNode extends XNode {
           Font _lcarsFont = LcarsExtensions.lcarsFont(4);
           it.setFont(_lcarsFont);
           it.setText(buttonText);
+          it.setFill(Color.BLACK);
+          it.setTextOrigin(VPos.TOP);
           boolean _matched = false;
           if (!_matched) {
             if (Objects.equal(alignment,VPos.TOP)) {
               _matched=true;
               Insets _insets = new Insets(0, 0, 5, 3);
-              HBox.setMargin(it, _insets);
+              StackPane.setMargin(it, _insets);
             }
           }
           if (!_matched) {
             if (Objects.equal(alignment,VPos.BOTTOM)) {
               _matched=true;
               Insets _insets_1 = new Insets(5, 0, 0, 3);
-              HBox.setMargin(it, _insets_1);
+              StackPane.setMargin(it, _insets_1);
             }
           }
           if (!_matched) {
             Insets _insets_2 = new Insets(1, 0, 1, 3);
-            HBox.setMargin(it, _insets_2);
+            StackPane.setMargin(it, _insets_2);
           }
         }
       };
@@ -481,9 +476,9 @@ public class LcarsNode extends XNode {
           Iterable<String> _filter = IterableExtensions.<String>filter(LcarsNode.pageOrder, _function);
           for (final String pageTitle : _filter) {
             ObservableList<Node> _children_2 = it.getChildren();
-            HBox _createBox = LcarsNode.this.createBox(LcarsExtensions.FLESH);
-            final Procedure1<HBox> _function_1 = new Procedure1<HBox>() {
-                public void apply(final HBox it) {
+            RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.FLESH);
+            final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+                public void apply(final RectangleBorderPane it) {
                   VBox.setVgrow(it, Priority.SOMETIMES);
                   ObservableList<Node> _children = it.getChildren();
                   VPos _switchResult = null;
@@ -518,16 +513,16 @@ public class LcarsNode extends XNode {
                   it.setOnMousePressed(_function);
                 }
               };
-            HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(_createBox, _function_1);
+            RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox, _function_1);
             _children_2.add(_doubleArrow);
           }
           int _size = LcarsNode.this.imageUrls.size();
           boolean _greaterThan = (_size > 1);
           if (_greaterThan) {
             ObservableList<Node> _children_3 = it.getChildren();
-            HBox _createBox_1 = LcarsNode.this.createBox(LcarsExtensions.RED);
-            final Procedure1<HBox> _function_2 = new Procedure1<HBox>() {
-                public void apply(final HBox it) {
+            RectangleBorderPane _createBox_1 = LcarsNode.this.createBox(LcarsExtensions.RED);
+            final Procedure1<RectangleBorderPane> _function_2 = new Procedure1<RectangleBorderPane>() {
+                public void apply(final RectangleBorderPane it) {
                   VBox.setVgrow(it, Priority.SOMETIMES);
                   ObservableList<Node> _children = it.getChildren();
                   Text _createButtonText = LcarsNode.this.createButtonText("previous pic", VPos.BOTTOM);
@@ -545,12 +540,12 @@ public class LcarsNode extends XNode {
                   it.setOnMousePressed(_function);
                 }
               };
-            HBox _doubleArrow_1 = ObjectExtensions.<HBox>operator_doubleArrow(_createBox_1, _function_2);
+            RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox_1, _function_2);
             _children_3.add(_doubleArrow_1);
             ObservableList<Node> _children_4 = it.getChildren();
-            HBox _createBox_2 = LcarsNode.this.createBox(LcarsExtensions.RED);
-            final Procedure1<HBox> _function_3 = new Procedure1<HBox>() {
-                public void apply(final HBox it) {
+            RectangleBorderPane _createBox_2 = LcarsNode.this.createBox(LcarsExtensions.RED);
+            final Procedure1<RectangleBorderPane> _function_3 = new Procedure1<RectangleBorderPane>() {
+                public void apply(final RectangleBorderPane it) {
                   VBox.setVgrow(it, Priority.SOMETIMES);
                   ObservableList<Node> _children = it.getChildren();
                   Text _createButtonText = LcarsNode.this.createButtonText("next pic", VPos.TOP);
@@ -570,17 +565,17 @@ public class LcarsNode extends XNode {
                   it.setOnMousePressed(_function);
                 }
               };
-            HBox _doubleArrow_2 = ObjectExtensions.<HBox>operator_doubleArrow(_createBox_2, _function_3);
+            RectangleBorderPane _doubleArrow_2 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox_2, _function_3);
             _children_4.add(_doubleArrow_2);
           } else {
             ObservableList<Node> _children_5 = it.getChildren();
-            HBox _createBox_3 = LcarsNode.this.createBox(LcarsExtensions.RED);
-            final Procedure1<HBox> _function_4 = new Procedure1<HBox>() {
-                public void apply(final HBox it) {
+            RectangleBorderPane _createBox_3 = LcarsNode.this.createBox(LcarsExtensions.RED);
+            final Procedure1<RectangleBorderPane> _function_4 = new Procedure1<RectangleBorderPane>() {
+                public void apply(final RectangleBorderPane it) {
                   VBox.setVgrow(it, Priority.ALWAYS);
                 }
               };
-            HBox _doubleArrow_3 = ObjectExtensions.<HBox>operator_doubleArrow(_createBox_3, _function_4);
+            RectangleBorderPane _doubleArrow_3 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox_3, _function_4);
             _children_5.add(_doubleArrow_3);
           }
           ObservableList<Node> _children_6 = it.getChildren();

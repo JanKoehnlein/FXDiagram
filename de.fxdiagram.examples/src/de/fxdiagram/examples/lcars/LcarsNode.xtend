@@ -2,11 +2,12 @@ package de.fxdiagram.examples.lcars
 
 import com.mongodb.DBObject
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.core.RectangleAnchors
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.export.SvgExporter
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.util.List
 import java.util.Map
+import javafx.animation.Timeline
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.Rectangle2D
@@ -15,6 +16,7 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
+import javafx.scene.layout.Region
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
@@ -25,8 +27,6 @@ import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
 import static extension javafx.scene.layout.VBox.*
-import javafx.animation.Timeline
-import de.fxdiagram.core.RectangleAnchors
 
 class LcarsNode extends XNode {
 
@@ -54,8 +54,6 @@ class LcarsNode extends XNode {
 	Pane infoTextBox
 	ImageView imageView
 	
-	extension SvgExporter = new SvgExporter
-	
 	new(DBObject data) {
 		this.data = data
 		this.name = data.get("name").toString
@@ -77,7 +75,7 @@ class LcarsNode extends XNode {
 						text = name
 						fill = FLESH
 						font = lcarsFont(28)
-						HBox.setMargin(it, new Insets(0, 5, 0, 0))
+						StackPane.setMargin(it, new Insets(0, 5, 0, 0))
 					]
 				]
 				children += createBox(VIOLET) => [
@@ -109,7 +107,7 @@ class LcarsNode extends XNode {
 						preserveRatio = true
 					]
 					showImage(imageUrls.last)
-					StackPane.setMargin(it, new Insets(5, 8, 5, 5))
+					StackPane.setMargin(it, new Insets(5, 6, 5, 5))
 				]
 				clip = new Rectangle => [
 					widthProperty.bind(vbox.widthProperty - 15)
@@ -125,8 +123,13 @@ class LcarsNode extends XNode {
 	}
 
 	protected def createBox(Color color) {
-		new HBox => [
-			style = '-fx-background-color: ' + color.toSvgString + ';' 
+		new RectangleBorderPane => [
+			borderPaint = color
+			backgroundPaint = color
+			borderRadius = 0
+			backgroundRadius = 0
+			setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE)
+			alignment = Pos.CENTER_LEFT
 		]
 	}
 
@@ -134,10 +137,12 @@ class LcarsNode extends XNode {
 		new Text => [
 			font = lcarsFont(4)
 			text = buttonText
+			fill = Color.BLACK
+			textOrigin = VPos.TOP
 			switch alignment {
-				case VPos.TOP: HBox.setMargin(it, new Insets(0,0,5,3))
-				case VPos.BOTTOM: HBox.setMargin(it, new Insets(5,0,0,3))
-				default: HBox.setMargin(it, new Insets(1,0,1,3))
+				case VPos.TOP: StackPane.setMargin(it, new Insets(0,0,5,3))
+				case VPos.BOTTOM: StackPane.setMargin(it, new Insets(5,0,0,3))
+				default: StackPane.setMargin(it, new Insets(1,0,1,3))
 			}
 		]
 	}

@@ -3,17 +3,14 @@ package de.fxdiagram.lib.media;
 import de.fxdiagram.core.Anchors;
 import de.fxdiagram.core.RectangleAnchors;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.export.SvgExportable;
-import de.fxdiagram.core.export.SvgExporter;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class ImageNode extends XNode implements SvgExportable {
+public class ImageNode extends XNode {
   private ImageView imageView;
   
   public ImageNode() {
@@ -46,11 +43,5 @@ public class ImageNode extends XNode implements SvgExportable {
   public Image getImage() {
     Image _image = this.imageView.getImage();
     return _image;
-  }
-  
-  public CharSequence toSvgElement(@Extension final SvgExporter exporter) {
-    Image _image = this.getImage();
-    CharSequence _svgImage = exporter.toSvgImage(this, _image);
-    return _svgImage;
   }
 }

@@ -18,6 +18,7 @@ import javafx.scene.shape.Shape
 import javafx.scene.text.Text
 import javafx.scene.transform.Transform
 import javax.imageio.ImageIO
+import javafx.scene.image.ImageView
 
 @Logging
 class SvgExporter {
@@ -55,6 +56,7 @@ class SvgExporter {
 			SvgExportable: o.toSvgElement(this)
 			Text: o.textToSvgElement
 			Shape: o.shapeToSvgElement
+			ImageView: o.imageToSvgElement
 			Parent: o.parentToSvgElement
 			default: '''
 				<!-- «o.class.name» not exportable -->
@@ -91,6 +93,21 @@ class SvgExporter {
 	'''
 	// TODO: clip, cursor, smooth, strokeType
 	 
+	def CharSequence imageToSvgElement(ImageView it) {
+		val fileName = ('image' + nextImageNumber) + '.png'
+		try {
+			val buffered = SwingFXUtils.fromFXImage(image, null)
+			val visible = buffered.getSubimage(viewport.minX as int, viewport.minY as int, viewport.width as int, viewport.height as int)
+			ImageIO.write(visible, 'png', new File(fileName));
+    	} catch (IOException e) {
+    		LOG.log(Level.SEVERE, "Error exporting " + class.name + " to SVG", e)
+    	}
+		'''
+		<!-- «class.name» -->
+		<image «toSvgString(localToSceneTransform)» width="«layoutBounds.width»" height="«layoutBounds.height»" xlink:href="«fileName»"/>
+		'''
+	}
+
 	def CharSequence parentToSvgElement(Parent it) '''
 		«IF !childrenUnmodifiable.filter[visible].empty»
 			«FOR child: childrenUnmodifiable.filter[visible]»

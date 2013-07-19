@@ -1,13 +1,11 @@
 package de.fxdiagram.lib.media
 
+import de.fxdiagram.core.RectangleAnchors
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.export.SvgExportable
-import de.fxdiagram.core.export.SvgExporter
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import de.fxdiagram.core.RectangleAnchors
 
-class ImageNode extends XNode implements SvgExportable {
+class ImageNode extends XNode {
 
 	ImageView imageView
 
@@ -29,9 +27,5 @@ class ImageNode extends XNode implements SvgExportable {
 	
 	def getImage() {
 		imageView.image
-	}
-	
-	override toSvgElement(extension SvgExporter exporter) {
-		this.toSvgImage(getImage)
 	}
 }
