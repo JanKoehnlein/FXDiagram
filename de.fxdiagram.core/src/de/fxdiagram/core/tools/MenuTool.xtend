@@ -63,8 +63,8 @@ class MenuTool implements XDiagramTool {
 				buttonSize = 72
 				buttonAlpha = 1.0
 			],
-			#[EJECT, GRAPH, CAMERA, PHOTO, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
-				TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, SELECTION1, SELECTION2
+			#[EJECT, GRAPH, CAMERA, PHOTO //, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
+//				TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, SELECTION1, SELECTION2
 			].
 				map [ s |
 					new MenuItem => [
@@ -100,7 +100,7 @@ class MenuTool implements XDiagramTool {
 					closeMenu
 					if (selection != null) {
 						switch selection.symbol {
-							case SELECTION1:
+							case GRAPH:
 								doLayout
 							case CAMERA:
 								doExportSvg

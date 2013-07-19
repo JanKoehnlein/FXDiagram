@@ -127,7 +127,7 @@ public class MenuTool implements XDiagramTool {
           return _doubleArrow;
         }
       };
-    List<MenuItem> _map = ListExtensions.<Type, MenuItem>map(Collections.<Type>unmodifiableList(Lists.<Type>newArrayList(Type.EJECT, Type.GRAPH, Type.CAMERA, Type.PHOTO, Type.REFRESH, Type.TAG, Type.TAGS, Type.TEXT, Type.TOOL, Type.SPEECH_BUBBLE, Type.TRASH, Type.UNDO, Type.ZOOM_IN, Type.ZOOM_OUT, Type.WEB, Type.MONITOR, Type.SELECTION1, Type.SELECTION2)), _function_2);
+    List<MenuItem> _map = ListExtensions.<Type, MenuItem>map(Collections.<Type>unmodifiableList(Lists.<Type>newArrayList(Type.EJECT, Type.GRAPH, Type.CAMERA, Type.PHOTO)), _function_2);
     RadialMenu _radialMenu = new RadialMenu(_doubleArrow, _map);
     this.menu = _radialMenu;
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
@@ -197,7 +197,7 @@ public class MenuTool implements XDiagramTool {
                           final Type _switchValue = _symbol;
                           boolean _matched = false;
                           if (!_matched) {
-                            if (Objects.equal(_switchValue,Type.SELECTION1)) {
+                            if (Objects.equal(_switchValue,Type.GRAPH)) {
                               _matched=true;
                               MenuTool.this.doLayout();
                             }
