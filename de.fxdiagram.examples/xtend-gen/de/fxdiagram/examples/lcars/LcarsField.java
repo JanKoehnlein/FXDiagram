@@ -36,7 +36,8 @@ public class LcarsField extends Parent {
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
               public void apply(final Text it) {
-                String _plus = (name + ": ");
+                String _replace = name.replace("_", " ");
+                String _plus = (_replace + ": ");
                 it.setText(_plus);
                 Font _lcarsFont = LcarsExtensions.lcarsFont(12);
                 it.setFont(_lcarsFont);

@@ -61,7 +61,7 @@ public class LcarsNode extends XNode {
     public Map<String,List<String>> apply() {
       Map<String,List<String>> _xsetliteral = null;
       Map<String,List<String>> _tempMap = Maps.<String, List<String>>newHashMap();
-      _tempMap.put("person", Collections.<String>unmodifiableList(Lists.<String>newArrayList("gender", "species", "born", "status", "died", "martial_status")));
+      _tempMap.put("person", Collections.<String>unmodifiableList(Lists.<String>newArrayList("gender", "species", "born", "status", "died", "marital_status")));
       _tempMap.put("profession", Collections.<String>unmodifiableList(Lists.<String>newArrayList("occupation", "affiliation", "rank", "serial_number")));
       _tempMap.put("family", Collections.<String>unmodifiableList(Lists.<String>newArrayList("spouses", "children", "mother", "father", "siblings", "other_relatives")));
       _xsetliteral = Collections.<String, List<String>>unmodifiableMap(_tempMap);

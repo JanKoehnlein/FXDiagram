@@ -31,7 +31,7 @@ import static extension javafx.scene.layout.VBox.*
 class LcarsNode extends XNode {
 
 	static val PAGE_STRUCTURE = #{ 
-		'person' -> #['gender', 'species', 'born', 'status', 'died', 'martial_status'],
+		'person' -> #['gender', 'species', 'born', 'status', 'died', 'marital_status'],
 		'profession' -> #['occupation', 'affiliation', 'rank', 'serial_number'],
 		'family' -> #['spouses', 'children', 'mother', 'father', 'siblings', 'other_relatives']
 	}

@@ -24,7 +24,7 @@ class LcarsField extends Parent {
 		children += flowPane = new FlowPane => [
 			prefWrapLength = 150
 			children += new Text => [
-				text = name + ": "
+				text = name.replace('_', ' ') + ": "
 				font = lcarsFont(12)
 				fill = FLESH
 			]

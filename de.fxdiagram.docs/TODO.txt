@@ -14,6 +14,10 @@ BUG
 - click on nothing should deselect all
 - recalculate anchor when moving closest control point 
 - SVGExport: clipping 
+- Xconnection width 
+- populate menu
+- why can I select the last but not the first CP
+- anchor and chooser impls => lib
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
@@ -49,6 +53,7 @@ DONE
 - connection labels: behavior
 - Location of filter text
 - initial label placement
+- spinning labels 
 
 
 
