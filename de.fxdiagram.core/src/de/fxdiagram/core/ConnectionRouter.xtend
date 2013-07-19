@@ -31,7 +31,7 @@ class ConnectionRouter implements XActivatable {
 		if(!isActive) {
 			bindNode(connection.source)
 			bindNode(connection.target)
-		}	
+		}
 		isActiveProperty.set(true)
 	}
 	

@@ -1,5 +1,7 @@
 package de.fxdiagram.lib.media;
 
+import de.fxdiagram.core.Anchors;
+import de.fxdiagram.core.RectangleAnchors;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
@@ -30,6 +32,11 @@ public class ImageNode extends XNode implements SvgExportable {
     ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
     ImageView _imageView_1 = this.imageView = _doubleArrow;
     this.setNode(_imageView_1);
+  }
+  
+  protected Anchors createAnchors() {
+    RectangleAnchors _rectangleAnchors = new RectangleAnchors(this);
+    return _rectangleAnchors;
   }
   
   public void setImage(final Image image) {

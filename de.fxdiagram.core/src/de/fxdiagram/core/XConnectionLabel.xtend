@@ -1,84 +1,84 @@
 package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.behavior.MoveBehavior
 import java.util.List
-import javafx.beans.property.StringProperty
-import javafx.scene.Parent
 import javafx.scene.text.Text
-import javafx.scene.transform.Affine
-
+import javafx.scene.effect.Effect
+import javafx.scene.effect.DropShadow
+import javafx.geometry.VPos
+import javafx.geometry.Point2D
 import static java.lang.Math.*
-
+import javafx.scene.transform.Affine
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 
-class XConnectionLabel extends Parent implements XActivatable {
+class XConnectionLabel extends XShape {
 
 	@FxProperty XConnection connection
+	@FxProperty Text text
 
-	@FxProperty @ReadOnly boolean isActive
-
-	Text text
+	MoveBehavior moveBehavior
+	Effect selectionEffect
 
 	new(XConnection connection) {
 		this.connection = connection
 		connection.label = this
-		text = new Text
-		children += text
-	}
-
-	def getText() {
-		text.text
-	}
-
-	def setText(String text) {
-		this.text.text = text
-	}
-
-	def StringProperty textProperty() {
-		text.textProperty
-	}
-
-	override activate() {
-		if (!isActive)
-			doActivate
-		isActiveProperty.set(true)
-	}
-
-	def doActivate() {
-		val points = connection.polyline.points
-		place(points)
-		points.addListener [
-			place(list)
+		text = new Text => [
+			textOrigin = VPos.TOP
 		]
-		boundsInLocalProperty.addListener [ element, oldVlaue, newValue |
-			place(points)
+		node = text
+		selectionEffect = new DropShadow() => [
+			offsetX = 4.0
+			offsetY = 4.0
 		]
 	}
 
-	def protected place(List<? extends Double> list) {
-		if (list.size >= 4) {
-			val dx = list.get(list.size - 2) - list.get(0)
-			val dy = list.get(list.size - 1) - list.get(1)
+	override doActivate() {
+		moveBehavior = new MoveBehavior(this)
+		moveBehavior.activate()
+		selectedProperty.addListener [ observable, oldValue, newValue |
+			if (newValue) {
+				effect = selectionEffect
+				scaleX = 1.05
+				scaleY = 1.05
+				toFront
+			} else {
+				effect = null
+				scaleX = 1.0
+				scaleY = 1.0
+			}
+		]
+	}
+
+	def protected place(List<XControlPoint> list) {
+		if (list.size == 2) {
+			val center = new Point2D(0.5 * (list.get(0).layoutX + list.get(1).layoutX), 0.5 * (list.get(0).layoutY + list.get(1).layoutY))
+			val dx = list.get(1).layoutX - list.get(0).layoutX
+			val dy = list.get(1).layoutY - list.get(0).layoutY
 			var angle = atan2(dy, dx)
 			val labelDx = -boundsInLocal.width / 2
-			var labelDy = - 4
+			var labelDy = 1
 			if (abs(angle) > PI / 2) {
 				if (angle < 0)
 					angle = angle + PI
 				else if (angle > 0)
 					angle = angle - PI
-				labelDy = - 4
 			}
 			val transform = new Affine
 			transform.translate(labelDx, labelDy)
 			transform.rotate(angle * 180 / PI)
-
-			val xPos = (list.get(0) + list.get(list.size - 2)) / 2
-			val yPos = (list.get(1) + list.get(list.size - 1)) / 2
-			transform.translate(xPos, yPos)
-			transforms.clear
+			transform.translate(center.x, center.y)
+			layoutX = transform.tx
+			layoutY = transform.ty
+			transform.tx = 0
+			transform.ty = 0
 			transforms += transform
+		} else {
+			transforms.clear
 		}
+	}
+	
+	override getMoveBehavior() {
+		moveBehavior
 	}
 }

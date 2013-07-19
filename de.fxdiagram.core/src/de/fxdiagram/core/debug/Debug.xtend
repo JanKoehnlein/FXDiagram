@@ -1,19 +1,15 @@
 package de.fxdiagram.core.debug
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XRootDiagram
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
-import javafx.scene.Node
-import java.util.logging.Logger
-import java.util.logging.Level
 import javafx.geometry.Point2D
+import javafx.scene.Node
 
+@Logging
 class Debug {
-	
-	static val LOG = Logger.getLogger(Debug.canonicalName) => [
-		level = Level.INFO
-	]
-	 
+		 
 	def static debugTranslation(Node node) {
 		val ChangeListener<Number> debugger = [
 			element, oldVal, newVal |

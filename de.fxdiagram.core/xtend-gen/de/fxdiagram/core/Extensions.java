@@ -6,7 +6,6 @@ import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.geometry.TransformExtensions;
-import java.util.logging.Logger;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -278,12 +277,5 @@ public class Extensions {
       _switchResult = _containerButton;
     }
     return _switchResult;
-  }
-  
-  public static Logger getLogger(final Object it) {
-    Class<? extends Object> _class = it.getClass();
-    String _canonicalName = _class.getCanonicalName();
-    Logger _logger = Logger.getLogger(_canonicalName);
-    return _logger;
   }
 }

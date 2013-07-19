@@ -1,6 +1,7 @@
 package de.fxdiagram.core.export;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.export.ShapeConverterExtensions;
@@ -32,21 +33,13 @@ import javax.imageio.ImageIO;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 
+@Logging
 @SuppressWarnings("all")
 public class SvgExporter {
-  private final static Logger LOG = new Function0<Logger>() {
-    public Logger apply() {
-      String _canonicalName = SvgExporter.class.getCanonicalName();
-      Logger _logger = Logger.getLogger(_canonicalName);
-      return _logger;
-    }
-  }.apply();
-  
   private int currentID;
   
   private int imageCounter;
@@ -585,4 +578,7 @@ public class SvgExporter {
     String _lowerCase = _string.toLowerCase();
     return _lowerCase;
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.core.export.SvgExporter");
+    ;
 }

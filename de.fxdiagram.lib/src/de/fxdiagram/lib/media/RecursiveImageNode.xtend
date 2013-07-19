@@ -17,6 +17,7 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import de.fxdiagram.core.RectangleAnchors
 
 class RecursiveImageNode extends XNode implements SvgExportable {
 
@@ -34,6 +35,10 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		this.y = y
 		this.scale = scale
 		node = createPane()
+	}
+
+	override protected createAnchors() {
+		new RectangleAnchors(this)
 	}
 
 	override doActivate() {

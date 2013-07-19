@@ -1,23 +1,27 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.Lazy
+import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.scene.Group
-import javafx.scene.shape.Polyline
-import javafx.scene.shape.CubicCurve
-import javafx.scene.shape.QuadCurve
 import javafx.scene.paint.Color
+import javafx.scene.shape.CubicCurve
+import javafx.scene.shape.Polyline
+import javafx.scene.shape.QuadCurve
 import javafx.scene.shape.Shape
-import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
 
+import static de.fxdiagram.core.XConnectionKind.*
+
+@Logging
 class XConnection extends XShape {
-
+	
 	@FxProperty XNode source
 	@FxProperty XNode target
 	@FxProperty @Lazy XConnectionLabel label
 	@FxProperty double strokeWidth = 2
+	@FxProperty XConnectionKind kind = POLYLINE
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
@@ -25,10 +29,6 @@ class XConnection extends XShape {
 	ChangeListener<Number> controlPointListener
 	
 	ConnectionRouter connectionRouter
-
-	Polyline polyline = new Polyline
-	QuadCurve quadCurve
-	CubicCurve cubicCurve
 
 	new(XNode source, XNode target) {
 		node = shapeGroup 
@@ -38,16 +38,16 @@ class XConnection extends XShape {
 		this.source = source
 		this.target = target
 		controlPointListener = [ prop, oldVal, newVal |
-			updatePoints
+			updateShapes
 		]
 		connectionRouter = new ConnectionRouter(this)		
 	}
 
 	override doActivate() {
-		shape = polyline
+		updateShapes
 		controlPoints.addListener [
 			val points = list
-			updatePoints
+			updateShapes
 			while(next) 
 				addedSubList.forEach[
 					val index = points.indexOf(it)					
@@ -81,63 +81,100 @@ class XConnection extends XShape {
 		connectionRouter.controlPoints
 	}
 
-	def updatePoints() {
-		switch controlPoints.size {
-			case 3: {
-				if(quadCurve == null) 
-					quadCurve = new QuadCurve
-				quadCurve.startX = controlPoints.get(0).layoutX
-				quadCurve.startY = controlPoints.get(0).layoutY
-				quadCurve.controlX = controlPoints.get(1).layoutX
-				quadCurve.controlY = controlPoints.get(1).layoutY
-				quadCurve.endX = controlPoints.get(2).layoutX
-				quadCurve.endY = controlPoints.get(2).layoutY
-				shape = quadCurve
+	def void updateShapes() {
+		switch kind {
+			case CUBIC_CURVE: {
+				if((controlPoints.size - 1) % 3 != 0) {
+					kind = POLYLINE
+					LOG.warning("Cannot create cubic curve for " + controlPoints.size + " control points. Switching to polyline")
+					updateShapes
+				}
+				val numSegments = (controlPoints.size - 1) / 3
+				val curves = shapeGroup.children.filter(CubicCurve).toList
+				while(curves.size > numSegments) 
+					curves.remove(curves.last)
+				while(curves.size < numSegments)
+					curves += new CubicCurve => [
+						fill = null
+						stroke = Color.BLACK
+					]
+				for(i: 0..<numSegments) {
+					val curve = curves.get(i)
+					val offset = i * 3
+					curve.startX = controlPoints.get(offset).layoutX
+					curve.startY = controlPoints.get(offset).layoutY
+					curve.controlX1 = controlPoints.get(offset+1).layoutX
+					curve.controlY1 = controlPoints.get(offset+1).layoutY
+					curve.controlX2 = controlPoints.get(offset+2).layoutX
+					curve.controlY2 = controlPoints.get(offset+2).layoutY
+					curve.endX = controlPoints.get(offset+3).layoutX
+					curve.endY = controlPoints.get(offset+3).layoutY
+				}
+				shapes = curves
+				
 			}
-			case 4: {
-				if(cubicCurve == null) 
-					cubicCurve = new CubicCurve
-				cubicCurve.startX = controlPoints.get(0).layoutX
-				cubicCurve.startY = controlPoints.get(0).layoutY
-				cubicCurve.controlX1 = controlPoints.get(1).layoutX
-				cubicCurve.controlY1 = controlPoints.get(1).layoutY
-				cubicCurve.controlX2 = controlPoints.get(2).layoutX
-				cubicCurve.controlY2 = controlPoints.get(2).layoutY
-				cubicCurve.endX = controlPoints.get(3).layoutX
-				cubicCurve.endY = controlPoints.get(3).layoutY
-				shape = cubicCurve
+			case QUAD_CURVE: {
+				if((controlPoints.size - 1) % 2 != 0) {
+					kind = POLYLINE
+					LOG.warning("Cannot create quadratic curve for " + controlPoints.size + " control points. Switching to polyline")
+					updateShapes
+				}
+				val numSegments = (controlPoints.size - 1) / 2
+				val curves = shapeGroup.children.filter(QuadCurve).toList
+				while(curves.size > numSegments) 
+					curves.remove(curves.last)
+				while(curves.size < numSegments)
+					curves += new QuadCurve => [
+						fill = null
+						stroke = Color.BLACK
+					]
+				for(i: 0..<numSegments) {
+					val curve = curves.get(i)
+					val offset = i * 2
+					curve.startX = controlPoints.get(offset).layoutX
+					curve.startY = controlPoints.get(offset).layoutY
+					curve.controlX = controlPoints.get(offset+1).layoutX
+					curve.controlY = controlPoints.get(offset+1).layoutY
+					curve.endX = controlPoints.get(offset+2).layoutX
+					curve.endY = controlPoints.get(offset+2).layoutY
+				}
+				shapes = curves
 			}
-			default: {
+			case POLYLINE: {
+				val polyline = shapeGroup.children.filter(Polyline).head 
+					?: new Polyline => [
+						stroke = Color.BLACK
+					]
 				polyline.points.setAll(controlPoints.map[#[layoutX, layoutY]].flatten)
-				shapeGroup.children.setAll(polyline)
+				shapes = #[polyline]
 			}
 		}
 		controlPointGroup.children.setAll(connectionRouter.controlPoints)
 	}
 	
-	def protected setShape(Shape shape) {
-		shapeGroup.children.setAll(shape)
-		shape.strokeWidthProperty.bind(this.strokeWidthProperty / rootDiagram.scaleProperty)
-		shape => [
-			fill = null
-			stroke = Color.BLACK
-		]
+	def protected setShapes(List<? extends Shape> shapes) {
+		shapeGroup.children.setAll(shapes)
+//		shapes
+//			.map[strokeWidthProperty]
+//			.filter[!isBound]
+//			.forEach[bind(this.strokeWidthProperty / this.rootDiagram.scaleProperty)]
 	}
 	
 	override isSelectable() {
 		isActive
 	}
 
-	def getPolyline() {
-		polyline 		
-	}
-	
 	override getMoveBehavior() {
 		null
 	}
 	
 	override layoutChildren() {
 		super.layoutChildren
-		connectionRouter.calculatePoints	
+		connectionRouter.calculatePoints
+		label?.place(controlPoints)	
 	}
+}
+
+enum XConnectionKind {
+	POLYLINE, QUAD_CURVE, CUBIC_CURVE 
 }

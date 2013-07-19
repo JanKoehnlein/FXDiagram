@@ -5,6 +5,7 @@ import com.google.common.collect.Iterables;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
@@ -157,7 +158,17 @@ public class SelectionTool implements XDiagramTool {
     List<ObservableList<XControlPoint>> _map = ListExtensions.<XConnection, ObservableList<XControlPoint>>map(_connections_1, _function);
     Iterable<XControlPoint> _flatten = Iterables.<XControlPoint>concat(_map);
     Iterable<XShape> _plus_1 = Iterables.<XShape>concat(_plus, _flatten);
-    final Function1<XShape,Boolean> _function_1 = new Function1<XShape,Boolean>() {
+    List<XConnection> _connections_2 = this.rootDiagram.getConnections();
+    final Function1<XConnection,XConnectionLabel> _function_1 = new Function1<XConnection,XConnectionLabel>() {
+        public XConnectionLabel apply(final XConnection it) {
+          XConnectionLabel _label = it.getLabel();
+          return _label;
+        }
+      };
+    List<XConnectionLabel> _map_1 = ListExtensions.<XConnection, XConnectionLabel>map(_connections_2, _function_1);
+    Iterable<XConnectionLabel> _filterNull = IterableExtensions.<XConnectionLabel>filterNull(_map_1);
+    Iterable<XShape> _plus_2 = Iterables.<XShape>concat(_plus_1, _filterNull);
+    final Function1<XShape,Boolean> _function_2 = new Function1<XShape,Boolean>() {
         public Boolean apply(final XShape it) {
           boolean _and = false;
           boolean _isSelectable = it.isSelectable();
@@ -170,7 +181,7 @@ public class SelectionTool implements XDiagramTool {
           return Boolean.valueOf(_and);
         }
       };
-    Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_plus_1, _function_1);
+    Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_plus_2, _function_2);
     return _filter;
   }
   

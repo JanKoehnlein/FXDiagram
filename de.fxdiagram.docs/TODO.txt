@@ -5,25 +5,24 @@ ENHANCEMENT
 - Play diagram
 - Center node
 - Zoom node
+- Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
 
 BUG
 - Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
-- Location of filter text
-- moving of anchor points
 - distinguish between anchor and control points
-- don't loose autolayouted anchors
 - click on nothing should deselect all
-- connection labels: behavior and layout
-- LCARS reenable text animation
+- recalculate anchor when moving closest control point 
+- check SVGExport 
 
 MINOR
 - Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
   such that shadows are not clipped.
-- Unify Logging 
 - Transparent stage?
 - need for connection layer?
 - can't set size of browser node
-  
+- increase LayoutOptions.LABEL_SPACING, 8f
+- disable graphviz debug
+ 
 DONE 
 - Inherit from Parent, not Group
 - Fix layout position of BrickBreakerNode
@@ -43,3 +42,12 @@ DONE
 - displace of control points on move
 - Fix zoomin position
 - LCARS positioning of new nodes
+- LCARS reenable text animation
+- Unify Logging 
+- connection labels: layout
+- connection labels: behavior
+- Location of filter text
+- initial label placement
+
+
+

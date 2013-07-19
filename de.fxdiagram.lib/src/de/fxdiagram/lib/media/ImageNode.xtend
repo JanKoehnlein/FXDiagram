@@ -5,6 +5,7 @@ import de.fxdiagram.core.export.SvgExportable
 import de.fxdiagram.core.export.SvgExporter
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import de.fxdiagram.core.RectangleAnchors
 
 class ImageNode extends XNode implements SvgExportable {
 
@@ -16,6 +17,10 @@ class ImageNode extends XNode implements SvgExportable {
 			fitWidthProperty.bind(widthProperty) 
 			fitHeightProperty.bind(heightProperty)
 		]
+	}
+	
+	override protected createAnchors() {
+		new RectangleAnchors(this)
 	}
 	
 	def setImage(Image image) {

@@ -3,6 +3,7 @@ package de.fxdiagram.examples
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.examples.lcars.LcarsAccess
 import de.fxdiagram.examples.lcars.LcarsNode
 import de.fxdiagram.lib.java.JavaTypeNode
@@ -14,6 +15,7 @@ import de.fxdiagram.lib.simple.NestedDiagramNode
 import de.fxdiagram.lib.simple.SimpleNode
 import java.net.URL
 import javafx.application.Application
+import javafx.concurrent.Task
 import javafx.geometry.Rectangle2D
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
@@ -59,8 +61,26 @@ class Main extends Application {
 
 		val connection = new XConnection(source, target)
 		val connectionLabel = new XConnectionLabel(connection)
-		connectionLabel.text = 'label'
+		connectionLabel.text.text = 'label'
 		diagram.addConnection(connection)
+
+		val target2 = new SimpleNode('target2') => [
+			layoutX = 400
+			layoutY = 240
+			width = 80
+			height = 30
+		]
+		diagram.addNode(target2)
+
+		val connection2 = new XConnection(source, target2)
+		val connectionLabel2 = new XConnectionLabel(connection2)
+		connectionLabel2.text.text = 'label2'
+		diagram.addConnection(connection2)
+
+		val connection3 = new XConnection(target, target2)
+		val connectionLabel3 = new XConnectionLabel(connection3)
+		connectionLabel3.text.text = 'label3'
+		diagram.addConnection(connection3)
 
 		val image = new ImageNode => [
 			image = new Image("media/seltsam.jpg", true)
@@ -116,6 +136,11 @@ class Main extends Application {
 		diagram.addNode(new LcarsNode(kirk) => [
 			width = 120
 		])
+		val Task<Void> task = [|
+			new Layouter
+			null
+		]
+		task.run
 		scene
 	}
 }

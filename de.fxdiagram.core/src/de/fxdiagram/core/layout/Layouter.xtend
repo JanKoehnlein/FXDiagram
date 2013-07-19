@@ -4,6 +4,7 @@ import de.cau.cs.kieler.core.alg.BasicProgressMonitor
 import de.cau.cs.kieler.core.kgraph.KGraphElement
 import de.cau.cs.kieler.core.kgraph.KGraphFactory
 import de.cau.cs.kieler.core.kgraph.KNode
+import de.cau.cs.kieler.kiml.AbstractLayoutProvider
 import de.cau.cs.kieler.kiml.graphviz.layouter.GraphvizLayoutProvider
 import de.cau.cs.kieler.kiml.klayoutdata.KEdgeLayout
 import de.cau.cs.kieler.kiml.klayoutdata.KLayoutDataFactory
@@ -19,6 +20,9 @@ import javafx.animation.Animation
 import javafx.util.Duration
 
 import static java.lang.Math.*
+import de.cau.cs.kieler.kiml.options.EdgeLabelPlacement
+import de.cau.cs.kieler.kiml.options.EdgeRouting
+import de.fxdiagram.core.XConnectionKind
 
 class Layouter { 
 
@@ -28,6 +32,11 @@ class Layouter {
 	
 	extension LayoutTransitionFactory = new LayoutTransitionFactory
 
+	new() {
+		// pre-initialize
+		layoutProvider.dispose
+	}
+	
 	def layout(XAbstractDiagram diagram, Duration duration) {
 		val cache = <Object, KGraphElement> newHashMap
 		val kRoot = diagram.toKRootNode(cache)
@@ -40,14 +49,11 @@ class Layouter {
 		}
 	}
 
-	def getLayoutProvider() {
+	def AbstractLayoutProvider getLayoutProvider() {
 		new LoggingTransformationService
 		new GraphvizLayoutProvider => [
 			initialize("DOT")
 		]
-//		new OgdfLayoutProvider => [
-//			initialize("SUGIYAMA")
-//		]
 	}
 	
 	def apply(Map<Object,KGraphElement> map, Duration duration) {
@@ -56,27 +62,43 @@ class Layouter {
 			val xElement = entry.key
 			val kElement = entry.value
 			switch xElement { 
+				XConnectionLabel: { 
+					val shapeLayout = kElement.data.filter(KShapeLayout).head
+					animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, true, duration)
+				}
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
-						animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, true, duration)
+					animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, true, duration)
 				}
 				XConnection: {
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain
+					switch(edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
+						case EdgeRouting.SPLINES: {
+							if((layoutPoints.size - 1) % 3 == 0) 
+								xElement.kind = XConnectionKind.CUBIC_CURVE
+							else if((layoutPoints.size - 1) % 2 == 0) 
+								xElement.kind = XConnectionKind.QUAD_CURVE
+							else 
+								xElement.kind = XConnectionKind.POLYLINE
+						}
+						default:
+							xElement.kind = XConnectionKind.POLYLINE
+					}
 					val controlPoints = xElement.controlPoints
 					val nodeDiff = layoutPoints.size - controlPoints.size
 					if(nodeDiff > 0) {
+						val newControlPoints = newArrayList
 						val delta = 1.0 / (nodeDiff + 1)
 						val first = controlPoints.head
 						val last = controlPoints.last
 						for(i: 1..nodeDiff) 
-							controlPoints.add(controlPoints.size - 1,
-								new XControlPoint => [
-									val lambda = delta * i
-									layoutX = (1-lambda) * first.layoutX + (lambda) * last.layoutX 
-									layoutY = (1-lambda) * first.layoutY + (lambda) * last.layoutY
-								]
-							)
+							newControlPoints += new XControlPoint => [
+								val lambda = delta * i
+								layoutX = (1-lambda) * first.layoutX + (lambda) * last.layoutX 
+								layoutY = (1-lambda) * first.layoutY + (lambda) * last.layoutY
+							]
+						controlPoints.addAll(controlPoints.size-1, newControlPoints)
 					}	
 					for(i: 1..<controlPoints.size-1) {
 						val layoutPoint = layoutPoints.get(min(layoutPoints.size-1, i))
@@ -99,6 +121,7 @@ class Layouter {
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
 		shapeLayout.setProperty(LayoutOptions.SPACING, 60f)
+		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
 		kRoot.data += shapeLayout
 		cache.put(it, kRoot)
 		nodes.forEach [
@@ -131,6 +154,9 @@ class Layouter {
 			edgeLayout.targetPoint = createKPoint
 			kEdge.data += edgeLayout
 			cache.put(it, kEdge)
+			if(label != null) {
+				label.toKLabel(cache).parent = kEdge
+			}
 			kEdge	
 		} else {
 			null
@@ -139,8 +165,10 @@ class Layouter {
 	
 	protected def toKLabel(XConnectionLabel it, Map<Object, KGraphElement> cache) {
 		val kLabel = createKLabel
-		kLabel.text = it?.text ?: ""
+		kLabel.text = it?.text	?.text ?: ''
 		val shapeLayout = createKShapeLayout
+		shapeLayout.setSize(layoutBounds.width as float, layoutBounds.height as float)
+		shapeLayout.setProperty(LayoutOptions.EDGE_LABEL_PLACEMENT, EdgeLabelPlacement.CENTER)
 		kLabel.data += shapeLayout
 		cache.put(it, kLabel)
 		kLabel

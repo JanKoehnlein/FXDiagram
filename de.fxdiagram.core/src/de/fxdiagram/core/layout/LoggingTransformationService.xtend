@@ -6,17 +6,16 @@ import de.cau.cs.kieler.kiml.graphviz.dot.GraphvizDotStandaloneSetup
 import de.cau.cs.kieler.kiml.graphviz.dot.transform.DotHandler
 import de.cau.cs.kieler.kiml.service.TransformationService
 import de.cau.cs.kieler.kiml.service.formats.GraphFormatData
+import de.fxdiagram.annotations.logging.Logging
 import java.util.logging.Level
-import java.util.logging.Logger
 import org.eclipse.core.runtime.CoreException
 import org.eclipse.core.runtime.IConfigurationElement
 
 /** 
  * KIELER's Graphviz layouts rely on the TransformationService to be initialized. 
  */
+@Logging
 class LoggingTransformationService extends TransformationService {
-	
-	static val LOG = Logger.getLogger(LoggingTransformationService.canonicalName)
 	
 	GraphFormatData dotFormatData
 	

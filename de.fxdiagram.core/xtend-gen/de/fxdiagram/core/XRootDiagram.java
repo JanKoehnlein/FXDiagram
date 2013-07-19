@@ -1,7 +1,7 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.Extensions;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.tools.CompositeTool;
@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
+@Logging
 @SuppressWarnings("all")
 public class XRootDiagram extends XAbstractDiagram {
   private Group nodeLayer = new Function0<Group>() {
@@ -105,8 +106,7 @@ public class XRootDiagram extends XAbstractDiagram {
       boolean _deactivate = previousTool.deactivate();
       boolean _not = (!_deactivate);
       if (_not) {
-        Logger _logger = Extensions.getLogger(this);
-        _logger.severe("Could not deactivate active tool");
+        XRootDiagram.LOG.severe("Could not deactivate active tool");
       }
     }
     this._currentTool = tool;
@@ -122,8 +122,7 @@ public class XRootDiagram extends XAbstractDiagram {
         }
         boolean _not_2 = (!_activate_1);
         if (_not_2) {
-          Logger _logger_1 = Extensions.getLogger(this);
-          _logger_1.severe("Could not reactivate tool");
+          XRootDiagram.LOG.severe("Could not reactivate tool");
         }
       }
     }
@@ -132,6 +131,9 @@ public class XRootDiagram extends XAbstractDiagram {
   public void restoreDefaultTool() {
     this.setCurrentTool(this.defaultTool);
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRootDiagram");
+    ;
   
   private SimpleDoubleProperty scaleProperty = new SimpleDoubleProperty(this, "scale",_initScale());
   

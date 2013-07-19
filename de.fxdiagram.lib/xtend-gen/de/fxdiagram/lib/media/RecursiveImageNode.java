@@ -1,7 +1,9 @@
 package de.fxdiagram.lib.media;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.Anchors;
 import de.fxdiagram.core.Extensions;
+import de.fxdiagram.core.RectangleAnchors;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.export.SvgExportable;
@@ -57,6 +59,11 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     this.scale = scale;
     Pane _createPane = this.createPane();
     this.setNode(_createPane);
+  }
+  
+  protected Anchors createAnchors() {
+    RectangleAnchors _rectangleAnchors = new RectangleAnchors(this);
+    return _rectangleAnchors;
   }
   
   public void doActivate() {

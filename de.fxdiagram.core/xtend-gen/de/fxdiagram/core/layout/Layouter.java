@@ -1,5 +1,6 @@
 package de.fxdiagram.core.layout;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.cau.cs.kieler.core.alg.BasicProgressMonitor;
 import de.cau.cs.kieler.core.kgraph.KEdge;
@@ -10,15 +11,19 @@ import de.cau.cs.kieler.core.kgraph.KLabel;
 import de.cau.cs.kieler.core.kgraph.KNode;
 import de.cau.cs.kieler.core.math.KVector;
 import de.cau.cs.kieler.core.math.KVectorChain;
+import de.cau.cs.kieler.kiml.AbstractLayoutProvider;
 import de.cau.cs.kieler.kiml.graphviz.layouter.GraphvizLayoutProvider;
 import de.cau.cs.kieler.kiml.klayoutdata.KEdgeLayout;
 import de.cau.cs.kieler.kiml.klayoutdata.KInsets;
 import de.cau.cs.kieler.kiml.klayoutdata.KLayoutDataFactory;
 import de.cau.cs.kieler.kiml.klayoutdata.KPoint;
 import de.cau.cs.kieler.kiml.klayoutdata.KShapeLayout;
+import de.cau.cs.kieler.kiml.options.EdgeLabelPlacement;
+import de.cau.cs.kieler.kiml.options.EdgeRouting;
 import de.cau.cs.kieler.kiml.options.LayoutOptions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
@@ -36,6 +41,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -63,10 +69,15 @@ public class Layouter {
     }
   }.apply();
   
+  public Layouter() {
+    AbstractLayoutProvider _layoutProvider = this.getLayoutProvider();
+    _layoutProvider.dispose();
+  }
+  
   public void layout(final XAbstractDiagram diagram, final Duration duration) {
     final HashMap<Object,KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
     final KNode kRoot = this.toKRootNode(diagram, cache);
-    final GraphvizLayoutProvider provider = this.getLayoutProvider();
+    final AbstractLayoutProvider provider = this.getLayoutProvider();
     try {
       BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
       provider.doLayout(kRoot, _basicProgressMonitor);
@@ -76,7 +87,7 @@ public class Layouter {
     }
   }
   
-  public GraphvizLayoutProvider getLayoutProvider() {
+  public AbstractLayoutProvider getLayoutProvider() {
     GraphvizLayoutProvider _xblockexpression = null;
     {
       new LoggingTransformationService();
@@ -101,6 +112,19 @@ public class Layouter {
         final KGraphElement kElement = entry.getValue();
         boolean _matched = false;
         if (!_matched) {
+          if (xElement instanceof XConnectionLabel) {
+            final XConnectionLabel _xConnectionLabel = (XConnectionLabel)xElement;
+            _matched=true;
+            EList<KGraphData> _data = kElement.getData();
+            Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
+            final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
+            float _xpos = shapeLayout.getXpos();
+            float _ypos = shapeLayout.getYpos();
+            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xConnectionLabel, _xpos, _ypos, true, duration);
+            animations.add(_createTransition);
+          }
+        }
+        if (!_matched) {
           if (xElement instanceof XNode) {
             final XNode _xNode = (XNode)xElement;
             _matched=true;
@@ -121,20 +145,47 @@ public class Layouter {
             Iterable<KEdgeLayout> _filter = Iterables.<KEdgeLayout>filter(_data, KEdgeLayout.class);
             final KEdgeLayout edgeLayout = IterableExtensions.<KEdgeLayout>head(_filter);
             final KVectorChain layoutPoints = edgeLayout.createVectorChain();
+            EdgeRouting _property = edgeLayout.<EdgeRouting>getProperty(LayoutOptions.EDGE_ROUTING);
+            final EdgeRouting _switchValue = _property;
+            boolean _matched_1 = false;
+            if (!_matched_1) {
+              if (Objects.equal(_switchValue,EdgeRouting.SPLINES)) {
+                _matched_1=true;
+                int _size = layoutPoints.size();
+                int _minus = (_size - 1);
+                int _modulo = (_minus % 3);
+                boolean _equals = (_modulo == 0);
+                if (_equals) {
+                  _xConnection.setKind(XConnectionKind.CUBIC_CURVE);
+                } else {
+                  int _size_1 = layoutPoints.size();
+                  int _minus_1 = (_size_1 - 1);
+                  int _modulo_1 = (_minus_1 % 2);
+                  boolean _equals_1 = (_modulo_1 == 0);
+                  if (_equals_1) {
+                    _xConnection.setKind(XConnectionKind.QUAD_CURVE);
+                  } else {
+                    _xConnection.setKind(XConnectionKind.POLYLINE);
+                  }
+                }
+              }
+            }
+            if (!_matched_1) {
+              _xConnection.setKind(XConnectionKind.POLYLINE);
+            }
             final ObservableList<XControlPoint> controlPoints = _xConnection.getControlPoints();
-            int _size = layoutPoints.size();
-            int _size_1 = controlPoints.size();
-            final int nodeDiff = (_size - _size_1);
+            int _size_2 = layoutPoints.size();
+            int _size_3 = controlPoints.size();
+            final int nodeDiff = (_size_2 - _size_3);
             boolean _greaterThan = (nodeDiff > 0);
             if (_greaterThan) {
+              final ArrayList<XControlPoint> newControlPoints = CollectionLiterals.<XControlPoint>newArrayList();
               int _plus = (nodeDiff + 1);
               final double delta = (1.0 / _plus);
               final XControlPoint first = IterableExtensions.<XControlPoint>head(controlPoints);
               final XControlPoint last = IterableExtensions.<XControlPoint>last(controlPoints);
               IntegerRange _upTo = new IntegerRange(1, nodeDiff);
               for (final Integer i : _upTo) {
-                int _size_2 = controlPoints.size();
-                int _minus = (_size_2 - 1);
                 XControlPoint _xControlPoint = new XControlPoint();
                 final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
                     public void apply(final XControlPoint it) {
@@ -156,22 +207,25 @@ public class Layouter {
                     }
                   };
                 XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
-                controlPoints.add(_minus, _doubleArrow);
+                newControlPoints.add(_doubleArrow);
               }
+              int _size_4 = controlPoints.size();
+              int _minus_2 = (_size_4 - 1);
+              controlPoints.addAll(_minus_2, newControlPoints);
             }
-            int _size_3 = controlPoints.size();
-            int _minus_1 = (_size_3 - 1);
-            ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus_1, true);
+            int _size_5 = controlPoints.size();
+            int _minus_3 = (_size_5 - 1);
+            ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus_3, true);
             for (final Integer i_1 : _doubleDotLessThan) {
               {
-                int _size_4 = layoutPoints.size();
-                int _minus_2 = (_size_4 - 1);
-                int _min = Math.min(_minus_2, (i_1).intValue());
+                int _size_6 = layoutPoints.size();
+                int _minus_4 = (_size_6 - 1);
+                int _min = Math.min(_minus_4, (i_1).intValue());
                 final KVector layoutPoint = layoutPoints.get(_min);
                 final XControlPoint currentControlPoint = controlPoints.get((i_1).intValue());
                 final PathTransition transition = this._layoutTransitionFactory.createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, false, duration);
-                int _size_5 = layoutPoints.size();
-                boolean _greaterEqualsThan = ((i_1).intValue() >= _size_5);
+                int _size_7 = layoutPoints.size();
+                boolean _greaterEqualsThan = ((i_1).intValue() >= _size_7);
                 if (_greaterEqualsThan) {
                   final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
                       public void handle(final ActionEvent it) {
@@ -203,6 +257,7 @@ public class Layouter {
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
       shapeLayout.setProperty(LayoutOptions.SPACING, Float.valueOf(60f));
+      shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, Boolean.valueOf(true));
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
       cache.put(it, kRoot);
@@ -275,6 +330,13 @@ public class Layouter {
           EList<KGraphData> _data = kEdge.getData();
           _data.add(edgeLayout);
           cache.put(it, kEdge);
+          XConnectionLabel _label = it.getLabel();
+          boolean _notEquals = (!Objects.equal(_label, null));
+          if (_notEquals) {
+            XConnectionLabel _label_1 = it.getLabel();
+            KLabel _kLabel = this.toKLabel(_label_1, cache);
+            _kLabel.setParent(kEdge);
+          }
           _xblockexpression_1 = (kEdge);
         }
         _xifexpression = _xblockexpression_1;
@@ -291,17 +353,27 @@ public class Layouter {
     {
       final KLabel kLabel = this._kGraphFactory.createKLabel();
       String _elvis = null;
-      String _text = null;
+      Text _text = null;
       if (it!=null) {
         _text=it.getText();
       }
-      if (_text != null) {
-        _elvis = _text;
+      String _text_1 = null;
+      if (_text!=null) {
+        _text_1=_text.getText();
+      }
+      if (_text_1 != null) {
+        _elvis = _text_1;
       } else {
-        _elvis = ObjectExtensions.<String>operator_elvis(_text, "");
+        _elvis = ObjectExtensions.<String>operator_elvis(_text_1, "");
       }
       kLabel.setText(_elvis);
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
+      Bounds _layoutBounds = it.getLayoutBounds();
+      double _width = _layoutBounds.getWidth();
+      Bounds _layoutBounds_1 = it.getLayoutBounds();
+      double _height = _layoutBounds_1.getHeight();
+      shapeLayout.setSize(((float) _width), ((float) _height));
+      shapeLayout.setProperty(LayoutOptions.EDGE_LABEL_PLACEMENT, EdgeLabelPlacement.CENTER);
       EList<KGraphData> _data = kLabel.getData();
       _data.add(shapeLayout);
       cache.put(it, kLabel);

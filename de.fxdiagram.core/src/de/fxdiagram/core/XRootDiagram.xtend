@@ -1,5 +1,6 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramGestureTool
@@ -9,8 +10,7 @@ import de.fxdiagram.core.tools.XDiagramTool
 import java.util.List
 import javafx.scene.Group
 
-import static extension de.fxdiagram.core.Extensions.*
-
+@Logging
 class XRootDiagram extends XAbstractDiagram {
 	
 	Group nodeLayer = new Group
@@ -65,14 +65,14 @@ class XRootDiagram extends XAbstractDiagram {
 		var previousTool = _currentTool
 		if(previousTool != null) {
 			if(!previousTool.deactivate)
-				logger.severe("Could not deactivate active tool")
+				LOG.severe("Could not deactivate active tool")
 		}
 		_currentTool = tool
 		if(tool != null) {
 			if(!tool.activate) {
 				_currentTool = previousTool
 				if(!previousTool?.activate)
-					logger.severe("Could not reactivate tool")
+					LOG.severe("Could not reactivate tool")
 			}
 		}
 	}
@@ -80,6 +80,4 @@ class XRootDiagram extends XAbstractDiagram {
 	def restoreDefaultTool() {
 		currentTool = defaultTool
 	}
-	
-	
 }

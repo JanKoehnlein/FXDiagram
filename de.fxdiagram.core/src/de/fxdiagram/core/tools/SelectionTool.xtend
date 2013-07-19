@@ -40,7 +40,6 @@ class SelectionTool implements XDiagramTool {
 						moveBehavior?.mousePressed(event)
 					]
 					targetShape.moveBehavior?.mousePressed(event)
-					//event.consume
 				}
 			}
 		]
@@ -53,8 +52,11 @@ class SelectionTool implements XDiagramTool {
 	}
 
 	def getSelection() {
-		(rootDiagram.nodes + rootDiagram.connections + rootDiagram.connections.map[controlPoints].flatten)
-			.filter[isSelectable && selected]
+		(rootDiagram.nodes 
+			+ rootDiagram.connections 
+			+ rootDiagram.connections.map[controlPoints].flatten
+			+ rootDiagram.connections.map[label].filterNull
+		).filter[isSelectable && selected]
 	}
 
 	override activate() {

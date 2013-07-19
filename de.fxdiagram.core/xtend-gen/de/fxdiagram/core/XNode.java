@@ -2,7 +2,7 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.Anchors;
-import de.fxdiagram.core.DefaultAnchors;
+import de.fxdiagram.core.RoundedRectangleAnchors;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
@@ -71,15 +71,15 @@ public class XNode extends XShape {
     return _doubleArrow;
   }
   
-  protected DefaultAnchors createAnchors() {
-    DefaultAnchors _defaultAnchors = new DefaultAnchors(this, 3);
-    return _defaultAnchors;
+  protected Anchors createAnchors() {
+    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
+    return _roundedRectangleAnchors;
   }
   
   public void doActivate() {
     MoveBehavior _moveBehavior = new MoveBehavior(this);
     this.moveBehavior = _moveBehavior;
-    DefaultAnchors _createAnchors = this.createAnchors();
+    Anchors _createAnchors = this.createAnchors();
     this.anchors = _createAnchors;
     this.moveBehavior.activate();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {

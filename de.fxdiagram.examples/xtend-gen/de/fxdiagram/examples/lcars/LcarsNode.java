@@ -5,6 +5,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
+import de.fxdiagram.core.Anchors;
+import de.fxdiagram.core.RectangleAnchors;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.binding.DoubleExpressionExtensions;
 import de.fxdiagram.core.export.SvgExporter;
@@ -20,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javafx.animation.Timeline;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -265,6 +268,11 @@ public class LcarsNode extends XNode {
     this.setKey(this.name);
   }
   
+  protected Anchors createAnchors() {
+    RectangleAnchors _rectangleAnchors = new RectangleAnchors(this);
+    return _rectangleAnchors;
+  }
+  
   protected HBox createBox(final Color color) {
     HBox _hBox = new HBox();
     final Procedure1<HBox> _function = new Procedure1<HBox>() {
@@ -437,17 +445,21 @@ public class LcarsNode extends XNode {
     return _xblockexpression;
   }
   
-  public boolean showPage(final String page) {
-    boolean _xblockexpression = false;
-    {
-      final List<LcarsField> fields = this.pages.get(page);
-      ObservableList<Node> _children = this.infoTextBox.getChildren();
-      _children.clear();
-      ObservableList<Node> _children_1 = this.infoTextBox.getChildren();
-      boolean _add = Iterables.<Node>addAll(_children_1, fields);
-      _xblockexpression = (_add);
-    }
-    return _xblockexpression;
+  public void showPage(final String page) {
+    final List<LcarsField> fields = this.pages.get(page);
+    ObservableList<Node> _children = this.infoTextBox.getChildren();
+    _children.clear();
+    ObservableList<Node> _children_1 = this.infoTextBox.getChildren();
+    Iterables.<Node>addAll(_children_1, fields);
+    Timeline _timeline = new Timeline();
+    final Timeline timeline = _timeline;
+    final Procedure1<LcarsField> _function = new Procedure1<LcarsField>() {
+        public void apply(final LcarsField it) {
+          it.addAnimation(timeline);
+        }
+      };
+    IterableExtensions.<LcarsField>forEach(fields, _function);
+    timeline.play();
   }
   
   public void activate() {

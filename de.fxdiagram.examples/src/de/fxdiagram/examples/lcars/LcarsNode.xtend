@@ -25,6 +25,8 @@ import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
 import static extension javafx.scene.layout.VBox.*
+import javafx.animation.Timeline
+import de.fxdiagram.core.RectangleAnchors
 
 class LcarsNode extends XNode {
 
@@ -118,6 +120,10 @@ class LcarsNode extends XNode {
 		key = name
 	}
 
+	override protected createAnchors() {
+		new RectangleAnchors(this)
+	}
+
 	protected def createBox(Color color) {
 		new HBox => [
 			style = '-fx-background-color: ' + color.toSvgString + ';' 
@@ -197,15 +203,9 @@ class LcarsNode extends XNode {
 		val fields = pages.get(page)
 		infoTextBox.children.clear
 		infoTextBox.children += fields
-//		new Timeline => [
-//			for(i: 0..fields.length) {
-//				keyFrames += new KeyFrame(
-//					(i * 100).millis, 
-//					new KeyValue(infoTextBox.chtextProperty, text.substring(0, i))
-//				)			
-//			}
-//			play
-//		]
+		val timeline = new Timeline
+		fields.forEach[addAnimation(timeline)]
+		timeline.play
 	}
 	
 	override activate() {

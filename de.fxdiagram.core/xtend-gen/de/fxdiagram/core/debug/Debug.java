@@ -1,8 +1,8 @@
 package de.fxdiagram.core.debug;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XRootDiagram;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -13,26 +13,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import org.eclipse.xtend2.lib.StringConcatenation;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@Logging
 @SuppressWarnings("all")
 public class Debug {
-  private final static Logger LOG = new Function0<Logger>() {
-    public Logger apply() {
-      String _canonicalName = Debug.class.getCanonicalName();
-      Logger _logger = Logger.getLogger(_canonicalName);
-      final Procedure1<Logger> _function = new Procedure1<Logger>() {
-          public void apply(final Logger it) {
-            it.setLevel(Level.INFO);
-          }
-        };
-      Logger _doubleArrow = ObjectExtensions.<Logger>operator_doubleArrow(_logger, _function);
-      return _doubleArrow;
-    }
-  }.apply();
-  
   public static void debugTranslation(final Node node) {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> element, final Number oldVal, final Number newVal) {
@@ -209,4 +193,7 @@ public class Debug {
     }
     Debug.LOG.info(message);
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.core.debug.Debug");
+    ;
 }

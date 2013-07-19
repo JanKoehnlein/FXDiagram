@@ -8,27 +8,20 @@ import de.cau.cs.kieler.kiml.graphviz.dot.GraphvizDotStandaloneSetup;
 import de.cau.cs.kieler.kiml.graphviz.dot.transform.DotHandler;
 import de.cau.cs.kieler.kiml.service.TransformationService;
 import de.cau.cs.kieler.kiml.service.formats.GraphFormatData;
+import de.fxdiagram.annotations.logging.Logging;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 /**
  * KIELER's Graphviz layouts rely on the TransformationService to be initialized.
  */
+@Logging
 @SuppressWarnings("all")
 public class LoggingTransformationService extends TransformationService {
-  private final static Logger LOG = new Function0<Logger>() {
-    public Logger apply() {
-      String _canonicalName = LoggingTransformationService.class.getCanonicalName();
-      Logger _logger = Logger.getLogger(_canonicalName);
-      return _logger;
-    }
-  }.apply();
-  
   private GraphFormatData dotFormatData;
   
   public GraphFormatData getFormatData(final String id) {
@@ -70,4 +63,7 @@ public class LoggingTransformationService extends TransformationService {
   protected void reportError(final CoreException exception) {
     LoggingTransformationService.LOG.log(Level.SEVERE, "Error in LoggingTransformationService", exception);
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.core.layout.LoggingTransformationService");
+    ;
 }

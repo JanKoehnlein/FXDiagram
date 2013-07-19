@@ -1,12 +1,12 @@
 package de.fxdiagram.core.export
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRootDiagram
 import java.io.File
 import java.io.IOException
 import java.util.List
 import java.util.logging.Level
-import java.util.logging.Logger
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Parent
 import javafx.scene.image.Image
@@ -19,9 +19,8 @@ import javafx.scene.text.Text
 import javafx.scene.transform.Transform
 import javax.imageio.ImageIO
 
+@Logging
 class SvgExporter {
-	
-	static val Logger LOG = Logger.getLogger(SvgExporter.canonicalName)
 	
 	int currentID
 	

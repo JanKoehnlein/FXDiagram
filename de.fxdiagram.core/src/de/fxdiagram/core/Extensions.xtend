@@ -1,6 +1,5 @@
 package de.fxdiagram.core
 
-import java.util.logging.Logger
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
@@ -110,7 +109,4 @@ class Extensions {
 		}
 	}
 
-	def static Logger getLogger(Object it) {
-		Logger.getLogger(class.canonicalName)
-	}
 }
