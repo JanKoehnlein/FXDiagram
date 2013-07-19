@@ -608,6 +608,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       _children.remove(choice);
       XAbstractDiagram _diagram = this.getDiagram();
       _diagram.addNode(choice);
+      choice.layout();
       final Bounds bounds = choice.getLayoutBounds();
       double _x = center.getX();
       double _width = bounds.getWidth();

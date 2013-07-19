@@ -258,6 +258,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			choice.transforms.clear
 			group.children.remove(choice)
 			diagram.addNode(choice)
+			choice.layout
 			val bounds = choice.layoutBounds
 			choice.layoutX = center.x - 0.5 * bounds.width
 			choice.layoutY = center.y - 0.5 * bounds.height
