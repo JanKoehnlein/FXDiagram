@@ -66,9 +66,6 @@ class XConnection extends XShape {
 		selectedProperty.addListener [
 			prop, oldVal, newVal |
 			controlPointGroup.visible = newVal
-			for(i: 1..<(controlPoints.size - 1)) {
-				controlPoints.get(i).selected = newVal
-			}		
 		]
 		connectionRouter.activate
 	}

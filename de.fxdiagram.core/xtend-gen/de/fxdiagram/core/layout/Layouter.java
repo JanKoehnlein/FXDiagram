@@ -204,6 +204,7 @@ public class Layouter {
                       double _multiply_3 = (lambda * _layoutY_1);
                       double _plus_1 = (_multiply_2 + _multiply_3);
                       it.setLayoutY(_plus_1);
+                      it.setMovable(true);
                     }
                   };
                 XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);

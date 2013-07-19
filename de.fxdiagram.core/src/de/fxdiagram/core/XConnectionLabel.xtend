@@ -8,7 +8,7 @@ import javafx.scene.effect.Effect
 import javafx.scene.effect.DropShadow
 import javafx.geometry.VPos
 import javafx.geometry.Point2D
-import static java.lang.Math.*
+import static extension java.lang.Math.*
 import javafx.scene.transform.Affine
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 
@@ -51,8 +51,10 @@ class XConnectionLabel extends XShape {
 	}
 
 	def protected place(List<XControlPoint> list) {
+		transforms.clear
 		if (list.size == 2) {
-			val center = new Point2D(0.5 * (list.get(0).layoutX + list.get(1).layoutX), 0.5 * (list.get(0).layoutY + list.get(1).layoutY))
+			val centerX = 0.5 * (list.get(0).layoutX + list.get(1).layoutX)
+			val centerY = 0.5 * (list.get(0).layoutY + list.get(1).layoutY)
 			val dx = list.get(1).layoutX - list.get(0).layoutX
 			val dy = list.get(1).layoutY - list.get(0).layoutY
 			var angle = atan2(dy, dx)
@@ -66,15 +68,13 @@ class XConnectionLabel extends XShape {
 			}
 			val transform = new Affine
 			transform.translate(labelDx, labelDy)
-			transform.rotate(angle * 180 / PI)
-			transform.translate(center.x, center.y)
-			layoutX = transform.tx
-			layoutY = transform.ty
+			println(angle.toDegrees)
+			transform.rotate(angle.toDegrees)
+			layoutX = transform.tx + centerX
+			layoutY = transform.ty + centerY
 			transform.tx = 0
 			transform.ty = 0
 			transforms += transform
-		} else {
-			transforms.clear
 		}
 	}
 	

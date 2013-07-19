@@ -146,15 +146,6 @@ public class XConnection extends XShape {
     final ChangeListener<Boolean> _function_1 = new ChangeListener<Boolean>() {
         public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
           XConnection.this.controlPointGroup.setVisible((newVal).booleanValue());
-          ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
-          int _size = _controlPoints.size();
-          int _minus = (_size - 1);
-          ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus, true);
-          for (final Integer i : _doubleDotLessThan) {
-            ObservableList<XControlPoint> _controlPoints_1 = XConnection.this.getControlPoints();
-            XControlPoint _get = _controlPoints_1.get((i).intValue());
-            _get.setSelected((newVal).booleanValue());
-          }
         }
       };
     _selectedProperty.addListener(_function_1);

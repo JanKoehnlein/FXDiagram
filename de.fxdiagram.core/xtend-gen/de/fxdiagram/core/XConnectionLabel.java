@@ -13,13 +13,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -76,83 +76,84 @@ public class XConnectionLabel extends XShape {
   }
   
   protected Boolean place(final List<XControlPoint> list) {
-    boolean _xifexpression = false;
-    int _size = list.size();
-    boolean _equals = (_size == 2);
-    if (_equals) {
-      boolean _xblockexpression = false;
-      {
-        XControlPoint _get = list.get(0);
-        double _layoutX = _get.getLayoutX();
-        XControlPoint _get_1 = list.get(1);
-        double _layoutX_1 = _get_1.getLayoutX();
-        double _plus = (_layoutX + _layoutX_1);
-        double _multiply = (0.5 * _plus);
-        XControlPoint _get_2 = list.get(0);
-        double _layoutY = _get_2.getLayoutY();
-        XControlPoint _get_3 = list.get(1);
-        double _layoutY_1 = _get_3.getLayoutY();
-        double _plus_1 = (_layoutY + _layoutY_1);
-        double _multiply_1 = (0.5 * _plus_1);
-        Point2D _point2D = new Point2D(_multiply, _multiply_1);
-        final Point2D center = _point2D;
-        XControlPoint _get_4 = list.get(1);
-        double _layoutX_2 = _get_4.getLayoutX();
-        XControlPoint _get_5 = list.get(0);
-        double _layoutX_3 = _get_5.getLayoutX();
-        final double dx = (_layoutX_2 - _layoutX_3);
-        XControlPoint _get_6 = list.get(1);
-        double _layoutY_2 = _get_6.getLayoutY();
-        XControlPoint _get_7 = list.get(0);
-        double _layoutY_3 = _get_7.getLayoutY();
-        final double dy = (_layoutY_2 - _layoutY_3);
-        double angle = Math.atan2(dy, dx);
-        Bounds _boundsInLocal = this.getBoundsInLocal();
-        double _width = _boundsInLocal.getWidth();
-        double _minus = (-_width);
-        final double labelDx = (_minus / 2);
-        int labelDy = 1;
-        double _abs = Math.abs(angle);
-        double _divide = (Math.PI / 2);
-        boolean _greaterThan = (_abs > _divide);
-        if (_greaterThan) {
-          boolean _lessThan = (angle < 0);
-          if (_lessThan) {
-            double _plus_2 = (angle + Math.PI);
-            angle = _plus_2;
-          } else {
-            boolean _greaterThan_1 = (angle > 0);
-            if (_greaterThan_1) {
-              double _minus_1 = (angle - Math.PI);
-              angle = _minus_1;
-            }
-          }
-        }
-        Affine _affine = new Affine();
-        final Affine transform = _affine;
-        TransformExtensions.translate(transform, labelDx, labelDy);
-        double _multiply_2 = (angle * 180);
-        double _divide_1 = (_multiply_2 / Math.PI);
-        TransformExtensions.rotate(transform, _divide_1);
-        double _x = center.getX();
-        double _y = center.getY();
-        TransformExtensions.translate(transform, _x, _y);
-        double _tx = transform.getTx();
-        this.setLayoutX(_tx);
-        double _ty = transform.getTy();
-        this.setLayoutY(_ty);
-        transform.setTx(0);
-        transform.setTy(0);
-        ObservableList<Transform> _transforms = this.getTransforms();
-        boolean _add = _transforms.add(transform);
-        _xblockexpression = (_add);
-      }
-      _xifexpression = _xblockexpression;
-    } else {
+    Boolean _xblockexpression = null;
+    {
       ObservableList<Transform> _transforms = this.getTransforms();
       _transforms.clear();
+      Boolean _xifexpression = null;
+      int _size = list.size();
+      boolean _equals = (_size == 2);
+      if (_equals) {
+        boolean _xblockexpression_1 = false;
+        {
+          XControlPoint _get = list.get(0);
+          double _layoutX = _get.getLayoutX();
+          XControlPoint _get_1 = list.get(1);
+          double _layoutX_1 = _get_1.getLayoutX();
+          double _plus = (_layoutX + _layoutX_1);
+          final double centerX = (0.5 * _plus);
+          XControlPoint _get_2 = list.get(0);
+          double _layoutY = _get_2.getLayoutY();
+          XControlPoint _get_3 = list.get(1);
+          double _layoutY_1 = _get_3.getLayoutY();
+          double _plus_1 = (_layoutY + _layoutY_1);
+          final double centerY = (0.5 * _plus_1);
+          XControlPoint _get_4 = list.get(1);
+          double _layoutX_2 = _get_4.getLayoutX();
+          XControlPoint _get_5 = list.get(0);
+          double _layoutX_3 = _get_5.getLayoutX();
+          final double dx = (_layoutX_2 - _layoutX_3);
+          XControlPoint _get_6 = list.get(1);
+          double _layoutY_2 = _get_6.getLayoutY();
+          XControlPoint _get_7 = list.get(0);
+          double _layoutY_3 = _get_7.getLayoutY();
+          final double dy = (_layoutY_2 - _layoutY_3);
+          double angle = Math.atan2(dy, dx);
+          Bounds _boundsInLocal = this.getBoundsInLocal();
+          double _width = _boundsInLocal.getWidth();
+          double _minus = (-_width);
+          final double labelDx = (_minus / 2);
+          int labelDy = 1;
+          double _abs = Math.abs(angle);
+          double _divide = (Math.PI / 2);
+          boolean _greaterThan = (_abs > _divide);
+          if (_greaterThan) {
+            boolean _lessThan = (angle < 0);
+            if (_lessThan) {
+              double _plus_2 = (angle + Math.PI);
+              angle = _plus_2;
+            } else {
+              boolean _greaterThan_1 = (angle > 0);
+              if (_greaterThan_1) {
+                double _minus_1 = (angle - Math.PI);
+                angle = _minus_1;
+              }
+            }
+          }
+          Affine _affine = new Affine();
+          final Affine transform = _affine;
+          TransformExtensions.translate(transform, labelDx, labelDy);
+          double _degrees = Math.toDegrees(angle);
+          InputOutput.<Double>println(Double.valueOf(_degrees));
+          double _degrees_1 = Math.toDegrees(angle);
+          TransformExtensions.rotate(transform, _degrees_1);
+          double _tx = transform.getTx();
+          double _plus_3 = (_tx + centerX);
+          this.setLayoutX(_plus_3);
+          double _ty = transform.getTy();
+          double _plus_4 = (_ty + centerY);
+          this.setLayoutY(_plus_4);
+          transform.setTx(0);
+          transform.setTy(0);
+          ObservableList<Transform> _transforms_1 = this.getTransforms();
+          boolean _add = _transforms_1.add(transform);
+          _xblockexpression_1 = (_add);
+        }
+        _xifexpression = Boolean.valueOf(_xblockexpression_1);
+      }
+      _xblockexpression = (_xifexpression);
     }
-    return _xifexpression;
+    return _xblockexpression;
   }
   
   public MoveBehavior getMoveBehavior() {

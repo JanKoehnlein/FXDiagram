@@ -1,5 +1,6 @@
 package de.fxdiagram.core;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import javafx.beans.property.BooleanProperty;
@@ -43,9 +44,33 @@ public class XControlPoint extends XShape {
         }
       };
     _selectedProperty.addListener(_function);
-    MoveBehavior _moveBehavior = new MoveBehavior(this);
-    this.moveBehavior = _moveBehavior;
-    this.moveBehavior.activate();
+    if (this.moveBehavior!=null) {
+      this.moveBehavior.activate();
+    }
+  }
+  
+  public MoveBehavior setMovable(final boolean isMovable) {
+    MoveBehavior _xifexpression = null;
+    if (isMovable) {
+      boolean _equals = Objects.equal(this.moveBehavior, null);
+      if (_equals) {
+        MoveBehavior _moveBehavior = new MoveBehavior(this);
+        this.moveBehavior = _moveBehavior;
+      }
+      boolean _isActive = this.getIsActive();
+      if (_isActive) {
+        this.moveBehavior.activate();
+      }
+    } else {
+      MoveBehavior _xifexpression_1 = null;
+      boolean _notEquals = (!Objects.equal(this.moveBehavior, null));
+      if (_notEquals) {
+        MoveBehavior _moveBehavior_1 = this.moveBehavior = null;
+        _xifexpression_1 = _moveBehavior_1;
+      }
+      _xifexpression = _xifexpression_1;
+    }
+    return _xifexpression;
   }
   
   public MoveBehavior getMoveBehavior() {

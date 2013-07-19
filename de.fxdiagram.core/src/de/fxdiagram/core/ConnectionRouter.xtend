@@ -57,18 +57,22 @@ class ConnectionRouter implements XActivatable {
 				#[new XControlPoint => [
 					layoutX = sourcePoint.x
 					layoutY = sourcePoint.y
+					movable = false
 				], new XControlPoint => [
 					layoutX = targetPoint.x
 					layoutY = targetPoint.y
+					movable = false
 				]])
 		} else {
 			controlPoints.head => [
 				layoutX = sourcePoint.x
 				layoutY = sourcePoint.y
+				movable = false
 			]
 			controlPoints.last => [
 				layoutX = targetPoint.x
 				layoutY = targetPoint.y
+				movable = false
 			]
 		}
 	}

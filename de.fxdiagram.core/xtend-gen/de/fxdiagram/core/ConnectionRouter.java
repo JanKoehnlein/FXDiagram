@@ -114,6 +114,7 @@ public class ConnectionRouter implements XActivatable {
               it.setLayoutX(_x);
               double _y = sourcePoint.getY();
               it.setLayoutY(_y);
+              it.setMovable(false);
             }
           };
         XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
@@ -124,6 +125,7 @@ public class ConnectionRouter implements XActivatable {
               it.setLayoutX(_x);
               double _y = targetPoint.getY();
               it.setLayoutY(_y);
+              it.setMovable(false);
             }
           };
         XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
@@ -141,6 +143,7 @@ public class ConnectionRouter implements XActivatable {
                 it.setLayoutX(_x);
                 double _y = sourcePoint.getY();
                 it.setLayoutY(_y);
+                it.setMovable(false);
               }
             };
           ObjectExtensions.<XControlPoint>operator_doubleArrow(_head, _function_2);
@@ -152,6 +155,7 @@ public class ConnectionRouter implements XActivatable {
                 it.setLayoutX(_x);
                 double _y = targetPoint.getY();
                 it.setLayoutY(_y);
+                it.setMovable(false);
               }
             };
           XControlPoint _doubleArrow_2 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);

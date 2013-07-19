@@ -24,8 +24,18 @@ class XControlPoint extends XShape {
 			else 
 				circle.fill = Color.WHITE
 		]
-		moveBehavior = new MoveBehavior(this)
-		moveBehavior.activate
+		moveBehavior?.activate
+	}
+	
+	def setMovable(boolean isMovable) {
+		if(isMovable) {
+			if(moveBehavior == null) 
+				moveBehavior = new MoveBehavior(this)
+			if(isActive) 
+				moveBehavior.activate
+		} else if(moveBehavior != null) { 
+			moveBehavior = null
+		}
 	}
 	
 	override getMoveBehavior() {

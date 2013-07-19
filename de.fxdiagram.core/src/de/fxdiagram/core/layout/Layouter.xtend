@@ -97,6 +97,7 @@ class Layouter {
 								val lambda = delta * i
 								layoutX = (1-lambda) * first.layoutX + (lambda) * last.layoutX 
 								layoutY = (1-lambda) * first.layoutY + (lambda) * last.layoutY
+								movable = true
 							]
 						controlPoints.addAll(controlPoints.size-1, newControlPoints)
 					}	
