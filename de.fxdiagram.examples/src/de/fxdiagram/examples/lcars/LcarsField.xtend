@@ -1,6 +1,6 @@
 package de.fxdiagram.examples.lcars
 
-import de.fxdiagram.core.tools.chooser.CoverFlowChooser
+import de.fxdiagram.lib.tools.CoverFlowChooser
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline

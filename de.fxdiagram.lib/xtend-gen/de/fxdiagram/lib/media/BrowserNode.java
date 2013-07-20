@@ -1,6 +1,8 @@
 package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.net.URL;
@@ -59,5 +61,10 @@ public class BrowserNode extends XNode {
   
   public WebView getView() {
     return this.view;
+  }
+  
+  protected Anchors createAnchors() {
+    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
+    return _roundedRectangleAnchors;
   }
 }

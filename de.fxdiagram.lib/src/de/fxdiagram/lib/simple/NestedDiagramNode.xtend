@@ -3,6 +3,7 @@ package de.fxdiagram.lib.simple
 import de.fxdiagram.core.XAbstractDiagram
 import de.fxdiagram.core.XNestedDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import javafx.geometry.Insets
 import javafx.geometry.VPos
@@ -72,7 +73,11 @@ class NestedDiagramNode extends XNode {
 		]
 		key = name
 	}
-
+	
+	override protected createAnchors() {
+		new RoundedRectangleAnchors(this, 12, 12)
+	}
+	
 	override doActivate() {
 		super.doActivate()
 		getRootDiagram.boundsInParentProperty.addListener [ prop, oldVal, newVal |

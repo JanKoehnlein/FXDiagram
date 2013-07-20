@@ -4,9 +4,9 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.Layouter
+import de.fxdiagram.examples.java.JavaTypeNode
 import de.fxdiagram.examples.lcars.LcarsAccess
 import de.fxdiagram.examples.lcars.LcarsNode
-import de.fxdiagram.lib.java.JavaTypeNode
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
 import de.fxdiagram.lib.media.MovieNode

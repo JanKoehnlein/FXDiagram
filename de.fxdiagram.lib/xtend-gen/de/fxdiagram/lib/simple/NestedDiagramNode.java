@@ -5,6 +5,8 @@ import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XNestedDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
 import de.fxdiagram.lib.simple.SimpleNode;
@@ -145,6 +147,11 @@ public class NestedDiagramNode extends XNode {
     Pane _doubleArrow = ObjectExtensions.<Pane>operator_doubleArrow(this.pane, _function);
     this.setNode(_doubleArrow);
     this.setKey(name);
+  }
+  
+  protected Anchors createAnchors() {
+    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
+    return _roundedRectangleAnchors;
   }
   
   public void doActivate() {

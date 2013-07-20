@@ -19,7 +19,6 @@ import javafx.scene.effect.Effect;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -134,9 +133,7 @@ public class XConnectionLabel extends XShape {
           final Affine transform = _affine;
           TransformExtensions.translate(transform, labelDx, labelDy);
           double _degrees = Math.toDegrees(angle);
-          InputOutput.<Double>println(Double.valueOf(_degrees));
-          double _degrees_1 = Math.toDegrees(angle);
-          TransformExtensions.rotate(transform, _degrees_1);
+          TransformExtensions.rotate(transform, _degrees);
           double _tx = transform.getTx();
           double _plus_3 = (_tx + centerX);
           this.setLayoutX(_plus_3);

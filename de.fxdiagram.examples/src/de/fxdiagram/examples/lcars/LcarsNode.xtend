@@ -2,7 +2,6 @@ package de.fxdiagram.examples.lcars
 
 import com.mongodb.DBObject
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.core.RectangleAnchors
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.util.List
@@ -116,10 +115,6 @@ class LcarsNode extends XNode {
 			]
 		]
 		key = name
-	}
-
-	override protected createAnchors() {
-		new RectangleAnchors(this)
 	}
 
 	protected def createBox(Color color) {

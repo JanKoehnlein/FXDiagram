@@ -20,6 +20,7 @@ Require-Bundle: org.eclipse.core.runtime,
  de.fxdiagram.external;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.core,
+ de.fxdiagram.core.anchors,
  de.fxdiagram.core.behavior,
  de.fxdiagram.core.binding,
  de.fxdiagram.core.css,

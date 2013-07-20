@@ -4,10 +4,10 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.behavior.AbstractBehavior
-import de.fxdiagram.core.tools.chooser.AbstractXNodeChooser
-import de.fxdiagram.core.tools.chooser.CarusselChooser
-import de.fxdiagram.core.tools.chooser.CoverFlowChooser
-import de.fxdiagram.core.tools.chooser.CubeChooser
+import de.fxdiagram.core.tools.AbstractXNodeChooser
+import de.fxdiagram.lib.tools.CarusselChooser
+import de.fxdiagram.lib.tools.CoverFlowChooser
+import de.fxdiagram.lib.tools.CubeChooser
 import java.util.List
 
 import static extension de.fxdiagram.core.Extensions.*

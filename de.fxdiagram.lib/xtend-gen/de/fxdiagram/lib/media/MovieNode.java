@@ -2,9 +2,11 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
 import de.fxdiagram.core.geometry.TransformExtensions;
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.net.URL;
@@ -144,6 +146,11 @@ public class MovieNode extends XNode implements SvgExportable {
     this.setNode(_doubleArrow);
     ObservableList<String> _stylesheets = this.getStylesheets();
     _stylesheets.add("de/fxdiagram/lib/media/MovieNode.css");
+  }
+  
+  protected Anchors createAnchors() {
+    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
+    return _roundedRectangleAnchors;
   }
   
   protected HBox createControlBar() {

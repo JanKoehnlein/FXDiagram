@@ -1,10 +1,10 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.Anchors;
-import de.fxdiagram.core.RoundedRectangleAnchors;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -72,8 +72,8 @@ public class XNode extends XShape {
   }
   
   protected Anchors createAnchors() {
-    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
-    return _roundedRectangleAnchors;
+    RectangleAnchors _rectangleAnchors = new RectangleAnchors(this);
+    return _rectangleAnchors;
   }
   
   public void doActivate() {

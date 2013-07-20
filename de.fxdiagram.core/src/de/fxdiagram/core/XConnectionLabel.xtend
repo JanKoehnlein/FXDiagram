@@ -68,7 +68,6 @@ class XConnectionLabel extends XShape {
 			}
 			val transform = new Affine
 			transform.translate(labelDx, labelDy)
-			println(angle.toDegrees)
 			transform.rotate(angle.toDegrees)
 			layoutX = transform.tx + centerX
 			layoutY = transform.ty + centerY

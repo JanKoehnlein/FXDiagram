@@ -3,6 +3,7 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.Lazy
+import de.fxdiagram.core.anchors.ConnectionRouter
 import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.scene.Group

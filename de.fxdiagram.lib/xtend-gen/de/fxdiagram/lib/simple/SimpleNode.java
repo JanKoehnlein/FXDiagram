@@ -1,6 +1,8 @@
 package de.fxdiagram.lib.simple;
 
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
 import javafx.collections.ObservableList;
@@ -49,6 +51,11 @@ public class SimpleNode extends XNode {
     InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
     _node.setEffect(_doubleArrow_1);
     this.setKey(name);
+  }
+  
+  protected Anchors createAnchors() {
+    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
+    return _roundedRectangleAnchors;
   }
   
   public void doActivate() {

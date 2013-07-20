@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.export.SvgExportable
 import de.fxdiagram.core.export.SvgExporter
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.net.URL
@@ -86,7 +87,11 @@ class MovieNode extends XNode implements SvgExportable {
 		]
 		stylesheets += "de/fxdiagram/lib/media/MovieNode.css"
 	}
-
+	
+	override protected createAnchors() {
+		new RoundedRectangleAnchors(this, 12, 12)
+	}
+	
 	protected def createControlBar() {
 		new HBox => [
 			id = "controlbar"

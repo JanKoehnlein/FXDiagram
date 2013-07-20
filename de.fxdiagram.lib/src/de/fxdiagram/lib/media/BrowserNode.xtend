@@ -1,6 +1,7 @@
 package de.fxdiagram.lib.media
 
 import de.fxdiagram.core.XNode
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.net.URL
@@ -35,5 +36,10 @@ class BrowserNode extends XNode {
 	def getView() {
 		view
 	}
+	
+	override protected createAnchors() {
+		new RoundedRectangleAnchors(this, 12, 12)
+	}
+	
 
 }

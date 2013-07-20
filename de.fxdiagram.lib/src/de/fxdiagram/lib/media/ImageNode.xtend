@@ -1,7 +1,7 @@
 package de.fxdiagram.lib.media
 
-import de.fxdiagram.core.RectangleAnchors
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.anchors.RectangleAnchors
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 

@@ -3,6 +3,8 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.Lazy
 import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.anchors.Anchors
+import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
 import javafx.scene.Node
 import javafx.scene.effect.DropShadow
@@ -48,7 +50,7 @@ class XNode extends XShape {
 	}
 
 	protected def Anchors createAnchors() {
-		new RoundedRectangleAnchors(this, 12, 12)
+		new RectangleAnchors(this)
 	}
 
 	override doActivate() {

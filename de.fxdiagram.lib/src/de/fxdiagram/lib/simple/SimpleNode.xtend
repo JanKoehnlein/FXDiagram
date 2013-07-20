@@ -7,6 +7,7 @@ import javafx.geometry.VPos
 import javafx.scene.effect.InnerShadow
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 
 class SimpleNode extends XNode {
 
@@ -26,6 +27,10 @@ class SimpleNode extends XNode {
 			radius = 7
 		]
 		key = name
+	}
+	
+	override protected createAnchors() {
+		new RoundedRectangleAnchors(this, 12, 12)
 	}
 
 	override doActivate() {

@@ -5,8 +5,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
-import de.fxdiagram.core.Anchors;
-import de.fxdiagram.core.RectangleAnchors;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.binding.DoubleExpressionExtensions;
 import de.fxdiagram.examples.lcars.LcarsAccess;
@@ -257,11 +255,6 @@ public class LcarsNode extends XNode {
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
     this.setNode(_doubleArrow);
     this.setKey(this.name);
-  }
-  
-  protected Anchors createAnchors() {
-    RectangleAnchors _rectangleAnchors = new RectangleAnchors(this);
-    return _rectangleAnchors;
   }
   
   protected RectangleBorderPane createBox(final Color color) {
