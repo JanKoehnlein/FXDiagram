@@ -27,6 +27,7 @@ import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.layout.LayoutTransitionFactory;
 import de.fxdiagram.core.layout.LoggingTransformationService;
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
-import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -174,66 +174,32 @@ public class Layouter {
               _xConnection.setKind(XConnectionKind.POLYLINE);
             }
             final ObservableList<XControlPoint> controlPoints = _xConnection.getControlPoints();
+            ConnectionRouter _connectionRouter = _xConnection.getConnectionRouter();
             int _size_2 = layoutPoints.size();
+            _connectionRouter.growToSize(_size_2);
             int _size_3 = controlPoints.size();
-            final int nodeDiff = (_size_2 - _size_3);
-            boolean _greaterThan = (nodeDiff > 0);
-            if (_greaterThan) {
-              final ArrayList<XControlPoint> newControlPoints = CollectionLiterals.<XControlPoint>newArrayList();
-              int _plus = (nodeDiff + 1);
-              final double delta = (1.0 / _plus);
-              final XControlPoint first = IterableExtensions.<XControlPoint>head(controlPoints);
-              final XControlPoint last = IterableExtensions.<XControlPoint>last(controlPoints);
-              IntegerRange _upTo = new IntegerRange(1, nodeDiff);
-              for (final Integer i : _upTo) {
-                XControlPoint _xControlPoint = new XControlPoint();
-                final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-                    public void apply(final XControlPoint it) {
-                      final double lambda = (delta * (i).intValue());
-                      double _minus = (1 - lambda);
-                      double _layoutX = first.getLayoutX();
-                      double _multiply = (_minus * _layoutX);
-                      double _layoutX_1 = last.getLayoutX();
-                      double _multiply_1 = (lambda * _layoutX_1);
-                      double _plus = (_multiply + _multiply_1);
-                      it.setLayoutX(_plus);
-                      double _minus_1 = (1 - lambda);
-                      double _layoutY = first.getLayoutY();
-                      double _multiply_2 = (_minus_1 * _layoutY);
-                      double _layoutY_1 = last.getLayoutY();
-                      double _multiply_3 = (lambda * _layoutY_1);
-                      double _plus_1 = (_multiply_2 + _multiply_3);
-                      it.setLayoutY(_plus_1);
-                      it.setMovable(true);
-                    }
-                  };
-                XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
-                newControlPoints.add(_doubleArrow);
-              }
-              int _size_4 = controlPoints.size();
-              int _minus_2 = (_size_4 - 1);
-              controlPoints.addAll(_minus_2, newControlPoints);
-            }
-            int _size_5 = controlPoints.size();
-            int _minus_3 = (_size_5 - 1);
-            ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus_3, true);
-            for (final Integer i_1 : _doubleDotLessThan) {
+            int _minus_2 = (_size_3 - 1);
+            ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus_2, true);
+            for (final Integer i : _doubleDotLessThan) {
               {
-                int _size_6 = layoutPoints.size();
-                int _minus_4 = (_size_6 - 1);
-                int _min = Math.min(_minus_4, (i_1).intValue());
+                int _size_4 = layoutPoints.size();
+                int _minus_3 = (_size_4 - 1);
+                int _min = Math.min(_minus_3, (i).intValue());
                 final KVector layoutPoint = layoutPoints.get(_min);
-                final XControlPoint currentControlPoint = controlPoints.get((i_1).intValue());
+                final XControlPoint currentControlPoint = controlPoints.get((i).intValue());
                 final PathTransition transition = this._layoutTransitionFactory.createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, false, duration);
-                int _size_7 = layoutPoints.size();
-                boolean _greaterEqualsThan = ((i_1).intValue() >= _size_7);
-                if (_greaterEqualsThan) {
-                  final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
+                boolean _equals_2 = ((i).intValue() == 1);
+                if (_equals_2) {
+                  final EventHandler<ActionEvent> unbind = transition.getOnFinished();
+                  final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                       public void handle(final ActionEvent it) {
-                        controlPoints.remove(currentControlPoint);
+                        unbind.handle(it);
+                        ConnectionRouter _connectionRouter = _xConnection.getConnectionRouter();
+                        int _size = layoutPoints.size();
+                        _connectionRouter.shrinkToSize(_size);
                       }
                     };
-                  transition.setOnFinished(_function_1);
+                  transition.setOnFinished(_function);
                 }
                 animations.add(transition);
               }
@@ -258,7 +224,6 @@ public class Layouter {
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
       shapeLayout.setProperty(LayoutOptions.SPACING, Float.valueOf(60f));
-      shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, Boolean.valueOf(true));
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
       cache.put(it, kRoot);

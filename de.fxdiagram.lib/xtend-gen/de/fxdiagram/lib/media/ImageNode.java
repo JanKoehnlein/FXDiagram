@@ -1,8 +1,6 @@
 package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.anchors.RectangleAnchors;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,11 +27,6 @@ public class ImageNode extends XNode {
     ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
     ImageView _imageView_1 = this.imageView = _doubleArrow;
     this.setNode(_imageView_1);
-  }
-  
-  protected Anchors createAnchors() {
-    RectangleAnchors _rectangleAnchors = new RectangleAnchors(this);
-    return _rectangleAnchors;
   }
   
   public void setImage(final Image image) {

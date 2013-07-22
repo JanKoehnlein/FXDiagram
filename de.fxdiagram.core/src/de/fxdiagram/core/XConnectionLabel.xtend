@@ -3,14 +3,14 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.behavior.MoveBehavior
 import java.util.List
-import javafx.scene.text.Text
-import javafx.scene.effect.Effect
-import javafx.scene.effect.DropShadow
 import javafx.geometry.VPos
-import javafx.geometry.Point2D
-import static extension java.lang.Math.*
+import javafx.scene.effect.DropShadow
+import javafx.scene.effect.Effect
+import javafx.scene.text.Text
 import javafx.scene.transform.Affine
+
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import static extension java.lang.Math.*
 
 class XConnectionLabel extends XShape {
 

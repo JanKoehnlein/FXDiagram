@@ -1,6 +1,7 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import javafx.beans.property.BooleanProperty;
@@ -17,17 +18,76 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class XControlPoint extends XShape {
   private MoveBehavior moveBehavior;
   
+  private XControlPointType type;
+  
   public XControlPoint() {
-    Circle _circle = new Circle();
-    final Procedure1<Circle> _function = new Procedure1<Circle>() {
-        public void apply(final Circle it) {
-          it.setRadius(5);
-          it.setStroke(Color.RED);
-          it.setFill(Color.WHITE);
+    this.setType(XControlPointType.CONTROL_POINT);
+  }
+  
+  public XControlPointType getType() {
+    return this.type;
+  }
+  
+  public MoveBehavior setType(final XControlPointType type) {
+    MoveBehavior _xblockexpression = null;
+    {
+      this.type = type;
+      boolean _matched = false;
+      if (!_matched) {
+        if (Objects.equal(type,XControlPointType.ANCHOR)) {
+          _matched=true;
+          Circle _circle = new Circle();
+          final Procedure1<Circle> _function = new Procedure1<Circle>() {
+              public void apply(final Circle it) {
+                it.setRadius(3);
+                it.setStroke(Color.BLUE);
+                it.setFill(Color.WHITE);
+              }
+            };
+          Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
+          this.setNode(_doubleArrow);
         }
-      };
-    Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
-    this.setNode(_doubleArrow);
+      }
+      if (!_matched) {
+        if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
+          _matched=true;
+          Circle _circle_1 = new Circle();
+          final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
+              public void apply(final Circle it) {
+                it.setRadius(5);
+                it.setStroke(Color.RED);
+                it.setFill(Color.WHITE);
+              }
+            };
+          Circle _doubleArrow_1 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
+          this.setNode(_doubleArrow_1);
+        }
+      }
+      if (!_matched) {
+        if (Objects.equal(type,XControlPointType.INTERPOLATED)) {
+          _matched=true;
+          Circle _circle_2 = new Circle();
+          final Procedure1<Circle> _function_2 = new Procedure1<Circle>() {
+              public void apply(final Circle it) {
+                it.setRadius(5);
+                it.setStroke(Color.RED);
+                it.setFill(Color.WHITE);
+              }
+            };
+          Circle _doubleArrow_2 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_2, _function_2);
+          this.setNode(_doubleArrow_2);
+        }
+      }
+      MoveBehavior _xifexpression = null;
+      boolean _notEquals = (!Objects.equal(type, XControlPointType.ANCHOR));
+      if (_notEquals) {
+        MoveBehavior _moveBehavior = new MoveBehavior(this);
+        MoveBehavior _moveBehavior_1 = this.moveBehavior = _moveBehavior;
+        _xifexpression = _moveBehavior_1;
+      }
+      _xblockexpression = (_xifexpression);
+    }
+    return _xblockexpression;
   }
   
   protected void doActivate() {
@@ -49,28 +109,16 @@ public class XControlPoint extends XShape {
     }
   }
   
-  public MoveBehavior setMovable(final boolean isMovable) {
-    MoveBehavior _xifexpression = null;
-    if (isMovable) {
-      boolean _equals = Objects.equal(this.moveBehavior, null);
-      if (_equals) {
-        MoveBehavior _moveBehavior = new MoveBehavior(this);
-        this.moveBehavior = _moveBehavior;
-      }
-      boolean _isActive = this.getIsActive();
-      if (_isActive) {
-        this.moveBehavior.activate();
-      }
+  public boolean isSelectable() {
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(this.type, XControlPointType.ANCHOR));
+    if (!_notEquals) {
+      _and = false;
     } else {
-      MoveBehavior _xifexpression_1 = null;
-      boolean _notEquals = (!Objects.equal(this.moveBehavior, null));
-      if (_notEquals) {
-        MoveBehavior _moveBehavior_1 = this.moveBehavior = null;
-        _xifexpression_1 = _moveBehavior_1;
-      }
-      _xifexpression = _xifexpression_1;
+      boolean _isSelectable = super.isSelectable();
+      _and = (_notEquals && _isSelectable);
     }
-    return _xifexpression;
+    return _and;
   }
   
   public MoveBehavior getMoveBehavior() {

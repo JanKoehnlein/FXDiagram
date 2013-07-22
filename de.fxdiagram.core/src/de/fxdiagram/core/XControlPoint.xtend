@@ -4,18 +4,51 @@ import de.fxdiagram.core.behavior.MoveBehavior
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 
+import static de.fxdiagram.core.XControlPointType.*
+
 class XControlPoint extends XShape {
 	
 	MoveBehavior moveBehavior
 	
+	XControlPointType type
+	
 	new() {
-		node = new Circle => [
-			radius = 5
-			stroke = Color.RED
-			fill = Color.WHITE
-		]
+		setType(CONTROL_POINT)
 	}
-		
+	
+	def getType() {
+		type
+	}
+
+	def setType(XControlPointType type) {
+		this.type = type
+		switch type {
+			case ANCHOR: {
+				node = new Circle => [
+					radius = 3
+					stroke = Color.BLUE
+					fill = Color.WHITE
+				]
+			}
+			case CONTROL_POINT: {
+				node = new Circle => [
+					radius = 5
+					stroke = Color.RED
+					fill = Color.WHITE
+				]				
+			}
+			case INTERPOLATED: {
+				node = new Circle => [
+					radius = 5
+					stroke = Color.RED
+					fill = Color.WHITE
+				]
+			}
+		}
+		if(type != ANCHOR) 
+			moveBehavior = new MoveBehavior(this)
+	}
+	
 	override protected doActivate() {
 		selectedProperty.addListener [
 			prop, oldVal, newVal |
@@ -27,15 +60,8 @@ class XControlPoint extends XShape {
 		moveBehavior?.activate
 	}
 	
-	def setMovable(boolean isMovable) {
-		if(isMovable) {
-			if(moveBehavior == null) 
-				moveBehavior = new MoveBehavior(this)
-			if(isActive) 
-				moveBehavior.activate
-		} else if(moveBehavior != null) { 
-			moveBehavior = null
-		}
+	override isSelectable() {
+		type != XControlPointType.ANCHOR && super.isSelectable()
 	}
 	
 	override getMoveBehavior() {
@@ -49,4 +75,8 @@ class XControlPoint extends XShape {
 	override toString() {
 		'''XControlPoint at («layoutX»,«layoutY»)'''
 	}
+}
+
+enum XControlPointType {
+	ANCHOR, INTERPOLATED, CONTROL_POINT
 }

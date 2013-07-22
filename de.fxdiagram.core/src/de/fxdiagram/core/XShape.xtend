@@ -17,7 +17,7 @@ abstract class XShape extends Parent implements XActivatable {
 	
 	protected def setNode(Node node) {
 		nodeProperty.set(node)
-		children += node
+		children.setAll(node)
 	}
 	
 	override activate() {

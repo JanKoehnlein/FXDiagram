@@ -9,20 +9,19 @@ import de.cau.cs.kieler.kiml.graphviz.layouter.GraphvizLayoutProvider
 import de.cau.cs.kieler.kiml.klayoutdata.KEdgeLayout
 import de.cau.cs.kieler.kiml.klayoutdata.KLayoutDataFactory
 import de.cau.cs.kieler.kiml.klayoutdata.KShapeLayout
+import de.cau.cs.kieler.kiml.options.EdgeLabelPlacement
+import de.cau.cs.kieler.kiml.options.EdgeRouting
 import de.cau.cs.kieler.kiml.options.LayoutOptions
 import de.fxdiagram.core.XAbstractDiagram
 import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XConnectionKind
 import de.fxdiagram.core.XConnectionLabel
-import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XNode
 import java.util.Map
 import javafx.animation.Animation
 import javafx.util.Duration
 
 import static java.lang.Math.*
-import de.cau.cs.kieler.kiml.options.EdgeLabelPlacement
-import de.cau.cs.kieler.kiml.options.EdgeRouting
-import de.fxdiagram.core.XConnectionKind
 
 class Layouter { 
 
@@ -86,29 +85,18 @@ class Layouter {
 							xElement.kind = XConnectionKind.POLYLINE
 					}
 					val controlPoints = xElement.controlPoints
-					val nodeDiff = layoutPoints.size - controlPoints.size
-					if(nodeDiff > 0) {
-						val newControlPoints = newArrayList
-						val delta = 1.0 / (nodeDiff + 1)
-						val first = controlPoints.head
-						val last = controlPoints.last
-						for(i: 1..nodeDiff) 
-							newControlPoints += new XControlPoint => [
-								val lambda = delta * i
-								layoutX = (1-lambda) * first.layoutX + (lambda) * last.layoutX 
-								layoutY = (1-lambda) * first.layoutY + (lambda) * last.layoutY
-								movable = true
-							]
-						controlPoints.addAll(controlPoints.size-1, newControlPoints)
-					}	
+					xElement.connectionRouter.growToSize(layoutPoints.size)
 					for(i: 1..<controlPoints.size-1) {
 						val layoutPoint = layoutPoints.get(min(layoutPoints.size-1, i))
 						val currentControlPoint = controlPoints.get(i)
 						val transition = createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, false, duration)
-						if (i >= layoutPoints.size)
+						if (i == 1) {
+							val unbind = transition.onFinished
 							transition.onFinished = [
-								controlPoints.remove(currentControlPoint)
-							] 						
+								unbind.handle(it)
+								xElement.connectionRouter.shrinkToSize(layoutPoints.size)
+							] 		
+						}				
 						animations += transition
 					}
 				}
@@ -122,7 +110,7 @@ class Layouter {
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
 		shapeLayout.setProperty(LayoutOptions.SPACING, 60f)
-		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
+		//shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
 		kRoot.data += shapeLayout
 		cache.put(it, kRoot)
 		nodes.forEach [

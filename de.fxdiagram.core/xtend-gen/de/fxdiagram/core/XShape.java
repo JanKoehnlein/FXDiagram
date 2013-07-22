@@ -20,8 +20,8 @@ public abstract class XShape extends Parent implements XActivatable {
     {
       this.nodeProperty.set(node);
       ObservableList<Node> _children = this.getChildren();
-      boolean _add = _children.add(node);
-      _xblockexpression = (_add);
+      boolean _setAll = _children.setAll(node);
+      _xblockexpression = (_setAll);
     }
     return _xblockexpression;
   }

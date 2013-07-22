@@ -1,7 +1,6 @@
 package de.fxdiagram.lib.media
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.anchors.RectangleAnchors
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 
@@ -15,10 +14,6 @@ class ImageNode extends XNode {
 			fitWidthProperty.bind(widthProperty) 
 			fitHeightProperty.bind(heightProperty)
 		]
-	}
-	
-	override protected createAnchors() {
-		new RectangleAnchors(this)
 	}
 	
 	def setImage(Image image) {

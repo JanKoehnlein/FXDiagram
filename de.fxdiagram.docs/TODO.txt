@@ -1,3 +1,14 @@
+BUG
+- Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
+- click on nothing should deselect all
+- recalculate anchor when moving closest control point 
+- SVGExport: clipping 
+- Xconnection width 
+- populate menu
+- chooser isVertical
+- Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
+  such that shadows are not clipped.
+
 ENHANCEMENT
 - Open subdiagram
 - Fancy context menus
@@ -6,28 +17,14 @@ ENHANCEMENT
 - Center node
 - Zoom node
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
-- connection labels
-
-BUG
-- Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
-- distinguish between anchor and control points
-- click on nothing should deselect all
-- recalculate anchor when moving closest control point 
-- SVGExport: clipping 
-- Xconnection width 
-- populate menu
-- why can I select the last but not the first CP
-- anchor and chooser impls => lib
-- chooser isVertical
 
 MINOR
-- Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
-  such that shadows are not clipped.
 - Transparent stage?
 - need for connection layer?
 - can't set size of browser node
 - increase LayoutOptions.LABEL_SPACING, 8f
-- disable graphviz debug
+- different anchors for sides of flipNodes 
+- move brickbreaker to external
  
 DONE 
 - Inherit from Parent, not Group
@@ -55,6 +52,10 @@ DONE
 - Location of filter text
 - initial label placement
 - spinning labels 
-
+- anchor and chooser impls => lib
+- disable graphviz debug
+- connection labels
+- distinguish between anchor and control points
+- why can I select the last but not the first CP
 
 

@@ -15,10 +15,12 @@ import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRootDiagram
+import static de.fxdiagram.core.XConnectionKind.*
+import static de.fxdiagram.core.XControlPointType.*
 
 class ConnectionRouter implements XActivatable {
 	
-	@FxProperty ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
+	@FxProperty@ReadOnly ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
 	@FxProperty@ReadOnly boolean isActive
 		
 	XConnection connection
@@ -52,7 +54,62 @@ class ConnectionRouter implements XActivatable {
 			current = current.parent
 		} while (current != null && !(current instanceof XRootDiagram))
 	}
-
+	
+	def growToSize(int newSize) {
+		val nodeDiff = newSize - controlPoints.size
+		if(nodeDiff > 0) {
+			val newControlPoints = newArrayList
+			val delta = 1.0 / (nodeDiff + 1)
+			val first = controlPoints.head
+			val last = controlPoints.last
+			println(controlPoints)
+			for(i: 1..nodeDiff) 
+				newControlPoints += new XControlPoint => [
+					val lambda = delta * i
+					layoutX = (1-lambda) * first.layoutX + (lambda) * last.layoutX 
+					layoutY = (1-lambda) * first.layoutY + (lambda) * last.layoutY
+				]
+			controlPoints.addAll(controlPoints.size-1, newControlPoints)
+			resetPointTypes
+			println(controlPoints)
+		}
+	}
+	
+	def shrinkToSize(int newSize) {
+		val nodeDiff = newSize - controlPoints.size
+		if(nodeDiff < 0) {
+			val toBeRemoved = newArrayList
+			for(i: controlPoints.size-1>..controlPoints.size + nodeDiff-1)
+				toBeRemoved.add(controlPoints.get(i))
+			controlPoints.removeAll(toBeRemoved)
+			resetPointTypes
+		}
+	}
+	
+	protected def resetPointTypes() {
+		if(controlPoints.size < 2) 
+			return
+		controlPoints.head.type = ANCHOR
+		controlPoints.last.type = ANCHOR
+		for(i: 1..<controlPoints.size - 1) {
+			val currentPoint = controlPoints.get(i)
+			currentPoint.type = switch connection.kind {
+				case POLYLINE:
+					INTERPOLATED
+				case QUAD_CURVE:
+					if(i % 2 == 0)
+						INTERPOLATED
+					else 
+						CONTROL_POINT
+				case CUBIC_CURVE:
+					if(i % 3 == 0)
+						INTERPOLATED
+					else 
+						CONTROL_POINT
+			}
+		}
+	}
+	
 	def calculatePoints() {
 		val anchors = findClosestAnchors
 		val sourcePoint = anchors.key
@@ -62,22 +119,20 @@ class ConnectionRouter implements XActivatable {
 				#[new XControlPoint => [
 					layoutX = sourcePoint.x
 					layoutY = sourcePoint.y
-					movable = false
+					type = ANCHOR
 				], new XControlPoint => [
 					layoutX = targetPoint.x
 					layoutY = targetPoint.y
-					movable = false
+					type = ANCHOR
 				]])
 		} else {
 			controlPoints.head => [
 				layoutX = sourcePoint.x
 				layoutY = sourcePoint.y
-				movable = false
 			]
 			controlPoints.last => [
 				layoutX = targetPoint.x
 				layoutY = targetPoint.y
-				movable = false
 			]
 		}
 	}
