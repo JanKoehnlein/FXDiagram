@@ -2,13 +2,14 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.services.ImageCache
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.beans.binding.ObjectBinding
 import javafx.geometry.Point2D
+import javafx.geometry.Pos
 import javafx.scene.Parent
-import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 
@@ -17,7 +18,6 @@ import static javafx.geometry.VPos.*
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension javafx.util.Duration.*
-import javafx.geometry.Pos
 
 class XRapidButton extends Parent implements XActivatable {
 	
@@ -36,7 +36,7 @@ class XRapidButton extends Parent implements XActivatable {
 		this.host = host
 		this.action = action
 		children += new ImageView => [
-			image = new Image(file)
+			image = ImageCache.get.getImage(file)
 		]
 		placer = new Placer(this, xPos, yPos)
 	}

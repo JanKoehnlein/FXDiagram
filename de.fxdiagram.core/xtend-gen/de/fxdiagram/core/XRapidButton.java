@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.Placer;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.services.ImageCache;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -45,7 +46,8 @@ public class XRapidButton extends Parent implements XActivatable {
     ImageView _imageView = new ImageView();
     final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
         public void apply(final ImageView it) {
-          Image _image = new Image(file);
+          ImageCache _get = ImageCache.get();
+          Image _image = _get.getImage(file);
           it.setImage(_image);
         }
       };

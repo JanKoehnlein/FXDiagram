@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.binding.DoubleExpressionExtensions;
-import de.fxdiagram.examples.lcars.LcarsAccess;
+import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsField;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -365,72 +365,65 @@ public class LcarsNode extends XNode {
     return _xblockexpression;
   }
   
-  public ImageView showImage(final String imageUrl) {
-    ImageView _xblockexpression = null;
-    {
-      Object _get = this.data.get("images");
-      final Function1<DBObject,Boolean> _function = new Function1<DBObject,Boolean>() {
-          public Boolean apply(final DBObject it) {
-            Object _get = it.get("url");
-            String _string = _get.toString();
-            boolean _equals = Objects.equal(_string, imageUrl);
-            return Boolean.valueOf(_equals);
-          }
-        };
-      Iterable<DBObject> _filter = IterableExtensions.<DBObject>filter(((List<DBObject>) _get), _function);
-      DBObject _head = IterableExtensions.<DBObject>head(_filter);
-      Object _get_1 = _head.get("data");
-      final byte[] imageData = ((byte[]) _get_1);
-      ImageView _xifexpression = null;
-      boolean _notEquals = (!Objects.equal(imageData, null));
-      if (_notEquals) {
-        ImageView _xblockexpression_1 = null;
-        {
-          LcarsAccess _get_2 = LcarsAccess.get();
-          final Image image = _get_2.getImage(imageUrl, imageData);
-          this.currentImageUrl = imageUrl;
-          final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
-              public void apply(final ImageView it) {
-                it.setImage(image);
-                double _width = image.getWidth();
-                double _height = image.getHeight();
-                final double ratio = (_width / _height);
-                double _imageRatio = LcarsNode.this.getImageRatio();
-                boolean _lessThan = (ratio < _imageRatio);
-                if (_lessThan) {
-                  double _width_1 = image.getWidth();
-                  double _imageRatio_1 = LcarsNode.this.getImageRatio();
-                  final double newHeight = (_width_1 / _imageRatio_1);
-                  double _height_1 = image.getHeight();
-                  double _minus = (_height_1 - newHeight);
-                  double _multiply = (0.5 * _minus);
-                  double _width_2 = image.getWidth();
-                  Rectangle2D _rectangle2D = new Rectangle2D(
-                    0, _multiply, _width_2, newHeight);
-                  it.setViewport(_rectangle2D);
-                } else {
-                  double _imageRatio_2 = LcarsNode.this.getImageRatio();
-                  double _height_2 = image.getHeight();
-                  final double newWidth = (_imageRatio_2 * _height_2);
-                  double _width_3 = image.getWidth();
-                  double _minus_1 = (_width_3 - newWidth);
-                  double _multiply_1 = (0.5 * _minus_1);
-                  double _height_3 = image.getHeight();
-                  Rectangle2D _rectangle2D_1 = new Rectangle2D(_multiply_1, 
-                    0, newWidth, _height_3);
-                  it.setViewport(_rectangle2D_1);
-                }
+  public void showImage(final String imageUrl) {
+    final ImageCache imageCache = ImageCache.get();
+    final Function0<byte[]> _function = new Function0<byte[]>() {
+        public byte[] apply() {
+          Object _get = LcarsNode.this.data.get("images");
+          final Function1<DBObject,Boolean> _function = new Function1<DBObject,Boolean>() {
+              public Boolean apply(final DBObject it) {
+                Object _get = it.get("url");
+                String _string = _get.toString();
+                boolean _equals = Objects.equal(_string, imageUrl);
+                return Boolean.valueOf(_equals);
               }
             };
-          ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(
-            this.imageView, _function_1);
-          _xblockexpression_1 = (_doubleArrow);
+          Iterable<DBObject> _filter = IterableExtensions.<DBObject>filter(((List<DBObject>) _get), _function);
+          DBObject _head = IterableExtensions.<DBObject>head(_filter);
+          Object _get_1 = _head.get("data");
+          return ((byte[]) _get_1);
         }
-        _xifexpression = _xblockexpression_1;
-      }
-      _xblockexpression = (_xifexpression);
+      };
+    final Image image = imageCache.getImage(imageUrl, _function);
+    boolean _notEquals = (!Objects.equal(image, null));
+    if (_notEquals) {
+      this.currentImageUrl = imageUrl;
+      final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+          public void apply(final ImageView it) {
+            it.setImage(image);
+            double _width = image.getWidth();
+            double _height = image.getHeight();
+            final double ratio = (_width / _height);
+            double _imageRatio = LcarsNode.this.getImageRatio();
+            boolean _lessThan = (ratio < _imageRatio);
+            if (_lessThan) {
+              double _width_1 = image.getWidth();
+              double _imageRatio_1 = LcarsNode.this.getImageRatio();
+              final double newHeight = (_width_1 / _imageRatio_1);
+              double _height_1 = image.getHeight();
+              double _minus = (_height_1 - newHeight);
+              double _multiply = (0.5 * _minus);
+              double _width_2 = image.getWidth();
+              Rectangle2D _rectangle2D = new Rectangle2D(
+                0, _multiply, _width_2, newHeight);
+              it.setViewport(_rectangle2D);
+            } else {
+              double _imageRatio_2 = LcarsNode.this.getImageRatio();
+              double _height_2 = image.getHeight();
+              final double newWidth = (_imageRatio_2 * _height_2);
+              double _width_3 = image.getWidth();
+              double _minus_1 = (_width_3 - newWidth);
+              double _multiply_1 = (0.5 * _minus_1);
+              double _height_3 = image.getHeight();
+              Rectangle2D _rectangle2D_1 = new Rectangle2D(_multiply_1, 
+                0, newWidth, _height_3);
+              it.setViewport(_rectangle2D_1);
+            }
+          }
+        };
+      ObjectExtensions.<ImageView>operator_doubleArrow(
+        this.imageView, _function_1);
     }
-    return _xblockexpression;
   }
   
   public void showPage(final String page) {

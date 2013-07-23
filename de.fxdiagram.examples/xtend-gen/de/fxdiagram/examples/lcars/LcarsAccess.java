@@ -6,14 +6,8 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
-import java.io.ByteArrayInputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javafx.scene.image.Image;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -25,13 +19,6 @@ public class LcarsAccess {
   private DB db;
   
   private DBCollection lcars;
-  
-  private Map<String,Image> imageCache = new Function0<Map<String,Image>>() {
-    public Map<String,Image> apply() {
-      HashMap<String,Image> _newHashMap = CollectionLiterals.<String, Image>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
   
   private static LcarsAccess INSTANCE;
   
@@ -72,25 +59,5 @@ public class LcarsAccess {
     DBCursor _find = this.lcars.find(_doubleArrow);
     List<DBObject> _list = IterableExtensions.<DBObject>toList(_find);
     return _list;
-  }
-  
-  public Image getImage(final String url, final byte[] data) {
-    Image _xifexpression = null;
-    boolean _containsKey = this.imageCache.containsKey(url);
-    if (_containsKey) {
-      Image _get = this.imageCache.get(url);
-      _xifexpression = _get;
-    } else {
-      Image _xblockexpression = null;
-      {
-        ByteArrayInputStream _byteArrayInputStream = new ByteArrayInputStream(data);
-        Image _image = new Image(_byteArrayInputStream);
-        final Image image = _image;
-        this.imageCache.put(url, image);
-        _xblockexpression = (image);
-      }
-      _xifexpression = _xblockexpression;
-    }
-    return _xifexpression;
   }
 }

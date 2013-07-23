@@ -3,6 +3,7 @@ package de.fxdiagram.examples.lcars
 import com.mongodb.DBObject
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.services.ImageCache
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.util.List
 import java.util.Map
@@ -167,12 +168,14 @@ class LcarsNode extends XNode {
 		fields	
 	}
 
-	def showImage(String imageUrl) {
-		val imageData = (data.get('images') as List<DBObject>)
-			.filter[get('url').toString == imageUrl]
-			.head.get('data') as byte[]
-		if(imageData != null) {
-			val image = LcarsAccess.get().getImage(imageUrl, imageData)
+	def void showImage(String imageUrl) {
+		val imageCache = ImageCache.get
+		val image = imageCache.getImage(imageUrl, [|
+			(data.get('images') as List<DBObject>)
+				.filter[get('url').toString == imageUrl]
+				.head.get('data') as byte[] 
+		])
+		if(image != null) {	
 			currentImageUrl = imageUrl
 			imageView => [
 				it.image = image

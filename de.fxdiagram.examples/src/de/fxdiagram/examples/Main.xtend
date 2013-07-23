@@ -22,6 +22,7 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.image.Image
 import javafx.stage.Stage
+import de.fxdiagram.core.services.ImageCache
 
 class Main extends Application {
 
@@ -82,65 +83,65 @@ class Main extends Application {
 		connectionLabel3.text.text = 'label3'
 		diagram.addConnection(connection3)
 
-//		val image = new ImageNode => [
-//			image = new Image("media/seltsam.jpg", true)
-//			layoutX = 100
-//			layoutY = 100
-//			width = 100
-//		]
-//		diagram.addNode(image)
-//
-//		val movie = new MovieNode => [
-//			movieUrl = this.class.classLoader.getResource("media/ScreenFlow.mp4")
-//			width = 640
-//			height = 360
-//			view.viewport = new Rectangle2D(0, 60, 640, 360)
-//			layoutX = 100
-//			layoutY = 200
-//		]
-//		diagram.addNode(movie)
-//
-//		val recursive = new RecursiveImageNode(new Image("media/seltsam.jpg", true), 10, 0, 0.5) => [
-//			width = 120
-//			height = 90
-//		]
-//		diagram.addNode(recursive)
-//		
-//		val browser = new BrowserNode => [
-//			width = 120
-//			height = 160
-//			layoutX = 100
-//			layoutY = 500
-//			pageUrl = new URL("http://koehnlein.blogspot.de/")
-//		]
-//		diagram.addNode(browser)
-//		
-//		val brickBreakerNode = new BrickBreakerNode => [
-//			width = 640
-//			height = 480
-//			layoutX = 500
-//			layoutY = 100
-//		]
-//		diagram.addNode(brickBreakerNode)
-//
-//		val javaTypeNode = new JavaTypeNode => [
-//			javaType = Button
-//			width = 160
-//			height = 120
-//			layoutX = 500
-//			layoutY = 200
-//		]
-//		diagram.addNode(javaTypeNode)
-//
-//		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
-//		diagram.addNode(new LcarsNode(kirk) => [
-//			width = 120
-//		])
-//		val Task<Void> task = [|
-//			new Layouter
-//			null
-//		]
-//		task.run
+		val image = new ImageNode => [
+			image = new Image("media/seltsam.jpg", true)
+			layoutX = 100
+			layoutY = 100
+			width = 100
+		]
+		diagram.addNode(image)
+
+		val movie = new MovieNode => [
+			movieUrl = this.class.classLoader.getResource("media/ScreenFlow.mp4")
+			width = 640
+			height = 360
+			view.viewport = new Rectangle2D(0, 60, 640, 360)
+			layoutX = 100
+			layoutY = 200
+		]
+		diagram.addNode(movie)
+
+		val recursive = new RecursiveImageNode(ImageCache.get.getImage("media/seltsam.jpg"), 10, 0, 0.5) => [
+			width = 120
+			height = 90
+		]
+		diagram.addNode(recursive)
+		
+		val browser = new BrowserNode => [
+			width = 120
+			height = 160
+			layoutX = 100
+			layoutY = 500
+			pageUrl = new URL("http://koehnlein.blogspot.de/")
+		]
+		diagram.addNode(browser)
+		
+		val brickBreakerNode = new BrickBreakerNode => [
+			width = 640
+			height = 480
+			layoutX = 500
+			layoutY = 100
+		]
+		diagram.addNode(brickBreakerNode)
+
+		val javaTypeNode = new JavaTypeNode => [
+			javaType = Button
+			width = 160
+			height = 120
+			layoutX = 500
+			layoutY = 200
+		]
+		diagram.addNode(javaTypeNode)
+
+		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
+		diagram.addNode(new LcarsNode(kirk) => [
+			width = 120
+		])
+		val Task<Void> task = [|
+			new Layouter
+			null
+		]
+		task.run
 		scene
 	}
 }
