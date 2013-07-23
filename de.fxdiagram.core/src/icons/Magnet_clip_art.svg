@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 12.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 51448)  --><svg height="120.754" id="Layer_1" inkscape:version="0.42" sodipodi:docbase="F:\openclip\svg da inviare" sodipodi:docname="calamita.svg" sodipodi:version="0.32" space="preserve" style="overflow:visible;enable-background:new 0 0 133.151 120.754;" version="1.1" viewBox="0 0 133.151 120.754" width="133.151" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg">
+  <metadata>
+    <rdf:RDF xmlns:cc="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <cc:Work rdf:about="">
+        <dc:title>Calamita</dc:title>
+        <dc:description></dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>utensile</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://www.openclipart.org/">
+            <dc:title>Open Clip Art Library</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Architetto Francesco Rollandin</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Architetto Francesco Rollandin</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date></dc:date>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://web.resource.org/cc/PublicDomain"/>
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits rdf:resource="http://web.resource.org/cc/Reproduction"/>
+        <cc:permits rdf:resource="http://web.resource.org/cc/Distribution"/>
+        <cc:permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs id="defs34"/>
+  <sodipodi:namedview bordercolor="#666666" borderopacity="1.0" id="base" inkscape:current-layer="Layer_1" inkscape:cx="66.575500" inkscape:cy="60.376999" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="510" inkscape:window-width="787" inkscape:window-x="44" inkscape:window-y="58" inkscape:zoom="2.9812678" pagecolor="#ffffff"/>
+  <g id="g3">
+    <radialGradient cx="39.7563" cy="24.2212" gradientTransform="matrix(-1 0 0 -1 140.3828 123.0322)" gradientUnits="userSpaceOnUse" id="XMLID_3_" r="120.088">
+      <stop id="stop6" offset="0" style="stop-color:#E88080"/>
+      <stop id="stop8" offset="0.6181" style="stop-color:#DE4848"/>
+      <stop id="stop10" offset="1" style="stop-color:#D82A2A"/>
+    </radialGradient>
+    <path d="M67.697,119.816c34.942,0,61.557-25.644,64.317-60.226   c1.58-19.809-0.918-40.315-10.865-57.748c-2.611-1.459-10.149,0-13.112,0c-2.762,0-9.751-1.393-11.364,1.805   c-2.679,5.304,0.127,14.024,1.094,19.446c1.58,8.87,2.682,17.375,1.955,26.402c-1.055,13.087-5.894,24.534-19.752,27.513   c-11.812,2.534-29.275,2.516-38.254-6.962c-10.009-10.56-9.025-29.173-6.17-42.251c1.498-6.867,5.557-16.31,3.709-23.4   c-1.103-4.235-9.372-2.635-12.489-2.671C22.368,1.669,13.742-0.486,11.5,3.723C6.034,13.971,2.801,24.95,1.681,36.504   C-0.396,57.938,2.01,79.972,16.382,96.975C29.035,111.944,48.272,119.816,67.697,119.816" id="path12" style="fill:url(#XMLID_3_);"/>
+    <path d="M131.271,37.805c-0.921-9.047-2.576-18.107-5.783-26.644c-0.451-1.198-3.217-9.319-4.482-9.319   c-1.821,0-3.643,0-5.464,0c-7.674,0-19.95-3.54-19.67,7.253c0.196,7.574,2.227,15.067,3.336,22.535   c0.972,6.537,0.015,6.175,6.214,6.175C114.038,37.805,122.655,37.805,131.271,37.805 M33.868,37.805   c0.879-9.923,4.827-19.351,5.59-29.268c0.528-6.865-2.948-6.692-8.424-6.762C24.963,1.7,18.893,1.625,12.819,1.546   c-1.897-0.021-5.837,12.645-6.427,14.433c-2.328,7.068-3.79,14.417-4.478,21.826C12.565,37.805,23.217,37.805,33.868,37.805" id="path14" style="fill:#E5E5E5;"/>
+    <linearGradient gradientTransform="matrix(0 12.2047 12.2047 0 -7060.1382 3307.916)" gradientUnits="userSpaceOnUse" id="XMLID_4_" x1="-268.1382" x2="-266.2365" y1="583.9312" y2="583.9312">
+      <stop id="stop17" offset="0" style="stop-color:#919191"/>
+      <stop id="stop19" offset="0.0056" style="stop-color:#919191"/>
+      <stop id="stop21" offset="1" style="stop-color:#BF0D00"/>
+    </linearGradient>
+    <path d="M133.151,52.608c0-10.226-0.443-20.501-2.961-30.46c-1.778-7.036-4.261-21.252-12.984-21.252   c-5.15,0-12.748-1.488-17.681,0C90.594,1.013,96.792,22.5,97.532,26.75c2.313,13.259,4.679,35.693-7.748,45.308   c-9.198,7.116-26.049,6.385-36.661,3.605c-14.101-3.694-17.855-16.999-18.438-30.15c-0.482-10.933,2.844-21.026,4.875-31.644   c0.629-3.289,1.903-8.387-0.223-11.428c-1.582-2.257-5.659-1.578-7.998-1.607c-3.758-0.05-17.574-2.428-19.856,1.079   c-5.478,8.402-8.478,19.782-9.991,29.59c-2.938,19.016-2.112,39.8,7.687,56.819c14.843,25.779,46.697,37.219,75.123,30.58   C115.229,111.681,133.151,83.363,133.151,52.608 M131.424,52.608c0,34.868-23.729,64.123-59.447,66.145   C37.28,120.713,6.675,96.957,2.45,62.03C-0.002,41.766,3.344,20.42,13.206,2.498c4.763,0.054,9.524,0.121,14.288,0.179   C33.251,2.75,39.301,1.041,38.56,8.881c-1.795,18.971-10.708,37.671-1.376,56.317c6.123,12.234,19.971,14.055,32.323,13.841   c11.007-0.192,22.358-2.571,27.422-13.456c7.411-15.931,2.739-34.001,0.395-50.421c-0.737-5.166-2.33-12.374,4.52-12.374   c5.683,0,11.365,0,17.051,0c5.063,0,8.566,15.372,9.658,19.741C131.011,32.358,131.424,42.52,131.424,52.608" id="path23" style="fill:url(#XMLID_4_);"/>
+    <path d="M13.842,83.873c0,2.83,9.374,10.294,11.391,12.021c10.726,9.183,24.172,14.539,38.305,15.052   c14.944,0.539,29.649-3.849,42.247-11.796c4.328-2.729,8.4-5.854,12.21-9.27c0.515-0.461,3.912-4.399,4.675-4.179   c0.612,0.177-12.533,14.285-13.504,15.072c-12.204,9.93-27.383,15.891-43.197,15.891c-14.793,0-28.845-5.701-39.604-15.808   C22.872,97.576,13.842,89.375,13.842,83.873" id="path25" style="fill:#FFA3A3;"/>
+    <path d="M34.692,64.009c0.196,2.275,6.695,7.454,8.483,8.884c8.192,6.55,18.279,8.777,28.609,7.948   c9.901-0.796,26.275-5.766,29.778-16.91c-3.592,11.425-14.2,19.624-25.682,21.923C60.802,88.869,36.327,82.854,34.692,64.009" id="path27" style="fill:#B20D0D;"/>
+    <path d="M102.4,8.009c2.229-4.608,16.587,7.405,16.066,9.742c0.063-0.283-4.482-2.673-5.126-2.601   c-1.48,0.167,6.305,14.689,7.322,14.479c-3.646,0.757-11.687-5.402-13.663-8.28C105.285,18.854,100.835,11.261,102.4,8.009" id="path29" style="fill:#FFFFFF;"/>
+    <path d="M19.027,34.021c-1.422-1.771-3.179-3.533-5.267-4.493c-4.374-2.012-3.681,2.63-6.319,3.368   c1.683-0.471,4.898-27.082,11.962-19.839C23.624,17.383,32.623,40.458,19.027,34.021" id="path31" style="fill:#FFFFFF;"/>
+  </g>
+</svg>

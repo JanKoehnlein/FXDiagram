@@ -28,7 +28,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -103,16 +102,16 @@ public class ConnectionRouter implements XActivatable {
     } while(_dowhile);
   }
   
-  public ObservableList<XControlPoint> growToSize(final int newSize) {
-    ObservableList<XControlPoint> _xblockexpression = null;
+  public MoveBehavior growToSize(final int newSize) {
+    MoveBehavior _xblockexpression = null;
     {
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       int _size = _controlPoints.size();
       final int nodeDiff = (newSize - _size);
-      ObservableList<XControlPoint> _xifexpression = null;
+      MoveBehavior _xifexpression = null;
       boolean _greaterThan = (nodeDiff > 0);
       if (_greaterThan) {
-        ObservableList<XControlPoint> _xblockexpression_1 = null;
+        MoveBehavior _xblockexpression_1 = null;
         {
           final ArrayList<XControlPoint> newControlPoints = CollectionLiterals.<XControlPoint>newArrayList();
           int _plus = (nodeDiff + 1);
@@ -121,42 +120,44 @@ public class ConnectionRouter implements XActivatable {
           final XControlPoint first = IterableExtensions.<XControlPoint>head(_controlPoints_1);
           ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
           final XControlPoint last = IterableExtensions.<XControlPoint>last(_controlPoints_2);
-          ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-          InputOutput.<ObservableList<XControlPoint>>println(_controlPoints_3);
           IntegerRange _upTo = new IntegerRange(1, nodeDiff);
           for (final Integer i : _upTo) {
-            XControlPoint _xControlPoint = new XControlPoint();
-            final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-                public void apply(final XControlPoint it) {
-                  final double lambda = (delta * (i).intValue());
-                  double _minus = (1 - lambda);
-                  double _layoutX = first.getLayoutX();
-                  double _multiply = (_minus * _layoutX);
-                  double _layoutX_1 = last.getLayoutX();
-                  double _multiply_1 = (lambda * _layoutX_1);
-                  double _plus = (_multiply + _multiply_1);
-                  it.setLayoutX(_plus);
-                  double _minus_1 = (1 - lambda);
-                  double _layoutY = first.getLayoutY();
-                  double _multiply_2 = (_minus_1 * _layoutY);
-                  double _layoutY_1 = last.getLayoutY();
-                  double _multiply_3 = (lambda * _layoutY_1);
-                  double _plus_1 = (_multiply_2 + _multiply_3);
-                  it.setLayoutY(_plus_1);
-                }
-              };
-            XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
-            newControlPoints.add(_doubleArrow);
+            {
+              XControlPoint _xControlPoint = new XControlPoint();
+              final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+                  public void apply(final XControlPoint it) {
+                    final double lambda = (delta * (i).intValue());
+                    double _minus = (1 - lambda);
+                    double _layoutX = first.getLayoutX();
+                    double _multiply = (_minus * _layoutX);
+                    double _layoutX_1 = last.getLayoutX();
+                    double _multiply_1 = (lambda * _layoutX_1);
+                    double _plus = (_multiply + _multiply_1);
+                    it.setLayoutX(_plus);
+                    double _minus_1 = (1 - lambda);
+                    double _layoutY = first.getLayoutY();
+                    double _multiply_2 = (_minus_1 * _layoutY);
+                    double _layoutY_1 = last.getLayoutY();
+                    double _multiply_3 = (lambda * _layoutY_1);
+                    double _plus_1 = (_multiply_2 + _multiply_3);
+                    it.setLayoutY(_plus_1);
+                  }
+                };
+              final XControlPoint newControlPoint = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
+              DoubleProperty _layoutXProperty = newControlPoint.layoutXProperty();
+              _layoutXProperty.addListener(this.scalarListener);
+              DoubleProperty _layoutYProperty = newControlPoint.layoutYProperty();
+              _layoutYProperty.addListener(this.scalarListener);
+              newControlPoints.add(newControlPoint);
+            }
           }
+          ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
           ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-          ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
-          int _size_1 = _controlPoints_5.size();
+          int _size_1 = _controlPoints_4.size();
           int _minus = (_size_1 - 1);
-          _controlPoints_4.addAll(_minus, newControlPoints);
-          this.resetPointTypes();
-          ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
-          ObservableList<XControlPoint> _println = InputOutput.<ObservableList<XControlPoint>>println(_controlPoints_6);
-          _xblockexpression_1 = (_println);
+          _controlPoints_3.addAll(_minus, newControlPoints);
+          MoveBehavior _resetPointTypes = this.resetPointTypes();
+          _xblockexpression_1 = (_resetPointTypes);
         }
         _xifexpression = _xblockexpression_1;
       }
@@ -186,12 +187,18 @@ public class ConnectionRouter implements XActivatable {
           int _minus_1 = (_plus - 1);
           ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_minus, _minus_1, false);
           for (final Integer i : _greaterThanDoubleDot) {
-            ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-            XControlPoint _get = _controlPoints_3.get((i).intValue());
-            toBeRemoved.add(_get);
+            {
+              ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
+              final XControlPoint removeMe = _controlPoints_3.get((i).intValue());
+              DoubleProperty _layoutXProperty = removeMe.layoutXProperty();
+              _layoutXProperty.removeListener(this.scalarListener);
+              DoubleProperty _layoutYProperty = removeMe.layoutYProperty();
+              _layoutYProperty.removeListener(this.scalarListener);
+              toBeRemoved.add(removeMe);
+            }
           }
-          ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-          _controlPoints_4.removeAll(toBeRemoved);
+          ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
+          _controlPoints_3.removeAll(toBeRemoved);
           MoveBehavior _resetPointTypes = this.resetPointTypes();
           _xblockexpression_1 = (_resetPointTypes);
         }
@@ -266,75 +273,89 @@ public class ConnectionRouter implements XActivatable {
     return null;
   }
   
-  public Object calculatePoints() {
-    Object _xblockexpression = null;
-    {
-      final Pair<Point2D,Point2D> anchors = this.findClosestAnchors();
-      final Point2D sourcePoint = anchors.getKey();
-      final Point2D targetPoint = anchors.getValue();
-      Object _xifexpression = null;
-      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-      int _size = _controlPoints.size();
-      boolean _lessThan = (_size < 2);
-      if (_lessThan) {
-        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-        XControlPoint _xControlPoint = new XControlPoint();
-        final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-            public void apply(final XControlPoint it) {
-              double _x = sourcePoint.getX();
-              it.setLayoutX(_x);
-              double _y = sourcePoint.getY();
-              it.setLayoutY(_y);
-              it.setType(XControlPointType.ANCHOR);
-            }
-          };
-        XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
-        XControlPoint _xControlPoint_1 = new XControlPoint();
-        final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
-            public void apply(final XControlPoint it) {
-              double _x = targetPoint.getX();
-              it.setLayoutX(_x);
-              double _y = targetPoint.getY();
-              it.setLayoutY(_y);
-              it.setType(XControlPointType.ANCHOR);
-            }
-          };
-        XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
-        boolean _setAll = _controlPoints_1.setAll(
-          new XControlPoint[] { _doubleArrow, _doubleArrow_1 });
-        _xifexpression = Boolean.valueOf(_setAll);
-      } else {
-        XControlPoint _xblockexpression_1 = null;
+  public void calculatePoints() {
+    final Pair<Point2D,Point2D> anchors = this.findClosestAnchors();
+    final Point2D sourcePoint = anchors.getKey();
+    final Point2D targetPoint = anchors.getValue();
+    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+    int _size = _controlPoints.size();
+    boolean _lessThan = (_size < 2);
+    if (_lessThan) {
+      ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+      for (final XControlPoint controlPoint : _controlPoints_1) {
         {
-          ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-          XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_2);
-          final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
-              public void apply(final XControlPoint it) {
-                double _x = sourcePoint.getX();
-                it.setLayoutX(_x);
-                double _y = sourcePoint.getY();
-                it.setLayoutY(_y);
-              }
-            };
-          ObjectExtensions.<XControlPoint>operator_doubleArrow(_head, _function_2);
-          ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-          XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_3);
-          final Procedure1<XControlPoint> _function_3 = new Procedure1<XControlPoint>() {
-              public void apply(final XControlPoint it) {
-                double _x = targetPoint.getX();
-                it.setLayoutX(_x);
-                double _y = targetPoint.getY();
-                it.setLayoutY(_y);
-              }
-            };
-          XControlPoint _doubleArrow_2 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
-          _xblockexpression_1 = (_doubleArrow_2);
+          DoubleProperty _layoutXProperty = controlPoint.layoutXProperty();
+          _layoutXProperty.removeListener(this.scalarListener);
+          DoubleProperty _layoutYProperty = controlPoint.layoutYProperty();
+          _layoutYProperty.removeListener(this.scalarListener);
         }
-        _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
+      XControlPoint _xControlPoint = new XControlPoint();
+      final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+          public void apply(final XControlPoint it) {
+            double _x = sourcePoint.getX();
+            it.setLayoutX(_x);
+            double _y = sourcePoint.getY();
+            it.setLayoutY(_y);
+            it.setType(XControlPointType.ANCHOR);
+          }
+        };
+      XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
+      XControlPoint _xControlPoint_1 = new XControlPoint();
+      final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
+          public void apply(final XControlPoint it) {
+            double _x = targetPoint.getX();
+            it.setLayoutX(_x);
+            double _y = targetPoint.getY();
+            it.setLayoutY(_y);
+            it.setType(XControlPointType.ANCHOR);
+          }
+        };
+      XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
+      _controlPoints_2.setAll(
+        new XControlPoint[] { _doubleArrow, _doubleArrow_1 });
+      ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
+      for (final XControlPoint controlPoint_1 : _controlPoints_3) {
+        {
+          DoubleProperty _layoutXProperty = controlPoint_1.layoutXProperty();
+          _layoutXProperty.addListener(this.scalarListener);
+          DoubleProperty _layoutYProperty = controlPoint_1.layoutYProperty();
+          _layoutYProperty.addListener(this.scalarListener);
+        }
+      }
+    } else {
+      ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
+      XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_4);
+      final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
+          public void apply(final XControlPoint it) {
+            double _x = sourcePoint.getX();
+            it.setLayoutX(_x);
+            double _y = sourcePoint.getY();
+            it.setLayoutY(_y);
+          }
+        };
+      ObjectExtensions.<XControlPoint>operator_doubleArrow(_head, _function_2);
+      ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
+      XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_5);
+      final Procedure1<XControlPoint> _function_3 = new Procedure1<XControlPoint>() {
+          public void apply(final XControlPoint it) {
+            double _x = targetPoint.getX();
+            it.setLayoutX(_x);
+            double _y = targetPoint.getY();
+            it.setLayoutY(_y);
+          }
+        };
+      ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
+      ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
+      final Procedure1<XControlPoint> _function_4 = new Procedure1<XControlPoint>() {
+          public void apply(final XControlPoint it) {
+            ObservableList<XControlPoint> _controlPoints = ConnectionRouter.this.getControlPoints();
+            it.update(_controlPoints);
+          }
+        };
+      IterableExtensions.<XControlPoint>forEach(_controlPoints_6, _function_4);
     }
-    return _xblockexpression;
   }
   
   protected Pair<Point2D,Point2D> findClosestAnchors() {

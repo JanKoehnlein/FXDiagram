@@ -62,16 +62,18 @@ class ConnectionRouter implements XActivatable {
 			val delta = 1.0 / (nodeDiff + 1)
 			val first = controlPoints.head
 			val last = controlPoints.last
-			println(controlPoints)
-			for(i: 1..nodeDiff) 
-				newControlPoints += new XControlPoint => [
+			for(i: 1..nodeDiff) {
+				val newControlPoint = new XControlPoint => [
 					val lambda = delta * i
 					layoutX = (1-lambda) * first.layoutX + (lambda) * last.layoutX 
 					layoutY = (1-lambda) * first.layoutY + (lambda) * last.layoutY
-				]
+				]				
+				newControlPoint.layoutXProperty.addListener(scalarListener)
+				newControlPoint.layoutYProperty.addListener(scalarListener)
+				newControlPoints += newControlPoint
+			} 
 			controlPoints.addAll(controlPoints.size-1, newControlPoints)
 			resetPointTypes
-			println(controlPoints)
 		}
 	}
 	
@@ -79,8 +81,12 @@ class ConnectionRouter implements XActivatable {
 		val nodeDiff = newSize - controlPoints.size
 		if(nodeDiff < 0) {
 			val toBeRemoved = newArrayList
-			for(i: controlPoints.size-1>..controlPoints.size + nodeDiff-1)
-				toBeRemoved.add(controlPoints.get(i))
+			for(i: controlPoints.size-1>..controlPoints.size + nodeDiff-1) {
+				val removeMe = controlPoints.get(i)
+				removeMe.layoutXProperty.removeListener(scalarListener)
+				removeMe.layoutYProperty.removeListener(scalarListener)				
+				toBeRemoved.add(removeMe)
+			}
 			controlPoints.removeAll(toBeRemoved)
 			resetPointTypes
 		}
@@ -115,6 +121,10 @@ class ConnectionRouter implements XActivatable {
 		val sourcePoint = anchors.key
 		val targetPoint = anchors.value
 		if (controlPoints.size < 2) {
+			for(controlPoint: controlPoints) {
+				controlPoint.layoutXProperty.removeListener(scalarListener)
+				controlPoint.layoutYProperty.removeListener(scalarListener)
+			} 
 			controlPoints.setAll(
 				#[new XControlPoint => [
 					layoutX = sourcePoint.x
@@ -125,6 +135,10 @@ class ConnectionRouter implements XActivatable {
 					layoutY = targetPoint.y
 					type = ANCHOR
 				]])
+			for(controlPoint: controlPoints) {
+				controlPoint.layoutXProperty.addListener(scalarListener)
+				controlPoint.layoutYProperty.addListener(scalarListener)
+			} 
 		} else {
 			controlPoints.head => [
 				layoutX = sourcePoint.x
@@ -134,9 +148,10 @@ class ConnectionRouter implements XActivatable {
 				layoutX = targetPoint.x
 				layoutY = targetPoint.y
 			]
+			controlPoints.forEach[update(controlPoints)]
 		}
 	}
-
+	
 	protected def findClosestAnchors() {
 		if (controlPoints.size <= 2) {
 			getNearestAnchor(connection.source, connection.target.midPoint) 
