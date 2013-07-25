@@ -5,7 +5,6 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.lib.simple.SimpleNode;
-import java.util.List;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
@@ -35,6 +34,7 @@ public class LayoutTests extends Application {
         public void apply(final XNestedDiagram it) {
           final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
               public void apply(final XNestedDiagram it) {
+                ObservableList<XNode> _nodes = it.getNodes();
                 SimpleNode _simpleNode = new SimpleNode("Foo");
                 final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
                     public void apply(final SimpleNode it) {
@@ -46,7 +46,8 @@ public class LayoutTests extends Application {
                     }
                   };
                 SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function);
-                it.addNode(_doubleArrow);
+                _nodes.add(_doubleArrow);
+                ObservableList<XNode> _nodes_1 = it.getNodes();
                 SimpleNode _simpleNode_1 = new SimpleNode("Bar");
                 final Procedure1<SimpleNode> _function_1 = new Procedure1<SimpleNode>() {
                     public void apply(final SimpleNode it) {
@@ -54,7 +55,7 @@ public class LayoutTests extends Application {
                     }
                   };
                 SimpleNode _doubleArrow_1 = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode_1, _function_1);
-                it.addNode(_doubleArrow_1);
+                _nodes_1.add(_doubleArrow_1);
                 it.scaleToFit();
               }
             };
@@ -73,6 +74,7 @@ public class LayoutTests extends Application {
     final Procedure1<XRootDiagram> _function_1 = new Procedure1<XRootDiagram>() {
         public void apply(final XRootDiagram it) {
           it.activate();
+          ObservableList<XNode> _nodes = it.getNodes();
           final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
               public void apply(final StackPane it) {
                 ObservableList<Node> _children = it.getChildren();
@@ -89,14 +91,14 @@ public class LayoutTests extends Application {
             };
           StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(rectangleBorderPane, _function);
           XNode _xNode = new XNode(_doubleArrow);
-          it.addNode(_xNode);
+          _nodes.add(_xNode);
           LayoutTests.this.nestedDiagram.activate();
         }
       };
     ObjectExtensions.<XRootDiagram>operator_doubleArrow(
       this.diagram, _function_1);
     stage.show();
-    List<XNode> _nodes = this.nestedDiagram.getNodes();
+    ObservableList<XNode> _nodes = this.nestedDiagram.getNodes();
     final Procedure1<XNode> _function_2 = new Procedure1<XNode>() {
         public void apply(final XNode it) {
           LayoutTests.this.printLayoutGeometry(it);
@@ -105,7 +107,7 @@ public class LayoutTests extends Application {
     IterableExtensions.<XNode>forEach(_nodes, _function_2);
     this.printLayoutGeometry(this.nestedDiagram);
     this.printLayoutGeometry(rectangleBorderPane);
-    List<XNode> _nodes_1 = this.nestedDiagram.getNodes();
+    ObservableList<XNode> _nodes_1 = this.nestedDiagram.getNodes();
     final Procedure1<XNode> _function_3 = new Procedure1<XNode>() {
         public void apply(final XNode it) {
           LayoutTests.this.printSizes(it);

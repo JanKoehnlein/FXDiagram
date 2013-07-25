@@ -1,7 +1,6 @@
 BUG
 - Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
 - click on nothing should deselect all
-- recalculate anchor when moving closest control point 
 - SVGExport: clipping 
 - Xconnection width 
 - populate menu
@@ -57,5 +56,6 @@ DONE
 - connection labels
 - distinguish between anchor and control points
 - why can I select the last but not the first CP
+- recalculate anchor when moving closest control point 
 
 

@@ -32,17 +32,15 @@ class NestedDiagramNode extends XNode {
 	static int nr = 0
 
 	public static val (XAbstractDiagram)=>void dummyDiagramContent = [
-		addNode(
-			new SimpleNode("Inner " + nr) => [
-				relocate(0,0)
-			])
-		addNode(
-			new SimpleNode("Inner " + nr + 1) => [
-				relocate(100,100)
-			])
-		addNode(new NestedDiagramNode("Nested " + nr + 2) => [
-				it.relocate(50, 50)
-			])
+		nodes += new SimpleNode("Inner " + nr) => [
+			relocate(0,0)
+		]
+		nodes += new SimpleNode("Inner " + nr + 1) => [
+			relocate(100,100)
+		]
+		nodes += new NestedDiagramNode("Nested " + nr + 2) => [
+			it.relocate(50, 50)
+		]
 		nr = nr + 3
 	]
 
@@ -80,7 +78,8 @@ class NestedDiagramNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate()
-		getRootDiagram.boundsInParentProperty.addListener [ prop, oldVal, newVal |
+		diagram.subDiagrams += innerDiagram
+		rootDiagram.boundsInParentProperty.addListener [ prop, oldVal, newVal |
 			val bounds = localToScene(boundsInLocal)
 			val area = bounds.width * bounds.height
 			if (area <= 100000) {

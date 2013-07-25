@@ -1,26 +1,19 @@
 package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Iterables;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
-import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.tools.XDiagramTool;
-import java.util.List;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -145,30 +138,8 @@ public class SelectionTool implements XDiagramTool {
   }
   
   public Iterable<XShape> getSelection() {
-    List<XNode> _nodes = this.rootDiagram.getNodes();
-    List<XConnection> _connections = this.rootDiagram.getConnections();
-    Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
-    List<XConnection> _connections_1 = this.rootDiagram.getConnections();
-    final Function1<XConnection,ObservableList<XControlPoint>> _function = new Function1<XConnection,ObservableList<XControlPoint>>() {
-        public ObservableList<XControlPoint> apply(final XConnection it) {
-          ObservableList<XControlPoint> _controlPoints = it.getControlPoints();
-          return _controlPoints;
-        }
-      };
-    List<ObservableList<XControlPoint>> _map = ListExtensions.<XConnection, ObservableList<XControlPoint>>map(_connections_1, _function);
-    Iterable<XControlPoint> _flatten = Iterables.<XControlPoint>concat(_map);
-    Iterable<XShape> _plus_1 = Iterables.<XShape>concat(_plus, _flatten);
-    List<XConnection> _connections_2 = this.rootDiagram.getConnections();
-    final Function1<XConnection,XConnectionLabel> _function_1 = new Function1<XConnection,XConnectionLabel>() {
-        public XConnectionLabel apply(final XConnection it) {
-          XConnectionLabel _label = it.getLabel();
-          return _label;
-        }
-      };
-    List<XConnectionLabel> _map_1 = ListExtensions.<XConnection, XConnectionLabel>map(_connections_2, _function_1);
-    Iterable<XConnectionLabel> _filterNull = IterableExtensions.<XConnectionLabel>filterNull(_map_1);
-    Iterable<XShape> _plus_2 = Iterables.<XShape>concat(_plus_1, _filterNull);
-    final Function1<XShape,Boolean> _function_2 = new Function1<XShape,Boolean>() {
+    Iterable<XShape> _allShapes = this.rootDiagram.getAllShapes();
+    final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
         public Boolean apply(final XShape it) {
           boolean _and = false;
           boolean _isSelectable = it.isSelectable();
@@ -181,7 +152,7 @@ public class SelectionTool implements XDiagramTool {
           return Boolean.valueOf(_and);
         }
       };
-    Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_plus_2, _function_2);
+    Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_allShapes, _function);
     return _filter;
   }
   

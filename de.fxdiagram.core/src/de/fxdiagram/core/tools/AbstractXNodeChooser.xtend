@@ -257,13 +257,13 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			var center = group.localToDiagram(0, 0)
 			choice.transforms.clear
 			group.children.remove(choice)
-			getDiagram.addNode(choice)
+			diagram.nodes += choice
 			choice.layout
 			val bounds = choice.layoutBounds
 			choice.layoutX = center.x - 0.5 * bounds.width
 			choice.layoutY = center.y - 0.5 * bounds.height
 			val connection = new XConnection(host, choice)
-			getDiagram.addConnection(connection)
+			diagram.connections += connection
 			choice.toFront
 			connection.toFront
 		}

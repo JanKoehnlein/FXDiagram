@@ -25,16 +25,16 @@ class LayoutTests extends Application {
 	override start(Stage stage) throws Exception {
 		nestedDiagram = new XNestedDiagram => [
 			contentsInitializer = [
-				addNode(
+				nodes += 
 					new SimpleNode("Foo") => [
 						relocate(-100, -100)
 						width = 65
 						height = 40
-					])
-				addNode(
+					]
+				nodes += 
 					new SimpleNode("Bar") => [
 						relocate(100, 100)
-					])
+					]
 				scaleToFit
 			]
 		]
@@ -43,12 +43,12 @@ class LayoutTests extends Application {
 		val rectangleBorderPane = new StackPane
 		diagram => [
 			activate
-			addNode(
+			nodes += 
 				new XNode(rectangleBorderPane => [
 					children += new Group => [ // why the hell is this additional group necessary
 						children += nestedDiagram
 					]
-				]))
+				])
 			nestedDiagram.activate
 		]
 		stage.show

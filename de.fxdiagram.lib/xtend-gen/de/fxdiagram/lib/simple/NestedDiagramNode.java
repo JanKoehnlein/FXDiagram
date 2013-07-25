@@ -48,6 +48,7 @@ public class NestedDiagramNode extends XNode {
     public Procedure1<? super XAbstractDiagram> apply() {
       final Procedure1<XAbstractDiagram> _function = new Procedure1<XAbstractDiagram>() {
           public void apply(final XAbstractDiagram it) {
+            ObservableList<XNode> _nodes = it.getNodes();
             String _plus = ("Inner " + Integer.valueOf(NestedDiagramNode.nr));
             SimpleNode _simpleNode = new SimpleNode(_plus);
             final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
@@ -56,7 +57,8 @@ public class NestedDiagramNode extends XNode {
                 }
               };
             SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function);
-            it.addNode(_doubleArrow);
+            _nodes.add(_doubleArrow);
+            ObservableList<XNode> _nodes_1 = it.getNodes();
             String _plus_1 = ("Inner " + Integer.valueOf(NestedDiagramNode.nr));
             String _plus_2 = (_plus_1 + Integer.valueOf(1));
             SimpleNode _simpleNode_1 = new SimpleNode(_plus_2);
@@ -66,7 +68,8 @@ public class NestedDiagramNode extends XNode {
                 }
               };
             SimpleNode _doubleArrow_1 = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode_1, _function_1);
-            it.addNode(_doubleArrow_1);
+            _nodes_1.add(_doubleArrow_1);
+            ObservableList<XNode> _nodes_2 = it.getNodes();
             String _plus_3 = ("Nested " + Integer.valueOf(NestedDiagramNode.nr));
             String _plus_4 = (_plus_3 + Integer.valueOf(2));
             NestedDiagramNode _nestedDiagramNode = new NestedDiagramNode(_plus_4);
@@ -76,7 +79,7 @@ public class NestedDiagramNode extends XNode {
                 }
               };
             NestedDiagramNode _doubleArrow_2 = ObjectExtensions.<NestedDiagramNode>operator_doubleArrow(_nestedDiagramNode, _function_2);
-            it.addNode(_doubleArrow_2);
+            _nodes_2.add(_doubleArrow_2);
             int _plus_5 = (NestedDiagramNode.nr + 3);
             NestedDiagramNode.nr = _plus_5;
           }
@@ -156,6 +159,9 @@ public class NestedDiagramNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
+    XAbstractDiagram _diagram = Extensions.getDiagram(this);
+    ObservableList<XNestedDiagram> _subDiagrams = _diagram.getSubDiagrams();
+    _subDiagrams.add(this.innerDiagram);
     XRootDiagram _rootDiagram = Extensions.getRootDiagram(this);
     ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _rootDiagram.boundsInParentProperty();
     final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {

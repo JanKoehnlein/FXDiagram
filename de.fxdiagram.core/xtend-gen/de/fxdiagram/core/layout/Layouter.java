@@ -32,7 +32,6 @@ import de.fxdiagram.core.layout.LayoutTransitionFactory;
 import de.fxdiagram.core.layout.LoggingTransformationService;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -227,7 +226,7 @@ public class Layouter {
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
       cache.put(it, kRoot);
-      List<XNode> _nodes = it.getNodes();
+      ObservableList<XNode> _nodes = it.getNodes();
       final Procedure1<XNode> _function = new Procedure1<XNode>() {
           public void apply(final XNode it) {
             EList<KNode> _children = kRoot.getChildren();
@@ -236,7 +235,7 @@ public class Layouter {
           }
         };
       IterableExtensions.<XNode>forEach(_nodes, _function);
-      List<XConnection> _connections = it.getConnections();
+      ObservableList<XConnection> _connections = it.getConnections();
       final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
           public void apply(final XConnection it) {
             Layouter.this.toKEdge(it, cache);

@@ -50,7 +50,7 @@ class Main extends Application {
 			width = 80
 			height = 30
 		]
-		diagram.addNode(source)
+		diagram.nodes += source
 
 		val target = new SimpleNode('target') => [
 			layoutX = 280
@@ -58,12 +58,12 @@ class Main extends Application {
 			width = 80
 			height = 30
 		]
-		diagram.addNode(target)
+		diagram.nodes += target
 
 		val connection = new XConnection(source, target)
 		val connectionLabel = new XConnectionLabel(connection)
 		connectionLabel.text.text = 'label'
-		diagram.addConnection(connection)
+		diagram.connections += connection
 
 		val target2 = new SimpleNode('target2') => [
 			layoutX = 400
@@ -71,17 +71,17 @@ class Main extends Application {
 			width = 80
 			height = 30
 		]
-		diagram.addNode(target2)
+		diagram.nodes += target2
 
 		val connection2 = new XConnection(source, target2)
 		val connectionLabel2 = new XConnectionLabel(connection2)
 		connectionLabel2.text.text = 'label2'
-		diagram.addConnection(connection2)
+		diagram.connections += connection2
 
 		val connection3 = new XConnection(target, target2)
 		val connectionLabel3 = new XConnectionLabel(connection3)
 		connectionLabel3.text.text = 'label3'
-		diagram.addConnection(connection3)
+		diagram.connections += connection3
 
 		val image = new ImageNode => [
 			image = new Image("media/seltsam.jpg", true)
@@ -89,7 +89,7 @@ class Main extends Application {
 			layoutY = 100
 			width = 100
 		]
-		diagram.addNode(image)
+		diagram.nodes += image
 
 		val movie = new MovieNode => [
 			movieUrl = this.class.classLoader.getResource("media/ScreenFlow.mp4")
@@ -99,13 +99,13 @@ class Main extends Application {
 			layoutX = 100
 			layoutY = 200
 		]
-		diagram.addNode(movie)
+		diagram.nodes += movie
 
 		val recursive = new RecursiveImageNode(ImageCache.get.getImage("media/seltsam.jpg"), 10, 0, 0.5) => [
 			width = 120
 			height = 90
 		]
-		diagram.addNode(recursive)
+		diagram.nodes += recursive
 		
 		val browser = new BrowserNode => [
 			width = 120
@@ -114,7 +114,7 @@ class Main extends Application {
 			layoutY = 500
 			pageUrl = new URL("http://koehnlein.blogspot.de/")
 		]
-		diagram.addNode(browser)
+		diagram.nodes += browser
 		
 		val brickBreakerNode = new BrickBreakerNode => [
 			width = 640
@@ -122,7 +122,7 @@ class Main extends Application {
 			layoutX = 500
 			layoutY = 100
 		]
-		diagram.addNode(brickBreakerNode)
+		diagram.nodes += brickBreakerNode
 
 		val javaTypeNode = new JavaTypeNode => [
 			javaType = Button
@@ -131,12 +131,12 @@ class Main extends Application {
 			layoutX = 500
 			layoutY = 200
 		]
-		diagram.addNode(javaTypeNode)
+		diagram.nodes += javaTypeNode
 
 		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
-		diagram.addNode(new LcarsNode(kirk) => [
+		diagram.nodes += new LcarsNode(kirk) => [
 			width = 120
-		])
+		]
 		val Task<Void> task = [|
 			new Layouter
 			null

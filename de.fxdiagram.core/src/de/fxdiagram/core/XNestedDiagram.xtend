@@ -10,6 +10,7 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+import javafx.collections.ListChangeListener
 
 /**
  * A nested diagram needs a width and a height to be set in order to rescale itself.
@@ -85,6 +86,23 @@ class XNestedDiagram extends XAbstractDiagram {
 
 	override doActivate() {
 		super.doActivate()
+		nodes.addListener [
+			ListChangeListener.Change<? extends XNode> change |
+			while(change.next) {
+				if(change.wasAdded)
+					change.addedSubList.forEach [
+						boundsInLocalProperty.addListener(boundsInLocalListener)
+						layoutXProperty.addListener(layoutListener)
+						layoutYProperty.addListener(layoutListener)
+					]
+				if(change.wasRemoved)
+					change.removed.forEach [
+						boundsInLocalProperty.removeListener(boundsInLocalListener)
+						layoutXProperty.removeListener(layoutListener)
+						layoutYProperty.removeListener(layoutListener)
+					]
+			}
+		]
 		contentsInitializer?.apply(this)
 	}
 
@@ -98,32 +116,6 @@ class XNestedDiagram extends XAbstractDiagram {
 
 	override getButtonLayer() {
 		buttonLayer
-	}
-
-	override internalAddNode(XNode node) {
-		super.internalAddNode(node)
-		node.boundsInLocalProperty.addListener(boundsInLocalListener)
-		node.layoutXProperty.addListener(layoutListener)
-		node.layoutYProperty.addListener(layoutListener)
-		parentDiagram.internalAddNode(node)
-	}
-
-	override internalAddButton(XRapidButton button) {
-		super.internalAddButton(button)
-		parentDiagram.internalAddButton(button)
-	}
-
-	override internalRemoveNode(XNode node) {
-		super.internalRemoveNode(node)
-		node.boundsInLocalProperty.removeListener(boundsInLocalListener)
-		node.layoutXProperty.removeListener(layoutListener)
-		node.layoutYProperty.removeListener(layoutListener)
-		parentDiagram.internalRemoveNode(node)
-	}
-
-	override internalRemoveButton(XRapidButton button) {
-		super.internalRemoveButton(button)
-		parentDiagram.internalRemoveButton(button)
 	}
 
 	def protected getParentDiagram() {

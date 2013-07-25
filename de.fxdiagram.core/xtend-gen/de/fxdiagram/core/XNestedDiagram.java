@@ -4,7 +4,6 @@ import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.geometry.BoundsExtensions;
 import java.util.List;
 import javafx.beans.property.BooleanProperty;
@@ -13,6 +12,8 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -61,7 +62,7 @@ public class XNestedDiagram extends XAbstractDiagram {
     BooleanProperty _visibleProperty = this.visibleProperty();
     final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
         public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVal, final Boolean newVal) {
-          List<XConnection> _connections = XNestedDiagram.this.getConnections();
+          ObservableList<XConnection> _connections = XNestedDiagram.this.getConnections();
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setVisible((newVal).booleanValue());
@@ -103,13 +104,13 @@ public class XNestedDiagram extends XAbstractDiagram {
   }
   
   public void scaleToFit() {
-    List<XNode> _nodes = this.getNodes();
+    ObservableList<XNode> _nodes = this.getNodes();
     boolean _isEmpty = _nodes.isEmpty();
     if (_isEmpty) {
       this.setScale(1);
       this.setClip(null);
     } else {
-      List<XNode> _nodes_1 = this.getNodes();
+      ObservableList<XNode> _nodes_1 = this.getNodes();
       final Function1<XNode,BoundingBox> _function = new Function1<XNode,BoundingBox>() {
           public BoundingBox apply(final XNode it) {
             Bounds _layoutBounds = it.getLayoutBounds();
@@ -208,6 +209,50 @@ public class XNestedDiagram extends XAbstractDiagram {
   
   public void doActivate() {
     super.doActivate();
+    ObservableList<XNode> _nodes = this.getNodes();
+    final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
+        public void onChanged(final Change<? extends XNode> change) {
+          boolean _next = change.next();
+          boolean _while = _next;
+          while (_while) {
+            {
+              boolean _wasAdded = change.wasAdded();
+              if (_wasAdded) {
+                List<? extends XNode> _addedSubList = change.getAddedSubList();
+                final Procedure1<XNode> _function = new Procedure1<XNode>() {
+                    public void apply(final XNode it) {
+                      ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+                      _boundsInLocalProperty.addListener(XNestedDiagram.this.boundsInLocalListener);
+                      DoubleProperty _layoutXProperty = it.layoutXProperty();
+                      _layoutXProperty.addListener(XNestedDiagram.this.layoutListener);
+                      DoubleProperty _layoutYProperty = it.layoutYProperty();
+                      _layoutYProperty.addListener(XNestedDiagram.this.layoutListener);
+                    }
+                  };
+                IterableExtensions.forEach(_addedSubList, _function);
+              }
+              boolean _wasRemoved = change.wasRemoved();
+              if (_wasRemoved) {
+                List<? extends XNode> _removed = change.getRemoved();
+                final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
+                    public void apply(final XNode it) {
+                      ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+                      _boundsInLocalProperty.removeListener(XNestedDiagram.this.boundsInLocalListener);
+                      DoubleProperty _layoutXProperty = it.layoutXProperty();
+                      _layoutXProperty.removeListener(XNestedDiagram.this.layoutListener);
+                      DoubleProperty _layoutYProperty = it.layoutYProperty();
+                      _layoutYProperty.removeListener(XNestedDiagram.this.layoutListener);
+                    }
+                  };
+                IterableExtensions.forEach(_removed, _function_1);
+              }
+            }
+            boolean _next_1 = change.next();
+            _while = _next_1;
+          }
+        }
+      };
+    _nodes.addListener(_function);
     if (this.contentsInitializer!=null) {
       this.contentsInitializer.apply(this);
     }
@@ -225,62 +270,6 @@ public class XNestedDiagram extends XAbstractDiagram {
   
   public Group getButtonLayer() {
     return this.buttonLayer;
-  }
-  
-  public boolean internalAddNode(final XNode node) {
-    boolean _xblockexpression = false;
-    {
-      super.internalAddNode(node);
-      ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = node.boundsInLocalProperty();
-      _boundsInLocalProperty.addListener(this.boundsInLocalListener);
-      DoubleProperty _layoutXProperty = node.layoutXProperty();
-      _layoutXProperty.addListener(this.layoutListener);
-      DoubleProperty _layoutYProperty = node.layoutYProperty();
-      _layoutYProperty.addListener(this.layoutListener);
-      XAbstractDiagram _parentDiagram = this.getParentDiagram();
-      boolean _internalAddNode = _parentDiagram.internalAddNode(node);
-      _xblockexpression = (_internalAddNode);
-    }
-    return _xblockexpression;
-  }
-  
-  public boolean internalAddButton(final XRapidButton button) {
-    boolean _xblockexpression = false;
-    {
-      super.internalAddButton(button);
-      XAbstractDiagram _parentDiagram = this.getParentDiagram();
-      boolean _internalAddButton = _parentDiagram.internalAddButton(button);
-      _xblockexpression = (_internalAddButton);
-    }
-    return _xblockexpression;
-  }
-  
-  public boolean internalRemoveNode(final XNode node) {
-    boolean _xblockexpression = false;
-    {
-      super.internalRemoveNode(node);
-      ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = node.boundsInLocalProperty();
-      _boundsInLocalProperty.removeListener(this.boundsInLocalListener);
-      DoubleProperty _layoutXProperty = node.layoutXProperty();
-      _layoutXProperty.removeListener(this.layoutListener);
-      DoubleProperty _layoutYProperty = node.layoutYProperty();
-      _layoutYProperty.removeListener(this.layoutListener);
-      XAbstractDiagram _parentDiagram = this.getParentDiagram();
-      boolean _internalRemoveNode = _parentDiagram.internalRemoveNode(node);
-      _xblockexpression = (_internalRemoveNode);
-    }
-    return _xblockexpression;
-  }
-  
-  public boolean internalRemoveButton(final XRapidButton button) {
-    boolean _xblockexpression = false;
-    {
-      super.internalRemoveButton(button);
-      XAbstractDiagram _parentDiagram = this.getParentDiagram();
-      boolean _internalRemoveButton = _parentDiagram.internalRemoveButton(button);
-      _xblockexpression = (_internalRemoveButton);
-    }
-    return _xblockexpression;
   }
   
   protected XAbstractDiagram getParentDiagram() {

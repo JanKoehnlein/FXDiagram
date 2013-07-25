@@ -19,6 +19,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -127,12 +128,8 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior {
     XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, "icons/add_16.png", addReferencesAction);
     XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, "icons/add_16.png", addReferencesAction);
     final List<XRapidButton> buttons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
-    final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
-        public void apply(final XRapidButton it) {
-          XAbstractDiagram _diagram = Extensions.getDiagram(host);
-          _diagram.addButton(it);
-        }
-      };
-    IterableExtensions.<XRapidButton>forEach(buttons, _function_2);
+    XAbstractDiagram _diagram = Extensions.getDiagram(host);
+    ObservableList<XRapidButton> _buttons = _diagram.getButtons();
+    Iterables.<XRapidButton>addAll(_buttons, buttons);
   }
 }

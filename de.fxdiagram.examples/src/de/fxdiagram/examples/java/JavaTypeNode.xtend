@@ -111,7 +111,7 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior {
 			chooser += supertypes.map[
 				superType | new JavaTypeNode => [ it.javaType = superType ]
 			] 
-			host.getRootDiagram.currentTool = chooser
+			host.rootDiagram.currentTool = chooser
 		]
 		val addReferencesAction = [
 			XRapidButton button |
@@ -121,7 +121,7 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior {
 			chooser += references.map[
 				reference | new JavaTypeNode => [ it.javaType = reference.type ]
 			] 
-			host.getRootDiagram.currentTool = chooser
+			host.rootDiagram.currentTool = chooser
 		]
 		val buttons = #[
 			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', addSuperTypeAction),
@@ -129,7 +129,7 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior {
 			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', addReferencesAction),
 			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addReferencesAction)
 		]
-		buttons.forEach[ host.getDiagram.addButton(it) ]
+		host.diagram.buttons += buttons
 	}
 	
 	

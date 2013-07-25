@@ -52,11 +52,7 @@ class SelectionTool implements XDiagramTool {
 	}
 
 	def getSelection() {
-		(rootDiagram.nodes 
-			+ rootDiagram.connections 
-			+ rootDiagram.connections.map[controlPoints].flatten
-			+ rootDiagram.connections.map[label].filterNull
-		).filter[isSelectable && selected]
+		rootDiagram.allShapes.filter[isSelectable && selected]
 	}
 
 	override activate() {

@@ -26,32 +26,32 @@ class AddRapidButtonBehavior extends AbstractBehavior {
 			val target = new NestedDiagramNode("new")
 			val source = button.getHost
 			val connection = new XConnection(source, target)
-			host.getDiagram.addNode(target)
-			host.getDiagram.addConnection(connection)
+			host.diagram.nodes += target
+			host.diagram.connections += connection
 			target.layoutX = 200 * (button.getPlacer.getXPos - 0.5) + source.layoutX 
 			target.layoutY = 150 * (button.getPlacer.getYPos - 0.5) + source.layoutY
 		]
 		val chooseAction = [ XRapidButton button | 
 			val chooser = new CarusselChooser(host, button.getChooserPosition)
 			chooser.addChoices
-			host.getRootDiagram.currentTool = chooser
+			host.rootDiagram.currentTool = chooser
 		]
 		val cubeChooseAction = [ XRapidButton button | 
 			val chooser = new CubeChooser(host, button.getChooserPosition)
 			chooser.addChoices
-			host.getRootDiagram.currentTool = chooser
+			host.rootDiagram.currentTool = chooser
 		]
 		val coverFlowChooseAction = [ XRapidButton button | 
 			val chooser = new CoverFlowChooser(host, button.getChooserPosition)
 			chooser.addChoices
-			host.getRootDiagram.currentTool = chooser
+			host.rootDiagram.currentTool = chooser
 		]
 		rapidButtons = #[
 			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', cubeChooseAction),
 			new XRapidButton(host, 0.5, 1, 'icons/add_16.png', coverFlowChooseAction),
 			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', chooseAction),
 			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addAction)]
-		rapidButtons.forEach[host.getDiagram.addButton(it)]
+		host.diagram.buttons += rapidButtons
 	}
 	
 	protected def addChoices(AbstractXNodeChooser chooser) {

@@ -3,6 +3,7 @@ package de.fxdiagram.examples;
 import com.mongodb.DBObject;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.layout.Layouter;
@@ -20,6 +21,7 @@ import de.fxdiagram.lib.simple.SimpleNode;
 import java.net.URL;
 import java.util.List;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.PerspectiveCamera;
@@ -67,7 +69,8 @@ public class Main extends Application {
           }
         };
       final NestedDiagramNode source = ObjectExtensions.<NestedDiagramNode>operator_doubleArrow(_nestedDiagramNode, _function);
-      diagram.addNode(source);
+      ObservableList<XNode> _nodes = diagram.getNodes();
+      _nodes.add(source);
       SimpleNode _simpleNode = new SimpleNode("target");
       final Procedure1<SimpleNode> _function_1 = new Procedure1<SimpleNode>() {
           public void apply(final SimpleNode it) {
@@ -78,14 +81,16 @@ public class Main extends Application {
           }
         };
       final SimpleNode target = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function_1);
-      diagram.addNode(target);
+      ObservableList<XNode> _nodes_1 = diagram.getNodes();
+      _nodes_1.add(target);
       XConnection _xConnection = new XConnection(source, target);
       final XConnection connection = _xConnection;
       XConnectionLabel _xConnectionLabel = new XConnectionLabel(connection);
       final XConnectionLabel connectionLabel = _xConnectionLabel;
       Text _text = connectionLabel.getText();
       _text.setText("label");
-      diagram.addConnection(connection);
+      ObservableList<XConnection> _connections = diagram.getConnections();
+      _connections.add(connection);
       SimpleNode _simpleNode_1 = new SimpleNode("target2");
       final Procedure1<SimpleNode> _function_2 = new Procedure1<SimpleNode>() {
           public void apply(final SimpleNode it) {
@@ -96,21 +101,24 @@ public class Main extends Application {
           }
         };
       final SimpleNode target2 = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode_1, _function_2);
-      diagram.addNode(target2);
+      ObservableList<XNode> _nodes_2 = diagram.getNodes();
+      _nodes_2.add(target2);
       XConnection _xConnection_1 = new XConnection(source, target2);
       final XConnection connection2 = _xConnection_1;
       XConnectionLabel _xConnectionLabel_1 = new XConnectionLabel(connection2);
       final XConnectionLabel connectionLabel2 = _xConnectionLabel_1;
       Text _text_1 = connectionLabel2.getText();
       _text_1.setText("label2");
-      diagram.addConnection(connection2);
+      ObservableList<XConnection> _connections_1 = diagram.getConnections();
+      _connections_1.add(connection2);
       XConnection _xConnection_2 = new XConnection(target, target2);
       final XConnection connection3 = _xConnection_2;
       XConnectionLabel _xConnectionLabel_2 = new XConnectionLabel(connection3);
       final XConnectionLabel connectionLabel3 = _xConnectionLabel_2;
       Text _text_2 = connectionLabel3.getText();
       _text_2.setText("label3");
-      diagram.addConnection(connection3);
+      ObservableList<XConnection> _connections_2 = diagram.getConnections();
+      _connections_2.add(connection3);
       ImageNode _imageNode = new ImageNode();
       final Procedure1<ImageNode> _function_3 = new Procedure1<ImageNode>() {
           public void apply(final ImageNode it) {
@@ -122,7 +130,8 @@ public class Main extends Application {
           }
         };
       final ImageNode image = ObjectExtensions.<ImageNode>operator_doubleArrow(_imageNode, _function_3);
-      diagram.addNode(image);
+      ObservableList<XNode> _nodes_3 = diagram.getNodes();
+      _nodes_3.add(image);
       MovieNode _movieNode = new MovieNode();
       final Procedure1<MovieNode> _function_4 = new Procedure1<MovieNode>() {
           public void apply(final MovieNode it) {
@@ -140,7 +149,8 @@ public class Main extends Application {
           }
         };
       final MovieNode movie = ObjectExtensions.<MovieNode>operator_doubleArrow(_movieNode, _function_4);
-      diagram.addNode(movie);
+      ObservableList<XNode> _nodes_4 = diagram.getNodes();
+      _nodes_4.add(movie);
       ImageCache _get = ImageCache.get();
       Image _image = _get.getImage("media/seltsam.jpg");
       RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_image, 10, 0, 0.5);
@@ -151,7 +161,8 @@ public class Main extends Application {
           }
         };
       final RecursiveImageNode recursive = ObjectExtensions.<RecursiveImageNode>operator_doubleArrow(_recursiveImageNode, _function_5);
-      diagram.addNode(recursive);
+      ObservableList<XNode> _nodes_5 = diagram.getNodes();
+      _nodes_5.add(recursive);
       BrowserNode _browserNode = new BrowserNode();
       final Procedure1<BrowserNode> _function_6 = new Procedure1<BrowserNode>() {
           public void apply(final BrowserNode it) {
@@ -168,7 +179,8 @@ public class Main extends Application {
           }
         };
       final BrowserNode browser = ObjectExtensions.<BrowserNode>operator_doubleArrow(_browserNode, _function_6);
-      diagram.addNode(browser);
+      ObservableList<XNode> _nodes_6 = diagram.getNodes();
+      _nodes_6.add(browser);
       BrickBreakerNode _brickBreakerNode = new BrickBreakerNode();
       final Procedure1<BrickBreakerNode> _function_7 = new Procedure1<BrickBreakerNode>() {
           public void apply(final BrickBreakerNode it) {
@@ -179,7 +191,8 @@ public class Main extends Application {
           }
         };
       final BrickBreakerNode brickBreakerNode = ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function_7);
-      diagram.addNode(brickBreakerNode);
+      ObservableList<XNode> _nodes_7 = diagram.getNodes();
+      _nodes_7.add(brickBreakerNode);
       JavaTypeNode _javaTypeNode = new JavaTypeNode();
       final Procedure1<JavaTypeNode> _function_8 = new Procedure1<JavaTypeNode>() {
           public void apply(final JavaTypeNode it) {
@@ -191,10 +204,12 @@ public class Main extends Application {
           }
         };
       final JavaTypeNode javaTypeNode = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_8);
-      diagram.addNode(javaTypeNode);
+      ObservableList<XNode> _nodes_8 = diagram.getNodes();
+      _nodes_8.add(javaTypeNode);
       LcarsAccess _get_1 = LcarsAccess.get();
       List<DBObject> _query = _get_1.query("name", "James T. Kirk");
       final DBObject kirk = _query.get(0);
+      ObservableList<XNode> _nodes_9 = diagram.getNodes();
       LcarsNode _lcarsNode = new LcarsNode(kirk);
       final Procedure1<LcarsNode> _function_9 = new Procedure1<LcarsNode>() {
           public void apply(final LcarsNode it) {
@@ -202,7 +217,7 @@ public class Main extends Application {
           }
         };
       LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function_9);
-      diagram.addNode(_doubleArrow);
+      _nodes_9.add(_doubleArrow);
       final Task<Void> _function_10 = new Task<Void>() {
           @Override
           protected Void call() throws Exception {

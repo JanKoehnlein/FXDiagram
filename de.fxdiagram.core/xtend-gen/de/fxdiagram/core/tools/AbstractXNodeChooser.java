@@ -607,7 +607,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       ObservableList<Node> _children = this.group.getChildren();
       _children.remove(choice);
       XAbstractDiagram _diagram = this.getDiagram();
-      _diagram.addNode(choice);
+      ObservableList<XNode> _nodes_1 = _diagram.getNodes();
+      _nodes_1.add(choice);
       choice.layout();
       final Bounds bounds = choice.getLayoutBounds();
       double _x = center.getX();
@@ -623,7 +624,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       XConnection _xConnection = new XConnection(this.host, choice);
       final XConnection connection = _xConnection;
       XAbstractDiagram _diagram_1 = this.getDiagram();
-      _diagram_1.addConnection(connection);
+      ObservableList<XConnection> _connections = _diagram_1.getConnections();
+      _connections.add(connection);
       choice.toFront();
       connection.toFront();
     }

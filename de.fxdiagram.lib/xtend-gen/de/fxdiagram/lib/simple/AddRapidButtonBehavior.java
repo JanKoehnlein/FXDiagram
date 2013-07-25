@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.simple;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.Placer;
@@ -18,9 +19,9 @@ import de.fxdiagram.lib.tools.CoverFlowChooser;
 import de.fxdiagram.lib.tools.CubeChooser;
 import java.util.Collections;
 import java.util.List;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -42,9 +43,11 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
           XConnection _xConnection = new XConnection(source, target);
           final XConnection connection = _xConnection;
           XAbstractDiagram _diagram = Extensions.getDiagram(host);
-          _diagram.addNode(target);
+          ObservableList<XNode> _nodes = _diagram.getNodes();
+          _nodes.add(target);
           XAbstractDiagram _diagram_1 = Extensions.getDiagram(host);
-          _diagram_1.addConnection(connection);
+          ObservableList<XConnection> _connections = _diagram_1.getConnections();
+          _connections.add(connection);
           Placer _placer = button.getPlacer();
           double _xPos = _placer.getXPos();
           double _minus = (_xPos - 0.5);
@@ -100,13 +103,9 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, "icons/add_16.png", chooseAction);
     XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, "icons/add_16.png", addAction);
     this.rapidButtons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
-    final Procedure1<XRapidButton> _function_4 = new Procedure1<XRapidButton>() {
-        public void apply(final XRapidButton it) {
-          XAbstractDiagram _diagram = Extensions.getDiagram(host);
-          _diagram.addButton(it);
-        }
-      };
-    IterableExtensions.<XRapidButton>forEach(this.rapidButtons, _function_4);
+    XAbstractDiagram _diagram = Extensions.getDiagram(host);
+    ObservableList<XRapidButton> _buttons = _diagram.getButtons();
+    Iterables.<XRapidButton>addAll(_buttons, this.rapidButtons);
   }
   
   protected void addChoices(final AbstractXNodeChooser chooser) {
