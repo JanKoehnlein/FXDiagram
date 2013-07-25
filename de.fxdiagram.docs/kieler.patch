@@ -1,5 +1,54 @@
+diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/.project b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/.project
+index 98fa9f5..8aa3c58 100644
+--- a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/.project
++++ b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/.project
+@@ -6,6 +6,11 @@
+ 	</projects>
+ 	<buildSpec>
+ 		<buildCommand>
++			<name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
++			<arguments>
++			</arguments>
++		</buildCommand>
++		<buildCommand>
+ 			<name>org.eclipse.jdt.core.javabuilder</name>
+ 			<arguments>
+ 			</arguments>
+@@ -29,7 +34,7 @@
+ 	<natures>
+ 		<nature>org.eclipse.jdt.core.javanature</nature>
+ 		<nature>org.eclipse.pde.PluginNature</nature>
+-		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
+ 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
++		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
+ 	</natures>
+ </projectDescription>
+diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/META-INF/MANIFEST.MF b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/META-INF/MANIFEST.MF
+index 49b3280..dcec368 100644
+--- a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/META-INF/MANIFEST.MF
++++ b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/META-INF/MANIFEST.MF
+@@ -31,5 +31,5 @@
+  de.cau.cs.kieler.kiml.graphviz.dot.services,
+  de.cau.cs.kieler.kiml.graphviz.dot.transform,
+  de.cau.cs.kieler.kiml.graphviz.dot.serializer,
+- de.cau.cs.kieler.kiml.graphviz.dot.formatting
++ de.cau.cs.kieler.kiml.graphviz.dot.formatting 
+ Bundle-Activator: de.cau.cs.kieler.kiml.graphviz.dot.GraphvizDotActivator
+diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/src/de/cau/cs/kieler/kiml/graphviz/dot/transform/DotExporter.java b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/src/de/cau/cs/kieler/kiml/graphviz/dot/transform/DotExporter.java
+index fc5bce8..b62873d 100644
+--- a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/src/de/cau/cs/kieler/kiml/graphviz/dot/transform/DotExporter.java
++++ b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/src/de/cau/cs/kieler/kiml/graphviz/dot/transform/DotExporter.java
+@@ -630,7 +630,7 @@
+ 
+         // set mid label: if empty, it is filled with a dummy string to avoid
+         // edge overlapping
+-        if (midLabel.length() > 0) {
++        if (midLabel.length() == 0) {
+             float labelSpacing = edgeLayout.getProperty(LayoutOptions.LABEL_SPACING);
+             int charsToAdd = (labelSpacing < 1 ? 0 : (int) labelSpacing) - 1;
+             for (int i = 0; i < charsToAdd; i++) {
 diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
-index 334a4ce..5168415 100644
+index 334a4ce..95d7125 100644
 --- a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
 +++ b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
 @@ -148,10 +148,10 @@
@@ -36,3 +85,24 @@ index 334a4ce..5168415 100644
          }
          
          return dotExecutable;
+@@ -391,13 +391,13 @@
+                     }
+                 }
+                 
+-                // retrieve the current timeout value
+-                IPreferenceStore preferenceStore =
+-                        GraphvizLayouterPlugin.getDefault().getPreferenceStore();
+-                int timeout = preferenceStore.getInt(PREF_TIMEOUT);
+-                if (timeout < PROCESS_MIN_TIMEOUT) {
+-                    timeout = PROCESS_DEF_TIMEOUT;
+-                }
++//                // retrieve the current timeout value
++//                IPreferenceStore preferenceStore =
++//                        GraphvizLayouterPlugin.getDefault().getPreferenceStore();
++//                int timeout = preferenceStore.getInt(PREF_TIMEOUT);
++//                if (timeout < PROCESS_MIN_TIMEOUT) {
++                   int timeout = PROCESS_DEF_TIMEOUT;
++//                }
+                 
+                 boolean interrupted = false;
+                 try {
