@@ -35,10 +35,10 @@ index 49b3280..dcec368 100644
 + de.cau.cs.kieler.kiml.graphviz.dot.formatting 
  Bundle-Activator: de.cau.cs.kieler.kiml.graphviz.dot.GraphvizDotActivator
 diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/src/de/cau/cs/kieler/kiml/graphviz/dot/transform/DotExporter.java b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/src/de/cau/cs/kieler/kiml/graphviz/dot/transform/DotExporter.java
-index fc5bce8..b62873d 100644
+index fc5bce8..306ac05 100644
 --- a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/src/de/cau/cs/kieler/kiml/graphviz/dot/transform/DotExporter.java
 +++ b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/src/de/cau/cs/kieler/kiml/graphviz/dot/transform/DotExporter.java
-@@ -630,7 +630,7 @@
+@@ -630,12 +630,14 @@
  
          // set mid label: if empty, it is filled with a dummy string to avoid
          // edge overlapping
@@ -47,6 +47,13 @@ index fc5bce8..b62873d 100644
              float labelSpacing = edgeLayout.getProperty(LayoutOptions.LABEL_SPACING);
              int charsToAdd = (labelSpacing < 1 ? 0 : (int) labelSpacing) - 1;
              for (int i = 0; i < charsToAdd; i++) {
+                 midLabel.append(isVertical ? "O" : "\nO");
+             }
++        }
++        if (midLabel.length() > 0) {
+             attributes.add(createAttribute(Attributes.LABEL, createString(midLabel.toString())));
+         }
+         // set head label
 diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
 index 334a4ce..95d7125 100644
 --- a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
