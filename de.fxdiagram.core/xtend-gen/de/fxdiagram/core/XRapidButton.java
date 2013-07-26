@@ -45,12 +45,12 @@ public class XRapidButton extends Parent implements XActivatable {
     ObservableList<Node> _children = this.getChildren();
     ImageView _imageView = new ImageView();
     final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-        public void apply(final ImageView it) {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(file);
-          it.setImage(_image);
-        }
-      };
+      public void apply(final ImageView it) {
+        ImageCache _get = ImageCache.get();
+        Image _image = _get.getImage(file);
+        it.setImage(_image);
+      }
+    };
     ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
     _children.add(_doubleArrow);
     Placer _placer = new Placer(this, xPos, yPos);
@@ -66,50 +66,50 @@ public class XRapidButton extends Parent implements XActivatable {
     this.isActiveProperty.set(true);
     Node _node = this.host.getNode();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          XRapidButton.this.show();
-        }
-      };
+      public void handle(final MouseEvent it) {
+        XRapidButton.this.show();
+      }
+    };
     _node.<MouseEvent>addEventHandler(MouseEvent.MOUSE_ENTERED, _function);
     Node _node_1 = this.host.getNode();
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          XRapidButton.this.fade();
-        }
-      };
+      public void handle(final MouseEvent it) {
+        XRapidButton.this.fade();
+      }
+    };
     _node_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_EXITED, _function_1);
   }
   
   public void doActivate() {
     this.setVisible(false);
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          XRapidButton.this.show();
-        }
-      };
+      public void handle(final MouseEvent it) {
+        XRapidButton.this.show();
+      }
+    };
     this.setOnMouseEntered(_function);
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          XRapidButton.this.fade();
-        }
-      };
+      public void handle(final MouseEvent it) {
+        XRapidButton.this.fade();
+      }
+    };
     this.setOnMouseExited(_function_1);
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          XRapidButton.this.action.apply(XRapidButton.this);
-          it.consume();
-        }
-      };
+      public void handle(final MouseEvent it) {
+        XRapidButton.this.action.apply(XRapidButton.this);
+        it.consume();
+      }
+    };
     this.setOnMousePressed(_function_2);
     this.placer.activate();
     final ChangeListener<Point2D> _function_3 = new ChangeListener<Point2D>() {
-        public void changed(final ObservableValue<? extends Point2D> element, final Point2D oldVal, final Point2D newVal) {
-          double _x = newVal.getX();
-          XRapidButton.this.setLayoutX(_x);
-          double _y = newVal.getY();
-          XRapidButton.this.setLayoutY(_y);
-        }
-      };
+      public void changed(final ObservableValue<? extends Point2D> element, final Point2D oldVal, final Point2D newVal) {
+        double _x = newVal.getX();
+        XRapidButton.this.setLayoutX(_x);
+        double _y = newVal.getY();
+        XRapidButton.this.setLayoutY(_y);
+      }
+    };
     this.placer.addListener(_function_3);
   }
   
@@ -147,29 +147,29 @@ public class XRapidButton extends Parent implements XActivatable {
       if (_equals) {
         Timeline _timeline = new Timeline();
         final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
-            public void apply(final Timeline it) {
-              it.setAutoReverse(true);
-              ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
-              Duration _millis = Duration.millis(500);
-              DoubleProperty _opacityProperty = XRapidButton.this.opacityProperty();
-              Double _double = new Double(1.0);
-              KeyValue _keyValue = new KeyValue(_opacityProperty, _double);
-              KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
-              _keyFrames.add(_keyFrame);
-              ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
-              Duration _millis_1 = Duration.millis(1000);
-              DoubleProperty _opacityProperty_1 = XRapidButton.this.opacityProperty();
-              KeyValue _keyValue_1 = new KeyValue(_opacityProperty_1, Double.valueOf(0.0));
-              KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
-              _keyFrames_1.add(_keyFrame_1);
-              ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
-              Duration _millis_2 = Duration.millis(1000);
-              BooleanProperty _visibleProperty = XRapidButton.this.visibleProperty();
-              KeyValue _keyValue_2 = new KeyValue(_visibleProperty, Boolean.valueOf(false));
-              KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
-              _keyFrames_2.add(_keyFrame_2);
-            }
-          };
+          public void apply(final Timeline it) {
+            it.setAutoReverse(true);
+            ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
+            Duration _millis = Duration.millis(500);
+            DoubleProperty _opacityProperty = XRapidButton.this.opacityProperty();
+            Double _double = new Double(1.0);
+            KeyValue _keyValue = new KeyValue(_opacityProperty, _double);
+            KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
+            _keyFrames.add(_keyFrame);
+            ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
+            Duration _millis_1 = Duration.millis(1000);
+            DoubleProperty _opacityProperty_1 = XRapidButton.this.opacityProperty();
+            KeyValue _keyValue_1 = new KeyValue(_opacityProperty_1, Double.valueOf(0.0));
+            KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
+            _keyFrames_1.add(_keyFrame_1);
+            ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
+            Duration _millis_2 = Duration.millis(1000);
+            BooleanProperty _visibleProperty = XRapidButton.this.visibleProperty();
+            KeyValue _keyValue_2 = new KeyValue(_visibleProperty, Boolean.valueOf(false));
+            KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
+            _keyFrames_2.add(_keyFrame_2);
+          }
+        };
         Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function);
         this.timeline = _doubleArrow;
       }

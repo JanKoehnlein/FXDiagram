@@ -6,6 +6,7 @@ import de.fxdiagram.annotations.properties.Lazy
 import de.fxdiagram.core.anchors.ConnectionRouter
 import java.util.List
 import javafx.beans.value.ChangeListener
+import javafx.geometry.BoundingBox
 import javafx.scene.Group
 import javafx.scene.paint.Color
 import javafx.scene.shape.CubicCurve
@@ -16,7 +17,6 @@ import javafx.scene.shape.Shape
 import static de.fxdiagram.core.XConnectionKind.*
 
 import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
 
 @Logging
 class XConnection extends XShape {
@@ -24,8 +24,8 @@ class XConnection extends XShape {
 	@FxProperty XNode source
 	@FxProperty XNode target
 	@FxProperty @Lazy XConnectionLabel label
-	@FxProperty double strokeWidth = 2
 	@FxProperty XConnectionKind kind = POLYLINE
+	@FxProperty double strokeWidth = 2.0
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
@@ -155,14 +155,11 @@ class XConnection extends XShape {
 	
 	def protected setShapes(List<? extends Shape> shapes) {
 		shapeGroup.children.setAll(shapes)
-		shapes
-			.map[strokeWidthProperty]
-			.filter[!isBound]
-			.forEach[
-				val doubleBinding = this.strokeWidthProperty / this.diagram.scaleXProperty
-				doubleBinding.value
-				it.bind(doubleBinding)
-			]
+		val strokeBoundsInRoot = source.localToRootDiagram(new BoundingBox(0, 0, this.strokeWidth, this.strokeWidth))
+		val strokeInRoot = 0.5 * (strokeBoundsInRoot.width + strokeBoundsInRoot.height) 
+		shapes.forEach[
+			strokeWidth = strokeInRoot
+		]
 	}
 	
 	override isSelectable() {

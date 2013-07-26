@@ -7,7 +7,6 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.FxProperty;
 import de.fxdiagram.annotations.properties.Lazy;
 import de.fxdiagram.core.Extensions;
-import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
@@ -15,11 +14,9 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.binding.DoubleExpressionExtensions;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -30,6 +27,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -399,30 +398,21 @@ public class XConnection extends XShape {
   protected void setShapes(final List<? extends Shape> shapes) {
     ObservableList<Node> _children = this.shapeGroup.getChildren();
     _children.setAll(shapes);
-    final Function1<Shape,SimpleDoubleProperty> _function = new Function1<Shape,SimpleDoubleProperty>() {
-      public SimpleDoubleProperty apply(final Shape it) {
-        return XConnection.this.strokeWidthProperty;
+    XNode _source = this.getSource();
+    double _strokeWidth = this.getStrokeWidth();
+    double _strokeWidth_1 = this.getStrokeWidth();
+    BoundingBox _boundingBox = new BoundingBox(0, 0, _strokeWidth, _strokeWidth_1);
+    final Bounds strokeBoundsInRoot = Extensions.localToRootDiagram(_source, _boundingBox);
+    double _width = strokeBoundsInRoot.getWidth();
+    double _height = strokeBoundsInRoot.getHeight();
+    double _plus = (_width + _height);
+    final double strokeInRoot = (0.5 * _plus);
+    final Procedure1<Shape> _function = new Procedure1<Shape>() {
+      public void apply(final Shape it) {
+        it.setStrokeWidth(strokeInRoot);
       }
     };
-    List<SimpleDoubleProperty> _map = ListExtensions.map(shapes, _function);
-    final Function1<SimpleDoubleProperty,Boolean> _function_1 = new Function1<SimpleDoubleProperty,Boolean>() {
-      public Boolean apply(final SimpleDoubleProperty it) {
-        boolean _isBound = it.isBound();
-        boolean _not = (!_isBound);
-        return Boolean.valueOf(_not);
-      }
-    };
-    Iterable<SimpleDoubleProperty> _filter = IterableExtensions.<SimpleDoubleProperty>filter(_map, _function_1);
-    final Procedure1<SimpleDoubleProperty> _function_2 = new Procedure1<SimpleDoubleProperty>() {
-      public void apply(final SimpleDoubleProperty it) {
-        XAbstractDiagram _diagram = Extensions.getDiagram(XConnection.this);
-        DoubleProperty _scaleXProperty = _diagram.scaleXProperty();
-        final DoubleBinding doubleBinding = DoubleExpressionExtensions.operator_divide(XConnection.this.strokeWidthProperty, _scaleXProperty);
-        doubleBinding.getValue();
-        it.bind(doubleBinding);
-      }
-    };
-    IterableExtensions.<SimpleDoubleProperty>forEach(_filter, _function_2);
+    IterableExtensions.forEach(shapes, _function);
   }
   
   public boolean isSelectable() {
@@ -504,27 +494,6 @@ public class XConnection extends XShape {
     
   }
   
-  private SimpleDoubleProperty strokeWidthProperty = new SimpleDoubleProperty(this, "strokeWidth",_initStrokeWidth());
-  
-  private static final double _initStrokeWidth() {
-    return 2;
-  }
-  
-  public double getStrokeWidth() {
-    return this.strokeWidthProperty.get();
-    
-  }
-  
-  public void setStrokeWidth(final double strokeWidth) {
-    this.strokeWidthProperty.set(strokeWidth);
-    
-  }
-  
-  public DoubleProperty strokeWidthProperty() {
-    return this.strokeWidthProperty;
-    
-  }
-  
   private SimpleObjectProperty<XConnectionKind> kindProperty = new SimpleObjectProperty<XConnectionKind>(this, "kind",_initKind());
   
   private static final XConnectionKind _initKind() {
@@ -543,6 +512,27 @@ public class XConnection extends XShape {
   
   public ObjectProperty<XConnectionKind> kindProperty() {
     return this.kindProperty;
+    
+  }
+  
+  private SimpleDoubleProperty strokeWidthProperty = new SimpleDoubleProperty(this, "strokeWidth",_initStrokeWidth());
+  
+  private static final double _initStrokeWidth() {
+    return 2.0;
+  }
+  
+  public double getStrokeWidth() {
+    return this.strokeWidthProperty.get();
+    
+  }
+  
+  public void setStrokeWidth(final double strokeWidth) {
+    this.strokeWidthProperty.set(strokeWidth);
+    
+  }
+  
+  public DoubleProperty strokeWidthProperty() {
+    return this.strokeWidthProperty;
     
   }
 }
