@@ -64,6 +64,8 @@ public class XConnectionLabel extends XShape {
             XConnectionLabel.this.setScaleX(1.05);
             XConnectionLabel.this.setScaleY(1.05);
             XConnectionLabel.this.toFront();
+            XConnection _connection = XConnectionLabel.this.getConnection();
+            _connection.setSelected(true);
           } else {
             XConnectionLabel.this.setEffect(null);
             XConnectionLabel.this.setScaleX(1.0);
