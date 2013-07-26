@@ -119,7 +119,8 @@ public class Layouter {
             final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
             float _xpos = shapeLayout.getXpos();
             float _ypos = shapeLayout.getYpos();
-            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xConnectionLabel, _xpos, _ypos, true, duration);
+            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xConnectionLabel, _xpos, _ypos, 
+              true, duration);
             animations.add(_createTransition);
           }
         }
@@ -337,7 +338,10 @@ public class Layouter {
       double _width = _layoutBounds.getWidth();
       Bounds _layoutBounds_1 = it.getLayoutBounds();
       double _height = _layoutBounds_1.getHeight();
-      shapeLayout.setSize(((float) _width), ((float) _height));
+      shapeLayout.setSize(
+        ((float) _width), 
+        ((float) _height));
+      shapeLayout.setProperty(LayoutOptions.FONT_SIZE, Integer.valueOf(12));
       shapeLayout.setProperty(LayoutOptions.EDGE_LABEL_PLACEMENT, EdgeLabelPlacement.CENTER);
       EList<KGraphData> _data = kLabel.getData();
       _data.add(shapeLayout);

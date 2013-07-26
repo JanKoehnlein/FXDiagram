@@ -30,7 +30,7 @@ class Layouter {
 	extension KGraphFactory = KGraphFactory.eINSTANCE
 	
 	extension LayoutTransitionFactory = new LayoutTransitionFactory
-
+	
 	new() {
 		// pre-initialize
 		layoutProvider.dispose
@@ -63,7 +63,10 @@ class Layouter {
 			switch xElement { 
 				XConnectionLabel: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
-					animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, true, duration)
+					animations += createTransition(xElement,
+						shapeLayout.xpos, shapeLayout.ypos, 
+						true, duration
+					)
 				}
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
@@ -110,7 +113,7 @@ class Layouter {
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
 		shapeLayout.setProperty(LayoutOptions.SPACING, 60f)
-		//shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
+//		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
 		kRoot.data += shapeLayout
 		cache.put(it, kRoot)
 		nodes.forEach [
@@ -154,9 +157,14 @@ class Layouter {
 	
 	protected def toKLabel(XConnectionLabel it, Map<Object, KGraphElement> cache) {
 		val kLabel = createKLabel
-		kLabel.text = it?.text	?.text ?: ''
+		kLabel.text = it?.text?.text ?: ''
 		val shapeLayout = createKShapeLayout
-		shapeLayout.setSize(layoutBounds.width as float, layoutBounds.height as float)
+		shapeLayout.setSize(
+			layoutBounds.width as float, 
+			layoutBounds.height as float
+		)
+		// HACK: enlarge font size to increase label distance
+		shapeLayout.setProperty(LayoutOptions.FONT_SIZE, 12)
 		shapeLayout.setProperty(LayoutOptions.EDGE_LABEL_PLACEMENT, EdgeLabelPlacement.CENTER)
 		kLabel.data += shapeLayout
 		cache.put(it, kLabel)

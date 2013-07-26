@@ -21,7 +21,6 @@ MINOR
 - Transparent stage?
 - need for connection layer?
 - can't set size of browser node
-- increase LayoutOptions.LABEL_SPACING, 8f
 - different anchors for sides of flipNodes 
 - move brickbreaker to external
  
@@ -57,5 +56,6 @@ DONE
 - distinguish between anchor and control points
 - why can I select the last but not the first CP
 - recalculate anchor when moving closest control point 
+- increase label spaceing
 
 
