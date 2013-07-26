@@ -88,46 +88,46 @@ public class AuxiliaryLinesCache {
   
   public AuxiliaryLinesCache(final XAbstractDiagram diagram) {
     final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
-        public void onChanged(final Change<? extends XNode> it) {
-          boolean _next = it.next();
-          boolean _while = _next;
-          while (_while) {
-            {
-              boolean _wasAdded = it.wasAdded();
-              if (_wasAdded) {
-                List<? extends XNode> _addedSubList = it.getAddedSubList();
-                final Procedure1<XNode> _function = new Procedure1<XNode>() {
-                    public void apply(final XNode it) {
-                      AuxiliaryLinesCache.this.watchNode(it);
-                    }
-                  };
-                IterableExtensions.forEach(_addedSubList, _function);
-              }
-              boolean _wasRemoved = it.wasRemoved();
-              if (_wasRemoved) {
-                List<? extends XNode> _removed = it.getRemoved();
-                final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-                    public void apply(final XNode it) {
-                      AuxiliaryLinesCache.this.unwatchNode(it);
-                    }
-                  };
-                IterableExtensions.forEach(_removed, _function_1);
-              }
+      public void onChanged(final Change<? extends XNode> it) {
+        boolean _next = it.next();
+        boolean _while = _next;
+        while (_while) {
+          {
+            boolean _wasAdded = it.wasAdded();
+            if (_wasAdded) {
+              List<? extends XNode> _addedSubList = it.getAddedSubList();
+              final Procedure1<XNode> _function = new Procedure1<XNode>() {
+                public void apply(final XNode it) {
+                  AuxiliaryLinesCache.this.watchNode(it);
+                }
+              };
+              IterableExtensions.forEach(_addedSubList, _function);
             }
-            boolean _next_1 = it.next();
-            _while = _next_1;
+            boolean _wasRemoved = it.wasRemoved();
+            if (_wasRemoved) {
+              List<? extends XNode> _removed = it.getRemoved();
+              final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
+                public void apply(final XNode it) {
+                  AuxiliaryLinesCache.this.unwatchNode(it);
+                }
+              };
+              IterableExtensions.forEach(_removed, _function_1);
+            }
           }
+          boolean _next_1 = it.next();
+          _while = _next_1;
         }
-      };
+      }
+    };
     this.nodesListener = _function;
     ObservableList<XNode> _nodes = diagram.getNodes();
     _nodes.addListener(this.nodesListener);
     ObservableList<XNode> _nodes_1 = diagram.getNodes();
     final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
-          AuxiliaryLinesCache.this.watchNode(it);
-        }
-      };
+      public void apply(final XNode it) {
+        AuxiliaryLinesCache.this.watchNode(it);
+      }
+    };
     IterableExtensions.<XNode>forEach(_nodes_1, _function_1);
   }
   
@@ -187,16 +187,16 @@ public class AuxiliaryLinesCache {
   
   public void watchNode(final XNode node) {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
-        public void changed(final ObservableValue<? extends Number> scalar, final Number oldValue, final Number newValue) {
-          AuxiliaryLinesCache.this.updateNode(node);
-        }
-      };
+      public void changed(final ObservableValue<? extends Number> scalar, final Number oldValue, final Number newValue) {
+        AuxiliaryLinesCache.this.updateNode(node);
+      }
+    };
     final ChangeListener<Number> scalarListener = _function;
     final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
-        public void changed(final ObservableValue<? extends Bounds> scalar, final Bounds oldValue, final Bounds newValue) {
-          AuxiliaryLinesCache.this.updateNode(node);
-        }
-      };
+      public void changed(final ObservableValue<? extends Bounds> scalar, final Bounds oldValue, final Bounds newValue) {
+        AuxiliaryLinesCache.this.updateNode(node);
+      }
+    };
     final ChangeListener<Bounds> boundsListener = _function_1;
     DoubleProperty _layoutXProperty = node.layoutXProperty();
     _layoutXProperty.addListener(scalarListener);

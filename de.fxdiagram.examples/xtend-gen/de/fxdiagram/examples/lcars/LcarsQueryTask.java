@@ -38,38 +38,38 @@ public class LcarsQueryTask extends Task<Void> {
       CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(this.host, Pos.BOTTOM_CENTER);
       final CoverFlowChooser chooser = _coverFlowChooser;
       final Function1<DBObject,Boolean> _function = new Function1<DBObject,Boolean>() {
-          public Boolean apply(final DBObject it) {
-            Object _get = it.get("_id");
-            String _string = _get.toString();
-            String _dbId = LcarsQueryTask.this.host.getDbId();
-            boolean _notEquals = (!Objects.equal(_string, _dbId));
-            return Boolean.valueOf(_notEquals);
-          }
-        };
+        public Boolean apply(final DBObject it) {
+          Object _get = it.get("_id");
+          String _string = _get.toString();
+          String _dbId = LcarsQueryTask.this.host.getDbId();
+          boolean _notEquals = (!Objects.equal(_string, _dbId));
+          return Boolean.valueOf(_notEquals);
+        }
+      };
       Iterable<DBObject> _filter = IterableExtensions.<DBObject>filter(siblings, _function);
       final Function1<DBObject,LcarsNode> _function_1 = new Function1<DBObject,LcarsNode>() {
-          public LcarsNode apply(final DBObject it) {
-            LcarsNode _lcarsNode = new LcarsNode(it);
-            final Procedure1<LcarsNode> _function = new Procedure1<LcarsNode>() {
-                public void apply(final LcarsNode it) {
-                  double _width = LcarsQueryTask.this.host.getWidth();
-                  it.setWidth(_width);
-                  double _height = LcarsQueryTask.this.host.getHeight();
-                  it.setHeight(_height);
-                }
-              };
-            LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function);
-            return _doubleArrow;
-          }
-        };
+        public LcarsNode apply(final DBObject it) {
+          LcarsNode _lcarsNode = new LcarsNode(it);
+          final Procedure1<LcarsNode> _function = new Procedure1<LcarsNode>() {
+            public void apply(final LcarsNode it) {
+              double _width = LcarsQueryTask.this.host.getWidth();
+              it.setWidth(_width);
+              double _height = LcarsQueryTask.this.host.getHeight();
+              it.setHeight(_height);
+            }
+          };
+          LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function);
+          return _doubleArrow;
+        }
+      };
       Iterable<LcarsNode> _map = IterableExtensions.<DBObject, LcarsNode>map(_filter, _function_1);
       chooser.operator_add(_map);
       final Runnable _function_2 = new Runnable() {
-          public void run() {
-            XRootDiagram _rootDiagram = Extensions.getRootDiagram(LcarsQueryTask.this.host);
-            _rootDiagram.setCurrentTool(chooser);
-          }
-        };
+        public void run() {
+          XRootDiagram _rootDiagram = Extensions.getRootDiagram(LcarsQueryTask.this.host);
+          _rootDiagram.setCurrentTool(chooser);
+        }
+      };
       Platform.runLater(_function_2);
       _xblockexpression = (null);
     }

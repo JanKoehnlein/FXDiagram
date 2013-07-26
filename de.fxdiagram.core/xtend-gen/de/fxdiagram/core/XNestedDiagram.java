@@ -61,40 +61,40 @@ public class XNestedDiagram extends XAbstractDiagram {
     _children_1.add(this.buttonLayer);
     BooleanProperty _visibleProperty = this.visibleProperty();
     final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-        public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVal, final Boolean newVal) {
-          ObservableList<XConnection> _connections = XNestedDiagram.this.getConnections();
-          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-              public void apply(final XConnection it) {
-                it.setVisible((newVal).booleanValue());
-              }
-            };
-          IterableExtensions.<XConnection>forEach(_connections, _function);
-        }
-      };
+      public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVal, final Boolean newVal) {
+        ObservableList<XConnection> _connections = XNestedDiagram.this.getConnections();
+        final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+          public void apply(final XConnection it) {
+            it.setVisible((newVal).booleanValue());
+          }
+        };
+        IterableExtensions.<XConnection>forEach(_connections, _function);
+      }
+    };
     _visibleProperty.addListener(_function);
     final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
-        public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-          XNestedDiagram.this.scaleToFit();
-        }
-      };
+      public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
+        XNestedDiagram.this.scaleToFit();
+      }
+    };
     this.boundsInLocalListener = _function_1;
     final ChangeListener<Number> _function_2 = new ChangeListener<Number>() {
-        public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-          XNestedDiagram.this.scaleToFit();
-        }
-      };
+      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
+        XNestedDiagram.this.scaleToFit();
+      }
+    };
     this.layoutListener = _function_2;
     final ChangeListener<Number> _function_3 = new ChangeListener<Number>() {
-        public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-          XNestedDiagram.this.scaleToFit();
-        }
-      };
+      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
+        XNestedDiagram.this.scaleToFit();
+      }
+    };
     this.widthProperty.addListener(_function_3);
     final ChangeListener<Number> _function_4 = new ChangeListener<Number>() {
-        public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-          XNestedDiagram.this.scaleToFit();
-        }
-      };
+      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
+        XNestedDiagram.this.scaleToFit();
+      }
+    };
     this.heightProperty.addListener(_function_4);
   }
   
@@ -112,21 +112,21 @@ public class XNestedDiagram extends XAbstractDiagram {
     } else {
       ObservableList<XNode> _nodes_1 = this.getNodes();
       final Function1<XNode,BoundingBox> _function = new Function1<XNode,BoundingBox>() {
-          public BoundingBox apply(final XNode it) {
-            Bounds _layoutBounds = it.getLayoutBounds();
-            double _layoutX = it.getLayoutX();
-            double _layoutY = it.getLayoutY();
-            BoundingBox _translate = BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
-            return _translate;
-          }
-        };
+        public BoundingBox apply(final XNode it) {
+          Bounds _layoutBounds = it.getLayoutBounds();
+          double _layoutX = it.getLayoutX();
+          double _layoutY = it.getLayoutY();
+          BoundingBox _translate = BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
+          return _translate;
+        }
+      };
       List<BoundingBox> _map = ListExtensions.<XNode, BoundingBox>map(_nodes_1, _function);
       final Function2<BoundingBox,BoundingBox,BoundingBox> _function_1 = new Function2<BoundingBox,BoundingBox,BoundingBox>() {
-          public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
-            BoundingBox _plus = BoundsExtensions.operator_plus(b0, b1);
-            return _plus;
-          }
-        };
+        public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
+          BoundingBox _plus = BoundsExtensions.operator_plus(b0, b1);
+          return _plus;
+        }
+      };
       final BoundingBox myBounds = IterableExtensions.<BoundingBox>reduce(_map, _function_1);
       double _xifexpression = (double) 0;
       double _width = myBounds.getWidth();
@@ -158,45 +158,45 @@ public class XNestedDiagram extends XAbstractDiagram {
       this.setScale(newScale);
       Rectangle _rectangle = new Rectangle();
       final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
-          public void apply(final Rectangle it) {
-            double _minX = myBounds.getMinX();
-            it.setX(_minX);
-            double _width = myBounds.getWidth();
-            it.setWidth(_width);
-            boolean _equals = (newScaleX == 1);
-            if (_equals) {
-              double _width_1 = it.getWidth();
-              double _divide = (_width_1 / newScale);
-              double _width_2 = myBounds.getWidth();
-              final double delta = (_divide - _width_2);
-              double _x = it.getX();
-              double _multiply = (0.5 * delta);
-              double _minus = (_x - _multiply);
-              it.setX(_minus);
-              double _width_3 = it.getWidth();
-              double _plus = (_width_3 + delta);
-              it.setWidth(_plus);
-            }
-            double _minY = myBounds.getMinY();
-            it.setY(_minY);
-            double _height = myBounds.getHeight();
-            it.setHeight(_height);
-            boolean _equals_1 = (newScaleY == 1);
-            if (_equals_1) {
-              double _height_1 = it.getHeight();
-              double _divide_1 = (_height_1 / newScale);
-              double _height_2 = myBounds.getHeight();
-              final double delta_1 = (_divide_1 - _height_2);
-              double _y = it.getY();
-              double _multiply_1 = (0.5 * delta_1);
-              double _minus_1 = (_y - _multiply_1);
-              it.setY(_minus_1);
-              double _height_3 = it.getHeight();
-              double _plus_1 = (_height_3 + delta_1);
-              it.setHeight(_plus_1);
-            }
+        public void apply(final Rectangle it) {
+          double _minX = myBounds.getMinX();
+          it.setX(_minX);
+          double _width = myBounds.getWidth();
+          it.setWidth(_width);
+          boolean _equals = (newScaleX == 1);
+          if (_equals) {
+            double _width_1 = it.getWidth();
+            double _divide = (_width_1 / newScale);
+            double _width_2 = myBounds.getWidth();
+            final double delta = (_divide - _width_2);
+            double _x = it.getX();
+            double _multiply = (0.5 * delta);
+            double _minus = (_x - _multiply);
+            it.setX(_minus);
+            double _width_3 = it.getWidth();
+            double _plus = (_width_3 + delta);
+            it.setWidth(_plus);
           }
-        };
+          double _minY = myBounds.getMinY();
+          it.setY(_minY);
+          double _height = myBounds.getHeight();
+          it.setHeight(_height);
+          boolean _equals_1 = (newScaleY == 1);
+          if (_equals_1) {
+            double _height_1 = it.getHeight();
+            double _divide_1 = (_height_1 / newScale);
+            double _height_2 = myBounds.getHeight();
+            final double delta_1 = (_divide_1 - _height_2);
+            double _y = it.getY();
+            double _multiply_1 = (0.5 * delta_1);
+            double _minus_1 = (_y - _multiply_1);
+            it.setY(_minus_1);
+            double _height_3 = it.getHeight();
+            double _plus_1 = (_height_3 + delta_1);
+            it.setHeight(_plus_1);
+          }
+        }
+      };
       Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
       this.setClip(_doubleArrow);
     }
@@ -211,47 +211,47 @@ public class XNestedDiagram extends XAbstractDiagram {
     super.doActivate();
     ObservableList<XNode> _nodes = this.getNodes();
     final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
-        public void onChanged(final Change<? extends XNode> change) {
-          boolean _next = change.next();
-          boolean _while = _next;
-          while (_while) {
-            {
-              boolean _wasAdded = change.wasAdded();
-              if (_wasAdded) {
-                List<? extends XNode> _addedSubList = change.getAddedSubList();
-                final Procedure1<XNode> _function = new Procedure1<XNode>() {
-                    public void apply(final XNode it) {
-                      ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-                      _boundsInLocalProperty.addListener(XNestedDiagram.this.boundsInLocalListener);
-                      DoubleProperty _layoutXProperty = it.layoutXProperty();
-                      _layoutXProperty.addListener(XNestedDiagram.this.layoutListener);
-                      DoubleProperty _layoutYProperty = it.layoutYProperty();
-                      _layoutYProperty.addListener(XNestedDiagram.this.layoutListener);
-                    }
-                  };
-                IterableExtensions.forEach(_addedSubList, _function);
-              }
-              boolean _wasRemoved = change.wasRemoved();
-              if (_wasRemoved) {
-                List<? extends XNode> _removed = change.getRemoved();
-                final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-                    public void apply(final XNode it) {
-                      ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-                      _boundsInLocalProperty.removeListener(XNestedDiagram.this.boundsInLocalListener);
-                      DoubleProperty _layoutXProperty = it.layoutXProperty();
-                      _layoutXProperty.removeListener(XNestedDiagram.this.layoutListener);
-                      DoubleProperty _layoutYProperty = it.layoutYProperty();
-                      _layoutYProperty.removeListener(XNestedDiagram.this.layoutListener);
-                    }
-                  };
-                IterableExtensions.forEach(_removed, _function_1);
-              }
+      public void onChanged(final Change<? extends XNode> change) {
+        boolean _next = change.next();
+        boolean _while = _next;
+        while (_while) {
+          {
+            boolean _wasAdded = change.wasAdded();
+            if (_wasAdded) {
+              List<? extends XNode> _addedSubList = change.getAddedSubList();
+              final Procedure1<XNode> _function = new Procedure1<XNode>() {
+                public void apply(final XNode it) {
+                  ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+                  _boundsInLocalProperty.addListener(XNestedDiagram.this.boundsInLocalListener);
+                  DoubleProperty _layoutXProperty = it.layoutXProperty();
+                  _layoutXProperty.addListener(XNestedDiagram.this.layoutListener);
+                  DoubleProperty _layoutYProperty = it.layoutYProperty();
+                  _layoutYProperty.addListener(XNestedDiagram.this.layoutListener);
+                }
+              };
+              IterableExtensions.forEach(_addedSubList, _function);
             }
-            boolean _next_1 = change.next();
-            _while = _next_1;
+            boolean _wasRemoved = change.wasRemoved();
+            if (_wasRemoved) {
+              List<? extends XNode> _removed = change.getRemoved();
+              final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
+                public void apply(final XNode it) {
+                  ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+                  _boundsInLocalProperty.removeListener(XNestedDiagram.this.boundsInLocalListener);
+                  DoubleProperty _layoutXProperty = it.layoutXProperty();
+                  _layoutXProperty.removeListener(XNestedDiagram.this.layoutListener);
+                  DoubleProperty _layoutYProperty = it.layoutYProperty();
+                  _layoutYProperty.removeListener(XNestedDiagram.this.layoutListener);
+                }
+              };
+              IterableExtensions.forEach(_removed, _function_1);
+            }
           }
+          boolean _next_1 = change.next();
+          _while = _next_1;
         }
-      };
+      }
+    };
     _nodes.addListener(_function);
     if (this.contentsInitializer!=null) {
       this.contentsInitializer.apply(this);

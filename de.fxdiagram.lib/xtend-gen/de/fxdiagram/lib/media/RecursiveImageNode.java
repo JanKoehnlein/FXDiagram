@@ -65,10 +65,10 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     XRootDiagram _rootDiagram = Extensions.getRootDiagram(this);
     ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _rootDiagram.boundsInParentProperty();
     final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
-        public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-          RecursiveImageNode.this.updateChildPanes();
-        }
-      };
+      public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
+        RecursiveImageNode.this.updateChildPanes();
+      }
+    };
     _boundsInParentProperty.addListener(_function);
     AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
     final AddRapidButtonBehavior rapidButtonBehavior = _addRapidButtonBehavior;
@@ -78,32 +78,32 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   public void setHeight(final double height) {
     super.setHeight(height);
     final Procedure1<Pane> _function = new Procedure1<Pane>() {
-        public void apply(final Pane it) {
-          ObservableList<Node> _children = it.getChildren();
-          Node _head = IterableExtensions.<Node>head(_children);
-          ObservableList<Node> _children_1 = it.getChildren();
-          Node _head_1 = IterableExtensions.<Node>head(_children);
-          if (((ImageView) _head_1)!=null) {
-            ((ImageView) _head_1).setFitHeight(height);
-          }
+      public void apply(final Pane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Node _head = IterableExtensions.<Node>head(_children);
+        ObservableList<Node> _children_1 = it.getChildren();
+        Node _head_1 = IterableExtensions.<Node>head(_children);
+        if (((ImageView) _head_1)!=null) {
+          ((ImageView) _head_1).setFitHeight(height);
         }
-      };
+      }
+    };
     IterableExtensions.<Pane>forEach(this.panes, _function);
   }
   
   public void setWidth(final double width) {
     super.setWidth(width);
     final Procedure1<Pane> _function = new Procedure1<Pane>() {
-        public void apply(final Pane it) {
-          ObservableList<Node> _children = it.getChildren();
-          Node _head = IterableExtensions.<Node>head(_children);
-          ObservableList<Node> _children_1 = it.getChildren();
-          Node _head_1 = IterableExtensions.<Node>head(_children);
-          if (((ImageView) _head_1)!=null) {
-            ((ImageView) _head_1).setFitWidth(width);
-          }
+      public void apply(final Pane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Node _head = IterableExtensions.<Node>head(_children);
+        ObservableList<Node> _children_1 = it.getChildren();
+        Node _head_1 = IterableExtensions.<Node>head(_children);
+        if (((ImageView) _head_1)!=null) {
+          ((ImageView) _head_1).setFitWidth(width);
         }
-      };
+      }
+    };
     IterableExtensions.<Pane>forEach(this.panes, _function);
   }
   
@@ -112,46 +112,46 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     {
       Pane _pane = new Pane();
       final Procedure1<Pane> _function = new Procedure1<Pane>() {
-          public void apply(final Pane it) {
-            ObservableList<Node> _children = it.getChildren();
-            ImageView _imageView = new ImageView();
-            final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-                public void apply(final ImageView it) {
-                  it.setImage(RecursiveImageNode.this.image);
-                  it.setPreserveRatio(true);
-                  int _minus = (-1);
-                  double _prefWidth = RecursiveImageNode.this.prefWidth(_minus);
-                  it.setFitWidth(_prefWidth);
-                  int _minus_1 = (-1);
-                  double _prefHeight = RecursiveImageNode.this.prefHeight(_minus_1);
-                  it.setFitHeight(_prefHeight);
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  final InvalidationListener _function = new InvalidationListener() {
-                      public void invalidated(final Observable it) {
-                        InputOutput.<String>println("foo");
-                      }
-                    };
-                  _layoutXProperty.addListener(_function);
-                  DoubleProperty _translateXProperty = it.translateXProperty();
-                  final InvalidationListener _function_1 = new InvalidationListener() {
-                      public void invalidated(final Observable it) {
-                        InputOutput.<String>println("bar");
-                      }
-                    };
-                  _translateXProperty.addListener(_function_1);
-                  DoubleProperty _xProperty = it.xProperty();
-                  final InvalidationListener _function_2 = new InvalidationListener() {
-                      public void invalidated(final Observable it) {
-                        InputOutput.<String>println("foobar");
-                      }
-                    };
-                  _xProperty.addListener(_function_2);
+        public void apply(final Pane it) {
+          ObservableList<Node> _children = it.getChildren();
+          ImageView _imageView = new ImageView();
+          final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+            public void apply(final ImageView it) {
+              it.setImage(RecursiveImageNode.this.image);
+              it.setPreserveRatio(true);
+              int _minus = (-1);
+              double _prefWidth = RecursiveImageNode.this.prefWidth(_minus);
+              it.setFitWidth(_prefWidth);
+              int _minus_1 = (-1);
+              double _prefHeight = RecursiveImageNode.this.prefHeight(_minus_1);
+              it.setFitHeight(_prefHeight);
+              DoubleProperty _layoutXProperty = it.layoutXProperty();
+              final InvalidationListener _function = new InvalidationListener() {
+                public void invalidated(final Observable it) {
+                  InputOutput.<String>println("foo");
                 }
               };
-            ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
-            _children.add(_doubleArrow);
-          }
-        };
+              _layoutXProperty.addListener(_function);
+              DoubleProperty _translateXProperty = it.translateXProperty();
+              final InvalidationListener _function_1 = new InvalidationListener() {
+                public void invalidated(final Observable it) {
+                  InputOutput.<String>println("bar");
+                }
+              };
+              _translateXProperty.addListener(_function_1);
+              DoubleProperty _xProperty = it.xProperty();
+              final InvalidationListener _function_2 = new InvalidationListener() {
+                public void invalidated(final Observable it) {
+                  InputOutput.<String>println("foobar");
+                }
+              };
+              _xProperty.addListener(_function_2);
+            }
+          };
+          ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
+          _children.add(_doubleArrow);
+        }
+      };
       final Pane pane = ObjectExtensions.<Pane>operator_doubleArrow(_pane, _function);
       this.panes.push(pane);
       _xblockexpression = (pane);
@@ -187,26 +187,26 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
           if (_greaterThan_1) {
             Pane _createPane = this.createPane();
             final Procedure1<Pane> _function = new Procedure1<Pane>() {
-                public void apply(final Pane it) {
-                  it.setScaleX(RecursiveImageNode.this.scale);
-                  it.setScaleY(RecursiveImageNode.this.scale);
-                  it.relocate(RecursiveImageNode.this.x, RecursiveImageNode.this.y);
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  final InvalidationListener _function = new InvalidationListener() {
-                      public void invalidated(final Observable it) {
-                        InputOutput.<String>println("foo");
-                      }
-                    };
-                  _layoutXProperty.addListener(_function);
-                  DoubleProperty _translateXProperty = it.translateXProperty();
-                  final InvalidationListener _function_1 = new InvalidationListener() {
-                      public void invalidated(final Observable it) {
-                        InputOutput.<String>println("bar");
-                      }
-                    };
-                  _translateXProperty.addListener(_function_1);
-                }
-              };
+              public void apply(final Pane it) {
+                it.setScaleX(RecursiveImageNode.this.scale);
+                it.setScaleY(RecursiveImageNode.this.scale);
+                it.relocate(RecursiveImageNode.this.x, RecursiveImageNode.this.y);
+                DoubleProperty _layoutXProperty = it.layoutXProperty();
+                final InvalidationListener _function = new InvalidationListener() {
+                  public void invalidated(final Observable it) {
+                    InputOutput.<String>println("foo");
+                  }
+                };
+                _layoutXProperty.addListener(_function);
+                DoubleProperty _translateXProperty = it.translateXProperty();
+                final InvalidationListener _function_1 = new InvalidationListener() {
+                  public void invalidated(final Observable it) {
+                    InputOutput.<String>println("bar");
+                  }
+                };
+                _translateXProperty.addListener(_function_1);
+              }
+            };
             final Pane grandChild = ObjectExtensions.<Pane>operator_doubleArrow(_createPane, _function);
             ObservableList<Node> _children_1 = child.getChildren();
             _children_1.add(grandChild);
@@ -264,10 +264,10 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
         final Transform t = TransformExtensions.operator_multiply(_localToDiagramTransform, _scale);
         SnapshotParameters _snapshotParameters = new SnapshotParameters();
         final Procedure1<SnapshotParameters> _function = new Procedure1<SnapshotParameters>() {
-            public void apply(final SnapshotParameters it) {
-              it.setTransform(t);
-            }
-          };
+          public void apply(final SnapshotParameters it) {
+            it.setTransform(t);
+          }
+        };
         SnapshotParameters _doubleArrow = ObjectExtensions.<SnapshotParameters>operator_doubleArrow(_snapshotParameters, _function);
         this.snapshot(_doubleArrow, image);
         return exporter.toSvgImage(this, image);

@@ -61,25 +61,25 @@ public class Main extends Application {
       diagram.activate();
       NestedDiagramNode _nestedDiagramNode = new NestedDiagramNode("source");
       final Procedure1<NestedDiagramNode> _function = new Procedure1<NestedDiagramNode>() {
-          public void apply(final NestedDiagramNode it) {
-            it.setLayoutX(280);
-            it.setLayoutY(170);
-            it.setWidth(80);
-            it.setHeight(30);
-          }
-        };
+        public void apply(final NestedDiagramNode it) {
+          it.setLayoutX(280);
+          it.setLayoutY(170);
+          it.setWidth(80);
+          it.setHeight(30);
+        }
+      };
       final NestedDiagramNode source = ObjectExtensions.<NestedDiagramNode>operator_doubleArrow(_nestedDiagramNode, _function);
       ObservableList<XNode> _nodes = diagram.getNodes();
       _nodes.add(source);
       SimpleNode _simpleNode = new SimpleNode("target");
       final Procedure1<SimpleNode> _function_1 = new Procedure1<SimpleNode>() {
-          public void apply(final SimpleNode it) {
-            it.setLayoutX(280);
-            it.setLayoutY(280);
-            it.setWidth(80);
-            it.setHeight(30);
-          }
-        };
+        public void apply(final SimpleNode it) {
+          it.setLayoutX(280);
+          it.setLayoutY(280);
+          it.setWidth(80);
+          it.setHeight(30);
+        }
+      };
       final SimpleNode target = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function_1);
       ObservableList<XNode> _nodes_1 = diagram.getNodes();
       _nodes_1.add(target);
@@ -93,13 +93,13 @@ public class Main extends Application {
       _connections.add(connection);
       SimpleNode _simpleNode_1 = new SimpleNode("target2");
       final Procedure1<SimpleNode> _function_2 = new Procedure1<SimpleNode>() {
-          public void apply(final SimpleNode it) {
-            it.setLayoutX(400);
-            it.setLayoutY(240);
-            it.setWidth(80);
-            it.setHeight(30);
-          }
-        };
+        public void apply(final SimpleNode it) {
+          it.setLayoutX(400);
+          it.setLayoutY(240);
+          it.setWidth(80);
+          it.setHeight(30);
+        }
+      };
       final SimpleNode target2 = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode_1, _function_2);
       ObservableList<XNode> _nodes_2 = diagram.getNodes();
       _nodes_2.add(target2);
@@ -121,33 +121,33 @@ public class Main extends Application {
       _connections_2.add(connection3);
       ImageNode _imageNode = new ImageNode();
       final Procedure1<ImageNode> _function_3 = new Procedure1<ImageNode>() {
-          public void apply(final ImageNode it) {
-            Image _image = new Image("media/seltsam.jpg", true);
-            it.setImage(_image);
-            it.setLayoutX(100);
-            it.setLayoutY(100);
-            it.setWidth(100);
-          }
-        };
+        public void apply(final ImageNode it) {
+          Image _image = new Image("media/seltsam.jpg", true);
+          it.setImage(_image);
+          it.setLayoutX(100);
+          it.setLayoutY(100);
+          it.setWidth(100);
+        }
+      };
       final ImageNode image = ObjectExtensions.<ImageNode>operator_doubleArrow(_imageNode, _function_3);
       ObservableList<XNode> _nodes_3 = diagram.getNodes();
       _nodes_3.add(image);
       MovieNode _movieNode = new MovieNode();
       final Procedure1<MovieNode> _function_4 = new Procedure1<MovieNode>() {
-          public void apply(final MovieNode it) {
-            Class<? extends Main> _class = Main.this.getClass();
-            ClassLoader _classLoader = _class.getClassLoader();
-            URL _resource = _classLoader.getResource("media/ScreenFlow.mp4");
-            it.setMovieUrl(_resource);
-            it.setWidth(640);
-            it.setHeight(360);
-            MediaView _view = it.getView();
-            Rectangle2D _rectangle2D = new Rectangle2D(0, 60, 640, 360);
-            _view.setViewport(_rectangle2D);
-            it.setLayoutX(100);
-            it.setLayoutY(200);
-          }
-        };
+        public void apply(final MovieNode it) {
+          Class<? extends Main> _class = Main.this.getClass();
+          ClassLoader _classLoader = _class.getClassLoader();
+          URL _resource = _classLoader.getResource("media/ScreenFlow.mp4");
+          it.setMovieUrl(_resource);
+          it.setWidth(640);
+          it.setHeight(360);
+          MediaView _view = it.getView();
+          Rectangle2D _rectangle2D = new Rectangle2D(0, 60, 640, 360);
+          _view.setViewport(_rectangle2D);
+          it.setLayoutX(100);
+          it.setLayoutY(200);
+        }
+      };
       final MovieNode movie = ObjectExtensions.<MovieNode>operator_doubleArrow(_movieNode, _function_4);
       ObservableList<XNode> _nodes_4 = diagram.getNodes();
       _nodes_4.add(movie);
@@ -155,54 +155,54 @@ public class Main extends Application {
       Image _image = _get.getImage("media/seltsam.jpg");
       RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_image, 10, 0, 0.5);
       final Procedure1<RecursiveImageNode> _function_5 = new Procedure1<RecursiveImageNode>() {
-          public void apply(final RecursiveImageNode it) {
-            it.setWidth(120);
-            it.setHeight(90);
-          }
-        };
+        public void apply(final RecursiveImageNode it) {
+          it.setWidth(120);
+          it.setHeight(90);
+        }
+      };
       final RecursiveImageNode recursive = ObjectExtensions.<RecursiveImageNode>operator_doubleArrow(_recursiveImageNode, _function_5);
       ObservableList<XNode> _nodes_5 = diagram.getNodes();
       _nodes_5.add(recursive);
       BrowserNode _browserNode = new BrowserNode();
       final Procedure1<BrowserNode> _function_6 = new Procedure1<BrowserNode>() {
-          public void apply(final BrowserNode it) {
-            try {
-              it.setWidth(120);
-              it.setHeight(160);
-              it.setLayoutX(100);
-              it.setLayoutY(500);
-              URL _uRL = new URL("http://koehnlein.blogspot.de/");
-              it.setPageUrl(_uRL);
-            } catch (Throwable _e) {
-              throw Exceptions.sneakyThrow(_e);
-            }
+        public void apply(final BrowserNode it) {
+          try {
+            it.setWidth(120);
+            it.setHeight(160);
+            it.setLayoutX(100);
+            it.setLayoutY(500);
+            URL _uRL = new URL("http://koehnlein.blogspot.de/");
+            it.setPageUrl(_uRL);
+          } catch (Throwable _e) {
+            throw Exceptions.sneakyThrow(_e);
           }
-        };
+        }
+      };
       final BrowserNode browser = ObjectExtensions.<BrowserNode>operator_doubleArrow(_browserNode, _function_6);
       ObservableList<XNode> _nodes_6 = diagram.getNodes();
       _nodes_6.add(browser);
       BrickBreakerNode _brickBreakerNode = new BrickBreakerNode();
       final Procedure1<BrickBreakerNode> _function_7 = new Procedure1<BrickBreakerNode>() {
-          public void apply(final BrickBreakerNode it) {
-            it.setWidth(640);
-            it.setHeight(480);
-            it.setLayoutX(500);
-            it.setLayoutY(100);
-          }
-        };
+        public void apply(final BrickBreakerNode it) {
+          it.setWidth(640);
+          it.setHeight(480);
+          it.setLayoutX(500);
+          it.setLayoutY(100);
+        }
+      };
       final BrickBreakerNode brickBreakerNode = ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function_7);
       ObservableList<XNode> _nodes_7 = diagram.getNodes();
       _nodes_7.add(brickBreakerNode);
       JavaTypeNode _javaTypeNode = new JavaTypeNode();
       final Procedure1<JavaTypeNode> _function_8 = new Procedure1<JavaTypeNode>() {
-          public void apply(final JavaTypeNode it) {
-            it.setJavaType(Button.class);
-            it.setWidth(160);
-            it.setHeight(120);
-            it.setLayoutX(500);
-            it.setLayoutY(200);
-          }
-        };
+        public void apply(final JavaTypeNode it) {
+          it.setJavaType(Button.class);
+          it.setWidth(160);
+          it.setHeight(120);
+          it.setLayoutX(500);
+          it.setLayoutY(200);
+        }
+      };
       final JavaTypeNode javaTypeNode = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_8);
       ObservableList<XNode> _nodes_8 = diagram.getNodes();
       _nodes_8.add(javaTypeNode);
@@ -212,23 +212,23 @@ public class Main extends Application {
       ObservableList<XNode> _nodes_9 = diagram.getNodes();
       LcarsNode _lcarsNode = new LcarsNode(kirk);
       final Procedure1<LcarsNode> _function_9 = new Procedure1<LcarsNode>() {
-          public void apply(final LcarsNode it) {
-            it.setWidth(120);
-          }
-        };
+        public void apply(final LcarsNode it) {
+          it.setWidth(120);
+        }
+      };
       LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function_9);
       _nodes_9.add(_doubleArrow);
       final Task<Void> _function_10 = new Task<Void>() {
-          @Override
-          protected Void call() throws Exception {
-            Void _xblockexpression = null;
-            {
-              new Layouter();
-              _xblockexpression = (null);
-            }
-            return _xblockexpression;
+        @Override
+        protected Void call() throws Exception {
+          Void _xblockexpression = null;
+          {
+            new Layouter();
+            _xblockexpression = (null);
           }
-        };
+          return _xblockexpression;
+        }
+      };
       final Task<Void> task = _function_10;
       task.run();
       _xblockexpression = (scene);

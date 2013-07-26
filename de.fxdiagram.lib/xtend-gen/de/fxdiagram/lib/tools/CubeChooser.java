@@ -42,13 +42,13 @@ public class CubeChooser extends AbstractXNodeChooser {
   protected void setInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _nodes = this.getNodes();
     final Function2<Double,XNode,Double> _function = new Function2<Double,XNode,Double>() {
-        public Double apply(final Double a, final XNode b) {
-          Bounds _layoutBounds = b.getLayoutBounds();
-          double _width = _layoutBounds.getWidth();
-          double _max = Math.max((a).doubleValue(), _width);
-          return Double.valueOf(_max);
-        }
-      };
+      public Double apply(final Double a, final XNode b) {
+        Bounds _layoutBounds = b.getLayoutBounds();
+        double _width = _layoutBounds.getWidth();
+        double _max = Math.max((a).doubleValue(), _width);
+        return Double.valueOf(_max);
+      }
+    };
     Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
     double _spacing = this.getSpacing();
     double _plus = ((_fold).doubleValue() + _spacing);
@@ -67,20 +67,20 @@ public class CubeChooser extends AbstractXNodeChooser {
     this.applyTransform(rightNodeIndex, _minus_1);
     ArrayList<XNode> _nodes_3 = this.getNodes();
     final Procedure2<XNode,Integer> _function_1 = new Procedure2<XNode,Integer>() {
-        public void apply(final XNode node, final Integer i) {
-          boolean _and = false;
-          boolean _notEquals = (i != leftNodeIndex);
-          if (!_notEquals) {
-            _and = false;
-          } else {
-            boolean _notEquals_1 = (i != rightNodeIndex);
-            _and = (_notEquals && _notEquals_1);
-          }
-          if (_and) {
-            node.setVisible(false);
-          }
+      public void apply(final XNode node, final Integer i) {
+        boolean _and = false;
+        boolean _notEquals = (i != leftNodeIndex);
+        if (!_notEquals) {
+          _and = false;
+        } else {
+          boolean _notEquals_1 = (i != rightNodeIndex);
+          _and = (_notEquals && _notEquals_1);
         }
-      };
+        if (_and) {
+          node.setVisible(false);
+        }
+      }
+    };
     IterableExtensions.<XNode>forEach(_nodes_3, _function_1);
   }
   

@@ -14,16 +14,16 @@ public class ImageNode extends XNode {
   public ImageNode() {
     ImageView _imageView = new ImageView();
     final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-        public void apply(final ImageView it) {
-          it.setPreserveRatio(true);
-          DoubleProperty _fitWidthProperty = it.fitWidthProperty();
-          DoubleProperty _widthProperty = ImageNode.this.widthProperty();
-          _fitWidthProperty.bind(_widthProperty);
-          DoubleProperty _fitHeightProperty = it.fitHeightProperty();
-          DoubleProperty _heightProperty = ImageNode.this.heightProperty();
-          _fitHeightProperty.bind(_heightProperty);
-        }
-      };
+      public void apply(final ImageView it) {
+        it.setPreserveRatio(true);
+        DoubleProperty _fitWidthProperty = it.fitWidthProperty();
+        DoubleProperty _widthProperty = ImageNode.this.widthProperty();
+        _fitWidthProperty.bind(_widthProperty);
+        DoubleProperty _fitHeightProperty = it.fitHeightProperty();
+        DoubleProperty _heightProperty = ImageNode.this.heightProperty();
+        _fitHeightProperty.bind(_heightProperty);
+      }
+    };
     ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
     ImageView _imageView_1 = this.imageView = _doubleArrow;
     this.setNode(_imageView_1);

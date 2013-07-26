@@ -83,11 +83,11 @@ public class SvgExporter {
       {
         ObservableList<Node> _childrenUnmodifiable = diagram.getChildrenUnmodifiable();
         final Function1<Node,Boolean> _function = new Function1<Node,Boolean>() {
-            public Boolean apply(final Node it) {
-              boolean _isVisible = it.isVisible();
-              return Boolean.valueOf(_isVisible);
-            }
-          };
+          public Boolean apply(final Node it) {
+            boolean _isVisible = it.isVisible();
+            return Boolean.valueOf(_isVisible);
+          }
+        };
         Iterable<Node> _filter = IterableExtensions.<Node>filter(_childrenUnmodifiable, _function);
         for(final Node child : _filter) {
           _builder.append("\t");
@@ -357,11 +357,11 @@ public class SvgExporter {
     {
       ObservableList<Node> _childrenUnmodifiable = it.getChildrenUnmodifiable();
       final Function1<Node,Boolean> _function = new Function1<Node,Boolean>() {
-          public Boolean apply(final Node it) {
-            boolean _isVisible = it.isVisible();
-            return Boolean.valueOf(_isVisible);
-          }
-        };
+        public Boolean apply(final Node it) {
+          boolean _isVisible = it.isVisible();
+          return Boolean.valueOf(_isVisible);
+        }
+      };
       Iterable<Node> _filter = IterableExtensions.<Node>filter(_childrenUnmodifiable, _function);
       boolean _isEmpty = IterableExtensions.isEmpty(_filter);
       boolean _not = (!_isEmpty);
@@ -369,11 +369,11 @@ public class SvgExporter {
         {
           ObservableList<Node> _childrenUnmodifiable_1 = it.getChildrenUnmodifiable();
           final Function1<Node,Boolean> _function_1 = new Function1<Node,Boolean>() {
-              public Boolean apply(final Node it) {
-                boolean _isVisible = it.isVisible();
-                return Boolean.valueOf(_isVisible);
-              }
-            };
+            public Boolean apply(final Node it) {
+              boolean _isVisible = it.isVisible();
+              return Boolean.valueOf(_isVisible);
+            }
+          };
           Iterable<Node> _filter_1 = IterableExtensions.<Node>filter(_childrenUnmodifiable_1, _function_1);
           for(final Node child : _filter_1) {
             CharSequence _svgElement = this.toSvgElement(child);

@@ -36,72 +36,72 @@ public class TransformExtensionsTest {
     Shear _shear_1 = new Shear(40, 41);
     final ArrayList<Transform> matrices = CollectionLiterals.<Transform>newArrayList(_translate, _translate_1, _rotate, _rotate_1, _rotate_2, _rotate_3, _rotate_4, _scale, _scale_1, _scale_2, _scale_3, _shear, _shear_1);
     final Procedure1<Affine> _function = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.translate(it, 1, 2);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.translate(it, 1, 2);
+      }
+    };
     final Procedure1<Affine> _function_1 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.translate(it, 1, 2, 3);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.translate(it, 1, 2, 3);
+      }
+    };
     final Procedure1<Affine> _function_2 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.rotate(it, 90);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.rotate(it, 90);
+      }
+    };
     final Procedure1<Affine> _function_3 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.rotate(it, 5, 6, 7);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.rotate(it, 5, 6, 7);
+      }
+    };
     final Procedure1<Affine> _function_4 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.rotate(it, 8, 9, 10, 11);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.rotate(it, 8, 9, 10, 11);
+      }
+    };
     final Procedure1<Affine> _function_5 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          Point3D _point3D = new Point3D(16, 17, 18);
-          TransformExtensions.rotate(it, 12, 13, 14, 15, _point3D);
-        }
-      };
+      public void apply(final Affine it) {
+        Point3D _point3D = new Point3D(16, 17, 18);
+        TransformExtensions.rotate(it, 12, 13, 14, 15, _point3D);
+      }
+    };
     final Procedure1<Affine> _function_6 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          Point3D _point3D = new Point3D(20, 21, 22);
-          TransformExtensions.rotate(it, 19, _point3D);
-        }
-      };
+      public void apply(final Affine it) {
+        Point3D _point3D = new Point3D(20, 21, 22);
+        TransformExtensions.rotate(it, 19, _point3D);
+      }
+    };
     final Procedure1<Affine> _function_7 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.scale(it, 23, 24);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.scale(it, 23, 24);
+      }
+    };
     final Procedure1<Affine> _function_8 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.scale(it, 25, 26, 27);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.scale(it, 25, 26, 27);
+      }
+    };
     final Procedure1<Affine> _function_9 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.scale(it, 28, 29, 30, 31);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.scale(it, 28, 29, 30, 31);
+      }
+    };
     final Procedure1<Affine> _function_10 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.scale(it, 32, 33, 34, 35, 36, 37);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.scale(it, 32, 33, 34, 35, 36, 37);
+      }
+    };
     final Procedure1<Affine> _function_11 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.shear(it, 38, 39);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.shear(it, 38, 39);
+      }
+    };
     final Procedure1<Affine> _function_12 = new Procedure1<Affine>() {
-        public void apply(final Affine it) {
-          TransformExtensions.shear(it, 40, 41);
-        }
-      };
+      public void apply(final Affine it) {
+        TransformExtensions.shear(it, 40, 41);
+      }
+    };
     final ArrayList<Procedure1<? super Affine>> operations = CollectionLiterals.<Procedure1<? super Affine>>newArrayList(_function, _function_1, _function_2, _function_3, _function_4, _function_5, _function_6, _function_7, _function_8, _function_9, _function_10, _function_11, _function_12);
     Point3D _point3D_2 = new Point3D(1, 0, 0);
     Point3D _point3D_3 = new Point3D(0, 1, 0);

@@ -33,21 +33,21 @@ public class XConnectionLabel extends XShape {
     connection.setLabel(this);
     Text _text = new Text();
     final Procedure1<Text> _function = new Procedure1<Text>() {
-        public void apply(final Text it) {
-          it.setTextOrigin(VPos.TOP);
-        }
-      };
+      public void apply(final Text it) {
+        it.setTextOrigin(VPos.TOP);
+      }
+    };
     Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
     this.setText(_doubleArrow);
     Text _text_1 = this.getText();
     this.setNode(_text_1);
     DropShadow _dropShadow = new DropShadow();
     final Procedure1<DropShadow> _function_1 = new Procedure1<DropShadow>() {
-        public void apply(final DropShadow it) {
-          it.setOffsetX(4.0);
-          it.setOffsetY(4.0);
-        }
-      };
+      public void apply(final DropShadow it) {
+        it.setOffsetX(4.0);
+        it.setOffsetY(4.0);
+      }
+    };
     DropShadow _doubleArrow_1 = ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function_1);
     this.selectionEffect = _doubleArrow_1;
   }
@@ -58,21 +58,21 @@ public class XConnectionLabel extends XShape {
     this.moveBehavior.activate();
     BooleanProperty _selectedProperty = this.selectedProperty();
     final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-        public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
-          if ((newValue).booleanValue()) {
-            XConnectionLabel.this.setEffect(XConnectionLabel.this.selectionEffect);
-            XConnectionLabel.this.setScaleX(1.05);
-            XConnectionLabel.this.setScaleY(1.05);
-            XConnectionLabel.this.toFront();
-            XConnection _connection = XConnectionLabel.this.getConnection();
-            _connection.setSelected(true);
-          } else {
-            XConnectionLabel.this.setEffect(null);
-            XConnectionLabel.this.setScaleX(1.0);
-            XConnectionLabel.this.setScaleY(1.0);
-          }
+      public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
+        if ((newValue).booleanValue()) {
+          XConnectionLabel.this.setEffect(XConnectionLabel.this.selectionEffect);
+          XConnectionLabel.this.setScaleX(1.05);
+          XConnectionLabel.this.setScaleY(1.05);
+          XConnectionLabel.this.toFront();
+          XConnection _connection = XConnectionLabel.this.getConnection();
+          _connection.setSelected(true);
+        } else {
+          XConnectionLabel.this.setEffect(null);
+          XConnectionLabel.this.setScaleX(1.0);
+          XConnectionLabel.this.setScaleY(1.0);
         }
-      };
+      }
+    };
     _selectedProperty.addListener(_function);
   }
   

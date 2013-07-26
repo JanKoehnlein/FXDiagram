@@ -22,18 +22,18 @@ public class MoveBehavior extends AbstractBehavior {
     XShape _host = this.getHost();
     Node _node = _host.getNode();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          MoveBehavior.this.mousePressed(it);
-        }
-      };
+      public void handle(final MouseEvent it) {
+        MoveBehavior.this.mousePressed(it);
+      }
+    };
     _node.setOnMousePressed(_function);
     XShape _host_1 = this.getHost();
     Node _node_1 = _host_1.getNode();
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          MoveBehavior.this.mouseDragged(it);
-        }
-      };
+      public void handle(final MouseEvent it) {
+        MoveBehavior.this.mouseDragged(it);
+      }
+    };
     _node_1.setOnMouseDragged(_function_1);
   }
   

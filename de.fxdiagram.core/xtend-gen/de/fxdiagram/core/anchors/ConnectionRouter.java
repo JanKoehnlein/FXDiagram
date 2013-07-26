@@ -45,16 +45,16 @@ public class ConnectionRouter implements XActivatable {
   public ConnectionRouter(final XConnection connection) {
     this.connection = connection;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
-        public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-          connection.requestLayout();
-        }
-      };
+      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
+        connection.requestLayout();
+      }
+    };
     this.scalarListener = _function;
     final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
-        public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-          connection.requestLayout();
-        }
-      };
+      public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
+        connection.requestLayout();
+      }
+    };
     this.boundsListener = _function_1;
   }
   
@@ -125,24 +125,24 @@ public class ConnectionRouter implements XActivatable {
             {
               XControlPoint _xControlPoint = new XControlPoint();
               final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-                  public void apply(final XControlPoint it) {
-                    final double lambda = (delta * (i).intValue());
-                    double _minus = (1 - lambda);
-                    double _layoutX = first.getLayoutX();
-                    double _multiply = (_minus * _layoutX);
-                    double _layoutX_1 = last.getLayoutX();
-                    double _multiply_1 = (lambda * _layoutX_1);
-                    double _plus = (_multiply + _multiply_1);
-                    it.setLayoutX(_plus);
-                    double _minus_1 = (1 - lambda);
-                    double _layoutY = first.getLayoutY();
-                    double _multiply_2 = (_minus_1 * _layoutY);
-                    double _layoutY_1 = last.getLayoutY();
-                    double _multiply_3 = (lambda * _layoutY_1);
-                    double _plus_1 = (_multiply_2 + _multiply_3);
-                    it.setLayoutY(_plus_1);
-                  }
-                };
+                public void apply(final XControlPoint it) {
+                  final double lambda = (delta * (i).intValue());
+                  double _minus = (1 - lambda);
+                  double _layoutX = first.getLayoutX();
+                  double _multiply = (_minus * _layoutX);
+                  double _layoutX_1 = last.getLayoutX();
+                  double _multiply_1 = (lambda * _layoutX_1);
+                  double _plus = (_multiply + _multiply_1);
+                  it.setLayoutX(_plus);
+                  double _minus_1 = (1 - lambda);
+                  double _layoutY = first.getLayoutY();
+                  double _multiply_2 = (_minus_1 * _layoutY);
+                  double _layoutY_1 = last.getLayoutY();
+                  double _multiply_3 = (lambda * _layoutY_1);
+                  double _plus_1 = (_multiply_2 + _multiply_3);
+                  it.setLayoutY(_plus_1);
+                }
+              };
               final XControlPoint newControlPoint = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
               DoubleProperty _layoutXProperty = newControlPoint.layoutXProperty();
               _layoutXProperty.addListener(this.scalarListener);
@@ -293,25 +293,25 @@ public class ConnectionRouter implements XActivatable {
       ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
       XControlPoint _xControlPoint = new XControlPoint();
       final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-          public void apply(final XControlPoint it) {
-            double _x = sourcePoint.getX();
-            it.setLayoutX(_x);
-            double _y = sourcePoint.getY();
-            it.setLayoutY(_y);
-            it.setType(XControlPointType.ANCHOR);
-          }
-        };
+        public void apply(final XControlPoint it) {
+          double _x = sourcePoint.getX();
+          it.setLayoutX(_x);
+          double _y = sourcePoint.getY();
+          it.setLayoutY(_y);
+          it.setType(XControlPointType.ANCHOR);
+        }
+      };
       XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
       XControlPoint _xControlPoint_1 = new XControlPoint();
       final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
-          public void apply(final XControlPoint it) {
-            double _x = targetPoint.getX();
-            it.setLayoutX(_x);
-            double _y = targetPoint.getY();
-            it.setLayoutY(_y);
-            it.setType(XControlPointType.ANCHOR);
-          }
-        };
+        public void apply(final XControlPoint it) {
+          double _x = targetPoint.getX();
+          it.setLayoutX(_x);
+          double _y = targetPoint.getY();
+          it.setLayoutY(_y);
+          it.setType(XControlPointType.ANCHOR);
+        }
+      };
       XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
       _controlPoints_2.setAll(
         new XControlPoint[] { _doubleArrow, _doubleArrow_1 });
@@ -328,32 +328,32 @@ public class ConnectionRouter implements XActivatable {
       ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
       XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_4);
       final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
-          public void apply(final XControlPoint it) {
-            double _x = sourcePoint.getX();
-            it.setLayoutX(_x);
-            double _y = sourcePoint.getY();
-            it.setLayoutY(_y);
-          }
-        };
+        public void apply(final XControlPoint it) {
+          double _x = sourcePoint.getX();
+          it.setLayoutX(_x);
+          double _y = sourcePoint.getY();
+          it.setLayoutY(_y);
+        }
+      };
       ObjectExtensions.<XControlPoint>operator_doubleArrow(_head, _function_2);
       ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
       XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_5);
       final Procedure1<XControlPoint> _function_3 = new Procedure1<XControlPoint>() {
-          public void apply(final XControlPoint it) {
-            double _x = targetPoint.getX();
-            it.setLayoutX(_x);
-            double _y = targetPoint.getY();
-            it.setLayoutY(_y);
-          }
-        };
+        public void apply(final XControlPoint it) {
+          double _x = targetPoint.getX();
+          it.setLayoutX(_x);
+          double _y = targetPoint.getY();
+          it.setLayoutY(_y);
+        }
+      };
       ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
       ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
       final Procedure1<XControlPoint> _function_4 = new Procedure1<XControlPoint>() {
-          public void apply(final XControlPoint it) {
-            ObservableList<XControlPoint> _controlPoints = ConnectionRouter.this.getControlPoints();
-            it.update(_controlPoints);
-          }
-        };
+        public void apply(final XControlPoint it) {
+          ObservableList<XControlPoint> _controlPoints = ConnectionRouter.this.getControlPoints();
+          it.update(_controlPoints);
+        }
+      };
       IterableExtensions.<XControlPoint>forEach(_controlPoints_6, _function_4);
     }
   }

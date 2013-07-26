@@ -15,6 +15,9 @@ import javafx.scene.shape.Shape
 
 import static de.fxdiagram.core.XConnectionKind.*
 
+import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
+
 @Logging
 class XConnection extends XShape {
 	
@@ -38,14 +41,13 @@ class XConnection extends XShape {
 		]
 		this.source = source
 		this.target = target
-		controlPointListener = [ prop, oldVal, newVal |
-			updateShapes
-		]
 		connectionRouter = new ConnectionRouter(this)		
 	}
 
 	override doActivate() {
-		updateShapes
+		controlPointListener = [ prop, oldVal, newVal |
+			updateShapes
+		]
 		controlPoints.addListener [
 			val points = list
 			updateShapes
@@ -69,6 +71,7 @@ class XConnection extends XShape {
 			controlPointGroup.visible = newVal
 		]
 		connectionRouter.activate
+		updateShapes
 	}
 	
 	def getConnectionRouter() {
@@ -152,10 +155,14 @@ class XConnection extends XShape {
 	
 	def protected setShapes(List<? extends Shape> shapes) {
 		shapeGroup.children.setAll(shapes)
-//		shapes
-//			.map[strokeWidthProperty]
-//			.filter[!isBound]
-//			.forEach[bind(this.strokeWidthProperty / this.rootDiagram.scaleProperty)]
+		shapes
+			.map[strokeWidthProperty]
+			.filter[!isBound]
+			.forEach[
+				val doubleBinding = this.strokeWidthProperty / this.diagram.scaleXProperty
+				doubleBinding.value
+				it.bind(doubleBinding)
+			]
 	}
 	
 	override isSelectable() {

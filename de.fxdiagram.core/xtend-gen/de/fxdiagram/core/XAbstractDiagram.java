@@ -57,21 +57,21 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   public void doActivate() {
     this.isActiveProperty.set(true);
     final ChangeListener<XConnectionLabel> _function = new ChangeListener<XConnectionLabel>() {
-        public void changed(final ObservableValue<? extends XConnectionLabel> prop, final XConnectionLabel oldVal, final XConnectionLabel newVal) {
-          boolean _notEquals = (!Objects.equal(oldVal, null));
-          if (_notEquals) {
-            Group _connectionLayer = XAbstractDiagram.this.getConnectionLayer();
-            ObservableList<Node> _children = _connectionLayer.getChildren();
-            _children.remove(oldVal);
-          }
-          boolean _notEquals_1 = (!Objects.equal(newVal, null));
-          if (_notEquals_1) {
-            Group _connectionLayer_1 = XAbstractDiagram.this.getConnectionLayer();
-            ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();
-            _children_1.add(newVal);
-          }
+      public void changed(final ObservableValue<? extends XConnectionLabel> prop, final XConnectionLabel oldVal, final XConnectionLabel newVal) {
+        boolean _notEquals = (!Objects.equal(oldVal, null));
+        if (_notEquals) {
+          Group _connectionLayer = XAbstractDiagram.this.getConnectionLayer();
+          ObservableList<Node> _children = _connectionLayer.getChildren();
+          _children.remove(oldVal);
         }
-      };
+        boolean _notEquals_1 = (!Objects.equal(newVal, null));
+        if (_notEquals_1) {
+          Group _connectionLayer_1 = XAbstractDiagram.this.getConnectionLayer();
+          ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();
+          _children_1.add(newVal);
+        }
+      }
+    };
     final ChangeListener<XConnectionLabel> labelListener = _function;
     ObservableList<XNode> _nodes = this.getNodes();
     Group _nodeLayer = this.getNodeLayer();
@@ -88,57 +88,57 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
     Group _connectionLayer_1 = this.getConnectionLayer();
     ObservableList<Node> _children = _connectionLayer_1.getChildren();
     final ListChangeListener<Node> _function_1 = new ListChangeListener<Node>() {
-        public void onChanged(final Change<? extends Node> change) {
-          boolean _next = change.next();
-          boolean _while = _next;
-          while (_while) {
-            {
-              boolean _wasAdded = change.wasAdded();
-              if (_wasAdded) {
-                List<? extends Node> _addedSubList = change.getAddedSubList();
-                final Iterable<XConnection> addedConnections = Iterables.<XConnection>filter(_addedSubList, XConnection.class);
-                final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-                    public void apply(final XConnection it) {
-                      XConnectionLabel _label = it.getLabel();
-                      boolean _notEquals = (!Objects.equal(_label, null));
-                      if (_notEquals) {
-                        Group _connectionLayer = XAbstractDiagram.this.getConnectionLayer();
-                        ObservableList<Node> _children = _connectionLayer.getChildren();
-                        XConnectionLabel _label_1 = it.getLabel();
-                        _children.add(_label_1);
-                      }
-                      ObjectProperty<XConnectionLabel> _labelProperty = it.labelProperty();
-                      _labelProperty.addListener(labelListener);
-                    }
-                  };
-                IterableExtensions.<XConnection>forEach(addedConnections, _function);
-              }
-              boolean _wasRemoved = change.wasRemoved();
-              if (_wasRemoved) {
-                List<? extends Node> _removed = change.getRemoved();
-                final Iterable<XConnection> removedConnections = Iterables.<XConnection>filter(_removed, XConnection.class);
-                final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
-                    public void apply(final XConnection it) {
-                      XConnectionLabel _label = it.getLabel();
-                      boolean _notEquals = (!Objects.equal(_label, null));
-                      if (_notEquals) {
-                        Group _connectionLayer = XAbstractDiagram.this.getConnectionLayer();
-                        ObservableList<Node> _children = _connectionLayer.getChildren();
-                        XConnectionLabel _label_1 = it.getLabel();
-                        _children.remove(_label_1);
-                      }
-                      ObjectProperty<XConnectionLabel> _labelProperty = it.labelProperty();
-                      _labelProperty.removeListener(labelListener);
-                    }
-                  };
-                IterableExtensions.<XConnection>forEach(removedConnections, _function_1);
-              }
+      public void onChanged(final Change<? extends Node> change) {
+        boolean _next = change.next();
+        boolean _while = _next;
+        while (_while) {
+          {
+            boolean _wasAdded = change.wasAdded();
+            if (_wasAdded) {
+              List<? extends Node> _addedSubList = change.getAddedSubList();
+              final Iterable<XConnection> addedConnections = Iterables.<XConnection>filter(_addedSubList, XConnection.class);
+              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                public void apply(final XConnection it) {
+                  XConnectionLabel _label = it.getLabel();
+                  boolean _notEquals = (!Objects.equal(_label, null));
+                  if (_notEquals) {
+                    Group _connectionLayer = XAbstractDiagram.this.getConnectionLayer();
+                    ObservableList<Node> _children = _connectionLayer.getChildren();
+                    XConnectionLabel _label_1 = it.getLabel();
+                    _children.add(_label_1);
+                  }
+                  ObjectProperty<XConnectionLabel> _labelProperty = it.labelProperty();
+                  _labelProperty.addListener(labelListener);
+                }
+              };
+              IterableExtensions.<XConnection>forEach(addedConnections, _function);
             }
-            boolean _next_1 = change.next();
-            _while = _next_1;
+            boolean _wasRemoved = change.wasRemoved();
+            if (_wasRemoved) {
+              List<? extends Node> _removed = change.getRemoved();
+              final Iterable<XConnection> removedConnections = Iterables.<XConnection>filter(_removed, XConnection.class);
+              final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
+                public void apply(final XConnection it) {
+                  XConnectionLabel _label = it.getLabel();
+                  boolean _notEquals = (!Objects.equal(_label, null));
+                  if (_notEquals) {
+                    Group _connectionLayer = XAbstractDiagram.this.getConnectionLayer();
+                    ObservableList<Node> _children = _connectionLayer.getChildren();
+                    XConnectionLabel _label_1 = it.getLabel();
+                    _children.remove(_label_1);
+                  }
+                  ObjectProperty<XConnectionLabel> _labelProperty = it.labelProperty();
+                  _labelProperty.removeListener(labelListener);
+                }
+              };
+              IterableExtensions.<XConnection>forEach(removedConnections, _function_1);
+            }
           }
+          boolean _next_1 = change.next();
+          _while = _next_1;
         }
-      };
+      }
+    };
     _children.addListener(_function_1);
     ObservableList<XNode> _nodes_1 = this.getNodes();
     ObservableList<XConnection> _connections_1 = this.getConnections();
@@ -146,10 +146,10 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
     ObservableList<XRapidButton> _buttons_1 = this.getButtons();
     Iterable<Parent> _plus_1 = Iterables.<Parent>concat(_plus, _buttons_1);
     final Procedure1<Parent> _function_2 = new Procedure1<Parent>() {
-        public void apply(final Parent it) {
-          ((XActivatable)it).activate();
-        }
-      };
+      public void apply(final Parent it) {
+        ((XActivatable)it).activate();
+      }
+    };
     IterableExtensions.<Parent>forEach(_plus_1, _function_2);
     AuxiliaryLinesSupport _auxiliaryLinesSupport = new AuxiliaryLinesSupport(this);
     this.auxiliaryLinesSupport = _auxiliaryLinesSupport;
@@ -165,31 +165,31 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
     Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
     ObservableList<XConnection> _connections_1 = this.getConnections();
     final Function1<XConnection,XConnectionLabel> _function = new Function1<XConnection,XConnectionLabel>() {
-        public XConnectionLabel apply(final XConnection it) {
-          XConnectionLabel _label = it.getLabel();
-          return _label;
-        }
-      };
+      public XConnectionLabel apply(final XConnection it) {
+        XConnectionLabel _label = it.getLabel();
+        return _label;
+      }
+    };
     List<XConnectionLabel> _map = ListExtensions.<XConnection, XConnectionLabel>map(_connections_1, _function);
     Iterable<XConnectionLabel> _filterNull = IterableExtensions.<XConnectionLabel>filterNull(_map);
     Iterable<XShape> _plus_1 = Iterables.<XShape>concat(_plus, _filterNull);
     ObservableList<XConnection> _connections_2 = this.getConnections();
     final Function1<XConnection,ObservableList<XControlPoint>> _function_1 = new Function1<XConnection,ObservableList<XControlPoint>>() {
-        public ObservableList<XControlPoint> apply(final XConnection it) {
-          ObservableList<XControlPoint> _controlPoints = it.getControlPoints();
-          return _controlPoints;
-        }
-      };
+      public ObservableList<XControlPoint> apply(final XConnection it) {
+        ObservableList<XControlPoint> _controlPoints = it.getControlPoints();
+        return _controlPoints;
+      }
+    };
     List<ObservableList<XControlPoint>> _map_1 = ListExtensions.<XConnection, ObservableList<XControlPoint>>map(_connections_2, _function_1);
     Iterable<XControlPoint> _flatten = Iterables.<XControlPoint>concat(_map_1);
     Iterable<XShape> _plus_2 = Iterables.<XShape>concat(_plus_1, _flatten);
     ObservableList<XNestedDiagram> _subDiagrams = this.getSubDiagrams();
     final Function1<XNestedDiagram,Iterable<XShape>> _function_2 = new Function1<XNestedDiagram,Iterable<XShape>>() {
-        public Iterable<XShape> apply(final XNestedDiagram it) {
-          Iterable<XShape> _allShapes = it.getAllShapes();
-          return _allShapes;
-        }
-      };
+      public Iterable<XShape> apply(final XNestedDiagram it) {
+        Iterable<XShape> _allShapes = it.getAllShapes();
+        return _allShapes;
+      }
+    };
     List<Iterable<XShape>> _map_2 = ListExtensions.<XNestedDiagram, Iterable<XShape>>map(_subDiagrams, _function_2);
     Iterable<XShape> _flatten_1 = Iterables.<XShape>concat(_map_2);
     Iterable<XShape> _plus_3 = Iterables.<XShape>concat(_plus_2, _flatten_1);

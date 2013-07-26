@@ -29,22 +29,22 @@ public class UnderstandigLayout extends Application {
   public void groupSizes() {
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
-        public void apply(final Group it) {
-          ObservableList<Node> _children = it.getChildren();
-          Rectangle _rectangle = new Rectangle();
-          final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-              public void apply(final Rectangle it) {
-                it.setWidth(1);
-                it.setHeight(2);
-                int _minus = (-3);
-                int _minus_1 = (-4);
-                it.relocate(_minus, _minus_1);
-              }
-            };
-          Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-          _children.add(_doubleArrow);
-        }
-      };
+      public void apply(final Group it) {
+        ObservableList<Node> _children = it.getChildren();
+        Rectangle _rectangle = new Rectangle();
+        final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            it.setWidth(1);
+            it.setHeight(2);
+            int _minus = (-3);
+            int _minus_1 = (-4);
+            it.relocate(_minus, _minus_1);
+          }
+        };
+        Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
+        _children.add(_doubleArrow);
+      }
+    };
     final Group group = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
     int _minus = (-1);
     double _minWidth = group.minWidth(_minus);
@@ -82,22 +82,22 @@ public class UnderstandigLayout extends Application {
   public void stackPaneSizes() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-        public void apply(final StackPane it) {
-          ObservableList<Node> _children = it.getChildren();
-          Rectangle _rectangle = new Rectangle();
-          final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-              public void apply(final Rectangle it) {
-                it.setWidth(1);
-                it.setHeight(2);
-                int _minus = (-3);
-                int _minus_1 = (-4);
-                it.relocate(_minus, _minus_1);
-              }
-            };
-          Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-          _children.add(_doubleArrow);
-        }
-      };
+      public void apply(final StackPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Rectangle _rectangle = new Rectangle();
+        final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            it.setWidth(1);
+            it.setHeight(2);
+            int _minus = (-3);
+            int _minus_1 = (-4);
+            it.relocate(_minus, _minus_1);
+          }
+        };
+        Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
+        _children.add(_doubleArrow);
+      }
+    };
     final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     int _minus = (-1);
     double _minWidth = stackPane.minWidth(_minus);
@@ -146,23 +146,23 @@ public class UnderstandigLayout extends Application {
   public void stackPaneWithAnXNodeSizes() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-        public void apply(final StackPane it) {
-          ObservableList<Node> _children = it.getChildren();
-          Rectangle _rectangle = new Rectangle();
-          XNode _xNode = new XNode(_rectangle);
-          final Procedure1<XNode> _function = new Procedure1<XNode>() {
-              public void apply(final XNode it) {
-                it.setWidth(1);
-                it.setHeight(2);
-                int _minus = (-3);
-                int _minus_1 = (-4);
-                it.relocate(_minus, _minus_1);
-              }
-            };
-          XNode _doubleArrow = ObjectExtensions.<XNode>operator_doubleArrow(_xNode, _function);
-          _children.add(_doubleArrow);
-        }
-      };
+      public void apply(final StackPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Rectangle _rectangle = new Rectangle();
+        XNode _xNode = new XNode(_rectangle);
+        final Procedure1<XNode> _function = new Procedure1<XNode>() {
+          public void apply(final XNode it) {
+            it.setWidth(1);
+            it.setHeight(2);
+            int _minus = (-3);
+            int _minus_1 = (-4);
+            it.relocate(_minus, _minus_1);
+          }
+        };
+        XNode _doubleArrow = ObjectExtensions.<XNode>operator_doubleArrow(_xNode, _function);
+        _children.add(_doubleArrow);
+      }
+    };
     final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     int _minus = (-1);
     double _minWidth = stackPane.minWidth(_minus);
@@ -211,32 +211,32 @@ public class UnderstandigLayout extends Application {
   public void groupLayout() {
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
-        public void apply(final Group it) {
-          ObservableList<Node> _children = it.getChildren();
-          Rectangle _rectangle = new Rectangle();
-          final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-              public void apply(final Rectangle it) {
-                it.setWidth(2);
-                it.setHeight(1);
-              }
-            };
-          Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-          _children.add(_doubleArrow);
-          ObservableList<Node> _children_1 = it.getChildren();
-          Rectangle _rectangle_1 = new Rectangle();
-          final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
-              public void apply(final Rectangle it) {
-                it.setWidth(1);
-                it.setHeight(2);
-                int _minus = (-3);
-                int _minus_1 = (-4);
-                it.relocate(_minus, _minus_1);
-              }
-            };
-          Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle_1, _function_1);
-          _children_1.add(_doubleArrow_1);
-        }
-      };
+      public void apply(final Group it) {
+        ObservableList<Node> _children = it.getChildren();
+        Rectangle _rectangle = new Rectangle();
+        final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            it.setWidth(2);
+            it.setHeight(1);
+          }
+        };
+        Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
+        _children.add(_doubleArrow);
+        ObservableList<Node> _children_1 = it.getChildren();
+        Rectangle _rectangle_1 = new Rectangle();
+        final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            it.setWidth(1);
+            it.setHeight(2);
+            int _minus = (-3);
+            int _minus_1 = (-4);
+            it.relocate(_minus, _minus_1);
+          }
+        };
+        Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle_1, _function_1);
+        _children_1.add(_doubleArrow_1);
+      }
+    };
     final Group group = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
     ObservableList<Node> _children = group.getChildren();
     Node _get = _children.get(0);
@@ -299,32 +299,32 @@ public class UnderstandigLayout extends Application {
   public void stackPaneLayout() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-        public void apply(final StackPane it) {
-          ObservableList<Node> _children = it.getChildren();
-          Rectangle _rectangle = new Rectangle();
-          final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-              public void apply(final Rectangle it) {
-                it.setWidth(2);
-                it.setHeight(1);
-              }
-            };
-          Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-          _children.add(_doubleArrow);
-          ObservableList<Node> _children_1 = it.getChildren();
-          Rectangle _rectangle_1 = new Rectangle();
-          final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
-              public void apply(final Rectangle it) {
-                it.setWidth(1);
-                it.setHeight(2);
-                int _minus = (-3);
-                int _minus_1 = (-4);
-                it.relocate(_minus, _minus_1);
-              }
-            };
-          Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle_1, _function_1);
-          _children_1.add(_doubleArrow_1);
-        }
-      };
+      public void apply(final StackPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Rectangle _rectangle = new Rectangle();
+        final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            it.setWidth(2);
+            it.setHeight(1);
+          }
+        };
+        Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
+        _children.add(_doubleArrow);
+        ObservableList<Node> _children_1 = it.getChildren();
+        Rectangle _rectangle_1 = new Rectangle();
+        final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            it.setWidth(1);
+            it.setHeight(2);
+            int _minus = (-3);
+            int _minus_1 = (-4);
+            it.relocate(_minus, _minus_1);
+          }
+        };
+        Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle_1, _function_1);
+        _children_1.add(_doubleArrow_1);
+      }
+    };
     final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     ObservableList<Node> _children = stackPane.getChildren();
     Node _get = _children.get(0);
@@ -388,30 +388,30 @@ public class UnderstandigLayout extends Application {
   public void groupLyingAboutItsSizes() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-        public void apply(final StackPane it) {
-          ObservableList<Node> _children = it.getChildren();
-          GroupWithFixedSize _groupWithFixedSize = new GroupWithFixedSize();
-          final Procedure1<GroupWithFixedSize> _function = new Procedure1<GroupWithFixedSize>() {
-              public void apply(final GroupWithFixedSize it) {
-                ObservableList<Node> _children = it.getChildren();
-                Rectangle _rectangle = new Rectangle();
-                final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-                    public void apply(final Rectangle it) {
-                      it.setWidth(3);
-                      it.setHeight(3);
-                      int _minus = (-1);
-                      int _minus_1 = (-1);
-                      it.relocate(_minus, _minus_1);
-                    }
-                  };
-                Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-                _children.add(_doubleArrow);
+      public void apply(final StackPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        GroupWithFixedSize _groupWithFixedSize = new GroupWithFixedSize();
+        final Procedure1<GroupWithFixedSize> _function = new Procedure1<GroupWithFixedSize>() {
+          public void apply(final GroupWithFixedSize it) {
+            ObservableList<Node> _children = it.getChildren();
+            Rectangle _rectangle = new Rectangle();
+            final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+              public void apply(final Rectangle it) {
+                it.setWidth(3);
+                it.setHeight(3);
+                int _minus = (-1);
+                int _minus_1 = (-1);
+                it.relocate(_minus, _minus_1);
               }
             };
-          GroupWithFixedSize _doubleArrow = ObjectExtensions.<GroupWithFixedSize>operator_doubleArrow(_groupWithFixedSize, _function);
-          _children.add(_doubleArrow);
-        }
-      };
+            Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
+            _children.add(_doubleArrow);
+          }
+        };
+        GroupWithFixedSize _doubleArrow = ObjectExtensions.<GroupWithFixedSize>operator_doubleArrow(_groupWithFixedSize, _function);
+        _children.add(_doubleArrow);
+      }
+    };
     final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     int _minus = (-1);
     double _minWidth = stackPane.minWidth(_minus);
@@ -456,18 +456,18 @@ public class UnderstandigLayout extends Application {
   public void testRelocateMovesFiguresIntoPositive() {
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
-        public void apply(final Group it) {
-          ObservableList<Node> _children = it.getChildren();
-          Circle _circle = new Circle();
-          final Procedure1<Circle> _function = new Procedure1<Circle>() {
-              public void apply(final Circle it) {
-                it.setRadius(2);
-              }
-            };
-          Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
-          _children.add(_doubleArrow);
-        }
-      };
+      public void apply(final Group it) {
+        ObservableList<Node> _children = it.getChildren();
+        Circle _circle = new Circle();
+        final Procedure1<Circle> _function = new Procedure1<Circle>() {
+          public void apply(final Circle it) {
+            it.setRadius(2);
+          }
+        };
+        Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
+        _children.add(_doubleArrow);
+      }
+    };
     final Group group = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
     double _layoutX = group.getLayoutX();
     Assert.assertEquals(0, _layoutX, UnderstandigLayout.EPS);
@@ -505,38 +505,38 @@ public class UnderstandigLayout extends Application {
     final Rectangle innerRectangle = _rectangle;
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-        public void apply(final StackPane it) {
-          ObservableList<Node> _children = it.getChildren();
-          GroupWithFixedSize _groupWithFixedSize = new GroupWithFixedSize();
-          final Procedure1<GroupWithFixedSize> _function = new Procedure1<GroupWithFixedSize>() {
-              public void apply(final GroupWithFixedSize it) {
-                ObservableList<Node> _children = it.getChildren();
-                final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-                    public void apply(final Rectangle it) {
-                      it.setWidth(300);
-                      it.setHeight(300);
-                    }
-                  };
-                Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(innerRectangle, _function);
-                _children.add(_doubleArrow);
-              }
-            };
-          GroupWithFixedSize _doubleArrow = ObjectExtensions.<GroupWithFixedSize>operator_doubleArrow(_groupWithFixedSize, _function);
-          _children.add(_doubleArrow);
-          ObservableList<Node> _children_1 = it.getChildren();
-          Rectangle _rectangle = new Rectangle();
-          final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
+      public void apply(final StackPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        GroupWithFixedSize _groupWithFixedSize = new GroupWithFixedSize();
+        final Procedure1<GroupWithFixedSize> _function = new Procedure1<GroupWithFixedSize>() {
+          public void apply(final GroupWithFixedSize it) {
+            ObservableList<Node> _children = it.getChildren();
+            final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
               public void apply(final Rectangle it) {
-                it.setWidth(100);
-                it.setHeight(100);
-                it.relocate(250, 250);
-                it.setFill(Color.GREEN);
+                it.setWidth(300);
+                it.setHeight(300);
               }
             };
-          Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_1);
-          _children_1.add(_doubleArrow_1);
-        }
-      };
+            Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(innerRectangle, _function);
+            _children.add(_doubleArrow);
+          }
+        };
+        GroupWithFixedSize _doubleArrow = ObjectExtensions.<GroupWithFixedSize>operator_doubleArrow(_groupWithFixedSize, _function);
+        _children.add(_doubleArrow);
+        ObservableList<Node> _children_1 = it.getChildren();
+        Rectangle _rectangle = new Rectangle();
+        final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            it.setWidth(100);
+            it.setHeight(100);
+            it.relocate(250, 250);
+            it.setFill(Color.GREEN);
+          }
+        };
+        Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_1);
+        _children_1.add(_doubleArrow_1);
+      }
+    };
     final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     Scene _scene = new Scene(stackPane, 640, 480);
     stage.setScene(_scene);

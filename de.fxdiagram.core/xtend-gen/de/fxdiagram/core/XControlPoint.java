@@ -48,12 +48,12 @@ public class XControlPoint extends XShape {
           _matched=true;
           Circle _circle = new Circle();
           final Procedure1<Circle> _function = new Procedure1<Circle>() {
-              public void apply(final Circle it) {
-                it.setRadius(3);
-                it.setStroke(Color.BLUE);
-                it.setFill(Color.WHITE);
-              }
-            };
+            public void apply(final Circle it) {
+              it.setRadius(3);
+              it.setStroke(Color.BLUE);
+              it.setFill(Color.WHITE);
+            }
+          };
           Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
           this.setNode(_doubleArrow);
         }
@@ -63,12 +63,12 @@ public class XControlPoint extends XShape {
           _matched=true;
           ImageView _imageView = new ImageView();
           final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
-              public void apply(final ImageView it) {
-                ImageCache _get = ImageCache.get();
-                Image _image = _get.getImage("icons/magnet.png");
-                it.setImage(_image);
-              }
-            };
+            public void apply(final ImageView it) {
+              ImageCache _get = ImageCache.get();
+              Image _image = _get.getImage("icons/magnet.png");
+              it.setImage(_image);
+            }
+          };
           ImageView _doubleArrow_1 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_1);
           this.setNode(_doubleArrow_1);
         }
@@ -78,12 +78,12 @@ public class XControlPoint extends XShape {
           _matched=true;
           Circle _circle_1 = new Circle();
           final Procedure1<Circle> _function_2 = new Procedure1<Circle>() {
-              public void apply(final Circle it) {
-                it.setRadius(5);
-                it.setStroke(Color.RED);
-                it.setFill(Color.WHITE);
-              }
-            };
+            public void apply(final Circle it) {
+              it.setRadius(5);
+              it.setStroke(Color.RED);
+              it.setFill(Color.WHITE);
+            }
+          };
           Circle _doubleArrow_2 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_2);
           this.setNode(_doubleArrow_2);
         }
@@ -103,45 +103,45 @@ public class XControlPoint extends XShape {
   protected void doActivate() {
     BooleanProperty _selectedProperty = this.selectedProperty();
     final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-        public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
-          if ((newVal).booleanValue()) {
-            final XControlPointType type = XControlPoint.this.type;
-            boolean _matched = false;
-            if (!_matched) {
-              if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
-                _matched=true;
-                Node _node = XControlPoint.this.getNode();
-                DropShadow _dropShadow = new DropShadow();
-                _node.setEffect(_dropShadow);
-              }
+      public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
+        if ((newVal).booleanValue()) {
+          final XControlPointType type = XControlPoint.this.type;
+          boolean _matched = false;
+          if (!_matched) {
+            if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
+              _matched=true;
+              Node _node = XControlPoint.this.getNode();
+              DropShadow _dropShadow = new DropShadow();
+              _node.setEffect(_dropShadow);
             }
-            if (!_matched) {
-              if (Objects.equal(type,XControlPointType.INTERPOLATED)) {
-                _matched=true;
-                Node _node_1 = XControlPoint.this.getNode();
-                ((Circle) _node_1).setFill(Color.RED);
-              }
+          }
+          if (!_matched) {
+            if (Objects.equal(type,XControlPointType.INTERPOLATED)) {
+              _matched=true;
+              Node _node_1 = XControlPoint.this.getNode();
+              ((Circle) _node_1).setFill(Color.RED);
             }
-          } else {
-            final XControlPointType type_1 = XControlPoint.this.type;
-            boolean _matched_1 = false;
-            if (!_matched_1) {
-              if (Objects.equal(type_1,XControlPointType.CONTROL_POINT)) {
-                _matched_1=true;
-                Node _node_2 = XControlPoint.this.getNode();
-                _node_2.setEffect(null);
-              }
+          }
+        } else {
+          final XControlPointType type_1 = XControlPoint.this.type;
+          boolean _matched_1 = false;
+          if (!_matched_1) {
+            if (Objects.equal(type_1,XControlPointType.CONTROL_POINT)) {
+              _matched_1=true;
+              Node _node_2 = XControlPoint.this.getNode();
+              _node_2.setEffect(null);
             }
-            if (!_matched_1) {
-              if (Objects.equal(type_1,XControlPointType.INTERPOLATED)) {
-                _matched_1=true;
-                Node _node_3 = XControlPoint.this.getNode();
-                ((Circle) _node_3).setFill(Color.WHITE);
-              }
+          }
+          if (!_matched_1) {
+            if (Objects.equal(type_1,XControlPointType.INTERPOLATED)) {
+              _matched_1=true;
+              Node _node_3 = XControlPoint.this.getNode();
+              ((Circle) _node_3).setFill(Color.WHITE);
             }
           }
         }
-      };
+      }
+    };
     _selectedProperty.addListener(_function);
     if (this.moveBehavior!=null) {
       this.moveBehavior.activate();

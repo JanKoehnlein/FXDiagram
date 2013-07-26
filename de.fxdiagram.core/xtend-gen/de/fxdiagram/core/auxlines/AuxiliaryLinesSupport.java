@@ -42,12 +42,12 @@ public class AuxiliaryLinesSupport {
       XNode _head = IterableExtensions.<XNode>head(selectedNodes);
       final Iterable<AuxiliaryLine> lines = this.cache.getAuxiliaryLines(_head);
       final Procedure1<AuxiliaryLine> _function = new Procedure1<AuxiliaryLine>() {
-          public void apply(final AuxiliaryLine it) {
-            ObservableList<Node> _children = AuxiliaryLinesSupport.this.group.getChildren();
-            Node _createNode = it.createNode();
-            _children.add(_createNode);
-          }
-        };
+        public void apply(final AuxiliaryLine it) {
+          ObservableList<Node> _children = AuxiliaryLinesSupport.this.group.getChildren();
+          Node _createNode = it.createNode();
+          _children.add(_createNode);
+        }
+      };
       IterableExtensions.<AuxiliaryLine>forEach(lines, _function);
     }
   }

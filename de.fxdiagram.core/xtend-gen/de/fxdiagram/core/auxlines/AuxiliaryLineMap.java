@@ -44,10 +44,10 @@ public class AuxiliaryLineMap<T extends Object> {
     XNode[] _relatedNodes = line.getRelatedNodes();
     if (((Iterable<XNode>)Conversions.doWrapArray(_relatedNodes))!=null) {
       final Procedure1<XNode> _function = new Procedure1<XNode>() {
-          public void apply(final XNode it) {
-            AuxiliaryLineMap.this.removeByNode(it);
-          }
-        };
+        public void apply(final XNode it) {
+          AuxiliaryLineMap.this.removeByNode(it);
+        }
+      };
       IterableExtensions.<XNode>forEach(((Iterable<XNode>)Conversions.doWrapArray(_relatedNodes)), _function);
     }
     double _position = line.getPosition();
@@ -56,10 +56,10 @@ public class AuxiliaryLineMap<T extends Object> {
     XNode[] _relatedNodes_1 = line.getRelatedNodes();
     if (((Iterable<XNode>)Conversions.doWrapArray(_relatedNodes_1))!=null) {
       final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-          public void apply(final XNode it) {
-            AuxiliaryLineMap.this.node2entry.put(it, line);
-          }
-        };
+        public void apply(final XNode it) {
+          AuxiliaryLineMap.this.node2entry.put(it, line);
+        }
+      };
       IterableExtensions.<XNode>forEach(((Iterable<XNode>)Conversions.doWrapArray(_relatedNodes_1)), _function_1);
     }
   }

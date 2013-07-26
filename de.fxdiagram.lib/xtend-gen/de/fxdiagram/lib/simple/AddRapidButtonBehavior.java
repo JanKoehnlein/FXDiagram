@@ -36,67 +36,67 @@ public class AddRapidButtonBehavior extends AbstractBehavior {
     XShape _host = this.getHost();
     final XNode host = ((XNode) _host);
     final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
-        public void apply(final XRapidButton button) {
-          NestedDiagramNode _nestedDiagramNode = new NestedDiagramNode("new");
-          final NestedDiagramNode target = _nestedDiagramNode;
-          final XNode source = button.getHost();
-          XConnection _xConnection = new XConnection(source, target);
-          final XConnection connection = _xConnection;
-          XAbstractDiagram _diagram = Extensions.getDiagram(host);
-          ObservableList<XNode> _nodes = _diagram.getNodes();
-          _nodes.add(target);
-          XAbstractDiagram _diagram_1 = Extensions.getDiagram(host);
-          ObservableList<XConnection> _connections = _diagram_1.getConnections();
-          _connections.add(connection);
-          Placer _placer = button.getPlacer();
-          double _xPos = _placer.getXPos();
-          double _minus = (_xPos - 0.5);
-          double _multiply = (200 * _minus);
-          double _layoutX = source.getLayoutX();
-          double _plus = (_multiply + _layoutX);
-          target.setLayoutX(_plus);
-          Placer _placer_1 = button.getPlacer();
-          double _yPos = _placer_1.getYPos();
-          double _minus_1 = (_yPos - 0.5);
-          double _multiply_1 = (150 * _minus_1);
-          double _layoutY = source.getLayoutY();
-          double _plus_1 = (_multiply_1 + _layoutY);
-          target.setLayoutY(_plus_1);
-        }
-      };
+      public void apply(final XRapidButton button) {
+        NestedDiagramNode _nestedDiagramNode = new NestedDiagramNode("new");
+        final NestedDiagramNode target = _nestedDiagramNode;
+        final XNode source = button.getHost();
+        XConnection _xConnection = new XConnection(source, target);
+        final XConnection connection = _xConnection;
+        XAbstractDiagram _diagram = Extensions.getDiagram(host);
+        ObservableList<XNode> _nodes = _diagram.getNodes();
+        _nodes.add(target);
+        XAbstractDiagram _diagram_1 = Extensions.getDiagram(host);
+        ObservableList<XConnection> _connections = _diagram_1.getConnections();
+        _connections.add(connection);
+        Placer _placer = button.getPlacer();
+        double _xPos = _placer.getXPos();
+        double _minus = (_xPos - 0.5);
+        double _multiply = (200 * _minus);
+        double _layoutX = source.getLayoutX();
+        double _plus = (_multiply + _layoutX);
+        target.setLayoutX(_plus);
+        Placer _placer_1 = button.getPlacer();
+        double _yPos = _placer_1.getYPos();
+        double _minus_1 = (_yPos - 0.5);
+        double _multiply_1 = (150 * _minus_1);
+        double _layoutY = source.getLayoutY();
+        double _plus_1 = (_multiply_1 + _layoutY);
+        target.setLayoutY(_plus_1);
+      }
+    };
     final Procedure1<XRapidButton> addAction = _function;
     final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
-        public void apply(final XRapidButton button) {
-          Pos _chooserPosition = button.getChooserPosition();
-          CarusselChooser _carusselChooser = new CarusselChooser(host, _chooserPosition);
-          final CarusselChooser chooser = _carusselChooser;
-          AddRapidButtonBehavior.this.addChoices(chooser);
-          XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
-          _rootDiagram.setCurrentTool(chooser);
-        }
-      };
+      public void apply(final XRapidButton button) {
+        Pos _chooserPosition = button.getChooserPosition();
+        CarusselChooser _carusselChooser = new CarusselChooser(host, _chooserPosition);
+        final CarusselChooser chooser = _carusselChooser;
+        AddRapidButtonBehavior.this.addChoices(chooser);
+        XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
+        _rootDiagram.setCurrentTool(chooser);
+      }
+    };
     final Procedure1<XRapidButton> chooseAction = _function_1;
     final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
-        public void apply(final XRapidButton button) {
-          Pos _chooserPosition = button.getChooserPosition();
-          CubeChooser _cubeChooser = new CubeChooser(host, _chooserPosition);
-          final CubeChooser chooser = _cubeChooser;
-          AddRapidButtonBehavior.this.addChoices(chooser);
-          XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
-          _rootDiagram.setCurrentTool(chooser);
-        }
-      };
+      public void apply(final XRapidButton button) {
+        Pos _chooserPosition = button.getChooserPosition();
+        CubeChooser _cubeChooser = new CubeChooser(host, _chooserPosition);
+        final CubeChooser chooser = _cubeChooser;
+        AddRapidButtonBehavior.this.addChoices(chooser);
+        XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
+        _rootDiagram.setCurrentTool(chooser);
+      }
+    };
     final Procedure1<XRapidButton> cubeChooseAction = _function_2;
     final Procedure1<XRapidButton> _function_3 = new Procedure1<XRapidButton>() {
-        public void apply(final XRapidButton button) {
-          Pos _chooserPosition = button.getChooserPosition();
-          CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(host, _chooserPosition);
-          final CoverFlowChooser chooser = _coverFlowChooser;
-          AddRapidButtonBehavior.this.addChoices(chooser);
-          XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
-          _rootDiagram.setCurrentTool(chooser);
-        }
-      };
+      public void apply(final XRapidButton button) {
+        Pos _chooserPosition = button.getChooserPosition();
+        CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(host, _chooserPosition);
+        final CoverFlowChooser chooser = _coverFlowChooser;
+        AddRapidButtonBehavior.this.addChoices(chooser);
+        XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
+        _rootDiagram.setCurrentTool(chooser);
+      }
+    };
     final Procedure1<XRapidButton> coverFlowChooseAction = _function_3;
     XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, "icons/add_16.png", cubeChooseAction);
     XRapidButton _xRapidButton_1 = new XRapidButton(host, 0.5, 1, "icons/add_16.png", coverFlowChooseAction);

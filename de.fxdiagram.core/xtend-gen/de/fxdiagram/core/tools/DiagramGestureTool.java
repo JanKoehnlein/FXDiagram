@@ -40,59 +40,59 @@ public class DiagramGestureTool implements XDiagramTool {
     ObservableList<Transform> _transforms_1 = diagram.getTransforms();
     _transforms_1.add(this.diagramTransform);
     final EventHandler<ZoomEvent> _function = new EventHandler<ZoomEvent>() {
-        public void handle(final ZoomEvent it) {
-          double _sceneX = it.getSceneX();
-          double _sceneY = it.getSceneY();
-          Point2D _sceneToLocal = diagram.sceneToLocal(_sceneX, _sceneY);
-          ZoomContext _zoomContext = new ZoomContext(_sceneToLocal);
-          DiagramGestureTool.this.zoomContext = _zoomContext;
-        }
-      };
+      public void handle(final ZoomEvent it) {
+        double _sceneX = it.getSceneX();
+        double _sceneY = it.getSceneY();
+        Point2D _sceneToLocal = diagram.sceneToLocal(_sceneX, _sceneY);
+        ZoomContext _zoomContext = new ZoomContext(_sceneToLocal);
+        DiagramGestureTool.this.zoomContext = _zoomContext;
+      }
+    };
     this.zoomStartHandler = _function;
     final EventHandler<ZoomEvent> _function_1 = new EventHandler<ZoomEvent>() {
-        public void handle(final ZoomEvent it) {
-          double _totalZoomFactor = it.getTotalZoomFactor();
-          double _previousScale = DiagramGestureTool.this.zoomContext.getPreviousScale();
-          final double scale = (_totalZoomFactor / _previousScale);
-          DoubleProperty _scaleProperty = diagram.scaleProperty();
-          DoubleProperty _scaleProperty_1 = diagram.scaleProperty();
-          double _get = _scaleProperty_1.get();
-          double _multiply = (scale * _get);
-          _scaleProperty.set(_multiply);
-          TransformExtensions.scale(DiagramGestureTool.this.diagramTransform, scale, scale);
-          Point2D _pivotInDiagram = DiagramGestureTool.this.zoomContext.getPivotInDiagram();
-          final Point2D pivotInScene = diagram.localToScene(_pivotInDiagram);
-          double _sceneX = it.getSceneX();
-          double _x = pivotInScene.getX();
-          double _minus = (_sceneX - _x);
-          double _sceneY = it.getSceneY();
-          double _y = pivotInScene.getY();
-          double _minus_1 = (_sceneY - _y);
-          TransformExtensions.translate(DiagramGestureTool.this.diagramTransform, _minus, _minus_1);
-          double _totalZoomFactor_1 = it.getTotalZoomFactor();
-          DiagramGestureTool.this.zoomContext.setPreviousScale(_totalZoomFactor_1);
-        }
-      };
+      public void handle(final ZoomEvent it) {
+        double _totalZoomFactor = it.getTotalZoomFactor();
+        double _previousScale = DiagramGestureTool.this.zoomContext.getPreviousScale();
+        final double scale = (_totalZoomFactor / _previousScale);
+        DoubleProperty _scaleProperty = diagram.scaleProperty();
+        DoubleProperty _scaleProperty_1 = diagram.scaleProperty();
+        double _get = _scaleProperty_1.get();
+        double _multiply = (scale * _get);
+        _scaleProperty.set(_multiply);
+        TransformExtensions.scale(DiagramGestureTool.this.diagramTransform, scale, scale);
+        Point2D _pivotInDiagram = DiagramGestureTool.this.zoomContext.getPivotInDiagram();
+        final Point2D pivotInScene = diagram.localToScene(_pivotInDiagram);
+        double _sceneX = it.getSceneX();
+        double _x = pivotInScene.getX();
+        double _minus = (_sceneX - _x);
+        double _sceneY = it.getSceneY();
+        double _y = pivotInScene.getY();
+        double _minus_1 = (_sceneY - _y);
+        TransformExtensions.translate(DiagramGestureTool.this.diagramTransform, _minus, _minus_1);
+        double _totalZoomFactor_1 = it.getTotalZoomFactor();
+        DiagramGestureTool.this.zoomContext.setPreviousScale(_totalZoomFactor_1);
+      }
+    };
     this.zoomHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
-        public void handle(final ScrollEvent it) {
-          double _deltaX = it.getDeltaX();
-          double _deltaY = it.getDeltaY();
-          TransformExtensions.translate(DiagramGestureTool.this.diagramTransform, _deltaX, _deltaY);
-        }
-      };
+      public void handle(final ScrollEvent it) {
+        double _deltaX = it.getDeltaX();
+        double _deltaY = it.getDeltaY();
+        TransformExtensions.translate(DiagramGestureTool.this.diagramTransform, _deltaX, _deltaY);
+      }
+    };
     this.scrollHandler = _function_2;
     final EventHandler<RotateEvent> _function_3 = new EventHandler<RotateEvent>() {
-        public void handle(final RotateEvent it) {
-          boolean _isShortcutDown = it.isShortcutDown();
-          if (_isShortcutDown) {
-            double _angle = it.getAngle();
-            double _sceneX = it.getSceneX();
-            double _sceneY = it.getSceneY();
-            TransformExtensions.rotate(DiagramGestureTool.this.diagramTransform, _angle, _sceneX, _sceneY);
-          }
+      public void handle(final RotateEvent it) {
+        boolean _isShortcutDown = it.isShortcutDown();
+        if (_isShortcutDown) {
+          double _angle = it.getAngle();
+          double _sceneX = it.getSceneX();
+          double _sceneY = it.getSceneY();
+          TransformExtensions.rotate(DiagramGestureTool.this.diagramTransform, _angle, _sceneX, _sceneY);
         }
-      };
+      }
+    };
     this.rotateHandler = _function_3;
   }
   

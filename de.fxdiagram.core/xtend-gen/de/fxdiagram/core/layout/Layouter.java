@@ -92,10 +92,10 @@ public class Layouter {
       new LoggingTransformationService();
       GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
       final Procedure1<GraphvizLayoutProvider> _function = new Procedure1<GraphvizLayoutProvider>() {
-          public void apply(final GraphvizLayoutProvider it) {
-            it.initialize("DOT");
-          }
-        };
+        public void apply(final GraphvizLayoutProvider it) {
+          it.initialize("DOT");
+        }
+      };
       GraphvizLayoutProvider _doubleArrow = ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
       _xblockexpression = (_doubleArrow);
     }
@@ -192,13 +192,13 @@ public class Layouter {
                 if (_equals_2) {
                   final EventHandler<ActionEvent> unbind = transition.getOnFinished();
                   final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                      public void handle(final ActionEvent it) {
-                        unbind.handle(it);
-                        ConnectionRouter _connectionRouter = _xConnection.getConnectionRouter();
-                        int _size = layoutPoints.size();
-                        _connectionRouter.shrinkToSize(_size);
-                      }
-                    };
+                    public void handle(final ActionEvent it) {
+                      unbind.handle(it);
+                      ConnectionRouter _connectionRouter = _xConnection.getConnectionRouter();
+                      int _size = layoutPoints.size();
+                      _connectionRouter.shrinkToSize(_size);
+                    }
+                  };
                   transition.setOnFinished(_function);
                 }
                 animations.add(transition);
@@ -209,10 +209,10 @@ public class Layouter {
       }
     }
     final Procedure1<Animation> _function = new Procedure1<Animation>() {
-        public void apply(final Animation it) {
-          it.play();
-        }
-      };
+      public void apply(final Animation it) {
+        it.play();
+      }
+    };
     IterableExtensions.<Animation>forEach(animations, _function);
   }
   
@@ -229,19 +229,19 @@ public class Layouter {
       cache.put(it, kRoot);
       ObservableList<XNode> _nodes = it.getNodes();
       final Procedure1<XNode> _function = new Procedure1<XNode>() {
-          public void apply(final XNode it) {
-            EList<KNode> _children = kRoot.getChildren();
-            KNode _kNode = Layouter.this.toKNode(it, cache);
-            _children.add(_kNode);
-          }
-        };
+        public void apply(final XNode it) {
+          EList<KNode> _children = kRoot.getChildren();
+          KNode _kNode = Layouter.this.toKNode(it, cache);
+          _children.add(_kNode);
+        }
+      };
       IterableExtensions.<XNode>forEach(_nodes, _function);
       ObservableList<XConnection> _connections = it.getConnections();
       final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
-          public void apply(final XConnection it) {
-            Layouter.this.toKEdge(it, cache);
-          }
-        };
+        public void apply(final XConnection it) {
+          Layouter.this.toKEdge(it, cache);
+        }
+      };
       IterableExtensions.<XConnection>forEach(_connections, _function_1);
       _xblockexpression = (kRoot);
     }

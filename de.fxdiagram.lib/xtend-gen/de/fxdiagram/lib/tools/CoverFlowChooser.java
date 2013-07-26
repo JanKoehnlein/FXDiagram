@@ -62,19 +62,19 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
     if (_notEquals) {
       ArrayList<XNode> _nodes_1 = this.getNodes();
       final Function1<XNode,Double> _function = new Function1<XNode,Double>() {
-          public Double apply(final XNode it) {
-            Bounds _layoutBounds = it.getLayoutBounds();
-            double _width = _layoutBounds.getWidth();
-            return Double.valueOf(_width);
-          }
-        };
+        public Double apply(final XNode it) {
+          Bounds _layoutBounds = it.getLayoutBounds();
+          double _width = _layoutBounds.getWidth();
+          return Double.valueOf(_width);
+        }
+      };
       List<Double> _map = ListExtensions.<XNode, Double>map(_nodes_1, _function);
       final Function2<Double,Double,Double> _function_1 = new Function2<Double,Double,Double>() {
-          public Double apply(final Double a, final Double b) {
-            double _plus = DoubleExtensions.operator_plus(a, b);
-            return Double.valueOf(_plus);
-          }
-        };
+        public Double apply(final Double a, final Double b) {
+          double _plus = DoubleExtensions.operator_plus(a, b);
+          return Double.valueOf(_plus);
+        }
+      };
       Double _reduce = IterableExtensions.<Double>reduce(_map, _function_1);
       ArrayList<XNode> _nodes_2 = this.getNodes();
       int _size_1 = _nodes_2.size();
@@ -196,13 +196,13 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
         node.toFront();
         ColorAdjust _colorAdjust = new ColorAdjust();
         final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
-            public void apply(final ColorAdjust it) {
-              double _minus = (1 - opacity);
-              it.setBrightness(_minus);
-              Reflection _reflection = new Reflection();
-              it.setInput(_reflection);
-            }
-          };
+          public void apply(final ColorAdjust it) {
+            double _minus = (1 - opacity);
+            it.setBrightness(_minus);
+            Reflection _reflection = new Reflection();
+            it.setInput(_reflection);
+          }
+        };
         ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function);
         node.setEffect(_doubleArrow);
       }

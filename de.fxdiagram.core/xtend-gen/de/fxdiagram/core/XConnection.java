@@ -6,6 +6,8 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.FxProperty;
 import de.fxdiagram.annotations.properties.Lazy;
+import de.fxdiagram.core.Extensions;
+import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
@@ -13,9 +15,11 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.binding.DoubleExpressionExtensions;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -71,85 +75,85 @@ public class XConnection extends XShape {
     this.setNode(this.shapeGroup);
     ObservableList<Node> _children = this.getChildren();
     final Procedure1<Group> _function = new Procedure1<Group>() {
-        public void apply(final Group it) {
-          it.setVisible(false);
-        }
-      };
+      public void apply(final Group it) {
+        it.setVisible(false);
+      }
+    };
     Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(this.controlPointGroup, _function);
     _children.add(_doubleArrow);
     this.setSource(source);
     this.setTarget(target);
-    final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-        public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-          XConnection.this.updateShapes();
-        }
-      };
-    this.controlPointListener = _function_1;
     ConnectionRouter _connectionRouter = new ConnectionRouter(this);
     this.connectionRouter = _connectionRouter;
   }
   
   public void doActivate() {
-    this.updateShapes();
+    final ChangeListener<Number> _function = new ChangeListener<Number>() {
+      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
+        XConnection.this.updateShapes();
+      }
+    };
+    this.controlPointListener = _function;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    final ListChangeListener<XControlPoint> _function = new ListChangeListener<XControlPoint>() {
-        public void onChanged(final Change<? extends XControlPoint> it) {
-          final ObservableList<? extends XControlPoint> points = it.getList();
-          XConnection.this.updateShapes();
-          boolean _next = it.next();
-          boolean _while = _next;
-          while (_while) {
-            List<? extends XControlPoint> _addedSubList = it.getAddedSubList();
-            final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-                public void apply(final XControlPoint it) {
-                  final int index = points.indexOf(it);
-                  boolean _and = false;
-                  boolean _notEquals = (index != 0);
-                  if (!_notEquals) {
-                    _and = false;
-                  } else {
-                    int _size = points.size();
-                    boolean _notEquals_1 = (index != _size);
-                    _and = (_notEquals && _notEquals_1);
-                  }
-                  if (_and) {
-                    it.activate();
-                  }
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.addListener(XConnection.this.controlPointListener);
-                  DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.addListener(XConnection.this.controlPointListener);
-                }
-              };
-            IterableExtensions.forEach(_addedSubList, _function);
-            boolean _next_1 = it.next();
-            _while = _next_1;
-          }
-          List<? extends XControlPoint> _removed = it.getRemoved();
+    final ListChangeListener<XControlPoint> _function_1 = new ListChangeListener<XControlPoint>() {
+      public void onChanged(final Change<? extends XControlPoint> it) {
+        final ObservableList<? extends XControlPoint> points = it.getList();
+        XConnection.this.updateShapes();
+        boolean _next = it.next();
+        boolean _while = _next;
+        while (_while) {
+          List<? extends XControlPoint> _addedSubList = it.getAddedSubList();
           final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-              public void apply(final XControlPoint it) {
-                DoubleProperty _layoutXProperty = it.layoutXProperty();
-                _layoutXProperty.removeListener(XConnection.this.controlPointListener);
-                DoubleProperty _layoutYProperty = it.layoutYProperty();
-                _layoutYProperty.removeListener(XConnection.this.controlPointListener);
+            public void apply(final XControlPoint it) {
+              final int index = points.indexOf(it);
+              boolean _and = false;
+              boolean _notEquals = (index != 0);
+              if (!_notEquals) {
+                _and = false;
+              } else {
+                int _size = points.size();
+                boolean _notEquals_1 = (index != _size);
+                _and = (_notEquals && _notEquals_1);
               }
-            };
-          IterableExtensions.forEach(_removed, _function);
+              if (_and) {
+                it.activate();
+              }
+              DoubleProperty _layoutXProperty = it.layoutXProperty();
+              _layoutXProperty.addListener(XConnection.this.controlPointListener);
+              DoubleProperty _layoutYProperty = it.layoutYProperty();
+              _layoutYProperty.addListener(XConnection.this.controlPointListener);
+            }
+          };
+          IterableExtensions.forEach(_addedSubList, _function);
+          boolean _next_1 = it.next();
+          _while = _next_1;
         }
-      };
-    _controlPoints.addListener(_function);
+        List<? extends XControlPoint> _removed = it.getRemoved();
+        final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+          public void apply(final XControlPoint it) {
+            DoubleProperty _layoutXProperty = it.layoutXProperty();
+            _layoutXProperty.removeListener(XConnection.this.controlPointListener);
+            DoubleProperty _layoutYProperty = it.layoutYProperty();
+            _layoutYProperty.removeListener(XConnection.this.controlPointListener);
+          }
+        };
+        IterableExtensions.forEach(_removed, _function);
+      }
+    };
+    _controlPoints.addListener(_function_1);
     boolean _notEquals = (!Objects.equal(this.label, null));
     if (_notEquals) {
       this.label.activate();
     }
     BooleanProperty _selectedProperty = this.selectedProperty();
-    final ChangeListener<Boolean> _function_1 = new ChangeListener<Boolean>() {
-        public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
-          XConnection.this.controlPointGroup.setVisible((newVal).booleanValue());
-        }
-      };
-    _selectedProperty.addListener(_function_1);
+    final ChangeListener<Boolean> _function_2 = new ChangeListener<Boolean>() {
+      public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
+        XConnection.this.controlPointGroup.setVisible((newVal).booleanValue());
+      }
+    };
+    _selectedProperty.addListener(_function_2);
     this.connectionRouter.activate();
+    this.updateShapes();
   }
   
   public ConnectionRouter getConnectionRouter() {
@@ -205,11 +209,11 @@ public class XConnection extends XShape {
         while (_while_1) {
           CubicCurve _cubicCurve = new CubicCurve();
           final Procedure1<CubicCurve> _function = new Procedure1<CubicCurve>() {
-              public void apply(final CubicCurve it) {
-                it.setFill(null);
-                it.setStroke(Color.BLACK);
-              }
-            };
+            public void apply(final CubicCurve it) {
+              it.setFill(null);
+              it.setStroke(Color.BLACK);
+            }
+          };
           CubicCurve _doubleArrow = ObjectExtensions.<CubicCurve>operator_doubleArrow(_cubicCurve, _function);
           curves.add(_doubleArrow);
           int _size_5 = curves.size();
@@ -304,11 +308,11 @@ public class XConnection extends XShape {
         while (_while_3) {
           QuadCurve _quadCurve = new QuadCurve();
           final Procedure1<QuadCurve> _function = new Procedure1<QuadCurve>() {
-              public void apply(final QuadCurve it) {
-                it.setFill(null);
-                it.setStroke(Color.BLACK);
-              }
-            };
+            public void apply(final QuadCurve it) {
+              it.setFill(null);
+              it.setStroke(Color.BLACK);
+            }
+          };
           QuadCurve _doubleArrow = ObjectExtensions.<QuadCurve>operator_doubleArrow(_quadCurve, _function);
           curves_1.add(_doubleArrow);
           int _size_10 = curves_1.size();
@@ -367,20 +371,20 @@ public class XConnection extends XShape {
           _elvis = ObjectExtensions.<Polyline>operator_elvis(_head, _polyline);
         }
         final Procedure1<Polyline> _function = new Procedure1<Polyline>() {
-            public void apply(final Polyline it) {
-              it.setStroke(Color.BLACK);
-            }
-          };
+          public void apply(final Polyline it) {
+            it.setStroke(Color.BLACK);
+          }
+        };
         final Polyline polyline = ObjectExtensions.<Polyline>operator_doubleArrow(_elvis, _function);
         ObservableList<Double> _points = polyline.getPoints();
         ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
         final Function1<XControlPoint,List<Double>> _function_1 = new Function1<XControlPoint,List<Double>>() {
-            public List<Double> apply(final XControlPoint it) {
-              double _layoutX = it.getLayoutX();
-              double _layoutY = it.getLayoutY();
-              return Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(_layoutX, _layoutY));
-            }
-          };
+          public List<Double> apply(final XControlPoint it) {
+            double _layoutX = it.getLayoutX();
+            double _layoutY = it.getLayoutY();
+            return Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(_layoutX, _layoutY));
+          }
+        };
         List<List<Double>> _map = ListExtensions.<XControlPoint, List<Double>>map(_controlPoints_6, _function_1);
         Iterable<Double> _flatten = Iterables.<Double>concat(_map);
         _points.setAll(((Double[])Conversions.unwrapArray(_flatten, Double.class)));
@@ -392,10 +396,33 @@ public class XConnection extends XShape {
     _children_3.setAll(_controlPoints_7);
   }
   
-  protected boolean setShapes(final List<? extends Shape> shapes) {
+  protected void setShapes(final List<? extends Shape> shapes) {
     ObservableList<Node> _children = this.shapeGroup.getChildren();
-    boolean _setAll = _children.setAll(shapes);
-    return _setAll;
+    _children.setAll(shapes);
+    final Function1<Shape,SimpleDoubleProperty> _function = new Function1<Shape,SimpleDoubleProperty>() {
+      public SimpleDoubleProperty apply(final Shape it) {
+        return XConnection.this.strokeWidthProperty;
+      }
+    };
+    List<SimpleDoubleProperty> _map = ListExtensions.map(shapes, _function);
+    final Function1<SimpleDoubleProperty,Boolean> _function_1 = new Function1<SimpleDoubleProperty,Boolean>() {
+      public Boolean apply(final SimpleDoubleProperty it) {
+        boolean _isBound = it.isBound();
+        boolean _not = (!_isBound);
+        return Boolean.valueOf(_not);
+      }
+    };
+    Iterable<SimpleDoubleProperty> _filter = IterableExtensions.<SimpleDoubleProperty>filter(_map, _function_1);
+    final Procedure1<SimpleDoubleProperty> _function_2 = new Procedure1<SimpleDoubleProperty>() {
+      public void apply(final SimpleDoubleProperty it) {
+        XAbstractDiagram _diagram = Extensions.getDiagram(XConnection.this);
+        DoubleProperty _scaleXProperty = _diagram.scaleXProperty();
+        final DoubleBinding doubleBinding = DoubleExpressionExtensions.operator_divide(XConnection.this.strokeWidthProperty, _scaleXProperty);
+        doubleBinding.getValue();
+        it.bind(doubleBinding);
+      }
+    };
+    IterableExtensions.<SimpleDoubleProperty>forEach(_filter, _function_2);
   }
   
   public boolean isSelectable() {

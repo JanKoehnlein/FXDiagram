@@ -19,16 +19,16 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 public class Debug {
   public static void debugTranslation(final Node node) {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
-        public void changed(final ObservableValue<? extends Number> element, final Number oldVal, final Number newVal) {
-          StringConcatenation _builder = new StringConcatenation();
-          _builder.append("Position changed from ");
-          _builder.append(oldVal, "");
-          _builder.append(" to ");
-          _builder.append(newVal, "");
-          Exception _exception = new Exception(_builder.toString());
-          _exception.printStackTrace();
-        }
-      };
+      public void changed(final ObservableValue<? extends Number> element, final Number oldVal, final Number newVal) {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("Position changed from ");
+        _builder.append(oldVal, "");
+        _builder.append(" to ");
+        _builder.append(newVal, "");
+        Exception _exception = new Exception(_builder.toString());
+        _exception.printStackTrace();
+      }
+    };
     final ChangeListener<Number> debugger = _function;
     Node currentNode = node;
     boolean _and = false;
@@ -67,22 +67,22 @@ public class Debug {
   
   public static void debugSize(final Node node) {
     final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
-        public void changed(final ObservableValue<? extends Bounds> element, final Bounds oldVal, final Bounds newVal) {
-          StringConcatenation _builder = new StringConcatenation();
-          _builder.append("Bounds changed from");
-          _builder.newLine();
-          _builder.append("\t");
-          _builder.append(oldVal, "	");
-          _builder.newLineIfNotEmpty();
-          _builder.append("to");
-          _builder.newLine();
-          _builder.append("\t");
-          _builder.append(newVal, "	");
-          _builder.newLineIfNotEmpty();
-          Exception _exception = new Exception(_builder.toString());
-          _exception.printStackTrace();
-        }
-      };
+      public void changed(final ObservableValue<? extends Bounds> element, final Bounds oldVal, final Bounds newVal) {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("Bounds changed from");
+        _builder.newLine();
+        _builder.append("\t");
+        _builder.append(oldVal, "	");
+        _builder.newLineIfNotEmpty();
+        _builder.append("to");
+        _builder.newLine();
+        _builder.append("\t");
+        _builder.append(newVal, "	");
+        _builder.newLineIfNotEmpty();
+        Exception _exception = new Exception(_builder.toString());
+        _exception.printStackTrace();
+      }
+    };
     final ChangeListener<Bounds> debugger = _function;
     Node currentNode = node;
     boolean _and = false;

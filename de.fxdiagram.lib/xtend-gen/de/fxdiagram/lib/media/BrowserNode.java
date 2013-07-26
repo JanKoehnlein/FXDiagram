@@ -24,31 +24,31 @@ public class BrowserNode extends XNode {
   public BrowserNode() {
     FlipNode _flipNode = new FlipNode();
     final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
-        public void apply(final FlipNode it) {
-          RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-          final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-              public void apply(final RectangleBorderPane it) {
-                ObservableList<Node> _children = it.getChildren();
-                Text _text = new Text();
-                final Procedure1<Text> _function = new Procedure1<Text>() {
-                    public void apply(final Text it) {
-                      it.setText("My Blog");
-                      it.setTextOrigin(VPos.TOP);
-                      Insets _insets = new Insets(10, 20, 10, 20);
-                      StackPane.setMargin(it, _insets);
-                    }
-                  };
-                Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-                _children.add(_doubleArrow);
+      public void apply(final FlipNode it) {
+        RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+        final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+          public void apply(final RectangleBorderPane it) {
+            ObservableList<Node> _children = it.getChildren();
+            Text _text = new Text();
+            final Procedure1<Text> _function = new Procedure1<Text>() {
+              public void apply(final Text it) {
+                it.setText("My Blog");
+                it.setTextOrigin(VPos.TOP);
+                Insets _insets = new Insets(10, 20, 10, 20);
+                StackPane.setMargin(it, _insets);
               }
             };
-          RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-          it.setFront(_doubleArrow);
-          WebView _webView = new WebView();
-          WebView _view = BrowserNode.this.view = _webView;
-          it.setBack(_view);
-        }
-      };
+            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+            _children.add(_doubleArrow);
+          }
+        };
+        RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+        it.setFront(_doubleArrow);
+        WebView _webView = new WebView();
+        WebView _view = BrowserNode.this.view = _webView;
+        it.setBack(_view);
+      }
+    };
     FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
     this.setNode(_doubleArrow);
   }

@@ -51,10 +51,10 @@ public class LcarsAccess {
   public List<DBObject> query(final String fieldName, final Object fieldValue) {
     BasicDBObject _basicDBObject = new BasicDBObject();
     final Procedure1<BasicDBObject> _function = new Procedure1<BasicDBObject>() {
-        public void apply(final BasicDBObject it) {
-          it.put(fieldName, fieldValue);
-        }
-      };
+      public void apply(final BasicDBObject it) {
+        it.put(fieldName, fieldValue);
+      }
+    };
     BasicDBObject _doubleArrow = ObjectExtensions.<BasicDBObject>operator_doubleArrow(_basicDBObject, _function);
     DBCursor _find = this.lcars.find(_doubleArrow);
     List<DBObject> _list = IterableExtensions.<DBObject>toList(_find);

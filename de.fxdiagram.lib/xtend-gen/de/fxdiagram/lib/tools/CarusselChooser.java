@@ -47,13 +47,13 @@ public class CarusselChooser extends AbstractXNodeChooser {
   protected void setInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _nodes = this.getNodes();
     final Function2<Double,XNode,Double> _function = new Function2<Double,XNode,Double>() {
-        public Double apply(final Double a, final XNode b) {
-          Bounds _layoutBounds = b.getLayoutBounds();
-          double _height = _layoutBounds.getHeight();
-          double _max = Math.max((a).doubleValue(), _height);
-          return Double.valueOf(_max);
-        }
-      };
+      public Double apply(final Double a, final XNode b) {
+        Bounds _layoutBounds = b.getLayoutBounds();
+        double _height = _layoutBounds.getHeight();
+        double _max = Math.max((a).doubleValue(), _height);
+        return Double.valueOf(_max);
+      }
+    };
     Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
     double _spacing = this.getSpacing();
     final double maxHeight = ((_fold).doubleValue() + _spacing);

@@ -15,24 +15,24 @@ public class ClippingTest {
   public void boundsInLocalConsiderClipping() {
     Rectangle _rectangle = new Rectangle();
     final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-        public void apply(final Rectangle it) {
-          it.setX(1);
-          it.setY(2);
-          it.setWidth(3);
-          it.setHeight(4);
-          Rectangle _rectangle = new Rectangle();
-          final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-              public void apply(final Rectangle it) {
-                it.setX(2);
-                it.setY(3);
-                it.setWidth(1);
-                it.setHeight(1);
-              }
-            };
-          Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-          it.setClip(_doubleArrow);
-        }
-      };
+      public void apply(final Rectangle it) {
+        it.setX(1);
+        it.setY(2);
+        it.setWidth(3);
+        it.setHeight(4);
+        Rectangle _rectangle = new Rectangle();
+        final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            it.setX(2);
+            it.setY(3);
+            it.setWidth(1);
+            it.setHeight(1);
+          }
+        };
+        Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
+        it.setClip(_doubleArrow);
+      }
+    };
     final Rectangle rect = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
     Bounds _boundsInLocal = rect.getBoundsInLocal();
     double _minX = _boundsInLocal.getMinX();

@@ -62,11 +62,11 @@ public class XNode extends XShape {
   protected DropShadow createSelectionEffect() {
     DropShadow _dropShadow = new DropShadow();
     final Procedure1<DropShadow> _function = new Procedure1<DropShadow>() {
-        public void apply(final DropShadow it) {
-          it.setOffsetX(4.0);
-          it.setOffsetY(4.0);
-        }
-      };
+      public void apply(final DropShadow it) {
+        it.setOffsetX(4.0);
+        it.setOffsetY(4.0);
+      }
+    };
     DropShadow _doubleArrow = ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
     return _doubleArrow;
   }
@@ -83,27 +83,27 @@ public class XNode extends XShape {
     this.anchors = _createAnchors;
     this.moveBehavior.activate();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          Node _node = XNode.this.getNode();
-          Effect _effect = _node.getEffect();
-          XNode.this.originalEffect = _effect;
-          Node _node_1 = XNode.this.getNode();
-          Effect _elvis = null;
-          if (XNode.this.mouseOverEffect != null) {
-            _elvis = XNode.this.mouseOverEffect;
-          } else {
-            _elvis = ObjectExtensions.<Effect>operator_elvis(XNode.this.mouseOverEffect, XNode.this.originalEffect);
-          }
-          _node_1.setEffect(_elvis);
+      public void handle(final MouseEvent it) {
+        Node _node = XNode.this.getNode();
+        Effect _effect = _node.getEffect();
+        XNode.this.originalEffect = _effect;
+        Node _node_1 = XNode.this.getNode();
+        Effect _elvis = null;
+        if (XNode.this.mouseOverEffect != null) {
+          _elvis = XNode.this.mouseOverEffect;
+        } else {
+          _elvis = ObjectExtensions.<Effect>operator_elvis(XNode.this.mouseOverEffect, XNode.this.originalEffect);
         }
-      };
+        _node_1.setEffect(_elvis);
+      }
+    };
     this.setOnMouseEntered(_function);
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          Node _node = XNode.this.getNode();
-          _node.setEffect(XNode.this.originalEffect);
-        }
-      };
+      public void handle(final MouseEvent it) {
+        Node _node = XNode.this.getNode();
+        _node.setEffect(XNode.this.originalEffect);
+      }
+    };
     this.setOnMouseExited(_function_1);
     Node _node = this.getNode();
     final Node n = _node;
@@ -117,19 +117,19 @@ public class XNode extends XShape {
     }
     BooleanProperty _selectedProperty = this.selectedProperty();
     final ChangeListener<Boolean> _function_2 = new ChangeListener<Boolean>() {
-        public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
-          if ((newValue).booleanValue()) {
-            XNode.this.setEffect(XNode.this.selectionEffect);
-            XNode.this.setScaleX(1.05);
-            XNode.this.setScaleY(1.05);
-            XNode.this.toFront();
-          } else {
-            XNode.this.setEffect(null);
-            XNode.this.setScaleX(1.0);
-            XNode.this.setScaleY(1.0);
-          }
+      public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
+        if ((newValue).booleanValue()) {
+          XNode.this.setEffect(XNode.this.selectionEffect);
+          XNode.this.setScaleX(1.05);
+          XNode.this.setScaleY(1.05);
+          XNode.this.toFront();
+        } else {
+          XNode.this.setEffect(null);
+          XNode.this.setScaleX(1.0);
+          XNode.this.setScaleY(1.0);
         }
-      };
+      }
+    };
     _selectedProperty.addListener(_function_2);
   }
   

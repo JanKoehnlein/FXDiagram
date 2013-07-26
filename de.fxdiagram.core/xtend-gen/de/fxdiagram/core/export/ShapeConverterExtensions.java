@@ -42,11 +42,11 @@ public class ShapeConverterExtensions {
   public static SVGPath toSvgPath(final Shape shape) {
     SVGPath _sVGPath = new SVGPath();
     final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
-        public void apply(final SVGPath it) {
-          String _svgString = ShapeConverterExtensions.toSvgString(shape);
-          it.setContent(_svgString);
-        }
-      };
+      public void apply(final SVGPath it) {
+        String _svgString = ShapeConverterExtensions.toSvgString(shape);
+        it.setContent(_svgString);
+      }
+    };
     SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
     return _doubleArrow;
   }

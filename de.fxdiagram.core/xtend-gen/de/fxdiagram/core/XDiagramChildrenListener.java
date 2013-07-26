@@ -31,26 +31,26 @@ public class XDiagramChildrenListener<T extends Node & XActivatable> implements 
         if (_wasAdded) {
           List<? extends T> _addedSubList = change.getAddedSubList();
           final Procedure1<Node> _function = new Procedure1<Node>() {
-              public void apply(final Node it) {
-                ObservableList<Node> _children = XDiagramChildrenListener.this.layer.getChildren();
-                _children.add(it);
-                boolean _isActive = XDiagramChildrenListener.this.diagram.getIsActive();
-                if (_isActive) {
-                  ((XActivatable) it).activate();
-                }
+            public void apply(final Node it) {
+              ObservableList<Node> _children = XDiagramChildrenListener.this.layer.getChildren();
+              _children.add(it);
+              boolean _isActive = XDiagramChildrenListener.this.diagram.getIsActive();
+              if (_isActive) {
+                ((XActivatable) it).activate();
               }
-            };
+            }
+          };
           IterableExtensions.forEach(_addedSubList, _function);
         }
         boolean _wasRemoved = change.wasRemoved();
         if (_wasRemoved) {
           List<? extends T> _removed = change.getRemoved();
           final Procedure1<Node> _function_1 = new Procedure1<Node>() {
-              public void apply(final Node it) {
-                ObservableList<Node> _children = XDiagramChildrenListener.this.layer.getChildren();
-                _children.remove(it);
-              }
-            };
+            public void apply(final Node it) {
+              ObservableList<Node> _children = XDiagramChildrenListener.this.layer.getChildren();
+              _children.remove(it);
+            }
+          };
           IterableExtensions.forEach(_removed, _function_1);
         }
       }

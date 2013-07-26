@@ -20,21 +20,21 @@ public class XNodeChooserTransition extends Transition {
   public XNodeChooserTransition(final AbstractXNodeChooser tool) {
     this.tool = tool;
     final Interpolator _function = new Interpolator() {
-        @Override
-        protected double curve(final double alpha) {
-          double _minus = (1 - alpha);
-          double _minus_1 = (1 - alpha);
-          double _multiply = (_minus * _minus_1);
-          double _minus_2 = (1 - _multiply);
-          return _minus_2;
-        }
-      };
+      @Override
+      protected double curve(final double alpha) {
+        double _minus = (1 - alpha);
+        double _minus_1 = (1 - alpha);
+        double _multiply = (_minus * _minus_1);
+        double _minus_2 = (1 - _multiply);
+        return _minus_2;
+      }
+    };
     this.setInterpolator(_function);
     final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
-        public void handle(final ActionEvent it) {
-          tool.setCurrentPosition(XNodeChooserTransition.this.endPosition);
-        }
-      };
+      public void handle(final ActionEvent it) {
+        tool.setCurrentPosition(XNodeChooserTransition.this.endPosition);
+      }
+    };
     this.setOnFinished(_function_1);
   }
   

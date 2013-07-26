@@ -38,11 +38,11 @@ public class LoggingTransformationService extends TransformationService {
           final Injector injector = Guice.createInjector(graphvizDotRuntimeModule);
           GraphFormatData _graphFormatData = new GraphFormatData();
           final Procedure1<GraphFormatData> _function = new Procedure1<GraphFormatData>() {
-              public void apply(final GraphFormatData it) {
-                DotHandler _instance = injector.<DotHandler>getInstance(DotHandler.class);
-                it.setHandler(_instance);
-              }
-            };
+            public void apply(final GraphFormatData it) {
+              DotHandler _instance = injector.<DotHandler>getInstance(DotHandler.class);
+              it.setHandler(_instance);
+            }
+          };
           GraphFormatData _doubleArrow = ObjectExtensions.<GraphFormatData>operator_doubleArrow(_graphFormatData, _function);
           this.dotFormatData = _doubleArrow;
         }
