@@ -2,6 +2,7 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
 import javafx.beans.value.ChangeListener
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
@@ -24,10 +25,10 @@ abstract class XAbstractDiagram extends Parent implements XActivatable {
 	@FxProperty @ReadOnly boolean isActive
 
 	def Group getNodeLayer()
-
 	def Group getConnectionLayer()
+ 	def Group getButtonLayer()
 	
-	def Group getButtonLayer()
+	AuxiliaryLinesSupport auxiliaryLinesSupport
 
 	override activate() {
 		if (!isActive)
@@ -69,6 +70,11 @@ abstract class XAbstractDiagram extends Parent implements XActivatable {
 			}
 		]
 		(nodes + connections + buttons).forEach[activate]
+		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
+	}
+	
+	def getAuxiliaryLinesSupport() {
+		auxiliaryLinesSupport	
 	}
 	
 	def Iterable<XShape> getAllShapes() {

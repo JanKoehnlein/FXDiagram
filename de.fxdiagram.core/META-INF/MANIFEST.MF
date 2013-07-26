@@ -21,6 +21,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.anchors,
+ de.fxdiagram.core.auxlines,
  de.fxdiagram.core.behavior,
  de.fxdiagram.core.binding,
  de.fxdiagram.core.css,

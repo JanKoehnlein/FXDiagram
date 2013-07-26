@@ -14,6 +14,7 @@ class SelectionTool implements XDiagramTool {
 
 	EventHandler<MouseEvent> mousePressedHandler
 	EventHandler<MouseEvent> mouseDraggedHandler
+	EventHandler<MouseEvent> mouseReleasedHandler
 
 	new(XRootDiagram rootDiagram) {
 		this.rootDiagram = rootDiagram
@@ -47,6 +48,11 @@ class SelectionTool implements XDiagramTool {
 			for (shape : selection) {
 				shape?.moveBehavior?.mouseDragged(it)
 			}
+			rootDiagram.auxiliaryLinesSupport?.show(selection)				
+			consume
+		]
+		this.mouseReleasedHandler = [
+			rootDiagram.auxiliaryLinesSupport?.hide()				
 			consume
 		]
 	}
@@ -58,12 +64,14 @@ class SelectionTool implements XDiagramTool {
 	override activate() {
 		rootDiagram.addEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
 		rootDiagram.addEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
+		rootDiagram.addEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true
 	}
 
 	override deactivate() {
 		rootDiagram.removeEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
 		rootDiagram.removeEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
+		rootDiagram.removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true
 	}
 }

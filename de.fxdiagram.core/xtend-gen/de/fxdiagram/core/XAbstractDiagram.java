@@ -11,6 +11,7 @@ import de.fxdiagram.core.XNestedDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import java.util.List;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -41,6 +42,8 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   public abstract Group getConnectionLayer();
   
   public abstract Group getButtonLayer();
+  
+  private AuxiliaryLinesSupport auxiliaryLinesSupport;
   
   public void activate() {
     boolean _isActive = this.getIsActive();
@@ -148,6 +151,12 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
         }
       };
     IterableExtensions.<Parent>forEach(_plus_1, _function_2);
+    AuxiliaryLinesSupport _auxiliaryLinesSupport = new AuxiliaryLinesSupport(this);
+    this.auxiliaryLinesSupport = _auxiliaryLinesSupport;
+  }
+  
+  public AuxiliaryLinesSupport getAuxiliaryLinesSupport() {
+    return this.auxiliaryLinesSupport;
   }
   
   public Iterable<XShape> getAllShapes() {
