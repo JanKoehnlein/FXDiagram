@@ -1,5 +1,6 @@
 package de.fxdiagram.core;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
@@ -54,6 +55,8 @@ public class XNestedDiagram extends XAbstractDiagram {
   
   private ChangeListener<Number> layoutListener;
   
+  private Rectangle fillRectangle;
+  
   public XNestedDiagram() {
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.nodeLayer);
@@ -96,6 +99,15 @@ public class XNestedDiagram extends XAbstractDiagram {
       }
     };
     this.heightProperty.addListener(_function_4);
+    Rectangle _rectangle = new Rectangle();
+    final Procedure1<Rectangle> _function_5 = new Procedure1<Rectangle>() {
+      public void apply(final Rectangle it) {
+        it.setOpacity(0);
+        it.setMouseTransparent(true);
+      }
+    };
+    Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_5);
+    this.fillRectangle = _doubleArrow;
   }
   
   public void setScale(final double scale) {
@@ -103,102 +115,138 @@ public class XNestedDiagram extends XAbstractDiagram {
     this.setScaleY(scale);
   }
   
-  public void scaleToFit() {
+  public Boolean scaleToFit() {
+    Boolean _xifexpression = null;
     ObservableList<XNode> _nodes = this.getNodes();
     boolean _isEmpty = _nodes.isEmpty();
     if (_isEmpty) {
-      this.setScale(1);
-      this.setClip(null);
+      Boolean _xblockexpression = null;
+      {
+        this.setScale(1);
+        this.setClip(null);
+        Boolean _xifexpression_1 = null;
+        boolean _notEquals = (!Objects.equal(this.fillRectangle, null));
+        if (_notEquals) {
+          ObservableList<Node> _children = this.getChildren();
+          boolean _remove = _children.remove(this.fillRectangle);
+          _xifexpression_1 = Boolean.valueOf(_remove);
+        }
+        _xblockexpression = (_xifexpression_1);
+      }
+      _xifexpression = _xblockexpression;
     } else {
-      ObservableList<XNode> _nodes_1 = this.getNodes();
-      final Function1<XNode,BoundingBox> _function = new Function1<XNode,BoundingBox>() {
-        public BoundingBox apply(final XNode it) {
-          Bounds _layoutBounds = it.getLayoutBounds();
-          double _layoutX = it.getLayoutX();
-          double _layoutY = it.getLayoutY();
-          BoundingBox _translate = BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
-          return _translate;
-        }
-      };
-      List<BoundingBox> _map = ListExtensions.<XNode, BoundingBox>map(_nodes_1, _function);
-      final Function2<BoundingBox,BoundingBox,BoundingBox> _function_1 = new Function2<BoundingBox,BoundingBox,BoundingBox>() {
-        public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
-          BoundingBox _plus = BoundsExtensions.operator_plus(b0, b1);
-          return _plus;
-        }
-      };
-      final BoundingBox myBounds = IterableExtensions.<BoundingBox>reduce(_map, _function_1);
-      double _xifexpression = (double) 0;
-      double _width = myBounds.getWidth();
-      boolean _notEquals = (_width != 0);
-      if (_notEquals) {
-        double _width_1 = this.getWidth();
-        double _width_2 = myBounds.getWidth();
-        double _divide = (_width_1 / _width_2);
-        double _min = Math.min(1, _divide);
-        _xifexpression = _min;
-      } else {
-        _xifexpression = 1;
-      }
-      final double newScaleX = _xifexpression;
-      double _xifexpression_1 = (double) 0;
-      double _height = myBounds.getHeight();
-      boolean _notEquals_1 = (_height != 0);
-      if (_notEquals_1) {
-        double _height_1 = this.getHeight();
-        double _height_2 = myBounds.getHeight();
-        double _divide_1 = (_height_1 / _height_2);
-        double _min_1 = Math.min(1, _divide_1);
-        _xifexpression_1 = _min_1;
-      } else {
-        _xifexpression_1 = 1;
-      }
-      final double newScaleY = _xifexpression_1;
-      final double newScale = Math.min(newScaleX, newScaleY);
-      this.setScale(newScale);
-      Rectangle _rectangle = new Rectangle();
-      final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
-        public void apply(final Rectangle it) {
-          double _minX = myBounds.getMinX();
-          it.setX(_minX);
-          double _width = myBounds.getWidth();
-          it.setWidth(_width);
-          boolean _equals = (newScaleX == 1);
-          if (_equals) {
-            double _width_1 = it.getWidth();
-            double _divide = (_width_1 / newScale);
-            double _width_2 = myBounds.getWidth();
-            final double delta = (_divide - _width_2);
-            double _x = it.getX();
-            double _multiply = (0.5 * delta);
-            double _minus = (_x - _multiply);
-            it.setX(_minus);
-            double _width_3 = it.getWidth();
-            double _plus = (_width_3 + delta);
-            it.setWidth(_plus);
+      Boolean _xblockexpression_1 = null;
+      {
+        ObservableList<XNode> _nodes_1 = this.getNodes();
+        final Function1<XNode,BoundingBox> _function = new Function1<XNode,BoundingBox>() {
+          public BoundingBox apply(final XNode it) {
+            Bounds _layoutBounds = it.getLayoutBounds();
+            double _layoutX = it.getLayoutX();
+            double _layoutY = it.getLayoutY();
+            BoundingBox _translate = BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
+            return _translate;
           }
-          double _minY = myBounds.getMinY();
-          it.setY(_minY);
-          double _height = myBounds.getHeight();
-          it.setHeight(_height);
-          boolean _equals_1 = (newScaleY == 1);
-          if (_equals_1) {
-            double _height_1 = it.getHeight();
-            double _divide_1 = (_height_1 / newScale);
-            double _height_2 = myBounds.getHeight();
-            final double delta_1 = (_divide_1 - _height_2);
-            double _y = it.getY();
-            double _multiply_1 = (0.5 * delta_1);
-            double _minus_1 = (_y - _multiply_1);
-            it.setY(_minus_1);
-            double _height_3 = it.getHeight();
-            double _plus_1 = (_height_3 + delta_1);
-            it.setHeight(_plus_1);
+        };
+        List<BoundingBox> _map = ListExtensions.<XNode, BoundingBox>map(_nodes_1, _function);
+        final Function2<BoundingBox,BoundingBox,BoundingBox> _function_1 = new Function2<BoundingBox,BoundingBox,BoundingBox>() {
+          public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
+            BoundingBox _plus = BoundsExtensions.operator_plus(b0, b1);
+            return _plus;
           }
+        };
+        final BoundingBox myBounds = IterableExtensions.<BoundingBox>reduce(_map, _function_1);
+        double _xifexpression_1 = (double) 0;
+        double _width = myBounds.getWidth();
+        boolean _notEquals = (_width != 0);
+        if (_notEquals) {
+          double _width_1 = this.getWidth();
+          double _width_2 = myBounds.getWidth();
+          double _divide = (_width_1 / _width_2);
+          double _min = Math.min(1, _divide);
+          _xifexpression_1 = _min;
+        } else {
+          _xifexpression_1 = 1;
         }
-      };
-      Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
-      this.setClip(_doubleArrow);
+        final double newScaleX = _xifexpression_1;
+        double _xifexpression_2 = (double) 0;
+        double _height = myBounds.getHeight();
+        boolean _notEquals_1 = (_height != 0);
+        if (_notEquals_1) {
+          double _height_1 = this.getHeight();
+          double _height_2 = myBounds.getHeight();
+          double _divide_1 = (_height_1 / _height_2);
+          double _min_1 = Math.min(1, _divide_1);
+          _xifexpression_2 = _min_1;
+        } else {
+          _xifexpression_2 = 1;
+        }
+        final double newScaleY = _xifexpression_2;
+        final double newScale = Math.min(newScaleX, newScaleY);
+        this.setScale(newScale);
+        Rectangle _rectangle = new Rectangle();
+        final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
+          public void apply(final Rectangle it) {
+            XNestedDiagram.this.fit(it, newScale, newScaleX, newScaleY, myBounds);
+          }
+        };
+        Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
+        this.setClip(_doubleArrow);
+        this.fit(this.fillRectangle, newScale, newScaleX, newScaleY, myBounds);
+        Boolean _xifexpression_3 = null;
+        Parent _parent = this.fillRectangle.getParent();
+        boolean _equals = Objects.equal(_parent, null);
+        if (_equals) {
+          ObservableList<Node> _children = this.getChildren();
+          boolean _add = _children.add(this.fillRectangle);
+          _xifexpression_3 = Boolean.valueOf(_add);
+        }
+        _xblockexpression_1 = (_xifexpression_3);
+      }
+      _xifexpression = _xblockexpression_1;
+    }
+    return _xifexpression;
+  }
+  
+  protected void fit(final Rectangle it, final double newScale, final double newScaleX, final double newScaleY, final Bounds allNodesBounds) {
+    double _divide = (22 / newScale);
+    it.setArcWidth(_divide);
+    double _divide_1 = (22 / newScale);
+    it.setArcHeight(_divide_1);
+    double _minX = allNodesBounds.getMinX();
+    it.setX(_minX);
+    double _width = allNodesBounds.getWidth();
+    it.setWidth(_width);
+    boolean _greaterThan = (newScaleX > newScaleY);
+    if (_greaterThan) {
+      double _width_1 = this.getWidth();
+      double _divide_2 = (_width_1 / newScale);
+      double _width_2 = allNodesBounds.getWidth();
+      final double delta = (_divide_2 - _width_2);
+      double _x = it.getX();
+      double _multiply = (0.5 * delta);
+      double _minus = (_x - _multiply);
+      it.setX(_minus);
+      double _width_3 = it.getWidth();
+      double _plus = (_width_3 + delta);
+      it.setWidth(_plus);
+    }
+    double _minY = allNodesBounds.getMinY();
+    it.setY(_minY);
+    double _height = allNodesBounds.getHeight();
+    it.setHeight(_height);
+    boolean _greaterThan_1 = (newScaleY > newScaleX);
+    if (_greaterThan_1) {
+      double _height_1 = this.getHeight();
+      double _divide_3 = (_height_1 / newScale);
+      double _height_2 = allNodesBounds.getHeight();
+      final double delta_1 = (_divide_3 - _height_2);
+      double _y = it.getY();
+      double _multiply_1 = (0.5 * delta_1);
+      double _minus_1 = (_y - _multiply_1);
+      it.setY(_minus_1);
+      double _height_3 = it.getHeight();
+      double _plus_1 = (_height_3 + delta_1);
+      it.setHeight(_plus_1);
     }
   }
   
@@ -253,6 +301,8 @@ public class XNestedDiagram extends XAbstractDiagram {
       }
     };
     _nodes.addListener(_function);
+    ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = this.buttonLayer.layoutBoundsProperty();
+    _layoutBoundsProperty.addListener(this.boundsInLocalListener);
     if (this.contentsInitializer!=null) {
       this.contentsInitializer.apply(this);
     }

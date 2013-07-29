@@ -9,7 +9,6 @@ import javafx.geometry.Insets
 import javafx.geometry.VPos
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
@@ -23,7 +22,7 @@ class NestedDiagramNode extends XNode {
 
 	String name
 
-	Pane pane
+	RectangleBorderPane pane
 
 	Node label
 
@@ -59,14 +58,12 @@ class NestedDiagramNode extends XNode {
 			]
 			children += new Group => [
 				children += innerDiagram = new XNestedDiagram => [
-					style = "-fx-background-color: white;"
 					contentsInitializer = [
 						it => diagramContents
 						width = label.layoutBounds.width + 40 
 						height = label.layoutBounds.height + 20
 					]
 				]
-				StackPane.setMargin(it, new Insets(3, 3, 3, 3))
 			]
 		]
 		key = name
@@ -85,10 +82,12 @@ class NestedDiagramNode extends XNode {
 			if (area <= 100000) {
 				label.visible = true
 				innerDiagram.visible = false
+				pane.backgroundPaint = RectangleBorderPane.DEFAULT_BACKGROUND
 			} else {
 				label.visible = false
 				innerDiagram.visible = true
-				innerDiagram.activate					
+				innerDiagram.activate
+				pane.backgroundPaint = Color.WHITE
 			}
 		]
 		val rapidButtonBehavior = new AddRapidButtonBehavior(this)

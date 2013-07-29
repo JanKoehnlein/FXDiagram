@@ -5,6 +5,7 @@ import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 
 import static java.lang.Math.*
+import javafx.geometry.Insets
 
 class BoundsExtensions {
 
@@ -16,6 +17,12 @@ class BoundsExtensions {
 		val maxY = max(left.maxY, right.maxY)
 		val maxZ = max(left.maxZ, right.maxZ)
 		new BoundingBox(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ)
+	}
+	
+	def static operator_plus(Bounds bounds, Insets insets) {
+		new BoundingBox(bounds.minX - insets.left, bounds.minY - insets.top,
+			bounds.width + insets.left + insets.right, bounds.height + insets.top + insets.bottom
+		)
 	}
 
 	def static translate(Bounds bounds, double tx, double ty, double tz) {

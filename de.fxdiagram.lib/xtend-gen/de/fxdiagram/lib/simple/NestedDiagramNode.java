@@ -20,7 +20,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -36,7 +35,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class NestedDiagramNode extends XNode {
   private String name;
   
-  private Pane pane;
+  private RectangleBorderPane pane;
   
   private Node label;
   
@@ -96,8 +95,8 @@ public class NestedDiagramNode extends XNode {
     this.name = name;
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     this.pane = _rectangleBorderPane;
-    final Procedure1<Pane> _function = new Procedure1<Pane>() {
-      public void apply(final Pane it) {
+    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -119,7 +118,6 @@ public class NestedDiagramNode extends XNode {
             XNestedDiagram _xNestedDiagram = new XNestedDiagram();
             final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
               public void apply(final XNestedDiagram it) {
-                it.setStyle("-fx-background-color: white;");
                 final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
                   public void apply(final XNestedDiagram it) {
                     ObjectExtensions.<XNestedDiagram>operator_doubleArrow(it, diagramContents);
@@ -139,15 +137,13 @@ public class NestedDiagramNode extends XNode {
             XNestedDiagram _doubleArrow = ObjectExtensions.<XNestedDiagram>operator_doubleArrow(_xNestedDiagram, _function);
             XNestedDiagram _innerDiagram = NestedDiagramNode.this.innerDiagram = _doubleArrow;
             _children.add(_innerDiagram);
-            Insets _insets = new Insets(3, 3, 3, 3);
-            StackPane.setMargin(it, _insets);
           }
         };
         Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
         _children_1.add(_doubleArrow_1);
       }
     };
-    Pane _doubleArrow = ObjectExtensions.<Pane>operator_doubleArrow(this.pane, _function);
+    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(this.pane, _function);
     this.setNode(_doubleArrow);
     this.setKey(name);
   }
@@ -175,10 +171,12 @@ public class NestedDiagramNode extends XNode {
         if (_lessEqualsThan) {
           NestedDiagramNode.this.label.setVisible(true);
           NestedDiagramNode.this.innerDiagram.setVisible(false);
+          NestedDiagramNode.this.pane.setBackgroundPaint(RectangleBorderPane.DEFAULT_BACKGROUND);
         } else {
           NestedDiagramNode.this.label.setVisible(false);
           NestedDiagramNode.this.innerDiagram.setVisible(true);
           NestedDiagramNode.this.innerDiagram.activate();
+          NestedDiagramNode.this.pane.setBackgroundPaint(Color.WHITE);
         }
       }
     };

@@ -2,6 +2,7 @@ package de.fxdiagram.core.geometry;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 
 @SuppressWarnings("all")
@@ -34,6 +35,27 @@ public class BoundsExtensions {
       _xblockexpression = (_boundingBox);
     }
     return _xblockexpression;
+  }
+  
+  public static BoundingBox operator_plus(final Bounds bounds, final Insets insets) {
+    double _minX = bounds.getMinX();
+    double _left = insets.getLeft();
+    double _minus = (_minX - _left);
+    double _minY = bounds.getMinY();
+    double _top = insets.getTop();
+    double _minus_1 = (_minY - _top);
+    double _width = bounds.getWidth();
+    double _left_1 = insets.getLeft();
+    double _plus = (_width + _left_1);
+    double _right = insets.getRight();
+    double _plus_1 = (_plus + _right);
+    double _height = bounds.getHeight();
+    double _top_1 = insets.getTop();
+    double _plus_2 = (_height + _top_1);
+    double _bottom = insets.getBottom();
+    double _plus_3 = (_plus_2 + _bottom);
+    BoundingBox _boundingBox = new BoundingBox(_minus, _minus_1, _plus_1, _plus_3);
+    return _boundingBox;
   }
   
   public static BoundingBox translate(final Bounds bounds, final double tx, final double ty, final double tz) {

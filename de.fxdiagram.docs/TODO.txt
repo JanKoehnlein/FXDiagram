@@ -5,8 +5,6 @@ BUG
 - Xconnection width 
 - populate menu
 - chooser isVertical
-- Apply insets for nested diagrams in XNestedDiagram instead of NestedDiagramNode,
-  such that shadows are not clipped.
 
 ENHANCEMENT
 - Open subdiagram
@@ -58,4 +56,4 @@ DONE
 - recalculate anchor when moving closest control point 
 - increase label spaceing
 - auxiliary lines
-
+- Fixed nested diagram clipping

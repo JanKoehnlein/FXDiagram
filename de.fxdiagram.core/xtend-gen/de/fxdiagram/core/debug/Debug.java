@@ -96,8 +96,8 @@ public class Debug {
     boolean _while = _and;
     while (_while) {
       {
-        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = currentNode.boundsInLocalProperty();
-        _boundsInLocalProperty.addListener(debugger);
+        ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = currentNode.layoutBoundsProperty();
+        _layoutBoundsProperty.addListener(debugger);
         Parent _parent = currentNode.getParent();
         currentNode = _parent;
       }

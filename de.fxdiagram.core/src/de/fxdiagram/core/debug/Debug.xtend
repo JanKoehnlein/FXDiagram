@@ -38,7 +38,7 @@ class Debug {
 		]
 		var currentNode = node
 		while(currentNode != null && !(currentNode instanceof XRootDiagram)) {
-			currentNode.boundsInLocalProperty.addListener(debugger)
+			currentNode.layoutBoundsProperty.addListener(debugger)
 			currentNode = currentNode.parent
 		}
 	}

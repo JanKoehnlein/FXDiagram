@@ -24,16 +24,17 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 
 	@FxProperty Paint borderPaint = Color.GRAY
 
-	@FxProperty Paint backgroundPaint = new LinearGradient(
+	@FxProperty Paint backgroundPaint = DEFAULT_BACKGROUND
+	
+	@FxProperty double backgroundRadius = 12.0
+
+	public static val DEFAULT_BACKGROUND = new LinearGradient(
 		0, 0, 1, 1, 
 		true, CycleMethod.NO_CYCLE,
 		#[
 			new Stop(0, Color.gray(0.6)), 
 			new Stop(1, Color.gray(0.9))
-		])
-		
-	@FxProperty double backgroundRadius = 12.0
-
+		]) 
 	
 	new() {
 		setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE)

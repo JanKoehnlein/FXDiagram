@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.anchors;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.RectangleAnchors;
@@ -29,6 +30,10 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
       Node _node_1 = this.host.getNode();
       Bounds _layoutBounds = _node_1.getLayoutBounds();
       final Bounds boundsInRootDiagram = Extensions.localToRootDiagram(_node, _layoutBounds);
+      boolean _equals = Objects.equal(boundsInRootDiagram, null);
+      if (_equals) {
+        return null;
+      }
       Node _node_2 = this.host.getNode();
       BoundingBox _boundingBox = new BoundingBox(0, 0, this.radiusX, this.radiusY);
       final Bounds radiusBounds = Extensions.localToRootDiagram(_node_2, _boundingBox);
