@@ -2,7 +2,6 @@ package de.fxdiagram.core.export;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.export.ShapeConverterExtensions;
 import de.fxdiagram.core.export.SvgExportable;
@@ -21,6 +20,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -37,7 +38,6 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 
 @Logging
 @SuppressWarnings("all")
@@ -149,6 +149,14 @@ public class SvgExporter {
         _matched=true;
         CharSequence _imageToSvgElement = this.imageToSvgElement(_imageView);
         _switchResult = _imageToSvgElement;
+      }
+    }
+    if (!_matched) {
+      if (o instanceof MediaView) {
+        final MediaView _mediaView = (MediaView)o;
+        _matched=true;
+        CharSequence _snapshotToSvgElement = this.snapshotToSvgElement(_mediaView);
+        _switchResult = _snapshotToSvgElement;
       }
     }
     if (!_matched) {
@@ -295,40 +303,14 @@ public class SvgExporter {
   public CharSequence imageToSvgElement(final ImageView it) {
     CharSequence _xblockexpression = null;
     {
-      int _nextImageNumber = this.nextImageNumber();
-      String _plus = ("image" + Integer.valueOf(_nextImageNumber));
-      final String fileName = (_plus + ".png");
-      try {
-        Image _image = it.getImage();
-        final BufferedImage buffered = SwingFXUtils.fromFXImage(_image, null);
-        Rectangle2D _viewport = it.getViewport();
-        double _minX = _viewport.getMinX();
-        Rectangle2D _viewport_1 = it.getViewport();
-        double _minY = _viewport_1.getMinY();
-        Rectangle2D _viewport_2 = it.getViewport();
-        double _width = _viewport_2.getWidth();
-        Rectangle2D _viewport_3 = it.getViewport();
-        double _height = _viewport_3.getHeight();
-        final BufferedImage visible = buffered.getSubimage(((int) _minX), ((int) _minY), ((int) _width), ((int) _height));
-        File _file = new File(fileName);
-        ImageIO.write(visible, "png", _file);
-      } catch (final Throwable _t) {
-        if (_t instanceof IOException) {
-          final IOException e = (IOException)_t;
-          Class<? extends ImageView> _class = it.getClass();
-          String _name = _class.getName();
-          String _plus_1 = ("Error exporting " + _name);
-          String _plus_2 = (_plus_1 + " to SVG");
-          SvgExporter.LOG.log(Level.SEVERE, _plus_2, e);
-        } else {
-          throw Exceptions.sneakyThrow(_t);
-        }
-      }
+      Image _image = it.getImage();
+      Rectangle2D _viewport = it.getViewport();
+      final String fileName = this.saveImageFile(_image, _viewport);
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<!-- ");
-      Class<? extends ImageView> _class_1 = it.getClass();
-      String _name_1 = _class_1.getName();
-      _builder.append(_name_1, "");
+      Class<? extends ImageView> _class = it.getClass();
+      String _name = _class.getName();
+      _builder.append(_name, "");
       _builder.append(" -->");
       _builder.newLineIfNotEmpty();
       _builder.append("<image ");
@@ -337,17 +319,107 @@ public class SvgExporter {
       _builder.append(_svgString, "");
       _builder.append(" width=\"");
       Bounds _layoutBounds = it.getLayoutBounds();
-      double _width_1 = _layoutBounds.getWidth();
-      _builder.append(_width_1, "");
+      double _width = _layoutBounds.getWidth();
+      _builder.append(_width, "");
       _builder.append("\" height=\"");
       Bounds _layoutBounds_1 = it.getLayoutBounds();
-      double _height_1 = _layoutBounds_1.getHeight();
+      double _height = _layoutBounds_1.getHeight();
+      _builder.append(_height, "");
+      _builder.append("\" xlink:href=\"");
+      _builder.append(fileName, "");
+      _builder.append("\"/>");
+      _builder.newLineIfNotEmpty();
+      _xblockexpression = (_builder);
+    }
+    return _xblockexpression;
+  }
+  
+  public CharSequence snapshotToSvgElement(final Node node) {
+    CharSequence _xblockexpression = null;
+    {
+      Bounds _layoutBounds = node.getLayoutBounds();
+      double _width = _layoutBounds.getWidth();
+      Bounds _layoutBounds_1 = node.getLayoutBounds();
+      double _height = _layoutBounds_1.getHeight();
+      WritableImage _writableImage = new WritableImage(((int) _width), ((int) _height));
+      final WritableImage image = _writableImage;
+      node.snapshot(null, image);
+      final String fileName = this.saveImageFile(image, null);
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("<!-- ");
+      Class<? extends Node> _class = node.getClass();
+      String _name = _class.getName();
+      _builder.append(_name, "");
+      _builder.append(" -->");
+      _builder.newLineIfNotEmpty();
+      _builder.append("<image ");
+      Transform _localToSceneTransform = node.getLocalToSceneTransform();
+      CharSequence _svgString = this.toSvgString(_localToSceneTransform);
+      _builder.append(_svgString, "");
+      _builder.append(" width=\"");
+      Bounds _layoutBounds_2 = node.getLayoutBounds();
+      double _width_1 = _layoutBounds_2.getWidth();
+      _builder.append(_width_1, "");
+      _builder.append("\" height=\"");
+      Bounds _layoutBounds_3 = node.getLayoutBounds();
+      double _height_1 = _layoutBounds_3.getHeight();
       _builder.append(_height_1, "");
       _builder.append("\" xlink:href=\"");
       _builder.append(fileName, "");
       _builder.append("\"/>");
       _builder.newLineIfNotEmpty();
       _xblockexpression = (_builder);
+    }
+    return _xblockexpression;
+  }
+  
+  protected String saveImageFile(final Image image, final Rectangle2D viewport) {
+    String _xblockexpression = null;
+    {
+      int _nextImageNumber = this.nextImageNumber();
+      String _plus = ("image" + Integer.valueOf(_nextImageNumber));
+      final String fileName = (_plus + ".png");
+      try {
+        final BufferedImage buffered = SwingFXUtils.fromFXImage(image, null);
+        BufferedImage _xifexpression = null;
+        boolean _equals = Objects.equal(viewport, null);
+        if (_equals) {
+          _xifexpression = buffered;
+        } else {
+          double _minX = viewport.getMinX();
+          double _minY = viewport.getMinY();
+          double _width = viewport.getWidth();
+          double _height = viewport.getHeight();
+          BufferedImage _subimage = buffered.getSubimage(((int) _minX), ((int) _minY), 
+            ((int) _width), ((int) _height));
+          _xifexpression = _subimage;
+        }
+        final BufferedImage visible = _xifexpression;
+        File _file = new File(fileName);
+        ImageIO.write(visible, "png", _file);
+      } catch (final Throwable _t) {
+        if (_t instanceof IOException) {
+          final IOException e = (IOException)_t;
+          Class<? extends SvgExporter> _class = this.getClass();
+          String _name = _class.getName();
+          String _plus_1 = ("Error exporting " + _name);
+          String _plus_2 = (_plus_1 + " to SVG");
+          SvgExporter.LOG.log(Level.SEVERE, _plus_2, e);
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
+      _xblockexpression = (fileName);
+    }
+    return _xblockexpression;
+  }
+  
+  protected int nextImageNumber() {
+    int _xblockexpression = (int) 0;
+    {
+      int _plus = (this.imageCounter + 1);
+      this.imageCounter = _plus;
+      _xblockexpression = (this.imageCounter);
     }
     return _xblockexpression;
   }
@@ -384,73 +456,6 @@ public class SvgExporter {
       }
     }
     return _builder;
-  }
-  
-  public CharSequence toSvgImage(final XNode node, final Image image) {
-    CharSequence _xblockexpression = null;
-    {
-      String _elvis = null;
-      String _key = node.getKey();
-      if (_key != null) {
-        _elvis = _key;
-      } else {
-        int _nextImageNumber = this.nextImageNumber();
-        String _plus = ("image" + Integer.valueOf(_nextImageNumber));
-        _elvis = ObjectExtensions.<String>operator_elvis(_key, _plus);
-      }
-      final String fileName = (_elvis + ".png");
-      try {
-        BufferedImage _fromFXImage = SwingFXUtils.fromFXImage(image, null);
-        File _file = new File(fileName);
-        ImageIO.write(_fromFXImage, "png", _file);
-      } catch (final Throwable _t) {
-        if (_t instanceof IOException) {
-          final IOException e = (IOException)_t;
-          Class<? extends SvgExporter> _class = this.getClass();
-          String _name = _class.getName();
-          String _plus_1 = ("Error exporting " + _name);
-          String _plus_2 = (_plus_1 + " to SVG");
-          SvgExporter.LOG.log(Level.SEVERE, _plus_2, e);
-        } else {
-          throw Exceptions.sneakyThrow(_t);
-        }
-      }
-      StringConcatenation _builder = new StringConcatenation();
-      _builder.append("<!-- ");
-      Class<? extends XNode> _class_1 = node.getClass();
-      String _name_1 = _class_1.getName();
-      _builder.append(_name_1, "");
-      _builder.append(" -->");
-      _builder.newLineIfNotEmpty();
-      _builder.append("<image ");
-      Transform _localToSceneTransform = node.getLocalToSceneTransform();
-      CharSequence _svgString = this.toSvgString(_localToSceneTransform);
-      _builder.append(_svgString, "");
-      _builder.append(" width=\"");
-      Bounds _layoutBounds = node.getLayoutBounds();
-      double _width = _layoutBounds.getWidth();
-      _builder.append(_width, "");
-      _builder.append("\" height=\"");
-      Bounds _layoutBounds_1 = node.getLayoutBounds();
-      double _height = _layoutBounds_1.getHeight();
-      _builder.append(_height, "");
-      _builder.append("\" xlink:href=\"");
-      _builder.append(fileName, "");
-      _builder.append("\"/>");
-      _builder.newLineIfNotEmpty();
-      _xblockexpression = (_builder);
-    }
-    return _xblockexpression;
-  }
-  
-  public int nextImageNumber() {
-    int _xblockexpression = (int) 0;
-    {
-      int _plus = (this.imageCounter + 1);
-      this.imageCounter = _plus;
-      _xblockexpression = (this.imageCounter);
-    }
-    return _xblockexpression;
   }
   
   public CharSequence toSvgAttribute(final Object value, final String name, final Object defaultValue) {

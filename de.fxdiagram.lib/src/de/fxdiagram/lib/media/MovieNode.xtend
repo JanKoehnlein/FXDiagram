@@ -3,8 +3,6 @@ package de.fxdiagram.lib.media
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.export.SvgExportable
-import de.fxdiagram.core.export.SvgExporter
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -16,24 +14,17 @@ import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.SnapshotParameters
 import javafx.scene.control.Button
-import javafx.scene.image.WritableImage
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import javafx.scene.media.Media
 import javafx.scene.media.MediaPlayer
 import javafx.scene.media.MediaView
 import javafx.scene.text.Text
-import javafx.scene.transform.Scale
 
-import static java.lang.Math.*
-
-import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 import static extension javafx.util.Duration.*
 
-class MovieNode extends XNode implements SvgExportable {
+class MovieNode extends XNode {
 
 	@FxProperty@ReadOnly Media media
 
@@ -57,7 +48,7 @@ class MovieNode extends XNode implements SvgExportable {
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
 			]
-			back = pane = new StackPane => [
+			back = pane = new RectangleBorderPane => [
 				id = "pane"
 				padding = new Insets(border, border, border, border)
 				children += view = new MediaView 
@@ -153,17 +144,4 @@ class MovieNode extends XNode implements SvgExportable {
 		view
 	}
 
-	override toSvgElement(extension SvgExporter exporter) {
-		val mediaScale = min(view.fitWidth / getMedia.width, view.fitHeight / getMedia.height)
-		val imageWidth = (getMedia.width + 2 * border / mediaScale) as int
-		val imageHeight = (getMedia.height + 2 * border / mediaScale) as int
-		val image = new WritableImage(imageWidth, imageHeight)
-		val scale = imageWidth / layoutBounds.width
-		val t = localToDiagramTransform * new Scale(scale, scale, scale)
-		snapshot(
-			new SnapshotParameters => [
-				transform = t
-			], image)
-		toSvgImage(this, image)
-	}
 }

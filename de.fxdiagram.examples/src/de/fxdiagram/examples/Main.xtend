@@ -4,6 +4,7 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.Layouter
+import de.fxdiagram.core.services.ImageCache
 import de.fxdiagram.examples.java.JavaTypeNode
 import de.fxdiagram.examples.lcars.LcarsAccess
 import de.fxdiagram.examples.lcars.LcarsNode
@@ -22,7 +23,6 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.image.Image
 import javafx.stage.Stage
-import de.fxdiagram.core.services.ImageCache
 
 class Main extends Application {
 

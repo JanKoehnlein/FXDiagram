@@ -1,11 +1,7 @@
 package de.fxdiagram.lib.media;
 
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.export.SvgExportable;
-import de.fxdiagram.core.export.SvgExporter;
-import de.fxdiagram.core.geometry.TransformExtensions;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -20,15 +16,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -36,15 +29,12 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
 import javafx.util.Duration;
-import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class MovieNode extends XNode implements SvgExportable {
+public class MovieNode extends XNode {
   private StackPane pane;
   
   private MediaPlayer player;
@@ -80,9 +70,9 @@ public class MovieNode extends XNode implements SvgExportable {
         };
         RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
         it.setFront(_doubleArrow);
-        StackPane _stackPane = new StackPane();
-        final Procedure1<StackPane> _function_1 = new Procedure1<StackPane>() {
-          public void apply(final StackPane it) {
+        RectangleBorderPane _rectangleBorderPane_1 = new RectangleBorderPane();
+        final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+          public void apply(final RectangleBorderPane it) {
             it.setId("pane");
             Insets _insets = new Insets(MovieNode.this.border, MovieNode.this.border, MovieNode.this.border, MovieNode.this.border);
             it.setPadding(_insets);
@@ -137,7 +127,7 @@ public class MovieNode extends XNode implements SvgExportable {
             _children_1.add(_doubleArrow);
           }
         };
-        StackPane _doubleArrow_1 = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function_1);
+        RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane_1, _function_1);
         StackPane _pane = MovieNode.this.pane = _doubleArrow_1;
         it.setBack(_pane);
       }
@@ -293,52 +283,6 @@ public class MovieNode extends XNode implements SvgExportable {
   
   public MediaView getView() {
     return this.view;
-  }
-  
-  public CharSequence toSvgElement(@Extension final SvgExporter exporter) {
-    CharSequence _xblockexpression = null;
-    {
-      double _fitWidth = this.view.getFitWidth();
-      Media _media = this.getMedia();
-      int _width = _media.getWidth();
-      double _divide = (_fitWidth / _width);
-      double _fitHeight = this.view.getFitHeight();
-      Media _media_1 = this.getMedia();
-      int _height = _media_1.getHeight();
-      double _divide_1 = (_fitHeight / _height);
-      final double mediaScale = Math.min(_divide, _divide_1);
-      Media _media_2 = this.getMedia();
-      int _width_1 = _media_2.getWidth();
-      int _multiply = (2 * this.border);
-      double _divide_2 = (_multiply / mediaScale);
-      double _plus = (_width_1 + _divide_2);
-      final int imageWidth = ((int) _plus);
-      Media _media_3 = this.getMedia();
-      int _height_1 = _media_3.getHeight();
-      int _multiply_1 = (2 * this.border);
-      double _divide_3 = (_multiply_1 / mediaScale);
-      double _plus_1 = (_height_1 + _divide_3);
-      final int imageHeight = ((int) _plus_1);
-      WritableImage _writableImage = new WritableImage(imageWidth, imageHeight);
-      final WritableImage image = _writableImage;
-      Bounds _layoutBounds = this.getLayoutBounds();
-      double _width_2 = _layoutBounds.getWidth();
-      final double scale = (imageWidth / _width_2);
-      Transform _localToDiagramTransform = Extensions.localToDiagramTransform(this);
-      Scale _scale = new Scale(scale, scale, scale);
-      final Transform t = TransformExtensions.operator_multiply(_localToDiagramTransform, _scale);
-      SnapshotParameters _snapshotParameters = new SnapshotParameters();
-      final Procedure1<SnapshotParameters> _function = new Procedure1<SnapshotParameters>() {
-        public void apply(final SnapshotParameters it) {
-          it.setTransform(t);
-        }
-      };
-      SnapshotParameters _doubleArrow = ObjectExtensions.<SnapshotParameters>operator_doubleArrow(_snapshotParameters, _function);
-      this.snapshot(_doubleArrow, image);
-      CharSequence _svgImage = exporter.toSvgImage(this, image);
-      _xblockexpression = (_svgImage);
-    }
-    return _xblockexpression;
   }
   
   private ReadOnlyObjectWrapper<Media> mediaProperty = new ReadOnlyObjectWrapper<Media>(this, "media");

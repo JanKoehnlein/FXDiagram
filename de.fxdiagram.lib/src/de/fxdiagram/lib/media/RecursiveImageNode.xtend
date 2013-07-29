@@ -1,22 +1,16 @@
 package de.fxdiagram.lib.media
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.export.SvgExportable
-import de.fxdiagram.core.export.SvgExporter
 import de.fxdiagram.lib.simple.AddRapidButtonBehavior
 import java.util.Deque
 import java.util.LinkedList
-import javafx.scene.SnapshotParameters
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import javafx.scene.image.WritableImage
 import javafx.scene.layout.Pane
-import javafx.scene.transform.Scale
-
-import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import de.fxdiagram.core.export.SvgExportable
+import de.fxdiagram.core.export.SvgExporter
 
 class RecursiveImageNode extends XNode implements SvgExportable {
 
@@ -112,22 +106,9 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 				return
 		}
 	}
-
+	
 	override toSvgElement(extension SvgExporter exporter) {
-		val view = panes?.head?.children?.head as ImageView
-		if (view != null) {
-			val imageScale = min(view.fitWidth / image.width, view.fitHeight / image.height)
-			val imageWidth = (image.width / imageScale) as int
-			val imageHeight = (image.height / imageScale) as int
-			val image = new WritableImage(imageWidth, imageHeight)
-			val renderScale = imageWidth / layoutBounds.width
-			val t = localToDiagramTransform * new Scale(renderScale, renderScale, renderScale)
-			snapshot(
-				new SnapshotParameters => [
-					transform = t
-				], image)
-			return toSvgImage(this, image)
-		}
-		''
+		exporter.snapshotToSvgElement(this.node)
 	}
+
 }

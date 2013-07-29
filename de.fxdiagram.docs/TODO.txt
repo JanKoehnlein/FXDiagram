@@ -1,8 +1,7 @@
 BUG
-- Fix fluctuations in layout of RecursiveImageNode and pos in SVG export
+- Fix fluctuations in layout of RecursiveImageNode 
 - click on nothing should deselect all
 - SVGExport: clipping 
-- Xconnection width 
 - populate menu
 - chooser isVertical
 
@@ -23,37 +22,4 @@ MINOR
 - move brickbreaker to external
  
 DONE 
-- Inherit from Parent, not Group
-- Fix layout position of BrickBreakerNode
-- Make SVG export work with RectangleBorderPane
-- rename and don't export test packages
-- FlipNode
-- Embed JavaFX demos in XNodes
-- Implement Java API for properties of RectangleBorderPane
-- Initial layout of choosers is broken  
-- Fix rapid buttons in nested diagram
-- FlipNode control
-- more controls for MovieNode
-- Location and layout of chooser buttons
-- Connection auto-layout
-- Connection behavior
-- BrowserNode
-- displace of control points on move
-- Fix zoomin position
-- LCARS positioning of new nodes
-- LCARS reenable text animation
-- Unify Logging 
-- connection labels: layout
-- connection labels: behavior
-- Location of filter text
-- initial label placement
-- spinning labels 
-- anchor and chooser impls => lib
-- disable graphviz debug
-- connection labels
-- distinguish between anchor and control points
-- why can I select the last but not the first CP
-- recalculate anchor when moving closest control point 
-- increase label spaceing
-- auxiliary lines
-- Fixed nested diagram clipping
+

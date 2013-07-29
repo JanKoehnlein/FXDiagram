@@ -40,6 +40,4 @@ class BrowserNode extends XNode {
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
-	
-
 }
