@@ -60,15 +60,16 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 	
 	override toSvgElement(extension SvgExporter exporter) '''
 		<!-- «class.name» -->
-		<rect
-			«toSvgString(localToSceneTransform)» 
-			width="«width»" height="«height»"
-			rx="«getBorderRadius»" ry="«getBorderRadius»"
-			fill="«getBackgroundPaint.toSvgString»"
-			stroke="«getBorderPaint.toSvgString»"
-			strokeWidth="«getBorderWidth»"
-			«opacity.toSvgAttribute("opacity", 1.0)»
-		/>
-		«this.parentToSvgElement»
+		«this.parentToSvgElement('''
+			<rect
+				«toSvgString(localToSceneTransform)»
+				width="«width»" height="«height»"
+				rx="«getBorderRadius»" ry="«getBorderRadius»"
+				fill="«getBackgroundPaint.toSvgString»"
+				stroke="«getBorderPaint.toSvgString»"
+				strokeWidth="«getBorderWidth»"
+				«opacity.toSvgAttribute("opacity", 1.0)»
+			/>
+		''')»
 	'''
 }

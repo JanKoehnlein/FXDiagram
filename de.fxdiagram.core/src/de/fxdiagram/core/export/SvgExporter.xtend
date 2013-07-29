@@ -8,6 +8,7 @@ import java.util.List
 import java.util.logging.Level
 import javafx.embed.swing.SwingFXUtils
 import javafx.geometry.Rectangle2D
+import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -21,7 +22,6 @@ import javafx.scene.shape.Shape
 import javafx.scene.text.Text
 import javafx.scene.transform.Transform
 import javax.imageio.ImageIO
-import javafx.scene.Node
 
 @Logging
 class SvgExporter {
@@ -61,7 +61,7 @@ class SvgExporter {
 			Shape: o.shapeToSvgElement
 			ImageView: o.imageToSvgElement
 			MediaView: o.snapshotToSvgElement
-			Parent: o.parentToSvgElement
+			Parent: o.parentToSvgElement('')
 			default: '''
 				<!-- «o.class.name» not exportable -->
 			'''
@@ -136,13 +136,23 @@ class SvgExporter {
 		imageCounter 
 	}
 
-	def CharSequence parentToSvgElement(Parent it) '''
-		«IF !childrenUnmodifiable.filter[visible].empty»
-			«FOR child: childrenUnmodifiable.filter[visible]»
-				«child.toSvgElement»
-			«ENDFOR»
-		«ENDIF»
-	'''
+	def CharSequence parentToSvgElement(Parent it, CharSequence ownSvgCode) {
+		val clipPath = toSvgClip
+		if(!childrenUnmodifiable.filter[visible].empty) {
+			'''
+				«IF clipPath != null»
+					<g «clipPath»>
+				«ENDIF»
+					«ownSvgCode»
+					«FOR child: childrenUnmodifiable.filter[visible]»
+						«child.toSvgElement»
+					«ENDFOR»
+				«IF clipPath != null»
+					</g>
+				«ENDIF»
+			'''
+		} else ownSvgCode
+	}
 	
 	public def toSvgAttribute(Object value, String name, Object defaultValue) {
 		value.toSvgAttribute(name, defaultValue, '')
@@ -153,6 +163,21 @@ class SvgExporter {
 			'''«name»="«value.toSvgString»«unit»" '''
 		else 
 			''
+	}
+	
+	public def toSvgClip(Node node) {
+		val clip = node.clip
+		if(clip instanceof Shape) {
+			currentID = currentID + 1
+			val clipPathId = 'clipPath' + currentID
+			defs += '''
+				<clipPath id="«clipPathId»"
+					«toSvgString(node.localToSceneTransform)»>
+				 	<path d="«toSvgString(clip as Shape)»"/>
+				</clipPath>
+			'''
+			'''clip-path="url(#«clipPathId»)" '''
+		} else null
 	}
 	
 	public def toSvgString(Shape shape) {
@@ -169,8 +194,9 @@ class SvgExporter {
 				'''rgb(«(255*paint.red) as int»,«(255*paint.green) as int»,«(255*paint.blue) as int»)''' 
 			LinearGradient: {
 				currentID = currentID + 1
+				val gradientId = "Gradient" + currentID
 				defs += '''
-					<linearGradient id="Gradient«currentID»"
+					<linearGradient id="«gradientId»"
 						gradientUnits="«IF paint.proportional»objectBoundingBox«ELSE»userSpaceOnUse«ENDIF»"
 						«paint.startX.toSvgAttribute("x1", 0.0)»
 						«paint.startY.toSvgAttribute("y1", 0.0)»
@@ -182,7 +208,7 @@ class SvgExporter {
 						«ENDFOR»
 					</linearGradient>
 				'''
-				'''url(#Gradient«currentID»)'''
+				'''url(#«gradientId»)'''
 			}
 			//	TODO: RadialGradient, ImagePattern
 			default: 

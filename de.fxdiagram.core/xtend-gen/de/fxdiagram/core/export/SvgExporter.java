@@ -163,7 +163,7 @@ public class SvgExporter {
       if (o instanceof Parent) {
         final Parent _parent = (Parent)o;
         _matched=true;
-        CharSequence _parentToSvgElement = this.parentToSvgElement(_parent);
+        CharSequence _parentToSvgElement = this.parentToSvgElement(_parent, "");
         _switchResult = _parentToSvgElement;
       }
     }
@@ -424,9 +424,11 @@ public class SvgExporter {
     return _xblockexpression;
   }
   
-  public CharSequence parentToSvgElement(final Parent it) {
-    StringConcatenation _builder = new StringConcatenation();
+  public CharSequence parentToSvgElement(final Parent it, final CharSequence ownSvgCode) {
+    CharSequence _xblockexpression = null;
     {
+      final CharSequence clipPath = this.toSvgClip(it);
+      CharSequence _xifexpression = null;
       ObservableList<Node> _childrenUnmodifiable = it.getChildrenUnmodifiable();
       final Function1<Node,Boolean> _function = new Function1<Node,Boolean>() {
         public Boolean apply(final Node it) {
@@ -438,6 +440,19 @@ public class SvgExporter {
       boolean _isEmpty = IterableExtensions.isEmpty(_filter);
       boolean _not = (!_isEmpty);
       if (_not) {
+        StringConcatenation _builder = new StringConcatenation();
+        {
+          boolean _notEquals = (!Objects.equal(clipPath, null));
+          if (_notEquals) {
+            _builder.append("<g ");
+            _builder.append(clipPath, "");
+            _builder.append(">");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        _builder.append("\t");
+        _builder.append(ownSvgCode, "	");
+        _builder.newLineIfNotEmpty();
         {
           ObservableList<Node> _childrenUnmodifiable_1 = it.getChildrenUnmodifiable();
           final Function1<Node,Boolean> _function_1 = new Function1<Node,Boolean>() {
@@ -448,14 +463,26 @@ public class SvgExporter {
           };
           Iterable<Node> _filter_1 = IterableExtensions.<Node>filter(_childrenUnmodifiable_1, _function_1);
           for(final Node child : _filter_1) {
+            _builder.append("\t");
             CharSequence _svgElement = this.toSvgElement(child);
-            _builder.append(_svgElement, "");
+            _builder.append(_svgElement, "	");
             _builder.newLineIfNotEmpty();
           }
         }
+        {
+          boolean _notEquals_1 = (!Objects.equal(clipPath, null));
+          if (_notEquals_1) {
+            _builder.append("</g>");
+            _builder.newLine();
+          }
+        }
+        _xifexpression = _builder;
+      } else {
+        _xifexpression = ownSvgCode;
       }
+      _xblockexpression = (_xifexpression);
     }
-    return _builder;
+    return _xblockexpression;
   }
   
   public CharSequence toSvgAttribute(final Object value, final String name, final Object defaultValue) {
@@ -481,6 +508,52 @@ public class SvgExporter {
       _xifexpression = "";
     }
     return _xifexpression;
+  }
+  
+  public CharSequence toSvgClip(final Node node) {
+    CharSequence _xblockexpression = null;
+    {
+      final Node clip = node.getClip();
+      CharSequence _xifexpression = null;
+      if ((clip instanceof Shape)) {
+        CharSequence _xblockexpression_1 = null;
+        {
+          int _plus = (this.currentID + 1);
+          this.currentID = _plus;
+          final String clipPathId = ("clipPath" + Integer.valueOf(this.currentID));
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("<clipPath id=\"");
+          _builder.append(clipPathId, "");
+          _builder.append("\"");
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t");
+          Transform _localToSceneTransform = node.getLocalToSceneTransform();
+          CharSequence _svgString = this.toSvgString(_localToSceneTransform);
+          _builder.append(_svgString, "	");
+          _builder.append(">");
+          _builder.newLineIfNotEmpty();
+          _builder.append(" \t");
+          _builder.append("<path d=\"");
+          String _svgString_1 = this.toSvgString(((Shape) clip));
+          _builder.append(_svgString_1, " 	");
+          _builder.append("\"/>");
+          _builder.newLineIfNotEmpty();
+          _builder.append("</clipPath>");
+          _builder.newLine();
+          this.defs.add(_builder.toString());
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("clip-path=\"url(#");
+          _builder_1.append(clipPathId, "");
+          _builder_1.append(")\" ");
+          _xblockexpression_1 = (_builder_1);
+        }
+        _xifexpression = _xblockexpression_1;
+      } else {
+        _xifexpression = null;
+      }
+      _xblockexpression = (_xifexpression);
+    }
+    return _xblockexpression;
   }
   
   public String toSvgString(final Shape shape) {
@@ -547,9 +620,10 @@ public class SvgExporter {
         {
           int _plus = (this.currentID + 1);
           this.currentID = _plus;
+          final String gradientId = ("Gradient" + Integer.valueOf(this.currentID));
           StringConcatenation _builder = new StringConcatenation();
-          _builder.append("<linearGradient id=\"Gradient");
-          _builder.append(this.currentID, "");
+          _builder.append("<linearGradient id=\"");
+          _builder.append(gradientId, "");
           _builder.append("\"");
           _builder.newLineIfNotEmpty();
           _builder.append("\t");
@@ -610,8 +684,8 @@ public class SvgExporter {
           _builder.newLine();
           this.defs.add(_builder.toString());
           StringConcatenation _builder_1 = new StringConcatenation();
-          _builder_1.append("url(#Gradient");
-          _builder_1.append(this.currentID, "");
+          _builder_1.append("url(#");
+          _builder_1.append(gradientId, "");
           _builder_1.append(")");
           _xblockexpression = (_builder_1);
         }

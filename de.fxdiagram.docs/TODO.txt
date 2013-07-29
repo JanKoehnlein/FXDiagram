@@ -1,13 +1,13 @@
 BUG
 - Fix fluctuations in layout of RecursiveImageNode 
 - click on nothing should deselect all
-- SVGExport: clipping 
 - populate menu
 - chooser isVertical
+- need for connection layer?
+- use real bounds for aux lines
 
 ENHANCEMENT
 - Open subdiagram
-- Fancy context menus
 - Embed more JavaFX demos in XNodes
 - Play diagram
 - Center node
@@ -15,11 +15,13 @@ ENHANCEMENT
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
 
 MINOR
+- SVG export: arc size
 - Transparent stage?
-- need for connection layer?
 - can't set size of browser node
 - different anchors for faces of flipNodes 
 - move brickbreaker to external
  
 DONE 
+- SVGExport: clipping 
+- Fancy context menus
 
