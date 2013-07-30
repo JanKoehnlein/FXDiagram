@@ -1,79 +1,68 @@
 package de.fxdiagram.lib.media
 
+import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.export.SvgExportable
+import de.fxdiagram.core.export.SvgExporter
 import de.fxdiagram.lib.simple.AddRapidButtonBehavior
 import java.util.Deque
 import java.util.LinkedList
+import javafx.scene.Group
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import javafx.scene.layout.Pane
+import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.Extensions.*
-import de.fxdiagram.core.export.SvgExportable
-import de.fxdiagram.core.export.SvgExporter
 
 class RecursiveImageNode extends XNode implements SvgExportable {
 
-	// TODO convert to FxProperties
-	Image image
-	double x
-	double y
-	double scale
+	@FxProperty Image image
+	@FxProperty double x
+	@FxProperty double y
+	@FxProperty double scale
 
-	Deque<Pane> panes = new LinkedList<Pane>
+	Deque<Group> panes = new LinkedList<Group>
 
 	new(Image image, double x, double y, double scale) {
 		this.image = image
 		this.x = x
 		this.y = y
 		this.scale = scale
-		node = createPane()
+		val rootPane = createPane()
+		node = rootPane
+		panes.push(rootPane)
 	}
 
 	override doActivate() {
 		super.doActivate()
 		updateChildPanes
-		getRootDiagram.boundsInParentProperty.addListener [ prop, oldVal, newVal |
+		getRootDiagram.scaleProperty.addListener [ prop, oldVal, newVal |
 			updateChildPanes
 		]
 		val rapidButtonBehavior = new AddRapidButtonBehavior(this)
 		rapidButtonBehavior.activate
 	}
 
-	override setHeight(double height) {
-		super.setHeight(height)
-		panes.forEach[(children.head as ImageView)?.setFitHeight(height)]
-	}
-
-	override setWidth(double width) {
-		super.setWidth(width)
-		panes.forEach[(children.head as ImageView)?.setFitWidth(width)]
-	}
-
-	protected def Pane createPane() {
-		val pane = new Pane => [
+	protected def Group createPane() {
+		val pane = new Group => [
 			children += new ImageView => [
-				it.image = image
+				it.imageProperty.bind(imageProperty)
 				preserveRatio = true
-				fitWidth = this.prefWidth(-1)
-				fitHeight = this.prefHeight(-1)
-				it.layoutXProperty.addListener [
-					println("foo")
-				]
-				it.translateXProperty.addListener [
-					println("bar")
-				]
-				it.xProperty.addListener [
-					println("foobar")
-				]
+				fitWidthProperty.bind(this.widthProperty)
+				fitHeightProperty.bind(this.heightProperty)
+			]
+			clip = new Rectangle => [
+				x = 0
+				y = 0
+				widthProperty.bind(this.widthProperty)
+				heightProperty.bind(this.heightProperty)
 			]
 		]
-		panes.push(pane)
 		pane
 	}
 
 	def void updateChildPanes() {
-		while (panes.size > 0) {
+		while (!panes.empty) {
 			val child = panes.pop
 			val parent = panes.peek
 			val bounds = child.localToScene(child.boundsInLocal)
@@ -82,28 +71,25 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 				if (parent != null) {
 					parent.children -= child
 				} else {
-
 					// never remove the first image
 					panes.push(child)
 					return
 				}
 			} else if (area > 500) {
 				val grandChild = createPane() => [
-					it.scaleX = scale
-					it.scaleY = scale
-					it.relocate(this.x, this.y)
-					it.layoutXProperty.addListener [
-						println("foo")
-					]
-					it.translateXProperty.addListener [
-						println("bar")
-					]
+					scaleXProperty.bind(this.scaleProperty)
+					scaleYProperty.bind(this.scaleProperty)
+					layoutXProperty.bind(this.xProperty)
+					layoutYProperty.bind(this.yProperty)
 				]
 				child.children += grandChild
 				panes.push(child)
 				panes.push(grandChild)
-			} else
+				
+			} else {
+				panes.push(child)
 				return
+			}
 		}
 	}
 	
