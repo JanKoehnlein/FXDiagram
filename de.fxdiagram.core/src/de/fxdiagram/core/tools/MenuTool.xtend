@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
 
 import static extension javafx.util.Duration.*
+import javafx.scene.input.MouseButton
 
 class MenuTool implements XDiagramTool {
 
@@ -74,12 +75,14 @@ class MenuTool implements XDiagramTool {
 					]
 				])
 		mouseHandler = [
-			if (menu.state == State.OPENED) {
-				closeMenu
-				consume
-			} else if (target == diagram.scene && menu.state != State.OPENED) {
-				openMenu
-				consume
+			if(it.button == MouseButton.SECONDARY) {
+				if (menu.state == State.OPENED) {
+					closeMenu
+					consume
+				} else if (target == diagram.scene && menu.state != State.OPENED) {
+					openMenu
+					consume
+				}
 			}
 		]
 

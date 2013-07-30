@@ -28,6 +28,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -132,26 +133,30 @@ public class MenuTool implements XDiagramTool {
     this.menu = _radialMenu;
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
-        State _state = MenuTool.this.menu.getState();
-        boolean _equals = Objects.equal(_state, State.OPENED);
+        MouseButton _button = it.getButton();
+        boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
         if (_equals) {
-          MenuTool.this.closeMenu();
-          it.consume();
-        } else {
-          boolean _and = false;
-          EventTarget _target = it.getTarget();
-          Scene _scene = diagram.getScene();
-          boolean _equals_1 = Objects.equal(_target, _scene);
-          if (!_equals_1) {
-            _and = false;
-          } else {
-            State _state_1 = MenuTool.this.menu.getState();
-            boolean _notEquals = (!Objects.equal(_state_1, State.OPENED));
-            _and = (_equals_1 && _notEquals);
-          }
-          if (_and) {
-            MenuTool.this.openMenu();
+          State _state = MenuTool.this.menu.getState();
+          boolean _equals_1 = Objects.equal(_state, State.OPENED);
+          if (_equals_1) {
+            MenuTool.this.closeMenu();
             it.consume();
+          } else {
+            boolean _and = false;
+            EventTarget _target = it.getTarget();
+            Scene _scene = diagram.getScene();
+            boolean _equals_2 = Objects.equal(_target, _scene);
+            if (!_equals_2) {
+              _and = false;
+            } else {
+              State _state_1 = MenuTool.this.menu.getState();
+              boolean _notEquals = (!Objects.equal(_state_1, State.OPENED));
+              _and = (_equals_2 && _notEquals);
+            }
+            if (_and) {
+              MenuTool.this.openMenu();
+              it.consume();
+            }
           }
         }
       }

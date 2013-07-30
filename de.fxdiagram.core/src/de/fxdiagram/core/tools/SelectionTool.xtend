@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent
 
 import static extension de.fxdiagram.core.Extensions.*
 import de.fxdiagram.core.XControlPoint
+import javafx.scene.Scene
 
 class SelectionTool implements XDiagramTool {
 
@@ -19,7 +20,9 @@ class SelectionTool implements XDiagramTool {
 	new(XRootDiagram rootDiagram) {
 		this.rootDiagram = rootDiagram
 		this.mousePressedHandler = [ event |
-			if (!(event.targetButton instanceof XRapidButton)) {
+			if(event.target instanceof Scene) {
+				selection.forEach[ selected = false ]
+			} else if (!(event.targetButton instanceof XRapidButton)) {
 				val targetShape = event.targetShape
 				if (targetShape?.isSelectable) {
 					if (!targetShape.selected && !event.shortcutDown) {
@@ -61,14 +64,14 @@ class SelectionTool implements XDiagramTool {
 	}
 
 	override activate() {
-		rootDiagram.addEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
+		rootDiagram.scene.addEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
 		rootDiagram.addEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
 		rootDiagram.addEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true
 	}
 
 	override deactivate() {
-		rootDiagram.removeEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
+		rootDiagram.scene.removeEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
 		rootDiagram.removeEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
 		rootDiagram.removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true

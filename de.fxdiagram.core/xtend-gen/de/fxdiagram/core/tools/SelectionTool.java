@@ -11,7 +11,9 @@ import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.tools.XDiagramTool;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -31,91 +33,102 @@ public class SelectionTool implements XDiagramTool {
     this.rootDiagram = rootDiagram;
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent event) {
-        XRapidButton _targetButton = Extensions.getTargetButton(event);
-        boolean _not = (!(_targetButton instanceof XRapidButton));
-        if (_not) {
-          final XShape targetShape = Extensions.getTargetShape(event);
-          boolean _isSelectable = false;
-          if (targetShape!=null) {
-            _isSelectable=targetShape.isSelectable();
-          }
-          if (_isSelectable) {
-            boolean _and = false;
-            boolean _selected = targetShape.getSelected();
-            boolean _not_1 = (!_selected);
-            if (!_not_1) {
-              _and = false;
-            } else {
-              boolean _isShortcutDown = event.isShortcutDown();
-              boolean _not_2 = (!_isShortcutDown);
-              _and = (_not_1 && _not_2);
+        EventTarget _target = event.getTarget();
+        if ((_target instanceof Scene)) {
+          Iterable<XShape> _selection = SelectionTool.this.getSelection();
+          final Procedure1<XShape> _function = new Procedure1<XShape>() {
+            public void apply(final XShape it) {
+              it.setSelected(false);
             }
-            if (_and) {
-              XShape _switchResult = null;
-              boolean _matched = false;
-              if (!_matched) {
-                if (targetShape instanceof XControlPoint) {
-                  final XControlPoint _xControlPoint = (XControlPoint)targetShape;
-                  _matched=true;
-                  Parent _parent = _xControlPoint.getParent();
-                  XShape _containerShape = Extensions.getContainerShape(_parent);
-                  _switchResult = _containerShape;
+          };
+          IterableExtensions.<XShape>forEach(_selection, _function);
+        } else {
+          XRapidButton _targetButton = Extensions.getTargetButton(event);
+          boolean _not = (!(_targetButton instanceof XRapidButton));
+          if (_not) {
+            final XShape targetShape = Extensions.getTargetShape(event);
+            boolean _isSelectable = false;
+            if (targetShape!=null) {
+              _isSelectable=targetShape.isSelectable();
+            }
+            if (_isSelectable) {
+              boolean _and = false;
+              boolean _selected = targetShape.getSelected();
+              boolean _not_1 = (!_selected);
+              if (!_not_1) {
+                _and = false;
+              } else {
+                boolean _isShortcutDown = event.isShortcutDown();
+                boolean _not_2 = (!_isShortcutDown);
+                _and = (_not_1 && _not_2);
+              }
+              if (_and) {
+                XShape _switchResult = null;
+                boolean _matched = false;
+                if (!_matched) {
+                  if (targetShape instanceof XControlPoint) {
+                    final XControlPoint _xControlPoint = (XControlPoint)targetShape;
+                    _matched=true;
+                    Parent _parent = _xControlPoint.getParent();
+                    XShape _containerShape = Extensions.getContainerShape(_parent);
+                    _switchResult = _containerShape;
+                  }
                 }
+                if (!_matched) {
+                  _switchResult = null;
+                }
+                final XShape skip = _switchResult;
+                Iterable<XShape> _selection_1 = SelectionTool.this.getSelection();
+                final Function1<XShape,Boolean> _function_1 = new Function1<XShape,Boolean>() {
+                  public Boolean apply(final XShape it) {
+                    boolean _notEquals = (!Objects.equal(it, skip));
+                    return Boolean.valueOf(_notEquals);
+                  }
+                };
+                Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_selection_1, _function_1);
+                final Procedure1<XShape> _function_2 = new Procedure1<XShape>() {
+                  public void apply(final XShape it) {
+                    it.setSelected(false);
+                  }
+                };
+                IterableExtensions.<XShape>forEach(_filter, _function_2);
               }
-              if (!_matched) {
-                _switchResult = null;
-              }
-              final XShape skip = _switchResult;
-              Iterable<XShape> _selection = SelectionTool.this.getSelection();
-              final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
+              Iterable<XShape> _selection_2 = SelectionTool.this.getSelection();
+              final Function1<XShape,Boolean> _function_3 = new Function1<XShape,Boolean>() {
                 public Boolean apply(final XShape it) {
-                  boolean _notEquals = (!Objects.equal(it, skip));
+                  XAbstractDiagram _diagram = Extensions.getDiagram(it);
+                  XAbstractDiagram _diagram_1 = Extensions.getDiagram(targetShape);
+                  boolean _notEquals = (!Objects.equal(_diagram, _diagram_1));
                   return Boolean.valueOf(_notEquals);
                 }
               };
-              Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_selection, _function);
-              final Procedure1<XShape> _function_1 = new Procedure1<XShape>() {
+              Iterable<XShape> _filter_1 = IterableExtensions.<XShape>filter(_selection_2, _function_3);
+              final Procedure1<XShape> _function_4 = new Procedure1<XShape>() {
                 public void apply(final XShape it) {
                   it.setSelected(false);
                 }
               };
-              IterableExtensions.<XShape>forEach(_filter, _function_1);
-            }
-            Iterable<XShape> _selection_1 = SelectionTool.this.getSelection();
-            final Function1<XShape,Boolean> _function_2 = new Function1<XShape,Boolean>() {
-              public Boolean apply(final XShape it) {
-                XAbstractDiagram _diagram = Extensions.getDiagram(it);
-                XAbstractDiagram _diagram_1 = Extensions.getDiagram(targetShape);
-                boolean _notEquals = (!Objects.equal(_diagram, _diagram_1));
-                return Boolean.valueOf(_notEquals);
+              IterableExtensions.<XShape>forEach(_filter_1, _function_4);
+              boolean _isShortcutDown_1 = event.isShortcutDown();
+              if (_isShortcutDown_1) {
+                targetShape.toggleSelect(event);
+              } else {
+                targetShape.select(event);
               }
-            };
-            Iterable<XShape> _filter_1 = IterableExtensions.<XShape>filter(_selection_1, _function_2);
-            final Procedure1<XShape> _function_3 = new Procedure1<XShape>() {
-              public void apply(final XShape it) {
-                it.setSelected(false);
-              }
-            };
-            IterableExtensions.<XShape>forEach(_filter_1, _function_3);
-            boolean _isShortcutDown_1 = event.isShortcutDown();
-            if (_isShortcutDown_1) {
-              targetShape.toggleSelect(event);
-            } else {
-              targetShape.select(event);
-            }
-            Iterable<XShape> _selection_2 = SelectionTool.this.getSelection();
-            final Procedure1<XShape> _function_4 = new Procedure1<XShape>() {
-              public void apply(final XShape it) {
-                MoveBehavior _moveBehavior = it.getMoveBehavior();
-                if (_moveBehavior!=null) {
-                  _moveBehavior.mousePressed(event);
+              Iterable<XShape> _selection_3 = SelectionTool.this.getSelection();
+              final Procedure1<XShape> _function_5 = new Procedure1<XShape>() {
+                public void apply(final XShape it) {
+                  MoveBehavior _moveBehavior = it.getMoveBehavior();
+                  if (_moveBehavior!=null) {
+                    _moveBehavior.mousePressed(event);
+                  }
                 }
+              };
+              IterableExtensions.<XShape>forEach(_selection_3, _function_5);
+              MoveBehavior _moveBehavior = targetShape.getMoveBehavior();
+              if (_moveBehavior!=null) {
+                _moveBehavior.mousePressed(event);
               }
-            };
-            IterableExtensions.<XShape>forEach(_selection_2, _function_4);
-            MoveBehavior _moveBehavior = targetShape.getMoveBehavior();
-            if (_moveBehavior!=null) {
-              _moveBehavior.mousePressed(event);
             }
           }
         }
@@ -176,7 +189,8 @@ public class SelectionTool implements XDiagramTool {
   public boolean activate() {
     boolean _xblockexpression = false;
     {
-      this.rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
+      Scene _scene = this.rootDiagram.getScene();
+      _scene.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
       this.rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
       this.rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
       _xblockexpression = (true);
@@ -187,7 +201,8 @@ public class SelectionTool implements XDiagramTool {
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
-      this.rootDiagram.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
+      Scene _scene = this.rootDiagram.getScene();
+      _scene.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
       this.rootDiagram.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
       this.rootDiagram.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
       _xblockexpression = (true);

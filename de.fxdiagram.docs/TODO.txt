@@ -1,5 +1,4 @@
 BUG
-- click on nothing should deselect all
 - populate menu
 - chooser isVertical
 - use real bounds for aux lines
@@ -25,4 +24,5 @@ DONE
 - Fix fluctuations in layout of RecursiveImageNode 
 - re-enable movie controls
 - eliminated connection layer
+- click on nothing should deselect all
 
