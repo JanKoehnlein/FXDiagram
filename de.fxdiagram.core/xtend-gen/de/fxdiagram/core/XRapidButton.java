@@ -111,6 +111,12 @@ public class XRapidButton extends Parent implements XActivatable {
       }
     };
     this.placer.addListener(_function_3);
+    Point2D _value = this.placer.getValue();
+    double _x = _value.getX();
+    this.setLayoutX(_x);
+    Point2D _value_1 = this.placer.getValue();
+    double _y = _value_1.getY();
+    this.setLayoutY(_y);
   }
   
   protected void setPosition(final Point2D position) {

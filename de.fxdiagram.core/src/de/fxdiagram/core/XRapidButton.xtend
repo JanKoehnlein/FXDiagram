@@ -65,7 +65,9 @@ class XRapidButton extends Parent implements XActivatable {
 			element, oldVal, newVal | 
 			layoutX = newVal.x
 			layoutY = newVal.y
-		] 
+		]
+		layoutX = placer.value.x
+		layoutY = placer.value.y
 	}
 
 	def protected setPosition(Point2D position) {
