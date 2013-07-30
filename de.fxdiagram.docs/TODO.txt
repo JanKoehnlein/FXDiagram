@@ -2,7 +2,6 @@ BUG
 - click on nothing should deselect all
 - populate menu
 - chooser isVertical
-- need for connection layer?
 - use real bounds for aux lines
 
 ENHANCEMENT
@@ -25,4 +24,5 @@ DONE
 - Fancy context menus
 - Fix fluctuations in layout of RecursiveImageNode 
 - re-enable movie controls
+- eliminated connection layer
 

@@ -41,7 +41,6 @@ class XConnectionLabel extends XShape {
 				effect = selectionEffect
 				scaleX = 1.05
 				scaleY = 1.05
-				toFront
 				connection.selected = true
 			} else {
 				effect = null

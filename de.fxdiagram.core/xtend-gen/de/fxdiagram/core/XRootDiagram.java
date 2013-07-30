@@ -30,13 +30,6 @@ public class XRootDiagram extends XAbstractDiagram {
     }
   }.apply();
   
-  private Group connectionLayer = new Function0<Group>() {
-    public Group apply() {
-      Group _group = new Group();
-      return _group;
-    }
-  }.apply();
-  
   private Group buttonLayer = new Function0<Group>() {
     public Group apply() {
       Group _group = new Group();
@@ -62,9 +55,7 @@ public class XRootDiagram extends XAbstractDiagram {
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.nodeLayer);
     ObservableList<Node> _children_1 = this.getChildren();
-    _children_1.add(this.connectionLayer);
-    ObservableList<Node> _children_2 = this.getChildren();
-    _children_2.add(this.buttonLayer);
+    _children_1.add(this.buttonLayer);
     CompositeTool _compositeTool = new CompositeTool();
     this.defaultTool = _compositeTool;
     SelectionTool _selectionTool = new SelectionTool(this);
@@ -92,7 +83,7 @@ public class XRootDiagram extends XAbstractDiagram {
   }
   
   public Group getConnectionLayer() {
-    return this.connectionLayer;
+    return this.nodeLayer;
   }
   
   public Group getButtonLayer() {

@@ -1,24 +1,31 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XActivatable;
+import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -122,7 +129,15 @@ public class XNode extends XShape {
           XNode.this.setEffect(XNode.this.selectionEffect);
           XNode.this.setScaleX(1.05);
           XNode.this.setScaleY(1.05);
-          XNode.this.toFront();
+          ObservableList<XConnection> _outgoingConnections = XNode.this.getOutgoingConnections();
+          ObservableList<XConnection> _incomingConnections = XNode.this.getIncomingConnections();
+          Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
+          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+            public void apply(final XConnection it) {
+              it.toFront();
+            }
+          };
+          IterableExtensions.<XConnection>forEach(_plus, _function);
         } else {
           XNode.this.setEffect(null);
           XNode.this.setScaleX(1.0);
@@ -276,6 +291,40 @@ public class XNode extends XShape {
   
   public ReadOnlyStringProperty keyProperty() {
     return this.keyProperty.getReadOnlyProperty();
+    
+  }
+  
+  private SimpleListProperty<XConnection> incomingConnectionsProperty = new SimpleListProperty<XConnection>(this, "incomingConnections",_initIncomingConnections());
+  
+  private static final ObservableList<XConnection> _initIncomingConnections() {
+    ObservableList<XConnection> _observableArrayList = FXCollections.<XConnection>observableArrayList();
+    return _observableArrayList;
+  }
+  
+  public ObservableList<XConnection> getIncomingConnections() {
+    return this.incomingConnectionsProperty.get();
+    
+  }
+  
+  public ListProperty<XConnection> incomingConnectionsProperty() {
+    return this.incomingConnectionsProperty;
+    
+  }
+  
+  private SimpleListProperty<XConnection> outgoingConnectionsProperty = new SimpleListProperty<XConnection>(this, "outgoingConnections",_initOutgoingConnections());
+  
+  private static final ObservableList<XConnection> _initOutgoingConnections() {
+    ObservableList<XConnection> _observableArrayList = FXCollections.<XConnection>observableArrayList();
+    return _observableArrayList;
+  }
+  
+  public ObservableList<XConnection> getOutgoingConnections() {
+    return this.outgoingConnectionsProperty.get();
+    
+  }
+  
+  public ListProperty<XConnection> outgoingConnectionsProperty() {
+    return this.outgoingConnectionsProperty;
     
   }
 }

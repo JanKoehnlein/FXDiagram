@@ -24,6 +24,11 @@ abstract class XShape extends Parent implements XActivatable {
 		if(!isActive)
 			doActivate
 		isActiveProperty.set(true)
+		selectedProperty.addListener [
+			property, oldVlaue, newValue |
+			if(newValue)
+				toFront
+		]
 	}
 	
 	protected def void doActivate()

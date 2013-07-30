@@ -8,6 +8,8 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -33,6 +35,14 @@ public abstract class XShape extends Parent implements XActivatable {
       this.doActivate();
     }
     this.isActiveProperty.set(true);
+    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
+      public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVlaue, final Boolean newValue) {
+        if ((newValue).booleanValue()) {
+          XShape.this.toFront();
+        }
+      }
+    };
+    this.selectedProperty.addListener(_function);
   }
   
   protected abstract void doActivate();

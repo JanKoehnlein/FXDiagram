@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,6 +32,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Polyline;
@@ -82,6 +84,20 @@ public class XConnection extends XShape {
     _children.add(_doubleArrow);
     this.setSource(source);
     this.setTarget(target);
+    ObservableList<XConnection> _outgoingConnections = source.getOutgoingConnections();
+    boolean _contains = _outgoingConnections.contains(this);
+    boolean _not = (!_contains);
+    if (_not) {
+      ObservableList<XConnection> _outgoingConnections_1 = source.getOutgoingConnections();
+      _outgoingConnections_1.add(this);
+    }
+    ObservableList<XConnection> _incomingConnections = target.getIncomingConnections();
+    boolean _contains_1 = _incomingConnections.contains(this);
+    boolean _not_1 = (!_contains_1);
+    if (_not_1) {
+      ObservableList<XConnection> _incomingConnections_1 = target.getIncomingConnections();
+      _incomingConnections_1.add(this);
+    }
     ConnectionRouter _connectionRouter = new ConnectionRouter(this);
     this.connectionRouter = _connectionRouter;
   }
@@ -148,11 +164,32 @@ public class XConnection extends XShape {
     final ChangeListener<Boolean> _function_2 = new ChangeListener<Boolean>() {
       public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
         XConnection.this.controlPointGroup.setVisible((newVal).booleanValue());
+        if ((newVal).booleanValue()) {
+          XNode _source = XConnection.this.getSource();
+          _source.toFront();
+          XNode _target = XConnection.this.getTarget();
+          _target.toFront();
+        }
       }
     };
     _selectedProperty.addListener(_function_2);
     this.connectionRouter.activate();
     this.updateShapes();
+    ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
+    final ChangeListener<Parent> _function_3 = new ChangeListener<Parent>() {
+      public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
+        boolean _equals = Objects.equal(newValue, null);
+        if (_equals) {
+          XNode _source = XConnection.this.getSource();
+          ObservableList<XConnection> _outgoingConnections = _source.getOutgoingConnections();
+          _outgoingConnections.remove(XConnection.this);
+          XNode _target = XConnection.this.getTarget();
+          ObservableList<XConnection> _incomingConnections = _target.getIncomingConnections();
+          _incomingConnections.remove(XConnection.this);
+        }
+      }
+    };
+    _parentProperty.addListener(_function_3);
   }
   
   public ConnectionRouter getConnectionRouter() {

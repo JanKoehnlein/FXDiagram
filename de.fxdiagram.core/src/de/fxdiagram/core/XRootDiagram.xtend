@@ -14,7 +14,6 @@ import javafx.scene.Group
 class XRootDiagram extends XAbstractDiagram {
 	
 	Group nodeLayer = new Group
-	Group connectionLayer = new Group
 	Group buttonLayer = new Group
 	
 	@FxProperty double scale = 1.0
@@ -30,7 +29,6 @@ class XRootDiagram extends XAbstractDiagram {
 	new(XRoot root) {
 		this.root = root
 		children += nodeLayer
-		children += connectionLayer
 		children += buttonLayer
 		defaultTool = new CompositeTool
 		defaultTool += new SelectionTool(this)
@@ -54,7 +52,7 @@ class XRootDiagram extends XAbstractDiagram {
 	}
 	
 	override getConnectionLayer() {
-		connectionLayer		
+		nodeLayer		
 	}
 	
 	override getButtonLayer() {

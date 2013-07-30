@@ -41,6 +41,10 @@ class XConnection extends XShape {
 		]
 		this.source = source
 		this.target = target
+		if(!source.outgoingConnections.contains(this))
+			source.outgoingConnections.add(this)
+		if(!target.incomingConnections.contains(this))
+			target.incomingConnections.add(this)
 		connectionRouter = new ConnectionRouter(this)		
 	}
 
@@ -69,9 +73,20 @@ class XConnection extends XShape {
 		selectedProperty.addListener [
 			prop, oldVal, newVal |
 			controlPointGroup.visible = newVal
+			if(newVal) {
+				source.toFront
+				target.toFront
+			}
 		]
 		connectionRouter.activate
 		updateShapes
+		parentProperty.addListener [
+			property, oldValue, newValue |
+			if(newValue == null) {
+				source.outgoingConnections.remove(this)
+				target.incomingConnections.remove(this)
+			}
+		]
 	}
 	
 	def getConnectionRouter() {

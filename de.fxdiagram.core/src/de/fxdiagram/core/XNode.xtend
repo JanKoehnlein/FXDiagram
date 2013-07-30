@@ -10,6 +10,9 @@ import javafx.scene.Node
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
+import javafx.collections.ObservableList
+
+import static javafx.collections.FXCollections.*
 
 class XNode extends XShape {
 
@@ -18,7 +21,9 @@ class XNode extends XShape {
 	@FxProperty @Lazy double width
 	@FxProperty @Lazy double height
 	@FxProperty @ReadOnly String key
-
+	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
+	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
+	 
 	Effect mouseOverEffect
 	Effect selectionEffect
 	Effect originalEffect
@@ -70,7 +75,7 @@ class XNode extends XShape {
 				effect = selectionEffect
 				scaleX = 1.05
 				scaleY = 1.05
-				toFront
+				(outgoingConnections + incomingConnections).forEach[toFront]
 			} else {
 				effect = null
 				scaleX = 1.0
