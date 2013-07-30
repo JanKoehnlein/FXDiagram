@@ -153,19 +153,19 @@ public class XRapidButton extends Parent implements XActivatable {
             Duration _millis = Duration.millis(500);
             DoubleProperty _opacityProperty = XRapidButton.this.opacityProperty();
             Double _double = new Double(1.0);
-            KeyValue _keyValue = new KeyValue(_opacityProperty, _double);
+            KeyValue _keyValue = new <Number>KeyValue(_opacityProperty, _double);
             KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
             _keyFrames.add(_keyFrame);
             ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
             Duration _millis_1 = Duration.millis(1000);
             DoubleProperty _opacityProperty_1 = XRapidButton.this.opacityProperty();
-            KeyValue _keyValue_1 = new KeyValue(_opacityProperty_1, Double.valueOf(0.0));
+            KeyValue _keyValue_1 = new <Number>KeyValue(_opacityProperty_1, Double.valueOf(0.0));
             KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
             _keyFrames_1.add(_keyFrame_1);
             ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
             Duration _millis_2 = Duration.millis(1000);
             BooleanProperty _visibleProperty = XRapidButton.this.visibleProperty();
-            KeyValue _keyValue_2 = new KeyValue(_visibleProperty, Boolean.valueOf(false));
+            KeyValue _keyValue_2 = new <Boolean>KeyValue(_visibleProperty, Boolean.valueOf(false));
             KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
             _keyFrames_2.add(_keyFrame_2);
           }

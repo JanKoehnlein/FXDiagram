@@ -152,7 +152,7 @@ public class LcarsField extends Parent {
                 String _text_1 = textNode.getText();
                 int _plus = ((index).intValue() + 1);
                 String _substring = _text_1.substring(0, _plus);
-                KeyValue _keyValue = new KeyValue(_textProperty, _substring);
+                KeyValue _keyValue = new <String>KeyValue(_textProperty, _substring);
                 KeyFrame _keyFrame = new KeyFrame(_add, _keyValue);
                 _keyFrames.add(_keyFrame);
               }
