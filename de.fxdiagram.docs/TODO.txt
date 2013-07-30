@@ -4,7 +4,6 @@ BUG
 - chooser isVertical
 - need for connection layer?
 - use real bounds for aux lines
-- re-enable movie controls
 
 ENHANCEMENT
 - Open subdiagram
@@ -25,4 +24,5 @@ DONE
 - SVGExport: clipping 
 - Fancy context menus
 - Fix fluctuations in layout of RecursiveImageNode 
+- re-enable movie controls
 

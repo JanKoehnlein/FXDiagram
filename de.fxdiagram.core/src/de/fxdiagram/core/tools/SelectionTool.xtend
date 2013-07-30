@@ -53,7 +53,6 @@ class SelectionTool implements XDiagramTool {
 		]
 		this.mouseReleasedHandler = [
 			rootDiagram.auxiliaryLinesSupport?.hide()				
-			consume
 		]
 	}
 

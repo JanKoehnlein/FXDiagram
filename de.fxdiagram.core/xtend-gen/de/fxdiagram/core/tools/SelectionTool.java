@@ -149,7 +149,6 @@ public class SelectionTool implements XDiagramTool {
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.hide();
         }
-        it.consume();
       }
     };
     this.mouseReleasedHandler = _function_2;
