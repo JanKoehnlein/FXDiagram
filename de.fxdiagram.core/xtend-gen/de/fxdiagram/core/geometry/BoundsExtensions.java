@@ -83,6 +83,58 @@ public class BoundsExtensions {
     return _boundingBox;
   }
   
+  public static BoundingBox scale(final Bounds it, final double scaleX, final double scaleY, final double scaleZ) {
+    double _minX = it.getMinX();
+    double _width = it.getWidth();
+    double _multiply = (0.5 * _width);
+    double _minus = (1 - scaleX);
+    double _multiply_1 = (_multiply * _minus);
+    double _plus = (_minX + _multiply_1);
+    double _minY = it.getMinY();
+    double _height = it.getHeight();
+    double _multiply_2 = (0.5 * _height);
+    double _minus_1 = (1 - scaleY);
+    double _multiply_3 = (_multiply_2 * _minus_1);
+    double _plus_1 = (_minY + _multiply_3);
+    double _minZ = it.getMinZ();
+    double _depth = it.getDepth();
+    double _multiply_4 = (0.5 * _depth);
+    double _minus_2 = (1 - scaleZ);
+    double _multiply_5 = (_multiply_4 * _minus_2);
+    double _plus_2 = (_minZ + _multiply_5);
+    double _width_1 = it.getWidth();
+    double _multiply_6 = (_width_1 * scaleX);
+    double _height_1 = it.getHeight();
+    double _multiply_7 = (_height_1 * scaleY);
+    double _depth_1 = it.getDepth();
+    double _multiply_8 = (_depth_1 * scaleZ);
+    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _plus_2, _multiply_6, _multiply_7, _multiply_8);
+    return _boundingBox;
+  }
+  
+  public static BoundingBox scale(final Bounds it, final double scaleX, final double scaleY) {
+    double _minX = it.getMinX();
+    double _width = it.getWidth();
+    double _multiply = (0.5 * _width);
+    double _minus = (1 - scaleX);
+    double _multiply_1 = (_multiply * _minus);
+    double _plus = (_minX + _multiply_1);
+    double _minY = it.getMinY();
+    double _height = it.getHeight();
+    double _multiply_2 = (0.5 * _height);
+    double _minus_1 = (1 - scaleY);
+    double _multiply_3 = (_multiply_2 * _minus_1);
+    double _plus_1 = (_minY + _multiply_3);
+    double _minZ = it.getMinZ();
+    double _width_1 = it.getWidth();
+    double _multiply_4 = (_width_1 * scaleX);
+    double _height_1 = it.getHeight();
+    double _multiply_5 = (_height_1 * scaleY);
+    double _depth = it.getDepth();
+    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _minZ, _multiply_4, _multiply_5, _depth);
+    return _boundingBox;
+  }
+  
   public static Point2D center(final Bounds it) {
     double _minX = it.getMinX();
     double _width = it.getWidth();

@@ -42,14 +42,7 @@ public class XConnectionLabel extends XShape {
     Text _text_1 = this.getText();
     this.setNode(_text_1);
     DropShadow _dropShadow = new DropShadow();
-    final Procedure1<DropShadow> _function_1 = new Procedure1<DropShadow>() {
-      public void apply(final DropShadow it) {
-        it.setOffsetX(4.0);
-        it.setOffsetY(4.0);
-      }
-    };
-    DropShadow _doubleArrow_1 = ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function_1);
-    this.selectionEffect = _doubleArrow_1;
+    this.selectionEffect = _dropShadow;
   }
   
   public void doActivate() {

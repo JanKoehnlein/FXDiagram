@@ -1,7 +1,6 @@
 BUG
 - populate menu
 - chooser isVertical
-- use real bounds for aux lines
 - choose connections instead of nodes?
 - hide lag in LCARS
 
@@ -12,6 +11,7 @@ ENHANCEMENT
 - Center node
 - Zoom node
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
+- more auxiliary lines
 
 MINOR
 - SVG export: arc size
@@ -27,4 +27,5 @@ DONE
 - re-enable movie controls
 - eliminated connection layer
 - click on nothing should deselect all
+- use real bounds for aux lines
 

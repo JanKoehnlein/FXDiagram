@@ -27,10 +27,7 @@ class XConnectionLabel extends XShape {
 			textOrigin = VPos.TOP
 		]
 		node = text
-		selectionEffect = new DropShadow() => [
-			offsetX = 4.0
-			offsetY = 4.0
-		]
+		selectionEffect = new DropShadow
 	}
 
 	override doActivate() {

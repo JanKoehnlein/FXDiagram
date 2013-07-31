@@ -61,8 +61,6 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	ChangeListener<String> filterChangeListener
 
-	
-
 	Pos layoutPosition
 
 	Button plusButton

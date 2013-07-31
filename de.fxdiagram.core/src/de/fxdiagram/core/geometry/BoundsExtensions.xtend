@@ -32,6 +32,24 @@ class BoundsExtensions {
 	def static translate(Bounds bounds, double tx, double ty) {
 		new BoundingBox(bounds.minX + tx, bounds.minY + ty, bounds.width, bounds.height)
 	}
+	
+	def static scale(Bounds it, double scaleX, double scaleY, double scaleZ) {
+		new BoundingBox(
+			minX + 0.5 * width * (1 - scaleX), 
+			minY + 0.5 * height * (1 -scaleY), 
+			minZ + 0.5 * depth * (1 - scaleZ), 
+			width * scaleX, height * scaleY, depth * scaleZ
+		)
+	}
+
+	def static scale(Bounds it, double scaleX, double scaleY) {
+		new BoundingBox(
+			minX + 0.5 * width * (1 - scaleX), 
+			minY + 0.5 * height * (1 -scaleY), 
+			minZ, 
+			width * scaleX, height * scaleY, depth
+		)
+	}
 
 	def static center(Bounds it) {
 		new Point2D(minX + 0.5 * width, minY + 0.5 * height)

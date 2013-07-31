@@ -8,6 +8,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.geometry.BoundsExtensions;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
@@ -20,6 +21,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
@@ -146,6 +149,18 @@ public class XNode extends XShape {
       }
     };
     _selectedProperty.addListener(_function_2);
+  }
+  
+  public Bounds getSnapBoundsInParent() {
+    Node _node = this.getNode();
+    Bounds _boundsInParent = _node.getBoundsInParent();
+    double _scaleX = this.getScaleX();
+    double _divide = (1 / _scaleX);
+    double _scaleY = this.getScaleY();
+    double _divide_1 = (1 / _scaleY);
+    BoundingBox _scale = BoundsExtensions.scale(_boundsInParent, _divide, _divide_1);
+    Bounds _localToParent = this.localToParent(_scale);
+    return _localToParent;
   }
   
   protected void setKey(final String key) {

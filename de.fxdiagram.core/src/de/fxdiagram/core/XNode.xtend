@@ -13,7 +13,7 @@ import javafx.scene.effect.InnerShadow
 import javafx.collections.ObservableList
 
 import static javafx.collections.FXCollections.*
-
+import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 class XNode extends XShape {
 
 	static int instanceCount
@@ -82,6 +82,10 @@ class XNode extends XShape {
 				scaleY = 1.0
 			}
 		]
+	}
+	
+	def getSnapBoundsInParent() {
+		localToParent(node.boundsInParent.scale(1 / scaleX, 1 / scaleY))
 	}
 
 	protected def setKey(String key) {
