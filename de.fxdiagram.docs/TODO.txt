@@ -2,6 +2,8 @@ BUG
 - populate menu
 - chooser isVertical
 - use real bounds for aux lines
+- choose connections instead of nodes?
+- hide lag in LCARS
 
 ENHANCEMENT
 - Open subdiagram

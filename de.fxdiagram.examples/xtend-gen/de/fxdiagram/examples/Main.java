@@ -12,6 +12,7 @@ import de.fxdiagram.examples.BrickBreakerNode;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.lcars.LcarsAccess;
 import de.fxdiagram.examples.lcars.LcarsNode;
+import de.fxdiagram.examples.neonsign.NeonSignNode;
 import de.fxdiagram.lib.media.BrowserNode;
 import de.fxdiagram.lib.media.ImageNode;
 import de.fxdiagram.lib.media.MovieNode;
@@ -206,19 +207,31 @@ public class Main extends Application {
       final JavaTypeNode javaTypeNode = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_8);
       ObservableList<XNode> _nodes_8 = diagram.getNodes();
       _nodes_8.add(javaTypeNode);
+      NeonSignNode _neonSignNode = new NeonSignNode();
+      final Procedure1<NeonSignNode> _function_9 = new Procedure1<NeonSignNode>() {
+        public void apply(final NeonSignNode it) {
+          it.setLayoutX(500);
+          it.setLayoutY(10);
+          it.setWidth(80);
+          it.setHeight(30);
+        }
+      };
+      final NeonSignNode neonSignNode = ObjectExtensions.<NeonSignNode>operator_doubleArrow(_neonSignNode, _function_9);
+      ObservableList<XNode> _nodes_9 = diagram.getNodes();
+      _nodes_9.add(neonSignNode);
       LcarsAccess _get_1 = LcarsAccess.get();
       List<DBObject> _query = _get_1.query("name", "James T. Kirk");
       final DBObject kirk = _query.get(0);
-      ObservableList<XNode> _nodes_9 = diagram.getNodes();
+      ObservableList<XNode> _nodes_10 = diagram.getNodes();
       LcarsNode _lcarsNode = new LcarsNode(kirk);
-      final Procedure1<LcarsNode> _function_9 = new Procedure1<LcarsNode>() {
+      final Procedure1<LcarsNode> _function_10 = new Procedure1<LcarsNode>() {
         public void apply(final LcarsNode it) {
           it.setWidth(120);
         }
       };
-      LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function_9);
-      _nodes_9.add(_doubleArrow);
-      final Task<Void> _function_10 = new Task<Void>() {
+      LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function_10);
+      _nodes_10.add(_doubleArrow);
+      final Task<Void> _function_11 = new Task<Void>() {
         @Override
         protected Void call() throws Exception {
           Void _xblockexpression = null;
@@ -229,7 +242,7 @@ public class Main extends Application {
           return _xblockexpression;
         }
       };
-      final Task<Void> task = _function_10;
+      final Task<Void> task = _function_11;
       task.run();
       _xblockexpression = (scene);
     }

@@ -23,6 +23,7 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.image.Image
 import javafx.stage.Stage
+import de.fxdiagram.examples.neonsign.NeonSignNode
 
 class Main extends Application {
 
@@ -132,6 +133,14 @@ class Main extends Application {
 			layoutY = 200
 		]
 		diagram.nodes += javaTypeNode
+
+		val neonSignNode = new NeonSignNode => [
+			layoutX = 500
+			layoutY = 10
+			width = 80
+			height = 30
+		]
+		diagram.nodes += neonSignNode
 
 		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
 		diagram.nodes += new LcarsNode(kirk) => [
