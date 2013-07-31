@@ -1,6 +1,7 @@
 package de.fxdiagram.examples.lcars
 
 import com.mongodb.DBObject
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.services.ImageCache
@@ -8,6 +9,8 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.util.List
 import java.util.Map
 import javafx.animation.Timeline
+import javafx.beans.value.ChangeListener
+import javafx.geometry.Bounds
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.Rectangle2D
@@ -28,6 +31,7 @@ import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
 import static extension javafx.scene.layout.VBox.*
 
+@Logging
 class LcarsNode extends XNode {
 
 	static val PAGE_STRUCTURE = #{ 
@@ -40,6 +44,8 @@ class LcarsNode extends XNode {
 		'person', 'profession', 'family', 'other'
 	]
 	
+	extension NameShortener = new NameShortener()
+	
 	DBObject data 
 	String name
 	String dbId
@@ -51,8 +57,11 @@ class LcarsNode extends XNode {
 	@FxProperty double imageRatio = 0.7
 
 	VBox vbox
+	HBox infoBox
+	Text nameField
 	Pane infoTextBox
 	ImageView imageView
+	ChangeListener<Bounds> nameShortener
 	
 	new(DBObject data) {
 		this.data = data
@@ -68,14 +77,18 @@ class LcarsNode extends XNode {
 			children += vbox => [
 				spacing = 2
 				fillWidth = true
-				children += createBox(DARKBLUE) => [
+				children += new HBox => [
 					vgrow = Priority.ALWAYS
-					alignment = Pos.TOP_RIGHT
-					children += new Text => [
+					children += createBox(DARKBLUE) => [
+						alignment = Pos.TOP_LEFT
+						HBox.setHgrow(it, Priority.ALWAYS)
+					]
+					nameField = new Text 
+					children += nameField => [
 						text = name
 						fill = FLESH
 						font = lcarsFont(28)
-						StackPane.setMargin(it, new Insets(0, 5, 0, 0))
+						HBox.setMargin(it, new Insets(0, 0, 0, 5))
 					]
 				]
 				children += createBox(VIOLET) => [
@@ -91,13 +104,15 @@ class LcarsNode extends XNode {
 				]
 				StackPane.setMargin(it, new Insets(5, 5, 5, 5))
 			]
+			
 			children += new RectangleBorderPane => [
 				backgroundPaint = Color.BLACK
 				backgroundRadius = 8
 				borderPaint = Color.BLACK
 				borderRadius = 8
 				StackPane.setMargin(it, new Insets(35, -3, 10, 25))
-				children += new HBox => [
+				infoBox = new HBox
+				children += infoBox => [
 					spacing = 5
 					children += infoTextBox = new VBox => [
 					]
@@ -116,6 +131,12 @@ class LcarsNode extends XNode {
 			]
 		]
 		key = name
+		nameShortener = [ 
+			property, oldValue, newValue | 
+			while(nameField.boundsInLocal.width > newValue.width) 
+				nameField.text = shortenName(nameField.text)
+		]
+		infoBox.boundsInLocalProperty.addListener(nameShortener) 
 	}
 
 	protected def createBox(Color color) {
@@ -211,14 +232,17 @@ class LcarsNode extends XNode {
 		timeline.play
 	}
 	
-	override activate() {
-		super.activate()
+	override doActivate() {
+		super.doActivate()
+		infoBox.boundsInLocalProperty.removeListener(nameShortener) 
+		nameField.text = name
 		pages = data.createPages
 		vbox => [
 			val lastStripe = children.last
 			children -= lastStripe
 			for(pageTitle: pageOrder.filter[pages.containsKey(it)]) {
-				children += createBox(FLESH) => [
+				val box = createBox(FLESH) 
+				children += box => [
 					vgrow = Priority.SOMETIMES
 					children += createButtonText(
 						pageTitle, 
@@ -229,22 +253,36 @@ class LcarsNode extends XNode {
 						})
 					onMousePressed = [
 						showPage(pageTitle)
+						invertColors(box)
+					]
+					onMouseReleased = [
+						invertColors(box)
 					]
 				]
 			}
 			if(imageUrls.size > 1) {
-				children += createBox(RED) => [
+				val previous_box = createBox(RED)
+				children += previous_box => [
 					vgrow = Priority.SOMETIMES
 					children += createButtonText("previous pic", VPos.BOTTOM)
 					onMousePressed = [
 						showImage(imageUrls.get((imageUrls.indexOf(currentImageUrl) + 1) % imageUrls.size))
+						invertColors(previous_box)
+					]
+					onMouseReleased = [
+						invertColors(previous_box)
 					]
 				]
-				children += createBox(RED) => [
+				val next_box = createBox(RED)
+				children += next_box => [
 					vgrow = Priority.SOMETIMES
 					children += createButtonText("next pic", VPos.TOP)
 					onMousePressed = [
 						showImage(imageUrls.get((imageUrls.indexOf(currentImageUrl) + imageUrls.size - 1) % imageUrls.size))
+						invertColors(next_box)
+					]
+					onMouseReleased = [
+						invertColors(next_box)
 					]
 				]
 			} else {
@@ -255,6 +293,15 @@ class LcarsNode extends XNode {
 			children += lastStripe
 		]
 		showPage(pages.keySet.iterator.next)
+		infoBox.boundsInLocalProperty.addListener(nameShortener) 
+	}
+	
+	protected def invertColors(RectangleBorderPane box) {
+		val text = box.children.head as Text
+		val textColor = text.fill
+		text.fill = box.backgroundPaint
+		box.backgroundPaint = textColor
+		box.borderPaint = textColor
 	}
 	
 	def getDbId() {

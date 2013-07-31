@@ -5,11 +5,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.binding.DoubleExpressionExtensions;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsField;
+import de.fxdiagram.examples.lcars.NameShortener;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,13 +21,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import javafx.animation.Timeline;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -41,11 +48,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -53,6 +62,7 @@ import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@Logging
 @SuppressWarnings("all")
 public class LcarsNode extends XNode {
   private final static Map<String,List<String>> PAGE_STRUCTURE = new Function0<Map<String,List<String>>>() {
@@ -68,6 +78,14 @@ public class LcarsNode extends XNode {
   }.apply();
   
   private final static List<String> pageOrder = Collections.<String>unmodifiableList(Lists.<String>newArrayList("person", "profession", "family", "other"));
+  
+  @Extension
+  private NameShortener _nameShortener = new Function0<NameShortener>() {
+    public NameShortener apply() {
+      NameShortener _nameShortener = new NameShortener();
+      return _nameShortener;
+    }
+  }.apply();
   
   private DBObject data;
   
@@ -88,9 +106,15 @@ public class LcarsNode extends XNode {
   
   private VBox vbox;
   
+  private HBox infoBox;
+  
+  private Text nameField;
+  
   private Pane infoTextBox;
   
   private ImageView imageView;
+  
+  private ChangeListener<Bounds> nameShortener;
   
   public LcarsNode(final DBObject data) {
     this.data = data;
@@ -125,37 +149,47 @@ public class LcarsNode extends XNode {
             it.setSpacing(2);
             it.setFillWidth(true);
             ObservableList<Node> _children = it.getChildren();
-            RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.DARKBLUE);
-            final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-              public void apply(final RectangleBorderPane it) {
+            HBox _hBox = new HBox();
+            final Procedure1<HBox> _function = new Procedure1<HBox>() {
+              public void apply(final HBox it) {
                 VBox.setVgrow(it, Priority.ALWAYS);
-                it.setAlignment(Pos.TOP_RIGHT);
                 ObservableList<Node> _children = it.getChildren();
+                RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.DARKBLUE);
+                final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+                  public void apply(final RectangleBorderPane it) {
+                    it.setAlignment(Pos.TOP_LEFT);
+                    HBox.setHgrow(it, Priority.ALWAYS);
+                  }
+                };
+                RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox, _function);
+                _children.add(_doubleArrow);
                 Text _text = new Text();
-                final Procedure1<Text> _function = new Procedure1<Text>() {
+                LcarsNode.this.nameField = _text;
+                ObservableList<Node> _children_1 = it.getChildren();
+                final Procedure1<Text> _function_1 = new Procedure1<Text>() {
                   public void apply(final Text it) {
                     it.setText(LcarsNode.this.name);
                     it.setFill(LcarsExtensions.FLESH);
                     Font _lcarsFont = LcarsExtensions.lcarsFont(28);
                     it.setFont(_lcarsFont);
-                    Insets _insets = new Insets(0, 5, 0, 0);
-                    StackPane.setMargin(it, _insets);
+                    Insets _insets = new Insets(0, 0, 0, 5);
+                    HBox.setMargin(it, _insets);
                   }
                 };
-                Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-                _children.add(_doubleArrow);
+                Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(LcarsNode.this.nameField, _function_1);
+                _children_1.add(_doubleArrow_1);
               }
             };
-            RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox, _function);
+            HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
             _children.add(_doubleArrow);
             ObservableList<Node> _children_1 = it.getChildren();
-            RectangleBorderPane _createBox_1 = LcarsNode.this.createBox(LcarsExtensions.VIOLET);
+            RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.VIOLET);
             final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
               public void apply(final RectangleBorderPane it) {
                 VBox.setVgrow(it, Priority.ALWAYS);
               }
             };
-            RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox_1, _function_1);
+            RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox, _function_1);
             _children_1.add(_doubleArrow_1);
             Rectangle _rectangle = new Rectangle();
             final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
@@ -192,8 +226,9 @@ public class LcarsNode extends XNode {
             int _minus = (-3);
             Insets _insets = new Insets(35, _minus, 10, 25);
             StackPane.setMargin(it, _insets);
-            ObservableList<Node> _children = it.getChildren();
             HBox _hBox = new HBox();
+            LcarsNode.this.infoBox = _hBox;
+            ObservableList<Node> _children = it.getChildren();
             final Procedure1<HBox> _function = new Procedure1<HBox>() {
               public void apply(final HBox it) {
                 it.setSpacing(5);
@@ -230,7 +265,7 @@ public class LcarsNode extends XNode {
                 StackPane.setMargin(it, _insets);
               }
             };
-            HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
+            HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(LcarsNode.this.infoBox, _function);
             _children.add(_doubleArrow);
             Rectangle _rectangle = new Rectangle();
             final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
@@ -255,6 +290,28 @@ public class LcarsNode extends XNode {
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
     this.setNode(_doubleArrow);
     this.setKey(this.name);
+    final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
+      public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
+        Bounds _boundsInLocal = LcarsNode.this.nameField.getBoundsInLocal();
+        double _width = _boundsInLocal.getWidth();
+        double _width_1 = newValue.getWidth();
+        boolean _greaterThan = (_width > _width_1);
+        boolean _while = _greaterThan;
+        while (_while) {
+          String _text = LcarsNode.this.nameField.getText();
+          String _shortenName = LcarsNode.this._nameShortener.shortenName(_text);
+          LcarsNode.this.nameField.setText(_shortenName);
+          Bounds _boundsInLocal_1 = LcarsNode.this.nameField.getBoundsInLocal();
+          double _width_2 = _boundsInLocal_1.getWidth();
+          double _width_3 = newValue.getWidth();
+          boolean _greaterThan_1 = (_width_2 > _width_3);
+          _while = _greaterThan_1;
+        }
+      }
+    };
+    this.nameShortener = _function_2;
+    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.infoBox.boundsInLocalProperty();
+    _boundsInLocalProperty.addListener(this.nameShortener);
   }
   
   protected RectangleBorderPane createBox(final Color color) {
@@ -443,8 +500,11 @@ public class LcarsNode extends XNode {
     timeline.play();
   }
   
-  public void activate() {
-    super.activate();
+  public void doActivate() {
+    super.doActivate();
+    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.infoBox.boundsInLocalProperty();
+    _boundsInLocalProperty.removeListener(this.nameShortener);
+    this.nameField.setText(this.name);
     LinkedHashMap<String,List<LcarsField>> _createPages = this.createPages(this.data);
     this.pages = _createPages;
     final Procedure1<VBox> _function = new Procedure1<VBox>() {
@@ -461,53 +521,62 @@ public class LcarsNode extends XNode {
         };
         Iterable<String> _filter = IterableExtensions.<String>filter(LcarsNode.pageOrder, _function);
         for (final String pageTitle : _filter) {
-          ObservableList<Node> _children_2 = it.getChildren();
-          RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.FLESH);
-          final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
-            public void apply(final RectangleBorderPane it) {
-              VBox.setVgrow(it, Priority.SOMETIMES);
-              ObservableList<Node> _children = it.getChildren();
-              VPos _switchResult = null;
-              int _indexOf = LcarsNode.pageOrder.indexOf(pageTitle);
-              final int _switchValue = _indexOf;
-              boolean _matched = false;
-              if (!_matched) {
-                if (Objects.equal(_switchValue,0)) {
-                  _matched=true;
-                  _switchResult = VPos.BOTTOM;
+          {
+            final RectangleBorderPane box = LcarsNode.this.createBox(LcarsExtensions.FLESH);
+            ObservableList<Node> _children_2 = it.getChildren();
+            final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+              public void apply(final RectangleBorderPane it) {
+                VBox.setVgrow(it, Priority.SOMETIMES);
+                ObservableList<Node> _children = it.getChildren();
+                VPos _switchResult = null;
+                int _indexOf = LcarsNode.pageOrder.indexOf(pageTitle);
+                final int _switchValue = _indexOf;
+                boolean _matched = false;
+                if (!_matched) {
+                  if (Objects.equal(_switchValue,0)) {
+                    _matched=true;
+                    _switchResult = VPos.BOTTOM;
+                  }
                 }
-              }
-              if (!_matched) {
-                Set<String> _keySet = LcarsNode.this.pages.keySet();
-                int _size = _keySet.size();
-                int _minus = (_size - 1);
-                if (Objects.equal(_switchValue,_minus)) {
-                  _matched=true;
-                  _switchResult = VPos.TOP;
+                if (!_matched) {
+                  Set<String> _keySet = LcarsNode.this.pages.keySet();
+                  int _size = _keySet.size();
+                  int _minus = (_size - 1);
+                  if (Objects.equal(_switchValue,_minus)) {
+                    _matched=true;
+                    _switchResult = VPos.TOP;
+                  }
                 }
-              }
-              if (!_matched) {
-                _switchResult = VPos.CENTER;
-              }
-              Text _createButtonText = LcarsNode.this.createButtonText(pageTitle, _switchResult);
-              _children.add(_createButtonText);
-              final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-                public void handle(final MouseEvent it) {
-                  LcarsNode.this.showPage(pageTitle);
+                if (!_matched) {
+                  _switchResult = VPos.CENTER;
                 }
-              };
-              it.setOnMousePressed(_function);
-            }
-          };
-          RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox, _function_1);
-          _children_2.add(_doubleArrow);
+                Text _createButtonText = LcarsNode.this.createButtonText(pageTitle, _switchResult);
+                _children.add(_createButtonText);
+                final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+                  public void handle(final MouseEvent it) {
+                    LcarsNode.this.showPage(pageTitle);
+                    LcarsNode.this.invertColors(box);
+                  }
+                };
+                it.setOnMousePressed(_function);
+                final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+                  public void handle(final MouseEvent it) {
+                    LcarsNode.this.invertColors(box);
+                  }
+                };
+                it.setOnMouseReleased(_function_1);
+              }
+            };
+            RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(box, _function_1);
+            _children_2.add(_doubleArrow);
+          }
         }
         int _size = LcarsNode.this.imageUrls.size();
         boolean _greaterThan = (_size > 1);
         if (_greaterThan) {
-          ObservableList<Node> _children_3 = it.getChildren();
-          RectangleBorderPane _createBox_1 = LcarsNode.this.createBox(LcarsExtensions.RED);
-          final Procedure1<RectangleBorderPane> _function_2 = new Procedure1<RectangleBorderPane>() {
+          final RectangleBorderPane previous_box = LcarsNode.this.createBox(LcarsExtensions.RED);
+          ObservableList<Node> _children_2 = it.getChildren();
+          final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
             public void apply(final RectangleBorderPane it) {
               VBox.setVgrow(it, Priority.SOMETIMES);
               ObservableList<Node> _children = it.getChildren();
@@ -521,16 +590,23 @@ public class LcarsNode extends XNode {
                   int _modulo = (_plus % _size);
                   String _get = LcarsNode.this.imageUrls.get(_modulo);
                   LcarsNode.this.showImage(_get);
+                  LcarsNode.this.invertColors(previous_box);
                 }
               };
               it.setOnMousePressed(_function);
+              final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+                public void handle(final MouseEvent it) {
+                  LcarsNode.this.invertColors(previous_box);
+                }
+              };
+              it.setOnMouseReleased(_function_1);
             }
           };
-          RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox_1, _function_2);
-          _children_3.add(_doubleArrow_1);
-          ObservableList<Node> _children_4 = it.getChildren();
-          RectangleBorderPane _createBox_2 = LcarsNode.this.createBox(LcarsExtensions.RED);
-          final Procedure1<RectangleBorderPane> _function_3 = new Procedure1<RectangleBorderPane>() {
+          RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(previous_box, _function_1);
+          _children_2.add(_doubleArrow);
+          final RectangleBorderPane next_box = LcarsNode.this.createBox(LcarsExtensions.RED);
+          ObservableList<Node> _children_3 = it.getChildren();
+          final Procedure1<RectangleBorderPane> _function_2 = new Procedure1<RectangleBorderPane>() {
             public void apply(final RectangleBorderPane it) {
               VBox.setVgrow(it, Priority.SOMETIMES);
               ObservableList<Node> _children = it.getChildren();
@@ -546,26 +622,33 @@ public class LcarsNode extends XNode {
                   int _modulo = (_minus % _size_1);
                   String _get = LcarsNode.this.imageUrls.get(_modulo);
                   LcarsNode.this.showImage(_get);
+                  LcarsNode.this.invertColors(next_box);
                 }
               };
               it.setOnMousePressed(_function);
+              final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+                public void handle(final MouseEvent it) {
+                  LcarsNode.this.invertColors(next_box);
+                }
+              };
+              it.setOnMouseReleased(_function_1);
             }
           };
-          RectangleBorderPane _doubleArrow_2 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox_2, _function_3);
-          _children_4.add(_doubleArrow_2);
+          RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(next_box, _function_2);
+          _children_3.add(_doubleArrow_1);
         } else {
-          ObservableList<Node> _children_5 = it.getChildren();
-          RectangleBorderPane _createBox_3 = LcarsNode.this.createBox(LcarsExtensions.RED);
-          final Procedure1<RectangleBorderPane> _function_4 = new Procedure1<RectangleBorderPane>() {
+          ObservableList<Node> _children_4 = it.getChildren();
+          RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.RED);
+          final Procedure1<RectangleBorderPane> _function_3 = new Procedure1<RectangleBorderPane>() {
             public void apply(final RectangleBorderPane it) {
               VBox.setVgrow(it, Priority.ALWAYS);
             }
           };
-          RectangleBorderPane _doubleArrow_3 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox_3, _function_4);
-          _children_5.add(_doubleArrow_3);
+          RectangleBorderPane _doubleArrow_2 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_createBox, _function_3);
+          _children_4.add(_doubleArrow_2);
         }
-        ObservableList<Node> _children_6 = it.getChildren();
-        _children_6.add(lastStripe);
+        ObservableList<Node> _children_5 = it.getChildren();
+        _children_5.add(lastStripe);
       }
     };
     ObjectExtensions.<VBox>operator_doubleArrow(
@@ -574,11 +657,27 @@ public class LcarsNode extends XNode {
     Iterator<String> _iterator = _keySet.iterator();
     String _next = _iterator.next();
     this.showPage(_next);
+    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty_1 = this.infoBox.boundsInLocalProperty();
+    _boundsInLocalProperty_1.addListener(this.nameShortener);
+  }
+  
+  protected void invertColors(final RectangleBorderPane box) {
+    ObservableList<Node> _children = box.getChildren();
+    Node _head = IterableExtensions.<Node>head(_children);
+    final Text text = ((Text) _head);
+    final Paint textColor = text.getFill();
+    Paint _backgroundPaint = box.getBackgroundPaint();
+    text.setFill(_backgroundPaint);
+    box.setBackgroundPaint(textColor);
+    box.setBorderPaint(textColor);
   }
   
   public String getDbId() {
     return this.dbId;
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.examples.lcars.LcarsNode");
+    ;
   
   private SimpleDoubleProperty imageRatioProperty = new SimpleDoubleProperty(this, "imageRatio",_initImageRatio());
   
