@@ -3,6 +3,7 @@ package de.fxdiagram.examples.java
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.behavior.AbstractBehavior
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
@@ -19,14 +20,13 @@ import javafx.scene.text.Text
 import static java.lang.reflect.Modifier.*
 
 import static extension de.fxdiagram.core.Extensions.*
-import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 
 class JavaTypeNode extends XNode {
 
 	Class<?> javaType
 	
 	Text name
-	VBox attributeCompartment
+	VBox propertyCompartment
 	VBox operationCompartment
 	
 	new() {
@@ -34,19 +34,18 @@ class JavaTypeNode extends XNode {
 			children += new VBox => [
 				children += name = new Text => [
 					textOrigin = VPos.TOP
-					font = Font.font(getFont.family, FontWeight.BOLD, getFont.size*1.5)
-					VBox.setMargin(it, new Insets(20, 20, 20, 15))
+					font = Font.font(getFont.family, FontWeight.BOLD, getFont.size * 1.1)
+					VBox.setMargin(it, new Insets(12, 12, 12, 12))
 				]
 				children += new Separator 
-				children += attributeCompartment = new VBox => [
-					VBox.setMargin(it, new Insets(10, 10, 10, 10))
+				children += propertyCompartment = new VBox => [
+					VBox.setMargin(it, new Insets(5, 10, 5, 10))
 				]
 				children += new Separator
 				children += operationCompartment = new VBox => [
-					VBox.setMargin(it, new Insets(10, 10, 10, 10))
+					VBox.setMargin(it, new Insets(5, 10, 5, 10))
 				]
 				alignment = Pos.CENTER
-				spacing = 5
 			]
 		]
 	}
@@ -58,20 +57,20 @@ class JavaTypeNode extends XNode {
 	def setJavaType(Class<?> javaType) {
 		this.javaType = javaType
 		name.text = javaType.simpleName
-		javaType.declaredFields.filter[isPublic(it.modifiers) && (type.primitive || String.equals(type))].forEach [ 
-			attribute |
-			attributeCompartment.children += new Text => [
-				text = attribute.name + ': ' + attribute.type.simpleName
-				textOrigin = VPos.TOP
-			]				
+		val model = new JavaTypeModel(javaType)
+		model.properties.forEach [
+			property |
+			propertyCompartment.children += new Text => [
+				text = '''«property.name»: «property.type.simpleName»''' 
+			]
 		]
-		javaType.declaredConstructors.filter[isPublic(it.modifiers)].forEach [
+		model.constructors.forEach [
 			constructor |
 			operationCompartment.children += new Text => [
 				text = '''«javaType.simpleName»(«constructor.parameterTypes.map[simpleName].join(', ')»)''' 
 			]
 		]
-		javaType.declaredMethods.filter[isPublic(it.modifiers)].forEach [
+		model.operations.forEach [
 			method |
 			operationCompartment.children += new Text => [
 				text = '''«method.name»(«method.parameterTypes.map[simpleName].join(', ')»): «method.returnType.simpleName»''' 

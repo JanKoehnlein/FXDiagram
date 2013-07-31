@@ -3,13 +3,13 @@ package de.fxdiagram.examples.java;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeRapidButtonBehavior;
+import de.fxdiagram.examples.java.Property;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -35,7 +35,7 @@ public class JavaTypeNode extends XNode {
   
   private Text name;
   
-  private VBox attributeCompartment;
+  private VBox propertyCompartment;
   
   private VBox operationCompartment;
   
@@ -56,10 +56,10 @@ public class JavaTypeNode extends XNode {
                 String _family = _font.getFamily();
                 Font _font_1 = it.getFont();
                 double _size = _font_1.getSize();
-                double _multiply = (_size * 1.5);
+                double _multiply = (_size * 1.1);
                 Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
                 it.setFont(_font_2);
-                Insets _insets = new Insets(20, 20, 20, 15);
+                Insets _insets = new Insets(12, 12, 12, 12);
                 VBox.setMargin(it, _insets);
               }
             };
@@ -73,13 +73,13 @@ public class JavaTypeNode extends XNode {
             VBox _vBox = new VBox();
             final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
               public void apply(final VBox it) {
-                Insets _insets = new Insets(10, 10, 10, 10);
+                Insets _insets = new Insets(5, 10, 5, 10);
                 VBox.setMargin(it, _insets);
               }
             };
             VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
-            VBox _attributeCompartment = JavaTypeNode.this.attributeCompartment = _doubleArrow_1;
-            _children_2.add(_attributeCompartment);
+            VBox _propertyCompartment = JavaTypeNode.this.propertyCompartment = _doubleArrow_1;
+            _children_2.add(_propertyCompartment);
             ObservableList<Node> _children_3 = it.getChildren();
             Separator _separator_1 = new Separator();
             _children_3.add(_separator_1);
@@ -87,7 +87,7 @@ public class JavaTypeNode extends XNode {
             VBox _vBox_1 = new VBox();
             final Procedure1<VBox> _function_2 = new Procedure1<VBox>() {
               public void apply(final VBox it) {
-                Insets _insets = new Insets(10, 10, 10, 10);
+                Insets _insets = new Insets(5, 10, 5, 10);
                 VBox.setMargin(it, _insets);
               }
             };
@@ -95,7 +95,6 @@ public class JavaTypeNode extends XNode {
             VBox _operationCompartment = JavaTypeNode.this.operationCompartment = _doubleArrow_2;
             _children_4.add(_operationCompartment);
             it.setAlignment(Pos.CENTER);
-            it.setSpacing(5);
           }
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
@@ -115,61 +114,32 @@ public class JavaTypeNode extends XNode {
     this.javaType = javaType;
     String _simpleName = javaType.getSimpleName();
     this.name.setText(_simpleName);
-    Field[] _declaredFields = javaType.getDeclaredFields();
-    final Function1<Field,Boolean> _function = new Function1<Field,Boolean>() {
-      public Boolean apply(final Field it) {
-        boolean _and = false;
-        int _modifiers = it.getModifiers();
-        boolean _isPublic = Modifier.isPublic(_modifiers);
-        if (!_isPublic) {
-          _and = false;
-        } else {
-          boolean _or = false;
-          Class<? extends Object> _type = it.getType();
-          boolean _isPrimitive = _type.isPrimitive();
-          if (_isPrimitive) {
-            _or = true;
-          } else {
-            Class<? extends Object> _type_1 = it.getType();
-            boolean _equals = String.class.equals(_type_1);
-            _or = (_isPrimitive || _equals);
-          }
-          _and = (_isPublic && _or);
-        }
-        return Boolean.valueOf(_and);
-      }
-    };
-    Iterable<Field> _filter = IterableExtensions.<Field>filter(((Iterable<Field>)Conversions.doWrapArray(_declaredFields)), _function);
-    final Procedure1<Field> _function_1 = new Procedure1<Field>() {
-      public void apply(final Field attribute) {
-        ObservableList<Node> _children = JavaTypeNode.this.attributeCompartment.getChildren();
+    JavaTypeModel _javaTypeModel = new JavaTypeModel(javaType);
+    final JavaTypeModel model = _javaTypeModel;
+    List<Property> _properties = model.getProperties();
+    final Procedure1<Property> _function = new Procedure1<Property>() {
+      public void apply(final Property property) {
+        ObservableList<Node> _children = JavaTypeNode.this.propertyCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
-            String _name = attribute.getName();
-            String _plus = (_name + ": ");
-            Class<? extends Object> _type = attribute.getType();
+            StringConcatenation _builder = new StringConcatenation();
+            String _name = property.getName();
+            _builder.append(_name, "");
+            _builder.append(": ");
+            Class<? extends Object> _type = property.getType();
             String _simpleName = _type.getSimpleName();
-            String _plus_1 = (_plus + _simpleName);
-            it.setText(_plus_1);
-            it.setTextOrigin(VPos.TOP);
+            _builder.append(_simpleName, "");
+            it.setText(_builder.toString());
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Field>forEach(_filter, _function_1);
-    Constructor<? extends Object>[] _declaredConstructors = javaType.getDeclaredConstructors();
-    final Function1<Constructor<? extends Object>,Boolean> _function_2 = new Function1<Constructor<? extends Object>,Boolean>() {
-      public Boolean apply(final Constructor<? extends Object> it) {
-        int _modifiers = it.getModifiers();
-        boolean _isPublic = Modifier.isPublic(_modifiers);
-        return Boolean.valueOf(_isPublic);
-      }
-    };
-    Iterable<Constructor<? extends Object>> _filter_1 = IterableExtensions.<Constructor<? extends Object>>filter(((Iterable<Constructor<? extends Object>>)Conversions.doWrapArray(_declaredConstructors)), _function_2);
-    final Procedure1<Constructor<? extends Object>> _function_3 = new Procedure1<Constructor<? extends Object>>() {
+    IterableExtensions.<Property>forEach(_properties, _function);
+    List<Constructor<? extends Object>> _constructors = model.getConstructors();
+    final Procedure1<Constructor<? extends Object>> _function_1 = new Procedure1<Constructor<? extends Object>>() {
       public void apply(final Constructor<? extends Object> constructor) {
         ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
         Text _text = new Text();
@@ -197,17 +167,9 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Constructor<? extends Object>>forEach(_filter_1, _function_3);
-    Method[] _declaredMethods = javaType.getDeclaredMethods();
-    final Function1<Method,Boolean> _function_4 = new Function1<Method,Boolean>() {
-      public Boolean apply(final Method it) {
-        int _modifiers = it.getModifiers();
-        boolean _isPublic = Modifier.isPublic(_modifiers);
-        return Boolean.valueOf(_isPublic);
-      }
-    };
-    Iterable<Method> _filter_2 = IterableExtensions.<Method>filter(((Iterable<Method>)Conversions.doWrapArray(_declaredMethods)), _function_4);
-    final Procedure1<Method> _function_5 = new Procedure1<Method>() {
+    IterableExtensions.<Constructor<? extends Object>>forEach(_constructors, _function_1);
+    List<Method> _operations = model.getOperations();
+    final Procedure1<Method> _function_2 = new Procedure1<Method>() {
       public void apply(final Method method) {
         ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
         Text _text = new Text();
@@ -238,7 +200,7 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Method>forEach(_filter_2, _function_5);
+    IterableExtensions.<Method>forEach(_operations, _function_2);
   }
   
   public Class<? extends Object> getJavaType() {
