@@ -158,7 +158,7 @@ class XConnection extends XShape {
 			}
 			case POLYLINE: {
 				val polyline = shapeGroup.children.filter(Polyline).head 
-					?: new Polyline => [
+					?: new Polyline => [ 
 						stroke = Color.BLACK
 					]
 				polyline.points.setAll(controlPoints.map[#[layoutX, layoutY]].flatten)

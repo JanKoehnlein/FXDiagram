@@ -12,9 +12,6 @@ import javafx.scene.Parent
 
 import static javafx.collections.FXCollections.*
 
-/**
- * A diagram is a group, as such not resizable from the outside. 
- */
 abstract class XAbstractDiagram extends Parent implements XActivatable { 
 
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
@@ -79,7 +76,7 @@ abstract class XAbstractDiagram extends Parent implements XActivatable {
 	
 	def Iterable<XShape> getAllShapes() {
 		nodes 
-		+ connections + connections.map[label].filterNull + connections.map[controlPoints].flatten 
+		+ connections + connections.map[label].filterNull + connections.map[controlPoints].flatten
 		+ subDiagrams.map[allShapes].flatten
 	}
 }

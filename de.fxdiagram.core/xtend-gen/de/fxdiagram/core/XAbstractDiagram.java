@@ -32,9 +32,6 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-/**
- * A diagram is a group, as such not resizable from the outside.
- */
 @SuppressWarnings("all")
 public abstract class XAbstractDiagram extends Parent implements XActivatable {
   public abstract Group getNodeLayer();
