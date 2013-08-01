@@ -25,15 +25,15 @@ import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddRapidButtonBehavior extends AbstractBehavior {
+public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T> {
   private List<XRapidButton> rapidButtons;
   
-  public AddRapidButtonBehavior(final XNode host) {
+  public AddRapidButtonBehavior(final T host) {
     super(host);
   }
   
   public void doActivate() {
-    XShape _host = this.getHost();
+    T _host = this.getHost();
     final XNode host = ((XNode) _host);
     final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
       public void apply(final XRapidButton button) {

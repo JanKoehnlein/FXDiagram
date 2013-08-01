@@ -57,8 +57,8 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
       }
     };
     _scaleProperty.addListener(_function);
-    AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
-    final AddRapidButtonBehavior rapidButtonBehavior = _addRapidButtonBehavior;
+    AddRapidButtonBehavior<RecursiveImageNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<RecursiveImageNode>(this);
+    final AddRapidButtonBehavior<RecursiveImageNode> rapidButtonBehavior = _addRapidButtonBehavior;
     rapidButtonBehavior.activate();
   }
   

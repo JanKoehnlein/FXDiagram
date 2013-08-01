@@ -42,7 +42,7 @@ public class XNode extends XShape {
   
   private Effect originalEffect;
   
-  private MoveBehavior moveBehavior;
+  private MoveBehavior<XNode> moveBehavior;
   
   private Anchors anchors;
   
@@ -87,7 +87,7 @@ public class XNode extends XShape {
   }
   
   public void doActivate() {
-    MoveBehavior _moveBehavior = new MoveBehavior(this);
+    MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
     this.moveBehavior = _moveBehavior;
     Anchors _createAnchors = this.createAnchors();
     this.anchors = _createAnchors;
@@ -167,7 +167,7 @@ public class XNode extends XShape {
     this.keyProperty.set(key);
   }
   
-  public MoveBehavior getMoveBehavior() {
+  public MoveBehavior<? extends XShape> getMoveBehavior() {
     return this.moveBehavior;
   }
   

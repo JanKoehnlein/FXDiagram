@@ -65,7 +65,7 @@ public abstract class XShape extends Parent implements XActivatable {
     }
   }
   
-  public abstract MoveBehavior getMoveBehavior();
+  public abstract MoveBehavior<? extends XShape> getMoveBehavior();
   
   private ReadOnlyObjectWrapper<Node> nodeProperty = new ReadOnlyObjectWrapper<Node>(this, "node");
   

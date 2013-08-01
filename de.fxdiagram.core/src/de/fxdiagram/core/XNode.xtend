@@ -28,7 +28,7 @@ class XNode extends XShape {
 	Effect selectionEffect
 	Effect originalEffect
 
-	MoveBehavior moveBehavior
+	MoveBehavior<XNode> moveBehavior
 	Anchors anchors
 
 	new() {

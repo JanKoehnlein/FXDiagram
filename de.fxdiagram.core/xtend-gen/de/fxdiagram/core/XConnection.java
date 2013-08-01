@@ -457,7 +457,7 @@ public class XConnection extends XShape {
     return _isActive;
   }
   
-  public MoveBehavior getMoveBehavior() {
+  public MoveBehavior<? extends XShape> getMoveBehavior() {
     return null;
   }
   

@@ -16,7 +16,7 @@ import static extension java.lang.Math.*
 
 class XControlPoint extends XShape {
 
-	MoveBehavior moveBehavior
+	MoveBehavior<XControlPoint> moveBehavior
 
 	XControlPointType type
 
@@ -27,7 +27,7 @@ class XControlPoint extends XShape {
 	def getType() {
 		type
 	}
-
+	
 	def setType(XControlPointType type) {
 		this.type = type
 		switch type {

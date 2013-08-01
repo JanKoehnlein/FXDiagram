@@ -17,7 +17,7 @@ class XConnectionLabel extends XShape {
 	@FxProperty XConnection connection
 	@FxProperty Text text
 
-	MoveBehavior moveBehavior
+	MoveBehavior<XConnectionLabel> moveBehavior
 	Effect selectionEffect
 
 	new(XConnection connection) {

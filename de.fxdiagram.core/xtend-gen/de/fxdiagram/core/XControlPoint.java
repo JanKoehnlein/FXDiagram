@@ -26,7 +26,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class XControlPoint extends XShape {
-  private MoveBehavior moveBehavior;
+  private MoveBehavior<XControlPoint> moveBehavior;
   
   private XControlPointType type;
   
@@ -38,8 +38,8 @@ public class XControlPoint extends XShape {
     return this.type;
   }
   
-  public MoveBehavior setType(final XControlPointType type) {
-    MoveBehavior _xblockexpression = null;
+  public MoveBehavior<XControlPoint> setType(final XControlPointType type) {
+    MoveBehavior<XControlPoint> _xblockexpression = null;
     {
       this.type = type;
       boolean _matched = false;
@@ -88,11 +88,11 @@ public class XControlPoint extends XShape {
           this.setNode(_doubleArrow_2);
         }
       }
-      MoveBehavior _xifexpression = null;
+      MoveBehavior<XControlPoint> _xifexpression = null;
       boolean _notEquals = (!Objects.equal(type, XControlPointType.ANCHOR));
       if (_notEquals) {
-        MoveBehavior _moveBehavior = new MoveBehavior(this);
-        MoveBehavior _moveBehavior_1 = this.moveBehavior = _moveBehavior;
+        MoveBehavior<XControlPoint> _moveBehavior = new MoveBehavior<XControlPoint>(this);
+        MoveBehavior<XControlPoint> _moveBehavior_1 = this.moveBehavior = _moveBehavior;
         _xifexpression = _moveBehavior_1;
       }
       _xblockexpression = (_xifexpression);
@@ -160,7 +160,7 @@ public class XControlPoint extends XShape {
     return _and;
   }
   
-  public MoveBehavior getMoveBehavior() {
+  public MoveBehavior<? extends XShape> getMoveBehavior() {
     return this.moveBehavior;
   }
   

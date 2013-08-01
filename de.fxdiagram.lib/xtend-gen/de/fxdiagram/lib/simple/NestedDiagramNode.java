@@ -181,8 +181,8 @@ public class NestedDiagramNode extends XNode {
       }
     };
     _boundsInParentProperty.addListener(_function);
-    AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
-    final AddRapidButtonBehavior rapidButtonBehavior = _addRapidButtonBehavior;
+    AddRapidButtonBehavior<NestedDiagramNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<NestedDiagramNode>(this);
+    final AddRapidButtonBehavior<NestedDiagramNode> rapidButtonBehavior = _addRapidButtonBehavior;
     rapidButtonBehavior.activate();
   }
   

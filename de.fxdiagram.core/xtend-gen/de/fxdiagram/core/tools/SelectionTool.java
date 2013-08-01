@@ -118,14 +118,14 @@ public class SelectionTool implements XDiagramTool {
               Iterable<XShape> _selection_3 = SelectionTool.this.getSelection();
               final Procedure1<XShape> _function_5 = new Procedure1<XShape>() {
                 public void apply(final XShape it) {
-                  MoveBehavior _moveBehavior = it.getMoveBehavior();
+                  MoveBehavior<? extends XShape> _moveBehavior = it.getMoveBehavior();
                   if (_moveBehavior!=null) {
                     _moveBehavior.mousePressed(event);
                   }
                 }
               };
               IterableExtensions.<XShape>forEach(_selection_3, _function_5);
-              MoveBehavior _moveBehavior = targetShape.getMoveBehavior();
+              MoveBehavior<? extends XShape> _moveBehavior = targetShape.getMoveBehavior();
               if (_moveBehavior!=null) {
                 _moveBehavior.mousePressed(event);
               }
@@ -139,7 +139,7 @@ public class SelectionTool implements XDiagramTool {
       public void handle(final MouseEvent it) {
         Iterable<XShape> _selection = SelectionTool.this.getSelection();
         for (final XShape shape : _selection) {
-          MoveBehavior _moveBehavior = null;
+          MoveBehavior<? extends XShape> _moveBehavior = null;
           if (shape!=null) {
             _moveBehavior=shape.getMoveBehavior();
           }

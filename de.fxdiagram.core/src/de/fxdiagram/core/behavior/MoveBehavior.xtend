@@ -4,11 +4,11 @@ import de.fxdiagram.core.XShape
 import javafx.geometry.Point2D
 import javafx.scene.input.MouseEvent
 
-class MoveBehavior extends AbstractBehavior {
+class MoveBehavior <T extends XShape> extends AbstractBehavior<T> {
 	
 	DragContext dragContext
 	
-	new(XShape host) {
+	new(T host) {
 		super(host)
 	}
 	

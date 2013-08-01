@@ -11,12 +11,13 @@ import de.fxdiagram.lib.tools.CubeChooser
 import java.util.List
 
 import static extension de.fxdiagram.core.Extensions.*
+import de.fxdiagram.core.XShape
 
-class AddRapidButtonBehavior extends AbstractBehavior {
+class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 	
 	List<XRapidButton> rapidButtons
 	
-	new(XNode host) {
+	new(T host) {
 		super(host)
 	}	
 	

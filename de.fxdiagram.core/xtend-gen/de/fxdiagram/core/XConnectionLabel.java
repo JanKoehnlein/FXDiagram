@@ -24,7 +24,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class XConnectionLabel extends XShape {
-  private MoveBehavior moveBehavior;
+  private MoveBehavior<XConnectionLabel> moveBehavior;
   
   private Effect selectionEffect;
   
@@ -46,7 +46,7 @@ public class XConnectionLabel extends XShape {
   }
   
   public void doActivate() {
-    MoveBehavior _moveBehavior = new MoveBehavior(this);
+    MoveBehavior<XConnectionLabel> _moveBehavior = new MoveBehavior<XConnectionLabel>(this);
     this.moveBehavior = _moveBehavior;
     this.moveBehavior.activate();
     BooleanProperty _selectedProperty = this.selectedProperty();
@@ -147,7 +147,7 @@ public class XConnectionLabel extends XShape {
     return _xblockexpression;
   }
   
-  public MoveBehavior getMoveBehavior() {
+  public MoveBehavior<? extends XShape> getMoveBehavior() {
     return this.moveBehavior;
   }
   

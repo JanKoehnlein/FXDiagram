@@ -5,13 +5,13 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XActivatable
 import de.fxdiagram.core.XShape
 
-abstract class AbstractBehavior implements XActivatable {
+abstract class AbstractBehavior <T extends XShape> implements XActivatable {
 	
-	XShape host 
+	T host 
 	
 	@FxProperty@ReadOnly boolean isActive
 	
-	new(XShape host) {
+	new(T host) {
 		this.host = host	
 	}
 	

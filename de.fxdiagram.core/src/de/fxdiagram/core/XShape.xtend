@@ -47,5 +47,5 @@ abstract class XShape extends Parent implements XActivatable {
 		}
 	}
 	
-	def MoveBehavior getMoveBehavior()
+	def MoveBehavior<? extends XShape> getMoveBehavior()
 }

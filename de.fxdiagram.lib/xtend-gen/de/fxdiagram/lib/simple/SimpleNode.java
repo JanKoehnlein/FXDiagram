@@ -60,8 +60,8 @@ public class SimpleNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    AddRapidButtonBehavior _addRapidButtonBehavior = new AddRapidButtonBehavior(this);
-    final AddRapidButtonBehavior rapidButtonBehavior = _addRapidButtonBehavior;
+    AddRapidButtonBehavior<SimpleNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<SimpleNode>(this);
+    final AddRapidButtonBehavior<SimpleNode> rapidButtonBehavior = _addRapidButtonBehavior;
     rapidButtonBehavior.activate();
   }
   

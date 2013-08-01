@@ -11,15 +11,15 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings("all")
-public class MoveBehavior extends AbstractBehavior {
+public class MoveBehavior<T extends XShape> extends AbstractBehavior<T> {
   private DragContext dragContext;
   
-  public MoveBehavior(final XShape host) {
+  public MoveBehavior(final T host) {
     super(host);
   }
   
   public void doActivate() {
-    XShape _host = this.getHost();
+    T _host = this.getHost();
     Node _node = _host.getNode();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
@@ -27,7 +27,7 @@ public class MoveBehavior extends AbstractBehavior {
       }
     };
     _node.setOnMousePressed(_function);
-    XShape _host_1 = this.getHost();
+    T _host_1 = this.getHost();
     Node _node_1 = _host_1.getNode();
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
@@ -40,11 +40,11 @@ public class MoveBehavior extends AbstractBehavior {
   public DragContext mousePressed(final MouseEvent it) {
     DragContext _xblockexpression = null;
     {
-      XShape _host = this.getHost();
+      T _host = this.getHost();
       Parent _parent = _host.getParent();
-      XShape _host_1 = this.getHost();
+      T _host_1 = this.getHost();
       double _layoutX = _host_1.getLayoutX();
-      XShape _host_2 = this.getHost();
+      T _host_2 = this.getHost();
       double _layoutY = _host_2.getLayoutY();
       final Point2D initialPositionInScene = _parent.localToScene(_layoutX, _layoutY);
       double _screenX = it.getScreenX();
@@ -71,15 +71,15 @@ public class MoveBehavior extends AbstractBehavior {
     double _minus_1 = (_plus_1 - _mouseAnchorY);
     Point2D _point2D = new Point2D(_minus, _minus_1);
     final Point2D newPositionInScene = _point2D;
-    XShape _host = this.getHost();
+    T _host = this.getHost();
     Parent _parent = _host.getParent();
     final Point2D newPositionInDiagram = _parent.sceneToLocal(newPositionInScene);
     boolean _notEquals = (!Objects.equal(newPositionInDiagram, null));
     if (_notEquals) {
-      XShape _host_1 = this.getHost();
+      T _host_1 = this.getHost();
       double _x_1 = newPositionInDiagram.getX();
       _host_1.setLayoutX(_x_1);
-      XShape _host_2 = this.getHost();
+      T _host_2 = this.getHost();
       double _y_1 = newPositionInDiagram.getY();
       _host_2.setLayoutY(_y_1);
     }

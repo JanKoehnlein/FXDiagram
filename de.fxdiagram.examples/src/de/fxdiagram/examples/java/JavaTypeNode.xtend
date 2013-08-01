@@ -7,7 +7,6 @@ import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
-import java.lang.reflect.Type
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.VPos
@@ -17,9 +16,8 @@ import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 
-import static java.lang.reflect.Modifier.*
-
 import static extension de.fxdiagram.core.Extensions.*
+import java.util.List
 
 class JavaTypeNode extends XNode {
 
@@ -28,6 +26,8 @@ class JavaTypeNode extends XNode {
 	Text name
 	VBox propertyCompartment
 	VBox operationCompartment
+	
+	JavaTypeModel model
 	
 	new() {
 		node = new RectangleBorderPane => [
@@ -57,20 +57,23 @@ class JavaTypeNode extends XNode {
 	def setJavaType(Class<?> javaType) {
 		this.javaType = javaType
 		name.text = javaType.simpleName
-		val model = new JavaTypeModel(javaType)
-		model.properties.forEach [
+		model = new JavaTypeModel(javaType)
+		propertyCompartment.children.clear
+		operationCompartment.children.clear
+		model.properties.limit.forEach [
 			property |
 			propertyCompartment.children += new Text => [
 				text = '''«property.name»: «property.type.simpleName»''' 
 			]
 		]
-		model.constructors.forEach [
-			constructor |
-			operationCompartment.children += new Text => [
-				text = '''«javaType.simpleName»(«constructor.parameterTypes.map[simpleName].join(', ')»)''' 
+		if(isActive)
+			model.constructors.forEach [
+				constructor |
+				operationCompartment.children += new Text => [
+					text = '''«javaType.simpleName»(«constructor.parameterTypes.map[simpleName].join(', ')»)''' 
+				]
 			]
-		]
-		model.operations.forEach [
+		model.operations.limit.forEach [
 			method |
 			operationCompartment.children += new Text => [
 				text = '''«method.name»(«method.parameterTypes.map[simpleName].join(', ')»): «method.returnType.simpleName»''' 
@@ -78,57 +81,71 @@ class JavaTypeNode extends XNode {
 		]
 	}
 	
+	protected def <T> limit(List<T> list) {
+		if(list.empty)
+			list
+		else if(isActive)
+			list
+		else 
+			list.subList(0, Math.min(list.size, 4))
+	}
+	
 	def getJavaType() {
 		javaType
+	}
+	
+	
+	def getJavaTypeModel() {
+		model
 	}
 	
 	override activate() {
 		if(javaType != null) {
 			super.activate()
-			new JavaTypeRapidButtonBehavior(this).activate	
+			setJavaType(javaType)
+			new JavaTypeRapidButtonBehavior(this).activate
 		}
 	}
 	
 }
 
-class JavaTypeRapidButtonBehavior extends AbstractBehavior {
+class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 	
 	new(JavaTypeNode host) {
 		super(host)
 	}
 	
 	override protected doActivate() {
-		val host = this.getHost as XNode
-		val addSuperTypeAction = [
-			XRapidButton button |
-			val chooser = new CoverFlowChooser(host, button.getChooserPosition)
-			val javaType = (host as JavaTypeNode).getJavaType
-			val supertypes = <Class<?>>newArrayList
-			if(javaType.superclass != null)
-				supertypes += javaType.superclass
-			supertypes += javaType.interfaces
-			chooser += supertypes.map[
-				superType | new JavaTypeNode => [ it.javaType = superType ]
-			] 
-			host.rootDiagram.currentTool = chooser
-		]
-		val addReferencesAction = [
-			XRapidButton button |
-			val chooser = new CarusselChooser(host, button.getChooserPosition)
-			val javaType = (host as JavaTypeNode).getJavaType
-			val references = javaType.declaredFields.filter[isPublic(it.modifiers) && !Type.primitive && !String.equals(Type)]
-			chooser += references.map[
-				reference | new JavaTypeNode => [ it.javaType = reference.type ]
-			] 
-			host.rootDiagram.currentTool = chooser
-		]
-		val buttons = #[
-			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', addSuperTypeAction),
-			new XRapidButton(host, 0.5, 1, 'icons/add_16.png', addSuperTypeAction),
-			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', addReferencesAction),
-			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addReferencesAction)
-		]
-		host.diagram.buttons += buttons
+		val model = host.javaTypeModel
+		if(!model.superTypes.empty) {
+			val addSuperTypeAction = [
+				XRapidButton button |
+				val chooser = new CoverFlowChooser(host, button.getChooserPosition)
+				chooser += model.superTypes.map[
+					superType | new JavaTypeNode => [ it.javaType = superType ]
+				] 
+				host.rootDiagram.currentTool = chooser
+			]
+			host.diagram.buttons += #[
+				new XRapidButton(host, 0.5, 0, 'icons/SuperType.gif', addSuperTypeAction),
+				new XRapidButton(host, 0.5, 1, 'icons/SuperType.gif', addSuperTypeAction)
+			] 			
+		}
+		if(!model.references.empty) {
+			val addReferencesAction = [
+				XRapidButton button |
+				val chooser = new CarusselChooser(host, button.getChooserPosition)
+				chooser += model.references.map[
+					reference | new JavaTypeNode => [ it.javaType = reference.type ]
+				] 
+				host.rootDiagram.currentTool = chooser
+			]
+			host.diagram.buttons += #[
+				new XRapidButton(host, 0, 0.5, 'icons/Reference.gif', addReferencesAction),
+				new XRapidButton(host, 1, 0.5, 'icons/Reference.gif', addReferencesAction)
+			]
+		}
+
 	}
 	
 	

@@ -34,6 +34,20 @@ public class JavaTypeModel {
     }
   }.apply();
   
+  private List<Property> references = new Function0<List<Property>>() {
+    public List<Property> apply() {
+      ArrayList<Property> _newArrayList = CollectionLiterals.<Property>newArrayList();
+      return _newArrayList;
+    }
+  }.apply();
+  
+  private List<Class<? extends Object>> superTypes = new Function0<List<Class<? extends Object>>>() {
+    public List<Class<? extends Object>> apply() {
+      ArrayList<Class<? extends Object>> _newArrayList = CollectionLiterals.<Class<? extends Object>>newArrayList();
+      return _newArrayList;
+    }
+  }.apply();
+  
   public JavaTypeModel(final Class<? extends Object> javaType) {
     Constructor<? extends Object>[] _declaredConstructors = javaType.getDeclaredConstructors();
     final Function1<Constructor<? extends Object>,Boolean> _function = new Function1<Constructor<? extends Object>,Boolean>() {
@@ -114,8 +128,16 @@ public class JavaTypeModel {
           Iterable<Method> _map_1 = IterableExtensions.<Pair<Class<? extends Object>,Method>, Method>map(type2Method, _function_5);
           CollectionExtensions.<Method>removeAll(this.operations, _map_1);
           Class<? extends Object> _head = IterableExtensions.<Class<? extends Object>>head(types);
-          Property _property = new Property(propertyName, _head);
-          this.properties.add(_property);
+          boolean _isPrimitiveOrString = this.isPrimitiveOrString(_head);
+          if (_isPrimitiveOrString) {
+            Class<? extends Object> _head_1 = IterableExtensions.<Class<? extends Object>>head(types);
+            Property _property = new Property(propertyName, _head_1);
+            this.properties.add(_property);
+          } else {
+            Class<? extends Object> _head_2 = IterableExtensions.<Class<? extends Object>>head(types);
+            Property _property_1 = new Property(propertyName, _head_2);
+            this.references.add(_property_1);
+          }
         } else {
           String _join = IterableExtensions.join(types, " ");
           InputOutput.<String>println(_join);
@@ -136,6 +158,14 @@ public class JavaTypeModel {
       }
     };
     ListExtensions.<Property, String>sortInplaceBy(this.properties, _function_5);
+    Class<? extends Object> _superclass = javaType.getSuperclass();
+    boolean _notEquals = (!Objects.equal(_superclass, null));
+    if (_notEquals) {
+      Class<? extends Object> _superclass_1 = javaType.getSuperclass();
+      this.superTypes.add(_superclass_1);
+    }
+    Class<? extends Object>[] _interfaces = javaType.getInterfaces();
+    CollectionExtensions.<Class<? extends Object>>addAll(this.superTypes, _interfaces);
   }
   
   protected Pair<String,Class<? extends Object>> getPropertyNameAndType(final Method method) {
@@ -213,6 +243,10 @@ public class JavaTypeModel {
     return _xblockexpression;
   }
   
+  public List<Class<? extends Object>> getSuperTypes() {
+    return this.superTypes;
+  }
+  
   public List<Constructor<? extends Object>> getConstructors() {
     return this.constructors;
   }
@@ -223,5 +257,21 @@ public class JavaTypeModel {
   
   public List<Property> getProperties() {
     return this.properties;
+  }
+  
+  public List<Property> getReferences() {
+    return this.references;
+  }
+  
+  public boolean isPrimitiveOrString(final Class<? extends Object> type) {
+    boolean _or = false;
+    boolean _isPrimitive = type.isPrimitive();
+    if (_isPrimitive) {
+      _or = true;
+    } else {
+      boolean _equals = Objects.equal(type, String.class);
+      _or = (_isPrimitive || _equals);
+    }
+    return _or;
   }
 }

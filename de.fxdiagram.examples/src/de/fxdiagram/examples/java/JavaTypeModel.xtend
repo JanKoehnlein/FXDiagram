@@ -15,6 +15,10 @@ class JavaTypeModel {
 	List<Method> operations
 
 	List<Property> properties = newArrayList
+
+	List<Property> references = newArrayList
+	
+	List<Class<?>> superTypes = newArrayList
 	
 	new(Class<?> javaType) {
 		constructors = javaType.declaredConstructors.filter[isPublic(it.modifiers)].toList
@@ -32,13 +36,19 @@ class JavaTypeModel {
 			val types = type2Method.map[key].filterNull.toSet
 			if(types.size == 1) {
 				operations.removeAll(type2Method.map[value])
-				properties += new Property(propertyName, types.head)		
+				if(types.head.primitiveOrString)
+					properties += new Property(propertyName, types.head)
+				else
+					references += new Property(propertyName, types.head)
 			} else {
 				println(types.join(" "))
 			}
 		}
 		operations.sortInplaceBy[name]
 		properties.sortInplaceBy[name]
+		if(javaType.superclass != null)
+			superTypes.add(javaType.superclass)
+		superTypes.addAll(javaType.interfaces)
 	}
 	
 	protected def getPropertyNameAndType(Method method) {
@@ -58,6 +68,10 @@ class JavaTypeModel {
 		} else null
 	}
 	
+	def getSuperTypes() {
+		superTypes
+	}
+	
 	def getConstructors() {
 		constructors
 	}
@@ -68,6 +82,14 @@ class JavaTypeModel {
 	
 	def getProperties() {
 		properties
+	}
+	
+	def getReferences() {
+		references
+	}
+	
+	def boolean isPrimitiveOrString(Class<?> type) {
+		type.isPrimitive || type == String
 	}
 }
 
