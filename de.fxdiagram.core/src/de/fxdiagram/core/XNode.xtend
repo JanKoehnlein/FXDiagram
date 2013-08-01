@@ -6,14 +6,16 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
+import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
-import javafx.collections.ObservableList
 
 import static javafx.collections.FXCollections.*
+
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+
 class XNode extends XShape {
 
 	static int instanceCount
