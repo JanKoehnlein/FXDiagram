@@ -736,18 +736,17 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     Set<Entry<String,XNode>> _entrySet = this.nodeMap.entrySet();
     for (final Entry<String,XNode> entry : _entrySet) {
       {
-        String _key = entry.getKey();
-        String _filterString = this.getFilterString();
-        boolean _contains = _key.contains(_filterString);
-        if (_contains) {
-          XNode _value = entry.getValue();
-          boolean _notEquals = (!Objects.equal(currentVisibleNode, _value));
+        XNode _value = entry.getValue();
+        boolean _matchesFilter = this.matchesFilter(_value);
+        if (_matchesFilter) {
+          XNode _value_1 = entry.getValue();
+          boolean _notEquals = (!Objects.equal(currentVisibleNode, _value_1));
           if (_notEquals) {
-            XNode _value_1 = entry.getValue();
-            this.visibleNodes.add(currentVisibleIndex, _value_1);
+            XNode _value_2 = entry.getValue();
+            this.visibleNodes.add(currentVisibleIndex, _value_2);
           }
-          XNode _value_2 = entry.getValue();
-          final Bounds layoutBounds = _value_2.getLayoutBounds();
+          XNode _value_3 = entry.getValue();
+          final Bounds layoutBounds = _value_3.getLayoutBounds();
           double _width = layoutBounds.getWidth();
           double _max = Math.max(maxWidth, _width);
           maxWidth = _max;
@@ -767,8 +766,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
           }
           currentVisibleNode = _xifexpression;
         } else {
-          XNode _value_3 = entry.getValue();
-          boolean _equals = Objects.equal(currentVisibleNode, _value_3);
+          XNode _value_4 = entry.getValue();
+          boolean _equals = Objects.equal(currentVisibleNode, _value_4);
           if (_equals) {
             this.visibleNodes.remove(currentVisibleIndex);
             currentVisibleNode.setVisible(false);
@@ -867,6 +866,27 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     double _currentPosition = this.getCurrentPosition();
     this.setInterpolatedPosition(_currentPosition);
     this.spinToPosition.resetTargetPosition();
+  }
+  
+  protected boolean matchesFilter(final XNode node) {
+    boolean _xifexpression = false;
+    String _filterString = this.getFilterString();
+    String _lowerCase = _filterString.toLowerCase();
+    String _filterString_1 = this.getFilterString();
+    boolean _equals = Objects.equal(_lowerCase, _filterString_1);
+    if (_equals) {
+      String _key = node.getKey();
+      String _lowerCase_1 = _key.toLowerCase();
+      String _filterString_2 = this.getFilterString();
+      boolean _contains = _lowerCase_1.contains(_filterString_2);
+      _xifexpression = _contains;
+    } else {
+      String _key_1 = node.getKey();
+      String _filterString_3 = this.getFilterString();
+      boolean _contains_1 = _key_1.contains(_filterString_3);
+      _xifexpression = _contains_1;
+    }
+    return _xifexpression;
   }
   
   public void relocateButtons(final Button minusButton, final Button plusButton) {

@@ -4,13 +4,16 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.tools.XDiagramTool
 import javafx.animation.FadeTransition
+import javafx.animation.ParallelTransition
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.value.ChangeListener
 import javafx.event.EventHandler
+import javafx.geometry.Bounds
+import javafx.geometry.HPos
 import javafx.geometry.Pos
+import javafx.geometry.VPos
 import javafx.scene.Group
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -20,21 +23,17 @@ import javafx.scene.input.ScrollEvent
 import javafx.scene.input.SwipeEvent
 
 import static java.lang.Math.*
-import javafx.geometry.HPos
-import javafx.geometry.VPos
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.binding.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
-import javafx.geometry.Bounds
-import javafx.animation.ParallelTransition
 
 abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	@FxProperty @ReadOnly boolean isActive = false
 
 	@FxProperty Label filterLabel
-	
+
 	@FxProperty String filterString = ''
 
 	@FxProperty double layoutDistance = 40
@@ -53,7 +52,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	protected XNodeChooserTransition spinToPosition
 
-	EventHandler<SwipeEvent> swipeHandler
+	EventHandler<SwipeEvent> swipeHandler 
 
 	EventHandler<ScrollEvent> scrollHandler
 
@@ -123,8 +122,8 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		filterChangeListener = [ property, oldValue, newValue |
 			calculateVisibleNodes
 		]
-		if(hasButtons) {
-			val isVertical = layoutPosition.hpos != HPos.CENTER && layoutPosition.hpos != null 
+		if (hasButtons) {
+			val isVertical = layoutPosition.hpos != HPos.CENTER && layoutPosition.hpos != null
 			minusButton = new Button => [
 				id = if(isVertical) 'button-down' else 'button-right'
 				text = id
@@ -183,15 +182,15 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			return false
 		isActiveProperty.set(true)
 		getDiagram.getButtonLayer.children += group
-		if(minusButton != null) {
+		if (minusButton != null) {
 			getDiagram.getButtonLayer.children += plusButton
 			getDiagram.getButtonLayer.children += minusButton
-			val ChangeListener<Bounds> relocateButtons_0 = [
-				prop, oldVal, newVal | relocateButtons(minusButton, plusButton)
-			]  
-			val ChangeListener<Number> relocateButtons_1 = [
-				prop, oldVal, newVal | relocateButtons(minusButton, plusButton) 
-			]  
+			val ChangeListener<Bounds> relocateButtons_0 = [ prop, oldVal, newVal |
+				relocateButtons(minusButton, plusButton)
+			]
+			val ChangeListener<Number> relocateButtons_1 = [ prop, oldVal, newVal |
+				relocateButtons(minusButton, plusButton)
+			]
 			minusButton.layoutBoundsProperty.addListener(relocateButtons_0)
 			plusButton.layoutBoundsProperty.addListener(relocateButtons_0)
 			group.layoutBoundsProperty.addListener(relocateButtons_0)
@@ -204,7 +203,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			return false
 		}
 		blurDiagram = true
-		
+
 		if (getNodes.size != 0) {
 			interpolatedPosition = 0
 		}
@@ -240,11 +239,11 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		getDiagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)
 		spinToPosition.stop
 		blurDiagram = false
-		if(minusButton != null) {
+		if (minusButton != null) {
 			getDiagram.getButtonLayer.children -= minusButton
 			getDiagram.getButtonLayer.children -= plusButton
 		}
-		getDiagram.getButtonLayer.children -= group		
+		getDiagram.getButtonLayer.children -= group
 		true
 	}
 
@@ -269,7 +268,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	protected def setBlurDiagram(boolean isBlur) {
 		new ParallelTransition => [
-			for(layer: #[host.getRootDiagram.getNodeLayer, host.getRootDiagram.getConnectionLayer])
+			for (layer : #[host.getRootDiagram.getNodeLayer, host.getRootDiagram.getConnectionLayer])
 				children += new FadeTransition => [
 					node = layer
 					toValue = if(isBlur) 0.3 else 1
@@ -308,7 +307,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	def getDiagram() {
 		host.getDiagram
 	}
-	
+
 	protected def getGroup() {
 		group
 	}
@@ -320,7 +319,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		var maxWidth = 0.0
 		var maxHeight = 0.0
 		for (entry : nodeMap.entrySet) {
-			if (entry.key.contains(getFilterString)) {
+			if (entry.value.matchesFilter) {
 				if (currentVisibleNode != entry.value)
 					visibleNodes.add(currentVisibleIndex, entry.value)
 				val layoutBounds = entry.value.layoutBounds
@@ -352,6 +351,13 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		}
 		interpolatedPosition = getCurrentPosition
 		spinToPosition.resetTargetPosition
+	}
+
+	def protected matchesFilter(XNode node) {
+		if (filterString.toLowerCase == filterString)
+			node.key.toLowerCase.contains(filterString)
+		else
+			node.key.contains(filterString)
 	}
 
 	def void relocateButtons(Button minusButton, Button plusButton) {
