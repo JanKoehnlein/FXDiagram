@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.application.Platform
+import javafx.concurrent.Service
 import javafx.concurrent.Task
 import javafx.geometry.Pos
 import javafx.scene.Parent
@@ -19,8 +20,11 @@ import static extension javafx.util.Duration.*
 class LcarsField extends Parent {
 
 	FlowPane flowPane
+	
+	LcarsNode node
 
-	new(LcarsNode host, String name, String value) {
+	new(LcarsNode node, String name, String value) {
+		this.node = node
 		children += flowPane = new FlowPane => [
 			prefWrapLength = 150
 			children += new Text => [
@@ -47,16 +51,21 @@ class LcarsField extends Parent {
 			}
 			onMousePressed = [
 				allTextNodes.forEach[fill = RED]
-				new LcarsQueryTask(host, name, value).run
+				val Service<Void> service = [|
+					new LcarsQueryTask(this, name, value)
+				]
+				service.start
 			]
 			onMouseReleased = [
-				allTextNodes.head.fill = FLESH
-				allTextNodes.tail.forEach[fill = ORANGE]
 			]
 		]
 	}
+	
+	def getLcarsNode() {
+		node
+	}
 
-	protected def getAllTextNodes() {
+	def getAllTextNodes() {
 		flowPane.children.filter(Text)
 	}
 
@@ -82,11 +91,11 @@ class LcarsField extends Parent {
 
 class LcarsQueryTask extends Task<Void> {
 	
-	LcarsNode host
+	LcarsField host
 	String fieldName
 	String fieldValue
 	
-	new(LcarsNode host, String fieldName, String fieldValue) {
+	new(LcarsField host, String fieldName, String fieldValue) {
 		this.host = host
 		this.fieldName = fieldName
 		this.fieldValue = fieldValue
@@ -94,17 +103,20 @@ class LcarsQueryTask extends Task<Void> {
 	
 	override protected call() throws Exception {
 		val siblings = LcarsAccess.get.query(fieldName, fieldValue)
-		val chooser = new CoverFlowChooser(host, Pos.BOTTOM_CENTER)
+		val lcarsNode = host.lcarsNode
+		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
 		chooser += siblings
-			.filter[get('_id').toString != host.dbId]
+			.filter[get('_id').toString != lcarsNode.dbId]
 			.map[
 				new LcarsNode(it) => [
-					width = host.width
-					height = host.height
+					width = lcarsNode.width
+					height = lcarsNode.height
 				]
 			]
 		Platform.runLater [|
 			host.rootDiagram.currentTool = chooser
+			host.allTextNodes.head.fill = FLESH
+			host.allTextNodes.tail.forEach[fill = ORANGE]
 		]
 		null
 	}

@@ -9,6 +9,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -26,7 +28,10 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class LcarsField extends Parent {
   private FlowPane flowPane;
   
-  public LcarsField(final LcarsNode host, final String name, final String value) {
+  private LcarsNode node;
+  
+  public LcarsField(final LcarsNode node, final String name, final String value) {
+    this.node = node;
     ObservableList<Node> _children = this.getChildren();
     FlowPane _flowPane = new FlowPane();
     final Procedure1<FlowPane> _function = new Procedure1<FlowPane>() {
@@ -93,24 +98,20 @@ public class LcarsField extends Parent {
               }
             };
             IterableExtensions.<Text>forEach(_allTextNodes, _function);
-            LcarsQueryTask _lcarsQueryTask = new LcarsQueryTask(host, name, value);
-            _lcarsQueryTask.run();
+            final Service<Void> _function_1 = new Service<Void>() {
+              @Override
+              protected Task<Void> createTask() {
+                LcarsQueryTask _lcarsQueryTask = new LcarsQueryTask(LcarsField.this, name, value);
+                return _lcarsQueryTask;
+              }
+            };
+            final Service<Void> service = _function_1;
+            service.start();
           }
         };
         it.setOnMousePressed(_function_2);
         final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
           public void handle(final MouseEvent it) {
-            Iterable<Text> _allTextNodes = LcarsField.this.getAllTextNodes();
-            Text _head = IterableExtensions.<Text>head(_allTextNodes);
-            _head.setFill(LcarsExtensions.FLESH);
-            Iterable<Text> _allTextNodes_1 = LcarsField.this.getAllTextNodes();
-            Iterable<Text> _tail = IterableExtensions.<Text>tail(_allTextNodes_1);
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              public void apply(final Text it) {
-                it.setFill(LcarsExtensions.ORANGE);
-              }
-            };
-            IterableExtensions.<Text>forEach(_tail, _function);
           }
         };
         it.setOnMouseReleased(_function_3);
@@ -121,7 +122,11 @@ public class LcarsField extends Parent {
     _children.add(_flowPane_1);
   }
   
-  protected Iterable<Text> getAllTextNodes() {
+  public LcarsNode getLcarsNode() {
+    return this.node;
+  }
+  
+  public Iterable<Text> getAllTextNodes() {
     ObservableList<Node> _children = this.flowPane.getChildren();
     Iterable<Text> _filter = Iterables.<Text>filter(_children, Text.class);
     return _filter;
