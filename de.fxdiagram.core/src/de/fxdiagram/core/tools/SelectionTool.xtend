@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent
 import static extension de.fxdiagram.core.Extensions.*
 import de.fxdiagram.core.XControlPoint
 import javafx.scene.Scene
+import javafx.scene.input.MouseButton
 
 class SelectionTool implements XDiagramTool {
 
@@ -20,7 +21,7 @@ class SelectionTool implements XDiagramTool {
 	new(XRootDiagram rootDiagram) {
 		this.rootDiagram = rootDiagram
 		this.mousePressedHandler = [ event |
-			if(event.target instanceof Scene) {
+			if(event.target instanceof Scene && event.button == MouseButton.PRIMARY) {
 				selection.forEach[ selected = false ]
 			} else if (!(event.targetButton instanceof XRapidButton)) {
 				val targetShape = event.targetShape

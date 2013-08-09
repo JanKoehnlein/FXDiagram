@@ -9,12 +9,17 @@ import de.fxdiagram.core.tools.SelectionTool
 import de.fxdiagram.core.tools.XDiagramTool
 import java.util.List
 import javafx.scene.Group
+import javafx.scene.transform.Affine
+
+import static de.fxdiagram.core.binding.NumberExpressionExtensions.*
 
 @Logging
 class XRootDiagram extends XAbstractDiagram {
 	
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
+	
+	public static val MIN_SCALE = EPSILON
 	
 	@FxProperty double scale = 1.0
 	
@@ -26,10 +31,14 @@ class XRootDiagram extends XAbstractDiagram {
 	
 	XRoot root
 	
+	Affine canvasTransform
+	
 	new(XRoot root) {
 		this.root = root
 		children += nodeLayer
 		children += buttonLayer
+		canvasTransform = new Affine
+		transforms.setAll(canvasTransform)
 		defaultTool = new CompositeTool
 		defaultTool += new SelectionTool(this)
 		defaultTool += new DiagramGestureTool(this)
@@ -57,6 +66,10 @@ class XRootDiagram extends XAbstractDiagram {
 	
 	override getButtonLayer() {
 		buttonLayer
+	}
+		
+	def getCanvasTransform() {
+		canvasTransform
 	}
 		
 	def setCurrentTool(XDiagramTool tool) {

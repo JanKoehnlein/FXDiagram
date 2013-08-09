@@ -900,29 +900,24 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   public boolean getIsActive() {
     return this.isActiveProperty.get();
-    
   }
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
-    
   }
   
   private SimpleObjectProperty<Label> filterLabelProperty = new SimpleObjectProperty<Label>(this, "filterLabel");
   
   public Label getFilterLabel() {
     return this.filterLabelProperty.get();
-    
   }
   
   public void setFilterLabel(final Label filterLabel) {
     this.filterLabelProperty.set(filterLabel);
-    
   }
   
   public ObjectProperty<Label> filterLabelProperty() {
     return this.filterLabelProperty;
-    
   }
   
   private SimpleStringProperty filterStringProperty = new SimpleStringProperty(this, "filterString",_initFilterString());
@@ -933,17 +928,14 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   public String getFilterString() {
     return this.filterStringProperty.get();
-    
   }
   
   public void setFilterString(final String filterString) {
     this.filterStringProperty.set(filterString);
-    
   }
   
   public StringProperty filterStringProperty() {
     return this.filterStringProperty;
-    
   }
   
   private SimpleDoubleProperty layoutDistanceProperty = new SimpleDoubleProperty(this, "layoutDistance",_initLayoutDistance());
@@ -954,16 +946,13 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   public double getLayoutDistance() {
     return this.layoutDistanceProperty.get();
-    
   }
   
   public void setLayoutDistance(final double layoutDistance) {
     this.layoutDistanceProperty.set(layoutDistance);
-    
   }
   
   public DoubleProperty layoutDistanceProperty() {
     return this.layoutDistanceProperty;
-    
   }
 }

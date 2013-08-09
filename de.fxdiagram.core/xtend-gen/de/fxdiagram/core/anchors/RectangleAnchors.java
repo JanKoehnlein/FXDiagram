@@ -4,14 +4,13 @@ import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.NearestPointFinder;
+import de.fxdiagram.core.binding.NumberExpressionExtensions;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 
 @SuppressWarnings("all")
 public class RectangleAnchors implements Anchors {
-  private final static double EPSILON = 1e-6;
-  
   protected XNode host;
   
   public RectangleAnchors(final XNode host) {
@@ -37,7 +36,7 @@ public class RectangleAnchors implements Anchors {
       final NearestPointFinder finder = _nearestPointFinder;
       double _minus = (centerY - y);
       double _abs = Math.abs(_minus);
-      boolean _greaterThan = (_abs > RectangleAnchors.EPSILON);
+      boolean _greaterThan = (_abs > NumberExpressionExtensions.EPSILON);
       if (_greaterThan) {
         double _minY_1 = boundsInRootDiagram.getMinY();
         final double xTop = this.getXIntersection(_minY_1, centerX, centerY, x, y);
@@ -74,7 +73,7 @@ public class RectangleAnchors implements Anchors {
       }
       double _minus_1 = (centerX - x);
       double _abs_1 = Math.abs(_minus_1);
-      boolean _greaterThan_1 = (_abs_1 > RectangleAnchors.EPSILON);
+      boolean _greaterThan_1 = (_abs_1 > NumberExpressionExtensions.EPSILON);
       if (_greaterThan_1) {
         double _minX_3 = boundsInRootDiagram.getMinX();
         final double yLeft = this.getYIntersection(_minX_3, centerX, centerY, x, y);

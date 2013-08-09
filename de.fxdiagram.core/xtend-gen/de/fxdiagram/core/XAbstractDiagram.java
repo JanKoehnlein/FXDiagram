@@ -202,12 +202,10 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public ObservableList<XNode> getNodes() {
     return this.nodesProperty.get();
-    
   }
   
   public ListProperty<XNode> nodesProperty() {
     return this.nodesProperty;
-    
   }
   
   private SimpleListProperty<XConnection> connectionsProperty = new SimpleListProperty<XConnection>(this, "connections",_initConnections());
@@ -219,12 +217,10 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public ObservableList<XConnection> getConnections() {
     return this.connectionsProperty.get();
-    
   }
   
   public ListProperty<XConnection> connectionsProperty() {
     return this.connectionsProperty;
-    
   }
   
   private SimpleListProperty<XRapidButton> buttonsProperty = new SimpleListProperty<XRapidButton>(this, "buttons",_initButtons());
@@ -236,12 +232,10 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public ObservableList<XRapidButton> getButtons() {
     return this.buttonsProperty.get();
-    
   }
   
   public ListProperty<XRapidButton> buttonsProperty() {
     return this.buttonsProperty;
-    
   }
   
   private SimpleListProperty<XNestedDiagram> subDiagramsProperty = new SimpleListProperty<XNestedDiagram>(this, "subDiagrams",_initSubDiagrams());
@@ -253,23 +247,19 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public ObservableList<XNestedDiagram> getSubDiagrams() {
     return this.subDiagramsProperty.get();
-    
   }
   
   public ListProperty<XNestedDiagram> subDiagramsProperty() {
     return this.subDiagramsProperty;
-    
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   
   public boolean getIsActive() {
     return this.isActiveProperty.get();
-    
   }
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
-    
   }
 }

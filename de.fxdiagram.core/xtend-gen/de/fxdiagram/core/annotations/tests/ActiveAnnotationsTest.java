@@ -50,17 +50,14 @@ public class ActiveAnnotationsTest {
   
   public double getMyDouble() {
     return this.myDoubleProperty.get();
-    
   }
   
   public void setMyDouble(final double myDouble) {
     this.myDoubleProperty.set(myDouble);
-    
   }
   
   public DoubleProperty myDoubleProperty() {
     return this.myDoubleProperty;
-    
   }
   
   private SimpleStringProperty myStringProperty = new SimpleStringProperty(this, "myString",_initMyString());
@@ -71,17 +68,14 @@ public class ActiveAnnotationsTest {
   
   public String getMyString() {
     return this.myStringProperty.get();
-    
   }
   
   public void setMyString(final String myString) {
     this.myStringProperty.set(myString);
-    
   }
   
   public StringProperty myStringProperty() {
     return this.myStringProperty;
-    
   }
   
   private SimpleObjectProperty<Object> myObjectProperty = new SimpleObjectProperty<Object>(this, "myObject",_initMyObject());
@@ -93,17 +87,14 @@ public class ActiveAnnotationsTest {
   
   public Object getMyObject() {
     return this.myObjectProperty.get();
-    
   }
   
   public void setMyObject(final Object myObject) {
     this.myObjectProperty.set(myObject);
-    
   }
   
   public ObjectProperty<Object> myObjectProperty() {
     return this.myObjectProperty;
-    
   }
   
   private SimpleListProperty<Object> myListProperty = new SimpleListProperty<Object>(this, "myList",_initMyList());
@@ -115,12 +106,10 @@ public class ActiveAnnotationsTest {
   
   public ObservableList<Object> getMyList() {
     return this.myListProperty.get();
-    
   }
   
   public ListProperty<Object> myListProperty() {
     return this.myListProperty;
-    
   }
   
   private ReadOnlyDoubleWrapper myReadOnlyDoubleProperty = new ReadOnlyDoubleWrapper(this, "myReadOnlyDouble",_initMyReadOnlyDouble());
@@ -131,12 +120,10 @@ public class ActiveAnnotationsTest {
   
   public double getMyReadOnlyDouble() {
     return this.myReadOnlyDoubleProperty.get();
-    
   }
   
   public ReadOnlyDoubleProperty myReadOnlyDoubleProperty() {
     return this.myReadOnlyDoubleProperty.getReadOnlyProperty();
-    
   }
   
   private ReadOnlyStringWrapper myReadOnlyStringProperty = new ReadOnlyStringWrapper(this, "myReadOnlyString",_initMyReadOnlyString());
@@ -147,12 +134,10 @@ public class ActiveAnnotationsTest {
   
   public String getMyReadOnlyString() {
     return this.myReadOnlyStringProperty.get();
-    
   }
   
   public ReadOnlyStringProperty myReadOnlyStringProperty() {
     return this.myReadOnlyStringProperty.getReadOnlyProperty();
-    
   }
   
   private ReadOnlyObjectWrapper<Object> myReadOnlyObjectProperty = new ReadOnlyObjectWrapper<Object>(this, "myReadOnlyObject",_initMyReadOnlyObject());
@@ -164,12 +149,10 @@ public class ActiveAnnotationsTest {
   
   public Object getMyReadOnlyObject() {
     return this.myReadOnlyObjectProperty.get();
-    
   }
   
   public ReadOnlyObjectProperty<Object> myReadOnlyObjectProperty() {
     return this.myReadOnlyObjectProperty.getReadOnlyProperty();
-    
   }
   
   private ReadOnlyListWrapper<Object> myReadOnlyListProperty = new ReadOnlyListWrapper<Object>(this, "myReadOnlyList",_initMyReadOnlyList());
@@ -181,12 +164,10 @@ public class ActiveAnnotationsTest {
   
   public ObservableList<Object> getMyReadOnlyList() {
     return this.myReadOnlyListProperty.get();
-    
   }
   
   public ReadOnlyListProperty<Object> myReadOnlyListProperty() {
     return this.myReadOnlyListProperty.getReadOnlyProperty();
-    
   }
   
   private final static double DEFAULT_MYEAGERDOUBLE = 1.0;
@@ -195,12 +176,10 @@ public class ActiveAnnotationsTest {
   
   public double getMyEagerDouble() {
     return (this.myEagerDoubleProperty != null)? this.myEagerDoubleProperty.get() : DEFAULT_MYEAGERDOUBLE;
-    
   }
   
   public void setMyEagerDouble(final double myEagerDouble) {
     this.myEagerDoubleProperty().set(myEagerDouble);
-    
   }
   
   public DoubleProperty myEagerDoubleProperty() {
@@ -208,7 +187,6 @@ public class ActiveAnnotationsTest {
     	this.myEagerDoubleProperty = new SimpleDoubleProperty(this, "myEagerDouble", DEFAULT_MYEAGERDOUBLE);
     }
     return this.myEagerDoubleProperty;
-    
   }
   
   private final static String DEFAULT_MYEAGERSTRING = "";
@@ -217,12 +195,10 @@ public class ActiveAnnotationsTest {
   
   public String getMyEagerString() {
     return (this.myEagerStringProperty != null)? this.myEagerStringProperty.get() : DEFAULT_MYEAGERSTRING;
-    
   }
   
   public void setMyEagerString(final String myEagerString) {
     this.myEagerStringProperty().set(myEagerString);
-    
   }
   
   public StringProperty myEagerStringProperty() {
@@ -230,14 +206,12 @@ public class ActiveAnnotationsTest {
     	this.myEagerStringProperty = new SimpleStringProperty(this, "myEagerString", DEFAULT_MYEAGERSTRING);
     }
     return this.myEagerStringProperty;
-    
   }
   
   private SimpleObjectProperty<Object> myEagerObjectProperty;
   
   public Object getMyEagerObject() {
     return (this.myEagerObjectProperty != null)? this.myEagerObjectProperty.get() : this.myEagerObject;
-    
   }
   
   public void setMyEagerObject(final Object myEagerObject) {
@@ -246,7 +220,6 @@ public class ActiveAnnotationsTest {
     } else {
     	this.myEagerObject = myEagerObject;
     }
-    
   }
   
   public ObjectProperty<Object> myEagerObjectProperty() {
@@ -254,14 +227,12 @@ public class ActiveAnnotationsTest {
     	this.myEagerObjectProperty = new SimpleObjectProperty<Object>(this, "myEagerObject", this.myEagerObject);
     }
     return this.myEagerObjectProperty;
-    
   }
   
   private SimpleListProperty<Object> myEagerListProperty;
   
   public ObservableList<Object> getMyEagerList() {
     return (this.myEagerListProperty != null)? this.myEagerListProperty.get() : this.myEagerList;
-    
   }
   
   public ListProperty<Object> myEagerListProperty() {
@@ -269,7 +240,6 @@ public class ActiveAnnotationsTest {
     	this.myEagerListProperty = new SimpleListProperty<Object>(this, "myEagerList", this.myEagerList);
     }
     return this.myEagerListProperty;
-    
   }
   
   private SimpleDoubleProperty myImmutableDoubleProperty = new SimpleDoubleProperty(this, "myImmutableDouble",_initMyImmutableDouble());
@@ -280,17 +250,14 @@ public class ActiveAnnotationsTest {
   
   public double getMyImmutableDouble() {
     return this.myImmutableDoubleProperty.get();
-    
   }
   
   public void setMyImmutableDouble(final double myImmutableDouble) {
     this.myImmutableDoubleProperty.set(myImmutableDouble);
-    
   }
   
   public DoubleProperty myImmutableDoubleProperty() {
     return this.myImmutableDoubleProperty;
-    
   }
   
   private SimpleStringProperty myImmutableStringProperty = new SimpleStringProperty(this, "myImmutableString",_initMyImmutableString());
@@ -301,17 +268,14 @@ public class ActiveAnnotationsTest {
   
   public String getMyImmutableString() {
     return this.myImmutableStringProperty.get();
-    
   }
   
   public void setMyImmutableString(final String myImmutableString) {
     this.myImmutableStringProperty.set(myImmutableString);
-    
   }
   
   public StringProperty myImmutableStringProperty() {
     return this.myImmutableStringProperty;
-    
   }
   
   private SimpleObjectProperty<Object> myImmutableObjectProperty = new SimpleObjectProperty<Object>(this, "myImmutableObject",_initMyImmutableObject());
@@ -323,17 +287,14 @@ public class ActiveAnnotationsTest {
   
   public Object getMyImmutableObject() {
     return this.myImmutableObjectProperty.get();
-    
   }
   
   public void setMyImmutableObject(final Object myImmutableObject) {
     this.myImmutableObjectProperty.set(myImmutableObject);
-    
   }
   
   public ObjectProperty<Object> myImmutableObjectProperty() {
     return this.myImmutableObjectProperty;
-    
   }
   
   private SimpleListProperty<Object> myImmutableListProperty = new SimpleListProperty<Object>(this, "myImmutableList",_initMyImmutableList());
@@ -345,11 +306,9 @@ public class ActiveAnnotationsTest {
   
   public ObservableList<Object> getMyImmutableList() {
     return this.myImmutableListProperty.get();
-    
   }
   
   public ListProperty<Object> myImmutableListProperty() {
     return this.myImmutableListProperty;
-    
   }
 }

@@ -71,40 +71,33 @@ public abstract class XShape extends Parent implements XActivatable {
   
   public Node getNode() {
     return this.nodeProperty.get();
-    
   }
   
   public ReadOnlyObjectProperty<Node> nodeProperty() {
     return this.nodeProperty.getReadOnlyProperty();
-    
   }
   
   private SimpleBooleanProperty selectedProperty = new SimpleBooleanProperty(this, "selected");
   
   public boolean getSelected() {
     return this.selectedProperty.get();
-    
   }
   
   public void setSelected(final boolean selected) {
     this.selectedProperty.set(selected);
-    
   }
   
   public BooleanProperty selectedProperty() {
     return this.selectedProperty;
-    
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   
   public boolean getIsActive() {
     return this.isActiveProperty.get();
-    
   }
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
-    
   }
 }

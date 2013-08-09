@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -33,8 +34,16 @@ public class SelectionTool implements XDiagramTool {
     this.rootDiagram = rootDiagram;
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent event) {
+        boolean _and = false;
         EventTarget _target = event.getTarget();
-        if ((_target instanceof Scene)) {
+        if (!(_target instanceof Scene)) {
+          _and = false;
+        } else {
+          MouseButton _button = event.getButton();
+          boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
+          _and = ((_target instanceof Scene) && _equals);
+        }
+        if (_and) {
           Iterable<XShape> _selection = SelectionTool.this.getSelection();
           final Procedure1<XShape> _function = new Procedure1<XShape>() {
             public void apply(final XShape it) {
@@ -52,17 +61,17 @@ public class SelectionTool implements XDiagramTool {
               _isSelectable=targetShape.isSelectable();
             }
             if (_isSelectable) {
-              boolean _and = false;
+              boolean _and_1 = false;
               boolean _selected = targetShape.getSelected();
               boolean _not_1 = (!_selected);
               if (!_not_1) {
-                _and = false;
+                _and_1 = false;
               } else {
                 boolean _isShortcutDown = event.isShortcutDown();
                 boolean _not_2 = (!_isShortcutDown);
-                _and = (_not_1 && _not_2);
+                _and_1 = (_not_1 && _not_2);
               }
-              if (_and) {
+              if (_and_1) {
                 XShape _switchResult = null;
                 boolean _matched = false;
                 if (!_matched) {

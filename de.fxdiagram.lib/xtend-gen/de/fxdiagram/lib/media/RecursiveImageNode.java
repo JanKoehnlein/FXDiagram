@@ -174,67 +174,55 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   
   public Image getImage() {
     return this.imageProperty.get();
-    
   }
   
   public void setImage(final Image image) {
     this.imageProperty.set(image);
-    
   }
   
   public ObjectProperty<Image> imageProperty() {
     return this.imageProperty;
-    
   }
   
   private SimpleDoubleProperty xProperty = new SimpleDoubleProperty(this, "x");
   
   public double getX() {
     return this.xProperty.get();
-    
   }
   
   public void setX(final double x) {
     this.xProperty.set(x);
-    
   }
   
   public DoubleProperty xProperty() {
     return this.xProperty;
-    
   }
   
   private SimpleDoubleProperty yProperty = new SimpleDoubleProperty(this, "y");
   
   public double getY() {
     return this.yProperty.get();
-    
   }
   
   public void setY(final double y) {
     this.yProperty.set(y);
-    
   }
   
   public DoubleProperty yProperty() {
     return this.yProperty;
-    
   }
   
   private SimpleDoubleProperty scaleProperty = new SimpleDoubleProperty(this, "scale");
   
   public double getScale() {
     return this.scaleProperty.get();
-    
   }
   
   public void setScale(final double scale) {
     this.scaleProperty.set(scale);
-    
   }
   
   public DoubleProperty scaleProperty() {
     return this.scaleProperty;
-    
   }
 }

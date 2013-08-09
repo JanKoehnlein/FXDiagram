@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.binding.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.MenuTool;
@@ -17,6 +18,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
@@ -37,6 +40,8 @@ public class XRootDiagram extends XAbstractDiagram {
     }
   }.apply();
   
+  public final static double MIN_SCALE = NumberExpressionExtensions.EPSILON;
+  
   private List<XDiagramTool> tools = new Function0<List<XDiagramTool>>() {
     public List<XDiagramTool> apply() {
       ArrayList<XDiagramTool> _newArrayList = CollectionLiterals.<XDiagramTool>newArrayList();
@@ -50,12 +55,18 @@ public class XRootDiagram extends XAbstractDiagram {
   
   private XRoot root;
   
+  private Affine canvasTransform;
+  
   public XRootDiagram(final XRoot root) {
     this.root = root;
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.nodeLayer);
     ObservableList<Node> _children_1 = this.getChildren();
     _children_1.add(this.buttonLayer);
+    Affine _affine = new Affine();
+    this.canvasTransform = _affine;
+    ObservableList<Transform> _transforms = this.getTransforms();
+    _transforms.setAll(this.canvasTransform);
     CompositeTool _compositeTool = new CompositeTool();
     this.defaultTool = _compositeTool;
     SelectionTool _selectionTool = new SelectionTool(this);
@@ -88,6 +99,10 @@ public class XRootDiagram extends XAbstractDiagram {
   
   public Group getButtonLayer() {
     return this.buttonLayer;
+  }
+  
+  public Affine getCanvasTransform() {
+    return this.canvasTransform;
   }
   
   public void setCurrentTool(final XDiagramTool tool) {
@@ -134,16 +149,13 @@ public class XRootDiagram extends XAbstractDiagram {
   
   public double getScale() {
     return this.scaleProperty.get();
-    
   }
   
   public void setScale(final double scale) {
     this.scaleProperty.set(scale);
-    
   }
   
   public DoubleProperty scaleProperty() {
     return this.scaleProperty;
-    
   }
 }

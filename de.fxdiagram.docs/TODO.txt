@@ -2,7 +2,6 @@ BUG
 - populate menu
 - chooser isVertical
 - choose connections instead of nodes?
-- hide lag in LCARS
 
 ENHANCEMENT
 - Open subdiagram
@@ -28,4 +27,5 @@ DONE
 - eliminated connection layer
 - click on nothing should deselect all
 - use real bounds for aux lines
+- hide lag in LCARS
 

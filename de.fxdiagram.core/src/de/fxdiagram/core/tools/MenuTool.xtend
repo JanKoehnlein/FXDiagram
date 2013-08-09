@@ -1,25 +1,23 @@
 package de.fxdiagram.core.tools
 
-import com.google.common.base.Charsets
-import com.google.common.io.Files
 import de.fxdiagram.core.XRootDiagram
-import de.fxdiagram.core.export.SvgExporter
-import de.fxdiagram.core.layout.Layouter
+import de.fxdiagram.core.tools.actions.CenterAction
+import de.fxdiagram.core.tools.actions.ExitAction
+import de.fxdiagram.core.tools.actions.ExportSvgAction
+import de.fxdiagram.core.tools.actions.LayoutAction
 import eu.hansolo.enzo.radialmenu.MenuItem
 import eu.hansolo.enzo.radialmenu.Options
 import eu.hansolo.enzo.radialmenu.RadialMenu
 import eu.hansolo.enzo.radialmenu.RadialMenu.State
-import java.io.File
 import javafx.event.EventHandler
 import javafx.scene.Group
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
-
-import static extension javafx.util.Duration.*
-import javafx.scene.input.MouseButton
+import de.fxdiagram.core.tools.actions.DiagramAction
 
 class MenuTool implements XDiagramTool {
 
@@ -35,26 +33,34 @@ class MenuTool implements XDiagramTool {
 	new(XRootDiagram diagram) {
 		this.diagram = diagram
 		keyHandler = [
-			switch code {
+			val DiagramAction action = switch code {
+				case KeyCode.C:
+					if (shortcutDown) {
+						consume
+						new CenterAction
+					}
 				case KeyCode.E:
 					if (shortcutDown) {
-						doExportSvg
 						consume
+						new ExportSvgAction
 					}
 				case KeyCode.L:
 					if (shortcutDown) {
-						doLayout
 						consume
+						new LayoutAction
 					}
 				case KeyCode.Q:
 					if (shortcutDown) {
-						doExit
+						new ExitAction
 					}
 				case KeyCode.ESCAPE: {
-					closeMenu
 					consume
+					closeMenu
+					null
 				}
+				default: null
 			}
+			action?.perform(diagram)
 		]
 		menu = new RadialMenu(
 			new Options => [
@@ -64,7 +70,7 @@ class MenuTool implements XDiagramTool {
 				buttonSize = 72
 				buttonAlpha = 1.0
 			],
-			#[EJECT, GRAPH, CAMERA, PHOTO //, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
+			#[EJECT, GRAPH, CAMERA, PHOTO, SELECTION1 //, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
 //				TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, SELECTION1, SELECTION2
 			].
 				map [ s |
@@ -102,16 +108,21 @@ class MenuTool implements XDiagramTool {
 				onMenuCloseFinished = [
 					closeMenu
 					if (selection != null) {
-						switch selection.symbol {
+						val DiagramAction action = switch selection.symbol {
 							case GRAPH:
-								doLayout
+								new LayoutAction
 							case CAMERA:
-								doExportSvg
+								new ExportSvgAction
 							case EJECT:
-								doExit
-							default:
+								new ExitAction
+							case SELECTION1:
+								new CenterAction
+							default: {
 								println("Unhandled menu item " + selection)
+								null								
+							}
 						}
+						action?.perform(diagram)
 					}
 					selection = null
 				]
@@ -136,18 +147,5 @@ class MenuTool implements XDiagramTool {
 		diagram.scene.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
 		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		true
-	}
-
-	def doLayout() {
-		new Layouter().layout(diagram, 2.seconds)
-	}
-
-	def doExportSvg() {
-		val svgCode = new SvgExporter().toSvg(diagram)
-		Files.write(svgCode, new File("Diagram.svg"), Charsets.UTF_8)
-	}
-
-	def doExit() {
-		System.exit(0)
 	}
 }

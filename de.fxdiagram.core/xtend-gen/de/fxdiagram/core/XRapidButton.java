@@ -233,11 +233,9 @@ public class XRapidButton extends Parent implements XActivatable {
   
   public boolean getIsActive() {
     return this.isActiveProperty.get();
-    
   }
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
-    
   }
 }

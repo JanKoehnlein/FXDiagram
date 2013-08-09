@@ -6,10 +6,9 @@ import javafx.geometry.Point2D
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.Extensions.*
+import static de.fxdiagram.core.binding.NumberExpressionExtensions.*
 
 class RectangleAnchors implements Anchors {
-
-	static val double EPSILON = 1e-6
 
 	protected XNode host
 

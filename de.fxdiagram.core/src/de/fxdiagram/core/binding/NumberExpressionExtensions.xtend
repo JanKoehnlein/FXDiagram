@@ -6,7 +6,7 @@ import javafx.beans.binding.NumberExpressionBase
 
 class NumberExpressionExtensions {
 		
-	static double EPSILON = 1e-9
+	public static double EPSILON = 1e-9
 	
 	@Pure
 	def static operator_lessThan(NumberExpressionBase a, ObservableNumberValue b) {

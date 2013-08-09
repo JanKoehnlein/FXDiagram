@@ -8,7 +8,7 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class NumberExpressionExtensions {
-  private static double EPSILON = 1e-9;
+  public static double EPSILON = 1e-9;
   
   @Pure
   public static BooleanBinding operator_lessThan(final NumberExpressionBase a, final ObservableNumberValue b) {

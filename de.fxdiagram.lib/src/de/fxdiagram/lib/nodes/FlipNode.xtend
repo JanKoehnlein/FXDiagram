@@ -10,6 +10,8 @@ import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
 
+import static de.fxdiagram.core.binding.NumberExpressionExtensions.*
+
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
@@ -34,7 +36,7 @@ class FlipNode extends Parent {
 				val clickInLocal = getCurrentVisible.sceneToLocal(clickInScene)
 				val center = boundsInLocal.center
 				val direction = new Point3D(clickInLocal.x - center.x, clickInLocal.y - center.y, 0)
-				val turnAxis = if (direction.x * direction.x + direction.y * direction.y < 1E-6)
+				val turnAxis = if (direction.x * direction.x + direction.y * direction.y < EPSILON)
 						new Point3D(1, 0, 0)
 					else if (direction.x.abs > direction.y.abs)
 						new Point3D(0, direction.y, 0)

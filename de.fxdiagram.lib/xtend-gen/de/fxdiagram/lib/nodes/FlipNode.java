@@ -1,6 +1,7 @@
 package de.fxdiagram.lib.nodes;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.binding.NumberExpressionExtensions;
 import de.fxdiagram.core.geometry.BoundsExtensions;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
@@ -83,7 +84,7 @@ public class FlipNode extends Parent {
           double _y_3 = direction.getY();
           double _multiply_1 = (_y_2 * _y_3);
           double _plus = (_multiply + _multiply_1);
-          boolean _lessThan = (_plus < 1E-6);
+          boolean _lessThan = (_plus < NumberExpressionExtensions.EPSILON);
           if (_lessThan) {
             Point3D _point3D_1 = new Point3D(1, 0, 0);
             _xifexpression = _point3D_1;

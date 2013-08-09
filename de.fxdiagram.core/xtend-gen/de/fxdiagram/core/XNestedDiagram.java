@@ -339,17 +339,14 @@ public class XNestedDiagram extends XAbstractDiagram {
   
   public double getWidth() {
     return this.widthProperty.get();
-    
   }
   
   public void setWidth(final double width) {
     this.widthProperty.set(width);
-    
   }
   
   public DoubleProperty widthProperty() {
     return this.widthProperty;
-    
   }
   
   private SimpleDoubleProperty heightProperty = new SimpleDoubleProperty(this, "height",_initHeight());
@@ -360,16 +357,13 @@ public class XNestedDiagram extends XAbstractDiagram {
   
   public double getHeight() {
     return this.heightProperty.get();
-    
   }
   
   public void setHeight(final double height) {
     this.heightProperty.set(height);
-    
   }
   
   public DoubleProperty heightProperty() {
     return this.heightProperty;
-    
   }
 }

@@ -155,33 +155,27 @@ public class XConnectionLabel extends XShape {
   
   public XConnection getConnection() {
     return this.connectionProperty.get();
-    
   }
   
   public void setConnection(final XConnection connection) {
     this.connectionProperty.set(connection);
-    
   }
   
   public ObjectProperty<XConnection> connectionProperty() {
     return this.connectionProperty;
-    
   }
   
   private SimpleObjectProperty<Text> textProperty = new SimpleObjectProperty<Text>(this, "text");
   
   public Text getText() {
     return this.textProperty.get();
-    
   }
   
   public void setText(final Text text) {
     this.textProperty.set(text);
-    
   }
   
   public ObjectProperty<Text> textProperty() {
     return this.textProperty;
-    
   }
 }

@@ -434,23 +434,19 @@ public class ConnectionRouter implements XActivatable {
   
   public ObservableList<XControlPoint> getControlPoints() {
     return this.controlPointsProperty.get();
-    
   }
   
   public ReadOnlyListProperty<XControlPoint> controlPointsProperty() {
     return this.controlPointsProperty.getReadOnlyProperty();
-    
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   
   public boolean getIsActive() {
     return this.isActiveProperty.get();
-    
   }
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
-    
   }
 }
