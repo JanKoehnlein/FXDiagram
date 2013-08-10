@@ -2,10 +2,10 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
-import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagramChildrenListener;
 import de.fxdiagram.core.XNestedDiagram;
 import de.fxdiagram.core.XNode;
@@ -27,9 +27,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -156,41 +154,10 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
     return this.auxiliaryLinesSupport;
   }
   
-  public Iterable<XShape> getAllShapes() {
-    ObservableList<XNode> _nodes = this.getNodes();
-    ObservableList<XConnection> _connections = this.getConnections();
-    Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
-    ObservableList<XConnection> _connections_1 = this.getConnections();
-    final Function1<XConnection,XConnectionLabel> _function = new Function1<XConnection,XConnectionLabel>() {
-      public XConnectionLabel apply(final XConnection it) {
-        XConnectionLabel _label = it.getLabel();
-        return _label;
-      }
-    };
-    List<XConnectionLabel> _map = ListExtensions.<XConnection, XConnectionLabel>map(_connections_1, _function);
-    Iterable<XConnectionLabel> _filterNull = IterableExtensions.<XConnectionLabel>filterNull(_map);
-    Iterable<XShape> _plus_1 = Iterables.<XShape>concat(_plus, _filterNull);
-    ObservableList<XConnection> _connections_2 = this.getConnections();
-    final Function1<XConnection,ObservableList<XControlPoint>> _function_1 = new Function1<XConnection,ObservableList<XControlPoint>>() {
-      public ObservableList<XControlPoint> apply(final XConnection it) {
-        ObservableList<XControlPoint> _controlPoints = it.getControlPoints();
-        return _controlPoints;
-      }
-    };
-    List<ObservableList<XControlPoint>> _map_1 = ListExtensions.<XConnection, ObservableList<XControlPoint>>map(_connections_2, _function_1);
-    Iterable<XControlPoint> _flatten = Iterables.<XControlPoint>concat(_map_1);
-    Iterable<XShape> _plus_2 = Iterables.<XShape>concat(_plus_1, _flatten);
-    ObservableList<XNestedDiagram> _subDiagrams = this.getSubDiagrams();
-    final Function1<XNestedDiagram,Iterable<XShape>> _function_2 = new Function1<XNestedDiagram,Iterable<XShape>>() {
-      public Iterable<XShape> apply(final XNestedDiagram it) {
-        Iterable<XShape> _allShapes = it.getAllShapes();
-        return _allShapes;
-      }
-    };
-    List<Iterable<XShape>> _map_2 = ListExtensions.<XNestedDiagram, Iterable<XShape>>map(_subDiagrams, _function_2);
-    Iterable<XShape> _flatten_1 = Iterables.<XShape>concat(_map_2);
-    Iterable<XShape> _plus_3 = Iterables.<XShape>concat(_plus_2, _flatten_1);
-    return _plus_3;
+  public Iterable<? extends XShape> getAllShapes() {
+    Iterable<? extends Node> _allChildren = Extensions.getAllChildren(this);
+    Iterable<XShape> _filter = Iterables.<XShape>filter(_allChildren, XShape.class);
+    return _filter;
   }
   
   private SimpleListProperty<XNode> nodesProperty = new SimpleListProperty<XNode>(this, "nodes",_initNodes());
@@ -202,10 +169,12 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public ObservableList<XNode> getNodes() {
     return this.nodesProperty.get();
+    
   }
   
   public ListProperty<XNode> nodesProperty() {
     return this.nodesProperty;
+    
   }
   
   private SimpleListProperty<XConnection> connectionsProperty = new SimpleListProperty<XConnection>(this, "connections",_initConnections());
@@ -217,10 +186,12 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public ObservableList<XConnection> getConnections() {
     return this.connectionsProperty.get();
+    
   }
   
   public ListProperty<XConnection> connectionsProperty() {
     return this.connectionsProperty;
+    
   }
   
   private SimpleListProperty<XRapidButton> buttonsProperty = new SimpleListProperty<XRapidButton>(this, "buttons",_initButtons());
@@ -232,10 +203,12 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public ObservableList<XRapidButton> getButtons() {
     return this.buttonsProperty.get();
+    
   }
   
   public ListProperty<XRapidButton> buttonsProperty() {
     return this.buttonsProperty;
+    
   }
   
   private SimpleListProperty<XNestedDiagram> subDiagramsProperty = new SimpleListProperty<XNestedDiagram>(this, "subDiagrams",_initSubDiagrams());
@@ -247,19 +220,23 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   
   public ObservableList<XNestedDiagram> getSubDiagrams() {
     return this.subDiagramsProperty.get();
+    
   }
   
   public ListProperty<XNestedDiagram> subDiagramsProperty() {
     return this.subDiagramsProperty;
+    
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   
   public boolean getIsActive() {
     return this.isActiveProperty.get();
+    
   }
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
+    
   }
 }

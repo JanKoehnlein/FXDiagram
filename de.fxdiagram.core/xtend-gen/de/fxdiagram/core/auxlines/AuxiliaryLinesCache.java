@@ -20,7 +20,6 @@ import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
-import javafx.scene.Parent;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -134,9 +133,8 @@ public class AuxiliaryLinesCache {
   public Iterable<AuxiliaryLine> getAuxiliaryLines(final XNode node) {
     Iterable<AuxiliaryLine> _xblockexpression = null;
     {
-      Parent _parent = node.getParent();
-      Bounds _snapBoundsInParent = node.getSnapBoundsInParent();
-      final Bounds boundsInDiagram = Extensions.localToDiagram(_parent, _snapBoundsInParent);
+      Bounds _snapBounds = node.getSnapBounds();
+      final Bounds boundsInDiagram = Extensions.localToDiagram(node, _snapBounds);
       double _minX = boundsInDiagram.getMinX();
       Collection<AuxiliaryLine> _byPosition = this.leftMap.getByPosition(_minX);
       Iterable<AuxiliaryLine> _atLeastTwo = this.atLeastTwo(_byPosition);
@@ -209,9 +207,8 @@ public class AuxiliaryLinesCache {
   }
   
   public void updateNode(final XNode node) {
-    Parent _parent = node.getParent();
-    Bounds _snapBoundsInParent = node.getSnapBoundsInParent();
-    final Bounds boundsInDiagram = Extensions.localToDiagram(_parent, _snapBoundsInParent);
+    Bounds _snapBounds = node.getSnapBounds();
+    final Bounds boundsInDiagram = Extensions.localToDiagram(node, _snapBounds);
     double _minX = boundsInDiagram.getMinX();
     NodeLine _nodeLine = new NodeLine(_minX, 
       Orientation.VERTICAL, node, boundsInDiagram);

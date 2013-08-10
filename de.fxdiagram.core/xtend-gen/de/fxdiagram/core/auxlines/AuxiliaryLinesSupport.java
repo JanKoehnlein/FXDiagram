@@ -32,7 +32,7 @@ public class AuxiliaryLinesSupport {
     _children.add(this.group);
   }
   
-  public void show(final Iterable<XShape> selection) {
+  public void show(final Iterable<? extends XShape> selection) {
     ObservableList<Node> _children = this.group.getChildren();
     _children.clear();
     final Iterable<XNode> selectedNodes = Iterables.<XNode>filter(selection, XNode.class);

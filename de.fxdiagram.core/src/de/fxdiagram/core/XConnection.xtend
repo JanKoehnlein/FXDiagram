@@ -70,14 +70,6 @@ class XConnection extends XShape {
 		]
 		if(label != null)
 			label.activate
-		selectedProperty.addListener [
-			prop, oldVal, newVal |
-			controlPointGroup.visible = newVal
-			if(newVal) {
-				source.toFront
-				target.toFront
-			}
-		]
 		connectionRouter.activate
 		updateShapes
 		parentProperty.addListener [
@@ -87,6 +79,14 @@ class XConnection extends XShape {
 				target.incomingConnections.remove(this)
 			}
 		]
+	}
+	
+	override selectionFeedback(boolean isSelected) {
+		controlPointGroup.visible = isSelected
+		if(isSelected) {
+			source.toFront
+			target.toFront
+		}
 	}
 	
 	def getConnectionRouter() {

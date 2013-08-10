@@ -2,6 +2,7 @@ package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.tools.XDiagramTool;
@@ -10,6 +11,8 @@ import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ExitAction;
 import de.fxdiagram.core.tools.actions.ExportSvgAction;
 import de.fxdiagram.core.tools.actions.LayoutAction;
+import de.fxdiagram.core.tools.actions.SelectAllAction;
+import de.fxdiagram.core.tools.actions.ZoomToFillAction;
 import eu.hansolo.enzo.radialmenu.MenuItem;
 import eu.hansolo.enzo.radialmenu.Options;
 import eu.hansolo.enzo.radialmenu.RadialMenu;
@@ -19,6 +22,7 @@ import eu.hansolo.enzo.radialmenu.RadialMenu.State;
 import eu.hansolo.enzo.radialmenu.Symbol.Type;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
@@ -31,12 +35,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
 
+@Logging
 @SuppressWarnings("all")
 public class MenuTool implements XDiagramTool {
   private XRootDiagram diagram;
@@ -60,16 +64,16 @@ public class MenuTool implements XDiagramTool {
         final KeyCode getCode = _code;
         boolean _matched = false;
         if (!_matched) {
-          if (Objects.equal(getCode,KeyCode.C)) {
+          if (Objects.equal(getCode,KeyCode.A)) {
             _matched=true;
-            CenterAction _xifexpression = null;
+            SelectAllAction _xifexpression = null;
             boolean _isShortcutDown = it.isShortcutDown();
             if (_isShortcutDown) {
-              CenterAction _xblockexpression = null;
+              SelectAllAction _xblockexpression = null;
               {
                 it.consume();
-                CenterAction _centerAction = new CenterAction();
-                _xblockexpression = (_centerAction);
+                SelectAllAction _selectAllAction = new SelectAllAction();
+                _xblockexpression = (_selectAllAction);
               }
               _xifexpression = _xblockexpression;
             }
@@ -77,16 +81,16 @@ public class MenuTool implements XDiagramTool {
           }
         }
         if (!_matched) {
-          if (Objects.equal(getCode,KeyCode.E)) {
+          if (Objects.equal(getCode,KeyCode.C)) {
             _matched=true;
-            ExportSvgAction _xifexpression_1 = null;
+            CenterAction _xifexpression_1 = null;
             boolean _isShortcutDown_1 = it.isShortcutDown();
             if (_isShortcutDown_1) {
-              ExportSvgAction _xblockexpression_1 = null;
+              CenterAction _xblockexpression_1 = null;
               {
                 it.consume();
-                ExportSvgAction _exportSvgAction = new ExportSvgAction();
-                _xblockexpression_1 = (_exportSvgAction);
+                CenterAction _centerAction = new CenterAction();
+                _xblockexpression_1 = (_centerAction);
               }
               _xifexpression_1 = _xblockexpression_1;
             }
@@ -94,16 +98,16 @@ public class MenuTool implements XDiagramTool {
           }
         }
         if (!_matched) {
-          if (Objects.equal(getCode,KeyCode.L)) {
+          if (Objects.equal(getCode,KeyCode.E)) {
             _matched=true;
-            LayoutAction _xifexpression_2 = null;
+            ExportSvgAction _xifexpression_2 = null;
             boolean _isShortcutDown_2 = it.isShortcutDown();
             if (_isShortcutDown_2) {
-              LayoutAction _xblockexpression_2 = null;
+              ExportSvgAction _xblockexpression_2 = null;
               {
                 it.consume();
-                LayoutAction _layoutAction = new LayoutAction();
-                _xblockexpression_2 = (_layoutAction);
+                ExportSvgAction _exportSvgAction = new ExportSvgAction();
+                _xblockexpression_2 = (_exportSvgAction);
               }
               _xifexpression_2 = _xblockexpression_2;
             }
@@ -111,27 +115,61 @@ public class MenuTool implements XDiagramTool {
           }
         }
         if (!_matched) {
-          if (Objects.equal(getCode,KeyCode.Q)) {
+          if (Objects.equal(getCode,KeyCode.F)) {
             _matched=true;
-            ExitAction _xifexpression_3 = null;
+            ZoomToFillAction _xifexpression_3 = null;
             boolean _isShortcutDown_3 = it.isShortcutDown();
             if (_isShortcutDown_3) {
-              ExitAction _exitAction = new ExitAction();
-              _xifexpression_3 = _exitAction;
+              ZoomToFillAction _xblockexpression_3 = null;
+              {
+                it.consume();
+                ZoomToFillAction _zoomToFillAction = new ZoomToFillAction();
+                _xblockexpression_3 = (_zoomToFillAction);
+              }
+              _xifexpression_3 = _xblockexpression_3;
             }
             _switchResult = _xifexpression_3;
           }
         }
         if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.L)) {
+            _matched=true;
+            LayoutAction _xifexpression_4 = null;
+            boolean _isShortcutDown_4 = it.isShortcutDown();
+            if (_isShortcutDown_4) {
+              LayoutAction _xblockexpression_4 = null;
+              {
+                it.consume();
+                LayoutAction _layoutAction = new LayoutAction();
+                _xblockexpression_4 = (_layoutAction);
+              }
+              _xifexpression_4 = _xblockexpression_4;
+            }
+            _switchResult = _xifexpression_4;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.Q)) {
+            _matched=true;
+            ExitAction _xifexpression_5 = null;
+            boolean _isShortcutDown_5 = it.isShortcutDown();
+            if (_isShortcutDown_5) {
+              ExitAction _exitAction = new ExitAction();
+              _xifexpression_5 = _exitAction;
+            }
+            _switchResult = _xifexpression_5;
+          }
+        }
+        if (!_matched) {
           if (Objects.equal(getCode,KeyCode.ESCAPE)) {
             _matched=true;
-            DiagramAction _xblockexpression_3 = null;
+            DiagramAction _xblockexpression_5 = null;
             {
               it.consume();
               MenuTool.this.closeMenu();
-              _xblockexpression_3 = (null);
+              _xblockexpression_5 = (null);
             }
-            _switchResult = _xblockexpression_3;
+            _switchResult = _xblockexpression_5;
           }
         }
         if (!_matched) {
@@ -173,7 +211,7 @@ public class MenuTool implements XDiagramTool {
         return _doubleArrow;
       }
     };
-    List<MenuItem> _map = ListExtensions.<Type, MenuItem>map(Collections.<Type>unmodifiableList(Lists.<Type>newArrayList(Type.EJECT, Type.GRAPH, Type.CAMERA, Type.PHOTO, Type.SELECTION1)), _function_2);
+    List<MenuItem> _map = ListExtensions.<Type, MenuItem>map(Collections.<Type>unmodifiableList(Lists.<Type>newArrayList(Type.EJECT, Type.GRAPH, Type.CAMERA, Type.SELECTION1, Type.SELECTION2, Type.ZOOM_IN)), _function_2);
     RadialMenu _radialMenu = new RadialMenu(_doubleArrow, _map);
     this.menu = _radialMenu;
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
@@ -271,15 +309,29 @@ public class MenuTool implements XDiagramTool {
                     if (!_matched) {
                       if (Objects.equal(_switchValue,Type.SELECTION1)) {
                         _matched=true;
+                        SelectAllAction _selectAllAction = new SelectAllAction();
+                        _switchResult = _selectAllAction;
+                      }
+                    }
+                    if (!_matched) {
+                      if (Objects.equal(_switchValue,Type.SELECTION2)) {
+                        _matched=true;
                         CenterAction _centerAction = new CenterAction();
                         _switchResult = _centerAction;
+                      }
+                    }
+                    if (!_matched) {
+                      if (Objects.equal(_switchValue,Type.ZOOM_IN)) {
+                        _matched=true;
+                        ZoomToFillAction _zoomToFillAction = new ZoomToFillAction();
+                        _switchResult = _zoomToFillAction;
                       }
                     }
                     if (!_matched) {
                       DiagramAction _xblockexpression = null;
                       {
                         String _plus = ("Unhandled menu item " + MenuTool.this.selection);
-                        InputOutput.<String>println(_plus);
+                        MenuTool.LOG.warning(_plus);
                         _xblockexpression = (null);
                       }
                       _switchResult = _xblockexpression;
@@ -354,4 +406,7 @@ public class MenuTool implements XDiagramTool {
     }
     return _xblockexpression;
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.core.tools.MenuTool");
+    ;
 }

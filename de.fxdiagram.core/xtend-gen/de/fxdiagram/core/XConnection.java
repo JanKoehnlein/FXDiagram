@@ -17,7 +17,6 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -160,23 +159,10 @@ public class XConnection extends XShape {
     if (_notEquals) {
       this.label.activate();
     }
-    BooleanProperty _selectedProperty = this.selectedProperty();
-    final ChangeListener<Boolean> _function_2 = new ChangeListener<Boolean>() {
-      public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
-        XConnection.this.controlPointGroup.setVisible((newVal).booleanValue());
-        if ((newVal).booleanValue()) {
-          XNode _source = XConnection.this.getSource();
-          _source.toFront();
-          XNode _target = XConnection.this.getTarget();
-          _target.toFront();
-        }
-      }
-    };
-    _selectedProperty.addListener(_function_2);
     this.connectionRouter.activate();
     this.updateShapes();
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
-    final ChangeListener<Parent> _function_3 = new ChangeListener<Parent>() {
+    final ChangeListener<Parent> _function_2 = new ChangeListener<Parent>() {
       public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
         boolean _equals = Objects.equal(newValue, null);
         if (_equals) {
@@ -189,7 +175,17 @@ public class XConnection extends XShape {
         }
       }
     };
-    _parentProperty.addListener(_function_3);
+    _parentProperty.addListener(_function_2);
+  }
+  
+  public void selectionFeedback(final boolean isSelected) {
+    this.controlPointGroup.setVisible(isSelected);
+    if (isSelected) {
+      XNode _source = this.getSource();
+      _source.toFront();
+      XNode _target = this.getTarget();
+      _target.toFront();
+    }
   }
   
   public ConnectionRouter getConnectionRouter() {
@@ -477,34 +473,41 @@ public class XConnection extends XShape {
   
   public XNode getSource() {
     return this.sourceProperty.get();
+    
   }
   
   public void setSource(final XNode source) {
     this.sourceProperty.set(source);
+    
   }
   
   public ObjectProperty<XNode> sourceProperty() {
     return this.sourceProperty;
+    
   }
   
   private SimpleObjectProperty<XNode> targetProperty = new SimpleObjectProperty<XNode>(this, "target");
   
   public XNode getTarget() {
     return this.targetProperty.get();
+    
   }
   
   public void setTarget(final XNode target) {
     this.targetProperty.set(target);
+    
   }
   
   public ObjectProperty<XNode> targetProperty() {
     return this.targetProperty;
+    
   }
   
   private SimpleObjectProperty<XConnectionLabel> labelProperty;
   
   public XConnectionLabel getLabel() {
     return (this.labelProperty != null)? this.labelProperty.get() : this.label;
+    
   }
   
   public void setLabel(final XConnectionLabel label) {
@@ -513,6 +516,7 @@ public class XConnection extends XShape {
     } else {
     	this.label = label;
     }
+    
   }
   
   public ObjectProperty<XConnectionLabel> labelProperty() {
@@ -520,6 +524,7 @@ public class XConnection extends XShape {
     	this.labelProperty = new SimpleObjectProperty<XConnectionLabel>(this, "label", this.label);
     }
     return this.labelProperty;
+    
   }
   
   private SimpleObjectProperty<XConnectionKind> kindProperty = new SimpleObjectProperty<XConnectionKind>(this, "kind",_initKind());
@@ -530,14 +535,17 @@ public class XConnection extends XShape {
   
   public XConnectionKind getKind() {
     return this.kindProperty.get();
+    
   }
   
   public void setKind(final XConnectionKind kind) {
     this.kindProperty.set(kind);
+    
   }
   
   public ObjectProperty<XConnectionKind> kindProperty() {
     return this.kindProperty;
+    
   }
   
   private SimpleDoubleProperty strokeWidthProperty = new SimpleDoubleProperty(this, "strokeWidth",_initStrokeWidth());
@@ -548,13 +556,16 @@ public class XConnection extends XShape {
   
   public double getStrokeWidth() {
     return this.strokeWidthProperty.get();
+    
   }
   
   public void setStrokeWidth(final double strokeWidth) {
     this.strokeWidthProperty.set(strokeWidth);
+    
   }
   
   public DoubleProperty strokeWidthProperty() {
     return this.strokeWidthProperty;
+    
   }
 }

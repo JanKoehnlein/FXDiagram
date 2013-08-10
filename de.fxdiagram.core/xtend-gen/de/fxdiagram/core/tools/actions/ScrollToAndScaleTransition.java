@@ -64,6 +64,10 @@ public class ScrollToAndScaleTransition extends Transition {
     this.setCycleDuration(_millis);
   }
   
+  public void setDuration(final Duration duration) {
+    this.setCycleDuration(duration);
+  }
+  
   protected void interpolate(final double frac) {
     double _minus = (1 - frac);
     double _multiply = (_minus * this.fromScale);

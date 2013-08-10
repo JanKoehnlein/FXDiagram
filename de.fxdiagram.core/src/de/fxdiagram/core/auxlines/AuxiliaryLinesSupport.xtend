@@ -16,7 +16,7 @@ class AuxiliaryLinesSupport {
 		diagram.buttonLayer.children += group
 	}
 	
-	def show(Iterable<XShape> selection) {
+	def show(Iterable<? extends XShape> selection) {
 		group.children.clear()
 		val selectedNodes = selection.filter(XNode)
 		if(selectedNodes.size == 1) {

@@ -8,6 +8,7 @@ import javafx.scene.transform.Affine
 import javafx.scene.transform.Transform
 
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import javafx.scene.Parent
 
 class Extensions {
 
@@ -107,6 +108,10 @@ class Extensions {
 			XRapidButton: it
 			default: getContainerButton(parent)
 		}
+	}
+	
+	def static Iterable<? extends Node> getAllChildren(Parent node) {
+		node.childrenUnmodifiable + node.childrenUnmodifiable.filter(Parent).map[allChildren].flatten
 	}
 
 }

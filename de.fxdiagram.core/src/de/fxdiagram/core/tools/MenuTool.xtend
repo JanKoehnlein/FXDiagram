@@ -18,7 +18,11 @@ import javafx.scene.input.MouseEvent
 
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
 import de.fxdiagram.core.tools.actions.DiagramAction
+import de.fxdiagram.core.tools.actions.ZoomToFillAction
+import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.core.tools.actions.SelectAllAction
 
+@Logging
 class MenuTool implements XDiagramTool {
 
 	XRootDiagram diagram
@@ -34,6 +38,11 @@ class MenuTool implements XDiagramTool {
 		this.diagram = diagram
 		keyHandler = [
 			val DiagramAction action = switch code {
+				case KeyCode.A:
+					if (shortcutDown) {
+						consume
+						new SelectAllAction
+					}
 				case KeyCode.C:
 					if (shortcutDown) {
 						consume
@@ -43,6 +52,11 @@ class MenuTool implements XDiagramTool {
 					if (shortcutDown) {
 						consume
 						new ExportSvgAction
+					}
+				case KeyCode.F:
+					if (shortcutDown) {
+						consume
+						new ZoomToFillAction
 					}
 				case KeyCode.L:
 					if (shortcutDown) {
@@ -70,8 +84,8 @@ class MenuTool implements XDiagramTool {
 				buttonSize = 72
 				buttonAlpha = 1.0
 			],
-			#[EJECT, GRAPH, CAMERA, PHOTO, SELECTION1 //, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
-//				TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, SELECTION1, SELECTION2
+			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN//, PHOTO, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
+//				TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, 
 			].
 				map [ s |
 					new MenuItem => [
@@ -116,9 +130,13 @@ class MenuTool implements XDiagramTool {
 							case EJECT:
 								new ExitAction
 							case SELECTION1:
+								new SelectAllAction
+							case SELECTION2:
 								new CenterAction
+							case ZOOM_IN:
+								new ZoomToFillAction
 							default: {
-								println("Unhandled menu item " + selection)
+								LOG.warning("Unhandled menu item " + selection)
 								null								
 							}
 						}

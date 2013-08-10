@@ -154,7 +154,7 @@ public class Main extends Application {
       _nodes_4.add(movie);
       ImageCache _get = ImageCache.get();
       Image _image = _get.getImage("media/seltsam.jpg");
-      RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_image, 10, 0, 0.5);
+      RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_image, 10, 0, 0.3);
       final Procedure1<RecursiveImageNode> _function_5 = new Procedure1<RecursiveImageNode>() {
         public void apply(final RecursiveImageNode it) {
           it.setWidth(120);

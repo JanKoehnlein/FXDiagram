@@ -7,14 +7,14 @@ import static java.lang.Math.*
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 
-class CenterAction implements DiagramAction {
+class ZoomToFillAction implements DiagramAction {
 	
 	override perform(XRootDiagram diagram) {
-		val selectionBounds = diagram.selection.map[localToRootDiagram(boundsInLocal)].reduce[a,b|a+b]
+		val selectionBounds = diagram.selection.map[localToRootDiagram(snapBounds)].reduce[a,b|a+b]
 		if(selectionBounds != null) {
-			val targetScale = min(1, 
-					min(diagram.scene.width / selectionBounds.width, 
-						diagram.scene.height / selectionBounds.height))
+			val targetScale =  
+					max(diagram.scene.width / selectionBounds.width, 
+						diagram.scene.height / selectionBounds.height)
 			new ScrollToAndScaleTransition(diagram, selectionBounds.center, targetScale).play
 		}
 	}

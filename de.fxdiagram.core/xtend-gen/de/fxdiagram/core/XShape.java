@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
@@ -40,9 +41,13 @@ public abstract class XShape extends Parent implements XActivatable {
         if ((newValue).booleanValue()) {
           XShape.this.toFront();
         }
+        XShape.this.selectionFeedback((newValue).booleanValue());
       }
     };
     this.selectedProperty.addListener(_function);
+  }
+  
+  public void selectionFeedback(final boolean isSelected) {
   }
   
   protected abstract void doActivate();
@@ -65,39 +70,51 @@ public abstract class XShape extends Parent implements XActivatable {
     }
   }
   
+  public Bounds getSnapBounds() {
+    Bounds _boundsInLocal = this.getBoundsInLocal();
+    return _boundsInLocal;
+  }
+  
   public abstract MoveBehavior<? extends XShape> getMoveBehavior();
   
   private ReadOnlyObjectWrapper<Node> nodeProperty = new ReadOnlyObjectWrapper<Node>(this, "node");
   
   public Node getNode() {
     return this.nodeProperty.get();
+    
   }
   
   public ReadOnlyObjectProperty<Node> nodeProperty() {
     return this.nodeProperty.getReadOnlyProperty();
+    
   }
   
   private SimpleBooleanProperty selectedProperty = new SimpleBooleanProperty(this, "selected");
   
   public boolean getSelected() {
     return this.selectedProperty.get();
+    
   }
   
   public void setSelected(final boolean selected) {
     this.selectedProperty.set(selected);
+    
   }
   
   public BooleanProperty selectedProperty() {
     return this.selectedProperty;
+    
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   
   public boolean getIsActive() {
     return this.isActiveProperty.get();
+    
   }
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
+    
   }
 }

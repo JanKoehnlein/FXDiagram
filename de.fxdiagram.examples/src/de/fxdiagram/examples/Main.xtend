@@ -102,7 +102,7 @@ class Main extends Application {
 		]
 		diagram.nodes += movie
 
-		val recursive = new RecursiveImageNode(ImageCache.get.getImage("media/seltsam.jpg"), 10, 0, 0.5) => [
+		val recursive = new RecursiveImageNode(ImageCache.get.getImage("media/seltsam.jpg"), 10, 0, 0.3) => [
 			width = 120
 			height = 90
 		]

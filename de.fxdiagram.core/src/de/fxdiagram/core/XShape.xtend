@@ -28,7 +28,11 @@ abstract class XShape extends Parent implements XActivatable {
 			property, oldVlaue, newValue |
 			if(newValue)
 				toFront
+			selectionFeedback(newValue)
 		]
+	}
+	
+	def void selectionFeedback(boolean isSelected) {
 	}
 	
 	protected def void doActivate()
@@ -46,6 +50,11 @@ abstract class XShape extends Parent implements XActivatable {
 			selected = !selected
 		}
 	}
+	
+	def getSnapBounds() {
+		boundsInLocal
+	}
+	
 	
 	def MoveBehavior<? extends XShape> getMoveBehavior()
 }

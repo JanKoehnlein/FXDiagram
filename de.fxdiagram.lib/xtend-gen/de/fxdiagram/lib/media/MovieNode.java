@@ -289,9 +289,11 @@ public class MovieNode extends XNode {
   
   public Media getMedia() {
     return this.mediaProperty.get();
+    
   }
   
   public ReadOnlyObjectProperty<Media> mediaProperty() {
     return this.mediaProperty.getReadOnlyProperty();
+    
   }
 }

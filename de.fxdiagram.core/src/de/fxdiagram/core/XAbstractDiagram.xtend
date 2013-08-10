@@ -12,6 +12,8 @@ import javafx.scene.Parent
 
 import static javafx.collections.FXCollections.*
 
+import static extension de.fxdiagram.core.Extensions.*
+
 abstract class XAbstractDiagram extends Parent implements XActivatable { 
 
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
@@ -74,10 +76,8 @@ abstract class XAbstractDiagram extends Parent implements XActivatable {
 		auxiliaryLinesSupport	
 	}
 	
-	def Iterable<XShape> getAllShapes() {
-		nodes 
-		+ connections + connections.map[label].filterNull + connections.map[controlPoints].flatten
-		+ subDiagrams.map[allShapes].flatten
+	def Iterable<? extends XShape> getAllShapes() {
+		allChildren.filter(XShape)
 	}
 }
 

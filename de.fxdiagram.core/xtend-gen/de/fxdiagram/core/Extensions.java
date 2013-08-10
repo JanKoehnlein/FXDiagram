@@ -1,11 +1,13 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.geometry.TransformExtensions;
+import javafx.collections.ObservableList;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -14,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class Extensions {
@@ -277,5 +281,21 @@ public class Extensions {
       _switchResult = _containerButton;
     }
     return _switchResult;
+  }
+  
+  public static Iterable<? extends Node> getAllChildren(final Parent node) {
+    ObservableList<Node> _childrenUnmodifiable = node.getChildrenUnmodifiable();
+    ObservableList<Node> _childrenUnmodifiable_1 = node.getChildrenUnmodifiable();
+    Iterable<Parent> _filter = Iterables.<Parent>filter(_childrenUnmodifiable_1, Parent.class);
+    final Function1<Parent,Iterable<? extends Node>> _function = new Function1<Parent,Iterable<? extends Node>>() {
+      public Iterable<? extends Node> apply(final Parent it) {
+        Iterable<? extends Node> _allChildren = Extensions.getAllChildren(it);
+        return _allChildren;
+      }
+    };
+    Iterable<Iterable<? extends Node>> _map = IterableExtensions.<Parent, Iterable<? extends Node>>map(_filter, _function);
+    Iterable<Node> _flatten = Iterables.<Node>concat(_map);
+    Iterable<Node> _plus = Iterables.<Node>concat(_childrenUnmodifiable, _flatten);
+    return _plus;
   }
 }

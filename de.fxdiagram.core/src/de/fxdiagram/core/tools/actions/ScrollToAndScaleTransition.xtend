@@ -8,6 +8,7 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 import static extension javafx.util.Duration.*
+import javafx.util.Duration
 
 class ScrollToAndScaleTransition extends Transition {
 
@@ -32,6 +33,10 @@ class ScrollToAndScaleTransition extends Transition {
 					0.5 * diagram.scene.height - centerInScene.y + diagram.canvasTransform.ty)
 		diagram.canvasTransform.scale(1/rescale, 1/rescale)
 		cycleDuration = 500.millis
+	}
+	
+	def setDuration(Duration duration) {
+		cycleDuration = duration		
 	}
 	
 	override protected interpolate(double frac) {

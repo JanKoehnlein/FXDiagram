@@ -72,22 +72,23 @@ class XNode extends XShape {
 			node.effect = originalEffect
 		]
 		switch n:node { XActivatable: n.activate }
-		selectedProperty.addListener [ observable, oldValue, newValue |
-			if (newValue) {
-				effect = selectionEffect
-				scaleX = 1.05
-				scaleY = 1.05
-				(outgoingConnections + incomingConnections).forEach[toFront]
-			} else {
-				effect = null
-				scaleX = 1.0
-				scaleY = 1.0
-			}
-		]
+	}
+
+	override selectionFeedback(boolean isSelected) {
+		if (isSelected) {
+			effect = selectionEffect
+			scaleX = 1.05
+			scaleY = 1.05
+			(outgoingConnections + incomingConnections).forEach[toFront]
+		} else {
+			effect = null
+			scaleX = 1.0
+			scaleY = 1.0
+		}
 	}
 	
-	def getSnapBoundsInParent() {
-		localToParent(node.boundsInParent.scale(1 / scaleX, 1 / scaleY))
+	override getSnapBounds() {
+		node.boundsInParent.scale(1 / scaleX, 1 / scaleY)
 	}
 
 	protected def setKey(String key) {

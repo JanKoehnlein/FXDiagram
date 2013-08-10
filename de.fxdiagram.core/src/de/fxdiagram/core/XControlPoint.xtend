@@ -56,23 +56,24 @@ class XControlPoint extends XShape {
 	}
 
 	override protected doActivate() {
-		selectedProperty.addListener [ prop, oldVal, newVal |
-			if (newVal)
-				switch type {
-					case CONTROL_POINT:
-						node.effect = new DropShadow
-					case INTERPOLATED:
-						(node as Circle).fill = Color.RED
-				}
-			else
-				switch type {
-					case CONTROL_POINT:
-						node.effect = null
-					case INTERPOLATED:
-						(node as Circle).fill = Color.WHITE
-				}
-		]
 		moveBehavior?.activate
+	}
+
+	override selectionFeedback(boolean isSelected) {
+		if (isSelected)
+			switch type {
+				case CONTROL_POINT:
+					node.effect = new DropShadow
+				case INTERPOLATED:
+					(node as Circle).fill = Color.RED
+			}
+		else
+			switch type {
+				case CONTROL_POINT:
+					node.effect = null
+				case INTERPOLATED:
+					(node as Circle).fill = Color.WHITE
+			}
 	}
 
 	override isSelectable() {

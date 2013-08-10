@@ -31,6 +31,7 @@ Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.layout,
  de.fxdiagram.core.services,
  de.fxdiagram.core.tools,
+ de.fxdiagram.core.tools.actions,
  de.fxdiagram.core.tools.chooser,
  de.fxdiagram.core.transform,
  icons

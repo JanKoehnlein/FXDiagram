@@ -32,9 +32,11 @@ public abstract class AbstractBehavior<T extends XShape> implements XActivatable
   
   public boolean getIsActive() {
     return this.isActiveProperty.get();
+    
   }
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
+    
   }
 }

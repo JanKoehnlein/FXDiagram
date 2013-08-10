@@ -42,7 +42,7 @@ class AuxiliaryLinesCache {
 	}
 
 	def getAuxiliaryLines(XNode node) {
-		val boundsInDiagram = node.parent.localToDiagram(node.snapBoundsInParent)
+		val boundsInDiagram = node.localToDiagram(node.snapBounds)
 		leftMap.getByPosition(boundsInDiagram.minX).atLeastTwo
 			+ centerXMap.getByPosition(0.5 * (boundsInDiagram.minX + boundsInDiagram.maxX)).atLeastTwo
 			+ rightMap.getByPosition(boundsInDiagram.maxX).atLeastTwo
@@ -76,7 +76,7 @@ class AuxiliaryLinesCache {
 	}
 	
 	def updateNode(XNode node) {
-		val boundsInDiagram = node.parent.localToDiagram(node.snapBoundsInParent)
+		val boundsInDiagram = node.localToDiagram(node.snapBounds)
 		leftMap.add(
 			new NodeLine(
 				boundsInDiagram.minX,

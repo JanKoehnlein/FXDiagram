@@ -9,15 +9,12 @@ import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.geometry.BoundsExtensions;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -125,33 +122,30 @@ public class XNode extends XShape {
         ((XActivatable)_xActivatable).activate();
       }
     }
-    BooleanProperty _selectedProperty = this.selectedProperty();
-    final ChangeListener<Boolean> _function_2 = new ChangeListener<Boolean>() {
-      public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
-        if ((newValue).booleanValue()) {
-          XNode.this.setEffect(XNode.this.selectionEffect);
-          XNode.this.setScaleX(1.05);
-          XNode.this.setScaleY(1.05);
-          ObservableList<XConnection> _outgoingConnections = XNode.this.getOutgoingConnections();
-          ObservableList<XConnection> _incomingConnections = XNode.this.getIncomingConnections();
-          Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
-          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-            public void apply(final XConnection it) {
-              it.toFront();
-            }
-          };
-          IterableExtensions.<XConnection>forEach(_plus, _function);
-        } else {
-          XNode.this.setEffect(null);
-          XNode.this.setScaleX(1.0);
-          XNode.this.setScaleY(1.0);
-        }
-      }
-    };
-    _selectedProperty.addListener(_function_2);
   }
   
-  public Bounds getSnapBoundsInParent() {
+  public void selectionFeedback(final boolean isSelected) {
+    if (isSelected) {
+      this.setEffect(this.selectionEffect);
+      this.setScaleX(1.05);
+      this.setScaleY(1.05);
+      ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
+      ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
+      Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
+      final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+        public void apply(final XConnection it) {
+          it.toFront();
+        }
+      };
+      IterableExtensions.<XConnection>forEach(_plus, _function);
+    } else {
+      this.setEffect(null);
+      this.setScaleX(1.0);
+      this.setScaleY(1.0);
+    }
+  }
+  
+  public Bounds getSnapBounds() {
     Node _node = this.getNode();
     Bounds _boundsInParent = _node.getBoundsInParent();
     double _scaleX = this.getScaleX();
@@ -159,8 +153,7 @@ public class XNode extends XShape {
     double _scaleY = this.getScaleY();
     double _divide_1 = (1 / _scaleY);
     BoundingBox _scale = BoundsExtensions.scale(_boundsInParent, _divide, _divide_1);
-    Bounds _localToParent = this.localToParent(_scale);
-    return _localToParent;
+    return _scale;
   }
   
   protected void setKey(final String key) {
@@ -259,10 +252,12 @@ public class XNode extends XShape {
   
   public double getWidth() {
     return (this.widthProperty != null)? this.widthProperty.get() : DEFAULT_WIDTH;
+    
   }
   
   public void setWidth(final double width) {
     this.widthProperty().set(width);
+    
   }
   
   public DoubleProperty widthProperty() {
@@ -270,6 +265,7 @@ public class XNode extends XShape {
     	this.widthProperty = new SimpleDoubleProperty(this, "width", DEFAULT_WIDTH);
     }
     return this.widthProperty;
+    
   }
   
   private final static double DEFAULT_HEIGHT = 0d;
@@ -278,10 +274,12 @@ public class XNode extends XShape {
   
   public double getHeight() {
     return (this.heightProperty != null)? this.heightProperty.get() : DEFAULT_HEIGHT;
+    
   }
   
   public void setHeight(final double height) {
     this.heightProperty().set(height);
+    
   }
   
   public DoubleProperty heightProperty() {
@@ -289,16 +287,19 @@ public class XNode extends XShape {
     	this.heightProperty = new SimpleDoubleProperty(this, "height", DEFAULT_HEIGHT);
     }
     return this.heightProperty;
+    
   }
   
   private ReadOnlyStringWrapper keyProperty = new ReadOnlyStringWrapper(this, "key");
   
   public String getKey() {
     return this.keyProperty.get();
+    
   }
   
   public ReadOnlyStringProperty keyProperty() {
     return this.keyProperty.getReadOnlyProperty();
+    
   }
   
   private SimpleListProperty<XConnection> incomingConnectionsProperty = new SimpleListProperty<XConnection>(this, "incomingConnections",_initIncomingConnections());
@@ -310,10 +311,12 @@ public class XNode extends XShape {
   
   public ObservableList<XConnection> getIncomingConnections() {
     return this.incomingConnectionsProperty.get();
+    
   }
   
   public ListProperty<XConnection> incomingConnectionsProperty() {
     return this.incomingConnectionsProperty;
+    
   }
   
   private SimpleListProperty<XConnection> outgoingConnectionsProperty = new SimpleListProperty<XConnection>(this, "outgoingConnections",_initOutgoingConnections());
@@ -325,9 +328,11 @@ public class XNode extends XShape {
   
   public ObservableList<XConnection> getOutgoingConnections() {
     return this.outgoingConnectionsProperty.get();
+    
   }
   
   public ListProperty<XConnection> outgoingConnectionsProperty() {
     return this.outgoingConnectionsProperty;
+    
   }
 }

@@ -16,13 +16,13 @@ import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
-public class CenterAction implements DiagramAction {
+public class ZoomToFillAction implements DiagramAction {
   public void perform(final XRootDiagram diagram) {
     Iterable<? extends XShape> _selection = this.getSelection(diagram);
     final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
       public Bounds apply(final XShape it) {
-        Bounds _boundsInLocal = it.getBoundsInLocal();
-        Bounds _localToRootDiagram = Extensions.localToRootDiagram(it, _boundsInLocal);
+        Bounds _snapBounds = it.getSnapBounds();
+        Bounds _localToRootDiagram = Extensions.localToRootDiagram(it, _snapBounds);
         return _localToRootDiagram;
       }
     };
@@ -44,8 +44,7 @@ public class CenterAction implements DiagramAction {
       double _height = _scene_1.getHeight();
       double _height_1 = selectionBounds.getHeight();
       double _divide_1 = (_height / _height_1);
-      double _min = Math.min(_divide, _divide_1);
-      final double targetScale = Math.min(1, _min);
+      final double targetScale = Math.max(_divide, _divide_1);
       Point2D _center = BoundsExtensions.center(selectionBounds);
       ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(diagram, _center, targetScale);
       _scrollToAndScaleTransition.play();

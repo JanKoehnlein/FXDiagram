@@ -4,15 +4,16 @@ BUG
 - choose connections instead of nodes?
 
 ENHANCEMENT
+- Make auxlines magnetic
 - Open subdiagram
 - Embed more JavaFX demos in XNodes
 - Play diagram
-- Center node
-- Zoom node
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
 - more auxiliary lines
+- ScrollAndScale should reset rotation
 
 MINOR
+- fix connection stroke width
 - SVG export: arc size
 - Transparent stage?
 - can't set size of browser node
@@ -28,4 +29,7 @@ DONE
 - click on nothing should deselect all
 - use real bounds for aux lines
 - hide lag in LCARS
+- Center node
+- select all CMD-A and menu
+- Zoom node
 

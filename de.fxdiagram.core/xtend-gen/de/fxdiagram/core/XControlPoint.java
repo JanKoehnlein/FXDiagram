@@ -7,9 +7,6 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.geometry.TransformExtensions;
 import de.fxdiagram.core.services.ImageCache;
 import java.util.List;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -101,50 +98,47 @@ public class XControlPoint extends XShape {
   }
   
   protected void doActivate() {
-    BooleanProperty _selectedProperty = this.selectedProperty();
-    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-      public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
-        if ((newVal).booleanValue()) {
-          final XControlPointType type = XControlPoint.this.type;
-          boolean _matched = false;
-          if (!_matched) {
-            if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
-              _matched=true;
-              Node _node = XControlPoint.this.getNode();
-              DropShadow _dropShadow = new DropShadow();
-              _node.setEffect(_dropShadow);
-            }
-          }
-          if (!_matched) {
-            if (Objects.equal(type,XControlPointType.INTERPOLATED)) {
-              _matched=true;
-              Node _node_1 = XControlPoint.this.getNode();
-              ((Circle) _node_1).setFill(Color.RED);
-            }
-          }
-        } else {
-          final XControlPointType type_1 = XControlPoint.this.type;
-          boolean _matched_1 = false;
-          if (!_matched_1) {
-            if (Objects.equal(type_1,XControlPointType.CONTROL_POINT)) {
-              _matched_1=true;
-              Node _node_2 = XControlPoint.this.getNode();
-              _node_2.setEffect(null);
-            }
-          }
-          if (!_matched_1) {
-            if (Objects.equal(type_1,XControlPointType.INTERPOLATED)) {
-              _matched_1=true;
-              Node _node_3 = XControlPoint.this.getNode();
-              ((Circle) _node_3).setFill(Color.WHITE);
-            }
-          }
-        }
-      }
-    };
-    _selectedProperty.addListener(_function);
     if (this.moveBehavior!=null) {
       this.moveBehavior.activate();
+    }
+  }
+  
+  public void selectionFeedback(final boolean isSelected) {
+    if (isSelected) {
+      final XControlPointType type = this.type;
+      boolean _matched = false;
+      if (!_matched) {
+        if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
+          _matched=true;
+          Node _node = this.getNode();
+          DropShadow _dropShadow = new DropShadow();
+          _node.setEffect(_dropShadow);
+        }
+      }
+      if (!_matched) {
+        if (Objects.equal(type,XControlPointType.INTERPOLATED)) {
+          _matched=true;
+          Node _node_1 = this.getNode();
+          ((Circle) _node_1).setFill(Color.RED);
+        }
+      }
+    } else {
+      final XControlPointType type_1 = this.type;
+      boolean _matched_1 = false;
+      if (!_matched_1) {
+        if (Objects.equal(type_1,XControlPointType.CONTROL_POINT)) {
+          _matched_1=true;
+          Node _node_2 = this.getNode();
+          _node_2.setEffect(null);
+        }
+      }
+      if (!_matched_1) {
+        if (Objects.equal(type_1,XControlPointType.INTERPOLATED)) {
+          _matched_1=true;
+          Node _node_3 = this.getNode();
+          ((Circle) _node_3).setFill(Color.WHITE);
+        }
+      }
     }
   }
   
