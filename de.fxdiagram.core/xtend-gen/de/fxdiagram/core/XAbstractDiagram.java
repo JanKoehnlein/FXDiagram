@@ -154,7 +154,7 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
     return this.auxiliaryLinesSupport;
   }
   
-  public Iterable<? extends XShape> getAllShapes() {
+  public Iterable<XShape> getAllShapes() {
     Iterable<? extends Node> _allChildren = Extensions.getAllChildren(this);
     Iterable<XShape> _filter = Iterables.<XShape>filter(_allChildren, XShape.class);
     return _filter;

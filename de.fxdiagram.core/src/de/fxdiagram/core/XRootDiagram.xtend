@@ -91,4 +91,8 @@ class XRootDiagram extends XAbstractDiagram {
 	def restoreDefaultTool() {
 		currentTool = defaultTool
 	}
+	
+	def getCurrentSelection() {
+		allShapes.filter[isSelectable && selected]
+	}
 }

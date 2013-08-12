@@ -76,7 +76,7 @@ abstract class XAbstractDiagram extends Parent implements XActivatable {
 		auxiliaryLinesSupport	
 	}
 	
-	def Iterable<? extends XShape> getAllShapes() {
+	def Iterable<XShape> getAllShapes() {
 		allChildren.filter(XShape)
 	}
 }

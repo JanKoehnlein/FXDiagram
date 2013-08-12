@@ -1,14 +1,16 @@
 package de.fxdiagram.core.tools
 
+import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.core.XShape
+import java.util.Collection
 import javafx.event.EventHandler
+import javafx.scene.Scene
+import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 import static extension de.fxdiagram.core.Extensions.*
-import de.fxdiagram.core.XControlPoint
-import javafx.scene.Scene
-import javafx.scene.input.MouseButton
 
 class SelectionTool implements XDiagramTool {
 
@@ -21,8 +23,9 @@ class SelectionTool implements XDiagramTool {
 	new(XRootDiagram rootDiagram) {
 		this.rootDiagram = rootDiagram
 		this.mousePressedHandler = [ event |
+			val selection = rootDiagram.currentSelection.toSet
 			if(event.target instanceof Scene && event.button == MouseButton.PRIMARY) {
-				selection.forEach[ selected = false ]
+				selection.deselect[true]
 			} else if (!(event.targetButton instanceof XRapidButton)) {
 				val targetShape = event.targetShape
 				if (targetShape?.isSelectable) {
@@ -31,11 +34,9 @@ class SelectionTool implements XDiagramTool {
 							XControlPoint: targetShape.parent.containerShape
 							default: null
 						}
-						selection.filter[it != skip].forEach[selected = false]						
+						selection.deselect[it != skip]
 					} 
-					selection.filter[it.diagram != targetShape.diagram].forEach [
-						selected = false
-					]
+					selection.deselect[it.diagram != targetShape.diagram]
 					if(event.shortcutDown)
 						targetShape.toggleSelect(event)
 					else 
@@ -49,9 +50,9 @@ class SelectionTool implements XDiagramTool {
 			}
 		]
 		this.mouseDraggedHandler = [
-			for (shape : selection) {
+			val selection = rootDiagram.currentSelection
+			for (shape : selection) 
 				shape?.moveBehavior?.mouseDragged(it)
-			}
 			rootDiagram.auxiliaryLinesSupport?.show(selection)				
 			consume
 		]
@@ -59,9 +60,16 @@ class SelectionTool implements XDiagramTool {
 			rootDiagram.auxiliaryLinesSupport?.hide()				
 		]
 	}
-
-	def getSelection() {
-		rootDiagram.allShapes.filter[isSelectable && selected]
+	
+	protected def deselect(Collection<XShape> selection, (XShape)=>boolean filter) {
+		val i = selection.iterator()
+		while(i.hasNext) {
+			val element = i.next
+			if(filter.apply(element)) {
+				element.selected = false				
+				i.remove
+			}
+		}
 	}
 
 	override activate() {

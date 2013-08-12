@@ -9,7 +9,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class SelectAllAction implements DiagramAction {
   public void perform(final XRootDiagram diagram) {
-    Iterable<? extends XShape> _allShapes = diagram.getAllShapes();
+    Iterable<XShape> _allShapes = diagram.getAllShapes();
     final Procedure1<XShape> _function = new Procedure1<XShape>() {
       public void apply(final XShape it) {
         boolean _isSelectable = it.isSelectable();
@@ -18,6 +18,6 @@ public class SelectAllAction implements DiagramAction {
         }
       }
     };
-    IterableExtensions.forEach(_allShapes, _function);
+    IterableExtensions.<XShape>forEach(_allShapes, _function);
   }
 }

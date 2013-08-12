@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.binding.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
@@ -22,6 +23,8 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @Logging
 @SuppressWarnings("all")
@@ -136,6 +139,25 @@ public class XRootDiagram extends XAbstractDiagram {
   
   public void restoreDefaultTool() {
     this.setCurrentTool(this.defaultTool);
+  }
+  
+  public Iterable<XShape> getCurrentSelection() {
+    Iterable<XShape> _allShapes = this.getAllShapes();
+    final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
+      public Boolean apply(final XShape it) {
+        boolean _and = false;
+        boolean _isSelectable = it.isSelectable();
+        if (!_isSelectable) {
+          _and = false;
+        } else {
+          boolean _selected = it.getSelected();
+          _and = (_isSelectable && _selected);
+        }
+        return Boolean.valueOf(_and);
+      }
+    };
+    Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_allShapes, _function);
+    return _filter;
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRootDiagram");
