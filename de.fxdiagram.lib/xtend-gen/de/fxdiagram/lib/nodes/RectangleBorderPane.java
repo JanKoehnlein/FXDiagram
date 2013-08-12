@@ -192,17 +192,14 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   
   public double getBorderWidth() {
     return this.borderWidthProperty.get();
-    
   }
   
   public void setBorderWidth(final double borderWidth) {
     this.borderWidthProperty.set(borderWidth);
-    
   }
   
   public DoubleProperty borderWidthProperty() {
     return this.borderWidthProperty;
-    
   }
   
   private SimpleDoubleProperty borderRadiusProperty = new SimpleDoubleProperty(this, "borderRadius",_initBorderRadius());
@@ -213,17 +210,14 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   
   public double getBorderRadius() {
     return this.borderRadiusProperty.get();
-    
   }
   
   public void setBorderRadius(final double borderRadius) {
     this.borderRadiusProperty.set(borderRadius);
-    
   }
   
   public DoubleProperty borderRadiusProperty() {
     return this.borderRadiusProperty;
-    
   }
   
   private SimpleObjectProperty<Insets> borderInsetsProperty = new SimpleObjectProperty<Insets>(this, "borderInsets",_initBorderInsets());
@@ -235,17 +229,14 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   
   public Insets getBorderInsets() {
     return this.borderInsetsProperty.get();
-    
   }
   
   public void setBorderInsets(final Insets borderInsets) {
     this.borderInsetsProperty.set(borderInsets);
-    
   }
   
   public ObjectProperty<Insets> borderInsetsProperty() {
     return this.borderInsetsProperty;
-    
   }
   
   private SimpleObjectProperty<Paint> borderPaintProperty = new SimpleObjectProperty<Paint>(this, "borderPaint",_initBorderPaint());
@@ -256,17 +247,14 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   
   public Paint getBorderPaint() {
     return this.borderPaintProperty.get();
-    
   }
   
   public void setBorderPaint(final Paint borderPaint) {
     this.borderPaintProperty.set(borderPaint);
-    
   }
   
   public ObjectProperty<Paint> borderPaintProperty() {
     return this.borderPaintProperty;
-    
   }
   
   private SimpleObjectProperty<Paint> backgroundPaintProperty = new SimpleObjectProperty<Paint>(this, "backgroundPaint",_initBackgroundPaint());
@@ -277,17 +265,14 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   
   public Paint getBackgroundPaint() {
     return this.backgroundPaintProperty.get();
-    
   }
   
   public void setBackgroundPaint(final Paint backgroundPaint) {
     this.backgroundPaintProperty.set(backgroundPaint);
-    
   }
   
   public ObjectProperty<Paint> backgroundPaintProperty() {
     return this.backgroundPaintProperty;
-    
   }
   
   private SimpleDoubleProperty backgroundRadiusProperty = new SimpleDoubleProperty(this, "backgroundRadius",_initBackgroundRadius());
@@ -298,16 +283,13 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   
   public double getBackgroundRadius() {
     return this.backgroundRadiusProperty.get();
-    
   }
   
   public void setBackgroundRadius(final double backgroundRadius) {
     this.backgroundRadiusProperty.set(backgroundRadius);
-    
   }
   
   public DoubleProperty backgroundRadiusProperty() {
     return this.backgroundRadiusProperty;
-    
   }
 }

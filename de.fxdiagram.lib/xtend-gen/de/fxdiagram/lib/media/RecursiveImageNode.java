@@ -25,6 +25,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
@@ -155,6 +156,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
               _widthProperty.bind(RecursiveImageNode.this.actualWidthProperty);
               DoubleProperty _heightProperty = it.heightProperty();
               _heightProperty.bind(RecursiveImageNode.this.actualHeightProperty);
+              it.setStrokeType(StrokeType.INSIDE);
             }
           };
           Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_1);
@@ -193,67 +195,55 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   
   public Image getImage() {
     return this.imageProperty.get();
-    
   }
   
   public void setImage(final Image image) {
     this.imageProperty.set(image);
-    
   }
   
   public ObjectProperty<Image> imageProperty() {
     return this.imageProperty;
-    
   }
   
   private SimpleDoubleProperty xProperty = new SimpleDoubleProperty(this, "x");
   
   public double getX() {
     return this.xProperty.get();
-    
   }
   
   public void setX(final double x) {
     this.xProperty.set(x);
-    
   }
   
   public DoubleProperty xProperty() {
     return this.xProperty;
-    
   }
   
   private SimpleDoubleProperty yProperty = new SimpleDoubleProperty(this, "y");
   
   public double getY() {
     return this.yProperty.get();
-    
   }
   
   public void setY(final double y) {
     this.yProperty.set(y);
-    
   }
   
   public DoubleProperty yProperty() {
     return this.yProperty;
-    
   }
   
   private SimpleDoubleProperty scaleProperty = new SimpleDoubleProperty(this, "scale");
   
   public double getScale() {
     return this.scaleProperty.get();
-    
   }
   
   public void setScale(final double scale) {
     this.scaleProperty.set(scale);
-    
   }
   
   public DoubleProperty scaleProperty() {
     return this.scaleProperty;
-    
   }
 }

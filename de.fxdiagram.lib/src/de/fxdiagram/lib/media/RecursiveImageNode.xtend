@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle
 import static extension de.fxdiagram.core.Extensions.*
 import static extension javafx.util.Duration.*
 import javafx.animation.Interpolator
+import javafx.scene.shape.StrokeType
 
 class RecursiveImageNode extends XNode implements SvgExportable {
 
@@ -74,6 +75,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 				y = 0
 				widthProperty.bind(actualWidthProperty)
 				heightProperty.bind(actualHeightProperty)
+				strokeType = StrokeType.INSIDE
 			]
 			updateActualDimension(imageView.boundsInLocal)
 			imageView.boundsInLocalProperty.addListener [

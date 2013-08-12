@@ -473,41 +473,34 @@ public class XConnection extends XShape {
   
   public XNode getSource() {
     return this.sourceProperty.get();
-    
   }
   
   public void setSource(final XNode source) {
     this.sourceProperty.set(source);
-    
   }
   
   public ObjectProperty<XNode> sourceProperty() {
     return this.sourceProperty;
-    
   }
   
   private SimpleObjectProperty<XNode> targetProperty = new SimpleObjectProperty<XNode>(this, "target");
   
   public XNode getTarget() {
     return this.targetProperty.get();
-    
   }
   
   public void setTarget(final XNode target) {
     this.targetProperty.set(target);
-    
   }
   
   public ObjectProperty<XNode> targetProperty() {
     return this.targetProperty;
-    
   }
   
   private SimpleObjectProperty<XConnectionLabel> labelProperty;
   
   public XConnectionLabel getLabel() {
     return (this.labelProperty != null)? this.labelProperty.get() : this.label;
-    
   }
   
   public void setLabel(final XConnectionLabel label) {
@@ -516,7 +509,6 @@ public class XConnection extends XShape {
     } else {
     	this.label = label;
     }
-    
   }
   
   public ObjectProperty<XConnectionLabel> labelProperty() {
@@ -524,7 +516,6 @@ public class XConnection extends XShape {
     	this.labelProperty = new SimpleObjectProperty<XConnectionLabel>(this, "label", this.label);
     }
     return this.labelProperty;
-    
   }
   
   private SimpleObjectProperty<XConnectionKind> kindProperty = new SimpleObjectProperty<XConnectionKind>(this, "kind",_initKind());
@@ -535,17 +526,14 @@ public class XConnection extends XShape {
   
   public XConnectionKind getKind() {
     return this.kindProperty.get();
-    
   }
   
   public void setKind(final XConnectionKind kind) {
     this.kindProperty.set(kind);
-    
   }
   
   public ObjectProperty<XConnectionKind> kindProperty() {
     return this.kindProperty;
-    
   }
   
   private SimpleDoubleProperty strokeWidthProperty = new SimpleDoubleProperty(this, "strokeWidth",_initStrokeWidth());
@@ -556,16 +544,13 @@ public class XConnection extends XShape {
   
   public double getStrokeWidth() {
     return this.strokeWidthProperty.get();
-    
   }
   
   public void setStrokeWidth(final double strokeWidth) {
     this.strokeWidthProperty.set(strokeWidth);
-    
   }
   
   public DoubleProperty strokeWidthProperty() {
     return this.strokeWidthProperty;
-    
   }
 }

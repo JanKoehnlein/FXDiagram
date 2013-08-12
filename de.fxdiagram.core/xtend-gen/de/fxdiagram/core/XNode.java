@@ -252,12 +252,10 @@ public class XNode extends XShape {
   
   public double getWidth() {
     return (this.widthProperty != null)? this.widthProperty.get() : DEFAULT_WIDTH;
-    
   }
   
   public void setWidth(final double width) {
     this.widthProperty().set(width);
-    
   }
   
   public DoubleProperty widthProperty() {
@@ -265,7 +263,6 @@ public class XNode extends XShape {
     	this.widthProperty = new SimpleDoubleProperty(this, "width", DEFAULT_WIDTH);
     }
     return this.widthProperty;
-    
   }
   
   private final static double DEFAULT_HEIGHT = 0d;
@@ -274,12 +271,10 @@ public class XNode extends XShape {
   
   public double getHeight() {
     return (this.heightProperty != null)? this.heightProperty.get() : DEFAULT_HEIGHT;
-    
   }
   
   public void setHeight(final double height) {
     this.heightProperty().set(height);
-    
   }
   
   public DoubleProperty heightProperty() {
@@ -287,19 +282,16 @@ public class XNode extends XShape {
     	this.heightProperty = new SimpleDoubleProperty(this, "height", DEFAULT_HEIGHT);
     }
     return this.heightProperty;
-    
   }
   
   private ReadOnlyStringWrapper keyProperty = new ReadOnlyStringWrapper(this, "key");
   
   public String getKey() {
     return this.keyProperty.get();
-    
   }
   
   public ReadOnlyStringProperty keyProperty() {
     return this.keyProperty.getReadOnlyProperty();
-    
   }
   
   private SimpleListProperty<XConnection> incomingConnectionsProperty = new SimpleListProperty<XConnection>(this, "incomingConnections",_initIncomingConnections());
@@ -311,12 +303,10 @@ public class XNode extends XShape {
   
   public ObservableList<XConnection> getIncomingConnections() {
     return this.incomingConnectionsProperty.get();
-    
   }
   
   public ListProperty<XConnection> incomingConnectionsProperty() {
     return this.incomingConnectionsProperty;
-    
   }
   
   private SimpleListProperty<XConnection> outgoingConnectionsProperty = new SimpleListProperty<XConnection>(this, "outgoingConnections",_initOutgoingConnections());
@@ -328,11 +318,9 @@ public class XNode extends XShape {
   
   public ObservableList<XConnection> getOutgoingConnections() {
     return this.outgoingConnectionsProperty.get();
-    
   }
   
   public ListProperty<XConnection> outgoingConnectionsProperty() {
     return this.outgoingConnectionsProperty;
-    
   }
 }

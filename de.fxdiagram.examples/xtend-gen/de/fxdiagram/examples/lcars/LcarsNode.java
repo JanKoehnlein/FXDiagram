@@ -687,16 +687,13 @@ public class LcarsNode extends XNode {
   
   public double getImageRatio() {
     return this.imageRatioProperty.get();
-    
   }
   
   public void setImageRatio(final double imageRatio) {
     this.imageRatioProperty.set(imageRatio);
-    
   }
   
   public DoubleProperty imageRatioProperty() {
     return this.imageRatioProperty;
-    
   }
 }
