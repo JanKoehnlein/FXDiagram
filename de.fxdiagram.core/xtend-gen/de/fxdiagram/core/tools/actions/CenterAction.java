@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.binding.NumberExpressionExtensions;
 import de.fxdiagram.core.geometry.BoundsExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
@@ -34,16 +35,32 @@ public class CenterAction implements DiagramAction {
       }
     };
     final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
+    boolean _and = false;
+    boolean _and_1 = false;
     boolean _notEquals = (!Objects.equal(selectionBounds, null));
-    if (_notEquals) {
+    if (!_notEquals) {
+      _and_1 = false;
+    } else {
+      double _width = selectionBounds.getWidth();
+      boolean _greaterThan = (_width > NumberExpressionExtensions.EPSILON);
+      _and_1 = (_notEquals && _greaterThan);
+    }
+    if (!_and_1) {
+      _and = false;
+    } else {
+      double _height = selectionBounds.getHeight();
+      boolean _greaterThan_1 = (_height > NumberExpressionExtensions.EPSILON);
+      _and = (_and_1 && _greaterThan_1);
+    }
+    if (_and) {
       Scene _scene = diagram.getScene();
-      double _width = _scene.getWidth();
-      double _width_1 = selectionBounds.getWidth();
-      double _divide = (_width / _width_1);
+      double _width_1 = _scene.getWidth();
+      double _width_2 = selectionBounds.getWidth();
+      double _divide = (_width_1 / _width_2);
       Scene _scene_1 = diagram.getScene();
-      double _height = _scene_1.getHeight();
-      double _height_1 = selectionBounds.getHeight();
-      double _divide_1 = (_height / _height_1);
+      double _height_1 = _scene_1.getHeight();
+      double _height_2 = selectionBounds.getHeight();
+      double _divide_1 = (_height_1 / _height_2);
       double _min = Math.min(_divide, _divide_1);
       final double targetScale = Math.min(1, _min);
       Point2D _center = BoundsExtensions.center(selectionBounds);

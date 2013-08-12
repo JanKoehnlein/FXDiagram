@@ -1,7 +1,6 @@
 package de.fxdiagram.core.tools
 
 import de.fxdiagram.core.XRootDiagram
-import de.fxdiagram.core.tools.actions.CenterAction
 import de.fxdiagram.core.tools.actions.ExitAction
 import de.fxdiagram.core.tools.actions.ExportSvgAction
 import de.fxdiagram.core.tools.actions.LayoutAction
@@ -17,10 +16,11 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
-import de.fxdiagram.core.tools.actions.DiagramAction
-import de.fxdiagram.core.tools.actions.ZoomToFillAction
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.tools.actions.SelectAllAction
+import de.fxdiagram.core.tools.actions.ZoomToFitAction
+import de.fxdiagram.core.tools.actions.CenterAction
+import de.fxdiagram.core.tools.actions.DiagramAction
 
 @Logging
 class MenuTool implements XDiagramTool {
@@ -56,7 +56,7 @@ class MenuTool implements XDiagramTool {
 				case KeyCode.F:
 					if (shortcutDown) {
 						consume
-						new ZoomToFillAction
+						new ZoomToFitAction
 					}
 				case KeyCode.L:
 					if (shortcutDown) {
@@ -134,7 +134,7 @@ class MenuTool implements XDiagramTool {
 							case SELECTION2:
 								new CenterAction
 							case ZOOM_IN:
-								new ZoomToFillAction
+								new ZoomToFitAction
 							default: {
 								LOG.warning("Unhandled menu item " + selection)
 								null								

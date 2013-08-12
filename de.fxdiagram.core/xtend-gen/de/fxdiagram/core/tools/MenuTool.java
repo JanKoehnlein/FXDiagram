@@ -12,7 +12,7 @@ import de.fxdiagram.core.tools.actions.ExitAction;
 import de.fxdiagram.core.tools.actions.ExportSvgAction;
 import de.fxdiagram.core.tools.actions.LayoutAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
-import de.fxdiagram.core.tools.actions.ZoomToFillAction;
+import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import eu.hansolo.enzo.radialmenu.MenuItem;
 import eu.hansolo.enzo.radialmenu.Options;
 import eu.hansolo.enzo.radialmenu.RadialMenu;
@@ -117,14 +117,14 @@ public class MenuTool implements XDiagramTool {
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.F)) {
             _matched=true;
-            ZoomToFillAction _xifexpression_3 = null;
+            ZoomToFitAction _xifexpression_3 = null;
             boolean _isShortcutDown_3 = it.isShortcutDown();
             if (_isShortcutDown_3) {
-              ZoomToFillAction _xblockexpression_3 = null;
+              ZoomToFitAction _xblockexpression_3 = null;
               {
                 it.consume();
-                ZoomToFillAction _zoomToFillAction = new ZoomToFillAction();
-                _xblockexpression_3 = (_zoomToFillAction);
+                ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
+                _xblockexpression_3 = (_zoomToFitAction);
               }
               _xifexpression_3 = _xblockexpression_3;
             }
@@ -323,8 +323,8 @@ public class MenuTool implements XDiagramTool {
                     if (!_matched) {
                       if (Objects.equal(_switchValue,Type.ZOOM_IN)) {
                         _matched=true;
-                        ZoomToFillAction _zoomToFillAction = new ZoomToFillAction();
-                        _switchResult = _zoomToFillAction;
+                        ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
+                        _switchResult = _zoomToFitAction;
                       }
                     }
                     if (!_matched) {
