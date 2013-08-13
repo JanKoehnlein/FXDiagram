@@ -40,6 +40,7 @@ import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
@@ -433,6 +434,7 @@ public class XConnection extends XShape {
     final double strokeInRoot = (0.5 * _plus);
     final Procedure1<Shape> _function = new Procedure1<Shape>() {
       public void apply(final Shape it) {
+        it.setStrokeLineCap(StrokeLineCap.ROUND);
         it.setStrokeWidth(strokeInRoot);
       }
     };

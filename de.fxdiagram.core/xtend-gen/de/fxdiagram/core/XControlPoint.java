@@ -4,20 +4,22 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.geometry.Point2DExtensions;
 import de.fxdiagram.core.geometry.TransformExtensions;
-import de.fxdiagram.core.services.ImageCache;
+import java.net.URL;
 import java.util.List;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -58,31 +60,23 @@ public class XControlPoint extends XShape {
       if (!_matched) {
         if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
           _matched=true;
-          ImageView _imageView = new ImageView();
-          final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
-            public void apply(final ImageView it) {
-              ImageCache _get = ImageCache.get();
-              Image _image = _get.getImage("icons/magnet.png");
-              it.setImage(_image);
-            }
-          };
-          ImageView _doubleArrow_1 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_1);
-          this.setNode(_doubleArrow_1);
+          Node _newMagnet = this.newMagnet();
+          this.setNode(_newMagnet);
         }
       }
       if (!_matched) {
         if (Objects.equal(type,XControlPointType.INTERPOLATED)) {
           _matched=true;
           Circle _circle_1 = new Circle();
-          final Procedure1<Circle> _function_2 = new Procedure1<Circle>() {
+          final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
             public void apply(final Circle it) {
               it.setRadius(5);
               it.setStroke(Color.RED);
               it.setFill(Color.WHITE);
             }
           };
-          Circle _doubleArrow_2 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_2);
-          this.setNode(_doubleArrow_2);
+          Circle _doubleArrow_1 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
+          this.setNode(_doubleArrow_1);
         }
       }
       MoveBehavior<XControlPoint> _xifexpression = null;
@@ -209,7 +203,7 @@ public class XControlPoint extends XShape {
             double _layoutY_3 = successor.getLayoutY();
             double _layoutX_4 = predecessor.getLayoutX();
             double _layoutY_4 = predecessor.getLayoutY();
-            boolean _isClockwise = this.isClockwise(_layoutX_2, _layoutY_2, _layoutX_3, _layoutY_3, _layoutX_4, _layoutY_4);
+            boolean _isClockwise = Point2DExtensions.isClockwise(_layoutX_2, _layoutY_2, _layoutX_3, _layoutY_3, _layoutX_4, _layoutY_4);
             if (_isClockwise) {
               double _plus_1 = (angle + 180);
               angle = _plus_1;
@@ -241,19 +235,22 @@ public class XControlPoint extends XShape {
     return _xifexpression;
   }
   
-  protected boolean isClockwise(final double x0, final double y0, final double x1, final double y1, final double x2, final double y2) {
-    double _minus = (x1 - x0);
-    double _plus = (y1 + y0);
-    double _multiply = (_minus * _plus);
-    double _minus_1 = (x2 - x1);
-    double _plus_1 = (y2 + y1);
-    double _multiply_1 = (_minus_1 * _plus_1);
-    double _plus_2 = (_multiply + _multiply_1);
-    double _minus_2 = (x0 - x2);
-    double _plus_3 = (y0 + y2);
-    double _multiply_2 = (_minus_2 * _plus_3);
-    double _plus_4 = (_plus_2 + _multiply_2);
-    boolean _greaterThan = (_plus_4 > 0);
-    return _greaterThan;
+  protected Node newMagnet() {
+    Group _group = new Group();
+    final Procedure1<Group> _function = new Procedure1<Group>() {
+      public void apply(final Group it) {
+        try {
+          ObservableList<Node> _children = it.getChildren();
+          Class<? extends Group> _class = it.getClass();
+          URL _resource = _class.getResource("/icons/Magnet.fxml");
+          Node _load = FXMLLoader.<Node>load(_resource);
+          _children.add(_load);
+        } catch (Throwable _e) {
+          throw Exceptions.sneakyThrow(_e);
+        }
+      }
+    };
+    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+    return _doubleArrow;
   }
 }

@@ -20,6 +20,7 @@ import static de.fxdiagram.core.geometry.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.geometry.BezierExtensions.*
+import javafx.scene.shape.StrokeLineCap
 
 @Logging
 class XConnection extends XShape {
@@ -171,7 +172,8 @@ class XConnection extends XShape {
 		shapeGroup.children.setAll(shapes)
 		val strokeBoundsInRoot = source.localToRootDiagram(new BoundingBox(0, 0, this.strokeWidth, this.strokeWidth))
 		val strokeInRoot = 0.5 * (strokeBoundsInRoot.width + strokeBoundsInRoot.height) 
-		shapes.forEach[
+		shapes.forEach [
+			strokeLineCap = StrokeLineCap.ROUND
 			strokeWidth = strokeInRoot
 		]
 	}
