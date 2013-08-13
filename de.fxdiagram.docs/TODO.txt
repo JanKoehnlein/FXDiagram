@@ -14,6 +14,7 @@ ENHANCEMENT
 - Layouter: convert edges as a last step
 
 MINOR
+- hover/armed buttons for choosers
 - fix connection stroke width
 - SVG export: arc size
 - Transparent stage?

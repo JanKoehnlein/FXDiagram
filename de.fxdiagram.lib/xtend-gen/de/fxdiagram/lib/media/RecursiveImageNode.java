@@ -111,8 +111,17 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
             public void apply(final ScrollToAndScaleTransition it) {
               Duration _seconds = Duration.seconds(5);
               it.setDuration(_seconds);
-              Interpolator _SPLINE = Interpolator.SPLINE(0.5, 0, 1, 0.5);
-              it.setInterpolator(_SPLINE);
+              final Interpolator _function = new Interpolator() {
+                @Override
+                protected double curve(final double it) {
+                  double _log = Math.log(10000);
+                  double _multiply = (_log * it);
+                  double _exp = Math.exp(_multiply);
+                  double _divide = (_exp / 10000);
+                  return _divide;
+                }
+              };
+              it.setInterpolator(_function);
               it.play();
             }
           };

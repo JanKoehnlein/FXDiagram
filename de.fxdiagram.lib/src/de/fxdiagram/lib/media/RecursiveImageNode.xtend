@@ -17,6 +17,8 @@ import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension javafx.util.Duration.*
+import static java.lang.Math.*
+
 import javafx.animation.Interpolator
 import javafx.scene.shape.StrokeType
 
@@ -56,7 +58,9 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 				)
 				new ScrollToAndScaleTransition(rootDiagram, centerInDiagram, 10000) => [
 					duration = 5.seconds
-					interpolator = Interpolator.SPLINE(0.5, 0, 1, 0.5)
+					interpolator = [
+						exp(log(10000) * it) / 10000
+					]
 					play
 				]
 			}
