@@ -193,6 +193,8 @@ class XConnection extends XShape {
 	def at(double t) {
 		if(t < 0 || t > 1)
 			throw new IllegalArgumentException("Argument must be between 0 and 1") 
+		if(t==1) 
+			return new Point2D(controlPoints.last.layoutX, controlPoints.last.layoutY)
 		switch (kind) {
 			case CUBIC_CURVE: {
 				val curves = shapeGroup.children.filter(CubicCurve)
@@ -213,7 +215,8 @@ class XConnection extends XShape {
 				val numSegments = (line.points.size / 2 - 1)
 				val segment = t * numSegments
 				val index = segment as int
-				linear(line.points.get(index), line.points.get(index + 1), 
+				linear(
+					line.points.get(index), line.points.get(index + 1), 
 					line.points.get(index + 2), line.points.get(index + 3), 
 					(segment - index) * numSegments)
 			}
@@ -222,10 +225,12 @@ class XConnection extends XShape {
 	
 	def derivativeAt(double t) {
 		if(t < 0 || t > 1)
-			throw new IllegalArgumentException("Argument must be between 0 and 1") 
+			throw new IllegalArgumentException("Argument must be between 0 and 1")
 		switch (kind) {
 			case CUBIC_CURVE: {
 				val curves = shapeGroup.children.filter(CubicCurve)
+				if (t==1) 
+					return curves.last.derivativeAt(1)					
 				val segment = t * curves.size
 				val index = segment as int
 				val curve = curves.get(index)
@@ -233,6 +238,8 @@ class XConnection extends XShape {
 			}
 			case QUAD_CURVE: {
 				val curves = shapeGroup.children.filter(QuadCurve)
+				if (t==1) 
+					return curves.last.derivativeAt(1)					
 				val segment = t * curves.size
 				val index = segment as int
 				val curve = curves.get(index)
@@ -240,10 +247,11 @@ class XConnection extends XShape {
 			}
 			case POLYLINE: {
 				val line = shapeGroup.children.filter(Polyline).head
+				val numSegments = (line.points.size / 2 - 1)
 				val segment = if(t == 1)
-						line.points.size - line.points.size / 4 
+						numSegments - 0.5 / numSegments
 					else
-					 	t * (line.points.size / 2 - 1)
+					 	t * numSegments
 				val index = segment as int
 				new Point2D(line.points.get(index + 2) - line.points.get(index), 
 					line.points.get(index + 3) - line.points.get(index + 1))

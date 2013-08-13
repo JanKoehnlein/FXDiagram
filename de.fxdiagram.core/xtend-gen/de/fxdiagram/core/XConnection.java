@@ -472,6 +472,17 @@ public class XConnection extends XShape {
         IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("Argument must be between 0 and 1");
         throw _illegalArgumentException;
       }
+      boolean _equals = (t == 1);
+      if (_equals) {
+        ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+        XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints);
+        double _layoutX = _last.getLayoutX();
+        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+        XControlPoint _last_1 = IterableExtensions.<XControlPoint>last(_controlPoints_1);
+        double _layoutY = _last_1.getLayoutY();
+        Point2D _point2D = new Point2D(_layoutX, _layoutY);
+        return _point2D;
+      }
       Point2D _switchResult = null;
       XConnectionKind _kind = this.getKind();
       final XConnectionKind getKind = _kind;
@@ -580,6 +591,11 @@ public class XConnection extends XShape {
           {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
             final Iterable<CubicCurve> curves = Iterables.<CubicCurve>filter(_children, CubicCurve.class);
+            boolean _equals = (t == 1);
+            if (_equals) {
+              CubicCurve _last = IterableExtensions.<CubicCurve>last(curves);
+              return BezierExtensions.derivativeAt(_last, 1);
+            }
             int _size = IterableExtensions.size(curves);
             final double segment = (t * _size);
             final int index = ((int) segment);
@@ -600,6 +616,11 @@ public class XConnection extends XShape {
           {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
             final Iterable<QuadCurve> curves = Iterables.<QuadCurve>filter(_children, QuadCurve.class);
+            boolean _equals = (t == 1);
+            if (_equals) {
+              QuadCurve _last = IterableExtensions.<QuadCurve>last(curves);
+              return BezierExtensions.derivativeAt(_last, 1);
+            }
             int _size = IterableExtensions.size(curves);
             final double segment = (t * _size);
             final int index = ((int) segment);
@@ -621,40 +642,36 @@ public class XConnection extends XShape {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
             Iterable<Polyline> _filter = Iterables.<Polyline>filter(_children, Polyline.class);
             final Polyline line = IterableExtensions.<Polyline>head(_filter);
+            ObservableList<Double> _points = line.getPoints();
+            int _size = _points.size();
+            int _divide = (_size / 2);
+            final int numSegments = (_divide - 1);
             double _xifexpression = (double) 0;
             boolean _equals = (t == 1);
             if (_equals) {
-              ObservableList<Double> _points = line.getPoints();
-              int _size = _points.size();
-              ObservableList<Double> _points_1 = line.getPoints();
-              int _size_1 = _points_1.size();
-              int _divide = (_size_1 / 4);
-              int _minus = (_size - _divide);
+              double _divide_1 = (0.5 / numSegments);
+              double _minus = (numSegments - _divide_1);
               _xifexpression = _minus;
             } else {
-              ObservableList<Double> _points_2 = line.getPoints();
-              int _size_2 = _points_2.size();
-              int _divide_1 = (_size_2 / 2);
-              int _minus_1 = (_divide_1 - 1);
-              double _multiply = (t * _minus_1);
+              double _multiply = (t * numSegments);
               _xifexpression = _multiply;
             }
             final double segment = _xifexpression;
             final int index = ((int) segment);
-            ObservableList<Double> _points_3 = line.getPoints();
+            ObservableList<Double> _points_1 = line.getPoints();
             int _plus = (index + 2);
-            Double _get = _points_3.get(_plus);
-            ObservableList<Double> _points_4 = line.getPoints();
-            Double _get_1 = _points_4.get(index);
-            double _minus_2 = DoubleExtensions.operator_minus(_get, _get_1);
-            ObservableList<Double> _points_5 = line.getPoints();
+            Double _get = _points_1.get(_plus);
+            ObservableList<Double> _points_2 = line.getPoints();
+            Double _get_1 = _points_2.get(index);
+            double _minus_1 = DoubleExtensions.operator_minus(_get, _get_1);
+            ObservableList<Double> _points_3 = line.getPoints();
             int _plus_1 = (index + 3);
-            Double _get_2 = _points_5.get(_plus_1);
-            ObservableList<Double> _points_6 = line.getPoints();
+            Double _get_2 = _points_3.get(_plus_1);
+            ObservableList<Double> _points_4 = line.getPoints();
             int _plus_2 = (index + 1);
-            Double _get_3 = _points_6.get(_plus_2);
-            double _minus_3 = DoubleExtensions.operator_minus(_get_2, _get_3);
-            Point2D _point2D = new Point2D(_minus_2, _minus_3);
+            Double _get_3 = _points_4.get(_plus_2);
+            double _minus_2 = DoubleExtensions.operator_minus(_get_2, _get_3);
+            Point2D _point2D = new Point2D(_minus_1, _minus_2);
             _xblockexpression_3 = (_point2D);
           }
           _switchResult = _xblockexpression_3;
