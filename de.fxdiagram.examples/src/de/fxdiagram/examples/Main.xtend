@@ -24,6 +24,7 @@ import javafx.scene.control.Button
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import de.fxdiagram.examples.neonsign.NeonSignNode
+import de.fxdiagram.core.XConnectionKind
 
 class Main extends Application {
 
@@ -61,7 +62,9 @@ class Main extends Application {
 		]
 		diagram.nodes += target
 
-		val connection = new XConnection(source, target)
+		val connection = new XConnection(source, target) => [
+			kind = XConnectionKind.QUAD_CURVE
+		]
 		val connectionLabel = new XConnectionLabel(connection)
 		connectionLabel.text.text = 'label'
 		diagram.connections += connection
@@ -74,7 +77,9 @@ class Main extends Application {
 		]
 		diagram.nodes += target2
 
-		val connection2 = new XConnection(source, target2)
+		val connection2 = new XConnection(source, target2) => [
+			kind = XConnectionKind.CUBIC_CURVE
+		]
 		val connectionLabel2 = new XConnectionLabel(connection2)
 		connectionLabel2.text.text = 'label2'
 		diagram.connections += connection2

@@ -135,6 +135,10 @@ class ConnectionRouter implements XActivatable {
 					layoutY = targetPoint.y
 					type = ANCHOR
 				]])
+			switch connection.kind {
+				case CUBIC_CURVE: growToSize(4)
+				case QUAD_CURVE: growToSize(3)
+			}
 			for(controlPoint: controlPoints) {
 				controlPoint.layoutXProperty.addListener(scalarListener)
 				controlPoint.layoutYProperty.addListener(scalarListener)

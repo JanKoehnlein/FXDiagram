@@ -315,6 +315,21 @@ public class ConnectionRouter implements XActivatable {
       XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
       _controlPoints_2.setAll(
         new XControlPoint[] { _doubleArrow, _doubleArrow_1 });
+      XConnectionKind _kind = this.connection.getKind();
+      final XConnectionKind _switchValue = _kind;
+      boolean _matched = false;
+      if (!_matched) {
+        if (Objects.equal(_switchValue,XConnectionKind.CUBIC_CURVE)) {
+          _matched=true;
+          this.growToSize(4);
+        }
+      }
+      if (!_matched) {
+        if (Objects.equal(_switchValue,XConnectionKind.QUAD_CURVE)) {
+          _matched=true;
+          this.growToSize(3);
+        }
+      }
       ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
       for (final XControlPoint controlPoint_1 : _controlPoints_3) {
         {

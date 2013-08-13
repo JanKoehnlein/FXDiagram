@@ -47,33 +47,29 @@ class XConnectionLabel extends XShape {
 		]
 	}
 
-	def protected place(List<XControlPoint> list) {
+	def protected void place(List<XControlPoint> list) {
 		transforms.clear
-		if (list.size == 2) {
-			val centerX = 0.5 * (list.get(0).layoutX + list.get(1).layoutX)
-			val centerY = 0.5 * (list.get(0).layoutY + list.get(1).layoutY)
-			val dx = list.get(1).layoutX - list.get(0).layoutX
-			val dy = list.get(1).layoutY - list.get(0).layoutY
-			var angle = atan2(dy, dx)
-			val labelDx = -boundsInLocal.width / 2
-			var labelDy = 1
-			if (abs(angle) > PI / 2) {
-				if (angle < 0)
-					angle = angle + PI
-				else if (angle > 0)
-					angle = angle - PI
-			}
-			val transform = new Affine
-			transform.translate(labelDx, labelDy)
-			transform.rotate(angle.toDegrees)
-			layoutX = transform.tx + centerX
-			layoutY = transform.ty + centerY
-			transform.tx = 0
-			transform.ty = 0
-			transforms += transform
+		val center = connection.at(0.5)
+		val derivative = connection.derivativeAt(0.5)
+		var angle = atan2(derivative.y, derivative.x)
+		val labelDx = -boundsInLocal.width / 2
+		var labelDy = 1
+		if (abs(angle) > PI / 2) {
+			if (angle < 0)
+				angle = angle + PI
+			else if (angle > 0)
+				angle = angle - PI
 		}
+		val transform = new Affine
+		transform.translate(labelDx, labelDy)
+		transform.rotate(angle.toDegrees)
+		layoutX = transform.tx + center.x
+		layoutY = transform.ty + center.y
+		transform.tx = 0
+		transform.ty = 0
+		transforms += transform
 	}
-	
+
 	override getMoveBehavior() {
 		moveBehavior
 	}

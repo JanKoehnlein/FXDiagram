@@ -14,6 +14,8 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.geometry.BezierExtensions;
+import de.fxdiagram.core.geometry.Point2DExtensions;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -29,6 +31,7 @@ import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -38,6 +41,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -198,6 +202,7 @@ public class XConnection extends XShape {
   }
   
   public void updateShapes() {
+    int remainder = (-1);
     XConnectionKind _kind = this.getKind();
     final XConnectionKind getKind = _kind;
     boolean _matched = false;
@@ -208,224 +213,210 @@ public class XConnection extends XShape {
         int _size = _controlPoints.size();
         int _minus = (_size - 1);
         int _modulo = (_minus % 3);
-        boolean _notEquals = (_modulo != 0);
-        if (_notEquals) {
-          this.setKind(XConnectionKind.POLYLINE);
+        remainder = _modulo;
+        boolean _equals = (remainder == 0);
+        if (_equals) {
           ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
           int _size_1 = _controlPoints_1.size();
-          String _plus = ("Cannot create cubic curve for " + Integer.valueOf(_size_1));
-          String _plus_1 = (_plus + " control points. Switching to polyline");
-          XConnection.LOG.warning(_plus_1);
-          this.updateShapes();
-        }
-        ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-        int _size_2 = _controlPoints_2.size();
-        int _minus_1 = (_size_2 - 1);
-        final int numSegments = (_minus_1 / 3);
-        ObservableList<Node> _children = this.shapeGroup.getChildren();
-        Iterable<CubicCurve> _filter = Iterables.<CubicCurve>filter(_children, CubicCurve.class);
-        final List<CubicCurve> curves = IterableExtensions.<CubicCurve>toList(_filter);
-        int _size_3 = curves.size();
-        boolean _greaterThan = (_size_3 > numSegments);
-        boolean _while = _greaterThan;
-        while (_while) {
-          CubicCurve _last = IterableExtensions.<CubicCurve>last(curves);
-          curves.remove(_last);
-          int _size_4 = curves.size();
-          boolean _greaterThan_1 = (_size_4 > numSegments);
-          _while = _greaterThan_1;
-        }
-        int _size_4 = curves.size();
-        boolean _lessThan = (_size_4 < numSegments);
-        boolean _while_1 = _lessThan;
-        while (_while_1) {
-          CubicCurve _cubicCurve = new CubicCurve();
-          final Procedure1<CubicCurve> _function = new Procedure1<CubicCurve>() {
-            public void apply(final CubicCurve it) {
-              it.setFill(null);
-              it.setStroke(Color.BLACK);
-            }
-          };
-          CubicCurve _doubleArrow = ObjectExtensions.<CubicCurve>operator_doubleArrow(_cubicCurve, _function);
-          curves.add(_doubleArrow);
-          int _size_5 = curves.size();
-          boolean _lessThan_1 = (_size_5 < numSegments);
-          _while_1 = _lessThan_1;
-        }
-        ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, numSegments, true);
-        for (final Integer i : _doubleDotLessThan) {
-          {
-            final CubicCurve curve = curves.get((i).intValue());
-            final int offset = ((i).intValue() * 3);
-            ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-            XControlPoint _get = _controlPoints_3.get(offset);
-            double _layoutX = _get.getLayoutX();
-            curve.setStartX(_layoutX);
-            ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-            XControlPoint _get_1 = _controlPoints_4.get(offset);
-            double _layoutY = _get_1.getLayoutY();
-            curve.setStartY(_layoutY);
-            ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
-            int _plus_2 = (offset + 1);
-            XControlPoint _get_2 = _controlPoints_5.get(_plus_2);
-            double _layoutX_1 = _get_2.getLayoutX();
-            curve.setControlX1(_layoutX_1);
-            ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
-            int _plus_3 = (offset + 1);
-            XControlPoint _get_3 = _controlPoints_6.get(_plus_3);
-            double _layoutY_1 = _get_3.getLayoutY();
-            curve.setControlY1(_layoutY_1);
-            ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
-            int _plus_4 = (offset + 2);
-            XControlPoint _get_4 = _controlPoints_7.get(_plus_4);
-            double _layoutX_2 = _get_4.getLayoutX();
-            curve.setControlX2(_layoutX_2);
-            ObservableList<XControlPoint> _controlPoints_8 = this.getControlPoints();
-            int _plus_5 = (offset + 2);
-            XControlPoint _get_5 = _controlPoints_8.get(_plus_5);
-            double _layoutY_2 = _get_5.getLayoutY();
-            curve.setControlY2(_layoutY_2);
-            ObservableList<XControlPoint> _controlPoints_9 = this.getControlPoints();
-            int _plus_6 = (offset + 3);
-            XControlPoint _get_6 = _controlPoints_9.get(_plus_6);
-            double _layoutX_3 = _get_6.getLayoutX();
-            curve.setEndX(_layoutX_3);
-            ObservableList<XControlPoint> _controlPoints_10 = this.getControlPoints();
-            int _plus_7 = (offset + 3);
-            XControlPoint _get_7 = _controlPoints_10.get(_plus_7);
-            double _layoutY_3 = _get_7.getLayoutY();
-            curve.setEndY(_layoutY_3);
+          int _minus_1 = (_size_1 - 1);
+          final int numSegments = (_minus_1 / 3);
+          ObservableList<Node> _children = this.shapeGroup.getChildren();
+          Iterable<CubicCurve> _filter = Iterables.<CubicCurve>filter(_children, CubicCurve.class);
+          final List<CubicCurve> curves = IterableExtensions.<CubicCurve>toList(_filter);
+          int _size_2 = curves.size();
+          boolean _greaterThan = (_size_2 > numSegments);
+          boolean _while = _greaterThan;
+          while (_while) {
+            CubicCurve _last = IterableExtensions.<CubicCurve>last(curves);
+            curves.remove(_last);
+            int _size_3 = curves.size();
+            boolean _greaterThan_1 = (_size_3 > numSegments);
+            _while = _greaterThan_1;
           }
+          int _size_3 = curves.size();
+          boolean _lessThan = (_size_3 < numSegments);
+          boolean _while_1 = _lessThan;
+          while (_while_1) {
+            CubicCurve _cubicCurve = new CubicCurve();
+            final Procedure1<CubicCurve> _function = new Procedure1<CubicCurve>() {
+              public void apply(final CubicCurve it) {
+                it.setFill(null);
+                it.setStroke(Color.BLACK);
+              }
+            };
+            CubicCurve _doubleArrow = ObjectExtensions.<CubicCurve>operator_doubleArrow(_cubicCurve, _function);
+            curves.add(_doubleArrow);
+            int _size_4 = curves.size();
+            boolean _lessThan_1 = (_size_4 < numSegments);
+            _while_1 = _lessThan_1;
+          }
+          ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, numSegments, true);
+          for (final Integer i : _doubleDotLessThan) {
+            {
+              final CubicCurve curve = curves.get((i).intValue());
+              final int offset = ((i).intValue() * 3);
+              ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
+              XControlPoint _get = _controlPoints_2.get(offset);
+              double _layoutX = _get.getLayoutX();
+              curve.setStartX(_layoutX);
+              ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
+              XControlPoint _get_1 = _controlPoints_3.get(offset);
+              double _layoutY = _get_1.getLayoutY();
+              curve.setStartY(_layoutY);
+              ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
+              int _plus = (offset + 1);
+              XControlPoint _get_2 = _controlPoints_4.get(_plus);
+              double _layoutX_1 = _get_2.getLayoutX();
+              curve.setControlX1(_layoutX_1);
+              ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
+              int _plus_1 = (offset + 1);
+              XControlPoint _get_3 = _controlPoints_5.get(_plus_1);
+              double _layoutY_1 = _get_3.getLayoutY();
+              curve.setControlY1(_layoutY_1);
+              ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
+              int _plus_2 = (offset + 2);
+              XControlPoint _get_4 = _controlPoints_6.get(_plus_2);
+              double _layoutX_2 = _get_4.getLayoutX();
+              curve.setControlX2(_layoutX_2);
+              ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
+              int _plus_3 = (offset + 2);
+              XControlPoint _get_5 = _controlPoints_7.get(_plus_3);
+              double _layoutY_2 = _get_5.getLayoutY();
+              curve.setControlY2(_layoutY_2);
+              ObservableList<XControlPoint> _controlPoints_8 = this.getControlPoints();
+              int _plus_4 = (offset + 3);
+              XControlPoint _get_6 = _controlPoints_8.get(_plus_4);
+              double _layoutX_3 = _get_6.getLayoutX();
+              curve.setEndX(_layoutX_3);
+              ObservableList<XControlPoint> _controlPoints_9 = this.getControlPoints();
+              int _plus_5 = (offset + 3);
+              XControlPoint _get_7 = _controlPoints_9.get(_plus_5);
+              double _layoutY_3 = _get_7.getLayoutY();
+              curve.setEndY(_layoutY_3);
+            }
+          }
+          this.setShapes(curves);
         }
-        this.setShapes(curves);
       }
     }
     if (!_matched) {
       if (Objects.equal(getKind,XConnectionKind.QUAD_CURVE)) {
         _matched=true;
-        ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-        int _size_5 = _controlPoints_3.size();
-        int _minus_2 = (_size_5 - 1);
+        ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
+        int _size_4 = _controlPoints_2.size();
+        int _minus_2 = (_size_4 - 1);
         int _modulo_1 = (_minus_2 % 2);
-        boolean _notEquals_1 = (_modulo_1 != 0);
-        if (_notEquals_1) {
-          this.setKind(XConnectionKind.POLYLINE);
-          ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-          int _size_6 = _controlPoints_4.size();
-          String _plus_2 = ("Cannot create quadratic curve for " + Integer.valueOf(_size_6));
-          String _plus_3 = (_plus_2 + " control points. Switching to polyline");
-          XConnection.LOG.warning(_plus_3);
-          this.updateShapes();
-        }
-        ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
-        int _size_7 = _controlPoints_5.size();
-        int _minus_3 = (_size_7 - 1);
-        final int numSegments_1 = (_minus_3 / 2);
-        ObservableList<Node> _children_1 = this.shapeGroup.getChildren();
-        Iterable<QuadCurve> _filter_1 = Iterables.<QuadCurve>filter(_children_1, QuadCurve.class);
-        final List<QuadCurve> curves_1 = IterableExtensions.<QuadCurve>toList(_filter_1);
-        int _size_8 = curves_1.size();
-        boolean _greaterThan_1 = (_size_8 > numSegments_1);
-        boolean _while_2 = _greaterThan_1;
-        while (_while_2) {
-          QuadCurve _last = IterableExtensions.<QuadCurve>last(curves_1);
-          curves_1.remove(_last);
-          int _size_9 = curves_1.size();
-          boolean _greaterThan_2 = (_size_9 > numSegments_1);
-          _while_2 = _greaterThan_2;
-        }
-        int _size_9 = curves_1.size();
-        boolean _lessThan_1 = (_size_9 < numSegments_1);
-        boolean _while_3 = _lessThan_1;
-        while (_while_3) {
-          QuadCurve _quadCurve = new QuadCurve();
-          final Procedure1<QuadCurve> _function = new Procedure1<QuadCurve>() {
-            public void apply(final QuadCurve it) {
-              it.setFill(null);
-              it.setStroke(Color.BLACK);
-            }
-          };
-          QuadCurve _doubleArrow = ObjectExtensions.<QuadCurve>operator_doubleArrow(_quadCurve, _function);
-          curves_1.add(_doubleArrow);
-          int _size_10 = curves_1.size();
-          boolean _lessThan_2 = (_size_10 < numSegments_1);
-          _while_3 = _lessThan_2;
-        }
-        ExclusiveRange _doubleDotLessThan_1 = new ExclusiveRange(0, numSegments_1, true);
-        for (final Integer i_1 : _doubleDotLessThan_1) {
-          {
-            final QuadCurve curve = curves_1.get((i_1).intValue());
-            final int offset = ((i_1).intValue() * 2);
-            ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
-            XControlPoint _get = _controlPoints_6.get(offset);
-            double _layoutX = _get.getLayoutX();
-            curve.setStartX(_layoutX);
-            ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
-            XControlPoint _get_1 = _controlPoints_7.get(offset);
-            double _layoutY = _get_1.getLayoutY();
-            curve.setStartY(_layoutY);
-            ObservableList<XControlPoint> _controlPoints_8 = this.getControlPoints();
-            int _plus_4 = (offset + 1);
-            XControlPoint _get_2 = _controlPoints_8.get(_plus_4);
-            double _layoutX_1 = _get_2.getLayoutX();
-            curve.setControlX(_layoutX_1);
-            ObservableList<XControlPoint> _controlPoints_9 = this.getControlPoints();
-            int _plus_5 = (offset + 1);
-            XControlPoint _get_3 = _controlPoints_9.get(_plus_5);
-            double _layoutY_1 = _get_3.getLayoutY();
-            curve.setControlY(_layoutY_1);
-            ObservableList<XControlPoint> _controlPoints_10 = this.getControlPoints();
-            int _plus_6 = (offset + 2);
-            XControlPoint _get_4 = _controlPoints_10.get(_plus_6);
-            double _layoutX_2 = _get_4.getLayoutX();
-            curve.setEndX(_layoutX_2);
-            ObservableList<XControlPoint> _controlPoints_11 = this.getControlPoints();
-            int _plus_7 = (offset + 2);
-            XControlPoint _get_5 = _controlPoints_11.get(_plus_7);
-            double _layoutY_2 = _get_5.getLayoutY();
-            curve.setEndY(_layoutY_2);
+        remainder = _modulo_1;
+        boolean _equals_1 = (remainder == 0);
+        if (_equals_1) {
+          ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
+          int _size_5 = _controlPoints_3.size();
+          int _minus_3 = (_size_5 - 1);
+          final int numSegments_1 = (_minus_3 / 2);
+          ObservableList<Node> _children_1 = this.shapeGroup.getChildren();
+          Iterable<QuadCurve> _filter_1 = Iterables.<QuadCurve>filter(_children_1, QuadCurve.class);
+          final List<QuadCurve> curves_1 = IterableExtensions.<QuadCurve>toList(_filter_1);
+          int _size_6 = curves_1.size();
+          boolean _greaterThan_1 = (_size_6 > numSegments_1);
+          boolean _while_2 = _greaterThan_1;
+          while (_while_2) {
+            QuadCurve _last = IterableExtensions.<QuadCurve>last(curves_1);
+            curves_1.remove(_last);
+            int _size_7 = curves_1.size();
+            boolean _greaterThan_2 = (_size_7 > numSegments_1);
+            _while_2 = _greaterThan_2;
           }
+          int _size_7 = curves_1.size();
+          boolean _lessThan_1 = (_size_7 < numSegments_1);
+          boolean _while_3 = _lessThan_1;
+          while (_while_3) {
+            QuadCurve _quadCurve = new QuadCurve();
+            final Procedure1<QuadCurve> _function = new Procedure1<QuadCurve>() {
+              public void apply(final QuadCurve it) {
+                it.setFill(null);
+                it.setStroke(Color.BLACK);
+              }
+            };
+            QuadCurve _doubleArrow = ObjectExtensions.<QuadCurve>operator_doubleArrow(_quadCurve, _function);
+            curves_1.add(_doubleArrow);
+            int _size_8 = curves_1.size();
+            boolean _lessThan_2 = (_size_8 < numSegments_1);
+            _while_3 = _lessThan_2;
+          }
+          ExclusiveRange _doubleDotLessThan_1 = new ExclusiveRange(0, numSegments_1, true);
+          for (final Integer i_1 : _doubleDotLessThan_1) {
+            {
+              final QuadCurve curve = curves_1.get((i_1).intValue());
+              final int offset = ((i_1).intValue() * 2);
+              ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
+              XControlPoint _get = _controlPoints_4.get(offset);
+              double _layoutX = _get.getLayoutX();
+              curve.setStartX(_layoutX);
+              ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
+              XControlPoint _get_1 = _controlPoints_5.get(offset);
+              double _layoutY = _get_1.getLayoutY();
+              curve.setStartY(_layoutY);
+              ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
+              int _plus = (offset + 1);
+              XControlPoint _get_2 = _controlPoints_6.get(_plus);
+              double _layoutX_1 = _get_2.getLayoutX();
+              curve.setControlX(_layoutX_1);
+              ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
+              int _plus_1 = (offset + 1);
+              XControlPoint _get_3 = _controlPoints_7.get(_plus_1);
+              double _layoutY_1 = _get_3.getLayoutY();
+              curve.setControlY(_layoutY_1);
+              ObservableList<XControlPoint> _controlPoints_8 = this.getControlPoints();
+              int _plus_2 = (offset + 2);
+              XControlPoint _get_4 = _controlPoints_8.get(_plus_2);
+              double _layoutX_2 = _get_4.getLayoutX();
+              curve.setEndX(_layoutX_2);
+              ObservableList<XControlPoint> _controlPoints_9 = this.getControlPoints();
+              int _plus_3 = (offset + 2);
+              XControlPoint _get_5 = _controlPoints_9.get(_plus_3);
+              double _layoutY_2 = _get_5.getLayoutY();
+              curve.setEndY(_layoutY_2);
+            }
+          }
+          this.setShapes(curves_1);
         }
-        this.setShapes(curves_1);
       }
     }
-    if (!_matched) {
-      if (Objects.equal(getKind,XConnectionKind.POLYLINE)) {
-        _matched=true;
-        Polyline _elvis = null;
-        ObservableList<Node> _children_2 = this.shapeGroup.getChildren();
-        Iterable<Polyline> _filter_2 = Iterables.<Polyline>filter(_children_2, Polyline.class);
-        Polyline _head = IterableExtensions.<Polyline>head(_filter_2);
-        if (_head != null) {
-          _elvis = _head;
-        } else {
-          Polyline _polyline = new Polyline();
-          _elvis = ObjectExtensions.<Polyline>operator_elvis(_head, _polyline);
-        }
-        final Procedure1<Polyline> _function = new Procedure1<Polyline>() {
-          public void apply(final Polyline it) {
-            it.setStroke(Color.BLACK);
-          }
-        };
-        final Polyline polyline = ObjectExtensions.<Polyline>operator_doubleArrow(_elvis, _function);
-        ObservableList<Double> _points = polyline.getPoints();
-        ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
-        final Function1<XControlPoint,List<Double>> _function_1 = new Function1<XControlPoint,List<Double>>() {
-          public List<Double> apply(final XControlPoint it) {
-            double _layoutX = it.getLayoutX();
-            double _layoutY = it.getLayoutY();
-            return Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(_layoutX, _layoutY));
-          }
-        };
-        List<List<Double>> _map = ListExtensions.<XControlPoint, List<Double>>map(_controlPoints_6, _function_1);
-        Iterable<Double> _flatten = Iterables.<Double>concat(_map);
-        _points.setAll(((Double[])Conversions.unwrapArray(_flatten, Double.class)));
-        this.setShapes(Collections.<Polyline>unmodifiableList(Lists.<Polyline>newArrayList(polyline)));
+    boolean _notEquals = (remainder != 0);
+    if (_notEquals) {
+      Polyline _elvis = null;
+      ObservableList<Node> _children_2 = this.shapeGroup.getChildren();
+      Iterable<Polyline> _filter_2 = Iterables.<Polyline>filter(_children_2, Polyline.class);
+      Polyline _head = IterableExtensions.<Polyline>head(_filter_2);
+      if (_head != null) {
+        _elvis = _head;
+      } else {
+        Polyline _polyline = new Polyline();
+        _elvis = ObjectExtensions.<Polyline>operator_elvis(_head, _polyline);
       }
+      final Procedure1<Polyline> _function = new Procedure1<Polyline>() {
+        public void apply(final Polyline it) {
+          it.setStroke(Color.BLACK);
+        }
+      };
+      final Polyline polyline = ObjectExtensions.<Polyline>operator_doubleArrow(_elvis, _function);
+      ObservableList<Double> _points = polyline.getPoints();
+      ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
+      final Function1<XControlPoint,List<Double>> _function_1 = new Function1<XControlPoint,List<Double>>() {
+        public List<Double> apply(final XControlPoint it) {
+          double _layoutX = it.getLayoutX();
+          double _layoutY = it.getLayoutY();
+          return Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(_layoutX, _layoutY));
+        }
+      };
+      List<List<Double>> _map = ListExtensions.<XControlPoint, List<Double>>map(_controlPoints_4, _function_1);
+      Iterable<Double> _flatten = Iterables.<Double>concat(_map);
+      _points.setAll(((Double[])Conversions.unwrapArray(_flatten, Double.class)));
+      this.setShapes(Collections.<Polyline>unmodifiableList(Lists.<Polyline>newArrayList(polyline)));
     }
     ObservableList<Node> _children_3 = this.controlPointGroup.getChildren();
-    ObservableList<XControlPoint> _controlPoints_7 = this.connectionRouter.getControlPoints();
-    _children_3.setAll(_controlPoints_7);
+    ObservableList<XControlPoint> _controlPoints_5 = this.connectionRouter.getControlPoints();
+    _children_3.setAll(_controlPoints_5);
   }
   
   protected void setShapes(final List<? extends Shape> shapes) {
@@ -464,6 +455,214 @@ public class XConnection extends XShape {
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       this.label.place(_controlPoints);
     }
+  }
+  
+  public Point2D at(final double t) {
+    Point2D _xblockexpression = null;
+    {
+      boolean _or = false;
+      boolean _lessThan = (t < 0);
+      if (_lessThan) {
+        _or = true;
+      } else {
+        boolean _greaterThan = (t > 1);
+        _or = (_lessThan || _greaterThan);
+      }
+      if (_or) {
+        IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("Argument must be between 0 and 1");
+        throw _illegalArgumentException;
+      }
+      Point2D _switchResult = null;
+      XConnectionKind _kind = this.getKind();
+      final XConnectionKind getKind = _kind;
+      boolean _matched = false;
+      if (!_matched) {
+        if (Objects.equal(getKind,XConnectionKind.CUBIC_CURVE)) {
+          _matched=true;
+          Point2D _xblockexpression_1 = null;
+          {
+            ObservableList<Node> _children = this.shapeGroup.getChildren();
+            final Iterable<CubicCurve> curves = Iterables.<CubicCurve>filter(_children, CubicCurve.class);
+            int _size = IterableExtensions.size(curves);
+            final double segment = (t * _size);
+            final int index = ((int) segment);
+            final CubicCurve curve = ((CubicCurve[])Conversions.unwrapArray(curves, CubicCurve.class))[index];
+            double _minus = (segment - index);
+            int _size_1 = IterableExtensions.size(curves);
+            double _multiply = (_minus * _size_1);
+            Point2D _at = BezierExtensions.at(curve, _multiply);
+            _xblockexpression_1 = (_at);
+          }
+          _switchResult = _xblockexpression_1;
+        }
+      }
+      if (!_matched) {
+        if (Objects.equal(getKind,XConnectionKind.QUAD_CURVE)) {
+          _matched=true;
+          Point2D _xblockexpression_2 = null;
+          {
+            ObservableList<Node> _children = this.shapeGroup.getChildren();
+            final Iterable<QuadCurve> curves = Iterables.<QuadCurve>filter(_children, QuadCurve.class);
+            int _size = IterableExtensions.size(curves);
+            final double segment = (t * _size);
+            final int index = ((int) segment);
+            final QuadCurve curve = ((QuadCurve[])Conversions.unwrapArray(curves, QuadCurve.class))[index];
+            double _minus = (segment - index);
+            int _size_1 = IterableExtensions.size(curves);
+            double _multiply = (_minus * _size_1);
+            Point2D _at = BezierExtensions.at(curve, _multiply);
+            _xblockexpression_2 = (_at);
+          }
+          _switchResult = _xblockexpression_2;
+        }
+      }
+      if (!_matched) {
+        if (Objects.equal(getKind,XConnectionKind.POLYLINE)) {
+          _matched=true;
+          Point2D _xblockexpression_3 = null;
+          {
+            ObservableList<Node> _children = this.shapeGroup.getChildren();
+            Iterable<Polyline> _filter = Iterables.<Polyline>filter(_children, Polyline.class);
+            final Polyline line = IterableExtensions.<Polyline>head(_filter);
+            ObservableList<Double> _points = line.getPoints();
+            int _size = _points.size();
+            int _divide = (_size / 2);
+            final int numSegments = (_divide - 1);
+            final double segment = (t * numSegments);
+            final int index = ((int) segment);
+            ObservableList<Double> _points_1 = line.getPoints();
+            Double _get = _points_1.get(index);
+            ObservableList<Double> _points_2 = line.getPoints();
+            int _plus = (index + 1);
+            Double _get_1 = _points_2.get(_plus);
+            ObservableList<Double> _points_3 = line.getPoints();
+            int _plus_1 = (index + 2);
+            Double _get_2 = _points_3.get(_plus_1);
+            ObservableList<Double> _points_4 = line.getPoints();
+            int _plus_2 = (index + 3);
+            Double _get_3 = _points_4.get(_plus_2);
+            double _minus = (segment - index);
+            double _multiply = (_minus * numSegments);
+            Point2D _linear = Point2DExtensions.linear((_get).doubleValue(), (_get_1).doubleValue(), (_get_2).doubleValue(), (_get_3).doubleValue(), _multiply);
+            _xblockexpression_3 = (_linear);
+          }
+          _switchResult = _xblockexpression_3;
+        }
+      }
+      _xblockexpression = (_switchResult);
+    }
+    return _xblockexpression;
+  }
+  
+  public Point2D derivativeAt(final double t) {
+    Point2D _xblockexpression = null;
+    {
+      boolean _or = false;
+      boolean _lessThan = (t < 0);
+      if (_lessThan) {
+        _or = true;
+      } else {
+        boolean _greaterThan = (t > 1);
+        _or = (_lessThan || _greaterThan);
+      }
+      if (_or) {
+        IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("Argument must be between 0 and 1");
+        throw _illegalArgumentException;
+      }
+      Point2D _switchResult = null;
+      XConnectionKind _kind = this.getKind();
+      final XConnectionKind getKind = _kind;
+      boolean _matched = false;
+      if (!_matched) {
+        if (Objects.equal(getKind,XConnectionKind.CUBIC_CURVE)) {
+          _matched=true;
+          Point2D _xblockexpression_1 = null;
+          {
+            ObservableList<Node> _children = this.shapeGroup.getChildren();
+            final Iterable<CubicCurve> curves = Iterables.<CubicCurve>filter(_children, CubicCurve.class);
+            int _size = IterableExtensions.size(curves);
+            final double segment = (t * _size);
+            final int index = ((int) segment);
+            final CubicCurve curve = ((CubicCurve[])Conversions.unwrapArray(curves, CubicCurve.class))[index];
+            double _minus = (segment - index);
+            int _size_1 = IterableExtensions.size(curves);
+            double _multiply = (_minus * _size_1);
+            Point2D _derivativeAt = BezierExtensions.derivativeAt(curve, _multiply);
+            _xblockexpression_1 = (_derivativeAt);
+          }
+          _switchResult = _xblockexpression_1;
+        }
+      }
+      if (!_matched) {
+        if (Objects.equal(getKind,XConnectionKind.QUAD_CURVE)) {
+          _matched=true;
+          Point2D _xblockexpression_2 = null;
+          {
+            ObservableList<Node> _children = this.shapeGroup.getChildren();
+            final Iterable<QuadCurve> curves = Iterables.<QuadCurve>filter(_children, QuadCurve.class);
+            int _size = IterableExtensions.size(curves);
+            final double segment = (t * _size);
+            final int index = ((int) segment);
+            final QuadCurve curve = ((QuadCurve[])Conversions.unwrapArray(curves, QuadCurve.class))[index];
+            double _minus = (segment - index);
+            int _size_1 = IterableExtensions.size(curves);
+            double _multiply = (_minus * _size_1);
+            Point2D _derivativeAt = BezierExtensions.derivativeAt(curve, _multiply);
+            _xblockexpression_2 = (_derivativeAt);
+          }
+          _switchResult = _xblockexpression_2;
+        }
+      }
+      if (!_matched) {
+        if (Objects.equal(getKind,XConnectionKind.POLYLINE)) {
+          _matched=true;
+          Point2D _xblockexpression_3 = null;
+          {
+            ObservableList<Node> _children = this.shapeGroup.getChildren();
+            Iterable<Polyline> _filter = Iterables.<Polyline>filter(_children, Polyline.class);
+            final Polyline line = IterableExtensions.<Polyline>head(_filter);
+            double _xifexpression = (double) 0;
+            boolean _equals = (t == 1);
+            if (_equals) {
+              ObservableList<Double> _points = line.getPoints();
+              int _size = _points.size();
+              ObservableList<Double> _points_1 = line.getPoints();
+              int _size_1 = _points_1.size();
+              int _divide = (_size_1 / 4);
+              int _minus = (_size - _divide);
+              _xifexpression = _minus;
+            } else {
+              ObservableList<Double> _points_2 = line.getPoints();
+              int _size_2 = _points_2.size();
+              int _divide_1 = (_size_2 / 2);
+              int _minus_1 = (_divide_1 - 1);
+              double _multiply = (t * _minus_1);
+              _xifexpression = _multiply;
+            }
+            final double segment = _xifexpression;
+            final int index = ((int) segment);
+            ObservableList<Double> _points_3 = line.getPoints();
+            int _plus = (index + 2);
+            Double _get = _points_3.get(_plus);
+            ObservableList<Double> _points_4 = line.getPoints();
+            Double _get_1 = _points_4.get(index);
+            double _minus_2 = DoubleExtensions.operator_minus(_get, _get_1);
+            ObservableList<Double> _points_5 = line.getPoints();
+            int _plus_1 = (index + 3);
+            Double _get_2 = _points_5.get(_plus_1);
+            ObservableList<Double> _points_6 = line.getPoints();
+            int _plus_2 = (index + 1);
+            Double _get_3 = _points_6.get(_plus_2);
+            double _minus_3 = DoubleExtensions.operator_minus(_get_2, _get_3);
+            Point2D _point2D = new Point2D(_minus_2, _minus_3);
+            _xblockexpression_3 = (_point2D);
+          }
+          _switchResult = _xblockexpression_3;
+        }
+      }
+      _xblockexpression = (_switchResult);
+    }
+    return _xblockexpression;
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XConnection");

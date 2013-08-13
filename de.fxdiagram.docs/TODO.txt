@@ -11,8 +11,12 @@ ENHANCEMENT
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
 - more auxiliary lines
 - ScrollAndScale should reset rotation
+- Layouter: convert edges as a last step
+- XConnection style settable
 
 MINOR
+- LineCap.ROUND
+- SVGImage for magnets
 - fix connection stroke width
 - SVG export: arc size
 - Transparent stage?

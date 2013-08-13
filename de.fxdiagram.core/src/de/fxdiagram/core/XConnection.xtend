@@ -7,6 +7,7 @@ import de.fxdiagram.core.anchors.ConnectionRouter
 import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.geometry.BoundingBox
+import javafx.geometry.Point2D
 import javafx.scene.Group
 import javafx.scene.paint.Color
 import javafx.scene.shape.CubicCurve
@@ -15,8 +16,10 @@ import javafx.scene.shape.QuadCurve
 import javafx.scene.shape.Shape
 
 import static de.fxdiagram.core.XConnectionKind.*
+import static de.fxdiagram.core.geometry.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.geometry.BezierExtensions.*
 
 @Logging
 class XConnection extends XShape {
@@ -98,72 +101,68 @@ class XConnection extends XShape {
 	}
 
 	def void updateShapes() {
+		var remainder = -1
 		switch kind {
 			case CUBIC_CURVE: {
-				if((controlPoints.size - 1) % 3 != 0) {
-					kind = POLYLINE
-					LOG.warning("Cannot create cubic curve for " + controlPoints.size + " control points. Switching to polyline")
-					updateShapes
-				}
-				val numSegments = (controlPoints.size - 1) / 3
-				val curves = shapeGroup.children.filter(CubicCurve).toList
-				while(curves.size > numSegments) 
-					curves.remove(curves.last)
-				while(curves.size < numSegments)
-					curves += new CubicCurve => [
-						fill = null
-						stroke = Color.BLACK
-					]
-				for(i: 0..<numSegments) {
-					val curve = curves.get(i)
-					val offset = i * 3
-					curve.startX = controlPoints.get(offset).layoutX
-					curve.startY = controlPoints.get(offset).layoutY
-					curve.controlX1 = controlPoints.get(offset+1).layoutX
-					curve.controlY1 = controlPoints.get(offset+1).layoutY
-					curve.controlX2 = controlPoints.get(offset+2).layoutX
-					curve.controlY2 = controlPoints.get(offset+2).layoutY
-					curve.endX = controlPoints.get(offset+3).layoutX
-					curve.endY = controlPoints.get(offset+3).layoutY
-				}
-				shapes = curves
-				
+				remainder = (controlPoints.size - 1) % 3
+				if(remainder == 0) {
+					val numSegments = (controlPoints.size - 1) / 3
+					val curves = shapeGroup.children.filter(CubicCurve).toList
+					while(curves.size > numSegments) 
+						curves.remove(curves.last)
+					while(curves.size < numSegments)
+						curves += new CubicCurve => [
+							fill = null
+							stroke = Color.BLACK
+						]
+					for(i: 0..<numSegments) {
+						val curve = curves.get(i)
+						val offset = i * 3
+						curve.startX = controlPoints.get(offset).layoutX
+						curve.startY = controlPoints.get(offset).layoutY
+						curve.controlX1 = controlPoints.get(offset+1).layoutX
+						curve.controlY1 = controlPoints.get(offset+1).layoutY
+						curve.controlX2 = controlPoints.get(offset+2).layoutX
+						curve.controlY2 = controlPoints.get(offset+2).layoutY
+						curve.endX = controlPoints.get(offset+3).layoutX
+						curve.endY = controlPoints.get(offset+3).layoutY
+					}
+					shapes = curves
+				}	
 			}
 			case QUAD_CURVE: {
-				if((controlPoints.size - 1) % 2 != 0) {
-					kind = POLYLINE
-					LOG.warning("Cannot create quadratic curve for " + controlPoints.size + " control points. Switching to polyline")
-					updateShapes
+				remainder = (controlPoints.size - 1) % 2 
+				if(remainder == 0) {
+					val numSegments = (controlPoints.size - 1) / 2
+					val curves = shapeGroup.children.filter(QuadCurve).toList
+					while(curves.size > numSegments) 
+						curves.remove(curves.last)
+					while(curves.size < numSegments)
+						curves += new QuadCurve => [
+							fill = null
+							stroke = Color.BLACK
+						]
+					for(i: 0..<numSegments) {
+						val curve = curves.get(i)
+						val offset = i * 2
+						curve.startX = controlPoints.get(offset).layoutX
+						curve.startY = controlPoints.get(offset).layoutY
+						curve.controlX = controlPoints.get(offset+1).layoutX
+						curve.controlY = controlPoints.get(offset+1).layoutY
+						curve.endX = controlPoints.get(offset+2).layoutX
+						curve.endY = controlPoints.get(offset+2).layoutY
+					}
+					shapes = curves
 				}
-				val numSegments = (controlPoints.size - 1) / 2
-				val curves = shapeGroup.children.filter(QuadCurve).toList
-				while(curves.size > numSegments) 
-					curves.remove(curves.last)
-				while(curves.size < numSegments)
-					curves += new QuadCurve => [
-						fill = null
-						stroke = Color.BLACK
-					]
-				for(i: 0..<numSegments) {
-					val curve = curves.get(i)
-					val offset = i * 2
-					curve.startX = controlPoints.get(offset).layoutX
-					curve.startY = controlPoints.get(offset).layoutY
-					curve.controlX = controlPoints.get(offset+1).layoutX
-					curve.controlY = controlPoints.get(offset+1).layoutY
-					curve.endX = controlPoints.get(offset+2).layoutX
-					curve.endY = controlPoints.get(offset+2).layoutY
-				}
-				shapes = curves
 			}
-			case POLYLINE: {
-				val polyline = shapeGroup.children.filter(Polyline).head 
-					?: new Polyline => [ 
-						stroke = Color.BLACK
-					]
-				polyline.points.setAll(controlPoints.map[#[layoutX, layoutY]].flatten)
-				shapes = #[polyline]
-			}
+		}
+		if (remainder != 0) {
+			val polyline = shapeGroup.children.filter(Polyline).head 
+				?: new Polyline => [ 
+					stroke = Color.BLACK
+				]
+			polyline.points.setAll(controlPoints.map[#[layoutX, layoutY]].flatten)
+			shapes = #[polyline]
 		}
 		controlPointGroup.children.setAll(connectionRouter.controlPoints)
 	}
@@ -189,6 +188,67 @@ class XConnection extends XShape {
 		super.layoutChildren
 		connectionRouter.calculatePoints
 		label?.place(controlPoints)	
+	}
+	
+	def at(double t) {
+		if(t < 0 || t > 1)
+			throw new IllegalArgumentException("Argument must be between 0 and 1") 
+		switch (kind) {
+			case CUBIC_CURVE: {
+				val curves = shapeGroup.children.filter(CubicCurve)
+				val segment = t * curves.size
+				val index = segment as int
+				val curve = curves.get(index)
+				curve.at((segment - index) * curves.size)
+			}
+			case QUAD_CURVE: {
+				val curves = shapeGroup.children.filter(QuadCurve)
+				val segment = t * curves.size
+				val index = segment as int
+				val curve = curves.get(index)
+				curve.at((segment - index) * curves.size)
+			}
+			case POLYLINE: {
+				val line = shapeGroup.children.filter(Polyline).head
+				val numSegments = (line.points.size / 2 - 1)
+				val segment = t * numSegments
+				val index = segment as int
+				linear(line.points.get(index), line.points.get(index + 1), 
+					line.points.get(index + 2), line.points.get(index + 3), 
+					(segment - index) * numSegments)
+			}
+		}
+	}
+	
+	def derivativeAt(double t) {
+		if(t < 0 || t > 1)
+			throw new IllegalArgumentException("Argument must be between 0 and 1") 
+		switch (kind) {
+			case CUBIC_CURVE: {
+				val curves = shapeGroup.children.filter(CubicCurve)
+				val segment = t * curves.size
+				val index = segment as int
+				val curve = curves.get(index)
+				curve.derivativeAt((segment - index) * curves.size)
+			}
+			case QUAD_CURVE: {
+				val curves = shapeGroup.children.filter(QuadCurve)
+				val segment = t * curves.size
+				val index = segment as int
+				val curve = curves.get(index)
+				curve.derivativeAt((segment - index) * curves.size)
+			}
+			case POLYLINE: {
+				val line = shapeGroup.children.filter(Polyline).head
+				val segment = if(t == 1)
+						line.points.size - line.points.size / 4 
+					else
+					 	t * (line.points.size / 2 - 1)
+				val index = segment as int
+				new Point2D(line.points.get(index + 2) - line.points.get(index), 
+					line.points.get(index + 3) - line.points.get(index + 1))
+			}
+		}
 	}
 }
 

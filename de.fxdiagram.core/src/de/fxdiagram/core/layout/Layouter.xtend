@@ -61,13 +61,13 @@ class Layouter {
 			val xElement = entry.key
 			val kElement = entry.value
 			switch xElement { 
-				XConnectionLabel: { 
-					val shapeLayout = kElement.data.filter(KShapeLayout).head
-					animations += createTransition(xElement,
-						shapeLayout.xpos, shapeLayout.ypos, 
-						true, duration
-					)
-				}
+//				XConnectionLabel: { 
+//					val shapeLayout = kElement.data.filter(KShapeLayout).head
+//					animations += createTransition(xElement,
+//						shapeLayout.xpos, shapeLayout.ypos, 
+//						LayoutTransitionStyle.CURVE_XFIRST, duration
+//					)
+//				}
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, LayoutTransitionStyle.CURVE_XFIRST, duration)
