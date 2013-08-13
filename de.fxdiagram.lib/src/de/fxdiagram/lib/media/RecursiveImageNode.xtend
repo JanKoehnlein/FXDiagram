@@ -14,13 +14,12 @@ import javafx.scene.Group
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.shape.Rectangle
+import javafx.scene.shape.StrokeType
+
+import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension javafx.util.Duration.*
-import static java.lang.Math.*
-
-import javafx.animation.Interpolator
-import javafx.scene.shape.StrokeType
 
 class RecursiveImageNode extends XNode implements SvgExportable {
 
