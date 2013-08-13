@@ -27,11 +27,11 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 	@FxProperty double y
 	@FxProperty double scale
 
-	DoubleProperty actualWidthProperty = new SimpleDoubleProperty  
+	DoubleProperty actualWidthProperty = new SimpleDoubleProperty
 	DoubleProperty actualHeightProperty = new SimpleDoubleProperty
-	  
+
 	FirstRecursiveImageNode pivot
-	
+
 	new(Image image, double x, double y, double scale) {
 		this.image = image
 		this.x = x
@@ -47,10 +47,12 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		super.doActivate
 		pivot.activate
 		onMouseClicked = [
-			if(clickCount == 2) {
+			if (clickCount == 2) {
 				val centerInDiagram = localToRootDiagram(
-					actualWidthProperty.get * 0.5 * (1-scale+2*this.x/actualWidthProperty.get) * (1/(1-scale)), 
-					actualHeightProperty.get * 0.5 * (1-scale+2*this.y/actualHeightProperty.get) * (1/(1-scale))
+					actualWidthProperty.get * 0.5 * (1 - scale + 2 * this.x / actualWidthProperty.get) *
+						(1 / (1 - scale)),
+					actualHeightProperty.get * 0.5 * (1 - scale + 2 * this.y / actualHeightProperty.get) *
+						(1 / (1 - scale))
 				)
 				new ScrollToAndScaleTransition(rootDiagram, centerInDiagram, 10000) => [
 					duration = 5.seconds
@@ -78,14 +80,13 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 				strokeType = StrokeType.INSIDE
 			]
 			updateActualDimension(imageView.boundsInLocal)
-			imageView.boundsInLocalProperty.addListener [
-				property, oldValue, newValue |
+			imageView.boundsInLocalProperty.addListener [ property, oldValue, newValue |
 				updateActualDimension(newValue)
 			]
 		]
 		pane
 	}
-	
+
 	protected def updateActualDimension(Bounds newValue) {
 		actualWidthProperty.set(newValue.width)
 		actualHeightProperty.set(newValue.height)
@@ -120,10 +121,10 @@ class FirstRecursiveImageNode extends XNode {
 			updateChildPanes
 		]
 	}
-	
+
 	override selectionFeedback(boolean isSelected) {
 	}
-	
+
 	def void updateChildPanes() {
 		while (!panes.empty) {
 			val child = panes.pop
@@ -143,14 +144,14 @@ class FirstRecursiveImageNode extends XNode {
 				child.children += grandChild
 				panes.push(child)
 				panes.push(grandChild)
-				
+
 			} else {
 				panes.push(child)
 				return
 			}
 		}
 	}
-	
+
 	def createScaledPane() {
 		recursiveImageNode.createPane() => [
 			scaleXProperty.bind(recursiveImageNode.scaleProperty)

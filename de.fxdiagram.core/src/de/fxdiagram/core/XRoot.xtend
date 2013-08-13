@@ -2,7 +2,6 @@ package de.fxdiagram.core
 
 import javafx.scene.Group
 
-// TODO extends XActivtable?
 class XRoot extends Group {
 	
 	XRootDiagram diagram

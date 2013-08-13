@@ -14,13 +14,13 @@ import de.cau.cs.kieler.kiml.options.EdgeRouting
 import de.cau.cs.kieler.kiml.options.LayoutOptions
 import de.fxdiagram.core.XAbstractDiagram
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XConnectionKind
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XNode
 import java.util.Map
 import javafx.animation.Animation
 import javafx.util.Duration
 
+import static de.fxdiagram.core.XConnectionKind.*
 import static java.lang.Math.*
 
 class Layouter { 
@@ -78,14 +78,14 @@ class Layouter {
 					switch(edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
 						case EdgeRouting.SPLINES: {
 							if((layoutPoints.size - 1) % 3 == 0) 
-								xElement.kind = XConnectionKind.CUBIC_CURVE
+								xElement.kind = CUBIC_CURVE
 							else if((layoutPoints.size - 1) % 2 == 0) 
-								xElement.kind = XConnectionKind.QUAD_CURVE
+								xElement.kind = QUAD_CURVE
 							else 
-								xElement.kind = XConnectionKind.POLYLINE
+								xElement.kind = POLYLINE
 						}
 						default:
-							xElement.kind = XConnectionKind.POLYLINE
+							xElement.kind = POLYLINE
 					}
 					val controlPoints = xElement.controlPoints
 					xElement.connectionRouter.growToSize(layoutPoints.size)

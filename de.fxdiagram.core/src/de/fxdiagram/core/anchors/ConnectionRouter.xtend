@@ -18,6 +18,8 @@ import de.fxdiagram.core.XRootDiagram
 import static de.fxdiagram.core.XConnectionKind.*
 import static de.fxdiagram.core.XControlPointType.*
 
+import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+
 class ConnectionRouter implements XActivatable {
 	
 	@FxProperty@ReadOnly ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
@@ -167,10 +169,7 @@ class ConnectionRouter implements XActivatable {
 	}
 	
 	protected def midPoint(XNode node) {
-		node.localToRootDiagram(
-			0.5 * (node.boundsInLocal.minX + node.boundsInLocal.maxX),
-			0.5 * (node.boundsInLocal.minY + node.boundsInLocal.maxY)
-		)
+		node.localToRootDiagram(node.boundsInLocal.center)
 	}
 
 	protected def getNearestAnchor(XNode node, XControlPoint controlPoint) {

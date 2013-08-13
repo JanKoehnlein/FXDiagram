@@ -12,11 +12,8 @@ ENHANCEMENT
 - more auxiliary lines
 - ScrollAndScale should reset rotation
 - Layouter: convert edges as a last step
-- XConnection style settable
 
 MINOR
-- LineCap.ROUND
-- SVGImage for magnets
 - fix connection stroke width
 - SVG export: arc size
 - Transparent stage?
@@ -36,4 +33,7 @@ DONE
 - Center node
 - select all CMD-A and menu
 - Zoom node
+- XConnection style settable
+- LineCap.ROUND
+- SVGImage for magnets
 

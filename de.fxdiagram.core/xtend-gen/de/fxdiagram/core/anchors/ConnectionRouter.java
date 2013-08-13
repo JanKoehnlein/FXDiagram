@@ -11,6 +11,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.geometry.BoundsExtensions;
 import java.util.ArrayList;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -409,18 +410,8 @@ public class ConnectionRouter implements XActivatable {
   
   protected Point2D midPoint(final XNode node) {
     Bounds _boundsInLocal = node.getBoundsInLocal();
-    double _minX = _boundsInLocal.getMinX();
-    Bounds _boundsInLocal_1 = node.getBoundsInLocal();
-    double _maxX = _boundsInLocal_1.getMaxX();
-    double _plus = (_minX + _maxX);
-    double _multiply = (0.5 * _plus);
-    Bounds _boundsInLocal_2 = node.getBoundsInLocal();
-    double _minY = _boundsInLocal_2.getMinY();
-    Bounds _boundsInLocal_3 = node.getBoundsInLocal();
-    double _maxY = _boundsInLocal_3.getMaxY();
-    double _plus_1 = (_minY + _maxY);
-    double _multiply_1 = (0.5 * _plus_1);
-    Point2D _localToRootDiagram = Extensions.localToRootDiagram(node, _multiply, _multiply_1);
+    Point2D _center = BoundsExtensions.center(_boundsInLocal);
+    Point2D _localToRootDiagram = Extensions.localToRootDiagram(node, _center);
     return _localToRootDiagram;
   }
   

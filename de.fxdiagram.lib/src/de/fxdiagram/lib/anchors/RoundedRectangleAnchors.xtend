@@ -28,7 +28,8 @@ class RoundedRectangleAnchors extends RectangleAnchors {
 			return null
 		val radiusBounds = host.getNode.localToRootDiagram(new BoundingBox(0, 0, radiusX, radiusY))
 		val radiusInRootDiagram = new Dimension2D(radiusBounds.width, radiusBounds.height)
-		if (rectAnchor.x < boundsInRootDiagram.minX + radiusInRootDiagram.width && rectAnchor.y < boundsInRootDiagram.minY + radiusInRootDiagram.height) {
+		if (rectAnchor.x < boundsInRootDiagram.minX + radiusInRootDiagram.width && 
+			rectAnchor.y < boundsInRootDiagram.minY + radiusInRootDiagram.height) {
 			// top-left corner
 			getPointOnCircle(rectAnchor.x, rectAnchor.y, boundsInRootDiagram.minX + radiusInRootDiagram.width,
 				boundsInRootDiagram.minY + radiusInRootDiagram.height,

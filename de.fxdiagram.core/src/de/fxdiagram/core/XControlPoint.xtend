@@ -1,15 +1,17 @@
 package de.fxdiagram.core
 
 import de.fxdiagram.core.behavior.MoveBehavior
-import de.fxdiagram.core.services.ImageCache
 import java.util.List
+import javafx.fxml.FXMLLoader
+import javafx.scene.Group
+import javafx.scene.Node
 import javafx.scene.effect.DropShadow
-import javafx.scene.image.ImageView
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.scene.transform.Affine
 
 import static de.fxdiagram.core.XControlPointType.*
+import static de.fxdiagram.core.geometry.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 import static extension java.lang.Math.*
@@ -39,9 +41,7 @@ class XControlPoint extends XShape {
 				]
 			}
 			case CONTROL_POINT: {
-				node = new ImageView => [
-					image = ImageCache.get.getImage("icons/magnet.png")
-				]
+				node = newMagnet
 			}
 			case INTERPOLATED: {
 				node = new Circle => [
@@ -109,8 +109,10 @@ class XControlPoint extends XShape {
 		}
 	}
 
-	protected def isClockwise(double x0, double y0, double x1, double y1, double x2, double y2) {
-		(x1 - x0) * (y1 + y0) + (x2 - x1) * (y2 + y1) + (x0 - x2) * (y0 + y2) > 0
+	protected def Node newMagnet() {
+		new Group => [
+			children += FXMLLoader.load(class.getResource('/icons/Magnet.fxml'))
+		]
 	}
 }
 
