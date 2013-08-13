@@ -9,11 +9,11 @@ import javafx.scene.shape.Path
 import javafx.scene.shape.QuadCurveTo
 import javafx.util.Duration
 
-import static java.lang.Math.*
+import static de.fxdiagram.core.layout.LayoutTransitionStyle.*
 
 class LayoutTransitionFactory {
-	
-	def createTransition(XShape shape, double endX, double endY, boolean curve, Duration duration) {
+
+	def createTransition(XShape shape, double endX, double endY, LayoutTransitionStyle style, Duration duration) {
 		// hack: a PathTransition modifies translateX/Y but we need to modify layoutX/Y
 		// we use a dummy node instead and bind its translate properties to the layout properties 
 		// for the duration of the Transition
@@ -27,19 +27,13 @@ class LayoutTransitionFactory {
 			cycleCount = 1
 			path = new Path => [
 				elements += new MoveTo(shape.layoutX, shape.layoutY)
-				if(curve) {
-					var double controlX
-					var double controlY
-					if(random > 0.5) {
-						controlX = shape.layoutX
-						controlY = endY
-					} else {
-						controlX = endX
-						controlY = shape.layoutY
-					}
-						elements += new QuadCurveTo(controlX, controlY, endX, endY)
-				} else {
-					elements += new LineTo(endX, endY)
+				switch style {
+					case STRAIGHT:
+						elements += new LineTo(endX, endY)
+					case CURVE_XFIRST:
+						elements += new QuadCurveTo(endX, shape.layoutY, endX, endY)
+					case CURVE_YFIRST:
+						elements += new QuadCurveTo(shape.layoutX, endY, endX, endY)
 				}
 			]
 		]
@@ -51,4 +45,10 @@ class LayoutTransitionFactory {
 		]
 		delegate
 	}
+}
+
+enum LayoutTransitionStyle {
+	STRAIGHT,
+	CURVE_XFIRST,
+	CURVE_YFIRST
 }

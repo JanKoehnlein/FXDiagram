@@ -29,6 +29,7 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.layout.LayoutTransitionFactory;
+import de.fxdiagram.core.layout.LayoutTransitionStyle;
 import de.fxdiagram.core.layout.LoggingTransformationService;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,20 +112,6 @@ public class Layouter {
         final KGraphElement kElement = entry.getValue();
         boolean _matched = false;
         if (!_matched) {
-          if (xElement instanceof XConnectionLabel) {
-            final XConnectionLabel _xConnectionLabel = (XConnectionLabel)xElement;
-            _matched=true;
-            EList<KGraphData> _data = kElement.getData();
-            Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
-            final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
-            float _xpos = shapeLayout.getXpos();
-            float _ypos = shapeLayout.getYpos();
-            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xConnectionLabel, _xpos, _ypos, 
-              true, duration);
-            animations.add(_createTransition);
-          }
-        }
-        if (!_matched) {
           if (xElement instanceof XNode) {
             final XNode _xNode = (XNode)xElement;
             _matched=true;
@@ -133,7 +120,7 @@ public class Layouter {
             final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
             float _xpos = shapeLayout.getXpos();
             float _ypos = shapeLayout.getYpos();
-            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xNode, _xpos, _ypos, true, duration);
+            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xNode, _xpos, _ypos, LayoutTransitionStyle.CURVE_XFIRST, duration);
             animations.add(_createTransition);
           }
         }
@@ -187,7 +174,7 @@ public class Layouter {
                 int _min = Math.min(_minus_3, (i).intValue());
                 final KVector layoutPoint = layoutPoints.get(_min);
                 final XControlPoint currentControlPoint = controlPoints.get((i).intValue());
-                final PathTransition transition = this._layoutTransitionFactory.createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, false, duration);
+                final PathTransition transition = this._layoutTransitionFactory.createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, LayoutTransitionStyle.CURVE_XFIRST, duration);
                 boolean _equals_2 = ((i).intValue() == 1);
                 if (_equals_2) {
                   final EventHandler<ActionEvent> unbind = transition.getOnFinished();

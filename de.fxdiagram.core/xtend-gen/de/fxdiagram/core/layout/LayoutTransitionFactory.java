@@ -1,6 +1,8 @@
 package de.fxdiagram.core.layout;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.layout.LayoutTransitionStyle;
 import javafx.animation.PathTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
@@ -18,7 +20,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class LayoutTransitionFactory {
-  public PathTransition createTransition(final XShape shape, final double endX, final double endY, final boolean curve, final Duration duration) {
+  public PathTransition createTransition(final XShape shape, final double endX, final double endY, final LayoutTransitionStyle style, final Duration duration) {
     PathTransition _xblockexpression = null;
     {
       Group _group = new Group();
@@ -45,27 +47,32 @@ public class LayoutTransitionFactory {
               double _layoutY = shape.getLayoutY();
               MoveTo _moveTo = new MoveTo(_layoutX, _layoutY);
               _elements.add(_moveTo);
-              if (curve) {
-                double controlX = 0;
-                double controlY = 0;
-                double _random = Math.random();
-                boolean _greaterThan = (_random > 0.5);
-                if (_greaterThan) {
-                  double _layoutX_1 = shape.getLayoutX();
-                  controlX = _layoutX_1;
-                  controlY = endY;
-                } else {
-                  controlX = endX;
-                  double _layoutY_1 = shape.getLayoutY();
-                  controlY = _layoutY_1;
+              boolean _matched = false;
+              if (!_matched) {
+                if (Objects.equal(style,LayoutTransitionStyle.STRAIGHT)) {
+                  _matched=true;
+                  ObservableList<PathElement> _elements_1 = it.getElements();
+                  LineTo _lineTo = new LineTo(endX, endY);
+                  _elements_1.add(_lineTo);
                 }
-                ObservableList<PathElement> _elements_1 = it.getElements();
-                QuadCurveTo _quadCurveTo = new QuadCurveTo(controlX, controlY, endX, endY);
-                _elements_1.add(_quadCurveTo);
-              } else {
-                ObservableList<PathElement> _elements_2 = it.getElements();
-                LineTo _lineTo = new LineTo(endX, endY);
-                _elements_2.add(_lineTo);
+              }
+              if (!_matched) {
+                if (Objects.equal(style,LayoutTransitionStyle.CURVE_XFIRST)) {
+                  _matched=true;
+                  ObservableList<PathElement> _elements_2 = it.getElements();
+                  double _layoutY_1 = shape.getLayoutY();
+                  QuadCurveTo _quadCurveTo = new QuadCurveTo(endX, _layoutY_1, endX, endY);
+                  _elements_2.add(_quadCurveTo);
+                }
+              }
+              if (!_matched) {
+                if (Objects.equal(style,LayoutTransitionStyle.CURVE_YFIRST)) {
+                  _matched=true;
+                  ObservableList<PathElement> _elements_3 = it.getElements();
+                  double _layoutX_1 = shape.getLayoutX();
+                  QuadCurveTo _quadCurveTo_1 = new QuadCurveTo(_layoutX_1, endY, endX, endY);
+                  _elements_3.add(_quadCurveTo_1);
+                }
               }
             }
           };

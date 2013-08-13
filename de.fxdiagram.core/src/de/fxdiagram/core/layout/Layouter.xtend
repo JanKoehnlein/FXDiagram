@@ -70,7 +70,7 @@ class Layouter {
 				}
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
-					animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, true, duration)
+					animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, LayoutTransitionStyle.CURVE_XFIRST, duration)
 				}
 				XConnection: {
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
@@ -92,7 +92,7 @@ class Layouter {
 					for(i: 1..<controlPoints.size-1) {
 						val layoutPoint = layoutPoints.get(min(layoutPoints.size-1, i))
 						val currentControlPoint = controlPoints.get(i)
-						val transition = createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, false, duration)
+						val transition = createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, LayoutTransitionStyle.CURVE_XFIRST, duration)
 						if (i == 1) {
 							val unbind = transition.onFinished
 							transition.onFinished = [
