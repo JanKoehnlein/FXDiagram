@@ -59,8 +59,8 @@ public class Main extends Application {
       final Scene scene = _scene;
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       scene.setCamera(_perspectiveCamera);
+      root.activate();
       final XRootDiagram diagram = root.getDiagram();
-      diagram.activate();
       NestedDiagramNode _nestedDiagramNode = new NestedDiagramNode("source");
       final Procedure1<NestedDiagramNode> _function = new Procedure1<NestedDiagramNode>() {
         public void apply(final NestedDiagramNode it) {

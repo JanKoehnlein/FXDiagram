@@ -124,7 +124,7 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				chooser += model.superTypes.map[
 					superType | new JavaTypeNode => [ it.javaType = superType ]
 				] 
-				host.rootDiagram.currentTool = chooser
+				host.root.currentTool = chooser
 			]
 			host.diagram.buttons += #[
 				new XRapidButton(host, 0.5, 0, 'icons/SuperType.gif', addSuperTypeAction),
@@ -138,7 +138,7 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				chooser += model.references.map[
 					reference | new JavaTypeNode => [ it.javaType = reference.type ]
 				] 
-				host.rootDiagram.currentTool = chooser
+				host.root.currentTool = chooser
 			]
 			host.diagram.buttons += #[
 				new XRapidButton(host, 0, 0.5, 'icons/Reference.gif', addReferencesAction),

@@ -1,10 +1,10 @@
 package de.fxdiagram.core.tools.actions
 
-import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.core.XRoot
 
 class ExitAction implements DiagramAction {
 	
-	override perform(XRootDiagram rootDiagram) {
+	override perform(XRoot root) {
 		System.exit(0)
 	}
 	

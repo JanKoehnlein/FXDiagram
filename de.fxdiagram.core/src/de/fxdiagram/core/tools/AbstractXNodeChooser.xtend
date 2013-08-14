@@ -107,7 +107,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 					spinToPosition.targetPositionDelta = 1
 				case KeyCode.ENTER: {
 					nodeChosen(getCurrentNode)
-					host.getRootDiagram.restoreDefaultTool
+					host.root.restoreDefaultTool
 				}
 				case KeyCode.BACK_SPACE: {
 					val oldFilter = getFilterString
@@ -214,7 +214,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 						spinToPosition.targetPosition = getNodes.toList.indexOf(node)
 					case 2: {
 						nodeChosen(getCurrentNode)
-						host.getRootDiagram.restoreDefaultTool
+						host.root.restoreDefaultTool
 					}
 				}
 			]
@@ -224,7 +224,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		getDiagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		currentPositionProperty.addListener(positionListener)
 		filterStringProperty.addListener(filterChangeListener)
-		host.getRootDiagram.getRoot.children += getFilterLabel
+		host.root.children += getFilterLabel
 		getFilterLabel.toFront
 		true
 	}
@@ -232,7 +232,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	override deactivate() {
 		if (!getIsActive)
 			return false
-		host.getRootDiagram.getRoot.children -= getFilterLabel
+		host.root.children -= getFilterLabel
 		isActiveProperty.set(false)
 		getDiagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		getDiagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)
@@ -279,7 +279,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	}
 
 	protected def cancel() {
-		host.getRootDiagram.restoreDefaultTool
+		host.root.restoreDefaultTool
 	}
 
 	protected def void setInterpolatedPosition(double interpolatedPosition)

@@ -1,9 +1,14 @@
 package de.fxdiagram.core.tools
 
-import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.tools.actions.CenterAction
+import de.fxdiagram.core.tools.actions.DiagramAction
 import de.fxdiagram.core.tools.actions.ExitAction
 import de.fxdiagram.core.tools.actions.ExportSvgAction
 import de.fxdiagram.core.tools.actions.LayoutAction
+import de.fxdiagram.core.tools.actions.SelectAllAction
+import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import eu.hansolo.enzo.radialmenu.MenuItem
 import eu.hansolo.enzo.radialmenu.Options
 import eu.hansolo.enzo.radialmenu.RadialMenu
@@ -16,16 +21,11 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
-import de.fxdiagram.annotations.logging.Logging
-import de.fxdiagram.core.tools.actions.SelectAllAction
-import de.fxdiagram.core.tools.actions.ZoomToFitAction
-import de.fxdiagram.core.tools.actions.CenterAction
-import de.fxdiagram.core.tools.actions.DiagramAction
 
 @Logging
 class MenuTool implements XDiagramTool {
 
-	XRootDiagram diagram
+	XRoot root
 
 	EventHandler<KeyEvent> keyHandler
 	EventHandler<MouseEvent> mouseHandler
@@ -34,8 +34,8 @@ class MenuTool implements XDiagramTool {
 	RadialMenu menu
 	MenuItem selection
 
-	new(XRootDiagram diagram) {
-		this.diagram = diagram
+	new(XRoot root) {
+		this.root = root
 		keyHandler = [
 			val DiagramAction action = switch code {
 				case KeyCode.A:
@@ -74,7 +74,7 @@ class MenuTool implements XDiagramTool {
 				}
 				default: null
 			}
-			action?.perform(diagram)
+			action?.perform(root)
 		]
 		menu = new RadialMenu(
 			new Options => [
@@ -99,7 +99,7 @@ class MenuTool implements XDiagramTool {
 				if (menu.state == State.OPENED) {
 					closeMenu
 					consume
-				} else if (target == diagram.scene && menu.state != State.OPENED) {
+				} else if (target == root.scene && menu.state != State.OPENED) {
 					openMenu
 					consume
 				}
@@ -110,9 +110,9 @@ class MenuTool implements XDiagramTool {
 
 	protected def openMenu() {
 		menuGroup = new Group
-		diagram.root.children += menuGroup => [
-			translateX = 0.5 * diagram.scene.width
-			translateY = 0.5 * diagram.scene.height
+		root.children += menuGroup => [
+			translateX = 0.5 * root.scene.width
+			translateY = 0.5 * root.scene.height
 			children += menu => [
 				show
 				open
@@ -140,7 +140,7 @@ class MenuTool implements XDiagramTool {
 								null								
 							}
 						}
-						action?.perform(diagram)
+						action?.perform(root)
 					}
 					selection = null
 				]
@@ -151,19 +151,19 @@ class MenuTool implements XDiagramTool {
 	protected def closeMenu() {
 		menu.hide
 		if (menuGroup != null && menuGroup.parent != null) {
-			diagram.root.children -= menuGroup
+			root.children -= menuGroup
 		}
 	}
 
 	override activate() {
-		diagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
-		diagram.scene.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
+		root.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
+		root.scene.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
 		true
 	}
 
 	override deactivate() {
-		diagram.scene.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
-		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
+		root.scene.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
+		root.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		true
 	}
 }

@@ -1,8 +1,8 @@
 package de.fxdiagram.core.tools.actions
 
-import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.core.XRoot
 
 interface DiagramAction {
 	
-	def void perform(XRootDiagram rootDiagram)
+	def void perform(XRoot root)
 }

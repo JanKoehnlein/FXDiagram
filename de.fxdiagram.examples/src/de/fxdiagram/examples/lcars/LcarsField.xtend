@@ -114,7 +114,7 @@ class LcarsQueryTask extends Task<Void> {
 				]
 			]
 		Platform.runLater [|
-			host.rootDiagram.currentTool = chooser
+			host.root.currentTool = chooser
 			host.allTextNodes.head.fill = FLESH
 			host.allTextNodes.tail.forEach[fill = ORANGE]
 		]

@@ -55,7 +55,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 					actualHeightProperty.get * 0.5 * (1 - scale + 2 * this.y / actualHeightProperty.get) *
 						(1 / (1 - scale))
 				)
-				new ScrollToAndScaleTransition(rootDiagram, centerInDiagram, 10000) => [
+				new ScrollToAndScaleTransition(root, centerInDiagram, 10000) => [
 					duration = 5.seconds
 					interpolator = [
 						exp(log(10000) * it) / 10000

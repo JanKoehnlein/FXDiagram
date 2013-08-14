@@ -156,7 +156,7 @@ public class NestedDiagramNode extends XNode {
   public void doActivate() {
     super.doActivate();
     XAbstractDiagram _diagram = Extensions.getDiagram(this);
-    ObservableList<XNestedDiagram> _subDiagrams = _diagram.getSubDiagrams();
+    ObservableList<XAbstractDiagram> _subDiagrams = _diagram.getSubDiagrams();
     _subDiagrams.add(this.innerDiagram);
     XRootDiagram _rootDiagram = Extensions.getRootDiagram(this);
     ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _rootDiagram.boundsInParentProperty();

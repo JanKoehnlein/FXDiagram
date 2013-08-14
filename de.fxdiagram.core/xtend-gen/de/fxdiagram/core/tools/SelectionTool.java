@@ -5,6 +5,7 @@ import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
@@ -25,7 +26,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class SelectionTool implements XDiagramTool {
-  private XRootDiagram rootDiagram;
+  private XRoot root;
   
   private EventHandler<MouseEvent> mousePressedHandler;
   
@@ -33,11 +34,11 @@ public class SelectionTool implements XDiagramTool {
   
   private EventHandler<MouseEvent> mouseReleasedHandler;
   
-  public SelectionTool(final XRootDiagram rootDiagram) {
-    this.rootDiagram = rootDiagram;
+  public SelectionTool(final XRoot root) {
+    this.root = root;
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent event) {
-        Iterable<XShape> _currentSelection = rootDiagram.getCurrentSelection();
+        Iterable<XShape> _currentSelection = root.getCurrentSelection();
         final Set<XShape> selection = IterableExtensions.<XShape>toSet(_currentSelection);
         boolean _and = false;
         EventTarget _target = event.getTarget();
@@ -135,7 +136,7 @@ public class SelectionTool implements XDiagramTool {
     this.mousePressedHandler = _function;
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
-        final Iterable<XShape> selection = rootDiagram.getCurrentSelection();
+        final Iterable<XShape> selection = root.getCurrentSelection();
         for (final XShape shape : selection) {
           MoveBehavior<? extends XShape> _moveBehavior = null;
           if (shape!=null) {
@@ -145,7 +146,8 @@ public class SelectionTool implements XDiagramTool {
             _moveBehavior.mouseDragged(it);
           }
         }
-        AuxiliaryLinesSupport _auxiliaryLinesSupport = rootDiagram.getAuxiliaryLinesSupport();
+        XRootDiagram _diagram = root.getDiagram();
+        AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.show(selection);
         }
@@ -155,7 +157,8 @@ public class SelectionTool implements XDiagramTool {
     this.mouseDraggedHandler = _function_1;
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
-        AuxiliaryLinesSupport _auxiliaryLinesSupport = rootDiagram.getAuxiliaryLinesSupport();
+        XRootDiagram _diagram = root.getDiagram();
+        AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.hide();
         }
@@ -185,10 +188,10 @@ public class SelectionTool implements XDiagramTool {
   public boolean activate() {
     boolean _xblockexpression = false;
     {
-      Scene _scene = this.rootDiagram.getScene();
+      Scene _scene = this.root.getScene();
       _scene.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
-      this.rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
-      this.rootDiagram.<MouseEvent>addEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
+      this.root.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
+      this.root.<MouseEvent>addEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
       _xblockexpression = (true);
     }
     return _xblockexpression;
@@ -197,10 +200,10 @@ public class SelectionTool implements XDiagramTool {
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
-      Scene _scene = this.rootDiagram.getScene();
+      Scene _scene = this.root.getScene();
       _scene.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
-      this.rootDiagram.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
-      this.rootDiagram.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
+      this.root.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
+      this.root.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
       _xblockexpression = (true);
     }
     return _xblockexpression;

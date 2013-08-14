@@ -1,6 +1,12 @@
 package de.fxdiagram.core.anchors
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.XActivatable
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XControlPoint
+import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XRootDiagram
 import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -8,16 +14,10 @@ import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
 
-import static extension de.fxdiagram.core.Extensions.*
-import de.fxdiagram.annotations.properties.ReadOnly
-import de.fxdiagram.core.XActivatable
-import de.fxdiagram.core.XControlPoint
-import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XNode
-import de.fxdiagram.core.XRootDiagram
 import static de.fxdiagram.core.XConnectionKind.*
 import static de.fxdiagram.core.XControlPointType.*
 
+import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 
 class ConnectionRouter implements XActivatable {

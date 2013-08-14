@@ -224,8 +224,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             _matched=true;
             XNode _currentNode = AbstractXNodeChooser.this.getCurrentNode();
             AbstractXNodeChooser.this.nodeChosen(_currentNode);
-            XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
-            _rootDiagram.restoreDefaultTool();
+            XRoot _root = Extensions.getRoot(host);
+            _root.restoreDefaultTool();
           }
         }
         if (!_matched) {
@@ -512,8 +512,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
                   _matched=true;
                   XNode _currentNode = AbstractXNodeChooser.this.getCurrentNode();
                   AbstractXNodeChooser.this.nodeChosen(_currentNode);
-                  XRootDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
-                  _rootDiagram.restoreDefaultTool();
+                  XRoot _root = Extensions.getRoot(AbstractXNodeChooser.this.host);
+                  _root.restoreDefaultTool();
                 }
               }
             }
@@ -533,8 +533,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       this.currentPositionProperty.addListener(this.positionListener);
       this.filterStringProperty.addListener(this.filterChangeListener);
-      XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
-      XRoot _root = _rootDiagram.getRoot();
+      XRoot _root = Extensions.getRoot(this.host);
       ObservableList<Node> _children_3 = _root.getChildren();
       Label _filterLabel = this.getFilterLabel();
       _children_3.add(_filterLabel);
@@ -553,8 +552,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       if (_not) {
         return false;
       }
-      XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
-      XRoot _root = _rootDiagram.getRoot();
+      XRoot _root = Extensions.getRoot(this.host);
       ObservableList<Node> _children = _root.getChildren();
       Label _filterLabel = this.getFilterLabel();
       _children.remove(_filterLabel);
@@ -667,8 +665,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   }
   
   protected void cancel() {
-    XRootDiagram _rootDiagram = Extensions.getRootDiagram(this.host);
-    _rootDiagram.restoreDefaultTool();
+    XRoot _root = Extensions.getRoot(this.host);
+    _root.restoreDefaultTool();
   }
   
   protected abstract void setInterpolatedPosition(final double interpolatedPosition);

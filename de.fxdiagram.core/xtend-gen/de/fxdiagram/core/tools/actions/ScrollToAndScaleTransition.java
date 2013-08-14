@@ -1,5 +1,6 @@
 package de.fxdiagram.core.tools.actions;
 
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.geometry.TransformExtensions;
 import javafx.animation.Transition;
@@ -12,7 +13,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class ScrollToAndScaleTransition extends Transition {
-  private XRootDiagram diagram;
+  private XRoot root;
   
   private double fromScale;
   
@@ -22,41 +23,49 @@ public class ScrollToAndScaleTransition extends Transition {
   
   private Point2D toTranslation;
   
-  public ScrollToAndScaleTransition(final XRootDiagram diagram, final Point2D targetCenterInDiagram, final double targetScale) {
-    this.diagram = diagram;
-    double _scale = diagram.getScale();
+  public ScrollToAndScaleTransition(final XRoot root, final Point2D targetCenterInDiagram, final double targetScale) {
+    this.root = root;
+    XRootDiagram _diagram = root.getDiagram();
+    double _scale = _diagram.getScale();
     this.fromScale = _scale;
     double _max = Math.max(XRootDiagram.MIN_SCALE, targetScale);
     this.toScale = _max;
-    Affine _canvasTransform = diagram.getCanvasTransform();
+    XRootDiagram _diagram_1 = root.getDiagram();
+    Affine _canvasTransform = _diagram_1.getCanvasTransform();
     double _tx = _canvasTransform.getTx();
-    Affine _canvasTransform_1 = diagram.getCanvasTransform();
+    XRootDiagram _diagram_2 = root.getDiagram();
+    Affine _canvasTransform_1 = _diagram_2.getCanvasTransform();
     double _ty = _canvasTransform_1.getTy();
     Point2D _point2D = new Point2D(_tx, _ty);
     this.fromTranslation = _point2D;
     final double rescale = (this.toScale / this.fromScale);
-    Affine _canvasTransform_2 = diagram.getCanvasTransform();
+    XRootDiagram _diagram_3 = root.getDiagram();
+    Affine _canvasTransform_2 = _diagram_3.getCanvasTransform();
     TransformExtensions.scale(_canvasTransform_2, rescale, rescale);
-    final Point2D centerInScene = diagram.localToScene(targetCenterInDiagram);
-    Scene _scene = diagram.getScene();
+    XRootDiagram _diagram_4 = root.getDiagram();
+    final Point2D centerInScene = _diagram_4.localToScene(targetCenterInDiagram);
+    Scene _scene = root.getScene();
     double _width = _scene.getWidth();
     double _multiply = (0.5 * _width);
     double _x = centerInScene.getX();
     double _minus = (_multiply - _x);
-    Affine _canvasTransform_3 = diagram.getCanvasTransform();
+    XRootDiagram _diagram_5 = root.getDiagram();
+    Affine _canvasTransform_3 = _diagram_5.getCanvasTransform();
     double _tx_1 = _canvasTransform_3.getTx();
     double _plus = (_minus + _tx_1);
-    Scene _scene_1 = diagram.getScene();
+    Scene _scene_1 = root.getScene();
     double _height = _scene_1.getHeight();
     double _multiply_1 = (0.5 * _height);
     double _y = centerInScene.getY();
     double _minus_1 = (_multiply_1 - _y);
-    Affine _canvasTransform_4 = diagram.getCanvasTransform();
+    XRootDiagram _diagram_6 = root.getDiagram();
+    Affine _canvasTransform_4 = _diagram_6.getCanvasTransform();
     double _ty_1 = _canvasTransform_4.getTy();
     double _plus_1 = (_minus_1 + _ty_1);
     Point2D _point2D_1 = new Point2D(_plus, _plus_1);
     this.toTranslation = _point2D_1;
-    Affine _canvasTransform_5 = diagram.getCanvasTransform();
+    XRootDiagram _diagram_7 = root.getDiagram();
+    Affine _canvasTransform_5 = _diagram_7.getCanvasTransform();
     double _divide = (1 / rescale);
     double _divide_1 = (1 / rescale);
     TransformExtensions.scale(_canvasTransform_5, _divide, _divide_1);
@@ -85,10 +94,13 @@ public class ScrollToAndScaleTransition extends Transition {
     double _y_1 = this.toTranslation.getY();
     double _multiply_5 = (frac * _y_1);
     final double tyNow = (_multiply_4 + _multiply_5);
-    double _scale = this.diagram.getScale();
+    XRootDiagram _diagram = this.root.getDiagram();
+    double _scale = _diagram.getScale();
     final double rescale = (scaleNow / _scale);
-    this.diagram.setScale(scaleNow);
-    Affine _canvasTransform = this.diagram.getCanvasTransform();
+    XRootDiagram _diagram_1 = this.root.getDiagram();
+    _diagram_1.setScale(scaleNow);
+    XRootDiagram _diagram_2 = this.root.getDiagram();
+    Affine _canvasTransform = _diagram_2.getCanvasTransform();
     final Procedure1<Affine> _function = new Procedure1<Affine>() {
       public void apply(final Affine it) {
         TransformExtensions.scale(it, rescale, rescale);

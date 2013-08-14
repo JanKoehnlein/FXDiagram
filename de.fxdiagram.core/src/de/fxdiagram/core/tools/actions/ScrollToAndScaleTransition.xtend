@@ -1,18 +1,19 @@
 package de.fxdiagram.core.tools.actions
 
+import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XRootDiagram
 import javafx.animation.Transition
 import javafx.geometry.Point2D
+import javafx.util.Duration
 
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
 import static extension javafx.util.Duration.*
-import javafx.util.Duration
 
 class ScrollToAndScaleTransition extends Transition {
 
-	XRootDiagram diagram
+	XRoot root
 
 	double fromScale
 	double toScale
@@ -20,18 +21,18 @@ class ScrollToAndScaleTransition extends Transition {
 	Point2D fromTranslation
 	Point2D toTranslation
 
-	new(XRootDiagram diagram, Point2D targetCenterInDiagram, double targetScale) {
-		this.diagram = diagram
-		fromScale = diagram.scale
+	new(XRoot root, Point2D targetCenterInDiagram, double targetScale) {
+		this.root = root
+		fromScale = root.diagram.scale
 		toScale = max(XRootDiagram.MIN_SCALE, targetScale)
-		fromTranslation = new Point2D(diagram.canvasTransform.tx, diagram.canvasTransform.ty)
+		fromTranslation = new Point2D(root.diagram.canvasTransform.tx, root.diagram.canvasTransform.ty)
 		val rescale = toScale / fromScale
-		diagram.canvasTransform.scale(rescale, rescale)
-		val centerInScene = diagram.localToScene(targetCenterInDiagram)
+		root.diagram.canvasTransform.scale(rescale, rescale)
+		val centerInScene = root.diagram.localToScene(targetCenterInDiagram)
 		toTranslation = new Point2D(
-					0.5 * diagram.scene.width - centerInScene.x + diagram.canvasTransform.tx,
-					0.5 * diagram.scene.height - centerInScene.y + diagram.canvasTransform.ty)
-		diagram.canvasTransform.scale(1/rescale, 1/rescale)
+					0.5 * root.scene.width - centerInScene.x + root.diagram.canvasTransform.tx,
+					0.5 * root.scene.height - centerInScene.y + root.diagram.canvasTransform.ty)
+		root.diagram.canvasTransform.scale(1/rescale, 1/rescale)
 		cycleDuration = 500.millis
 	}
 	
@@ -43,9 +44,9 @@ class ScrollToAndScaleTransition extends Transition {
 		val scaleNow = (1-frac) * fromScale + frac * toScale
 		val txNow =  (1-frac) * fromTranslation.x + frac * toTranslation.x
 		val tyNow =  (1-frac) * fromTranslation.y + frac * toTranslation.y
-		val rescale = scaleNow / diagram.scale
-		diagram.scale = scaleNow
-		diagram.canvasTransform => [
+		val rescale = scaleNow / root.diagram.scale
+		root.diagram.scale = scaleNow
+		root.diagram.canvasTransform => [
 			scale(rescale, rescale)
 			tx = txNow
 			ty = tyNow

@@ -10,10 +10,11 @@ import javafx.scene.input.ZoomEvent
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import de.fxdiagram.core.XRoot
 
 class DiagramGestureTool implements XDiagramTool {
 
-	XRootDiagram diagram
+	XRoot root
 
 	ZoomContext zoomContext
 
@@ -25,31 +26,31 @@ class DiagramGestureTool implements XDiagramTool {
 
 	EventHandler<RotateEvent> rotateHandler
 	
-	new(XRootDiagram diagram) {
-		this.diagram = diagram
+	new(XRoot root) {
+		this.root = root
 		zoomStartHandler = [
-			zoomContext = new ZoomContext(diagram.sceneToLocal(sceneX, sceneY))
+			zoomContext = new ZoomContext(root.diagram.sceneToLocal(sceneX, sceneY))
 		]
 		zoomHandler = [
 			val scale = max(totalZoomFactor / zoomContext.previousScale, XRootDiagram.MIN_SCALE)
-			val newScale = scale * diagram.scaleProperty.get 
-			diagram.scale = newScale
-			diagram.canvasTransform.scale(scale, scale)
-			val pivotInScene = diagram.localToScene(zoomContext.pivotInDiagram)
-			diagram.canvasTransform.translate(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
+			val newScale = scale * root.diagram.scaleProperty.get 
+			root.diagram.scale = newScale
+			root.diagram.canvasTransform.scale(scale, scale)
+			val pivotInScene = root.diagram.localToScene(zoomContext.pivotInDiagram)
+			root.diagram.canvasTransform.translate(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
 			zoomContext.previousScale = totalZoomFactor
 		]
 		scrollHandler = [
-			diagram.canvasTransform.translate(deltaX, deltaY)
+			root.diagram.canvasTransform.translate(deltaX, deltaY)
 		]
 		rotateHandler = [
 			if (shortcutDown)
-				diagram.canvasTransform.rotate(angle, sceneX, sceneY)
+				root.diagram.canvasTransform.rotate(angle, sceneX, sceneY)
 		]
 	}
 
 	override activate() {
-		val scene = diagram.scene
+		val scene = root.scene
 		scene.addEventHandler(ZoomEvent.ZOOM_STARTED, zoomStartHandler)
 		scene.addEventHandler(ZoomEvent.ZOOM, zoomHandler)
 		scene.addEventHandler(ZoomEvent.ZOOM_FINISHED, zoomHandler)
@@ -62,7 +63,7 @@ class DiagramGestureTool implements XDiagramTool {
 	}
 
 	override deactivate() {
-		val scene = diagram.scene
+		val scene = root.scene
 		scene.removeEventHandler(ZoomEvent.ZOOM_STARTED, zoomStartHandler)
 		scene.removeEventHandler(ZoomEvent.ZOOM, zoomHandler)
 		scene.removeEventHandler(ZoomEvent.ZOOM_FINISHED, zoomHandler)

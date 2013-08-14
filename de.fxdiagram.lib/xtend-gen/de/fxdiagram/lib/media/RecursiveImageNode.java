@@ -2,7 +2,7 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
@@ -105,8 +105,8 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
           double _divide_3 = (1 / _minus_3);
           double _multiply_7 = (_multiply_6 * _divide_3);
           final Point2D centerInDiagram = Extensions.localToRootDiagram(RecursiveImageNode.this, _multiply_3, _multiply_7);
-          XRootDiagram _rootDiagram = Extensions.getRootDiagram(RecursiveImageNode.this);
-          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_rootDiagram, centerInDiagram, 10000);
+          XRoot _root = Extensions.getRoot(RecursiveImageNode.this);
+          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, centerInDiagram, 10000);
           final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
             public void apply(final ScrollToAndScaleTransition it) {
               Duration _seconds = Duration.seconds(5);

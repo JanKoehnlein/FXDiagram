@@ -35,17 +35,17 @@ class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 		val chooseAction = [ XRapidButton button | 
 			val chooser = new CarusselChooser(host, button.getChooserPosition)
 			chooser.addChoices
-			host.rootDiagram.currentTool = chooser
+			host.root.currentTool = chooser
 		]
 		val cubeChooseAction = [ XRapidButton button | 
 			val chooser = new CubeChooser(host, button.getChooserPosition)
 			chooser.addChoices
-			host.rootDiagram.currentTool = chooser
+			host.root.currentTool = chooser
 		]
 		val coverFlowChooseAction = [ XRapidButton button | 
 			val chooser = new CoverFlowChooser(host, button.getChooserPosition)
 			chooser.addChoices
-			host.rootDiagram.currentTool = chooser
+			host.root.currentTool = chooser
 		]
 		rapidButtons = #[
 			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', cubeChooseAction),

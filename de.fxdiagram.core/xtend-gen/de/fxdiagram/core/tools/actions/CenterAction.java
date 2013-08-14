@@ -2,7 +2,7 @@ package de.fxdiagram.core.tools.actions;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
-import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.binding.NumberExpressionExtensions;
 import de.fxdiagram.core.geometry.BoundsExtensions;
@@ -18,8 +18,8 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class CenterAction implements DiagramAction {
-  public void perform(final XRootDiagram diagram) {
-    Iterable<XShape> _currentSelection = diagram.getCurrentSelection();
+  public void perform(final XRoot root) {
+    Iterable<XShape> _currentSelection = root.getCurrentSelection();
     final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
       public Bounds apply(final XShape it) {
         Bounds _boundsInLocal = it.getBoundsInLocal();
@@ -53,18 +53,18 @@ public class CenterAction implements DiagramAction {
       _and = (_and_1 && _greaterThan_1);
     }
     if (_and) {
-      Scene _scene = diagram.getScene();
+      Scene _scene = root.getScene();
       double _width_1 = _scene.getWidth();
       double _width_2 = selectionBounds.getWidth();
       double _divide = (_width_1 / _width_2);
-      Scene _scene_1 = diagram.getScene();
+      Scene _scene_1 = root.getScene();
       double _height_1 = _scene_1.getHeight();
       double _height_2 = selectionBounds.getHeight();
       double _divide_1 = (_height_1 / _height_2);
       double _min = Math.min(_divide, _divide_1);
       final double targetScale = Math.min(1, _min);
       Point2D _center = BoundsExtensions.center(selectionBounds);
-      ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(diagram, _center, targetScale);
+      ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(root, _center, targetScale);
       _scrollToAndScaleTransition.play();
     }
   }

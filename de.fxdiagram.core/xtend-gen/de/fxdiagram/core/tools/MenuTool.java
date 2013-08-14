@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.actions.CenterAction;
 import de.fxdiagram.core.tools.actions.DiagramAction;
@@ -43,7 +42,7 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 @Logging
 @SuppressWarnings("all")
 public class MenuTool implements XDiagramTool {
-  private XRootDiagram diagram;
+  private XRoot root;
   
   private EventHandler<KeyEvent> keyHandler;
   
@@ -55,8 +54,8 @@ public class MenuTool implements XDiagramTool {
   
   private MenuItem selection;
   
-  public MenuTool(final XRootDiagram diagram) {
-    this.diagram = diagram;
+  public MenuTool(final XRoot root) {
+    this.root = root;
     final EventHandler<KeyEvent> _function = new EventHandler<KeyEvent>() {
       public void handle(final KeyEvent it) {
         DiagramAction _switchResult = null;
@@ -177,7 +176,7 @@ public class MenuTool implements XDiagramTool {
         }
         final DiagramAction action = _switchResult;
         if (action!=null) {
-          action.perform(diagram);
+          action.perform(root);
         }
       }
     };
@@ -227,7 +226,7 @@ public class MenuTool implements XDiagramTool {
           } else {
             boolean _and = false;
             EventTarget _target = it.getTarget();
-            Scene _scene = diagram.getScene();
+            Scene _scene = root.getScene();
             boolean _equals_2 = Objects.equal(_target, _scene);
             if (!_equals_2) {
               _and = false;
@@ -252,15 +251,14 @@ public class MenuTool implements XDiagramTool {
     {
       Group _group = new Group();
       this.menuGroup = _group;
-      XRoot _root = this.diagram.getRoot();
-      ObservableList<Node> _children = _root.getChildren();
+      ObservableList<Node> _children = this.root.getChildren();
       final Procedure1<Group> _function = new Procedure1<Group>() {
         public void apply(final Group it) {
-          Scene _scene = MenuTool.this.diagram.getScene();
+          Scene _scene = MenuTool.this.root.getScene();
           double _width = _scene.getWidth();
           double _multiply = (0.5 * _width);
           it.setTranslateX(_multiply);
-          Scene _scene_1 = MenuTool.this.diagram.getScene();
+          Scene _scene_1 = MenuTool.this.root.getScene();
           double _height = _scene_1.getHeight();
           double _multiply_1 = (0.5 * _height);
           it.setTranslateY(_multiply_1);
@@ -338,7 +336,7 @@ public class MenuTool implements XDiagramTool {
                     }
                     final DiagramAction action = _switchResult;
                     if (action!=null) {
-                      action.perform(MenuTool.this.diagram);
+                      action.perform(MenuTool.this.root);
                     }
                   }
                   MenuTool.this.selection = null;
@@ -373,8 +371,7 @@ public class MenuTool implements XDiagramTool {
         _and = (_notEquals && _notEquals_1);
       }
       if (_and) {
-        XRoot _root = this.diagram.getRoot();
-        ObservableList<Node> _children = _root.getChildren();
+        ObservableList<Node> _children = this.root.getChildren();
         boolean _remove = _children.remove(this.menuGroup);
         _xifexpression = Boolean.valueOf(_remove);
       }
@@ -386,9 +383,9 @@ public class MenuTool implements XDiagramTool {
   public boolean activate() {
     boolean _xblockexpression = false;
     {
-      Scene _scene = this.diagram.getScene();
+      Scene _scene = this.root.getScene();
       _scene.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-      Scene _scene_1 = this.diagram.getScene();
+      Scene _scene_1 = this.root.getScene();
       _scene_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_PRESSED, this.mouseHandler);
       _xblockexpression = (true);
     }
@@ -398,9 +395,9 @@ public class MenuTool implements XDiagramTool {
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
-      Scene _scene = this.diagram.getScene();
+      Scene _scene = this.root.getScene();
       _scene.<MouseEvent>removeEventHandler(MouseEvent.MOUSE_PRESSED, this.mouseHandler);
-      Scene _scene_1 = this.diagram.getScene();
+      Scene _scene_1 = this.root.getScene();
       _scene_1.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       _xblockexpression = (true);
     }

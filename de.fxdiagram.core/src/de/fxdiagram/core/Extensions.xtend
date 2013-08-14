@@ -80,6 +80,14 @@ class Extensions {
 		}
 	}
 
+	def static XRoot getRoot(Node it) {
+		switch it {
+			case null: null
+			XRoot: it
+			default: getRoot(it.parent)
+		}
+	}
+
 	def static getTargetShape(MouseEvent event) {
 		if (event.target instanceof Node)
 			getContainerShape(event.target as Node)

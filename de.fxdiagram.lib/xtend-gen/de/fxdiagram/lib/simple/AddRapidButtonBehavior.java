@@ -8,7 +8,7 @@ import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
-import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.tools.AbstractXNodeChooser;
@@ -71,8 +71,8 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
         CarusselChooser _carusselChooser = new CarusselChooser(host, _chooserPosition);
         final CarusselChooser chooser = _carusselChooser;
         AddRapidButtonBehavior.this.addChoices(chooser);
-        XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
-        _rootDiagram.setCurrentTool(chooser);
+        XRoot _root = Extensions.getRoot(host);
+        _root.setCurrentTool(chooser);
       }
     };
     final Procedure1<XRapidButton> chooseAction = _function_1;
@@ -82,8 +82,8 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
         CubeChooser _cubeChooser = new CubeChooser(host, _chooserPosition);
         final CubeChooser chooser = _cubeChooser;
         AddRapidButtonBehavior.this.addChoices(chooser);
-        XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
-        _rootDiagram.setCurrentTool(chooser);
+        XRoot _root = Extensions.getRoot(host);
+        _root.setCurrentTool(chooser);
       }
     };
     final Procedure1<XRapidButton> cubeChooseAction = _function_2;
@@ -93,8 +93,8 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
         CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(host, _chooserPosition);
         final CoverFlowChooser chooser = _coverFlowChooser;
         AddRapidButtonBehavior.this.addChoices(chooser);
-        XRootDiagram _rootDiagram = Extensions.getRootDiagram(host);
-        _rootDiagram.setCurrentTool(chooser);
+        XRoot _root = Extensions.getRoot(host);
+        _root.setCurrentTool(chooser);
       }
     };
     final Procedure1<XRapidButton> coverFlowChooseAction = _function_3;

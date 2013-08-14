@@ -2,7 +2,7 @@ package de.fxdiagram.core.tools
 
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XRapidButton
-import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import java.util.Collection
 import javafx.event.EventHandler
@@ -14,16 +14,16 @@ import static extension de.fxdiagram.core.Extensions.*
 
 class SelectionTool implements XDiagramTool {
 
-	XRootDiagram rootDiagram
+	XRoot root
 
 	EventHandler<MouseEvent> mousePressedHandler
 	EventHandler<MouseEvent> mouseDraggedHandler
 	EventHandler<MouseEvent> mouseReleasedHandler
 
-	new(XRootDiagram rootDiagram) {
-		this.rootDiagram = rootDiagram
+	new(XRoot root) {
+		this.root = root
 		this.mousePressedHandler = [ event |
-			val selection = rootDiagram.currentSelection.toSet
+			val selection = root.currentSelection.toSet
 			if(event.target instanceof Scene && event.button == MouseButton.PRIMARY) {
 				selection.deselect[true]
 			} else if (!(event.targetButton instanceof XRapidButton)) {
@@ -50,14 +50,14 @@ class SelectionTool implements XDiagramTool {
 			}
 		]
 		this.mouseDraggedHandler = [
-			val selection = rootDiagram.currentSelection
+			val selection = root.currentSelection
 			for (shape : selection) 
 				shape?.moveBehavior?.mouseDragged(it)
-			rootDiagram.auxiliaryLinesSupport?.show(selection)				
+			root.diagram.auxiliaryLinesSupport?.show(selection)				
 			consume
 		]
 		this.mouseReleasedHandler = [
-			rootDiagram.auxiliaryLinesSupport?.hide()				
+			root.diagram.auxiliaryLinesSupport?.hide()				
 		]
 	}
 	
@@ -73,16 +73,16 @@ class SelectionTool implements XDiagramTool {
 	}
 
 	override activate() {
-		rootDiagram.scene.addEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
-		rootDiagram.addEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
-		rootDiagram.addEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
+		root.scene.addEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
+		root.addEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
+		root.addEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true
 	}
 
 	override deactivate() {
-		rootDiagram.scene.removeEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
-		rootDiagram.removeEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
-		rootDiagram.removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
+		root.scene.removeEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
+		root.removeEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
+		root.removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true
 	}
 }

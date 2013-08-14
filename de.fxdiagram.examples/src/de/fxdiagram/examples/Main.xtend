@@ -42,9 +42,8 @@ class Main extends Application {
 		val root = new XRoot
 		val scene = new Scene(root, 1024, 768)
 		scene.setCamera(new PerspectiveCamera)
-
+		root.activate()
 		val diagram = root.diagram
-		diagram.activate()
 		
 		val source = new NestedDiagramNode('source') => [
 			layoutX = 280

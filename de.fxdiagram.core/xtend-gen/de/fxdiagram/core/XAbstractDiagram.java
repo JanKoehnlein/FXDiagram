@@ -7,7 +7,6 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagramChildrenListener;
-import de.fxdiagram.core.XNestedDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XShape;
@@ -205,18 +204,18 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
     return this.buttonsProperty;
   }
   
-  private SimpleListProperty<XNestedDiagram> subDiagramsProperty = new SimpleListProperty<XNestedDiagram>(this, "subDiagrams",_initSubDiagrams());
+  private SimpleListProperty<XAbstractDiagram> subDiagramsProperty = new SimpleListProperty<XAbstractDiagram>(this, "subDiagrams",_initSubDiagrams());
   
-  private static final ObservableList<XNestedDiagram> _initSubDiagrams() {
-    ObservableList<XNestedDiagram> _observableArrayList = FXCollections.<XNestedDiagram>observableArrayList();
+  private static final ObservableList<XAbstractDiagram> _initSubDiagrams() {
+    ObservableList<XAbstractDiagram> _observableArrayList = FXCollections.<XAbstractDiagram>observableArrayList();
     return _observableArrayList;
   }
   
-  public ObservableList<XNestedDiagram> getSubDiagrams() {
+  public ObservableList<XAbstractDiagram> getSubDiagrams() {
     return this.subDiagramsProperty.get();
   }
   
-  public ListProperty<XNestedDiagram> subDiagramsProperty() {
+  public ListProperty<XAbstractDiagram> subDiagramsProperty() {
     return this.subDiagramsProperty;
   }
   

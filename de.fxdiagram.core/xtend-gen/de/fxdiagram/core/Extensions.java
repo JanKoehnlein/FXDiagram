@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.geometry.TransformExtensions;
@@ -205,6 +206,30 @@ public class Extensions {
       Parent _parent = it.getParent();
       XRootDiagram _rootDiagram = Extensions.getRootDiagram(_parent);
       _switchResult = _rootDiagram;
+    }
+    return _switchResult;
+  }
+  
+  public static XRoot getRoot(final Node it) {
+    XRoot _switchResult = null;
+    boolean _matched = false;
+    if (!_matched) {
+      if (Objects.equal(it,null)) {
+        _matched=true;
+        _switchResult = null;
+      }
+    }
+    if (!_matched) {
+      if (it instanceof XRoot) {
+        final XRoot _xRoot = (XRoot)it;
+        _matched=true;
+        _switchResult = _xRoot;
+      }
+    }
+    if (!_matched) {
+      Parent _parent = it.getParent();
+      XRoot _root = Extensions.getRoot(_parent);
+      _switchResult = _root;
     }
     return _switchResult;
   }

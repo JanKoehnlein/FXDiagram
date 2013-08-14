@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XRapidButton;
-import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
@@ -56,8 +56,8 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
           List<JavaTypeNode> _map = ListExtensions.<Class<? extends Object>, JavaTypeNode>map(_superTypes, _function);
           chooser.operator_add(_map);
           JavaTypeNode _host_1 = JavaTypeRapidButtonBehavior.this.getHost();
-          XRootDiagram _rootDiagram = Extensions.getRootDiagram(_host_1);
-          _rootDiagram.setCurrentTool(chooser);
+          XRoot _root = Extensions.getRoot(_host_1);
+          _root.setCurrentTool(chooser);
         }
       };
       final Procedure1<XRapidButton> addSuperTypeAction = _function;
@@ -97,8 +97,8 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
           List<JavaTypeNode> _map = ListExtensions.<Property, JavaTypeNode>map(_references, _function);
           chooser.operator_add(_map);
           JavaTypeNode _host_1 = JavaTypeRapidButtonBehavior.this.getHost();
-          XRootDiagram _rootDiagram = Extensions.getRootDiagram(_host_1);
-          _rootDiagram.setCurrentTool(chooser);
+          XRoot _root = Extensions.getRoot(_host_1);
+          _root.setCurrentTool(chooser);
         }
       };
       final Procedure1<XRapidButton> addReferencesAction = _function_1;
