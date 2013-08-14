@@ -4,14 +4,14 @@ import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XNestedDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
 import de.fxdiagram.lib.simple.SimpleNode;
 import java.util.ArrayList;
-import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -158,10 +158,10 @@ public class NestedDiagramNode extends XNode {
     XAbstractDiagram _diagram = Extensions.getDiagram(this);
     ObservableList<XAbstractDiagram> _subDiagrams = _diagram.getSubDiagrams();
     _subDiagrams.add(this.innerDiagram);
-    XRootDiagram _rootDiagram = Extensions.getRootDiagram(this);
-    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _rootDiagram.boundsInParentProperty();
-    final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
-      public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
+    XRoot _root = Extensions.getRoot(this);
+    DoubleProperty _diagramScaleProperty = _root.diagramScaleProperty();
+    final ChangeListener<Number> _function = new ChangeListener<Number>() {
+      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         Bounds _boundsInLocal = NestedDiagramNode.this.getBoundsInLocal();
         final Bounds bounds = NestedDiagramNode.this.localToScene(_boundsInLocal);
         double _width = bounds.getWidth();
@@ -180,7 +180,7 @@ public class NestedDiagramNode extends XNode {
         }
       }
     };
-    _boundsInParentProperty.addListener(_function);
+    _diagramScaleProperty.addListener(_function);
     AddRapidButtonBehavior<NestedDiagramNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<NestedDiagramNode>(this);
     final AddRapidButtonBehavior<NestedDiagramNode> rapidButtonBehavior = _addRapidButtonBehavior;
     rapidButtonBehavior.activate();

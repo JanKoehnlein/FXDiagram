@@ -251,7 +251,8 @@ public class MenuTool implements XDiagramTool {
     {
       Group _group = new Group();
       this.menuGroup = _group;
-      ObservableList<Node> _children = this.root.getChildren();
+      Group _headsUpDisplay = this.root.getHeadsUpDisplay();
+      ObservableList<Node> _children = _headsUpDisplay.getChildren();
       final Procedure1<Group> _function = new Procedure1<Group>() {
         public void apply(final Group it) {
           Scene _scene = MenuTool.this.root.getScene();
@@ -371,7 +372,8 @@ public class MenuTool implements XDiagramTool {
         _and = (_notEquals && _notEquals_1);
       }
       if (_and) {
-        ObservableList<Node> _children = this.root.getChildren();
+        Group _headsUpDisplay = this.root.getHeadsUpDisplay();
+        ObservableList<Node> _children = _headsUpDisplay.getChildren();
         boolean _remove = _children.remove(this.menuGroup);
         _xifexpression = Boolean.valueOf(_remove);
       }

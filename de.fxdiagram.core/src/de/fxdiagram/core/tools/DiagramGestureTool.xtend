@@ -1,6 +1,6 @@
 package de.fxdiagram.core.tools
 
-import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.core.XRoot
 import javafx.event.EventHandler
 import javafx.geometry.Point2D
 import javafx.scene.input.RotateEvent
@@ -10,7 +10,6 @@ import javafx.scene.input.ZoomEvent
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
-import de.fxdiagram.core.XRoot
 
 class DiagramGestureTool implements XDiagramTool {
 
@@ -32,20 +31,20 @@ class DiagramGestureTool implements XDiagramTool {
 			zoomContext = new ZoomContext(root.diagram.sceneToLocal(sceneX, sceneY))
 		]
 		zoomHandler = [
-			val scale = max(totalZoomFactor / zoomContext.previousScale, XRootDiagram.MIN_SCALE)
-			val newScale = scale * root.diagram.scaleProperty.get 
-			root.diagram.scale = newScale
-			root.diagram.canvasTransform.scale(scale, scale)
+			val scale = max(totalZoomFactor / zoomContext.previousScale, XRoot.MIN_SCALE)
+			val newScale = scale * root.diagramScale 
+			root.diagramScale = newScale
+			root.diagramTransform.scale(scale, scale)
 			val pivotInScene = root.diagram.localToScene(zoomContext.pivotInDiagram)
-			root.diagram.canvasTransform.translate(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
+			root.diagramTransform.translate(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
 			zoomContext.previousScale = totalZoomFactor
 		]
 		scrollHandler = [
-			root.diagram.canvasTransform.translate(deltaX, deltaY)
+			root.diagramTransform.translate(deltaX, deltaY)
 		]
 		rotateHandler = [
 			if (shortcutDown)
-				root.diagram.canvasTransform.rotate(angle, sceneX, sceneY)
+				root.diagramTransform.rotate(angle, sceneX, sceneY)
 		]
 	}
 

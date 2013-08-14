@@ -110,7 +110,7 @@ class MenuTool implements XDiagramTool {
 
 	protected def openMenu() {
 		menuGroup = new Group
-		root.children += menuGroup => [
+		root.headsUpDisplay.children += menuGroup => [
 			translateX = 0.5 * root.scene.width
 			translateY = 0.5 * root.scene.height
 			children += menu => [
@@ -151,7 +151,7 @@ class MenuTool implements XDiagramTool {
 	protected def closeMenu() {
 		menu.hide
 		if (menuGroup != null && menuGroup.parent != null) {
-			root.children -= menuGroup
+			root.headsUpDisplay.children -= menuGroup
 		}
 	}
 

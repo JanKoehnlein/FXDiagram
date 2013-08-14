@@ -1,6 +1,7 @@
 package de.fxdiagram.core
 
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramGestureTool
 import de.fxdiagram.core.tools.MenuTool
@@ -8,9 +9,23 @@ import de.fxdiagram.core.tools.SelectionTool
 import de.fxdiagram.core.tools.XDiagramTool
 import java.util.List
 import javafx.scene.Group
+import javafx.scene.Parent
+import javafx.scene.transform.Affine
+
+import static de.fxdiagram.core.binding.NumberExpressionExtensions.*
 
 @Logging
-class XRoot extends Group implements XActivatable {
+class XRoot extends Parent implements XActivatable {
+	
+	Group headsUpDisplay = new Group
+	
+	Group diagramCanvas  = new Group
+	
+	public static val MIN_SCALE = EPSILON
+	
+	@FxProperty double diagramScale = 1.0
+	
+	Affine diagramTransform = new Affine
 	
 	XRootDiagram diagram
 	
@@ -21,8 +36,13 @@ class XRoot extends Group implements XActivatable {
 	XDiagramTool _currentTool
 	
 	new() {
+		children += diagramCanvas
+		children += headsUpDisplay
+		
 		diagram = new XRootDiagram(this)
-		children += diagram
+		diagramCanvas.children += diagram
+		diagramCanvas.transforms.setAll(diagramTransform)
+
 		defaultTool = new CompositeTool
 		defaultTool += new SelectionTool(this)
 		defaultTool += new DiagramGestureTool(this)
@@ -33,6 +53,14 @@ class XRoot extends Group implements XActivatable {
 	
 	def getDiagram() {
 		diagram
+	}
+	
+	def getHeadsUpDisplay() {
+		headsUpDisplay
+	}
+	
+	def getDiagramTransform() {
+		diagramTransform
 	}
 	
 	override activate() {

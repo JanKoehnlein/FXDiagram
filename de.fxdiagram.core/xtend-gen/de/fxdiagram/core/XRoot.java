@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.binding.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.MenuTool;
@@ -13,9 +14,14 @@ import de.fxdiagram.core.tools.XDiagramTool;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -23,7 +29,30 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @Logging
 @SuppressWarnings("all")
-public class XRoot extends Group implements XActivatable {
+public class XRoot extends Parent implements XActivatable {
+  private Group headsUpDisplay = new Function0<Group>() {
+    public Group apply() {
+      Group _group = new Group();
+      return _group;
+    }
+  }.apply();
+  
+  private Group diagramCanvas = new Function0<Group>() {
+    public Group apply() {
+      Group _group = new Group();
+      return _group;
+    }
+  }.apply();
+  
+  public final static double MIN_SCALE = NumberExpressionExtensions.EPSILON;
+  
+  private Affine diagramTransform = new Function0<Affine>() {
+    public Affine apply() {
+      Affine _affine = new Affine();
+      return _affine;
+    }
+  }.apply();
+  
   private XRootDiagram diagram;
   
   private List<XDiagramTool> tools = new Function0<List<XDiagramTool>>() {
@@ -38,10 +67,16 @@ public class XRoot extends Group implements XActivatable {
   private XDiagramTool _currentTool;
   
   public XRoot() {
+    ObservableList<Node> _children = this.getChildren();
+    _children.add(this.diagramCanvas);
+    ObservableList<Node> _children_1 = this.getChildren();
+    _children_1.add(this.headsUpDisplay);
     XRootDiagram _xRootDiagram = new XRootDiagram(this);
     this.diagram = _xRootDiagram;
-    ObservableList<Node> _children = this.getChildren();
-    _children.add(this.diagram);
+    ObservableList<Node> _children_2 = this.diagramCanvas.getChildren();
+    _children_2.add(this.diagram);
+    ObservableList<Transform> _transforms = this.diagramCanvas.getTransforms();
+    _transforms.setAll(this.diagramTransform);
     CompositeTool _compositeTool = new CompositeTool();
     this.defaultTool = _compositeTool;
     SelectionTool _selectionTool = new SelectionTool(this);
@@ -57,6 +92,14 @@ public class XRoot extends Group implements XActivatable {
   
   public XRootDiagram getDiagram() {
     return this.diagram;
+  }
+  
+  public Group getHeadsUpDisplay() {
+    return this.headsUpDisplay;
+  }
+  
+  public Affine getDiagramTransform() {
+    return this.diagramTransform;
   }
   
   public void activate() {
@@ -118,4 +161,22 @@ public class XRoot extends Group implements XActivatable {
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRoot");
     ;
+  
+  private SimpleDoubleProperty diagramScaleProperty = new SimpleDoubleProperty(this, "diagramScale",_initDiagramScale());
+  
+  private static final double _initDiagramScale() {
+    return 1.0;
+  }
+  
+  public double getDiagramScale() {
+    return this.diagramScaleProperty.get();
+  }
+  
+  public void setDiagramScale(final double diagramScale) {
+    this.diagramScaleProperty.set(diagramScale);
+  }
+  
+  public DoubleProperty diagramScaleProperty() {
+    return this.diagramScaleProperty;
+  }
 }

@@ -3,7 +3,7 @@ package de.fxdiagram.lib.media;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.lib.media.RecursiveImageNode;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -51,14 +51,14 @@ public class FirstRecursiveImageNode extends XNode {
     DoubleProperty _scaleProperty_1 = this.recursiveImageNode.scaleProperty();
     _scaleYProperty.bind(_scaleProperty_1);
     this.updateChildPanes();
-    XRootDiagram _rootDiagram = Extensions.getRootDiagram(this);
-    DoubleProperty _scaleProperty_2 = _rootDiagram.scaleProperty();
+    XRoot _root = Extensions.getRoot(this);
+    DoubleProperty _diagramScaleProperty = _root.diagramScaleProperty();
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         FirstRecursiveImageNode.this.updateChildPanes();
       }
     };
-    _scaleProperty_2.addListener(_function);
+    _diagramScaleProperty.addListener(_function);
   }
   
   public void selectionFeedback(final boolean isSelected) {

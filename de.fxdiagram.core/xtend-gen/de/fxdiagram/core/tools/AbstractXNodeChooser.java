@@ -534,7 +534,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       this.currentPositionProperty.addListener(this.positionListener);
       this.filterStringProperty.addListener(this.filterChangeListener);
       XRoot _root = Extensions.getRoot(this.host);
-      ObservableList<Node> _children_3 = _root.getChildren();
+      Group _headsUpDisplay = _root.getHeadsUpDisplay();
+      ObservableList<Node> _children_3 = _headsUpDisplay.getChildren();
       Label _filterLabel = this.getFilterLabel();
       _children_3.add(_filterLabel);
       Label _filterLabel_1 = this.getFilterLabel();
@@ -553,7 +554,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         return false;
       }
       XRoot _root = Extensions.getRoot(this.host);
-      ObservableList<Node> _children = _root.getChildren();
+      Group _headsUpDisplay = _root.getHeadsUpDisplay();
+      ObservableList<Node> _children = _headsUpDisplay.getChildren();
       Label _filterLabel = this.getFilterLabel();
       _children.remove(_filterLabel);
       this.isActiveProperty.set(false);

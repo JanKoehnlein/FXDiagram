@@ -76,7 +76,7 @@ class NestedDiagramNode extends XNode {
 	override doActivate() {
 		super.doActivate()
 		diagram.subDiagrams += innerDiagram
-		rootDiagram.boundsInParentProperty.addListener [ prop, oldVal, newVal |
+		root.diagramScaleProperty.addListener [ prop, oldVal, newVal |
 			val bounds = localToScene(boundsInLocal)
 			val area = bounds.width * bounds.height
 			if (area <= 100000) {
