@@ -12,24 +12,31 @@ import javafx.scene.Parent
 
 class Extensions {
 
+	def static isRootDiagram(Node node) {
+		switch node { 
+			XDiagram: return node.isRootDiagram
+		} 
+		false
+	}
+
 	def static localToRootDiagram(Node node, double x, double y) {
 		localToRootDiagram(node, new Point2D(x, y))
 	}
 
 	def static Point2D localToRootDiagram(Node node, Point2D point) {
 		switch node {
-			case null: null
-			XRootDiagram: point
-			default: localToRootDiagram(node.parent, node.localToParent(point))
+			case null: return null
+			XDiagram: if(node.isRootDiagram) return point
 		}
+		localToRootDiagram(node.parent, node.localToParent(point))
 	}
 
 	def static Bounds localToRootDiagram(Node node, Bounds bounds) {
 		switch node {
-			case null: null
-			XRootDiagram: bounds
-			default: localToRootDiagram(node.parent, node.localToParent(bounds))
+			case null: return null
+			XDiagram: if(node.isRootDiagram) return bounds
 		}
+		localToRootDiagram(node.parent, node.localToParent(bounds))
 	}
 
 	def static localToDiagram(Node node, double x, double y) {
@@ -72,10 +79,10 @@ class Extensions {
 		}
 	}
 
-	def static XRootDiagram getRootDiagram(Node it) {
+	def static XDiagram getRootDiagram(Node it) {
 		switch it {
 			case null: null
-			XRootDiagram: it
+			XDiagram: if(isRootDiagram) it else getRootDiagram(it.parentDiagram)
 			default: getRootDiagram(it.parent)
 		}
 	}

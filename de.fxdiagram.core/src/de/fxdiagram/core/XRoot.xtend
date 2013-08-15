@@ -27,7 +27,7 @@ class XRoot extends Parent implements XActivatable {
 	
 	Affine diagramTransform = new Affine
 	
-	XRootDiagram diagram
+	XDiagram diagram
 	
 	List<XDiagramTool> tools = newArrayList
 	
@@ -39,7 +39,7 @@ class XRoot extends Parent implements XActivatable {
 		children += diagramCanvas
 		children += headsUpDisplay
 		
-		diagram = new XRootDiagram(this)
+		diagram = new XDiagram
 		diagramCanvas.children += diagram
 		diagramCanvas.transforms.setAll(diagramTransform)
 
@@ -48,7 +48,7 @@ class XRoot extends Parent implements XActivatable {
 		defaultTool += new DiagramGestureTool(this)
 		defaultTool += new MenuTool(this)
 		tools += defaultTool
-		stylesheets += "de/fxdiagram/core/XRootDiagram.css"
+		stylesheets += "de/fxdiagram/core/XRoot.css"
 	}
 	
 	def getDiagram() {

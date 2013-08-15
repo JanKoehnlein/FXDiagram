@@ -155,9 +155,6 @@ public class NestedDiagramNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    XAbstractDiagram _diagram = Extensions.getDiagram(this);
-    ObservableList<XAbstractDiagram> _subDiagrams = _diagram.getSubDiagrams();
-    _subDiagrams.add(this.innerDiagram);
     XRoot _root = Extensions.getRoot(this);
     DoubleProperty _diagramScaleProperty = _root.diagramScaleProperty();
     final ChangeListener<Number> _function = new ChangeListener<Number>() {

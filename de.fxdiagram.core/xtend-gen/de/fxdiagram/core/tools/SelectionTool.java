@@ -4,9 +4,9 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XControlPoint;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.MoveBehavior;
@@ -146,7 +146,7 @@ public class SelectionTool implements XDiagramTool {
             _moveBehavior.mouseDragged(it);
           }
         }
-        XRootDiagram _diagram = root.getDiagram();
+        XDiagram _diagram = root.getDiagram();
         AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.show(selection);
@@ -157,7 +157,7 @@ public class SelectionTool implements XDiagramTool {
     this.mouseDraggedHandler = _function_1;
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
-        XRootDiagram _diagram = root.getDiagram();
+        XDiagram _diagram = root.getDiagram();
         AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.hide();

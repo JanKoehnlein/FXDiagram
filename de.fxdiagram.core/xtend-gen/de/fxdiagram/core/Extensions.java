@@ -3,9 +3,9 @@ package de.fxdiagram.core;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XAbstractDiagram;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.geometry.TransformExtensions;
 import javafx.collections.ObservableList;
@@ -22,6 +22,22 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class Extensions {
+  public static boolean isRootDiagram(final Node node) {
+    boolean _xblockexpression = false;
+    {
+      boolean _matched = false;
+      if (!_matched) {
+        if (node instanceof XDiagram) {
+          final XDiagram _xDiagram = (XDiagram)node;
+          _matched=true;
+          return _xDiagram.getIsRootDiagram();
+        }
+      }
+      _xblockexpression = (false);
+    }
+    return _xblockexpression;
+  }
+  
   public static Point2D localToRootDiagram(final Node node, final double x, final double y) {
     Point2D _point2D = new Point2D(x, y);
     Point2D _localToRootDiagram = Extensions.localToRootDiagram(node, _point2D);
@@ -29,53 +45,59 @@ public class Extensions {
   }
   
   public static Point2D localToRootDiagram(final Node node, final Point2D point) {
-    Point2D _switchResult = null;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(node,null)) {
-        _matched=true;
-        _switchResult = null;
+    Point2D _xblockexpression = null;
+    {
+      boolean _matched = false;
+      if (!_matched) {
+        if (Objects.equal(node,null)) {
+          _matched=true;
+          return null;
+        }
       }
-    }
-    if (!_matched) {
-      if (node instanceof XRootDiagram) {
-        final XRootDiagram _xRootDiagram = (XRootDiagram)node;
-        _matched=true;
-        _switchResult = point;
+      if (!_matched) {
+        if (node instanceof XDiagram) {
+          final XDiagram _xDiagram = (XDiagram)node;
+          _matched=true;
+          boolean _isRootDiagram = _xDiagram.getIsRootDiagram();
+          if (_isRootDiagram) {
+            return point;
+          }
+        }
       }
-    }
-    if (!_matched) {
       Parent _parent = node.getParent();
       Point2D _localToParent = node.localToParent(point);
       Point2D _localToRootDiagram = Extensions.localToRootDiagram(_parent, _localToParent);
-      _switchResult = _localToRootDiagram;
+      _xblockexpression = (_localToRootDiagram);
     }
-    return _switchResult;
+    return _xblockexpression;
   }
   
   public static Bounds localToRootDiagram(final Node node, final Bounds bounds) {
-    Bounds _switchResult = null;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(node,null)) {
-        _matched=true;
-        _switchResult = null;
+    Bounds _xblockexpression = null;
+    {
+      boolean _matched = false;
+      if (!_matched) {
+        if (Objects.equal(node,null)) {
+          _matched=true;
+          return null;
+        }
       }
-    }
-    if (!_matched) {
-      if (node instanceof XRootDiagram) {
-        final XRootDiagram _xRootDiagram = (XRootDiagram)node;
-        _matched=true;
-        _switchResult = bounds;
+      if (!_matched) {
+        if (node instanceof XDiagram) {
+          final XDiagram _xDiagram = (XDiagram)node;
+          _matched=true;
+          boolean _isRootDiagram = _xDiagram.getIsRootDiagram();
+          if (_isRootDiagram) {
+            return bounds;
+          }
+        }
       }
-    }
-    if (!_matched) {
       Parent _parent = node.getParent();
       Bounds _localToParent = node.localToParent(bounds);
       Bounds _localToRootDiagram = Extensions.localToRootDiagram(_parent, _localToParent);
-      _switchResult = _localToRootDiagram;
+      _xblockexpression = (_localToRootDiagram);
     }
-    return _switchResult;
+    return _xblockexpression;
   }
   
   public static Point2D localToDiagram(final Node node, final double x, final double y) {
@@ -186,8 +208,8 @@ public class Extensions {
     return _switchResult;
   }
   
-  public static XRootDiagram getRootDiagram(final Node it) {
-    XRootDiagram _switchResult = null;
+  public static XDiagram getRootDiagram(final Node it) {
+    XDiagram _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
       if (Objects.equal(it,null)) {
@@ -196,15 +218,24 @@ public class Extensions {
       }
     }
     if (!_matched) {
-      if (it instanceof XRootDiagram) {
-        final XRootDiagram _xRootDiagram = (XRootDiagram)it;
+      if (it instanceof XDiagram) {
+        final XDiagram _xDiagram = (XDiagram)it;
         _matched=true;
-        _switchResult = _xRootDiagram;
+        XDiagram _xifexpression = null;
+        boolean _isRootDiagram = _xDiagram.getIsRootDiagram();
+        if (_isRootDiagram) {
+          _xifexpression = _xDiagram;
+        } else {
+          XAbstractDiagram _parentDiagram = _xDiagram.getParentDiagram();
+          XDiagram _rootDiagram = Extensions.getRootDiagram(_parentDiagram);
+          _xifexpression = _rootDiagram;
+        }
+        _switchResult = _xifexpression;
       }
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XRootDiagram _rootDiagram = Extensions.getRootDiagram(_parent);
+      XDiagram _rootDiagram = Extensions.getRootDiagram(_parent);
       _switchResult = _rootDiagram;
     }
     return _switchResult;

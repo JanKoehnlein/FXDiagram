@@ -1,9 +1,9 @@
 package de.fxdigram.lib.layout.tests
 
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNestedDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
-import de.fxdiagram.core.XRootDiagram
 import de.fxdiagram.lib.simple.SimpleNode
 import javafx.application.Application
 import javafx.scene.Group
@@ -16,7 +16,7 @@ class LayoutTests extends Application {
 
 	XNestedDiagram nestedDiagram
 
-	XRootDiagram diagram
+	XDiagram diagram
 
 	def static main(String... args) {
 		launch

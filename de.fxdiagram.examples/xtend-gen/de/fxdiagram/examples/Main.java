@@ -4,9 +4,9 @@ import com.mongodb.DBObject;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.BrickBreakerNode;
@@ -60,7 +60,7 @@ public class Main extends Application {
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       scene.setCamera(_perspectiveCamera);
       root.activate();
-      final XRootDiagram diagram = root.getDiagram();
+      final XDiagram diagram = root.getDiagram();
       NestedDiagramNode _nestedDiagramNode = new NestedDiagramNode("source");
       final Procedure1<NestedDiagramNode> _function = new Procedure1<NestedDiagramNode>() {
         public void apply(final NestedDiagramNode it) {

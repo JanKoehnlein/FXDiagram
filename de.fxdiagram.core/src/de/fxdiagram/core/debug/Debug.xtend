@@ -1,11 +1,12 @@
 package de.fxdiagram.core.debug
 
 import de.fxdiagram.annotations.logging.Logging
-import de.fxdiagram.core.XRootDiagram
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
+
+import static extension de.fxdiagram.core.Extensions.*
 
 @Logging
 class Debug {
@@ -17,7 +18,7 @@ class Debug {
 				Position changed from «oldVal» to «newVal»''').printStackTrace
 		]
 		var currentNode = node
-		while(currentNode != null && !(currentNode instanceof XRootDiagram)) {
+		while(currentNode != null && !currentNode.isRootDiagram) {
 			currentNode.layoutXProperty.addListener(debugger)
 			currentNode.layoutYProperty.addListener(debugger)
 			currentNode.translateXProperty.addListener(debugger)
@@ -37,7 +38,7 @@ class Debug {
 			''').printStackTrace
 		]
 		var currentNode = node
-		while(currentNode != null && !(currentNode instanceof XRootDiagram)) {
+		while(currentNode != null && !currentNode.isRootDiagram) {
 			currentNode.layoutBoundsProperty.addListener(debugger)
 			currentNode = currentNode.parent
 		}

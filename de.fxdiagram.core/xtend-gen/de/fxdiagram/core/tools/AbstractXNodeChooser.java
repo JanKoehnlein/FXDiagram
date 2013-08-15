@@ -5,9 +5,9 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.binding.StringExpressionExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.XNodeChooserTransition;
@@ -635,9 +635,9 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
-        XRootDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+        XDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
         Group _nodeLayer = _rootDiagram.getNodeLayer();
-        XRootDiagram _rootDiagram_1 = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+        XDiagram _rootDiagram_1 = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
         Group _connectionLayer = _rootDiagram_1.getConnectionLayer();
         for (final Group layer : Collections.<Group>unmodifiableList(Lists.<Group>newArrayList(_nodeLayer, _connectionLayer))) {
           ObservableList<Animation> _children = it.getChildren();

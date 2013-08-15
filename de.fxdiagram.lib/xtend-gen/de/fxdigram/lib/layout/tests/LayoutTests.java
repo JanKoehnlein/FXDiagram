@@ -1,9 +1,9 @@
 package de.fxdigram.lib.layout.tests;
 
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNestedDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.lib.simple.SimpleNode;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -22,7 +22,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class LayoutTests extends Application {
   private XNestedDiagram nestedDiagram;
   
-  private XRootDiagram diagram;
+  private XDiagram diagram;
   
   public static void main(final String... args) {
     Application.launch();
@@ -65,14 +65,14 @@ public class LayoutTests extends Application {
     XNestedDiagram _doubleArrow = ObjectExtensions.<XNestedDiagram>operator_doubleArrow(_xNestedDiagram, _function);
     this.nestedDiagram = _doubleArrow;
     XRoot _xRoot = new XRoot();
-    XRootDiagram _diagram = _xRoot.getDiagram();
+    XDiagram _diagram = _xRoot.getDiagram();
     this.diagram = _diagram;
     Scene _scene = new Scene(this.diagram, 1024, 768);
     stage.setScene(_scene);
     StackPane _stackPane = new StackPane();
     final StackPane rectangleBorderPane = _stackPane;
-    final Procedure1<XRootDiagram> _function_1 = new Procedure1<XRootDiagram>() {
-      public void apply(final XRootDiagram it) {
+    final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
+      public void apply(final XDiagram it) {
         it.activate();
         ObservableList<XNode> _nodes = it.getNodes();
         final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
@@ -95,7 +95,7 @@ public class LayoutTests extends Application {
         LayoutTests.this.nestedDiagram.activate();
       }
     };
-    ObjectExtensions.<XRootDiagram>operator_doubleArrow(
+    ObjectExtensions.<XDiagram>operator_doubleArrow(
       this.diagram, _function_1);
     stage.show();
     ObservableList<XNode> _nodes = this.nestedDiagram.getNodes();

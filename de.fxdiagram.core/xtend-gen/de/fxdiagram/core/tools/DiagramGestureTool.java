@@ -1,7 +1,7 @@
 package de.fxdiagram.core.tools;
 
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.geometry.TransformExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.ZoomContext;
@@ -31,7 +31,7 @@ public class DiagramGestureTool implements XDiagramTool {
     this.root = root;
     final EventHandler<ZoomEvent> _function = new EventHandler<ZoomEvent>() {
       public void handle(final ZoomEvent it) {
-        XRootDiagram _diagram = root.getDiagram();
+        XDiagram _diagram = root.getDiagram();
         double _sceneX = it.getSceneX();
         double _sceneY = it.getSceneY();
         Point2D _sceneToLocal = _diagram.sceneToLocal(_sceneX, _sceneY);
@@ -51,7 +51,7 @@ public class DiagramGestureTool implements XDiagramTool {
         root.setDiagramScale(newScale);
         Affine _diagramTransform = root.getDiagramTransform();
         TransformExtensions.scale(_diagramTransform, scale, scale);
-        XRootDiagram _diagram = root.getDiagram();
+        XDiagram _diagram = root.getDiagram();
         Point2D _pivotInDiagram = DiagramGestureTool.this.zoomContext.getPivotInDiagram();
         final Point2D pivotInScene = _diagram.localToScene(_pivotInDiagram);
         Affine _diagramTransform_1 = root.getDiagramTransform();

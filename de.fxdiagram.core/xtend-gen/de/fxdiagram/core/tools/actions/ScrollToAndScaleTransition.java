@@ -1,7 +1,7 @@
 package de.fxdiagram.core.tools.actions;
 
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.geometry.TransformExtensions;
 import javafx.animation.Transition;
 import javafx.geometry.Point2D;
@@ -38,7 +38,7 @@ public class ScrollToAndScaleTransition extends Transition {
     final double rescale = (this.toScale / this.fromScale);
     Affine _diagramTransform_2 = root.getDiagramTransform();
     TransformExtensions.scale(_diagramTransform_2, rescale, rescale);
-    XRootDiagram _diagram = root.getDiagram();
+    XDiagram _diagram = root.getDiagram();
     final Point2D centerInScene = _diagram.localToScene(targetCenterInDiagram);
     Scene _scene = root.getScene();
     double _width = _scene.getWidth();

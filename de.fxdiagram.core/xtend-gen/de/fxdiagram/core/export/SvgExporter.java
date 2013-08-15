@@ -2,7 +2,7 @@ package de.fxdiagram.core.export;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
-import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.export.ShapeConverterExtensions;
 import de.fxdiagram.core.export.SvgExportable;
 import java.awt.image.BufferedImage;
@@ -48,7 +48,7 @@ public class SvgExporter {
   
   private List<String> defs;
   
-  public CharSequence toSvg(final XRootDiagram diagram) {
+  public CharSequence toSvg(final XDiagram diagram) {
     CharSequence _xblockexpression = null;
     {
       ArrayList<String> _newArrayList = CollectionLiterals.<String>newArrayList();

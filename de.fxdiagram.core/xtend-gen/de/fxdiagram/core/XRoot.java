@@ -3,7 +3,7 @@ package de.fxdiagram.core;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XActivatable;
-import de.fxdiagram.core.XRootDiagram;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.binding.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.CompositeTool;
@@ -53,7 +53,7 @@ public class XRoot extends Parent implements XActivatable {
     }
   }.apply();
   
-  private XRootDiagram diagram;
+  private XDiagram diagram;
   
   private List<XDiagramTool> tools = new Function0<List<XDiagramTool>>() {
     public List<XDiagramTool> apply() {
@@ -71,8 +71,8 @@ public class XRoot extends Parent implements XActivatable {
     _children.add(this.diagramCanvas);
     ObservableList<Node> _children_1 = this.getChildren();
     _children_1.add(this.headsUpDisplay);
-    XRootDiagram _xRootDiagram = new XRootDiagram(this);
-    this.diagram = _xRootDiagram;
+    XDiagram _xDiagram = new XDiagram();
+    this.diagram = _xDiagram;
     ObservableList<Node> _children_2 = this.diagramCanvas.getChildren();
     _children_2.add(this.diagram);
     ObservableList<Transform> _transforms = this.diagramCanvas.getTransforms();
@@ -87,10 +87,10 @@ public class XRoot extends Parent implements XActivatable {
     this.defaultTool.operator_add(_menuTool);
     this.tools.add(this.defaultTool);
     ObservableList<String> _stylesheets = this.getStylesheets();
-    _stylesheets.add("de/fxdiagram/core/XRootDiagram.css");
+    _stylesheets.add("de/fxdiagram/core/XRoot.css");
   }
   
-  public XRootDiagram getDiagram() {
+  public XDiagram getDiagram() {
     return this.diagram;
   }
   

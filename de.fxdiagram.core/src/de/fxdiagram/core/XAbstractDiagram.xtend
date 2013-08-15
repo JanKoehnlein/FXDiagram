@@ -19,7 +19,6 @@ abstract class XAbstractDiagram extends Parent implements XActivatable {
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
 	@FxProperty ObservableList<XConnection> connections = observableArrayList
 	@FxProperty ObservableList<XRapidButton> buttons = observableArrayList
-	@FxProperty ObservableList<XAbstractDiagram> subDiagrams = observableArrayList
 
 	@FxProperty @ReadOnly boolean isActive
 

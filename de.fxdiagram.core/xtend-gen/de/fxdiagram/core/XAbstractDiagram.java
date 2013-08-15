@@ -204,21 +204,6 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
     return this.buttonsProperty;
   }
   
-  private SimpleListProperty<XAbstractDiagram> subDiagramsProperty = new SimpleListProperty<XAbstractDiagram>(this, "subDiagrams",_initSubDiagrams());
-  
-  private static final ObservableList<XAbstractDiagram> _initSubDiagrams() {
-    ObservableList<XAbstractDiagram> _observableArrayList = FXCollections.<XAbstractDiagram>observableArrayList();
-    return _observableArrayList;
-  }
-  
-  public ObservableList<XAbstractDiagram> getSubDiagrams() {
-    return this.subDiagramsProperty.get();
-  }
-  
-  public ListProperty<XAbstractDiagram> subDiagramsProperty() {
-    return this.subDiagramsProperty;
-  }
-  
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   
   public boolean getIsActive() {

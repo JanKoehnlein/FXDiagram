@@ -6,7 +6,6 @@ import de.fxdiagram.core.XActivatable
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.XRootDiagram
 import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -54,7 +53,7 @@ class ConnectionRouter implements XActivatable {
 			current.scaleYProperty.addListener(scalarListener)
 			current.rotateProperty.addListener(scalarListener)
 			current = current.parent
-		} while (current != null && !(current instanceof XRootDiagram))
+		} while (current != null && !current.isRootDiagram)
 	}
 	
 	def growToSize(int newSize) {

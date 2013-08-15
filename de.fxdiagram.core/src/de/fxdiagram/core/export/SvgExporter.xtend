@@ -1,7 +1,7 @@
 package de.fxdiagram.core.export
 
 import de.fxdiagram.annotations.logging.Logging
-import de.fxdiagram.core.XRootDiagram
+import de.fxdiagram.core.XDiagram
 import java.io.File
 import java.io.IOException
 import java.util.List
@@ -32,7 +32,7 @@ class SvgExporter {
 	
 	List<String> defs
 	
-	def toSvg(XRootDiagram diagram) {
+	def toSvg(XDiagram diagram) {
 		defs = newArrayList
 		currentID = 0
 		val bounds = diagram.boundsInParent

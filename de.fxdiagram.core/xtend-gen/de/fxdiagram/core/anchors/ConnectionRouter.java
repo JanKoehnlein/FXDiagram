@@ -8,7 +8,6 @@ import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRootDiagram;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.geometry.BoundsExtensions;
@@ -96,7 +95,8 @@ public class ConnectionRouter implements XActivatable {
       if (!_notEquals) {
         _and = false;
       } else {
-        boolean _not = (!(current instanceof XRootDiagram));
+        boolean _isRootDiagram = Extensions.isRootDiagram(current);
+        boolean _not = (!_isRootDiagram);
         _and = (_notEquals && _not);
       }
       _dowhile = _and;
