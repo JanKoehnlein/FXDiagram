@@ -25,6 +25,8 @@ import javafx.scene.image.Image
 import javafx.stage.Stage
 import de.fxdiagram.examples.neonsign.NeonSignNode
 import de.fxdiagram.core.XConnectionKind
+import de.fxdiagram.lib.simple.OpenableDiagramNode
+import de.fxdiagram.core.XDiagram
 
 class Main extends Application {
 
@@ -42,8 +44,9 @@ class Main extends Application {
 		val root = new XRoot
 		val scene = new Scene(root, 1024, 768)
 		scene.setCamera(new PerspectiveCamera)
-		root.activate()
-		val diagram = root.diagram
+		root.activate
+		val diagram = new XDiagram
+		root.diagram = diagram
 		
 		val source = new NestedDiagramNode('source') => [
 			layoutX = 280
@@ -68,7 +71,9 @@ class Main extends Application {
 		connectionLabel.text.text = 'label'
 		diagram.connections += connection
 
-		val target2 = new SimpleNode('target2') => [
+		val target2 = new OpenableDiagramNode('openable', new XDiagram => [
+			contentsInitializer = NestedDiagramNode.dummyDiagramContent
+		]) => [
 			layoutX = 400
 			layoutY = 240
 			width = 80
@@ -155,6 +160,7 @@ class Main extends Application {
 			null
 		]
 		task.run
+		root.centerDiagram
 		scene
 	}
 }

@@ -14,6 +14,7 @@ import eu.hansolo.enzo.radialmenu.Options
 import eu.hansolo.enzo.radialmenu.RadialMenu
 import eu.hansolo.enzo.radialmenu.RadialMenu.State
 import javafx.event.EventHandler
+import javafx.geometry.Pos
 import javafx.scene.Group
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
@@ -21,6 +22,8 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
+
+import static extension javafx.scene.layout.BorderPane.*
 
 @Logging
 class MenuTool implements XDiagramTool {
@@ -84,8 +87,9 @@ class MenuTool implements XDiagramTool {
 				buttonSize = 72
 				buttonAlpha = 1.0
 			],
-			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN//, PHOTO, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
-//				TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, 
+			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN
+			  //, PHOTO, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
+			  // TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, DELETE,
 			].
 				map [ s |
 					new MenuItem => [
@@ -111,6 +115,7 @@ class MenuTool implements XDiagramTool {
 	protected def openMenu() {
 		menuGroup = new Group
 		root.headsUpDisplay.children += menuGroup => [
+			alignment = Pos.CENTER
 			translateX = 0.5 * root.scene.width
 			translateY = 0.5 * root.scene.height
 			children += menu => [

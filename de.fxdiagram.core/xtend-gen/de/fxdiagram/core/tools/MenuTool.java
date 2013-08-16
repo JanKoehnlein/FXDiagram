@@ -3,6 +3,7 @@ package de.fxdiagram.core.tools;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.actions.CenterAction;
@@ -25,6 +26,7 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -33,6 +35,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -251,10 +254,11 @@ public class MenuTool implements XDiagramTool {
     {
       Group _group = new Group();
       this.menuGroup = _group;
-      Group _headsUpDisplay = this.root.getHeadsUpDisplay();
+      HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
       ObservableList<Node> _children = _headsUpDisplay.getChildren();
       final Procedure1<Group> _function = new Procedure1<Group>() {
         public void apply(final Group it) {
+          BorderPane.setAlignment(it, Pos.CENTER);
           Scene _scene = MenuTool.this.root.getScene();
           double _width = _scene.getWidth();
           double _multiply = (0.5 * _width);
@@ -372,7 +376,7 @@ public class MenuTool implements XDiagramTool {
         _and = (_notEquals && _notEquals_1);
       }
       if (_and) {
-        Group _headsUpDisplay = this.root.getHeadsUpDisplay();
+        HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
         ObservableList<Node> _children = _headsUpDisplay.getChildren();
         boolean _remove = _children.remove(this.menuGroup);
         _xifexpression = Boolean.valueOf(_remove);

@@ -2,10 +2,11 @@ BUG
 - populate menu
 - chooser isVertical
 - choose connections instead of nodes?
+- select all doesn't select all
+- all choices grayed out in chooser in nested diagrm
 
 ENHANCEMENT
 - Make auxlines magnetic
-- Open subdiagram
 - Embed more JavaFX demos in XNodes
 - Play diagram
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
@@ -37,4 +38,6 @@ DONE
 - XConnection style settable
 - LineCap.ROUND
 - SVGImage for magnets
+- diagramTransform should be the diagram's internal transform
+- Open subdiagram
 

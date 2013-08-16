@@ -224,15 +224,15 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		getDiagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		currentPositionProperty.addListener(positionListener)
 		filterStringProperty.addListener(filterChangeListener)
-		host.root.headsUpDisplay.children += getFilterLabel
-		getFilterLabel.toFront
+		host.root.headsUpDisplay.add(filterLabel, Pos.BOTTOM_LEFT)
+		filterLabel.toFront
 		true
 	}
 
 	override deactivate() {
 		if (!getIsActive)
 			return false
-		host.root.headsUpDisplay.children -= getFilterLabel
+		host.root.headsUpDisplay.children -= filterLabel
 		isActiveProperty.set(false)
 		getDiagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		getDiagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)

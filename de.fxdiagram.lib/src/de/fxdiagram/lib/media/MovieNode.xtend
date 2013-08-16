@@ -6,6 +6,8 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
+import eu.hansolo.enzo.radialmenu.Symbol
+import eu.hansolo.enzo.radialmenu.SymbolCanvas
 import java.net.URL
 import javafx.animation.FadeTransition
 import javafx.animation.Interpolator
@@ -20,6 +22,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.media.Media
 import javafx.scene.media.MediaPlayer
 import javafx.scene.media.MediaView
+import javafx.scene.paint.Color
 import javafx.scene.text.Text
 
 import static extension javafx.util.Duration.*
@@ -46,6 +49,12 @@ class MovieNode extends XNode {
 					text = "Movie"
 					textOrigin = VPos.TOP
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
+				]
+				children += new Text => [
+					text = '*'
+					textOrigin = VPos.TOP
+					StackPane.setAlignment(it, Pos.TOP_RIGHT)
+					StackPane.setMargin(it, new Insets(3, 6, 0, 0))
 				]
 			]
 			back = pane = new RectangleBorderPane => [

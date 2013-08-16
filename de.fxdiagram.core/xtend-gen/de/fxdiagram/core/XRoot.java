@@ -2,10 +2,13 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.binding.NumberExpressionExtensions;
+import de.fxdiagram.core.geometry.BoundsExtensions;
+import de.fxdiagram.core.geometry.TransformExtensions;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.MenuTool;
@@ -15,25 +18,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
 @SuppressWarnings("all")
 public class XRoot extends Parent implements XActivatable {
-  private Group headsUpDisplay = new Function0<Group>() {
-    public Group apply() {
-      Group _group = new Group();
-      return _group;
+  private HeadsUpDisplay headsUpDisplay = new Function0<HeadsUpDisplay>() {
+    public HeadsUpDisplay apply() {
+      HeadsUpDisplay _headsUpDisplay = new HeadsUpDisplay();
+      return _headsUpDisplay;
     }
   }.apply();
   
@@ -46,14 +57,7 @@ public class XRoot extends Parent implements XActivatable {
   
   public final static double MIN_SCALE = NumberExpressionExtensions.EPSILON;
   
-  private Affine diagramTransform = new Function0<Affine>() {
-    public Affine apply() {
-      Affine _affine = new Affine();
-      return _affine;
-    }
-  }.apply();
-  
-  private XDiagram diagram;
+  private Affine diagramTransform;
   
   private List<XDiagramTool> tools = new Function0<List<XDiagramTool>>() {
     public List<XDiagramTool> apply() {
@@ -71,12 +75,6 @@ public class XRoot extends Parent implements XActivatable {
     _children.add(this.diagramCanvas);
     ObservableList<Node> _children_1 = this.getChildren();
     _children_1.add(this.headsUpDisplay);
-    XDiagram _xDiagram = new XDiagram();
-    this.diagram = _xDiagram;
-    ObservableList<Node> _children_2 = this.diagramCanvas.getChildren();
-    _children_2.add(this.diagram);
-    ObservableList<Transform> _transforms = this.diagramCanvas.getTransforms();
-    _transforms.setAll(this.diagramTransform);
     CompositeTool _compositeTool = new CompositeTool();
     this.defaultTool = _compositeTool;
     SelectionTool _selectionTool = new SelectionTool(this);
@@ -90,11 +88,91 @@ public class XRoot extends Parent implements XActivatable {
     _stylesheets.add("de/fxdiagram/core/XRoot.css");
   }
   
-  public XDiagram getDiagram() {
-    return this.diagram;
+  public boolean setDiagram(final XDiagram newDiagram) {
+    boolean _xblockexpression = false;
+    {
+      XDiagram _diagram = this.getDiagram();
+      boolean _notEquals = (!Objects.equal(_diagram, null));
+      if (_notEquals) {
+        ObservableList<Node> _children = this.diagramCanvas.getChildren();
+        XDiagram _diagram_1 = this.getDiagram();
+        _children.remove(_diagram_1);
+      }
+      this.diagramProperty.set(newDiagram);
+      ObservableList<Node> _children_1 = this.diagramCanvas.getChildren();
+      XDiagram _diagram_2 = this.getDiagram();
+      _children_1.add(_diagram_2);
+      boolean _isActive = this.getIsActive();
+      if (_isActive) {
+        newDiagram.activate();
+      }
+      Affine _affine = new Affine();
+      this.diagramTransform = _affine;
+      XDiagram _diagram_3 = this.getDiagram();
+      ObservableList<Transform> _transforms = _diagram_3.getTransforms();
+      boolean _isEmpty = _transforms.isEmpty();
+      if (_isEmpty) {
+        this.centerDiagram();
+      } else {
+        XDiagram _diagram_4 = this.getDiagram();
+        ObservableList<Transform> _transforms_1 = _diagram_4.getTransforms();
+        final Procedure1<Transform> _function = new Procedure1<Transform>() {
+          public void apply(final Transform it) {
+            TransformExtensions.leftMultiply(XRoot.this.diagramTransform, it);
+          }
+        };
+        IterableExtensions.<Transform>forEach(_transforms_1, _function);
+      }
+      XDiagram _diagram_5 = this.getDiagram();
+      ObservableList<Transform> _transforms_2 = _diagram_5.getTransforms();
+      boolean _setAll = _transforms_2.setAll(this.diagramTransform);
+      _xblockexpression = (_setAll);
+    }
+    return _xblockexpression;
   }
   
-  public Group getHeadsUpDisplay() {
+  public void centerDiagram() {
+    XDiagram _diagram = this.getDiagram();
+    _diagram.layout();
+    XDiagram _diagram_1 = this.getDiagram();
+    final Bounds diagramBounds = _diagram_1.getBoundsInParent();
+    double _width = diagramBounds.getWidth();
+    double _height = diagramBounds.getHeight();
+    double _multiply = (_width * _height);
+    boolean _greaterThan = (_multiply > 1);
+    if (_greaterThan) {
+      Scene _scene = this.getScene();
+      double _width_1 = _scene.getWidth();
+      double _width_2 = diagramBounds.getWidth();
+      double _divide = (_width_1 / _width_2);
+      Scene _scene_1 = this.getScene();
+      double _height_1 = _scene_1.getHeight();
+      double _height_2 = diagramBounds.getHeight();
+      double _divide_1 = (_height_1 / _height_2);
+      double _min = Math.min(_divide, _divide_1);
+      double _min_1 = Math.min(1, _min);
+      final double scale = Math.max(XRoot.MIN_SCALE, _min_1);
+      TransformExtensions.scale(this.diagramTransform, scale, scale);
+      XDiagram _diagram_2 = this.getDiagram();
+      XDiagram _diagram_3 = this.getDiagram();
+      Bounds _boundsInLocal = _diagram_3.getBoundsInLocal();
+      Bounds _localToScene = _diagram_2.localToScene(_boundsInLocal);
+      final Point2D centerInScene = BoundsExtensions.center(_localToScene);
+      Scene _scene_2 = this.getScene();
+      double _width_3 = _scene_2.getWidth();
+      double _multiply_1 = (0.5 * _width_3);
+      double _x = centerInScene.getX();
+      double _minus = (_multiply_1 - _x);
+      Scene _scene_3 = this.getScene();
+      double _height_3 = _scene_3.getHeight();
+      double _multiply_2 = (0.5 * _height_3);
+      double _y = centerInScene.getY();
+      double _minus_1 = (_multiply_2 - _y);
+      TransformExtensions.translate(this.diagramTransform, _minus, _minus_1);
+    }
+  }
+  
+  public HeadsUpDisplay getHeadsUpDisplay() {
     return this.headsUpDisplay;
   }
   
@@ -103,7 +181,19 @@ public class XRoot extends Parent implements XActivatable {
   }
   
   public void activate() {
-    this.diagram.activate();
+    boolean _isActive = this.getIsActive();
+    boolean _not = (!_isActive);
+    if (_not) {
+      this.doActivate();
+    }
+    this.isActiveProperty.set(true);
+  }
+  
+  public void doActivate() {
+    XDiagram _diagram = this.getDiagram();
+    if (_diagram!=null) {
+      _diagram.activate();
+    }
     this.setCurrentTool(this.defaultTool);
   }
   
@@ -141,7 +231,8 @@ public class XRoot extends Parent implements XActivatable {
   }
   
   public Iterable<XShape> getCurrentSelection() {
-    Iterable<XShape> _allShapes = this.diagram.getAllShapes();
+    XDiagram _diagram = this.getDiagram();
+    Iterable<XShape> _allShapes = _diagram.getAllShapes();
     final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
       public Boolean apply(final XShape it) {
         boolean _and = false;
@@ -162,6 +253,16 @@ public class XRoot extends Parent implements XActivatable {
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRoot");
     ;
   
+  private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
+  
+  public boolean getIsActive() {
+    return this.isActiveProperty.get();
+  }
+  
+  public ReadOnlyBooleanProperty isActiveProperty() {
+    return this.isActiveProperty.getReadOnlyProperty();
+  }
+  
   private SimpleDoubleProperty diagramScaleProperty = new SimpleDoubleProperty(this, "diagramScale",_initDiagramScale());
   
   private static final double _initDiagramScale() {
@@ -178,5 +279,15 @@ public class XRoot extends Parent implements XActivatable {
   
   public DoubleProperty diagramScaleProperty() {
     return this.diagramScaleProperty;
+  }
+  
+  private ReadOnlyObjectWrapper<XDiagram> diagramProperty = new ReadOnlyObjectWrapper<XDiagram>(this, "diagram");
+  
+  public XDiagram getDiagram() {
+    return this.diagramProperty.get();
+  }
+  
+  public ReadOnlyObjectProperty<XDiagram> diagramProperty() {
+    return this.diagramProperty.getReadOnlyProperty();
   }
 }

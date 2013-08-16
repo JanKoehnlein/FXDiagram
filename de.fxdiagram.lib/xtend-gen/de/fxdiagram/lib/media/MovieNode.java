@@ -66,6 +66,19 @@ public class MovieNode extends XNode {
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
+            ObservableList<Node> _children_1 = it.getChildren();
+            Text _text_1 = new Text();
+            final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+              public void apply(final Text it) {
+                it.setText("*");
+                it.setTextOrigin(VPos.TOP);
+                StackPane.setAlignment(it, Pos.TOP_RIGHT);
+                Insets _insets = new Insets(3, 6, 0, 0);
+                StackPane.setMargin(it, _insets);
+              }
+            };
+            Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_1);
+            _children_1.add(_doubleArrow_1);
           }
         };
         RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);

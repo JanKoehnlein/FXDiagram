@@ -3,6 +3,7 @@ package de.fxdiagram.core.tools;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import de.fxdiagram.core.Extensions;
+import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
@@ -534,10 +535,9 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       this.currentPositionProperty.addListener(this.positionListener);
       this.filterStringProperty.addListener(this.filterChangeListener);
       XRoot _root = Extensions.getRoot(this.host);
-      Group _headsUpDisplay = _root.getHeadsUpDisplay();
-      ObservableList<Node> _children_3 = _headsUpDisplay.getChildren();
+      HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
       Label _filterLabel = this.getFilterLabel();
-      _children_3.add(_filterLabel);
+      _headsUpDisplay.add(_filterLabel, Pos.BOTTOM_LEFT);
       Label _filterLabel_1 = this.getFilterLabel();
       _filterLabel_1.toFront();
       _xblockexpression = (true);
@@ -554,7 +554,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         return false;
       }
       XRoot _root = Extensions.getRoot(this.host);
-      Group _headsUpDisplay = _root.getHeadsUpDisplay();
+      HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
       ObservableList<Node> _children = _headsUpDisplay.getChildren();
       Label _filterLabel = this.getFilterLabel();
       _children.remove(_filterLabel);
