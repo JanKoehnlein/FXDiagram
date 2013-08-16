@@ -13,6 +13,7 @@ ENHANCEMENT
 - more auxiliary lines
 - ScrollAndScale should reset rotation
 - Layouter: convert edges as a last step
+- change Cursor on FlipNode
 
 MINOR
 - hover/armed buttons for choosers

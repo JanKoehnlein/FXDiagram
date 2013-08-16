@@ -3,7 +3,6 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
-import de.fxdiagram.core.debug.Debug
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramGestureTool
 import de.fxdiagram.core.tools.MenuTool
@@ -72,7 +71,8 @@ class XRoot extends Parent implements XActivatable {
 		if(diagram.transforms.empty) {
 			centerDiagram()
 		} else {
-			diagram.transforms.forEach [diagramTransform.leftMultiply(it)]		
+			diagram.transforms.forEach [diagramTransform.leftMultiply(it)]
+			diagramScale = sqrt(diagramTransform.mxx * diagramTransform.mxx + diagramTransform.mxy * diagramTransform.mxy)
 		}
 		diagram.transforms.setAll(diagramTransform)
 	}
@@ -82,6 +82,7 @@ class XRoot extends Parent implements XActivatable {
 		val diagramBounds = diagram.boundsInParent
 		if(diagramBounds.width * diagramBounds.height > 1) {
 			val scale = max(XRoot.MIN_SCALE, min(1, min(scene.width / diagramBounds.width, scene.height / diagramBounds.height)))
+			diagramScale = scale
 			diagramTransform.scale(scale, scale)
 			val centerInScene = diagram.localToScene(diagram.boundsInLocal).center
 			diagramTransform.translate(0.5 * scene.width - centerInScene.x, 0.5 * scene.height - centerInScene.y)

@@ -32,6 +32,8 @@ public class AutoScaleToFit implements XActivatable {
   
   private XDiagram diagram;
   
+  private ListChangeListener<XNode> listChangeListener;
+  
   public AutoScaleToFit(final XDiagram diagram) {
     this.diagram = diagram;
     final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
@@ -58,6 +60,49 @@ public class AutoScaleToFit implements XActivatable {
       }
     };
     this.heightProperty.addListener(_function_3);
+    final ListChangeListener<XNode> _function_4 = new ListChangeListener<XNode>() {
+      public void onChanged(final Change<? extends XNode> change) {
+        boolean _next = change.next();
+        boolean _while = _next;
+        while (_while) {
+          {
+            boolean _wasAdded = change.wasAdded();
+            if (_wasAdded) {
+              List<? extends XNode> _addedSubList = change.getAddedSubList();
+              final Procedure1<XNode> _function = new Procedure1<XNode>() {
+                public void apply(final XNode it) {
+                  ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+                  _boundsInLocalProperty.addListener(AutoScaleToFit.this.boundsInLocalListener);
+                  DoubleProperty _layoutXProperty = it.layoutXProperty();
+                  _layoutXProperty.addListener(AutoScaleToFit.this.layoutListener);
+                  DoubleProperty _layoutYProperty = it.layoutYProperty();
+                  _layoutYProperty.addListener(AutoScaleToFit.this.layoutListener);
+                }
+              };
+              IterableExtensions.forEach(_addedSubList, _function);
+            }
+            boolean _wasRemoved = change.wasRemoved();
+            if (_wasRemoved) {
+              List<? extends XNode> _removed = change.getRemoved();
+              final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
+                public void apply(final XNode it) {
+                  ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+                  _boundsInLocalProperty.removeListener(AutoScaleToFit.this.boundsInLocalListener);
+                  DoubleProperty _layoutXProperty = it.layoutXProperty();
+                  _layoutXProperty.removeListener(AutoScaleToFit.this.layoutListener);
+                  DoubleProperty _layoutYProperty = it.layoutYProperty();
+                  _layoutYProperty.removeListener(AutoScaleToFit.this.layoutListener);
+                }
+              };
+              IterableExtensions.forEach(_removed, _function_1);
+            }
+          }
+          boolean _next_1 = change.next();
+          _while = _next_1;
+        }
+      }
+    };
+    this.listChangeListener = _function_4;
   }
   
   public void scaleToFit() {
@@ -171,52 +216,46 @@ public class AutoScaleToFit implements XActivatable {
   
   public void activate() {
     ObservableList<XNode> _nodes = this.diagram.getNodes();
-    final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
-      public void onChanged(final Change<? extends XNode> change) {
-        boolean _next = change.next();
-        boolean _while = _next;
-        while (_while) {
-          {
-            boolean _wasAdded = change.wasAdded();
-            if (_wasAdded) {
-              List<? extends XNode> _addedSubList = change.getAddedSubList();
-              final Procedure1<XNode> _function = new Procedure1<XNode>() {
-                public void apply(final XNode it) {
-                  ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-                  _boundsInLocalProperty.addListener(AutoScaleToFit.this.boundsInLocalListener);
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.addListener(AutoScaleToFit.this.layoutListener);
-                  DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.addListener(AutoScaleToFit.this.layoutListener);
-                }
-              };
-              IterableExtensions.forEach(_addedSubList, _function);
-            }
-            boolean _wasRemoved = change.wasRemoved();
-            if (_wasRemoved) {
-              List<? extends XNode> _removed = change.getRemoved();
-              final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-                public void apply(final XNode it) {
-                  ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-                  _boundsInLocalProperty.removeListener(AutoScaleToFit.this.boundsInLocalListener);
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.removeListener(AutoScaleToFit.this.layoutListener);
-                  DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.removeListener(AutoScaleToFit.this.layoutListener);
-                }
-              };
-              IterableExtensions.forEach(_removed, _function_1);
-            }
-          }
-          boolean _next_1 = change.next();
-          _while = _next_1;
-        }
+    final Procedure1<XNode> _function = new Procedure1<XNode>() {
+      public void apply(final XNode it) {
+        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+        _boundsInLocalProperty.addListener(AutoScaleToFit.this.boundsInLocalListener);
+        DoubleProperty _layoutXProperty = it.layoutXProperty();
+        _layoutXProperty.addListener(AutoScaleToFit.this.layoutListener);
+        DoubleProperty _layoutYProperty = it.layoutYProperty();
+        _layoutYProperty.addListener(AutoScaleToFit.this.layoutListener);
       }
     };
-    _nodes.addListener(_function);
+    IterableExtensions.<XNode>forEach(_nodes, _function);
+    ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
+    _nodes_1.addListener(this.listChangeListener);
     Group _buttonLayer = this.diagram.getButtonLayer();
     ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = _buttonLayer.layoutBoundsProperty();
     _layoutBoundsProperty.addListener(this.boundsInLocalListener);
+    this.scaleToFit();
+  }
+  
+  public void deactivate() {
+    this.diagram.setClip(null);
+    this.diagram.setScaleX(1);
+    this.diagram.setScaleY(1);
+    Group _buttonLayer = this.diagram.getButtonLayer();
+    ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = _buttonLayer.layoutBoundsProperty();
+    _layoutBoundsProperty.removeListener(this.boundsInLocalListener);
+    ObservableList<XNode> _nodes = this.diagram.getNodes();
+    _nodes.removeListener(this.listChangeListener);
+    ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
+    final Procedure1<XNode> _function = new Procedure1<XNode>() {
+      public void apply(final XNode it) {
+        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+        _boundsInLocalProperty.removeListener(AutoScaleToFit.this.boundsInLocalListener);
+        DoubleProperty _layoutXProperty = it.layoutXProperty();
+        _layoutXProperty.removeListener(AutoScaleToFit.this.layoutListener);
+        DoubleProperty _layoutYProperty = it.layoutYProperty();
+        _layoutYProperty.removeListener(AutoScaleToFit.this.layoutListener);
+      }
+    };
+    IterableExtensions.<XNode>forEach(_nodes_1, _function);
   }
   
   private SimpleDoubleProperty widthProperty = new SimpleDoubleProperty(this, "width",_initWidth());

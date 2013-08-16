@@ -151,15 +151,15 @@ class Main extends Application {
 		]
 		diagram.nodes += neonSignNode
 
-		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
-		diagram.nodes += new LcarsNode(kirk) => [
-			width = 120
-		]
-		val Task<Void> task = [|
-			new Layouter
-			null
-		]
-		task.run
+//		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
+//		diagram.nodes += new LcarsNode(kirk) => [
+//			width = 120
+//		]
+//		val Task<Void> task = [|
+//			new Layouter
+//			null
+//		]
+//		task.run
 		root.centerDiagram
 		scene
 	}

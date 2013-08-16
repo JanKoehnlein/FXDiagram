@@ -122,6 +122,15 @@ public class XRoot extends Parent implements XActivatable {
           }
         };
         IterableExtensions.<Transform>forEach(_transforms_1, _function);
+        double _mxx = this.diagramTransform.getMxx();
+        double _mxx_1 = this.diagramTransform.getMxx();
+        double _multiply = (_mxx * _mxx_1);
+        double _mxy = this.diagramTransform.getMxy();
+        double _mxy_1 = this.diagramTransform.getMxy();
+        double _multiply_1 = (_mxy * _mxy_1);
+        double _plus = (_multiply + _multiply_1);
+        double _sqrt = Math.sqrt(_plus);
+        this.setDiagramScale(_sqrt);
       }
       XDiagram _diagram_5 = this.getDiagram();
       ObservableList<Transform> _transforms_2 = _diagram_5.getTransforms();
@@ -152,6 +161,7 @@ public class XRoot extends Parent implements XActivatable {
       double _min = Math.min(_divide, _divide_1);
       double _min_1 = Math.min(1, _min);
       final double scale = Math.max(XRoot.MIN_SCALE, _min_1);
+      this.setDiagramScale(scale);
       TransformExtensions.scale(this.diagramTransform, scale, scale);
       XDiagram _diagram_2 = this.getDiagram();
       XDiagram _diagram_3 = this.getDiagram();

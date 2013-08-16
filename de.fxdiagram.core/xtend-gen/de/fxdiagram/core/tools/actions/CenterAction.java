@@ -22,8 +22,8 @@ public class CenterAction implements DiagramAction {
     Iterable<XShape> _currentSelection = root.getCurrentSelection();
     final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
       public Bounds apply(final XShape it) {
-        Bounds _boundsInLocal = it.getBoundsInLocal();
-        Bounds _localToRootDiagram = Extensions.localToRootDiagram(it, _boundsInLocal);
+        Bounds _snapBounds = it.getSnapBounds();
+        Bounds _localToRootDiagram = Extensions.localToRootDiagram(it, _snapBounds);
         return _localToRootDiagram;
       }
     };

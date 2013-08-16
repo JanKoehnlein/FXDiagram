@@ -67,7 +67,7 @@ class NeonSignNode extends XNode {
 						choke = 0.4
 					]
 				]
-			]			
+			]	
 		]
 	}
 	

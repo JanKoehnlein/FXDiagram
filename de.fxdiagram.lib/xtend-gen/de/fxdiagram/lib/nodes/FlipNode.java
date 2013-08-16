@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -160,6 +161,7 @@ public class FlipNode extends Parent {
     };
     this.clickHandler = _function;
     this.setOnMouseClicked(this.clickHandler);
+    this.setCursor(Cursor.HAND);
   }
   
   public void setFront(final Node front) {

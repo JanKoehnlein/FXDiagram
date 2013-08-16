@@ -1,18 +1,14 @@
 package de.fxdiagram.examples;
 
-import com.mongodb.DBObject;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.BrickBreakerNode;
 import de.fxdiagram.examples.java.JavaTypeNode;
-import de.fxdiagram.examples.lcars.LcarsAccess;
-import de.fxdiagram.examples.lcars.LcarsNode;
 import de.fxdiagram.examples.neonsign.NeonSignNode;
 import de.fxdiagram.lib.media.BrowserNode;
 import de.fxdiagram.lib.media.ImageNode;
@@ -22,10 +18,8 @@ import de.fxdiagram.lib.simple.NestedDiagramNode;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.lib.simple.SimpleNode;
 import java.net.URL;
-import java.util.List;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -240,31 +234,6 @@ public class Main extends Application {
       final NeonSignNode neonSignNode = ObjectExtensions.<NeonSignNode>operator_doubleArrow(_neonSignNode, _function_12);
       ObservableList<XNode> _nodes_9 = diagram.getNodes();
       _nodes_9.add(neonSignNode);
-      LcarsAccess _get_1 = LcarsAccess.get();
-      List<DBObject> _query = _get_1.query("name", "James T. Kirk");
-      final DBObject kirk = _query.get(0);
-      ObservableList<XNode> _nodes_10 = diagram.getNodes();
-      LcarsNode _lcarsNode = new LcarsNode(kirk);
-      final Procedure1<LcarsNode> _function_13 = new Procedure1<LcarsNode>() {
-        public void apply(final LcarsNode it) {
-          it.setWidth(120);
-        }
-      };
-      LcarsNode _doubleArrow_1 = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function_13);
-      _nodes_10.add(_doubleArrow_1);
-      final Task<Void> _function_14 = new Task<Void>() {
-        @Override
-        protected Void call() throws Exception {
-          Void _xblockexpression = null;
-          {
-            new Layouter();
-            _xblockexpression = (null);
-          }
-          return _xblockexpression;
-        }
-      };
-      final Task<Void> task = _function_14;
-      task.run();
       root.centerDiagram();
       _xblockexpression = (scene);
     }

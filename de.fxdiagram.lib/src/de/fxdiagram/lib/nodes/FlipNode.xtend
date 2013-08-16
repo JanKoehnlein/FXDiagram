@@ -15,6 +15,7 @@ import static de.fxdiagram.core.binding.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
+import javafx.scene.Cursor
 
 class FlipNode extends Parent {
 
@@ -67,6 +68,7 @@ class FlipNode extends Parent {
 			}
 		]
 		onMouseClicked = clickHandler
+		cursor = Cursor.HAND
 	}
 
 	def setFront(Node front) {

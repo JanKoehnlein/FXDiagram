@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+import de.fxdiagram.core.debug.Debug
 
 class AutoScaleToFit implements XActivatable {
 
@@ -24,6 +25,8 @@ class AutoScaleToFit implements XActivatable {
 //	Rectangle fillRectangle
 
 	XDiagram diagram
+	
+	ListChangeListener<XNode> listChangeListener
 
 	new(XDiagram diagram) {
 		this.diagram = diagram
@@ -31,6 +34,22 @@ class AutoScaleToFit implements XActivatable {
 		layoutListener = [prop, oldVal, newVal | scaleToFit]
 		widthProperty.addListener[prop, oldVal, newVal | scaleToFit]
 		heightProperty.addListener[prop, oldVal, newVal | scaleToFit]
+		listChangeListener = [ ListChangeListener.Change<? extends XNode> change |
+			while (change.next) {
+				if (change.wasAdded)
+					change.addedSubList.forEach [
+						boundsInLocalProperty.addListener(boundsInLocalListener)
+						layoutXProperty.addListener(layoutListener)
+						layoutYProperty.addListener(layoutListener)
+					]
+				if (change.wasRemoved)
+					change.removed.forEach [
+						boundsInLocalProperty.removeListener(boundsInLocalListener)
+						layoutXProperty.removeListener(layoutListener)
+						layoutYProperty.removeListener(layoutListener)
+					]
+			}
+		]
 //		fillRectangle = new Rectangle => [
 //			opacity = 0
 //			mouseTransparent = true
@@ -90,23 +109,27 @@ class AutoScaleToFit implements XActivatable {
 	}
 
 	override activate() {
-		diagram.nodes.addListener [ ListChangeListener.Change<? extends XNode> change |
-			while (change.next) {
-				if (change.wasAdded)
-					change.addedSubList.forEach [
-						boundsInLocalProperty.addListener(boundsInLocalListener)
-						layoutXProperty.addListener(layoutListener)
-						layoutYProperty.addListener(layoutListener)
-					]
-				if (change.wasRemoved)
-					change.removed.forEach [
-						boundsInLocalProperty.removeListener(boundsInLocalListener)
-						layoutXProperty.removeListener(layoutListener)
-						layoutYProperty.removeListener(layoutListener)
-					]
-			}
+		diagram.nodes.forEach [
+			boundsInLocalProperty.addListener(boundsInLocalListener)
+			layoutXProperty.addListener(layoutListener)
+			layoutYProperty.addListener(layoutListener)
 		]
+		diagram.nodes.addListener(listChangeListener)
 		diagram.buttonLayer.layoutBoundsProperty.addListener(boundsInLocalListener)
+		scaleToFit
+	}
+
+	def deactivate() {
+		diagram.clip = null
+		diagram.scaleX = 1
+		diagram.scaleY = 1
+		diagram.buttonLayer.layoutBoundsProperty.removeListener(boundsInLocalListener)
+		diagram.nodes.removeListener(listChangeListener)
+		diagram.nodes.forEach [
+			boundsInLocalProperty.removeListener(boundsInLocalListener)
+			layoutXProperty.removeListener(layoutListener)
+			layoutYProperty.removeListener(layoutListener)
+		]
 	}
 
 }
