@@ -12,7 +12,6 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.tools.AbstractXNodeChooser;
-import de.fxdiagram.lib.simple.NestedDiagramNode;
 import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
@@ -37,8 +36,8 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
     final XNode host = ((XNode) _host);
     final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
       public void apply(final XRapidButton button) {
-        NestedDiagramNode _nestedDiagramNode = new NestedDiagramNode("new");
-        final NestedDiagramNode target = _nestedDiagramNode;
+        SimpleNode _simpleNode = new SimpleNode("new node");
+        final SimpleNode target = _simpleNode;
         final XNode source = button.getHost();
         XConnection _xConnection = new XConnection(source, target);
         final XConnection connection = _xConnection;

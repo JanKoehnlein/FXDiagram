@@ -68,7 +68,7 @@ public class XRoot extends Parent implements XActivatable {
   
   private CompositeTool defaultTool;
   
-  private XDiagramTool _currentTool;
+  private XDiagramTool currentTool;
   
   public XRoot() {
     ObservableList<Node> _children = this.getChildren();
@@ -208,7 +208,7 @@ public class XRoot extends Parent implements XActivatable {
   }
   
   public void setCurrentTool(final XDiagramTool tool) {
-    XDiagramTool previousTool = this._currentTool;
+    XDiagramTool previousTool = this.currentTool;
     boolean _notEquals = (!Objects.equal(previousTool, null));
     if (_notEquals) {
       boolean _deactivate = previousTool.deactivate();
@@ -217,13 +217,13 @@ public class XRoot extends Parent implements XActivatable {
         XRoot.LOG.severe("Could not deactivate active tool");
       }
     }
-    this._currentTool = tool;
+    this.currentTool = tool;
     boolean _notEquals_1 = (!Objects.equal(tool, null));
     if (_notEquals_1) {
       boolean _activate = tool.activate();
       boolean _not_1 = (!_activate);
       if (_not_1) {
-        this._currentTool = previousTool;
+        this.currentTool = previousTool;
         boolean _activate_1 = false;
         if (previousTool!=null) {
           _activate_1=previousTool.activate();

@@ -1,9 +1,9 @@
 package de.fxdigram.lib.layout.tests;
 
 import de.fxdiagram.core.XDiagram;
-import de.fxdiagram.core.XNestedDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.lib.simple.DiagramScaler;
 import de.fxdiagram.lib.simple.SimpleNode;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -20,7 +20,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class LayoutTests extends Application {
-  private XNestedDiagram nestedDiagram;
+  private XDiagram nestedDiagram;
   
   private XDiagram diagram;
   
@@ -29,11 +29,11 @@ public class LayoutTests extends Application {
   }
   
   public void start(final Stage stage) throws Exception {
-    XNestedDiagram _xNestedDiagram = new XNestedDiagram();
-    final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
-      public void apply(final XNestedDiagram it) {
-        final Procedure1<XNestedDiagram> _function = new Procedure1<XNestedDiagram>() {
-          public void apply(final XNestedDiagram it) {
+    XDiagram _xDiagram = new XDiagram();
+    final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
+      public void apply(final XDiagram it) {
+        final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
+          public void apply(final XDiagram it) {
             ObservableList<XNode> _nodes = it.getNodes();
             SimpleNode _simpleNode = new SimpleNode("Foo");
             final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
@@ -56,13 +56,13 @@ public class LayoutTests extends Application {
             };
             SimpleNode _doubleArrow_1 = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode_1, _function_1);
             _nodes_1.add(_doubleArrow_1);
-            it.scaleToFit();
           }
         };
         it.setContentsInitializer(_function);
+        new DiagramScaler(LayoutTests.this.nestedDiagram);
       }
     };
-    XNestedDiagram _doubleArrow = ObjectExtensions.<XNestedDiagram>operator_doubleArrow(_xNestedDiagram, _function);
+    XDiagram _doubleArrow = ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function);
     this.nestedDiagram = _doubleArrow;
     XRoot _xRoot = new XRoot();
     XDiagram _diagram = _xRoot.getDiagram();

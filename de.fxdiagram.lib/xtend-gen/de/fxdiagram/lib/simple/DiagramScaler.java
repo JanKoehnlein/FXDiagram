@@ -25,7 +25,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AutoScaleToFit implements XActivatable {
+public class DiagramScaler implements XActivatable {
   private ChangeListener<Bounds> boundsInLocalListener;
   
   private ChangeListener<Number> layoutListener;
@@ -34,29 +34,29 @@ public class AutoScaleToFit implements XActivatable {
   
   private ListChangeListener<XNode> listChangeListener;
   
-  public AutoScaleToFit(final XDiagram diagram) {
+  public DiagramScaler(final XDiagram diagram) {
     this.diagram = diagram;
     final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
       public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-        AutoScaleToFit.this.scaleToFit();
+        DiagramScaler.this.scaleToFit();
       }
     };
     this.boundsInLocalListener = _function;
     final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        AutoScaleToFit.this.scaleToFit();
+        DiagramScaler.this.scaleToFit();
       }
     };
     this.layoutListener = _function_1;
     final ChangeListener<Number> _function_2 = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        AutoScaleToFit.this.scaleToFit();
+        DiagramScaler.this.scaleToFit();
       }
     };
     this.widthProperty.addListener(_function_2);
     final ChangeListener<Number> _function_3 = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        AutoScaleToFit.this.scaleToFit();
+        DiagramScaler.this.scaleToFit();
       }
     };
     this.heightProperty.addListener(_function_3);
@@ -72,11 +72,11 @@ public class AutoScaleToFit implements XActivatable {
               final Procedure1<XNode> _function = new Procedure1<XNode>() {
                 public void apply(final XNode it) {
                   ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-                  _boundsInLocalProperty.addListener(AutoScaleToFit.this.boundsInLocalListener);
+                  _boundsInLocalProperty.addListener(DiagramScaler.this.boundsInLocalListener);
                   DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.addListener(AutoScaleToFit.this.layoutListener);
+                  _layoutXProperty.addListener(DiagramScaler.this.layoutListener);
                   DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.addListener(AutoScaleToFit.this.layoutListener);
+                  _layoutYProperty.addListener(DiagramScaler.this.layoutListener);
                 }
               };
               IterableExtensions.forEach(_addedSubList, _function);
@@ -87,11 +87,11 @@ public class AutoScaleToFit implements XActivatable {
               final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
                 public void apply(final XNode it) {
                   ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-                  _boundsInLocalProperty.removeListener(AutoScaleToFit.this.boundsInLocalListener);
+                  _boundsInLocalProperty.removeListener(DiagramScaler.this.boundsInLocalListener);
                   DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.removeListener(AutoScaleToFit.this.layoutListener);
+                  _layoutXProperty.removeListener(DiagramScaler.this.layoutListener);
                   DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.removeListener(AutoScaleToFit.this.layoutListener);
+                  _layoutYProperty.removeListener(DiagramScaler.this.layoutListener);
                 }
               };
               IterableExtensions.forEach(_removed, _function_1);
@@ -163,7 +163,7 @@ public class AutoScaleToFit implements XActivatable {
       Rectangle _rectangle = new Rectangle();
       final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
         public void apply(final Rectangle it) {
-          AutoScaleToFit.this.fit(it, newScale, newScaleX, newScaleY, myBounds);
+          DiagramScaler.this.fit(it, newScale, newScaleX, newScaleY, myBounds);
         }
       };
       Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
@@ -219,11 +219,11 @@ public class AutoScaleToFit implements XActivatable {
     final Procedure1<XNode> _function = new Procedure1<XNode>() {
       public void apply(final XNode it) {
         ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-        _boundsInLocalProperty.addListener(AutoScaleToFit.this.boundsInLocalListener);
+        _boundsInLocalProperty.addListener(DiagramScaler.this.boundsInLocalListener);
         DoubleProperty _layoutXProperty = it.layoutXProperty();
-        _layoutXProperty.addListener(AutoScaleToFit.this.layoutListener);
+        _layoutXProperty.addListener(DiagramScaler.this.layoutListener);
         DoubleProperty _layoutYProperty = it.layoutYProperty();
-        _layoutYProperty.addListener(AutoScaleToFit.this.layoutListener);
+        _layoutYProperty.addListener(DiagramScaler.this.layoutListener);
       }
     };
     IterableExtensions.<XNode>forEach(_nodes, _function);
@@ -248,11 +248,11 @@ public class AutoScaleToFit implements XActivatable {
     final Procedure1<XNode> _function = new Procedure1<XNode>() {
       public void apply(final XNode it) {
         ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-        _boundsInLocalProperty.removeListener(AutoScaleToFit.this.boundsInLocalListener);
+        _boundsInLocalProperty.removeListener(DiagramScaler.this.boundsInLocalListener);
         DoubleProperty _layoutXProperty = it.layoutXProperty();
-        _layoutXProperty.removeListener(AutoScaleToFit.this.layoutListener);
+        _layoutXProperty.removeListener(DiagramScaler.this.layoutListener);
         DoubleProperty _layoutYProperty = it.layoutYProperty();
-        _layoutYProperty.removeListener(AutoScaleToFit.this.layoutListener);
+        _layoutYProperty.removeListener(DiagramScaler.this.layoutListener);
       }
     };
     IterableExtensions.<XNode>forEach(_nodes_1, _function);

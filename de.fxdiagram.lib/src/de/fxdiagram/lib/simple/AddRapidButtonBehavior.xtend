@@ -24,7 +24,7 @@ class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 	override doActivate() {
 		val host = this.getHost as XNode
 		val addAction = [ XRapidButton button | 
-			val target = new NestedDiagramNode("new")
+			val target = new SimpleNode("new node")
 			val source = button.getHost
 			val connection = new XConnection(source, target)
 			host.diagram.nodes += target

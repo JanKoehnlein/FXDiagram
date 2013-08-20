@@ -25,6 +25,12 @@ class BoundsExtensions {
 		)
 	}
 
+	def static operator_minus(Bounds bounds, Insets insets) {
+		new BoundingBox(bounds.minX + insets.left, bounds.minY + insets.top,
+			bounds.width - insets.left - insets.right, bounds.height - insets.top - insets.bottom
+		)
+	}
+
 	def static translate(Bounds bounds, double tx, double ty, double tz) {
 		new BoundingBox(bounds.minX + tx, bounds.minY + ty, bounds.minZ + tz, bounds.width, bounds.height, bounds.depth)
 	}

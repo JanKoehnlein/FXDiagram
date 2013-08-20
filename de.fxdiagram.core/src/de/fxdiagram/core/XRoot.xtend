@@ -46,7 +46,7 @@ class XRoot extends Parent implements XActivatable {
 	
 	CompositeTool defaultTool
 	
-	XDiagramTool _currentTool
+	XDiagramTool currentTool
 	
 	new() {
 		children += diagramCanvas
@@ -105,19 +105,19 @@ class XRoot extends Parent implements XActivatable {
 	
 	def	doActivate() {
 		diagram?.activate
-		currentTool = defaultTool		
+		setCurrentTool(defaultTool)		
 	}
 	
 	def setCurrentTool(XDiagramTool tool) {
-		var previousTool = _currentTool
+		var previousTool = currentTool
 		if(previousTool != null) {
 			if(!previousTool.deactivate)
 				LOG.severe("Could not deactivate active tool")
 		}
-		_currentTool = tool
+		currentTool = tool
 		if(tool != null) {
 			if(!tool.activate) {
-				_currentTool = previousTool
+				currentTool = previousTool
 				if(!previousTool?.activate)
 					LOG.severe("Could not reactivate tool")
 			}
@@ -125,7 +125,7 @@ class XRoot extends Parent implements XActivatable {
 	}
 
 	def restoreDefaultTool() {
-		currentTool = defaultTool
+		setCurrentTool(defaultTool)
 	}
 	
 	def getCurrentSelection() {

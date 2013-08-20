@@ -1,9 +1,9 @@
 package de.fxdigram.lib.layout.tests
 
 import de.fxdiagram.core.XDiagram
-import de.fxdiagram.core.XNestedDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.lib.simple.DiagramScaler
 import de.fxdiagram.lib.simple.SimpleNode
 import javafx.application.Application
 import javafx.scene.Group
@@ -14,7 +14,7 @@ import javafx.stage.Stage
 
 class LayoutTests extends Application {
 
-	XNestedDiagram nestedDiagram
+	XDiagram nestedDiagram
 
 	XDiagram diagram
 
@@ -23,7 +23,7 @@ class LayoutTests extends Application {
 	}
 
 	override start(Stage stage) throws Exception {
-		nestedDiagram = new XNestedDiagram => [
+		nestedDiagram = new XDiagram => [
 			contentsInitializer = [
 				nodes += 
 					new SimpleNode("Foo") => [
@@ -35,8 +35,8 @@ class LayoutTests extends Application {
 					new SimpleNode("Bar") => [
 						relocate(100, 100)
 					]
-				scaleToFit
 			]
+			new DiagramScaler(nestedDiagram) 
 		]
 		diagram = new XRoot().diagram
 		stage.scene = new Scene(diagram, 1024, 768)

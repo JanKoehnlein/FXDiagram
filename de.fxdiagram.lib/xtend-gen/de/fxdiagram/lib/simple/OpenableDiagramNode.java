@@ -7,10 +7,11 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.geometry.BoundsExtensions;
+import de.fxdiagram.core.geometry.DurationExtensions;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
-import de.fxdiagram.lib.simple.AutoScaleToFit;
+import de.fxdiagram.lib.simple.DiagramScaler;
 import eu.hansolo.enzo.radialmenu.Symbol.Type;
 import eu.hansolo.enzo.radialmenu.SymbolCanvas;
 import javafx.animation.Animation;
@@ -53,9 +54,11 @@ public class OpenableDiagramNode extends XNode {
   
   private Text textNode;
   
+  private DiagramScaler diagramScaler;
+  
   private Duration _transitionDuration = new Function0<Duration>() {
     public Duration apply() {
-      Duration _millis = Duration.millis(800);
+      Duration _millis = DurationExtensions.millis(1000);
       return _millis;
     }
   }.apply();
@@ -66,6 +69,21 @@ public class OpenableDiagramNode extends XNode {
   
   public void setTransitionDuration(final Duration transitionDuration) {
     this._transitionDuration = transitionDuration;
+  }
+  
+  private Duration _transitionDelay = new Function0<Duration>() {
+    public Duration apply() {
+      Duration _millis = DurationExtensions.millis(100);
+      return _millis;
+    }
+  }.apply();
+  
+  public Duration getTransitionDelay() {
+    return this._transitionDelay;
+  }
+  
+  public void setTransitionDelay(final Duration transitionDelay) {
+    this._transitionDelay = transitionDelay;
   }
   
   public OpenableDiagramNode(final String name, final XDiagram nestedDiagram) {
@@ -120,11 +138,14 @@ public class OpenableDiagramNode extends XNode {
   protected ParallelTransition openDiagram() {
     ParallelTransition _xblockexpression = null;
     {
-      final Bounds nodeBounds = this.getLayoutBounds();
+      Bounds _layoutBounds = this.getLayoutBounds();
+      Insets _insets = new Insets(5, 5, 5, 5);
+      final BoundingBox nodeBounds = BoundsExtensions.operator_minus(_layoutBounds, _insets);
       Point2D _center = BoundsExtensions.center(nodeBounds);
       final Point2D targetInDiagram = Extensions.localToRootDiagram(this, _center);
       ObservableList<Transform> _transforms = this.nestedDiagram.getTransforms();
       _transforms.clear();
+      this.nestedDiagram.setOpacity(0);
       ObservableList<Node> _children = this.pane.getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
@@ -137,9 +158,9 @@ public class OpenableDiagramNode extends XNode {
       _children.add(_doubleArrow);
       this.nestedDiagram.activate();
       this.nestedDiagram.layout();
-      AutoScaleToFit _autoScaleToFit = new AutoScaleToFit(this.nestedDiagram);
-      final Procedure1<AutoScaleToFit> _function_1 = new Procedure1<AutoScaleToFit>() {
-        public void apply(final AutoScaleToFit it) {
+      DiagramScaler _diagramScaler = new DiagramScaler(this.nestedDiagram);
+      final Procedure1<DiagramScaler> _function_1 = new Procedure1<DiagramScaler>() {
+        public void apply(final DiagramScaler it) {
           double _width = nodeBounds.getWidth();
           it.setWidth(_width);
           double _height = nodeBounds.getHeight();
@@ -147,7 +168,8 @@ public class OpenableDiagramNode extends XNode {
           it.activate();
         }
       };
-      final AutoScaleToFit autoScaleToFit = ObjectExtensions.<AutoScaleToFit>operator_doubleArrow(_autoScaleToFit, _function_1);
+      DiagramScaler _doubleArrow_1 = ObjectExtensions.<DiagramScaler>operator_doubleArrow(_diagramScaler, _function_1);
+      this.diagramScaler = _doubleArrow_1;
       BoundingBox _boundingBox = new BoundingBox(0, 0, 1, 0);
       Bounds _localToScene = this.nestedDiagram.localToScene(_boundingBox);
       final double initialScale = _localToScene.getWidth();
@@ -165,19 +187,19 @@ public class OpenableDiagramNode extends XNode {
       double _divide_2 = (_min_1 / initialScale);
       double _max = Math.max(XRoot.MIN_SCALE, _divide_2);
       double _diagramScale = this.root.getDiagramScale();
-      final double scale = (_max * _diagramScale);
+      final double targetScale = (_max * _diagramScale);
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function_2 = new Procedure1<ParallelTransition>() {
         public void apply(final ParallelTransition it) {
           ObservableList<Animation> _children = it.getChildren();
-          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(OpenableDiagramNode.this.root, targetInDiagram, scale);
+          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(OpenableDiagramNode.this.root, targetInDiagram, targetScale);
           final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
             public void apply(final ScrollToAndScaleTransition it) {
               Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
               it.setDuration(_transitionDuration);
               final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                 public void handle(final ActionEvent it) {
-                  autoScaleToFit.deactivate();
+                  OpenableDiagramNode.this.diagramScaler.deactivate();
                   XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();
                   OpenableDiagramNode.this.parentDiagram = _diagram;
                   ObservableList<Transform> _transforms = OpenableDiagramNode.this.nestedDiagram.getTransforms();
@@ -195,7 +217,7 @@ public class OpenableDiagramNode extends XNode {
                           ObservableList<Node> _children = _headsUpDisplay.getChildren();
                           EventTarget _target = it.getTarget();
                           _children.remove(((Node) _target));
-                          OpenableDiagramNode.this.closeDiagram(nodeBounds, targetInDiagram);
+                          OpenableDiagramNode.this.closeDiagram(targetInDiagram);
                         }
                       };
                       it.setOnMouseClicked(_function);
@@ -215,7 +237,9 @@ public class OpenableDiagramNode extends XNode {
           final Procedure1<FadeTransition> _function_1 = new Procedure1<FadeTransition>() {
             public void apply(final FadeTransition it) {
               Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
-              it.setDuration(_transitionDuration);
+              Duration _transitionDelay = OpenableDiagramNode.this.getTransitionDelay();
+              Duration _minus = DurationExtensions.operator_minus(_transitionDuration, _transitionDelay);
+              it.setDuration(_minus);
               it.setFromValue(1);
               it.setToValue(0);
               it.setNode(OpenableDiagramNode.this.textNode);
@@ -227,8 +251,12 @@ public class OpenableDiagramNode extends XNode {
           FadeTransition _fadeTransition_1 = new FadeTransition();
           final Procedure1<FadeTransition> _function_2 = new Procedure1<FadeTransition>() {
             public void apply(final FadeTransition it) {
+              Duration _transitionDelay = OpenableDiagramNode.this.getTransitionDelay();
+              it.setDelay(_transitionDelay);
               Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
-              it.setDuration(_transitionDuration);
+              Duration _transitionDelay_1 = OpenableDiagramNode.this.getTransitionDelay();
+              Duration _minus = DurationExtensions.operator_minus(_transitionDuration, _transitionDelay_1);
+              it.setDuration(_minus);
               it.setFromValue(0);
               it.setToValue(1);
               it.setNode(OpenableDiagramNode.this.nestedDiagram);
@@ -239,92 +267,92 @@ public class OpenableDiagramNode extends XNode {
           it.play();
         }
       };
-      ParallelTransition _doubleArrow_1 = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_2);
-      _xblockexpression = (_doubleArrow_1);
+      ParallelTransition _doubleArrow_2 = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_2);
+      _xblockexpression = (_doubleArrow_2);
     }
     return _xblockexpression;
   }
   
-  protected void closeDiagram(final Bounds nodeBounds, final Point2D targetInDiagram) {
-    this.root.setDiagram(this.parentDiagram);
-    ObservableList<Node> _children = this.pane.getChildren();
-    Group _group = new Group();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      public void apply(final Group it) {
-        ObservableList<Node> _children = it.getChildren();
-        _children.add(OpenableDiagramNode.this.nestedDiagram);
-      }
-    };
-    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-    _children.add(_doubleArrow);
-    this.nestedDiagram.activate();
-    this.nestedDiagram.layout();
-    AutoScaleToFit _autoScaleToFit = new AutoScaleToFit(this.nestedDiagram);
-    final Procedure1<AutoScaleToFit> _function_1 = new Procedure1<AutoScaleToFit>() {
-      public void apply(final AutoScaleToFit it) {
-        double _width = nodeBounds.getWidth();
-        it.setWidth(_width);
-        double _height = nodeBounds.getHeight();
-        it.setHeight(_height);
-        it.activate();
-      }
-    };
-    final AutoScaleToFit autoScaleToFit = ObjectExtensions.<AutoScaleToFit>operator_doubleArrow(_autoScaleToFit, _function_1);
-    ParallelTransition _parallelTransition = new ParallelTransition();
-    final Procedure1<ParallelTransition> _function_2 = new Procedure1<ParallelTransition>() {
-      public void apply(final ParallelTransition it) {
-        ObservableList<Animation> _children = it.getChildren();
-        ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(OpenableDiagramNode.this.root, targetInDiagram, 1);
-        final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
-          public void apply(final ScrollToAndScaleTransition it) {
-            Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
-            it.setDuration(_transitionDuration);
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              public void handle(final ActionEvent it) {
-                autoScaleToFit.deactivate();
-                XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();
-                OpenableDiagramNode.this.parentDiagram = _diagram;
-                ObservableList<Transform> _transforms = OpenableDiagramNode.this.nestedDiagram.getTransforms();
-                _transforms.clear();
-                ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
-                _children.setAll(OpenableDiagramNode.this.textNode);
-              }
-            };
-            it.setOnFinished(_function);
-          }
-        };
-        ScrollToAndScaleTransition _doubleArrow = ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
-        _children.add(_doubleArrow);
-        ObservableList<Animation> _children_1 = it.getChildren();
-        FadeTransition _fadeTransition = new FadeTransition();
-        final Procedure1<FadeTransition> _function_1 = new Procedure1<FadeTransition>() {
-          public void apply(final FadeTransition it) {
-            Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
-            it.setDuration(_transitionDuration);
-            it.setFromValue(0);
-            it.setToValue(1);
-            it.setNode(OpenableDiagramNode.this.textNode);
-          }
-        };
-        FadeTransition _doubleArrow_1 = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function_1);
-        _children_1.add(_doubleArrow_1);
-        ObservableList<Animation> _children_2 = it.getChildren();
-        FadeTransition _fadeTransition_1 = new FadeTransition();
-        final Procedure1<FadeTransition> _function_2 = new Procedure1<FadeTransition>() {
-          public void apply(final FadeTransition it) {
-            Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
-            it.setDuration(_transitionDuration);
-            it.setFromValue(1);
-            it.setToValue(0);
-            it.setNode(OpenableDiagramNode.this.nestedDiagram);
-          }
-        };
-        FadeTransition _doubleArrow_2 = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition_1, _function_2);
-        _children_2.add(_doubleArrow_2);
-        it.play();
-      }
-    };
-    ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_2);
-    this.textNode.setOpacity(1);
+  protected ParallelTransition closeDiagram(final Point2D targetInDiagram) {
+    ParallelTransition _xblockexpression = null;
+    {
+      this.root.setDiagram(this.parentDiagram);
+      ObservableList<Node> _children = this.pane.getChildren();
+      Group _group = new Group();
+      final Procedure1<Group> _function = new Procedure1<Group>() {
+        public void apply(final Group it) {
+          ObservableList<Node> _children = it.getChildren();
+          _children.add(OpenableDiagramNode.this.nestedDiagram);
+        }
+      };
+      Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+      _children.add(_doubleArrow);
+      this.nestedDiagram.activate();
+      this.nestedDiagram.layout();
+      this.diagramScaler.activate();
+      ParallelTransition _parallelTransition = new ParallelTransition();
+      final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
+        public void apply(final ParallelTransition it) {
+          ObservableList<Animation> _children = it.getChildren();
+          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(OpenableDiagramNode.this.root, targetInDiagram, 1);
+          final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
+            public void apply(final ScrollToAndScaleTransition it) {
+              Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
+              it.setDuration(_transitionDuration);
+              final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                public void handle(final ActionEvent it) {
+                  OpenableDiagramNode.this.diagramScaler.deactivate();
+                  XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();
+                  OpenableDiagramNode.this.parentDiagram = _diagram;
+                  ObservableList<Transform> _transforms = OpenableDiagramNode.this.nestedDiagram.getTransforms();
+                  _transforms.clear();
+                  ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
+                  _children.setAll(OpenableDiagramNode.this.textNode);
+                }
+              };
+              it.setOnFinished(_function);
+            }
+          };
+          ScrollToAndScaleTransition _doubleArrow = ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+          _children.add(_doubleArrow);
+          ObservableList<Animation> _children_1 = it.getChildren();
+          FadeTransition _fadeTransition = new FadeTransition();
+          final Procedure1<FadeTransition> _function_1 = new Procedure1<FadeTransition>() {
+            public void apply(final FadeTransition it) {
+              Duration _transitionDelay = OpenableDiagramNode.this.getTransitionDelay();
+              it.setDelay(_transitionDelay);
+              Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
+              Duration _transitionDelay_1 = OpenableDiagramNode.this.getTransitionDelay();
+              Duration _minus = DurationExtensions.operator_minus(_transitionDuration, _transitionDelay_1);
+              it.setDuration(_minus);
+              it.setFromValue(0);
+              it.setToValue(1);
+              it.setNode(OpenableDiagramNode.this.textNode);
+            }
+          };
+          FadeTransition _doubleArrow_1 = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function_1);
+          _children_1.add(_doubleArrow_1);
+          ObservableList<Animation> _children_2 = it.getChildren();
+          FadeTransition _fadeTransition_1 = new FadeTransition();
+          final Procedure1<FadeTransition> _function_2 = new Procedure1<FadeTransition>() {
+            public void apply(final FadeTransition it) {
+              Duration _transitionDuration = OpenableDiagramNode.this.getTransitionDuration();
+              Duration _transitionDelay = OpenableDiagramNode.this.getTransitionDelay();
+              Duration _minus = DurationExtensions.operator_minus(_transitionDuration, _transitionDelay);
+              it.setDuration(_minus);
+              it.setFromValue(1);
+              it.setToValue(0);
+              it.setNode(OpenableDiagramNode.this.nestedDiagram);
+            }
+          };
+          FadeTransition _doubleArrow_2 = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition_1, _function_2);
+          _children_2.add(_doubleArrow_2);
+          it.play();
+        }
+      };
+      ParallelTransition _doubleArrow_1 = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_1);
+      _xblockexpression = (_doubleArrow_1);
+    }
+    return _xblockexpression;
   }
 }

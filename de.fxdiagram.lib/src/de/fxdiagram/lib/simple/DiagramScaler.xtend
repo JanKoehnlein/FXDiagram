@@ -12,9 +12,8 @@ import javafx.scene.shape.Rectangle
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
-import de.fxdiagram.core.debug.Debug
 
-class AutoScaleToFit implements XActivatable {
+class DiagramScaler implements XActivatable {
 
 	@FxProperty double width = 80
 	@FxProperty double height = 60

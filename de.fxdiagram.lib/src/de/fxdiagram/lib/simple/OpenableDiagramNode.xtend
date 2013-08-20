@@ -11,7 +11,6 @@ import eu.hansolo.enzo.radialmenu.SymbolCanvas
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
 import javafx.geometry.BoundingBox
-import javafx.geometry.Bounds
 import javafx.geometry.Insets
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
@@ -28,7 +27,7 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
-import static extension javafx.util.Duration.*
+import static extension de.fxdiagram.core.geometry.DurationExtensions.*
 
 class OpenableDiagramNode extends XNode {
 	
@@ -41,8 +40,11 @@ class OpenableDiagramNode extends XNode {
 	RectangleBorderPane pane
 	
 	Text textNode
+	
+	DiagramScaler diagramScaler
 
-	@Property Duration transitionDuration = 800.millis
+	@Property Duration transitionDuration = 1000.millis
+	@Property Duration transitionDelay = 100.millis
 	
 	new(String name, XDiagram nestedDiagram) {
 		this.nestedDiagram = nestedDiagram
@@ -72,30 +74,31 @@ class OpenableDiagramNode extends XNode {
 	}
 	
 	protected def openDiagram() {
-		val nodeBounds = layoutBounds
+		val nodeBounds = layoutBounds - new Insets(5,5,5,5)
 		val targetInDiagram = localToRootDiagram(nodeBounds.center)
 		nestedDiagram.transforms.clear
+		nestedDiagram.opacity = 0
 		pane.children.add(new Group => [
 			children += nestedDiagram
 		])
 		nestedDiagram.activate
 		nestedDiagram.layout
-		val autoScaleToFit = new AutoScaleToFit(nestedDiagram) => [
+		diagramScaler = new DiagramScaler(nestedDiagram) => [
 			width = nodeBounds.width
 			height = nodeBounds.height
 			activate
 		]
 		val initialScale = nestedDiagram.localToScene(new BoundingBox(0,0,1,0)).width
 		val diagramBoundsInLocal = nestedDiagram.boundsInLocal
-		val scale = max(XRoot.MIN_SCALE, 
+		val targetScale = max(XRoot.MIN_SCALE, 
 			min(1, 
 				min(scene.width / diagramBoundsInLocal.width, 
 					scene.height / diagramBoundsInLocal.height)) / initialScale) * root.diagramScale
 		new ParallelTransition => [
-			children += new ScrollToAndScaleTransition(root, targetInDiagram, scale) => [
+			children += new ScrollToAndScaleTransition(root, targetInDiagram, targetScale) => [
 				duration = transitionDuration
 				onFinished = [
-					autoScaleToFit.deactivate
+					diagramScaler.deactivate
 					parentDiagram = root.diagram
 					nestedDiagram.transforms.clear
 					pane.children.setAll(textNode)
@@ -104,19 +107,20 @@ class OpenableDiagramNode extends XNode {
 						SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY) => [
 							onMouseClicked = [
 								root.headsUpDisplay.children -= target as Node
-								closeDiagram(nodeBounds, targetInDiagram)
+								closeDiagram(targetInDiagram)
 							]
 						], Pos.TOP_RIGHT)
 				]
 			]
 			children += new FadeTransition => [
-				duration = transitionDuration
+				duration = transitionDuration - transitionDelay
 				fromValue = 1
 				toValue = 0
 				node = textNode
 			]
 			children += new FadeTransition => [
-				duration = transitionDuration
+				delay = transitionDelay
+				duration = transitionDuration - transitionDelay
 				fromValue = 0
 				toValue = 1
 				node = nestedDiagram
@@ -125,42 +129,38 @@ class OpenableDiagramNode extends XNode {
 		]
 	}
 	
-	protected def closeDiagram(Bounds nodeBounds, Point2D targetInDiagram) {
+	protected def closeDiagram(Point2D targetInDiagram) {
 		root.diagram = parentDiagram
 		pane.children.add(new Group => [
 			children += nestedDiagram
 		])
 		nestedDiagram.activate
 		nestedDiagram.layout
-		val autoScaleToFit = new AutoScaleToFit(nestedDiagram) => [
-			width = nodeBounds.width
-			height = nodeBounds.height
-			activate
-		]
+		diagramScaler.activate
 		new ParallelTransition => [
 			children += new ScrollToAndScaleTransition(root, targetInDiagram, 1) => [
 				duration = transitionDuration
 				onFinished = [
-					autoScaleToFit.deactivate
+					diagramScaler.deactivate
 					parentDiagram = root.diagram
 					nestedDiagram.transforms.clear
 					pane.children.setAll(textNode)
 				]
 			]
 			children += new FadeTransition => [
-				duration = transitionDuration
+				delay = transitionDelay
+				duration = transitionDuration - transitionDelay
 				fromValue = 0
 				toValue = 1
 				node = textNode
 			]
 			children += new FadeTransition => [
-				duration = transitionDuration
+				duration = transitionDuration - transitionDelay
 				fromValue = 1
 				toValue = 0
 				node = nestedDiagram
 			]
 			play
 		]
-		textNode.opacity = 1
 	}
 }

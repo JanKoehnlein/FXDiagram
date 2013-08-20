@@ -1,18 +1,22 @@
 package de.fxdiagram.examples
 
 import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XConnectionKind
 import de.fxdiagram.core.XConnectionLabel
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.services.ImageCache
 import de.fxdiagram.examples.java.JavaTypeNode
 import de.fxdiagram.examples.lcars.LcarsAccess
 import de.fxdiagram.examples.lcars.LcarsNode
+import de.fxdiagram.examples.neonsign.NeonSignNode
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
 import de.fxdiagram.lib.media.MovieNode
 import de.fxdiagram.lib.media.RecursiveImageNode
-import de.fxdiagram.lib.simple.NestedDiagramNode
+import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode
+import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.lib.simple.SimpleNode
 import java.net.URL
 import javafx.application.Application
@@ -23,10 +27,6 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.image.Image
 import javafx.stage.Stage
-import de.fxdiagram.examples.neonsign.NeonSignNode
-import de.fxdiagram.core.XConnectionKind
-import de.fxdiagram.lib.simple.OpenableDiagramNode
-import de.fxdiagram.core.XDiagram
 
 class Main extends Application {
 
@@ -48,7 +48,7 @@ class Main extends Application {
 		val diagram = new XDiagram
 		root.diagram = diagram
 		
-		val source = new NestedDiagramNode('source') => [
+		val source = new LevelOfDetailDiagramNode('source', createDummyDiagram) => [
 			layoutX = 280
 			layoutY = 170
 			width = 80
@@ -71,9 +71,7 @@ class Main extends Application {
 		connectionLabel.text.text = 'label'
 		diagram.connections += connection
 
-		val target2 = new OpenableDiagramNode('openable', new XDiagram => [
-			contentsInitializer = NestedDiagramNode.dummyDiagramContent
-		]) => [
+		val target2 = new OpenableDiagramNode('openable', createDummyDiagram) => [
 			layoutX = 400
 			layoutY = 240
 			width = 80
@@ -151,16 +149,35 @@ class Main extends Application {
 		]
 		diagram.nodes += neonSignNode
 
-//		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
-//		diagram.nodes += new LcarsNode(kirk) => [
-//			width = 120
-//		]
-//		val Task<Void> task = [|
-//			new Layouter
-//			null
-//		]
-//		task.run
+		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
+		diagram.nodes += new LcarsNode(kirk) => [
+			width = 120
+		]
+		val Task<Void> task = [|
+			new Layouter
+			null
+		]
+		task.run
 		root.centerDiagram
 		scene
+	}
+	
+	int nr = 0
+
+	protected def XDiagram createDummyDiagram() {
+		new XDiagram => [
+			contentsInitializer = [
+				nodes += new SimpleNode("Inner " + nr) => [
+					relocate(0,0)
+				]
+				nodes += new SimpleNode("Inner " + nr + 1) => [
+					relocate(100,100)
+				]
+				nodes += new LevelOfDetailDiagramNode("Nested " + nr + 2, createDummyDiagram) => [
+					it.relocate(50, 50)
+				]
+			]
+			nr = nr + 3
+		]
 	}
 }

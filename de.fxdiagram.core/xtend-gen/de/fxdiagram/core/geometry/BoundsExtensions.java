@@ -58,6 +58,27 @@ public class BoundsExtensions {
     return _boundingBox;
   }
   
+  public static BoundingBox operator_minus(final Bounds bounds, final Insets insets) {
+    double _minX = bounds.getMinX();
+    double _left = insets.getLeft();
+    double _plus = (_minX + _left);
+    double _minY = bounds.getMinY();
+    double _top = insets.getTop();
+    double _plus_1 = (_minY + _top);
+    double _width = bounds.getWidth();
+    double _left_1 = insets.getLeft();
+    double _minus = (_width - _left_1);
+    double _right = insets.getRight();
+    double _minus_1 = (_minus - _right);
+    double _height = bounds.getHeight();
+    double _top_1 = insets.getTop();
+    double _minus_2 = (_height - _top_1);
+    double _bottom = insets.getBottom();
+    double _minus_3 = (_minus_2 - _bottom);
+    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _minus_1, _minus_3);
+    return _boundingBox;
+  }
+  
   public static BoundingBox translate(final Bounds bounds, final double tx, final double ty, final double tz) {
     double _minX = bounds.getMinX();
     double _plus = (_minX + tx);
