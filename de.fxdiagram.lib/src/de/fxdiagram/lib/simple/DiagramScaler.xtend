@@ -12,11 +12,13 @@ import javafx.scene.shape.Rectangle
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+import de.fxdiagram.annotations.properties.ReadOnly
 
 class DiagramScaler implements XActivatable {
 
 	@FxProperty double width = 80
 	@FxProperty double height = 60
+	@FxProperty@ReadOnly boolean isActive
 
 	ChangeListener<Bounds> boundsInLocalListener
 	ChangeListener<Number> layoutListener
@@ -108,27 +110,33 @@ class DiagramScaler implements XActivatable {
 	}
 
 	override activate() {
-		diagram.nodes.forEach [
-			boundsInLocalProperty.addListener(boundsInLocalListener)
-			layoutXProperty.addListener(layoutListener)
-			layoutYProperty.addListener(layoutListener)
-		]
-		diagram.nodes.addListener(listChangeListener)
-		diagram.buttonLayer.layoutBoundsProperty.addListener(boundsInLocalListener)
-		scaleToFit
+		if(!isActive) {
+			diagram.nodes.forEach [
+				boundsInLocalProperty.addListener(boundsInLocalListener)
+				layoutXProperty.addListener(layoutListener)
+				layoutYProperty.addListener(layoutListener)
+			]
+			diagram.nodes.addListener(listChangeListener)
+			diagram.buttonLayer.layoutBoundsProperty.addListener(boundsInLocalListener)
+			scaleToFit
+		}
+		isActiveProperty.set(true)
 	}
 
 	def deactivate() {
-		diagram.clip = null
-		diagram.scaleX = 1
-		diagram.scaleY = 1
-		diagram.buttonLayer.layoutBoundsProperty.removeListener(boundsInLocalListener)
-		diagram.nodes.removeListener(listChangeListener)
-		diagram.nodes.forEach [
-			boundsInLocalProperty.removeListener(boundsInLocalListener)
-			layoutXProperty.removeListener(layoutListener)
-			layoutYProperty.removeListener(layoutListener)
-		]
+		if(isActive) {
+			diagram.clip = null
+			diagram.scaleX = 1
+			diagram.scaleY = 1
+			diagram.buttonLayer.layoutBoundsProperty.removeListener(boundsInLocalListener)
+			diagram.nodes.removeListener(listChangeListener)
+			diagram.nodes.forEach [
+				boundsInLocalProperty.removeListener(boundsInLocalListener)
+				layoutXProperty.removeListener(layoutListener)
+				layoutYProperty.removeListener(layoutListener)
+			]
+		}
+		isActiveProperty.set(false)
 	}
 
 }

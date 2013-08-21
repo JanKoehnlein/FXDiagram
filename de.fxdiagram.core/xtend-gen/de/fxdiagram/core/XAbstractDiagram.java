@@ -26,11 +26,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.layout.Region;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public abstract class XAbstractDiagram extends Parent implements XActivatable {
+public abstract class XAbstractDiagram extends Region implements XActivatable {
   public abstract Group getNodeLayer();
   
   public abstract Group getConnectionLayer();
@@ -154,7 +155,7 @@ public abstract class XAbstractDiagram extends Parent implements XActivatable {
   }
   
   public Iterable<XShape> getAllShapes() {
-    Iterable<? extends Node> _allChildren = Extensions.getAllChildren(this);
+    Iterable<Node> _allChildren = Extensions.getAllChildren(this);
     Iterable<XShape> _filter = Iterables.<XShape>filter(_allChildren, XShape.class);
     return _filter;
   }

@@ -12,7 +12,7 @@ import javafx.scene.Parent
 import javafx.scene.layout.FlowPane
 import javafx.scene.text.Text
 
-import static de.fxdiagram.examples.lcars.LcarsExtensions.*
+import static extension de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.Extensions.*
 import static extension javafx.util.Duration.*
@@ -102,7 +102,7 @@ class LcarsQueryTask extends Task<Void> {
 	}
 	
 	override protected call() throws Exception {
-		val siblings = LcarsAccess.get.query(fieldName, fieldValue)
+		val siblings = host.lcarsDiagram.lcarsAccess.query(fieldName, fieldValue)
 		val lcarsNode = host.lcarsNode
 		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
 		chooser += siblings

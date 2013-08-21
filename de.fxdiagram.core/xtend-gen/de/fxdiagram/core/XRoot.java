@@ -7,6 +7,7 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.binding.NumberExpressionExtensions;
+import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.geometry.BoundsExtensions;
 import de.fxdiagram.core.geometry.TransformExtensions;
 import de.fxdiagram.core.tools.CompositeTool;
@@ -20,22 +21,25 @@ import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
@@ -48,10 +52,10 @@ public class XRoot extends Parent implements XActivatable {
     }
   }.apply();
   
-  private Group diagramCanvas = new Function0<Group>() {
-    public Group apply() {
-      Group _group = new Group();
-      return _group;
+  private Pane diagramCanvas = new Function0<Pane>() {
+    public Pane apply() {
+      Pane _pane = new Pane();
+      return _pane;
     }
   }.apply();
   
@@ -133,7 +137,13 @@ public class XRoot extends Parent implements XActivatable {
         this.setDiagramScale(_sqrt);
       }
       XDiagram _diagram_5 = this.getDiagram();
-      ObservableList<Transform> _transforms_2 = _diagram_5.getTransforms();
+      Paint _backgroundPaint = _diagram_5.getBackgroundPaint();
+      CharSequence _css = JavaToCss.toCss(_backgroundPaint);
+      String _plus_1 = ("-fx-background-color: " + _css);
+      String _plus_2 = (_plus_1 + ";");
+      this.diagramCanvas.setStyle(_plus_2);
+      XDiagram _diagram_6 = this.getDiagram();
+      ObservableList<Transform> _transforms_2 = _diagram_6.getTransforms();
       boolean _setAll = _transforms_2.setAll(this.diagramTransform);
       _xblockexpression = (_setAll);
     }
@@ -204,6 +214,20 @@ public class XRoot extends Parent implements XActivatable {
     if (_diagram!=null) {
       _diagram.activate();
     }
+    final Procedure1<Pane> _function = new Procedure1<Pane>() {
+      public void apply(final Pane it) {
+        DoubleProperty _prefWidthProperty = it.prefWidthProperty();
+        Scene _scene = it.getScene();
+        ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
+        _prefWidthProperty.bind(_widthProperty);
+        DoubleProperty _prefHeightProperty = it.prefHeightProperty();
+        Scene _scene_1 = it.getScene();
+        ReadOnlyDoubleProperty _heightProperty = _scene_1.heightProperty();
+        _prefHeightProperty.bind(_heightProperty);
+      }
+    };
+    ObjectExtensions.<Pane>operator_doubleArrow(
+      this.diagramCanvas, _function);
     this.setCurrentTool(this.defaultTool);
   }
   

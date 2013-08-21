@@ -49,12 +49,12 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 	
 	protected def updateStyle() {
 		style = '''
-			-fx-border-color: «getBorderPaint.toCss»;
-			-fx-border-width: «getBorderWidth»;
-			-fx-border-radius: «getBorderRadius»;
-			-fx-background-color: «getBackgroundPaint.toCss»;
-			-fx-background-radius: «getBackgroundRadius»;
-			-fx-background-insets: «getBorderInsets.toCss»;
+			-fx-border-color: «borderPaint.toCss»;
+			-fx-border-width: «borderWidth»;
+			-fx-border-radius: «borderRadius»;
+			-fx-background-color: «backgroundPaint.toCss»;
+			-fx-background-radius: «backgroundRadius»;
+			-fx-background-insets: «borderInsets.toCss»;
 		'''
 	}
 	
@@ -64,10 +64,10 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 			<rect
 				«toSvgString(localToSceneTransform)»
 				width="«width»" height="«height»"
-				rx="«getBorderRadius»" ry="«getBorderRadius»"
-				fill="«getBackgroundPaint.toSvgString»"
-				stroke="«getBorderPaint.toSvgString»"
-				strokeWidth="«getBorderWidth»"
+				rx="«borderRadius»" ry="«borderRadius»"
+				fill="«backgroundPaint.toSvgString»"
+				stroke="«borderPaint.toSvgString»"
+				strokeWidth="«borderWidth»"
 				«opacity.toSvgAttribute("opacity", 1.0)»
 			/>
 		''')»

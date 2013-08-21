@@ -19,7 +19,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -31,6 +31,8 @@ public class LevelOfDetailDiagramNode extends XNode {
   private RectangleBorderPane pane;
   
   private Node label;
+  
+  private Group innerDiagramGroup;
   
   private XDiagram innerDiagram;
   
@@ -67,7 +69,8 @@ public class LevelOfDetailDiagramNode extends XNode {
           }
         };
         Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
-        _children_1.add(_doubleArrow_1);
+        Group _innerDiagramGroup = LevelOfDetailDiagramNode.this.innerDiagramGroup = _doubleArrow_1;
+        _children_1.add(_innerDiagramGroup);
       }
     };
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(this.pane, _function);
@@ -94,14 +97,11 @@ public class LevelOfDetailDiagramNode extends XNode {
         boolean _lessEqualsThan = (area <= 100000);
         if (_lessEqualsThan) {
           LevelOfDetailDiagramNode.this.label.setVisible(true);
-          LevelOfDetailDiagramNode.this.innerDiagram.setVisible(false);
+          LevelOfDetailDiagramNode.this.innerDiagramGroup.setVisible(false);
           LevelOfDetailDiagramNode.this.pane.setBackgroundPaint(RectangleBorderPane.DEFAULT_BACKGROUND);
-          if (LevelOfDetailDiagramNode.this.diagramScaler!=null) {
-            LevelOfDetailDiagramNode.this.diagramScaler.deactivate();
-          }
         } else {
           LevelOfDetailDiagramNode.this.label.setVisible(false);
-          LevelOfDetailDiagramNode.this.innerDiagram.setVisible(true);
+          LevelOfDetailDiagramNode.this.innerDiagramGroup.setVisible(true);
           LevelOfDetailDiagramNode.this.innerDiagram.activate();
           final Procedure1<DiagramScaler> _function = new Procedure1<DiagramScaler>() {
             public void apply(final DiagramScaler it) {
@@ -118,7 +118,8 @@ public class LevelOfDetailDiagramNode extends XNode {
           };
           ObjectExtensions.<DiagramScaler>operator_doubleArrow(
             LevelOfDetailDiagramNode.this.diagramScaler, _function);
-          LevelOfDetailDiagramNode.this.pane.setBackgroundPaint(Color.WHITE);
+          Paint _backgroundPaint = LevelOfDetailDiagramNode.this.innerDiagram.getBackgroundPaint();
+          LevelOfDetailDiagramNode.this.pane.setBackgroundPaint(_backgroundPaint);
         }
       }
     };

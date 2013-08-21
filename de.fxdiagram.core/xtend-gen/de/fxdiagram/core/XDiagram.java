@@ -5,15 +5,19 @@ import com.google.common.collect.Iterables;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -112,5 +116,23 @@ public class XDiagram extends XAbstractDiagram {
   
   public ReadOnlyBooleanProperty isRootDiagramProperty() {
     return this.isRootDiagramProperty.getReadOnlyProperty();
+  }
+  
+  private SimpleObjectProperty<Paint> backgroundPaintProperty = new SimpleObjectProperty<Paint>(this, "backgroundPaint",_initBackgroundPaint());
+  
+  private static final Paint _initBackgroundPaint() {
+    return Color.WHITE;
+  }
+  
+  public Paint getBackgroundPaint() {
+    return this.backgroundPaintProperty.get();
+  }
+  
+  public void setBackgroundPaint(final Paint backgroundPaint) {
+    this.backgroundPaintProperty.set(backgroundPaint);
+  }
+  
+  public ObjectProperty<Paint> backgroundPaintProperty() {
+    return this.backgroundPaintProperty;
   }
 }

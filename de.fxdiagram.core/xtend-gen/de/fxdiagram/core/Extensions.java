@@ -339,17 +339,17 @@ public class Extensions {
     return _switchResult;
   }
   
-  public static Iterable<? extends Node> getAllChildren(final Parent node) {
+  public static Iterable<Node> getAllChildren(final Parent node) {
     ObservableList<Node> _childrenUnmodifiable = node.getChildrenUnmodifiable();
     ObservableList<Node> _childrenUnmodifiable_1 = node.getChildrenUnmodifiable();
     Iterable<Parent> _filter = Iterables.<Parent>filter(_childrenUnmodifiable_1, Parent.class);
-    final Function1<Parent,Iterable<? extends Node>> _function = new Function1<Parent,Iterable<? extends Node>>() {
-      public Iterable<? extends Node> apply(final Parent it) {
-        Iterable<? extends Node> _allChildren = Extensions.getAllChildren(it);
+    final Function1<Parent,Iterable<Node>> _function = new Function1<Parent,Iterable<Node>>() {
+      public Iterable<Node> apply(final Parent it) {
+        Iterable<Node> _allChildren = Extensions.getAllChildren(it);
         return _allChildren;
       }
     };
-    Iterable<Iterable<? extends Node>> _map = IterableExtensions.<Parent, Iterable<? extends Node>>map(_filter, _function);
+    Iterable<Iterable<Node>> _map = IterableExtensions.<Parent, Iterable<Node>>map(_filter, _function);
     Iterable<Node> _flatten = Iterables.<Node>concat(_map);
     Iterable<Node> _plus = Iterables.<Node>concat(_childrenUnmodifiable, _flatten);
     return _plus;

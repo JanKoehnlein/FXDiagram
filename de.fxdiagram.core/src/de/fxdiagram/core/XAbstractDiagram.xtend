@@ -8,13 +8,12 @@ import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.Parent
+import javafx.scene.layout.Region
 
+import static de.fxdiagram.core.Extensions.*
 import static javafx.collections.FXCollections.*
 
-import static extension de.fxdiagram.core.Extensions.*
-
-abstract class XAbstractDiagram extends Parent implements XActivatable { 
+abstract class XAbstractDiagram extends Region implements XActivatable { 
 
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
 	@FxProperty ObservableList<XConnection> connections = observableArrayList
@@ -76,7 +75,7 @@ abstract class XAbstractDiagram extends Parent implements XActivatable {
 	}
 	
 	def Iterable<XShape> getAllShapes() {
-		allChildren.filter(XShape)
+		getAllChildren(this).filter(XShape)
 	}
 }
 

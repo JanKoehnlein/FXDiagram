@@ -3,6 +3,7 @@ package de.fxdiagram.examples.lcars
 import javafx.scene.text.Font
 import java.util.Map
 import javafx.scene.paint.Color
+import javafx.scene.Node
 
 class LcarsExtensions {
 	
@@ -30,5 +31,13 @@ class LcarsExtensions {
 	
 	public static def rgbColor(int red, int green, int blue) {
 		new Color(red / 255.0, green/255.0, blue/255.0, 1)
+	}
+	
+	static def LcarsDiagram getLcarsDiagram(Node node) {
+		switch node {
+			LcarsDiagram: node
+			case null: null
+			default: node.parent.lcarsDiagram
+		}
 	} 
 }

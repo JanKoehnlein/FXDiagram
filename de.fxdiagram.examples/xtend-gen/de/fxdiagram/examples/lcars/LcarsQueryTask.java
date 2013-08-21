@@ -5,6 +5,7 @@ import com.mongodb.DBObject;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.examples.lcars.LcarsAccess;
+import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsField;
 import de.fxdiagram.examples.lcars.LcarsNode;
@@ -36,8 +37,9 @@ public class LcarsQueryTask extends Task<Void> {
   protected Void call() throws Exception {
     Void _xblockexpression = null;
     {
-      LcarsAccess _get = LcarsAccess.get();
-      final List<DBObject> siblings = _get.query(this.fieldName, this.fieldValue);
+      LcarsDiagram _lcarsDiagram = LcarsExtensions.getLcarsDiagram(this.host);
+      LcarsAccess _lcarsAccess = _lcarsDiagram.getLcarsAccess();
+      final List<DBObject> siblings = _lcarsAccess.query(this.fieldName, this.fieldValue);
       final LcarsNode lcarsNode = this.host.getLcarsNode();
       CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER);
       final CoverFlowChooser chooser = _coverFlowChooser;

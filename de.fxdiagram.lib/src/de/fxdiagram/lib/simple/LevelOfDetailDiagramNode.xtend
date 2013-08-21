@@ -9,7 +9,6 @@ import javafx.geometry.VPos
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.layout.StackPane
-import javafx.scene.paint.Color
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.Extensions.*
@@ -22,6 +21,8 @@ class LevelOfDetailDiagramNode extends XNode {
 
 	Node label
 
+	Group innerDiagramGroup
+	
 	XDiagram innerDiagram
 
 	DiagramScaler diagramScaler
@@ -36,7 +37,7 @@ class LevelOfDetailDiagramNode extends XNode {
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
-			children += new Group => [
+			children += innerDiagramGroup = new Group => [
 				children += innerDiagram 
 				diagramScaler = new DiagramScaler(innerDiagram)
 			]
@@ -55,19 +56,18 @@ class LevelOfDetailDiagramNode extends XNode {
 			val area = bounds.width * bounds.height
 			if (area <= 100000) {
 				label.visible = true
-				innerDiagram.visible = false
+				innerDiagramGroup.visible = false
 				pane.backgroundPaint = RectangleBorderPane.DEFAULT_BACKGROUND
-				diagramScaler?.deactivate
 			} else {
 				label.visible = false
-				innerDiagram.visible = true
+				innerDiagramGroup.visible = true
 				innerDiagram.activate
 				diagramScaler => [
 					width = label.layoutBounds.width + 40
 					height = label.layoutBounds.height + 20
 					activate
 				]
-				pane.backgroundPaint = Color.WHITE
+				pane.backgroundPaint = innerDiagram.backgroundPaint
 			}
 		]
 		val rapidButtonBehavior = new AddRapidButtonBehavior(this)

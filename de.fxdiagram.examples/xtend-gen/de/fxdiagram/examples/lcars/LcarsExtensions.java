@@ -1,9 +1,12 @@
 package de.fxdiagram.examples.lcars;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.examples.lcars.LcarsDiagram;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -97,5 +100,29 @@ public class LcarsExtensions {
     double _divide_2 = (blue / 255.0);
     Color _color = new Color(_divide, _divide_1, _divide_2, 1);
     return _color;
+  }
+  
+  public static LcarsDiagram getLcarsDiagram(final Node node) {
+    LcarsDiagram _switchResult = null;
+    boolean _matched = false;
+    if (!_matched) {
+      if (node instanceof LcarsDiagram) {
+        final LcarsDiagram _lcarsDiagram = (LcarsDiagram)node;
+        _matched=true;
+        _switchResult = _lcarsDiagram;
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(node,null)) {
+        _matched=true;
+        _switchResult = null;
+      }
+    }
+    if (!_matched) {
+      Parent _parent = node.getParent();
+      LcarsDiagram _lcarsDiagram = LcarsExtensions.getLcarsDiagram(_parent);
+      _switchResult = _lcarsDiagram;
+    }
+    return _switchResult;
   }
 }

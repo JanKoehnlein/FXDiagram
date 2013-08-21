@@ -8,8 +8,7 @@ import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.services.ImageCache
 import de.fxdiagram.examples.java.JavaTypeNode
-import de.fxdiagram.examples.lcars.LcarsAccess
-import de.fxdiagram.examples.lcars.LcarsNode
+import de.fxdiagram.examples.lcars.LcarsDiagram
 import de.fxdiagram.examples.neonsign.NeonSignNode
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
@@ -48,7 +47,7 @@ class Main extends Application {
 		val diagram = new XDiagram
 		root.diagram = diagram
 		
-		val source = new LevelOfDetailDiagramNode('source', createDummyDiagram) => [
+		val source = new LevelOfDetailDiagramNode('LOD diagram', createDummyDiagram) => [
 			layoutX = 280
 			layoutY = 170
 			width = 80
@@ -56,7 +55,7 @@ class Main extends Application {
 		]
 		diagram.nodes += source
 
-		val target = new SimpleNode('target') => [
+		val target = new SimpleNode('Simple Node') => [
 			layoutX = 280
 			layoutY = 280
 			width = 80
@@ -68,10 +67,10 @@ class Main extends Application {
 			kind = XConnectionKind.QUAD_CURVE
 		]
 		val connectionLabel = new XConnectionLabel(connection)
-		connectionLabel.text.text = 'label'
+		connectionLabel.text.text = 'quadratic'
 		diagram.connections += connection
 
-		val target2 = new OpenableDiagramNode('openable', createDummyDiagram) => [
+		val target2 = new OpenableDiagramNode('Openable', createDummyDiagram) => [
 			layoutX = 400
 			layoutY = 240
 			width = 80
@@ -83,12 +82,12 @@ class Main extends Application {
 			kind = XConnectionKind.CUBIC_CURVE
 		]
 		val connectionLabel2 = new XConnectionLabel(connection2)
-		connectionLabel2.text.text = 'label2'
+		connectionLabel2.text.text = 'cubic'
 		diagram.connections += connection2
 
 		val connection3 = new XConnection(target, target2)
 		val connectionLabel3 = new XConnectionLabel(connection3)
-		connectionLabel3.text.text = 'label3'
+		connectionLabel3.text.text = 'polyline'
 		diagram.connections += connection3
 
 		val image = new ImageNode => [
@@ -149,10 +148,13 @@ class Main extends Application {
 		]
 		diagram.nodes += neonSignNode
 
-		val kirk = LcarsAccess.get.query('name', 'James T. Kirk').get(0)
-		diagram.nodes += new LcarsNode(kirk) => [
-			width = 120
+		diagram.nodes += new OpenableDiagramNode('LCARS', new LcarsDiagram) => [
+			layoutX = 300
+			layoutY = 300
+			width = 80
+			height = 30
 		]
+
 		val Task<Void> task = [|
 			new Layouter
 			null

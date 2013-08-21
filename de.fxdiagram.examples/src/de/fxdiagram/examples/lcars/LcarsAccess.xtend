@@ -13,12 +13,6 @@ class LcarsAccess {
 	
 	DBCollection lcars
 	
-	static LcarsAccess INSTANCE
-	
-	static def get() {
-		INSTANCE ?: (INSTANCE = new LcarsAccess)
-	}
-	
 	new() {
 		mongo = new Mongo
 		db = mongo.getDB('startrek')

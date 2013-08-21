@@ -20,21 +20,6 @@ public class LcarsAccess {
   
   private DBCollection lcars;
   
-  private static LcarsAccess INSTANCE;
-  
-  public static LcarsAccess get() {
-    LcarsAccess _elvis = null;
-    if (LcarsAccess.INSTANCE != null) {
-      _elvis = LcarsAccess.INSTANCE;
-    } else {
-      LcarsAccess _lcarsAccess = new LcarsAccess();
-      LcarsAccess _INSTANCE = LcarsAccess.INSTANCE = _lcarsAccess;
-      _elvis = ObjectExtensions.<LcarsAccess>operator_elvis(
-        LcarsAccess.INSTANCE, _INSTANCE);
-    }
-    return _elvis;
-  }
-  
   public LcarsAccess() {
     try {
       Mongo _mongo = new Mongo();

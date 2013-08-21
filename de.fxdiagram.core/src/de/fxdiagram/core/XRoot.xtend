@@ -24,6 +24,8 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import javafx.scene.layout.Pane
+import static extension de.fxdiagram.core.css.JavaToCss.*
 
 @Logging
 class XRoot extends Parent implements XActivatable {
@@ -36,7 +38,7 @@ class XRoot extends Parent implements XActivatable {
 
 	HeadsUpDisplay headsUpDisplay = new HeadsUpDisplay
 	
-	Group diagramCanvas  = new Group
+	Pane diagramCanvas  = new Pane
 	
 	public static val MIN_SCALE = EPSILON
 	
@@ -74,6 +76,7 @@ class XRoot extends Parent implements XActivatable {
 			diagram.transforms.forEach [diagramTransform.leftMultiply(it)]
 			diagramScale = sqrt(diagramTransform.mxx * diagramTransform.mxx + diagramTransform.mxy * diagramTransform.mxy)
 		}
+		diagramCanvas.style = '-fx-background-color: ' + diagram.backgroundPaint.toCss + ';'
 		diagram.transforms.setAll(diagramTransform)
 	}
 	
@@ -105,7 +108,11 @@ class XRoot extends Parent implements XActivatable {
 	
 	def	doActivate() {
 		diagram?.activate
-		setCurrentTool(defaultTool)		
+		diagramCanvas => [
+			prefWidthProperty.bind(scene.widthProperty)
+			prefHeightProperty.bind(scene.heightProperty)
+		]
+		setCurrentTool(defaultTool)
 	}
 	
 	def setCurrentTool(XDiagramTool tool) {

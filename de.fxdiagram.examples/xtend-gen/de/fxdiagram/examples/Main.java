@@ -1,6 +1,5 @@
 package de.fxdiagram.examples;
 
-import com.mongodb.DBObject;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
@@ -11,8 +10,7 @@ import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.BrickBreakerNode;
 import de.fxdiagram.examples.java.JavaTypeNode;
-import de.fxdiagram.examples.lcars.LcarsAccess;
-import de.fxdiagram.examples.lcars.LcarsNode;
+import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.neonsign.NeonSignNode;
 import de.fxdiagram.lib.media.BrowserNode;
 import de.fxdiagram.lib.media.ImageNode;
@@ -22,7 +20,6 @@ import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.lib.simple.SimpleNode;
 import java.net.URL;
-import java.util.List;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -65,7 +62,7 @@ public class Main extends Application {
       final XDiagram diagram = _xDiagram;
       root.setDiagram(diagram);
       XDiagram _createDummyDiagram = this.createDummyDiagram();
-      LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode("source", _createDummyDiagram);
+      LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode("LOD diagram", _createDummyDiagram);
       final Procedure1<LevelOfDetailDiagramNode> _function = new Procedure1<LevelOfDetailDiagramNode>() {
         public void apply(final LevelOfDetailDiagramNode it) {
           it.setLayoutX(280);
@@ -77,7 +74,7 @@ public class Main extends Application {
       final LevelOfDetailDiagramNode source = ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(_levelOfDetailDiagramNode, _function);
       ObservableList<XNode> _nodes = diagram.getNodes();
       _nodes.add(source);
-      SimpleNode _simpleNode = new SimpleNode("target");
+      SimpleNode _simpleNode = new SimpleNode("Simple Node");
       final Procedure1<SimpleNode> _function_1 = new Procedure1<SimpleNode>() {
         public void apply(final SimpleNode it) {
           it.setLayoutX(280);
@@ -99,11 +96,11 @@ public class Main extends Application {
       XConnectionLabel _xConnectionLabel = new XConnectionLabel(connection);
       final XConnectionLabel connectionLabel = _xConnectionLabel;
       Text _text = connectionLabel.getText();
-      _text.setText("label");
+      _text.setText("quadratic");
       ObservableList<XConnection> _connections = diagram.getConnections();
       _connections.add(connection);
       XDiagram _createDummyDiagram_1 = this.createDummyDiagram();
-      OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("openable", _createDummyDiagram_1);
+      OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Openable", _createDummyDiagram_1);
       final Procedure1<OpenableDiagramNode> _function_3 = new Procedure1<OpenableDiagramNode>() {
         public void apply(final OpenableDiagramNode it) {
           it.setLayoutX(400);
@@ -125,7 +122,7 @@ public class Main extends Application {
       XConnectionLabel _xConnectionLabel_1 = new XConnectionLabel(connection2);
       final XConnectionLabel connectionLabel2 = _xConnectionLabel_1;
       Text _text_1 = connectionLabel2.getText();
-      _text_1.setText("label2");
+      _text_1.setText("cubic");
       ObservableList<XConnection> _connections_1 = diagram.getConnections();
       _connections_1.add(connection2);
       XConnection _xConnection_2 = new XConnection(target, target2);
@@ -133,7 +130,7 @@ public class Main extends Application {
       XConnectionLabel _xConnectionLabel_2 = new XConnectionLabel(connection3);
       final XConnectionLabel connectionLabel3 = _xConnectionLabel_2;
       Text _text_2 = connectionLabel3.getText();
-      _text_2.setText("label3");
+      _text_2.setText("polyline");
       ObservableList<XConnection> _connections_2 = diagram.getConnections();
       _connections_2.add(connection3);
       ImageNode _imageNode = new ImageNode();
@@ -235,17 +232,18 @@ public class Main extends Application {
       final NeonSignNode neonSignNode = ObjectExtensions.<NeonSignNode>operator_doubleArrow(_neonSignNode, _function_11);
       ObservableList<XNode> _nodes_9 = diagram.getNodes();
       _nodes_9.add(neonSignNode);
-      LcarsAccess _get_1 = LcarsAccess.get();
-      List<DBObject> _query = _get_1.query("name", "James T. Kirk");
-      final DBObject kirk = _query.get(0);
       ObservableList<XNode> _nodes_10 = diagram.getNodes();
-      LcarsNode _lcarsNode = new LcarsNode(kirk);
-      final Procedure1<LcarsNode> _function_12 = new Procedure1<LcarsNode>() {
-        public void apply(final LcarsNode it) {
-          it.setWidth(120);
+      LcarsDiagram _lcarsDiagram = new LcarsDiagram();
+      OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode("LCARS", _lcarsDiagram);
+      final Procedure1<OpenableDiagramNode> _function_12 = new Procedure1<OpenableDiagramNode>() {
+        public void apply(final OpenableDiagramNode it) {
+          it.setLayoutX(300);
+          it.setLayoutY(300);
+          it.setWidth(80);
+          it.setHeight(30);
         }
       };
-      LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function_12);
+      OpenableDiagramNode _doubleArrow = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode_1, _function_12);
       _nodes_10.add(_doubleArrow);
       final Task<Void> _function_13 = new Task<Void>() {
         @Override

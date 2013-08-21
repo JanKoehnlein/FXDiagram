@@ -5,10 +5,13 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import javafx.scene.Group
 
 import static extension de.fxdiagram.core.Extensions.*
+import javafx.scene.paint.Paint
+import javafx.scene.paint.Color
 
 class XDiagram extends XAbstractDiagram {
 	
 	@FxProperty@ReadOnly boolean isRootDiagram
+	@FxProperty Paint backgroundPaint = Color.WHITE
 	
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
@@ -61,4 +64,5 @@ class XDiagram extends XAbstractDiagram {
 	override getButtonLayer() {
 		buttonLayer
 	}
+	
 }
