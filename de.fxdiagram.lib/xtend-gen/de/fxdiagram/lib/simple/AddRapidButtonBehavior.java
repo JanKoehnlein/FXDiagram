@@ -4,8 +4,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.Placer;
-import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
@@ -41,10 +41,10 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
         final XNode source = button.getHost();
         XConnection _xConnection = new XConnection(source, target);
         final XConnection connection = _xConnection;
-        XAbstractDiagram _diagram = Extensions.getDiagram(host);
+        XDiagram _diagram = Extensions.getDiagram(host);
         ObservableList<XNode> _nodes = _diagram.getNodes();
         _nodes.add(target);
-        XAbstractDiagram _diagram_1 = Extensions.getDiagram(host);
+        XDiagram _diagram_1 = Extensions.getDiagram(host);
         ObservableList<XConnection> _connections = _diagram_1.getConnections();
         _connections.add(connection);
         Placer _placer = button.getPlacer();
@@ -102,7 +102,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
     XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, "icons/add_16.png", chooseAction);
     XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, "icons/add_16.png", addAction);
     this.rapidButtons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
-    XAbstractDiagram _diagram = Extensions.getDiagram(host);
+    XDiagram _diagram = Extensions.getDiagram(host);
     ObservableList<XRapidButton> _buttons = _diagram.getButtons();
     Iterables.<XRapidButton>addAll(_buttons, this.rapidButtons);
   }

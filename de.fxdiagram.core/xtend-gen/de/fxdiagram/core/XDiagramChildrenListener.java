@@ -1,7 +1,7 @@
 package de.fxdiagram.core;
 
-import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XActivatable;
+import de.fxdiagram.core.XDiagram;
 import java.util.List;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
@@ -15,9 +15,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class XDiagramChildrenListener<T extends Node & XActivatable> implements ListChangeListener<T> {
   private Group layer;
   
-  private XAbstractDiagram diagram;
+  private XDiagram diagram;
   
-  public XDiagramChildrenListener(final XAbstractDiagram diagram, final Group layer) {
+  public XDiagramChildrenListener(final XDiagram diagram, final Group layer) {
     this.layer = layer;
     this.diagram = diagram;
   }

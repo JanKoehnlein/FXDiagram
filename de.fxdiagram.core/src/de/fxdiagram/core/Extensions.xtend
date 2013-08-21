@@ -3,12 +3,12 @@ package de.fxdiagram.core
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
+import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
 import javafx.scene.transform.Affine
 import javafx.scene.transform.Transform
 
 import static extension de.fxdiagram.core.geometry.TransformExtensions.*
-import javafx.scene.Parent
 
 class Extensions {
 
@@ -46,7 +46,7 @@ class Extensions {
 	def static Point2D localToDiagram(Node node, Point2D point) {
 		switch node {
 			case null: null
-			XAbstractDiagram: point
+			XDiagram: point
 			default: localToDiagram(node.parent, node.localToParent(point))
 		}
 	}
@@ -54,7 +54,7 @@ class Extensions {
 	def static Bounds localToDiagram(Node node, Bounds bounds) {
 		switch node {
 			case null: null
-			XAbstractDiagram: bounds
+			XDiagram: bounds
 			default: localToDiagram(node.parent, node.localToParent(bounds))
 		}
 	}
@@ -65,16 +65,16 @@ class Extensions {
 		while (currentNode.parent != null) {
 			transform.leftMultiply(currentNode.localToParentTransform)
 			currentNode = currentNode.parent
-			if (currentNode instanceof XAbstractDiagram)
+			if (currentNode instanceof XDiagram)
 				return transform
 		}
 		null
 	}
 
-	def static XAbstractDiagram getDiagram(Node it) {
+	def static XDiagram getDiagram(Node it) {
 		switch it {
 			case null: null
-			XAbstractDiagram: it
+			XDiagram: it
 			default: getDiagram(it.parent)
 		}
 	}

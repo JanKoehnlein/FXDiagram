@@ -2,7 +2,6 @@ package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.Extensions;
-import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
@@ -102,8 +101,8 @@ public class SelectionTool implements XDiagramTool {
               }
               final Function1<XShape,Boolean> _function_2 = new Function1<XShape,Boolean>() {
                 public Boolean apply(final XShape it) {
-                  XAbstractDiagram _diagram = Extensions.getDiagram(it);
-                  XAbstractDiagram _diagram_1 = Extensions.getDiagram(targetShape);
+                  XDiagram _diagram = Extensions.getDiagram(it);
+                  XDiagram _diagram_1 = Extensions.getDiagram(targetShape);
                   boolean _notEquals = (!Objects.equal(_diagram, _diagram_1));
                   return Boolean.valueOf(_notEquals);
                 }

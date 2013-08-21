@@ -21,11 +21,11 @@ import de.cau.cs.kieler.kiml.klayoutdata.KShapeLayout;
 import de.cau.cs.kieler.kiml.options.EdgeLabelPlacement;
 import de.cau.cs.kieler.kiml.options.EdgeRouting;
 import de.cau.cs.kieler.kiml.options.LayoutOptions;
-import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.layout.LayoutTransitionFactory;
@@ -74,7 +74,7 @@ public class Layouter {
     _layoutProvider.dispose();
   }
   
-  public void layout(final XAbstractDiagram diagram, final Duration duration) {
+  public void layout(final XDiagram diagram, final Duration duration) {
     final HashMap<Object,KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
     final KNode kRoot = this.toKRootNode(diagram, cache);
     final AbstractLayoutProvider provider = this.getLayoutProvider();
@@ -203,7 +203,7 @@ public class Layouter {
     IterableExtensions.<Animation>forEach(animations, _function);
   }
   
-  protected KNode toKRootNode(final XAbstractDiagram it, final Map<Object,KGraphElement> cache) {
+  protected KNode toKRootNode(final XDiagram it, final Map<Object,KGraphElement> cache) {
     KNode _xblockexpression = null;
     {
       final KNode kRoot = this._kGraphFactory.createKNode();

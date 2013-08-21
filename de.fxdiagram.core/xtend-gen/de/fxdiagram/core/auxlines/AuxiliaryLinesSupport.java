@@ -1,7 +1,7 @@
 package de.fxdiagram.core.auxlines;
 
 import com.google.common.collect.Iterables;
-import de.fxdiagram.core.XAbstractDiagram;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
@@ -24,7 +24,7 @@ public class AuxiliaryLinesSupport {
     }
   }.apply();
   
-  public AuxiliaryLinesSupport(final XAbstractDiagram diagram) {
+  public AuxiliaryLinesSupport(final XDiagram diagram) {
     AuxiliaryLinesCache _auxiliaryLinesCache = new AuxiliaryLinesCache(diagram);
     this.cache = _auxiliaryLinesCache;
     Group _buttonLayer = diagram.getButtonLayer();

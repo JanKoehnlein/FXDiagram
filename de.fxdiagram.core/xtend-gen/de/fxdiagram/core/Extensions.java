@@ -2,7 +2,6 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import de.fxdiagram.core.XAbstractDiagram;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
@@ -116,8 +115,8 @@ public class Extensions {
       }
     }
     if (!_matched) {
-      if (node instanceof XAbstractDiagram) {
-        final XAbstractDiagram _xAbstractDiagram = (XAbstractDiagram)node;
+      if (node instanceof XDiagram) {
+        final XDiagram _xDiagram = (XDiagram)node;
         _matched=true;
         _switchResult = point;
       }
@@ -141,8 +140,8 @@ public class Extensions {
       }
     }
     if (!_matched) {
-      if (node instanceof XAbstractDiagram) {
-        final XAbstractDiagram _xAbstractDiagram = (XAbstractDiagram)node;
+      if (node instanceof XDiagram) {
+        final XDiagram _xDiagram = (XDiagram)node;
         _matched=true;
         _switchResult = bounds;
       }
@@ -171,7 +170,7 @@ public class Extensions {
           TransformExtensions.leftMultiply(transform, _localToParentTransform);
           Parent _parent_1 = currentNode.getParent();
           currentNode = _parent_1;
-          if ((currentNode instanceof XAbstractDiagram)) {
+          if ((currentNode instanceof XDiagram)) {
             return transform;
           }
         }
@@ -184,8 +183,8 @@ public class Extensions {
     return _xblockexpression;
   }
   
-  public static XAbstractDiagram getDiagram(final Node it) {
-    XAbstractDiagram _switchResult = null;
+  public static XDiagram getDiagram(final Node it) {
+    XDiagram _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
       if (Objects.equal(it,null)) {
@@ -194,15 +193,15 @@ public class Extensions {
       }
     }
     if (!_matched) {
-      if (it instanceof XAbstractDiagram) {
-        final XAbstractDiagram _xAbstractDiagram = (XAbstractDiagram)it;
+      if (it instanceof XDiagram) {
+        final XDiagram _xDiagram = (XDiagram)it;
         _matched=true;
-        _switchResult = _xAbstractDiagram;
+        _switchResult = _xDiagram;
       }
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XAbstractDiagram _diagram = Extensions.getDiagram(_parent);
+      XDiagram _diagram = Extensions.getDiagram(_parent);
       _switchResult = _diagram;
     }
     return _switchResult;
@@ -226,7 +225,7 @@ public class Extensions {
         if (_isRootDiagram) {
           _xifexpression = _xDiagram;
         } else {
-          XAbstractDiagram _parentDiagram = _xDiagram.getParentDiagram();
+          XDiagram _parentDiagram = _xDiagram.getParentDiagram();
           XDiagram _rootDiagram = Extensions.getRootDiagram(_parentDiagram);
           _xifexpression = _rootDiagram;
         }
@@ -339,17 +338,17 @@ public class Extensions {
     return _switchResult;
   }
   
-  public static Iterable<Node> getAllChildren(final Parent node) {
+  public static Iterable<? extends Node> getAllChildren(final Parent node) {
     ObservableList<Node> _childrenUnmodifiable = node.getChildrenUnmodifiable();
     ObservableList<Node> _childrenUnmodifiable_1 = node.getChildrenUnmodifiable();
     Iterable<Parent> _filter = Iterables.<Parent>filter(_childrenUnmodifiable_1, Parent.class);
-    final Function1<Parent,Iterable<Node>> _function = new Function1<Parent,Iterable<Node>>() {
-      public Iterable<Node> apply(final Parent it) {
-        Iterable<Node> _allChildren = Extensions.getAllChildren(it);
+    final Function1<Parent,Iterable<? extends Node>> _function = new Function1<Parent,Iterable<? extends Node>>() {
+      public Iterable<? extends Node> apply(final Parent it) {
+        Iterable<? extends Node> _allChildren = Extensions.getAllChildren(it);
         return _allChildren;
       }
     };
-    Iterable<Iterable<Node>> _map = IterableExtensions.<Parent, Iterable<Node>>map(_filter, _function);
+    Iterable<Iterable<? extends Node>> _map = IterableExtensions.<Parent, Iterable<? extends Node>>map(_filter, _function);
     Iterable<Node> _flatten = Iterables.<Node>concat(_map);
     Iterable<Node> _plus = Iterables.<Node>concat(_childrenUnmodifiable, _flatten);
     return _plus;

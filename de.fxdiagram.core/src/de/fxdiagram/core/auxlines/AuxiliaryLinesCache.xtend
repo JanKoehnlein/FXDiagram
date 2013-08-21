@@ -1,6 +1,6 @@
 package de.fxdiagram.core.auxlines
 
-import de.fxdiagram.core.XAbstractDiagram
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import java.util.Map
 import javafx.beans.value.ChangeListener
@@ -24,7 +24,7 @@ class AuxiliaryLinesCache {
 	AuxiliaryLineMap<Bounds> centerYMap = new AuxiliaryLineMap
 	AuxiliaryLineMap<Bounds> bottomMap = new AuxiliaryLineMap
 
-	new(XAbstractDiagram diagram) {
+	new(XDiagram diagram) {
 		nodesListener = [
 			while (next) {
 				if (wasAdded)

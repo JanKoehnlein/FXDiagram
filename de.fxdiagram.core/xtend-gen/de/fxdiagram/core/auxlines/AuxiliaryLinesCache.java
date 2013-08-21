@@ -2,7 +2,7 @@ package de.fxdiagram.core.auxlines;
 
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.Extensions;
-import de.fxdiagram.core.XAbstractDiagram;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import de.fxdiagram.core.auxlines.AuxiliaryLineMap;
@@ -85,7 +85,7 @@ public class AuxiliaryLinesCache {
     }
   }.apply();
   
-  public AuxiliaryLinesCache(final XAbstractDiagram diagram) {
+  public AuxiliaryLinesCache(final XDiagram diagram) {
     final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
       public void onChanged(final Change<? extends XNode> it) {
         boolean _next = it.next();

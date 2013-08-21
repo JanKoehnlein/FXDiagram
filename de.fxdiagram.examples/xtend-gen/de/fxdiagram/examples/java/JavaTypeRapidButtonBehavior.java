@@ -3,7 +3,7 @@ package de.fxdiagram.examples.java;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.fxdiagram.core.Extensions;
-import de.fxdiagram.core.XAbstractDiagram;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.AbstractBehavior;
@@ -62,7 +62,7 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
       };
       final Procedure1<XRapidButton> addSuperTypeAction = _function;
       JavaTypeNode _host_1 = this.getHost();
-      XAbstractDiagram _diagram = Extensions.getDiagram(_host_1);
+      XDiagram _diagram = Extensions.getDiagram(_host_1);
       ObservableList<XRapidButton> _buttons = _diagram.getButtons();
       JavaTypeNode _host_2 = this.getHost();
       XRapidButton _xRapidButton = new XRapidButton(_host_2, 0.5, 0, "icons/SuperType.gif", addSuperTypeAction);
@@ -103,7 +103,7 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
       };
       final Procedure1<XRapidButton> addReferencesAction = _function_1;
       JavaTypeNode _host_4 = this.getHost();
-      XAbstractDiagram _diagram_1 = Extensions.getDiagram(_host_4);
+      XDiagram _diagram_1 = Extensions.getDiagram(_host_4);
       ObservableList<XRapidButton> _buttons_1 = _diagram_1.getButtons();
       JavaTypeNode _host_5 = this.getHost();
       XRapidButton _xRapidButton_2 = new XRapidButton(_host_5, 0, 0.5, "icons/Reference.gif", addReferencesAction);

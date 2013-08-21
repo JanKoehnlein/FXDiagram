@@ -1,6 +1,6 @@
 package de.fxdiagram.core.auxlines
 
-import de.fxdiagram.core.XAbstractDiagram
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import javafx.scene.Group
@@ -11,7 +11,7 @@ class AuxiliaryLinesSupport {
 	Group group = new Group
 	
 	
-	new(XAbstractDiagram diagram) {
+	new(XDiagram diagram) {
 		this.cache = new AuxiliaryLinesCache(diagram)
 		diagram.buttonLayer.children += group
 	}

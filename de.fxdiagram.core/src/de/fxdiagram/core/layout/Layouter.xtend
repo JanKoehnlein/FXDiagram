@@ -12,9 +12,9 @@ import de.cau.cs.kieler.kiml.klayoutdata.KShapeLayout
 import de.cau.cs.kieler.kiml.options.EdgeLabelPlacement
 import de.cau.cs.kieler.kiml.options.EdgeRouting
 import de.cau.cs.kieler.kiml.options.LayoutOptions
-import de.fxdiagram.core.XAbstractDiagram
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import java.util.Map
 import javafx.animation.Animation
@@ -36,7 +36,7 @@ class Layouter {
 		layoutProvider.dispose
 	}
 	
-	def layout(XAbstractDiagram diagram, Duration duration) {
+	def layout(XDiagram diagram, Duration duration) {
 		val cache = <Object, KGraphElement> newHashMap
 		val kRoot = diagram.toKRootNode(cache)
 		val provider = getLayoutProvider()
@@ -108,7 +108,7 @@ class Layouter {
 		animations.forEach[play]
 	}
 	
-	protected def toKRootNode(XAbstractDiagram it, Map<Object, KGraphElement> cache) {
+	protected def toKRootNode(XDiagram it, Map<Object, KGraphElement> cache) {
 		val kRoot = createKNode
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
