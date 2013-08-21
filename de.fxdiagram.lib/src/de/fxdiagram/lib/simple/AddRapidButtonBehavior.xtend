@@ -10,7 +10,7 @@ import de.fxdiagram.lib.tools.CoverFlowChooser
 import de.fxdiagram.lib.tools.CubeChooser
 import java.util.List
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.XShape
 
 class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {

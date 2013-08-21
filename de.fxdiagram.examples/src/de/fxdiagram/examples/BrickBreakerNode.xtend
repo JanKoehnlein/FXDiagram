@@ -13,7 +13,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 
-import static extension de.fxdiagram.core.binding.DoubleExpressionExtensions.*
+import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 
 class BrickBreakerNode extends XNode {
 

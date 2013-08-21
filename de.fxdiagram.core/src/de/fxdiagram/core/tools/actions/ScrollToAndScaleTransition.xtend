@@ -7,7 +7,7 @@ import javafx.util.Duration
 
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension javafx.util.Duration.*
 
 class ScrollToAndScaleTransition extends Transition {

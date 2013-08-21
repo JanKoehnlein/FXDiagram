@@ -16,7 +16,7 @@ import javafx.scene.input.MouseEvent
 import static javafx.geometry.HPos.*
 import static javafx.geometry.VPos.*
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension javafx.util.Duration.*
 
 class XRapidButton extends Parent implements XActivatable {

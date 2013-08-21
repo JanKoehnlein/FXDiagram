@@ -2,8 +2,8 @@ package de.fxdiagram.examples.lcars;
 
 import com.google.common.base.Objects;
 import com.mongodb.DBObject;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.examples.lcars.LcarsAccess;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
@@ -72,7 +72,7 @@ public class LcarsQueryTask extends Task<Void> {
       chooser.operator_add(_map);
       final Runnable _function_2 = new Runnable() {
         public void run() {
-          XRoot _root = Extensions.getRoot(LcarsQueryTask.this.host);
+          XRoot _root = CoreExtensions.getRoot(LcarsQueryTask.this.host);
           _root.setCurrentTool(chooser);
           Iterable<Text> _allTextNodes = LcarsQueryTask.this.host.getAllTextNodes();
           Text _head = IterableExtensions.<Text>head(_allTextNodes);

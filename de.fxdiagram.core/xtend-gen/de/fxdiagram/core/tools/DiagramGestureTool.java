@@ -2,7 +2,7 @@ package de.fxdiagram.core.tools;
 
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.geometry.TransformExtensions;
+import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.ZoomContext;
 import javafx.event.EventHandler;

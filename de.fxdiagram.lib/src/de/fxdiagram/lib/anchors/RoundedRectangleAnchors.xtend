@@ -8,7 +8,7 @@ import javafx.geometry.Point2D
 
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class RoundedRectangleAnchors extends RectangleAnchors {
 

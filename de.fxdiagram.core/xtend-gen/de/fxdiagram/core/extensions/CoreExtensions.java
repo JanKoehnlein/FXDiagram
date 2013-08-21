@@ -1,4 +1,4 @@
-package de.fxdiagram.core;
+package de.fxdiagram.core.extensions;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
@@ -6,7 +6,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.geometry.TransformExtensions;
+import de.fxdiagram.core.extensions.TransformExtensions;
 import javafx.collections.ObservableList;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
@@ -20,7 +20,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
-public class Extensions {
+public class CoreExtensions {
   public static boolean isRootDiagram(final Node node) {
     boolean _xblockexpression = false;
     {
@@ -39,7 +39,7 @@ public class Extensions {
   
   public static Point2D localToRootDiagram(final Node node, final double x, final double y) {
     Point2D _point2D = new Point2D(x, y);
-    Point2D _localToRootDiagram = Extensions.localToRootDiagram(node, _point2D);
+    Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(node, _point2D);
     return _localToRootDiagram;
   }
   
@@ -65,7 +65,7 @@ public class Extensions {
       }
       Parent _parent = node.getParent();
       Point2D _localToParent = node.localToParent(point);
-      Point2D _localToRootDiagram = Extensions.localToRootDiagram(_parent, _localToParent);
+      Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(_parent, _localToParent);
       _xblockexpression = (_localToRootDiagram);
     }
     return _xblockexpression;
@@ -93,7 +93,7 @@ public class Extensions {
       }
       Parent _parent = node.getParent();
       Bounds _localToParent = node.localToParent(bounds);
-      Bounds _localToRootDiagram = Extensions.localToRootDiagram(_parent, _localToParent);
+      Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(_parent, _localToParent);
       _xblockexpression = (_localToRootDiagram);
     }
     return _xblockexpression;
@@ -101,7 +101,7 @@ public class Extensions {
   
   public static Point2D localToDiagram(final Node node, final double x, final double y) {
     Point2D _point2D = new Point2D(x, y);
-    Point2D _localToDiagram = Extensions.localToDiagram(node, _point2D);
+    Point2D _localToDiagram = CoreExtensions.localToDiagram(node, _point2D);
     return _localToDiagram;
   }
   
@@ -124,7 +124,7 @@ public class Extensions {
     if (!_matched) {
       Parent _parent = node.getParent();
       Point2D _localToParent = node.localToParent(point);
-      Point2D _localToDiagram = Extensions.localToDiagram(_parent, _localToParent);
+      Point2D _localToDiagram = CoreExtensions.localToDiagram(_parent, _localToParent);
       _switchResult = _localToDiagram;
     }
     return _switchResult;
@@ -149,7 +149,7 @@ public class Extensions {
     if (!_matched) {
       Parent _parent = node.getParent();
       Bounds _localToParent = node.localToParent(bounds);
-      Bounds _localToDiagram = Extensions.localToDiagram(_parent, _localToParent);
+      Bounds _localToDiagram = CoreExtensions.localToDiagram(_parent, _localToParent);
       _switchResult = _localToDiagram;
     }
     return _switchResult;
@@ -201,7 +201,7 @@ public class Extensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XDiagram _diagram = Extensions.getDiagram(_parent);
+      XDiagram _diagram = CoreExtensions.getDiagram(_parent);
       _switchResult = _diagram;
     }
     return _switchResult;
@@ -226,7 +226,7 @@ public class Extensions {
           _xifexpression = _xDiagram;
         } else {
           XDiagram _parentDiagram = _xDiagram.getParentDiagram();
-          XDiagram _rootDiagram = Extensions.getRootDiagram(_parentDiagram);
+          XDiagram _rootDiagram = CoreExtensions.getRootDiagram(_parentDiagram);
           _xifexpression = _rootDiagram;
         }
         _switchResult = _xifexpression;
@@ -234,7 +234,7 @@ public class Extensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XDiagram _rootDiagram = Extensions.getRootDiagram(_parent);
+      XDiagram _rootDiagram = CoreExtensions.getRootDiagram(_parent);
       _switchResult = _rootDiagram;
     }
     return _switchResult;
@@ -258,7 +258,7 @@ public class Extensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XRoot _root = Extensions.getRoot(_parent);
+      XRoot _root = CoreExtensions.getRoot(_parent);
       _switchResult = _root;
     }
     return _switchResult;
@@ -269,7 +269,7 @@ public class Extensions {
     EventTarget _target = event.getTarget();
     if ((_target instanceof Node)) {
       EventTarget _target_1 = event.getTarget();
-      XShape _containerShape = Extensions.getContainerShape(((Node) _target_1));
+      XShape _containerShape = CoreExtensions.getContainerShape(((Node) _target_1));
       _xifexpression = _containerShape;
     } else {
       _xifexpression = null;
@@ -295,7 +295,7 @@ public class Extensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XShape _containerShape = Extensions.getContainerShape(_parent);
+      XShape _containerShape = CoreExtensions.getContainerShape(_parent);
       _switchResult = _containerShape;
     }
     return _switchResult;
@@ -306,7 +306,7 @@ public class Extensions {
     EventTarget _target = event.getTarget();
     if ((_target instanceof Node)) {
       EventTarget _target_1 = event.getTarget();
-      XRapidButton _containerButton = Extensions.getContainerButton(((Node) _target_1));
+      XRapidButton _containerButton = CoreExtensions.getContainerButton(((Node) _target_1));
       _xifexpression = _containerButton;
     } else {
       _xifexpression = null;
@@ -332,7 +332,7 @@ public class Extensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XRapidButton _containerButton = Extensions.getContainerButton(_parent);
+      XRapidButton _containerButton = CoreExtensions.getContainerButton(_parent);
       _switchResult = _containerButton;
     }
     return _switchResult;
@@ -344,7 +344,7 @@ public class Extensions {
     Iterable<Parent> _filter = Iterables.<Parent>filter(_childrenUnmodifiable_1, Parent.class);
     final Function1<Parent,Iterable<? extends Node>> _function = new Function1<Parent,Iterable<? extends Node>>() {
       public Iterable<? extends Node> apply(final Parent it) {
-        Iterable<? extends Node> _allChildren = Extensions.getAllChildren(it);
+        Iterable<? extends Node> _allChildren = CoreExtensions.getAllChildren(it);
         return _allChildren;
       }
     };

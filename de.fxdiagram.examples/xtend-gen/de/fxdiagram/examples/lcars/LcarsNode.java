@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.binding.DoubleExpressionExtensions;
+import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsField;

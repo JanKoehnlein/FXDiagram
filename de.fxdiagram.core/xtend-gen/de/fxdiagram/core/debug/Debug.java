@@ -2,7 +2,7 @@ package de.fxdiagram.core.debug;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
-import de.fxdiagram.core.Extensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -36,7 +36,7 @@ public class Debug {
     if (!_notEquals) {
       _and = false;
     } else {
-      boolean _isRootDiagram = Extensions.isRootDiagram(currentNode);
+      boolean _isRootDiagram = CoreExtensions.isRootDiagram(currentNode);
       boolean _not = (!_isRootDiagram);
       _and = (_notEquals && _not);
     }
@@ -59,7 +59,7 @@ public class Debug {
       if (!_notEquals_1) {
         _and_1 = false;
       } else {
-        boolean _isRootDiagram_1 = Extensions.isRootDiagram(currentNode);
+        boolean _isRootDiagram_1 = CoreExtensions.isRootDiagram(currentNode);
         boolean _not_1 = (!_isRootDiagram_1);
         _and_1 = (_notEquals_1 && _not_1);
       }
@@ -92,7 +92,7 @@ public class Debug {
     if (!_notEquals) {
       _and = false;
     } else {
-      boolean _isRootDiagram = Extensions.isRootDiagram(currentNode);
+      boolean _isRootDiagram = CoreExtensions.isRootDiagram(currentNode);
       boolean _not = (!_isRootDiagram);
       _and = (_notEquals && _not);
     }
@@ -109,7 +109,7 @@ public class Debug {
       if (!_notEquals_1) {
         _and_1 = false;
       } else {
-        boolean _isRootDiagram_1 = Extensions.isRootDiagram(currentNode);
+        boolean _isRootDiagram_1 = CoreExtensions.isRootDiagram(currentNode);
         boolean _not_1 = (!_isRootDiagram_1);
         _and_1 = (_notEquals_1 && _not_1);
       }

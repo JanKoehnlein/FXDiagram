@@ -2,7 +2,6 @@ package de.fxdiagram.lib.simple;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.Placer;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
@@ -11,6 +10,7 @@ import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractBehavior;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.AbstractXNodeChooser;
 import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.lib.tools.CarusselChooser;
@@ -41,10 +41,10 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
         final XNode source = button.getHost();
         XConnection _xConnection = new XConnection(source, target);
         final XConnection connection = _xConnection;
-        XDiagram _diagram = Extensions.getDiagram(host);
+        XDiagram _diagram = CoreExtensions.getDiagram(host);
         ObservableList<XNode> _nodes = _diagram.getNodes();
         _nodes.add(target);
-        XDiagram _diagram_1 = Extensions.getDiagram(host);
+        XDiagram _diagram_1 = CoreExtensions.getDiagram(host);
         ObservableList<XConnection> _connections = _diagram_1.getConnections();
         _connections.add(connection);
         Placer _placer = button.getPlacer();
@@ -70,7 +70,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
         CarusselChooser _carusselChooser = new CarusselChooser(host, _chooserPosition);
         final CarusselChooser chooser = _carusselChooser;
         AddRapidButtonBehavior.this.addChoices(chooser);
-        XRoot _root = Extensions.getRoot(host);
+        XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);
       }
     };
@@ -81,7 +81,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
         CubeChooser _cubeChooser = new CubeChooser(host, _chooserPosition);
         final CubeChooser chooser = _cubeChooser;
         AddRapidButtonBehavior.this.addChoices(chooser);
-        XRoot _root = Extensions.getRoot(host);
+        XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);
       }
     };
@@ -92,7 +92,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
         CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(host, _chooserPosition);
         final CoverFlowChooser chooser = _coverFlowChooser;
         AddRapidButtonBehavior.this.addChoices(chooser);
-        XRoot _root = Extensions.getRoot(host);
+        XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);
       }
     };
@@ -102,7 +102,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
     XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, "icons/add_16.png", chooseAction);
     XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, "icons/add_16.png", addAction);
     this.rapidButtons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
-    XDiagram _diagram = Extensions.getDiagram(host);
+    XDiagram _diagram = CoreExtensions.getDiagram(host);
     ObservableList<XRapidButton> _buttons = _diagram.getButtons();
     Iterables.<XRapidButton>addAll(_buttons, this.rapidButtons);
   }

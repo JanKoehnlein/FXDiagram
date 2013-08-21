@@ -1,13 +1,13 @@
 package de.fxdiagram.lib.simple;
 
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.geometry.BoundsExtensions;
-import de.fxdiagram.core.geometry.DurationExtensions;
+import de.fxdiagram.core.extensions.BoundsExtensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -120,7 +120,7 @@ public class OpenableDiagramNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    XRoot _root = Extensions.getRoot(this);
+    XRoot _root = CoreExtensions.getRoot(this);
     this.root = _root;
     Node _node = this.getNode();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
@@ -142,7 +142,7 @@ public class OpenableDiagramNode extends XNode {
       Insets _insets = new Insets(5, 5, 5, 5);
       final BoundingBox nodeBounds = BoundsExtensions.operator_minus(_layoutBounds, _insets);
       Point2D _center = BoundsExtensions.center(nodeBounds);
-      final Point2D targetInDiagram = Extensions.localToRootDiagram(this, _center);
+      final Point2D targetInDiagram = CoreExtensions.localToRootDiagram(this, _center);
       ObservableList<Transform> _transforms = this.nestedDiagram.getTransforms();
       _transforms.clear();
       this.nestedDiagram.setOpacity(0);

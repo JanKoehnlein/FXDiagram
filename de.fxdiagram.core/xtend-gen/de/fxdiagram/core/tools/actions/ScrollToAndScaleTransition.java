@@ -2,7 +2,7 @@ package de.fxdiagram.core.tools.actions;
 
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.geometry.TransformExtensions;
+import de.fxdiagram.core.extensions.TransformExtensions;
 import javafx.animation.Transition;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;

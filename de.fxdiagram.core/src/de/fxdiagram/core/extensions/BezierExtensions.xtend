@@ -1,10 +1,10 @@
-package de.fxdiagram.core.geometry
+package de.fxdiagram.core.extensions
 
 import javafx.scene.shape.CubicCurve
 import javafx.geometry.Point2D
 import javafx.scene.shape.QuadCurve
 
-import static de.fxdiagram.core.geometry.Point2DExtensions.*
+import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 /**
  * De Casteljau algorithm

@@ -2,13 +2,13 @@ package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.binding.StringExpressionExtensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.StringExpressionExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.XNodeChooserTransition;
 import java.util.ArrayList;
@@ -224,7 +224,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             _matched=true;
             XNode _currentNode = AbstractXNodeChooser.this.getCurrentNode();
             AbstractXNodeChooser.this.nodeChosen(_currentNode);
-            XRoot _root = Extensions.getRoot(host);
+            XRoot _root = CoreExtensions.getRoot(host);
             _root.restoreDefaultTool();
           }
         }
@@ -512,7 +512,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
                   _matched=true;
                   XNode _currentNode = AbstractXNodeChooser.this.getCurrentNode();
                   AbstractXNodeChooser.this.nodeChosen(_currentNode);
-                  XRoot _root = Extensions.getRoot(AbstractXNodeChooser.this.host);
+                  XRoot _root = CoreExtensions.getRoot(AbstractXNodeChooser.this.host);
                   _root.restoreDefaultTool();
                 }
               }
@@ -533,7 +533,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       this.currentPositionProperty.addListener(this.positionListener);
       this.filterStringProperty.addListener(this.filterChangeListener);
-      XRoot _root = Extensions.getRoot(this.host);
+      XRoot _root = CoreExtensions.getRoot(this.host);
       HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
       Label _filterLabel = this.getFilterLabel();
       _headsUpDisplay.add(_filterLabel, Pos.BOTTOM_LEFT);
@@ -552,7 +552,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       if (_not) {
         return false;
       }
-      XRoot _root = Extensions.getRoot(this.host);
+      XRoot _root = CoreExtensions.getRoot(this.host);
       HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
       ObservableList<Node> _children = _headsUpDisplay.getChildren();
       Label _filterLabel = this.getFilterLabel();
@@ -600,7 +600,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       };
       IterableExtensions.<XNode>forEach(_nodes, _function);
       choice.setEffect(null);
-      Point2D center = Extensions.localToDiagram(this.group, 0, 0);
+      Point2D center = CoreExtensions.localToDiagram(this.group, 0, 0);
       ObservableList<Transform> _transforms = choice.getTransforms();
       _transforms.clear();
       ObservableList<Node> _children = this.group.getChildren();
@@ -634,9 +634,9 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
-        XDiagram _rootDiagram = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+        XDiagram _rootDiagram = CoreExtensions.getRootDiagram(AbstractXNodeChooser.this.host);
         Group _nodeLayer = _rootDiagram.getNodeLayer();
-        XDiagram _rootDiagram_1 = Extensions.getRootDiagram(AbstractXNodeChooser.this.host);
+        XDiagram _rootDiagram_1 = CoreExtensions.getRootDiagram(AbstractXNodeChooser.this.host);
         Group _connectionLayer = _rootDiagram_1.getConnectionLayer();
         for (final Group layer : Collections.<Group>unmodifiableList(Lists.<Group>newArrayList(_nodeLayer, _connectionLayer))) {
           ObservableList<Animation> _children = it.getChildren();
@@ -666,7 +666,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   }
   
   protected void cancel() {
-    XRoot _root = Extensions.getRoot(this.host);
+    XRoot _root = CoreExtensions.getRoot(this.host);
     _root.restoreDefaultTool();
   }
   
@@ -718,7 +718,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   }
   
   public XDiagram getDiagram() {
-    XDiagram _diagram = Extensions.getDiagram(this.host);
+    XDiagram _diagram = CoreExtensions.getDiagram(this.host);
     return _diagram;
   }
   

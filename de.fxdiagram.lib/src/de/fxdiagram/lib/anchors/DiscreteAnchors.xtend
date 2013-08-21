@@ -4,7 +4,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.anchors.Anchors
 import javafx.geometry.Point2D
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class DiscreteAnchors implements Anchors {
 	

@@ -1,11 +1,11 @@
 package de.fxdiagram.core.tools.actions;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.binding.NumberExpressionExtensions;
-import de.fxdiagram.core.geometry.BoundsExtensions;
+import de.fxdiagram.core.extensions.BoundsExtensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import javafx.geometry.BoundingBox;
@@ -23,7 +23,7 @@ public class ZoomToFitAction implements DiagramAction {
     final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
       public Bounds apply(final XShape it) {
         Bounds _snapBounds = it.getSnapBounds();
-        Bounds _localToRootDiagram = Extensions.localToRootDiagram(it, _snapBounds);
+        Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(it, _snapBounds);
         return _localToRootDiagram;
       }
     };

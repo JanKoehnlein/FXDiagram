@@ -24,8 +24,8 @@ import javafx.scene.input.SwipeEvent
 
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.binding.StringExpressionExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
 
 abstract class AbstractXNodeChooser implements XDiagramTool {

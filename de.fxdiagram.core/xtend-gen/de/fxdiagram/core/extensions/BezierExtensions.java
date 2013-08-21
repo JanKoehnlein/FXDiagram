@@ -1,6 +1,6 @@
-package de.fxdiagram.core.geometry;
+package de.fxdiagram.core.extensions;
 
-import de.fxdiagram.core.geometry.Point2DExtensions;
+import de.fxdiagram.core.extensions.Point2DExtensions;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.QuadCurve;

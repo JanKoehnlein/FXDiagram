@@ -1,8 +1,8 @@
 package de.fxdiagram.lib.nodes;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.binding.NumberExpressionExtensions;
-import de.fxdiagram.core.geometry.BoundsExtensions;
+import de.fxdiagram.core.extensions.BoundsExtensions;
+import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;

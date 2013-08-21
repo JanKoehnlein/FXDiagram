@@ -1,4 +1,4 @@
-package de.fxdiagram.core.geometry;
+package de.fxdiagram.core.extensions;
 
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Affine;

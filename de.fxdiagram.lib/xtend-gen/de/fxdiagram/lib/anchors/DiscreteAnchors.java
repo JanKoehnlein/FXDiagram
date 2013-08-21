@@ -1,9 +1,9 @@
 package de.fxdiagram.lib.anchors;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.ArrayList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -79,28 +79,28 @@ public class DiscreteAnchors implements Anchors {
               double _minY_1 = bounds.getMinY();
               double _multiply = ((i).intValue() * deltaY);
               double _plus_4 = (_minY_1 + _multiply);
-              Point2D _localToRootDiagram = Extensions.localToRootDiagram(_node_1, _minX_1, _plus_4);
+              Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(_node_1, _minX_1, _plus_4);
               anchors.add(_localToRootDiagram);
               Node _node_2 = this.host.getNode();
               double _maxX_1 = bounds.getMaxX();
               double _minY_2 = bounds.getMinY();
               double _multiply_1 = ((i).intValue() * deltaY);
               double _plus_5 = (_minY_2 + _multiply_1);
-              Point2D _localToRootDiagram_1 = Extensions.localToRootDiagram(_node_2, _maxX_1, _plus_5);
+              Point2D _localToRootDiagram_1 = CoreExtensions.localToRootDiagram(_node_2, _maxX_1, _plus_5);
               anchors.add(_localToRootDiagram_1);
               Node _node_3 = this.host.getNode();
               double _minX_2 = bounds.getMinX();
               double _multiply_2 = ((i).intValue() * deltaX);
               double _plus_6 = (_minX_2 + _multiply_2);
               double _minY_3 = bounds.getMinY();
-              Point2D _localToRootDiagram_2 = Extensions.localToRootDiagram(_node_3, _plus_6, _minY_3);
+              Point2D _localToRootDiagram_2 = CoreExtensions.localToRootDiagram(_node_3, _plus_6, _minY_3);
               anchors.add(_localToRootDiagram_2);
               Node _node_4 = this.host.getNode();
               double _minX_3 = bounds.getMinX();
               double _multiply_3 = ((i).intValue() * deltaX);
               double _plus_7 = (_minX_3 + _multiply_3);
               double _maxY_1 = bounds.getMaxY();
-              Point2D _localToRootDiagram_3 = Extensions.localToRootDiagram(_node_4, _plus_7, _maxY_1);
+              Point2D _localToRootDiagram_3 = CoreExtensions.localToRootDiagram(_node_4, _plus_7, _maxY_1);
               anchors.add(_localToRootDiagram_3);
             }
           }

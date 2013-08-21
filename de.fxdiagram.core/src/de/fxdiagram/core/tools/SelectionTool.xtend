@@ -10,7 +10,7 @@ import javafx.scene.Scene
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class SelectionTool implements XDiagramTool {
 

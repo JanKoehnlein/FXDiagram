@@ -1,12 +1,12 @@
 package de.fxdiagram.core.auxlines;
 
 import com.google.common.collect.Iterables;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import de.fxdiagram.core.auxlines.AuxiliaryLineMap;
 import de.fxdiagram.core.auxlines.NodeLine;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -134,7 +134,7 @@ public class AuxiliaryLinesCache {
     Iterable<AuxiliaryLine> _xblockexpression = null;
     {
       Bounds _snapBounds = node.getSnapBounds();
-      final Bounds boundsInDiagram = Extensions.localToDiagram(node, _snapBounds);
+      final Bounds boundsInDiagram = CoreExtensions.localToDiagram(node, _snapBounds);
       double _minX = boundsInDiagram.getMinX();
       Collection<AuxiliaryLine> _byPosition = this.leftMap.getByPosition(_minX);
       Iterable<AuxiliaryLine> _atLeastTwo = this.atLeastTwo(_byPosition);
@@ -208,7 +208,7 @@ public class AuxiliaryLinesCache {
   
   public void updateNode(final XNode node) {
     Bounds _snapBounds = node.getSnapBounds();
-    final Bounds boundsInDiagram = Extensions.localToDiagram(node, _snapBounds);
+    final Bounds boundsInDiagram = CoreExtensions.localToDiagram(node, _snapBounds);
     double _minX = boundsInDiagram.getMinX();
     NodeLine _nodeLine = new NodeLine(_minX, 
       Orientation.VERTICAL, node, boundsInDiagram);

@@ -14,7 +14,7 @@ import javafx.scene.text.Text
 
 import static extension de.fxdiagram.examples.lcars.LcarsExtensions.*
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension javafx.util.Duration.*
 
 class LcarsField extends Parent {

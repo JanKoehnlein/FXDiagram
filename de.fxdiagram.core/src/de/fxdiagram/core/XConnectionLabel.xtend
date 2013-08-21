@@ -9,7 +9,7 @@ import javafx.scene.effect.Effect
 import javafx.scene.text.Text
 import javafx.scene.transform.Affine
 
-import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
 class XConnectionLabel extends XShape {

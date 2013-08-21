@@ -4,7 +4,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.geometry.TransformExtensions;
+import de.fxdiagram.core.extensions.TransformExtensions;
 import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;

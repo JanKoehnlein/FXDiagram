@@ -1,9 +1,9 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -38,7 +38,7 @@ public class Placer extends ObjectBinding<Point2D> {
     {
       final XNode node = this.button.getHost();
       Bounds _layoutBounds = node.getLayoutBounds();
-      final Bounds boundsInDiagram = Extensions.localToDiagram(node, _layoutBounds);
+      final Bounds boundsInDiagram = CoreExtensions.localToDiagram(node, _layoutBounds);
       Point2D _xifexpression = null;
       boolean _notEquals = (!Objects.equal(boundsInDiagram, null));
       if (_notEquals) {

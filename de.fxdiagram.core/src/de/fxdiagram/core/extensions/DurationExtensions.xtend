@@ -1,4 +1,4 @@
-package de.fxdiagram.core.geometry
+package de.fxdiagram.core.extensions
 
 import static javafx.util.Duration.*
 import javafx.util.Duration

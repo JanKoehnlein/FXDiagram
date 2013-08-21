@@ -1,7 +1,7 @@
 package de.fxdiagram.lib.tools;
 
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.geometry.TransformExtensions;
+import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.tools.AbstractXNodeChooser;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;

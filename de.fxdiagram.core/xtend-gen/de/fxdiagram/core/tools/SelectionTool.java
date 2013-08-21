@@ -1,7 +1,6 @@
 package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
@@ -9,6 +8,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import java.util.Collection;
 import java.util.Iterator;
@@ -56,10 +56,10 @@ public class SelectionTool implements XDiagramTool {
           };
           SelectionTool.this.deselect(selection, _function);
         } else {
-          XRapidButton _targetButton = Extensions.getTargetButton(event);
+          XRapidButton _targetButton = CoreExtensions.getTargetButton(event);
           boolean _not = (!(_targetButton instanceof XRapidButton));
           if (_not) {
-            final XShape targetShape = Extensions.getTargetShape(event);
+            final XShape targetShape = CoreExtensions.getTargetShape(event);
             boolean _isSelectable = false;
             if (targetShape!=null) {
               _isSelectable=targetShape.isSelectable();
@@ -83,7 +83,7 @@ public class SelectionTool implements XDiagramTool {
                     final XControlPoint _xControlPoint = (XControlPoint)targetShape;
                     _matched=true;
                     Parent _parent = _xControlPoint.getParent();
-                    XShape _containerShape = Extensions.getContainerShape(_parent);
+                    XShape _containerShape = CoreExtensions.getContainerShape(_parent);
                     _switchResult = _containerShape;
                   }
                 }
@@ -101,8 +101,8 @@ public class SelectionTool implements XDiagramTool {
               }
               final Function1<XShape,Boolean> _function_2 = new Function1<XShape,Boolean>() {
                 public Boolean apply(final XShape it) {
-                  XDiagram _diagram = Extensions.getDiagram(it);
-                  XDiagram _diagram_1 = Extensions.getDiagram(targetShape);
+                  XDiagram _diagram = CoreExtensions.getDiagram(it);
+                  XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
                   boolean _notEquals = (!Objects.equal(_diagram, _diagram_1));
                   return Boolean.valueOf(_notEquals);
                 }

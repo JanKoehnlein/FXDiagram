@@ -14,7 +14,7 @@ import javafx.scene.effect.InnerShadow
 
 import static javafx.collections.FXCollections.*
 
-import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
 class XNode extends XShape {
 

@@ -2,11 +2,11 @@ package de.fxdiagram.core.tools.actions
 
 import de.fxdiagram.core.XRoot
 
-import static de.fxdiagram.core.binding.NumberExpressionExtensions.*
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
 class CenterAction implements DiagramAction {
 	

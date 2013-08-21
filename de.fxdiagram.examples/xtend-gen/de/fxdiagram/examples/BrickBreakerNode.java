@@ -5,7 +5,7 @@ import brickbreaker.Main;
 import brickbreaker.Main.MainFrame;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.binding.DoubleExpressionExtensions;
+import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.lang.reflect.Constructor;

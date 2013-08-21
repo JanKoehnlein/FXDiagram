@@ -1,6 +1,6 @@
 package de.fxdiagram.core.transform.tests;
 
-import de.fxdiagram.core.geometry.TransformExtensions;
+import de.fxdiagram.core.extensions.TransformExtensions;
 import java.util.ArrayList;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Affine;

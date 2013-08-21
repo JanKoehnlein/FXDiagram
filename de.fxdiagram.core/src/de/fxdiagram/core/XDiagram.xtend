@@ -14,7 +14,7 @@ import javafx.scene.paint.Paint
 
 import static javafx.collections.FXCollections.*
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class XDiagram extends Region implements XActivatable {
 	

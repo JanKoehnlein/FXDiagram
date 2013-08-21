@@ -1,4 +1,4 @@
-package de.fxdiagram.core.binding;
+package de.fxdiagram.core.extensions;
 
 import javafx.beans.binding.DoubleBinding;
 

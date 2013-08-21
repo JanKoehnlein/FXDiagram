@@ -10,9 +10,9 @@ import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
 
-import static de.fxdiagram.core.binding.NumberExpressionExtensions.*
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 
-import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
 import javafx.scene.Cursor

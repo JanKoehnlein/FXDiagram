@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle
 
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import de.fxdiagram.annotations.properties.ReadOnly
 
 class DiagramScaler implements XActivatable {

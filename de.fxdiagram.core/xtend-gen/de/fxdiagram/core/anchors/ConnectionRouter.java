@@ -1,7 +1,6 @@
 package de.fxdiagram.core.anchors;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
@@ -10,7 +9,8 @@ import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.geometry.BoundsExtensions;
+import de.fxdiagram.core.extensions.BoundsExtensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.ArrayList;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -95,7 +95,7 @@ public class ConnectionRouter implements XActivatable {
       if (!_notEquals) {
         _and = false;
       } else {
-        boolean _isRootDiagram = Extensions.isRootDiagram(current);
+        boolean _isRootDiagram = CoreExtensions.isRootDiagram(current);
         boolean _not = (!_isRootDiagram);
         _and = (_notEquals && _not);
       }
@@ -411,7 +411,7 @@ public class ConnectionRouter implements XActivatable {
   protected Point2D midPoint(final XNode node) {
     Bounds _boundsInLocal = node.getBoundsInLocal();
     Point2D _center = BoundsExtensions.center(_boundsInLocal);
-    Point2D _localToRootDiagram = Extensions.localToRootDiagram(node, _center);
+    Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(node, _center);
     return _localToRootDiagram;
   }
   

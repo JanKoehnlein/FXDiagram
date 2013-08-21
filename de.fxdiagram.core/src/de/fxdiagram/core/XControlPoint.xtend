@@ -11,9 +11,9 @@ import javafx.scene.shape.Circle
 import javafx.scene.transform.Affine
 
 import static de.fxdiagram.core.XControlPointType.*
-import static de.fxdiagram.core.geometry.Point2DExtensions.*
+import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
-import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
 class XControlPoint extends XShape {

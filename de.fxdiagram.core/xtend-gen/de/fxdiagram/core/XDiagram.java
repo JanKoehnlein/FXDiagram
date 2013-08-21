@@ -2,7 +2,6 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
@@ -11,6 +10,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.List;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -65,7 +65,7 @@ public class XDiagram extends Region implements XActivatable {
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
     final ChangeListener<Parent> _function = new ChangeListener<Parent>() {
       public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
-        XDiagram _diagram = Extensions.getDiagram(newValue);
+        XDiagram _diagram = CoreExtensions.getDiagram(newValue);
         XDiagram.this.parentDiagram = _diagram;
         boolean _equals = Objects.equal(XDiagram.this.parentDiagram, null);
         XDiagram.this.isRootDiagramProperty.set(_equals);
@@ -203,7 +203,7 @@ public class XDiagram extends Region implements XActivatable {
   }
   
   public Iterable<XShape> getAllShapes() {
-    Iterable<? extends Node> _allChildren = Extensions.getAllChildren(this);
+    Iterable<? extends Node> _allChildren = CoreExtensions.getAllChildren(this);
     Iterable<XShape> _filter = Iterables.<XShape>filter(_allChildren, XShape.class);
     return _filter;
   }

@@ -10,7 +10,7 @@ import org.junit.Test
 
 import static org.junit.Assert.*
 
-import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
 class TransformExtensionsTest {
 	@Test

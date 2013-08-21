@@ -3,7 +3,7 @@ package de.fxdiagram.lib.simple;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.geometry.BoundsExtensions;
+import de.fxdiagram.core.extensions.BoundsExtensions;
 import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;

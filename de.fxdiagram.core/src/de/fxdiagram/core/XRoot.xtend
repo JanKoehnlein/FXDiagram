@@ -19,11 +19,11 @@ import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.transform.Affine
 
-import static de.fxdiagram.core.binding.NumberExpressionExtensions.*
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
-import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import javafx.scene.layout.Pane
 import static extension de.fxdiagram.core.css.JavaToCss.*
 

@@ -16,8 +16,8 @@ import javafx.scene.Node
 import static de.fxdiagram.core.XConnectionKind.*
 import static de.fxdiagram.core.XControlPointType.*
 
-import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.geometry.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
 class ConnectionRouter implements XActivatable {
 	

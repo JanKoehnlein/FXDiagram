@@ -1,5 +1,9 @@
-package de.fxdiagram.core
+package de.fxdiagram.core.extensions
 
+import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XRapidButton
+import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.XShape
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
@@ -8,9 +12,9 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.transform.Affine
 import javafx.scene.transform.Transform
 
-import static extension de.fxdiagram.core.geometry.TransformExtensions.*
+import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
-class Extensions {
+class CoreExtensions {
 
 	def static isRootDiagram(Node node) {
 		switch node { 

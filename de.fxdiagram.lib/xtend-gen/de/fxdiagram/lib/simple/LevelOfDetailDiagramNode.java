@@ -1,10 +1,10 @@
 package de.fxdiagram.lib.simple;
 
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
@@ -85,7 +85,7 @@ public class LevelOfDetailDiagramNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    XRoot _root = Extensions.getRoot(this);
+    XRoot _root = CoreExtensions.getRoot(this);
     DoubleProperty _diagramScaleProperty = _root.diagramScaleProperty();
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {

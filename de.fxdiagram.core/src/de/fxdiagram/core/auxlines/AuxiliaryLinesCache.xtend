@@ -9,7 +9,7 @@ import javafx.collections.ListChangeListener
 import javafx.geometry.Bounds
 import javafx.geometry.Orientation
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class AuxiliaryLinesCache {
 

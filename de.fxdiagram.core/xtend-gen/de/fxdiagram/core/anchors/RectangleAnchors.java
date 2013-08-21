@@ -1,10 +1,10 @@
 package de.fxdiagram.core.anchors;
 
-import de.fxdiagram.core.Extensions;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.NearestPointFinder;
-import de.fxdiagram.core.binding.NumberExpressionExtensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -23,7 +23,7 @@ public class RectangleAnchors implements Anchors {
       Node _node = this.host.getNode();
       Node _node_1 = this.host.getNode();
       Bounds _layoutBounds = _node_1.getLayoutBounds();
-      final Bounds boundsInRootDiagram = Extensions.localToRootDiagram(_node, _layoutBounds);
+      final Bounds boundsInRootDiagram = CoreExtensions.localToRootDiagram(_node, _layoutBounds);
       double _minX = boundsInRootDiagram.getMinX();
       double _maxX = boundsInRootDiagram.getMaxX();
       double _plus = (_minX + _maxX);

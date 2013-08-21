@@ -11,7 +11,7 @@ import javafx.scene.Node
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 
-import static extension de.fxdiagram.core.Extensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class LevelOfDetailDiagramNode extends XNode {
 

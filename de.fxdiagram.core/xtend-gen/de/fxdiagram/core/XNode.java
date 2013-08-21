@@ -8,7 +8,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.geometry.BoundsExtensions;
+import de.fxdiagram.core.extensions.BoundsExtensions;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyStringProperty;

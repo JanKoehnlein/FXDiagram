@@ -16,10 +16,10 @@ import javafx.scene.shape.QuadCurve
 import javafx.scene.shape.Shape
 
 import static de.fxdiagram.core.XConnectionKind.*
-import static de.fxdiagram.core.geometry.Point2DExtensions.*
+import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
-import static extension de.fxdiagram.core.Extensions.*
-import static extension de.fxdiagram.core.geometry.BezierExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import javafx.scene.shape.StrokeLineCap
 
 @Logging

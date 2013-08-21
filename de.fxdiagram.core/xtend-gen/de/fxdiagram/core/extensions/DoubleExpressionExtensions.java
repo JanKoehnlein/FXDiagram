@@ -1,6 +1,6 @@
-package de.fxdiagram.core.binding;
+package de.fxdiagram.core.extensions;
 
-import de.fxdiagram.core.binding.DoubleConstant;
+import de.fxdiagram.core.extensions.DoubleConstant;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.value.ObservableNumberValue;

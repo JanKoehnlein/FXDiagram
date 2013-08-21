@@ -1,4 +1,4 @@
-package de.fxdiagram.core.geometry;
+package de.fxdiagram.core.extensions;
 
 import javafx.geometry.Point2D;
 import org.eclipse.xtext.xbase.lib.Pure;
