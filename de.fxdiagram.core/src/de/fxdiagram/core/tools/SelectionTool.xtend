@@ -6,7 +6,6 @@ import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import java.util.Collection
 import javafx.event.EventHandler
-import javafx.scene.Scene
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
@@ -24,7 +23,7 @@ class SelectionTool implements XDiagramTool {
 		this.root = root
 		this.mousePressedHandler = [ event |
 			val selection = root.currentSelection.toSet
-			if(event.target instanceof Scene && event.button == MouseButton.PRIMARY) {
+			if(event.target == root.diagramCanvas && event.button == MouseButton.PRIMARY) {
 				selection.deselect[true]
 			} else if (!(event.targetButton instanceof XRapidButton)) {
 				val targetShape = event.targetShape
@@ -73,14 +72,14 @@ class SelectionTool implements XDiagramTool {
 	}
 
 	override activate() {
-		root.scene.addEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
+		root.addEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
 		root.addEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
 		root.addEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true
 	}
 
 	override deactivate() {
-		root.scene.removeEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
+		root.removeEventFilter(MouseEvent.MOUSE_PRESSED, mousePressedHandler)
 		root.removeEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
 		root.removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true

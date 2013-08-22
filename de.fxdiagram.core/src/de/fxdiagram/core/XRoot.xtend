@@ -82,7 +82,7 @@ class XRoot extends Parent implements XActivatable {
 	
 	def centerDiagram() {
 		diagram.layout
-		val diagramBounds = diagram.boundsInParent
+		val diagramBounds = diagram.layoutBounds
 		if(diagramBounds.width * diagramBounds.height > 1) {
 			val scale = max(XRoot.MIN_SCALE, min(1, min(scene.width / diagramBounds.width, scene.height / diagramBounds.height)))
 			diagramScale = scale
@@ -94,6 +94,10 @@ class XRoot extends Parent implements XActivatable {
 		
 	def getHeadsUpDisplay() {
 		headsUpDisplay
+	}
+	
+	def getDiagramCanvas() {
+		diagramCanvas
 	}
 	
 	def getDiagramTransform() {

@@ -16,9 +16,9 @@ import java.util.Set;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -41,12 +41,14 @@ public class SelectionTool implements XDiagramTool {
         final Set<XShape> selection = IterableExtensions.<XShape>toSet(_currentSelection);
         boolean _and = false;
         EventTarget _target = event.getTarget();
-        if (!(_target instanceof Scene)) {
+        Pane _diagramCanvas = root.getDiagramCanvas();
+        boolean _equals = Objects.equal(_target, _diagramCanvas);
+        if (!_equals) {
           _and = false;
         } else {
           MouseButton _button = event.getButton();
-          boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
-          _and = ((_target instanceof Scene) && _equals);
+          boolean _equals_1 = Objects.equal(_button, MouseButton.PRIMARY);
+          _and = (_equals && _equals_1);
         }
         if (_and) {
           final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
@@ -187,8 +189,7 @@ public class SelectionTool implements XDiagramTool {
   public boolean activate() {
     boolean _xblockexpression = false;
     {
-      Scene _scene = this.root.getScene();
-      _scene.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
+      this.root.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
       this.root.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
       this.root.<MouseEvent>addEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
       _xblockexpression = (true);
@@ -199,8 +200,7 @@ public class SelectionTool implements XDiagramTool {
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
-      Scene _scene = this.root.getScene();
-      _scene.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
+      this.root.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
       this.root.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
       this.root.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
       _xblockexpression = (true);

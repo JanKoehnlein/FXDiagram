@@ -8,7 +8,6 @@ import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.layout.Region
 import javafx.scene.paint.Color
 import javafx.scene.paint.Paint
 
@@ -16,7 +15,7 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
-class XDiagram extends Region implements XActivatable {
+class XDiagram extends Group implements XActivatable {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
 	@FxProperty ObservableList<XConnection> connections = observableArrayList

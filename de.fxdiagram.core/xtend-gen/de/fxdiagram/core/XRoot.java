@@ -154,7 +154,7 @@ public class XRoot extends Parent implements XActivatable {
     XDiagram _diagram = this.getDiagram();
     _diagram.layout();
     XDiagram _diagram_1 = this.getDiagram();
-    final Bounds diagramBounds = _diagram_1.getBoundsInParent();
+    final Bounds diagramBounds = _diagram_1.getLayoutBounds();
     double _width = diagramBounds.getWidth();
     double _height = diagramBounds.getHeight();
     double _multiply = (_width * _height);
@@ -194,6 +194,10 @@ public class XRoot extends Parent implements XActivatable {
   
   public HeadsUpDisplay getHeadsUpDisplay() {
     return this.headsUpDisplay;
+  }
+  
+  public Pane getDiagramCanvas() {
+    return this.diagramCanvas;
   }
   
   public Affine getDiagramTransform() {

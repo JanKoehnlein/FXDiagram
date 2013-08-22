@@ -103,7 +103,7 @@ class MenuTool implements XDiagramTool {
 				if (menu.state == State.OPENED) {
 					closeMenu
 					consume
-				} else if (target == root.scene && menu.state != State.OPENED) {
+				} else if (target == root.diagramCanvas && menu.state != State.OPENED) {
 					openMenu
 					consume
 				}
@@ -162,12 +162,12 @@ class MenuTool implements XDiagramTool {
 
 	override activate() {
 		root.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
-		root.scene.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
+		root.diagramCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
 		true
 	}
 
 	override deactivate() {
-		root.scene.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
+		root.diagramCanvas.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
 		root.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		true
 	}

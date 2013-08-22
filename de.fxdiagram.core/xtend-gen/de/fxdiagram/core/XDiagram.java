@@ -28,7 +28,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
@@ -36,7 +35,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class XDiagram extends Region implements XActivatable {
+public class XDiagram extends Group implements XActivatable {
   private Group nodeLayer = new Function0<Group>() {
     public Group apply() {
       Group _group = new Group();

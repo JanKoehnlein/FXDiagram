@@ -36,6 +36,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -229,8 +230,8 @@ public class MenuTool implements XDiagramTool {
           } else {
             boolean _and = false;
             EventTarget _target = it.getTarget();
-            Scene _scene = root.getScene();
-            boolean _equals_2 = Objects.equal(_target, _scene);
+            Pane _diagramCanvas = root.getDiagramCanvas();
+            boolean _equals_2 = Objects.equal(_target, _diagramCanvas);
             if (!_equals_2) {
               _and = false;
             } else {
@@ -391,8 +392,8 @@ public class MenuTool implements XDiagramTool {
     {
       Scene _scene = this.root.getScene();
       _scene.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-      Scene _scene_1 = this.root.getScene();
-      _scene_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_PRESSED, this.mouseHandler);
+      Pane _diagramCanvas = this.root.getDiagramCanvas();
+      _diagramCanvas.<MouseEvent>addEventHandler(MouseEvent.MOUSE_PRESSED, this.mouseHandler);
       _xblockexpression = (true);
     }
     return _xblockexpression;
@@ -401,10 +402,10 @@ public class MenuTool implements XDiagramTool {
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
+      Pane _diagramCanvas = this.root.getDiagramCanvas();
+      _diagramCanvas.<MouseEvent>removeEventHandler(MouseEvent.MOUSE_PRESSED, this.mouseHandler);
       Scene _scene = this.root.getScene();
-      _scene.<MouseEvent>removeEventHandler(MouseEvent.MOUSE_PRESSED, this.mouseHandler);
-      Scene _scene_1 = this.root.getScene();
-      _scene_1.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+      _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       _xblockexpression = (true);
     }
     return _xblockexpression;
