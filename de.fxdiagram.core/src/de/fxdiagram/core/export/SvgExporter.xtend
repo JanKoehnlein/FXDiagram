@@ -42,6 +42,7 @@ class SvgExporter {
 				"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 			<svg viewBox="«bounds.minX» «bounds.minY» «bounds.width» «bounds.height»"
 				xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+				<rect x="«bounds.minX»" y="«bounds.minY»" width="100%" height ="100%" fill="«diagram.backgroundPaint.toSvgString»"/>
 				«FOR child: diagram.childrenUnmodifiable.filter[visible]»
 					«child.toSvgElement»
 				«ENDFOR»

@@ -1,9 +1,8 @@
 BUG
-- populate menu
 - chooser isVertical
 - choose connections instead of nodes?
 - select all doesn't select all
-- all choices grayed out in chooser in nested diagrm
+- all choices grayed out in chooser in nested diagram
 
 ENHANCEMENT
 - Make auxlines magnetic
@@ -40,5 +39,6 @@ DONE
 - SVGImage for magnets
 - diagramTransform should be the diagram's internal transform
 - Open subdiagram
+- populate menu
 - change Cursor on FlipNode
 

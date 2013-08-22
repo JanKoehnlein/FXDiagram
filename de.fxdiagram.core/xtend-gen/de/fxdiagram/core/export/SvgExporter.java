@@ -80,6 +80,19 @@ public class SvgExporter {
       _builder.append("\t");
       _builder.append("xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\">");
       _builder.newLine();
+      _builder.append("\t");
+      _builder.append("<rect x=\"");
+      double _minX_1 = bounds.getMinX();
+      _builder.append(_minX_1, "	");
+      _builder.append("\" y=\"");
+      double _minY_1 = bounds.getMinY();
+      _builder.append(_minY_1, "	");
+      _builder.append("\" width=\"100%\" height =\"100%\" fill=\"");
+      Paint _backgroundPaint = diagram.getBackgroundPaint();
+      CharSequence _svgString = this.toSvgString(_backgroundPaint);
+      _builder.append(_svgString, "	");
+      _builder.append("\"/>");
+      _builder.newLineIfNotEmpty();
       {
         ObservableList<Node> _childrenUnmodifiable = diagram.getChildrenUnmodifiable();
         final Function1<Node,Boolean> _function = new Function1<Node,Boolean>() {

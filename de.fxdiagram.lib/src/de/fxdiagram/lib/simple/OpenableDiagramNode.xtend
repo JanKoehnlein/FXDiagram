@@ -131,9 +131,9 @@ class OpenableDiagramNode extends XNode {
 	
 	protected def closeDiagram(Point2D targetInDiagram) {
 		root.diagram = parentDiagram
-		pane.children.add(new Group => [
+		pane.children += new Group => [
 			children += nestedDiagram
-		])
+		]
 		nestedDiagram.activate
 		nestedDiagram.layout
 		diagramScaler.activate
