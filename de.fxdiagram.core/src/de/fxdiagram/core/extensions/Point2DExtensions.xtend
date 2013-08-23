@@ -1,6 +1,7 @@
 package de.fxdiagram.core.extensions
 
 import javafx.geometry.Point2D
+import static java.lang.Math.*
 
 class Point2DExtensions {
 	
@@ -33,6 +34,31 @@ class Point2DExtensions {
 	@Pure
 	static def operator_minus(Point2D left, Point2D right) {
 		new Point2D(left.x - right.x, left.y - right.y)
+	}
+	
+	@Pure
+	static def operator_multiply(Point2D left, double right) {
+		new Point2D(left.x * right, left.y * right)
+	}
+	
+	@Pure
+	static def operator_multiply(double left, Point2D right) {
+		new Point2D(left * right.x, left * right.y)
+	}
+	
+	@Pure
+	static def operator_divide(Point2D left, double right) {
+		new Point2D(left.x / right, left.y / right)
+	}
+	
+	@Pure
+	static def operator_divide(double left, Point2D right) {
+		new Point2D(left / right.x, left / right.y)
+	}
+	
+	@Pure
+	static def norm(Point2D it) {
+		sqrt(x*x + y*y)
 	}
 	
 	@Pure

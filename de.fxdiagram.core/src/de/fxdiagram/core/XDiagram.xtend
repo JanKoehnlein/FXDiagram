@@ -59,7 +59,7 @@ class XDiagram extends Group implements XActivatable {
 	}
 
 	def void doActivate() {
-		val ChangeListener<XConnectionLabel> labelListener = [
+		val ChangeListener<Node> labelListener = [
 			prop, oldVal, newVal |
 			if(oldVal != null)
 				connectionLayer.children -= oldVal
@@ -75,17 +75,17 @@ class XDiagram extends Group implements XActivatable {
 				if(change.wasAdded) {
 					val addedConnections = change.addedSubList.filter(XConnection)
 					addedConnections.forEach [
-						if(label != null) 
-							connectionLayer.children += label
-						labelProperty.addListener(labelListener)
+						addConnectionDecoration(labelProperty, labelListener) 
+						addConnectionDecoration(targetArrowHeadProperty, labelListener) 
+						addConnectionDecoration(sourceArrowHeadProperty, labelListener) 
 					]
 				}
 				if(change.wasRemoved) {
 					val removedConnections = change.removed.filter(XConnection)
 					removedConnections.forEach [
-						if(label != null) 
-							connectionLayer.children -= label
-						labelProperty.removeListener(labelListener)
+						removeConnectionDecoration(labelProperty, labelListener) 
+						removeConnectionDecoration(targetArrowHeadProperty, labelListener) 
+						removeConnectionDecoration(sourceArrowHeadProperty, labelListener) 
 					]
 				}
 			}
@@ -95,12 +95,26 @@ class XDiagram extends Group implements XActivatable {
 		contentsInitializer?.apply(this)
 	}
 	
+	protected def addConnectionDecoration(javafx.beans.property.Property<? extends Node> property, 
+		ChangeListener<? super Node> listener) {
+		if(property.value != null)
+			connectionLayer.children += property.value
+		property.addListener(listener)
+	} 
+	
+	protected def removeConnectionDecoration(javafx.beans.property.Property<? extends Node> property, 
+		ChangeListener<? super Node> listener) {
+		if(property.value != null)
+			connectionLayer.children -= property.value
+		property.removeListener(listener)
+	} 
+	
 	def getAuxiliaryLinesSupport() {
 		auxiliaryLinesSupport	
 	}
 	
 	def Iterable<XShape> getAllShapes() {
-		getAllChildren(this).filter(XShape)
+		allChildren.filter(XShape)
 	}
 
 	def setContentsInitializer((XDiagram)=>void contentsInitializer) {

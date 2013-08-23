@@ -64,6 +64,59 @@ public class Point2DExtensions {
   }
   
   @Pure
+  public static Point2D operator_multiply(final Point2D left, final double right) {
+    double _x = left.getX();
+    double _multiply = (_x * right);
+    double _y = left.getY();
+    double _multiply_1 = (_y * right);
+    Point2D _point2D = new Point2D(_multiply, _multiply_1);
+    return _point2D;
+  }
+  
+  @Pure
+  public static Point2D operator_multiply(final double left, final Point2D right) {
+    double _x = right.getX();
+    double _multiply = (left * _x);
+    double _y = right.getY();
+    double _multiply_1 = (left * _y);
+    Point2D _point2D = new Point2D(_multiply, _multiply_1);
+    return _point2D;
+  }
+  
+  @Pure
+  public static Point2D operator_divide(final Point2D left, final double right) {
+    double _x = left.getX();
+    double _divide = (_x / right);
+    double _y = left.getY();
+    double _divide_1 = (_y / right);
+    Point2D _point2D = new Point2D(_divide, _divide_1);
+    return _point2D;
+  }
+  
+  @Pure
+  public static Point2D operator_divide(final double left, final Point2D right) {
+    double _x = right.getX();
+    double _divide = (left / _x);
+    double _y = right.getY();
+    double _divide_1 = (left / _y);
+    Point2D _point2D = new Point2D(_divide, _divide_1);
+    return _point2D;
+  }
+  
+  @Pure
+  public static double norm(final Point2D it) {
+    double _x = it.getX();
+    double _x_1 = it.getX();
+    double _multiply = (_x * _x_1);
+    double _y = it.getY();
+    double _y_1 = it.getY();
+    double _multiply_1 = (_y * _y_1);
+    double _plus = (_multiply + _multiply_1);
+    double _sqrt = Math.sqrt(_plus);
+    return _sqrt;
+  }
+  
+  @Pure
   public static double linear(final double x, final double y, final double lambda) {
     double _minus = (y - x);
     double _multiply = (_minus * lambda);

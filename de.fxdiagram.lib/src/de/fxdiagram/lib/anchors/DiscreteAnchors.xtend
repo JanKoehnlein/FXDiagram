@@ -26,7 +26,7 @@ class DiscreteAnchors implements Anchors {
 				currentDistance = candidateDistance
 			}
 		}
-		currentAnchor	
+		currentAnchor
 	}
 
 	protected def calculatePoints() {

@@ -26,9 +26,9 @@ abstract class XShape extends Parent implements XActivatable {
 		isActiveProperty.set(true)
 		selectedProperty.addListener [
 			property, oldVlaue, newValue |
+			selectionFeedback(newValue)
 			if(newValue)
 				toFront
-			selectionFeedback(newValue)
 		]
 	}
 	

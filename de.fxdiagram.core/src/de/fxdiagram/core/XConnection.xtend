@@ -2,8 +2,9 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.Lazy
+import de.fxdiagram.core.anchors.AbstractArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
+import de.fxdiagram.core.anchors.DefaultArrowHead
 import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.geometry.BoundingBox
@@ -14,22 +15,26 @@ import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.Polyline
 import javafx.scene.shape.QuadCurve
 import javafx.scene.shape.Shape
+import javafx.scene.shape.StrokeLineCap
 
 import static de.fxdiagram.core.XConnectionKind.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
-import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
-import javafx.scene.shape.StrokeLineCap
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.scene.paint.Paint
 
 @Logging
 class XConnection extends XShape {
 	
 	@FxProperty XNode source
 	@FxProperty XNode target
-	@FxProperty @Lazy XConnectionLabel label
+	@FxProperty XConnectionLabel label
+	@FxProperty AbstractArrowHead sourceArrowHead
+	@FxProperty AbstractArrowHead targetArrowHead
 	@FxProperty XConnectionKind kind = POLYLINE
 	@FxProperty double strokeWidth = 2.0
+	@FxProperty Paint stroke = Color.BLACK
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
@@ -49,7 +54,8 @@ class XConnection extends XShape {
 			source.outgoingConnections.add(this)
 		if(!target.incomingConnections.contains(this))
 			target.incomingConnections.add(this)
-		connectionRouter = new ConnectionRouter(this)		
+		connectionRouter = new ConnectionRouter(this)
+		targetArrowHead = new DefaultArrowHead(this, false)	
 	}
 
 	override doActivate() {
@@ -86,11 +92,11 @@ class XConnection extends XShape {
 	}
 	
 	override selectionFeedback(boolean isSelected) {
-		controlPointGroup.visible = isSelected
 		if(isSelected) {
 			source.toFront
 			target.toFront
 		}
+		controlPointGroup.visible = isSelected
 	}
 	
 	def getConnectionRouter() {
@@ -173,6 +179,7 @@ class XConnection extends XShape {
 		val strokeBoundsInRoot = source.localToRootDiagram(new BoundingBox(0, 0, this.strokeWidth, this.strokeWidth))
 		val strokeInRoot = 0.5 * (strokeBoundsInRoot.width + strokeBoundsInRoot.height) 
 		shapes.forEach [
+			stroke = this.stroke
 			strokeLineCap = StrokeLineCap.ROUND
 			strokeWidth = strokeInRoot
 		]
@@ -190,6 +197,8 @@ class XConnection extends XShape {
 		super.layoutChildren
 		connectionRouter.calculatePoints
 		label?.place(controlPoints)	
+		sourceArrowHead?.place
+		targetArrowHead?.place
 	}
 	
 	def at(double t) {

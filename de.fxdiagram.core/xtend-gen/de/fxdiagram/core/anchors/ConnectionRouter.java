@@ -7,6 +7,7 @@ import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.anchors.AbstractArrowHead;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
@@ -383,25 +384,29 @@ public class ConnectionRouter implements XActivatable {
       XNode _source = this.connection.getSource();
       XNode _target = this.connection.getTarget();
       Point2D _midPoint = this.midPoint(_target);
-      Point2D _nearestAnchor = this.getNearestAnchor(_source, _midPoint);
+      AbstractArrowHead _sourceArrowHead = this.connection.getSourceArrowHead();
+      Point2D _nearestAnchor = this.getNearestAnchor(_source, _midPoint, _sourceArrowHead);
       XNode _target_1 = this.connection.getTarget();
       XNode _source_1 = this.connection.getSource();
       Point2D _midPoint_1 = this.midPoint(_source_1);
-      Point2D _nearestAnchor_1 = this.getNearestAnchor(_target_1, _midPoint_1);
+      AbstractArrowHead _targetArrowHead = this.connection.getTargetArrowHead();
+      Point2D _nearestAnchor_1 = this.getNearestAnchor(_target_1, _midPoint_1, _targetArrowHead);
       Pair<Point2D,Point2D> _mappedTo = Pair.<Point2D, Point2D>of(_nearestAnchor, _nearestAnchor_1);
       _xifexpression = _mappedTo;
     } else {
       XNode _source_2 = this.connection.getSource();
       ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
       XControlPoint _get = _controlPoints_1.get(1);
-      Point2D _nearestAnchor_2 = this.getNearestAnchor(_source_2, _get);
+      AbstractArrowHead _sourceArrowHead_1 = this.connection.getSourceArrowHead();
+      Point2D _nearestAnchor_2 = this.getNearestAnchor(_source_2, _get, _sourceArrowHead_1);
       XNode _target_2 = this.connection.getTarget();
       ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
       ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
       int _size_1 = _controlPoints_3.size();
       int _minus = (_size_1 - 2);
       XControlPoint _get_1 = _controlPoints_2.get(_minus);
-      Point2D _nearestAnchor_3 = this.getNearestAnchor(_target_2, _get_1);
+      AbstractArrowHead _targetArrowHead_1 = this.connection.getTargetArrowHead();
+      Point2D _nearestAnchor_3 = this.getNearestAnchor(_target_2, _get_1, _targetArrowHead_1);
       Pair<Point2D,Point2D> _mappedTo_1 = Pair.<Point2D, Point2D>of(_nearestAnchor_2, _nearestAnchor_3);
       _xifexpression = _mappedTo_1;
     }
@@ -415,20 +420,36 @@ public class ConnectionRouter implements XActivatable {
     return _localToRootDiagram;
   }
   
-  protected Point2D getNearestAnchor(final XNode node, final XControlPoint controlPoint) {
-    Anchors _anchors = node.getAnchors();
+  protected Point2D getNearestAnchor(final XNode node, final XControlPoint controlPoint, final AbstractArrowHead arrowHead) {
     double _layoutX = controlPoint.getLayoutX();
     double _layoutY = controlPoint.getLayoutY();
-    Point2D _anchor = _anchors.getAnchor(_layoutX, _layoutY);
-    return _anchor;
+    Point2D _nearestAnchor = this.getNearestAnchor(node, _layoutX, _layoutY, arrowHead);
+    return _nearestAnchor;
   }
   
-  protected Point2D getNearestAnchor(final XNode node, final Point2D point) {
-    Anchors _anchors = node.getAnchors();
+  protected Point2D getNearestAnchor(final XNode node, final Point2D point, final AbstractArrowHead arrowHead) {
     double _x = point.getX();
     double _y = point.getY();
-    Point2D _anchor = _anchors.getAnchor(_x, _y);
-    return _anchor;
+    Point2D _nearestAnchor = this.getNearestAnchor(node, _x, _y, arrowHead);
+    return _nearestAnchor;
+  }
+  
+  protected Point2D getNearestAnchor(final XNode node, final double x, final double y, final AbstractArrowHead arrowHead) {
+    Point2D _xblockexpression = null;
+    {
+      Anchors _anchors = node.getAnchors();
+      final Point2D anchor = _anchors.getAnchor(x, y);
+      Point2D _xifexpression = null;
+      boolean _notEquals = (!Objects.equal(arrowHead, null));
+      if (_notEquals) {
+        Point2D _correctAnchor = arrowHead.correctAnchor(x, y, anchor);
+        _xifexpression = _correctAnchor;
+      } else {
+        _xifexpression = anchor;
+      }
+      _xblockexpression = (_xifexpression);
+    }
+    return _xblockexpression;
   }
   
   private ReadOnlyListWrapper<XControlPoint> controlPointsProperty = new ReadOnlyListWrapper<XControlPoint>(this, "controlPoints",_initControlPoints());

@@ -3,10 +3,10 @@ package de.fxdiagram.core.anchors
 import de.fxdiagram.core.XNode
 import javafx.geometry.Point2D
 
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 
 class RectangleAnchors implements Anchors {
 
@@ -17,7 +17,7 @@ class RectangleAnchors implements Anchors {
 	}
 
 	override getAnchor(double x, double y) {
-		val boundsInRootDiagram = host.node.localToRootDiagram(host.node.layoutBounds)
+		val boundsInRootDiagram = host.node.localToRootDiagram(host.node.layoutBounds) 
 		val centerX = 0.5 * (boundsInRootDiagram.minX + boundsInRootDiagram.maxX)
 		val centerY = 0.5 * (boundsInRootDiagram.minY + boundsInRootDiagram.maxY)
 		val finder = new NearestPointFinder(x,y)
@@ -37,7 +37,7 @@ class RectangleAnchors implements Anchors {
 			if(yRight >= boundsInRootDiagram.minY  && yRight <= boundsInRootDiagram.maxY)
 				finder.addCandidate(boundsInRootDiagram.maxX, yRight)
 		}
-		finder.currentNearest 
+		finder.currentNearest
 	}
 
 	protected def getXIntersection(double yIntersection, double centerX, double centerY, double pointX, double pointY) {

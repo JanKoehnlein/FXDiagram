@@ -38,10 +38,10 @@ public abstract class XShape extends Parent implements XActivatable {
     this.isActiveProperty.set(true);
     final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
       public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVlaue, final Boolean newValue) {
+        XShape.this.selectionFeedback((newValue).booleanValue());
         if ((newValue).booleanValue()) {
           XShape.this.toFront();
         }
-        XShape.this.selectionFeedback((newValue).booleanValue());
       }
     };
     this.selectedProperty.addListener(_function);

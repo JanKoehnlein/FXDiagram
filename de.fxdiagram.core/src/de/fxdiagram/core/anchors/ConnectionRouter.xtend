@@ -16,8 +16,8 @@ import javafx.scene.Node
 import static de.fxdiagram.core.XConnectionKind.*
 import static de.fxdiagram.core.XControlPointType.*
 
-import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class ConnectionRouter implements XActivatable {
 	
@@ -157,26 +157,34 @@ class ConnectionRouter implements XActivatable {
 		}
 	}
 	
-	protected def findClosestAnchors() {
+ 	protected def findClosestAnchors() {
 		if (controlPoints.size <= 2) {
-			getNearestAnchor(connection.source, connection.target.midPoint) 
-			-> getNearestAnchor(connection.target, connection.source.midPoint) 
+			getNearestAnchor(connection.source, connection.target.midPoint, connection.sourceArrowHead) 
+			-> getNearestAnchor(connection.target, connection.source.midPoint, connection.targetArrowHead) 
 		} else {
-			getNearestAnchor(connection.source, controlPoints.get(1)) 
-			-> getNearestAnchor(connection.target, controlPoints.get(controlPoints.size - 2))
+			getNearestAnchor(connection.source, controlPoints.get(1), connection.sourceArrowHead) 
+			-> getNearestAnchor(connection.target, controlPoints.get(controlPoints.size - 2), connection.targetArrowHead)
 		}
 	}
 	
-	protected def midPoint(XNode node) {
+ 	protected def midPoint(XNode node) {
 		node.localToRootDiagram(node.boundsInLocal.center)
 	}
 
-	protected def getNearestAnchor(XNode node, XControlPoint controlPoint) {
-		node.anchors.getAnchor(controlPoint.layoutX, controlPoint.layoutY)
+	protected def getNearestAnchor(XNode node, XControlPoint controlPoint, AbstractArrowHead arrowHead) {
+		getNearestAnchor(node, controlPoint.layoutX, controlPoint.layoutY, arrowHead)
 	}
 	
-	protected def getNearestAnchor(XNode node, Point2D point) {
-		node.anchors.getAnchor(point.x, point.y)
+	protected def getNearestAnchor(XNode node, Point2D point, AbstractArrowHead arrowHead) {
+		getNearestAnchor(node, point.x, point.y, arrowHead)
+	}
+	
+	protected def getNearestAnchor(XNode node, double x, double y, AbstractArrowHead arrowHead) {
+		val anchor = node.anchors.getAnchor(x, y)
+		if(arrowHead != null)
+			arrowHead.correctAnchor(x, y, anchor)
+		else 
+			anchor
 	}
 	
 }

@@ -66,8 +66,9 @@ class Main extends Application {
 		val connection = new XConnection(source, target) => [
 			kind = XConnectionKind.QUAD_CURVE
 		]
-		val connectionLabel = new XConnectionLabel(connection)
-		connectionLabel.text.text = 'quadratic'
+		new XConnectionLabel(connection) => [
+			text.text = 'quadratic'
+		]
 		diagram.connections += connection
 
 		val target2 = new OpenableDiagramNode('Openable', createDummyDiagram) => [

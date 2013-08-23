@@ -4,14 +4,14 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
-import de.fxdiagram.annotations.properties.FxProperty;
-import de.fxdiagram.annotations.properties.Lazy;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.anchors.AbstractArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
+import de.fxdiagram.core.anchors.DefaultArrowHead;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -36,6 +36,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurve;
@@ -54,10 +55,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @Logging
 @SuppressWarnings("all")
 public class XConnection extends XShape {
-  @FxProperty
-  @Lazy
-  private XConnectionLabel label;
-  
   private Group controlPointGroup = new Function0<Group>() {
     public Group apply() {
       Group _group = new Group();
@@ -104,6 +101,8 @@ public class XConnection extends XShape {
     }
     ConnectionRouter _connectionRouter = new ConnectionRouter(this);
     this.connectionRouter = _connectionRouter;
+    DefaultArrowHead _defaultArrowHead = new DefaultArrowHead(this, false);
+    this.setTargetArrowHead(_defaultArrowHead);
   }
   
   public void doActivate() {
@@ -160,9 +159,11 @@ public class XConnection extends XShape {
       }
     };
     _controlPoints.addListener(_function_1);
-    boolean _notEquals = (!Objects.equal(this.label, null));
+    XConnectionLabel _label = this.getLabel();
+    boolean _notEquals = (!Objects.equal(_label, null));
     if (_notEquals) {
-      this.label.activate();
+      XConnectionLabel _label_1 = this.getLabel();
+      _label_1.activate();
     }
     this.connectionRouter.activate();
     this.updateShapes();
@@ -184,13 +185,13 @@ public class XConnection extends XShape {
   }
   
   public void selectionFeedback(final boolean isSelected) {
-    this.controlPointGroup.setVisible(isSelected);
     if (isSelected) {
       XNode _source = this.getSource();
       _source.toFront();
       XNode _target = this.getTarget();
       _target.toFront();
     }
+    this.controlPointGroup.setVisible(isSelected);
   }
   
   public ConnectionRouter getConnectionRouter() {
@@ -434,6 +435,8 @@ public class XConnection extends XShape {
     final double strokeInRoot = (0.5 * _plus);
     final Procedure1<Shape> _function = new Procedure1<Shape>() {
       public void apply(final Shape it) {
+        Paint _stroke = XConnection.this.getStroke();
+        it.setStroke(_stroke);
         it.setStrokeLineCap(StrokeLineCap.ROUND);
         it.setStrokeWidth(strokeInRoot);
       }
@@ -453,9 +456,18 @@ public class XConnection extends XShape {
   public void layoutChildren() {
     super.layoutChildren();
     this.connectionRouter.calculatePoints();
-    if (this.label!=null) {
+    XConnectionLabel _label = this.getLabel();
+    if (_label!=null) {
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-      this.label.place(_controlPoints);
+      _label.place(_controlPoints);
+    }
+    AbstractArrowHead _sourceArrowHead = this.getSourceArrowHead();
+    if (_sourceArrowHead!=null) {
+      _sourceArrowHead.place();
+    }
+    AbstractArrowHead _targetArrowHead = this.getTargetArrowHead();
+    if (_targetArrowHead!=null) {
+      _targetArrowHead.place();
     }
   }
   
@@ -715,25 +727,46 @@ public class XConnection extends XShape {
     return this.targetProperty;
   }
   
-  private SimpleObjectProperty<XConnectionLabel> labelProperty;
+  private SimpleObjectProperty<XConnectionLabel> labelProperty = new SimpleObjectProperty<XConnectionLabel>(this, "label");
   
   public XConnectionLabel getLabel() {
-    return (this.labelProperty != null)? this.labelProperty.get() : this.label;
+    return this.labelProperty.get();
   }
   
   public void setLabel(final XConnectionLabel label) {
-    if (labelProperty != null) {
-    	this.labelProperty.set(label);
-    } else {
-    	this.label = label;
-    }
+    this.labelProperty.set(label);
   }
   
   public ObjectProperty<XConnectionLabel> labelProperty() {
-    if (this.labelProperty == null) { 
-    	this.labelProperty = new SimpleObjectProperty<XConnectionLabel>(this, "label", this.label);
-    }
     return this.labelProperty;
+  }
+  
+  private SimpleObjectProperty<AbstractArrowHead> sourceArrowHeadProperty = new SimpleObjectProperty<AbstractArrowHead>(this, "sourceArrowHead");
+  
+  public AbstractArrowHead getSourceArrowHead() {
+    return this.sourceArrowHeadProperty.get();
+  }
+  
+  public void setSourceArrowHead(final AbstractArrowHead sourceArrowHead) {
+    this.sourceArrowHeadProperty.set(sourceArrowHead);
+  }
+  
+  public ObjectProperty<AbstractArrowHead> sourceArrowHeadProperty() {
+    return this.sourceArrowHeadProperty;
+  }
+  
+  private SimpleObjectProperty<AbstractArrowHead> targetArrowHeadProperty = new SimpleObjectProperty<AbstractArrowHead>(this, "targetArrowHead");
+  
+  public AbstractArrowHead getTargetArrowHead() {
+    return this.targetArrowHeadProperty.get();
+  }
+  
+  public void setTargetArrowHead(final AbstractArrowHead targetArrowHead) {
+    this.targetArrowHeadProperty.set(targetArrowHead);
+  }
+  
+  public ObjectProperty<AbstractArrowHead> targetArrowHeadProperty() {
+    return this.targetArrowHeadProperty;
   }
   
   private SimpleObjectProperty<XConnectionKind> kindProperty = new SimpleObjectProperty<XConnectionKind>(this, "kind",_initKind());
@@ -770,5 +803,23 @@ public class XConnection extends XShape {
   
   public DoubleProperty strokeWidthProperty() {
     return this.strokeWidthProperty;
+  }
+  
+  private SimpleObjectProperty<Paint> strokeProperty = new SimpleObjectProperty<Paint>(this, "stroke",_initStroke());
+  
+  private static final Paint _initStroke() {
+    return Color.BLACK;
+  }
+  
+  public Paint getStroke() {
+    return this.strokeProperty.get();
+  }
+  
+  public void setStroke(final Paint stroke) {
+    this.strokeProperty.set(stroke);
+  }
+  
+  public ObjectProperty<Paint> strokeProperty() {
+    return this.strokeProperty;
   }
 }
