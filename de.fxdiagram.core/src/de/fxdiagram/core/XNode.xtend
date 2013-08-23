@@ -1,5 +1,6 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.Lazy
 import de.fxdiagram.annotations.properties.ReadOnly
@@ -7,7 +8,6 @@ import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
 import javafx.collections.ObservableList
-import javafx.scene.Node
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
@@ -16,6 +16,7 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
+@Logging
 class XNode extends XShape {
 
 	static int instanceCount
@@ -40,9 +41,8 @@ class XNode extends XShape {
 		selectionEffect = createSelectionEffect
 	}
 
-	new(Node node) {
-		this()
-		this.node = node
+	new(String key) {
+		this.key = key
 	}
 
 	protected def createMouseOverEffect() {
@@ -61,6 +61,9 @@ class XNode extends XShape {
 	}
 
 	override doActivate() {
+		if(key == null) {
+			LOG.warning('Node\'s key is not set')
+		}
 		moveBehavior = new MoveBehavior(this)
 		anchors = createAnchors
 		moveBehavior.activate()
@@ -144,4 +147,5 @@ class XNode extends XShape {
 		else
 			super.maxHeight(width)
 	}
+	
 }

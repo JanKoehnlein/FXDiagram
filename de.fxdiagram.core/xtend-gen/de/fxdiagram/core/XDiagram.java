@@ -9,7 +9,7 @@ import de.fxdiagram.core.XDiagramChildrenListener;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.anchors.AbstractArrowHead;
+import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.List;
@@ -142,9 +142,9 @@ public class XDiagram extends Group implements XActivatable {
                 public void apply(final XConnection it) {
                   ObjectProperty<XConnectionLabel> _labelProperty = it.labelProperty();
                   XDiagram.this.addConnectionDecoration(_labelProperty, labelListener);
-                  ObjectProperty<AbstractArrowHead> _targetArrowHeadProperty = it.targetArrowHeadProperty();
+                  ObjectProperty<ArrowHead> _targetArrowHeadProperty = it.targetArrowHeadProperty();
                   XDiagram.this.addConnectionDecoration(_targetArrowHeadProperty, labelListener);
-                  ObjectProperty<AbstractArrowHead> _sourceArrowHeadProperty = it.sourceArrowHeadProperty();
+                  ObjectProperty<ArrowHead> _sourceArrowHeadProperty = it.sourceArrowHeadProperty();
                   XDiagram.this.addConnectionDecoration(_sourceArrowHeadProperty, labelListener);
                 }
               };
@@ -158,9 +158,9 @@ public class XDiagram extends Group implements XActivatable {
                 public void apply(final XConnection it) {
                   ObjectProperty<XConnectionLabel> _labelProperty = it.labelProperty();
                   XDiagram.this.removeConnectionDecoration(_labelProperty, labelListener);
-                  ObjectProperty<AbstractArrowHead> _targetArrowHeadProperty = it.targetArrowHeadProperty();
+                  ObjectProperty<ArrowHead> _targetArrowHeadProperty = it.targetArrowHeadProperty();
                   XDiagram.this.removeConnectionDecoration(_targetArrowHeadProperty, labelListener);
-                  ObjectProperty<AbstractArrowHead> _sourceArrowHeadProperty = it.sourceArrowHeadProperty();
+                  ObjectProperty<ArrowHead> _sourceArrowHeadProperty = it.sourceArrowHeadProperty();
                   XDiagram.this.removeConnectionDecoration(_sourceArrowHeadProperty, labelListener);
                 }
               };

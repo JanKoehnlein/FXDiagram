@@ -45,7 +45,8 @@ public class MovieNode extends XNode {
   
   private int border = 10;
   
-  public MovieNode() {
+  public MovieNode(final String name) {
+    super(name);
     HBox _createControlBar = this.createControlBar();
     this.controlBar = _createControlBar;
     FlipNode _flipNode = new FlipNode();
@@ -58,7 +59,7 @@ public class MovieNode extends XNode {
             Text _text = new Text();
             final Procedure1<Text> _function = new Procedure1<Text>() {
               public void apply(final Text it) {
-                it.setText("Movie");
+                it.setText(name);
                 it.setTextOrigin(VPos.TOP);
                 Insets _insets = new Insets(10, 20, 10, 20);
                 StackPane.setMargin(it, _insets);

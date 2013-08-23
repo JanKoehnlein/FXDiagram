@@ -2,15 +2,16 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.core.anchors.AbstractArrowHead
+import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
-import de.fxdiagram.core.anchors.DefaultArrowHead
+import de.fxdiagram.core.anchors.TriangleArrowHead
 import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.geometry.BoundingBox
 import javafx.geometry.Point2D
 import javafx.scene.Group
 import javafx.scene.paint.Color
+import javafx.scene.paint.Paint
 import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.Polyline
 import javafx.scene.shape.QuadCurve
@@ -22,7 +23,6 @@ import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import javafx.scene.paint.Paint
 
 @Logging
 class XConnection extends XShape {
@@ -30,8 +30,8 @@ class XConnection extends XShape {
 	@FxProperty XNode source
 	@FxProperty XNode target
 	@FxProperty XConnectionLabel label
-	@FxProperty AbstractArrowHead sourceArrowHead
-	@FxProperty AbstractArrowHead targetArrowHead
+	@FxProperty ArrowHead sourceArrowHead
+	@FxProperty ArrowHead targetArrowHead
 	@FxProperty XConnectionKind kind = POLYLINE
 	@FxProperty double strokeWidth = 2.0
 	@FxProperty Paint stroke = Color.BLACK
@@ -55,7 +55,7 @@ class XConnection extends XShape {
 		if(!target.incomingConnections.contains(this))
 			target.incomingConnections.add(this)
 		connectionRouter = new ConnectionRouter(this)
-		targetArrowHead = new DefaultArrowHead(this, false)	
+		targetArrowHead = new TriangleArrowHead(this, false)	
 	}
 
 	override doActivate() {

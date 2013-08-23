@@ -38,12 +38,13 @@ class MovieNode extends XNode {
 
 	int border = 10
 
-	new() {
+	new(String name) {
+		super(name)
 		controlBar = createControlBar
 		node = new FlipNode => [
 			front = new RectangleBorderPane => [
 				children += new Text => [
-					text = "Movie"
+					text = name
 					textOrigin = VPos.TOP
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]

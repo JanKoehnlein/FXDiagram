@@ -7,8 +7,8 @@ import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.anchors.AbstractArrowHead;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -18,6 +18,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -40,6 +41,8 @@ public class ConnectionRouter implements XActivatable {
   
   private ChangeListener<Number> scalarListener;
   
+  private ChangeListener<Bounds> boundsListener;
+  
   public ConnectionRouter(final XConnection connection) {
     this.connection = connection;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
@@ -48,6 +51,12 @@ public class ConnectionRouter implements XActivatable {
       }
     };
     this.scalarListener = _function;
+    final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
+      public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
+        connection.requestLayout();
+      }
+    };
+    this.boundsListener = _function_1;
   }
   
   public void activate() {
@@ -64,6 +73,8 @@ public class ConnectionRouter implements XActivatable {
   
   protected void bindNode(final XNode host) {
     Node current = host.getNode();
+    ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = current.layoutBoundsProperty();
+    _layoutBoundsProperty.addListener(this.boundsListener);
     boolean _dowhile = false;
     do {
       {
@@ -373,12 +384,12 @@ public class ConnectionRouter implements XActivatable {
       XNode _source = this.connection.getSource();
       XNode _target = this.connection.getTarget();
       Point2D _midPoint = this.midPoint(_target);
-      AbstractArrowHead _sourceArrowHead = this.connection.getSourceArrowHead();
+      ArrowHead _sourceArrowHead = this.connection.getSourceArrowHead();
       Point2D _nearestAnchor = this.getNearestAnchor(_source, _midPoint, _sourceArrowHead);
       XNode _target_1 = this.connection.getTarget();
       XNode _source_1 = this.connection.getSource();
       Point2D _midPoint_1 = this.midPoint(_source_1);
-      AbstractArrowHead _targetArrowHead = this.connection.getTargetArrowHead();
+      ArrowHead _targetArrowHead = this.connection.getTargetArrowHead();
       Point2D _nearestAnchor_1 = this.getNearestAnchor(_target_1, _midPoint_1, _targetArrowHead);
       Pair<Point2D,Point2D> _mappedTo = Pair.<Point2D, Point2D>of(_nearestAnchor, _nearestAnchor_1);
       _xifexpression = _mappedTo;
@@ -386,7 +397,7 @@ public class ConnectionRouter implements XActivatable {
       XNode _source_2 = this.connection.getSource();
       ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
       XControlPoint _get = _controlPoints_1.get(1);
-      AbstractArrowHead _sourceArrowHead_1 = this.connection.getSourceArrowHead();
+      ArrowHead _sourceArrowHead_1 = this.connection.getSourceArrowHead();
       Point2D _nearestAnchor_2 = this.getNearestAnchor(_source_2, _get, _sourceArrowHead_1);
       XNode _target_2 = this.connection.getTarget();
       ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
@@ -394,7 +405,7 @@ public class ConnectionRouter implements XActivatable {
       int _size_1 = _controlPoints_3.size();
       int _minus = (_size_1 - 2);
       XControlPoint _get_1 = _controlPoints_2.get(_minus);
-      AbstractArrowHead _targetArrowHead_1 = this.connection.getTargetArrowHead();
+      ArrowHead _targetArrowHead_1 = this.connection.getTargetArrowHead();
       Point2D _nearestAnchor_3 = this.getNearestAnchor(_target_2, _get_1, _targetArrowHead_1);
       Pair<Point2D,Point2D> _mappedTo_1 = Pair.<Point2D, Point2D>of(_nearestAnchor_2, _nearestAnchor_3);
       _xifexpression = _mappedTo_1;
@@ -409,21 +420,21 @@ public class ConnectionRouter implements XActivatable {
     return _localToRootDiagram;
   }
   
-  protected Point2D getNearestAnchor(final XNode node, final XControlPoint controlPoint, final AbstractArrowHead arrowHead) {
+  protected Point2D getNearestAnchor(final XNode node, final XControlPoint controlPoint, final ArrowHead arrowHead) {
     double _layoutX = controlPoint.getLayoutX();
     double _layoutY = controlPoint.getLayoutY();
     Point2D _nearestAnchor = this.getNearestAnchor(node, _layoutX, _layoutY, arrowHead);
     return _nearestAnchor;
   }
   
-  protected Point2D getNearestAnchor(final XNode node, final Point2D point, final AbstractArrowHead arrowHead) {
+  protected Point2D getNearestAnchor(final XNode node, final Point2D point, final ArrowHead arrowHead) {
     double _x = point.getX();
     double _y = point.getY();
     Point2D _nearestAnchor = this.getNearestAnchor(node, _x, _y, arrowHead);
     return _nearestAnchor;
   }
   
-  protected Point2D getNearestAnchor(final XNode node, final double x, final double y, final AbstractArrowHead arrowHead) {
+  protected Point2D getNearestAnchor(final XNode node, final double x, final double y, final ArrowHead arrowHead) {
     Point2D _xblockexpression = null;
     {
       Anchors _anchors = node.getAnchors();

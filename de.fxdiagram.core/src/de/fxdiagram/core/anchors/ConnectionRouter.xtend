@@ -17,6 +17,7 @@ import static de.fxdiagram.core.XControlPointType.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.geometry.Bounds
 
 class ConnectionRouter implements XActivatable {
 	
@@ -26,10 +27,12 @@ class ConnectionRouter implements XActivatable {
 	XConnection connection
 
 	ChangeListener<Number> scalarListener  
+	ChangeListener<Bounds> boundsListener  
 	
 	new(XConnection connection) {
 		this.connection = connection
 		scalarListener = [ prop, oldVal, newVal | connection.requestLayout ]
+		boundsListener = [ prop, oldVal, newVal | connection.requestLayout ]
 	}
 	
 	override activate() {
@@ -42,6 +45,7 @@ class ConnectionRouter implements XActivatable {
 	
 	protected def bindNode(XNode host) {
 		var Node current = host.node
+		current.layoutBoundsProperty.addListener(boundsListener)
 		do {
 			current.layoutXProperty.addListener(scalarListener)
 			current.layoutYProperty.addListener(scalarListener)
@@ -167,15 +171,15 @@ class ConnectionRouter implements XActivatable {
 		node.localToRootDiagram(node.boundsInLocal.center)
 	}
 
-	protected def getNearestAnchor(XNode node, XControlPoint controlPoint, AbstractArrowHead arrowHead) {
+	protected def getNearestAnchor(XNode node, XControlPoint controlPoint, ArrowHead arrowHead) {
 		getNearestAnchor(node, controlPoint.layoutX, controlPoint.layoutY, arrowHead)
 	}
 	
-	protected def getNearestAnchor(XNode node, Point2D point, AbstractArrowHead arrowHead) {
+	protected def getNearestAnchor(XNode node, Point2D point, ArrowHead arrowHead) {
 		getNearestAnchor(node, point.x, point.y, arrowHead)
 	}
 	
-	protected def getNearestAnchor(XNode node, double x, double y, AbstractArrowHead arrowHead) {
+	protected def getNearestAnchor(XNode node, double x, double y, ArrowHead arrowHead) {
 		val anchor = node.anchors.getAnchor(x, y)
 		if(arrowHead != null)
 			arrowHead.correctAnchor(x, y, anchor)

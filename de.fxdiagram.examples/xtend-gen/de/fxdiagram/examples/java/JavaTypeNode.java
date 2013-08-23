@@ -116,6 +116,8 @@ public class JavaTypeNode extends XNode {
     this.javaType = javaType;
     String _simpleName = javaType.getSimpleName();
     this.name.setText(_simpleName);
+    String _simpleName_1 = javaType.getSimpleName();
+    this.setKey(_simpleName_1);
     JavaTypeModel _javaTypeModel = new JavaTypeModel(javaType);
     this.model = _javaTypeModel;
     ObservableList<Node> _children = this.propertyCompartment.getChildren();

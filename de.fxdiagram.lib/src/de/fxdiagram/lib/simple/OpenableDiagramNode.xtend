@@ -28,7 +28,9 @@ import static java.lang.Math.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.annotations.logging.Logging
 
+@Logging
 class OpenableDiagramNode extends XNode {
 	
 	XDiagram nestedDiagram
@@ -46,8 +48,7 @@ class OpenableDiagramNode extends XNode {
 	@Property Duration transitionDuration = 1000.millis
 	@Property Duration transitionDelay = 100.millis
 	
-	new(String name, XDiagram nestedDiagram) {
-		this.nestedDiagram = nestedDiagram
+	new(String name) {
 		node = pane = new RectangleBorderPane => [
 			children += textNode = new Text => [
 				text = name
@@ -59,6 +60,10 @@ class OpenableDiagramNode extends XNode {
 		cursor = Cursor.HAND
 	}
 	
+	def setInnerDiagram(XDiagram nestedDiagram) {
+		this.nestedDiagram = nestedDiagram
+	}
+	
 	override createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
@@ -66,11 +71,15 @@ class OpenableDiagramNode extends XNode {
 	override doActivate() {
 		super.doActivate()
 		this.root = getRoot
-		node.onMouseClicked = [
-			if(clickCount == 2) {
-				openDiagram
-			}
-		]
+		if(nestedDiagram == null) {
+			LOG.severe('Nested diagram not set. Deactivating open behavior')
+		} else {
+			node.onMouseClicked = [
+				if(clickCount == 2) {
+					openDiagram
+				}
+			]
+		}
 	}
 	
 	protected def openDiagram() {

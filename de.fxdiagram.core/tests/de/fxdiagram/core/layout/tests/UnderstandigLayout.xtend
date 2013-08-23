@@ -1,6 +1,5 @@
 package de.fxdiagram.core.layout.tests
 
-import de.fxdiagram.core.XNode
 import javafx.application.Application
 import javafx.scene.Group
 import javafx.scene.Scene
@@ -72,34 +71,34 @@ class UnderstandigLayout extends Application {
 		assertEquals(2, stackPane.maxHeight(10), EPS)
 	}
 
-	@Test def stackPaneWithAnXNodeSizes() {
-		val stackPane = new StackPane => [
-			children += new XNode(new Rectangle) => [
-				width = 1
-				height = 2
-				relocate(-3, -4)
-			]
-		]
-		assertEquals(1, stackPane.minWidth(-1), EPS)
-		assertEquals(2, stackPane.minHeight(-1), EPS)
-		assertEquals(1, stackPane.prefWidth(-1), EPS)
-		assertEquals(2, stackPane.prefHeight(-1), EPS)
-		assertEquals(Double.MAX_VALUE, stackPane.maxWidth(-1), EPS)
-		assertEquals(Double.MAX_VALUE, stackPane.maxHeight(-1), EPS)
-
-		assertEquals(1, stackPane.minWidth(10), EPS)
-		assertEquals(2, stackPane.minHeight(10), EPS)
-		assertEquals(1, stackPane.prefWidth(10), EPS)
-		assertEquals(2, stackPane.prefHeight(10), EPS)
-		assertEquals(Double.MAX_VALUE, stackPane.maxWidth(10), EPS)
-		assertEquals(Double.MAX_VALUE, stackPane.maxHeight(10), EPS)
-
-		stackPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE)
-		assertEquals(1, stackPane.maxWidth(-1), EPS)
-		assertEquals(2, stackPane.maxHeight(-1), EPS)
-		assertEquals(1, stackPane.maxWidth(10), EPS)
-		assertEquals(2, stackPane.maxHeight(10), EPS)
-	}
+//	@Test def stackPaneWithAnXNodeSizes() {
+//		val stackPane = new StackPane => [
+//			children += new XNode(new Rectangle) => [
+//				width = 1
+//				height = 2
+//				relocate(-3, -4)
+//			]
+//		]
+//		assertEquals(1, stackPane.minWidth(-1), EPS)
+//		assertEquals(2, stackPane.minHeight(-1), EPS)
+//		assertEquals(1, stackPane.prefWidth(-1), EPS)
+//		assertEquals(2, stackPane.prefHeight(-1), EPS)
+//		assertEquals(Double.MAX_VALUE, stackPane.maxWidth(-1), EPS)
+//		assertEquals(Double.MAX_VALUE, stackPane.maxHeight(-1), EPS)
+//
+//		assertEquals(1, stackPane.minWidth(10), EPS)
+//		assertEquals(2, stackPane.minHeight(10), EPS)
+//		assertEquals(1, stackPane.prefWidth(10), EPS)
+//		assertEquals(2, stackPane.prefHeight(10), EPS)
+//		assertEquals(Double.MAX_VALUE, stackPane.maxWidth(10), EPS)
+//		assertEquals(Double.MAX_VALUE, stackPane.maxHeight(10), EPS)
+//
+//		stackPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE)
+//		assertEquals(1, stackPane.maxWidth(-1), EPS)
+//		assertEquals(2, stackPane.maxHeight(-1), EPS)
+//		assertEquals(1, stackPane.maxWidth(10), EPS)
+//		assertEquals(2, stackPane.maxHeight(10), EPS)
+//	}
 
 	@Test def groupLayout() {
 		val group = new Group => [

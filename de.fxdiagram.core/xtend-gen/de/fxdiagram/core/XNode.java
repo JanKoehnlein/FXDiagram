@@ -2,6 +2,7 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XShape;
@@ -9,6 +10,7 @@ import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
+import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -29,6 +31,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@Logging
 @SuppressWarnings("all")
 public class XNode extends XShape {
   private static int instanceCount;
@@ -56,9 +59,8 @@ public class XNode extends XShape {
     this.selectionEffect = _createSelectionEffect;
   }
   
-  public XNode(final Node node) {
-    this();
-    this.setNode(node);
+  public XNode(final String key) {
+    this.setKey(key);
   }
   
   protected InnerShadow createMouseOverEffect() {
@@ -84,6 +86,11 @@ public class XNode extends XShape {
   }
   
   public void doActivate() {
+    String _key = this.getKey();
+    boolean _equals = Objects.equal(_key, null);
+    if (_equals) {
+      XNode.LOG.warning("Node\'s key is not set");
+    }
     MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
     this.moveBehavior = _moveBehavior;
     Anchors _createAnchors = this.createAnchors();
@@ -245,6 +252,9 @@ public class XNode extends XShape {
     }
     return _xifexpression;
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XNode");
+    ;
   
   private final static double DEFAULT_WIDTH = 0d;
   

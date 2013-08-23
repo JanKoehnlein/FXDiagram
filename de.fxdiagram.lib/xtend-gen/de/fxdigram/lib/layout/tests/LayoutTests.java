@@ -8,7 +8,6 @@ import de.fxdiagram.lib.simple.SimpleNode;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -75,23 +74,13 @@ public class LayoutTests extends Application {
       public void apply(final XDiagram it) {
         it.activate();
         ObservableList<XNode> _nodes = it.getNodes();
-        final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-          public void apply(final StackPane it) {
-            ObservableList<Node> _children = it.getChildren();
-            Group _group = new Group();
-            final Procedure1<Group> _function = new Procedure1<Group>() {
-              public void apply(final Group it) {
-                ObservableList<Node> _children = it.getChildren();
-                _children.add(LayoutTests.this.nestedDiagram);
-              }
-            };
-            Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-            _children.add(_doubleArrow);
+        XNode _xNode = new XNode();
+        final Procedure1<XNode> _function = new Procedure1<XNode>() {
+          public void apply(final XNode it) {
           }
         };
-        StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(rectangleBorderPane, _function);
-        XNode _xNode = new XNode(_doubleArrow);
-        _nodes.add(_xNode);
+        XNode _doubleArrow = ObjectExtensions.<XNode>operator_doubleArrow(_xNode, _function);
+        _nodes.add(_doubleArrow);
         LayoutTests.this.nestedDiagram.activate();
       }
     };

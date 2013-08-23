@@ -9,9 +9,9 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.anchors.AbstractArrowHead;
+import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
-import de.fxdiagram.core.anchors.DefaultArrowHead;
+import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -101,8 +101,8 @@ public class XConnection extends XShape {
     }
     ConnectionRouter _connectionRouter = new ConnectionRouter(this);
     this.connectionRouter = _connectionRouter;
-    DefaultArrowHead _defaultArrowHead = new DefaultArrowHead(this, false);
-    this.setTargetArrowHead(_defaultArrowHead);
+    TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
+    this.setTargetArrowHead(_triangleArrowHead);
   }
   
   public void doActivate() {
@@ -461,11 +461,11 @@ public class XConnection extends XShape {
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       _label.place(_controlPoints);
     }
-    AbstractArrowHead _sourceArrowHead = this.getSourceArrowHead();
+    ArrowHead _sourceArrowHead = this.getSourceArrowHead();
     if (_sourceArrowHead!=null) {
       _sourceArrowHead.place();
     }
-    AbstractArrowHead _targetArrowHead = this.getTargetArrowHead();
+    ArrowHead _targetArrowHead = this.getTargetArrowHead();
     if (_targetArrowHead!=null) {
       _targetArrowHead.place();
     }
@@ -741,31 +741,31 @@ public class XConnection extends XShape {
     return this.labelProperty;
   }
   
-  private SimpleObjectProperty<AbstractArrowHead> sourceArrowHeadProperty = new SimpleObjectProperty<AbstractArrowHead>(this, "sourceArrowHead");
+  private SimpleObjectProperty<ArrowHead> sourceArrowHeadProperty = new SimpleObjectProperty<ArrowHead>(this, "sourceArrowHead");
   
-  public AbstractArrowHead getSourceArrowHead() {
+  public ArrowHead getSourceArrowHead() {
     return this.sourceArrowHeadProperty.get();
   }
   
-  public void setSourceArrowHead(final AbstractArrowHead sourceArrowHead) {
+  public void setSourceArrowHead(final ArrowHead sourceArrowHead) {
     this.sourceArrowHeadProperty.set(sourceArrowHead);
   }
   
-  public ObjectProperty<AbstractArrowHead> sourceArrowHeadProperty() {
+  public ObjectProperty<ArrowHead> sourceArrowHeadProperty() {
     return this.sourceArrowHeadProperty;
   }
   
-  private SimpleObjectProperty<AbstractArrowHead> targetArrowHeadProperty = new SimpleObjectProperty<AbstractArrowHead>(this, "targetArrowHead");
+  private SimpleObjectProperty<ArrowHead> targetArrowHeadProperty = new SimpleObjectProperty<ArrowHead>(this, "targetArrowHead");
   
-  public AbstractArrowHead getTargetArrowHead() {
+  public ArrowHead getTargetArrowHead() {
     return this.targetArrowHeadProperty.get();
   }
   
-  public void setTargetArrowHead(final AbstractArrowHead targetArrowHead) {
+  public void setTargetArrowHead(final ArrowHead targetArrowHead) {
     this.targetArrowHeadProperty.set(targetArrowHead);
   }
   
-  public ObjectProperty<AbstractArrowHead> targetArrowHeadProperty() {
+  public ObjectProperty<ArrowHead> targetArrowHeadProperty() {
     return this.targetArrowHeadProperty;
   }
   

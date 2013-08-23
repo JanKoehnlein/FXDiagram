@@ -1,5 +1,7 @@
 package de.fxdiagram.lib.simple;
 
+import com.google.common.base.Objects;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -14,6 +16,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
 import eu.hansolo.enzo.radialmenu.Symbol.Type;
 import eu.hansolo.enzo.radialmenu.SymbolCanvas;
+import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -42,6 +45,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@Logging
 @SuppressWarnings("all")
 public class OpenableDiagramNode extends XNode {
   private XDiagram nestedDiagram;
@@ -86,8 +90,7 @@ public class OpenableDiagramNode extends XNode {
     this._transitionDelay = transitionDelay;
   }
   
-  public OpenableDiagramNode(final String name, final XDiagram nestedDiagram) {
-    this.nestedDiagram = nestedDiagram;
+  public OpenableDiagramNode(final String name) {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -113,6 +116,11 @@ public class OpenableDiagramNode extends XNode {
     this.setCursor(Cursor.HAND);
   }
   
+  public XDiagram setInnerDiagram(final XDiagram nestedDiagram) {
+    XDiagram _nestedDiagram = this.nestedDiagram = nestedDiagram;
+    return _nestedDiagram;
+  }
+  
   public Anchors createAnchors() {
     RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
     return _roundedRectangleAnchors;
@@ -122,17 +130,22 @@ public class OpenableDiagramNode extends XNode {
     super.doActivate();
     XRoot _root = CoreExtensions.getRoot(this);
     this.root = _root;
-    Node _node = this.getNode();
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      public void handle(final MouseEvent it) {
-        int _clickCount = it.getClickCount();
-        boolean _equals = (_clickCount == 2);
-        if (_equals) {
-          OpenableDiagramNode.this.openDiagram();
+    boolean _equals = Objects.equal(this.nestedDiagram, null);
+    if (_equals) {
+      OpenableDiagramNode.LOG.severe("Nested diagram not set. Deactivating open behavior");
+    } else {
+      Node _node = this.getNode();
+      final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+        public void handle(final MouseEvent it) {
+          int _clickCount = it.getClickCount();
+          boolean _equals = (_clickCount == 2);
+          if (_equals) {
+            OpenableDiagramNode.this.openDiagram();
+          }
         }
-      }
-    };
-    _node.setOnMouseClicked(_function);
+      };
+      _node.setOnMouseClicked(_function);
+    }
   }
   
   protected ParallelTransition openDiagram() {
@@ -355,4 +368,7 @@ public class OpenableDiagramNode extends XNode {
     }
     return _xblockexpression;
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.lib.simple.OpenableDiagramNode");
+    ;
 }

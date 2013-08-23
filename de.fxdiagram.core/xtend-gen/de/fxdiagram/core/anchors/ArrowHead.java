@@ -14,19 +14,24 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
 @SuppressWarnings("all")
-public abstract class AbstractArrowHead extends Parent {
+public abstract class ArrowHead extends Parent {
   private Node node;
   
   private XConnection connection;
   
   private boolean isSource;
   
-  public AbstractArrowHead(final XConnection connection, final Node node, final boolean isSource) {
+  public ArrowHead(final XConnection connection, final Node node, final boolean isSource) {
     this.connection = connection;
     this.node = node;
     ObservableList<Node> _children = this.getChildren();
     _children.add(node);
     this.isSource = isSource;
+    if (isSource) {
+      connection.setSourceArrowHead(this);
+    } else {
+      connection.setTargetArrowHead(this);
+    }
   }
   
   public double getLineCut() {
@@ -119,6 +124,6 @@ public abstract class AbstractArrowHead extends Parent {
     double _y_1 = pos.getY();
     TransformExtensions.translate(trafo, _x_1, _y_1);
     ObservableList<Transform> _transforms_1 = this.getTransforms();
-    _transforms_1.setAll(trafo);
+    _transforms_1.add(trafo);
   }
 }

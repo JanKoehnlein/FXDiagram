@@ -1,6 +1,5 @@
 package de.fxdiagram.core.layout.tests;
 
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.debug.Debug;
 import de.fxdiagram.core.layout.tests.GroupWithFixedSize;
 import javafx.application.Application;
@@ -95,71 +94,6 @@ public class UnderstandigLayout extends Application {
           }
         };
         Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    final StackPane stackPane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
-    int _minus = (-1);
-    double _minWidth = stackPane.minWidth(_minus);
-    Assert.assertEquals(1, _minWidth, UnderstandigLayout.EPS);
-    int _minus_1 = (-1);
-    double _minHeight = stackPane.minHeight(_minus_1);
-    Assert.assertEquals(2, _minHeight, UnderstandigLayout.EPS);
-    int _minus_2 = (-1);
-    double _prefWidth = stackPane.prefWidth(_minus_2);
-    Assert.assertEquals(1, _prefWidth, UnderstandigLayout.EPS);
-    int _minus_3 = (-1);
-    double _prefHeight = stackPane.prefHeight(_minus_3);
-    Assert.assertEquals(2, _prefHeight, UnderstandigLayout.EPS);
-    int _minus_4 = (-1);
-    double _maxWidth = stackPane.maxWidth(_minus_4);
-    Assert.assertEquals(Double.MAX_VALUE, _maxWidth, UnderstandigLayout.EPS);
-    int _minus_5 = (-1);
-    double _maxHeight = stackPane.maxHeight(_minus_5);
-    Assert.assertEquals(Double.MAX_VALUE, _maxHeight, UnderstandigLayout.EPS);
-    double _minWidth_1 = stackPane.minWidth(10);
-    Assert.assertEquals(1, _minWidth_1, UnderstandigLayout.EPS);
-    double _minHeight_1 = stackPane.minHeight(10);
-    Assert.assertEquals(2, _minHeight_1, UnderstandigLayout.EPS);
-    double _prefWidth_1 = stackPane.prefWidth(10);
-    Assert.assertEquals(1, _prefWidth_1, UnderstandigLayout.EPS);
-    double _prefHeight_1 = stackPane.prefHeight(10);
-    Assert.assertEquals(2, _prefHeight_1, UnderstandigLayout.EPS);
-    double _maxWidth_1 = stackPane.maxWidth(10);
-    Assert.assertEquals(Double.MAX_VALUE, _maxWidth_1, UnderstandigLayout.EPS);
-    double _maxHeight_1 = stackPane.maxHeight(10);
-    Assert.assertEquals(Double.MAX_VALUE, _maxHeight_1, UnderstandigLayout.EPS);
-    stackPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-    int _minus_6 = (-1);
-    double _maxWidth_2 = stackPane.maxWidth(_minus_6);
-    Assert.assertEquals(1, _maxWidth_2, UnderstandigLayout.EPS);
-    int _minus_7 = (-1);
-    double _maxHeight_2 = stackPane.maxHeight(_minus_7);
-    Assert.assertEquals(2, _maxHeight_2, UnderstandigLayout.EPS);
-    double _maxWidth_3 = stackPane.maxWidth(10);
-    Assert.assertEquals(1, _maxWidth_3, UnderstandigLayout.EPS);
-    double _maxHeight_3 = stackPane.maxHeight(10);
-    Assert.assertEquals(2, _maxHeight_3, UnderstandigLayout.EPS);
-  }
-  
-  @Test
-  public void stackPaneWithAnXNodeSizes() {
-    StackPane _stackPane = new StackPane();
-    final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-      public void apply(final StackPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        Rectangle _rectangle = new Rectangle();
-        XNode _xNode = new XNode(_rectangle);
-        final Procedure1<XNode> _function = new Procedure1<XNode>() {
-          public void apply(final XNode it) {
-            it.setWidth(1);
-            it.setHeight(2);
-            int _minus = (-3);
-            int _minus_1 = (-4);
-            it.relocate(_minus, _minus_1);
-          }
-        };
-        XNode _doubleArrow = ObjectExtensions.<XNode>operator_doubleArrow(_xNode, _function);
         _children.add(_doubleArrow);
       }
     };

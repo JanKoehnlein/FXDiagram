@@ -57,6 +57,7 @@ class JavaTypeNode extends XNode {
 	def setJavaType(Class<?> javaType) {
 		this.javaType = javaType
 		name.text = javaType.simpleName
+		key = javaType.simpleName
 		model = new JavaTypeModel(javaType)
 		propertyCompartment.children.clear
 		operationCompartment.children.clear

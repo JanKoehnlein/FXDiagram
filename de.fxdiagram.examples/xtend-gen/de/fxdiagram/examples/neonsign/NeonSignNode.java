@@ -35,6 +35,7 @@ public class NeonSignNode extends XNode {
   private Text neonText;
   
   public NeonSignNode() {
+    super("Neon Sign");
     FlipNode _flipNode = new FlipNode();
     final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
       public void apply(final FlipNode it) {
@@ -46,7 +47,8 @@ public class NeonSignNode extends XNode {
             final Procedure1<Text> _function = new Procedure1<Text>() {
               public void apply(final Text it) {
                 it.setTextOrigin(VPos.TOP);
-                it.setText("Neon Sign");
+                String _key = NeonSignNode.this.getKey();
+                it.setText(_key);
                 Insets _insets = new Insets(10, 20, 10, 20);
                 StackPane.setMargin(it, _insets);
               }

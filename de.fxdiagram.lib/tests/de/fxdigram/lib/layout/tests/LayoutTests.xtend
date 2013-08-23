@@ -6,7 +6,6 @@ import de.fxdiagram.core.XRoot
 import de.fxdiagram.lib.simple.DiagramScaler
 import de.fxdiagram.lib.simple.SimpleNode
 import javafx.application.Application
-import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.layout.StackPane
@@ -44,11 +43,14 @@ class LayoutTests extends Application {
 		diagram => [
 			activate
 			nodes += 
-				new XNode(rectangleBorderPane => [
-					children += new Group => [ // why the hell is this additional group necessary
-						children += nestedDiagram
-					]
-				])
+				new XNode() => [
+//					node = rectangleBorderPane => [
+//						children += new Group => [ // why the hell is this additional group necessary
+//							children += nestedDiagram
+//						]
+//					]
+				]
+				
 			nestedDiagram.activate
 		]
 		stage.show

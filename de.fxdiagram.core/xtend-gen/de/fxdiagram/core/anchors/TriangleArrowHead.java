@@ -1,7 +1,7 @@
 package de.fxdiagram.core.anchors;
 
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.anchors.AbstractArrowHead;
+import de.fxdiagram.core.anchors.ArrowHead;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
@@ -14,16 +14,19 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class DefaultArrowHead extends AbstractArrowHead {
-  public DefaultArrowHead(final XConnection connection, final boolean isSource) {
+public class TriangleArrowHead extends ArrowHead {
+  public TriangleArrowHead(final XConnection connection, final double width, final double height, final Paint fill, final boolean isSource) {
     super(connection, new Function0<Node>() {
       public Node apply() {
         Polygon _polygon = new Polygon();
         final Procedure1<Polygon> _function = new Procedure1<Polygon>() {
           public void apply(final Polygon it) {
             ObservableList<Double> _points = it.getPoints();
-            double _minus = (-5.0);
-            _points.setAll(new Double[] { Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(5.0), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(5.0) });
+            double _minus = (-0.5);
+            double _multiply = (_minus * height);
+            double _multiply_1 = (0.5 * height);
+            _points.setAll(new Double[] { Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1) });
+            it.setFill(fill);
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
             ObjectProperty<Paint> _strokeProperty_1 = connection.strokeProperty();
             _strokeProperty.bind(_strokeProperty_1);
@@ -35,6 +38,15 @@ public class DefaultArrowHead extends AbstractArrowHead {
         };
         Polygon _doubleArrow = ObjectExtensions.<Polygon>operator_doubleArrow(_polygon, _function);
         return _doubleArrow;
+      }
+    }.apply(), isSource);
+  }
+  
+  public TriangleArrowHead(final XConnection connection, final boolean isSource) {
+    this(connection, 5, 10, new Function0<Paint>() {
+      public Paint apply() {
+        Paint _stroke = connection.getStroke();
+        return _stroke;
       }
     }.apply(), isSource);
   }

@@ -31,11 +31,12 @@ class NeonSignNode extends XNode {
 	Text neonText
 
 	new() {
+		super('Neon Sign')
 		node = new FlipNode => [
 			front = new RectangleBorderPane => [
 				children += new Text => [
 					textOrigin = VPos.TOP
-					text = 'Neon Sign'
+					text = key
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
 			]

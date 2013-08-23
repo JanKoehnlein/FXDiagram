@@ -4,8 +4,6 @@ import de.fxdiagram.core.XConnection
 import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.Parent
-import javafx.scene.shape.Polygon
-import javafx.scene.shape.StrokeType
 import javafx.scene.transform.Affine
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
@@ -14,7 +12,7 @@ import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
-abstract class AbstractArrowHead extends Parent {
+abstract class ArrowHead extends Parent {
 	
 	Node node
 	
@@ -27,6 +25,10 @@ abstract class AbstractArrowHead extends Parent {
 		this.node = node
 		children += node
 		this.isSource = isSource
+		if(isSource)
+			connection.sourceArrowHead = this
+		else 
+			connection.targetArrowHead = this
 	}
 	
 	def getLineCut() {
@@ -64,23 +66,7 @@ abstract class AbstractArrowHead extends Parent {
 		trafo.rotate(angle)
 		val pos = connection.at(t)
 		trafo.translate(pos.x, pos.y)
-		transforms.setAll(trafo)
+		transforms += trafo
 	}
 }
 
-class DefaultArrowHead extends AbstractArrowHead {
-	
-	new(XConnection connection, boolean isSource) {
-		super(connection, new Polygon => [
-			points.setAll(#[0.0, -5.0, 5.0, 0.0, 0.0, 5.0])
-			strokeProperty.bind(connection.strokeProperty)
-			strokeWidthProperty.bind(connection.strokeWidthProperty)
-			strokeType = StrokeType.CENTERED
-		], isSource)
-	}
-	
-	override getLineCut() {
-		5 + connection.strokeWidth
-	}
-	
-}
