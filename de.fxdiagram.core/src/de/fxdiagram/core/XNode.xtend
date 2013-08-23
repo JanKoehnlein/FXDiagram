@@ -144,5 +144,4 @@ class XNode extends XShape {
 		else
 			super.maxHeight(width)
 	}
-
 }

@@ -18,7 +18,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -41,8 +40,6 @@ public class ConnectionRouter implements XActivatable {
   
   private ChangeListener<Number> scalarListener;
   
-  private ChangeListener<Bounds> boundsListener;
-  
   public ConnectionRouter(final XConnection connection) {
     this.connection = connection;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
@@ -51,12 +48,6 @@ public class ConnectionRouter implements XActivatable {
       }
     };
     this.scalarListener = _function;
-    final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
-      public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-        connection.requestLayout();
-      }
-    };
-    this.boundsListener = _function_1;
   }
   
   public void activate() {
@@ -76,8 +67,6 @@ public class ConnectionRouter implements XActivatable {
     boolean _dowhile = false;
     do {
       {
-        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = current.boundsInLocalProperty();
-        _boundsInLocalProperty.addListener(this.boundsListener);
         DoubleProperty _layoutXProperty = current.layoutXProperty();
         _layoutXProperty.addListener(this.scalarListener);
         DoubleProperty _layoutYProperty = current.layoutYProperty();

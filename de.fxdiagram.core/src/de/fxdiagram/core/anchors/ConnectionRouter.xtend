@@ -9,7 +9,6 @@ import de.fxdiagram.core.XNode
 import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
 
@@ -27,12 +26,10 @@ class ConnectionRouter implements XActivatable {
 	XConnection connection
 
 	ChangeListener<Number> scalarListener  
-	ChangeListener<Bounds> boundsListener
 	
 	new(XConnection connection) {
 		this.connection = connection
 		scalarListener = [ prop, oldVal, newVal | connection.requestLayout ]
-		boundsListener = [ prop, oldVal, newVal | connection.requestLayout ]
 	}
 	
 	override activate() {
@@ -46,7 +43,6 @@ class ConnectionRouter implements XActivatable {
 	protected def bindNode(XNode host) {
 		var Node current = host.node
 		do {
-			current.boundsInLocalProperty.addListener(boundsListener)
 			current.layoutXProperty.addListener(scalarListener)
 			current.layoutYProperty.addListener(scalarListener)
 			current.scaleXProperty.addListener(scalarListener)
@@ -117,7 +113,7 @@ class ConnectionRouter implements XActivatable {
 		}
 	}
 	
-	def calculatePoints() {
+	def void calculatePoints() {
 		val anchors = findClosestAnchors
 		val sourcePoint = anchors.key
 		val targetPoint = anchors.value
