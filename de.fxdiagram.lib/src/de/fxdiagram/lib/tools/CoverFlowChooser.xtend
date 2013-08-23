@@ -12,10 +12,6 @@ import javafx.scene.transform.Affine
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
-import javafx.scene.effect.Blend
-import javafx.scene.effect.ColorInput
-import javafx.scene.effect.BlendMode
-import javafx.scene.paint.Color
 
 class CoverFlowChooser extends AbstractXNodeChooser {
 
