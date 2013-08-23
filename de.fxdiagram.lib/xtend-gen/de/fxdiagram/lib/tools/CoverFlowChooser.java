@@ -1,5 +1,7 @@
 package de.fxdiagram.lib.tools;
 
+import com.google.common.base.Objects;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.tools.AbstractXNodeChooser;
@@ -11,6 +13,8 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Reflection;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
@@ -142,70 +146,94 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
     }
   }
   
-  protected void transformNode(final int i, final double interpolatedPosition, final boolean isLeft, final double fraction) {
+  protected XNode transformNode(final int i, final double interpolatedPosition, final boolean isLeft, final double fraction) {
+    XNode _xifexpression = null;
     boolean _greaterEqualsThan = (i >= 0);
     if (_greaterEqualsThan) {
-      ArrayList<XNode> _nodes = this.getNodes();
-      final XNode node = _nodes.get(i);
-      double _minus = (i - interpolatedPosition);
-      final double distanceFromSelection = Math.abs(_minus);
-      double _multiply = (0.2 * distanceFromSelection);
-      final double opacity = (1 - _multiply);
-      boolean _lessThan = (opacity < 0);
-      if (_lessThan) {
-        node.setVisible(false);
-      } else {
-        node.setVisible(true);
-        Affine _affine = new Affine();
-        final Affine trafo = _affine;
-        int _xifexpression = (int) 0;
-        if (isLeft) {
-          int _minus_1 = (-1);
-          _xifexpression = _minus_1;
+      XNode _xblockexpression = null;
+      {
+        ArrayList<XNode> _nodes = this.getNodes();
+        final XNode node = _nodes.get(i);
+        double _minus = (i - interpolatedPosition);
+        final double distanceFromSelection = Math.abs(_minus);
+        double _multiply = (0.2 * distanceFromSelection);
+        final double opacity = (1 - _multiply);
+        XNode _xifexpression_1 = null;
+        boolean _lessThan = (opacity < 0);
+        if (_lessThan) {
+          node.setVisible(false);
         } else {
-          _xifexpression = 1;
-        }
-        final int direction = _xifexpression;
-        ObservableList<Transform> _transforms = node.getTransforms();
-        _transforms.clear();
-        double _minus_2 = (-0.5);
-        Bounds _layoutBounds = node.getLayoutBounds();
-        double _width = _layoutBounds.getWidth();
-        double _multiply_1 = (_minus_2 * _width);
-        double _minus_3 = (-0.5);
-        Bounds _layoutBounds_1 = node.getLayoutBounds();
-        double _height = _layoutBounds_1.getHeight();
-        double _multiply_2 = (_minus_3 * _height);
-        TransformExtensions.translate(trafo, _multiply_1, _multiply_2, 0);
-        double _angle = this.getAngle();
-        double _multiply_3 = (direction * _angle);
-        double _multiply_4 = (_multiply_3 * fraction);
-        Point3D _point3D = new Point3D(0, 1, 0);
-        TransformExtensions.rotate(trafo, _multiply_4, _point3D);
-        double _minus_4 = (i - interpolatedPosition);
-        double _deltaX = this.getDeltaX();
-        double _multiply_5 = (_minus_4 * _deltaX);
-        double _multiply_6 = (0.5 * fraction);
-        double _multiply_7 = (_multiply_6 * direction);
-        double _multiply_8 = (_multiply_7 * this.gap);
-        double _plus = (_multiply_5 + _multiply_8);
-        double _minus_5 = (-fraction);
-        TransformExtensions.translate(trafo, _plus, 0, _minus_5);
-        ObservableList<Transform> _transforms_1 = node.getTransforms();
-        _transforms_1.add(trafo);
-        node.toFront();
-        ColorAdjust _colorAdjust = new ColorAdjust();
-        final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
-          public void apply(final ColorAdjust it) {
-            double _minus = (1 - opacity);
-            it.setBrightness(_minus);
-            Reflection _reflection = new Reflection();
-            it.setInput(_reflection);
+          XNode _xblockexpression_1 = null;
+          {
+            node.setVisible(true);
+            Affine _affine = new Affine();
+            final Affine trafo = _affine;
+            int _xifexpression_2 = (int) 0;
+            if (isLeft) {
+              int _minus_1 = (-1);
+              _xifexpression_2 = _minus_1;
+            } else {
+              _xifexpression_2 = 1;
+            }
+            final int direction = _xifexpression_2;
+            double _minus_2 = (-0.5);
+            Bounds _layoutBounds = node.getLayoutBounds();
+            double _width = _layoutBounds.getWidth();
+            double _multiply_1 = (_minus_2 * _width);
+            double _minus_3 = (-0.5);
+            Bounds _layoutBounds_1 = node.getLayoutBounds();
+            double _height = _layoutBounds_1.getHeight();
+            double _multiply_2 = (_minus_3 * _height);
+            TransformExtensions.translate(trafo, _multiply_1, _multiply_2, 0);
+            double _angle = this.getAngle();
+            double _multiply_3 = (direction * _angle);
+            double _multiply_4 = (_multiply_3 * fraction);
+            Point3D _point3D = new Point3D(0, 1, 0);
+            TransformExtensions.rotate(trafo, _multiply_4, _point3D);
+            double _minus_4 = (i - interpolatedPosition);
+            double _deltaX = this.getDeltaX();
+            double _multiply_5 = (_minus_4 * _deltaX);
+            double _multiply_6 = (0.5 * fraction);
+            double _multiply_7 = (_multiply_6 * direction);
+            double _multiply_8 = (_multiply_7 * this.gap);
+            double _plus = (_multiply_5 + _multiply_8);
+            double _minus_5 = (-fraction);
+            TransformExtensions.translate(trafo, _plus, 0, _minus_5);
+            final Procedure1<XNode> _function = new Procedure1<XNode>() {
+              public void apply(final XNode it) {
+                ObservableList<Transform> _transforms = node.getTransforms();
+                _transforms.setAll(trafo);
+                node.toFront();
+                ColorAdjust _colorAdjust = new ColorAdjust();
+                final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
+                  public void apply(final ColorAdjust it) {
+                    XDiagram _diagram = CoverFlowChooser.this.getDiagram();
+                    Paint _backgroundPaint = _diagram.getBackgroundPaint();
+                    boolean _equals = Objects.equal(_backgroundPaint, Color.BLACK);
+                    if (_equals) {
+                      double _minus = (opacity - 1);
+                      it.setBrightness(_minus);
+                    } else {
+                      double _minus_1 = (1 - opacity);
+                      it.setBrightness(_minus_1);
+                    }
+                    Reflection _reflection = new Reflection();
+                    it.setInput(_reflection);
+                  }
+                };
+                ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function);
+                node.setEffect(_doubleArrow);
+              }
+            };
+            XNode _doubleArrow = ObjectExtensions.<XNode>operator_doubleArrow(node, _function);
+            _xblockexpression_1 = (_doubleArrow);
           }
-        };
-        ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function);
-        node.setEffect(_doubleArrow);
+          _xifexpression_1 = _xblockexpression_1;
+        }
+        _xblockexpression = (_xifexpression_1);
       }
+      _xifexpression = _xblockexpression;
     }
+    return _xifexpression;
   }
 }

@@ -11,6 +11,10 @@ import javafx.scene.transform.Affine
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
+import javafx.scene.effect.Blend
+import javafx.scene.effect.ColorInput
+import javafx.scene.effect.BlendMode
+import javafx.scene.paint.Color
 
 class CoverFlowChooser extends AbstractXNodeChooser {
 
@@ -61,15 +65,19 @@ class CoverFlowChooser extends AbstractXNodeChooser {
 				node.visible = true
 				val trafo = new Affine
 				val direction = if(isLeft) -1 else 1
-				node.transforms.clear
 				trafo.translate(-0.5 * node.layoutBounds.width, -0.5 * node.layoutBounds.height, 0)
 				trafo.rotate(direction * angle * fraction, new Point3D(0, 1, 0))
 				trafo.translate((i - interpolatedPosition) * deltaX + 0.5 * fraction * direction * gap, 0, -fraction)
-				node.transforms += trafo
-				node.toFront
-				node.effect = new ColorAdjust => [
-					brightness = 1 - opacity
-					input = new Reflection
+				node => [
+					node.transforms.setAll(trafo)
+					node.toFront
+					node.effect = new ColorAdjust => [
+						if(diagram.backgroundPaint == Color.BLACK)
+							brightness = opacity - 1
+						else 
+							brightness = 1 - opacity
+						input = new Reflection
+					]
 				]
 			}
 		}
