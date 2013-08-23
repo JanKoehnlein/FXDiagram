@@ -6,6 +6,7 @@ import javafx.geometry.Point3D
 import javafx.geometry.Pos
 import javafx.scene.effect.ColorAdjust
 import javafx.scene.effect.Reflection
+import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
 
 import static java.lang.Math.*
