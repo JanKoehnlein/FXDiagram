@@ -130,6 +130,10 @@ class CoreExtensions {
 	}
 	
 	def static Iterable<? extends Node> getAllChildren(Parent node) {
+		node.allChildrenInternal.toSet
+	}
+
+	protected def static Iterable<? extends Node> getAllChildrenInternal(Parent node) {
 		node.childrenUnmodifiable + node.childrenUnmodifiable.filter(Parent).map[allChildren].flatten
 	}
 

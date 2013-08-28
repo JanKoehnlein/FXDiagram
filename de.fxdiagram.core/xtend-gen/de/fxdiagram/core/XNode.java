@@ -60,6 +60,7 @@ public class XNode extends XShape {
   }
   
   public XNode(final String key) {
+    this();
     this.setKey(key);
   }
   

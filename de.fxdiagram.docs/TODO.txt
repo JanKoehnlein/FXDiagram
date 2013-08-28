@@ -1,7 +1,6 @@
 BUG
 - chooser isVertical
 - choose connections instead of nodes?
-- select all doesn't select all
 - all choices grayed out in chooser in nested diagram
 
 ENHANCEMENT
@@ -41,4 +40,5 @@ DONE
 - Open subdiagram
 - populate menu
 - change Cursor on FlipNode
+- select all doesn't select all
 

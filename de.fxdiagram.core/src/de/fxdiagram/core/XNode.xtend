@@ -42,6 +42,7 @@ class XNode extends XShape {
 	}
 
 	new(String key) {
+		this()
 		this.key = key
 	}
 

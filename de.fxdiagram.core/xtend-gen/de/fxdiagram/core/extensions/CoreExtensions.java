@@ -7,6 +7,7 @@ import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import java.util.Set;
 import javafx.collections.ObservableList;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
@@ -339,6 +340,12 @@ public class CoreExtensions {
   }
   
   public static Iterable<? extends Node> getAllChildren(final Parent node) {
+    Iterable<? extends Node> _allChildrenInternal = CoreExtensions.getAllChildrenInternal(node);
+    Set<? extends Node> _set = IterableExtensions.toSet(_allChildrenInternal);
+    return _set;
+  }
+  
+  protected static Iterable<? extends Node> getAllChildrenInternal(final Parent node) {
     ObservableList<Node> _childrenUnmodifiable = node.getChildrenUnmodifiable();
     ObservableList<Node> _childrenUnmodifiable_1 = node.getChildrenUnmodifiable();
     Iterable<Parent> _filter = Iterables.<Parent>filter(_childrenUnmodifiable_1, Parent.class);
