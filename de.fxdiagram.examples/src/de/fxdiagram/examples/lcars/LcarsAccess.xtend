@@ -3,6 +3,7 @@ package de.fxdiagram.examples.lcars
 import com.mongodb.BasicDBObject
 import com.mongodb.DB
 import com.mongodb.DBCollection
+import com.mongodb.DBObject
 import com.mongodb.Mongo
 
 class LcarsAccess {
@@ -20,8 +21,8 @@ class LcarsAccess {
 	}
 	
 	def query(String fieldName, Object fieldValue) {
-		lcars.find(new BasicDBObject => [
+		(lcars.find(new BasicDBObject => [
 			put(fieldName, fieldValue)
-		]).toList
+		]) as Iterable<DBObject>).toList
 	}
 }

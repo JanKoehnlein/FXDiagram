@@ -112,9 +112,8 @@ public class XConnection extends XShape {
       }
     };
     this.controlPointListener = _function;
-    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    final ListChangeListener<XControlPoint> _function_1 = new ListChangeListener<XControlPoint>() {
-      public void onChanged(final Change<? extends XControlPoint> it) {
+    final Procedure1<Change<? extends XControlPoint>> _function_1 = new Procedure1<Change<? extends XControlPoint>>() {
+      public void apply(final Change<? extends XControlPoint> it) {
         final ObservableList<? extends XControlPoint> points = it.getList();
         XConnection.this.updateShapes();
         boolean _next = it.next();
@@ -158,7 +157,13 @@ public class XConnection extends XShape {
         IterableExtensions.forEach(_removed, _function);
       }
     };
-    _controlPoints.addListener(_function_1);
+    final Procedure1<Change<? extends XControlPoint>> listChangeListener = _function_1;
+    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+    _controlPoints.addListener(new ListChangeListener<XControlPoint>() {
+        public void onChanged(Change<? extends XControlPoint> arg0) {
+          listChangeListener.apply(arg0);
+        }
+    });
     XConnectionLabel _label = this.getLabel();
     boolean _notEquals = (!Objects.equal(_label, null));
     if (_notEquals) {

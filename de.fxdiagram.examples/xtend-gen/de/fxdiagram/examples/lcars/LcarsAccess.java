@@ -42,7 +42,7 @@ public class LcarsAccess {
     };
     BasicDBObject _doubleArrow = ObjectExtensions.<BasicDBObject>operator_doubleArrow(_basicDBObject, _function);
     DBCursor _find = this.lcars.find(_doubleArrow);
-    List<DBObject> _list = IterableExtensions.<DBObject>toList(_find);
+    List<DBObject> _list = IterableExtensions.<DBObject>toList(((Iterable<DBObject>) _find));
     return _list;
   }
 }

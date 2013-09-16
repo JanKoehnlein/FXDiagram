@@ -7,8 +7,10 @@ import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.beans.binding.ObjectBinding
+import javafx.geometry.HPos
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
+import javafx.geometry.VPos
 import javafx.scene.Parent
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
@@ -108,13 +110,13 @@ class XRapidButton extends Parent implements XActivatable {
 		val hpos = if(placer.XPos < 0.25)
 				LEFT
 			else if (placer.XPos < 0.75)
-				CENTER
+				HPos.CENTER
 			else 
 				RIGHT		
 		val vpos = if(placer.YPos < 0.25)
 				TOP
 			else if (placer.YPos < 0.75)
-				CENTER
+				VPos.CENTER
 			else 
 				BOTTOM		
 		Pos.valueOf(vpos + '_' + hpos)

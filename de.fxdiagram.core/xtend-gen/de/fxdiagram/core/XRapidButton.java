@@ -204,23 +204,23 @@ public class XRapidButton extends Parent implements XActivatable {
         _xifexpression = _xifexpression_1;
       }
       final HPos hpos = _xifexpression;
-      Enum<? extends Object> _xifexpression_2 = null;
+      VPos _xifexpression_2 = null;
       double _yPos = this.placer.getYPos();
       boolean _lessThan_2 = (_yPos < 0.25);
       if (_lessThan_2) {
         _xifexpression_2 = VPos.TOP;
       } else {
-        Enum<? extends Object> _xifexpression_3 = null;
+        VPos _xifexpression_3 = null;
         double _yPos_1 = this.placer.getYPos();
         boolean _lessThan_3 = (_yPos_1 < 0.75);
         if (_lessThan_3) {
-          _xifexpression_3 = HPos.CENTER;
+          _xifexpression_3 = VPos.CENTER;
         } else {
           _xifexpression_3 = VPos.BOTTOM;
         }
         _xifexpression_2 = _xifexpression_3;
       }
-      final Enum<? extends Object> vpos = _xifexpression_2;
+      final VPos vpos = _xifexpression_2;
       String _plus = (vpos + "_");
       String _plus_1 = (_plus + hpos);
       Pos _valueOf = Pos.valueOf(_plus_1);

@@ -15,6 +15,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class TriangleArrowHead extends ArrowHead {
+  private double width;
+  
   public TriangleArrowHead(final XConnection connection, final double width, final double height, final Paint fill, final boolean isSource) {
     super(connection, new Function0<Node>() {
       public Node apply() {
@@ -40,6 +42,7 @@ public class TriangleArrowHead extends ArrowHead {
         return _doubleArrow;
       }
     }.apply(), isSource);
+    this.width = width;
   }
   
   public TriangleArrowHead(final XConnection connection, final boolean isSource) {
@@ -54,7 +57,7 @@ public class TriangleArrowHead extends ArrowHead {
   public double getLineCut() {
     XConnection _connection = this.getConnection();
     double _strokeWidth = _connection.getStrokeWidth();
-    double _plus = (5 + _strokeWidth);
+    double _plus = (this.width + _strokeWidth);
     return _plus;
   }
 }

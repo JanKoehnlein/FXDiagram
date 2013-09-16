@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
 import javafx.beans.value.ChangeListener
 import javafx.collections.ListChangeListener
+import javafx.collections.ListChangeListener.Change
 import javafx.collections.ObservableList
 import javafx.scene.Group
 import javafx.scene.Node
@@ -69,8 +70,9 @@ class XDiagram extends Group implements XActivatable {
 		nodes.addListener(new XDiagramChildrenListener<XNode>(this, nodeLayer))
 		connections.addListener(new XDiagramChildrenListener<XConnection>(this, connectionLayer))
 		buttons.addListener(new XDiagramChildrenListener<XRapidButton>(this, buttonLayer))
-		connectionLayer.children.addListener [
-			ListChangeListener.Change<? extends Node> change |
+		// Xtend bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=410990
+		val listChangeListener = [
+			Change<? extends Node> change | 
 			while(change.next) {
 				if(change.wasAdded) {
 					val addedConnections = change.addedSubList.filter(XConnection)
@@ -90,6 +92,7 @@ class XDiagram extends Group implements XActivatable {
 				}
 			}
 		]
+		connectionLayer.children.addListener(listChangeListener)
 		(nodes + connections + buttons).forEach[activate]
 		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
 		contentsInitializer?.apply(this)

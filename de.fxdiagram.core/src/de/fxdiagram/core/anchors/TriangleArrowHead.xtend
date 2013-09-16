@@ -7,6 +7,8 @@ import javafx.scene.paint.Paint
 
 class TriangleArrowHead extends ArrowHead {
 	
+	double width 
+	
 	new(XConnection connection, double width, double height, Paint fill, boolean isSource) {
 		super(connection, new Polygon => [
 			points.setAll(#[0.0, -0.5 * height, width, 0.0, 0.0, 0.5 * height])
@@ -15,6 +17,7 @@ class TriangleArrowHead extends ArrowHead {
 			strokeWidthProperty.bind(connection.strokeWidthProperty)
 			strokeType = StrokeType.CENTERED
 		], isSource)
+		this.width = width
 	}
 	
 	new(XConnection connection, boolean isSource) {
@@ -22,7 +25,7 @@ class TriangleArrowHead extends ArrowHead {
 	}
 	
 	override getLineCut() {
-		5 + connection.strokeWidth
+		width + connection.strokeWidth
 	}
 	
 }

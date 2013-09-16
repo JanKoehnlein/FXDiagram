@@ -7,6 +7,7 @@ import de.fxdiagram.core.anchors.ConnectionRouter
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import java.util.List
 import javafx.beans.value.ChangeListener
+import javafx.collections.ListChangeListener.Change
 import javafx.geometry.BoundingBox
 import javafx.geometry.Point2D
 import javafx.scene.Group
@@ -62,7 +63,9 @@ class XConnection extends XShape {
 		controlPointListener = [ prop, oldVal, newVal |
 			updateShapes
 		]
-		controlPoints.addListener [
+		// Xtend bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=410990
+		val listChangeListener = [ 
+			Change<? extends XControlPoint> it | 
 			val points = list
 			updateShapes
 			while(next) 
@@ -78,6 +81,7 @@ class XConnection extends XShape {
 					layoutYProperty.removeListener(controlPointListener)
 				]
 		]
+		controlPoints.addListener(listChangeListener)
 		if(label != null)
 			label.activate
 		connectionRouter.activate
