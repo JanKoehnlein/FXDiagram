@@ -18,6 +18,7 @@ import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.
 class BrickBreakerNode extends XNode {
 
 	new() {
+		super('BrickBreaker')
 		node = new FlipNode => [
 			front = new RectangleBorderPane => [
 				children += new Text => [
@@ -35,7 +36,6 @@ class BrickBreakerNode extends XNode {
 			]
 			flipOnDoubleClick = true
 		]
-		key = 'BrickBreaker'
 	}
 
 	def createRoot() {

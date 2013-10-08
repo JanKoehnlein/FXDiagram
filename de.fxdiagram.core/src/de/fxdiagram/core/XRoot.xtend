@@ -77,7 +77,8 @@ class XRoot extends Parent implements XActivatable {
 			diagramScale = sqrt(diagramTransform.mxx * diagramTransform.mxx + diagramTransform.mxy * diagramTransform.mxy)
 		}
 		diagramCanvas.style = '''
-			-fx-background-color: «diagram.backgroundPaint.toCss»;'
+			-fx-background-color: «diagram.backgroundPaint.toCss»;
+			-fx-text-fill: «diagram.foregroundPaint.toCss»;
 		'''
 		diagram.transforms.setAll(diagramTransform)
 	}

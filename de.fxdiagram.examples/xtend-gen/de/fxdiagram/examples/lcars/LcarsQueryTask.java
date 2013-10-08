@@ -43,6 +43,7 @@ public class LcarsQueryTask extends Task<Void> {
       final LcarsNode lcarsNode = this.host.getLcarsNode();
       CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER);
       final CoverFlowChooser chooser = _coverFlowChooser;
+      chooser.setConnectionLabel(this.fieldValue);
       final Function1<DBObject,Boolean> _function = new Function1<DBObject,Boolean>() {
         public Boolean apply(final DBObject it) {
           Object _get = it.get("_id");

@@ -33,12 +33,6 @@ public class StringExpressionExtensions {
     return _equals;
   }
   
-  public static boolean operator_equals(final String left, final StringExpression right) {
-    String _value = right.getValue();
-    boolean _equals = Objects.equal(left, _value);
-    return _equals;
-  }
-  
   public static boolean operator_equals(final StringExpression left, final String right) {
     String _value = left.getValue();
     boolean _equals = Objects.equal(_value, right);
@@ -49,12 +43,6 @@ public class StringExpressionExtensions {
     String _value = left.getValue();
     String _value_1 = right.getValue();
     boolean _notEquals = (!Objects.equal(_value, _value_1));
-    return _notEquals;
-  }
-  
-  public static boolean operator_notEquals(final String left, final StringExpression right) {
-    String _value = right.getValue();
-    boolean _notEquals = (!Objects.equal(left, _value));
     return _notEquals;
   }
   

@@ -27,6 +27,7 @@ import static java.lang.Math.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.XConnectionLabel
 
 abstract class AbstractXNodeChooser implements XDiagramTool {
 
@@ -47,6 +48,8 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	Group group = new Group
 
 	val nodeMap = <String, XNode>newLinkedHashMap
+
+	String connectionLabel
 
 	ChangeListener<Number> positionListener
 
@@ -149,8 +152,8 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	}
 
 	def operator_add(XNode node) {
-		if (!nodeMap.containsKey(node.getKey)) {
-			nodeMap.put(node.getKey, node)
+		if (!nodeMap.containsKey(node.key)) {
+			nodeMap.put(node.key, node)
 			node.layout
 			calculateVisibleNodes
 			group.children += node
@@ -165,7 +168,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	}
 
 	def operator_remove(XNode node) {
-		if (nodeMap.remove(node.getKey) != null) {
+		if (nodeMap.remove(node.key) != null) {
 			group.children += node
 			visibleNodes.remove(node)
 			calculateVisibleNodes
@@ -178,15 +181,19 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	def operator_remove(Iterable<XNode> nodes) {
 		nodes.map[this -= it].reduce[a, b|a || b]
 	}
+	
+	def void setConnectionLabel(String connectionLabel) {
+		this.connectionLabel = connectionLabel
+	}
 
 	override activate() {
 		if (getIsActive || getNodes.empty)
 			return false
 		isActiveProperty.set(true)
-		getDiagram.getButtonLayer.children += group
+		diagram.buttonLayer.children += group
 		if (minusButton != null) {
-			getDiagram.getButtonLayer.children += plusButton
-			getDiagram.getButtonLayer.children += minusButton
+			diagram.buttonLayer.children += plusButton
+			diagram.buttonLayer.children += minusButton
 			val ChangeListener<Bounds> relocateButtons_0 = [ prop, oldVal, newVal |
 				relocateButtons(minusButton, plusButton)
 			]
@@ -221,13 +228,16 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 				}
 			]
 		]
-		getDiagram.scene.addEventHandler(SwipeEvent.ANY, swipeHandler)
-		getDiagram.scene.addEventHandler(ScrollEvent.ANY, scrollHandler)
-		getDiagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
+		diagram.scene.addEventHandler(SwipeEvent.ANY, swipeHandler)
+		diagram.scene.addEventHandler(ScrollEvent.ANY, scrollHandler)
+		diagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		currentPositionProperty.addListener(positionListener)
 		filterStringProperty.addListener(filterChangeListener)
 		host.root.headsUpDisplay.add(filterLabel, Pos.BOTTOM_LEFT)
-		filterLabel.toFront
+		filterLabel => [
+			textFill = diagram.foregroundPaint
+			toFront
+		]
 		true
 	}
 
@@ -236,41 +246,50 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			return false
 		host.root.headsUpDisplay.children -= filterLabel
 		isActiveProperty.set(false)
-		getDiagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
-		getDiagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)
-		getDiagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)
+		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
+		diagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)
+		diagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)
 		spinToPosition.stop
 		blurDiagram = false
 		if (minusButton != null) {
-			getDiagram.getButtonLayer.children -= minusButton
-			getDiagram.getButtonLayer.children -= plusButton
+			diagram.buttonLayer.children -= minusButton
+			diagram.buttonLayer.children -= plusButton
 		}
-		getDiagram.getButtonLayer.children -= group
+		diagram.buttonLayer.children -= group
 		true
 	}
 
 	protected def nodeChosen(XNode choice) {
 		if (choice != null) {
 			getNodes.forEach[onMouseClicked = null]
-			choice.effect = null
-			var center = group.localToDiagram(0, 0)
-			choice.transforms.clear
-			group.children.remove(choice)
-			diagram.nodes += choice
-			choice.layout
-			val bounds = choice.layoutBounds
-			choice.layoutX = center.x - 0.5 * bounds.width
-			choice.layoutY = center.y - 0.5 * bounds.height
-			val connection = new XConnection(host, choice)
+			var existingChoice = diagram.nodes.findFirst[it.equals(choice)]
+			if(existingChoice == null) {
+				existingChoice = choice
+				choice.effect = null
+				var center = group.localToDiagram(0, 0)
+				group.children.remove(choice)
+				choice.transforms.clear
+				diagram.nodes += choice
+				choice.layout
+				val bounds = choice.layoutBounds
+				choice.layoutX = center.x - 0.5 * bounds.width
+				choice.layoutY = center.y - 0.5 * bounds.height
+			}
+			val connection = new XConnection(host, existingChoice)
 			diagram.connections += connection
-			choice.toFront
+			if(connectionLabel != null) {
+				new XConnectionLabel(connection) => [
+					text.text = connectionLabel
+				]
+			}
+			existingChoice.toFront
 			connection.toFront
 		}
 	}
 
 	protected def setBlurDiagram(boolean isBlur) {
 		new ParallelTransition => [
-			for (layer : #[host.getRootDiagram.getNodeLayer, host.getRootDiagram.getConnectionLayer])
+			for (layer : #[host.getRootDiagram.nodeLayer, host.getRootDiagram.connectionLayer])
 				children += new FadeTransition => [
 					node = layer
 					toValue = if(isBlur) 0.3 else 1
@@ -306,8 +325,8 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		getNodes.get(currentPosition)
 	}
 
-	def getDiagram() {
-		host.getDiagram
+	def diagram() {
+		host.diagram
 	}
 
 	protected def getGroup() {

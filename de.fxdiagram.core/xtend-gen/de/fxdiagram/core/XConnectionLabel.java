@@ -17,6 +17,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
@@ -36,6 +37,9 @@ public class XConnectionLabel extends XShape {
     final Procedure1<Text> _function = new Procedure1<Text>() {
       public void apply(final Text it) {
         it.setTextOrigin(VPos.TOP);
+        ObjectProperty<Paint> _fillProperty = it.fillProperty();
+        ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
+        _fillProperty.bind(_strokeProperty);
       }
     };
     Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);

@@ -207,7 +207,7 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
                 ColorAdjust _colorAdjust = new ColorAdjust();
                 final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
                   public void apply(final ColorAdjust it) {
-                    XDiagram _diagram = CoverFlowChooser.this.getDiagram();
+                    XDiagram _diagram = CoverFlowChooser.this.diagram();
                     Paint _backgroundPaint = _diagram.getBackgroundPaint();
                     boolean _equals = Objects.equal(_backgroundPaint, Color.BLACK);
                     if (_equals) {

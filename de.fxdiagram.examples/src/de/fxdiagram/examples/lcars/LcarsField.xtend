@@ -105,6 +105,7 @@ class LcarsQueryTask extends Task<Void> {
 		val siblings = host.lcarsDiagram.lcarsAccess.query(fieldName, fieldValue)
 		val lcarsNode = host.lcarsNode
 		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
+		chooser.connectionLabel = fieldValue
 		chooser += siblings
 			.filter[get('_id').toString != lcarsNode.dbId]
 			.map[

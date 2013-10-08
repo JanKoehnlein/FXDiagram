@@ -7,8 +7,6 @@ import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.geometry.Insets
-import javafx.geometry.Pos
-import javafx.geometry.VPos
 import javafx.scene.control.TextField
 import javafx.scene.effect.Blend
 import javafx.scene.effect.BlendMode
@@ -35,7 +33,6 @@ class NeonSignNode extends XNode {
 		node = new FlipNode => [
 			front = new RectangleBorderPane => [
 				children += new Text => [
-					textOrigin = VPos.TOP
 					text = key
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
@@ -48,19 +45,18 @@ class NeonSignNode extends XNode {
 	protected def getNeonSign() {
 		new VBox => [
 			style = '-fx-background-image: url("de/fxdiagram/examples/neonsign/brick.jpg");'
-			alignment = Pos.TOP_CENTER
-			children += textField = new TextField => [
-				text = 'How many LOC are necessary?'
+			children += textField = new TextField => [     // text input widget
+				text = 'JavaFX loves Xtend'
 				margin = new Insets(10,40,10,40)
 			]
-			children += neonText = new Text => [
-				textProperty.bind(textField.textProperty)
-				font = Font.font('Nanum Pen Script', 100)
-				fill = Color.web('#feeb42')
-				wrappingWidth = 580
+			children += neonText = new Text => [           // neon text
+				textProperty.bind(textField.textProperty)  // databinding
+				wrappingWidth = 580                        // text placement
 				textAlignment = TextAlignment.CENTER
 				rotate = -7
-				effect = new Blend => [
+				font = Font.font('Nanum Pen Script', 100)  // font and color
+				fill = Color.web('#feeb42')
+				effect = new Blend => [                    // neon effect
 					mode = BlendMode.MULTIPLY
 					topInput = new Bloom
 					bottomInput = new InnerShadow => [
@@ -70,19 +66,16 @@ class NeonSignNode extends XNode {
 					]
 				]
 			]	
+			onMouseClicked = [                             // flickering animation
+				new Timeline => [
+					cycleCount = 20
+					keyFrames += new KeyFrame(10.millis, new KeyValue(neonText.opacityProperty, 0.45)) 			 	
+					keyFrames += new KeyFrame(20.millis, new KeyValue(neonText.opacityProperty, 0.95)) 			 	
+					keyFrames += new KeyFrame(40.millis, new KeyValue(neonText.opacityProperty, 0.65)) 			 	
+					keyFrames += new KeyFrame(50.millis, new KeyValue(neonText.opacityProperty, 1)) 			 	
+					play
+				]
+			] 
 		]
 	}
-	
-	override doActivate() {
-		super.doActivate()
-		new Timeline => [
-			cycleCount = -1
-			keyFrames += new KeyFrame(10.millis, new KeyValue(neonText.opacityProperty, 0.75)) 			 	
-			keyFrames += new KeyFrame(20.millis, new KeyValue(neonText.opacityProperty, 0.95)) 			 	
-			keyFrames += new KeyFrame(40.millis, new KeyValue(neonText.opacityProperty, 0.85)) 			 	
-			keyFrames += new KeyFrame(50.millis, new KeyValue(neonText.opacityProperty, 1)) 			 	
-			play
-		]
-	}
-	
 }

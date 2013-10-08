@@ -29,20 +29,12 @@ class StringExpressionExtensions {
 		left.value == right.value
 	}
 
-	def static operator_equals(String left, StringExpression right) {
-		left == right.value
-	}
-
 	def static operator_equals(StringExpression left, String right) {
 		left.value == right
 	}
 
 	def static operator_notEquals(StringExpression left, StringExpression right) {
 		left.value != right.value
-	}
-
-	def static operator_notEquals(String left, StringExpression right) {
-		left != right.value
 	}
 
 	def static operator_notEquals(StringExpression left, String right) {

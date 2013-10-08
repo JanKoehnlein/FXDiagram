@@ -253,6 +253,33 @@ public class XNode extends XShape {
     return _xifexpression;
   }
   
+  public boolean equals(final Object obj) {
+    boolean _switchResult = false;
+    boolean _matched = false;
+    if (!_matched) {
+      if (obj instanceof XNode) {
+        _matched=true;
+        String _key = ((XNode)obj).getKey();
+        String _key_1 = this.getKey();
+        boolean _equals = Objects.equal(_key, _key_1);
+        _switchResult = _equals;
+      }
+    }
+    if (!_matched) {
+      _switchResult = false;
+    }
+    return _switchResult;
+  }
+  
+  public int hashCode() {
+    String _key = this.getKey();
+    int _hashCode = 0;
+    if (_key!=null) {
+      _hashCode=_key.hashCode();
+    }
+    return _hashCode;
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XNode");
     ;
   

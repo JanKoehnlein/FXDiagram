@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
@@ -52,6 +53,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.SwipeEvent;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -93,6 +96,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       return _newLinkedHashMap;
     }
   }.apply();
+  
+  private String connectionLabel;
   
   private ChangeListener<Number> positionListener;
   
@@ -424,6 +429,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _reduce;
   }
   
+  public void setConnectionLabel(final String connectionLabel) {
+    this.connectionLabel = connectionLabel;
+  }
+  
   public boolean activate() {
     boolean _xblockexpression = false;
     {
@@ -440,17 +449,17 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         return false;
       }
       this.isActiveProperty.set(true);
-      XDiagram _diagram = this.getDiagram();
+      XDiagram _diagram = this.diagram();
       Group _buttonLayer = _diagram.getButtonLayer();
       ObservableList<Node> _children = _buttonLayer.getChildren();
       _children.add(this.group);
       boolean _notEquals = (!Objects.equal(this.minusButton, null));
       if (_notEquals) {
-        XDiagram _diagram_1 = this.getDiagram();
+        XDiagram _diagram_1 = this.diagram();
         Group _buttonLayer_1 = _diagram_1.getButtonLayer();
         ObservableList<Node> _children_1 = _buttonLayer_1.getChildren();
         _children_1.add(this.plusButton);
-        XDiagram _diagram_2 = this.getDiagram();
+        XDiagram _diagram_2 = this.diagram();
         Group _buttonLayer_2 = _diagram_2.getButtonLayer();
         ObservableList<Node> _children_2 = _buttonLayer_2.getChildren();
         _children_2.add(this.minusButton);
@@ -526,13 +535,13 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         }
       };
       IterableExtensions.<XNode>forEach(_nodes_4, _function_2);
-      XDiagram _diagram_3 = this.getDiagram();
+      XDiagram _diagram_3 = this.diagram();
       Scene _scene = _diagram_3.getScene();
       _scene.<SwipeEvent>addEventHandler(SwipeEvent.ANY, this.swipeHandler);
-      XDiagram _diagram_4 = this.getDiagram();
+      XDiagram _diagram_4 = this.diagram();
       Scene _scene_1 = _diagram_4.getScene();
       _scene_1.<ScrollEvent>addEventHandler(ScrollEvent.ANY, this.scrollHandler);
-      XDiagram _diagram_5 = this.getDiagram();
+      XDiagram _diagram_5 = this.diagram();
       Scene _scene_2 = _diagram_5.getScene();
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       this.currentPositionProperty.addListener(this.positionListener);
@@ -542,7 +551,15 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Label _filterLabel = this.getFilterLabel();
       _headsUpDisplay.add(_filterLabel, Pos.BOTTOM_LEFT);
       Label _filterLabel_1 = this.getFilterLabel();
-      _filterLabel_1.toFront();
+      final Procedure1<Label> _function_3 = new Procedure1<Label>() {
+        public void apply(final Label it) {
+          XDiagram _diagram = AbstractXNodeChooser.this.diagram();
+          Paint _foregroundPaint = _diagram.getForegroundPaint();
+          it.setTextFill(_foregroundPaint);
+          it.toFront();
+        }
+      };
+      ObjectExtensions.<Label>operator_doubleArrow(_filterLabel_1, _function_3);
       _xblockexpression = (true);
     }
     return _xblockexpression;
@@ -562,29 +579,29 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Label _filterLabel = this.getFilterLabel();
       _children.remove(_filterLabel);
       this.isActiveProperty.set(false);
-      XDiagram _diagram = this.getDiagram();
+      XDiagram _diagram = this.diagram();
       Scene _scene = _diagram.getScene();
       _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-      XDiagram _diagram_1 = this.getDiagram();
+      XDiagram _diagram_1 = this.diagram();
       Scene _scene_1 = _diagram_1.getScene();
       _scene_1.<ScrollEvent>removeEventHandler(ScrollEvent.ANY, this.scrollHandler);
-      XDiagram _diagram_2 = this.getDiagram();
+      XDiagram _diagram_2 = this.diagram();
       Scene _scene_2 = _diagram_2.getScene();
       _scene_2.<SwipeEvent>removeEventHandler(SwipeEvent.ANY, this.swipeHandler);
       this.spinToPosition.stop();
       this.setBlurDiagram(false);
       boolean _notEquals = (!Objects.equal(this.minusButton, null));
       if (_notEquals) {
-        XDiagram _diagram_3 = this.getDiagram();
+        XDiagram _diagram_3 = this.diagram();
         Group _buttonLayer = _diagram_3.getButtonLayer();
         ObservableList<Node> _children_1 = _buttonLayer.getChildren();
         _children_1.remove(this.minusButton);
-        XDiagram _diagram_4 = this.getDiagram();
+        XDiagram _diagram_4 = this.diagram();
         Group _buttonLayer_1 = _diagram_4.getButtonLayer();
         ObservableList<Node> _children_2 = _buttonLayer_1.getChildren();
         _children_2.remove(this.plusButton);
       }
-      XDiagram _diagram_5 = this.getDiagram();
+      XDiagram _diagram_5 = this.diagram();
       Group _buttonLayer_2 = _diagram_5.getButtonLayer();
       ObservableList<Node> _children_3 = _buttonLayer_2.getChildren();
       _children_3.remove(this.group);
@@ -603,33 +620,57 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         }
       };
       IterableExtensions.<XNode>forEach(_nodes, _function);
-      choice.setEffect(null);
-      Point2D center = CoreExtensions.localToDiagram(this.group, 0, 0);
-      ObservableList<Transform> _transforms = choice.getTransforms();
-      _transforms.clear();
-      ObservableList<Node> _children = this.group.getChildren();
-      _children.remove(choice);
-      XDiagram _diagram = this.getDiagram();
+      XDiagram _diagram = this.diagram();
       ObservableList<XNode> _nodes_1 = _diagram.getNodes();
-      _nodes_1.add(choice);
-      choice.layout();
-      final Bounds bounds = choice.getLayoutBounds();
-      double _x = center.getX();
-      double _width = bounds.getWidth();
-      double _multiply = (0.5 * _width);
-      double _minus = (_x - _multiply);
-      choice.setLayoutX(_minus);
-      double _y = center.getY();
-      double _height = bounds.getHeight();
-      double _multiply_1 = (0.5 * _height);
-      double _minus_1 = (_y - _multiply_1);
-      choice.setLayoutY(_minus_1);
-      XConnection _xConnection = new XConnection(this.host, choice);
+      final Function1<XNode,Boolean> _function_1 = new Function1<XNode,Boolean>() {
+        public Boolean apply(final XNode it) {
+          boolean _equals = it.equals(choice);
+          return Boolean.valueOf(_equals);
+        }
+      };
+      XNode existingChoice = IterableExtensions.<XNode>findFirst(_nodes_1, _function_1);
+      boolean _equals = Objects.equal(existingChoice, null);
+      if (_equals) {
+        existingChoice = choice;
+        choice.setEffect(null);
+        Point2D center = CoreExtensions.localToDiagram(this.group, 0, 0);
+        ObservableList<Node> _children = this.group.getChildren();
+        _children.remove(choice);
+        ObservableList<Transform> _transforms = choice.getTransforms();
+        _transforms.clear();
+        XDiagram _diagram_1 = this.diagram();
+        ObservableList<XNode> _nodes_2 = _diagram_1.getNodes();
+        _nodes_2.add(choice);
+        choice.layout();
+        final Bounds bounds = choice.getLayoutBounds();
+        double _x = center.getX();
+        double _width = bounds.getWidth();
+        double _multiply = (0.5 * _width);
+        double _minus = (_x - _multiply);
+        choice.setLayoutX(_minus);
+        double _y = center.getY();
+        double _height = bounds.getHeight();
+        double _multiply_1 = (0.5 * _height);
+        double _minus_1 = (_y - _multiply_1);
+        choice.setLayoutY(_minus_1);
+      }
+      XConnection _xConnection = new XConnection(this.host, existingChoice);
       final XConnection connection = _xConnection;
-      XDiagram _diagram_1 = this.getDiagram();
-      ObservableList<XConnection> _connections = _diagram_1.getConnections();
+      XDiagram _diagram_2 = this.diagram();
+      ObservableList<XConnection> _connections = _diagram_2.getConnections();
       _connections.add(connection);
-      choice.toFront();
+      boolean _notEquals_1 = (!Objects.equal(this.connectionLabel, null));
+      if (_notEquals_1) {
+        XConnectionLabel _xConnectionLabel = new XConnectionLabel(connection);
+        final Procedure1<XConnectionLabel> _function_2 = new Procedure1<XConnectionLabel>() {
+          public void apply(final XConnectionLabel it) {
+            Text _text = it.getText();
+            _text.setText(AbstractXNodeChooser.this.connectionLabel);
+          }
+        };
+        ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_2);
+      }
+      existingChoice.toFront();
       connection.toFront();
     }
   }
@@ -721,7 +762,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _xblockexpression;
   }
   
-  public XDiagram getDiagram() {
+  public XDiagram diagram() {
     XDiagram _diagram = CoreExtensions.getDiagram(this.host);
     return _diagram;
   }

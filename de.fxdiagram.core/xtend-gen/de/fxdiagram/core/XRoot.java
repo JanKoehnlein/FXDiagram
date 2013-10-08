@@ -143,11 +143,18 @@ public class XRoot extends Parent implements XActivatable {
       Paint _backgroundPaint = _diagram_5.getBackgroundPaint();
       CharSequence _css = JavaToCss.toCss(_backgroundPaint);
       _builder.append(_css, "");
-      _builder.append(";\'");
+      _builder.append(";");
+      _builder.newLineIfNotEmpty();
+      _builder.append("-fx-text-fill: ");
+      XDiagram _diagram_6 = this.getDiagram();
+      Paint _foregroundPaint = _diagram_6.getForegroundPaint();
+      CharSequence _css_1 = JavaToCss.toCss(_foregroundPaint);
+      _builder.append(_css_1, "");
+      _builder.append(";");
       _builder.newLineIfNotEmpty();
       this.diagramCanvas.setStyle(_builder.toString());
-      XDiagram _diagram_6 = this.getDiagram();
-      ObservableList<Transform> _transforms_2 = _diagram_6.getTransforms();
+      XDiagram _diagram_7 = this.getDiagram();
+      ObservableList<Transform> _transforms_2 = _diagram_7.getTransforms();
       boolean _setAll = _transforms_2.setAll(this.diagramTransform);
       _xblockexpression = (_setAll);
     }

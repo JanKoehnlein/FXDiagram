@@ -25,6 +25,7 @@ class XConnectionLabel extends XShape {
 		connection.label = this
 		text = new Text => [
 			textOrigin = VPos.TOP
+			fillProperty.bind(connection.strokeProperty)
 		]
 		node = text
 		selectionEffect = new DropShadow

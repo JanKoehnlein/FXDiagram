@@ -30,6 +30,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class BrickBreakerNode extends XNode {
   public BrickBreakerNode() {
+    super("BrickBreaker");
     FlipNode _flipNode = new FlipNode();
     final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
       public void apply(final FlipNode it) {
@@ -83,7 +84,6 @@ public class BrickBreakerNode extends XNode {
     };
     FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
     this.setNode(_doubleArrow);
-    this.setKey("BrickBreaker");
   }
   
   public Group createRoot() {

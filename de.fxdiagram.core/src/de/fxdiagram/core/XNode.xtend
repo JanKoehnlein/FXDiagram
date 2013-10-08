@@ -149,4 +149,15 @@ class XNode extends XShape {
 			super.maxHeight(width)
 	}
 	
+	override equals(Object obj) {
+		switch obj {
+			XNode: obj.key == key
+			default: false
+		}
+	}
+	
+	override hashCode() {
+		key?.hashCode
+	}
+	
 }
