@@ -126,6 +126,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			val isVertical = layoutPosition.hpos != HPos.CENTER && layoutPosition.hpos != null
 			minusButton = new Button => [
 				id = if(isVertical) 'button-down' else 'button-right'
+				styleClass += 'icon-button'
 				text = id
 				onAction = [
 					spinToPosition.targetPositionDelta = -1
@@ -134,6 +135,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			]
 			plusButton = new Button => [
 				id = if(isVertical) 'button-up' else 'button-left'
+				styleClass += 'icon-button'
 				text = id
 				onAction = [
 					spinToPosition.targetPositionDelta = 1

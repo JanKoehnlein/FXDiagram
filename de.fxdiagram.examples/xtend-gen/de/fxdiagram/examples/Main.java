@@ -11,6 +11,7 @@ import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.BrickBreakerNode;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
+import de.fxdiagram.examples.login.LoginNode;
 import de.fxdiagram.examples.neonsign.NeonSignNode;
 import de.fxdiagram.lib.media.BrowserNode;
 import de.fxdiagram.lib.media.ImageNode;
@@ -268,6 +269,18 @@ public class Main extends Application {
           };
           OpenableDiagramNode _doubleArrow_10 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode_1, _function_13);
           _nodes_10.add(_doubleArrow_10);
+          ObservableList<XNode> _nodes_11 = it.getNodes();
+          LoginNode _loginNode = new LoginNode();
+          final Procedure1<LoginNode> _function_14 = new Procedure1<LoginNode>() {
+            public void apply(final LoginNode it) {
+              it.setLayoutX(200);
+              it.setLayoutY(200);
+              it.setWidth(80);
+              it.setHeight(30);
+            }
+          };
+          LoginNode _doubleArrow_11 = ObjectExtensions.<LoginNode>operator_doubleArrow(_loginNode, _function_14);
+          _nodes_11.add(_doubleArrow_11);
         }
       };
       ObjectExtensions.<XDiagram>operator_doubleArrow(diagram, _function);

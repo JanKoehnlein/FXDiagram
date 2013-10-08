@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.services.ImageCache;
@@ -674,6 +675,18 @@ public class LcarsNode extends XNode {
   
   public String getDbId() {
     return this.dbId;
+  }
+  
+  public void selectionFeedback(final boolean isSelected) {
+    ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
+    ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
+    Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
+    final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+      public void apply(final XConnection it) {
+        it.toFront();
+      }
+    };
+    IterableExtensions.<XConnection>forEach(_plus, _function);
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.examples.lcars.LcarsNode");

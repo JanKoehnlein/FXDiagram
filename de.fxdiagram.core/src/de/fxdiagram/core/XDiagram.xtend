@@ -23,8 +23,9 @@ class XDiagram extends Group implements XActivatable {
 	@FxProperty ObservableList<XRapidButton> buttons = observableArrayList
 
 	@FxProperty @ReadOnly boolean isActive
-	@FxProperty@ReadOnly boolean isRootDiagram
+	@FxProperty @ReadOnly boolean isRootDiagram
 	@FxProperty Paint backgroundPaint = Color.WHITE
+	@FxProperty Paint foregroundPaint = Color.BLACK
 	
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
@@ -142,9 +143,7 @@ class XDiagram extends Group implements XActivatable {
 	def getButtonLayer() {
 		buttonLayer
 	}
-	
 }
-
 
 class XDiagramChildrenListener<T extends Node & XActivatable> implements ListChangeListener<T> {
 	

@@ -35,6 +35,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -136,12 +137,15 @@ public class XRoot extends Parent implements XActivatable {
         double _sqrt = Math.sqrt(_plus);
         this.setDiagramScale(_sqrt);
       }
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("-fx-background-color: ");
       XDiagram _diagram_5 = this.getDiagram();
       Paint _backgroundPaint = _diagram_5.getBackgroundPaint();
       CharSequence _css = JavaToCss.toCss(_backgroundPaint);
-      String _plus_1 = ("-fx-background-color: " + _css);
-      String _plus_2 = (_plus_1 + ";");
-      this.diagramCanvas.setStyle(_plus_2);
+      _builder.append(_css, "");
+      _builder.append(";\'");
+      _builder.newLineIfNotEmpty();
+      this.diagramCanvas.setStyle(_builder.toString());
       XDiagram _diagram_6 = this.getDiagram();
       ObservableList<Transform> _transforms_2 = _diagram_6.getTransforms();
       boolean _setAll = _transforms_2.setAll(this.diagramTransform);
@@ -152,9 +156,7 @@ public class XRoot extends Parent implements XActivatable {
   
   public void centerDiagram() {
     XDiagram _diagram = this.getDiagram();
-    _diagram.layout();
-    XDiagram _diagram_1 = this.getDiagram();
-    final Bounds diagramBounds = _diagram_1.getLayoutBounds();
+    final Bounds diagramBounds = _diagram.getLayoutBounds();
     double _width = diagramBounds.getWidth();
     double _height = diagramBounds.getHeight();
     double _multiply = (_width * _height);
@@ -173,10 +175,10 @@ public class XRoot extends Parent implements XActivatable {
       final double scale = Math.max(XRoot.MIN_SCALE, _min_1);
       this.setDiagramScale(scale);
       TransformExtensions.scale(this.diagramTransform, scale, scale);
+      XDiagram _diagram_1 = this.getDiagram();
       XDiagram _diagram_2 = this.getDiagram();
-      XDiagram _diagram_3 = this.getDiagram();
-      Bounds _boundsInLocal = _diagram_3.getBoundsInLocal();
-      Bounds _localToScene = _diagram_2.localToScene(_boundsInLocal);
+      Bounds _boundsInLocal = _diagram_2.getBoundsInLocal();
+      Bounds _localToScene = _diagram_1.localToScene(_boundsInLocal);
       final Point2D centerInScene = BoundsExtensions.center(_localToScene);
       Scene _scene_2 = this.getScene();
       double _width_3 = _scene_2.getWidth();

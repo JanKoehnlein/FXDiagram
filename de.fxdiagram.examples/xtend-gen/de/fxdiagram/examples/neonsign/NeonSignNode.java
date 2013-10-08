@@ -61,6 +61,7 @@ public class NeonSignNode extends XNode {
         it.setFront(_doubleArrow);
         VBox _neonSign = NeonSignNode.this.getNeonSign();
         it.setBack(_neonSign);
+        it.setFlipOnDoubleClick(true);
       }
     };
     FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);

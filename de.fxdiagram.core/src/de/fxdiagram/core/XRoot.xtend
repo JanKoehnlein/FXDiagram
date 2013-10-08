@@ -38,7 +38,7 @@ class XRoot extends Parent implements XActivatable {
 
 	HeadsUpDisplay headsUpDisplay = new HeadsUpDisplay
 	
-	Pane diagramCanvas  = new Pane
+	Pane diagramCanvas = new Pane
 	
 	public static val MIN_SCALE = EPSILON
 	
@@ -76,12 +76,13 @@ class XRoot extends Parent implements XActivatable {
 			diagram.transforms.forEach [diagramTransform.leftMultiply(it)]
 			diagramScale = sqrt(diagramTransform.mxx * diagramTransform.mxx + diagramTransform.mxy * diagramTransform.mxy)
 		}
-		diagramCanvas.style = '-fx-background-color: ' + diagram.backgroundPaint.toCss + ';'
+		diagramCanvas.style = '''
+			-fx-background-color: «diagram.backgroundPaint.toCss»;'
+		'''
 		diagram.transforms.setAll(diagramTransform)
 	}
 	
 	def centerDiagram() {
-		diagram.layout
 		val diagramBounds = diagram.layoutBounds
 		if(diagramBounds.width * diagramBounds.height > 1) {
 			val scale = max(XRoot.MIN_SCALE, min(1, min(scene.width / diagramBounds.width, scene.height / diagramBounds.height)))

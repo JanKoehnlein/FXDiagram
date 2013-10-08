@@ -7,6 +7,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
@@ -106,6 +107,13 @@ public class XConnection extends XShape {
   }
   
   public void doActivate() {
+    Paint _stroke = this.getStroke();
+    boolean _equals = Objects.equal(_stroke, null);
+    if (_equals) {
+      XDiagram _diagram = CoreExtensions.getDiagram(this);
+      Paint _foregroundPaint = _diagram.getForegroundPaint();
+      this.setStroke(_foregroundPaint);
+    }
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         XConnection.this.updateShapes();
@@ -810,11 +818,7 @@ public class XConnection extends XShape {
     return this.strokeWidthProperty;
   }
   
-  private SimpleObjectProperty<Paint> strokeProperty = new SimpleObjectProperty<Paint>(this, "stroke",_initStroke());
-  
-  private static final Paint _initStroke() {
-    return Color.BLACK;
-  }
+  private SimpleObjectProperty<Paint> strokeProperty = new SimpleObjectProperty<Paint>(this, "stroke");
   
   public Paint getStroke() {
     return this.strokeProperty.get();

@@ -6,6 +6,7 @@ import de.fxdiagram.core.anchors.ArrowHead;
 import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.paint.Paint;
@@ -19,7 +20,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class TriangleArrowHead extends ArrowHead {
   private double width;
   
-  public TriangleArrowHead(final XConnection connection, final double width, final double height, final Paint fill, final boolean isSource) {
+  public TriangleArrowHead(final XConnection connection, final double width, final double height, final Property<Paint> strokeProperty, final Property<Paint> fillProperty, final boolean isSource) {
     super(connection, new Function0<Node>() {
       public Node apply() {
         Polygon _polygon = new Polygon();
@@ -30,10 +31,10 @@ public class TriangleArrowHead extends ArrowHead {
             double _multiply = (_minus * height);
             double _multiply_1 = (0.5 * height);
             _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
-            it.setFill(fill);
+            ObjectProperty<Paint> _fillProperty = it.fillProperty();
+            _fillProperty.bindBidirectional(fillProperty);
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-            ObjectProperty<Paint> _strokeProperty_1 = connection.strokeProperty();
-            _strokeProperty.bind(_strokeProperty_1);
+            _strokeProperty.bind(strokeProperty);
             DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
             DoubleProperty _strokeWidthProperty_1 = connection.strokeWidthProperty();
             _strokeWidthProperty.bind(_strokeWidthProperty_1);
@@ -48,10 +49,15 @@ public class TriangleArrowHead extends ArrowHead {
   }
   
   public TriangleArrowHead(final XConnection connection, final boolean isSource) {
-    this(connection, 5, 10, new Function0<Paint>() {
-      public Paint apply() {
-        Paint _stroke = connection.getStroke();
-        return _stroke;
+    this(connection, 5, 10, new Function0<Property<Paint>>() {
+      public Property<Paint> apply() {
+        ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
+        return _strokeProperty;
+      }
+    }.apply(), new Function0<Property<Paint>>() {
+      public Property<Paint> apply() {
+        ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
+        return _strokeProperty;
       }
     }.apply(), isSource);
   }

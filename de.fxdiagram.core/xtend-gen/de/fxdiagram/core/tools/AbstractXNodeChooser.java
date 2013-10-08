@@ -279,6 +279,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             _xifexpression = "button-right";
           }
           it.setId(_xifexpression);
+          ObservableList<String> _styleClass = it.getStyleClass();
+          _styleClass.add("icon-button");
           String _id = it.getId();
           it.setText(_id);
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
@@ -303,6 +305,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             _xifexpression = "button-left";
           }
           it.setId(_xifexpression);
+          ObservableList<String> _styleClass = it.getStyleClass();
+          _styleClass.add("icon-button");
           String _id = it.getId();
           it.setText(_id);
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {

@@ -24,7 +24,8 @@ class BrowserNode extends XNode {
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
 			]
-			back = view = new WebView 
+			back = view = new WebView
+			flipOnDoubleClick = true
 		]
 	}
 

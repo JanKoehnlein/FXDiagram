@@ -78,6 +78,7 @@ public class BrickBreakerNode extends XNode {
         };
         Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
         it.setBack(_doubleArrow_1);
+        it.setFlipOnDoubleClick(true);
       }
     };
     FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);

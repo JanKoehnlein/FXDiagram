@@ -144,6 +144,7 @@ public class MovieNode extends XNode {
         RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane_1, _function_1);
         StackPane _pane = MovieNode.this.pane = _doubleArrow_1;
         it.setBack(_pane);
+        it.setFlipOnDoubleClick(true);
       }
     };
     FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);

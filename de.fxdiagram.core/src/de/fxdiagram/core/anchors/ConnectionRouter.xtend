@@ -153,8 +153,8 @@ class ConnectionRouter implements XActivatable {
 				layoutX = targetPoint.x
 				layoutY = targetPoint.y
 			]
-			controlPoints.forEach[update(controlPoints)]
 		}
+		controlPoints.forEach[update(controlPoints)]
 	}
 	
  	protected def findClosestAnchors() {

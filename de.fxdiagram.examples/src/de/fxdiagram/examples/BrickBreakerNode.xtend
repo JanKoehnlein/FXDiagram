@@ -33,6 +33,7 @@ class BrickBreakerNode extends XNode {
 					scaleYProperty.bind(heightProperty / Config.SCREEN_HEIGHT)
 				]
 			]
+			flipOnDoubleClick = true
 		]
 		key = 'BrickBreaker'
 	}

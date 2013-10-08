@@ -9,6 +9,7 @@ import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.services.ImageCache
 import de.fxdiagram.examples.java.JavaTypeNode
 import de.fxdiagram.examples.lcars.LcarsDiagram
+import de.fxdiagram.examples.login.LoginNode
 import de.fxdiagram.examples.neonsign.NeonSignNode
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
@@ -151,6 +152,13 @@ class Main extends Application {
 				innerDiagram = new LcarsDiagram
 				layoutX = 300
 				layoutY = 300
+				width = 80
+				height = 30
+			]
+
+			nodes += new LoginNode => [
+				layoutX = 200
+				layoutY = 200
 				width = 80
 				height = 30
 			]

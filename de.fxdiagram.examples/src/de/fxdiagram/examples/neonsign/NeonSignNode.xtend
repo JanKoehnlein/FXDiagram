@@ -41,6 +41,7 @@ class NeonSignNode extends XNode {
 				]
 			]
 			back = neonSign
+			flipOnDoubleClick = true
 		]
 	}
 	

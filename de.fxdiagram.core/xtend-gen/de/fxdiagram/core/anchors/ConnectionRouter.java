@@ -366,15 +366,15 @@ public class ConnectionRouter implements XActivatable {
         }
       };
       ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
-      ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
-      final Procedure1<XControlPoint> _function_4 = new Procedure1<XControlPoint>() {
-        public void apply(final XControlPoint it) {
-          ObservableList<XControlPoint> _controlPoints = ConnectionRouter.this.getControlPoints();
-          it.update(_controlPoints);
-        }
-      };
-      IterableExtensions.<XControlPoint>forEach(_controlPoints_6, _function_4);
     }
+    ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
+    final Procedure1<XControlPoint> _function_4 = new Procedure1<XControlPoint>() {
+      public void apply(final XControlPoint it) {
+        ObservableList<XControlPoint> _controlPoints = ConnectionRouter.this.getControlPoints();
+        it.update(_controlPoints);
+      }
+    };
+    IterableExtensions.<XControlPoint>forEach(_controlPoints_6, _function_4);
   }
   
   protected Pair<Point2D,Point2D> findClosestAnchors() {

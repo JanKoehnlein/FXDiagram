@@ -47,6 +47,7 @@ public class BrowserNode extends XNode {
         WebView _webView = new WebView();
         WebView _view = BrowserNode.this.view = _webView;
         it.setBack(_view);
+        it.setFlipOnDoubleClick(true);
       }
     };
     FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);

@@ -9,11 +9,13 @@ class TriangleArrowHead extends ArrowHead {
 	
 	double width 
 	
-	new(XConnection connection, double width, double height, Paint fill, boolean isSource) {
+	new(XConnection connection, double width, double height, 
+		javafx.beans.property.Property<Paint> strokeProperty, javafx.beans.property.Property<Paint> fillProperty, 
+		boolean isSource) {
 		super(connection, new Polygon => [
 			points.setAll(#[0.0, -0.5 * height, width, 0.0, 0.0, 0.5 * height])
-			it.fill = fill
-			strokeProperty.bind(connection.strokeProperty)
+			it.fillProperty.bindBidirectional(fillProperty)
+			it.strokeProperty.bind(strokeProperty)
 			strokeWidthProperty.bind(connection.strokeWidthProperty)
 			strokeType = StrokeType.CENTERED
 		], isSource)
@@ -21,7 +23,7 @@ class TriangleArrowHead extends ArrowHead {
 	}
 	
 	new(XConnection connection, boolean isSource) {
-		this(connection, 5, 10, connection.stroke, isSource)
+		this(connection, 5, 10, connection.strokeProperty, connection.strokeProperty, isSource)
 	}
 	
 	override getLineCut() {

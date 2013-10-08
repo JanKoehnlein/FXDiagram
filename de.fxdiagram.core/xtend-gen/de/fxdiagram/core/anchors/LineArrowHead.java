@@ -20,7 +20,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class LineArrowHead extends ArrowHead {
   private double width;
   
-  public LineArrowHead(final XConnection connection, final double width, final double height, final Paint fill, final boolean isSource) {
+  public LineArrowHead(final XConnection connection, final double width, final double height, final boolean isSource) {
     super(connection, new Function0<Node>() {
       public Node apply() {
         Group _group = new Group();
@@ -75,12 +75,7 @@ public class LineArrowHead extends ArrowHead {
   }
   
   public LineArrowHead(final XConnection connection, final boolean isSource) {
-    this(connection, 8, 15, new Function0<Paint>() {
-      public Paint apply() {
-        Paint _stroke = connection.getStroke();
-        return _stroke;
-      }
-    }.apply(), isSource);
+    this(connection, 8, 15, isSource);
   }
   
   public double getLineCut() {

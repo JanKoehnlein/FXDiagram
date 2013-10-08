@@ -35,7 +35,7 @@ class XConnection extends XShape {
 	@FxProperty ArrowHead targetArrowHead
 	@FxProperty XConnectionKind kind = POLYLINE
 	@FxProperty double strokeWidth = 2.0
-	@FxProperty Paint stroke = Color.BLACK
+	@FxProperty Paint stroke
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
@@ -60,6 +60,8 @@ class XConnection extends XShape {
 	}
 
 	override doActivate() {
+		if(stroke == null) 
+			stroke = diagram.foregroundPaint
 		controlPointListener = [ prop, oldVal, newVal |
 			updateShapes
 		]

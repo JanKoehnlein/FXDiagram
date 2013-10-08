@@ -340,4 +340,22 @@ public class XDiagram extends Group implements XActivatable {
   public ObjectProperty<Paint> backgroundPaintProperty() {
     return this.backgroundPaintProperty;
   }
+  
+  private SimpleObjectProperty<Paint> foregroundPaintProperty = new SimpleObjectProperty<Paint>(this, "foregroundPaint",_initForegroundPaint());
+  
+  private static final Paint _initForegroundPaint() {
+    return Color.BLACK;
+  }
+  
+  public Paint getForegroundPaint() {
+    return this.foregroundPaintProperty.get();
+  }
+  
+  public void setForegroundPaint(final Paint foregroundPaint) {
+    this.foregroundPaintProperty.set(foregroundPaint);
+  }
+  
+  public ObjectProperty<Paint> foregroundPaintProperty() {
+    return this.foregroundPaintProperty;
+  }
 }

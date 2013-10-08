@@ -82,6 +82,7 @@ class MovieNode extends XNode {
 					StackPane.setAlignment(it, Pos.BOTTOM_CENTER)
 				]
 			]
+			flipOnDoubleClick = true
 		]
 		stylesheets += "de/fxdiagram/lib/media/MovieNode.css"
 	}
