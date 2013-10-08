@@ -27,6 +27,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.layout.LayoutTransitionFactory;
 import de.fxdiagram.core.layout.LayoutTransitionStyle;
@@ -113,20 +114,18 @@ public class Layouter {
         boolean _matched = false;
         if (!_matched) {
           if (xElement instanceof XNode) {
-            final XNode _xNode = (XNode)xElement;
             _matched=true;
             EList<KGraphData> _data = kElement.getData();
             Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
             final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
             float _xpos = shapeLayout.getXpos();
             float _ypos = shapeLayout.getYpos();
-            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(_xNode, _xpos, _ypos, LayoutTransitionStyle.CURVE_XFIRST, duration);
+            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(((XShape)xElement), _xpos, _ypos, LayoutTransitionStyle.CURVE_XFIRST, duration);
             animations.add(_createTransition);
           }
         }
         if (!_matched) {
           if (xElement instanceof XConnection) {
-            final XConnection _xConnection = (XConnection)xElement;
             _matched=true;
             EList<KGraphData> _data = kElement.getData();
             Iterable<KEdgeLayout> _filter = Iterables.<KEdgeLayout>filter(_data, KEdgeLayout.class);
@@ -143,25 +142,25 @@ public class Layouter {
                 int _modulo = (_minus % 3);
                 boolean _equals = (_modulo == 0);
                 if (_equals) {
-                  _xConnection.setKind(XConnectionKind.CUBIC_CURVE);
+                  ((XConnection)xElement).setKind(XConnectionKind.CUBIC_CURVE);
                 } else {
                   int _size_1 = layoutPoints.size();
                   int _minus_1 = (_size_1 - 1);
                   int _modulo_1 = (_minus_1 % 2);
                   boolean _equals_1 = (_modulo_1 == 0);
                   if (_equals_1) {
-                    _xConnection.setKind(XConnectionKind.QUAD_CURVE);
+                    ((XConnection)xElement).setKind(XConnectionKind.QUAD_CURVE);
                   } else {
-                    _xConnection.setKind(XConnectionKind.POLYLINE);
+                    ((XConnection)xElement).setKind(XConnectionKind.POLYLINE);
                   }
                 }
               }
             }
             if (!_matched_1) {
-              _xConnection.setKind(XConnectionKind.POLYLINE);
+              ((XConnection)xElement).setKind(XConnectionKind.POLYLINE);
             }
-            final ObservableList<XControlPoint> controlPoints = _xConnection.getControlPoints();
-            ConnectionRouter _connectionRouter = _xConnection.getConnectionRouter();
+            final ObservableList<XControlPoint> controlPoints = ((XConnection)xElement).getControlPoints();
+            ConnectionRouter _connectionRouter = ((XConnection)xElement).getConnectionRouter();
             int _size_2 = layoutPoints.size();
             _connectionRouter.growToSize(_size_2);
             int _size_3 = controlPoints.size();
@@ -181,7 +180,7 @@ public class Layouter {
                   final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                     public void handle(final ActionEvent it) {
                       unbind.handle(it);
-                      ConnectionRouter _connectionRouter = _xConnection.getConnectionRouter();
+                      ConnectionRouter _connectionRouter = ((XConnection)xElement).getConnectionRouter();
                       int _size = layoutPoints.size();
                       _connectionRouter.shrinkToSize(_size);
                     }

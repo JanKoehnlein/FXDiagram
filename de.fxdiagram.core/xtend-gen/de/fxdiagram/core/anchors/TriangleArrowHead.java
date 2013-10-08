@@ -1,7 +1,9 @@
 package de.fxdiagram.core.anchors;
 
+import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
+import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
@@ -27,7 +29,7 @@ public class TriangleArrowHead extends ArrowHead {
             double _minus = (-0.5);
             double _multiply = (_minus * height);
             double _multiply_1 = (0.5 * height);
-            _points.setAll(new Double[] { Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1) });
+            _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
             it.setFill(fill);
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
             ObjectProperty<Paint> _strokeProperty_1 = connection.strokeProperty();

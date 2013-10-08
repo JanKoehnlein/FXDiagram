@@ -107,9 +107,8 @@ public class LcarsExtensions {
     boolean _matched = false;
     if (!_matched) {
       if (node instanceof LcarsDiagram) {
-        final LcarsDiagram _lcarsDiagram = (LcarsDiagram)node;
         _matched=true;
-        _switchResult = _lcarsDiagram;
+        _switchResult = ((LcarsDiagram)node);
       }
     }
     if (!_matched) {

@@ -160,8 +160,8 @@ public class XConnection extends XShape {
     final Procedure1<Change<? extends XControlPoint>> listChangeListener = _function_1;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
     _controlPoints.addListener(new ListChangeListener<XControlPoint>() {
-        public void onChanged(Change<? extends XControlPoint> arg0) {
-          listChangeListener.apply(arg0);
+        public void onChanged(Change<? extends XControlPoint> c) {
+          listChangeListener.apply(c);
         }
     });
     XConnectionLabel _label = this.getLabel();

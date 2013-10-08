@@ -346,18 +346,18 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
                   _builder.newLineIfNotEmpty();
                   _builder.append("\t");
                   _builder.append("this.");
-                  _builder.append(propName, "	");
+                  _builder.append(propName, "\t");
                   _builder.append(".set(");
-                  _builder.append(fieldName, "	");
+                  _builder.append(fieldName, "\t");
                   _builder.append(");");
                   _builder.newLineIfNotEmpty();
                   _builder.append("} else {");
                   _builder.newLine();
                   _builder.append("\t");
                   _builder.append("this.");
-                  _builder.append(fieldName, "	");
+                  _builder.append(fieldName, "\t");
                   _builder.append(" = ");
-                  _builder.append(fieldName, "	");
+                  _builder.append(fieldName, "\t");
                   _builder.append(";");
                   _builder.newLineIfNotEmpty();
                   _builder.append("}");
@@ -385,21 +385,21 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
             _builder.newLineIfNotEmpty();
             _builder.append("\t");
             _builder.append("this.");
-            _builder.append(propName, "	");
+            _builder.append(propName, "\t");
             _builder.append(" = new ");
             String _javaCode = it.toJavaCode(propType);
-            _builder.append(_javaCode, "	");
+            _builder.append(_javaCode, "\t");
             _builder.append("(this, \"");
-            _builder.append(fieldName, "	");
+            _builder.append(fieldName, "\t");
             _builder.append("\", ");
             {
               if (immutableType) {
                 _builder.append("DEFAULT_");
                 String _upperCase = fieldName.toUpperCase();
-                _builder.append(_upperCase, "	");
+                _builder.append(_upperCase, "\t");
               } else {
                 _builder.append("this.");
-                _builder.append(fieldName, "	");
+                _builder.append(fieldName, "\t");
               }
             }
             _builder.append(");");

@@ -83,14 +83,14 @@ public class SvgExporter {
       _builder.append("\t");
       _builder.append("<rect x=\"");
       double _minX_1 = bounds.getMinX();
-      _builder.append(_minX_1, "	");
+      _builder.append(_minX_1, "\t");
       _builder.append("\" y=\"");
       double _minY_1 = bounds.getMinY();
-      _builder.append(_minY_1, "	");
+      _builder.append(_minY_1, "\t");
       _builder.append("\" width=\"100%\" height =\"100%\" fill=\"");
       Paint _backgroundPaint = diagram.getBackgroundPaint();
       CharSequence _svgString = this.toSvgString(_backgroundPaint);
-      _builder.append(_svgString, "	");
+      _builder.append(_svgString, "\t");
       _builder.append("\"/>");
       _builder.newLineIfNotEmpty();
       {
@@ -105,7 +105,7 @@ public class SvgExporter {
         for(final Node child : _filter) {
           _builder.append("\t");
           CharSequence _svgElement = this.toSvgElement(child);
-          _builder.append(_svgElement, "	");
+          _builder.append(_svgElement, "\t");
           _builder.newLineIfNotEmpty();
         }
       }
@@ -115,7 +115,7 @@ public class SvgExporter {
       {
         for(final String defElement : this.defs) {
           _builder.append("\t\t");
-          _builder.append(defElement, "		");
+          _builder.append(defElement, "\t\t");
           _builder.newLineIfNotEmpty();
         }
       }
@@ -134,49 +134,43 @@ public class SvgExporter {
     boolean _matched = false;
     if (!_matched) {
       if (o instanceof SvgExportable) {
-        final SvgExportable _svgExportable = (SvgExportable)o;
         _matched=true;
-        CharSequence _svgElement = _svgExportable.toSvgElement(this);
+        CharSequence _svgElement = ((SvgExportable)o).toSvgElement(this);
         _switchResult = _svgElement;
       }
     }
     if (!_matched) {
       if (o instanceof Text) {
-        final Text _text = (Text)o;
         _matched=true;
-        CharSequence _textToSvgElement = this.textToSvgElement(_text);
+        CharSequence _textToSvgElement = this.textToSvgElement(((Text)o));
         _switchResult = _textToSvgElement;
       }
     }
     if (!_matched) {
       if (o instanceof Shape) {
-        final Shape _shape = (Shape)o;
         _matched=true;
-        CharSequence _shapeToSvgElement = this.shapeToSvgElement(_shape);
+        CharSequence _shapeToSvgElement = this.shapeToSvgElement(((Shape)o));
         _switchResult = _shapeToSvgElement;
       }
     }
     if (!_matched) {
       if (o instanceof ImageView) {
-        final ImageView _imageView = (ImageView)o;
         _matched=true;
-        CharSequence _imageToSvgElement = this.imageToSvgElement(_imageView);
+        CharSequence _imageToSvgElement = this.imageToSvgElement(((ImageView)o));
         _switchResult = _imageToSvgElement;
       }
     }
     if (!_matched) {
       if (o instanceof MediaView) {
-        final MediaView _mediaView = (MediaView)o;
         _matched=true;
-        CharSequence _snapshotToSvgElement = this.snapshotToSvgElement(_mediaView);
+        CharSequence _snapshotToSvgElement = this.snapshotToSvgElement(((Node)o));
         _switchResult = _snapshotToSvgElement;
       }
     }
     if (!_matched) {
       if (o instanceof Parent) {
-        final Parent _parent = (Parent)o;
         _matched=true;
-        CharSequence _parentToSvgElement = this.parentToSvgElement(_parent, "");
+        CharSequence _parentToSvgElement = this.parentToSvgElement(((Parent)o), "");
         _switchResult = _parentToSvgElement;
       }
     }
@@ -210,33 +204,33 @@ public class SvgExporter {
     _builder.append("fill=\"");
     Paint _fill = it.getFill();
     CharSequence _svgString_1 = this.toSvgString(_fill);
-    _builder.append(_svgString_1, "	");
+    _builder.append(_svgString_1, "\t");
     _builder.append("\"");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _opacity = it.getOpacity();
     CharSequence _svgAttribute = this.toSvgAttribute(Double.valueOf(_opacity), "opacity", Double.valueOf(1.0));
-    _builder.append(_svgAttribute, "	");
+    _builder.append(_svgAttribute, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _strokeDashOffset = it.getStrokeDashOffset();
     CharSequence _svgAttribute_1 = this.toSvgAttribute(Double.valueOf(_strokeDashOffset), "stroke-dahsoffset", "0.0", "em");
-    _builder.append(_svgAttribute_1, "	");
+    _builder.append(_svgAttribute_1, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     StrokeLineCap _strokeLineCap = it.getStrokeLineCap();
     CharSequence _svgAttribute_2 = this.toSvgAttribute(_strokeLineCap, "stroke-linecap", "butt");
-    _builder.append(_svgAttribute_2, "	");
+    _builder.append(_svgAttribute_2, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     StrokeLineJoin _strokeLineJoin = it.getStrokeLineJoin();
     CharSequence _svgAttribute_3 = this.toSvgAttribute(_strokeLineJoin, "stroke-linejoin", "miter");
-    _builder.append(_svgAttribute_3, "	");
+    _builder.append(_svgAttribute_3, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _strokeMiterLimit = it.getStrokeMiterLimit();
     CharSequence _svgAttribute_4 = this.toSvgAttribute(Double.valueOf(_strokeMiterLimit), "stroke-miterLimit", Double.valueOf(4.0));
-    _builder.append(_svgAttribute_4, "	");
+    _builder.append(_svgAttribute_4, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     _builder.append("stroke-width=\"0.0\"");
@@ -262,51 +256,51 @@ public class SvgExporter {
     _builder.append("\t");
     Transform _localToSceneTransform = it.getLocalToSceneTransform();
     CharSequence _svgString_1 = this.toSvgString(_localToSceneTransform);
-    _builder.append(_svgString_1, "	");
+    _builder.append(_svgString_1, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     _builder.append("fill=\"");
     Paint _fill = it.getFill();
     CharSequence _svgString_2 = this.toSvgString(_fill);
-    _builder.append(_svgString_2, "	");
+    _builder.append(_svgString_2, "\t");
     _builder.append("\"");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _opacity = it.getOpacity();
     CharSequence _svgAttribute = this.toSvgAttribute(Double.valueOf(_opacity), "opacity", Double.valueOf(1.0));
-    _builder.append(_svgAttribute, "	");
+    _builder.append(_svgAttribute, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     _builder.append("stroke=\"");
     Paint _stroke = it.getStroke();
     CharSequence _svgString_3 = this.toSvgString(_stroke);
-    _builder.append(_svgString_3, "	");
+    _builder.append(_svgString_3, "\t");
     _builder.append("\"");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _strokeDashOffset = it.getStrokeDashOffset();
     CharSequence _svgAttribute_1 = this.toSvgAttribute(Double.valueOf(_strokeDashOffset), "stroke-dahsoffset", "0.0", "em");
-    _builder.append(_svgAttribute_1, "	");
+    _builder.append(_svgAttribute_1, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     StrokeLineCap _strokeLineCap = it.getStrokeLineCap();
     CharSequence _svgAttribute_2 = this.toSvgAttribute(_strokeLineCap, "stroke-linecap", "butt");
-    _builder.append(_svgAttribute_2, "	");
+    _builder.append(_svgAttribute_2, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     StrokeLineJoin _strokeLineJoin = it.getStrokeLineJoin();
     CharSequence _svgAttribute_3 = this.toSvgAttribute(_strokeLineJoin, "stroke-linejoin", "miter");
-    _builder.append(_svgAttribute_3, "	");
+    _builder.append(_svgAttribute_3, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _strokeMiterLimit = it.getStrokeMiterLimit();
     CharSequence _svgAttribute_4 = this.toSvgAttribute(Double.valueOf(_strokeMiterLimit), "stroke-miterLimit", Double.valueOf(4.0));
-    _builder.append(_svgAttribute_4, "	");
+    _builder.append(_svgAttribute_4, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _strokeWidth = it.getStrokeWidth();
     CharSequence _svgAttribute_5 = this.toSvgAttribute(Double.valueOf(_strokeWidth), "stroke-width", Double.valueOf(1.0));
-    _builder.append(_svgAttribute_5, "	");
+    _builder.append(_svgAttribute_5, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("/>");
     _builder.newLine();
@@ -464,7 +458,7 @@ public class SvgExporter {
           }
         }
         _builder.append("\t");
-        _builder.append(ownSvgCode, "	");
+        _builder.append(ownSvgCode, "\t");
         _builder.newLineIfNotEmpty();
         {
           ObservableList<Node> _childrenUnmodifiable_1 = it.getChildrenUnmodifiable();
@@ -478,7 +472,7 @@ public class SvgExporter {
           for(final Node child : _filter_1) {
             _builder.append("\t");
             CharSequence _svgElement = this.toSvgElement(child);
-            _builder.append(_svgElement, "	");
+            _builder.append(_svgElement, "\t");
             _builder.newLineIfNotEmpty();
           }
         }
@@ -542,13 +536,13 @@ public class SvgExporter {
           _builder.append("\t");
           Transform _localToSceneTransform = node.getLocalToSceneTransform();
           CharSequence _svgString = this.toSvgString(_localToSceneTransform);
-          _builder.append(_svgString, "	");
+          _builder.append(_svgString, "\t");
           _builder.append(">");
           _builder.newLineIfNotEmpty();
           _builder.append(" \t");
           _builder.append("<path d=\"");
           String _svgString_1 = this.toSvgString(((Shape) clip));
-          _builder.append(_svgString_1, " 	");
+          _builder.append(_svgString_1, " \t");
           _builder.append("\"/>");
           _builder.newLineIfNotEmpty();
           _builder.append("</clipPath>");
@@ -606,19 +600,18 @@ public class SvgExporter {
     boolean _matched = false;
     if (!_matched) {
       if (paint instanceof Color) {
-        final Color _color = (Color)paint;
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("rgb(");
-        double _red = _color.getRed();
+        double _red = ((Color)paint).getRed();
         double _multiply = (255 * _red);
         _builder.append(((int) _multiply), "");
         _builder.append(",");
-        double _green = _color.getGreen();
+        double _green = ((Color)paint).getGreen();
         double _multiply_1 = (255 * _green);
         _builder.append(((int) _multiply_1), "");
         _builder.append(",");
-        double _blue = _color.getBlue();
+        double _blue = ((Color)paint).getBlue();
         double _multiply_2 = (255 * _blue);
         _builder.append(((int) _multiply_2), "");
         _builder.append(")");
@@ -627,7 +620,6 @@ public class SvgExporter {
     }
     if (!_matched) {
       if (paint instanceof LinearGradient) {
-        final LinearGradient _linearGradient = (LinearGradient)paint;
         _matched=true;
         CharSequence _xblockexpression = null;
         {
@@ -642,7 +634,7 @@ public class SvgExporter {
           _builder.append("\t");
           _builder.append("gradientUnits=\"");
           {
-            boolean _isProportional = _linearGradient.isProportional();
+            boolean _isProportional = ((LinearGradient)paint).isProportional();
             if (_isProportional) {
               _builder.append("objectBoundingBox");
             } else {
@@ -652,43 +644,43 @@ public class SvgExporter {
           _builder.append("\"");
           _builder.newLineIfNotEmpty();
           _builder.append("\t");
-          double _startX = _linearGradient.getStartX();
+          double _startX = ((LinearGradient)paint).getStartX();
           CharSequence _svgAttribute = this.toSvgAttribute(Double.valueOf(_startX), "x1", Double.valueOf(0.0));
-          _builder.append(_svgAttribute, "	");
+          _builder.append(_svgAttribute, "\t");
           _builder.newLineIfNotEmpty();
           _builder.append("\t");
-          double _startY = _linearGradient.getStartY();
+          double _startY = ((LinearGradient)paint).getStartY();
           CharSequence _svgAttribute_1 = this.toSvgAttribute(Double.valueOf(_startY), "y1", Double.valueOf(0.0));
-          _builder.append(_svgAttribute_1, "	");
+          _builder.append(_svgAttribute_1, "\t");
           _builder.newLineIfNotEmpty();
           _builder.append("\t");
-          double _endX = _linearGradient.getEndX();
+          double _endX = ((LinearGradient)paint).getEndX();
           CharSequence _svgAttribute_2 = this.toSvgAttribute(Double.valueOf(_endX), "x2", Double.valueOf(1.0));
-          _builder.append(_svgAttribute_2, "	");
+          _builder.append(_svgAttribute_2, "\t");
           _builder.newLineIfNotEmpty();
           _builder.append("\t");
-          double _endY = _linearGradient.getEndY();
+          double _endY = ((LinearGradient)paint).getEndY();
           CharSequence _svgAttribute_3 = this.toSvgAttribute(Double.valueOf(_endY), "y2", Double.valueOf(1.0));
-          _builder.append(_svgAttribute_3, "	");
+          _builder.append(_svgAttribute_3, "\t");
           _builder.newLineIfNotEmpty();
           _builder.append("\t");
-          CycleMethod _cycleMethod = _linearGradient.getCycleMethod();
+          CycleMethod _cycleMethod = ((LinearGradient)paint).getCycleMethod();
           CharSequence _svgAttribute_4 = this.toSvgAttribute(_cycleMethod, "spreadMethod", "pad");
-          _builder.append(_svgAttribute_4, "	");
+          _builder.append(_svgAttribute_4, "\t");
           _builder.append(">");
           _builder.newLineIfNotEmpty();
           {
-            List<Stop> _stops = _linearGradient.getStops();
+            List<Stop> _stops = ((LinearGradient)paint).getStops();
             for(final Stop stop : _stops) {
               _builder.append("\t");
               _builder.append("<stop offset=\"");
               double _offset = stop.getOffset();
               double _multiply = (_offset * 100);
-              _builder.append(_multiply, "	");
+              _builder.append(_multiply, "\t");
               _builder.append("%\" stop-color=\"");
               Color _color = stop.getColor();
               CharSequence _svgString = this.toSvgString(_color);
-              _builder.append(_svgString, "	");
+              _builder.append(_svgString, "\t");
               _builder.append("\" />");
               _builder.newLineIfNotEmpty();
             }

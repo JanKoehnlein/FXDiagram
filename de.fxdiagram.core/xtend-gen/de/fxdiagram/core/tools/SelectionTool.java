@@ -82,9 +82,8 @@ public class SelectionTool implements XDiagramTool {
                 boolean _matched = false;
                 if (!_matched) {
                   if (targetShape instanceof XControlPoint) {
-                    final XControlPoint _xControlPoint = (XControlPoint)targetShape;
                     _matched=true;
-                    Parent _parent = _xControlPoint.getParent();
+                    Parent _parent = ((XControlPoint)targetShape).getParent();
                     XShape _containerShape = CoreExtensions.getContainerShape(_parent);
                     _switchResult = _containerShape;
                   }

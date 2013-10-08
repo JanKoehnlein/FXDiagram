@@ -1,8 +1,10 @@
 package de.fxdiagram.lib.nodes;
 
+import com.google.common.collect.Lists;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
+import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -33,7 +35,7 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
       LinearGradient _linearGradient = new LinearGradient(
         0, 0, 1, 1, 
         true, CycleMethod.NO_CYCLE, 
-        new Stop[] { _stop, _stop_1 });
+        Collections.<Stop>unmodifiableList(Lists.<Stop>newArrayList(_stop, _stop_1)));
       return _linearGradient;
     }
   }.apply();
@@ -131,50 +133,50 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
     _builder_1.append("\t");
     Transform _localToSceneTransform = this.getLocalToSceneTransform();
     CharSequence _svgString = exporter.toSvgString(_localToSceneTransform);
-    _builder_1.append(_svgString, "	");
+    _builder_1.append(_svgString, "\t");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
     _builder_1.append("width=\"");
     double _width = this.getWidth();
-    _builder_1.append(_width, "	");
+    _builder_1.append(_width, "\t");
     _builder_1.append("\" height=\"");
     double _height = this.getHeight();
-    _builder_1.append(_height, "	");
+    _builder_1.append(_height, "\t");
     _builder_1.append("\"");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
     _builder_1.append("rx=\"");
     double _borderRadius = this.getBorderRadius();
-    _builder_1.append(_borderRadius, "	");
+    _builder_1.append(_borderRadius, "\t");
     _builder_1.append("\" ry=\"");
     double _borderRadius_1 = this.getBorderRadius();
-    _builder_1.append(_borderRadius_1, "	");
+    _builder_1.append(_borderRadius_1, "\t");
     _builder_1.append("\"");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
     _builder_1.append("fill=\"");
     Paint _backgroundPaint = this.getBackgroundPaint();
     CharSequence _svgString_1 = exporter.toSvgString(_backgroundPaint);
-    _builder_1.append(_svgString_1, "	");
+    _builder_1.append(_svgString_1, "\t");
     _builder_1.append("\"");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
     _builder_1.append("stroke=\"");
     Paint _borderPaint = this.getBorderPaint();
     CharSequence _svgString_2 = exporter.toSvgString(_borderPaint);
-    _builder_1.append(_svgString_2, "	");
+    _builder_1.append(_svgString_2, "\t");
     _builder_1.append("\"");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
     _builder_1.append("strokeWidth=\"");
     double _borderWidth = this.getBorderWidth();
-    _builder_1.append(_borderWidth, "	");
+    _builder_1.append(_borderWidth, "\t");
     _builder_1.append("\"");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
     double _opacity = this.getOpacity();
     CharSequence _svgAttribute = exporter.toSvgAttribute(Double.valueOf(_opacity), "opacity", Double.valueOf(1.0));
-    _builder_1.append(_svgAttribute, "	");
+    _builder_1.append(_svgAttribute, "\t");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("/>");
     _builder_1.newLine();

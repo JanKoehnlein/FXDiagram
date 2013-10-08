@@ -682,14 +682,13 @@ public class ShapeConverterExtensions {
         boolean _matched = false;
         if (!_matched) {
           if (element instanceof MoveTo) {
-            final MoveTo _moveTo = (MoveTo)element;
             _matched=true;
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("M ");
-            double _x = _moveTo.getX();
+            double _x = ((MoveTo)element).getX();
             _builder.append(_x, "");
             _builder.append(" ");
-            double _y = _moveTo.getY();
+            double _y = ((MoveTo)element).getY();
             _builder.append(_y, "");
             _builder.append(" ");
             it.append(_builder);
@@ -697,14 +696,13 @@ public class ShapeConverterExtensions {
         }
         if (!_matched) {
           if (element instanceof LineTo) {
-            final LineTo _lineTo = (LineTo)element;
             _matched=true;
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("L ");
-            double _x = _lineTo.getX();
+            double _x = ((LineTo)element).getX();
             _builder.append(_x, "");
             _builder.append(" ");
-            double _y = _lineTo.getY();
+            double _y = ((LineTo)element).getY();
             _builder.append(_y, "");
             _builder.append(" ");
             it.append(_builder);
@@ -712,26 +710,25 @@ public class ShapeConverterExtensions {
         }
         if (!_matched) {
           if (element instanceof CubicCurveTo) {
-            final CubicCurveTo _cubicCurveTo = (CubicCurveTo)element;
             _matched=true;
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("C ");
-            double _controlX1 = _cubicCurveTo.getControlX1();
+            double _controlX1 = ((CubicCurveTo)element).getControlX1();
             _builder.append(_controlX1, "");
             _builder.append(" ");
-            double _controlY1 = _cubicCurveTo.getControlY1();
+            double _controlY1 = ((CubicCurveTo)element).getControlY1();
             _builder.append(_controlY1, "");
             _builder.append(" ");
-            double _controlX2 = _cubicCurveTo.getControlX2();
+            double _controlX2 = ((CubicCurveTo)element).getControlX2();
             _builder.append(_controlX2, "");
             _builder.append(" ");
-            double _controlY2 = _cubicCurveTo.getControlY2();
+            double _controlY2 = ((CubicCurveTo)element).getControlY2();
             _builder.append(_controlY2, "");
             _builder.append(" ");
-            double _x = _cubicCurveTo.getX();
+            double _x = ((CubicCurveTo)element).getX();
             _builder.append(_x, "");
             _builder.append(" ");
-            double _y = _cubicCurveTo.getY();
+            double _y = ((CubicCurveTo)element).getY();
             _builder.append(_y, "");
             _builder.append(" ");
             it.append(_builder);
@@ -739,20 +736,19 @@ public class ShapeConverterExtensions {
         }
         if (!_matched) {
           if (element instanceof QuadCurveTo) {
-            final QuadCurveTo _quadCurveTo = (QuadCurveTo)element;
             _matched=true;
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("Q ");
-            double _controlX = _quadCurveTo.getControlX();
+            double _controlX = ((QuadCurveTo)element).getControlX();
             _builder.append(_controlX, "");
             _builder.append(" ");
-            double _controlY = _quadCurveTo.getControlY();
+            double _controlY = ((QuadCurveTo)element).getControlY();
             _builder.append(_controlY, "");
             _builder.append(" ");
-            double _x = _quadCurveTo.getX();
+            double _x = ((QuadCurveTo)element).getX();
             _builder.append(_x, "");
             _builder.append(" ");
-            double _y = _quadCurveTo.getY();
+            double _y = ((QuadCurveTo)element).getY();
             _builder.append(_y, "");
             _builder.append(" ");
             it.append(_builder);
@@ -760,20 +756,19 @@ public class ShapeConverterExtensions {
         }
         if (!_matched) {
           if (element instanceof ArcTo) {
-            final ArcTo _arcTo = (ArcTo)element;
             _matched=true;
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("A ");
-            double _x = _arcTo.getX();
+            double _x = ((ArcTo)element).getX();
             _builder.append(_x, "");
             _builder.append(" ");
-            double _y = _arcTo.getY();
+            double _y = ((ArcTo)element).getY();
             _builder.append(_y, "");
             _builder.append(" ");
-            double _radiusX = _arcTo.getRadiusX();
+            double _radiusX = ((ArcTo)element).getRadiusX();
             _builder.append(_radiusX, "");
             _builder.append(" ");
-            double _radiusY = _arcTo.getRadiusY();
+            double _radiusY = ((ArcTo)element).getRadiusY();
             _builder.append(_radiusY, "");
             _builder.append(" ");
             it.append(_builder);
@@ -781,11 +776,10 @@ public class ShapeConverterExtensions {
         }
         if (!_matched) {
           if (element instanceof HLineTo) {
-            final HLineTo _hLineTo = (HLineTo)element;
             _matched=true;
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("H ");
-            double _x = _hLineTo.getX();
+            double _x = ((HLineTo)element).getX();
             _builder.append(_x, "");
             _builder.append(" ");
             it.append(_builder);
@@ -793,11 +787,10 @@ public class ShapeConverterExtensions {
         }
         if (!_matched) {
           if (element instanceof VLineTo) {
-            final VLineTo _vLineTo = (VLineTo)element;
             _matched=true;
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("V ");
-            double _y = _vLineTo.getY();
+            double _y = ((VLineTo)element).getY();
             _builder.append(_y, "");
             _builder.append(" ");
             it.append(_builder);
@@ -805,7 +798,6 @@ public class ShapeConverterExtensions {
         }
         if (!_matched) {
           if (element instanceof ClosePath) {
-            final ClosePath _closePath = (ClosePath)element;
             _matched=true;
             it.append("Z");
           }

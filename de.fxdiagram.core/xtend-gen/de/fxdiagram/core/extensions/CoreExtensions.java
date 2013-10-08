@@ -28,9 +28,8 @@ public class CoreExtensions {
       boolean _matched = false;
       if (!_matched) {
         if (node instanceof XDiagram) {
-          final XDiagram _xDiagram = (XDiagram)node;
           _matched=true;
-          return _xDiagram.getIsRootDiagram();
+          return ((XDiagram)node).getIsRootDiagram();
         }
       }
       _xblockexpression = (false);
@@ -56,9 +55,8 @@ public class CoreExtensions {
       }
       if (!_matched) {
         if (node instanceof XDiagram) {
-          final XDiagram _xDiagram = (XDiagram)node;
           _matched=true;
-          boolean _isRootDiagram = _xDiagram.getIsRootDiagram();
+          boolean _isRootDiagram = ((XDiagram)node).getIsRootDiagram();
           if (_isRootDiagram) {
             return point;
           }
@@ -84,9 +82,8 @@ public class CoreExtensions {
       }
       if (!_matched) {
         if (node instanceof XDiagram) {
-          final XDiagram _xDiagram = (XDiagram)node;
           _matched=true;
-          boolean _isRootDiagram = _xDiagram.getIsRootDiagram();
+          boolean _isRootDiagram = ((XDiagram)node).getIsRootDiagram();
           if (_isRootDiagram) {
             return bounds;
           }
@@ -117,7 +114,6 @@ public class CoreExtensions {
     }
     if (!_matched) {
       if (node instanceof XDiagram) {
-        final XDiagram _xDiagram = (XDiagram)node;
         _matched=true;
         _switchResult = point;
       }
@@ -142,7 +138,6 @@ public class CoreExtensions {
     }
     if (!_matched) {
       if (node instanceof XDiagram) {
-        final XDiagram _xDiagram = (XDiagram)node;
         _matched=true;
         _switchResult = bounds;
       }
@@ -195,9 +190,8 @@ public class CoreExtensions {
     }
     if (!_matched) {
       if (it instanceof XDiagram) {
-        final XDiagram _xDiagram = (XDiagram)it;
         _matched=true;
-        _switchResult = _xDiagram;
+        _switchResult = ((XDiagram)it);
       }
     }
     if (!_matched) {
@@ -219,14 +213,13 @@ public class CoreExtensions {
     }
     if (!_matched) {
       if (it instanceof XDiagram) {
-        final XDiagram _xDiagram = (XDiagram)it;
         _matched=true;
         XDiagram _xifexpression = null;
-        boolean _isRootDiagram = _xDiagram.getIsRootDiagram();
+        boolean _isRootDiagram = ((XDiagram)it).getIsRootDiagram();
         if (_isRootDiagram) {
-          _xifexpression = _xDiagram;
+          _xifexpression = ((XDiagram)it);
         } else {
-          XDiagram _parentDiagram = _xDiagram.getParentDiagram();
+          XDiagram _parentDiagram = ((XDiagram)it).getParentDiagram();
           XDiagram _rootDiagram = CoreExtensions.getRootDiagram(_parentDiagram);
           _xifexpression = _rootDiagram;
         }
@@ -252,9 +245,8 @@ public class CoreExtensions {
     }
     if (!_matched) {
       if (it instanceof XRoot) {
-        final XRoot _xRoot = (XRoot)it;
         _matched=true;
-        _switchResult = _xRoot;
+        _switchResult = ((XRoot)it);
       }
     }
     if (!_matched) {
@@ -289,9 +281,8 @@ public class CoreExtensions {
     }
     if (!_matched) {
       if (it instanceof XShape) {
-        final XShape _xShape = (XShape)it;
         _matched=true;
-        _switchResult = _xShape;
+        _switchResult = ((XShape)it);
       }
     }
     if (!_matched) {
@@ -326,9 +317,8 @@ public class CoreExtensions {
     }
     if (!_matched) {
       if (it instanceof XRapidButton) {
-        final XRapidButton _xRapidButton = (XRapidButton)it;
         _matched=true;
-        _switchResult = _xRapidButton;
+        _switchResult = ((XRapidButton)it);
       }
     }
     if (!_matched) {

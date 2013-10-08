@@ -125,9 +125,8 @@ public class XNode extends XShape {
     boolean _matched = false;
     if (!_matched) {
       if (n instanceof XActivatable) {
-        final XActivatable _xActivatable = (XActivatable)n;
         _matched=true;
-        ((XActivatable)_xActivatable).activate();
+        ((XActivatable)n).activate();
       }
     }
   }

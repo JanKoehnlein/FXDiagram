@@ -1,6 +1,7 @@
 package de.fxdiagram.core.anchors;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
@@ -13,6 +14,7 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -316,7 +318,7 @@ public class ConnectionRouter implements XActivatable {
       };
       XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
       _controlPoints_2.setAll(
-        new XControlPoint[] { _doubleArrow, _doubleArrow_1 });
+        Collections.<XControlPoint>unmodifiableList(Lists.<XControlPoint>newArrayList(_doubleArrow, _doubleArrow_1)));
       XConnectionKind _kind = this.connection.getKind();
       final XConnectionKind _switchValue = _kind;
       boolean _matched = false;
