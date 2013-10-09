@@ -526,9 +526,7 @@ public class XConnection extends XShape {
             final int index = ((int) segment);
             final CubicCurve curve = ((CubicCurve[])Conversions.unwrapArray(curves, CubicCurve.class))[index];
             double _minus = (segment - index);
-            int _size_1 = IterableExtensions.size(curves);
-            double _multiply = (_minus * _size_1);
-            Point2D _at = BezierExtensions.at(curve, _multiply);
+            Point2D _at = BezierExtensions.at(curve, _minus);
             _xblockexpression_1 = (_at);
           }
           _switchResult = _xblockexpression_1;
@@ -546,9 +544,7 @@ public class XConnection extends XShape {
             final int index = ((int) segment);
             final QuadCurve curve = ((QuadCurve[])Conversions.unwrapArray(curves, QuadCurve.class))[index];
             double _minus = (segment - index);
-            int _size_1 = IterableExtensions.size(curves);
-            double _multiply = (_minus * _size_1);
-            Point2D _at = BezierExtensions.at(curve, _multiply);
+            Point2D _at = BezierExtensions.at(curve, _minus);
             _xblockexpression_2 = (_at);
           }
           _switchResult = _xblockexpression_2;
@@ -580,8 +576,7 @@ public class XConnection extends XShape {
             int _plus_2 = (index + 3);
             Double _get_3 = _points_4.get(_plus_2);
             double _minus = (segment - index);
-            double _multiply = (_minus * numSegments);
-            Point2D _linear = Point2DExtensions.linear((_get).doubleValue(), (_get_1).doubleValue(), (_get_2).doubleValue(), (_get_3).doubleValue(), _multiply);
+            Point2D _linear = Point2DExtensions.linear((_get).doubleValue(), (_get_1).doubleValue(), (_get_2).doubleValue(), (_get_3).doubleValue(), _minus);
             _xblockexpression_3 = (_linear);
           }
           _switchResult = _xblockexpression_3;
@@ -628,9 +623,7 @@ public class XConnection extends XShape {
             final int index = ((int) segment);
             final CubicCurve curve = ((CubicCurve[])Conversions.unwrapArray(curves, CubicCurve.class))[index];
             double _minus = (segment - index);
-            int _size_1 = IterableExtensions.size(curves);
-            double _multiply = (_minus * _size_1);
-            Point2D _derivativeAt = BezierExtensions.derivativeAt(curve, _multiply);
+            Point2D _derivativeAt = BezierExtensions.derivativeAt(curve, _minus);
             _xblockexpression_1 = (_derivativeAt);
           }
           _switchResult = _xblockexpression_1;
@@ -653,9 +646,7 @@ public class XConnection extends XShape {
             final int index = ((int) segment);
             final QuadCurve curve = ((QuadCurve[])Conversions.unwrapArray(curves, QuadCurve.class))[index];
             double _minus = (segment - index);
-            int _size_1 = IterableExtensions.size(curves);
-            double _multiply = (_minus * _size_1);
-            Point2D _derivativeAt = BezierExtensions.derivativeAt(curve, _multiply);
+            Point2D _derivativeAt = BezierExtensions.derivativeAt(curve, _minus);
             _xblockexpression_2 = (_derivativeAt);
           }
           _switchResult = _xblockexpression_2;

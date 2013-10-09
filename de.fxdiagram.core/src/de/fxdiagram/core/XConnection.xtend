@@ -218,14 +218,14 @@ class XConnection extends XShape {
 				val segment = t * curves.size
 				val index = segment as int
 				val curve = curves.get(index)
-				curve.at((segment - index) * curves.size)
+				curve.at(segment - index)
 			}
 			case QUAD_CURVE: {
 				val curves = shapeGroup.children.filter(QuadCurve)
 				val segment = t * curves.size
 				val index = segment as int
 				val curve = curves.get(index)
-				curve.at((segment - index) * curves.size)
+				curve.at(segment - index)
 			}
 			case POLYLINE: {
 				val line = shapeGroup.children.filter(Polyline).head
@@ -235,7 +235,7 @@ class XConnection extends XShape {
 				linear(
 					line.points.get(index), line.points.get(index + 1), 
 					line.points.get(index + 2), line.points.get(index + 3), 
-					(segment - index) * numSegments)
+					segment - index)
 			}
 		}
 	}
@@ -251,7 +251,7 @@ class XConnection extends XShape {
 				val segment = t * curves.size
 				val index = segment as int
 				val curve = curves.get(index)
-				curve.derivativeAt((segment - index) * curves.size)
+				curve.derivativeAt(segment - index)
 			}
 			case QUAD_CURVE: {
 				val curves = shapeGroup.children.filter(QuadCurve)
@@ -260,7 +260,7 @@ class XConnection extends XShape {
 				val segment = t * curves.size
 				val index = segment as int
 				val curve = curves.get(index)
-				curve.derivativeAt((segment - index) * curves.size)
+				curve.derivativeAt(segment - index)
 			}
 			case POLYLINE: {
 				val line = shapeGroup.children.filter(Polyline).head
