@@ -8,14 +8,12 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.services.ImageCache;
-import de.fxdiagram.examples.BrickBreakerNode;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.login.LoginNode;
 import de.fxdiagram.examples.neonsign.NeonSignNode;
 import de.fxdiagram.lib.media.BrowserNode;
 import de.fxdiagram.lib.media.ImageNode;
-import de.fxdiagram.lib.media.MovieNode;
 import de.fxdiagram.lib.media.RecursiveImageNode;
 import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
@@ -24,12 +22,10 @@ import java.net.URL;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -160,7 +156,10 @@ public class Main extends Application {
           ImageNode _imageNode = new ImageNode();
           final Procedure1<ImageNode> _function_6 = new Procedure1<ImageNode>() {
             public void apply(final ImageNode it) {
-              Image _image = new Image("media/seltsam.jpg", true);
+              ImageCache _get = ImageCache.get();
+              Class<? extends Main> _class = Main.this.getClass();
+              ClassLoader _classLoader = _class.getClassLoader();
+              Image _image = _get.getImage("media/seltsam.jpg", _classLoader);
               it.setImage(_image);
               it.setLayoutX(100);
               it.setLayoutY(100);
@@ -170,39 +169,22 @@ public class Main extends Application {
           ImageNode _doubleArrow_3 = ObjectExtensions.<ImageNode>operator_doubleArrow(_imageNode, _function_6);
           _nodes_3.add(_doubleArrow_3);
           ObservableList<XNode> _nodes_4 = it.getNodes();
-          MovieNode _movieNode = new MovieNode("Movie");
-          final Procedure1<MovieNode> _function_7 = new Procedure1<MovieNode>() {
-            public void apply(final MovieNode it) {
-              Class<? extends Main> _class = Main.this.getClass();
-              ClassLoader _classLoader = _class.getClassLoader();
-              URL _resource = _classLoader.getResource("media/ScreenFlow.mp4");
-              it.setMovieUrl(_resource);
-              it.setWidth(640);
-              it.setHeight(360);
-              MediaView _view = it.getView();
-              Rectangle2D _rectangle2D = new Rectangle2D(0, 60, 640, 360);
-              _view.setViewport(_rectangle2D);
-              it.setLayoutX(100);
-              it.setLayoutY(200);
-            }
-          };
-          MovieNode _doubleArrow_4 = ObjectExtensions.<MovieNode>operator_doubleArrow(_movieNode, _function_7);
-          _nodes_4.add(_doubleArrow_4);
-          ObservableList<XNode> _nodes_5 = it.getNodes();
           ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage("media/seltsam.jpg");
+          Class<? extends Main> _class = Main.this.getClass();
+          ClassLoader _classLoader = _class.getClassLoader();
+          Image _image = _get.getImage("media/seltsam.jpg", _classLoader);
           RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_image, 10, 0, 0.3);
-          final Procedure1<RecursiveImageNode> _function_8 = new Procedure1<RecursiveImageNode>() {
+          final Procedure1<RecursiveImageNode> _function_7 = new Procedure1<RecursiveImageNode>() {
             public void apply(final RecursiveImageNode it) {
               it.setWidth(120);
               it.setHeight(90);
             }
           };
-          RecursiveImageNode _doubleArrow_5 = ObjectExtensions.<RecursiveImageNode>operator_doubleArrow(_recursiveImageNode, _function_8);
-          _nodes_5.add(_doubleArrow_5);
-          ObservableList<XNode> _nodes_6 = it.getNodes();
+          RecursiveImageNode _doubleArrow_4 = ObjectExtensions.<RecursiveImageNode>operator_doubleArrow(_recursiveImageNode, _function_7);
+          _nodes_4.add(_doubleArrow_4);
+          ObservableList<XNode> _nodes_5 = it.getNodes();
           BrowserNode _browserNode = new BrowserNode();
-          final Procedure1<BrowserNode> _function_9 = new Procedure1<BrowserNode>() {
+          final Procedure1<BrowserNode> _function_8 = new Procedure1<BrowserNode>() {
             public void apply(final BrowserNode it) {
               try {
                 it.setWidth(120);
@@ -216,23 +198,11 @@ public class Main extends Application {
               }
             }
           };
-          BrowserNode _doubleArrow_6 = ObjectExtensions.<BrowserNode>operator_doubleArrow(_browserNode, _function_9);
-          _nodes_6.add(_doubleArrow_6);
-          ObservableList<XNode> _nodes_7 = it.getNodes();
-          BrickBreakerNode _brickBreakerNode = new BrickBreakerNode();
-          final Procedure1<BrickBreakerNode> _function_10 = new Procedure1<BrickBreakerNode>() {
-            public void apply(final BrickBreakerNode it) {
-              it.setWidth(640);
-              it.setHeight(480);
-              it.setLayoutX(500);
-              it.setLayoutY(100);
-            }
-          };
-          BrickBreakerNode _doubleArrow_7 = ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function_10);
-          _nodes_7.add(_doubleArrow_7);
-          ObservableList<XNode> _nodes_8 = it.getNodes();
+          BrowserNode _doubleArrow_5 = ObjectExtensions.<BrowserNode>operator_doubleArrow(_browserNode, _function_8);
+          _nodes_5.add(_doubleArrow_5);
+          ObservableList<XNode> _nodes_6 = it.getNodes();
           JavaTypeNode _javaTypeNode = new JavaTypeNode();
-          final Procedure1<JavaTypeNode> _function_11 = new Procedure1<JavaTypeNode>() {
+          final Procedure1<JavaTypeNode> _function_9 = new Procedure1<JavaTypeNode>() {
             public void apply(final JavaTypeNode it) {
               it.setJavaType(Button.class);
               it.setWidth(160);
@@ -241,11 +211,11 @@ public class Main extends Application {
               it.setLayoutY(200);
             }
           };
-          JavaTypeNode _doubleArrow_8 = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_11);
-          _nodes_8.add(_doubleArrow_8);
-          ObservableList<XNode> _nodes_9 = it.getNodes();
+          JavaTypeNode _doubleArrow_6 = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_9);
+          _nodes_6.add(_doubleArrow_6);
+          ObservableList<XNode> _nodes_7 = it.getNodes();
           NeonSignNode _neonSignNode = new NeonSignNode();
-          final Procedure1<NeonSignNode> _function_12 = new Procedure1<NeonSignNode>() {
+          final Procedure1<NeonSignNode> _function_10 = new Procedure1<NeonSignNode>() {
             public void apply(final NeonSignNode it) {
               it.setLayoutX(500);
               it.setLayoutY(10);
@@ -253,11 +223,11 @@ public class Main extends Application {
               it.setHeight(30);
             }
           };
-          NeonSignNode _doubleArrow_9 = ObjectExtensions.<NeonSignNode>operator_doubleArrow(_neonSignNode, _function_12);
-          _nodes_9.add(_doubleArrow_9);
-          ObservableList<XNode> _nodes_10 = it.getNodes();
+          NeonSignNode _doubleArrow_7 = ObjectExtensions.<NeonSignNode>operator_doubleArrow(_neonSignNode, _function_10);
+          _nodes_7.add(_doubleArrow_7);
+          ObservableList<XNode> _nodes_8 = it.getNodes();
           OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode("LCARS");
-          final Procedure1<OpenableDiagramNode> _function_13 = new Procedure1<OpenableDiagramNode>() {
+          final Procedure1<OpenableDiagramNode> _function_11 = new Procedure1<OpenableDiagramNode>() {
             public void apply(final OpenableDiagramNode it) {
               LcarsDiagram _lcarsDiagram = new LcarsDiagram();
               it.setInnerDiagram(_lcarsDiagram);
@@ -267,11 +237,11 @@ public class Main extends Application {
               it.setHeight(30);
             }
           };
-          OpenableDiagramNode _doubleArrow_10 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode_1, _function_13);
-          _nodes_10.add(_doubleArrow_10);
-          ObservableList<XNode> _nodes_11 = it.getNodes();
+          OpenableDiagramNode _doubleArrow_8 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode_1, _function_11);
+          _nodes_8.add(_doubleArrow_8);
+          ObservableList<XNode> _nodes_9 = it.getNodes();
           LoginNode _loginNode = new LoginNode();
-          final Procedure1<LoginNode> _function_14 = new Procedure1<LoginNode>() {
+          final Procedure1<LoginNode> _function_12 = new Procedure1<LoginNode>() {
             public void apply(final LoginNode it) {
               it.setLayoutX(200);
               it.setLayoutY(200);
@@ -279,8 +249,8 @@ public class Main extends Application {
               it.setHeight(30);
             }
           };
-          LoginNode _doubleArrow_11 = ObjectExtensions.<LoginNode>operator_doubleArrow(_loginNode, _function_14);
-          _nodes_11.add(_doubleArrow_11);
+          LoginNode _doubleArrow_9 = ObjectExtensions.<LoginNode>operator_doubleArrow(_loginNode, _function_12);
+          _nodes_9.add(_doubleArrow_9);
         }
       };
       ObjectExtensions.<XDiagram>operator_doubleArrow(diagram, _function);

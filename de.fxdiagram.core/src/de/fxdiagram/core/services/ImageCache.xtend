@@ -1,8 +1,8 @@
 package de.fxdiagram.core.services
 
+import java.io.ByteArrayInputStream
 import java.util.Map
 import javafx.scene.image.Image
-import java.io.ByteArrayInputStream
 
 class ImageCache {
 	
@@ -14,12 +14,12 @@ class ImageCache {
 		INSTANCE ?: (INSTANCE = new ImageCache)	
 	}
 	
-	def getImage(String file) {
+	def getImage(String file, ClassLoader classLoader) {
 		val cachedImage = cache.get(file)
 		if (cachedImage != null) {
 			cachedImage
 		} else {
-			val image = new Image(file)
+			val image = new Image(classLoader.getResourceAsStream(file))
 			put(file, image)
 			image
 		}

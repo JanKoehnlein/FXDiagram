@@ -2,6 +2,7 @@ package de.fxdiagram.core.services;
 
 import com.google.common.base.Objects;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.image.Image;
@@ -33,7 +34,7 @@ public class ImageCache {
     return _elvis;
   }
   
-  public Image getImage(final String file) {
+  public Image getImage(final String file, final ClassLoader classLoader) {
     Image _xblockexpression = null;
     {
       final Image cachedImage = this.cache.get(file);
@@ -44,7 +45,8 @@ public class ImageCache {
       } else {
         Image _xblockexpression_1 = null;
         {
-          Image _image = new Image(file);
+          InputStream _resourceAsStream = classLoader.getResourceAsStream(file);
+          Image _image = new Image(_resourceAsStream);
           final Image image = _image;
           this.put(file, image);
           _xblockexpression_1 = (image);

@@ -111,7 +111,8 @@ class XControlPoint extends XShape {
 
 	protected def Node newMagnet() {
 		new Group => [
-			children += FXMLLoader.<Node>load(class.getResource('/icons/Magnet.fxml'))
+			val fxmlStream = this.class.getResourceAsStream('icons/Magnet.fxml')
+			children += new FXMLLoader().load(fxmlStream) as Node
 		]
 	}
 }

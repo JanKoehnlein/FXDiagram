@@ -5,6 +5,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractBehavior
+import de.fxdiagram.core.services.ImageCache
 import de.fxdiagram.core.tools.AbstractXNodeChooser
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
@@ -48,10 +49,10 @@ class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 			host.root.currentTool = chooser
 		]
 		rapidButtons = #[
-			new XRapidButton(host, 0.5, 0, 'icons/add_16.png', cubeChooseAction),
-			new XRapidButton(host, 0.5, 1, 'icons/add_16.png', coverFlowChooseAction),
-			new XRapidButton(host, 0, 0.5, 'icons/add_16.png', chooseAction),
-			new XRapidButton(host, 1, 0.5, 'icons/add_16.png', addAction)]
+			new XRapidButton(host, 0.5, 0, getImage('icons/add_16.png'), cubeChooseAction),
+			new XRapidButton(host, 0.5, 1, getImage('icons/add_16.png'), coverFlowChooseAction),
+			new XRapidButton(host, 0, 0.5, getImage('icons/add_16.png'), chooseAction),
+			new XRapidButton(host, 1, 0.5, getImage('icons/add_16.png'), addAction)]
 		host.diagram.buttons += rapidButtons
 	}
 	
@@ -59,4 +60,9 @@ class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 		for (i: 0..<20)
 			chooser += new SimpleNode("node " +  i)
 	} 
+	
+	protected def getImage(String file) {
+		ImageCache.get.getImage(file, class.classLoader)
+	}	
+	
 }

@@ -22,6 +22,7 @@ import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.services.ImageCache
 
 class JavaTypeNode extends XNode {
 	
@@ -142,8 +143,8 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				host.root.currentTool = chooser
 			]
 			host.diagram.buttons += #[
-				new XRapidButton(host, 0.5, 0, 'icons/SuperType.gif', addSuperTypeAction),
-				new XRapidButton(host, 0.5, 1, 'icons/SuperType.gif', addSuperTypeAction)
+				new XRapidButton(host, 0.5, 0, getImage('icons/SuperType.gif'), addSuperTypeAction),
+				new XRapidButton(host, 0.5, 1, getImage('icons/SuperType.gif'), addSuperTypeAction)
 			] 			
 		}
 		if(!model.references.empty) {
@@ -169,12 +170,14 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				host.root.currentTool = chooser
 			]
 			host.diagram.buttons += #[
-				new XRapidButton(host, 0, 0.5, 'icons/Reference.gif', addReferencesAction),
-				new XRapidButton(host, 1, 0.5, 'icons/Reference.gif', addReferencesAction)
+				new XRapidButton(host, 0, 0.5, getImage('icons/Reference.gif'), addReferencesAction),
+				new XRapidButton(host, 1, 0.5, getImage('icons/Reference.gif'), addReferencesAction)
 			]
 		}
 
 	}
-	
-	
+
+	protected def getImage(String file) {
+		ImageCache.get.getImage(file, class.classLoader)
+	}	
 }

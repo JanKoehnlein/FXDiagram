@@ -11,6 +11,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.core.tools.AbstractXNodeChooser;
 import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.lib.tools.CarusselChooser;
@@ -20,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -97,10 +99,14 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
       }
     };
     final Procedure1<XRapidButton> coverFlowChooseAction = _function_3;
-    XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, "icons/add_16.png", cubeChooseAction);
-    XRapidButton _xRapidButton_1 = new XRapidButton(host, 0.5, 1, "icons/add_16.png", coverFlowChooseAction);
-    XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, "icons/add_16.png", chooseAction);
-    XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, "icons/add_16.png", addAction);
+    Image _image = this.getImage("icons/add_16.png");
+    XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, _image, cubeChooseAction);
+    Image _image_1 = this.getImage("icons/add_16.png");
+    XRapidButton _xRapidButton_1 = new XRapidButton(host, 0.5, 1, _image_1, coverFlowChooseAction);
+    Image _image_2 = this.getImage("icons/add_16.png");
+    XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, _image_2, chooseAction);
+    Image _image_3 = this.getImage("icons/add_16.png");
+    XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, _image_3, addAction);
     this.rapidButtons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
     XDiagram _diagram = CoreExtensions.getDiagram(host);
     ObservableList<XRapidButton> _buttons = _diagram.getButtons();
@@ -114,5 +120,13 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
       SimpleNode _simpleNode = new SimpleNode(_plus);
       chooser.operator_add(_simpleNode);
     }
+  }
+  
+  protected Image getImage(final String file) {
+    ImageCache _get = ImageCache.get();
+    Class<? extends AddRapidButtonBehavior> _class = this.getClass();
+    ClassLoader _classLoader = _class.getClassLoader();
+    Image _image = _get.getImage(file, _classLoader);
+    return _image;
   }
 }

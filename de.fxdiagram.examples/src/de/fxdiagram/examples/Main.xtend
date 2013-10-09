@@ -98,22 +98,22 @@ class Main extends Application {
 			]
 
 			nodes += new ImageNode => [
-				image = new Image('media/seltsam.jpg', true)
+				image = ImageCache.get.getImage('media/seltsam.jpg', this.class.classLoader)
 				layoutX = 100
 				layoutY = 100
 				width = 100
 			]
 
-			nodes += new MovieNode('Movie') => [
-				movieUrl = this.class.classLoader.getResource('media/ScreenFlow.mp4')
-				width = 640
-				height = 360
-				view.viewport = new Rectangle2D(0, 60, 640, 360)
-				layoutX = 100
-				layoutY = 200
-			]
+//			nodes += new MovieNode('Movie') => [
+//				movieUrl = this.class.classLoader.getResource('media/ScreenFlow.mp4')
+//				width = 640
+//				height = 360
+//				view.viewport = new Rectangle2D(0, 60, 640, 360)
+//				layoutX = 100
+//				layoutY = 200
+//			]
 
-			nodes += new RecursiveImageNode(ImageCache.get.getImage('media/seltsam.jpg'), 10, 0, 0.3) => [
+			nodes += new RecursiveImageNode(ImageCache.get.getImage('media/seltsam.jpg', this.class.classLoader), 10, 0, 0.3) => [
 				width = 120
 				height = 90
 			]
@@ -126,12 +126,12 @@ class Main extends Application {
 				pageUrl = new URL('http://koehnlein.blogspot.de/')
 			]
 		
-			nodes += new BrickBreakerNode => [
-				width = 640
-				height = 480
-				layoutX = 500
-				layoutY = 100
-			]
+//			nodes += new BrickBreakerNode => [
+//				width = 640
+//				height = 480
+//				layoutX = 500
+//				layoutY = 100
+//			]
 
 			nodes += new JavaTypeNode => [
 				javaType = Button

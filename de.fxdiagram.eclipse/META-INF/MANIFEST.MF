@@ -1,10 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: External
-Bundle-SymbolicName: de.fxdiagram.external
+Bundle-Name: Eclipse
+Bundle-SymbolicName: de.fxdiagram.eclipse;singleton:=true
 Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: de.fxdiagram.eclipse.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ de.fxdiagram.examples;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: eu.hansolo.enzo.radialmenu
+Bundle-ActivationPolicy: lazy
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",
