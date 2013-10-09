@@ -16,6 +16,9 @@ import static de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
+import static extension de.fxdiagram.core.extensions.UriExtensions.*
+import java.net.URL
+
 class XControlPoint extends XShape {
 
 	MoveBehavior<XControlPoint> moveBehavior
@@ -111,8 +114,7 @@ class XControlPoint extends XShape {
 
 	protected def Node newMagnet() {
 		new Group => [
-			val fxmlStream = this.class.getResourceAsStream('icons/Magnet.fxml')
-			children += new FXMLLoader().load(fxmlStream) as Node
+			children += FXMLLoader.<Node>load(new URL(this.toURI('images/Magnet.fxml')))
 		]
 	}
 }

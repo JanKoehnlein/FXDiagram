@@ -99,14 +99,12 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
       }
     };
     final Procedure1<XRapidButton> coverFlowChooseAction = _function_3;
-    Image _image = this.getImage("icons/add_16.png");
-    XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, _image, cubeChooseAction);
-    Image _image_1 = this.getImage("icons/add_16.png");
-    XRapidButton _xRapidButton_1 = new XRapidButton(host, 0.5, 1, _image_1, coverFlowChooseAction);
-    Image _image_2 = this.getImage("icons/add_16.png");
-    XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, _image_2, chooseAction);
-    Image _image_3 = this.getImage("icons/add_16.png");
-    XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, _image_3, addAction);
+    ImageCache _get = ImageCache.get();
+    final Image image = _get.getImage(this, "add_16.png");
+    XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, image, cubeChooseAction);
+    XRapidButton _xRapidButton_1 = new XRapidButton(host, 0.5, 1, image, coverFlowChooseAction);
+    XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, image, chooseAction);
+    XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, image, addAction);
     this.rapidButtons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
     XDiagram _diagram = CoreExtensions.getDiagram(host);
     ObservableList<XRapidButton> _buttons = _diagram.getButtons();
@@ -120,13 +118,5 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
       SimpleNode _simpleNode = new SimpleNode(_plus);
       chooser.operator_add(_simpleNode);
     }
-  }
-  
-  protected Image getImage(final String file) {
-    ImageCache _get = ImageCache.get();
-    Class<? extends AddRapidButtonBehavior> _class = this.getClass();
-    ClassLoader _classLoader = _class.getClassLoader();
-    Image _image = _get.getImage(file, _classLoader);
-    return _image;
   }
 }

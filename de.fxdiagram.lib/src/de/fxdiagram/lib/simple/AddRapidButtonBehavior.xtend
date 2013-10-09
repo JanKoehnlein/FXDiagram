@@ -48,11 +48,12 @@ class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 			chooser.addChoices
 			host.root.currentTool = chooser
 		]
+		val image = ImageCache.get.getImage(this, 'add_16.png')
 		rapidButtons = #[
-			new XRapidButton(host, 0.5, 0, getImage('icons/add_16.png'), cubeChooseAction),
-			new XRapidButton(host, 0.5, 1, getImage('icons/add_16.png'), coverFlowChooseAction),
-			new XRapidButton(host, 0, 0.5, getImage('icons/add_16.png'), chooseAction),
-			new XRapidButton(host, 1, 0.5, getImage('icons/add_16.png'), addAction)]
+			new XRapidButton(host, 0.5, 0, image, cubeChooseAction),
+			new XRapidButton(host, 0.5, 1, image, coverFlowChooseAction),
+			new XRapidButton(host, 0, 0.5, image, chooseAction),
+			new XRapidButton(host, 1, 0.5, image, addAction)]
 		host.diagram.buttons += rapidButtons
 	}
 	
@@ -60,9 +61,4 @@ class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 		for (i: 0..<20)
 			chooser += new SimpleNode("node " +  i)
 	} 
-	
-	protected def getImage(String file) {
-		ImageCache.get.getImage(file, class.classLoader)
-	}	
-	
 }

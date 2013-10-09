@@ -26,6 +26,7 @@ import static java.lang.Math.*
 import static extension de.fxdiagram.core.css.JavaToCss.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
+import static extension de.fxdiagram.core.extensions.UriExtensions.*
 
 @Logging
 class XRoot extends Parent implements XActivatable {
@@ -58,8 +59,7 @@ class XRoot extends Parent implements XActivatable {
 		defaultTool += new DiagramGestureTool(this)
 		defaultTool += new MenuTool(this)
 		tools += defaultTool
-		stylesheets += "de/fxdiagram/core/XRoot.css"
-		
+		stylesheets += toURI("XRoot.css")
 	}
 	
 	def setDiagram(XDiagram newDiagram) {

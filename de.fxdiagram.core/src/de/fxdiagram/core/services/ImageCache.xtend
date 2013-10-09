@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream
 import java.util.Map
 import javafx.scene.image.Image
 
+import static de.fxdiagram.core.extensions.UriExtensions.*
+
 class ImageCache {
 	
 	Map<String, Image> cache = newHashMap
@@ -14,12 +16,12 @@ class ImageCache {
 		INSTANCE ?: (INSTANCE = new ImageCache)	
 	}
 	
-	def getImage(String file, ClassLoader classLoader) {
+	def getImage(Object context, String file) {
 		val cachedImage = cache.get(file)
 		if (cachedImage != null) {
 			cachedImage
 		} else {
-			val image = new Image(classLoader.getResourceAsStream(file))
+			val image = new Image(toURI(context, file))
 			put(file, image)
 			image
 		}

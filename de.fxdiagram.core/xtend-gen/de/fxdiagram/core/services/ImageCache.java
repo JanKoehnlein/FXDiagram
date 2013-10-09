@@ -1,8 +1,8 @@
 package de.fxdiagram.core.services;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.extensions.UriExtensions;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.image.Image;
@@ -34,7 +34,7 @@ public class ImageCache {
     return _elvis;
   }
   
-  public Image getImage(final String file, final ClassLoader classLoader) {
+  public Image getImage(final Object context, final String file) {
     Image _xblockexpression = null;
     {
       final Image cachedImage = this.cache.get(file);
@@ -45,8 +45,8 @@ public class ImageCache {
       } else {
         Image _xblockexpression_1 = null;
         {
-          InputStream _resourceAsStream = classLoader.getResourceAsStream(file);
-          Image _image = new Image(_resourceAsStream);
+          String _uRI = UriExtensions.toURI(context, file);
+          Image _image = new Image(_uRI);
           final Image image = _image;
           this.put(file, image);
           _xblockexpression_1 = (image);

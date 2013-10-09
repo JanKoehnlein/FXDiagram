@@ -142,9 +142,10 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				]
 				host.root.currentTool = chooser
 			]
+			val image = ImageCache.get.getImage(this, 'SuperType.gif')
 			host.diagram.buttons += #[
-				new XRapidButton(host, 0.5, 0, getImage('icons/SuperType.gif'), addSuperTypeAction),
-				new XRapidButton(host, 0.5, 1, getImage('icons/SuperType.gif'), addSuperTypeAction)
+				new XRapidButton(host, 0.5, 0, image, addSuperTypeAction),
+				new XRapidButton(host, 0.5, 1, image, addSuperTypeAction)
 			] 			
 		}
 		if(!model.references.empty) {
@@ -169,15 +170,11 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				]
 				host.root.currentTool = chooser
 			]
+			val image = ImageCache.get.getImage(this, 'Reference.gif')
 			host.diagram.buttons += #[
-				new XRapidButton(host, 0, 0.5, getImage('icons/Reference.gif'), addReferencesAction),
-				new XRapidButton(host, 1, 0.5, getImage('icons/Reference.gif'), addReferencesAction)
+				new XRapidButton(host, 0, 0.5, image, addReferencesAction),
+				new XRapidButton(host, 1, 0.5, image, addReferencesAction)
 			]
 		}
-
 	}
-
-	protected def getImage(String file) {
-		ImageCache.get.getImage(file, class.classLoader)
-	}	
 }

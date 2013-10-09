@@ -1,6 +1,7 @@
 package de.fxdiagram.examples.neonsign;
 
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import javafx.animation.KeyFrame;
@@ -25,6 +26,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -71,7 +73,13 @@ public class NeonSignNode extends XNode {
     VBox _vBox = new VBox();
     final Procedure1<VBox> _function = new Procedure1<VBox>() {
       public void apply(final VBox it) {
-        it.setStyle("-fx-background-image: url(\"de/fxdiagram/examples/neonsign/brick.jpg\");");
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("-fx-background-image: url(\"");
+        String _uRI = UriExtensions.toURI(NeonSignNode.this, "brick.jpg");
+        _builder.append(_uRI, "");
+        _builder.append("\");");
+        _builder.newLineIfNotEmpty();
+        it.setStyle(_builder.toString());
         ObservableList<Node> _children = it.getChildren();
         TextField _textField = new TextField();
         final Procedure1<TextField> _function = new Procedure1<TextField>() {

@@ -89,15 +89,15 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
         }
       };
       final Procedure1<XRapidButton> addSuperTypeAction = _function;
+      ImageCache _get = ImageCache.get();
+      final Image image = _get.getImage(this, "SuperType.gif");
       JavaTypeNode _host_1 = this.getHost();
       XDiagram _diagram = CoreExtensions.getDiagram(_host_1);
       ObservableList<XRapidButton> _buttons = _diagram.getButtons();
       JavaTypeNode _host_2 = this.getHost();
-      Image _image = this.getImage("icons/SuperType.gif");
-      XRapidButton _xRapidButton = new XRapidButton(_host_2, 0.5, 0, _image, addSuperTypeAction);
+      XRapidButton _xRapidButton = new XRapidButton(_host_2, 0.5, 0, image, addSuperTypeAction);
       JavaTypeNode _host_3 = this.getHost();
-      Image _image_1 = this.getImage("icons/SuperType.gif");
-      XRapidButton _xRapidButton_1 = new XRapidButton(_host_3, 0.5, 1, _image_1, addSuperTypeAction);
+      XRapidButton _xRapidButton_1 = new XRapidButton(_host_3, 0.5, 1, image, addSuperTypeAction);
       Iterables.<XRapidButton>addAll(_buttons, Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1)));
     }
     List<Property> _references = model.getReferences();
@@ -158,24 +158,16 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
         }
       };
       final Procedure1<XRapidButton> addReferencesAction = _function_1;
+      ImageCache _get_1 = ImageCache.get();
+      final Image image_1 = _get_1.getImage(this, "Reference.gif");
       JavaTypeNode _host_4 = this.getHost();
       XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_4);
       ObservableList<XRapidButton> _buttons_1 = _diagram_1.getButtons();
       JavaTypeNode _host_5 = this.getHost();
-      Image _image_2 = this.getImage("icons/Reference.gif");
-      XRapidButton _xRapidButton_2 = new XRapidButton(_host_5, 0, 0.5, _image_2, addReferencesAction);
+      XRapidButton _xRapidButton_2 = new XRapidButton(_host_5, 0, 0.5, image_1, addReferencesAction);
       JavaTypeNode _host_6 = this.getHost();
-      Image _image_3 = this.getImage("icons/Reference.gif");
-      XRapidButton _xRapidButton_3 = new XRapidButton(_host_6, 1, 0.5, _image_3, addReferencesAction);
+      XRapidButton _xRapidButton_3 = new XRapidButton(_host_6, 1, 0.5, image_1, addReferencesAction);
       Iterables.<XRapidButton>addAll(_buttons_1, Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton_2, _xRapidButton_3)));
     }
-  }
-  
-  protected Image getImage(final String file) {
-    ImageCache _get = ImageCache.get();
-    Class<? extends JavaTypeRapidButtonBehavior> _class = this.getClass();
-    ClassLoader _classLoader = _class.getClassLoader();
-    Image _image = _get.getImage(file, _classLoader);
-    return _image;
   }
 }

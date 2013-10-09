@@ -23,6 +23,7 @@ import javafx.scene.media.MediaView
 import javafx.scene.text.Text
 
 import static extension javafx.util.Duration.*
+import static de.fxdiagram.core.extensions.UriExtensions.*
 
 class MovieNode extends XNode {
 
@@ -84,7 +85,7 @@ class MovieNode extends XNode {
 			]
 			flipOnDoubleClick = true
 		]
-		stylesheets += "de/fxdiagram/lib/media/MovieNode.css"
+		stylesheets += toURI(this, 'MovieNode.css')
 	}
 	
 	override protected createAnchors() {

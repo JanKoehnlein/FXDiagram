@@ -6,7 +6,8 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import java.io.InputStream;
+import de.fxdiagram.core.extensions.UriExtensions;
+import java.net.URL;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -240,12 +241,11 @@ public class XControlPoint extends XShape {
     final Procedure1<Group> _function = new Procedure1<Group>() {
       public void apply(final Group it) {
         try {
-          Class<? extends XControlPoint> _class = XControlPoint.this.getClass();
-          final InputStream fxmlStream = _class.getResourceAsStream("icons/Magnet.fxml");
           ObservableList<Node> _children = it.getChildren();
-          FXMLLoader _fXMLLoader = new FXMLLoader();
-          Object _load = _fXMLLoader.load(fxmlStream);
-          _children.add(((Node) _load));
+          String _uRI = UriExtensions.toURI(XControlPoint.this, "images/Magnet.fxml");
+          URL _uRL = new URL(_uRI);
+          Node _load = FXMLLoader.<Node>load(_uRL);
+          _children.add(_load);
         } catch (Throwable _e) {
           throw Exceptions.sneakyThrow(_e);
         }

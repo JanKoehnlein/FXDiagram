@@ -44,4 +44,7 @@ Import-Package: javafx.animation;version="2.2.0",
  javafx.stage;version="2.2.0",
  javafx.util;version="2.2.0",
  javafx.util.converter;version="2.2.0"
+Bundle-ClassPath: .,
+ lib/BrickBreaker.jar,
+ lib/mongo-java-driver-2.9.3.jar
 

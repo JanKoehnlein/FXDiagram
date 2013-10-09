@@ -10,6 +10,7 @@ import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.MenuTool;
@@ -90,7 +91,8 @@ public class XRoot extends Parent implements XActivatable {
     this.defaultTool.operator_add(_menuTool);
     this.tools.add(this.defaultTool);
     ObservableList<String> _stylesheets = this.getStylesheets();
-    _stylesheets.add("de/fxdiagram/core/XRoot.css");
+    String _uRI = UriExtensions.toURI(this, "XRoot.css");
+    _stylesheets.add(_uRI);
   }
   
   public boolean setDiagram(final XDiagram newDiagram) {

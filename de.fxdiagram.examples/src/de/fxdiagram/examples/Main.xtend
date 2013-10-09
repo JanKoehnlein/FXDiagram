@@ -25,8 +25,9 @@ import javafx.geometry.Rectangle2D
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
 import javafx.scene.control.Button
-import javafx.scene.image.Image
 import javafx.stage.Stage
+
+import static extension de.fxdiagram.core.extensions.UriExtensions.*
 
 class Main extends Application {
 
@@ -98,22 +99,22 @@ class Main extends Application {
 			]
 
 			nodes += new ImageNode => [
-				image = ImageCache.get.getImage('media/seltsam.jpg', this.class.classLoader)
+				image = ImageCache.get.getImage(this, 'media/seltsam.jpg')
 				layoutX = 100
 				layoutY = 100
 				width = 100
 			]
 
-//			nodes += new MovieNode('Movie') => [
-//				movieUrl = this.class.classLoader.getResource('media/ScreenFlow.mp4')
-//				width = 640
-//				height = 360
-//				view.viewport = new Rectangle2D(0, 60, 640, 360)
-//				layoutX = 100
-//				layoutY = 200
-//			]
+			nodes += new MovieNode('Movie') => [
+				movieUrl = new URL(this.toURI('media/ScreenFlow.mp4'))
+				width = 640
+				height = 360
+				view.viewport = new Rectangle2D(0, 60, 640, 360)
+				layoutX = 100
+				layoutY = 200
+			]
 
-			nodes += new RecursiveImageNode(ImageCache.get.getImage('media/seltsam.jpg', this.class.classLoader), 10, 0, 0.3) => [
+			nodes += new RecursiveImageNode(ImageCache.get.getImage(this, 'media/seltsam.jpg'), 10, 0, 0.3) => [
 				width = 120
 				height = 90
 			]
@@ -126,12 +127,12 @@ class Main extends Application {
 				pageUrl = new URL('http://koehnlein.blogspot.de/')
 			]
 		
-//			nodes += new BrickBreakerNode => [
-//				width = 640
-//				height = 480
-//				layoutX = 500
-//				layoutY = 100
-//			]
+			nodes += new BrickBreakerNode => [
+				width = 640
+				height = 480
+				layoutX = 500
+				layoutY = 100
+			]
 
 			nodes += new JavaTypeNode => [
 				javaType = Button

@@ -2,6 +2,7 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -150,7 +151,8 @@ public class MovieNode extends XNode {
     FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
     this.setNode(_doubleArrow);
     ObservableList<String> _stylesheets = this.getStylesheets();
-    _stylesheets.add("de/fxdiagram/lib/media/MovieNode.css");
+    String _uRI = UriExtensions.toURI(this, "MovieNode.css");
+    _stylesheets.add(_uRI);
   }
   
   protected Anchors createAnchors() {
