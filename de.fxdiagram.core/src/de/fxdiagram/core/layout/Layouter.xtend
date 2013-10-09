@@ -39,7 +39,7 @@ class Layouter {
 	def layout(XDiagram diagram, Duration duration) {
 		val cache = <Object, KGraphElement> newHashMap
 		val kRoot = diagram.toKRootNode(cache)
-		val provider = getLayoutProvider()
+		val provider = getLayoutProvider
 		try {
 			provider.doLayout(kRoot, new BasicProgressMonitor())
 			apply(cache, duration)

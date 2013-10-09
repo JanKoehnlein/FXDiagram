@@ -28,7 +28,7 @@ class CoverFlowChooser extends AbstractXNodeChooser {
 		super.activate()
 	}
 
-	override protected setInterpolatedPosition(double interpolatedPosition) {
+	override protected doSetInterpolatedPosition(double interpolatedPosition) {
 		if(nodes.size != 0) {
 			gap = nodes.map[layoutBounds.width].reduce[a,b|a+b] / nodes.size
 			val currentIndex = (interpolatedPosition as int) % nodes.size()

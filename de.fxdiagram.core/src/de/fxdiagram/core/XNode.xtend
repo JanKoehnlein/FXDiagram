@@ -39,6 +39,7 @@ class XNode extends XShape {
 		key = class.simpleName + instanceCount
 		instanceCount = instanceCount + 1
 		selectionEffect = createSelectionEffect
+		anchors = createAnchors
 	}
 
 	new(String key) {
@@ -66,7 +67,6 @@ class XNode extends XShape {
 			LOG.warning('Node\'s key is not set')
 		}
 		moveBehavior = new MoveBehavior(this)
-		anchors = createAnchors
 		moveBehavior.activate()
 		onMouseEntered = [
 			originalEffect = node.effect
@@ -148,16 +148,4 @@ class XNode extends XShape {
 		else
 			super.maxHeight(width)
 	}
-	
-	override equals(Object obj) {
-		switch obj {
-			XNode: obj.key == key
-			default: false
-		}
-	}
-	
-	override hashCode() {
-		key?.hashCode
-	}
-	
 }

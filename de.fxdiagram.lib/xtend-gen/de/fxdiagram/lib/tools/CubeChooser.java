@@ -39,7 +39,7 @@ public class CubeChooser extends AbstractXNodeChooser {
     return _activate;
   }
   
-  protected void setInterpolatedPosition(final double interpolatedPosition) {
+  protected void doSetInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _nodes = this.getNodes();
     final Function2<Double,XNode,Double> _function = new Function2<Double,XNode,Double>() {
       public Double apply(final Double a, final XNode b) {
@@ -116,10 +116,8 @@ public class CubeChooser extends AbstractXNodeChooser {
           TransformExtensions.translate(transform, 0, 0, _multiply_3);
           node.setVisible(true);
           ObservableList<Transform> _transforms = node.getTransforms();
-          _transforms.clear();
-          ObservableList<Transform> _transforms_1 = node.getTransforms();
-          boolean _add = _transforms_1.add(transform);
-          _xblockexpression_1 = (_add);
+          boolean _setAll = _transforms.setAll(transform);
+          _xblockexpression_1 = (_setAll);
         }
         _xifexpression = _xblockexpression_1;
       }

@@ -57,6 +57,8 @@ public class XNode extends XShape {
     XNode.instanceCount = _plus_1;
     DropShadow _createSelectionEffect = this.createSelectionEffect();
     this.selectionEffect = _createSelectionEffect;
+    Anchors _createAnchors = this.createAnchors();
+    this.anchors = _createAnchors;
   }
   
   public XNode(final String key) {
@@ -94,8 +96,6 @@ public class XNode extends XShape {
     }
     MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
     this.moveBehavior = _moveBehavior;
-    Anchors _createAnchors = this.createAnchors();
-    this.anchors = _createAnchors;
     this.moveBehavior.activate();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
@@ -251,33 +251,6 @@ public class XNode extends XShape {
       _xifexpression = _maxHeight;
     }
     return _xifexpression;
-  }
-  
-  public boolean equals(final Object obj) {
-    boolean _switchResult = false;
-    boolean _matched = false;
-    if (!_matched) {
-      if (obj instanceof XNode) {
-        _matched=true;
-        String _key = ((XNode)obj).getKey();
-        String _key_1 = this.getKey();
-        boolean _equals = Objects.equal(_key, _key_1);
-        _switchResult = _equals;
-      }
-    }
-    if (!_matched) {
-      _switchResult = false;
-    }
-    return _switchResult;
-  }
-  
-  public int hashCode() {
-    String _key = this.getKey();
-    int _hashCode = 0;
-    if (_key!=null) {
-      _hashCode=_key.hashCode();
-    }
-    return _hashCode;
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XNode");

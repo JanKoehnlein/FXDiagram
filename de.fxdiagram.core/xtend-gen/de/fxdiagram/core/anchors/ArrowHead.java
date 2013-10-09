@@ -89,8 +89,6 @@ public abstract class ArrowHead extends Parent {
       _xifexpression = 1;
     }
     final int t = _xifexpression;
-    ObservableList<Transform> _transforms = this.getTransforms();
-    _transforms.clear();
     Affine _affine = new Affine();
     final Affine trafo = _affine;
     final Bounds headBounds = this.getBoundsInLocal();
@@ -123,7 +121,7 @@ public abstract class ArrowHead extends Parent {
     double _x_1 = pos.getX();
     double _y_1 = pos.getY();
     TransformExtensions.translate(trafo, _x_1, _y_1);
-    ObservableList<Transform> _transforms_1 = this.getTransforms();
-    _transforms_1.add(trafo);
+    ObservableList<Transform> _transforms = this.getTransforms();
+    _transforms.setAll(trafo);
   }
 }

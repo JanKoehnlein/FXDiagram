@@ -26,6 +26,7 @@ class XDiagram extends Group implements XActivatable {
 	@FxProperty @ReadOnly boolean isRootDiagram
 	@FxProperty Paint backgroundPaint = Color.WHITE
 	@FxProperty Paint foregroundPaint = Color.BLACK
+	@FxProperty Paint connectionPaint = Color.gray(0.2)
 	
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group

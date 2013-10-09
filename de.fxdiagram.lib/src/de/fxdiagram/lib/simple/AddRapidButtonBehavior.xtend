@@ -3,6 +3,7 @@ package de.fxdiagram.lib.simple
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
+import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractBehavior
 import de.fxdiagram.core.tools.AbstractXNodeChooser
 import de.fxdiagram.lib.tools.CarusselChooser
@@ -11,7 +12,6 @@ import de.fxdiagram.lib.tools.CubeChooser
 import java.util.List
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.XShape
 
 class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 	

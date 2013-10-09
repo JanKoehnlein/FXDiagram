@@ -61,7 +61,7 @@ class XConnection extends XShape {
 
 	override doActivate() {
 		if(stroke == null) 
-			stroke = diagram.foregroundPaint
+			stroke = diagram.connectionPaint
 		controlPointListener = [ prop, oldVal, newVal |
 			updateShapes
 		]

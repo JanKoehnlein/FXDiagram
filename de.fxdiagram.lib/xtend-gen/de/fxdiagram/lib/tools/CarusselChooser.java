@@ -1,8 +1,11 @@
 package de.fxdiagram.lib.tools;
 
+import com.google.common.collect.Lists;
+import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.tools.AbstractXNodeChooser;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
@@ -44,7 +47,7 @@ public class CarusselChooser extends AbstractXNodeChooser {
     return _activate;
   }
   
-  protected void setInterpolatedPosition(final double interpolatedPosition) {
+  protected void doSetInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _nodes = this.getNodes();
     final Function2<Double,XNode,Double> _function = new Function2<Double,XNode,Double>() {
       public Double apply(final Double a, final XNode b) {
@@ -83,21 +86,15 @@ public class CarusselChooser extends AbstractXNodeChooser {
           node.setVisible(false);
         } else {
           node.setVisible(true);
-          ObservableList<Transform> _transforms = node.getTransforms();
-          _transforms.clear();
           final double scaleY = Math.cos(nodeCenterAngle);
           double _plus = (scaleY + 0.5);
           final double scaleX = (_plus / 1.5);
-          ObservableList<Transform> _transforms_1 = node.getTransforms();
+          ObservableList<Transform> _transforms = node.getTransforms();
           double _minus_1 = (nodeCenterAngle - angle);
           double _sin_1 = Math.sin(_minus_1);
           double _multiply_2 = (this.radius * _sin_1);
           Translate _translate = Transform.translate(0, _multiply_2);
-          _transforms_1.add(_translate);
-          ObservableList<Transform> _transforms_2 = node.getTransforms();
           Scale _scale = Transform.scale(scaleX, scaleY);
-          _transforms_2.add(_scale);
-          ObservableList<Transform> _transforms_3 = node.getTransforms();
           Bounds _layoutBounds = node.getLayoutBounds();
           double _width = _layoutBounds.getWidth();
           double _minus_2 = (-_width);
@@ -105,7 +102,8 @@ public class CarusselChooser extends AbstractXNodeChooser {
           double _spacing_1 = this.getSpacing();
           double _divide_3 = (_spacing_1 / 2);
           Translate _translate_1 = Transform.translate(_divide_2, _divide_3);
-          _transforms_3.add(_translate_1);
+          _transforms.setAll(
+            Collections.<Transform>unmodifiableList(Lists.<Transform>newArrayList(_translate, _scale, _translate_1)));
           double _multiply_3 = (scaleY * scaleY);
           double _multiply_4 = (_multiply_3 * scaleY);
           node.setOpacity(_multiply_4);
@@ -121,9 +119,14 @@ public class CarusselChooser extends AbstractXNodeChooser {
     }
   }
   
-  protected void nodeChosen(final XNode choice) {
-    choice.setEffect(null);
-    super.nodeChosen(choice);
+  protected XConnection nodeChosen(final XNode choice) {
+    XConnection _xblockexpression = null;
+    {
+      choice.setEffect(null);
+      XConnection _nodeChosen = super.nodeChosen(choice);
+      _xblockexpression = (_nodeChosen);
+    }
+    return _xblockexpression;
   }
   
   public void relocateButtons(final Button minusButton, final Button plusButton) {

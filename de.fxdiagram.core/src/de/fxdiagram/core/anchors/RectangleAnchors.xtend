@@ -18,6 +18,8 @@ class RectangleAnchors implements Anchors {
 
 	override getAnchor(double x, double y) {
 		val boundsInRootDiagram = host.node.localToRootDiagram(host.node.layoutBounds) 
+		if(boundsInRootDiagram == null)
+			return null
 		val centerX = 0.5 * (boundsInRootDiagram.minX + boundsInRootDiagram.maxX)
 		val centerY = 0.5 * (boundsInRootDiagram.minY + boundsInRootDiagram.maxY)
 		val finder = new NearestPointFinder(x,y)

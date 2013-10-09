@@ -677,6 +677,10 @@ public class LcarsNode extends XNode {
     return this.dbId;
   }
   
+  public DBObject getData() {
+    return this.data;
+  }
+  
   public void selectionFeedback(final boolean isSelected) {
     ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
     ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();

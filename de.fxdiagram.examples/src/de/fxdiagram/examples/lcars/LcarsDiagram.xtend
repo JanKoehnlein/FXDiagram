@@ -17,6 +17,7 @@ class LcarsDiagram extends XDiagram {
 		]
 		backgroundPaint = Color.BLACK
 		foregroundPaint = Color.WHITE
+		connectionPaint = Color.WHITE
 	}
 	
 	def getLcarsAccess() {

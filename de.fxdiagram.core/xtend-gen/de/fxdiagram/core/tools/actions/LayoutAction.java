@@ -11,7 +11,7 @@ public class LayoutAction implements DiagramAction {
   public void perform(final XRoot root) {
     Layouter _layouter = new Layouter();
     XDiagram _diagram = root.getDiagram();
-    Duration _seconds = Duration.seconds(2);
-    _layouter.layout(_diagram, _seconds);
+    Duration _millis = Duration.millis(1500);
+    _layouter.layout(_diagram, _millis);
   }
 }

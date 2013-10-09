@@ -6,6 +6,7 @@ import de.fxdiagram.core.anchors.ArrowHead;
 import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -20,7 +21,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class LineArrowHead extends ArrowHead {
   private double width;
   
-  public LineArrowHead(final XConnection connection, final double width, final double height, final boolean isSource) {
+  public LineArrowHead(final XConnection connection, final double width, final double height, final Property<Paint> strokeProperty, final boolean isSource) {
     super(connection, new Function0<Node>() {
       public Node apply() {
         Group _group = new Group();
@@ -36,8 +37,7 @@ public class LineArrowHead extends ArrowHead {
                 double _multiply_1 = (0.5 * height);
                 _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
                 ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-                ObjectProperty<Paint> _strokeProperty_1 = connection.strokeProperty();
-                _strokeProperty.bind(_strokeProperty_1);
+                _strokeProperty.bind(strokeProperty);
                 DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
                 DoubleProperty _strokeWidthProperty_1 = connection.strokeWidthProperty();
                 _strokeWidthProperty.bind(_strokeWidthProperty_1);
@@ -55,8 +55,7 @@ public class LineArrowHead extends ArrowHead {
                 double _minus = (width - _strokeWidth);
                 _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
                 ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-                ObjectProperty<Paint> _strokeProperty_1 = connection.strokeProperty();
-                _strokeProperty.bind(_strokeProperty_1);
+                _strokeProperty.bind(strokeProperty);
                 DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
                 DoubleProperty _strokeWidthProperty_1 = connection.strokeWidthProperty();
                 _strokeWidthProperty.bind(_strokeWidthProperty_1);
@@ -75,7 +74,12 @@ public class LineArrowHead extends ArrowHead {
   }
   
   public LineArrowHead(final XConnection connection, final boolean isSource) {
-    this(connection, 8, 15, isSource);
+    this(connection, 8, 15, new Function0<Property<Paint>>() {
+      public Property<Paint> apply() {
+        ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
+        return _strokeProperty;
+      }
+    }.apply(), isSource);
   }
   
   public double getLineCut() {

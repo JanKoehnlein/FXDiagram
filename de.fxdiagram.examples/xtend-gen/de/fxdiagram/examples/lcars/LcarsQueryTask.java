@@ -2,6 +2,8 @@ package de.fxdiagram.examples.lcars;
 
 import com.google.common.base.Objects;
 import com.mongodb.DBObject;
+import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.examples.lcars.LcarsAccess;
@@ -14,8 +16,8 @@ import java.util.List;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
-import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -28,10 +30,13 @@ public class LcarsQueryTask extends Task<Void> {
   
   private String fieldValue;
   
-  public LcarsQueryTask(final LcarsField host, final String fieldName, final String fieldValue) {
+  private Function2<? super XNode,? super XNode,? extends XConnection> connectionFactory;
+  
+  public LcarsQueryTask(final LcarsField host, final String fieldName, final String fieldValue, final Function2<? super XNode,? super XNode,? extends XConnection> connectionFactory) {
     this.host = host;
     this.fieldName = fieldName;
     this.fieldValue = fieldValue;
+    this.connectionFactory = connectionFactory;
   }
   
   protected Void call() throws Exception {
@@ -43,7 +48,7 @@ public class LcarsQueryTask extends Task<Void> {
       final LcarsNode lcarsNode = this.host.getLcarsNode();
       CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER);
       final CoverFlowChooser chooser = _coverFlowChooser;
-      chooser.setConnectionLabel(this.fieldValue);
+      chooser.setConnectionFactory(this.connectionFactory);
       final Function1<DBObject,Boolean> _function = new Function1<DBObject,Boolean>() {
         public Boolean apply(final DBObject it) {
           Object _get = it.get("_id");
@@ -75,17 +80,7 @@ public class LcarsQueryTask extends Task<Void> {
         public void run() {
           XRoot _root = CoreExtensions.getRoot(LcarsQueryTask.this.host);
           _root.setCurrentTool(chooser);
-          Iterable<Text> _allTextNodes = LcarsQueryTask.this.host.getAllTextNodes();
-          Text _head = IterableExtensions.<Text>head(_allTextNodes);
-          _head.setFill(LcarsExtensions.FLESH);
-          Iterable<Text> _allTextNodes_1 = LcarsQueryTask.this.host.getAllTextNodes();
-          Iterable<Text> _tail = IterableExtensions.<Text>tail(_allTextNodes_1);
-          final Procedure1<Text> _function = new Procedure1<Text>() {
-            public void apply(final Text it) {
-              it.setFill(LcarsExtensions.ORANGE);
-            }
-          };
-          IterableExtensions.<Text>forEach(_tail, _function);
+          LcarsQueryTask.this.host.resetColors();
         }
       };
       Platform.runLater(_function_2);

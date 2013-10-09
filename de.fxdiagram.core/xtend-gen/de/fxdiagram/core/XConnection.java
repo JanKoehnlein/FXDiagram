@@ -111,8 +111,8 @@ public class XConnection extends XShape {
     boolean _equals = Objects.equal(_stroke, null);
     if (_equals) {
       XDiagram _diagram = CoreExtensions.getDiagram(this);
-      Paint _foregroundPaint = _diagram.getForegroundPaint();
-      this.setStroke(_foregroundPaint);
+      Paint _connectionPaint = _diagram.getConnectionPaint();
+      this.setStroke(_connectionPaint);
     }
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
@@ -168,8 +168,8 @@ public class XConnection extends XShape {
     final Procedure1<Change<? extends XControlPoint>> listChangeListener = _function_1;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
     _controlPoints.addListener(new ListChangeListener<XControlPoint>() {
-        public void onChanged(Change<? extends XControlPoint> c) {
-          listChangeListener.apply(c);
+        public void onChanged(Change<? extends XControlPoint> arg0) {
+          listChangeListener.apply(arg0);
         }
     });
     XConnectionLabel _label = this.getLabel();

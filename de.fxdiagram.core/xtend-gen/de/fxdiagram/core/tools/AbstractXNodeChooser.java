@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
@@ -54,7 +53,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.SwipeEvent;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -97,7 +95,21 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     }
   }.apply();
   
-  private String connectionLabel;
+  private Function2<? super XNode,? super XNode,? extends XConnection> connectionFactory = new Function0<Function2<? super XNode,? super XNode,? extends XConnection>>() {
+    public Function2<? super XNode,? super XNode,? extends XConnection> apply() {
+      final Function2<XNode,XNode,XConnection> _function = new Function2<XNode,XNode,XConnection>() {
+        public XConnection apply(final XNode host, final XNode choice) {
+          XConnection _xConnection = new XConnection(host, choice);
+          return _xConnection;
+        }
+      };
+      return _function;
+    }
+  }.apply();
+  
+  private XNode currentChoice;
+  
+  private XConnection currentConnection;
   
   private ChangeListener<Number> positionListener;
   
@@ -385,52 +397,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _reduce;
   }
   
-  public boolean operator_remove(final XNode node) {
-    boolean _xifexpression = false;
-    String _key = node.getKey();
-    XNode _remove = this.nodeMap.remove(_key);
-    boolean _notEquals = (!Objects.equal(_remove, null));
-    if (_notEquals) {
-      boolean _xblockexpression = false;
-      {
-        ObservableList<Node> _children = this.group.getChildren();
-        _children.add(node);
-        this.visibleNodes.remove(node);
-        this.calculateVisibleNodes();
-        _xblockexpression = (true);
-      }
-      _xifexpression = _xblockexpression;
-    } else {
-      _xifexpression = false;
-    }
-    return _xifexpression;
-  }
-  
-  public Boolean operator_remove(final Iterable<XNode> nodes) {
-    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
-      public Boolean apply(final XNode it) {
-        boolean _remove = AbstractXNodeChooser.this.operator_remove(it);
-        return Boolean.valueOf(_remove);
-      }
-    };
-    Iterable<Boolean> _map = IterableExtensions.<XNode, Boolean>map(nodes, _function);
-    final Function2<Boolean,Boolean,Boolean> _function_1 = new Function2<Boolean,Boolean,Boolean>() {
-      public Boolean apply(final Boolean a, final Boolean b) {
-        boolean _or = false;
-        if ((a).booleanValue()) {
-          _or = true;
-        } else {
-          _or = ((a).booleanValue() || (b).booleanValue());
-        }
-        return Boolean.valueOf(_or);
-      }
-    };
-    Boolean _reduce = IterableExtensions.<Boolean>reduce(_map, _function_1);
-    return _reduce;
-  }
-  
-  public void setConnectionLabel(final String connectionLabel) {
-    this.connectionLabel = connectionLabel;
+  public void setConnectionFactory(final Function2<? super XNode,? super XNode,? extends XConnection> connectionFactory) {
+    this.connectionFactory = connectionFactory;
   }
   
   public boolean activate() {
@@ -573,6 +541,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       if (_not) {
         return false;
       }
+      this.removeConnection(this.currentConnection);
       XRoot _root = CoreExtensions.getRoot(this.host);
       HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
       ObservableList<Node> _children = _headsUpDisplay.getChildren();
@@ -610,69 +579,166 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _xblockexpression;
   }
   
-  protected void nodeChosen(final XNode choice) {
+  protected XConnection nodeChosen(final XNode choice) {
+    XConnection _xifexpression = null;
     boolean _notEquals = (!Objects.equal(choice, null));
     if (_notEquals) {
-      ArrayList<XNode> _nodes = this.getNodes();
-      final Procedure1<XNode> _function = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
-          it.setOnMouseClicked(null);
-        }
-      };
-      IterableExtensions.<XNode>forEach(_nodes, _function);
-      XDiagram _diagram = this.diagram();
-      ObservableList<XNode> _nodes_1 = _diagram.getNodes();
-      final Function1<XNode,Boolean> _function_1 = new Function1<XNode,Boolean>() {
-        public Boolean apply(final XNode it) {
-          boolean _equals = it.equals(choice);
-          return Boolean.valueOf(_equals);
-        }
-      };
-      XNode existingChoice = IterableExtensions.<XNode>findFirst(_nodes_1, _function_1);
-      boolean _equals = Objects.equal(existingChoice, null);
-      if (_equals) {
-        existingChoice = choice;
-        choice.setEffect(null);
-        Point2D center = CoreExtensions.localToDiagram(this.group, 0, 0);
-        ObservableList<Node> _children = this.group.getChildren();
-        _children.remove(choice);
-        ObservableList<Transform> _transforms = choice.getTransforms();
-        _transforms.clear();
-        XDiagram _diagram_1 = this.diagram();
-        ObservableList<XNode> _nodes_2 = _diagram_1.getNodes();
-        _nodes_2.add(choice);
-        choice.layout();
-        final Bounds bounds = choice.getLayoutBounds();
-        double _x = center.getX();
-        double _width = bounds.getWidth();
-        double _multiply = (0.5 * _width);
-        double _minus = (_x - _multiply);
-        choice.setLayoutX(_minus);
-        double _y = center.getY();
-        double _height = bounds.getHeight();
-        double _multiply_1 = (0.5 * _height);
-        double _minus_1 = (_y - _multiply_1);
-        choice.setLayoutY(_minus_1);
-      }
-      XConnection _xConnection = new XConnection(this.host, existingChoice);
-      final XConnection connection = _xConnection;
-      XDiagram _diagram_2 = this.diagram();
-      ObservableList<XConnection> _connections = _diagram_2.getConnections();
-      _connections.add(connection);
-      boolean _notEquals_1 = (!Objects.equal(this.connectionLabel, null));
-      if (_notEquals_1) {
-        XConnectionLabel _xConnectionLabel = new XConnectionLabel(connection);
-        final Procedure1<XConnectionLabel> _function_2 = new Procedure1<XConnectionLabel>() {
-          public void apply(final XConnectionLabel it) {
-            Text _text = it.getText();
-            _text.setText(AbstractXNodeChooser.this.connectionLabel);
+      XConnection _xblockexpression = null;
+      {
+        ArrayList<XNode> _nodes = this.getNodes();
+        final Procedure1<XNode> _function = new Procedure1<XNode>() {
+          public void apply(final XNode it) {
+            it.setOnMouseClicked(null);
           }
         };
-        ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_2);
+        IterableExtensions.<XNode>forEach(_nodes, _function);
+        ObservableList<Node> _children = this.group.getChildren();
+        _children.remove(choice);
+        XDiagram _diagram = this.diagram();
+        ObservableList<XNode> _nodes_1 = _diagram.getNodes();
+        final Function1<XNode,Boolean> _function_1 = new Function1<XNode,Boolean>() {
+          public Boolean apply(final XNode it) {
+            String _key = it.getKey();
+            String _key_1 = choice.getKey();
+            boolean _equals = Objects.equal(_key, _key_1);
+            return Boolean.valueOf(_equals);
+          }
+        };
+        XNode existingChoice = IterableExtensions.<XNode>findFirst(_nodes_1, _function_1);
+        boolean _equals = Objects.equal(existingChoice, null);
+        if (_equals) {
+          existingChoice = choice;
+          final Bounds unlayoutedBounds = choice.getLayoutBounds();
+          choice.setEffect(null);
+          Point2D center = CoreExtensions.localToDiagram(this.group, 0, 0);
+          ObservableList<Transform> _transforms = choice.getTransforms();
+          _transforms.clear();
+          XDiagram _diagram_1 = this.diagram();
+          ObservableList<XNode> _nodes_2 = _diagram_1.getNodes();
+          _nodes_2.add(choice);
+          choice.layout();
+          final Bounds bounds = choice.getLayoutBounds();
+          double _x = center.getX();
+          double _width = bounds.getWidth();
+          double _multiply = (0.5 * _width);
+          double _minus = (_x - _multiply);
+          choice.setLayoutX(_minus);
+          double _y = center.getY();
+          double _height = bounds.getHeight();
+          double _multiply_1 = (0.5 * _height);
+          double _minus_1 = (_y - _multiply_1);
+          choice.setLayoutY(_minus_1);
+          HPos _hpos = this.layoutPosition.getHpos();
+          final HPos _switchValue = _hpos;
+          boolean _matched = false;
+          if (!_matched) {
+            if (Objects.equal(_switchValue,HPos.LEFT)) {
+              _matched=true;
+              double _layoutX = choice.getLayoutX();
+              double _width_1 = bounds.getWidth();
+              double _width_2 = unlayoutedBounds.getWidth();
+              double _minus_2 = (_width_1 - _width_2);
+              double _multiply_2 = (0.5 * _minus_2);
+              double _minus_3 = (_layoutX - _multiply_2);
+              choice.setLayoutX(_minus_3);
+            }
+          }
+          if (!_matched) {
+            if (Objects.equal(_switchValue,HPos.RIGHT)) {
+              _matched=true;
+              double _layoutX_1 = choice.getLayoutX();
+              double _width_3 = bounds.getWidth();
+              double _width_4 = unlayoutedBounds.getWidth();
+              double _minus_4 = (_width_3 - _width_4);
+              double _multiply_3 = (0.5 * _minus_4);
+              double _plus = (_layoutX_1 + _multiply_3);
+              choice.setLayoutX(_plus);
+            }
+          }
+          VPos _vpos = this.layoutPosition.getVpos();
+          final VPos _switchValue_1 = _vpos;
+          boolean _matched_1 = false;
+          if (!_matched_1) {
+            if (Objects.equal(_switchValue_1,VPos.TOP)) {
+              _matched_1=true;
+              double _layoutY = choice.getLayoutY();
+              double _height_1 = bounds.getHeight();
+              double _height_2 = unlayoutedBounds.getHeight();
+              double _minus_5 = (_height_1 - _height_2);
+              double _multiply_4 = (0.5 * _minus_5);
+              double _minus_6 = (_layoutY - _multiply_4);
+              choice.setLayoutY(_minus_6);
+            }
+          }
+          if (!_matched_1) {
+            if (Objects.equal(_switchValue_1,VPos.BOTTOM)) {
+              _matched_1=true;
+              double _layoutY_1 = choice.getLayoutY();
+              double _height_3 = bounds.getHeight();
+              double _height_4 = unlayoutedBounds.getHeight();
+              double _minus_7 = (_height_3 - _height_4);
+              double _multiply_5 = (0.5 * _minus_7);
+              double _plus_1 = (_layoutY_1 + _multiply_5);
+              choice.setLayoutY(_plus_1);
+            }
+          }
+        }
+        this.connectChoice(existingChoice);
+        XConnection _currentConnection = this.currentConnection = null;
+        _xblockexpression = (_currentConnection);
       }
-      existingChoice.toFront();
-      connection.toFront();
+      _xifexpression = _xblockexpression;
     }
+    return _xifexpression;
+  }
+  
+  protected XConnection connectChoice(final XNode choice) {
+    XConnection _xblockexpression = null;
+    {
+      boolean _and = false;
+      boolean _isActive = this.getIsActive();
+      if (!_isActive) {
+        _and = false;
+      } else {
+        boolean _tripleNotEquals = (choice != this.currentChoice);
+        _and = (_isActive && _tripleNotEquals);
+      }
+      if (_and) {
+        this.currentChoice = choice;
+        this.removeConnection(this.currentConnection);
+        XConnection _apply = this.connectionFactory.apply(this.host, choice);
+        this.currentConnection = _apply;
+        XDiagram _diagram = this.diagram();
+        ObservableList<XConnection> _connections = _diagram.getConnections();
+        _connections.add(this.currentConnection);
+        choice.toFront();
+        this.currentConnection.toFront();
+      }
+      _xblockexpression = (this.currentConnection);
+    }
+    return _xblockexpression;
+  }
+  
+  protected Boolean removeConnection(final XConnection connection) {
+    Boolean _xifexpression = null;
+    boolean _notEquals = (!Objects.equal(connection, null));
+    if (_notEquals) {
+      boolean _xblockexpression = false;
+      {
+        XDiagram _diagram = this.diagram();
+        ObservableList<XConnection> _connections = _diagram.getConnections();
+        _connections.remove(connection);
+        XNode _source = connection.getSource();
+        ObservableList<XConnection> _outgoingConnections = _source.getOutgoingConnections();
+        _outgoingConnections.remove(connection);
+        XNode _target = connection.getTarget();
+        ObservableList<XConnection> _incomingConnections = _target.getIncomingConnections();
+        boolean _remove = _incomingConnections.remove(connection);
+        _xblockexpression = (_remove);
+      }
+      _xifexpression = Boolean.valueOf(_xblockexpression);
+    }
+    return _xifexpression;
   }
   
   protected ParallelTransition setBlurDiagram(final boolean isBlur) {
@@ -715,7 +781,24 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     _root.restoreDefaultTool();
   }
   
-  protected abstract void setInterpolatedPosition(final double interpolatedPosition);
+  protected void setInterpolatedPosition(final double interpolatedPosition) {
+    this.doSetInterpolatedPosition(interpolatedPosition);
+    ArrayList<XNode> _nodes = this.getNodes();
+    boolean _isEmpty = _nodes.isEmpty();
+    boolean _not = (!_isEmpty);
+    if (_not) {
+      ArrayList<XNode> _nodes_1 = this.getNodes();
+      double _currentPosition = this.getCurrentPosition();
+      double _plus = (_currentPosition + 0.5);
+      ArrayList<XNode> _nodes_2 = this.getNodes();
+      int _size = _nodes_2.size();
+      int _modulo = (((int) _plus) % _size);
+      XNode _get = _nodes_1.get(_modulo);
+      this.connectChoice(_get);
+    }
+  }
+  
+  protected abstract void doSetInterpolatedPosition(final double interpolatedPosition);
   
   public double getCurrentPosition() {
     double _xblockexpression = (double) 0;

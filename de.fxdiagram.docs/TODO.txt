@@ -1,11 +1,17 @@
-BUG
-- chooser isVertical
-- choose connections instead of nodes?
-- all choices grayed out in chooser in nested diagram
+TODO
+- find better recursive image
+- rearrange demo diagram
+- better icons for JavaTypeNode
+- collapsible compartments
+- Ecore diagram
+- position tooltip
+- find better colors
+- use scalable icons
+- LCARS connect other matches
 
 ENHANCEMENT
+- chooser isVertical
 - Make auxlines magnetic
-- Embed more JavaFX demos in XNodes
 - Play diagram
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
 - more auxiliary lines
@@ -14,14 +20,16 @@ ENHANCEMENT
 
 MINOR
 - hover/armed buttons for choosers
-- fix connection stroke width
 - SVG export: arc size
 - Transparent stage?
 - can't set size of browser node
 - different anchors for faces of flipNodes 
-- move brickbreaker to external
  
 DONE 
+- fix connection stroke width
+- Embed more JavaFX demos in XNodes
+- choose connections instead of nodes?
+- all choices grayed out in chooser in nested diagram
 - SVGExport: clipping 
 - Fancy context menus
 - Fix fluctuations in layout of RecursiveImageNode 

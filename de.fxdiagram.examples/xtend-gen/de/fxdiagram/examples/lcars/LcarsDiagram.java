@@ -36,6 +36,7 @@ public class LcarsDiagram extends XDiagram {
     this.setContentsInitializer(_function);
     this.setBackgroundPaint(Color.BLACK);
     this.setForegroundPaint(Color.WHITE);
+    this.setConnectionPaint(Color.WHITE);
   }
   
   public LcarsAccess getLcarsAccess() {

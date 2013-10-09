@@ -25,7 +25,7 @@ class CubeChooser extends AbstractXNodeChooser {
 		super.activate()
 	}
 
-	override protected setInterpolatedPosition(double interpolatedPosition) {
+	override protected doSetInterpolatedPosition(double interpolatedPosition) {
 		maxWidth = nodes.fold(0.0, [a, b|max(a, b.layoutBounds.width)]) + spacing
 		val angle = (interpolatedPosition - (interpolatedPosition as int)) * 90
 		val leftNodeIndex = interpolatedPosition as int % nodes.size
@@ -50,8 +50,7 @@ class CubeChooser extends AbstractXNodeChooser {
 			transform.rotate(angle, new Point3D(0, 1, 0))
 			transform.translate(0, 0, maxWidth * 0.5)
 			node.visible = true
-			node.transforms.clear
-			node.transforms += transform
+			node.transforms.setAll(transform)
 		}
 	}
 	

@@ -27,7 +27,6 @@ import static java.lang.Math.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.XConnectionLabel
 
 abstract class AbstractXNodeChooser implements XDiagramTool {
 
@@ -48,9 +47,15 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	Group group = new Group
 
 	val nodeMap = <String, XNode>newLinkedHashMap
-
-	String connectionLabel
-
+	
+	var (XNode, XNode)=>XConnection connectionFactory = [
+		host, choice | new XConnection(host, choice)
+	]
+	
+	XNode currentChoice 
+	
+	XConnection currentConnection
+	
 	ChangeListener<Number> positionListener
 
 	protected XNodeChooserTransition spinToPosition
@@ -74,7 +79,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		this.layoutPosition = layoutPosition
 		positionListener = [ element, oldValue, newValue |
 			val newVal = newValue.doubleValue
-			setInterpolatedPosition(newVal % getNodes.size)
+			interpolatedPosition = newVal % getNodes.size
 		]
 		spinToPosition = new XNodeChooserTransition(this)
 		swipeHandler = [
@@ -167,23 +172,8 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		nodes.map[this += it].reduce[a, b|a || b]
 	}
 
-	def operator_remove(XNode node) {
-		if (nodeMap.remove(node.key) != null) {
-			group.children += node
-			visibleNodes.remove(node)
-			calculateVisibleNodes
-			true
-		} else {
-			false
-		}
-	}
-
-	def operator_remove(Iterable<XNode> nodes) {
-		nodes.map[this -= it].reduce[a, b|a || b]
-	}
-	
-	def void setConnectionLabel(String connectionLabel) {
-		this.connectionLabel = connectionLabel
+	def void setConnectionFactory((XNode, XNode)=>XConnection connectionFactory) {
+		this.connectionFactory = connectionFactory
 	}
 
 	override activate() {
@@ -208,19 +198,18 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		}
 		currentPosition = 0
 		if (getNodes.size == 1) {
-			nodeChosen(getNodes.head)
+			nodeChosen(nodes.head)
 			return false
 		}
 		blurDiagram = true
 
-		if (getNodes.size != 0) {
+		if (getNodes.size != 0) 
 			interpolatedPosition = 0
-		}
 		getNodes.forEach [ node |
 			node.onMouseClicked = [
 				switch (clickCount) {
 					case 1:
-						spinToPosition.targetPosition = getNodes.toList.indexOf(node)
+						spinToPosition.targetPosition = nodes.toList.indexOf(node)
 					case 2: {
 						nodeChosen(getCurrentNode)
 						host.root.restoreDefaultTool
@@ -244,6 +233,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	override deactivate() {
 		if (!getIsActive)
 			return false
+		removeConnection(currentConnection)
 		host.root.headsUpDisplay.children -= filterLabel
 		isActiveProperty.set(false)
 		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
@@ -262,28 +252,54 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	protected def nodeChosen(XNode choice) {
 		if (choice != null) {
 			getNodes.forEach[onMouseClicked = null]
-			var existingChoice = diagram.nodes.findFirst[it.equals(choice)]
+			group.children.remove(choice)
+			var existingChoice = diagram.nodes.findFirst[key == choice.key]
 			if(existingChoice == null) {
 				existingChoice = choice
+				val unlayoutedBounds = choice.layoutBounds
 				choice.effect = null
 				var center = group.localToDiagram(0, 0)
-				group.children.remove(choice)
 				choice.transforms.clear
 				diagram.nodes += choice
 				choice.layout
 				val bounds = choice.layoutBounds
-				choice.layoutX = center.x - 0.5 * bounds.width
+				choice.layoutX = center.x - 0.5 * bounds.width 
 				choice.layoutY = center.y - 0.5 * bounds.height
+				switch layoutPosition.hpos {
+					case HPos.LEFT:
+						choice.layoutX = choice.layoutX - 0.5 * (bounds.width - unlayoutedBounds.width)
+					case HPos.RIGHT:
+						choice.layoutX = choice.layoutX + 0.5 * (bounds.width - unlayoutedBounds.width)
+				}
+				switch layoutPosition.vpos {
+					case VPos.TOP:
+						choice.layoutY = choice.layoutY - 0.5 * (bounds.height - unlayoutedBounds.height)
+					case VPos.BOTTOM:
+						choice.layoutY = choice.layoutY + 0.5 * (bounds.height - unlayoutedBounds.height)
+				}
 			}
-			val connection = new XConnection(host, existingChoice)
-			diagram.connections += connection
-			if(connectionLabel != null) {
-				new XConnectionLabel(connection) => [
-					text.text = connectionLabel
-				]
-			}
-			existingChoice.toFront
-			connection.toFront
+			connectChoice(existingChoice)
+			currentConnection = null
+		}
+	}
+	
+	protected def connectChoice(XNode choice) {
+		if(isActive && choice !== currentChoice) {
+			currentChoice = choice
+			removeConnection(currentConnection)
+			currentConnection = connectionFactory.apply(host, choice)
+			diagram.connections += currentConnection
+			choice.toFront
+			currentConnection.toFront
+		}
+		currentConnection
+	}
+	
+	protected def removeConnection(XConnection connection) {
+		if(connection != null) {
+			diagram.connections -= connection
+			connection.source.outgoingConnections.remove(connection)
+			connection.target.incomingConnections.remove(connection)
 		}
 	}
 
@@ -303,7 +319,13 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		host.root.restoreDefaultTool
 	}
 
-	protected def void setInterpolatedPosition(double interpolatedPosition)
+	protected def void setInterpolatedPosition(double interpolatedPosition) {
+		doSetInterpolatedPosition(interpolatedPosition)
+		if(!nodes.empty)
+			connectChoice(nodes.get(((getCurrentPosition + 0.5) as int) % nodes.size))
+	}
+
+	protected def void doSetInterpolatedPosition(double interpolatedPosition)
 
 	def getCurrentPosition() {
 		var result = currentPositionProperty.get % getNodes.size

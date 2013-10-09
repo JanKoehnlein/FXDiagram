@@ -308,6 +308,10 @@ class LcarsNode extends XNode {
 		dbId
 	}
 	
+	def getData() {
+		data
+	}
+	
 	override selectionFeedback(boolean isSelected) {
 		(outgoingConnections + incomingConnections).forEach[toFront]
 	}

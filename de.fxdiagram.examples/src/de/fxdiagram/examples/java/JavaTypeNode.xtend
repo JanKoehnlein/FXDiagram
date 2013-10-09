@@ -1,12 +1,17 @@
 package de.fxdiagram.examples.java
 
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
+import de.fxdiagram.core.anchors.LineArrowHead
+import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.core.behavior.AbstractBehavior
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
+import java.util.List
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.VPos
@@ -17,9 +22,10 @@ import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import java.util.List
 
 class JavaTypeNode extends XNode {
+	
+	@org.eclipse.xtend.lib.Property String referenceName
 
 	Class<?> javaType
 	
@@ -61,25 +67,26 @@ class JavaTypeNode extends XNode {
 		model = new JavaTypeModel(javaType)
 		propertyCompartment.children.clear
 		operationCompartment.children.clear
-		model.properties.limit.forEach [
-			property |
-			propertyCompartment.children += new Text => [
-				text = '''«property.name»: «property.type.simpleName»''' 
+		if(isActive) {
+			model.properties.limit.forEach [
+				property |
+				propertyCompartment.children += new Text => [
+					text = '''«property.name»: «property.type.simpleName»''' 
+				]
 			]
-		]
-		if(isActive)
 			model.constructors.forEach [
 				constructor |
 				operationCompartment.children += new Text => [
 					text = '''«javaType.simpleName»(«constructor.parameterTypes.map[simpleName].join(', ')»)''' 
 				]
 			]
-		model.operations.limit.forEach [
-			method |
-			operationCompartment.children += new Text => [
-				text = '''«method.name»(«method.parameterTypes.map[simpleName].join(', ')»): «method.returnType.simpleName»''' 
+			model.operations.limit.forEach [
+				method |
+				operationCompartment.children += new Text => [
+					text = '''«method.name»(«method.parameterTypes.map[simpleName].join(', ')»): «method.returnType.simpleName»''' 
+				]
 			]
-		]
+		}
 	}
 	
 	protected def <T> limit(List<T> list) {
@@ -124,7 +131,14 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				val chooser = new CoverFlowChooser(host, button.getChooserPosition)
 				chooser += model.superTypes.map[
 					superType | new JavaTypeNode => [ it.javaType = superType ]
-				] 
+				]
+				chooser.connectionFactory = [
+					host, choice |
+					new XConnection(host, choice) => [
+						targetArrowHead = new TriangleArrowHead(it, 10, 15, 
+							it.strokeProperty, host.diagram.backgroundPaintProperty, false)
+					]
+				]
 				host.root.currentTool = chooser
 			]
 			host.diagram.buttons += #[
@@ -137,8 +151,21 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				XRapidButton button |
 				val chooser = new CarusselChooser(host, button.getChooserPosition)
 				chooser += model.references.map[
-					reference | new JavaTypeNode => [ it.javaType = reference.type ]
+					reference | new JavaTypeNode => [ 
+						javaType = reference.type
+						referenceName = reference.name
+					]
 				] 
+				chooser.connectionFactory = [
+					host, choice |
+					new XConnection(host, choice) => [
+						targetArrowHead = new LineArrowHead(it, 7, 10, 
+							it.strokeProperty, false)
+						new XConnectionLabel(it) => [
+							text.text = (choice as JavaTypeNode).referenceName
+						]
+					]
+				]
 				host.root.currentTool = chooser
 			]
 			host.diagram.buttons += #[

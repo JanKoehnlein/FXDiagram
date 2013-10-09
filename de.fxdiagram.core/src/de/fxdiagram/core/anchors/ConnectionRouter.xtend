@@ -9,6 +9,7 @@ import de.fxdiagram.core.XNode
 import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
 
@@ -17,7 +18,6 @@ import static de.fxdiagram.core.XControlPointType.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import javafx.geometry.Bounds
 
 class ConnectionRouter implements XActivatable {
 	
@@ -27,7 +27,7 @@ class ConnectionRouter implements XActivatable {
 	XConnection connection
 
 	ChangeListener<Number> scalarListener  
-	ChangeListener<Bounds> boundsListener  
+	ChangeListener<Bounds> boundsListener
 	
 	new(XConnection connection) {
 		this.connection = connection
@@ -46,17 +46,15 @@ class ConnectionRouter implements XActivatable {
 	protected def bindNode(XNode host) {
 		var Node current = host.node
 		current.layoutBoundsProperty.addListener(boundsListener)
-		do {
-			current.layoutXProperty.addListener(scalarListener)
-			current.layoutYProperty.addListener(scalarListener)
-			current.scaleXProperty.addListener(scalarListener)
-			current.scaleYProperty.addListener(scalarListener)
-			current.rotateProperty.addListener(scalarListener)
+		while(current != null && !current.isRootDiagram) {
+			current.boundsInParentProperty.addListener(boundsListener)
 			current = current.parent
-		} while (current != null && !current.isRootDiagram)
+		} 
 	}
 	
 	def growToSize(int newSize) {
+		if (controlPoints.size < 2) 
+			calculatePoints
 		val nodeDiff = newSize - controlPoints.size
 		if(nodeDiff > 0) {
 			val newControlPoints = newArrayList
@@ -79,6 +77,8 @@ class ConnectionRouter implements XActivatable {
 	}
 	
 	def shrinkToSize(int newSize) {
+		if (controlPoints.size < 2) 
+			calculatePoints
 		val nodeDiff = newSize - controlPoints.size
 		if(nodeDiff < 0) {
 			val toBeRemoved = newArrayList
@@ -119,42 +119,44 @@ class ConnectionRouter implements XActivatable {
 	
 	def void calculatePoints() {
 		val anchors = findClosestAnchors
-		val sourcePoint = anchors.key
-		val targetPoint = anchors.value
-		if (controlPoints.size < 2) {
-			for(controlPoint: controlPoints) {
-				controlPoint.layoutXProperty.removeListener(scalarListener)
-				controlPoint.layoutYProperty.removeListener(scalarListener)
-			} 
-			controlPoints.setAll(
-				#[new XControlPoint => [
+		if(anchors.key != null && anchors.value != null) {
+			val sourcePoint = anchors.key
+			val targetPoint = anchors.value
+			if (controlPoints.size < 2) {
+				for(controlPoint: controlPoints) {
+					controlPoint.layoutXProperty.removeListener(scalarListener)
+					controlPoint.layoutYProperty.removeListener(scalarListener)
+				} 
+				controlPoints.setAll(
+					#[new XControlPoint => [
+						layoutX = sourcePoint.x
+						layoutY = sourcePoint.y
+						type = ANCHOR
+					], new XControlPoint => [
+						layoutX = targetPoint.x
+						layoutY = targetPoint.y
+						type = ANCHOR
+					]])
+				switch connection.kind {
+					case CUBIC_CURVE: growToSize(4)
+					case QUAD_CURVE: growToSize(3)
+				}
+				for(controlPoint: controlPoints) {
+					controlPoint.layoutXProperty.addListener(scalarListener)
+					controlPoint.layoutYProperty.addListener(scalarListener)
+				} 
+			} else {
+				controlPoints.head => [
 					layoutX = sourcePoint.x
 					layoutY = sourcePoint.y
-					type = ANCHOR
-				], new XControlPoint => [
+				]
+				controlPoints.last => [
 					layoutX = targetPoint.x
 					layoutY = targetPoint.y
-					type = ANCHOR
-				]])
-			switch connection.kind {
-				case CUBIC_CURVE: growToSize(4)
-				case QUAD_CURVE: growToSize(3)
+				]
 			}
-			for(controlPoint: controlPoints) {
-				controlPoint.layoutXProperty.addListener(scalarListener)
-				controlPoint.layoutYProperty.addListener(scalarListener)
-			} 
-		} else {
-			controlPoints.head => [
-				layoutX = sourcePoint.x
-				layoutY = sourcePoint.y
-			]
-			controlPoints.last => [
-				layoutX = targetPoint.x
-				layoutY = targetPoint.y
-			]
+			controlPoints.forEach[update(controlPoints)]
 		}
-		controlPoints.forEach[update(controlPoints)]
 	}
 	
  	protected def findClosestAnchors() {
@@ -176,12 +178,14 @@ class ConnectionRouter implements XActivatable {
 	}
 	
 	protected def getNearestAnchor(XNode node, Point2D point, ArrowHead arrowHead) {
+		if(point == null)
+			return null
 		getNearestAnchor(node, point.x, point.y, arrowHead)
 	}
 	
 	protected def getNearestAnchor(XNode node, double x, double y, ArrowHead arrowHead) {
 		val anchor = node.anchors.getAnchor(x, y)
-		if(arrowHead != null)
+		if(anchor != null && arrowHead != null)
 			arrowHead.correctAnchor(x, y, anchor)
 		else 
 			anchor

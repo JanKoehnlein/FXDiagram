@@ -1,5 +1,10 @@
 package de.fxdiagram.examples.lcars
 
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XConnectionLabel
+import de.fxdiagram.core.XNode
+import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.core.tools.actions.LayoutAction
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
@@ -9,12 +14,12 @@ import javafx.concurrent.Service
 import javafx.concurrent.Task
 import javafx.geometry.Pos
 import javafx.scene.Parent
+import javafx.scene.input.MouseButton
 import javafx.scene.layout.FlowPane
 import javafx.scene.text.Text
 
-import static extension de.fxdiagram.examples.lcars.LcarsExtensions.*
-
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.examples.lcars.LcarsExtensions.*
 import static extension javafx.util.Duration.*
 
 class LcarsField extends Parent {
@@ -22,9 +27,17 @@ class LcarsField extends Parent {
 	FlowPane flowPane
 	
 	LcarsNode node
-
+	
 	new(LcarsNode node, String name, String value) {
 		this.node = node
+		val connectionFactory = [XNode host, XNode choice | 
+			new XConnection(host, choice) => [
+				sourceArrowHead = new TriangleArrowHead(it, true)
+				new XConnectionLabel(it) => [
+					text.text = name.replace('_', ' ')
+				]
+			]
+		]
 		children += flowPane = new FlowPane => [
 			prefWrapLength = 150
 			children += new Text => [
@@ -51,12 +64,29 @@ class LcarsField extends Parent {
 			}
 			onMousePressed = [
 				allTextNodes.forEach[fill = RED]
-				val Service<Void> service = [|
-					new LcarsQueryTask(this, name, value)
-				]
-				service.start
+				if(button != MouseButton.PRIMARY) {
+					val Service<Void> service = [|
+						new LcarsQueryTask(this, name, value, connectionFactory)
+					]
+					service.start
+				}
 			]
 			onMouseReleased = [
+				if(button == MouseButton.PRIMARY) {
+					val newConnections  = diagram.nodes
+						.filter(LcarsNode)
+						.filter[
+							it != node && data.get(name)==value 
+							&& !outgoingConnections.exists[target == node && label?.text?.text == name]
+							&& !incomingConnections.exists[source == node && label?.text?.text == name]
+						]
+						.map[connectionFactory.apply(node, it)]
+						.toList
+					diagram.connections += newConnections
+					if(!newConnections.empty)
+						new LayoutAction().perform(root)
+					resetColors
+				}
 			]
 		]
 	}
@@ -65,7 +95,7 @@ class LcarsField extends Parent {
 		node
 	}
 
-	def getAllTextNodes() {
+	protected def getAllTextNodes() {
 		flowPane.children.filter(Text)
 	}
 
@@ -78,7 +108,7 @@ class LcarsField extends Parent {
 			for(textNode: allTextNodes) {
 				for(index: 0..<textNode.text.length) {
 					keyFrames += new KeyFrame(
-						cycleDuration.add(20.millis), 
+						cycleDuration.add(15.millis), 
 						new KeyValue(textNode.textProperty, textNode.text.substring(0, index + 1))
 					)			
 				}
@@ -87,6 +117,11 @@ class LcarsField extends Parent {
 		]
 		timeline
 	}
+	
+	def resetColors() {
+		allTextNodes.head.fill = FLESH
+		allTextNodes.tail.forEach[fill = ORANGE]
+	}
 }
 
 class LcarsQueryTask extends Task<Void> {
@@ -94,18 +129,20 @@ class LcarsQueryTask extends Task<Void> {
 	LcarsField host
 	String fieldName
 	String fieldValue
+	(XNode, XNode)=>XConnection connectionFactory
 	
-	new(LcarsField host, String fieldName, String fieldValue) {
+	new(LcarsField host, String fieldName, String fieldValue, (XNode, XNode)=>XConnection connectionFactory) {
 		this.host = host
 		this.fieldName = fieldName
 		this.fieldValue = fieldValue
+		this.connectionFactory = connectionFactory
 	}
 	
 	override protected call() throws Exception {
 		val siblings = host.lcarsDiagram.lcarsAccess.query(fieldName, fieldValue)
 		val lcarsNode = host.lcarsNode
 		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
-		chooser.connectionLabel = fieldValue
+		chooser.connectionFactory = connectionFactory
 		chooser += siblings
 			.filter[get('_id').toString != lcarsNode.dbId]
 			.map[
@@ -116,8 +153,7 @@ class LcarsQueryTask extends Task<Void> {
 			]
 		Platform.runLater [|
 			host.root.currentTool = chooser
-			host.allTextNodes.head.fill = FLESH
-			host.allTextNodes.tail.forEach[fill = ORANGE]
+			host.resetColors
 		]
 		null
 	}

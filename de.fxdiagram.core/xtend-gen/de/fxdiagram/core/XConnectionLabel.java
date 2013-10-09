@@ -18,6 +18,7 @@ import javafx.geometry.VPos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
@@ -37,6 +38,13 @@ public class XConnectionLabel extends XShape {
     final Procedure1<Text> _function = new Procedure1<Text>() {
       public void apply(final Text it) {
         it.setTextOrigin(VPos.TOP);
+        Font _font = it.getFont();
+        String _family = _font.getFamily();
+        Font _font_1 = it.getFont();
+        double _size = _font_1.getSize();
+        double _multiply = (_size * 0.9);
+        Font _font_2 = Font.font(_family, _multiply);
+        it.setFont(_font_2);
         ObjectProperty<Paint> _fillProperty = it.fillProperty();
         ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
         _fillProperty.bind(_strokeProperty);
@@ -74,8 +82,6 @@ public class XConnectionLabel extends XShape {
   }
   
   protected void place(final List<XControlPoint> list) {
-    ObservableList<Transform> _transforms = this.getTransforms();
-    _transforms.clear();
     XConnection _connection = this.getConnection();
     final Point2D center = _connection.at(0.5);
     XConnection _connection_1 = this.getConnection();
@@ -119,8 +125,8 @@ public class XConnectionLabel extends XShape {
     this.setLayoutY(_plus_2);
     transform.setTx(0);
     transform.setTy(0);
-    ObservableList<Transform> _transforms_1 = this.getTransforms();
-    _transforms_1.add(transform);
+    ObservableList<Transform> _transforms = this.getTransforms();
+    _transforms.setAll(transform);
   }
   
   public MoveBehavior<? extends XShape> getMoveBehavior() {

@@ -1,5 +1,6 @@
 package de.fxdiagram.core.anchors;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.NearestPointFinder;
@@ -24,6 +25,10 @@ public class RectangleAnchors implements Anchors {
       Node _node_1 = this.host.getNode();
       Bounds _layoutBounds = _node_1.getLayoutBounds();
       final Bounds boundsInRootDiagram = CoreExtensions.localToRootDiagram(_node, _layoutBounds);
+      boolean _equals = Objects.equal(boundsInRootDiagram, null);
+      if (_equals) {
+        return null;
+      }
       double _minX = boundsInRootDiagram.getMinX();
       double _maxX = boundsInRootDiagram.getMaxX();
       double _plus = (_minX + _maxX);

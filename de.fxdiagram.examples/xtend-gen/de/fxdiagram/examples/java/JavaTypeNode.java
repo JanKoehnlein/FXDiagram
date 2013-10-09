@@ -31,6 +31,16 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class JavaTypeNode extends XNode {
+  private String _referenceName;
+  
+  public String getReferenceName() {
+    return this._referenceName;
+  }
+  
+  public void setReferenceName(final String referenceName) {
+    this._referenceName = referenceName;
+  }
+  
   private Class<? extends Object> javaType;
   
   private Text name;
@@ -124,31 +134,31 @@ public class JavaTypeNode extends XNode {
     _children.clear();
     ObservableList<Node> _children_1 = this.operationCompartment.getChildren();
     _children_1.clear();
-    List<Property> _properties = this.model.getProperties();
-    List<Property> _limit = this.<Property>limit(_properties);
-    final Procedure1<Property> _function = new Procedure1<Property>() {
-      public void apply(final Property property) {
-        ObservableList<Node> _children = JavaTypeNode.this.propertyCompartment.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            StringConcatenation _builder = new StringConcatenation();
-            String _name = property.getName();
-            _builder.append(_name, "");
-            _builder.append(": ");
-            Class<? extends Object> _type = property.getType();
-            String _simpleName = _type.getSimpleName();
-            _builder.append(_simpleName, "");
-            it.setText(_builder.toString());
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    IterableExtensions.<Property>forEach(_limit, _function);
     boolean _isActive = this.getIsActive();
     if (_isActive) {
+      List<Property> _properties = this.model.getProperties();
+      List<Property> _limit = this.<Property>limit(_properties);
+      final Procedure1<Property> _function = new Procedure1<Property>() {
+        public void apply(final Property property) {
+          ObservableList<Node> _children = JavaTypeNode.this.propertyCompartment.getChildren();
+          Text _text = new Text();
+          final Procedure1<Text> _function = new Procedure1<Text>() {
+            public void apply(final Text it) {
+              StringConcatenation _builder = new StringConcatenation();
+              String _name = property.getName();
+              _builder.append(_name, "");
+              _builder.append(": ");
+              Class<? extends Object> _type = property.getType();
+              String _simpleName = _type.getSimpleName();
+              _builder.append(_simpleName, "");
+              it.setText(_builder.toString());
+            }
+          };
+          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+      IterableExtensions.<Property>forEach(_limit, _function);
       List<Constructor<? extends Object>> _constructors = this.model.getConstructors();
       final Procedure1<Constructor<? extends Object>> _function_1 = new Procedure1<Constructor<? extends Object>>() {
         public void apply(final Constructor<? extends Object> constructor) {
@@ -179,41 +189,41 @@ public class JavaTypeNode extends XNode {
         }
       };
       IterableExtensions.<Constructor<? extends Object>>forEach(_constructors, _function_1);
+      List<Method> _operations = this.model.getOperations();
+      List<Method> _limit_1 = this.<Method>limit(_operations);
+      final Procedure1<Method> _function_2 = new Procedure1<Method>() {
+        public void apply(final Method method) {
+          ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
+          Text _text = new Text();
+          final Procedure1<Text> _function = new Procedure1<Text>() {
+            public void apply(final Text it) {
+              StringConcatenation _builder = new StringConcatenation();
+              String _name = method.getName();
+              _builder.append(_name, "");
+              _builder.append("(");
+              Class<? extends Object>[] _parameterTypes = method.getParameterTypes();
+              final Function1<Class<? extends Object>,String> _function = new Function1<Class<? extends Object>,String>() {
+                public String apply(final Class<? extends Object> it) {
+                  String _simpleName = it.getSimpleName();
+                  return _simpleName;
+                }
+              };
+              List<String> _map = ListExtensions.<Class<? extends Object>, String>map(((List<Class<? extends Object>>)Conversions.doWrapArray(_parameterTypes)), _function);
+              String _join = IterableExtensions.join(_map, ", ");
+              _builder.append(_join, "");
+              _builder.append("): ");
+              Class<? extends Object> _returnType = method.getReturnType();
+              String _simpleName = _returnType.getSimpleName();
+              _builder.append(_simpleName, "");
+              it.setText(_builder.toString());
+            }
+          };
+          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+      IterableExtensions.<Method>forEach(_limit_1, _function_2);
     }
-    List<Method> _operations = this.model.getOperations();
-    List<Method> _limit_1 = this.<Method>limit(_operations);
-    final Procedure1<Method> _function_2 = new Procedure1<Method>() {
-      public void apply(final Method method) {
-        ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            StringConcatenation _builder = new StringConcatenation();
-            String _name = method.getName();
-            _builder.append(_name, "");
-            _builder.append("(");
-            Class<? extends Object>[] _parameterTypes = method.getParameterTypes();
-            final Function1<Class<? extends Object>,String> _function = new Function1<Class<? extends Object>,String>() {
-              public String apply(final Class<? extends Object> it) {
-                String _simpleName = it.getSimpleName();
-                return _simpleName;
-              }
-            };
-            List<String> _map = ListExtensions.<Class<? extends Object>, String>map(((List<Class<? extends Object>>)Conversions.doWrapArray(_parameterTypes)), _function);
-            String _join = IterableExtensions.join(_map, ", ");
-            _builder.append(_join, "");
-            _builder.append("): ");
-            Class<? extends Object> _returnType = method.getReturnType();
-            String _simpleName = _returnType.getSimpleName();
-            _builder.append(_simpleName, "");
-            it.setText(_builder.toString());
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    IterableExtensions.<Method>forEach(_limit_1, _function_2);
   }
   
   protected <T extends Object> List<T> limit(final List<T> list) {

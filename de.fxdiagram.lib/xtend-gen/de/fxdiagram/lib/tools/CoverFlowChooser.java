@@ -59,7 +59,7 @@ public class CoverFlowChooser extends AbstractXNodeChooser {
     return _activate;
   }
   
-  protected void setInterpolatedPosition(final double interpolatedPosition) {
+  protected void doSetInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _nodes = this.getNodes();
     int _size = _nodes.size();
     boolean _notEquals = (_size != 0);

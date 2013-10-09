@@ -174,8 +174,8 @@ public class XDiagram extends Group implements XActivatable {
     Group _connectionLayer_1 = this.getConnectionLayer();
     ObservableList<Node> _children = _connectionLayer_1.getChildren();
     _children.addListener(new ListChangeListener<Node>() {
-        public void onChanged(Change<? extends Node> c) {
-          listChangeListener.apply(c);
+        public void onChanged(Change<? extends Node> arg0) {
+          listChangeListener.apply(arg0);
         }
     });
     ObservableList<XNode> _nodes_1 = this.getNodes();
@@ -357,5 +357,24 @@ public class XDiagram extends Group implements XActivatable {
   
   public ObjectProperty<Paint> foregroundPaintProperty() {
     return this.foregroundPaintProperty;
+  }
+  
+  private SimpleObjectProperty<Paint> connectionPaintProperty = new SimpleObjectProperty<Paint>(this, "connectionPaint",_initConnectionPaint());
+  
+  private static final Paint _initConnectionPaint() {
+    Color _gray = Color.gray(0.2);
+    return _gray;
+  }
+  
+  public Paint getConnectionPaint() {
+    return this.connectionPaintProperty.get();
+  }
+  
+  public void setConnectionPaint(final Paint connectionPaint) {
+    this.connectionPaintProperty.set(connectionPaint);
+  }
+  
+  public ObjectProperty<Paint> connectionPaintProperty() {
+    return this.connectionPaintProperty;
   }
 }

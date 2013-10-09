@@ -8,7 +8,7 @@ import static extension javafx.util.Duration.*
 class LayoutAction implements DiagramAction {
 	
 	override perform(XRoot root) {
-		new Layouter().layout(root.diagram, 2.seconds)
+		new Layouter().layout(root.diagram, 1500.millis)
 	}
 	
 }

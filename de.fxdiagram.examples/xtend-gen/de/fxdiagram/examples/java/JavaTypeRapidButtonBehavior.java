@@ -2,9 +2,14 @@ package de.fxdiagram.examples.java;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.anchors.LineArrowHead;
+import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.examples.java.JavaTypeModel;
@@ -14,9 +19,13 @@ import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import java.util.Collections;
 import java.util.List;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -55,6 +64,23 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
           };
           List<JavaTypeNode> _map = ListExtensions.<Class<? extends Object>, JavaTypeNode>map(_superTypes, _function);
           chooser.operator_add(_map);
+          final Function2<XNode,XNode,XConnection> _function_1 = new Function2<XNode,XNode,XConnection>() {
+            public XConnection apply(final XNode host, final XNode choice) {
+              XConnection _xConnection = new XConnection(host, choice);
+              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                public void apply(final XConnection it) {
+                  ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
+                  XDiagram _diagram = CoreExtensions.getDiagram(host);
+                  ObjectProperty<Paint> _backgroundPaintProperty = _diagram.backgroundPaintProperty();
+                  TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, _strokeProperty, _backgroundPaintProperty, false);
+                  it.setTargetArrowHead(_triangleArrowHead);
+                }
+              };
+              XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+              return _doubleArrow;
+            }
+          };
+          chooser.setConnectionFactory(_function_1);
           JavaTypeNode _host_1 = JavaTypeRapidButtonBehavior.this.getHost();
           XRoot _root = CoreExtensions.getRoot(_host_1);
           _root.setCurrentTool(chooser);
@@ -88,6 +114,8 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
                 public void apply(final JavaTypeNode it) {
                   Class<? extends Object> _type = reference.getType();
                   it.setJavaType(_type);
+                  String _name = reference.getName();
+                  it.setReferenceName(_name);
                 }
               };
               JavaTypeNode _doubleArrow = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function);
@@ -96,6 +124,30 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
           };
           List<JavaTypeNode> _map = ListExtensions.<Property, JavaTypeNode>map(_references, _function);
           chooser.operator_add(_map);
+          final Function2<XNode,XNode,XConnection> _function_1 = new Function2<XNode,XNode,XConnection>() {
+            public XConnection apply(final XNode host, final XNode choice) {
+              XConnection _xConnection = new XConnection(host, choice);
+              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                public void apply(final XConnection it) {
+                  ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
+                  LineArrowHead _lineArrowHead = new LineArrowHead(it, 7, 10, _strokeProperty, false);
+                  it.setTargetArrowHead(_lineArrowHead);
+                  XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
+                  final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+                    public void apply(final XConnectionLabel it) {
+                      Text _text = it.getText();
+                      String _referenceName = ((JavaTypeNode) choice).getReferenceName();
+                      _text.setText(_referenceName);
+                    }
+                  };
+                  ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
+                }
+              };
+              XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+              return _doubleArrow;
+            }
+          };
+          chooser.setConnectionFactory(_function_1);
           JavaTypeNode _host_1 = JavaTypeRapidButtonBehavior.this.getHost();
           XRoot _root = CoreExtensions.getRoot(_host_1);
           _root.setCurrentTool(chooser);

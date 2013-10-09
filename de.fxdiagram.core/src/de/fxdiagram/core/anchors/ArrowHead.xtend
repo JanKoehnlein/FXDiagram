@@ -56,7 +56,6 @@ abstract class ArrowHead extends Parent {
 	
 	def void place() {
 		val t = if(isSource) 0 else 1
-		transforms.clear
 		val trafo = new Affine
 		val headBounds = boundsInLocal
 		trafo.translate(- headBounds.width - headBounds.minX + lineCut,  - 0.5 * headBounds.height - headBounds.minY)
@@ -66,7 +65,7 @@ abstract class ArrowHead extends Parent {
 		trafo.rotate(angle)
 		val pos = connection.at(t)
 		trafo.translate(pos.x, pos.y)
-		transforms += trafo
+		transforms.setAll(trafo)
 	}
 }
 

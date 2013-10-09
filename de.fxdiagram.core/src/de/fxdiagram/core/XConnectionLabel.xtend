@@ -11,6 +11,7 @@ import javafx.scene.transform.Affine
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
+import javafx.scene.text.Font
 
 class XConnectionLabel extends XShape {
 
@@ -25,6 +26,7 @@ class XConnectionLabel extends XShape {
 		connection.label = this
 		text = new Text => [
 			textOrigin = VPos.TOP
+			font = Font.font(font.family, font.size * 0.9)
 			fillProperty.bind(connection.strokeProperty)
 		]
 		node = text
@@ -49,7 +51,6 @@ class XConnectionLabel extends XShape {
 	}
 
 	def protected void place(List<XControlPoint> list) {
-		transforms.clear
 		val center = connection.at(0.5)
 		val derivative = connection.derivativeAt(0.5)
 		var angle = atan2(derivative.y, derivative.x)
@@ -68,7 +69,7 @@ class XConnectionLabel extends XShape {
 		layoutY = transform.ty + center.y
 		transform.tx = 0
 		transform.ty = 0
-		transforms += transform
+		transforms.setAll(transform)
 	}
 
 	override getMoveBehavior() {

@@ -27,7 +27,7 @@ class CarusselChooser extends AbstractXNodeChooser {
 		super.activate()
 	}
 
-	protected override setInterpolatedPosition(double interpolatedPosition) {
+	protected override doSetInterpolatedPosition(double interpolatedPosition) {
 		val maxHeight = nodes.fold(0.0, [a, b|max(a, b.layoutBounds.height)]) + spacing
 		val angle = PI / nodes.size
 		radius = maxHeight / 2 / sin(angle)
@@ -38,17 +38,19 @@ class CarusselChooser extends AbstractXNodeChooser {
 				node.visible = false
 			else {
 				node.visible = true
-				node.transforms.clear
 				val scaleY = cos(nodeCenterAngle)
 				val scaleX = (scaleY + 0.5) / 1.5
-				node.transforms.add(Transform.translate(0, radius * sin(nodeCenterAngle - angle)))
-				node.transforms.add(Transform.scale(scaleX, scaleY))
-				node.transforms.add(Transform.translate(- node.layoutBounds.width / 2, spacing / 2))
+				node.transforms.setAll(#[
+					Transform.translate(0, radius * sin(nodeCenterAngle - angle)),
+					Transform.scale(scaleX, scaleY),
+					Transform.translate(- node.layoutBounds.width / 2, spacing / 2)
+				])
 				node.opacity = scaleY * scaleY * scaleY
-				if (abs(nodeCenterAngle) < angle)
+				if (abs(nodeCenterAngle) < angle) {
 					node.effect = currentNodeEffect
-				else
+				} else {
 					node.effect = null
+				}
 			}
 		}
 	}
