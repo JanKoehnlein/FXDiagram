@@ -7,7 +7,6 @@ TODO
 - position tooltip
 - find better colors
 - use scalable icons
-- LCARS connect other matches
 
 ENHANCEMENT
 - chooser isVertical
@@ -26,6 +25,7 @@ MINOR
 - different anchors for faces of flipNodes 
  
 DONE 
+- LCARS connect other matches
 - fix connection stroke width
 - Embed more JavaFX demos in XNodes
 - choose connections instead of nodes?

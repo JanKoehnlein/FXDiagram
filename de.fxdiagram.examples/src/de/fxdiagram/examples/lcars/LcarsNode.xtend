@@ -30,6 +30,7 @@ import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 import static extension javafx.scene.layout.VBox.*
+import javafx.scene.control.Tooltip
 
 @Logging
 class LcarsNode extends XNode {
@@ -294,6 +295,10 @@ class LcarsNode extends XNode {
 		]
 		showPage(pages.keySet.iterator.next)
 		infoBox.boundsInLocalProperty.addListener(nameShortener) 
+		Tooltip.install(this, new Tooltip('''
+			Click on a property to connect with equivalents,
+			Right-click to add new equivalents.
+		'''))
 	}
 	
 	protected def invertColors(RectangleBorderPane box) {

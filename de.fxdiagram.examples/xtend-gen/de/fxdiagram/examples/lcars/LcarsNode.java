@@ -39,6 +39,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -53,6 +54,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -660,6 +662,13 @@ public class LcarsNode extends XNode {
     this.showPage(_next);
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty_1 = this.infoBox.boundsInLocalProperty();
     _boundsInLocalProperty_1.addListener(this.nameShortener);
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Click on a property to connect with equivalents,");
+    _builder.newLine();
+    _builder.append("Right-click to add new equivalents.");
+    _builder.newLine();
+    Tooltip _tooltip = new Tooltip(_builder.toString());
+    Tooltip.install(this, _tooltip);
   }
   
   protected void invertColors(final RectangleBorderPane box) {
