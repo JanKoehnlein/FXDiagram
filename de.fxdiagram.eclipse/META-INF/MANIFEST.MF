@@ -6,7 +6,10 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: de.fxdiagram.eclipse.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- de.fxdiagram.examples;bundle-version="1.0.0"
+ de.fxdiagram.examples;bundle-version="1.0.0",
+ org.eclipse.xtend.lib,
+ com.google.guava,
+ org.eclipse.xtext.xbase.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: javafx.animation;version="2.2.0",
@@ -42,3 +45,4 @@ Import-Package: javafx.animation;version="2.2.0",
  javafx.stage;version="2.2.0",
  javafx.util;version="2.2.0",
  javafx.util.converter;version="2.2.0"
+
