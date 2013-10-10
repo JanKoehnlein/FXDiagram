@@ -12,7 +12,6 @@ import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.java.Property;
@@ -23,8 +22,11 @@ import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
+import javafx.scene.control.Tooltip;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
@@ -89,15 +91,15 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
         }
       };
       final Procedure1<XRapidButton> addSuperTypeAction = _function;
-      ImageCache _get = ImageCache.get();
-      final Image image = _get.getImage(this, "SuperType.gif");
       JavaTypeNode _host_1 = this.getHost();
       XDiagram _diagram = CoreExtensions.getDiagram(_host_1);
       ObservableList<XRapidButton> _buttons = _diagram.getButtons();
       JavaTypeNode _host_2 = this.getHost();
-      XRapidButton _xRapidButton = new XRapidButton(_host_2, 0.5, 0, image, addSuperTypeAction);
+      SVGPath _superImage = this.getSuperImage(true);
+      XRapidButton _xRapidButton = new XRapidButton(_host_2, 0.5, 0, _superImage, addSuperTypeAction);
       JavaTypeNode _host_3 = this.getHost();
-      XRapidButton _xRapidButton_1 = new XRapidButton(_host_3, 0.5, 1, image, addSuperTypeAction);
+      SVGPath _superImage_1 = this.getSuperImage(false);
+      XRapidButton _xRapidButton_1 = new XRapidButton(_host_3, 0.5, 1, _superImage_1, addSuperTypeAction);
       Iterables.<XRapidButton>addAll(_buttons, Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1)));
     }
     List<Property> _references = model.getReferences();
@@ -158,16 +160,61 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
         }
       };
       final Procedure1<XRapidButton> addReferencesAction = _function_1;
-      ImageCache _get_1 = ImageCache.get();
-      final Image image_1 = _get_1.getImage(this, "Reference.gif");
       JavaTypeNode _host_4 = this.getHost();
       XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_4);
       ObservableList<XRapidButton> _buttons_1 = _diagram_1.getButtons();
       JavaTypeNode _host_5 = this.getHost();
-      XRapidButton _xRapidButton_2 = new XRapidButton(_host_5, 0, 0.5, image_1, addReferencesAction);
+      SVGPath _referenceImage = this.getReferenceImage(true);
+      XRapidButton _xRapidButton_2 = new XRapidButton(_host_5, 0, 0.5, _referenceImage, addReferencesAction);
       JavaTypeNode _host_6 = this.getHost();
-      XRapidButton _xRapidButton_3 = new XRapidButton(_host_6, 1, 0.5, image_1, addReferencesAction);
+      SVGPath _referenceImage_1 = this.getReferenceImage(false);
+      XRapidButton _xRapidButton_3 = new XRapidButton(_host_6, 1, 0.5, _referenceImage_1, addReferencesAction);
       Iterables.<XRapidButton>addAll(_buttons_1, Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton_2, _xRapidButton_3)));
     }
+  }
+  
+  protected SVGPath getSuperImage(final boolean isUp) {
+    SVGPath _sVGPath = new SVGPath();
+    final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
+      public void apply(final SVGPath it) {
+        String _xifexpression = null;
+        if (isUp) {
+          _xifexpression = "m 0,8 7,-8 7,8 z";
+        } else {
+          _xifexpression = "m 0,0 7,8 7,-8 z";
+        }
+        it.setContent(_xifexpression);
+        it.setFill(Color.WHITE);
+        it.setStroke(Color.BLACK);
+        it.setStrokeWidth(1.8);
+        Tooltip _tooltip = new Tooltip("Discover supertypes");
+        Tooltip.install(it, _tooltip);
+      }
+    };
+    SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
+    return _doubleArrow;
+  }
+  
+  protected SVGPath getReferenceImage(final boolean isLeft) {
+    SVGPath _sVGPath = new SVGPath();
+    final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
+      public void apply(final SVGPath it) {
+        String _xifexpression = null;
+        if (isLeft) {
+          _xifexpression = "m 7,0 -7,6 7,6";
+        } else {
+          _xifexpression = "m 0,0 7,6 -7,6";
+        }
+        it.setContent(_xifexpression);
+        it.setFill(Color.WHITE);
+        it.setStroke(Color.BLACK);
+        it.setStrokeWidth(2);
+        it.setStrokeLineCap(StrokeLineCap.ROUND);
+        Tooltip _tooltip = new Tooltip("Discover properties");
+        Tooltip.install(it, _tooltip);
+      }
+    };
+    SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
+    return _doubleArrow;
   }
 }

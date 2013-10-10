@@ -20,6 +20,7 @@ import static javafx.geometry.VPos.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension javafx.util.Duration.*
+import javafx.scene.Node
 
 class XRapidButton extends Parent implements XActivatable {
 	
@@ -43,6 +44,14 @@ class XRapidButton extends Parent implements XActivatable {
 		placer = new Placer(this, xPos, yPos)
 	}
 	
+	new(XNode host, double xPos, double yPos, 
+		Node image, (XRapidButton)=>void action) {
+		this.host = host
+		this.action = action
+		children += image
+		placer = new Placer(this, xPos, yPos)
+	}
+	
 	override activate() {
 		if(!isActive)
 			doActivate
@@ -60,7 +69,10 @@ class XRapidButton extends Parent implements XActivatable {
 		onMouseEntered = [ show ]
 		onMouseExited = [ fade ]
 		onMousePressed = [ 
-			action.apply(this) consume
+			opacity = 0
+			visible = false 
+			action.apply(this)
+			consume
 		]
 		placer.activate
 		placer.addListener [

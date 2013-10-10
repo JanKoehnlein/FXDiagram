@@ -8,19 +8,30 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.DurationExtensions;
+import de.fxdiagram.core.extensions.TimerExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Window;
+import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -32,6 +43,8 @@ public class SelectionTool implements XDiagramTool {
   private EventHandler<MouseEvent> mouseDraggedHandler;
   
   private EventHandler<MouseEvent> mouseReleasedHandler;
+  
+  private Tooltip positionTip;
   
   public SelectionTool(final XRoot root) {
     this.root = root;
@@ -115,6 +128,10 @@ public class SelectionTool implements XDiagramTool {
               } else {
                 targetShape.select(event);
               }
+              boolean _selected_1 = targetShape.getSelected();
+              if (_selected_1) {
+                selection.add(targetShape);
+              }
               final Procedure1<XShape> _function_3 = new Procedure1<XShape>() {
                 public void apply(final XShape it) {
                   MoveBehavior<? extends XShape> _moveBehavior = it.getMoveBehavior();
@@ -128,6 +145,16 @@ public class SelectionTool implements XDiagramTool {
               if (_moveBehavior!=null) {
                 _moveBehavior.mousePressed(event);
               }
+              double _screenX = event.getScreenX();
+              double _screenY = event.getScreenY();
+              SelectionTool.this.updatePositionTooltip(selection, _screenX, _screenY);
+              final Runnable _function_4 = new Runnable() {
+                public void run() {
+                  SelectionTool.this.showPositionTooltip();
+                }
+              };
+              Duration _millis = DurationExtensions.millis(200);
+              TimerExtensions.defer(_function_4, _millis);
             }
           }
         }
@@ -151,6 +178,10 @@ public class SelectionTool implements XDiagramTool {
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.show(selection);
         }
+        double _screenX = it.getScreenX();
+        double _screenY = it.getScreenY();
+        SelectionTool.this.updatePositionTooltip(selection, _screenX, _screenY);
+        SelectionTool.this.showPositionTooltip();
         it.consume();
       }
     };
@@ -162,9 +193,80 @@ public class SelectionTool implements XDiagramTool {
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.hide();
         }
+        SelectionTool.this.hidePositionTooltip();
       }
     };
     this.mouseReleasedHandler = _function_2;
+  }
+  
+  protected void updatePositionTooltip(final Iterable<? extends XShape> selection, final double screenX, final double screenY) {
+    final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
+      public Bounds apply(final XShape it) {
+        Bounds _snapBounds = it.getSnapBounds();
+        Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(it, _snapBounds);
+        return _localToRootDiagram;
+      }
+    };
+    Iterable<Bounds> _map = IterableExtensions.map(selection, _function);
+    final Function2<Bounds,Bounds,Bounds> _function_1 = new Function2<Bounds,Bounds,Bounds>() {
+      public Bounds apply(final Bounds a, final Bounds b) {
+        BoundingBox _plus = BoundsExtensions.operator_plus(a, b);
+        return _plus;
+      }
+    };
+    Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
+    boolean _notEquals = (!Objects.equal(selectionBounds, null));
+    if (_notEquals) {
+      Tooltip _elvis = null;
+      if (this.positionTip != null) {
+        _elvis = this.positionTip;
+      } else {
+        Tooltip _tooltip = new Tooltip();
+        _elvis = ObjectExtensions.<Tooltip>operator_elvis(this.positionTip, _tooltip);
+      }
+      this.positionTip = _elvis;
+      double _minX = selectionBounds.getMinX();
+      double _minY = selectionBounds.getMinY();
+      final String positionString = String.format("(%.3f : %.3f)", Double.valueOf(_minX), Double.valueOf(_minY));
+      this.positionTip.setText(positionString);
+      double _plus = (screenX + 10);
+      this.positionTip.setX(_plus);
+      double _minus = (screenY - 40);
+      this.positionTip.setY(_minus);
+    }
+  }
+  
+  protected void showPositionTooltip() {
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(this.positionTip, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _isShowing = this.positionTip.isShowing();
+      boolean _not = (!_isShowing);
+      _and = (_notEquals && _not);
+    }
+    if (_and) {
+      Scene _scene = this.root.getScene();
+      Window _window = _scene.getWindow();
+      this.positionTip.show(_window);
+    }
+  }
+  
+  protected Tooltip hidePositionTooltip() {
+    Tooltip _xblockexpression = null;
+    {
+      boolean _isShowing = false;
+      if (this.positionTip!=null) {
+        _isShowing=this.positionTip.isShowing();
+      }
+      if (_isShowing) {
+        this.positionTip.hide();
+      }
+      Tooltip _positionTip = this.positionTip = null;
+      _xblockexpression = (_positionTip);
+    }
+    return _xblockexpression;
   }
   
   protected void deselect(final Collection<XShape> selection, final Function1<? super XShape,? extends Boolean> filter) {

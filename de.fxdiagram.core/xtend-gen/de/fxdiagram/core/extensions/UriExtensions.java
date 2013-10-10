@@ -2,6 +2,8 @@ package de.fxdiagram.core.extensions;
 
 import com.google.common.base.Objects;
 import java.net.URL;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -28,6 +30,17 @@ public class UriExtensions {
         _xblockexpression = (_xifexpression);
       }
       return _xblockexpression;
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
+    }
+  }
+  
+  public static Node fxmlNode(final Object context, final String file) {
+    try {
+      String _uRI = UriExtensions.toURI(context, file);
+      URL _uRL = new URL(_uRI);
+      Node _load = FXMLLoader.<Node>load(_uRL);
+      return _load;
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }

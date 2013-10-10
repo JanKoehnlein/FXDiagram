@@ -17,12 +17,15 @@ import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.control.Separator
 import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
+import javafx.scene.shape.SVGPath
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.services.ImageCache
+import javafx.scene.shape.StrokeLineCap
+import javafx.scene.control.Tooltip
 
 class JavaTypeNode extends XNode {
 	
@@ -142,10 +145,9 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				]
 				host.root.currentTool = chooser
 			]
-			val image = ImageCache.get.getImage(this, 'SuperType.gif')
 			host.diagram.buttons += #[
-				new XRapidButton(host, 0.5, 0, image, addSuperTypeAction),
-				new XRapidButton(host, 0.5, 1, image, addSuperTypeAction)
+				new XRapidButton(host, 0.5, 0, getSuperImage(true), addSuperTypeAction),
+				new XRapidButton(host, 0.5, 1, getSuperImage(false), addSuperTypeAction)
 			] 			
 		}
 		if(!model.references.empty) {
@@ -170,11 +172,38 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 				]
 				host.root.currentTool = chooser
 			]
-			val image = ImageCache.get.getImage(this, 'Reference.gif')
 			host.diagram.buttons += #[
-				new XRapidButton(host, 0, 0.5, image, addReferencesAction),
-				new XRapidButton(host, 1, 0.5, image, addReferencesAction)
+				new XRapidButton(host, 0, 0.5, getReferenceImage(true), addReferencesAction),
+				new XRapidButton(host, 1, 0.5, getReferenceImage(false), addReferencesAction)
 			]
 		}
+		
+	}
+	
+	protected def getSuperImage(boolean isUp) {
+		new SVGPath => [
+			content = if(isUp) 
+					"m 0,8 7,-8 7,8 z"
+				else 
+					"m 0,0 7,8 7,-8 z"
+			fill = Color.WHITE
+			stroke = Color.BLACK
+			strokeWidth = 1.8
+			Tooltip.install(it, new Tooltip('Discover supertypes'))
+		]
+	}
+	
+	protected def getReferenceImage(boolean isLeft) {
+		new SVGPath => [
+			content = if(isLeft) 
+					"m 7,0 -7,6 7,6"
+				else
+					"m 0,0 7,6 -7,6"
+			fill = Color.WHITE
+			stroke = Color.BLACK
+			strokeWidth = 2
+			strokeLineCap = StrokeLineCap.ROUND
+			Tooltip.install(it, new Tooltip('Discover properties'))
+		]
 	}
 }

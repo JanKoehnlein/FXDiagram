@@ -54,6 +54,15 @@ public class XRapidButton extends Parent implements XActivatable {
     this.placer = _placer;
   }
   
+  public XRapidButton(final XNode host, final double xPos, final double yPos, final Node image, final Procedure1<? super XRapidButton> action) {
+    this.host = host;
+    this.action = action;
+    ObservableList<Node> _children = this.getChildren();
+    _children.add(image);
+    Placer _placer = new Placer(this, xPos, yPos);
+    this.placer = _placer;
+  }
+  
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
@@ -93,6 +102,8 @@ public class XRapidButton extends Parent implements XActivatable {
     this.setOnMouseExited(_function_1);
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
+        XRapidButton.this.setOpacity(0);
+        XRapidButton.this.setVisible(false);
         XRapidButton.this.action.apply(XRapidButton.this);
         it.consume();
       }

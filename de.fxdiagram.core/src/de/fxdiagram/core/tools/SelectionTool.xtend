@@ -6,10 +6,15 @@ import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import java.util.Collection
 import javafx.event.EventHandler
+import javafx.scene.control.Tooltip
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
+import static de.fxdiagram.core.extensions.TimerExtensions.*
+
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 class SelectionTool implements XDiagramTool {
 
@@ -18,6 +23,8 @@ class SelectionTool implements XDiagramTool {
 	EventHandler<MouseEvent> mousePressedHandler
 	EventHandler<MouseEvent> mouseDraggedHandler
 	EventHandler<MouseEvent> mouseReleasedHandler
+	
+	Tooltip positionTip 
 
 	new(XRoot root) {
 		this.root = root
@@ -40,11 +47,14 @@ class SelectionTool implements XDiagramTool {
 						targetShape.toggleSelect(event)
 					else 
 						targetShape.select(event)
-						
+					if(targetShape.selected)
+						selection.add(targetShape)
 					selection.forEach [
 						moveBehavior?.mousePressed(event)
 					]
 					targetShape.moveBehavior?.mousePressed(event)
+					updatePositionTooltip(selection, event.screenX, event.screenY)
+					defer([|showPositionTooltip], 200.millis)
 				}
 			}
 		]
@@ -52,12 +62,37 @@ class SelectionTool implements XDiagramTool {
 			val selection = root.currentSelection
 			for (shape : selection) 
 				shape?.moveBehavior?.mouseDragged(it)
-			root.diagram.auxiliaryLinesSupport?.show(selection)				
+			root.diagram.auxiliaryLinesSupport?.show(selection)	
+			updatePositionTooltip(selection, screenX, screenY)
+			showPositionTooltip
 			consume
 		]
 		this.mouseReleasedHandler = [
-			root.diagram.auxiliaryLinesSupport?.hide()				
+			root.diagram.auxiliaryLinesSupport?.hide()
+			hidePositionTooltip
 		]
+	}
+	
+	protected def updatePositionTooltip(Iterable<? extends XShape> selection, double screenX, double screenY) {
+		var selectionBounds = selection.map[localToRootDiagram(snapBounds)].reduce[a, b | a + b]
+		if(selectionBounds != null) {
+			positionTip = positionTip ?: new Tooltip
+			val positionString = String.format("(%.3f : %.3f)", selectionBounds.minX, selectionBounds.minY)
+			positionTip.text = positionString
+			positionTip.x = screenX + 10
+			positionTip.y = screenY - 40	
+		}
+	}
+	
+	protected def showPositionTooltip() {
+		if(positionTip != null && !positionTip.showing) 
+			positionTip.show(root.scene.window)
+	}
+	
+	protected def hidePositionTooltip() {
+		if(positionTip?.showing) 
+			positionTip.hide
+		positionTip = null			
 	}
 	
 	protected def deselect(Collection<XShape> selection, (XShape)=>boolean filter) {
