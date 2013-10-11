@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.ui.part.ViewPart
 
 import de.fxdiagram.examples.Main
+import de.fxdiagram.swtfx.SwtToFXGestureConverter
 
 class FXDiagramViewPart extends ViewPart {
 
@@ -15,6 +16,7 @@ class FXDiagramViewPart extends ViewPart {
 	
 	override createPartControl(Composite parent) {
 		canvas = new FXCanvas(parent, SWT.NONE)
+		SwtToFXGestureConverter.register(canvas);
 		canvas.scene = createFxScene
 	}
 	

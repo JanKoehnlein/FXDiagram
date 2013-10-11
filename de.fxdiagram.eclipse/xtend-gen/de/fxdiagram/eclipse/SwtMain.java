@@ -1,6 +1,7 @@
 package de.fxdiagram.eclipse;
 
 import de.fxdiagram.examples.Main;
+import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import javafx.embed.swt.FXCanvas;
 import javafx.scene.Scene;
 import org.eclipse.swt.SWT;
@@ -25,6 +26,7 @@ public class SwtMain {
     shell.setLayout(_fillLayout);
     FXCanvas _fXCanvas = new FXCanvas(shell, SWT.NONE);
     final FXCanvas canvas = _fXCanvas;
+    SwtToFXGestureConverter.register(canvas);
     final Scene scene = SwtMain.createScene();
     canvas.setScene(scene);
     shell.open();

@@ -1,6 +1,7 @@
 package de.fxdiagram.eclipse
 
 import de.fxdiagram.examples.Main
+import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import javafx.embed.swt.FXCanvas
 import org.eclipse.swt.SWT
 import org.eclipse.swt.layout.FillLayout
@@ -18,6 +19,7 @@ class SwtMain {
 		val shell = new Shell(display)
 		shell.layout = new FillLayout
 		val canvas = new FXCanvas(shell, SWT.NONE)
+		SwtToFXGestureConverter.register(canvas);
 		val scene = createScene
 		canvas.scene = scene
 		shell.open
@@ -27,5 +29,4 @@ class SwtMain {
 		}
 		display.dispose
 	}
-	
 }
