@@ -48,7 +48,7 @@ public class LcarsField extends Parent {
     this.node = node;
     final ChooserConnectionProvider _function = new ChooserConnectionProvider() {
       public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
-        XConnection _xConnection = new XConnection(host, choice);
+        XConnection _xConnection = new XConnection(host, choice, name);
         final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
           public void apply(final XConnection it) {
             TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, true);
@@ -185,17 +185,8 @@ public class LcarsField extends Parent {
                         if (!_equals) {
                           _and = false;
                         } else {
-                          ObservableList<XConnectionLabel> _labels = it.getLabels();
-                          XConnectionLabel _head = IterableExtensions.<XConnectionLabel>head(_labels);
-                          Text _text = null;
-                          if (_head!=null) {
-                            _text=_head.getText();
-                          }
-                          String _text_1 = null;
-                          if (_text!=null) {
-                            _text_1=_text.getText();
-                          }
-                          boolean _equals_1 = Objects.equal(_text_1, name);
+                          Object _key = it.getKey();
+                          boolean _equals_1 = Objects.equal(_key, name);
                           _and = (_equals && _equals_1);
                         }
                         return Boolean.valueOf(_and);
@@ -217,17 +208,8 @@ public class LcarsField extends Parent {
                         if (!_equals) {
                           _and = false;
                         } else {
-                          ObservableList<XConnectionLabel> _labels = it.getLabels();
-                          XConnectionLabel _head = IterableExtensions.<XConnectionLabel>head(_labels);
-                          Text _text = null;
-                          if (_head!=null) {
-                            _text=_head.getText();
-                          }
-                          String _text_1 = null;
-                          if (_text!=null) {
-                            _text_1=_text.getText();
-                          }
-                          boolean _equals_1 = Objects.equal(_text_1, name);
+                          Object _key = it.getKey();
+                          boolean _equals_1 = Objects.equal(_key, name);
                           _and = (_equals && _equals_1);
                         }
                         return Boolean.valueOf(_and);

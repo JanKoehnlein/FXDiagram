@@ -32,7 +32,7 @@ class LcarsField extends Parent {
 		this.node = node
 		val ChooserConnectionProvider connectionProvider = [ 
 			host,  choice, choiceInfo | 
-			new XConnection(host, choice) => [
+			new XConnection(host, choice, name) => [
 				sourceArrowHead = new TriangleArrowHead(it, true)
 				new XConnectionLabel(it) => [
 					text.text = name.replace('_', ' ')
@@ -78,8 +78,8 @@ class LcarsField extends Parent {
 						.filter(LcarsNode)
 						.filter[
 							it != node && data.get(name)==value 
-							&& !outgoingConnections.exists[target == node && labels.head?.text?.text == name]
-							&& !incomingConnections.exists[source == node && labels.head?.text?.text == name]
+							&& !outgoingConnections.exists[target == node && key == name]
+							&& !incomingConnections.exists[source == node && key == name]
 						]
 						.map[connectionProvider.getConnection(node, it, null)]
 						.toList

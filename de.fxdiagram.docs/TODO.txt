@@ -1,9 +1,9 @@
 TODO
 - find better recursive image
 - rearrange demo diagram
-- LCARS refactor choosers to use keys
 
 ENHANCEMENT
+- eOpposite aware key in Ecore
 - find better colors
 - collapsible compartments
 - chooser isVertical
@@ -20,6 +20,7 @@ MINOR
 - different anchors for faces of flipNodes 
  
 DONE 
+- LCARS refactor choosers to use keys
 - multiple connection labels
 - eOpposites in Ecore 
 - filter duplicate connections
