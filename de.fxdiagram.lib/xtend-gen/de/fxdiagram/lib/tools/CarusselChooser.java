@@ -3,7 +3,7 @@ package de.fxdiagram.lib.tools;
 import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.tools.AbstractXNodeChooser;
+import de.fxdiagram.core.tools.AbstractChooser;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.collections.ObservableList;
@@ -21,7 +21,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
-public class CarusselChooser extends AbstractXNodeChooser {
+public class CarusselChooser extends AbstractChooser {
   private double _spacing = 6;
   
   public double getSpacing() {

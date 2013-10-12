@@ -1,7 +1,6 @@
 package de.fxdiagram.lib.tools
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.tools.AbstractXNodeChooser
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.effect.Effect
@@ -9,8 +8,9 @@ import javafx.scene.effect.InnerShadow
 import javafx.scene.transform.Transform
 
 import static java.lang.Math.*
+import de.fxdiagram.core.tools.AbstractChooser
 
-class CarusselChooser extends AbstractXNodeChooser {
+class CarusselChooser extends AbstractChooser {
 
 	@Property double spacing = 6
 

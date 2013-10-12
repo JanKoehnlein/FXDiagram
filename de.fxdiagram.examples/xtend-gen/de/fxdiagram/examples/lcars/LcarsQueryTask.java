@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import com.mongodb.DBObject;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider;
+import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.lcars.LcarsAccess;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
@@ -28,9 +28,9 @@ public class LcarsQueryTask extends Task<Void> {
   
   private String fieldValue;
   
-  private XNodeChooserXConnectionProvider connectionProvider;
+  private ChooserConnectionProvider connectionProvider;
   
-  public LcarsQueryTask(final LcarsField host, final String fieldName, final String fieldValue, final XNodeChooserXConnectionProvider connectionProvider) {
+  public LcarsQueryTask(final LcarsField host, final String fieldName, final String fieldValue, final ChooserConnectionProvider connectionProvider) {
     this.host = host;
     this.fieldName = fieldName;
     this.fieldValue = fieldValue;

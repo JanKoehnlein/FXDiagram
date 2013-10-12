@@ -15,7 +15,7 @@ import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider;
+import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
@@ -61,7 +61,7 @@ public class EClassRapidButtonBehavior extends AbstractBehavior<EClassNode> {
             }
           };
           IterableExtensions.<EClass>forEach(_eSuperTypes, _function);
-          final XNodeChooserXConnectionProvider _function_1 = new XNodeChooserXConnectionProvider() {
+          final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
             public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
               XConnection _xConnection = new XConnection(host, choice);
               final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
@@ -114,7 +114,7 @@ public class EClassRapidButtonBehavior extends AbstractBehavior<EClassNode> {
             }
           };
           IterableExtensions.<EReference>forEach(_eReferences, _function);
-          final XNodeChooserXConnectionProvider _function_1 = new XNodeChooserXConnectionProvider() {
+          final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
             public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
               XConnection _xConnection = new XConnection(host, choice);
               final Procedure1<XConnection> _function = new Procedure1<XConnection>() {

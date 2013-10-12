@@ -12,7 +12,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.tools.AbstractXNodeChooser;
+import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
@@ -114,7 +114,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
     Iterables.<XRapidButton>addAll(_buttons, this.rapidButtons);
   }
   
-  protected void addChoices(final AbstractXNodeChooser chooser) {
+  protected void addChoices(final AbstractChooser chooser) {
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, 20, true);
     for (final Integer i : _doubleDotLessThan) {
       String _plus = ("node " + i);

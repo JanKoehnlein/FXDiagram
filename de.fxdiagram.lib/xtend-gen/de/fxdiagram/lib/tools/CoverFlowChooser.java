@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import de.fxdiagram.core.tools.AbstractXNodeChooser;
+import de.fxdiagram.core.tools.AbstractChooser;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -27,7 +27,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class CoverFlowChooser extends AbstractXNodeChooser {
+public class CoverFlowChooser extends AbstractChooser {
   private double _angle = 60;
   
   public double getAngle() {

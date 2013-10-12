@@ -13,7 +13,7 @@ import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider;
+import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.java.Property;
@@ -59,7 +59,7 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
             }
           };
           IterableExtensions.<Class<? extends Object>>forEach(_superTypes, _function);
-          final XNodeChooserXConnectionProvider _function_1 = new XNodeChooserXConnectionProvider() {
+          final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
             public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
               XConnection _xConnection = new XConnection(host, choice);
               final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
@@ -112,7 +112,7 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
             }
           };
           IterableExtensions.<Property>forEach(_references, _function);
-          final XNodeChooserXConnectionProvider _function_1 = new XNodeChooserXConnectionProvider() {
+          final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
             public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
               XConnection _xblockexpression = null;
               {

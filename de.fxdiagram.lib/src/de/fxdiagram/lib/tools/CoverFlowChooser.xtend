@@ -1,7 +1,6 @@
 package de.fxdiagram.lib.tools
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.tools.AbstractXNodeChooser
 import javafx.geometry.Point3D
 import javafx.geometry.Pos
 import javafx.scene.effect.ColorAdjust
@@ -12,8 +11,9 @@ import javafx.scene.transform.Affine
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
+import de.fxdiagram.core.tools.AbstractChooser
 
-class CoverFlowChooser extends AbstractXNodeChooser {
+class CoverFlowChooser extends AbstractChooser {
 
 	@Property double angle = 60
 	@Property double deltaX = 20

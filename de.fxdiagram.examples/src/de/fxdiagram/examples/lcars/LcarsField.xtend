@@ -3,7 +3,6 @@ package de.fxdiagram.examples.lcars
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.TriangleArrowHead
-import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider
 import de.fxdiagram.core.tools.actions.LayoutAction
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import javafx.animation.KeyFrame
@@ -21,6 +20,7 @@ import javafx.scene.text.Text
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.examples.lcars.LcarsExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.tools.ChooserConnectionProvider
 
 class LcarsField extends Parent {
 
@@ -30,7 +30,7 @@ class LcarsField extends Parent {
 	
 	new(LcarsNode node, String name, String value) {
 		this.node = node
-		val XNodeChooserXConnectionProvider connectionProvider = [ 
+		val ChooserConnectionProvider connectionProvider = [ 
 			host,  choice, choiceInfo | 
 			new XConnection(host, choice) => [
 				sourceArrowHead = new TriangleArrowHead(it, true)
@@ -130,9 +130,9 @@ class LcarsQueryTask extends Task<Void> {
 	LcarsField host
 	String fieldName
 	String fieldValue
-	XNodeChooserXConnectionProvider connectionProvider
+	ChooserConnectionProvider connectionProvider
 	
-	new(LcarsField host, String fieldName, String fieldValue, XNodeChooserXConnectionProvider connectionProvider) {
+	new(LcarsField host, String fieldName, String fieldValue, ChooserConnectionProvider connectionProvider) {
 		this.host = host
 		this.fieldName = fieldName
 		this.fieldValue = fieldValue

@@ -10,9 +10,9 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
+import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.core.tools.ChooserTransition;
 import de.fxdiagram.core.tools.XDiagramTool;
-import de.fxdiagram.core.tools.XNodeChooserTransition;
-import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,7 +66,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public abstract class AbstractXNodeChooser implements XDiagramTool {
+public abstract class AbstractChooser implements XDiagramTool {
   private DoubleProperty currentPositionProperty = new Function0<DoubleProperty>() {
     public DoubleProperty apply() {
       SimpleDoubleProperty _simpleDoubleProperty = new SimpleDoubleProperty(0.0);
@@ -104,9 +104,9 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     }
   }.apply();
   
-  private XNodeChooserXConnectionProvider connectionProvider = new Function0<XNodeChooserXConnectionProvider>() {
-    public XNodeChooserXConnectionProvider apply() {
-      final XNodeChooserXConnectionProvider _function = new XNodeChooserXConnectionProvider() {
+  private ChooserConnectionProvider connectionProvider = new Function0<ChooserConnectionProvider>() {
+    public ChooserConnectionProvider apply() {
+      final ChooserConnectionProvider _function = new ChooserConnectionProvider() {
         public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
           XConnection _xConnection = new XConnection(host, choice);
           return _xConnection;
@@ -122,7 +122,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   private ChangeListener<Number> positionListener;
   
-  protected XNodeChooserTransition spinToPosition;
+  protected ChooserTransition spinToPosition;
   
   private EventHandler<SwipeEvent> swipeHandler;
   
@@ -138,21 +138,21 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
   
   private Node minusButton;
   
-  public AbstractXNodeChooser(final XNode host, final Pos layoutPosition, final boolean hasButtons) {
+  public AbstractChooser(final XNode host, final Pos layoutPosition, final boolean hasButtons) {
     this.host = host;
     this.layoutPosition = layoutPosition;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> element, final Number oldValue, final Number newValue) {
         final double newVal = newValue.doubleValue();
-        ArrayList<XNode> _nodes = AbstractXNodeChooser.this.getNodes();
+        ArrayList<XNode> _nodes = AbstractChooser.this.getNodes();
         int _size = _nodes.size();
         double _modulo = (newVal % _size);
-        AbstractXNodeChooser.this.setInterpolatedPosition(_modulo);
+        AbstractChooser.this.setInterpolatedPosition(_modulo);
       }
     };
     this.positionListener = _function;
-    XNodeChooserTransition _xNodeChooserTransition = new XNodeChooserTransition(this);
-    this.spinToPosition = _xNodeChooserTransition;
+    ChooserTransition _chooserTransition = new ChooserTransition(this);
+    this.spinToPosition = _chooserTransition;
     final EventHandler<SwipeEvent> _function_1 = new EventHandler<SwipeEvent>() {
       public void handle(final SwipeEvent it) {
         int _switchResult = (int) 0;
@@ -178,7 +178,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         }
         final int direction = _switchResult;
         int _multiply = (direction * 10);
-        AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_multiply);
+        AbstractChooser.this.spinToPosition.setTargetPositionDelta(_multiply);
       }
     };
     this.swipeHandler = _function_1;
@@ -187,17 +187,17 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         EventType<? extends Event> _eventType = it.getEventType();
         boolean _equals = Objects.equal(_eventType, ScrollEvent.SCROLL_FINISHED);
         if (_equals) {
-          double _currentPosition = AbstractXNodeChooser.this.getCurrentPosition();
+          double _currentPosition = AbstractChooser.this.getCurrentPosition();
           double _plus = (_currentPosition + 0.5);
-          AbstractXNodeChooser.this.spinToPosition.setTargetPosition(((int) _plus));
+          AbstractChooser.this.spinToPosition.setTargetPosition(((int) _plus));
         } else {
-          double _currentPosition_1 = AbstractXNodeChooser.this.getCurrentPosition();
+          double _currentPosition_1 = AbstractChooser.this.getCurrentPosition();
           double _deltaX = it.getDeltaX();
           double _deltaY = it.getDeltaY();
           double _plus_1 = (_deltaX + _deltaY);
           double _divide = (_plus_1 / 100);
           double _minus = (_currentPosition_1 - _divide);
-          AbstractXNodeChooser.this.setCurrentPosition(_minus);
+          AbstractChooser.this.setCurrentPosition(_minus);
         }
       }
     };
@@ -210,46 +210,46 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.CANCEL)) {
             _matched=true;
-            AbstractXNodeChooser.this.cancel();
+            AbstractChooser.this.cancel();
           }
         }
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.ESCAPE)) {
             _matched=true;
-            AbstractXNodeChooser.this.cancel();
+            AbstractChooser.this.cancel();
           }
         }
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.UP)) {
             _matched=true;
-            AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(1);
+            AbstractChooser.this.spinToPosition.setTargetPositionDelta(1);
           }
         }
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.LEFT)) {
             _matched=true;
             int _minus = (-1);
-            AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus);
+            AbstractChooser.this.spinToPosition.setTargetPositionDelta(_minus);
           }
         }
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.DOWN)) {
             _matched=true;
             int _minus_1 = (-1);
-            AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus_1);
+            AbstractChooser.this.spinToPosition.setTargetPositionDelta(_minus_1);
           }
         }
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.RIGHT)) {
             _matched=true;
-            AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(1);
+            AbstractChooser.this.spinToPosition.setTargetPositionDelta(1);
           }
         }
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.ENTER)) {
             _matched=true;
-            XNode _currentNode = AbstractXNodeChooser.this.getCurrentNode();
-            AbstractXNodeChooser.this.nodeChosen(_currentNode);
+            XNode _currentNode = AbstractChooser.this.getCurrentNode();
+            AbstractChooser.this.nodeChosen(_currentNode);
             XRoot _root = CoreExtensions.getRoot(host);
             _root.restoreDefaultTool();
           }
@@ -257,29 +257,29 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.BACK_SPACE)) {
             _matched=true;
-            final String oldFilter = AbstractXNodeChooser.this.getFilterString();
+            final String oldFilter = AbstractChooser.this.getFilterString();
             boolean _isEmpty = oldFilter.isEmpty();
             boolean _not = (!_isEmpty);
             if (_not) {
               int _length = oldFilter.length();
               int _minus_2 = (_length - 1);
               String _substring = oldFilter.substring(0, _minus_2);
-              AbstractXNodeChooser.this.setFilterString(_substring);
+              AbstractChooser.this.setFilterString(_substring);
             }
           }
         }
         if (!_matched) {
-          String _filterString = AbstractXNodeChooser.this.getFilterString();
+          String _filterString = AbstractChooser.this.getFilterString();
           String _text = it.getText();
           String _plus = (_filterString + _text);
-          AbstractXNodeChooser.this.setFilterString(_plus);
+          AbstractChooser.this.setFilterString(_plus);
         }
       }
     };
     this.keyHandler = _function_3;
     final ChangeListener<String> _function_4 = new ChangeListener<String>() {
       public void changed(final ObservableValue<? extends String> property, final String oldValue, final String newValue) {
-        AbstractXNodeChooser.this.calculateVisibleNodes();
+        AbstractChooser.this.calculateVisibleNodes();
       }
     };
     this.filterChangeListener = _function_4;
@@ -308,7 +308,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
             public void handle(final MouseEvent it) {
               int _minus = (-1);
-              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(_minus);
+              AbstractChooser.this.spinToPosition.setTargetPositionDelta(_minus);
             }
           };
           it.setOnMouseClicked(_function);
@@ -328,7 +328,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         public void apply(final SVGPath it) {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
             public void handle(final MouseEvent it) {
-              AbstractXNodeChooser.this.spinToPosition.setTargetPositionDelta(1);
+              AbstractChooser.this.spinToPosition.setTargetPositionDelta(1);
             }
           };
           it.setOnMouseClicked(_function);
@@ -341,7 +341,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     final Procedure1<Label> _function_7 = new Procedure1<Label>() {
       public void apply(final Label it) {
         StringProperty _textProperty = it.textProperty();
-        StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractXNodeChooser.this.filterStringProperty);
+        StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractChooser.this.filterStringProperty);
         StringExpression _plus_1 = StringExpressionExtensions.operator_plus(_plus, "");
         _textProperty.bind(_plus_1);
       }
@@ -383,7 +383,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _xifexpression;
   }
   
-  public void setConnectionProvider(final XNodeChooserXConnectionProvider connectionProvider) {
+  public void setConnectionProvider(final ChooserConnectionProvider connectionProvider) {
     this.connectionProvider = connectionProvider;
   }
   
@@ -435,18 +435,18 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
               if (!_matched) {
                 if (Objects.equal(getClickCount,1)) {
                   _matched=true;
-                  ArrayList<XNode> _nodes = AbstractXNodeChooser.this.getNodes();
+                  ArrayList<XNode> _nodes = AbstractChooser.this.getNodes();
                   List<XNode> _list = IterableExtensions.<XNode>toList(_nodes);
                   int _indexOf = _list.indexOf(node);
-                  AbstractXNodeChooser.this.spinToPosition.setTargetPosition(_indexOf);
+                  AbstractChooser.this.spinToPosition.setTargetPosition(_indexOf);
                 }
               }
               if (!_matched) {
                 if (Objects.equal(getClickCount,2)) {
                   _matched=true;
-                  XNode _currentNode = AbstractXNodeChooser.this.getCurrentNode();
-                  AbstractXNodeChooser.this.nodeChosen(_currentNode);
-                  XRoot _root = CoreExtensions.getRoot(AbstractXNodeChooser.this.host);
+                  XNode _currentNode = AbstractChooser.this.getCurrentNode();
+                  AbstractChooser.this.nodeChosen(_currentNode);
+                  XRoot _root = CoreExtensions.getRoot(AbstractChooser.this.host);
                   _root.restoreDefaultTool();
                 }
               }
@@ -474,7 +474,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       Label _filterLabel_1 = this.getFilterLabel();
       final Procedure1<Label> _function_1 = new Procedure1<Label>() {
         public void apply(final Label it) {
-          XDiagram _diagram = AbstractXNodeChooser.this.diagram();
+          XDiagram _diagram = AbstractChooser.this.diagram();
           Paint _foregroundPaint = _diagram.getForegroundPaint();
           it.setTextFill(_foregroundPaint);
           it.toFront();
@@ -493,13 +493,13 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         _children_2.add(this.minusButton);
         final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
           public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-            AbstractXNodeChooser.this.relocateButtons(AbstractXNodeChooser.this.minusButton, AbstractXNodeChooser.this.plusButton);
+            AbstractChooser.this.relocateButtons(AbstractChooser.this.minusButton, AbstractChooser.this.plusButton);
           }
         };
         final ChangeListener<Bounds> relocateButtons_0 = _function_2;
         final ChangeListener<Number> _function_3 = new ChangeListener<Number>() {
           public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-            AbstractXNodeChooser.this.relocateButtons(AbstractXNodeChooser.this.minusButton, AbstractXNodeChooser.this.plusButton);
+            AbstractChooser.this.relocateButtons(AbstractChooser.this.minusButton, AbstractChooser.this.plusButton);
           }
         };
         final ChangeListener<Number> relocateButtons_1 = _function_3;
@@ -749,9 +749,9 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
-        XDiagram _rootDiagram = CoreExtensions.getRootDiagram(AbstractXNodeChooser.this.host);
+        XDiagram _rootDiagram = CoreExtensions.getRootDiagram(AbstractChooser.this.host);
         Group _nodeLayer = _rootDiagram.getNodeLayer();
-        XDiagram _rootDiagram_1 = CoreExtensions.getRootDiagram(AbstractXNodeChooser.this.host);
+        XDiagram _rootDiagram_1 = CoreExtensions.getRootDiagram(AbstractChooser.this.host);
         Group _connectionLayer = _rootDiagram_1.getConnectionLayer();
         for (final Group layer : Collections.<Group>unmodifiableList(Lists.<Group>newArrayList(_nodeLayer, _connectionLayer))) {
           ObservableList<Animation> _children = it.getChildren();

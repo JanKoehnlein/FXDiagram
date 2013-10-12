@@ -30,7 +30,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
 
-abstract class AbstractXNodeChooser implements XDiagramTool {
+abstract class AbstractChooser implements XDiagramTool {
 
 	@FxProperty @ReadOnly boolean isActive = false
 
@@ -52,7 +52,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	
 	val node2choiceInfo = <XNode, Object>newHashMap 
 	
-	var XNodeChooserXConnectionProvider connectionProvider = [
+	var ChooserConnectionProvider connectionProvider = [
 		host, choice, choiceInfo | new XConnection(host, choice)
 	]
 	
@@ -62,7 +62,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 	
 	ChangeListener<Number> positionListener
 
-	protected XNodeChooserTransition spinToPosition
+	protected ChooserTransition spinToPosition
 
 	EventHandler<SwipeEvent> swipeHandler 
 
@@ -85,7 +85,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			val newVal = newValue.doubleValue
 			interpolatedPosition = newVal % getNodes.size
 		]
-		spinToPosition = new XNodeChooserTransition(this)
+		spinToPosition = new ChooserTransition(this)
 		swipeHandler = [
 			val direction = switch eventType {
 				case SwipeEvent.SWIPE_DOWN:
@@ -178,7 +178,7 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		}
 	}
 
-	def void setConnectionProvider(XNodeChooserXConnectionProvider connectionProvider) {
+	def void setConnectionProvider(ChooserConnectionProvider connectionProvider) {
 		this.connectionProvider = connectionProvider
 	}
 

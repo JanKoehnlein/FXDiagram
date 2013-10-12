@@ -2,7 +2,7 @@ package de.fxdiagram.lib.tools;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import de.fxdiagram.core.tools.AbstractXNodeChooser;
+import de.fxdiagram.core.tools.AbstractChooser;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
@@ -17,7 +17,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
 @SuppressWarnings("all")
-public class CubeChooser extends AbstractXNodeChooser {
+public class CubeChooser extends AbstractChooser {
   private double _spacing = 6.0;
   
   public double getSpacing() {

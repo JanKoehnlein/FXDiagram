@@ -1,7 +1,7 @@
 package de.fxdiagram.core.tools;
 
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.tools.AbstractXNodeChooser;
+import de.fxdiagram.core.tools.AbstractChooser;
 import java.util.ArrayList;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
@@ -10,14 +10,14 @@ import javafx.event.EventHandler;
 import javafx.util.Duration;
 
 @SuppressWarnings("all")
-public class XNodeChooserTransition extends Transition {
-  private AbstractXNodeChooser tool;
+public class ChooserTransition extends Transition {
+  private AbstractChooser tool;
   
   private double startPosition;
   
   private double endPosition;
   
-  public XNodeChooserTransition(final AbstractXNodeChooser tool) {
+  public ChooserTransition(final AbstractChooser tool) {
     this.tool = tool;
     final Interpolator _function = new Interpolator() {
       @Override
@@ -32,7 +32,7 @@ public class XNodeChooserTransition extends Transition {
     this.setInterpolator(_function);
     final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
       public void handle(final ActionEvent it) {
-        tool.setCurrentPosition(XNodeChooserTransition.this.endPosition);
+        tool.setCurrentPosition(ChooserTransition.this.endPosition);
       }
     };
     this.setOnFinished(_function_1);

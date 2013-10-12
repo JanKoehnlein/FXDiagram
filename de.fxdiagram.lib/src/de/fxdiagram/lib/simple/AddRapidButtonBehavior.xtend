@@ -5,7 +5,6 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractBehavior
-import de.fxdiagram.core.tools.AbstractXNodeChooser
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import de.fxdiagram.lib.tools.CubeChooser
@@ -15,6 +14,7 @@ import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.tools.AbstractChooser
 
 class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 	
@@ -58,7 +58,7 @@ class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 		host.diagram.buttons += rapidButtons
 	}
 	
-	protected def addChoices(AbstractXNodeChooser chooser) {
+	protected def addChoices(AbstractChooser chooser) {
 		for (i: 0..<20)
 			chooser.addChoice(new SimpleNode("node " +  i))
 	} 

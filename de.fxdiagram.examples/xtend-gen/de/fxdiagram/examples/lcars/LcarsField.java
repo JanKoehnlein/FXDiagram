@@ -10,7 +10,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider;
+import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.core.tools.actions.LayoutAction;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsNode;
@@ -46,7 +46,7 @@ public class LcarsField extends Parent {
   
   public LcarsField(final LcarsNode node, final String name, final String value) {
     this.node = node;
-    final XNodeChooserXConnectionProvider _function = new XNodeChooserXConnectionProvider() {
+    final ChooserConnectionProvider _function = new ChooserConnectionProvider() {
       public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
         XConnection _xConnection = new XConnection(host, choice);
         final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
@@ -68,7 +68,7 @@ public class LcarsField extends Parent {
         return _doubleArrow;
       }
     };
-    final XNodeChooserXConnectionProvider connectionProvider = _function;
+    final ChooserConnectionProvider connectionProvider = _function;
     ObservableList<Node> _children = this.getChildren();
     FlowPane _flowPane = new FlowPane();
     final Procedure1<FlowPane> _function_1 = new Procedure1<FlowPane>() {

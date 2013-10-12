@@ -4,14 +4,14 @@ import javafx.animation.Transition
 import static extension javafx.util.Duration.*
 import static java.lang.Math.*
 
-class XNodeChooserTransition extends Transition {
+class ChooserTransition extends Transition {
 
-	AbstractXNodeChooser tool
+	AbstractChooser tool
 
 	double startPosition
 	double endPosition
 
-	new(AbstractXNodeChooser tool) {
+	new(AbstractChooser tool) {
 		this.tool = tool
 		interpolator = [alpha|1 - (1 - alpha) * (1 - alpha)]
 		onFinished = [
