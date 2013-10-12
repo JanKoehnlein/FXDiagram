@@ -1,4 +1,4 @@
-package de.fxdiagram.lib.buttons;
+package de.fxdiagram.core.extensions;
 
 import com.google.common.base.Objects;
 import javafx.geometry.Side;

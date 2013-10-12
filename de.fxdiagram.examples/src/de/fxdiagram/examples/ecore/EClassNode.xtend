@@ -24,7 +24,7 @@ import javafx.scene.text.Text
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EReference
 
-import static de.fxdiagram.lib.buttons.ButtonExtensions.*
+import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*

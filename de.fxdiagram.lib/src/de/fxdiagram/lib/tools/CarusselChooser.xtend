@@ -1,14 +1,14 @@
 package de.fxdiagram.lib.tools
 
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.tools.AbstractXNodeChooser
 import javafx.geometry.Pos
-import javafx.scene.control.Button
+import javafx.scene.Node
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
 import javafx.scene.transform.Transform
 
 import static java.lang.Math.*
-import de.fxdiagram.core.tools.AbstractXNodeChooser
 
 class CarusselChooser extends AbstractXNodeChooser {
 
@@ -60,7 +60,7 @@ class CarusselChooser extends AbstractXNodeChooser {
 		super.nodeChosen(choice)
 	}
 	
-	override relocateButtons(Button minusButton, Button plusButton) {
+	override relocateButtons(Node minusButton, Node plusButton) {
 		minusButton.layoutX = group.layoutX - 0.5 * minusButton.layoutBounds.width
 		minusButton.layoutY = group.layoutY + radius
 		plusButton.layoutX = group.layoutX - 0.5 * plusButton.layoutBounds.width

@@ -15,14 +15,16 @@ import javafx.geometry.HPos
 import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.Group
-import javafx.scene.control.Button
+import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.SwipeEvent
 
+import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static java.lang.Math.*
+import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
@@ -72,9 +74,9 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	Pos layoutPosition
 
-	Button plusButton
+	Node plusButton
 
-	Button minusButton
+	Node minusButton
 
 	new(XNode host, Pos layoutPosition, boolean hasButtons) {
 		this.host = host
@@ -134,24 +136,24 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		]
 		if (hasButtons) {
 			val isVertical = layoutPosition.hpos != HPos.CENTER && layoutPosition.hpos != null
-			minusButton = new Button => [
-				id = if(isVertical) 'button-down' else 'button-right'
-				styleClass += 'icon-button'
-				text = id
-				onAction = [
-					spinToPosition.targetPositionDelta = -1
+			minusButton = (if (isVertical) 
+					getArrowButton(BOTTOM, 'previous')
+				else 
+					getArrowButton(RIGHT, "previous")
+				) => [
+					onMouseClicked = [
+						spinToPosition.targetPositionDelta = -1
+					]
 				]
-				focusTraversable = false
-			]
-			plusButton = new Button => [
-				id = if(isVertical) 'button-up' else 'button-left'
-				styleClass += 'icon-button'
-				text = id
-				onAction = [
-					spinToPosition.targetPositionDelta = 1
+			plusButton = (if(isVertical) 
+					getArrowButton(TOP, 'next')
+				else 
+					getArrowButton(LEFT, 'next')
+				) => [
+					onMouseClicked = [
+						spinToPosition.targetPositionDelta = 1
+					]
 				]
-				focusTraversable = false
-			]
 		}
 		filterLabel = new Label => [
 			textProperty.bind("Filter: " + filterStringProperty + "")
@@ -185,21 +187,6 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			return false
 		isActiveProperty.set(true)
 		diagram.buttonLayer.children += group
-		if (minusButton != null) {
-			diagram.buttonLayer.children += plusButton
-			diagram.buttonLayer.children += minusButton
-			val ChangeListener<Bounds> relocateButtons_0 = [ prop, oldVal, newVal |
-				relocateButtons(minusButton, plusButton)
-			]
-			val ChangeListener<Number> relocateButtons_1 = [ prop, oldVal, newVal |
-				relocateButtons(minusButton, plusButton)
-			]
-			minusButton.layoutBoundsProperty.addListener(relocateButtons_0)
-			plusButton.layoutBoundsProperty.addListener(relocateButtons_0)
-			group.layoutBoundsProperty.addListener(relocateButtons_0)
-			group.layoutXProperty.addListener(relocateButtons_1)
-			group.layoutYProperty.addListener(relocateButtons_1)
-		}
 		currentPosition = 0
 		if (getNodes.size == 1) {
 			nodeChosen(nodes.head)
@@ -231,6 +218,22 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			textFill = diagram.foregroundPaint
 			toFront
 		]
+		if (minusButton != null) {
+			diagram.buttonLayer.children += plusButton
+			diagram.buttonLayer.children += minusButton
+			val ChangeListener<Bounds> relocateButtons_0 = [ prop, oldVal, newVal |
+				relocateButtons(minusButton, plusButton)
+			]
+			val ChangeListener<Number> relocateButtons_1 = [ prop, oldVal, newVal |
+				relocateButtons(minusButton, plusButton)
+			]
+			minusButton.layoutBoundsProperty.addListener(relocateButtons_0)
+			plusButton.layoutBoundsProperty.addListener(relocateButtons_0)
+			group.layoutBoundsProperty.addListener(relocateButtons_0)
+			group.layoutXProperty.addListener(relocateButtons_1)
+			group.layoutYProperty.addListener(relocateButtons_1)
+			relocateButtons(minusButton, plusButton)
+		}
 		true
 	}
 
@@ -413,6 +416,6 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 			node.key.contains(filterString)
 	}
 
-	def void relocateButtons(Button minusButton, Button plusButton) {
+	def void relocateButtons(Node minusButton, Node plusButton) {
 	}
 }

@@ -9,7 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
@@ -126,7 +126,7 @@ public class CubeChooser extends AbstractXNodeChooser {
     return _xblockexpression;
   }
   
-  public void relocateButtons(final Button minusButton, final Button plusButton) {
+  public void relocateButtons(final Node minusButton, final Node plusButton) {
     double _multiply = (0.5 * this.maxWidth);
     double _sqrt = Math.sqrt(2);
     final double groupMaxWidthHalf = (_multiply * _sqrt);

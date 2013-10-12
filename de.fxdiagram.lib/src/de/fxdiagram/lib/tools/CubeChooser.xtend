@@ -1,15 +1,15 @@
 package de.fxdiagram.lib.tools
 
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.tools.AbstractXNodeChooser
 import javafx.geometry.Point3D
 import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.transform.Affine
 
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
-import javafx.scene.control.Button
-import de.fxdiagram.core.tools.AbstractXNodeChooser
 
 class CubeChooser extends AbstractXNodeChooser {
 
@@ -54,7 +54,7 @@ class CubeChooser extends AbstractXNodeChooser {
 		}
 	}
 	
-	override relocateButtons(Button minusButton, Button plusButton) {
+	override relocateButtons(Node minusButton, Node plusButton) {
 		val groupMaxWidthHalf = 0.5 * maxWidth * sqrt(2)
 		minusButton.layoutX = group.layoutX + groupMaxWidthHalf 
 		minusButton.layoutY = group.layoutY - 0.5 * minusButton.layoutBounds.height

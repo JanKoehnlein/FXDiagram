@@ -1,4 +1,4 @@
-package de.fxdiagram.lib.buttons
+package de.fxdiagram.core.extensions
 
 import javafx.geometry.Side
 import javafx.scene.control.Tooltip

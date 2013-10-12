@@ -1,10 +1,10 @@
 TODO
 - find better recursive image
 - rearrange demo diagram
-- collapsible compartments
 - find better colors
 
 ENHANCEMENT
+- collapsible compartments
 - chooser isVertical
 - Make auxlines magnetic
 - Play diagram
@@ -14,9 +14,7 @@ ENHANCEMENT
 - Layouter: convert edges as a last step
 
 MINOR
-- hover/armed buttons for choosers
 - SVG export: arc size
-- Transparent stage?
 - can't set size of browser node
 - different anchors for faces of flipNodes 
  

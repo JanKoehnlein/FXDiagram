@@ -11,7 +11,7 @@ import de.fxdiagram.lib.tools.CoverFlowChooser
 import de.fxdiagram.lib.tools.CubeChooser
 import java.util.List
 
-import static de.fxdiagram.lib.buttons.ButtonExtensions.*
+import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*

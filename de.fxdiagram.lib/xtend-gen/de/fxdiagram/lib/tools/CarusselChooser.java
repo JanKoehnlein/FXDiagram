@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.transform.Scale;
@@ -129,7 +129,7 @@ public class CarusselChooser extends AbstractXNodeChooser {
     return _xblockexpression;
   }
   
-  public void relocateButtons(final Button minusButton, final Button plusButton) {
+  public void relocateButtons(final Node minusButton, final Node plusButton) {
     Group _group = this.getGroup();
     double _layoutX = _group.getLayoutX();
     Bounds _layoutBounds = minusButton.getLayoutBounds();
