@@ -56,6 +56,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @Logging
 @SuppressWarnings("all")
 public class XConnection extends XShape {
+  private Object key;
+  
   private Group controlPointGroup = new Function0<Group>() {
     public Group apply() {
       Group _group = new Group();
@@ -74,7 +76,8 @@ public class XConnection extends XShape {
   
   private ConnectionRouter connectionRouter;
   
-  public XConnection(final XNode source, final XNode target) {
+  public XConnection(final XNode source, final XNode target, final Object key) {
+    this.key = key;
     this.setNode(this.shapeGroup);
     ObservableList<Node> _children = this.getChildren();
     final Procedure1<Group> _function = new Procedure1<Group>() {
@@ -104,6 +107,22 @@ public class XConnection extends XShape {
     this.connectionRouter = _connectionRouter;
     TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
     this.setTargetArrowHead(_triangleArrowHead);
+  }
+  
+  public XConnection(final XNode source, final XNode target) {
+    this(source, target, new Function0<Object>() {
+      public Object apply() {
+        String _key = source.getKey();
+        String _plus = (_key + "->");
+        String _key_1 = target.getKey();
+        String _plus_1 = (_plus + _key_1);
+        return _plus_1;
+      }
+    }.apply());
+  }
+  
+  public Object getKey() {
+    return this.key;
   }
   
   public void doActivate() {

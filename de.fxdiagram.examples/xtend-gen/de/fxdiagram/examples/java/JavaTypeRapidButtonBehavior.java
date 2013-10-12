@@ -41,44 +41,13 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
   protected void doActivate() {
     JavaTypeNode _host = this.getHost();
     final JavaTypeModel model = _host.getJavaTypeModel();
-    List<Class<? extends Object>> _superTypes = model.getSuperTypes();
-    boolean _isEmpty = _superTypes.isEmpty();
+    final List<Class<? extends Object>> choosableSupertypes = model.getSuperTypes();
+    boolean _isEmpty = choosableSupertypes.isEmpty();
     boolean _not = (!_isEmpty);
     if (_not) {
       final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
-          JavaTypeNode _host = JavaTypeRapidButtonBehavior.this.getHost();
-          Pos _chooserPosition = button.getChooserPosition();
-          CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
-          final CoverFlowChooser chooser = _coverFlowChooser;
-          List<Class<? extends Object>> _superTypes = model.getSuperTypes();
-          final Procedure1<Class<? extends Object>> _function = new Procedure1<Class<? extends Object>>() {
-            public void apply(final Class<? extends Object> superType) {
-              JavaTypeNode _javaTypeNode = new JavaTypeNode(superType);
-              chooser.addChoice(_javaTypeNode);
-            }
-          };
-          IterableExtensions.<Class<? extends Object>>forEach(_superTypes, _function);
-          final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-            public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
-              XConnection _xConnection = new XConnection(host, choice);
-              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-                public void apply(final XConnection it) {
-                  ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-                  XDiagram _diagram = CoreExtensions.getDiagram(host);
-                  ObjectProperty<Paint> _backgroundPaintProperty = _diagram.backgroundPaintProperty();
-                  TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, _strokeProperty, _backgroundPaintProperty, false);
-                  it.setTargetArrowHead(_triangleArrowHead);
-                }
-              };
-              XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-              return _doubleArrow;
-            }
-          };
-          chooser.setConnectionProvider(_function_1);
-          JavaTypeNode _host_1 = JavaTypeRapidButtonBehavior.this.getHost();
-          XRoot _root = CoreExtensions.getRoot(_host_1);
-          _root.setCurrentTool(chooser);
+          JavaTypeRapidButtonBehavior.this.addSuperType(button, choosableSupertypes);
         }
       };
       final Procedure1<XRapidButton> addSuperTypeAction = _function;
@@ -93,57 +62,13 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
       XRapidButton _xRapidButton_1 = new XRapidButton(_host_3, 0.5, 1, _triangleButton_1, addSuperTypeAction);
       Iterables.<XRapidButton>addAll(_buttons, Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1)));
     }
-    List<Property> _references = model.getReferences();
-    boolean _isEmpty_1 = _references.isEmpty();
+    final List<Property> choosableReferences = model.getReferences();
+    boolean _isEmpty_1 = choosableReferences.isEmpty();
     boolean _not_1 = (!_isEmpty_1);
     if (_not_1) {
       final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
-          JavaTypeNode _host = JavaTypeRapidButtonBehavior.this.getHost();
-          Pos _chooserPosition = button.getChooserPosition();
-          CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
-          final CarusselChooser chooser = _carusselChooser;
-          List<Property> _references = model.getReferences();
-          final Procedure1<Property> _function = new Procedure1<Property>() {
-            public void apply(final Property reference) {
-              Class<? extends Object> _type = reference.getType();
-              JavaTypeNode _javaTypeNode = new JavaTypeNode(_type);
-              chooser.addChoice(_javaTypeNode, reference);
-            }
-          };
-          IterableExtensions.<Property>forEach(_references, _function);
-          final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-            public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
-              XConnection _xblockexpression = null;
-              {
-                final Property reference = ((Property) choiceInfo);
-                XConnection _xConnection = new XConnection(host, choice);
-                final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-                  public void apply(final XConnection it) {
-                    ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-                    LineArrowHead _lineArrowHead = new LineArrowHead(it, 7, 10, _strokeProperty, false);
-                    it.setTargetArrowHead(_lineArrowHead);
-                    XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-                    final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                      public void apply(final XConnectionLabel it) {
-                        Text _text = it.getText();
-                        String _name = reference.getName();
-                        _text.setText(_name);
-                      }
-                    };
-                    ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-                  }
-                };
-                XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-                _xblockexpression = (_doubleArrow);
-              }
-              return _xblockexpression;
-            }
-          };
-          chooser.setConnectionProvider(_function_1);
-          JavaTypeNode _host_1 = JavaTypeRapidButtonBehavior.this.getHost();
-          XRoot _root = CoreExtensions.getRoot(_host_1);
-          _root.setCurrentTool(chooser);
+          JavaTypeRapidButtonBehavior.this.addReference(button, choosableReferences);
         }
       };
       final Procedure1<XRapidButton> addReferencesAction = _function_1;
@@ -158,5 +83,97 @@ public class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> 
       XRapidButton _xRapidButton_3 = new XRapidButton(_host_6, 1, 0.5, _arrowButton_1, addReferencesAction);
       Iterables.<XRapidButton>addAll(_buttons_1, Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton_2, _xRapidButton_3)));
     }
+  }
+  
+  protected String getSuperTypeKey(final XNode host, final XNode superType) {
+    Class<? extends Object> _javaType = ((JavaTypeNode) host).getJavaType();
+    String _simpleName = _javaType.getSimpleName();
+    String _plus = (_simpleName + " extends ");
+    Class<? extends Object> _javaType_1 = ((JavaTypeNode) superType).getJavaType();
+    String _simpleName_1 = _javaType_1.getSimpleName();
+    String _plus_1 = (_plus + _simpleName_1);
+    return _plus_1;
+  }
+  
+  protected void addSuperType(final XRapidButton button, final Iterable<Class<? extends Object>> superTypes) {
+    JavaTypeNode _host = this.getHost();
+    Pos _chooserPosition = button.getChooserPosition();
+    CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
+    final CoverFlowChooser chooser = _coverFlowChooser;
+    final Procedure1<Class<? extends Object>> _function = new Procedure1<Class<? extends Object>>() {
+      public void apply(final Class<? extends Object> superType) {
+        JavaTypeNode _javaTypeNode = new JavaTypeNode(superType);
+        chooser.addChoice(_javaTypeNode);
+      }
+    };
+    IterableExtensions.<Class<? extends Object>>forEach(superTypes, _function);
+    final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
+      public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
+        String _superTypeKey = JavaTypeRapidButtonBehavior.this.getSuperTypeKey(host, choice);
+        XConnection _xConnection = new XConnection(host, choice, _superTypeKey);
+        final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+          public void apply(final XConnection it) {
+            ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
+            XDiagram _diagram = CoreExtensions.getDiagram(host);
+            ObjectProperty<Paint> _backgroundPaintProperty = _diagram.backgroundPaintProperty();
+            TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, _strokeProperty, _backgroundPaintProperty, false);
+            it.setTargetArrowHead(_triangleArrowHead);
+          }
+        };
+        XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+        return _doubleArrow;
+      }
+    };
+    chooser.setConnectionProvider(_function_1);
+    JavaTypeNode _host_1 = this.getHost();
+    XRoot _root = CoreExtensions.getRoot(_host_1);
+    _root.setCurrentTool(chooser);
+  }
+  
+  protected void addReference(final XRapidButton button, final Iterable<Property> references) {
+    JavaTypeNode _host = this.getHost();
+    Pos _chooserPosition = button.getChooserPosition();
+    CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
+    final CarusselChooser chooser = _carusselChooser;
+    final Procedure1<Property> _function = new Procedure1<Property>() {
+      public void apply(final Property reference) {
+        Class<? extends Object> _type = reference.getType();
+        JavaTypeNode _javaTypeNode = new JavaTypeNode(_type);
+        chooser.addChoice(_javaTypeNode, reference);
+      }
+    };
+    IterableExtensions.<Property>forEach(references, _function);
+    final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
+      public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
+        XConnection _xblockexpression = null;
+        {
+          final Property reference = ((Property) choiceInfo);
+          XConnection _xConnection = new XConnection(host, choice, reference);
+          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+            public void apply(final XConnection it) {
+              ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
+              LineArrowHead _lineArrowHead = new LineArrowHead(it, 7, 10, _strokeProperty, false);
+              it.setTargetArrowHead(_lineArrowHead);
+              XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
+              final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+                public void apply(final XConnectionLabel it) {
+                  Text _text = it.getText();
+                  String _name = reference.getName();
+                  _text.setText(_name);
+                }
+              };
+              ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
+            }
+          };
+          XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+          _xblockexpression = (_doubleArrow);
+        }
+        return _xblockexpression;
+      }
+    };
+    chooser.setConnectionProvider(_function_1);
+    JavaTypeNode _host_1 = this.getHost();
+    XRoot _root = CoreExtensions.getRoot(_host_1);
+    _root.setCurrentTool(chooser);
   }
 }

@@ -112,21 +112,9 @@ class EClassRapidButtonBehavior extends AbstractBehavior<EClassNode> {
 		if(!eClass.ESuperTypes.empty) {
 			val addSuperTypeAction = [
 				XRapidButton button |
-				val chooser = new CoverFlowChooser(getHost, button.getChooserPosition)
-				eClass.ESuperTypes.forEach[
-					superType | 
-						chooser.addChoice(new EClassNode(superType))
-				]
-				chooser.connectionProvider = [
-					host, choice, choiceInfo |
-					new XConnection(host, choice) => [
-						targetArrowHead = new TriangleArrowHead(it, 10, 15, 
-							it.strokeProperty, host.getDiagram.backgroundPaintProperty, false)
-					]
-				]
-				getHost.getRoot.currentTool = chooser
+				addSuperType(button, eClass.ESuperTypes)
 			]
-			getHost.getDiagram.getButtons += #[
+			host.diagram.getButtons += #[
 				new XRapidButton(getHost, 0.5, 0, getTriangleButton(TOP, 'Discover supertypes'), addSuperTypeAction),
 				new XRapidButton(getHost, 0.5, 1, getTriangleButton(BOTTOM, 'Discover supertypes'), addSuperTypeAction)
 			] 			
@@ -134,31 +122,59 @@ class EClassRapidButtonBehavior extends AbstractBehavior<EClassNode> {
 		if(!eClass.EReferences.empty) {
 			val addReferencesAction = [
 				XRapidButton button |
-				val chooser = new CarusselChooser(getHost, button.getChooserPosition)
-				eClass.EReferences.forEach[
-					reference | 
-					chooser.addChoice(new EClassNode(reference.EReferenceType), reference)
-				] 
-				chooser.connectionProvider = [
-					host, choice, choiceInfo |
-					new XConnection(host, choice) => [
-						val reference = choiceInfo as EReference
-						targetArrowHead =  if(reference.containment) 
-								new DiamondArrowHead(it, false)	
-							else
-								new LineArrowHead(it, 7, 10, 
-									it.strokeProperty, false)
-						new XConnectionLabel(it) => [
-							text.text = reference.name + if(reference.many) ' *' else ''
-						]
-					]
-				]
-				host.root.currentTool = chooser
+				addReference(button, eClass.EReferences)
 			]
 			host.diagram.getButtons += #[
 				new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover referenes'), addReferencesAction),
 				new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover references'), addReferencesAction)
 			]
 		}
+	}
+	
+	protected def getSuperTypeKey(XNode host, XNode superType) {
+		(host as EClassNode).EClass.name + " extends " + (superType as EClassNode).EClass.name
+	}
+	
+	protected def addSuperType(XRapidButton button, List<? extends EClass> superTypes) {
+		val chooser = new CoverFlowChooser(getHost, button.getChooserPosition)
+		superTypes.forEach[
+			superType | 
+				chooser.addChoice(new EClassNode(superType))
+		]
+		chooser.connectionProvider = [
+			host, choice, choiceInfo |
+			new XConnection(host, choice, getSuperTypeKey(host, choice)) => [
+				targetArrowHead = new TriangleArrowHead(it, 10, 15, 
+					it.strokeProperty, host.diagram.backgroundPaintProperty, false)
+			]
+		]
+		host.root.currentTool = chooser
+	}
+	
+	protected def getReferenceKey(EReference reference) {
+		reference.EContainingClass.EPackage.name + '.' + reference.EContainingClass.name + '.' + reference.name
+	}
+	
+	protected def addReference(XRapidButton button, List<? extends EReference> references) {
+		val chooser = new CarusselChooser(getHost, button.getChooserPosition)
+		references.forEach[
+			reference | 
+			chooser.addChoice(new EClassNode(reference.EReferenceType), reference)
+		] 
+		chooser.connectionProvider = [
+			host, choice, choiceInfo |
+			val reference = choiceInfo as EReference
+			new XConnection(host, choice, reference) => [
+				targetArrowHead =  if(reference.containment) 
+						new DiamondArrowHead(it, false)	
+					else
+						new LineArrowHead(it, 7, 10, 
+							it.strokeProperty, false)
+				new XConnectionLabel(it) => [
+					text.text = reference.name + if(reference.many) ' *' else ''
+				]
+			]
+		]
+		host.root.currentTool = chooser
 	}
 }

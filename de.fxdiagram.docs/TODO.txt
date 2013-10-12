@@ -2,6 +2,8 @@ TODO
 - find better recursive image
 - rearrange demo diagram
 - find better colors
+- multiple connection labels
+- filter duplicate connections
 
 ENHANCEMENT
 - collapsible compartments

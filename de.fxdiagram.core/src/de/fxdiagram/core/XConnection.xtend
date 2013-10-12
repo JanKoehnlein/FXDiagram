@@ -37,6 +37,8 @@ class XConnection extends XShape {
 	@FxProperty double strokeWidth = 2.0
 	@FxProperty Paint stroke
 
+	Object key
+
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
 
@@ -44,7 +46,8 @@ class XConnection extends XShape {
 	
 	ConnectionRouter connectionRouter
 
-	new(XNode source, XNode target) {
+	new(XNode source, XNode target, Object key) {
+		this.key = key
 		node = shapeGroup 
 		children += controlPointGroup => [
 			visible = false
@@ -57,6 +60,14 @@ class XConnection extends XShape {
 			target.incomingConnections.add(this)
 		connectionRouter = new ConnectionRouter(this)
 		targetArrowHead = new TriangleArrowHead(this, false)	
+	}
+	
+	new(XNode source, XNode target) {
+		this(source, target, source.key + '->' + target.key)
+	}
+	
+	def getKey() {
+		key
 	}
 
 	override doActivate() {

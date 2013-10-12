@@ -108,7 +108,6 @@ class JavaTypeNode extends XNode {
 		populateComprtments
 		new JavaTypeRapidButtonBehavior(this).activate
 	}
-	
 }
 
 class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
@@ -119,54 +118,68 @@ class JavaTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 	
 	override protected doActivate() {
 		val model = host.javaTypeModel
-		if(!model.superTypes.empty) {
+		val choosableSupertypes = model.superTypes
+		if(!choosableSupertypes.empty) {
 			val addSuperTypeAction = [
 				XRapidButton button |
-				val chooser = new CoverFlowChooser(host, button.getChooserPosition)
-				model.superTypes.forEach[
-					superType | 
-					chooser.addChoice(new JavaTypeNode(superType))
-				]
-				chooser.connectionProvider = [
-					host, choice, choiceInfo |
-					new XConnection(host, choice) => [
-						targetArrowHead = new TriangleArrowHead(it, 10, 15, 
-							it.strokeProperty, host.diagram.backgroundPaintProperty, false)
-					]
-				]
-				host.root.currentTool = chooser
+				addSuperType(button, choosableSupertypes)
 			]
 			host.diagram.buttons += #[
 				new XRapidButton(host, 0.5, 0, getTriangleButton(TOP, 'Discover supertypes'), addSuperTypeAction),
 				new XRapidButton(host, 0.5, 1, getTriangleButton(BOTTOM, 'Discover supertypes'), addSuperTypeAction)
 			] 			
 		}
-		if(!model.references.empty) {
+		val choosableReferences = model.references
+		if(!choosableReferences.empty) {
 			val addReferencesAction = [
 				XRapidButton button |
-				val chooser = new CarusselChooser(host, button.getChooserPosition)
-				model.references.forEach[
-					reference | 
-					chooser.addChoice(new JavaTypeNode(reference.type),  reference)
-				] 
-				chooser.connectionProvider = [
-					host, choice, choiceInfo |
-					val reference = choiceInfo as Property 
-					new XConnection(host, choice) => [
-						targetArrowHead = new LineArrowHead(it, 7, 10, 
-							it.strokeProperty, false)
-						new XConnectionLabel(it) => [
-							text.text = reference.name
-						]
-					]
-				]
-				host.root.currentTool = chooser
+				addReference(button, choosableReferences)
 			]
 			host.diagram.buttons += #[
 				new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover properties'), addReferencesAction),
 				new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover properties'), addReferencesAction)
 			]
 		}
-		
 	}
+	
+	protected def getSuperTypeKey(XNode host, XNode superType) {
+		(host as JavaTypeNode).javaType.simpleName + ' extends ' + (superType as JavaTypeNode).javaType.simpleName
+	}
+	
+	protected def addSuperType(XRapidButton button, Iterable<Class<?>> superTypes) {
+		val chooser = new CoverFlowChooser(host, button.getChooserPosition)
+		superTypes.forEach[
+			superType | 
+			chooser.addChoice(new JavaTypeNode(superType))
+		]
+		chooser.connectionProvider = [
+			host, choice, choiceInfo |
+			new XConnection(host, choice, getSuperTypeKey(host, choice)) => [
+				targetArrowHead = new TriangleArrowHead(it, 10, 15, 
+					it.strokeProperty, host.diagram.backgroundPaintProperty, false)
+			]
+		]
+		host.root.currentTool = chooser
+	}
+
+	protected def addReference(XRapidButton button, Iterable<Property> references) {
+		val chooser = new CarusselChooser(host, button.getChooserPosition)
+		references.forEach[
+			reference | 
+			chooser.addChoice(new JavaTypeNode(reference.type),  reference)
+		] 
+		chooser.connectionProvider = [
+			host, choice, choiceInfo |
+			val reference = choiceInfo as Property 
+			new XConnection(host, choice, reference) => [
+				targetArrowHead = new LineArrowHead(it, 7, 10, 
+					it.strokeProperty, false)
+				new XConnectionLabel(it) => [
+					text.text = reference.name
+				]
+			]
+		]
+		host.root.currentTool = chooser
+	}
+	
 }

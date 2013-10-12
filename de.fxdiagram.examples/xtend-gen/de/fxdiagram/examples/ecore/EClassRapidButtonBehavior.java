@@ -20,6 +20,7 @@ import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import java.util.Collections;
+import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -29,6 +30,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -49,38 +51,8 @@ public class EClassRapidButtonBehavior extends AbstractBehavior<EClassNode> {
     if (_not) {
       final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
-          EClassNode _host = EClassRapidButtonBehavior.this.getHost();
-          Pos _chooserPosition = button.getChooserPosition();
-          CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
-          final CoverFlowChooser chooser = _coverFlowChooser;
           EList<EClass> _eSuperTypes = eClass.getESuperTypes();
-          final Procedure1<EClass> _function = new Procedure1<EClass>() {
-            public void apply(final EClass superType) {
-              EClassNode _eClassNode = new EClassNode(superType);
-              chooser.addChoice(_eClassNode);
-            }
-          };
-          IterableExtensions.<EClass>forEach(_eSuperTypes, _function);
-          final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-            public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
-              XConnection _xConnection = new XConnection(host, choice);
-              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-                public void apply(final XConnection it) {
-                  ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-                  XDiagram _diagram = CoreExtensions.getDiagram(host);
-                  ObjectProperty<Paint> _backgroundPaintProperty = _diagram.backgroundPaintProperty();
-                  TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, _strokeProperty, _backgroundPaintProperty, false);
-                  it.setTargetArrowHead(_triangleArrowHead);
-                }
-              };
-              XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-              return _doubleArrow;
-            }
-          };
-          chooser.setConnectionProvider(_function_1);
-          EClassNode _host_1 = EClassRapidButtonBehavior.this.getHost();
-          XRoot _root = CoreExtensions.getRoot(_host_1);
-          _root.setCurrentTool(chooser);
+          EClassRapidButtonBehavior.this.addSuperType(button, _eSuperTypes);
         }
       };
       final Procedure1<XRapidButton> addSuperTypeAction = _function;
@@ -101,63 +73,8 @@ public class EClassRapidButtonBehavior extends AbstractBehavior<EClassNode> {
     if (_not_1) {
       final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
-          EClassNode _host = EClassRapidButtonBehavior.this.getHost();
-          Pos _chooserPosition = button.getChooserPosition();
-          CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
-          final CarusselChooser chooser = _carusselChooser;
           EList<EReference> _eReferences = eClass.getEReferences();
-          final Procedure1<EReference> _function = new Procedure1<EReference>() {
-            public void apply(final EReference reference) {
-              EClass _eReferenceType = reference.getEReferenceType();
-              EClassNode _eClassNode = new EClassNode(_eReferenceType);
-              chooser.addChoice(_eClassNode, reference);
-            }
-          };
-          IterableExtensions.<EReference>forEach(_eReferences, _function);
-          final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-            public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
-              XConnection _xConnection = new XConnection(host, choice);
-              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-                public void apply(final XConnection it) {
-                  final EReference reference = ((EReference) choiceInfo);
-                  ArrowHead _xifexpression = null;
-                  boolean _isContainment = reference.isContainment();
-                  if (_isContainment) {
-                    DiamondArrowHead _diamondArrowHead = new DiamondArrowHead(it, false);
-                    _xifexpression = _diamondArrowHead;
-                  } else {
-                    ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-                    LineArrowHead _lineArrowHead = new LineArrowHead(it, 7, 10, _strokeProperty, false);
-                    _xifexpression = _lineArrowHead;
-                  }
-                  it.setTargetArrowHead(_xifexpression);
-                  XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-                  final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                    public void apply(final XConnectionLabel it) {
-                      Text _text = it.getText();
-                      String _name = reference.getName();
-                      String _xifexpression = null;
-                      boolean _isMany = reference.isMany();
-                      if (_isMany) {
-                        _xifexpression = " *";
-                      } else {
-                        _xifexpression = "";
-                      }
-                      String _plus = (_name + _xifexpression);
-                      _text.setText(_plus);
-                    }
-                  };
-                  ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-                }
-              };
-              XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-              return _doubleArrow;
-            }
-          };
-          chooser.setConnectionProvider(_function_1);
-          EClassNode _host_1 = EClassRapidButtonBehavior.this.getHost();
-          XRoot _root = CoreExtensions.getRoot(_host_1);
-          _root.setCurrentTool(chooser);
+          EClassRapidButtonBehavior.this.addReference(button, _eReferences);
         }
       };
       final Procedure1<XRapidButton> addReferencesAction = _function_1;
@@ -172,5 +89,127 @@ public class EClassRapidButtonBehavior extends AbstractBehavior<EClassNode> {
       XRapidButton _xRapidButton_3 = new XRapidButton(_host_6, 1, 0.5, _arrowButton_1, addReferencesAction);
       Iterables.<XRapidButton>addAll(_buttons_1, Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton_2, _xRapidButton_3)));
     }
+  }
+  
+  protected String getSuperTypeKey(final XNode host, final XNode superType) {
+    EClass _eClass = ((EClassNode) host).getEClass();
+    String _name = _eClass.getName();
+    String _plus = (_name + " extends ");
+    EClass _eClass_1 = ((EClassNode) superType).getEClass();
+    String _name_1 = _eClass_1.getName();
+    String _plus_1 = (_plus + _name_1);
+    return _plus_1;
+  }
+  
+  protected void addSuperType(final XRapidButton button, final List<? extends EClass> superTypes) {
+    EClassNode _host = this.getHost();
+    Pos _chooserPosition = button.getChooserPosition();
+    CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
+    final CoverFlowChooser chooser = _coverFlowChooser;
+    final Procedure1<EClass> _function = new Procedure1<EClass>() {
+      public void apply(final EClass superType) {
+        EClassNode _eClassNode = new EClassNode(superType);
+        chooser.addChoice(_eClassNode);
+      }
+    };
+    IterableExtensions.forEach(superTypes, _function);
+    final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
+      public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
+        String _superTypeKey = EClassRapidButtonBehavior.this.getSuperTypeKey(host, choice);
+        XConnection _xConnection = new XConnection(host, choice, _superTypeKey);
+        final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+          public void apply(final XConnection it) {
+            ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
+            XDiagram _diagram = CoreExtensions.getDiagram(host);
+            ObjectProperty<Paint> _backgroundPaintProperty = _diagram.backgroundPaintProperty();
+            TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, _strokeProperty, _backgroundPaintProperty, false);
+            it.setTargetArrowHead(_triangleArrowHead);
+          }
+        };
+        XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+        return _doubleArrow;
+      }
+    };
+    chooser.setConnectionProvider(_function_1);
+    EClassNode _host_1 = this.getHost();
+    XRoot _root = CoreExtensions.getRoot(_host_1);
+    _root.setCurrentTool(chooser);
+  }
+  
+  protected String getReferenceKey(final EReference reference) {
+    EClass _eContainingClass = reference.getEContainingClass();
+    EPackage _ePackage = _eContainingClass.getEPackage();
+    String _name = _ePackage.getName();
+    String _plus = (_name + ".");
+    EClass _eContainingClass_1 = reference.getEContainingClass();
+    String _name_1 = _eContainingClass_1.getName();
+    String _plus_1 = (_plus + _name_1);
+    String _plus_2 = (_plus_1 + ".");
+    String _name_2 = reference.getName();
+    String _plus_3 = (_plus_2 + _name_2);
+    return _plus_3;
+  }
+  
+  protected void addReference(final XRapidButton button, final List<? extends EReference> references) {
+    EClassNode _host = this.getHost();
+    Pos _chooserPosition = button.getChooserPosition();
+    CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
+    final CarusselChooser chooser = _carusselChooser;
+    final Procedure1<EReference> _function = new Procedure1<EReference>() {
+      public void apply(final EReference reference) {
+        EClass _eReferenceType = reference.getEReferenceType();
+        EClassNode _eClassNode = new EClassNode(_eReferenceType);
+        chooser.addChoice(_eClassNode, reference);
+      }
+    };
+    IterableExtensions.forEach(references, _function);
+    final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
+      public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
+        XConnection _xblockexpression = null;
+        {
+          final EReference reference = ((EReference) choiceInfo);
+          XConnection _xConnection = new XConnection(host, choice, reference);
+          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+            public void apply(final XConnection it) {
+              ArrowHead _xifexpression = null;
+              boolean _isContainment = reference.isContainment();
+              if (_isContainment) {
+                DiamondArrowHead _diamondArrowHead = new DiamondArrowHead(it, false);
+                _xifexpression = _diamondArrowHead;
+              } else {
+                ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
+                LineArrowHead _lineArrowHead = new LineArrowHead(it, 7, 10, _strokeProperty, false);
+                _xifexpression = _lineArrowHead;
+              }
+              it.setTargetArrowHead(_xifexpression);
+              XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
+              final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+                public void apply(final XConnectionLabel it) {
+                  Text _text = it.getText();
+                  String _name = reference.getName();
+                  String _xifexpression = null;
+                  boolean _isMany = reference.isMany();
+                  if (_isMany) {
+                    _xifexpression = " *";
+                  } else {
+                    _xifexpression = "";
+                  }
+                  String _plus = (_name + _xifexpression);
+                  _text.setText(_plus);
+                }
+              };
+              ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
+            }
+          };
+          XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+          _xblockexpression = (_doubleArrow);
+        }
+        return _xblockexpression;
+      }
+    };
+    chooser.setConnectionProvider(_function_1);
+    EClassNode _host_1 = this.getHost();
+    XRoot _root = CoreExtensions.getRoot(_host_1);
+    _root.setCurrentTool(chooser);
   }
 }
