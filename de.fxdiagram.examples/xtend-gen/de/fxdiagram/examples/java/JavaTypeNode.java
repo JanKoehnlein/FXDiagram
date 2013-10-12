@@ -2,8 +2,9 @@ package de.fxdiagram.examples.java;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.examples.java.AddReferenceRapidButtonBehavior;
+import de.fxdiagram.examples.java.AddSuperTypeRapidButtonBehavior;
 import de.fxdiagram.examples.java.JavaTypeModel;
-import de.fxdiagram.examples.java.JavaTypeRapidButtonBehavior;
 import de.fxdiagram.examples.java.Property;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -254,7 +255,9 @@ public class JavaTypeNode extends XNode {
   public void activate() {
     super.activate();
     this.populateComprtments();
-    JavaTypeRapidButtonBehavior _javaTypeRapidButtonBehavior = new JavaTypeRapidButtonBehavior(this);
-    _javaTypeRapidButtonBehavior.activate();
+    AddSuperTypeRapidButtonBehavior _addSuperTypeRapidButtonBehavior = new AddSuperTypeRapidButtonBehavior(this);
+    _addSuperTypeRapidButtonBehavior.activate();
+    AddReferenceRapidButtonBehavior _addReferenceRapidButtonBehavior = new AddReferenceRapidButtonBehavior(this);
+    _addReferenceRapidButtonBehavior.activate();
   }
 }

@@ -3,7 +3,6 @@ TODO
 - rearrange demo diagram
 - find better colors
 - multiple connection labels
-- filter duplicate connections
 
 ENHANCEMENT
 - collapsible compartments
@@ -21,6 +20,7 @@ MINOR
 - different anchors for faces of flipNodes 
  
 DONE 
+- filter duplicate connections
 - use scalable icons
 - Ecore diagram
 - better icons for JavaTypeNode

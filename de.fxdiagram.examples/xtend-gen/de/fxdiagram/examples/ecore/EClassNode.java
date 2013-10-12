@@ -2,7 +2,8 @@ package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.examples.ecore.EClassRapidButtonBehavior;
+import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
+import de.fxdiagram.examples.ecore.AddESuperTypeRapidButtonBehavior;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
@@ -218,7 +219,9 @@ public class EClassNode extends XNode {
   public void activate() {
     super.activate();
     this.populateCompartments();
-    EClassRapidButtonBehavior _eClassRapidButtonBehavior = new EClassRapidButtonBehavior(this);
-    _eClassRapidButtonBehavior.activate();
+    AddESuperTypeRapidButtonBehavior _addESuperTypeRapidButtonBehavior = new AddESuperTypeRapidButtonBehavior(this);
+    _addESuperTypeRapidButtonBehavior.activate();
+    AddEReferenceRapidButtonBehavior _addEReferenceRapidButtonBehavior = new AddEReferenceRapidButtonBehavior(this);
+    _addEReferenceRapidButtonBehavior.activate();
   }
 }
