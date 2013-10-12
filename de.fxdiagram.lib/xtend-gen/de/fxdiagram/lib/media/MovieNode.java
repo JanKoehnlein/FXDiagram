@@ -23,6 +23,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -68,19 +69,8 @@ public class MovieNode extends XNode {
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
-            ObservableList<Node> _children_1 = it.getChildren();
-            Text _text_1 = new Text();
-            final Procedure1<Text> _function_1 = new Procedure1<Text>() {
-              public void apply(final Text it) {
-                it.setText("*");
-                it.setTextOrigin(VPos.TOP);
-                StackPane.setAlignment(it, Pos.TOP_RIGHT);
-                Insets _insets = new Insets(3, 6, 0, 0);
-                StackPane.setMargin(it, _insets);
-              }
-            };
-            Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_1);
-            _children_1.add(_doubleArrow_1);
+            Tooltip _tooltip = new Tooltip("Double-click to watch");
+            Tooltip.install(it, _tooltip);
           }
         };
         RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
@@ -140,6 +130,8 @@ public class MovieNode extends XNode {
             };
             Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_2);
             _children_1.add(_doubleArrow);
+            Tooltip _tooltip = new Tooltip("Double-click to close");
+            Tooltip.install(it, _tooltip);
           }
         };
         RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane_1, _function_1);

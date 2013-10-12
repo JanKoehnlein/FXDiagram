@@ -11,8 +11,8 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.core.tools.AbstractXNodeChooser;
+import de.fxdiagram.lib.buttons.ButtonExtensions;
 import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
+import javafx.geometry.Side;
+import javafx.scene.shape.SVGPath;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -99,12 +100,14 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
       }
     };
     final Procedure1<XRapidButton> coverFlowChooseAction = _function_3;
-    ImageCache _get = ImageCache.get();
-    final Image image = _get.getImage(this, "add_16.png");
-    XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, image, cubeChooseAction);
-    XRapidButton _xRapidButton_1 = new XRapidButton(host, 0.5, 1, image, coverFlowChooseAction);
-    XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, image, chooseAction);
-    XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, image, addAction);
+    SVGPath _filledTriangle = ButtonExtensions.getFilledTriangle(Side.TOP, "Add node");
+    XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, _filledTriangle, cubeChooseAction);
+    SVGPath _filledTriangle_1 = ButtonExtensions.getFilledTriangle(Side.BOTTOM, "Add node");
+    XRapidButton _xRapidButton_1 = new XRapidButton(host, 0.5, 1, _filledTriangle_1, coverFlowChooseAction);
+    SVGPath _filledTriangle_2 = ButtonExtensions.getFilledTriangle(Side.LEFT, "Add node");
+    XRapidButton _xRapidButton_2 = new XRapidButton(host, 0, 0.5, _filledTriangle_2, chooseAction);
+    SVGPath _filledTriangle_3 = ButtonExtensions.getFilledTriangle(Side.RIGHT, "Add node");
+    XRapidButton _xRapidButton_3 = new XRapidButton(host, 1, 0.5, _filledTriangle_3, addAction);
     this.rapidButtons = Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1, _xRapidButton_2, _xRapidButton_3));
     XDiagram _diagram = CoreExtensions.getDiagram(host);
     ObservableList<XRapidButton> _buttons = _diagram.getButtons();
@@ -116,7 +119,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
     for (final Integer i : _doubleDotLessThan) {
       String _plus = ("node " + i);
       SimpleNode _simpleNode = new SimpleNode(_plus);
-      chooser.operator_add(_simpleNode);
+      chooser.addChoice(_simpleNode);
     }
   }
 }

@@ -7,6 +7,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.net.URL
 import javafx.geometry.Insets
 import javafx.geometry.VPos
+import javafx.scene.control.Tooltip
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 import javafx.scene.web.WebView
@@ -23,8 +24,11 @@ class BrowserNode extends XNode {
 					textOrigin = VPos.TOP
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
+				Tooltip.install(it, new Tooltip('Double-click to browse'))
 			]
-			back = view = new WebView
+			back = view = new WebView => [
+				Tooltip.install(it, new Tooltip('Double-click to close'))
+			]
 			flipOnDoubleClick = true
 		]
 	}

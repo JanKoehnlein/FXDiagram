@@ -10,6 +10,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider;
 import de.fxdiagram.core.tools.actions.LayoutAction;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsNode;
@@ -33,7 +34,6 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -46,8 +46,8 @@ public class LcarsField extends Parent {
   
   public LcarsField(final LcarsNode node, final String name, final String value) {
     this.node = node;
-    final Function2<XNode,XNode,XConnection> _function = new Function2<XNode,XNode,XConnection>() {
-      public XConnection apply(final XNode host, final XNode choice) {
+    final XNodeChooserXConnectionProvider _function = new XNodeChooserXConnectionProvider() {
+      public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
         XConnection _xConnection = new XConnection(host, choice);
         final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
           public void apply(final XConnection it) {
@@ -68,7 +68,7 @@ public class LcarsField extends Parent {
         return _doubleArrow;
       }
     };
-    final Function2<XNode,XNode,XConnection> connectionFactory = _function;
+    final XNodeChooserXConnectionProvider connectionProvider = _function;
     ObservableList<Node> _children = this.getChildren();
     FlowPane _flowPane = new FlowPane();
     final Procedure1<FlowPane> _function_1 = new Procedure1<FlowPane>() {
@@ -141,7 +141,7 @@ public class LcarsField extends Parent {
               final Service<Void> _function_1 = new Service<Void>() {
                 @Override
                 protected Task<Void> createTask() {
-                  LcarsQueryTask _lcarsQueryTask = new LcarsQueryTask(LcarsField.this, name, value, connectionFactory);
+                  LcarsQueryTask _lcarsQueryTask = new LcarsQueryTask(LcarsField.this, name, value, connectionProvider);
                   return _lcarsQueryTask;
                 }
               };
@@ -241,8 +241,8 @@ public class LcarsField extends Parent {
               Iterable<LcarsNode> _filter_1 = IterableExtensions.<LcarsNode>filter(_filter, _function);
               final Function1<LcarsNode,XConnection> _function_1 = new Function1<LcarsNode,XConnection>() {
                 public XConnection apply(final LcarsNode it) {
-                  XConnection _apply = connectionFactory.apply(node, it);
-                  return _apply;
+                  XConnection _connection = connectionProvider.getConnection(node, it, null);
+                  return _connection;
                 }
               };
               Iterable<XConnection> _map = IterableExtensions.<LcarsNode, XConnection>map(_filter_1, _function_1);

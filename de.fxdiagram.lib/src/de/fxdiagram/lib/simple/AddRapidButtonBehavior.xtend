@@ -5,12 +5,14 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractBehavior
-import de.fxdiagram.core.services.ImageCache
 import de.fxdiagram.core.tools.AbstractXNodeChooser
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import de.fxdiagram.lib.tools.CubeChooser
 import java.util.List
+
+import static de.fxdiagram.lib.buttons.ButtonExtensions.*
+import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
@@ -48,17 +50,16 @@ class AddRapidButtonBehavior <T extends XShape> extends AbstractBehavior<T> {
 			chooser.addChoices
 			host.root.currentTool = chooser
 		]
-		val image = ImageCache.get.getImage(this, 'add_16.png')
 		rapidButtons = #[
-			new XRapidButton(host, 0.5, 0, image, cubeChooseAction),
-			new XRapidButton(host, 0.5, 1, image, coverFlowChooseAction),
-			new XRapidButton(host, 0, 0.5, image, chooseAction),
-			new XRapidButton(host, 1, 0.5, image, addAction)]
+			new XRapidButton(host, 0.5, 0, getFilledTriangle(TOP, 'Add node'), cubeChooseAction),
+			new XRapidButton(host, 0.5, 1, getFilledTriangle(BOTTOM, 'Add node'), coverFlowChooseAction),
+			new XRapidButton(host, 0, 0.5, getFilledTriangle(LEFT, 'Add node'), chooseAction),
+			new XRapidButton(host, 1, 0.5, getFilledTriangle(RIGHT, 'Add node'), addAction)]
 		host.diagram.buttons += rapidButtons
 	}
 	
 	protected def addChoices(AbstractXNodeChooser chooser) {
 		for (i: 0..<20)
-			chooser += new SimpleNode("node " +  i)
+			chooser.addChoice(new SimpleNode("node " +  i))
 	} 
 }

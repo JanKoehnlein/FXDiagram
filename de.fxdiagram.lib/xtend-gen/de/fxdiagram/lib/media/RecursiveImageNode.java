@@ -51,21 +51,11 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   private FirstRecursiveImageNode pivot;
   
   public RecursiveImageNode(final Image image, final double x, final double y, final double scale) {
-    this.setImage(image);
-    this.setX(x);
-    this.setY(y);
-    this.setScale(scale);
-    FirstRecursiveImageNode _firstRecursiveImageNode = new FirstRecursiveImageNode(this);
-    this.pivot = _firstRecursiveImageNode;
-    Group _createPane = this.createPane();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      public void apply(final Group it) {
-        ObservableList<Node> _children = it.getChildren();
-        _children.add(RecursiveImageNode.this.pivot);
-      }
-    };
-    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
-    this.setNode(_doubleArrow);
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method or field Tooltip is undefined for the type RecursiveImageNode"
+      + "\nThe method or field it is undefined for the type RecursiveImageNode"
+      + "\nTooltip cannot be resolved."
+      + "\ninstall cannot be resolved");
   }
   
   public void doActivate() {

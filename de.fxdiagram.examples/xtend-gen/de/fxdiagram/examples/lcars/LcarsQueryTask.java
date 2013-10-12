@@ -2,10 +2,9 @@ package de.fxdiagram.examples.lcars;
 
 import com.google.common.base.Objects;
 import com.mongodb.DBObject;
-import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider;
 import de.fxdiagram.examples.lcars.LcarsAccess;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
@@ -17,7 +16,6 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -30,13 +28,13 @@ public class LcarsQueryTask extends Task<Void> {
   
   private String fieldValue;
   
-  private Function2<? super XNode,? super XNode,? extends XConnection> connectionFactory;
+  private XNodeChooserXConnectionProvider connectionProvider;
   
-  public LcarsQueryTask(final LcarsField host, final String fieldName, final String fieldValue, final Function2<? super XNode,? super XNode,? extends XConnection> connectionFactory) {
+  public LcarsQueryTask(final LcarsField host, final String fieldName, final String fieldValue, final XNodeChooserXConnectionProvider connectionProvider) {
     this.host = host;
     this.fieldName = fieldName;
     this.fieldValue = fieldValue;
-    this.connectionFactory = connectionFactory;
+    this.connectionProvider = connectionProvider;
   }
   
   protected Void call() throws Exception {
@@ -48,7 +46,7 @@ public class LcarsQueryTask extends Task<Void> {
       final LcarsNode lcarsNode = this.host.getLcarsNode();
       CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER);
       final CoverFlowChooser chooser = _coverFlowChooser;
-      chooser.setConnectionFactory(this.connectionFactory);
+      chooser.setConnectionProvider(this.connectionProvider);
       final Function1<DBObject,Boolean> _function = new Function1<DBObject,Boolean>() {
         public Boolean apply(final DBObject it) {
           Object _get = it.get("_id");
@@ -59,8 +57,8 @@ public class LcarsQueryTask extends Task<Void> {
         }
       };
       Iterable<DBObject> _filter = IterableExtensions.<DBObject>filter(siblings, _function);
-      final Function1<DBObject,LcarsNode> _function_1 = new Function1<DBObject,LcarsNode>() {
-        public LcarsNode apply(final DBObject it) {
+      final Procedure1<DBObject> _function_1 = new Procedure1<DBObject>() {
+        public void apply(final DBObject it) {
           LcarsNode _lcarsNode = new LcarsNode(it);
           final Procedure1<LcarsNode> _function = new Procedure1<LcarsNode>() {
             public void apply(final LcarsNode it) {
@@ -71,11 +69,10 @@ public class LcarsQueryTask extends Task<Void> {
             }
           };
           LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function);
-          return _doubleArrow;
+          chooser.addChoice(_doubleArrow);
         }
       };
-      Iterable<LcarsNode> _map = IterableExtensions.<DBObject, LcarsNode>map(_filter, _function_1);
-      chooser.operator_add(_map);
+      IterableExtensions.<DBObject>forEach(_filter, _function_1);
       final Runnable _function_2 = new Runnable() {
         public void run() {
           XRoot _root = CoreExtensions.getRoot(LcarsQueryTask.this.host);

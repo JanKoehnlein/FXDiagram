@@ -2,8 +2,8 @@ package de.fxdiagram.examples.lcars
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
-import de.fxdiagram.core.XNode
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider
 import de.fxdiagram.core.tools.actions.LayoutAction
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import javafx.animation.KeyFrame
@@ -30,7 +30,8 @@ class LcarsField extends Parent {
 	
 	new(LcarsNode node, String name, String value) {
 		this.node = node
-		val connectionFactory = [XNode host, XNode choice | 
+		val XNodeChooserXConnectionProvider connectionProvider = [ 
+			host,  choice, choiceInfo | 
 			new XConnection(host, choice) => [
 				sourceArrowHead = new TriangleArrowHead(it, true)
 				new XConnectionLabel(it) => [
@@ -66,7 +67,7 @@ class LcarsField extends Parent {
 				allTextNodes.forEach[fill = RED]
 				if(button != MouseButton.PRIMARY) {
 					val Service<Void> service = [|
-						new LcarsQueryTask(this, name, value, connectionFactory)
+						new LcarsQueryTask(this, name, value, connectionProvider)
 					]
 					service.start
 				}
@@ -80,7 +81,7 @@ class LcarsField extends Parent {
 							&& !outgoingConnections.exists[target == node && label?.text?.text == name]
 							&& !incomingConnections.exists[source == node && label?.text?.text == name]
 						]
-						.map[connectionFactory.apply(node, it)]
+						.map[connectionProvider.getConnection(node, it, null)]
 						.toList
 					diagram.connections += newConnections
 					if(!newConnections.empty)
@@ -129,27 +130,27 @@ class LcarsQueryTask extends Task<Void> {
 	LcarsField host
 	String fieldName
 	String fieldValue
-	(XNode, XNode)=>XConnection connectionFactory
+	XNodeChooserXConnectionProvider connectionProvider
 	
-	new(LcarsField host, String fieldName, String fieldValue, (XNode, XNode)=>XConnection connectionFactory) {
+	new(LcarsField host, String fieldName, String fieldValue, XNodeChooserXConnectionProvider connectionProvider) {
 		this.host = host
 		this.fieldName = fieldName
 		this.fieldValue = fieldValue
-		this.connectionFactory = connectionFactory
+		this.connectionProvider = connectionProvider
 	}
 	
 	override protected call() throws Exception {
 		val siblings = host.lcarsDiagram.lcarsAccess.query(fieldName, fieldValue)
 		val lcarsNode = host.lcarsNode
 		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
-		chooser.connectionFactory = connectionFactory
-		chooser += siblings
+		chooser.connectionProvider = connectionProvider
+		siblings
 			.filter[get('_id').toString != lcarsNode.dbId]
-			.map[
-				new LcarsNode(it) => [
+			.forEach[
+				chooser.addChoice(new LcarsNode(it) => [
 					width = lcarsNode.width
 					height = lcarsNode.height
-				]
+				])
 			]
 		Platform.runLater [|
 			host.root.currentTool = chooser

@@ -21,6 +21,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -54,6 +55,8 @@ public class LevelOfDetailDiagramNode extends XNode {
             it.setTextOrigin(VPos.TOP);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
+            Tooltip _tooltip = new Tooltip("Zoom to reveal content");
+            Tooltip.install(LevelOfDetailDiagramNode.this, _tooltip);
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);

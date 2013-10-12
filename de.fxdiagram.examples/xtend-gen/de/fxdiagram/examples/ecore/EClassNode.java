@@ -1,14 +1,10 @@
-package de.fxdiagram.examples.java;
+package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.examples.java.JavaTypeModel;
-import de.fxdiagram.examples.java.JavaTypeRapidButtonBehavior;
-import de.fxdiagram.examples.java.Property;
+import de.fxdiagram.examples.ecore.EClassRapidButtonBehavior;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -20,8 +16,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.xtend2.lib.StringConcatenation;
-import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -30,8 +31,8 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class JavaTypeNode extends XNode {
-  private Class<? extends Object> javaType;
+public class EClassNode extends XNode {
+  private EClass eClass;
   
   private final Text name = new Function0<Text>() {
     public Text apply() {
@@ -40,7 +41,7 @@ public class JavaTypeNode extends XNode {
     }
   }.apply();
   
-  private final VBox propertyCompartment = new Function0<VBox>() {
+  private final VBox attributeCompartment = new Function0<VBox>() {
     public VBox apply() {
       VBox _vBox = new VBox();
       return _vBox;
@@ -54,20 +55,16 @@ public class JavaTypeNode extends XNode {
     }
   }.apply();
   
-  private JavaTypeModel model;
-  
-  public JavaTypeNode(final Class<? extends Object> javaType) {
+  public EClassNode(final EClass eClass) {
     super(new Function0<String>() {
       public String apply() {
-        String _simpleName = javaType.getSimpleName();
-        return _simpleName;
+        String _name = eClass.getName();
+        return _name;
       }
     }.apply());
-    this.javaType = javaType;
-    String _simpleName = javaType.getSimpleName();
-    this.name.setText(_simpleName);
-    JavaTypeModel _javaTypeModel = new JavaTypeModel(javaType);
-    this.model = _javaTypeModel;
+    this.eClass = eClass;
+    String _name = eClass.getName();
+    this.name.setText(_name);
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -90,7 +87,7 @@ public class JavaTypeNode extends XNode {
                 VBox.setMargin(it, _insets);
               }
             };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(JavaTypeNode.this.name, _function);
+            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(EClassNode.this.name, _function);
             _children.add(_doubleArrow);
             ObservableList<Node> _children_1 = it.getChildren();
             Separator _separator = new Separator();
@@ -102,7 +99,7 @@ public class JavaTypeNode extends XNode {
                 VBox.setMargin(it, _insets);
               }
             };
-            VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(JavaTypeNode.this.propertyCompartment, _function_1);
+            VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(EClassNode.this.attributeCompartment, _function_1);
             _children_2.add(_doubleArrow_1);
             ObservableList<Node> _children_3 = it.getChildren();
             Separator _separator_1 = new Separator();
@@ -114,7 +111,7 @@ public class JavaTypeNode extends XNode {
                 VBox.setMargin(it, _insets);
               }
             };
-            VBox _doubleArrow_2 = ObjectExtensions.<VBox>operator_doubleArrow(JavaTypeNode.this.operationCompartment, _function_2);
+            VBox _doubleArrow_2 = ObjectExtensions.<VBox>operator_doubleArrow(EClassNode.this.operationCompartment, _function_2);
             _children_4.add(_doubleArrow_2);
             it.setAlignment(Pos.CENTER);
           }
@@ -132,22 +129,22 @@ public class JavaTypeNode extends XNode {
     return _roundedRectangleAnchors;
   }
   
-  public void populateComprtments() {
-    List<Property> _properties = this.model.getProperties();
-    List<Property> _limit = this.<Property>limit(_properties);
-    final Procedure1<Property> _function = new Procedure1<Property>() {
-      public void apply(final Property property) {
-        ObservableList<Node> _children = JavaTypeNode.this.propertyCompartment.getChildren();
+  public void populateCompartments() {
+    EList<EAttribute> _eAttributes = this.eClass.getEAttributes();
+    List<EAttribute> _limit = this.<EAttribute>limit(_eAttributes);
+    final Procedure1<EAttribute> _function = new Procedure1<EAttribute>() {
+      public void apply(final EAttribute attribute) {
+        ObservableList<Node> _children = EClassNode.this.attributeCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             StringConcatenation _builder = new StringConcatenation();
-            String _name = property.getName();
+            String _name = attribute.getName();
             _builder.append(_name, "");
             _builder.append(": ");
-            Class<? extends Object> _type = property.getType();
-            String _simpleName = _type.getSimpleName();
-            _builder.append(_simpleName, "");
+            EClassifier _eType = attribute.getEType();
+            String _name_1 = _eType.getName();
+            _builder.append(_name_1, "");
             it.setText(_builder.toString());
           }
         };
@@ -155,63 +152,34 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Property>forEach(_limit, _function);
-    List<Constructor<? extends Object>> _constructors = this.model.getConstructors();
-    final Procedure1<Constructor<? extends Object>> _function_1 = new Procedure1<Constructor<? extends Object>>() {
-      public void apply(final Constructor<? extends Object> constructor) {
-        ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
+    IterableExtensions.<EAttribute>forEach(_limit, _function);
+    EList<EOperation> _eOperations = this.eClass.getEOperations();
+    List<EOperation> _limit_1 = this.<EOperation>limit(_eOperations);
+    final Procedure1<EOperation> _function_1 = new Procedure1<EOperation>() {
+      public void apply(final EOperation operation) {
+        ObservableList<Node> _children = EClassNode.this.operationCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             StringConcatenation _builder = new StringConcatenation();
-            String _simpleName = JavaTypeNode.this.javaType.getSimpleName();
-            _builder.append(_simpleName, "");
-            _builder.append("(");
-            Class<? extends Object>[] _parameterTypes = constructor.getParameterTypes();
-            final Function1<Class<? extends Object>,String> _function = new Function1<Class<? extends Object>,String>() {
-              public String apply(final Class<? extends Object> it) {
-                String _simpleName = it.getSimpleName();
-                return _simpleName;
-              }
-            };
-            List<String> _map = ListExtensions.<Class<? extends Object>, String>map(((List<Class<? extends Object>>)Conversions.doWrapArray(_parameterTypes)), _function);
-            String _join = IterableExtensions.join(_map, ", ");
-            _builder.append(_join, "");
-            _builder.append(")");
-            it.setText(_builder.toString());
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    IterableExtensions.<Constructor<? extends Object>>forEach(_constructors, _function_1);
-    List<Method> _operations = this.model.getOperations();
-    List<Method> _limit_1 = this.<Method>limit(_operations);
-    final Procedure1<Method> _function_2 = new Procedure1<Method>() {
-      public void apply(final Method method) {
-        ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            StringConcatenation _builder = new StringConcatenation();
-            String _name = method.getName();
+            String _name = operation.getName();
             _builder.append(_name, "");
             _builder.append("(");
-            Class<? extends Object>[] _parameterTypes = method.getParameterTypes();
-            final Function1<Class<? extends Object>,String> _function = new Function1<Class<? extends Object>,String>() {
-              public String apply(final Class<? extends Object> it) {
-                String _simpleName = it.getSimpleName();
-                return _simpleName;
+            EList<EParameter> _eParameters = operation.getEParameters();
+            final Function1<EParameter,String> _function = new Function1<EParameter,String>() {
+              public String apply(final EParameter it) {
+                EClassifier _eType = it.getEType();
+                String _name = _eType.getName();
+                return _name;
               }
             };
-            List<String> _map = ListExtensions.<Class<? extends Object>, String>map(((List<Class<? extends Object>>)Conversions.doWrapArray(_parameterTypes)), _function);
+            List<String> _map = ListExtensions.<EParameter, String>map(_eParameters, _function);
             String _join = IterableExtensions.join(_map, ", ");
             _builder.append(_join, "");
             _builder.append("): ");
-            Class<? extends Object> _returnType = method.getReturnType();
-            String _simpleName = _returnType.getSimpleName();
-            _builder.append(_simpleName, "");
+            EClassifier _eType = operation.getEType();
+            String _name_1 = _eType.getName();
+            _builder.append(_name_1, "");
             it.setText(_builder.toString());
           }
         };
@@ -219,7 +187,7 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Method>forEach(_limit_1, _function_2);
+    IterableExtensions.<EOperation>forEach(_limit_1, _function_1);
   }
   
   protected <T extends Object> List<T> limit(final List<T> list) {
@@ -243,18 +211,14 @@ public class JavaTypeNode extends XNode {
     return _xifexpression;
   }
   
-  public Class<? extends Object> getJavaType() {
-    return this.javaType;
-  }
-  
-  public JavaTypeModel getJavaTypeModel() {
-    return this.model;
+  public EClass getEClass() {
+    return this.eClass;
   }
   
   public void activate() {
     super.activate();
-    this.populateComprtments();
-    JavaTypeRapidButtonBehavior _javaTypeRapidButtonBehavior = new JavaTypeRapidButtonBehavior(this);
-    _javaTypeRapidButtonBehavior.activate();
+    this.populateCompartments();
+    EClassRapidButtonBehavior _eClassRapidButtonBehavior = new EClassRapidButtonBehavior(this);
+    _eClassRapidButtonBehavior.activate();
   }
 }

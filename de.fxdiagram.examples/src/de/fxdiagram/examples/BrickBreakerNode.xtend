@@ -14,6 +14,7 @@ import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
+import javafx.scene.control.Tooltip
 
 class BrickBreakerNode extends XNode {
 
@@ -26,6 +27,7 @@ class BrickBreakerNode extends XNode {
 					textOrigin = VPos.TOP
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
+				Tooltip.install(it, new Tooltip('Double-click to play'))
 			]
 			back = new Group => [
 				children += new Group => [

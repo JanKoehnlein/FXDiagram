@@ -48,8 +48,10 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	val nodeMap = <String, XNode>newLinkedHashMap
 	
-	var (XNode, XNode)=>XConnection connectionFactory = [
-		host, choice | new XConnection(host, choice)
+	val node2choiceInfo = <XNode, Object>newHashMap 
+	
+	var XNodeChooserXConnectionProvider connectionProvider = [
+		host, choice, choiceInfo | new XConnection(host, choice)
 	]
 	
 	XNode currentChoice 
@@ -156,24 +158,26 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 		]
 	}
 
-	def operator_add(XNode node) {
+	def addChoice(XNode node) {
+		addChoice(node, node.key)
+	}
+	
+	def addChoice(XNode node, Object choiceInfo) {
 		if (!nodeMap.containsKey(node.key)) {
 			nodeMap.put(node.key, node)
 			node.layout
 			calculateVisibleNodes
 			group.children += node
+			if(choiceInfo != null)
+				node2choiceInfo.put(node, choiceInfo)
 			true
 		} else {
 			false
 		}
 	}
 
-	def operator_add(Iterable<? extends XNode> nodes) {
-		nodes.map[this += it].reduce[a, b|a || b]
-	}
-
-	def void setConnectionFactory((XNode, XNode)=>XConnection connectionFactory) {
-		this.connectionFactory = connectionFactory
+	def void setConnectionProvider(XNodeChooserXConnectionProvider connectionProvider) {
+		this.connectionProvider = connectionProvider
 	}
 
 	override activate() {
@@ -278,17 +282,21 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 						choice.layoutY = choice.layoutY + 0.5 * (bounds.height - unlayoutedBounds.height)
 				}
 			}
-			connectChoice(existingChoice)
+			connectChoice(existingChoice, node2choiceInfo.get(choice))
 			currentConnection = null
 		}
 	}
 	
-	protected def connectChoice(XNode choice) {
+	protected def connectChoice(XNode choice, Object choiceInfo) {
 		if(isActive && choice !== currentChoice) {
 			currentChoice = choice
-			removeConnection(currentConnection)
-			currentConnection = connectionFactory.apply(host, choice)
-			diagram.connections += currentConnection
+			val newConnection = connectionProvider.getConnection(host, choice, choiceInfo)
+			if(newConnection != currentConnection) {
+				removeConnection(currentConnection)
+				currentConnection = newConnection
+				if(newConnection != null && !diagram.connections.contains(newConnection)) 
+					diagram.connections += newConnection
+			}
 			choice.toFront
 			currentConnection.toFront
 		}
@@ -321,8 +329,10 @@ abstract class AbstractXNodeChooser implements XDiagramTool {
 
 	protected def void setInterpolatedPosition(double interpolatedPosition) {
 		doSetInterpolatedPosition(interpolatedPosition)
-		if(!nodes.empty)
-			connectChoice(nodes.get(((getCurrentPosition + 0.5) as int) % nodes.size))
+		if(!nodes.empty) {
+			val choice = nodes.get(((getCurrentPosition + 0.5) as int) % nodes.size)			
+			connectChoice(choice, node2choiceInfo.get(choice))
+		}
 	}
 
 	protected def void doSetInterpolatedPosition(double interpolatedPosition)

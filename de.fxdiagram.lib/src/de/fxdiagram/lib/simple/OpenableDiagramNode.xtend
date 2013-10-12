@@ -29,6 +29,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import de.fxdiagram.annotations.logging.Logging
+import javafx.scene.control.Tooltip
 
 @Logging
 class OpenableDiagramNode extends XNode {
@@ -58,6 +59,7 @@ class OpenableDiagramNode extends XNode {
 		]
 		key = name
 		cursor = Cursor.HAND
+		Tooltip.install(this, new Tooltip("Double-click to open"))
 	}
 	
 	def setInnerDiagram(XDiagram nestedDiagram) {
@@ -118,6 +120,7 @@ class OpenableDiagramNode extends XNode {
 								root.headsUpDisplay.children -= target as Node
 								closeDiagram(targetInDiagram)
 							]
+							Tooltip.install(it, new Tooltip("Parent diagram"))
 						], Pos.TOP_RIGHT)
 				]
 			]

@@ -13,6 +13,7 @@ import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.annotations.logging.Logging
+import javafx.scene.control.Tooltip
 
 @Logging
 class LevelOfDetailDiagramNode extends XNode {
@@ -35,6 +36,7 @@ class LevelOfDetailDiagramNode extends XNode {
 				text = name
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
+				Tooltip.install(this, new Tooltip("Zoom to reveal content"))
 			]
 		]
 	}

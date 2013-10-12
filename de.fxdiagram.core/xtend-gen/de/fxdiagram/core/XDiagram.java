@@ -174,8 +174,8 @@ public class XDiagram extends Group implements XActivatable {
     Group _connectionLayer_1 = this.getConnectionLayer();
     ObservableList<Node> _children = _connectionLayer_1.getChildren();
     _children.addListener(new ListChangeListener<Node>() {
-        public void onChanged(Change<? extends Node> arg0) {
-          listChangeListener.apply(arg0);
+        public void onChanged(Change<? extends Node> c) {
+          listChangeListener.apply(c);
         }
     });
     ObservableList<XNode> _nodes_1 = this.getNodes();

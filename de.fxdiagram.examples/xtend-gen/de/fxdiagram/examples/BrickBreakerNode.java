@@ -17,6 +17,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -49,6 +50,8 @@ public class BrickBreakerNode extends XNode {
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
+            Tooltip _tooltip = new Tooltip("Double-click to play");
+            Tooltip.install(it, _tooltip);
           }
         };
         RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);

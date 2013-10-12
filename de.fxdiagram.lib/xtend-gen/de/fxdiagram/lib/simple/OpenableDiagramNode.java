@@ -35,6 +35,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -114,6 +115,8 @@ public class OpenableDiagramNode extends XNode {
     this.setNode(_pane);
     this.setKey(name);
     this.setCursor(Cursor.HAND);
+    Tooltip _tooltip = new Tooltip("Double-click to open");
+    Tooltip.install(this, _tooltip);
   }
   
   public XDiagram setInnerDiagram(final XDiagram nestedDiagram) {
@@ -234,6 +237,8 @@ public class OpenableDiagramNode extends XNode {
                         }
                       };
                       it.setOnMouseClicked(_function);
+                      Tooltip _tooltip = new Tooltip("Parent diagram");
+                      Tooltip.install(it, _tooltip);
                     }
                   };
                   Canvas _doubleArrow = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);

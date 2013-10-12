@@ -11,8 +11,10 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.XNodeChooserTransition;
+import de.fxdiagram.core.tools.XNodeChooserXConnectionProvider;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -58,7 +60,6 @@ import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -95,10 +96,17 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     }
   }.apply();
   
-  private Function2<? super XNode,? super XNode,? extends XConnection> connectionFactory = new Function0<Function2<? super XNode,? super XNode,? extends XConnection>>() {
-    public Function2<? super XNode,? super XNode,? extends XConnection> apply() {
-      final Function2<XNode,XNode,XConnection> _function = new Function2<XNode,XNode,XConnection>() {
-        public XConnection apply(final XNode host, final XNode choice) {
+  private final HashMap<XNode,Object> node2choiceInfo = new Function0<HashMap<XNode,Object>>() {
+    public HashMap<XNode,Object> apply() {
+      HashMap<XNode,Object> _newHashMap = CollectionLiterals.<XNode, Object>newHashMap();
+      return _newHashMap;
+    }
+  }.apply();
+  
+  private XNodeChooserXConnectionProvider connectionProvider = new Function0<XNodeChooserXConnectionProvider>() {
+    public XNodeChooserXConnectionProvider apply() {
+      final XNodeChooserXConnectionProvider _function = new XNodeChooserXConnectionProvider() {
+        public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
           XConnection _xConnection = new XConnection(host, choice);
           return _xConnection;
         }
@@ -351,7 +359,13 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     this.setFilterLabel(_doubleArrow_2);
   }
   
-  public boolean operator_add(final XNode node) {
+  public boolean addChoice(final XNode node) {
+    String _key = node.getKey();
+    boolean _addChoice = this.addChoice(node, _key);
+    return _addChoice;
+  }
+  
+  public boolean addChoice(final XNode node, final Object choiceInfo) {
     boolean _xifexpression = false;
     String _key = node.getKey();
     boolean _containsKey = this.nodeMap.containsKey(_key);
@@ -365,6 +379,10 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
         this.calculateVisibleNodes();
         ObservableList<Node> _children = this.group.getChildren();
         _children.add(node);
+        boolean _notEquals = (!Objects.equal(choiceInfo, null));
+        if (_notEquals) {
+          this.node2choiceInfo.put(node, choiceInfo);
+        }
         _xblockexpression = (true);
       }
       _xifexpression = _xblockexpression;
@@ -374,31 +392,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _xifexpression;
   }
   
-  public Boolean operator_add(final Iterable<? extends XNode> nodes) {
-    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
-      public Boolean apply(final XNode it) {
-        boolean _add = AbstractXNodeChooser.this.operator_add(it);
-        return Boolean.valueOf(_add);
-      }
-    };
-    Iterable<Boolean> _map = IterableExtensions.map(nodes, _function);
-    final Function2<Boolean,Boolean,Boolean> _function_1 = new Function2<Boolean,Boolean,Boolean>() {
-      public Boolean apply(final Boolean a, final Boolean b) {
-        boolean _or = false;
-        if ((a).booleanValue()) {
-          _or = true;
-        } else {
-          _or = ((a).booleanValue() || (b).booleanValue());
-        }
-        return Boolean.valueOf(_or);
-      }
-    };
-    Boolean _reduce = IterableExtensions.<Boolean>reduce(_map, _function_1);
-    return _reduce;
-  }
-  
-  public void setConnectionFactory(final Function2<? super XNode,? super XNode,? extends XConnection> connectionFactory) {
-    this.connectionFactory = connectionFactory;
+  public void setConnectionProvider(final XNodeChooserXConnectionProvider connectionProvider) {
+    this.connectionProvider = connectionProvider;
   }
   
   public boolean activate() {
@@ -683,7 +678,8 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
             }
           }
         }
-        this.connectChoice(existingChoice);
+        Object _get = this.node2choiceInfo.get(choice);
+        this.connectChoice(existingChoice, _get);
         XConnection _currentConnection = this.currentConnection = null;
         _xblockexpression = (_currentConnection);
       }
@@ -692,7 +688,7 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
     return _xifexpression;
   }
   
-  protected XConnection connectChoice(final XNode choice) {
+  protected XConnection connectChoice(final XNode choice, final Object choiceInfo) {
     XConnection _xblockexpression = null;
     {
       boolean _and = false;
@@ -705,12 +701,28 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       }
       if (_and) {
         this.currentChoice = choice;
-        this.removeConnection(this.currentConnection);
-        XConnection _apply = this.connectionFactory.apply(this.host, choice);
-        this.currentConnection = _apply;
-        XDiagram _diagram = this.diagram();
-        ObservableList<XConnection> _connections = _diagram.getConnections();
-        _connections.add(this.currentConnection);
+        final XConnection newConnection = this.connectionProvider.getConnection(this.host, choice, choiceInfo);
+        boolean _notEquals = (!Objects.equal(newConnection, this.currentConnection));
+        if (_notEquals) {
+          this.removeConnection(this.currentConnection);
+          this.currentConnection = newConnection;
+          boolean _and_1 = false;
+          boolean _notEquals_1 = (!Objects.equal(newConnection, null));
+          if (!_notEquals_1) {
+            _and_1 = false;
+          } else {
+            XDiagram _diagram = this.diagram();
+            ObservableList<XConnection> _connections = _diagram.getConnections();
+            boolean _contains = _connections.contains(newConnection);
+            boolean _not = (!_contains);
+            _and_1 = (_notEquals_1 && _not);
+          }
+          if (_and_1) {
+            XDiagram _diagram_1 = this.diagram();
+            ObservableList<XConnection> _connections_1 = _diagram_1.getConnections();
+            _connections_1.add(newConnection);
+          }
+        }
         choice.toFront();
         this.currentConnection.toFront();
       }
@@ -793,8 +805,9 @@ public abstract class AbstractXNodeChooser implements XDiagramTool {
       ArrayList<XNode> _nodes_2 = this.getNodes();
       int _size = _nodes_2.size();
       int _modulo = (((int) _plus) % _size);
-      XNode _get = _nodes_1.get(_modulo);
-      this.connectChoice(_get);
+      final XNode choice = _nodes_1.get(_modulo);
+      Object _get = this.node2choiceInfo.get(choice);
+      this.connectChoice(choice, _get);
     }
   }
   

@@ -2,9 +2,7 @@ TODO
 - find better recursive image
 - rearrange demo diagram
 - collapsible compartments
-- Ecore diagram
 - find better colors
-- use scalable icons
 
 ENHANCEMENT
 - chooser isVertical
@@ -23,6 +21,8 @@ MINOR
 - different anchors for faces of flipNodes 
  
 DONE 
+- use scalable icons
+- Ecore diagram
 - better icons for JavaTypeNode
 - position tooltip
 - LCARS connect other matches

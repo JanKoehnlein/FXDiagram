@@ -80,7 +80,7 @@ class XRapidButton extends Parent implements XActivatable {
 			layoutX = newVal.x
 			layoutY = newVal.y
 		]
-		layoutX = placer.value.x
+		layoutX = placer.value.x 
 		layoutY = placer.value.y
 	}
 
@@ -157,11 +157,12 @@ class Placer extends ObjectBinding<Point2D> {
 		val node = button.host
 		val boundsInDiagram = node.localToDiagram(node.layoutBounds)
 		if(boundsInDiagram != null) {
-			val totalWidth = boundsInDiagram.width + 2 * button.layoutBounds.width
-			val totalHeight = boundsInDiagram.height + 2 * button.layoutBounds.height
+			val buttonBounds = button.boundsInLocal
+			val totalWidth = boundsInDiagram.width + 2 * buttonBounds.width
+			val totalHeight = boundsInDiagram.height + 2 * buttonBounds.height
 			val position = new Point2D(
-				boundsInDiagram.minX - 1.5 * button.layoutBounds.width + xPos * totalWidth,
-				boundsInDiagram.minY - 1.5 * button.layoutBounds.height + yPos * totalHeight)
+				boundsInDiagram.minX - 1.5 * buttonBounds.width - buttonBounds.minX + xPos * totalWidth,
+				boundsInDiagram.minY - 1.5 * buttonBounds.height - buttonBounds.minY + yPos * totalHeight)
 			position
 		} else {
 			null

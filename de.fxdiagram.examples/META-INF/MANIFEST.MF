@@ -9,7 +9,8 @@ Require-Bundle: org.eclipse.xtend.lib,
  org.eclipse.xtext.xbase.lib,
  de.fxdiagram.lib;bundle-version="1.0.0",
  de.fxdiagram.core;bundle-version="1.0.0",
- de.fxdiagram.annotations;bundle-version="1.0.0"
+ de.fxdiagram.annotations;bundle-version="1.0.0",
+ org.eclipse.emf.ecore;bundle-version="2.10.0"
 Export-Package: de.fxdiagram.examples
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",

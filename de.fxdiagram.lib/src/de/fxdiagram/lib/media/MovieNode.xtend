@@ -24,6 +24,7 @@ import javafx.scene.text.Text
 
 import static extension javafx.util.Duration.*
 import static de.fxdiagram.core.extensions.UriExtensions.*
+import javafx.scene.control.Tooltip
 
 class MovieNode extends XNode {
 
@@ -49,12 +50,7 @@ class MovieNode extends XNode {
 					textOrigin = VPos.TOP
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
-				children += new Text => [
-					text = '*'
-					textOrigin = VPos.TOP
-					StackPane.setAlignment(it, Pos.TOP_RIGHT)
-					StackPane.setMargin(it, new Insets(3, 6, 0, 0))
-				]
+				Tooltip.install(it, new Tooltip('Double-click to watch'))
 			]
 			back = pane = new RectangleBorderPane => [
 				id = "pane"
@@ -82,6 +78,7 @@ class MovieNode extends XNode {
 					children += controlBar
 					StackPane.setAlignment(it, Pos.BOTTOM_CENTER)
 				]
+				Tooltip.install(it, new Tooltip('Double-click to close'))
 			]
 			flipOnDoubleClick = true
 		]

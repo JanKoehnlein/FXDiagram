@@ -42,6 +42,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		node = createPane => [
 			children += pivot
 		]
+		Tooltip.install(it, new Tooltip('Double-click to zoom in'))
 	}
 
 	override doActivate() {
