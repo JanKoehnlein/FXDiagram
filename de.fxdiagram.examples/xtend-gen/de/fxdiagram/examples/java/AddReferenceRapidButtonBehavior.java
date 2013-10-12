@@ -16,18 +16,16 @@ import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.java.Property;
-import de.fxdiagram.lib.tools.CoverFlowChooser;
+import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -119,8 +117,8 @@ public class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNo
   protected void createChooser(final XRapidButton button) {
     JavaTypeNode _host = this.getHost();
     Pos _chooserPosition = button.getChooserPosition();
-    CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
-    final CoverFlowChooser chooser = _coverFlowChooser;
+    CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
+    final CarusselChooser chooser = _carusselChooser;
     final Procedure1<Property> _function = new Procedure1<Property>() {
       public void apply(final Property it) {
         Class<? extends Object> _type = it.getType();
@@ -137,8 +135,7 @@ public class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNo
           XConnection _xConnection = new XConnection(host, choice, reference);
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
             public void apply(final XConnection it) {
-              ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-              LineArrowHead _lineArrowHead = new LineArrowHead(it, 7, 10, _strokeProperty, false);
+              LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
               it.setTargetArrowHead(_lineArrowHead);
               XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
               final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {

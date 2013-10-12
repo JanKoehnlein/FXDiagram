@@ -146,9 +146,7 @@ class Layouter {
 			edgeLayout.targetPoint = createKPoint
 			kEdge.data += edgeLayout
 			cache.put(it, kEdge)
-			if(label != null) {
-				label.toKLabel(cache).parent = kEdge
-			}
+			labels.forEach[ toKLabel(cache).parent = kEdge ]
 			kEdge	
 		} else {
 			null

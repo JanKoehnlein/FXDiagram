@@ -24,13 +24,15 @@ import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static javafx.collections.FXCollections.*
+import javafx.collections.ObservableList
 
 @Logging
 class XConnection extends XShape {
 	
 	@FxProperty XNode source
 	@FxProperty XNode target
-	@FxProperty XConnectionLabel label
+	@FxProperty ObservableList<XConnectionLabel> labels = observableArrayList
 	@FxProperty ArrowHead sourceArrowHead
 	@FxProperty ArrowHead targetArrowHead
 	@FxProperty XConnectionKind kind = POLYLINE
@@ -82,7 +84,7 @@ class XConnection extends XShape {
 			val points = list
 			updateShapes
 			while(next) 
-				addedSubList.forEach[
+				addedSubList.forEach [
 					val index = points.indexOf(it)					
 					if(index != 0 && index != points.size)
 						activate
@@ -95,8 +97,7 @@ class XConnection extends XShape {
 				]
 		]
 		controlPoints.addListener(listChangeListener)
-		if(label != null)
-			label.activate
+		labels.forEach[activate]
 		connectionRouter.activate
 		updateShapes
 		parentProperty.addListener [
@@ -213,7 +214,7 @@ class XConnection extends XShape {
 	override layoutChildren() {
 		super.layoutChildren
 		connectionRouter.calculatePoints
-		label?.place(controlPoints)	
+		labels.forEach[ place(controlPoints) ]	
 		sourceArrowHead?.place
 		targetArrowHead?.place
 	}

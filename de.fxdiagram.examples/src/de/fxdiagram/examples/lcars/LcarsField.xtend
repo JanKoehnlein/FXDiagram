@@ -78,8 +78,8 @@ class LcarsField extends Parent {
 						.filter(LcarsNode)
 						.filter[
 							it != node && data.get(name)==value 
-							&& !outgoingConnections.exists[target == node && label?.text?.text == name]
-							&& !incomingConnections.exists[source == node && label?.text?.text == name]
+							&& !outgoingConnections.exists[target == node && labels.head?.text?.text == name]
+							&& !incomingConnections.exists[source == node && labels.head?.text?.text == name]
 						]
 						.map[connectionProvider.getConnection(node, it, null)]
 						.toList

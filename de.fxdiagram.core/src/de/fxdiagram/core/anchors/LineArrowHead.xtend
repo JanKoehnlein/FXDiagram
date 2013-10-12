@@ -30,7 +30,7 @@ class LineArrowHead extends ArrowHead {
 	}
 	
 	new(XConnection connection, boolean isSource) {
-		this(connection, 8, 15, connection.strokeProperty, isSource)
+		this(connection, 7, 10, connection.strokeProperty, isSource)
 	}
 	
 	override getLineCut() {

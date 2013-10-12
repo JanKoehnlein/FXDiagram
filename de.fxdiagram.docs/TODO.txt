@@ -1,10 +1,10 @@
 TODO
 - find better recursive image
 - rearrange demo diagram
-- find better colors
-- multiple connection labels
+- LCARS refactor choosers to use keys
 
 ENHANCEMENT
+- find better colors
 - collapsible compartments
 - chooser isVertical
 - Make auxlines magnetic
@@ -20,6 +20,8 @@ MINOR
 - different anchors for faces of flipNodes 
  
 DONE 
+- multiple connection labels
+- eOpposites in Ecore 
 - filter duplicate connections
 - use scalable icons
 - Ecore diagram

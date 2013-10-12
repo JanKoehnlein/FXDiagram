@@ -6,11 +6,10 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import java.util.List;
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -33,7 +32,8 @@ public class XConnectionLabel extends XShape {
   
   public XConnectionLabel(final XConnection connection) {
     this.setConnection(connection);
-    connection.setLabel(this);
+    ObservableList<XConnectionLabel> _labels = connection.getLabels();
+    _labels.add(this);
     Text _text = new Text();
     final Procedure1<Text> _function = new Procedure1<Text>() {
       public void apply(final Text it) {
@@ -62,30 +62,29 @@ public class XConnectionLabel extends XShape {
     MoveBehavior<XConnectionLabel> _moveBehavior = new MoveBehavior<XConnectionLabel>(this);
     this.moveBehavior = _moveBehavior;
     this.moveBehavior.activate();
-    BooleanProperty _selectedProperty = this.selectedProperty();
-    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-      public void changed(final ObservableValue<? extends Boolean> observable, final Boolean oldValue, final Boolean newValue) {
-        if ((newValue).booleanValue()) {
-          XConnectionLabel.this.setEffect(XConnectionLabel.this.selectionEffect);
-          XConnectionLabel.this.setScaleX(1.05);
-          XConnectionLabel.this.setScaleY(1.05);
-          XConnection _connection = XConnectionLabel.this.getConnection();
-          _connection.setSelected(true);
-        } else {
-          XConnectionLabel.this.setEffect(null);
-          XConnectionLabel.this.setScaleX(1.0);
-          XConnectionLabel.this.setScaleY(1.0);
-        }
-      }
-    };
-    _selectedProperty.addListener(_function);
   }
   
-  protected void place(final List<XControlPoint> list) {
+  public void selectionFeedback(final boolean isSelected) {
+    if (isSelected) {
+      this.setEffect(this.selectionEffect);
+      this.setScaleX(1.05);
+      this.setScaleY(1.05);
+      XConnection _connection = this.getConnection();
+      _connection.setSelected(true);
+    } else {
+      this.setEffect(null);
+      this.setScaleX(1.0);
+      this.setScaleY(1.0);
+    }
+  }
+  
+  public void place(final List<XControlPoint> list) {
     XConnection _connection = this.getConnection();
-    final Point2D center = _connection.at(0.5);
+    double _position = this.getPosition();
+    final Point2D center = _connection.at(_position);
     XConnection _connection_1 = this.getConnection();
-    final Point2D derivative = _connection_1.derivativeAt(0.5);
+    double _position_1 = this.getPosition();
+    final Point2D derivative = _connection_1.derivativeAt(_position_1);
     double _y = derivative.getY();
     double _x = derivative.getX();
     double angle = Math.atan2(_y, _x);
@@ -159,5 +158,23 @@ public class XConnectionLabel extends XShape {
   
   public ObjectProperty<Text> textProperty() {
     return this.textProperty;
+  }
+  
+  private SimpleDoubleProperty positionProperty = new SimpleDoubleProperty(this, "position",_initPosition());
+  
+  private static final double _initPosition() {
+    return 0.5;
+  }
+  
+  public double getPosition() {
+    return this.positionProperty.get();
+  }
+  
+  public void setPosition(final double position) {
+    this.positionProperty.set(position);
+  }
+  
+  public DoubleProperty positionProperty() {
+    return this.positionProperty;
   }
 }

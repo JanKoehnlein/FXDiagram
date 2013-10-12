@@ -21,12 +21,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
@@ -191,16 +194,17 @@ public class XConnection extends XShape {
           listChangeListener.apply(c);
         }
     });
-    XConnectionLabel _label = this.getLabel();
-    boolean _notEquals = (!Objects.equal(_label, null));
-    if (_notEquals) {
-      XConnectionLabel _label_1 = this.getLabel();
-      _label_1.activate();
-    }
+    ObservableList<XConnectionLabel> _labels = this.getLabels();
+    final Procedure1<XConnectionLabel> _function_2 = new Procedure1<XConnectionLabel>() {
+      public void apply(final XConnectionLabel it) {
+        it.activate();
+      }
+    };
+    IterableExtensions.<XConnectionLabel>forEach(_labels, _function_2);
     this.connectionRouter.activate();
     this.updateShapes();
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
-    final ChangeListener<Parent> _function_2 = new ChangeListener<Parent>() {
+    final ChangeListener<Parent> _function_3 = new ChangeListener<Parent>() {
       public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
         boolean _equals = Objects.equal(newValue, null);
         if (_equals) {
@@ -213,7 +217,7 @@ public class XConnection extends XShape {
         }
       }
     };
-    _parentProperty.addListener(_function_2);
+    _parentProperty.addListener(_function_3);
   }
   
   public void selectionFeedback(final boolean isSelected) {
@@ -488,11 +492,14 @@ public class XConnection extends XShape {
   public void layoutChildren() {
     super.layoutChildren();
     this.connectionRouter.calculatePoints();
-    XConnectionLabel _label = this.getLabel();
-    if (_label!=null) {
-      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-      _label.place(_controlPoints);
-    }
+    ObservableList<XConnectionLabel> _labels = this.getLabels();
+    final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+      public void apply(final XConnectionLabel it) {
+        ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
+        it.place(_controlPoints);
+      }
+    };
+    IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
     ArrowHead _sourceArrowHead = this.getSourceArrowHead();
     if (_sourceArrowHead!=null) {
       _sourceArrowHead.place();
@@ -750,18 +757,19 @@ public class XConnection extends XShape {
     return this.targetProperty;
   }
   
-  private SimpleObjectProperty<XConnectionLabel> labelProperty = new SimpleObjectProperty<XConnectionLabel>(this, "label");
+  private SimpleListProperty<XConnectionLabel> labelsProperty = new SimpleListProperty<XConnectionLabel>(this, "labels",_initLabels());
   
-  public XConnectionLabel getLabel() {
-    return this.labelProperty.get();
+  private static final ObservableList<XConnectionLabel> _initLabels() {
+    ObservableList<XConnectionLabel> _observableArrayList = FXCollections.<XConnectionLabel>observableArrayList();
+    return _observableArrayList;
   }
   
-  public void setLabel(final XConnectionLabel label) {
-    this.labelProperty.set(label);
+  public ObservableList<XConnectionLabel> getLabels() {
+    return this.labelsProperty.get();
   }
   
-  public ObjectProperty<XConnectionLabel> labelProperty() {
-    return this.labelProperty;
+  public ListProperty<XConnectionLabel> labelsProperty() {
+    return this.labelsProperty;
   }
   
   private SimpleObjectProperty<ArrowHead> sourceArrowHeadProperty = new SimpleObjectProperty<ArrowHead>(this, "sourceArrowHead");

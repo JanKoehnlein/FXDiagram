@@ -17,13 +17,14 @@ class XConnectionLabel extends XShape {
 
 	@FxProperty XConnection connection
 	@FxProperty Text text
+	@FxProperty double position = 0.5
 
 	MoveBehavior<XConnectionLabel> moveBehavior
 	Effect selectionEffect
 
 	new(XConnection connection) {
 		this.connection = connection
-		connection.label = this
+		connection.labels += this
 		text = new Text => [
 			textOrigin = VPos.TOP
 			font = Font.font(font.family, font.size * 0.9)
@@ -36,23 +37,24 @@ class XConnectionLabel extends XShape {
 	override doActivate() {
 		moveBehavior = new MoveBehavior(this)
 		moveBehavior.activate()
-		selectedProperty.addListener [ observable, oldValue, newValue |
-			if (newValue) {
-				effect = selectionEffect
-				scaleX = 1.05
-				scaleY = 1.05
-				connection.selected = true
-			} else {
-				effect = null
-				scaleX = 1.0
-				scaleY = 1.0
-			}
-		]
+	}
+	
+	override selectionFeedback(boolean isSelected) {
+		if (isSelected) {
+			effect = selectionEffect
+			scaleX = 1.05
+			scaleY = 1.05
+			connection.selected = true
+		} else {
+			effect = null
+			scaleX = 1.0
+			scaleY = 1.0
+		}
 	}
 
-	def protected void place(List<XControlPoint> list) {
-		val center = connection.at(0.5)
-		val derivative = connection.derivativeAt(0.5)
+	def void place(List<XControlPoint> list) {
+		val center = connection.at(position)
+		val derivative = connection.derivativeAt(position)
 		var angle = atan2(derivative.y, derivative.x)
 		val labelDx = -boundsInLocal.width / 2
 		var labelDy = 1

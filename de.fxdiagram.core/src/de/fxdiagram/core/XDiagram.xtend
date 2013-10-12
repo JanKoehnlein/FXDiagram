@@ -62,12 +62,21 @@ class XDiagram extends Group implements XActivatable {
 	}
 
 	def void doActivate() {
-		val ChangeListener<Node> labelListener = [
+		val ChangeListener<Node> arrowHeadListener = [
 			prop, oldVal, newVal |
 			if(oldVal != null)
 				connectionLayer.children -= oldVal
 			if(newVal != null)
 				connectionLayer.children += newVal
+		]
+		val ListChangeListener<? super XConnectionLabel> labelListener = [
+			change |
+			while(change.next) {
+				if(change.wasAdded)
+					connectionLayer.children += change.addedSubList
+				if(change.wasRemoved)
+					connectionLayer.children -= change.removed
+			}
 		]
 		nodes.addListener(new XDiagramChildrenListener<XNode>(this, nodeLayer))
 		connections.addListener(new XDiagramChildrenListener<XConnection>(this, connectionLayer))
@@ -79,17 +88,22 @@ class XDiagram extends Group implements XActivatable {
 				if(change.wasAdded) {
 					val addedConnections = change.addedSubList.filter(XConnection)
 					addedConnections.forEach [
-						addConnectionDecoration(labelProperty, labelListener) 
-						addConnectionDecoration(targetArrowHeadProperty, labelListener) 
-						addConnectionDecoration(sourceArrowHeadProperty, labelListener) 
+						labels.forEach[
+							if(!connectionLayer.children.contains(it))
+								connectionLayer.children.add(it)
+						]
+						labelsProperty.addListener(labelListener)
+						addArrowHead(targetArrowHeadProperty, arrowHeadListener) 
+						addArrowHead(sourceArrowHeadProperty, arrowHeadListener) 
 					]
 				}
 				if(change.wasRemoved) {
 					val removedConnections = change.removed.filter(XConnection)
 					removedConnections.forEach [
-						removeConnectionDecoration(labelProperty, labelListener) 
-						removeConnectionDecoration(targetArrowHeadProperty, labelListener) 
-						removeConnectionDecoration(sourceArrowHeadProperty, labelListener) 
+						connectionLayer.children.removeAll(labels)
+						labelsProperty.removeListener(labelListener)
+						removeArrowHead(targetArrowHeadProperty, arrowHeadListener) 
+						removeArrowHead(sourceArrowHeadProperty, arrowHeadListener) 
 					]
 				}
 			}
@@ -100,14 +114,14 @@ class XDiagram extends Group implements XActivatable {
 		contentsInitializer?.apply(this)
 	}
 	
-	protected def addConnectionDecoration(javafx.beans.property.Property<? extends Node> property, 
+	protected def addArrowHead(javafx.beans.property.Property<? extends Node> property, 
 		ChangeListener<? super Node> listener) {
-		if(property.value != null)
+		if(property.value != null && !connectionLayer.children.contains(property.value))
 			connectionLayer.children += property.value
 		property.addListener(listener)
 	} 
 	
-	protected def removeConnectionDecoration(javafx.beans.property.Property<? extends Node> property, 
+	protected def removeArrowHead(javafx.beans.property.Property<? extends Node> property, 
 		ChangeListener<? super Node> listener) {
 		if(property.value != null)
 			connectionLayer.children -= property.value

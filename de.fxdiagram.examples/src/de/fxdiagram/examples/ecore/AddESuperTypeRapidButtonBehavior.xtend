@@ -1,15 +1,14 @@
 package de.fxdiagram.examples.ecore
 
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRapidButton
-import de.fxdiagram.core.anchors.LineArrowHead
+import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.core.behavior.AbstractBehavior
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import java.util.List
-import java.util.Set
+import java.util.Map
 import javafx.collections.ListChangeListener
-import org.eclipse.emf.ecore.EReference
+import org.eclipse.emf.ecore.EClass
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
@@ -20,15 +19,15 @@ class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNode> {
 	
 	List<XRapidButton> buttons
 	
-	Set<EReference> availableReferences = newHashSet
+	Map<Object, EClass> key2availableSuperType = newHashMap
 	
 	new(EClassNode host) {
 		super(host)
 	}
 	
 	override protected doActivate() {
-		availableReferences += host.EClass.EReferences
-		if(!availableReferences.empty) {
+		host.EClass.ESuperTypes.forEach[ key2availableSuperType.put(getKey(it), it) ]
+		if(!key2availableSuperType.empty) {
 			val addSuperTypeAction = [
 				XRapidButton button |
 				createChooser(button)
@@ -39,37 +38,38 @@ class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNode> {
 				ListChangeListener.Change<? extends XConnection> change |
 				while(change.next) {
 					if(change.wasAdded) 
-						change.addedSubList.forEach[ availableReferences.remove(key) ]
+						change.addedSubList.forEach[ key2availableSuperType.remove(key) ]
 				}
-				if(availableReferences.empty)
+				if(key2availableSuperType.empty)
 					host.diagram.buttons -= buttons
 			]  			
 		}
 	}
 	
-	protected def createButtons((XRapidButton)=>void addReferencesAction) {
+	protected def getKey(EClass superType) {
+		(host as EClassNode).EClass.name + ' extends ' + superType.name
+	}
+	
+	protected def createButtons((XRapidButton)=>void addSuperTypeAction) {
 		#[
-			new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover properties'), addReferencesAction),
-			new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover properties'), addReferencesAction)
+			new XRapidButton(host, 0.5, 0, getTriangleButton(TOP, 'Discover supertypes'), addSuperTypeAction),
+			new XRapidButton(host, 0.5, 1, getTriangleButton(BOTTOM, 'Discover supertypes'), addSuperTypeAction)
 		]
 	}
 	
 	protected def createChooser(XRapidButton button) {
 		val chooser = new CoverFlowChooser(host, button.getChooserPosition)
-		availableReferences.forEach [
-			chooser.addChoice(new EClassNode(it.EReferenceType), it)
+		key2availableSuperType.values.forEach[
+			superType | 
+			chooser.addChoice(new EClassNode(superType))
 		]
 		chooser.connectionProvider = [
 			host, choice, choiceInfo |
-			val reference = choiceInfo as EReference 
-			new XConnection(host, choice, reference) => [
-				targetArrowHead = new LineArrowHead(it, 7, 10, 
-					it.strokeProperty, false)
-				new XConnectionLabel(it) => [
-					text.text = reference.name
-				]
+			new XConnection(host, choice, getKey((choice as EClassNode).EClass)) => [
+				targetArrowHead = new TriangleArrowHead(it, 10, 15, 
+					it.strokeProperty, host.diagram.backgroundPaintProperty, false)
 			]
 		]
 		host.root.currentTool = chooser
-	}	
+	}
 }

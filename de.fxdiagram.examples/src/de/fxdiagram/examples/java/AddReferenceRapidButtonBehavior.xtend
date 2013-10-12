@@ -5,7 +5,7 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.behavior.AbstractBehavior
-import de.fxdiagram.lib.tools.CoverFlowChooser
+import de.fxdiagram.lib.tools.CarusselChooser
 import java.util.List
 import java.util.Set
 import javafx.collections.ListChangeListener
@@ -55,7 +55,7 @@ class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 	}
 	
 	protected def createChooser(XRapidButton button) {
-		val chooser = new CoverFlowChooser(host, button.getChooserPosition)
+		val chooser = new CarusselChooser(host, button.getChooserPosition)
 		availableReferences.forEach [
 			chooser.addChoice(new JavaTypeNode(it.type), it)
 		]
@@ -63,8 +63,7 @@ class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 			host, choice, choiceInfo |
 			val reference = choiceInfo as Property 
 			new XConnection(host, choice, reference) => [
-				targetArrowHead = new LineArrowHead(it, 7, 10, 
-					it.strokeProperty, false)
+				targetArrowHead = new LineArrowHead(it, false)
 				new XConnectionLabel(it) => [
 					text.text = reference.name
 				]

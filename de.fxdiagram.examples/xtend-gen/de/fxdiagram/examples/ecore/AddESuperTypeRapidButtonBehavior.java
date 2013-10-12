@@ -3,22 +3,22 @@ package de.fxdiagram.examples.ecore;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.anchors.LineArrowHead;
+import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.behavior.AbstractBehavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
@@ -27,10 +27,8 @@ import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Text;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -41,10 +39,10 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNode> {
   private List<XRapidButton> buttons;
   
-  private Set<EReference> availableReferences = new Function0<Set<EReference>>() {
-    public Set<EReference> apply() {
-      HashSet<EReference> _newHashSet = CollectionLiterals.<EReference>newHashSet();
-      return _newHashSet;
+  private Map<Object,EClass> key2availableSuperType = new Function0<Map<Object,EClass>>() {
+    public Map<Object,EClass> apply() {
+      HashMap<Object,EClass> _newHashMap = CollectionLiterals.<Object, EClass>newHashMap();
+      return _newHashMap;
     }
   }.apply();
   
@@ -55,17 +53,23 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNod
   protected void doActivate() {
     EClassNode _host = this.getHost();
     EClass _eClass = _host.getEClass();
-    EList<EReference> _eReferences = _eClass.getEReferences();
-    Iterables.<EReference>addAll(this.availableReferences, _eReferences);
-    boolean _isEmpty = this.availableReferences.isEmpty();
+    EList<EClass> _eSuperTypes = _eClass.getESuperTypes();
+    final Procedure1<EClass> _function = new Procedure1<EClass>() {
+      public void apply(final EClass it) {
+        String _key = AddESuperTypeRapidButtonBehavior.this.getKey(it);
+        AddESuperTypeRapidButtonBehavior.this.key2availableSuperType.put(_key, it);
+      }
+    };
+    IterableExtensions.<EClass>forEach(_eSuperTypes, _function);
+    boolean _isEmpty = this.key2availableSuperType.isEmpty();
     boolean _not = (!_isEmpty);
     if (_not) {
-      final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
+      final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
         public void apply(final XRapidButton button) {
           AddESuperTypeRapidButtonBehavior.this.createChooser(button);
         }
       };
-      final Procedure1<XRapidButton> addSuperTypeAction = _function;
+      final Procedure1<XRapidButton> addSuperTypeAction = _function_1;
       List<XRapidButton> _createButtons = this.createButtons(addSuperTypeAction);
       this.buttons = _createButtons;
       EClassNode _host_1 = this.getHost();
@@ -75,7 +79,7 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNod
       EClassNode _host_2 = this.getHost();
       XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_2);
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
-      final ListChangeListener<XConnection> _function_1 = new ListChangeListener<XConnection>() {
+      final ListChangeListener<XConnection> _function_2 = new ListChangeListener<XConnection>() {
         public void onChanged(final Change<? extends XConnection> change) {
           boolean _next = change.next();
           boolean _while = _next;
@@ -86,7 +90,7 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNod
               final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
                 public void apply(final XConnection it) {
                   Object _key = it.getKey();
-                  AddESuperTypeRapidButtonBehavior.this.availableReferences.remove(_key);
+                  AddESuperTypeRapidButtonBehavior.this.key2availableSuperType.remove(_key);
                 }
               };
               IterableExtensions.forEach(_addedSubList, _function);
@@ -94,7 +98,7 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNod
             boolean _next_1 = change.next();
             _while = _next_1;
           }
-          boolean _isEmpty = AddESuperTypeRapidButtonBehavior.this.availableReferences.isEmpty();
+          boolean _isEmpty = AddESuperTypeRapidButtonBehavior.this.key2availableSuperType.isEmpty();
           if (_isEmpty) {
             EClassNode _host = AddESuperTypeRapidButtonBehavior.this.getHost();
             XDiagram _diagram = CoreExtensions.getDiagram(_host);
@@ -103,17 +107,27 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNod
           }
         }
       };
-      _connections.addListener(_function_1);
+      _connections.addListener(_function_2);
     }
   }
   
-  protected List<XRapidButton> createButtons(final Procedure1<? super XRapidButton> addReferencesAction) {
+  protected String getKey(final EClass superType) {
     EClassNode _host = this.getHost();
-    SVGPath _arrowButton = ButtonExtensions.getArrowButton(Side.LEFT, "Discover properties");
-    XRapidButton _xRapidButton = new XRapidButton(_host, 0, 0.5, _arrowButton, addReferencesAction);
+    EClass _eClass = ((EClassNode) _host).getEClass();
+    String _name = _eClass.getName();
+    String _plus = (_name + " extends ");
+    String _name_1 = superType.getName();
+    String _plus_1 = (_plus + _name_1);
+    return _plus_1;
+  }
+  
+  protected List<XRapidButton> createButtons(final Procedure1<? super XRapidButton> addSuperTypeAction) {
+    EClassNode _host = this.getHost();
+    SVGPath _triangleButton = ButtonExtensions.getTriangleButton(Side.TOP, "Discover supertypes");
+    XRapidButton _xRapidButton = new XRapidButton(_host, 0.5, 0, _triangleButton, addSuperTypeAction);
     EClassNode _host_1 = this.getHost();
-    SVGPath _arrowButton_1 = ButtonExtensions.getArrowButton(Side.RIGHT, "Discover properties");
-    XRapidButton _xRapidButton_1 = new XRapidButton(_host_1, 1, 0.5, _arrowButton_1, addReferencesAction);
+    SVGPath _triangleButton_1 = ButtonExtensions.getTriangleButton(Side.BOTTOM, "Discover supertypes");
+    XRapidButton _xRapidButton_1 = new XRapidButton(_host_1, 0.5, 1, _triangleButton_1, addSuperTypeAction);
     return Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1));
   }
   
@@ -122,40 +136,30 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractBehavior<EClassNod
     Pos _chooserPosition = button.getChooserPosition();
     CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
     final CoverFlowChooser chooser = _coverFlowChooser;
-    final Procedure1<EReference> _function = new Procedure1<EReference>() {
-      public void apply(final EReference it) {
-        EClass _eReferenceType = it.getEReferenceType();
-        EClassNode _eClassNode = new EClassNode(_eReferenceType);
-        chooser.addChoice(_eClassNode, it);
+    Collection<EClass> _values = this.key2availableSuperType.values();
+    final Procedure1<EClass> _function = new Procedure1<EClass>() {
+      public void apply(final EClass superType) {
+        EClassNode _eClassNode = new EClassNode(superType);
+        chooser.addChoice(_eClassNode);
       }
     };
-    IterableExtensions.<EReference>forEach(this.availableReferences, _function);
+    IterableExtensions.<EClass>forEach(_values, _function);
     final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
       public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
-        XConnection _xblockexpression = null;
-        {
-          final EReference reference = ((EReference) choiceInfo);
-          XConnection _xConnection = new XConnection(host, choice, reference);
-          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-            public void apply(final XConnection it) {
-              ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-              LineArrowHead _lineArrowHead = new LineArrowHead(it, 7, 10, _strokeProperty, false);
-              it.setTargetArrowHead(_lineArrowHead);
-              XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-              final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                public void apply(final XConnectionLabel it) {
-                  Text _text = it.getText();
-                  String _name = reference.getName();
-                  _text.setText(_name);
-                }
-              };
-              ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-            }
-          };
-          XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-          _xblockexpression = (_doubleArrow);
-        }
-        return _xblockexpression;
+        EClass _eClass = ((EClassNode) choice).getEClass();
+        String _key = AddESuperTypeRapidButtonBehavior.this.getKey(_eClass);
+        XConnection _xConnection = new XConnection(host, choice, _key);
+        final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+          public void apply(final XConnection it) {
+            ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
+            XDiagram _diagram = CoreExtensions.getDiagram(host);
+            ObjectProperty<Paint> _backgroundPaintProperty = _diagram.backgroundPaintProperty();
+            TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, _strokeProperty, _backgroundPaintProperty, false);
+            it.setTargetArrowHead(_triangleArrowHead);
+          }
+        };
+        XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+        return _doubleArrow;
       }
     };
     chooser.setConnectionProvider(_function_1);

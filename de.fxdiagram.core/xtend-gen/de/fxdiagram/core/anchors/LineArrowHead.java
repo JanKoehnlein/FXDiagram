@@ -74,7 +74,7 @@ public class LineArrowHead extends ArrowHead {
   }
   
   public LineArrowHead(final XConnection connection, final boolean isSource) {
-    this(connection, 8, 15, new Function0<Property<Paint>>() {
+    this(connection, 7, 10, new Function0<Property<Paint>>() {
       public Property<Paint> apply() {
         ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
         return _strokeProperty;

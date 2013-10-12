@@ -282,13 +282,14 @@ public class Layouter {
           EList<KGraphData> _data = kEdge.getData();
           _data.add(edgeLayout);
           cache.put(it, kEdge);
-          XConnectionLabel _label = it.getLabel();
-          boolean _notEquals = (!Objects.equal(_label, null));
-          if (_notEquals) {
-            XConnectionLabel _label_1 = it.getLabel();
-            KLabel _kLabel = this.toKLabel(_label_1, cache);
-            _kLabel.setParent(kEdge);
-          }
+          ObservableList<XConnectionLabel> _labels = it.getLabels();
+          final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+            public void apply(final XConnectionLabel it) {
+              KLabel _kLabel = Layouter.this.toKLabel(it, cache);
+              _kLabel.setParent(kEdge);
+            }
+          };
+          IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
           _xblockexpression_1 = (kEdge);
         }
         _xifexpression = _xblockexpression_1;

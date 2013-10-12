@@ -185,10 +185,11 @@ public class LcarsField extends Parent {
                         if (!_equals) {
                           _and = false;
                         } else {
-                          XConnectionLabel _label = it.getLabel();
+                          ObservableList<XConnectionLabel> _labels = it.getLabels();
+                          XConnectionLabel _head = IterableExtensions.<XConnectionLabel>head(_labels);
                           Text _text = null;
-                          if (_label!=null) {
-                            _text=_label.getText();
+                          if (_head!=null) {
+                            _text=_head.getText();
                           }
                           String _text_1 = null;
                           if (_text!=null) {
@@ -216,10 +217,11 @@ public class LcarsField extends Parent {
                         if (!_equals) {
                           _and = false;
                         } else {
-                          XConnectionLabel _label = it.getLabel();
+                          ObservableList<XConnectionLabel> _labels = it.getLabels();
+                          XConnectionLabel _head = IterableExtensions.<XConnectionLabel>head(_labels);
                           Text _text = null;
-                          if (_label!=null) {
-                            _text=_label.getText();
+                          if (_head!=null) {
+                            _text=_head.getText();
                           }
                           String _text_1 = null;
                           if (_text!=null) {
