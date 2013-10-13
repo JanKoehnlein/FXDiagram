@@ -116,7 +116,7 @@ class Main extends Application {
 				layoutY = 200
 			]
 
-			nodes += new RecursiveImageNode(ImageCache.get.getImage(this, 'media/seltsam.jpg'), 10, 0, 0.3) => [
+			nodes += new RecursiveImageNode(ImageCache.get.getImage(this, 'media/laptop.jpg'), 0, -6, 0.6) => [
 				width = 120
 				height = 90
 			]

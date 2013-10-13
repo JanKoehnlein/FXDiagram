@@ -197,8 +197,9 @@ public class Main extends Application {
           _nodes_4.add(_doubleArrow_4);
           ObservableList<XNode> _nodes_5 = it.getNodes();
           ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(Main.this, "media/seltsam.jpg");
-          RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_image, 10, 0, 0.3);
+          Image _image = _get.getImage(Main.this, "media/laptop.jpg");
+          int _minus = (-6);
+          RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_image, 0, _minus, 0.6);
           final Procedure1<RecursiveImageNode> _function_8 = new Procedure1<RecursiveImageNode>() {
             public void apply(final RecursiveImageNode it) {
               it.setWidth(120);

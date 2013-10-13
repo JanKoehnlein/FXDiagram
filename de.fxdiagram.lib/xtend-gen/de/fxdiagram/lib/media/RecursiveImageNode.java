@@ -109,7 +109,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
           double _multiply_7 = (_multiply_6 * _divide_3);
           final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(RecursiveImageNode.this, _multiply_3, _multiply_7);
           XRoot _root = CoreExtensions.getRoot(RecursiveImageNode.this);
-          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, centerInDiagram, 10000);
+          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, centerInDiagram, 500);
           final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
             public void apply(final ScrollToAndScaleTransition it) {
               Duration _seconds = Duration.seconds(5);
