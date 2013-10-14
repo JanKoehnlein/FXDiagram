@@ -288,11 +288,6 @@ public class LcarsNode extends XNode {
         };
         RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
         _children_1.add(_doubleArrow_1);
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("Click on a property to connect with equivalents,");
-        _builder.newLine();
-        _builder.append("Right-click to add new equivalents.");
-        TooltipExtensions.setTooltip(it, _builder.toString());
       }
     };
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
@@ -667,6 +662,11 @@ public class LcarsNode extends XNode {
     this.showPage(_next);
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty_1 = this.infoBox.boundsInLocalProperty();
     _boundsInLocalProperty_1.addListener(this.nameShortener);
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Click on a property to connect with equivalents,");
+    _builder.newLine();
+    _builder.append("Right-click to add new equivalents.");
+    TooltipExtensions.setTooltip(this, _builder.toString());
   }
   
   protected void invertColors(final RectangleBorderPane box) {

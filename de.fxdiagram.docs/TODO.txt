@@ -1,7 +1,6 @@
 TODO
 - rearrange demo diagram
 - LCARS use keys to prohibit duplicate edges
-- fix gesture bug
 
 ENHANCEMENT
 - eOpposite aware key in Ecore
@@ -18,9 +17,10 @@ ENHANCEMENT
 MINOR
 - SVG export: arc size
 - can't set size of browser node
-- different anchors for faces of flipNodes 
+- allow different anchors for faces of flipNodes 
  
 DONE 
+- fix gesture bug
 - find better recursive image
 - LCARS refactor choosers to use keys
 - multiple connection labels

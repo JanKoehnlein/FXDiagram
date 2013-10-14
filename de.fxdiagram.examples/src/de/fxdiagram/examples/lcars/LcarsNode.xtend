@@ -130,9 +130,6 @@ class LcarsNode extends XNode {
 					heightProperty.bind(vbox.heightProperty)
 				]
 			]
-			tooltip = '''
-				Click on a property to connect with equivalents,
-				Right-click to add new equivalents.'''
 		]
 		key = name
 		nameShortener = [ 
@@ -298,6 +295,10 @@ class LcarsNode extends XNode {
 		]
 		showPage(pages.keySet.iterator.next)
 		infoBox.boundsInLocalProperty.addListener(nameShortener) 
+		tooltip = '''
+			Click on a property to connect with equivalents,
+			Right-click to add new equivalents.'''
+		
 	}
 	
 	protected def invertColors(RectangleBorderPane box) {

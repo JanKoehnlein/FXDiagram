@@ -3,6 +3,7 @@ package de.fxdiagram.examples.lcars
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.core.tools.ChooserConnectionProvider
 import de.fxdiagram.core.tools.actions.LayoutAction
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import javafx.animation.KeyFrame
@@ -20,7 +21,6 @@ import javafx.scene.text.Text
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.examples.lcars.LcarsExtensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.tools.ChooserConnectionProvider
 
 class LcarsField extends Parent {
 
