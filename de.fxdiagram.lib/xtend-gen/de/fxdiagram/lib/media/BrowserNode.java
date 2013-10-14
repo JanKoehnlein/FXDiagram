@@ -2,6 +2,7 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -10,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
@@ -41,8 +41,7 @@ public class BrowserNode extends XNode {
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
-            Tooltip _tooltip = new Tooltip("Double-click to browse");
-            Tooltip.install(it, _tooltip);
+            TooltipExtensions.setTooltip(it, "Double-click to browse");
           }
         };
         RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
@@ -50,8 +49,7 @@ public class BrowserNode extends XNode {
         WebView _webView = new WebView();
         final Procedure1<WebView> _function_1 = new Procedure1<WebView>() {
           public void apply(final WebView it) {
-            Tooltip _tooltip = new Tooltip("Double-click to close");
-            Tooltip.install(it, _tooltip);
+            TooltipExtensions.setTooltip(it, "Double-click to close");
           }
         };
         WebView _doubleArrow_1 = ObjectExtensions.<WebView>operator_doubleArrow(_webView, _function_1);

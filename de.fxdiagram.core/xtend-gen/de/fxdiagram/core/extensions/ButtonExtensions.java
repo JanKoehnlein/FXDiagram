@@ -1,8 +1,8 @@
 package de.fxdiagram.core.extensions;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.extensions.TooltipExtensions;
 import javafx.geometry.Side;
-import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeLineCap;
@@ -45,8 +45,7 @@ public class ButtonExtensions {
         it.setFill(Color.WHITE);
         it.setStroke(Color.DARKGREEN);
         it.setStrokeWidth(3.5);
-        Tooltip _tooltip = new Tooltip(tooltip);
-        Tooltip.install(it, _tooltip);
+        TooltipExtensions.setTooltip(it, tooltip);
       }
     };
     SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
@@ -87,8 +86,7 @@ public class ButtonExtensions {
         it.setFill(Color.DARKGREEN);
         it.setStroke(Color.DARKGREEN);
         it.setStrokeWidth(3.5);
-        Tooltip _tooltip = new Tooltip(tooltip);
-        Tooltip.install(it, _tooltip);
+        TooltipExtensions.setTooltip(it, tooltip);
       }
     };
     SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
@@ -130,8 +128,7 @@ public class ButtonExtensions {
         it.setFill(Color.TRANSPARENT);
         it.setStrokeWidth(3.5);
         it.setStrokeLineCap(StrokeLineCap.ROUND);
-        Tooltip _tooltip = new Tooltip(tooltip);
-        Tooltip.install(it, _tooltip);
+        TooltipExtensions.setTooltip(it, tooltip);
       }
     };
     SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);

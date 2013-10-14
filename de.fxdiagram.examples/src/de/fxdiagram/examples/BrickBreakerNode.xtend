@@ -1,7 +1,6 @@
 package de.fxdiagram.examples
 
 import brickbreaker.Config
-import brickbreaker.Main
 import brickbreaker.Main.MainFrame
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.nodes.FlipNode
@@ -14,7 +13,7 @@ import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
-import javafx.scene.control.Tooltip
+import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 class BrickBreakerNode extends XNode {
 
@@ -27,7 +26,7 @@ class BrickBreakerNode extends XNode {
 					textOrigin = VPos.TOP
 					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				]
-				Tooltip.install(it, new Tooltip('Double-click to play'))
+				tooltip = 'Double-click to play'
 			]
 			back = new Group => [
 				children += new Group => [
@@ -50,11 +49,11 @@ class BrickBreakerNode extends XNode {
 		]
 
 		// some reflection hassle to deal with private members 
-		val main = new Main
-		val constructor = MainFrame.getDeclaredConstructor(Main, Group)
+		val main = new brickbreaker.Main
+		val constructor = MainFrame.getDeclaredConstructor(brickbreaker.Main, Group)
 		constructor.accessible = true
 		val mainFrame = constructor.newInstance(main, root)
-		val mainFrameField = Main.declaredFields.filter[name == "mainFrame"].head
+		val mainFrameField = brickbreaker.Main.declaredFields.filter[name == "mainFrame"].head
 		mainFrameField.accessible = true
 		mainFrameField.set(main, mainFrame)
 		mainFrame.changeState(MainFrame.SPLASH)

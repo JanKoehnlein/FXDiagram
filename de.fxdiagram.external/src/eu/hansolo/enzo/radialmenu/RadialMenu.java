@@ -42,6 +42,7 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
@@ -273,6 +274,7 @@ public class RadialMenu extends Pane {
 
 			// Add items and nodes to map
 			itemMap.put(NODE, item);
+			Tooltip.install(NODE, new Tooltip(item.getTooltip()));
 		}
 		items.putAll(itemMap);
 	}

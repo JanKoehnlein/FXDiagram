@@ -19,8 +19,8 @@ import javafx.scene.shape.StrokeType
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
-import javafx.scene.control.Tooltip
 
 class RecursiveImageNode extends XNode implements SvgExportable {
 
@@ -43,7 +43,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		node = createPane => [
 			children += pivot
 		]
-		Tooltip.install(this, new Tooltip('Double-click to zoom in'))
+		tooltip = 'Double-click to zoom in'
 	}
 
 	override doActivate() {

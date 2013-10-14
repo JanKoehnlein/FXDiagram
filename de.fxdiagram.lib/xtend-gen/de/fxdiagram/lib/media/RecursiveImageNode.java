@@ -5,6 +5,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.media.FirstRecursiveImageNode;
 import javafx.animation.Interpolator;
@@ -21,7 +22,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -67,8 +67,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     };
     Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
     this.setNode(_doubleArrow);
-    Tooltip _tooltip = new Tooltip("Double-click to zoom in");
-    Tooltip.install(this, _tooltip);
+    TooltipExtensions.setTooltip(this, "Double-click to zoom in");
   }
   
   public void doActivate() {

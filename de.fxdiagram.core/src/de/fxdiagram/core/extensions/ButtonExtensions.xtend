@@ -1,10 +1,11 @@
 package de.fxdiagram.core.extensions
 
 import javafx.geometry.Side
-import javafx.scene.control.Tooltip
 import javafx.scene.paint.Color
 import javafx.scene.shape.SVGPath
 import javafx.scene.shape.StrokeLineCap
+
+import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 class ButtonExtensions {
 	
@@ -19,7 +20,7 @@ class ButtonExtensions {
 			fill = Color.WHITE
 			stroke = Color.DARKGREEN
 			strokeWidth = 3.5
-			Tooltip.install(it, new Tooltip(tooltip))
+			it.tooltip = tooltip
 		]
 	}
 	
@@ -34,7 +35,7 @@ class ButtonExtensions {
 			fill = Color.DARKGREEN
 			stroke = Color.DARKGREEN
 			strokeWidth = 3.5
-			Tooltip.install(it, new Tooltip(tooltip))
+			it.tooltip = tooltip
 		]
 	}
 	
@@ -50,7 +51,7 @@ class ButtonExtensions {
 			fill = Color.TRANSPARENT
 			strokeWidth = 3.5
 			strokeLineCap = StrokeLineCap.ROUND
-			Tooltip.install(it, new Tooltip(tooltip))
+			it.tooltip = tooltip
 		]
 	}
 }

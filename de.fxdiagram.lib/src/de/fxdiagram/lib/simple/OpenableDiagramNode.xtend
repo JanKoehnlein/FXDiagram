@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.simple
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
@@ -25,11 +26,10 @@ import javafx.util.Duration
 
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.annotations.logging.Logging
-import javafx.scene.control.Tooltip
+import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @Logging
 class OpenableDiagramNode extends XNode {
@@ -56,10 +56,10 @@ class OpenableDiagramNode extends XNode {
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
+			tooltip = "Double-click to open"
 		]
 		key = name
 		cursor = Cursor.HAND
-		Tooltip.install(this, new Tooltip("Double-click to open"))
 	}
 	
 	def setInnerDiagram(XDiagram nestedDiagram) {
@@ -120,7 +120,7 @@ class OpenableDiagramNode extends XNode {
 								root.headsUpDisplay.children -= target as Node
 								closeDiagram(targetInDiagram)
 							]
-							Tooltip.install(it, new Tooltip("Parent diagram"))
+							tooltip = "Parent diagram"
 						], Pos.TOP_RIGHT)
 				]
 			]

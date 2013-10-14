@@ -10,6 +10,7 @@ import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
+import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -35,7 +36,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -108,6 +108,7 @@ public class OpenableDiagramNode extends XNode {
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
         Text _textNode = OpenableDiagramNode.this.textNode = _doubleArrow;
         _children.add(_textNode);
+        TooltipExtensions.setTooltip(it, "Double-click to open");
       }
     };
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
@@ -115,8 +116,6 @@ public class OpenableDiagramNode extends XNode {
     this.setNode(_pane);
     this.setKey(name);
     this.setCursor(Cursor.HAND);
-    Tooltip _tooltip = new Tooltip("Double-click to open");
-    Tooltip.install(this, _tooltip);
   }
   
   public XDiagram setInnerDiagram(final XDiagram nestedDiagram) {
@@ -237,8 +236,7 @@ public class OpenableDiagramNode extends XNode {
                         }
                       };
                       it.setOnMouseClicked(_function);
-                      Tooltip _tooltip = new Tooltip("Parent diagram");
-                      Tooltip.install(it, _tooltip);
+                      TooltipExtensions.setTooltip(it, "Parent diagram");
                     }
                   };
                   Canvas _doubleArrow = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);

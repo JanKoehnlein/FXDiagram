@@ -6,6 +6,7 @@ import brickbreaker.Main.MainFrame;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
+import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.lang.reflect.Constructor;
@@ -17,7 +18,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -50,8 +50,7 @@ public class BrickBreakerNode extends XNode {
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
-            Tooltip _tooltip = new Tooltip("Double-click to play");
-            Tooltip.install(it, _tooltip);
+            TooltipExtensions.setTooltip(it, "Double-click to play");
           }
         };
         RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);

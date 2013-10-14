@@ -94,7 +94,6 @@ class MenuTool implements XDiagramTool {
 				map [ s |
 					new MenuItem => [
 						symbol = s
-						tooltip = s.toString.toLowerCase.toFirstUpper
 						size = 64
 					]
 				])

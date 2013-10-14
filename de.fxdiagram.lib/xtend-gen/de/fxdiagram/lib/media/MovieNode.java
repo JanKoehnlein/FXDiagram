@@ -2,6 +2,7 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
@@ -23,7 +24,6 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -69,8 +69,7 @@ public class MovieNode extends XNode {
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
-            Tooltip _tooltip = new Tooltip("Double-click to watch");
-            Tooltip.install(it, _tooltip);
+            TooltipExtensions.setTooltip(it, "Double-click to watch");
           }
         };
         RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
@@ -130,8 +129,7 @@ public class MovieNode extends XNode {
             };
             Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_2);
             _children_1.add(_doubleArrow);
-            Tooltip _tooltip = new Tooltip("Double-click to close");
-            Tooltip.install(it, _tooltip);
+            TooltipExtensions.setTooltip(it, "Double-click to close");
           }
         };
         RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane_1, _function_1);

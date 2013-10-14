@@ -9,6 +9,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
+import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsField;
@@ -39,7 +40,6 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -288,6 +288,11 @@ public class LcarsNode extends XNode {
         };
         RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
         _children_1.add(_doubleArrow_1);
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("Click on a property to connect with equivalents,");
+        _builder.newLine();
+        _builder.append("Right-click to add new equivalents.");
+        TooltipExtensions.setTooltip(it, _builder.toString());
       }
     };
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
@@ -662,13 +667,6 @@ public class LcarsNode extends XNode {
     this.showPage(_next);
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty_1 = this.infoBox.boundsInLocalProperty();
     _boundsInLocalProperty_1.addListener(this.nameShortener);
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("Click on a property to connect with equivalents,");
-    _builder.newLine();
-    _builder.append("Right-click to add new equivalents.");
-    _builder.newLine();
-    Tooltip _tooltip = new Tooltip(_builder.toString());
-    Tooltip.install(this, _tooltip);
   }
   
   protected void invertColors(final RectangleBorderPane box) {

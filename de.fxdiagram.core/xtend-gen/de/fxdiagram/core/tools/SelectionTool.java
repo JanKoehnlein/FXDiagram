@@ -1,6 +1,7 @@
 package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
@@ -11,6 +12,7 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
+import de.fxdiagram.core.extensions.SoftTooltip;
 import de.fxdiagram.core.extensions.TimerExtensions;
 import de.fxdiagram.core.tools.XDiagramTool;
 import java.util.Collection;
@@ -21,12 +23,9 @@ import javafx.event.EventTarget;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Window;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
@@ -44,7 +43,7 @@ public class SelectionTool implements XDiagramTool {
   
   private EventHandler<MouseEvent> mouseReleasedHandler;
   
-  private Tooltip positionTip;
+  private SoftTooltip positionTip;
   
   public SelectionTool(final XRoot root) {
     this.root = root;
@@ -145,9 +144,9 @@ public class SelectionTool implements XDiagramTool {
               if (_moveBehavior!=null) {
                 _moveBehavior.mousePressed(event);
               }
-              double _screenX = event.getScreenX();
-              double _screenY = event.getScreenY();
-              SelectionTool.this.updatePositionTooltip(selection, _screenX, _screenY);
+              double _sceneX = event.getSceneX();
+              double _sceneY = event.getSceneY();
+              SelectionTool.this.updatePositionTooltip(selection, _sceneX, _sceneY);
               final Runnable _function_4 = new Runnable() {
                 public void run() {
                   SelectionTool.this.showPositionTooltip();
@@ -178,9 +177,9 @@ public class SelectionTool implements XDiagramTool {
         if (_auxiliaryLinesSupport!=null) {
           _auxiliaryLinesSupport.show(selection);
         }
-        double _screenX = it.getScreenX();
-        double _screenY = it.getScreenY();
-        SelectionTool.this.updatePositionTooltip(selection, _screenX, _screenY);
+        double _sceneX = it.getSceneX();
+        double _sceneY = it.getSceneY();
+        SelectionTool.this.updatePositionTooltip(selection, _sceneX, _sceneY);
         SelectionTool.this.showPositionTooltip();
         it.consume();
       }
@@ -217,26 +216,25 @@ public class SelectionTool implements XDiagramTool {
     Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
     boolean _notEquals = (!Objects.equal(selectionBounds, null));
     if (_notEquals) {
-      Tooltip _elvis = null;
-      if (this.positionTip != null) {
-        _elvis = this.positionTip;
-      } else {
-        Tooltip _tooltip = new Tooltip();
-        _elvis = ObjectExtensions.<Tooltip>operator_elvis(this.positionTip, _tooltip);
-      }
-      this.positionTip = _elvis;
       double _minX = selectionBounds.getMinX();
       double _minY = selectionBounds.getMinY();
       final String positionString = String.format("(%.3f : %.3f)", Double.valueOf(_minX), Double.valueOf(_minY));
+      SoftTooltip _elvis = null;
+      if (this.positionTip != null) {
+        _elvis = this.positionTip;
+      } else {
+        HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
+        SoftTooltip _softTooltip = new SoftTooltip(_headsUpDisplay, positionString);
+        _elvis = ObjectExtensions.<SoftTooltip>operator_elvis(this.positionTip, _softTooltip);
+      }
+      this.positionTip = _elvis;
+      this.positionTip.setReferencePosition(screenX, screenY);
       this.positionTip.setText(positionString);
-      double _plus = (screenX + 10);
-      this.positionTip.setX(_plus);
-      double _minus = (screenY - 40);
-      this.positionTip.setY(_minus);
     }
   }
   
-  protected void showPositionTooltip() {
+  protected Boolean showPositionTooltip() {
+    Boolean _xifexpression = null;
     boolean _and = false;
     boolean _notEquals = (!Objects.equal(this.positionTip, null));
     if (!_notEquals) {
@@ -247,14 +245,14 @@ public class SelectionTool implements XDiagramTool {
       _and = (_notEquals && _not);
     }
     if (_and) {
-      Scene _scene = this.root.getScene();
-      Window _window = _scene.getWindow();
-      this.positionTip.show(_window);
+      boolean _show = this.positionTip.show();
+      _xifexpression = Boolean.valueOf(_show);
     }
+    return _xifexpression;
   }
   
-  protected Tooltip hidePositionTooltip() {
-    Tooltip _xblockexpression = null;
+  protected SoftTooltip hidePositionTooltip() {
+    SoftTooltip _xblockexpression = null;
     {
       boolean _isShowing = false;
       if (this.positionTip!=null) {
@@ -263,7 +261,7 @@ public class SelectionTool implements XDiagramTool {
       if (_isShowing) {
         this.positionTip.hide();
       }
-      Tooltip _positionTip = this.positionTip = null;
+      SoftTooltip _positionTip = this.positionTip = null;
       _xblockexpression = (_positionTip);
     }
     return _xblockexpression;

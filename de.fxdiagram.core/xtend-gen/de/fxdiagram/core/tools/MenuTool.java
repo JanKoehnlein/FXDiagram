@@ -41,7 +41,6 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @Logging
 @SuppressWarnings("all")
@@ -203,10 +202,6 @@ public class MenuTool implements XDiagramTool {
         final Procedure1<MenuItem> _function = new Procedure1<MenuItem>() {
           public void apply(final MenuItem it) {
             it.setSymbol(s);
-            String _string = s.toString();
-            String _lowerCase = _string.toLowerCase();
-            String _firstUpper = StringExtensions.toFirstUpper(_lowerCase);
-            it.setTooltip(_firstUpper);
             it.setSize(64);
           }
         };

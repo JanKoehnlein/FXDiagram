@@ -1,11 +1,13 @@
 package de.fxdiagram.lib.media;
 
-import de.fxdiagram.core.XNode;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
+import de.fxdiagram.core.XNode;
 
 @SuppressWarnings("all")
 public class ImageNode extends XNode {

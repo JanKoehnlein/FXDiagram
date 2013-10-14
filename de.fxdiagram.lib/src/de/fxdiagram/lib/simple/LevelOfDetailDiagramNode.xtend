@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.simple
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
@@ -12,8 +13,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.annotations.logging.Logging
-import javafx.scene.control.Tooltip
+import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @Logging
 class LevelOfDetailDiagramNode extends XNode {
@@ -36,8 +36,8 @@ class LevelOfDetailDiagramNode extends XNode {
 				text = name
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-				Tooltip.install(this, new Tooltip("Zoom to reveal content"))
 			]
+			tooltip = "Zoom to reveal content"
 		]
 	}
 	
