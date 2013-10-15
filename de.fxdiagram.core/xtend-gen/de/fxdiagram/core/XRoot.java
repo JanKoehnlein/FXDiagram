@@ -91,72 +91,69 @@ public class XRoot extends Parent implements XActivatable {
     this.tools.add(this.defaultTool);
   }
   
-  public boolean setDiagram(final XDiagram newDiagram) {
-    boolean _xblockexpression = false;
-    {
-      XDiagram _diagram = this.getDiagram();
-      boolean _notEquals = (!Objects.equal(_diagram, null));
-      if (_notEquals) {
-        ObservableList<Node> _children = this.diagramCanvas.getChildren();
-        XDiagram _diagram_1 = this.getDiagram();
-        _children.remove(_diagram_1);
-      }
-      this.diagramProperty.set(newDiagram);
-      ObservableList<Node> _children_1 = this.diagramCanvas.getChildren();
-      XDiagram _diagram_2 = this.getDiagram();
-      _children_1.add(_diagram_2);
-      boolean _isActive = this.getIsActive();
-      if (_isActive) {
-        newDiagram.activate();
-      }
-      Affine _affine = new Affine();
-      this.diagramTransform = _affine;
-      XDiagram _diagram_3 = this.getDiagram();
-      ObservableList<Transform> _transforms = _diagram_3.getTransforms();
-      boolean _isEmpty = _transforms.isEmpty();
-      if (_isEmpty) {
-        this.centerDiagram();
-      } else {
-        XDiagram _diagram_4 = this.getDiagram();
-        ObservableList<Transform> _transforms_1 = _diagram_4.getTransforms();
-        final Procedure1<Transform> _function = new Procedure1<Transform>() {
-          public void apply(final Transform it) {
-            TransformExtensions.leftMultiply(XRoot.this.diagramTransform, it);
-          }
-        };
-        IterableExtensions.<Transform>forEach(_transforms_1, _function);
-        double _mxx = this.diagramTransform.getMxx();
-        double _mxx_1 = this.diagramTransform.getMxx();
-        double _multiply = (_mxx * _mxx_1);
-        double _mxy = this.diagramTransform.getMxy();
-        double _mxy_1 = this.diagramTransform.getMxy();
-        double _multiply_1 = (_mxy * _mxy_1);
-        double _plus = (_multiply + _multiply_1);
-        double _sqrt = Math.sqrt(_plus);
-        this.setDiagramScale(_sqrt);
-      }
-      StringConcatenation _builder = new StringConcatenation();
-      _builder.append("-fx-background-color: ");
-      XDiagram _diagram_5 = this.getDiagram();
-      Paint _backgroundPaint = _diagram_5.getBackgroundPaint();
-      CharSequence _css = JavaToCss.toCss(_backgroundPaint);
-      _builder.append(_css, "");
-      _builder.append(";");
-      _builder.newLineIfNotEmpty();
-      _builder.append("-fx-text-fill: ");
-      XDiagram _diagram_6 = this.getDiagram();
-      Paint _foregroundPaint = _diagram_6.getForegroundPaint();
-      CharSequence _css_1 = JavaToCss.toCss(_foregroundPaint);
-      _builder.append(_css_1, "");
-      _builder.append(";");
-      _builder.newLineIfNotEmpty();
-      this.diagramCanvas.setStyle(_builder.toString());
-      XDiagram _diagram_7 = this.getDiagram();
-      ObservableList<Transform> _transforms_2 = _diagram_7.getTransforms();
-      boolean _setAll = _transforms_2.setAll(this.diagramTransform);
-      _xblockexpression = (_setAll);
+  public void setDiagram(final XDiagram newDiagram) {
+    XDiagram _diagram = this.getDiagram();
+    boolean _notEquals = (!Objects.equal(_diagram, null));
+    if (_notEquals) {
+      ObservableList<Node> _children = this.diagramCanvas.getChildren();
+      XDiagram _diagram_1 = this.getDiagram();
+      _children.remove(_diagram_1);
     }
-    return _xblockexpression;
+    this.diagramProperty.set(newDiagram);
+    ObservableList<Node> _children_1 = this.diagramCanvas.getChildren();
+    XDiagram _diagram_2 = this.getDiagram();
+    _children_1.add(_diagram_2);
+    boolean _isActive = this.getIsActive();
+    if (_isActive) {
+      newDiagram.activate();
+    }
+    Affine _affine = new Affine();
+    this.diagramTransform = _affine;
+    XDiagram _diagram_3 = this.getDiagram();
+    ObservableList<Transform> _transforms = _diagram_3.getTransforms();
+    boolean _isEmpty = _transforms.isEmpty();
+    if (_isEmpty) {
+      this.centerDiagram();
+    } else {
+      XDiagram _diagram_4 = this.getDiagram();
+      ObservableList<Transform> _transforms_1 = _diagram_4.getTransforms();
+      final Procedure1<Transform> _function = new Procedure1<Transform>() {
+        public void apply(final Transform it) {
+          TransformExtensions.leftMultiply(XRoot.this.diagramTransform, it);
+        }
+      };
+      IterableExtensions.<Transform>forEach(_transforms_1, _function);
+      double _mxx = this.diagramTransform.getMxx();
+      double _mxx_1 = this.diagramTransform.getMxx();
+      double _multiply = (_mxx * _mxx_1);
+      double _mxy = this.diagramTransform.getMxy();
+      double _mxy_1 = this.diagramTransform.getMxy();
+      double _multiply_1 = (_mxy * _mxy_1);
+      double _plus = (_multiply + _multiply_1);
+      double _sqrt = Math.sqrt(_plus);
+      this.setDiagramScale(_sqrt);
+    }
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("-fx-background-color: ");
+    XDiagram _diagram_5 = this.getDiagram();
+    Paint _backgroundPaint = _diagram_5.getBackgroundPaint();
+    CharSequence _css = JavaToCss.toCss(_backgroundPaint);
+    _builder.append(_css, "");
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    _builder.append("-fx-text-fill: ");
+    XDiagram _diagram_6 = this.getDiagram();
+    Paint _foregroundPaint = _diagram_6.getForegroundPaint();
+    CharSequence _css_1 = JavaToCss.toCss(_foregroundPaint);
+    _builder.append(_css_1, "");
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    this.diagramCanvas.setStyle(_builder.toString());
+    XDiagram _diagram_7 = this.getDiagram();
+    ObservableList<Transform> _transforms_2 = _diagram_7.getTransforms();
+    _transforms_2.setAll(this.diagramTransform);
+    ObservableList<Node> _children_2 = this.headsUpDisplay.getChildren();
+    _children_2.clear();
   }
   
   public void centerDiagram() {

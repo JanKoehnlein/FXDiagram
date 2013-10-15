@@ -1,8 +1,11 @@
 package de.fxdiagram.core.extensions
 
+import de.fxdiagram.annotations.properties.FxProperty
 import javafx.application.Platform
+import javafx.beans.property.StringProperty
 import javafx.geometry.Insets
 import javafx.scene.Node
+import javafx.scene.control.Tooltip
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
@@ -11,9 +14,6 @@ import javafx.util.Duration
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension javafx.scene.layout.StackPane.*
-import javafx.beans.property.StringProperty
-import de.fxdiagram.annotations.properties.FxProperty
-import javafx.scene.Parent
 
 class TooltipExtensions {
 	static def setTooltip(Node host, String text) {
@@ -34,7 +34,7 @@ class SoftTooltip {
 	Node tooltip 
 	TooltipTimer timer
 	
-	boolean canceled = false
+	boolean isHideOnTrigger = false
 	boolean isShowing
 	
 	new(Node host, String text) {
@@ -52,30 +52,34 @@ class SoftTooltip {
 			]
 			mouseTransparent = true
 		]
+		this.timer = new TooltipTimer(this)
 	}
 
-	protected def void install(Node currentHost) {
-		currentHost.addEventHandler(MouseEvent.ANY, [
+	protected def void install(Node host) {
+		host.addEventHandler(MouseEvent.ANY, [
 			switch eventType {
-				case MouseEvent.MOUSE_ENTERED: {
+				case MouseEvent.MOUSE_ENTERED_TARGET: {
+					isHideOnTrigger = false
 					setReferencePosition(sceneX, sceneY)
-					timer = new TooltipTimer(this)
+					timer?.restart
+				}
+				case MouseEvent.MOUSE_EXITED_TARGET: {
+				}
+				case MouseEvent.MOUSE_ENTERED: {
+					isHideOnTrigger = false
+					setReferencePosition(sceneX, sceneY)
+					timer?.restart
 				}
 				case MouseEvent.MOUSE_MOVED: {
 					setReferencePosition(sceneX, sceneY)
 					timer?.restart
 				}
 				default: {
-					timer?.stop
-					timer = null
-					hide
-					canceled = eventType != MouseEvent.MOUSE_EXITED
+					isHideOnTrigger = true
+					timer?.restart
 				}
 			}			
 		])
-		switch currentHost {
-			Parent: currentHost.childrenUnmodifiable.forEach[install] 
-		}
 	}
 	
 	def getText() {
@@ -106,15 +110,22 @@ class SoftTooltip {
 		show()
 	}
 
-	def show() {
-		if(host != null && !isShowing)
-			host.root.headsUpDisplay.children += tooltip
-		isShowing = true
+	def trigger() {
+		if(isHideOnTrigger)
+			hide
+		else 
+			show
 	}
 
+	def show() {
+		if(!isShowing)
+			host?.root?.headsUpDisplay?.children?.add(tooltip)
+		isShowing = true
+	}
+	
 	def hide() {
-		if(host != null && isShowing)
-			host.root.getHeadsUpDisplay.children -= tooltip
+		if(isShowing)
+			host?.root?.headsUpDisplay?.children?.remove(tooltip)
 		isShowing = false
 	}
 }
@@ -126,9 +137,7 @@ class TooltipTimer implements Runnable {
 	
 	new(SoftTooltip behavior) {
 		this.tooltip = behavior
-		new Thread(this).start
-		isRunning = true
-		restart 
+		isRunning = false
 	}
 	
 	def stop() {
@@ -136,6 +145,10 @@ class TooltipTimer implements Runnable {
 	}
 	
 	def restart() {
+		if(!isRunning) {
+			isRunning = true
+			new Thread(this).start
+		}
 		endTime = System.currentTimeMillis + (tooltip.delay.toMillis as long) 
 	}
 	
@@ -147,8 +160,9 @@ class TooltipTimer implements Runnable {
 				return;
 			delay = endTime - System.currentTimeMillis
 		} while(delay > 0)
-		if(isRunning)
-			Platform.runLater[| tooltip.show]	
+		if(isRunning) 
+			Platform.runLater[| tooltip.trigger]	
+		isRunning = false
 	}
 }
 

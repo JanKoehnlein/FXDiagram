@@ -13,4 +13,5 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="de.fxdiagram.examples.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="de.fxdiagram.examples"/>
+<stringAttribute key="yk-options" value="&#10;additional-options2=onexit\=snapshot&#10;startup=0&#10;"/>
 </launchConfiguration>

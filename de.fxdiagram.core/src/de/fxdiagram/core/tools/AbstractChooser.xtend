@@ -38,7 +38,7 @@ abstract class AbstractChooser implements XDiagramTool {
 
 	@FxProperty String filterString = ''
 
-	@FxProperty double layoutDistance = 40
+	@FxProperty double layoutDistance = 60
 
 	DoubleProperty currentPositionProperty = new SimpleDoubleProperty(0.0)
 

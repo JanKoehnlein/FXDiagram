@@ -1073,7 +1073,7 @@ public abstract class AbstractChooser implements XDiagramTool {
   private SimpleDoubleProperty layoutDistanceProperty = new SimpleDoubleProperty(this, "layoutDistance",_initLayoutDistance());
   
   private static final double _initLayoutDistance() {
-    return 40;
+    return 60;
   }
   
   public double getLayoutDistance() {

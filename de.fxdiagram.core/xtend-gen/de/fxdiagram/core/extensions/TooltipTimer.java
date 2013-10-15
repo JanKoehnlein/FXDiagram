@@ -15,10 +15,7 @@ public class TooltipTimer implements Runnable {
   
   public TooltipTimer(final SoftTooltip behavior) {
     this.tooltip = behavior;
-    Thread _thread = new Thread(this);
-    _thread.start();
-    this.isRunning = true;
-    this.restart();
+    this.isRunning = false;
   }
   
   public boolean stop() {
@@ -27,12 +24,22 @@ public class TooltipTimer implements Runnable {
   }
   
   public long restart() {
-    long _currentTimeMillis = System.currentTimeMillis();
-    Duration _delay = this.tooltip.getDelay();
-    double _millis = _delay.toMillis();
-    long _plus = (_currentTimeMillis + ((long) _millis));
-    long _endTime = this.endTime = _plus;
-    return _endTime;
+    long _xblockexpression = (long) 0;
+    {
+      boolean _not = (!this.isRunning);
+      if (_not) {
+        this.isRunning = true;
+        Thread _thread = new Thread(this);
+        _thread.start();
+      }
+      long _currentTimeMillis = System.currentTimeMillis();
+      Duration _delay = this.tooltip.getDelay();
+      double _millis = _delay.toMillis();
+      long _plus = (_currentTimeMillis + ((long) _millis));
+      long _endTime = this.endTime = _plus;
+      _xblockexpression = (_endTime);
+    }
+    return _xblockexpression;
   }
   
   public void run() {
@@ -58,11 +65,12 @@ public class TooltipTimer implements Runnable {
       if (this.isRunning) {
         final Runnable _function = new Runnable() {
           public void run() {
-            TooltipTimer.this.tooltip.show();
+            TooltipTimer.this.tooltip.trigger();
           }
         };
         Platform.runLater(_function);
       }
+      this.isRunning = false;
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }

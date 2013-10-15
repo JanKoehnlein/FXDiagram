@@ -15,13 +15,12 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.eclipse.xtend2.lib.StringConcatenation;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -39,7 +38,7 @@ public class SoftTooltip {
   
   private TooltipTimer timer;
   
-  private boolean canceled = false;
+  private boolean isHideOnTrigger = false;
   
   private boolean isShowing;
   
@@ -74,27 +73,37 @@ public class SoftTooltip {
     };
     StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     this.tooltip = _doubleArrow;
+    TooltipTimer _tooltipTimer = new TooltipTimer(this);
+    this.timer = _tooltipTimer;
   }
   
-  protected void install(final Node currentHost) {
+  protected void install(final Node host) {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
         EventType<? extends Event> _eventType = it.getEventType();
         final EventType<? extends Event> getEventType = _eventType;
         boolean _matched = false;
         if (!_matched) {
-          if (Objects.equal(getEventType,MouseEvent.MOUSE_ENTERED)) {
+          if (Objects.equal(getEventType,MouseEvent.MOUSE_ENTERED_TARGET)) {
             _matched=true;
+            SoftTooltip.this.isHideOnTrigger = false;
             double _sceneX = it.getSceneX();
             double _sceneY = it.getSceneY();
             SoftTooltip.this.setReferencePosition(_sceneX, _sceneY);
-            TooltipTimer _tooltipTimer = new TooltipTimer(SoftTooltip.this);
-            SoftTooltip.this.timer = _tooltipTimer;
+            if (SoftTooltip.this.timer!=null) {
+              SoftTooltip.this.timer.restart();
+            }
           }
         }
         if (!_matched) {
-          if (Objects.equal(getEventType,MouseEvent.MOUSE_MOVED)) {
+          if (Objects.equal(getEventType,MouseEvent.MOUSE_EXITED_TARGET)) {
             _matched=true;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getEventType,MouseEvent.MOUSE_ENTERED)) {
+            _matched=true;
+            SoftTooltip.this.isHideOnTrigger = false;
             double _sceneX_1 = it.getSceneX();
             double _sceneY_1 = it.getSceneY();
             SoftTooltip.this.setReferencePosition(_sceneX_1, _sceneY_1);
@@ -104,33 +113,27 @@ public class SoftTooltip {
           }
         }
         if (!_matched) {
-          {
+          if (Objects.equal(getEventType,MouseEvent.MOUSE_MOVED)) {
+            _matched=true;
+            double _sceneX_2 = it.getSceneX();
+            double _sceneY_2 = it.getSceneY();
+            SoftTooltip.this.setReferencePosition(_sceneX_2, _sceneY_2);
             if (SoftTooltip.this.timer!=null) {
-              SoftTooltip.this.timer.stop();
+              SoftTooltip.this.timer.restart();
             }
-            SoftTooltip.this.timer = null;
-            SoftTooltip.this.hide();
-            EventType<? extends Event> _eventType_1 = it.getEventType();
-            boolean _notEquals = (!Objects.equal(_eventType_1, MouseEvent.MOUSE_EXITED));
-            SoftTooltip.this.canceled = _notEquals;
+          }
+        }
+        if (!_matched) {
+          {
+            SoftTooltip.this.isHideOnTrigger = true;
+            if (SoftTooltip.this.timer!=null) {
+              SoftTooltip.this.timer.restart();
+            }
           }
         }
       }
     };
-    currentHost.<MouseEvent>addEventHandler(MouseEvent.ANY, _function);
-    boolean _matched = false;
-    if (!_matched) {
-      if (currentHost instanceof Parent) {
-        _matched=true;
-        ObservableList<Node> _childrenUnmodifiable = ((Parent)currentHost).getChildrenUnmodifiable();
-        final Procedure1<Node> _function_1 = new Procedure1<Node>() {
-          public void apply(final Node it) {
-            SoftTooltip.this.install(it);
-          }
-        };
-        IterableExtensions.<Node>forEach(_childrenUnmodifiable, _function_1);
-      }
-    }
+    host.<MouseEvent>addEventHandler(MouseEvent.ANY, _function);
   }
   
   public String getText() {
@@ -175,22 +178,38 @@ public class SoftTooltip {
     return _xblockexpression;
   }
   
+  public boolean trigger() {
+    boolean _xifexpression = false;
+    if (this.isHideOnTrigger) {
+      boolean _hide = this.hide();
+      _xifexpression = _hide;
+    } else {
+      boolean _show = this.show();
+      _xifexpression = _show;
+    }
+    return _xifexpression;
+  }
+  
   public boolean show() {
     boolean _xblockexpression = false;
     {
-      boolean _and = false;
-      boolean _notEquals = (!Objects.equal(this.host, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        boolean _not = (!this.isShowing);
-        _and = (_notEquals && _not);
-      }
-      if (_and) {
-        XRoot _root = CoreExtensions.getRoot(this.host);
-        HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
-        ObservableList<Node> _children = _headsUpDisplay.getChildren();
-        _children.add(this.tooltip);
+      boolean _not = (!this.isShowing);
+      if (_not) {
+        XRoot _root = null;
+        if (this.host!=null) {
+          _root=CoreExtensions.getRoot(this.host);
+        }
+        HeadsUpDisplay _headsUpDisplay = null;
+        if (_root!=null) {
+          _headsUpDisplay=_root.getHeadsUpDisplay();
+        }
+        ObservableList<Node> _children = null;
+        if (_headsUpDisplay!=null) {
+          _children=_headsUpDisplay.getChildren();
+        }
+        if (_children!=null) {
+          _children.add(this.tooltip);
+        }
       }
       boolean _isShowing = this.isShowing = true;
       _xblockexpression = (_isShowing);
@@ -201,18 +220,22 @@ public class SoftTooltip {
   public boolean hide() {
     boolean _xblockexpression = false;
     {
-      boolean _and = false;
-      boolean _notEquals = (!Objects.equal(this.host, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        _and = (_notEquals && this.isShowing);
-      }
-      if (_and) {
-        XRoot _root = CoreExtensions.getRoot(this.host);
-        HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
-        ObservableList<Node> _children = _headsUpDisplay.getChildren();
-        _children.remove(this.tooltip);
+      if (this.isShowing) {
+        XRoot _root = null;
+        if (this.host!=null) {
+          _root=CoreExtensions.getRoot(this.host);
+        }
+        HeadsUpDisplay _headsUpDisplay = null;
+        if (_root!=null) {
+          _headsUpDisplay=_root.getHeadsUpDisplay();
+        }
+        ObservableList<Node> _children = null;
+        if (_headsUpDisplay!=null) {
+          _children=_headsUpDisplay.getChildren();
+        }
+        if (_children!=null) {
+          _children.remove(this.tooltip);
+        }
       }
       boolean _isShowing = this.isShowing = false;
       _xblockexpression = (_isShowing);

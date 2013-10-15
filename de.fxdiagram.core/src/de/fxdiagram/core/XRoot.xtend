@@ -79,6 +79,7 @@ class XRoot extends Parent implements XActivatable {
 			-fx-text-fill: «diagram.foregroundPaint.toCss»;
 		'''
 		diagram.transforms.setAll(diagramTransform)
+		headsUpDisplay.children.clear
 	}
 	
 	def centerDiagram() {
