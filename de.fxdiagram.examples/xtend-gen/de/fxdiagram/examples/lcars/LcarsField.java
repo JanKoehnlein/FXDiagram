@@ -15,20 +15,26 @@ import de.fxdiagram.core.tools.actions.LayoutAction;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsNode;
 import de.fxdiagram.examples.lcars.LcarsQueryTask;
+import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -43,6 +49,8 @@ public class LcarsField extends Parent {
   private FlowPane flowPane;
   
   private LcarsNode node;
+  
+  private Node queryProgress;
   
   public LcarsField(final LcarsNode node, final String name, final String value) {
     this.node = node;
@@ -127,7 +135,7 @@ public class LcarsField extends Parent {
           _children_1.add(_doubleArrow_1);
         }
         final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
-          public void handle(final MouseEvent it) {
+          public void handle(final MouseEvent event) {
             Iterable<Text> _allTextNodes = LcarsField.this.getAllTextNodes();
             final Procedure1<Text> _function = new Procedure1<Text>() {
               public void apply(final Text it) {
@@ -135,7 +143,13 @@ public class LcarsField extends Parent {
               }
             };
             IterableExtensions.<Text>forEach(_allTextNodes, _function);
-            MouseButton _button = it.getButton();
+            RectangleBorderPane _createQueryProgress = LcarsField.this.createQueryProgress();
+            LcarsField.this.queryProgress = _createQueryProgress;
+            LcarsNode _lcarsNode = LcarsField.this.getLcarsNode();
+            Node _node = _lcarsNode.getNode();
+            ObservableList<Node> _children = ((Pane) _node).getChildren();
+            _children.add(LcarsField.this.queryProgress);
+            MouseButton _button = event.getButton();
             boolean _notEquals = (!Objects.equal(_button, MouseButton.PRIMARY));
             if (_notEquals) {
               final Service<Void> _function_1 = new Service<Void>() {
@@ -241,7 +255,7 @@ public class LcarsField extends Parent {
                 XRoot _root = CoreExtensions.getRoot(LcarsField.this);
                 _layoutAction.perform(_root);
               }
-              LcarsField.this.resetColors();
+              LcarsField.this.resetVisuals();
             }
           }
         };
@@ -303,7 +317,15 @@ public class LcarsField extends Parent {
     return _xblockexpression;
   }
   
-  public void resetColors() {
+  public void resetVisuals() {
+    boolean _notEquals = (!Objects.equal(this.queryProgress, null));
+    if (_notEquals) {
+      LcarsNode _lcarsNode = this.getLcarsNode();
+      Node _node = _lcarsNode.getNode();
+      ObservableList<Node> _children = ((Pane) _node).getChildren();
+      _children.remove(this.queryProgress);
+      this.queryProgress = null;
+    }
     Iterable<Text> _allTextNodes = this.getAllTextNodes();
     Text _head = IterableExtensions.<Text>head(_allTextNodes);
     _head.setFill(LcarsExtensions.FLESH);
@@ -315,5 +337,70 @@ public class LcarsField extends Parent {
       }
     };
     IterableExtensions.<Text>forEach(_tail, _function);
+  }
+  
+  public RectangleBorderPane createQueryProgress() {
+    RectangleBorderPane _xblockexpression = null;
+    {
+      Text _text = new Text();
+      final Text label = _text;
+      RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+      final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+        public void apply(final RectangleBorderPane it) {
+          ObservableList<Node> _children = it.getChildren();
+          final Procedure1<Text> _function = new Procedure1<Text>() {
+            public void apply(final Text it) {
+              it.setText("querying...");
+              Font _lcarsFont = LcarsExtensions.lcarsFont(42);
+              it.setFont(_lcarsFont);
+              it.setFill(LcarsExtensions.ORANGE);
+              Insets _insets = new Insets(5, 5, 5, 5);
+              StackPane.setMargin(it, _insets);
+            }
+          };
+          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(label, _function);
+          _children.add(_doubleArrow);
+          it.setBackgroundPaint(Color.BLACK);
+          it.setBackgroundRadius(10);
+          it.setBorderWidth(0);
+        }
+      };
+      final RectangleBorderPane node = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+      Timeline _timeline = new Timeline();
+      final Procedure1<Timeline> _function_1 = new Procedure1<Timeline>() {
+        public void apply(final Timeline it) {
+          ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
+          Duration _millis = Duration.millis(0);
+          DoubleProperty _opacityProperty = label.opacityProperty();
+          KeyValue _keyValue = new <Number>KeyValue(_opacityProperty, Integer.valueOf(0));
+          KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
+          _keyFrames.add(_keyFrame);
+          ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
+          Duration _millis_1 = Duration.millis(700);
+          DoubleProperty _opacityProperty_1 = label.opacityProperty();
+          KeyValue _keyValue_1 = new <Number>KeyValue(_opacityProperty_1, Integer.valueOf(1));
+          KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
+          _keyFrames_1.add(_keyFrame_1);
+          ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
+          Duration _millis_2 = Duration.millis(750);
+          DoubleProperty _opacityProperty_2 = label.opacityProperty();
+          KeyValue _keyValue_2 = new <Number>KeyValue(_opacityProperty_2, Integer.valueOf(1));
+          KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
+          _keyFrames_2.add(_keyFrame_2);
+          ObservableList<KeyFrame> _keyFrames_3 = it.getKeyFrames();
+          Duration _millis_3 = Duration.millis(770);
+          DoubleProperty _opacityProperty_3 = label.opacityProperty();
+          KeyValue _keyValue_3 = new <Number>KeyValue(_opacityProperty_3, Integer.valueOf(0));
+          KeyFrame _keyFrame_3 = new KeyFrame(_millis_3, _keyValue_3);
+          _keyFrames_3.add(_keyFrame_3);
+          int _minus = (-1);
+          it.setCycleCount(_minus);
+          it.play();
+        }
+      };
+      ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_1);
+      _xblockexpression = (node);
+    }
+    return _xblockexpression;
   }
 }

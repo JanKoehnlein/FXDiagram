@@ -5,6 +5,7 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.core.tools.ChooserConnectionProvider
 import de.fxdiagram.core.tools.actions.LayoutAction
+import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
@@ -12,10 +13,15 @@ import javafx.animation.Timeline
 import javafx.application.Platform
 import javafx.concurrent.Service
 import javafx.concurrent.Task
+import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.FlowPane
+import javafx.scene.layout.Pane
+import javafx.scene.layout.StackPane
+import javafx.scene.paint.Color
 import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
@@ -27,6 +33,8 @@ class LcarsField extends Parent {
 	FlowPane flowPane
 	
 	LcarsNode node
+	
+	Node queryProgress
 	
 	new(LcarsNode node, String name, String value) {
 		this.node = node
@@ -63,9 +71,11 @@ class LcarsField extends Parent {
 					fill = ORANGE
 				]
 			}
-			onMousePressed = [
+			onMousePressed = [ event |
 				allTextNodes.forEach[fill = RED]
-				if(button != MouseButton.PRIMARY) {
+				queryProgress = createQueryProgress;
+				(lcarsNode.node as Pane).children += queryProgress
+				if(event.button != MouseButton.PRIMARY) {
 					val Service<Void> service = [|
 						new LcarsQueryTask(this, name, value, connectionProvider)
 					]
@@ -86,7 +96,7 @@ class LcarsField extends Parent {
 					diagram.connections += newConnections
 					if(!newConnections.empty)
 						new LayoutAction().perform(root)
-					resetColors
+					resetVisuals
 				}
 			]
 		]
@@ -119,9 +129,37 @@ class LcarsField extends Parent {
 		timeline
 	}
 	
-	def resetColors() {
+	def resetVisuals() {
+		if(queryProgress != null) {
+			(lcarsNode.node as Pane).children -= queryProgress
+			queryProgress = null			
+		}
 		allTextNodes.head.fill = FLESH
 		allTextNodes.tail.forEach[fill = ORANGE]
+	}
+	
+	def createQueryProgress() {
+		val label = new Text
+		val node = new RectangleBorderPane => [
+			children += label => [
+				text = 'querying...'
+				font = lcarsFont(42)
+				fill = ORANGE
+				StackPane.setMargin(it, new Insets(5,5,5,5))
+			]
+			backgroundPaint = Color.BLACK
+			backgroundRadius = 10
+			borderWidth = 0
+		]
+		new Timeline => [
+			keyFrames += new KeyFrame(0.millis, new KeyValue(label.opacityProperty, 0))
+			keyFrames += new KeyFrame(700.millis, new KeyValue(label.opacityProperty, 1))
+			keyFrames += new KeyFrame(750.millis, new KeyValue(label.opacityProperty, 1))
+			keyFrames += new KeyFrame(770.millis, new KeyValue(label.opacityProperty, 0))
+			cycleCount = -1
+			play
+		]
+		node
 	}
 }
 
@@ -144,9 +182,14 @@ class LcarsQueryTask extends Task<Void> {
 		val lcarsNode = host.lcarsNode
 		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
 		chooser.connectionProvider = connectionProvider
+		val alreadyConnected = 
+			(host.lcarsNode.incomingConnections.filter[key == fieldName].map[source] 
+				+ host.lcarsNode.outgoingConnections.filter[key == fieldName].map[target])
+			.filter(LcarsNode).map[dbId].toSet
+		alreadyConnected.add(lcarsNode.dbId)
 		siblings
-			.filter[get('_id').toString != lcarsNode.dbId]
-			.forEach[
+			.filter[!alreadyConnected.contains(get('_id').toString)]
+			.forEach[it, i | 
 				chooser.addChoice(new LcarsNode(it) => [
 					width = lcarsNode.width
 					height = lcarsNode.height
@@ -154,7 +197,7 @@ class LcarsQueryTask extends Task<Void> {
 			]
 		Platform.runLater [|
 			host.root.currentTool = chooser
-			host.resetColors
+			host.resetVisuals
 		]
 		null
 	}
