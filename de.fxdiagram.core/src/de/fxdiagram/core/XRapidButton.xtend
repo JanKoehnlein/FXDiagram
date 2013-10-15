@@ -150,7 +150,9 @@ class Placer extends ObjectBinding<Point2D> {
 	
 	def activate() {
 		val node = button.host
-		bind(node.layoutXProperty, node.layoutYProperty, node.layoutBoundsProperty)
+		bind(node.layoutXProperty, node.layoutYProperty, 
+			node.scaleXProperty, node.scaleYProperty, 
+			node.layoutBoundsProperty)
 	}
 
 	override protected computeValue() {

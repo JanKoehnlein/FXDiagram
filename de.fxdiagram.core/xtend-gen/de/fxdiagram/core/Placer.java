@@ -29,8 +29,10 @@ public class Placer extends ObjectBinding<Point2D> {
     final XNode node = this.button.getHost();
     DoubleProperty _layoutXProperty = node.layoutXProperty();
     DoubleProperty _layoutYProperty = node.layoutYProperty();
+    DoubleProperty _scaleXProperty = node.scaleXProperty();
+    DoubleProperty _scaleYProperty = node.scaleYProperty();
     ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = node.layoutBoundsProperty();
-    this.bind(_layoutXProperty, _layoutYProperty, _layoutBoundsProperty);
+    this.bind(_layoutXProperty, _layoutYProperty, _scaleXProperty, _scaleYProperty, _layoutBoundsProperty);
   }
   
   protected Point2D computeValue() {
