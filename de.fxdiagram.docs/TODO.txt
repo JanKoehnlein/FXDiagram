@@ -1,8 +1,8 @@
 TODO
 - rearrange demo diagram
-- LCARS use keys to prohibit duplicate edges
 
 ENHANCEMENT
+- scroll to reveal choosers
 - eOpposite aware key in Ecore
 - find better colors
 - collapsible compartments
@@ -11,7 +11,6 @@ ENHANCEMENT
 - Play diagram
 - Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
 - more auxiliary lines
-- ScrollAndScale should reset rotation
 - Layouter: convert edges as a last step
 
 MINOR
@@ -20,6 +19,8 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
+- ScrollAndScale should reset rotation
+- LCARS use keys to prohibit duplicate edges
 - fix gesture bug
 - find better recursive image
 - LCARS refactor choosers to use keys
