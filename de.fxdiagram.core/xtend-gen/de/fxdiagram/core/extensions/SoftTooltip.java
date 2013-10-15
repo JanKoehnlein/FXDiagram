@@ -34,6 +34,8 @@ public class SoftTooltip {
   
   private Node host;
   
+  private XRoot root;
+  
   private Node tooltip;
   
   private TooltipTimer timer;
@@ -195,13 +197,11 @@ public class SoftTooltip {
     {
       boolean _not = (!this.isShowing);
       if (_not) {
-        XRoot _root = null;
-        if (this.host!=null) {
-          _root=CoreExtensions.getRoot(this.host);
-        }
+        XRoot _root = CoreExtensions.getRoot(this.host);
+        this.root = _root;
         HeadsUpDisplay _headsUpDisplay = null;
-        if (_root!=null) {
-          _headsUpDisplay=_root.getHeadsUpDisplay();
+        if (this.root!=null) {
+          _headsUpDisplay=this.root.getHeadsUpDisplay();
         }
         ObservableList<Node> _children = null;
         if (_headsUpDisplay!=null) {
@@ -221,13 +221,9 @@ public class SoftTooltip {
     boolean _xblockexpression = false;
     {
       if (this.isShowing) {
-        XRoot _root = null;
-        if (this.host!=null) {
-          _root=CoreExtensions.getRoot(this.host);
-        }
         HeadsUpDisplay _headsUpDisplay = null;
-        if (_root!=null) {
-          _headsUpDisplay=_root.getHeadsUpDisplay();
+        if (this.root!=null) {
+          _headsUpDisplay=this.root.getHeadsUpDisplay();
         }
         ObservableList<Node> _children = null;
         if (_headsUpDisplay!=null) {

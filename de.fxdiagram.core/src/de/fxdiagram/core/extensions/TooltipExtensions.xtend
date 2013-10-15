@@ -14,6 +14,7 @@ import javafx.util.Duration
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension javafx.scene.layout.StackPane.*
+import de.fxdiagram.core.XRoot
 
 class TooltipExtensions {
 	static def setTooltip(Node host, String text) {
@@ -31,6 +32,7 @@ class SoftTooltip {
 	StringProperty textProperty
 	
 	Node host
+	XRoot root
 	Node tooltip 
 	TooltipTimer timer
 	
@@ -78,7 +80,7 @@ class SoftTooltip {
 					isHideOnTrigger = true
 					timer?.restart
 				}
-			}			
+			}
 		])
 	}
 	
@@ -118,14 +120,16 @@ class SoftTooltip {
 	}
 
 	def show() {
-		if(!isShowing)
-			host?.root?.headsUpDisplay?.children?.add(tooltip)
+		if(!isShowing) {
+			root = host.root
+			root?.headsUpDisplay?.children?.add(tooltip)
+		}
 		isShowing = true
 	}
 	
 	def hide() {
-		if(isShowing)
-			host?.root?.headsUpDisplay?.children?.remove(tooltip)
+		if(isShowing) 
+			root?.headsUpDisplay?.children?.remove(tooltip)
 		isShowing = false
 	}
 }
