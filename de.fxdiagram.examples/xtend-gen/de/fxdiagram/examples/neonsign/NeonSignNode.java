@@ -1,9 +1,11 @@
 package de.fxdiagram.examples.neonsign;
 
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
+import de.fxdiagram.core.services.ImageCache;
+import de.fxdiagram.lib.media.ImageNode;
 import de.fxdiagram.lib.nodes.FlipNode;
-import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -18,8 +20,8 @@ import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.InnerShadow;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -37,31 +39,28 @@ public class NeonSignNode extends XNode {
   private Text neonText;
   
   public NeonSignNode() {
-    super("Neon Sign");
+    super("Xtend");
     FlipNode _flipNode = new FlipNode();
     final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
       public void apply(final FlipNode it) {
-        RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-        final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-          public void apply(final RectangleBorderPane it) {
-            ObservableList<Node> _children = it.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              public void apply(final Text it) {
-                String _key = NeonSignNode.this.getKey();
-                it.setText(_key);
-                Insets _insets = new Insets(10, 20, 10, 20);
-                StackPane.setMargin(it, _insets);
-              }
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-            _children.add(_doubleArrow);
+        VBox _neonSign = NeonSignNode.this.getNeonSign();
+        final Procedure1<VBox> _function = new Procedure1<VBox>() {
+          public void apply(final VBox it) {
+            TooltipExtensions.setTooltip(it, "Double-click for Xtend code");
           }
         };
-        RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_neonSign, _function);
         it.setFront(_doubleArrow);
-        VBox _neonSign = NeonSignNode.this.getNeonSign();
-        it.setBack(_neonSign);
+        ImageNode _imageNode = new ImageNode();
+        final Procedure1<ImageNode> _function_1 = new Procedure1<ImageNode>() {
+          public void apply(final ImageNode it) {
+            ImageCache _get = ImageCache.get();
+            Image _image = _get.getImage(NeonSignNode.this, "code.png");
+            it.setImage(_image);
+          }
+        };
+        ImageNode _doubleArrow_1 = ObjectExtensions.<ImageNode>operator_doubleArrow(_imageNode, _function_1);
+        it.setBack(_doubleArrow_1);
         it.setFlipOnDoubleClick(true);
       }
     };
