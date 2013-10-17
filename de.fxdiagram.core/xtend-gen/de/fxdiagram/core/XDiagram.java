@@ -12,6 +12,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import java.util.HashMap;
 import java.util.List;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -27,11 +28,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -358,6 +362,26 @@ public class XDiagram extends Group implements XActivatable {
   
   public ListProperty<XRapidButton> buttonsProperty() {
     return this.buttonsProperty;
+  }
+  
+  private SimpleObjectProperty<ObservableMap<Node,Pos>> fixedButtonsProperty = new SimpleObjectProperty<ObservableMap<Node, Pos>>(this, "fixedButtons",_initFixedButtons());
+  
+  private static final ObservableMap<Node,Pos> _initFixedButtons() {
+    HashMap<Node,Pos> _newHashMap = CollectionLiterals.<Node, Pos>newHashMap();
+    ObservableMap<Node,Pos> _observableMap = FXCollections.<Node, Pos>observableMap(_newHashMap);
+    return _observableMap;
+  }
+  
+  public ObservableMap<Node,Pos> getFixedButtons() {
+    return this.fixedButtonsProperty.get();
+  }
+  
+  public void setFixedButtons(final ObservableMap<Node,Pos> fixedButtons) {
+    this.fixedButtonsProperty.set(fixedButtons);
+  }
+  
+  public ObjectProperty<ObservableMap<Node,Pos>> fixedButtonsProperty() {
+    return this.fixedButtonsProperty;
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");

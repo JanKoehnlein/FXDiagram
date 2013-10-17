@@ -28,9 +28,9 @@ import org.eclipse.xtext.xbase.lib.Functions.Function0;
 public class RectangleBorderPane extends StackPane implements SvgExportable {
   public final static LinearGradient DEFAULT_BACKGROUND = new Function0<LinearGradient>() {
     public LinearGradient apply() {
-      Color _gray = Color.gray(0.6);
+      Color _gray = Color.gray(0.4);
       Stop _stop = new Stop(0, _gray);
-      Color _gray_1 = Color.gray(0.9);
+      Color _gray_1 = Color.gray(1);
       Stop _stop_1 = new Stop(1, _gray_1);
       LinearGradient _linearGradient = new LinearGradient(
         0, 0, 1, 1, 
@@ -225,7 +225,7 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   private SimpleObjectProperty<Insets> borderInsetsProperty = new SimpleObjectProperty<Insets>(this, "borderInsets",_initBorderInsets());
   
   private static final Insets _initBorderInsets() {
-    Insets _insets = new Insets(1, 1, 1, 1);
+    Insets _insets = new Insets(0.9, 0.9, 0.9, 0.9);
     return _insets;
   }
   

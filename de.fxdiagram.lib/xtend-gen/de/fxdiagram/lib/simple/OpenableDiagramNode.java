@@ -22,6 +22,7 @@ import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
@@ -221,8 +222,6 @@ public class OpenableDiagramNode extends XNode {
                   _transforms.clear();
                   ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
                   _children.setAll(OpenableDiagramNode.this.textNode);
-                  OpenableDiagramNode.this.root.setDiagram(OpenableDiagramNode.this.nestedDiagram);
-                  HeadsUpDisplay _headsUpDisplay = OpenableDiagramNode.this.root.getHeadsUpDisplay();
                   Canvas _symbol = SymbolCanvas.getSymbol(Type.ZOOM_OUT, 32, Color.GRAY);
                   final Procedure1<Canvas> _function = new Procedure1<Canvas>() {
                     public void apply(final Canvas it) {
@@ -239,8 +238,10 @@ public class OpenableDiagramNode extends XNode {
                       TooltipExtensions.setTooltip(it, "Parent diagram");
                     }
                   };
-                  Canvas _doubleArrow = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);
-                  _headsUpDisplay.add(_doubleArrow, Pos.TOP_RIGHT);
+                  final Canvas toParentButton = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);
+                  ObservableMap<Node,Pos> _fixedButtons = OpenableDiagramNode.this.nestedDiagram.getFixedButtons();
+                  _fixedButtons.put(toParentButton, Pos.TOP_RIGHT);
+                  OpenableDiagramNode.this.root.setDiagram(OpenableDiagramNode.this.nestedDiagram);
                 }
               };
               it.setOnFinished(_function);

@@ -15,12 +15,16 @@ import javafx.scene.paint.Paint
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.collections.ObservableMap
+import javafx.geometry.Pos
 
 class XDiagram extends Group implements XActivatable {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
 	@FxProperty ObservableList<XConnection> connections = observableArrayList
 	@FxProperty ObservableList<XRapidButton> buttons = observableArrayList
+
+	@FxProperty ObservableMap<Node, Pos> fixedButtons = observableMap(newHashMap)
 
 	@FxProperty @ReadOnly boolean isActive
 	@FxProperty @ReadOnly boolean isRootDiagram

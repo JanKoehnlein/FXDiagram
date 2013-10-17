@@ -36,8 +36,8 @@ class LevelOfDetailDiagramNode extends XNode {
 				text = name
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
+				tooltip = "Zoom to reveal content"
 			]
-			tooltip = "Zoom to reveal content"
 		]
 	}
 	

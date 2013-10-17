@@ -1,5 +1,6 @@
 TODO
 - rearrange demo diagram
+- labels snap back after being repositioned
 
 ENHANCEMENT
 - scroll to reveal choosers
@@ -19,6 +20,7 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
+- goTo parent button missing when returning from grandchild 
 - ScrollAndScale should reset rotation
 - LCARS use keys to prohibit duplicate edges
 - fix gesture bug

@@ -20,7 +20,7 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 	
 	@FxProperty double borderRadius = 12.0
 
-	@FxProperty Insets borderInsets = new Insets(1, 1, 1, 1)
+	@FxProperty Insets borderInsets = new Insets(0.9, 0.9, 0.9, 0.9)
 
 	@FxProperty Paint borderPaint = Color.GRAY
 
@@ -32,8 +32,8 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 		0, 0, 1, 1, 
 		true, CycleMethod.NO_CYCLE,
 		#[
-			new Stop(0, Color.gray(0.6)), 
-			new Stop(1, Color.gray(0.9))
+			new Stop(0, Color.gray(0.4)), 
+			new Stop(1, Color.gray(1))
 		]) 
 	
 	new() {

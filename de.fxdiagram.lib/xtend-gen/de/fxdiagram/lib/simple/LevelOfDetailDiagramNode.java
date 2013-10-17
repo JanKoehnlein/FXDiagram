@@ -55,12 +55,12 @@ public class LevelOfDetailDiagramNode extends XNode {
             it.setTextOrigin(VPos.TOP);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
+            TooltipExtensions.setTooltip(it, "Zoom to reveal content");
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
         Node _label = LevelOfDetailDiagramNode.this.label = _doubleArrow;
         _children.add(_label);
-        TooltipExtensions.setTooltip(it, "Zoom to reveal content");
       }
     };
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(this.pane, _function);

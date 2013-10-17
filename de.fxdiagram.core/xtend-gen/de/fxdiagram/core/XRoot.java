@@ -17,6 +17,8 @@ import de.fxdiagram.core.tools.SelectionTool;
 import de.fxdiagram.core.tools.XDiagramTool;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -26,8 +28,10 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -154,6 +158,17 @@ public class XRoot extends Parent implements XActivatable {
     _transforms_2.setAll(this.diagramTransform);
     ObservableList<Node> _children_2 = this.headsUpDisplay.getChildren();
     _children_2.clear();
+    XDiagram _diagram_8 = this.getDiagram();
+    ObservableMap<Node,Pos> _fixedButtons = _diagram_8.getFixedButtons();
+    Set<Entry<Node,Pos>> _entrySet = _fixedButtons.entrySet();
+    final Procedure1<Entry<Node,Pos>> _function_1 = new Procedure1<Entry<Node,Pos>>() {
+      public void apply(final Entry<Node,Pos> it) {
+        Node _key = it.getKey();
+        Pos _value = it.getValue();
+        XRoot.this.headsUpDisplay.add(_key, _value);
+      }
+    };
+    IterableExtensions.<Entry<Node,Pos>>forEach(_entrySet, _function_1);
   }
   
   public void centerDiagram() {

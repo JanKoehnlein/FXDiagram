@@ -80,6 +80,7 @@ class XRoot extends Parent implements XActivatable {
 		'''
 		diagram.transforms.setAll(diagramTransform)
 		headsUpDisplay.children.clear
+		diagram.fixedButtons.entrySet.forEach[headsUpDisplay.add(key, value)]
 	}
 	
 	def centerDiagram() {

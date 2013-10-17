@@ -113,15 +113,16 @@ class OpenableDiagramNode extends XNode {
 					parentDiagram = root.diagram
 					nestedDiagram.transforms.clear
 					pane.children.setAll(textNode)
+					val toParentButton = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY) => [
+						onMouseClicked = [
+							root.headsUpDisplay.children -= target as Node
+							closeDiagram(targetInDiagram)
+						]
+						tooltip = "Parent diagram"
+						
+					]
+					nestedDiagram.fixedButtons.put(toParentButton, Pos.TOP_RIGHT)
 					root.diagram = nestedDiagram				
-					root.headsUpDisplay.add(
-						SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY) => [
-							onMouseClicked = [
-								root.headsUpDisplay.children -= target as Node
-								closeDiagram(targetInDiagram)
-							]
-							tooltip = "Parent diagram"
-						], Pos.TOP_RIGHT)
 				]
 			]
 			children += new FadeTransition => [
