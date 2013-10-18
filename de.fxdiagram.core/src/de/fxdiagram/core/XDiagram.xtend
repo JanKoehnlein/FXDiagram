@@ -3,10 +3,16 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
+import de.fxdiagram.core.behavior.Behavior
+import de.fxdiagram.core.behavior.DiagramNavigationBehavior
+import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
 import javafx.collections.ListChangeListener
 import javafx.collections.ListChangeListener.Change
+import javafx.collections.MapChangeListener
 import javafx.collections.ObservableList
+import javafx.collections.ObservableMap
+import javafx.geometry.Pos
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.paint.Color
@@ -15,8 +21,7 @@ import javafx.scene.paint.Paint
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import javafx.collections.ObservableMap
-import javafx.geometry.Pos
+import de.fxdiagram.core.behavior.NavigationBehavior
 
 class XDiagram extends Group implements XActivatable {
 	
@@ -40,7 +45,9 @@ class XDiagram extends Group implements XActivatable {
 	(XDiagram)=>void contentsInitializer
 
 	AuxiliaryLinesSupport auxiliaryLinesSupport
-
+	
+	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
+	
 	new() {
 		children += nodeLayer
 		children += buttonLayer
@@ -63,6 +70,15 @@ class XDiagram extends Group implements XActivatable {
 			isActiveProperty.set(true)
 			doActivate
 		}
+		behaviors.values.forEach[activate]
+		val MapChangeListener<Class<? extends Behavior>, Behavior> behaviorActivator = [
+			change |
+			if(isActive) {
+				if(change.wasAdded)
+					change.valueAdded.activate
+			}
+		]
+		behaviors.addListener(behaviorActivator)
 	}
 
 	def void doActivate() {
@@ -116,16 +132,30 @@ class XDiagram extends Group implements XActivatable {
 		(nodes + connections + buttons).forEach[activate]
 		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
 		contentsInitializer?.apply(this)
+		if(getBehavior(NavigationBehavior) == null) 
+			addBehavior(new DiagramNavigationBehavior(this))
+	}
+		
+	def <T extends Behavior> T getBehavior(Class<T> key) {
+		behaviors.get(key) as T
 	}
 	
-	protected def addArrowHead(javafx.beans.property.Property<? extends Node> property, 
+	def addBehavior(Behavior behavior) {
+		behaviors.put(behavior.behaviorKey, behavior)
+	}
+	
+	def removeBehavior(String key) {
+		behaviors.remove(key)
+	}
+	
+	protected def addArrowHead(Property<? extends Node> property, 
 		ChangeListener<? super Node> listener) {
 		if(property.value != null && !connectionLayer.children.contains(property.value))
 			connectionLayer.children += property.value
 		property.addListener(listener)
 	} 
 	
-	protected def removeArrowHead(javafx.beans.property.Property<? extends Node> property, 
+	protected def removeArrowHead(Property<? extends Node> property, 
 		ChangeListener<? super Node> listener) {
 		if(property.value != null)
 			connectionLayer.children -= property.value

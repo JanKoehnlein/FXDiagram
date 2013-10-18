@@ -10,7 +10,6 @@ import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.ArrowHead;
-import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.ArrayList;
@@ -107,8 +106,8 @@ public class ConnectionRouter implements XActivatable {
     }
   }
   
-  public MoveBehavior<XControlPoint> growToSize(final int newSize) {
-    MoveBehavior<XControlPoint> _xblockexpression = null;
+  public Boolean growToSize(final int newSize) {
+    Boolean _xblockexpression = null;
     {
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       int _size = _controlPoints.size();
@@ -119,10 +118,10 @@ public class ConnectionRouter implements XActivatable {
       ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
       int _size_1 = _controlPoints_1.size();
       final int nodeDiff = (newSize - _size_1);
-      MoveBehavior<XControlPoint> _xifexpression = null;
+      Boolean _xifexpression = null;
       boolean _greaterThan = (nodeDiff > 0);
       if (_greaterThan) {
-        MoveBehavior<XControlPoint> _xblockexpression_1 = null;
+        Boolean _xblockexpression_1 = null;
         {
           final ArrayList<XControlPoint> newControlPoints = CollectionLiterals.<XControlPoint>newArrayList();
           int _plus = (nodeDiff + 1);
@@ -167,7 +166,7 @@ public class ConnectionRouter implements XActivatable {
           int _size_2 = _controlPoints_5.size();
           int _minus = (_size_2 - 1);
           _controlPoints_4.addAll(_minus, newControlPoints);
-          MoveBehavior<XControlPoint> _resetPointTypes = this.resetPointTypes();
+          Boolean _resetPointTypes = this.resetPointTypes();
           _xblockexpression_1 = (_resetPointTypes);
         }
         _xifexpression = _xblockexpression_1;
@@ -177,8 +176,8 @@ public class ConnectionRouter implements XActivatable {
     return _xblockexpression;
   }
   
-  public MoveBehavior<XControlPoint> shrinkToSize(final int newSize) {
-    MoveBehavior<XControlPoint> _xblockexpression = null;
+  public Boolean shrinkToSize(final int newSize) {
+    Boolean _xblockexpression = null;
     {
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       int _size = _controlPoints.size();
@@ -189,10 +188,10 @@ public class ConnectionRouter implements XActivatable {
       ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
       int _size_1 = _controlPoints_1.size();
       final int nodeDiff = (newSize - _size_1);
-      MoveBehavior<XControlPoint> _xifexpression = null;
+      Boolean _xifexpression = null;
       boolean _lessThan_1 = (nodeDiff < 0);
       if (_lessThan_1) {
-        MoveBehavior<XControlPoint> _xblockexpression_1 = null;
+        Boolean _xblockexpression_1 = null;
         {
           final ArrayList<XControlPoint> toBeRemoved = CollectionLiterals.<XControlPoint>newArrayList();
           ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
@@ -216,7 +215,7 @@ public class ConnectionRouter implements XActivatable {
           }
           ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
           _controlPoints_4.removeAll(toBeRemoved);
-          MoveBehavior<XControlPoint> _resetPointTypes = this.resetPointTypes();
+          Boolean _resetPointTypes = this.resetPointTypes();
           _xblockexpression_1 = (_resetPointTypes);
         }
         _xifexpression = _xblockexpression_1;
@@ -226,7 +225,7 @@ public class ConnectionRouter implements XActivatable {
     return _xblockexpression;
   }
   
-  protected MoveBehavior<XControlPoint> resetPointTypes() {
+  protected Boolean resetPointTypes() {
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
     int _size = _controlPoints.size();
     boolean _lessThan = (_size < 2);

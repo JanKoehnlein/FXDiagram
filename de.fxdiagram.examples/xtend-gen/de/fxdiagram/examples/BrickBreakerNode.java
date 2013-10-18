@@ -4,7 +4,6 @@ import brickbreaker.Config;
 import brickbreaker.Main;
 import brickbreaker.Main.MainFrame;
 import com.google.common.base.Objects;
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.lib.nodes.FlipNode;
@@ -29,63 +28,55 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class BrickBreakerNode extends XNode {
+public class BrickBreakerNode extends FlipNode {
   public BrickBreakerNode() {
     super("BrickBreaker");
-    FlipNode _flipNode = new FlipNode();
-    final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
-      public void apply(final FlipNode it) {
-        RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-        final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-          public void apply(final RectangleBorderPane it) {
-            ObservableList<Node> _children = it.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              public void apply(final Text it) {
-                it.setText("BrickBreaker");
-                it.setTextOrigin(VPos.TOP);
-                Insets _insets = new Insets(10, 20, 10, 20);
-                StackPane.setMargin(it, _insets);
-              }
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-            _children.add(_doubleArrow);
-            TooltipExtensions.setTooltip(it, "Double-click to play");
+    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      public void apply(final RectangleBorderPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setText("BrickBreaker");
+            it.setTextOrigin(VPos.TOP);
+            Insets _insets = new Insets(10, 20, 10, 20);
+            StackPane.setMargin(it, _insets);
           }
         };
-        RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-        it.setFront(_doubleArrow);
-        Group _group = new Group();
-        final Procedure1<Group> _function_1 = new Procedure1<Group>() {
-          public void apply(final Group it) {
-            ObservableList<Node> _children = it.getChildren();
-            Group _group = new Group();
-            final Procedure1<Group> _function = new Procedure1<Group>() {
-              public void apply(final Group it) {
-                ObservableList<Node> _children = it.getChildren();
-                Group _createRoot = BrickBreakerNode.this.createRoot();
-                _children.add(_createRoot);
-                DoubleProperty _scaleXProperty = it.scaleXProperty();
-                DoubleProperty _widthProperty = BrickBreakerNode.this.widthProperty();
-                DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(_widthProperty, Config.SCREEN_WIDTH);
-                _scaleXProperty.bind(_divide);
-                DoubleProperty _scaleYProperty = it.scaleYProperty();
-                DoubleProperty _heightProperty = BrickBreakerNode.this.heightProperty();
-                DoubleBinding _divide_1 = DoubleExpressionExtensions.operator_divide(_heightProperty, Config.SCREEN_HEIGHT);
-                _scaleYProperty.bind(_divide_1);
-              }
-            };
-            Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-            _children.add(_doubleArrow);
-          }
-        };
-        Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
-        it.setBack(_doubleArrow_1);
-        it.setFlipOnDoubleClick(true);
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+        _children.add(_doubleArrow);
+        TooltipExtensions.setTooltip(it, "Double-click to play");
       }
     };
-    FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
-    this.setNode(_doubleArrow);
+    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+    this.setFront(_doubleArrow);
+    Group _group = new Group();
+    final Procedure1<Group> _function_1 = new Procedure1<Group>() {
+      public void apply(final Group it) {
+        ObservableList<Node> _children = it.getChildren();
+        Group _group = new Group();
+        final Procedure1<Group> _function = new Procedure1<Group>() {
+          public void apply(final Group it) {
+            ObservableList<Node> _children = it.getChildren();
+            Group _createRoot = BrickBreakerNode.this.createRoot();
+            _children.add(_createRoot);
+            DoubleProperty _scaleXProperty = it.scaleXProperty();
+            DoubleProperty _widthProperty = BrickBreakerNode.this.widthProperty();
+            DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(_widthProperty, Config.SCREEN_WIDTH);
+            _scaleXProperty.bind(_divide);
+            DoubleProperty _scaleYProperty = it.scaleYProperty();
+            DoubleProperty _heightProperty = BrickBreakerNode.this.heightProperty();
+            DoubleBinding _divide_1 = DoubleExpressionExtensions.operator_divide(_heightProperty, Config.SCREEN_HEIGHT);
+            _scaleYProperty.bind(_divide_1);
+          }
+        };
+        Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+        _children.add(_doubleArrow);
+      }
+    };
+    Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
+    this.setBack(_doubleArrow_1);
   }
   
   public Group createRoot() {

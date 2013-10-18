@@ -12,7 +12,8 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.DiamondArrowHead;
 import de.fxdiagram.core.anchors.LineArrowHead;
-import de.fxdiagram.core.behavior.AbstractBehavior;
+import de.fxdiagram.core.behavior.AbstractHostBehavior;
+import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
@@ -20,6 +21,7 @@ import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.collections.ListChangeListener;
@@ -39,10 +41,17 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddEReferenceRapidButtonBehavior extends AbstractBehavior<EClassNode> {
+public class AddEReferenceRapidButtonBehavior extends AbstractHostBehavior<EClassNode> {
   private List<XRapidButton> buttons;
   
-  private Set<EReference> availableReferences = new Function0<Set<EReference>>() {
+  private Set<EReference> availableKeys = new Function0<Set<EReference>>() {
+    public Set<EReference> apply() {
+      LinkedHashSet<EReference> _newLinkedHashSet = CollectionLiterals.<EReference>newLinkedHashSet();
+      return _newLinkedHashSet;
+    }
+  }.apply();
+  
+  private Set<EReference> unavailableKeys = new Function0<Set<EReference>>() {
     public Set<EReference> apply() {
       HashSet<EReference> _newHashSet = CollectionLiterals.<EReference>newHashSet();
       return _newHashSet;
@@ -53,12 +62,16 @@ public class AddEReferenceRapidButtonBehavior extends AbstractBehavior<EClassNod
     super(host);
   }
   
+  public Class<? extends Behavior> getBehaviorKey() {
+    return AddEReferenceRapidButtonBehavior.class;
+  }
+  
   protected void doActivate() {
     EClassNode _host = this.getHost();
     EClass _eClass = _host.getEClass();
     EList<EReference> _eReferences = _eClass.getEReferences();
-    Iterables.<EReference>addAll(this.availableReferences, _eReferences);
-    boolean _isEmpty = this.availableReferences.isEmpty();
+    Iterables.<EReference>addAll(this.availableKeys, _eReferences);
+    boolean _isEmpty = this.availableKeys.isEmpty();
     boolean _not = (!_isEmpty);
     if (_not) {
       final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
@@ -66,8 +79,8 @@ public class AddEReferenceRapidButtonBehavior extends AbstractBehavior<EClassNod
           AddEReferenceRapidButtonBehavior.this.createChooser(button);
         }
       };
-      final Procedure1<XRapidButton> addReferenceAction = _function;
-      List<XRapidButton> _createButtons = this.createButtons(addReferenceAction);
+      final Procedure1<XRapidButton> addConnectionAction = _function;
+      List<XRapidButton> _createButtons = this.createButtons(addConnectionAction);
       this.buttons = _createButtons;
       EClassNode _host_1 = this.getHost();
       XDiagram _diagram = CoreExtensions.getDiagram(_host_1);
@@ -81,21 +94,42 @@ public class AddEReferenceRapidButtonBehavior extends AbstractBehavior<EClassNod
           boolean _next = change.next();
           boolean _while = _next;
           while (_while) {
-            boolean _wasAdded = change.wasAdded();
-            if (_wasAdded) {
-              List<? extends XConnection> _addedSubList = change.getAddedSubList();
-              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-                public void apply(final XConnection it) {
-                  Object _key = it.getKey();
-                  AddEReferenceRapidButtonBehavior.this.availableReferences.remove(_key);
-                }
-              };
-              IterableExtensions.forEach(_addedSubList, _function);
+            {
+              boolean _wasAdded = change.wasAdded();
+              if (_wasAdded) {
+                List<? extends XConnection> _addedSubList = change.getAddedSubList();
+                final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                  public void apply(final XConnection it) {
+                    Object _key = it.getKey();
+                    boolean _remove = AddEReferenceRapidButtonBehavior.this.availableKeys.remove(_key);
+                    if (_remove) {
+                      Object _key_1 = it.getKey();
+                      AddEReferenceRapidButtonBehavior.this.unavailableKeys.add(((EReference) _key_1));
+                    }
+                  }
+                };
+                IterableExtensions.forEach(_addedSubList, _function);
+              }
+              boolean _wasRemoved = change.wasRemoved();
+              if (_wasRemoved) {
+                List<? extends XConnection> _removed = change.getRemoved();
+                final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
+                  public void apply(final XConnection it) {
+                    Object _key = it.getKey();
+                    boolean _remove = AddEReferenceRapidButtonBehavior.this.unavailableKeys.remove(_key);
+                    if (_remove) {
+                      Object _key_1 = it.getKey();
+                      AddEReferenceRapidButtonBehavior.this.availableKeys.add(((EReference) _key_1));
+                    }
+                  }
+                };
+                IterableExtensions.forEach(_removed, _function_1);
+              }
             }
             boolean _next_1 = change.next();
             _while = _next_1;
           }
-          boolean _isEmpty = AddEReferenceRapidButtonBehavior.this.availableReferences.isEmpty();
+          boolean _isEmpty = AddEReferenceRapidButtonBehavior.this.availableKeys.isEmpty();
           if (_isEmpty) {
             EClassNode _host = AddEReferenceRapidButtonBehavior.this.getHost();
             XDiagram _diagram = CoreExtensions.getDiagram(_host);
@@ -130,7 +164,7 @@ public class AddEReferenceRapidButtonBehavior extends AbstractBehavior<EClassNod
         chooser.addChoice(_eClassNode, it);
       }
     };
-    IterableExtensions.<EReference>forEach(this.availableReferences, _function);
+    IterableExtensions.<EReference>forEach(this.availableKeys, _function);
     final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
       public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
         XConnection _xblockexpression = null;

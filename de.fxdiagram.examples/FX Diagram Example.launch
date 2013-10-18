@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/de.fxdiagram.examples/xtend-gen/de/fxdiagram/examples/Main.java"/>
+<listEntry value="/de.fxdiagram.examples/xtend-gen/de/fxdiagram/examples/Demo.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -11,7 +11,7 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="false"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="de.fxdiagram.examples.Main"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="de.fxdiagram.examples.Demo"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="de.fxdiagram.examples"/>
 <stringAttribute key="yk-options" value="&#10;additional-options2=onexit\=snapshot&#10;startup=0&#10;"/>
 </launchConfiguration>

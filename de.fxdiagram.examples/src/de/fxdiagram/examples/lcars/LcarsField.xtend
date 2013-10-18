@@ -27,6 +27,7 @@ import javafx.scene.text.Text
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.examples.lcars.LcarsExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.layout.LayoutType
 
 class LcarsField extends Parent {
 
@@ -95,7 +96,7 @@ class LcarsField extends Parent {
 						.toList
 					diagram.connections += newConnections
 					if(!newConnections.empty)
-						new LayoutAction().perform(root)
+						new LayoutAction(LayoutType.DOT).perform(root)
 					resetVisuals
 				}
 			]

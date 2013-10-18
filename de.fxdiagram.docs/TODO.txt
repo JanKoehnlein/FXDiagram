@@ -3,6 +3,8 @@ TODO
 - labels snap back after being repositioned
 
 ENHANCEMENT
+- make this XNode.behaviors a map
+- lift up XNode.behaviors to XShape (blocked by https://bugs.eclipse.org/bugs/show_bug.cgi?id=419688)
 - scroll to reveal choosers
 - eOpposite aware key in Ecore
 - find better colors

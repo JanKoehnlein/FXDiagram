@@ -2,8 +2,11 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.behavior.AbstractCloseBehavior;
+import de.fxdiagram.core.behavior.AbstractOpenBehavior;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
+import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
@@ -51,7 +54,10 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   
   private FirstRecursiveImageNode pivot;
   
-  public RecursiveImageNode(final Image image, final double x, final double y, final double scale) {
+  private boolean isZoomedIn;
+  
+  public RecursiveImageNode(final String name, final Image image, final double x, final double y, final double scale) {
+    super(name);
     this.setImage(image);
     this.setX(x);
     this.setY(y);
@@ -78,60 +84,118 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
         int _clickCount = it.getClickCount();
         boolean _equals = (_clickCount == 2);
         if (_equals) {
-          double _get = RecursiveImageNode.this.actualWidthProperty.get();
-          double _multiply = (_get * 0.5);
-          double _scale = RecursiveImageNode.this.getScale();
-          double _minus = (1 - _scale);
-          double _x = RecursiveImageNode.this.getX();
-          double _multiply_1 = (2 * _x);
-          double _get_1 = RecursiveImageNode.this.actualWidthProperty.get();
-          double _divide = (_multiply_1 / _get_1);
-          double _plus = (_minus + _divide);
-          double _multiply_2 = (_multiply * _plus);
-          double _scale_1 = RecursiveImageNode.this.getScale();
-          double _minus_1 = (1 - _scale_1);
-          double _divide_1 = (1 / _minus_1);
-          double _multiply_3 = (_multiply_2 * _divide_1);
-          double _get_2 = RecursiveImageNode.this.actualHeightProperty.get();
-          double _multiply_4 = (_get_2 * 0.5);
-          double _scale_2 = RecursiveImageNode.this.getScale();
-          double _minus_2 = (1 - _scale_2);
-          double _y = RecursiveImageNode.this.getY();
-          double _multiply_5 = (2 * _y);
-          double _get_3 = RecursiveImageNode.this.actualHeightProperty.get();
-          double _divide_2 = (_multiply_5 / _get_3);
-          double _plus_1 = (_minus_2 + _divide_2);
-          double _multiply_6 = (_multiply_4 * _plus_1);
-          double _scale_3 = RecursiveImageNode.this.getScale();
-          double _minus_3 = (1 - _scale_3);
-          double _divide_3 = (1 / _minus_3);
-          double _multiply_7 = (_multiply_6 * _divide_3);
-          final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(RecursiveImageNode.this, _multiply_3, _multiply_7);
-          XRoot _root = CoreExtensions.getRoot(RecursiveImageNode.this);
-          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, centerInDiagram, 500);
-          final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
-            public void apply(final ScrollToAndScaleTransition it) {
-              Duration _seconds = Duration.seconds(5);
-              it.setDuration(_seconds);
-              final Interpolator _function = new Interpolator() {
-                @Override
-                protected double curve(final double it) {
-                  double _log = Math.log(10000);
-                  double _multiply = (_log * it);
-                  double _exp = Math.exp(_multiply);
-                  double _divide = (_exp / 10000);
-                  return _divide;
-                }
-              };
-              it.setInterpolator(_function);
-              it.play();
-            }
-          };
-          ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+          if (RecursiveImageNode.this.isZoomedIn) {
+            RecursiveImageNode.this.zoomOut();
+          } else {
+            RecursiveImageNode.this.zoomIn();
+          }
         }
       }
     };
     this.setOnMouseClicked(_function);
+    final AbstractOpenBehavior _function_1 = new AbstractOpenBehavior() {
+      public void open() {
+        RecursiveImageNode.this.zoomIn();
+      }
+    };
+    final AbstractOpenBehavior openBehavior = _function_1;
+    this.addBehavior(openBehavior);
+    final AbstractCloseBehavior _function_2 = new AbstractCloseBehavior() {
+      public void close() {
+        RecursiveImageNode.this.zoomOut();
+      }
+    };
+    final AbstractCloseBehavior closeBehavior = _function_2;
+    this.addBehavior(closeBehavior);
+  }
+  
+  protected void zoomIn() {
+    if (this.isZoomedIn) {
+      return;
+    }
+    double _get = this.actualWidthProperty.get();
+    double _multiply = (_get * 0.5);
+    double _scale = this.getScale();
+    double _minus = (1 - _scale);
+    double _x = this.getX();
+    double _multiply_1 = (2 * _x);
+    double _get_1 = this.actualWidthProperty.get();
+    double _divide = (_multiply_1 / _get_1);
+    double _plus = (_minus + _divide);
+    double _multiply_2 = (_multiply * _plus);
+    double _scale_1 = this.getScale();
+    double _minus_1 = (1 - _scale_1);
+    double _divide_1 = (1 / _minus_1);
+    double _multiply_3 = (_multiply_2 * _divide_1);
+    double _get_2 = this.actualHeightProperty.get();
+    double _multiply_4 = (_get_2 * 0.5);
+    double _scale_2 = this.getScale();
+    double _minus_2 = (1 - _scale_2);
+    double _y = this.getY();
+    double _multiply_5 = (2 * _y);
+    double _get_3 = this.actualHeightProperty.get();
+    double _divide_2 = (_multiply_5 / _get_3);
+    double _plus_1 = (_minus_2 + _divide_2);
+    double _multiply_6 = (_multiply_4 * _plus_1);
+    double _scale_3 = this.getScale();
+    double _minus_3 = (1 - _scale_3);
+    double _divide_3 = (1 / _minus_3);
+    double _multiply_7 = (_multiply_6 * _divide_3);
+    final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(this, _multiply_3, _multiply_7);
+    XRoot _root = CoreExtensions.getRoot(this);
+    ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, centerInDiagram, 500);
+    final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
+      public void apply(final ScrollToAndScaleTransition it) {
+        Duration _seconds = Duration.seconds(5);
+        it.setDuration(_seconds);
+        final Interpolator _function = new Interpolator() {
+          @Override
+          protected double curve(final double it) {
+            double _log = Math.log(10000);
+            double _multiply = (_log * it);
+            double _exp = Math.exp(_multiply);
+            double _divide = (_exp / 10000);
+            return _divide;
+          }
+        };
+        it.setInterpolator(_function);
+        it.play();
+      }
+    };
+    ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+    this.isZoomedIn = true;
+  }
+  
+  protected void zoomOut() {
+    boolean _not = (!this.isZoomedIn);
+    if (_not) {
+      return;
+    }
+    Bounds _boundsInLocal = this.getBoundsInLocal();
+    Point2D _center = BoundsExtensions.center(_boundsInLocal);
+    final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(this, _center);
+    XRoot _root = CoreExtensions.getRoot(this);
+    ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, centerInDiagram, 1);
+    final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
+      public void apply(final ScrollToAndScaleTransition it) {
+        Duration _seconds = Duration.seconds(5);
+        it.setDuration(_seconds);
+        final Interpolator _function = new Interpolator() {
+          @Override
+          protected double curve(final double it) {
+            double _multiply = (it * 10000);
+            double _log = Math.log(_multiply);
+            double _log_1 = Math.log(10000);
+            double _divide = (_log / _log_1);
+            return _divide;
+          }
+        };
+        it.setInterpolator(_function);
+        it.play();
+      }
+    };
+    ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+    this.isZoomedIn = false;
   }
   
   protected Group createPane() {

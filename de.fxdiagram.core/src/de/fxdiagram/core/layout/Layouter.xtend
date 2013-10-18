@@ -33,13 +33,13 @@ class Layouter {
 	
 	new() {
 		// pre-initialize
-		layoutProvider.dispose
+		getLayoutProvider(LayoutType.DOT).dispose
 	}
 	
-	def layout(XDiagram diagram, Duration duration) {
+	def layout(LayoutType type, XDiagram diagram, Duration duration) {
 		val cache = <Object, KGraphElement> newHashMap
 		val kRoot = diagram.toKRootNode(cache)
-		val provider = getLayoutProvider
+		val provider = getLayoutProvider(type)
 		try {
 			provider.doLayout(kRoot, new BasicProgressMonitor())
 			apply(cache, duration)
@@ -48,10 +48,10 @@ class Layouter {
 		}
 	}
 
-	def AbstractLayoutProvider getLayoutProvider() {
+	def AbstractLayoutProvider getLayoutProvider(LayoutType type) {
 		new LoggingTransformationService
 		new GraphvizLayoutProvider => [
-			initialize("DOT")
+			initialize(type.toString)
 		]
 	}
 	
@@ -70,7 +70,7 @@ class Layouter {
 //				}
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
-					animations += createTransition(xElement, shapeLayout.xpos, shapeLayout.ypos, LayoutTransitionStyle.CURVE_XFIRST, duration)
+					animations += createTransition(xElement, shapeLayout.xpos - xElement.layoutBounds.minX, shapeLayout.ypos - xElement.layoutBounds.minY, LayoutTransitionStyle.CURVE_XFIRST, duration)
 				}
 				XConnection: {
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
@@ -168,5 +168,9 @@ class Layouter {
 		cache.put(it, kLabel)
 		kLabel
 	}
+}
+
+enum LayoutType {
+	DOT, NEATO
 }
 

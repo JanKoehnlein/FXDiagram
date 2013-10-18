@@ -13,7 +13,6 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
-import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
@@ -483,10 +482,6 @@ public class XConnection extends XShape {
   public boolean isSelectable() {
     boolean _isActive = this.getIsActive();
     return _isActive;
-  }
-  
-  public MoveBehavior<? extends XShape> getMoveBehavior() {
-    return null;
   }
   
   public void layoutChildren() {

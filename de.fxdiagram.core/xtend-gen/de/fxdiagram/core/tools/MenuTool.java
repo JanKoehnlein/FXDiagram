@@ -5,12 +5,17 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.actions.CenterAction;
+import de.fxdiagram.core.tools.actions.CloseAction;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ExitAction;
 import de.fxdiagram.core.tools.actions.ExportSvgAction;
 import de.fxdiagram.core.tools.actions.LayoutAction;
+import de.fxdiagram.core.tools.actions.NavigateNextAction;
+import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
+import de.fxdiagram.core.tools.actions.OpenAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import eu.hansolo.enzo.radialmenu.MenuItem;
@@ -37,6 +42,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -56,6 +62,8 @@ public class MenuTool implements XDiagramTool {
   private RadialMenu menu;
   
   private MenuItem selection;
+  
+  private LayoutType currentLayoutType = LayoutType.DOT;
   
   public MenuTool(final XRoot root) {
     this.root = root;
@@ -142,7 +150,9 @@ public class MenuTool implements XDiagramTool {
               LayoutAction _xblockexpression_4 = null;
               {
                 it.consume();
-                LayoutAction _layoutAction = new LayoutAction();
+                LayoutType _next = MenuTool.this.next(MenuTool.this.currentLayoutType);
+                MenuTool.this.currentLayoutType = _next;
+                LayoutAction _layoutAction = new LayoutAction(MenuTool.this.currentLayoutType);
                 _xblockexpression_4 = (_layoutAction);
               }
               _xifexpression_4 = _xblockexpression_4;
@@ -163,13 +173,43 @@ public class MenuTool implements XDiagramTool {
           }
         }
         if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.PAGE_DOWN)) {
+            _matched=true;
+            NavigateNextAction _navigateNextAction = new NavigateNextAction();
+            _switchResult = _navigateNextAction;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.PAGE_UP)) {
+            _matched=true;
+            NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
+            _switchResult = _navigatePreviousAction;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.PERIOD)) {
+            _matched=true;
+            OpenAction _openAction = new OpenAction();
+            _switchResult = _openAction;
+          }
+        }
+        if (!_matched) {
           if (Objects.equal(getCode,KeyCode.ESCAPE)) {
             _matched=true;
-            DiagramAction _xblockexpression_5 = null;
+            CloseAction _xblockexpression_5 = null;
             {
               it.consume();
-              MenuTool.this.closeMenu();
-              _xblockexpression_5 = (null);
+              CloseAction _xifexpression_6 = null;
+              State _state = MenuTool.this.menu.getState();
+              boolean _equals = Objects.equal(_state, State.OPENED);
+              if (_equals) {
+                MenuTool.this.closeMenu();
+                return;
+              } else {
+                CloseAction _closeAction = new CloseAction();
+                _xifexpression_6 = _closeAction;
+              }
+              _xblockexpression_5 = (_xifexpression_6);
             }
             _switchResult = _xblockexpression_5;
           }
@@ -287,8 +327,14 @@ public class MenuTool implements XDiagramTool {
                     if (!_matched) {
                       if (Objects.equal(_switchValue,Type.GRAPH)) {
                         _matched=true;
-                        LayoutAction _layoutAction = new LayoutAction();
-                        _switchResult = _layoutAction;
+                        LayoutAction _xblockexpression = null;
+                        {
+                          LayoutType _next = MenuTool.this.next(MenuTool.this.currentLayoutType);
+                          MenuTool.this.currentLayoutType = _next;
+                          LayoutAction _layoutAction = new LayoutAction(MenuTool.this.currentLayoutType);
+                          _xblockexpression = (_layoutAction);
+                        }
+                        _switchResult = _xblockexpression;
                       }
                     }
                     if (!_matched) {
@@ -327,13 +373,13 @@ public class MenuTool implements XDiagramTool {
                       }
                     }
                     if (!_matched) {
-                      DiagramAction _xblockexpression = null;
+                      DiagramAction _xblockexpression_1 = null;
                       {
                         String _plus = ("Unhandled menu item " + MenuTool.this.selection);
                         MenuTool.LOG.warning(_plus);
-                        _xblockexpression = (null);
+                        _xblockexpression_1 = (null);
                       }
-                      _switchResult = _xblockexpression;
+                      _switchResult = _xblockexpression_1;
                     }
                     final DiagramAction action = _switchResult;
                     if (action!=null) {
@@ -402,6 +448,20 @@ public class MenuTool implements XDiagramTool {
       Scene _scene = this.root.getScene();
       _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       _xblockexpression = (true);
+    }
+    return _xblockexpression;
+  }
+  
+  protected LayoutType next(final LayoutType currentLayoutType) {
+    LayoutType _xblockexpression = null;
+    {
+      final LayoutType[] values = LayoutType.values();
+      int _indexOf = ((List<LayoutType>)Conversions.doWrapArray(values)).indexOf(currentLayoutType);
+      int _plus = (_indexOf + 1);
+      int _size = ((List<LayoutType>)Conversions.doWrapArray(values)).size();
+      int _modulo = (_plus % _size);
+      LayoutType _get = values[_modulo];
+      _xblockexpression = (_get);
     }
     return _xblockexpression;
   }

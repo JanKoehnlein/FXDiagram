@@ -11,7 +11,11 @@ import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
+import de.fxdiagram.core.behavior.Behavior;
+import de.fxdiagram.core.behavior.DiagramNavigationBehavior;
+import de.fxdiagram.core.behavior.NavigationBehavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import javafx.beans.property.ListProperty;
@@ -26,7 +30,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
+import javafx.collections.MapChangeListener;
+import javafx.collections.MapChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
@@ -61,6 +66,13 @@ public class XDiagram extends Group implements XActivatable {
   private Procedure1<? super XDiagram> contentsInitializer;
   
   private AuxiliaryLinesSupport auxiliaryLinesSupport;
+  
+  private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = new Function0<ObservableMap<Class<? extends Behavior>,Behavior>>() {
+    public ObservableMap<Class<? extends Behavior>,Behavior> apply() {
+      ObservableMap<Class<? extends Behavior>,Behavior> _observableHashMap = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
+      return _observableHashMap;
+    }
+  }.apply();
   
   public XDiagram() {
     ObservableList<Node> _children = this.getChildren();
@@ -100,6 +112,27 @@ public class XDiagram extends Group implements XActivatable {
       this.isActiveProperty.set(true);
       this.doActivate();
     }
+    Collection<Behavior> _values = this.behaviors.values();
+    final Procedure1<Behavior> _function = new Procedure1<Behavior>() {
+      public void apply(final Behavior it) {
+        it.activate();
+      }
+    };
+    IterableExtensions.<Behavior>forEach(_values, _function);
+    final MapChangeListener<Class<? extends Behavior>,Behavior> _function_1 = new MapChangeListener<Class<? extends Behavior>,Behavior>() {
+      public void onChanged(final Change<? extends Class<? extends Behavior>,? extends Behavior> change) {
+        boolean _isActive = XDiagram.this.getIsActive();
+        if (_isActive) {
+          boolean _wasAdded = change.wasAdded();
+          if (_wasAdded) {
+            Behavior _valueAdded = change.getValueAdded();
+            _valueAdded.activate();
+          }
+        }
+      }
+    };
+    final MapChangeListener<Class<? extends Behavior>,Behavior> behaviorActivator = _function_1;
+    this.behaviors.addListener(behaviorActivator);
   }
   
   public void doActivate() {
@@ -121,7 +154,7 @@ public class XDiagram extends Group implements XActivatable {
     };
     final ChangeListener<Node> arrowHeadListener = _function;
     final ListChangeListener<Node> _function_1 = new ListChangeListener<Node>() {
-      public void onChanged(final Change<? extends Node> change) {
+      public void onChanged(final javafx.collections.ListChangeListener.Change<? extends Node> change) {
         boolean _next = change.next();
         boolean _while = _next;
         while (_while) {
@@ -157,8 +190,8 @@ public class XDiagram extends Group implements XActivatable {
     ObservableList<XRapidButton> _buttons = this.getButtons();
     XDiagramChildrenListener<XRapidButton> _xDiagramChildrenListener_2 = new XDiagramChildrenListener<XRapidButton>(this, this.buttonLayer);
     _buttons.addListener(_xDiagramChildrenListener_2);
-    final Procedure1<Change<? extends Node>> _function_2 = new Procedure1<Change<? extends Node>>() {
-      public void apply(final Change<? extends Node> change) {
+    final Procedure1<javafx.collections.ListChangeListener.Change<? extends Node>> _function_2 = new Procedure1<javafx.collections.ListChangeListener.Change<? extends Node>>() {
+      public void apply(final javafx.collections.ListChangeListener.Change<? extends Node> change) {
         boolean _next = change.next();
         boolean _while = _next;
         while (_while) {
@@ -220,11 +253,11 @@ public class XDiagram extends Group implements XActivatable {
         }
       }
     };
-    final Procedure1<Change<? extends Node>> listChangeListener = _function_2;
+    final Procedure1<javafx.collections.ListChangeListener.Change<? extends Node>> listChangeListener = _function_2;
     Group _connectionLayer_1 = this.getConnectionLayer();
     ObservableList<Node> _children = _connectionLayer_1.getChildren();
     _children.addListener(new ListChangeListener<Node>() {
-        public void onChanged(Change<? extends Node> c) {
+        public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> c) {
           listChangeListener.apply(c);
         }
     });
@@ -244,6 +277,28 @@ public class XDiagram extends Group implements XActivatable {
     if (this.contentsInitializer!=null) {
       this.contentsInitializer.apply(this);
     }
+    NavigationBehavior _behavior = this.<NavigationBehavior>getBehavior(NavigationBehavior.class);
+    boolean _equals = Objects.equal(_behavior, null);
+    if (_equals) {
+      DiagramNavigationBehavior _diagramNavigationBehavior = new DiagramNavigationBehavior(this);
+      this.addBehavior(_diagramNavigationBehavior);
+    }
+  }
+  
+  public <T extends Behavior> T getBehavior(final Class<T> key) {
+    Behavior _get = this.behaviors.get(key);
+    return ((T) _get);
+  }
+  
+  public Behavior addBehavior(final Behavior behavior) {
+    Class<? extends Behavior> _behaviorKey = behavior.getBehaviorKey();
+    Behavior _put = this.behaviors.put(_behaviorKey, behavior);
+    return _put;
+  }
+  
+  public Behavior removeBehavior(final String key) {
+    Behavior _remove = this.behaviors.remove(key);
+    return _remove;
   }
   
   protected void addArrowHead(final Property<? extends Node> property, final ChangeListener<? super Node> listener) {

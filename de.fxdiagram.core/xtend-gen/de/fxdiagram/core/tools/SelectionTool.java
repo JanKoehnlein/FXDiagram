@@ -133,16 +133,16 @@ public class SelectionTool implements XDiagramTool {
               }
               final Procedure1<XShape> _function_3 = new Procedure1<XShape>() {
                 public void apply(final XShape it) {
-                  MoveBehavior<? extends XShape> _moveBehavior = it.getMoveBehavior();
-                  if (_moveBehavior!=null) {
-                    _moveBehavior.mousePressed(event);
+                  MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
+                  if (_behavior!=null) {
+                    _behavior.mousePressed(event);
                   }
                 }
               };
               IterableExtensions.<XShape>forEach(selection, _function_3);
-              MoveBehavior<? extends XShape> _moveBehavior = targetShape.getMoveBehavior();
-              if (_moveBehavior!=null) {
-                _moveBehavior.mousePressed(event);
+              MoveBehavior _behavior = targetShape.<MoveBehavior>getBehavior(MoveBehavior.class);
+              if (_behavior!=null) {
+                _behavior.mousePressed(event);
               }
               double _sceneX = event.getSceneX();
               double _sceneY = event.getSceneY();
@@ -164,12 +164,12 @@ public class SelectionTool implements XDiagramTool {
       public void handle(final MouseEvent it) {
         final Iterable<XShape> selection = root.getCurrentSelection();
         for (final XShape shape : selection) {
-          MoveBehavior<? extends XShape> _moveBehavior = null;
+          MoveBehavior _behavior = null;
           if (shape!=null) {
-            _moveBehavior=shape.getMoveBehavior();
+            _behavior=shape.<MoveBehavior>getBehavior(MoveBehavior.class);
           }
-          if (_moveBehavior!=null) {
-            _moveBehavior.mouseDragged(it);
+          if (_behavior!=null) {
+            _behavior.mouseDragged(it);
           }
         }
         XDiagram _diagram = root.getDiagram();

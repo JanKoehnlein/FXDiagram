@@ -207,10 +207,6 @@ class XConnection extends XShape {
 		isActive
 	}
 
-	override getMoveBehavior() {
-		null
-	}
-	
 	override layoutChildren() {
 		super.layoutChildren
 		connectionRouter.calculatePoints

@@ -10,6 +10,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.core.tools.actions.LayoutAction;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
@@ -251,7 +252,7 @@ public class LcarsField extends Parent {
               boolean _isEmpty = newConnections.isEmpty();
               boolean _not = (!_isEmpty);
               if (_not) {
-                LayoutAction _layoutAction = new LayoutAction();
+                LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
                 XRoot _root = CoreExtensions.getRoot(LcarsField.this);
                 _layoutAction.perform(_root);
               }

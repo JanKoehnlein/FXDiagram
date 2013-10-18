@@ -26,12 +26,16 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
     Point2D _xblockexpression = null;
     {
       final Point2D rectAnchor = super.getAnchor(x, y);
+      boolean _equals = Objects.equal(rectAnchor, null);
+      if (_equals) {
+        return null;
+      }
       Node _node = this.host.getNode();
       Node _node_1 = this.host.getNode();
       Bounds _layoutBounds = _node_1.getLayoutBounds();
       final Bounds boundsInRootDiagram = CoreExtensions.localToRootDiagram(_node, _layoutBounds);
-      boolean _equals = Objects.equal(boundsInRootDiagram, null);
-      if (_equals) {
+      boolean _equals_1 = Objects.equal(boundsInRootDiagram, null);
+      if (_equals_1) {
         return null;
       }
       Node _node_2 = this.host.getNode();

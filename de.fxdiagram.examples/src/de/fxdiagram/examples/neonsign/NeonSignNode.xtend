@@ -1,8 +1,6 @@
 package de.fxdiagram.examples.neonsign
 
-import de.fxdiagram.core.XNode
 import de.fxdiagram.core.services.ImageCache
-import de.fxdiagram.lib.media.ImageNode
 import de.fxdiagram.lib.nodes.FlipNode
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
@@ -13,6 +11,7 @@ import javafx.scene.effect.Blend
 import javafx.scene.effect.BlendMode
 import javafx.scene.effect.Bloom
 import javafx.scene.effect.InnerShadow
+import javafx.scene.image.ImageView
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
@@ -21,11 +20,11 @@ import javafx.scene.text.TextAlignment
 
 import static de.fxdiagram.core.extensions.UriExtensions.*
 
+import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.scene.layout.VBox.*
 import static extension javafx.util.Duration.*
-import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
-class NeonSignNode extends XNode {
+class NeonSignNode extends FlipNode {
 
 	TextField textField
 
@@ -33,14 +32,11 @@ class NeonSignNode extends XNode {
 
 	new() {
 		super('Xtend')
-		node = new FlipNode => [
-			front = neonSign => [
-				tooltip = 'Double-click for Xtend code'
-			]
-			back = new ImageNode => [
-				image = ImageCache.get.getImage(this, 'code.png')
-			]
-			flipOnDoubleClick = true
+		front = neonSign => [
+			tooltip = 'Double-click for Xtend code'
+		]
+		back = new ImageView => [
+			image = ImageCache.get.getImage(this, 'code.png')
 		]
 	}
 
@@ -82,8 +78,4 @@ class NeonSignNode extends XNode {
 			]
 		]
 	}
-
-
-	
-	
 }

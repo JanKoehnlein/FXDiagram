@@ -15,6 +15,7 @@ import static de.fxdiagram.core.extensions.TimerExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.behavior.MoveBehavior
 
 class SelectionTool implements XDiagramTool {
 
@@ -50,9 +51,9 @@ class SelectionTool implements XDiagramTool {
 					if(targetShape.selected)
 						selection.add(targetShape)
 					selection.forEach [
-						moveBehavior?.mousePressed(event)
+						getBehavior(MoveBehavior)?.mousePressed(event)
 					]
-					targetShape.moveBehavior?.mousePressed(event)
+					targetShape.getBehavior(MoveBehavior)?.mousePressed(event)
 					updatePositionTooltip(selection, event.sceneX, event.sceneY)
 					defer([|showPositionTooltip], 200.millis)
 				}
@@ -61,7 +62,7 @@ class SelectionTool implements XDiagramTool {
 		this.mouseDraggedHandler = [
 			val selection = root.currentSelection
 			for (shape : selection) 
-				shape?.moveBehavior?.mouseDragged(it)
+				shape?.getBehavior(MoveBehavior)?.mouseDragged(it)
 			root.diagram.auxiliaryLinesSupport?.show(selection)	
 			updatePositionTooltip(selection, sceneX, sceneY)
 			showPositionTooltip

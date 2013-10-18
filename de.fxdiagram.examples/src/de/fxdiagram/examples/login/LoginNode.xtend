@@ -1,7 +1,6 @@
 package de.fxdiagram.examples.login
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import javafx.geometry.Insets
@@ -20,23 +19,21 @@ import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 
-class LoginNode extends XNode {
+class LoginNode extends FlipNode {
 
 	@FxProperty String userName = ""
 	@FxProperty String password
 
 	new() {
 		super("Login")
-		node = new FlipNode => [
-			front = createForm
-			back = new RectangleBorderPane => [
-				children += new Text => [
-					textOrigin = VPos.TOP
-					text = key
-					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-				]
+		front = new RectangleBorderPane => [
+			children += new Text => [
+				textOrigin = VPos.TOP
+				text = key
+				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
 		]
+		back = createForm 
 	}
 
 	def createForm() {
@@ -63,16 +60,11 @@ class LoginNode extends XNode {
 						alignment = Pos.BOTTOM_RIGHT
 						children += new Button("Sign in") => [
 							onAction = [
-								flipNode.flip(true)
-								flipNode.flipOnDoubleClick = true
+								flip(true)
 							]
 						]
 					], 1, 4)
 			]
 		]
-	}
-
-	protected def getFlipNode() {
-		node as FlipNode
 	}
 }

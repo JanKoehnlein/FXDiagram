@@ -3,10 +3,10 @@ package de.fxdiagram.examples.java
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.anchors.TriangleArrowHead
-import de.fxdiagram.core.behavior.AbstractBehavior
+import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import java.util.List
-import java.util.Map
+import java.util.Set
 import javafx.collections.ListChangeListener
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
@@ -14,40 +14,52 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
-class AddSuperTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
+class AddSuperTypeRapidButtonBehavior extends AbstractHostBehavior<JavaTypeNode> {
 	
 	List<XRapidButton> buttons
 	
-	Map<Object, Class<?>> key2availableSuperType = newHashMap
+	Set<SuperTypeKey> availableKeys = newLinkedHashSet
+	Set<SuperTypeKey> unavailableKeys = newHashSet
 	
 	new(JavaTypeNode host) {
 		super(host)
 	}
 	
+	override getBehaviorKey() {
+		AddSuperTypeRapidButtonBehavior
+	}
+	
 	override protected doActivate() {
-		val model = host.javaTypeModel
-		model.superTypes.forEach[ key2availableSuperType.put(getKey(it), it) ]
-		if(!key2availableSuperType.empty) {
-			val addSuperTypeAction = [
+		availableKeys += host.javaTypeModel.superTypes.map[key]
+		if(!availableKeys.empty) {
+			val addConnectionAction = [
 				XRapidButton button |
 				createChooser(button)
 			]
-			buttons = createButtons(addSuperTypeAction)
+			buttons = createButtons(addConnectionAction)
 			host.diagram.buttons += buttons
 			host.diagram.connections.addListener [
 				ListChangeListener.Change<? extends XConnection> change |
 				while(change.next) {
 					if(change.wasAdded) 
-						change.addedSubList.forEach[ key2availableSuperType.remove(key) ]
+						change.addedSubList.forEach[ 
+							if(availableKeys.remove(key))
+								unavailableKeys.add(key as SuperTypeKey)
+						]
+					if(change.wasRemoved) 
+						change.removed.forEach[
+							if(unavailableKeys.remove(key))
+								availableKeys.add(key as SuperTypeKey)
+						]
 				}
-				if(key2availableSuperType.empty)
+				if(availableKeys.empty)
 					host.diagram.buttons -= buttons
 			]  			
 		}
 	}
 	
 	protected def getKey(Class<?> superType) {
-		(host as JavaTypeNode).javaType.simpleName + ' extends ' + superType.simpleName
+		new SuperTypeKey((host as JavaTypeNode).javaType, superType)
 	}
 	
 	protected def createButtons((XRapidButton)=>void addSuperTypeAction) {
@@ -59,9 +71,8 @@ class AddSuperTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 	
 	protected def createChooser(XRapidButton button) {
 		val chooser = new CoverFlowChooser(host, button.getChooserPosition)
-		key2availableSuperType.values.forEach[
-			superType | 
-			chooser.addChoice(new JavaTypeNode(superType))
+		availableKeys.forEach[
+			chooser.addChoice(new JavaTypeNode(superType), it)
 		]
 		chooser.connectionProvider = [
 			host, choice, choiceInfo |
@@ -72,4 +83,10 @@ class AddSuperTypeRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
 		]
 		host.root.currentTool = chooser
 	}
+}
+
+@Data
+class SuperTypeKey {
+	Class<?> subType
+	Class<?> superType
 }

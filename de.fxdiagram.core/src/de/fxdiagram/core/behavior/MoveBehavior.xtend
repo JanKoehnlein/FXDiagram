@@ -4,7 +4,7 @@ import de.fxdiagram.core.XShape
 import javafx.geometry.Point2D
 import javafx.scene.input.MouseEvent
 
-class MoveBehavior <T extends XShape> extends AbstractBehavior<T> {
+class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	
 	DragContext dragContext
 	
@@ -19,6 +19,10 @@ class MoveBehavior <T extends XShape> extends AbstractBehavior<T> {
 		host.node.onMouseDragged = [
 			mouseDragged	
 		]
+	}
+	
+	override getBehaviorKey() {
+		MoveBehavior
 	}
 	
 	def mousePressed(MouseEvent it) {

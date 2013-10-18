@@ -216,12 +216,12 @@ public class EClassNode extends XNode {
     return this.eClass;
   }
   
-  public void activate() {
-    super.activate();
+  public void doActivate() {
+    super.doActivate();
     this.populateCompartments();
     AddESuperTypeRapidButtonBehavior _addESuperTypeRapidButtonBehavior = new AddESuperTypeRapidButtonBehavior(this);
-    _addESuperTypeRapidButtonBehavior.activate();
+    this.addBehavior(_addESuperTypeRapidButtonBehavior);
     AddEReferenceRapidButtonBehavior _addEReferenceRapidButtonBehavior = new AddEReferenceRapidButtonBehavior(this);
-    _addEReferenceRapidButtonBehavior.activate();
+    this.addBehavior(_addEReferenceRapidButtonBehavior);
   }
 }

@@ -78,7 +78,5 @@ class LevelOfDetailDiagramNode extends XNode {
 				}
 			]
 		}
-		val rapidButtonBehavior = new AddRapidButtonBehavior(this)
-		rapidButtonBehavior.activate
 	}
 }

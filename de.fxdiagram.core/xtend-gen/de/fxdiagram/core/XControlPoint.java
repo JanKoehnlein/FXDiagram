@@ -26,8 +26,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class XControlPoint extends XShape {
-  private MoveBehavior<XControlPoint> moveBehavior;
-  
   private XControlPointType type;
   
   public XControlPoint() {
@@ -38,10 +36,11 @@ public class XControlPoint extends XShape {
     return this.type;
   }
   
-  public MoveBehavior<XControlPoint> setType(final XControlPointType type) {
-    MoveBehavior<XControlPoint> _xblockexpression = null;
+  public Boolean setType(final XControlPointType type) {
+    Boolean _xblockexpression = null;
     {
       this.type = type;
+      Boolean _switchResult = null;
       boolean _matched = false;
       if (!_matched) {
         if (Objects.equal(type,XControlPointType.ANCHOR)) {
@@ -55,14 +54,16 @@ public class XControlPoint extends XShape {
             }
           };
           Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
-          this.setNode(_doubleArrow);
+          boolean _setNode = this.setNode(_doubleArrow);
+          _switchResult = Boolean.valueOf(_setNode);
         }
       }
       if (!_matched) {
         if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
           _matched=true;
           Node _newMagnet = this.newMagnet();
-          this.setNode(_newMagnet);
+          boolean _setNode_1 = this.setNode(_newMagnet);
+          _switchResult = Boolean.valueOf(_setNode_1);
         }
       }
       if (!_matched) {
@@ -77,24 +78,20 @@ public class XControlPoint extends XShape {
             }
           };
           Circle _doubleArrow_1 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
-          this.setNode(_doubleArrow_1);
+          boolean _setNode_2 = this.setNode(_doubleArrow_1);
+          _switchResult = Boolean.valueOf(_setNode_2);
         }
       }
-      MoveBehavior<XControlPoint> _xifexpression = null;
-      boolean _notEquals = (!Objects.equal(type, XControlPointType.ANCHOR));
-      if (_notEquals) {
-        MoveBehavior<XControlPoint> _moveBehavior = new MoveBehavior<XControlPoint>(this);
-        MoveBehavior<XControlPoint> _moveBehavior_1 = this.moveBehavior = _moveBehavior;
-        _xifexpression = _moveBehavior_1;
-      }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = (_switchResult);
     }
     return _xblockexpression;
   }
   
   protected void doActivate() {
-    if (this.moveBehavior!=null) {
-      this.moveBehavior.activate();
+    boolean _notEquals = (!Objects.equal(this.type, XControlPointType.ANCHOR));
+    if (_notEquals) {
+      MoveBehavior<XControlPoint> _moveBehavior = new MoveBehavior<XControlPoint>(this);
+      this.addBehavior(_moveBehavior);
     }
   }
   
@@ -147,10 +144,6 @@ public class XControlPoint extends XShape {
       _and = (_notEquals && _isSelectable);
     }
     return _and;
-  }
-  
-  public MoveBehavior<? extends XShape> getMoveBehavior() {
-    return this.moveBehavior;
   }
   
   public String toString() {

@@ -19,32 +19,23 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 @Logging
 class XNode extends XShape {
 
-	static int instanceCount
-
 	@FxProperty @Lazy double width
 	@FxProperty @Lazy double height
 	@FxProperty @ReadOnly String key
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
-	 
+	
 	Effect mouseOverEffect
 	Effect selectionEffect
 	Effect originalEffect
 
-	MoveBehavior<XNode> moveBehavior
 	Anchors anchors
-
-	new() {
+ 
+	new(String key) {
+		this.keyProperty.set(key)
 		mouseOverEffect = createMouseOverEffect
-		key = class.simpleName + instanceCount
-		instanceCount = instanceCount + 1
 		selectionEffect = createSelectionEffect
 		anchors = createAnchors
-	}
-
-	new(String key) {
-		this()
-		this.key = key
 	}
 
 	protected def createMouseOverEffect() {
@@ -66,8 +57,7 @@ class XNode extends XShape {
 		if(key == null) {
 			LOG.warning('Node\'s key is not set')
 		}
-		moveBehavior = new MoveBehavior(this)
-		moveBehavior.activate()
+		addBehavior(new MoveBehavior(this))
 		onMouseEntered = [
 			originalEffect = node.effect
 			node.effect = mouseOverEffect ?: originalEffect
@@ -77,7 +67,7 @@ class XNode extends XShape {
 		]
 		switch n:node { XActivatable: n.activate }
 	}
-
+	
 	override selectionFeedback(boolean isSelected) {
 		if (isSelected) {
 			effect = selectionEffect
@@ -93,14 +83,6 @@ class XNode extends XShape {
 	
 	override getSnapBounds() {
 		node.boundsInParent.scale(1 / scaleX, 1 / scaleY)
-	}
-
-	protected def setKey(String key) {
-		keyProperty.set(key)
-	}
-
-	override getMoveBehavior() {
-		moveBehavior
 	}
 
 	def getAnchors() {

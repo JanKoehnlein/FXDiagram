@@ -9,7 +9,8 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.behavior.AbstractBehavior;
+import de.fxdiagram.core.behavior.AbstractHostBehavior;
+import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.AbstractChooser;
@@ -23,15 +24,25 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.shape.SVGPath;
-import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T> {
+public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   private List<XRapidButton> rapidButtons;
+  
+  private Procedure1<? super AbstractChooser> choiceInitializer;
   
   public AddRapidButtonBehavior(final T host) {
     super(host);
+  }
+  
+  public Class<? extends Behavior> getBehaviorKey() {
+    return AddRapidButtonBehavior.class;
+  }
+  
+  public Procedure1<? super AbstractChooser> setChoiceInitializer(final Procedure1<? super AbstractChooser> choiceInitializer) {
+    Procedure1<? super AbstractChooser> _choiceInitializer = this.choiceInitializer = choiceInitializer;
+    return _choiceInitializer;
   }
   
   public void doActivate() {
@@ -115,11 +126,6 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractBehavior<T
   }
   
   protected void addChoices(final AbstractChooser chooser) {
-    ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, 20, true);
-    for (final Integer i : _doubleDotLessThan) {
-      String _plus = ("node " + i);
-      SimpleNode _simpleNode = new SimpleNode(_plus);
-      chooser.addChoice(_simpleNode);
-    }
+    this.choiceInitializer.apply(chooser);
   }
 }

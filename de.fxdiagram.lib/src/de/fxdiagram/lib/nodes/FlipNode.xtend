@@ -1,13 +1,14 @@
 package de.fxdiagram.lib.nodes
 
+import de.fxdiagram.core.XNode
 import javafx.animation.RotateTransition
 import javafx.animation.SequentialTransition
 import javafx.event.EventHandler
 import javafx.geometry.Point2D
 import javafx.geometry.Point3D
+import javafx.scene.Cursor
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
@@ -15,9 +16,10 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
-import javafx.scene.Cursor
+import de.fxdiagram.core.behavior.AbstractOpenBehavior
+import de.fxdiagram.core.behavior.AbstractCloseBehavior
 
-class FlipNode extends Parent {
+class FlipNode extends XNode {
 
 	Node front
 
@@ -29,8 +31,9 @@ class FlipNode extends Parent {
 
 	EventHandler<MouseEvent> clickHandler
 
-	new() {
-		children += pane
+	new(String key) {
+		super(key)
+		node = pane
 		cursor = Cursor.HAND
 	}
 	
@@ -47,7 +50,7 @@ class FlipNode extends Parent {
 		onMouseClicked = clickHandler
 	}
 
-	def flip(boolean isHorizontal) {
+	def void flip(boolean isHorizontal) {
 		back.layoutX = front.layoutX - (back.layoutBounds.width - front.layoutBounds.width) / 2 
 			- back.layoutBounds.minX
 		back.layoutY = front.layoutY - (back.layoutBounds.height - front.layoutBounds.height) / 2 
@@ -109,4 +112,12 @@ class FlipNode extends Parent {
 		if(isCurrentFront) back else front
 	}
 
+	override doActivate() {
+		super.doActivate()
+		flipOnDoubleClick = true
+		val AbstractOpenBehavior openBehavior = [| flip(true) ]
+		addBehavior(openBehavior)
+		val AbstractCloseBehavior closeBehavior = [| flip(true) ]
+		addBehavior(closeBehavior)
+	}
 }

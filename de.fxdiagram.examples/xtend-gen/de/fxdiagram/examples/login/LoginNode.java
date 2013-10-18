@@ -1,6 +1,5 @@
 package de.fxdiagram.examples.login;
 
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -28,38 +27,31 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class LoginNode extends XNode {
+public class LoginNode extends FlipNode {
   public LoginNode() {
     super("Login");
-    FlipNode _flipNode = new FlipNode();
-    final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
-      public void apply(final FlipNode it) {
-        RectangleBorderPane _createForm = LoginNode.this.createForm();
-        it.setFront(_createForm);
-        RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-        final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-          public void apply(final RectangleBorderPane it) {
-            ObservableList<Node> _children = it.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              public void apply(final Text it) {
-                it.setTextOrigin(VPos.TOP);
-                String _key = LoginNode.this.getKey();
-                it.setText(_key);
-                Insets _insets = new Insets(10, 20, 10, 20);
-                StackPane.setMargin(it, _insets);
-              }
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-            _children.add(_doubleArrow);
+    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      public void apply(final RectangleBorderPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setTextOrigin(VPos.TOP);
+            String _key = LoginNode.this.getKey();
+            it.setText(_key);
+            Insets _insets = new Insets(10, 20, 10, 20);
+            StackPane.setMargin(it, _insets);
           }
         };
-        RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-        it.setBack(_doubleArrow);
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+        _children.add(_doubleArrow);
       }
     };
-    FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
-    this.setNode(_doubleArrow);
+    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+    this.setFront(_doubleArrow);
+    RectangleBorderPane _createForm = this.createForm();
+    this.setBack(_createForm);
   }
   
   public RectangleBorderPane createForm() {
@@ -122,10 +114,7 @@ public class LoginNode extends XNode {
                     public void apply(final Button it) {
                       final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                         public void handle(final ActionEvent it) {
-                          FlipNode _flipNode = LoginNode.this.getFlipNode();
-                          _flipNode.flip(true);
-                          FlipNode _flipNode_1 = LoginNode.this.getFlipNode();
-                          _flipNode_1.setFlipOnDoubleClick(true);
+                          LoginNode.this.flip(true);
                         }
                       };
                       it.setOnAction(_function);
@@ -147,11 +136,6 @@ public class LoginNode extends XNode {
       _xblockexpression = (_doubleArrow);
     }
     return _xblockexpression;
-  }
-  
-  protected FlipNode getFlipNode() {
-    Node _node = this.getNode();
-    return ((FlipNode) _node);
   }
   
   private SimpleStringProperty userNameProperty = new SimpleStringProperty(this, "userName",_initUserName());

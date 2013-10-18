@@ -34,36 +34,22 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @Logging
 @SuppressWarnings("all")
 public class XNode extends XShape {
-  private static int instanceCount;
-  
   private Effect mouseOverEffect;
   
   private Effect selectionEffect;
   
   private Effect originalEffect;
   
-  private MoveBehavior<XNode> moveBehavior;
-  
   private Anchors anchors;
   
-  public XNode() {
+  public XNode(final String key) {
+    this.keyProperty.set(key);
     InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
     this.mouseOverEffect = _createMouseOverEffect;
-    Class<? extends XNode> _class = this.getClass();
-    String _simpleName = _class.getSimpleName();
-    String _plus = (_simpleName + Integer.valueOf(XNode.instanceCount));
-    this.setKey(_plus);
-    int _plus_1 = (XNode.instanceCount + 1);
-    XNode.instanceCount = _plus_1;
     DropShadow _createSelectionEffect = this.createSelectionEffect();
     this.selectionEffect = _createSelectionEffect;
     Anchors _createAnchors = this.createAnchors();
     this.anchors = _createAnchors;
-  }
-  
-  public XNode(final String key) {
-    this();
-    this.setKey(key);
   }
   
   protected InnerShadow createMouseOverEffect() {
@@ -95,8 +81,7 @@ public class XNode extends XShape {
       XNode.LOG.warning("Node\'s key is not set");
     }
     MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
-    this.moveBehavior = _moveBehavior;
-    this.moveBehavior.activate();
+    this.addBehavior(_moveBehavior);
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
         Node _node = XNode.this.getNode();
@@ -161,14 +146,6 @@ public class XNode extends XShape {
     double _divide_1 = (1 / _scaleY);
     BoundingBox _scale = BoundsExtensions.scale(_boundsInParent, _divide, _divide_1);
     return _scale;
-  }
-  
-  protected void setKey(final String key) {
-    this.keyProperty.set(key);
-  }
-  
-  public MoveBehavior<? extends XShape> getMoveBehavior() {
-    return this.moveBehavior;
   }
   
   public Anchors getAnchors() {

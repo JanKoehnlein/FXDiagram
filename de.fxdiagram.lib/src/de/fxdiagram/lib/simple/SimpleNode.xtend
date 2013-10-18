@@ -14,6 +14,7 @@ class SimpleNode extends XNode {
 	String name
 
 	new(String name) {
+		super(name)
 		this.name = name
 		node = new RectangleBorderPane => [
 			val label = new Text
@@ -26,7 +27,6 @@ class SimpleNode extends XNode {
 		getNode.effect = new InnerShadow => [
 			radius = 7
 		]
-		key = name
 	}
 	
 	override protected createAnchors() {
@@ -35,8 +35,6 @@ class SimpleNode extends XNode {
 
 	override doActivate() {
 		super.doActivate
-		val rapidButtonBehavior = new AddRapidButtonBehavior(this)
-		rapidButtonBehavior.activate
 	}
 
 	override toString() {

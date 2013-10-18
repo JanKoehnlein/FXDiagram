@@ -4,7 +4,6 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
-import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -20,6 +19,7 @@ public class SimpleNode extends XNode {
   private String name;
   
   public SimpleNode(final String name) {
+    super(name);
     this.name = name;
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
@@ -50,7 +50,6 @@ public class SimpleNode extends XNode {
     };
     InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
     _node.setEffect(_doubleArrow_1);
-    this.setKey(name);
   }
   
   protected Anchors createAnchors() {
@@ -60,9 +59,6 @@ public class SimpleNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    AddRapidButtonBehavior<SimpleNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<SimpleNode>(this);
-    final AddRapidButtonBehavior<SimpleNode> rapidButtonBehavior = _addRapidButtonBehavior;
-    rapidButtonBehavior.activate();
   }
   
   public String toString() {

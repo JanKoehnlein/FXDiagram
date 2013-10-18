@@ -252,12 +252,12 @@ public class JavaTypeNode extends XNode {
     return this.model;
   }
   
-  public void activate() {
-    super.activate();
+  public void doActivate() {
+    super.doActivate();
     this.populateComprtments();
     AddSuperTypeRapidButtonBehavior _addSuperTypeRapidButtonBehavior = new AddSuperTypeRapidButtonBehavior(this);
-    _addSuperTypeRapidButtonBehavior.activate();
+    this.addBehavior(_addSuperTypeRapidButtonBehavior);
     AddReferenceRapidButtonBehavior _addReferenceRapidButtonBehavior = new AddReferenceRapidButtonBehavior(this);
-    _addReferenceRapidButtonBehavior.activate();
+    this.addBehavior(_addReferenceRapidButtonBehavior);
   }
 }

@@ -31,6 +31,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.layout.LayoutTransitionFactory;
 import de.fxdiagram.core.layout.LayoutTransitionStyle;
+import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.LoggingTransformationService;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,14 +72,14 @@ public class Layouter {
   }.apply();
   
   public Layouter() {
-    AbstractLayoutProvider _layoutProvider = this.getLayoutProvider();
+    AbstractLayoutProvider _layoutProvider = this.getLayoutProvider(LayoutType.DOT);
     _layoutProvider.dispose();
   }
   
-  public void layout(final XDiagram diagram, final Duration duration) {
+  public void layout(final LayoutType type, final XDiagram diagram, final Duration duration) {
     final HashMap<Object,KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
     final KNode kRoot = this.toKRootNode(diagram, cache);
-    final AbstractLayoutProvider provider = this.getLayoutProvider();
+    final AbstractLayoutProvider provider = this.getLayoutProvider(type);
     try {
       BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
       provider.doLayout(kRoot, _basicProgressMonitor);
@@ -88,14 +89,15 @@ public class Layouter {
     }
   }
   
-  public AbstractLayoutProvider getLayoutProvider() {
+  public AbstractLayoutProvider getLayoutProvider(final LayoutType type) {
     GraphvizLayoutProvider _xblockexpression = null;
     {
       new LoggingTransformationService();
       GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
       final Procedure1<GraphvizLayoutProvider> _function = new Procedure1<GraphvizLayoutProvider>() {
         public void apply(final GraphvizLayoutProvider it) {
-          it.initialize("DOT");
+          String _string = type.toString();
+          it.initialize(_string);
         }
       };
       GraphvizLayoutProvider _doubleArrow = ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
@@ -119,8 +121,14 @@ public class Layouter {
             Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
             final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
             float _xpos = shapeLayout.getXpos();
+            Bounds _layoutBounds = ((XNode)xElement).getLayoutBounds();
+            double _minX = _layoutBounds.getMinX();
+            double _minus = (_xpos - _minX);
             float _ypos = shapeLayout.getYpos();
-            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(((XShape)xElement), _xpos, _ypos, LayoutTransitionStyle.CURVE_XFIRST, duration);
+            Bounds _layoutBounds_1 = ((XNode)xElement).getLayoutBounds();
+            double _minY = _layoutBounds_1.getMinY();
+            double _minus_1 = (_ypos - _minY);
+            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(((XShape)xElement), _minus, _minus_1, LayoutTransitionStyle.CURVE_XFIRST, duration);
             animations.add(_createTransition);
           }
         }

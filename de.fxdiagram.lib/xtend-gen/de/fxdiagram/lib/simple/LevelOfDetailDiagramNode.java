@@ -10,7 +10,6 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
-import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
 import de.fxdiagram.lib.simple.DiagramScaler;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
@@ -143,9 +142,6 @@ public class LevelOfDetailDiagramNode extends XNode {
       };
       _diagramScaleProperty.addListener(_function);
     }
-    AddRapidButtonBehavior<LevelOfDetailDiagramNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<LevelOfDetailDiagramNode>(this);
-    final AddRapidButtonBehavior<LevelOfDetailDiagramNode> rapidButtonBehavior = _addRapidButtonBehavior;
-    rapidButtonBehavior.activate();
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.lib.simple.LevelOfDetailDiagramNode");

@@ -8,7 +8,8 @@ class ImageNode extends XNode {
 
 	ImageView imageView
 
-	new() {
+	new(String key) {
+		super(key)
 		node = imageView = new ImageView => [
 			preserveRatio = true
 			fitWidthProperty.bind(widthProperty) 

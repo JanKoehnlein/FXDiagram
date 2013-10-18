@@ -120,14 +120,20 @@ public class LcarsNode extends XNode {
   private ChangeListener<Bounds> nameShortener;
   
   public LcarsNode(final DBObject data) {
+    super(new Function0<String>() {
+      public String apply() {
+        Object _get = data.get("name");
+        String _string = _get.toString();
+        return _string;
+      }
+    }.apply());
     this.data = data;
-    Object _get = data.get("name");
+    String _key = this.getKey();
+    this.name = _key;
+    Object _get = data.get("_id");
     String _string = _get.toString();
-    this.name = _string;
-    Object _get_1 = data.get("_id");
-    String _string_1 = _get_1.toString();
-    this.dbId = _string_1;
-    Object _get_2 = data.get("images");
+    this.dbId = _string;
+    Object _get_1 = data.get("images");
     final Function1<DBObject,String> _function = new Function1<DBObject,String>() {
       public String apply(final DBObject it) {
         Object _get = it.get("url");
@@ -135,7 +141,7 @@ public class LcarsNode extends XNode {
         return _string;
       }
     };
-    List<String> _map = ListExtensions.<DBObject, String>map(((List<DBObject>) _get_2), _function);
+    List<String> _map = ListExtensions.<DBObject, String>map(((List<DBObject>) _get_1), _function);
     this.imageUrls = _map;
     VBox _vBox = new VBox();
     this.vbox = _vBox;
@@ -292,7 +298,6 @@ public class LcarsNode extends XNode {
     };
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
     this.setNode(_doubleArrow);
-    this.setKey(this.name);
     final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
       public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
         Bounds _boundsInLocal = LcarsNode.this.nameField.getBoundsInLocal();

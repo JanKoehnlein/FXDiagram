@@ -1,19 +1,18 @@
 package de.fxdiagram.lib.media;
 
+import de.fxdiagram.core.XNode;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-
-import de.fxdiagram.core.XNode;
 
 @SuppressWarnings("all")
 public class ImageNode extends XNode {
   private ImageView imageView;
   
-  public ImageNode() {
+  public ImageNode(final String key) {
+    super(key);
     ImageView _imageView = new ImageView();
     final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
       public void apply(final ImageView it) {

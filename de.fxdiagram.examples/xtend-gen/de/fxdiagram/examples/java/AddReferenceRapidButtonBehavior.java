@@ -9,7 +9,8 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.LineArrowHead;
-import de.fxdiagram.core.behavior.AbstractBehavior;
+import de.fxdiagram.core.behavior.AbstractHostBehavior;
+import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
@@ -19,6 +20,7 @@ import de.fxdiagram.examples.java.Property;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.collections.ListChangeListener;
@@ -35,10 +37,17 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNode> {
+public class AddReferenceRapidButtonBehavior extends AbstractHostBehavior<JavaTypeNode> {
   private List<XRapidButton> buttons;
   
-  private Set<Property> availableReferences = new Function0<Set<Property>>() {
+  private Set<Property> availableKeys = new Function0<Set<Property>>() {
+    public Set<Property> apply() {
+      LinkedHashSet<Property> _newLinkedHashSet = CollectionLiterals.<Property>newLinkedHashSet();
+      return _newLinkedHashSet;
+    }
+  }.apply();
+  
+  private Set<Property> unavailableKeys = new Function0<Set<Property>>() {
     public Set<Property> apply() {
       HashSet<Property> _newHashSet = CollectionLiterals.<Property>newHashSet();
       return _newHashSet;
@@ -49,12 +58,16 @@ public class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNo
     super(host);
   }
   
+  public Class<? extends Behavior> getBehaviorKey() {
+    return AddReferenceRapidButtonBehavior.class;
+  }
+  
   protected void doActivate() {
     JavaTypeNode _host = this.getHost();
-    final JavaTypeModel model = _host.getJavaTypeModel();
-    List<Property> _references = model.getReferences();
-    Iterables.<Property>addAll(this.availableReferences, _references);
-    boolean _isEmpty = this.availableReferences.isEmpty();
+    JavaTypeModel _javaTypeModel = _host.getJavaTypeModel();
+    List<Property> _properties = _javaTypeModel.getProperties();
+    Iterables.<Property>addAll(this.availableKeys, _properties);
+    boolean _isEmpty = this.availableKeys.isEmpty();
     boolean _not = (!_isEmpty);
     if (_not) {
       final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
@@ -62,8 +75,8 @@ public class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNo
           AddReferenceRapidButtonBehavior.this.createChooser(button);
         }
       };
-      final Procedure1<XRapidButton> addSuperTypeAction = _function;
-      List<XRapidButton> _createButtons = this.createButtons(addSuperTypeAction);
+      final Procedure1<XRapidButton> addConnectionAction = _function;
+      List<XRapidButton> _createButtons = this.createButtons(addConnectionAction);
       this.buttons = _createButtons;
       JavaTypeNode _host_1 = this.getHost();
       XDiagram _diagram = CoreExtensions.getDiagram(_host_1);
@@ -77,21 +90,42 @@ public class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNo
           boolean _next = change.next();
           boolean _while = _next;
           while (_while) {
-            boolean _wasAdded = change.wasAdded();
-            if (_wasAdded) {
-              List<? extends XConnection> _addedSubList = change.getAddedSubList();
-              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-                public void apply(final XConnection it) {
-                  Object _key = it.getKey();
-                  AddReferenceRapidButtonBehavior.this.availableReferences.remove(_key);
-                }
-              };
-              IterableExtensions.forEach(_addedSubList, _function);
+            {
+              boolean _wasAdded = change.wasAdded();
+              if (_wasAdded) {
+                List<? extends XConnection> _addedSubList = change.getAddedSubList();
+                final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                  public void apply(final XConnection it) {
+                    Object _key = it.getKey();
+                    boolean _remove = AddReferenceRapidButtonBehavior.this.availableKeys.remove(_key);
+                    if (_remove) {
+                      Object _key_1 = it.getKey();
+                      AddReferenceRapidButtonBehavior.this.unavailableKeys.add(((Property) _key_1));
+                    }
+                  }
+                };
+                IterableExtensions.forEach(_addedSubList, _function);
+              }
+              boolean _wasRemoved = change.wasRemoved();
+              if (_wasRemoved) {
+                List<? extends XConnection> _removed = change.getRemoved();
+                final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
+                  public void apply(final XConnection it) {
+                    Object _key = it.getKey();
+                    boolean _remove = AddReferenceRapidButtonBehavior.this.unavailableKeys.remove(_key);
+                    if (_remove) {
+                      Object _key_1 = it.getKey();
+                      AddReferenceRapidButtonBehavior.this.availableKeys.add(((Property) _key_1));
+                    }
+                  }
+                };
+                IterableExtensions.forEach(_removed, _function_1);
+              }
             }
             boolean _next_1 = change.next();
             _while = _next_1;
           }
-          boolean _isEmpty = AddReferenceRapidButtonBehavior.this.availableReferences.isEmpty();
+          boolean _isEmpty = AddReferenceRapidButtonBehavior.this.availableKeys.isEmpty();
           if (_isEmpty) {
             JavaTypeNode _host = AddReferenceRapidButtonBehavior.this.getHost();
             XDiagram _diagram = CoreExtensions.getDiagram(_host);
@@ -126,7 +160,7 @@ public class AddReferenceRapidButtonBehavior extends AbstractBehavior<JavaTypeNo
         chooser.addChoice(_javaTypeNode, it);
       }
     };
-    IterableExtensions.<Property>forEach(this.availableReferences, _function);
+    IterableExtensions.<Property>forEach(this.availableKeys, _function);
     final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
       public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
         XConnection _xblockexpression = null;

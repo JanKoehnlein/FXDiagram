@@ -2,7 +2,8 @@ package de.fxdiagram.core.behavior;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.behavior.AbstractBehavior;
+import de.fxdiagram.core.behavior.AbstractHostBehavior;
+import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DragContext;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -11,7 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings("all")
-public class MoveBehavior<T extends XShape> extends AbstractBehavior<T> {
+public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   private DragContext dragContext;
   
   public MoveBehavior(final T host) {
@@ -35,6 +36,10 @@ public class MoveBehavior<T extends XShape> extends AbstractBehavior<T> {
       }
     };
     _node_1.setOnMouseDragged(_function_1);
+  }
+  
+  public Class<? extends Behavior> getBehaviorKey() {
+    return MoveBehavior.class;
   }
   
   public DragContext mousePressed(final MouseEvent it) {

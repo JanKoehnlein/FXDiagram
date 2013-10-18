@@ -2,11 +2,16 @@ package de.fxdiagram.core.tools
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.tools.actions.CenterAction
+import de.fxdiagram.core.tools.actions.CloseAction
 import de.fxdiagram.core.tools.actions.DiagramAction
 import de.fxdiagram.core.tools.actions.ExitAction
 import de.fxdiagram.core.tools.actions.ExportSvgAction
 import de.fxdiagram.core.tools.actions.LayoutAction
+import de.fxdiagram.core.tools.actions.NavigateNextAction
+import de.fxdiagram.core.tools.actions.NavigatePreviousAction
+import de.fxdiagram.core.tools.actions.OpenAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import eu.hansolo.enzo.radialmenu.MenuItem
@@ -36,6 +41,8 @@ class MenuTool implements XDiagramTool {
 	Group menuGroup
 	RadialMenu menu
 	MenuItem selection
+	
+	LayoutType currentLayoutType = LayoutType.DOT
 
 	new(XRoot root) {
 		this.root = root
@@ -64,16 +71,27 @@ class MenuTool implements XDiagramTool {
 				case KeyCode.L:
 					if (shortcutDown) {
 						consume
-						new LayoutAction
+						currentLayoutType = currentLayoutType.next
+						new LayoutAction(currentLayoutType)
 					}
 				case KeyCode.Q:
 					if (shortcutDown) {
 						new ExitAction
 					}
+				case KeyCode.PAGE_DOWN:
+						new NavigateNextAction
+				case KeyCode.PAGE_UP:
+						new NavigatePreviousAction
+				case KeyCode.PERIOD:
+						new OpenAction
 				case KeyCode.ESCAPE: {
 					consume
-					closeMenu
-					null
+					if(menu.state == State.OPENED) {
+						closeMenu
+						return
+					} else {
+						new CloseAction
+					}
 				}
 				default: null
 			}
@@ -127,8 +145,10 @@ class MenuTool implements XDiagramTool {
 					closeMenu
 					if (selection != null) {
 						val DiagramAction action = switch selection.symbol {
-							case GRAPH:
-								new LayoutAction
+							case GRAPH: {
+								currentLayoutType = currentLayoutType.next
+								new LayoutAction(currentLayoutType)
+							}
 							case CAMERA:
 								new ExportSvgAction
 							case EJECT:
@@ -169,5 +189,10 @@ class MenuTool implements XDiagramTool {
 		root.diagramCanvas.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
 		root.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		true
+	}
+	
+	protected def LayoutType next(LayoutType currentLayoutType) {
+		val values = LayoutType.values
+		values.get((values.indexOf(currentLayoutType) + 1) % values.size)
 	}
 }

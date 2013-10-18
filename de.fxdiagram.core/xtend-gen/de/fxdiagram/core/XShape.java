@@ -1,7 +1,8 @@
 package de.fxdiagram.core;
 
 import de.fxdiagram.core.XActivatable;
-import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.behavior.Behavior;
+import java.util.Collection;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -10,14 +11,28 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.MapChangeListener.Change;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public abstract class XShape extends Parent implements XActivatable {
+  private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = new Function0<ObservableMap<Class<? extends Behavior>,Behavior>>() {
+    public ObservableMap<Class<? extends Behavior>,Behavior> apply() {
+      ObservableMap<Class<? extends Behavior>,Behavior> _observableHashMap = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
+      return _observableHashMap;
+    }
+  }.apply();
+  
   protected boolean setNode(final Node node) {
     boolean _xblockexpression = false;
     {
@@ -34,17 +49,54 @@ public abstract class XShape extends Parent implements XActivatable {
     boolean _not = (!_isActive);
     if (_not) {
       this.doActivate();
-    }
-    this.isActiveProperty.set(true);
-    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-      public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVlaue, final Boolean newValue) {
-        XShape.this.selectionFeedback((newValue).booleanValue());
-        if ((newValue).booleanValue()) {
-          XShape.this.toFront();
+      this.isActiveProperty.set(true);
+      final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
+        public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVlaue, final Boolean newValue) {
+          XShape.this.selectionFeedback((newValue).booleanValue());
+          if ((newValue).booleanValue()) {
+            XShape.this.toFront();
+          }
         }
-      }
-    };
-    this.selectedProperty.addListener(_function);
+      };
+      this.selectedProperty.addListener(_function);
+      Collection<Behavior> _values = this.behaviors.values();
+      final Procedure1<Behavior> _function_1 = new Procedure1<Behavior>() {
+        public void apply(final Behavior it) {
+          it.activate();
+        }
+      };
+      IterableExtensions.<Behavior>forEach(_values, _function_1);
+      final MapChangeListener<Class<? extends Behavior>,Behavior> _function_2 = new MapChangeListener<Class<? extends Behavior>,Behavior>() {
+        public void onChanged(final Change<? extends Class<? extends Behavior>,? extends Behavior> change) {
+          boolean _isActive = XShape.this.getIsActive();
+          if (_isActive) {
+            boolean _wasAdded = change.wasAdded();
+            if (_wasAdded) {
+              Behavior _valueAdded = change.getValueAdded();
+              _valueAdded.activate();
+            }
+          }
+        }
+      };
+      final MapChangeListener<Class<? extends Behavior>,Behavior> behaviorActivator = _function_2;
+      this.behaviors.addListener(behaviorActivator);
+    }
+  }
+  
+  public <T extends Behavior> T getBehavior(final Class<T> key) {
+    Behavior _get = this.behaviors.get(key);
+    return ((T) _get);
+  }
+  
+  public Behavior addBehavior(final Behavior behavior) {
+    Class<? extends Behavior> _behaviorKey = behavior.getBehaviorKey();
+    Behavior _put = this.behaviors.put(_behaviorKey, behavior);
+    return _put;
+  }
+  
+  public Behavior removeBehavior(final String key) {
+    Behavior _remove = this.behaviors.remove(key);
+    return _remove;
   }
   
   public void selectionFeedback(final boolean isSelected) {
@@ -74,8 +126,6 @@ public abstract class XShape extends Parent implements XActivatable {
     Bounds _boundsInLocal = this.getBoundsInLocal();
     return _boundsInLocal;
   }
-  
-  public abstract MoveBehavior<? extends XShape> getMoveBehavior();
   
   private ReadOnlyObjectWrapper<Node> nodeProperty = new ReadOnlyObjectWrapper<Node>(this, "node");
   

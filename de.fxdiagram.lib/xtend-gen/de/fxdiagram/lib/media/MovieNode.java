@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.media;
 
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
@@ -36,7 +35,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class MovieNode extends XNode {
+public class MovieNode extends FlipNode {
   private StackPane pane;
   
   private MediaPlayer player;
@@ -51,95 +50,87 @@ public class MovieNode extends XNode {
     super(name);
     HBox _createControlBar = this.createControlBar();
     this.controlBar = _createControlBar;
-    FlipNode _flipNode = new FlipNode();
-    final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
-      public void apply(final FlipNode it) {
-        RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-        final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-          public void apply(final RectangleBorderPane it) {
-            ObservableList<Node> _children = it.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              public void apply(final Text it) {
-                it.setText(name);
-                it.setTextOrigin(VPos.TOP);
-                Insets _insets = new Insets(10, 20, 10, 20);
-                StackPane.setMargin(it, _insets);
-              }
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-            _children.add(_doubleArrow);
-            TooltipExtensions.setTooltip(it, "Double-click to watch");
+    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      public void apply(final RectangleBorderPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setText(name);
+            it.setTextOrigin(VPos.TOP);
+            Insets _insets = new Insets(10, 20, 10, 20);
+            StackPane.setMargin(it, _insets);
           }
         };
-        RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-        it.setFront(_doubleArrow);
-        RectangleBorderPane _rectangleBorderPane_1 = new RectangleBorderPane();
-        final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
-          public void apply(final RectangleBorderPane it) {
-            it.setId("pane");
-            Insets _insets = new Insets(MovieNode.this.border, MovieNode.this.border, MovieNode.this.border, MovieNode.this.border);
-            it.setPadding(_insets);
-            ObservableList<Node> _children = it.getChildren();
-            MediaView _mediaView = new MediaView();
-            MediaView _view = MovieNode.this.view = _mediaView;
-            _children.add(_view);
-            final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-              public void handle(final MouseEvent it) {
-                FadeTransition _fadeTransition = new FadeTransition();
-                final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-                  public void apply(final FadeTransition it) {
-                    it.setNode(MovieNode.this.controlBar);
-                    it.setToValue(1.0);
-                    Duration _millis = Duration.millis(200);
-                    it.setDuration(_millis);
-                    it.setInterpolator(Interpolator.EASE_OUT);
-                    it.play();
-                  }
-                };
-                ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
-              }
-            };
-            it.setOnMouseEntered(_function);
-            final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-              public void handle(final MouseEvent it) {
-                FadeTransition _fadeTransition = new FadeTransition();
-                final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-                  public void apply(final FadeTransition it) {
-                    it.setNode(MovieNode.this.controlBar);
-                    it.setToValue(0);
-                    Duration _millis = Duration.millis(200);
-                    it.setDuration(_millis);
-                    it.setInterpolator(Interpolator.EASE_OUT);
-                    it.play();
-                  }
-                };
-                ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
-              }
-            };
-            it.setOnMouseExited(_function_1);
-            ObservableList<Node> _children_1 = it.getChildren();
-            Group _group = new Group();
-            final Procedure1<Group> _function_2 = new Procedure1<Group>() {
-              public void apply(final Group it) {
-                ObservableList<Node> _children = it.getChildren();
-                _children.add(MovieNode.this.controlBar);
-                StackPane.setAlignment(it, Pos.BOTTOM_CENTER);
-              }
-            };
-            Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_2);
-            _children_1.add(_doubleArrow);
-            TooltipExtensions.setTooltip(it, "Double-click to close");
-          }
-        };
-        RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane_1, _function_1);
-        StackPane _pane = MovieNode.this.pane = _doubleArrow_1;
-        it.setBack(_pane);
-        it.setFlipOnDoubleClick(true);
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+        _children.add(_doubleArrow);
+        TooltipExtensions.setTooltip(it, "Double-click to watch");
       }
     };
-    FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
-    this.setNode(_doubleArrow);
+    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+    this.setFront(_doubleArrow);
+    RectangleBorderPane _rectangleBorderPane_1 = new RectangleBorderPane();
+    final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+      public void apply(final RectangleBorderPane it) {
+        it.setId("pane");
+        Insets _insets = new Insets(MovieNode.this.border, MovieNode.this.border, MovieNode.this.border, MovieNode.this.border);
+        it.setPadding(_insets);
+        ObservableList<Node> _children = it.getChildren();
+        MediaView _mediaView = new MediaView();
+        MediaView _view = MovieNode.this.view = _mediaView;
+        _children.add(_view);
+        final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+          public void handle(final MouseEvent it) {
+            FadeTransition _fadeTransition = new FadeTransition();
+            final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+              public void apply(final FadeTransition it) {
+                it.setNode(MovieNode.this.controlBar);
+                it.setToValue(1.0);
+                Duration _millis = Duration.millis(200);
+                it.setDuration(_millis);
+                it.setInterpolator(Interpolator.EASE_OUT);
+                it.play();
+              }
+            };
+            ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
+          }
+        };
+        it.setOnMouseEntered(_function);
+        final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+          public void handle(final MouseEvent it) {
+            FadeTransition _fadeTransition = new FadeTransition();
+            final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+              public void apply(final FadeTransition it) {
+                it.setNode(MovieNode.this.controlBar);
+                it.setToValue(0);
+                Duration _millis = Duration.millis(200);
+                it.setDuration(_millis);
+                it.setInterpolator(Interpolator.EASE_OUT);
+                it.play();
+              }
+            };
+            ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
+          }
+        };
+        it.setOnMouseExited(_function_1);
+        ObservableList<Node> _children_1 = it.getChildren();
+        Group _group = new Group();
+        final Procedure1<Group> _function_2 = new Procedure1<Group>() {
+          public void apply(final Group it) {
+            ObservableList<Node> _children = it.getChildren();
+            _children.add(MovieNode.this.controlBar);
+            StackPane.setAlignment(it, Pos.BOTTOM_CENTER);
+          }
+        };
+        Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_2);
+        _children_1.add(_doubleArrow);
+        TooltipExtensions.setTooltip(it, "Double-click to close");
+      }
+    };
+    RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane_1, _function_1);
+    StackPane _pane = this.pane = _doubleArrow_1;
+    this.setBack(_pane);
     ObservableList<String> _stylesheets = this.getStylesheets();
     String _uRI = UriExtensions.toURI(this, "MovieNode.css");
     _stylesheets.add(_uRI);

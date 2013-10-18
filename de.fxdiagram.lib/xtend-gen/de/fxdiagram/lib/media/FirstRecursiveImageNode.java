@@ -30,6 +30,13 @@ public class FirstRecursiveImageNode extends XNode {
   }.apply();
   
   public FirstRecursiveImageNode(final RecursiveImageNode parent) {
+    super(new Function0<String>() {
+      public String apply() {
+        String _key = parent.getKey();
+        String _plus = (_key + "_");
+        return _plus;
+      }
+    }.apply());
     this.recursiveImageNode = parent;
     final Group group = parent.createPane();
     this.setNode(group);

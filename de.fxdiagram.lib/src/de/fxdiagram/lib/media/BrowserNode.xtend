@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.media
 
-import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -13,24 +12,22 @@ import javafx.scene.web.WebView
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
-class BrowserNode extends XNode {
+class BrowserNode extends FlipNode {
 	
 	WebView view
 
-	new() {
-		node = new FlipNode => [
-			front = new RectangleBorderPane => [
-				children += new Text => [
-					text = "My Blog"
-					textOrigin = VPos.TOP
-					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-				]
-				tooltip = 'Double-click to browse'
+	new(String name) {
+		super(name)
+		front = new RectangleBorderPane => [
+			children += new Text => [
+				text = name
+				textOrigin = VPos.TOP
+				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
-			back = view = new WebView => [
-				tooltip = 'Double-click to close'
-			]
-			flipOnDoubleClick = true
+			tooltip = 'Double-click to browse'
+		]
+		back = view = new WebView => [
+			tooltip = 'Double-click to close'
 		]
 	}
 

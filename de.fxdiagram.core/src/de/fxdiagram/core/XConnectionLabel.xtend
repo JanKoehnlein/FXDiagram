@@ -19,7 +19,6 @@ class XConnectionLabel extends XShape {
 	@FxProperty Text text
 	@FxProperty double position = 0.5
 
-	MoveBehavior<XConnectionLabel> moveBehavior
 	Effect selectionEffect
 
 	new(XConnection connection) {
@@ -35,8 +34,7 @@ class XConnectionLabel extends XShape {
 	}
 
 	override doActivate() {
-		moveBehavior = new MoveBehavior(this)
-		moveBehavior.activate()
+		addBehavior(new MoveBehavior(this))
 	}
 	
 	override selectionFeedback(boolean isSelected) {
@@ -72,9 +70,5 @@ class XConnectionLabel extends XShape {
 		transform.tx = 0
 		transform.ty = 0
 		transforms.setAll(transform)
-	}
-
-	override getMoveBehavior() {
-		moveBehavior
 	}
 }

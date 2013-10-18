@@ -1,6 +1,9 @@
 package de.fxdiagram.lib.nodes;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.behavior.AbstractCloseBehavior;
+import de.fxdiagram.core.behavior.AbstractOpenBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import javafx.animation.Animation;
@@ -15,7 +18,6 @@ import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
@@ -23,7 +25,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class FlipNode extends Parent {
+public class FlipNode extends XNode {
   private Node front;
   
   private Node back;
@@ -39,9 +41,9 @@ public class FlipNode extends Parent {
   
   private EventHandler<MouseEvent> clickHandler;
   
-  public FlipNode() {
-    ObservableList<Node> _children = this.getChildren();
-    _children.add(this.pane);
+  public FlipNode(final String key) {
+    super(key);
+    this.setNode(this.pane);
     this.setCursor(Cursor.HAND);
   }
   
@@ -76,93 +78,88 @@ public class FlipNode extends Parent {
     this.setOnMouseClicked(this.clickHandler);
   }
   
-  public SequentialTransition flip(final boolean isHorizontal) {
-    SequentialTransition _xblockexpression = null;
-    {
-      double _layoutX = this.front.getLayoutX();
-      Bounds _layoutBounds = this.back.getLayoutBounds();
-      double _width = _layoutBounds.getWidth();
-      Bounds _layoutBounds_1 = this.front.getLayoutBounds();
-      double _width_1 = _layoutBounds_1.getWidth();
-      double _minus = (_width - _width_1);
-      double _divide = (_minus / 2);
-      double _minus_1 = (_layoutX - _divide);
-      Bounds _layoutBounds_2 = this.back.getLayoutBounds();
-      double _minX = _layoutBounds_2.getMinX();
-      double _minus_2 = (_minus_1 - _minX);
-      this.back.setLayoutX(_minus_2);
-      double _layoutY = this.front.getLayoutY();
-      Bounds _layoutBounds_3 = this.back.getLayoutBounds();
-      double _height = _layoutBounds_3.getHeight();
-      Bounds _layoutBounds_4 = this.front.getLayoutBounds();
-      double _height_1 = _layoutBounds_4.getHeight();
-      double _minus_3 = (_height - _height_1);
-      double _divide_1 = (_minus_3 / 2);
-      double _minus_4 = (_layoutY - _divide_1);
-      Bounds _layoutBounds_5 = this.back.getLayoutBounds();
-      double _minY = _layoutBounds_5.getMinY();
-      double _minus_5 = (_minus_4 - _minY);
-      this.back.setLayoutY(_minus_5);
-      Point3D _xifexpression = null;
-      if (isHorizontal) {
-        Point3D _point3D = new Point3D(1, 0, 0);
-        _xifexpression = _point3D;
-      } else {
-        Point3D _point3D_1 = new Point3D(0, 1, 0);
-        _xifexpression = _point3D_1;
-      }
-      final Point3D turnAxis = _xifexpression;
-      SequentialTransition _sequentialTransition = new SequentialTransition();
-      final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-        public void apply(final SequentialTransition it) {
-          ObservableList<Animation> _children = it.getChildren();
-          RotateTransition _rotateTransition = new RotateTransition();
-          final Procedure1<RotateTransition> _function = new Procedure1<RotateTransition>() {
-            public void apply(final RotateTransition it) {
-              Node _currentVisible = FlipNode.this.getCurrentVisible();
-              it.setNode(_currentVisible);
-              Duration _millis = Duration.millis(250);
-              it.setDuration(_millis);
-              it.setAxis(turnAxis);
-              it.setFromAngle(0);
-              it.setToAngle(90);
-              final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                public void handle(final ActionEvent it) {
-                  Node _currentVisible = FlipNode.this.getCurrentVisible();
-                  _currentVisible.setVisible(false);
-                  boolean _not = (!FlipNode.this.isCurrentFront);
-                  FlipNode.this.isCurrentFront = _not;
-                  Node _currentVisible_1 = FlipNode.this.getCurrentVisible();
-                  _currentVisible_1.setVisible(true);
-                }
-              };
-              it.setOnFinished(_function);
-            }
-          };
-          RotateTransition _doubleArrow = ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition, _function);
-          _children.add(_doubleArrow);
-          ObservableList<Animation> _children_1 = it.getChildren();
-          RotateTransition _rotateTransition_1 = new RotateTransition();
-          final Procedure1<RotateTransition> _function_1 = new Procedure1<RotateTransition>() {
-            public void apply(final RotateTransition it) {
-              Node _currentInvisible = FlipNode.this.getCurrentInvisible();
-              it.setNode(_currentInvisible);
-              Duration _millis = Duration.millis(250);
-              it.setDuration(_millis);
-              it.setAxis(turnAxis);
-              it.setFromAngle(90);
-              it.setToAngle(0);
-            }
-          };
-          RotateTransition _doubleArrow_1 = ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition_1, _function_1);
-          _children_1.add(_doubleArrow_1);
-          it.play();
-        }
-      };
-      SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
-      _xblockexpression = (_doubleArrow);
+  public void flip(final boolean isHorizontal) {
+    double _layoutX = this.front.getLayoutX();
+    Bounds _layoutBounds = this.back.getLayoutBounds();
+    double _width = _layoutBounds.getWidth();
+    Bounds _layoutBounds_1 = this.front.getLayoutBounds();
+    double _width_1 = _layoutBounds_1.getWidth();
+    double _minus = (_width - _width_1);
+    double _divide = (_minus / 2);
+    double _minus_1 = (_layoutX - _divide);
+    Bounds _layoutBounds_2 = this.back.getLayoutBounds();
+    double _minX = _layoutBounds_2.getMinX();
+    double _minus_2 = (_minus_1 - _minX);
+    this.back.setLayoutX(_minus_2);
+    double _layoutY = this.front.getLayoutY();
+    Bounds _layoutBounds_3 = this.back.getLayoutBounds();
+    double _height = _layoutBounds_3.getHeight();
+    Bounds _layoutBounds_4 = this.front.getLayoutBounds();
+    double _height_1 = _layoutBounds_4.getHeight();
+    double _minus_3 = (_height - _height_1);
+    double _divide_1 = (_minus_3 / 2);
+    double _minus_4 = (_layoutY - _divide_1);
+    Bounds _layoutBounds_5 = this.back.getLayoutBounds();
+    double _minY = _layoutBounds_5.getMinY();
+    double _minus_5 = (_minus_4 - _minY);
+    this.back.setLayoutY(_minus_5);
+    Point3D _xifexpression = null;
+    if (isHorizontal) {
+      Point3D _point3D = new Point3D(1, 0, 0);
+      _xifexpression = _point3D;
+    } else {
+      Point3D _point3D_1 = new Point3D(0, 1, 0);
+      _xifexpression = _point3D_1;
     }
-    return _xblockexpression;
+    final Point3D turnAxis = _xifexpression;
+    SequentialTransition _sequentialTransition = new SequentialTransition();
+    final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+      public void apply(final SequentialTransition it) {
+        ObservableList<Animation> _children = it.getChildren();
+        RotateTransition _rotateTransition = new RotateTransition();
+        final Procedure1<RotateTransition> _function = new Procedure1<RotateTransition>() {
+          public void apply(final RotateTransition it) {
+            Node _currentVisible = FlipNode.this.getCurrentVisible();
+            it.setNode(_currentVisible);
+            Duration _millis = Duration.millis(250);
+            it.setDuration(_millis);
+            it.setAxis(turnAxis);
+            it.setFromAngle(0);
+            it.setToAngle(90);
+            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+              public void handle(final ActionEvent it) {
+                Node _currentVisible = FlipNode.this.getCurrentVisible();
+                _currentVisible.setVisible(false);
+                boolean _not = (!FlipNode.this.isCurrentFront);
+                FlipNode.this.isCurrentFront = _not;
+                Node _currentVisible_1 = FlipNode.this.getCurrentVisible();
+                _currentVisible_1.setVisible(true);
+              }
+            };
+            it.setOnFinished(_function);
+          }
+        };
+        RotateTransition _doubleArrow = ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition, _function);
+        _children.add(_doubleArrow);
+        ObservableList<Animation> _children_1 = it.getChildren();
+        RotateTransition _rotateTransition_1 = new RotateTransition();
+        final Procedure1<RotateTransition> _function_1 = new Procedure1<RotateTransition>() {
+          public void apply(final RotateTransition it) {
+            Node _currentInvisible = FlipNode.this.getCurrentInvisible();
+            it.setNode(_currentInvisible);
+            Duration _millis = Duration.millis(250);
+            it.setDuration(_millis);
+            it.setAxis(turnAxis);
+            it.setFromAngle(90);
+            it.setToAngle(0);
+          }
+        };
+        RotateTransition _doubleArrow_1 = ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition_1, _function_1);
+        _children_1.add(_doubleArrow_1);
+        it.play();
+      }
+    };
+    ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
   }
   
   protected boolean isHorizontal(final MouseEvent event) {
@@ -237,5 +234,24 @@ public class FlipNode extends Parent {
       _xifexpression = this.front;
     }
     return _xifexpression;
+  }
+  
+  public void doActivate() {
+    super.doActivate();
+    this.setFlipOnDoubleClick(true);
+    final AbstractOpenBehavior _function = new AbstractOpenBehavior() {
+      public void open() {
+        FlipNode.this.flip(true);
+      }
+    };
+    final AbstractOpenBehavior openBehavior = _function;
+    this.addBehavior(openBehavior);
+    final AbstractCloseBehavior _function_1 = new AbstractCloseBehavior() {
+      public void close() {
+        FlipNode.this.flip(true);
+      }
+    };
+    final AbstractCloseBehavior closeBehavior = _function_1;
+    this.addBehavior(closeBehavior);
   }
 }

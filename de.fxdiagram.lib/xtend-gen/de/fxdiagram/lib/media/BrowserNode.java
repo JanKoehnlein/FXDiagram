@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.media;
 
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
@@ -19,47 +18,40 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class BrowserNode extends XNode {
+public class BrowserNode extends FlipNode {
   private WebView view;
   
-  public BrowserNode() {
-    FlipNode _flipNode = new FlipNode();
-    final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
-      public void apply(final FlipNode it) {
-        RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-        final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-          public void apply(final RectangleBorderPane it) {
-            ObservableList<Node> _children = it.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              public void apply(final Text it) {
-                it.setText("My Blog");
-                it.setTextOrigin(VPos.TOP);
-                Insets _insets = new Insets(10, 20, 10, 20);
-                StackPane.setMargin(it, _insets);
-              }
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-            _children.add(_doubleArrow);
-            TooltipExtensions.setTooltip(it, "Double-click to browse");
+  public BrowserNode(final String name) {
+    super(name);
+    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      public void apply(final RectangleBorderPane it) {
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setText(name);
+            it.setTextOrigin(VPos.TOP);
+            Insets _insets = new Insets(10, 20, 10, 20);
+            StackPane.setMargin(it, _insets);
           }
         };
-        RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-        it.setFront(_doubleArrow);
-        WebView _webView = new WebView();
-        final Procedure1<WebView> _function_1 = new Procedure1<WebView>() {
-          public void apply(final WebView it) {
-            TooltipExtensions.setTooltip(it, "Double-click to close");
-          }
-        };
-        WebView _doubleArrow_1 = ObjectExtensions.<WebView>operator_doubleArrow(_webView, _function_1);
-        WebView _view = BrowserNode.this.view = _doubleArrow_1;
-        it.setBack(_view);
-        it.setFlipOnDoubleClick(true);
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+        _children.add(_doubleArrow);
+        TooltipExtensions.setTooltip(it, "Double-click to browse");
       }
     };
-    FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
-    this.setNode(_doubleArrow);
+    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+    this.setFront(_doubleArrow);
+    WebView _webView = new WebView();
+    final Procedure1<WebView> _function_1 = new Procedure1<WebView>() {
+      public void apply(final WebView it) {
+        TooltipExtensions.setTooltip(it, "Double-click to close");
+      }
+    };
+    WebView _doubleArrow_1 = ObjectExtensions.<WebView>operator_doubleArrow(_webView, _function_1);
+    WebView _view = this.view = _doubleArrow_1;
+    this.setBack(_view);
   }
   
   public void setPageUrl(final URL pageUrl) {

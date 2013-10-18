@@ -5,7 +5,6 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.anchors.DiamondArrowHead
 import de.fxdiagram.core.anchors.LineArrowHead
-import de.fxdiagram.core.behavior.AbstractBehavior
 import de.fxdiagram.lib.tools.CarusselChooser
 import java.util.List
 import java.util.Set
@@ -16,33 +15,47 @@ import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.behavior.AbstractHostBehavior
 
-class AddEReferenceRapidButtonBehavior extends AbstractBehavior<EClassNode> {
+class AddEReferenceRapidButtonBehavior extends AbstractHostBehavior<EClassNode> {
 	
 	List<XRapidButton> buttons
 	
-	Set<EReference> availableReferences = newHashSet
+	Set<EReference> availableKeys = newLinkedHashSet
+	Set<EReference> unavailableKeys = newHashSet
 	
 	new(EClassNode host) {
 		super(host)
 	}
 	
+	override getBehaviorKey() {
+		AddEReferenceRapidButtonBehavior
+	}
+	
 	override protected doActivate() {
-		availableReferences += host.EClass.EReferences
-		if(!availableReferences.empty) {
-			val addReferenceAction = [
+		availableKeys += host.EClass.EReferences
+		if(!availableKeys.empty) {
+			val addConnectionAction = [
 				XRapidButton button |
 				createChooser(button)
 			]
-			buttons = createButtons(addReferenceAction)
+			buttons = createButtons(addConnectionAction)
 			host.diagram.buttons += buttons
 			host.diagram.connections.addListener [
 				ListChangeListener.Change<? extends XConnection> change |
 				while(change.next) {
 					if(change.wasAdded) 
-						change.addedSubList.forEach[ availableReferences.remove(key) ]
+						change.addedSubList.forEach[ 
+							if(availableKeys.remove(key))
+								unavailableKeys.add(key as EReference)
+						]
+					if(change.wasRemoved) 
+						change.removed.forEach[
+							if(unavailableKeys.remove(key))
+								availableKeys.add(key as EReference)
+						]
 				}
-				if(availableReferences.empty)
+				if(availableKeys.empty)
 					host.diagram.buttons -= buttons
 			]  			
 		}
@@ -57,7 +70,7 @@ class AddEReferenceRapidButtonBehavior extends AbstractBehavior<EClassNode> {
 	
 	protected def createChooser(XRapidButton button) {
 		val chooser = new CarusselChooser(host, button.getChooserPosition)
-		availableReferences.forEach [
+		availableKeys.forEach [
 			chooser.addChoice(new EClassNode(it.EReferenceType), it)
 		]
 		chooser.connectionProvider = [

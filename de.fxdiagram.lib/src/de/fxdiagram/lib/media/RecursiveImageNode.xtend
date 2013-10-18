@@ -2,6 +2,8 @@ package de.fxdiagram.lib.media
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.behavior.AbstractCloseBehavior
+import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.export.SvgExportable
 import de.fxdiagram.core.export.SvgExporter
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
@@ -18,6 +20,7 @@ import javafx.scene.shape.StrokeType
 
 import static java.lang.Math.*
 
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
@@ -33,8 +36,11 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 	DoubleProperty actualHeightProperty = new SimpleDoubleProperty
 
 	FirstRecursiveImageNode pivot
+	
+	boolean isZoomedIn 
 
-	new(Image image, double x, double y, double scale) {
+	new(String name, Image image, double x, double y, double scale) {
+		super(name)
 		this.image = image
 		this.x = x
 		this.y = y
@@ -51,21 +57,49 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		pivot.activate
 		onMouseClicked = [
 			if (clickCount == 2) {
-				val centerInDiagram = localToRootDiagram(
-					actualWidthProperty.get * 0.5 * (1 - scale + 2 * this.x / actualWidthProperty.get) *
-						(1 / (1 - scale)),
-					actualHeightProperty.get * 0.5 * (1 - scale + 2 * this.y / actualHeightProperty.get) *
-						(1 / (1 - scale))
-				)
-				new ScrollToAndScaleTransition(root, centerInDiagram, 500) => [
-					duration = 5.seconds
-					interpolator = [
-						exp(log(10000) * it) / 10000
-					]
-					play
-				]
+				if(isZoomedIn)
+					zoomOut
+				else
+					zoomIn
 			}
 		]
+		val AbstractOpenBehavior openBehavior = [| zoomIn] 
+		addBehavior(openBehavior)
+		val AbstractCloseBehavior closeBehavior = [| zoomOut]
+		addBehavior(closeBehavior)
+	}
+	
+	protected def void zoomIn() {
+		if(isZoomedIn)
+			return
+		val centerInDiagram = localToRootDiagram(
+			actualWidthProperty.get * 0.5 * (1 - scale + 2 * this.x / actualWidthProperty.get) *
+				(1 / (1 - scale)),
+			actualHeightProperty.get * 0.5 * (1 - scale + 2 * this.y / actualHeightProperty.get) *
+				(1 / (1 - scale))
+		)
+		new ScrollToAndScaleTransition(root, centerInDiagram, 500) => [
+			duration = 5.seconds
+			interpolator = [
+				exp(log(10000) * it) / 10000
+			]
+			play
+		]
+		isZoomedIn = true
+	}
+
+	protected def void zoomOut() {
+		if(!isZoomedIn)
+			return
+		val centerInDiagram = localToRootDiagram(boundsInLocal.center)
+		new ScrollToAndScaleTransition(root, centerInDiagram, 1) => [
+			duration = 5.seconds
+			interpolator = [
+				log(it * 10000)/log(10000)
+			]
+			play
+		]
+		isZoomedIn = false
 	}
 
 	protected def Group createPane() {
@@ -109,6 +143,7 @@ class FirstRecursiveImageNode extends XNode {
 	Deque<Group> panes = new LinkedList<Group>
 
 	new(RecursiveImageNode parent) {
+		super(parent.key + '_')
 		this.recursiveImageNode = parent
 		val group = parent.createPane
 		node = group

@@ -90,11 +90,11 @@ class JavaTypeNode extends XNode {
 		model
 	}
 	
-	override activate() {
-		super.activate
+	override doActivate() {
+		super.doActivate
 		populateComprtments
-		new AddSuperTypeRapidButtonBehavior(this).activate
-		new AddReferenceRapidButtonBehavior(this).activate
+		addBehavior(new AddSuperTypeRapidButtonBehavior(this))
+		addBehavior(new AddReferenceRapidButtonBehavior(this))
 	}
 }
 

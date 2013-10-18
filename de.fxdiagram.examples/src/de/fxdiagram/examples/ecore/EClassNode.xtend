@@ -78,11 +78,11 @@ class EClassNode extends XNode {
 		eClass
 	}
 	
-	override activate() {
-		super.activate()
+	override doActivate() {
+		super.doActivate()
 		populateCompartments
-		new AddESuperTypeRapidButtonBehavior(this).activate
-		new AddEReferenceRapidButtonBehavior(this).activate
+		addBehavior(new AddESuperTypeRapidButtonBehavior(this))
+		addBehavior(new AddEReferenceRapidButtonBehavior(this))
 	}
 }
 

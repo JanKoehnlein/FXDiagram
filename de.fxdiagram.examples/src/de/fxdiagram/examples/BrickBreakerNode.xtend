@@ -2,7 +2,6 @@ package de.fxdiagram.examples
 
 import brickbreaker.Config
 import brickbreaker.Main.MainFrame
-import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import javafx.geometry.Insets
@@ -15,27 +14,24 @@ import javafx.scene.text.Text
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
-class BrickBreakerNode extends XNode {
+class BrickBreakerNode extends FlipNode {
 
 	new() {
 		super('BrickBreaker')
-		node = new FlipNode => [
-			front = new RectangleBorderPane => [
-				children += new Text => [
-					text = "BrickBreaker"
-					textOrigin = VPos.TOP
-					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-				]
-				tooltip = 'Double-click to play'
+		front = new RectangleBorderPane => [
+			children += new Text => [
+				text = "BrickBreaker"
+				textOrigin = VPos.TOP
+				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
-			back = new Group => [
-				children += new Group => [
-					children += createRoot
-					scaleXProperty.bind(widthProperty / Config.SCREEN_WIDTH)
-					scaleYProperty.bind(heightProperty / Config.SCREEN_HEIGHT)
-				]
+			tooltip = 'Double-click to play'
+		]
+		back = new Group => [
+			children += new Group => [
+				children += createRoot
+				scaleXProperty.bind(widthProperty / Config.SCREEN_WIDTH)
+				scaleYProperty.bind(heightProperty / Config.SCREEN_HEIGHT)
 			]
-			flipOnDoubleClick = true
 		]
 	}
 
@@ -59,4 +55,5 @@ class BrickBreakerNode extends XNode {
 		mainFrame.changeState(MainFrame.SPLASH)
 		root
 	}
+	
 }

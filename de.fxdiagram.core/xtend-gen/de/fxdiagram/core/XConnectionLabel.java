@@ -26,8 +26,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class XConnectionLabel extends XShape {
-  private MoveBehavior<XConnectionLabel> moveBehavior;
-  
   private Effect selectionEffect;
   
   public XConnectionLabel(final XConnection connection) {
@@ -60,8 +58,7 @@ public class XConnectionLabel extends XShape {
   
   public void doActivate() {
     MoveBehavior<XConnectionLabel> _moveBehavior = new MoveBehavior<XConnectionLabel>(this);
-    this.moveBehavior = _moveBehavior;
-    this.moveBehavior.activate();
+    this.addBehavior(_moveBehavior);
   }
   
   public void selectionFeedback(final boolean isSelected) {
@@ -126,10 +123,6 @@ public class XConnectionLabel extends XShape {
     transform.setTy(0);
     ObservableList<Transform> _transforms = this.getTransforms();
     _transforms.setAll(transform);
-  }
-  
-  public MoveBehavior<? extends XShape> getMoveBehavior() {
-    return this.moveBehavior;
   }
   
   private SimpleObjectProperty<XConnection> connectionProperty = new SimpleObjectProperty<XConnection>(this, "connection");

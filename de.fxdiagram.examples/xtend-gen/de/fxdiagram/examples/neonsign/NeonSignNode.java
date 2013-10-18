@@ -1,10 +1,8 @@
 package de.fxdiagram.examples.neonsign;
 
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.services.ImageCache;
-import de.fxdiagram.lib.media.ImageNode;
 import de.fxdiagram.lib.nodes.FlipNode;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -21,6 +19,7 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -33,39 +32,31 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class NeonSignNode extends XNode {
+public class NeonSignNode extends FlipNode {
   private TextField textField;
   
   private Text neonText;
   
   public NeonSignNode() {
     super("Xtend");
-    FlipNode _flipNode = new FlipNode();
-    final Procedure1<FlipNode> _function = new Procedure1<FlipNode>() {
-      public void apply(final FlipNode it) {
-        VBox _neonSign = NeonSignNode.this.getNeonSign();
-        final Procedure1<VBox> _function = new Procedure1<VBox>() {
-          public void apply(final VBox it) {
-            TooltipExtensions.setTooltip(it, "Double-click for Xtend code");
-          }
-        };
-        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_neonSign, _function);
-        it.setFront(_doubleArrow);
-        ImageNode _imageNode = new ImageNode();
-        final Procedure1<ImageNode> _function_1 = new Procedure1<ImageNode>() {
-          public void apply(final ImageNode it) {
-            ImageCache _get = ImageCache.get();
-            Image _image = _get.getImage(NeonSignNode.this, "code.png");
-            it.setImage(_image);
-          }
-        };
-        ImageNode _doubleArrow_1 = ObjectExtensions.<ImageNode>operator_doubleArrow(_imageNode, _function_1);
-        it.setBack(_doubleArrow_1);
-        it.setFlipOnDoubleClick(true);
+    VBox _neonSign = this.getNeonSign();
+    final Procedure1<VBox> _function = new Procedure1<VBox>() {
+      public void apply(final VBox it) {
+        TooltipExtensions.setTooltip(it, "Double-click for Xtend code");
       }
     };
-    FlipNode _doubleArrow = ObjectExtensions.<FlipNode>operator_doubleArrow(_flipNode, _function);
-    this.setNode(_doubleArrow);
+    VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_neonSign, _function);
+    this.setFront(_doubleArrow);
+    ImageView _imageView = new ImageView();
+    final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+      public void apply(final ImageView it) {
+        ImageCache _get = ImageCache.get();
+        Image _image = _get.getImage(NeonSignNode.this, "code.png");
+        it.setImage(_image);
+      }
+    };
+    ImageView _doubleArrow_1 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_1);
+    this.setBack(_doubleArrow_1);
   }
   
   protected VBox getNeonSign() {

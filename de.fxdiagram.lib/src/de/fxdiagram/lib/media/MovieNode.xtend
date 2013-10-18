@@ -2,7 +2,6 @@ package de.fxdiagram.lib.media
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
-import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -27,7 +26,7 @@ import static de.fxdiagram.core.extensions.UriExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
 
-class MovieNode extends XNode {
+class MovieNode extends FlipNode {
 
 	@FxProperty@ReadOnly Media media
 
@@ -44,44 +43,41 @@ class MovieNode extends XNode {
 	new(String name) {
 		super(name)
 		controlBar = createControlBar
-		node = new FlipNode => [
-			front = new RectangleBorderPane => [
-				children += new Text => [
-					text = name
-					textOrigin = VPos.TOP
-					StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-				]
-				tooltip = 'Double-click to watch'
+		front = new RectangleBorderPane => [
+			children += new Text => [
+				text = name
+				textOrigin = VPos.TOP
+				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
-			back = pane = new RectangleBorderPane => [
-				id = "pane"
-				padding = new Insets(border, border, border, border)
-				children += view = new MediaView 
-				onMouseEntered = [
-					new FadeTransition => [
-						node = controlBar
-						toValue = 1.0
-						duration = 200.millis
-						interpolator = Interpolator.EASE_OUT
-						play
-					]
+			tooltip = 'Double-click to watch'
+		]
+		back = pane = new RectangleBorderPane => [
+			id = "pane"
+			padding = new Insets(border, border, border, border)
+			children += view = new MediaView 
+			onMouseEntered = [
+				new FadeTransition => [
+					node = controlBar
+					toValue = 1.0
+					duration = 200.millis
+					interpolator = Interpolator.EASE_OUT
+					play
 				]
-				onMouseExited = [
-					new FadeTransition => [
-						node = controlBar
-						toValue = 0
-						duration = 200.millis
-						interpolator = Interpolator.EASE_OUT
-						play
-					]
-				]
-				children += new Group => [
-					children += controlBar
-					StackPane.setAlignment(it, Pos.BOTTOM_CENTER)
-				]
-				tooltip = 'Double-click to close'
 			]
-			flipOnDoubleClick = true
+			onMouseExited = [
+				new FadeTransition => [
+					node = controlBar
+					toValue = 0
+					duration = 200.millis
+					interpolator = Interpolator.EASE_OUT
+					play
+				]
+			]
+			children += new Group => [
+				children += controlBar
+				StackPane.setAlignment(it, Pos.BOTTOM_CENTER)
+			]
+			tooltip = 'Double-click to close'
 		]
 		stylesheets += toURI(this, 'MovieNode.css')
 	}
@@ -150,5 +146,4 @@ class MovieNode extends XNode {
 	def getView() {
 		view
 	}
-
 }

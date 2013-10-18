@@ -65,8 +65,9 @@ class LcarsNode extends XNode {
 	ChangeListener<Bounds> nameShortener
 	
 	new(DBObject data) {
+		super(data.get("name").toString)
 		this.data = data
-		this.name = data.get("name").toString
+		this.name = key
 		this.dbId = data.get('_id').toString
 		imageUrls = (data.get("images") as List<DBObject>).map[get('url').toString]
 		vbox = new VBox
@@ -131,7 +132,6 @@ class LcarsNode extends XNode {
 				]
 			]
 		]
-		key = name
 		nameShortener = [ 
 			property, oldValue, newValue | 
 			while(nameField.boundsInLocal.width > newValue.width) 

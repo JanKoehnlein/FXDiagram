@@ -100,7 +100,7 @@ class Main extends Application {
 				]
 			]
 
-			nodes += new ImageNode => [
+			nodes += new ImageNode('seltsam') => [
 				image = ImageCache.get.getImage(this, 'media/seltsam.jpg')
 				layoutX = 100
 				layoutY = 100
@@ -116,12 +116,12 @@ class Main extends Application {
 				layoutY = 200
 			]
 
-			nodes += new RecursiveImageNode(ImageCache.get.getImage(this, 'media/laptop.jpg'), 0, -6, 0.6) => [
+			nodes += new RecursiveImageNode('recursive', ImageCache.get.getImage(this, 'media/laptop.jpg'), 0, -6, 0.6) => [
 				width = 120
 				height = 90
 			]
 		
-			nodes += new BrowserNode => [
+			nodes += new BrowserNode('My Blog')=> [
 				width = 120
 				height = 160
 				layoutX = 100

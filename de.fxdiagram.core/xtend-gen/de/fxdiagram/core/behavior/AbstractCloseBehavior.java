@@ -1,20 +1,14 @@
 package de.fxdiagram.core.behavior;
 
-import de.fxdiagram.core.XActivatable;
-import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.behavior.Behavior;
+import de.fxdiagram.core.behavior.CloseBehavior;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 
 @SuppressWarnings("all")
-public abstract class AbstractBehavior<T extends XShape> implements XActivatable {
-  private T host;
-  
-  public AbstractBehavior(final T host) {
-    this.host = host;
-  }
-  
-  public T getHost() {
-    return this.host;
+public abstract class AbstractCloseBehavior implements CloseBehavior {
+  public Class<? extends Behavior> getBehaviorKey() {
+    return CloseBehavior.class;
   }
   
   public void activate() {
@@ -26,7 +20,9 @@ public abstract class AbstractBehavior<T extends XShape> implements XActivatable
     this.isActiveProperty.set(true);
   }
   
-  protected abstract void doActivate();
+  protected Object doActivate() {
+    return null;
+  }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   

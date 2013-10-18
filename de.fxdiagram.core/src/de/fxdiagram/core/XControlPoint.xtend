@@ -21,8 +21,6 @@ import java.net.URL
 
 class XControlPoint extends XShape {
 
-	MoveBehavior<XControlPoint> moveBehavior
-
 	XControlPointType type
 
 	new() {
@@ -54,12 +52,11 @@ class XControlPoint extends XShape {
 				]
 			}
 		}
-		if (type != ANCHOR)
-			moveBehavior = new MoveBehavior(this)
 	}
 
 	override protected doActivate() {
-		moveBehavior?.activate
+		if (type != ANCHOR)
+			addBehavior(new MoveBehavior(this))
 	}
 
 	override selectionFeedback(boolean isSelected) {
@@ -81,10 +78,6 @@ class XControlPoint extends XShape {
 
 	override isSelectable() {
 		type != XControlPointType.ANCHOR && super.isSelectable()
-	}
-
-	override getMoveBehavior() {
-		moveBehavior
 	}
 
 	override toString() {

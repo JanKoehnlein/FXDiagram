@@ -74,7 +74,7 @@ public class LayoutTests extends Application {
       public void apply(final XDiagram it) {
         it.activate();
         ObservableList<XNode> _nodes = it.getNodes();
-        XNode _xNode = new XNode();
+        XNode _xNode = new XNode("");
         final Procedure1<XNode> _function = new Procedure1<XNode>() {
           public void apply(final XNode it) {
           }
