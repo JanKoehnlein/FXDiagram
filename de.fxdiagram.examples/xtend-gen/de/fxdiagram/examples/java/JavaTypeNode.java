@@ -260,4 +260,9 @@ public class JavaTypeNode extends XNode {
     AddReferenceRapidButtonBehavior _addReferenceRapidButtonBehavior = new AddReferenceRapidButtonBehavior(this);
     this.addBehavior(_addReferenceRapidButtonBehavior);
   }
+  
+  public String toString() {
+    String _simpleName = this.javaType.getSimpleName();
+    return _simpleName;
+  }
 }

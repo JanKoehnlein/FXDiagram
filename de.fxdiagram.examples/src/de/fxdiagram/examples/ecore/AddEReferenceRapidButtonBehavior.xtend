@@ -5,24 +5,15 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.anchors.DiamondArrowHead
 import de.fxdiagram.core.anchors.LineArrowHead
+import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
 import de.fxdiagram.lib.tools.CarusselChooser
-import java.util.List
 import java.util.Set
-import javafx.collections.ListChangeListener
 import org.eclipse.emf.ecore.EReference
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
-import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.behavior.AbstractHostBehavior
-
-class AddEReferenceRapidButtonBehavior extends AbstractHostBehavior<EClassNode> {
-	
-	List<XRapidButton> buttons
-	
-	Set<EReference> availableKeys = newLinkedHashSet
-	Set<EReference> unavailableKeys = newHashSet
+class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EReference, EReferenceKey> {
 	
 	new(EClassNode host) {
 		super(host)
@@ -31,52 +22,27 @@ class AddEReferenceRapidButtonBehavior extends AbstractHostBehavior<EClassNode> 
 	override getBehaviorKey() {
 		AddEReferenceRapidButtonBehavior
 	}
-	
-	override protected doActivate() {
-		availableKeys += host.EClass.EReferences
-		if(!availableKeys.empty) {
-			val addConnectionAction = [
-				XRapidButton button |
-				createChooser(button)
-			]
-			buttons = createButtons(addConnectionAction)
-			host.diagram.buttons += buttons
-			host.diagram.connections.addListener [
-				ListChangeListener.Change<? extends XConnection> change |
-				while(change.next) {
-					if(change.wasAdded) 
-						change.addedSubList.forEach[ 
-							if(availableKeys.remove(key))
-								unavailableKeys.add(key as EReference)
-						]
-					if(change.wasRemoved) 
-						change.removed.forEach[
-							if(unavailableKeys.remove(key))
-								availableKeys.add(key as EReference)
-						]
-				}
-				if(availableKeys.empty)
-					host.diagram.buttons -= buttons
-			]  			
-		}
+
+	override protected getInitialModelChoices() {
+		host.EClass.EReferences
 	}
 	
-	protected def createButtons((XRapidButton)=>void addReferencesAction) {
-		#[
-			new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover properties'), addReferencesAction),
-			new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover properties'), addReferencesAction)
-		]
+	override protected getChoiceKey(EReference model) {
+		new EReferenceKey(model)
 	}
 	
-	protected def createChooser(XRapidButton button) {
-		val chooser = new CarusselChooser(host, button.getChooserPosition)
-		availableKeys.forEach [
-			chooser.addChoice(new EClassNode(it.EReferenceType), it)
+	override protected createNode(EReferenceKey key) {
+		new EClassNode(key.left.EReferenceType)
+	}
+
+	override protected createChooser(XRapidButton button, Set<EReferenceKey> availableChoiceKeys, Set<EReferenceKey> unavailableChoiceKeys) {
+		val chooser = new CarusselChooser(host, button.chooserPosition)
+		availableChoiceKeys.forEach[
+			chooser.addChoice(it.createNode, it)
 		]
-		chooser.connectionProvider = [
-			host, choice, choiceInfo |
-			val reference = choiceInfo as EReference 
-			new XConnection(host, choice, reference) => [
+		chooser.connectionProvider = [	host, choice, key |
+			val reference = (key as EReferenceKey).left
+			new XConnection(host, choice, key) => [
 				targetArrowHead = if (reference.container)
 						new DiamondArrowHead(it, false)
 					else 
@@ -98,6 +64,48 @@ class AddEReferenceRapidButtonBehavior extends AbstractHostBehavior<EClassNode> 
 				}
 			]
 		]
-		host.root.currentTool = chooser
-	}	
+		chooser
+	}
+	
+	override protected createButtons((XRapidButton)=>void addConnectionAction) {
+		#[	new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover references'), addConnectionAction),
+			new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover references'), addConnectionAction) ]
+	}
+}
+
+class EReferenceKey {
+	EReference left
+	EReference right
+	
+	new(EReference left) {
+		this.left = left
+		this.right = left.EOpposite ?: left
+	}
+
+	def getLeft() {
+		left
+	}
+
+	def getRight() {
+		right
+	}
+	
+	override hashCode() {
+		left.hashCode + right.hashCode
+	}
+	
+	override equals(Object other) {
+		switch other {
+			EReferenceKey:
+				return (other.left == this.left && other.right == this.right)
+					|| (other.left == this.right && other.right == this.left)
+			default: 
+				return false
+		}
+	}		
+	
+	override toString() {
+		'''EReferenceKey «left»«IF right!=left» / «right»«ENDIF»'''
+	}
+	
 }

@@ -12,6 +12,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Export-Package: de.fxdiagram.lib.anchors,
  de.fxdiagram.lib.media,
+ de.fxdiagram.lib.model,
  de.fxdiagram.lib.nodes,
  de.fxdiagram.lib.simple,
  de.fxdiagram.lib.tools

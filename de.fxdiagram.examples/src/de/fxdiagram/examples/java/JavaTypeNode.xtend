@@ -96,5 +96,10 @@ class JavaTypeNode extends XNode {
 		addBehavior(new AddSuperTypeRapidButtonBehavior(this))
 		addBehavior(new AddReferenceRapidButtonBehavior(this))
 	}
+	
+	override toString() {
+		javaType.simpleName
+	}
+	
 }
 
