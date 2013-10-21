@@ -32,7 +32,6 @@ import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
 
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
-import javafx.scene.control.Control
 
 class Demo extends Application {
 
@@ -209,7 +208,7 @@ class Demo extends Application {
 	}
 	
 	def newJavaTypeNode() {
-		new JavaTypeNode(Control)
+		new JavaTypeNode(Button)
 	}
 	
 	def newNeonSignNode() {

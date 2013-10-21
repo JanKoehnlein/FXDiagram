@@ -33,7 +33,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
@@ -464,7 +464,7 @@ public class Demo extends Application {
   }
   
   public JavaTypeNode newJavaTypeNode() {
-    JavaTypeNode _javaTypeNode = new JavaTypeNode(Control.class);
+    JavaTypeNode _javaTypeNode = new JavaTypeNode(Button.class);
     return _javaTypeNode;
   }
   
