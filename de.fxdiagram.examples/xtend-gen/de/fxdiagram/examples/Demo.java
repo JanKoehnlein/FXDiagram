@@ -137,6 +137,9 @@ public class Demo extends Application {
           OpenableDiagramNode _newLcarsDiagramNode = Demo.this.newLcarsDiagramNode();
           _nodes_5.add(_newLcarsDiagramNode);
           ObservableList<XNode> _nodes_6 = it.getNodes();
+          SimpleNode _simpleNode = new SimpleNode("Eclipse");
+          _nodes_6.add(_simpleNode);
+          ObservableList<XNode> _nodes_7 = it.getNodes();
           OpenableDiagramNode _openableDiagramNode_2 = new OpenableDiagramNode("Gallery");
           final Procedure1<OpenableDiagramNode> _function_2 = new Procedure1<OpenableDiagramNode>() {
             public void apply(final OpenableDiagramNode it) {
@@ -194,18 +197,18 @@ public class Demo extends Application {
             }
           };
           OpenableDiagramNode _doubleArrow_2 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode_2, _function_2);
-          _nodes_6.add(_doubleArrow_2);
+          _nodes_7.add(_doubleArrow_2);
           double _width = scene.getWidth();
-          ObservableList<XNode> _nodes_7 = it.getNodes();
-          int _size = _nodes_7.size();
+          ObservableList<XNode> _nodes_8 = it.getNodes();
+          int _size = _nodes_8.size();
           int _plus = (_size + 2);
           final double deltaX = (_width / _plus);
           double _height = scene.getHeight();
-          ObservableList<XNode> _nodes_8 = it.getNodes();
-          int _size_1 = _nodes_8.size();
+          ObservableList<XNode> _nodes_9 = it.getNodes();
+          int _size_1 = _nodes_9.size();
           int _plus_1 = (_size_1 + 2);
           final double deltaY = (_height / _plus_1);
-          ObservableList<XNode> _nodes_9 = it.getNodes();
+          ObservableList<XNode> _nodes_10 = it.getNodes();
           final Procedure2<XNode,Integer> _function_3 = new Procedure2<XNode,Integer>() {
             public void apply(final XNode node, final Integer i) {
               double _multiply = ((i).intValue() * deltaX);
@@ -222,12 +225,12 @@ public class Demo extends Application {
               node.setLayoutY(_minus_1);
             }
           };
-          IterableExtensions.<XNode>forEach(_nodes_9, _function_3);
-          ObservableList<XNode> _nodes_10 = it.getNodes();
+          IterableExtensions.<XNode>forEach(_nodes_10, _function_3);
           ObservableList<XNode> _nodes_11 = it.getNodes();
-          int _size_2 = _nodes_11.size();
+          ObservableList<XNode> _nodes_12 = it.getNodes();
+          int _size_2 = _nodes_12.size();
           int _minus = (_size_2 - 1);
-          List<XNode> _subList = _nodes_10.subList(0, _minus);
+          List<XNode> _subList = _nodes_11.subList(0, _minus);
           final Procedure2<XNode,Integer> _function_4 = new Procedure2<XNode,Integer>() {
             public void apply(final XNode node, final Integer i) {
               ObservableList<XConnection> _connections = it.getConnections();
@@ -528,7 +531,7 @@ public class Demo extends Application {
   public RecursiveImageNode newRecursiveImageNode() {
     ImageCache _get = ImageCache.get();
     Image _image = _get.getImage(this, "media/laptop.jpg");
-    int _minus = (-6);
+    int _minus = (-3);
     RecursiveImageNode _recursiveImageNode = new RecursiveImageNode("Recursive Laptop", _image, 0, _minus, 0.6);
     final Procedure1<RecursiveImageNode> _function = new Procedure1<RecursiveImageNode>() {
       public void apply(final RecursiveImageNode it) {

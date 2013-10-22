@@ -32,6 +32,8 @@ import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
 
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
+import de.fxdiagram.core.behavior.OpenBehavior
+import de.fxdiagram.core.behavior.AbstractOpenBehavior
 
 class Demo extends Application {
 
@@ -73,6 +75,7 @@ class Demo extends Application {
 			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
 			nodes += openableDiagram('Ecore Explorer', newEClassNode)
 			nodes += newLcarsDiagramNode
+			nodes += new SimpleNode('Eclipse')
 			nodes += new OpenableDiagramNode('Gallery') => [
 				innerDiagram = new XDiagram => [
 					contentsInitializer = [
@@ -240,7 +243,7 @@ class Demo extends Application {
 	}
 	
 	def newRecursiveImageNode() {
-		new RecursiveImageNode('Recursive Laptop', ImageCache.get.getImage(this, 'media/laptop.jpg'), 0, -6, 0.6) => [
+		new RecursiveImageNode('Recursive Laptop', ImageCache.get.getImage(this, 'media/laptop.jpg'), 0, -3, 0.6) => [
 			width = 80
 			height = 60
 		]

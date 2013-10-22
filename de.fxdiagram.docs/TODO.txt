@@ -1,6 +1,7 @@
 TODO
 - rearrange demo diagram
 - labels snap back after being repositioned
+- noreng
 
 ENHANCEMENT
 - scroll to reveal choosers
