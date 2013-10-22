@@ -42,8 +42,6 @@ class MenuTool implements XDiagramTool {
 	RadialMenu menu
 	MenuItem selection
 	
-	LayoutType currentLayoutType = LayoutType.DOT
-
 	new(XRoot root) {
 		this.root = root
 		keyHandler = [
@@ -71,8 +69,7 @@ class MenuTool implements XDiagramTool {
 				case KeyCode.L:
 					if (shortcutDown) {
 						consume
-						currentLayoutType = currentLayoutType.next
-						new LayoutAction(currentLayoutType)
+						new LayoutAction(if(shiftDown) LayoutType.NEATO else LayoutType.DOT)
 					}
 				case KeyCode.Q:
 					if (shortcutDown) {
@@ -145,10 +142,8 @@ class MenuTool implements XDiagramTool {
 					closeMenu
 					if (selection != null) {
 						val DiagramAction action = switch selection.symbol {
-							case GRAPH: {
-								currentLayoutType = currentLayoutType.next
-								new LayoutAction(currentLayoutType)
-							}
+							case GRAPH: 
+								new LayoutAction(LayoutType.DOT)
 							case CAMERA:
 								new ExportSvgAction
 							case EJECT:
@@ -189,10 +184,5 @@ class MenuTool implements XDiagramTool {
 		root.diagramCanvas.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
 		root.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		true
-	}
-	
-	protected def LayoutType next(LayoutType currentLayoutType) {
-		val values = LayoutType.values
-		values.get((values.indexOf(currentLayoutType) + 1) % values.size)
 	}
 }

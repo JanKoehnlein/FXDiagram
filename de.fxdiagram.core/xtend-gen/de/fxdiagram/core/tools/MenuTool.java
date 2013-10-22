@@ -42,7 +42,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -62,8 +61,6 @@ public class MenuTool implements XDiagramTool {
   private RadialMenu menu;
   
   private MenuItem selection;
-  
-  private LayoutType currentLayoutType = LayoutType.DOT;
   
   public MenuTool(final XRoot root) {
     this.root = root;
@@ -150,9 +147,14 @@ public class MenuTool implements XDiagramTool {
               LayoutAction _xblockexpression_4 = null;
               {
                 it.consume();
-                LayoutType _next = MenuTool.this.next(MenuTool.this.currentLayoutType);
-                MenuTool.this.currentLayoutType = _next;
-                LayoutAction _layoutAction = new LayoutAction(MenuTool.this.currentLayoutType);
+                LayoutType _xifexpression_5 = null;
+                boolean _isShiftDown = it.isShiftDown();
+                if (_isShiftDown) {
+                  _xifexpression_5 = LayoutType.NEATO;
+                } else {
+                  _xifexpression_5 = LayoutType.DOT;
+                }
+                LayoutAction _layoutAction = new LayoutAction(_xifexpression_5);
                 _xblockexpression_4 = (_layoutAction);
               }
               _xifexpression_4 = _xblockexpression_4;
@@ -327,14 +329,8 @@ public class MenuTool implements XDiagramTool {
                     if (!_matched) {
                       if (Objects.equal(_switchValue,Type.GRAPH)) {
                         _matched=true;
-                        LayoutAction _xblockexpression = null;
-                        {
-                          LayoutType _next = MenuTool.this.next(MenuTool.this.currentLayoutType);
-                          MenuTool.this.currentLayoutType = _next;
-                          LayoutAction _layoutAction = new LayoutAction(MenuTool.this.currentLayoutType);
-                          _xblockexpression = (_layoutAction);
-                        }
-                        _switchResult = _xblockexpression;
+                        LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
+                        _switchResult = _layoutAction;
                       }
                     }
                     if (!_matched) {
@@ -373,13 +369,13 @@ public class MenuTool implements XDiagramTool {
                       }
                     }
                     if (!_matched) {
-                      DiagramAction _xblockexpression_1 = null;
+                      DiagramAction _xblockexpression = null;
                       {
                         String _plus = ("Unhandled menu item " + MenuTool.this.selection);
                         MenuTool.LOG.warning(_plus);
-                        _xblockexpression_1 = (null);
+                        _xblockexpression = (null);
                       }
-                      _switchResult = _xblockexpression_1;
+                      _switchResult = _xblockexpression;
                     }
                     final DiagramAction action = _switchResult;
                     if (action!=null) {
@@ -448,20 +444,6 @@ public class MenuTool implements XDiagramTool {
       Scene _scene = this.root.getScene();
       _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       _xblockexpression = (true);
-    }
-    return _xblockexpression;
-  }
-  
-  protected LayoutType next(final LayoutType currentLayoutType) {
-    LayoutType _xblockexpression = null;
-    {
-      final LayoutType[] values = LayoutType.values();
-      int _indexOf = ((List<LayoutType>)Conversions.doWrapArray(values)).indexOf(currentLayoutType);
-      int _plus = (_indexOf + 1);
-      int _size = ((List<LayoutType>)Conversions.doWrapArray(values)).size();
-      int _modulo = (_plus % _size);
-      LayoutType _get = values[_modulo];
-      _xblockexpression = (_get);
     }
     return _xblockexpression;
   }
