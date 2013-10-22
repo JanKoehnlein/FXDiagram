@@ -189,8 +189,8 @@ public class XConnection extends XShape {
     final Procedure1<Change<? extends XControlPoint>> listChangeListener = _function_1;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
     _controlPoints.addListener(new ListChangeListener<XControlPoint>() {
-        public void onChanged(Change<? extends XControlPoint> c) {
-          listChangeListener.apply(c);
+        public void onChanged(Change<? extends XControlPoint> arg0) {
+          listChangeListener.apply(arg0);
         }
     });
     ObservableList<XConnectionLabel> _labels = this.getLabels();
@@ -688,8 +688,9 @@ public class XConnection extends XShape {
             double _xifexpression = (double) 0;
             boolean _equals = (t == 1);
             if (_equals) {
-              double _divide_1 = (0.5 / numSegments);
-              double _minus = (numSegments - _divide_1);
+              ObservableList<Double> _points_1 = line.getPoints();
+              int _size_1 = _points_1.size();
+              int _minus = (_size_1 - 4);
               _xifexpression = _minus;
             } else {
               double _multiply = (t * numSegments);
@@ -697,18 +698,18 @@ public class XConnection extends XShape {
             }
             final double segment = _xifexpression;
             final int index = ((int) segment);
-            ObservableList<Double> _points_1 = line.getPoints();
-            int _plus = (index + 2);
-            Double _get = _points_1.get(_plus);
             ObservableList<Double> _points_2 = line.getPoints();
-            Double _get_1 = _points_2.get(index);
-            double _minus_1 = DoubleExtensions.operator_minus(_get, _get_1);
+            int _plus = (index + 2);
+            Double _get = _points_2.get(_plus);
             ObservableList<Double> _points_3 = line.getPoints();
-            int _plus_1 = (index + 3);
-            Double _get_2 = _points_3.get(_plus_1);
+            Double _get_1 = _points_3.get(index);
+            double _minus_1 = DoubleExtensions.operator_minus(_get, _get_1);
             ObservableList<Double> _points_4 = line.getPoints();
+            int _plus_1 = (index + 3);
+            Double _get_2 = _points_4.get(_plus_1);
+            ObservableList<Double> _points_5 = line.getPoints();
             int _plus_2 = (index + 1);
-            Double _get_3 = _points_4.get(_plus_2);
+            Double _get_3 = _points_5.get(_plus_2);
             double _minus_2 = DoubleExtensions.operator_minus(_get_2, _get_3);
             Point2D _point2D = new Point2D(_minus_1, _minus_2);
             _xblockexpression_3 = (_point2D);

@@ -184,20 +184,24 @@ public abstract class AbstractChooser implements XDiagramTool {
     this.swipeHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
       public void handle(final ScrollEvent it) {
-        EventType<? extends Event> _eventType = it.getEventType();
-        boolean _equals = Objects.equal(_eventType, ScrollEvent.SCROLL_FINISHED);
-        if (_equals) {
-          double _currentPosition = AbstractChooser.this.getCurrentPosition();
-          double _plus = (_currentPosition + 0.5);
-          AbstractChooser.this.spinToPosition.setTargetPosition(((int) _plus));
-        } else {
-          double _currentPosition_1 = AbstractChooser.this.getCurrentPosition();
-          double _deltaX = it.getDeltaX();
-          double _deltaY = it.getDeltaY();
-          double _plus_1 = (_deltaX + _deltaY);
-          double _divide = (_plus_1 / 100);
-          double _minus = (_currentPosition_1 - _divide);
-          AbstractChooser.this.setCurrentPosition(_minus);
+        boolean _isShortcutDown = it.isShortcutDown();
+        boolean _not = (!_isShortcutDown);
+        if (_not) {
+          EventType<? extends Event> _eventType = it.getEventType();
+          boolean _equals = Objects.equal(_eventType, ScrollEvent.SCROLL_FINISHED);
+          if (_equals) {
+            double _currentPosition = AbstractChooser.this.getCurrentPosition();
+            double _plus = (_currentPosition + 0.5);
+            AbstractChooser.this.spinToPosition.setTargetPosition(((int) _plus));
+          } else {
+            double _currentPosition_1 = AbstractChooser.this.getCurrentPosition();
+            double _deltaX = it.getDeltaX();
+            double _deltaY = it.getDeltaY();
+            double _plus_1 = (_deltaX + _deltaY);
+            double _divide = (_plus_1 / 100);
+            double _minus = (_currentPosition_1 - _divide);
+            AbstractChooser.this.setCurrentPosition(_minus);
+          }
         }
       }
     };

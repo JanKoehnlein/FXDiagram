@@ -1,12 +1,10 @@
 TODO
 - rearrange demo diagram
 - labels snap back after being repositioned
+- Layout algorithm shift
 
 ENHANCEMENT
-- make this XNode.behaviors a map
-- lift up XNode.behaviors to XShape (blocked by https://bugs.eclipse.org/bugs/show_bug.cgi?id=419688)
 - scroll to reveal choosers
-- eOpposite aware key in Ecore
 - find better colors
 - collapsible compartments
 - chooser isVertical
@@ -22,6 +20,9 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
+- eOpposite aware key in Ecore
+- make this XNode.behaviors a map
+- lift up XNode.behaviors to XShape (blocked by https://bugs.eclipse.org/bugs/show_bug.cgi?id=419688)
 - goTo parent button missing when returning from grandchild 
 - ScrollAndScale should reset rotation
 - LCARS use keys to prohibit duplicate edges

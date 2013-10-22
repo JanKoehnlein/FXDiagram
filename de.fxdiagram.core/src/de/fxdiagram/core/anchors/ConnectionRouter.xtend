@@ -13,12 +13,15 @@ import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
 
+import static java.lang.Math.*
 import static de.fxdiagram.core.XConnectionKind.*
 import static de.fxdiagram.core.XControlPointType.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.annotations.logging.Logging
 
+@Logging
 class ConnectionRouter implements XActivatable {
 	
 	@FxProperty@ReadOnly ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
@@ -28,6 +31,8 @@ class ConnectionRouter implements XActivatable {
 
 	ChangeListener<Number> scalarListener  
 	ChangeListener<Bounds> boundsListener
+	
+	double selfEdgeDist = 60
 	
 	new(XConnection connection) {
 		this.connection = connection
@@ -118,15 +123,20 @@ class ConnectionRouter implements XActivatable {
 	}
 	
 	def void calculatePoints() {
+		if(controlPoints.size < 2) {
+			for(controlPoint: controlPoints) {
+				controlPoint.layoutXProperty.removeListener(scalarListener)
+				controlPoint.layoutYProperty.removeListener(scalarListener)
+			} 
+			if(connection.source == connection.target) {
+				calculateSelfEdge()
+			}
+		} 
 		val anchors = findClosestAnchors
 		if(anchors.key != null && anchors.value != null) {
 			val sourcePoint = anchors.key
 			val targetPoint = anchors.value
 			if (controlPoints.size < 2) {
-				for(controlPoint: controlPoints) {
-					controlPoint.layoutXProperty.removeListener(scalarListener)
-					controlPoint.layoutYProperty.removeListener(scalarListener)
-				} 
 				controlPoints.setAll(
 					#[new XControlPoint => [
 						layoutX = sourcePoint.x
@@ -158,6 +168,54 @@ class ConnectionRouter implements XActivatable {
 			controlPoints.forEach[update(controlPoints)]
 		}
 	}
+	
+	protected def calculateSelfEdge() {
+		val boundsInDiagram = connection.source.localToDiagram(connection.source.boundsInLocal)
+		controlPoints.clear
+		controlPoints += new XControlPoint => [
+			type = ANCHOR
+		]
+		if(connection.kind == QUAD_CURVE) {
+			LOG.severe("self-edges cannot be QUAD_CURVEs. Switching to CUBIC_CURVE")
+			connection.kind = CUBIC_CURVE			
+		}
+		switch connection.kind {
+			case POLYLINE: {
+				val deltaX = min(selfEdgeDist, 0.5 * boundsInDiagram.width)
+				val deltaY = min(selfEdgeDist, 0.5 * boundsInDiagram.height)
+				controlPoints += new XControlPoint => [
+					layoutX = boundsInDiagram.minX - deltaX
+					layoutY = boundsInDiagram.minY + deltaY
+					type = CONTROL_POINT
+				]	
+				controlPoints += new XControlPoint => [
+					layoutX = boundsInDiagram.minX - deltaX
+					layoutY = boundsInDiagram.minY - deltaY
+					type = CONTROL_POINT
+				]	
+				controlPoints+= new XControlPoint => [
+					layoutX = boundsInDiagram.minX + deltaX
+					layoutY = boundsInDiagram.minY - deltaY
+					type = CONTROL_POINT
+				]	
+			}
+			case CUBIC_CURVE: {
+				controlPoints += new XControlPoint => [
+					layoutX = boundsInDiagram.minX - selfEdgeDist
+					layoutY = boundsInDiagram.minY + 0.3 * selfEdgeDist
+					type = CONTROL_POINT
+				]	
+				controlPoints += new XControlPoint => [
+					layoutX = boundsInDiagram.minX + 0.3 * selfEdgeDist
+					layoutY = boundsInDiagram.minY - selfEdgeDist
+					type = CONTROL_POINT
+				]	
+			}
+		}
+		controlPoints += new XControlPoint => [
+			type = ANCHOR
+		]
+	}	
 	
  	protected def findClosestAnchors() {
 		if (controlPoints.size <= 2) {

@@ -53,7 +53,7 @@ abstract class AbstractChooser implements XDiagramTool {
 	val node2choiceInfo = <XNode, Object>newHashMap 
 	
 	var ChooserConnectionProvider connectionProvider = [
-		host, choice, choiceInfo | new XConnection(host, choice)
+		host, choice, choiceInfo | new XConnection(host, choice) 
 	]
 	
 	XNode currentChoice 
@@ -98,10 +98,12 @@ abstract class AbstractChooser implements XDiagramTool {
 			spinToPosition.targetPositionDelta = direction * 10
 		]
 		scrollHandler = [
-			if (eventType == ScrollEvent.SCROLL_FINISHED)
-				spinToPosition.targetPosition = (getCurrentPosition + 0.5) as int
-			else
-				currentPosition = getCurrentPosition - (deltaX + deltaY) / 100
+			if(!it.shortcutDown) {
+				if (eventType == ScrollEvent.SCROLL_FINISHED)
+					spinToPosition.targetPosition = (getCurrentPosition + 0.5) as int
+				else
+					currentPosition = getCurrentPosition - (deltaX + deltaY) / 100
+			}
 		]
 		keyHandler = [
 			switch code {

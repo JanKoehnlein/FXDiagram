@@ -274,7 +274,7 @@ class XConnection extends XShape {
 				val line = shapeGroup.children.filter(Polyline).head
 				val numSegments = (line.points.size / 2 - 1)
 				val segment = if(t == 1)
-						numSegments - 0.5 / numSegments
+						line.points.size -4
 					else
 					 	t * numSegments
 				val index = segment as int
