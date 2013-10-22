@@ -1,14 +1,12 @@
 package de.fxdiagram.eclipse
 
+import de.fxdiagram.examples.Demo
+import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import javafx.embed.swt.FXCanvas
 import javafx.scene.Scene
-
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.ui.part.ViewPart
-
-import de.fxdiagram.examples.Main
-import de.fxdiagram.swtfx.SwtToFXGestureConverter
 
 class FXDiagramViewPart extends ViewPart {
 
@@ -21,7 +19,7 @@ class FXDiagramViewPart extends ViewPart {
 	}
 	
 	protected def Scene createFxScene() {
-		new Main().createScene
+		new Demo().createScene
 	}
 	
 	override setFocus() {

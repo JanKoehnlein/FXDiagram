@@ -1,6 +1,6 @@
 package de.fxdiagram.eclipse;
 
-import de.fxdiagram.examples.Main;
+import de.fxdiagram.examples.Demo;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import javafx.embed.swt.FXCanvas;
 import javafx.scene.Scene;
@@ -10,10 +10,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 @SuppressWarnings("all")
-public class SwtMain {
+public class SwtDemo {
   private static Scene createScene() {
-    Main _main = new Main();
-    Scene _createScene = _main.createScene();
+    Demo _demo = new Demo();
+    Scene _createScene = _demo.createScene();
     return _createScene;
   }
   
@@ -27,7 +27,7 @@ public class SwtMain {
     FXCanvas _fXCanvas = new FXCanvas(shell, SWT.NONE);
     final FXCanvas canvas = _fXCanvas;
     SwtToFXGestureConverter.register(canvas);
-    final Scene scene = SwtMain.createScene();
+    final Scene scene = SwtDemo.createScene();
     canvas.setScene(scene);
     shell.open();
     boolean _isDisposed = shell.isDisposed();

@@ -1,6 +1,6 @@
 package de.fxdiagram.eclipse;
 
-import de.fxdiagram.examples.Main;
+import de.fxdiagram.examples.Demo;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import javafx.embed.swt.FXCanvas;
 import javafx.scene.Scene;
@@ -21,8 +21,8 @@ public class FXDiagramViewPart extends ViewPart {
   }
   
   protected Scene createFxScene() {
-    Main _main = new Main();
-    Scene _createScene = _main.createScene();
+    Demo _demo = new Demo();
+    Scene _createScene = _demo.createScene();
     return _createScene;
   }
   

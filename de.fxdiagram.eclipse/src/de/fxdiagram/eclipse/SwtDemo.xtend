@@ -1,6 +1,6 @@
 package de.fxdiagram.eclipse
 
-import de.fxdiagram.examples.Main
+import de.fxdiagram.examples.Demo
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import javafx.embed.swt.FXCanvas
 import org.eclipse.swt.SWT
@@ -8,10 +8,10 @@ import org.eclipse.swt.layout.FillLayout
 import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.Shell
 
-class SwtMain {
+class SwtDemo {
 
 	private static def createScene() {
-		new Main().createScene
+		new Demo().createScene
 	}
 
 	static def void main(String[] args) {
