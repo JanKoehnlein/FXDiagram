@@ -422,8 +422,8 @@ public class ConnectionRouter implements XActivatable {
     {
       XNode _source = this.connection.getSource();
       XNode _source_1 = this.connection.getSource();
-      Bounds _boundsInLocal = _source_1.getBoundsInLocal();
-      final Bounds boundsInDiagram = CoreExtensions.localToDiagram(_source, _boundsInLocal);
+      Bounds _snapBounds = _source_1.getSnapBounds();
+      final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(_source, _snapBounds);
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       _controlPoints.clear();
       ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();

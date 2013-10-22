@@ -170,7 +170,7 @@ class ConnectionRouter implements XActivatable {
 	}
 	
 	protected def calculateSelfEdge() {
-		val boundsInDiagram = connection.source.localToDiagram(connection.source.boundsInLocal)
+		val boundsInDiagram = connection.source.localToRootDiagram(connection.source.snapBounds)
 		controlPoints.clear
 		controlPoints += new XControlPoint => [
 			type = ANCHOR
