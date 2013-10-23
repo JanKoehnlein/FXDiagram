@@ -24,7 +24,6 @@ import de.fxdiagram.lib.simple.SimpleNode
 import java.net.URL
 import javafx.application.Application
 import javafx.concurrent.Task
-import javafx.geometry.Rectangle2D
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
 import javafx.scene.control.Button
@@ -32,8 +31,7 @@ import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
 
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
-import de.fxdiagram.core.behavior.OpenBehavior
-import de.fxdiagram.core.behavior.AbstractOpenBehavior
+import static extension javafx.util.Duration.*
 
 class Demo extends Application {
 
@@ -56,6 +54,7 @@ class Demo extends Application {
 		root.diagram = diagram
 
 		diagram => [
+			nodes += new SimpleNode('Introduction')
 			nodes += new OpenableDiagramNode('Basic') => [
 				innerDiagram = createBasicDiagram('')
 			]
@@ -72,29 +71,30 @@ class Demo extends Application {
 				]
 			]
 			nodes += openableDiagram('Xtend', newNeonSignNode)
-			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
+			//nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
 			nodes += openableDiagram('Ecore Explorer', newEClassNode)
 			nodes += newLcarsDiagramNode
 			nodes += new SimpleNode('Eclipse')
-			nodes += new OpenableDiagramNode('Gallery') => [
-				innerDiagram = new XDiagram => [
-					contentsInitializer = [
-						nodes += newSimpleNode('')
-						nodes += newOpenableBasicDiagramNode('')
-						nodes += newEmbeddedBasicDiagram('')
-						nodes += newNeonSignNode
-						nodes += newJavaTypeNode
-						nodes += newEClassNode
-						nodes += newLoginNode
-						nodes += newRecursiveImageNode
-						nodes += newImageNode
-						nodes += newMovieNode
-						nodes += newBrowserNode
-						nodes += newBrickBreakerNode
-						nodes += newLcarsDiagramNode
-					]
-				]
-			]
+//			nodes += new OpenableDiagramNode('Gallery') => [
+//				innerDiagram = new XDiagram => [
+//					contentsInitializer = [
+//						nodes += newSimpleNode('')
+//						nodes += newOpenableBasicDiagramNode('')
+//						nodes += newEmbeddedBasicDiagram('')
+//						nodes += newNeonSignNode
+//						nodes += newJavaTypeNode
+//						nodes += newEClassNode
+//						nodes += newLoginNode
+//						nodes += newRecursiveImageNode
+//						nodes += newImageNode
+//						nodes += newMovieNode
+//						nodes += newBrowserNode
+//						nodes += newBrickBreakerNode
+//						nodes += newLcarsDiagramNode
+//					]
+//				]
+//			]
+			nodes += new SimpleNode('Summary')
 			val deltaX = scene.width / (nodes.size + 2)
 			val deltaY = scene.height / (nodes.size + 2)
 			nodes.forEach[
@@ -170,20 +170,23 @@ class Demo extends Application {
 	protected def void addRapidButtons(XNode node, String nameSuffix) {
 		node.addBehavior(new AddRapidButtonBehavior(node) => [
 			choiceInitializer = [
+				for(i: 1..20) {
+					addChoice(newSimpleNode(' ' + i))
+				}
 				addChoice(newSimpleNode(nameSuffix))
 				addChoice(newOpenableBasicDiagramNode(nameSuffix))
 				addChoice(newEmbeddedBasicDiagram(nameSuffix))
 				addChoice(newMovieNode)
 				addChoice(newBrowserNode)
 				addChoice(newBrickBreakerNode)
-				addChoice(newImageNode)
-				addChoice(newRecursiveImageNode)
+//				addChoice(newImageNode)
+//				addChoice(newRecursiveImageNode)
 			]
 		])
 	}
 	
 	def newSimpleNode(String nameSuffix) {
-		new SimpleNode('Simple' + nameSuffix) => [
+		new SimpleNode('Node' + nameSuffix) => [
 			addRapidButtons(nameSuffix)
 		]
 	}
@@ -220,10 +223,10 @@ class Demo extends Application {
 
 	def newMovieNode() {
 		new MovieNode('Movie') => [
-			movieUrl = new URL(this.toURI('media/ScreenFlow.mp4'))
+			movieUrl = new URL(this.toURI('media/Usability.mp4'))
 			width = 640
 			height = 360
-			view.viewport = new Rectangle2D(0, 60, 640, 360)
+			player.seek(2.minutes)
 		]
 	}
 	

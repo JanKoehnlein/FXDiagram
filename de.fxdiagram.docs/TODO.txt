@@ -1,7 +1,9 @@
 TODO
-- rearrange demo diagram
-- labels snap back after being repositioned
 - noreng
+
+BUGS
+- player.seek doesn't work
+- labels snap back after being repositioned
 
 ENHANCEMENT
 - scroll to reveal choosers
@@ -20,7 +22,8 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
-- Layout algorithm shift
+- rearrange demo diagram
+- layout algorithm shift
 - eOpposite aware key in Ecore
 - make this XNode.behaviors a map
 - lift up XNode.behaviors to XShape (blocked by https://bugs.eclipse.org/bugs/show_bug.cgi?id=419688)
