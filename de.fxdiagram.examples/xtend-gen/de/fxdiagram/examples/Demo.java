@@ -16,6 +16,8 @@ import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.login.LoginNode;
 import de.fxdiagram.examples.neonsign.NeonSignNode;
+import de.fxdiagram.examples.slides.IntroductionSlideDeck;
+import de.fxdiagram.examples.slides.SummarySlideDeck;
 import de.fxdiagram.lib.media.BrowserNode;
 import de.fxdiagram.lib.media.ImageNode;
 import de.fxdiagram.lib.media.MovieNode;
@@ -75,8 +77,8 @@ public class Demo extends Application {
       final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
         public void apply(final XDiagram it) {
           ObservableList<XNode> _nodes = it.getNodes();
-          SimpleNode _simpleNode = new SimpleNode("Introduction");
-          _nodes.add(_simpleNode);
+          IntroductionSlideDeck _introductionSlideDeck = new IntroductionSlideDeck();
+          _nodes.add(_introductionSlideDeck);
           ObservableList<XNode> _nodes_1 = it.getNodes();
           OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Basic");
           final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
@@ -137,11 +139,11 @@ public class Demo extends Application {
           OpenableDiagramNode _newLcarsDiagramNode = Demo.this.newLcarsDiagramNode();
           _nodes_5.add(_newLcarsDiagramNode);
           ObservableList<XNode> _nodes_6 = it.getNodes();
-          SimpleNode _simpleNode_1 = new SimpleNode("Eclipse");
-          _nodes_6.add(_simpleNode_1);
+          SimpleNode _simpleNode = new SimpleNode("Eclipse");
+          _nodes_6.add(_simpleNode);
           ObservableList<XNode> _nodes_7 = it.getNodes();
-          SimpleNode _simpleNode_2 = new SimpleNode("Summary");
-          _nodes_7.add(_simpleNode_2);
+          SummarySlideDeck _summarySlideDeck = new SummarySlideDeck();
+          _nodes_7.add(_summarySlideDeck);
           double _width = scene.getWidth();
           ObservableList<XNode> _nodes_8 = it.getNodes();
           int _size = _nodes_8.size();
@@ -333,7 +335,7 @@ public class Demo extends Application {
       public void apply(final AddRapidButtonBehavior<XNode> it) {
         final Procedure1<AbstractChooser> _function = new Procedure1<AbstractChooser>() {
           public void apply(final AbstractChooser it) {
-            IntegerRange _upTo = new IntegerRange(1, 20);
+            IntegerRange _upTo = new IntegerRange(5, 20);
             for (final Integer i : _upTo) {
               String _plus = (" " + i);
               SimpleNode _newSimpleNode = Demo.this.newSimpleNode(_plus);
@@ -351,6 +353,14 @@ public class Demo extends Application {
             it.addChoice(_newBrowserNode);
             BrickBreakerNode _newBrickBreakerNode = Demo.this.newBrickBreakerNode();
             it.addChoice(_newBrickBreakerNode);
+            IntegerRange _upTo_1 = new IntegerRange(1, 4);
+            for (final Integer i_1 : _upTo_1) {
+              String _plus_1 = (" " + i_1);
+              SimpleNode _newSimpleNode_2 = Demo.this.newSimpleNode(_plus_1);
+              it.addChoice(_newSimpleNode_2);
+            }
+            SimpleNode _newSimpleNode_3 = Demo.this.newSimpleNode(nameSuffix);
+            it.addChoice(_newSimpleNode_3);
           }
         };
         it.setChoiceInitializer(_function);

@@ -1,9 +1,10 @@
 package de.fxdiagram.examples.ecore;
 
-import com.google.common.base.Objects;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+
+import com.google.common.base.Objects;
 
 @SuppressWarnings("all")
 public class EReferenceKey {

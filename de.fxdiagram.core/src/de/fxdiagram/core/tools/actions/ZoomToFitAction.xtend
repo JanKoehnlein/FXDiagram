@@ -11,7 +11,12 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 class ZoomToFitAction implements DiagramAction {
 	
 	override perform(XRoot root) {
-		val selectionBounds = root.currentSelection.map[localToRootDiagram(snapBounds)].reduce[a,b|a+b]
+		val elements = 
+			if(root.currentSelection.empty) 
+		  		root.diagram.nodes + root.diagram.connections
+		  	else
+		  		root.currentSelection
+		val selectionBounds = elements.map[localToRootDiagram(snapBounds)].reduce[a,b|a+b]
 		if(selectionBounds != null && selectionBounds.width > EPSILON && selectionBounds.height > EPSILON) {
 			val targetScale =  
 					min(root.scene.width / selectionBounds.width, 

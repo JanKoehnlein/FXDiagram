@@ -75,10 +75,16 @@ class MenuTool implements XDiagramTool {
 					if (shortcutDown) {
 						new ExitAction
 					}
+				case KeyCode.RIGHT:
+						new NavigateNextAction
+				case KeyCode.LEFT:
+						new NavigatePreviousAction
 				case KeyCode.PAGE_DOWN:
 						new NavigateNextAction
 				case KeyCode.PAGE_UP:
 						new NavigatePreviousAction
+				case KeyCode.ENTER:
+						new OpenAction
 				case KeyCode.PERIOD:
 						new OpenAction
 				case KeyCode.ESCAPE: {

@@ -1,15 +1,8 @@
 package de.fxdiagram.examples;
 
-import brickbreaker.Config;
-import brickbreaker.Main;
-import brickbreaker.Main.MainFrame;
-import com.google.common.base.Objects;
-import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
-import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.lib.nodes.FlipNode;
-import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
@@ -20,12 +13,24 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
+import brickbreaker.Config;
+import brickbreaker.Main;
+import brickbreaker.Main.MainFrame;
+
+import com.google.common.base.Objects;
+
+import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
+import de.fxdiagram.core.extensions.TooltipExtensions;
+import de.fxdiagram.lib.nodes.FlipNode;
+import de.fxdiagram.lib.nodes.RectangleBorderPane;
 
 @SuppressWarnings("all")
 public class BrickBreakerNode extends FlipNode {

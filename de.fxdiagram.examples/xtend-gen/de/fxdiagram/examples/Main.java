@@ -1,5 +1,24 @@
 package de.fxdiagram.examples;
 
+import java.net.URL;
+
+import javafx.application.Application;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.media.MediaView;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import org.eclipse.emf.ecore.EcorePackage.Literals;
+import org.eclipse.xtext.xbase.lib.Exceptions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
@@ -9,7 +28,6 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.services.ImageCache;
-import de.fxdiagram.examples.BrickBreakerNode;
 import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
@@ -22,22 +40,6 @@ import de.fxdiagram.lib.media.RecursiveImageNode;
 import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.lib.simple.SimpleNode;
-import java.net.URL;
-import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.media.MediaView;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import org.eclipse.emf.ecore.EcorePackage.Literals;
-import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class Main extends Application {

@@ -1,12 +1,14 @@
 package de.fxdiagram.examples.lcars;
 
-import com.google.common.base.Objects;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+
+import com.google.common.base.Objects;
 
 @SuppressWarnings("all")
 public class NameShortener {

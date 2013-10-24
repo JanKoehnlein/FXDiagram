@@ -1,8 +1,5 @@
 package de.fxdiagram.examples.login;
 
-import de.fxdiagram.core.extensions.StringExpressionExtensions;
-import de.fxdiagram.lib.nodes.FlipNode;
-import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -23,8 +20,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
+import de.fxdiagram.core.extensions.StringExpressionExtensions;
+import de.fxdiagram.lib.nodes.FlipNode;
+import de.fxdiagram.lib.nodes.RectangleBorderPane;
 
 @SuppressWarnings("all")
 public class LoginNode extends FlipNode {

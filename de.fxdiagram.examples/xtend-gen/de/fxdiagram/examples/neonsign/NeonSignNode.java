@@ -1,9 +1,5 @@
 package de.fxdiagram.examples.neonsign;
 
-import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.extensions.UriExtensions;
-import de.fxdiagram.core.services.ImageCache;
-import de.fxdiagram.lib.nodes.FlipNode;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -27,9 +23,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
+import de.fxdiagram.core.extensions.TooltipExtensions;
+import de.fxdiagram.core.extensions.UriExtensions;
+import de.fxdiagram.core.services.ImageCache;
+import de.fxdiagram.lib.nodes.FlipNode;
 
 @SuppressWarnings("all")
 public class NeonSignNode extends FlipNode {

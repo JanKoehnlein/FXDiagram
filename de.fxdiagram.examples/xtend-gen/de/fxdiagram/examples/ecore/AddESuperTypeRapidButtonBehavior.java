@@ -1,6 +1,22 @@
 package de.fxdiagram.examples.ecore;
 
+import java.util.Collections;
+import java.util.Set;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.SVGPath;
+
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
 import com.google.common.collect.Lists;
+
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -11,22 +27,8 @@ import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
-import de.fxdiagram.examples.ecore.EClassNode;
-import de.fxdiagram.examples.ecore.ESuperTypeKey;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
-import java.util.Collections;
-import java.util.Set;
-import javafx.beans.property.ObjectProperty;
-import javafx.geometry.Pos;
-import javafx.geometry.Side;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.SVGPath;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode,EClass,ESuperTypeKey> {

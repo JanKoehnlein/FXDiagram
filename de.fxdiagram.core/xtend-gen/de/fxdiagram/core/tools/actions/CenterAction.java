@@ -1,6 +1,10 @@
 package de.fxdiagram.core.tools.actions;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.extensions.BoundsExtensions;
@@ -8,6 +12,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
+import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -19,7 +24,21 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 @SuppressWarnings("all")
 public class CenterAction implements DiagramAction {
   public void perform(final XRoot root) {
+    Iterable<XShape> _xifexpression = null;
     Iterable<XShape> _currentSelection = root.getCurrentSelection();
+    boolean _isEmpty = IterableExtensions.isEmpty(_currentSelection);
+    if (_isEmpty) {
+      XDiagram _diagram = root.getDiagram();
+      ObservableList<XNode> _nodes = _diagram.getNodes();
+      XDiagram _diagram_1 = root.getDiagram();
+      ObservableList<XConnection> _connections = _diagram_1.getConnections();
+      Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
+      _xifexpression = _plus;
+    } else {
+      Iterable<XShape> _currentSelection_1 = root.getCurrentSelection();
+      _xifexpression = _currentSelection_1;
+    }
+    final Iterable<XShape> elements = _xifexpression;
     final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
       public Bounds apply(final XShape it) {
         Bounds _snapBounds = it.getSnapBounds();
@@ -27,7 +46,7 @@ public class CenterAction implements DiagramAction {
         return _localToRootDiagram;
       }
     };
-    Iterable<Bounds> _map = IterableExtensions.<XShape, Bounds>map(_currentSelection, _function);
+    Iterable<Bounds> _map = IterableExtensions.<XShape, Bounds>map(elements, _function);
     final Function2<Bounds,Bounds,Bounds> _function_1 = new Function2<Bounds,Bounds,Bounds>() {
       public Bounds apply(final Bounds a, final Bounds b) {
         BoundingBox _plus = BoundsExtensions.operator_plus(a, b);

@@ -1,20 +1,5 @@
 package de.fxdiagram.examples.lcars;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mongodb.DBObject;
-import de.fxdiagram.annotations.logging.Logging;
-import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
-import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.services.ImageCache;
-import de.fxdiagram.examples.lcars.LcarsExtensions;
-import de.fxdiagram.examples.lcars.LcarsField;
-import de.fxdiagram.examples.lcars.NameShortener;
-import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
 import javafx.animation.Timeline;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -54,6 +40,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -64,6 +51,20 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
+import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mongodb.DBObject;
+
+import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
+import de.fxdiagram.core.extensions.TooltipExtensions;
+import de.fxdiagram.core.services.ImageCache;
+import de.fxdiagram.lib.nodes.RectangleBorderPane;
 
 @Logging
 @SuppressWarnings("all")

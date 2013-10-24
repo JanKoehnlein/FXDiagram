@@ -1,16 +1,18 @@
 package de.fxdiagram.examples.lcars;
 
-import com.google.common.base.Objects;
-import de.fxdiagram.examples.lcars.LcarsDiagram;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
+
+import com.google.common.base.Objects;
 
 @SuppressWarnings("all")
 public class LcarsExtensions {

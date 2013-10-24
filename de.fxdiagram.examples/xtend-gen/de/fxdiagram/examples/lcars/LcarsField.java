@@ -1,23 +1,7 @@
 package de.fxdiagram.examples.lcars;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Iterables;
-import com.mongodb.DBObject;
-import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionLabel;
-import de.fxdiagram.core.XDiagram;
-import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.anchors.TriangleArrowHead;
-import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.layout.LayoutType;
-import de.fxdiagram.core.tools.ChooserConnectionProvider;
-import de.fxdiagram.core.tools.actions.LayoutAction;
-import de.fxdiagram.examples.lcars.LcarsExtensions;
-import de.fxdiagram.examples.lcars.LcarsNode;
-import de.fxdiagram.examples.lcars.LcarsQueryTask;
-import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -39,11 +23,28 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
+import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+import com.mongodb.DBObject;
+
+import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionLabel;
+import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.anchors.TriangleArrowHead;
+import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.layout.LayoutType;
+import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.core.tools.actions.LayoutAction;
+import de.fxdiagram.lib.nodes.RectangleBorderPane;
 
 @SuppressWarnings("all")
 public class LcarsField extends Parent {

@@ -175,24 +175,45 @@ public class MenuTool implements XDiagramTool {
           }
         }
         if (!_matched) {
-          if (Objects.equal(getCode,KeyCode.PAGE_DOWN)) {
+          if (Objects.equal(getCode,KeyCode.RIGHT)) {
             _matched=true;
             NavigateNextAction _navigateNextAction = new NavigateNextAction();
             _switchResult = _navigateNextAction;
           }
         }
         if (!_matched) {
-          if (Objects.equal(getCode,KeyCode.PAGE_UP)) {
+          if (Objects.equal(getCode,KeyCode.LEFT)) {
             _matched=true;
             NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
             _switchResult = _navigatePreviousAction;
           }
         }
         if (!_matched) {
-          if (Objects.equal(getCode,KeyCode.PERIOD)) {
+          if (Objects.equal(getCode,KeyCode.PAGE_DOWN)) {
+            _matched=true;
+            NavigateNextAction _navigateNextAction_1 = new NavigateNextAction();
+            _switchResult = _navigateNextAction_1;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.PAGE_UP)) {
+            _matched=true;
+            NavigatePreviousAction _navigatePreviousAction_1 = new NavigatePreviousAction();
+            _switchResult = _navigatePreviousAction_1;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.ENTER)) {
             _matched=true;
             OpenAction _openAction = new OpenAction();
             _switchResult = _openAction;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.PERIOD)) {
+            _matched=true;
+            OpenAction _openAction_1 = new OpenAction();
+            _switchResult = _openAction_1;
           }
         }
         if (!_matched) {

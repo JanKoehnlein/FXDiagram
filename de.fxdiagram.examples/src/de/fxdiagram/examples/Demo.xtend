@@ -13,6 +13,8 @@ import de.fxdiagram.examples.java.JavaTypeNode
 import de.fxdiagram.examples.lcars.LcarsDiagram
 import de.fxdiagram.examples.login.LoginNode
 import de.fxdiagram.examples.neonsign.NeonSignNode
+import de.fxdiagram.examples.slides.IntroductionSlideDeck
+import de.fxdiagram.examples.slides.SummarySlideDeck
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
 import de.fxdiagram.lib.media.MovieNode
@@ -54,7 +56,7 @@ class Demo extends Application {
 		root.diagram = diagram
 
 		diagram => [
-			nodes += new SimpleNode('Introduction')
+			nodes += new IntroductionSlideDeck
 			nodes += new OpenableDiagramNode('Basic') => [
 				innerDiagram = createBasicDiagram('')
 			]
@@ -94,7 +96,7 @@ class Demo extends Application {
 //					]
 //				]
 //			]
-			nodes += new SimpleNode('Summary')
+			nodes += new SummarySlideDeck
 			val deltaX = scene.width / (nodes.size + 2)
 			val deltaY = scene.height / (nodes.size + 2)
 			nodes.forEach[
@@ -170,9 +172,8 @@ class Demo extends Application {
 	protected def void addRapidButtons(XNode node, String nameSuffix) {
 		node.addBehavior(new AddRapidButtonBehavior(node) => [
 			choiceInitializer = [
-				for(i: 1..20) {
+				for(i: 5..20) 
 					addChoice(newSimpleNode(' ' + i))
-				}
 				addChoice(newSimpleNode(nameSuffix))
 				addChoice(newOpenableBasicDiagramNode(nameSuffix))
 				addChoice(newEmbeddedBasicDiagram(nameSuffix))
@@ -181,6 +182,9 @@ class Demo extends Application {
 				addChoice(newBrickBreakerNode)
 //				addChoice(newImageNode)
 //				addChoice(newRecursiveImageNode)
+				for(i: 1..4) 
+					addChoice(newSimpleNode(' ' + i))
+				addChoice(newSimpleNode(nameSuffix))
 			]
 		])
 	}
