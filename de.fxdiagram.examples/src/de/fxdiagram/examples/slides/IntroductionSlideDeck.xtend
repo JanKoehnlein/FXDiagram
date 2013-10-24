@@ -15,10 +15,9 @@ import javafx.scene.media.MediaView
 import javafx.scene.paint.Color
 import javafx.scene.shape.Polyline
 
-import static de.fxdiagram.examples.slides.Styles.*
-
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
+import static extension de.fxdiagram.examples.slides.Styles.*
 
 class IntroductionSlideDeck extends OpenableDiagramNode {
 	new() {
@@ -33,36 +32,40 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 							rotate = 340
 							layoutX = 110
 							layoutY = 379
+							breathe
 						]
 						children += createJungleText('Draw2D', 22) => [
 							fill = jungleDarkGreen							
 							rotate = 339
 							layoutX = 405
 							layoutY = 147
+							flicker
 						]
 						children += createJungleText('GMF RT', 22) => [
 							fill = jungleDarkGreen							
-							rotate = 93
-							layoutX = 702
-							layoutY = 221
+							layoutX = 762
+							layoutY = 61
+							dangle
 						]
 						children += createJungleText('Graphiti', 22) => [
 							fill = jungleDarkGreen							
-							rotate = 325
+							rotate = 11
 							layoutX = 850
-							layoutY = 319
+							layoutY = 349
+							breathe
 						]
 						children += createJungleText('Sirius', 22) => [
 							fill = jungleDarkGreen							
 							rotate = 67
 							layoutX = 188
 							layoutY = 229
+							flicker
 						]
 						children += createJungleText('GMF Tooling', 22) => [
 							fill = jungleDarkGreen							
-							rotate = 267
-							layoutX = 525
-							layoutY = 231
+							layoutX = 595
+							layoutY = 121
+							dangle
 						]
 					]
 					children += new VBox => [
@@ -82,39 +85,44 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 						setPrefSize(1024, 768)
 						children += createJungleText('GEF', 48) => [
 							fill = jungleDarkGreen
-							rotate = 26
-							layoutX = 240
-							layoutY = 637
+							rotate = 16
+							layoutX = 80
+							layoutY = 665
+							flicker
 						]
 						children += createJungleText('Draw2D', 48) => [
 							fill = jungleDarkGreen
 							rotate = 338
 							layoutX = 380
 							layoutY = 132
+							crawl
 						]
 						children += createJungleText('GMF RT', 48) => [
 							fill = jungleDarkGreen
 							rotate = 10
-							layoutX = 740
-							layoutY = 337
+							layoutX = 560
+							layoutY = 300
+							crawl
 						]
 						children += createJungleText('Graphiti', 48) => [
 							fill = jungleDarkGreen
 							rotate = 332
-							layoutX = 670
-							layoutY = 580
+							layoutX = 710
+							layoutY = 630
+							breathe
 						]
 						children += createJungleText('Sirius', 48) => [
 							fill = jungleDarkGreen
-							rotate = 67
 							layoutX = 111
 							layoutY = 167
+							dangle
 						]
-						children += createJungleText('GMF Tooling', 48) => [
+						children += createJungleText('GMF Tools', 48) => [
 							fill = jungleDarkGreen
-							rotate = 355
-							layoutX = 40
-							layoutY = 430
+							rotate = 5
+							layoutX = 190
+							layoutY = 480
+							breathe
 						]
 					]
 				]

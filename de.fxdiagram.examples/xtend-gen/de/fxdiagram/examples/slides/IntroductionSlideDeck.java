@@ -61,6 +61,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                         it.setRotate(340);
                         it.setLayoutX(110);
                         it.setLayoutY(379);
+                        Styles.breathe(it);
                       }
                     };
                     Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText, _function);
@@ -74,6 +75,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                         it.setRotate(339);
                         it.setLayoutX(405);
                         it.setLayoutY(147);
+                        Styles.flicker(it);
                       }
                     };
                     Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_1, _function_1);
@@ -84,9 +86,9 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = Styles.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
-                        it.setRotate(93);
-                        it.setLayoutX(702);
-                        it.setLayoutY(221);
+                        it.setLayoutX(762);
+                        it.setLayoutY(61);
+                        Styles.dangle(it);
                       }
                     };
                     Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_2, _function_2);
@@ -97,9 +99,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = Styles.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
-                        it.setRotate(325);
+                        it.setRotate(11);
                         it.setLayoutX(850);
-                        it.setLayoutY(319);
+                        it.setLayoutY(349);
+                        Styles.breathe(it);
                       }
                     };
                     Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_3, _function_3);
@@ -113,6 +116,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                         it.setRotate(67);
                         it.setLayoutX(188);
                         it.setLayoutY(229);
+                        Styles.flicker(it);
                       }
                     };
                     Text _doubleArrow_4 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_4, _function_4);
@@ -123,9 +127,9 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = Styles.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
-                        it.setRotate(267);
-                        it.setLayoutX(525);
-                        it.setLayoutY(231);
+                        it.setLayoutX(595);
+                        it.setLayoutY(121);
+                        Styles.dangle(it);
                       }
                     };
                     Text _doubleArrow_5 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_5, _function_5);
@@ -191,9 +195,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = Styles.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
-                        it.setRotate(26);
-                        it.setLayoutX(240);
-                        it.setLayoutY(637);
+                        it.setRotate(16);
+                        it.setLayoutX(80);
+                        it.setLayoutY(665);
+                        Styles.flicker(it);
                       }
                     };
                     Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText, _function);
@@ -207,6 +212,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                         it.setRotate(338);
                         it.setLayoutX(380);
                         it.setLayoutY(132);
+                        Styles.crawl(it);
                       }
                     };
                     Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_1, _function_1);
@@ -218,8 +224,9 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                         Color _jungleDarkGreen = Styles.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
                         it.setRotate(10);
-                        it.setLayoutX(740);
-                        it.setLayoutY(337);
+                        it.setLayoutX(560);
+                        it.setLayoutY(300);
+                        Styles.crawl(it);
                       }
                     };
                     Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_2, _function_2);
@@ -231,8 +238,9 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                         Color _jungleDarkGreen = Styles.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
                         it.setRotate(332);
-                        it.setLayoutX(670);
-                        it.setLayoutY(580);
+                        it.setLayoutX(710);
+                        it.setLayoutY(630);
+                        Styles.breathe(it);
                       }
                     };
                     Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_3, _function_3);
@@ -243,22 +251,23 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = Styles.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
-                        it.setRotate(67);
                         it.setLayoutX(111);
                         it.setLayoutY(167);
+                        Styles.dangle(it);
                       }
                     };
                     Text _doubleArrow_4 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_4, _function_4);
                     _children_4.add(_doubleArrow_4);
                     ObservableList<Node> _children_5 = it.getChildren();
-                    Text _createJungleText_5 = Styles.createJungleText("GMF Tooling", 48);
+                    Text _createJungleText_5 = Styles.createJungleText("GMF Tools", 48);
                     final Procedure1<Text> _function_5 = new Procedure1<Text>() {
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = Styles.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
-                        it.setRotate(355);
-                        it.setLayoutX(40);
-                        it.setLayoutY(430);
+                        it.setRotate(5);
+                        it.setLayoutX(190);
+                        it.setLayoutY(480);
+                        Styles.breathe(it);
                       }
                     };
                     Text _doubleArrow_5 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_5, _function_5);
