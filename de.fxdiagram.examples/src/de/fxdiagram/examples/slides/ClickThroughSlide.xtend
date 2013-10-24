@@ -8,14 +8,11 @@ import javafx.scene.layout.Pane
 import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import javafx.animation.Transition
-import java.util.Map
 
 class ClickThroughSlide extends Slide {
 	
 	Pane pane = new Pane
 	Node currentNode 
-	Map<Node, Transition> revealTransitions = newHashMap
 	
 	new(String name) {
 		super(name)
@@ -33,14 +30,8 @@ class ClickThroughSlide extends Slide {
 		addBehavior(new RevealBehavior(this))
 	}
 
-	def setRevealTransition(Node node, Transition transition) {
-		revealTransitions.put(node, transition)
-	}
-
 	def getRevealTransition(Node childNode) {
-		if(revealTransitions.containsKey(childNode)) 
-			revealTransitions.get(childNode) 
-		else new FadeTransition() => [
+		new FadeTransition() => [
 			node = childNode
 			fromValue = 0
 			toValue = 1

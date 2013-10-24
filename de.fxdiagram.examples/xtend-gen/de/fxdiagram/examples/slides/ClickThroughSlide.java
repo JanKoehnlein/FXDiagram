@@ -3,10 +3,7 @@ package de.fxdiagram.examples.slides;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.examples.slides.RevealBehavior;
 import de.fxdiagram.examples.slides.Slide;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.animation.FadeTransition;
-import javafx.animation.Transition;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -14,7 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -30,13 +26,6 @@ public class ClickThroughSlide extends Slide {
   }.apply();
   
   private Node currentNode;
-  
-  private Map<Node,Transition> revealTransitions = new Function0<Map<Node,Transition>>() {
-    public Map<Node,Transition> apply() {
-      HashMap<Node,Transition> _newHashMap = CollectionLiterals.<Node, Transition>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
   
   public ClickThroughSlide(final String name) {
     super(name);
@@ -79,32 +68,19 @@ public class ClickThroughSlide extends Slide {
     this.addBehavior(_revealBehavior);
   }
   
-  public Transition setRevealTransition(final Node node, final Transition transition) {
-    Transition _put = this.revealTransitions.put(node, transition);
-    return _put;
-  }
-  
-  public Transition getRevealTransition(final Node childNode) {
-    Transition _xifexpression = null;
-    boolean _containsKey = this.revealTransitions.containsKey(childNode);
-    if (_containsKey) {
-      Transition _get = this.revealTransitions.get(childNode);
-      _xifexpression = _get;
-    } else {
-      FadeTransition _fadeTransition = new FadeTransition();
-      final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-        public void apply(final FadeTransition it) {
-          it.setNode(childNode);
-          it.setFromValue(0);
-          it.setToValue(1);
-          Duration _millis = DurationExtensions.millis(200);
-          it.setDuration(_millis);
-        }
-      };
-      FadeTransition _doubleArrow = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
-      _xifexpression = _doubleArrow;
-    }
-    return _xifexpression;
+  public FadeTransition getRevealTransition(final Node childNode) {
+    FadeTransition _fadeTransition = new FadeTransition();
+    final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+      public void apply(final FadeTransition it) {
+        it.setNode(childNode);
+        it.setFromValue(0);
+        it.setToValue(1);
+        Duration _millis = DurationExtensions.millis(200);
+        it.setDuration(_millis);
+      }
+    };
+    FadeTransition _doubleArrow = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
+    return _doubleArrow;
   }
   
   public boolean next() {
@@ -123,7 +99,7 @@ public class ClickThroughSlide extends Slide {
       Node _get = children.get(nextIndex);
       this.currentNode = _get;
       Node _node = this.getNode();
-      Transition _revealTransition = this.getRevealTransition(_node);
+      FadeTransition _revealTransition = this.getRevealTransition(_node);
       _revealTransition.play();
       return true;
     }
