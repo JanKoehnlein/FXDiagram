@@ -1,23 +1,7 @@
 package de.fxdiagram.examples.ecore;
 
-import java.util.Collections;
-import java.util.Set;
-
-import javafx.geometry.Pos;
-import javafx.geometry.Side;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Text;
-
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
@@ -29,8 +13,22 @@ import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.examples.ecore.EClassNode;
+import de.fxdiagram.examples.ecore.EReferenceKey;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CarusselChooser;
+import java.util.Collections;
+import java.util.Set;
+import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Text;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode,EReference,EReferenceKey> {

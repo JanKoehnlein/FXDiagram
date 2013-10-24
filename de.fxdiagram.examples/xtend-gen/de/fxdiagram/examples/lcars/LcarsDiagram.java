@@ -1,17 +1,15 @@
 package de.fxdiagram.examples.lcars;
 
-import java.util.List;
-
-import javafx.collections.ObservableList;
-import javafx.scene.paint.Color;
-
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-
 import com.mongodb.DBObject;
-
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.examples.lcars.LcarsAccess;
+import de.fxdiagram.examples.lcars.LcarsNode;
+import java.util.List;
+import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class LcarsDiagram extends XDiagram {

@@ -1,7 +1,12 @@
 package de.fxdiagram.examples.ecore;
 
+import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
+import de.fxdiagram.examples.ecore.AddESuperTypeRapidButtonBehavior;
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
+import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,7 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -26,11 +30,6 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-
-import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
-import de.fxdiagram.lib.nodes.RectangleBorderPane;
 
 @SuppressWarnings("all")
 public class EClassNode extends XNode {

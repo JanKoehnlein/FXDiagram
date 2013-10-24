@@ -1,12 +1,14 @@
 package de.fxdiagram.examples.java;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.HashMultimap;
+import de.fxdiagram.examples.java.Property;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -18,9 +20,6 @@ import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.HashMultimap;
 
 @SuppressWarnings("all")
 public class JavaTypeModel {

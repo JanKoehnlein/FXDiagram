@@ -1,29 +1,30 @@
 package de.fxdiagram.examples.lcars;
 
-import java.util.List;
-import java.util.Set;
-
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.geometry.Pos;
-
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.mongodb.DBObject;
-
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.examples.lcars.LcarsAccess;
+import de.fxdiagram.examples.lcars.LcarsDiagram;
+import de.fxdiagram.examples.lcars.LcarsExtensions;
+import de.fxdiagram.examples.lcars.LcarsField;
+import de.fxdiagram.examples.lcars.LcarsNode;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
+import java.util.List;
+import java.util.Set;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.geometry.Pos;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
 @SuppressWarnings("all")
 public class LcarsQueryTask extends Task<Void> {
