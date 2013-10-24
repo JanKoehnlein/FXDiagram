@@ -98,8 +98,7 @@ public class ClickThroughSlide extends Slide {
       }
       Node _get = children.get(nextIndex);
       this.currentNode = _get;
-      Node _node = this.getNode();
-      FadeTransition _revealTransition = this.getRevealTransition(_node);
+      FadeTransition _revealTransition = this.getRevealTransition(this.currentNode);
       _revealTransition.play();
       return true;
     }

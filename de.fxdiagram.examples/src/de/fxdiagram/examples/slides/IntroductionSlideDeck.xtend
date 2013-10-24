@@ -147,7 +147,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					layoutX = 295
 					layoutY = 332
 					mediaPlayer = new MediaPlayer(
-							new Media(toURI('/de/fxdiagram/examples/media/Usability.mp4'))) => [
+							new Media(this.toURI('/de/fxdiagram/examples/media/Usability.mp4'))) => [
 						seek(200.seconds)
 //								play
 					]

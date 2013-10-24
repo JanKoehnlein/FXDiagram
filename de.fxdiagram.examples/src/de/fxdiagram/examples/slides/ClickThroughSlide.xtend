@@ -48,7 +48,7 @@ class ClickThroughSlide extends Slide {
 			if(nextIndex == children.size) 
 				return false
 			currentNode = children.get(nextIndex)
-			node.revealTransition.play
+			currentNode.revealTransition.play
 			return true
 		}
 	}

@@ -345,7 +345,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 it.setOpacity(0.9);
                 it.setLayoutX(295);
                 it.setLayoutY(332);
-                String _uRI = UriExtensions.toURI(it, "/de/fxdiagram/examples/media/Usability.mp4");
+                String _uRI = UriExtensions.toURI(IntroductionSlideDeck.this, "/de/fxdiagram/examples/media/Usability.mp4");
                 Media _media = new Media(_uRI);
                 MediaPlayer _mediaPlayer = new MediaPlayer(_media);
                 final Procedure1<MediaPlayer> _function = new Procedure1<MediaPlayer>() {
