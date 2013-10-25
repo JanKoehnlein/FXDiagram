@@ -192,7 +192,7 @@ class Demo extends Application {
 	
 	def newSimpleNode(String nameSuffix) {
 		new SimpleNode('Node' + nameSuffix) => [
-			addRapidButtons(nameSuffix)
+			//addRapidButtons(nameSuffix)
 		]
 	}
 	

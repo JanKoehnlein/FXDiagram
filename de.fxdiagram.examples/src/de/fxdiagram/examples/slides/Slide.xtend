@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane
 import static de.fxdiagram.examples.slides.Styles.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.scene.effect.ColorAdjust
 
 class Slide extends XNode {
 	
@@ -17,6 +18,11 @@ class Slide extends XNode {
 		node = new StackPane => [
 			children += new ImageView => [
 				image = ImageCache.get.getImage(this, 'images/jungle.jpg')
+				effect = new ColorAdjust => [
+					brightness = 0
+					saturation = 0
+					contrast = 0
+				]
 			]
 		]
 	} 

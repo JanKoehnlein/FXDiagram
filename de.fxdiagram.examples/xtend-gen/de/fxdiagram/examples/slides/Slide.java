@@ -8,6 +8,7 @@ import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.examples.slides.Styles;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -29,6 +30,16 @@ public class Slide extends XNode {
             ImageCache _get = ImageCache.get();
             Image _image = _get.getImage(Slide.this, "images/jungle.jpg");
             it.setImage(_image);
+            ColorAdjust _colorAdjust = new ColorAdjust();
+            final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
+              public void apply(final ColorAdjust it) {
+                it.setBrightness(0);
+                it.setSaturation(0);
+                it.setContrast(0);
+              }
+            };
+            ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function);
+            it.setEffect(_doubleArrow);
           }
         };
         ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
