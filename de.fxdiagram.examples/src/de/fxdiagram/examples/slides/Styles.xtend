@@ -78,27 +78,47 @@ class Styles {
 		]
 	}
 	
-	def static breathe(Node creature) {
+	def static breathe(Shape creature) {
 		new SequentialTransition => [
-			children += new ScaleTransition => [
-				fromX = 1
-				toX = 1.15
-				fromY = 1
-				toY = 1.1
-				node = creature
-				duration = 1000.millis
-				delay = 200.millis
+			children += new ParallelTransition => [
+				children += new ScaleTransition => [
+					fromX = 1
+					toX = 1.15
+					fromY = 1
+					toY = 1.1
+					node = creature
+					duration = 1800.millis
+					delay = 250.millis
+				]
+				children += new FillTransition => [
+					shape = creature 
+					fromValue = Color.rgb(107, 114, 51)
+					toValue = jungleDarkGreen
+					duration = 1800.millis
+					delay = 250.millis
+					play
+				]
 			]
-			children += new ScaleTransition => [
-				fromX = 1.15
-				toX = 1
-				fromY = 1.1
-				toY = 1
-				node = creature
-				duration = 1500.millis
-				delay = 300.millis
+			children += new ParallelTransition => [
+				children += new ScaleTransition => [
+					fromX = 1.15
+					toX = 1
+					fromY = 1.1
+					toY = 1
+					node = creature
+					duration = 2500.millis
+					delay = 300.millis
+				]
+				children += new FillTransition => [
+					shape = creature 
+					fromValue = jungleDarkGreen
+					toValue = Color.rgb(107, 114, 51)
+					duration = 2500.millis
+					delay = 300.millis
+					play
+				]
 			]
-			delay = random * 1000.millis
+			delay = random * 4000.millis
 			cycleCount = -1
 			play
 		]

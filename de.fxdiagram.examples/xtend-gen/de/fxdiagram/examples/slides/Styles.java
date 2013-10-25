@@ -143,46 +143,98 @@ public class Styles {
     return _doubleArrow;
   }
   
-  public static SequentialTransition breathe(final Node creature) {
+  public static SequentialTransition breathe(final Shape creature) {
     SequentialTransition _sequentialTransition = new SequentialTransition();
     final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
       public void apply(final SequentialTransition it) {
         ObservableList<Animation> _children = it.getChildren();
-        ScaleTransition _scaleTransition = new ScaleTransition();
-        final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
-          public void apply(final ScaleTransition it) {
-            it.setFromX(1);
-            it.setToX(1.15);
-            it.setFromY(1);
-            it.setToY(1.1);
-            it.setNode(creature);
-            Duration _millis = DurationExtensions.millis(1000);
-            it.setDuration(_millis);
-            Duration _millis_1 = DurationExtensions.millis(200);
-            it.setDelay(_millis_1);
+        ParallelTransition _parallelTransition = new ParallelTransition();
+        final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+          public void apply(final ParallelTransition it) {
+            ObservableList<Animation> _children = it.getChildren();
+            ScaleTransition _scaleTransition = new ScaleTransition();
+            final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+              public void apply(final ScaleTransition it) {
+                it.setFromX(1);
+                it.setToX(1.15);
+                it.setFromY(1);
+                it.setToY(1.1);
+                it.setNode(creature);
+                Duration _millis = DurationExtensions.millis(1800);
+                it.setDuration(_millis);
+                Duration _millis_1 = DurationExtensions.millis(250);
+                it.setDelay(_millis_1);
+              }
+            };
+            ScaleTransition _doubleArrow = ObjectExtensions.<ScaleTransition>operator_doubleArrow(_scaleTransition, _function);
+            _children.add(_doubleArrow);
+            ObservableList<Animation> _children_1 = it.getChildren();
+            FillTransition _fillTransition = new FillTransition();
+            final Procedure1<FillTransition> _function_1 = new Procedure1<FillTransition>() {
+              public void apply(final FillTransition it) {
+                it.setShape(creature);
+                Color _rgb = Color.rgb(107, 114, 51);
+                it.setFromValue(_rgb);
+                Color _jungleDarkGreen = Styles.jungleDarkGreen();
+                it.setToValue(_jungleDarkGreen);
+                Duration _millis = DurationExtensions.millis(1800);
+                it.setDuration(_millis);
+                Duration _millis_1 = DurationExtensions.millis(250);
+                it.setDelay(_millis_1);
+                it.play();
+              }
+            };
+            FillTransition _doubleArrow_1 = ObjectExtensions.<FillTransition>operator_doubleArrow(_fillTransition, _function_1);
+            _children_1.add(_doubleArrow_1);
           }
         };
-        ScaleTransition _doubleArrow = ObjectExtensions.<ScaleTransition>operator_doubleArrow(_scaleTransition, _function);
+        ParallelTransition _doubleArrow = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
         _children.add(_doubleArrow);
         ObservableList<Animation> _children_1 = it.getChildren();
-        ScaleTransition _scaleTransition_1 = new ScaleTransition();
-        final Procedure1<ScaleTransition> _function_1 = new Procedure1<ScaleTransition>() {
-          public void apply(final ScaleTransition it) {
-            it.setFromX(1.15);
-            it.setToX(1);
-            it.setFromY(1.1);
-            it.setToY(1);
-            it.setNode(creature);
-            Duration _millis = DurationExtensions.millis(1500);
-            it.setDuration(_millis);
-            Duration _millis_1 = DurationExtensions.millis(300);
-            it.setDelay(_millis_1);
+        ParallelTransition _parallelTransition_1 = new ParallelTransition();
+        final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
+          public void apply(final ParallelTransition it) {
+            ObservableList<Animation> _children = it.getChildren();
+            ScaleTransition _scaleTransition = new ScaleTransition();
+            final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+              public void apply(final ScaleTransition it) {
+                it.setFromX(1.15);
+                it.setToX(1);
+                it.setFromY(1.1);
+                it.setToY(1);
+                it.setNode(creature);
+                Duration _millis = DurationExtensions.millis(2500);
+                it.setDuration(_millis);
+                Duration _millis_1 = DurationExtensions.millis(300);
+                it.setDelay(_millis_1);
+              }
+            };
+            ScaleTransition _doubleArrow = ObjectExtensions.<ScaleTransition>operator_doubleArrow(_scaleTransition, _function);
+            _children.add(_doubleArrow);
+            ObservableList<Animation> _children_1 = it.getChildren();
+            FillTransition _fillTransition = new FillTransition();
+            final Procedure1<FillTransition> _function_1 = new Procedure1<FillTransition>() {
+              public void apply(final FillTransition it) {
+                it.setShape(creature);
+                Color _jungleDarkGreen = Styles.jungleDarkGreen();
+                it.setFromValue(_jungleDarkGreen);
+                Color _rgb = Color.rgb(107, 114, 51);
+                it.setToValue(_rgb);
+                Duration _millis = DurationExtensions.millis(2500);
+                it.setDuration(_millis);
+                Duration _millis_1 = DurationExtensions.millis(300);
+                it.setDelay(_millis_1);
+                it.play();
+              }
+            };
+            FillTransition _doubleArrow_1 = ObjectExtensions.<FillTransition>operator_doubleArrow(_fillTransition, _function_1);
+            _children_1.add(_doubleArrow_1);
           }
         };
-        ScaleTransition _doubleArrow_1 = ObjectExtensions.<ScaleTransition>operator_doubleArrow(_scaleTransition_1, _function_1);
+        ParallelTransition _doubleArrow_1 = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition_1, _function_1);
         _children_1.add(_doubleArrow_1);
         double _random = Math.random();
-        Duration _millis = DurationExtensions.millis(1000);
+        Duration _millis = DurationExtensions.millis(4000);
         Duration _multiply = DurationExtensions.operator_multiply(_random, _millis);
         it.setDelay(_multiply);
         int _minus = (-1);

@@ -376,6 +376,11 @@ public class Demo extends Application {
     SimpleNode _simpleNode = new SimpleNode(_plus);
     final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
       public void apply(final SimpleNode it) {
+        boolean _isEmpty = nameSuffix.isEmpty();
+        boolean _not = (!_isEmpty);
+        if (_not) {
+          Demo.this.addRapidButtons(it, nameSuffix);
+        }
       }
     };
     SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function);

@@ -2,7 +2,6 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.behavior.AbstractCloseBehavior;
 import de.fxdiagram.core.behavior.AbstractOpenBehavior;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
@@ -95,18 +94,15 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     this.setOnMouseClicked(_function);
     final AbstractOpenBehavior _function_1 = new AbstractOpenBehavior() {
       public void open() {
-        RecursiveImageNode.this.zoomIn();
+        if (RecursiveImageNode.this.isZoomedIn) {
+          RecursiveImageNode.this.zoomOut();
+        } else {
+          RecursiveImageNode.this.zoomIn();
+        }
       }
     };
     final AbstractOpenBehavior openBehavior = _function_1;
     this.addBehavior(openBehavior);
-    final AbstractCloseBehavior _function_2 = new AbstractCloseBehavior() {
-      public void close() {
-        RecursiveImageNode.this.zoomOut();
-      }
-    };
-    final AbstractCloseBehavior closeBehavior = _function_2;
-    this.addBehavior(closeBehavior);
   }
   
   protected void zoomIn() {

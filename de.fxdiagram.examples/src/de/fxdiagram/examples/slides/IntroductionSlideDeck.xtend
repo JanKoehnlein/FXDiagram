@@ -131,13 +131,11 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 			slides += new ClickThroughSlide('Darkness images') => [
 				pane.children += new ImageView => [
 					image = ImageCache.get.getImage(this, 'images/darkness1.png')
-					opacity = 0.8
 					layoutX = 45
 					layoutY = 45
 				]
 				pane.children += new ImageView => [
 					image = ImageCache.get.getImage(this, 'images/darkness2.png')
-					opacity = 0.8
 					layoutX = 420
 					layoutY = 374
 				]
@@ -146,12 +144,10 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 			slides += new ClickThroughSlide('Behavior images') => [ 
 				pane.children += new ImageView => [
 					image = ImageCache.get.getImage(this, 'images/graphiti.png')
-					opacity = 0.8
 					layoutX = 50
 					layoutY = 44
 				]	
 				pane.children += new MediaView => [
-					opacity = 0.9
 					layoutX = 295
 					layoutY = 332
 					mediaPlayer = new MediaPlayer(
@@ -260,7 +256,6 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					image = ImageCache.get.getImage(this, 'images/graphiti_code.png')
 					layoutX = 43
 					layoutY = 41
-					opacity = 0.8
 				]
 				pane.children += new VBox => [
 					layoutX = 313
@@ -272,10 +267,10 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 						-fx-border-width: 1;
 						-fx-background-color: rgb(252,228,153);
 					'''
-					children += createText('34 Files', 24) => [
+					children += createText('34 Files', 36) => [
 						fill = Color.BLACK
 					]
-					children += createText('2730 LOC', 24) => [
+					children += createText('2730 LOC', 36) => [
 						fill = Color.BLACK
 					]
 				]
@@ -283,7 +278,6 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					image = ImageCache.get.getImage(this, 'images/gmf_dashboard.png')
 					layoutX = 284
 					layoutY = 406
-					opacity = 0.8
 				]
 			]
 			slides += new Slide('Endangerment', 144)

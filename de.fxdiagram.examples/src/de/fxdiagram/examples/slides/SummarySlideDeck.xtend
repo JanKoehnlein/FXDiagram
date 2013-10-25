@@ -8,18 +8,18 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 
-import static de.fxdiagram.examples.slides.Styles.*
+import static extension de.fxdiagram.examples.slides.Styles.*
 
 class SummarySlideDeck extends OpenableDiagramNode {
 	new() {
 		super('Summary')
 		innerDiagram = new SlideDiagram => [
+			slides += new Slide('Summary', 144)
 			slides += new Slide(
 				'''
-					Diagrams are for humans
-					not for computers.
-					Visual design and usability
-					are top priority.
+					The users must be our top priority.
+					Not developers.
+					Not frameworks.
 				''', 48)
 			slides += new Slide('JavaFX advantages') => [
 				stackPane.children += new VBox => [
@@ -31,15 +31,16 @@ class SummarySlideDeck extends OpenableDiagramNode {
 						VBox.setMargin(it, new Insets(0,0,-30,0))
 					]
 					children += createText('''
-						allows superior visual design,
-						helps to focus on usability,
+						provides superior graphics,
+						allows to focus on usability,
 						and leverages the hardware...
 					''', 48)
 				]
 			]
 			slides += new Slide(
 				'''
-					...and makes developing graphical editors
+					...and makes 
+					developing graphical editors
 					fun again.
 				''', 48)
 			slides += new Slide('Thanks') => [
@@ -63,7 +64,9 @@ class SummarySlideDeck extends OpenableDiagramNode {
 		new HBox => [
 			alignment = Pos.CENTER
 			spacing = 16
-			children += createJungleText(jungleText, 36)
+			children += createJungleText(jungleText, 36) => [
+				breathe
+			]
 			children += createText(normalText, 36)
 		]
 	}

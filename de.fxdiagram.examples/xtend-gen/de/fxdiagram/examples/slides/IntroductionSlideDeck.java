@@ -270,7 +270,6 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/darkness1.png");
                 it.setImage(_image);
-                it.setOpacity(0.8);
                 it.setLayoutX(45);
                 it.setLayoutY(45);
               }
@@ -285,7 +284,6 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/darkness2.png");
                 it.setImage(_image);
-                it.setOpacity(0.8);
                 it.setLayoutX(420);
                 it.setLayoutY(374);
               }
@@ -311,7 +309,6 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/graphiti.png");
                 it.setImage(_image);
-                it.setOpacity(0.8);
                 it.setLayoutX(50);
                 it.setLayoutY(44);
               }
@@ -323,7 +320,6 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             MediaView _mediaView = new MediaView();
             final Procedure1<MediaView> _function_1 = new Procedure1<MediaView>() {
               public void apply(final MediaView it) {
-                it.setOpacity(0.9);
                 it.setLayoutX(295);
                 it.setLayoutY(332);
                 String _uRI = UriExtensions.toURI(IntroductionSlideDeck.this, "/de/fxdiagram/examples/media/Usability.mp4");
@@ -619,7 +615,6 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 it.setImage(_image);
                 it.setLayoutX(43);
                 it.setLayoutY(41);
-                it.setOpacity(0.8);
               }
             };
             ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
@@ -643,7 +638,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 _builder.newLine();
                 it.setStyle(_builder.toString());
                 ObservableList<Node> _children = it.getChildren();
-                Text _createText = Styles.createText("34 Files", 24);
+                Text _createText = Styles.createText("34 Files", 36);
                 final Procedure1<Text> _function = new Procedure1<Text>() {
                   public void apply(final Text it) {
                     it.setFill(Color.BLACK);
@@ -652,7 +647,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function);
                 _children.add(_doubleArrow);
                 ObservableList<Node> _children_1 = it.getChildren();
-                Text _createText_1 = Styles.createText("2730 LOC", 24);
+                Text _createText_1 = Styles.createText("2730 LOC", 36);
                 final Procedure1<Text> _function_1 = new Procedure1<Text>() {
                   public void apply(final Text it) {
                     it.setFill(Color.BLACK);
@@ -674,7 +669,6 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 it.setImage(_image);
                 it.setLayoutX(284);
                 it.setLayoutY(406);
-                it.setOpacity(0.8);
               }
             };
             ImageView _doubleArrow_2 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView_1, _function_2);

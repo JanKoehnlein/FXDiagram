@@ -2,7 +2,6 @@ package de.fxdiagram.lib.nodes;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.behavior.AbstractCloseBehavior;
 import de.fxdiagram.core.behavior.AbstractOpenBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
@@ -246,12 +245,5 @@ public class FlipNode extends XNode {
     };
     final AbstractOpenBehavior openBehavior = _function;
     this.addBehavior(openBehavior);
-    final AbstractCloseBehavior _function_1 = new AbstractCloseBehavior() {
-      public void close() {
-        FlipNode.this.flip(true);
-      }
-    };
-    final AbstractCloseBehavior closeBehavior = _function_1;
-    this.addBehavior(closeBehavior);
   }
 }

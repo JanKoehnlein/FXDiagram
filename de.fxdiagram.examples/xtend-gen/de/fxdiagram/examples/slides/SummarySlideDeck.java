@@ -28,19 +28,20 @@ public class SummarySlideDeck extends OpenableDiagramNode {
     final Procedure1<SlideDiagram> _function = new Procedure1<SlideDiagram>() {
       public void apply(final SlideDiagram it) {
         List<Slide> _slides = it.getSlides();
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("Diagrams are for humans");
-        _builder.newLine();
-        _builder.append("not for computers.");
-        _builder.newLine();
-        _builder.append("Visual design and usability");
-        _builder.newLine();
-        _builder.append("are top priority.");
-        _builder.newLine();
-        Slide _slide = new Slide(_builder.toString(), 48);
+        Slide _slide = new Slide("Summary", 144);
         _slides.add(_slide);
         List<Slide> _slides_1 = it.getSlides();
-        Slide _slide_1 = new Slide("JavaFX advantages");
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("The users must be our top priority.");
+        _builder.newLine();
+        _builder.append("Not developers.");
+        _builder.newLine();
+        _builder.append("Not frameworks.");
+        _builder.newLine();
+        Slide _slide_1 = new Slide(_builder.toString(), 48);
+        _slides_1.add(_slide_1);
+        List<Slide> _slides_2 = it.getSlides();
+        Slide _slide_2 = new Slide("JavaFX advantages");
         final Procedure1<Slide> _function = new Procedure1<Slide>() {
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
@@ -67,9 +68,9 @@ public class SummarySlideDeck extends OpenableDiagramNode {
                 _children.add(_doubleArrow);
                 ObservableList<Node> _children_1 = it.getChildren();
                 StringConcatenation _builder = new StringConcatenation();
-                _builder.append("allows superior visual design,");
+                _builder.append("provides superior graphics,");
                 _builder.newLine();
-                _builder.append("helps to focus on usability,");
+                _builder.append("allows to focus on usability,");
                 _builder.newLine();
                 _builder.append("and leverages the hardware...");
                 _builder.newLine();
@@ -81,18 +82,20 @@ public class SummarySlideDeck extends OpenableDiagramNode {
             _children.add(_doubleArrow);
           }
         };
-        Slide _doubleArrow = ObjectExtensions.<Slide>operator_doubleArrow(_slide_1, _function);
-        _slides_1.add(_doubleArrow);
-        List<Slide> _slides_2 = it.getSlides();
+        Slide _doubleArrow = ObjectExtensions.<Slide>operator_doubleArrow(_slide_2, _function);
+        _slides_2.add(_doubleArrow);
+        List<Slide> _slides_3 = it.getSlides();
         StringConcatenation _builder_1 = new StringConcatenation();
-        _builder_1.append("...and makes developing graphical editors");
+        _builder_1.append("...and makes ");
+        _builder_1.newLine();
+        _builder_1.append("developing graphical editors");
         _builder_1.newLine();
         _builder_1.append("fun again.");
         _builder_1.newLine();
-        Slide _slide_2 = new Slide(_builder_1.toString(), 48);
-        _slides_2.add(_slide_2);
-        List<Slide> _slides_3 = it.getSlides();
-        Slide _slide_3 = new Slide("Thanks");
+        Slide _slide_3 = new Slide(_builder_1.toString(), 48);
+        _slides_3.add(_slide_3);
+        List<Slide> _slides_4 = it.getSlides();
+        Slide _slide_4 = new Slide("Thanks");
         final Procedure1<Slide> _function_1 = new Procedure1<Slide>() {
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
@@ -135,8 +138,8 @@ public class SummarySlideDeck extends OpenableDiagramNode {
             _children.add(_doubleArrow);
           }
         };
-        Slide _doubleArrow_1 = ObjectExtensions.<Slide>operator_doubleArrow(_slide_3, _function_1);
-        _slides_3.add(_doubleArrow_1);
+        Slide _doubleArrow_1 = ObjectExtensions.<Slide>operator_doubleArrow(_slide_4, _function_1);
+        _slides_4.add(_doubleArrow_1);
       }
     };
     SlideDiagram _doubleArrow = ObjectExtensions.<SlideDiagram>operator_doubleArrow(_slideDiagram, _function);
@@ -151,7 +154,13 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         it.setSpacing(16);
         ObservableList<Node> _children = it.getChildren();
         Text _createJungleText = Styles.createJungleText(jungleText, 36);
-        _children.add(_createJungleText);
+        final Procedure1<Text> _function = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            Styles.breathe(it);
+          }
+        };
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText, _function);
+        _children.add(_doubleArrow);
         ObservableList<Node> _children_1 = it.getChildren();
         Text _createText = Styles.createText(normalText, 36);
         _children_1.add(_createText);

@@ -2,7 +2,6 @@ package de.fxdiagram.lib.media
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.behavior.AbstractCloseBehavior
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.export.SvgExportable
 import de.fxdiagram.core.export.SvgExporter
@@ -63,10 +62,8 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 					zoomIn
 			}
 		]
-		val AbstractOpenBehavior openBehavior = [| zoomIn] 
+		val AbstractOpenBehavior openBehavior = [| if(isZoomedIn) zoomOut else zoomIn ] 
 		addBehavior(openBehavior)
-		val AbstractCloseBehavior closeBehavior = [| zoomOut]
-		addBehavior(closeBehavior)
 	}
 	
 	protected def void zoomIn() {

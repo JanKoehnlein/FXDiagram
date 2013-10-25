@@ -1,6 +1,7 @@
 package de.fxdiagram.lib.nodes
 
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import javafx.animation.RotateTransition
 import javafx.animation.SequentialTransition
 import javafx.event.EventHandler
@@ -16,8 +17,6 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.behavior.AbstractOpenBehavior
-import de.fxdiagram.core.behavior.AbstractCloseBehavior
 
 class FlipNode extends XNode {
 
@@ -117,7 +116,5 @@ class FlipNode extends XNode {
 		flipOnDoubleClick = true
 		val AbstractOpenBehavior openBehavior = [| flip(true) ]
 		addBehavior(openBehavior)
-		val AbstractCloseBehavior closeBehavior = [| flip(true) ]
-		addBehavior(closeBehavior)
 	}
 }
