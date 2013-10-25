@@ -42,6 +42,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -130,6 +132,20 @@ public class MenuTool implements XDiagramTool {
               ZoomToFitAction _xblockexpression_3 = null;
               {
                 it.consume();
+                boolean _isShiftDown = it.isShiftDown();
+                if (_isShiftDown) {
+                  Scene _scene = root.getScene();
+                  Window _window = _scene.getWindow();
+                  final Window window = _window;
+                  boolean _matched_1 = false;
+                  if (!_matched_1) {
+                    if (window instanceof Stage) {
+                      _matched_1=true;
+                      ((Stage)window).setFullScreen(true);
+                      return;
+                    }
+                  }
+                }
                 ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
                 _xblockexpression_3 = (_zoomToFitAction);
               }

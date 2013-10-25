@@ -44,6 +44,7 @@ class Demo extends Application {
 	override start(Stage it) {
 		title = 'FX Diagram Demo'
 		scene = createScene
+		fullScreen = true
 		show
 	}
 

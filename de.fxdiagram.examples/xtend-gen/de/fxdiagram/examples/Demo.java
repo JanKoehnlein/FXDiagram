@@ -58,6 +58,7 @@ public class Demo extends Application {
     it.setTitle("FX Diagram Demo");
     Scene _createScene = this.createScene();
     it.setScene(_createScene);
+    it.setFullScreen(true);
     it.show();
   }
   

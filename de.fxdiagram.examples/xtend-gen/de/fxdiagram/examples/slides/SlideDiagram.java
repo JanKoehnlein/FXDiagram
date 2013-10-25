@@ -3,6 +3,7 @@ package de.fxdiagram.examples.slides;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.behavior.CloseBehavior;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.examples.slides.Slide;
 import de.fxdiagram.examples.slides.SlideNavigation;
@@ -40,7 +41,83 @@ public class SlideDiagram extends XDiagram {
     this.showSlide(_head);
   }
   
-  public void showSlide(final Slide newSlide) {
+  public boolean next() {
+    boolean _xblockexpression = false;
+    {
+      Slide _xifexpression = null;
+      Slide _currentSlide = this.getCurrentSlide();
+      boolean _notEquals = (!Objects.equal(_currentSlide, null));
+      if (_notEquals) {
+        Slide _xblockexpression_1 = null;
+        {
+          List<Slide> _slides = this.getSlides();
+          Slide _currentSlide_1 = this.getCurrentSlide();
+          int _indexOf = _slides.indexOf(_currentSlide_1);
+          final int nextIndex = (_indexOf + 1);
+          List<Slide> _slides_1 = this.getSlides();
+          int _size = _slides_1.size();
+          boolean _equals = (nextIndex == _size);
+          if (_equals) {
+            CloseBehavior _behavior = this.<CloseBehavior>getBehavior(CloseBehavior.class);
+            if (_behavior!=null) {
+              _behavior.close();
+            }
+            return false;
+          }
+          List<Slide> _slides_2 = this.getSlides();
+          Slide _get = _slides_2.get(nextIndex);
+          _xblockexpression_1 = (_get);
+        }
+        _xifexpression = _xblockexpression_1;
+      } else {
+        List<Slide> _slides = this.getSlides();
+        Slide _head = IterableExtensions.<Slide>head(_slides);
+        _xifexpression = _head;
+      }
+      final Slide newSlide = _xifexpression;
+      this.showSlide(newSlide);
+      _xblockexpression = (true);
+    }
+    return _xblockexpression;
+  }
+  
+  public boolean previous() {
+    boolean _xblockexpression = false;
+    {
+      final List<Slide> slides = this.getSlides();
+      Slide _xifexpression = null;
+      Slide _currentSlide = this.getCurrentSlide();
+      boolean _notEquals = (!Objects.equal(_currentSlide, null));
+      if (_notEquals) {
+        Slide _xblockexpression_1 = null;
+        {
+          Slide _currentSlide_1 = this.getCurrentSlide();
+          int _indexOf = slides.indexOf(_currentSlide_1);
+          final int previousIndex = (_indexOf - 1);
+          boolean _lessThan = (previousIndex < 0);
+          if (_lessThan) {
+            CloseBehavior _behavior = this.<CloseBehavior>getBehavior(CloseBehavior.class);
+            if (_behavior!=null) {
+              _behavior.close();
+            }
+            return false;
+          }
+          Slide _get = slides.get(previousIndex);
+          _xblockexpression_1 = (_get);
+        }
+        _xifexpression = _xblockexpression_1;
+      } else {
+        Slide _head = IterableExtensions.<Slide>head(slides);
+        _xifexpression = _head;
+      }
+      final Slide newSlide = _xifexpression;
+      this.showSlide(newSlide);
+      _xblockexpression = (true);
+    }
+    return _xblockexpression;
+  }
+  
+  protected void showSlide(final Slide newSlide) {
     final Slide oldSlide = this.getCurrentSlide();
     FadeTransition _xifexpression = null;
     boolean _notEquals = (!Objects.equal(oldSlide, null));

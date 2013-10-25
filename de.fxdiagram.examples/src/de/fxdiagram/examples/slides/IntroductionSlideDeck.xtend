@@ -54,13 +54,13 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 							layoutY = 349
 							breathe
 						]
-						children += createJungleText('Sirius', 22) => [
-							fill = jungleDarkGreen							
-							rotate = 67
-							layoutX = 188
-							layoutY = 229
-							flicker
-						]
+//						children += createJungleText('Sirius', 22) => [
+//							fill = jungleDarkGreen							
+//							rotate = 67
+//							layoutX = 188
+//							layoutY = 229
+//							flicker
+//						]
 						children += createJungleText('GMF Tooling', 22) => [
 							fill = jungleDarkGreen							
 							layoutX = 595
@@ -104,26 +104,26 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 							layoutY = 300
 							crawl
 						]
-						children += createJungleText('Graphiti', 48) => [
+						children += createJungleText('GMF Tooling', 48) => [
 							fill = jungleDarkGreen
 							rotate = 332
-							layoutX = 710
-							layoutY = 630
+							layoutX = 640
+							layoutY = 620
 							breathe
 						]
-						children += createJungleText('Sirius', 48) => [
+						children += createJungleText('Graphiti', 48) => [
 							fill = jungleDarkGreen
 							layoutX = 111
 							layoutY = 167
 							dangle
 						]
-						children += createJungleText('GMF Tools', 48) => [
-							fill = jungleDarkGreen
-							rotate = 5
-							layoutX = 190
-							layoutY = 480
-							breathe
-						]
+//						children += createJungleText('Sirius', 48) => [
+//							fill = jungleDarkGreen
+//							rotate = 5
+//							layoutX = 190
+//							layoutY = 480
+//							breathe
+//						]
 					]
 				]
 			]
@@ -314,6 +314,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					]
 				]
 			]
+			slides += new Slide('What Can We Do?', 96)
 			slides += new Slide(
 				'''
 					We have improve visual design,

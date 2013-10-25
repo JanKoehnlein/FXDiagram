@@ -5,9 +5,9 @@ import de.fxdiagram.examples.slides.RevealBehavior;
 import de.fxdiagram.examples.slides.Slide;
 import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -18,10 +18,10 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class ClickThroughSlide extends Slide {
-  private Pane pane = new Function0<Pane>() {
-    public Pane apply() {
-      Pane _pane = new Pane();
-      return _pane;
+  private Group pane = new Function0<Group>() {
+    public Group apply() {
+      Group _group = new Group();
+      return _group;
     }
   }.apply();
   
@@ -31,23 +31,19 @@ public class ClickThroughSlide extends Slide {
     super(name);
     StackPane _stackPane = this.getStackPane();
     ObservableList<Node> _children = _stackPane.getChildren();
-    _children.add(this.pane);
+    _children.add(
+      this.pane);
   }
   
   public void doActivate() {
     super.doActivate();
-    final Procedure1<Pane> _function = new Procedure1<Pane>() {
-      public void apply(final Pane it) {
+    final Procedure1<Group> _function = new Procedure1<Group>() {
+      public void apply(final Group it) {
         Scene _scene = it.getScene();
         double _width = _scene.getWidth();
         Scene _scene_1 = it.getScene();
         double _height = _scene_1.getHeight();
-        it.setPrefSize(_width, _height);
-        Scene _scene_2 = it.getScene();
-        double _width_1 = _scene_2.getWidth();
-        Scene _scene_3 = it.getScene();
-        double _height_1 = _scene_3.getHeight();
-        Rectangle _rectangle = new Rectangle(0, 0, _width_1, _height_1);
+        Rectangle _rectangle = new Rectangle(0, 0, _width, _height);
         it.setClip(_rectangle);
         ObservableList<Node> _children = it.getChildren();
         Iterable<Node> _tail = IterableExtensions.<Node>tail(_children);
@@ -59,7 +55,7 @@ public class ClickThroughSlide extends Slide {
         IterableExtensions.<Node>forEach(_tail, _function);
       }
     };
-    ObjectExtensions.<Pane>operator_doubleArrow(
+    ObjectExtensions.<Group>operator_doubleArrow(
       this.pane, _function);
     ObservableList<Node> _children = this.pane.getChildren();
     Node _head = IterableExtensions.<Node>head(_children);
@@ -123,7 +119,7 @@ public class ClickThroughSlide extends Slide {
     }
   }
   
-  public Pane getPane() {
+  public Group getPane() {
     return this.pane;
   }
 }

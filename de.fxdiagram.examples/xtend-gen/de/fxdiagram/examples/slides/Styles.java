@@ -128,7 +128,7 @@ public class Styles {
         it.setFromValue(_jungleDarkGreen);
         Color _rgb = Color.rgb(107, 114, 51);
         it.setToValue(_rgb);
-        Duration _millis = DurationExtensions.millis(300);
+        Duration _millis = DurationExtensions.millis(100);
         it.setDuration(_millis);
         int _minus = (-1);
         it.setCycleCount(_minus);
@@ -200,16 +200,29 @@ public class Styles {
       double _random = Math.random();
       double _multiply = (10 * _random);
       final double stepSize = (20 + _multiply);
+      double _random_1 = Math.random();
+      double _multiply_1 = (4 * _random_1);
+      double _plus = (2 + _multiply_1);
+      final int numSteps = ((int) _plus);
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
         public void apply(final SequentialTransition it) {
           ObservableList<Animation> _children = it.getChildren();
-          SequentialTransition _crawlOneWay = Styles.crawlOneWay(creature, stepSize);
+          SequentialTransition _crawlOneWay = Styles.crawlOneWay(creature, stepSize, numSteps);
           _children.add(_crawlOneWay);
           ObservableList<Animation> _children_1 = it.getChildren();
           double _minus = (-stepSize);
-          SequentialTransition _crawlOneWay_1 = Styles.crawlOneWay(creature, _minus);
-          _children_1.add(_crawlOneWay_1);
+          SequentialTransition _crawlOneWay_1 = Styles.crawlOneWay(creature, _minus, numSteps);
+          final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+            public void apply(final SequentialTransition it) {
+              double _random = Math.random();
+              Duration _seconds = DurationExtensions.seconds(1);
+              Duration _multiply = DurationExtensions.operator_multiply(_random, _seconds);
+              it.setDelay(_multiply);
+            }
+          };
+          SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_crawlOneWay_1, _function);
+          _children_1.add(_doubleArrow);
           int _minus_1 = (-1);
           it.setCycleCount(_minus_1);
           double _random = Math.random();
@@ -225,114 +238,123 @@ public class Styles {
     return _xblockexpression;
   }
   
-  public static SequentialTransition crawlOneWay(final Node creature, final double stepSize) {
-    SequentialTransition _sequentialTransition = new SequentialTransition();
-    final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-      public void apply(final SequentialTransition it) {
-        IntegerRange _upTo = new IntegerRange(1, 6);
-        for (final Integer i : _upTo) {
-          {
-            ObservableList<Animation> _children = it.getChildren();
-            ParallelTransition _parallelTransition = new ParallelTransition();
-            final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
-              public void apply(final ParallelTransition it) {
-                ObservableList<Animation> _children = it.getChildren();
-                ScaleTransition _scaleTransition = new ScaleTransition();
-                final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
-                  public void apply(final ScaleTransition it) {
-                    it.setNode(creature);
-                    it.setFromX(1);
-                    it.setToX(1.2);
-                    it.setFromY(1);
-                    it.setToY(0.9);
-                    Duration _millis = DurationExtensions.millis(400);
-                    it.setDuration(_millis);
-                    Duration _millis_1 = DurationExtensions.millis(100);
-                    it.setDelay(_millis_1);
-                  }
-                };
-                ScaleTransition _doubleArrow = ObjectExtensions.<ScaleTransition>operator_doubleArrow(_scaleTransition, _function);
-                _children.add(_doubleArrow);
-                ObservableList<Animation> _children_1 = it.getChildren();
-                TranslateTransition _translateTransition = new TranslateTransition();
-                final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
-                  public void apply(final TranslateTransition it) {
-                    it.setNode(creature);
-                    double _rotate = creature.getRotate();
-                    double _radians = Math.toRadians(_rotate);
-                    double _cos = Math.cos(_radians);
-                    double _multiply = (stepSize * _cos);
-                    it.setByX(_multiply);
-                    double _rotate_1 = creature.getRotate();
-                    double _radians_1 = Math.toRadians(_rotate_1);
-                    double _sin = Math.sin(_radians_1);
-                    double _multiply_1 = (stepSize * _sin);
-                    it.setByY(_multiply_1);
-                    Duration _millis = DurationExtensions.millis(400);
-                    it.setDuration(_millis);
-                    Duration _millis_1 = DurationExtensions.millis(100);
-                    it.setDelay(_millis_1);
-                  }
-                };
-                TranslateTransition _doubleArrow_1 = ObjectExtensions.<TranslateTransition>operator_doubleArrow(_translateTransition, _function_1);
-                _children_1.add(_doubleArrow_1);
-              }
-            };
-            ParallelTransition _doubleArrow = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
-            _children.add(_doubleArrow);
-            ObservableList<Animation> _children_1 = it.getChildren();
-            ParallelTransition _parallelTransition_1 = new ParallelTransition();
-            final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
-              public void apply(final ParallelTransition it) {
-                ObservableList<Animation> _children = it.getChildren();
-                ScaleTransition _scaleTransition = new ScaleTransition();
-                final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
-                  public void apply(final ScaleTransition it) {
-                    it.setNode(creature);
-                    it.setFromX(1.2);
-                    it.setToX(1);
-                    it.setFromY(0.9);
-                    it.setToY(1);
-                    Duration _millis = DurationExtensions.millis(300);
-                    it.setDuration(_millis);
-                    Duration _millis_1 = DurationExtensions.millis(200);
-                    it.setDelay(_millis_1);
-                  }
-                };
-                ScaleTransition _doubleArrow = ObjectExtensions.<ScaleTransition>operator_doubleArrow(_scaleTransition, _function);
-                _children.add(_doubleArrow);
-                ObservableList<Animation> _children_1 = it.getChildren();
-                TranslateTransition _translateTransition = new TranslateTransition();
-                final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
-                  public void apply(final TranslateTransition it) {
-                    it.setNode(creature);
-                    double _rotate = creature.getRotate();
-                    double _radians = Math.toRadians(_rotate);
-                    double _cos = Math.cos(_radians);
-                    double _multiply = (stepSize * _cos);
-                    it.setByX(_multiply);
-                    double _rotate_1 = creature.getRotate();
-                    double _radians_1 = Math.toRadians(_rotate_1);
-                    double _sin = Math.sin(_radians_1);
-                    double _multiply_1 = (stepSize * _sin);
-                    it.setByY(_multiply_1);
-                    Duration _millis = DurationExtensions.millis(300);
-                    it.setDuration(_millis);
-                    Duration _millis_1 = DurationExtensions.millis(200);
-                    it.setDelay(_millis_1);
-                  }
-                };
-                TranslateTransition _doubleArrow_1 = ObjectExtensions.<TranslateTransition>operator_doubleArrow(_translateTransition, _function_1);
-                _children_1.add(_doubleArrow_1);
-              }
-            };
-            ParallelTransition _doubleArrow_1 = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition_1, _function_1);
-            _children_1.add(_doubleArrow_1);
+  public static SequentialTransition crawlOneWay(final Node creature, final double stepSize, final int numSteps) {
+    SequentialTransition _xblockexpression = null;
+    {
+      double _random = Math.random();
+      Duration _millis = DurationExtensions.millis(300);
+      Duration _multiply = DurationExtensions.operator_multiply(_random, _millis);
+      Duration _millis_1 = DurationExtensions.millis(600);
+      final Duration stepDuration = DurationExtensions.operator_plus(_multiply, _millis_1);
+      SequentialTransition _sequentialTransition = new SequentialTransition();
+      final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+        public void apply(final SequentialTransition it) {
+          IntegerRange _upTo = new IntegerRange(1, numSteps);
+          for (final Integer i : _upTo) {
+            {
+              ObservableList<Animation> _children = it.getChildren();
+              ParallelTransition _parallelTransition = new ParallelTransition();
+              final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+                public void apply(final ParallelTransition it) {
+                  ObservableList<Animation> _children = it.getChildren();
+                  ScaleTransition _scaleTransition = new ScaleTransition();
+                  final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+                    public void apply(final ScaleTransition it) {
+                      it.setNode(creature);
+                      it.setFromX(1);
+                      it.setToX(1.2);
+                      it.setFromY(1);
+                      it.setToY(0.9);
+                      Duration _multiply = DurationExtensions.operator_multiply(0.8, stepDuration);
+                      it.setDuration(_multiply);
+                      Duration _multiply_1 = DurationExtensions.operator_multiply(0.2, stepDuration);
+                      it.setDelay(_multiply_1);
+                    }
+                  };
+                  ScaleTransition _doubleArrow = ObjectExtensions.<ScaleTransition>operator_doubleArrow(_scaleTransition, _function);
+                  _children.add(_doubleArrow);
+                  ObservableList<Animation> _children_1 = it.getChildren();
+                  TranslateTransition _translateTransition = new TranslateTransition();
+                  final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
+                    public void apply(final TranslateTransition it) {
+                      it.setNode(creature);
+                      double _rotate = creature.getRotate();
+                      double _radians = Math.toRadians(_rotate);
+                      double _cos = Math.cos(_radians);
+                      double _multiply = (stepSize * _cos);
+                      it.setByX(_multiply);
+                      double _rotate_1 = creature.getRotate();
+                      double _radians_1 = Math.toRadians(_rotate_1);
+                      double _sin = Math.sin(_radians_1);
+                      double _multiply_1 = (stepSize * _sin);
+                      it.setByY(_multiply_1);
+                      Duration _multiply_2 = DurationExtensions.operator_multiply(0.8, stepDuration);
+                      it.setDuration(_multiply_2);
+                      Duration _multiply_3 = DurationExtensions.operator_multiply(0.2, stepDuration);
+                      it.setDelay(_multiply_3);
+                    }
+                  };
+                  TranslateTransition _doubleArrow_1 = ObjectExtensions.<TranslateTransition>operator_doubleArrow(_translateTransition, _function_1);
+                  _children_1.add(_doubleArrow_1);
+                }
+              };
+              ParallelTransition _doubleArrow = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
+              _children.add(_doubleArrow);
+              ObservableList<Animation> _children_1 = it.getChildren();
+              ParallelTransition _parallelTransition_1 = new ParallelTransition();
+              final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
+                public void apply(final ParallelTransition it) {
+                  ObservableList<Animation> _children = it.getChildren();
+                  ScaleTransition _scaleTransition = new ScaleTransition();
+                  final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+                    public void apply(final ScaleTransition it) {
+                      it.setNode(creature);
+                      it.setFromX(1.2);
+                      it.setToX(1);
+                      it.setFromY(0.9);
+                      it.setToY(1);
+                      Duration _multiply = DurationExtensions.operator_multiply(0.6, stepDuration);
+                      it.setDuration(_multiply);
+                      Duration _multiply_1 = DurationExtensions.operator_multiply(0.4, stepDuration);
+                      it.setDelay(_multiply_1);
+                    }
+                  };
+                  ScaleTransition _doubleArrow = ObjectExtensions.<ScaleTransition>operator_doubleArrow(_scaleTransition, _function);
+                  _children.add(_doubleArrow);
+                  ObservableList<Animation> _children_1 = it.getChildren();
+                  TranslateTransition _translateTransition = new TranslateTransition();
+                  final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
+                    public void apply(final TranslateTransition it) {
+                      it.setNode(creature);
+                      double _rotate = creature.getRotate();
+                      double _radians = Math.toRadians(_rotate);
+                      double _cos = Math.cos(_radians);
+                      double _multiply = (stepSize * _cos);
+                      it.setByX(_multiply);
+                      double _rotate_1 = creature.getRotate();
+                      double _radians_1 = Math.toRadians(_rotate_1);
+                      double _sin = Math.sin(_radians_1);
+                      double _multiply_1 = (stepSize * _sin);
+                      it.setByY(_multiply_1);
+                      Duration _multiply_2 = DurationExtensions.operator_multiply(0.6, stepDuration);
+                      it.setDuration(_multiply_2);
+                      Duration _multiply_3 = DurationExtensions.operator_multiply(0.4, stepDuration);
+                      it.setDelay(_multiply_3);
+                    }
+                  };
+                  TranslateTransition _doubleArrow_1 = ObjectExtensions.<TranslateTransition>operator_doubleArrow(_translateTransition, _function_1);
+                  _children_1.add(_doubleArrow_1);
+                }
+              };
+              ParallelTransition _doubleArrow_1 = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition_1, _function_1);
+              _children_1.add(_doubleArrow_1);
+            }
           }
         }
-      }
-    };
-    SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
-    return _doubleArrow;
+      };
+      SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
+      _xblockexpression = (_doubleArrow);
+    }
+    return _xblockexpression;
   }
 }

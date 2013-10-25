@@ -71,7 +71,7 @@ class Styles {
 			shape = creature 
 			fromValue = jungleDarkGreen
 			toValue = Color.rgb(107, 114, 51)
-			duration = 300.millis
+			duration = 100.millis
 			cycleCount = -1
 			delay = random * 2000.millis
 			play
@@ -106,18 +106,22 @@ class Styles {
 	
 	def static crawl(Node creature) {
 		val stepSize = 20 + 10 * random
+		val numSteps = (2 + 4 * random) as int
 		new SequentialTransition => [
-		 	children += crawlOneWay(creature, stepSize)
-		 	children += crawlOneWay(creature, -stepSize)
+		 	children += crawlOneWay(creature, stepSize, numSteps)
+		 	children += crawlOneWay(creature, -stepSize, numSteps) => [
+		 		delay = random * 1.seconds
+		 	]
 		 	cycleCount = -1
 		 	delay = random * 4.seconds
 			play
 		]
 	}
 	
-	def static crawlOneWay(Node creature, double stepSize) {
+	def static crawlOneWay(Node creature, double stepSize, int numSteps) {
+		val stepDuration = random * 300.millis + 600.millis
 		new SequentialTransition => [
-			for(i: 1..6) {
+			for(i: 1..numSteps) {
 				children += new ParallelTransition => [
 					children +=	new ScaleTransition => [
 						node = creature
@@ -125,15 +129,15 @@ class Styles {
 						toX = 1.2
 						fromY = 1
 						toY = 0.9
-						duration = 400.millis
-						delay = 100.millis
+						duration = 0.8 * stepDuration
+						delay = 0.2 * stepDuration
 					]
 					children += new TranslateTransition => [
 						node = creature
 						byX = stepSize * cos(creature.rotate.toRadians)
 						byY = stepSize * sin(creature.rotate.toRadians)
-						duration = 400.millis
-						delay = 100.millis
+						duration = 0.8 * stepDuration
+						delay = 0.2 * stepDuration
 					]
 				]
 				children += new ParallelTransition => [
@@ -143,20 +147,19 @@ class Styles {
 						toX = 1
 						fromY = 0.9
 						toY = 1
-						duration = 300.millis
-						delay = 200.millis
+						duration = 0.6 * stepDuration
+						delay = 0.4 * stepDuration
 					]
 					children += new TranslateTransition => [
 						node = creature
 						byX = stepSize * cos(creature.rotate.toRadians)
 						byY = stepSize * sin(creature.rotate.toRadians)
-						duration = 300.millis
-						delay = 200.millis
+						duration = 0.6 * stepDuration
+						delay = 0.4 * stepDuration
 					]
 				]
 			}
 		]
 	}
-
 }
 

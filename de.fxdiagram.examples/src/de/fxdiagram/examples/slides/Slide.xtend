@@ -2,10 +2,13 @@ package de.fxdiagram.examples.slides
 
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.services.ImageCache
+import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import javafx.scene.image.ImageView
 import javafx.scene.layout.StackPane
 
 import static de.fxdiagram.examples.slides.Styles.*
+
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class Slide extends XNode {
 	
@@ -23,6 +26,11 @@ class Slide extends XNode {
 		stackPane => [
 			children += createText(text, fontSize)
 		]
+	}
+	
+	override doActivate() {
+		super.doActivate()
+		new ZoomToFitAction().perform(root)
 	}
 	
 	def getStackPane() {

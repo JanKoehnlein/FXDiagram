@@ -50,7 +50,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
     final XNode host = ((XNode) _host);
     final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
       public void apply(final XRapidButton button) {
-        SimpleNode _simpleNode = new SimpleNode("new node");
+        SimpleNode _simpleNode = new SimpleNode("New Node");
         final SimpleNode target = _simpleNode;
         final XNode source = button.getHost();
         XConnection _xConnection = new XConnection(source, target);

@@ -29,6 +29,7 @@ import javafx.scene.input.MouseEvent
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
 
 import static extension javafx.scene.layout.BorderPane.*
+import javafx.stage.Stage
 
 @Logging
 class MenuTool implements XDiagramTool {
@@ -61,11 +62,19 @@ class MenuTool implements XDiagramTool {
 						consume
 						new ExportSvgAction
 					}
-				case KeyCode.F:
+				case KeyCode.F: 
 					if (shortcutDown) {
 						consume
+						if(shiftDown) {
+							switch window: root.scene.window {
+								Stage: {
+									window.fullScreen = true
+									return
+								}
+							}
+						}  
 						new ZoomToFitAction
-					}
+					} 
 				case KeyCode.L:
 					if (shortcutDown) {
 						consume

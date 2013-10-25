@@ -1,7 +1,10 @@
 package de.fxdiagram.examples.slides;
 
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.services.ImageCache;
+import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.examples.slides.Styles;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -47,6 +50,13 @@ public class Slide extends XNode {
       }
     };
     ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
+  }
+  
+  public void doActivate() {
+    super.doActivate();
+    ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
+    XRoot _root = CoreExtensions.getRoot(this);
+    _zoomToFitAction.perform(_root);
   }
   
   public StackPane getStackPane() {

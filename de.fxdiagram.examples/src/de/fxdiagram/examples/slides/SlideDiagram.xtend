@@ -28,10 +28,41 @@ class SlideDiagram extends XDiagram {
 		super.doActivate()
 		backgroundPaint = Color.BLACK
 		addBehavior(new SlideNavigation(this))
-		showSlide(slides.head)		
+		showSlide(slides.head)
 	}
 	
-	def showSlide(Slide newSlide) {
+	def boolean next() {
+		val newSlide = if(currentSlide != null) {
+				val nextIndex = slides.indexOf(currentSlide) + 1
+				if(nextIndex == slides.size) {
+					getBehavior(CloseBehavior)?.close					
+					return false
+				}
+				slides.get(nextIndex)
+			}
+			else 			
+				slides.head
+		showSlide(newSlide)
+		true
+	}
+	
+	def boolean previous() {
+		val slides = slides
+		val newSlide = if(currentSlide != null) {
+				val previousIndex = slides.indexOf(currentSlide) - 1
+				if(previousIndex < 0) {
+					getBehavior(CloseBehavior)?.close					
+					return false
+				}
+				slides.get(previousIndex)
+			}
+			else 			
+				slides.head
+		showSlide(newSlide)
+		true
+	}
+	
+	protected def showSlide(Slide newSlide) {
 		val oldSlide = currentSlide
 		val fade = if(oldSlide != null) {
 						new FadeTransition => [
@@ -80,35 +111,11 @@ class SlideNavigation extends AbstractHostBehavior<SlideDiagram> implements Navi
 	}
 	
 	override next() {
-		val slides = host.slides
-		val newSlide = if(host.currentSlide != null) {
-				val nextIndex = slides.indexOf(host.currentSlide) + 1
-				if(nextIndex == slides.size) {
-					host.getBehavior(CloseBehavior)?.close					
-					return false
-				}
-				slides.get(nextIndex)
-			}
-			else 			
-				slides.head
-		host.showSlide(newSlide)
-		true
+		host.next
 	}
 	
 	override previous() {
-		val slides = host.slides
-		val newSlide = if(host.currentSlide != null) {
-				val previousIndex = slides.indexOf(host.currentSlide) - 1
-				if(previousIndex < 0) {
-					host.getBehavior(CloseBehavior)?.close					
-					return false
-				}
-				slides.get(previousIndex)
-			}
-			else 			
-				slides.head
-		host.showSlide(newSlide)
-		true
+		host.previous	
 	}
 	
 }
