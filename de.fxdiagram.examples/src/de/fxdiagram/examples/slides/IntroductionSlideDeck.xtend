@@ -9,14 +9,9 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
-import javafx.scene.media.Media
-import javafx.scene.media.MediaPlayer
-import javafx.scene.media.MediaView
 import javafx.scene.paint.Color
 import javafx.scene.shape.Polyline
 
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import static extension de.fxdiagram.core.extensions.UriExtensions.*
 import static extension de.fxdiagram.examples.slides.Styles.*
 
 class IntroductionSlideDeck extends OpenableDiagramNode {
@@ -147,14 +142,10 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					layoutX = 50
 					layoutY = 44
 				]	
-				pane.children += new MediaView => [
+				pane.children += new ImageView => [
+					image = ImageCache.get.getImage(this, 'images/properties.png')
 					layoutX = 295
 					layoutY = 332
-					mediaPlayer = new MediaPlayer(
-							new Media(this.toURI('/de/fxdiagram/examples/media/Usability.mp4'))) => [
-						seek(200.seconds)
-//								play
-					]
 				]					
 			]
 			slides += new Slide('Recycling', 144)

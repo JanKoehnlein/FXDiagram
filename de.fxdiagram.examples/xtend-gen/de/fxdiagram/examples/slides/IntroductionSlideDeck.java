@@ -2,8 +2,6 @@ package de.fxdiagram.examples.slides;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import de.fxdiagram.core.extensions.DurationExtensions;
-import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.slides.ClickThroughSlide;
 import de.fxdiagram.examples.slides.Slide;
@@ -22,13 +20,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -317,25 +311,17 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             _children.add(_doubleArrow);
             Group _pane_1 = it.getPane();
             ObservableList<Node> _children_1 = _pane_1.getChildren();
-            MediaView _mediaView = new MediaView();
-            final Procedure1<MediaView> _function_1 = new Procedure1<MediaView>() {
-              public void apply(final MediaView it) {
+            ImageView _imageView_1 = new ImageView();
+            final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+              public void apply(final ImageView it) {
+                ImageCache _get = ImageCache.get();
+                Image _image = _get.getImage(IntroductionSlideDeck.this, "images/properties.png");
+                it.setImage(_image);
                 it.setLayoutX(295);
                 it.setLayoutY(332);
-                String _uRI = UriExtensions.toURI(IntroductionSlideDeck.this, "/de/fxdiagram/examples/media/Usability.mp4");
-                Media _media = new Media(_uRI);
-                MediaPlayer _mediaPlayer = new MediaPlayer(_media);
-                final Procedure1<MediaPlayer> _function = new Procedure1<MediaPlayer>() {
-                  public void apply(final MediaPlayer it) {
-                    Duration _seconds = DurationExtensions.seconds(200);
-                    it.seek(_seconds);
-                  }
-                };
-                MediaPlayer _doubleArrow = ObjectExtensions.<MediaPlayer>operator_doubleArrow(_mediaPlayer, _function);
-                it.setMediaPlayer(_doubleArrow);
               }
             };
-            MediaView _doubleArrow_1 = ObjectExtensions.<MediaView>operator_doubleArrow(_mediaView, _function_1);
+            ImageView _doubleArrow_1 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView_1, _function_1);
             _children_1.add(_doubleArrow_1);
           }
         };

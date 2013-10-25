@@ -61,7 +61,7 @@ class Demo extends Application {
 			nodes += new OpenableDiagramNode('Basic') => [
 				innerDiagram = createBasicDiagram('')
 			]
-			nodes += new OpenableDiagramNode('Media Integration') => [
+			nodes += new OpenableDiagramNode('JavaFX') => [
 				innerDiagram = new XDiagram => [
 					contentsInitializer = [
 						nodes += newLoginNode

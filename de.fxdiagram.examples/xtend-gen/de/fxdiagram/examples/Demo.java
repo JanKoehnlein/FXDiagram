@@ -91,7 +91,7 @@ public class Demo extends Application {
           OpenableDiagramNode _doubleArrow = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
           _nodes_1.add(_doubleArrow);
           ObservableList<XNode> _nodes_2 = it.getNodes();
-          OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode("Media Integration");
+          OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode("JavaFX");
           final Procedure1<OpenableDiagramNode> _function_1 = new Procedure1<OpenableDiagramNode>() {
             public void apply(final OpenableDiagramNode it) {
               XDiagram _xDiagram = new XDiagram();
