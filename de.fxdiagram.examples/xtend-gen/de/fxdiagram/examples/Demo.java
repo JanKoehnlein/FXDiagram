@@ -223,7 +223,7 @@ public class Demo extends Application {
             ObservableList<XNode> _nodes = it.getNodes();
             final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
               public void apply(final SimpleNode it) {
-                it.setLayoutX(50);
+                it.setLayoutX(75);
                 it.setLayoutY(50);
               }
             };

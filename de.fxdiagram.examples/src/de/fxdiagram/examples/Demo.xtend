@@ -128,7 +128,7 @@ class Demo extends Application {
 				val openable = newOpenableBasicDiagramNode(nameSuffix)
 				val levelOfDetail = newEmbeddedBasicDiagram(nameSuffix)
 				nodes += simple => [
-					layoutX = 50
+					layoutX = 75
 					layoutY = 50
 				]
 				nodes += openable => [

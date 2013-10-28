@@ -19,9 +19,9 @@ class Slide extends XNode {
 			children += new ImageView => [
 				image = ImageCache.get.getImage(this, 'images/jungle.jpg')
 				effect = new ColorAdjust => [
-					brightness = 0
+					brightness = -0.5
 					saturation = 0
-					contrast = 0
+					contrast = -0.1
 				]
 			]
 		]

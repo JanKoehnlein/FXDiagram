@@ -42,111 +42,54 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
               public void apply(final StackPane it) {
                 ObservableList<Node> _children = it.getChildren();
-                Pane _pane = new Pane();
-                final Procedure1<Pane> _function = new Procedure1<Pane>() {
-                  public void apply(final Pane it) {
-                    it.setPrefSize(1024, 768);
-                    ObservableList<Node> _children = it.getChildren();
-                    Text _createJungleText = Styles.createJungleText("GEF", 22);
-                    final Procedure1<Text> _function = new Procedure1<Text>() {
-                      public void apply(final Text it) {
-                        Color _jungleDarkGreen = Styles.jungleDarkGreen();
-                        it.setFill(_jungleDarkGreen);
-                        it.setRotate(340);
-                        it.setLayoutX(110);
-                        it.setLayoutY(379);
-                        Styles.breathe(it);
-                      }
-                    };
-                    Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText, _function);
-                    _children.add(_doubleArrow);
-                    ObservableList<Node> _children_1 = it.getChildren();
-                    Text _createJungleText_1 = Styles.createJungleText("Draw2D", 22);
-                    final Procedure1<Text> _function_1 = new Procedure1<Text>() {
-                      public void apply(final Text it) {
-                        Color _jungleDarkGreen = Styles.jungleDarkGreen();
-                        it.setFill(_jungleDarkGreen);
-                        it.setRotate(339);
-                        it.setLayoutX(405);
-                        it.setLayoutY(147);
-                        Styles.flicker(it);
-                      }
-                    };
-                    Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_1, _function_1);
-                    _children_1.add(_doubleArrow_1);
-                    ObservableList<Node> _children_2 = it.getChildren();
-                    Text _createJungleText_2 = Styles.createJungleText("GMF RT", 22);
-                    final Procedure1<Text> _function_2 = new Procedure1<Text>() {
-                      public void apply(final Text it) {
-                        Color _jungleDarkGreen = Styles.jungleDarkGreen();
-                        it.setFill(_jungleDarkGreen);
-                        it.setLayoutX(762);
-                        it.setLayoutY(61);
-                        Styles.dangle(it);
-                      }
-                    };
-                    Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_2, _function_2);
-                    _children_2.add(_doubleArrow_2);
-                    ObservableList<Node> _children_3 = it.getChildren();
-                    Text _createJungleText_3 = Styles.createJungleText("Graphiti", 22);
-                    final Procedure1<Text> _function_3 = new Procedure1<Text>() {
-                      public void apply(final Text it) {
-                        Color _jungleDarkGreen = Styles.jungleDarkGreen();
-                        it.setFill(_jungleDarkGreen);
-                        it.setRotate(11);
-                        it.setLayoutX(850);
-                        it.setLayoutY(349);
-                        Styles.breathe(it);
-                      }
-                    };
-                    Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_3, _function_3);
-                    _children_3.add(_doubleArrow_3);
-                    ObservableList<Node> _children_4 = it.getChildren();
-                    Text _createJungleText_4 = Styles.createJungleText("GMF Tooling", 22);
-                    final Procedure1<Text> _function_4 = new Procedure1<Text>() {
-                      public void apply(final Text it) {
-                        Color _jungleDarkGreen = Styles.jungleDarkGreen();
-                        it.setFill(_jungleDarkGreen);
-                        it.setLayoutX(595);
-                        it.setLayoutY(121);
-                        Styles.dangle(it);
-                      }
-                    };
-                    Text _doubleArrow_4 = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText_4, _function_4);
-                    _children_4.add(_doubleArrow_4);
-                  }
-                };
-                Pane _doubleArrow = ObjectExtensions.<Pane>operator_doubleArrow(_pane, _function);
-                _children.add(_doubleArrow);
-                ObservableList<Node> _children_1 = it.getChildren();
                 VBox _vBox = new VBox();
-                final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
+                final Procedure1<VBox> _function = new Procedure1<VBox>() {
                   public void apply(final VBox it) {
                     it.setAlignment(Pos.CENTER);
-                    Insets _insets = new Insets(400, 0, 0, 0);
+                    Insets _insets = new Insets(200, 0, 0, 0);
                     StackPane.setMargin(it, _insets);
                     ObservableList<Node> _children = it.getChildren();
-                    Text _createText = Styles.createText("Eclipse Diagram Editors", 93);
+                    Text _createText = Styles.createText("Eclipse Discovery Channel", 36);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
                       public void apply(final Text it) {
-                        Color _rgb = Color.rgb(238, 191, 171);
-                        it.setFill(_rgb);
+                        Color _jungleDarkGreen = Styles.jungleDarkGreen();
+                        it.setFill(_jungleDarkGreen);
                       }
                     };
                     Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function);
                     _children.add(_doubleArrow);
                     ObservableList<Node> _children_1 = it.getChildren();
-                    Text _createText_1 = Styles.createText("An Endangered Species", 48);
+                    Text _createText_1 = Styles.createText("presents", 30);
                     final Procedure1<Text> _function_1 = new Procedure1<Text>() {
                       public void apply(final Text it) {
+                        Color _jungleDarkGreen = Styles.jungleDarkGreen();
+                        it.setFill(_jungleDarkGreen);
                       }
                     };
                     Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_createText_1, _function_1);
                     _children_1.add(_doubleArrow_1);
+                    ObservableList<Node> _children_2 = it.getChildren();
+                    Text _createText_2 = Styles.createText("Eclipse Diagram Editors", 93);
+                    final Procedure1<Text> _function_2 = new Procedure1<Text>() {
+                      public void apply(final Text it) {
+                        Color _rgb = Color.rgb(238, 191, 171);
+                        it.setFill(_rgb);
+                      }
+                    };
+                    Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_createText_2, _function_2);
+                    _children_2.add(_doubleArrow_2);
+                    ObservableList<Node> _children_3 = it.getChildren();
+                    Text _createText_3 = Styles.createText("An Endangered Species", 48);
+                    final Procedure1<Text> _function_3 = new Procedure1<Text>() {
+                      public void apply(final Text it) {
+                      }
+                    };
+                    Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_createText_3, _function_3);
+                    _children_3.add(_doubleArrow_3);
                   }
                 };
-                VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
-                _children_1.add(_doubleArrow_1);
+                VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
+                _children.add(_doubleArrow);
               }
             };
             ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);

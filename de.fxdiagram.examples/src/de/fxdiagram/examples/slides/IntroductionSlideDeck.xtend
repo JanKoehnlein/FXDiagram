@@ -20,35 +20,35 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 		innerDiagram = new SlideDiagram => [
 			slides += new Slide('Title') => [ 
 				stackPane => [
-					children += new Pane => [
-						setPrefSize(1024, 768)
-						children += createJungleText('GEF', 22) => [
-							fill = jungleDarkGreen							
-							rotate = 340
-							layoutX = 110
-							layoutY = 379
-							breathe
-						]
-						children += createJungleText('Draw2D', 22) => [
-							fill = jungleDarkGreen							
-							rotate = 339
-							layoutX = 405
-							layoutY = 147
-							flicker
-						]
-						children += createJungleText('GMF RT', 22) => [
-							fill = jungleDarkGreen							
-							layoutX = 762
-							layoutY = 61
-							dangle
-						]
-						children += createJungleText('Graphiti', 22) => [
-							fill = jungleDarkGreen							
-							rotate = 11
-							layoutX = 850
-							layoutY = 349
-							breathe
-						]
+//					children += new Pane => [
+//						setPrefSize(1024, 768)
+//						children += createJungleText('GEF', 22) => [
+//							fill = jungleDarkGreen							
+//							rotate = 340
+//							layoutX = 110
+//							layoutY = 379
+//							breathe
+//						]
+//						children += createJungleText('Draw2D', 22) => [
+//							fill = jungleDarkGreen							
+//							rotate = 339
+//							layoutX = 405
+//							layoutY = 147
+//							flicker
+//						]
+//						children += createJungleText('GMF RT', 22) => [
+//							fill = jungleDarkGreen							
+//							layoutX = 762
+//							layoutY = 61
+//							dangle
+//						]
+//						children += createJungleText('Graphiti', 22) => [
+//							fill = jungleDarkGreen							
+//							rotate = 11
+//							layoutX = 850
+//							layoutY = 349
+//							breathe
+//						]
 //						children += createJungleText('Sirius', 22) => [
 //							fill = jungleDarkGreen							
 //							rotate = 67
@@ -56,16 +56,22 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 //							layoutY = 229
 //							flicker
 //						]
-						children += createJungleText('GMF Tooling', 22) => [
-							fill = jungleDarkGreen							
-							layoutX = 595
-							layoutY = 121
-							dangle
-						]
-					]
+//						children += createJungleText('GMF Tooling', 22) => [
+//							fill = jungleDarkGreen							
+//							layoutX = 595
+//							layoutY = 121
+//							dangle
+//						]
+//					]
 					children += new VBox => [
 						alignment = Pos.CENTER
-						StackPane.setMargin(it, new Insets(400, 0, 0, 0))
+						StackPane.setMargin(it, new Insets(200, 0, 0, 0))
+						children += createText('Eclipse Discovery Channel', 36) => [
+							fill = jungleDarkGreen
+						]
+						children += createText('presents', 30) => [
+							fill = jungleDarkGreen
+						]
 						children += createText('Eclipse Diagram Editors', 93) => [
 							fill = Color.rgb(238, 191, 171)
 						]

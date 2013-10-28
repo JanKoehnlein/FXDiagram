@@ -33,9 +33,11 @@ public class Slide extends XNode {
             ColorAdjust _colorAdjust = new ColorAdjust();
             final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
               public void apply(final ColorAdjust it) {
-                it.setBrightness(0);
+                double _minus = (-0.5);
+                it.setBrightness(_minus);
                 it.setSaturation(0);
-                it.setContrast(0);
+                double _minus_1 = (-0.1);
+                it.setContrast(_minus_1);
               }
             };
             ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function);
