@@ -9,11 +9,11 @@
 <project reference="1.0,http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git,master,plugins/de.cau.cs.kieler.kiml.service"/>
 </provider>
 <workingSets editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1372242139370_48" label="KIELER" name="KIELER">
-<item elementID="=de.cau.cs.kieler.kiml.service" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=de.cau.cs.kieler.core.kgraph" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=de.cau.cs.kieler.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=de.cau.cs.kieler.kiml.graphviz.dot" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=de.cau.cs.kieler.kiml" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.cau.cs.kieler.core.kgraph" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.cau.cs.kieler.kiml.service" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=de.cau.cs.kieler.kiml.graphviz.layouter" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.cau.cs.kieler.kiml" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSets>
 </psf>

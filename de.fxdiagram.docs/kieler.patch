@@ -23,56 +23,78 @@ index c3379c3..b502453 100644
 +		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
  	</natures>
  </projectDescription>
-diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/META-INF/MANIFEST.MF b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/META-INF/MANIFEST.MF
-index f208cc0..a3829ec 100644
---- a/plugins/de.cau.cs.kieler.kiml.graphviz.dot/META-INF/MANIFEST.MF
-+++ b/plugins/de.cau.cs.kieler.kiml.graphviz.dot/META-INF/MANIFEST.MF
-@@ -31,5 +31,5 @@
-  de.cau.cs.kieler.kiml.graphviz.dot.services,
-  de.cau.cs.kieler.kiml.graphviz.dot.transform,
-  de.cau.cs.kieler.kiml.graphviz.dot.serializer,
-- de.cau.cs.kieler.kiml.graphviz.dot.formatting
-+ de.cau.cs.kieler.kiml.graphviz.dot.formatting 
- Bundle-Activator: de.cau.cs.kieler.kiml.graphviz.dot.GraphvizDotActivator
 diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
-index 334a4ce..95d7125 100644
+index 14c7a32..028065a 100644
 --- a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
 +++ b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
-@@ -148,10 +148,10 @@
-      */
-     public static String getDotExecutable() {
-         // get a string to the dot executable
--        IPreferenceStore preferenceStore =
--                GraphvizLayouterPlugin.getDefault().getPreferenceStore();
--        String dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
--        if (!new File(dotExecutable).exists()) {
-+//        IPreferenceStore preferenceStore =
-+//                GraphvizLayouterPlugin.getDefault().getPreferenceStore();
-+        String dotExecutable = null;// = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
-+//        if (!new File(dotExecutable).exists()) {
-             boolean foundExec = false;
-             for (String location : DEFAULT_LOCS) {
-                 dotExecutable = location + "dot";
-@@ -159,12 +159,12 @@
-                     foundExec = true;
-                     break;
-                 }
--            }
--            if (!foundExec) {
--                handleExecPath();
--                // fetch the executable string again after the user has entered a new path
--                dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
--            }
-+//            }
-+//            if (!foundExec) {
-+//                handleExecPath();
-+//                // fetch the executable string again after the user has entered a new path
-+//                dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
-+//            }
+@@ -103,13 +103,13 @@
+             }
          }
          
+-        if (DEFAULT_LOCS.isEmpty()) {
++//        if (DEFAULT_LOCS.isEmpty()) {
+             // Fallback list of default locations
+             DEFAULT_LOCS.add("/opt/local/bin/");
+             DEFAULT_LOCS.add("/usr/local/bin/");
+             DEFAULT_LOCS.add("/usr/bin/");
+             DEFAULT_LOCS.add("/bin/");
+-        }
++//        }
+     }
+     
+     
+@@ -194,19 +194,20 @@
+      */
+     public static String getDotExecutable(final boolean promptUser) {
+         // load the graphviz path from the preferences, if any
+-        IPreferenceStore preferenceStore = GraphvizLayouterPlugin.getDefault().getPreferenceStore();
+-        String dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
+-        File dotFile = new File(dotExecutable);
+-        
+-        // check if the executable exists
+-        if (!dotFile.exists() || !dotFile.canExecute()) {
++//        IPreferenceStore preferenceStore = GraphvizLayouterPlugin.getDefault().getPreferenceStore();
++//        String dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
++//        File dotFile = new File(dotExecutable);
++//        
++//        // check if the executable exists
++//        if (!dotFile.exists() || !dotFile.canExecute()) {
++    		String dotExecutable = null;
+             boolean foundExec = false;
+             
+             // look in a selection of default locations where it might be installed
+             for (String location : DEFAULT_LOCS) {
+                 // Linux
+                 dotExecutable = location + "dot";
+-                dotFile = new File(dotExecutable);
++                File dotFile = new File(dotExecutable);
+                 if (dotFile.exists() && dotFile.canExecute()) {
+                     foundExec = true;
+                     break;
+@@ -222,15 +223,15 @@
+             }
+             
+             if (!foundExec) {
+-                if (promptUser) {
+-                    handleExecPath();
+-                    // fetch the executable string again after the user has entered a new path
+-                    dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
+-                } else {
++//                if (promptUser) {
++//                    handleExecPath();
++//                    // fetch the executable string again after the user has entered a new path
++//                    dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
++//                } else {
+                     return null;
+                 }
+-            }
+-        }
++//            }
++//        }
+         
          return dotExecutable;
-@@ -391,13 +391,13 @@
+     }
+@@ -500,13 +501,13 @@
                      }
                  }
                  
