@@ -101,8 +101,7 @@ class XDiagram extends Group implements XActivatable {
 		nodes.addListener(new XDiagramChildrenListener<XNode>(this, nodeLayer))
 		connections.addListener(new XDiagramChildrenListener<XConnection>(this, connectionLayer))
 		buttons.addListener(new XDiagramChildrenListener<XRapidButton>(this, buttonLayer))
-		// Xtend bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=410990
-		val listChangeListener = [
+		connectionLayer.children.addListener [
 			Change<? extends Node> change | 
 			while(change.next) {
 				if(change.wasAdded) {
@@ -128,7 +127,6 @@ class XDiagram extends Group implements XActivatable {
 				}
 			}
 		]
-		connectionLayer.children.addListener(listChangeListener)
 		(nodes + connections + buttons).forEach[activate]
 		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
 		contentsInitializer?.apply(this)

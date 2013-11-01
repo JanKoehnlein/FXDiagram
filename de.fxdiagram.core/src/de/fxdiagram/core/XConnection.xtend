@@ -78,8 +78,7 @@ class XConnection extends XShape {
 		controlPointListener = [ prop, oldVal, newVal |
 			updateShapes
 		]
-		// Xtend bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=410990
-		val listChangeListener = [ 
+		controlPoints.addListener [ 
 			Change<? extends XControlPoint> it | 
 			val points = list
 			updateShapes
@@ -96,7 +95,6 @@ class XConnection extends XShape {
 					layoutYProperty.removeListener(controlPointListener)
 				]
 		]
-		controlPoints.addListener(listChangeListener)
 		labels.forEach[activate]
 		connectionRouter.activate
 		updateShapes

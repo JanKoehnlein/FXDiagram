@@ -141,8 +141,9 @@ public class XConnection extends XShape {
       }
     };
     this.controlPointListener = _function;
-    final Procedure1<Change<? extends XControlPoint>> _function_1 = new Procedure1<Change<? extends XControlPoint>>() {
-      public void apply(final Change<? extends XControlPoint> it) {
+    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+    final ListChangeListener<XControlPoint> _function_1 = new ListChangeListener<XControlPoint>() {
+      public void onChanged(final Change<? extends XControlPoint> it) {
         final ObservableList<? extends XControlPoint> points = it.getList();
         XConnection.this.updateShapes();
         boolean _next = it.next();
@@ -186,13 +187,7 @@ public class XConnection extends XShape {
         IterableExtensions.forEach(_removed, _function);
       }
     };
-    final Procedure1<Change<? extends XControlPoint>> listChangeListener = _function_1;
-    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    _controlPoints.addListener(new ListChangeListener<XControlPoint>() {
-        public void onChanged(Change<? extends XControlPoint> arg0) {
-          listChangeListener.apply(arg0);
-        }
-    });
+    _controlPoints.addListener(_function_1);
     ObservableList<XConnectionLabel> _labels = this.getLabels();
     final Procedure1<XConnectionLabel> _function_2 = new Procedure1<XConnectionLabel>() {
       public void apply(final XConnectionLabel it) {

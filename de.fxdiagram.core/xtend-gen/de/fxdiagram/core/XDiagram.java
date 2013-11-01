@@ -190,8 +190,10 @@ public class XDiagram extends Group implements XActivatable {
     ObservableList<XRapidButton> _buttons = this.getButtons();
     XDiagramChildrenListener<XRapidButton> _xDiagramChildrenListener_2 = new XDiagramChildrenListener<XRapidButton>(this, this.buttonLayer);
     _buttons.addListener(_xDiagramChildrenListener_2);
-    final Procedure1<javafx.collections.ListChangeListener.Change<? extends Node>> _function_2 = new Procedure1<javafx.collections.ListChangeListener.Change<? extends Node>>() {
-      public void apply(final javafx.collections.ListChangeListener.Change<? extends Node> change) {
+    Group _connectionLayer_1 = this.getConnectionLayer();
+    ObservableList<Node> _children = _connectionLayer_1.getChildren();
+    final ListChangeListener<Node> _function_2 = new ListChangeListener<Node>() {
+      public void onChanged(final javafx.collections.ListChangeListener.Change<? extends Node> change) {
         boolean _next = change.next();
         boolean _while = _next;
         while (_while) {
@@ -253,14 +255,7 @@ public class XDiagram extends Group implements XActivatable {
         }
       }
     };
-    final Procedure1<javafx.collections.ListChangeListener.Change<? extends Node>> listChangeListener = _function_2;
-    Group _connectionLayer_1 = this.getConnectionLayer();
-    ObservableList<Node> _children = _connectionLayer_1.getChildren();
-    _children.addListener(new ListChangeListener<Node>() {
-        public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> arg0) {
-          listChangeListener.apply(arg0);
-        }
-    });
+    _children.addListener(_function_2);
     ObservableList<XNode> _nodes_1 = this.getNodes();
     ObservableList<XConnection> _connections_1 = this.getConnections();
     Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes_1, _connections_1);
