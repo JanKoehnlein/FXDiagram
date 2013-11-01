@@ -1,5 +1,4 @@
 TODO
-- noreng
 
 BUGS
 - player.seek doesn't work
