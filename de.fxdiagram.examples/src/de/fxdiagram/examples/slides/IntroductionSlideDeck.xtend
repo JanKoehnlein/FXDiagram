@@ -128,7 +128,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					]
 				]
 			]
-			slides += new Slide('Darkness', 144)
+			slides += new Slide('Appearance', 144)
 			slides += new ClickThroughSlide('Darkness images') => [
 				pane.children += new ImageView => [
 					image = ImageCache.get.getImage(this, 'images/darkness1.png')
@@ -235,7 +235,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 						]
 					]
 					children += new Group => [
-						children += createJungleText('Epsilon', 48) => [
+						children += createJungleText('...', 48) => [
 							layoutX = 405
 							layoutY = 88
 						]

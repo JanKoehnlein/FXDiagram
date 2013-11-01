@@ -193,7 +193,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         Slide _doubleArrow_1 = ObjectExtensions.<Slide>operator_doubleArrow(_slide_2, _function_1);
         _slides_2.add(_doubleArrow_1);
         List<Slide> _slides_3 = it.getSlides();
-        Slide _slide_3 = new Slide("Darkness", 144);
+        Slide _slide_3 = new Slide("Appearance", 144);
         _slides_3.add(_slide_3);
         List<Slide> _slides_4 = it.getSlides();
         ClickThroughSlide _clickThroughSlide = new ClickThroughSlide("Darkness images");
@@ -494,7 +494,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 final Procedure1<Group> _function_7 = new Procedure1<Group>() {
                   public void apply(final Group it) {
                     ObservableList<Node> _children = it.getChildren();
-                    Text _createJungleText = Styles.createJungleText("Epsilon", 48);
+                    Text _createJungleText = Styles.createJungleText("...", 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
                       public void apply(final Text it) {
                         it.setLayoutX(405);
