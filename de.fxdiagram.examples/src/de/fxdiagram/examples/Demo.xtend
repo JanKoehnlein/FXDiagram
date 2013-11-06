@@ -74,7 +74,7 @@ class Demo extends Application {
 				]
 			]
 			nodes += openableDiagram('Xtend', newNeonSignNode)
-			//nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
+			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
 			nodes += openableDiagram('Ecore Explorer', newEClassNode)
 			nodes += newLcarsDiagramNode
 			nodes += new SimpleNode('Eclipse')

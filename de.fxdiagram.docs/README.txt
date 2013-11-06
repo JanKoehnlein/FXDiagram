@@ -4,6 +4,7 @@ Use at your own risk.
 It is neither a complete solution nor built for reuse as a framework.
 I cannot give any support on this.
 I tested on MacOSX only. 
+The LCARS demo won't run as it depends on a currently unreleased database. 
 
 
 PREREQUISITES
