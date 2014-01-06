@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -27,12 +28,11 @@ public class ClickThroughSlide extends Slide {
   
   private Node currentNode;
   
-  public ClickThroughSlide(final String name) {
-    super(name);
+  public ClickThroughSlide(final String name, final Image backgroundImage) {
+    super(name, backgroundImage);
     StackPane _stackPane = this.getStackPane();
     ObservableList<Node> _children = _stackPane.getChildren();
-    _children.add(
-      this.pane);
+    _children.add(this.pane);
   }
   
   public void doActivate() {

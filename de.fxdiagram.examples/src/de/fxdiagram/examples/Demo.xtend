@@ -13,8 +13,8 @@ import de.fxdiagram.examples.java.JavaTypeNode
 import de.fxdiagram.examples.lcars.LcarsDiagram
 import de.fxdiagram.examples.login.LoginNode
 import de.fxdiagram.examples.neonsign.NeonSignNode
-import de.fxdiagram.examples.slides.IntroductionSlideDeck
-import de.fxdiagram.examples.slides.SummarySlideDeck
+import de.fxdiagram.examples.slides.eclipsecon.IntroductionSlideDeck
+import de.fxdiagram.examples.slides.eclipsecon.SummarySlideDeck
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
 import de.fxdiagram.lib.media.MovieNode
@@ -57,6 +57,7 @@ class Demo extends Application {
 		root.diagram = diagram
 
 		diagram => [
+//			nodes += new DemoCampIntroSlides
 			nodes += new IntroductionSlideDeck
 			nodes += new OpenableDiagramNode('Basic') => [
 				innerDiagram = createBasicDiagram('')
@@ -75,28 +76,11 @@ class Demo extends Application {
 			]
 			nodes += openableDiagram('Xtend', newNeonSignNode)
 			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
-			nodes += openableDiagram('Ecore Explorer', newEClassNode)
+//			nodes += openableDiagram('Ecore Explorer', newEClassNode)
 			nodes += newLcarsDiagramNode
 			nodes += new SimpleNode('Eclipse')
-//			nodes += new OpenableDiagramNode('Gallery') => [
-//				innerDiagram = new XDiagram => [
-//					contentsInitializer = [
-//						nodes += newSimpleNode('')
-//						nodes += newOpenableBasicDiagramNode('')
-//						nodes += newEmbeddedBasicDiagram('')
-//						nodes += newNeonSignNode
-//						nodes += newJavaTypeNode
-//						nodes += newEClassNode
-//						nodes += newLoginNode
-//						nodes += newRecursiveImageNode
-//						nodes += newImageNode
-//						nodes += newMovieNode
-//						nodes += newBrowserNode
-//						nodes += newBrickBreakerNode
-//						nodes += newLcarsDiagramNode
-//					]
-//				]
-//			]
+//			nodes += newGalleryDiagramNode()
+//			nodes += new DemoCampSummarySlides
 			nodes += new SummarySlideDeck
 			val deltaX = scene.width / (nodes.size + 2)
 			val deltaY = scene.height / (nodes.size + 2)
@@ -113,6 +97,28 @@ class Demo extends Application {
 		warmUpLayouter
 		root.centerDiagram
 		scene
+	}
+	
+	def newGalleryDiagramNode() {
+		new OpenableDiagramNode('Gallery') => [
+			innerDiagram = new XDiagram => [
+				contentsInitializer = [
+					nodes += newSimpleNode('')
+					nodes += newOpenableBasicDiagramNode('')
+					nodes += newEmbeddedBasicDiagram('')
+					nodes += newNeonSignNode
+					nodes += newJavaTypeNode
+					nodes += newEClassNode
+					nodes += newLoginNode
+					nodes += newRecursiveImageNode
+					nodes += newImageNode
+					nodes += newMovieNode
+					nodes += newBrowserNode
+					nodes += newBrickBreakerNode
+					nodes += newLcarsDiagramNode
+				]
+			]
+		]
 	}
 	
 	def newLcarsDiagramNode() {

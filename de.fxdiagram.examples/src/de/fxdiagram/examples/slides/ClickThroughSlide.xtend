@@ -8,16 +8,16 @@ import javafx.scene.Node
 import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import javafx.scene.image.Image
 
 class ClickThroughSlide extends Slide {
 	
 	Group pane = new Group
 	Node currentNode 
 	
-	new(String name) {
-		super(name)
-		stackPane.children += 
-			 pane
+	new(String name, Image backgroundImage) {
+		super(name, backgroundImage)
+		stackPane.children += pane
 	}
 	
 	override doActivate() {

@@ -7,7 +7,10 @@ import java.net.URL
 
 class UriExtensions {
 	def static toURI(Object context, String file) {
-		val resource = context.class.getResource(file)
+		val resource =  switch context {
+				Class<?>: context
+				default: context.class
+		}.getResource(file)
 		if(org.eclipse.core.internal.runtime.Activator.getDefault != null)
 			FileLocator.toFileURL(resource).toExternalForm
 		else

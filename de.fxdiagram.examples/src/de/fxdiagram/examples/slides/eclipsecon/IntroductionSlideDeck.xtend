@@ -1,6 +1,7 @@
-package de.fxdiagram.examples.slides
+package de.fxdiagram.examples.slides.eclipsecon
 
 import de.fxdiagram.core.services.ImageCache
+import de.fxdiagram.examples.slides.SlideDiagram
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -12,57 +13,17 @@ import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.shape.Polyline
 
-import static extension de.fxdiagram.examples.slides.Styles.*
+import static de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory.*
+
+import static extension de.fxdiagram.examples.slides.Animations.*
 
 class IntroductionSlideDeck extends OpenableDiagramNode {
+	
 	new() {
 		super('Introduction')
 		innerDiagram = new SlideDiagram => [
-			slides += new Slide('Title') => [ 
+			slides += createSlide('Title') => [ 
 				stackPane => [
-//					children += new Pane => [
-//						setPrefSize(1024, 768)
-//						children += createJungleText('GEF', 22) => [
-//							fill = jungleDarkGreen							
-//							rotate = 340
-//							layoutX = 110
-//							layoutY = 379
-//							breathe
-//						]
-//						children += createJungleText('Draw2D', 22) => [
-//							fill = jungleDarkGreen							
-//							rotate = 339
-//							layoutX = 405
-//							layoutY = 147
-//							flicker
-//						]
-//						children += createJungleText('GMF RT', 22) => [
-//							fill = jungleDarkGreen							
-//							layoutX = 762
-//							layoutY = 61
-//							dangle
-//						]
-//						children += createJungleText('Graphiti', 22) => [
-//							fill = jungleDarkGreen							
-//							rotate = 11
-//							layoutX = 850
-//							layoutY = 349
-//							breathe
-//						]
-//						children += createJungleText('Sirius', 22) => [
-//							fill = jungleDarkGreen							
-//							rotate = 67
-//							layoutX = 188
-//							layoutY = 229
-//							flicker
-//						]
-//						children += createJungleText('GMF Tooling', 22) => [
-//							fill = jungleDarkGreen							
-//							layoutX = 595
-//							layoutY = 121
-//							dangle
-//						]
-//					]
 					children += new VBox => [
 						alignment = Pos.CENTER
 						StackPane.setMargin(it, new Insets(200, 0, 0, 0))
@@ -79,8 +40,8 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					]
 				]
 			]
-			slides += new Slide('The Eclipse Jungle', 110)
-			slides += new Slide('Jungle images') => [
+			slides += createSlide('The Eclipse Jungle', 110)
+			slides += createSlide('Jungle images') => [
 				stackPane => [
 					children += new Pane => [
 						setPrefSize(1024, 768)
@@ -89,7 +50,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 							rotate = 16
 							layoutX = 80
 							layoutY = 665
-							flicker
+							flicker(jungleDarkGreen, jungleDarkestGreen)
 						]
 						children += createJungleText('Draw2D', 48) => [
 							fill = jungleDarkGreen
@@ -110,7 +71,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 							rotate = 332
 							layoutX = 640
 							layoutY = 620
-							breathe
+							breathe(jungleDarkGreen, jungleDarkestGreen)
 						]
 						children += createJungleText('Graphiti', 48) => [
 							fill = jungleDarkGreen
@@ -118,18 +79,18 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 							layoutY = 167
 							dangle
 						]
-//						children += createJungleText('Sirius', 48) => [
-//							fill = jungleDarkGreen
-//							rotate = 5
-//							layoutX = 190
-//							layoutY = 480
-//							breathe
-//						]
+						children += createJungleText('Sirius', 48) => [
+							fill = jungleDarkGreen
+							rotate = 5
+							layoutX = 190
+							layoutY = 480
+							breathe(jungleDarkGreen, jungleDarkestGreen)
+						]
 					]
 				]
 			]
-			slides += new Slide('Appearance', 144)
-			slides += new ClickThroughSlide('Darkness images') => [
+			slides += createSlide('Appearance', 144)
+			slides += createClickThroughSlide('Darkness images') => [
 				pane.children += new ImageView => [
 					image = ImageCache.get.getImage(this, 'images/darkness1.png')
 					layoutX = 45
@@ -141,8 +102,8 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					layoutY = 374
 				]
 			]
-			slides += new Slide('Behavior', 144)
-			slides += new ClickThroughSlide('Behavior images') => [ 
+			slides += createSlide('Behavior', 144)
+			slides += createClickThroughSlide('Behavior images') => [ 
 				pane.children += new ImageView => [
 					image = ImageCache.get.getImage(this, 'images/graphiti.png')
 					layoutX = 50
@@ -154,8 +115,8 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					layoutY = 332
 				]					
 			]
-			slides += new Slide('Recycling', 144)
-			slides += new ClickThroughSlide('Recycling images') => [ 
+			slides += createSlide('Recycling', 144)
+			slides += createClickThroughSlide('Recycling images') => [ 
 				pane => [
 					children += new ImageView => [
 						image = ImageCache.get.getImage(this, 'images/onion.png')
@@ -247,8 +208,8 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					] 
 				]
 			]
-			slides += new Slide('Reproduction', 144)
-			slides += new ClickThroughSlide('Reproduction images') => [ 
+			slides += createSlide('Reproduction', 144)
+			slides += createClickThroughSlide('Reproduction images') => [ 
 				pane.children += new ImageView => [
 					image = ImageCache.get.getImage(this, 'images/graphiti_code.png')
 					layoutX = 43
@@ -277,8 +238,8 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					layoutY = 406
 				]
 			]
-			slides += new Slide('Endangerment', 144)
-			slides += new ClickThroughSlide('Tablet') => [ 
+			slides += createSlide('Endangerment', 144)
+			slides += createClickThroughSlide('Tablet') => [ 
 				pane.children += new ImageView => [
 					image = ImageCache.get.getImage(this, 'images/tablet.png')
 					layoutX = 183
@@ -292,7 +253,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					layoutY = 244
 				]
 			]
-			slides += new Slide('Help') => [ 
+			slides += createSlide('Help') => [ 
 				stackPane => [
 					children += new VBox => [
 						alignment = Pos.CENTER
@@ -305,8 +266,8 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					]
 				]
 			]
-			slides += new Slide('What Can We Do?', 96)
-			slides += new Slide(
+			slides += createSlide('What Can We Do?', 96)
+			slides += createSlide(
 				'''
 					We have improve visual design,
 					haptic behavior,
@@ -314,7 +275,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 					and customizability
 					in order to save them from extinction.
 				''', 48)
-			slides += new Slide('JavaFX') => [ 
+			slides += createSlide('JavaFX') => [ 
 				stackPane => [
 					children += new ImageView => [
 						image = ImageCache.get.getImage(this, 'images/javafx.png')
@@ -325,4 +286,5 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 			]
 		]
 	}
+	
 }

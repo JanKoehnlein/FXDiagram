@@ -1,9 +1,10 @@
-package de.fxdiagram.examples.slides;
+package de.fxdiagram.examples.slides.eclipsecon;
 
 import de.fxdiagram.core.services.ImageCache;
+import de.fxdiagram.examples.slides.Animations;
 import de.fxdiagram.examples.slides.Slide;
 import de.fxdiagram.examples.slides.SlideDiagram;
-import de.fxdiagram.examples.slides.Styles;
+import de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -15,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -28,8 +30,8 @@ public class SummarySlideDeck extends OpenableDiagramNode {
     final Procedure1<SlideDiagram> _function = new Procedure1<SlideDiagram>() {
       public void apply(final SlideDiagram it) {
         List<Slide> _slides = it.getSlides();
-        Slide _slide = new Slide("Summary", 144);
-        _slides.add(_slide);
+        Slide _createSlide = EclipseConSlideFactory.createSlide("Summary", 144);
+        _slides.add(_createSlide);
         List<Slide> _slides_1 = it.getSlides();
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("The users must be our top priority.");
@@ -38,10 +40,10 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         _builder.newLine();
         _builder.append("Not frameworks.");
         _builder.newLine();
-        Slide _slide_1 = new Slide(_builder.toString(), 48);
-        _slides_1.add(_slide_1);
+        Slide _createSlide_1 = EclipseConSlideFactory.createSlide(_builder.toString(), 48);
+        _slides_1.add(_createSlide_1);
         List<Slide> _slides_2 = it.getSlides();
-        Slide _slide_2 = new Slide("JavaFX advantages");
+        Slide _createSlide_2 = EclipseConSlideFactory.createSlide("JavaFX advantages");
         final Procedure1<Slide> _function = new Procedure1<Slide>() {
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
@@ -74,7 +76,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
                 _builder.newLine();
                 _builder.append("and leverages the hardware...");
                 _builder.newLine();
-                Text _createText = Styles.createText(_builder.toString(), 48);
+                Text _createText = EclipseConSlideFactory.createText(_builder.toString(), 48);
                 _children_1.add(_createText);
               }
             };
@@ -82,7 +84,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
             _children.add(_doubleArrow);
           }
         };
-        Slide _doubleArrow = ObjectExtensions.<Slide>operator_doubleArrow(_slide_2, _function);
+        Slide _doubleArrow = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide_2, _function);
         _slides_2.add(_doubleArrow);
         List<Slide> _slides_3 = it.getSlides();
         StringConcatenation _builder_1 = new StringConcatenation();
@@ -92,10 +94,10 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         _builder_1.newLine();
         _builder_1.append("fun again.");
         _builder_1.newLine();
-        Slide _slide_3 = new Slide(_builder_1.toString(), 48);
-        _slides_3.add(_slide_3);
+        Slide _createSlide_3 = EclipseConSlideFactory.createSlide(_builder_1.toString(), 48);
+        _slides_3.add(_createSlide_3);
         List<Slide> _slides_4 = it.getSlides();
-        Slide _slide_4 = new Slide("Thanks");
+        Slide _createSlide_4 = EclipseConSlideFactory.createSlide("Thanks");
         final Procedure1<Slide> _function_1 = new Procedure1<Slide>() {
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
@@ -105,7 +107,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
               public void apply(final VBox it) {
                 it.setAlignment(Pos.CENTER);
                 ObservableList<Node> _children = it.getChildren();
-                Text _createText = Styles.createText("Thanks to", 144);
+                Text _createText = EclipseConSlideFactory.createText("Thanks to", 144);
                 final Procedure1<Text> _function = new Procedure1<Text>() {
                   public void apply(final Text it) {
                     Insets _insets = new Insets(0, 0, 30, 0);
@@ -138,7 +140,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
             _children.add(_doubleArrow);
           }
         };
-        Slide _doubleArrow_1 = ObjectExtensions.<Slide>operator_doubleArrow(_slide_4, _function_1);
+        Slide _doubleArrow_1 = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide_4, _function_1);
         _slides_4.add(_doubleArrow_1);
       }
     };
@@ -153,16 +155,18 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         it.setAlignment(Pos.CENTER);
         it.setSpacing(16);
         ObservableList<Node> _children = it.getChildren();
-        Text _createJungleText = Styles.createJungleText(jungleText, 36);
+        Text _createJungleText = EclipseConSlideFactory.createJungleText(jungleText, 36);
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
-            Styles.breathe(it);
+            Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
+            Color _jungleDarkestGreen = EclipseConSlideFactory.jungleDarkestGreen();
+            Animations.breathe(it, _jungleDarkGreen, _jungleDarkestGreen);
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createJungleText, _function);
         _children.add(_doubleArrow);
         ObservableList<Node> _children_1 = it.getChildren();
-        Text _createText = Styles.createText(normalText, 36);
+        Text _createText = EclipseConSlideFactory.createText(normalText, 36);
         _children_1.add(_createText);
       }
     };

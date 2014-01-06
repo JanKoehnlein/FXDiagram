@@ -16,9 +16,6 @@ import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.util.Duration;
@@ -27,44 +24,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class Styles {
-  public static Text createText(final String text, final int fontSize) {
-    Text _createText = Styles.createText(text, "Gill Sans", fontSize);
-    return _createText;
-  }
-  
-  public static Text createJungleText(final String text, final int fontSize) {
-    Text _createText = Styles.createText(text, "Chalkduster", fontSize);
-    return _createText;
-  }
-  
-  public static Text createText(final String text, final String fontName, final int fontSize) {
-    Text _text = new Text();
-    final Procedure1<Text> _function = new Procedure1<Text>() {
-      public void apply(final Text it) {
-        String _trim = text.trim();
-        it.setText(_trim);
-        it.setTextAlignment(TextAlignment.CENTER);
-        Font _font = new Font(fontName, fontSize);
-        it.setFont(_font);
-        Color _jungleGreen = Styles.jungleGreen();
-        it.setFill(_jungleGreen);
-      }
-    };
-    Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-    return _doubleArrow;
-  }
-  
-  public static Color jungleGreen() {
-    Color _rgb = Color.rgb(224, 237, 214);
-    return _rgb;
-  }
-  
-  public static Color jungleDarkGreen() {
-    Color _rgb = Color.rgb(161, 171, 74);
-    return _rgb;
-  }
-  
+public class Animations {
   public static Timeline dangle(final Node creature) {
     Timeline _xblockexpression = null;
     {
@@ -88,7 +48,7 @@ public class Styles {
             Duration _multiply = DurationExtensions.operator_multiply((i).intValue(), _millis);
             DoubleProperty _angleProperty = transform.angleProperty();
             double _divide = ((i).intValue() / 10.0);
-            double _interpolateAngle = Styles.interpolateAngle(_divide);
+            double _interpolateAngle = Animations.interpolateAngle(_divide);
             KeyValue _keyValue = new <Number>KeyValue(_angleProperty, Double.valueOf(_interpolateAngle));
             KeyFrame _keyFrame = new KeyFrame(_multiply, _keyValue);
             _keyFrames.add(_keyFrame);
@@ -119,15 +79,13 @@ public class Styles {
     return _plus;
   }
   
-  public static FillTransition flicker(final Shape creature) {
+  public static FillTransition flicker(final Shape creature, final Color fromColor, final Color toColor) {
     FillTransition _fillTransition = new FillTransition();
     final Procedure1<FillTransition> _function = new Procedure1<FillTransition>() {
       public void apply(final FillTransition it) {
         it.setShape(creature);
-        Color _jungleDarkGreen = Styles.jungleDarkGreen();
-        it.setFromValue(_jungleDarkGreen);
-        Color _rgb = Color.rgb(107, 114, 51);
-        it.setToValue(_rgb);
+        it.setFromValue(fromColor);
+        it.setToValue(toColor);
         Duration _millis = DurationExtensions.millis(100);
         it.setDuration(_millis);
         int _minus = (-1);
@@ -143,7 +101,7 @@ public class Styles {
     return _doubleArrow;
   }
   
-  public static SequentialTransition breathe(final Shape creature) {
+  public static SequentialTransition breathe(final Shape creature, final Color fromColor, final Color toColor) {
     SequentialTransition _sequentialTransition = new SequentialTransition();
     final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
       public void apply(final SequentialTransition it) {
@@ -173,10 +131,8 @@ public class Styles {
             final Procedure1<FillTransition> _function_1 = new Procedure1<FillTransition>() {
               public void apply(final FillTransition it) {
                 it.setShape(creature);
-                Color _rgb = Color.rgb(107, 114, 51);
-                it.setFromValue(_rgb);
-                Color _jungleDarkGreen = Styles.jungleDarkGreen();
-                it.setToValue(_jungleDarkGreen);
+                it.setFromValue(toColor);
+                it.setToValue(fromColor);
                 Duration _millis = DurationExtensions.millis(1800);
                 it.setDuration(_millis);
                 Duration _millis_1 = DurationExtensions.millis(250);
@@ -216,10 +172,8 @@ public class Styles {
             final Procedure1<FillTransition> _function_1 = new Procedure1<FillTransition>() {
               public void apply(final FillTransition it) {
                 it.setShape(creature);
-                Color _jungleDarkGreen = Styles.jungleDarkGreen();
-                it.setFromValue(_jungleDarkGreen);
-                Color _rgb = Color.rgb(107, 114, 51);
-                it.setToValue(_rgb);
+                it.setFromValue(fromColor);
+                it.setToValue(toColor);
                 Duration _millis = DurationExtensions.millis(2500);
                 it.setDuration(_millis);
                 Duration _millis_1 = DurationExtensions.millis(300);
@@ -260,11 +214,11 @@ public class Styles {
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
         public void apply(final SequentialTransition it) {
           ObservableList<Animation> _children = it.getChildren();
-          SequentialTransition _crawlOneWay = Styles.crawlOneWay(creature, stepSize, numSteps);
+          SequentialTransition _crawlOneWay = Animations.crawlOneWay(creature, stepSize, numSteps);
           _children.add(_crawlOneWay);
           ObservableList<Animation> _children_1 = it.getChildren();
           double _minus = (-stepSize);
-          SequentialTransition _crawlOneWay_1 = Styles.crawlOneWay(creature, _minus, numSteps);
+          SequentialTransition _crawlOneWay_1 = Animations.crawlOneWay(creature, _minus, numSteps);
           final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
             public void apply(final SequentialTransition it) {
               double _random = Math.random();

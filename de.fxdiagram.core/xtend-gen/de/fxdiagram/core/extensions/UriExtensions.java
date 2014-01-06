@@ -14,8 +14,19 @@ public class UriExtensions {
     try {
       String _xblockexpression = null;
       {
-        Class<? extends Object> _class = context.getClass();
-        final URL resource = _class.getResource(file);
+        Class<? extends Object> _switchResult = null;
+        boolean _matched = false;
+        if (!_matched) {
+          if (context instanceof Class) {
+            _matched=true;
+            _switchResult = ((Class<? extends Object>)context);
+          }
+        }
+        if (!_matched) {
+          Class<? extends Object> _class = context.getClass();
+          _switchResult = _class;
+        }
+        final URL resource = _switchResult.getResource(file);
         String _xifexpression = null;
         Activator _default = Activator.getDefault();
         boolean _notEquals = (!Objects.equal(_default, null));

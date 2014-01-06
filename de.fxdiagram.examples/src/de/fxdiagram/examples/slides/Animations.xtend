@@ -12,40 +12,12 @@ import javafx.geometry.Point3D
 import javafx.scene.Node
 import javafx.scene.paint.Color
 import javafx.scene.shape.Shape
-import javafx.scene.text.Font
-import javafx.scene.text.Text
-import javafx.scene.text.TextAlignment
 import javafx.scene.transform.Rotate
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension java.lang.Math.*
 
-class Styles {
-	
-	static def createText(String text, int fontSize) {
-		createText(text, 'Gill Sans', fontSize)
-	}
-	
-	static def createJungleText(String text, int fontSize) {
-		createText(text, 'Chalkduster', fontSize)
-	}
-	
-	static def createText(String text, String fontName, int fontSize) {
-		new Text => [
-			it.text = text.trim
-			it.textAlignment = TextAlignment.CENTER
-			it.font = new Font(fontName, fontSize)
-			it.fill = jungleGreen()  
-		]
-	}
-	
-	def static jungleGreen() {
-		Color.rgb(224, 237, 214)
-	}
-	
-	def static jungleDarkGreen() {
-		Color.rgb(161, 171, 74)
-	}
+class Animations {
 	
 	def static dangle(Node creature) {
 		val transform = new Rotate => [
@@ -66,11 +38,11 @@ class Styles {
 		90 + 10 * sin(alpha*PI - PI/2)
 	}
 	
-	def static flicker(Shape creature) {
+	def static flicker(Shape creature, Color fromColor, Color toColor) {
 		new FillTransition => [
 			shape = creature 
-			fromValue = jungleDarkGreen
-			toValue = Color.rgb(107, 114, 51)
+			fromValue = fromColor
+			toValue = toColor
 			duration = 100.millis
 			cycleCount = -1
 			delay = random * 2000.millis
@@ -78,7 +50,7 @@ class Styles {
 		]
 	}
 	
-	def static breathe(Shape creature) {
+	def static breathe(Shape creature, Color fromColor, Color toColor) {
 		new SequentialTransition => [
 			children += new ParallelTransition => [
 				children += new ScaleTransition => [
@@ -92,8 +64,8 @@ class Styles {
 				]
 				children += new FillTransition => [
 					shape = creature 
-					fromValue = Color.rgb(107, 114, 51)
-					toValue = jungleDarkGreen
+					fromValue = toColor
+					toValue = fromColor
 					duration = 1800.millis
 					delay = 250.millis
 					play
@@ -111,8 +83,8 @@ class Styles {
 				]
 				children += new FillTransition => [
 					shape = creature 
-					fromValue = jungleDarkGreen
-					toValue = Color.rgb(107, 114, 51)
+					fromValue = fromColor
+					toValue = toColor
 					duration = 2500.millis
 					delay = 300.millis
 					play
