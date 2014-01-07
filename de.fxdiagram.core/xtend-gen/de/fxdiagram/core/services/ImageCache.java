@@ -3,7 +3,6 @@ package de.fxdiagram.core.services;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.extensions.UriExtensions;
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.image.Image;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -12,12 +11,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 
 @SuppressWarnings("all")
 public class ImageCache {
-  private Map<String,Image> cache = new Function0<Map<String,Image>>() {
-    public Map<String,Image> apply() {
-      HashMap<String,Image> _newHashMap = CollectionLiterals.<String, Image>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
+  private Map<String,Image> cache = CollectionLiterals.<String, Image>newHashMap();
   
   private static ImageCache INSTANCE;
   

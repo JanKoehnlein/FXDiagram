@@ -36,8 +36,7 @@ public class NearestPointFinder {
       double _multiply_1 = (_minus_2 * _minus_3);
       final double distanceSquared = (_multiply + _multiply_1);
       Point2D _xifexpression = null;
-      boolean _lessThan = (distanceSquared < this.currentDistanceSquared);
-      if (_lessThan) {
+      if ((distanceSquared < this.currentDistanceSquared)) {
         Point2D _xblockexpression_1 = null;
         {
           this.currentDistanceSquared = distanceSquared;
@@ -54,16 +53,9 @@ public class NearestPointFinder {
   public Point2D addCandidate(final double px, final double py) {
     Point2D _xblockexpression = null;
     {
-      double _minus = (px - this.refX);
-      double _minus_1 = (px - this.refX);
-      double _multiply = (_minus * _minus_1);
-      double _minus_2 = (py - this.refY);
-      double _minus_3 = (py - this.refY);
-      double _multiply_1 = (_minus_2 * _minus_3);
-      final double distanceSquared = (_multiply + _multiply_1);
+      final double distanceSquared = (((px - this.refX) * (px - this.refX)) + ((py - this.refY) * (py - this.refY)));
       Point2D _xifexpression = null;
-      boolean _lessThan = (distanceSquared < this.currentDistanceSquared);
-      if (_lessThan) {
+      if ((distanceSquared < this.currentDistanceSquared)) {
         Point2D _xblockexpression_1 = null;
         {
           this.currentDistanceSquared = distanceSquared;

@@ -118,10 +118,7 @@ public class Point2DExtensions {
   
   @Pure
   public static double linear(final double x, final double y, final double lambda) {
-    double _minus = (y - x);
-    double _multiply = (_minus * lambda);
-    double _plus = (x + _multiply);
-    return _plus;
+    return (x + ((y - x) * lambda));
   }
   
   @Pure
@@ -138,18 +135,6 @@ public class Point2DExtensions {
   
   @Pure
   public static boolean isClockwise(final double x0, final double y0, final double x1, final double y1, final double x2, final double y2) {
-    double _minus = (x1 - x0);
-    double _plus = (y1 + y0);
-    double _multiply = (_minus * _plus);
-    double _minus_1 = (x2 - x1);
-    double _plus_1 = (y2 + y1);
-    double _multiply_1 = (_minus_1 * _plus_1);
-    double _plus_2 = (_multiply + _multiply_1);
-    double _minus_2 = (x0 - x2);
-    double _plus_3 = (y0 + y2);
-    double _multiply_2 = (_minus_2 * _plus_3);
-    double _plus_4 = (_plus_2 + _multiply_2);
-    boolean _greaterThan = (_plus_4 > 0);
-    return _greaterThan;
+    return (((((x1 - x0) * (y1 + y0)) + ((x2 - x1) * (y2 + y1))) + ((x0 - x2) * (y0 + y2))) > 0);
   }
 }

@@ -23,8 +23,6 @@ class DiagramScaler implements XActivatable {
 	ChangeListener<Bounds> boundsInLocalListener
 	ChangeListener<Number> layoutListener
 	
-//	Rectangle fillRectangle
-
 	XDiagram diagram
 	
 	ListChangeListener<XNode> listChangeListener
@@ -51,20 +49,13 @@ class DiagramScaler implements XActivatable {
 					]
 			}
 		]
-//		fillRectangle = new Rectangle => [
-//			opacity = 0
-//			mouseTransparent = true
-//		]
 	}
 
 	def scaleToFit() {
 		if (diagram.nodes.empty) {
 			diagram.scaleX = 1
 			diagram.scaleY = 1
-
 			diagram.clip = null
-//			if(fillRectangle != null)
-//				diagram.children -= fillRectangle
 		} else {
 			val myBounds = diagram.nodes
 				.map[layoutBounds.translate(layoutX, layoutY)]
@@ -84,9 +75,6 @@ class DiagramScaler implements XActivatable {
 			diagram.clip = new Rectangle => [
 				fit(newScale, newScaleX, newScaleY, myBounds)
 			]
-//			fillRectangle.fit(newScale, newScaleX, newScaleY, myBounds)
-//			if(fillRectangle.parent == null)
-//				children += fillRectangle
 		}
 	}
 	

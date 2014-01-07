@@ -35,12 +35,7 @@ public class ActiveAnnotationsTest {
   
   @FxProperty
   @Lazy
-  private final ObservableList<Object> myEagerList = new Function0<ObservableList<Object>>() {
-    public ObservableList<Object> apply() {
-      ObservableList<Object> _observableArrayList = FXCollections.<Object>observableArrayList();
-      return _observableArrayList;
-    }
-  }.apply();
+  private final ObservableList<Object> myEagerList = FXCollections.<Object>observableArrayList();
   
   private SimpleDoubleProperty myDoubleProperty = new SimpleDoubleProperty(this, "myDouble",_initMyDouble());
   

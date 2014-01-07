@@ -39,8 +39,7 @@ public class RectangleAnchors implements Anchors {
       final double centerY = (0.5 * _plus_1);
       NearestPointFinder _nearestPointFinder = new NearestPointFinder(x, y);
       final NearestPointFinder finder = _nearestPointFinder;
-      double _minus = (centerY - y);
-      double _abs = Math.abs(_minus);
+      double _abs = Math.abs((centerY - y));
       boolean _greaterThan = (_abs > NumberExpressionExtensions.EPSILON);
       if (_greaterThan) {
         double _minY_1 = boundsInRootDiagram.getMinY();
@@ -76,8 +75,7 @@ public class RectangleAnchors implements Anchors {
           finder.addCandidate(xBottom, _maxY_2);
         }
       }
-      double _minus_1 = (centerX - x);
-      double _abs_1 = Math.abs(_minus_1);
+      double _abs_1 = Math.abs((centerX - x));
       boolean _greaterThan_1 = (_abs_1 > NumberExpressionExtensions.EPSILON);
       if (_greaterThan_1) {
         double _minX_3 = boundsInRootDiagram.getMinX();
@@ -122,13 +120,8 @@ public class RectangleAnchors implements Anchors {
   protected double getXIntersection(final double yIntersection, final double centerX, final double centerY, final double pointX, final double pointY) {
     double _xblockexpression = (double) 0;
     {
-      double _minus = (yIntersection - centerY);
-      double _minus_1 = (pointY - centerY);
-      final double t = (_minus / _minus_1);
-      double _minus_2 = (pointX - centerX);
-      double _multiply = (_minus_2 * t);
-      double _plus = (_multiply + centerX);
-      _xblockexpression = (_plus);
+      final double t = ((yIntersection - centerY) / (pointY - centerY));
+      _xblockexpression = ((((pointX - centerX) * t) + centerX));
     }
     return _xblockexpression;
   }
@@ -136,13 +129,8 @@ public class RectangleAnchors implements Anchors {
   protected double getYIntersection(final double xIntersection, final double centerX, final double centerY, final double pointX, final double pointY) {
     double _xblockexpression = (double) 0;
     {
-      double _minus = (xIntersection - centerX);
-      double _minus_1 = (pointX - centerX);
-      final double t = (_minus / _minus_1);
-      double _minus_2 = (pointY - centerY);
-      double _multiply = (_minus_2 * t);
-      double _plus = (_multiply + centerY);
-      _xblockexpression = (_plus);
+      final double t = ((xIntersection - centerX) / (pointX - centerX));
+      _xblockexpression = ((((pointY - centerY) * t) + centerY));
     }
     return _xblockexpression;
   }

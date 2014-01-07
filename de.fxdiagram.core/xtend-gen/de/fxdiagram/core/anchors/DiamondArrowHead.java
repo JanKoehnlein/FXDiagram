@@ -27,13 +27,8 @@ public class DiamondArrowHead extends ArrowHead {
         final Procedure1<Polygon> _function = new Procedure1<Polygon>() {
           public void apply(final Polygon it) {
             ObservableList<Double> _points = it.getPoints();
-            double _multiply = (0.5 * width);
-            double _minus = (-0.5);
-            double _multiply_1 = (_minus * height);
-            double _multiply_2 = (0.5 * width);
-            double _multiply_3 = (0.5 * height);
             _points.setAll(
-              Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_multiply_1), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf(_multiply_2), Double.valueOf(_multiply_3))));
+              Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf((0.5 * width)), Double.valueOf(((-0.5) * height)), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf((0.5 * width)), Double.valueOf((0.5 * height)))));
             ObjectProperty<Paint> _fillProperty = it.fillProperty();
             _fillProperty.bindBidirectional(fillProperty);
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
@@ -52,17 +47,7 @@ public class DiamondArrowHead extends ArrowHead {
   }
   
   public DiamondArrowHead(final XConnection connection, final boolean isSource) {
-    this(connection, 10, 10, new Function0<Property<Paint>>() {
-      public Property<Paint> apply() {
-        ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
-        return _strokeProperty;
-      }
-    }.apply(), new Function0<Property<Paint>>() {
-      public Property<Paint> apply() {
-        ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
-        return _strokeProperty;
-      }
-    }.apply(), isSource);
+    this(connection, 10, 10, connection.strokeProperty(), connection.strokeProperty(), isSource);
   }
   
   public double getLineCut() {

@@ -40,7 +40,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.eclipse.emf.ecore.EcorePackage.Literals;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -158,17 +158,15 @@ public class Demo extends Application {
           ObservableList<XNode> _nodes_10 = it.getNodes();
           final Procedure2<XNode,Integer> _function_2 = new Procedure2<XNode,Integer>() {
             public void apply(final XNode node, final Integer i) {
-              double _multiply = ((i).intValue() * deltaX);
               Bounds _layoutBounds = node.getLayoutBounds();
               double _width = _layoutBounds.getWidth();
               double _divide = (_width / 2);
-              double _minus = (_multiply - _divide);
+              double _minus = (((i).intValue() * deltaX) - _divide);
               node.setLayoutX(_minus);
-              double _multiply_1 = ((i).intValue() * deltaY);
               Bounds _layoutBounds_1 = node.getLayoutBounds();
               double _height = _layoutBounds_1.getHeight();
               double _divide_1 = (_height / 2);
-              double _minus_1 = (_multiply_1 - _divide_1);
+              double _minus_1 = (((i).intValue() * deltaY) - _divide_1);
               node.setLayoutY(_minus_1);
             }
           };
@@ -182,8 +180,7 @@ public class Demo extends Application {
             public void apply(final XNode node, final Integer i) {
               ObservableList<XConnection> _connections = it.getConnections();
               ObservableList<XNode> _nodes = it.getNodes();
-              int _plus = ((i).intValue() + 1);
-              XNode _get = _nodes.get(_plus);
+              XNode _get = _nodes.get(((i).intValue() + 1));
               XConnection _xConnection = new XConnection(node, _get);
               _connections.add(_xConnection);
             }
@@ -399,8 +396,7 @@ public class Demo extends Application {
           public void apply(final AbstractChooser it) {
             IntegerRange _upTo = new IntegerRange(5, 20);
             for (final Integer i : _upTo) {
-              String _plus = (" " + i);
-              SimpleNode _newSimpleNode = Demo.this.newSimpleNode(_plus);
+              SimpleNode _newSimpleNode = Demo.this.newSimpleNode((" " + i));
               it.addChoice(_newSimpleNode);
             }
             SimpleNode _newSimpleNode_1 = Demo.this.newSimpleNode(nameSuffix);
@@ -417,8 +413,7 @@ public class Demo extends Application {
             it.addChoice(_newBrickBreakerNode);
             IntegerRange _upTo_1 = new IntegerRange(1, 4);
             for (final Integer i_1 : _upTo_1) {
-              String _plus_1 = (" " + i_1);
-              SimpleNode _newSimpleNode_2 = Demo.this.newSimpleNode(_plus_1);
+              SimpleNode _newSimpleNode_2 = Demo.this.newSimpleNode((" " + i_1));
               it.addChoice(_newSimpleNode_2);
             }
             SimpleNode _newSimpleNode_3 = Demo.this.newSimpleNode(nameSuffix);
@@ -433,8 +428,7 @@ public class Demo extends Application {
   }
   
   public SimpleNode newSimpleNode(final String nameSuffix) {
-    String _plus = ("Node" + nameSuffix);
-    SimpleNode _simpleNode = new SimpleNode(_plus);
+    SimpleNode _simpleNode = new SimpleNode(("Node" + nameSuffix));
     final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
       public void apply(final SimpleNode it) {
         boolean _isEmpty = nameSuffix.isEmpty();
@@ -449,12 +443,10 @@ public class Demo extends Application {
   }
   
   public OpenableDiagramNode newOpenableBasicDiagramNode(final String nameSuffix) {
-    String _plus = ("Nested" + nameSuffix);
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(_plus);
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(("Nested" + nameSuffix));
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
-        String _plus = (nameSuffix + " (nested)");
-        XDiagram _createBasicDiagram = Demo.this.createBasicDiagram(_plus);
+        XDiagram _createBasicDiagram = Demo.this.createBasicDiagram((nameSuffix + " (nested)"));
         it.setInnerDiagram(_createBasicDiagram);
         Demo.this.addRapidButtons(it, nameSuffix);
       }
@@ -464,12 +456,10 @@ public class Demo extends Application {
   }
   
   public LevelOfDetailDiagramNode newEmbeddedBasicDiagram(final String nameSuffix) {
-    String _plus = ("Embedded" + nameSuffix);
-    LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode(_plus);
+    LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode(("Embedded" + nameSuffix));
     final Procedure1<LevelOfDetailDiagramNode> _function = new Procedure1<LevelOfDetailDiagramNode>() {
       public void apply(final LevelOfDetailDiagramNode it) {
-        String _plus = (nameSuffix + " (embedded)");
-        XDiagram _createBasicDiagram = Demo.this.createBasicDiagram(_plus);
+        XDiagram _createBasicDiagram = Demo.this.createBasicDiagram((nameSuffix + " (embedded)"));
         it.setInnerDiagram(_createBasicDiagram);
         Demo.this.addRapidButtons(it, nameSuffix);
       }
@@ -484,7 +474,7 @@ public class Demo extends Application {
   }
   
   public EClassNode newEClassNode() {
-    EClassNode _eClassNode = new EClassNode(Literals.ECLASS);
+    EClassNode _eClassNode = new EClassNode(EcorePackage.Literals.ECLASS);
     return _eClassNode;
   }
   
@@ -553,8 +543,7 @@ public class Demo extends Application {
   public RecursiveImageNode newRecursiveImageNode() {
     ImageCache _get = ImageCache.get();
     Image _image = _get.getImage(this, "media/laptop.jpg");
-    int _minus = (-3);
-    RecursiveImageNode _recursiveImageNode = new RecursiveImageNode("Recursive Laptop", _image, 0, _minus, 0.6);
+    RecursiveImageNode _recursiveImageNode = new RecursiveImageNode("Recursive Laptop", _image, 0, (-3), 0.6);
     final Procedure1<RecursiveImageNode> _function = new Procedure1<RecursiveImageNode>() {
       public void apply(final RecursiveImageNode it) {
         it.setWidth(80);

@@ -58,12 +58,7 @@ public class JavaTypeNode extends XNode {
   private JavaTypeModel model;
   
   public JavaTypeNode(final Class<? extends Object> javaType) {
-    super(new Function0<String>() {
-      public String apply() {
-        String _simpleName = javaType.getSimpleName();
-        return _simpleName;
-      }
-    }.apply());
+    super(javaType.getSimpleName());
     this.javaType = javaType;
     String _simpleName = javaType.getSimpleName();
     this.name.setText(_simpleName);

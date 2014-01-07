@@ -31,7 +31,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
-import javafx.collections.MapChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
@@ -67,12 +66,7 @@ public class XDiagram extends Group implements XActivatable {
   
   private AuxiliaryLinesSupport auxiliaryLinesSupport;
   
-  private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = new Function0<ObservableMap<Class<? extends Behavior>,Behavior>>() {
-    public ObservableMap<Class<? extends Behavior>,Behavior> apply() {
-      ObservableMap<Class<? extends Behavior>,Behavior> _observableHashMap = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
-      return _observableHashMap;
-    }
-  }.apply();
+  private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
   
   public XDiagram() {
     ObservableList<Node> _children = this.getChildren();
@@ -120,7 +114,7 @@ public class XDiagram extends Group implements XActivatable {
     };
     IterableExtensions.<Behavior>forEach(_values, _function);
     final MapChangeListener<Class<? extends Behavior>,Behavior> _function_1 = new MapChangeListener<Class<? extends Behavior>,Behavior>() {
-      public void onChanged(final Change<? extends Class<? extends Behavior>,? extends Behavior> change) {
+      public void onChanged(final MapChangeListener.Change<? extends Class<? extends Behavior>,? extends Behavior> change) {
         boolean _isActive = XDiagram.this.getIsActive();
         if (_isActive) {
           boolean _wasAdded = change.wasAdded();
@@ -154,7 +148,7 @@ public class XDiagram extends Group implements XActivatable {
     };
     final ChangeListener<Node> arrowHeadListener = _function;
     final ListChangeListener<Node> _function_1 = new ListChangeListener<Node>() {
-      public void onChanged(final javafx.collections.ListChangeListener.Change<? extends Node> change) {
+      public void onChanged(final ListChangeListener.Change<? extends Node> change) {
         boolean _next = change.next();
         boolean _while = _next;
         while (_while) {
@@ -193,7 +187,7 @@ public class XDiagram extends Group implements XActivatable {
     Group _connectionLayer_1 = this.getConnectionLayer();
     ObservableList<Node> _children = _connectionLayer_1.getChildren();
     final ListChangeListener<Node> _function_2 = new ListChangeListener<Node>() {
-      public void onChanged(final javafx.collections.ListChangeListener.Change<? extends Node> change) {
+      public void onChanged(final ListChangeListener.Change<? extends Node> change) {
         boolean _next = change.next();
         boolean _while = _next;
         while (_while) {

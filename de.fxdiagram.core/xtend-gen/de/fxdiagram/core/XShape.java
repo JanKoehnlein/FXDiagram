@@ -13,25 +13,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
-import javafx.collections.MapChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public abstract class XShape extends Parent implements XActivatable {
-  private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = new Function0<ObservableMap<Class<? extends Behavior>,Behavior>>() {
-    public ObservableMap<Class<? extends Behavior>,Behavior> apply() {
-      ObservableMap<Class<? extends Behavior>,Behavior> _observableHashMap = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
-      return _observableHashMap;
-    }
-  }.apply();
+  private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
   
   protected boolean setNode(final Node node) {
     boolean _xblockexpression = false;
@@ -67,7 +60,7 @@ public abstract class XShape extends Parent implements XActivatable {
       };
       IterableExtensions.<Behavior>forEach(_values, _function_1);
       final MapChangeListener<Class<? extends Behavior>,Behavior> _function_2 = new MapChangeListener<Class<? extends Behavior>,Behavior>() {
-        public void onChanged(final Change<? extends Class<? extends Behavior>,? extends Behavior> change) {
+        public void onChanged(final MapChangeListener.Change<? extends Class<? extends Behavior>,? extends Behavior> change) {
           boolean _isActive = XShape.this.getIsActive();
           if (_isActive) {
             boolean _wasAdded = change.wasAdded();

@@ -36,7 +36,6 @@ import de.fxdiagram.core.layout.LoggingTransformationService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
@@ -108,8 +107,8 @@ public class Layouter {
   
   public void apply(final Map<Object,KGraphElement> map, final Duration duration) {
     final ArrayList<Animation> animations = CollectionLiterals.<Animation>newArrayList();
-    Set<Entry<Object,KGraphElement>> _entrySet = map.entrySet();
-    for (final Entry<Object,KGraphElement> entry : _entrySet) {
+    Set<Map.Entry<Object,KGraphElement>> _entrySet = map.entrySet();
+    for (final Map.Entry<Object,KGraphElement> entry : _entrySet) {
       {
         final Object xElement = entry.getKey();
         final KGraphElement kElement = entry.getValue();
@@ -182,8 +181,7 @@ public class Layouter {
                 final KVector layoutPoint = layoutPoints.get(_min);
                 final XControlPoint currentControlPoint = controlPoints.get((i).intValue());
                 final PathTransition transition = this._layoutTransitionFactory.createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, LayoutTransitionStyle.CURVE_XFIRST, duration);
-                boolean _equals_2 = ((i).intValue() == 1);
-                if (_equals_2) {
+                if (((i).intValue() == 1)) {
                   final EventHandler<ActionEvent> unbind = transition.getOnFinished();
                   final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                     public void handle(final ActionEvent it) {

@@ -241,16 +241,12 @@ public class MovieNode extends FlipNode {
   
   public void setWidth(final double width) {
     super.setWidth(width);
-    int _multiply = (2 * this.border);
-    double _minus = (width - _multiply);
-    this.view.setFitWidth(_minus);
+    this.view.setFitWidth((width - (2 * this.border)));
   }
   
   public void setHeight(final double height) {
     super.setHeight(height);
-    int _multiply = (2 * this.border);
-    double _minus = (height - _multiply);
-    this.view.setFitHeight(_minus);
+    this.view.setFitHeight((height - (2 * this.border)));
   }
   
   public void setMovieUrl(final URL movieUrl) {

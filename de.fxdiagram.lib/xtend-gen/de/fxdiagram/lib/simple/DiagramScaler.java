@@ -13,7 +13,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -63,7 +62,7 @@ public class DiagramScaler implements XActivatable {
     };
     this.heightProperty.addListener(_function_3);
     final ListChangeListener<XNode> _function_4 = new ListChangeListener<XNode>() {
-      public void onChanged(final Change<? extends XNode> change) {
+      public void onChanged(final ListChangeListener.Change<? extends XNode> change) {
         boolean _next = change.next();
         boolean _while = _next;
         while (_while) {
@@ -174,23 +173,19 @@ public class DiagramScaler implements XActivatable {
   }
   
   protected void fit(final Rectangle it, final double newScale, final double newScaleX, final double newScaleY, final Bounds allNodesBounds) {
-    double _divide = (22 / newScale);
-    it.setArcWidth(_divide);
-    double _divide_1 = (22 / newScale);
-    it.setArcHeight(_divide_1);
+    it.setArcWidth((22 / newScale));
+    it.setArcHeight((22 / newScale));
     double _minX = allNodesBounds.getMinX();
     it.setX(_minX);
     double _width = allNodesBounds.getWidth();
     it.setWidth(_width);
-    boolean _greaterThan = (newScaleX > newScaleY);
-    if (_greaterThan) {
+    if ((newScaleX > newScaleY)) {
       double _width_1 = this.getWidth();
-      double _divide_2 = (_width_1 / newScale);
+      double _divide = (_width_1 / newScale);
       double _width_2 = allNodesBounds.getWidth();
-      final double delta = (_divide_2 - _width_2);
+      final double delta = (_divide - _width_2);
       double _x = it.getX();
-      double _multiply = (0.5 * delta);
-      double _minus = (_x - _multiply);
+      double _minus = (_x - (0.5 * delta));
       it.setX(_minus);
       double _width_3 = it.getWidth();
       double _plus = (_width_3 + delta);
@@ -200,15 +195,13 @@ public class DiagramScaler implements XActivatable {
     it.setY(_minY);
     double _height = allNodesBounds.getHeight();
     it.setHeight(_height);
-    boolean _greaterThan_1 = (newScaleY > newScaleX);
-    if (_greaterThan_1) {
+    if ((newScaleY > newScaleX)) {
       double _height_1 = this.getHeight();
-      double _divide_3 = (_height_1 / newScale);
+      double _divide_1 = (_height_1 / newScale);
       double _height_2 = allNodesBounds.getHeight();
-      final double delta_1 = (_divide_3 - _height_2);
+      final double delta_1 = (_divide_1 - _height_2);
       double _y = it.getY();
-      double _multiply_1 = (0.5 * delta_1);
-      double _minus_1 = (_y - _multiply_1);
+      double _minus_1 = (_y - (0.5 * delta_1));
       it.setY(_minus_1);
       double _height_3 = it.getHeight();
       double _plus_1 = (_height_3 + delta_1);

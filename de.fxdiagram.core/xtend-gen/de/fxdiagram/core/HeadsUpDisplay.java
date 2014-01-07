@@ -1,7 +1,6 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
-import java.util.HashMap;
 import java.util.Map;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -17,19 +16,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class HeadsUpDisplay extends Group {
-  private Map<Node,Pos> alignments = new Function0<Map<Node,Pos>>() {
-    public Map<Node,Pos> apply() {
-      HashMap<Node,Pos> _newHashMap = CollectionLiterals.<Node, Pos>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
+  private Map<Node,Pos> alignments = CollectionLiterals.<Node, Pos>newHashMap();
   
   private ChangeListener<Number> sceneListener;
   

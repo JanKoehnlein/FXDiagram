@@ -129,8 +129,7 @@ public class FlipNode extends XNode {
               public void handle(final ActionEvent it) {
                 Node _currentVisible = FlipNode.this.getCurrentVisible();
                 _currentVisible.setVisible(false);
-                boolean _not = (!FlipNode.this.isCurrentFront);
-                FlipNode.this.isCurrentFront = _not;
+                FlipNode.this.isCurrentFront = (!FlipNode.this.isCurrentFront);
                 Node _currentVisible_1 = FlipNode.this.getCurrentVisible();
                 _currentVisible_1.setVisible(true);
               }
@@ -211,8 +210,7 @@ public class FlipNode extends XNode {
     this.back = back;
     ObservableList<Node> _children = this.pane.getChildren();
     _children.add(back);
-    boolean _not = (!this.isCurrentFront);
-    back.setVisible(_not);
+    back.setVisible((!this.isCurrentFront));
   }
   
   public Node getCurrentVisible() {

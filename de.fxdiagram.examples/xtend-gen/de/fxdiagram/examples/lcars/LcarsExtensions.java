@@ -3,23 +3,16 @@ package de.fxdiagram.examples.lcars;
 import com.google.common.base.Objects;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
 @SuppressWarnings("all")
 public class LcarsExtensions {
-  private static Map<Double,Font> cache = new Function0<Map<Double,Font>>() {
-    public Map<Double,Font> apply() {
-      HashMap<Double,Font> _newHashMap = CollectionLiterals.<Double, Font>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
+  private static Map<Double,Font> cache = CollectionLiterals.<Double, Font>newHashMap();
   
   public static Font lcarsFont(final double size) {
     Font _xblockexpression = null;
@@ -38,67 +31,24 @@ public class LcarsExtensions {
     return _xblockexpression;
   }
   
-  public final static Color ORANGE = new Function0<Color>() {
-    public Color apply() {
-      Color _rgbColor = LcarsExtensions.rgbColor(251, 134, 9);
-      return _rgbColor;
-    }
-  }.apply();
+  public final static Color ORANGE = LcarsExtensions.rgbColor(251, 134, 9);
   
-  public final static Color DARKBLUE = new Function0<Color>() {
-    public Color apply() {
-      Color _rgbColor = LcarsExtensions.rgbColor(135, 132, 194);
-      return _rgbColor;
-    }
-  }.apply();
+  public final static Color DARKBLUE = LcarsExtensions.rgbColor(135, 132, 194);
   
-  public final static Color FLESH = new Function0<Color>() {
-    public Color apply() {
-      Color _rgbColor = LcarsExtensions.rgbColor(253, 193, 137);
-      return _rgbColor;
-    }
-  }.apply();
+  public final static Color FLESH = LcarsExtensions.rgbColor(253, 193, 137);
   
-  public final static Color DARKFLESH = new Function0<Color>() {
-    public Color apply() {
-      Color _rgbColor = LcarsExtensions.rgbColor(251, 135, 84);
-      return _rgbColor;
-    }
-  }.apply();
+  public final static Color DARKFLESH = LcarsExtensions.rgbColor(251, 135, 84);
   
-  public final static Color VIOLET = new Function0<Color>() {
-    public Color apply() {
-      Color _rgbColor = LcarsExtensions.rgbColor(190, 131, 192);
-      return _rgbColor;
-    }
-  }.apply();
+  public final static Color VIOLET = LcarsExtensions.rgbColor(190, 131, 192);
   
-  public final static Color RED = new Function0<Color>() {
-    public Color apply() {
-      Color _rgbColor = LcarsExtensions.rgbColor(192, 80, 85);
-      return _rgbColor;
-    }
-  }.apply();
+  public final static Color RED = LcarsExtensions.rgbColor(192, 80, 85);
   
-  public final static Color BLUE = new Function0<Color>() {
-    public Color apply() {
-      Color _rgbColor = LcarsExtensions.rgbColor(136, 130, 254);
-      return _rgbColor;
-    }
-  }.apply();
+  public final static Color BLUE = LcarsExtensions.rgbColor(136, 130, 254);
   
-  public final static Color MAGENTA = new Function0<Color>() {
-    public Color apply() {
-      Color _rgbColor = LcarsExtensions.rgbColor(190, 78, 134);
-      return _rgbColor;
-    }
-  }.apply();
+  public final static Color MAGENTA = LcarsExtensions.rgbColor(190, 78, 134);
   
   public static Color rgbColor(final int red, final int green, final int blue) {
-    double _divide = (red / 255.0);
-    double _divide_1 = (green / 255.0);
-    double _divide_2 = (blue / 255.0);
-    Color _color = new Color(_divide, _divide_1, _divide_2, 1);
+    Color _color = new Color((red / 255.0), (green / 255.0), (blue / 255.0), 1);
     return _color;
   }
   

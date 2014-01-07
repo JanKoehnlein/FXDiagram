@@ -108,8 +108,7 @@ public class ClickThroughSlide extends Slide {
     } else {
       int _indexOf = children.indexOf(this.currentNode);
       final int previousIndex = (_indexOf - 1);
-      boolean _lessThan = (previousIndex < 0);
-      if (_lessThan) {
+      if ((previousIndex < 0)) {
         return false;
       }
       this.currentNode.setOpacity(0);

@@ -47,14 +47,12 @@ public class Animations {
             Duration _millis = DurationExtensions.millis(130);
             Duration _multiply = DurationExtensions.operator_multiply((i).intValue(), _millis);
             DoubleProperty _angleProperty = transform.angleProperty();
-            double _divide = ((i).intValue() / 10.0);
-            double _interpolateAngle = Animations.interpolateAngle(_divide);
+            double _interpolateAngle = Animations.interpolateAngle(((i).intValue() / 10.0));
             KeyValue _keyValue = new <Number>KeyValue(_angleProperty, Double.valueOf(_interpolateAngle));
             KeyFrame _keyFrame = new KeyFrame(_multiply, _keyValue);
             _keyFrames.add(_keyFrame);
           }
-          int _minus = (-1);
-          it.setCycleCount(_minus);
+          it.setCycleCount((-1));
           it.setAutoReverse(true);
           double _random = Math.random();
           Duration _millis_1 = DurationExtensions.millis(1000);
@@ -70,12 +68,9 @@ public class Animations {
   }
   
   protected static double interpolateAngle(final double alpha) {
-    double _multiply = (alpha * Math.PI);
-    double _divide = (Math.PI / 2);
-    double _minus = (_multiply - _divide);
-    double _sin = Math.sin(_minus);
-    double _multiply_1 = (10 * _sin);
-    double _plus = (90 + _multiply_1);
+    double _sin = Math.sin(((alpha * Math.PI) - (Math.PI / 2)));
+    double _multiply = (10 * _sin);
+    double _plus = (90 + _multiply);
     return _plus;
   }
   
@@ -88,8 +83,7 @@ public class Animations {
         it.setToValue(toColor);
         Duration _millis = DurationExtensions.millis(100);
         it.setDuration(_millis);
-        int _minus = (-1);
-        it.setCycleCount(_minus);
+        it.setCycleCount((-1));
         double _random = Math.random();
         Duration _millis_1 = DurationExtensions.millis(2000);
         Duration _multiply = DurationExtensions.operator_multiply(_random, _millis_1);
@@ -191,8 +185,7 @@ public class Animations {
         Duration _millis = DurationExtensions.millis(4000);
         Duration _multiply = DurationExtensions.operator_multiply(_random, _millis);
         it.setDelay(_multiply);
-        int _minus = (-1);
-        it.setCycleCount(_minus);
+        it.setCycleCount((-1));
         it.play();
       }
     };
@@ -217,8 +210,7 @@ public class Animations {
           SequentialTransition _crawlOneWay = Animations.crawlOneWay(creature, stepSize, numSteps);
           _children.add(_crawlOneWay);
           ObservableList<Animation> _children_1 = it.getChildren();
-          double _minus = (-stepSize);
-          SequentialTransition _crawlOneWay_1 = Animations.crawlOneWay(creature, _minus, numSteps);
+          SequentialTransition _crawlOneWay_1 = Animations.crawlOneWay(creature, (-stepSize), numSteps);
           final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
             public void apply(final SequentialTransition it) {
               double _random = Math.random();
@@ -229,8 +221,7 @@ public class Animations {
           };
           SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_crawlOneWay_1, _function);
           _children_1.add(_doubleArrow);
-          int _minus_1 = (-1);
-          it.setCycleCount(_minus_1);
+          it.setCycleCount((-1));
           double _random = Math.random();
           Duration _seconds = DurationExtensions.seconds(4);
           Duration _multiply = DurationExtensions.operator_multiply(_random, _seconds);

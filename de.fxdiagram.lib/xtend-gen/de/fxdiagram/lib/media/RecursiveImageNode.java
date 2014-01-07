@@ -163,8 +163,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   }
   
   protected void zoomOut() {
-    boolean _not = (!this.isZoomedIn);
-    if (_not) {
+    if ((!this.isZoomedIn)) {
       return;
     }
     Bounds _boundsInLocal = this.getBoundsInLocal();
@@ -179,8 +178,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
         final Interpolator _function = new Interpolator() {
           @Override
           protected double curve(final double it) {
-            double _multiply = (it * 10000);
-            double _log = Math.log(_multiply);
+            double _log = Math.log((it * 10000));
             double _log_1 = Math.log(10000);
             double _divide = (_log / _log_1);
             return _divide;

@@ -98,12 +98,11 @@ public abstract class ArrowHead extends Parent {
     double _minus_1 = (_minus - _minX);
     double _lineCut = this.getLineCut();
     double _plus = (_minus_1 + _lineCut);
-    double _minus_2 = (-0.5);
     double _height = headBounds.getHeight();
-    double _multiply = (_minus_2 * _height);
+    double _multiply = ((-0.5) * _height);
     double _minY = headBounds.getMinY();
-    double _minus_3 = (_multiply - _minY);
-    TransformExtensions.translate(trafo, _plus, _minus_3);
+    double _minus_2 = (_multiply - _minY);
+    TransformExtensions.translate(trafo, _plus, _minus_2);
     final Point2D derivative = this.connection.derivativeAt(t);
     double _y = derivative.getY();
     double _x = derivative.getX();

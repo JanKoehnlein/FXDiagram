@@ -36,11 +36,11 @@ public class XControlPoint extends XShape {
     return this.type;
   }
   
-  public Boolean setType(final XControlPointType type) {
-    Boolean _xblockexpression = null;
+  public boolean setType(final XControlPointType type) {
+    boolean _xblockexpression = false;
     {
       this.type = type;
-      Boolean _switchResult = null;
+      boolean _switchResult = false;
       boolean _matched = false;
       if (!_matched) {
         if (Objects.equal(type,XControlPointType.ANCHOR)) {
@@ -55,7 +55,7 @@ public class XControlPoint extends XShape {
           };
           Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
           boolean _setNode = this.setNode(_doubleArrow);
-          _switchResult = Boolean.valueOf(_setNode);
+          _switchResult = _setNode;
         }
       }
       if (!_matched) {
@@ -63,7 +63,7 @@ public class XControlPoint extends XShape {
           _matched=true;
           Node _newMagnet = this.newMagnet();
           boolean _setNode_1 = this.setNode(_newMagnet);
-          _switchResult = Boolean.valueOf(_setNode_1);
+          _switchResult = _setNode_1;
         }
       }
       if (!_matched) {
@@ -79,7 +79,7 @@ public class XControlPoint extends XShape {
           };
           Circle _doubleArrow_1 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
           boolean _setNode_2 = this.setNode(_doubleArrow_1);
-          _switchResult = Boolean.valueOf(_setNode_2);
+          _switchResult = _setNode_2;
         }
       }
       _xblockexpression = (_switchResult);
@@ -158,31 +158,28 @@ public class XControlPoint extends XShape {
     return _builder.toString();
   }
   
-  public Boolean update(final List<XControlPoint> siblings) {
-    Boolean _xifexpression = null;
+  public boolean update(final List<XControlPoint> siblings) {
+    boolean _xifexpression = false;
     boolean _equals = Objects.equal(this.type, XControlPointType.CONTROL_POINT);
     if (_equals) {
-      Boolean _xblockexpression = null;
+      boolean _xblockexpression = false;
       {
         final int index = siblings.indexOf(this);
-        Boolean _xifexpression_1 = null;
+        boolean _xifexpression_1 = false;
         boolean _and = false;
-        boolean _greaterThan = (index > 0);
-        if (!_greaterThan) {
+        if (!(index > 0)) {
           _and = false;
         } else {
           int _size = siblings.size();
           int _minus = (_size - 1);
           boolean _lessThan = (index < _minus);
-          _and = (_greaterThan && _lessThan);
+          _and = ((index > 0) && _lessThan);
         }
         if (_and) {
           boolean _xblockexpression_1 = false;
           {
-            int _minus_1 = (index - 1);
-            final XControlPoint predecessor = siblings.get(_minus_1);
-            int _plus = (index + 1);
-            final XControlPoint successor = siblings.get(_plus);
+            final XControlPoint predecessor = siblings.get((index - 1));
+            final XControlPoint successor = siblings.get((index + 1));
             double _layoutX = successor.getLayoutX();
             double _layoutX_1 = predecessor.getLayoutX();
             final double dx = (_layoutX - _layoutX_1);
@@ -199,28 +196,26 @@ public class XControlPoint extends XShape {
             double _layoutY_4 = predecessor.getLayoutY();
             boolean _isClockwise = Point2DExtensions.isClockwise(_layoutX_2, _layoutY_2, _layoutX_3, _layoutY_3, _layoutX_4, _layoutY_4);
             if (_isClockwise) {
-              double _plus_1 = (angle + 180);
-              angle = _plus_1;
+              angle = (angle + 180);
             }
             Affine _affine = new Affine();
             final Affine trafo = _affine;
-            double _minus_2 = (-0.5);
             Node _node = this.getNode();
             Bounds _layoutBounds = _node.getLayoutBounds();
             double _width = _layoutBounds.getWidth();
-            double _multiply = (_minus_2 * _width);
+            double _multiply = ((-0.5) * _width);
             Node _node_1 = this.getNode();
             Bounds _layoutBounds_1 = _node_1.getLayoutBounds();
             double _height = _layoutBounds_1.getHeight();
-            double _minus_3 = (-_height);
-            double _minus_4 = (_minus_3 - 5);
-            TransformExtensions.translate(trafo, _multiply, _minus_4);
+            double _minus_1 = (-_height);
+            double _minus_2 = (_minus_1 - 5);
+            TransformExtensions.translate(trafo, _multiply, _minus_2);
             TransformExtensions.rotate(trafo, angle);
             ObservableList<Transform> _transforms = this.getTransforms();
             boolean _setAll = _transforms.setAll(trafo);
             _xblockexpression_1 = (_setAll);
           }
-          _xifexpression_1 = Boolean.valueOf(_xblockexpression_1);
+          _xifexpression_1 = _xblockexpression_1;
         }
         _xblockexpression = (_xifexpression_1);
       }

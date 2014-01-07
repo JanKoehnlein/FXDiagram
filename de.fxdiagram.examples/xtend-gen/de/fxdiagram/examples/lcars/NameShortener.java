@@ -5,24 +5,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.eclipse.xtext.xbase.lib.Conversions;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class NameShortener {
-  private final Pattern initialsPattern = new Function0<Pattern>() {
-    public Pattern apply() {
-      Pattern _compile = Pattern.compile("((^|\\s)[A-Z]\\.\\s*)");
-      return _compile;
-    }
-  }.apply();
+  private final Pattern initialsPattern = Pattern.compile("((^|\\s)[A-Z]\\.\\s*)");
   
-  private final Pattern parenthesesPattern = new Function0<Pattern>() {
-    public Pattern apply() {
-      Pattern _compile = Pattern.compile("\\s*\\([^\\)]+\\)");
-      return _compile;
-    }
-  }.apply();
+  private final Pattern parenthesesPattern = Pattern.compile("\\s*\\([^\\)]+\\)");
   
   public String shortenName(final String name) {
     Matcher matcher = this.initialsPattern.matcher(name);

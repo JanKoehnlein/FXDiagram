@@ -15,9 +15,8 @@ import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.MenuTool;
 import de.fxdiagram.core.tools.SelectionTool;
 import de.fxdiagram.core.tools.XDiagramTool;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
@@ -68,12 +67,7 @@ public class XRoot extends Parent implements XActivatable {
   
   private Affine diagramTransform;
   
-  private List<XDiagramTool> tools = new Function0<List<XDiagramTool>>() {
-    public List<XDiagramTool> apply() {
-      ArrayList<XDiagramTool> _newArrayList = CollectionLiterals.<XDiagramTool>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
+  private List<XDiagramTool> tools = CollectionLiterals.<XDiagramTool>newArrayList();
   
   private CompositeTool defaultTool;
   
@@ -160,15 +154,15 @@ public class XRoot extends Parent implements XActivatable {
     _children_2.clear();
     XDiagram _diagram_8 = this.getDiagram();
     ObservableMap<Node,Pos> _fixedButtons = _diagram_8.getFixedButtons();
-    Set<Entry<Node,Pos>> _entrySet = _fixedButtons.entrySet();
-    final Procedure1<Entry<Node,Pos>> _function_1 = new Procedure1<Entry<Node,Pos>>() {
-      public void apply(final Entry<Node,Pos> it) {
+    Set<Map.Entry<Node,Pos>> _entrySet = _fixedButtons.entrySet();
+    final Procedure1<Map.Entry<Node,Pos>> _function_1 = new Procedure1<Map.Entry<Node,Pos>>() {
+      public void apply(final Map.Entry<Node,Pos> it) {
         Node _key = it.getKey();
         Pos _value = it.getValue();
         XRoot.this.headsUpDisplay.add(_key, _value);
       }
     };
-    IterableExtensions.<Entry<Node,Pos>>forEach(_entrySet, _function_1);
+    IterableExtensions.<Map.Entry<Node,Pos>>forEach(_entrySet, _function_1);
   }
   
   public void centerDiagram() {

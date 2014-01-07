@@ -61,8 +61,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
                     it.setImage(_image);
                     it.setFitWidth(300);
                     it.setPreserveRatio(true);
-                    int _minus = (-30);
-                    Insets _insets = new Insets(0, 0, _minus, 0);
+                    Insets _insets = new Insets(0, 0, (-30), 0);
                     VBox.setMargin(it, _insets);
                   }
                 };

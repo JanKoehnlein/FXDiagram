@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 import org.eclipse.xtend.lib.macro.AbstractClassProcessor;
 import org.eclipse.xtend.lib.macro.TransformationContext;
 import org.eclipse.xtend.lib.macro.declaration.CompilationStrategy;
-import org.eclipse.xtend.lib.macro.declaration.CompilationStrategy.CompilationContext;
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableFieldDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.Type;
@@ -23,7 +22,7 @@ public class LoggingProcessor extends AbstractClassProcessor {
         TypeReference _newTypeReference = context.newTypeReference(_findTypeGlobally);
         it.setType(_newTypeReference);
         final CompilationStrategy _function = new CompilationStrategy() {
-          public CharSequence compile(final CompilationContext it) {
+          public CharSequence compile(final CompilationStrategy.CompilationContext it) {
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("Logger.getLogger(\"");
             String _qualifiedName = annotatedClass.getQualifiedName();

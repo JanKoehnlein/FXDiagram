@@ -42,7 +42,6 @@ import org.eclipse.xtend.lib.macro.TransformationContext;
 import org.eclipse.xtend.lib.macro.TransformationParticipant;
 import org.eclipse.xtend.lib.macro.declaration.AnnotationReference;
 import org.eclipse.xtend.lib.macro.declaration.CompilationStrategy;
-import org.eclipse.xtend.lib.macro.declaration.CompilationStrategy.CompilationContext;
 import org.eclipse.xtend.lib.macro.declaration.MutableAnnotationReference;
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableFieldDeclaration;
@@ -102,7 +101,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         public void apply(final MutableFieldDeclaration it) {
           it.setType(propType);
           final CompilationStrategy _function = new CompilationStrategy() {
-            public CharSequence compile(final CompilationContext it) {
+            public CharSequence compile(final CompilationStrategy.CompilationContext it) {
               StringConcatenation _builder = new StringConcatenation();
               _builder.append("new ");
               String _javaCode = it.toJavaCode(propType);
@@ -122,7 +121,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         public void apply(final MutableFieldDeclaration it) {
           it.setType(propType);
           final CompilationStrategy _function = new CompilationStrategy() {
-            public CharSequence compile(final CompilationContext it) {
+            public CharSequence compile(final CompilationStrategy.CompilationContext it) {
               StringConcatenation _builder = new StringConcatenation();
               _builder.append("new ");
               String _javaCode = it.toJavaCode(propType);
@@ -160,7 +159,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       public void apply(final MutableMethodDeclaration it) {
         it.setReturnType(fieldType);
         final CompilationStrategy _function = new CompilationStrategy() {
-          public CharSequence compile(final CompilationContext it) {
+          public CharSequence compile(final CompilationStrategy.CompilationContext it) {
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("return this.");
             _builder.append(propName, "");
@@ -174,12 +173,10 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
     };
     clazz.addMethod(_plus_1, _function_3);
     boolean _and = false;
-    boolean _not = (!readonly);
-    if (!_not) {
+    if (!(!readonly)) {
       _and = false;
     } else {
-      boolean _not_1 = (!isList);
-      _and = (_not && _not_1);
+      _and = ((!readonly) && (!isList));
     }
     if (_and) {
       String _firstUpper_2 = StringExtensions.toFirstUpper(fieldName);
@@ -188,7 +185,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         public void apply(final MutableMethodDeclaration it) {
           it.addParameter(fieldName, fieldType);
           final CompilationStrategy _function = new CompilationStrategy() {
-            public CharSequence compile(final CompilationContext it) {
+            public CharSequence compile(final CompilationStrategy.CompilationContext it) {
               StringConcatenation _builder = new StringConcatenation();
               _builder.append("this.");
               _builder.append(propName, "");
@@ -204,12 +201,11 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       };
       clazz.addMethod(_plus_2, _function_4);
     }
-    String _plus_3 = (fieldName + "Property");
     final Procedure1<MutableMethodDeclaration> _function_5 = new Procedure1<MutableMethodDeclaration>() {
       public void apply(final MutableMethodDeclaration it) {
         it.setReturnType(propTypeAPI);
         final CompilationStrategy _function = new CompilationStrategy() {
-          public CharSequence compile(final CompilationContext it) {
+          public CharSequence compile(final CompilationStrategy.CompilationContext it) {
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("return ");
             {
@@ -230,7 +226,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         it.setBody(_function);
       }
     };
-    clazz.addMethod(_plus_3, _function_5);
+    clazz.addMethod((fieldName + "Property"), _function_5);
     f.remove();
   }
   
@@ -247,7 +243,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
             TypeReference _type = f.getType();
             it.setType(_type);
             final CompilationStrategy _function = new CompilationStrategy() {
-              public CharSequence compile(final CompilationContext it) {
+              public CharSequence compile(final CompilationStrategy.CompilationContext it) {
                 TypeReference _type = f.getType();
                 String _defaultValue = FxPropertyCompilationParticipant.this.defaultValue(_type);
                 return _defaultValue;
@@ -288,7 +284,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       public void apply(final MutableMethodDeclaration it) {
         it.setReturnType(fieldType);
         final CompilationStrategy _function = new CompilationStrategy() {
-          public CharSequence compile(final CompilationContext it) {
+          public CharSequence compile(final CompilationStrategy.CompilationContext it) {
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("return (this.");
             _builder.append(propName, "");
@@ -315,12 +311,10 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
     };
     clazz.addMethod(_plus_2, _function_3);
     boolean _and = false;
-    boolean _not = (!readonly);
-    if (!_not) {
+    if (!(!readonly)) {
       _and = false;
     } else {
-      boolean _not_1 = (!isList);
-      _and = (_not && _not_1);
+      _and = ((!readonly) && (!isList));
     }
     if (_and) {
       String _firstUpper_1 = StringExtensions.toFirstUpper(fieldName);
@@ -329,7 +323,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         public void apply(final MutableMethodDeclaration it) {
           it.addParameter(fieldName, fieldType);
           final CompilationStrategy _function = new CompilationStrategy() {
-            public CharSequence compile(final CompilationContext it) {
+            public CharSequence compile(final CompilationStrategy.CompilationContext it) {
               StringConcatenation _builder = new StringConcatenation();
               {
                 if (immutableType) {
@@ -372,12 +366,11 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       };
       clazz.addMethod(_plus_3, _function_4);
     }
-    String _plus_4 = (fieldName + "Property");
     final Procedure1<MutableMethodDeclaration> _function_5 = new Procedure1<MutableMethodDeclaration>() {
       public void apply(final MutableMethodDeclaration it) {
         it.setReturnType(propTypeAPI);
         final CompilationStrategy _function = new CompilationStrategy() {
-          public CharSequence compile(final CompilationContext it) {
+          public CharSequence compile(final CompilationStrategy.CompilationContext it) {
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("if (this.");
             _builder.append(propName, "");
@@ -425,7 +418,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
         it.setBody(_function);
       }
     };
-    clazz.addMethod(_plus_4, _function_5);
+    clazz.addMethod((fieldName + "Property"), _function_5);
     if (immutableType) {
       f.remove();
     }

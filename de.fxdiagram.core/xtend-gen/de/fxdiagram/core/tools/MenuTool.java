@@ -21,10 +21,7 @@ import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import eu.hansolo.enzo.radialmenu.MenuItem;
 import eu.hansolo.enzo.radialmenu.Options;
 import eu.hansolo.enzo.radialmenu.RadialMenu;
-import eu.hansolo.enzo.radialmenu.RadialMenu.ItemEvent;
-import eu.hansolo.enzo.radialmenu.RadialMenu.MenuEvent;
-import eu.hansolo.enzo.radialmenu.RadialMenu.State;
-import eu.hansolo.enzo.radialmenu.Symbol.Type;
+import eu.hansolo.enzo.radialmenu.Symbol;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -239,8 +236,8 @@ public class MenuTool implements XDiagramTool {
             {
               it.consume();
               CloseAction _xifexpression_6 = null;
-              State _state = MenuTool.this.menu.getState();
-              boolean _equals = Objects.equal(_state, State.OPENED);
+              RadialMenu.State _state = MenuTool.this.menu.getState();
+              boolean _equals = Objects.equal(_state, RadialMenu.State.OPENED);
               if (_equals) {
                 MenuTool.this.closeMenu();
                 return;
@@ -267,16 +264,15 @@ public class MenuTool implements XDiagramTool {
     final Procedure1<Options> _function_1 = new Procedure1<Options>() {
       public void apply(final Options it) {
         it.setDegrees(360);
-        int _minus = (-90);
-        it.setOffset(_minus);
+        it.setOffset((-90));
         it.setRadius(200);
         it.setButtonSize(72);
         it.setButtonAlpha(1.0);
       }
     };
     Options _doubleArrow = ObjectExtensions.<Options>operator_doubleArrow(_options, _function_1);
-    final Function1<Type,MenuItem> _function_2 = new Function1<Type,MenuItem>() {
-      public MenuItem apply(final Type s) {
+    final Function1<Symbol.Type,MenuItem> _function_2 = new Function1<Symbol.Type,MenuItem>() {
+      public MenuItem apply(final Symbol.Type s) {
         MenuItem _menuItem = new MenuItem();
         final Procedure1<MenuItem> _function = new Procedure1<MenuItem>() {
           public void apply(final MenuItem it) {
@@ -288,7 +284,7 @@ public class MenuTool implements XDiagramTool {
         return _doubleArrow;
       }
     };
-    List<MenuItem> _map = ListExtensions.<Type, MenuItem>map(Collections.<Type>unmodifiableList(Lists.<Type>newArrayList(Type.EJECT, Type.GRAPH, Type.CAMERA, Type.SELECTION1, Type.SELECTION2, Type.ZOOM_IN)), _function_2);
+    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN)), _function_2);
     RadialMenu _radialMenu = new RadialMenu(_doubleArrow, _map);
     this.menu = _radialMenu;
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
@@ -296,8 +292,8 @@ public class MenuTool implements XDiagramTool {
         MouseButton _button = it.getButton();
         boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
         if (_equals) {
-          State _state = MenuTool.this.menu.getState();
-          boolean _equals_1 = Objects.equal(_state, State.OPENED);
+          RadialMenu.State _state = MenuTool.this.menu.getState();
+          boolean _equals_1 = Objects.equal(_state, RadialMenu.State.OPENED);
           if (_equals_1) {
             MenuTool.this.closeMenu();
             it.consume();
@@ -309,8 +305,8 @@ public class MenuTool implements XDiagramTool {
             if (!_equals_2) {
               _and = false;
             } else {
-              State _state_1 = MenuTool.this.menu.getState();
-              boolean _notEquals = (!Objects.equal(_state_1, State.OPENED));
+              RadialMenu.State _state_1 = MenuTool.this.menu.getState();
+              boolean _notEquals = (!Objects.equal(_state_1, RadialMenu.State.OPENED));
               _and = (_equals_2 && _notEquals);
             }
             if (_and) {
@@ -347,59 +343,59 @@ public class MenuTool implements XDiagramTool {
             public void apply(final RadialMenu it) {
               it.show();
               it.open();
-              final EventHandler<ItemEvent> _function = new EventHandler<ItemEvent>() {
-                public void handle(final ItemEvent it) {
+              final EventHandler<RadialMenu.ItemEvent> _function = new EventHandler<RadialMenu.ItemEvent>() {
+                public void handle(final RadialMenu.ItemEvent it) {
                   MenuItem _item = it.getItem();
                   MenuTool.this.selection = _item;
                 }
               };
               it.setOnItemSelected(_function);
-              final EventHandler<MenuEvent> _function_1 = new EventHandler<MenuEvent>() {
-                public void handle(final MenuEvent it) {
+              final EventHandler<RadialMenu.MenuEvent> _function_1 = new EventHandler<RadialMenu.MenuEvent>() {
+                public void handle(final RadialMenu.MenuEvent it) {
                   MenuTool.this.closeMenu();
                   boolean _notEquals = (!Objects.equal(MenuTool.this.selection, null));
                   if (_notEquals) {
                     DiagramAction _switchResult = null;
-                    Type _symbol = MenuTool.this.selection.getSymbol();
-                    final Type _switchValue = _symbol;
+                    Symbol.Type _symbol = MenuTool.this.selection.getSymbol();
+                    final Symbol.Type _switchValue = _symbol;
                     boolean _matched = false;
                     if (!_matched) {
-                      if (Objects.equal(_switchValue,Type.GRAPH)) {
+                      if (Objects.equal(_switchValue,Symbol.Type.GRAPH)) {
                         _matched=true;
                         LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
                         _switchResult = _layoutAction;
                       }
                     }
                     if (!_matched) {
-                      if (Objects.equal(_switchValue,Type.CAMERA)) {
+                      if (Objects.equal(_switchValue,Symbol.Type.CAMERA)) {
                         _matched=true;
                         ExportSvgAction _exportSvgAction = new ExportSvgAction();
                         _switchResult = _exportSvgAction;
                       }
                     }
                     if (!_matched) {
-                      if (Objects.equal(_switchValue,Type.EJECT)) {
+                      if (Objects.equal(_switchValue,Symbol.Type.EJECT)) {
                         _matched=true;
                         ExitAction _exitAction = new ExitAction();
                         _switchResult = _exitAction;
                       }
                     }
                     if (!_matched) {
-                      if (Objects.equal(_switchValue,Type.SELECTION1)) {
+                      if (Objects.equal(_switchValue,Symbol.Type.SELECTION1)) {
                         _matched=true;
                         SelectAllAction _selectAllAction = new SelectAllAction();
                         _switchResult = _selectAllAction;
                       }
                     }
                     if (!_matched) {
-                      if (Objects.equal(_switchValue,Type.SELECTION2)) {
+                      if (Objects.equal(_switchValue,Symbol.Type.SELECTION2)) {
                         _matched=true;
                         CenterAction _centerAction = new CenterAction();
                         _switchResult = _centerAction;
                       }
                     }
                     if (!_matched) {
-                      if (Objects.equal(_switchValue,Type.ZOOM_IN)) {
+                      if (Objects.equal(_switchValue,Symbol.Type.ZOOM_IN)) {
                         _matched=true;
                         ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
                         _switchResult = _zoomToFitAction;
@@ -408,8 +404,7 @@ public class MenuTool implements XDiagramTool {
                     if (!_matched) {
                       DiagramAction _xblockexpression = null;
                       {
-                        String _plus = ("Unhandled menu item " + MenuTool.this.selection);
-                        MenuTool.LOG.warning(_plus);
+                        MenuTool.LOG.warning(("Unhandled menu item " + MenuTool.this.selection));
                         _xblockexpression = (null);
                       }
                       _switchResult = _xblockexpression;
@@ -436,11 +431,11 @@ public class MenuTool implements XDiagramTool {
     return _xblockexpression;
   }
   
-  protected Boolean closeMenu() {
-    Boolean _xblockexpression = null;
+  protected boolean closeMenu() {
+    boolean _xblockexpression = false;
     {
       this.menu.hide();
-      Boolean _xifexpression = null;
+      boolean _xifexpression = false;
       boolean _and = false;
       boolean _notEquals = (!Objects.equal(this.menuGroup, null));
       if (!_notEquals) {
@@ -454,7 +449,7 @@ public class MenuTool implements XDiagramTool {
         HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
         ObservableList<Node> _children = _headsUpDisplay.getChildren();
         boolean _remove = _children.remove(this.menuGroup);
-        _xifexpression = Boolean.valueOf(_remove);
+        _xifexpression = _remove;
       }
       _xblockexpression = (_xifexpression);
     }

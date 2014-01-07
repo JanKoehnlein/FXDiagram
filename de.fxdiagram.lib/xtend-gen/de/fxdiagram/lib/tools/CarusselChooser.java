@@ -63,10 +63,9 @@ public class CarusselChooser extends AbstractChooser {
     ArrayList<XNode> _nodes_1 = this.getNodes();
     int _size = _nodes_1.size();
     final double angle = (Math.PI / _size);
-    double _divide = (maxHeight / 2);
     double _sin = Math.sin(angle);
-    double _divide_1 = (_divide / _sin);
-    this.radius = _divide_1;
+    double _divide = ((maxHeight / 2) / _sin);
+    this.radius = _divide;
     ArrayList<XNode> _nodes_2 = this.getNodes();
     int _size_1 = _nodes_2.size();
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size_1, true);
@@ -74,12 +73,9 @@ public class CarusselChooser extends AbstractChooser {
       {
         ArrayList<XNode> _nodes_3 = this.getNodes();
         final XNode node = _nodes_3.get((i).intValue());
-        double _multiply = (2 * Math.PI);
-        double _minus = ((i).intValue() - interpolatedPosition);
-        double _multiply_1 = (_multiply * _minus);
         ArrayList<XNode> _nodes_4 = this.getNodes();
         int _size_2 = _nodes_4.size();
-        final double nodeCenterAngle = (_multiply_1 / _size_2);
+        final double nodeCenterAngle = (((2 * Math.PI) * ((i).intValue() - interpolatedPosition)) / _size_2);
         double _cos = Math.cos(nodeCenterAngle);
         boolean _lessThan = (_cos < 0);
         if (_lessThan) {
@@ -87,26 +83,22 @@ public class CarusselChooser extends AbstractChooser {
         } else {
           node.setVisible(true);
           final double scaleY = Math.cos(nodeCenterAngle);
-          double _plus = (scaleY + 0.5);
-          final double scaleX = (_plus / 1.5);
+          final double scaleX = ((scaleY + 0.5) / 1.5);
           ObservableList<Transform> _transforms = node.getTransforms();
-          double _minus_1 = (nodeCenterAngle - angle);
-          double _sin_1 = Math.sin(_minus_1);
-          double _multiply_2 = (this.radius * _sin_1);
-          Translate _translate = Transform.translate(0, _multiply_2);
+          double _sin_1 = Math.sin((nodeCenterAngle - angle));
+          double _multiply = (this.radius * _sin_1);
+          Translate _translate = Transform.translate(0, _multiply);
           Scale _scale = Transform.scale(scaleX, scaleY);
           Bounds _layoutBounds = node.getLayoutBounds();
           double _width = _layoutBounds.getWidth();
-          double _minus_2 = (-_width);
-          double _divide_2 = (_minus_2 / 2);
+          double _minus = (-_width);
+          double _divide_1 = (_minus / 2);
           double _spacing_1 = this.getSpacing();
-          double _divide_3 = (_spacing_1 / 2);
-          Translate _translate_1 = Transform.translate(_divide_2, _divide_3);
+          double _divide_2 = (_spacing_1 / 2);
+          Translate _translate_1 = Transform.translate(_divide_1, _divide_2);
           _transforms.setAll(
             Collections.<Transform>unmodifiableList(Lists.<Transform>newArrayList(_translate, _scale, _translate_1)));
-          double _multiply_3 = (scaleY * scaleY);
-          double _multiply_4 = (_multiply_3 * scaleY);
-          node.setOpacity(_multiply_4);
+          node.setOpacity(((scaleY * scaleY) * scaleY));
           double _abs = Math.abs(nodeCenterAngle);
           boolean _lessThan_1 = (_abs < angle);
           if (_lessThan_1) {

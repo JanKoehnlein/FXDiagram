@@ -93,8 +93,7 @@ public class CoverFlowChooser extends AbstractChooser {
       int _minus = (_size_3 - 1);
       boolean _equals = (currentIndex == _minus);
       if (_equals) {
-        int _minus_1 = (currentIndex - 1);
-        _xifexpression = _minus_1;
+        _xifexpression = (currentIndex - 1);
       } else {
         _xifexpression = currentIndex;
       }
@@ -102,13 +101,12 @@ public class CoverFlowChooser extends AbstractChooser {
       int _xifexpression_1 = (int) 0;
       ArrayList<XNode> _nodes_5 = this.getNodes();
       int _size_4 = _nodes_5.size();
-      int _minus_2 = (_size_4 - 1);
-      boolean _equals_1 = (currentIndex == _minus_2);
+      int _minus_1 = (_size_4 - 1);
+      boolean _equals_1 = (currentIndex == _minus_1);
       if (_equals_1) {
         _xifexpression_1 = currentIndex;
       } else {
-        int _plus = (currentIndex + 1);
-        _xifexpression_1 = _plus;
+        _xifexpression_1 = (currentIndex + 1);
       }
       final int rightIndex = _xifexpression_1;
       ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, leftIndex, true);
@@ -117,26 +115,20 @@ public class CoverFlowChooser extends AbstractChooser {
       }
       ArrayList<XNode> _nodes_6 = this.getNodes();
       int _size_5 = _nodes_6.size();
-      int _plus_1 = (rightIndex + 1);
-      ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_size_5, _plus_1, false);
+      ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_size_5, (rightIndex + 1), false);
       for (final Integer i_1 : _greaterThanDoubleDot) {
         this.transformNode((i_1).intValue(), interpolatedPosition, false, 1);
       }
-      double _minus_3 = (rightIndex - interpolatedPosition);
-      this.transformNode(rightIndex, interpolatedPosition, false, _minus_3);
-      double _minus_4 = (interpolatedPosition - leftIndex);
-      this.transformNode(leftIndex, interpolatedPosition, true, _minus_4);
+      this.transformNode(rightIndex, interpolatedPosition, false, (rightIndex - interpolatedPosition));
+      this.transformNode(leftIndex, interpolatedPosition, true, (interpolatedPosition - leftIndex));
       boolean _and = false;
-      boolean _greaterThan = (rightIndex > 0);
-      if (!_greaterThan) {
+      if (!(rightIndex > 0)) {
         _and = false;
       } else {
-        double _minus_5 = (leftIndex - interpolatedPosition);
-        double _abs = Math.abs(_minus_5);
-        double _minus_6 = (rightIndex - interpolatedPosition);
-        double _abs_1 = Math.abs(_minus_6);
-        boolean _greaterThan_1 = (_abs > _abs_1);
-        _and = (_greaterThan && _greaterThan_1);
+        double _abs = Math.abs((leftIndex - interpolatedPosition));
+        double _abs_1 = Math.abs((rightIndex - interpolatedPosition));
+        boolean _greaterThan = (_abs > _abs_1);
+        _and = ((rightIndex > 0) && _greaterThan);
       }
       if (_and) {
         ArrayList<XNode> _nodes_7 = this.getNodes();
@@ -148,19 +140,15 @@ public class CoverFlowChooser extends AbstractChooser {
   
   protected XNode transformNode(final int i, final double interpolatedPosition, final boolean isLeft, final double fraction) {
     XNode _xifexpression = null;
-    boolean _greaterEqualsThan = (i >= 0);
-    if (_greaterEqualsThan) {
+    if ((i >= 0)) {
       XNode _xblockexpression = null;
       {
         ArrayList<XNode> _nodes = this.getNodes();
         final XNode node = _nodes.get(i);
-        double _minus = (i - interpolatedPosition);
-        final double distanceFromSelection = Math.abs(_minus);
-        double _multiply = (0.2 * distanceFromSelection);
-        final double opacity = (1 - _multiply);
+        final double distanceFromSelection = Math.abs((i - interpolatedPosition));
+        final double opacity = (1 - (0.2 * distanceFromSelection));
         XNode _xifexpression_1 = null;
-        boolean _lessThan = (opacity < 0);
-        if (_lessThan) {
+        if ((opacity < 0)) {
           node.setVisible(false);
         } else {
           XNode _xblockexpression_1 = null;
@@ -170,35 +158,27 @@ public class CoverFlowChooser extends AbstractChooser {
             final Affine trafo = _affine;
             int _xifexpression_2 = (int) 0;
             if (isLeft) {
-              int _minus_1 = (-1);
-              _xifexpression_2 = _minus_1;
+              _xifexpression_2 = (-1);
             } else {
               _xifexpression_2 = 1;
             }
             final int direction = _xifexpression_2;
-            double _minus_2 = (-0.5);
             Bounds _layoutBounds = node.getLayoutBounds();
             double _width = _layoutBounds.getWidth();
-            double _multiply_1 = (_minus_2 * _width);
-            double _minus_3 = (-0.5);
+            double _multiply = ((-0.5) * _width);
             Bounds _layoutBounds_1 = node.getLayoutBounds();
             double _height = _layoutBounds_1.getHeight();
-            double _multiply_2 = (_minus_3 * _height);
-            TransformExtensions.translate(trafo, _multiply_1, _multiply_2, 0);
+            double _multiply_1 = ((-0.5) * _height);
+            TransformExtensions.translate(trafo, _multiply, _multiply_1, 0);
             double _angle = this.getAngle();
-            double _multiply_3 = (direction * _angle);
-            double _multiply_4 = (_multiply_3 * fraction);
+            double _multiply_2 = (direction * _angle);
+            double _multiply_3 = (_multiply_2 * fraction);
             Point3D _point3D = new Point3D(0, 1, 0);
-            TransformExtensions.rotate(trafo, _multiply_4, _point3D);
-            double _minus_4 = (i - interpolatedPosition);
+            TransformExtensions.rotate(trafo, _multiply_3, _point3D);
             double _deltaX = this.getDeltaX();
-            double _multiply_5 = (_minus_4 * _deltaX);
-            double _multiply_6 = (0.5 * fraction);
-            double _multiply_7 = (_multiply_6 * direction);
-            double _multiply_8 = (_multiply_7 * this.gap);
-            double _plus = (_multiply_5 + _multiply_8);
-            double _minus_5 = (-fraction);
-            TransformExtensions.translate(trafo, _plus, 0, _minus_5);
+            double _multiply_4 = ((i - interpolatedPosition) * _deltaX);
+            double _plus = (_multiply_4 + (((0.5 * fraction) * direction) * this.gap));
+            TransformExtensions.translate(trafo, _plus, 0, (-fraction));
             final Procedure1<XNode> _function = new Procedure1<XNode>() {
               public void apply(final XNode it) {
                 ObservableList<Transform> _transforms = node.getTransforms();
@@ -211,11 +191,9 @@ public class CoverFlowChooser extends AbstractChooser {
                     Paint _backgroundPaint = _diagram.getBackgroundPaint();
                     boolean _equals = Objects.equal(_backgroundPaint, Color.BLACK);
                     if (_equals) {
-                      double _minus = (opacity - 1);
-                      it.setBrightness(_minus);
+                      it.setBrightness((opacity - 1));
                     } else {
-                      double _minus_1 = (1 - opacity);
-                      it.setBrightness(_minus_1);
+                      it.setBrightness((1 - opacity));
                     }
                     Reflection _reflection = new Reflection();
                     it.setInput(_reflection);

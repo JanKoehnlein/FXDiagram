@@ -94,8 +94,7 @@ public class SlideDiagram extends XDiagram {
           Slide _currentSlide_1 = this.getCurrentSlide();
           int _indexOf = slides.indexOf(_currentSlide_1);
           final int previousIndex = (_indexOf - 1);
-          boolean _lessThan = (previousIndex < 0);
-          if (_lessThan) {
+          if ((previousIndex < 0)) {
             CloseBehavior _behavior = this.<CloseBehavior>getBehavior(CloseBehavior.class);
             if (_behavior!=null) {
               _behavior.close();

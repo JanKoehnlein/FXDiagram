@@ -96,12 +96,7 @@ public class LcarsNode extends XNode {
   
   private Map<String,List<LcarsField>> pages;
   
-  private List<String> imageUrls = new Function0<List<String>>() {
-    public List<String> apply() {
-      ArrayList<String> _newArrayList = CollectionLiterals.<String>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
+  private List<String> imageUrls = CollectionLiterals.<String>newArrayList();
   
   private String currentImageUrl;
   
@@ -118,13 +113,7 @@ public class LcarsNode extends XNode {
   private ChangeListener<Bounds> nameShortener;
   
   public LcarsNode(final DBObject data) {
-    super(new Function0<String>() {
-      public String apply() {
-        Object _get = data.get("name");
-        String _string = _get.toString();
-        return _string;
-      }
-    }.apply());
+    super(data.get("name").toString());
     this.data = data;
     String _key = this.getKey();
     this.name = _key;
@@ -230,8 +219,7 @@ public class LcarsNode extends XNode {
             it.setBackgroundRadius(8);
             it.setBorderPaint(Color.BLACK);
             it.setBorderRadius(8);
-            int _minus = (-3);
-            Insets _insets = new Insets(35, _minus, 10, 25);
+            Insets _insets = new Insets(35, (-3), 10, 25);
             StackPane.setMargin(it, _insets);
             HBox _hBox = new HBox();
             LcarsNode.this.infoBox = _hBox;

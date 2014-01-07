@@ -26,8 +26,7 @@ public class TooltipTimer implements Runnable {
   public long restart() {
     long _xblockexpression = (long) 0;
     {
-      boolean _not = (!this.isRunning);
-      if (_not) {
+      if ((!this.isRunning)) {
         this.isRunning = true;
         Thread _thread = new Thread(this);
         _thread.start();
@@ -51,16 +50,14 @@ public class TooltipTimer implements Runnable {
           long _currentTimeMillis = System.currentTimeMillis();
           long _minus = (this.endTime - _currentTimeMillis);
           Thread.sleep(_minus);
-          boolean _not = (!this.isRunning);
-          if (_not) {
+          if ((!this.isRunning)) {
             return;
           }
           long _currentTimeMillis_1 = System.currentTimeMillis();
           long _minus_1 = (this.endTime - _currentTimeMillis_1);
           delay = _minus_1;
         }
-        boolean _greaterThan = (delay > 0);
-        _dowhile = _greaterThan;
+        _dowhile = (delay > 0);
       } while(_dowhile);
       if (this.isRunning) {
         final Runnable _function = new Runnable() {

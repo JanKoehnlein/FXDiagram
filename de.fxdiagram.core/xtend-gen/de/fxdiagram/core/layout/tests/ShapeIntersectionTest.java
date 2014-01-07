@@ -28,9 +28,7 @@ public class ShapeIntersectionTest {
     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
       public void apply(final Polyline it) {
         ObservableList<Double> _points = it.getPoints();
-        double _minus = (-1.0);
-        double _minus_1 = (-1.0);
-        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(_minus), Double.valueOf(_minus_1), Double.valueOf(1.0), Double.valueOf(1.0))));
+        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf((-1.0)), Double.valueOf((-1.0)), Double.valueOf(1.0), Double.valueOf(1.0))));
       }
     };
     final Polyline line = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_1);

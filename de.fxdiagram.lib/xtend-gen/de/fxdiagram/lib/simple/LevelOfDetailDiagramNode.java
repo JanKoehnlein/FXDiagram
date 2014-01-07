@@ -111,8 +111,7 @@ public class LevelOfDetailDiagramNode extends XNode {
           double _width = bounds.getWidth();
           double _height = bounds.getHeight();
           final double area = (_width * _height);
-          boolean _lessEqualsThan = (area <= 100000);
-          if (_lessEqualsThan) {
+          if ((area <= 100000)) {
             LevelOfDetailDiagramNode.this.label.setVisible(true);
             LevelOfDetailDiagramNode.this.innerDiagramGroup.setVisible(false);
             LevelOfDetailDiagramNode.this.pane.setBackgroundPaint(RectangleBorderPane.DEFAULT_BACKGROUND);

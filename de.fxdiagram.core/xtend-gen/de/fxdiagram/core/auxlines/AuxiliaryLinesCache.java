@@ -8,7 +8,6 @@ import de.fxdiagram.core.auxlines.AuxiliaryLineMap;
 import de.fxdiagram.core.auxlines.NodeLine;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.beans.property.DoubleProperty;
@@ -16,7 +15,6 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
@@ -29,19 +27,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class AuxiliaryLinesCache {
   private ListChangeListener<XNode> nodesListener;
   
-  private Map<XNode,ChangeListener<Number>> node2scalarListener = new Function0<Map<XNode,ChangeListener<Number>>>() {
-    public Map<XNode,ChangeListener<Number>> apply() {
-      HashMap<XNode,ChangeListener<Number>> _newHashMap = CollectionLiterals.<XNode, ChangeListener<Number>>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
+  private Map<XNode,ChangeListener<Number>> node2scalarListener = CollectionLiterals.<XNode, ChangeListener<Number>>newHashMap();
   
-  private Map<XNode,ChangeListener<Bounds>> node2boundsListener = new Function0<Map<XNode,ChangeListener<Bounds>>>() {
-    public Map<XNode,ChangeListener<Bounds>> apply() {
-      HashMap<XNode,ChangeListener<Bounds>> _newHashMap = CollectionLiterals.<XNode, ChangeListener<Bounds>>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
+  private Map<XNode,ChangeListener<Bounds>> node2boundsListener = CollectionLiterals.<XNode, ChangeListener<Bounds>>newHashMap();
   
   private AuxiliaryLineMap<Bounds> leftMap = new Function0<AuxiliaryLineMap<Bounds>>() {
     public AuxiliaryLineMap<Bounds> apply() {
@@ -87,7 +75,7 @@ public class AuxiliaryLinesCache {
   
   public AuxiliaryLinesCache(final XDiagram diagram) {
     final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
-      public void onChanged(final Change<? extends XNode> it) {
+      public void onChanged(final ListChangeListener.Change<? extends XNode> it) {
         boolean _next = it.next();
         boolean _while = _next;
         while (_while) {

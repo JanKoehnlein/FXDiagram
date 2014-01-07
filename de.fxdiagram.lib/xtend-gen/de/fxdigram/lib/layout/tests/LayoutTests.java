@@ -37,9 +37,7 @@ public class LayoutTests extends Application {
             SimpleNode _simpleNode = new SimpleNode("Foo");
             final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
               public void apply(final SimpleNode it) {
-                int _minus = (-100);
-                int _minus_1 = (-100);
-                it.relocate(_minus, _minus_1);
+                it.relocate((-100), (-100));
                 it.setWidth(65);
                 it.setHeight(40);
               }
@@ -125,28 +123,22 @@ public class LayoutTests extends Application {
   public String printSizes(final Node it) {
     String _xblockexpression = null;
     {
-      int _minus = (-1);
-      double _minWidth = it.minWidth(_minus);
+      double _minWidth = it.minWidth((-1));
       String _plus = ("MinSize : " + Double.valueOf(_minWidth));
       String _plus_1 = (_plus + " x ");
-      int _minus_1 = (-1);
-      double _minHeight = it.minHeight(_minus_1);
+      double _minHeight = it.minHeight((-1));
       String _plus_2 = (_plus_1 + Double.valueOf(_minHeight));
       InputOutput.<String>println(_plus_2);
-      int _minus_2 = (-1);
-      double _minWidth_1 = it.minWidth(_minus_2);
+      double _minWidth_1 = it.minWidth((-1));
       String _plus_3 = ("PrefSize: " + Double.valueOf(_minWidth_1));
       String _plus_4 = (_plus_3 + " x ");
-      int _minus_3 = (-1);
-      double _minHeight_1 = it.minHeight(_minus_3);
+      double _minHeight_1 = it.minHeight((-1));
       String _plus_5 = (_plus_4 + Double.valueOf(_minHeight_1));
       InputOutput.<String>println(_plus_5);
-      int _minus_4 = (-1);
-      double _minWidth_2 = it.minWidth(_minus_4);
+      double _minWidth_2 = it.minWidth((-1));
       String _plus_6 = ("MaxSize : " + Double.valueOf(_minWidth_2));
       String _plus_7 = (_plus_6 + " x ");
-      int _minus_5 = (-1);
-      double _minHeight_2 = it.minHeight(_minus_5);
+      double _minHeight_2 = it.minHeight((-1));
       String _plus_8 = (_plus_7 + Double.valueOf(_minHeight_2));
       String _println = InputOutput.<String>println(_plus_8);
       _xblockexpression = (_println);

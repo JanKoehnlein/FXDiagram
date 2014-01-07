@@ -152,9 +152,7 @@ public class SoftTooltip {
   }
   
   public Node setReferencePosition(final double positionX, final double positionY) {
-    double _plus = (positionX + 16);
-    double _minus = (positionY - 32);
-    Node _setPosition = this.setPosition(_plus, _minus);
+    Node _setPosition = this.setPosition((positionX + 16), (positionY - 32));
     return _setPosition;
   }
   
@@ -195,8 +193,7 @@ public class SoftTooltip {
   public boolean show() {
     boolean _xblockexpression = false;
     {
-      boolean _not = (!this.isShowing);
-      if (_not) {
+      if ((!this.isShowing)) {
         XRoot _root = CoreExtensions.getRoot(this.host);
         this.root = _root;
         HeadsUpDisplay _headsUpDisplay = null;

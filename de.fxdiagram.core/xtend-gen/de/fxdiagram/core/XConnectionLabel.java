@@ -91,18 +91,13 @@ public class XConnectionLabel extends XShape {
     final double labelDx = (_minus / 2);
     int labelDy = 1;
     double _abs = Math.abs(angle);
-    double _divide = (Math.PI / 2);
-    boolean _greaterThan = (_abs > _divide);
+    boolean _greaterThan = (_abs > (Math.PI / 2));
     if (_greaterThan) {
-      boolean _lessThan = (angle < 0);
-      if (_lessThan) {
-        double _plus = (angle + Math.PI);
-        angle = _plus;
+      if ((angle < 0)) {
+        angle = (angle + Math.PI);
       } else {
-        boolean _greaterThan_1 = (angle > 0);
-        if (_greaterThan_1) {
-          double _minus_1 = (angle - Math.PI);
-          angle = _minus_1;
+        if ((angle > 0)) {
+          angle = (angle - Math.PI);
         }
       }
     }
@@ -113,12 +108,12 @@ public class XConnectionLabel extends XShape {
     TransformExtensions.rotate(transform, _degrees);
     double _tx = transform.getTx();
     double _x_1 = center.getX();
-    double _plus_1 = (_tx + _x_1);
-    this.setLayoutX(_plus_1);
+    double _plus = (_tx + _x_1);
+    this.setLayoutX(_plus);
     double _ty = transform.getTy();
     double _y_1 = center.getY();
-    double _plus_2 = (_ty + _y_1);
-    this.setLayoutY(_plus_2);
+    double _plus_1 = (_ty + _y_1);
+    this.setLayoutY(_plus_1);
     transform.setTx(0);
     transform.setTy(0);
     ObservableList<Transform> _transforms = this.getTransforms();

@@ -91,8 +91,7 @@ public class NeonSignNode extends FlipNode {
             _textProperty.bind(_textProperty_1);
             it.setWrappingWidth(580);
             it.setTextAlignment(TextAlignment.CENTER);
-            int _minus = (-7);
-            it.setRotate(_minus);
+            it.setRotate((-7));
             Font _font = Font.font("Nanum Pen Script", 100);
             it.setFont(_font);
             Color _web = Color.web("#feeb42");

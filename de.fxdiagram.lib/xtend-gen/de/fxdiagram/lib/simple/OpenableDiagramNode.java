@@ -17,7 +17,7 @@ import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
-import eu.hansolo.enzo.radialmenu.Symbol.Type;
+import eu.hansolo.enzo.radialmenu.Symbol;
 import eu.hansolo.enzo.radialmenu.SymbolCanvas;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
@@ -45,7 +45,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import javafx.util.Duration;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -72,12 +71,7 @@ public class OpenableDiagramNode extends XNode {
   
   private DiagramScaler diagramScaler;
   
-  private Duration _transitionDuration = new Function0<Duration>() {
-    public Duration apply() {
-      Duration _millis = DurationExtensions.millis(1000);
-      return _millis;
-    }
-  }.apply();
+  private Duration _transitionDuration = DurationExtensions.millis(1000);
   
   public Duration getTransitionDuration() {
     return this._transitionDuration;
@@ -87,12 +81,7 @@ public class OpenableDiagramNode extends XNode {
     this._transitionDuration = transitionDuration;
   }
   
-  private Duration _transitionDelay = new Function0<Duration>() {
-    public Duration apply() {
-      Duration _millis = DurationExtensions.millis(100);
-      return _millis;
-    }
-  }.apply();
+  private Duration _transitionDelay = DurationExtensions.millis(100);
   
   public Duration getTransitionDelay() {
     return this._transitionDelay;
@@ -269,7 +258,7 @@ public class OpenableDiagramNode extends XNode {
                 _transforms.clear();
                 ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
                 _children.setAll(OpenableDiagramNode.this.textNode);
-                Canvas _symbol = SymbolCanvas.getSymbol(Type.ZOOM_OUT, 32, Color.GRAY);
+                Canvas _symbol = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY);
                 final Procedure1<Canvas> _function = new Procedure1<Canvas>() {
                   public void apply(final Canvas it) {
                     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {

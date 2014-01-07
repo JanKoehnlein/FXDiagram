@@ -30,13 +30,7 @@ public class FirstRecursiveImageNode extends XNode {
   }.apply();
   
   public FirstRecursiveImageNode(final RecursiveImageNode parent) {
-    super(new Function0<String>() {
-      public String apply() {
-        String _key = parent.getKey();
-        String _plus = (_key + "_");
-        return _plus;
-      }
-    }.apply());
+    super((parent.getKey() + "_"));
     this.recursiveImageNode = parent;
     final Group group = parent.createPane();
     this.setNode(group);
@@ -84,8 +78,7 @@ public class FirstRecursiveImageNode extends XNode {
         double _width = bounds.getWidth();
         double _height = bounds.getHeight();
         final double area = (_width * _height);
-        boolean _lessEqualsThan = (area <= 10);
-        if (_lessEqualsThan) {
+        if ((area <= 10)) {
           boolean _notEquals = (!Objects.equal(parent, null));
           if (_notEquals) {
             ObservableList<Node> _children = parent.getChildren();
@@ -95,8 +88,7 @@ public class FirstRecursiveImageNode extends XNode {
             return;
           }
         } else {
-          boolean _greaterThan = (area > 500);
-          if (_greaterThan) {
+          if ((area > 500)) {
             final Group grandChild = this.createScaledPane();
             ObservableList<Node> _children_1 = child.getChildren();
             _children_1.add(grandChild);

@@ -32,10 +32,7 @@ public class LineArrowHead extends ArrowHead {
             final Procedure1<Polyline> _function = new Procedure1<Polyline>() {
               public void apply(final Polyline it) {
                 ObservableList<Double> _points = it.getPoints();
-                double _minus = (-0.5);
-                double _multiply = (_minus * height);
-                double _multiply_1 = (0.5 * height);
-                _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
+                _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(((-0.5) * height)), Double.valueOf(width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf((0.5 * height)))));
                 ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
                 _strokeProperty.bind(strokeProperty);
                 DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
@@ -74,12 +71,7 @@ public class LineArrowHead extends ArrowHead {
   }
   
   public LineArrowHead(final XConnection connection, final boolean isSource) {
-    this(connection, 7, 10, new Function0<Property<Paint>>() {
-      public Property<Paint> apply() {
-        ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
-        return _strokeProperty;
-      }
-    }.apply(), isSource);
+    this(connection, 7, 10, connection.strokeProperty(), isSource);
   }
   
   public double getLineCut() {

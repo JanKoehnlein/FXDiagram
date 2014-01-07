@@ -57,12 +57,7 @@ public class EClassNode extends XNode {
   }.apply();
   
   public EClassNode(final EClass eClass) {
-    super(new Function0<String>() {
-      public String apply() {
-        String _name = eClass.getName();
-        return _name;
-      }
-    }.apply());
+    super(eClass.getName());
     this.eClass = eClass;
     String _name = eClass.getName();
     this.name.setText(_name);

@@ -29,7 +29,6 @@ import javafx.scene.text.Text
 import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
-import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.scene.layout.VBox.*
 
 @Logging

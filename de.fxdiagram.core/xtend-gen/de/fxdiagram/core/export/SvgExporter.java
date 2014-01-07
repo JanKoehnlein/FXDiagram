@@ -424,8 +424,7 @@ public class SvgExporter {
   protected int nextImageNumber() {
     int _xblockexpression = (int) 0;
     {
-      int _plus = (this.imageCounter + 1);
-      this.imageCounter = _plus;
+      this.imageCounter = (this.imageCounter + 1);
       _xblockexpression = (this.imageCounter);
     }
     return _xblockexpression;
@@ -525,8 +524,7 @@ public class SvgExporter {
       if ((clip instanceof Shape)) {
         CharSequence _xblockexpression_1 = null;
         {
-          int _plus = (this.currentID + 1);
-          this.currentID = _plus;
+          this.currentID = (this.currentID + 1);
           final String clipPathId = ("clipPath" + Integer.valueOf(this.currentID));
           StringConcatenation _builder = new StringConcatenation();
           _builder.append("<clipPath id=\"");
@@ -623,8 +621,7 @@ public class SvgExporter {
         _matched=true;
         CharSequence _xblockexpression = null;
         {
-          int _plus = (this.currentID + 1);
-          this.currentID = _plus;
+          this.currentID = (this.currentID + 1);
           final String gradientId = ("Gradient" + Integer.valueOf(this.currentID));
           StringConcatenation _builder = new StringConcatenation();
           _builder.append("<linearGradient id=\"");

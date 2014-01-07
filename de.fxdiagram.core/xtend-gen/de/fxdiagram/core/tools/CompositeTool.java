@@ -1,10 +1,8 @@
 package de.fxdiagram.core.tools;
 
 import de.fxdiagram.core.tools.XDiagramTool;
-import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -12,12 +10,7 @@ import org.eclipse.xtext.xbase.lib.ListExtensions;
 
 @SuppressWarnings("all")
 public class CompositeTool implements XDiagramTool {
-  private List<XDiagramTool> children = new Function0<List<XDiagramTool>>() {
-    public List<XDiagramTool> apply() {
-      ArrayList<XDiagramTool> _newArrayList = CollectionLiterals.<XDiagramTool>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
+  private List<XDiagramTool> children = CollectionLiterals.<XDiagramTool>newArrayList();
   
   public boolean operator_add(final XDiagramTool child) {
     boolean _add = this.children.add(child);

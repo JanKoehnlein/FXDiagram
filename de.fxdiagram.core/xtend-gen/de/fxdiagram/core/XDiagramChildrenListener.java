@@ -4,7 +4,6 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XDiagram;
 import java.util.List;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -22,7 +21,7 @@ public class XDiagramChildrenListener<T extends Node & XActivatable> implements 
     this.diagram = diagram;
   }
   
-  public void onChanged(final Change<? extends T> change) {
+  public void onChanged(final ListChangeListener.Change<? extends T> change) {
     boolean _next = change.next();
     boolean _while = _next;
     while (_while) {

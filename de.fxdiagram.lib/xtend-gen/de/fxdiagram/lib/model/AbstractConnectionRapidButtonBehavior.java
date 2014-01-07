@@ -10,42 +10,22 @@ import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.AbstractChooser;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL extends Object, KEY extends Object> extends AbstractHostBehavior<HOST> {
-  private Set<KEY> availableChoiceKeys = new Function0<Set<KEY>>() {
-    public Set<KEY> apply() {
-      LinkedHashSet<KEY> _newLinkedHashSet = CollectionLiterals.<KEY>newLinkedHashSet();
-      return _newLinkedHashSet;
-    }
-  }.apply();
+  private Set<KEY> availableChoiceKeys = CollectionLiterals.<KEY>newLinkedHashSet();
   
-  private Set<KEY> unavailableChoiceKeys = new Function0<Set<KEY>>() {
-    public Set<KEY> apply() {
-      HashSet<KEY> _newHashSet = CollectionLiterals.<KEY>newHashSet();
-      return _newHashSet;
-    }
-  }.apply();
+  private Set<KEY> unavailableChoiceKeys = CollectionLiterals.<KEY>newHashSet();
   
-  private List<XRapidButton> buttons = new Function0<List<XRapidButton>>() {
-    public List<XRapidButton> apply() {
-      ArrayList<XRapidButton> _newArrayList = CollectionLiterals.<XRapidButton>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
+  private List<XRapidButton> buttons = CollectionLiterals.<XRapidButton>newArrayList();
   
   public AbstractConnectionRapidButtonBehavior(final HOST host) {
     super(host);
@@ -102,7 +82,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
       XDiagram _diagram_2 = CoreExtensions.getDiagram(_host_2);
       ObservableList<XConnection> _connections_1 = _diagram_2.getConnections();
       final ListChangeListener<XConnection> _function_3 = new ListChangeListener<XConnection>() {
-        public void onChanged(final Change<? extends XConnection> change) {
+        public void onChanged(final ListChangeListener.Change<? extends XConnection> change) {
           boolean _isEmpty = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
           final boolean hadChoices = (!_isEmpty);
           boolean _next = change.next();
@@ -150,8 +130,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
             ObservableList<XRapidButton> _buttons = _diagram.getButtons();
             Iterables.removeAll(_buttons, AbstractConnectionRapidButtonBehavior.this.buttons);
           } else {
-            boolean _not = (!hadChoices);
-            if (_not) {
+            if ((!hadChoices)) {
               HOST _host_1 = AbstractConnectionRapidButtonBehavior.this.getHost();
               XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_1);
               ObservableList<XRapidButton> _buttons_1 = _diagram_1.getButtons();

@@ -101,8 +101,7 @@ public class LcarsField extends Parent {
         char[] _charArray = value.toCharArray();
         for (final char c : _charArray) {
           {
-            String _plus = (currentWord + Character.valueOf(c));
-            currentWord = _plus;
+            currentWord = (currentWord + Character.valueOf(c));
             boolean _isSplitHere = LcarsField.this.isSplitHere(c);
             if (_isSplitHere) {
               ObservableList<Node> _children_1 = it.getChildren();
@@ -301,8 +300,7 @@ public class LcarsField extends Parent {
                 Duration _add = _cycleDuration.add(_millis);
                 StringProperty _textProperty = textNode.textProperty();
                 String _text_1 = textNode.getText();
-                int _plus = ((index).intValue() + 1);
-                String _substring = _text_1.substring(0, _plus);
+                String _substring = _text_1.substring(0, ((index).intValue() + 1));
                 KeyValue _keyValue = new <String>KeyValue(_textProperty, _substring);
                 KeyFrame _keyFrame = new KeyFrame(_add, _keyValue);
                 _keyFrames.add(_keyFrame);
@@ -394,8 +392,7 @@ public class LcarsField extends Parent {
           KeyValue _keyValue_3 = new <Number>KeyValue(_opacityProperty_3, Integer.valueOf(0));
           KeyFrame _keyFrame_3 = new KeyFrame(_millis_3, _keyValue_3);
           _keyFrames_3.add(_keyFrame_3);
-          int _minus = (-1);
-          it.setCycleCount(_minus);
+          it.setCycleCount((-1));
           it.play();
         }
       };

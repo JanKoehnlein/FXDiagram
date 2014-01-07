@@ -71,8 +71,7 @@ public class SelectionTool implements XDiagramTool {
           SelectionTool.this.deselect(selection, _function);
         } else {
           XRapidButton _targetButton = CoreExtensions.getTargetButton(event);
-          boolean _not = (!(_targetButton instanceof XRapidButton));
-          if (_not) {
+          if ((!(_targetButton instanceof XRapidButton))) {
             final XShape targetShape = CoreExtensions.getTargetShape(event);
             boolean _isSelectable = false;
             if (targetShape!=null) {
@@ -81,13 +80,13 @@ public class SelectionTool implements XDiagramTool {
             if (_isSelectable) {
               boolean _and_1 = false;
               boolean _selected = targetShape.getSelected();
-              boolean _not_1 = (!_selected);
-              if (!_not_1) {
+              boolean _not = (!_selected);
+              if (!_not) {
                 _and_1 = false;
               } else {
                 boolean _isShortcutDown = event.isShortcutDown();
-                boolean _not_2 = (!_isShortcutDown);
-                _and_1 = (_not_1 && _not_2);
+                boolean _not_1 = (!_isShortcutDown);
+                _and_1 = (_not && _not_1);
               }
               if (_and_1) {
                 XShape _switchResult = null;
@@ -233,8 +232,8 @@ public class SelectionTool implements XDiagramTool {
     }
   }
   
-  protected Boolean showPositionTooltip() {
-    Boolean _xifexpression = null;
+  protected boolean showPositionTooltip() {
+    boolean _xifexpression = false;
     boolean _and = false;
     boolean _notEquals = (!Objects.equal(this.positionTip, null));
     if (!_notEquals) {
@@ -246,7 +245,7 @@ public class SelectionTool implements XDiagramTool {
     }
     if (_and) {
       boolean _show = this.positionTip.show();
-      _xifexpression = Boolean.valueOf(_show);
+      _xifexpression = _show;
     }
     return _xifexpression;
   }

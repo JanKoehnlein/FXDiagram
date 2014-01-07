@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -74,12 +74,7 @@ public abstract class AbstractChooser implements XDiagramTool {
     }
   }.apply();
   
-  private final ArrayList<XNode> visibleNodes = new Function0<ArrayList<XNode>>() {
-    public ArrayList<XNode> apply() {
-      ArrayList<XNode> _newArrayList = CollectionLiterals.<XNode>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
+  private final ArrayList<XNode> visibleNodes = CollectionLiterals.<XNode>newArrayList();
   
   private XNode host;
   
@@ -90,19 +85,9 @@ public abstract class AbstractChooser implements XDiagramTool {
     }
   }.apply();
   
-  private final LinkedHashMap<String,XNode> nodeMap = new Function0<LinkedHashMap<String,XNode>>() {
-    public LinkedHashMap<String,XNode> apply() {
-      LinkedHashMap<String,XNode> _newLinkedHashMap = CollectionLiterals.<String, XNode>newLinkedHashMap();
-      return _newLinkedHashMap;
-    }
-  }.apply();
+  private final LinkedHashMap<String,XNode> nodeMap = CollectionLiterals.<String, XNode>newLinkedHashMap();
   
-  private final HashMap<XNode,Object> node2choiceInfo = new Function0<HashMap<XNode,Object>>() {
-    public HashMap<XNode,Object> apply() {
-      HashMap<XNode,Object> _newHashMap = CollectionLiterals.<XNode, Object>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
+  private final HashMap<XNode,Object> node2choiceInfo = CollectionLiterals.<XNode, Object>newHashMap();
   
   private ChooserConnectionProvider connectionProvider = new Function0<ChooserConnectionProvider>() {
     public ChooserConnectionProvider apply() {
@@ -162,23 +147,20 @@ public abstract class AbstractChooser implements XDiagramTool {
         if (!_matched) {
           if (Objects.equal(getEventType,SwipeEvent.SWIPE_DOWN)) {
             _matched=true;
-            int _minus = (-1);
-            _switchResult = _minus;
+            _switchResult = (-1);
           }
         }
         if (!_matched) {
           if (Objects.equal(getEventType,SwipeEvent.SWIPE_RIGHT)) {
             _matched=true;
-            int _minus_1 = (-1);
-            _switchResult = _minus_1;
+            _switchResult = (-1);
           }
         }
         if (!_matched) {
           _switchResult = 1;
         }
         final int direction = _switchResult;
-        int _multiply = (direction * 10);
-        AbstractChooser.this.spinToPosition.setTargetPositionDelta(_multiply);
+        AbstractChooser.this.spinToPosition.setTargetPositionDelta((direction * 10));
       }
     };
     this.swipeHandler = _function_1;
@@ -232,15 +214,13 @@ public abstract class AbstractChooser implements XDiagramTool {
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.LEFT)) {
             _matched=true;
-            int _minus = (-1);
-            AbstractChooser.this.spinToPosition.setTargetPositionDelta(_minus);
+            AbstractChooser.this.spinToPosition.setTargetPositionDelta((-1));
           }
         }
         if (!_matched) {
           if (Objects.equal(getCode,KeyCode.DOWN)) {
             _matched=true;
-            int _minus_1 = (-1);
-            AbstractChooser.this.spinToPosition.setTargetPositionDelta(_minus_1);
+            AbstractChooser.this.spinToPosition.setTargetPositionDelta((-1));
           }
         }
         if (!_matched) {
@@ -266,8 +246,8 @@ public abstract class AbstractChooser implements XDiagramTool {
             boolean _not = (!_isEmpty);
             if (_not) {
               int _length = oldFilter.length();
-              int _minus_2 = (_length - 1);
-              String _substring = oldFilter.substring(0, _minus_2);
+              int _minus = (_length - 1);
+              String _substring = oldFilter.substring(0, _minus);
               AbstractChooser.this.setFilterString(_substring);
             }
           }
@@ -311,8 +291,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         public void apply(final SVGPath it) {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
             public void handle(final MouseEvent it) {
-              int _minus = (-1);
-              AbstractChooser.this.spinToPosition.setTargetPositionDelta(_minus);
+              AbstractChooser.this.spinToPosition.setTargetPositionDelta((-1));
             }
           };
           it.setOnMouseClicked(_function);
@@ -727,8 +706,8 @@ public abstract class AbstractChooser implements XDiagramTool {
     return _xblockexpression;
   }
   
-  protected Boolean removeConnection(final XConnection connection) {
-    Boolean _xifexpression = null;
+  protected boolean removeConnection(final XConnection connection) {
+    boolean _xifexpression = false;
     boolean _notEquals = (!Objects.equal(connection, null));
     if (_notEquals) {
       boolean _xblockexpression = false;
@@ -744,7 +723,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         boolean _remove = _incomingConnections.remove(connection);
         _xblockexpression = (_remove);
       }
-      _xifexpression = Boolean.valueOf(_xblockexpression);
+      _xifexpression = _xblockexpression;
     }
     return _xifexpression;
   }
@@ -816,17 +795,12 @@ public abstract class AbstractChooser implements XDiagramTool {
       ArrayList<XNode> _nodes = this.getNodes();
       int _size = _nodes.size();
       double result = (_get % _size);
-      boolean _lessThan = (result < 0);
-      if (_lessThan) {
+      if ((result < 0)) {
         ArrayList<XNode> _nodes_1 = this.getNodes();
         int _size_1 = _nodes_1.size();
-        double _divide = (result / _size_1);
-        int _plus = (((int) _divide) + 1);
-        ArrayList<XNode> _nodes_2 = this.getNodes();
-        int _size_2 = _nodes_2.size();
-        int _multiply = (_plus * _size_2);
-        double _plus_1 = (result + _multiply);
-        result = _plus_1;
+        int _multiply = ((((int) (result / this.getNodes().size())) + 1) * _size_1);
+        double _plus = (result + _multiply);
+        result = _plus;
       }
       _xblockexpression = (result);
     }
@@ -869,8 +843,8 @@ public abstract class AbstractChooser implements XDiagramTool {
     int mapIndex = 0;
     double maxWidth = 0.0;
     double maxHeight = 0.0;
-    Set<Entry<String,XNode>> _entrySet = this.nodeMap.entrySet();
-    for (final Entry<String,XNode> entry : _entrySet) {
+    Set<Map.Entry<String,XNode>> _entrySet = this.nodeMap.entrySet();
+    for (final Map.Entry<String,XNode> entry : _entrySet) {
       {
         XNode _value = entry.getValue();
         boolean _matchesFilter = this.matchesFilter(_value);
@@ -889,8 +863,7 @@ public abstract class AbstractChooser implements XDiagramTool {
           double _height = layoutBounds.getHeight();
           double _max_1 = Math.max(maxHeight, _height);
           maxHeight = _max_1;
-          int _plus = (currentVisibleIndex + 1);
-          currentVisibleIndex = _plus;
+          currentVisibleIndex = (currentVisibleIndex + 1);
           XNode _xifexpression = null;
           int _size = this.visibleNodes.size();
           boolean _lessThan = (currentVisibleIndex < _size);
@@ -919,8 +892,7 @@ public abstract class AbstractChooser implements XDiagramTool {
             currentVisibleNode = _xifexpression_1;
           }
         }
-        int _plus_1 = (mapIndex + 1);
-        mapIndex = _plus_1;
+        mapIndex = (mapIndex + 1);
       }
     }
     double _switchResult = (double) 0;
@@ -933,8 +905,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         double _layoutX = this.host.getLayoutX();
         double _layoutDistance = this.getLayoutDistance();
         double _minus = (_layoutX - _layoutDistance);
-        double _multiply = (0.5 * maxWidth);
-        double _minus_1 = (_minus - _multiply);
+        double _minus_1 = (_minus - (0.5 * maxWidth));
         _switchResult = _minus_1;
       }
     }
@@ -947,8 +918,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         double _plus = (_layoutX_1 + _width);
         double _layoutDistance_1 = this.getLayoutDistance();
         double _plus_1 = (_plus + _layoutDistance_1);
-        double _multiply_1 = (0.5 * maxWidth);
-        double _plus_2 = (_plus_1 + _multiply_1);
+        double _plus_2 = (_plus_1 + (0.5 * maxWidth));
         _switchResult = _plus_2;
       }
     }
@@ -956,8 +926,8 @@ public abstract class AbstractChooser implements XDiagramTool {
       double _layoutX_2 = this.host.getLayoutX();
       Bounds _layoutBounds_1 = this.host.getLayoutBounds();
       double _width_1 = _layoutBounds_1.getWidth();
-      double _multiply_2 = (0.5 * _width_1);
-      double _plus_3 = (_layoutX_2 + _multiply_2);
+      double _multiply = (0.5 * _width_1);
+      double _plus_3 = (_layoutX_2 + _multiply);
       _switchResult = _plus_3;
     }
     this.group.setLayoutX(_switchResult);
@@ -971,8 +941,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         double _layoutY = this.host.getLayoutY();
         double _layoutDistance_2 = this.getLayoutDistance();
         double _minus_2 = (_layoutY - _layoutDistance_2);
-        double _multiply_3 = (0.5 * maxHeight);
-        double _minus_3 = (_minus_2 - _multiply_3);
+        double _minus_3 = (_minus_2 - (0.5 * maxHeight));
         _switchResult_1 = _minus_3;
       }
     }
@@ -985,8 +954,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         double _plus_4 = (_layoutY_1 + _height);
         double _layoutDistance_3 = this.getLayoutDistance();
         double _plus_5 = (_plus_4 + _layoutDistance_3);
-        double _multiply_4 = (0.5 * maxHeight);
-        double _plus_6 = (_plus_5 + _multiply_4);
+        double _plus_6 = (_plus_5 + (0.5 * maxHeight));
         _switchResult_1 = _plus_6;
       }
     }
@@ -994,8 +962,8 @@ public abstract class AbstractChooser implements XDiagramTool {
       double _layoutY_2 = this.host.getLayoutY();
       Bounds _layoutBounds_3 = this.host.getLayoutBounds();
       double _height_1 = _layoutBounds_3.getHeight();
-      double _multiply_5 = (0.5 * _height_1);
-      double _plus_7 = (_layoutY_2 + _multiply_5);
+      double _multiply_1 = (0.5 * _height_1);
+      double _plus_7 = (_layoutY_2 + _multiply_1);
       _switchResult_1 = _plus_7;
     }
     this.group.setLayoutY(_switchResult_1);

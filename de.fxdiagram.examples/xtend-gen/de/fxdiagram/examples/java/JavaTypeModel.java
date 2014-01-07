@@ -6,13 +6,11 @@ import de.fxdiagram.examples.java.Property;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -27,26 +25,11 @@ public class JavaTypeModel {
   
   private List<Method> operations;
   
-  private List<Property> properties = new Function0<List<Property>>() {
-    public List<Property> apply() {
-      ArrayList<Property> _newArrayList = CollectionLiterals.<Property>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
+  private List<Property> properties = CollectionLiterals.<Property>newArrayList();
   
-  private List<Property> references = new Function0<List<Property>>() {
-    public List<Property> apply() {
-      ArrayList<Property> _newArrayList = CollectionLiterals.<Property>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
+  private List<Property> references = CollectionLiterals.<Property>newArrayList();
   
-  private List<Class<? extends Object>> superTypes = new Function0<List<Class<? extends Object>>>() {
-    public List<Class<? extends Object>> apply() {
-      ArrayList<Class<? extends Object>> _newArrayList = CollectionLiterals.<Class<? extends Object>>newArrayList();
-      return _newArrayList;
-    }
-  }.apply();
+  private List<Class<? extends Object>> superTypes = CollectionLiterals.<Class<? extends Object>>newArrayList();
   
   public JavaTypeModel(final Class<? extends Object> javaType) {
     Constructor<? extends Object>[] _declaredConstructors = javaType.getDeclaredConstructors();

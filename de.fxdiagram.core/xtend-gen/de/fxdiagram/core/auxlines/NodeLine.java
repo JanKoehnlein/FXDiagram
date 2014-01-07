@@ -59,12 +59,10 @@ public class NodeLine extends AuxiliaryLine {
         Line _line = new Line();
         final Procedure1<Line> _function = new Procedure1<Line>() {
           public void apply(final Line it) {
-            double _minus = (NodeLine.this.min - NodeLine.this.overlap);
-            it.setStartX(_minus);
+            it.setStartX((NodeLine.this.min - NodeLine.this.overlap));
             double _position = NodeLine.this.getPosition();
             it.setStartY(_position);
-            double _plus = (NodeLine.this.max + NodeLine.this.overlap);
-            it.setEndX(_plus);
+            it.setEndX((NodeLine.this.max + NodeLine.this.overlap));
             double _position_1 = NodeLine.this.getPosition();
             it.setEndY(_position_1);
           }
@@ -81,12 +79,10 @@ public class NodeLine extends AuxiliaryLine {
           public void apply(final Line it) {
             double _position = NodeLine.this.getPosition();
             it.setStartX(_position);
-            double _minus = (NodeLine.this.min - NodeLine.this.overlap);
-            it.setStartY(_minus);
+            it.setStartY((NodeLine.this.min - NodeLine.this.overlap));
             double _position_1 = NodeLine.this.getPosition();
             it.setEndX(_position_1);
-            double _plus = (NodeLine.this.max + NodeLine.this.overlap);
-            it.setEndY(_plus);
+            it.setEndY((NodeLine.this.max + NodeLine.this.overlap));
           }
         };
         Line _doubleArrow_1 = ObjectExtensions.<Line>operator_doubleArrow(_line_1, _function_1);

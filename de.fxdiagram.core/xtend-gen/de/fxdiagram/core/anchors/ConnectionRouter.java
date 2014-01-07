@@ -124,13 +124,11 @@ public class ConnectionRouter implements XActivatable {
       int _size_1 = _controlPoints_1.size();
       final int nodeDiff = (newSize - _size_1);
       Boolean _xifexpression = null;
-      boolean _greaterThan = (nodeDiff > 0);
-      if (_greaterThan) {
+      if ((nodeDiff > 0)) {
         Boolean _xblockexpression_1 = null;
         {
           final ArrayList<XControlPoint> newControlPoints = CollectionLiterals.<XControlPoint>newArrayList();
-          int _plus = (nodeDiff + 1);
-          final double delta = (1.0 / _plus);
+          final double delta = (1.0 / (nodeDiff + 1));
           ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
           final XControlPoint first = IterableExtensions.<XControlPoint>head(_controlPoints_2);
           ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
@@ -142,16 +140,14 @@ public class ConnectionRouter implements XActivatable {
               final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
                 public void apply(final XControlPoint it) {
                   final double lambda = (delta * (i).intValue());
-                  double _minus = (1 - lambda);
                   double _layoutX = first.getLayoutX();
-                  double _multiply = (_minus * _layoutX);
+                  double _multiply = ((1 - lambda) * _layoutX);
                   double _layoutX_1 = last.getLayoutX();
                   double _multiply_1 = (lambda * _layoutX_1);
                   double _plus = (_multiply + _multiply_1);
                   it.setLayoutX(_plus);
-                  double _minus_1 = (1 - lambda);
                   double _layoutY = first.getLayoutY();
-                  double _multiply_2 = (_minus_1 * _layoutY);
+                  double _multiply_2 = ((1 - lambda) * _layoutY);
                   double _layoutY_1 = last.getLayoutY();
                   double _multiply_3 = (lambda * _layoutY_1);
                   double _plus_1 = (_multiply_2 + _multiply_3);
@@ -194,8 +190,7 @@ public class ConnectionRouter implements XActivatable {
       int _size_1 = _controlPoints_1.size();
       final int nodeDiff = (newSize - _size_1);
       Boolean _xifexpression = null;
-      boolean _lessThan_1 = (nodeDiff < 0);
-      if (_lessThan_1) {
+      if ((nodeDiff < 0)) {
         Boolean _xblockexpression_1 = null;
         {
           final ArrayList<XControlPoint> toBeRemoved = CollectionLiterals.<XControlPoint>newArrayList();
@@ -264,9 +259,7 @@ public class ConnectionRouter implements XActivatable {
           if (Objects.equal(_switchValue,XConnectionKind.QUAD_CURVE)) {
             _matched=true;
             XControlPointType _xifexpression = null;
-            int _modulo = ((i).intValue() % 2);
-            boolean _equals = (_modulo == 0);
-            if (_equals) {
+            if ((((i).intValue() % 2) == 0)) {
               _xifexpression = XControlPointType.INTERPOLATED;
             } else {
               _xifexpression = XControlPointType.CONTROL_POINT;
@@ -278,9 +271,7 @@ public class ConnectionRouter implements XActivatable {
           if (Objects.equal(_switchValue,XConnectionKind.CUBIC_CURVE)) {
             _matched=true;
             XControlPointType _xifexpression_1 = null;
-            int _modulo_1 = ((i).intValue() % 3);
-            boolean _equals_1 = (_modulo_1 == 0);
-            if (_equals_1) {
+            if ((((i).intValue() % 3) == 0)) {
               _xifexpression_1 = XControlPointType.INTERPOLATED;
             } else {
               _xifexpression_1 = XControlPointType.CONTROL_POINT;
@@ -511,8 +502,7 @@ public class ConnectionRouter implements XActivatable {
               double _minus = (_minX - ConnectionRouter.this.selfEdgeDist);
               it.setLayoutX(_minus);
               double _minY = boundsInDiagram.getMinY();
-              double _multiply = (0.3 * ConnectionRouter.this.selfEdgeDist);
-              double _plus = (_minY + _multiply);
+              double _plus = (_minY + (0.3 * ConnectionRouter.this.selfEdgeDist));
               it.setLayoutY(_plus);
               it.setType(XControlPointType.CONTROL_POINT);
             }
@@ -524,8 +514,7 @@ public class ConnectionRouter implements XActivatable {
           final Procedure1<XControlPoint> _function_5 = new Procedure1<XControlPoint>() {
             public void apply(final XControlPoint it) {
               double _minX = boundsInDiagram.getMinX();
-              double _multiply = (0.3 * ConnectionRouter.this.selfEdgeDist);
-              double _plus = (_minX + _multiply);
+              double _plus = (_minX + (0.3 * ConnectionRouter.this.selfEdgeDist));
               it.setLayoutX(_plus);
               double _minY = boundsInDiagram.getMinY();
               double _minus = (_minY - ConnectionRouter.this.selfEdgeDist);

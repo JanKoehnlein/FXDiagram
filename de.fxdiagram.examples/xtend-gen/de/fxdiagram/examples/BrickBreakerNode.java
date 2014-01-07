@@ -2,7 +2,6 @@ package de.fxdiagram.examples;
 
 import brickbreaker.Config;
 import brickbreaker.Main;
-import brickbreaker.Main.MainFrame;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
@@ -101,9 +100,9 @@ public class BrickBreakerNode extends FlipNode {
         final Group root = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
         Main _main = new Main();
         final Main main = _main;
-        final Constructor<MainFrame> constructor = MainFrame.class.getDeclaredConstructor(Main.class, Group.class);
+        final Constructor<Main.MainFrame> constructor = Main.MainFrame.class.getDeclaredConstructor(Main.class, Group.class);
         constructor.setAccessible(true);
-        final MainFrame mainFrame = constructor.newInstance(main, root);
+        final Main.MainFrame mainFrame = constructor.newInstance(main, root);
         Field[] _declaredFields = Main.class.getDeclaredFields();
         final Function1<Field,Boolean> _function_1 = new Function1<Field,Boolean>() {
           public Boolean apply(final Field it) {
@@ -116,7 +115,7 @@ public class BrickBreakerNode extends FlipNode {
         final Field mainFrameField = IterableExtensions.<Field>head(_filter);
         mainFrameField.setAccessible(true);
         mainFrameField.set(main, mainFrame);
-        mainFrame.changeState(MainFrame.SPLASH);
+        mainFrame.changeState(Main.MainFrame.SPLASH);
         _xblockexpression = (root);
       }
       return _xblockexpression;

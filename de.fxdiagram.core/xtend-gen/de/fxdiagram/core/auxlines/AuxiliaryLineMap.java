@@ -6,29 +6,17 @@ import com.google.common.collect.Multimap;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AuxiliaryLineMap<T extends Object> {
-  private Multimap<Integer,AuxiliaryLine> store = new Function0<Multimap<Integer,AuxiliaryLine>>() {
-    public Multimap<Integer,AuxiliaryLine> apply() {
-      HashMultimap<Integer,AuxiliaryLine> _create = HashMultimap.<Integer, AuxiliaryLine>create();
-      return _create;
-    }
-  }.apply();
+  private Multimap<Integer,AuxiliaryLine> store = HashMultimap.<Integer, AuxiliaryLine>create();
   
-  private Map<XNode,AuxiliaryLine> node2entry = new Function0<Map<XNode,AuxiliaryLine>>() {
-    public Map<XNode,AuxiliaryLine> apply() {
-      HashMap<XNode,AuxiliaryLine> _newHashMap = CollectionLiterals.<XNode, AuxiliaryLine>newHashMap();
-      return _newHashMap;
-    }
-  }.apply();
+  private Map<XNode,AuxiliaryLine> node2entry = CollectionLiterals.<XNode, AuxiliaryLine>newHashMap();
   
   private double threshold;
   
@@ -104,8 +92,6 @@ public class AuxiliaryLineMap<T extends Object> {
   }
   
   protected int getKey(final double position) {
-    double _divide = (position / this.threshold);
-    double _plus = (_divide + 0.5);
-    return ((int) _plus);
+    return ((int) ((position / this.threshold) + 0.5));
   }
 }

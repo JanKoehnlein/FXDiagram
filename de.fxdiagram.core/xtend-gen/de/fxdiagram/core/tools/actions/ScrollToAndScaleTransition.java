@@ -122,26 +122,18 @@ public class ScrollToAndScaleTransition extends Transition {
   }
   
   protected void interpolate(final double frac) {
-    double _minus = (1 - frac);
-    double _multiply = (_minus * this.fromScale);
-    double _multiply_1 = (frac * this.toScale);
-    final double scaleNow = (_multiply + _multiply_1);
-    double _minus_1 = (1 - frac);
-    double _multiply_2 = (_minus_1 * this.fromAngle);
-    double _multiply_3 = (frac * this.toAngle);
-    final double angleNow = (_multiply_2 + _multiply_3);
-    double _minus_2 = (1 - frac);
+    final double scaleNow = (((1 - frac) * this.fromScale) + (frac * this.toScale));
+    final double angleNow = (((1 - frac) * this.fromAngle) + (frac * this.toAngle));
     double _x = this.fromTranslation.getX();
-    double _multiply_4 = (_minus_2 * _x);
+    double _multiply = ((1 - frac) * _x);
     double _x_1 = this.toTranslation.getX();
-    double _multiply_5 = (frac * _x_1);
-    final double txNow = (_multiply_4 + _multiply_5);
-    double _minus_3 = (1 - frac);
+    double _multiply_1 = (frac * _x_1);
+    final double txNow = (_multiply + _multiply_1);
     double _y = this.fromTranslation.getY();
-    double _multiply_6 = (_minus_3 * _y);
+    double _multiply_2 = ((1 - frac) * _y);
     double _y_1 = this.toTranslation.getY();
-    double _multiply_7 = (frac * _y_1);
-    final double tyNow = (_multiply_6 + _multiply_7);
+    double _multiply_3 = (frac * _y_1);
+    final double tyNow = (_multiply_2 + _multiply_3);
     this.root.setDiagramScale(scaleNow);
     Affine _diagramTransform = this.root.getDiagramTransform();
     final Procedure1<Affine> _function = new Procedure1<Affine>() {

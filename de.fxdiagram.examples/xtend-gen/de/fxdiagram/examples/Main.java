@@ -34,7 +34,7 @@ import javafx.scene.image.Image;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.eclipse.emf.ecore.EcorePackage.Literals;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -198,8 +198,7 @@ public class Main extends Application {
           ObservableList<XNode> _nodes_5 = it.getNodes();
           ImageCache _get = ImageCache.get();
           Image _image = _get.getImage(Main.this, "media/laptop.jpg");
-          int _minus = (-6);
-          RecursiveImageNode _recursiveImageNode = new RecursiveImageNode("recursive", _image, 0, _minus, 0.6);
+          RecursiveImageNode _recursiveImageNode = new RecursiveImageNode("recursive", _image, 0, (-6), 0.6);
           final Procedure1<RecursiveImageNode> _function_8 = new Procedure1<RecursiveImageNode>() {
             public void apply(final RecursiveImageNode it) {
               it.setWidth(120);
@@ -251,7 +250,7 @@ public class Main extends Application {
           JavaTypeNode _doubleArrow_8 = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function_11);
           _nodes_8.add(_doubleArrow_8);
           ObservableList<XNode> _nodes_9 = it.getNodes();
-          EClassNode _eClassNode = new EClassNode(Literals.ECLASS);
+          EClassNode _eClassNode = new EClassNode(EcorePackage.Literals.ECLASS);
           final Procedure1<EClassNode> _function_12 = new Procedure1<EClassNode>() {
             public void apply(final EClassNode it) {
               it.setWidth(160);
@@ -333,8 +332,7 @@ public class Main extends Application {
         final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
           public void apply(final XDiagram it) {
             ObservableList<XNode> _nodes = it.getNodes();
-            String _plus = ("Inner " + Integer.valueOf(Main.this.node_nr));
-            SimpleNode _simpleNode = new SimpleNode(_plus);
+            SimpleNode _simpleNode = new SimpleNode(("Inner " + Integer.valueOf(Main.this.node_nr)));
             final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
               public void apply(final SimpleNode it) {
                 it.relocate(0, 0);
@@ -343,9 +341,7 @@ public class Main extends Application {
             SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function);
             _nodes.add(_doubleArrow);
             ObservableList<XNode> _nodes_1 = it.getNodes();
-            String _plus_1 = ("Inner " + Integer.valueOf(Main.this.node_nr));
-            String _plus_2 = (_plus_1 + Integer.valueOf(1));
-            SimpleNode _simpleNode_1 = new SimpleNode(_plus_2);
+            SimpleNode _simpleNode_1 = new SimpleNode((("Inner " + Integer.valueOf(Main.this.node_nr)) + Integer.valueOf(1)));
             final Procedure1<SimpleNode> _function_1 = new Procedure1<SimpleNode>() {
               public void apply(final SimpleNode it) {
                 it.relocate(100, 100);
@@ -354,9 +350,7 @@ public class Main extends Application {
             SimpleNode _doubleArrow_1 = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode_1, _function_1);
             _nodes_1.add(_doubleArrow_1);
             ObservableList<XNode> _nodes_2 = it.getNodes();
-            String _plus_3 = ("Nested " + Integer.valueOf(Main.this.node_nr));
-            String _plus_4 = (_plus_3 + Integer.valueOf(2));
-            LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode(_plus_4);
+            LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode((("Nested " + Integer.valueOf(Main.this.node_nr)) + Integer.valueOf(2)));
             final Procedure1<LevelOfDetailDiagramNode> _function_2 = new Procedure1<LevelOfDetailDiagramNode>() {
               public void apply(final LevelOfDetailDiagramNode it) {
                 XDiagram _createDummyDiagram = Main.this.createDummyDiagram();
@@ -369,8 +363,7 @@ public class Main extends Application {
           }
         };
         it.setContentsInitializer(_function);
-        int _plus = (Main.this.node_nr + 3);
-        Main.this.node_nr = _plus;
+        Main.this.node_nr = (Main.this.node_nr + 3);
       }
     };
     XDiagram _doubleArrow = ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function);

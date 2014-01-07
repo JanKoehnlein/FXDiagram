@@ -177,9 +177,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
   public Point2D getPointOnCircle(final double x, final double y, final double centerX, final double centerY, final Dimension2D radius) {
     Point2D _xblockexpression = null;
     {
-      double _minus = (y - centerY);
-      double _minus_1 = (x - centerX);
-      final double angle = Math.atan2(_minus, _minus_1);
+      final double angle = Math.atan2((y - centerY), (x - centerX));
       double _cos = Math.cos(angle);
       double _width = radius.getWidth();
       double _multiply = (_cos * _width);
