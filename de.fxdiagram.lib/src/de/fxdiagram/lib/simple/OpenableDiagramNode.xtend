@@ -32,6 +32,7 @@ import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.behavior.AbstractCloseBehavior
+import de.fxdiagram.core.extensions.AccumulativeTransform2D
 
 @Logging
 class OpenableDiagramNode extends XNode {
@@ -96,7 +97,6 @@ class OpenableDiagramNode extends XNode {
 		isOpen = true
 		val nodeBounds = layoutBounds - new Insets(5,5,5,5)
 		nodeCenterInDiagram = localToRootDiagram(nodeBounds.center)
-		innerDiagram.transforms.clear
 		innerDiagram.opacity = 0
 		pane.children.add(new Group => [
 			children += innerDiagram
@@ -112,17 +112,16 @@ class OpenableDiagramNode extends XNode {
 		]
 		val initialScale = innerDiagram.localToScene(new BoundingBox(0,0,1,0)).width
 		val diagramBoundsInLocal = innerDiagram.boundsInLocal
-		val targetScale = max(XRoot.MIN_SCALE, 
+		val targetScale = max(AccumulativeTransform2D.MIN_SCALE, 
 			min(1, 
 				min(scene.width / diagramBoundsInLocal.width, 
-					scene.height / diagramBoundsInLocal.height)) / initialScale) * root.diagramScale
+					scene.height / diagramBoundsInLocal.height)) / initialScale) * root.diagramTransform.scale
 		new ParallelTransition => [
 			children += new ScrollToAndScaleTransition(root, nodeCenterInDiagram, targetScale) => [
 				duration = transitionDuration
 				onFinished = [
 					diagramScaler.deactivate
 					parentDiagram = root.diagram
-					innerDiagram.transforms.clear
 					pane.children.setAll(textNode)
 					val toParentButton = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY) => [
 						onMouseClicked = [
@@ -172,7 +171,6 @@ class OpenableDiagramNode extends XNode {
 				onFinished = [
 					diagramScaler.deactivate
 					parentDiagram = root.diagram
-					innerDiagram.transforms.clear
 					pane.children.setAll(textNode)
 				]
 			]

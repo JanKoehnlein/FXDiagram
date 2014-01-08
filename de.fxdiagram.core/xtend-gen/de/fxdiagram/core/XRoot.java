@@ -7,9 +7,7 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.css.JavaToCss;
-import de.fxdiagram.core.extensions.BoundsExtensions;
-import de.fxdiagram.core.extensions.NumberExpressionExtensions;
-import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.MenuTool;
@@ -25,19 +23,14 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
@@ -62,10 +55,6 @@ public class XRoot extends Parent implements XActivatable {
       return _pane;
     }
   }.apply();
-  
-  public final static double MIN_SCALE = NumberExpressionExtensions.EPSILON;
-  
-  private Affine diagramTransform;
   
   private List<XDiagramTool> tools = CollectionLiterals.<XDiagramTool>newArrayList();
   
@@ -99,110 +88,39 @@ public class XRoot extends Parent implements XActivatable {
     }
     this.diagramProperty.set(newDiagram);
     ObservableList<Node> _children_1 = this.diagramCanvas.getChildren();
-    XDiagram _diagram_2 = this.getDiagram();
-    _children_1.add(_diagram_2);
+    _children_1.add(newDiagram);
     boolean _isActive = this.getIsActive();
     if (_isActive) {
       newDiagram.activate();
     }
-    Affine _affine = new Affine();
-    this.diagramTransform = _affine;
-    XDiagram _diagram_3 = this.getDiagram();
-    ObservableList<Transform> _transforms = _diagram_3.getTransforms();
-    boolean _isEmpty = _transforms.isEmpty();
-    if (_isEmpty) {
-      this.centerDiagram();
-    } else {
-      XDiagram _diagram_4 = this.getDiagram();
-      ObservableList<Transform> _transforms_1 = _diagram_4.getTransforms();
-      final Procedure1<Transform> _function = new Procedure1<Transform>() {
-        public void apply(final Transform it) {
-          TransformExtensions.leftMultiply(XRoot.this.diagramTransform, it);
-        }
-      };
-      IterableExtensions.<Transform>forEach(_transforms_1, _function);
-      double _mxx = this.diagramTransform.getMxx();
-      double _mxx_1 = this.diagramTransform.getMxx();
-      double _multiply = (_mxx * _mxx_1);
-      double _mxy = this.diagramTransform.getMxy();
-      double _mxy_1 = this.diagramTransform.getMxy();
-      double _multiply_1 = (_mxy * _mxy_1);
-      double _plus = (_multiply + _multiply_1);
-      double _sqrt = Math.sqrt(_plus);
-      this.setDiagramScale(_sqrt);
-    }
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("-fx-background-color: ");
-    XDiagram _diagram_5 = this.getDiagram();
-    Paint _backgroundPaint = _diagram_5.getBackgroundPaint();
+    Paint _backgroundPaint = newDiagram.getBackgroundPaint();
     CharSequence _css = JavaToCss.toCss(_backgroundPaint);
     _builder.append(_css, "");
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     _builder.append("-fx-text-fill: ");
-    XDiagram _diagram_6 = this.getDiagram();
-    Paint _foregroundPaint = _diagram_6.getForegroundPaint();
+    Paint _foregroundPaint = newDiagram.getForegroundPaint();
     CharSequence _css_1 = JavaToCss.toCss(_foregroundPaint);
     _builder.append(_css_1, "");
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     this.diagramCanvas.setStyle(_builder.toString());
-    XDiagram _diagram_7 = this.getDiagram();
-    ObservableList<Transform> _transforms_2 = _diagram_7.getTransforms();
-    _transforms_2.setAll(this.diagramTransform);
     ObservableList<Node> _children_2 = this.headsUpDisplay.getChildren();
     _children_2.clear();
-    XDiagram _diagram_8 = this.getDiagram();
-    ObservableMap<Node,Pos> _fixedButtons = _diagram_8.getFixedButtons();
+    XDiagram _diagram_2 = this.getDiagram();
+    ObservableMap<Node,Pos> _fixedButtons = _diagram_2.getFixedButtons();
     Set<Map.Entry<Node,Pos>> _entrySet = _fixedButtons.entrySet();
-    final Procedure1<Map.Entry<Node,Pos>> _function_1 = new Procedure1<Map.Entry<Node,Pos>>() {
+    final Procedure1<Map.Entry<Node,Pos>> _function = new Procedure1<Map.Entry<Node,Pos>>() {
       public void apply(final Map.Entry<Node,Pos> it) {
         Node _key = it.getKey();
         Pos _value = it.getValue();
         XRoot.this.headsUpDisplay.add(_key, _value);
       }
     };
-    IterableExtensions.<Map.Entry<Node,Pos>>forEach(_entrySet, _function_1);
-  }
-  
-  public void centerDiagram() {
-    XDiagram _diagram = this.getDiagram();
-    final Bounds diagramBounds = _diagram.getLayoutBounds();
-    double _width = diagramBounds.getWidth();
-    double _height = diagramBounds.getHeight();
-    double _multiply = (_width * _height);
-    boolean _greaterThan = (_multiply > 1);
-    if (_greaterThan) {
-      Scene _scene = this.getScene();
-      double _width_1 = _scene.getWidth();
-      double _width_2 = diagramBounds.getWidth();
-      double _divide = (_width_1 / _width_2);
-      Scene _scene_1 = this.getScene();
-      double _height_1 = _scene_1.getHeight();
-      double _height_2 = diagramBounds.getHeight();
-      double _divide_1 = (_height_1 / _height_2);
-      double _min = Math.min(_divide, _divide_1);
-      double _min_1 = Math.min(1, _min);
-      final double scale = Math.max(XRoot.MIN_SCALE, _min_1);
-      this.setDiagramScale(scale);
-      TransformExtensions.scale(this.diagramTransform, scale, scale);
-      XDiagram _diagram_1 = this.getDiagram();
-      XDiagram _diagram_2 = this.getDiagram();
-      Bounds _boundsInLocal = _diagram_2.getBoundsInLocal();
-      Bounds _localToScene = _diagram_1.localToScene(_boundsInLocal);
-      final Point2D centerInScene = BoundsExtensions.center(_localToScene);
-      Scene _scene_2 = this.getScene();
-      double _width_3 = _scene_2.getWidth();
-      double _multiply_1 = (0.5 * _width_3);
-      double _x = centerInScene.getX();
-      double _minus = (_multiply_1 - _x);
-      Scene _scene_3 = this.getScene();
-      double _height_3 = _scene_3.getHeight();
-      double _multiply_2 = (0.5 * _height_3);
-      double _y = centerInScene.getY();
-      double _minus_1 = (_multiply_2 - _y);
-      TransformExtensions.translate(this.diagramTransform, _minus, _minus_1);
-    }
+    IterableExtensions.<Map.Entry<Node,Pos>>forEach(_entrySet, _function);
+    newDiagram.centerDiagram(false);
   }
   
   public HeadsUpDisplay getHeadsUpDisplay() {
@@ -213,8 +131,10 @@ public class XRoot extends Parent implements XActivatable {
     return this.diagramCanvas;
   }
   
-  public Affine getDiagramTransform() {
-    return this.diagramTransform;
+  public AccumulativeTransform2D getDiagramTransform() {
+    XDiagram _diagram = this.getDiagram();
+    AccumulativeTransform2D _canvasTransform = _diagram.getCanvasTransform();
+    return _canvasTransform;
   }
   
   public void activate() {
@@ -312,24 +232,6 @@ public class XRoot extends Parent implements XActivatable {
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
-  }
-  
-  private SimpleDoubleProperty diagramScaleProperty = new SimpleDoubleProperty(this, "diagramScale",_initDiagramScale());
-  
-  private static final double _initDiagramScale() {
-    return 1.0;
-  }
-  
-  public double getDiagramScale() {
-    return this.diagramScaleProperty.get();
-  }
-  
-  public void setDiagramScale(final double diagramScale) {
-    this.diagramScaleProperty.set(diagramScale);
-  }
-  
-  public DoubleProperty diagramScaleProperty() {
-    return this.diagramScaleProperty;
   }
   
   private ReadOnlyObjectWrapper<XDiagram> diagramProperty = new ReadOnlyObjectWrapper<XDiagram>(this, "diagram");

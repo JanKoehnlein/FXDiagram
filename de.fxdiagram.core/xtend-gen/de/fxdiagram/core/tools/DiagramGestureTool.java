@@ -2,7 +2,7 @@ package de.fxdiagram.core.tools;
 
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.ZoomContext;
 import javafx.event.EventHandler;
@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.RotateEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
-import javafx.scene.transform.Affine;
 
 @SuppressWarnings("all")
 public class DiagramGestureTool implements XDiagramTool {
@@ -44,24 +43,20 @@ public class DiagramGestureTool implements XDiagramTool {
       public void handle(final ZoomEvent it) {
         double _totalZoomFactor = it.getTotalZoomFactor();
         double _previousScale = DiagramGestureTool.this.zoomContext.getPreviousScale();
-        double _divide = (_totalZoomFactor / _previousScale);
-        final double scale = Math.max(_divide, XRoot.MIN_SCALE);
-        double _diagramScale = root.getDiagramScale();
-        final double newScale = (scale * _diagramScale);
-        root.setDiagramScale(newScale);
-        Affine _diagramTransform = root.getDiagramTransform();
-        TransformExtensions.scale(_diagramTransform, scale, scale);
+        final double scale = (_totalZoomFactor / _previousScale);
+        AccumulativeTransform2D _diagramTransform = root.getDiagramTransform();
+        _diagramTransform.scaleRelative(scale);
         XDiagram _diagram = root.getDiagram();
         Point2D _pivotInDiagram = DiagramGestureTool.this.zoomContext.getPivotInDiagram();
         final Point2D pivotInScene = _diagram.localToScene(_pivotInDiagram);
-        Affine _diagramTransform_1 = root.getDiagramTransform();
+        AccumulativeTransform2D _diagramTransform_1 = root.getDiagramTransform();
         double _sceneX = it.getSceneX();
         double _x = pivotInScene.getX();
         double _minus = (_sceneX - _x);
         double _sceneY = it.getSceneY();
         double _y = pivotInScene.getY();
         double _minus_1 = (_sceneY - _y);
-        TransformExtensions.translate(_diagramTransform_1, _minus, _minus_1);
+        _diagramTransform_1.translateRelative(_minus, _minus_1);
         double _totalZoomFactor_1 = it.getTotalZoomFactor();
         DiagramGestureTool.this.zoomContext.setPreviousScale(_totalZoomFactor_1);
       }
@@ -69,10 +64,10 @@ public class DiagramGestureTool implements XDiagramTool {
     this.zoomHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
       public void handle(final ScrollEvent it) {
-        Affine _diagramTransform = root.getDiagramTransform();
+        AccumulativeTransform2D _diagramTransform = root.getDiagramTransform();
         double _deltaX = it.getDeltaX();
         double _deltaY = it.getDeltaY();
-        TransformExtensions.translate(_diagramTransform, _deltaX, _deltaY);
+        _diagramTransform.translateRelative(_deltaX, _deltaY);
       }
     };
     this.scrollHandler = _function_2;
@@ -80,11 +75,11 @@ public class DiagramGestureTool implements XDiagramTool {
       public void handle(final RotateEvent it) {
         boolean _isShortcutDown = it.isShortcutDown();
         if (_isShortcutDown) {
-          Affine _diagramTransform = root.getDiagramTransform();
+          AccumulativeTransform2D _diagramTransform = root.getDiagramTransform();
           double _angle = it.getAngle();
           double _sceneX = it.getSceneX();
           double _sceneY = it.getSceneY();
-          TransformExtensions.rotate(_diagramTransform, _angle, _sceneX, _sceneY);
+          _diagramTransform.rotateRelative(_angle, _sceneX, _sceneY);
         }
       }
     };

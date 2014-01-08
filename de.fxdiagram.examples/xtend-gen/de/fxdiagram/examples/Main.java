@@ -24,6 +24,7 @@ import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.lib.simple.SimpleNode;
 import java.net.URL;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
@@ -303,7 +304,12 @@ public class Main extends Application {
       };
       ObjectExtensions.<XDiagram>operator_doubleArrow(diagram, _function);
       this.warmUpLayouter();
-      root.centerDiagram();
+      final Runnable _function_1 = new Runnable() {
+        public void run() {
+          diagram.centerDiagram(true);
+        }
+      };
+      Platform.runLater(_function_1);
       _xblockexpression = (scene);
     }
     return _xblockexpression;

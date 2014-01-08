@@ -7,10 +7,6 @@ import javafx.scene.input.RotateEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.ZoomEvent
 
-import static java.lang.Math.*
-
-import static extension de.fxdiagram.core.extensions.TransformExtensions.*
-
 class DiagramGestureTool implements XDiagramTool {
 
 	XRoot root
@@ -31,20 +27,18 @@ class DiagramGestureTool implements XDiagramTool {
 			zoomContext = new ZoomContext(root.diagram.sceneToLocal(sceneX, sceneY))
 		]
 		zoomHandler = [
-			val scale = max(totalZoomFactor / zoomContext.previousScale, XRoot.MIN_SCALE)
-			val newScale = scale * root.diagramScale 
-			root.diagramScale = newScale
-			root.diagramTransform.scale(scale, scale)
+			val scale = totalZoomFactor / zoomContext.previousScale
+			root.diagramTransform.scaleRelative(scale)
 			val pivotInScene = root.diagram.localToScene(zoomContext.pivotInDiagram)
-			root.diagramTransform.translate(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
+			root.diagramTransform.translateRelative(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
 			zoomContext.previousScale = totalZoomFactor
 		]
 		scrollHandler = [
-			root.diagramTransform.translate(deltaX, deltaY)
+			root.diagramTransform.translateRelative(deltaX, deltaY)
 		]
 		rotateHandler = [
 			if (shortcutDown)
-				root.diagramTransform.rotate(angle, sceneX, sceneY)
+				root.diagramTransform.rotateRelative(angle, sceneX, sceneY)
 		]
 	}
 

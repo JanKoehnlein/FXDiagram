@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EcorePackage
 
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
 import static extension javafx.util.Duration.*
+import javafx.application.Platform
 
 class Demo extends Application {
 
@@ -44,7 +45,7 @@ class Demo extends Application {
 	override start(Stage it) {
 		title = 'FX Diagram Demo'
 		scene = createScene
-		fullScreen = true
+//		fullScreen = true
 		show
 	}
 
@@ -95,7 +96,9 @@ class Demo extends Application {
 			]
 		]
 		warmUpLayouter
-		root.centerDiagram
+		Platform.runLater[|
+			diagram.centerDiagram(true)
+		]
 		scene
 	}
 	

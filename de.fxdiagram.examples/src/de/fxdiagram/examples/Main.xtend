@@ -30,6 +30,7 @@ import javafx.stage.Stage
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
 import de.fxdiagram.examples.ecore.EClassNode
 import org.eclipse.emf.ecore.EcorePackage
+import javafx.application.Platform
 
 class Main extends Application {
 
@@ -174,7 +175,9 @@ class Main extends Application {
 
 		]
 		warmUpLayouter
-		root.centerDiagram
+		Platform.runLater[|
+			diagram.centerDiagram(true)
+		]
 		scene
 	}
 	

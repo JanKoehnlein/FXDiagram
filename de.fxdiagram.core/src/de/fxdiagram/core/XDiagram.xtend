@@ -5,6 +5,8 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
 import de.fxdiagram.core.behavior.Behavior
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior
+import de.fxdiagram.core.behavior.NavigationBehavior
+import de.fxdiagram.core.extensions.AccumulativeTransform2D
 import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
 import javafx.collections.ListChangeListener
@@ -17,11 +19,13 @@ import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.paint.Color
 import javafx.scene.paint.Paint
+import javafx.scene.transform.Transform
 
+import static java.lang.Math.*
 import static javafx.collections.FXCollections.*
 
+import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.behavior.NavigationBehavior
 
 class XDiagram extends Group implements XActivatable {
 	
@@ -48,6 +52,10 @@ class XDiagram extends Group implements XActivatable {
 	
 	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
 	
+	AccumulativeTransform2D canvasTransform
+	
+	boolean needsCentering = true
+	
 	new() {
 		children += nodeLayer
 		children += buttonLayer
@@ -63,6 +71,15 @@ class XDiagram extends Group implements XActivatable {
 			else 
 				nodeLayer.children -= connections
 		]
+		canvasTransform = new AccumulativeTransform2D
+		transforms.setAll(canvasTransform.transform)
+		transforms.addListener([ListChangeListener.Change<Transform> change | 
+			throw new IllegalStateException("Illegal attempt to change the transforms of an XDiagram")
+		])
+	}
+	
+	def getCanvasTransform() {
+		canvasTransform
 	}
 	
 	override activate() {
@@ -132,6 +149,19 @@ class XDiagram extends Group implements XActivatable {
 		contentsInitializer?.apply(this)
 		if(getBehavior(NavigationBehavior) == null) 
 			addBehavior(new DiagramNavigationBehavior(this))
+	}
+		
+	def void centerDiagram(boolean useForce) {
+		if(needsCentering|| useForce) {
+			layout
+			if(layoutBounds.width * layoutBounds.height > 1) {
+				val scale = min(1, min(scene.width / layoutBounds.width, scene.height / layoutBounds.height))
+				canvasTransform.scale = scale
+				val centerInScene = localToScene(boundsInLocal).center
+				canvasTransform.setTranslate(0.5 * scene.width - centerInScene.x, 0.5 * scene.height - centerInScene.y)
+			}
+		}
+		needsCentering = false
 	}
 		
 	def <T extends Behavior> T getBehavior(Class<T> key) {

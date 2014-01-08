@@ -6,13 +6,14 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
 import java.util.logging.Logger;
-import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -103,7 +104,8 @@ public class LevelOfDetailDiagramNode extends XNode {
       LevelOfDetailDiagramNode.LOG.severe(_plus_1);
     } else {
       XRoot _root = CoreExtensions.getRoot(this);
-      DoubleProperty _diagramScaleProperty = _root.diagramScaleProperty();
+      AccumulativeTransform2D _diagramTransform = _root.getDiagramTransform();
+      ReadOnlyDoubleProperty _scaleProperty = _diagramTransform.scaleProperty();
       final ChangeListener<Number> _function = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
           Bounds _boundsInLocal = LevelOfDetailDiagramNode.this.getBoundsInLocal();
@@ -139,7 +141,7 @@ public class LevelOfDetailDiagramNode extends XNode {
           }
         }
       };
-      _diagramScaleProperty.addListener(_function);
+      _scaleProperty.addListener(_function);
     }
   }
   

@@ -14,6 +14,8 @@ import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior;
 import de.fxdiagram.core.behavior.NavigationBehavior;
+import de.fxdiagram.core.extensions.AccumulativeTransform2D;
+import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,12 +35,16 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -67,6 +73,10 @@ public class XDiagram extends Group implements XActivatable {
   private AuxiliaryLinesSupport auxiliaryLinesSupport;
   
   private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
+  
+  private AccumulativeTransform2D canvasTransform;
+  
+  private boolean needsCentering = true;
   
   public XDiagram() {
     ObservableList<Node> _children = this.getChildren();
@@ -97,6 +107,23 @@ public class XDiagram extends Group implements XActivatable {
       }
     };
     this.isRootDiagramProperty.addListener(_function_1);
+    AccumulativeTransform2D _accumulativeTransform2D = new AccumulativeTransform2D();
+    this.canvasTransform = _accumulativeTransform2D;
+    ObservableList<Transform> _transforms = this.getTransforms();
+    Transform _transform = this.canvasTransform.getTransform();
+    _transforms.setAll(_transform);
+    ObservableList<Transform> _transforms_1 = this.getTransforms();
+    final ListChangeListener<Transform> _function_2 = new ListChangeListener<Transform>() {
+      public void onChanged(final ListChangeListener.Change<? extends Transform> change) {
+        IllegalStateException _illegalStateException = new IllegalStateException("Illegal attempt to change the transforms of an XDiagram");
+        throw _illegalStateException;
+      }
+    };
+    _transforms_1.addListener(_function_2);
+  }
+  
+  public AccumulativeTransform2D getCanvasTransform() {
+    return this.canvasTransform;
   }
   
   public void activate() {
@@ -272,6 +299,54 @@ public class XDiagram extends Group implements XActivatable {
       DiagramNavigationBehavior _diagramNavigationBehavior = new DiagramNavigationBehavior(this);
       this.addBehavior(_diagramNavigationBehavior);
     }
+  }
+  
+  public void centerDiagram(final boolean useForce) {
+    boolean _or = false;
+    if (this.needsCentering) {
+      _or = true;
+    } else {
+      _or = (this.needsCentering || useForce);
+    }
+    if (_or) {
+      this.layout();
+      Bounds _layoutBounds = this.getLayoutBounds();
+      double _width = _layoutBounds.getWidth();
+      Bounds _layoutBounds_1 = this.getLayoutBounds();
+      double _height = _layoutBounds_1.getHeight();
+      double _multiply = (_width * _height);
+      boolean _greaterThan = (_multiply > 1);
+      if (_greaterThan) {
+        Scene _scene = this.getScene();
+        double _width_1 = _scene.getWidth();
+        Bounds _layoutBounds_2 = this.getLayoutBounds();
+        double _width_2 = _layoutBounds_2.getWidth();
+        double _divide = (_width_1 / _width_2);
+        Scene _scene_1 = this.getScene();
+        double _height_1 = _scene_1.getHeight();
+        Bounds _layoutBounds_3 = this.getLayoutBounds();
+        double _height_2 = _layoutBounds_3.getHeight();
+        double _divide_1 = (_height_1 / _height_2);
+        double _min = Math.min(_divide, _divide_1);
+        final double scale = Math.min(1, _min);
+        this.canvasTransform.setScale(scale);
+        Bounds _boundsInLocal = this.getBoundsInLocal();
+        Bounds _localToScene = this.localToScene(_boundsInLocal);
+        final Point2D centerInScene = BoundsExtensions.center(_localToScene);
+        Scene _scene_2 = this.getScene();
+        double _width_3 = _scene_2.getWidth();
+        double _multiply_1 = (0.5 * _width_3);
+        double _x = centerInScene.getX();
+        double _minus = (_multiply_1 - _x);
+        Scene _scene_3 = this.getScene();
+        double _height_3 = _scene_3.getHeight();
+        double _multiply_2 = (0.5 * _height_3);
+        double _y = centerInScene.getY();
+        double _minus_1 = (_multiply_2 - _y);
+        this.canvasTransform.setTranslate(_minus, _minus_1);
+      }
+    }
+    this.needsCentering = false;
   }
   
   public <T extends Behavior> T getBehavior(final Class<T> key) {

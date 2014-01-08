@@ -2,11 +2,10 @@ package de.fxdiagram.core.tools.actions;
 
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import javafx.animation.Transition;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.transform.Affine;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -33,43 +32,29 @@ public class ScrollToAndScaleTransition extends Transition {
   
   public ScrollToAndScaleTransition(final XRoot root, final Point2D targetCenterInDiagram, final double targetScale, final double targetAngle) {
     this.root = root;
-    double _diagramScale = root.getDiagramScale();
-    this.fromScale = _diagramScale;
-    double _max = Math.max(XRoot.MIN_SCALE, targetScale);
+    AccumulativeTransform2D _diagramTransform = root.getDiagramTransform();
+    double _scale = _diagramTransform.getScale();
+    this.fromScale = _scale;
+    double _max = Math.max(AccumulativeTransform2D.MIN_SCALE, targetScale);
     this.toScale = _max;
-    Affine _diagramTransform = root.getDiagramTransform();
-    double _tx = _diagramTransform.getTx();
-    Affine _diagramTransform_1 = root.getDiagramTransform();
-    double _ty = _diagramTransform_1.getTy();
-    Point2D _point2D = new Point2D(_tx, _ty);
+    AccumulativeTransform2D _diagramTransform_1 = root.getDiagramTransform();
+    double _translateX = _diagramTransform_1.getTranslateX();
+    AccumulativeTransform2D _diagramTransform_2 = root.getDiagramTransform();
+    double _translateY = _diagramTransform_2.getTranslateY();
+    Point2D _point2D = new Point2D(_translateX, _translateY);
     this.fromTranslation = _point2D;
-    Affine _diagramTransform_2 = root.getDiagramTransform();
-    double _mxx = _diagramTransform_2.getMxx();
-    double _divide = (_mxx / this.fromScale);
-    double _acos = Math.acos(_divide);
-    this.fromAngle = _acos;
+    AccumulativeTransform2D _diagramTransform_3 = root.getDiagramTransform();
+    double _rotate = _diagramTransform_3.getRotate();
+    this.fromAngle = _rotate;
     this.toAngle = targetAngle;
-    final double rescale = (this.toScale / this.fromScale);
-    Affine _diagramTransform_3 = root.getDiagramTransform();
-    final Procedure1<Affine> _function = new Procedure1<Affine>() {
-      public void apply(final Affine it) {
-        TransformExtensions.scale(it, rescale, rescale);
-        double _cos = Math.cos(ScrollToAndScaleTransition.this.toAngle);
-        double _multiply = (ScrollToAndScaleTransition.this.toScale * _cos);
-        it.setMxx(_multiply);
-        double _sin = Math.sin(ScrollToAndScaleTransition.this.toAngle);
-        double _multiply_1 = (ScrollToAndScaleTransition.this.toScale * _sin);
-        it.setMxy(_multiply_1);
-        double _sin_1 = Math.sin(ScrollToAndScaleTransition.this.toAngle);
-        double _minus = (-_sin_1);
-        double _multiply_2 = (ScrollToAndScaleTransition.this.toScale * _minus);
-        it.setMyx(_multiply_2);
-        double _cos_1 = Math.cos(ScrollToAndScaleTransition.this.toAngle);
-        double _multiply_3 = (ScrollToAndScaleTransition.this.toScale * _cos_1);
-        it.setMyy(_multiply_3);
+    AccumulativeTransform2D _diagramTransform_4 = root.getDiagramTransform();
+    final Procedure1<AccumulativeTransform2D> _function = new Procedure1<AccumulativeTransform2D>() {
+      public void apply(final AccumulativeTransform2D it) {
+        it.scaleRelative((ScrollToAndScaleTransition.this.toScale / ScrollToAndScaleTransition.this.fromScale));
+        it.setRotate(ScrollToAndScaleTransition.this.toAngle);
       }
     };
-    ObjectExtensions.<Affine>operator_doubleArrow(_diagramTransform_3, _function);
+    ObjectExtensions.<AccumulativeTransform2D>operator_doubleArrow(_diagramTransform_4, _function);
     XDiagram _diagram = root.getDiagram();
     final Point2D centerInScene = _diagram.localToScene(targetCenterInDiagram);
     Scene _scene = root.getScene();
@@ -77,42 +62,28 @@ public class ScrollToAndScaleTransition extends Transition {
     double _multiply = (0.5 * _width);
     double _x = centerInScene.getX();
     double _minus = (_multiply - _x);
-    Affine _diagramTransform_4 = root.getDiagramTransform();
-    double _tx_1 = _diagramTransform_4.getTx();
-    double _plus = (_minus + _tx_1);
+    AccumulativeTransform2D _diagramTransform_5 = root.getDiagramTransform();
+    double _translateX_1 = _diagramTransform_5.getTranslateX();
+    double _plus = (_minus + _translateX_1);
     Scene _scene_1 = root.getScene();
     double _height = _scene_1.getHeight();
     double _multiply_1 = (0.5 * _height);
     double _y = centerInScene.getY();
     double _minus_1 = (_multiply_1 - _y);
-    Affine _diagramTransform_5 = root.getDiagramTransform();
-    double _ty_1 = _diagramTransform_5.getTy();
-    double _plus_1 = (_minus_1 + _ty_1);
+    AccumulativeTransform2D _diagramTransform_6 = root.getDiagramTransform();
+    double _translateY_1 = _diagramTransform_6.getTranslateY();
+    double _plus_1 = (_minus_1 + _translateY_1);
     Point2D _point2D_1 = new Point2D(_plus, _plus_1);
     this.toTranslation = _point2D_1;
-    Affine _diagramTransform_6 = root.getDiagramTransform();
-    final Procedure1<Affine> _function_1 = new Procedure1<Affine>() {
-      public void apply(final Affine it) {
-        double _cos = Math.cos(ScrollToAndScaleTransition.this.fromAngle);
-        double _multiply = (ScrollToAndScaleTransition.this.fromScale * _cos);
-        it.setMxx(_multiply);
-        double _sin = Math.sin(ScrollToAndScaleTransition.this.fromAngle);
-        double _multiply_1 = (ScrollToAndScaleTransition.this.fromScale * _sin);
-        it.setMxy(_multiply_1);
-        double _sin_1 = Math.sin(ScrollToAndScaleTransition.this.fromAngle);
-        double _minus = (-_sin_1);
-        double _multiply_2 = (ScrollToAndScaleTransition.this.fromScale * _minus);
-        it.setMyx(_multiply_2);
-        double _cos_1 = Math.cos(ScrollToAndScaleTransition.this.fromAngle);
-        double _multiply_3 = (ScrollToAndScaleTransition.this.fromScale * _cos_1);
-        it.setMyy(_multiply_3);
-        double _x = ScrollToAndScaleTransition.this.fromTranslation.getX();
-        it.setTx(_x);
-        double _y = ScrollToAndScaleTransition.this.fromTranslation.getY();
-        it.setTx(_y);
+    AccumulativeTransform2D _diagramTransform_7 = root.getDiagramTransform();
+    final Procedure1<AccumulativeTransform2D> _function_1 = new Procedure1<AccumulativeTransform2D>() {
+      public void apply(final AccumulativeTransform2D it) {
+        it.setScale(ScrollToAndScaleTransition.this.fromScale);
+        it.setRotate(ScrollToAndScaleTransition.this.fromAngle);
+        it.setTranslate(ScrollToAndScaleTransition.this.fromTranslation);
       }
     };
-    ObjectExtensions.<Affine>operator_doubleArrow(_diagramTransform_6, _function_1);
+    ObjectExtensions.<AccumulativeTransform2D>operator_doubleArrow(_diagramTransform_7, _function_1);
     Duration _millis = Duration.millis(500);
     this.setCycleDuration(_millis);
   }
@@ -134,27 +105,15 @@ public class ScrollToAndScaleTransition extends Transition {
     double _y_1 = this.toTranslation.getY();
     double _multiply_3 = (frac * _y_1);
     final double tyNow = (_multiply_2 + _multiply_3);
-    this.root.setDiagramScale(scaleNow);
-    Affine _diagramTransform = this.root.getDiagramTransform();
-    final Procedure1<Affine> _function = new Procedure1<Affine>() {
-      public void apply(final Affine it) {
-        double _cos = Math.cos(angleNow);
-        double _multiply = (scaleNow * _cos);
-        it.setMxx(_multiply);
-        double _sin = Math.sin(angleNow);
-        double _multiply_1 = (scaleNow * _sin);
-        it.setMxy(_multiply_1);
-        double _sin_1 = Math.sin(angleNow);
-        double _minus = (-_sin_1);
-        double _multiply_2 = (scaleNow * _minus);
-        it.setMyx(_multiply_2);
-        double _cos_1 = Math.cos(angleNow);
-        double _multiply_3 = (scaleNow * _cos_1);
-        it.setMyy(_multiply_3);
-        it.setTx(txNow);
-        it.setTy(tyNow);
+    AccumulativeTransform2D _diagramTransform = this.root.getDiagramTransform();
+    final Procedure1<AccumulativeTransform2D> _function = new Procedure1<AccumulativeTransform2D>() {
+      public void apply(final AccumulativeTransform2D it) {
+        it.setRotate(angleNow);
+        it.setScale(scaleNow);
+        it.setTranslateX(txNow);
+        it.setTranslateY(tyNow);
       }
     };
-    ObjectExtensions.<Affine>operator_doubleArrow(_diagramTransform, _function);
+    ObjectExtensions.<AccumulativeTransform2D>operator_doubleArrow(_diagramTransform, _function);
   }
 }

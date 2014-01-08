@@ -7,8 +7,8 @@ import javafx.util.Duration
 
 import static java.lang.Math.*
 
-import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.extensions.AccumulativeTransform2D
 
 class ScrollToAndScaleTransition extends Transition {
 
@@ -29,30 +29,23 @@ class ScrollToAndScaleTransition extends Transition {
 	
 	new(XRoot root, Point2D targetCenterInDiagram, double targetScale, double targetAngle) {
 		this.root = root
-		fromScale = root.diagramScale
-		toScale = max(XRoot.MIN_SCALE, targetScale)
-		fromTranslation = new Point2D(root.diagramTransform.tx, root.diagramTransform.ty)
-		fromAngle = acos(root.diagramTransform.mxx / fromScale)
+		fromScale = root.diagramTransform.scale
+		toScale = max(AccumulativeTransform2D.MIN_SCALE, targetScale)
+		fromTranslation = new Point2D(root.diagramTransform.translateX, root.diagramTransform.translateY)
+		fromAngle = root.diagramTransform.rotate
 		toAngle = targetAngle
-		val rescale = toScale / fromScale
 		root.diagramTransform => [
-			scale(rescale, rescale)
-			mxx = toScale * cos(toAngle)
-			mxy = toScale * sin(toAngle)
-			myx = toScale * -sin(toAngle)
-			myy = toScale * cos(toAngle)
+			scaleRelative(toScale/fromScale)
+			rotate = toAngle
 		]
 		val centerInScene = root.diagram.localToScene(targetCenterInDiagram)
 		toTranslation = new Point2D(
-					0.5 * root.scene.width - centerInScene.x + root.diagramTransform.tx,
-					0.5 * root.scene.height - centerInScene.y + root.diagramTransform.ty)
+					0.5 * root.scene.width - centerInScene.x + root.diagramTransform.translateX,
+					0.5 * root.scene.height - centerInScene.y + root.diagramTransform.translateY)
 		root.diagramTransform => [
-			mxx = fromScale * cos(fromAngle)
-			mxy = fromScale * sin(fromAngle)
-			myx = fromScale * -sin(fromAngle)
-			myy = fromScale * cos(fromAngle)
-			tx = fromTranslation.x
-			tx = fromTranslation.y
+			scale = fromScale
+			rotate = fromAngle
+			translate = fromTranslation
 		]
 		cycleDuration = 500.millis
 	}
@@ -66,14 +59,11 @@ class ScrollToAndScaleTransition extends Transition {
 		val angleNow = (1-frac) * fromAngle + frac * toAngle
 		val txNow =  (1-frac) * fromTranslation.x + frac * toTranslation.x
 		val tyNow =  (1-frac) * fromTranslation.y + frac * toTranslation.y
-		root.diagramScale = scaleNow
 		root.diagramTransform => [
-			mxx = scaleNow * cos(angleNow)
-			mxy = scaleNow * sin(angleNow)
-			myx = scaleNow * -sin(angleNow)
-			myy = scaleNow * cos(angleNow)
-			tx = txNow
-			ty = tyNow
+			rotate = angleNow
+			scale = scaleNow
+			translateX = txNow
+			translateY = tyNow
 		]
 	}
 }

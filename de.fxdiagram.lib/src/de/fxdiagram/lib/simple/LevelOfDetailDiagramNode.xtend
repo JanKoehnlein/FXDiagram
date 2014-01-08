@@ -58,7 +58,7 @@ class LevelOfDetailDiagramNode extends XNode {
 		if(innerDiagram == null) {
 			LOG.severe('No inner diagram set on node ' + key + '. LOD behavior deactivated')
 		} else {
-			root.diagramScaleProperty.addListener [ prop, oldVal, newVal |
+			root.diagramTransform.scaleProperty.addListener [ prop, oldVal, newVal |
 				val bounds = localToScene(boundsInLocal)
 				val area = bounds.width * bounds.height
 				if (area <= 100000) {

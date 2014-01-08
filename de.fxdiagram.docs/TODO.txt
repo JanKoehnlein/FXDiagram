@@ -1,5 +1,6 @@
 TODO
-
+- container node to big when closing a zoomed subdiagram
+ 
 BUGS
 - player.seek doesn't work
 - labels snap back after being repositioned
@@ -10,8 +11,6 @@ ENHANCEMENT
 - collapsible compartments
 - chooser isVertical
 - Make auxlines magnetic
-- Play diagram
-- Hello computer http://www.youtube.com/watch?v=hShY6xZWVGE
 - more auxiliary lines
 - Layouter: convert edges as a last step
 

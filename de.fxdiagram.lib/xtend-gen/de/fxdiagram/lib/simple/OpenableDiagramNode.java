@@ -9,6 +9,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.behavior.AbstractCloseBehavior;
 import de.fxdiagram.core.behavior.AbstractOpenBehavior;
+import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
@@ -43,7 +44,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -179,10 +179,7 @@ public class OpenableDiagramNode extends XNode {
     Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(this, _center);
     this.nodeCenterInDiagram = _localToRootDiagram;
     XDiagram _innerDiagram = this.getInnerDiagram();
-    ObservableList<Transform> _transforms = _innerDiagram.getTransforms();
-    _transforms.clear();
-    XDiagram _innerDiagram_1 = this.getInnerDiagram();
-    _innerDiagram_1.setOpacity(0);
+    _innerDiagram.setOpacity(0);
     ObservableList<Node> _children = this.pane.getChildren();
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
@@ -194,20 +191,20 @@ public class OpenableDiagramNode extends XNode {
     };
     Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
     _children.add(_doubleArrow);
-    XDiagram _innerDiagram_2 = this.getInnerDiagram();
-    _innerDiagram_2.activate();
+    XDiagram _innerDiagram_1 = this.getInnerDiagram();
+    _innerDiagram_1.activate();
     final AbstractCloseBehavior _function_1 = new AbstractCloseBehavior() {
       public void close() {
         OpenableDiagramNode.this.closeDiagram();
       }
     };
     final AbstractCloseBehavior closeBehavior = _function_1;
+    XDiagram _innerDiagram_2 = this.getInnerDiagram();
+    _innerDiagram_2.addBehavior(closeBehavior);
     XDiagram _innerDiagram_3 = this.getInnerDiagram();
-    _innerDiagram_3.addBehavior(closeBehavior);
+    _innerDiagram_3.layout();
     XDiagram _innerDiagram_4 = this.getInnerDiagram();
-    _innerDiagram_4.layout();
-    XDiagram _innerDiagram_5 = this.getInnerDiagram();
-    DiagramScaler _diagramScaler = new DiagramScaler(_innerDiagram_5);
+    DiagramScaler _diagramScaler = new DiagramScaler(_innerDiagram_4);
     final Procedure1<DiagramScaler> _function_2 = new Procedure1<DiagramScaler>() {
       public void apply(final DiagramScaler it) {
         double _width = nodeBounds.getWidth();
@@ -219,12 +216,12 @@ public class OpenableDiagramNode extends XNode {
     };
     DiagramScaler _doubleArrow_1 = ObjectExtensions.<DiagramScaler>operator_doubleArrow(_diagramScaler, _function_2);
     this.diagramScaler = _doubleArrow_1;
-    XDiagram _innerDiagram_6 = this.getInnerDiagram();
+    XDiagram _innerDiagram_5 = this.getInnerDiagram();
     BoundingBox _boundingBox = new BoundingBox(0, 0, 1, 0);
-    Bounds _localToScene = _innerDiagram_6.localToScene(_boundingBox);
+    Bounds _localToScene = _innerDiagram_5.localToScene(_boundingBox);
     final double initialScale = _localToScene.getWidth();
-    XDiagram _innerDiagram_7 = this.getInnerDiagram();
-    final Bounds diagramBoundsInLocal = _innerDiagram_7.getBoundsInLocal();
+    XDiagram _innerDiagram_6 = this.getInnerDiagram();
+    final Bounds diagramBoundsInLocal = _innerDiagram_6.getBoundsInLocal();
     Scene _scene = this.getScene();
     double _width = _scene.getWidth();
     double _width_1 = diagramBoundsInLocal.getWidth();
@@ -236,9 +233,10 @@ public class OpenableDiagramNode extends XNode {
     double _min = Math.min(_divide, _divide_1);
     double _min_1 = Math.min(1, _min);
     double _divide_2 = (_min_1 / initialScale);
-    double _max = Math.max(XRoot.MIN_SCALE, _divide_2);
-    double _diagramScale = this.root.getDiagramScale();
-    final double targetScale = (_max * _diagramScale);
+    double _max = Math.max(AccumulativeTransform2D.MIN_SCALE, _divide_2);
+    AccumulativeTransform2D _diagramTransform = this.root.getDiagramTransform();
+    double _scale = _diagramTransform.getScale();
+    final double targetScale = (_max * _scale);
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function_3 = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
@@ -253,9 +251,6 @@ public class OpenableDiagramNode extends XNode {
                 OpenableDiagramNode.this.diagramScaler.deactivate();
                 XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();
                 OpenableDiagramNode.this.parentDiagram = _diagram;
-                XDiagram _innerDiagram = OpenableDiagramNode.this.getInnerDiagram();
-                ObservableList<Transform> _transforms = _innerDiagram.getTransforms();
-                _transforms.clear();
                 ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
                 _children.setAll(OpenableDiagramNode.this.textNode);
                 Canvas _symbol = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY);
@@ -275,11 +270,11 @@ public class OpenableDiagramNode extends XNode {
                   }
                 };
                 final Canvas toParentButton = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);
-                XDiagram _innerDiagram_1 = OpenableDiagramNode.this.getInnerDiagram();
-                ObservableMap<Node,Pos> _fixedButtons = _innerDiagram_1.getFixedButtons();
+                XDiagram _innerDiagram = OpenableDiagramNode.this.getInnerDiagram();
+                ObservableMap<Node,Pos> _fixedButtons = _innerDiagram.getFixedButtons();
                 _fixedButtons.put(toParentButton, Pos.TOP_RIGHT);
-                XDiagram _innerDiagram_2 = OpenableDiagramNode.this.getInnerDiagram();
-                OpenableDiagramNode.this.root.setDiagram(_innerDiagram_2);
+                XDiagram _innerDiagram_1 = OpenableDiagramNode.this.getInnerDiagram();
+                OpenableDiagramNode.this.root.setDiagram(_innerDiagram_1);
               }
             };
             it.setOnFinished(_function);
@@ -365,9 +360,6 @@ public class OpenableDiagramNode extends XNode {
                 OpenableDiagramNode.this.diagramScaler.deactivate();
                 XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();
                 OpenableDiagramNode.this.parentDiagram = _diagram;
-                XDiagram _innerDiagram = OpenableDiagramNode.this.getInnerDiagram();
-                ObservableList<Transform> _transforms = _innerDiagram.getTransforms();
-                _transforms.clear();
                 ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
                 _children.setAll(OpenableDiagramNode.this.textNode);
               }
