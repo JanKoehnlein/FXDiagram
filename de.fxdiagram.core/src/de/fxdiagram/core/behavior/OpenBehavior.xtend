@@ -23,7 +23,4 @@ abstract class AbstractOpenBehavior implements OpenBehavior {
 	
 	def protected doActivate() {
 	}
-	
-	
-	
 }

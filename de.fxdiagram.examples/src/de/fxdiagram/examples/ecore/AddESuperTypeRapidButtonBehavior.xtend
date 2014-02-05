@@ -4,23 +4,19 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
+import de.fxdiagram.lib.tools.CoverFlowChooser
+import java.util.Set
 import org.eclipse.emf.ecore.EClass
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import java.util.Set
-import de.fxdiagram.lib.tools.CoverFlowChooser
 
-class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EClass, ESuperTypeKey> {
+class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EClass, ESuperTypeHandle> {
 	
 	new(EClassNode host) {
 		super(host)
-	}
-	
-	override getBehaviorKey() {
-		AddESuperTypeRapidButtonBehavior
 	}
 	
 	override protected getInitialModelChoices() {
@@ -28,14 +24,20 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 	}
 	
 	override protected getChoiceKey(EClass superType) {
-		new ESuperTypeKey(host.EClass, superType) 
+		domainObjectProvider.createESuperClassHandle(new ESuperType(host.EClass, superType)) 
 	}
 	
-	override protected createNode(ESuperTypeKey key) {
-		new EClassNode(key.superType)
+	override protected createNode(ESuperTypeHandle key) {
+		new EClassNode => [
+			domainObject = domainObjectProvider.createDomainObjectHandle(key.domainObject.superType)
+		]
 	}
 	
-	override protected createChooser(XRapidButton button, Set<ESuperTypeKey> availableChoiceKeys, Set<ESuperTypeKey> unavailableChoiceKeys) {
+	protected def getDomainObjectProvider() {
+		host.root.getDomainObjectProvider(EcoreDomainObjectProvider)
+	}
+	
+	override protected createChooser(XRapidButton button, Set<ESuperTypeHandle> availableChoiceKeys, Set<ESuperTypeHandle> unavailableChoiceKeys) {
 		val chooser = new CoverFlowChooser(host, button.chooserPosition)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)
@@ -57,8 +59,3 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 	}
 }
 
-@Data
-class ESuperTypeKey {
-	EClass subType
-	EClass superType
-}

@@ -2,6 +2,7 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -21,8 +22,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class BrowserNode extends FlipNode {
   private WebView view;
   
-  public BrowserNode(final String name) {
-    super(name);
+  private Text label;
+  
+  public BrowserNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -30,14 +32,14 @@ public class BrowserNode extends FlipNode {
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
-            it.setText(name);
             it.setTextOrigin(VPos.TOP);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
+        Text _label = BrowserNode.this.label = _doubleArrow;
+        _children.add(_label);
         TooltipExtensions.setTooltip(it, "Double-click to browse");
       }
     };
@@ -52,6 +54,16 @@ public class BrowserNode extends FlipNode {
     WebView _doubleArrow_1 = ObjectExtensions.<WebView>operator_doubleArrow(_webView, _function_1);
     WebView _view = this.view = _doubleArrow_1;
     this.setBack(_view);
+  }
+  
+  public void activate() {
+    super.activate();
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    String _key = null;
+    if (_domainObject!=null) {
+      _key=_domainObject.getKey();
+    }
+    this.label.setText(_key);
   }
   
   public void setPageUrl(final URL pageUrl) {

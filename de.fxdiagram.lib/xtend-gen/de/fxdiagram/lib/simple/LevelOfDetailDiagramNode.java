@@ -9,6 +9,7 @@ import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
@@ -33,7 +34,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class LevelOfDetailDiagramNode extends XNode {
   private RectangleBorderPane pane;
   
-  private Node label;
+  private Text label;
   
   private Group innerDiagramGroup;
   
@@ -41,8 +42,7 @@ public class LevelOfDetailDiagramNode extends XNode {
   
   private DiagramScaler diagramScaler;
   
-  public LevelOfDetailDiagramNode(final String name) {
-    super(name);
+  public LevelOfDetailDiagramNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     this.pane = _rectangleBorderPane;
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
@@ -51,7 +51,6 @@ public class LevelOfDetailDiagramNode extends XNode {
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
-            it.setText(name);
             it.setTextOrigin(VPos.TOP);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
@@ -59,7 +58,7 @@ public class LevelOfDetailDiagramNode extends XNode {
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        Node _label = LevelOfDetailDiagramNode.this.label = _doubleArrow;
+        Text _label = LevelOfDetailDiagramNode.this.label = _doubleArrow;
         _children.add(_label);
       }
     };
@@ -96,10 +95,16 @@ public class LevelOfDetailDiagramNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    String _key = null;
+    if (_domainObject!=null) {
+      _key=_domainObject.getKey();
+    }
+    this.label.setText(_key);
     boolean _equals = Objects.equal(this.innerDiagram, null);
     if (_equals) {
-      String _key = this.getKey();
-      String _plus = ("No inner diagram set on node " + _key);
+      String _key_1 = this.getKey();
+      String _plus = ("No inner diagram set on node " + _key_1);
       String _plus_1 = (_plus + ". LOD behavior deactivated");
       LevelOfDetailDiagramNode.LOG.severe(_plus_1);
     } else {

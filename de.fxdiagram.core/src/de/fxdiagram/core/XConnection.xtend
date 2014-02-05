@@ -5,9 +5,13 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.core.model.DomainObjectHandle
+import de.fxdiagram.core.model.ModelElement
+import de.fxdiagram.core.model.StringHandle
 import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.collections.ListChangeListener.Change
+import javafx.collections.ObservableList
 import javafx.geometry.BoundingBox
 import javafx.geometry.Point2D
 import javafx.scene.Group
@@ -21,62 +25,78 @@ import javafx.scene.shape.StrokeLineCap
 
 import static de.fxdiagram.core.XConnectionKind.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
+import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import static javafx.collections.FXCollections.*
-import javafx.collections.ObservableList
+import de.fxdiagram.annotations.properties.ReadOnly
+import javafx.collections.FXCollections
 
 @Logging
 class XConnection extends XShape {
 	
-	@FxProperty XNode source
-	@FxProperty XNode target
+	@FxProperty @ReadOnly XNode source
+	@FxProperty @ReadOnly XNode target
 	@FxProperty ObservableList<XConnectionLabel> labels = observableArrayList
 	@FxProperty ArrowHead sourceArrowHead
 	@FxProperty ArrowHead targetArrowHead
 	@FxProperty XConnectionKind kind = POLYLINE
+	@FxProperty @ReadOnly ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
+	
 	@FxProperty double strokeWidth = 2.0
 	@FxProperty Paint stroke
 
-	Object key
+	@FxProperty DomainObjectHandle domainObject
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
 
 	ChangeListener<Number> controlPointListener
 	
-	ConnectionRouter connectionRouter
+	@FxProperty ConnectionRouter connectionRouter
 
-	new(XNode source, XNode target, Object key) {
-		this.key = key
+	new() {
 		node = shapeGroup 
 		children += controlPointGroup => [
 			visible = false
 		]
-		this.source = source
-		this.target = target
-		if(!source.outgoingConnections.contains(this))
-			source.outgoingConnections.add(this)
-		if(!target.incomingConnections.contains(this))
-			target.incomingConnections.add(this)
 		connectionRouter = new ConnectionRouter(this)
 		targetArrowHead = new TriangleArrowHead(this, false)	
 	}
 	
-	new(XNode source, XNode target) {
-		this(source, target, source.key + '->' + target.key)
+	new(XNode source, XNode target, DomainObjectHandle domainObject) {
+		this()
+		this.domainObject = domainObject
+		this.source = source
+		this.target = target
 	}
 	
-	def getKey() {
-		key
+	new(XNode source, XNode target) {
+		this(source, target, new StringHandle(source.key + '->' + target.key))
 	}
-
+	
+	def void setSource(XNode source) {
+		sourceProperty.set(source)
+		if(!source.outgoingConnections.contains(this))
+			source.outgoingConnections.add(this)
+	}
+	
+	def void setTarget(XNode target) {
+		targetProperty.set(target)
+		if(!target.incomingConnections.contains(this))
+			target.incomingConnections.add(this)
+	}
+	
 	override doActivate() {
 		if(stroke == null) 
 			stroke = diagram.connectionPaint
 		controlPointListener = [ prop, oldVal, newVal |
 			updateShapes
+		]
+		controlPoints.forEach[
+			activate
+			layoutXProperty.addListener(controlPointListener)
+			layoutYProperty.addListener(controlPointListener)
 		]
 		controlPoints.addListener [ 
 			Change<? extends XControlPoint> it | 
@@ -115,14 +135,6 @@ class XConnection extends XShape {
 		controlPointGroup.visible = isSelected
 	}
 	
-	def getConnectionRouter() {
-		connectionRouter
-	}
-	
-	def getControlPoints() {
-		connectionRouter.controlPoints
-	}
-
 	def void updateShapes() {
 		var remainder = -1
 		switch kind {
@@ -187,7 +199,7 @@ class XConnection extends XShape {
 			polyline.points.setAll(controlPoints.map[#[layoutX, layoutY]].flatten)
 			shapes = #[polyline]
 		}
-		controlPointGroup.children.setAll(connectionRouter.controlPoints)
+		controlPointGroup.children.setAll(controlPoints)
 	}
 	
 	def protected setShapes(List<? extends Shape> shapes) {
@@ -208,9 +220,14 @@ class XConnection extends XShape {
 	override layoutChildren() {
 		super.layoutChildren
 		connectionRouter.calculatePoints
-		labels.forEach[ place(controlPoints) ]	
-		sourceArrowHead?.place
-		targetArrowHead?.place
+		try {
+			labels.forEach[ place(controlPoints) ]	
+			sourceArrowHead?.place
+			targetArrowHead?.place
+		} catch(NullPointerException exc) {
+			// TODO fix control flow
+			LOG.severe("NPE in XConnection.layoutChildren()")
+		}
 	}
 	
 	def at(double t) {
@@ -281,8 +298,18 @@ class XConnection extends XShape {
 			}
 		}
 	}
+	
+	override populate(ModelElement it) {
+		addProperty(sourceProperty, XNode)
+		addProperty(targetProperty, XNode)
+		addProperty(kindProperty, XConnectionKind)
+		addChildProperty(controlPointsProperty, XControlPoint)
+		addChildProperty(labelsProperty, XConnectionLabel)
+		addChildProperty(domainObjectProperty, DomainObjectHandle)
+	}
 }
 
 enum XConnectionKind {
 	POLYLINE, QUAD_CURVE, CUBIC_CURVE 
 }
+

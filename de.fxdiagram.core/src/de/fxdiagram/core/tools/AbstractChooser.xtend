@@ -29,6 +29,7 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.model.DomainObjectHandle
 
 abstract class AbstractChooser implements XDiagramTool {
 
@@ -50,7 +51,7 @@ abstract class AbstractChooser implements XDiagramTool {
 
 	val nodeMap = <String, XNode>newLinkedHashMap
 	
-	val node2choiceInfo = <XNode, Object>newHashMap 
+	val node2choiceInfo = <XNode, DomainObjectHandle>newHashMap 
 	
 	var ChooserConnectionProvider connectionProvider = [
 		host, choice, choiceInfo | new XConnection(host, choice) 
@@ -163,10 +164,10 @@ abstract class AbstractChooser implements XDiagramTool {
 	}
 
 	def addChoice(XNode node) {
-		addChoice(node, node.key)
+		addChoice(node, node.domainObject)
 	}
 	
-	def addChoice(XNode node, Object choiceInfo) {
+	def addChoice(XNode node, DomainObjectHandle choiceInfo) {
 		if (!nodeMap.containsKey(node.key)) {
 			nodeMap.put(node.key, node)
 			node.layout
@@ -292,7 +293,7 @@ abstract class AbstractChooser implements XDiagramTool {
 		}
 	}
 	
-	protected def connectChoice(XNode choice, Object choiceInfo) {
+	protected def connectChoice(XNode choice, DomainObjectHandle choiceInfo) {
 		if(isActive && choice !== currentChoice) {
 			currentChoice = choice
 			val newConnection = connectionProvider.getConnection(host, choice, choiceInfo)

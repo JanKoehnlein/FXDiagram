@@ -35,9 +35,13 @@ import org.eclipse.emf.ecore.EcorePackage
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
 import static extension javafx.util.Duration.*
 import javafx.application.Platform
+import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider
+import de.fxdiagram.examples.java.JavaModelProvider
 
 class Demo extends Application {
 
+	XRoot root
+	
 	def static main(String... args) {
 		launch(args)
 	}
@@ -50,20 +54,24 @@ class Demo extends Application {
 	}
 
 	def createScene() {
-		val root = new XRoot
+		root = new XRoot
 		val scene = new Scene(root, 1024, 768)
 		scene.setCamera(new PerspectiveCamera)
 		root.activate
 		val diagram = new XDiagram
 		root.diagram = diagram
+		root.domainObjectProviders.add(new EcoreDomainObjectProvider)
+		root.domainObjectProviders.add(new JavaModelProvider)
 
 		diagram => [
 //			nodes += new DemoCampIntroSlides
 			nodes += new IntroductionSlideDeck
-			nodes += new OpenableDiagramNode('Basic') => [
+			nodes += new OpenableDiagramNode => [
+				name = 'Basic'
 				innerDiagram = createBasicDiagram('')
 			]
-			nodes += new OpenableDiagramNode('JavaFX') => [
+			nodes += new OpenableDiagramNode => [
+				name = 'JavaFX'
 				innerDiagram = new XDiagram => [
 					contentsInitializer = [
 						nodes += newLoginNode
@@ -77,8 +85,8 @@ class Demo extends Application {
 			]
 			nodes += openableDiagram('Xtend', newNeonSignNode)
 			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
-//			nodes += openableDiagram('Ecore Explorer', newEClassNode)
-			nodes += newLcarsDiagramNode
+			nodes += openableDiagram('Ecore Explorer', newEClassNode)
+//			nodes += newLcarsDiagramNode
 			nodes += new SimpleNode('Eclipse')
 //			nodes += newGalleryDiagramNode()
 //			nodes += new DemoCampSummarySlides
@@ -103,7 +111,8 @@ class Demo extends Application {
 	}
 	
 	def newGalleryDiagramNode() {
-		new OpenableDiagramNode('Gallery') => [
+		new OpenableDiagramNode => [
+			name = 'Gallery'
 			innerDiagram = new XDiagram => [
 				contentsInitializer = [
 					nodes += newSimpleNode('')
@@ -125,7 +134,8 @@ class Demo extends Application {
 	}
 	
 	def newLcarsDiagramNode() {
-		new OpenableDiagramNode('LCARS') => [
+		new OpenableDiagramNode => [
+			name = 'LCARS'
 			innerDiagram = new LcarsDiagram
 		]
 	}
@@ -170,7 +180,8 @@ class Demo extends Application {
 	}
 	
 	protected def openableDiagram(String name, XNode node) {
-		new OpenableDiagramNode(name) => [
+		new OpenableDiagramNode => [
+			it.name = name
 			innerDiagram = new XDiagram => [
 				contentsInitializer = [
 					nodes += node
@@ -207,14 +218,16 @@ class Demo extends Application {
 	}
 	
 	def newOpenableBasicDiagramNode(String nameSuffix) {
-		new OpenableDiagramNode('Nested' + nameSuffix) => [
+		new OpenableDiagramNode => [
+			name = 'Nested' + nameSuffix
 			innerDiagram = createBasicDiagram(nameSuffix + " (nested)")
 			addRapidButtons(nameSuffix)
 		]
 	}
 	
 	def newEmbeddedBasicDiagram(String nameSuffix) {
-		new LevelOfDetailDiagramNode('Embedded' + nameSuffix) => [
+		new LevelOfDetailDiagramNode => [
+			name = 'Embedded' + nameSuffix
 			innerDiagram = createBasicDiagram(nameSuffix + " (embedded)")
 			addRapidButtons(nameSuffix)
 		]
@@ -225,11 +238,17 @@ class Demo extends Application {
 	}
 	
 	def newEClassNode() {
-		new EClassNode(EcorePackage.Literals.ECLASS)
+		val provider = root.getDomainObjectProvider(EcoreDomainObjectProvider)
+		new EClassNode => [
+			domainObject = provider.createEClassHandle(EcorePackage.Literals.ECLASS)
+		]
 	}
 	
 	def newJavaTypeNode() {
-		new JavaTypeNode(Button)
+		val provider = root.getDomainObjectProvider(JavaModelProvider)
+		new JavaTypeNode => [
+			domainObject = provider.createJavaTypeHandle(Button)
+		]
 	}
 	
 	def newNeonSignNode() {
@@ -237,7 +256,8 @@ class Demo extends Application {
 	}
 
 	def newMovieNode() {
-		new MovieNode('Movie') => [
+		new MovieNode => [
+			name = 'Movie'
 			movieUrl = new URL(this.toURI('media/Usability.mp4'))
 			width = 640
 			height = 360
@@ -246,7 +266,8 @@ class Demo extends Application {
 	}
 	
 	def newBrowserNode() {
-		new BrowserNode('Browser') => [
+		new BrowserNode => [
+			name = 'Browser'
 			width = 120
 			height = 160
 			pageUrl = new URL('http://koehnlein.blogspot.de/')
@@ -261,14 +282,18 @@ class Demo extends Application {
 	}
 	
 	def newRecursiveImageNode() {
-		new RecursiveImageNode('Recursive Laptop', ImageCache.get.getImage(this, 'media/laptop.jpg'), 0, -3, 0.6) => [
+		new RecursiveImageNode => [
+			image = ImageCache.get.getImage(this, 'media/laptop.jpg')
+			x = 0
+			y = -3
+			scale = 0.6
 			width = 80
 			height = 60
 		]
 	}
 	
 	def newImageNode() {
-		new ImageNode('seltsam') => [
+		new ImageNode => [
 			image = ImageCache.get.getImage(this, 'media/seltsam.jpg')
 			width = 100
 		]

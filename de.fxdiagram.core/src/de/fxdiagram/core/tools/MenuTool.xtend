@@ -9,9 +9,11 @@ import de.fxdiagram.core.tools.actions.DiagramAction
 import de.fxdiagram.core.tools.actions.ExitAction
 import de.fxdiagram.core.tools.actions.ExportSvgAction
 import de.fxdiagram.core.tools.actions.LayoutAction
+import de.fxdiagram.core.tools.actions.LoadAction
 import de.fxdiagram.core.tools.actions.NavigateNextAction
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction
 import de.fxdiagram.core.tools.actions.OpenAction
+import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import eu.hansolo.enzo.radialmenu.MenuItem
@@ -25,11 +27,11 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
+import javafx.stage.Stage
 
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
 
 import static extension javafx.scene.layout.BorderPane.*
-import javafx.stage.Stage
 
 @Logging
 class MenuTool implements XDiagramTool {
@@ -80,9 +82,17 @@ class MenuTool implements XDiagramTool {
 						consume
 						new LayoutAction(if(shiftDown) LayoutType.NEATO else LayoutType.DOT)
 					}
+				case KeyCode.O:
+					if (shortcutDown) {
+						new LoadAction
+					}
 				case KeyCode.Q:
 					if (shortcutDown) {
 						new ExitAction
+					}
+				case KeyCode.S:
+					if (shortcutDown) {
+						new SaveAction
 					}
 				case KeyCode.RIGHT:
 						new NavigateNextAction
@@ -117,7 +127,7 @@ class MenuTool implements XDiagramTool {
 				buttonSize = 72
 				buttonAlpha = 1.0
 			],
-			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN
+			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN, CLOUD
 			  //, PHOTO, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
 			  // TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, DELETE,
 			].
@@ -138,7 +148,6 @@ class MenuTool implements XDiagramTool {
 				}
 			}
 		]
-
 	}
 
 	protected def openMenu() {

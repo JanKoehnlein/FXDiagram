@@ -8,7 +8,6 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane
 import javafx.geometry.Insets
 import javafx.geometry.VPos
 import javafx.scene.Group
-import javafx.scene.Node
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 
@@ -20,7 +19,7 @@ class LevelOfDetailDiagramNode extends XNode {
 
 	RectangleBorderPane pane
 
-	Node label
+	Text label
 
 	Group innerDiagramGroup
 	
@@ -28,12 +27,10 @@ class LevelOfDetailDiagramNode extends XNode {
 
 	DiagramScaler diagramScaler
 
-	new(String name) {
-		super(name)
+	new() {
 		pane = new RectangleBorderPane
 		node = pane => [
 			children += label = new Text => [
-				text = name
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				tooltip = "Zoom to reveal content"
@@ -55,6 +52,7 @@ class LevelOfDetailDiagramNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate()
+		label.text = domainObject?.key
 		if(innerDiagram == null) {
 			LOG.severe('No inner diagram set on node ' + key + '. LOD behavior deactivated')
 		} else {

@@ -5,6 +5,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.model.StringHandle;
 import de.fxdiagram.lib.media.RecursiveImageNode;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -32,7 +33,10 @@ public class FirstRecursiveImageNode extends XNode {
   }.apply();
   
   public FirstRecursiveImageNode(final RecursiveImageNode parent) {
-    super((parent.getKey() + "_"));
+    String _key = parent.getKey();
+    String _plus = (_key + "_");
+    StringHandle _stringHandle = new StringHandle(_plus);
+    this.setDomainObject(_stringHandle);
     this.recursiveImageNode = parent;
     final Group group = parent.createPane();
     this.setNode(group);

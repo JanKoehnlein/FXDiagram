@@ -14,9 +14,9 @@ class JavaTypeModel {
 	
 	List<Method> operations
 
-	List<Property> properties = newArrayList
+	List<JavaProperty> properties = newArrayList
 
-	List<Property> references = newArrayList
+	List<JavaProperty> references = newArrayList
 	
 	List<Class<?>> superTypes = newArrayList
 	
@@ -37,9 +37,9 @@ class JavaTypeModel {
 			if(types.size == 1) {
 				operations.removeAll(type2Method.map[value])
 				if(types.head.primitiveOrString)
-					properties += new Property(propertyName, types.head)
+					properties += new JavaProperty(propertyName, types.head)
 				else
-					references += new Property(propertyName, types.head)
+					references += new JavaProperty(propertyName, types.head)
 			} else {
 				println(types.join(" "))
 			}
@@ -93,7 +93,13 @@ class JavaTypeModel {
 	}
 }
 
-@Data class Property {
+@Data class JavaProperty {
 	String name
 	Class<?> type
+}
+
+@Data
+class JavaSuperType {
+	Class<?> subType
+	Class<?> superType
 }

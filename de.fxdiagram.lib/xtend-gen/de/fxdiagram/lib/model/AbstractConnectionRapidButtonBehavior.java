@@ -9,6 +9,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.tools.AbstractChooser;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +21,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL extends Object, KEY extends Object> extends AbstractHostBehavior<HOST> {
+public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL extends Object, KEY extends DomainObjectHandle> extends AbstractHostBehavior<HOST> {
   private Set<KEY> availableChoiceKeys = CollectionLiterals.<KEY>newLinkedHashSet();
   
   private Set<KEY> unavailableChoiceKeys = CollectionLiterals.<KEY>newHashSet();
@@ -69,11 +70,11 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
       final Procedure1<XConnection> _function_2 = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {
-          Object _key = it.getKey();
-          boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_key);
+          DomainObjectHandle _domainObject = it.getDomainObject();
+          boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_domainObject);
           if (_remove) {
-            Object _key_1 = it.getKey();
-            AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _key_1));
+            DomainObjectHandle _domainObject_1 = it.getDomainObject();
+            AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
           }
         }
       };
@@ -94,11 +95,11 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
                 List<? extends XConnection> _addedSubList = change.getAddedSubList();
                 final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
                   public void apply(final XConnection it) {
-                    Object _key = it.getKey();
-                    boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_key);
+                    DomainObjectHandle _domainObject = it.getDomainObject();
+                    boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_domainObject);
                     if (_remove) {
-                      Object _key_1 = it.getKey();
-                      AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _key_1));
+                      DomainObjectHandle _domainObject_1 = it.getDomainObject();
+                      AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
                     }
                   }
                 };
@@ -109,11 +110,11 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
                 List<? extends XConnection> _removed = change.getRemoved();
                 final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
                   public void apply(final XConnection it) {
-                    Object _key = it.getKey();
-                    boolean _remove = AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.remove(_key);
+                    DomainObjectHandle _domainObject = it.getDomainObject();
+                    boolean _remove = AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.remove(_domainObject);
                     if (_remove) {
-                      Object _key_1 = it.getKey();
-                      AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.add(((KEY) _key_1));
+                      DomainObjectHandle _domainObject_1 = it.getDomainObject();
+                      AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.add(((KEY) _domainObject_1));
                     }
                   }
                 };

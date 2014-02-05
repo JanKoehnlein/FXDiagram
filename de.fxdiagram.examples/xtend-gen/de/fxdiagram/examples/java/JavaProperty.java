@@ -5,7 +5,7 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
 @SuppressWarnings("all")
-public class Property {
+public class JavaProperty {
   private final String _name;
   
   public String getName() {
@@ -18,7 +18,7 @@ public class Property {
     return this._type;
   }
   
-  public Property(final String name, final Class<? extends Object> type) {
+  public JavaProperty(final String name, final Class<? extends Object> type) {
     super();
     this._name = name;
     this._type = type;
@@ -41,7 +41,7 @@ public class Property {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Property other = (Property) obj;
+    JavaProperty other = (JavaProperty) obj;
     if (_name == null) {
       if (other._name != null)
         return false;

@@ -13,36 +13,40 @@ import org.eclipse.emf.ecore.EReference
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
-class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EReference, EReferenceKey> {
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+
+class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EReference, EReferenceHandle> {
 	
 	new(EClassNode host) {
 		super(host)
 	}
 	
-	override getBehaviorKey() {
-		AddEReferenceRapidButtonBehavior
-	}
-
 	override protected getInitialModelChoices() {
 		host.EClass.EReferences
 	}
 	
 	override protected getChoiceKey(EReference model) {
-		new EReferenceKey(model)
+		domainObjectProvider.createEReferenceHandle(model)
 	}
 	
-	override protected createNode(EReferenceKey key) {
-		new EClassNode(key.left.EReferenceType)
+	override protected createNode(EReferenceHandle handle) {
+		new EClassNode => [
+			domainObject = domainObjectProvider.createDomainObjectHandle(handle.domainObject.EReferenceType)
+		]
+	}
+	
+	protected def getDomainObjectProvider() {
+		host.root.getDomainObjectProvider(EcoreDomainObjectProvider)
 	}
 
-	override protected createChooser(XRapidButton button, Set<EReferenceKey> availableChoiceKeys, Set<EReferenceKey> unavailableChoiceKeys) {
+	override protected createChooser(XRapidButton button, Set<EReferenceHandle> availableChoiceKeys, Set<EReferenceHandle> unavailableChoiceKeys) {
 		val chooser = new CarusselChooser(host, button.chooserPosition)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)
 		]
-		chooser.connectionProvider = [	host, choice, key |
-			val reference = (key as EReferenceKey).left
-			new XConnection(host, choice, key) => [
+		chooser.connectionProvider = [ host, choice, handle |
+			val reference = handle.domainObject as EReference
+			new XConnection(host, choice, handle) => [
 				targetArrowHead = if (reference.container)
 						new DiamondArrowHead(it, false)
 					else 
@@ -73,39 +77,3 @@ class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 	}
 }
 
-class EReferenceKey {
-	EReference left
-	EReference right
-	
-	new(EReference left) {
-		this.left = left
-		this.right = left.EOpposite ?: left
-	}
-
-	def getLeft() {
-		left
-	}
-
-	def getRight() {
-		right
-	}
-	
-	override hashCode() {
-		left.hashCode + right.hashCode
-	}
-	
-	override equals(Object other) {
-		switch other {
-			EReferenceKey:
-				return (other.left == this.left && other.right == this.right)
-					|| (other.left == this.right && other.right == this.left)
-			default: 
-				return false
-		}
-	}		
-	
-	override toString() {
-		'''EReferenceKey «left»«IF right!=left» / «right»«ENDIF»'''
-	}
-	
-}

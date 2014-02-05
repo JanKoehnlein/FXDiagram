@@ -12,25 +12,20 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
+import de.fxdiagram.core.model.DomainObjectHandle
 
 class JavaTypeNode extends XNode {
 	
-	Class<?> javaType
-	
-	val name = new Text
+	val label = new Text
 	val propertyCompartment = new VBox
 	val operationCompartment = new VBox
 	
 	JavaTypeModel model
 	
-	new(Class<?> javaType) {
-		super(javaType.simpleName)
-		this.javaType = javaType
-		name.text = javaType.simpleName
-		model = new JavaTypeModel(javaType)
+	new() {
 		node = new RectangleBorderPane => [
 			children += new VBox => [
-				children += name => [
+				children += label => [
 					textOrigin = VPos.TOP
 					font = Font.font(getFont.family, FontWeight.BOLD, getFont.size * 1.1)
 					VBox.setMargin(it, new Insets(12, 12, 12, 12))
@@ -47,25 +42,44 @@ class JavaTypeNode extends XNode {
 			]
 		]
 	}
+	
+	def getJavaType() {
+		domainObject.domainObject as Class<?>
+	}
+	
+	def getJavaTypeModel() {
+		if(model == null) 
+			model = new JavaTypeModel(javaType)
+		model
+	}
+	
+	override setDomainObject(DomainObjectHandle domainObject) {
+		if(domainObject instanceof JavaTypeHandle) {
+			super.setDomainObject(domainObject)
+			label.text = javaType.simpleName
+		} else {
+			throw new IllegalArgumentException("JavaTypeNode can only use JavaTypeHandles")
+		}
+	}
 
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
 	
-	def populateComprtments() {
-		model.properties.limit.forEach [
+	def populateCompartments() {
+		javaTypeModel.properties.limit.forEach [
 			property |
 			propertyCompartment.children += new Text => [
 				text = '''«property.name»: «property.type.simpleName»''' 
 			]
 		]
-		model.constructors.forEach [
+		javaTypeModel.constructors.forEach [
 			constructor |
 			operationCompartment.children += new Text => [
 				text = '''«javaType.simpleName»(«constructor.parameterTypes.map[simpleName].join(', ')»)''' 
 			]
 		]
-		model.operations.limit.forEach [
+		javaTypeModel.operations.limit.forEach [
 			method |
 			operationCompartment.children += new Text => [
 				text = '''«method.name»(«method.parameterTypes.map[simpleName].join(', ')»): «method.returnType.simpleName»''' 
@@ -82,17 +96,10 @@ class JavaTypeNode extends XNode {
 			list.subList(0, Math.min(list.size, 4))
 	}
 	
-	def getJavaType() {
-		javaType
-	}
-	
-	def getJavaTypeModel() {
-		model
-	}
-	
 	override doActivate() {
 		super.doActivate
-		populateComprtments
+		label.text = javaType.simpleName
+		populateCompartments
 		addBehavior(new AddSuperTypeRapidButtonBehavior(this))
 		addBehavior(new AddReferenceRapidButtonBehavior(this))
 	}

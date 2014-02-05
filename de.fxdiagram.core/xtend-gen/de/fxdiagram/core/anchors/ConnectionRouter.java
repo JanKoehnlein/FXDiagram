@@ -19,12 +19,9 @@ import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -49,7 +46,14 @@ public class ConnectionRouter implements XActivatable {
   
   private double selfEdgeDist = 60;
   
+  public ConnectionRouter() {
+  }
+  
   public ConnectionRouter(final XConnection connection) {
+    this.setConnection(connection);
+  }
+  
+  public void setConnection(final XConnection connection) {
     this.connection = connection;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
@@ -63,6 +67,11 @@ public class ConnectionRouter implements XActivatable {
       }
     };
     this.boundsListener = _function_1;
+  }
+  
+  public ObservableList<XControlPoint> getControlPoints() {
+    ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+    return _controlPoints;
   }
   
   public void activate() {
@@ -634,21 +643,6 @@ public class ConnectionRouter implements XActivatable {
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.anchors.ConnectionRouter");
     ;
-  
-  private ReadOnlyListWrapper<XControlPoint> controlPointsProperty = new ReadOnlyListWrapper<XControlPoint>(this, "controlPoints",_initControlPoints());
-  
-  private static final ObservableList<XControlPoint> _initControlPoints() {
-    ObservableList<XControlPoint> _observableArrayList = FXCollections.<XControlPoint>observableArrayList();
-    return _observableArrayList;
-  }
-  
-  public ObservableList<XControlPoint> getControlPoints() {
-    return this.controlPointsProperty.get();
-  }
-  
-  public ReadOnlyListProperty<XControlPoint> controlPointsProperty() {
-    return this.controlPointsProperty.getReadOnlyProperty();
-  }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   

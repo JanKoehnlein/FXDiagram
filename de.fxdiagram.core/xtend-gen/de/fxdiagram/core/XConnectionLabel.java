@@ -1,13 +1,17 @@
 package de.fxdiagram.core;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.model.ModelElement;
 import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -21,17 +25,20 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class XConnectionLabel extends XShape {
-  private Effect selectionEffect;
+  private Effect selectionEffect = new Function0<Effect>() {
+    public Effect apply() {
+      DropShadow _dropShadow = new DropShadow();
+      return _dropShadow;
+    }
+  }.apply();
   
-  public XConnectionLabel(final XConnection connection) {
-    this.setConnection(connection);
-    ObservableList<XConnectionLabel> _labels = connection.getLabels();
-    _labels.add(this);
+  public XConnectionLabel() {
     Text _text = new Text();
     final Procedure1<Text> _function = new Procedure1<Text>() {
       public void apply(final Text it) {
@@ -43,17 +50,33 @@ public class XConnectionLabel extends XShape {
         double _multiply = (_size * 0.9);
         Font _font_2 = Font.font(_family, _multiply);
         it.setFont(_font_2);
-        ObjectProperty<Paint> _fillProperty = it.fillProperty();
-        ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
-        _fillProperty.bind(_strokeProperty);
       }
     };
     Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
     this.setText(_doubleArrow);
     Text _text_1 = this.getText();
     this.setNode(_text_1);
-    DropShadow _dropShadow = new DropShadow();
-    this.selectionEffect = _dropShadow;
+  }
+  
+  public XConnectionLabel(final XConnection connection) {
+    this();
+    this.setConnection(connection);
+  }
+  
+  public void setConnection(final XConnection connection) {
+    XConnection _connection = this.getConnection();
+    boolean _notEquals = (!Objects.equal(_connection, null));
+    if (_notEquals) {
+      IllegalStateException _illegalStateException = new IllegalStateException("Cannot reset the connection on a label");
+      throw _illegalStateException;
+    }
+    this.connectionProperty.set(connection);
+    ObservableList<XConnectionLabel> _labels = connection.getLabels();
+    _labels.add(this);
+    Text _text = this.getText();
+    ObjectProperty<Paint> _fillProperty = _text.fillProperty();
+    ObjectProperty<Paint> _strokeProperty = connection.strokeProperty();
+    _fillProperty.bind(_strokeProperty);
   }
   
   public void doActivate() {
@@ -120,18 +143,20 @@ public class XConnectionLabel extends XShape {
     _transforms.setAll(transform);
   }
   
-  private SimpleObjectProperty<XConnection> connectionProperty = new SimpleObjectProperty<XConnection>(this, "connection");
+  public void populate(final ModelElement it) {
+    super.populate(it);
+    it.<XConnection>addProperty(this.connectionProperty, XConnection.class);
+    it.<Text>addChildProperty(this.textProperty, Text.class);
+  }
+  
+  private ReadOnlyObjectWrapper<XConnection> connectionProperty = new ReadOnlyObjectWrapper<XConnection>(this, "connection");
   
   public XConnection getConnection() {
     return this.connectionProperty.get();
   }
   
-  public void setConnection(final XConnection connection) {
-    this.connectionProperty.set(connection);
-  }
-  
-  public ObjectProperty<XConnection> connectionProperty() {
-    return this.connectionProperty;
+  public ReadOnlyObjectProperty<XConnection> connectionProperty() {
+    return this.connectionProperty.getReadOnlyProperty();
   }
   
   private SimpleObjectProperty<Text> textProperty = new SimpleObjectProperty<Text>(this, "text");

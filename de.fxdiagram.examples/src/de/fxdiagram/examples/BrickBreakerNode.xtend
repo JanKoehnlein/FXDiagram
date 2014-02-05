@@ -17,7 +17,6 @@ import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 class BrickBreakerNode extends FlipNode {
 
 	new() {
-		super('BrickBreaker')
 		front = new RectangleBorderPane => [
 			children += new Text => [
 				text = "BrickBreaker"

@@ -5,6 +5,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.export.SvgExportable
 import de.fxdiagram.core.export.SvgExporter
+import de.fxdiagram.core.model.StringHandle
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
 import java.util.Deque
 import java.util.LinkedList
@@ -38,8 +39,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 	
 	boolean isZoomedIn 
 
-	new(String name, Image image, double x, double y, double scale) {
-		super(name)
+	new() {
 		this.image = image
 		this.x = x
 		this.y = y
@@ -140,7 +140,7 @@ class FirstRecursiveImageNode extends XNode {
 	Deque<Group> panes = new LinkedList<Group>
 
 	new(RecursiveImageNode parent) {
-		super(parent.key + '_')
+		domainObject = new StringHandle(parent.key + '_')
 		this.recursiveImageNode = parent
 		val group = parent.createPane
 		node = group

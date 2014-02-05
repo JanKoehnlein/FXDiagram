@@ -13,9 +13,11 @@ import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ExitAction;
 import de.fxdiagram.core.tools.actions.ExportSvgAction;
 import de.fxdiagram.core.tools.actions.LayoutAction;
+import de.fxdiagram.core.tools.actions.LoadAction;
 import de.fxdiagram.core.tools.actions.NavigateNextAction;
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
 import de.fxdiagram.core.tools.actions.OpenAction;
+import de.fxdiagram.core.tools.actions.SaveAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import eu.hansolo.enzo.radialmenu.MenuItem;
@@ -176,15 +178,39 @@ public class MenuTool implements XDiagramTool {
           }
         }
         if (!_matched) {
-          if (Objects.equal(getCode,KeyCode.Q)) {
+          if (Objects.equal(getCode,KeyCode.O)) {
             _matched=true;
-            ExitAction _xifexpression_5 = null;
+            LoadAction _xifexpression_5 = null;
             boolean _isShortcutDown_5 = it.isShortcutDown();
             if (_isShortcutDown_5) {
-              ExitAction _exitAction = new ExitAction();
-              _xifexpression_5 = _exitAction;
+              LoadAction _loadAction = new LoadAction();
+              _xifexpression_5 = _loadAction;
             }
             _switchResult = _xifexpression_5;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.Q)) {
+            _matched=true;
+            ExitAction _xifexpression_6 = null;
+            boolean _isShortcutDown_6 = it.isShortcutDown();
+            if (_isShortcutDown_6) {
+              ExitAction _exitAction = new ExitAction();
+              _xifexpression_6 = _exitAction;
+            }
+            _switchResult = _xifexpression_6;
+          }
+        }
+        if (!_matched) {
+          if (Objects.equal(getCode,KeyCode.S)) {
+            _matched=true;
+            SaveAction _xifexpression_7 = null;
+            boolean _isShortcutDown_7 = it.isShortcutDown();
+            if (_isShortcutDown_7) {
+              SaveAction _saveAction = new SaveAction();
+              _xifexpression_7 = _saveAction;
+            }
+            _switchResult = _xifexpression_7;
           }
         }
         if (!_matched) {
@@ -235,7 +261,7 @@ public class MenuTool implements XDiagramTool {
             CloseAction _xblockexpression_5 = null;
             {
               it.consume();
-              CloseAction _xifexpression_6 = null;
+              CloseAction _xifexpression_8 = null;
               RadialMenu.State _state = MenuTool.this.menu.getState();
               boolean _equals = Objects.equal(_state, RadialMenu.State.OPENED);
               if (_equals) {
@@ -243,9 +269,9 @@ public class MenuTool implements XDiagramTool {
                 return;
               } else {
                 CloseAction _closeAction = new CloseAction();
-                _xifexpression_6 = _closeAction;
+                _xifexpression_8 = _closeAction;
               }
-              _xblockexpression_5 = (_xifexpression_6);
+              _xblockexpression_5 = (_xifexpression_8);
             }
             _switchResult = _xblockexpression_5;
           }
@@ -284,7 +310,7 @@ public class MenuTool implements XDiagramTool {
         return _doubleArrow;
       }
     };
-    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN)), _function_2);
+    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN, Symbol.Type.CLOUD)), _function_2);
     RadialMenu _radialMenu = new RadialMenu(_doubleArrow, _map);
     this.menu = _radialMenu;
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {

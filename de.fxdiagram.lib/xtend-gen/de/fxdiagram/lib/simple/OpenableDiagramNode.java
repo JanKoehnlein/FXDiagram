@@ -14,6 +14,8 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -24,6 +26,8 @@ import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
@@ -51,16 +55,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @Logging
 @SuppressWarnings("all")
 public class OpenableDiagramNode extends XNode {
-  private XDiagram _innerDiagram;
-  
-  public XDiagram getInnerDiagram() {
-    return this._innerDiagram;
-  }
-  
-  public void setInnerDiagram(final XDiagram innerDiagram) {
-    this._innerDiagram = innerDiagram;
-  }
-  
   private XDiagram parentDiagram;
   
   private XRoot root;
@@ -103,8 +97,7 @@ public class OpenableDiagramNode extends XNode {
   
   private Point2D nodeCenterInDiagram;
   
-  public OpenableDiagramNode(final String name) {
-    super(name);
+  public OpenableDiagramNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -112,7 +105,6 @@ public class OpenableDiagramNode extends XNode {
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
-            it.setText(name);
             it.setTextOrigin(VPos.TOP);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
@@ -137,6 +129,12 @@ public class OpenableDiagramNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    String _key = null;
+    if (_domainObject!=null) {
+      _key=_domainObject.getKey();
+    }
+    this.textNode.setText(_key);
     XRoot _root = CoreExtensions.getRoot(this);
     this.root = _root;
     XDiagram _innerDiagram = this.getInnerDiagram();
@@ -408,6 +406,24 @@ public class OpenableDiagramNode extends XNode {
     ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_1);
   }
   
+  public void populate(final ModelElement it) {
+    super.populate(it);
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.lib.simple.OpenableDiagramNode");
     ;
+  
+  private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram");
+  
+  public XDiagram getInnerDiagram() {
+    return this.innerDiagramProperty.get();
+  }
+  
+  public void setInnerDiagram(final XDiagram innerDiagram) {
+    this.innerDiagramProperty.set(innerDiagram);
+  }
+  
+  public ObjectProperty<XDiagram> innerDiagramProperty() {
+    return this.innerDiagramProperty;
+  }
 }

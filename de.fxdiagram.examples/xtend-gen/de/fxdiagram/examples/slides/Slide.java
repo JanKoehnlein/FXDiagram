@@ -4,6 +4,8 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.effect.ColorAdjust;
@@ -15,8 +17,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class Slide extends XNode {
-  public Slide(final String name, final Image backgroundImage) {
-    super(name);
+  private ImageView imageView;
+  
+  public Slide() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
       public void apply(final StackPane it) {
@@ -24,7 +27,6 @@ public class Slide extends XNode {
         ImageView _imageView = new ImageView();
         final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
           public void apply(final ImageView it) {
-            it.setImage(backgroundImage);
             ColorAdjust _colorAdjust = new ColorAdjust();
             final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
               public void apply(final ColorAdjust it) {
@@ -38,15 +40,24 @@ public class Slide extends XNode {
           }
         };
         ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
-        _children.add(_doubleArrow);
+        ImageView _imageView_1 = Slide.this.imageView = _doubleArrow;
+        _children.add(_imageView_1);
       }
     };
     StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     this.setNode(_doubleArrow);
   }
   
+  public Slide(final String name, final Image backgroundImage) {
+    this();
+    this.setBackgroundImage(backgroundImage);
+    this.setName(name);
+  }
+  
   public void doActivate() {
     super.doActivate();
+    Image _backgroundImage = this.getBackgroundImage();
+    this.imageView.setImage(_backgroundImage);
     ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
     XRoot _root = CoreExtensions.getRoot(this);
     _zoomToFitAction.perform(_root);
@@ -58,5 +69,19 @@ public class Slide extends XNode {
   }
   
   public void selectionFeedback(final boolean isSelected) {
+  }
+  
+  private SimpleObjectProperty<Image> backgroundImageProperty = new SimpleObjectProperty<Image>(this, "backgroundImage");
+  
+  public Image getBackgroundImage() {
+    return this.backgroundImageProperty.get();
+  }
+  
+  public void setBackgroundImage(final Image backgroundImage) {
+    this.backgroundImageProperty.set(backgroundImage);
+  }
+  
+  public ObjectProperty<Image> backgroundImageProperty() {
+    return this.backgroundImageProperty;
   }
 }

@@ -13,22 +13,18 @@ import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import org.eclipse.emf.ecore.EClass
+import de.fxdiagram.core.model.DomainObjectHandle
 
 class EClassNode extends XNode {
 	
-	EClass eClass
-	
-	val name = new Text
+	val label = new Text
 	val attributeCompartment = new VBox
 	val operationCompartment = new VBox
 	
-	new(EClass eClass) {
-		super(eClass.name)
-		this.eClass = eClass
-		name.text = eClass.name
+	new() {
 		node = new RectangleBorderPane => [
 			children += new VBox => [
-				children += name => [
+				children += label => [
 					textOrigin = VPos.TOP
 					font = Font.font(getFont.family, FontWeight.BOLD, getFont.size * 1.1)
 					VBox.setMargin(it, new Insets(12, 12, 12, 12))
@@ -46,18 +42,31 @@ class EClassNode extends XNode {
 		]
 	}
 
+	def getEClass() {
+		domainObject.domainObject as EClass
+	}
+	
+	override setDomainObject(DomainObjectHandle domainObject) {
+		if(domainObject instanceof EClassHandle) {
+			super.setDomainObject(domainObject)
+			label.text = EClass.name
+		} else {
+			throw new IllegalArgumentException("EClassNode can only use EClassHandles")
+		}
+	}
+
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
 	
 	def populateCompartments() {
-		eClass.EAttributes.limit.forEach [
+		EClass.EAttributes.limit.forEach [
 			attribute |
 			attributeCompartment.children += new Text => [
 				text = '''«attribute.name»: «attribute.EType.name»''' 
 			]
 		]
-		eClass.EOperations.limit.forEach [
+		EClass.EOperations.limit.forEach [
 			operation |
 			operationCompartment.children += new Text => [
 				text = '''«operation.name»(«operation.EParameters.map[EType.name].join(', ')»): «operation.EType.name»''' 
@@ -74,12 +83,9 @@ class EClassNode extends XNode {
 			list.subList(0, Math.min(list.size, 4))
 	}
 	
-	def getEClass() {
-		eClass
-	}
-	
 	override doActivate() {
 		super.doActivate()
+		label.text = EClass.name
 		populateCompartments
 		addBehavior(new AddESuperTypeRapidButtonBehavior(this))
 		addBehavior(new AddEReferenceRapidButtonBehavior(this))

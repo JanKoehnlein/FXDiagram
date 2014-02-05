@@ -10,8 +10,9 @@ import java.util.Set
 import javafx.collections.ListChangeListener
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.model.DomainObjectHandle
 
-abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, KEY> extends AbstractHostBehavior<HOST> {
+abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, KEY extends DomainObjectHandle> extends AbstractHostBehavior<HOST> {
 	
 	Set<KEY> availableChoiceKeys = newLinkedHashSet	
 	Set<KEY> unavailableChoiceKeys = newHashSet
@@ -37,8 +38,8 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 			buttons += createButtons(addConnectionAction)
 			host.diagram.buttons += buttons
 			host.diagram.connections.forEach [
-				if(availableChoiceKeys.remove(key))						
-					unavailableChoiceKeys.add(key as KEY)
+				if(availableChoiceKeys.remove(domainObject))						
+					unavailableChoiceKeys.add(domainObject as KEY)
 			]
 			host.diagram.connections.addListener [
 				ListChangeListener.Change<? extends XConnection> change |
@@ -46,14 +47,14 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 				while(change.next) {
 					if(change.wasAdded) 
 						change.addedSubList.forEach[ 
-							if(availableChoiceKeys.remove(key)) {
-								unavailableChoiceKeys.add(key as KEY)
+							if(availableChoiceKeys.remove(domainObject)) {
+								unavailableChoiceKeys.add(domainObject as KEY)
 							}
 						]
 					if(change.wasRemoved) 
 						change.removed.forEach[
-							if(unavailableChoiceKeys.remove(key)) {
-								availableChoiceKeys.add(key as KEY)
+							if(unavailableChoiceKeys.remove(domainObject)) {
+								availableChoiceKeys.add(domainObject as KEY)
 							}
 						]
 				}

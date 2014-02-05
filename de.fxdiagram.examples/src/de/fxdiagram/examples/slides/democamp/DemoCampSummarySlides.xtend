@@ -12,15 +12,15 @@ import static de.fxdiagram.examples.slides.democamp.DemoCampSlideFactory.*
 import static extension de.fxdiagram.examples.slides.Animations.*
 
 class DemoCampSummarySlides extends OpenableDiagramNode {
-	
+
 	new() {
-		super('Credits')
+		this.name = 'Credits'
 		innerDiagram = new SlideDiagram => [
 			slides += createSlide('Credits') => [
 				stackPane.children += new VBox => [
 					alignment = Pos.CENTER
 					children += createText('Thanks to', 144) => [
-						VBox.setMargin(it, new Insets(0,0,30,0))
+						VBox.setMargin(it, new Insets(0, 0, 30, 0))
 					]
 					children += createMixedText('Gerrit Grunwald', 'for JavaFX inspiration')
 					children += createMixedText('Tom Schindl', 'for e(fx)clipse')
@@ -32,7 +32,7 @@ class DemoCampSummarySlides extends OpenableDiagramNode {
 			]
 		]
 	}
-	
+
 	def protected createMixedText(String jungleText, String normalText) {
 		new HBox => [
 			alignment = Pos.CENTER
@@ -44,4 +44,3 @@ class DemoCampSummarySlides extends OpenableDiagramNode {
 		]
 	}
 }
-

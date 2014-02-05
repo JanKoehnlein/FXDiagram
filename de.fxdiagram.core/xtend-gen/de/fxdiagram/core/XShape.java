@@ -2,8 +2,11 @@ package de.fxdiagram.core;
 
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.behavior.Behavior;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collection;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -23,7 +26,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public abstract class XShape extends Parent implements XActivatable {
+public abstract class XShape extends Parent implements XActivatable, XModelProvider {
   private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
   
   protected boolean setNode(final Node node) {
@@ -118,6 +121,13 @@ public abstract class XShape extends Parent implements XActivatable {
   public Bounds getSnapBounds() {
     Bounds _boundsInLocal = this.getBoundsInLocal();
     return _boundsInLocal;
+  }
+  
+  public void populate(final ModelElement it) {
+    DoubleProperty _layoutXProperty = this.layoutXProperty();
+    it.<Number>addProperty(_layoutXProperty, Double.class);
+    DoubleProperty _layoutYProperty = this.layoutYProperty();
+    it.<Number>addProperty(_layoutYProperty, Double.class);
   }
   
   private ReadOnlyObjectWrapper<Node> nodeProperty = new ReadOnlyObjectWrapper<Node>(this, "node");

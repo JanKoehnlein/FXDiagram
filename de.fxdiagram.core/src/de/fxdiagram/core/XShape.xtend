@@ -10,8 +10,10 @@ import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
 
 import static javafx.collections.FXCollections.*
+import de.fxdiagram.core.model.XModelProvider
+import de.fxdiagram.core.model.ModelElement
 
-abstract class XShape extends Parent implements XActivatable {
+abstract class XShape extends Parent implements XActivatable, XModelProvider {
 
 	@FxProperty@ReadOnly Node node
 
@@ -81,5 +83,10 @@ abstract class XShape extends Parent implements XActivatable {
 	
 	def getSnapBounds() {
 		boundsInLocal
+	}
+	
+	override populate(ModelElement it) {
+		addProperty(layoutXProperty, Double)
+		addProperty(layoutYProperty, Double)
 	}
 }

@@ -11,8 +11,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class ImageNode extends XNode {
   private ImageView imageView;
   
-  public ImageNode(final String key) {
-    super(key);
+  public ImageNode() {
     ImageView _imageView = new ImageView();
     final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
       public void apply(final ImageView it) {

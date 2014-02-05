@@ -18,21 +18,21 @@ import static extension java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
 import java.net.URL
+import de.fxdiagram.core.model.XModelProvider
+import de.fxdiagram.core.model.ModelElement
+import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ReadOnly
 
-class XControlPoint extends XShape {
+class XControlPoint extends XShape implements XModelProvider {
 
-	XControlPointType type
+	@FxProperty@ReadOnly XControlPointType type
 
 	new() {
 		setType(CONTROL_POINT)
 	}
 
-	def getType() {
-		type
-	}
-	
 	def setType(XControlPointType type) {
-		this.type = type
+		typeProperty.set(type)
 		switch type {
 			case ANCHOR: {
 				node = new Circle => [
@@ -109,6 +109,11 @@ class XControlPoint extends XShape {
 		new Group => [
 			children += FXMLLoader.<Node>load(new URL(this.toURI('images/Magnet.fxml')))
 		]
+	}
+	
+	override populate(ModelElement it) {
+		super.populate(it)
+		addProperty(typeProperty, XControlPointType)
 	}
 }
 

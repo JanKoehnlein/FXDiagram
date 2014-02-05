@@ -1,9 +1,14 @@
 package de.fxdiagram.lib.simple
 
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.behavior.AbstractCloseBehavior
+import de.fxdiagram.core.behavior.AbstractOpenBehavior
+import de.fxdiagram.core.extensions.AccumulativeTransform2D
+import de.fxdiagram.core.model.ModelElement
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -30,14 +35,11 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import de.fxdiagram.core.behavior.AbstractOpenBehavior
-import de.fxdiagram.core.behavior.AbstractCloseBehavior
-import de.fxdiagram.core.extensions.AccumulativeTransform2D
 
 @Logging
 class OpenableDiagramNode extends XNode {
 	
-	@Property XDiagram innerDiagram
+	@FxProperty XDiagram innerDiagram
 	
 	XDiagram parentDiagram 
 	
@@ -56,11 +58,9 @@ class OpenableDiagramNode extends XNode {
 	
 	Point2D nodeCenterInDiagram
 	
-	new(String name) {
-		super(name)
+	new() {
 		node = pane = new RectangleBorderPane => [
 			children += textNode = new Text => [
-				text = name
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
@@ -69,12 +69,14 @@ class OpenableDiagramNode extends XNode {
 		cursor = Cursor.HAND
 	}
 	
+	
 	override createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
 	
 	override doActivate() {
 		super.doActivate()
+		textNode.text = domainObject?.key
 		this.root = getRoot
 		if(innerDiagram == null) {
 			LOG.severe('Nested diagram not set. Deactivating open behavior')
@@ -190,5 +192,11 @@ class OpenableDiagramNode extends XNode {
 			play
 		]
 	}
+	
+	override populate(ModelElement it) {
+		super.populate(it)
+//		addChildProperty(innerDiagramProperty, XDiagram)
+	}
+	
 }
 

@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: de.fxdiagram.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/javax.json-1.0.4.jar
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.core.runtime,
@@ -29,6 +30,7 @@ Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.export,
  de.fxdiagram.core.extensions,
  de.fxdiagram.core.layout,
+ de.fxdiagram.core.model,
  de.fxdiagram.core.services,
  de.fxdiagram.core.tools,
  de.fxdiagram.core.tools.actions,

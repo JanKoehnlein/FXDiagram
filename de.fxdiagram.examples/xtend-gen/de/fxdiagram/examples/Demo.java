@@ -8,10 +8,15 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.layout.Layouter;
+import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.examples.BrickBreakerNode;
+import de.fxdiagram.examples.ecore.EClassHandle;
 import de.fxdiagram.examples.ecore.EClassNode;
+import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
+import de.fxdiagram.examples.java.JavaModelProvider;
+import de.fxdiagram.examples.java.JavaTypeHandle;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.login.LoginNode;
@@ -51,6 +56,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
 @SuppressWarnings("all")
 public class Demo extends Application {
+  private XRoot root;
+  
   public static void main(final String... args) {
     Application.launch(args);
   }
@@ -66,24 +73,31 @@ public class Demo extends Application {
     Scene _xblockexpression = null;
     {
       XRoot _xRoot = new XRoot();
-      final XRoot root = _xRoot;
-      Scene _scene = new Scene(root, 1024, 768);
+      this.root = _xRoot;
+      Scene _scene = new Scene(this.root, 1024, 768);
       final Scene scene = _scene;
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       scene.setCamera(_perspectiveCamera);
-      root.activate();
+      this.root.activate();
       XDiagram _xDiagram = new XDiagram();
       final XDiagram diagram = _xDiagram;
-      root.setDiagram(diagram);
+      this.root.setDiagram(diagram);
+      ObservableList<DomainObjectProvider> _domainObjectProviders = this.root.getDomainObjectProviders();
+      EcoreDomainObjectProvider _ecoreDomainObjectProvider = new EcoreDomainObjectProvider();
+      _domainObjectProviders.add(_ecoreDomainObjectProvider);
+      ObservableList<DomainObjectProvider> _domainObjectProviders_1 = this.root.getDomainObjectProviders();
+      JavaModelProvider _javaModelProvider = new JavaModelProvider();
+      _domainObjectProviders_1.add(_javaModelProvider);
       final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
         public void apply(final XDiagram it) {
           ObservableList<XNode> _nodes = it.getNodes();
           IntroductionSlideDeck _introductionSlideDeck = new IntroductionSlideDeck();
           _nodes.add(_introductionSlideDeck);
           ObservableList<XNode> _nodes_1 = it.getNodes();
-          OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Basic");
+          OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
           final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
             public void apply(final OpenableDiagramNode it) {
+              it.setName("Basic");
               XDiagram _createBasicDiagram = Demo.this.createBasicDiagram("");
               it.setInnerDiagram(_createBasicDiagram);
             }
@@ -91,9 +105,10 @@ public class Demo extends Application {
           OpenableDiagramNode _doubleArrow = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
           _nodes_1.add(_doubleArrow);
           ObservableList<XNode> _nodes_2 = it.getNodes();
-          OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode("JavaFX");
+          OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode();
           final Procedure1<OpenableDiagramNode> _function_1 = new Procedure1<OpenableDiagramNode>() {
             public void apply(final OpenableDiagramNode it) {
+              it.setName("JavaFX");
               XDiagram _xDiagram = new XDiagram();
               final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
                 public void apply(final XDiagram it) {
@@ -137,8 +152,9 @@ public class Demo extends Application {
           OpenableDiagramNode _openableDiagram_1 = Demo.this.openableDiagram("JavaFX Explorer", _newJavaTypeNode);
           _nodes_4.add(_openableDiagram_1);
           ObservableList<XNode> _nodes_5 = it.getNodes();
-          OpenableDiagramNode _newLcarsDiagramNode = Demo.this.newLcarsDiagramNode();
-          _nodes_5.add(_newLcarsDiagramNode);
+          EClassNode _newEClassNode = Demo.this.newEClassNode();
+          OpenableDiagramNode _openableDiagram_2 = Demo.this.openableDiagram("Ecore Explorer", _newEClassNode);
+          _nodes_5.add(_openableDiagram_2);
           ObservableList<XNode> _nodes_6 = it.getNodes();
           SimpleNode _simpleNode = new SimpleNode("Eclipse");
           _nodes_6.add(_simpleNode);
@@ -202,9 +218,10 @@ public class Demo extends Application {
   }
   
   public OpenableDiagramNode newGalleryDiagramNode() {
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Gallery");
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
+        it.setName("Gallery");
         XDiagram _xDiagram = new XDiagram();
         final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
           public void apply(final XDiagram it) {
@@ -263,9 +280,10 @@ public class Demo extends Application {
   }
   
   public OpenableDiagramNode newLcarsDiagramNode() {
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("LCARS");
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
+        it.setName("LCARS");
         LcarsDiagram _lcarsDiagram = new LcarsDiagram();
         it.setInnerDiagram(_lcarsDiagram);
       }
@@ -370,9 +388,10 @@ public class Demo extends Application {
   }
   
   protected OpenableDiagramNode openableDiagram(final String name, final XNode node) {
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(name);
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
+        it.setName(name);
         XDiagram _xDiagram = new XDiagram();
         final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
           public void apply(final XDiagram it) {
@@ -448,9 +467,10 @@ public class Demo extends Application {
   }
   
   public OpenableDiagramNode newOpenableBasicDiagramNode(final String nameSuffix) {
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(("Nested" + nameSuffix));
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
+        it.setName(("Nested" + nameSuffix));
         XDiagram _createBasicDiagram = Demo.this.createBasicDiagram((nameSuffix + " (nested)"));
         it.setInnerDiagram(_createBasicDiagram);
         Demo.this.addRapidButtons(it, nameSuffix);
@@ -461,9 +481,10 @@ public class Demo extends Application {
   }
   
   public LevelOfDetailDiagramNode newEmbeddedBasicDiagram(final String nameSuffix) {
-    LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode(("Embedded" + nameSuffix));
+    LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode();
     final Procedure1<LevelOfDetailDiagramNode> _function = new Procedure1<LevelOfDetailDiagramNode>() {
       public void apply(final LevelOfDetailDiagramNode it) {
+        it.setName(("Embedded" + nameSuffix));
         XDiagram _createBasicDiagram = Demo.this.createBasicDiagram((nameSuffix + " (embedded)"));
         it.setInnerDiagram(_createBasicDiagram);
         Demo.this.addRapidButtons(it, nameSuffix);
@@ -479,13 +500,37 @@ public class Demo extends Application {
   }
   
   public EClassNode newEClassNode() {
-    EClassNode _eClassNode = new EClassNode(EcorePackage.Literals.ECLASS);
-    return _eClassNode;
+    EClassNode _xblockexpression = null;
+    {
+      final EcoreDomainObjectProvider provider = this.root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
+      EClassNode _eClassNode = new EClassNode();
+      final Procedure1<EClassNode> _function = new Procedure1<EClassNode>() {
+        public void apply(final EClassNode it) {
+          EClassHandle _createEClassHandle = provider.createEClassHandle(EcorePackage.Literals.ECLASS);
+          it.setDomainObject(_createEClassHandle);
+        }
+      };
+      EClassNode _doubleArrow = ObjectExtensions.<EClassNode>operator_doubleArrow(_eClassNode, _function);
+      _xblockexpression = (_doubleArrow);
+    }
+    return _xblockexpression;
   }
   
   public JavaTypeNode newJavaTypeNode() {
-    JavaTypeNode _javaTypeNode = new JavaTypeNode(Button.class);
-    return _javaTypeNode;
+    JavaTypeNode _xblockexpression = null;
+    {
+      final JavaModelProvider provider = this.root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
+      JavaTypeNode _javaTypeNode = new JavaTypeNode();
+      final Procedure1<JavaTypeNode> _function = new Procedure1<JavaTypeNode>() {
+        public void apply(final JavaTypeNode it) {
+          JavaTypeHandle _createJavaTypeHandle = provider.createJavaTypeHandle(Button.class);
+          it.setDomainObject(_createJavaTypeHandle);
+        }
+      };
+      JavaTypeNode _doubleArrow = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function);
+      _xblockexpression = (_doubleArrow);
+    }
+    return _xblockexpression;
   }
   
   public NeonSignNode newNeonSignNode() {
@@ -494,10 +539,11 @@ public class Demo extends Application {
   }
   
   public MovieNode newMovieNode() {
-    MovieNode _movieNode = new MovieNode("Movie");
+    MovieNode _movieNode = new MovieNode();
     final Procedure1<MovieNode> _function = new Procedure1<MovieNode>() {
       public void apply(final MovieNode it) {
         try {
+          it.setName("Movie");
           String _uRI = UriExtensions.toURI(Demo.this, "media/Usability.mp4");
           URL _uRL = new URL(_uRI);
           it.setMovieUrl(_uRL);
@@ -516,10 +562,11 @@ public class Demo extends Application {
   }
   
   public BrowserNode newBrowserNode() {
-    BrowserNode _browserNode = new BrowserNode("Browser");
+    BrowserNode _browserNode = new BrowserNode();
     final Procedure1<BrowserNode> _function = new Procedure1<BrowserNode>() {
       public void apply(final BrowserNode it) {
         try {
+          it.setName("Browser");
           it.setWidth(120);
           it.setHeight(160);
           URL _uRL = new URL("http://koehnlein.blogspot.de/");
@@ -546,11 +593,15 @@ public class Demo extends Application {
   }
   
   public RecursiveImageNode newRecursiveImageNode() {
-    ImageCache _get = ImageCache.get();
-    Image _image = _get.getImage(this, "media/laptop.jpg");
-    RecursiveImageNode _recursiveImageNode = new RecursiveImageNode("Recursive Laptop", _image, 0, (-3), 0.6);
+    RecursiveImageNode _recursiveImageNode = new RecursiveImageNode();
     final Procedure1<RecursiveImageNode> _function = new Procedure1<RecursiveImageNode>() {
       public void apply(final RecursiveImageNode it) {
+        ImageCache _get = ImageCache.get();
+        Image _image = _get.getImage(Demo.this, "media/laptop.jpg");
+        it.setImage(_image);
+        it.setX(0);
+        it.setY((-3));
+        it.setScale(0.6);
         it.setWidth(80);
         it.setHeight(60);
       }
@@ -560,7 +611,7 @@ public class Demo extends Application {
   }
   
   public ImageNode newImageNode() {
-    ImageNode _imageNode = new ImageNode("seltsam");
+    ImageNode _imageNode = new ImageNode();
     final Procedure1<ImageNode> _function = new Procedure1<ImageNode>() {
       public void apply(final ImageNode it) {
         ImageCache _get = ImageCache.get();

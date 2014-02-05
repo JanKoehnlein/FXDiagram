@@ -55,12 +55,15 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   
   private boolean isZoomedIn;
   
-  public RecursiveImageNode(final String name, final Image image, final double x, final double y, final double scale) {
-    super(name);
-    this.setImage(image);
-    this.setX(x);
-    this.setY(y);
-    this.setScale(scale);
+  public RecursiveImageNode() {
+    Image _image = this.getImage();
+    this.setImage(_image);
+    double _x = this.getX();
+    this.setX(_x);
+    double _y = this.getY();
+    this.setY(_y);
+    double _scale = this.getScale();
+    this.setScale(_scale);
     FirstRecursiveImageNode _firstRecursiveImageNode = new FirstRecursiveImageNode(this);
     this.pivot = _firstRecursiveImageNode;
     Group _createPane = this.createPane();

@@ -2,8 +2,10 @@ package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.AddESuperTypeRapidButtonBehavior;
+import de.fxdiagram.examples.ecore.EClassHandle;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
@@ -33,9 +35,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class EClassNode extends XNode {
-  private EClass eClass;
-  
-  private final Text name = new Function0<Text>() {
+  private final Text label = new Function0<Text>() {
     public Text apply() {
       Text _text = new Text();
       return _text;
@@ -56,11 +56,7 @@ public class EClassNode extends XNode {
     }
   }.apply();
   
-  public EClassNode(final EClass eClass) {
-    super(eClass.getName());
-    this.eClass = eClass;
-    String _name = eClass.getName();
-    this.name.setText(_name);
+  public EClassNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -83,7 +79,7 @@ public class EClassNode extends XNode {
                 VBox.setMargin(it, _insets);
               }
             };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(EClassNode.this.name, _function);
+            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(EClassNode.this.label, _function);
             _children.add(_doubleArrow);
             ObservableList<Node> _children_1 = it.getChildren();
             Separator _separator = new Separator();
@@ -120,13 +116,32 @@ public class EClassNode extends XNode {
     this.setNode(_doubleArrow);
   }
   
+  public EClass getEClass() {
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    Object _domainObject_1 = _domainObject.getDomainObject();
+    return ((EClass) _domainObject_1);
+  }
+  
+  public void setDomainObject(final DomainObjectHandle domainObject) {
+    if ((domainObject instanceof EClassHandle)) {
+      super.setDomainObject(domainObject);
+      EClass _eClass = this.getEClass();
+      String _name = _eClass.getName();
+      this.label.setText(_name);
+    } else {
+      IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("EClassNode can only use EClassHandles");
+      throw _illegalArgumentException;
+    }
+  }
+  
   protected Anchors createAnchors() {
     RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
     return _roundedRectangleAnchors;
   }
   
   public void populateCompartments() {
-    EList<EAttribute> _eAttributes = this.eClass.getEAttributes();
+    EClass _eClass = this.getEClass();
+    EList<EAttribute> _eAttributes = _eClass.getEAttributes();
     List<EAttribute> _limit = this.<EAttribute>limit(_eAttributes);
     final Procedure1<EAttribute> _function = new Procedure1<EAttribute>() {
       public void apply(final EAttribute attribute) {
@@ -149,7 +164,8 @@ public class EClassNode extends XNode {
       }
     };
     IterableExtensions.<EAttribute>forEach(_limit, _function);
-    EList<EOperation> _eOperations = this.eClass.getEOperations();
+    EClass _eClass_1 = this.getEClass();
+    EList<EOperation> _eOperations = _eClass_1.getEOperations();
     List<EOperation> _limit_1 = this.<EOperation>limit(_eOperations);
     final Procedure1<EOperation> _function_1 = new Procedure1<EOperation>() {
       public void apply(final EOperation operation) {
@@ -207,12 +223,11 @@ public class EClassNode extends XNode {
     return _xifexpression;
   }
   
-  public EClass getEClass() {
-    return this.eClass;
-  }
-  
   public void doActivate() {
     super.doActivate();
+    EClass _eClass = this.getEClass();
+    String _name = _eClass.getName();
+    this.label.setText(_name);
     this.populateCompartments();
     AddESuperTypeRapidButtonBehavior _addESuperTypeRapidButtonBehavior = new AddESuperTypeRapidButtonBehavior(this);
     this.addBehavior(_addESuperTypeRapidButtonBehavior);

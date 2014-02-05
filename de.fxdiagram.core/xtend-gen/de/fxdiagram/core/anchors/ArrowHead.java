@@ -5,6 +5,8 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.XModelProvider;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -14,7 +16,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
 @SuppressWarnings("all")
-public abstract class ArrowHead extends Parent {
+public abstract class ArrowHead extends Parent implements XModelProvider {
   private Node node;
   
   private XConnection connection;
@@ -122,5 +124,8 @@ public abstract class ArrowHead extends Parent {
     TransformExtensions.translate(trafo, _x_1, _y_1);
     ObservableList<Transform> _transforms = this.getTransforms();
     _transforms.setAll(trafo);
+  }
+  
+  public void populate(final ModelElement element) {
   }
 }

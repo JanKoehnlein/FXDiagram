@@ -39,13 +39,13 @@ class MovieNode extends FlipNode {
 	Node controlBar
 
 	int border = 10
+	
+	Text label
 
-	new(String name) {
-		super(name)
+	new() {
 		controlBar = createControlBar
 		front = new RectangleBorderPane => [
-			children += new Text => [
-				text = name
+			children += label = new Text => [
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
@@ -81,7 +81,7 @@ class MovieNode extends FlipNode {
 		]
 		stylesheets += toURI(this, 'MovieNode.css')
 	}
-	
+
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
@@ -118,6 +118,11 @@ class MovieNode extends FlipNode {
 			]
 			opacity = 0
 		]
+	}
+	
+	override doActivate() {
+		super.doActivate()
+		label.text = domainObject?.key
 	}
 
 	override setWidth(double width) {

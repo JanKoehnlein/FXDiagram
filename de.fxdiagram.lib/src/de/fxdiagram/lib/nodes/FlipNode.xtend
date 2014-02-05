@@ -30,12 +30,11 @@ class FlipNode extends XNode {
 
 	EventHandler<MouseEvent> clickHandler
 
-	new(String key) {
-		super(key)
+	new() {
 		node = pane
 		cursor = Cursor.HAND
 	}
-	
+
 	def setFlipOnDoubleClick(boolean isFlipOnDoubleClick) {
 		clickHandler = if(isFlipOnDoubleClick) 
 				[ event |

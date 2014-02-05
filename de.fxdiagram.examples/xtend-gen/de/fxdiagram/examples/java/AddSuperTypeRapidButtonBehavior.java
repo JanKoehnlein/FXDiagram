@@ -5,14 +5,19 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.examples.java.JavaModelProvider;
+import de.fxdiagram.examples.java.JavaSuperType;
+import de.fxdiagram.examples.java.JavaSuperTypeHandle;
+import de.fxdiagram.examples.java.JavaTypeHandle;
 import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
-import de.fxdiagram.examples.java.SuperTypeKey;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import java.util.Collections;
@@ -28,7 +33,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode,Class<? extends Object>,SuperTypeKey> {
+public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode,Class<? extends Object>,JavaSuperTypeHandle> {
   public AddSuperTypeRapidButtonBehavior(final JavaTypeNode host) {
     super(host);
   }
@@ -40,35 +45,53 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
     return _superTypes;
   }
   
-  protected SuperTypeKey getChoiceKey(final Class<? extends Object> superType) {
+  protected JavaSuperTypeHandle getChoiceKey(final Class<? extends Object> superType) {
+    JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
     JavaTypeNode _host = this.getHost();
-    Class<? extends Object> _javaType = ((JavaTypeNode) _host).getJavaType();
-    SuperTypeKey _superTypeKey = new SuperTypeKey(_javaType, superType);
-    return _superTypeKey;
+    Class<? extends Object> _javaType = _host.getJavaType();
+    JavaSuperType _javaSuperType = new JavaSuperType(_javaType, superType);
+    JavaSuperTypeHandle _createJavaSuperClassHandle = _domainObjectProvider.createJavaSuperClassHandle(_javaSuperType);
+    return _createJavaSuperClassHandle;
   }
   
-  protected XNode createNode(final SuperTypeKey key) {
-    Class<? extends Object> _superType = key.getSuperType();
-    JavaTypeNode _javaTypeNode = new JavaTypeNode(_superType);
-    return _javaTypeNode;
+  protected XNode createNode(final JavaSuperTypeHandle key) {
+    JavaTypeNode _javaTypeNode = new JavaTypeNode();
+    final Procedure1<JavaTypeNode> _function = new Procedure1<JavaTypeNode>() {
+      public void apply(final JavaTypeNode it) {
+        JavaModelProvider _domainObjectProvider = AddSuperTypeRapidButtonBehavior.this.getDomainObjectProvider();
+        JavaSuperType _domainObject = key.getDomainObject();
+        Class<? extends Object> _superType = _domainObject.getSuperType();
+        JavaTypeHandle _createJavaTypeHandle = _domainObjectProvider.createJavaTypeHandle(_superType);
+        it.setDomainObject(_createJavaTypeHandle);
+      }
+    };
+    JavaTypeNode _doubleArrow = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function);
+    return _doubleArrow;
   }
   
-  protected AbstractChooser createChooser(final XRapidButton button, final Set<SuperTypeKey> availableChoiceKeys, final Set<SuperTypeKey> unavailableChoiceKeys) {
+  protected JavaModelProvider getDomainObjectProvider() {
+    JavaTypeNode _host = this.getHost();
+    XRoot _root = CoreExtensions.getRoot(_host);
+    JavaModelProvider _domainObjectProvider = _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
+    return _domainObjectProvider;
+  }
+  
+  protected AbstractChooser createChooser(final XRapidButton button, final Set<JavaSuperTypeHandle> availableChoiceKeys, final Set<JavaSuperTypeHandle> unavailableChoiceKeys) {
     CoverFlowChooser _xblockexpression = null;
     {
       JavaTypeNode _host = this.getHost();
       Pos _chooserPosition = button.getChooserPosition();
       CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
       final CoverFlowChooser chooser = _coverFlowChooser;
-      final Procedure1<SuperTypeKey> _function = new Procedure1<SuperTypeKey>() {
-        public void apply(final SuperTypeKey it) {
+      final Procedure1<JavaSuperTypeHandle> _function = new Procedure1<JavaSuperTypeHandle>() {
+        public void apply(final JavaSuperTypeHandle it) {
           XNode _createNode = AddSuperTypeRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
         }
       };
-      IterableExtensions.<SuperTypeKey>forEach(availableChoiceKeys, _function);
+      IterableExtensions.<JavaSuperTypeHandle>forEach(availableChoiceKeys, _function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        public XConnection getConnection(final XNode host, final XNode choice, final Object key) {
+        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectHandle key) {
           XConnection _xConnection = new XConnection(host, choice, key);
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
             public void apply(final XConnection it) {

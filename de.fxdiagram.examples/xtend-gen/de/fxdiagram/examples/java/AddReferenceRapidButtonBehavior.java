@@ -5,13 +5,19 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.examples.java.JavaModelProvider;
+import de.fxdiagram.examples.java.JavaProperty;
+import de.fxdiagram.examples.java.JavaPropertyHandle;
+import de.fxdiagram.examples.java.JavaTypeHandle;
 import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
-import de.fxdiagram.examples.java.Property;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
@@ -26,47 +32,65 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode,Property,Property> {
+public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode,JavaProperty,JavaPropertyHandle> {
   public AddReferenceRapidButtonBehavior(final JavaTypeNode host) {
     super(host);
   }
   
-  protected Iterable<Property> getInitialModelChoices() {
+  protected Iterable<JavaProperty> getInitialModelChoices() {
     JavaTypeNode _host = this.getHost();
     JavaTypeModel _javaTypeModel = _host.getJavaTypeModel();
-    List<Property> _references = _javaTypeModel.getReferences();
+    List<JavaProperty> _references = _javaTypeModel.getReferences();
     return _references;
   }
   
-  protected Property getChoiceKey(final Property property) {
-    return property;
+  protected JavaPropertyHandle getChoiceKey(final JavaProperty property) {
+    JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
+    JavaPropertyHandle _createJavaPropertyHandle = _domainObjectProvider.createJavaPropertyHandle(property);
+    return _createJavaPropertyHandle;
   }
   
-  protected XNode createNode(final Property key) {
-    Class<? extends Object> _type = key.getType();
-    JavaTypeNode _javaTypeNode = new JavaTypeNode(_type);
-    return _javaTypeNode;
+  protected XNode createNode(final JavaPropertyHandle key) {
+    JavaTypeNode _javaTypeNode = new JavaTypeNode();
+    final Procedure1<JavaTypeNode> _function = new Procedure1<JavaTypeNode>() {
+      public void apply(final JavaTypeNode it) {
+        JavaModelProvider _domainObjectProvider = AddReferenceRapidButtonBehavior.this.getDomainObjectProvider();
+        JavaProperty _domainObject = key.getDomainObject();
+        Class<? extends Object> _type = _domainObject.getType();
+        JavaTypeHandle _createJavaTypeHandle = _domainObjectProvider.createJavaTypeHandle(_type);
+        it.setDomainObject(_createJavaTypeHandle);
+      }
+    };
+    JavaTypeNode _doubleArrow = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function);
+    return _doubleArrow;
   }
   
-  protected AbstractChooser createChooser(final XRapidButton button, final Set<Property> availableChoiceKeys, final Set<Property> unavailableChoiceKeys) {
+  protected JavaModelProvider getDomainObjectProvider() {
+    JavaTypeNode _host = this.getHost();
+    XRoot _root = CoreExtensions.getRoot(_host);
+    JavaModelProvider _domainObjectProvider = _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
+    return _domainObjectProvider;
+  }
+  
+  protected AbstractChooser createChooser(final XRapidButton button, final Set<JavaPropertyHandle> availableChoiceKeys, final Set<JavaPropertyHandle> unavailableChoiceKeys) {
     CarusselChooser _xblockexpression = null;
     {
       JavaTypeNode _host = this.getHost();
       Pos _chooserPosition = button.getChooserPosition();
       CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
       final CarusselChooser chooser = _carusselChooser;
-      final Procedure1<Property> _function = new Procedure1<Property>() {
-        public void apply(final Property it) {
+      final Procedure1<JavaPropertyHandle> _function = new Procedure1<JavaPropertyHandle>() {
+        public void apply(final JavaPropertyHandle it) {
           XNode _createNode = AddReferenceRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
         }
       };
-      IterableExtensions.<Property>forEach(availableChoiceKeys, _function);
+      IterableExtensions.<JavaPropertyHandle>forEach(availableChoiceKeys, _function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        public XConnection getConnection(final XNode host, final XNode choice, final Object choiceInfo) {
+        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectHandle choiceInfo) {
           XConnection _xblockexpression = null;
           {
-            final Property reference = ((Property) choiceInfo);
+            final JavaPropertyHandle reference = ((JavaPropertyHandle) choiceInfo);
             XConnection _xConnection = new XConnection(host, choice, reference);
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
@@ -76,7 +100,8 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
                 final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
                   public void apply(final XConnectionLabel it) {
                     Text _text = it.getText();
-                    String _name = reference.getName();
+                    JavaProperty _domainObject = reference.getDomainObject();
+                    String _name = _domainObject.getName();
                     _text.setText(_name);
                   }
                 };

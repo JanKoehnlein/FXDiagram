@@ -1,5 +1,15 @@
 TODO
 - container node to big when closing a zoomed subdiagram
+- add constructor XNode(domainObject), load domainObject first
+- fix LCARS example
+- save all diagrams
+- domainModel abstraction
+- review ModelElement
+- fix connection initialization
+- rename handle -> descriptor
+- properly calculate existing edges 
+- restore labels, XConnectionPointTypes
+- save arrowHeads / nestedDiagrams 
  
 BUGS
 - player.seek doesn't work

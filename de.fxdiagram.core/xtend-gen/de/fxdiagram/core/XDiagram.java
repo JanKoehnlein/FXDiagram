@@ -17,6 +17,8 @@ import de.fxdiagram.core.behavior.NavigationBehavior;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -51,7 +54,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class XDiagram extends Group implements XActivatable {
+public class XDiagram extends Group implements XActivatable, XModelProvider {
   private Group nodeLayer = new Function0<Group>() {
     public Group apply() {
       Group _group = new Group();
@@ -65,8 +68,6 @@ public class XDiagram extends Group implements XActivatable {
       return _group;
     }
   }.apply();
-  
-  private XDiagram parentDiagram;
   
   private Procedure1<? super XDiagram> contentsInitializer;
   
@@ -83,12 +84,14 @@ public class XDiagram extends Group implements XActivatable {
     _children.add(this.nodeLayer);
     ObservableList<Node> _children_1 = this.getChildren();
     _children_1.add(this.buttonLayer);
+    this.isRootDiagramProperty.set(true);
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
     final ChangeListener<Parent> _function = new ChangeListener<Parent>() {
       public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
         XDiagram _diagram = CoreExtensions.getDiagram(newValue);
-        XDiagram.this.parentDiagram = _diagram;
-        boolean _equals = Objects.equal(XDiagram.this.parentDiagram, null);
+        XDiagram.this.parentDiagramProperty.set(_diagram);
+        XDiagram _parentDiagram = XDiagram.this.getParentDiagram();
+        boolean _equals = Objects.equal(_parentDiagram, null);
         XDiagram.this.isRootDiagramProperty.set(_equals);
       }
     };
@@ -157,6 +160,16 @@ public class XDiagram extends Group implements XActivatable {
   }
   
   public void doActivate() {
+    ObservableList<Node> _children = this.nodeLayer.getChildren();
+    ObservableList<XNode> _nodes = this.getNodes();
+    Iterables.<Node>addAll(_children, _nodes);
+    Group _connectionLayer = this.getConnectionLayer();
+    ObservableList<Node> _children_1 = _connectionLayer.getChildren();
+    ObservableList<XConnection> _connections = this.getConnections();
+    Iterables.<Node>addAll(_children_1, _connections);
+    ObservableList<Node> _children_2 = this.buttonLayer.getChildren();
+    ObservableList<XRapidButton> _buttons = this.getButtons();
+    Iterables.<Node>addAll(_children_2, _buttons);
     final ChangeListener<Node> _function = new ChangeListener<Node>() {
       public void changed(final ObservableValue<? extends Node> prop, final Node oldVal, final Node newVal) {
         boolean _notEquals = (!Objects.equal(oldVal, null));
@@ -201,19 +214,26 @@ public class XDiagram extends Group implements XActivatable {
       }
     };
     final ListChangeListener<? super XConnectionLabel> labelListener = _function_1;
-    ObservableList<XNode> _nodes = this.getNodes();
+    ObservableList<XConnection> _connections_1 = this.getConnections();
+    final Procedure1<XConnection> _function_2 = new Procedure1<XConnection>() {
+      public void apply(final XConnection it) {
+        XDiagram.this.addConnectionDecorations(it, labelListener, arrowHeadListener);
+      }
+    };
+    IterableExtensions.<XConnection>forEach(_connections_1, _function_2);
+    ObservableList<XNode> _nodes_1 = this.getNodes();
     XDiagramChildrenListener<XNode> _xDiagramChildrenListener = new XDiagramChildrenListener<XNode>(this, this.nodeLayer);
-    _nodes.addListener(_xDiagramChildrenListener);
-    ObservableList<XConnection> _connections = this.getConnections();
-    Group _connectionLayer = this.getConnectionLayer();
-    XDiagramChildrenListener<XConnection> _xDiagramChildrenListener_1 = new XDiagramChildrenListener<XConnection>(this, _connectionLayer);
-    _connections.addListener(_xDiagramChildrenListener_1);
-    ObservableList<XRapidButton> _buttons = this.getButtons();
-    XDiagramChildrenListener<XRapidButton> _xDiagramChildrenListener_2 = new XDiagramChildrenListener<XRapidButton>(this, this.buttonLayer);
-    _buttons.addListener(_xDiagramChildrenListener_2);
+    _nodes_1.addListener(_xDiagramChildrenListener);
+    ObservableList<XConnection> _connections_2 = this.getConnections();
     Group _connectionLayer_1 = this.getConnectionLayer();
-    ObservableList<Node> _children = _connectionLayer_1.getChildren();
-    final ListChangeListener<Node> _function_2 = new ListChangeListener<Node>() {
+    XDiagramChildrenListener<XConnection> _xDiagramChildrenListener_1 = new XDiagramChildrenListener<XConnection>(this, _connectionLayer_1);
+    _connections_2.addListener(_xDiagramChildrenListener_1);
+    ObservableList<XRapidButton> _buttons_1 = this.getButtons();
+    XDiagramChildrenListener<XRapidButton> _xDiagramChildrenListener_2 = new XDiagramChildrenListener<XRapidButton>(this, this.buttonLayer);
+    _buttons_1.addListener(_xDiagramChildrenListener_2);
+    Group _connectionLayer_2 = this.getConnectionLayer();
+    ObservableList<Node> _children_3 = _connectionLayer_2.getChildren();
+    final ListChangeListener<Node> _function_3 = new ListChangeListener<Node>() {
       public void onChanged(final ListChangeListener.Change<? extends Node> change) {
         boolean _next = change.next();
         boolean _while = _next;
@@ -225,27 +245,7 @@ public class XDiagram extends Group implements XActivatable {
               final Iterable<XConnection> addedConnections = Iterables.<XConnection>filter(_addedSubList, XConnection.class);
               final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
                 public void apply(final XConnection it) {
-                  ObservableList<XConnectionLabel> _labels = it.getLabels();
-                  final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                    public void apply(final XConnectionLabel it) {
-                      Group _connectionLayer = XDiagram.this.getConnectionLayer();
-                      ObservableList<Node> _children = _connectionLayer.getChildren();
-                      boolean _contains = _children.contains(it);
-                      boolean _not = (!_contains);
-                      if (_not) {
-                        Group _connectionLayer_1 = XDiagram.this.getConnectionLayer();
-                        ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();
-                        _children_1.add(it);
-                      }
-                    }
-                  };
-                  IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
-                  ListProperty<XConnectionLabel> _labelsProperty = it.labelsProperty();
-                  _labelsProperty.addListener(labelListener);
-                  ObjectProperty<ArrowHead> _targetArrowHeadProperty = it.targetArrowHeadProperty();
-                  XDiagram.this.addArrowHead(_targetArrowHeadProperty, arrowHeadListener);
-                  ObjectProperty<ArrowHead> _sourceArrowHeadProperty = it.sourceArrowHeadProperty();
-                  XDiagram.this.addArrowHead(_sourceArrowHeadProperty, arrowHeadListener);
+                  XDiagram.this.addConnectionDecorations(it, labelListener, arrowHeadListener);
                 }
               };
               IterableExtensions.<XConnection>forEach(addedConnections, _function);
@@ -276,18 +276,18 @@ public class XDiagram extends Group implements XActivatable {
         }
       }
     };
-    _children.addListener(_function_2);
-    ObservableList<XNode> _nodes_1 = this.getNodes();
-    ObservableList<XConnection> _connections_1 = this.getConnections();
-    Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes_1, _connections_1);
-    ObservableList<XRapidButton> _buttons_1 = this.getButtons();
-    Iterable<Parent> _plus_1 = Iterables.<Parent>concat(_plus, _buttons_1);
-    final Procedure1<Parent> _function_3 = new Procedure1<Parent>() {
+    _children_3.addListener(_function_3);
+    ObservableList<XNode> _nodes_2 = this.getNodes();
+    ObservableList<XConnection> _connections_3 = this.getConnections();
+    Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes_2, _connections_3);
+    ObservableList<XRapidButton> _buttons_2 = this.getButtons();
+    Iterable<Parent> _plus_1 = Iterables.<Parent>concat(_plus, _buttons_2);
+    final Procedure1<Parent> _function_4 = new Procedure1<Parent>() {
       public void apply(final Parent it) {
         ((XActivatable)it).activate();
       }
     };
-    IterableExtensions.<Parent>forEach(_plus_1, _function_3);
+    IterableExtensions.<Parent>forEach(_plus_1, _function_4);
     AuxiliaryLinesSupport _auxiliaryLinesSupport = new AuxiliaryLinesSupport(this);
     this.auxiliaryLinesSupport = _auxiliaryLinesSupport;
     if (this.contentsInitializer!=null) {
@@ -299,6 +299,30 @@ public class XDiagram extends Group implements XActivatable {
       DiagramNavigationBehavior _diagramNavigationBehavior = new DiagramNavigationBehavior(this);
       this.addBehavior(_diagramNavigationBehavior);
     }
+  }
+  
+  protected void addConnectionDecorations(final XConnection it, final ListChangeListener<? super XConnectionLabel> labelListener, final ChangeListener<Node> arrowHeadListener) {
+    ObservableList<XConnectionLabel> _labels = it.getLabels();
+    final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+      public void apply(final XConnectionLabel it) {
+        Group _connectionLayer = XDiagram.this.getConnectionLayer();
+        ObservableList<Node> _children = _connectionLayer.getChildren();
+        boolean _contains = _children.contains(it);
+        boolean _not = (!_contains);
+        if (_not) {
+          Group _connectionLayer_1 = XDiagram.this.getConnectionLayer();
+          ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();
+          _children_1.add(it);
+        }
+      }
+    };
+    IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
+    ListProperty<XConnectionLabel> _labelsProperty = it.labelsProperty();
+    _labelsProperty.addListener(labelListener);
+    ObjectProperty<ArrowHead> _targetArrowHeadProperty = it.targetArrowHeadProperty();
+    this.addArrowHead(_targetArrowHeadProperty, arrowHeadListener);
+    ObjectProperty<ArrowHead> _sourceArrowHeadProperty = it.sourceArrowHeadProperty();
+    this.addArrowHead(_sourceArrowHeadProperty, arrowHeadListener);
   }
   
   public void centerDiagram(final boolean useForce) {
@@ -415,10 +439,6 @@ public class XDiagram extends Group implements XActivatable {
     return _contentsInitializer;
   }
   
-  public XDiagram getParentDiagram() {
-    return this.parentDiagram;
-  }
-  
   public Group getNodeLayer() {
     return this.nodeLayer;
   }
@@ -429,13 +449,20 @@ public class XDiagram extends Group implements XActivatable {
     if (_isRootDiagram) {
       _xifexpression = this.nodeLayer;
     } else {
-      _xifexpression = this.parentDiagram.nodeLayer;
+      XDiagram _parentDiagram = this.getParentDiagram();
+      _xifexpression = _parentDiagram.nodeLayer;
     }
     return _xifexpression;
   }
   
   public Group getButtonLayer() {
     return this.buttonLayer;
+  }
+  
+  public void populate(final ModelElement it) {
+    it.<XNode>addChildProperty(this.nodesProperty, XNode.class);
+    it.<XConnection>addChildProperty(this.connectionsProperty, XConnection.class);
+    it.<XDiagram>addChildProperty(this.parentDiagramProperty, XDiagram.class);
   }
   
   private SimpleListProperty<XNode> nodesProperty = new SimpleListProperty<XNode>(this, "nodes",_initNodes());
@@ -576,5 +603,15 @@ public class XDiagram extends Group implements XActivatable {
   
   public ObjectProperty<Paint> connectionPaintProperty() {
     return this.connectionPaintProperty;
+  }
+  
+  private ReadOnlyObjectWrapper<XDiagram> parentDiagramProperty = new ReadOnlyObjectWrapper<XDiagram>(this, "parentDiagram");
+  
+  public XDiagram getParentDiagram() {
+    return this.parentDiagramProperty.get();
+  }
+  
+  public ReadOnlyObjectProperty<XDiagram> parentDiagramProperty() {
+    return this.parentDiagramProperty.getReadOnlyProperty();
   }
 }

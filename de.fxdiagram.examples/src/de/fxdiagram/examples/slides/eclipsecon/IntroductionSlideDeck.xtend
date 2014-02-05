@@ -20,7 +20,7 @@ import static extension de.fxdiagram.examples.slides.Animations.*
 class IntroductionSlideDeck extends OpenableDiagramNode {
 	
 	new() {
-		super('Introduction')
+		this.name = 'Introduction'
 		innerDiagram = new SlideDiagram => [
 			slides += createSlide('Title') => [ 
 				stackPane => [

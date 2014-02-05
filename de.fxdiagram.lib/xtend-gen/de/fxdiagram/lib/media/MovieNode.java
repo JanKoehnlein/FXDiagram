@@ -3,6 +3,7 @@ package de.fxdiagram.lib.media;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -46,8 +47,9 @@ public class MovieNode extends FlipNode {
   
   private int border = 10;
   
-  public MovieNode(final String name) {
-    super(name);
+  private Text label;
+  
+  public MovieNode() {
     HBox _createControlBar = this.createControlBar();
     this.controlBar = _createControlBar;
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
@@ -57,14 +59,14 @@ public class MovieNode extends FlipNode {
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
-            it.setText(name);
             it.setTextOrigin(VPos.TOP);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
+        Text _label = MovieNode.this.label = _doubleArrow;
+        _children.add(_label);
         TooltipExtensions.setTooltip(it, "Double-click to watch");
       }
     };
@@ -237,6 +239,16 @@ public class MovieNode extends FlipNode {
     };
     HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
     return _doubleArrow;
+  }
+  
+  public void doActivate() {
+    super.doActivate();
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    String _key = null;
+    if (_domainObject!=null) {
+      _key=_domainObject.getKey();
+    }
+    this.label.setText(_key);
   }
   
   public void setWidth(final double width) {

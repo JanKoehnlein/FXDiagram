@@ -1,5 +1,6 @@
 package de.fxdiagram.core.anchors
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XActivatable
@@ -7,24 +8,20 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XNode
 import javafx.beans.value.ChangeListener
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
 
-import static java.lang.Math.*
 import static de.fxdiagram.core.XConnectionKind.*
 import static de.fxdiagram.core.XControlPointType.*
+import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.annotations.logging.Logging
 
 @Logging
 class ConnectionRouter implements XActivatable {
 	
-	@FxProperty@ReadOnly ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
 	@FxProperty@ReadOnly boolean isActive
 		
 	XConnection connection
@@ -34,10 +31,25 @@ class ConnectionRouter implements XActivatable {
 	
 	double selfEdgeDist = 60
 	
+	new() {
+	}
+
 	new(XConnection connection) {
+		setConnection(connection)
+	}
+	
+	def void setConnection(XConnection connection) {
 		this.connection = connection
-		scalarListener = [ prop, oldVal, newVal | connection.requestLayout ]
-		boundsListener = [ prop, oldVal, newVal | connection.requestLayout ]
+		scalarListener = [ prop, oldVal, newVal | 
+			connection.requestLayout
+		]
+		boundsListener = [ prop, oldVal, newVal |
+			connection.requestLayout
+		]
+	}
+	
+	def getControlPoints() {
+		connection.controlPoints
 	}
 	
 	override activate() {
@@ -193,7 +205,7 @@ class ConnectionRouter implements XActivatable {
 					layoutY = boundsInDiagram.minY - deltaY
 					type = CONTROL_POINT
 				]	
-				controlPoints+= new XControlPoint => [
+				controlPoints += new XControlPoint => [
 					layoutX = boundsInDiagram.minX + deltaX
 					layoutY = boundsInDiagram.minY - deltaY
 					type = CONTROL_POINT
@@ -248,5 +260,4 @@ class ConnectionRouter implements XActivatable {
 		else 
 			anchor
 	}
-	
 }

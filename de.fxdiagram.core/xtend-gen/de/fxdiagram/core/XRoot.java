@@ -8,21 +8,30 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
+import de.fxdiagram.core.model.DomainObjectProvider;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.MenuTool;
 import de.fxdiagram.core.tools.SelectionTool;
 import de.fxdiagram.core.tools.XDiagramTool;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
@@ -41,7 +50,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
 @SuppressWarnings("all")
-public class XRoot extends Parent implements XActivatable {
+public class XRoot extends Parent implements XActivatable, XModelProvider {
   private HeadsUpDisplay headsUpDisplay = new Function0<HeadsUpDisplay>() {
     public HeadsUpDisplay apply() {
       HeadsUpDisplay _headsUpDisplay = new HeadsUpDisplay();
@@ -62,6 +71,8 @@ public class XRoot extends Parent implements XActivatable {
   
   private XDiagramTool currentTool;
   
+  private Map<Class<? extends DomainObjectProvider>,DomainObjectProvider> domainObjectProviderCache;
+  
   public XRoot() {
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.diagramCanvas);
@@ -76,6 +87,13 @@ public class XRoot extends Parent implements XActivatable {
     MenuTool _menuTool = new MenuTool(this);
     this.defaultTool.operator_add(_menuTool);
     this.tools.add(this.defaultTool);
+    ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
+    final InvalidationListener _function = new InvalidationListener() {
+      public void invalidated(final Observable o) {
+        XRoot.this.domainObjectProviderCache = null;
+      }
+    };
+    _domainObjectProviders.addListener(_function);
   }
   
   public void setDiagram(final XDiagram newDiagram) {
@@ -221,6 +239,33 @@ public class XRoot extends Parent implements XActivatable {
     return _filter;
   }
   
+  public <T extends DomainObjectProvider> T getDomainObjectProvider(final Class<T> providerClazz) {
+    T _xblockexpression = null;
+    {
+      boolean _equals = Objects.equal(this.domainObjectProviderCache, null);
+      if (_equals) {
+        HashMap<Class<? extends DomainObjectProvider>,DomainObjectProvider> _newHashMap = CollectionLiterals.<Class<? extends DomainObjectProvider>, DomainObjectProvider>newHashMap();
+        this.domainObjectProviderCache = _newHashMap;
+        ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
+        final Procedure1<DomainObjectProvider> _function = new Procedure1<DomainObjectProvider>() {
+          public void apply(final DomainObjectProvider it) {
+            Class<? extends DomainObjectProvider> _class = it.getClass();
+            XRoot.this.domainObjectProviderCache.put(_class, it);
+          }
+        };
+        IterableExtensions.<DomainObjectProvider>forEach(_domainObjectProviders, _function);
+      }
+      DomainObjectProvider _get = this.domainObjectProviderCache.get(providerClazz);
+      _xblockexpression = (((T) _get));
+    }
+    return _xblockexpression;
+  }
+  
+  public void populate(final ModelElement it) {
+    it.<DomainObjectProvider>addChildProperty(this.domainObjectProvidersProperty, DomainObjectProvider.class);
+    it.<XDiagram>addChildProperty(this.diagramProperty, XDiagram.class);
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRoot");
     ;
   
@@ -242,5 +287,20 @@ public class XRoot extends Parent implements XActivatable {
   
   public ReadOnlyObjectProperty<XDiagram> diagramProperty() {
     return this.diagramProperty.getReadOnlyProperty();
+  }
+  
+  private SimpleListProperty<DomainObjectProvider> domainObjectProvidersProperty = new SimpleListProperty<DomainObjectProvider>(this, "domainObjectProviders",_initDomainObjectProviders());
+  
+  private static final ObservableList<DomainObjectProvider> _initDomainObjectProviders() {
+    ObservableList<DomainObjectProvider> _observableArrayList = FXCollections.<DomainObjectProvider>observableArrayList();
+    return _observableArrayList;
+  }
+  
+  public ObservableList<DomainObjectProvider> getDomainObjectProviders() {
+    return this.domainObjectProvidersProperty.get();
+  }
+  
+  public ListProperty<DomainObjectProvider> domainObjectProvidersProperty() {
+    return this.domainObjectProvidersProperty;
   }
 }

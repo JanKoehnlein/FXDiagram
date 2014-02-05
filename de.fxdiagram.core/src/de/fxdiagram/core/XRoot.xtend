@@ -20,14 +20,22 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
+import de.fxdiagram.core.model.DomainObjectProvider
+import de.fxdiagram.core.model.XModelProvider
+import de.fxdiagram.core.model.ModelElement
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
+import javafx.beans.Observable
 
 @Logging
-class XRoot extends Parent implements XActivatable {
+class XRoot extends Parent implements XActivatable, XModelProvider {
 	
 	@FxProperty @ReadOnly boolean isActive
 
 	@FxProperty @ReadOnly XDiagram diagram
 
+	@FxProperty ObservableList<DomainObjectProvider> domainObjectProviders = FXCollections.observableArrayList
+	
 	HeadsUpDisplay headsUpDisplay = new HeadsUpDisplay
 	
 	Pane diagramCanvas = new Pane
@@ -38,6 +46,8 @@ class XRoot extends Parent implements XActivatable {
 	
 	XDiagramTool currentTool
 	
+	Map<Class<? extends DomainObjectProvider>, DomainObjectProvider> domainObjectProviderCache
+	
 	new() {
 		children += diagramCanvas
 		children += headsUpDisplay
@@ -46,6 +56,7 @@ class XRoot extends Parent implements XActivatable {
 		defaultTool += new DiagramGestureTool(this)
 		defaultTool += new MenuTool(this)
 		tools += defaultTool
+		domainObjectProviders.addListener[Observable o | domainObjectProviderCache = null]
 	}
 	
 	def setDiagram(XDiagram newDiagram) {
@@ -114,6 +125,20 @@ class XRoot extends Parent implements XActivatable {
 	def getCurrentSelection() {
 		diagram.allShapes.filter[isSelectable && selected]
 	}
+	
+	def <T extends DomainObjectProvider> T getDomainObjectProvider(Class<T> providerClazz) {
+		if(domainObjectProviderCache == null) {
+			domainObjectProviderCache = newHashMap
+			domainObjectProviders.forEach[domainObjectProviderCache.put(class, it)]
+		}
+		domainObjectProviderCache.get(providerClazz) as T
+	}
+	
+	override populate(ModelElement it) {
+		addChildProperty(domainObjectProvidersProperty, DomainObjectProvider)
+		addChildProperty(diagramProperty, XDiagram)
+	}
+	
 }
 
 class HeadsUpDisplay extends Group {

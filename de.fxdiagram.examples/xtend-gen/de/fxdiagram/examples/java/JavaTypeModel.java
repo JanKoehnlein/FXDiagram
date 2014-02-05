@@ -2,7 +2,7 @@ package de.fxdiagram.examples.java;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.HashMultimap;
-import de.fxdiagram.examples.java.Property;
+import de.fxdiagram.examples.java.JavaProperty;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -25,9 +25,9 @@ public class JavaTypeModel {
   
   private List<Method> operations;
   
-  private List<Property> properties = CollectionLiterals.<Property>newArrayList();
+  private List<JavaProperty> properties = CollectionLiterals.<JavaProperty>newArrayList();
   
-  private List<Property> references = CollectionLiterals.<Property>newArrayList();
+  private List<JavaProperty> references = CollectionLiterals.<JavaProperty>newArrayList();
   
   private List<Class<? extends Object>> superTypes = CollectionLiterals.<Class<? extends Object>>newArrayList();
   
@@ -114,12 +114,12 @@ public class JavaTypeModel {
           boolean _isPrimitiveOrString = this.isPrimitiveOrString(_head);
           if (_isPrimitiveOrString) {
             Class<? extends Object> _head_1 = IterableExtensions.<Class<? extends Object>>head(types);
-            Property _property = new Property(propertyName, _head_1);
-            this.properties.add(_property);
+            JavaProperty _javaProperty = new JavaProperty(propertyName, _head_1);
+            this.properties.add(_javaProperty);
           } else {
             Class<? extends Object> _head_2 = IterableExtensions.<Class<? extends Object>>head(types);
-            Property _property_1 = new Property(propertyName, _head_2);
-            this.references.add(_property_1);
+            JavaProperty _javaProperty_1 = new JavaProperty(propertyName, _head_2);
+            this.references.add(_javaProperty_1);
           }
         } else {
           String _join = IterableExtensions.join(types, " ");
@@ -134,13 +134,13 @@ public class JavaTypeModel {
       }
     };
     ListExtensions.<Method, String>sortInplaceBy(this.operations, _function_4);
-    final Function1<Property,String> _function_5 = new Function1<Property,String>() {
-      public String apply(final Property it) {
+    final Function1<JavaProperty,String> _function_5 = new Function1<JavaProperty,String>() {
+      public String apply(final JavaProperty it) {
         String _name = it.getName();
         return _name;
       }
     };
-    ListExtensions.<Property, String>sortInplaceBy(this.properties, _function_5);
+    ListExtensions.<JavaProperty, String>sortInplaceBy(this.properties, _function_5);
     Class<? extends Object> _superclass = javaType.getSuperclass();
     boolean _notEquals = (!Objects.equal(_superclass, null));
     if (_notEquals) {
@@ -238,11 +238,11 @@ public class JavaTypeModel {
     return this.operations;
   }
   
-  public List<Property> getProperties() {
+  public List<JavaProperty> getProperties() {
     return this.properties;
   }
   
-  public List<Property> getReferences() {
+  public List<JavaProperty> getReferences() {
     return this.references;
   }
   

@@ -5,14 +5,17 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
-import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.ecore.EClassNode;
-import de.fxdiagram.examples.ecore.ESuperTypeKey;
+import de.fxdiagram.examples.ecore.ESuperType;
+import de.fxdiagram.examples.ecore.ESuperTypeHandle;
+import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import java.util.Collections;
@@ -29,13 +32,9 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode,EClass,ESuperTypeKey> {
+public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode,EClass,ESuperTypeHandle> {
   public AddESuperTypeRapidButtonBehavior(final EClassNode host) {
     super(host);
-  }
-  
-  public Class<? extends Behavior> getBehaviorKey() {
-    return AddESuperTypeRapidButtonBehavior.class;
   }
   
   protected Iterable<EClass> getInitialModelChoices() {
@@ -45,35 +44,53 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
     return _eSuperTypes;
   }
   
-  protected ESuperTypeKey getChoiceKey(final EClass superType) {
+  protected ESuperTypeHandle getChoiceKey(final EClass superType) {
+    EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
     EClassNode _host = this.getHost();
     EClass _eClass = _host.getEClass();
-    ESuperTypeKey _eSuperTypeKey = new ESuperTypeKey(_eClass, superType);
-    return _eSuperTypeKey;
+    ESuperType _eSuperType = new ESuperType(_eClass, superType);
+    ESuperTypeHandle _createESuperClassHandle = _domainObjectProvider.createESuperClassHandle(_eSuperType);
+    return _createESuperClassHandle;
   }
   
-  protected XNode createNode(final ESuperTypeKey key) {
-    EClass _superType = key.getSuperType();
-    EClassNode _eClassNode = new EClassNode(_superType);
-    return _eClassNode;
+  protected XNode createNode(final ESuperTypeHandle key) {
+    EClassNode _eClassNode = new EClassNode();
+    final Procedure1<EClassNode> _function = new Procedure1<EClassNode>() {
+      public void apply(final EClassNode it) {
+        EcoreDomainObjectProvider _domainObjectProvider = AddESuperTypeRapidButtonBehavior.this.getDomainObjectProvider();
+        ESuperType _domainObject = key.getDomainObject();
+        EClass _superType = _domainObject.getSuperType();
+        DomainObjectHandle _createDomainObjectHandle = _domainObjectProvider.createDomainObjectHandle(_superType);
+        it.setDomainObject(_createDomainObjectHandle);
+      }
+    };
+    EClassNode _doubleArrow = ObjectExtensions.<EClassNode>operator_doubleArrow(_eClassNode, _function);
+    return _doubleArrow;
   }
   
-  protected AbstractChooser createChooser(final XRapidButton button, final Set<ESuperTypeKey> availableChoiceKeys, final Set<ESuperTypeKey> unavailableChoiceKeys) {
+  protected EcoreDomainObjectProvider getDomainObjectProvider() {
+    EClassNode _host = this.getHost();
+    XRoot _root = CoreExtensions.getRoot(_host);
+    EcoreDomainObjectProvider _domainObjectProvider = _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
+    return _domainObjectProvider;
+  }
+  
+  protected AbstractChooser createChooser(final XRapidButton button, final Set<ESuperTypeHandle> availableChoiceKeys, final Set<ESuperTypeHandle> unavailableChoiceKeys) {
     CoverFlowChooser _xblockexpression = null;
     {
       EClassNode _host = this.getHost();
       Pos _chooserPosition = button.getChooserPosition();
       CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(_host, _chooserPosition);
       final CoverFlowChooser chooser = _coverFlowChooser;
-      final Procedure1<ESuperTypeKey> _function = new Procedure1<ESuperTypeKey>() {
-        public void apply(final ESuperTypeKey it) {
+      final Procedure1<ESuperTypeHandle> _function = new Procedure1<ESuperTypeHandle>() {
+        public void apply(final ESuperTypeHandle it) {
           XNode _createNode = AddESuperTypeRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
         }
       };
-      IterableExtensions.<ESuperTypeKey>forEach(availableChoiceKeys, _function);
+      IterableExtensions.<ESuperTypeHandle>forEach(availableChoiceKeys, _function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        public XConnection getConnection(final XNode host, final XNode choice, final Object key) {
+        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectHandle key) {
           XConnection _xConnection = new XConnection(host, choice, key);
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
             public void apply(final XConnection it) {

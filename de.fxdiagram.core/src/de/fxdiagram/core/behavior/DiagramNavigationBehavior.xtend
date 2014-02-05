@@ -61,5 +61,4 @@ class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> implement
 			play
 		]
 	}
-	
 }

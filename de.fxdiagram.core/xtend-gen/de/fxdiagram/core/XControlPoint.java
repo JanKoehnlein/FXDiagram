@@ -7,8 +7,12 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.XModelProvider;
 import java.net.URL;
 import java.util.List;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
@@ -25,21 +29,15 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class XControlPoint extends XShape {
-  private XControlPointType type;
-  
+public class XControlPoint extends XShape implements XModelProvider {
   public XControlPoint() {
     this.setType(XControlPointType.CONTROL_POINT);
-  }
-  
-  public XControlPointType getType() {
-    return this.type;
   }
   
   public boolean setType(final XControlPointType type) {
     boolean _xblockexpression = false;
     {
-      this.type = type;
+      this.typeProperty.set(type);
       boolean _switchResult = false;
       boolean _matched = false;
       if (!_matched) {
@@ -88,7 +86,8 @@ public class XControlPoint extends XShape {
   }
   
   protected void doActivate() {
-    boolean _notEquals = (!Objects.equal(this.type, XControlPointType.ANCHOR));
+    XControlPointType _type = this.getType();
+    boolean _notEquals = (!Objects.equal(_type, XControlPointType.ANCHOR));
     if (_notEquals) {
       MoveBehavior<XControlPoint> _moveBehavior = new MoveBehavior<XControlPoint>(this);
       this.addBehavior(_moveBehavior);
@@ -97,10 +96,11 @@ public class XControlPoint extends XShape {
   
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
-      final XControlPointType type = this.type;
+      XControlPointType _type = this.getType();
+      final XControlPointType getType = _type;
       boolean _matched = false;
       if (!_matched) {
-        if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
+        if (Objects.equal(getType,XControlPointType.CONTROL_POINT)) {
           _matched=true;
           Node _node = this.getNode();
           DropShadow _dropShadow = new DropShadow();
@@ -108,24 +108,25 @@ public class XControlPoint extends XShape {
         }
       }
       if (!_matched) {
-        if (Objects.equal(type,XControlPointType.INTERPOLATED)) {
+        if (Objects.equal(getType,XControlPointType.INTERPOLATED)) {
           _matched=true;
           Node _node_1 = this.getNode();
           ((Circle) _node_1).setFill(Color.RED);
         }
       }
     } else {
-      final XControlPointType type_1 = this.type;
+      XControlPointType _type_1 = this.getType();
+      final XControlPointType getType_1 = _type_1;
       boolean _matched_1 = false;
       if (!_matched_1) {
-        if (Objects.equal(type_1,XControlPointType.CONTROL_POINT)) {
+        if (Objects.equal(getType_1,XControlPointType.CONTROL_POINT)) {
           _matched_1=true;
           Node _node_2 = this.getNode();
           _node_2.setEffect(null);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(type_1,XControlPointType.INTERPOLATED)) {
+        if (Objects.equal(getType_1,XControlPointType.INTERPOLATED)) {
           _matched_1=true;
           Node _node_3 = this.getNode();
           ((Circle) _node_3).setFill(Color.WHITE);
@@ -136,7 +137,8 @@ public class XControlPoint extends XShape {
   
   public boolean isSelectable() {
     boolean _and = false;
-    boolean _notEquals = (!Objects.equal(this.type, XControlPointType.ANCHOR));
+    XControlPointType _type = this.getType();
+    boolean _notEquals = (!Objects.equal(_type, XControlPointType.ANCHOR));
     if (!_notEquals) {
       _and = false;
     } else {
@@ -160,7 +162,8 @@ public class XControlPoint extends XShape {
   
   public boolean update(final List<XControlPoint> siblings) {
     boolean _xifexpression = false;
-    boolean _equals = Objects.equal(this.type, XControlPointType.CONTROL_POINT);
+    XControlPointType _type = this.getType();
+    boolean _equals = Objects.equal(_type, XControlPointType.CONTROL_POINT);
     if (_equals) {
       boolean _xblockexpression = false;
       {
@@ -241,5 +244,20 @@ public class XControlPoint extends XShape {
     };
     Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
     return _doubleArrow;
+  }
+  
+  public void populate(final ModelElement it) {
+    super.populate(it);
+    it.<XControlPointType>addProperty(this.typeProperty, XControlPointType.class);
+  }
+  
+  private ReadOnlyObjectWrapper<XControlPointType> typeProperty = new ReadOnlyObjectWrapper<XControlPointType>(this, "type");
+  
+  public XControlPointType getType() {
+    return this.typeProperty.get();
+  }
+  
+  public ReadOnlyObjectProperty<XControlPointType> typeProperty() {
+    return this.typeProperty.getReadOnlyProperty();
   }
 }

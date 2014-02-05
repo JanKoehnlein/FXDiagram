@@ -31,7 +31,6 @@ class NeonSignNode extends FlipNode {
 	Text neonText
 
 	new() {
-		super('Xtend')
 		front = neonSign => [
 			tooltip = 'Double-click for Xtend code'
 		]

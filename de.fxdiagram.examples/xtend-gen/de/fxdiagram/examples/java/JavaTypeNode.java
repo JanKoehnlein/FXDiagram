@@ -1,11 +1,14 @@
 package de.fxdiagram.examples.java;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.examples.java.AddReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.java.AddSuperTypeRapidButtonBehavior;
+import de.fxdiagram.examples.java.JavaProperty;
+import de.fxdiagram.examples.java.JavaTypeHandle;
 import de.fxdiagram.examples.java.JavaTypeModel;
-import de.fxdiagram.examples.java.Property;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.lang.reflect.Constructor;
@@ -32,9 +35,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class JavaTypeNode extends XNode {
-  private Class<? extends Object> javaType;
-  
-  private final Text name = new Function0<Text>() {
+  private final Text label = new Function0<Text>() {
     public Text apply() {
       Text _text = new Text();
       return _text;
@@ -57,13 +58,7 @@ public class JavaTypeNode extends XNode {
   
   private JavaTypeModel model;
   
-  public JavaTypeNode(final Class<? extends Object> javaType) {
-    super(javaType.getSimpleName());
-    this.javaType = javaType;
-    String _simpleName = javaType.getSimpleName();
-    this.name.setText(_simpleName);
-    JavaTypeModel _javaTypeModel = new JavaTypeModel(javaType);
-    this.model = _javaTypeModel;
+  public JavaTypeNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -86,7 +81,7 @@ public class JavaTypeNode extends XNode {
                 VBox.setMargin(it, _insets);
               }
             };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(JavaTypeNode.this.name, _function);
+            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(JavaTypeNode.this.label, _function);
             _children.add(_doubleArrow);
             ObservableList<Node> _children_1 = it.getChildren();
             Separator _separator = new Separator();
@@ -123,16 +118,49 @@ public class JavaTypeNode extends XNode {
     this.setNode(_doubleArrow);
   }
   
+  public Class<? extends Object> getJavaType() {
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    Object _domainObject_1 = _domainObject.getDomainObject();
+    return ((Class<?>) _domainObject_1);
+  }
+  
+  public JavaTypeModel getJavaTypeModel() {
+    JavaTypeModel _xblockexpression = null;
+    {
+      boolean _equals = Objects.equal(this.model, null);
+      if (_equals) {
+        Class<? extends Object> _javaType = this.getJavaType();
+        JavaTypeModel _javaTypeModel = new JavaTypeModel(_javaType);
+        this.model = _javaTypeModel;
+      }
+      _xblockexpression = (this.model);
+    }
+    return _xblockexpression;
+  }
+  
+  public void setDomainObject(final DomainObjectHandle domainObject) {
+    if ((domainObject instanceof JavaTypeHandle)) {
+      super.setDomainObject(domainObject);
+      Class<? extends Object> _javaType = this.getJavaType();
+      String _simpleName = _javaType.getSimpleName();
+      this.label.setText(_simpleName);
+    } else {
+      IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("JavaTypeNode can only use JavaTypeHandles");
+      throw _illegalArgumentException;
+    }
+  }
+  
   protected Anchors createAnchors() {
     RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
     return _roundedRectangleAnchors;
   }
   
-  public void populateComprtments() {
-    List<Property> _properties = this.model.getProperties();
-    List<Property> _limit = this.<Property>limit(_properties);
-    final Procedure1<Property> _function = new Procedure1<Property>() {
-      public void apply(final Property property) {
+  public void populateCompartments() {
+    JavaTypeModel _javaTypeModel = this.getJavaTypeModel();
+    List<JavaProperty> _properties = _javaTypeModel.getProperties();
+    List<JavaProperty> _limit = this.<JavaProperty>limit(_properties);
+    final Procedure1<JavaProperty> _function = new Procedure1<JavaProperty>() {
+      public void apply(final JavaProperty property) {
         ObservableList<Node> _children = JavaTypeNode.this.propertyCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -151,8 +179,9 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Property>forEach(_limit, _function);
-    List<Constructor<? extends Object>> _constructors = this.model.getConstructors();
+    IterableExtensions.<JavaProperty>forEach(_limit, _function);
+    JavaTypeModel _javaTypeModel_1 = this.getJavaTypeModel();
+    List<Constructor<? extends Object>> _constructors = _javaTypeModel_1.getConstructors();
     final Procedure1<Constructor<? extends Object>> _function_1 = new Procedure1<Constructor<? extends Object>>() {
       public void apply(final Constructor<? extends Object> constructor) {
         ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
@@ -160,7 +189,8 @@ public class JavaTypeNode extends XNode {
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             StringConcatenation _builder = new StringConcatenation();
-            String _simpleName = JavaTypeNode.this.javaType.getSimpleName();
+            Class<? extends Object> _javaType = JavaTypeNode.this.getJavaType();
+            String _simpleName = _javaType.getSimpleName();
             _builder.append(_simpleName, "");
             _builder.append("(");
             Class<? extends Object>[] _parameterTypes = constructor.getParameterTypes();
@@ -182,7 +212,8 @@ public class JavaTypeNode extends XNode {
       }
     };
     IterableExtensions.<Constructor<? extends Object>>forEach(_constructors, _function_1);
-    List<Method> _operations = this.model.getOperations();
+    JavaTypeModel _javaTypeModel_2 = this.getJavaTypeModel();
+    List<Method> _operations = _javaTypeModel_2.getOperations();
     List<Method> _limit_1 = this.<Method>limit(_operations);
     final Procedure1<Method> _function_2 = new Procedure1<Method>() {
       public void apply(final Method method) {
@@ -239,17 +270,12 @@ public class JavaTypeNode extends XNode {
     return _xifexpression;
   }
   
-  public Class<? extends Object> getJavaType() {
-    return this.javaType;
-  }
-  
-  public JavaTypeModel getJavaTypeModel() {
-    return this.model;
-  }
-  
   public void doActivate() {
     super.doActivate();
-    this.populateComprtments();
+    Class<? extends Object> _javaType = this.getJavaType();
+    String _simpleName = _javaType.getSimpleName();
+    this.label.setText(_simpleName);
+    this.populateCompartments();
     AddSuperTypeRapidButtonBehavior _addSuperTypeRapidButtonBehavior = new AddSuperTypeRapidButtonBehavior(this);
     this.addBehavior(_addSuperTypeRapidButtonBehavior);
     AddReferenceRapidButtonBehavior _addReferenceRapidButtonBehavior = new AddReferenceRapidButtonBehavior(this);
@@ -257,7 +283,8 @@ public class JavaTypeNode extends XNode {
   }
   
   public String toString() {
-    String _simpleName = this.javaType.getSimpleName();
+    Class<? extends Object> _javaType = this.getJavaType();
+    String _simpleName = _javaType.getSimpleName();
     return _simpleName;
   }
 }

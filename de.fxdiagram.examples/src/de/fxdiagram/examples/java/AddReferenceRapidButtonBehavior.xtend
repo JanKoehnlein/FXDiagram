@@ -11,7 +11,9 @@ import java.util.Set
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
-class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode, Property, Property> {
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+
+class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode, JavaProperty, JavaPropertyHandle> {
 	
 	new(JavaTypeNode host) {
 		super(host)
@@ -21,27 +23,32 @@ class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 		host.javaTypeModel.references
 	}
 	
-	override protected getChoiceKey(Property property) {
-		property
+	override protected getChoiceKey(JavaProperty property) {
+		domainObjectProvider.createJavaPropertyHandle(property)
 	}
 	
-	override protected createNode(Property key) {
-		new JavaTypeNode(key.type)
+	override protected createNode(JavaPropertyHandle key) {
+		new JavaTypeNode => [
+			domainObject = domainObjectProvider.createJavaTypeHandle(key.domainObject.type)
+		]
 	}
 	
+	protected def getDomainObjectProvider() {
+		host.root.getDomainObjectProvider(JavaModelProvider)
+	}
 	
-	override protected createChooser(XRapidButton button, Set<Property> availableChoiceKeys, Set<Property> unavailableChoiceKeys) {
+	override protected createChooser(XRapidButton button, Set<JavaPropertyHandle> availableChoiceKeys, Set<JavaPropertyHandle> unavailableChoiceKeys) {
 		val chooser = new CarusselChooser(host, button.chooserPosition)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)
 		]
 		chooser.connectionProvider = [
 			host, choice, choiceInfo |
-			val reference = choiceInfo as Property 
+			val reference = choiceInfo as JavaPropertyHandle
 			new XConnection(host, choice, reference) => [
 				targetArrowHead = new LineArrowHead(it, false)
 				new XConnectionLabel(it) => [
-					text.text = reference.name
+					text.text = reference.domainObject.name
 				]
 			]
 		]

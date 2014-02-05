@@ -25,11 +25,10 @@ class LoginNode extends FlipNode {
 	@FxProperty String password
 
 	new() {
-		super("Login")
 		front = new RectangleBorderPane => [
 			children += new Text => [
 				textOrigin = VPos.TOP
-				text = key
+				text = "Login"
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
 		]

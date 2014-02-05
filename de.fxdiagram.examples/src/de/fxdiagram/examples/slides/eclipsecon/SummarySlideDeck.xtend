@@ -16,7 +16,7 @@ import static de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory.*
 class SummarySlideDeck extends OpenableDiagramNode {
 	
 	new() {
-		super('Summary')
+		this.name = 'Summary'
 		innerDiagram = new SlideDiagram => [
 			slides += createSlide('Summary', 144)
 			slides += createSlide(

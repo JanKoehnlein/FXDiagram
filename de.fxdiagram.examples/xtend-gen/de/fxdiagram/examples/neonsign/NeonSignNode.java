@@ -38,7 +38,6 @@ public class NeonSignNode extends FlipNode {
   private Text neonText;
   
   public NeonSignNode() {
-    super("Xtend");
     VBox _neonSign = this.getNeonSign();
     final Procedure1<VBox> _function = new Procedure1<VBox>() {
       public void apply(final VBox it) {

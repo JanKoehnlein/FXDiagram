@@ -11,8 +11,10 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
+import de.fxdiagram.core.model.XModelProvider
+import de.fxdiagram.core.model.ModelElement
 
-abstract class ArrowHead extends Parent {
+abstract class ArrowHead extends Parent implements XModelProvider {
 	
 	Node node
 	
@@ -67,5 +69,9 @@ abstract class ArrowHead extends Parent {
 		trafo.translate(pos.x, pos.y)
 		transforms.setAll(trafo)
 	}
+	
+	override populate(ModelElement element) {
+	}
+	
 }
 

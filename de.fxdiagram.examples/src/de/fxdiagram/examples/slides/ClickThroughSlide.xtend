@@ -15,6 +15,9 @@ class ClickThroughSlide extends Slide {
 	Group pane = new Group
 	Node currentNode 
 	
+	new() {
+	}
+	
 	new(String name, Image backgroundImage) {
 		super(name, backgroundImage)
 		stackPane.children += pane

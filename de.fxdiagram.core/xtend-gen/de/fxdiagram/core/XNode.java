@@ -10,13 +10,16 @@ import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.StringHandle;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -42,14 +45,42 @@ public class XNode extends XShape {
   
   private Anchors anchors;
   
-  public XNode(final String key) {
-    this.keyProperty.set(key);
+  public XNode() {
     InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
     this.mouseOverEffect = _createMouseOverEffect;
     DropShadow _createSelectionEffect = this.createSelectionEffect();
     this.selectionEffect = _createSelectionEffect;
     Anchors _createAnchors = this.createAnchors();
     this.anchors = _createAnchors;
+  }
+  
+  public void setName(final String name) {
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    boolean _notEquals = (!Objects.equal(_domainObject, null));
+    if (_notEquals) {
+      XNode.LOG.severe("Cannot set the name of an XNode when domainObject is already set.");
+    } else {
+      StringHandle _stringHandle = new StringHandle(name);
+      this.setDomainObject(_stringHandle);
+    }
+  }
+  
+  public String getKey() {
+    String _xblockexpression = null;
+    {
+      DomainObjectHandle _domainObject = this.getDomainObject();
+      String _key = null;
+      if (_domainObject!=null) {
+        _key=_domainObject.getKey();
+      }
+      final String key = _key;
+      boolean _equals = Objects.equal(key, null);
+      if (_equals) {
+        XNode.LOG.severe("XNodes key is null");
+      }
+      _xblockexpression = (key);
+    }
+    return _xblockexpression;
   }
   
   protected InnerShadow createMouseOverEffect() {
@@ -75,11 +106,6 @@ public class XNode extends XShape {
   }
   
   public void doActivate() {
-    String _key = this.getKey();
-    boolean _equals = Objects.equal(_key, null);
-    if (_equals) {
-      XNode.LOG.warning("Node\'s key is not set");
-    }
     MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
     this.addBehavior(_moveBehavior);
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
@@ -230,6 +256,27 @@ public class XNode extends XShape {
     return _xifexpression;
   }
   
+  public void populate(final ModelElement it) {
+    super.populate(it);
+    it.<DomainObjectHandle>addChildProperty(this.domainObjectProperty, DomainObjectHandle.class);
+    it.<Number>addProperty(this.widthProperty, Double.class);
+    it.<Number>addProperty(this.heightProperty, Double.class);
+  }
+  
+  public String toString() {
+    Class<? extends XNode> _class = this.getClass();
+    String _name = _class.getName();
+    String _plus = (_name + " (");
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    String _key = null;
+    if (_domainObject!=null) {
+      _key=_domainObject.getKey();
+    }
+    String _plus_1 = (_plus + _key);
+    String _plus_2 = (_plus_1 + ")");
+    return _plus_2;
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XNode");
     ;
   
@@ -271,14 +318,18 @@ public class XNode extends XShape {
     return this.heightProperty;
   }
   
-  private ReadOnlyStringWrapper keyProperty = new ReadOnlyStringWrapper(this, "key");
+  private SimpleObjectProperty<DomainObjectHandle> domainObjectProperty = new SimpleObjectProperty<DomainObjectHandle>(this, "domainObject");
   
-  public String getKey() {
-    return this.keyProperty.get();
+  public DomainObjectHandle getDomainObject() {
+    return this.domainObjectProperty.get();
   }
   
-  public ReadOnlyStringProperty keyProperty() {
-    return this.keyProperty.getReadOnlyProperty();
+  public void setDomainObject(final DomainObjectHandle domainObject) {
+    this.domainObjectProperty.set(domainObject);
+  }
+  
+  public ObjectProperty<DomainObjectHandle> domainObjectProperty() {
+    return this.domainObjectProperty;
   }
   
   private SimpleListProperty<XConnection> incomingConnectionsProperty = new SimpleListProperty<XConnection>(this, "incomingConnections",_initIncomingConnections());

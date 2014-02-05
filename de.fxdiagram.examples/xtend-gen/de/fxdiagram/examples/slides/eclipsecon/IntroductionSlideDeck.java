@@ -31,7 +31,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class IntroductionSlideDeck extends OpenableDiagramNode {
   public IntroductionSlideDeck() {
-    super("Introduction");
+    this.setName("Introduction");
     SlideDiagram _slideDiagram = new SlideDiagram();
     final Procedure1<SlideDiagram> _function = new Procedure1<SlideDiagram>() {
       public void apply(final SlideDiagram it) {

@@ -1,24 +1,25 @@
-package de.fxdiagram.examples.java;
+package de.fxdiagram.examples.ecore;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
 @SuppressWarnings("all")
-public class SuperTypeKey {
-  private final Class<? extends Object> _subType;
+public class ESuperType {
+  private final EClass _subType;
   
-  public Class<? extends Object> getSubType() {
+  public EClass getSubType() {
     return this._subType;
   }
   
-  private final Class<? extends Object> _superType;
+  private final EClass _superType;
   
-  public Class<? extends Object> getSuperType() {
+  public EClass getSuperType() {
     return this._superType;
   }
   
-  public SuperTypeKey(final Class<? extends Object> subType, final Class<? extends Object> superType) {
+  public ESuperType(final EClass subType, final EClass superType) {
     super();
     this._subType = subType;
     this._superType = superType;
@@ -41,7 +42,7 @@ public class SuperTypeKey {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    SuperTypeKey other = (SuperTypeKey) obj;
+    ESuperType other = (ESuperType) obj;
     if (_subType == null) {
       if (other._subType != null)
         return false;

@@ -29,7 +29,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class LoginNode extends FlipNode {
   public LoginNode() {
-    super("Login");
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -38,8 +37,7 @@ public class LoginNode extends FlipNode {
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
-            String _key = LoginNode.this.getKey();
-            it.setText(_key);
+            it.setText("Login");
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
           }

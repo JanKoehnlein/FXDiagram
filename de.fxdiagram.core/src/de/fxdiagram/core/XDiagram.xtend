@@ -7,6 +7,8 @@ import de.fxdiagram.core.behavior.Behavior
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior
 import de.fxdiagram.core.behavior.NavigationBehavior
 import de.fxdiagram.core.extensions.AccumulativeTransform2D
+import de.fxdiagram.core.model.ModelElement
+import de.fxdiagram.core.model.XModelProvider
 import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
 import javafx.collections.ListChangeListener
@@ -27,7 +29,7 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
-class XDiagram extends Group implements XActivatable {
+class XDiagram extends Group implements XActivatable, XModelProvider {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
 	@FxProperty ObservableList<XConnection> connections = observableArrayList
@@ -44,7 +46,7 @@ class XDiagram extends Group implements XActivatable {
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
 	
-	XDiagram parentDiagram
+	@FxProperty @ReadOnly XDiagram parentDiagram
 
 	(XDiagram)=>void contentsInitializer
 
@@ -59,9 +61,10 @@ class XDiagram extends Group implements XActivatable {
 	new() {
 		children += nodeLayer
 		children += buttonLayer
+		isRootDiagramProperty.set(true)
 		parentProperty.addListener [
 			property, oldValue, newValue |
-			parentDiagram = newValue.diagram
+			parentDiagramProperty.set(newValue.diagram)
 			isRootDiagramProperty.set(parentDiagram == null)
 		]
 		isRootDiagramProperty.addListener [
@@ -99,6 +102,9 @@ class XDiagram extends Group implements XActivatable {
 	}
 
 	def void doActivate() {
+		nodeLayer.children += nodes
+		connectionLayer.children += connections
+		buttonLayer.children += buttons;
 		val ChangeListener<Node> arrowHeadListener = [
 			prop, oldVal, newVal |
 			if(oldVal != null)
@@ -115,6 +121,9 @@ class XDiagram extends Group implements XActivatable {
 					connectionLayer.children -= change.removed
 			}
 		]
+		connections.forEach [
+			addConnectionDecorations(labelListener, arrowHeadListener)
+		]
 		nodes.addListener(new XDiagramChildrenListener<XNode>(this, nodeLayer))
 		connections.addListener(new XDiagramChildrenListener<XConnection>(this, connectionLayer))
 		buttons.addListener(new XDiagramChildrenListener<XRapidButton>(this, buttonLayer))
@@ -124,13 +133,7 @@ class XDiagram extends Group implements XActivatable {
 				if(change.wasAdded) {
 					val addedConnections = change.addedSubList.filter(XConnection)
 					addedConnections.forEach [
-						labels.forEach[
-							if(!connectionLayer.children.contains(it))
-								connectionLayer.children.add(it)
-						]
-						labelsProperty.addListener(labelListener)
-						addArrowHead(targetArrowHeadProperty, arrowHeadListener) 
-						addArrowHead(sourceArrowHeadProperty, arrowHeadListener) 
+						addConnectionDecorations(it, labelListener, arrowHeadListener) 
 					]
 				}
 				if(change.wasRemoved) {
@@ -149,6 +152,18 @@ class XDiagram extends Group implements XActivatable {
 		contentsInitializer?.apply(this)
 		if(getBehavior(NavigationBehavior) == null) 
 			addBehavior(new DiagramNavigationBehavior(this))
+	}
+	
+	protected def addConnectionDecorations(XConnection it, 
+			ListChangeListener<? super XConnectionLabel> labelListener, 
+			ChangeListener<Node> arrowHeadListener) {
+		labels.forEach[
+			if(!connectionLayer.children.contains(it))
+				connectionLayer.children.add(it)
+		]
+		labelsProperty.addListener(labelListener)
+		addArrowHead(targetArrowHeadProperty, arrowHeadListener) 
+		addArrowHead(sourceArrowHeadProperty, arrowHeadListener)
 	}
 		
 	def void centerDiagram(boolean useForce) {
@@ -202,10 +217,6 @@ class XDiagram extends Group implements XActivatable {
 		this.contentsInitializer = contentsInitializer
 	}
 	
-	def getParentDiagram() {
-		parentDiagram
-	}
-
 	def getNodeLayer() {
 		nodeLayer
 	}
@@ -219,6 +230,12 @@ class XDiagram extends Group implements XActivatable {
 	
 	def getButtonLayer() {
 		buttonLayer
+	}
+	
+	override populate(ModelElement it) {
+		addChildProperty(nodesProperty, XNode)
+		addChildProperty(connectionsProperty, XConnection)
+		addChildProperty(parentDiagramProperty, XDiagram)
 	}
 }
 

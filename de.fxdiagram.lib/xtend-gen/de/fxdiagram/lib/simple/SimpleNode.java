@@ -2,6 +2,7 @@ package de.fxdiagram.lib.simple;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import javafx.collections.ObservableList;
@@ -16,27 +17,29 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class SimpleNode extends XNode {
-  private String name;
+  private Text label;
   
   public SimpleNode(final String name) {
-    super(name);
-    this.name = name;
+    this();
+    this.setName(name);
+  }
+  
+  public SimpleNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
-        Text _text = new Text();
-        final Text label = _text;
         ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
-            it.setText(name);
             it.setTextOrigin(VPos.TOP);
           }
         };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(label, _function);
-        _children.add(_doubleArrow);
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+        Text _label = SimpleNode.this.label = _doubleArrow;
+        _children.add(_label);
         Insets _insets = new Insets(10, 20, 10, 20);
-        StackPane.setMargin(label, _insets);
+        StackPane.setMargin(SimpleNode.this.label, _insets);
       }
     };
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
@@ -59,9 +62,11 @@ public class SimpleNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-  }
-  
-  public String toString() {
-    return this.name;
+    DomainObjectHandle _domainObject = this.getDomainObject();
+    String _key = null;
+    if (_domainObject!=null) {
+      _key=_domainObject.getKey();
+    }
+    this.label.setText(_key);
   }
 }

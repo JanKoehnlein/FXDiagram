@@ -16,13 +16,19 @@ import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.StringHandle;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -46,6 +52,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -57,8 +64,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @Logging
 @SuppressWarnings("all")
 public class XConnection extends XShape {
-  private Object key;
-  
   private Group controlPointGroup = new Function0<Group>() {
     public Group apply() {
       Group _group = new Group();
@@ -75,10 +80,7 @@ public class XConnection extends XShape {
   
   private ChangeListener<Number> controlPointListener;
   
-  private ConnectionRouter connectionRouter;
-  
-  public XConnection(final XNode source, final XNode target, final Object key) {
-    this.key = key;
+  public XConnection() {
     this.setNode(this.shapeGroup);
     ObservableList<Node> _children = this.getChildren();
     final Procedure1<Group> _function = new Procedure1<Group>() {
@@ -88,8 +90,34 @@ public class XConnection extends XShape {
     };
     Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(this.controlPointGroup, _function);
     _children.add(_doubleArrow);
+    ConnectionRouter _connectionRouter = new ConnectionRouter(this);
+    this.setConnectionRouter(_connectionRouter);
+    TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
+    this.setTargetArrowHead(_triangleArrowHead);
+  }
+  
+  public XConnection(final XNode source, final XNode target, final DomainObjectHandle domainObject) {
+    this();
+    this.setDomainObject(domainObject);
     this.setSource(source);
     this.setTarget(target);
+  }
+  
+  public XConnection(final XNode source, final XNode target) {
+    this(source, target, new Function0<DomainObjectHandle>() {
+      public DomainObjectHandle apply() {
+        String _key = source.getKey();
+        String _plus = (_key + "->");
+        String _key_1 = target.getKey();
+        String _plus_1 = (_plus + _key_1);
+        StringHandle _stringHandle = new StringHandle(_plus_1);
+        return _stringHandle;
+      }
+    }.apply());
+  }
+  
+  public void setSource(final XNode source) {
+    this.sourceProperty.set(source);
     ObservableList<XConnection> _outgoingConnections = source.getOutgoingConnections();
     boolean _contains = _outgoingConnections.contains(this);
     boolean _not = (!_contains);
@@ -97,25 +125,17 @@ public class XConnection extends XShape {
       ObservableList<XConnection> _outgoingConnections_1 = source.getOutgoingConnections();
       _outgoingConnections_1.add(this);
     }
+  }
+  
+  public void setTarget(final XNode target) {
+    this.targetProperty.set(target);
     ObservableList<XConnection> _incomingConnections = target.getIncomingConnections();
-    boolean _contains_1 = _incomingConnections.contains(this);
-    boolean _not_1 = (!_contains_1);
-    if (_not_1) {
+    boolean _contains = _incomingConnections.contains(this);
+    boolean _not = (!_contains);
+    if (_not) {
       ObservableList<XConnection> _incomingConnections_1 = target.getIncomingConnections();
       _incomingConnections_1.add(this);
     }
-    ConnectionRouter _connectionRouter = new ConnectionRouter(this);
-    this.connectionRouter = _connectionRouter;
-    TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
-    this.setTargetArrowHead(_triangleArrowHead);
-  }
-  
-  public XConnection(final XNode source, final XNode target) {
-    this(source, target, ((source.getKey() + "->") + target.getKey()));
-  }
-  
-  public Object getKey() {
-    return this.key;
   }
   
   public void doActivate() {
@@ -133,7 +153,18 @@ public class XConnection extends XShape {
     };
     this.controlPointListener = _function;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    final ListChangeListener<XControlPoint> _function_1 = new ListChangeListener<XControlPoint>() {
+    final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
+      public void apply(final XControlPoint it) {
+        it.activate();
+        DoubleProperty _layoutXProperty = it.layoutXProperty();
+        _layoutXProperty.addListener(XConnection.this.controlPointListener);
+        DoubleProperty _layoutYProperty = it.layoutYProperty();
+        _layoutYProperty.addListener(XConnection.this.controlPointListener);
+      }
+    };
+    IterableExtensions.<XControlPoint>forEach(_controlPoints, _function_1);
+    ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+    final ListChangeListener<XControlPoint> _function_2 = new ListChangeListener<XControlPoint>() {
       public void onChanged(final ListChangeListener.Change<? extends XControlPoint> it) {
         final ObservableList<? extends XControlPoint> points = it.getList();
         XConnection.this.updateShapes();
@@ -177,18 +208,19 @@ public class XConnection extends XShape {
         IterableExtensions.forEach(_removed, _function);
       }
     };
-    _controlPoints.addListener(_function_1);
+    _controlPoints_1.addListener(_function_2);
     ObservableList<XConnectionLabel> _labels = this.getLabels();
-    final Procedure1<XConnectionLabel> _function_2 = new Procedure1<XConnectionLabel>() {
+    final Procedure1<XConnectionLabel> _function_3 = new Procedure1<XConnectionLabel>() {
       public void apply(final XConnectionLabel it) {
         it.activate();
       }
     };
-    IterableExtensions.<XConnectionLabel>forEach(_labels, _function_2);
-    this.connectionRouter.activate();
+    IterableExtensions.<XConnectionLabel>forEach(_labels, _function_3);
+    ConnectionRouter _connectionRouter = this.getConnectionRouter();
+    _connectionRouter.activate();
     this.updateShapes();
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
-    final ChangeListener<Parent> _function_3 = new ChangeListener<Parent>() {
+    final ChangeListener<Parent> _function_4 = new ChangeListener<Parent>() {
       public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
         boolean _equals = Objects.equal(newValue, null);
         if (_equals) {
@@ -201,7 +233,7 @@ public class XConnection extends XShape {
         }
       }
     };
-    _parentProperty.addListener(_function_3);
+    _parentProperty.addListener(_function_4);
   }
   
   public void selectionFeedback(final boolean isSelected) {
@@ -212,15 +244,6 @@ public class XConnection extends XShape {
       _target.toFront();
     }
     this.controlPointGroup.setVisible(isSelected);
-  }
-  
-  public ConnectionRouter getConnectionRouter() {
-    return this.connectionRouter;
-  }
-  
-  public ObservableList<XControlPoint> getControlPoints() {
-    ObservableList<XControlPoint> _controlPoints = this.connectionRouter.getControlPoints();
-    return _controlPoints;
   }
   
   public void updateShapes() {
@@ -424,7 +447,7 @@ public class XConnection extends XShape {
       this.setShapes(Collections.<Polyline>unmodifiableList(Lists.<Polyline>newArrayList(polyline)));
     }
     ObservableList<Node> _children_3 = this.controlPointGroup.getChildren();
-    ObservableList<XControlPoint> _controlPoints_5 = this.connectionRouter.getControlPoints();
+    ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
     _children_3.setAll(_controlPoints_5);
   }
   
@@ -458,22 +481,32 @@ public class XConnection extends XShape {
   
   public void layoutChildren() {
     super.layoutChildren();
-    this.connectionRouter.calculatePoints();
-    ObservableList<XConnectionLabel> _labels = this.getLabels();
-    final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-      public void apply(final XConnectionLabel it) {
-        ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
-        it.place(_controlPoints);
+    ConnectionRouter _connectionRouter = this.getConnectionRouter();
+    _connectionRouter.calculatePoints();
+    try {
+      ObservableList<XConnectionLabel> _labels = this.getLabels();
+      final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+        public void apply(final XConnectionLabel it) {
+          ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
+          it.place(_controlPoints);
+        }
+      };
+      IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
+      ArrowHead _sourceArrowHead = this.getSourceArrowHead();
+      if (_sourceArrowHead!=null) {
+        _sourceArrowHead.place();
       }
-    };
-    IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
-    ArrowHead _sourceArrowHead = this.getSourceArrowHead();
-    if (_sourceArrowHead!=null) {
-      _sourceArrowHead.place();
-    }
-    ArrowHead _targetArrowHead = this.getTargetArrowHead();
-    if (_targetArrowHead!=null) {
-      _targetArrowHead.place();
+      ArrowHead _targetArrowHead = this.getTargetArrowHead();
+      if (_targetArrowHead!=null) {
+        _targetArrowHead.place();
+      }
+    } catch (final Throwable _t) {
+      if (_t instanceof NullPointerException) {
+        final NullPointerException exc = (NullPointerException)_t;
+        XConnection.LOG.severe("NPE in XConnection.layoutChildren()");
+      } else {
+        throw Exceptions.sneakyThrow(_t);
+      }
     }
   }
   
@@ -675,35 +708,36 @@ public class XConnection extends XShape {
     return _xblockexpression;
   }
   
+  public void populate(final ModelElement it) {
+    it.<XNode>addProperty(this.sourceProperty, XNode.class);
+    it.<XNode>addProperty(this.targetProperty, XNode.class);
+    it.<XConnectionKind>addProperty(this.kindProperty, XConnectionKind.class);
+    it.<XControlPoint>addChildProperty(this.controlPointsProperty, XControlPoint.class);
+    it.<XConnectionLabel>addChildProperty(this.labelsProperty, XConnectionLabel.class);
+    it.<DomainObjectHandle>addChildProperty(this.domainObjectProperty, DomainObjectHandle.class);
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XConnection");
     ;
   
-  private SimpleObjectProperty<XNode> sourceProperty = new SimpleObjectProperty<XNode>(this, "source");
+  private ReadOnlyObjectWrapper<XNode> sourceProperty = new ReadOnlyObjectWrapper<XNode>(this, "source");
   
   public XNode getSource() {
     return this.sourceProperty.get();
   }
   
-  public void setSource(final XNode source) {
-    this.sourceProperty.set(source);
+  public ReadOnlyObjectProperty<XNode> sourceProperty() {
+    return this.sourceProperty.getReadOnlyProperty();
   }
   
-  public ObjectProperty<XNode> sourceProperty() {
-    return this.sourceProperty;
-  }
-  
-  private SimpleObjectProperty<XNode> targetProperty = new SimpleObjectProperty<XNode>(this, "target");
+  private ReadOnlyObjectWrapper<XNode> targetProperty = new ReadOnlyObjectWrapper<XNode>(this, "target");
   
   public XNode getTarget() {
     return this.targetProperty.get();
   }
   
-  public void setTarget(final XNode target) {
-    this.targetProperty.set(target);
-  }
-  
-  public ObjectProperty<XNode> targetProperty() {
-    return this.targetProperty;
+  public ReadOnlyObjectProperty<XNode> targetProperty() {
+    return this.targetProperty.getReadOnlyProperty();
   }
   
   private SimpleListProperty<XConnectionLabel> labelsProperty = new SimpleListProperty<XConnectionLabel>(this, "labels",_initLabels());
@@ -767,6 +801,21 @@ public class XConnection extends XShape {
     return this.kindProperty;
   }
   
+  private ReadOnlyListWrapper<XControlPoint> controlPointsProperty = new ReadOnlyListWrapper<XControlPoint>(this, "controlPoints",_initControlPoints());
+  
+  private static final ObservableList<XControlPoint> _initControlPoints() {
+    ObservableList<XControlPoint> _observableArrayList = FXCollections.<XControlPoint>observableArrayList();
+    return _observableArrayList;
+  }
+  
+  public ObservableList<XControlPoint> getControlPoints() {
+    return this.controlPointsProperty.get();
+  }
+  
+  public ReadOnlyListProperty<XControlPoint> controlPointsProperty() {
+    return this.controlPointsProperty.getReadOnlyProperty();
+  }
+  
   private SimpleDoubleProperty strokeWidthProperty = new SimpleDoubleProperty(this, "strokeWidth",_initStrokeWidth());
   
   private static final double _initStrokeWidth() {
@@ -797,5 +846,33 @@ public class XConnection extends XShape {
   
   public ObjectProperty<Paint> strokeProperty() {
     return this.strokeProperty;
+  }
+  
+  private SimpleObjectProperty<DomainObjectHandle> domainObjectProperty = new SimpleObjectProperty<DomainObjectHandle>(this, "domainObject");
+  
+  public DomainObjectHandle getDomainObject() {
+    return this.domainObjectProperty.get();
+  }
+  
+  public void setDomainObject(final DomainObjectHandle domainObject) {
+    this.domainObjectProperty.set(domainObject);
+  }
+  
+  public ObjectProperty<DomainObjectHandle> domainObjectProperty() {
+    return this.domainObjectProperty;
+  }
+  
+  private SimpleObjectProperty<ConnectionRouter> connectionRouterProperty = new SimpleObjectProperty<ConnectionRouter>(this, "connectionRouter");
+  
+  public ConnectionRouter getConnectionRouter() {
+    return this.connectionRouterProperty.get();
+  }
+  
+  public void setConnectionRouter(final ConnectionRouter connectionRouter) {
+    this.connectionRouterProperty.set(connectionRouter);
+  }
+  
+  public ObjectProperty<ConnectionRouter> connectionRouterProperty() {
+    return this.connectionRouterProperty;
   }
 }

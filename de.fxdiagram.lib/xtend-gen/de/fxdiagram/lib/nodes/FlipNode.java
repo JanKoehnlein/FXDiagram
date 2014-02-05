@@ -40,8 +40,7 @@ public class FlipNode extends XNode {
   
   private EventHandler<MouseEvent> clickHandler;
   
-  public FlipNode(final String key) {
-    super(key);
+  public FlipNode() {
     this.setNode(this.pane);
     this.setCursor(Cursor.HAND);
   }

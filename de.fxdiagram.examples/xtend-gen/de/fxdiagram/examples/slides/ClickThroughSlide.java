@@ -28,6 +28,9 @@ public class ClickThroughSlide extends Slide {
   
   private Node currentNode;
   
+  public ClickThroughSlide() {
+  }
+  
   public ClickThroughSlide(final String name, final Image backgroundImage) {
     super(name, backgroundImage);
     StackPane _stackPane = this.getStackPane();

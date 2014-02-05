@@ -3,10 +3,12 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.Lazy
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
+import de.fxdiagram.core.model.DomainObjectHandle
+import de.fxdiagram.core.model.ModelElement
+import de.fxdiagram.core.model.StringHandle
 import javafx.collections.ObservableList
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
@@ -21,7 +23,7 @@ class XNode extends XShape {
 
 	@FxProperty @Lazy double width
 	@FxProperty @Lazy double height
-	@FxProperty @ReadOnly String key
+	@FxProperty DomainObjectHandle domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	
@@ -31,13 +33,26 @@ class XNode extends XShape {
 
 	Anchors anchors
  
-	new(String key) {
-		this.keyProperty.set(key)
+ 	new() {
 		mouseOverEffect = createMouseOverEffect
 		selectionEffect = createSelectionEffect
 		anchors = createAnchors
-	}
-
+ 	}
+ 	
+ 	def setName(String name) {
+ 		if(domainObject != null)
+ 			LOG.severe("Cannot set the name of an XNode when domainObject is already set.")
+ 		else
+ 			domainObject = new StringHandle(name);	
+ 	}
+ 	
+ 	def getKey() {
+		val key = domainObject?.key
+ 		if(key == null)
+ 			LOG.severe("XNodes key is null")
+ 		key
+ 	}
+ 		
 	protected def createMouseOverEffect() {
 		new InnerShadow
 	}
@@ -54,9 +69,6 @@ class XNode extends XShape {
 	}
 
 	override doActivate() {
-		if(key == null) {
-			LOG.warning('Node\'s key is not set')
-		}
 		addBehavior(new MoveBehavior(this))
 		onMouseEntered = [
 			originalEffect = node.effect
@@ -130,4 +142,16 @@ class XNode extends XShape {
 		else
 			super.maxHeight(width)
 	}
+	
+	override populate(ModelElement it) {
+		super.populate(it)
+		addChildProperty(domainObjectProperty, DomainObjectHandle)
+		addProperty(widthProperty, Double)
+		addProperty(heightProperty, Double)
+	}
+	
+	override toString() {
+		class.name + " (" + domainObject?.key + ")" 
+	}
+	
 }
