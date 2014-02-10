@@ -27,9 +27,7 @@ class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 	}
 	
 	override protected createNode(JavaSuperTypeHandle key) {
-		new JavaTypeNode => [
-			domainObject = domainObjectProvider.createJavaTypeHandle(key.domainObject.superType)
-		]
+		new JavaTypeNode(domainObjectProvider.createJavaTypeHandle(key.domainObject.superType))
 	}
 	
 	protected def getDomainObjectProvider() {

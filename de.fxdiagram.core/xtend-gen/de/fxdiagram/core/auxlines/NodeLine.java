@@ -1,6 +1,5 @@
 package de.fxdiagram.core.auxlines;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import javafx.geometry.Bounds;
@@ -24,24 +23,21 @@ public class NodeLine extends AuxiliaryLine {
   public NodeLine(final double position, final Orientation orientation, final XNode node, final Bounds boundsInDiagram) {
     super(position, new XNode[] { node });
     this.orientation = orientation;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(orientation,Orientation.HORIZONTAL)) {
-        _matched=true;
+    switch (orientation) {
+      case HORIZONTAL:
         double _minX = boundsInDiagram.getMinX();
         this.min = _minX;
         double _maxX = boundsInDiagram.getMaxX();
         this.max = _maxX;
-      }
-    }
-    if (!_matched) {
-      if (Objects.equal(orientation,Orientation.VERTICAL)) {
-        _matched=true;
+        break;
+      case VERTICAL:
         double _minY = boundsInDiagram.getMinY();
         this.min = _minY;
         double _maxY = boundsInDiagram.getMaxY();
         this.max = _maxY;
-      }
+        break;
+      default:
+        break;
     }
   }
   
@@ -52,10 +48,8 @@ public class NodeLine extends AuxiliaryLine {
   public Node createNode() {
     Line _switchResult = null;
     final Orientation orientation = this.orientation;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(orientation,Orientation.HORIZONTAL)) {
-        _matched=true;
+    switch (orientation) {
+      case HORIZONTAL:
         Line _line = new Line();
         final Procedure1<Line> _function = new Procedure1<Line>() {
           public void apply(final Line it) {
@@ -67,13 +61,9 @@ public class NodeLine extends AuxiliaryLine {
             it.setEndY(_position_1);
           }
         };
-        Line _doubleArrow = ObjectExtensions.<Line>operator_doubleArrow(_line, _function);
-        _switchResult = _doubleArrow;
-      }
-    }
-    if (!_matched) {
-      if (Objects.equal(orientation,Orientation.VERTICAL)) {
-        _matched=true;
+        _switchResult = ObjectExtensions.<Line>operator_doubleArrow(_line, _function);
+        break;
+      case VERTICAL:
         Line _line_1 = new Line();
         final Procedure1<Line> _function_1 = new Procedure1<Line>() {
           public void apply(final Line it) {
@@ -85,9 +75,10 @@ public class NodeLine extends AuxiliaryLine {
             it.setEndY((NodeLine.this.max + NodeLine.this.overlap));
           }
         };
-        Line _doubleArrow_1 = ObjectExtensions.<Line>operator_doubleArrow(_line_1, _function_1);
-        _switchResult = _doubleArrow_1;
-      }
+        _switchResult = ObjectExtensions.<Line>operator_doubleArrow(_line_1, _function_1);
+        break;
+      default:
+        break;
     }
     final Procedure1<Line> _function_2 = new Procedure1<Line>() {
       public void apply(final Line it) {
@@ -95,7 +86,6 @@ public class NodeLine extends AuxiliaryLine {
         it.setStrokeWidth(2);
       }
     };
-    Line _doubleArrow_2 = ObjectExtensions.<Line>operator_doubleArrow(_switchResult, _function_2);
-    return _doubleArrow_2;
+    return ObjectExtensions.<Line>operator_doubleArrow(_switchResult, _function_2);
   }
 }

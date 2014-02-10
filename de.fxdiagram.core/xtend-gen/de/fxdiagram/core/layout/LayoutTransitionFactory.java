@@ -1,6 +1,5 @@
 package de.fxdiagram.core.layout;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.layout.LayoutTransitionStyle;
 import javafx.animation.PathTransition;
@@ -47,32 +46,26 @@ public class LayoutTransitionFactory {
               double _layoutY = shape.getLayoutY();
               MoveTo _moveTo = new MoveTo(_layoutX, _layoutY);
               _elements.add(_moveTo);
-              boolean _matched = false;
-              if (!_matched) {
-                if (Objects.equal(style,LayoutTransitionStyle.STRAIGHT)) {
-                  _matched=true;
+              switch (style) {
+                case STRAIGHT:
                   ObservableList<PathElement> _elements_1 = it.getElements();
                   LineTo _lineTo = new LineTo(endX, endY);
                   _elements_1.add(_lineTo);
-                }
-              }
-              if (!_matched) {
-                if (Objects.equal(style,LayoutTransitionStyle.CURVE_XFIRST)) {
-                  _matched=true;
+                  break;
+                case CURVE_XFIRST:
                   ObservableList<PathElement> _elements_2 = it.getElements();
                   double _layoutY_1 = shape.getLayoutY();
                   QuadCurveTo _quadCurveTo = new QuadCurveTo(endX, _layoutY_1, endX, endY);
                   _elements_2.add(_quadCurveTo);
-                }
-              }
-              if (!_matched) {
-                if (Objects.equal(style,LayoutTransitionStyle.CURVE_YFIRST)) {
-                  _matched=true;
+                  break;
+                case CURVE_YFIRST:
                   ObservableList<PathElement> _elements_3 = it.getElements();
                   double _layoutX_1 = shape.getLayoutX();
                   QuadCurveTo _quadCurveTo_1 = new QuadCurveTo(_layoutX_1, endY, endX, endY);
                   _elements_3.add(_quadCurveTo_1);
-                }
+                  break;
+                default:
+                  break;
               }
             }
           };
@@ -96,7 +89,7 @@ public class LayoutTransitionFactory {
         }
       };
       delegate.setOnFinished(_function_2);
-      _xblockexpression = (delegate);
+      _xblockexpression = delegate;
     }
     return _xblockexpression;
   }

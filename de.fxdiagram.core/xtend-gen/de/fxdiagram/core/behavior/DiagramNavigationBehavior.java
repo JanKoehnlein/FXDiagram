@@ -39,8 +39,7 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
     final ObservableList<XNode> nodes = _host.getNodes();
     final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
       public Boolean apply(final XNode it) {
-        boolean _selected = it.getSelected();
-        return Boolean.valueOf(_selected);
+        return Boolean.valueOf(it.getSelected());
       }
     };
     final XNode current = IterableExtensions.<XNode>findFirst(nodes, _function);
@@ -51,11 +50,9 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
       int _plus = (_indexOf + 1);
       int _size = nodes.size();
       int _modulo = (_plus % _size);
-      XNode _get = nodes.get(_modulo);
-      _xifexpression = _get;
+      _xifexpression = nodes.get(_modulo);
     } else {
-      XNode _head = IterableExtensions.<XNode>head(nodes);
-      _xifexpression = _head;
+      _xifexpression = IterableExtensions.<XNode>head(nodes);
     }
     final XNode next = _xifexpression;
     if (next!=null) {
@@ -69,8 +66,7 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
     final ObservableList<XNode> nodes = _host.getNodes();
     final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
       public Boolean apply(final XNode it) {
-        boolean _selected = it.getSelected();
-        return Boolean.valueOf(_selected);
+        return Boolean.valueOf(it.getSelected());
       }
     };
     final XNode current = IterableExtensions.<XNode>findLast(nodes, _function);
@@ -83,11 +79,9 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
       int _minus = (_plus - 1);
       int _size_1 = nodes.size();
       int _modulo = (_minus % _size_1);
-      XNode _get = nodes.get(_modulo);
-      _xifexpression = _get;
+      _xifexpression = nodes.get(_modulo);
     } else {
-      XNode _last = IterableExtensions.<XNode>last(nodes);
-      _xifexpression = _last;
+      _xifexpression = IterableExtensions.<XNode>last(nodes);
     }
     final XNode previous = _xifexpression;
     if (previous!=null) {
@@ -123,7 +117,6 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
         it.play();
       }
     };
-    ScrollToAndScaleTransition _doubleArrow = ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
   }
 }

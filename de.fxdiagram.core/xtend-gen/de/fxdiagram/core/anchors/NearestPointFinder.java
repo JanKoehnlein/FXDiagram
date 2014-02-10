@@ -40,12 +40,11 @@ public class NearestPointFinder {
         Point2D _xblockexpression_1 = null;
         {
           this.currentDistanceSquared = distanceSquared;
-          Point2D _currentNearest = this.currentNearest = point;
-          _xblockexpression_1 = (_currentNearest);
+          _xblockexpression_1 = this.currentNearest = point;
         }
         _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
@@ -60,12 +59,11 @@ public class NearestPointFinder {
         {
           this.currentDistanceSquared = distanceSquared;
           Point2D _point2D = new Point2D(px, py);
-          Point2D _currentNearest = this.currentNearest = _point2D;
-          _xblockexpression_1 = (_currentNearest);
+          _xblockexpression_1 = this.currentNearest = _point2D;
         }
         _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }

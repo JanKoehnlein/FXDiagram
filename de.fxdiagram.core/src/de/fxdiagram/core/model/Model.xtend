@@ -51,11 +51,14 @@ class Model {
 		val element = modelFactory.createElement(node)
 		index.put(node, element)
 		modelSync.addElement(element)
+		element.constructorProperties.forEach [
+			value?.addElement
+		]
 		element.children.forEach [
 			value?.addElement
 			addListener(changeListener)
 		]
-		element.listChildren.forEach[
+		element.listChildren.forEach [
 			value.forEach[it?.addElement]
 			addListener(listChangeListener)
 		]

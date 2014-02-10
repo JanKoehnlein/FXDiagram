@@ -1,6 +1,7 @@
 package de.fxdiagram.examples.slides
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import javafx.scene.effect.ColorAdjust
@@ -10,13 +11,24 @@ import javafx.scene.layout.StackPane
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class Slide extends XNode {
 	
 	@FxProperty Image backgroundImage
 	
 	ImageView imageView
 	
-	new() {
+	new(String name) {
+		super(name)
+	}
+	
+	new(String name, Image backgroundImage) {
+		this(name)
+		this.backgroundImage = backgroundImage
+	} 
+	
+	override doActivatePreview() {
+		super.doActivatePreview
 		node = new StackPane => [
 			children += imageView = new ImageView => [
 				effect = new ColorAdjust => [
@@ -27,12 +39,6 @@ class Slide extends XNode {
 			]
 		]
 	}
-	
-	new(String name, Image backgroundImage) {
-		this()
-		this.backgroundImage = backgroundImage
-		this.name = name
-	} 
 	
 	override doActivate() {
 		super.doActivate()

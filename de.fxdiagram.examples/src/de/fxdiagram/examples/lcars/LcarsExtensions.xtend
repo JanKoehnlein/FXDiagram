@@ -1,9 +1,8 @@
 package de.fxdiagram.examples.lcars
 
-import javafx.scene.text.Font
 import java.util.Map
 import javafx.scene.paint.Color
-import javafx.scene.Node
+import javafx.scene.text.Font
 
 class LcarsExtensions {
 	
@@ -29,15 +28,7 @@ class LcarsExtensions {
 	public static val BLUE = rgbColor(136, 130, 254) 
 	public static val MAGENTA = rgbColor(190,78,134)
 	
-	public static def rgbColor(int red, int green, int blue) {
+	private static def rgbColor(int red, int green, int blue) {
 		new Color(red / 255.0, green/255.0, blue/255.0, 1)
 	}
-	
-	static def LcarsDiagram getLcarsDiagram(Node node) {
-		switch node {
-			LcarsDiagram: node
-			case null: null
-			default: node.parent.lcarsDiagram
-		}
-	} 
 }

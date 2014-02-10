@@ -1,6 +1,7 @@
 package de.fxdiagram.lib.media
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
@@ -26,15 +27,16 @@ import static de.fxdiagram.core.extensions.UriExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class MovieNode extends FlipNode {
 
 	@FxProperty@ReadOnly Media media
 
-	StackPane pane
+	StackPane pane = new RectangleBorderPane
 
 	MediaPlayer player
 
-	MediaView view
+	MediaView view = new MediaView
 
 	Node controlBar
 
@@ -42,19 +44,33 @@ class MovieNode extends FlipNode {
 	
 	Text label
 
-	new() {
-		controlBar = createControlBar
+	new(String name) {
+		super(name)
+	}
+	
+	override doActivatePreview() {
 		front = new RectangleBorderPane => [
 			children += label = new Text => [
+				text = key
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
-			tooltip = 'Double-click to watch'
 		]
-		back = pane = new RectangleBorderPane => [
+		back = pane => [
 			id = "pane"
 			padding = new Insets(border, border, border, border)
-			children += view = new MediaView 
+			children += view 
+			
+		]
+		stylesheets += toURI(this, 'MovieNode.css')
+		super.doActivatePreview()
+	}
+	
+	override doActivate() {
+		super.doActivate()
+		controlBar = createControlBar
+		front.tooltip = 'Double-click to watch'
+		back => [
 			onMouseEntered = [
 				new FadeTransition => [
 					node = controlBar
@@ -79,7 +95,6 @@ class MovieNode extends FlipNode {
 			]
 			tooltip = 'Double-click to close'
 		]
-		stylesheets += toURI(this, 'MovieNode.css')
 	}
 
 	override protected createAnchors() {
@@ -120,11 +135,6 @@ class MovieNode extends FlipNode {
 		]
 	}
 	
-	override doActivate() {
-		super.doActivate()
-		label.text = domainObject?.key
-	}
-
 	override setWidth(double width) {
 		super.width = width
 		view.fitWidth = width - 2 * border

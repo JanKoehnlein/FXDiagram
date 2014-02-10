@@ -2,6 +2,7 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XDiagram;
@@ -10,6 +11,7 @@ import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
@@ -42,28 +44,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
+@ModelNode({ "domainObjctProviders", "diagram" })
 @SuppressWarnings("all")
 public class XRoot extends Parent implements XActivatable, XModelProvider {
-  private HeadsUpDisplay headsUpDisplay = new Function0<HeadsUpDisplay>() {
-    public HeadsUpDisplay apply() {
-      HeadsUpDisplay _headsUpDisplay = new HeadsUpDisplay();
-      return _headsUpDisplay;
-    }
-  }.apply();
+  private HeadsUpDisplay headsUpDisplay = new HeadsUpDisplay();
   
-  private Pane diagramCanvas = new Function0<Pane>() {
-    public Pane apply() {
-      Pane _pane = new Pane();
-      return _pane;
-    }
-  }.apply();
+  private Pane diagramCanvas = new Pane();
   
   private List<XDiagramTool> tools = CollectionLiterals.<XDiagramTool>newArrayList();
   
@@ -78,15 +70,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     _children.add(this.diagramCanvas);
     ObservableList<Node> _children_1 = this.getChildren();
     _children_1.add(this.headsUpDisplay);
-    CompositeTool _compositeTool = new CompositeTool();
-    this.defaultTool = _compositeTool;
-    SelectionTool _selectionTool = new SelectionTool(this);
-    this.defaultTool.operator_add(_selectionTool);
-    DiagramGestureTool _diagramGestureTool = new DiagramGestureTool(this);
-    this.defaultTool.operator_add(_diagramGestureTool);
-    MenuTool _menuTool = new MenuTool(this);
-    this.defaultTool.operator_add(_menuTool);
-    this.tools.add(this.defaultTool);
     ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
     final InvalidationListener _function = new InvalidationListener() {
       public void invalidated(final Observable o) {
@@ -151,8 +134,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   public AccumulativeTransform2D getDiagramTransform() {
     XDiagram _diagram = this.getDiagram();
-    AccumulativeTransform2D _canvasTransform = _diagram.getCanvasTransform();
-    return _canvasTransform;
+    return _diagram.getCanvasTransform();
   }
   
   public void activate() {
@@ -165,6 +147,15 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   }
   
   public void doActivate() {
+    CompositeTool _compositeTool = new CompositeTool();
+    this.defaultTool = _compositeTool;
+    SelectionTool _selectionTool = new SelectionTool(this);
+    this.defaultTool.operator_add(_selectionTool);
+    DiagramGestureTool _diagramGestureTool = new DiagramGestureTool(this);
+    this.defaultTool.operator_add(_diagramGestureTool);
+    MenuTool _menuTool = new MenuTool(this);
+    this.defaultTool.operator_add(_menuTool);
+    this.tools.add(this.defaultTool);
     XDiagram _diagram = this.getDiagram();
     if (_diagram!=null) {
       _diagram.activate();
@@ -230,13 +221,12 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
           _and = false;
         } else {
           boolean _selected = it.getSelected();
-          _and = (_isSelectable && _selected);
+          _and = _selected;
         }
         return Boolean.valueOf(_and);
       }
     };
-    Iterable<XShape> _filter = IterableExtensions.<XShape>filter(_allShapes, _function);
-    return _filter;
+    return IterableExtensions.<XShape>filter(_allShapes, _function);
   }
   
   public <T extends DomainObjectProvider> T getDomainObjectProvider(final Class<T> providerClazz) {
@@ -256,18 +246,23 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
         IterableExtensions.<DomainObjectProvider>forEach(_domainObjectProviders, _function);
       }
       DomainObjectProvider _get = this.domainObjectProviderCache.get(providerClazz);
-      _xblockexpression = (((T) _get));
+      _xblockexpression = ((T) _get);
     }
     return _xblockexpression;
   }
   
-  public void populate(final ModelElement it) {
-    it.<DomainObjectProvider>addChildProperty(this.domainObjectProvidersProperty, DomainObjectProvider.class);
-    it.<XDiagram>addChildProperty(this.diagramProperty, XDiagram.class);
-  }
-  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRoot");
     ;
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public XRoot(final ModelLoad modelLoad) {
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(diagramProperty, XDiagram.class);
+  }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   

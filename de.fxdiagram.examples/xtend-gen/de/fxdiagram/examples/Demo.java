@@ -1,5 +1,7 @@
 package de.fxdiagram.examples;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
@@ -19,6 +21,7 @@ import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaTypeHandle;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
+import de.fxdiagram.examples.lcars.LcarsModelProvider;
 import de.fxdiagram.examples.login.LoginNode;
 import de.fxdiagram.examples.neonsign.NeonSignNode;
 import de.fxdiagram.examples.slides.eclipsecon.IntroductionSlideDeck;
@@ -32,6 +35,7 @@ import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.lib.simple.SimpleNode;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -74,30 +78,26 @@ public class Demo extends Application {
     {
       XRoot _xRoot = new XRoot();
       this.root = _xRoot;
-      Scene _scene = new Scene(this.root, 1024, 768);
-      final Scene scene = _scene;
+      final Scene scene = new Scene(this.root, 1024, 768);
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       scene.setCamera(_perspectiveCamera);
       this.root.activate();
-      XDiagram _xDiagram = new XDiagram();
-      final XDiagram diagram = _xDiagram;
+      final XDiagram diagram = new XDiagram();
       this.root.setDiagram(diagram);
       ObservableList<DomainObjectProvider> _domainObjectProviders = this.root.getDomainObjectProviders();
       EcoreDomainObjectProvider _ecoreDomainObjectProvider = new EcoreDomainObjectProvider();
-      _domainObjectProviders.add(_ecoreDomainObjectProvider);
-      ObservableList<DomainObjectProvider> _domainObjectProviders_1 = this.root.getDomainObjectProviders();
       JavaModelProvider _javaModelProvider = new JavaModelProvider();
-      _domainObjectProviders_1.add(_javaModelProvider);
+      LcarsModelProvider _lcarsModelProvider = new LcarsModelProvider();
+      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(Lists.<DomainObjectProvider>newArrayList(_ecoreDomainObjectProvider, _javaModelProvider, _lcarsModelProvider)));
       final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
         public void apply(final XDiagram it) {
           ObservableList<XNode> _nodes = it.getNodes();
           IntroductionSlideDeck _introductionSlideDeck = new IntroductionSlideDeck();
           _nodes.add(_introductionSlideDeck);
           ObservableList<XNode> _nodes_1 = it.getNodes();
-          OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
+          OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Basic");
           final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
             public void apply(final OpenableDiagramNode it) {
-              it.setName("Basic");
               XDiagram _createBasicDiagram = Demo.this.createBasicDiagram("");
               it.setInnerDiagram(_createBasicDiagram);
             }
@@ -105,10 +105,9 @@ public class Demo extends Application {
           OpenableDiagramNode _doubleArrow = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
           _nodes_1.add(_doubleArrow);
           ObservableList<XNode> _nodes_2 = it.getNodes();
-          OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode();
+          OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode("JavaFX");
           final Procedure1<OpenableDiagramNode> _function_1 = new Procedure1<OpenableDiagramNode>() {
             public void apply(final OpenableDiagramNode it) {
-              it.setName("JavaFX");
               XDiagram _xDiagram = new XDiagram();
               final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
                 public void apply(final XDiagram it) {
@@ -156,22 +155,25 @@ public class Demo extends Application {
           OpenableDiagramNode _openableDiagram_2 = Demo.this.openableDiagram("Ecore Explorer", _newEClassNode);
           _nodes_5.add(_openableDiagram_2);
           ObservableList<XNode> _nodes_6 = it.getNodes();
-          SimpleNode _simpleNode = new SimpleNode("Eclipse");
-          _nodes_6.add(_simpleNode);
+          OpenableDiagramNode _newLcarsDiagramNode = Demo.this.newLcarsDiagramNode();
+          _nodes_6.add(_newLcarsDiagramNode);
           ObservableList<XNode> _nodes_7 = it.getNodes();
-          SummarySlideDeck _summarySlideDeck = new SummarySlideDeck();
-          _nodes_7.add(_summarySlideDeck);
-          double _width = scene.getWidth();
+          SimpleNode _simpleNode = new SimpleNode("Eclipse");
+          _nodes_7.add(_simpleNode);
           ObservableList<XNode> _nodes_8 = it.getNodes();
-          int _size = _nodes_8.size();
+          SummarySlideDeck _summarySlideDeck = new SummarySlideDeck();
+          _nodes_8.add(_summarySlideDeck);
+          double _width = scene.getWidth();
+          ObservableList<XNode> _nodes_9 = it.getNodes();
+          int _size = _nodes_9.size();
           int _plus = (_size + 2);
           final double deltaX = (_width / _plus);
           double _height = scene.getHeight();
-          ObservableList<XNode> _nodes_9 = it.getNodes();
-          int _size_1 = _nodes_9.size();
+          ObservableList<XNode> _nodes_10 = it.getNodes();
+          int _size_1 = _nodes_10.size();
           int _plus_1 = (_size_1 + 2);
           final double deltaY = (_height / _plus_1);
-          ObservableList<XNode> _nodes_10 = it.getNodes();
+          ObservableList<XNode> _nodes_11 = it.getNodes();
           final Procedure2<XNode,Integer> _function_2 = new Procedure2<XNode,Integer>() {
             public void apply(final XNode node, final Integer i) {
               Bounds _layoutBounds = node.getLayoutBounds();
@@ -186,12 +188,12 @@ public class Demo extends Application {
               node.setLayoutY(_minus_1);
             }
           };
-          IterableExtensions.<XNode>forEach(_nodes_10, _function_2);
-          ObservableList<XNode> _nodes_11 = it.getNodes();
+          IterableExtensions.<XNode>forEach(_nodes_11, _function_2);
           ObservableList<XNode> _nodes_12 = it.getNodes();
-          int _size_2 = _nodes_12.size();
+          ObservableList<XNode> _nodes_13 = it.getNodes();
+          int _size_2 = _nodes_13.size();
           int _minus = (_size_2 - 1);
-          List<XNode> _subList = _nodes_11.subList(0, _minus);
+          List<XNode> _subList = _nodes_12.subList(0, _minus);
           final Procedure2<XNode,Integer> _function_3 = new Procedure2<XNode,Integer>() {
             public void apply(final XNode node, final Integer i) {
               ObservableList<XConnection> _connections = it.getConnections();
@@ -212,16 +214,15 @@ public class Demo extends Application {
         }
       };
       Platform.runLater(_function_1);
-      _xblockexpression = (scene);
+      _xblockexpression = scene;
     }
     return _xblockexpression;
   }
   
   public OpenableDiagramNode newGalleryDiagramNode() {
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Gallery");
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
-        it.setName("Gallery");
         XDiagram _xDiagram = new XDiagram();
         final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
           public void apply(final XDiagram it) {
@@ -275,21 +276,18 @@ public class Demo extends Application {
         it.setInnerDiagram(_doubleArrow);
       }
     };
-    OpenableDiagramNode _doubleArrow = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
   }
   
   public OpenableDiagramNode newLcarsDiagramNode() {
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("LCARS");
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
-        it.setName("LCARS");
         LcarsDiagram _lcarsDiagram = new LcarsDiagram();
         it.setInnerDiagram(_lcarsDiagram);
       }
     };
-    OpenableDiagramNode _doubleArrow = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
   }
   
   public XDiagram createBasicDiagram(final String nameSuffix) {
@@ -383,15 +381,13 @@ public class Demo extends Application {
         it.setContentsInitializer(_function);
       }
     };
-    XDiagram _doubleArrow = ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function);
   }
   
   protected OpenableDiagramNode openableDiagram(final String name, final XNode node) {
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(name);
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
-        it.setName(name);
         XDiagram _xDiagram = new XDiagram();
         final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
           public void apply(final XDiagram it) {
@@ -408,8 +404,7 @@ public class Demo extends Application {
         it.setInnerDiagram(_doubleArrow);
       }
     };
-    OpenableDiagramNode _doubleArrow = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
   }
   
   protected void addRapidButtons(final XNode node, final String nameSuffix) {
@@ -462,56 +457,43 @@ public class Demo extends Application {
         }
       }
     };
-    SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function);
   }
   
   public OpenableDiagramNode newOpenableBasicDiagramNode(final String nameSuffix) {
-    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode();
+    OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(("Nested" + nameSuffix));
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
       public void apply(final OpenableDiagramNode it) {
-        it.setName(("Nested" + nameSuffix));
         XDiagram _createBasicDiagram = Demo.this.createBasicDiagram((nameSuffix + " (nested)"));
         it.setInnerDiagram(_createBasicDiagram);
         Demo.this.addRapidButtons(it, nameSuffix);
       }
     };
-    OpenableDiagramNode _doubleArrow = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
   }
   
   public LevelOfDetailDiagramNode newEmbeddedBasicDiagram(final String nameSuffix) {
-    LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode();
+    LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode(("Embedded" + nameSuffix));
     final Procedure1<LevelOfDetailDiagramNode> _function = new Procedure1<LevelOfDetailDiagramNode>() {
       public void apply(final LevelOfDetailDiagramNode it) {
-        it.setName(("Embedded" + nameSuffix));
         XDiagram _createBasicDiagram = Demo.this.createBasicDiagram((nameSuffix + " (embedded)"));
         it.setInnerDiagram(_createBasicDiagram);
         Demo.this.addRapidButtons(it, nameSuffix);
       }
     };
-    LevelOfDetailDiagramNode _doubleArrow = ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(_levelOfDetailDiagramNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(_levelOfDetailDiagramNode, _function);
   }
   
   public LoginNode newLoginNode() {
-    LoginNode _loginNode = new LoginNode();
-    return _loginNode;
+    return new LoginNode("Login");
   }
   
   public EClassNode newEClassNode() {
     EClassNode _xblockexpression = null;
     {
       final EcoreDomainObjectProvider provider = this.root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
-      EClassNode _eClassNode = new EClassNode();
-      final Procedure1<EClassNode> _function = new Procedure1<EClassNode>() {
-        public void apply(final EClassNode it) {
-          EClassHandle _createEClassHandle = provider.createEClassHandle(EcorePackage.Literals.ECLASS);
-          it.setDomainObject(_createEClassHandle);
-        }
-      };
-      EClassNode _doubleArrow = ObjectExtensions.<EClassNode>operator_doubleArrow(_eClassNode, _function);
-      _xblockexpression = (_doubleArrow);
+      EClassHandle _createEClassHandle = provider.createEClassHandle(EcorePackage.Literals.ECLASS);
+      _xblockexpression = new EClassNode(_createEClassHandle);
     }
     return _xblockexpression;
   }
@@ -520,30 +502,21 @@ public class Demo extends Application {
     JavaTypeNode _xblockexpression = null;
     {
       final JavaModelProvider provider = this.root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
-      JavaTypeNode _javaTypeNode = new JavaTypeNode();
-      final Procedure1<JavaTypeNode> _function = new Procedure1<JavaTypeNode>() {
-        public void apply(final JavaTypeNode it) {
-          JavaTypeHandle _createJavaTypeHandle = provider.createJavaTypeHandle(Button.class);
-          it.setDomainObject(_createJavaTypeHandle);
-        }
-      };
-      JavaTypeNode _doubleArrow = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function);
-      _xblockexpression = (_doubleArrow);
+      JavaTypeHandle _createJavaTypeHandle = provider.createJavaTypeHandle(Button.class);
+      _xblockexpression = new JavaTypeNode(_createJavaTypeHandle);
     }
     return _xblockexpression;
   }
   
   public NeonSignNode newNeonSignNode() {
-    NeonSignNode _neonSignNode = new NeonSignNode();
-    return _neonSignNode;
+    return new NeonSignNode("NeonSign");
   }
   
   public MovieNode newMovieNode() {
-    MovieNode _movieNode = new MovieNode();
+    MovieNode _movieNode = new MovieNode("Movie");
     final Procedure1<MovieNode> _function = new Procedure1<MovieNode>() {
       public void apply(final MovieNode it) {
         try {
-          it.setName("Movie");
           String _uRI = UriExtensions.toURI(Demo.this, "media/Usability.mp4");
           URL _uRL = new URL(_uRI);
           it.setMovieUrl(_uRL);
@@ -557,16 +530,14 @@ public class Demo extends Application {
         }
       }
     };
-    MovieNode _doubleArrow = ObjectExtensions.<MovieNode>operator_doubleArrow(_movieNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<MovieNode>operator_doubleArrow(_movieNode, _function);
   }
   
   public BrowserNode newBrowserNode() {
-    BrowserNode _browserNode = new BrowserNode();
+    BrowserNode _browserNode = new BrowserNode("Browser");
     final Procedure1<BrowserNode> _function = new Procedure1<BrowserNode>() {
       public void apply(final BrowserNode it) {
         try {
-          it.setName("Browser");
           it.setWidth(120);
           it.setHeight(160);
           URL _uRL = new URL("http://koehnlein.blogspot.de/");
@@ -576,20 +547,18 @@ public class Demo extends Application {
         }
       }
     };
-    BrowserNode _doubleArrow = ObjectExtensions.<BrowserNode>operator_doubleArrow(_browserNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<BrowserNode>operator_doubleArrow(_browserNode, _function);
   }
   
   public BrickBreakerNode newBrickBreakerNode() {
-    BrickBreakerNode _brickBreakerNode = new BrickBreakerNode();
+    BrickBreakerNode _brickBreakerNode = new BrickBreakerNode("BrickBreaker");
     final Procedure1<BrickBreakerNode> _function = new Procedure1<BrickBreakerNode>() {
       public void apply(final BrickBreakerNode it) {
         it.setWidth(640);
         it.setHeight(480);
       }
     };
-    BrickBreakerNode _doubleArrow = ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<BrickBreakerNode>operator_doubleArrow(_brickBreakerNode, _function);
   }
   
   public RecursiveImageNode newRecursiveImageNode() {
@@ -606,8 +575,7 @@ public class Demo extends Application {
         it.setHeight(60);
       }
     };
-    RecursiveImageNode _doubleArrow = ObjectExtensions.<RecursiveImageNode>operator_doubleArrow(_recursiveImageNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<RecursiveImageNode>operator_doubleArrow(_recursiveImageNode, _function);
   }
   
   public ImageNode newImageNode() {
@@ -620,8 +588,7 @@ public class Demo extends Application {
         it.setWidth(100);
       }
     };
-    ImageNode _doubleArrow = ObjectExtensions.<ImageNode>operator_doubleArrow(_imageNode, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<ImageNode>operator_doubleArrow(_imageNode, _function);
   }
   
   protected void warmUpLayouter() {
@@ -631,7 +598,7 @@ public class Demo extends Application {
         Void _xblockexpression = null;
         {
           new Layouter();
-          _xblockexpression = (null);
+          _xblockexpression = null;
         }
         return _xblockexpression;
       }

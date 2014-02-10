@@ -14,7 +14,7 @@ public class CloseAction implements DiagramAction {
         boolean _xblockexpression = false;
         {
           it.close();
-          _xblockexpression = (true);
+          _xblockexpression = true;
         }
         return Boolean.valueOf(_xblockexpression);
       }

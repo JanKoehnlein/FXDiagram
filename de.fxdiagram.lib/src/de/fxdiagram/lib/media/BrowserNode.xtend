@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.media
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -12,28 +13,31 @@ import javafx.scene.web.WebView
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class BrowserNode extends FlipNode {
 	
-	WebView view
+	WebView view = new WebView
 	
-	Text label
-
-	new() {
+	new(String name) {
+		super(name)
+	}
+	
+	override doActivatePreview() {
+		super.doActivatePreview()
 		front = new RectangleBorderPane => [
-			children += label = new Text => [
+			children += new Text => [
+				text = domainObject?.key
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
-			tooltip = 'Double-click to browse'
 		]
-		back = view = new WebView => [
-			tooltip = 'Double-click to close'
-		]
+		back = view 
 	}
 
 	override activate() {
 		super.activate()
-		label.text = domainObject?.key
+		front.tooltip = 'Double-click to browse'
+		back.tooltip = 'Double-click to close'
 	}
 	
 	def setPageUrl(URL pageUrl) {

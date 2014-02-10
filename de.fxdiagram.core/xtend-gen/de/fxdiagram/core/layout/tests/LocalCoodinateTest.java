@@ -17,8 +17,7 @@ import org.junit.Test;
 public class LocalCoodinateTest {
   @Test
   public void paneWidthIsLocal() {
-    TestPane _testPane = new TestPane();
-    final TestPane pane = _testPane;
+    final TestPane pane = new TestPane();
     Bounds _boundsInLocal = pane.getBoundsInLocal();
     double _width = _boundsInLocal.getWidth();
     Assert.assertEquals(Double.valueOf(100.0), Double.valueOf(_width));
@@ -29,8 +28,7 @@ public class LocalCoodinateTest {
   
   @Test
   public void scaleIsLocalToParent() {
-    TestPane _testPane = new TestPane();
-    final TestPane pane = _testPane;
+    final TestPane pane = new TestPane();
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
       public void apply(final Group it) {
@@ -50,8 +48,7 @@ public class LocalCoodinateTest {
   
   @Test
   public void layoutXIsInNotLayoutBounds() {
-    TestPane _testPane = new TestPane();
-    final TestPane pane = _testPane;
+    final TestPane pane = new TestPane();
     pane.setLayoutX(100);
     Bounds _boundsInLocal = pane.getBoundsInLocal();
     double _minX = _boundsInLocal.getMinX();

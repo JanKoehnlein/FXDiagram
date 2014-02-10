@@ -13,6 +13,13 @@ import javafx.scene.transform.Affine
 import javafx.scene.transform.Transform
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
+import javafx.collections.ListChangeListener
+import javafx.collections.ListChangeListener.Change
+import javafx.collections.ObservableList
+import javafx.beans.value.ObservableValue
+import javafx.beans.value.ChangeListener
+import javafx.collections.ObservableMap
+import javafx.collections.MapChangeListener
 
 class CoreExtensions {
 
@@ -137,4 +144,75 @@ class CoreExtensions {
 		node.childrenUnmodifiable + node.childrenUnmodifiable.filter(Parent).map[allChildren].flatten
 	}
 
+	public static def <T, U> addInitializingListener(ObservableMap<T, U> map, InitializingMapListener<T, U> mapListener) {
+		map.entrySet.forEach[mapListener.put.apply(key, value)]
+		map.addListener(mapListener)
+	} 
+
+	public static def <T> addInitializingListener(ObservableList<T> list, InitializingListListener<T> listListener) {
+		list.forEach[listListener.add.apply(it)]
+		list.addListener(listListener)
+	} 
+
+	public static def <T> addInitializingListener(ObservableValue<T> value, InitializingListener<T> listener) {
+		if(value.value != null)
+			listener.set.apply(value.value)
+		value.addListener(listener)
+	} 
+
+	public static def <T, U> removeInitializingListener(ObservableMap<T, U> map, InitializingMapListener<T, U> mapListener) {
+		map.entrySet.forEach[mapListener.remove.apply(key, value)]
+		map.removeListener(mapListener)
+	} 
+
+	public static def <T> removeInitializingListener(ObservableList<T> list, InitializingListListener<T> listListener) {
+		list.forEach[listListener.remove.apply(it)]
+		list.removeListener(listListener)
+	} 
+
+	public static def <T> removeInitializingListener(ObservableValue<T> value, InitializingListener<T> listener) {
+		if(value.value != null)
+			listener.unset.apply(value.value)
+		value.removeListener(listener)
+	} 
 }
+
+class InitializingMapListener<T,U> implements MapChangeListener<T, U> {
+	
+	@Property var (T,U)=>void put
+	@Property var (T,U)=>void remove
+	
+	override onChanged(MapChangeListener.Change<? extends T, ? extends U> c) {
+		if(c.wasAdded) 
+			put.apply(c.key, c.valueAdded)
+		if(c.wasRemoved)
+			remove.apply(c.key, c.valueRemoved)
+	}
+}	
+
+class InitializingListListener<T> implements ListChangeListener<T> {
+	
+	@Property var (T)=>void add
+	@Property var (T)=>void remove
+	
+	override onChanged(Change<? extends T> c) {
+		while(c.next) 
+			if(c.wasAdded) 
+				c.addedSubList.forEach[add.apply(it)]
+			if(c.wasRemoved)
+				c.removed.forEach[remove.apply(it)]
+	}
+}	
+
+class InitializingListener<T> implements ChangeListener<T> {
+	
+	@Property var (T)=>void set
+	@Property var (T)=>void unset
+	
+	override changed(ObservableValue<? extends T> value, T oldValue, T newValue) {
+		if(oldValue != null)
+			unset.apply(oldValue)
+		if(newValue != null) 
+			set.apply(newValue)
+	}
+}	

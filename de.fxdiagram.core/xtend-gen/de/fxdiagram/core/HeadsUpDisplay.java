@@ -17,7 +17,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -101,66 +100,50 @@ public class HeadsUpDisplay extends Group {
     if (_get != null) {
       _elvis = _get;
     } else {
-      _elvis = ObjectExtensions.<Pos>operator_elvis(_get, Pos.CENTER);
+      _elvis = Pos.CENTER;
     }
     final Pos pos = _elvis;
     final Bounds bounds = child.getBoundsInParent();
     double _switchResult = (double) 0;
     HPos _hpos = pos.getHpos();
-    final HPos _switchValue = _hpos;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(_switchValue,HPos.LEFT)) {
-        _matched=true;
+    switch (_hpos) {
+      case LEFT:
         _switchResult = 0;
-      }
-    }
-    if (!_matched) {
-      if (Objects.equal(_switchValue,HPos.RIGHT)) {
-        _matched=true;
+        break;
+      case RIGHT:
         Scene _scene = child.getScene();
         double _width = _scene.getWidth();
         double _width_1 = bounds.getWidth();
-        double _minus = (_width - _width_1);
-        _switchResult = _minus;
-      }
-    }
-    if (!_matched) {
-      Scene _scene_1 = child.getScene();
-      double _width_2 = _scene_1.getWidth();
-      double _width_3 = bounds.getWidth();
-      double _minus_1 = (_width_2 - _width_3);
-      double _multiply = (0.5 * _minus_1);
-      _switchResult = _multiply;
+        _switchResult = (_width - _width_1);
+        break;
+      default:
+        Scene _scene_1 = child.getScene();
+        double _width_2 = _scene_1.getWidth();
+        double _width_3 = bounds.getWidth();
+        double _minus = (_width_2 - _width_3);
+        _switchResult = (0.5 * _minus);
+        break;
     }
     child.setLayoutX(_switchResult);
     double _switchResult_1 = (double) 0;
     VPos _vpos = pos.getVpos();
-    final VPos _switchValue_1 = _vpos;
-    boolean _matched_1 = false;
-    if (!_matched_1) {
-      if (Objects.equal(_switchValue_1,VPos.TOP)) {
-        _matched_1=true;
+    switch (_vpos) {
+      case TOP:
         _switchResult_1 = 0;
-      }
-    }
-    if (!_matched_1) {
-      if (Objects.equal(_switchValue_1,VPos.BOTTOM)) {
-        _matched_1=true;
+        break;
+      case BOTTOM:
         Scene _scene_2 = child.getScene();
         double _height = _scene_2.getHeight();
         double _height_1 = bounds.getHeight();
-        double _minus_2 = (_height - _height_1);
-        _switchResult_1 = _minus_2;
-      }
-    }
-    if (!_matched_1) {
-      Scene _scene_3 = child.getScene();
-      double _height_2 = _scene_3.getHeight();
-      double _height_3 = bounds.getHeight();
-      double _minus_3 = (_height_2 - _height_3);
-      double _multiply_1 = (0.5 * _minus_3);
-      _switchResult_1 = _multiply_1;
+        _switchResult_1 = (_height - _height_1);
+        break;
+      default:
+        Scene _scene_3 = child.getScene();
+        double _height_2 = _scene_3.getHeight();
+        double _height_3 = bounds.getHeight();
+        double _minus_1 = (_height_2 - _height_3);
+        _switchResult_1 = (0.5 * _minus_1);
+        break;
     }
     child.setLayoutY(_switchResult_1);
   }

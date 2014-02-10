@@ -7,152 +7,175 @@ import java.util.Map;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 
 @SuppressWarnings("all")
 public class ModelElement {
   private Object node;
   
-  private List<Property<? extends Object>> properties;
+  private List<Property<?>> constructorProperties;
   
-  private List<ListProperty<? extends Object>> listProperties;
+  private List<Property<?>> properties;
   
-  private List<Property<? extends Object>> children;
+  private List<ListProperty<?>> listProperties;
   
-  private List<ListProperty<? extends Object>> listChildren;
+  private List<Property<?>> children;
   
-  private Map<String,Class<? extends Object>> propertyTypes = CollectionLiterals.<String, Class<? extends Object>>newHashMap();
+  private List<ListProperty<?>> listChildren;
+  
+  private Map<String,Class<?>> propertyTypes = CollectionLiterals.<String, Class<?>>newHashMap();
   
   public ModelElement(final Object node) {
     this.node = node;
   }
   
-  public <T extends Object> Class<? extends Object> addProperty(final Property<T> property, final Class<? extends T> propertyType) {
-    Class<? extends Object> _xifexpression = null;
+  public <T extends Object> Class<?> addConstructorProperty(final Property<T> property, final Class<? extends T> propertyType) {
+    Class<?> _xifexpression = null;
     boolean _notEquals = (!Objects.equal(property, null));
     if (_notEquals) {
-      Class<? extends Object> _xblockexpression = null;
+      Class<?> _xblockexpression = null;
+      {
+        boolean _equals = Objects.equal(this.constructorProperties, null);
+        if (_equals) {
+          ArrayList<Property<?>> _newArrayList = CollectionLiterals.<Property<?>>newArrayList();
+          this.constructorProperties = _newArrayList;
+        }
+        this.constructorProperties.add(property);
+        String _name = property.getName();
+        _xblockexpression = this.propertyTypes.put(_name, propertyType);
+      }
+      _xifexpression = _xblockexpression;
+    }
+    return _xifexpression;
+  }
+  
+  public <T extends Object> Class<?> addProperty(final Property<T> property, final Class<? extends T> propertyType) {
+    Class<?> _xifexpression = null;
+    boolean _notEquals = (!Objects.equal(property, null));
+    if (_notEquals) {
+      Class<?> _xblockexpression = null;
       {
         boolean _equals = Objects.equal(this.properties, null);
         if (_equals) {
-          ArrayList<Property<? extends Object>> _newArrayList = CollectionLiterals.<Property<? extends Object>>newArrayList();
+          ArrayList<Property<?>> _newArrayList = CollectionLiterals.<Property<?>>newArrayList();
           this.properties = _newArrayList;
         }
         this.properties.add(property);
         String _name = property.getName();
-        Class<? extends Object> _put = this.propertyTypes.put(_name, propertyType);
-        _xblockexpression = (_put);
+        _xblockexpression = this.propertyTypes.put(_name, propertyType);
       }
       _xifexpression = _xblockexpression;
     }
     return _xifexpression;
   }
   
-  public <T extends Object> Class<? extends Object> addProperty(final ListProperty<T> listProperty, final Class<? extends T> componentType) {
-    Class<? extends Object> _xblockexpression = null;
+  public <T extends Object> Class<?> addProperty(final ListProperty<T> listProperty, final Class<? extends T> componentType) {
+    Class<?> _xblockexpression = null;
     {
       boolean _equals = Objects.equal(this.listProperties, null);
       if (_equals) {
-        ArrayList<ListProperty<? extends Object>> _newArrayList = CollectionLiterals.<ListProperty<? extends Object>>newArrayList();
+        ArrayList<ListProperty<?>> _newArrayList = CollectionLiterals.<ListProperty<?>>newArrayList();
         this.listProperties = _newArrayList;
       }
       this.listProperties.add(listProperty);
       String _name = listProperty.getName();
-      Class<? extends Object> _put = this.propertyTypes.put(_name, componentType);
-      _xblockexpression = (_put);
+      _xblockexpression = this.propertyTypes.put(_name, componentType);
     }
     return _xblockexpression;
   }
   
-  public <T extends Object> Class<? extends Object> addChildProperty(final Property<T> child, final Class<? extends T> propertyType) {
-    Class<? extends Object> _xifexpression = null;
+  public <T extends Object> Class<?> addChildProperty(final Property<T> child, final Class<? extends T> propertyType) {
+    Class<?> _xifexpression = null;
     boolean _notEquals = (!Objects.equal(child, null));
     if (_notEquals) {
-      Class<? extends Object> _xblockexpression = null;
+      Class<?> _xblockexpression = null;
       {
         boolean _equals = Objects.equal(this.children, null);
         if (_equals) {
-          ArrayList<Property<? extends Object>> _newArrayList = CollectionLiterals.<Property<? extends Object>>newArrayList();
+          ArrayList<Property<?>> _newArrayList = CollectionLiterals.<Property<?>>newArrayList();
           this.children = _newArrayList;
         }
         this.children.add(child);
         String _name = child.getName();
-        Class<? extends Object> _put = this.propertyTypes.put(_name, propertyType);
-        _xblockexpression = (_put);
+        _xblockexpression = this.propertyTypes.put(_name, propertyType);
       }
       _xifexpression = _xblockexpression;
     }
     return _xifexpression;
   }
   
-  public <T extends Object> Class<? extends Object> addChildProperty(final ListProperty<T> listChild, final Class<? extends T> componentType) {
-    Class<? extends Object> _xblockexpression = null;
+  public <T extends Object> Class<?> addChildProperty(final ListProperty<T> listChild, final Class<? extends T> componentType) {
+    Class<?> _xblockexpression = null;
     {
       boolean _equals = Objects.equal(this.listChildren, null);
       if (_equals) {
-        ArrayList<ListProperty<? extends Object>> _newArrayList = CollectionLiterals.<ListProperty<? extends Object>>newArrayList();
+        ArrayList<ListProperty<?>> _newArrayList = CollectionLiterals.<ListProperty<?>>newArrayList();
         this.listChildren = _newArrayList;
       }
       this.listChildren.add(listChild);
       String _name = listChild.getName();
-      Class<? extends Object> _put = this.propertyTypes.put(_name, componentType);
-      _xblockexpression = (_put);
+      _xblockexpression = this.propertyTypes.put(_name, componentType);
     }
     return _xblockexpression;
   }
   
-  public List<Property<? extends Object>> getChildren() {
-    List<Property<? extends Object>> _elvis = null;
+  public List<Property<?>> getConstructorProperties() {
+    List<Property<?>> _elvis = null;
+    if (this.constructorProperties != null) {
+      _elvis = this.constructorProperties;
+    } else {
+      List<Property<?>> _emptyList = CollectionLiterals.<Property<?>>emptyList();
+      _elvis = _emptyList;
+    }
+    return _elvis;
+  }
+  
+  public List<Property<?>> getChildren() {
+    List<Property<?>> _elvis = null;
     if (this.children != null) {
       _elvis = this.children;
     } else {
-      List<Property<? extends Object>> _emptyList = CollectionLiterals.<Property<? extends Object>>emptyList();
-      _elvis = ObjectExtensions.<List<Property<? extends Object>>>operator_elvis(
-        this.children, _emptyList);
+      List<Property<?>> _emptyList = CollectionLiterals.<Property<?>>emptyList();
+      _elvis = _emptyList;
     }
     return _elvis;
   }
   
-  public List<ListProperty<? extends Object>> getListChildren() {
-    List<ListProperty<? extends Object>> _elvis = null;
+  public List<ListProperty<?>> getListChildren() {
+    List<ListProperty<?>> _elvis = null;
     if (this.listChildren != null) {
       _elvis = this.listChildren;
     } else {
-      List<ListProperty<? extends Object>> _emptyList = CollectionLiterals.<ListProperty<? extends Object>>emptyList();
-      _elvis = ObjectExtensions.<List<ListProperty<? extends Object>>>operator_elvis(
-        this.listChildren, _emptyList);
+      List<ListProperty<?>> _emptyList = CollectionLiterals.<ListProperty<?>>emptyList();
+      _elvis = _emptyList;
     }
     return _elvis;
   }
   
-  public List<Property<? extends Object>> getProperties() {
-    List<Property<? extends Object>> _elvis = null;
+  public List<Property<?>> getProperties() {
+    List<Property<?>> _elvis = null;
     if (this.properties != null) {
       _elvis = this.properties;
     } else {
-      List<Property<? extends Object>> _emptyList = CollectionLiterals.<Property<? extends Object>>emptyList();
-      _elvis = ObjectExtensions.<List<Property<? extends Object>>>operator_elvis(
-        this.properties, _emptyList);
+      List<Property<?>> _emptyList = CollectionLiterals.<Property<?>>emptyList();
+      _elvis = _emptyList;
     }
     return _elvis;
   }
   
-  public List<ListProperty<? extends Object>> getListProperties() {
-    List<ListProperty<? extends Object>> _elvis = null;
+  public List<ListProperty<?>> getListProperties() {
+    List<ListProperty<?>> _elvis = null;
     if (this.listProperties != null) {
       _elvis = this.listProperties;
     } else {
-      List<ListProperty<? extends Object>> _emptyList = CollectionLiterals.<ListProperty<? extends Object>>emptyList();
-      _elvis = ObjectExtensions.<List<ListProperty<? extends Object>>>operator_elvis(
-        this.listProperties, _emptyList);
+      List<ListProperty<?>> _emptyList = CollectionLiterals.<ListProperty<?>>emptyList();
+      _elvis = _emptyList;
     }
     return _elvis;
   }
   
-  public Class<? extends Object> getType(final Property<? extends Object> property) {
+  public Class<?> getType(final Property<?> property) {
     String _name = property.getName();
-    Class<? extends Object> _get = this.propertyTypes.get(_name);
-    return _get;
+    return this.propertyTypes.get(_name);
   }
   
   public Object getNode() {

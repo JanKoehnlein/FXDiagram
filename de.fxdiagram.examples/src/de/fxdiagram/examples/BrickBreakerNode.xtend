@@ -13,17 +13,22 @@ import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class BrickBreakerNode extends FlipNode {
 
-	new() {
+	new(String name) {
+		super(name)
+	}
+
+	override doActivatePreview() {
 		front = new RectangleBorderPane => [
 			children += new Text => [
-				text = "BrickBreaker"
+				text = key
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
-			tooltip = 'Double-click to play'
 		]
 		back = new Group => [
 			children += new Group => [
@@ -32,6 +37,12 @@ class BrickBreakerNode extends FlipNode {
 				scaleYProperty.bind(heightProperty / Config.SCREEN_HEIGHT)
 			]
 		]
+		super.doActivatePreview()
+	}
+	
+	override activate() {
+		super.activate()
+		front.tooltip = 'Double-click to play'
 	}
 
 	def createRoot() {

@@ -6,9 +6,15 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.extensions.InitializingListListener;
+import de.fxdiagram.core.extensions.InitializingListener;
+import de.fxdiagram.core.extensions.InitializingMapListener;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import java.util.Map;
 import java.util.Set;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -19,6 +25,8 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
 @SuppressWarnings("all")
 public class CoreExtensions {
@@ -32,15 +40,14 @@ public class CoreExtensions {
           return ((XDiagram)node).getIsRootDiagram();
         }
       }
-      _xblockexpression = (false);
+      _xblockexpression = false;
     }
     return _xblockexpression;
   }
   
   public static Point2D localToRootDiagram(final Node node, final double x, final double y) {
     Point2D _point2D = new Point2D(x, y);
-    Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(node, _point2D);
-    return _localToRootDiagram;
+    return CoreExtensions.localToRootDiagram(node, _point2D);
   }
   
   public static Point2D localToRootDiagram(final Node node, final Point2D point) {
@@ -64,8 +71,7 @@ public class CoreExtensions {
       }
       Parent _parent = node.getParent();
       Point2D _localToParent = node.localToParent(point);
-      Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(_parent, _localToParent);
-      _xblockexpression = (_localToRootDiagram);
+      _xblockexpression = CoreExtensions.localToRootDiagram(_parent, _localToParent);
     }
     return _xblockexpression;
   }
@@ -91,16 +97,14 @@ public class CoreExtensions {
       }
       Parent _parent = node.getParent();
       Bounds _localToParent = node.localToParent(bounds);
-      Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(_parent, _localToParent);
-      _xblockexpression = (_localToRootDiagram);
+      _xblockexpression = CoreExtensions.localToRootDiagram(_parent, _localToParent);
     }
     return _xblockexpression;
   }
   
   public static Point2D localToDiagram(final Node node, final double x, final double y) {
     Point2D _point2D = new Point2D(x, y);
-    Point2D _localToDiagram = CoreExtensions.localToDiagram(node, _point2D);
-    return _localToDiagram;
+    return CoreExtensions.localToDiagram(node, _point2D);
   }
   
   public static Point2D localToDiagram(final Node node, final Point2D point) {
@@ -121,8 +125,7 @@ public class CoreExtensions {
     if (!_matched) {
       Parent _parent = node.getParent();
       Point2D _localToParent = node.localToParent(point);
-      Point2D _localToDiagram = CoreExtensions.localToDiagram(_parent, _localToParent);
-      _switchResult = _localToDiagram;
+      _switchResult = CoreExtensions.localToDiagram(_parent, _localToParent);
     }
     return _switchResult;
   }
@@ -145,8 +148,7 @@ public class CoreExtensions {
     if (!_matched) {
       Parent _parent = node.getParent();
       Bounds _localToParent = node.localToParent(bounds);
-      Bounds _localToDiagram = CoreExtensions.localToDiagram(_parent, _localToParent);
-      _switchResult = _localToDiagram;
+      _switchResult = CoreExtensions.localToDiagram(_parent, _localToParent);
     }
     return _switchResult;
   }
@@ -154,8 +156,7 @@ public class CoreExtensions {
   public static Transform localToDiagramTransform(final Node node) {
     Transform _xblockexpression = null;
     {
-      Affine _affine = new Affine();
-      final Affine transform = _affine;
+      final Affine transform = new Affine();
       Node currentNode = node;
       Parent _parent = currentNode.getParent();
       boolean _notEquals = (!Objects.equal(_parent, null));
@@ -174,7 +175,7 @@ public class CoreExtensions {
         boolean _notEquals_1 = (!Objects.equal(_parent_1, null));
         _while = _notEquals_1;
       }
-      _xblockexpression = (null);
+      _xblockexpression = null;
     }
     return _xblockexpression;
   }
@@ -196,8 +197,7 @@ public class CoreExtensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XDiagram _diagram = CoreExtensions.getDiagram(_parent);
-      _switchResult = _diagram;
+      _switchResult = CoreExtensions.getDiagram(_parent);
     }
     return _switchResult;
   }
@@ -220,16 +220,14 @@ public class CoreExtensions {
           _xifexpression = ((XDiagram)it);
         } else {
           XDiagram _parentDiagram = ((XDiagram)it).getParentDiagram();
-          XDiagram _rootDiagram = CoreExtensions.getRootDiagram(_parentDiagram);
-          _xifexpression = _rootDiagram;
+          _xifexpression = CoreExtensions.getRootDiagram(_parentDiagram);
         }
         _switchResult = _xifexpression;
       }
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XDiagram _rootDiagram = CoreExtensions.getRootDiagram(_parent);
-      _switchResult = _rootDiagram;
+      _switchResult = CoreExtensions.getRootDiagram(_parent);
     }
     return _switchResult;
   }
@@ -251,8 +249,7 @@ public class CoreExtensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XRoot _root = CoreExtensions.getRoot(_parent);
-      _switchResult = _root;
+      _switchResult = CoreExtensions.getRoot(_parent);
     }
     return _switchResult;
   }
@@ -262,8 +259,7 @@ public class CoreExtensions {
     EventTarget _target = event.getTarget();
     if ((_target instanceof Node)) {
       EventTarget _target_1 = event.getTarget();
-      XShape _containerShape = CoreExtensions.getContainerShape(((Node) _target_1));
-      _xifexpression = _containerShape;
+      _xifexpression = CoreExtensions.getContainerShape(((Node) _target_1));
     } else {
       _xifexpression = null;
     }
@@ -287,8 +283,7 @@ public class CoreExtensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XShape _containerShape = CoreExtensions.getContainerShape(_parent);
-      _switchResult = _containerShape;
+      _switchResult = CoreExtensions.getContainerShape(_parent);
     }
     return _switchResult;
   }
@@ -298,8 +293,7 @@ public class CoreExtensions {
     EventTarget _target = event.getTarget();
     if ((_target instanceof Node)) {
       EventTarget _target_1 = event.getTarget();
-      XRapidButton _containerButton = CoreExtensions.getContainerButton(((Node) _target_1));
-      _xifexpression = _containerButton;
+      _xifexpression = CoreExtensions.getContainerButton(((Node) _target_1));
     } else {
       _xifexpression = null;
     }
@@ -323,16 +317,14 @@ public class CoreExtensions {
     }
     if (!_matched) {
       Parent _parent = it.getParent();
-      XRapidButton _containerButton = CoreExtensions.getContainerButton(_parent);
-      _switchResult = _containerButton;
+      _switchResult = CoreExtensions.getContainerButton(_parent);
     }
     return _switchResult;
   }
   
   public static Iterable<? extends Node> getAllChildren(final Parent node) {
     Iterable<? extends Node> _allChildrenInternal = CoreExtensions.getAllChildrenInternal(node);
-    Set<? extends Node> _set = IterableExtensions.toSet(_allChildrenInternal);
-    return _set;
+    return IterableExtensions.toSet(_allChildrenInternal);
   }
   
   protected static Iterable<? extends Node> getAllChildrenInternal(final Parent node) {
@@ -341,13 +333,83 @@ public class CoreExtensions {
     Iterable<Parent> _filter = Iterables.<Parent>filter(_childrenUnmodifiable_1, Parent.class);
     final Function1<Parent,Iterable<? extends Node>> _function = new Function1<Parent,Iterable<? extends Node>>() {
       public Iterable<? extends Node> apply(final Parent it) {
-        Iterable<? extends Node> _allChildren = CoreExtensions.getAllChildren(it);
-        return _allChildren;
+        return CoreExtensions.getAllChildren(it);
       }
     };
     Iterable<Iterable<? extends Node>> _map = IterableExtensions.<Parent, Iterable<? extends Node>>map(_filter, _function);
     Iterable<Node> _flatten = Iterables.<Node>concat(_map);
-    Iterable<Node> _plus = Iterables.<Node>concat(_childrenUnmodifiable, _flatten);
-    return _plus;
+    return Iterables.<Node>concat(_childrenUnmodifiable, _flatten);
+  }
+  
+  public static <T extends Object, U extends Object> void addInitializingListener(final ObservableMap<T,U> map, final InitializingMapListener<T,U> mapListener) {
+    Set<Map.Entry<T,U>> _entrySet = map.entrySet();
+    final Procedure1<Map.Entry<T,U>> _function = new Procedure1<Map.Entry<T,U>>() {
+      public void apply(final Map.Entry<T,U> it) {
+        Procedure2<? super T,? super U> _put = mapListener.getPut();
+        T _key = it.getKey();
+        U _value = it.getValue();
+        _put.apply(_key, _value);
+      }
+    };
+    IterableExtensions.<Map.Entry<T,U>>forEach(_entrySet, _function);
+    map.addListener(mapListener);
+  }
+  
+  public static <T extends Object> void addInitializingListener(final ObservableList<T> list, final InitializingListListener<T> listListener) {
+    final Procedure1<T> _function = new Procedure1<T>() {
+      public void apply(final T it) {
+        Procedure1<? super T> _add = listListener.getAdd();
+        _add.apply(it);
+      }
+    };
+    IterableExtensions.<T>forEach(list, _function);
+    list.addListener(listListener);
+  }
+  
+  public static <T extends Object> void addInitializingListener(final ObservableValue<T> value, final InitializingListener<T> listener) {
+    T _value = value.getValue();
+    boolean _notEquals = (!Objects.equal(_value, null));
+    if (_notEquals) {
+      Procedure1<? super T> _set = listener.getSet();
+      T _value_1 = value.getValue();
+      _set.apply(_value_1);
+    }
+    value.addListener(listener);
+  }
+  
+  public static <T extends Object, U extends Object> void removeInitializingListener(final ObservableMap<T,U> map, final InitializingMapListener<T,U> mapListener) {
+    Set<Map.Entry<T,U>> _entrySet = map.entrySet();
+    final Procedure1<Map.Entry<T,U>> _function = new Procedure1<Map.Entry<T,U>>() {
+      public void apply(final Map.Entry<T,U> it) {
+        Procedure2<? super T,? super U> _remove = mapListener.getRemove();
+        T _key = it.getKey();
+        U _value = it.getValue();
+        _remove.apply(_key, _value);
+      }
+    };
+    IterableExtensions.<Map.Entry<T,U>>forEach(_entrySet, _function);
+    map.removeListener(mapListener);
+  }
+  
+  public static <T extends Object> void removeInitializingListener(final ObservableList<T> list, final InitializingListListener<T> listListener) {
+    final Procedure1<T> _function = new Procedure1<T>() {
+      public void apply(final T it) {
+        Procedure1<? super T> _remove = listListener.getRemove();
+        _remove.apply(it);
+      }
+    };
+    IterableExtensions.<T>forEach(list, _function);
+    list.removeListener(listListener);
+  }
+  
+  public static <T extends Object> void removeInitializingListener(final ObservableValue<T> value, final InitializingListener<T> listener) {
+    T _value = value.getValue();
+    boolean _notEquals = (!Objects.equal(_value, null));
+    if (_notEquals) {
+      Procedure1<? super T> _unset = listener.getUnset();
+      T _value_1 = value.getValue();
+      _unset.apply(_value_1);
+    }
+    value.removeListener(listener);
   }
 }

@@ -1,24 +1,28 @@
 package de.fxdiagram.examples.slides
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.behavior.CloseBehavior
 import de.fxdiagram.core.behavior.NavigationBehavior
-import java.util.List
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
+import javafx.collections.ObservableList
 import javafx.scene.paint.Color
 
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
+@ModelNode(#['nodes', 'connections', 'parentDiagram', 'slides'])
 class SlideDiagram extends XDiagram {
 	
-	@FxProperty val List<Slide> slides = observableArrayList
+	@FxProperty ObservableList<Slide> slides = observableArrayList
 	
 	@FxProperty Slide currentSlide
+
+	new() {}
 
 	def operator_add(Slide slide) {
 		slides.add(slide)

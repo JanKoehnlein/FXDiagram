@@ -1,6 +1,8 @@
 package de.fxdiagram.core.model
 
+import de.fxdiagram.annotations.logging.Logging
 import java.io.Writer
+import java.util.List
 import java.util.Map
 import java.util.Set
 import javafx.beans.property.BooleanProperty
@@ -14,6 +16,9 @@ import javafx.beans.property.StringProperty
 import javax.json.Json
 import javax.json.stream.JsonGenerator
 
+import static extension de.fxdiagram.core.model.ModelPersistence.*
+
+@Logging
 class ModelSave {
 
 	Map<ModelElement, String> idMap
@@ -59,17 +64,28 @@ class ModelSave {
 		if (!alreadySerialized.add(element)) {
 			gen.write(idMap.get(element))
 		} else {
-			gen.write("class", element.node.class.canonicalName)
-			element.properties.forEach[write(gen, it, element.getType(it))]
-			element.listProperties.forEach[write(gen, it, element.getType(it))]
-			element.children.forEach [
-				if (value != null) {
-					gen
-						.writeStartObject(name)
-						.write(model.index.get(value))
-						.writeEnd
+			gen.writeStartObject('__constructor')
+			val className = element.node.class.canonicalName
+			gen.write("__class", className)
+			val paramTypes = element.constructorProperties.map[element.getType(it)]
+			val constructor = element.node.class.findConstructor(paramTypes)
+			var List<Property<?>> remainingChildren
+			if(constructor != null) {
+				remainingChildren = #[]
+				if(!element.constructorProperties.empty) {
+					gen.writeStartArray('__params')
+					element.constructorProperties.forEach [
+						gen .writeStartObject()
+							.write(model.index.get(value))
+							.writeEnd
+					]
+					gen.writeEnd
 				}
-			]
+			} else {
+				LOG.warning('Cannot find constructor ' + className + '(' + paramTypes.map[simpleName].join(',') + '). Using no-arg constructor instead.')
+				remainingChildren = element.constructorProperties
+			}
+			gen.writeEnd;
 			element.listChildren.forEach [
 				if(!empty) {
 					gen.writeStartArray(name)
@@ -86,6 +102,16 @@ class ModelSave {
 					gen.writeEnd
 				}
 			]
+			(remainingChildren + element.children).forEach [
+				if (value != null) {
+					gen
+						.writeStartObject(name)
+						.write(model.index.get(value))
+						.writeEnd
+				}
+			]
+			element.properties.forEach[write(gen, it, element.getType(it))]
+			element.listProperties.forEach[write(gen, it, element.getType(it))]
 		}
 		return gen
 	}

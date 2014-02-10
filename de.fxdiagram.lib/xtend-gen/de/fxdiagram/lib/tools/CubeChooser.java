@@ -35,8 +35,7 @@ public class CubeChooser extends AbstractChooser {
   }
   
   public boolean activate() {
-    boolean _activate = super.activate();
-    return _activate;
+    return super.activate();
   }
   
   protected void doSetInterpolatedPosition(final double interpolatedPosition) {
@@ -45,8 +44,7 @@ public class CubeChooser extends AbstractChooser {
       public Double apply(final Double a, final XNode b) {
         Bounds _layoutBounds = b.getLayoutBounds();
         double _width = _layoutBounds.getWidth();
-        double _max = Math.max((a).doubleValue(), _width);
-        return Double.valueOf(_max);
+        return Double.valueOf(Math.max((a).doubleValue(), _width));
       }
     };
     Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
@@ -65,13 +63,7 @@ public class CubeChooser extends AbstractChooser {
     ArrayList<XNode> _nodes_3 = this.getNodes();
     final Procedure2<XNode,Integer> _function_1 = new Procedure2<XNode,Integer>() {
       public void apply(final XNode node, final Integer i) {
-        boolean _and = false;
-        if (!(i != leftNodeIndex)) {
-          _and = false;
-        } else {
-          _and = ((i != leftNodeIndex) && (i != rightNodeIndex));
-        }
-        if (_and) {
+        if (((i != leftNodeIndex) && (i != rightNodeIndex))) {
           node.setVisible(false);
         }
       }
@@ -96,20 +88,18 @@ public class CubeChooser extends AbstractChooser {
           final double width = _layoutBounds.getWidth();
           Bounds _layoutBounds_1 = node.getLayoutBounds();
           final double height = _layoutBounds_1.getHeight();
-          Affine _affine = new Affine();
-          final Affine transform = _affine;
+          final Affine transform = new Affine();
           TransformExtensions.translate(transform, ((-0.5) * width), ((-0.5) * height), ((-this.maxWidth) * 0.5));
           Point3D _point3D = new Point3D(0, 1, 0);
           TransformExtensions.rotate(transform, angle, _point3D);
           TransformExtensions.translate(transform, 0, 0, (this.maxWidth * 0.5));
           node.setVisible(true);
           ObservableList<Transform> _transforms = node.getTransforms();
-          boolean _setAll = _transforms.setAll(transform);
-          _xblockexpression_1 = (_setAll);
+          _xblockexpression_1 = _transforms.setAll(transform);
         }
         _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }

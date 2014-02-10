@@ -55,8 +55,7 @@ public class CoverFlowChooser extends AbstractChooser {
   }
   
   public boolean activate() {
-    boolean _activate = super.activate();
-    return _activate;
+    return super.activate();
   }
   
   protected void doSetInterpolatedPosition(final double interpolatedPosition) {
@@ -68,15 +67,13 @@ public class CoverFlowChooser extends AbstractChooser {
       final Function1<XNode,Double> _function = new Function1<XNode,Double>() {
         public Double apply(final XNode it) {
           Bounds _layoutBounds = it.getLayoutBounds();
-          double _width = _layoutBounds.getWidth();
-          return Double.valueOf(_width);
+          return Double.valueOf(_layoutBounds.getWidth());
         }
       };
       List<Double> _map = ListExtensions.<XNode, Double>map(_nodes_1, _function);
       final Function2<Double,Double,Double> _function_1 = new Function2<Double,Double,Double>() {
         public Double apply(final Double a, final Double b) {
-          double _plus = DoubleExtensions.operator_plus(a, b);
-          return Double.valueOf(_plus);
+          return Double.valueOf(DoubleExtensions.operator_plus(a, b));
         }
       };
       Double _reduce = IterableExtensions.<Double>reduce(_map, _function_1);
@@ -128,7 +125,7 @@ public class CoverFlowChooser extends AbstractChooser {
         double _abs = Math.abs((leftIndex - interpolatedPosition));
         double _abs_1 = Math.abs((rightIndex - interpolatedPosition));
         boolean _greaterThan = (_abs > _abs_1);
-        _and = ((rightIndex > 0) && _greaterThan);
+        _and = _greaterThan;
       }
       if (_and) {
         ArrayList<XNode> _nodes_7 = this.getNodes();
@@ -154,8 +151,7 @@ public class CoverFlowChooser extends AbstractChooser {
           XNode _xblockexpression_1 = null;
           {
             node.setVisible(true);
-            Affine _affine = new Affine();
-            final Affine trafo = _affine;
+            final Affine trafo = new Affine();
             int _xifexpression_2 = (int) 0;
             if (isLeft) {
               _xifexpression_2 = (-1);
@@ -203,12 +199,11 @@ public class CoverFlowChooser extends AbstractChooser {
                 node.setEffect(_doubleArrow);
               }
             };
-            XNode _doubleArrow = ObjectExtensions.<XNode>operator_doubleArrow(node, _function);
-            _xblockexpression_1 = (_doubleArrow);
+            _xblockexpression_1 = ObjectExtensions.<XNode>operator_doubleArrow(node, _function);
           }
           _xifexpression_1 = _xblockexpression_1;
         }
-        _xblockexpression = (_xifexpression_1);
+        _xblockexpression = _xifexpression_1;
       }
       _xifexpression = _xblockexpression;
     }

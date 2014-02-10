@@ -20,8 +20,7 @@ public class SaveAction implements DiagramAction {
       XDiagram _diagram = root.getDiagram();
       boolean _notEquals = (!Objects.equal(_diagram, null));
       if (_notEquals) {
-        FileChooser _fileChooser = new FileChooser();
-        final FileChooser fileChooser = _fileChooser;
+        final FileChooser fileChooser = new FileChooser();
         ObservableList<FileChooser.ExtensionFilter> _extensionFilters = fileChooser.getExtensionFilters();
         FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FX Diagram", "*.fxd");
         _extensionFilters.add(_extensionFilter);

@@ -1,9 +1,11 @@
 package de.fxdiagram.lib.media;
 
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -35,13 +37,14 @@ import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class MovieNode extends FlipNode {
-  private StackPane pane;
+  private StackPane pane = new RectangleBorderPane();
   
   private MediaPlayer player;
   
-  private MediaView view;
+  private MediaView view = new MediaView();
   
   private Node controlBar;
   
@@ -49,9 +52,11 @@ public class MovieNode extends FlipNode {
   
   private Text label;
   
-  public MovieNode() {
-    HBox _createControlBar = this.createControlBar();
-    this.controlBar = _createControlBar;
+  public MovieNode(final String name) {
+    super(name);
+  }
+  
+  public void doActivatePreview() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -59,6 +64,8 @@ public class MovieNode extends FlipNode {
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
+            String _key = MovieNode.this.getKey();
+            it.setText(_key);
             it.setTextOrigin(VPos.TOP);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
@@ -67,21 +74,36 @@ public class MovieNode extends FlipNode {
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
         Text _label = MovieNode.this.label = _doubleArrow;
         _children.add(_label);
-        TooltipExtensions.setTooltip(it, "Double-click to watch");
       }
     };
     RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
     this.setFront(_doubleArrow);
-    RectangleBorderPane _rectangleBorderPane_1 = new RectangleBorderPane();
-    final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
-      public void apply(final RectangleBorderPane it) {
+    final Procedure1<StackPane> _function_1 = new Procedure1<StackPane>() {
+      public void apply(final StackPane it) {
         it.setId("pane");
         Insets _insets = new Insets(MovieNode.this.border, MovieNode.this.border, MovieNode.this.border, MovieNode.this.border);
         it.setPadding(_insets);
         ObservableList<Node> _children = it.getChildren();
-        MediaView _mediaView = new MediaView();
-        MediaView _view = MovieNode.this.view = _mediaView;
-        _children.add(_view);
+        _children.add(MovieNode.this.view);
+      }
+    };
+    StackPane _doubleArrow_1 = ObjectExtensions.<StackPane>operator_doubleArrow(this.pane, _function_1);
+    this.setBack(_doubleArrow_1);
+    ObservableList<String> _stylesheets = this.getStylesheets();
+    String _uRI = UriExtensions.toURI(this, "MovieNode.css");
+    _stylesheets.add(_uRI);
+    super.doActivatePreview();
+  }
+  
+  public void doActivate() {
+    super.doActivate();
+    HBox _createControlBar = this.createControlBar();
+    this.controlBar = _createControlBar;
+    Node _front = this.getFront();
+    TooltipExtensions.setTooltip(_front, "Double-click to watch");
+    Node _back = this.getBack();
+    final Procedure1<Node> _function = new Procedure1<Node>() {
+      public void apply(final Node it) {
         final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
           public void handle(final MouseEvent it) {
             FadeTransition _fadeTransition = new FadeTransition();
@@ -116,7 +138,7 @@ public class MovieNode extends FlipNode {
           }
         };
         it.setOnMouseExited(_function_1);
-        ObservableList<Node> _children_1 = it.getChildren();
+        ObservableList<Node> _children = MovieNode.this.getChildren();
         Group _group = new Group();
         final Procedure1<Group> _function_2 = new Procedure1<Group>() {
           public void apply(final Group it) {
@@ -126,21 +148,15 @@ public class MovieNode extends FlipNode {
           }
         };
         Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_2);
-        _children_1.add(_doubleArrow);
+        _children.add(_doubleArrow);
         TooltipExtensions.setTooltip(it, "Double-click to close");
       }
     };
-    RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane_1, _function_1);
-    StackPane _pane = this.pane = _doubleArrow_1;
-    this.setBack(_pane);
-    ObservableList<String> _stylesheets = this.getStylesheets();
-    String _uRI = UriExtensions.toURI(this, "MovieNode.css");
-    _stylesheets.add(_uRI);
+    ObjectExtensions.<Node>operator_doubleArrow(_back, _function);
   }
   
   protected Anchors createAnchors() {
-    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
-    return _roundedRectangleAnchors;
+    return new RoundedRectangleAnchors(this, 12, 12);
   }
   
   protected HBox createControlBar() {
@@ -237,18 +253,7 @@ public class MovieNode extends FlipNode {
         it.setOpacity(0);
       }
     };
-    HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
-    return _doubleArrow;
-  }
-  
-  public void doActivate() {
-    super.doActivate();
-    DomainObjectHandle _domainObject = this.getDomainObject();
-    String _key = null;
-    if (_domainObject!=null) {
-      _key=_domainObject.getKey();
-    }
-    this.label.setText(_key);
+    return ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
   }
   
   public void setWidth(final double width) {
@@ -289,6 +294,20 @@ public class MovieNode extends FlipNode {
   
   public MediaView getView() {
     return this.view;
+  }
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public MovieNode(final ModelLoad modelLoad) {
+    super(modelLoad);
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
+    modelElement.addProperty(widthProperty(), Double.class);
+    modelElement.addProperty(heightProperty(), Double.class);
   }
   
   private ReadOnlyObjectWrapper<Media> mediaProperty = new ReadOnlyObjectWrapper<Media>(this, "media");

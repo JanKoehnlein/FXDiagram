@@ -14,8 +14,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class DemoCampSlideFactory {
   public static Slide createSlide(final String slideName) {
     Image _backgroundImage = DemoCampSlideFactory.getBackgroundImage();
-    Slide _slide = new Slide(slideName, _backgroundImage);
-    return _slide;
+    return new Slide(slideName, _backgroundImage);
   }
   
   public static Text createText(final String text, final double size) {
@@ -29,23 +28,19 @@ public class DemoCampSlideFactory {
         it.setFill(_textColor);
       }
     };
-    Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
   }
   
   public static Color getTextColor() {
-    Color _rgb = Color.rgb(238, 191, 171);
-    return _rgb;
+    return Color.rgb(238, 191, 171);
   }
   
   public static Color getDarkTextColor() {
-    Color _rgb = Color.rgb(156, 124, 114);
-    return _rgb;
+    return Color.rgb(156, 124, 114);
   }
   
   public static Image getBackgroundImage() {
     ImageCache _get = ImageCache.get();
-    Image _image = _get.getImage(DemoCampSlideFactory.class, "images/planet.jpg");
-    return _image;
+    return _get.getImage(DemoCampSlideFactory.class, "images/planet.jpg");
   }
 }

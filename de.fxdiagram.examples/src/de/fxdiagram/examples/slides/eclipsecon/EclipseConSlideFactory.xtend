@@ -11,11 +11,14 @@ import javafx.scene.text.TextAlignment
 class EclipseConSlideFactory {
 	
 	static def createSlide(String slideName) {
-		new Slide(slideName, backgroundImage)
+		new Slide(slideName, backgroundImage) => [
+			activatePreview
+		]
 	} 
 
 	static def createSlide(String text, int fontSize) {
 		new Slide(text, backgroundImage)=> [
+			activatePreview
 			getStackPane => [
 				children += createText(text, fontSize)
 			]

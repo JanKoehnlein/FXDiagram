@@ -83,10 +83,9 @@ public class SoftTooltip {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
         EventType<? extends Event> _eventType = it.getEventType();
-        final EventType<? extends Event> getEventType = _eventType;
         boolean _matched = false;
         if (!_matched) {
-          if (Objects.equal(getEventType,MouseEvent.MOUSE_ENTERED_TARGET)) {
+          if (Objects.equal(_eventType,MouseEvent.MOUSE_ENTERED_TARGET)) {
             _matched=true;
             SoftTooltip.this.isHideOnTrigger = false;
             double _sceneX = it.getSceneX();
@@ -98,12 +97,12 @@ public class SoftTooltip {
           }
         }
         if (!_matched) {
-          if (Objects.equal(getEventType,MouseEvent.MOUSE_EXITED_TARGET)) {
+          if (Objects.equal(_eventType,MouseEvent.MOUSE_EXITED_TARGET)) {
             _matched=true;
           }
         }
         if (!_matched) {
-          if (Objects.equal(getEventType,MouseEvent.MOUSE_ENTERED)) {
+          if (Objects.equal(_eventType,MouseEvent.MOUSE_ENTERED)) {
             _matched=true;
             SoftTooltip.this.isHideOnTrigger = false;
             double _sceneX_1 = it.getSceneX();
@@ -115,7 +114,7 @@ public class SoftTooltip {
           }
         }
         if (!_matched) {
-          if (Objects.equal(getEventType,MouseEvent.MOUSE_MOVED)) {
+          if (Objects.equal(_eventType,MouseEvent.MOUSE_MOVED)) {
             _matched=true;
             double _sceneX_2 = it.getSceneX();
             double _sceneY_2 = it.getSceneY();
@@ -139,8 +138,7 @@ public class SoftTooltip {
   }
   
   public String getText() {
-    String _get = this.textProperty.get();
-    return _get;
+    return this.textProperty.get();
   }
   
   public void setText(final String text) {
@@ -152,8 +150,7 @@ public class SoftTooltip {
   }
   
   public Node setReferencePosition(final double positionX, final double positionY) {
-    Node _setPosition = this.setPosition((positionX + 16), (positionY - 32));
-    return _setPosition;
+    return this.setPosition((positionX + 16), (positionY - 32));
   }
   
   public Node setPosition(final double positionX, final double positionY) {
@@ -163,17 +160,15 @@ public class SoftTooltip {
         it.setLayoutY(positionY);
       }
     };
-    Node _doubleArrow = ObjectExtensions.<Node>operator_doubleArrow(
+    return ObjectExtensions.<Node>operator_doubleArrow(
       this.tooltip, _function);
-    return _doubleArrow;
   }
   
   public boolean show(final double positionX, final double positionY) {
     boolean _xblockexpression = false;
     {
       this.setReferencePosition(positionX, positionY);
-      boolean _show = this.show();
-      _xblockexpression = (_show);
+      _xblockexpression = this.show();
     }
     return _xblockexpression;
   }
@@ -181,11 +176,9 @@ public class SoftTooltip {
   public boolean trigger() {
     boolean _xifexpression = false;
     if (this.isHideOnTrigger) {
-      boolean _hide = this.hide();
-      _xifexpression = _hide;
+      _xifexpression = this.hide();
     } else {
-      boolean _show = this.show();
-      _xifexpression = _show;
+      _xifexpression = this.show();
     }
     return _xifexpression;
   }
@@ -208,8 +201,7 @@ public class SoftTooltip {
           _children.add(this.tooltip);
         }
       }
-      boolean _isShowing = this.isShowing = true;
-      _xblockexpression = (_isShowing);
+      _xblockexpression = this.isShowing = true;
     }
     return _xblockexpression;
   }
@@ -230,8 +222,7 @@ public class SoftTooltip {
           _children.remove(this.tooltip);
         }
       }
-      boolean _isShowing = this.isShowing = false;
-      _xblockexpression = (_isShowing);
+      _xblockexpression = this.isShowing = false;
     }
     return _xblockexpression;
   }

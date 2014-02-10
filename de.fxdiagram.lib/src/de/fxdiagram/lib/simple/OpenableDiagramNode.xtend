@@ -2,13 +2,15 @@ package de.fxdiagram.lib.simple
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.behavior.AbstractCloseBehavior
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.extensions.AccumulativeTransform2D
-import de.fxdiagram.core.model.ModelElement
+import de.fxdiagram.core.model.DomainObjectHandle
+import de.fxdiagram.core.model.StringHandle
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -37,6 +39,7 @@ import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @Logging
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class OpenableDiagramNode extends XNode {
 	
 	@FxProperty XDiagram innerDiagram
@@ -45,7 +48,7 @@ class OpenableDiagramNode extends XNode {
 	
 	XRoot root
 	
-	RectangleBorderPane pane
+	RectangleBorderPane pane = new RectangleBorderPane
 	
 	Text textNode
 	
@@ -58,17 +61,24 @@ class OpenableDiagramNode extends XNode {
 	
 	Point2D nodeCenterInDiagram
 	
-	new() {
-		node = pane = new RectangleBorderPane => [
-			children += textNode = new Text => [
-				textOrigin = VPos.TOP
-				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-			]
-			tooltip = "Double-click to open"
-		]
-		cursor = Cursor.HAND
+	new(String name) {
+		this(new StringHandle(name))
 	}
 	
+	new(DomainObjectHandle domainObject) {
+		super(domainObject)
+	}
+	
+	override doActivatePreview() {
+		super.doActivatePreview()
+		node = pane => [
+			children += textNode = new Text => [
+				textOrigin = VPos.TOP
+				text = key
+				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
+			]
+		]
+	}
 	
 	override createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
@@ -76,6 +86,8 @@ class OpenableDiagramNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate()
+		pane.tooltip = "Double-click to open"
+		cursor = Cursor.HAND
 		textNode.text = domainObject?.key
 		this.root = getRoot
 		if(innerDiagram == null) {
@@ -192,11 +204,5 @@ class OpenableDiagramNode extends XNode {
 			play
 		]
 	}
-	
-	override populate(ModelElement it) {
-		super.populate(it)
-//		addChildProperty(innerDiagramProperty, XDiagram)
-	}
-	
 }
 

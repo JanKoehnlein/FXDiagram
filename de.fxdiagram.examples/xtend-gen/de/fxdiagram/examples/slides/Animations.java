@@ -61,8 +61,7 @@ public class Animations {
           it.play();
         }
       };
-      Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_1);
-      _xblockexpression = (_doubleArrow);
+      _xblockexpression = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_1);
     }
     return _xblockexpression;
   }
@@ -70,8 +69,7 @@ public class Animations {
   protected static double interpolateAngle(final double alpha) {
     double _sin = Math.sin(((alpha * Math.PI) - (Math.PI / 2)));
     double _multiply = (10 * _sin);
-    double _plus = (90 + _multiply);
-    return _plus;
+    return (90 + _multiply);
   }
   
   public static FillTransition flicker(final Shape creature, final Color fromColor, final Color toColor) {
@@ -91,8 +89,7 @@ public class Animations {
         it.play();
       }
     };
-    FillTransition _doubleArrow = ObjectExtensions.<FillTransition>operator_doubleArrow(_fillTransition, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<FillTransition>operator_doubleArrow(_fillTransition, _function);
   }
   
   public static SequentialTransition breathe(final Shape creature, final Color fromColor, final Color toColor) {
@@ -189,8 +186,7 @@ public class Animations {
         it.play();
       }
     };
-    SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
   }
   
   public static SequentialTransition crawl(final Node creature) {
@@ -229,8 +225,7 @@ public class Animations {
           it.play();
         }
       };
-      SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
-      _xblockexpression = (_doubleArrow);
+      _xblockexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
     }
     return _xblockexpression;
   }
@@ -349,8 +344,7 @@ public class Animations {
           }
         }
       };
-      SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
-      _xblockexpression = (_doubleArrow);
+      _xblockexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
     }
     return _xblockexpression;
   }

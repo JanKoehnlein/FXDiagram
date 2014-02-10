@@ -30,9 +30,7 @@ class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 	}
 	
 	override protected createNode(EReferenceHandle handle) {
-		new EClassNode => [
-			domainObject = domainObjectProvider.createDomainObjectHandle(handle.domainObject.EReferenceType)
-		]
+		new EClassNode(domainObjectProvider.createEClassHandle(handle.domainObject.EReferenceType))
 	}
 	
 	protected def getDomainObjectProvider() {

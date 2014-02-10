@@ -366,8 +366,7 @@ public class UnderstandigLayout extends Application {
   }
   
   public void start(final Stage stage) throws Exception {
-    Rectangle _rectangle = new Rectangle();
-    final Rectangle innerRectangle = _rectangle;
+    final Rectangle innerRectangle = new Rectangle();
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
       public void apply(final StackPane it) {

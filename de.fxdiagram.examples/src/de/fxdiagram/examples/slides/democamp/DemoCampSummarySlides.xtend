@@ -10,11 +10,16 @@ import javafx.scene.layout.VBox
 import static de.fxdiagram.examples.slides.democamp.DemoCampSlideFactory.*
 
 import static extension de.fxdiagram.examples.slides.Animations.*
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class DemoCampSummarySlides extends OpenableDiagramNode {
 
 	new() {
-		this.name = 'Credits'
+		super('Summary')
+	}
+	
+	override doActivate() {
 		innerDiagram = new SlideDiagram => [
 			slides += createSlide('Credits') => [
 				stackPane.children += new VBox => [
@@ -31,6 +36,7 @@ class DemoCampSummarySlides extends OpenableDiagramNode {
 				]
 			]
 		]
+		super.doActivate
 	}
 
 	def protected createMixedText(String jungleText, String normalText) {

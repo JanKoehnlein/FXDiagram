@@ -12,115 +12,97 @@ public class NumberExpressionExtensions {
   
   @Pure
   public static BooleanBinding operator_lessThan(final NumberExpressionBase a, final ObservableNumberValue b) {
-    BooleanBinding _lessThan = a.lessThan(b);
-    return _lessThan;
+    return a.lessThan(b);
   }
   
   @Pure
   public static BooleanBinding operator_lessEqualsThan(final NumberExpressionBase a, final ObservableNumberValue b) {
-    BooleanBinding _lessThanOrEqualTo = a.lessThanOrEqualTo(b);
-    return _lessThanOrEqualTo;
+    return a.lessThanOrEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_greaterThan(final NumberExpressionBase a, final ObservableNumberValue b) {
-    BooleanBinding _greaterThan = a.greaterThan(b);
-    return _greaterThan;
+    return a.greaterThan(b);
   }
   
   @Pure
   public static BooleanBinding operator_greaterEqualsThan(final NumberExpressionBase a, final ObservableNumberValue b) {
-    BooleanBinding _greaterThanOrEqualTo = a.greaterThanOrEqualTo(b);
-    return _greaterThanOrEqualTo;
+    return a.greaterThanOrEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_equals(final NumberExpressionBase a, final ObservableNumberValue b) {
-    BooleanBinding _isEqualTo = a.isEqualTo(b);
-    return _isEqualTo;
+    return a.isEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_notEquals(final NumberExpressionBase a, final ObservableNumberValue b) {
-    BooleanBinding _isNotEqualTo = a.isNotEqualTo(b);
-    return _isNotEqualTo;
+    return a.isNotEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_lessThan(final double a, final NumberExpressionBase b) {
     DoubleConstant _doubleConstant = new DoubleConstant(a);
-    BooleanBinding _lessThan = _doubleConstant.lessThan(b);
-    return _lessThan;
+    return _doubleConstant.lessThan(b);
   }
   
   @Pure
   public static BooleanBinding operator_lessEqualsThan(final double a, final NumberExpressionBase b) {
     DoubleConstant _doubleConstant = new DoubleConstant(a);
-    BooleanBinding _lessThanOrEqualTo = _doubleConstant.lessThanOrEqualTo(b);
-    return _lessThanOrEqualTo;
+    return _doubleConstant.lessThanOrEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_greaterThan(final double a, final NumberExpressionBase b) {
     DoubleConstant _doubleConstant = new DoubleConstant(a);
-    BooleanBinding _greaterThan = _doubleConstant.greaterThan(b);
-    return _greaterThan;
+    return _doubleConstant.greaterThan(b);
   }
   
   @Pure
   public static BooleanBinding operator_greaterEqualsThan(final double a, final NumberExpressionBase b) {
     DoubleConstant _doubleConstant = new DoubleConstant(a);
-    BooleanBinding _greaterThanOrEqualTo = _doubleConstant.greaterThanOrEqualTo(b);
-    return _greaterThanOrEqualTo;
+    return _doubleConstant.greaterThanOrEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_equals(final double a, final NumberExpressionBase b) {
     DoubleConstant _doubleConstant = new DoubleConstant(a);
-    BooleanBinding _isEqualTo = _doubleConstant.isEqualTo(b);
-    return _isEqualTo;
+    return _doubleConstant.isEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_notEquals(final double a, final NumberExpressionBase b) {
     DoubleConstant _doubleConstant = new DoubleConstant(a);
-    BooleanBinding _isNotEqualTo = _doubleConstant.isNotEqualTo(b);
-    return _isNotEqualTo;
+    return _doubleConstant.isNotEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_lessThan(final NumberExpressionBase a, final double b) {
-    BooleanBinding _lessThan = a.lessThan(b);
-    return _lessThan;
+    return a.lessThan(b);
   }
   
   @Pure
   public static BooleanBinding operator_lessEqualsThan(final NumberExpressionBase a, final double b) {
-    BooleanBinding _lessThanOrEqualTo = a.lessThanOrEqualTo(b);
-    return _lessThanOrEqualTo;
+    return a.lessThanOrEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_greaterThan(final NumberExpressionBase a, final double b) {
-    BooleanBinding _greaterThan = a.greaterThan(b);
-    return _greaterThan;
+    return a.greaterThan(b);
   }
   
   @Pure
   public static BooleanBinding operator_greaterEqualsThan(final NumberExpressionBase a, final double b) {
-    BooleanBinding _greaterThanOrEqualTo = a.greaterThanOrEqualTo(b);
-    return _greaterThanOrEqualTo;
+    return a.greaterThanOrEqualTo(b);
   }
   
   @Pure
   public static BooleanBinding operator_equals(final NumberExpressionBase a, final double b) {
-    BooleanBinding _isEqualTo = a.isEqualTo(b, NumberExpressionExtensions.EPSILON);
-    return _isEqualTo;
+    return a.isEqualTo(b, NumberExpressionExtensions.EPSILON);
   }
   
   @Pure
   public static BooleanBinding operator_notEquals(final NumberExpressionBase a, final double b) {
-    BooleanBinding _isNotEqualTo = a.isNotEqualTo(b, NumberExpressionExtensions.EPSILON);
-    return _isNotEqualTo;
+    return a.isNotEqualTo(b, NumberExpressionExtensions.EPSILON);
   }
 }

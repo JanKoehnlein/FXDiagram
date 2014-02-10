@@ -69,15 +69,14 @@ public class Placer extends ObjectBinding<Point2D> {
           double _minY_1 = buttonBounds.getMinY();
           double _minus_3 = (_minus_2 - _minY_1);
           double _plus_1 = (_minus_3 + (this.yPos * totalHeight));
-          Point2D _point2D = new Point2D(_plus, _plus_1);
-          final Point2D position = _point2D;
-          _xblockexpression_1 = (position);
+          final Point2D position = new Point2D(_plus, _plus_1);
+          _xblockexpression_1 = position;
         }
         _xifexpression = _xblockexpression_1;
       } else {
         _xifexpression = null;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }

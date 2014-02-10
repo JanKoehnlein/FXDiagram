@@ -56,12 +56,6 @@ class XRapidButton extends Parent implements XActivatable {
 		if(!isActive)
 			doActivate
 		isActiveProperty.set(true)
-		host.node.addEventHandler(MouseEvent.MOUSE_ENTERED, [
-			show
-		]) 
-		host.node.addEventHandler(MouseEvent.MOUSE_EXITED, [
-			fade
-		])
 	}
 	
 	def doActivate() {
@@ -82,6 +76,12 @@ class XRapidButton extends Parent implements XActivatable {
 		]
 		layoutX = placer.value.x 
 		layoutY = placer.value.y
+		host.node.addEventHandler(MouseEvent.MOUSE_ENTERED, [
+			show
+		]) 
+		host.node.addEventHandler(MouseEvent.MOUSE_EXITED, [
+			fade
+		])
 	}
 
 	def protected setPosition(Point2D position) {

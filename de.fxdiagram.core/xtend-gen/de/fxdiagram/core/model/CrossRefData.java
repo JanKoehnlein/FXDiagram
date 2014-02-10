@@ -13,9 +13,9 @@ public class CrossRefData {
     return this._href;
   }
   
-  private final Property<? extends Object> _property;
+  private final Property<?> _property;
   
-  public Property<? extends Object> getProperty() {
+  public Property<?> getProperty() {
     return this._property;
   }
   
@@ -25,7 +25,7 @@ public class CrossRefData {
     return this._index;
   }
   
-  public CrossRefData(final String href, final Property<? extends Object> property, final int index) {
+  public CrossRefData(final String href, final Property<?> property, final int index) {
     super();
     this._href = href;
     this._property = property;

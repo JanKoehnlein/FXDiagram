@@ -1,38 +1,30 @@
 package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.behavior.MoveBehavior
 import java.util.List
 import javafx.geometry.VPos
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
+import javafx.scene.text.Font
 import javafx.scene.text.Text
 import javafx.scene.transform.Affine
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
-import javafx.scene.text.Font
-import de.fxdiagram.core.model.ModelElement
-import de.fxdiagram.annotations.properties.ReadOnly
 
+@ModelNode(#['connection', 'text'])
 class XConnectionLabel extends XShape {
 
 	@FxProperty@ReadOnly XConnection connection
-	@FxProperty Text text
+	@FxProperty Text text = new Text
 	@FxProperty double position = 0.5
 
 	Effect selectionEffect = new DropShadow
 
-	new() {
-		text = new Text => [
-			textOrigin = VPos.TOP
-			font = Font.font(font.family, font.size * 0.9)
-		]
-		node = text
-	}
-
 	new(XConnection connection) {
-		this()
 		this.connection = connection
 	}
 
@@ -41,10 +33,17 @@ class XConnectionLabel extends XShape {
 			throw new IllegalStateException("Cannot reset the connection on a label")
 		connectionProperty.set(connection)
 		connection.labels += this
-		text.fillProperty.bind(connection.strokeProperty)
+	}
+
+	override doActivatePreview() {
+		node = text => [
+			textOrigin = VPos.TOP
+			font = Font.font(font.family, font.size * 0.9)
+		]
 	}
 
 	override doActivate() {
+		text.fillProperty.bind(connection.strokeProperty)
 		addBehavior(new MoveBehavior(this))
 	}
 	
@@ -82,11 +81,4 @@ class XConnectionLabel extends XShape {
 		transform.ty = 0
 		transforms.setAll(transform)
 	}
-	
-	override populate(ModelElement it) {
-		super.populate(it)
-		addProperty(connectionProperty, XConnection)
-		addChildProperty(textProperty, Text)
-	}
-	
 }

@@ -37,7 +37,7 @@ public class DiscreteAnchors implements Anchors {
           }
         }
       }
-      _xblockexpression = (currentAnchor);
+      _xblockexpression = currentAnchor;
     }
     return _xblockexpression;
   }
@@ -97,11 +97,11 @@ public class DiscreteAnchors implements Anchors {
               anchors.add(_localToRootDiagram_3);
             }
           }
-          _xblockexpression_1 = (anchors);
+          _xblockexpression_1 = anchors;
         }
         _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }

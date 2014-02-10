@@ -38,7 +38,7 @@ public class Debug {
     } else {
       boolean _isRootDiagram = CoreExtensions.isRootDiagram(currentNode);
       boolean _not = (!_isRootDiagram);
-      _and = (_notEquals && _not);
+      _and = _not;
     }
     boolean _while = _and;
     while (_while) {
@@ -61,7 +61,7 @@ public class Debug {
       } else {
         boolean _isRootDiagram_1 = CoreExtensions.isRootDiagram(currentNode);
         boolean _not_1 = (!_isRootDiagram_1);
-        _and_1 = (_notEquals_1 && _not_1);
+        _and_1 = _not_1;
       }
       _while = _and_1;
     }
@@ -94,7 +94,7 @@ public class Debug {
     } else {
       boolean _isRootDiagram = CoreExtensions.isRootDiagram(currentNode);
       boolean _not = (!_isRootDiagram);
-      _and = (_notEquals && _not);
+      _and = _not;
     }
     boolean _while = _and;
     while (_while) {
@@ -111,7 +111,7 @@ public class Debug {
       } else {
         boolean _isRootDiagram_1 = CoreExtensions.isRootDiagram(currentNode);
         boolean _not_1 = (!_isRootDiagram_1);
-        _and_1 = (_notEquals_1 && _not_1);
+        _and_1 = _not_1;
       }
       _while = _and_1;
     }
@@ -158,8 +158,7 @@ public class Debug {
     Node current = it;
     double _layoutX_1 = it.getLayoutX();
     double _layoutY_1 = it.getLayoutY();
-    Point2D _point2D = new Point2D(_layoutX_1, _layoutY_1);
-    Point2D currentPosition = _point2D;
+    Point2D currentPosition = new Point2D(_layoutX_1, _layoutY_1);
     Bounds currentBounds = it.getLayoutBounds();
     Parent _parent = current.getParent();
     boolean _notEquals = (!Objects.equal(_parent, null));

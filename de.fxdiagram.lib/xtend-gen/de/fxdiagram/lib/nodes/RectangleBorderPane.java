@@ -22,23 +22,13 @@ import javafx.scene.paint.Stop;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
 @SuppressWarnings("all")
 public class RectangleBorderPane extends StackPane implements SvgExportable {
-  public final static LinearGradient DEFAULT_BACKGROUND = new Function0<LinearGradient>() {
-    public LinearGradient apply() {
-      Color _gray = Color.gray(0.4);
-      Stop _stop = new Stop(0, _gray);
-      Color _gray_1 = Color.gray(1);
-      Stop _stop_1 = new Stop(1, _gray_1);
-      LinearGradient _linearGradient = new LinearGradient(
-        0, 0, 1, 1, 
-        true, CycleMethod.NO_CYCLE, 
-        Collections.<Stop>unmodifiableList(Lists.<Stop>newArrayList(_stop, _stop_1)));
-      return _linearGradient;
-    }
-  }.apply();
+  public final static LinearGradient DEFAULT_BACKGROUND = new LinearGradient(
+    0, 0, 1, 1, 
+    true, CycleMethod.NO_CYCLE, 
+    Collections.<Stop>unmodifiableList(Lists.<Stop>newArrayList(new Stop(0, Color.gray(0.4)), new Stop(1, Color.gray(1)))));
   
   public RectangleBorderPane() {
     this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);

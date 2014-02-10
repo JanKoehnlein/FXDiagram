@@ -2,11 +2,8 @@ package de.fxdiagram.core;
 
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.behavior.Behavior;
-import de.fxdiagram.core.model.ModelElement;
-import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collection;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -26,7 +23,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public abstract class XShape extends Parent implements XActivatable, XModelProvider {
+public abstract class XShape extends Parent implements XActivatable {
   private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
   
   protected boolean setNode(final Node node) {
@@ -34,8 +31,7 @@ public abstract class XShape extends Parent implements XActivatable, XModelProvi
     {
       this.nodeProperty.set(node);
       ObservableList<Node> _children = this.getChildren();
-      boolean _setAll = _children.setAll(node);
-      _xblockexpression = (_setAll);
+      _xblockexpression = _children.setAll(node);
     }
     return _xblockexpression;
   }
@@ -44,6 +40,7 @@ public abstract class XShape extends Parent implements XActivatable, XModelProvi
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
     if (_not) {
+      this.activatePreview();
       this.doActivate();
       this.isActiveProperty.set(true);
       final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
@@ -79,6 +76,19 @@ public abstract class XShape extends Parent implements XActivatable, XModelProvi
     }
   }
   
+  public void activatePreview() {
+    boolean _isPreviewActive = this.getIsPreviewActive();
+    boolean _not = (!_isPreviewActive);
+    if (_not) {
+      this.doActivatePreview();
+      this.isPreviewActiveProperty.set(true);
+    }
+  }
+  
+  protected abstract void doActivatePreview();
+  
+  protected abstract void doActivate();
+  
   public <T extends Behavior> T getBehavior(final Class<T> key) {
     Behavior _get = this.behaviors.get(key);
     return ((T) _get);
@@ -86,23 +96,18 @@ public abstract class XShape extends Parent implements XActivatable, XModelProvi
   
   public Behavior addBehavior(final Behavior behavior) {
     Class<? extends Behavior> _behaviorKey = behavior.getBehaviorKey();
-    Behavior _put = this.behaviors.put(_behaviorKey, behavior);
-    return _put;
+    return this.behaviors.put(_behaviorKey, behavior);
   }
   
   public Behavior removeBehavior(final String key) {
-    Behavior _remove = this.behaviors.remove(key);
-    return _remove;
+    return this.behaviors.remove(key);
   }
   
   public void selectionFeedback(final boolean isSelected) {
   }
   
-  protected abstract void doActivate();
-  
   public boolean isSelectable() {
-    boolean _isActive = this.getIsActive();
-    return _isActive;
+    return this.getIsActive();
   }
   
   public void select(final MouseEvent it) {
@@ -119,15 +124,7 @@ public abstract class XShape extends Parent implements XActivatable, XModelProvi
   }
   
   public Bounds getSnapBounds() {
-    Bounds _boundsInLocal = this.getBoundsInLocal();
-    return _boundsInLocal;
-  }
-  
-  public void populate(final ModelElement it) {
-    DoubleProperty _layoutXProperty = this.layoutXProperty();
-    it.<Number>addProperty(_layoutXProperty, Double.class);
-    DoubleProperty _layoutYProperty = this.layoutYProperty();
-    it.<Number>addProperty(_layoutYProperty, Double.class);
+    return this.getBoundsInLocal();
   }
   
   private ReadOnlyObjectWrapper<Node> nodeProperty = new ReadOnlyObjectWrapper<Node>(this, "node");
@@ -162,5 +159,15 @@ public abstract class XShape extends Parent implements XActivatable, XModelProvi
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyBooleanWrapper isPreviewActiveProperty = new ReadOnlyBooleanWrapper(this, "isPreviewActive");
+  
+  public boolean getIsPreviewActive() {
+    return this.isPreviewActiveProperty.get();
+  }
+  
+  public ReadOnlyBooleanProperty isPreviewActiveProperty() {
+    return this.isPreviewActiveProperty.getReadOnlyProperty();
   }
 }

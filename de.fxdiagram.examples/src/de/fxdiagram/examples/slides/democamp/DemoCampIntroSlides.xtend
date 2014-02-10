@@ -13,10 +13,16 @@ import javafx.scene.layout.VBox
 import static de.fxdiagram.examples.slides.democamp.DemoCampSlideFactory.*
 
 import static extension de.fxdiagram.examples.slides.Animations.*
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class DemoCampIntroSlides extends OpenableDiagramNode {
+	
 	new() {
-		this.name = 'Introduction'
+		super('Summary')
+	}
+	
+	override doActivate() {
 		innerDiagram = new SlideDiagram => [
 			slides += createSlide('Title') => [ 
 				stackPane => [
@@ -88,6 +94,7 @@ class DemoCampIntroSlides extends OpenableDiagramNode {
 				]
 			]
 		]
+		super.doActivate()
 	}	
 	
 }

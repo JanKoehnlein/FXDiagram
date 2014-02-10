@@ -13,15 +13,13 @@ public class CompositeTool implements XDiagramTool {
   private List<XDiagramTool> children = CollectionLiterals.<XDiagramTool>newArrayList();
   
   public boolean operator_add(final XDiagramTool child) {
-    boolean _add = this.children.add(child);
-    return _add;
+    return this.children.add(child);
   }
   
   public boolean activate() {
     final Function1<XDiagramTool,Boolean> _function = new Function1<XDiagramTool,Boolean>() {
       public Boolean apply(final XDiagramTool it) {
-        boolean _activate = it.activate();
-        return Boolean.valueOf(_activate);
+        return Boolean.valueOf(it.activate());
       }
     };
     List<Boolean> _map = ListExtensions.<XDiagramTool, Boolean>map(this.children, _function);
@@ -31,20 +29,18 @@ public class CompositeTool implements XDiagramTool {
         if ((a).booleanValue()) {
           _or = true;
         } else {
-          _or = ((a).booleanValue() || (b).booleanValue());
+          _or = (b).booleanValue();
         }
         return Boolean.valueOf(_or);
       }
     };
-    Boolean _reduce = IterableExtensions.<Boolean>reduce(_map, _function_1);
-    return (_reduce).booleanValue();
+    return (IterableExtensions.<Boolean>reduce(_map, _function_1)).booleanValue();
   }
   
   public boolean deactivate() {
     final Function1<XDiagramTool,Boolean> _function = new Function1<XDiagramTool,Boolean>() {
       public Boolean apply(final XDiagramTool it) {
-        boolean _deactivate = it.deactivate();
-        return Boolean.valueOf(_deactivate);
+        return Boolean.valueOf(it.deactivate());
       }
     };
     List<Boolean> _map = ListExtensions.<XDiagramTool, Boolean>map(this.children, _function);
@@ -54,12 +50,11 @@ public class CompositeTool implements XDiagramTool {
         if ((a).booleanValue()) {
           _or = true;
         } else {
-          _or = ((a).booleanValue() || (b).booleanValue());
+          _or = (b).booleanValue();
         }
         return Boolean.valueOf(_or);
       }
     };
-    Boolean _reduce = IterableExtensions.<Boolean>reduce(_map, _function_1);
-    return (_reduce).booleanValue();
+    return (IterableExtensions.<Boolean>reduce(_map, _function_1)).booleanValue();
   }
 }

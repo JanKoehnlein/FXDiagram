@@ -1,5 +1,6 @@
 package de.fxdiagram.core.anchors
 
+import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnection
 import javafx.geometry.Point2D
 import javafx.scene.Node
@@ -11,20 +12,16 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
-import de.fxdiagram.core.model.XModelProvider
-import de.fxdiagram.core.model.ModelElement
 
-abstract class ArrowHead extends Parent implements XModelProvider {
+abstract class ArrowHead extends Parent {
 	
 	Node node
 	
-	XConnection connection
+	@FxProperty XConnection connection
 	
-	boolean isSource
+	@FxProperty boolean isSource
 	
-	new(XConnection connection, Node node, boolean isSource) {
-		this.connection = connection
-		this.node = node
+	def void initialize() {
 		children += node
 		this.isSource = isSource
 		if(isSource)
@@ -33,17 +30,17 @@ abstract class ArrowHead extends Parent implements XModelProvider {
 			connection.targetArrowHead = this
 	}
 	
-	def getLineCut() {
-		connection.strokeWidth
+	protected def setNode(Node node) {
+		this.node = node
 	} 
-	
-	def getConnection() {
-		connection
-	}
 	
 	def getNode() {
 		node
 	}
+
+	def getLineCut() {
+		connection.strokeWidth
+	} 
 	
 	def correctAnchor(double x, double y, Point2D anchorOnOutline) {
 		if(anchorOnOutline != null && lineCut > 0) {
@@ -69,9 +66,5 @@ abstract class ArrowHead extends Parent implements XModelProvider {
 		trafo.translate(pos.x, pos.y)
 		transforms.setAll(trafo)
 	}
-	
-	override populate(ModelElement element) {
-	}
-	
 }
 

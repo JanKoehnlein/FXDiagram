@@ -3,19 +3,22 @@ package de.fxdiagram.lib.media
 import de.fxdiagram.core.XNode
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class ImageNode extends XNode {
 
 	ImageView imageView
 
 	new() {
+		super('Image')
 		node = imageView = new ImageView => [
 			preserveRatio = true
 			fitWidthProperty.bind(widthProperty) 
 			fitHeightProperty.bind(heightProperty)
 		]
 	}
-
+	
 	def setImage(Image image) {
 		imageView.image = image
 	}

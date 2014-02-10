@@ -33,16 +33,14 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
   }
   
   public Class<? extends Behavior> getBehaviorKey() {
-    Class<? extends AbstractConnectionRapidButtonBehavior> _class = this.getClass();
-    return _class;
+    return this.getClass();
   }
   
   protected void doActivate() {
     Iterable<MODEL> _initialModelChoices = this.getInitialModelChoices();
     final Function1<MODEL,KEY> _function = new Function1<MODEL,KEY>() {
       public KEY apply(final MODEL it) {
-        KEY _choiceKey = AbstractConnectionRapidButtonBehavior.this.getChoiceKey(it);
-        return _choiceKey;
+        return AbstractConnectionRapidButtonBehavior.this.getChoiceKey(it);
       }
     };
     Iterable<KEY> _map = IterableExtensions.<MODEL, KEY>map(_initialModelChoices, _function);

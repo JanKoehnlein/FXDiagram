@@ -113,8 +113,7 @@ public class TransformExtensionsTest {
     for (final Transform l : matrices) {
       for (final Transform r : matrices) {
         {
-          Affine _affine = new Affine();
-          final Affine affine = _affine;
+          final Affine affine = new Affine();
           TransformExtensions.leftMultiply(affine, r);
           int _indexOf = matrices.indexOf(l);
           Procedure1<? super Affine> _get = operations.get(_indexOf);

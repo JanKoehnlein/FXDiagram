@@ -14,17 +14,16 @@ public class UriExtensions {
     try {
       String _xblockexpression = null;
       {
-        Class<? extends Object> _switchResult = null;
+        Class<?> _switchResult = null;
         boolean _matched = false;
         if (!_matched) {
           if (context instanceof Class) {
             _matched=true;
-            _switchResult = ((Class<? extends Object>)context);
+            _switchResult = ((Class<?>)context);
           }
         }
         if (!_matched) {
-          Class<? extends Object> _class = context.getClass();
-          _switchResult = _class;
+          _switchResult = context.getClass();
         }
         final URL resource = _switchResult.getResource(file);
         String _xifexpression = null;
@@ -32,13 +31,11 @@ public class UriExtensions {
         boolean _notEquals = (!Objects.equal(_default, null));
         if (_notEquals) {
           URL _fileURL = FileLocator.toFileURL(resource);
-          String _externalForm = _fileURL.toExternalForm();
-          _xifexpression = _externalForm;
+          _xifexpression = _fileURL.toExternalForm();
         } else {
-          String _externalForm_1 = resource.toExternalForm();
-          _xifexpression = _externalForm_1;
+          _xifexpression = resource.toExternalForm();
         }
-        _xblockexpression = (_xifexpression);
+        _xblockexpression = _xifexpression;
       }
       return _xblockexpression;
     } catch (Throwable _e) {
@@ -50,8 +47,7 @@ public class UriExtensions {
     try {
       String _uRI = UriExtensions.toURI(context, file);
       URL _uRL = new URL(_uRI);
-      Node _load = FXMLLoader.<Node>load(_uRL);
-      return _load;
+      return FXMLLoader.<Node>load(_uRL);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }

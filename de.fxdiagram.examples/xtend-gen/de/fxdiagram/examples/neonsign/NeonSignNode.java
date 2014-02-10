@@ -1,7 +1,10 @@
 package de.fxdiagram.examples.neonsign;
 
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.lib.nodes.FlipNode;
 import javafx.animation.KeyFrame;
@@ -31,31 +34,79 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class NeonSignNode extends FlipNode {
   private TextField textField;
   
   private Text neonText;
   
-  public NeonSignNode() {
+  public NeonSignNode(final String name) {
+    super(name);
+  }
+  
+  public void doActivatePreview() {
     VBox _neonSign = this.getNeonSign();
-    final Procedure1<VBox> _function = new Procedure1<VBox>() {
-      public void apply(final VBox it) {
-        TooltipExtensions.setTooltip(it, "Double-click for Xtend code");
-      }
-    };
-    VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_neonSign, _function);
-    this.setFront(_doubleArrow);
+    this.setFront(_neonSign);
     ImageView _imageView = new ImageView();
-    final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+    final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
       public void apply(final ImageView it) {
         ImageCache _get = ImageCache.get();
         Image _image = _get.getImage(NeonSignNode.this, "code.png");
         it.setImage(_image);
       }
     };
-    ImageView _doubleArrow_1 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_1);
-    this.setBack(_doubleArrow_1);
+    ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
+    this.setBack(_doubleArrow);
+    super.doActivatePreview();
+  }
+  
+  public void doActivate() {
+    super.doActivate();
+    Node _front = this.getFront();
+    final Procedure1<Node> _function = new Procedure1<Node>() {
+      public void apply(final Node it) {
+        TooltipExtensions.setTooltip(it, "Double-click for Xtend code");
+        final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+          public void handle(final MouseEvent it) {
+            Timeline _timeline = new Timeline();
+            final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
+              public void apply(final Timeline it) {
+                it.setCycleCount(20);
+                ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
+                Duration _millis = Duration.millis(10);
+                DoubleProperty _opacityProperty = NeonSignNode.this.neonText.opacityProperty();
+                KeyValue _keyValue = new <Number>KeyValue(_opacityProperty, Double.valueOf(0.45));
+                KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
+                _keyFrames.add(_keyFrame);
+                ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
+                Duration _millis_1 = Duration.millis(20);
+                DoubleProperty _opacityProperty_1 = NeonSignNode.this.neonText.opacityProperty();
+                KeyValue _keyValue_1 = new <Number>KeyValue(_opacityProperty_1, Double.valueOf(0.95));
+                KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
+                _keyFrames_1.add(_keyFrame_1);
+                ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
+                Duration _millis_2 = Duration.millis(40);
+                DoubleProperty _opacityProperty_2 = NeonSignNode.this.neonText.opacityProperty();
+                KeyValue _keyValue_2 = new <Number>KeyValue(_opacityProperty_2, Double.valueOf(0.65));
+                KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
+                _keyFrames_2.add(_keyFrame_2);
+                ObservableList<KeyFrame> _keyFrames_3 = it.getKeyFrames();
+                Duration _millis_3 = Duration.millis(50);
+                DoubleProperty _opacityProperty_3 = NeonSignNode.this.neonText.opacityProperty();
+                KeyValue _keyValue_3 = new <Number>KeyValue(_opacityProperty_3, Integer.valueOf(1));
+                KeyFrame _keyFrame_3 = new KeyFrame(_millis_3, _keyValue_3);
+                _keyFrames_3.add(_keyFrame_3);
+                it.play();
+              }
+            };
+            ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function);
+          }
+        };
+        it.setOnMouseClicked(_function);
+      }
+    };
+    ObjectExtensions.<Node>operator_doubleArrow(_front, _function);
   }
   
   protected VBox getNeonSign() {
@@ -121,46 +172,22 @@ public class NeonSignNode extends FlipNode {
         Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
         Text _neonText = NeonSignNode.this.neonText = _doubleArrow_1;
         _children_1.add(_neonText);
-        final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
-          public void handle(final MouseEvent it) {
-            Timeline _timeline = new Timeline();
-            final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
-              public void apply(final Timeline it) {
-                it.setCycleCount(20);
-                ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
-                Duration _millis = Duration.millis(10);
-                DoubleProperty _opacityProperty = NeonSignNode.this.neonText.opacityProperty();
-                KeyValue _keyValue = new <Number>KeyValue(_opacityProperty, Double.valueOf(0.45));
-                KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
-                _keyFrames.add(_keyFrame);
-                ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
-                Duration _millis_1 = Duration.millis(20);
-                DoubleProperty _opacityProperty_1 = NeonSignNode.this.neonText.opacityProperty();
-                KeyValue _keyValue_1 = new <Number>KeyValue(_opacityProperty_1, Double.valueOf(0.95));
-                KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
-                _keyFrames_1.add(_keyFrame_1);
-                ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
-                Duration _millis_2 = Duration.millis(40);
-                DoubleProperty _opacityProperty_2 = NeonSignNode.this.neonText.opacityProperty();
-                KeyValue _keyValue_2 = new <Number>KeyValue(_opacityProperty_2, Double.valueOf(0.65));
-                KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
-                _keyFrames_2.add(_keyFrame_2);
-                ObservableList<KeyFrame> _keyFrames_3 = it.getKeyFrames();
-                Duration _millis_3 = Duration.millis(50);
-                DoubleProperty _opacityProperty_3 = NeonSignNode.this.neonText.opacityProperty();
-                KeyValue _keyValue_3 = new <Number>KeyValue(_opacityProperty_3, Integer.valueOf(1));
-                KeyFrame _keyFrame_3 = new KeyFrame(_millis_3, _keyValue_3);
-                _keyFrames_3.add(_keyFrame_3);
-                it.play();
-              }
-            };
-            ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function);
-          }
-        };
-        it.setOnMouseClicked(_function_2);
       }
     };
-    VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
+  }
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public NeonSignNode(final ModelLoad modelLoad) {
+    super(modelLoad);
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
+    modelElement.addProperty(widthProperty(), Double.class);
+    modelElement.addProperty(heightProperty(), Double.class);
   }
 }

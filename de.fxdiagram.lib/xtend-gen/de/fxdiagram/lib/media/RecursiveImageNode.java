@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.media;
 
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.AbstractOpenBehavior;
@@ -8,6 +9,8 @@ import de.fxdiagram.core.export.SvgExporter;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.media.FirstRecursiveImageNode;
 import javafx.animation.Interpolator;
@@ -31,39 +34,25 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height", "image", "x", "y", "scale" })
 @SuppressWarnings("all")
 public class RecursiveImageNode extends XNode implements SvgExportable {
-  private DoubleProperty actualWidthProperty = new Function0<DoubleProperty>() {
-    public DoubleProperty apply() {
-      SimpleDoubleProperty _simpleDoubleProperty = new SimpleDoubleProperty();
-      return _simpleDoubleProperty;
-    }
-  }.apply();
+  private DoubleProperty actualWidthProperty = new SimpleDoubleProperty();
   
-  private DoubleProperty actualHeightProperty = new Function0<DoubleProperty>() {
-    public DoubleProperty apply() {
-      SimpleDoubleProperty _simpleDoubleProperty = new SimpleDoubleProperty();
-      return _simpleDoubleProperty;
-    }
-  }.apply();
+  private DoubleProperty actualHeightProperty = new SimpleDoubleProperty();
   
   private FirstRecursiveImageNode pivot;
   
   private boolean isZoomedIn;
   
   public RecursiveImageNode() {
-    Image _image = this.getImage();
-    this.setImage(_image);
-    double _x = this.getX();
-    this.setX(_x);
-    double _y = this.getY();
-    this.setY(_y);
-    double _scale = this.getScale();
-    this.setScale(_scale);
+    super("Recursive image");
+  }
+  
+  public void doActivatePreview() {
     FirstRecursiveImageNode _firstRecursiveImageNode = new FirstRecursiveImageNode(this);
     this.pivot = _firstRecursiveImageNode;
     Group _createPane = this.createPane();
@@ -75,11 +64,12 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     };
     Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
     this.setNode(_doubleArrow);
-    TooltipExtensions.setTooltip(this, "Double-click to zoom in");
+    super.doActivatePreview();
   }
   
   public void doActivate() {
     super.doActivate();
+    TooltipExtensions.setTooltip(this, "Double-click to zoom in");
     this.pivot.activate();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
@@ -153,8 +143,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
             double _log = Math.log(10000);
             double _multiply = (_log * it);
             double _exp = Math.exp(_multiply);
-            double _divide = (_exp / 10000);
-            return _divide;
+            return (_exp / 10000);
           }
         };
         it.setInterpolator(_function);
@@ -183,8 +172,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
           protected double curve(final double it) {
             double _log = Math.log((it * 10000));
             double _log_1 = Math.log(10000);
-            double _divide = (_log / _log_1);
-            return _divide;
+            return (_log / _log_1);
           }
         };
         it.setInterpolator(_function);
@@ -201,8 +189,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
         public void apply(final Group it) {
-          ImageView _imageView = new ImageView();
-          final ImageView imageView = _imageView;
+          final ImageView imageView = new ImageView();
           ObservableList<Node> _children = it.getChildren();
           final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
             public void apply(final ImageView it) {
@@ -245,7 +232,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
         }
       };
       final Group pane = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-      _xblockexpression = (pane);
+      _xblockexpression = pane;
     }
     return _xblockexpression;
   }
@@ -259,8 +246,25 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   
   public CharSequence toSvgElement(@Extension final SvgExporter exporter) {
     Node _node = this.getNode();
-    CharSequence _snapshotToSvgElement = exporter.snapshotToSvgElement(_node);
-    return _snapshotToSvgElement;
+    return exporter.snapshotToSvgElement(_node);
+  }
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public RecursiveImageNode(final ModelLoad modelLoad) {
+    super(modelLoad);
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
+    modelElement.addProperty(widthProperty(), Double.class);
+    modelElement.addProperty(heightProperty(), Double.class);
+    modelElement.addProperty(imageProperty, Image.class);
+    modelElement.addProperty(xProperty, Double.class);
+    modelElement.addProperty(yProperty, Double.class);
+    modelElement.addProperty(scaleProperty, Double.class);
   }
   
   private SimpleObjectProperty<Image> imageProperty = new SimpleObjectProperty<Image>(this, "image");

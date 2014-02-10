@@ -30,8 +30,10 @@ import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 import static extension javafx.scene.layout.VBox.*
+import de.fxdiagram.annotations.properties.ModelNode
 
 @Logging
+@ModelNode(#['layoutX', 'layoutY', 'domainObject'])
 class LcarsNode extends XNode {
 
 	static val PAGE_STRUCTURE = #{ 
@@ -46,9 +48,7 @@ class LcarsNode extends XNode {
 	
 	extension NameShortener = new NameShortener()
 	
-	DBObject data 
 	String name
-	String dbId
 
 	Map<String,List<LcarsField>> pages
 
@@ -63,11 +63,13 @@ class LcarsNode extends XNode {
 	ImageView imageView
 	ChangeListener<Bounds> nameShortener
 	
-	new(DBObject data) {
-		super(data.get("name").toString)
-		this.data = data
+	new(LcarsEntryHandle handle) {
+		super(handle)
+	}
+	
+	override doActivatePreview() {
+		super.doActivatePreview()
 		this.name = key
-		this.dbId = data.get('_id').toString
 		imageUrls = (data.get("images") as List<DBObject>).map[get('url').toString]
 		vbox = new VBox
 		node = new RectangleBorderPane => [
@@ -81,6 +83,7 @@ class LcarsNode extends XNode {
 				children += new HBox => [
 					vgrow = Priority.ALWAYS
 					children += createBox(DARKBLUE) => [
+	
 						alignment = Pos.TOP_LEFT
 						HBox.setHgrow(it, Priority.ALWAYS)
 					]
@@ -136,9 +139,9 @@ class LcarsNode extends XNode {
 			while(nameField.boundsInLocal.width > newValue.width) 
 				nameField.text = shortenName(nameField.text)
 		]
-		infoBox.boundsInLocalProperty.addListener(nameShortener) 
+		infoBox.boundsInLocalProperty.addListener(nameShortener)
 	}
-
+	
 	protected def createBox(Color color) {
 		new RectangleBorderPane => [
 			borderPaint = color
@@ -308,12 +311,8 @@ class LcarsNode extends XNode {
 		box.borderPaint = textColor
 	}
 	
-	def getDbId() {
-		dbId
-	}
-	
 	def getData() {
-		data
+		domainObject.domainObject as DBObject
 	}
 	
 	override selectionFeedback(boolean isSelected) {

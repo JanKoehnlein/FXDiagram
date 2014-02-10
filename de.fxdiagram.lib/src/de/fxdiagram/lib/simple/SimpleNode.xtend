@@ -1,6 +1,8 @@
 package de.fxdiagram.lib.simple
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.model.DomainObjectHandle
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import javafx.geometry.Insets
@@ -9,33 +11,40 @@ import javafx.scene.effect.InnerShadow
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class SimpleNode extends XNode {
 
 	Text label
 	
-	new(String name) {
-		this()
-		this.name = name
+	new(DomainObjectHandle domainObject) {
+		super(domainObject)
 	}
 	
-	new() {
+	new(String name) {
+		super(name)
+	}
+	
+	override doActivatePreview() {
 		node = new RectangleBorderPane => [
 			children += label = new Text => [
 				textOrigin = VPos.TOP
+				text = key
 			]
 			StackPane.setMargin(label, new Insets(10, 20, 10, 20))
 		]
 		getNode.effect = new InnerShadow => [
 			radius = 7
 		]
-	}
-	
-	override protected createAnchors() {
-		new RoundedRectangleAnchors(this, 12, 12)
+		super.doActivatePreview()
 	}
 
 	override doActivate() {
 		super.doActivate
 		label.text = domainObject?.key
 	}
+
+	override protected createAnchors() {
+		new RoundedRectangleAnchors(this, 12, 12)
+	}
+
 }

@@ -28,8 +28,7 @@ public class BoundsExtensions {
       double _maxZ = left.getMaxZ();
       double _maxZ_1 = right.getMaxZ();
       final double maxZ = Math.max(_maxZ, _maxZ_1);
-      BoundingBox _boundingBox = new BoundingBox(minX, minY, minZ, (maxX - minX), (maxY - minY), (maxZ - minZ));
-      _xblockexpression = (_boundingBox);
+      _xblockexpression = new BoundingBox(minX, minY, minZ, (maxX - minX), (maxY - minY), (maxZ - minZ));
     }
     return _xblockexpression;
   }
@@ -51,8 +50,7 @@ public class BoundsExtensions {
     double _plus_2 = (_height + _top_1);
     double _bottom = insets.getBottom();
     double _plus_3 = (_plus_2 + _bottom);
-    BoundingBox _boundingBox = new BoundingBox(_minus, _minus_1, _plus_1, _plus_3);
-    return _boundingBox;
+    return new BoundingBox(_minus, _minus_1, _plus_1, _plus_3);
   }
   
   public static BoundingBox operator_minus(final Bounds bounds, final Insets insets) {
@@ -72,8 +70,7 @@ public class BoundsExtensions {
     double _minus_2 = (_height - _top_1);
     double _bottom = insets.getBottom();
     double _minus_3 = (_minus_2 - _bottom);
-    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _minus_1, _minus_3);
-    return _boundingBox;
+    return new BoundingBox(_plus, _plus_1, _minus_1, _minus_3);
   }
   
   public static BoundingBox translate(final Bounds bounds, final double tx, final double ty, final double tz) {
@@ -86,8 +83,7 @@ public class BoundsExtensions {
     double _width = bounds.getWidth();
     double _height = bounds.getHeight();
     double _depth = bounds.getDepth();
-    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _plus_2, _width, _height, _depth);
-    return _boundingBox;
+    return new BoundingBox(_plus, _plus_1, _plus_2, _width, _height, _depth);
   }
   
   public static BoundingBox translate(final Bounds bounds, final double tx, final double ty) {
@@ -97,8 +93,7 @@ public class BoundsExtensions {
     double _plus_1 = (_minY + ty);
     double _width = bounds.getWidth();
     double _height = bounds.getHeight();
-    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _width, _height);
-    return _boundingBox;
+    return new BoundingBox(_plus, _plus_1, _width, _height);
   }
   
   public static BoundingBox scale(final Bounds it, final double scaleX, final double scaleY, final double scaleZ) {
@@ -123,8 +118,7 @@ public class BoundsExtensions {
     double _multiply_7 = (_height_1 * scaleY);
     double _depth_1 = it.getDepth();
     double _multiply_8 = (_depth_1 * scaleZ);
-    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _plus_2, _multiply_6, _multiply_7, _multiply_8);
-    return _boundingBox;
+    return new BoundingBox(_plus, _plus_1, _plus_2, _multiply_6, _multiply_7, _multiply_8);
   }
   
   public static BoundingBox scale(final Bounds it, final double scaleX, final double scaleY) {
@@ -144,8 +138,7 @@ public class BoundsExtensions {
     double _height_1 = it.getHeight();
     double _multiply_5 = (_height_1 * scaleY);
     double _depth = it.getDepth();
-    BoundingBox _boundingBox = new BoundingBox(_plus, _plus_1, _minZ, _multiply_4, _multiply_5, _depth);
-    return _boundingBox;
+    return new BoundingBox(_plus, _plus_1, _minZ, _multiply_4, _multiply_5, _depth);
   }
   
   public static Point2D center(final Bounds it) {
@@ -157,7 +150,6 @@ public class BoundsExtensions {
     double _height = it.getHeight();
     double _multiply_1 = (0.5 * _height);
     double _plus_1 = (_minY + _multiply_1);
-    Point2D _point2D = new Point2D(_plus, _plus_1);
-    return _point2D;
+    return new Point2D(_plus, _plus_1);
   }
 }

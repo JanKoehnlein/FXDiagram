@@ -13,19 +13,15 @@ import org.eclipse.swt.widgets.Shell;
 public class SwtDemo {
   private static Scene createScene() {
     Demo _demo = new Demo();
-    Scene _createScene = _demo.createScene();
-    return _createScene;
+    return _demo.createScene();
   }
   
   public static void main(final String[] args) {
-    Display _display = new Display();
-    final Display display = _display;
-    Shell _shell = new Shell(display);
-    final Shell shell = _shell;
+    final Display display = new Display();
+    final Shell shell = new Shell(display);
     FillLayout _fillLayout = new FillLayout();
     shell.setLayout(_fillLayout);
-    FXCanvas _fXCanvas = new FXCanvas(shell, SWT.NONE);
-    final FXCanvas canvas = _fXCanvas;
+    final FXCanvas canvas = new FXCanvas(shell, SWT.NONE);
     SwtToFXGestureConverter.register(canvas);
     final Scene scene = SwtDemo.createScene();
     canvas.setScene(scene);

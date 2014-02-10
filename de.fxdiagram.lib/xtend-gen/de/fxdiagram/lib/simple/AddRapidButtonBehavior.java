@@ -41,8 +41,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
   }
   
   public Procedure1<? super AbstractChooser> setChoiceInitializer(final Procedure1<? super AbstractChooser> choiceInitializer) {
-    Procedure1<? super AbstractChooser> _choiceInitializer = this.choiceInitializer = choiceInitializer;
-    return _choiceInitializer;
+    return this.choiceInitializer = choiceInitializer;
   }
   
   public void doActivate() {
@@ -50,11 +49,9 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
     final XNode host = ((XNode) _host);
     final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
       public void apply(final XRapidButton button) {
-        SimpleNode _simpleNode = new SimpleNode("New Node");
-        final SimpleNode target = _simpleNode;
+        final SimpleNode target = new SimpleNode("New Node");
         final XNode source = button.getHost();
-        XConnection _xConnection = new XConnection(source, target);
-        final XConnection connection = _xConnection;
+        final XConnection connection = new XConnection(source, target);
         XDiagram _diagram = CoreExtensions.getDiagram(host);
         ObservableList<XNode> _nodes = _diagram.getNodes();
         _nodes.add(target);
@@ -81,8 +78,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
     final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
       public void apply(final XRapidButton button) {
         Pos _chooserPosition = button.getChooserPosition();
-        CarusselChooser _carusselChooser = new CarusselChooser(host, _chooserPosition);
-        final CarusselChooser chooser = _carusselChooser;
+        final CarusselChooser chooser = new CarusselChooser(host, _chooserPosition);
         AddRapidButtonBehavior.this.addChoices(chooser);
         XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);
@@ -92,8 +88,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
     final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
       public void apply(final XRapidButton button) {
         Pos _chooserPosition = button.getChooserPosition();
-        CubeChooser _cubeChooser = new CubeChooser(host, _chooserPosition);
-        final CubeChooser chooser = _cubeChooser;
+        final CubeChooser chooser = new CubeChooser(host, _chooserPosition);
         AddRapidButtonBehavior.this.addChoices(chooser);
         XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);
@@ -103,8 +98,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
     final Procedure1<XRapidButton> _function_3 = new Procedure1<XRapidButton>() {
       public void apply(final XRapidButton button) {
         Pos _chooserPosition = button.getChooserPosition();
-        CoverFlowChooser _coverFlowChooser = new CoverFlowChooser(host, _chooserPosition);
-        final CoverFlowChooser chooser = _coverFlowChooser;
+        final CoverFlowChooser chooser = new CoverFlowChooser(host, _chooserPosition);
         AddRapidButtonBehavior.this.addChoices(chooser);
         XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);

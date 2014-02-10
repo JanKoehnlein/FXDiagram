@@ -1,8 +1,10 @@
 package de.fxdiagram.lib.simple
 
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.model.DomainObjectHandle
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import javafx.geometry.Insets
@@ -15,9 +17,10 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @Logging
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class LevelOfDetailDiagramNode extends XNode {
 
-	RectangleBorderPane pane
+	RectangleBorderPane pane = new RectangleBorderPane
 
 	Text label
 
@@ -27,11 +30,20 @@ class LevelOfDetailDiagramNode extends XNode {
 
 	DiagramScaler diagramScaler
 
-	new() {
-		pane = new RectangleBorderPane
+	new(String name) {
+		super(name)	
+	}
+
+	new(DomainObjectHandle domainObject) {
+		super(domainObject)
+	}
+	
+	override doActivatePreview() {
+		super.doActivatePreview()
 		node = pane => [
 			children += label = new Text => [
 				textOrigin = VPos.TOP
+				text = key
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 				tooltip = "Zoom to reveal content"
 			]

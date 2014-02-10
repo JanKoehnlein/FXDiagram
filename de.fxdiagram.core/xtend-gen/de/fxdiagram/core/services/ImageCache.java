@@ -7,7 +7,6 @@ import java.util.Map;
 import javafx.scene.image.Image;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 
 @SuppressWarnings("all")
 public class ImageCache {
@@ -22,8 +21,7 @@ public class ImageCache {
     } else {
       ImageCache _imageCache = new ImageCache();
       ImageCache _INSTANCE = ImageCache.INSTANCE = _imageCache;
-      _elvis = ObjectExtensions.<ImageCache>operator_elvis(
-        ImageCache.INSTANCE, _INSTANCE);
+      _elvis = _INSTANCE;
     }
     return _elvis;
   }
@@ -40,14 +38,13 @@ public class ImageCache {
         Image _xblockexpression_1 = null;
         {
           String _uRI = UriExtensions.toURI(context, file);
-          Image _image = new Image(_uRI);
-          final Image image = _image;
+          final Image image = new Image(_uRI);
           this.put(file, image);
-          _xblockexpression_1 = (image);
+          _xblockexpression_1 = image;
         }
         _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
@@ -65,25 +62,22 @@ public class ImageCache {
         {
           byte[] _apply = dataAccess.apply();
           ByteArrayInputStream _byteArrayInputStream = new ByteArrayInputStream(_apply);
-          Image _image = new Image(_byteArrayInputStream);
-          final Image image = _image;
+          final Image image = new Image(_byteArrayInputStream);
           this.put(file, image);
-          _xblockexpression_1 = (image);
+          _xblockexpression_1 = image;
         }
         _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
   
   public boolean containsImage(final String file) {
-    boolean _containsKey = this.cache.containsKey(file);
-    return _containsKey;
+    return this.cache.containsKey(file);
   }
   
   public Image put(final String key, final Image image) {
-    Image _put = this.cache.put(key, image);
-    return _put;
+    return this.cache.put(key, image);
   }
 }

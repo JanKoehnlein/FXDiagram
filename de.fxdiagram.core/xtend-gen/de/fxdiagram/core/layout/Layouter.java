@@ -1,6 +1,5 @@
 package de.fxdiagram.core.layout;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.cau.cs.kieler.core.alg.BasicProgressMonitor;
 import de.cau.cs.kieler.core.kgraph.KEdge;
@@ -49,7 +48,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -63,12 +61,7 @@ public class Layouter {
   private KGraphFactory _kGraphFactory = KGraphFactory.eINSTANCE;
   
   @Extension
-  private LayoutTransitionFactory _layoutTransitionFactory = new Function0<LayoutTransitionFactory>() {
-    public LayoutTransitionFactory apply() {
-      LayoutTransitionFactory _layoutTransitionFactory = new LayoutTransitionFactory();
-      return _layoutTransitionFactory;
-    }
-  }.apply();
+  private LayoutTransitionFactory _layoutTransitionFactory = new LayoutTransitionFactory();
   
   public Layouter() {
     AbstractLayoutProvider _layoutProvider = this.getLayoutProvider(LayoutType.DOT);
@@ -99,8 +92,7 @@ public class Layouter {
           it.initialize(_string);
         }
       };
-      GraphvizLayoutProvider _doubleArrow = ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
-      _xblockexpression = (_doubleArrow);
+      _xblockexpression = ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
     }
     return _xblockexpression;
   }
@@ -139,11 +131,8 @@ public class Layouter {
             final KEdgeLayout edgeLayout = IterableExtensions.<KEdgeLayout>head(_filter);
             final KVectorChain layoutPoints = edgeLayout.createVectorChain();
             EdgeRouting _property = edgeLayout.<EdgeRouting>getProperty(LayoutOptions.EDGE_ROUTING);
-            final EdgeRouting _switchValue = _property;
-            boolean _matched_1 = false;
-            if (!_matched_1) {
-              if (Objects.equal(_switchValue,EdgeRouting.SPLINES)) {
-                _matched_1=true;
+            switch (_property) {
+              case SPLINES:
                 int _size = layoutPoints.size();
                 int _minus = (_size - 1);
                 int _modulo = (_minus % 3);
@@ -161,10 +150,10 @@ public class Layouter {
                     ((XConnection)xElement).setKind(XConnectionKind.POLYLINE);
                   }
                 }
-              }
-            }
-            if (!_matched_1) {
-              ((XConnection)xElement).setKind(XConnectionKind.POLYLINE);
+                break;
+              default:
+                ((XConnection)xElement).setKind(XConnectionKind.POLYLINE);
+                break;
             }
             final ObservableList<XControlPoint> controlPoints = ((XConnection)xElement).getControlPoints();
             ConnectionRouter _connectionRouter = ((XConnection)xElement).getConnectionRouter();
@@ -235,7 +224,7 @@ public class Layouter {
         }
       };
       IterableExtensions.<XConnection>forEach(_connections, _function_1);
-      _xblockexpression = (kRoot);
+      _xblockexpression = kRoot;
     }
     return _xblockexpression;
   }
@@ -253,7 +242,7 @@ public class Layouter {
       EList<KGraphData> _data = kNode.getData();
       _data.add(shapeLayout);
       cache.put(it, kNode);
-      _xblockexpression = (kNode);
+      _xblockexpression = kNode;
     }
     return _xblockexpression;
   }
@@ -270,7 +259,7 @@ public class Layouter {
       if (!(kSource instanceof KNode)) {
         _and = false;
       } else {
-        _and = ((kSource instanceof KNode) && (kTarget instanceof KNode));
+        _and = (kTarget instanceof KNode);
       }
       if (_and) {
         KEdge _xblockexpression_1 = null;
@@ -296,13 +285,13 @@ public class Layouter {
             }
           };
           IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
-          _xblockexpression_1 = (kEdge);
+          _xblockexpression_1 = kEdge;
         }
         _xifexpression = _xblockexpression_1;
       } else {
         _xifexpression = null;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
@@ -323,7 +312,7 @@ public class Layouter {
       if (_text_1 != null) {
         _elvis = _text_1;
       } else {
-        _elvis = ObjectExtensions.<String>operator_elvis(_text_1, "");
+        _elvis = "";
       }
       kLabel.setText(_elvis);
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
@@ -339,7 +328,7 @@ public class Layouter {
       EList<KGraphData> _data = kLabel.getData();
       _data.add(shapeLayout);
       cache.put(it, kLabel);
-      _xblockexpression = (kLabel);
+      _xblockexpression = kLabel;
     }
     return _xblockexpression;
   }

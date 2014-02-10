@@ -10,16 +10,15 @@ import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
 
 import static javafx.collections.FXCollections.*
-import de.fxdiagram.core.model.XModelProvider
-import de.fxdiagram.core.model.ModelElement
 
-abstract class XShape extends Parent implements XActivatable, XModelProvider {
+abstract class XShape extends Parent implements XActivatable {
 
 	@FxProperty@ReadOnly Node node
 
 	@FxProperty boolean selected
 	
 	@FxProperty@ReadOnly boolean isActive
+	@FxProperty@ReadOnly boolean isPreviewActive
 	
 	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
 	
@@ -30,6 +29,7 @@ abstract class XShape extends Parent implements XActivatable, XModelProvider {
 	
 	override activate() {
 		if(!isActive) {
+			activatePreview()
 			doActivate
 			isActiveProperty.set(true)
 			selectedProperty.addListener [
@@ -50,6 +50,17 @@ abstract class XShape extends Parent implements XActivatable, XModelProvider {
 		}
 	}
 	
+	def activatePreview() {
+		if(!isPreviewActive) {
+			doActivatePreview()
+			isPreviewActiveProperty.set(true)
+		}
+	}
+	
+	protected def void doActivatePreview()
+	
+	protected def void doActivate()
+	
 	def <T extends Behavior> T getBehavior(Class<T> key) {
 		behaviors.get(key) as T
 	}
@@ -64,8 +75,6 @@ abstract class XShape extends Parent implements XActivatable, XModelProvider {
 	
 	def void selectionFeedback(boolean isSelected) {
 	}
-	
-	protected def void doActivate()
 	
 	def boolean isSelectable() {
 		isActive
@@ -83,10 +92,5 @@ abstract class XShape extends Parent implements XActivatable, XModelProvider {
 	
 	def getSnapBounds() {
 		boundsInLocal
-	}
-	
-	override populate(ModelElement it) {
-		addProperty(layoutXProperty, Double)
-		addProperty(layoutYProperty, Double)
 	}
 }

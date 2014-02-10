@@ -31,14 +31,7 @@ class ConnectionRouter implements XActivatable {
 	
 	double selfEdgeDist = 60
 	
-	new() {
-	}
-
 	new(XConnection connection) {
-		setConnection(connection)
-	}
-	
-	def void setConnection(XConnection connection) {
 		this.connection = connection
 		scalarListener = [ prop, oldVal, newVal | 
 			connection.requestLayout
@@ -112,7 +105,7 @@ class ConnectionRouter implements XActivatable {
 	
 	protected def resetPointTypes() {
 		if(controlPoints.size < 2) 
-			return
+			return;
 		controlPoints.head.type = ANCHOR
 		controlPoints.last.type = ANCHOR
 		for(i: 1..<controlPoints.size - 1) {

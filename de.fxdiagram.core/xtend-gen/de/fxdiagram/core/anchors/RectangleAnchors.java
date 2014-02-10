@@ -37,8 +37,7 @@ public class RectangleAnchors implements Anchors {
       double _maxY = boundsInRootDiagram.getMaxY();
       double _plus_1 = (_minY + _maxY);
       final double centerY = (0.5 * _plus_1);
-      NearestPointFinder _nearestPointFinder = new NearestPointFinder(x, y);
-      final NearestPointFinder finder = _nearestPointFinder;
+      final NearestPointFinder finder = new NearestPointFinder(x, y);
       double _abs = Math.abs((centerY - y));
       boolean _greaterThan = (_abs > NumberExpressionExtensions.EPSILON);
       if (_greaterThan) {
@@ -52,7 +51,7 @@ public class RectangleAnchors implements Anchors {
         } else {
           double _maxX_1 = boundsInRootDiagram.getMaxX();
           boolean _lessEqualsThan = (xTop <= _maxX_1);
-          _and = (_greaterEqualsThan && _lessEqualsThan);
+          _and = _lessEqualsThan;
         }
         if (_and) {
           double _minY_2 = boundsInRootDiagram.getMinY();
@@ -68,7 +67,7 @@ public class RectangleAnchors implements Anchors {
         } else {
           double _maxX_2 = boundsInRootDiagram.getMaxX();
           boolean _lessEqualsThan_1 = (xBottom <= _maxX_2);
-          _and_1 = (_greaterEqualsThan_1 && _lessEqualsThan_1);
+          _and_1 = _lessEqualsThan_1;
         }
         if (_and_1) {
           double _maxY_2 = boundsInRootDiagram.getMaxY();
@@ -88,7 +87,7 @@ public class RectangleAnchors implements Anchors {
         } else {
           double _maxY_3 = boundsInRootDiagram.getMaxY();
           boolean _lessEqualsThan_2 = (yLeft <= _maxY_3);
-          _and_2 = (_greaterEqualsThan_2 && _lessEqualsThan_2);
+          _and_2 = _lessEqualsThan_2;
         }
         if (_and_2) {
           double _minX_4 = boundsInRootDiagram.getMinX();
@@ -104,15 +103,14 @@ public class RectangleAnchors implements Anchors {
         } else {
           double _maxY_4 = boundsInRootDiagram.getMaxY();
           boolean _lessEqualsThan_3 = (yRight <= _maxY_4);
-          _and_3 = (_greaterEqualsThan_3 && _lessEqualsThan_3);
+          _and_3 = _lessEqualsThan_3;
         }
         if (_and_3) {
           double _maxX_4 = boundsInRootDiagram.getMaxX();
           finder.addCandidate(_maxX_4, yRight);
         }
       }
-      Point2D _currentNearest = finder.getCurrentNearest();
-      _xblockexpression = (_currentNearest);
+      _xblockexpression = finder.getCurrentNearest();
     }
     return _xblockexpression;
   }
@@ -121,7 +119,7 @@ public class RectangleAnchors implements Anchors {
     double _xblockexpression = (double) 0;
     {
       final double t = ((yIntersection - centerY) / (pointY - centerY));
-      _xblockexpression = ((((pointX - centerX) * t) + centerX));
+      _xblockexpression = (((pointX - centerX) * t) + centerX);
     }
     return _xblockexpression;
   }
@@ -130,7 +128,7 @@ public class RectangleAnchors implements Anchors {
     double _xblockexpression = (double) 0;
     {
       final double t = ((xIntersection - centerX) / (pointX - centerX));
-      _xblockexpression = ((((pointY - centerY) * t) + centerY));
+      _xblockexpression = (((pointY - centerY) * t) + centerY);
     }
     return _xblockexpression;
   }

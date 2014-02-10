@@ -2,7 +2,9 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramGestureTool
 import de.fxdiagram.core.tools.MenuTool
@@ -10,7 +12,10 @@ import de.fxdiagram.core.tools.SelectionTool
 import de.fxdiagram.core.tools.XDiagramTool
 import java.util.List
 import java.util.Map
+import javafx.beans.Observable
 import javafx.beans.value.ChangeListener
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.geometry.HPos
 import javafx.geometry.Pos
 import javafx.geometry.VPos
@@ -20,15 +25,10 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
-import de.fxdiagram.core.model.DomainObjectProvider
-import de.fxdiagram.core.model.XModelProvider
-import de.fxdiagram.core.model.ModelElement
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
-import javafx.beans.Observable
 
 @Logging
-class XRoot extends Parent implements XActivatable, XModelProvider {
+@ModelNode(#['domainObjctProviders', 'diagram'])
+class XRoot extends Parent implements XActivatable {
 	
 	@FxProperty @ReadOnly boolean isActive
 
@@ -51,11 +51,6 @@ class XRoot extends Parent implements XActivatable, XModelProvider {
 	new() {
 		children += diagramCanvas
 		children += headsUpDisplay
-		defaultTool = new CompositeTool
-		defaultTool += new SelectionTool(this)
-		defaultTool += new DiagramGestureTool(this)
-		defaultTool += new MenuTool(this)
-		tools += defaultTool
 		domainObjectProviders.addListener[Observable o | domainObjectProviderCache = null]
 	}
 	
@@ -92,8 +87,13 @@ class XRoot extends Parent implements XActivatable, XModelProvider {
 			doActivate
 		isActiveProperty.set(true)
 	}
-	
+
 	def	doActivate() {
+		defaultTool = new CompositeTool
+		defaultTool += new SelectionTool(this)
+		defaultTool += new DiagramGestureTool(this)
+		defaultTool += new MenuTool(this)
+		tools += defaultTool
 		diagram?.activate
 		diagramCanvas => [
 			prefWidthProperty.bind(scene.widthProperty)
@@ -132,11 +132,6 @@ class XRoot extends Parent implements XActivatable, XModelProvider {
 			domainObjectProviders.forEach[domainObjectProviderCache.put(class, it)]
 		}
 		domainObjectProviderCache.get(providerClazz) as T
-	}
-	
-	override populate(ModelElement it) {
-		addChildProperty(domainObjectProvidersProperty, DomainObjectProvider)
-		addChildProperty(diagramProperty, XDiagram)
 	}
 	
 }

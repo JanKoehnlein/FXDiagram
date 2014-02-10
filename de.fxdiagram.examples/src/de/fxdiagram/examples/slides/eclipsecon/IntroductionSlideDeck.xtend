@@ -16,11 +16,16 @@ import javafx.scene.shape.Polyline
 import static de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory.*
 
 import static extension de.fxdiagram.examples.slides.Animations.*
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class IntroductionSlideDeck extends OpenableDiagramNode {
 	
 	new() {
-		this.name = 'Introduction'
+		super('Introduction')
+	}
+	
+	override doActivate() {
 		innerDiagram = new SlideDiagram => [
 			slides += createSlide('Title') => [ 
 				stackPane => [
@@ -285,6 +290,7 @@ class IntroductionSlideDeck extends OpenableDiagramNode {
 				]
 			]
 		]
+		super.doActivate
 	}
 	
 }

@@ -1,6 +1,5 @@
 package de.fxdiagram.examples.lcars;
 
-import com.google.common.base.Objects;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,19 +26,12 @@ public class NameShortener {
     }
     final String[] subnames = name.split(" ");
     int _size = ((List<String>)Conversions.doWrapArray(subnames)).size();
-    final int _switchValue = _size;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(_switchValue,1)) {
-        _matched=true;
+    switch (_size) {
+      case 1:
         String _head = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames)));
         String _substring = _head.substring(0, 8);
         return (_substring + "...");
-      }
-    }
-    if (!_matched) {
-      if (Objects.equal(_switchValue,2)) {
-        _matched=true;
+      case 2:
         final String firstName = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames)));
         int _length = firstName.length();
         boolean _lessEqualsThan = (_length <= 2);
@@ -51,11 +43,11 @@ public class NameShortener {
           String _last = IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(subnames)));
           return (_plus + _last);
         }
-      }
+      default:
+        String _head_1 = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames)));
+        String _plus_1 = (_head_1 + " ");
+        String _last_1 = IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(subnames)));
+        return (_plus_1 + _last_1);
     }
-    String _head_1 = IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(subnames)));
-    String _plus_1 = (_head_1 + " ");
-    String _last_1 = IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(subnames)));
-    return (_plus_1 + _last_1);
   }
 }

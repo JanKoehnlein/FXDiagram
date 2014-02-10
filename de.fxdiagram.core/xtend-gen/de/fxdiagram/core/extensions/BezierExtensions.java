@@ -37,8 +37,7 @@ public class BezierExtensions {
       final double bdy = Point2DExtensions.linear(bcy, cdy, t);
       double _linear = Point2DExtensions.linear(acx, bdx, t);
       double _linear_1 = Point2DExtensions.linear(acy, bdy, t);
-      Point2D _point2D = new Point2D(_linear, _linear_1);
-      _xblockexpression = (_point2D);
+      _xblockexpression = new Point2D(_linear, _linear_1);
     }
     return _xblockexpression;
   }
@@ -60,8 +59,7 @@ public class BezierExtensions {
       final double bcy = Point2DExtensions.linear(_controlY_1, _endY, t);
       double _linear = Point2DExtensions.linear(abx, bcx, t);
       double _linear_1 = Point2DExtensions.linear(aby, bcy, t);
-      Point2D _point2D = new Point2D(_linear, _linear_1);
-      _xblockexpression = (_point2D);
+      _xblockexpression = new Point2D(_linear, _linear_1);
     }
     return _xblockexpression;
   }
@@ -91,8 +89,7 @@ public class BezierExtensions {
       final double acy = Point2DExtensions.linear(aby, bcy, t);
       final double bdx = Point2DExtensions.linear(bcx, cdx, t);
       final double bdy = Point2DExtensions.linear(bcy, cdy, t);
-      Point2D _point2D = new Point2D((bdx - acx), (bdy - acy));
-      _xblockexpression = (_point2D);
+      _xblockexpression = new Point2D((bdx - acx), (bdy - acy));
     }
     return _xblockexpression;
   }
@@ -112,8 +109,7 @@ public class BezierExtensions {
       double _controlY_1 = c.getControlY();
       double _endY = c.getEndY();
       final double bcy = Point2DExtensions.linear(_controlY_1, _endY, t);
-      Point2D _point2D = new Point2D((bcx - abx), (bcy - aby));
-      _xblockexpression = (_point2D);
+      _xblockexpression = new Point2D((bcx - abx), (bcy - aby));
     }
     return _xblockexpression;
   }

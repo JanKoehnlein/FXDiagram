@@ -21,7 +21,6 @@ import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -40,36 +39,26 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
   protected Iterable<JavaProperty> getInitialModelChoices() {
     JavaTypeNode _host = this.getHost();
     JavaTypeModel _javaTypeModel = _host.getJavaTypeModel();
-    List<JavaProperty> _references = _javaTypeModel.getReferences();
-    return _references;
+    return _javaTypeModel.getReferences();
   }
   
   protected JavaPropertyHandle getChoiceKey(final JavaProperty property) {
     JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
-    JavaPropertyHandle _createJavaPropertyHandle = _domainObjectProvider.createJavaPropertyHandle(property);
-    return _createJavaPropertyHandle;
+    return _domainObjectProvider.createJavaPropertyHandle(property);
   }
   
   protected XNode createNode(final JavaPropertyHandle key) {
-    JavaTypeNode _javaTypeNode = new JavaTypeNode();
-    final Procedure1<JavaTypeNode> _function = new Procedure1<JavaTypeNode>() {
-      public void apply(final JavaTypeNode it) {
-        JavaModelProvider _domainObjectProvider = AddReferenceRapidButtonBehavior.this.getDomainObjectProvider();
-        JavaProperty _domainObject = key.getDomainObject();
-        Class<? extends Object> _type = _domainObject.getType();
-        JavaTypeHandle _createJavaTypeHandle = _domainObjectProvider.createJavaTypeHandle(_type);
-        it.setDomainObject(_createJavaTypeHandle);
-      }
-    };
-    JavaTypeNode _doubleArrow = ObjectExtensions.<JavaTypeNode>operator_doubleArrow(_javaTypeNode, _function);
-    return _doubleArrow;
+    JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
+    JavaProperty _domainObject = key.getDomainObject();
+    Class<?> _type = _domainObject.getType();
+    JavaTypeHandle _createJavaTypeHandle = _domainObjectProvider.createJavaTypeHandle(_type);
+    return new JavaTypeNode(_createJavaTypeHandle);
   }
   
   protected JavaModelProvider getDomainObjectProvider() {
     JavaTypeNode _host = this.getHost();
     XRoot _root = CoreExtensions.getRoot(_host);
-    JavaModelProvider _domainObjectProvider = _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
-    return _domainObjectProvider;
+    return _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
   }
   
   protected AbstractChooser createChooser(final XRapidButton button, final Set<JavaPropertyHandle> availableChoiceKeys, final Set<JavaPropertyHandle> unavailableChoiceKeys) {
@@ -77,8 +66,7 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
     {
       JavaTypeNode _host = this.getHost();
       Pos _chooserPosition = button.getChooserPosition();
-      CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
-      final CarusselChooser chooser = _carusselChooser;
+      final CarusselChooser chooser = new CarusselChooser(_host, _chooserPosition);
       final Procedure1<JavaPropertyHandle> _function = new Procedure1<JavaPropertyHandle>() {
         public void apply(final JavaPropertyHandle it) {
           XNode _createNode = AddReferenceRapidButtonBehavior.this.createNode(it);
@@ -108,14 +96,13 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
                 ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
               }
             };
-            XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-            _xblockexpression = (_doubleArrow);
+            _xblockexpression = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
           }
           return _xblockexpression;
         }
       };
       chooser.setConnectionProvider(_function_1);
-      _xblockexpression = (chooser);
+      _xblockexpression = chooser;
     }
     return _xblockexpression;
   }

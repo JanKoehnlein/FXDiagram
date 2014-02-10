@@ -308,8 +308,7 @@ public class TransformExtensions {
     double _plus_25 = (_plus_24 + _multiply_35);
     double _tz_3 = l.getTz();
     double _plus_26 = (_plus_25 + _tz_3);
-    Affine _affine = Transform.affine(_plus_1, _plus_3, _plus_5, _plus_8, _plus_10, _plus_12, _plus_14, _plus_17, _plus_19, _plus_21, _plus_23, _plus_26);
-    return _affine;
+    return Transform.affine(_plus_1, _plus_3, _plus_5, _plus_8, _plus_10, _plus_12, _plus_14, _plus_17, _plus_19, _plus_21, _plus_23, _plus_26);
   }
   
   /**
@@ -355,8 +354,7 @@ public class TransformExtensions {
     double _plus_7 = (_plus_6 + _multiply_8);
     double _tz = l.getTz();
     double _plus_8 = (_plus_7 + _tz);
-    Point3D _point3D = new Point3D(_plus_2, _plus_5, _plus_8);
-    return _point3D;
+    return new Point3D(_plus_2, _plus_5, _plus_8);
   }
   
   /**

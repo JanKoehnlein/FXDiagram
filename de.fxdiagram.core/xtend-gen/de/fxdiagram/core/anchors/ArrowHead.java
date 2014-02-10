@@ -5,8 +5,10 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import de.fxdiagram.core.model.ModelElement;
-import de.fxdiagram.core.model.XModelProvider;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -16,37 +18,35 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
 @SuppressWarnings("all")
-public abstract class ArrowHead extends Parent implements XModelProvider {
+public abstract class ArrowHead extends Parent {
   private Node node;
   
-  private XConnection connection;
-  
-  private boolean isSource;
-  
-  public ArrowHead(final XConnection connection, final Node node, final boolean isSource) {
-    this.connection = connection;
-    this.node = node;
+  public void initialize() {
     ObservableList<Node> _children = this.getChildren();
-    _children.add(node);
-    this.isSource = isSource;
-    if (isSource) {
-      connection.setSourceArrowHead(this);
+    _children.add(this.node);
+    boolean _isSource = this.getIsSource();
+    this.setIsSource(_isSource);
+    boolean _isSource_1 = this.getIsSource();
+    if (_isSource_1) {
+      XConnection _connection = this.getConnection();
+      _connection.setSourceArrowHead(this);
     } else {
-      connection.setTargetArrowHead(this);
+      XConnection _connection_1 = this.getConnection();
+      _connection_1.setTargetArrowHead(this);
     }
   }
   
-  public double getLineCut() {
-    double _strokeWidth = this.connection.getStrokeWidth();
-    return _strokeWidth;
-  }
-  
-  public XConnection getConnection() {
-    return this.connection;
+  protected Node setNode(final Node node) {
+    return this.node = node;
   }
   
   public Node getNode() {
     return this.node;
+  }
+  
+  public double getLineCut() {
+    XConnection _connection = this.getConnection();
+    return _connection.getStrokeWidth();
   }
   
   public Point2D correctAnchor(final double x, final double y, final Point2D anchorOnOutline) {
@@ -59,15 +59,14 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
       } else {
         double _lineCut = this.getLineCut();
         boolean _greaterThan = (_lineCut > 0);
-        _and = (_notEquals && _greaterThan);
+        _and = _greaterThan;
       }
       if (_and) {
         double _x = anchorOnOutline.getX();
         double _minus = (_x - x);
         double _y = anchorOnOutline.getY();
         double _minus_1 = (_y - y);
-        Point2D _point2D = new Point2D(_minus, _minus_1);
-        final Point2D direction = _point2D;
+        final Point2D direction = new Point2D(_minus, _minus_1);
         double _norm = Point2DExtensions.norm(direction);
         boolean _greaterThan_1 = (_norm > NumberExpressionExtensions.EPSILON);
         if (_greaterThan_1) {
@@ -78,21 +77,21 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
           return Point2DExtensions.operator_minus(anchorOnOutline, correction);
         }
       }
-      _xblockexpression = (anchorOnOutline);
+      _xblockexpression = anchorOnOutline;
     }
     return _xblockexpression;
   }
   
   public void place() {
     int _xifexpression = (int) 0;
-    if (this.isSource) {
+    boolean _isSource = this.getIsSource();
+    if (_isSource) {
       _xifexpression = 0;
     } else {
       _xifexpression = 1;
     }
     final int t = _xifexpression;
-    Affine _affine = new Affine();
-    final Affine trafo = _affine;
+    final Affine trafo = new Affine();
     final Bounds headBounds = this.getBoundsInLocal();
     double _width = headBounds.getWidth();
     double _minus = (-_width);
@@ -105,20 +104,23 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
     double _minY = headBounds.getMinY();
     double _minus_2 = (_multiply - _minY);
     TransformExtensions.translate(trafo, _plus, _minus_2);
-    final Point2D derivative = this.connection.derivativeAt(t);
+    XConnection _connection = this.getConnection();
+    final Point2D derivative = _connection.derivativeAt(t);
     double _y = derivative.getY();
     double _x = derivative.getX();
     double _atan2 = Math.atan2(_y, _x);
     double _degrees = Math.toDegrees(_atan2);
     int _xifexpression_1 = (int) 0;
-    if (this.isSource) {
+    boolean _isSource_1 = this.getIsSource();
+    if (_isSource_1) {
       _xifexpression_1 = 180;
     } else {
       _xifexpression_1 = 0;
     }
     final double angle = (_degrees + _xifexpression_1);
     TransformExtensions.rotate(trafo, angle);
-    final Point2D pos = this.connection.at(t);
+    XConnection _connection_1 = this.getConnection();
+    final Point2D pos = _connection_1.at(t);
     double _x_1 = pos.getX();
     double _y_1 = pos.getY();
     TransformExtensions.translate(trafo, _x_1, _y_1);
@@ -126,6 +128,31 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
     _transforms.setAll(trafo);
   }
   
-  public void populate(final ModelElement element) {
+  private SimpleObjectProperty<XConnection> connectionProperty = new SimpleObjectProperty<XConnection>(this, "connection");
+  
+  public XConnection getConnection() {
+    return this.connectionProperty.get();
+  }
+  
+  public void setConnection(final XConnection connection) {
+    this.connectionProperty.set(connection);
+  }
+  
+  public ObjectProperty<XConnection> connectionProperty() {
+    return this.connectionProperty;
+  }
+  
+  private SimpleBooleanProperty isSourceProperty = new SimpleBooleanProperty(this, "isSource");
+  
+  public boolean getIsSource() {
+    return this.isSourceProperty.get();
+  }
+  
+  public void setIsSource(final boolean isSource) {
+    this.isSourceProperty.set(isSource);
+  }
+  
+  public BooleanProperty isSourceProperty() {
+    return this.isSourceProperty;
   }
 }

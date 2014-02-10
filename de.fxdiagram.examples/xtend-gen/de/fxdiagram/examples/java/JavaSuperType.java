@@ -6,19 +6,19 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 @Data
 @SuppressWarnings("all")
 public class JavaSuperType {
-  private final Class<? extends Object> _subType;
+  private final Class<?> _subType;
   
-  public Class<? extends Object> getSubType() {
+  public Class<?> getSubType() {
     return this._subType;
   }
   
-  private final Class<? extends Object> _superType;
+  private final Class<?> _superType;
   
-  public Class<? extends Object> getSuperType() {
+  public Class<?> getSuperType() {
     return this._superType;
   }
   
-  public JavaSuperType(final Class<? extends Object> subType, final Class<? extends Object> superType) {
+  public JavaSuperType(final Class<?> subType, final Class<?> superType) {
     super();
     this._subType = subType;
     this._superType = superType;

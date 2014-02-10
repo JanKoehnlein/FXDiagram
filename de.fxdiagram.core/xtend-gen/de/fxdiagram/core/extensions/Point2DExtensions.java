@@ -9,8 +9,7 @@ public class Point2DExtensions {
   public static Point2D linear(final double fromX, final double fromY, final double toX, final double toY, final double lambda) {
     double _linear = Point2DExtensions.linear(fromX, toX, lambda);
     double _linear_1 = Point2DExtensions.linear(fromY, toY, lambda);
-    Point2D _point2D = new Point2D(_linear, _linear_1);
-    return _point2D;
+    return new Point2D(_linear, _linear_1);
   }
   
   @Pure
@@ -21,8 +20,7 @@ public class Point2DExtensions {
     double _y = from.getY();
     double _y_1 = to.getY();
     double _linear_1 = Point2DExtensions.linear(_y, _y_1, lambda);
-    Point2D _point2D = new Point2D(_linear, _linear_1);
-    return _point2D;
+    return new Point2D(_linear, _linear_1);
   }
   
   @Pure
@@ -35,8 +33,7 @@ public class Point2DExtensions {
     double _y_1 = to.getY();
     double _plus_1 = (_y + _y_1);
     double _multiply_1 = (0.5 * _plus_1);
-    Point2D _point2D = new Point2D(_multiply, _multiply_1);
-    return _point2D;
+    return new Point2D(_multiply, _multiply_1);
   }
   
   @Pure
@@ -47,8 +44,7 @@ public class Point2DExtensions {
     double _y = left.getY();
     double _y_1 = right.getY();
     double _plus_1 = (_y + _y_1);
-    Point2D _point2D = new Point2D(_plus, _plus_1);
-    return _point2D;
+    return new Point2D(_plus, _plus_1);
   }
   
   @Pure
@@ -59,8 +55,7 @@ public class Point2DExtensions {
     double _y = left.getY();
     double _y_1 = right.getY();
     double _minus_1 = (_y - _y_1);
-    Point2D _point2D = new Point2D(_minus, _minus_1);
-    return _point2D;
+    return new Point2D(_minus, _minus_1);
   }
   
   @Pure
@@ -69,8 +64,7 @@ public class Point2DExtensions {
     double _multiply = (_x * right);
     double _y = left.getY();
     double _multiply_1 = (_y * right);
-    Point2D _point2D = new Point2D(_multiply, _multiply_1);
-    return _point2D;
+    return new Point2D(_multiply, _multiply_1);
   }
   
   @Pure
@@ -79,8 +73,7 @@ public class Point2DExtensions {
     double _multiply = (left * _x);
     double _y = right.getY();
     double _multiply_1 = (left * _y);
-    Point2D _point2D = new Point2D(_multiply, _multiply_1);
-    return _point2D;
+    return new Point2D(_multiply, _multiply_1);
   }
   
   @Pure
@@ -89,8 +82,7 @@ public class Point2DExtensions {
     double _divide = (_x / right);
     double _y = left.getY();
     double _divide_1 = (_y / right);
-    Point2D _point2D = new Point2D(_divide, _divide_1);
-    return _point2D;
+    return new Point2D(_divide, _divide_1);
   }
   
   @Pure
@@ -99,8 +91,7 @@ public class Point2DExtensions {
     double _divide = (left / _x);
     double _y = right.getY();
     double _divide_1 = (left / _y);
-    Point2D _point2D = new Point2D(_divide, _divide_1);
-    return _point2D;
+    return new Point2D(_divide, _divide_1);
   }
   
   @Pure
@@ -112,8 +103,7 @@ public class Point2DExtensions {
     double _y_1 = it.getY();
     double _multiply_1 = (_y * _y_1);
     double _plus = (_multiply + _multiply_1);
-    double _sqrt = Math.sqrt(_plus);
-    return _sqrt;
+    return Math.sqrt(_plus);
   }
   
   @Pure
@@ -129,8 +119,7 @@ public class Point2DExtensions {
     double _y_1 = two.getY();
     double _x_2 = three.getX();
     double _y_2 = three.getY();
-    boolean _isClockwise = Point2DExtensions.isClockwise(_x, _y, _x_1, _y_1, _x_2, _y_2);
-    return _isClockwise;
+    return Point2DExtensions.isClockwise(_x, _y, _x_1, _y_1, _x_2, _y_2);
   }
   
   @Pure

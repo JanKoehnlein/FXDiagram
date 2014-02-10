@@ -55,8 +55,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       double _screenX = it.getScreenX();
       double _screenY = it.getScreenY();
       DragContext _dragContext = new DragContext(_screenX, _screenY, initialPositionInScene);
-      DragContext _dragContext_1 = this.dragContext = _dragContext;
-      _xblockexpression = (_dragContext_1);
+      _xblockexpression = this.dragContext = _dragContext;
     }
     return _xblockexpression;
   }
@@ -74,8 +73,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     double _plus_1 = (_y + _screenY);
     double _mouseAnchorY = this.dragContext.getMouseAnchorY();
     double _minus_1 = (_plus_1 - _mouseAnchorY);
-    Point2D _point2D = new Point2D(_minus, _minus_1);
-    final Point2D newPositionInScene = _point2D;
+    final Point2D newPositionInScene = new Point2D(_minus, _minus_1);
     T _host = this.getHost();
     Parent _parent = _host.getParent();
     final Point2D newPositionInDiagram = _parent.sceneToLocal(newPositionInScene);

@@ -13,7 +13,7 @@ public class GroupWithFixedSize extends Group {
     {
       Exception _exception = new Exception();
       _exception.printStackTrace();
-      _xblockexpression = (100);
+      _xblockexpression = 100;
     }
     return _xblockexpression;
   }
@@ -23,7 +23,7 @@ public class GroupWithFixedSize extends Group {
     {
       Exception _exception = new Exception();
       _exception.printStackTrace();
-      _xblockexpression = (100);
+      _xblockexpression = 100;
     }
     return _xblockexpression;
   }
@@ -33,7 +33,7 @@ public class GroupWithFixedSize extends Group {
     {
       Exception _exception = new Exception();
       _exception.printStackTrace();
-      _xblockexpression = (100);
+      _xblockexpression = 100;
     }
     return _xblockexpression;
   }
@@ -43,7 +43,7 @@ public class GroupWithFixedSize extends Group {
     {
       Exception _exception = new Exception();
       _exception.printStackTrace();
-      _xblockexpression = (100);
+      _xblockexpression = 100;
     }
     return _xblockexpression;
   }
@@ -53,7 +53,7 @@ public class GroupWithFixedSize extends Group {
     {
       Exception _exception = new Exception();
       _exception.printStackTrace();
-      _xblockexpression = (100);
+      _xblockexpression = 100;
     }
     return _xblockexpression;
   }
@@ -63,7 +63,7 @@ public class GroupWithFixedSize extends Group {
     {
       Exception _exception = new Exception();
       _exception.printStackTrace();
-      _xblockexpression = (100);
+      _xblockexpression = 100;
     }
     return _xblockexpression;
   }

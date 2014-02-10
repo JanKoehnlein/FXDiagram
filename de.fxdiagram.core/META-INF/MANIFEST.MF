@@ -18,7 +18,9 @@ Require-Bundle: org.eclipse.core.runtime,
  de.cau.cs.kieler.kiml.graphviz.dot;bundle-version="0.6.1",
  de.cau.cs.kieler.kiml.graphviz.layouter;bundle-version="0.6.2",
  de.fxdiagram.annotations;bundle-version="1.0.0",
- de.fxdiagram.external;bundle-version="1.0.0"
+ de.fxdiagram.external;bundle-version="1.0.0",
+ org.eclipse.xtend.core;bundle-version="2.5.1",
+ org.eclipse.xtext.xbase.junit;bundle-version="2.5.1"
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.anchors,

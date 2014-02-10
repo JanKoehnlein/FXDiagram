@@ -47,20 +47,17 @@ public class ShapeConverterExtensions {
         it.setContent(_svgString);
       }
     };
-    SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
   }
   
   public static String toSvgString(final Shape shape) {
     String _internalToSvgString = ShapeConverterExtensions.internalToSvgString(shape);
     String _replaceAll = _internalToSvgString.replaceAll("\\s+", " ");
-    String _trim = _replaceAll.trim();
-    return _trim;
+    return _replaceAll.trim();
   }
   
   protected static String _internalToSvgString(final SVGPath svgPath) {
-    String _content = svgPath.getContent();
-    return _content;
+    return svgPath.getContent();
   }
   
   protected static String _internalToSvgString(final Text text) {
@@ -69,8 +66,7 @@ public class ShapeConverterExtensions {
       Rectangle _rectangle = new Rectangle(0, 0);
       Shape _subtract = Shape.subtract(text, _rectangle);
       final Path path = ((Path) _subtract);
-      String _svgString = ShapeConverterExtensions.toSvgString(path);
-      _xblockexpression = (_svgString);
+      _xblockexpression = ShapeConverterExtensions.toSvgString(path);
     }
     return _xblockexpression;
   }
@@ -205,14 +201,14 @@ public class ShapeConverterExtensions {
         } else {
           ArcType _type_2 = arc.getType();
           boolean _equals_2 = Objects.equal(ArcType.ROUND, _type_2);
-          _or = (_equals_1 || _equals_2);
+          _or = _equals_2;
         }
         if (_or) {
           _builder.append("Z");
           _builder.newLine();
         }
       }
-      _xblockexpression = (_builder.toString());
+      _xblockexpression = _builder.toString();
     }
     return _xblockexpression;
   }
@@ -293,7 +289,7 @@ public class ShapeConverterExtensions {
         double _arcHeight = rectangle.getArcHeight();
         int _spaceship_1 = (Double.valueOf(_arcHeight).compareTo(Double.valueOf(0.0)));
         boolean _equals_1 = (_spaceship_1 == 0);
-        _and = (_equals && _equals_1);
+        _and = _equals_1;
       }
       if (_and) {
         StringConcatenation _builder = new StringConcatenation();
@@ -396,11 +392,11 @@ public class ShapeConverterExtensions {
           _builder_1.append(y, "");
           _builder_1.append(" Z");
           _builder_1.newLineIfNotEmpty();
-          _xblockexpression_1 = (_builder_1.toString());
+          _xblockexpression_1 = _builder_1.toString();
         }
         _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
@@ -412,22 +408,18 @@ public class ShapeConverterExtensions {
       double _centerX = circle.getCenterX();
       boolean _equals = (_centerX == 0);
       if (_equals) {
-        double _radius = circle.getRadius();
-        _xifexpression = _radius;
+        _xifexpression = circle.getRadius();
       } else {
-        double _centerX_1 = circle.getCenterX();
-        _xifexpression = _centerX_1;
+        _xifexpression = circle.getCenterX();
       }
       final double centerX = _xifexpression;
       double _xifexpression_1 = (double) 0;
       double _centerY = circle.getCenterY();
       boolean _equals_1 = (_centerY == 0);
       if (_equals_1) {
-        double _radius_1 = circle.getRadius();
-        _xifexpression_1 = _radius_1;
+        _xifexpression_1 = circle.getRadius();
       } else {
-        double _centerY_1 = circle.getCenterY();
-        _xifexpression_1 = _centerY_1;
+        _xifexpression_1 = circle.getCenterY();
       }
       final double centerY = _xifexpression_1;
       final double radius = circle.getRadius();
@@ -503,7 +495,7 @@ public class ShapeConverterExtensions {
       _builder.append((centerY - radius), "");
       _builder.append(" Z");
       _builder.newLineIfNotEmpty();
-      _xblockexpression = (_builder.toString());
+      _xblockexpression = _builder.toString();
     }
     return _xblockexpression;
   }
@@ -515,22 +507,18 @@ public class ShapeConverterExtensions {
       double _centerX = ellipse.getCenterX();
       boolean _equals = (_centerX == 0);
       if (_equals) {
-        double _radiusX = ellipse.getRadiusX();
-        _xifexpression = _radiusX;
+        _xifexpression = ellipse.getRadiusX();
       } else {
-        double _centerX_1 = ellipse.getCenterX();
-        _xifexpression = _centerX_1;
+        _xifexpression = ellipse.getCenterX();
       }
       final double centerX = _xifexpression;
       double _xifexpression_1 = (double) 0;
       double _centerY = ellipse.getCenterY();
       boolean _equals_1 = (_centerY == 0);
       if (_equals_1) {
-        double _radiusY = ellipse.getRadiusY();
-        _xifexpression_1 = _radiusY;
+        _xifexpression_1 = ellipse.getRadiusY();
       } else {
-        double _centerY_1 = ellipse.getCenterY();
-        _xifexpression_1 = _centerY_1;
+        _xifexpression_1 = ellipse.getCenterY();
       }
       final double centerY = _xifexpression_1;
       final double radiusX = ellipse.getRadiusX();
@@ -608,7 +596,7 @@ public class ShapeConverterExtensions {
       _builder.append((centerY - radiusY), "");
       _builder.append(" Z");
       _builder.newLineIfNotEmpty();
-      _xblockexpression = (_builder.toString());
+      _xblockexpression = _builder.toString();
     }
     return _xblockexpression;
   }
@@ -616,8 +604,7 @@ public class ShapeConverterExtensions {
   protected static String _internalToSvgString(final Path path) {
     String _xblockexpression = null;
     {
-      StringBuilder _stringBuilder = new StringBuilder();
-      final StringBuilder it = _stringBuilder;
+      final StringBuilder it = new StringBuilder();
       ObservableList<PathElement> _elements = path.getElements();
       for (final PathElement element : _elements) {
         boolean _matched = false;
@@ -744,8 +731,7 @@ public class ShapeConverterExtensions {
           }
         }
       }
-      String _string = it.toString();
-      _xblockexpression = (_string);
+      _xblockexpression = it.toString();
     }
     return _xblockexpression;
   }
@@ -753,21 +739,18 @@ public class ShapeConverterExtensions {
   protected static String _internalToSvgString(final Polygon polygon) {
     ObservableList<Double> _points = polygon.getPoints();
     String _pointsToSvgString = ShapeConverterExtensions.pointsToSvgString(_points);
-    String _plus = (_pointsToSvgString + "Z");
-    return _plus;
+    return (_pointsToSvgString + "Z");
   }
   
   protected static String _internalToSvgString(final Polyline polyline) {
     ObservableList<Double> _points = polyline.getPoints();
-    String _pointsToSvgString = ShapeConverterExtensions.pointsToSvgString(_points);
-    return _pointsToSvgString;
+    return ShapeConverterExtensions.pointsToSvgString(_points);
   }
   
   protected static String pointsToSvgString(final List<Double> points) {
     String _xblockexpression = null;
     {
-      StringBuilder _stringBuilder = new StringBuilder();
-      final StringBuilder it = _stringBuilder;
+      final StringBuilder it = new StringBuilder();
       final int size = points.size();
       if (((size % 2) == 0)) {
         final List<Double> coordinates = points;
@@ -798,8 +781,7 @@ public class ShapeConverterExtensions {
           _while = (i < size);
         }
       }
-      String _string = it.toString();
-      _xblockexpression = (_string);
+      _xblockexpression = it.toString();
     }
     return _xblockexpression;
   }

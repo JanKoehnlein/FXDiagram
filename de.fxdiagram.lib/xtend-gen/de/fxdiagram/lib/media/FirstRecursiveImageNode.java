@@ -5,7 +5,6 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.model.StringHandle;
 import de.fxdiagram.lib.media.RecursiveImageNode;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -17,7 +16,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -25,18 +23,10 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class FirstRecursiveImageNode extends XNode {
   private RecursiveImageNode recursiveImageNode;
   
-  private Deque<Group> panes = new Function0<Deque<Group>>() {
-    public Deque<Group> apply() {
-      LinkedList<Group> _linkedList = new LinkedList<Group>();
-      return _linkedList;
-    }
-  }.apply();
+  private Deque<Group> panes = new LinkedList<Group>();
   
   public FirstRecursiveImageNode(final RecursiveImageNode parent) {
-    String _key = parent.getKey();
-    String _plus = (_key + "_");
-    StringHandle _stringHandle = new StringHandle(_plus);
-    this.setDomainObject(_stringHandle);
+    super((parent.getKey() + "_"));
     this.recursiveImageNode = parent;
     final Group group = parent.createPane();
     this.setNode(group);
@@ -131,7 +121,6 @@ public class FirstRecursiveImageNode extends XNode {
         _layoutYProperty.bind(_yProperty);
       }
     };
-    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
   }
 }

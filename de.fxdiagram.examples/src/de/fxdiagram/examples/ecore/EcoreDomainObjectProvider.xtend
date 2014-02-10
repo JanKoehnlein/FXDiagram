@@ -1,9 +1,9 @@
 package de.fxdiagram.examples.ecore
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectHandle
 import de.fxdiagram.core.model.DomainObjectHandleImpl
 import de.fxdiagram.core.model.DomainObjectProvider
-import de.fxdiagram.core.model.ModelElement
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.util.EcoreUtil
 
+@ModelNode
 class EcoreDomainObjectProvider implements DomainObjectProvider {
 	
 	override createDomainObjectHandle(Object object) {
@@ -48,9 +49,6 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 		}
 	}
 	
-	override populate(ModelElement element) {
-	}
-	
 	def String getId(EObject it) {
 		EcoreUtil.getURI(it).toString
 	}
@@ -64,9 +62,8 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 	}
 }
 
+@ModelNode(#['id', 'key', 'provider'])
 class EClassHandle extends DomainObjectHandleImpl {
-	
-	new() {}
 	
 	new(EClass eClass, extension EcoreDomainObjectProvider provider) {
 		super(eClass.id, eClass.fqn, provider)
@@ -77,9 +74,8 @@ class EClassHandle extends DomainObjectHandleImpl {
 	}
 }
 
+@ModelNode(#['id', 'key', 'provider'])
 class EReferenceHandle extends DomainObjectHandleImpl {
-	
-	new() {}
 	
 	new(EReference eReference, extension EcoreDomainObjectProvider provider) {
 		super(eReference.id, eReference.fqn, provider)
@@ -101,9 +97,8 @@ class EReferenceHandle extends DomainObjectHandleImpl {
 	}
 }
 
+@ModelNode(#['id', 'key', 'provider'])
 class ESuperTypeHandle extends DomainObjectHandleImpl {
-	
-	new() {}
 	
 	new(ESuperType it, extension EcoreDomainObjectProvider provider) {
 		super(subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),

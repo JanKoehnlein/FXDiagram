@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
@@ -18,7 +19,9 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.model.StringHandle;
+import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -54,7 +57,6 @@ import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
@@ -62,21 +64,12 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
+@ModelNode({ "domainObject", "source", "target", "kind", "controlPoints", "labels" })
 @SuppressWarnings("all")
-public class XConnection extends XShape {
-  private Group controlPointGroup = new Function0<Group>() {
-    public Group apply() {
-      Group _group = new Group();
-      return _group;
-    }
-  }.apply();
+public class XConnection extends XShape implements XModelProvider {
+  private Group controlPointGroup = new Group();
   
-  private Group shapeGroup = new Function0<Group>() {
-    public Group apply() {
-      Group _group = new Group();
-      return _group;
-    }
-  }.apply();
+  private Group shapeGroup = new Group();
   
   private ChangeListener<Number> controlPointListener;
   
@@ -90,30 +83,23 @@ public class XConnection extends XShape {
     };
     Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(this.controlPointGroup, _function);
     _children.add(_doubleArrow);
-    ConnectionRouter _connectionRouter = new ConnectionRouter(this);
-    this.setConnectionRouter(_connectionRouter);
     TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
     this.setTargetArrowHead(_triangleArrowHead);
   }
   
-  public XConnection(final XNode source, final XNode target, final DomainObjectHandle domainObject) {
+  public XConnection(final DomainObjectHandle domainObject) {
     this();
-    this.setDomainObject(domainObject);
+    this.domainObjectProperty.set(domainObject);
+  }
+  
+  public XConnection(final XNode source, final XNode target, final DomainObjectHandle domainObject) {
+    this(domainObject);
     this.setSource(source);
     this.setTarget(target);
   }
   
   public XConnection(final XNode source, final XNode target) {
-    this(source, target, new Function0<DomainObjectHandle>() {
-      public DomainObjectHandle apply() {
-        String _key = source.getKey();
-        String _plus = (_key + "->");
-        String _key_1 = target.getKey();
-        String _plus_1 = (_plus + _key_1);
-        StringHandle _stringHandle = new StringHandle(_plus_1);
-        return _stringHandle;
-      }
-    }.apply());
+    this(source, target, new StringHandle(((source.getKey() + "->") + target.getKey())));
   }
   
   public void setSource(final XNode source) {
@@ -136,6 +122,11 @@ public class XConnection extends XShape {
       ObservableList<XConnection> _incomingConnections_1 = target.getIncomingConnections();
       _incomingConnections_1.add(this);
     }
+  }
+  
+  public void doActivatePreview() {
+    ConnectionRouter _connectionRouter = new ConnectionRouter(this);
+    this.setConnectionRouter(_connectionRouter);
   }
   
   public void doActivate() {
@@ -181,7 +172,7 @@ public class XConnection extends XShape {
               } else {
                 int _size = points.size();
                 boolean _notEquals = (index != _size);
-                _and = ((index != 0) && _notEquals);
+                _and = _notEquals;
               }
               if (_and) {
                 it.activate();
@@ -249,11 +240,8 @@ public class XConnection extends XShape {
   public void updateShapes() {
     int remainder = (-1);
     XConnectionKind _kind = this.getKind();
-    final XConnectionKind getKind = _kind;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(getKind,XConnectionKind.CUBIC_CURVE)) {
-        _matched=true;
+    switch (_kind) {
+      case CUBIC_CURVE:
         ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
         int _size = _controlPoints.size();
         int _minus = (_size - 1);
@@ -335,11 +323,8 @@ public class XConnection extends XShape {
           }
           this.setShapes(curves);
         }
-      }
-    }
-    if (!_matched) {
-      if (Objects.equal(getKind,XConnectionKind.QUAD_CURVE)) {
-        _matched=true;
+        break;
+      case QUAD_CURVE:
         ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
         int _size_4 = _controlPoints_2.size();
         int _minus_2 = (_size_4 - 1);
@@ -413,7 +398,9 @@ public class XConnection extends XShape {
           }
           this.setShapes(curves_1);
         }
-      }
+        break;
+      default:
+        break;
     }
     if ((remainder != 0)) {
       Polyline _elvis = null;
@@ -424,7 +411,7 @@ public class XConnection extends XShape {
         _elvis = _head;
       } else {
         Polyline _polyline = new Polyline();
-        _elvis = ObjectExtensions.<Polyline>operator_elvis(_head, _polyline);
+        _elvis = _polyline;
       }
       final Procedure1<Polyline> _function = new Procedure1<Polyline>() {
         public void apply(final Polyline it) {
@@ -475,8 +462,7 @@ public class XConnection extends XShape {
   }
   
   public boolean isSelectable() {
-    boolean _isActive = this.getIsActive();
-    return _isActive;
+    return this.getIsActive();
   }
   
   public void layoutChildren() {
@@ -501,9 +487,11 @@ public class XConnection extends XShape {
         _targetArrowHead.place();
       }
     } catch (final Throwable _t) {
-      if (_t instanceof NullPointerException) {
-        final NullPointerException exc = (NullPointerException)_t;
-        XConnection.LOG.severe("NPE in XConnection.layoutChildren()");
+      if (_t instanceof Exception) {
+        final Exception exc = (Exception)_t;
+        String _message = exc.getMessage();
+        String _plus = ("Exception in XConnection.layoutChildren() " + _message);
+        XConnection.LOG.severe(_plus);
       } else {
         throw Exceptions.sneakyThrow(_t);
       }
@@ -513,15 +501,8 @@ public class XConnection extends XShape {
   public Point2D at(final double t) {
     Point2D _xblockexpression = null;
     {
-      boolean _or = false;
-      if ((t < 0)) {
-        _or = true;
-      } else {
-        _or = ((t < 0) || (t > 1));
-      }
-      if (_or) {
-        IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("Argument must be between 0 and 1");
-        throw _illegalArgumentException;
+      if (((t < 0) || (t > 1))) {
+        throw new IllegalArgumentException("Argument must be between 0 and 1");
       }
       if ((t == 1)) {
         ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
@@ -530,16 +511,12 @@ public class XConnection extends XShape {
         ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
         XControlPoint _last_1 = IterableExtensions.<XControlPoint>last(_controlPoints_1);
         double _layoutY = _last_1.getLayoutY();
-        Point2D _point2D = new Point2D(_layoutX, _layoutY);
-        return _point2D;
+        return new Point2D(_layoutX, _layoutY);
       }
       Point2D _switchResult = null;
       XConnectionKind _kind = this.getKind();
-      final XConnectionKind getKind = _kind;
-      boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(getKind,XConnectionKind.CUBIC_CURVE)) {
-          _matched=true;
+      switch (_kind) {
+        case CUBIC_CURVE:
           Point2D _xblockexpression_1 = null;
           {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
@@ -548,15 +525,11 @@ public class XConnection extends XShape {
             final double segment = (t * _size);
             final int index = ((int) segment);
             final CubicCurve curve = ((CubicCurve[])Conversions.unwrapArray(curves, CubicCurve.class))[index];
-            Point2D _at = BezierExtensions.at(curve, (segment - index));
-            _xblockexpression_1 = (_at);
+            _xblockexpression_1 = BezierExtensions.at(curve, (segment - index));
           }
           _switchResult = _xblockexpression_1;
-        }
-      }
-      if (!_matched) {
-        if (Objects.equal(getKind,XConnectionKind.QUAD_CURVE)) {
-          _matched=true;
+          break;
+        case QUAD_CURVE:
           Point2D _xblockexpression_2 = null;
           {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
@@ -565,15 +538,11 @@ public class XConnection extends XShape {
             final double segment = (t * _size);
             final int index = ((int) segment);
             final QuadCurve curve = ((QuadCurve[])Conversions.unwrapArray(curves, QuadCurve.class))[index];
-            Point2D _at = BezierExtensions.at(curve, (segment - index));
-            _xblockexpression_2 = (_at);
+            _xblockexpression_2 = BezierExtensions.at(curve, (segment - index));
           }
           _switchResult = _xblockexpression_2;
-        }
-      }
-      if (!_matched) {
-        if (Objects.equal(getKind,XConnectionKind.POLYLINE)) {
-          _matched=true;
+          break;
+        case POLYLINE:
           Point2D _xblockexpression_3 = null;
           {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
@@ -593,14 +562,15 @@ public class XConnection extends XShape {
             Double _get_2 = _points_3.get((index + 2));
             ObservableList<Double> _points_4 = line.getPoints();
             Double _get_3 = _points_4.get((index + 3));
-            Point2D _linear = Point2DExtensions.linear((_get).doubleValue(), (_get_1).doubleValue(), (_get_2).doubleValue(), (_get_3).doubleValue(), 
+            _xblockexpression_3 = Point2DExtensions.linear((_get).doubleValue(), (_get_1).doubleValue(), (_get_2).doubleValue(), (_get_3).doubleValue(), 
               (segment - index));
-            _xblockexpression_3 = (_linear);
           }
           _switchResult = _xblockexpression_3;
-        }
+          break;
+        default:
+          break;
       }
-      _xblockexpression = (_switchResult);
+      _xblockexpression = _switchResult;
     }
     return _xblockexpression;
   }
@@ -608,23 +578,13 @@ public class XConnection extends XShape {
   public Point2D derivativeAt(final double t) {
     Point2D _xblockexpression = null;
     {
-      boolean _or = false;
-      if ((t < 0)) {
-        _or = true;
-      } else {
-        _or = ((t < 0) || (t > 1));
-      }
-      if (_or) {
-        IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("Argument must be between 0 and 1");
-        throw _illegalArgumentException;
+      if (((t < 0) || (t > 1))) {
+        throw new IllegalArgumentException("Argument must be between 0 and 1");
       }
       Point2D _switchResult = null;
       XConnectionKind _kind = this.getKind();
-      final XConnectionKind getKind = _kind;
-      boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(getKind,XConnectionKind.CUBIC_CURVE)) {
-          _matched=true;
+      switch (_kind) {
+        case CUBIC_CURVE:
           Point2D _xblockexpression_1 = null;
           {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
@@ -637,15 +597,11 @@ public class XConnection extends XShape {
             final double segment = (t * _size);
             final int index = ((int) segment);
             final CubicCurve curve = ((CubicCurve[])Conversions.unwrapArray(curves, CubicCurve.class))[index];
-            Point2D _derivativeAt = BezierExtensions.derivativeAt(curve, (segment - index));
-            _xblockexpression_1 = (_derivativeAt);
+            _xblockexpression_1 = BezierExtensions.derivativeAt(curve, (segment - index));
           }
           _switchResult = _xblockexpression_1;
-        }
-      }
-      if (!_matched) {
-        if (Objects.equal(getKind,XConnectionKind.QUAD_CURVE)) {
-          _matched=true;
+          break;
+        case QUAD_CURVE:
           Point2D _xblockexpression_2 = null;
           {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
@@ -658,15 +614,11 @@ public class XConnection extends XShape {
             final double segment = (t * _size);
             final int index = ((int) segment);
             final QuadCurve curve = ((QuadCurve[])Conversions.unwrapArray(curves, QuadCurve.class))[index];
-            Point2D _derivativeAt = BezierExtensions.derivativeAt(curve, (segment - index));
-            _xblockexpression_2 = (_derivativeAt);
+            _xblockexpression_2 = BezierExtensions.derivativeAt(curve, (segment - index));
           }
           _switchResult = _xblockexpression_2;
-        }
-      }
-      if (!_matched) {
-        if (Objects.equal(getKind,XConnectionKind.POLYLINE)) {
-          _matched=true;
+          break;
+        case POLYLINE:
           Point2D _xblockexpression_3 = null;
           {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
@@ -680,8 +632,7 @@ public class XConnection extends XShape {
             if ((t == 1)) {
               ObservableList<Double> _points_1 = line.getPoints();
               int _size_1 = _points_1.size();
-              int _minus = (_size_1 - 4);
-              _xifexpression = _minus;
+              _xifexpression = (_size_1 - 4);
             } else {
               _xifexpression = (t * numSegments);
             }
@@ -691,34 +642,41 @@ public class XConnection extends XShape {
             Double _get = _points_2.get((index + 2));
             ObservableList<Double> _points_3 = line.getPoints();
             Double _get_1 = _points_3.get(index);
-            double _minus_1 = DoubleExtensions.operator_minus(_get, _get_1);
+            double _minus = DoubleExtensions.operator_minus(_get, _get_1);
             ObservableList<Double> _points_4 = line.getPoints();
             Double _get_2 = _points_4.get((index + 3));
             ObservableList<Double> _points_5 = line.getPoints();
             Double _get_3 = _points_5.get((index + 1));
-            double _minus_2 = DoubleExtensions.operator_minus(_get_2, _get_3);
-            Point2D _point2D = new Point2D(_minus_1, _minus_2);
-            _xblockexpression_3 = (_point2D);
+            double _minus_1 = DoubleExtensions.operator_minus(_get_2, _get_3);
+            _xblockexpression_3 = new Point2D(_minus, _minus_1);
           }
           _switchResult = _xblockexpression_3;
-        }
+          break;
+        default:
+          break;
       }
-      _xblockexpression = (_switchResult);
+      _xblockexpression = _switchResult;
     }
     return _xblockexpression;
   }
   
-  public void populate(final ModelElement it) {
-    it.<XNode>addProperty(this.sourceProperty, XNode.class);
-    it.<XNode>addProperty(this.targetProperty, XNode.class);
-    it.<XConnectionKind>addProperty(this.kindProperty, XConnectionKind.class);
-    it.<XControlPoint>addChildProperty(this.controlPointsProperty, XControlPoint.class);
-    it.<XConnectionLabel>addChildProperty(this.labelsProperty, XConnectionLabel.class);
-    it.<DomainObjectHandle>addChildProperty(this.domainObjectProperty, DomainObjectHandle.class);
-  }
-  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XConnection");
     ;
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public XConnection(final ModelLoad modelLoad) {
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(domainObjectProperty, DomainObjectHandle.class);
+    modelElement.addProperty(sourceProperty, XNode.class);
+    modelElement.addProperty(targetProperty, XNode.class);
+    modelElement.addProperty(kindProperty, XConnectionKind.class);
+    modelElement.addProperty(controlPointsProperty, XControlPoint.class);
+    modelElement.addProperty(labelsProperty, XConnectionLabel.class);
+  }
   
   private ReadOnlyObjectWrapper<XNode> sourceProperty = new ReadOnlyObjectWrapper<XNode>(this, "source");
   
@@ -848,18 +806,14 @@ public class XConnection extends XShape {
     return this.strokeProperty;
   }
   
-  private SimpleObjectProperty<DomainObjectHandle> domainObjectProperty = new SimpleObjectProperty<DomainObjectHandle>(this, "domainObject");
+  private ReadOnlyObjectWrapper<DomainObjectHandle> domainObjectProperty = new ReadOnlyObjectWrapper<DomainObjectHandle>(this, "domainObject");
   
   public DomainObjectHandle getDomainObject() {
     return this.domainObjectProperty.get();
   }
   
-  public void setDomainObject(final DomainObjectHandle domainObject) {
-    this.domainObjectProperty.set(domainObject);
-  }
-  
-  public ObjectProperty<DomainObjectHandle> domainObjectProperty() {
-    return this.domainObjectProperty;
+  public ReadOnlyObjectProperty<DomainObjectHandle> domainObjectProperty() {
+    return this.domainObjectProperty.getReadOnlyProperty();
   }
   
   private SimpleObjectProperty<ConnectionRouter> connectionRouterProperty = new SimpleObjectProperty<ConnectionRouter>(this, "connectionRouter");

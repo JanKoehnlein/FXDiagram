@@ -19,10 +19,9 @@ public class ModelFactory {
       if (_equals) {
         return null;
       }
-      ModelElement _modelElement = new ModelElement(node);
-      final ModelElement element = _modelElement;
+      final ModelElement element = new ModelElement(node);
       this.populate(node, element);
-      _xblockexpression = (element);
+      _xblockexpression = element;
     }
     return _xblockexpression;
   }
@@ -32,10 +31,9 @@ public class ModelFactory {
     return null;
   }
   
-  protected Class<? extends Object> _populate(final Text text, final ModelElement it) {
+  protected Class<?> _populate(final Text text, final ModelElement it) {
     StringProperty _textProperty = text.textProperty();
-    Class<? extends Object> _addProperty = it.<String>addProperty(_textProperty, String.class);
-    return _addProperty;
+    return it.<String>addProperty(_textProperty, String.class);
   }
   
   protected Object _populate(final Object object, final ModelElement it) {
@@ -44,7 +42,7 @@ public class ModelFactory {
       String _string = object.toString();
       String _plus = ("No model population strategy for " + _string);
       ModelFactory.LOG.severe(_plus);
-      _xblockexpression = (null);
+      _xblockexpression = null;
     }
     return _xblockexpression;
   }

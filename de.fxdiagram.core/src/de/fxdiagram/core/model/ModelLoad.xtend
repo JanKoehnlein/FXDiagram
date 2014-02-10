@@ -12,11 +12,14 @@ import javafx.beans.property.ListProperty
 import javafx.beans.property.LongProperty
 import javafx.beans.property.Property
 import javafx.beans.property.StringProperty
-import javafx.scene.Node
 import javax.json.Json
-import javax.json.stream.JsonParser
+import javax.json.JsonNumber
+import javax.json.JsonObject
+import javax.json.JsonString
+import javax.json.JsonValue
 
-import static javax.json.stream.JsonParser.Event.*
+import static javax.json.JsonValue.ValueType.*
+import static extension de.fxdiagram.core.model.ModelPersistence.*
 
 @Logging
 class ModelLoad {
@@ -31,192 +34,131 @@ class ModelLoad {
 		modelFactory = new ModelFactory
 		crossRefs = newArrayList
 		idMap = newHashMap
-		val parser = Json.createParser(in)
-		if (parser.hasNext) {
-			parser.consume(START_OBJECT)
-			val node = parseNode(parser, '')
-			for(crossRef: crossRefs) {
-				val crossRefTarget = idMap.get(crossRef.href)
-				if(crossRefTarget == null)
-					LOG.severe("Cannot resolve href '" + crossRef.href +"'")
-				else if(crossRef.index == -1)
-					(crossRef.property as Property<Object>).value = crossRefTarget
-				else
-					(crossRef.property as ListProperty<Object>).set(crossRef.index, crossRefTarget) 	
-			}
-			return node
-		}
-		return null
-	}
-
-	protected def Object parseNode(JsonParser it, String currentID) {
-		consume(KEY_NAME)
-		if (string != "class")
-			throw new ParseException("Error parsing JSON file")
-		consume(VALUE_STRING)
-		val clazz = Class.forName(string)
-		val node = clazz.newInstance
-		idMap.put(currentID, node)
-		val model = modelFactory.createElement(node)
-		while(hasNext) {
-			val event = next
-			switch event {
-				case KEY_NAME:
-					parseProperty(node, model, string, currentID)
-				case END_OBJECT:
-					return node
-				default:
-					throw new ParseException("Invalid token " + event.toString + " at " + location)
-			}
-		}
+		val reader = Json.createReader(in)
+		val jsonObject = reader.readObject
+		val node = readNode(jsonObject, '')
+		crossRefs.forEach[resolveCrossReference]
 		return node
 	}
-
-	protected def parseProperty(JsonParser it, Object node, ModelElement model, String propertyName, String currentID) {
-		val property = (model.properties + model.children).findFirst[name == propertyName]
-		if (property != null) {
-			parseValue(node, property, model.getType(property), currentID)
+	
+	protected def Object readNode(JsonObject jsonObject, String currentID) {
+		val jsonConstructor = jsonObject.getJsonObject('__constructor')
+		val className = jsonConstructor.getString('__class')
+		val params = newArrayList
+		if(jsonConstructor.containsKey("__params")) {
+			val jsonParams = jsonConstructor.getJsonArray('__params').filter(JsonObject)
+			for(i: 0..<jsonParams.size) {
+				params += jsonParams.get(i).readNode(currentID + "/__params." + i)
+			}
+		}
+		val clazz = Class.forName(className)
+		val paramTypes = params.map[class]
+		val constructor = clazz.findConstructor(paramTypes)
+		if(constructor == null) {
+			LOG.warning('Couldn\'t find compatible constructor ' + className + '(' + paramTypes.map[simpleName].join(',')+ ')')
+			clazz
 		} else {
-			val listProperty = (model.listProperties + model.listChildren).findFirst[name == propertyName]
-			if (listProperty == null)
-				throw new ParseException(
-					"Cannot find property '" + propertyName + "' in class " + node.class.name + " at " + location)
-			else
-				parseListValue(node, listProperty, model.getType(listProperty), currentID)
+			val node = constructor.newInstance(params as Object[])
+			idMap.put(currentID, node)
+			val model = modelFactory.createElement(node)
+			model.listChildren.forEach [
+				jsonObject.readListProperty(it, model.getType(it), currentID)
+			]
+			model.children.forEach [
+				jsonObject.readProperty(it, model.getType(it), currentID)
+			]		
+			model.properties.forEach [
+				jsonObject.readProperty(it, model.getType(it), currentID)
+			]		
+			model.listProperties.forEach [
+				jsonObject.readListProperty(it, model.getType(it), currentID)
+			]		
+			node
 		}
 	}
 
-	def parseListValue(JsonParser it, Object node, ListProperty<?> property, Class<?> componentType, String currentID) {
-		consume(START_ARRAY)
-		var index = 0
-		while (hasNext) {
-			val event = next
-			switch componentType {
-				case String: {
-					consume(VALUE_STRING)
-					(property as List<String>) += string
-				}
-				case Double: {
-					consume(VALUE_NUMBER)
-					(property as List<Double>) += bigDecimal.doubleValue
-				}
-				case Float: {
-					consume(VALUE_NUMBER)
-					(property as List<Float>) += bigDecimal.floatValue
-				}
-				case Long: {
-					consume(VALUE_NUMBER)
-					(property as List<Long>) += ^long
-				}
-				case Integer: {
-					consume(VALUE_NUMBER)
-					(property as List<Integer>) += ^int
-				}
-				case Boolean: {
-					(property as List<Boolean>) += switch event {
-						case VALUE_TRUE:
-							true
-						case VALUE_FALSE:
-							false
-						default:
-							throw new ParseException("Expected boolean value but got " + event.name + " " + location)
-					}
-				}
-				case Enum.isAssignableFrom(componentType): {
-					switch event {
-						case VALUE_NULL: {
-						}
-						case VALUE_STRING: {
-							(property as List<Object>) += Enum.valueOf(componentType as Class<? extends Enum>, string)
-						}
-						default:
-							throw new ParseException("Expected enum value but got " + event + " at " + location)
-					}
+	protected def readProperty(JsonObject it, Property<?> property, Class<?> propertyType, String currentID) {
+		if(containsKey(property.name)) {
+			switch propertyType {
+				case String: 
+					(property as StringProperty).value = getString(property.name)
+				case Double: 
+					(property as DoubleProperty).value = getJsonNumber(property.name).doubleValue
+				case Float: 
+					(property as FloatProperty).value = getJsonNumber(property.name).doubleValue
+				case Long: 
+					(property as LongProperty).value = getJsonNumber(property.name).longValue
+				case Integer: 
+					(property as IntegerProperty).value = getInt(property.name)
+				case Boolean: 
+					(property as BooleanProperty).value = getBoolean(property.name)
+				case Enum.isAssignableFrom(propertyType): {
+					(property as Property<Object>).value = Enum.valueOf(propertyType as Class<Enum>, getString(property.name))
 				}
 				default: {
-					switch event {
-						case VALUE_NULL: {
-							(property as List<Node>) += null
+					val value = get(property.name)
+					switch value.valueType {
+						case STRING: {
+							val crossRefData = new CrossRefData(getString(property.name), property,  -1)
+							crossRefs.add(crossRefData)
 						}
-						case VALUE_STRING:
-							crossRefs.add(new CrossRefData(string, property, index))
-						case START_OBJECT:
-							(property as List<Object>) += parseNode(currentID + '/' + property.name + '.' + index)
-						case END_ARRAY: 
-							return
+						case OBJECT:
+							(property as Property<Object>).value = (value as JsonObject).readNode(currentID + "/" + property.name)
 						default:
-							throw new ParseException("Expected object but got " + event + " at " + location)
+							throw new ParseException("Expected object but got " + value)
 					}
-				}
-			}
-			index = index + 1
-		}
-		return
-	}
-
-	def void parseValue(JsonParser it, Object node, Property<?> property, Class<?> propertyType, String currentID) {
-		switch propertyType {
-			case String: {
-				consume(VALUE_STRING)
-				(property as StringProperty).value = string
-			}
-			case Double: {
-				consume(VALUE_NUMBER)
-				(property as DoubleProperty).value = bigDecimal.doubleValue
-			}
-			case Float: {
-				consume(VALUE_NUMBER)
-				(property as FloatProperty).value = bigDecimal.floatValue
-			}
-			case Long: {
-				consume(VALUE_NUMBER)
-				(property as LongProperty).value = ^long
-			}
-			case Integer: {
-				consume(VALUE_NUMBER)
-				(property as IntegerProperty).value = ^int
-			}
-			case Boolean: {
-				(property as BooleanProperty).value = switch event: next {
-					case VALUE_TRUE:
-						true
-					case VALUE_FALSE:
-						false
-					default:
-						throw new ParseException("Expected boolean value but got " + event.name + " " + location)
-				}
-			}
-			case Enum.isAssignableFrom(propertyType): {
-				switch event: next {
-					case VALUE_NULL: {
-					}
-					case VALUE_STRING: {
-						(property as Property<Object>).value = Enum.valueOf(propertyType as Class<? extends Enum>,
-							string)
-					}
-					default:
-						throw new ParseException("Expected enum value but got " + event + " at " + location)
-				}
-			}
-			default: {
-				switch event: next {
-					case VALUE_NULL: {
-					}
-					case VALUE_STRING:
-						crossRefs.add(new CrossRefData(string, property,  -1))
-					case START_OBJECT:
-						(property as Property<Object>).value = parseNode(currentID + '/' + property.name)
-					default:
-						throw new ParseException("Expected object but got " + event + " at " + location)
 				}
 			}
 		}
 	}
 
-	protected def consume(JsonParser parser, JsonParser.Event event) {
-		val next = parser.next()
-		if (next != event)
-			throw new ParseException("Expected " + event + " but got " + next + " at " + parser.location)
+	protected def readListProperty(JsonObject it, ListProperty<?> property, Class<?> componentType, String currentID) {
+		if(containsKey(property.name)) {
+			val jsonValues = getJsonArray(property.name)
+			for(i: 0..<jsonValues.size) {
+				val jsonValue = jsonValues.get(i)
+				switch componentType {
+					case String: 
+						(property as List<String>) += (jsonValue as JsonString).toString
+					case Double: 
+						(property as List<Double>) += (jsonValue as JsonNumber).doubleValue
+					case Float: 
+						(property as List<Float>) += (jsonValue as JsonNumber).doubleValue as float
+					case Long: 
+						(property as List<Long>) += (jsonValue as JsonNumber).longValue
+					case Integer: 
+						(property as List<Integer>) += (jsonValue as JsonNumber).intValue
+					case Boolean: 
+						(property as List<Boolean>) += jsonValue == JsonValue.TRUE
+					case Enum.isAssignableFrom(componentType): {
+						(property as ListProperty<Object>) += Enum.valueOf(componentType as Class<Enum>, (jsonValue as JsonString).toString)
+					}
+					default: {
+						switch jsonValue.valueType {
+							case STRING: {
+								val crossRefData = new CrossRefData((jsonValue as JsonString).toString, property, i)
+								crossRefs.add(crossRefData)
+							}
+							case OBJECT:
+								(property as List<Object>) += (jsonValue as JsonObject).readNode(currentID + '/' + property.name + '.' + i)
+							default:
+								throw new ParseException("Expected object but got " + jsonValue)
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
+	protected def resolveCrossReference(CrossRefData crossRef) {
+		val crossRefTarget = idMap.get(crossRef.href)
+		if(crossRefTarget == null)
+			throw new ParseException("Cannot resolve href '" + crossRef.href +"'")
+		else if(crossRef.index == -1)
+			(crossRef.property as Property<Object>).value = crossRefTarget
+		else
+			(crossRef.property as ListProperty<Object>).set(crossRef.index, crossRefTarget)
 	}
 }
 

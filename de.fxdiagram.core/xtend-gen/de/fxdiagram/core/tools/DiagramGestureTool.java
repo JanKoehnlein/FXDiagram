@@ -98,7 +98,7 @@ public class DiagramGestureTool implements XDiagramTool {
       scene.<RotateEvent>addEventHandler(RotateEvent.ROTATION_STARTED, this.rotateHandler);
       scene.<RotateEvent>addEventHandler(RotateEvent.ROTATE, this.rotateHandler);
       scene.<RotateEvent>addEventHandler(RotateEvent.ROTATION_FINISHED, this.rotateHandler);
-      _xblockexpression = (true);
+      _xblockexpression = true;
     }
     return _xblockexpression;
   }
@@ -115,7 +115,7 @@ public class DiagramGestureTool implements XDiagramTool {
       scene.<RotateEvent>removeEventHandler(RotateEvent.ROTATION_STARTED, this.rotateHandler);
       scene.<RotateEvent>removeEventHandler(RotateEvent.ROTATE, this.rotateHandler);
       scene.<RotateEvent>removeEventHandler(RotateEvent.ROTATION_FINISHED, this.rotateHandler);
-      _xblockexpression = (true);
+      _xblockexpression = true;
     }
     return _xblockexpression;
   }

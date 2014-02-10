@@ -1,19 +1,20 @@
 package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
 import de.fxdiagram.core.behavior.Behavior
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior
 import de.fxdiagram.core.behavior.NavigationBehavior
 import de.fxdiagram.core.extensions.AccumulativeTransform2D
-import de.fxdiagram.core.model.ModelElement
-import de.fxdiagram.core.model.XModelProvider
+import de.fxdiagram.core.extensions.InitializingListListener
+import de.fxdiagram.core.extensions.InitializingListener
+import de.fxdiagram.core.extensions.InitializingMapListener
 import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
 import javafx.collections.ListChangeListener
-import javafx.collections.ListChangeListener.Change
-import javafx.collections.MapChangeListener
 import javafx.collections.ObservableList
 import javafx.collections.ObservableMap
 import javafx.geometry.Pos
@@ -29,7 +30,8 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
-class XDiagram extends Group implements XActivatable, XModelProvider {
+@ModelNode(#['nodes', 'connections', 'parentDiagram'])
+class XDiagram extends Group implements XActivatable {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
 	@FxProperty ObservableList<XConnection> connections = observableArrayList
@@ -38,7 +40,9 @@ class XDiagram extends Group implements XActivatable, XModelProvider {
 	@FxProperty ObservableMap<Node, Pos> fixedButtons = observableMap(newHashMap)
 
 	@FxProperty @ReadOnly boolean isActive
+	@FxProperty @ReadOnly boolean isPreviewActive
 	@FxProperty @ReadOnly boolean isRootDiagram
+
 	@FxProperty Paint backgroundPaint = Color.WHITE
 	@FxProperty Paint foregroundPaint = Color.BLACK
 	@FxProperty Paint connectionPaint = Color.gray(0.2)
@@ -57,7 +61,7 @@ class XDiagram extends Group implements XActivatable, XModelProvider {
 	AccumulativeTransform2D canvasTransform
 	
 	boolean needsCentering = true
-	
+
 	new() {
 		children += nodeLayer
 		children += buttonLayer
@@ -86,86 +90,56 @@ class XDiagram extends Group implements XActivatable, XModelProvider {
 	}
 	
 	override activate() {
-		if (!isActive) {
-			isActiveProperty.set(true)
+		if(!isActive) {
 			doActivate
+			isActiveProperty.set(true);
 		}
-		behaviors.values.forEach[activate]
-		val MapChangeListener<Class<? extends Behavior>, Behavior> behaviorActivator = [
-			change |
-			if(isActive) {
-				if(change.wasAdded)
-					change.valueAdded.activate
-			}
-		]
-		behaviors.addListener(behaviorActivator)
 	}
-
+	
 	def void doActivate() {
-		nodeLayer.children += nodes
-		connectionLayer.children += connections
-		buttonLayer.children += buttons;
-		val ChangeListener<Node> arrowHeadListener = [
-			prop, oldVal, newVal |
-			if(oldVal != null)
-				connectionLayer.children -= oldVal
-			if(newVal != null)
-				connectionLayer.children += newVal
+		nodes.addInitializingListener(new XDiagramChildrenListener<XNode>(this, nodeLayer))
+		connections.addInitializingListener(new XDiagramChildrenListener<XConnection>(this, connectionLayer))
+		buttons.addInitializingListener(new XDiagramChildrenListener<XRapidButton>(this, buttonLayer))
+		val arrowHeadListener = new InitializingListener<ArrowHead> => [
+			set = [ 
+				if(!connectionLayer.children.contains(it)) 
+					connectionLayer.children += it
+			]
+			unset = [ connectionLayer.children -= it ]
 		]
-		val ListChangeListener<? super XConnectionLabel> labelListener = [
-			change |
-			while(change.next) {
-				if(change.wasAdded)
-					connectionLayer.children += change.addedSubList
-				if(change.wasRemoved)
-					connectionLayer.children -= change.removed
-			}
+		val labelListener = new InitializingListListener<XConnectionLabel> => [
+			add = [ 
+				if(!connectionLayer.children.contains(it)) 
+					connectionLayer.children += it
+			]
+			remove = [ connectionLayer.children -= it ]
 		]
-		connections.forEach [
-			addConnectionDecorations(labelListener, arrowHeadListener)
-		]
-		nodes.addListener(new XDiagramChildrenListener<XNode>(this, nodeLayer))
-		connections.addListener(new XDiagramChildrenListener<XConnection>(this, connectionLayer))
-		buttons.addListener(new XDiagramChildrenListener<XRapidButton>(this, buttonLayer))
-		connectionLayer.children.addListener [
-			Change<? extends Node> change | 
-			while(change.next) {
-				if(change.wasAdded) {
-					val addedConnections = change.addedSubList.filter(XConnection)
-					addedConnections.forEach [
-						addConnectionDecorations(it, labelListener, arrowHeadListener) 
-					]
-				}
-				if(change.wasRemoved) {
-					val removedConnections = change.removed.filter(XConnection)
-					removedConnections.forEach [
-						connectionLayer.children.removeAll(labels)
-						labelsProperty.removeListener(labelListener)
-						removeArrowHead(targetArrowHeadProperty, arrowHeadListener) 
-						removeArrowHead(sourceArrowHeadProperty, arrowHeadListener) 
-					]
-				}
-			}
-		]
-		(nodes + connections + buttons).forEach[activate]
+		connectionLayer.children.addInitializingListener(new InitializingListListener  => [
+			add = [ 
+				if (it instanceof XConnection) {
+					labelsProperty.addInitializingListener(labelListener)
+					sourceArrowHeadProperty.addInitializingListener(arrowHeadListener)
+					targetArrowHeadProperty.addInitializingListener(arrowHeadListener)
+				} 
+			]
+			remove = [ 
+				if(it instanceof XConnection) {
+					labelsProperty.removeInitializingListener(labelListener)
+					sourceArrowHeadProperty.removeInitializingListener(arrowHeadListener)
+					targetArrowHeadProperty.removeInitializingListener(arrowHeadListener)
+				} 
+			]
+		])
 		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
 		contentsInitializer?.apply(this)
 		if(getBehavior(NavigationBehavior) == null) 
 			addBehavior(new DiagramNavigationBehavior(this))
+		behaviors.addInitializingListener(new InitializingMapListener => [
+			put = [ key, Behavior value | value.activate() ]
+			remove = [ key, value | ]
+		])
 	}
 	
-	protected def addConnectionDecorations(XConnection it, 
-			ListChangeListener<? super XConnectionLabel> labelListener, 
-			ChangeListener<Node> arrowHeadListener) {
-		labels.forEach[
-			if(!connectionLayer.children.contains(it))
-				connectionLayer.children.add(it)
-		]
-		labelsProperty.addListener(labelListener)
-		addArrowHead(targetArrowHeadProperty, arrowHeadListener) 
-		addArrowHead(sourceArrowHeadProperty, arrowHeadListener)
-	}
-		
 	def void centerDiagram(boolean useForce) {
 		if(needsCentering|| useForce) {
 			layout
@@ -198,13 +172,6 @@ class XDiagram extends Group implements XActivatable, XModelProvider {
 		property.addListener(listener)
 	} 
 	
-	protected def removeArrowHead(Property<? extends Node> property, 
-		ChangeListener<? super Node> listener) {
-		if(property.value != null)
-			connectionLayer.children -= property.value
-		property.removeListener(listener)
-	} 
-	
 	def getAuxiliaryLinesSupport() {
 		auxiliaryLinesSupport	
 	}
@@ -231,15 +198,9 @@ class XDiagram extends Group implements XActivatable, XModelProvider {
 	def getButtonLayer() {
 		buttonLayer
 	}
-	
-	override populate(ModelElement it) {
-		addChildProperty(nodesProperty, XNode)
-		addChildProperty(connectionsProperty, XConnection)
-		addChildProperty(parentDiagramProperty, XDiagram)
-	}
 }
 
-class XDiagramChildrenListener<T extends Node & XActivatable> implements ListChangeListener<T> {
+class XDiagramChildrenListener<T extends Node & XActivatable> extends InitializingListListener<T> {
 	
 	Group layer
 	XDiagram diagram
@@ -247,22 +208,15 @@ class XDiagramChildrenListener<T extends Node & XActivatable> implements ListCha
 	new(XDiagram diagram, Group layer) {
 		this.layer = layer
 		this.diagram = diagram
-	}
-	
-	override onChanged(ListChangeListener.Change<? extends T> change) {
-		while(change.next) {
-			if(change.wasAdded)
-				change.addedSubList.forEach [
-					layer.children += it
-					if(diagram.isActive)
-						// Xtend bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=413708
-						(it as XActivatable).activate
-				]
-			if(change.wasRemoved) 
-				change.removed.forEach [
-					layer.children -= it
-				]
-		}
+		add = [
+			if (it instanceof XShape)
+				it.activatePreview
+			layer.children += it
+			it.activate
+		]
+		remove = [
+			layer.children -= it
+		]
 	}
 }
 	

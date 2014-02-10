@@ -1,17 +1,22 @@
 package de.fxdiagram.examples.slides;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.CloseBehavior;
 import de.fxdiagram.core.extensions.DurationExtensions;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.examples.slides.Slide;
 import de.fxdiagram.examples.slides.SlideNavigation;
-import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,12 +28,15 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode({ "nodes", "connections", "parentDiagram", "slides" })
 @SuppressWarnings("all")
 public class SlideDiagram extends XDiagram {
+  public SlideDiagram() {
+  }
+  
   public boolean operator_add(final Slide slide) {
-    List<Slide> _slides = this.getSlides();
-    boolean _add = _slides.add(slide);
-    return _add;
+    ObservableList<Slide> _slides = this.getSlides();
+    return _slides.add(slide);
   }
   
   public void doActivate() {
@@ -36,7 +44,7 @@ public class SlideDiagram extends XDiagram {
     this.setBackgroundPaint(Color.BLACK);
     SlideNavigation _slideNavigation = new SlideNavigation(this);
     this.addBehavior(_slideNavigation);
-    List<Slide> _slides = this.getSlides();
+    ObservableList<Slide> _slides = this.getSlides();
     Slide _head = IterableExtensions.<Slide>head(_slides);
     this.showSlide(_head);
   }
@@ -50,11 +58,11 @@ public class SlideDiagram extends XDiagram {
       if (_notEquals) {
         Slide _xblockexpression_1 = null;
         {
-          List<Slide> _slides = this.getSlides();
+          ObservableList<Slide> _slides = this.getSlides();
           Slide _currentSlide_1 = this.getCurrentSlide();
           int _indexOf = _slides.indexOf(_currentSlide_1);
           final int nextIndex = (_indexOf + 1);
-          List<Slide> _slides_1 = this.getSlides();
+          ObservableList<Slide> _slides_1 = this.getSlides();
           int _size = _slides_1.size();
           boolean _equals = (nextIndex == _size);
           if (_equals) {
@@ -64,19 +72,17 @@ public class SlideDiagram extends XDiagram {
             }
             return false;
           }
-          List<Slide> _slides_2 = this.getSlides();
-          Slide _get = _slides_2.get(nextIndex);
-          _xblockexpression_1 = (_get);
+          ObservableList<Slide> _slides_2 = this.getSlides();
+          _xblockexpression_1 = _slides_2.get(nextIndex);
         }
         _xifexpression = _xblockexpression_1;
       } else {
-        List<Slide> _slides = this.getSlides();
-        Slide _head = IterableExtensions.<Slide>head(_slides);
-        _xifexpression = _head;
+        ObservableList<Slide> _slides = this.getSlides();
+        _xifexpression = IterableExtensions.<Slide>head(_slides);
       }
       final Slide newSlide = _xifexpression;
       this.showSlide(newSlide);
-      _xblockexpression = (true);
+      _xblockexpression = true;
     }
     return _xblockexpression;
   }
@@ -84,7 +90,7 @@ public class SlideDiagram extends XDiagram {
   public boolean previous() {
     boolean _xblockexpression = false;
     {
-      final List<Slide> slides = this.getSlides();
+      final ObservableList<Slide> slides = this.getSlides();
       Slide _xifexpression = null;
       Slide _currentSlide = this.getCurrentSlide();
       boolean _notEquals = (!Objects.equal(_currentSlide, null));
@@ -101,17 +107,15 @@ public class SlideDiagram extends XDiagram {
             }
             return false;
           }
-          Slide _get = slides.get(previousIndex);
-          _xblockexpression_1 = (_get);
+          _xblockexpression_1 = slides.get(previousIndex);
         }
         _xifexpression = _xblockexpression_1;
       } else {
-        Slide _head = IterableExtensions.<Slide>head(slides);
-        _xifexpression = _head;
+        _xifexpression = IterableExtensions.<Slide>head(slides);
       }
       final Slide newSlide = _xifexpression;
       this.showSlide(newSlide);
-      _xblockexpression = (true);
+      _xblockexpression = true;
     }
     return _xblockexpression;
   }
@@ -138,8 +142,7 @@ public class SlideDiagram extends XDiagram {
           it.setOnFinished(_function);
         }
       };
-      FadeTransition _doubleArrow = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
-      _xifexpression = _doubleArrow;
+      _xifexpression = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
     } else {
       _xifexpression = null;
     }
@@ -162,8 +165,7 @@ public class SlideDiagram extends XDiagram {
             it.setToValue(1);
           }
         };
-        FadeTransition _doubleArrow_1 = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition_1, _function_1);
-        _xblockexpression = (_doubleArrow_1);
+        _xblockexpression = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition_1, _function_1);
       }
       _xifexpression_1 = _xblockexpression;
     } else {
@@ -176,7 +178,7 @@ public class SlideDiagram extends XDiagram {
       _and = false;
     } else {
       boolean _notEquals_3 = (!Objects.equal(appear, null));
-      _and = (_notEquals_2 && _notEquals_3);
+      _and = _notEquals_3;
     }
     if (_and) {
       ParallelTransition _parallelTransition = new ParallelTransition();
@@ -201,22 +203,31 @@ public class SlideDiagram extends XDiagram {
     this.setCurrentSlide(newSlide);
   }
   
-  private SimpleObjectProperty<List<Slide>> slidesProperty = new SimpleObjectProperty<List<Slide>>(this, "slides",_initSlides());
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public SlideDiagram(final ModelLoad modelLoad) {
+    super(modelLoad);
+  }
   
-  private static final List<Slide> _initSlides() {
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(nodesProperty(), XNode.class);
+    modelElement.addProperty(connectionsProperty(), XConnection.class);
+    modelElement.addProperty(slidesProperty, Slide.class);
+  }
+  
+  private SimpleListProperty<Slide> slidesProperty = new SimpleListProperty<Slide>(this, "slides",_initSlides());
+  
+  private static final ObservableList<Slide> _initSlides() {
     ObservableList<Slide> _observableArrayList = FXCollections.<Slide>observableArrayList();
     return _observableArrayList;
   }
   
-  public List<Slide> getSlides() {
+  public ObservableList<Slide> getSlides() {
     return this.slidesProperty.get();
   }
   
-  public void setSlides(final List<Slide> slides) {
-    this.slidesProperty.set(slides);
-  }
-  
-  public ObjectProperty<List<Slide>> slidesProperty() {
+  public ListProperty<Slide> slidesProperty() {
     return this.slidesProperty;
   }
   

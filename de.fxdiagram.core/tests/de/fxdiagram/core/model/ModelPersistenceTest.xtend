@@ -3,7 +3,9 @@ package de.fxdiagram.core.model
 import de.fxdiagram.annotations.properties.FxProperty
 import java.io.StringReader
 import org.junit.Test
+
 import static extension org.junit.Assert.*
+import de.fxdiagram.annotations.properties.ModelNode
 
 class ModelPersistenceTest {
 	
@@ -20,12 +22,9 @@ class ModelPersistenceTest {
 	}
 }
 
-class TestBean implements XModelProvider {
+@ModelNode(#['testEnum'])
+class TestBean {
 	@FxProperty TestEnum testEnum
-	
-	override populate(ModelElement it) {
-		addProperty(testEnumProperty, TestEnum)
-	}
 }
 
 enum TestEnum {

@@ -37,6 +37,7 @@ import static extension javafx.util.Duration.*
 import javafx.application.Platform
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider
 import de.fxdiagram.examples.java.JavaModelProvider
+import de.fxdiagram.examples.lcars.LcarsModelProvider
 
 class Demo extends Application {
 
@@ -60,18 +61,18 @@ class Demo extends Application {
 		root.activate
 		val diagram = new XDiagram
 		root.diagram = diagram
-		root.domainObjectProviders.add(new EcoreDomainObjectProvider)
-		root.domainObjectProviders.add(new JavaModelProvider)
-
+		root.domainObjectProviders += #[ 
+			new EcoreDomainObjectProvider,
+			new JavaModelProvider,
+			new LcarsModelProvider
+		]
 		diagram => [
 //			nodes += new DemoCampIntroSlides
 			nodes += new IntroductionSlideDeck
-			nodes += new OpenableDiagramNode => [
-				name = 'Basic'
+			nodes += new OpenableDiagramNode('Basic') => [
 				innerDiagram = createBasicDiagram('')
 			]
-			nodes += new OpenableDiagramNode => [
-				name = 'JavaFX'
+			nodes += new OpenableDiagramNode('JavaFX') => [
 				innerDiagram = new XDiagram => [
 					contentsInitializer = [
 						nodes += newLoginNode
@@ -86,7 +87,7 @@ class Demo extends Application {
 			nodes += openableDiagram('Xtend', newNeonSignNode)
 			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
 			nodes += openableDiagram('Ecore Explorer', newEClassNode)
-//			nodes += newLcarsDiagramNode
+			nodes += newLcarsDiagramNode
 			nodes += new SimpleNode('Eclipse')
 //			nodes += newGalleryDiagramNode()
 //			nodes += new DemoCampSummarySlides
@@ -111,8 +112,7 @@ class Demo extends Application {
 	}
 	
 	def newGalleryDiagramNode() {
-		new OpenableDiagramNode => [
-			name = 'Gallery'
+		new OpenableDiagramNode('Gallery') => [
 			innerDiagram = new XDiagram => [
 				contentsInitializer = [
 					nodes += newSimpleNode('')
@@ -134,8 +134,7 @@ class Demo extends Application {
 	}
 	
 	def newLcarsDiagramNode() {
-		new OpenableDiagramNode => [
-			name = 'LCARS'
+		new OpenableDiagramNode('LCARS') => [
 			innerDiagram = new LcarsDiagram
 		]
 	}
@@ -180,8 +179,7 @@ class Demo extends Application {
 	}
 	
 	protected def openableDiagram(String name, XNode node) {
-		new OpenableDiagramNode => [
-			it.name = name
+		new OpenableDiagramNode(name) => [
 			innerDiagram = new XDiagram => [
 				contentsInitializer = [
 					nodes += node
@@ -218,46 +216,39 @@ class Demo extends Application {
 	}
 	
 	def newOpenableBasicDiagramNode(String nameSuffix) {
-		new OpenableDiagramNode => [
-			name = 'Nested' + nameSuffix
+		new OpenableDiagramNode('Nested' + nameSuffix) => [
 			innerDiagram = createBasicDiagram(nameSuffix + " (nested)")
 			addRapidButtons(nameSuffix)
 		]
 	}
 	
 	def newEmbeddedBasicDiagram(String nameSuffix) {
-		new LevelOfDetailDiagramNode => [
-			name = 'Embedded' + nameSuffix
+		new LevelOfDetailDiagramNode('Embedded' + nameSuffix) => [
 			innerDiagram = createBasicDiagram(nameSuffix + " (embedded)")
 			addRapidButtons(nameSuffix)
 		]
 	}
 	
 	def newLoginNode() {
-		new LoginNode
+		new LoginNode('Login')
 	}
 	
 	def newEClassNode() {
 		val provider = root.getDomainObjectProvider(EcoreDomainObjectProvider)
-		new EClassNode => [
-			domainObject = provider.createEClassHandle(EcorePackage.Literals.ECLASS)
-		]
+		new EClassNode(provider.createEClassHandle(EcorePackage.Literals.ECLASS))
 	}
 	
 	def newJavaTypeNode() {
 		val provider = root.getDomainObjectProvider(JavaModelProvider)
-		new JavaTypeNode => [
-			domainObject = provider.createJavaTypeHandle(Button)
-		]
+		new JavaTypeNode(provider.createJavaTypeHandle(Button))
 	}
 	
 	def newNeonSignNode() {
-		new NeonSignNode
+		new NeonSignNode('NeonSign')
 	}
 
 	def newMovieNode() {
-		new MovieNode => [
-			name = 'Movie'
+		new MovieNode('Movie') => [
 			movieUrl = new URL(this.toURI('media/Usability.mp4'))
 			width = 640
 			height = 360
@@ -266,8 +257,7 @@ class Demo extends Application {
 	}
 	
 	def newBrowserNode() {
-		new BrowserNode => [
-			name = 'Browser'
+		new BrowserNode('Browser') => [
 			width = 120
 			height = 160
 			pageUrl = new URL('http://koehnlein.blogspot.de/')
@@ -275,7 +265,7 @@ class Demo extends Application {
 	}
 	
 	def newBrickBreakerNode() {
-		new BrickBreakerNode => [
+		new BrickBreakerNode('BrickBreaker') => [
 			width = 640
 			height = 480
 		]

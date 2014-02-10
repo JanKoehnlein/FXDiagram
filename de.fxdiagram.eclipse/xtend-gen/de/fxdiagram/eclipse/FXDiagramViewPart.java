@@ -22,8 +22,7 @@ public class FXDiagramViewPart extends ViewPart {
   
   protected Scene createFxScene() {
     Demo _demo = new Demo();
-    Scene _createScene = _demo.createScene();
-    return _createScene;
+    return _demo.createScene();
   }
   
   public void setFocus() {

@@ -49,19 +49,7 @@ public class DiagramScaler implements XActivatable {
       }
     };
     this.layoutListener = _function_1;
-    final ChangeListener<Number> _function_2 = new ChangeListener<Number>() {
-      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        DiagramScaler.this.scaleToFit();
-      }
-    };
-    this.widthProperty.addListener(_function_2);
-    final ChangeListener<Number> _function_3 = new ChangeListener<Number>() {
-      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        DiagramScaler.this.scaleToFit();
-      }
-    };
-    this.heightProperty.addListener(_function_3);
-    final ListChangeListener<XNode> _function_4 = new ListChangeListener<XNode>() {
+    final ListChangeListener<XNode> _function_2 = new ListChangeListener<XNode>() {
       public void onChanged(final ListChangeListener.Change<? extends XNode> change) {
         boolean _next = change.next();
         boolean _while = _next;
@@ -103,7 +91,7 @@ public class DiagramScaler implements XActivatable {
         }
       }
     };
-    this.listChangeListener = _function_4;
+    this.listChangeListener = _function_2;
   }
   
   public void scaleToFit() {
@@ -120,15 +108,13 @@ public class DiagramScaler implements XActivatable {
           Bounds _layoutBounds = it.getLayoutBounds();
           double _layoutX = it.getLayoutX();
           double _layoutY = it.getLayoutY();
-          BoundingBox _translate = BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
-          return _translate;
+          return BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
         }
       };
       List<BoundingBox> _map = ListExtensions.<XNode, BoundingBox>map(_nodes_1, _function);
       final Function2<BoundingBox,BoundingBox,BoundingBox> _function_1 = new Function2<BoundingBox,BoundingBox,BoundingBox>() {
         public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
-          BoundingBox _plus = BoundsExtensions.operator_plus(b0, b1);
-          return _plus;
+          return BoundsExtensions.operator_plus(b0, b1);
         }
       };
       final BoundingBox myBounds = IterableExtensions.<BoundingBox>reduce(_map, _function_1);
@@ -139,8 +125,7 @@ public class DiagramScaler implements XActivatable {
         double _width_1 = this.getWidth();
         double _width_2 = myBounds.getWidth();
         double _divide = (_width_1 / _width_2);
-        double _min = Math.min(1, _divide);
-        _xifexpression = _min;
+        _xifexpression = Math.min(1, _divide);
       } else {
         _xifexpression = 1;
       }
@@ -152,8 +137,7 @@ public class DiagramScaler implements XActivatable {
         double _height_1 = this.getHeight();
         double _height_2 = myBounds.getHeight();
         double _divide_1 = (_height_1 / _height_2);
-        double _min_1 = Math.min(1, _divide_1);
-        _xifexpression_1 = _min_1;
+        _xifexpression_1 = Math.min(1, _divide_1);
       } else {
         _xifexpression_1 = 1;
       }
@@ -213,6 +197,8 @@ public class DiagramScaler implements XActivatable {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
     if (_not) {
+      this.widthProperty.addListener(this.layoutListener);
+      this.heightProperty.addListener(this.layoutListener);
       ObservableList<XNode> _nodes = this.diagram.getNodes();
       final Procedure1<XNode> _function = new Procedure1<XNode>() {
         public void apply(final XNode it) {
@@ -231,13 +217,15 @@ public class DiagramScaler implements XActivatable {
       ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = _buttonLayer.layoutBoundsProperty();
       _layoutBoundsProperty.addListener(this.boundsInLocalListener);
       this.scaleToFit();
+      this.isActiveProperty.set(true);
     }
-    this.isActiveProperty.set(true);
   }
   
   public void deactivate() {
     boolean _isActive = this.getIsActive();
     if (_isActive) {
+      this.widthProperty.removeListener(this.layoutListener);
+      this.heightProperty.removeListener(this.layoutListener);
       this.diagram.setClip(null);
       this.diagram.setScaleX(1);
       this.diagram.setScaleY(1);
@@ -258,8 +246,8 @@ public class DiagramScaler implements XActivatable {
         }
       };
       IterableExtensions.<XNode>forEach(_nodes_1, _function);
+      this.isActiveProperty.set(false);
     }
-    this.isActiveProperty.set(false);
   }
   
   private SimpleDoubleProperty widthProperty = new SimpleDoubleProperty(this, "width",_initWidth());

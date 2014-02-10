@@ -2,6 +2,9 @@ package de.fxdiagram.examples.slides.eclipsecon;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.slides.Animations;
 import de.fxdiagram.examples.slides.ClickThroughSlide;
@@ -10,7 +13,6 @@ import de.fxdiagram.examples.slides.SlideDiagram;
 import de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import java.util.Collections;
-import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,14 +30,18 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class IntroductionSlideDeck extends OpenableDiagramNode {
   public IntroductionSlideDeck() {
-    this.setName("Introduction");
+    super("Introduction");
+  }
+  
+  public void doActivate() {
     SlideDiagram _slideDiagram = new SlideDiagram();
     final Procedure1<SlideDiagram> _function = new Procedure1<SlideDiagram>() {
       public void apply(final SlideDiagram it) {
-        List<Slide> _slides = it.getSlides();
+        ObservableList<Slide> _slides = it.getSlides();
         Slide _createSlide = EclipseConSlideFactory.createSlide("Title");
         final Procedure1<Slide> _function = new Procedure1<Slide>() {
           public void apply(final Slide it) {
@@ -98,10 +104,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         Slide _doubleArrow = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide, _function);
         _slides.add(_doubleArrow);
-        List<Slide> _slides_1 = it.getSlides();
+        ObservableList<Slide> _slides_1 = it.getSlides();
         Slide _createSlide_1 = EclipseConSlideFactory.createSlide("The Eclipse Jungle", 110);
         _slides_1.add(_createSlide_1);
-        List<Slide> _slides_2 = it.getSlides();
+        ObservableList<Slide> _slides_2 = it.getSlides();
         Slide _createSlide_2 = EclipseConSlideFactory.createSlide("Jungle images");
         final Procedure1<Slide> _function_1 = new Procedure1<Slide>() {
           public void apply(final Slide it) {
@@ -213,10 +219,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         Slide _doubleArrow_1 = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide_2, _function_1);
         _slides_2.add(_doubleArrow_1);
-        List<Slide> _slides_3 = it.getSlides();
+        ObservableList<Slide> _slides_3 = it.getSlides();
         Slide _createSlide_3 = EclipseConSlideFactory.createSlide("Appearance", 144);
         _slides_3.add(_createSlide_3);
-        List<Slide> _slides_4 = it.getSlides();
+        ObservableList<Slide> _slides_4 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide = EclipseConSlideFactory.createClickThroughSlide("Darkness images");
         final Procedure1<ClickThroughSlide> _function_2 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
@@ -252,10 +258,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         ClickThroughSlide _doubleArrow_2 = ObjectExtensions.<ClickThroughSlide>operator_doubleArrow(_createClickThroughSlide, _function_2);
         _slides_4.add(_doubleArrow_2);
-        List<Slide> _slides_5 = it.getSlides();
+        ObservableList<Slide> _slides_5 = it.getSlides();
         Slide _createSlide_4 = EclipseConSlideFactory.createSlide("Behavior", 144);
         _slides_5.add(_createSlide_4);
-        List<Slide> _slides_6 = it.getSlides();
+        ObservableList<Slide> _slides_6 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide_1 = EclipseConSlideFactory.createClickThroughSlide("Behavior images");
         final Procedure1<ClickThroughSlide> _function_3 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
@@ -291,10 +297,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         ClickThroughSlide _doubleArrow_3 = ObjectExtensions.<ClickThroughSlide>operator_doubleArrow(_createClickThroughSlide_1, _function_3);
         _slides_6.add(_doubleArrow_3);
-        List<Slide> _slides_7 = it.getSlides();
+        ObservableList<Slide> _slides_7 = it.getSlides();
         Slide _createSlide_5 = EclipseConSlideFactory.createSlide("Recycling", 144);
         _slides_7.add(_createSlide_5);
-        List<Slide> _slides_8 = it.getSlides();
+        ObservableList<Slide> _slides_8 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide_2 = EclipseConSlideFactory.createClickThroughSlide("Recycling images");
         final Procedure1<ClickThroughSlide> _function_4 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
@@ -548,10 +554,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         ClickThroughSlide _doubleArrow_4 = ObjectExtensions.<ClickThroughSlide>operator_doubleArrow(_createClickThroughSlide_2, _function_4);
         _slides_8.add(_doubleArrow_4);
-        List<Slide> _slides_9 = it.getSlides();
+        ObservableList<Slide> _slides_9 = it.getSlides();
         Slide _createSlide_6 = EclipseConSlideFactory.createSlide("Reproduction", 144);
         _slides_9.add(_createSlide_6);
-        List<Slide> _slides_10 = it.getSlides();
+        ObservableList<Slide> _slides_10 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide_3 = EclipseConSlideFactory.createClickThroughSlide("Reproduction images");
         final Procedure1<ClickThroughSlide> _function_5 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
@@ -627,10 +633,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         ClickThroughSlide _doubleArrow_5 = ObjectExtensions.<ClickThroughSlide>operator_doubleArrow(_createClickThroughSlide_3, _function_5);
         _slides_10.add(_doubleArrow_5);
-        List<Slide> _slides_11 = it.getSlides();
+        ObservableList<Slide> _slides_11 = it.getSlides();
         Slide _createSlide_7 = EclipseConSlideFactory.createSlide("Endangerment", 144);
         _slides_11.add(_createSlide_7);
-        List<Slide> _slides_12 = it.getSlides();
+        ObservableList<Slide> _slides_12 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide_4 = EclipseConSlideFactory.createClickThroughSlide("Tablet");
         final Procedure1<ClickThroughSlide> _function_6 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
@@ -668,7 +674,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         ClickThroughSlide _doubleArrow_6 = ObjectExtensions.<ClickThroughSlide>operator_doubleArrow(_createClickThroughSlide_4, _function_6);
         _slides_12.add(_doubleArrow_6);
-        List<Slide> _slides_13 = it.getSlides();
+        ObservableList<Slide> _slides_13 = it.getSlides();
         Slide _createSlide_8 = EclipseConSlideFactory.createSlide("Help");
         final Procedure1<Slide> _function_7 = new Procedure1<Slide>() {
           public void apply(final Slide it) {
@@ -718,10 +724,10 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         };
         Slide _doubleArrow_7 = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide_8, _function_7);
         _slides_13.add(_doubleArrow_7);
-        List<Slide> _slides_14 = it.getSlides();
+        ObservableList<Slide> _slides_14 = it.getSlides();
         Slide _createSlide_9 = EclipseConSlideFactory.createSlide("What Can We Do?", 96);
         _slides_14.add(_createSlide_9);
-        List<Slide> _slides_15 = it.getSlides();
+        ObservableList<Slide> _slides_15 = it.getSlides();
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("We have improve visual design,");
         _builder.newLine();
@@ -735,7 +741,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         _builder.newLine();
         Slide _createSlide_10 = EclipseConSlideFactory.createSlide(_builder.toString(), 48);
         _slides_15.add(_createSlide_10);
-        List<Slide> _slides_16 = it.getSlides();
+        ObservableList<Slide> _slides_16 = it.getSlides();
         Slide _createSlide_11 = EclipseConSlideFactory.createSlide("JavaFX");
         final Procedure1<Slide> _function_8 = new Procedure1<Slide>() {
           public void apply(final Slide it) {
@@ -766,5 +772,20 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
     };
     SlideDiagram _doubleArrow = ObjectExtensions.<SlideDiagram>operator_doubleArrow(_slideDiagram, _function);
     this.setInnerDiagram(_doubleArrow);
+    super.doActivate();
+  }
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public IntroductionSlideDeck(final ModelLoad modelLoad) {
+    super(modelLoad);
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
+    modelElement.addProperty(widthProperty(), Double.class);
+    modelElement.addProperty(heightProperty(), Double.class);
   }
 }

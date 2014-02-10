@@ -15,6 +15,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.examples.ecore.EClassHandle;
 import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.examples.ecore.EReferenceHandle;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
@@ -26,7 +27,6 @@ import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -42,36 +42,26 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
   protected Iterable<EReference> getInitialModelChoices() {
     EClassNode _host = this.getHost();
     EClass _eClass = _host.getEClass();
-    EList<EReference> _eReferences = _eClass.getEReferences();
-    return _eReferences;
+    return _eClass.getEReferences();
   }
   
   protected EReferenceHandle getChoiceKey(final EReference model) {
     EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
-    EReferenceHandle _createEReferenceHandle = _domainObjectProvider.createEReferenceHandle(model);
-    return _createEReferenceHandle;
+    return _domainObjectProvider.createEReferenceHandle(model);
   }
   
   protected XNode createNode(final EReferenceHandle handle) {
-    EClassNode _eClassNode = new EClassNode();
-    final Procedure1<EClassNode> _function = new Procedure1<EClassNode>() {
-      public void apply(final EClassNode it) {
-        EcoreDomainObjectProvider _domainObjectProvider = AddEReferenceRapidButtonBehavior.this.getDomainObjectProvider();
-        EReference _domainObject = handle.getDomainObject();
-        EClass _eReferenceType = _domainObject.getEReferenceType();
-        DomainObjectHandle _createDomainObjectHandle = _domainObjectProvider.createDomainObjectHandle(_eReferenceType);
-        it.setDomainObject(_createDomainObjectHandle);
-      }
-    };
-    EClassNode _doubleArrow = ObjectExtensions.<EClassNode>operator_doubleArrow(_eClassNode, _function);
-    return _doubleArrow;
+    EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
+    EReference _domainObject = handle.getDomainObject();
+    EClass _eReferenceType = _domainObject.getEReferenceType();
+    EClassHandle _createEClassHandle = _domainObjectProvider.createEClassHandle(_eReferenceType);
+    return new EClassNode(_createEClassHandle);
   }
   
   protected EcoreDomainObjectProvider getDomainObjectProvider() {
     EClassNode _host = this.getHost();
     XRoot _root = CoreExtensions.getRoot(_host);
-    EcoreDomainObjectProvider _domainObjectProvider = _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
-    return _domainObjectProvider;
+    return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
   protected AbstractChooser createChooser(final XRapidButton button, final Set<EReferenceHandle> availableChoiceKeys, final Set<EReferenceHandle> unavailableChoiceKeys) {
@@ -79,8 +69,7 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     {
       EClassNode _host = this.getHost();
       Pos _chooserPosition = button.getChooserPosition();
-      CarusselChooser _carusselChooser = new CarusselChooser(_host, _chooserPosition);
-      final CarusselChooser chooser = _carusselChooser;
+      final CarusselChooser chooser = new CarusselChooser(_host, _chooserPosition);
       final Procedure1<EReferenceHandle> _function = new Procedure1<EReferenceHandle>() {
         public void apply(final EReferenceHandle it) {
           XNode _createNode = AddEReferenceRapidButtonBehavior.this.createNode(it);
@@ -100,18 +89,15 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
                 ArrowHead _xifexpression = null;
                 boolean _isContainer = reference.isContainer();
                 if (_isContainer) {
-                  DiamondArrowHead _diamondArrowHead = new DiamondArrowHead(it, false);
-                  _xifexpression = _diamondArrowHead;
+                  _xifexpression = new DiamondArrowHead(it, false);
                 } else {
-                  LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
-                  _xifexpression = _lineArrowHead;
+                  _xifexpression = new LineArrowHead(it, false);
                 }
-                it.setTargetArrowHead(_xifexpression);
+                it.setTargetArrowHead(((ArrowHead)_xifexpression));
                 ArrowHead _xifexpression_1 = null;
                 boolean _isContainment = reference.isContainment();
                 if (_isContainment) {
-                  DiamondArrowHead _diamondArrowHead_1 = new DiamondArrowHead(it, true);
-                  _xifexpression_1 = _diamondArrowHead_1;
+                  _xifexpression_1 = new DiamondArrowHead(it, true);
                 } else {
                   LineArrowHead _xifexpression_2 = null;
                   boolean _and = false;
@@ -122,15 +108,14 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
                   } else {
                     EReference _eOpposite = reference.getEOpposite();
                     boolean _notEquals = (!Objects.equal(_eOpposite, null));
-                    _and = (_not && _notEquals);
+                    _and = _notEquals;
                   }
                   if (_and) {
-                    LineArrowHead _lineArrowHead_1 = new LineArrowHead(it, true);
-                    _xifexpression_2 = _lineArrowHead_1;
+                    _xifexpression_2 = new LineArrowHead(it, true);
                   }
                   _xifexpression_1 = _xifexpression_2;
                 }
-                it.setSourceArrowHead(_xifexpression_1);
+                it.setSourceArrowHead(((ArrowHead)_xifexpression_1));
                 XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
                 final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
                   public void apply(final XConnectionLabel it) {
@@ -158,14 +143,13 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
                 }
               }
             };
-            XConnection _doubleArrow = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-            _xblockexpression = (_doubleArrow);
+            _xblockexpression = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
           }
           return _xblockexpression;
         }
       };
       chooser.setConnectionProvider(_function_1);
-      _xblockexpression = (chooser);
+      _xblockexpression = chooser;
     }
     return _xblockexpression;
   }

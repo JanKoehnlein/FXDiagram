@@ -1,6 +1,7 @@
 package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
 
 interface DomainObjectHandle extends XModelProvider {
@@ -9,6 +10,7 @@ interface DomainObjectHandle extends XModelProvider {
 	def Object getDomainObject()
 }
 
+@ModelNode(#['id', 'key', 'provider'])
 class DomainObjectHandleImpl implements DomainObjectHandle {
 	
 	@FxProperty@ReadOnly DomainObjectProvider provider
@@ -18,8 +20,6 @@ class DomainObjectHandleImpl implements DomainObjectHandle {
 	@FxProperty@ReadOnly String key
 	
 	Object cachedDomainObject
-	
-	new() {}
 	
 	new(String id, String key, DomainObjectProvider provider) {
 		idProperty.set(id)
@@ -33,21 +33,17 @@ class DomainObjectHandleImpl implements DomainObjectHandle {
 		return cachedDomainObject
 	}
 	
-	override populate(ModelElement it) {
-		addProperty(providerProperty, DomainObjectProvider)
-		addProperty(idProperty, String)
-		addProperty(keyProperty, String)
+	override equals(Object obj) {
+		return obj instanceof DomainObjectHandle && class==obj.class && id == (obj as DomainObjectHandle).id
 	}
 	
 }
 
+@ModelNode(#['key', 'provider'])
 class StringHandle implements DomainObjectHandle {
 	
 	@FxProperty@ReadOnly String key = null
 	
-	new() {
-	}
-
 	new(String key) {
 		setKey(key)
 	}
@@ -56,10 +52,6 @@ class StringHandle implements DomainObjectHandle {
 		if(getKey() != null)
 			throw new IllegalStateException("Cannot reset the key on a StringHandle")
 		keyProperty.set(key)
-	}
-	
-	override populate(ModelElement it) {
-		addProperty(keyProperty, String)
 	}
 	
 	override getId() {

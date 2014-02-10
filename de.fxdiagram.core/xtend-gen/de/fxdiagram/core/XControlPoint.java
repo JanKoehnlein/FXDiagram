@@ -1,6 +1,7 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
@@ -8,11 +9,14 @@ import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.model.XModelProvider;
 import java.net.URL;
 import java.util.List;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
@@ -28,61 +32,58 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode({ "layoutX", "layoutY", "type" })
 @SuppressWarnings("all")
 public class XControlPoint extends XShape implements XModelProvider {
   public XControlPoint() {
-    this.setType(XControlPointType.CONTROL_POINT);
+    final ChangeListener<XControlPointType> _function = new ChangeListener<XControlPointType>() {
+      public void changed(final ObservableValue<? extends XControlPointType> p, final XControlPointType o, final XControlPointType n) {
+        XControlPoint.this.updateNode();
+      }
+    };
+    this.typeProperty.addListener(_function);
+    this.updateNode();
   }
   
-  public boolean setType(final XControlPointType type) {
-    boolean _xblockexpression = false;
-    {
-      this.typeProperty.set(type);
-      boolean _switchResult = false;
-      boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(type,XControlPointType.ANCHOR)) {
-          _matched=true;
-          Circle _circle = new Circle();
-          final Procedure1<Circle> _function = new Procedure1<Circle>() {
-            public void apply(final Circle it) {
-              it.setRadius(3);
-              it.setStroke(Color.BLUE);
-              it.setFill(Color.WHITE);
-            }
-          };
-          Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
-          boolean _setNode = this.setNode(_doubleArrow);
-          _switchResult = _setNode;
-        }
-      }
-      if (!_matched) {
-        if (Objects.equal(type,XControlPointType.CONTROL_POINT)) {
-          _matched=true;
-          Node _newMagnet = this.newMagnet();
-          boolean _setNode_1 = this.setNode(_newMagnet);
-          _switchResult = _setNode_1;
-        }
-      }
-      if (!_matched) {
-        if (Objects.equal(type,XControlPointType.INTERPOLATED)) {
-          _matched=true;
-          Circle _circle_1 = new Circle();
-          final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
-            public void apply(final Circle it) {
-              it.setRadius(5);
-              it.setStroke(Color.RED);
-              it.setFill(Color.WHITE);
-            }
-          };
-          Circle _doubleArrow_1 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
-          boolean _setNode_2 = this.setNode(_doubleArrow_1);
-          _switchResult = _setNode_2;
-        }
-      }
-      _xblockexpression = (_switchResult);
+  protected boolean updateNode() {
+    boolean _switchResult = false;
+    XControlPointType _type = this.getType();
+    switch (_type) {
+      case ANCHOR:
+        Circle _circle = new Circle();
+        final Procedure1<Circle> _function = new Procedure1<Circle>() {
+          public void apply(final Circle it) {
+            it.setRadius(3);
+            it.setStroke(Color.BLUE);
+            it.setFill(Color.WHITE);
+          }
+        };
+        Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
+        _switchResult = this.setNode(_doubleArrow);
+        break;
+      case CONTROL_POINT:
+        Node _newMagnet = this.newMagnet();
+        _switchResult = this.setNode(_newMagnet);
+        break;
+      case INTERPOLATED:
+        Circle _circle_1 = new Circle();
+        final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
+          public void apply(final Circle it) {
+            it.setRadius(5);
+            it.setStroke(Color.RED);
+            it.setFill(Color.WHITE);
+          }
+        };
+        Circle _doubleArrow_1 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
+        _switchResult = this.setNode(_doubleArrow_1);
+        break;
+      default:
+        break;
     }
-    return _xblockexpression;
+    return _switchResult;
+  }
+  
+  protected void doActivatePreview() {
   }
   
   protected void doActivate() {
@@ -97,40 +98,32 @@ public class XControlPoint extends XShape implements XModelProvider {
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       XControlPointType _type = this.getType();
-      final XControlPointType getType = _type;
-      boolean _matched = false;
-      if (!_matched) {
-        if (Objects.equal(getType,XControlPointType.CONTROL_POINT)) {
-          _matched=true;
+      switch (_type) {
+        case CONTROL_POINT:
           Node _node = this.getNode();
           DropShadow _dropShadow = new DropShadow();
           _node.setEffect(_dropShadow);
-        }
-      }
-      if (!_matched) {
-        if (Objects.equal(getType,XControlPointType.INTERPOLATED)) {
-          _matched=true;
+          break;
+        case INTERPOLATED:
           Node _node_1 = this.getNode();
           ((Circle) _node_1).setFill(Color.RED);
-        }
+          break;
+        default:
+          break;
       }
     } else {
       XControlPointType _type_1 = this.getType();
-      final XControlPointType getType_1 = _type_1;
-      boolean _matched_1 = false;
-      if (!_matched_1) {
-        if (Objects.equal(getType_1,XControlPointType.CONTROL_POINT)) {
-          _matched_1=true;
+      switch (_type_1) {
+        case CONTROL_POINT:
           Node _node_2 = this.getNode();
           _node_2.setEffect(null);
-        }
-      }
-      if (!_matched_1) {
-        if (Objects.equal(getType_1,XControlPointType.INTERPOLATED)) {
-          _matched_1=true;
+          break;
+        case INTERPOLATED:
           Node _node_3 = this.getNode();
           ((Circle) _node_3).setFill(Color.WHITE);
-        }
+          break;
+        default:
+          break;
       }
     }
   }
@@ -143,7 +136,7 @@ public class XControlPoint extends XShape implements XModelProvider {
       _and = false;
     } else {
       boolean _isSelectable = super.isSelectable();
-      _and = (_notEquals && _isSelectable);
+      _and = _isSelectable;
     }
     return _and;
   }
@@ -176,7 +169,7 @@ public class XControlPoint extends XShape implements XModelProvider {
           int _size = siblings.size();
           int _minus = (_size - 1);
           boolean _lessThan = (index < _minus);
-          _and = ((index > 0) && _lessThan);
+          _and = _lessThan;
         }
         if (_and) {
           boolean _xblockexpression_1 = false;
@@ -201,8 +194,7 @@ public class XControlPoint extends XShape implements XModelProvider {
             if (_isClockwise) {
               angle = (angle + 180);
             }
-            Affine _affine = new Affine();
-            final Affine trafo = _affine;
+            final Affine trafo = new Affine();
             Node _node = this.getNode();
             Bounds _layoutBounds = _node.getLayoutBounds();
             double _width = _layoutBounds.getWidth();
@@ -215,12 +207,11 @@ public class XControlPoint extends XShape implements XModelProvider {
             TransformExtensions.translate(trafo, _multiply, _minus_2);
             TransformExtensions.rotate(trafo, angle);
             ObservableList<Transform> _transforms = this.getTransforms();
-            boolean _setAll = _transforms.setAll(trafo);
-            _xblockexpression_1 = (_setAll);
+            _xblockexpression_1 = _transforms.setAll(trafo);
           }
           _xifexpression_1 = _xblockexpression_1;
         }
-        _xblockexpression = (_xifexpression_1);
+        _xblockexpression = _xifexpression_1;
       }
       _xifexpression = _xblockexpression;
     }
@@ -242,22 +233,36 @@ public class XControlPoint extends XShape implements XModelProvider {
         }
       }
     };
-    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
   }
   
-  public void populate(final ModelElement it) {
-    super.populate(it);
-    it.<XControlPointType>addProperty(this.typeProperty, XControlPointType.class);
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public XControlPoint(final ModelLoad modelLoad) {
   }
   
-  private ReadOnlyObjectWrapper<XControlPointType> typeProperty = new ReadOnlyObjectWrapper<XControlPointType>(this, "type");
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
+    modelElement.addProperty(typeProperty, XControlPointType.class);
+  }
+  
+  private SimpleObjectProperty<XControlPointType> typeProperty = new SimpleObjectProperty<XControlPointType>(this, "type",_initType());
+  
+  private static final XControlPointType _initType() {
+    return XControlPointType.CONTROL_POINT;
+  }
   
   public XControlPointType getType() {
     return this.typeProperty.get();
   }
   
-  public ReadOnlyObjectProperty<XControlPointType> typeProperty() {
-    return this.typeProperty.getReadOnlyProperty();
+  public void setType(final XControlPointType type) {
+    this.typeProperty.set(type);
+  }
+  
+  public ObjectProperty<XControlPointType> typeProperty() {
+    return this.typeProperty;
   }
 }

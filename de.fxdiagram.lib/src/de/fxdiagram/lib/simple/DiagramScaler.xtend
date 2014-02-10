@@ -31,8 +31,6 @@ class DiagramScaler implements XActivatable {
 		this.diagram = diagram
 		boundsInLocalListener = [prop, oldVal, newVal | scaleToFit]
 		layoutListener = [prop, oldVal, newVal | scaleToFit]
-		widthProperty.addListener[prop, oldVal, newVal | scaleToFit]
-		heightProperty.addListener[prop, oldVal, newVal | scaleToFit]
 		listChangeListener = [ ListChangeListener.Change<? extends XNode> change |
 			while (change.next) {
 				if (change.wasAdded)
@@ -99,6 +97,8 @@ class DiagramScaler implements XActivatable {
 
 	override activate() {
 		if(!isActive) {
+			widthProperty.addListener(layoutListener)
+			heightProperty.addListener(layoutListener)
 			diagram.nodes.forEach [
 				boundsInLocalProperty.addListener(boundsInLocalListener)
 				layoutXProperty.addListener(layoutListener)
@@ -107,12 +107,14 @@ class DiagramScaler implements XActivatable {
 			diagram.nodes.addListener(listChangeListener)
 			diagram.buttonLayer.layoutBoundsProperty.addListener(boundsInLocalListener)
 			scaleToFit
+			isActiveProperty.set(true)
 		}
-		isActiveProperty.set(true)
 	}
 
 	def deactivate() {
 		if(isActive) {
+			widthProperty.removeListener(layoutListener)
+			heightProperty.removeListener(layoutListener)
 			diagram.clip = null
 			diagram.scaleX = 1
 			diagram.scaleY = 1
@@ -123,8 +125,8 @@ class DiagramScaler implements XActivatable {
 				layoutXProperty.removeListener(layoutListener)
 				layoutYProperty.removeListener(layoutListener)
 			]
+			isActiveProperty.set(false)
 		}
-		isActiveProperty.set(false)
 	}
 
 }

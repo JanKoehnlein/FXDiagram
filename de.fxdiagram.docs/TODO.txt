@@ -1,16 +1,18 @@
 TODO
 - container node to big when closing a zoomed subdiagram
-- add constructor XNode(domainObject), load domainObject first
-- fix LCARS example
-- save all diagrams
 - domainModel abstraction
-- review ModelElement
-- fix connection initialization
-- rename handle -> descriptor
-- properly calculate existing edges 
-- restore labels, XConnectionPointTypes
-- save arrowHeads / nestedDiagrams 
- 
+- persistence: 
+  - switch to object based loading
+  - handle lazy properties
+  - review ModelElement
+  - save arrowHeads / nestedDiagrams 
+  - restore labels, XConnectionPointTypes
+  - properly calculate existing edges 
+  - fix connection initialization
+  - rename handle -> descriptor
+  - save all diagrams
+  - @ModelNode add initialize method automatically
+  - XNode.key -> name, DomainObjectHandle.key -> name
 BUGS
 - player.seek doesn't work
 - labels snap back after being repositioned
@@ -30,46 +32,5 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
-- rearrange demo diagram
-- layout algorithm shift
-- eOpposite aware key in Ecore
-- make this XNode.behaviors a map
-- lift up XNode.behaviors to XShape (blocked by https://bugs.eclipse.org/bugs/show_bug.cgi?id=419688)
-- goTo parent button missing when returning from grandchild 
-- ScrollAndScale should reset rotation
-- LCARS use keys to prohibit duplicate edges
-- fix gesture bug
-- find better recursive image
-- LCARS refactor choosers to use keys
-- multiple connection labels
-- eOpposites in Ecore 
-- filter duplicate connections
-- use scalable icons
-- Ecore diagram
-- better icons for JavaTypeNode
-- position tooltip
-- LCARS connect other matches
-- fix connection stroke width
-- Embed more JavaFX demos in XNodes
-- choose connections instead of nodes?
-- all choices grayed out in chooser in nested diagram
-- SVGExport: clipping 
-- Fancy context menus
-- Fix fluctuations in layout of RecursiveImageNode 
-- re-enable movie controls
-- eliminated connection layer
-- click on nothing should deselect all
-- use real bounds for aux lines
-- hide lag in LCARS
-- Center node
-- select all CMD-A and menu
-- Zoom node
-- XConnection style settable
-- LineCap.ROUND
-- SVGImage for magnets
-- diagramTransform should be the diagram's internal transform
-- Open subdiagram
-- populate menu
-- change Cursor on FlipNode
-- select all doesn't select all
-
+- add constructor XNode(domainObject), load domainObject first
+- fix LCARS example

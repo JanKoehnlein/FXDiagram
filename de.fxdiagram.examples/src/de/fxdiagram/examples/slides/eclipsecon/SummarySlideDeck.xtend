@@ -9,14 +9,17 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 
-import static extension de.fxdiagram.examples.slides.Animations.*
-
 import static de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory.*
+
+import static extension de.fxdiagram.examples.slides.Animations.*
 
 class SummarySlideDeck extends OpenableDiagramNode {
 	
 	new() {
-		this.name = 'Summary'
+		super('Summary')
+	}
+	
+	override doActivate() {
 		innerDiagram = new SlideDiagram => [
 			slides += createSlide('Summary', 144)
 			slides += createSlide(
@@ -62,6 +65,7 @@ class SummarySlideDeck extends OpenableDiagramNode {
 				]
 			]
 		]
+		super.doActivate()
 	}
 	
 	def protected createMixedText(String jungleText, String normalText) {

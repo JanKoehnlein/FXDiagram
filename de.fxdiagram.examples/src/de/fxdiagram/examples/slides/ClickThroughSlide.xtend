@@ -5,31 +5,36 @@ import de.fxdiagram.core.behavior.NavigationBehavior
 import javafx.animation.FadeTransition
 import javafx.scene.Group
 import javafx.scene.Node
+import javafx.scene.image.Image
 import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import javafx.scene.image.Image
 
 class ClickThroughSlide extends Slide {
 	
 	Group pane = new Group
 	Node currentNode 
 	
-	new() {
+	new(String name) {
+		super(name)
 	}
 	
 	new(String name, Image backgroundImage) {
 		super(name, backgroundImage)
+	}
+	
+	override doActivatePreview() {
+		super.doActivatePreview()
 		stackPane.children += pane
+		pane => [
+			children.tail.forEach[opacity = 0]
+		]
+		currentNode = pane.children.head
 	}
 	
 	override doActivate() {
 		super.doActivate()
-		pane => [
-			clip = new Rectangle(0, 0, scene.width, scene.height)
-			children.tail.forEach[opacity = 0]
-		]
-		currentNode = pane.children.head
+		pane.clip = new Rectangle(0, 0, scene.width, scene.height)
 		addBehavior(new RevealBehavior(this))
 	}
 

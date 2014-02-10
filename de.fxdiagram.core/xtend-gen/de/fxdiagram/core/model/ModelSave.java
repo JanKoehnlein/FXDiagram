@@ -1,16 +1,22 @@
 package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelPersistence;
 import java.io.Writer;
+import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
@@ -24,9 +30,12 @@ import javax.json.Json;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@Logging
 @SuppressWarnings("all")
 public class ModelSave {
   private Map<ModelElement,String> idMap;
@@ -65,8 +74,8 @@ public class ModelSave {
     boolean _notEquals = (!Objects.equal(it, null));
     if (_notEquals) {
       this.idMap.put(it, id);
-      List<Property<? extends Object>> _children = it.getChildren();
-      for (final Property<? extends Object> property : _children) {
+      List<Property<?>> _children = it.getChildren();
+      for (final Property<?> property : _children) {
         Object _value = property.getValue();
         boolean _notEquals_1 = (!Objects.equal(_value, null));
         if (_notEquals_1) {
@@ -78,11 +87,11 @@ public class ModelSave {
           this.createIDs(_get, _plus);
         }
       }
-      List<ListProperty<? extends Object>> _listChildren = it.getListChildren();
-      for (final ListProperty<? extends Object> property_1 : _listChildren) {
+      List<ListProperty<?>> _listChildren = it.getListChildren();
+      for (final ListProperty<?> property_1 : _listChildren) {
         {
           int i = 0;
-          ObservableList<? extends Object> _value_2 = property_1.getValue();
+          ObservableList<?> _value_2 = property_1.getValue();
           for (final Object value : _value_2) {
             {
               boolean _notEquals_2 = (!Objects.equal(value, null));
@@ -110,52 +119,68 @@ public class ModelSave {
       String _get = this.idMap.get(element);
       gen.write(_get);
     } else {
+      gen.writeStartObject("__constructor");
       Object _node = element.getNode();
-      Class<? extends Object> _class = _node.getClass();
-      String _canonicalName = _class.getCanonicalName();
-      gen.write("class", _canonicalName);
-      List<Property<? extends Object>> _properties = element.getProperties();
-      final Procedure1<Property<? extends Object>> _function = new Procedure1<Property<? extends Object>>() {
-        public void apply(final Property<? extends Object> it) {
-          Class<? extends Object> _type = element.getType(it);
-          ModelSave.this.write(gen, it, _type);
+      Class<?> _class = _node.getClass();
+      final String className = _class.getCanonicalName();
+      gen.write("__class", className);
+      List<Property<?>> _constructorProperties = element.getConstructorProperties();
+      final Function1<Property<?>,Class<?>> _function = new Function1<Property<?>,Class<?>>() {
+        public Class<?> apply(final Property<?> it) {
+          return element.getType(it);
         }
       };
-      IterableExtensions.<Property<? extends Object>>forEach(_properties, _function);
-      List<ListProperty<? extends Object>> _listProperties = element.getListProperties();
-      final Procedure1<ListProperty<? extends Object>> _function_1 = new Procedure1<ListProperty<? extends Object>>() {
-        public void apply(final ListProperty<? extends Object> it) {
-          Class<? extends Object> _type = element.getType(it);
-          ModelSave.this.write(gen, it, _type);
+      final List<Class<?>> paramTypes = ListExtensions.<Property<?>, Class<?>>map(_constructorProperties, _function);
+      Object _node_1 = element.getNode();
+      Class<?> _class_1 = _node_1.getClass();
+      final Constructor<?> constructor = ModelPersistence.findConstructor(_class_1, paramTypes);
+      List<Property<?>> remainingChildren = null;
+      boolean _notEquals = (!Objects.equal(constructor, null));
+      if (_notEquals) {
+        remainingChildren = Collections.<Property<?>>unmodifiableList(Lists.<Property<?>>newArrayList());
+        List<Property<?>> _constructorProperties_1 = element.getConstructorProperties();
+        boolean _isEmpty = _constructorProperties_1.isEmpty();
+        boolean _not_1 = (!_isEmpty);
+        if (_not_1) {
+          gen.writeStartArray("__params");
+          List<Property<?>> _constructorProperties_2 = element.getConstructorProperties();
+          final Procedure1<Property<?>> _function_1 = new Procedure1<Property<?>>() {
+            public void apply(final Property<?> it) {
+              JsonGenerator _writeStartObject = gen.writeStartObject();
+              Map<Object,ModelElement> _index = ModelSave.this.model.getIndex();
+              Object _value = it.getValue();
+              ModelElement _get = _index.get(_value);
+              JsonGenerator _write = ModelSave.this.write(_writeStartObject, _get);
+              _write.writeEnd();
+            }
+          };
+          IterableExtensions.<Property<?>>forEach(_constructorProperties_2, _function_1);
+          gen.writeEnd();
         }
-      };
-      IterableExtensions.<ListProperty<? extends Object>>forEach(_listProperties, _function_1);
-      List<Property<? extends Object>> _children = element.getChildren();
-      final Procedure1<Property<? extends Object>> _function_2 = new Procedure1<Property<? extends Object>>() {
-        public void apply(final Property<? extends Object> it) {
-          Object _value = it.getValue();
-          boolean _notEquals = (!Objects.equal(_value, null));
-          if (_notEquals) {
-            String _name = it.getName();
-            JsonGenerator _writeStartObject = gen.writeStartObject(_name);
-            Map<Object,ModelElement> _index = ModelSave.this.model.getIndex();
-            Object _value_1 = it.getValue();
-            ModelElement _get = _index.get(_value_1);
-            JsonGenerator _write = ModelSave.this.write(_writeStartObject, _get);
-            _write.writeEnd();
+      } else {
+        final Function1<Class<?>,String> _function_2 = new Function1<Class<?>,String>() {
+          public String apply(final Class<?> it) {
+            return it.getSimpleName();
           }
-        }
-      };
-      IterableExtensions.<Property<? extends Object>>forEach(_children, _function_2);
-      List<ListProperty<? extends Object>> _listChildren = element.getListChildren();
-      final Procedure1<ListProperty<? extends Object>> _function_3 = new Procedure1<ListProperty<? extends Object>>() {
-        public void apply(final ListProperty<? extends Object> it) {
+        };
+        List<String> _map = ListExtensions.<Class<?>, String>map(paramTypes, _function_2);
+        String _join = IterableExtensions.join(_map, ",");
+        String _plus = ((("Cannot find constructor " + className) + "(") + _join);
+        String _plus_1 = (_plus + "). Using no-arg constructor instead.");
+        ModelSave.LOG.warning(_plus_1);
+        List<Property<?>> _constructorProperties_3 = element.getConstructorProperties();
+        remainingChildren = _constructorProperties_3;
+      }
+      gen.writeEnd();
+      List<ListProperty<?>> _listChildren = element.getListChildren();
+      final Procedure1<ListProperty<?>> _function_3 = new Procedure1<ListProperty<?>>() {
+        public void apply(final ListProperty<?> it) {
           boolean _isEmpty = it.isEmpty();
           boolean _not = (!_isEmpty);
           if (_not) {
             String _name = it.getName();
             gen.writeStartArray(_name);
-            ObservableList<? extends Object> _value = it.getValue();
+            ObservableList<?> _value = it.getValue();
             final Procedure1<Object> _function = new Procedure1<Object>() {
               public void apply(final Object it) {
                 boolean _equals = Objects.equal(it, null);
@@ -175,12 +200,46 @@ public class ModelSave {
           }
         }
       };
-      IterableExtensions.<ListProperty<? extends Object>>forEach(_listChildren, _function_3);
+      IterableExtensions.<ListProperty<?>>forEach(_listChildren, _function_3);
+      List<Property<?>> _children = element.getChildren();
+      Iterable<Property<?>> _plus_2 = Iterables.<Property<?>>concat(remainingChildren, _children);
+      final Procedure1<Property<?>> _function_4 = new Procedure1<Property<?>>() {
+        public void apply(final Property<?> it) {
+          Object _value = it.getValue();
+          boolean _notEquals = (!Objects.equal(_value, null));
+          if (_notEquals) {
+            String _name = it.getName();
+            JsonGenerator _writeStartObject = gen.writeStartObject(_name);
+            Map<Object,ModelElement> _index = ModelSave.this.model.getIndex();
+            Object _value_1 = it.getValue();
+            ModelElement _get = _index.get(_value_1);
+            JsonGenerator _write = ModelSave.this.write(_writeStartObject, _get);
+            _write.writeEnd();
+          }
+        }
+      };
+      IterableExtensions.<Property<?>>forEach(_plus_2, _function_4);
+      List<Property<?>> _properties = element.getProperties();
+      final Procedure1<Property<?>> _function_5 = new Procedure1<Property<?>>() {
+        public void apply(final Property<?> it) {
+          Class<?> _type = element.getType(it);
+          ModelSave.this.write(gen, it, _type);
+        }
+      };
+      IterableExtensions.<Property<?>>forEach(_properties, _function_5);
+      List<ListProperty<?>> _listProperties = element.getListProperties();
+      final Procedure1<ListProperty<?>> _function_6 = new Procedure1<ListProperty<?>>() {
+        public void apply(final ListProperty<?> it) {
+          Class<?> _type = element.getType(it);
+          ModelSave.this.write(gen, it, _type);
+        }
+      };
+      IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_6);
     }
     return gen;
   }
   
-  protected JsonGenerator write(final JsonGenerator gen, final Property<? extends Object> property, final Class<? extends Object> propertyType) {
+  protected JsonGenerator write(final JsonGenerator gen, final Property<?> property, final Class<?> propertyType) {
     JsonGenerator _xifexpression = null;
     Object _value = property.getValue();
     boolean _notEquals = (!Objects.equal(_value, null));
@@ -192,8 +251,7 @@ public class ModelSave {
           _matched=true;
           String _name = property.getName();
           String _value_1 = ((StringProperty) property).getValue();
-          JsonGenerator _write = gen.write(_name, _value_1);
-          _switchResult = _write;
+          _switchResult = gen.write(_name, _value_1);
         }
       }
       if (!_matched) {
@@ -201,8 +259,7 @@ public class ModelSave {
           _matched=true;
           String _name_1 = property.getName();
           double _doubleValue = ((DoubleProperty) property).doubleValue();
-          JsonGenerator _write_1 = gen.write(_name_1, _doubleValue);
-          _switchResult = _write_1;
+          _switchResult = gen.write(_name_1, _doubleValue);
         }
       }
       if (!_matched) {
@@ -210,8 +267,7 @@ public class ModelSave {
           _matched=true;
           String _name_2 = property.getName();
           float _floatValue = ((FloatProperty) property).floatValue();
-          JsonGenerator _write_2 = gen.write(_name_2, _floatValue);
-          _switchResult = _write_2;
+          _switchResult = gen.write(_name_2, _floatValue);
         }
       }
       if (!_matched) {
@@ -219,8 +275,7 @@ public class ModelSave {
           _matched=true;
           String _name_3 = property.getName();
           long _longValue = ((LongProperty) property).longValue();
-          JsonGenerator _write_3 = gen.write(_name_3, _longValue);
-          _switchResult = _write_3;
+          _switchResult = gen.write(_name_3, _longValue);
         }
       }
       if (!_matched) {
@@ -228,8 +283,7 @@ public class ModelSave {
           _matched=true;
           String _name_4 = property.getName();
           int _intValue = ((IntegerProperty) property).intValue();
-          JsonGenerator _write_4 = gen.write(_name_4, _intValue);
-          _switchResult = _write_4;
+          _switchResult = gen.write(_name_4, _intValue);
         }
       }
       if (!_matched) {
@@ -238,8 +292,7 @@ public class ModelSave {
           String _name_5 = property.getName();
           Boolean _value_2 = ((BooleanProperty) property).getValue();
           boolean _booleanValue = _value_2.booleanValue();
-          JsonGenerator _write_5 = gen.write(_name_5, _booleanValue);
-          _switchResult = _write_5;
+          _switchResult = gen.write(_name_5, _booleanValue);
         }
       }
       if (!_matched) {
@@ -249,8 +302,7 @@ public class ModelSave {
           String _name_6 = property.getName();
           Object _value_3 = property.getValue();
           String _string = _value_3.toString();
-          JsonGenerator _write_6 = gen.write(_name_6, _string);
-          _switchResult = _write_6;
+          _switchResult = gen.write(_name_6, _string);
         }
       }
       if (!_matched) {
@@ -259,20 +311,19 @@ public class ModelSave {
         Object _value_4 = property.getValue();
         ModelElement _get = _index.get(_value_4);
         String _get_1 = this.idMap.get(_get);
-        JsonGenerator _write_7 = gen.write(_name_7, _get_1);
-        _switchResult = _write_7;
+        _switchResult = gen.write(_name_7, _get_1);
       }
       _xifexpression = _switchResult;
     }
     return _xifexpression;
   }
   
-  protected JsonGenerator write(final JsonGenerator gen, final ListProperty<? extends Object> property, final Class<? extends Object> propertyType) {
+  protected JsonGenerator write(final JsonGenerator gen, final ListProperty<?> property, final Class<?> propertyType) {
     JsonGenerator _xblockexpression = null;
     {
       String _name = property.getName();
       gen.writeStartArray(_name);
-      ObservableList<? extends Object> _value = property.getValue();
+      ObservableList<?> _value = property.getValue();
       for (final Object value : _value) {
         boolean _matched = false;
         if (!_matched) {
@@ -326,15 +377,17 @@ public class ModelSave {
         }
         if (!_matched) {
           Map<Object,ModelElement> _index = this.model.getIndex();
-          ObservableList<? extends Object> _value_1 = property.getValue();
+          ObservableList<?> _value_1 = property.getValue();
           ModelElement _get = _index.get(_value_1);
           String _get_1 = this.idMap.get(_get);
           gen.write(_get_1);
         }
       }
-      JsonGenerator _writeEnd = gen.writeEnd();
-      _xblockexpression = (_writeEnd);
+      _xblockexpression = gen.writeEnd();
     }
     return _xblockexpression;
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.core.model.ModelSave");
+    ;
 }

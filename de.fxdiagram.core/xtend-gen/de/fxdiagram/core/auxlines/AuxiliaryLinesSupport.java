@@ -9,7 +9,6 @@ import de.fxdiagram.core.auxlines.AuxiliaryLinesCache;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -17,12 +16,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class AuxiliaryLinesSupport {
   private AuxiliaryLinesCache cache;
   
-  private Group group = new Function0<Group>() {
-    public Group apply() {
-      Group _group = new Group();
-      return _group;
-    }
-  }.apply();
+  private Group group = new Group();
   
   public AuxiliaryLinesSupport(final XDiagram diagram) {
     AuxiliaryLinesCache _auxiliaryLinesCache = new AuxiliaryLinesCache(diagram);

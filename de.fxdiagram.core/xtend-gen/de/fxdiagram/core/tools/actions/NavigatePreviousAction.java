@@ -11,8 +11,7 @@ public class NavigatePreviousAction implements DiagramAction {
   public void perform(final XRoot root) {
     final Function1<NavigationBehavior,Boolean> _function = new Function1<NavigationBehavior,Boolean>() {
       public Boolean apply(final NavigationBehavior it) {
-        boolean _previous = it.previous();
-        return Boolean.valueOf(_previous);
+        return Boolean.valueOf(it.previous());
       }
     };
     BehaviorProvider.<NavigationBehavior>triggerBehavior(root, NavigationBehavior.class, _function);

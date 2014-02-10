@@ -64,31 +64,27 @@ public class AuxiliaryLineMap<T extends Object> {
           double _position = line.getPosition();
           final int key = this.getKey(_position);
           this.store.remove(Integer.valueOf(key), line);
-          AuxiliaryLine _remove = this.node2entry.remove(node);
-          _xblockexpression_1 = (_remove);
+          _xblockexpression_1 = this.node2entry.remove(node);
         }
         _xifexpression = _xblockexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
   
   public Collection<AuxiliaryLine> getByPosition(final double position) {
     int _key = this.getKey(position);
-    Collection<AuxiliaryLine> _get = this.store.get(Integer.valueOf(_key));
-    return _get;
+    return this.store.get(Integer.valueOf(_key));
   }
   
   public AuxiliaryLine getByNode(final XNode node) {
-    AuxiliaryLine _get = this.node2entry.get(node);
-    return _get;
+    return this.node2entry.get(node);
   }
   
   public boolean containsKey(final double position) {
     int _key = this.getKey(position);
-    boolean _containsKey = this.store.containsKey(Integer.valueOf(_key));
-    return _containsKey;
+    return this.store.containsKey(Integer.valueOf(_key));
   }
   
   protected int getKey(final double position) {

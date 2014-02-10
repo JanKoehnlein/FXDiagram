@@ -43,8 +43,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
       final Bounds radiusBounds = CoreExtensions.localToRootDiagram(_node_2, _boundingBox);
       double _width = radiusBounds.getWidth();
       double _height = radiusBounds.getHeight();
-      Dimension2D _dimension2D = new Dimension2D(_width, _height);
-      final Dimension2D radiusInRootDiagram = _dimension2D;
+      final Dimension2D radiusInRootDiagram = new Dimension2D(_width, _height);
       Point2D _xifexpression = null;
       boolean _and = false;
       double _x = rectAnchor.getX();
@@ -60,7 +59,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
         double _height_1 = radiusInRootDiagram.getHeight();
         double _plus_1 = (_minY + _height_1);
         boolean _lessThan_1 = (_y < _plus_1);
-        _and = (_lessThan && _lessThan_1);
+        _and = _lessThan_1;
       }
       if (_and) {
         double _x_1 = rectAnchor.getX();
@@ -71,8 +70,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
         double _minY_1 = boundsInRootDiagram.getMinY();
         double _height_2 = radiusInRootDiagram.getHeight();
         double _plus_3 = (_minY_1 + _height_2);
-        Point2D _pointOnCircle = this.getPointOnCircle(_x_1, _y_1, _plus_2, _plus_3, radiusInRootDiagram);
-        _xifexpression = _pointOnCircle;
+        _xifexpression = this.getPointOnCircle(_x_1, _y_1, _plus_2, _plus_3, radiusInRootDiagram);
       } else {
         Point2D _xifexpression_1 = null;
         boolean _and_1 = false;
@@ -89,7 +87,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
           double _height_3 = radiusInRootDiagram.getHeight();
           double _plus_4 = (_minY_2 + _height_3);
           boolean _lessThan_2 = (_y_2 < _plus_4);
-          _and_1 = (_greaterThan && _lessThan_2);
+          _and_1 = _lessThan_2;
         }
         if (_and_1) {
           double _x_3 = rectAnchor.getX();
@@ -100,8 +98,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
           double _minY_3 = boundsInRootDiagram.getMinY();
           double _height_4 = radiusInRootDiagram.getHeight();
           double _plus_5 = (_minY_3 + _height_4);
-          Point2D _pointOnCircle_1 = this.getPointOnCircle(_x_3, _y_3, _minus_1, _plus_5, radiusInRootDiagram);
-          _xifexpression_1 = _pointOnCircle_1;
+          _xifexpression_1 = this.getPointOnCircle(_x_3, _y_3, _minus_1, _plus_5, radiusInRootDiagram);
         } else {
           Point2D _xifexpression_2 = null;
           boolean _and_2 = false;
@@ -118,7 +115,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
             double _height_5 = radiusInRootDiagram.getHeight();
             double _minus_2 = (_maxY - _height_5);
             boolean _greaterThan_1 = (_y_4 > _minus_2);
-            _and_2 = (_lessThan_3 && _greaterThan_1);
+            _and_2 = _greaterThan_1;
           }
           if (_and_2) {
             double _x_5 = rectAnchor.getX();
@@ -129,8 +126,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
             double _maxY_1 = boundsInRootDiagram.getMaxY();
             double _height_6 = radiusInRootDiagram.getHeight();
             double _minus_3 = (_maxY_1 - _height_6);
-            Point2D _pointOnCircle_2 = this.getPointOnCircle(_x_5, _y_5, _plus_7, _minus_3, radiusInRootDiagram);
-            _xifexpression_2 = _pointOnCircle_2;
+            _xifexpression_2 = this.getPointOnCircle(_x_5, _y_5, _plus_7, _minus_3, radiusInRootDiagram);
           } else {
             Point2D _xifexpression_3 = null;
             boolean _and_3 = false;
@@ -147,7 +143,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
               double _height_7 = radiusInRootDiagram.getHeight();
               double _minus_5 = (_maxY_2 - _height_7);
               boolean _greaterThan_3 = (_y_6 > _minus_5);
-              _and_3 = (_greaterThan_2 && _greaterThan_3);
+              _and_3 = _greaterThan_3;
             }
             if (_and_3) {
               double _x_7 = rectAnchor.getX();
@@ -158,8 +154,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
               double _maxY_3 = boundsInRootDiagram.getMaxY();
               double _height_8 = radiusInRootDiagram.getHeight();
               double _minus_7 = (_maxY_3 - _height_8);
-              Point2D _pointOnCircle_3 = this.getPointOnCircle(_x_7, _y_7, _minus_6, _minus_7, radiusInRootDiagram);
-              _xifexpression_3 = _pointOnCircle_3;
+              _xifexpression_3 = this.getPointOnCircle(_x_7, _y_7, _minus_6, _minus_7, radiusInRootDiagram);
             } else {
               _xifexpression_3 = rectAnchor;
             }
@@ -169,7 +164,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
         }
         _xifexpression = _xifexpression_1;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
@@ -186,8 +181,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
       double _height = radius.getHeight();
       double _multiply_1 = (_sin * _height);
       double _plus_1 = (centerY + _multiply_1);
-      Point2D _point2D = new Point2D(_plus, _plus_1);
-      _xblockexpression = (_point2D);
+      _xblockexpression = new Point2D(_plus, _plus_1);
     }
     return _xblockexpression;
   }

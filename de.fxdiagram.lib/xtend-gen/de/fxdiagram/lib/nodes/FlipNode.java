@@ -1,10 +1,14 @@
 package de.fxdiagram.lib.nodes;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractOpenBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
+import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
@@ -19,30 +23,54 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode
 @SuppressWarnings("all")
 public class FlipNode extends XNode {
   private Node front;
   
   private Node back;
   
-  private Group pane = new Function0<Group>() {
-    public Group apply() {
-      Group _group = new Group();
-      return _group;
-    }
-  }.apply();
+  private Group pane = new Group();
   
   private boolean isCurrentFront = true;
   
   private EventHandler<MouseEvent> clickHandler;
   
-  public FlipNode() {
+  public FlipNode(final String name) {
+    super(name);
+  }
+  
+  public FlipNode(final DomainObjectHandle domainObject) {
+    super(domainObject);
+  }
+  
+  public void doActivatePreview() {
+    super.doActivatePreview();
     this.setNode(this.pane);
+  }
+  
+  public void doActivate() {
+    super.doActivate();
+    boolean _equals = Objects.equal(this.front, null);
+    if (_equals) {
+      throw new IllegalStateException("FlipNode.front not set");
+    }
+    boolean _equals_1 = Objects.equal(this.back, null);
+    if (_equals_1) {
+      throw new IllegalStateException("FlipNode.back not set");
+    }
     this.setCursor(Cursor.HAND);
+    this.setFlipOnDoubleClick(true);
+    final AbstractOpenBehavior _function = new AbstractOpenBehavior() {
+      public void open() {
+        FlipNode.this.flip(true);
+      }
+    };
+    final AbstractOpenBehavior openBehavior = _function;
+    this.addBehavior(openBehavior);
   }
   
   public void setFlipOnDoubleClick(final boolean isFlipOnDoubleClick) {
@@ -59,7 +87,7 @@ public class FlipNode extends XNode {
               _and = false;
             } else {
               boolean _notEquals_1 = (!Objects.equal(FlipNode.this.back, null));
-              _and = (_notEquals && _notEquals_1);
+              _and = _notEquals_1;
             }
             if (_and) {
               boolean _isHorizontal = FlipNode.this.isHorizontal(event);
@@ -103,11 +131,9 @@ public class FlipNode extends XNode {
     this.back.setLayoutY(_minus_5);
     Point3D _xifexpression = null;
     if (isHorizontal) {
-      Point3D _point3D = new Point3D(1, 0, 0);
-      _xifexpression = _point3D;
+      _xifexpression = new Point3D(1, 0, 0);
     } else {
-      Point3D _point3D_1 = new Point3D(0, 1, 0);
-      _xifexpression = _point3D_1;
+      _xifexpression = new Point3D(0, 1, 0);
     }
     final Point3D turnAxis = _xifexpression;
     SequentialTransition _sequentialTransition = new SequentialTransition();
@@ -162,8 +188,7 @@ public class FlipNode extends XNode {
   protected boolean isHorizontal(final MouseEvent event) {
     double _sceneX = event.getSceneX();
     double _sceneY = event.getSceneY();
-    Point2D _point2D = new Point2D(_sceneX, _sceneY);
-    final Point2D clickInScene = _point2D;
+    final Point2D clickInScene = new Point2D(_sceneX, _sceneY);
     Node _currentVisible = this.getCurrentVisible();
     final Point2D clickInLocal = _currentVisible.sceneToLocal(clickInScene);
     Bounds _boundsInLocal = this.getBoundsInLocal();
@@ -174,8 +199,7 @@ public class FlipNode extends XNode {
     double _y = clickInLocal.getY();
     double _y_1 = center.getY();
     double _minus_1 = (_y - _y_1);
-    Point3D _point3D = new Point3D(_minus, _minus_1, 0);
-    final Point3D direction = _point3D;
+    final Point3D direction = new Point3D(_minus, _minus_1, 0);
     boolean _or = false;
     double _x_2 = direction.getX();
     double _x_3 = direction.getX();
@@ -193,7 +217,7 @@ public class FlipNode extends XNode {
       double _y_4 = direction.getY();
       double _abs_1 = Math.abs(_y_4);
       boolean _lessThan_1 = (_abs < _abs_1);
-      _or = (_lessThan || _lessThan_1);
+      _or = _lessThan_1;
     }
     return _or;
   }
@@ -205,11 +229,19 @@ public class FlipNode extends XNode {
     front.setVisible(this.isCurrentFront);
   }
   
+  public Node getFront() {
+    return this.front;
+  }
+  
   public void setBack(final Node back) {
     this.back = back;
     ObservableList<Node> _children = this.pane.getChildren();
     _children.add(back);
     back.setVisible((!this.isCurrentFront));
+  }
+  
+  public Node getBack() {
+    return this.back;
   }
   
   public Node getCurrentVisible() {
@@ -232,15 +264,14 @@ public class FlipNode extends XNode {
     return _xifexpression;
   }
   
-  public void doActivate() {
-    super.doActivate();
-    this.setFlipOnDoubleClick(true);
-    final AbstractOpenBehavior _function = new AbstractOpenBehavior() {
-      public void open() {
-        FlipNode.this.flip(true);
-      }
-    };
-    final AbstractOpenBehavior openBehavior = _function;
-    this.addBehavior(openBehavior);
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public FlipNode(final ModelLoad modelLoad) {
+    super(modelLoad);
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    
   }
 }

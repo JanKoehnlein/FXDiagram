@@ -1,27 +1,30 @@
 package de.fxdiagram.examples.lcars
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import javafx.scene.paint.Color
 
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+
+@ModelNode(#['nodes', 'connections', 'parentDiagram'])
 class LcarsDiagram extends XDiagram {
-	
-	LcarsAccess lcarsAccess
-	
+
 	new() {
-		contentsInitializer = [
-			lcarsAccess = new LcarsAccess
-			val kirk = lcarsAccess.query('name', 'James T. Kirk').get(0)
-			nodes += new LcarsNode(kirk) => [
-				width = 120
-			]
-		]
 		backgroundPaint = Color.BLACK
 		foregroundPaint = Color.WHITE
 		connectionPaint = Color.WHITE
 	}
 	
-	def getLcarsAccess() {
-		lcarsAccess
+	override doActivate() {
+		contentsInitializer = [
+			val provider = root.getDomainObjectProvider(LcarsModelProvider)
+			val kirk = provider.query('name', 'James T. Kirk').get(0)
+			val handle = provider.createLcarsEntryHandle(kirk)
+			nodes += new LcarsNode(handle) => [
+				width = 120
+			]
+		]
+		super.doActivate()
 	}
+	
 }
-

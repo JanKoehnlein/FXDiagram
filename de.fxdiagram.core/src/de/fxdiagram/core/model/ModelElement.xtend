@@ -9,6 +9,8 @@ class ModelElement {
 
 	Object node
 
+	List<Property<?>> constructorProperties
+
 	List<Property<?>> properties
 
 	List<ListProperty<?>> listProperties
@@ -21,6 +23,16 @@ class ModelElement {
 
 	new(Object node) {
 		this.node = node
+	}
+	
+	def <T> addConstructorProperty(Property<T> property, Class<? extends T> propertyType) {
+		// TODO handle null
+		if (property != null) {
+			if (constructorProperties == null)
+				constructorProperties = newArrayList
+			constructorProperties += property
+			propertyTypes.put(property.name, propertyType)
+		}
 	}
 
 	def <T> addProperty(Property<T> property, Class<? extends T> propertyType) {
@@ -55,6 +67,10 @@ class ModelElement {
 			listChildren = newArrayList
 		listChildren += listChild
 		propertyTypes.put(listChild.name, componentType)
+	}
+
+	def getConstructorProperties() {
+		constructorProperties ?: emptyList
 	}
 
 	def getChildren() {

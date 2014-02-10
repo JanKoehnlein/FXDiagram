@@ -12,20 +12,26 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
-import de.fxdiagram.core.model.DomainObjectHandle
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class JavaTypeNode extends XNode {
 	
-	val label = new Text
 	val propertyCompartment = new VBox
 	val operationCompartment = new VBox
 	
 	JavaTypeModel model
 	
-	new() {
+	new(JavaTypeHandle domainObject) {
+		super(domainObject)
+	}
+	
+	override doActivatePreview() {
+		super.doActivatePreview()
 		node = new RectangleBorderPane => [
 			children += new VBox => [
-				children += label => [
+				children += new Text => [
+					text = javaType.simpleName
 					textOrigin = VPos.TOP
 					font = Font.font(getFont.family, FontWeight.BOLD, getFont.size * 1.1)
 					VBox.setMargin(it, new Insets(12, 12, 12, 12))
@@ -53,15 +59,6 @@ class JavaTypeNode extends XNode {
 		model
 	}
 	
-	override setDomainObject(DomainObjectHandle domainObject) {
-		if(domainObject instanceof JavaTypeHandle) {
-			super.setDomainObject(domainObject)
-			label.text = javaType.simpleName
-		} else {
-			throw new IllegalArgumentException("JavaTypeNode can only use JavaTypeHandles")
-		}
-	}
-
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
@@ -98,7 +95,6 @@ class JavaTypeNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate
-		label.text = javaType.simpleName
 		populateCompartments
 		addBehavior(new AddSuperTypeRapidButtonBehavior(this))
 		addBehavior(new AddReferenceRapidButtonBehavior(this))

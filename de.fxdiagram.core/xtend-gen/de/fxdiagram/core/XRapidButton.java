@@ -70,20 +70,6 @@ public class XRapidButton extends Parent implements XActivatable {
       this.doActivate();
     }
     this.isActiveProperty.set(true);
-    Node _node = this.host.getNode();
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      public void handle(final MouseEvent it) {
-        XRapidButton.this.show();
-      }
-    };
-    _node.<MouseEvent>addEventHandler(MouseEvent.MOUSE_ENTERED, _function);
-    Node _node_1 = this.host.getNode();
-    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      public void handle(final MouseEvent it) {
-        XRapidButton.this.fade();
-      }
-    };
-    _node_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_EXITED, _function_1);
   }
   
   public void doActivate() {
@@ -125,6 +111,20 @@ public class XRapidButton extends Parent implements XActivatable {
     Point2D _value_1 = this.placer.getValue();
     double _y = _value_1.getY();
     this.setLayoutY(_y);
+    Node _node = this.host.getNode();
+    final EventHandler<MouseEvent> _function_4 = new EventHandler<MouseEvent>() {
+      public void handle(final MouseEvent it) {
+        XRapidButton.this.show();
+      }
+    };
+    _node.<MouseEvent>addEventHandler(MouseEvent.MOUSE_ENTERED, _function_4);
+    Node _node_1 = this.host.getNode();
+    final EventHandler<MouseEvent> _function_5 = new EventHandler<MouseEvent>() {
+      public void handle(final MouseEvent it) {
+        XRapidButton.this.fade();
+      }
+    };
+    _node_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_EXITED, _function_5);
   }
   
   protected void setPosition(final Point2D position) {
@@ -187,7 +187,7 @@ public class XRapidButton extends Parent implements XActivatable {
         Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function);
         this.timeline = _doubleArrow;
       }
-      _xblockexpression = (this.timeline);
+      _xblockexpression = this.timeline;
     }
     return _xblockexpression;
   }
@@ -231,8 +231,7 @@ public class XRapidButton extends Parent implements XActivatable {
       final VPos vpos = _xifexpression_2;
       String _plus = (vpos + "_");
       String _plus_1 = (_plus + hpos);
-      Pos _valueOf = Pos.valueOf(_plus_1);
-      _xblockexpression = (_valueOf);
+      _xblockexpression = Pos.valueOf(_plus_1);
     }
     return _xblockexpression;
   }

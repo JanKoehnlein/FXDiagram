@@ -2,14 +2,16 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.core.model.DomainObjectHandle
-import de.fxdiagram.core.model.ModelElement
 import de.fxdiagram.core.model.StringHandle
 import java.util.List
 import javafx.beans.value.ChangeListener
+import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener.Change
 import javafx.collections.ObservableList
 import javafx.geometry.BoundingBox
@@ -29,10 +31,9 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.annotations.properties.ReadOnly
-import javafx.collections.FXCollections
 
 @Logging
+@ModelNode(#['domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels'])
 class XConnection extends XShape {
 	
 	@FxProperty @ReadOnly XNode source
@@ -46,7 +47,7 @@ class XConnection extends XShape {
 	@FxProperty double strokeWidth = 2.0
 	@FxProperty Paint stroke
 
-	@FxProperty DomainObjectHandle domainObject
+	@FxProperty @ReadOnly DomainObjectHandle domainObject
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
@@ -60,13 +61,16 @@ class XConnection extends XShape {
 		children += controlPointGroup => [
 			visible = false
 		]
-		connectionRouter = new ConnectionRouter(this)
 		targetArrowHead = new TriangleArrowHead(this, false)	
+	}
+
+	new(DomainObjectHandle domainObject) {
+		this()
+		domainObjectProperty.set(domainObject)
 	}
 	
 	new(XNode source, XNode target, DomainObjectHandle domainObject) {
-		this()
-		this.domainObject = domainObject
+		this(domainObject)
 		this.source = source
 		this.target = target
 	}
@@ -85,6 +89,10 @@ class XConnection extends XShape {
 		targetProperty.set(target)
 		if(!target.incomingConnections.contains(this))
 			target.incomingConnections.add(this)
+	}
+	
+	override doActivatePreview() {
+		connectionRouter = new ConnectionRouter(this)
 	}
 	
 	override doActivate() {
@@ -224,9 +232,9 @@ class XConnection extends XShape {
 			labels.forEach[ place(controlPoints) ]	
 			sourceArrowHead?.place
 			targetArrowHead?.place
-		} catch(NullPointerException exc) {
+		} catch(Exception exc) {
 			// TODO fix control flow
-			LOG.severe("NPE in XConnection.layoutChildren()")
+			LOG.severe("Exception in XConnection.layoutChildren() " + exc.message)
 		}
 	}
 	
@@ -299,14 +307,6 @@ class XConnection extends XShape {
 		}
 	}
 	
-	override populate(ModelElement it) {
-		addProperty(sourceProperty, XNode)
-		addProperty(targetProperty, XNode)
-		addProperty(kindProperty, XConnectionKind)
-		addChildProperty(controlPointsProperty, XControlPoint)
-		addChildProperty(labelsProperty, XConnectionLabel)
-		addChildProperty(domainObjectProperty, DomainObjectHandle)
-	}
 }
 
 enum XConnectionKind {

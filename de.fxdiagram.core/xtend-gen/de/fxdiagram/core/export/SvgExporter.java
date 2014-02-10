@@ -97,8 +97,7 @@ public class SvgExporter {
         ObservableList<Node> _childrenUnmodifiable = diagram.getChildrenUnmodifiable();
         final Function1<Node,Boolean> _function = new Function1<Node,Boolean>() {
           public Boolean apply(final Node it) {
-            boolean _isVisible = it.isVisible();
-            return Boolean.valueOf(_isVisible);
+            return Boolean.valueOf(it.isVisible());
           }
         };
         Iterable<Node> _filter = IterableExtensions.<Node>filter(_childrenUnmodifiable, _function);
@@ -124,7 +123,7 @@ public class SvgExporter {
       _builder.newLine();
       _builder.append("</svg>");
       _builder.newLine();
-      _xblockexpression = (_builder);
+      _xblockexpression = _builder;
     }
     return _xblockexpression;
   }
@@ -135,49 +134,43 @@ public class SvgExporter {
     if (!_matched) {
       if (o instanceof SvgExportable) {
         _matched=true;
-        CharSequence _svgElement = ((SvgExportable)o).toSvgElement(this);
-        _switchResult = _svgElement;
+        _switchResult = ((SvgExportable)o).toSvgElement(this);
       }
     }
     if (!_matched) {
       if (o instanceof Text) {
         _matched=true;
-        CharSequence _textToSvgElement = this.textToSvgElement(((Text)o));
-        _switchResult = _textToSvgElement;
+        _switchResult = this.textToSvgElement(((Text)o));
       }
     }
     if (!_matched) {
       if (o instanceof Shape) {
         _matched=true;
-        CharSequence _shapeToSvgElement = this.shapeToSvgElement(((Shape)o));
-        _switchResult = _shapeToSvgElement;
+        _switchResult = this.shapeToSvgElement(((Shape)o));
       }
     }
     if (!_matched) {
       if (o instanceof ImageView) {
         _matched=true;
-        CharSequence _imageToSvgElement = this.imageToSvgElement(((ImageView)o));
-        _switchResult = _imageToSvgElement;
+        _switchResult = this.imageToSvgElement(((ImageView)o));
       }
     }
     if (!_matched) {
       if (o instanceof MediaView) {
         _matched=true;
-        CharSequence _snapshotToSvgElement = this.snapshotToSvgElement(((Node)o));
-        _switchResult = _snapshotToSvgElement;
+        _switchResult = this.snapshotToSvgElement(((Node)o));
       }
     }
     if (!_matched) {
       if (o instanceof Parent) {
         _matched=true;
-        CharSequence _parentToSvgElement = this.parentToSvgElement(((Parent)o), "");
-        _switchResult = _parentToSvgElement;
+        _switchResult = this.parentToSvgElement(((Parent)o), "");
       }
     }
     if (!_matched) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<!-- ");
-      Class<? extends Object> _class = o.getClass();
+      Class<?> _class = o.getClass();
       String _name = _class.getName();
       _builder.append(_name, "");
       _builder.append(" not exportable -->");
@@ -336,7 +329,7 @@ public class SvgExporter {
       _builder.append(fileName, "");
       _builder.append("\"/>");
       _builder.newLineIfNotEmpty();
-      _xblockexpression = (_builder);
+      _xblockexpression = _builder;
     }
     return _xblockexpression;
   }
@@ -348,8 +341,7 @@ public class SvgExporter {
       double _width = _layoutBounds.getWidth();
       Bounds _layoutBounds_1 = node.getLayoutBounds();
       double _height = _layoutBounds_1.getHeight();
-      WritableImage _writableImage = new WritableImage(((int) _width), ((int) _height));
-      final WritableImage image = _writableImage;
+      final WritableImage image = new WritableImage(((int) _width), ((int) _height));
       node.snapshot(null, image);
       final String fileName = this.saveImageFile(image, null);
       StringConcatenation _builder = new StringConcatenation();
@@ -375,7 +367,7 @@ public class SvgExporter {
       _builder.append(fileName, "");
       _builder.append("\"/>");
       _builder.newLineIfNotEmpty();
-      _xblockexpression = (_builder);
+      _xblockexpression = _builder;
     }
     return _xblockexpression;
   }
@@ -397,9 +389,8 @@ public class SvgExporter {
           double _minY = viewport.getMinY();
           double _width = viewport.getWidth();
           double _height = viewport.getHeight();
-          BufferedImage _subimage = buffered.getSubimage(((int) _minX), ((int) _minY), 
+          _xifexpression = buffered.getSubimage(((int) _minX), ((int) _minY), 
             ((int) _width), ((int) _height));
-          _xifexpression = _subimage;
         }
         final BufferedImage visible = _xifexpression;
         File _file = new File(fileName);
@@ -416,7 +407,7 @@ public class SvgExporter {
           throw Exceptions.sneakyThrow(_t);
         }
       }
-      _xblockexpression = (fileName);
+      _xblockexpression = fileName;
     }
     return _xblockexpression;
   }
@@ -425,7 +416,7 @@ public class SvgExporter {
     int _xblockexpression = (int) 0;
     {
       this.imageCounter = (this.imageCounter + 1);
-      _xblockexpression = (this.imageCounter);
+      _xblockexpression = this.imageCounter;
     }
     return _xblockexpression;
   }
@@ -438,8 +429,7 @@ public class SvgExporter {
       ObservableList<Node> _childrenUnmodifiable = it.getChildrenUnmodifiable();
       final Function1<Node,Boolean> _function = new Function1<Node,Boolean>() {
         public Boolean apply(final Node it) {
-          boolean _isVisible = it.isVisible();
-          return Boolean.valueOf(_isVisible);
+          return Boolean.valueOf(it.isVisible());
         }
       };
       Iterable<Node> _filter = IterableExtensions.<Node>filter(_childrenUnmodifiable, _function);
@@ -463,8 +453,7 @@ public class SvgExporter {
           ObservableList<Node> _childrenUnmodifiable_1 = it.getChildrenUnmodifiable();
           final Function1<Node,Boolean> _function_1 = new Function1<Node,Boolean>() {
             public Boolean apply(final Node it) {
-              boolean _isVisible = it.isVisible();
-              return Boolean.valueOf(_isVisible);
+              return Boolean.valueOf(it.isVisible());
             }
           };
           Iterable<Node> _filter_1 = IterableExtensions.<Node>filter(_childrenUnmodifiable_1, _function_1);
@@ -486,14 +475,13 @@ public class SvgExporter {
       } else {
         _xifexpression = ownSvgCode;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
   
   public CharSequence toSvgAttribute(final Object value, final String name, final Object defaultValue) {
-    CharSequence _svgAttribute = this.toSvgAttribute(value, name, defaultValue, "");
-    return _svgAttribute;
+    return this.toSvgAttribute(value, name, defaultValue, "");
   }
   
   public CharSequence toSvgAttribute(final Object value, final String name, final Object defaultValue, final String unit) {
@@ -550,20 +538,19 @@ public class SvgExporter {
           _builder_1.append("clip-path=\"url(#");
           _builder_1.append(clipPathId, "");
           _builder_1.append(")\" ");
-          _xblockexpression_1 = (_builder_1);
+          _xblockexpression_1 = _builder_1;
         }
         _xifexpression = _xblockexpression_1;
       } else {
         _xifexpression = null;
       }
-      _xblockexpression = (_xifexpression);
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
   
   public String toSvgString(final Shape shape) {
-    String _svgString = ShapeConverterExtensions.toSvgString(shape);
-    return _svgString;
+    return ShapeConverterExtensions.toSvgString(shape);
   }
   
   public CharSequence toSvgString(final Transform it) {
@@ -689,7 +676,7 @@ public class SvgExporter {
           _builder_1.append("url(#");
           _builder_1.append(gradientId, "");
           _builder_1.append(")");
-          _xblockexpression = (_builder_1);
+          _xblockexpression = _builder_1;
         }
         _switchResult = _xblockexpression;
       }
@@ -702,32 +689,25 @@ public class SvgExporter {
   
   public String toSvgString(final CycleMethod it) {
     String _switchResult = null;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(it,CycleMethod.NO_CYCLE)) {
-        _matched=true;
+    switch (it) {
+      case NO_CYCLE:
         _switchResult = "pad";
-      }
-    }
-    if (!_matched) {
-      if (Objects.equal(it,CycleMethod.REFLECT)) {
-        _matched=true;
+        break;
+      case REFLECT:
         _switchResult = "reflect";
-      }
-    }
-    if (!_matched) {
-      if (Objects.equal(it,CycleMethod.REPEAT)) {
-        _matched=true;
+        break;
+      case REPEAT:
         _switchResult = "repeat";
-      }
+        break;
+      default:
+        break;
     }
     return _switchResult;
   }
   
   public String toSvgString(final Object it) {
     String _string = it.toString();
-    String _lowerCase = _string.toLowerCase();
-    return _lowerCase;
+    return _string.toLowerCase();
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.export.SvgExporter");

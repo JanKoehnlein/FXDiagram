@@ -3,6 +3,7 @@ package de.fxdiagram.core;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XShape;
@@ -12,18 +13,19 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.model.StringHandle;
+import de.fxdiagram.core.model.XModelProvider;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
@@ -35,8 +37,9 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
-public class XNode extends XShape {
+public class XNode extends XShape implements XModelProvider {
   private Effect mouseOverEffect;
   
   private Effect selectionEffect;
@@ -45,24 +48,12 @@ public class XNode extends XShape {
   
   private Anchors anchors;
   
-  public XNode() {
-    InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
-    this.mouseOverEffect = _createMouseOverEffect;
-    DropShadow _createSelectionEffect = this.createSelectionEffect();
-    this.selectionEffect = _createSelectionEffect;
-    Anchors _createAnchors = this.createAnchors();
-    this.anchors = _createAnchors;
+  public XNode(final DomainObjectHandle domainObject) {
+    this.domainObjectProperty.set(domainObject);
   }
   
-  public void setName(final String name) {
-    DomainObjectHandle _domainObject = this.getDomainObject();
-    boolean _notEquals = (!Objects.equal(_domainObject, null));
-    if (_notEquals) {
-      XNode.LOG.severe("Cannot set the name of an XNode when domainObject is already set.");
-    } else {
-      StringHandle _stringHandle = new StringHandle(name);
-      this.setDomainObject(_stringHandle);
-    }
+  public XNode(final String name) {
+    this(new StringHandle(name));
   }
   
   public String getKey() {
@@ -78,14 +69,13 @@ public class XNode extends XShape {
       if (_equals) {
         XNode.LOG.severe("XNodes key is null");
       }
-      _xblockexpression = (key);
+      _xblockexpression = key;
     }
     return _xblockexpression;
   }
   
   protected InnerShadow createMouseOverEffect() {
-    InnerShadow _innerShadow = new InnerShadow();
-    return _innerShadow;
+    return new InnerShadow();
   }
   
   protected DropShadow createSelectionEffect() {
@@ -96,13 +86,20 @@ public class XNode extends XShape {
         it.setOffsetY(4.0);
       }
     };
-    DropShadow _doubleArrow = ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
+  }
+  
+  public void doActivatePreview() {
+    InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
+    this.mouseOverEffect = _createMouseOverEffect;
+    DropShadow _createSelectionEffect = this.createSelectionEffect();
+    this.selectionEffect = _createSelectionEffect;
+    Anchors _createAnchors = this.createAnchors();
+    this.anchors = _createAnchors;
   }
   
   protected Anchors createAnchors() {
-    RectangleAnchors _rectangleAnchors = new RectangleAnchors(this);
-    return _rectangleAnchors;
+    return new RectangleAnchors(this);
   }
   
   public void doActivate() {
@@ -118,7 +115,7 @@ public class XNode extends XShape {
         if (XNode.this.mouseOverEffect != null) {
           _elvis = XNode.this.mouseOverEffect;
         } else {
-          _elvis = ObjectExtensions.<Effect>operator_elvis(XNode.this.mouseOverEffect, XNode.this.originalEffect);
+          _elvis = XNode.this.originalEffect;
         }
         _node_1.setEffect(_elvis);
       }
@@ -132,13 +129,9 @@ public class XNode extends XShape {
     };
     this.setOnMouseExited(_function_1);
     Node _node = this.getNode();
-    final Node n = _node;
-    boolean _matched = false;
-    if (!_matched) {
-      if (n instanceof XActivatable) {
-        _matched=true;
-        ((XActivatable)n).activate();
-      }
+    if ((_node instanceof XActivatable)) {
+      Node _node_1 = this.getNode();
+      ((XActivatable) _node_1).activate();
     }
   }
   
@@ -170,8 +163,7 @@ public class XNode extends XShape {
     double _divide = (1 / _scaleX);
     double _scaleY = this.getScaleY();
     double _divide_1 = (1 / _scaleY);
-    BoundingBox _scale = BoundsExtensions.scale(_boundsInParent, _divide, _divide_1);
-    return _scale;
+    return BoundsExtensions.scale(_boundsInParent, _divide, _divide_1);
   }
   
   public Anchors getAnchors() {
@@ -182,11 +174,9 @@ public class XNode extends XShape {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.widthProperty, null));
     if (_notEquals) {
-      double _get = this.widthProperty.get();
-      _xifexpression = _get;
+      _xifexpression = this.widthProperty.get();
     } else {
-      double _minWidth = super.minWidth(height);
-      _xifexpression = _minWidth;
+      _xifexpression = super.minWidth(height);
     }
     return _xifexpression;
   }
@@ -195,11 +185,9 @@ public class XNode extends XShape {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.heightProperty, null));
     if (_notEquals) {
-      double _get = this.heightProperty.get();
-      _xifexpression = _get;
+      _xifexpression = this.heightProperty.get();
     } else {
-      double _minHeight = super.minHeight(width);
-      _xifexpression = _minHeight;
+      _xifexpression = super.minHeight(width);
     }
     return _xifexpression;
   }
@@ -208,11 +196,9 @@ public class XNode extends XShape {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.widthProperty, null));
     if (_notEquals) {
-      double _get = this.widthProperty.get();
-      _xifexpression = _get;
+      _xifexpression = this.widthProperty.get();
     } else {
-      double _prefWidth = super.prefWidth(height);
-      _xifexpression = _prefWidth;
+      _xifexpression = super.prefWidth(height);
     }
     return _xifexpression;
   }
@@ -221,11 +207,9 @@ public class XNode extends XShape {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.heightProperty, null));
     if (_notEquals) {
-      double _get = this.heightProperty.get();
-      _xifexpression = _get;
+      _xifexpression = this.heightProperty.get();
     } else {
-      double _prefHeight = super.prefHeight(width);
-      _xifexpression = _prefHeight;
+      _xifexpression = super.prefHeight(width);
     }
     return _xifexpression;
   }
@@ -234,11 +218,9 @@ public class XNode extends XShape {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.widthProperty, null));
     if (_notEquals) {
-      double _get = this.widthProperty.get();
-      _xifexpression = _get;
+      _xifexpression = this.widthProperty.get();
     } else {
-      double _maxWidth = super.maxWidth(height);
-      _xifexpression = _maxWidth;
+      _xifexpression = super.maxWidth(height);
     }
     return _xifexpression;
   }
@@ -247,20 +229,11 @@ public class XNode extends XShape {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.heightProperty, null));
     if (_notEquals) {
-      double _get = this.heightProperty.get();
-      _xifexpression = _get;
+      _xifexpression = this.heightProperty.get();
     } else {
-      double _maxHeight = super.maxHeight(width);
-      _xifexpression = _maxHeight;
+      _xifexpression = super.maxHeight(width);
     }
     return _xifexpression;
-  }
-  
-  public void populate(final ModelElement it) {
-    super.populate(it);
-    it.<DomainObjectHandle>addChildProperty(this.domainObjectProperty, DomainObjectHandle.class);
-    it.<Number>addProperty(this.widthProperty, Double.class);
-    it.<Number>addProperty(this.heightProperty, Double.class);
   }
   
   public String toString() {
@@ -273,12 +246,25 @@ public class XNode extends XShape {
       _key=_domainObject.getKey();
     }
     String _plus_1 = (_plus + _key);
-    String _plus_2 = (_plus_1 + ")");
-    return _plus_2;
+    return (_plus_1 + ")");
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XNode");
     ;
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public XNode(final ModelLoad modelLoad) {
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
+    modelElement.addProperty(domainObjectProperty, DomainObjectHandle.class);
+    modelElement.addProperty(widthProperty, Double.class);
+    modelElement.addProperty(heightProperty, Double.class);
+  }
   
   private final static double DEFAULT_WIDTH = 0d;
   
@@ -318,18 +304,14 @@ public class XNode extends XShape {
     return this.heightProperty;
   }
   
-  private SimpleObjectProperty<DomainObjectHandle> domainObjectProperty = new SimpleObjectProperty<DomainObjectHandle>(this, "domainObject");
+  private ReadOnlyObjectWrapper<DomainObjectHandle> domainObjectProperty = new ReadOnlyObjectWrapper<DomainObjectHandle>(this, "domainObject");
   
   public DomainObjectHandle getDomainObject() {
     return this.domainObjectProperty.get();
   }
   
-  public void setDomainObject(final DomainObjectHandle domainObject) {
-    this.domainObjectProperty.set(domainObject);
-  }
-  
-  public ObjectProperty<DomainObjectHandle> domainObjectProperty() {
-    return this.domainObjectProperty;
+  public ReadOnlyObjectProperty<DomainObjectHandle> domainObjectProperty() {
+    return this.domainObjectProperty.getReadOnlyProperty();
   }
   
   private SimpleListProperty<XConnection> incomingConnectionsProperty = new SimpleListProperty<XConnection>(this, "incomingConnections",_initIncomingConnections());

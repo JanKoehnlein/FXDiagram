@@ -6,7 +6,6 @@ import de.fxdiagram.examples.slides.Slide;
 import de.fxdiagram.examples.slides.SlideDiagram;
 import de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
-import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,14 +24,17 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class SummarySlideDeck extends OpenableDiagramNode {
   public SummarySlideDeck() {
-    this.setName("Summary");
+    super("Summary");
+  }
+  
+  public void doActivate() {
     SlideDiagram _slideDiagram = new SlideDiagram();
     final Procedure1<SlideDiagram> _function = new Procedure1<SlideDiagram>() {
       public void apply(final SlideDiagram it) {
-        List<Slide> _slides = it.getSlides();
+        ObservableList<Slide> _slides = it.getSlides();
         Slide _createSlide = EclipseConSlideFactory.createSlide("Summary", 144);
         _slides.add(_createSlide);
-        List<Slide> _slides_1 = it.getSlides();
+        ObservableList<Slide> _slides_1 = it.getSlides();
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("The users must be our top priority.");
         _builder.newLine();
@@ -42,7 +44,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         _builder.newLine();
         Slide _createSlide_1 = EclipseConSlideFactory.createSlide(_builder.toString(), 48);
         _slides_1.add(_createSlide_1);
-        List<Slide> _slides_2 = it.getSlides();
+        ObservableList<Slide> _slides_2 = it.getSlides();
         Slide _createSlide_2 = EclipseConSlideFactory.createSlide("JavaFX advantages");
         final Procedure1<Slide> _function = new Procedure1<Slide>() {
           public void apply(final Slide it) {
@@ -85,7 +87,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         };
         Slide _doubleArrow = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide_2, _function);
         _slides_2.add(_doubleArrow);
-        List<Slide> _slides_3 = it.getSlides();
+        ObservableList<Slide> _slides_3 = it.getSlides();
         StringConcatenation _builder_1 = new StringConcatenation();
         _builder_1.append("...and makes ");
         _builder_1.newLine();
@@ -95,7 +97,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         _builder_1.newLine();
         Slide _createSlide_3 = EclipseConSlideFactory.createSlide(_builder_1.toString(), 48);
         _slides_3.add(_createSlide_3);
-        List<Slide> _slides_4 = it.getSlides();
+        ObservableList<Slide> _slides_4 = it.getSlides();
         Slide _createSlide_4 = EclipseConSlideFactory.createSlide("Thanks");
         final Procedure1<Slide> _function_1 = new Procedure1<Slide>() {
           public void apply(final Slide it) {
@@ -145,6 +147,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
     };
     SlideDiagram _doubleArrow = ObjectExtensions.<SlideDiagram>operator_doubleArrow(_slideDiagram, _function);
     this.setInnerDiagram(_doubleArrow);
+    super.doActivate();
   }
   
   protected HBox createMixedText(final String jungleText, final String normalText) {
@@ -169,7 +172,6 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         _children_1.add(_createText);
       }
     };
-    HBox _doubleArrow = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
   }
 }

@@ -12,42 +12,31 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class ClickThroughSlide extends Slide {
-  private Group pane = new Function0<Group>() {
-    public Group apply() {
-      Group _group = new Group();
-      return _group;
-    }
-  }.apply();
+  private Group pane = new Group();
   
   private Node currentNode;
   
-  public ClickThroughSlide() {
+  public ClickThroughSlide(final String name) {
+    super(name);
   }
   
   public ClickThroughSlide(final String name, final Image backgroundImage) {
     super(name, backgroundImage);
+  }
+  
+  public void doActivatePreview() {
+    super.doActivatePreview();
     StackPane _stackPane = this.getStackPane();
     ObservableList<Node> _children = _stackPane.getChildren();
     _children.add(this.pane);
-  }
-  
-  public void doActivate() {
-    super.doActivate();
     final Procedure1<Group> _function = new Procedure1<Group>() {
       public void apply(final Group it) {
-        Scene _scene = it.getScene();
-        double _width = _scene.getWidth();
-        Scene _scene_1 = it.getScene();
-        double _height = _scene_1.getHeight();
-        Rectangle _rectangle = new Rectangle(0, 0, _width, _height);
-        it.setClip(_rectangle);
         ObservableList<Node> _children = it.getChildren();
         Iterable<Node> _tail = IterableExtensions.<Node>tail(_children);
         final Procedure1<Node> _function = new Procedure1<Node>() {
@@ -60,9 +49,19 @@ public class ClickThroughSlide extends Slide {
     };
     ObjectExtensions.<Group>operator_doubleArrow(
       this.pane, _function);
-    ObservableList<Node> _children = this.pane.getChildren();
-    Node _head = IterableExtensions.<Node>head(_children);
+    ObservableList<Node> _children_1 = this.pane.getChildren();
+    Node _head = IterableExtensions.<Node>head(_children_1);
     this.currentNode = _head;
+  }
+  
+  public void doActivate() {
+    super.doActivate();
+    Scene _scene = this.getScene();
+    double _width = _scene.getWidth();
+    Scene _scene_1 = this.getScene();
+    double _height = _scene_1.getHeight();
+    Rectangle _rectangle = new Rectangle(0, 0, _width, _height);
+    this.pane.setClip(_rectangle);
     RevealBehavior _revealBehavior = new RevealBehavior(this);
     this.addBehavior(_revealBehavior);
   }
@@ -78,8 +77,7 @@ public class ClickThroughSlide extends Slide {
         it.setDuration(_millis);
       }
     };
-    FadeTransition _doubleArrow = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
-    return _doubleArrow;
+    return ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
   }
   
   public boolean next() {

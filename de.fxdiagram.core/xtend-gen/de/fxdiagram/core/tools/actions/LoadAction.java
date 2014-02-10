@@ -18,8 +18,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 public class LoadAction implements DiagramAction {
   public void perform(final XRoot root) {
     try {
-      FileChooser _fileChooser = new FileChooser();
-      final FileChooser fileChooser = _fileChooser;
+      final FileChooser fileChooser = new FileChooser();
       ObservableList<FileChooser.ExtensionFilter> _extensionFilters = fileChooser.getExtensionFilters();
       FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FX Diagram", "*.fxd");
       _extensionFilters.add(_extensionFilter);

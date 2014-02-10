@@ -33,8 +33,7 @@ public class LoggingTransformationService extends TransformationService {
         boolean _equals_1 = Objects.equal(this.dotFormatData, null);
         if (_equals_1) {
           GraphvizDotStandaloneSetup.doSetup();
-          GraphvizDotRuntimeModule _graphvizDotRuntimeModule = new GraphvizDotRuntimeModule();
-          final GraphvizDotRuntimeModule graphvizDotRuntimeModule = _graphvizDotRuntimeModule;
+          final GraphvizDotRuntimeModule graphvizDotRuntimeModule = new GraphvizDotRuntimeModule();
           final Injector injector = Guice.createInjector(graphvizDotRuntimeModule);
           GraphFormatData _graphFormatData = new GraphFormatData();
           final Procedure1<GraphFormatData> _function = new Procedure1<GraphFormatData>() {
@@ -46,12 +45,11 @@ public class LoggingTransformationService extends TransformationService {
           GraphFormatData _doubleArrow = ObjectExtensions.<GraphFormatData>operator_doubleArrow(_graphFormatData, _function);
           this.dotFormatData = _doubleArrow;
         }
-        _xblockexpression = (this.dotFormatData);
+        _xblockexpression = this.dotFormatData;
       }
       _xifexpression = _xblockexpression;
     } else {
-      GraphFormatData _formatData = super.getFormatData(id);
-      _xifexpression = _formatData;
+      _xifexpression = super.getFormatData(id);
     }
     return _xifexpression;
   }

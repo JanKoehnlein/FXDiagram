@@ -5,7 +5,6 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.export.SvgExportable
 import de.fxdiagram.core.export.SvgExporter
-import de.fxdiagram.core.model.StringHandle
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
 import java.util.Deque
 import java.util.LinkedList
@@ -24,7 +23,9 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'image', 'x', 'y', 'scale'])
 class RecursiveImageNode extends XNode implements SvgExportable {
 
 	@FxProperty Image image
@@ -40,19 +41,20 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 	boolean isZoomedIn 
 
 	new() {
-		this.image = image
-		this.x = x
-		this.y = y
-		this.scale = scale
+		super('Recursive image')
+	}
+	
+	override doActivatePreview() {
 		pivot = new FirstRecursiveImageNode(this)
 		node = createPane => [
 			children += pivot
 		]
-		tooltip = 'Double-click to zoom in'
+		super.doActivatePreview
 	}
 
 	override doActivate() {
 		super.doActivate
+		tooltip = 'Double-click to zoom in'
 		pivot.activate
 		onMouseClicked = [
 			if (clickCount == 2) {
@@ -140,7 +142,7 @@ class FirstRecursiveImageNode extends XNode {
 	Deque<Group> panes = new LinkedList<Group>
 
 	new(RecursiveImageNode parent) {
-		domainObject = new StringHandle(parent.key + '_')
+		super(parent.key + '_')
 		this.recursiveImageNode = parent
 		val group = parent.createPane
 		node = group

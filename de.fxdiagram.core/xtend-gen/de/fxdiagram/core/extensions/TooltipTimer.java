@@ -19,8 +19,7 @@ public class TooltipTimer implements Runnable {
   }
   
   public boolean stop() {
-    boolean _isRunning = this.isRunning = false;
-    return _isRunning;
+    return this.isRunning = false;
   }
   
   public long restart() {
@@ -35,8 +34,7 @@ public class TooltipTimer implements Runnable {
       Duration _delay = this.tooltip.getDelay();
       double _millis = _delay.toMillis();
       long _plus = (_currentTimeMillis + ((long) _millis));
-      long _endTime = this.endTime = _plus;
-      _xblockexpression = (_endTime);
+      _xblockexpression = this.endTime = _plus;
     }
     return _xblockexpression;
   }

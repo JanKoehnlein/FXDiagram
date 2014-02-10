@@ -1,6 +1,9 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.MoveBehavior
+import java.net.URL
 import java.util.List
 import javafx.fxml.FXMLLoader
 import javafx.scene.Group
@@ -14,25 +17,23 @@ import static de.fxdiagram.core.XControlPointType.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
+import static extension de.fxdiagram.core.extensions.UriExtensions.*
 import static extension java.lang.Math.*
 
-import static extension de.fxdiagram.core.extensions.UriExtensions.*
-import java.net.URL
-import de.fxdiagram.core.model.XModelProvider
-import de.fxdiagram.core.model.ModelElement
-import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
+@ModelNode(#['layoutX', 'layoutY', 'type'])
+class XControlPoint extends XShape {
 
-class XControlPoint extends XShape implements XModelProvider {
-
-	@FxProperty@ReadOnly XControlPointType type
+	@FxProperty XControlPointType type = CONTROL_POINT
 
 	new() {
-		setType(CONTROL_POINT)
+		typeProperty.addListener [
+			p, o, n |
+			updateNode
+		]
+		updateNode
 	}
 
-	def setType(XControlPointType type) {
-		typeProperty.set(type)
+	protected def updateNode() {
 		switch type {
 			case ANCHOR: {
 				node = new Circle => [
@@ -52,8 +53,11 @@ class XControlPoint extends XShape implements XModelProvider {
 				]
 			}
 		}
+	} 
+	
+	override protected doActivatePreview() {
 	}
-
+	
 	override protected doActivate() {
 		if (type != ANCHOR)
 			addBehavior(new MoveBehavior(this))
@@ -109,11 +113,6 @@ class XControlPoint extends XShape implements XModelProvider {
 		new Group => [
 			children += FXMLLoader.<Node>load(new URL(this.toURI('images/Magnet.fxml')))
 		]
-	}
-	
-	override populate(ModelElement it) {
-		super.populate(it)
-		addProperty(typeProperty, XControlPointType)
 	}
 }
 

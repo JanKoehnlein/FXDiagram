@@ -20,13 +20,11 @@ public class RevealBehavior extends AbstractHostBehavior<ClickThroughSlide> impl
   
   public boolean next() {
     ClickThroughSlide _host = this.getHost();
-    boolean _next = _host.next();
-    return _next;
+    return _host.next();
   }
   
   public boolean previous() {
     ClickThroughSlide _host = this.getHost();
-    boolean _previous = _host.previous();
-    return _previous;
+    return _host.previous();
   }
 }

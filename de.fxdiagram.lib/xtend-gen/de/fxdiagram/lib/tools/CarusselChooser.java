@@ -43,8 +43,7 @@ public class CarusselChooser extends AbstractChooser {
   }
   
   public boolean activate() {
-    boolean _activate = super.activate();
-    return _activate;
+    return super.activate();
   }
   
   protected void doSetInterpolatedPosition(final double interpolatedPosition) {
@@ -53,8 +52,7 @@ public class CarusselChooser extends AbstractChooser {
       public Double apply(final Double a, final XNode b) {
         Bounds _layoutBounds = b.getLayoutBounds();
         double _height = _layoutBounds.getHeight();
-        double _max = Math.max((a).doubleValue(), _height);
-        return Double.valueOf(_max);
+        return Double.valueOf(Math.max((a).doubleValue(), _height));
       }
     };
     Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
@@ -115,8 +113,7 @@ public class CarusselChooser extends AbstractChooser {
     XConnection _xblockexpression = null;
     {
       choice.setEffect(null);
-      XConnection _nodeChosen = super.nodeChosen(choice);
-      _xblockexpression = (_nodeChosen);
+      _xblockexpression = super.nodeChosen(choice);
     }
     return _xblockexpression;
   }

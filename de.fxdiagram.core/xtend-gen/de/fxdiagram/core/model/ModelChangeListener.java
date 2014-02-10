@@ -6,7 +6,7 @@ import javafx.collections.ListChangeListener;
 
 @SuppressWarnings("all")
 public interface ModelChangeListener {
-  public abstract void propertyChanged(final Property<? extends Object> property, final Object oldVal, final Object newVal);
+  public abstract void propertyChanged(final Property<?> property, final Object oldVal, final Object newVal);
   
-  public abstract void listPropertyChanged(final ListProperty<? extends Object> property, final ListChangeListener.Change<? extends Object> change);
+  public abstract void listPropertyChanged(final ListProperty<?> property, final ListChangeListener.Change<?> change);
 }

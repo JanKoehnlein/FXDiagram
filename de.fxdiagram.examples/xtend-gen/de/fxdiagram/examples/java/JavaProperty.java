@@ -12,13 +12,13 @@ public class JavaProperty {
     return this._name;
   }
   
-  private final Class<? extends Object> _type;
+  private final Class<?> _type;
   
-  public Class<? extends Object> getType() {
+  public Class<?> getType() {
     return this._type;
   }
   
-  public JavaProperty(final String name, final Class<? extends Object> type) {
+  public JavaProperty(final String name, final Class<?> type) {
     super();
     this._name = name;
     this._type = type;

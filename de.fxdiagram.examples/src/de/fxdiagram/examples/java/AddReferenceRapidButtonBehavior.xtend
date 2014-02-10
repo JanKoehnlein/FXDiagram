@@ -28,9 +28,7 @@ class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 	}
 	
 	override protected createNode(JavaPropertyHandle key) {
-		new JavaTypeNode => [
-			domainObject = domainObjectProvider.createJavaTypeHandle(key.domainObject.type)
-		]
+		new JavaTypeNode(domainObjectProvider.createJavaTypeHandle(key.domainObject.type))
 	}
 	
 	protected def getDomainObjectProvider() {

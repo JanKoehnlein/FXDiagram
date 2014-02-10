@@ -1,9 +1,12 @@
 package de.fxdiagram.examples.java;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.examples.java.AddReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.java.AddSuperTypeRapidButtonBehavior;
 import de.fxdiagram.examples.java.JavaProperty;
@@ -26,39 +29,27 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Conversions;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class JavaTypeNode extends XNode {
-  private final Text label = new Function0<Text>() {
-    public Text apply() {
-      Text _text = new Text();
-      return _text;
-    }
-  }.apply();
+  private final VBox propertyCompartment = new VBox();
   
-  private final VBox propertyCompartment = new Function0<VBox>() {
-    public VBox apply() {
-      VBox _vBox = new VBox();
-      return _vBox;
-    }
-  }.apply();
-  
-  private final VBox operationCompartment = new Function0<VBox>() {
-    public VBox apply() {
-      VBox _vBox = new VBox();
-      return _vBox;
-    }
-  }.apply();
+  private final VBox operationCompartment = new VBox();
   
   private JavaTypeModel model;
   
-  public JavaTypeNode() {
+  public JavaTypeNode(final JavaTypeHandle domainObject) {
+    super(domainObject);
+  }
+  
+  public void doActivatePreview() {
+    super.doActivatePreview();
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -67,8 +58,12 @@ public class JavaTypeNode extends XNode {
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
           public void apply(final VBox it) {
             ObservableList<Node> _children = it.getChildren();
+            Text _text = new Text();
             final Procedure1<Text> _function = new Procedure1<Text>() {
               public void apply(final Text it) {
+                Class<?> _javaType = JavaTypeNode.this.getJavaType();
+                String _simpleName = _javaType.getSimpleName();
+                it.setText(_simpleName);
                 it.setTextOrigin(VPos.TOP);
                 Font _font = it.getFont();
                 String _family = _font.getFamily();
@@ -81,7 +76,7 @@ public class JavaTypeNode extends XNode {
                 VBox.setMargin(it, _insets);
               }
             };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(JavaTypeNode.this.label, _function);
+            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
             ObservableList<Node> _children_1 = it.getChildren();
             Separator _separator = new Separator();
@@ -118,7 +113,7 @@ public class JavaTypeNode extends XNode {
     this.setNode(_doubleArrow);
   }
   
-  public Class<? extends Object> getJavaType() {
+  public Class<?> getJavaType() {
     DomainObjectHandle _domainObject = this.getDomainObject();
     Object _domainObject_1 = _domainObject.getDomainObject();
     return ((Class<?>) _domainObject_1);
@@ -129,30 +124,17 @@ public class JavaTypeNode extends XNode {
     {
       boolean _equals = Objects.equal(this.model, null);
       if (_equals) {
-        Class<? extends Object> _javaType = this.getJavaType();
+        Class<?> _javaType = this.getJavaType();
         JavaTypeModel _javaTypeModel = new JavaTypeModel(_javaType);
         this.model = _javaTypeModel;
       }
-      _xblockexpression = (this.model);
+      _xblockexpression = this.model;
     }
     return _xblockexpression;
   }
   
-  public void setDomainObject(final DomainObjectHandle domainObject) {
-    if ((domainObject instanceof JavaTypeHandle)) {
-      super.setDomainObject(domainObject);
-      Class<? extends Object> _javaType = this.getJavaType();
-      String _simpleName = _javaType.getSimpleName();
-      this.label.setText(_simpleName);
-    } else {
-      IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("JavaTypeNode can only use JavaTypeHandles");
-      throw _illegalArgumentException;
-    }
-  }
-  
   protected Anchors createAnchors() {
-    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
-    return _roundedRectangleAnchors;
+    return new RoundedRectangleAnchors(this, 12, 12);
   }
   
   public void populateCompartments() {
@@ -169,7 +151,7 @@ public class JavaTypeNode extends XNode {
             String _name = property.getName();
             _builder.append(_name, "");
             _builder.append(": ");
-            Class<? extends Object> _type = property.getType();
+            Class<?> _type = property.getType();
             String _simpleName = _type.getSimpleName();
             _builder.append(_simpleName, "");
             it.setText(_builder.toString());
@@ -181,26 +163,25 @@ public class JavaTypeNode extends XNode {
     };
     IterableExtensions.<JavaProperty>forEach(_limit, _function);
     JavaTypeModel _javaTypeModel_1 = this.getJavaTypeModel();
-    List<Constructor<? extends Object>> _constructors = _javaTypeModel_1.getConstructors();
-    final Procedure1<Constructor<? extends Object>> _function_1 = new Procedure1<Constructor<? extends Object>>() {
-      public void apply(final Constructor<? extends Object> constructor) {
+    List<Constructor<?>> _constructors = _javaTypeModel_1.getConstructors();
+    final Procedure1<Constructor<?>> _function_1 = new Procedure1<Constructor<?>>() {
+      public void apply(final Constructor<?> constructor) {
         ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             StringConcatenation _builder = new StringConcatenation();
-            Class<? extends Object> _javaType = JavaTypeNode.this.getJavaType();
+            Class<?> _javaType = JavaTypeNode.this.getJavaType();
             String _simpleName = _javaType.getSimpleName();
             _builder.append(_simpleName, "");
             _builder.append("(");
-            Class<? extends Object>[] _parameterTypes = constructor.getParameterTypes();
-            final Function1<Class<? extends Object>,String> _function = new Function1<Class<? extends Object>,String>() {
-              public String apply(final Class<? extends Object> it) {
-                String _simpleName = it.getSimpleName();
-                return _simpleName;
+            Class<?>[] _parameterTypes = constructor.getParameterTypes();
+            final Function1<Class<?>,String> _function = new Function1<Class<?>,String>() {
+              public String apply(final Class<?> it) {
+                return it.getSimpleName();
               }
             };
-            List<String> _map = ListExtensions.<Class<? extends Object>, String>map(((List<Class<? extends Object>>)Conversions.doWrapArray(_parameterTypes)), _function);
+            List<String> _map = ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)), _function);
             String _join = IterableExtensions.join(_map, ", ");
             _builder.append(_join, "");
             _builder.append(")");
@@ -211,7 +192,7 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Constructor<? extends Object>>forEach(_constructors, _function_1);
+    IterableExtensions.<Constructor<?>>forEach(_constructors, _function_1);
     JavaTypeModel _javaTypeModel_2 = this.getJavaTypeModel();
     List<Method> _operations = _javaTypeModel_2.getOperations();
     List<Method> _limit_1 = this.<Method>limit(_operations);
@@ -225,18 +206,17 @@ public class JavaTypeNode extends XNode {
             String _name = method.getName();
             _builder.append(_name, "");
             _builder.append("(");
-            Class<? extends Object>[] _parameterTypes = method.getParameterTypes();
-            final Function1<Class<? extends Object>,String> _function = new Function1<Class<? extends Object>,String>() {
-              public String apply(final Class<? extends Object> it) {
-                String _simpleName = it.getSimpleName();
-                return _simpleName;
+            Class<?>[] _parameterTypes = method.getParameterTypes();
+            final Function1<Class<?>,String> _function = new Function1<Class<?>,String>() {
+              public String apply(final Class<?> it) {
+                return it.getSimpleName();
               }
             };
-            List<String> _map = ListExtensions.<Class<? extends Object>, String>map(((List<Class<? extends Object>>)Conversions.doWrapArray(_parameterTypes)), _function);
+            List<String> _map = ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)), _function);
             String _join = IterableExtensions.join(_map, ", ");
             _builder.append(_join, "");
             _builder.append("): ");
-            Class<? extends Object> _returnType = method.getReturnType();
+            Class<?> _returnType = method.getReturnType();
             String _simpleName = _returnType.getSimpleName();
             _builder.append(_simpleName, "");
             it.setText(_builder.toString());
@@ -262,8 +242,7 @@ public class JavaTypeNode extends XNode {
       } else {
         int _size = list.size();
         int _min = Math.min(_size, 4);
-        List<T> _subList = list.subList(0, _min);
-        _xifexpression_1 = _subList;
+        _xifexpression_1 = list.subList(0, _min);
       }
       _xifexpression = _xifexpression_1;
     }
@@ -272,9 +251,6 @@ public class JavaTypeNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    Class<? extends Object> _javaType = this.getJavaType();
-    String _simpleName = _javaType.getSimpleName();
-    this.label.setText(_simpleName);
     this.populateCompartments();
     AddSuperTypeRapidButtonBehavior _addSuperTypeRapidButtonBehavior = new AddSuperTypeRapidButtonBehavior(this);
     this.addBehavior(_addSuperTypeRapidButtonBehavior);
@@ -283,8 +259,21 @@ public class JavaTypeNode extends XNode {
   }
   
   public String toString() {
-    Class<? extends Object> _javaType = this.getJavaType();
-    String _simpleName = _javaType.getSimpleName();
-    return _simpleName;
+    Class<?> _javaType = this.getJavaType();
+    return _javaType.getSimpleName();
+  }
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public JavaTypeNode(final ModelLoad modelLoad) {
+    super(modelLoad);
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
+    modelElement.addProperty(widthProperty(), Double.class);
+    modelElement.addProperty(heightProperty(), Double.class);
   }
 }

@@ -1,10 +1,11 @@
 package de.fxdiagram.examples.java
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectHandle
 import de.fxdiagram.core.model.DomainObjectHandleImpl
 import de.fxdiagram.core.model.DomainObjectProvider
-import de.fxdiagram.core.model.ModelElement
 
+@ModelNode
 class JavaModelProvider implements DomainObjectProvider {
 	
 	override createDomainObjectHandle(Object object) {
@@ -42,14 +43,10 @@ class JavaModelProvider implements DomainObjectProvider {
 		}
 	}
 	
-	override populate(ModelElement element) {
-	}
-	
 }
 
+@ModelNode(#['id', 'key', 'provider'])
 class JavaTypeHandle extends DomainObjectHandleImpl {
-	
-	new() {}
 	
 	new(Class<?> javaClass, JavaModelProvider provider) {
 		super(javaClass.canonicalName, javaClass.canonicalName, provider)
@@ -60,9 +57,8 @@ class JavaTypeHandle extends DomainObjectHandleImpl {
 	}
 }
 
+@ModelNode(#['id', 'key', 'provider'])
 class JavaPropertyHandle extends DomainObjectHandleImpl {
-	
-	new() {}
 	
 	new(JavaProperty it, JavaModelProvider provider) {
 		super(type.canonicalName + ' ' + name, type.canonicalName + ' ' + name, provider)
@@ -73,10 +69,9 @@ class JavaPropertyHandle extends DomainObjectHandleImpl {
 	}
 }
 
+@ModelNode(#['id', 'key', 'provider'])
 class JavaSuperTypeHandle extends DomainObjectHandleImpl {
 
-	new() {}
-	
 	new(JavaSuperType it, JavaModelProvider provider) {
 		super(subType.canonicalName + '->' + superType.canonicalName,
 			subType.canonicalName + '->' + superType.canonicalName,

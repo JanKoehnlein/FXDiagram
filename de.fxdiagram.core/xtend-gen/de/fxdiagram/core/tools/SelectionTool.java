@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.Set;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
@@ -30,7 +29,6 @@ import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -60,7 +58,7 @@ public class SelectionTool implements XDiagramTool {
         } else {
           MouseButton _button = event.getButton();
           boolean _equals_1 = Objects.equal(_button, MouseButton.PRIMARY);
-          _and = (_equals && _equals_1);
+          _and = _equals_1;
         }
         if (_and) {
           final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
@@ -86,7 +84,7 @@ public class SelectionTool implements XDiagramTool {
               } else {
                 boolean _isShortcutDown = event.isShortcutDown();
                 boolean _not_1 = (!_isShortcutDown);
-                _and_1 = (_not && _not_1);
+                _and_1 = _not_1;
               }
               if (_and_1) {
                 XShape _switchResult = null;
@@ -95,8 +93,7 @@ public class SelectionTool implements XDiagramTool {
                   if (targetShape instanceof XControlPoint) {
                     _matched=true;
                     Parent _parent = ((XControlPoint)targetShape).getParent();
-                    XShape _containerShape = CoreExtensions.getContainerShape(_parent);
-                    _switchResult = _containerShape;
+                    _switchResult = CoreExtensions.getContainerShape(_parent);
                   }
                 }
                 if (!_matched) {
@@ -105,8 +102,7 @@ public class SelectionTool implements XDiagramTool {
                 final XShape skip = _switchResult;
                 final Function1<XShape,Boolean> _function_1 = new Function1<XShape,Boolean>() {
                   public Boolean apply(final XShape it) {
-                    boolean _notEquals = (!Objects.equal(it, skip));
-                    return Boolean.valueOf(_notEquals);
+                    return Boolean.valueOf((!Objects.equal(it, skip)));
                   }
                 };
                 SelectionTool.this.deselect(selection, _function_1);
@@ -115,8 +111,7 @@ public class SelectionTool implements XDiagramTool {
                 public Boolean apply(final XShape it) {
                   XDiagram _diagram = CoreExtensions.getDiagram(it);
                   XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
-                  boolean _notEquals = (!Objects.equal(_diagram, _diagram_1));
-                  return Boolean.valueOf(_notEquals);
+                  return Boolean.valueOf((!Objects.equal(_diagram, _diagram_1)));
                 }
               };
               SelectionTool.this.deselect(selection, _function_2);
@@ -201,15 +196,13 @@ public class SelectionTool implements XDiagramTool {
     final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
       public Bounds apply(final XShape it) {
         Bounds _snapBounds = it.getSnapBounds();
-        Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(it, _snapBounds);
-        return _localToRootDiagram;
+        return CoreExtensions.localToRootDiagram(it, _snapBounds);
       }
     };
     Iterable<Bounds> _map = IterableExtensions.map(selection, _function);
     final Function2<Bounds,Bounds,Bounds> _function_1 = new Function2<Bounds,Bounds,Bounds>() {
       public Bounds apply(final Bounds a, final Bounds b) {
-        BoundingBox _plus = BoundsExtensions.operator_plus(a, b);
-        return _plus;
+        return BoundsExtensions.operator_plus(a, b);
       }
     };
     Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
@@ -224,7 +217,7 @@ public class SelectionTool implements XDiagramTool {
       } else {
         HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
         SoftTooltip _softTooltip = new SoftTooltip(_headsUpDisplay, positionString);
-        _elvis = ObjectExtensions.<SoftTooltip>operator_elvis(this.positionTip, _softTooltip);
+        _elvis = _softTooltip;
       }
       this.positionTip = _elvis;
       this.positionTip.setReferencePosition(screenX, screenY);
@@ -241,11 +234,10 @@ public class SelectionTool implements XDiagramTool {
     } else {
       boolean _isShowing = this.positionTip.isShowing();
       boolean _not = (!_isShowing);
-      _and = (_notEquals && _not);
+      _and = _not;
     }
     if (_and) {
-      boolean _show = this.positionTip.show();
-      _xifexpression = _show;
+      _xifexpression = this.positionTip.show();
     }
     return _xifexpression;
   }
@@ -260,8 +252,7 @@ public class SelectionTool implements XDiagramTool {
       if (_isShowing) {
         this.positionTip.hide();
       }
-      SoftTooltip _positionTip = this.positionTip = null;
-      _xblockexpression = (_positionTip);
+      _xblockexpression = this.positionTip = null;
     }
     return _xblockexpression;
   }
@@ -290,7 +281,7 @@ public class SelectionTool implements XDiagramTool {
       this.root.<MouseEvent>addEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
       this.root.<MouseEvent>addEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
       this.root.<MouseEvent>addEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
-      _xblockexpression = (true);
+      _xblockexpression = true;
     }
     return _xblockexpression;
   }
@@ -301,7 +292,7 @@ public class SelectionTool implements XDiagramTool {
       this.root.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_PRESSED, this.mousePressedHandler);
       this.root.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_DRAGGED, this.mouseDraggedHandler);
       this.root.<MouseEvent>removeEventFilter(MouseEvent.MOUSE_RELEASED, this.mouseReleasedHandler);
-      _xblockexpression = (true);
+      _xblockexpression = true;
     }
     return _xblockexpression;
   }

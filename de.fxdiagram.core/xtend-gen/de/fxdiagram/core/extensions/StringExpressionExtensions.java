@@ -29,26 +29,22 @@ public class StringExpressionExtensions {
   public static boolean operator_equals(final StringExpression left, final StringExpression right) {
     String _value = left.getValue();
     String _value_1 = right.getValue();
-    boolean _equals = Objects.equal(_value, _value_1);
-    return _equals;
+    return Objects.equal(_value, _value_1);
   }
   
   public static boolean operator_equals(final StringExpression left, final String right) {
     String _value = left.getValue();
-    boolean _equals = Objects.equal(_value, right);
-    return _equals;
+    return Objects.equal(_value, right);
   }
   
   public static boolean operator_notEquals(final StringExpression left, final StringExpression right) {
     String _value = left.getValue();
     String _value_1 = right.getValue();
-    boolean _notEquals = (!Objects.equal(_value, _value_1));
-    return _notEquals;
+    return (!Objects.equal(_value, _value_1));
   }
   
   public static boolean operator_notEquals(final StringExpression left, final String right) {
     String _value = left.getValue();
-    boolean _notEquals = (!Objects.equal(_value, right));
-    return _notEquals;
+    return (!Objects.equal(_value, right));
   }
 }

@@ -3,6 +3,7 @@ package de.fxdiagram.examples.lcars
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.tools.ChooserConnectionProvider
 import de.fxdiagram.core.tools.actions.LayoutAction
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -24,10 +25,10 @@ import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
 
+import static de.fxdiagram.examples.lcars.LcarsExtensions.*
+
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import static extension de.fxdiagram.examples.lcars.LcarsExtensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.layout.LayoutType
 
 class LcarsField extends Parent {
 
@@ -39,9 +40,10 @@ class LcarsField extends Parent {
 	
 	new(LcarsNode node, String name, String value) {
 		this.node = node
+		val connectionHandle = node.root.getDomainObjectProvider(LcarsModelProvider).createLcarsConnectionHandle(name)
 		val ChooserConnectionProvider connectionProvider = [ 
 			host,  choice, choiceInfo | 
-			new XConnection(host, choice, name) => [
+			new XConnection(host, choice, connectionHandle) => [
 				sourceArrowHead = new TriangleArrowHead(it, true)
 				new XConnectionLabel(it) => [
 					text.text = name.replace('_', ' ')
@@ -89,8 +91,8 @@ class LcarsField extends Parent {
 						.filter(LcarsNode)
 						.filter[
 							it != node && data.get(name)==value 
-							&& !outgoingConnections.exists[target == node && key == name]
-							&& !incomingConnections.exists[source == node && key == name]
+							&& !outgoingConnections.exists[target == node && domainObject == connectionHandle]
+							&& !incomingConnections.exists[source == node && domainObject == connectionHandle]
 						]
 						.map[connectionProvider.getConnection(node, it, null)]
 						.toList
@@ -179,19 +181,22 @@ class LcarsQueryTask extends Task<Void> {
 	}
 	
 	override protected call() throws Exception {
-		val siblings = host.lcarsDiagram.lcarsAccess.query(fieldName, fieldValue)
+		val modelProvider = host.root.getDomainObjectProvider(LcarsModelProvider)
+		val connectionHandle = modelProvider.createLcarsConnectionHandle(fieldName)
+		val siblings = modelProvider.query(fieldName, fieldValue)
 		val lcarsNode = host.lcarsNode
 		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
 		chooser.connectionProvider = connectionProvider
 		val alreadyConnected = 
-			(host.lcarsNode.incomingConnections.filter[key == fieldName].map[source] 
-				+ host.lcarsNode.outgoingConnections.filter[key == fieldName].map[target])
-			.filter(LcarsNode).map[dbId].toSet
-		alreadyConnected.add(lcarsNode.dbId)
+			(host.lcarsNode.incomingConnections.filter[domainObject == connectionHandle].map[source] 
+				+ host.lcarsNode.outgoingConnections.filter[domainObject == connectionHandle].map[target])
+			.filter(LcarsNode).map[domainObject.id].toSet
+		alreadyConnected.add(lcarsNode.domainObject.id)
 		siblings
 			.filter[!alreadyConnected.contains(get('_id').toString)]
 			.forEach[it, i | 
-				chooser.addChoice(new LcarsNode(it) => [
+				val handle = modelProvider.createLcarsEntryHandle(it)
+				chooser.addChoice(new LcarsNode(handle) => [
 					width = lcarsNode.width
 					height = lcarsNode.height
 				])

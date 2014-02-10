@@ -19,7 +19,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -31,47 +30,17 @@ public class AuxiliaryLinesCache {
   
   private Map<XNode,ChangeListener<Bounds>> node2boundsListener = CollectionLiterals.<XNode, ChangeListener<Bounds>>newHashMap();
   
-  private AuxiliaryLineMap<Bounds> leftMap = new Function0<AuxiliaryLineMap<Bounds>>() {
-    public AuxiliaryLineMap<Bounds> apply() {
-      AuxiliaryLineMap<Bounds> _auxiliaryLineMap = new AuxiliaryLineMap<Bounds>();
-      return _auxiliaryLineMap;
-    }
-  }.apply();
+  private AuxiliaryLineMap<Bounds> leftMap = new AuxiliaryLineMap<Bounds>();
   
-  private AuxiliaryLineMap<Bounds> centerXMap = new Function0<AuxiliaryLineMap<Bounds>>() {
-    public AuxiliaryLineMap<Bounds> apply() {
-      AuxiliaryLineMap<Bounds> _auxiliaryLineMap = new AuxiliaryLineMap<Bounds>();
-      return _auxiliaryLineMap;
-    }
-  }.apply();
+  private AuxiliaryLineMap<Bounds> centerXMap = new AuxiliaryLineMap<Bounds>();
   
-  private AuxiliaryLineMap<Bounds> rightMap = new Function0<AuxiliaryLineMap<Bounds>>() {
-    public AuxiliaryLineMap<Bounds> apply() {
-      AuxiliaryLineMap<Bounds> _auxiliaryLineMap = new AuxiliaryLineMap<Bounds>();
-      return _auxiliaryLineMap;
-    }
-  }.apply();
+  private AuxiliaryLineMap<Bounds> rightMap = new AuxiliaryLineMap<Bounds>();
   
-  private AuxiliaryLineMap<Bounds> topMap = new Function0<AuxiliaryLineMap<Bounds>>() {
-    public AuxiliaryLineMap<Bounds> apply() {
-      AuxiliaryLineMap<Bounds> _auxiliaryLineMap = new AuxiliaryLineMap<Bounds>();
-      return _auxiliaryLineMap;
-    }
-  }.apply();
+  private AuxiliaryLineMap<Bounds> topMap = new AuxiliaryLineMap<Bounds>();
   
-  private AuxiliaryLineMap<Bounds> centerYMap = new Function0<AuxiliaryLineMap<Bounds>>() {
-    public AuxiliaryLineMap<Bounds> apply() {
-      AuxiliaryLineMap<Bounds> _auxiliaryLineMap = new AuxiliaryLineMap<Bounds>();
-      return _auxiliaryLineMap;
-    }
-  }.apply();
+  private AuxiliaryLineMap<Bounds> centerYMap = new AuxiliaryLineMap<Bounds>();
   
-  private AuxiliaryLineMap<Bounds> bottomMap = new Function0<AuxiliaryLineMap<Bounds>>() {
-    public AuxiliaryLineMap<Bounds> apply() {
-      AuxiliaryLineMap<Bounds> _auxiliaryLineMap = new AuxiliaryLineMap<Bounds>();
-      return _auxiliaryLineMap;
-    }
-  }.apply();
+  private AuxiliaryLineMap<Bounds> bottomMap = new AuxiliaryLineMap<Bounds>();
   
   public AuxiliaryLinesCache(final XDiagram diagram) {
     final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
@@ -151,8 +120,7 @@ public class AuxiliaryLinesCache {
       double _maxY_1 = boundsInDiagram.getMaxY();
       Collection<AuxiliaryLine> _byPosition_5 = this.bottomMap.getByPosition(_maxY_1);
       Iterable<AuxiliaryLine> _atLeastTwo_5 = this.atLeastTwo(_byPosition_5);
-      Iterable<AuxiliaryLine> _plus_6 = Iterables.<AuxiliaryLine>concat(_plus_5, _atLeastTwo_5);
-      _xblockexpression = (_plus_6);
+      _xblockexpression = Iterables.<AuxiliaryLine>concat(_plus_5, _atLeastTwo_5);
     }
     return _xblockexpression;
   }
@@ -162,8 +130,7 @@ public class AuxiliaryLinesCache {
     int _size = IterableExtensions.size(lines);
     boolean _lessThan = (_size < 2);
     if (_lessThan) {
-      List<AuxiliaryLine> _emptyList = CollectionLiterals.<AuxiliaryLine>emptyList();
-      _xifexpression = _emptyList;
+      _xifexpression = CollectionLiterals.<AuxiliaryLine>emptyList();
     } else {
       _xifexpression = lines;
     }

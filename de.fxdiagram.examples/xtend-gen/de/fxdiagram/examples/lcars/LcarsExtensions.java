@@ -1,11 +1,8 @@
 package de.fxdiagram.examples.lcars;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.examples.lcars.LcarsDiagram;
 import java.io.InputStream;
 import java.util.Map;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -26,7 +23,7 @@ public class LcarsExtensions {
       final InputStream input = _classLoader.getResourceAsStream("de/fxdiagram/examples/lcars/LCARSGTJ3.ttf");
       final Font font = Font.loadFont(input, size);
       LcarsExtensions.cache.put(Double.valueOf(size), font);
-      _xblockexpression = (font);
+      _xblockexpression = font;
     }
     return _xblockexpression;
   }
@@ -47,31 +44,7 @@ public class LcarsExtensions {
   
   public final static Color MAGENTA = LcarsExtensions.rgbColor(190, 78, 134);
   
-  public static Color rgbColor(final int red, final int green, final int blue) {
-    Color _color = new Color((red / 255.0), (green / 255.0), (blue / 255.0), 1);
-    return _color;
-  }
-  
-  public static LcarsDiagram getLcarsDiagram(final Node node) {
-    LcarsDiagram _switchResult = null;
-    boolean _matched = false;
-    if (!_matched) {
-      if (node instanceof LcarsDiagram) {
-        _matched=true;
-        _switchResult = ((LcarsDiagram)node);
-      }
-    }
-    if (!_matched) {
-      if (Objects.equal(node,null)) {
-        _matched=true;
-        _switchResult = null;
-      }
-    }
-    if (!_matched) {
-      Parent _parent = node.getParent();
-      LcarsDiagram _lcarsDiagram = LcarsExtensions.getLcarsDiagram(_parent);
-      _switchResult = _lcarsDiagram;
-    }
-    return _switchResult;
+  private static Color rgbColor(final int red, final int green, final int blue) {
+    return new Color((red / 255.0), (green / 255.0), (blue / 255.0), 1);
   }
 }

@@ -1,8 +1,11 @@
 package de.fxdiagram.examples.ecore;
 
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.AddESuperTypeRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.EClassHandle;
@@ -26,37 +29,25 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.xtend2.lib.StringConcatenation;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class EClassNode extends XNode {
-  private final Text label = new Function0<Text>() {
-    public Text apply() {
-      Text _text = new Text();
-      return _text;
-    }
-  }.apply();
+  private final VBox attributeCompartment = new VBox();
   
-  private final VBox attributeCompartment = new Function0<VBox>() {
-    public VBox apply() {
-      VBox _vBox = new VBox();
-      return _vBox;
-    }
-  }.apply();
+  private final VBox operationCompartment = new VBox();
   
-  private final VBox operationCompartment = new Function0<VBox>() {
-    public VBox apply() {
-      VBox _vBox = new VBox();
-      return _vBox;
-    }
-  }.apply();
+  public EClassNode(final EClassHandle domainObject) {
+    super(domainObject);
+  }
   
-  public EClassNode() {
+  public void doActivatePreview() {
+    super.doActivatePreview();
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -65,8 +56,12 @@ public class EClassNode extends XNode {
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
           public void apply(final VBox it) {
             ObservableList<Node> _children = it.getChildren();
+            Text _text = new Text();
             final Procedure1<Text> _function = new Procedure1<Text>() {
               public void apply(final Text it) {
+                EClass _eClass = EClassNode.this.getEClass();
+                String _name = _eClass.getName();
+                it.setText(_name);
                 it.setTextOrigin(VPos.TOP);
                 Font _font = it.getFont();
                 String _family = _font.getFamily();
@@ -79,7 +74,7 @@ public class EClassNode extends XNode {
                 VBox.setMargin(it, _insets);
               }
             };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(EClassNode.this.label, _function);
+            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
             ObservableList<Node> _children_1 = it.getChildren();
             Separator _separator = new Separator();
@@ -122,21 +117,8 @@ public class EClassNode extends XNode {
     return ((EClass) _domainObject_1);
   }
   
-  public void setDomainObject(final DomainObjectHandle domainObject) {
-    if ((domainObject instanceof EClassHandle)) {
-      super.setDomainObject(domainObject);
-      EClass _eClass = this.getEClass();
-      String _name = _eClass.getName();
-      this.label.setText(_name);
-    } else {
-      IllegalArgumentException _illegalArgumentException = new IllegalArgumentException("EClassNode can only use EClassHandles");
-      throw _illegalArgumentException;
-    }
-  }
-  
   protected Anchors createAnchors() {
-    RoundedRectangleAnchors _roundedRectangleAnchors = new RoundedRectangleAnchors(this, 12, 12);
-    return _roundedRectangleAnchors;
+    return new RoundedRectangleAnchors(this, 12, 12);
   }
   
   public void populateCompartments() {
@@ -181,8 +163,7 @@ public class EClassNode extends XNode {
             final Function1<EParameter,String> _function = new Function1<EParameter,String>() {
               public String apply(final EParameter it) {
                 EClassifier _eType = it.getEType();
-                String _name = _eType.getName();
-                return _name;
+                return _eType.getName();
               }
             };
             List<String> _map = ListExtensions.<EParameter, String>map(_eParameters, _function);
@@ -215,8 +196,7 @@ public class EClassNode extends XNode {
       } else {
         int _size = list.size();
         int _min = Math.min(_size, 4);
-        List<T> _subList = list.subList(0, _min);
-        _xifexpression_1 = _subList;
+        _xifexpression_1 = list.subList(0, _min);
       }
       _xifexpression = _xifexpression_1;
     }
@@ -225,13 +205,24 @@ public class EClassNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    EClass _eClass = this.getEClass();
-    String _name = _eClass.getName();
-    this.label.setText(_name);
     this.populateCompartments();
     AddESuperTypeRapidButtonBehavior _addESuperTypeRapidButtonBehavior = new AddESuperTypeRapidButtonBehavior(this);
     this.addBehavior(_addESuperTypeRapidButtonBehavior);
     AddEReferenceRapidButtonBehavior _addEReferenceRapidButtonBehavior = new AddEReferenceRapidButtonBehavior(this);
     this.addBehavior(_addEReferenceRapidButtonBehavior);
+  }
+  
+  /**
+   * Automatically generated by @ModelNode. Used in model deserialization.
+   */
+  public EClassNode(final ModelLoad modelLoad) {
+    super(modelLoad);
+  }
+  
+  public void populate(final ModelElement modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
+    modelElement.addProperty(widthProperty(), Double.class);
+    modelElement.addProperty(heightProperty(), Double.class);
   }
 }

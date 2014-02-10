@@ -23,19 +23,41 @@ import static de.fxdiagram.core.extensions.UriExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.scene.layout.VBox.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class NeonSignNode extends FlipNode {
 
 	TextField textField
 
 	Text neonText
 
-	new() {
-		front = neonSign => [
-			tooltip = 'Double-click for Xtend code'
-		]
+	new(String name) {
+		super(name)
+	}
+	
+	override doActivatePreview() {
+		front = neonSign
 		back = new ImageView => [
 			image = ImageCache.get.getImage(this, 'code.png')
+		]
+		super.doActivatePreview()
+	}
+	
+	override doActivate() {
+		super.doActivate()
+		front => [
+			tooltip = 'Double-click for Xtend code'
+			onMouseClicked = [                            // flickering animation
+				new Timeline => [
+					cycleCount = 20
+					keyFrames += new KeyFrame(10.millis, new KeyValue(neonText.opacityProperty, 0.45))
+					keyFrames += new KeyFrame(20.millis, new KeyValue(neonText.opacityProperty, 0.95))
+					keyFrames += new KeyFrame(40.millis, new KeyValue(neonText.opacityProperty, 0.65))
+					keyFrames += new KeyFrame(50.millis, new KeyValue(neonText.opacityProperty, 1))
+					play
+				]
+			]
 		]
 	}
 
@@ -63,16 +85,6 @@ class NeonSignNode extends FlipNode {
 						radius = 5
 						choke = 0.4
 					]
-				]
-			]
-			onMouseClicked = [                            // flickering animation
-				new Timeline => [
-					cycleCount = 20
-					keyFrames += new KeyFrame(10.millis, new KeyValue(neonText.opacityProperty, 0.45))
-					keyFrames += new KeyFrame(20.millis, new KeyValue(neonText.opacityProperty, 0.95))
-					keyFrames += new KeyFrame(40.millis, new KeyValue(neonText.opacityProperty, 0.65))
-					keyFrames += new KeyFrame(50.millis, new KeyValue(neonText.opacityProperty, 1))
-					play
 				]
 			]
 		]

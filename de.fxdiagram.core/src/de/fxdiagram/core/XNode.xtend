@@ -3,11 +3,12 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.Lazy
+import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.model.DomainObjectHandle
-import de.fxdiagram.core.model.ModelElement
 import de.fxdiagram.core.model.StringHandle
 import javafx.collections.ObservableList
 import javafx.scene.effect.DropShadow
@@ -19,11 +20,12 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
 @Logging
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class XNode extends XShape {
 
 	@FxProperty @Lazy double width
 	@FxProperty @Lazy double height
-	@FxProperty DomainObjectHandle domainObject
+	@FxProperty @ReadOnly DomainObjectHandle domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	
@@ -32,18 +34,13 @@ class XNode extends XShape {
 	Effect originalEffect
 
 	Anchors anchors
- 
- 	new() {
-		mouseOverEffect = createMouseOverEffect
-		selectionEffect = createSelectionEffect
-		anchors = createAnchors
+	
+ 	new(DomainObjectHandle domainObject) {
+ 		domainObjectProperty.set(domainObject)
  	}
  	
- 	def setName(String name) {
- 		if(domainObject != null)
- 			LOG.severe("Cannot set the name of an XNode when domainObject is already set.")
- 		else
- 			domainObject = new StringHandle(name);	
+ 	new(String name) {
+ 		this(new StringHandle(name))	
  	}
  	
  	def getKey() {
@@ -64,6 +61,12 @@ class XNode extends XShape {
 		]
 	}
 
+ 	override doActivatePreview() {
+		mouseOverEffect = createMouseOverEffect
+		selectionEffect = createSelectionEffect
+		anchors = createAnchors
+ 	}
+ 	
 	protected def Anchors createAnchors() {
 		new RectangleAnchors(this)
 	}
@@ -77,7 +80,8 @@ class XNode extends XShape {
 		onMouseExited = [
 			node.effect = originalEffect
 		]
-		switch n:node { XActivatable: n.activate }
+		if(node instanceof XActivatable)
+			(node as XActivatable).activate
 	}
 	
 	override selectionFeedback(boolean isSelected) {
@@ -141,13 +145,6 @@ class XNode extends XShape {
 			heightProperty.get
 		else
 			super.maxHeight(width)
-	}
-	
-	override populate(ModelElement it) {
-		super.populate(it)
-		addChildProperty(domainObjectProperty, DomainObjectHandle)
-		addProperty(widthProperty, Double)
-		addProperty(heightProperty, Double)
 	}
 	
 	override toString() {

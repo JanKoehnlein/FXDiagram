@@ -66,13 +66,12 @@ public class LayoutTests extends Application {
     this.diagram = _diagram;
     Scene _scene = new Scene(this.diagram, 1024, 768);
     stage.setScene(_scene);
-    StackPane _stackPane = new StackPane();
-    final StackPane rectangleBorderPane = _stackPane;
+    final StackPane rectangleBorderPane = new StackPane();
     final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
       public void apply(final XDiagram it) {
         it.activate();
         ObservableList<XNode> _nodes = it.getNodes();
-        XNode _xNode = new XNode();
+        XNode _xNode = new XNode("");
         final Procedure1<XNode> _function = new Procedure1<XNode>() {
           public void apply(final XNode it) {
           }
@@ -116,8 +115,7 @@ public class LayoutTests extends Application {
     String _plus_4 = (_plus_3 + " ");
     Bounds _layoutBounds = it.getLayoutBounds();
     String _plus_5 = (_plus_4 + _layoutBounds);
-    String _println = InputOutput.<String>println(_plus_5);
-    return _println;
+    return InputOutput.<String>println(_plus_5);
   }
   
   public String printSizes(final Node it) {
@@ -140,8 +138,7 @@ public class LayoutTests extends Application {
       String _plus_7 = (_plus_6 + " x ");
       double _minHeight_2 = it.minHeight((-1));
       String _plus_8 = (_plus_7 + Double.valueOf(_minHeight_2));
-      String _println = InputOutput.<String>println(_plus_8);
-      _xblockexpression = (_println);
+      _xblockexpression = InputOutput.<String>println(_plus_8);
     }
     return _xblockexpression;
   }

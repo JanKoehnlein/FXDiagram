@@ -16,8 +16,7 @@ public class OpenAction implements DiagramAction {
     ObservableList<XNode> _nodes = _diagram.getNodes();
     final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
       public Boolean apply(final XNode it) {
-        boolean _selected = it.getSelected();
-        return Boolean.valueOf(_selected);
+        return Boolean.valueOf(it.getSelected());
       }
     };
     final Iterable<XNode> selectedNodes = IterableExtensions.<XNode>filter(_nodes, _function);

@@ -13,7 +13,6 @@ import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import javafx.collections.ObservableList;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -32,25 +31,21 @@ public class ZoomToFitAction implements DiagramAction {
       ObservableList<XNode> _nodes = _diagram.getNodes();
       XDiagram _diagram_1 = root.getDiagram();
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
-      Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
-      _xifexpression = _plus;
+      _xifexpression = Iterables.<XShape>concat(_nodes, _connections);
     } else {
-      Iterable<XShape> _currentSelection_1 = root.getCurrentSelection();
-      _xifexpression = _currentSelection_1;
+      _xifexpression = root.getCurrentSelection();
     }
     final Iterable<XShape> elements = _xifexpression;
     final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
       public Bounds apply(final XShape it) {
         Bounds _snapBounds = it.getSnapBounds();
-        Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(it, _snapBounds);
-        return _localToRootDiagram;
+        return CoreExtensions.localToRootDiagram(it, _snapBounds);
       }
     };
     Iterable<Bounds> _map = IterableExtensions.<XShape, Bounds>map(elements, _function);
     final Function2<Bounds,Bounds,Bounds> _function_1 = new Function2<Bounds,Bounds,Bounds>() {
       public Bounds apply(final Bounds a, final Bounds b) {
-        BoundingBox _plus = BoundsExtensions.operator_plus(a, b);
-        return _plus;
+        return BoundsExtensions.operator_plus(a, b);
       }
     };
     final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
@@ -62,14 +57,14 @@ public class ZoomToFitAction implements DiagramAction {
     } else {
       double _width = selectionBounds.getWidth();
       boolean _greaterThan = (_width > NumberExpressionExtensions.EPSILON);
-      _and_1 = (_notEquals && _greaterThan);
+      _and_1 = _greaterThan;
     }
     if (!_and_1) {
       _and = false;
     } else {
       double _height = selectionBounds.getHeight();
       boolean _greaterThan_1 = (_height > NumberExpressionExtensions.EPSILON);
-      _and = (_and_1 && _greaterThan_1);
+      _and = _greaterThan_1;
     }
     if (_and) {
       Scene _scene = root.getScene();
