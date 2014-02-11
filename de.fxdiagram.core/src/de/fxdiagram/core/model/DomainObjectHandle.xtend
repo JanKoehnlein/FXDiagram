@@ -2,7 +2,6 @@ package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 
 interface DomainObjectHandle extends XModelProvider {
 	def String getKey()
@@ -13,11 +12,11 @@ interface DomainObjectHandle extends XModelProvider {
 @ModelNode(#['id', 'key', 'provider'])
 class DomainObjectHandleImpl implements DomainObjectHandle {
 	
-	@FxProperty@ReadOnly DomainObjectProvider provider
+	@FxProperty /* @ReadOnly */ DomainObjectProvider provider
 	
-	@FxProperty@ReadOnly String id
+	@FxProperty /* @ReadOnly */ String id
 	
-	@FxProperty@ReadOnly String key
+	@FxProperty /* @ReadOnly */ String key
 	
 	Object cachedDomainObject
 	
@@ -39,19 +38,13 @@ class DomainObjectHandleImpl implements DomainObjectHandle {
 	
 }
 
-@ModelNode(#['key', 'provider'])
+@ModelNode(#['key'])
 class StringHandle implements DomainObjectHandle {
 	
-	@FxProperty@ReadOnly String key = null
+	@FxProperty /* @ReadOnly */String key = null
 	
 	new(String key) {
 		setKey(key)
-	}
-	
-	def setKey(String key) {
-		if(getKey() != null)
-			throw new IllegalStateException("Cannot reset the key on a StringHandle")
-		keyProperty.set(key)
 	}
 	
 	override getId() {

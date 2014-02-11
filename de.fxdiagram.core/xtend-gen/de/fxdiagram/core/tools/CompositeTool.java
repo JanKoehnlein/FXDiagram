@@ -34,7 +34,7 @@ public class CompositeTool implements XDiagramTool {
         return Boolean.valueOf(_or);
       }
     };
-    return (IterableExtensions.<Boolean>reduce(_map, _function_1)).booleanValue();
+    return (boolean) IterableExtensions.<Boolean>reduce(_map, _function_1);
   }
   
   public boolean deactivate() {
@@ -55,6 +55,6 @@ public class CompositeTool implements XDiagramTool {
         return Boolean.valueOf(_or);
       }
     };
-    return (IterableExtensions.<Boolean>reduce(_map, _function_1)).booleanValue();
+    return (boolean) IterableExtensions.<Boolean>reduce(_map, _function_1);
   }
 }

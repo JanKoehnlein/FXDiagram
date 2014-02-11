@@ -23,6 +23,8 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -356,17 +358,18 @@ public class CoreExtensions {
   }
   
   public static <T extends Object> void addInitializingListener(final ObservableList<T> list, final InitializingListListener<T> listListener) {
-    final Procedure1<T> _function = new Procedure1<T>() {
-      public void apply(final T it) {
-        Procedure1<? super T> _add = listListener.getAdd();
-        _add.apply(it);
-      }
-    };
-    IterableExtensions.<T>forEach(list, _function);
     list.addListener(listListener);
+    int _size = list.size();
+    ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size, true);
+    for (final Integer i : _doubleDotLessThan) {
+      Procedure1<? super T> _add = listListener.getAdd();
+      T _get = list.get((i).intValue());
+      _add.apply(_get);
+    }
   }
   
   public static <T extends Object> void addInitializingListener(final ObservableValue<T> value, final InitializingListener<T> listener) {
+    value.addListener(listener);
     T _value = value.getValue();
     boolean _notEquals = (!Objects.equal(_value, null));
     if (_notEquals) {
@@ -374,21 +377,22 @@ public class CoreExtensions {
       T _value_1 = value.getValue();
       _set.apply(_value_1);
     }
-    value.addListener(listener);
   }
   
   public static <T extends Object, U extends Object> void removeInitializingListener(final ObservableMap<T,U> map, final InitializingMapListener<T,U> mapListener) {
-    Set<Map.Entry<T,U>> _entrySet = map.entrySet();
-    final Procedure1<Map.Entry<T,U>> _function = new Procedure1<Map.Entry<T,U>>() {
-      public void apply(final Map.Entry<T,U> it) {
+    map.removeListener(mapListener);
+    final Set<Map.Entry<T,U>> entries = map.entrySet();
+    int _size = entries.size();
+    ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size, true);
+    for (final Integer i : _doubleDotLessThan) {
+      {
+        final Map.Entry<T,U> entry = ((Map.Entry<T,U>[])Conversions.unwrapArray(entries, Map.Entry.class))[(i).intValue()];
         Procedure2<? super T,? super U> _remove = mapListener.getRemove();
-        T _key = it.getKey();
-        U _value = it.getValue();
+        T _key = entry.getKey();
+        U _value = entry.getValue();
         _remove.apply(_key, _value);
       }
-    };
-    IterableExtensions.<Map.Entry<T,U>>forEach(_entrySet, _function);
-    map.removeListener(mapListener);
+    }
   }
   
   public static <T extends Object> void removeInitializingListener(final ObservableList<T> list, final InitializingListListener<T> listListener) {

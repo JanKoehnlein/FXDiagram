@@ -1,6 +1,6 @@
 package de.fxdiagram.core.model;
 
-import com.google.common.collect.Iterables;
+import com.google.common.base.Objects;
 import de.fxdiagram.core.model.ModelChangeListener;
 import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelFactory;
@@ -67,67 +67,65 @@ public class Model {
   ModelElement addElement(final Object node) {
     ModelElement _xblockexpression = null;
     {
-      final ModelElement element = this.modelFactory.createElement(node);
-      this.index.put(node, element);
-      this.modelSync.addElement(element);
-      List<Property<?>> _constructorProperties = element.getConstructorProperties();
+      final ModelElement element = this.getOrCreateModelElement(node);
+      List<Property<?>> _properties = element.getProperties();
       final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
         public void apply(final Property<?> it) {
-          Object _value = it.getValue();
-          if (_value!=null) {
-            Model.this.addElement(_value);
-          }
-        }
-      };
-      IterableExtensions.<Property<?>>forEach(_constructorProperties, _function);
-      List<Property<?>> _children = element.getChildren();
-      final Procedure1<Property<?>> _function_1 = new Procedure1<Property<?>>() {
-        public void apply(final Property<?> it) {
-          Object _value = it.getValue();
-          if (_value!=null) {
-            Model.this.addElement(_value);
+          boolean _isPrimitive = element.isPrimitive(it);
+          boolean _not = (!_isPrimitive);
+          if (_not) {
+            Object _value = it.getValue();
+            if (_value!=null) {
+              Model.this.addElement(_value);
+            }
           }
           it.addListener(Model.this.changeListener);
         }
       };
-      IterableExtensions.<Property<?>>forEach(_children, _function_1);
-      List<ListProperty<?>> _listChildren = element.getListChildren();
-      final Procedure1<ListProperty<?>> _function_2 = new Procedure1<ListProperty<?>>() {
+      IterableExtensions.<Property<?>>forEach(_properties, _function);
+      List<ListProperty<?>> _listProperties = element.getListProperties();
+      final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
         public void apply(final ListProperty<?> it) {
-          ObservableList<?> _value = it.getValue();
-          final Procedure1<Object> _function = new Procedure1<Object>() {
-            public void apply(final Object it) {
-              if (it!=null) {
-                Model.this.addElement(it);
+          boolean _isPrimitive = element.isPrimitive(it);
+          boolean _not = (!_isPrimitive);
+          if (_not) {
+            ObservableList<?> _value = it.getValue();
+            final Procedure1<Object> _function = new Procedure1<Object>() {
+              public void apply(final Object it) {
+                if (it!=null) {
+                  Model.this.addElement(it);
+                }
               }
-            }
-          };
-          IterableExtensions.forEach(_value, _function);
+            };
+            IterableExtensions.forEach(_value, _function);
+          }
           it.addListener(Model.this.listChangeListener);
         }
       };
-      IterableExtensions.<ListProperty<?>>forEach(_listChildren, _function_2);
-      List<Property<?>> _properties = element.getProperties();
-      final Procedure1<Property<?>> _function_3 = new Procedure1<Property<?>>() {
-        public void apply(final Property<?> it) {
-          if (it!=null) {
-            it.addListener(Model.this.changeListener);
-          }
-        }
-      };
-      IterableExtensions.<Property<?>>forEach(_properties, _function_3);
-      List<ListProperty<?>> _listProperties = element.getListProperties();
-      final Procedure1<ListProperty<?>> _function_4 = new Procedure1<ListProperty<?>>() {
-        public void apply(final ListProperty<?> it) {
-          if (it!=null) {
-            it.addListener(Model.this.listChangeListener);
-          }
-        }
-      };
-      IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_4);
+      IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_1);
       _xblockexpression = element;
     }
     return _xblockexpression;
+  }
+  
+  protected ModelElement getOrCreateModelElement(final Object node) {
+    final ModelElement existingElement = this.index.get(node);
+    boolean _equals = Objects.equal(existingElement, null);
+    if (_equals) {
+      ModelElement _elvis = null;
+      if (existingElement != null) {
+        _elvis = existingElement;
+      } else {
+        ModelElement _createElement = this.modelFactory.createElement(node);
+        _elvis = _createElement;
+      }
+      final ModelElement element = _elvis;
+      this.index.put(node, element);
+      this.modelSync.addElement(element);
+      return element;
+    } else {
+      return existingElement;
+    }
   }
   
   ModelElement removeElement(final Object node) {
@@ -135,24 +133,20 @@ public class Model {
     {
       final ModelElement element = this.index.remove(node);
       this.modelSync.removeElement(element);
-      List<Property<?>> _children = element.getChildren();
       List<Property<?>> _properties = element.getProperties();
-      Iterable<Property<?>> _plus = Iterables.<Property<?>>concat(_children, _properties);
       final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
         public void apply(final Property<?> it) {
           it.removeListener(Model.this.changeListener);
         }
       };
-      IterableExtensions.<Property<?>>forEach(_plus, _function);
-      List<ListProperty<?>> _listChildren = element.getListChildren();
+      IterableExtensions.<Property<?>>forEach(_properties, _function);
       List<ListProperty<?>> _listProperties = element.getListProperties();
-      Iterable<ListProperty<?>> _plus_1 = Iterables.<ListProperty<?>>concat(_listChildren, _listProperties);
       final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
         public void apply(final ListProperty<?> it) {
           it.removeListener(Model.this.listChangeListener);
         }
       };
-      IterableExtensions.<ListProperty<?>>forEach(_plus_1, _function_1);
+      IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_1);
       _xblockexpression = element;
     }
     return _xblockexpression;

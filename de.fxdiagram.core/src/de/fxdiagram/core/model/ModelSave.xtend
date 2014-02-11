@@ -2,9 +2,7 @@ package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.logging.Logging
 import java.io.Writer
-import java.util.List
 import java.util.Map
-import java.util.Set
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.FloatProperty
@@ -16,14 +14,10 @@ import javafx.beans.property.StringProperty
 import javax.json.Json
 import javax.json.stream.JsonGenerator
 
-import static extension de.fxdiagram.core.model.ModelPersistence.*
-
 @Logging
 class ModelSave {
 
 	Map<ModelElement, String> idMap
-
-	Set<ModelElement> alreadySerialized
 
 	Model model
 
@@ -31,92 +25,37 @@ class ModelSave {
 		model = new Model(root)
 		if (model.rootElement != null) {
 			idMap = newHashMap
-			createIDs(model.rootElement, "")
-			alreadySerialized = newHashSet
 			Json.createGeneratorFactory(#{JsonGenerator.PRETTY_PRINTING -> true})
 				.createGenerator(out)
-				.writeStartObject
-				.write(model.rootElement)
-				.writeEnd
+				.write(model.rootElement, null, '')
 				.close
 		}
 	}
 
-	protected def void createIDs(ModelElement it, String id) {
-		if (it != null) {
-			idMap.put(it, id)
-			for (property : children) {
-				if (property.value != null)
-					createIDs(model.index.get(property.value), id + "/" + property.name)
-			}
-			for (property : listChildren) {
-				var i = 0
-				for (value : property.value) {
-					if (value != null)
-						createIDs(model.index.get(value), id + "/" + property.name + "." + i)
-					i = i + 1
-				}
-			}
-		}
-	}
-
-	protected def JsonGenerator write(JsonGenerator gen, ModelElement element) {
-		if (!alreadySerialized.add(element)) {
-			gen.write(idMap.get(element))
+	protected def JsonGenerator write(JsonGenerator gen, ModelElement element, String propertyName, String currentId) {
+		if(element == null) {
+			gen.writeNull(propertyName)
 		} else {
-			gen.writeStartObject('__constructor')
-			val className = element.node.class.canonicalName
-			gen.write("__class", className)
-			val paramTypes = element.constructorProperties.map[element.getType(it)]
-			val constructor = element.node.class.findConstructor(paramTypes)
-			var List<Property<?>> remainingChildren
-			if(constructor != null) {
-				remainingChildren = #[]
-				if(!element.constructorProperties.empty) {
-					gen.writeStartArray('__params')
-					element.constructorProperties.forEach [
-						gen .writeStartObject()
-							.write(model.index.get(value))
-							.writeEnd
-					]
-					gen.writeEnd
-				}
+			val cachedId = idMap.get(element)
+			if (cachedId != null) {
+				gen.write(propertyName, cachedId)
 			} else {
-				LOG.warning('Cannot find constructor ' + className + '(' + paramTypes.map[simpleName].join(',') + '). Using no-arg constructor instead.')
-				remainingChildren = element.constructorProperties
+				idMap.put(element, currentId)
+				val className = element.node.class.canonicalName
+				if(propertyName != null)
+					gen.writeStartObject(propertyName)
+				else
+					gen.writeStartObject()
+				gen.write("__class", className)
+				element.properties.forEach[write(gen, it, element.getType(it), currentId)]
+				element.listProperties.forEach[write(gen, it, element.getType(it), currentId)]
+				gen.writeEnd
 			}
-			gen.writeEnd;
-			element.listChildren.forEach [
-				if(!empty) {
-					gen.writeStartArray(name)
-					value.forEach [
-						if (it == null) {
-							gen.writeNull
-						} else {
-							gen
-								.writeStartObject
-								.write(model.index.get(it))
-								.writeEnd
-						}
-					]
-					gen.writeEnd
-				}
-			]
-			(remainingChildren + element.children).forEach [
-				if (value != null) {
-					gen
-						.writeStartObject(name)
-						.write(model.index.get(value))
-						.writeEnd
-				}
-			]
-			element.properties.forEach[write(gen, it, element.getType(it))]
-			element.listProperties.forEach[write(gen, it, element.getType(it))]
 		}
 		return gen
 	}
 
-	protected def write(JsonGenerator gen, Property<?> property, Class<?> propertyType) {
+	protected def write(JsonGenerator gen, Property<?> property, Class<?> propertyType, String currentId) {
 		if(property.value != null) {
 			switch propertyType {
 				case String:
@@ -134,14 +73,17 @@ class ModelSave {
 				case Enum.isAssignableFrom(propertyType):
 					gen.write(property.name, property.value.toString)
 				default:
-					gen.write(property.name, idMap.get(model.index.get(property.value)))
+					gen.write(model.index.get(property.value), 
+						property.name, 
+						currentId + '/' + property.name)
 			}
 		}
 	}
 
-	protected def write(JsonGenerator gen, ListProperty<?> property, Class<?> propertyType) {
+	protected def write(JsonGenerator gen, ListProperty<?> property, Class<?> propertyType, String currentId) {
 		gen.writeStartArray(property.name)
-		for (value : property.value) {
+		for (i: 0..<property.value.size) {
+			val value = property.value.get(i)
 			switch propertyType {
 				case String:
 					gen.write(value as String)
@@ -158,7 +100,9 @@ class ModelSave {
 				case Enum.isAssignableFrom(propertyType):
 					gen.write(value.toString)
 				default:
-					gen.write(idMap.get(model.index.get(property.value)))
+					gen.write(model.index.get(value), 
+						null, 
+						currentId + '/' + property.name + '.' + i)
 			}
 		}
 		gen.writeEnd()

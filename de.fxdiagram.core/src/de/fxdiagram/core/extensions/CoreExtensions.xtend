@@ -4,6 +4,13 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
+import javafx.collections.ListChangeListener
+import javafx.collections.ListChangeListener.Change
+import javafx.collections.MapChangeListener
+import javafx.collections.ObservableList
+import javafx.collections.ObservableMap
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
@@ -13,13 +20,6 @@ import javafx.scene.transform.Affine
 import javafx.scene.transform.Transform
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
-import javafx.collections.ListChangeListener
-import javafx.collections.ListChangeListener.Change
-import javafx.collections.ObservableList
-import javafx.beans.value.ObservableValue
-import javafx.beans.value.ChangeListener
-import javafx.collections.ObservableMap
-import javafx.collections.MapChangeListener
 
 class CoreExtensions {
 
@@ -150,19 +150,24 @@ class CoreExtensions {
 	} 
 
 	public static def <T> addInitializingListener(ObservableList<T> list, InitializingListListener<T> listListener) {
-		list.forEach[listListener.add.apply(it)]
 		list.addListener(listListener)
+		for(i: 0..<list.size)
+			listListener.add.apply(list.get(i))
 	} 
 
 	public static def <T> addInitializingListener(ObservableValue<T> value, InitializingListener<T> listener) {
+		value.addListener(listener)
 		if(value.value != null)
 			listener.set.apply(value.value)
-		value.addListener(listener)
 	} 
 
 	public static def <T, U> removeInitializingListener(ObservableMap<T, U> map, InitializingMapListener<T, U> mapListener) {
-		map.entrySet.forEach[mapListener.remove.apply(key, value)]
 		map.removeListener(mapListener)
+		val entries = map.entrySet
+		for(i: 0..<entries.size) {
+			val entry = entries.get(i)
+			mapListener.remove.apply(entry.key, entry.value)
+		}
 	} 
 
 	public static def <T> removeInitializingListener(ObservableList<T> list, InitializingListListener<T> listListener) {

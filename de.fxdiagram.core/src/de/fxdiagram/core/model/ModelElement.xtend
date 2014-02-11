@@ -9,15 +9,9 @@ class ModelElement {
 
 	Object node
 
-	List<Property<?>> constructorProperties
-
 	List<Property<?>> properties
 
 	List<ListProperty<?>> listProperties
-
-	List<Property<?>> children
-
-	List<ListProperty<?>> listChildren
 
 	Map<String, Class<?>> propertyTypes = newHashMap
 
@@ -25,16 +19,6 @@ class ModelElement {
 		this.node = node
 	}
 	
-	def <T> addConstructorProperty(Property<T> property, Class<? extends T> propertyType) {
-		// TODO handle null
-		if (property != null) {
-			if (constructorProperties == null)
-				constructorProperties = newArrayList
-			constructorProperties += property
-			propertyTypes.put(property.name, propertyType)
-		}
-	}
-
 	def <T> addProperty(Property<T> property, Class<? extends T> propertyType) {
 		// TODO handle null
 		if (property != null) {
@@ -52,35 +36,6 @@ class ModelElement {
 		propertyTypes.put(listProperty.name, componentType)
 	}
 
-	def <T> addChildProperty(Property<T> child, Class<? extends T> propertyType) {
-		// TODO handle null
-		if (child != null) {
-			if (children == null)
-				children = newArrayList
-			children += child
-			propertyTypes.put(child.name, propertyType)
-		}
-	}
-
-	def <T> addChildProperty(ListProperty<T> listChild, Class<? extends T> componentType) {
-		if (listChildren == null)
-			listChildren = newArrayList
-		listChildren += listChild
-		propertyTypes.put(listChild.name, componentType)
-	}
-
-	def getConstructorProperties() {
-		constructorProperties ?: emptyList
-	}
-
-	def getChildren() {
-		children ?: emptyList
-	}
-
-	def getListChildren() {
-		listChildren ?: emptyList
-	}
-
 	def getProperties() {
 		properties ?: emptyList
 	}
@@ -93,6 +48,12 @@ class ModelElement {
 		propertyTypes.get(property.name)
 	}
 
+	def isPrimitive(Property<?> property) {
+		val type = property.type
+		return #{Double, Float, Integer, Long, Boolean, String}.contains(type)
+			|| Enum.isAssignableFrom(type) 	
+	}
+	
 	def getNode() {
 		node
 	}

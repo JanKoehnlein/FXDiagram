@@ -67,36 +67,36 @@ public class ModelSync {
   }
   
   protected void addElement(final ModelElement element) {
-    List<Property<?>> _children = element.getChildren();
+    List<Property<?>> _properties = element.getProperties();
     final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
       public void apply(final Property<?> it) {
         it.addListener(ModelSync.this.childrenListener);
       }
     };
-    IterableExtensions.<Property<?>>forEach(_children, _function);
-    List<ListProperty<?>> _listChildren = element.getListChildren();
+    IterableExtensions.<Property<?>>forEach(_properties, _function);
+    List<ListProperty<?>> _listProperties = element.getListProperties();
     final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
       public void apply(final ListProperty<?> it) {
         it.addListener(ModelSync.this.childrenListListener);
       }
     };
-    IterableExtensions.<ListProperty<?>>forEach(_listChildren, _function_1);
+    IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_1);
   }
   
   protected void removeElement(final ModelElement element) {
-    List<Property<?>> _children = element.getChildren();
+    List<Property<?>> _properties = element.getProperties();
     final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
       public void apply(final Property<?> it) {
         it.removeListener(ModelSync.this.childrenListener);
       }
     };
-    IterableExtensions.<Property<?>>forEach(_children, _function);
-    List<ListProperty<?>> _listChildren = element.getListChildren();
+    IterableExtensions.<Property<?>>forEach(_properties, _function);
+    List<ListProperty<?>> _listProperties = element.getListProperties();
     final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
       public void apply(final ListProperty<?> it) {
         it.removeListener(ModelSync.this.childrenListListener);
       }
     };
-    IterableExtensions.<ListProperty<?>>forEach(_listChildren, _function_1);
+    IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_1);
   }
 }

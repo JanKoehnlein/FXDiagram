@@ -25,12 +25,15 @@ public class XDiagramChildrenListener<T extends Node & XActivatable> extends Ini
         }
         ObservableList<Node> _children = layer.getChildren();
         _children.add(it);
-        it.activate();
+        boolean _isActive = diagram.getIsActive();
+        if (_isActive) {
+          it.activate();
+        }
       }
     };
     this.setAdd(_function);
-    final Procedure1<Node> _function_1 = new Procedure1<Node>() {
-      public void apply(final Node it) {
+    final Procedure1<T> _function_1 = new Procedure1<T>() {
+      public void apply(final T it) {
         ObservableList<Node> _children = layer.getChildren();
         _children.remove(it);
       }

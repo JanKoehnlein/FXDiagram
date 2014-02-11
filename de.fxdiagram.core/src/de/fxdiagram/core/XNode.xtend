@@ -4,7 +4,6 @@ import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.Lazy
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
@@ -25,7 +24,7 @@ class XNode extends XShape {
 
 	@FxProperty @Lazy double width
 	@FxProperty @Lazy double height
-	@FxProperty @ReadOnly DomainObjectHandle domainObject
+	@FxProperty /* @ReadOnly */ DomainObjectHandle domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	

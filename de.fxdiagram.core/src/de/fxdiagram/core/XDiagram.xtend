@@ -50,7 +50,7 @@ class XDiagram extends Group implements XActivatable {
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
 	
-	@FxProperty @ReadOnly XDiagram parentDiagram
+	@FxProperty /* @ReadOnly */ XDiagram parentDiagram
 
 	(XDiagram)=>void contentsInitializer
 
@@ -91,8 +91,8 @@ class XDiagram extends Group implements XActivatable {
 	
 	override activate() {
 		if(!isActive) {
-			doActivate
 			isActiveProperty.set(true);
+			doActivate
 		}
 	}
 	
@@ -136,7 +136,7 @@ class XDiagram extends Group implements XActivatable {
 			addBehavior(new DiagramNavigationBehavior(this))
 		behaviors.addInitializingListener(new InitializingMapListener => [
 			put = [ key, Behavior value | value.activate() ]
-			remove = [ key, value | ]
+			remove = [ key, value | value.activate() ]
 		])
 	}
 	
@@ -212,7 +212,8 @@ class XDiagramChildrenListener<T extends Node & XActivatable> extends Initializi
 			if (it instanceof XShape)
 				it.activatePreview
 			layer.children += it
-			it.activate
+			if(diagram.isActive)
+				it.activate
 		]
 		remove = [
 			layer.children -= it

@@ -27,7 +27,7 @@ import javafx.scene.layout.Pane
 import static extension de.fxdiagram.core.css.JavaToCss.*
 
 @Logging
-@ModelNode(#['domainObjctProviders', 'diagram'])
+@ModelNode(#['domainObjectProviders', 'diagram'])
 class XRoot extends Parent implements XActivatable {
 	
 	@FxProperty @ReadOnly boolean isActive

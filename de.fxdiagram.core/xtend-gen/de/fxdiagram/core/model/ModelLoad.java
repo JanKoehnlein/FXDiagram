@@ -1,15 +1,12 @@
 package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Iterables;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.model.CrossRefData;
 import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelFactory;
-import de.fxdiagram.core.model.ModelPersistence;
 import de.fxdiagram.core.model.ParseException;
 import java.io.Reader;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,12 +28,9 @@ import javax.json.JsonReader;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
@@ -71,90 +65,28 @@ public class ModelLoad {
     try {
       Object _xblockexpression = null;
       {
-        final JsonObject jsonConstructor = jsonObject.getJsonObject("__constructor");
-        final String className = jsonConstructor.getString("__class");
-        final ArrayList<Object> params = CollectionLiterals.<Object>newArrayList();
-        boolean _containsKey = jsonConstructor.containsKey("__params");
-        if (_containsKey) {
-          JsonArray _jsonArray = jsonConstructor.getJsonArray("__params");
-          final Iterable<JsonObject> jsonParams = Iterables.<JsonObject>filter(_jsonArray, JsonObject.class);
-          int _size = IterableExtensions.size(jsonParams);
-          ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size, true);
-          for (final Integer i : _doubleDotLessThan) {
-            JsonObject _get = ((JsonObject[])Conversions.unwrapArray(jsonParams, JsonObject.class))[(i).intValue()];
-            Object _readNode = this.readNode(_get, ((currentID + "/__params.") + i));
-            params.add(_readNode);
-          }
-        }
+        final String className = jsonObject.getString("__class");
         final Class<?> clazz = Class.forName(className);
-        final Function1<Object,Class<?>> _function = new Function1<Object,Class<?>>() {
-          public Class<?> apply(final Object it) {
-            return it.getClass();
+        final Object node = clazz.newInstance();
+        this.idMap.put(currentID, node);
+        final ModelElement model = this.modelFactory.createElement(node);
+        List<Property<?>> _properties = model.getProperties();
+        final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
+          public void apply(final Property<?> it) {
+            Class<?> _type = model.getType(it);
+            ModelLoad.this.readProperty(jsonObject, it, _type, currentID);
           }
         };
-        final List<Class<?>> paramTypes = ListExtensions.<Object, Class<?>>map(params, _function);
-        final Constructor<?> constructor = ModelPersistence.findConstructor(clazz, paramTypes);
-        Object _xifexpression = null;
-        boolean _equals = Objects.equal(constructor, null);
-        if (_equals) {
-          Class<?> _xblockexpression_1 = null;
-          {
-            final Function1<Class<?>,String> _function_1 = new Function1<Class<?>,String>() {
-              public String apply(final Class<?> it) {
-                return it.getSimpleName();
-              }
-            };
-            List<String> _map = ListExtensions.<Class<?>, String>map(paramTypes, _function_1);
-            String _join = IterableExtensions.join(_map, ",");
-            String _plus = ((("Couldn\'t find compatible constructor " + className) + "(") + _join);
-            String _plus_1 = (_plus + ")");
-            ModelLoad.LOG.warning(_plus_1);
-            _xblockexpression_1 = clazz;
+        IterableExtensions.<Property<?>>forEach(_properties, _function);
+        List<ListProperty<?>> _listProperties = model.getListProperties();
+        final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
+          public void apply(final ListProperty<?> it) {
+            Class<?> _type = model.getType(it);
+            ModelLoad.this.readListProperty(jsonObject, it, _type, currentID);
           }
-          _xifexpression = _xblockexpression_1;
-        } else {
-          Object _xblockexpression_2 = null;
-          {
-            final Object node = constructor.newInstance(((Object[]) ((Object[])Conversions.unwrapArray(params, Object.class))));
-            this.idMap.put(currentID, node);
-            final ModelElement model = this.modelFactory.createElement(node);
-            List<ListProperty<?>> _listChildren = model.getListChildren();
-            final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
-              public void apply(final ListProperty<?> it) {
-                Class<?> _type = model.getType(it);
-                ModelLoad.this.readListProperty(jsonObject, it, _type, currentID);
-              }
-            };
-            IterableExtensions.<ListProperty<?>>forEach(_listChildren, _function_1);
-            List<Property<?>> _children = model.getChildren();
-            final Procedure1<Property<?>> _function_2 = new Procedure1<Property<?>>() {
-              public void apply(final Property<?> it) {
-                Class<?> _type = model.getType(it);
-                ModelLoad.this.readProperty(jsonObject, it, _type, currentID);
-              }
-            };
-            IterableExtensions.<Property<?>>forEach(_children, _function_2);
-            List<Property<?>> _properties = model.getProperties();
-            final Procedure1<Property<?>> _function_3 = new Procedure1<Property<?>>() {
-              public void apply(final Property<?> it) {
-                Class<?> _type = model.getType(it);
-                ModelLoad.this.readProperty(jsonObject, it, _type, currentID);
-              }
-            };
-            IterableExtensions.<Property<?>>forEach(_properties, _function_3);
-            List<ListProperty<?>> _listProperties = model.getListProperties();
-            final Procedure1<ListProperty<?>> _function_4 = new Procedure1<ListProperty<?>>() {
-              public void apply(final ListProperty<?> it) {
-                Class<?> _type = model.getType(it);
-                ModelLoad.this.readListProperty(jsonObject, it, _type, currentID);
-              }
-            };
-            IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_4);
-            _xblockexpression_2 = node;
-          }
-          _xifexpression = _xblockexpression_2;
-        }
-        _xblockexpression = _xifexpression;
+        };
+        IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_1);
+        _xblockexpression = node;
       }
       return _xblockexpression;
     } catch (Throwable _e) {

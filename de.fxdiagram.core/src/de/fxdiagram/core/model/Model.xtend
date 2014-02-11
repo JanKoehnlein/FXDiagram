@@ -48,30 +48,37 @@ class Model {
 	}
 
 	package def ModelElement addElement(Object node) {
-		val element = modelFactory.createElement(node)
-		index.put(node, element)
-		modelSync.addElement(element)
-		element.constructorProperties.forEach [
-			value?.addElement
-		]
-		element.children.forEach [
-			value?.addElement
+		val element = getOrCreateModelElement(node)
+		element.properties.forEach [
+			if(!element.isPrimitive(it))
+				value?.addElement
 			addListener(changeListener)
 		]
-		element.listChildren.forEach [
-			value.forEach[it?.addElement]
+		element.listProperties.forEach [
+			if(!element.isPrimitive(it))
+				value.forEach[it?.addElement]
 			addListener(listChangeListener)
 		]
-		element.properties.forEach[it?.addListener(changeListener)]
-		element.listProperties.forEach[it?.addListener(listChangeListener)]
 		element
+	}
+	
+	protected def getOrCreateModelElement(Object node) {
+		val existingElement = index.get(node)
+		if(existingElement == null) {
+			val element = existingElement ?: modelFactory.createElement(node)
+			index.put(node, element)
+			modelSync.addElement(element)
+			return element
+		} else {
+			return existingElement
+		}
 	}
 
 	package def removeElement(Object node) {
 		val element = index.remove(node)
 		modelSync.removeElement(element)
-		(element.children + element.properties).forEach[removeListener(changeListener)]
-		(element.listChildren + element.listProperties).forEach[removeListener(listChangeListener)]
+		element.properties.forEach[removeListener(changeListener)]
+		element.listProperties.forEach[removeListener(listChangeListener)]
 		element
 	}
 

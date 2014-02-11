@@ -13,6 +13,8 @@ TODO
   - save all diagrams
   - @ModelNode add initialize method automatically
   - XNode.key -> name, DomainObjectHandle.key -> name
+  - Fix movie node
+  
 BUGS
 - player.seek doesn't work
 - labels snap back after being repositioned

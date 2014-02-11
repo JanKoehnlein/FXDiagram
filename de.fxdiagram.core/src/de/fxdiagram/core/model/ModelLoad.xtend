@@ -42,39 +42,18 @@ class ModelLoad {
 	}
 	
 	protected def Object readNode(JsonObject jsonObject, String currentID) {
-		val jsonConstructor = jsonObject.getJsonObject('__constructor')
-		val className = jsonConstructor.getString('__class')
-		val params = newArrayList
-		if(jsonConstructor.containsKey("__params")) {
-			val jsonParams = jsonConstructor.getJsonArray('__params').filter(JsonObject)
-			for(i: 0..<jsonParams.size) {
-				params += jsonParams.get(i).readNode(currentID + "/__params." + i)
-			}
-		}
+		val className = jsonObject.getString('__class')
 		val clazz = Class.forName(className)
-		val paramTypes = params.map[class]
-		val constructor = clazz.findConstructor(paramTypes)
-		if(constructor == null) {
-			LOG.warning('Couldn\'t find compatible constructor ' + className + '(' + paramTypes.map[simpleName].join(',')+ ')')
-			clazz
-		} else {
-			val node = constructor.newInstance(params as Object[])
-			idMap.put(currentID, node)
-			val model = modelFactory.createElement(node)
-			model.listChildren.forEach [
-				jsonObject.readListProperty(it, model.getType(it), currentID)
-			]
-			model.children.forEach [
-				jsonObject.readProperty(it, model.getType(it), currentID)
-			]		
-			model.properties.forEach [
-				jsonObject.readProperty(it, model.getType(it), currentID)
-			]		
-			model.listProperties.forEach [
-				jsonObject.readListProperty(it, model.getType(it), currentID)
-			]		
-			node
-		}
+		val node = clazz.newInstance()
+		idMap.put(currentID, node)
+		val model = modelFactory.createElement(node)
+		model.properties.forEach [
+			jsonObject.readProperty(it, model.getType(it), currentID)
+		]		
+		model.listProperties.forEach [
+			jsonObject.readListProperty(it, model.getType(it), currentID)
+		]		
+		node
 	}
 
 	protected def readProperty(JsonObject it, Property<?> property, Class<?> propertyType, String currentID) {

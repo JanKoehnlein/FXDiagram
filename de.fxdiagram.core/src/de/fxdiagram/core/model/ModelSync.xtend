@@ -28,12 +28,12 @@ class ModelSync {
 	}
 
 	protected def void addElement(ModelElement element) {
-		element.children.forEach[addListener(childrenListener)]
-		element.listChildren.forEach[addListener(childrenListListener)]
+		element.properties.forEach[addListener(childrenListener)]
+		element.listProperties.forEach[addListener(childrenListListener)]
 	}
 
 	protected def void removeElement(ModelElement element) {
-		element.children.forEach[removeListener(childrenListener)]
-		element.listChildren.forEach[removeListener(childrenListListener)]
+		element.properties.forEach[removeListener(childrenListener)]
+		element.listProperties.forEach[removeListener(childrenListListener)]
 	}
 }
