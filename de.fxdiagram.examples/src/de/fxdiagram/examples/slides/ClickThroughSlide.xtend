@@ -9,7 +9,6 @@ import javafx.scene.image.Image
 import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import javafx.scene.layout.StackPane
 
 class ClickThroughSlide extends Slide {
 	
@@ -34,7 +33,7 @@ class ClickThroughSlide extends Slide {
 	
 	protected override createNode() {
 		val node = super.createNode()
-		(node as StackPane).children += pane = new Group
+		node.children += pane = new Group
 		node
 	}
 	

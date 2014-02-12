@@ -32,7 +32,7 @@ public class Slide extends XNode {
     this.setBackgroundImage(backgroundImage);
   }
   
-  protected Node createNode() {
+  protected StackPane createNode() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
       public void apply(final StackPane it) {

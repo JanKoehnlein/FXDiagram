@@ -51,11 +51,11 @@ public class ClickThroughSlide extends Slide {
     this.currentNode = _head;
   }
   
-  protected Node createNode() {
-    Node _xblockexpression = null;
+  protected StackPane createNode() {
+    StackPane _xblockexpression = null;
     {
-      final Node node = super.createNode();
-      ObservableList<Node> _children = ((StackPane) node).getChildren();
+      final StackPane node = super.createNode();
+      ObservableList<Node> _children = node.getChildren();
       Group _group = new Group();
       Group _pane = this.pane = _group;
       _children.add(_pane);
