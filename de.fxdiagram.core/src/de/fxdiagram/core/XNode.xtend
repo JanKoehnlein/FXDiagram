@@ -42,11 +42,11 @@ class XNode extends XShape {
  		this(new StringHandle(name))	
  	}
  	
- 	def getKey() {
-		val key = domainObject?.key
- 		if(key == null)
+ 	def getName() {
+		val name = domainObject?.name
+ 		if(name == null)
  			LOG.severe("XNodes key is null")
- 		key
+ 		name
  	}
  		
 	protected def createMouseOverEffect() {
@@ -152,7 +152,7 @@ class XNode extends XShape {
 	}
 	
 	override toString() {
-		class.name + " (" + domainObject?.key + ")" 
+		class.name + " (" + name + ")" 
 	}
 	
 }

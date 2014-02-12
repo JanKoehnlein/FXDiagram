@@ -55,7 +55,7 @@ class LcarsModelProvider implements DomainObjectProvider{
 
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class LcarsEntryHandle extends DomainObjectHandleImpl {
 	
 	new(String dbId, String name, LcarsModelProvider provider) {
@@ -67,7 +67,7 @@ class LcarsEntryHandle extends DomainObjectHandleImpl {
 	}
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class LcarsConnectionHandle extends DomainObjectHandleImpl {
 	
 	new(String fieldName, LcarsModelProvider provider) {

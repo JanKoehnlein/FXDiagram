@@ -48,8 +48,6 @@ class LcarsNode extends XNode {
 	
 	extension NameShortener = new NameShortener()
 	
-	String name
-
 	Map<String,List<LcarsField>> pages
 
 	List<String> imageUrls = newArrayList
@@ -68,7 +66,6 @@ class LcarsNode extends XNode {
 	}
 	
 	protected override createNode() {
-		this.name = key
 		imageUrls = (data.get("images") as List<DBObject>).map[get('url').toString]
 		vbox = new VBox
 		val node = new RectangleBorderPane => [

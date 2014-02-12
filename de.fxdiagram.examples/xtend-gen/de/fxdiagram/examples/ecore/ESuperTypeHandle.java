@@ -8,7 +8,7 @@ import de.fxdiagram.examples.ecore.ESuperType;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import org.eclipse.xtext.xbase.lib.Extension;
 
-@ModelNode({ "id", "key", "provider" })
+@ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
 public class ESuperTypeHandle extends DomainObjectHandleImpl {
   public ESuperTypeHandle(final ESuperType it, @Extension final EcoreDomainObjectProvider provider) {
@@ -29,7 +29,7 @@ public class ESuperTypeHandle extends DomainObjectHandleImpl {
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(keyProperty(), String.class);
+    modelElement.addProperty(nameProperty(), String.class);
     modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
   }
 }

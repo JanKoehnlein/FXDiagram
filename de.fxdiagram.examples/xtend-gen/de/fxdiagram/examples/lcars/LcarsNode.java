@@ -88,8 +88,6 @@ public class LcarsNode extends XNode {
   @Extension
   private NameShortener _nameShortener = new NameShortener();
   
-  private String name;
-  
   private Map<String,List<LcarsField>> pages;
   
   private List<String> imageUrls = CollectionLiterals.<String>newArrayList();
@@ -115,8 +113,6 @@ public class LcarsNode extends XNode {
   protected Node createNode() {
     RectangleBorderPane _xblockexpression = null;
     {
-      String _key = this.getKey();
-      this.name = _key;
       DBObject _data = this.getData();
       Object _get = _data.get("images");
       final Function1<DBObject,String> _function = new Function1<DBObject,String>() {
@@ -161,7 +157,8 @@ public class LcarsNode extends XNode {
                   ObservableList<Node> _children_1 = it.getChildren();
                   final Procedure1<Text> _function_1 = new Procedure1<Text>() {
                     public void apply(final Text it) {
-                      it.setText(LcarsNode.this.name);
+                      String _name = LcarsNode.this.getName();
+                      it.setText(_name);
                       it.setFill(LcarsExtensions.FLESH);
                       Font _lcarsFont = LcarsExtensions.lcarsFont(28);
                       it.setFont(_lcarsFont);
@@ -488,7 +485,8 @@ public class LcarsNode extends XNode {
     super.doActivate();
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.infoBox.boundsInLocalProperty();
     _boundsInLocalProperty.removeListener(this.nameShortener);
-    this.nameField.setText(this.name);
+    String _name = this.getName();
+    this.nameField.setText(_name);
     DBObject _data = this.getData();
     LinkedHashMap<String,List<LcarsField>> _createPages = this.createPages(_data);
     this.pages = _createPages;

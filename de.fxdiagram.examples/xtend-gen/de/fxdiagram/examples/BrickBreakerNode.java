@@ -47,8 +47,8 @@ public class BrickBreakerNode extends FlipNode {
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
             public void apply(final Text it) {
-              String _key = BrickBreakerNode.this.getKey();
-              it.setText(_key);
+              String _name = BrickBreakerNode.this.getName();
+              it.setText(_name);
               it.setTextOrigin(VPos.TOP);
               Insets _insets = new Insets(10, 20, 10, 20);
               StackPane.setMargin(it, _insets);

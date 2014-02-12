@@ -39,8 +39,8 @@ public class SimpleNode extends XNode {
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
-            String _key = SimpleNode.this.getKey();
-            it.setText(_key);
+            String _name = SimpleNode.this.getName();
+            it.setText(_name);
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
@@ -63,12 +63,8 @@ public class SimpleNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    DomainObjectHandle _domainObject = this.getDomainObject();
-    String _key = null;
-    if (_domainObject!=null) {
-      _key=_domainObject.getKey();
-    }
-    this.label.setText(_key);
+    String _name = this.getName();
+    this.label.setText(_name);
   }
   
   protected Anchors createAnchors() {

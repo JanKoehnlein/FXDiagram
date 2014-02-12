@@ -116,8 +116,8 @@ public class OpenableDiagramNode extends XNode {
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
-            String _key = OpenableDiagramNode.this.getKey();
-            it.setText(_key);
+            String _name = OpenableDiagramNode.this.getName();
+            it.setText(_name);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
           }
@@ -139,12 +139,8 @@ public class OpenableDiagramNode extends XNode {
     super.doActivate();
     TooltipExtensions.setTooltip(this.pane, "Double-click to open");
     this.setCursor(Cursor.HAND);
-    DomainObjectHandle _domainObject = this.getDomainObject();
-    String _key = null;
-    if (_domainObject!=null) {
-      _key=_domainObject.getKey();
-    }
-    this.textNode.setText(_key);
+    String _name = this.getName();
+    this.textNode.setText(_name);
     XRoot _root = CoreExtensions.getRoot(this);
     this.root = _root;
     XDiagram _innerDiagram = this.getInnerDiagram();

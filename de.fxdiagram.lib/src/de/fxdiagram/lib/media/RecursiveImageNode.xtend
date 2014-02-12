@@ -141,7 +141,7 @@ class FirstRecursiveImageNode extends XNode {
 	Deque<Group> panes = new LinkedList<Group>
 
 	new(RecursiveImageNode parent) {
-		super(parent.key + '_')
+		super(parent.name + '_')
 		this.recursiveImageNode = parent
 	}
 

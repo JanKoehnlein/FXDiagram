@@ -16,6 +16,7 @@ import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -87,7 +88,7 @@ public class XConnection extends XShape implements XModelProvider {
   }
   
   public XConnection(final XNode source, final XNode target) {
-    this(source, target, new StringHandle(((source.getKey() + "->") + target.getKey())));
+    this(source, target, new StringHandle(((source.getName() + "->") + target.getName())));
   }
   
   public void setSource(final XNode source) {
@@ -148,51 +149,42 @@ public class XConnection extends XShape implements XModelProvider {
     };
     this.controlPointListener = _function;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
-      public void apply(final XControlPoint it) {
-        it.activate();
-        DoubleProperty _layoutXProperty = it.layoutXProperty();
-        _layoutXProperty.addListener(XConnection.this.controlPointListener);
-        DoubleProperty _layoutYProperty = it.layoutYProperty();
-        _layoutYProperty.addListener(XConnection.this.controlPointListener);
-      }
-    };
-    IterableExtensions.<XControlPoint>forEach(_controlPoints, _function_1);
-    ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-    final ListChangeListener<XControlPoint> _function_2 = new ListChangeListener<XControlPoint>() {
-      public void onChanged(final ListChangeListener.Change<? extends XControlPoint> it) {
-        final ObservableList<? extends XControlPoint> points = it.getList();
-        XConnection.this.updateShapes();
-        boolean _next = it.next();
-        boolean _while = _next;
-        while (_while) {
-          List<? extends XControlPoint> _addedSubList = it.getAddedSubList();
-          final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-            public void apply(final XControlPoint it) {
-              final int index = points.indexOf(it);
-              boolean _and = false;
-              if (!(index != 0)) {
-                _and = false;
-              } else {
-                int _size = points.size();
-                boolean _notEquals = (index != _size);
-                _and = _notEquals;
-              }
-              if (_and) {
-                it.activate();
-              }
-              DoubleProperty _layoutXProperty = it.layoutXProperty();
-              _layoutXProperty.addListener(XConnection.this.controlPointListener);
-              DoubleProperty _layoutYProperty = it.layoutYProperty();
-              _layoutYProperty.addListener(XConnection.this.controlPointListener);
+    InitializingListListener<XControlPoint> _initializingListListener = new InitializingListListener<XControlPoint>();
+    final Procedure1<InitializingListListener<XControlPoint>> _function_1 = new Procedure1<InitializingListListener<XControlPoint>>() {
+      public void apply(final InitializingListListener<XControlPoint> it) {
+        final Procedure1<ListChangeListener.Change<? extends XControlPoint>> _function = new Procedure1<ListChangeListener.Change<? extends XControlPoint>>() {
+          public void apply(final ListChangeListener.Change<? extends XControlPoint> it) {
+            XConnection.this.updateShapes();
+          }
+        };
+        it.setChange(_function);
+        final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
+          public void apply(final XControlPoint it) {
+            ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
+            final int index = _controlPoints.indexOf(it);
+            boolean _or = false;
+            if ((index == 0)) {
+              _or = true;
+            } else {
+              ObservableList<XControlPoint> _controlPoints_1 = XConnection.this.getControlPoints();
+              int _size = _controlPoints_1.size();
+              int _minus = (_size - 1);
+              boolean _equals = (index == _minus);
+              _or = _equals;
             }
-          };
-          IterableExtensions.forEach(_addedSubList, _function);
-          boolean _next_1 = it.next();
-          _while = _next_1;
-        }
-        List<? extends XControlPoint> _removed = it.getRemoved();
-        final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+            if (_or) {
+              it.initializeGraphics();
+            } else {
+              it.activate();
+            }
+            DoubleProperty _layoutXProperty = it.layoutXProperty();
+            _layoutXProperty.addListener(XConnection.this.controlPointListener);
+            DoubleProperty _layoutYProperty = it.layoutYProperty();
+            _layoutYProperty.addListener(XConnection.this.controlPointListener);
+          }
+        };
+        it.setAdd(_function_1);
+        final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
           public void apply(final XControlPoint it) {
             DoubleProperty _layoutXProperty = it.layoutXProperty();
             _layoutXProperty.removeListener(XConnection.this.controlPointListener);
@@ -200,22 +192,23 @@ public class XConnection extends XShape implements XModelProvider {
             _layoutYProperty.removeListener(XConnection.this.controlPointListener);
           }
         };
-        IterableExtensions.forEach(_removed, _function);
+        it.setRemove(_function_2);
       }
     };
-    _controlPoints_1.addListener(_function_2);
+    InitializingListListener<XControlPoint> _doubleArrow = ObjectExtensions.<InitializingListListener<XControlPoint>>operator_doubleArrow(_initializingListListener, _function_1);
+    CoreExtensions.<XControlPoint>addInitializingListener(_controlPoints, _doubleArrow);
     ObservableList<XConnectionLabel> _labels = this.getLabels();
-    final Procedure1<XConnectionLabel> _function_3 = new Procedure1<XConnectionLabel>() {
+    final Procedure1<XConnectionLabel> _function_2 = new Procedure1<XConnectionLabel>() {
       public void apply(final XConnectionLabel it) {
         it.activate();
       }
     };
-    IterableExtensions.<XConnectionLabel>forEach(_labels, _function_3);
+    IterableExtensions.<XConnectionLabel>forEach(_labels, _function_2);
     ConnectionRouter _connectionRouter = this.getConnectionRouter();
     _connectionRouter.activate();
     this.updateShapes();
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
-    final ChangeListener<Parent> _function_4 = new ChangeListener<Parent>() {
+    final ChangeListener<Parent> _function_3 = new ChangeListener<Parent>() {
       public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
         boolean _equals = Objects.equal(newValue, null);
         if (_equals) {
@@ -228,7 +221,7 @@ public class XConnection extends XShape implements XModelProvider {
         }
       }
     };
-    _parentProperty.addListener(_function_4);
+    _parentProperty.addListener(_function_3);
   }
   
   public void selectionFeedback(final boolean isSelected) {

@@ -7,7 +7,7 @@ import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 
-@ModelNode({ "id", "key", "provider" })
+@ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
 public class LcarsEntryHandle extends DomainObjectHandleImpl {
   public LcarsEntryHandle(final String dbId, final String name, final LcarsModelProvider provider) {
@@ -27,7 +27,7 @@ public class LcarsEntryHandle extends DomainObjectHandleImpl {
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(keyProperty(), String.class);
+    modelElement.addProperty(nameProperty(), String.class);
     modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
   }
 }

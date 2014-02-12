@@ -168,8 +168,8 @@ abstract class AbstractChooser implements XDiagramTool {
 	}
 	
 	def addChoice(XNode node, DomainObjectHandle choiceInfo) {
-		if (!nodeMap.containsKey(node.key)) {
-			nodeMap.put(node.key, node)
+		if (!nodeMap.containsKey(node.name)) {
+			nodeMap.put(node.name, node)
 			node.initializeGraphics
 			node.layout
 			calculateVisibleNodes
@@ -264,7 +264,7 @@ abstract class AbstractChooser implements XDiagramTool {
 		if (choice != null) {
 			getNodes.forEach[onMouseClicked = null]
 			group.children.remove(choice)
-			var existingChoice = diagram.nodes.findFirst[key == choice.key]
+			var existingChoice = diagram.nodes.findFirst[name == choice.name]
 			if(existingChoice == null) {
 				existingChoice = choice
 				val unlayoutedBounds = choice.layoutBounds
@@ -415,9 +415,9 @@ abstract class AbstractChooser implements XDiagramTool {
 
 	def protected matchesFilter(XNode node) {
 		if (filterString.toLowerCase == filterString)
-			node.key.toLowerCase.contains(filterString)
+			node.name.toLowerCase.contains(filterString)
 		else
-			node.key.contains(filterString)
+			node.name.contains(filterString)
 	}
 
 	def void relocateButtons(Node minusButton, Node plusButton) {

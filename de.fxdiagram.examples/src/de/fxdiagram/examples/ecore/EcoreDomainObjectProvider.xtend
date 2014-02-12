@@ -62,7 +62,7 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 	}
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class EClassHandle extends DomainObjectHandleImpl {
 	
 	new(EClass eClass, extension EcoreDomainObjectProvider provider) {
@@ -74,7 +74,7 @@ class EClassHandle extends DomainObjectHandleImpl {
 	}
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class EReferenceHandle extends DomainObjectHandleImpl {
 	
 	new(EReference eReference, extension EcoreDomainObjectProvider provider) {
@@ -97,7 +97,7 @@ class EReferenceHandle extends DomainObjectHandleImpl {
 	}
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class ESuperTypeHandle extends DomainObjectHandleImpl {
 	
 	new(ESuperType it, extension EcoreDomainObjectProvider provider) {

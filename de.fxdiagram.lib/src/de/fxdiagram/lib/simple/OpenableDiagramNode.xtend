@@ -73,7 +73,7 @@ class OpenableDiagramNode extends XNode {
 		pane => [
 			children += textNode = new Text => [
 				textOrigin = VPos.TOP
-				text = key
+				text = name
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
 		]
@@ -87,7 +87,7 @@ class OpenableDiagramNode extends XNode {
 		super.doActivate()
 		pane.tooltip = "Double-click to open"
 		cursor = Cursor.HAND
-		textNode.text = domainObject?.key
+		textNode.text = name
 		this.root = getRoot
 		if(innerDiagram == null) {
 			LOG.severe('Nested diagram not set. Deactivating open behavior')

@@ -295,14 +295,14 @@ public abstract class AbstractChooser implements XDiagramTool {
   
   public boolean addChoice(final XNode node, final DomainObjectHandle choiceInfo) {
     boolean _xifexpression = false;
-    String _key = node.getKey();
-    boolean _containsKey = this.nodeMap.containsKey(_key);
+    String _name = node.getName();
+    boolean _containsKey = this.nodeMap.containsKey(_name);
     boolean _not = (!_containsKey);
     if (_not) {
       boolean _xblockexpression = false;
       {
-        String _key_1 = node.getKey();
-        this.nodeMap.put(_key_1, node);
+        String _name_1 = node.getName();
+        this.nodeMap.put(_name_1, node);
         node.initializeGraphics();
         node.layout();
         this.calculateVisibleNodes();
@@ -517,9 +517,9 @@ public abstract class AbstractChooser implements XDiagramTool {
         ObservableList<XNode> _nodes_1 = _diagram.getNodes();
         final Function1<XNode,Boolean> _function_1 = new Function1<XNode,Boolean>() {
           public Boolean apply(final XNode it) {
-            String _key = it.getKey();
-            String _key_1 = choice.getKey();
-            return Boolean.valueOf(Objects.equal(_key, _key_1));
+            String _name = it.getName();
+            String _name_1 = choice.getName();
+            return Boolean.valueOf(Objects.equal(_name, _name_1));
           }
         };
         XNode existingChoice = IterableExtensions.<XNode>findFirst(_nodes_1, _function_1);
@@ -894,14 +894,14 @@ public abstract class AbstractChooser implements XDiagramTool {
     String _filterString_1 = this.getFilterString();
     boolean _equals = Objects.equal(_lowerCase, _filterString_1);
     if (_equals) {
-      String _key = node.getKey();
-      String _lowerCase_1 = _key.toLowerCase();
+      String _name = node.getName();
+      String _lowerCase_1 = _name.toLowerCase();
       String _filterString_2 = this.getFilterString();
       _xifexpression = _lowerCase_1.contains(_filterString_2);
     } else {
-      String _key_1 = node.getKey();
+      String _name_1 = node.getName();
       String _filterString_3 = this.getFilterString();
-      _xifexpression = _key_1.contains(_filterString_3);
+      _xifexpression = _name_1.contains(_filterString_3);
     }
     return _xifexpression;
   }

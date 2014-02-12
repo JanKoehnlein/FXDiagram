@@ -10,14 +10,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-@ModelNode({ "id", "key", "provider" })
+@ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
 public class DomainObjectHandleImpl implements DomainObjectHandle {
   private Object cachedDomainObject;
   
-  public DomainObjectHandleImpl(final String id, final String key, final DomainObjectProvider provider) {
+  public DomainObjectHandleImpl(final String id, final String name, final DomainObjectProvider provider) {
     this.idProperty.set(id);
-    this.keyProperty.set(key);
+    this.nameProperty.set(name);
     this.providerProperty.set(provider);
   }
   
@@ -61,7 +61,7 @@ public class DomainObjectHandleImpl implements DomainObjectHandle {
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty, String.class);
-    modelElement.addProperty(keyProperty, String.class);
+    modelElement.addProperty(nameProperty, String.class);
     modelElement.addProperty(providerProperty, DomainObjectProvider.class);
   }
   
@@ -93,17 +93,17 @@ public class DomainObjectHandleImpl implements DomainObjectHandle {
     return this.idProperty;
   }
   
-  private SimpleStringProperty keyProperty = new SimpleStringProperty(this, "key");
+  private SimpleStringProperty nameProperty = new SimpleStringProperty(this, "name");
   
-  public String getKey() {
-    return this.keyProperty.get();
+  public String getName() {
+    return this.nameProperty.get();
   }
   
-  public void setKey(final String key) {
-    this.keyProperty.set(key);
+  public void setName(final String name) {
+    this.nameProperty.set(name);
   }
   
-  public StringProperty keyProperty() {
-    return this.keyProperty;
+  public StringProperty nameProperty() {
+    return this.nameProperty;
   }
 }

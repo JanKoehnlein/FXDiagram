@@ -55,20 +55,20 @@ public class XNode extends XShape implements XModelProvider {
     this(new StringHandle(name));
   }
   
-  public String getKey() {
+  public String getName() {
     String _xblockexpression = null;
     {
       DomainObjectHandle _domainObject = this.getDomainObject();
-      String _key = null;
+      String _name = null;
       if (_domainObject!=null) {
-        _key=_domainObject.getKey();
+        _name=_domainObject.getName();
       }
-      final String key = _key;
-      boolean _equals = Objects.equal(key, null);
+      final String name = _name;
+      boolean _equals = Objects.equal(name, null);
       if (_equals) {
         XNode.LOG.severe("XNodes key is null");
       }
-      _xblockexpression = key;
+      _xblockexpression = name;
     }
     return _xblockexpression;
   }
@@ -244,12 +244,8 @@ public class XNode extends XShape implements XModelProvider {
     Class<? extends XNode> _class = this.getClass();
     String _name = _class.getName();
     String _plus = (_name + " (");
-    DomainObjectHandle _domainObject = this.getDomainObject();
-    String _key = null;
-    if (_domainObject!=null) {
-      _key=_domainObject.getKey();
-    }
-    String _plus_1 = (_plus + _key);
+    String _name_1 = this.getName();
+    String _plus_1 = (_plus + _name_1);
     return (_plus_1 + ")");
   }
   

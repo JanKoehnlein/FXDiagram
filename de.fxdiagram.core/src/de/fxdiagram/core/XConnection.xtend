@@ -7,12 +7,12 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.model.DomainObjectHandle
 import de.fxdiagram.core.model.StringHandle
 import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
-import javafx.collections.ListChangeListener.Change
 import javafx.collections.ObservableList
 import javafx.geometry.BoundingBox
 import javafx.geometry.Point2D
@@ -71,7 +71,7 @@ class XConnection extends XShape {
 	}
 	
 	new(XNode source, XNode target) {
-		this(source, target, new StringHandle(source.key + '->' + target.key))
+		this(source, target, new StringHandle(source.name + '->' + target.name))
 	}
 	
 	def void setSource(XNode source) {
@@ -102,28 +102,24 @@ class XConnection extends XShape {
 		controlPointListener = [ prop, oldVal, newVal |
 			updateShapes
 		]
-		controlPoints.forEach[
-			activate
-			layoutXProperty.addListener(controlPointListener)
-			layoutYProperty.addListener(controlPointListener)
-		]
-		controlPoints.addListener [ 
-			Change<? extends XControlPoint> it | 
-			val points = list
-			updateShapes
-			while(next) 
-				addedSubList.forEach [
-					val index = points.indexOf(it)					
-					if(index != 0 && index != points.size)
-						activate
-					layoutXProperty.addListener(controlPointListener)
-					layoutYProperty.addListener(controlPointListener)
-				]
-				removed.forEach [
-					layoutXProperty.removeListener(controlPointListener)
-					layoutYProperty.removeListener(controlPointListener)
-				]
-		]
+		controlPoints.addInitializingListener(new InitializingListListener() => [
+			change = [
+				updateShapes
+			]
+			add = [ XControlPoint it | // Oops, have to declare 'it'
+				val index = controlPoints.indexOf(it)
+				if(index == 0 || index == controlPoints.size()-1)
+					it.initializeGraphics  // Oops, have to write 'it'
+				else 
+					it.activate
+				it.layoutXProperty.addListener(controlPointListener)
+				it.layoutYProperty.addListener(controlPointListener)
+			]
+			remove = [
+				it.layoutXProperty.removeListener(controlPointListener)
+				it.layoutYProperty.removeListener(controlPointListener)
+			]		
+		]);
 		labels.forEach[activate]
 		connectionRouter.activate
 		updateShapes

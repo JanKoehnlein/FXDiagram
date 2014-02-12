@@ -50,7 +50,7 @@ class MovieNode extends FlipNode {
 		val node = super.createNode
 		front = new RectangleBorderPane => [
 			children += new Text => [
-				text = key
+				text = name
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]

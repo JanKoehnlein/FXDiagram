@@ -197,10 +197,13 @@ class InitializingMapListener<T,U> implements MapChangeListener<T, U> {
 
 class InitializingListListener<T> implements ListChangeListener<T> {
 	
+	@Property var (Change<? extends T>)=>void change
 	@Property var (T)=>void add
 	@Property var (T)=>void remove
 	
 	override onChanged(Change<? extends T> c) {
+		if(change != null)
+			change.apply(c)
 		while(c.next) 
 			if(add != null && c.wasAdded) 
 				c.addedSubList.forEach[add.apply(it)]

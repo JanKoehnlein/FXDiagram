@@ -61,8 +61,8 @@ public class LevelOfDetailDiagramNode extends XNode {
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
-            String _key = LevelOfDetailDiagramNode.this.getKey();
-            it.setText(_key);
+            String _name = LevelOfDetailDiagramNode.this.getName();
+            it.setText(_name);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
           }
@@ -105,12 +105,8 @@ public class LevelOfDetailDiagramNode extends XNode {
     super.doActivate();
     final Procedure1<Text> _function = new Procedure1<Text>() {
       public void apply(final Text it) {
-        DomainObjectHandle _domainObject = LevelOfDetailDiagramNode.this.getDomainObject();
-        String _key = null;
-        if (_domainObject!=null) {
-          _key=_domainObject.getKey();
-        }
-        it.setText(_key);
+        String _name = LevelOfDetailDiagramNode.this.getName();
+        it.setText(_name);
         TooltipExtensions.setTooltip(it, "Zoom to reveal content");
       }
     };
@@ -118,8 +114,8 @@ public class LevelOfDetailDiagramNode extends XNode {
       this.label, _function);
     boolean _equals = Objects.equal(this.innerDiagram, null);
     if (_equals) {
-      String _key = this.getKey();
-      String _plus = ("No inner diagram set on node " + _key);
+      String _name = this.getName();
+      String _plus = ("No inner diagram set on node " + _name);
       String _plus_1 = (_plus + ". LOD behavior deactivated");
       LevelOfDetailDiagramNode.LOG.severe(_plus_1);
     } else {

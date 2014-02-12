@@ -26,7 +26,7 @@ public class FirstRecursiveImageNode extends XNode {
   private Deque<Group> panes = new LinkedList<Group>();
   
   public FirstRecursiveImageNode(final RecursiveImageNode parent) {
-    super((parent.getKey() + "_"));
+    super((parent.getName() + "_"));
     this.recursiveImageNode = parent;
   }
   

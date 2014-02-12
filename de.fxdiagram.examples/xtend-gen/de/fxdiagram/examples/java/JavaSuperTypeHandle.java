@@ -7,7 +7,7 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaSuperType;
 
-@ModelNode({ "id", "key", "provider" })
+@ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
 public class JavaSuperTypeHandle extends DomainObjectHandleImpl {
   public JavaSuperTypeHandle(final JavaSuperType it, final JavaModelProvider provider) {
@@ -28,7 +28,7 @@ public class JavaSuperTypeHandle extends DomainObjectHandleImpl {
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(keyProperty(), String.class);
+    modelElement.addProperty(nameProperty(), String.class);
     modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
   }
 }

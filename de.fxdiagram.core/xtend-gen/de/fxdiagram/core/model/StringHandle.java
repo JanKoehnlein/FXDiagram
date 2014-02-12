@@ -6,19 +6,19 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-@ModelNode({ "key" })
+@ModelNode({ "name" })
 @SuppressWarnings("all")
 public class StringHandle implements DomainObjectHandle {
-  public StringHandle(final String key) {
-    this.setKey(key);
+  public StringHandle(final String name) {
+    this.nameProperty.set(name);
   }
   
   public String getId() {
-    return this.getKey();
+    return this.getName();
   }
   
   public Object getDomainObject() {
-    return this.getKey();
+    return this.getName();
   }
   
   /**
@@ -28,24 +28,24 @@ public class StringHandle implements DomainObjectHandle {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(keyProperty, String.class);
+    modelElement.addProperty(nameProperty, String.class);
   }
   
-  private SimpleStringProperty keyProperty = new SimpleStringProperty(this, "key",_initKey());
+  private SimpleStringProperty nameProperty = new SimpleStringProperty(this, "name",_initName());
   
-  private static final String _initKey() {
+  private static final String _initName() {
     return null;
   }
   
-  public String getKey() {
-    return this.keyProperty.get();
+  public String getName() {
+    return this.nameProperty.get();
   }
   
-  public void setKey(final String key) {
-    this.keyProperty.set(key);
+  public void setName(final String name) {
+    this.nameProperty.set(name);
   }
   
-  public StringProperty keyProperty() {
-    return this.keyProperty;
+  public StringProperty nameProperty() {
+    return this.nameProperty;
   }
 }

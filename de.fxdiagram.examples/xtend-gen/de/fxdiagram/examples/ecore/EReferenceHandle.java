@@ -9,7 +9,7 @@ import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 
-@ModelNode({ "id", "key", "provider" })
+@ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
 public class EReferenceHandle extends DomainObjectHandleImpl {
   public EReferenceHandle(final EReference eReference, @Extension final EcoreDomainObjectProvider provider) {
@@ -66,7 +66,7 @@ public class EReferenceHandle extends DomainObjectHandleImpl {
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(keyProperty(), String.class);
+    modelElement.addProperty(nameProperty(), String.class);
     modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
   }
 }

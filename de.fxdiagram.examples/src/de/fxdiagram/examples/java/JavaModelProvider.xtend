@@ -45,7 +45,7 @@ class JavaModelProvider implements DomainObjectProvider {
 	
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class JavaTypeHandle extends DomainObjectHandleImpl {
 	
 	new(Class<?> javaClass, JavaModelProvider provider) {
@@ -57,7 +57,7 @@ class JavaTypeHandle extends DomainObjectHandleImpl {
 	}
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class JavaPropertyHandle extends DomainObjectHandleImpl {
 	
 	new(JavaProperty it, JavaModelProvider provider) {
@@ -69,7 +69,7 @@ class JavaPropertyHandle extends DomainObjectHandleImpl {
 	}
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class JavaSuperTypeHandle extends DomainObjectHandleImpl {
 
 	new(JavaSuperType it, JavaModelProvider provider) {

@@ -4,25 +4,25 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 
 interface DomainObjectHandle extends XModelProvider {
-	def String getKey()
+	def String getName()
 	def String getId()
 	def Object getDomainObject()
 }
 
-@ModelNode(#['id', 'key', 'provider'])
+@ModelNode(#['id', 'name', 'provider'])
 class DomainObjectHandleImpl implements DomainObjectHandle {
 	
 	@FxProperty /* @ReadOnly */ DomainObjectProvider provider
 	
 	@FxProperty /* @ReadOnly */ String id
 	
-	@FxProperty /* @ReadOnly */ String key
+	@FxProperty /* @ReadOnly */ String name
 	
 	Object cachedDomainObject
 	
-	new(String id, String key, DomainObjectProvider provider) {
+	new(String id, String name, DomainObjectProvider provider) {
 		idProperty.set(id)
-		keyProperty.set(key)
+		nameProperty.set(name)
 		providerProperty.set(provider)
 	}
 	
@@ -38,20 +38,20 @@ class DomainObjectHandleImpl implements DomainObjectHandle {
 	
 }
 
-@ModelNode(#['key'])
+@ModelNode(#['name'])
 class StringHandle implements DomainObjectHandle {
 	
-	@FxProperty /* @ReadOnly */String key = null
+	@FxProperty /* @ReadOnly */String name = null
 	
-	new(String key) {
-		setKey(key)
+	new(String name) {
+		nameProperty.set(name)
 	}
 	
 	override getId() {
-		key
+		name
 	}
 	
 	override getDomainObject() {
-		key
+		name
 	}
 }

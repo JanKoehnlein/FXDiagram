@@ -33,7 +33,7 @@ abstract class XShape extends Parent implements XActivatable {
 			val newNode = createNode
 			if(newNode != null) {
 				nodeProperty.set(newNode)
-				children.setAll(newNode)
+				children.add(newNode)
 			}
 		}
 		nodeProperty.get

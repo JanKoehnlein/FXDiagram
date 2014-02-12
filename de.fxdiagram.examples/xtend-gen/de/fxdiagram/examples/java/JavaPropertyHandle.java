@@ -7,7 +7,7 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaProperty;
 
-@ModelNode({ "id", "key", "provider" })
+@ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
 public class JavaPropertyHandle extends DomainObjectHandleImpl {
   public JavaPropertyHandle(final JavaProperty it, final JavaModelProvider provider) {
@@ -27,7 +27,7 @@ public class JavaPropertyHandle extends DomainObjectHandleImpl {
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(keyProperty(), String.class);
+    modelElement.addProperty(nameProperty(), String.class);
     modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
   }
 }

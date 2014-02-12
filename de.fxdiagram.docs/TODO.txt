@@ -8,7 +8,6 @@ TODO
   - properly calculate existing edges 
   - rename handle -> descriptor
   - save all diagrams
-  - XNode.key -> name, DomainObjectHandle.key -> name
   - fix LOD node
   
 BUGS
@@ -30,6 +29,7 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
+- XNode.key -> name, DomainObjectHandle.key -> name
 - restore labels, XConnectionPointTypes
 - add constructor XNode(domainObject), load domainObject first
 - fix LCARS example
