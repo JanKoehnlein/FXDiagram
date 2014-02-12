@@ -5,7 +5,6 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -119,9 +118,9 @@ public class LevelOfDetailDiagramNode extends XNode {
       String _plus_1 = (_plus + ". LOD behavior deactivated");
       LevelOfDetailDiagramNode.LOG.severe(_plus_1);
     } else {
-      XRoot _root = CoreExtensions.getRoot(this);
-      AccumulativeTransform2D _diagramTransform = _root.getDiagramTransform();
-      ReadOnlyDoubleProperty _scaleProperty = _diagramTransform.scaleProperty();
+      XDiagram _diagram = CoreExtensions.getDiagram(this);
+      AccumulativeTransform2D _canvasTransform = _diagram.getCanvasTransform();
+      ReadOnlyDoubleProperty _scaleProperty = _canvasTransform.scaleProperty();
       final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
           Bounds _boundsInLocal = LevelOfDetailDiagramNode.this.getBoundsInLocal();
