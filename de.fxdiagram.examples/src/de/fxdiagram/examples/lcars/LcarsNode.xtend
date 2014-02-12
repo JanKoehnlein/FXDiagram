@@ -33,7 +33,7 @@ import static extension javafx.scene.layout.VBox.*
 import de.fxdiagram.annotations.properties.ModelNode
 
 @Logging
-@ModelNode(#['layoutX', 'layoutY', 'domainObject'])
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class LcarsNode extends XNode {
 
 	static val PAGE_STRUCTURE = #{ 
@@ -67,12 +67,11 @@ class LcarsNode extends XNode {
 		super(handle)
 	}
 	
-	override doActivatePreview() {
-		super.doActivatePreview()
+	protected override createNode() {
 		this.name = key
 		imageUrls = (data.get("images") as List<DBObject>).map[get('url').toString]
 		vbox = new VBox
-		node = new RectangleBorderPane => [
+		val node = new RectangleBorderPane => [
 			backgroundRadius = 0
 			borderRadius = 0
 			backgroundPaint = Color.BLACK
@@ -140,6 +139,7 @@ class LcarsNode extends XNode {
 				nameField.text = shortenName(nameField.text)
 		]
 		infoBox.boundsInLocalProperty.addListener(nameShortener)
+		node
 	}
 	
 	protected def createBox(Color color) {

@@ -5,7 +5,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -32,8 +32,7 @@ public class Slide extends XNode {
     this.setBackgroundImage(backgroundImage);
   }
   
-  public void doActivatePreview() {
-    super.doActivatePreview();
+  protected Node createNode() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
       public void apply(final StackPane it) {
@@ -58,8 +57,7 @@ public class Slide extends XNode {
         _children.add(_imageView_1);
       }
     };
-    StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
-    this.setNode(_doubleArrow);
+    return ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
   }
   
   public void doActivate() {
@@ -85,7 +83,7 @@ public class Slide extends XNode {
   public Slide() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

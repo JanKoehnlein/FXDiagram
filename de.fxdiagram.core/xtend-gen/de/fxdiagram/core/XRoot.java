@@ -10,7 +10,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
@@ -253,7 +253,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRoot");
     ;
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(domainObjectProvidersProperty, DomainObjectProvider.class);
     modelElement.addProperty(diagramProperty, XDiagram.class);
   }

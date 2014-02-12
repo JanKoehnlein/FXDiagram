@@ -26,9 +26,8 @@ class JavaTypeNode extends XNode {
 		super(domainObject)
 	}
 	
-	override doActivatePreview() {
-		super.doActivatePreview()
-		node = new RectangleBorderPane => [
+	protected override createNode() {
+		new RectangleBorderPane => [
 			children += new VBox => [
 				children += new Text => [
 					text = javaType.simpleName

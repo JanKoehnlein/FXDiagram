@@ -4,7 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -29,37 +29,38 @@ public class BrowserNode extends FlipNode {
     super(name);
   }
   
-  public void doActivatePreview() {
-    super.doActivatePreview();
-    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      public void apply(final RectangleBorderPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            DomainObjectHandle _domainObject = BrowserNode.this.getDomainObject();
-            String _key = null;
-            if (_domainObject!=null) {
-              _key=_domainObject.getKey();
+  protected Node createNode() {
+    Node _xblockexpression = null;
+    {
+      final Node node = super.createNode();
+      RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+      final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+        public void apply(final RectangleBorderPane it) {
+          ObservableList<Node> _children = it.getChildren();
+          Text _text = new Text();
+          final Procedure1<Text> _function = new Procedure1<Text>() {
+            public void apply(final Text it) {
+              String _key = BrowserNode.this.getKey();
+              it.setText(_key);
+              it.setTextOrigin(VPos.TOP);
+              Insets _insets = new Insets(10, 20, 10, 20);
+              StackPane.setMargin(it, _insets);
             }
-            it.setText(_key);
-            it.setTextOrigin(VPos.TOP);
-            Insets _insets = new Insets(10, 20, 10, 20);
-            StackPane.setMargin(it, _insets);
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-    this.setFront(_doubleArrow);
-    this.setBack(this.view);
+          };
+          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+      RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+      this.setFront(_doubleArrow);
+      this.setBack(this.view);
+      _xblockexpression = node;
+    }
+    return _xblockexpression;
   }
   
-  public void activate() {
-    super.activate();
+  public void doActivate() {
+    super.doActivate();
     Node _front = this.getFront();
     TooltipExtensions.setTooltip(_front, "Double-click to browse");
     Node _back = this.getBack();
@@ -86,7 +87,7 @@ public class BrowserNode extends FlipNode {
   public BrowserNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

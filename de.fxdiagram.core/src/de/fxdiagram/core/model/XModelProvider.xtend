@@ -1,7 +1,5 @@
 package de.fxdiagram.core.model
 
-import de.fxdiagram.annotations.properties.ModelNode
-
 /**
  * Something that provides a model.
  * 
@@ -9,6 +7,6 @@ import de.fxdiagram.annotations.properties.ModelNode
  */
 interface XModelProvider {
 		
-	def void populate(ModelElement element)
+	def void populate(ModelElementImpl element)
 	
 }

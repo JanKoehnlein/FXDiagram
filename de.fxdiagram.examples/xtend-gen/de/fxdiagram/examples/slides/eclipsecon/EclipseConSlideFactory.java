@@ -21,7 +21,7 @@ public class EclipseConSlideFactory {
     Slide _slide = new Slide(slideName, _backgroundImage);
     final Procedure1<Slide> _function = new Procedure1<Slide>() {
       public void apply(final Slide it) {
-        it.activatePreview();
+        it.initializeGraphics();
       }
     };
     return ObjectExtensions.<Slide>operator_doubleArrow(_slide, _function);
@@ -32,7 +32,7 @@ public class EclipseConSlideFactory {
     Slide _slide = new Slide(text, _backgroundImage);
     final Procedure1<Slide> _function = new Procedure1<Slide>() {
       public void apply(final Slide it) {
-        it.activatePreview();
+        it.initializeGraphics();
         StackPane _stackPane = it.getStackPane();
         final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
           public void apply(final StackPane it) {
@@ -49,7 +49,13 @@ public class EclipseConSlideFactory {
   
   public static ClickThroughSlide createClickThroughSlide(final String slideName) {
     Image _backgroundImage = EclipseConSlideFactory.getBackgroundImage();
-    return new ClickThroughSlide(slideName, _backgroundImage);
+    ClickThroughSlide _clickThroughSlide = new ClickThroughSlide(slideName, _backgroundImage);
+    final Procedure1<ClickThroughSlide> _function = new Procedure1<ClickThroughSlide>() {
+      public void apply(final ClickThroughSlide it) {
+        it.initializeGraphics();
+      }
+    };
+    return ObjectExtensions.<ClickThroughSlide>operator_doubleArrow(_clickThroughSlide, _function);
   }
   
   public static Image getBackgroundImage() {

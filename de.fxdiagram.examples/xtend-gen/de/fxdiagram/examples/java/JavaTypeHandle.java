@@ -3,7 +3,7 @@ package de.fxdiagram.examples.java;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandleImpl;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.JavaModelProvider;
 
 @ModelNode({ "id", "key", "provider" })
@@ -24,7 +24,7 @@ public class JavaTypeHandle extends DomainObjectHandleImpl {
   public JavaTypeHandle() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty(), String.class);
     modelElement.addProperty(keyProperty(), String.class);
     modelElement.addProperty(providerProperty(), DomainObjectProvider.class);

@@ -2,7 +2,7 @@ package de.fxdiagram.core.model;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -27,7 +27,7 @@ public class StringHandle implements DomainObjectHandle {
   public StringHandle() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(keyProperty, String.class);
   }
   

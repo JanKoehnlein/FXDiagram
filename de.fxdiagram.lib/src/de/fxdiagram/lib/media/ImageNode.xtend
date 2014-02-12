@@ -8,15 +8,20 @@ import de.fxdiagram.annotations.properties.ModelNode
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class ImageNode extends XNode {
 
-	ImageView imageView
-
 	new() {
 		super('Image')
-		node = imageView = new ImageView => [
+	}
+	
+	override protected createNode() {
+		new ImageView => [
 			preserveRatio = true
 			fitWidthProperty.bind(widthProperty) 
 			fitHeightProperty.bind(heightProperty)
 		]
+	}
+
+	protected def getImageView() {
+		node as ImageView
 	}
 	
 	def setImage(Image image) {

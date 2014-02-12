@@ -25,40 +25,35 @@ class XControlPoint extends XShape {
 
 	@FxProperty XControlPointType type = CONTROL_POINT
 
-	new() {
-		typeProperty.addListener [
-			p, o, n |
-			updateNode
-		]
-		updateNode
-	}
-
-	protected def updateNode() {
+	protected override createNode() {
 		switch type {
 			case ANCHOR: {
-				node = new Circle => [
+				return new Circle => [
 					radius = 3
 					stroke = Color.BLUE
 					fill = Color.WHITE
 				]
 			}
 			case CONTROL_POINT: {
-				node = newMagnet
+				return newMagnet
 			}
 			case INTERPOLATED: {
-				node = new Circle => [
+				return new Circle => [
 					radius = 5
 					stroke = Color.RED
 					fill = Color.WHITE
 				]
 			}
+			default:
+				return null
 		}
 	} 
 	
-	override protected doActivatePreview() {
-	}
-	
 	override protected doActivate() {
+		typeProperty.addListener [
+			p, o, n |
+			nodeProperty.set(createNode())
+		]
 		if (type != ANCHOR)
 			addBehavior(new MoveBehavior(this))
 	}

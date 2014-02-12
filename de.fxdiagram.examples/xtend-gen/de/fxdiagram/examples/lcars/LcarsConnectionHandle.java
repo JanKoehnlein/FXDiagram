@@ -3,7 +3,7 @@ package de.fxdiagram.examples.lcars;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandleImpl;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 
 @ModelNode({ "id", "key", "provider" })
@@ -19,7 +19,7 @@ public class LcarsConnectionHandle extends DomainObjectHandleImpl {
   public LcarsConnectionHandle() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty(), String.class);
     modelElement.addProperty(keyProperty(), String.class);
     modelElement.addProperty(providerProperty(), DomainObjectProvider.class);

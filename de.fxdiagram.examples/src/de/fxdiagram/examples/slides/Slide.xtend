@@ -27,9 +27,8 @@ class Slide extends XNode {
 		this.backgroundImage = backgroundImage
 	} 
 	
-	override doActivatePreview() {
-		super.doActivatePreview
-		node = new StackPane => [
+	protected override createNode() {
+		new StackPane => [
 			children += imageView = new ImageView => [
 				effect = new ColorAdjust => [
 					brightness = -0.5

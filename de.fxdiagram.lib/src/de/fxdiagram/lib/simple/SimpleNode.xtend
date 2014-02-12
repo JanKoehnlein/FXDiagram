@@ -24,18 +24,17 @@ class SimpleNode extends XNode {
 		super(name)
 	}
 	
-	override doActivatePreview() {
-		node = new RectangleBorderPane => [
+	protected override createNode() {
+		new RectangleBorderPane => [
 			children += label = new Text => [
 				textOrigin = VPos.TOP
 				text = key
 			]
 			StackPane.setMargin(label, new Insets(10, 20, 10, 20))
+			effect = new InnerShadow => [
+				radius = 7
+			]
 		]
-		getNode.effect = new InnerShadow => [
-			radius = 7
-		]
-		super.doActivatePreview()
 	}
 
 	override doActivate() {

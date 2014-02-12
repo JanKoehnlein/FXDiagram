@@ -38,7 +38,10 @@ class ModelSave {
 		} else {
 			val cachedId = idMap.get(element)
 			if (cachedId != null) {
-				gen.write(propertyName, cachedId)
+				if(propertyName != null)
+					gen.write(propertyName, cachedId)
+				else
+					gen.write(cachedId)
 			} else {
 				idMap.put(element, currentId)
 				val className = element.node.class.canonicalName

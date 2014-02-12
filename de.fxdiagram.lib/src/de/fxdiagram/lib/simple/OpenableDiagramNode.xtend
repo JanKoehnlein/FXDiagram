@@ -69,9 +69,8 @@ class OpenableDiagramNode extends XNode {
 		super(domainObject)
 	}
 	
-	override doActivatePreview() {
-		super.doActivatePreview()
-		node = pane => [
+	protected override createNode() {
+		pane => [
 			children += textNode = new Text => [
 				textOrigin = VPos.TOP
 				text = key

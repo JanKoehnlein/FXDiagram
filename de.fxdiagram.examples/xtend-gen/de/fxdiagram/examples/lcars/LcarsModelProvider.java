@@ -9,7 +9,7 @@ import com.mongodb.Mongo;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.lcars.LcarsConnectionHandle;
 import de.fxdiagram.examples.lcars.LcarsEntryHandle;
 import java.util.List;
@@ -92,7 +92,7 @@ public class LcarsModelProvider implements DomainObjectProvider {
     return new LcarsConnectionHandle(fieldName, this);
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     
   }
 }

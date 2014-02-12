@@ -63,35 +63,40 @@ public class ModelSave {
       final String cachedId = this.idMap.get(element);
       boolean _notEquals = (!Objects.equal(cachedId, null));
       if (_notEquals) {
-        gen.write(propertyName, cachedId);
+        boolean _notEquals_1 = (!Objects.equal(propertyName, null));
+        if (_notEquals_1) {
+          gen.write(propertyName, cachedId);
+        } else {
+          gen.write(cachedId);
+        }
       } else {
         this.idMap.put(element, currentId);
         Object _node = element.getNode();
         Class<?> _class = _node.getClass();
         final String className = _class.getCanonicalName();
-        boolean _notEquals_1 = (!Objects.equal(propertyName, null));
-        if (_notEquals_1) {
+        boolean _notEquals_2 = (!Objects.equal(propertyName, null));
+        if (_notEquals_2) {
           gen.writeStartObject(propertyName);
         } else {
           gen.writeStartObject();
         }
         gen.write("__class", className);
-        List<Property<?>> _properties = element.getProperties();
+        List<? extends Property<?>> _properties = element.getProperties();
         final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
           public void apply(final Property<?> it) {
             Class<?> _type = element.getType(it);
             ModelSave.this.write(gen, it, _type, currentId);
           }
         };
-        IterableExtensions.<Property<?>>forEach(_properties, _function);
-        List<ListProperty<?>> _listProperties = element.getListProperties();
+        IterableExtensions.forEach(_properties, _function);
+        List<? extends ListProperty<?>> _listProperties = element.getListProperties();
         final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
           public void apply(final ListProperty<?> it) {
             Class<?> _type = element.getType(it);
             ModelSave.this.write(gen, it, _type, currentId);
           }
         };
-        IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_1);
+        IterableExtensions.forEach(_listProperties, _function_1);
         gen.writeEnd();
       }
     }

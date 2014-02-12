@@ -4,7 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.AddESuperTypeRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.EClassHandle;
@@ -45,8 +45,7 @@ public class EClassNode extends XNode {
     super(domainObject);
   }
   
-  public void doActivatePreview() {
-    super.doActivatePreview();
+  protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -106,8 +105,7 @@ public class EClassNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-    this.setNode(_doubleArrow);
+    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
   
   public EClass getEClass() {
@@ -217,7 +215,7 @@ public class EClassNode extends XNode {
   public EClassNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

@@ -7,7 +7,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.lcars.LcarsEntryHandle;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 import de.fxdiagram.examples.lcars.LcarsNode;
@@ -49,7 +49,7 @@ public class LcarsDiagram extends XDiagram {
     super.doActivate();
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(nodesProperty(), XNode.class);
     modelElement.addProperty(connectionsProperty(), XConnection.class);
     modelElement.addProperty(parentDiagramProperty(), XDiagram.class);

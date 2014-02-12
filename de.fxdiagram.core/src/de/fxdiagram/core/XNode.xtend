@@ -32,7 +32,7 @@ class XNode extends XShape {
 	Effect selectionEffect
 	Effect originalEffect
 
-	Anchors anchors
+	Anchors anchors 
 	
  	new(DomainObjectHandle domainObject) {
  		domainObjectProperty.set(domainObject)
@@ -60,14 +60,19 @@ class XNode extends XShape {
 		]
 	}
 
- 	override doActivatePreview() {
+	protected def Anchors createAnchors() {
+		new RectangleAnchors(this)
+	}
+
+	override initializeGraphics() {
+		super.initializeGraphics()
 		mouseOverEffect = createMouseOverEffect
 		selectionEffect = createSelectionEffect
 		anchors = createAnchors
- 	}
- 	
-	protected def Anchors createAnchors() {
-		new RectangleAnchors(this)
+	}
+
+	protected override createNode() {
+		null
 	}
 
 	override doActivate() {

@@ -4,7 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.lib.nodes.FlipNode;
 import javafx.animation.KeyFrame;
@@ -45,20 +45,25 @@ public class NeonSignNode extends FlipNode {
     super(name);
   }
   
-  public void doActivatePreview() {
-    VBox _neonSign = this.getNeonSign();
-    this.setFront(_neonSign);
-    ImageView _imageView = new ImageView();
-    final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-      public void apply(final ImageView it) {
-        ImageCache _get = ImageCache.get();
-        Image _image = _get.getImage(NeonSignNode.this, "code.png");
-        it.setImage(_image);
-      }
-    };
-    ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
-    this.setBack(_doubleArrow);
-    super.doActivatePreview();
+  protected Node createNode() {
+    Node _xblockexpression = null;
+    {
+      final Node node = super.createNode();
+      VBox _neonSign = this.getNeonSign();
+      this.setFront(_neonSign);
+      ImageView _imageView = new ImageView();
+      final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+        public void apply(final ImageView it) {
+          ImageCache _get = ImageCache.get();
+          Image _image = _get.getImage(NeonSignNode.this, "code.png");
+          it.setImage(_image);
+        }
+      };
+      ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
+      this.setBack(_doubleArrow);
+      _xblockexpression = node;
+    }
+    return _xblockexpression;
   }
   
   public void doActivate() {
@@ -183,7 +188,7 @@ public class NeonSignNode extends FlipNode {
   public NeonSignNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

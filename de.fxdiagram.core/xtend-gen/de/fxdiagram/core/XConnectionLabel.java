@@ -7,7 +7,7 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.List;
 import javafx.beans.property.DoubleProperty;
@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
@@ -54,7 +55,7 @@ public class XConnectionLabel extends XShape implements XModelProvider {
     return _xblockexpression;
   }
   
-  public void doActivatePreview() {
+  protected Node createNode() {
     Text _text = this.getText();
     final Procedure1<Text> _function = new Procedure1<Text>() {
       public void apply(final Text it) {
@@ -68,8 +69,7 @@ public class XConnectionLabel extends XShape implements XModelProvider {
         it.setFont(_font_2);
       }
     };
-    Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-    this.setNode(_doubleArrow);
+    return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
   }
   
   public void doActivate() {
@@ -146,7 +146,7 @@ public class XConnectionLabel extends XShape implements XModelProvider {
   public XConnectionLabel() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(connectionProperty, XConnection.class);
     modelElement.addProperty(textProperty, Text.class);
   }

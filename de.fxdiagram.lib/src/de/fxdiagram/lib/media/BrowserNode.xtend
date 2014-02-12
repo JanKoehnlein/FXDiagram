@@ -22,20 +22,21 @@ class BrowserNode extends FlipNode {
 		super(name)
 	}
 	
-	override doActivatePreview() {
-		super.doActivatePreview()
+	protected override createNode() {
+		val node = super.createNode
 		front = new RectangleBorderPane => [
 			children += new Text => [
-				text = domainObject?.key
+				text = key
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
 		]
-		back = view 
+		back = view
+		node 
 	}
 
-	override activate() {
-		super.activate()
+	override doActivate() {
+		super.doActivate()
 		front.tooltip = 'Double-click to browse'
 		back.tooltip = 'Double-click to close'
 	}

@@ -102,8 +102,10 @@ class XDiagram extends Group implements XActivatable {
 		buttons.addInitializingListener(new XDiagramChildrenListener<XRapidButton>(this, buttonLayer))
 		val arrowHeadListener = new InitializingListener<ArrowHead> => [
 			set = [ 
-				if(!connectionLayer.children.contains(it)) 
+				if(!connectionLayer.children.contains(it)) {
+					activatePreview					
 					connectionLayer.children += it
+				}
 			]
 			unset = [ connectionLayer.children -= it ]
 		]
@@ -136,7 +138,6 @@ class XDiagram extends Group implements XActivatable {
 			addBehavior(new DiagramNavigationBehavior(this))
 		behaviors.addInitializingListener(new InitializingMapListener => [
 			put = [ key, Behavior value | value.activate() ]
-			remove = [ key, value | value.activate() ]
 		])
 	}
 	
@@ -210,7 +211,7 @@ class XDiagramChildrenListener<T extends Node & XActivatable> extends Initializi
 		this.diagram = diagram
 		add = [
 			if (it instanceof XShape)
-				it.activatePreview
+				initializeGraphics
 			layer.children += it
 			if(diagram.isActive)
 				it.activate

@@ -33,7 +33,7 @@ import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 @Logging
-@ModelNode(#['domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels'])
+@ModelNode(#['domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead'])
 class XConnection extends XShape {
 	
 	@FxProperty @ReadOnly XNode source
@@ -57,11 +57,6 @@ class XConnection extends XShape {
 	@FxProperty ConnectionRouter connectionRouter
 
 	new() {
-		node = shapeGroup 
-		children += controlPointGroup => [
-			visible = false
-		]
-		targetArrowHead = new TriangleArrowHead(this, false)	
 	}
 
 	new(DomainObjectHandle domainObject) {
@@ -91,8 +86,14 @@ class XConnection extends XShape {
 			target.incomingConnections.add(this)
 	}
 	
-	override doActivatePreview() {
+	protected override createNode() {		
+		val node = shapeGroup 
+		children += controlPointGroup => [
+			visible = false
+		]
+		targetArrowHead = new TriangleArrowHead(this, false)	
 		connectionRouter = new ConnectionRouter(this)
+		node
 	}
 	
 	override doActivate() {

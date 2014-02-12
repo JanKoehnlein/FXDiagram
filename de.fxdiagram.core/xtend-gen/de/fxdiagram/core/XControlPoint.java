@@ -8,7 +8,7 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import java.net.URL;
 import java.util.List;
@@ -34,18 +34,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode({ "layoutX", "layoutY", "type" })
 @SuppressWarnings("all")
 public class XControlPoint extends XShape implements XModelProvider {
-  public XControlPoint() {
-    final ChangeListener<XControlPointType> _function = new ChangeListener<XControlPointType>() {
-      public void changed(final ObservableValue<? extends XControlPointType> p, final XControlPointType o, final XControlPointType n) {
-        XControlPoint.this.updateNode();
-      }
-    };
-    this.typeProperty.addListener(_function);
-    this.updateNode();
-  }
-  
-  protected boolean updateNode() {
-    boolean _switchResult = false;
+  protected Node createNode() {
     XControlPointType _type = this.getType();
     switch (_type) {
       case ANCHOR:
@@ -57,13 +46,9 @@ public class XControlPoint extends XShape implements XModelProvider {
             it.setFill(Color.WHITE);
           }
         };
-        Circle _doubleArrow = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
-        _switchResult = this.setNode(_doubleArrow);
-        break;
+        return ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
       case CONTROL_POINT:
-        Node _newMagnet = this.newMagnet();
-        _switchResult = this.setNode(_newMagnet);
-        break;
+        return this.newMagnet();
       case INTERPOLATED:
         Circle _circle_1 = new Circle();
         final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
@@ -73,19 +58,21 @@ public class XControlPoint extends XShape implements XModelProvider {
             it.setFill(Color.WHITE);
           }
         };
-        Circle _doubleArrow_1 = ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
-        _switchResult = this.setNode(_doubleArrow_1);
-        break;
+        return ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
       default:
-        break;
+        return null;
     }
-    return _switchResult;
-  }
-  
-  protected void doActivatePreview() {
   }
   
   protected void doActivate() {
+    final ChangeListener<XControlPointType> _function = new ChangeListener<XControlPointType>() {
+      public void changed(final ObservableValue<? extends XControlPointType> p, final XControlPointType o, final XControlPointType n) {
+        ObjectProperty<Node> _nodeProperty = XControlPoint.this.nodeProperty();
+        Node _createNode = XControlPoint.this.createNode();
+        _nodeProperty.set(_createNode);
+      }
+    };
+    this.typeProperty.addListener(_function);
     XControlPointType _type = this.getType();
     boolean _notEquals = (!Objects.equal(_type, XControlPointType.ANCHOR));
     if (_notEquals) {
@@ -235,7 +222,7 @@ public class XControlPoint extends XShape implements XModelProvider {
     return ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(typeProperty, XControlPointType.class);

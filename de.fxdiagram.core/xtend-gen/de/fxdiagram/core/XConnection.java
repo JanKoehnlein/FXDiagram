@@ -18,7 +18,7 @@ import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringHandle;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
@@ -63,7 +63,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
-@ModelNode({ "domainObject", "source", "target", "kind", "controlPoints", "labels" })
+@ModelNode({ "domainObject", "source", "target", "kind", "controlPoints", "labels", "sourceArrowHead", "targetArrowHead" })
 @SuppressWarnings("all")
 public class XConnection extends XShape implements XModelProvider {
   private Group controlPointGroup = new Group();
@@ -73,17 +73,6 @@ public class XConnection extends XShape implements XModelProvider {
   private ChangeListener<Number> controlPointListener;
   
   public XConnection() {
-    this.setNode(this.shapeGroup);
-    ObservableList<Node> _children = this.getChildren();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      public void apply(final Group it) {
-        it.setVisible(false);
-      }
-    };
-    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(this.controlPointGroup, _function);
-    _children.add(_doubleArrow);
-    TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
-    this.setTargetArrowHead(_triangleArrowHead);
   }
   
   public XConnection(final DomainObjectHandle domainObject) {
@@ -123,9 +112,25 @@ public class XConnection extends XShape implements XModelProvider {
     }
   }
   
-  public void doActivatePreview() {
-    ConnectionRouter _connectionRouter = new ConnectionRouter(this);
-    this.setConnectionRouter(_connectionRouter);
+  protected Node createNode() {
+    Group _xblockexpression = null;
+    {
+      final Group node = this.shapeGroup;
+      ObservableList<Node> _children = this.getChildren();
+      final Procedure1<Group> _function = new Procedure1<Group>() {
+        public void apply(final Group it) {
+          it.setVisible(false);
+        }
+      };
+      Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(this.controlPointGroup, _function);
+      _children.add(_doubleArrow);
+      TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
+      this.setTargetArrowHead(_triangleArrowHead);
+      ConnectionRouter _connectionRouter = new ConnectionRouter(this);
+      this.setConnectionRouter(_connectionRouter);
+      _xblockexpression = node;
+    }
+    return _xblockexpression;
   }
   
   public void doActivate() {
@@ -662,13 +667,15 @@ public class XConnection extends XShape implements XModelProvider {
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XConnection");
     ;
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(domainObjectProperty, DomainObjectHandle.class);
     modelElement.addProperty(sourceProperty, XNode.class);
     modelElement.addProperty(targetProperty, XNode.class);
     modelElement.addProperty(kindProperty, XConnectionKind.class);
     modelElement.addProperty(controlPointsProperty, XControlPoint.class);
     modelElement.addProperty(labelsProperty, XConnectionLabel.class);
+    modelElement.addProperty(sourceArrowHeadProperty, ArrowHead.class);
+    modelElement.addProperty(targetArrowHeadProperty, ArrowHead.class);
   }
   
   private ReadOnlyObjectWrapper<XNode> sourceProperty = new ReadOnlyObjectWrapper<XNode>(this, "source");

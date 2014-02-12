@@ -19,14 +19,13 @@ import javax.json.JsonString
 import javax.json.JsonValue
 
 import static javax.json.JsonValue.ValueType.*
-import static extension de.fxdiagram.core.model.ModelPersistence.*
 
 @Logging
 class ModelLoad {
 
 	ModelFactory modelFactory
 
-	Map<String, Object> idMap
+	Map<String, ModelElement> idMap
 	 
 	List<CrossRefData> crossRefs
 
@@ -43,17 +42,15 @@ class ModelLoad {
 	
 	protected def Object readNode(JsonObject jsonObject, String currentID) {
 		val className = jsonObject.getString('__class')
-		val clazz = Class.forName(className)
-		val node = clazz.newInstance()
-		idMap.put(currentID, node)
-		val model = modelFactory.createElement(node)
+		val model = modelFactory.createElement(className)
+		idMap.put(currentID, model)
 		model.properties.forEach [
 			jsonObject.readProperty(it, model.getType(it), currentID)
 		]		
 		model.listProperties.forEach [
 			jsonObject.readListProperty(it, model.getType(it), currentID)
 		]		
-		node
+		model.node
 	}
 
 	protected def readProperty(JsonObject it, Property<?> property, Class<?> propertyType, String currentID) {
@@ -115,7 +112,7 @@ class ModelLoad {
 					default: {
 						switch jsonValue.valueType {
 							case STRING: {
-								val crossRefData = new CrossRefData((jsonValue as JsonString).toString, property, i)
+								val crossRefData = new CrossRefData((jsonValue as JsonString).string, property, i)
 								crossRefs.add(crossRefData)
 							}
 							case OBJECT:
@@ -131,13 +128,13 @@ class ModelLoad {
 	
 	
 	protected def resolveCrossReference(CrossRefData crossRef) {
-		val crossRefTarget = idMap.get(crossRef.href)
+		val crossRefTarget = idMap.get(crossRef.href)?.node
 		if(crossRefTarget == null)
 			throw new ParseException("Cannot resolve href '" + crossRef.href +"'")
 		else if(crossRef.index == -1)
 			(crossRef.property as Property<Object>).value = crossRefTarget
-		else
-			(crossRef.property as ListProperty<Object>).set(crossRef.index, crossRefTarget)
+		else 
+			(crossRef.property as ListProperty<Object>).add(crossRef.index, crossRefTarget)
 	}
 }
 

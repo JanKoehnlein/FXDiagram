@@ -30,7 +30,8 @@ class LoginNode extends FlipNode {
 		super(name)
 	}
 	
-	override doActivatePreview() {
+	protected override createNode() {
+		val node = super.createNode
 		front = new RectangleBorderPane => [
 			children += new Text => [
 				textOrigin = VPos.TOP
@@ -39,7 +40,7 @@ class LoginNode extends FlipNode {
 			]
 		]
 		back = createForm 
-		super.doActivatePreview()
+		node
 	}
 
 	def createForm() {

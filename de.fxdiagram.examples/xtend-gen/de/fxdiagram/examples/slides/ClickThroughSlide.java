@@ -18,7 +18,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class ClickThroughSlide extends Slide {
-  private Group pane = new Group();
+  private Group pane;
   
   private Node currentNode;
   
@@ -30,11 +30,8 @@ public class ClickThroughSlide extends Slide {
     super(name, backgroundImage);
   }
   
-  public void doActivatePreview() {
-    super.doActivatePreview();
-    StackPane _stackPane = this.getStackPane();
-    ObservableList<Node> _children = _stackPane.getChildren();
-    _children.add(this.pane);
+  public void initializeGraphics() {
+    super.initializeGraphics();
     final Procedure1<Group> _function = new Procedure1<Group>() {
       public void apply(final Group it) {
         ObservableList<Node> _children = it.getChildren();
@@ -49,9 +46,22 @@ public class ClickThroughSlide extends Slide {
     };
     ObjectExtensions.<Group>operator_doubleArrow(
       this.pane, _function);
-    ObservableList<Node> _children_1 = this.pane.getChildren();
-    Node _head = IterableExtensions.<Node>head(_children_1);
+    ObservableList<Node> _children = this.pane.getChildren();
+    Node _head = IterableExtensions.<Node>head(_children);
     this.currentNode = _head;
+  }
+  
+  protected Node createNode() {
+    Node _xblockexpression = null;
+    {
+      final Node node = super.createNode();
+      ObservableList<Node> _children = ((StackPane) node).getChildren();
+      Group _group = new Group();
+      Group _pane = this.pane = _group;
+      _children.add(_pane);
+      _xblockexpression = node;
+    }
+    return _xblockexpression;
   }
   
   public void doActivate() {

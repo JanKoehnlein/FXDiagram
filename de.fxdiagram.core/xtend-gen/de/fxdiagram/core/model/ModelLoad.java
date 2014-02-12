@@ -38,7 +38,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class ModelLoad {
   private ModelFactory modelFactory;
   
-  private Map<String,Object> idMap;
+  private Map<String,ModelElement> idMap;
   
   private List<CrossRefData> crossRefs;
   
@@ -47,7 +47,7 @@ public class ModelLoad {
     this.modelFactory = _modelFactory;
     ArrayList<CrossRefData> _newArrayList = CollectionLiterals.<CrossRefData>newArrayList();
     this.crossRefs = _newArrayList;
-    HashMap<String,Object> _newHashMap = CollectionLiterals.<String, Object>newHashMap();
+    HashMap<String,ModelElement> _newHashMap = CollectionLiterals.<String, ModelElement>newHashMap();
     this.idMap = _newHashMap;
     final JsonReader reader = Json.createReader(in);
     final JsonObject jsonObject = reader.readObject();
@@ -62,36 +62,30 @@ public class ModelLoad {
   }
   
   protected Object readNode(final JsonObject jsonObject, final String currentID) {
-    try {
-      Object _xblockexpression = null;
-      {
-        final String className = jsonObject.getString("__class");
-        final Class<?> clazz = Class.forName(className);
-        final Object node = clazz.newInstance();
-        this.idMap.put(currentID, node);
-        final ModelElement model = this.modelFactory.createElement(node);
-        List<Property<?>> _properties = model.getProperties();
-        final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
-          public void apply(final Property<?> it) {
-            Class<?> _type = model.getType(it);
-            ModelLoad.this.readProperty(jsonObject, it, _type, currentID);
-          }
-        };
-        IterableExtensions.<Property<?>>forEach(_properties, _function);
-        List<ListProperty<?>> _listProperties = model.getListProperties();
-        final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
-          public void apply(final ListProperty<?> it) {
-            Class<?> _type = model.getType(it);
-            ModelLoad.this.readListProperty(jsonObject, it, _type, currentID);
-          }
-        };
-        IterableExtensions.<ListProperty<?>>forEach(_listProperties, _function_1);
-        _xblockexpression = node;
-      }
-      return _xblockexpression;
-    } catch (Throwable _e) {
-      throw Exceptions.sneakyThrow(_e);
+    Object _xblockexpression = null;
+    {
+      final String className = jsonObject.getString("__class");
+      final ModelElement model = this.modelFactory.createElement(className);
+      this.idMap.put(currentID, model);
+      List<? extends Property<?>> _properties = model.getProperties();
+      final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
+        public void apply(final Property<?> it) {
+          Class<?> _type = model.getType(it);
+          ModelLoad.this.readProperty(jsonObject, it, _type, currentID);
+        }
+      };
+      IterableExtensions.forEach(_properties, _function);
+      List<? extends ListProperty<?>> _listProperties = model.getListProperties();
+      final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
+        public void apply(final ListProperty<?> it) {
+          Class<?> _type = model.getType(it);
+          ModelLoad.this.readListProperty(jsonObject, it, _type, currentID);
+        }
+      };
+      IterableExtensions.forEach(_listProperties, _function_1);
+      _xblockexpression = model.getNode();
     }
+    return _xblockexpression;
   }
   
   protected Boolean readProperty(final JsonObject it, final Property<?> property, final Class<?> propertyType, final String currentID) {
@@ -270,7 +264,7 @@ public class ModelLoad {
               JsonValue.ValueType _valueType = jsonValue.getValueType();
               switch (_valueType) {
                 case STRING:
-                  String _string_2 = ((JsonString) jsonValue).toString();
+                  String _string_2 = ((JsonString) jsonValue).getString();
                   final CrossRefData crossRefData = new CrossRefData(_string_2, property, (i).intValue());
                   this.crossRefs.add(crossRefData);
                   break;
@@ -294,36 +288,33 @@ public class ModelLoad {
     }
   }
   
-  protected Object resolveCrossReference(final CrossRefData crossRef) {
+  protected void resolveCrossReference(final CrossRefData crossRef) {
     try {
-      Object _xblockexpression = null;
-      {
-        String _href = crossRef.getHref();
-        final Object crossRefTarget = this.idMap.get(_href);
-        Object _xifexpression = null;
-        boolean _equals = Objects.equal(crossRefTarget, null);
-        if (_equals) {
-          String _href_1 = crossRef.getHref();
-          String _plus = ("Cannot resolve href \'" + _href_1);
-          String _plus_1 = (_plus + "\'");
-          throw new ParseException(_plus_1);
-        } else {
-          Object _xifexpression_1 = null;
-          int _index = crossRef.getIndex();
-          boolean _equals_1 = (_index == (-1));
-          if (_equals_1) {
-            Property<?> _property = crossRef.getProperty();
-            ((Property<Object>) _property).setValue(crossRefTarget);
-          } else {
-            Property<?> _property_1 = crossRef.getProperty();
-            int _index_1 = crossRef.getIndex();
-            _xifexpression_1 = ((ListProperty<Object>) _property_1).set(_index_1, crossRefTarget);
-          }
-          _xifexpression = _xifexpression_1;
-        }
-        _xblockexpression = _xifexpression;
+      String _href = crossRef.getHref();
+      ModelElement _get = this.idMap.get(_href);
+      Object _node = null;
+      if (_get!=null) {
+        _node=_get.getNode();
       }
-      return _xblockexpression;
+      final Object crossRefTarget = _node;
+      boolean _equals = Objects.equal(crossRefTarget, null);
+      if (_equals) {
+        String _href_1 = crossRef.getHref();
+        String _plus = ("Cannot resolve href \'" + _href_1);
+        String _plus_1 = (_plus + "\'");
+        throw new ParseException(_plus_1);
+      } else {
+        int _index = crossRef.getIndex();
+        boolean _equals_1 = (_index == (-1));
+        if (_equals_1) {
+          Property<?> _property = crossRef.getProperty();
+          ((Property<Object>) _property).setValue(crossRefTarget);
+        } else {
+          Property<?> _property_1 = crossRef.getProperty();
+          int _index_1 = crossRef.getIndex();
+          ((ListProperty<Object>) _property_1).add(_index_1, crossRefTarget);
+        }
+      }
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }

@@ -4,7 +4,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.slides.Animations;
 import de.fxdiagram.examples.slides.ClickThroughSlide;
@@ -775,7 +775,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
     super.doActivate();
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

@@ -3,7 +3,7 @@ package de.fxdiagram.examples.ecore;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.EClassHandle;
 import de.fxdiagram.examples.ecore.EReferenceHandle;
 import de.fxdiagram.examples.ecore.ESuperType;
@@ -107,7 +107,7 @@ public class EcoreDomainObjectProvider implements DomainObjectProvider {
     return (_plus + _name);
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     
   }
 }

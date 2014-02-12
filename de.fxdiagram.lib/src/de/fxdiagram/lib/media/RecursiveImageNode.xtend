@@ -1,6 +1,7 @@
 package de.fxdiagram.lib.media
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.export.SvgExportable
@@ -23,7 +24,6 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.annotations.properties.ModelNode
 
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'image', 'x', 'y', 'scale'])
 class RecursiveImageNode extends XNode implements SvgExportable {
@@ -44,18 +44,16 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		super('Recursive image')
 	}
 	
-	override doActivatePreview() {
+	protected override createNode() {
 		pivot = new FirstRecursiveImageNode(this)
-		node = createPane => [
+		return createPane => [
 			children += pivot
 		]
-		super.doActivatePreview
 	}
 
 	override doActivate() {
 		super.doActivate
 		tooltip = 'Double-click to zoom in'
-		pivot.activate
 		onMouseClicked = [
 			if (clickCount == 2) {
 				if(isZoomedIn)
@@ -66,6 +64,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		]
 		val AbstractOpenBehavior openBehavior = [| if(isZoomedIn) zoomOut else zoomIn ] 
 		addBehavior(openBehavior)
+		pivot.activate
 	}
 	
 	protected def void zoomIn() {
@@ -144,11 +143,14 @@ class FirstRecursiveImageNode extends XNode {
 	new(RecursiveImageNode parent) {
 		super(parent.key + '_')
 		this.recursiveImageNode = parent
-		val group = parent.createPane
-		node = group
-		panes.push(group)
 	}
 
+	override protected createNode() {
+		val pane = recursiveImageNode.createPane
+		panes.push(pane)
+		pane
+	}
+	
 	override doActivate() {
 		super.doActivate()
 		layoutXProperty.bindBidirectional(recursiveImageNode.xProperty)
@@ -156,7 +158,7 @@ class FirstRecursiveImageNode extends XNode {
 		scaleXProperty.bind(recursiveImageNode.scaleProperty)
 		scaleYProperty.bind(recursiveImageNode.scaleProperty)
 		updateChildPanes
-		root.diagramTransform.scaleProperty.addListener [ prop, oldVal, newVal |
+		diagram.canvasTransform.scaleProperty.addListener [ prop, oldVal, newVal |
 			updateChildPanes
 		]
 	}

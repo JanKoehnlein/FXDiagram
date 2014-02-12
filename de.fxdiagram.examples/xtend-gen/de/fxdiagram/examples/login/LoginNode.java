@@ -3,7 +3,7 @@ package de.fxdiagram.examples.login;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import javafx.beans.binding.StringExpression;
@@ -36,29 +36,34 @@ public class LoginNode extends FlipNode {
     super(name);
   }
   
-  public void doActivatePreview() {
-    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      public void apply(final RectangleBorderPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            it.setTextOrigin(VPos.TOP);
-            it.setText("Login");
-            Insets _insets = new Insets(10, 20, 10, 20);
-            StackPane.setMargin(it, _insets);
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-    this.setFront(_doubleArrow);
-    RectangleBorderPane _createForm = this.createForm();
-    this.setBack(_createForm);
-    super.doActivatePreview();
+  protected Node createNode() {
+    Node _xblockexpression = null;
+    {
+      final Node node = super.createNode();
+      RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+      final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+        public void apply(final RectangleBorderPane it) {
+          ObservableList<Node> _children = it.getChildren();
+          Text _text = new Text();
+          final Procedure1<Text> _function = new Procedure1<Text>() {
+            public void apply(final Text it) {
+              it.setTextOrigin(VPos.TOP);
+              it.setText("Login");
+              Insets _insets = new Insets(10, 20, 10, 20);
+              StackPane.setMargin(it, _insets);
+            }
+          };
+          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+      RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+      this.setFront(_doubleArrow);
+      RectangleBorderPane _createForm = this.createForm();
+      this.setBack(_createForm);
+      _xblockexpression = node;
+    }
+    return _xblockexpression;
   }
   
   public RectangleBorderPane createForm() {
@@ -150,7 +155,7 @@ public class LoginNode extends FlipNode {
   public LoginNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

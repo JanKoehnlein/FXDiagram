@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
@@ -30,14 +30,14 @@ public class LineArrowHead extends ArrowHead implements XModelProvider {
     this.setWidth(width);
     this.setHeight(height);
     this.strokeProperty.bind(strokeProperty);
-    this.initialize();
+    this.activatePreview();
   }
   
   public LineArrowHead(final XConnection connection, final boolean isSource) {
     this(connection, 7, 10, connection.strokeProperty(), isSource);
   }
   
-  public void initialize() {
+  public void doActivatePreview() {
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
       public void apply(final Group it) {
@@ -88,7 +88,6 @@ public class LineArrowHead extends ArrowHead implements XModelProvider {
     };
     Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
     this.setNode(_doubleArrow);
-    super.initialize();
   }
   
   public double getLineCut() {
@@ -104,7 +103,7 @@ public class LineArrowHead extends ArrowHead implements XModelProvider {
   public LineArrowHead() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(connectionProperty(), XConnection.class);
     modelElement.addProperty(isSourceProperty(), Boolean.class);
     modelElement.addProperty(widthProperty, Double.class);

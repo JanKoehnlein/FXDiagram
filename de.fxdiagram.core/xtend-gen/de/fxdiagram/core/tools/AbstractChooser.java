@@ -303,7 +303,7 @@ public abstract class AbstractChooser implements XDiagramTool {
       {
         String _key_1 = node.getKey();
         this.nodeMap.put(_key_1, node);
-        node.activatePreview();
+        node.initializeGraphics();
         node.layout();
         this.calculateVisibleNodes();
         ObservableList<Node> _children = this.group.getChildren();

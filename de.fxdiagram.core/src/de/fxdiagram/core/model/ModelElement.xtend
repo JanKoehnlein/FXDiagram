@@ -5,7 +5,22 @@ import java.util.Map
 import javafx.beans.property.ListProperty
 import javafx.beans.property.Property
 
-class ModelElement {
+
+interface ModelElement {
+	
+	def List<? extends Property<?>> getProperties()
+
+	def List<? extends ListProperty<?>> getListProperties()
+	
+	def Class<?> getType(Property<?> property)
+
+	def boolean isPrimitive(Property<?> property)
+	
+	def Object getNode()
+	
+}
+
+class ModelElementImpl implements ModelElement {
 
 	Object node
 
@@ -36,25 +51,25 @@ class ModelElement {
 		propertyTypes.put(listProperty.name, componentType)
 	}
 
-	def getProperties() {
+	override getProperties() {
 		properties ?: emptyList
 	}
 
-	def getListProperties() {
+	override getListProperties() {
 		listProperties ?: emptyList
 	}
 	
-	def Class<?> getType(Property<?> property) {
+	override Class<?> getType(Property<?> property) {
 		propertyTypes.get(property.name)
 	}
 
-	def isPrimitive(Property<?> property) {
+	override isPrimitive(Property<?> property) {
 		val type = property.type
 		return #{Double, Float, Integer, Long, Boolean, String}.contains(type)
 			|| Enum.isAssignableFrom(type) 	
 	}
 	
-	def getNode() {
+	override getNode() {
 		node
 	}
 }

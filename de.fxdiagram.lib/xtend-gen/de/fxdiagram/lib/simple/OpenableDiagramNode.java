@@ -16,7 +16,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringHandle;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
@@ -108,8 +108,7 @@ public class OpenableDiagramNode extends XNode {
     super(domainObject);
   }
   
-  public void doActivatePreview() {
-    super.doActivatePreview();
+  protected Node createNode() {
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
@@ -128,8 +127,8 @@ public class OpenableDiagramNode extends XNode {
         _children.add(_textNode);
       }
     };
-    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(this.pane, _function);
-    this.setNode(_doubleArrow);
+    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
+      this.pane, _function);
   }
   
   public Anchors createAnchors() {
@@ -426,7 +425,7 @@ public class OpenableDiagramNode extends XNode {
   public OpenableDiagramNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

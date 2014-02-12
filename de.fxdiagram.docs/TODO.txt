@@ -2,18 +2,14 @@ TODO
 - container node to big when closing a zoomed subdiagram
 - domainModel abstraction
 - persistence: 
-  - switch to object based loading
   - handle lazy properties
   - review ModelElement
-  - save arrowHeads / nestedDiagrams 
-  - restore labels, XConnectionPointTypes
+  - save nestedDiagrams 
   - properly calculate existing edges 
-  - fix connection initialization
   - rename handle -> descriptor
   - save all diagrams
-  - @ModelNode add initialize method automatically
   - XNode.key -> name, DomainObjectHandle.key -> name
-  - Fix movie node
+  - fix LOD node
   
 BUGS
 - player.seek doesn't work
@@ -34,5 +30,14 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
+- restore labels, XConnectionPointTypes
 - add constructor XNode(domainObject), load domainObject first
 - fix LCARS example
+- Fix movie node
+- @ModelNode add initialize method automatically
+- switch to object based loading
+- switch to object based loading
+- fix connection initialization
+- activatePreview -> createNode
+ 
+  

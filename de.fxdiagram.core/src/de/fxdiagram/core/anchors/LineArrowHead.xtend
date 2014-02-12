@@ -23,14 +23,14 @@ class LineArrowHead extends ArrowHead {
 		this.width = width
 		this.height = height
 		this.strokeProperty.bind(strokeProperty)
-		initialize()
+		activatePreview()
 	}
 	
 	new(XConnection connection, boolean isSource) {
 		this(connection, 7, 10, connection.strokeProperty, isSource)
 	}
 	
-	override initialize() {
+	override doActivatePreview() {
 		node = new Group => [
 			children += new Polyline => [
 				points.setAll(#[0.0, -0.5 * height, width, 0.0, 0.0, 0.5 * height])
@@ -45,7 +45,6 @@ class LineArrowHead extends ArrowHead {
 				strokeType = StrokeType.CENTERED
 			]
 		]
-		super.initialize
 	}
 	
 	override getLineCut() {

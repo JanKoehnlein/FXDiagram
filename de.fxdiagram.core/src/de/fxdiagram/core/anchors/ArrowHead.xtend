@@ -12,6 +12,7 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
+import de.fxdiagram.annotations.properties.ReadOnly
 
 abstract class ArrowHead extends Parent {
 	
@@ -21,14 +22,22 @@ abstract class ArrowHead extends Parent {
 	
 	@FxProperty boolean isSource
 	
-	def void initialize() {
-		children += node
-		this.isSource = isSource
-		if(isSource)
-			connection.sourceArrowHead = this
-		else 
-			connection.targetArrowHead = this
+	@FxProperty @ReadOnly boolean isPreviewActive
+	
+	def void activatePreview() {
+		if(!isPreviewActive) {
+			doActivatePreview()
+			children += node
+			this.isSource = isSource
+			if(isSource)
+				connection.sourceArrowHead = this
+			else 
+				connection.targetArrowHead = this
+			isPreviewActiveProperty.set(true)
+		}
 	}
+	
+	def void doActivatePreview() 
 	
 	protected def setNode(Node node) {
 		this.node = node

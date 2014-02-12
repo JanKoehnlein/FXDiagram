@@ -3,7 +3,7 @@ package de.fxdiagram.examples.java;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.JavaProperty;
 import de.fxdiagram.examples.java.JavaPropertyHandle;
 import de.fxdiagram.examples.java.JavaSuperType;
@@ -97,7 +97,7 @@ public class JavaModelProvider implements DomainObjectProvider {
     }
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     
   }
 }

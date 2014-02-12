@@ -25,14 +25,14 @@ class DiamondArrowHead extends ArrowHead {
 		this.height = height
 		this.strokeProperty.bind(strokeProperty)
 		this.fillProperty.bind(fillProperty)
-		initialize
+		activatePreview
 	}
 	
 	new(XConnection connection, boolean isSource) {
 		this(connection, 10, 10, connection.strokeProperty, connection.strokeProperty, isSource)
 	}
 
-	override initialize() {
+	override doActivatePreview() {
 		node = new Polygon => [
 			points.setAll(#[
 				0.0, 0.0,
@@ -45,7 +45,6 @@ class DiamondArrowHead extends ArrowHead {
 			strokeWidthProperty.bind(connection.strokeWidthProperty)
 			strokeType = StrokeType.CENTERED
 		]
-		super.initialize
 	}
 	
 	override getLineCut() {

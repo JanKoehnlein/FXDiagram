@@ -38,14 +38,12 @@ class LevelOfDetailDiagramNode extends XNode {
 		super(domainObject)
 	}
 	
-	override doActivatePreview() {
-		super.doActivatePreview()
-		node = pane => [
+	protected override createNode() {
+		pane => [
 			children += label = new Text => [
 				textOrigin = VPos.TOP
 				text = key
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-				tooltip = "Zoom to reveal content"
 			]
 		]
 	}
@@ -64,7 +62,10 @@ class LevelOfDetailDiagramNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate()
-		label.text = domainObject?.key
+		label => [
+			text = domainObject?.key
+			tooltip = "Zoom to reveal content"
+		]	
 		if(innerDiagram == null) {
 			LOG.severe('No inner diagram set on node ' + key + '. LOD behavior deactivated')
 		} else {

@@ -7,7 +7,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.lang.reflect.Constructor;
@@ -36,54 +36,59 @@ public class BrickBreakerNode extends FlipNode {
     super(name);
   }
   
-  public void doActivatePreview() {
-    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      public void apply(final RectangleBorderPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            String _key = BrickBreakerNode.this.getKey();
-            it.setText(_key);
-            it.setTextOrigin(VPos.TOP);
-            Insets _insets = new Insets(10, 20, 10, 20);
-            StackPane.setMargin(it, _insets);
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-    this.setFront(_doubleArrow);
-    Group _group = new Group();
-    final Procedure1<Group> _function_1 = new Procedure1<Group>() {
-      public void apply(final Group it) {
-        ObservableList<Node> _children = it.getChildren();
-        Group _group = new Group();
-        final Procedure1<Group> _function = new Procedure1<Group>() {
-          public void apply(final Group it) {
-            ObservableList<Node> _children = it.getChildren();
-            Group _createRoot = BrickBreakerNode.this.createRoot();
-            _children.add(_createRoot);
-            DoubleProperty _scaleXProperty = it.scaleXProperty();
-            DoubleProperty _widthProperty = BrickBreakerNode.this.widthProperty();
-            DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(_widthProperty, Config.SCREEN_WIDTH);
-            _scaleXProperty.bind(_divide);
-            DoubleProperty _scaleYProperty = it.scaleYProperty();
-            DoubleProperty _heightProperty = BrickBreakerNode.this.heightProperty();
-            DoubleBinding _divide_1 = DoubleExpressionExtensions.operator_divide(_heightProperty, Config.SCREEN_HEIGHT);
-            _scaleYProperty.bind(_divide_1);
-          }
-        };
-        Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
-    this.setBack(_doubleArrow_1);
-    super.doActivatePreview();
+  protected Node createNode() {
+    Node _xblockexpression = null;
+    {
+      final Node flipNode = super.createNode();
+      RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+      final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+        public void apply(final RectangleBorderPane it) {
+          ObservableList<Node> _children = it.getChildren();
+          Text _text = new Text();
+          final Procedure1<Text> _function = new Procedure1<Text>() {
+            public void apply(final Text it) {
+              String _key = BrickBreakerNode.this.getKey();
+              it.setText(_key);
+              it.setTextOrigin(VPos.TOP);
+              Insets _insets = new Insets(10, 20, 10, 20);
+              StackPane.setMargin(it, _insets);
+            }
+          };
+          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+      RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+      this.setFront(_doubleArrow);
+      Group _group = new Group();
+      final Procedure1<Group> _function_1 = new Procedure1<Group>() {
+        public void apply(final Group it) {
+          ObservableList<Node> _children = it.getChildren();
+          Group _group = new Group();
+          final Procedure1<Group> _function = new Procedure1<Group>() {
+            public void apply(final Group it) {
+              ObservableList<Node> _children = it.getChildren();
+              Group _createRoot = BrickBreakerNode.this.createRoot();
+              _children.add(_createRoot);
+              DoubleProperty _scaleXProperty = it.scaleXProperty();
+              DoubleProperty _widthProperty = BrickBreakerNode.this.widthProperty();
+              DoubleBinding _divide = DoubleExpressionExtensions.operator_divide(_widthProperty, Config.SCREEN_WIDTH);
+              _scaleXProperty.bind(_divide);
+              DoubleProperty _scaleYProperty = it.scaleYProperty();
+              DoubleProperty _heightProperty = BrickBreakerNode.this.heightProperty();
+              DoubleBinding _divide_1 = DoubleExpressionExtensions.operator_divide(_heightProperty, Config.SCREEN_HEIGHT);
+              _scaleYProperty.bind(_divide_1);
+            }
+          };
+          Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+      Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
+      this.setBack(_doubleArrow_1);
+      _xblockexpression = flipNode;
+    }
+    return _xblockexpression;
   }
   
   public void activate() {
@@ -142,7 +147,7 @@ public class BrickBreakerNode extends FlipNode {
   public BrickBreakerNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

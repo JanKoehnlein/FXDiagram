@@ -7,7 +7,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.CloseBehavior;
 import de.fxdiagram.core.extensions.DurationExtensions;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.slides.Slide;
 import de.fxdiagram.examples.slides.SlideNavigation;
 import javafx.animation.Animation;
@@ -202,7 +202,7 @@ public class SlideDiagram extends XDiagram {
     this.setCurrentSlide(newSlide);
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(nodesProperty(), XNode.class);
     modelElement.addProperty(connectionsProperty(), XConnection.class);
     modelElement.addProperty(parentDiagramProperty(), XDiagram.class);

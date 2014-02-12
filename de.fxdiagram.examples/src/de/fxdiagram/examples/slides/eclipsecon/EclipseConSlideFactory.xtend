@@ -12,13 +12,13 @@ class EclipseConSlideFactory {
 	
 	static def createSlide(String slideName) {
 		new Slide(slideName, backgroundImage) => [
-			activatePreview
+			initializeGraphics
 		]
 	} 
 
 	static def createSlide(String text, int fontSize) {
 		new Slide(text, backgroundImage)=> [
-			activatePreview
+			initializeGraphics
 			getStackPane => [
 				children += createText(text, fontSize)
 			]
@@ -26,7 +26,9 @@ class EclipseConSlideFactory {
 	} 
 	
 	static def createClickThroughSlide(String slideName) {
-		new ClickThroughSlide(slideName, backgroundImage)
+		new ClickThroughSlide(slideName, backgroundImage) => [
+			initializeGraphics
+		]
 	}
 	
 	static def getBackgroundImage() {

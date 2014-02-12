@@ -42,15 +42,14 @@ class MovieNode extends FlipNode {
 
 	int border = 10
 	
-	Text label
-
 	new(String name) {
 		super(name)
 	}
 	
-	override doActivatePreview() {
+	protected override createNode() {
+		val node = super.createNode
 		front = new RectangleBorderPane => [
-			children += label = new Text => [
+			children += new Text => [
 				text = key
 				textOrigin = VPos.TOP
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
@@ -60,17 +59,20 @@ class MovieNode extends FlipNode {
 			id = "pane"
 			padding = new Insets(border, border, border, border)
 			children += view 
-			
 		]
+		node
+	}
+	
+	override initializeGraphics() {
+		super.initializeGraphics()
 		stylesheets += toURI(this, 'MovieNode.css')
-		super.doActivatePreview()
 	}
 	
 	override doActivate() {
 		super.doActivate()
-		controlBar = createControlBar
 		front.tooltip = 'Double-click to watch'
-		back => [
+		controlBar = createControlBar
+		pane => [
 			onMouseEntered = [
 				new FadeTransition => [
 					node = controlBar

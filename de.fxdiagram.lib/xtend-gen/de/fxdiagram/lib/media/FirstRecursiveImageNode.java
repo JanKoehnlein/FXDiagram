@@ -1,8 +1,8 @@
 package de.fxdiagram.lib.media;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.lib.media.RecursiveImageNode;
@@ -28,9 +28,16 @@ public class FirstRecursiveImageNode extends XNode {
   public FirstRecursiveImageNode(final RecursiveImageNode parent) {
     super((parent.getKey() + "_"));
     this.recursiveImageNode = parent;
-    final Group group = parent.createPane();
-    this.setNode(group);
-    this.panes.push(group);
+  }
+  
+  protected Node createNode() {
+    Group _xblockexpression = null;
+    {
+      final Group pane = this.recursiveImageNode.createPane();
+      this.panes.push(pane);
+      _xblockexpression = pane;
+    }
+    return _xblockexpression;
   }
   
   public void doActivate() {
@@ -48,9 +55,9 @@ public class FirstRecursiveImageNode extends XNode {
     DoubleProperty _scaleProperty_1 = this.recursiveImageNode.scaleProperty();
     _scaleYProperty.bind(_scaleProperty_1);
     this.updateChildPanes();
-    XRoot _root = CoreExtensions.getRoot(this);
-    AccumulativeTransform2D _diagramTransform = _root.getDiagramTransform();
-    ReadOnlyDoubleProperty _scaleProperty_2 = _diagramTransform.scaleProperty();
+    XDiagram _diagram = CoreExtensions.getDiagram(this);
+    AccumulativeTransform2D _canvasTransform = _diagram.getCanvasTransform();
+    ReadOnlyDoubleProperty _scaleProperty_2 = _canvasTransform.scaleProperty();
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         FirstRecursiveImageNode.this.updateChildPanes();

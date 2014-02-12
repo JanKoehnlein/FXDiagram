@@ -9,10 +9,11 @@ import javafx.scene.image.Image
 import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import javafx.scene.layout.StackPane
 
 class ClickThroughSlide extends Slide {
 	
-	Group pane = new Group
+	Group pane 
 	Node currentNode 
 	
 	new(String name) {
@@ -23,13 +24,18 @@ class ClickThroughSlide extends Slide {
 		super(name, backgroundImage)
 	}
 	
-	override doActivatePreview() {
-		super.doActivatePreview()
-		stackPane.children += pane
+	override initializeGraphics() {
+		super.initializeGraphics()
 		pane => [
 			children.tail.forEach[opacity = 0]
 		]
 		currentNode = pane.children.head
+	}
+	
+	protected override createNode() {
+		val node = super.createNode()
+		(node as StackPane).children += pane = new Group
+		node
 	}
 	
 	override doActivate() {

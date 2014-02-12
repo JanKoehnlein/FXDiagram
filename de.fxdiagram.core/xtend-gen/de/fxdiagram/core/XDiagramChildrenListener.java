@@ -21,7 +21,7 @@ public class XDiagramChildrenListener<T extends Node & XActivatable> extends Ini
     final Procedure1<T> _function = new Procedure1<T>() {
       public void apply(final T it) {
         if ((it instanceof XShape)) {
-          ((XShape)it).activatePreview();
+          ((XShape)it).initializeGraphics();
         }
         ObservableList<Node> _children = layer.getChildren();
         _children.add(it);

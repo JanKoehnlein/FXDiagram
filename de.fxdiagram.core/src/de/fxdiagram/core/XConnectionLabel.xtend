@@ -35,8 +35,8 @@ class XConnectionLabel extends XShape {
 		connection.labels += this
 	}
 
-	override doActivatePreview() {
-		node = text => [
+	protected override createNode() {
+		text => [
 			textOrigin = VPos.TOP
 			font = Font.font(font.family, font.size * 0.9)
 		]

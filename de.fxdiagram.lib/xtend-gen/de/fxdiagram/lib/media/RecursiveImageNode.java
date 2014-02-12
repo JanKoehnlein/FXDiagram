@@ -10,7 +10,7 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.media.FirstRecursiveImageNode;
 import javafx.animation.Interpolator;
@@ -52,7 +52,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     super("Recursive image");
   }
   
-  public void doActivatePreview() {
+  protected Node createNode() {
     FirstRecursiveImageNode _firstRecursiveImageNode = new FirstRecursiveImageNode(this);
     this.pivot = _firstRecursiveImageNode;
     Group _createPane = this.createPane();
@@ -62,15 +62,12 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
         _children.add(RecursiveImageNode.this.pivot);
       }
     };
-    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
-    this.setNode(_doubleArrow);
-    super.doActivatePreview();
+    return ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
   }
   
   public void doActivate() {
     super.doActivate();
     TooltipExtensions.setTooltip(this, "Double-click to zoom in");
-    this.pivot.activate();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
         int _clickCount = it.getClickCount();
@@ -96,6 +93,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     };
     final AbstractOpenBehavior openBehavior = _function_1;
     this.addBehavior(openBehavior);
+    this.pivot.activate();
   }
   
   protected void zoomIn() {
@@ -249,7 +247,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     return exporter.snapshotToSvgElement(_node);
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

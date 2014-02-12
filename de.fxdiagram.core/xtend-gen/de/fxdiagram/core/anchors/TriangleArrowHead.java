@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
@@ -29,14 +29,14 @@ public class TriangleArrowHead extends ArrowHead implements XModelProvider {
     this.setHeight(height);
     this.strokeProperty.bind(strokeProperty);
     this.fillProperty.bind(fillProperty);
-    this.initialize();
+    this.activatePreview();
   }
   
   public TriangleArrowHead(final XConnection connection, final boolean isSource) {
     this(connection, 5, 10, connection.strokeProperty(), connection.strokeProperty(), isSource);
   }
   
-  public void initialize() {
+  public void doActivatePreview() {
     Polygon _polygon = new Polygon();
     final Procedure1<Polygon> _function = new Procedure1<Polygon>() {
       public void apply(final Polygon it) {
@@ -60,7 +60,6 @@ public class TriangleArrowHead extends ArrowHead implements XModelProvider {
     };
     Polygon _doubleArrow = ObjectExtensions.<Polygon>operator_doubleArrow(_polygon, _function);
     this.setNode(_doubleArrow);
-    super.initialize();
   }
   
   public double getLineCut() {
@@ -76,7 +75,7 @@ public class TriangleArrowHead extends ArrowHead implements XModelProvider {
   public TriangleArrowHead() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(connectionProperty(), XConnection.class);
     modelElement.addProperty(isSourceProperty(), Boolean.class);
     modelElement.addProperty(widthProperty, Double.class);

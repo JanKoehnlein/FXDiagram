@@ -2,7 +2,7 @@ package de.fxdiagram.examples.slides.democamp;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.slides.Animations;
 import de.fxdiagram.examples.slides.Slide;
@@ -225,7 +225,7 @@ public class DemoCampIntroSlides extends OpenableDiagramNode {
     super.doActivate();
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

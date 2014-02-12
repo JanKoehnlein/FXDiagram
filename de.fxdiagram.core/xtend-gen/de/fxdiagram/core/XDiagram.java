@@ -21,7 +21,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.extensions.InitializingMapListener;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.HashMap;
 import javafx.beans.property.ListProperty;
@@ -149,6 +149,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
             boolean _contains = _children.contains(it);
             boolean _not = (!_contains);
             if (_not) {
+              it.activatePreview();
               Group _connectionLayer_1 = XDiagram.this.getConnectionLayer();
               ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();
               _children_1.add(it);
@@ -250,12 +251,6 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
           }
         };
         it.setPut(_function);
-        final Procedure2<Class<? extends Behavior>,Behavior> _function_1 = new Procedure2<Class<? extends Behavior>,Behavior>() {
-          public void apply(final Class<? extends Behavior> key, final Behavior value) {
-            value.activate();
-          }
-        };
-        it.setRemove(_function_1);
       }
     };
     InitializingMapListener<Class<? extends Behavior>,Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>,Behavior>>operator_doubleArrow(_initializingMapListener, _function_3);
@@ -380,7 +375,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     return this.buttonLayer;
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(nodesProperty, XNode.class);
     modelElement.addProperty(connectionsProperty, XConnection.class);
     modelElement.addProperty(parentDiagramProperty, XDiagram.class);

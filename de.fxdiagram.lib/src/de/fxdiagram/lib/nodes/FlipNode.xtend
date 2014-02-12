@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.nodes
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.model.DomainObjectHandle
@@ -18,20 +19,21 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.annotations.properties.ModelNode
 
-@ModelNode
+@Logging
 class FlipNode extends XNode {
 
 	Node front
 
 	Node back
 
-	Group pane = new Group
+	Group pane 
 
 	boolean isCurrentFront = true
 
 	EventHandler<MouseEvent> clickHandler
+	
+	new() {}
 
 	new(String name) {
 		super(name)
@@ -41,17 +43,20 @@ class FlipNode extends XNode {
 		super(domainObject)
 	}
 	
-	override doActivatePreview() {
-		super.doActivatePreview()
-		node = pane
+	protected override createNode() {
+		pane = new Group
+	}
+	
+	override initializeGraphics() {
+		super.initializeGraphics()
+		if(front == null)
+			LOG.severe('FlipNode.front not set')
+		if(back == null)
+			LOG.severe('FlipNode.back not set')
 	}
 	
 	override doActivate() {
 		super.doActivate()
-		if(front == null)
-			throw new IllegalStateException('FlipNode.front not set')
-		if(back == null)
-			throw new IllegalStateException('FlipNode.back not set')
 		cursor = Cursor.HAND
 		flipOnDoubleClick = true
 		val AbstractOpenBehavior openBehavior = [| flip(true) ]

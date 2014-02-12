@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandleImpl;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -64,7 +64,7 @@ public class EReferenceHandle extends DomainObjectHandleImpl {
   public EReferenceHandle() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty(), String.class);
     modelElement.addProperty(keyProperty(), String.class);
     modelElement.addProperty(providerProperty(), DomainObjectProvider.class);

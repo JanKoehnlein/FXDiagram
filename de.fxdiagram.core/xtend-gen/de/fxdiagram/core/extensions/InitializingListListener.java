@@ -1,5 +1,6 @@
 package de.fxdiagram.core.extensions;
 
+import com.google.common.base.Objects;
 import java.util.List;
 import javafx.collections.ListChangeListener;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -31,8 +32,16 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
     boolean _next = c.next();
     boolean _while = _next;
     while (_while) {
-      boolean _wasAdded = c.wasAdded();
-      if (_wasAdded) {
+      boolean _and = false;
+      Procedure1<? super T> _add = this.getAdd();
+      boolean _notEquals = (!Objects.equal(_add, null));
+      if (!_notEquals) {
+        _and = false;
+      } else {
+        boolean _wasAdded = c.wasAdded();
+        _and = _wasAdded;
+      }
+      if (_and) {
         List<? extends T> _addedSubList = c.getAddedSubList();
         final Procedure1<T> _function = new Procedure1<T>() {
           public void apply(final T it) {
@@ -45,8 +54,16 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
       boolean _next_1 = c.next();
       _while = _next_1;
     }
-    boolean _wasRemoved = c.wasRemoved();
-    if (_wasRemoved) {
+    boolean _and = false;
+    Procedure1<? super T> _remove = this.getRemove();
+    boolean _notEquals = (!Objects.equal(_remove, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _wasRemoved = c.wasRemoved();
+      _and = _wasRemoved;
+    }
+    if (_and) {
       List<? extends T> _removed = c.getRemoved();
       final Procedure1<T> _function = new Procedure1<T>() {
         public void apply(final T it) {

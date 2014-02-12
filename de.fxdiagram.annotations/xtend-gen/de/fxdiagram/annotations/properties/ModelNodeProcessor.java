@@ -82,7 +82,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
     }
     final Procedure1<MutableMethodDeclaration> _function_2 = new Procedure1<MutableMethodDeclaration>() {
       public void apply(final MutableMethodDeclaration it) {
-        TypeReference _newTypeReference = ModelNodeProcessor.this.context.newTypeReference("de.fxdiagram.core.model.ModelElement");
+        TypeReference _newTypeReference = ModelNodeProcessor.this.context.newTypeReference("de.fxdiagram.core.model.ModelElementImpl");
         it.addParameter("modelElement", _newTypeReference);
         StringConcatenationClient _client = new StringConcatenationClient() {
           @Override

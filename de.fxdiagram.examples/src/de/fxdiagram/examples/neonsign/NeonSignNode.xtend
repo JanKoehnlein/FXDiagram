@@ -36,12 +36,13 @@ class NeonSignNode extends FlipNode {
 		super(name)
 	}
 	
-	override doActivatePreview() {
+	protected override createNode() {
+		val node = super.createNode
 		front = neonSign
 		back = new ImageView => [
 			image = ImageCache.get.getImage(this, 'code.png')
 		]
-		super.doActivatePreview()
+		node
 	}
 	
 	override doActivate() {

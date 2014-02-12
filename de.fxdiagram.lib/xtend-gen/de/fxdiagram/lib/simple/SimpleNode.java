@@ -4,7 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import javafx.collections.ObservableList;
@@ -30,7 +30,7 @@ public class SimpleNode extends XNode {
     super(name);
   }
   
-  public void doActivatePreview() {
+  protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
@@ -48,20 +48,17 @@ public class SimpleNode extends XNode {
         _children.add(_label);
         Insets _insets = new Insets(10, 20, 10, 20);
         StackPane.setMargin(SimpleNode.this.label, _insets);
+        InnerShadow _innerShadow = new InnerShadow();
+        final Procedure1<InnerShadow> _function_1 = new Procedure1<InnerShadow>() {
+          public void apply(final InnerShadow it) {
+            it.setRadius(7);
+          }
+        };
+        InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
+        it.setEffect(_doubleArrow_1);
       }
     };
-    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
-    this.setNode(_doubleArrow);
-    Node _node = this.getNode();
-    InnerShadow _innerShadow = new InnerShadow();
-    final Procedure1<InnerShadow> _function_1 = new Procedure1<InnerShadow>() {
-      public void apply(final InnerShadow it) {
-        it.setRadius(7);
-      }
-    };
-    InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
-    _node.setEffect(_doubleArrow_1);
-    super.doActivatePreview();
+    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
   
   public void doActivate() {
@@ -84,7 +81,7 @@ public class SimpleNode extends XNode {
   public SimpleNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

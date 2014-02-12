@@ -2,6 +2,7 @@ package de.fxdiagram.examples
 
 import brickbreaker.Config
 import brickbreaker.Main.MainFrame
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import javafx.geometry.Insets
@@ -13,7 +14,6 @@ import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import de.fxdiagram.annotations.properties.ModelNode
 
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class BrickBreakerNode extends FlipNode {
@@ -22,7 +22,8 @@ class BrickBreakerNode extends FlipNode {
 		super(name)
 	}
 
-	override doActivatePreview() {
+	protected override createNode() {
+		val flipNode = super.createNode
 		front = new RectangleBorderPane => [
 			children += new Text => [
 				text = key
@@ -37,7 +38,7 @@ class BrickBreakerNode extends FlipNode {
 				scaleYProperty.bind(heightProperty / Config.SCREEN_HEIGHT)
 			]
 		]
-		super.doActivatePreview()
+		flipNode
 	}
 	
 	override activate() {

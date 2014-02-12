@@ -170,7 +170,7 @@ abstract class AbstractChooser implements XDiagramTool {
 	def addChoice(XNode node, DomainObjectHandle choiceInfo) {
 		if (!nodeMap.containsKey(node.key)) {
 			nodeMap.put(node.key, node)
-			node.activatePreview
+			node.initializeGraphics
 			node.layout
 			calculateVisibleNodes
 			group.children += node

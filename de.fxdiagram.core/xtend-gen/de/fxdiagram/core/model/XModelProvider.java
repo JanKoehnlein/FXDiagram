@@ -1,7 +1,6 @@
 package de.fxdiagram.core.model;
 
-import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 
 /**
  * Something that provides a model.
@@ -10,5 +9,5 @@ import de.fxdiagram.core.model.ModelElement;
  */
 @SuppressWarnings("all")
 public interface XModelProvider {
-  public abstract void populate(final ModelElement element);
+  public abstract void populate(final ModelElementImpl element);
 }

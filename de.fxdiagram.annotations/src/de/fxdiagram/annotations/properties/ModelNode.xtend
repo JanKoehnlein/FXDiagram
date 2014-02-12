@@ -54,7 +54,7 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 		if(!modelProviderType.type.isAssignableFrom(annotatedClass))
 			annotatedClass.implementedInterfaces = annotatedClass.implementedInterfaces + #[modelProviderType]
 		annotatedClass.addMethod('populate', [
-			addParameter('modelElement', newTypeReference('de.fxdiagram.core.model.ModelElement'))
+			addParameter('modelElement', newTypeReference('de.fxdiagram.core.model.ModelElementImpl'))
 			body = '''
 				«FOR accessor: validPropertyNames.map[getPropertyAccessor(annotatedClass, it, true)]»
 					modelElement.addProperty(«accessor.call», «accessor.componentType».class);

@@ -7,6 +7,8 @@ import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -21,20 +23,28 @@ import javafx.scene.transform.Transform;
 public abstract class ArrowHead extends Parent {
   private Node node;
   
-  public void initialize() {
-    ObservableList<Node> _children = this.getChildren();
-    _children.add(this.node);
-    boolean _isSource = this.getIsSource();
-    this.setIsSource(_isSource);
-    boolean _isSource_1 = this.getIsSource();
-    if (_isSource_1) {
-      XConnection _connection = this.getConnection();
-      _connection.setSourceArrowHead(this);
-    } else {
-      XConnection _connection_1 = this.getConnection();
-      _connection_1.setTargetArrowHead(this);
+  public void activatePreview() {
+    boolean _isPreviewActive = this.getIsPreviewActive();
+    boolean _not = (!_isPreviewActive);
+    if (_not) {
+      this.doActivatePreview();
+      ObservableList<Node> _children = this.getChildren();
+      _children.add(this.node);
+      boolean _isSource = this.getIsSource();
+      this.setIsSource(_isSource);
+      boolean _isSource_1 = this.getIsSource();
+      if (_isSource_1) {
+        XConnection _connection = this.getConnection();
+        _connection.setSourceArrowHead(this);
+      } else {
+        XConnection _connection_1 = this.getConnection();
+        _connection_1.setTargetArrowHead(this);
+      }
+      this.isPreviewActiveProperty.set(true);
     }
   }
+  
+  public abstract void doActivatePreview();
   
   protected Node setNode(final Node node) {
     return this.node = node;
@@ -154,5 +164,15 @@ public abstract class ArrowHead extends Parent {
   
   public BooleanProperty isSourceProperty() {
     return this.isSourceProperty;
+  }
+  
+  private ReadOnlyBooleanWrapper isPreviewActiveProperty = new ReadOnlyBooleanWrapper(this, "isPreviewActive");
+  
+  public boolean getIsPreviewActive() {
+    return this.isPreviewActiveProperty.get();
+  }
+  
+  public ReadOnlyBooleanProperty isPreviewActiveProperty() {
+    return this.isPreviewActiveProperty.getReadOnlyProperty();
   }
 }

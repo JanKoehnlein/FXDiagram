@@ -3,7 +3,8 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.behavior.Behavior
-import javafx.collections.MapChangeListener
+import de.fxdiagram.core.extensions.InitializingMapListener
+import javafx.beans.property.ObjectProperty
 import javafx.collections.ObservableMap
 import javafx.scene.Node
 import javafx.scene.Parent
@@ -11,9 +12,14 @@ import javafx.scene.input.MouseEvent
 
 import static javafx.collections.FXCollections.*
 
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.annotations.logging.Logging
+import javafx.beans.property.SimpleObjectProperty
+
+@Logging
 abstract class XShape extends Parent implements XActivatable {
 
-	@FxProperty@ReadOnly Node node
+	ObjectProperty<Node> nodeProperty = new SimpleObjectProperty<Node>(this, 'node') 
 
 	@FxProperty boolean selected
 	
@@ -22,14 +28,31 @@ abstract class XShape extends Parent implements XActivatable {
 	
 	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
 	
-	protected def setNode(Node node) {
-		nodeProperty.set(node)
-		children.setAll(node)
+	def getNode() {
+		if(nodeProperty.get == null) {
+			val newNode = createNode
+			if(newNode != null) {
+				nodeProperty.set(newNode)
+				children.setAll(newNode)
+			}
+		}
+		nodeProperty.get
+	}	
+	
+	def nodeProperty() {
+		nodeProperty
 	}
 	
+	protected def Node createNode()
+	
+	def initializeGraphics() {
+		if(getNode() == null)
+			LOG.severe("Node is null")
+	}
+
 	override activate() {
 		if(!isActive) {
-			activatePreview()
+			initializeGraphics
 			doActivate
 			isActiveProperty.set(true)
 			selectedProperty.addListener [
@@ -38,26 +61,11 @@ abstract class XShape extends Parent implements XActivatable {
 				if(newValue)
 					toFront
 			]
-			behaviors.values.forEach[activate]
-			val MapChangeListener<Class<? extends Behavior>, Behavior> behaviorActivator = [
-				change |
-				if(isActive) {
-					if(change.wasAdded)
-						change.valueAdded.activate
-				}
-			]
-			behaviors.addListener(behaviorActivator)
+			behaviors.addInitializingListener(new InitializingMapListener => [
+				put = [ key, Behavior value | value.activate ]
+			])
 		}
 	}
-	
-	def activatePreview() {
-		if(!isPreviewActive) {
-			doActivatePreview()
-			isPreviewActiveProperty.set(true)
-		}
-	}
-	
-	protected def void doActivatePreview()
 	
 	protected def void doActivate()
 	

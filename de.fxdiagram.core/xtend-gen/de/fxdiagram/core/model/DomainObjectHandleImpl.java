@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectHandle;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -59,7 +59,7 @@ public class DomainObjectHandleImpl implements DomainObjectHandle {
   public DomainObjectHandleImpl() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty, String.class);
     modelElement.addProperty(keyProperty, String.class);
     modelElement.addProperty(providerProperty, DomainObjectProvider.class);

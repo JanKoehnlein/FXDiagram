@@ -28,15 +28,31 @@ public class InitializingListener<T extends Object> implements ChangeListener<T>
   }
   
   public void changed(final ObservableValue<? extends T> value, final T oldValue, final T newValue) {
-    boolean _notEquals = (!Objects.equal(oldValue, null));
-    if (_notEquals) {
-      Procedure1<? super T> _unset = this.getUnset();
-      _unset.apply(oldValue);
+    boolean _and = false;
+    Procedure1<? super T> _unset = this.getUnset();
+    boolean _notEquals = (!Objects.equal(_unset, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _notEquals_1 = (!Objects.equal(oldValue, null));
+      _and = _notEquals_1;
     }
-    boolean _notEquals_1 = (!Objects.equal(newValue, null));
-    if (_notEquals_1) {
-      Procedure1<? super T> _set = this.getSet();
-      _set.apply(newValue);
+    if (_and) {
+      Procedure1<? super T> _unset_1 = this.getUnset();
+      _unset_1.apply(oldValue);
+    }
+    boolean _and_1 = false;
+    Procedure1<? super T> _set = this.getSet();
+    boolean _notEquals_2 = (!Objects.equal(_set, null));
+    if (!_notEquals_2) {
+      _and_1 = false;
+    } else {
+      boolean _notEquals_3 = (!Objects.equal(newValue, null));
+      _and_1 = _notEquals_3;
+    }
+    if (_and_1) {
+      Procedure1<? super T> _set_1 = this.getSet();
+      _set_1.apply(newValue);
     }
   }
 }

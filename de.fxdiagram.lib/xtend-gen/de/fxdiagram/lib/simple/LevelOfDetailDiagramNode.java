@@ -11,7 +11,7 @@ import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
@@ -53,8 +53,7 @@ public class LevelOfDetailDiagramNode extends XNode {
     super(domainObject);
   }
   
-  public void doActivatePreview() {
-    super.doActivatePreview();
+  protected Node createNode() {
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
@@ -66,7 +65,6 @@ public class LevelOfDetailDiagramNode extends XNode {
             it.setText(_key);
             Insets _insets = new Insets(10, 20, 10, 20);
             StackPane.setMargin(it, _insets);
-            TooltipExtensions.setTooltip(it, "Zoom to reveal content");
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
@@ -74,8 +72,8 @@ public class LevelOfDetailDiagramNode extends XNode {
         _children.add(_label);
       }
     };
-    RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(this.pane, _function);
-    this.setNode(_doubleArrow);
+    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
+      this.pane, _function);
   }
   
   public DiagramScaler setInnerDiagram(final XDiagram innerDiagram) {
@@ -105,23 +103,30 @@ public class LevelOfDetailDiagramNode extends XNode {
   
   public void doActivate() {
     super.doActivate();
-    DomainObjectHandle _domainObject = this.getDomainObject();
-    String _key = null;
-    if (_domainObject!=null) {
-      _key=_domainObject.getKey();
-    }
-    this.label.setText(_key);
+    final Procedure1<Text> _function = new Procedure1<Text>() {
+      public void apply(final Text it) {
+        DomainObjectHandle _domainObject = LevelOfDetailDiagramNode.this.getDomainObject();
+        String _key = null;
+        if (_domainObject!=null) {
+          _key=_domainObject.getKey();
+        }
+        it.setText(_key);
+        TooltipExtensions.setTooltip(it, "Zoom to reveal content");
+      }
+    };
+    ObjectExtensions.<Text>operator_doubleArrow(
+      this.label, _function);
     boolean _equals = Objects.equal(this.innerDiagram, null);
     if (_equals) {
-      String _key_1 = this.getKey();
-      String _plus = ("No inner diagram set on node " + _key_1);
+      String _key = this.getKey();
+      String _plus = ("No inner diagram set on node " + _key);
       String _plus_1 = (_plus + ". LOD behavior deactivated");
       LevelOfDetailDiagramNode.LOG.severe(_plus_1);
     } else {
       XRoot _root = CoreExtensions.getRoot(this);
       AccumulativeTransform2D _diagramTransform = _root.getDiagramTransform();
       ReadOnlyDoubleProperty _scaleProperty = _diagramTransform.scaleProperty();
-      final ChangeListener<Number> _function = new ChangeListener<Number>() {
+      final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
           Bounds _boundsInLocal = LevelOfDetailDiagramNode.this.getBoundsInLocal();
           final Bounds bounds = LevelOfDetailDiagramNode.this.localToScene(_boundsInLocal);
@@ -156,7 +161,7 @@ public class LevelOfDetailDiagramNode extends XNode {
           }
         }
       };
-      _scaleProperty.addListener(_function);
+      _scaleProperty.addListener(_function_1);
     }
   }
   
@@ -169,7 +174,7 @@ public class LevelOfDetailDiagramNode extends XNode {
   public LevelOfDetailDiagramNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);

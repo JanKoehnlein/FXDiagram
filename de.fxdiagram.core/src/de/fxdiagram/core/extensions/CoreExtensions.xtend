@@ -188,9 +188,9 @@ class InitializingMapListener<T,U> implements MapChangeListener<T, U> {
 	@Property var (T,U)=>void remove
 	
 	override onChanged(MapChangeListener.Change<? extends T, ? extends U> c) {
-		if(c.wasAdded) 
+		if(put != null && c.wasAdded) 
 			put.apply(c.key, c.valueAdded)
-		if(c.wasRemoved)
+		if(remove != null && c.wasRemoved)
 			remove.apply(c.key, c.valueRemoved)
 	}
 }	
@@ -202,9 +202,9 @@ class InitializingListListener<T> implements ListChangeListener<T> {
 	
 	override onChanged(Change<? extends T> c) {
 		while(c.next) 
-			if(c.wasAdded) 
+			if(add != null && c.wasAdded) 
 				c.addedSubList.forEach[add.apply(it)]
-			if(c.wasRemoved)
+			if(remove != null && c.wasRemoved)
 				c.removed.forEach[remove.apply(it)]
 	}
 }	
@@ -215,9 +215,9 @@ class InitializingListener<T> implements ChangeListener<T> {
 	@Property var (T)=>void unset
 	
 	override changed(ObservableValue<? extends T> value, T oldValue, T newValue) {
-		if(oldValue != null)
+		if(unset != null && oldValue != null)
 			unset.apply(oldValue)
-		if(newValue != null) 
+		if(set != null && newValue != null) 
 			set.apply(newValue)
 	}
 }	

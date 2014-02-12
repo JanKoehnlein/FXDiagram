@@ -27,11 +27,8 @@ class Model {
 
 	ModelFactory modelFactory
 
-	ModelSync modelSync
-
 	new(Object rootNode) {
 		modelFactory = new ModelFactory
-		modelSync = new ModelSync(this)
 		rootElement = addElement(rootNode)
 	}
 
@@ -48,7 +45,11 @@ class Model {
 	}
 
 	package def ModelElement addElement(Object node) {
-		val element = getOrCreateModelElement(node)
+		val existingElement = index.get(node)
+		if(existingElement != null) 
+			return existingElement
+		val element = existingElement ?: modelFactory.createElement(node)
+		index.put(node, element)
 		element.properties.forEach [
 			if(!element.isPrimitive(it))
 				value?.addElement
@@ -62,24 +63,13 @@ class Model {
 		element
 	}
 	
-	protected def getOrCreateModelElement(Object node) {
-		val existingElement = index.get(node)
-		if(existingElement == null) {
-			val element = existingElement ?: modelFactory.createElement(node)
-			index.put(node, element)
-			modelSync.addElement(element)
-			return element
-		} else {
-			return existingElement
-		}
-	}
-
 	package def removeElement(Object node) {
 		val element = index.remove(node)
-		modelSync.removeElement(element)
-		element.properties.forEach[removeListener(changeListener)]
-		element.listProperties.forEach[removeListener(listChangeListener)]
-		element
+		if(element != null) {
+			element.properties.forEach[removeListener(changeListener)]
+			element.listProperties.forEach[removeListener(listChangeListener)]
+			element
+		}
 	}
 
 	def addModelChangeListener(ModelChangeListener modelChangeListener) {

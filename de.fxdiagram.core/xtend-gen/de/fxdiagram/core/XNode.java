@@ -12,7 +12,7 @@ import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.model.DomainObjectHandle;
-import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringHandle;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.logging.Logger;
@@ -35,8 +35,8 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@Logging
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@Logging/* 
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" }) */
 @SuppressWarnings("all")
 public class XNode extends XShape implements XModelProvider {
   private Effect mouseOverEffect;
@@ -88,7 +88,12 @@ public class XNode extends XShape implements XModelProvider {
     return ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
   }
   
-  public void doActivatePreview() {
+  protected Anchors createAnchors() {
+    return new RectangleAnchors(this);
+  }
+  
+  public void initializeGraphics() {
+    super.initializeGraphics();
     InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
     this.mouseOverEffect = _createMouseOverEffect;
     DropShadow _createSelectionEffect = this.createSelectionEffect();
@@ -97,8 +102,8 @@ public class XNode extends XShape implements XModelProvider {
     this.anchors = _createAnchors;
   }
   
-  protected Anchors createAnchors() {
-    return new RectangleAnchors(this);
+  protected Node createNode() {
+    return null;
   }
   
   public void doActivate() {
@@ -257,9 +262,7 @@ public class XNode extends XShape implements XModelProvider {
   public XNode() {
   }
   
-  public void populate(final ModelElement modelElement) {
-    modelElement.addProperty(layoutXProperty(), Double.class);
-    modelElement.addProperty(layoutYProperty(), Double.class);
+  public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(domainObjectProperty, DomainObjectHandle.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
