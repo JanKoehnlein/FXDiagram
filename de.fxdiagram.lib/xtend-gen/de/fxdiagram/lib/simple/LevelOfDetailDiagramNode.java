@@ -9,7 +9,7 @@ import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -48,7 +48,7 @@ public class LevelOfDetailDiagramNode extends XNode {
     super(name);
   }
   
-  public LevelOfDetailDiagramNode(final DomainObjectHandle domainObject) {
+  public LevelOfDetailDiagramNode(final DomainObjectDescriptor domainObject) {
     super(domainObject);
   }
   
@@ -172,7 +172,7 @@ public class LevelOfDetailDiagramNode extends XNode {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
   }

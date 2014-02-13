@@ -9,8 +9,7 @@ import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.behavior.AbstractCloseBehavior
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.extensions.AccumulativeTransform2D
-import de.fxdiagram.core.model.DomainObjectHandle
-import de.fxdiagram.core.model.StringHandle
+import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -62,10 +61,10 @@ class OpenableDiagramNode extends XNode {
 	Point2D nodeCenterInDiagram
 	
 	new(String name) {
-		this(new StringHandle(name))
+		super(name)
 	}
 	
-	new(DomainObjectHandle domainObject) {
+	new(DomainObjectDescriptor domainObject) {
 		super(domainObject)
 	}
 	

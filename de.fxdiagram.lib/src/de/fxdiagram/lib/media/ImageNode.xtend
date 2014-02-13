@@ -1,34 +1,25 @@
 package de.fxdiagram.lib.media
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XNode
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.core.services.ResourceDescriptor
 
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class ImageNode extends XNode {
 
-	new() {
-		super('Image')
+	new(ResourceDescriptor imageDescriptor) {
+		super(imageDescriptor)
 	}
 	
 	override protected createNode() {
 		new ImageView => [
 			preserveRatio = true
+			image = new Image((domainObject as ResourceDescriptor).toURI)
 			fitWidthProperty.bind(widthProperty) 
 			fitHeightProperty.bind(heightProperty)
 		]
 	}
-
-	protected def getImageView() {
-		node as ImageView
-	}
-	
-	def setImage(Image image) {
-		imageView.image = image
-	}
-	
-	def getImage() {
-		imageView.image
-	}
 }
+

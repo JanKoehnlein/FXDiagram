@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.model.DomainObjectDescriptor
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
 import javafx.beans.property.DoubleProperty
@@ -29,7 +30,6 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.model.DomainObjectHandle
 
 abstract class AbstractChooser implements XDiagramTool {
 
@@ -51,7 +51,7 @@ abstract class AbstractChooser implements XDiagramTool {
 
 	val nodeMap = <String, XNode>newLinkedHashMap
 	
-	val node2choiceInfo = <XNode, DomainObjectHandle>newHashMap 
+	val node2choiceInfo = <XNode, DomainObjectDescriptor>newHashMap 
 	
 	var ChooserConnectionProvider connectionProvider = [
 		host, choice, choiceInfo | new XConnection(host, choice) 
@@ -167,7 +167,7 @@ abstract class AbstractChooser implements XDiagramTool {
 		addChoice(node, node.domainObject)
 	}
 	
-	def addChoice(XNode node, DomainObjectHandle choiceInfo) {
+	def addChoice(XNode node, DomainObjectDescriptor choiceInfo) {
 		if (!nodeMap.containsKey(node.name)) {
 			nodeMap.put(node.name, node)
 			node.initializeGraphics
@@ -294,7 +294,7 @@ abstract class AbstractChooser implements XDiagramTool {
 		}
 	}
 	
-	protected def connectChoice(XNode choice, DomainObjectHandle choiceInfo) {
+	protected def connectChoice(XNode choice, DomainObjectDescriptor choiceInfo) {
 		if(isActive && choice !== currentChoice) {
 			currentChoice = choice
 			val newConnection = connectionProvider.getConnection(host, choice, choiceInfo)

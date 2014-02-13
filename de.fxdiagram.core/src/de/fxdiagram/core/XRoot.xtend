@@ -48,10 +48,13 @@ class XRoot extends Parent implements XActivatable {
 	
 	Map<Class<? extends DomainObjectProvider>, DomainObjectProvider> domainObjectProviderCache
 	
+	@Property ClassLoader classLoader 
+	
 	new() {
 		children += diagramCanvas
 		children += headsUpDisplay
 		domainObjectProviders.addListener[Observable o | domainObjectProviderCache = null]
+		classLoader = this.class.classLoader
 	}
 	
 	def setDiagram(XDiagram newDiagram) {

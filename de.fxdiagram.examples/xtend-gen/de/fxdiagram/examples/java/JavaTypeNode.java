@@ -4,12 +4,12 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.AddReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.java.AddSuperTypeRapidButtonBehavior;
 import de.fxdiagram.examples.java.JavaProperty;
-import de.fxdiagram.examples.java.JavaTypeHandle;
+import de.fxdiagram.examples.java.JavaTypeDescriptor;
 import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -43,7 +43,7 @@ public class JavaTypeNode extends XNode {
   
   private JavaTypeModel model;
   
-  public JavaTypeNode(final JavaTypeHandle domainObject) {
+  public JavaTypeNode(final JavaTypeDescriptor domainObject) {
     super(domainObject);
   }
   
@@ -111,7 +111,7 @@ public class JavaTypeNode extends XNode {
   }
   
   public Class<?> getJavaType() {
-    DomainObjectHandle _domainObject = this.getDomainObject();
+    DomainObjectDescriptor _domainObject = this.getDomainObject();
     Object _domainObject_1 = _domainObject.getDomainObject();
     return ((Class<?>) _domainObject_1);
   }
@@ -269,7 +269,7 @@ public class JavaTypeNode extends XNode {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
   }

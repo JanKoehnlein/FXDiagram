@@ -1,12 +1,10 @@
 package de.fxdiagram.lib.media
 
-import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.services.ResourceDescriptor
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import java.net.URL
 import javafx.animation.FadeTransition
 import javafx.animation.Interpolator
 import javafx.geometry.Insets
@@ -30,7 +28,7 @@ import static extension javafx.util.Duration.*
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class MovieNode extends FlipNode {
 
-	@FxProperty@ReadOnly Media media
+	Media media
 
 	StackPane pane = new RectangleBorderPane
 
@@ -42,12 +40,14 @@ class MovieNode extends FlipNode {
 
 	int border = 10
 	
-	new(String name) {
-		super(name)
+	new(ResourceDescriptor movieDescriptor) {
+		super(movieDescriptor)
 	}
 	
 	protected override createNode() {
 		val node = super.createNode
+		media = new Media((domainObject as ResourceDescriptor).toURI)
+		player = new MediaPlayer(media)
 		front = new RectangleBorderPane => [
 			children += new Text => [
 				text = name
@@ -58,7 +58,7 @@ class MovieNode extends FlipNode {
 		back = pane => [
 			id = "pane"
 			padding = new Insets(border, border, border, border)
-			children += view 
+			children += view
 		]
 		node
 	}
@@ -71,6 +71,10 @@ class MovieNode extends FlipNode {
 	override doActivate() {
 		super.doActivate()
 		front.tooltip = 'Double-click to watch'
+		pane.visibleProperty.addListener [
+			prop, oldVal, newVal |
+			view.mediaPlayer = if(newVal) player else null
+		] 
 		controlBar = createControlBar
 		pane => [
 			onMouseEntered = [
@@ -145,15 +149,6 @@ class MovieNode extends FlipNode {
 	override setHeight(double height) {
 		super.height = height
 		view.fitHeight = height - 2 * border
-	}
-
-	def setMovieUrl(URL movieUrl) {
-		mediaProperty.set(new Media(movieUrl.toString))
-		player = new MediaPlayer(getMedia)
-		pane.visibleProperty.addListener [
-			prop, oldVal, newVal |
-			view.mediaPlayer = if(newVal) player else null
-		]
 	}
 
 	def getPlayer() {

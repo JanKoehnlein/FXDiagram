@@ -40,10 +40,10 @@ class LcarsField extends Parent {
 	
 	new(LcarsNode node, String name, String value) {
 		this.node = node
-		val connectionHandle = node.root.getDomainObjectProvider(LcarsModelProvider).createLcarsConnectionHandle(name)
+		val connectionDescriptor = node.root.getDomainObjectProvider(LcarsModelProvider).createLcarsConnectionDescriptor(name)
 		val ChooserConnectionProvider connectionProvider = [ 
 			host,  choice, choiceInfo | 
-			new XConnection(host, choice, connectionHandle) => [
+			new XConnection(host, choice, connectionDescriptor) => [
 				sourceArrowHead = new TriangleArrowHead(it, true)
 				new XConnectionLabel(it) => [
 					text.text = name.replace('_', ' ')
@@ -91,8 +91,8 @@ class LcarsField extends Parent {
 						.filter(LcarsNode)
 						.filter[
 							it != node && data.get(name)==value 
-							&& !outgoingConnections.exists[target == node && domainObject == connectionHandle]
-							&& !incomingConnections.exists[source == node && domainObject == connectionHandle]
+							&& !outgoingConnections.exists[target == node && domainObject == connectionDescriptor]
+							&& !incomingConnections.exists[source == node && domainObject == connectionDescriptor]
 						]
 						.map[connectionProvider.getConnection(node, it, null)]
 						.toList
@@ -182,21 +182,21 @@ class LcarsQueryTask extends Task<Void> {
 	
 	override protected call() throws Exception {
 		val modelProvider = host.root.getDomainObjectProvider(LcarsModelProvider)
-		val connectionHandle = modelProvider.createLcarsConnectionHandle(fieldName)
+		val connectionDescriptor = modelProvider.createLcarsConnectionDescriptor(fieldName)
 		val siblings = modelProvider.query(fieldName, fieldValue)
 		val lcarsNode = host.lcarsNode
 		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
 		chooser.connectionProvider = connectionProvider
 		val alreadyConnected = 
-			(host.lcarsNode.incomingConnections.filter[domainObject == connectionHandle].map[source] 
-				+ host.lcarsNode.outgoingConnections.filter[domainObject == connectionHandle].map[target])
+			(host.lcarsNode.incomingConnections.filter[domainObject == connectionDescriptor].map[source] 
+				+ host.lcarsNode.outgoingConnections.filter[domainObject == connectionDescriptor].map[target])
 			.filter(LcarsNode).map[domainObject.id].toSet
 		alreadyConnected.add(lcarsNode.domainObject.id)
 		siblings
 			.filter[!alreadyConnected.contains(get('_id').toString)]
 			.forEach[it, i | 
-				val handle = modelProvider.createLcarsEntryHandle(it)
-				chooser.addChoice(new LcarsNode(handle) => [
+				val descriptor = modelProvider.createLcarsEntryDescriptor(it)
+				chooser.addChoice(new LcarsNode(descriptor) => [
 					width = lcarsNode.width
 					height = lcarsNode.height
 				])

@@ -29,7 +29,8 @@ public class LoadAction implements DiagramAction {
       if (_notEquals) {
         ModelLoad _modelLoad = new ModelLoad();
         FileReader _fileReader = new FileReader(file);
-        final Object node = _modelLoad.load(_fileReader);
+        ClassLoader _classLoader = root.getClassLoader();
+        final Object node = _modelLoad.load(_fileReader, _classLoader);
         if ((node instanceof XRoot)) {
           ObservableList<DomainObjectProvider> _domainObjectProviders = root.getDomainObjectProviders();
           ObservableList<DomainObjectProvider> _domainObjectProviders_1 = ((XRoot)node).getDomainObjectProviders();

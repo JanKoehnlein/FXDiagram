@@ -10,7 +10,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.core.tools.ChooserTransition;
 import de.fxdiagram.core.tools.XDiagramTool;
@@ -77,10 +77,10 @@ public abstract class AbstractChooser implements XDiagramTool {
   
   private final LinkedHashMap<String,XNode> nodeMap = CollectionLiterals.<String, XNode>newLinkedHashMap();
   
-  private final HashMap<XNode,DomainObjectHandle> node2choiceInfo = CollectionLiterals.<XNode, DomainObjectHandle>newHashMap();
+  private final HashMap<XNode,DomainObjectDescriptor> node2choiceInfo = CollectionLiterals.<XNode, DomainObjectDescriptor>newHashMap();
   
   private ChooserConnectionProvider connectionProvider = new ChooserConnectionProvider() {
-    public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectHandle choiceInfo) {
+    public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor choiceInfo) {
       return new XConnection(host, choice);
     }
   };
@@ -289,11 +289,11 @@ public abstract class AbstractChooser implements XDiagramTool {
   }
   
   public boolean addChoice(final XNode node) {
-    DomainObjectHandle _domainObject = node.getDomainObject();
+    DomainObjectDescriptor _domainObject = node.getDomainObject();
     return this.addChoice(node, _domainObject);
   }
   
-  public boolean addChoice(final XNode node, final DomainObjectHandle choiceInfo) {
+  public boolean addChoice(final XNode node, final DomainObjectDescriptor choiceInfo) {
     boolean _xifexpression = false;
     String _name = node.getName();
     boolean _containsKey = this.nodeMap.containsKey(_name);
@@ -593,7 +593,7 @@ public abstract class AbstractChooser implements XDiagramTool {
               break;
           }
         }
-        DomainObjectHandle _get = this.node2choiceInfo.get(choice);
+        DomainObjectDescriptor _get = this.node2choiceInfo.get(choice);
         this.connectChoice(existingChoice, _get);
         _xblockexpression = this.currentConnection = null;
       }
@@ -602,7 +602,7 @@ public abstract class AbstractChooser implements XDiagramTool {
     return _xifexpression;
   }
   
-  protected XConnection connectChoice(final XNode choice, final DomainObjectHandle choiceInfo) {
+  protected XConnection connectChoice(final XNode choice, final DomainObjectDescriptor choiceInfo) {
     XConnection _xblockexpression = null;
     {
       boolean _and = false;
@@ -718,7 +718,7 @@ public abstract class AbstractChooser implements XDiagramTool {
       int _size = _nodes_2.size();
       int _modulo = (((int) _plus) % _size);
       final XNode choice = _nodes_1.get(_modulo);
-      DomainObjectHandle _get = this.node2choiceInfo.get(choice);
+      DomainObjectDescriptor _get = this.node2choiceInfo.get(choice);
       this.connectChoice(choice, _get);
     }
   }

@@ -1,8 +1,8 @@
 package de.fxdiagram.examples.ecore
 
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.model.DomainObjectHandle
-import de.fxdiagram.core.model.DomainObjectHandleImpl
+import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.core.model.DomainObjectDescriptorImpl
 import de.fxdiagram.core.model.DomainObjectProvider
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EClass
@@ -14,36 +14,36 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 @ModelNode
 class EcoreDomainObjectProvider implements DomainObjectProvider {
 	
-	override createDomainObjectHandle(Object object) {
-		switch object {
-			EClass: return createEClassHandle(object)
-			EReference: return createEReferenceHandle(object)
-			ESuperType: return createESuperClassHandle(object)
+	override createDescriptor(Object domainObject) {
+		switch domainObject {
+			EClass: return createEClassDescriptor(domainObject)
+			EReference: return createEReferenceDescriptor(domainObject)
+			ESuperTypeHandle: return createESuperClassDescriptor(domainObject)
 		}
 		return null;
 	}
 	
-	def createEClassHandle(EClass object) {
-		new EClassHandle(object, this)
+	def createEClassDescriptor(EClass object) {
+		new EClassDescriptor(object, this)
 	}
 	
-	def createEReferenceHandle(EReference object) {
-		new EReferenceHandle(object, this)
+	def createEReferenceDescriptor(EReference object) {
+		new EReferenceDescriptor(object, this)
 	}
 	
-	def createESuperClassHandle(ESuperType object) {
-		new ESuperTypeHandle(object, this)
+	def createESuperClassDescriptor(ESuperTypeHandle object) {
+		new ESuperTypeDescriptor(object, this)
 	}
 
-	override resolveDomainObject(DomainObjectHandle handle) {
-		val uri = URI.createURI(handle.id)
+	override resolveDomainObject(DomainObjectDescriptor descriptor) {
+		val uri = URI.createURI(descriptor.id)
 		val ePackage = EPackage.Registry.INSTANCE.getEPackage(uri.trimFragment.toString)
 		val posEquals = uri.fragment.indexOf('=')
 		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
 		val eObject = ePackage.eResource.getEObject(fragment)
-		if(handle instanceof ESuperTypeHandle) {
+		if(descriptor instanceof ESuperTypeHandle) {
 			val eClass = eObject as EClass
-			return new ESuperType(eClass, eClass.EAllSuperTypes.get(Integer.parseInt(uri.fragment.substring(posEquals + 1))))
+			return new ESuperTypeHandle(eClass, eClass.EAllSuperTypes.get(Integer.parseInt(uri.fragment.substring(posEquals + 1))))
 		} else {
 			return eObject
 		}
@@ -63,26 +63,18 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class EClassHandle extends DomainObjectHandleImpl {
+class EClassDescriptor extends DomainObjectDescriptorImpl<EClass> {
 	
 	new(EClass eClass, extension EcoreDomainObjectProvider provider) {
 		super(eClass.id, eClass.fqn, provider)
 	}
-	
-	override EClass getDomainObject() {
-		super.domainObject as EClass
-	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class EReferenceHandle extends DomainObjectHandleImpl {
+class EReferenceDescriptor extends DomainObjectDescriptorImpl<EReference> {
 	
 	new(EReference eReference, extension EcoreDomainObjectProvider provider) {
 		super(eReference.id, eReference.fqn, provider)
-	}
-	
-	override EReference getDomainObject() {
-		super.domainObject as EReference
 	}
 	
 	override hashCode() {
@@ -90,7 +82,7 @@ class EReferenceHandle extends DomainObjectHandleImpl {
 	}
 	
 	override equals(Object other) {
-		if(other instanceof EReferenceHandle) 
+		if(other instanceof EReferenceDescriptor) 
 			return other.domainObject == this.domainObject || other.domainObject == this.domainObject.EOpposite
 		else 
 			return false;
@@ -98,23 +90,18 @@ class EReferenceHandle extends DomainObjectHandleImpl {
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class ESuperTypeHandle extends DomainObjectHandleImpl {
+class ESuperTypeDescriptor extends DomainObjectDescriptorImpl<ESuperTypeHandle> {
 	
-	new(ESuperType it, extension EcoreDomainObjectProvider provider) {
+	new(ESuperTypeHandle it, extension EcoreDomainObjectProvider provider) {
 		super(subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),
 			subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),
 			provider
 		)
 	}
-	
-	override ESuperType getDomainObject() {
-		super.domainObject as ESuperType
-	}
-	
 }
 
 @Data
-class ESuperType {
+class ESuperTypeHandle {
 	EClass subType
 	EClass superType
 }

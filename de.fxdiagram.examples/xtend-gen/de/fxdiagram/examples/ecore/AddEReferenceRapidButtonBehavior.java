@@ -12,12 +12,12 @@ import de.fxdiagram.core.anchors.DiamondArrowHead;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
-import de.fxdiagram.examples.ecore.EClassHandle;
+import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.examples.ecore.EClassNode;
-import de.fxdiagram.examples.ecore.EReferenceHandle;
+import de.fxdiagram.examples.ecore.EReferenceDescriptor;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CarusselChooser;
@@ -34,7 +34,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode,EReference,EReferenceHandle> {
+public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode,EReference,EReferenceDescriptor> {
   public AddEReferenceRapidButtonBehavior(final EClassNode host) {
     super(host);
   }
@@ -45,17 +45,17 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     return _eClass.getEReferences();
   }
   
-  protected EReferenceHandle getChoiceKey(final EReference model) {
+  protected EReferenceDescriptor getChoiceKey(final EReference model) {
     EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
-    return _domainObjectProvider.createEReferenceHandle(model);
+    return _domainObjectProvider.createEReferenceDescriptor(model);
   }
   
-  protected XNode createNode(final EReferenceHandle handle) {
+  protected XNode createNode(final EReferenceDescriptor handle) {
     EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
     EReference _domainObject = handle.getDomainObject();
     EClass _eReferenceType = _domainObject.getEReferenceType();
-    EClassHandle _createEClassHandle = _domainObjectProvider.createEClassHandle(_eReferenceType);
-    return new EClassNode(_createEClassHandle);
+    EClassDescriptor _createEClassDescriptor = _domainObjectProvider.createEClassDescriptor(_eReferenceType);
+    return new EClassNode(_createEClassDescriptor);
   }
   
   protected EcoreDomainObjectProvider getDomainObjectProvider() {
@@ -64,26 +64,26 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
-  protected AbstractChooser createChooser(final XRapidButton button, final Set<EReferenceHandle> availableChoiceKeys, final Set<EReferenceHandle> unavailableChoiceKeys) {
+  protected AbstractChooser createChooser(final XRapidButton button, final Set<EReferenceDescriptor> availableChoiceKeys, final Set<EReferenceDescriptor> unavailableChoiceKeys) {
     CarusselChooser _xblockexpression = null;
     {
       EClassNode _host = this.getHost();
       Pos _chooserPosition = button.getChooserPosition();
       final CarusselChooser chooser = new CarusselChooser(_host, _chooserPosition);
-      final Procedure1<EReferenceHandle> _function = new Procedure1<EReferenceHandle>() {
-        public void apply(final EReferenceHandle it) {
+      final Procedure1<EReferenceDescriptor> _function = new Procedure1<EReferenceDescriptor>() {
+        public void apply(final EReferenceDescriptor it) {
           XNode _createNode = AddEReferenceRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
         }
       };
-      IterableExtensions.<EReferenceHandle>forEach(availableChoiceKeys, _function);
+      IterableExtensions.<EReferenceDescriptor>forEach(availableChoiceKeys, _function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectHandle handle) {
+        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor descriptor) {
           XConnection _xblockexpression = null;
           {
-            Object _domainObject = handle.getDomainObject();
+            Object _domainObject = descriptor.getDomainObject();
             final EReference reference = ((EReference) _domainObject);
-            XConnection _xConnection = new XConnection(host, choice, handle);
+            XConnection _xConnection = new XConnection(host, choice, descriptor);
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 ArrowHead _xifexpression = null;

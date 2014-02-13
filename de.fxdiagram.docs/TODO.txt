@@ -8,8 +8,8 @@ TODO
   - properly calculate existing edges 
   - rename handle -> descriptor
   - save all diagrams
-  - fix LOD node
-  
+  - revise image cache
+    
 BUGS
 - player.seek doesn't work
 - labels snap back after being repositioned
@@ -39,5 +39,6 @@ DONE
 - switch to object based loading
 - fix connection initialization
 - activatePreview -> createNode
+- fix LOD node
  
   

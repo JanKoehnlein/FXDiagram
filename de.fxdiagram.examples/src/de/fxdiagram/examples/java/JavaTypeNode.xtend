@@ -22,7 +22,7 @@ class JavaTypeNode extends XNode {
 	
 	JavaTypeModel model
 	
-	new(JavaTypeHandle domainObject) {
+	new(JavaTypeDescriptor domainObject) {
 		super(domainObject)
 	}
 	

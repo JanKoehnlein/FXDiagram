@@ -61,8 +61,8 @@ class LcarsNode extends XNode {
 	ImageView imageView
 	ChangeListener<Bounds> nameShortener
 	
-	new(LcarsEntryHandle handle) {
-		super(handle)
+	new(LcarsEntryDescriptor descriptor) {
+		super(descriptor)
 	}
 	
 	protected override createNode() {

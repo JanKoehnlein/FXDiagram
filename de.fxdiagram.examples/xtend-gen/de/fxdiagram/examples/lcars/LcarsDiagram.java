@@ -8,7 +8,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.examples.lcars.LcarsEntryHandle;
+import de.fxdiagram.examples.lcars.LcarsEntryDescriptor;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 import de.fxdiagram.examples.lcars.LcarsNode;
 import java.util.List;
@@ -33,7 +33,7 @@ public class LcarsDiagram extends XDiagram {
         final LcarsModelProvider provider = _root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
         List<DBObject> _query = provider.query("name", "James T. Kirk");
         final DBObject kirk = _query.get(0);
-        final LcarsEntryHandle handle = provider.createLcarsEntryHandle(kirk);
+        final LcarsEntryDescriptor handle = provider.createLcarsEntryDescriptor(kirk);
         ObservableList<XNode> _nodes = it.getNodes();
         LcarsNode _lcarsNode = new LcarsNode(handle);
         final Procedure1<LcarsNode> _function = new Procedure1<LcarsNode>() {

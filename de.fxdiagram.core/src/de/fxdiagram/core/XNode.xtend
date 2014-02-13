@@ -7,8 +7,8 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
-import de.fxdiagram.core.model.DomainObjectHandle
-import de.fxdiagram.core.model.StringHandle
+import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.core.model.StringDescriptor
 import javafx.collections.ObservableList
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
@@ -24,7 +24,7 @@ class XNode extends XShape {
 
 	@FxProperty @Lazy double width
 	@FxProperty @Lazy double height
-	@FxProperty /* @ReadOnly */ DomainObjectHandle domainObject
+	@FxProperty /* @ReadOnly */ DomainObjectDescriptor domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	
@@ -34,12 +34,12 @@ class XNode extends XShape {
 
 	Anchors anchors 
 	
- 	new(DomainObjectHandle domainObject) {
+ 	new(DomainObjectDescriptor domainObject) {
  		domainObjectProperty.set(domainObject)
  	}
  	
  	new(String name) {
- 		this(new StringHandle(name))	
+ 		this(new StringDescriptor(name))
  	}
  	
  	def getName() {

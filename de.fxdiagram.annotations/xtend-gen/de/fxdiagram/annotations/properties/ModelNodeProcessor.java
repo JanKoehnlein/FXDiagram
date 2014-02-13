@@ -100,7 +100,9 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
                 _builder.append(_call, "");
                 _builder.append(", ");
                 TypeReference _componentType = ModelNodeProcessor.this.getComponentType(accessor);
-                _builder.append(_componentType, "");
+                Type _type = _componentType.getType();
+                TypeReference _newTypeReference = ModelNodeProcessor.this.context.newTypeReference(_type);
+                _builder.append(_newTypeReference, "");
                 _builder.append(".class);");
                 _builder.newLineIfNotEmpty();
               }

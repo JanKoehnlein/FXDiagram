@@ -64,6 +64,16 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   private Map<Class<? extends DomainObjectProvider>,DomainObjectProvider> domainObjectProviderCache;
   
+  private ClassLoader _classLoader;
+  
+  public ClassLoader getClassLoader() {
+    return this._classLoader;
+  }
+  
+  public void setClassLoader(final ClassLoader classLoader) {
+    this._classLoader = classLoader;
+  }
+  
   public XRoot() {
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.diagramCanvas);
@@ -76,6 +86,9 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       }
     };
     _domainObjectProviders.addListener(_function);
+    Class<? extends XRoot> _class = this.getClass();
+    ClassLoader _classLoader = _class.getClassLoader();
+    this.setClassLoader(_classLoader);
   }
   
   public void setDiagram(final XDiagram newDiagram) {

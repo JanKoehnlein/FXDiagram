@@ -28,8 +28,11 @@ class ModelLoad {
 	Map<String, ModelElement> idMap
 	 
 	List<CrossRefData> crossRefs
+	
+	ClassLoader classLoader
 
-	def Object load(Reader in) {
+	def Object load(Reader in, ClassLoader classLoader) {
+		this.classLoader = classLoader
 		modelFactory = new ModelFactory
 		crossRefs = newArrayList
 		idMap = newHashMap

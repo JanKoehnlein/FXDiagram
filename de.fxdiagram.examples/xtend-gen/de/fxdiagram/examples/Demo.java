@@ -8,17 +8,18 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.services.ImageCache;
+import de.fxdiagram.core.services.ResourceDescriptor;
+import de.fxdiagram.core.services.ResourceHandle;
+import de.fxdiagram.core.services.ResourceProvider;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.examples.BrickBreakerNode;
-import de.fxdiagram.examples.ecore.EClassHandle;
+import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import de.fxdiagram.examples.java.JavaModelProvider;
-import de.fxdiagram.examples.java.JavaTypeHandle;
+import de.fxdiagram.examples.java.JavaTypeDescriptor;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.examples.lcars.LcarsDiagram;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
@@ -45,11 +46,8 @@ import javafx.geometry.Bounds;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
@@ -61,6 +59,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 @SuppressWarnings("all")
 public class Demo extends Application {
   private XRoot root;
+  
+  private ResourceProvider resourceProvider;
   
   public static void main(final String... args) {
     Application.launch(args);
@@ -78,17 +78,24 @@ public class Demo extends Application {
     {
       XRoot _xRoot = new XRoot();
       this.root = _xRoot;
+      Class<? extends Demo> _class = this.getClass();
+      ClassLoader _classLoader = _class.getClassLoader();
+      this.root.setClassLoader(_classLoader);
       final Scene scene = new Scene(this.root, 1024, 768);
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       scene.setCamera(_perspectiveCamera);
       this.root.activate();
       final XDiagram diagram = new XDiagram();
       this.root.setDiagram(diagram);
+      Class<? extends Demo> _class_1 = this.getClass();
+      ClassLoader _classLoader_1 = _class_1.getClassLoader();
+      ResourceProvider _resourceProvider = new ResourceProvider(_classLoader_1);
+      this.resourceProvider = _resourceProvider;
       ObservableList<DomainObjectProvider> _domainObjectProviders = this.root.getDomainObjectProviders();
       EcoreDomainObjectProvider _ecoreDomainObjectProvider = new EcoreDomainObjectProvider();
       JavaModelProvider _javaModelProvider = new JavaModelProvider();
       LcarsModelProvider _lcarsModelProvider = new LcarsModelProvider();
-      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(Lists.<DomainObjectProvider>newArrayList(_ecoreDomainObjectProvider, _javaModelProvider, _lcarsModelProvider)));
+      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(Lists.<DomainObjectProvider>newArrayList(_ecoreDomainObjectProvider, _javaModelProvider, _lcarsModelProvider, this.resourceProvider)));
       final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
         public void apply(final XDiagram it) {
           ObservableList<XNode> _nodes = it.getNodes();
@@ -492,8 +499,8 @@ public class Demo extends Application {
     EClassNode _xblockexpression = null;
     {
       final EcoreDomainObjectProvider provider = this.root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
-      EClassHandle _createEClassHandle = provider.createEClassHandle(EcorePackage.Literals.ECLASS);
-      _xblockexpression = new EClassNode(_createEClassHandle);
+      EClassDescriptor _createEClassDescriptor = provider.createEClassDescriptor(EcorePackage.Literals.ECLASS);
+      _xblockexpression = new EClassNode(_createEClassDescriptor);
     }
     return _xblockexpression;
   }
@@ -502,8 +509,8 @@ public class Demo extends Application {
     JavaTypeNode _xblockexpression = null;
     {
       final JavaModelProvider provider = this.root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
-      JavaTypeHandle _createJavaTypeHandle = provider.createJavaTypeHandle(Button.class);
-      _xblockexpression = new JavaTypeNode(_createJavaTypeHandle);
+      JavaTypeDescriptor _createJavaTypeDescriptor = provider.createJavaTypeDescriptor(Button.class);
+      _xblockexpression = new JavaTypeNode(_createJavaTypeDescriptor);
     }
     return _xblockexpression;
   }
@@ -513,21 +520,12 @@ public class Demo extends Application {
   }
   
   public MovieNode newMovieNode() {
-    MovieNode _movieNode = new MovieNode("Movie");
+    ResourceDescriptor _newResource = this.newResource("Movie", "media/Usability.mp4");
+    MovieNode _movieNode = new MovieNode(_newResource);
     final Procedure1<MovieNode> _function = new Procedure1<MovieNode>() {
       public void apply(final MovieNode it) {
-        try {
-          String _uRI = UriExtensions.toURI(Demo.this, "media/Usability.mp4");
-          URL _uRL = new URL(_uRI);
-          it.setMovieUrl(_uRL);
-          it.setWidth(640);
-          it.setHeight(360);
-          MediaPlayer _player = it.getPlayer();
-          Duration _minutes = Duration.minutes(2);
-          _player.seek(_minutes);
-        } catch (Throwable _e) {
-          throw Exceptions.sneakyThrow(_e);
-        }
+        it.setWidth(640);
+        it.setHeight(360);
       }
     };
     return ObjectExtensions.<MovieNode>operator_doubleArrow(_movieNode, _function);
@@ -562,12 +560,10 @@ public class Demo extends Application {
   }
   
   public RecursiveImageNode newRecursiveImageNode() {
-    RecursiveImageNode _recursiveImageNode = new RecursiveImageNode();
+    ResourceDescriptor _newResource = this.newResource("laptop", "media/laptop.jpg");
+    RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_newResource);
     final Procedure1<RecursiveImageNode> _function = new Procedure1<RecursiveImageNode>() {
       public void apply(final RecursiveImageNode it) {
-        ImageCache _get = ImageCache.get();
-        Image _image = _get.getImage(Demo.this, "media/laptop.jpg");
-        it.setImage(_image);
         it.setX(0);
         it.setY((-3));
         it.setScale(0.6);
@@ -579,12 +575,10 @@ public class Demo extends Application {
   }
   
   public ImageNode newImageNode() {
-    ImageNode _imageNode = new ImageNode();
+    ResourceDescriptor _newResource = this.newResource("seltsam", "media/seltsam.jpg");
+    ImageNode _imageNode = new ImageNode(_newResource);
     final Procedure1<ImageNode> _function = new Procedure1<ImageNode>() {
       public void apply(final ImageNode it) {
-        ImageCache _get = ImageCache.get();
-        Image _image = _get.getImage(Demo.this, "media/seltsam.jpg");
-        it.setImage(_image);
         it.setWidth(100);
       }
     };
@@ -605,5 +599,11 @@ public class Demo extends Application {
     };
     final Task<Void> task = _function;
     task.run();
+  }
+  
+  protected ResourceDescriptor newResource(final String name, final String relativePath) {
+    Class<? extends Demo> _class = this.getClass();
+    ResourceHandle _resourceHandle = new ResourceHandle(name, _class, relativePath);
+    return this.resourceProvider.createResourceDescriptor(_resourceHandle);
   }
 }

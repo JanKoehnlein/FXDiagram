@@ -12,7 +12,7 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
-class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode, Class<?>, JavaSuperTypeHandle> {
+class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode, Class<?>, JavaSuperTypeDescriptor> {
 	
 	new(JavaTypeNode host) {
 		super(host)
@@ -23,18 +23,18 @@ class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 	}
 	
 	override protected getChoiceKey(Class<?> superType) {
-		domainObjectProvider.createJavaSuperClassHandle(new JavaSuperType(host.javaType, superType))
+		domainObjectProvider.createJavaSuperClassDescriptor(new JavaSuperTypeHandle(host.javaType, superType))
 	}
 	
-	override protected createNode(JavaSuperTypeHandle key) {
-		new JavaTypeNode(domainObjectProvider.createJavaTypeHandle(key.domainObject.superType))
+	override protected createNode(JavaSuperTypeDescriptor key) {
+		new JavaTypeNode(domainObjectProvider.createJavaTypeDescriptor(key.domainObject.superType))
 	}
 	
 	protected def getDomainObjectProvider() {
 		host.root.getDomainObjectProvider(JavaModelProvider)
 	}
 	
-	override protected createChooser(XRapidButton button, Set<JavaSuperTypeHandle> availableChoiceKeys, Set<JavaSuperTypeHandle> unavailableChoiceKeys) {
+	override protected createChooser(XRapidButton button, Set<JavaSuperTypeDescriptor> availableChoiceKeys, Set<JavaSuperTypeDescriptor> unavailableChoiceKeys) {
 		val chooser = new CoverFlowChooser(host, button.chooserPosition)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)

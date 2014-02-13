@@ -4,7 +4,7 @@ import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.model.DomainObjectHandle
+import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import javafx.geometry.Insets
@@ -34,7 +34,7 @@ class LevelOfDetailDiagramNode extends XNode {
 		super(name)	
 	}
 
-	new(DomainObjectHandle domainObject) {
+	new(DomainObjectDescriptor domainObject) {
 		super(domainObject)
 	}
 	

@@ -3,14 +3,14 @@ package de.fxdiagram.core.model
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 
-interface DomainObjectHandle extends XModelProvider {
+interface DomainObjectDescriptor extends XModelProvider {
 	def String getName()
 	def String getId()
 	def Object getDomainObject()
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class DomainObjectHandleImpl implements DomainObjectHandle {
+class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	
 	@FxProperty /* @ReadOnly */ DomainObjectProvider provider
 	
@@ -18,7 +18,7 @@ class DomainObjectHandleImpl implements DomainObjectHandle {
 	
 	@FxProperty /* @ReadOnly */ String name
 	
-	Object cachedDomainObject
+	T cachedDomainObject
 	
 	new(String id, String name, DomainObjectProvider provider) {
 		idProperty.set(id)
@@ -26,20 +26,20 @@ class DomainObjectHandleImpl implements DomainObjectHandle {
 		providerProperty.set(provider)
 	}
 	
-	override getDomainObject() {
+	override T getDomainObject() {
 		if(cachedDomainObject == null)
-			cachedDomainObject = provider.resolveDomainObject(this)
+			cachedDomainObject = provider.resolveDomainObject(this) as T
 		return cachedDomainObject
 	}
 	
 	override equals(Object obj) {
-		return obj instanceof DomainObjectHandle && class==obj.class && id == (obj as DomainObjectHandle).id
+		return class==obj.class && id == (obj as DomainObjectDescriptor).id
 	}
 	
 }
 
 @ModelNode(#['name'])
-class StringHandle implements DomainObjectHandle {
+class StringDescriptor implements DomainObjectDescriptor {
 	
 	@FxProperty /* @ReadOnly */String name = null
 	

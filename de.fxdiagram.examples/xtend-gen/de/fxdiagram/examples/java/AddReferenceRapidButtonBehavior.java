@@ -9,13 +9,13 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaProperty;
-import de.fxdiagram.examples.java.JavaPropertyHandle;
-import de.fxdiagram.examples.java.JavaTypeHandle;
+import de.fxdiagram.examples.java.JavaPropertyDescriptor;
+import de.fxdiagram.examples.java.JavaTypeDescriptor;
 import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
@@ -31,7 +31,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode,JavaProperty,JavaPropertyHandle> {
+public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<JavaTypeNode,JavaProperty,JavaPropertyDescriptor> {
   public AddReferenceRapidButtonBehavior(final JavaTypeNode host) {
     super(host);
   }
@@ -42,17 +42,17 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
     return _javaTypeModel.getReferences();
   }
   
-  protected JavaPropertyHandle getChoiceKey(final JavaProperty property) {
+  protected JavaPropertyDescriptor getChoiceKey(final JavaProperty property) {
     JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
-    return _domainObjectProvider.createJavaPropertyHandle(property);
+    return _domainObjectProvider.createJavaPropertyDescriptor(property);
   }
   
-  protected XNode createNode(final JavaPropertyHandle key) {
+  protected XNode createNode(final JavaPropertyDescriptor key) {
     JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
     JavaProperty _domainObject = key.getDomainObject();
     Class<?> _type = _domainObject.getType();
-    JavaTypeHandle _createJavaTypeHandle = _domainObjectProvider.createJavaTypeHandle(_type);
-    return new JavaTypeNode(_createJavaTypeHandle);
+    JavaTypeDescriptor _createJavaTypeDescriptor = _domainObjectProvider.createJavaTypeDescriptor(_type);
+    return new JavaTypeNode(_createJavaTypeDescriptor);
   }
   
   protected JavaModelProvider getDomainObjectProvider() {
@@ -61,24 +61,24 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
     return _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
   }
   
-  protected AbstractChooser createChooser(final XRapidButton button, final Set<JavaPropertyHandle> availableChoiceKeys, final Set<JavaPropertyHandle> unavailableChoiceKeys) {
+  protected AbstractChooser createChooser(final XRapidButton button, final Set<JavaPropertyDescriptor> availableChoiceKeys, final Set<JavaPropertyDescriptor> unavailableChoiceKeys) {
     CarusselChooser _xblockexpression = null;
     {
       JavaTypeNode _host = this.getHost();
       Pos _chooserPosition = button.getChooserPosition();
       final CarusselChooser chooser = new CarusselChooser(_host, _chooserPosition);
-      final Procedure1<JavaPropertyHandle> _function = new Procedure1<JavaPropertyHandle>() {
-        public void apply(final JavaPropertyHandle it) {
+      final Procedure1<JavaPropertyDescriptor> _function = new Procedure1<JavaPropertyDescriptor>() {
+        public void apply(final JavaPropertyDescriptor it) {
           XNode _createNode = AddReferenceRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
         }
       };
-      IterableExtensions.<JavaPropertyHandle>forEach(availableChoiceKeys, _function);
+      IterableExtensions.<JavaPropertyDescriptor>forEach(availableChoiceKeys, _function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectHandle choiceInfo) {
+        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor choiceInfo) {
           XConnection _xblockexpression = null;
           {
-            final JavaPropertyHandle reference = ((JavaPropertyHandle) choiceInfo);
+            final JavaPropertyDescriptor reference = ((JavaPropertyDescriptor) choiceInfo);
             XConnection _xConnection = new XConnection(host, choice, reference);
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {

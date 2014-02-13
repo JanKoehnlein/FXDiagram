@@ -4,17 +4,15 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.extensions.UriExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.services.ResourceDescriptor;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
-import java.net.URL;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -40,6 +38,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class MovieNode extends FlipNode {
+  private Media media;
+  
   private StackPane pane = new RectangleBorderPane();
   
   private MediaPlayer player;
@@ -50,14 +50,20 @@ public class MovieNode extends FlipNode {
   
   private int border = 10;
   
-  public MovieNode(final String name) {
-    super(name);
+  public MovieNode(final ResourceDescriptor movieDescriptor) {
+    super(movieDescriptor);
   }
   
   protected Node createNode() {
     Node _xblockexpression = null;
     {
       final Node node = super.createNode();
+      DomainObjectDescriptor _domainObject = this.getDomainObject();
+      String _uRI = ((ResourceDescriptor) _domainObject).toURI();
+      Media _media = new Media(_uRI);
+      this.media = _media;
+      MediaPlayer _mediaPlayer = new MediaPlayer(this.media);
+      this.player = _mediaPlayer;
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
         public void apply(final RectangleBorderPane it) {
@@ -105,9 +111,22 @@ public class MovieNode extends FlipNode {
     super.doActivate();
     Node _front = this.getFront();
     TooltipExtensions.setTooltip(_front, "Double-click to watch");
+    BooleanProperty _visibleProperty = this.pane.visibleProperty();
+    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
+      public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
+        MediaPlayer _xifexpression = null;
+        if ((newVal).booleanValue()) {
+          _xifexpression = MovieNode.this.player;
+        } else {
+          _xifexpression = null;
+        }
+        MovieNode.this.view.setMediaPlayer(_xifexpression);
+      }
+    };
+    _visibleProperty.addListener(_function);
     HBox _createControlBar = this.createControlBar();
     this.controlBar = _createControlBar;
-    final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+    final Procedure1<StackPane> _function_1 = new Procedure1<StackPane>() {
       public void apply(final StackPane it) {
         final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
           public void handle(final MouseEvent it) {
@@ -158,7 +177,7 @@ public class MovieNode extends FlipNode {
       }
     };
     ObjectExtensions.<StackPane>operator_doubleArrow(
-      this.pane, _function);
+      this.pane, _function_1);
   }
   
   protected Anchors createAnchors() {
@@ -272,28 +291,6 @@ public class MovieNode extends FlipNode {
     this.view.setFitHeight((height - (2 * this.border)));
   }
   
-  public void setMovieUrl(final URL movieUrl) {
-    String _string = movieUrl.toString();
-    Media _media = new Media(_string);
-    this.mediaProperty.set(_media);
-    Media _media_1 = this.getMedia();
-    MediaPlayer _mediaPlayer = new MediaPlayer(_media_1);
-    this.player = _mediaPlayer;
-    BooleanProperty _visibleProperty = this.pane.visibleProperty();
-    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-      public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
-        MediaPlayer _xifexpression = null;
-        if ((newVal).booleanValue()) {
-          _xifexpression = MovieNode.this.player;
-        } else {
-          _xifexpression = null;
-        }
-        MovieNode.this.view.setMediaPlayer(_xifexpression);
-      }
-    };
-    _visibleProperty.addListener(_function);
-  }
-  
   public MediaPlayer getPlayer() {
     return this.player;
   }
@@ -311,18 +308,8 @@ public class MovieNode extends FlipNode {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
-  }
-  
-  private ReadOnlyObjectWrapper<Media> mediaProperty = new ReadOnlyObjectWrapper<Media>(this, "media");
-  
-  public Media getMedia() {
-    return this.mediaProperty.get();
-  }
-  
-  public ReadOnlyObjectProperty<Media> mediaProperty() {
-    return this.mediaProperty.getReadOnlyProperty();
   }
 }

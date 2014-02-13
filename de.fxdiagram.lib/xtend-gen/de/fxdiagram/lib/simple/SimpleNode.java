@@ -3,7 +3,7 @@ package de.fxdiagram.lib.simple;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -22,7 +22,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class SimpleNode extends XNode {
   private Text label;
   
-  public SimpleNode(final DomainObjectHandle domainObject) {
+  public SimpleNode(final DomainObjectDescriptor domainObject) {
     super(domainObject);
   }
   
@@ -80,7 +80,7 @@ public class SimpleNode extends XNode {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
   }

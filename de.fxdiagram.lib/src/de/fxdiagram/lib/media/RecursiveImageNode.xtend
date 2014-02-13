@@ -24,11 +24,13 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.services.ResourceDescriptor
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'image', 'x', 'y', 'scale'])
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'x', 'y', 'scale'])
 class RecursiveImageNode extends XNode implements SvgExportable {
 
-	@FxProperty Image image
+	Image image
+	
 	@FxProperty double x
 	@FxProperty double y
 	@FxProperty double scale
@@ -40,11 +42,12 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 	
 	boolean isZoomedIn 
 
-	new() {
-		super('Recursive image')
+	new(ResourceDescriptor imageDescriptor) {
+		super(imageDescriptor)
 	}
 	
 	protected override createNode() {
+		image = new Image((domainObject as ResourceDescriptor).toURI)
 		pivot = new FirstRecursiveImageNode(this)
 		return createPane => [
 			children += pivot
@@ -104,7 +107,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		val pane = new Group => [
 			val imageView = new ImageView
 			children += imageView => [
-				it.imageProperty.bind(imageProperty)
+				it.image = image
 				preserveRatio = true
 				fitWidthProperty.bind(this.widthProperty)
 				fitHeightProperty.bind(this.heightProperty)

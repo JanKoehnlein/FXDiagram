@@ -57,7 +57,7 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 			addParameter('modelElement', newTypeReference('de.fxdiagram.core.model.ModelElementImpl'))
 			body = '''
 				«FOR accessor: validPropertyNames.map[getPropertyAccessor(annotatedClass, it, true)]»
-					modelElement.addProperty(«accessor.call», «accessor.componentType».class);
+					modelElement.addProperty(«accessor.call», «newTypeReference(accessor.componentType.type)».class);
 				«ENDFOR»
 			'''
 		])

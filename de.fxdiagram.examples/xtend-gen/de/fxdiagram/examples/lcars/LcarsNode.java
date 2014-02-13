@@ -10,10 +10,10 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ImageCache;
-import de.fxdiagram.examples.lcars.LcarsEntryHandle;
+import de.fxdiagram.examples.lcars.LcarsEntryDescriptor;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsField;
 import de.fxdiagram.examples.lcars.NameShortener;
@@ -106,8 +106,8 @@ public class LcarsNode extends XNode {
   
   private ChangeListener<Bounds> nameShortener;
   
-  public LcarsNode(final LcarsEntryHandle handle) {
-    super(handle);
+  public LcarsNode(final LcarsEntryDescriptor descriptor) {
+    super(descriptor);
   }
   
   protected Node createNode() {
@@ -654,7 +654,7 @@ public class LcarsNode extends XNode {
   }
   
   public DBObject getData() {
-    DomainObjectHandle _domainObject = this.getDomainObject();
+    DomainObjectDescriptor _domainObject = this.getDomainObject();
     Object _domainObject_1 = _domainObject.getDomainObject();
     return ((DBObject) _domainObject_1);
   }
@@ -683,7 +683,7 @@ public class LcarsNode extends XNode {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
   }

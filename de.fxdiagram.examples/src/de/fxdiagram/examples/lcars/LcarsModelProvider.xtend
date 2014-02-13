@@ -6,8 +6,8 @@ import com.mongodb.DBCollection
 import com.mongodb.DBObject
 import com.mongodb.Mongo
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.model.DomainObjectHandle
-import de.fxdiagram.core.model.DomainObjectHandleImpl
+import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.core.model.DomainObjectDescriptorImpl
 import de.fxdiagram.core.model.DomainObjectProvider
 import org.bson.types.ObjectId
 
@@ -29,46 +29,41 @@ class LcarsModelProvider implements DomainObjectProvider{
 		]) as Iterable<DBObject>).toList
 	}
 	
-	override resolveDomainObject(DomainObjectHandle handle) {
+	override resolveDomainObject(DomainObjectDescriptor descriptor) {
 		lcars.findOne(new BasicDBObject => [
-			put("_id", new ObjectId(handle.id))
+			put("_id", new ObjectId(descriptor.id))
 		])
 	}
 	
-	override createDomainObjectHandle(Object it) {
+	override createDescriptor(Object it) {
 		switch it {
-			DBObject: return createLcarsEntryHandle
-			String: return createLcarsConnectionHandle
+			DBObject: return createLcarsEntryDescriptor
+			String: return createLcarsConnectionDescriptor
 			default:
 				throw new IllegalArgumentException("LcarsModelProvider only knows about DBObjects")
 		}
 	}
 	
-	def createLcarsEntryHandle(DBObject it) {
-		new LcarsEntryHandle(get('_id').toString, get('name').toString, this)
+	def createLcarsEntryDescriptor(DBObject it) {
+		new LcarsEntryDescriptor(get('_id').toString, get('name').toString, this)
 	}
 	
-	def createLcarsConnectionHandle(String fieldName) {
-		// TODO replace String by an ID 
-		new LcarsConnectionHandle(fieldName, this)
+	def createLcarsConnectionDescriptor(String fieldName) {
+		// TODO replace String by a handle 
+		new LcarsConnectionDescriptor(fieldName, this)
 	}
-
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class LcarsEntryHandle extends DomainObjectHandleImpl {
+class LcarsEntryDescriptor extends DomainObjectDescriptorImpl<DBObject> {
 	
 	new(String dbId, String name, LcarsModelProvider provider) {
 		super(dbId, name, provider)
 	}
-	
-	override getDomainObject() {
-		super.domainObject as DBObject
-	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class LcarsConnectionHandle extends DomainObjectHandleImpl {
+class LcarsConnectionDescriptor extends DomainObjectDescriptorImpl<String> {
 	
 	new(String fieldName, LcarsModelProvider provider) {
 		super(fieldName, fieldName, provider)  

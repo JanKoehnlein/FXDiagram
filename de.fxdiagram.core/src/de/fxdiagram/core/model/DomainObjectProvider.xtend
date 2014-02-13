@@ -2,9 +2,9 @@ package de.fxdiagram.core.model
 
 interface DomainObjectProvider extends XModelProvider {
 	
-	def Object resolveDomainObject(DomainObjectHandle handle) 
+	def Object resolveDomainObject(DomainObjectDescriptor descriptor) 
 	
-	def DomainObjectHandle createDomainObjectHandle(Object object)
+	def DomainObjectDescriptor createDescriptor(Object domainObject)
 	
 }
 

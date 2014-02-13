@@ -18,9 +18,9 @@ import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.Point2DExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.model.StringHandle;
+import de.fxdiagram.core.model.StringDescriptor;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import java.util.List;
@@ -76,19 +76,19 @@ public class XConnection extends XShape implements XModelProvider {
   public XConnection() {
   }
   
-  public XConnection(final DomainObjectHandle domainObject) {
+  public XConnection(final DomainObjectDescriptor domainObject) {
     this();
     this.domainObjectProperty.set(domainObject);
   }
   
-  public XConnection(final XNode source, final XNode target, final DomainObjectHandle domainObject) {
+  public XConnection(final XNode source, final XNode target, final DomainObjectDescriptor domainObject) {
     this(domainObject);
     this.setSource(source);
     this.setTarget(target);
   }
   
   public XConnection(final XNode source, final XNode target) {
-    this(source, target, new StringHandle(((source.getName() + "->") + target.getName())));
+    this(source, target, new StringDescriptor(((source.getName() + "->") + target.getName())));
   }
   
   public void setSource(final XNode source) {
@@ -661,7 +661,7 @@ public class XConnection extends XShape implements XModelProvider {
     ;
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(domainObjectProperty, DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
     modelElement.addProperty(sourceProperty, XNode.class);
     modelElement.addProperty(targetProperty, XNode.class);
     modelElement.addProperty(kindProperty, XConnectionKind.class);
@@ -799,13 +799,13 @@ public class XConnection extends XShape implements XModelProvider {
     return this.strokeProperty;
   }
   
-  private ReadOnlyObjectWrapper<DomainObjectHandle> domainObjectProperty = new ReadOnlyObjectWrapper<DomainObjectHandle>(this, "domainObject");
+  private ReadOnlyObjectWrapper<DomainObjectDescriptor> domainObjectProperty = new ReadOnlyObjectWrapper<DomainObjectDescriptor>(this, "domainObject");
   
-  public DomainObjectHandle getDomainObject() {
+  public DomainObjectDescriptor getDomainObject() {
     return this.domainObjectProperty.get();
   }
   
-  public ReadOnlyObjectProperty<DomainObjectHandle> domainObjectProperty() {
+  public ReadOnlyObjectProperty<DomainObjectDescriptor> domainObjectProperty() {
     return this.domainObjectProperty.getReadOnlyProperty();
   }
   

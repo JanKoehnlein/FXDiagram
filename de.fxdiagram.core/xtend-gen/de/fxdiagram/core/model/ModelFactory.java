@@ -31,7 +31,7 @@ public class ModelFactory {
     }
   }.apply();
   
-  protected ModelElement createElement(final String className) {
+  protected ModelElement createElement(final String className, final ClassLoader classLoader) {
     try {
       ModelElement _xblockexpression = null;
       {
@@ -43,7 +43,7 @@ public class ModelFactory {
         } else {
           ModelElement _xblockexpression_1 = null;
           {
-            final Class<?> clazz = Class.forName(className);
+            final Class<?> clazz = classLoader.loadClass(className);
             final Object node = clazz.newInstance();
             _xblockexpression_1 = this.createElement(node);
           }

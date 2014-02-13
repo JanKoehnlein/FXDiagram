@@ -3,11 +3,11 @@ package de.fxdiagram.examples.ecore;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.AddESuperTypeRapidButtonBehavior;
-import de.fxdiagram.examples.ecore.EClassHandle;
+import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
@@ -41,7 +41,7 @@ public class EClassNode extends XNode {
   
   private final VBox operationCompartment = new VBox();
   
-  public EClassNode(final EClassHandle domainObject) {
+  public EClassNode(final EClassDescriptor domainObject) {
     super(domainObject);
   }
   
@@ -109,7 +109,7 @@ public class EClassNode extends XNode {
   }
   
   public EClass getEClass() {
-    DomainObjectHandle _domainObject = this.getDomainObject();
+    DomainObjectDescriptor _domainObject = this.getDomainObject();
     Object _domainObject_1 = _domainObject.getDomainObject();
     return ((EClass) _domainObject_1);
   }
@@ -218,7 +218,7 @@ public class EClassNode extends XNode {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
   }

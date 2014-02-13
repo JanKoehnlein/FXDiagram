@@ -6,7 +6,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractOpenBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
@@ -45,7 +45,7 @@ public class FlipNode extends XNode {
     super(name);
   }
   
-  public FlipNode(final DomainObjectHandle domainObject) {
+  public FlipNode(final DomainObjectDescriptor domainObject) {
     super(domainObject);
   }
   

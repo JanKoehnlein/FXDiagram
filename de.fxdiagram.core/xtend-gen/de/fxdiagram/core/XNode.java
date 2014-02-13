@@ -11,9 +11,9 @@ import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.model.StringHandle;
+import de.fxdiagram.core.model.StringDescriptor;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
@@ -47,18 +47,18 @@ public class XNode extends XShape implements XModelProvider {
   
   private Anchors anchors;
   
-  public XNode(final DomainObjectHandle domainObject) {
+  public XNode(final DomainObjectDescriptor domainObject) {
     this.domainObjectProperty.set(domainObject);
   }
   
   public XNode(final String name) {
-    this(new StringHandle(name));
+    this(new StringDescriptor(name));
   }
   
   public String getName() {
     String _xblockexpression = null;
     {
-      DomainObjectHandle _domainObject = this.getDomainObject();
+      DomainObjectDescriptor _domainObject = this.getDomainObject();
       String _name = null;
       if (_domainObject!=null) {
         _name=_domainObject.getName();
@@ -261,7 +261,7 @@ public class XNode extends XShape implements XModelProvider {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty, DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
   }
@@ -304,17 +304,17 @@ public class XNode extends XShape implements XModelProvider {
     return this.heightProperty;
   }
   
-  private SimpleObjectProperty<DomainObjectHandle> domainObjectProperty = new SimpleObjectProperty<DomainObjectHandle>(this, "domainObject");
+  private SimpleObjectProperty<DomainObjectDescriptor> domainObjectProperty = new SimpleObjectProperty<DomainObjectDescriptor>(this, "domainObject");
   
-  public DomainObjectHandle getDomainObject() {
+  public DomainObjectDescriptor getDomainObject() {
     return this.domainObjectProperty.get();
   }
   
-  public void setDomainObject(final DomainObjectHandle domainObject) {
+  public void setDomainObject(final DomainObjectDescriptor domainObject) {
     this.domainObjectProperty.set(domainObject);
   }
   
-  public ObjectProperty<DomainObjectHandle> domainObjectProperty() {
+  public ObjectProperty<DomainObjectDescriptor> domainObjectProperty() {
     return this.domainObjectProperty;
   }
   

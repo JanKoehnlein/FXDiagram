@@ -42,7 +42,10 @@ public class ModelLoad {
   
   private List<CrossRefData> crossRefs;
   
-  public Object load(final Reader in) {
+  private ClassLoader classLoader;
+  
+  public Object load(final Reader in, final ClassLoader classLoader) {
+    this.classLoader = classLoader;
     ModelFactory _modelFactory = new ModelFactory();
     this.modelFactory = _modelFactory;
     ArrayList<CrossRefData> _newArrayList = CollectionLiterals.<CrossRefData>newArrayList();

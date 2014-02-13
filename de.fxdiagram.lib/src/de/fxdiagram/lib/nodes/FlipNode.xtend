@@ -3,7 +3,7 @@ package de.fxdiagram.lib.nodes
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
-import de.fxdiagram.core.model.DomainObjectHandle
+import de.fxdiagram.core.model.DomainObjectDescriptor
 import javafx.animation.RotateTransition
 import javafx.animation.SequentialTransition
 import javafx.event.EventHandler
@@ -39,7 +39,7 @@ class FlipNode extends XNode {
 		super(name)
 	}
 
-	new(DomainObjectHandle domainObject) {
+	new(DomainObjectDescriptor domainObject) {
 		super(domainObject)
 	}
 	

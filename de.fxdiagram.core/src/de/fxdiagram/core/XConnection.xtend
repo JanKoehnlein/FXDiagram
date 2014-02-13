@@ -8,8 +8,8 @@ import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.core.extensions.InitializingListListener
-import de.fxdiagram.core.model.DomainObjectHandle
-import de.fxdiagram.core.model.StringHandle
+import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.core.model.StringDescriptor
 import java.util.List
 import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
@@ -47,7 +47,7 @@ class XConnection extends XShape {
 	@FxProperty double strokeWidth = 2.0
 	@FxProperty Paint stroke
 
-	@FxProperty @ReadOnly DomainObjectHandle domainObject
+	@FxProperty @ReadOnly DomainObjectDescriptor domainObject
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
@@ -59,19 +59,19 @@ class XConnection extends XShape {
 	new() {
 	}
 
-	new(DomainObjectHandle domainObject) {
+	new(DomainObjectDescriptor domainObject) {
 		this()
 		domainObjectProperty.set(domainObject)
 	}
 	
-	new(XNode source, XNode target, DomainObjectHandle domainObject) {
+	new(XNode source, XNode target, DomainObjectDescriptor domainObject) {
 		this(domainObject)
 		this.source = source
 		this.target = target
 	}
 	
 	new(XNode source, XNode target) {
-		this(source, target, new StringHandle(source.name + '->' + target.name))
+		this(source, target, new StringDescriptor(source.name + '->' + target.name))
 	}
 	
 	def void setSource(XNode source) {
@@ -109,15 +109,15 @@ class XConnection extends XShape {
 			add = [ XControlPoint it | // Oops, have to declare 'it'
 				val index = controlPoints.indexOf(it)
 				if(index == 0 || index == controlPoints.size()-1)
-					it.initializeGraphics  // Oops, have to write 'it'
+					initializeGraphics  // Oops, have to write 'it'
 				else 
-					it.activate
-				it.layoutXProperty.addListener(controlPointListener)
-				it.layoutYProperty.addListener(controlPointListener)
+					activate
+				layoutXProperty.addListener(controlPointListener)
+				layoutYProperty.addListener(controlPointListener)
 			]
 			remove = [
-				it.layoutXProperty.removeListener(controlPointListener)
-				it.layoutYProperty.removeListener(controlPointListener)
+				layoutXProperty.removeListener(controlPointListener)
+				layoutYProperty.removeListener(controlPointListener)
 			]		
 		]);
 		labels.forEach[activate]

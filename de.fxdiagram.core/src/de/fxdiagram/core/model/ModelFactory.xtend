@@ -11,12 +11,12 @@ class ModelFactory {
 		Color.name -> ColorAdapter
 	}
 	
-	protected def ModelElement createElement(String className) {
+	protected def ModelElement createElement(String className, ClassLoader classLoader) {
 		val valueAdapter = valueAdapters.get(className)
 		if(valueAdapter != null) {
 			valueAdapter.newInstance()
 		} else {
-			val clazz = Class.forName(className)
+			val clazz = classLoader.loadClass(className)
 			val node = clazz.newInstance()
 			createElement(node)
 		}

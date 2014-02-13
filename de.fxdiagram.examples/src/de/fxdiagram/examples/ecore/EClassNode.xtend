@@ -21,7 +21,7 @@ class EClassNode extends XNode {
 	val attributeCompartment = new VBox
 	val operationCompartment = new VBox
 
-	new(EClassHandle domainObject) {
+	new(EClassDescriptor domainObject) {
 		super(domainObject)
 	}			
 

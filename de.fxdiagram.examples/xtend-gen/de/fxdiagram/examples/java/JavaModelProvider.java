@@ -1,71 +1,71 @@
 package de.fxdiagram.examples.java;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.JavaProperty;
-import de.fxdiagram.examples.java.JavaPropertyHandle;
-import de.fxdiagram.examples.java.JavaSuperType;
+import de.fxdiagram.examples.java.JavaPropertyDescriptor;
+import de.fxdiagram.examples.java.JavaSuperTypeDescriptor;
 import de.fxdiagram.examples.java.JavaSuperTypeHandle;
-import de.fxdiagram.examples.java.JavaTypeHandle;
+import de.fxdiagram.examples.java.JavaTypeDescriptor;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @ModelNode
 @SuppressWarnings("all")
 public class JavaModelProvider implements DomainObjectProvider {
-  public DomainObjectHandle createDomainObjectHandle(final Object object) {
+  public DomainObjectDescriptor createDescriptor(final Object domainObject) {
     boolean _matched = false;
     if (!_matched) {
-      if (object instanceof Class) {
+      if (domainObject instanceof Class) {
         _matched=true;
-        return this.createJavaTypeHandle(((Class<?>)object));
+        return this.createJavaTypeDescriptor(((Class<?>)domainObject));
       }
     }
     if (!_matched) {
-      if (object instanceof JavaProperty) {
+      if (domainObject instanceof JavaProperty) {
         _matched=true;
-        return this.createJavaPropertyHandle(((JavaProperty)object));
+        return this.createJavaPropertyDescriptor(((JavaProperty)domainObject));
       }
     }
     if (!_matched) {
-      if (object instanceof JavaSuperType) {
+      if (domainObject instanceof JavaSuperTypeHandle) {
         _matched=true;
-        return this.createJavaSuperClassHandle(((JavaSuperType)object));
+        return this.createJavaSuperClassDescriptor(((JavaSuperTypeHandle)domainObject));
       }
     }
     return null;
   }
   
-  public JavaSuperTypeHandle createJavaSuperClassHandle(final JavaSuperType javaSuperType) {
-    return new JavaSuperTypeHandle(javaSuperType, this);
+  public JavaSuperTypeDescriptor createJavaSuperClassDescriptor(final JavaSuperTypeHandle javaSuperType) {
+    return new JavaSuperTypeDescriptor(javaSuperType, this);
   }
   
-  public JavaPropertyHandle createJavaPropertyHandle(final JavaProperty property) {
-    return new JavaPropertyHandle(property, this);
+  public JavaPropertyDescriptor createJavaPropertyDescriptor(final JavaProperty property) {
+    return new JavaPropertyDescriptor(property, this);
   }
   
-  public JavaTypeHandle createJavaTypeHandle(final Class<?> clazz) {
-    return new JavaTypeHandle(clazz, this);
+  public JavaTypeDescriptor createJavaTypeDescriptor(final Class<?> clazz) {
+    return new JavaTypeDescriptor(clazz, this);
   }
   
-  public Object resolveDomainObject(final DomainObjectHandle handle) {
+  public Object resolveDomainObject(final DomainObjectDescriptor descriptor) {
     try {
       Object _switchResult = null;
       boolean _matched = false;
       if (!_matched) {
-        if (handle instanceof JavaTypeHandle) {
+        if (descriptor instanceof JavaTypeDescriptor) {
           _matched=true;
-          String _id = ((JavaTypeHandle)handle).getId();
+          String _id = ((JavaTypeDescriptor)descriptor).getId();
           return Class.forName(_id);
         }
       }
       if (!_matched) {
-        if (handle instanceof JavaPropertyHandle) {
+        if (descriptor instanceof JavaPropertyDescriptor) {
           _matched=true;
           JavaProperty _xblockexpression = null;
           {
-            String _id = ((JavaPropertyHandle)handle).getId();
+            String _id = ((JavaPropertyDescriptor)descriptor).getId();
             final String[] split = _id.split(" ");
             String _get = split[1];
             String _get_1 = split[0];
@@ -76,17 +76,17 @@ public class JavaModelProvider implements DomainObjectProvider {
         }
       }
       if (!_matched) {
-        if (handle instanceof JavaSuperTypeHandle) {
+        if (descriptor instanceof JavaSuperTypeDescriptor) {
           _matched=true;
-          JavaSuperType _xblockexpression = null;
+          JavaSuperTypeHandle _xblockexpression = null;
           {
-            String _id = ((JavaSuperTypeHandle)handle).getId();
+            String _id = ((JavaSuperTypeDescriptor)descriptor).getId();
             final String[] split = _id.split("->");
             String _get = split[0];
             Class<?> _forName = Class.forName(_get);
             String _get_1 = split[1];
             Class<?> _forName_1 = Class.forName(_get_1);
-            _xblockexpression = new JavaSuperType(_forName, _forName_1);
+            _xblockexpression = new JavaSuperTypeHandle(_forName, _forName_1);
           }
           _switchResult = _xblockexpression;
         }

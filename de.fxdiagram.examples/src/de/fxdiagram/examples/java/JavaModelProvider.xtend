@@ -1,44 +1,44 @@
 package de.fxdiagram.examples.java
 
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.model.DomainObjectHandle
-import de.fxdiagram.core.model.DomainObjectHandleImpl
+import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.core.model.DomainObjectDescriptorImpl
 import de.fxdiagram.core.model.DomainObjectProvider
 
 @ModelNode
 class JavaModelProvider implements DomainObjectProvider {
 	
-	override createDomainObjectHandle(Object object) {
-		switch object {
-			Class<?>: return createJavaTypeHandle(object)
-			JavaProperty: return createJavaPropertyHandle(object)
-			JavaSuperType: return createJavaSuperClassHandle(object)
+	override createDescriptor(Object domainObject) {
+		switch domainObject {
+			Class<?>: return createJavaTypeDescriptor(domainObject)
+			JavaProperty: return createJavaPropertyDescriptor(domainObject)
+			JavaSuperTypeHandle: return createJavaSuperClassDescriptor(domainObject)
 		}
 		return null;
 	}
 	
-	def createJavaSuperClassHandle(JavaSuperType javaSuperType) {
-		return new JavaSuperTypeHandle(javaSuperType, this)
+	def createJavaSuperClassDescriptor(JavaSuperTypeHandle javaSuperType) {
+		return new JavaSuperTypeDescriptor(javaSuperType, this)
 	}
 	
-	def createJavaPropertyHandle(JavaProperty property) {
-		return new JavaPropertyHandle(property, this)
+	def createJavaPropertyDescriptor(JavaProperty property) {
+		return new JavaPropertyDescriptor(property, this)
 	}
 	
-	def createJavaTypeHandle(Class<?> clazz) {
-		return new JavaTypeHandle(clazz, this)
+	def createJavaTypeDescriptor(Class<?> clazz) {
+		return new JavaTypeDescriptor(clazz, this)
 	}
 	
-	override resolveDomainObject(DomainObjectHandle handle) {
-		switch handle {
-			JavaTypeHandle: return Class.forName(handle.id)
-			JavaPropertyHandle: {
-				val split = handle.id.split(' ')
+	override resolveDomainObject(DomainObjectDescriptor descriptor) {
+		switch descriptor {
+			JavaTypeDescriptor: return Class.forName(descriptor.id)
+			JavaPropertyDescriptor: {
+				val split = descriptor.id.split(' ')
 				new JavaProperty(split.get(1), Class.forName(split.get(0)))
 			}
-			JavaSuperTypeHandle: {
-				val split = handle.id.split('->')
-				new JavaSuperType(Class.forName(split.get(0)), Class.forName(split.get(1)))
+			JavaSuperTypeDescriptor: {
+				val split = descriptor.id.split('->')
+				new JavaSuperTypeHandle(Class.forName(split.get(0)), Class.forName(split.get(1)))
 			}
 		}
 	}
@@ -46,41 +46,29 @@ class JavaModelProvider implements DomainObjectProvider {
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class JavaTypeHandle extends DomainObjectHandleImpl {
+class JavaTypeDescriptor extends DomainObjectDescriptorImpl<Class<?>> {
 	
 	new(Class<?> javaClass, JavaModelProvider provider) {
 		super(javaClass.canonicalName, javaClass.canonicalName, provider)
 	}
-	
-	override Class<?> getDomainObject() {
-		super.domainObject as Class<?>
-	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class JavaPropertyHandle extends DomainObjectHandleImpl {
+class JavaPropertyDescriptor extends DomainObjectDescriptorImpl<JavaProperty> {
 	
 	new(JavaProperty it, JavaModelProvider provider) {
 		super(type.canonicalName + ' ' + name, type.canonicalName + ' ' + name, provider)
 	}
-	
-	override JavaProperty getDomainObject() {
-		super.domainObject as JavaProperty
-	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class JavaSuperTypeHandle extends DomainObjectHandleImpl {
+class JavaSuperTypeDescriptor extends DomainObjectDescriptorImpl<JavaSuperTypeHandle> {
 
-	new(JavaSuperType it, JavaModelProvider provider) {
+	new(JavaSuperTypeHandle it, JavaModelProvider provider) {
 		super(subType.canonicalName + '->' + superType.canonicalName,
 			subType.canonicalName + '->' + superType.canonicalName,
 			provider
 		)
-	}
-	
-	override JavaSuperType getDomainObject() {
-		super.domainObject as JavaSuperType
 	}
 }
 

@@ -7,10 +7,10 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
-import de.fxdiagram.examples.lcars.LcarsConnectionHandle;
-import de.fxdiagram.examples.lcars.LcarsEntryHandle;
+import de.fxdiagram.examples.lcars.LcarsConnectionDescriptor;
+import de.fxdiagram.examples.lcars.LcarsEntryDescriptor;
 import de.fxdiagram.examples.lcars.LcarsField;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 import de.fxdiagram.examples.lcars.LcarsNode;
@@ -49,7 +49,7 @@ public class LcarsQueryTask extends Task<Void> {
     {
       XRoot _root = CoreExtensions.getRoot(this.host);
       final LcarsModelProvider modelProvider = _root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
-      final LcarsConnectionHandle connectionHandle = modelProvider.createLcarsConnectionHandle(this.fieldName);
+      final LcarsConnectionDescriptor connectionDescriptor = modelProvider.createLcarsConnectionDescriptor(this.fieldName);
       final List<DBObject> siblings = modelProvider.query(this.fieldName, this.fieldValue);
       final LcarsNode lcarsNode = this.host.getLcarsNode();
       final CoverFlowChooser chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER);
@@ -58,8 +58,8 @@ public class LcarsQueryTask extends Task<Void> {
       ObservableList<XConnection> _incomingConnections = _lcarsNode.getIncomingConnections();
       final Function1<XConnection,Boolean> _function = new Function1<XConnection,Boolean>() {
         public Boolean apply(final XConnection it) {
-          DomainObjectHandle _domainObject = it.getDomainObject();
-          return Boolean.valueOf(Objects.equal(_domainObject, connectionHandle));
+          DomainObjectDescriptor _domainObject = it.getDomainObject();
+          return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
         }
       };
       Iterable<XConnection> _filter = IterableExtensions.<XConnection>filter(_incomingConnections, _function);
@@ -73,8 +73,8 @@ public class LcarsQueryTask extends Task<Void> {
       ObservableList<XConnection> _outgoingConnections = _lcarsNode_1.getOutgoingConnections();
       final Function1<XConnection,Boolean> _function_2 = new Function1<XConnection,Boolean>() {
         public Boolean apply(final XConnection it) {
-          DomainObjectHandle _domainObject = it.getDomainObject();
-          return Boolean.valueOf(Objects.equal(_domainObject, connectionHandle));
+          DomainObjectDescriptor _domainObject = it.getDomainObject();
+          return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
         }
       };
       Iterable<XConnection> _filter_1 = IterableExtensions.<XConnection>filter(_outgoingConnections, _function_2);
@@ -88,13 +88,13 @@ public class LcarsQueryTask extends Task<Void> {
       Iterable<LcarsNode> _filter_2 = Iterables.<LcarsNode>filter(_plus, LcarsNode.class);
       final Function1<LcarsNode,String> _function_4 = new Function1<LcarsNode,String>() {
         public String apply(final LcarsNode it) {
-          DomainObjectHandle _domainObject = it.getDomainObject();
+          DomainObjectDescriptor _domainObject = it.getDomainObject();
           return _domainObject.getId();
         }
       };
       Iterable<String> _map_2 = IterableExtensions.<LcarsNode, String>map(_filter_2, _function_4);
       final Set<String> alreadyConnected = IterableExtensions.<String>toSet(_map_2);
-      DomainObjectHandle _domainObject = lcarsNode.getDomainObject();
+      DomainObjectDescriptor _domainObject = lcarsNode.getDomainObject();
       String _id = _domainObject.getId();
       alreadyConnected.add(_id);
       final Function1<DBObject,Boolean> _function_5 = new Function1<DBObject,Boolean>() {
@@ -108,8 +108,8 @@ public class LcarsQueryTask extends Task<Void> {
       Iterable<DBObject> _filter_3 = IterableExtensions.<DBObject>filter(siblings, _function_5);
       final Procedure2<DBObject,Integer> _function_6 = new Procedure2<DBObject,Integer>() {
         public void apply(final DBObject it, final Integer i) {
-          final LcarsEntryHandle handle = modelProvider.createLcarsEntryHandle(it);
-          LcarsNode _lcarsNode = new LcarsNode(handle);
+          final LcarsEntryDescriptor descriptor = modelProvider.createLcarsEntryDescriptor(it);
+          LcarsNode _lcarsNode = new LcarsNode(descriptor);
           final Procedure1<LcarsNode> _function = new Procedure1<LcarsNode>() {
             public void apply(final LcarsNode it) {
               double _width = lcarsNode.getWidth();

@@ -11,10 +11,10 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.layout.LayoutType;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.core.tools.actions.LayoutAction;
-import de.fxdiagram.examples.lcars.LcarsConnectionHandle;
+import de.fxdiagram.examples.lcars.LcarsConnectionDescriptor;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 import de.fxdiagram.examples.lcars.LcarsNode;
@@ -60,10 +60,10 @@ public class LcarsField extends Parent {
     this.node = node;
     XRoot _root = CoreExtensions.getRoot(node);
     LcarsModelProvider _domainObjectProvider = _root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
-    final LcarsConnectionHandle connectionHandle = _domainObjectProvider.createLcarsConnectionHandle(name);
+    final LcarsConnectionDescriptor connectionDescriptor = _domainObjectProvider.createLcarsConnectionDescriptor(name);
     final ChooserConnectionProvider _function = new ChooserConnectionProvider() {
-      public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectHandle choiceInfo) {
-        XConnection _xConnection = new XConnection(host, choice, connectionHandle);
+      public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor choiceInfo) {
+        XConnection _xConnection = new XConnection(host, choice, connectionDescriptor);
         final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
           public void apply(final XConnection it) {
             TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, true);
@@ -203,8 +203,8 @@ public class LcarsField extends Parent {
                         if (!_equals) {
                           _and = false;
                         } else {
-                          DomainObjectHandle _domainObject = it.getDomainObject();
-                          boolean _equals_1 = Objects.equal(_domainObject, connectionHandle);
+                          DomainObjectDescriptor _domainObject = it.getDomainObject();
+                          boolean _equals_1 = Objects.equal(_domainObject, connectionDescriptor);
                           _and = _equals_1;
                         }
                         return Boolean.valueOf(_and);
@@ -226,8 +226,8 @@ public class LcarsField extends Parent {
                         if (!_equals) {
                           _and = false;
                         } else {
-                          DomainObjectHandle _domainObject = it.getDomainObject();
-                          boolean _equals_1 = Objects.equal(_domainObject, connectionHandle);
+                          DomainObjectDescriptor _domainObject = it.getDomainObject();
+                          boolean _equals_1 = Objects.equal(_domainObject, connectionDescriptor);
                           _and = _equals_1;
                         }
                         return Boolean.valueOf(_and);

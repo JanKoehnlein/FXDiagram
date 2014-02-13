@@ -99,7 +99,7 @@ class JavaTypeModel {
 }
 
 @Data
-class JavaSuperType {
+class JavaSuperTypeHandle {
 	Class<?> subType
 	Class<?> superType
 }

@@ -15,9 +15,8 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.model.StringHandle;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -101,10 +100,10 @@ public class OpenableDiagramNode extends XNode {
   private Point2D nodeCenterInDiagram;
   
   public OpenableDiagramNode(final String name) {
-    this(new StringHandle(name));
+    super(name);
   }
   
-  public OpenableDiagramNode(final DomainObjectHandle domainObject) {
+  public OpenableDiagramNode(final DomainObjectDescriptor domainObject) {
     super(domainObject);
   }
   
@@ -424,7 +423,7 @@ public class OpenableDiagramNode extends XNode {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectHandle.class);
+    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
   }

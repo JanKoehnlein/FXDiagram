@@ -19,7 +19,7 @@ class LcarsDiagram extends XDiagram {
 		contentsInitializer = [
 			val provider = root.getDomainObjectProvider(LcarsModelProvider)
 			val kirk = provider.query('name', 'James T. Kirk').get(0)
-			val handle = provider.createLcarsEntryHandle(kirk)
+			val handle = provider.createLcarsEntryDescriptor(kirk)
 			nodes += new LcarsNode(handle) => [
 				width = 120
 			]

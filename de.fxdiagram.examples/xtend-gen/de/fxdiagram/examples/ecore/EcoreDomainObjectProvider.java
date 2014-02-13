@@ -1,12 +1,12 @@
 package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.examples.ecore.EClassHandle;
-import de.fxdiagram.examples.ecore.EReferenceHandle;
-import de.fxdiagram.examples.ecore.ESuperType;
+import de.fxdiagram.examples.ecore.EClassDescriptor;
+import de.fxdiagram.examples.ecore.EReferenceDescriptor;
+import de.fxdiagram.examples.ecore.ESuperTypeDescriptor;
 import de.fxdiagram.examples.ecore.ESuperTypeHandle;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -20,43 +20,43 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 @ModelNode
 @SuppressWarnings("all")
 public class EcoreDomainObjectProvider implements DomainObjectProvider {
-  public DomainObjectHandle createDomainObjectHandle(final Object object) {
+  public DomainObjectDescriptor createDescriptor(final Object domainObject) {
     boolean _matched = false;
     if (!_matched) {
-      if (object instanceof EClass) {
+      if (domainObject instanceof EClass) {
         _matched=true;
-        return this.createEClassHandle(((EClass)object));
+        return this.createEClassDescriptor(((EClass)domainObject));
       }
     }
     if (!_matched) {
-      if (object instanceof EReference) {
+      if (domainObject instanceof EReference) {
         _matched=true;
-        return this.createEReferenceHandle(((EReference)object));
+        return this.createEReferenceDescriptor(((EReference)domainObject));
       }
     }
     if (!_matched) {
-      if (object instanceof ESuperType) {
+      if (domainObject instanceof ESuperTypeHandle) {
         _matched=true;
-        return this.createESuperClassHandle(((ESuperType)object));
+        return this.createESuperClassDescriptor(((ESuperTypeHandle)domainObject));
       }
     }
     return null;
   }
   
-  public EClassHandle createEClassHandle(final EClass object) {
-    return new EClassHandle(object, this);
+  public EClassDescriptor createEClassDescriptor(final EClass object) {
+    return new EClassDescriptor(object, this);
   }
   
-  public EReferenceHandle createEReferenceHandle(final EReference object) {
-    return new EReferenceHandle(object, this);
+  public EReferenceDescriptor createEReferenceDescriptor(final EReference object) {
+    return new EReferenceDescriptor(object, this);
   }
   
-  public ESuperTypeHandle createESuperClassHandle(final ESuperType object) {
-    return new ESuperTypeHandle(object, this);
+  public ESuperTypeDescriptor createESuperClassDescriptor(final ESuperTypeHandle object) {
+    return new ESuperTypeDescriptor(object, this);
   }
   
-  public Object resolveDomainObject(final DomainObjectHandle handle) {
-    String _id = handle.getId();
+  public Object resolveDomainObject(final DomainObjectDescriptor descriptor) {
+    String _id = descriptor.getId();
     final URI uri = URI.createURI(_id);
     URI _trimFragment = uri.trimFragment();
     String _string = _trimFragment.toString();
@@ -73,14 +73,14 @@ public class EcoreDomainObjectProvider implements DomainObjectProvider {
     final String fragment = _xifexpression;
     Resource _eResource = ePackage.eResource();
     final EObject eObject = _eResource.getEObject(fragment);
-    if ((handle instanceof ESuperTypeHandle)) {
+    if ((descriptor instanceof ESuperTypeHandle)) {
       final EClass eClass = ((EClass) eObject);
       EList<EClass> _eAllSuperTypes = eClass.getEAllSuperTypes();
       String _fragment_2 = uri.fragment();
       String _substring = _fragment_2.substring((posEquals + 1));
       int _parseInt = Integer.parseInt(_substring);
       EClass _get = _eAllSuperTypes.get(_parseInt);
-      return new ESuperType(eClass, _get);
+      return new ESuperTypeHandle(eClass, _get);
     } else {
       return eObject;
     }

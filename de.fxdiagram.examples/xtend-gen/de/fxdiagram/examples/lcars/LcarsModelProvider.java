@@ -7,11 +7,11 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectHandle;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.examples.lcars.LcarsConnectionHandle;
-import de.fxdiagram.examples.lcars.LcarsEntryHandle;
+import de.fxdiagram.examples.lcars.LcarsConnectionDescriptor;
+import de.fxdiagram.examples.lcars.LcarsEntryDescriptor;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -50,11 +50,11 @@ public class LcarsModelProvider implements DomainObjectProvider {
     return IterableExtensions.<DBObject>toList(((Iterable<DBObject>) _find));
   }
   
-  public Object resolveDomainObject(final DomainObjectHandle handle) {
+  public Object resolveDomainObject(final DomainObjectDescriptor descriptor) {
     BasicDBObject _basicDBObject = new BasicDBObject();
     final Procedure1<BasicDBObject> _function = new Procedure1<BasicDBObject>() {
       public void apply(final BasicDBObject it) {
-        String _id = handle.getId();
+        String _id = descriptor.getId();
         ObjectId _objectId = new ObjectId(_id);
         it.put("_id", _objectId);
       }
@@ -63,33 +63,33 @@ public class LcarsModelProvider implements DomainObjectProvider {
     return this.lcars.findOne(_doubleArrow);
   }
   
-  public DomainObjectHandle createDomainObjectHandle(final Object it) {
+  public DomainObjectDescriptor createDescriptor(final Object it) {
     boolean _matched = false;
     if (!_matched) {
       if (it instanceof DBObject) {
         _matched=true;
-        return this.createLcarsEntryHandle(((DBObject)it));
+        return this.createLcarsEntryDescriptor(((DBObject)it));
       }
     }
     if (!_matched) {
       if (it instanceof String) {
         _matched=true;
-        return this.createLcarsConnectionHandle(((String)it));
+        return this.createLcarsConnectionDescriptor(((String)it));
       }
     }
     throw new IllegalArgumentException("LcarsModelProvider only knows about DBObjects");
   }
   
-  public LcarsEntryHandle createLcarsEntryHandle(final DBObject it) {
+  public LcarsEntryDescriptor createLcarsEntryDescriptor(final DBObject it) {
     Object _get = it.get("_id");
     String _string = _get.toString();
     Object _get_1 = it.get("name");
     String _string_1 = _get_1.toString();
-    return new LcarsEntryHandle(_string, _string_1, this);
+    return new LcarsEntryDescriptor(_string, _string_1, this);
   }
   
-  public LcarsConnectionHandle createLcarsConnectionHandle(final String fieldName) {
-    return new LcarsConnectionHandle(fieldName, this);
+  public LcarsConnectionDescriptor createLcarsConnectionDescriptor(final String fieldName) {
+    return new LcarsConnectionDescriptor(fieldName, this);
   }
   
   public void populate(final ModelElementImpl modelElement) {

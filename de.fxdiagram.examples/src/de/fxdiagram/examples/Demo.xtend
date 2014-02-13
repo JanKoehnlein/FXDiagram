@@ -7,10 +7,14 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.Layouter
-import de.fxdiagram.core.services.ImageCache
+import de.fxdiagram.core.services.ResourceHandle
+import de.fxdiagram.core.services.ResourceProvider
 import de.fxdiagram.examples.ecore.EClassNode
+import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider
+import de.fxdiagram.examples.java.JavaModelProvider
 import de.fxdiagram.examples.java.JavaTypeNode
 import de.fxdiagram.examples.lcars.LcarsDiagram
+import de.fxdiagram.examples.lcars.LcarsModelProvider
 import de.fxdiagram.examples.login.LoginNode
 import de.fxdiagram.examples.neonsign.NeonSignNode
 import de.fxdiagram.examples.slides.eclipsecon.IntroductionSlideDeck
@@ -25,6 +29,7 @@ import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.lib.simple.SimpleNode
 import java.net.URL
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.concurrent.Task
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
@@ -32,16 +37,11 @@ import javafx.scene.control.Button
 import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
 
-import static extension de.fxdiagram.core.extensions.UriExtensions.*
-import static extension javafx.util.Duration.*
-import javafx.application.Platform
-import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider
-import de.fxdiagram.examples.java.JavaModelProvider
-import de.fxdiagram.examples.lcars.LcarsModelProvider
-
 class Demo extends Application {
 
 	XRoot root
+	
+	ResourceProvider resourceProvider
 	
 	def static main(String... args) {
 		launch(args)
@@ -56,15 +56,18 @@ class Demo extends Application {
 
 	def createScene() {
 		root = new XRoot
+		root.classLoader = class.classLoader
 		val scene = new Scene(root, 1024, 768)
 		scene.setCamera(new PerspectiveCamera)
 		root.activate
 		val diagram = new XDiagram
 		root.diagram = diagram
+		resourceProvider = new ResourceProvider(class.classLoader)
 		root.domainObjectProviders += #[ 
 			new EcoreDomainObjectProvider,
 			new JavaModelProvider,
-			new LcarsModelProvider
+			new LcarsModelProvider,
+			resourceProvider
 		]
 		diagram => [
 //			nodes += new DemoCampIntroSlides
@@ -108,7 +111,7 @@ class Demo extends Application {
 		Platform.runLater[|
 			diagram.centerDiagram(true)
 		]
-		scene
+		scene 
 	}
 	
 	def newGalleryDiagramNode() {
@@ -235,12 +238,12 @@ class Demo extends Application {
 	
 	def newEClassNode() {
 		val provider = root.getDomainObjectProvider(EcoreDomainObjectProvider)
-		new EClassNode(provider.createEClassHandle(EcorePackage.Literals.ECLASS))
+		new EClassNode(provider.createEClassDescriptor(EcorePackage.Literals.ECLASS))
 	}
 	
 	def newJavaTypeNode() {
 		val provider = root.getDomainObjectProvider(JavaModelProvider)
-		new JavaTypeNode(provider.createJavaTypeHandle(Button))
+		new JavaTypeNode(provider.createJavaTypeDescriptor(Button))
 	}
 	
 	def newNeonSignNode() {
@@ -248,11 +251,9 @@ class Demo extends Application {
 	}
 
 	def newMovieNode() {
-		new MovieNode('Movie') => [
-			movieUrl = new URL(this.toURI('media/Usability.mp4'))
+		new MovieNode(newResource('Movie', 'media/Usability.mp4')) => [
 			width = 640
 			height = 360
-			player.seek(2.minutes)
 		]
 	}
 	
@@ -272,8 +273,7 @@ class Demo extends Application {
 	}
 	
 	def newRecursiveImageNode() {
-		new RecursiveImageNode => [
-			image = ImageCache.get.getImage(this, 'media/laptop.jpg')
+		new RecursiveImageNode(newResource('laptop', 'media/laptop.jpg')) => [
 			x = 0
 			y = -3
 			scale = 0.6
@@ -283,8 +283,7 @@ class Demo extends Application {
 	}
 	
 	def newImageNode() {
-		new ImageNode => [
-			image = ImageCache.get.getImage(this, 'media/seltsam.jpg')
+		new ImageNode(newResource('seltsam', 'media/seltsam.jpg')) => [
 			width = 100
 		]
 	}
@@ -295,5 +294,9 @@ class Demo extends Application {
 			null
 		]
 		task.run
+	}
+	
+	protected def newResource(String name, String relativePath) {
+		resourceProvider.createResourceDescriptor(new ResourceHandle(name, this.class, relativePath))
 	}
 }
