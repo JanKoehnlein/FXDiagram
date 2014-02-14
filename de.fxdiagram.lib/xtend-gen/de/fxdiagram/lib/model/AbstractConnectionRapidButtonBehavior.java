@@ -9,15 +9,16 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.tools.AbstractChooser;
 import java.util.List;
 import java.util.Set;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -66,79 +67,49 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
       HOST _host_1 = this.getHost();
       XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_1);
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
-      final Procedure1<XConnection> _function_2 = new Procedure1<XConnection>() {
-        public void apply(final XConnection it) {
-          DomainObjectDescriptor _domainObject = it.getDomainObject();
-          boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_domainObject);
-          if (_remove) {
-            DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
-            AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
-          }
-        }
-      };
-      IterableExtensions.<XConnection>forEach(_connections, _function_2);
-      HOST _host_2 = this.getHost();
-      XDiagram _diagram_2 = CoreExtensions.getDiagram(_host_2);
-      ObservableList<XConnection> _connections_1 = _diagram_2.getConnections();
-      final ListChangeListener<XConnection> _function_3 = new ListChangeListener<XConnection>() {
-        public void onChanged(final ListChangeListener.Change<? extends XConnection> change) {
-          boolean _isEmpty = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
-          final boolean hadChoices = (!_isEmpty);
-          boolean _next = change.next();
-          boolean _while = _next;
-          while (_while) {
-            {
-              boolean _wasAdded = change.wasAdded();
-              if (_wasAdded) {
-                List<? extends XConnection> _addedSubList = change.getAddedSubList();
-                final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-                  public void apply(final XConnection it) {
-                    DomainObjectDescriptor _domainObject = it.getDomainObject();
-                    boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_domainObject);
-                    if (_remove) {
-                      DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
-                      AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
-                    }
-                  }
-                };
-                IterableExtensions.forEach(_addedSubList, _function);
-              }
-              boolean _wasRemoved = change.wasRemoved();
-              if (_wasRemoved) {
-                List<? extends XConnection> _removed = change.getRemoved();
-                final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
-                  public void apply(final XConnection it) {
-                    DomainObjectDescriptor _domainObject = it.getDomainObject();
-                    boolean _remove = AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.remove(_domainObject);
-                    if (_remove) {
-                      DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
-                      AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.add(((KEY) _domainObject_1));
-                    }
-                  }
-                };
-                IterableExtensions.forEach(_removed, _function_1);
+      InitializingListListener<XConnection> _initializingListListener = new InitializingListListener<XConnection>();
+      final Procedure1<InitializingListListener<XConnection>> _function_2 = new Procedure1<InitializingListListener<XConnection>>() {
+        public void apply(final InitializingListListener<XConnection> it) {
+          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+            public void apply(final XConnection it) {
+              DomainObjectDescriptor _domainObject = it.getDomainObject();
+              boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_domainObject);
+              if (_remove) {
+                boolean _isEmpty = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
+                if (_isEmpty) {
+                  HOST _host = AbstractConnectionRapidButtonBehavior.this.getHost();
+                  XDiagram _diagram = CoreExtensions.getDiagram(_host);
+                  ObservableList<XRapidButton> _buttons = _diagram.getButtons();
+                  Iterables.removeAll(_buttons, AbstractConnectionRapidButtonBehavior.this.buttons);
+                }
+                DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
+                AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
               }
             }
-            boolean _next_1 = change.next();
-            _while = _next_1;
-          }
-          boolean _isEmpty_1 = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
-          if (_isEmpty_1) {
-            HOST _host = AbstractConnectionRapidButtonBehavior.this.getHost();
-            XDiagram _diagram = CoreExtensions.getDiagram(_host);
-            ObservableList<XRapidButton> _buttons = _diagram.getButtons();
-            Iterables.removeAll(_buttons, AbstractConnectionRapidButtonBehavior.this.buttons);
-          } else {
-            if ((!hadChoices)) {
-              HOST _host_1 = AbstractConnectionRapidButtonBehavior.this.getHost();
-              XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_1);
-              ObservableList<XRapidButton> _buttons_1 = _diagram_1.getButtons();
-              Iterables.<XRapidButton>addAll(_buttons_1, AbstractConnectionRapidButtonBehavior.this.buttons);
+          };
+          it.setAdd(_function);
+          final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
+            public void apply(final XConnection it) {
+              DomainObjectDescriptor _domainObject = it.getDomainObject();
+              boolean _remove = AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.remove(_domainObject);
+              if (_remove) {
+                boolean _isEmpty = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
+                if (_isEmpty) {
+                  HOST _host = AbstractConnectionRapidButtonBehavior.this.getHost();
+                  XDiagram _diagram = CoreExtensions.getDiagram(_host);
+                  ObservableList<XRapidButton> _buttons = _diagram.getButtons();
+                  Iterables.<XRapidButton>addAll(_buttons, AbstractConnectionRapidButtonBehavior.this.buttons);
+                }
+                DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
+                AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.add(((KEY) _domainObject_1));
+              }
             }
-          }
+          };
+          it.setRemove(_function_1);
         }
       };
-      _connections_1.addListener(_function_3);
+      InitializingListListener<XConnection> _doubleArrow = ObjectExtensions.<InitializingListListener<XConnection>>operator_doubleArrow(_initializingListListener, _function_2);
+      CoreExtensions.<XConnection>addInitializingListener(_connections, _doubleArrow);
     }
   }
   

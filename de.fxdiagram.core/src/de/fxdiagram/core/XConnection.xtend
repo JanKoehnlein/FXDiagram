@@ -57,6 +57,7 @@ class XConnection extends XShape {
 	@FxProperty ConnectionRouter connectionRouter
 
 	new() {
+		targetArrowHead = new TriangleArrowHead(this, false)
 	}
 
 	new(DomainObjectDescriptor domainObject) {
@@ -91,7 +92,6 @@ class XConnection extends XShape {
 		children += controlPointGroup => [
 			visible = false
 		]
-		targetArrowHead = new TriangleArrowHead(this, false)	
 		connectionRouter = new ConnectionRouter(this)
 		node
 	}

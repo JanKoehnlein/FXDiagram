@@ -38,12 +38,12 @@ import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @Logging
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'parentDiagram'])
 class OpenableDiagramNode extends XNode {
 	
 	@FxProperty XDiagram innerDiagram
 	
-	XDiagram parentDiagram 
+	@FxProperty XDiagram parentDiagram 
 	
 	XRoot root
 	

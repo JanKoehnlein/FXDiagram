@@ -74,6 +74,8 @@ public class XConnection extends XShape implements XModelProvider {
   private ChangeListener<Number> controlPointListener;
   
   public XConnection() {
+    TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
+    this.setTargetArrowHead(_triangleArrowHead);
   }
   
   public XConnection(final DomainObjectDescriptor domainObject) {
@@ -125,8 +127,6 @@ public class XConnection extends XShape implements XModelProvider {
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(this.controlPointGroup, _function);
       _children.add(_doubleArrow);
-      TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
-      this.setTargetArrowHead(_triangleArrowHead);
       ConnectionRouter _connectionRouter = new ConnectionRouter(this);
       this.setConnectionRouter(_connectionRouter);
       _xblockexpression = node;

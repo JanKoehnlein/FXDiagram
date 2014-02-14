@@ -54,11 +54,9 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height", "parentDiagram" })
 @SuppressWarnings("all")
 public class OpenableDiagramNode extends XNode {
-  private XDiagram parentDiagram;
-  
   private XRoot root;
   
   private RectangleBorderPane pane = new RectangleBorderPane();
@@ -253,7 +251,7 @@ public class OpenableDiagramNode extends XNode {
               public void handle(final ActionEvent it) {
                 OpenableDiagramNode.this.diagramScaler.deactivate();
                 XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();
-                OpenableDiagramNode.this.parentDiagram = _diagram;
+                OpenableDiagramNode.this.setParentDiagram(_diagram);
                 ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
                 _children.setAll(OpenableDiagramNode.this.textNode);
                 Canvas _symbol = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY);
@@ -332,7 +330,8 @@ public class OpenableDiagramNode extends XNode {
       return;
     }
     this.setIsOpen(false);
-    this.root.setDiagram(this.parentDiagram);
+    XDiagram _parentDiagram = this.getParentDiagram();
+    this.root.setDiagram(_parentDiagram);
     ObservableList<Node> _children = this.pane.getChildren();
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
@@ -362,7 +361,7 @@ public class OpenableDiagramNode extends XNode {
               public void handle(final ActionEvent it) {
                 OpenableDiagramNode.this.diagramScaler.deactivate();
                 XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();
-                OpenableDiagramNode.this.parentDiagram = _diagram;
+                OpenableDiagramNode.this.setParentDiagram(_diagram);
                 ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
                 _children.setAll(OpenableDiagramNode.this.textNode);
               }
@@ -426,6 +425,7 @@ public class OpenableDiagramNode extends XNode {
     modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
+    modelElement.addProperty(parentDiagramProperty, XDiagram.class);
   }
   
   private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram");
@@ -440,5 +440,19 @@ public class OpenableDiagramNode extends XNode {
   
   public ObjectProperty<XDiagram> innerDiagramProperty() {
     return this.innerDiagramProperty;
+  }
+  
+  private SimpleObjectProperty<XDiagram> parentDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "parentDiagram");
+  
+  public XDiagram getParentDiagram() {
+    return this.parentDiagramProperty.get();
+  }
+  
+  public void setParentDiagram(final XDiagram parentDiagram) {
+    this.parentDiagramProperty.set(parentDiagram);
+  }
+  
+  public ObjectProperty<XDiagram> parentDiagramProperty() {
+    return this.parentDiagramProperty;
   }
 }

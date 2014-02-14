@@ -56,7 +56,7 @@ class LcarsNode extends XNode {
 
 	VBox vbox
 	HBox infoBox
-	Text nameField
+	Text nameField 
 	Pane infoTextBox
 	ImageView imageView
 	ChangeListener<Bounds> nameShortener

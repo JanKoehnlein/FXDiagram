@@ -33,9 +33,12 @@ class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	}
 	
 	override equals(Object obj) {
-		return class==obj.class && id == (obj as DomainObjectDescriptor).id
+		return obj != null && class==obj.class && id.equals((obj as DomainObjectDescriptor).id)
 	}
 	
+	override hashCode() {
+		id.hashCode
+	}
 }
 
 @ModelNode(#['name'])

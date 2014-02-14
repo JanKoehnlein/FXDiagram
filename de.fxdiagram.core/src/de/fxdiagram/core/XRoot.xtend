@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.model.DomainObjectProvider
+import de.fxdiagram.core.model.DomainObjectProviderWithState
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramGestureTool
 import de.fxdiagram.core.tools.MenuTool
@@ -25,8 +26,6 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
-import de.fxdiagram.core.model.DomainObjectProviderWithState
-import javax.xml.crypto.dom.DOMCryptoContext
 
 @Logging
 @ModelNode(#['domainObjectProviders', 'diagram'])

@@ -33,18 +33,30 @@ public class DomainObjectDescriptorImpl<T extends Object> implements DomainObjec
   
   public boolean equals(final Object obj) {
     boolean _and = false;
-    Class<? extends DomainObjectDescriptorImpl> _class = this.getClass();
-    Class<?> _class_1 = obj.getClass();
-    boolean _equals = Objects.equal(_class, _class_1);
-    if (!_equals) {
+    boolean _and_1 = false;
+    boolean _notEquals = (!Objects.equal(obj, null));
+    if (!_notEquals) {
+      _and_1 = false;
+    } else {
+      Class<? extends DomainObjectDescriptorImpl> _class = this.getClass();
+      Class<?> _class_1 = obj.getClass();
+      boolean _equals = Objects.equal(_class, _class_1);
+      _and_1 = _equals;
+    }
+    if (!_and_1) {
       _and = false;
     } else {
       String _id = this.getId();
       String _id_1 = ((DomainObjectDescriptor) obj).getId();
-      boolean _equals_1 = Objects.equal(_id, _id_1);
+      boolean _equals_1 = _id.equals(_id_1);
       _and = _equals_1;
     }
     return _and;
+  }
+  
+  public int hashCode() {
+    String _id = this.getId();
+    return _id.hashCode();
   }
   
   /**

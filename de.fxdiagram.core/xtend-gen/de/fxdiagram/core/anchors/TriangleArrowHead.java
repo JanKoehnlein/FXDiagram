@@ -19,8 +19,8 @@ import javafx.scene.shape.StrokeType;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-/* @ModelNode({ "connection", "isSource", "width", "height", "stroke", "fill" })
- */@SuppressWarnings("all")
+@ModelNode({ "connection", "isSource", "width", "height", "stroke", "fill" })
+@SuppressWarnings("all")
 public class TriangleArrowHead extends ArrowHead implements XModelProvider {
   public TriangleArrowHead(final XConnection connection, final double width, final double height, final Property<Paint> strokeProperty, final Property<Paint> fillProperty, final boolean isSource) {
     this.setConnection(connection);
@@ -76,6 +76,8 @@ public class TriangleArrowHead extends ArrowHead implements XModelProvider {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    modelElement.addProperty(connectionProperty(), XConnection.class);
+    modelElement.addProperty(isSourceProperty(), Boolean.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
     modelElement.addProperty(strokeProperty, Paint.class);

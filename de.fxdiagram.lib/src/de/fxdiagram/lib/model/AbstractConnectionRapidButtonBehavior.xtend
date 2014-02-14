@@ -11,6 +11,7 @@ import java.util.Set
 import javafx.collections.ListChangeListener
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.extensions.InitializingListListener
 
 abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, KEY extends DomainObjectDescriptor> extends AbstractHostBehavior<HOST> {
 	
@@ -37,32 +38,22 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 			]
 			buttons += createButtons(addConnectionAction)
 			host.diagram.buttons += buttons
-			host.diagram.connections.forEach [
-				if(availableChoiceKeys.remove(domainObject))						
-					unavailableChoiceKeys.add(domainObject as KEY)
-			]
-			host.diagram.connections.addListener [
-				ListChangeListener.Change<? extends XConnection> change |
-				val hadChoices = !availableChoiceKeys.empty
-				while(change.next) {
-					if(change.wasAdded) 
-						change.addedSubList.forEach[ 
-							if(availableChoiceKeys.remove(domainObject)) {
-								unavailableChoiceKeys.add(domainObject as KEY)
-							}
-						]
-					if(change.wasRemoved) 
-						change.removed.forEach[
-							if(unavailableChoiceKeys.remove(domainObject)) {
-								availableChoiceKeys.add(domainObject as KEY)
-							}
-						]
-				}
-				if(availableChoiceKeys.empty) 
-					host.diagram.buttons -= buttons
-				else if(!hadChoices) 
-					host.diagram.buttons += buttons
-			]  			
+			host.diagram.connections.addInitializingListener(new InitializingListListener() => [
+				add = [ XConnection it |
+					if(availableChoiceKeys.remove(domainObject)) {
+						if(availableChoiceKeys.empty)						
+							host.diagram.buttons -= buttons
+						unavailableChoiceKeys.add(domainObject as KEY)
+					}
+				]
+				remove = [ XConnection it |
+					if(unavailableChoiceKeys.remove(domainObject)) {
+						if(availableChoiceKeys.empty) 
+							host.diagram.buttons += buttons
+						availableChoiceKeys.add(domainObject as KEY)
+					} 
+				]
+			])
 		}
 	}	
 	

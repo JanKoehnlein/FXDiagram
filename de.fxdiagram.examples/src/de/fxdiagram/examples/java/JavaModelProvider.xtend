@@ -42,7 +42,6 @@ class JavaModelProvider implements DomainObjectProvider {
 			}
 		}
 	}
-	
 }
 
 @ModelNode(#['id', 'name', 'provider'])
