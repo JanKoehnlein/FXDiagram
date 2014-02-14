@@ -71,8 +71,10 @@ class XRapidButton extends Parent implements XActivatable {
 		placer.activate
 		placer.addListener [
 			element, oldVal, newVal | 
-			layoutX = newVal.x
-			layoutY = newVal.y
+			if(newVal != null) {
+				layoutX = newVal.x
+				layoutY = newVal.y
+			}
 		]
 		layoutX = placer.value.x 
 		layoutY = placer.value.y

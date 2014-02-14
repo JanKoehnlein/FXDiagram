@@ -98,10 +98,13 @@ public class XRapidButton extends Parent implements XActivatable {
     this.placer.activate();
     final ChangeListener<Point2D> _function_3 = new ChangeListener<Point2D>() {
       public void changed(final ObservableValue<? extends Point2D> element, final Point2D oldVal, final Point2D newVal) {
-        double _x = newVal.getX();
-        XRapidButton.this.setLayoutX(_x);
-        double _y = newVal.getY();
-        XRapidButton.this.setLayoutY(_y);
+        boolean _notEquals = (!Objects.equal(newVal, null));
+        if (_notEquals) {
+          double _x = newVal.getX();
+          XRapidButton.this.setLayoutX(_x);
+          double _y = newVal.getY();
+          XRapidButton.this.setLayoutY(_y);
+        }
       }
     };
     this.placer.addListener(_function_3);

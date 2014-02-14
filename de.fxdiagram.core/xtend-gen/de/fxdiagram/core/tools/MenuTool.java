@@ -9,6 +9,7 @@ import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.actions.CenterAction;
 import de.fxdiagram.core.tools.actions.CloseAction;
+import de.fxdiagram.core.tools.actions.DeleteAction;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ExitAction;
 import de.fxdiagram.core.tools.actions.ExportSvgAction;
@@ -180,6 +181,9 @@ public class MenuTool implements XDiagramTool {
             }
             _switchResult = _xifexpression_7;
             break;
+          case BACK_SPACE:
+            _switchResult = new DeleteAction();
+            break;
           case RIGHT:
             _switchResult = new NavigateNextAction();
             break;
@@ -249,7 +253,7 @@ public class MenuTool implements XDiagramTool {
         return ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function);
       }
     };
-    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN, Symbol.Type.CLOUD)), _function_2);
+    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN, Symbol.Type.CLOUD, Symbol.Type.DELETE, Symbol.Type.BACK, Symbol.Type.SMUDGE)), _function_2);
     RadialMenu _radialMenu = new RadialMenu(_doubleArrow, _map);
     this.menu = _radialMenu;
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
@@ -323,14 +327,17 @@ public class MenuTool implements XDiagramTool {
                     DiagramAction _switchResult = null;
                     Symbol.Type _symbol = MenuTool.this.selection.getSymbol();
                     switch (_symbol) {
-                      case GRAPH:
-                        _switchResult = new LayoutAction(LayoutType.DOT);
-                        break;
                       case CAMERA:
                         _switchResult = new ExportSvgAction();
                         break;
+                      case DELETE:
+                        _switchResult = new DeleteAction();
+                        break;
                       case EJECT:
                         _switchResult = new ExitAction();
+                        break;
+                      case GRAPH:
+                        _switchResult = new LayoutAction(LayoutType.DOT);
                         break;
                       case SELECTION1:
                         _switchResult = new SelectAllAction();

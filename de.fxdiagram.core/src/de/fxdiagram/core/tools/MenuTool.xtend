@@ -32,6 +32,7 @@ import javafx.stage.Stage
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
 
 import static extension javafx.scene.layout.BorderPane.*
+import de.fxdiagram.core.tools.actions.DeleteAction
 
 @Logging
 class MenuTool implements XDiagramTool {
@@ -94,18 +95,20 @@ class MenuTool implements XDiagramTool {
 					if (shortcutDown) {
 						new SaveAction
 					}
+				case KeyCode.BACK_SPACE:
+					new DeleteAction
 				case KeyCode.RIGHT:
-						new NavigateNextAction
+					new NavigateNextAction
 				case KeyCode.LEFT:
-						new NavigatePreviousAction
+					new NavigatePreviousAction
 				case KeyCode.PAGE_DOWN:
-						new NavigateNextAction
+					new NavigateNextAction
 				case KeyCode.PAGE_UP:
-						new NavigatePreviousAction
+					new NavigatePreviousAction
 				case KeyCode.ENTER:
-						new OpenAction
+					new OpenAction
 				case KeyCode.PERIOD:
-						new OpenAction
+					new OpenAction
 				case KeyCode.ESCAPE: {
 					consume
 					if(menu.state == State.OPENED) {
@@ -127,9 +130,10 @@ class MenuTool implements XDiagramTool {
 				buttonSize = 72
 				buttonAlpha = 1.0
 			],
-			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN, CLOUD
+			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN, CLOUD, DELETE
 			  //, PHOTO, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
-			  // TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR, DELETE,
+//			   TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR 
+			   ,BACK, SMUDGE
 			].
 				map [ s |
 					new MenuItem => [
@@ -166,12 +170,14 @@ class MenuTool implements XDiagramTool {
 					closeMenu
 					if (selection != null) {
 						val DiagramAction action = switch selection.symbol {
-							case GRAPH: 
-								new LayoutAction(LayoutType.DOT)
 							case CAMERA:
 								new ExportSvgAction
+							case DELETE: 
+								new DeleteAction
 							case EJECT:
 								new ExitAction
+							case GRAPH: 
+								new LayoutAction(LayoutType.DOT)
 							case SELECTION1:
 								new SelectAllAction
 							case SELECTION2:
