@@ -1,8 +1,6 @@
 package de.fxdiagram.examples
 
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XConnectionKind
-import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
@@ -23,7 +21,6 @@ import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
 import de.fxdiagram.lib.media.MovieNode
 import de.fxdiagram.lib.media.RecursiveImageNode
-import de.fxdiagram.lib.simple.AddRapidButtonBehavior
 import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.lib.simple.SimpleNode
@@ -73,18 +70,16 @@ class Demo extends Application {
 //			nodes += new DemoCampIntroSlides
 			nodes += new IntroductionSlideDeck
 			nodes += new OpenableDiagramNode('Basic') => [
-				innerDiagram = createBasicDiagram('')
+				innerDiagram = new LazyExampleDiagram('')
 			]
 			nodes += new OpenableDiagramNode('JavaFX') => [
 				innerDiagram = new XDiagram => [
-					contentsInitializer = [
-						nodes += newLoginNode
-						nodes += newRecursiveImageNode
-						nodes += newImageNode
-						nodes += newMovieNode
-						nodes += newBrowserNode
-						nodes += newBrickBreakerNode
-					]
+					nodes += newLoginNode
+					nodes += newRecursiveImageNode
+					nodes += newImageNode
+					nodes += newMovieNode
+					nodes += newBrowserNode
+					nodes += newBrickBreakerNode
 				]
 			]
 			nodes += openableDiagram('Xtend', newNeonSignNode)
@@ -118,9 +113,13 @@ class Demo extends Application {
 		new OpenableDiagramNode('Gallery') => [
 			innerDiagram = new XDiagram => [
 				contentsInitializer = [
-					nodes += newSimpleNode('')
-					nodes += newOpenableBasicDiagramNode('')
-					nodes += newEmbeddedBasicDiagram('')
+					nodes += new SimpleNode('Simple')
+					nodes += new OpenableDiagramNode('Openable') => [
+						innerDiagram = new LazyExampleDiagram('(n)')
+					]
+					nodes += new LevelOfDetailDiagramNode('Embedded') => [
+						innerDiagram = new LazyExampleDiagram('(e)')
+					]
 					nodes += newNeonSignNode
 					nodes += newJavaTypeNode
 					nodes += newEClassNode
@@ -142,93 +141,11 @@ class Demo extends Application {
 		]
 	}
 	
-	def XDiagram createBasicDiagram(String nameSuffix) {
-		new XDiagram => [
-			contentsInitializer = [
-				val simple = newSimpleNode(nameSuffix)
-				val openable = newOpenableBasicDiagramNode(nameSuffix)
-				val levelOfDetail = newEmbeddedBasicDiagram(nameSuffix)
-				nodes += simple => [
-					layoutX = 75
-					layoutY = 50
-				]
-				nodes += openable => [
-					layoutX = 350
-					layoutY = 150
-				]
-				nodes += levelOfDetail => [
-					layoutX = 50
-					layoutY = 300
-				]
-				connections += new XConnection(simple, openable) => [
-					new XConnectionLabel(it) => [
-						text.text = 'polyline'
-					]
-				]
-				connections += new XConnection(openable, levelOfDetail) => [
-					kind = XConnectionKind.QUAD_CURVE
-					new XConnectionLabel(it) => [
-						text.text = 'quadratic'
-					]
-				]
-				connections += new XConnection(simple, levelOfDetail) => [
-					kind = XConnectionKind.CUBIC_CURVE
-					new XConnectionLabel(it) => [
-						text.text = 'cubic'
-					]
-				]
-			]
-		]
-	}
-	
 	protected def openableDiagram(String name, XNode node) {
 		new OpenableDiagramNode(name) => [
 			innerDiagram = new XDiagram => [
-				contentsInitializer = [
-					nodes += node
-				]
+				nodes += node
 			]
-		]
-	}
-
-	protected def void addRapidButtons(XNode node, String nameSuffix) {
-		node.addBehavior(new AddRapidButtonBehavior(node) => [
-			choiceInitializer = [
-				for(i: 5..20) 
-					addChoice(newSimpleNode(' ' + i))
-				addChoice(newSimpleNode(nameSuffix))
-				addChoice(newOpenableBasicDiagramNode(nameSuffix))
-				addChoice(newEmbeddedBasicDiagram(nameSuffix))
-				addChoice(newMovieNode)
-				addChoice(newBrowserNode)
-				addChoice(newBrickBreakerNode)
-//				addChoice(newImageNode)
-//				addChoice(newRecursiveImageNode)
-				for(i: 1..4) 
-					addChoice(newSimpleNode(' ' + i))
-				addChoice(newSimpleNode(nameSuffix))
-			]
-		])
-	}
-	
-	def newSimpleNode(String nameSuffix) {
-		new SimpleNode('Node' + nameSuffix) => [
-			if(!nameSuffix.empty)
-				addRapidButtons(nameSuffix)
-		]
-	}
-	
-	def newOpenableBasicDiagramNode(String nameSuffix) {
-		new OpenableDiagramNode('Nested' + nameSuffix) => [
-			innerDiagram = createBasicDiagram(nameSuffix + " (nested)")
-			addRapidButtons(nameSuffix)
-		]
-	}
-	
-	def newEmbeddedBasicDiagram(String nameSuffix) {
-		new LevelOfDetailDiagramNode('Embedded' + nameSuffix) => [
-			innerDiagram = createBasicDiagram(nameSuffix + " (embedded)")
-			addRapidButtons(nameSuffix)
 		]
 	}
 	

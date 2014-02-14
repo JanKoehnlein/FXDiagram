@@ -54,7 +54,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height", "parentDiagram" })
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height", "innerDiagram" })
 @SuppressWarnings("all")
 public class OpenableDiagramNode extends XNode {
   private XRoot root;
@@ -425,7 +425,7 @@ public class OpenableDiagramNode extends XNode {
     modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
-    modelElement.addProperty(parentDiagramProperty, XDiagram.class);
+    modelElement.addProperty(innerDiagramProperty, XDiagram.class);
   }
   
   private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram");

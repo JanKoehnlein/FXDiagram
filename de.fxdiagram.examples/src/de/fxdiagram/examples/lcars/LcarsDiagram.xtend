@@ -16,14 +16,16 @@ class LcarsDiagram extends XDiagram {
 	}
 	
 	override doActivate() {
-		contentsInitializer = [
-			val provider = root.getDomainObjectProvider(LcarsModelProvider)
-			val kirk = provider.query('name', 'James T. Kirk').get(0)
-			val handle = provider.createLcarsEntryDescriptor(kirk)
-			nodes += new LcarsNode(handle) => [
-				width = 120
+		if(nodes.empty) {
+			contentsInitializer = [
+				val provider = root.getDomainObjectProvider(LcarsModelProvider)
+				val kirk = provider.query('name', 'James T. Kirk').get(0)
+				val handle = provider.createLcarsEntryDescriptor(kirk)
+				nodes += new LcarsNode(handle) => [
+					width = 120
+				]
 			]
-		]
+		}
 		super.doActivate()
 	}
 	

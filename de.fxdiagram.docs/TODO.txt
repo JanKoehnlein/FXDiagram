@@ -5,10 +5,9 @@ TODO
   - handle lazy properties
   - review ModelElement
   - save nestedDiagrams 
-  - properly calculate existing edges 
-  - rename handle -> descriptor
   - save all diagrams
   - revise image cache
+  - XDiagram needs a hook like createNode
     
 BUGS
 - player.seek doesn't work
@@ -29,6 +28,8 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
+- properly calculate existing edges
+- rename handle -> descriptor
 - XNode.key -> name, DomainObjectHandle.key -> name
 - restore labels, XConnectionPointTypes
 - add constructor XNode(domainObject), load domainObject first
