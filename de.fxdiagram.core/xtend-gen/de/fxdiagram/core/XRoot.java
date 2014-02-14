@@ -10,6 +10,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.model.DomainObjectProvider;
+import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
@@ -261,6 +262,29 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       _xblockexpression = ((T) _get);
     }
     return _xblockexpression;
+  }
+  
+  public void replaceDomainObjectProviders(final List<DomainObjectProvider> newDomainObjectProviders) {
+    final Procedure1<DomainObjectProvider> _function = new Procedure1<DomainObjectProvider>() {
+      public void apply(final DomainObjectProvider newProvider) {
+        Class<? extends DomainObjectProvider> _class = newProvider.getClass();
+        final DomainObjectProvider oldProvider = XRoot.this.getDomainObjectProvider(_class);
+        boolean _notEquals = (!Objects.equal(oldProvider, null));
+        if (_notEquals) {
+          if ((newProvider instanceof DomainObjectProviderWithState)) {
+            ((DomainObjectProviderWithState)newProvider).copyState(((DomainObjectProviderWithState) oldProvider));
+          }
+          ObservableList<DomainObjectProvider> _domainObjectProviders = XRoot.this.getDomainObjectProviders();
+          ObservableList<DomainObjectProvider> _domainObjectProviders_1 = XRoot.this.getDomainObjectProviders();
+          int _indexOf = _domainObjectProviders_1.indexOf(oldProvider);
+          _domainObjectProviders.set(_indexOf, newProvider);
+        } else {
+          ObservableList<DomainObjectProvider> _domainObjectProviders_2 = XRoot.this.getDomainObjectProviders();
+          _domainObjectProviders_2.add(newProvider);
+        }
+      }
+    };
+    IterableExtensions.<DomainObjectProvider>forEach(newDomainObjectProviders, _function);
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRoot");

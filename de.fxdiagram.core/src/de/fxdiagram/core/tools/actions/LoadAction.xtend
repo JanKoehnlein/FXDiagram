@@ -14,7 +14,7 @@ class LoadAction implements DiagramAction {
 		if(file != null) {
 			val node = new ModelLoad().load(new FileReader(file), root.classLoader)
 			if(node instanceof XRoot) {
-				root.domainObjectProviders.setAll(node.domainObjectProviders)
+				root.replaceDomainObjectProviders(node.domainObjectProviders)
 				root.diagram = node.diagram
 			}
 		}

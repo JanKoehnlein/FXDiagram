@@ -5,12 +5,12 @@ import com.google.common.collect.HashBiMap
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.core.model.DomainObjectProvider
+import de.fxdiagram.core.model.DomainObjectProviderWithState
 
 import static extension de.fxdiagram.core.extensions.UriExtensions.*
 
 @ModelNode
-class ResourceProvider implements DomainObjectProvider {
+class ResourceProvider implements DomainObjectProviderWithState {
 
 	BiMap<String, ClassLoader> classLoaderMap = HashBiMap.create
 	
@@ -65,9 +65,16 @@ class ResourceProvider implements DomainObjectProvider {
 			object.name, 
 			this)
 	}
+	
+	override copyState(DomainObjectProviderWithState other) {
+		if(other instanceof ResourceProvider) {
+			defaultClassLoader = other.defaultClassLoader
+			classLoaderMap.putAll(other.classLoaderMap)		
+		}
+	}
 }
 
-@ModelNode(#['classLoaderId', 'className', 'relativePath'])
+@ModelNode(#['name', 'classLoaderId', 'className', 'relativePath', 'provider'])
 class ResourceDescriptor implements DomainObjectDescriptor {
 
 	@FxProperty String classLoaderId
@@ -78,7 +85,7 @@ class ResourceDescriptor implements DomainObjectDescriptor {
 	
 	@FxProperty String name
 	
-	ResourceProvider provider
+	@FxProperty ResourceProvider provider
 
 	new(String classLoaderId, String className, String relativePath, String name, ResourceProvider provider) {
 		this.relativePath = relativePath

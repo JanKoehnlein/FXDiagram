@@ -25,6 +25,8 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
+import de.fxdiagram.core.model.DomainObjectProviderWithState
+import javax.xml.crypto.dom.DOMCryptoContext
 
 @Logging
 @ModelNode(#['domainObjectProviders', 'diagram'])
@@ -135,6 +137,19 @@ class XRoot extends Parent implements XActivatable {
 			domainObjectProviders.forEach[domainObjectProviderCache.put(class, it)]
 		}
 		domainObjectProviderCache.get(providerClazz) as T
+	}
+	
+	def replaceDomainObjectProviders(List<DomainObjectProvider> newDomainObjectProviders) {
+		newDomainObjectProviders.forEach[ newProvider |
+			val oldProvider = getDomainObjectProvider(newProvider.class)
+			if(oldProvider != null) {
+				if(newProvider instanceof DomainObjectProviderWithState)
+					newProvider.copyState(oldProvider as DomainObjectProviderWithState)
+				domainObjectProviders.set(domainObjectProviders.indexOf(oldProvider), newProvider)
+			} else {
+				domainObjectProviders.add(newProvider)
+			}
+		]
 	}
 	
 }

@@ -68,7 +68,7 @@ public class ModelLoad {
     Object _xblockexpression = null;
     {
       final String className = jsonObject.getString("__class");
-      final ModelElement model = this.modelFactory.createElement(className);
+      final ModelElement model = this.modelFactory.createElement(className, this.classLoader);
       this.idMap.put(currentID, model);
       List<? extends Property<?>> _properties = model.getProperties();
       final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {

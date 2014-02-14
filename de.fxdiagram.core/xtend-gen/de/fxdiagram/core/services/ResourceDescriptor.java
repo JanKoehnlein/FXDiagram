@@ -6,24 +6,25 @@ import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ResourceHandle;
 import de.fxdiagram.core.services.ResourceProvider;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-@ModelNode({ "classLoaderId", "className", "relativePath" })
+@ModelNode({ "name", "classLoaderId", "className", "relativePath", "provider" })
 @SuppressWarnings("all")
 public class ResourceDescriptor implements DomainObjectDescriptor {
-  private ResourceProvider provider;
-  
   public ResourceDescriptor(final String classLoaderId, final String className, final String relativePath, final String name, final ResourceProvider provider) {
     this.setRelativePath(relativePath);
     this.setClassLoaderId(classLoaderId);
     this.setClassName(className);
     this.setName(name);
-    this.provider = provider;
+    this.setProvider(provider);
   }
   
   public ResourceHandle getDomainObject() {
-    return this.provider.resolveResourceHandle(this);
+    ResourceProvider _provider = this.getProvider();
+    return _provider.resolveResourceHandle(this);
   }
   
   public String getId() {
@@ -54,9 +55,11 @@ public class ResourceDescriptor implements DomainObjectDescriptor {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    modelElement.addProperty(nameProperty, String.class);
     modelElement.addProperty(classLoaderIdProperty, String.class);
     modelElement.addProperty(classNameProperty, String.class);
     modelElement.addProperty(relativePathProperty, String.class);
+    modelElement.addProperty(providerProperty, ResourceProvider.class);
   }
   
   private SimpleStringProperty classLoaderIdProperty = new SimpleStringProperty(this, "classLoaderId");
@@ -113,5 +116,19 @@ public class ResourceDescriptor implements DomainObjectDescriptor {
   
   public StringProperty nameProperty() {
     return this.nameProperty;
+  }
+  
+  private SimpleObjectProperty<ResourceProvider> providerProperty = new SimpleObjectProperty<ResourceProvider>(this, "provider");
+  
+  public ResourceProvider getProvider() {
+    return this.providerProperty.get();
+  }
+  
+  public void setProvider(final ResourceProvider provider) {
+    this.providerProperty.set(provider);
+  }
+  
+  public ObjectProperty<ResourceProvider> providerProperty() {
+    return this.providerProperty;
   }
 }

@@ -5,7 +5,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
+import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ResourceDescriptor;
 import de.fxdiagram.core.services.ResourceHandle;
@@ -13,7 +13,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @ModelNode
 @SuppressWarnings("all")
-public class ResourceProvider implements DomainObjectProvider {
+public class ResourceProvider implements DomainObjectProviderWithState {
   private BiMap<String,ClassLoader> classLoaderMap = HashBiMap.<String, ClassLoader>create();
   
   private ClassLoader defaultClassLoader;
@@ -99,6 +99,13 @@ public class ResourceProvider implements DomainObjectProvider {
     String _relativePath = object.getRelativePath();
     String _name = object.getName();
     return new ResourceDescriptor(_classLoaderId, _canonicalName, _relativePath, _name, this);
+  }
+  
+  public void copyState(final DomainObjectProviderWithState other) {
+    if ((other instanceof ResourceProvider)) {
+      this.defaultClassLoader = ((ResourceProvider)other).defaultClassLoader;
+      this.classLoaderMap.putAll(((ResourceProvider)other).classLoaderMap);
+    }
   }
   
   /**

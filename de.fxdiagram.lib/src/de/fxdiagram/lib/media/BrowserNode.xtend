@@ -12,11 +12,12 @@ import javafx.scene.text.Text
 import javafx.scene.web.WebView
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
+import de.fxdiagram.annotations.properties.FxProperty
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'pageUrl'])
 class BrowserNode extends FlipNode {
 	
-	WebView view = new WebView
+	@FxProperty String pageUrl
 	
 	new(String name) {
 		super(name)
@@ -31,7 +32,9 @@ class BrowserNode extends FlipNode {
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
 		]
-		back = view
+		back = new WebView => [
+			engine.load(pageUrl)
+		]
 		node 
 	}
 
@@ -42,11 +45,7 @@ class BrowserNode extends FlipNode {
 	}
 	
 	def setPageUrl(URL pageUrl) {
-		view.engine.load(pageUrl.toString)
-	}
-	
-	def getView() {
-		view
+		this.pageUrl = pageUrl.toString
 	}
 	
 	override protected createAnchors() {

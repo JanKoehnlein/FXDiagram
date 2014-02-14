@@ -32,9 +32,8 @@ public class LoadAction implements DiagramAction {
         ClassLoader _classLoader = root.getClassLoader();
         final Object node = _modelLoad.load(_fileReader, _classLoader);
         if ((node instanceof XRoot)) {
-          ObservableList<DomainObjectProvider> _domainObjectProviders = root.getDomainObjectProviders();
-          ObservableList<DomainObjectProvider> _domainObjectProviders_1 = ((XRoot)node).getDomainObjectProviders();
-          _domainObjectProviders.setAll(_domainObjectProviders_1);
+          ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();
+          root.replaceDomainObjectProviders(_domainObjectProviders);
           XDiagram _diagram = ((XRoot)node).getDiagram();
           root.setDiagram(_diagram);
         }

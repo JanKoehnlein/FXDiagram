@@ -45,7 +45,7 @@ class ModelLoad {
 	
 	protected def Object readNode(JsonObject jsonObject, String currentID) {
 		val className = jsonObject.getString('__class')
-		val model = modelFactory.createElement(className)
+		val model = modelFactory.createElement(className, classLoader)
 		idMap.put(currentID, model)
 		model.properties.forEach [
 			jsonObject.readProperty(it, model.getType(it), currentID)

@@ -9,6 +9,8 @@ import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.net.URL;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -20,11 +22,9 @@ import javafx.scene.web.WebView;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height", "pageUrl" })
 @SuppressWarnings("all")
 public class BrowserNode extends FlipNode {
-  private WebView view = new WebView();
-  
   public BrowserNode(final String name) {
     super(name);
   }
@@ -53,7 +53,16 @@ public class BrowserNode extends FlipNode {
       };
       RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
       this.setFront(_doubleArrow);
-      this.setBack(this.view);
+      WebView _webView = new WebView();
+      final Procedure1<WebView> _function_1 = new Procedure1<WebView>() {
+        public void apply(final WebView it) {
+          WebEngine _engine = it.getEngine();
+          String _pageUrl = BrowserNode.this.getPageUrl();
+          _engine.load(_pageUrl);
+        }
+      };
+      WebView _doubleArrow_1 = ObjectExtensions.<WebView>operator_doubleArrow(_webView, _function_1);
+      this.setBack(_doubleArrow_1);
       _xblockexpression = node;
     }
     return _xblockexpression;
@@ -68,13 +77,8 @@ public class BrowserNode extends FlipNode {
   }
   
   public void setPageUrl(final URL pageUrl) {
-    WebEngine _engine = this.view.getEngine();
     String _string = pageUrl.toString();
-    _engine.load(_string);
-  }
-  
-  public WebView getView() {
-    return this.view;
+    this.setPageUrl(_string);
   }
   
   protected Anchors createAnchors() {
@@ -93,5 +97,20 @@ public class BrowserNode extends FlipNode {
     modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty(), Double.class);
     modelElement.addProperty(heightProperty(), Double.class);
+    modelElement.addProperty(pageUrlProperty, String.class);
+  }
+  
+  private SimpleStringProperty pageUrlProperty = new SimpleStringProperty(this, "pageUrl");
+  
+  public String getPageUrl() {
+    return this.pageUrlProperty.get();
+  }
+  
+  public void setPageUrl(final String pageUrl) {
+    this.pageUrlProperty.set(pageUrl);
+  }
+  
+  public StringProperty pageUrlProperty() {
+    return this.pageUrlProperty;
   }
 }
