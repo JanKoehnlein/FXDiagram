@@ -184,6 +184,9 @@ public class MenuTool implements XDiagramTool {
           case BACK_SPACE:
             _switchResult = new DeleteAction();
             break;
+          case DELETE:
+            _switchResult = new DeleteAction();
+            break;
           case RIGHT:
             _switchResult = new NavigateNextAction();
             break;

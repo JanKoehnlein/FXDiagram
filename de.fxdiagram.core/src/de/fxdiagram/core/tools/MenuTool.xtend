@@ -97,6 +97,8 @@ class MenuTool implements XDiagramTool {
 					}
 				case KeyCode.BACK_SPACE:
 					new DeleteAction
+				case KeyCode.DELETE:
+					new DeleteAction
 				case KeyCode.RIGHT:
 					new NavigateNextAction
 				case KeyCode.LEFT:
