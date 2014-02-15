@@ -15,6 +15,7 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.behavior.AbstractHostBehavior
+import de.fxdiagram.core.command.AddRemoveCommand
 
 class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavior<T> {
 
@@ -40,10 +41,9 @@ class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavior<T> {
 			val target = new SimpleNode("New Node")
 			val source = button.getHost
 			val connection = new XConnection(source, target)
-			host.diagram.nodes += target
-			host.diagram.connections += connection
 			target.layoutX = 200 * (button.getPlacer.getXPos - 0.5) + source.layoutX
 			target.layoutY = 150 * (button.getPlacer.getYPos - 0.5) + source.layoutY
+			host.root.commandStack.execute(AddRemoveCommand.newAddCommand(host.diagram, target, connection))
 		]
 		val chooseAction = [ XRapidButton button |
 			val chooser = new CarusselChooser(host, button.getChooserPosition)

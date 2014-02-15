@@ -81,7 +81,7 @@ public class Demo extends Application {
       scene.setCamera(_perspectiveCamera);
       this.root.activate();
       final XDiagram diagram = new XDiagram();
-      this.root.setDiagram(diagram);
+      this.root.setRootDiagram(diagram);
       Class<? extends Demo> _class_1 = this.getClass();
       ClassLoader _classLoader_1 = _class_1.getClassLoader();
       ResourceProvider _resourceProvider = new ResourceProvider(_classLoader_1);

@@ -1,10 +1,14 @@
 package de.fxdiagram.core.behavior;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DragContext;
+import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.command.MoveCommand;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -36,6 +40,18 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       }
     };
     _node_1.setOnMouseDragged(_function_1);
+    T _host_2 = this.getHost();
+    Node _node_2 = _host_2.getNode();
+    final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
+      public void handle(final MouseEvent it) {
+        T _host = MoveBehavior.this.getHost();
+        XRoot _root = CoreExtensions.getRoot(_host);
+        CommandStack _commandStack = _root.getCommandStack();
+        MoveCommand _moveCommand = MoveBehavior.this.dragContext.getMoveCommand();
+        _commandStack.execute(_moveCommand);
+      }
+    };
+    _node_2.setOnMouseReleased(_function_2);
   }
   
   public Class<? extends Behavior> getBehaviorKey() {
@@ -52,9 +68,15 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       T _host_2 = this.getHost();
       double _layoutY = _host_2.getLayoutY();
       final Point2D initialPositionInScene = _parent.localToScene(_layoutX, _layoutY);
+      T _host_3 = this.getHost();
+      T _host_4 = this.getHost();
+      double _layoutX_1 = _host_4.getLayoutX();
+      T _host_5 = this.getHost();
+      double _layoutY_1 = _host_5.getLayoutY();
+      MoveCommand _moveCommand = new MoveCommand(_host_3, _layoutX_1, _layoutY_1);
       double _screenX = it.getScreenX();
       double _screenY = it.getScreenY();
-      DragContext _dragContext = new DragContext(_screenX, _screenY, initialPositionInScene);
+      DragContext _dragContext = new DragContext(_moveCommand, _screenX, _screenY, initialPositionInScene);
       _xblockexpression = this.dragContext = _dragContext;
     }
     return _xblockexpression;

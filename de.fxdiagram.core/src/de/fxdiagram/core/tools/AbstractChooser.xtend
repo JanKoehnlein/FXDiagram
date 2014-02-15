@@ -30,6 +30,7 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.command.AddRemoveCommand
 
 abstract class AbstractChooser implements XDiagramTool {
 
@@ -288,6 +289,7 @@ abstract class AbstractChooser implements XDiagramTool {
 					case VPos.BOTTOM:
 						choice.layoutY = choice.layoutY + 0.5 * (bounds.height - unlayoutedBounds.height)
 				}
+				host.root.commandStack.execute(AddRemoveCommand.newAddCommand(host.diagram, choice, currentConnection))
 			}
 			connectChoice(existingChoice, node2choiceInfo.get(choice))
 			currentConnection = null

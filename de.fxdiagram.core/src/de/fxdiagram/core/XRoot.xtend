@@ -26,12 +26,16 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
+import de.fxdiagram.core.model.Model
+import de.fxdiagram.core.command.CommandStack
 
 @Logging
-@ModelNode(#['domainObjectProviders', 'diagram'])
+@ModelNode(#['domainObjectProviders', 'rootDiagram', 'diagram'])
 class XRoot extends Parent implements XActivatable {
 	
 	@FxProperty @ReadOnly boolean isActive
+
+	@FxProperty @ReadOnly XDiagram rootDiagram
 
 	@FxProperty @ReadOnly XDiagram diagram
 
@@ -51,11 +55,20 @@ class XRoot extends Parent implements XActivatable {
 	
 	@Property ClassLoader classLoader 
 	
+	Model model
+	
+	CommandStack commandStack = new CommandStack
+	
 	new() {
 		children += diagramCanvas
 		children += headsUpDisplay
 		domainObjectProviders.addListener[Observable o | domainObjectProviderCache = null]
 		classLoader = this.class.classLoader
+	}
+	
+	def setRootDiagram(XDiagram rootDiagram) {
+		this.rootDiagramProperty.set(rootDiagram)
+		this.diagram = rootDiagram		
 	}
 	
 	def setDiagram(XDiagram newDiagram) {
@@ -151,6 +164,13 @@ class XRoot extends Parent implements XActivatable {
 		]
 	}
 	
+	def Model getModel() {
+		model ?: (model = new Model(this))
+	}
+	
+	def getCommandStack() {
+		commandStack
+	}
 }
 
 class HeadsUpDisplay extends Group {

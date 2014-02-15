@@ -4,10 +4,12 @@ TODO
 - persistence: 
   - handle lazy properties
   - review ModelElement
-  - save nestedDiagrams 
-  - save all diagrams
   - revise image cache
   - XDiagram needs a hook like createNode
+- undo 
+  - undo layout
+  - undo open
+  - undo close
     
 BUGS
 - player.seek doesn't work
@@ -28,6 +30,8 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
+- save nestedDiagrams 
+- save all diagrams
 - properly calculate existing edges
 - rename handle -> descriptor
 - XNode.key -> name, DomainObjectHandle.key -> name

@@ -13,7 +13,7 @@ class SaveAction implements DiagramAction {
 			fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FX Diagram", "*.fxd")
 			val file = (fileChooser).showSaveDialog(root.scene.window)
 			if(file != null) {
-				new ModelSave().save(root, new FileWriter(file))
+				new ModelSave().save(root, root.model, new FileWriter(file))
 			}
 		}
 	}

@@ -3,6 +3,8 @@ package de.fxdiagram.core.behavior
 import de.fxdiagram.core.XShape
 import javafx.geometry.Point2D
 import javafx.scene.input.MouseEvent
+import de.fxdiagram.core.command.MoveCommand
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	
@@ -19,6 +21,9 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 		host.node.onMouseDragged = [
 			mouseDragged	
 		]
+		host.node.onMouseReleased = [
+			host.root.commandStack.execute(dragContext.moveCommand)
+		]
 	}
 	
 	override getBehaviorKey() {
@@ -27,7 +32,10 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	
 	def mousePressed(MouseEvent it) {
 		val initialPositionInScene = host.parent.localToScene(host.layoutX, host.layoutY)
-		dragContext = new DragContext(screenX, screenY, initialPositionInScene)
+		dragContext = new DragContext(
+			new MoveCommand(host, host.layoutX, host.layoutY), 
+			screenX, screenY, initialPositionInScene
+		)
 	}
 	
 	def mouseDragged(MouseEvent it) {
@@ -44,6 +52,7 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 
 @Data 
 class DragContext {
+	MoveCommand moveCommand
 	double mouseAnchorX 
 	double mouseAnchorY
 	Point2D initialPosInScene

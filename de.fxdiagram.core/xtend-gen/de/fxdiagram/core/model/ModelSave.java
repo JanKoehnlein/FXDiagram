@@ -35,10 +35,9 @@ public class ModelSave {
   
   private Model model;
   
-  public void save(final Object root, final Writer out) {
-    Model _model = new Model(root);
-    this.model = _model;
-    ModelElement _rootElement = this.model.getRootElement();
+  public void save(final Object root, final Model model, final Writer out) {
+    this.model = model;
+    ModelElement _rootElement = model.getRootElement();
     boolean _notEquals = (!Objects.equal(_rootElement, null));
     if (_notEquals) {
       HashMap<ModelElement,String> _newHashMap = CollectionLiterals.<ModelElement, String>newHashMap();
@@ -49,7 +48,7 @@ public class ModelSave {
       _xsetliteral = Collections.<String, Boolean>unmodifiableMap(_tempMap);
       JsonGeneratorFactory _createGeneratorFactory = Json.createGeneratorFactory(_xsetliteral);
       JsonGenerator _createGenerator = _createGeneratorFactory.createGenerator(out);
-      ModelElement _rootElement_1 = this.model.getRootElement();
+      ModelElement _rootElement_1 = model.getRootElement();
       JsonGenerator _write = this.write(_createGenerator, _rootElement_1, null, "");
       _write.close();
     }

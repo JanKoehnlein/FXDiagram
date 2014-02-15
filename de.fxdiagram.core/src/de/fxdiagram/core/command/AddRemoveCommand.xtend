@@ -1,0 +1,139 @@
+package de.fxdiagram.core.command
+
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XShape
+import java.util.List
+import java.util.Map
+import javafx.animation.Animation
+import javafx.animation.FadeTransition
+import javafx.animation.ParallelTransition
+import javafx.util.Duration
+
+class AddRemoveCommand implements Command {
+	
+	boolean isAdd
+	
+	XDiagram diagram
+
+	List<? extends XShape> shapes
+	
+	Map<XConnection, Pair<XNode, XNode>> connectedNodesMap = newHashMap()
+	
+	static def newAddCommand(XDiagram diagram, XShape... shapes) {
+		new AddRemoveCommand(true, diagram, shapes)
+	}
+	
+	static def newRemoveCommand(XDiagram diagram, XShape... shapes) {
+		new AddRemoveCommand(false, diagram, shapes)
+	}
+	
+	protected new(boolean isAdd, XDiagram diagram, XShape... shapes) {
+		this.isAdd = isAdd
+		this.diagram = diagram
+		this.shapes = shapes
+	}
+	
+	override execute(Duration duration) {
+		shapes.forEach[
+			switch it {
+				XNode: {
+					if(isAdd) {
+						if(!diagram.nodes.contains(it)) 
+							diagram.nodes += it
+					} else {
+						diagram.nodes -= it
+					}
+				}
+				XConnection: {
+					connectedNodesMap.put(it, source -> target)					
+					if(isAdd) {
+						if(!diagram.connections.contains(it)) 
+							diagram.connections += it
+					} else {
+						diagram.connections -= it
+					}
+				}
+			}
+		]
+		null
+	}
+	
+	override canUndo() {
+		true
+	}
+	
+	override undo(Duration duration) {
+		if(isAdd)
+			add(duration)
+		else 
+			remove(duration)
+	}
+	
+	override canRedo() {
+		true
+	}
+	
+	override redo(Duration duration) {
+		if(isAdd)
+			remove(duration)
+		else 
+			add(duration)
+	}
+	
+	protected def add(Duration duration) {
+		new ParallelTransition => [ 
+			children += shapes.map[disappear(duration)]
+			onFinished = [
+				shapes.forEach[
+					switch it {
+						XNode: 
+							diagram.nodes -= it
+						XConnection: 	
+							diagram.connections -= it
+					}
+				]
+			]
+		]
+	}
+	
+	protected def remove(Duration duration) {
+		shapes.forEach[
+			switch it {
+				XNode:  
+					diagram.nodes += it
+				XConnection: {
+					val nodes = connectedNodesMap.get(it)
+					source = nodes.key
+					target = nodes.value				
+					diagram.connections += it
+				}
+			}
+		]
+		new ParallelTransition => [ 
+			children += shapes.map[appear(duration)]
+		]
+	}
+	
+	// Xtend bug: why do I have to state return type
+	protected def Animation appear(XShape node, Duration duration) {
+		new FadeTransition => [
+			it.node = node
+			fromValue = 0
+			toValue = 1
+			cycleCount = 1
+			it.duration = duration
+		]
+	}
+	
+	protected def Animation disappear(XShape node, Duration duration) {
+		new FadeTransition => [
+			it.node = node
+			fromValue = 1
+			toValue = 0
+			cycleCount = 1
+			it.duration = duration
+		]
+	}
+}

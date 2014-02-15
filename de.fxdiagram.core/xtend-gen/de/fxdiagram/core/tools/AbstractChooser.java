@@ -7,6 +7,8 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.command.AddRemoveCommand;
+import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
@@ -592,6 +594,11 @@ public abstract class AbstractChooser implements XDiagramTool {
             default:
               break;
           }
+          XRoot _root = CoreExtensions.getRoot(this.host);
+          CommandStack _commandStack = _root.getCommandStack();
+          XDiagram _diagram_2 = CoreExtensions.getDiagram(this.host);
+          AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram_2, choice, this.currentConnection);
+          _commandStack.execute(_newAddCommand);
         }
         DomainObjectDescriptor _get = this.node2choiceInfo.get(choice);
         this.connectChoice(existingChoice, _get);

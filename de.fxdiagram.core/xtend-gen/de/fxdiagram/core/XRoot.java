@@ -7,10 +7,12 @@ import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.DomainObjectProviderWithState;
+import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
@@ -50,7 +52,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
-@ModelNode({ "domainObjectProviders", "diagram" })
+@ModelNode({ "domainObjectProviders", "rootDiagram", "diagram" })
 @SuppressWarnings("all")
 public class XRoot extends Parent implements XActivatable, XModelProvider {
   private HeadsUpDisplay headsUpDisplay = new HeadsUpDisplay();
@@ -75,6 +77,10 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     this._classLoader = classLoader;
   }
   
+  private Model model;
+  
+  private CommandStack commandStack = new CommandStack();
+  
   public XRoot() {
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.diagramCanvas);
@@ -90,6 +96,11 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     Class<? extends XRoot> _class = this.getClass();
     ClassLoader _classLoader = _class.getClassLoader();
     this.setClassLoader(_classLoader);
+  }
+  
+  public void setRootDiagram(final XDiagram rootDiagram) {
+    this.rootDiagramProperty.set(rootDiagram);
+    this.setDiagram(rootDiagram);
   }
   
   public void setDiagram(final XDiagram newDiagram) {
@@ -287,11 +298,28 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     IterableExtensions.<DomainObjectProvider>forEach(newDomainObjectProviders, _function);
   }
   
+  public Model getModel() {
+    Model _elvis = null;
+    if (this.model != null) {
+      _elvis = this.model;
+    } else {
+      Model _model = new Model(this);
+      Model _model_1 = this.model = _model;
+      _elvis = _model_1;
+    }
+    return _elvis;
+  }
+  
+  public CommandStack getCommandStack() {
+    return this.commandStack;
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XRoot");
     ;
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(domainObjectProvidersProperty, DomainObjectProvider.class);
+    modelElement.addProperty(rootDiagramProperty, XDiagram.class);
     modelElement.addProperty(diagramProperty, XDiagram.class);
   }
   
@@ -303,6 +331,16 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyObjectWrapper<XDiagram> rootDiagramProperty = new ReadOnlyObjectWrapper<XDiagram>(this, "rootDiagram");
+  
+  public XDiagram getRootDiagram() {
+    return this.rootDiagramProperty.get();
+  }
+  
+  public ReadOnlyObjectProperty<XDiagram> rootDiagramProperty() {
+    return this.rootDiagramProperty.getReadOnlyProperty();
   }
   
   private ReadOnlyObjectWrapper<XDiagram> diagramProperty = new ReadOnlyObjectWrapper<XDiagram>(this, "diagram");

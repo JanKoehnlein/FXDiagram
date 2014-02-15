@@ -5,6 +5,7 @@ import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.tools.actions.CenterAction
 import de.fxdiagram.core.tools.actions.CloseAction
+import de.fxdiagram.core.tools.actions.DeleteAction
 import de.fxdiagram.core.tools.actions.DiagramAction
 import de.fxdiagram.core.tools.actions.ExitAction
 import de.fxdiagram.core.tools.actions.ExportSvgAction
@@ -13,8 +14,10 @@ import de.fxdiagram.core.tools.actions.LoadAction
 import de.fxdiagram.core.tools.actions.NavigateNextAction
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction
 import de.fxdiagram.core.tools.actions.OpenAction
+import de.fxdiagram.core.tools.actions.RedoAction
 import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
+import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import eu.hansolo.enzo.radialmenu.MenuItem
 import eu.hansolo.enzo.radialmenu.Options
@@ -32,7 +35,6 @@ import javafx.stage.Stage
 import static eu.hansolo.enzo.radialmenu.Symbol.Type.*
 
 import static extension javafx.scene.layout.BorderPane.*
-import de.fxdiagram.core.tools.actions.DeleteAction
 
 @Logging
 class MenuTool implements XDiagramTool {
@@ -95,6 +97,13 @@ class MenuTool implements XDiagramTool {
 					if (shortcutDown) {
 						new SaveAction
 					}
+				case KeyCode.Y:
+					if (shortcutDown) {
+						if(shiftDown) 
+							new RedoAction
+						else 
+							new UndoAction
+					}
 				case KeyCode.BACK_SPACE:
 					new DeleteAction
 				case KeyCode.DELETE:
@@ -135,7 +144,7 @@ class MenuTool implements XDiagramTool {
 			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN, CLOUD, DELETE
 			  //, PHOTO, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
 //			   TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR 
-			   ,BACK, SMUDGE
+			   ,UNDO
 			].
 				map [ s |
 					new MenuItem => [
@@ -184,6 +193,8 @@ class MenuTool implements XDiagramTool {
 								new SelectAllAction
 							case SELECTION2:
 								new CenterAction
+							case UNDO:
+								new UndoAction
 							case ZOOM_IN:
 								new ZoomToFitAction
 							default: {

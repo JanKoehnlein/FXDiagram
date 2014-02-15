@@ -18,8 +18,10 @@ import de.fxdiagram.core.tools.actions.LoadAction;
 import de.fxdiagram.core.tools.actions.NavigateNextAction;
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
 import de.fxdiagram.core.tools.actions.OpenAction;
+import de.fxdiagram.core.tools.actions.RedoAction;
 import de.fxdiagram.core.tools.actions.SaveAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
+import de.fxdiagram.core.tools.actions.UndoAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import eu.hansolo.enzo.radialmenu.MenuItem;
 import eu.hansolo.enzo.radialmenu.Options;
@@ -181,6 +183,21 @@ public class MenuTool implements XDiagramTool {
             }
             _switchResult = _xifexpression_7;
             break;
+          case Y:
+            DiagramAction _xifexpression_8 = null;
+            boolean _isShortcutDown_8 = it.isShortcutDown();
+            if (_isShortcutDown_8) {
+              DiagramAction _xifexpression_9 = null;
+              boolean _isShiftDown = it.isShiftDown();
+              if (_isShiftDown) {
+                _xifexpression_9 = new RedoAction();
+              } else {
+                _xifexpression_9 = new UndoAction();
+              }
+              _xifexpression_8 = _xifexpression_9;
+            }
+            _switchResult = _xifexpression_8;
+            break;
           case BACK_SPACE:
             _switchResult = new DeleteAction();
             break;
@@ -209,16 +226,16 @@ public class MenuTool implements XDiagramTool {
             CloseAction _xblockexpression_5 = null;
             {
               it.consume();
-              CloseAction _xifexpression_8 = null;
+              CloseAction _xifexpression_10 = null;
               RadialMenu.State _state = MenuTool.this.menu.getState();
               boolean _equals = Objects.equal(_state, RadialMenu.State.OPENED);
               if (_equals) {
                 MenuTool.this.closeMenu();
                 return;
               } else {
-                _xifexpression_8 = new CloseAction();
+                _xifexpression_10 = new CloseAction();
               }
-              _xblockexpression_5 = _xifexpression_8;
+              _xblockexpression_5 = _xifexpression_10;
             }
             _switchResult = _xblockexpression_5;
             break;
@@ -256,7 +273,7 @@ public class MenuTool implements XDiagramTool {
         return ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function);
       }
     };
-    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN, Symbol.Type.CLOUD, Symbol.Type.DELETE, Symbol.Type.BACK, Symbol.Type.SMUDGE)), _function_2);
+    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN, Symbol.Type.CLOUD, Symbol.Type.DELETE, Symbol.Type.UNDO)), _function_2);
     RadialMenu _radialMenu = new RadialMenu(_doubleArrow, _map);
     this.menu = _radialMenu;
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
@@ -347,6 +364,9 @@ public class MenuTool implements XDiagramTool {
                         break;
                       case SELECTION2:
                         _switchResult = new CenterAction();
+                        break;
+                      case UNDO:
+                        _switchResult = new UndoAction();
                         break;
                       case ZOOM_IN:
                         _switchResult = new ZoomToFitAction();

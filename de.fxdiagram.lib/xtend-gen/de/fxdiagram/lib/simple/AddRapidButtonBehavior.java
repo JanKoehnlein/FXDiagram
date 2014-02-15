@@ -11,6 +11,8 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
+import de.fxdiagram.core.command.AddRemoveCommand;
+import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.AbstractChooser;
@@ -52,12 +54,6 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
         final SimpleNode target = new SimpleNode("New Node");
         final XNode source = button.getHost();
         final XConnection connection = new XConnection(source, target);
-        XDiagram _diagram = CoreExtensions.getDiagram(host);
-        ObservableList<XNode> _nodes = _diagram.getNodes();
-        _nodes.add(target);
-        XDiagram _diagram_1 = CoreExtensions.getDiagram(host);
-        ObservableList<XConnection> _connections = _diagram_1.getConnections();
-        _connections.add(connection);
         Placer _placer = button.getPlacer();
         double _xPos = _placer.getXPos();
         double _minus = (_xPos - 0.5);
@@ -72,6 +68,11 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
         double _layoutY = source.getLayoutY();
         double _plus_1 = (_multiply_1 + _layoutY);
         target.setLayoutY(_plus_1);
+        XRoot _root = CoreExtensions.getRoot(host);
+        CommandStack _commandStack = _root.getCommandStack();
+        XDiagram _diagram = CoreExtensions.getDiagram(host);
+        AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram, target, connection);
+        _commandStack.execute(_newAddCommand);
       }
     };
     final Procedure1<XRapidButton> addAction = _function;

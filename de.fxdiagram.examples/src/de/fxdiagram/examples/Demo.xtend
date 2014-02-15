@@ -58,7 +58,7 @@ class Demo extends Application {
 		scene.setCamera(new PerspectiveCamera)
 		root.activate
 		val diagram = new XDiagram
-		root.diagram = diagram
+		root.rootDiagram = diagram
 		resourceProvider = new ResourceProvider(class.classLoader)
 		root.domainObjectProviders += #[ 
 			new EcoreDomainObjectProvider,

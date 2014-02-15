@@ -21,8 +21,8 @@ class ModelSave {
 
 	Model model
 
-	def void save(Object root, Writer out) {
-		model = new Model(root)
+	def void save(Object root, Model model, Writer out) {
+		this.model = model
 		if (model.rootElement != null) {
 			idMap = newHashMap
 			Json.createGeneratorFactory(#{JsonGenerator.PRETTY_PRINTING -> true})

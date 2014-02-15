@@ -3,6 +3,7 @@ package de.fxdiagram.core.tools.actions;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelSave;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import java.io.File;
@@ -30,8 +31,9 @@ public class SaveAction implements DiagramAction {
         boolean _notEquals_1 = (!Objects.equal(file, null));
         if (_notEquals_1) {
           ModelSave _modelSave = new ModelSave();
+          Model _model = root.getModel();
           FileWriter _fileWriter = new FileWriter(file);
-          _modelSave.save(root, _fileWriter);
+          _modelSave.save(root, _model, _fileWriter);
         }
       }
     } catch (Throwable _e) {
