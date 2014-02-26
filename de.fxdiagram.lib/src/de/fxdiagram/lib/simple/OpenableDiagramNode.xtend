@@ -8,6 +8,8 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.behavior.AbstractCloseBehavior
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
+import de.fxdiagram.core.command.AbstractAnimationCommand
+import de.fxdiagram.core.command.CommandContext
 import de.fxdiagram.core.extensions.AccumulativeTransform2D
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
@@ -51,15 +53,6 @@ class OpenableDiagramNode extends XNode {
 	
 	Text textNode
 	
-	DiagramScaler diagramScaler
-
-	@Property Duration transitionDuration = 1000.millis
-	@Property Duration transitionDelay = 100.millis
-	
-	@Property boolean isOpen
-	
-	Point2D nodeCenterInDiagram
-	
 	new(String name) {
 		super(name)
 	}
@@ -101,106 +94,165 @@ class OpenableDiagramNode extends XNode {
 		addBehavior(openBehavior)
 	}
 	
-	def void openDiagram() {
-		if(isOpen) {
-			LOG.severe('Attempt to close a closed editor')
-			return
-		}
-		isOpen = true
-		val nodeBounds = layoutBounds - new Insets(5,5,5,5)
-		nodeCenterInDiagram = localToRootDiagram(nodeBounds.center)
-		innerDiagram.opacity = 0
-		pane.children.add(new Group => [
-			children += innerDiagram
-		])
-		innerDiagram.activate
-		val AbstractCloseBehavior closeBehavior = [| closeDiagram ]
-		innerDiagram.addBehavior(closeBehavior)
-		innerDiagram.layout
-		diagramScaler = new DiagramScaler(innerDiagram) => [
+	 def getPane() {
+		pane
+	}
+
+	def getTextNode() {
+		textNode
+	}
+	
+	def openDiagram() {
+		root.commandStack.execute(OpenCloseDiagramCommand.newOpenCommand(this))
+	}
+}
+
+@Logging
+class OpenCloseDiagramCommand extends AbstractAnimationCommand {
+	
+	double delayFactor = 0.1
+	
+	boolean isOpenCommand
+	
+	extension OpenDiagramParameters params
+	
+	static def newOpenCommand(OpenableDiagramNode node) {
+		new OpenCloseDiagramCommand(true, node.calculateParams)
+	}
+	
+	static def newCloseCommand(XRoot root, OpenDiagramParameters params) {
+		new OpenCloseDiagramCommand(false, params) 
+	}
+	
+	protected new(boolean isOpenCommand, OpenDiagramParameters params) {
+		this.isOpenCommand = isOpenCommand
+		this.params = params
+	}
+	
+	protected static def calculateParams(OpenableDiagramNode host) {
+		val nodeBounds = host.layoutBounds - new Insets(5,5,5,5)
+		val nodeCenterInDiagram = host.localToRootDiagram(nodeBounds.center)
+		val diagramScaler = new DiagramScaler(host.innerDiagram) => [
 			width = nodeBounds.width
 			height = nodeBounds.height
-			activate
 		]
-		val initialScale = innerDiagram.localToScene(new BoundingBox(0,0,1,0)).width
-		val diagramBoundsInLocal = innerDiagram.boundsInLocal
+		new OpenDiagramParameters(host, host.root, diagramScaler, nodeCenterInDiagram)		
+	}
+	
+	protected def openDiagram(Duration duration) {
+		host.innerDiagram.opacity = 0
+		host.pane.children.add(new Group => [
+			children += host.innerDiagram
+		])
+		host.innerDiagram.activate
+		val AbstractCloseBehavior closeBehavior = [| root.commandStack.execute(newCloseCommand(root, params)) ]
+		host.innerDiagram.addBehavior(closeBehavior)
+		host.innerDiagram.layout
+		diagramScaler.activate
+		val initialScale = host.innerDiagram.localToScene(new BoundingBox(0,0,1,0)).width
+		val diagramBoundsInLocal = host.innerDiagram.boundsInLocal
 		val targetScale = max(AccumulativeTransform2D.MIN_SCALE, 
 			min(1, 
-				min(scene.width / diagramBoundsInLocal.width, 
-					scene.height / diagramBoundsInLocal.height)) / initialScale) * root.diagramTransform.scale
+				min(root.scene.width / diagramBoundsInLocal.width, 
+					root.scene.height / diagramBoundsInLocal.height)) / initialScale) * root.diagramTransform.scale
 		new ParallelTransition => [
 			children += new ScrollToAndScaleTransition(root, nodeCenterInDiagram, targetScale) => [
-				duration = transitionDuration
+				it.duration = duration
 				onFinished = [
 					diagramScaler.deactivate
-					parentDiagram = root.diagram
-					pane.children.setAll(textNode)
+					host.parentDiagram = root.diagram
+					host.pane.children.setAll(host.textNode)
 					val toParentButton = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY) => [
 						onMouseClicked = [
 							root.headsUpDisplay.children -= target as Node
-							closeDiagram
+							root.commandStack.execute(newCloseCommand(root, params))
 						]
 						tooltip = "Parent diagram"
 						
 					]
-					innerDiagram.fixedButtons.put(toParentButton, Pos.TOP_RIGHT)
-					root.diagram = innerDiagram				
+					host.innerDiagram.fixedButtons.put(toParentButton, Pos.TOP_RIGHT)
+					root.diagram = host.innerDiagram				
 				]
 			]
 			children += new FadeTransition => [
-				duration = transitionDuration - transitionDelay
+				it. duration = (1 - delayFactor) * duration  
 				fromValue = 1
 				toValue = 0
-				node = textNode
+				node = host.textNode
 			]
 			children += new FadeTransition => [
-				delay = transitionDelay
-				duration = transitionDuration - transitionDelay
+				delay = delayFactor * duration 
+				it.duration = (1 - delayFactor) * duration
 				fromValue = 0
 				toValue = 1
-				node = innerDiagram
+				node = host.innerDiagram
 			]
-			play
 		]
 	}
 	
-	def void closeDiagram() {
-		if(!isOpen) {
-			LOG.severe('Attempt to close a closed editor')
-			return
-		}
-		isOpen = false
-		root.diagram = parentDiagram
-		pane.children += new Group => [
-			children += innerDiagram
+	protected def closeDiagram(Duration duration) {
+		root.diagram = host.parentDiagram
+		host.pane.children += new Group => [
+			children += host.innerDiagram
 		]
-		innerDiagram.activate
-		innerDiagram.layout
+		host.innerDiagram.activate
+		host.innerDiagram.layout
 		diagramScaler.activate
 		new ParallelTransition => [
 			children += new ScrollToAndScaleTransition(root, nodeCenterInDiagram, 1) => [
-				duration = transitionDuration
+				it.duration = duration
 				onFinished = [
 					diagramScaler.deactivate
-					parentDiagram = root.diagram
-					pane.children.setAll(textNode)
+					host.parentDiagram = root.diagram
+					host.pane.children.setAll(host.textNode)
 				]
 			]
 			children += new FadeTransition => [
-				delay = transitionDelay
-				duration = transitionDuration - transitionDelay
+				delay = delayFactor * duration
+				it.duration = (1 - delayFactor) * duration 
 				fromValue = 0
 				toValue = 1
-				node = textNode
+				node = host.textNode
 			]
 			children += new FadeTransition => [
-				duration = transitionDuration - transitionDelay
+				it.duration = (1 - delayFactor) * duration
 				fromValue = 1
 				toValue = 0
-				node = innerDiagram
+				node = host.innerDiagram
 			]
-			play
 		]
 	}
-}
+	
+	override createExecuteAnimation(CommandContext context) {
+		if(isOpenCommand)
+			openDiagram(context.defaultExecuteDuration)
+		else 
+			closeDiagram(context.defaultExecuteDuration)
+	}
+	
+	override createUndoAnimation(CommandContext context) {
+		if(isOpenCommand)
+			closeDiagram(context.defaultUndoDuration)
+		else 
+			openDiagram(context.defaultUndoDuration)
+	}
+	
+	override createRedoAnimation(CommandContext context) {
+		if(isOpenCommand)
+			openDiagram(context.defaultUndoDuration)
+		else 
+			closeDiagram(context.defaultUndoDuration)
+	}
 
+	protected def isDiagramOpen() {
+		root.diagram == host.innerDiagram
+	}
+} 
+
+@Data 
+class OpenDiagramParameters {
+	OpenableDiagramNode host
+	XRoot root
+	DiagramScaler diagramScaler
+	Point2D nodeCenterInDiagram
+}

@@ -15,21 +15,23 @@ public class ButtonExtensions {
     final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
       public void apply(final SVGPath it) {
         String _switchResult = null;
-        switch (side) {
-          case TOP:
-            _switchResult = "m 0,11 9,-11 9,11 z";
-            break;
-          case BOTTOM:
-            _switchResult = "m 0,0 9,11 9,-11 z";
-            break;
-          case LEFT:
-            _switchResult = "m 11,0 -11,9 11,9 z";
-            break;
-          case RIGHT:
-            _switchResult = "m 0,0 11,9 -11,9 z";
-            break;
-          default:
-            break;
+        if (side != null) {
+          switch (side) {
+            case TOP:
+              _switchResult = "m 0,11 9,-11 9,11 z";
+              break;
+            case BOTTOM:
+              _switchResult = "m 0,0 9,11 9,-11 z";
+              break;
+            case LEFT:
+              _switchResult = "m 11,0 -11,9 11,9 z";
+              break;
+            case RIGHT:
+              _switchResult = "m 0,0 11,9 -11,9 z";
+              break;
+            default:
+              break;
+          }
         }
         it.setContent(_switchResult);
         it.setFill(Color.WHITE);
@@ -46,21 +48,23 @@ public class ButtonExtensions {
     final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
       public void apply(final SVGPath it) {
         String _switchResult = null;
-        switch (side) {
-          case TOP:
-            _switchResult = "m 0,7 6,-7 6,7 z";
-            break;
-          case BOTTOM:
-            _switchResult = "m 0,0 6,7 6,-7 z";
-            break;
-          case LEFT:
-            _switchResult = "m 7,0 -7,6 7,6 z";
-            break;
-          case RIGHT:
-            _switchResult = "m 0,0 7,6 -7,6 z";
-            break;
-          default:
-            break;
+        if (side != null) {
+          switch (side) {
+            case TOP:
+              _switchResult = "m 0,7 6,-7 6,7 z";
+              break;
+            case BOTTOM:
+              _switchResult = "m 0,0 6,7 6,-7 z";
+              break;
+            case LEFT:
+              _switchResult = "m 7,0 -7,6 7,6 z";
+              break;
+            case RIGHT:
+              _switchResult = "m 0,0 7,6 -7,6 z";
+              break;
+            default:
+              break;
+          }
         }
         it.setContent(_switchResult);
         it.setFill(Color.DARKGREEN);
@@ -77,21 +81,23 @@ public class ButtonExtensions {
     final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
       public void apply(final SVGPath it) {
         String _switchResult = null;
-        switch (side) {
-          case TOP:
-            _switchResult = "m 0,9 7,-9 7,9";
-            break;
-          case BOTTOM:
-            _switchResult = "m 0,0 7,9 7,-9";
-            break;
-          case LEFT:
-            _switchResult = "m 9,0 -9,7 9,7";
-            break;
-          case RIGHT:
-            _switchResult = "m 0,0 9,7 -9,7";
-            break;
-          default:
-            break;
+        if (side != null) {
+          switch (side) {
+            case TOP:
+              _switchResult = "m 0,9 7,-9 7,9";
+              break;
+            case BOTTOM:
+              _switchResult = "m 0,0 7,9 7,-9";
+              break;
+            case LEFT:
+              _switchResult = "m 9,0 -9,7 9,7";
+              break;
+            case RIGHT:
+              _switchResult = "m 0,0 9,7 -9,7";
+              break;
+            default:
+              break;
+          }
         }
         it.setContent(_switchResult);
         it.setStroke(Color.DARKGREEN);

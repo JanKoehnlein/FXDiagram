@@ -1,7 +1,8 @@
 package de.fxdiagram.core.command;
 
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.command.Command;
+import de.fxdiagram.core.command.AbstractAnimationCommand;
+import de.fxdiagram.core.command.CommandContext;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.beans.property.DoubleProperty;
@@ -18,36 +19,66 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class MoveCommand implements Command {
+public class MoveCommand extends AbstractAnimationCommand {
   private XShape shape;
   
-  private double targetX;
+  private double fromX;
   
-  private double targetY;
+  private double fromY;
   
-  public MoveCommand(final XShape shape, final double fromX, final double fromY) {
+  private double toX;
+  
+  private double toY;
+  
+  public MoveCommand(final XShape shape, final double toX, final double toY) {
     this.shape = shape;
-    this.targetX = fromX;
-    this.targetY = fromY;
+    double _layoutX = shape.getLayoutX();
+    this.fromX = _layoutX;
+    double _layoutY = shape.getLayoutY();
+    this.fromY = _layoutY;
+    this.toX = toX;
+    this.toY = toY;
   }
   
-  public Animation execute(final Duration duration) {
-    return null;
+  public MoveCommand(final XShape shape, final double fromX, final double fromY, final double toX, final double toY) {
+    this.shape = shape;
+    this.fromX = fromX;
+    this.fromY = fromY;
+    this.toX = toX;
+    this.toY = toY;
   }
   
-  public boolean canUndo() {
-    return true;
+  public Animation createExecuteAnimation(final CommandContext context) {
+    Duration _defaultExecuteDuration = context.getDefaultExecuteDuration();
+    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _defaultExecuteDuration);
   }
   
-  public Animation undo(final Duration duration) {
-    return this.createMoveTransition(duration);
+  public Animation createUndoAnimation(final CommandContext context) {
+    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
+    return this.createMoveTransition(this.toX, this.toY, this.fromX, this.fromY, _defaultUndoDuration);
   }
   
-  protected PathTransition createMoveTransition(final Duration duration) {
+  public Animation createRedoAnimation(final CommandContext context) {
+    Duration _defaultUndoDuration = context.getDefaultUndoDuration();
+    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _defaultUndoDuration);
+  }
+  
+  protected PathTransition createMoveTransition(final double fromX, final double fromY, final double toX, final double toY, final Duration duration) {
     PathTransition _xblockexpression = null;
     {
-      final double fromX = this.shape.getLayoutX();
-      final double fromY = this.shape.getLayoutY();
+      boolean _and = false;
+      double _layoutX = this.shape.getLayoutX();
+      boolean _equals = (_layoutX == toX);
+      if (!_equals) {
+        _and = false;
+      } else {
+        double _layoutY = this.shape.getLayoutY();
+        boolean _equals_1 = (_layoutY == toY);
+        _and = _equals_1;
+      }
+      if (_and) {
+        return null;
+      }
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
         public void apply(final Group it) {
@@ -75,7 +106,7 @@ public class MoveCommand implements Command {
               MoveTo _moveTo = new MoveTo(fromX, fromY);
               _elements.add(_moveTo);
               ObservableList<PathElement> _elements_1 = it.getElements();
-              LineTo _lineTo = new LineTo(MoveCommand.this.targetX, MoveCommand.this.targetY);
+              LineTo _lineTo = new LineTo(toX, toY);
               _elements_1.add(_lineTo);
             }
           };
@@ -89,10 +120,8 @@ public class MoveCommand implements Command {
                   _layoutXProperty.unbind();
                   DoubleProperty _layoutYProperty = it.layoutYProperty();
                   _layoutYProperty.unbind();
-                  it.setLayoutX(MoveCommand.this.targetX);
-                  MoveCommand.this.targetX = fromX;
-                  it.setLayoutY(MoveCommand.this.targetY);
-                  MoveCommand.this.targetY = fromY;
+                  it.setLayoutX(toX);
+                  it.setLayoutY(toY);
                 }
               };
               ObjectExtensions.<XShape>operator_doubleArrow(
@@ -105,13 +134,5 @@ public class MoveCommand implements Command {
       _xblockexpression = ObjectExtensions.<PathTransition>operator_doubleArrow(_pathTransition, _function_1);
     }
     return _xblockexpression;
-  }
-  
-  public boolean canRedo() {
-    return true;
-  }
-  
-  public Animation redo(final Duration duration) {
-    return this.createMoveTransition(duration);
   }
 }

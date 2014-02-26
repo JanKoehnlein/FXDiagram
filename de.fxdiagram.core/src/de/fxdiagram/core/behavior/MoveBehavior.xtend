@@ -22,7 +22,13 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			mouseDragged	
 		]
 		host.node.onMouseReleased = [
-			host.root.commandStack.execute(dragContext.moveCommand)
+			if(dragContext.initialX != host.layoutX || dragContext.initialY != host.layoutY) {
+				host.root.commandStack.execute(new MoveCommand(
+					host,
+					dragContext.initialX, dragContext.initialY,
+					host.layoutX, host.layoutY
+				))
+			}
 		]
 	}
 	
@@ -33,8 +39,11 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	def mousePressed(MouseEvent it) {
 		val initialPositionInScene = host.parent.localToScene(host.layoutX, host.layoutY)
 		dragContext = new DragContext(
-			new MoveCommand(host, host.layoutX, host.layoutY), 
-			screenX, screenY, initialPositionInScene
+			host.layoutX,
+			host.layoutY,
+			screenX,
+			screenY,
+			initialPositionInScene
 		)
 	}
 	
@@ -52,7 +61,8 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 
 @Data 
 class DragContext {
-	MoveCommand moveCommand
+	double initialX
+	double initialY
 	double mouseAnchorX 
 	double mouseAnchorY
 	Point2D initialPosInScene

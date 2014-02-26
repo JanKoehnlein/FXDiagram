@@ -31,6 +31,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
 import de.fxdiagram.core.command.AddRemoveCommand
+import de.fxdiagram.core.XShape
 
 abstract class AbstractChooser implements XDiagramTool {
 
@@ -265,6 +266,7 @@ abstract class AbstractChooser implements XDiagramTool {
 		if (choice != null) {
 			getNodes.forEach[onMouseClicked = null]
 			group.children.remove(choice)
+			val shapesToAdd = <XShape>newArrayList
 			var existingChoice = diagram.nodes.findFirst[name == choice.name]
 			if(existingChoice == null) {
 				existingChoice = choice
@@ -289,9 +291,10 @@ abstract class AbstractChooser implements XDiagramTool {
 					case VPos.BOTTOM:
 						choice.layoutY = choice.layoutY + 0.5 * (bounds.height - unlayoutedBounds.height)
 				}
-				host.root.commandStack.execute(AddRemoveCommand.newAddCommand(host.diagram, choice, currentConnection))
+				shapesToAdd += choice
 			}
-			connectChoice(existingChoice, node2choiceInfo.get(choice))
+			shapesToAdd += connectChoice(existingChoice, node2choiceInfo.get(choice))
+			host.root.commandStack.execute(AddRemoveCommand.newAddCommand(host.diagram, shapesToAdd))
 			currentConnection = null
 		}
 	}

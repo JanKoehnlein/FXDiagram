@@ -1,6 +1,5 @@
 package de.fxdiagram.core.behavior;
 
-import de.fxdiagram.core.command.MoveCommand;
 import javafx.geometry.Point2D;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
@@ -8,10 +7,16 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 @Data
 @SuppressWarnings("all")
 public class DragContext {
-  private final MoveCommand _moveCommand;
+  private final double _initialX;
   
-  public MoveCommand getMoveCommand() {
-    return this._moveCommand;
+  public double getInitialX() {
+    return this._initialX;
+  }
+  
+  private final double _initialY;
+  
+  public double getInitialY() {
+    return this._initialY;
   }
   
   private final double _mouseAnchorX;
@@ -32,9 +37,10 @@ public class DragContext {
     return this._initialPosInScene;
   }
   
-  public DragContext(final MoveCommand moveCommand, final double mouseAnchorX, final double mouseAnchorY, final Point2D initialPosInScene) {
+  public DragContext(final double initialX, final double initialY, final double mouseAnchorX, final double mouseAnchorY, final Point2D initialPosInScene) {
     super();
-    this._moveCommand = moveCommand;
+    this._initialX = initialX;
+    this._initialY = initialY;
     this._mouseAnchorX = mouseAnchorX;
     this._mouseAnchorY = mouseAnchorY;
     this._initialPosInScene = initialPosInScene;
@@ -44,7 +50,8 @@ public class DragContext {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_moveCommand== null) ? 0 : _moveCommand.hashCode());
+    result = prime * result + (int) (Double.doubleToLongBits(_initialX) ^ (Double.doubleToLongBits(_initialX) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(_initialY) ^ (Double.doubleToLongBits(_initialY) >>> 32));
     result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorX) ^ (Double.doubleToLongBits(_mouseAnchorX) >>> 32));
     result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorY) ^ (Double.doubleToLongBits(_mouseAnchorY) >>> 32));
     result = prime * result + ((_initialPosInScene== null) ? 0 : _initialPosInScene.hashCode());
@@ -60,10 +67,9 @@ public class DragContext {
     if (getClass() != obj.getClass())
       return false;
     DragContext other = (DragContext) obj;
-    if (_moveCommand == null) {
-      if (other._moveCommand != null)
-        return false;
-    } else if (!_moveCommand.equals(other._moveCommand))
+    if (Double.doubleToLongBits(other._initialX) != Double.doubleToLongBits(_initialX))
+      return false;
+    if (Double.doubleToLongBits(other._initialY) != Double.doubleToLongBits(_initialY))
       return false;
     if (Double.doubleToLongBits(other._mouseAnchorX) != Double.doubleToLongBits(_mouseAnchorX))
       return false;

@@ -23,32 +23,32 @@ import de.cau.cs.kieler.kiml.options.LayoutOptions;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
-import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.anchors.ConnectionRouter;
-import de.fxdiagram.core.layout.LayoutTransitionFactory;
-import de.fxdiagram.core.layout.LayoutTransitionStyle;
+import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.command.CompositeAnimationCommand;
+import de.fxdiagram.core.command.MoveCommand;
+import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.layout.ConnectionMorphCommand;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.LoggingTransformationService;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.animation.Animation;
-import javafx.animation.PathTransition;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -59,9 +59,6 @@ public class Layouter {
   
   @Extension
   private KGraphFactory _kGraphFactory = KGraphFactory.eINSTANCE;
-  
-  @Extension
-  private LayoutTransitionFactory _layoutTransitionFactory = new LayoutTransitionFactory();
   
   public Layouter() {
     AbstractLayoutProvider _layoutProvider = this.getLayoutProvider(LayoutType.DOT);
@@ -75,13 +72,16 @@ public class Layouter {
     try {
       BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
       provider.doLayout(kRoot, _basicProgressMonitor);
-      this.apply(cache, duration);
+      XRoot _root = CoreExtensions.getRoot(diagram);
+      CommandStack _commandStack = _root.getCommandStack();
+      CompositeAnimationCommand _createCommand = this.createCommand(cache, duration);
+      _commandStack.execute(_createCommand);
     } finally {
       provider.dispose();
     }
   }
   
-  public AbstractLayoutProvider getLayoutProvider(final LayoutType type) {
+  protected AbstractLayoutProvider getLayoutProvider(final LayoutType type) {
     GraphvizLayoutProvider _xblockexpression = null;
     {
       new LoggingTransformationService();
@@ -97,8 +97,8 @@ public class Layouter {
     return _xblockexpression;
   }
   
-  public void apply(final Map<Object,KGraphElement> map, final Duration duration) {
-    final ArrayList<Animation> animations = CollectionLiterals.<Animation>newArrayList();
+  protected CompositeAnimationCommand createCommand(final Map<Object,KGraphElement> map, final Duration duration) {
+    final CompositeAnimationCommand composite = new CompositeAnimationCommand();
     Set<Map.Entry<Object,KGraphElement>> _entrySet = map.entrySet();
     for (final Map.Entry<Object,KGraphElement> entry : _entrySet) {
       {
@@ -119,8 +119,8 @@ public class Layouter {
             Bounds _layoutBounds_1 = ((XNode)xElement).getLayoutBounds();
             double _minY = _layoutBounds_1.getMinY();
             double _minus_1 = (_ypos - _minY);
-            PathTransition _createTransition = this._layoutTransitionFactory.createTransition(((XShape)xElement), _minus, _minus_1, LayoutTransitionStyle.CURVE_XFIRST, duration);
-            animations.add(_createTransition);
+            MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus, _minus_1);
+            composite.operator_add(_moveCommand);
           }
         }
         if (!_matched) {
@@ -130,71 +130,54 @@ public class Layouter {
             Iterable<KEdgeLayout> _filter = Iterables.<KEdgeLayout>filter(_data, KEdgeLayout.class);
             final KEdgeLayout edgeLayout = IterableExtensions.<KEdgeLayout>head(_filter);
             final KVectorChain layoutPoints = edgeLayout.createVectorChain();
+            XConnectionKind _switchResult_1 = null;
             EdgeRouting _property = edgeLayout.<EdgeRouting>getProperty(LayoutOptions.EDGE_ROUTING);
-            switch (_property) {
-              case SPLINES:
-                int _size = layoutPoints.size();
-                int _minus = (_size - 1);
-                int _modulo = (_minus % 3);
-                boolean _equals = (_modulo == 0);
-                if (_equals) {
-                  ((XConnection)xElement).setKind(XConnectionKind.CUBIC_CURVE);
-                } else {
-                  int _size_1 = layoutPoints.size();
-                  int _minus_1 = (_size_1 - 1);
-                  int _modulo_1 = (_minus_1 % 2);
-                  boolean _equals_1 = (_modulo_1 == 0);
-                  if (_equals_1) {
-                    ((XConnection)xElement).setKind(XConnectionKind.QUAD_CURVE);
+            if (_property != null) {
+              switch (_property) {
+                case SPLINES:
+                  XConnectionKind _xifexpression = null;
+                  int _size = layoutPoints.size();
+                  int _minus = (_size - 1);
+                  int _modulo = (_minus % 3);
+                  boolean _equals = (_modulo == 0);
+                  if (_equals) {
+                    _xifexpression = XConnectionKind.CUBIC_CURVE;
                   } else {
-                    ((XConnection)xElement).setKind(XConnectionKind.POLYLINE);
-                  }
-                }
-                break;
-              default:
-                ((XConnection)xElement).setKind(XConnectionKind.POLYLINE);
-                break;
-            }
-            final ObservableList<XControlPoint> controlPoints = ((XConnection)xElement).getControlPoints();
-            ConnectionRouter _connectionRouter = ((XConnection)xElement).getConnectionRouter();
-            int _size_2 = layoutPoints.size();
-            _connectionRouter.growToSize(_size_2);
-            int _size_3 = controlPoints.size();
-            int _minus_2 = (_size_3 - 1);
-            ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus_2, true);
-            for (final Integer i : _doubleDotLessThan) {
-              {
-                int _size_4 = layoutPoints.size();
-                int _minus_3 = (_size_4 - 1);
-                int _min = Math.min(_minus_3, (i).intValue());
-                final KVector layoutPoint = layoutPoints.get(_min);
-                final XControlPoint currentControlPoint = controlPoints.get((i).intValue());
-                final PathTransition transition = this._layoutTransitionFactory.createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, LayoutTransitionStyle.CURVE_XFIRST, duration);
-                if (((i).intValue() == 1)) {
-                  final EventHandler<ActionEvent> unbind = transition.getOnFinished();
-                  final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                    public void handle(final ActionEvent it) {
-                      unbind.handle(it);
-                      ConnectionRouter _connectionRouter = ((XConnection)xElement).getConnectionRouter();
-                      int _size = layoutPoints.size();
-                      _connectionRouter.shrinkToSize(_size);
+                    XConnectionKind _xifexpression_1 = null;
+                    int _size_1 = layoutPoints.size();
+                    int _minus_1 = (_size_1 - 1);
+                    int _modulo_1 = (_minus_1 % 2);
+                    boolean _equals_1 = (_modulo_1 == 0);
+                    if (_equals_1) {
+                      _xifexpression_1 = XConnectionKind.QUAD_CURVE;
+                    } else {
+                      _xifexpression_1 = XConnectionKind.POLYLINE;
                     }
-                  };
-                  transition.setOnFinished(_function);
-                }
-                animations.add(transition);
+                    _xifexpression = _xifexpression_1;
+                  }
+                  _switchResult_1 = _xifexpression;
+                  break;
+                default:
+                  _switchResult_1 = XConnectionKind.POLYLINE;
+                  break;
               }
+            } else {
+              _switchResult_1 = XConnectionKind.POLYLINE;
             }
+            final XConnectionKind newKind = _switchResult_1;
+            final Function1<KVector,Point2D> _function = new Function1<KVector,Point2D>() {
+              public Point2D apply(final KVector it) {
+                return new Point2D(it.x, it.y);
+              }
+            };
+            List<Point2D> _map = ListExtensions.<KVector, Point2D>map(layoutPoints, _function);
+            ConnectionMorphCommand _connectionMorphCommand = new ConnectionMorphCommand(((XConnection)xElement), newKind, _map);
+            composite.operator_add(_connectionMorphCommand);
           }
         }
       }
     }
-    final Procedure1<Animation> _function = new Procedure1<Animation>() {
-      public void apply(final Animation it) {
-        it.play();
-      }
-    };
-    IterableExtensions.<Animation>forEach(animations, _function);
+    return composite;
   }
   
   protected KNode toKRootNode(final XDiagram it, final Map<Object,KGraphElement> cache) {

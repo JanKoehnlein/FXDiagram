@@ -36,31 +36,35 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class XControlPoint extends XShape implements XModelProvider {
   protected Node createNode() {
     XControlPointType _type = this.getType();
-    switch (_type) {
-      case ANCHOR:
-        Circle _circle = new Circle();
-        final Procedure1<Circle> _function = new Procedure1<Circle>() {
-          public void apply(final Circle it) {
-            it.setRadius(3);
-            it.setStroke(Color.BLUE);
-            it.setFill(Color.WHITE);
-          }
-        };
-        return ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
-      case CONTROL_POINT:
-        return this.newMagnet();
-      case INTERPOLATED:
-        Circle _circle_1 = new Circle();
-        final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
-          public void apply(final Circle it) {
-            it.setRadius(5);
-            it.setStroke(Color.RED);
-            it.setFill(Color.WHITE);
-          }
-        };
-        return ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
-      default:
-        return null;
+    if (_type != null) {
+      switch (_type) {
+        case ANCHOR:
+          Circle _circle = new Circle();
+          final Procedure1<Circle> _function = new Procedure1<Circle>() {
+            public void apply(final Circle it) {
+              it.setRadius(3);
+              it.setStroke(Color.BLUE);
+              it.setFill(Color.WHITE);
+            }
+          };
+          return ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
+        case CONTROL_POINT:
+          return this.newMagnet();
+        case INTERPOLATED:
+          Circle _circle_1 = new Circle();
+          final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
+            public void apply(final Circle it) {
+              it.setRadius(5);
+              it.setStroke(Color.RED);
+              it.setFill(Color.WHITE);
+            }
+          };
+          return ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
+        default:
+          return null;
+      }
+    } else {
+      return null;
     }
   }
   
@@ -84,32 +88,36 @@ public class XControlPoint extends XShape implements XModelProvider {
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       XControlPointType _type = this.getType();
-      switch (_type) {
-        case CONTROL_POINT:
-          Node _node = this.getNode();
-          DropShadow _dropShadow = new DropShadow();
-          _node.setEffect(_dropShadow);
-          break;
-        case INTERPOLATED:
-          Node _node_1 = this.getNode();
-          ((Circle) _node_1).setFill(Color.RED);
-          break;
-        default:
-          break;
+      if (_type != null) {
+        switch (_type) {
+          case CONTROL_POINT:
+            Node _node = this.getNode();
+            DropShadow _dropShadow = new DropShadow();
+            _node.setEffect(_dropShadow);
+            break;
+          case INTERPOLATED:
+            Node _node_1 = this.getNode();
+            ((Circle) _node_1).setFill(Color.RED);
+            break;
+          default:
+            break;
+        }
       }
     } else {
       XControlPointType _type_1 = this.getType();
-      switch (_type_1) {
-        case CONTROL_POINT:
-          Node _node_2 = this.getNode();
-          _node_2.setEffect(null);
-          break;
-        case INTERPOLATED:
-          Node _node_3 = this.getNode();
-          ((Circle) _node_3).setFill(Color.WHITE);
-          break;
-        default:
-          break;
+      if (_type_1 != null) {
+        switch (_type_1) {
+          case CONTROL_POINT:
+            Node _node_2 = this.getNode();
+            _node_2.setEffect(null);
+            break;
+          case INTERPOLATED:
+            Node _node_3 = this.getNode();
+            ((Circle) _node_3).setFill(Color.WHITE);
+            break;
+          default:
+            break;
+        }
       }
     }
   }

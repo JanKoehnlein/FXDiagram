@@ -689,18 +689,20 @@ public class SvgExporter {
   
   public String toSvgString(final CycleMethod it) {
     String _switchResult = null;
-    switch (it) {
-      case NO_CYCLE:
-        _switchResult = "pad";
-        break;
-      case REFLECT:
-        _switchResult = "reflect";
-        break;
-      case REPEAT:
-        _switchResult = "repeat";
-        break;
-      default:
-        break;
+    if (it != null) {
+      switch (it) {
+        case NO_CYCLE:
+          _switchResult = "pad";
+          break;
+        case REFLECT:
+          _switchResult = "reflect";
+          break;
+        case REPEAT:
+          _switchResult = "repeat";
+          break;
+        default:
+          break;
+      }
     }
     return _switchResult;
   }

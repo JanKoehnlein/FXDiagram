@@ -16,20 +16,21 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.command.CompositeAnimationCommand
+import de.fxdiagram.core.command.MoveCommand
 import java.util.Map
-import javafx.animation.Animation
+import javafx.geometry.Point2D
 import javafx.util.Duration
 
 import static de.fxdiagram.core.XConnectionKind.*
-import static java.lang.Math.*
+
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class Layouter { 
 
 	extension KLayoutDataFactory = KLayoutDataFactory.eINSTANCE
 	
 	extension KGraphFactory = KGraphFactory.eINSTANCE
-	
-	extension LayoutTransitionFactory = new LayoutTransitionFactory
 	
 	new() {
 		// pre-initialize
@@ -42,21 +43,21 @@ class Layouter {
 		val provider = getLayoutProvider(type)
 		try {
 			provider.doLayout(kRoot, new BasicProgressMonitor())
-			apply(cache, duration)
+			diagram.root.commandStack.execute(createCommand(cache, duration))
 		} finally {
 			provider.dispose
 		}
 	}
 
-	def AbstractLayoutProvider getLayoutProvider(LayoutType type) {
+	protected def AbstractLayoutProvider getLayoutProvider(LayoutType type) {
 		new LoggingTransformationService
 		new GraphvizLayoutProvider => [
 			initialize(type.toString)
 		]
 	}
 	
-	def apply(Map<Object,KGraphElement> map, Duration duration) {
-		val animations = <Animation>newArrayList
+	protected def createCommand(Map<Object,KGraphElement> map, Duration duration) {
+		val composite = new CompositeAnimationCommand
 		for(entry: map.entrySet) {
 			val xElement = entry.key
 			val kElement = entry.value
@@ -70,42 +71,28 @@ class Layouter {
 //				}
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
-					animations += createTransition(xElement, shapeLayout.xpos - xElement.layoutBounds.minX, shapeLayout.ypos - xElement.layoutBounds.minY, LayoutTransitionStyle.CURVE_XFIRST, duration)
+					composite += new MoveCommand(xElement, shapeLayout.xpos - xElement.layoutBounds.minX, shapeLayout.ypos - xElement.layoutBounds.minY)
 				}
 				XConnection: {
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain
-					switch(edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
+					val newKind = switch(edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
 						case EdgeRouting.SPLINES: {
 							if((layoutPoints.size - 1) % 3 == 0) 
-								xElement.kind = CUBIC_CURVE
+								CUBIC_CURVE
 							else if((layoutPoints.size - 1) % 2 == 0) 
-								xElement.kind = QUAD_CURVE
+								QUAD_CURVE
 							else 
-								xElement.kind = POLYLINE
+								POLYLINE
 						}
 						default:
-							xElement.kind = POLYLINE
+							POLYLINE
 					}
-					val controlPoints = xElement.controlPoints
-					xElement.connectionRouter.growToSize(layoutPoints.size)
-					for(i: 1..<controlPoints.size-1) {
-						val layoutPoint = layoutPoints.get(min(layoutPoints.size-1, i))
-						val currentControlPoint = controlPoints.get(i)
-						val transition = createTransition(currentControlPoint, layoutPoint.x, layoutPoint.y, LayoutTransitionStyle.CURVE_XFIRST, duration)
-						if (i == 1) {
-							val unbind = transition.onFinished
-							transition.onFinished = [
-								unbind.handle(it)
-								xElement.connectionRouter.shrinkToSize(layoutPoints.size)
-							] 		
-						}				
-						animations += transition
-					}
+					composite += new ConnectionMorphCommand(xElement, newKind, layoutPoints.map[new Point2D(x,y)])
 				}
 			}
 		}
-		animations.forEach[play]
+		return composite
 	}
 	
 	protected def toKRootNode(XDiagram it, Map<Object, KGraphElement> cache) {

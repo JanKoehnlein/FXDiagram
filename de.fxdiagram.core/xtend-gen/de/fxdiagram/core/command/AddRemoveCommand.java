@@ -5,7 +5,8 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.command.Command;
+import de.fxdiagram.core.command.AbstractAnimationCommand;
+import de.fxdiagram.core.command.CommandContext;
 import java.util.List;
 import java.util.Map;
 import javafx.animation.Animation;
@@ -17,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
@@ -25,7 +27,7 @@ import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddRemoveCommand implements Command {
+public class AddRemoveCommand extends AbstractAnimationCommand {
   private boolean isAdd;
   
   private XDiagram diagram;
@@ -48,94 +50,83 @@ public class AddRemoveCommand implements Command {
     this.shapes = ((List<? extends XShape>)Conversions.doWrapArray(shapes));
   }
   
-  public Animation execute(final Duration duration) {
-    Animation _xblockexpression = null;
-    {
-      final Procedure1<XShape> _function = new Procedure1<XShape>() {
-        public void apply(final XShape it) {
-          boolean _matched = false;
-          if (!_matched) {
-            if (it instanceof XNode) {
-              _matched=true;
-              if (AddRemoveCommand.this.isAdd) {
-                ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
-                boolean _contains = _nodes.contains(it);
-                boolean _not = (!_contains);
-                if (_not) {
-                  ObservableList<XNode> _nodes_1 = AddRemoveCommand.this.diagram.getNodes();
-                  _nodes_1.add(((XNode)it));
-                }
-              } else {
-                ObservableList<XNode> _nodes_2 = AddRemoveCommand.this.diagram.getNodes();
-                _nodes_2.remove(((XNode)it));
+  public Animation createExecuteAnimation(final CommandContext context) {
+    final Procedure1<XShape> _function = new Procedure1<XShape>() {
+      public void apply(final XShape it) {
+        boolean _matched = false;
+        if (!_matched) {
+          if (it instanceof XNode) {
+            _matched=true;
+            if (AddRemoveCommand.this.isAdd) {
+              ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
+              boolean _contains = _nodes.contains(it);
+              boolean _not = (!_contains);
+              if (_not) {
+                ObservableList<XNode> _nodes_1 = AddRemoveCommand.this.diagram.getNodes();
+                _nodes_1.add(((XNode)it));
               }
-            }
-          }
-          if (!_matched) {
-            if (it instanceof XConnection) {
-              _matched=true;
-              XNode _source = ((XConnection)it).getSource();
-              XNode _target = ((XConnection)it).getTarget();
-              Pair<XNode,XNode> _mappedTo = Pair.<XNode, XNode>of(_source, _target);
-              AddRemoveCommand.this.connectedNodesMap.put(((XConnection)it), _mappedTo);
-              if (AddRemoveCommand.this.isAdd) {
-                ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
-                boolean _contains = _connections.contains(it);
-                boolean _not = (!_contains);
-                if (_not) {
-                  ObservableList<XConnection> _connections_1 = AddRemoveCommand.this.diagram.getConnections();
-                  _connections_1.add(((XConnection)it));
-                }
-              } else {
-                ObservableList<XConnection> _connections_2 = AddRemoveCommand.this.diagram.getConnections();
-                _connections_2.remove(((XConnection)it));
-              }
+            } else {
+              ObservableList<XNode> _nodes_2 = AddRemoveCommand.this.diagram.getNodes();
+              _nodes_2.remove(((XNode)it));
             }
           }
         }
-      };
-      IterableExtensions.forEach(this.shapes, _function);
-      _xblockexpression = null;
-    }
-    return _xblockexpression;
+        if (!_matched) {
+          if (it instanceof XConnection) {
+            _matched=true;
+            XNode _source = ((XConnection)it).getSource();
+            XNode _target = ((XConnection)it).getTarget();
+            Pair<XNode,XNode> _mappedTo = Pair.<XNode, XNode>of(_source, _target);
+            AddRemoveCommand.this.connectedNodesMap.put(((XConnection)it), _mappedTo);
+            if (AddRemoveCommand.this.isAdd) {
+              ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
+              boolean _contains = _connections.contains(it);
+              boolean _not = (!_contains);
+              if (_not) {
+                ObservableList<XConnection> _connections_1 = AddRemoveCommand.this.diagram.getConnections();
+                _connections_1.add(((XConnection)it));
+              }
+            } else {
+              ObservableList<XConnection> _connections_2 = AddRemoveCommand.this.diagram.getConnections();
+              _connections_2.remove(((XConnection)it));
+            }
+          }
+        }
+      }
+    };
+    IterableExtensions.forEach(this.shapes, _function);
+    return null;
   }
   
-  public boolean canUndo() {
-    return true;
-  }
-  
-  public Animation undo(final Duration duration) {
+  public Animation createUndoAnimation(final CommandContext context) {
     ParallelTransition _xifexpression = null;
     if (this.isAdd) {
-      _xifexpression = this.add(duration);
+      _xifexpression = this.add(context);
     } else {
-      _xifexpression = this.remove(duration);
+      _xifexpression = this.remove(context);
     }
     return _xifexpression;
   }
   
-  public boolean canRedo() {
-    return true;
-  }
-  
-  public Animation redo(final Duration duration) {
+  public Animation createRedoAnimation(final CommandContext context) {
     ParallelTransition _xifexpression = null;
     if (this.isAdd) {
-      _xifexpression = this.remove(duration);
+      _xifexpression = this.remove(context);
     } else {
-      _xifexpression = this.add(duration);
+      _xifexpression = this.add(context);
     }
     return _xifexpression;
   }
   
-  protected ParallelTransition add(final Duration duration) {
+  protected ParallelTransition add(@Extension final CommandContext context) {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
         final Function1<XShape,Animation> _function = new Function1<XShape,Animation>() {
           public Animation apply(final XShape it) {
-            return AddRemoveCommand.this.disappear(it, duration);
+            Duration _defaultUndoDuration = context.getDefaultUndoDuration();
+            return AddRemoveCommand.this.disappear(it, _defaultUndoDuration);
           }
         };
         List<Animation> _map = ListExtensions.map(AddRemoveCommand.this.shapes, _function);
@@ -170,7 +161,7 @@ public class AddRemoveCommand implements Command {
     return ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
   }
   
-  protected ParallelTransition remove(final Duration duration) {
+  protected ParallelTransition remove(@Extension final CommandContext context) {
     ParallelTransition _xblockexpression = null;
     {
       final Procedure1<XShape> _function = new Procedure1<XShape>() {
@@ -204,7 +195,8 @@ public class AddRemoveCommand implements Command {
           ObservableList<Animation> _children = it.getChildren();
           final Function1<XShape,Animation> _function = new Function1<XShape,Animation>() {
             public Animation apply(final XShape it) {
-              return AddRemoveCommand.this.appear(it, duration);
+              Duration _defaultUndoDuration = context.getDefaultUndoDuration();
+              return AddRemoveCommand.this.appear(it, _defaultUndoDuration);
             }
           };
           List<Animation> _map = ListExtensions.map(AddRemoveCommand.this.shapes, _function);

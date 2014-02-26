@@ -167,25 +167,29 @@ public class ModelLoad {
             final JsonValue value = it.get(_name_8);
             boolean _switchResult_1 = false;
             JsonValue.ValueType _valueType = value.getValueType();
-            switch (_valueType) {
-              case STRING:
-                boolean _xblockexpression_1 = false;
-                {
+            if (_valueType != null) {
+              switch (_valueType) {
+                case STRING:
+                  boolean _xblockexpression_1 = false;
+                  {
+                    String _name_9 = property.getName();
+                    String _string_2 = it.getString(_name_9);
+                    final CrossRefData crossRefData = new CrossRefData(_string_2, property, (-1));
+                    _xblockexpression_1 = this.crossRefs.add(crossRefData);
+                  }
+                  _switchResult_1 = _xblockexpression_1;
+                  break;
+                case OBJECT:
                   String _name_9 = property.getName();
-                  String _string_2 = it.getString(_name_9);
-                  final CrossRefData crossRefData = new CrossRefData(_string_2, property, (-1));
-                  _xblockexpression_1 = this.crossRefs.add(crossRefData);
-                }
-                _switchResult_1 = _xblockexpression_1;
-                break;
-              case OBJECT:
-                String _name_9 = property.getName();
-                String _plus = ((currentID + "/") + _name_9);
-                Object _readNode = this.readNode(((JsonObject) value), _plus);
-                ((Property<Object>) property).setValue(_readNode);
-                break;
-              default:
-                throw new ParseException(("Expected object but got " + value));
+                  String _plus = ((currentID + "/") + _name_9);
+                  Object _readNode = this.readNode(((JsonObject) value), _plus);
+                  ((Property<Object>) property).setValue(_readNode);
+                  break;
+                default:
+                  throw new ParseException(("Expected object but got " + value));
+              }
+            } else {
+              throw new ParseException(("Expected object but got " + value));
             }
             _xblockexpression = _switchResult_1;
           }
@@ -265,22 +269,26 @@ public class ModelLoad {
             }
             if (!_matched) {
               JsonValue.ValueType _valueType = jsonValue.getValueType();
-              switch (_valueType) {
-                case STRING:
-                  String _string_2 = ((JsonString) jsonValue).getString();
-                  final CrossRefData crossRefData = new CrossRefData(_string_2, property, (i).intValue());
-                  this.crossRefs.add(crossRefData);
-                  break;
-                case OBJECT:
-                  String _name_2 = property.getName();
-                  String _plus = ((currentID + "/") + _name_2);
-                  String _plus_1 = (_plus + ".");
-                  String _plus_2 = (_plus_1 + i);
-                  Object _readNode = this.readNode(((JsonObject) jsonValue), _plus_2);
-                  ((List<Object>) property).add(_readNode);
-                  break;
-                default:
-                  throw new ParseException(("Expected object but got " + jsonValue));
+              if (_valueType != null) {
+                switch (_valueType) {
+                  case STRING:
+                    String _string_2 = ((JsonString) jsonValue).getString();
+                    final CrossRefData crossRefData = new CrossRefData(_string_2, property, (i).intValue());
+                    this.crossRefs.add(crossRefData);
+                    break;
+                  case OBJECT:
+                    String _name_2 = property.getName();
+                    String _plus = ((currentID + "/") + _name_2);
+                    String _plus_1 = (_plus + ".");
+                    String _plus_2 = (_plus_1 + i);
+                    Object _readNode = this.readNode(((JsonObject) jsonValue), _plus_2);
+                    ((List<Object>) property).add(_readNode);
+                    break;
+                  default:
+                    throw new ParseException(("Expected object but got " + jsonValue));
+                }
+              } else {
+                throw new ParseException(("Expected object but got " + jsonValue));
               }
             }
           }

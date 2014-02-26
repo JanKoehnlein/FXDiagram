@@ -7,6 +7,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.ButtonExtensions;
@@ -62,6 +63,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -176,48 +178,55 @@ public abstract class AbstractChooser implements XDiagramTool {
     final EventHandler<KeyEvent> _function_3 = new EventHandler<KeyEvent>() {
       public void handle(final KeyEvent it) {
         KeyCode _code = it.getCode();
-        switch (_code) {
-          case CANCEL:
-            AbstractChooser.this.cancel();
-            break;
-          case ESCAPE:
-            AbstractChooser.this.cancel();
-            break;
-          case UP:
-            AbstractChooser.this.spinToPosition.setTargetPositionDelta(1);
-            break;
-          case LEFT:
-            AbstractChooser.this.spinToPosition.setTargetPositionDelta((-1));
-            break;
-          case DOWN:
-            AbstractChooser.this.spinToPosition.setTargetPositionDelta((-1));
-            break;
-          case RIGHT:
-            AbstractChooser.this.spinToPosition.setTargetPositionDelta(1);
-            break;
-          case ENTER:
-            XNode _currentNode = AbstractChooser.this.getCurrentNode();
-            AbstractChooser.this.nodeChosen(_currentNode);
-            XRoot _root = CoreExtensions.getRoot(host);
-            _root.restoreDefaultTool();
-            break;
-          case BACK_SPACE:
-            final String oldFilter = AbstractChooser.this.getFilterString();
-            boolean _isEmpty = oldFilter.isEmpty();
-            boolean _not = (!_isEmpty);
-            if (_not) {
-              int _length = oldFilter.length();
-              int _minus = (_length - 1);
-              String _substring = oldFilter.substring(0, _minus);
-              AbstractChooser.this.setFilterString(_substring);
-            }
-            break;
-          default:
-            String _filterString = AbstractChooser.this.getFilterString();
-            String _text = it.getText();
-            String _plus = (_filterString + _text);
-            AbstractChooser.this.setFilterString(_plus);
-            break;
+        if (_code != null) {
+          switch (_code) {
+            case CANCEL:
+              AbstractChooser.this.cancel();
+              break;
+            case ESCAPE:
+              AbstractChooser.this.cancel();
+              break;
+            case UP:
+              AbstractChooser.this.spinToPosition.setTargetPositionDelta(1);
+              break;
+            case LEFT:
+              AbstractChooser.this.spinToPosition.setTargetPositionDelta((-1));
+              break;
+            case DOWN:
+              AbstractChooser.this.spinToPosition.setTargetPositionDelta((-1));
+              break;
+            case RIGHT:
+              AbstractChooser.this.spinToPosition.setTargetPositionDelta(1);
+              break;
+            case ENTER:
+              XNode _currentNode = AbstractChooser.this.getCurrentNode();
+              AbstractChooser.this.nodeChosen(_currentNode);
+              XRoot _root = CoreExtensions.getRoot(host);
+              _root.restoreDefaultTool();
+              break;
+            case BACK_SPACE:
+              final String oldFilter = AbstractChooser.this.getFilterString();
+              boolean _isEmpty = oldFilter.isEmpty();
+              boolean _not = (!_isEmpty);
+              if (_not) {
+                int _length = oldFilter.length();
+                int _minus = (_length - 1);
+                String _substring = oldFilter.substring(0, _minus);
+                AbstractChooser.this.setFilterString(_substring);
+              }
+              break;
+            default:
+              String _filterString = AbstractChooser.this.getFilterString();
+              String _text = it.getText();
+              String _plus = (_filterString + _text);
+              AbstractChooser.this.setFilterString(_plus);
+              break;
+          }
+        } else {
+          String _filterString = AbstractChooser.this.getFilterString();
+          String _text = it.getText();
+          String _plus = (_filterString + _text);
+          AbstractChooser.this.setFilterString(_plus);
         }
       }
     };
@@ -515,6 +524,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         IterableExtensions.<XNode>forEach(_nodes, _function);
         ObservableList<Node> _children = this.group.getChildren();
         _children.remove(choice);
+        final ArrayList<XShape> shapesToAdd = CollectionLiterals.<XShape>newArrayList();
         XDiagram _diagram = this.diagram();
         ObservableList<XNode> _nodes_1 = _diagram.getNodes();
         final Function1<XNode,Boolean> _function_1 = new Function1<XNode,Boolean>() {
@@ -549,59 +559,65 @@ public abstract class AbstractChooser implements XDiagramTool {
           double _minus_1 = (_y - _multiply_1);
           choice.setLayoutY(_minus_1);
           HPos _hpos = this.layoutPosition.getHpos();
-          switch (_hpos) {
-            case LEFT:
-              double _layoutX = choice.getLayoutX();
-              double _width_1 = bounds.getWidth();
-              double _width_2 = unlayoutedBounds.getWidth();
-              double _minus_2 = (_width_1 - _width_2);
-              double _multiply_2 = (0.5 * _minus_2);
-              double _minus_3 = (_layoutX - _multiply_2);
-              choice.setLayoutX(_minus_3);
-              break;
-            case RIGHT:
-              double _layoutX_1 = choice.getLayoutX();
-              double _width_3 = bounds.getWidth();
-              double _width_4 = unlayoutedBounds.getWidth();
-              double _minus_4 = (_width_3 - _width_4);
-              double _multiply_3 = (0.5 * _minus_4);
-              double _plus = (_layoutX_1 + _multiply_3);
-              choice.setLayoutX(_plus);
-              break;
-            default:
-              break;
+          if (_hpos != null) {
+            switch (_hpos) {
+              case LEFT:
+                double _layoutX = choice.getLayoutX();
+                double _width_1 = bounds.getWidth();
+                double _width_2 = unlayoutedBounds.getWidth();
+                double _minus_2 = (_width_1 - _width_2);
+                double _multiply_2 = (0.5 * _minus_2);
+                double _minus_3 = (_layoutX - _multiply_2);
+                choice.setLayoutX(_minus_3);
+                break;
+              case RIGHT:
+                double _layoutX_1 = choice.getLayoutX();
+                double _width_3 = bounds.getWidth();
+                double _width_4 = unlayoutedBounds.getWidth();
+                double _minus_4 = (_width_3 - _width_4);
+                double _multiply_3 = (0.5 * _minus_4);
+                double _plus = (_layoutX_1 + _multiply_3);
+                choice.setLayoutX(_plus);
+                break;
+              default:
+                break;
+            }
           }
           VPos _vpos = this.layoutPosition.getVpos();
-          switch (_vpos) {
-            case TOP:
-              double _layoutY = choice.getLayoutY();
-              double _height_1 = bounds.getHeight();
-              double _height_2 = unlayoutedBounds.getHeight();
-              double _minus_5 = (_height_1 - _height_2);
-              double _multiply_4 = (0.5 * _minus_5);
-              double _minus_6 = (_layoutY - _multiply_4);
-              choice.setLayoutY(_minus_6);
-              break;
-            case BOTTOM:
-              double _layoutY_1 = choice.getLayoutY();
-              double _height_3 = bounds.getHeight();
-              double _height_4 = unlayoutedBounds.getHeight();
-              double _minus_7 = (_height_3 - _height_4);
-              double _multiply_5 = (0.5 * _minus_7);
-              double _plus_1 = (_layoutY_1 + _multiply_5);
-              choice.setLayoutY(_plus_1);
-              break;
-            default:
-              break;
+          if (_vpos != null) {
+            switch (_vpos) {
+              case TOP:
+                double _layoutY = choice.getLayoutY();
+                double _height_1 = bounds.getHeight();
+                double _height_2 = unlayoutedBounds.getHeight();
+                double _minus_5 = (_height_1 - _height_2);
+                double _multiply_4 = (0.5 * _minus_5);
+                double _minus_6 = (_layoutY - _multiply_4);
+                choice.setLayoutY(_minus_6);
+                break;
+              case BOTTOM:
+                double _layoutY_1 = choice.getLayoutY();
+                double _height_3 = bounds.getHeight();
+                double _height_4 = unlayoutedBounds.getHeight();
+                double _minus_7 = (_height_3 - _height_4);
+                double _multiply_5 = (0.5 * _minus_7);
+                double _plus_1 = (_layoutY_1 + _multiply_5);
+                choice.setLayoutY(_plus_1);
+                break;
+              default:
+                break;
+            }
           }
-          XRoot _root = CoreExtensions.getRoot(this.host);
-          CommandStack _commandStack = _root.getCommandStack();
-          XDiagram _diagram_2 = CoreExtensions.getDiagram(this.host);
-          AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram_2, choice, this.currentConnection);
-          _commandStack.execute(_newAddCommand);
+          shapesToAdd.add(choice);
         }
         DomainObjectDescriptor _get = this.node2choiceInfo.get(choice);
-        this.connectChoice(existingChoice, _get);
+        XConnection _connectChoice = this.connectChoice(existingChoice, _get);
+        shapesToAdd.add(_connectChoice);
+        XRoot _root = CoreExtensions.getRoot(this.host);
+        CommandStack _commandStack = _root.getCommandStack();
+        XDiagram _diagram_2 = CoreExtensions.getDiagram(this.host);
+        AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram_2, ((XShape[])Conversions.unwrapArray(shapesToAdd, XShape.class)));
+        _commandStack.execute(_newAddCommand);
         _xblockexpression = this.currentConnection = null;
       }
       _xifexpression = _xblockexpression;
@@ -837,56 +853,72 @@ public abstract class AbstractChooser implements XDiagramTool {
     }
     double _switchResult = (double) 0;
     HPos _hpos = this.layoutPosition.getHpos();
-    switch (_hpos) {
-      case LEFT:
-        double _layoutX = this.host.getLayoutX();
-        double _layoutDistance = this.getLayoutDistance();
-        double _minus = (_layoutX - _layoutDistance);
-        _switchResult = (_minus - (0.5 * maxWidth));
-        break;
-      case RIGHT:
-        double _layoutX_1 = this.host.getLayoutX();
-        Bounds _layoutBounds = this.host.getLayoutBounds();
-        double _width = _layoutBounds.getWidth();
-        double _plus = (_layoutX_1 + _width);
-        double _layoutDistance_1 = this.getLayoutDistance();
-        double _plus_1 = (_plus + _layoutDistance_1);
-        _switchResult = (_plus_1 + (0.5 * maxWidth));
-        break;
-      default:
-        double _layoutX_2 = this.host.getLayoutX();
-        Bounds _layoutBounds_1 = this.host.getLayoutBounds();
-        double _width_1 = _layoutBounds_1.getWidth();
-        double _multiply = (0.5 * _width_1);
-        _switchResult = (_layoutX_2 + _multiply);
-        break;
+    if (_hpos != null) {
+      switch (_hpos) {
+        case LEFT:
+          double _layoutX = this.host.getLayoutX();
+          double _layoutDistance = this.getLayoutDistance();
+          double _minus = (_layoutX - _layoutDistance);
+          _switchResult = (_minus - (0.5 * maxWidth));
+          break;
+        case RIGHT:
+          double _layoutX_1 = this.host.getLayoutX();
+          Bounds _layoutBounds = this.host.getLayoutBounds();
+          double _width = _layoutBounds.getWidth();
+          double _plus = (_layoutX_1 + _width);
+          double _layoutDistance_1 = this.getLayoutDistance();
+          double _plus_1 = (_plus + _layoutDistance_1);
+          _switchResult = (_plus_1 + (0.5 * maxWidth));
+          break;
+        default:
+          double _layoutX_2 = this.host.getLayoutX();
+          Bounds _layoutBounds_1 = this.host.getLayoutBounds();
+          double _width_1 = _layoutBounds_1.getWidth();
+          double _multiply = (0.5 * _width_1);
+          _switchResult = (_layoutX_2 + _multiply);
+          break;
+      }
+    } else {
+      double _layoutX_2 = this.host.getLayoutX();
+      Bounds _layoutBounds_1 = this.host.getLayoutBounds();
+      double _width_1 = _layoutBounds_1.getWidth();
+      double _multiply = (0.5 * _width_1);
+      _switchResult = (_layoutX_2 + _multiply);
     }
     this.group.setLayoutX(_switchResult);
     double _switchResult_1 = (double) 0;
     VPos _vpos = this.layoutPosition.getVpos();
-    switch (_vpos) {
-      case TOP:
-        double _layoutY = this.host.getLayoutY();
-        double _layoutDistance_2 = this.getLayoutDistance();
-        double _minus_1 = (_layoutY - _layoutDistance_2);
-        _switchResult_1 = (_minus_1 - (0.5 * maxHeight));
-        break;
-      case BOTTOM:
-        double _layoutY_1 = this.host.getLayoutY();
-        Bounds _layoutBounds_2 = this.host.getLayoutBounds();
-        double _height = _layoutBounds_2.getHeight();
-        double _plus_2 = (_layoutY_1 + _height);
-        double _layoutDistance_3 = this.getLayoutDistance();
-        double _plus_3 = (_plus_2 + _layoutDistance_3);
-        _switchResult_1 = (_plus_3 + (0.5 * maxHeight));
-        break;
-      default:
-        double _layoutY_2 = this.host.getLayoutY();
-        Bounds _layoutBounds_3 = this.host.getLayoutBounds();
-        double _height_1 = _layoutBounds_3.getHeight();
-        double _multiply_1 = (0.5 * _height_1);
-        _switchResult_1 = (_layoutY_2 + _multiply_1);
-        break;
+    if (_vpos != null) {
+      switch (_vpos) {
+        case TOP:
+          double _layoutY = this.host.getLayoutY();
+          double _layoutDistance_2 = this.getLayoutDistance();
+          double _minus_1 = (_layoutY - _layoutDistance_2);
+          _switchResult_1 = (_minus_1 - (0.5 * maxHeight));
+          break;
+        case BOTTOM:
+          double _layoutY_1 = this.host.getLayoutY();
+          Bounds _layoutBounds_2 = this.host.getLayoutBounds();
+          double _height = _layoutBounds_2.getHeight();
+          double _plus_2 = (_layoutY_1 + _height);
+          double _layoutDistance_3 = this.getLayoutDistance();
+          double _plus_3 = (_plus_2 + _layoutDistance_3);
+          _switchResult_1 = (_plus_3 + (0.5 * maxHeight));
+          break;
+        default:
+          double _layoutY_2 = this.host.getLayoutY();
+          Bounds _layoutBounds_3 = this.host.getLayoutBounds();
+          double _height_1 = _layoutBounds_3.getHeight();
+          double _multiply_1 = (0.5 * _height_1);
+          _switchResult_1 = (_layoutY_2 + _multiply_1);
+          break;
+      }
+    } else {
+      double _layoutY_2 = this.host.getLayoutY();
+      Bounds _layoutBounds_3 = this.host.getLayoutBounds();
+      double _height_1 = _layoutBounds_3.getHeight();
+      double _multiply_1 = (0.5 * _height_1);
+      _switchResult_1 = (_layoutY_2 + _multiply_1);
     }
     this.group.setLayoutY(_switchResult_1);
     double _currentPosition = this.getCurrentPosition();

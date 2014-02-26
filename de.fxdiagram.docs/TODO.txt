@@ -6,16 +6,16 @@ TODO
   - review ModelElement
   - revise image cache
   - XDiagram needs a hook like createNode
-- undo 
-  - undo layout
-  - undo open
-  - undo close
+- menu icons for save / load / undo / redo / delete
     
 BUGS
 - player.seek doesn't work
 - labels snap back after being repositioned
 
 ENHANCEMENT
+- better animation for add/delete
+- delete rapid button on delete node
+- tooltips for menu items
 - scroll to reveal choosers
 - find better colors
 - collapsible compartments
@@ -45,5 +45,8 @@ DONE
 - fix connection initialization
 - activatePreview -> createNode
 - fix LOD node
+- undo open
+- undo close
+- undo layout
  
   

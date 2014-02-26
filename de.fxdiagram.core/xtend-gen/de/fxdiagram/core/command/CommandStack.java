@@ -1,10 +1,8 @@
 package de.fxdiagram.core.command;
 
 import de.fxdiagram.core.command.Command;
-import de.fxdiagram.core.extensions.DurationExtensions;
+import de.fxdiagram.core.command.CommandContext;
 import java.util.LinkedList;
-import javafx.animation.Animation;
-import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
@@ -13,7 +11,7 @@ public class CommandStack {
   
   private LinkedList<Command> redoStack = CollectionLiterals.<Command>newLinkedList();
   
-  private Duration duration = DurationExtensions.millis(100);
+  private CommandContext context = new CommandContext();
   
   public boolean canUndo() {
     boolean _and = false;
@@ -53,10 +51,7 @@ public class CommandStack {
     boolean _canUndo = this.canUndo();
     if (_canUndo) {
       final Command command = this.undoStack.pop();
-      Animation _undo = command.undo(this.duration);
-      if (_undo!=null) {
-        _undo.playFromStart();
-      }
+      command.undo(this.context);
       this.redoStack.push(command);
     }
   }
@@ -65,19 +60,13 @@ public class CommandStack {
     boolean _canRedo = this.canRedo();
     if (_canRedo) {
       final Command command = this.redoStack.pop();
-      Animation _redo = command.redo(this.duration);
-      if (_redo!=null) {
-        _redo.playFromStart();
-      }
+      command.redo(this.context);
       this.undoStack.push(command);
     }
   }
   
   public void execute(final Command command) {
-    Animation _execute = command.execute(this.duration);
-    if (_execute!=null) {
-      _execute.playFromStart();
-    }
+    command.execute(this.context);
     this.undoStack.push(command);
   }
 }

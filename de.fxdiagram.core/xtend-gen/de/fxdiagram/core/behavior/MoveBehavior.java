@@ -44,11 +44,34 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     Node _node_2 = _host_2.getNode();
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
+        boolean _or = false;
+        double _initialX = MoveBehavior.this.dragContext.getInitialX();
         T _host = MoveBehavior.this.getHost();
-        XRoot _root = CoreExtensions.getRoot(_host);
-        CommandStack _commandStack = _root.getCommandStack();
-        MoveCommand _moveCommand = MoveBehavior.this.dragContext.getMoveCommand();
-        _commandStack.execute(_moveCommand);
+        double _layoutX = _host.getLayoutX();
+        boolean _notEquals = (_initialX != _layoutX);
+        if (_notEquals) {
+          _or = true;
+        } else {
+          double _initialY = MoveBehavior.this.dragContext.getInitialY();
+          T _host_1 = MoveBehavior.this.getHost();
+          double _layoutY = _host_1.getLayoutY();
+          boolean _notEquals_1 = (_initialY != _layoutY);
+          _or = _notEquals_1;
+        }
+        if (_or) {
+          T _host_2 = MoveBehavior.this.getHost();
+          XRoot _root = CoreExtensions.getRoot(_host_2);
+          CommandStack _commandStack = _root.getCommandStack();
+          T _host_3 = MoveBehavior.this.getHost();
+          double _initialX_1 = MoveBehavior.this.dragContext.getInitialX();
+          double _initialY_1 = MoveBehavior.this.dragContext.getInitialY();
+          T _host_4 = MoveBehavior.this.getHost();
+          double _layoutX_1 = _host_4.getLayoutX();
+          T _host_5 = MoveBehavior.this.getHost();
+          double _layoutY_1 = _host_5.getLayoutY();
+          MoveCommand _moveCommand = new MoveCommand(_host_3, _initialX_1, _initialY_1, _layoutX_1, _layoutY_1);
+          _commandStack.execute(_moveCommand);
+        }
       }
     };
     _node_2.setOnMouseReleased(_function_2);
@@ -69,14 +92,12 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       double _layoutY = _host_2.getLayoutY();
       final Point2D initialPositionInScene = _parent.localToScene(_layoutX, _layoutY);
       T _host_3 = this.getHost();
+      double _layoutX_1 = _host_3.getLayoutX();
       T _host_4 = this.getHost();
-      double _layoutX_1 = _host_4.getLayoutX();
-      T _host_5 = this.getHost();
-      double _layoutY_1 = _host_5.getLayoutY();
-      MoveCommand _moveCommand = new MoveCommand(_host_3, _layoutX_1, _layoutY_1);
+      double _layoutY_1 = _host_4.getLayoutY();
       double _screenX = it.getScreenX();
       double _screenY = it.getScreenY();
-      DragContext _dragContext = new DragContext(_moveCommand, _screenX, _screenY, initialPositionInScene);
+      DragContext _dragContext = new DragContext(_layoutX_1, _layoutY_1, _screenX, _screenY, initialPositionInScene);
       _xblockexpression = this.dragContext = _dragContext;
     }
     return _xblockexpression;

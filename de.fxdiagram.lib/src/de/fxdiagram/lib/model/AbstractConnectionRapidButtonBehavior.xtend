@@ -4,14 +4,13 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.behavior.AbstractHostBehavior
+import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.tools.AbstractChooser
 import java.util.List
 import java.util.Set
-import javafx.collections.ListChangeListener
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.extensions.InitializingListListener
 
 abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, KEY extends DomainObjectDescriptor> extends AbstractHostBehavior<HOST> {
 	

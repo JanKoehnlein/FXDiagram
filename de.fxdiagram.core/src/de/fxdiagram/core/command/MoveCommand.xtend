@@ -8,34 +8,46 @@ import javafx.scene.shape.MoveTo
 import javafx.scene.shape.Path
 import javafx.util.Duration
 
-class MoveCommand implements Command {
+class MoveCommand extends AbstractAnimationCommand {
 
 	XShape shape
 	
-	double targetX
-	double targetY
+	double fromX
+	double fromY
+	double toX
+	double toY
 	
-	new(XShape shape, double fromX, double fromY) {
+	new(XShape shape, double toX, double toY) {
 		this.shape = shape;
-		this.targetX = fromX
-		this.targetY = fromY
+		this.fromX = shape.layoutX
+		this.fromY = shape.layoutY
+		this.toX = toX
+		this.toY = toY
 	}
 	
-	override execute(Duration duration) {
-		null
+	new(XShape shape, double fromX, double fromY, double toX, double toY) {
+		this.shape = shape;
+		this.fromX = fromX
+		this.fromY = fromY
+		this.toX = toX
+		this.toY = toY
 	}
 	
-	override canUndo() {
-		true
+	override createExecuteAnimation(CommandContext context) {
+		createMoveTransition(fromX, fromY, toX, toY, context.defaultExecuteDuration)
 	}
 	
-	override undo(Duration duration) {
-		createMoveTransition(duration)
+	override createUndoAnimation(CommandContext context) {
+		createMoveTransition(toX, toY, fromX, fromY, context.defaultUndoDuration)
 	}
 	
-	protected def createMoveTransition(Duration duration) {
-		val fromX = shape.layoutX
-		val fromY = shape.layoutY
+	override createRedoAnimation(CommandContext context) {
+		createMoveTransition(fromX, fromY, toX, toY, context.defaultUndoDuration)
+	}
+	
+	protected def createMoveTransition(double fromX, double fromY, double toX, double toY, Duration duration) {
+		if(shape.layoutX == toX && shape.layoutY == toY)
+			return null;
 		val dummyNode = new Group => [
 			translateX = fromX
 			translateY = fromY
@@ -48,26 +60,16 @@ class MoveCommand implements Command {
 			cycleCount = 1
 			path = new Path => [
 				elements += new MoveTo(fromX, fromY)
-				elements += new LineTo(targetX, targetY)
+				elements += new LineTo(toX, toY)
 			]
 			onFinished = [
 				shape => [
 					layoutXProperty.unbind
 					layoutYProperty.unbind
-					layoutX = targetX
-					targetX = fromX
-					layoutY = targetY
-					targetY = fromY
+					layoutX = toX
+					layoutY = toY
 				]
 			]
 		]
-	}
-	
-	override canRedo() {
-		true
-	}
-	
-	override redo(Duration duration) {
-		createMoveTransition(duration)
 	}
 }

@@ -11,7 +11,7 @@ import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
 import javafx.util.Duration
 
-class AddRemoveCommand implements Command {
+class AddRemoveCommand extends AbstractAnimationCommand {
 	
 	boolean isAdd
 	
@@ -35,7 +35,7 @@ class AddRemoveCommand implements Command {
 		this.shapes = shapes
 	}
 	
-	override execute(Duration duration) {
+	override createExecuteAnimation(CommandContext context) {
 		shapes.forEach[
 			switch it {
 				XNode: {
@@ -57,34 +57,27 @@ class AddRemoveCommand implements Command {
 				}
 			}
 		]
-		null
+		return null
 	}
-	
-	override canUndo() {
-		true
-	}
-	
-	override undo(Duration duration) {
+
+	override createUndoAnimation(CommandContext context) {
 		if(isAdd)
-			add(duration)
+			add(context)
 		else 
-			remove(duration)
+			remove(context)
+
 	}
 	
-	override canRedo() {
-		true
-	}
-	
-	override redo(Duration duration) {
+	override createRedoAnimation(CommandContext context) {
 		if(isAdd)
-			remove(duration)
+			remove(context)
 		else 
-			add(duration)
+			add(context)
 	}
 	
-	protected def add(Duration duration) {
+	protected def add(extension CommandContext context) {
 		new ParallelTransition => [ 
-			children += shapes.map[disappear(duration)]
+			children += shapes.map[disappear(defaultUndoDuration)]
 			onFinished = [
 				shapes.forEach[
 					switch it {
@@ -98,7 +91,7 @@ class AddRemoveCommand implements Command {
 		]
 	}
 	
-	protected def remove(Duration duration) {
+	protected def remove(extension CommandContext context) {
 		shapes.forEach[
 			switch it {
 				XNode:  
@@ -112,7 +105,7 @@ class AddRemoveCommand implements Command {
 			}
 		]
 		new ParallelTransition => [ 
-			children += shapes.map[appear(duration)]
+			children += shapes.map[appear(defaultUndoDuration)]
 		]
 	}
 	

@@ -72,176 +72,180 @@ public class MenuTool implements XDiagramTool {
       public void handle(final KeyEvent it) {
         DiagramAction _switchResult = null;
         KeyCode _code = it.getCode();
-        switch (_code) {
-          case A:
-            SelectAllAction _xifexpression = null;
-            boolean _isShortcutDown = it.isShortcutDown();
-            if (_isShortcutDown) {
-              SelectAllAction _xblockexpression = null;
-              {
-                it.consume();
-                _xblockexpression = new SelectAllAction();
+        if (_code != null) {
+          switch (_code) {
+            case A:
+              SelectAllAction _xifexpression = null;
+              boolean _isShortcutDown = it.isShortcutDown();
+              if (_isShortcutDown) {
+                SelectAllAction _xblockexpression = null;
+                {
+                  it.consume();
+                  _xblockexpression = new SelectAllAction();
+                }
+                _xifexpression = _xblockexpression;
               }
-              _xifexpression = _xblockexpression;
-            }
-            _switchResult = _xifexpression;
-            break;
-          case C:
-            CenterAction _xifexpression_1 = null;
-            boolean _isShortcutDown_1 = it.isShortcutDown();
-            if (_isShortcutDown_1) {
-              CenterAction _xblockexpression_1 = null;
-              {
-                it.consume();
-                _xblockexpression_1 = new CenterAction();
+              _switchResult = _xifexpression;
+              break;
+            case C:
+              CenterAction _xifexpression_1 = null;
+              boolean _isShortcutDown_1 = it.isShortcutDown();
+              if (_isShortcutDown_1) {
+                CenterAction _xblockexpression_1 = null;
+                {
+                  it.consume();
+                  _xblockexpression_1 = new CenterAction();
+                }
+                _xifexpression_1 = _xblockexpression_1;
               }
-              _xifexpression_1 = _xblockexpression_1;
-            }
-            _switchResult = _xifexpression_1;
-            break;
-          case E:
-            ExportSvgAction _xifexpression_2 = null;
-            boolean _isShortcutDown_2 = it.isShortcutDown();
-            if (_isShortcutDown_2) {
-              ExportSvgAction _xblockexpression_2 = null;
-              {
-                it.consume();
-                _xblockexpression_2 = new ExportSvgAction();
+              _switchResult = _xifexpression_1;
+              break;
+            case E:
+              ExportSvgAction _xifexpression_2 = null;
+              boolean _isShortcutDown_2 = it.isShortcutDown();
+              if (_isShortcutDown_2) {
+                ExportSvgAction _xblockexpression_2 = null;
+                {
+                  it.consume();
+                  _xblockexpression_2 = new ExportSvgAction();
+                }
+                _xifexpression_2 = _xblockexpression_2;
               }
-              _xifexpression_2 = _xblockexpression_2;
-            }
-            _switchResult = _xifexpression_2;
-            break;
-          case F:
-            ZoomToFitAction _xifexpression_3 = null;
-            boolean _isShortcutDown_3 = it.isShortcutDown();
-            if (_isShortcutDown_3) {
-              ZoomToFitAction _xblockexpression_3 = null;
-              {
-                it.consume();
-                boolean _isShiftDown = it.isShiftDown();
-                if (_isShiftDown) {
-                  Scene _scene = root.getScene();
-                  Window _window = _scene.getWindow();
-                  final Window window = _window;
-                  boolean _matched = false;
-                  if (!_matched) {
-                    if (window instanceof Stage) {
-                      _matched=true;
-                      ((Stage)window).setFullScreen(true);
-                      return;
+              _switchResult = _xifexpression_2;
+              break;
+            case F:
+              ZoomToFitAction _xifexpression_3 = null;
+              boolean _isShortcutDown_3 = it.isShortcutDown();
+              if (_isShortcutDown_3) {
+                ZoomToFitAction _xblockexpression_3 = null;
+                {
+                  it.consume();
+                  boolean _isShiftDown = it.isShiftDown();
+                  if (_isShiftDown) {
+                    Scene _scene = root.getScene();
+                    Window _window = _scene.getWindow();
+                    final Window window = _window;
+                    boolean _matched = false;
+                    if (!_matched) {
+                      if (window instanceof Stage) {
+                        _matched=true;
+                        ((Stage)window).setFullScreen(true);
+                        return;
+                      }
                     }
                   }
+                  _xblockexpression_3 = new ZoomToFitAction();
                 }
-                _xblockexpression_3 = new ZoomToFitAction();
+                _xifexpression_3 = _xblockexpression_3;
               }
-              _xifexpression_3 = _xblockexpression_3;
-            }
-            _switchResult = _xifexpression_3;
-            break;
-          case L:
-            LayoutAction _xifexpression_4 = null;
-            boolean _isShortcutDown_4 = it.isShortcutDown();
-            if (_isShortcutDown_4) {
-              LayoutAction _xblockexpression_4 = null;
-              {
-                it.consume();
-                LayoutType _xifexpression_5 = null;
+              _switchResult = _xifexpression_3;
+              break;
+            case L:
+              LayoutAction _xifexpression_4 = null;
+              boolean _isShortcutDown_4 = it.isShortcutDown();
+              if (_isShortcutDown_4) {
+                LayoutAction _xblockexpression_4 = null;
+                {
+                  it.consume();
+                  LayoutType _xifexpression_5 = null;
+                  boolean _isShiftDown = it.isShiftDown();
+                  if (_isShiftDown) {
+                    _xifexpression_5 = LayoutType.NEATO;
+                  } else {
+                    _xifexpression_5 = LayoutType.DOT;
+                  }
+                  _xblockexpression_4 = new LayoutAction(_xifexpression_5);
+                }
+                _xifexpression_4 = _xblockexpression_4;
+              }
+              _switchResult = _xifexpression_4;
+              break;
+            case O:
+              LoadAction _xifexpression_5 = null;
+              boolean _isShortcutDown_5 = it.isShortcutDown();
+              if (_isShortcutDown_5) {
+                _xifexpression_5 = new LoadAction();
+              }
+              _switchResult = _xifexpression_5;
+              break;
+            case Q:
+              ExitAction _xifexpression_6 = null;
+              boolean _isShortcutDown_6 = it.isShortcutDown();
+              if (_isShortcutDown_6) {
+                _xifexpression_6 = new ExitAction();
+              }
+              _switchResult = _xifexpression_6;
+              break;
+            case S:
+              SaveAction _xifexpression_7 = null;
+              boolean _isShortcutDown_7 = it.isShortcutDown();
+              if (_isShortcutDown_7) {
+                _xifexpression_7 = new SaveAction();
+              }
+              _switchResult = _xifexpression_7;
+              break;
+            case Y:
+              DiagramAction _xifexpression_8 = null;
+              boolean _isShortcutDown_8 = it.isShortcutDown();
+              if (_isShortcutDown_8) {
+                DiagramAction _xifexpression_9 = null;
                 boolean _isShiftDown = it.isShiftDown();
                 if (_isShiftDown) {
-                  _xifexpression_5 = LayoutType.NEATO;
+                  _xifexpression_9 = new RedoAction();
                 } else {
-                  _xifexpression_5 = LayoutType.DOT;
+                  _xifexpression_9 = new UndoAction();
                 }
-                _xblockexpression_4 = new LayoutAction(_xifexpression_5);
+                _xifexpression_8 = _xifexpression_9;
               }
-              _xifexpression_4 = _xblockexpression_4;
-            }
-            _switchResult = _xifexpression_4;
-            break;
-          case O:
-            LoadAction _xifexpression_5 = null;
-            boolean _isShortcutDown_5 = it.isShortcutDown();
-            if (_isShortcutDown_5) {
-              _xifexpression_5 = new LoadAction();
-            }
-            _switchResult = _xifexpression_5;
-            break;
-          case Q:
-            ExitAction _xifexpression_6 = null;
-            boolean _isShortcutDown_6 = it.isShortcutDown();
-            if (_isShortcutDown_6) {
-              _xifexpression_6 = new ExitAction();
-            }
-            _switchResult = _xifexpression_6;
-            break;
-          case S:
-            SaveAction _xifexpression_7 = null;
-            boolean _isShortcutDown_7 = it.isShortcutDown();
-            if (_isShortcutDown_7) {
-              _xifexpression_7 = new SaveAction();
-            }
-            _switchResult = _xifexpression_7;
-            break;
-          case Y:
-            DiagramAction _xifexpression_8 = null;
-            boolean _isShortcutDown_8 = it.isShortcutDown();
-            if (_isShortcutDown_8) {
-              DiagramAction _xifexpression_9 = null;
-              boolean _isShiftDown = it.isShiftDown();
-              if (_isShiftDown) {
-                _xifexpression_9 = new RedoAction();
-              } else {
-                _xifexpression_9 = new UndoAction();
+              _switchResult = _xifexpression_8;
+              break;
+            case BACK_SPACE:
+              _switchResult = new DeleteAction();
+              break;
+            case DELETE:
+              _switchResult = new DeleteAction();
+              break;
+            case RIGHT:
+              _switchResult = new NavigateNextAction();
+              break;
+            case LEFT:
+              _switchResult = new NavigatePreviousAction();
+              break;
+            case PAGE_DOWN:
+              _switchResult = new NavigateNextAction();
+              break;
+            case PAGE_UP:
+              _switchResult = new NavigatePreviousAction();
+              break;
+            case ENTER:
+              _switchResult = new OpenAction();
+              break;
+            case PERIOD:
+              _switchResult = new OpenAction();
+              break;
+            case ESCAPE:
+              CloseAction _xblockexpression_5 = null;
+              {
+                it.consume();
+                CloseAction _xifexpression_10 = null;
+                RadialMenu.State _state = MenuTool.this.menu.getState();
+                boolean _equals = Objects.equal(_state, RadialMenu.State.OPENED);
+                if (_equals) {
+                  MenuTool.this.closeMenu();
+                  return;
+                } else {
+                  _xifexpression_10 = new CloseAction();
+                }
+                _xblockexpression_5 = _xifexpression_10;
               }
-              _xifexpression_8 = _xifexpression_9;
-            }
-            _switchResult = _xifexpression_8;
-            break;
-          case BACK_SPACE:
-            _switchResult = new DeleteAction();
-            break;
-          case DELETE:
-            _switchResult = new DeleteAction();
-            break;
-          case RIGHT:
-            _switchResult = new NavigateNextAction();
-            break;
-          case LEFT:
-            _switchResult = new NavigatePreviousAction();
-            break;
-          case PAGE_DOWN:
-            _switchResult = new NavigateNextAction();
-            break;
-          case PAGE_UP:
-            _switchResult = new NavigatePreviousAction();
-            break;
-          case ENTER:
-            _switchResult = new OpenAction();
-            break;
-          case PERIOD:
-            _switchResult = new OpenAction();
-            break;
-          case ESCAPE:
-            CloseAction _xblockexpression_5 = null;
-            {
-              it.consume();
-              CloseAction _xifexpression_10 = null;
-              RadialMenu.State _state = MenuTool.this.menu.getState();
-              boolean _equals = Objects.equal(_state, RadialMenu.State.OPENED);
-              if (_equals) {
-                MenuTool.this.closeMenu();
-                return;
-              } else {
-                _xifexpression_10 = new CloseAction();
-              }
-              _xblockexpression_5 = _xifexpression_10;
-            }
-            _switchResult = _xblockexpression_5;
-            break;
-          default:
-            _switchResult = null;
-            break;
+              _switchResult = _xblockexpression_5;
+              break;
+            default:
+              _switchResult = null;
+              break;
+          }
+        } else {
+          _switchResult = null;
         }
         final DiagramAction action = _switchResult;
         if (action!=null) {
@@ -346,39 +350,48 @@ public class MenuTool implements XDiagramTool {
                   if (_notEquals) {
                     DiagramAction _switchResult = null;
                     Symbol.Type _symbol = MenuTool.this.selection.getSymbol();
-                    switch (_symbol) {
-                      case CAMERA:
-                        _switchResult = new ExportSvgAction();
-                        break;
-                      case DELETE:
-                        _switchResult = new DeleteAction();
-                        break;
-                      case EJECT:
-                        _switchResult = new ExitAction();
-                        break;
-                      case GRAPH:
-                        _switchResult = new LayoutAction(LayoutType.DOT);
-                        break;
-                      case SELECTION1:
-                        _switchResult = new SelectAllAction();
-                        break;
-                      case SELECTION2:
-                        _switchResult = new CenterAction();
-                        break;
-                      case UNDO:
-                        _switchResult = new UndoAction();
-                        break;
-                      case ZOOM_IN:
-                        _switchResult = new ZoomToFitAction();
-                        break;
-                      default:
-                        DiagramAction _xblockexpression = null;
-                        {
-                          MenuTool.LOG.warning(("Unhandled menu item " + MenuTool.this.selection));
-                          _xblockexpression = null;
-                        }
-                        _switchResult = _xblockexpression;
-                        break;
+                    if (_symbol != null) {
+                      switch (_symbol) {
+                        case CAMERA:
+                          _switchResult = new ExportSvgAction();
+                          break;
+                        case DELETE:
+                          _switchResult = new DeleteAction();
+                          break;
+                        case EJECT:
+                          _switchResult = new ExitAction();
+                          break;
+                        case GRAPH:
+                          _switchResult = new LayoutAction(LayoutType.DOT);
+                          break;
+                        case SELECTION1:
+                          _switchResult = new SelectAllAction();
+                          break;
+                        case SELECTION2:
+                          _switchResult = new CenterAction();
+                          break;
+                        case UNDO:
+                          _switchResult = new UndoAction();
+                          break;
+                        case ZOOM_IN:
+                          _switchResult = new ZoomToFitAction();
+                          break;
+                        default:
+                          DiagramAction _xblockexpression = null;
+                          {
+                            MenuTool.LOG.warning(("Unhandled menu item " + MenuTool.this.selection));
+                            _xblockexpression = null;
+                          }
+                          _switchResult = _xblockexpression;
+                          break;
+                      }
+                    } else {
+                      DiagramAction _xblockexpression = null;
+                      {
+                        MenuTool.LOG.warning(("Unhandled menu item " + MenuTool.this.selection));
+                        _xblockexpression = null;
+                      }
+                      _switchResult = _xblockexpression;
                     }
                     final DiagramAction action = _switchResult;
                     if (action!=null) {

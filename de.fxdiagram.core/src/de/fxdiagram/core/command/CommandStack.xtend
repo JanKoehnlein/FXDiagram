@@ -1,15 +1,13 @@
 package de.fxdiagram.core.command
 
 import java.util.LinkedList
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import javafx.util.Duration
 
 class CommandStack {
 	
 	LinkedList<Command> undoStack = newLinkedList
 	LinkedList<Command> redoStack = newLinkedList
 
-	Duration duration = 100.millis
+	CommandContext context = new CommandContext
 	
 	def boolean canUndo() {
 		return !undoStack.empty && undoStack.last?.canUndo
@@ -22,20 +20,21 @@ class CommandStack {
 	def void undo() {
 		if(canUndo) {
 			val command = undoStack.pop
-			command.undo(duration)?.playFromStart 				
+			command.undo(context)
 			redoStack.push(command)
 		}
 	}
+	
 	def void redo() {
 		if(canRedo) {
 			val command = redoStack.pop
-			command.redo(duration)?.playFromStart
+			command.redo(context)
 			undoStack.push(command)
 		}
 	}
 	
 	def execute(Command command) {
-		command.execute(duration)?.playFromStart
+		command.execute(context)
 		undoStack.push(command)
 	}
 }

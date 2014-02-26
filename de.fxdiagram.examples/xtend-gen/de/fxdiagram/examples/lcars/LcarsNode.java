@@ -328,19 +328,24 @@ public class LcarsNode extends XNode {
         it.setText(buttonText);
         it.setFill(Color.BLACK);
         it.setTextOrigin(VPos.TOP);
-        switch (alignment) {
-          case TOP:
-            Insets _insets = new Insets(0, 0, 5, 3);
-            StackPane.setMargin(it, _insets);
-            break;
-          case BOTTOM:
-            Insets _insets_1 = new Insets(5, 0, 0, 3);
-            StackPane.setMargin(it, _insets_1);
-            break;
-          default:
-            Insets _insets_2 = new Insets(1, 0, 1, 3);
-            StackPane.setMargin(it, _insets_2);
-            break;
+        if (alignment != null) {
+          switch (alignment) {
+            case TOP:
+              Insets _insets = new Insets(0, 0, 5, 3);
+              StackPane.setMargin(it, _insets);
+              break;
+            case BOTTOM:
+              Insets _insets_1 = new Insets(5, 0, 0, 3);
+              StackPane.setMargin(it, _insets_1);
+              break;
+            default:
+              Insets _insets_2 = new Insets(1, 0, 1, 3);
+              StackPane.setMargin(it, _insets_2);
+              break;
+          }
+        } else {
+          Insets _insets_2 = new Insets(1, 0, 1, 3);
+          StackPane.setMargin(it, _insets_2);
         }
       }
     };
