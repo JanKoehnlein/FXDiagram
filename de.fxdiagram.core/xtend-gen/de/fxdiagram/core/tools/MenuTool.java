@@ -277,7 +277,7 @@ public class MenuTool implements XDiagramTool {
         return ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function);
       }
     };
-    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN, Symbol.Type.CLOUD, Symbol.Type.DELETE, Symbol.Type.UNDO)), _function_2);
+    List<MenuItem> _map = ListExtensions.<Symbol.Type, MenuItem>map(Collections.<Symbol.Type>unmodifiableList(Lists.<Symbol.Type>newArrayList(Symbol.Type.EJECT, Symbol.Type.GRAPH, Symbol.Type.CAMERA, Symbol.Type.SELECTION1, Symbol.Type.SELECTION2, Symbol.Type.ZOOM_IN, Symbol.Type.ROCKET, Symbol.Type.CLOUD, Symbol.Type.TRASH, Symbol.Type.FORWARD, Symbol.Type.REWIND)), _function_2);
     RadialMenu _radialMenu = new RadialMenu(_doubleArrow, _map);
     this.menu = _radialMenu;
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
@@ -355,14 +355,23 @@ public class MenuTool implements XDiagramTool {
                         case CAMERA:
                           _switchResult = new ExportSvgAction();
                           break;
-                        case DELETE:
-                          _switchResult = new DeleteAction();
+                        case CLOUD:
+                          _switchResult = new LoadAction();
                           break;
                         case EJECT:
                           _switchResult = new ExitAction();
                           break;
+                        case FORWARD:
+                          _switchResult = new RedoAction();
+                          break;
                         case GRAPH:
                           _switchResult = new LayoutAction(LayoutType.DOT);
+                          break;
+                        case REWIND:
+                          _switchResult = new UndoAction();
+                          break;
+                        case ROCKET:
+                          _switchResult = new SaveAction();
                           break;
                         case SELECTION1:
                           _switchResult = new SelectAllAction();
@@ -370,8 +379,8 @@ public class MenuTool implements XDiagramTool {
                         case SELECTION2:
                           _switchResult = new CenterAction();
                           break;
-                        case UNDO:
-                          _switchResult = new UndoAction();
+                        case TRASH:
+                          _switchResult = new DeleteAction();
                           break;
                         case ZOOM_IN:
                           _switchResult = new ZoomToFitAction();

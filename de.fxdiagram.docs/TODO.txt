@@ -6,7 +6,6 @@ TODO
   - review ModelElement
   - revise image cache
   - XDiagram needs a hook like createNode
-- menu icons for save / load / undo / redo / delete
     
 BUGS
 - player.seek doesn't work
@@ -48,5 +47,6 @@ DONE
 - undo open
 - undo close
 - undo layout
- 
+- menu icons for save / load / undo / redo / delete
+
   

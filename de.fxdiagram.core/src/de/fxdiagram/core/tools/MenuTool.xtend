@@ -141,10 +141,10 @@ class MenuTool implements XDiagramTool {
 				buttonSize = 72
 				buttonAlpha = 1.0
 			],
-			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN, CLOUD, DELETE
+			#[EJECT, GRAPH, CAMERA, SELECTION1, SELECTION2, ZOOM_IN, ROCKET, CLOUD, TRASH
 			  //, PHOTO, REFRESH, TAG, TAGS, TEXT, TOOL, SPEECH_BUBBLE, 
 //			   TRASH, UNDO, ZOOM_IN, ZOOM_OUT, WEB, MONITOR 
-			   ,UNDO
+			   ,FORWARD, REWIND
 			].
 				map [ s |
 					new MenuItem => [
@@ -183,18 +183,24 @@ class MenuTool implements XDiagramTool {
 						val DiagramAction action = switch selection.symbol {
 							case CAMERA:
 								new ExportSvgAction
-							case DELETE: 
-								new DeleteAction
+							case CLOUD:
+								new LoadAction
 							case EJECT:
 								new ExitAction
+							case FORWARD:
+								new RedoAction
 							case GRAPH: 
 								new LayoutAction(LayoutType.DOT)
+							case REWIND:
+								new UndoAction
+							case ROCKET:
+								new SaveAction
 							case SELECTION1:
 								new SelectAllAction
 							case SELECTION2:
 								new CenterAction
-							case UNDO:
-								new UndoAction
+							case TRASH: 
+								new DeleteAction
 							case ZOOM_IN:
 								new ZoomToFitAction
 							default: {
