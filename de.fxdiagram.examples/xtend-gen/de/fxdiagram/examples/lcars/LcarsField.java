@@ -8,7 +8,10 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
+import de.fxdiagram.core.command.AddRemoveCommand;
+import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
@@ -42,6 +45,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -248,15 +252,17 @@ public class LcarsField extends Parent {
               };
               Iterable<XConnection> _map = IterableExtensions.<LcarsNode, XConnection>map(_filter_1, _function_1);
               final List<XConnection> newConnections = IterableExtensions.<XConnection>toList(_map);
+              XRoot _root = CoreExtensions.getRoot(LcarsField.this);
+              CommandStack _commandStack = _root.getCommandStack();
               XDiagram _diagram_1 = CoreExtensions.getDiagram(LcarsField.this);
-              ObservableList<XConnection> _connections = _diagram_1.getConnections();
-              Iterables.<XConnection>addAll(_connections, newConnections);
+              AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram_1, ((XShape[])Conversions.unwrapArray(newConnections, XShape.class)));
+              _commandStack.execute(_newAddCommand);
               boolean _isEmpty = newConnections.isEmpty();
               boolean _not = (!_isEmpty);
               if (_not) {
                 LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
-                XRoot _root = CoreExtensions.getRoot(LcarsField.this);
-                _layoutAction.perform(_root);
+                XRoot _root_1 = CoreExtensions.getRoot(LcarsField.this);
+                _layoutAction.perform(_root_1);
               }
               LcarsField.this.resetVisuals();
             }

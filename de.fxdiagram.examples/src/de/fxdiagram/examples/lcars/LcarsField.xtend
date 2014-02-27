@@ -29,6 +29,7 @@ import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.command.AddRemoveCommand
 
 class LcarsField extends Parent {
 
@@ -96,7 +97,7 @@ class LcarsField extends Parent {
 						]
 						.map[connectionProvider.getConnection(node, it, null)]
 						.toList
-					diagram.connections += newConnections
+					root.commandStack.execute(AddRemoveCommand.newAddCommand(diagram, newConnections))
 					if(!newConnections.empty)
 						new LayoutAction(LayoutType.DOT).perform(root)
 					resetVisuals

@@ -93,6 +93,7 @@ class XConnection extends XShape {
 			visible = false
 		]
 		connectionRouter = new ConnectionRouter(this)
+		connectionRouter.calculatePoints
 		node
 	}
 	

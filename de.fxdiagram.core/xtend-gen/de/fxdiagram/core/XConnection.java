@@ -129,6 +129,8 @@ public class XConnection extends XShape implements XModelProvider {
       _children.add(_doubleArrow);
       ConnectionRouter _connectionRouter = new ConnectionRouter(this);
       this.setConnectionRouter(_connectionRouter);
+      ConnectionRouter _connectionRouter_1 = this.getConnectionRouter();
+      _connectionRouter_1.calculatePoints();
       _xblockexpression = node;
     }
     return _xblockexpression;

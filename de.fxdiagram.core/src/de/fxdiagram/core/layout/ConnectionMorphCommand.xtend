@@ -29,13 +29,13 @@ class ConnectionMorphCommand extends AbstractAnimationCommand {
 	
 	new(XConnection connection, XConnectionKind toKind, List<Point2D> toPoints) {
 		this.connection = connection
-		this.fromKind = connection.kind
 		this.toKind = toKind
-		this.fromPoints = newArrayList(connection.controlPoints.map[new Point2D(layoutX, layoutY)])
 		this.toPoints = toPoints
 	}
 	
 	override createExecuteAnimation(CommandContext context) {
+		this.fromKind = connection.kind
+		this.fromPoints = newArrayList(connection.controlPoints.map[new Point2D(layoutX, layoutY)])
 		createMorphTransition(fromPoints, toKind, toPoints, context.defaultExecuteDuration)
 	}
 
@@ -47,19 +47,19 @@ class ConnectionMorphCommand extends AbstractAnimationCommand {
 		createMorphTransition(fromPoints, toKind, toPoints, context.defaultUndoDuration)
 	}
 	
-	def createMorphTransition(List<Point2D> fromPoints, XConnectionKind toKind, List<Point2D> toPoints, Duration duration) {
+	def createMorphTransition(List<Point2D> from, XConnectionKind toKind, List<Point2D> to, Duration duration) {
 		val morph = new ParallelTransition
 		connection.kind = toKind
+		connection.connectionRouter.growToSize(to.size)
 		val controlPoints = connection.controlPoints
-		connection.connectionRouter.growToSize(toPoints.size)
 		for(i: 1..<controlPoints.size-1) {
-			val index = min(toPoints.size-1, i)
-			val toPoint = toPoints.get(index)
+			val fromPoint = from.get(min(from.size-1, i))
+			val toPoint = to.get(min(to.size-1, i))
 			val currentControlPoint = controlPoints.get(i)
-			morph.children += createMoveTransition(currentControlPoint, new Point2D(currentControlPoint.layoutX, currentControlPoint.layoutY), toPoint, duration)
+			morph.children += createMoveTransition(currentControlPoint, fromPoint, toPoint, duration)
 		}
 		morph.onFinished = [
-			connection.connectionRouter.shrinkToSize(toPoints.size)
+			connection.connectionRouter.shrinkToSize(to.size)
 		] 
 		return morph		
 	}

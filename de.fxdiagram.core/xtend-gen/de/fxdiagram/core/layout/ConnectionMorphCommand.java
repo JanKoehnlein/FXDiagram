@@ -44,26 +44,30 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
   
   public ConnectionMorphCommand(final XConnection connection, final XConnectionKind toKind, final List<Point2D> toPoints) {
     this.connection = connection;
-    XConnectionKind _kind = connection.getKind();
-    this.fromKind = _kind;
     this.toKind = toKind;
-    ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
-    final Function1<XControlPoint,Point2D> _function = new Function1<XControlPoint,Point2D>() {
-      public Point2D apply(final XControlPoint it) {
-        double _layoutX = it.getLayoutX();
-        double _layoutY = it.getLayoutY();
-        return new Point2D(_layoutX, _layoutY);
-      }
-    };
-    List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
-    ArrayList<Point2D> _newArrayList = CollectionLiterals.<Point2D>newArrayList(((Point2D[])Conversions.unwrapArray(_map, Point2D.class)));
-    this.fromPoints = _newArrayList;
     this.toPoints = toPoints;
   }
   
   public Animation createExecuteAnimation(final CommandContext context) {
-    Duration _defaultExecuteDuration = context.getDefaultExecuteDuration();
-    return this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _defaultExecuteDuration);
+    ParallelTransition _xblockexpression = null;
+    {
+      XConnectionKind _kind = this.connection.getKind();
+      this.fromKind = _kind;
+      ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+      final Function1<XControlPoint,Point2D> _function = new Function1<XControlPoint,Point2D>() {
+        public Point2D apply(final XControlPoint it) {
+          double _layoutX = it.getLayoutX();
+          double _layoutY = it.getLayoutY();
+          return new Point2D(_layoutX, _layoutY);
+        }
+      };
+      List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
+      ArrayList<Point2D> _newArrayList = CollectionLiterals.<Point2D>newArrayList(((Point2D[])Conversions.unwrapArray(_map, Point2D.class)));
+      this.fromPoints = _newArrayList;
+      Duration _defaultExecuteDuration = context.getDefaultExecuteDuration();
+      _xblockexpression = this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _defaultExecuteDuration);
+    }
+    return _xblockexpression;
   }
   
   public Animation createUndoAnimation(final CommandContext context) {
@@ -76,35 +80,36 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
     return this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _defaultUndoDuration);
   }
   
-  public ParallelTransition createMorphTransition(final List<Point2D> fromPoints, final XConnectionKind toKind, final List<Point2D> toPoints, final Duration duration) {
+  public ParallelTransition createMorphTransition(final List<Point2D> from, final XConnectionKind toKind, final List<Point2D> to, final Duration duration) {
     final ParallelTransition morph = new ParallelTransition();
     this.connection.setKind(toKind);
-    final ObservableList<XControlPoint> controlPoints = this.connection.getControlPoints();
     ConnectionRouter _connectionRouter = this.connection.getConnectionRouter();
-    int _size = toPoints.size();
+    int _size = to.size();
     _connectionRouter.growToSize(_size);
+    final ObservableList<XControlPoint> controlPoints = this.connection.getControlPoints();
     int _size_1 = controlPoints.size();
     int _minus = (_size_1 - 1);
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus, true);
     for (final Integer i : _doubleDotLessThan) {
       {
-        int _size_2 = toPoints.size();
+        int _size_2 = from.size();
         int _minus_1 = (_size_2 - 1);
-        final int index = Math.min(_minus_1, (i).intValue());
-        final Point2D toPoint = toPoints.get(index);
+        int _min = Math.min(_minus_1, (i).intValue());
+        final Point2D fromPoint = from.get(_min);
+        int _size_3 = to.size();
+        int _minus_2 = (_size_3 - 1);
+        int _min_1 = Math.min(_minus_2, (i).intValue());
+        final Point2D toPoint = to.get(_min_1);
         final XControlPoint currentControlPoint = controlPoints.get((i).intValue());
         ObservableList<Animation> _children = morph.getChildren();
-        double _layoutX = currentControlPoint.getLayoutX();
-        double _layoutY = currentControlPoint.getLayoutY();
-        Point2D _point2D = new Point2D(_layoutX, _layoutY);
-        PathTransition _createMoveTransition = this.createMoveTransition(currentControlPoint, _point2D, toPoint, duration);
+        PathTransition _createMoveTransition = this.createMoveTransition(currentControlPoint, fromPoint, toPoint, duration);
         _children.add(_createMoveTransition);
       }
     }
     final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
       public void handle(final ActionEvent it) {
         ConnectionRouter _connectionRouter = ConnectionMorphCommand.this.connection.getConnectionRouter();
-        int _size = toPoints.size();
+        int _size = to.size();
         _connectionRouter.shrinkToSize(_size);
       }
     };
