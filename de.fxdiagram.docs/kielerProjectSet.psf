@@ -4,16 +4,37 @@
 <project reference="1.0,http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git,master,plugins/de.cau.cs.kieler.core"/>
 <project reference="1.0,http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git,master,plugins/de.cau.cs.kieler.core.kgraph"/>
 <project reference="1.0,http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git,master,plugins/de.cau.cs.kieler.kiml"/>
+<project reference="1.0,http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git,master,plugins/de.cau.cs.kieler.kiml.formats"/>
 <project reference="1.0,http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git,master,plugins/de.cau.cs.kieler.kiml.graphviz.dot"/>
 <project reference="1.0,http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git,master,plugins/de.cau.cs.kieler.kiml.graphviz.layouter"/>
 <project reference="1.0,http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git,master,plugins/de.cau.cs.kieler.kiml.service"/>
+<project reference="1.0,git@github.com:JanKoehnlein/FXDiagram.git,master,de.fxdiagram.annotations"/>
+<project reference="1.0,git@github.com:JanKoehnlein/FXDiagram.git,master,de.fxdiagram.core"/>
+<project reference="1.0,git@github.com:JanKoehnlein/FXDiagram.git,master,de.fxdiagram.docs"/>
+<project reference="1.0,git@github.com:JanKoehnlein/FXDiagram.git,master,de.fxdiagram.eclipse"/>
+<project reference="1.0,git@github.com:JanKoehnlein/FXDiagram.git,master,de.fxdiagram.examples"/>
+<project reference="1.0,git@github.com:JanKoehnlein/FXDiagram.git,master,de.fxdiagram.external"/>
+<project reference="1.0,git@github.com:JanKoehnlein/FXDiagram.git,master,de.fxdiagram.lib"/>
+<project reference="1.0,git@github.com:JanKoehnlein/JavaFX-SWT-Gesture-Bridge.git,master,de.fxdiagram.swtfx"/>
 </provider>
+<workingSets editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1372242161564_49" label="FXDiagram" name="FXDiagram">
+<item elementID="=de.fxdiagram.annotations" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.fxdiagram.swtfx" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.fxdiagram.eclipse" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.fxdiagram.annotations.tests" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/de.fxdiagram.docs" type="4"/>
+<item elementID="=de.fxdiagram.examples" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.fxdiagram.lib" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.fxdiagram.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.fxdiagram.external" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSets>
 <workingSets editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1372242139370_48" label="KIELER" name="KIELER">
+<item elementID="=de.cau.cs.kieler.kiml.service" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.cau.cs.kieler.core.kgraph" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=de.cau.cs.kieler.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=de.cau.cs.kieler.kiml.graphviz.dot" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=de.cau.cs.kieler.core.kgraph" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=de.cau.cs.kieler.kiml.service" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=de.cau.cs.kieler.kiml.graphviz.layouter" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=de.cau.cs.kieler.kiml" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.cau.cs.kieler.kiml.graphviz.layouter" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=de.cau.cs.kieler.kiml.formats" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSets>
 </psf>

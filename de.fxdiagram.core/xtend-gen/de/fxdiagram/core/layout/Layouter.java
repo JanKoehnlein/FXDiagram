@@ -33,7 +33,6 @@ import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.layout.ConnectionMorphCommand;
 import de.fxdiagram.core.layout.LayoutType;
-import de.fxdiagram.core.layout.LoggingTransformationService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,19 +81,14 @@ public class Layouter {
   }
   
   protected AbstractLayoutProvider getLayoutProvider(final LayoutType type) {
-    GraphvizLayoutProvider _xblockexpression = null;
-    {
-      new LoggingTransformationService();
-      GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
-      final Procedure1<GraphvizLayoutProvider> _function = new Procedure1<GraphvizLayoutProvider>() {
-        public void apply(final GraphvizLayoutProvider it) {
-          String _string = type.toString();
-          it.initialize(_string);
-        }
-      };
-      _xblockexpression = ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
-    }
-    return _xblockexpression;
+    GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
+    final Procedure1<GraphvizLayoutProvider> _function = new Procedure1<GraphvizLayoutProvider>() {
+      public void apply(final GraphvizLayoutProvider it) {
+        String _string = type.toString();
+        it.initialize(_string);
+      }
+    };
+    return ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
   }
   
   protected CompositeAnimationCommand createCommand(final Map<Object,KGraphElement> map, final Duration duration) {
@@ -187,7 +181,7 @@ public class Layouter {
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
-      shapeLayout.setProperty(LayoutOptions.SPACING, Float.valueOf(60f));
+      shapeLayout.<Float>setProperty(LayoutOptions.SPACING, Float.valueOf(60f));
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
       cache.put(it, kRoot);
@@ -306,8 +300,8 @@ public class Layouter {
       shapeLayout.setSize(
         ((float) _width), 
         ((float) _height));
-      shapeLayout.setProperty(LayoutOptions.FONT_SIZE, Integer.valueOf(12));
-      shapeLayout.setProperty(LayoutOptions.EDGE_LABEL_PLACEMENT, EdgeLabelPlacement.CENTER);
+      shapeLayout.<Integer>setProperty(LayoutOptions.FONT_SIZE, Integer.valueOf(12));
+      shapeLayout.<EdgeLabelPlacement>setProperty(LayoutOptions.EDGE_LABEL_PLACEMENT, EdgeLabelPlacement.CENTER);
       EList<KGraphData> _data = kLabel.getData();
       _data.add(shapeLayout);
       cache.put(it, kLabel);

@@ -50,7 +50,6 @@ class Layouter {
 	}
 
 	protected def AbstractLayoutProvider getLayoutProvider(LayoutType type) {
-		new LoggingTransformationService
 		new GraphvizLayoutProvider => [
 			initialize(type.toString)
 		]
