@@ -41,7 +41,7 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 		val posEquals = uri.fragment.indexOf('=')
 		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
 		val eObject = ePackage.eResource.getEObject(fragment)
-		if(descriptor instanceof ESuperTypeHandle) {
+		if(descriptor instanceof ESuperTypeDescriptor) {
 			val eClass = eObject as EClass
 			return new ESuperTypeHandle(eClass, eClass.EAllSuperTypes.get(Integer.parseInt(uri.fragment.substring(posEquals + 1))))
 		} else {

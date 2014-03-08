@@ -73,7 +73,7 @@ public class EcoreDomainObjectProvider implements DomainObjectProvider {
     final String fragment = _xifexpression;
     Resource _eResource = ePackage.eResource();
     final EObject eObject = _eResource.getEObject(fragment);
-    if ((descriptor instanceof ESuperTypeHandle)) {
+    if ((descriptor instanceof ESuperTypeDescriptor)) {
       final EClass eClass = ((EClass) eObject);
       EList<EClass> _eAllSuperTypes = eClass.getEAllSuperTypes();
       String _fragment_2 = uri.fragment();
