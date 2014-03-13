@@ -18,6 +18,7 @@ import de.fxdiagram.core.tools.actions.RedoAction
 import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.UndoAction
+import de.fxdiagram.core.tools.actions.UndoRedoPlayerAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import eu.hansolo.enzo.radialmenu.MenuItem
 import eu.hansolo.enzo.radialmenu.Options
@@ -88,6 +89,10 @@ class MenuTool implements XDiagramTool {
 				case KeyCode.O:
 					if (shortcutDown) {
 						new LoadAction
+					}
+				case KeyCode.P:
+					if (shortcutDown) {
+						new UndoRedoPlayerAction
 					}
 				case KeyCode.Q:
 					if (shortcutDown) {

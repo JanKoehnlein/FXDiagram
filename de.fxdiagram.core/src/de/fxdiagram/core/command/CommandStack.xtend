@@ -37,4 +37,8 @@ class CommandStack {
 		command.execute(context)
 		undoStack.push(command)
 	}
+	
+	def getContext() {
+		context
+	}
 }

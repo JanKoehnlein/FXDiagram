@@ -1,12 +1,24 @@
 package de.fxdiagram.core.command
 
+import java.util.List
 import java.util.Queue
 import javafx.animation.Animation
 import javafx.animation.SequentialTransition
+import com.google.common.collect.Lists
 
 class AnimationQueue {
 	
 	Queue<()=>Animation> queue = newLinkedList
+	
+	List<AnimationQueueListener> listeners = newArrayList
+	
+	def void addListener(AnimationQueueListener listener) {
+		listeners.add(listener)
+	}
+	
+	def void removeListener(AnimationQueueListener listener) {
+		listeners.remove(listener)
+	}
 	
 	def enqueue(()=>Animation animationFactory) {
 		if(animationFactory != null) {
@@ -34,6 +46,12 @@ class AnimationQueue {
 				queue.poll
 				executeNext
 			} 
+		} else {
+			Lists.newArrayList(listeners).forEach[handleQueueEmpty]
 		}
 	}
+}
+
+interface AnimationQueueListener {
+	def void handleQueueEmpty()
 }

@@ -1,6 +1,10 @@
 package de.fxdiagram.core.command;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+import de.fxdiagram.core.command.AnimationQueueListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import javafx.animation.Animation;
 import javafx.animation.SequentialTransition;
@@ -9,12 +13,23 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AnimationQueue {
   private Queue<Function0<? extends Animation>> queue = CollectionLiterals.<Function0<? extends Animation>>newLinkedList();
+  
+  private List<AnimationQueueListener> listeners = CollectionLiterals.<AnimationQueueListener>newArrayList();
+  
+  public void addListener(final AnimationQueueListener listener) {
+    this.listeners.add(listener);
+  }
+  
+  public void removeListener(final AnimationQueueListener listener) {
+    this.listeners.remove(listener);
+  }
   
   public void enqueue(final Function0<? extends Animation> animationFactory) {
     boolean _notEquals = (!Objects.equal(animationFactory, null));
@@ -54,6 +69,14 @@ public class AnimationQueue {
         this.queue.poll();
         this.executeNext();
       }
+    } else {
+      ArrayList<AnimationQueueListener> _newArrayList = Lists.<AnimationQueueListener>newArrayList(this.listeners);
+      final Procedure1<AnimationQueueListener> _function_1 = new Procedure1<AnimationQueueListener>() {
+        public void apply(final AnimationQueueListener it) {
+          it.handleQueueEmpty();
+        }
+      };
+      IterableExtensions.<AnimationQueueListener>forEach(_newArrayList, _function_1);
     }
   }
 }

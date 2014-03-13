@@ -69,4 +69,8 @@ public class CommandStack {
     command.execute(this.context);
     this.undoStack.push(command);
   }
+  
+  public CommandContext getContext() {
+    return this.context;
+  }
 }

@@ -76,22 +76,27 @@ public class HeadsUpDisplay extends Group {
   
   public void add(final Node child, final Pos pos) {
     ObservableList<Node> _children = this.getChildren();
-    _children.add(child);
-    this.alignments.put(child, pos);
-    this.place(child);
-    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = child.boundsInParentProperty();
-    final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
-      public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
-        Parent _parent = child.getParent();
-        boolean _notEquals = (!Objects.equal(_parent, HeadsUpDisplay.this));
-        if (_notEquals) {
-          property.removeListener(this);
-        } else {
-          HeadsUpDisplay.this.place(child);
+    boolean _contains = _children.contains(child);
+    boolean _not = (!_contains);
+    if (_not) {
+      ObservableList<Node> _children_1 = this.getChildren();
+      _children_1.add(child);
+      this.alignments.put(child, pos);
+      this.place(child);
+      ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = child.boundsInParentProperty();
+      final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
+        public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
+          Parent _parent = child.getParent();
+          boolean _notEquals = (!Objects.equal(_parent, HeadsUpDisplay.this));
+          if (_notEquals) {
+            property.removeListener(this);
+          } else {
+            HeadsUpDisplay.this.place(child);
+          }
         }
-      }
-    };
-    _boundsInParentProperty.addListener(_function);
+      };
+      _boundsInParentProperty.addListener(_function);
+    }
   }
   
   protected void place(final Node child) {

@@ -1,6 +1,7 @@
 package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.HeadsUpDisplay;
@@ -110,10 +111,15 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       ObservableList<Node> _children = this.diagramCanvas.getChildren();
       XDiagram _diagram_1 = this.getDiagram();
       _children.remove(_diagram_1);
+      ObservableList<Node> _children_1 = this.headsUpDisplay.getChildren();
+      XDiagram _diagram_2 = this.getDiagram();
+      ObservableMap<Node,Pos> _fixedButtons = _diagram_2.getFixedButtons();
+      Set<Node> _keySet = _fixedButtons.keySet();
+      Iterables.removeAll(_children_1, _keySet);
     }
     this.diagramProperty.set(newDiagram);
-    ObservableList<Node> _children_1 = this.diagramCanvas.getChildren();
-    _children_1.add(newDiagram);
+    ObservableList<Node> _children_2 = this.diagramCanvas.getChildren();
+    _children_2.add(newDiagram);
     boolean _isActive = this.getIsActive();
     if (_isActive) {
       newDiagram.activate();
@@ -132,11 +138,9 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     _builder.append(";");
     _builder.newLineIfNotEmpty();
     this.diagramCanvas.setStyle(_builder.toString());
-    ObservableList<Node> _children_2 = this.headsUpDisplay.getChildren();
-    _children_2.clear();
-    XDiagram _diagram_2 = this.getDiagram();
-    ObservableMap<Node,Pos> _fixedButtons = _diagram_2.getFixedButtons();
-    Set<Map.Entry<Node,Pos>> _entrySet = _fixedButtons.entrySet();
+    XDiagram _diagram_3 = this.getDiagram();
+    ObservableMap<Node,Pos> _fixedButtons_1 = _diagram_3.getFixedButtons();
+    Set<Map.Entry<Node,Pos>> _entrySet = _fixedButtons_1.entrySet();
     final Procedure1<Map.Entry<Node,Pos>> _function = new Procedure1<Map.Entry<Node,Pos>>() {
       public void apply(final Map.Entry<Node,Pos> it) {
         Node _key = it.getKey();

@@ -72,8 +72,10 @@ class XRoot extends Parent implements XActivatable {
 	}
 	
 	def setDiagram(XDiagram newDiagram) {
-		if(diagram != null)
+		if(diagram != null) {
 			diagramCanvas.children -= diagram
+			headsUpDisplay.children -= diagram.fixedButtons.keySet			
+		}
 		diagramProperty.set(newDiagram)
 		diagramCanvas.children += newDiagram
 		if(isActive)
@@ -82,7 +84,6 @@ class XRoot extends Parent implements XActivatable {
 			-fx-background-color: «newDiagram.backgroundPaint.toCss»;
 			-fx-text-fill: «newDiagram.foregroundPaint.toCss»;
 		'''
-		headsUpDisplay.children.clear
 		diagram.fixedButtons.entrySet.forEach[headsUpDisplay.add(key, value)]
 		newDiagram.centerDiagram(false)
 	}
@@ -194,16 +195,18 @@ class HeadsUpDisplay extends Group {
 	}
 	
 	def add(Node child, Pos pos) {
-		children += child
-		alignments.put(child, pos)
-		child.place
-		child.boundsInParentProperty.addListener [
-			property, oldValue, newValue | 
-			if(child.parent != this) 
-				property.removeListener(self)
-			else
-				child.place
-		]
+		if(!children.contains(child)) {
+			children += child
+			alignments.put(child, pos)
+			child.place
+			child.boundsInParentProperty.addListener [
+				property, oldValue, newValue | 
+				if(child.parent != this) 
+					property.removeListener(self)
+				else
+					child.place
+			]
+		}
 	} 
 	
 	protected def place(Node child) {

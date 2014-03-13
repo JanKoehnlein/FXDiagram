@@ -22,6 +22,7 @@ import de.fxdiagram.core.tools.actions.RedoAction;
 import de.fxdiagram.core.tools.actions.SaveAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.UndoAction;
+import de.fxdiagram.core.tools.actions.UndoRedoPlayerAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import eu.hansolo.enzo.radialmenu.MenuItem;
 import eu.hansolo.enzo.radialmenu.Options;
@@ -168,36 +169,44 @@ public class MenuTool implements XDiagramTool {
               }
               _switchResult = _xifexpression_5;
               break;
-            case Q:
-              ExitAction _xifexpression_6 = null;
+            case P:
+              UndoRedoPlayerAction _xifexpression_6 = null;
               boolean _isShortcutDown_6 = it.isShortcutDown();
               if (_isShortcutDown_6) {
-                _xifexpression_6 = new ExitAction();
+                _xifexpression_6 = new UndoRedoPlayerAction();
               }
               _switchResult = _xifexpression_6;
               break;
-            case S:
-              SaveAction _xifexpression_7 = null;
+            case Q:
+              ExitAction _xifexpression_7 = null;
               boolean _isShortcutDown_7 = it.isShortcutDown();
               if (_isShortcutDown_7) {
-                _xifexpression_7 = new SaveAction();
+                _xifexpression_7 = new ExitAction();
               }
               _switchResult = _xifexpression_7;
               break;
-            case Y:
-              DiagramAction _xifexpression_8 = null;
+            case S:
+              SaveAction _xifexpression_8 = null;
               boolean _isShortcutDown_8 = it.isShortcutDown();
               if (_isShortcutDown_8) {
-                DiagramAction _xifexpression_9 = null;
-                boolean _isShiftDown = it.isShiftDown();
-                if (_isShiftDown) {
-                  _xifexpression_9 = new RedoAction();
-                } else {
-                  _xifexpression_9 = new UndoAction();
-                }
-                _xifexpression_8 = _xifexpression_9;
+                _xifexpression_8 = new SaveAction();
               }
               _switchResult = _xifexpression_8;
+              break;
+            case Y:
+              DiagramAction _xifexpression_9 = null;
+              boolean _isShortcutDown_9 = it.isShortcutDown();
+              if (_isShortcutDown_9) {
+                DiagramAction _xifexpression_10 = null;
+                boolean _isShiftDown = it.isShiftDown();
+                if (_isShiftDown) {
+                  _xifexpression_10 = new RedoAction();
+                } else {
+                  _xifexpression_10 = new UndoAction();
+                }
+                _xifexpression_9 = _xifexpression_10;
+              }
+              _switchResult = _xifexpression_9;
               break;
             case BACK_SPACE:
               _switchResult = new DeleteAction();
@@ -227,16 +236,16 @@ public class MenuTool implements XDiagramTool {
               CloseAction _xblockexpression_5 = null;
               {
                 it.consume();
-                CloseAction _xifexpression_10 = null;
+                CloseAction _xifexpression_11 = null;
                 RadialMenu.State _state = MenuTool.this.menu.getState();
                 boolean _equals = Objects.equal(_state, RadialMenu.State.OPENED);
                 if (_equals) {
                   MenuTool.this.closeMenu();
                   return;
                 } else {
-                  _xifexpression_10 = new CloseAction();
+                  _xifexpression_11 = new CloseAction();
                 }
-                _xblockexpression_5 = _xifexpression_10;
+                _xblockexpression_5 = _xifexpression_11;
               }
               _switchResult = _xblockexpression_5;
               break;
