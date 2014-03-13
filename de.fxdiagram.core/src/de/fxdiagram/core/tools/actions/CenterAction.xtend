@@ -1,15 +1,26 @@
 package de.fxdiagram.core.tools.actions
 
 import de.fxdiagram.core.XRoot
+import eu.hansolo.enzo.radialmenu.Symbol
+import javafx.scene.input.KeyEvent
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.scene.input.KeyCode
 
 class CenterAction implements DiagramAction {
 	
+	override matches(KeyEvent it) {
+		isShortcutDown && code == KeyCode.C
+	}
+	
+	override getSymbol() {
+		Symbol.Type.SELECTION2
+	}
+
 	override perform(XRoot root) {
 		val elements = 
 			if(root.currentSelection.empty) 

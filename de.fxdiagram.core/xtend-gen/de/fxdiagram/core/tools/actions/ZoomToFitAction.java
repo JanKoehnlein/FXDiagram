@@ -12,16 +12,44 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
+import eu.hansolo.enzo.radialmenu.Symbol;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class ZoomToFitAction implements DiagramAction {
+  public boolean matches(final KeyEvent it) {
+    boolean _and = false;
+    boolean _and_1 = false;
+    boolean _isShortcutDown = it.isShortcutDown();
+    if (!_isShortcutDown) {
+      _and_1 = false;
+    } else {
+      boolean _isShiftDown = it.isShiftDown();
+      boolean _not = (!_isShiftDown);
+      _and_1 = _not;
+    }
+    if (!_and_1) {
+      _and = false;
+    } else {
+      KeyCode _code = it.getCode();
+      boolean _equals = Objects.equal(_code, KeyCode.F);
+      _and = _equals;
+    }
+    return _and;
+  }
+  
+  public Symbol.Type getSymbol() {
+    return Symbol.Type.ZOOM_IN;
+  }
+  
   public void perform(final XRoot root) {
     Iterable<XShape> _xifexpression = null;
     Iterable<XShape> _currentSelection = root.getCurrentSelection();

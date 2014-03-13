@@ -17,10 +17,11 @@ import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
+import de.fxdiagram.core.tools.DiagramActionTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
-import de.fxdiagram.core.tools.MenuTool;
 import de.fxdiagram.core.tools.SelectionTool;
 import de.fxdiagram.core.tools.XDiagramTool;
+import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode({ "domainObjectProviders", "rootDiagram", "diagram" })
 @SuppressWarnings("all")
 public class XRoot extends Parent implements XActivatable, XModelProvider {
+  private DiagramActionRegistry diagramActionRegistry = new DiagramActionRegistry();
+  
   private HeadsUpDisplay headsUpDisplay = new HeadsUpDisplay();
   
   private Pane diagramCanvas = new Pane();
@@ -181,8 +184,8 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     this.defaultTool.operator_add(_selectionTool);
     DiagramGestureTool _diagramGestureTool = new DiagramGestureTool(this);
     this.defaultTool.operator_add(_diagramGestureTool);
-    MenuTool _menuTool = new MenuTool(this);
-    this.defaultTool.operator_add(_menuTool);
+    DiagramActionTool _diagramActionTool = new DiagramActionTool(this);
+    this.defaultTool.operator_add(_diagramActionTool);
     this.tools.add(this.defaultTool);
     XDiagram _diagram = this.getDiagram();
     if (_diagram!=null) {
@@ -236,6 +239,10 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   public void restoreDefaultTool() {
     this.setCurrentTool(this.defaultTool);
+  }
+  
+  public DiagramActionRegistry getDiagramActionRegistry() {
+    return this.diagramActionRegistry;
   }
   
   public Iterable<XShape> getCurrentSelection() {

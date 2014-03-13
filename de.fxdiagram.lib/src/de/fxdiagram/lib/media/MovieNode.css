@@ -49,6 +49,18 @@
     -fx-graphic: url("images/button_pressed_play.png");
 }
 
+#reverse-button {
+    -fx-graphic: url("images/button_default_reverse.png");
+}
+
+#reverse-button:hover {
+    -fx-graphic: url("images/button_hover_reverse.png");
+}
+
+#reverse-button:armed {
+    -fx-graphic: url("images/button_pressed_reverse.png");
+}
+
 #pause-button {
     -fx-graphic: url("images/button_default_pause.png");
 }

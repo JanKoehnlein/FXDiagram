@@ -4,11 +4,13 @@ import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.command.CommandStack
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.core.model.DomainObjectProviderWithState
+import de.fxdiagram.core.model.Model
 import de.fxdiagram.core.tools.CompositeTool
+import de.fxdiagram.core.tools.DiagramActionTool
 import de.fxdiagram.core.tools.DiagramGestureTool
-import de.fxdiagram.core.tools.MenuTool
 import de.fxdiagram.core.tools.SelectionTool
 import de.fxdiagram.core.tools.XDiagramTool
 import java.util.List
@@ -26,8 +28,7 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
-import de.fxdiagram.core.model.Model
-import de.fxdiagram.core.command.CommandStack
+import de.fxdiagram.core.tools.actions.DiagramActionRegistry
 
 @Logging
 @ModelNode(#['domainObjectProviders', 'rootDiagram', 'diagram'])
@@ -41,6 +42,8 @@ class XRoot extends Parent implements XActivatable {
 
 	@FxProperty ObservableList<DomainObjectProvider> domainObjectProviders = FXCollections.observableArrayList
 	
+	DiagramActionRegistry diagramActionRegistry = new DiagramActionRegistry
+
 	HeadsUpDisplay headsUpDisplay = new HeadsUpDisplay
 	
 	Pane diagramCanvas = new Pane
@@ -110,7 +113,7 @@ class XRoot extends Parent implements XActivatable {
 		defaultTool = new CompositeTool
 		defaultTool += new SelectionTool(this)
 		defaultTool += new DiagramGestureTool(this)
-		defaultTool += new MenuTool(this)
+		defaultTool += new DiagramActionTool(this)
 		tools += defaultTool
 		diagram?.activate
 		diagramCanvas => [
@@ -135,9 +138,13 @@ class XRoot extends Parent implements XActivatable {
 			}
 		}
 	}
-
+	
 	def restoreDefaultTool() {
 		setCurrentTool(defaultTool)
+	}
+	
+	def getDiagramActionRegistry() {
+		diagramActionRegistry
 	}
 	
 	def getCurrentSelection() {

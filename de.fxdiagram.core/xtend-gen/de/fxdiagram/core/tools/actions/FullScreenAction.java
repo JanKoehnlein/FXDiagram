@@ -2,14 +2,16 @@ package de.fxdiagram.core.tools.actions;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.Symbol;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 @SuppressWarnings("all")
-public class UndoAction implements DiagramAction {
+public class FullScreenAction implements DiagramAction {
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _and_1 = false;
@@ -18,25 +20,28 @@ public class UndoAction implements DiagramAction {
       _and_1 = false;
     } else {
       boolean _isShiftDown = it.isShiftDown();
-      boolean _not = (!_isShiftDown);
-      _and_1 = _not;
+      _and_1 = _isShiftDown;
     }
     if (!_and_1) {
       _and = false;
     } else {
       KeyCode _code = it.getCode();
-      boolean _equals = Objects.equal(_code, KeyCode.Y);
+      boolean _equals = Objects.equal(_code, KeyCode.F);
       _and = _equals;
     }
     return _and;
   }
   
   public Symbol.Type getSymbol() {
-    return Symbol.Type.REWIND;
+    return null;
   }
   
   public void perform(final XRoot root) {
-    CommandStack _commandStack = root.getCommandStack();
-    _commandStack.undo();
+    Scene _scene = root.getScene();
+    final Window window = _scene.getWindow();
+    if ((window instanceof Stage)) {
+      ((Stage)window).setFullScreen(true);
+      return;
+    }
   }
 }

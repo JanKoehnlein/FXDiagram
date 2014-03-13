@@ -1,10 +1,13 @@
 package de.fxdiagram.core.tools.actions
 
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
+import eu.hansolo.enzo.radialmenu.Symbol
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.layout.LayoutType
 
 class LayoutAction implements DiagramAction {
 	
@@ -14,6 +17,14 @@ class LayoutAction implements DiagramAction {
 		this.layoutType = layoutType 
 	}
 	
+	override matches(KeyEvent it) {
+		isShortcutDown && code == KeyCode.L
+	}
+	
+	override getSymbol() {
+		Symbol.Type.GRAPH
+	}
+
 	override perform(XRoot root) {
 		new Layouter().layout(layoutType, root.diagram, 1000.millis)
 	}

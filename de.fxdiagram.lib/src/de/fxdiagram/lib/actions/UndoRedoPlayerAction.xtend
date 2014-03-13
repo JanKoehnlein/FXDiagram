@@ -1,4 +1,4 @@
-package de.fxdiagram.core.tools.actions
+package de.fxdiagram.lib.actions
 
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.command.AnimationQueueListener
@@ -6,13 +6,16 @@ import javafx.animation.FadeTransition
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Button
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.layout.HBox
-
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import javafx.scene.layout.StackPane
 import javafx.scene.shape.Rectangle
 
-class UndoRedoPlayerAction implements DiagramAction {
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import static extension de.fxdiagram.core.extensions.UriExtensions.*
+
+class UndoRedoPlayerAction implements de.fxdiagram.core.tools.actions.DiagramAction {
 	
     XRoot root
 
@@ -22,10 +25,18 @@ class UndoRedoPlayerAction implements DiagramAction {
 	
 	FadeTransition fadeTransition
 	
+	override matches(KeyEvent it) {
+		isShortcutDown && code == KeyCode.P
+	}
+	
+	override getSymbol() {
+		null
+	}
+
 	override perform(XRoot root) {
 		this.root = root
 		this.controlPanel = createControlPanel
-		root.headsUpDisplay.add(controlPanel, Pos.BOTTOM_CENTER);
+		root.getHeadsUpDisplay.add(controlPanel, Pos.BOTTOM_CENTER);
 	}
 	
 	protected def createControlPanel() {
@@ -41,32 +52,37 @@ class UndoRedoPlayerAction implements DiagramAction {
 			children += new HBox => [
 				alignment = Pos.CENTER
 				children += new Button => [
-					text = "rewind"
+					id = "back-button"
+					text = "Back"
 					onAction = [
 						startFastMode(true)
 					]
 				]
 				children += new Button => [
+					id = "reverse-button"
 					text = "undo"
 					onAction = [
 						stopFastMode
-						root.commandStack.undo
+						root.getCommandStack.undo
 					]
 				]
 				children += new Button => [
+					id = "pause-button"
 					text = "pause"
 					onAction = [
 						stopFastMode
 					]
 				]
 				children += new Button => [
+					id = "play-button"
 					text = "redo"
 					onAction = [
 						stopFastMode
-						root.commandStack.redo
+						root.getCommandStack.redo
 					]
 				]
 				children += new Button => [
+					id = "forward-button"
 					text = "forward"
 					onAction = [
 						startFastMode(false)
@@ -79,6 +95,7 @@ class UndoRedoPlayerAction implements DiagramAction {
 					show
 				]
 			]
+			stylesheets += toURI(this, '../media/MovieNode.css')
 		]
 	}
 	
@@ -96,7 +113,7 @@ class UndoRedoPlayerAction implements DiagramAction {
 			fromValue = 1
 			toValue = 0
 			onFinished = [
-				root.headsUpDisplay.children -= controlPanel;
+				root.getHeadsUpDisplay.children -= controlPanel;
 			]
 			play
 		]
@@ -104,12 +121,12 @@ class UndoRedoPlayerAction implements DiagramAction {
 	
 	protected def stopFastMode() {
 		if(animationQueueListener != null)
-			root.commandStack.context.animationQueue.removeListener(animationQueueListener)
+			root.getCommandStack.getContext.getAnimationQueue.removeListener(animationQueueListener)
 	}
 
 	protected def startFastMode(boolean isUndo) {
 		stopFastMode
-		val commandStack = root.commandStack
+		val commandStack = root.getCommandStack
 		animationQueueListener = [|
 			if(isUndo && commandStack.canUndo)
 				commandStack.undo
@@ -118,7 +135,7 @@ class UndoRedoPlayerAction implements DiagramAction {
 			else
 				stopFastMode
 		]
-		root.commandStack.context.animationQueue.addListener(animationQueueListener)
+		root.getCommandStack.getContext.getAnimationQueue.addListener(animationQueueListener)
 		if(isUndo) 
 			commandStack.undo
 		else 

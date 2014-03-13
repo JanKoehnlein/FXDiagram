@@ -1,4 +1,4 @@
-package de.fxdiagram.core.tools.actions;
+package de.fxdiagram.lib.actions;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.HeadsUpDisplay;
@@ -8,7 +8,9 @@ import de.fxdiagram.core.command.AnimationQueueListener;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.DurationExtensions;
+import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
+import eu.hansolo.enzo.radialmenu.Symbol;
 import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +18,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -33,6 +37,23 @@ public class UndoRedoPlayerAction implements DiagramAction {
   private Node controlPanel;
   
   private FadeTransition fadeTransition;
+  
+  public boolean matches(final KeyEvent it) {
+    boolean _and = false;
+    boolean _isShortcutDown = it.isShortcutDown();
+    if (!_isShortcutDown) {
+      _and = false;
+    } else {
+      KeyCode _code = it.getCode();
+      boolean _equals = Objects.equal(_code, KeyCode.P);
+      _and = _equals;
+    }
+    return _and;
+  }
+  
+  public Symbol.Type getSymbol() {
+    return null;
+  }
   
   public void perform(final XRoot root) {
     this.root = root;
@@ -67,7 +88,8 @@ public class UndoRedoPlayerAction implements DiagramAction {
             Button _button = new Button();
             final Procedure1<Button> _function = new Procedure1<Button>() {
               public void apply(final Button it) {
-                it.setText("rewind");
+                it.setId("back-button");
+                it.setText("Back");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                   public void handle(final ActionEvent it) {
                     UndoRedoPlayerAction.this.startFastMode(true);
@@ -82,6 +104,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
             Button _button_1 = new Button();
             final Procedure1<Button> _function_1 = new Procedure1<Button>() {
               public void apply(final Button it) {
+                it.setId("reverse-button");
                 it.setText("undo");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                   public void handle(final ActionEvent it) {
@@ -99,6 +122,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
             Button _button_2 = new Button();
             final Procedure1<Button> _function_2 = new Procedure1<Button>() {
               public void apply(final Button it) {
+                it.setId("pause-button");
                 it.setText("pause");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                   public void handle(final ActionEvent it) {
@@ -114,6 +138,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
             Button _button_3 = new Button();
             final Procedure1<Button> _function_3 = new Procedure1<Button>() {
               public void apply(final Button it) {
+                it.setId("play-button");
                 it.setText("redo");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                   public void handle(final ActionEvent it) {
@@ -131,6 +156,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
             Button _button_4 = new Button();
             final Procedure1<Button> _function_4 = new Procedure1<Button>() {
               public void apply(final Button it) {
+                it.setId("forward-button");
                 it.setText("forward");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                   public void handle(final ActionEvent it) {
@@ -158,6 +184,9 @@ public class UndoRedoPlayerAction implements DiagramAction {
         };
         HBox _doubleArrow_1 = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function_1);
         _children_1.add(_doubleArrow_1);
+        ObservableList<String> _stylesheets = it.getStylesheets();
+        String _uRI = UriExtensions.toURI(UndoRedoPlayerAction.this, "../media/MovieNode.css");
+        _stylesheets.add(_uRI);
       }
     };
     return ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);

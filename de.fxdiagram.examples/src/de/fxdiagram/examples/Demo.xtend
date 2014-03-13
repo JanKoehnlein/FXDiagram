@@ -4,9 +4,24 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.services.ResourceHandle
 import de.fxdiagram.core.services.ResourceProvider
+import de.fxdiagram.core.tools.actions.CenterAction
+import de.fxdiagram.core.tools.actions.DeleteAction
+import de.fxdiagram.core.tools.actions.ExitAction
+import de.fxdiagram.core.tools.actions.ExportSvgAction
+import de.fxdiagram.core.tools.actions.FullScreenAction
+import de.fxdiagram.core.tools.actions.LayoutAction
+import de.fxdiagram.core.tools.actions.LoadAction
+import de.fxdiagram.core.tools.actions.NavigateNextAction
+import de.fxdiagram.core.tools.actions.NavigatePreviousAction
+import de.fxdiagram.core.tools.actions.RedoAction
+import de.fxdiagram.core.tools.actions.SaveAction
+import de.fxdiagram.core.tools.actions.SelectAllAction
+import de.fxdiagram.core.tools.actions.UndoAction
+import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import de.fxdiagram.examples.ecore.EClassNode
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider
 import de.fxdiagram.examples.java.JavaModelProvider
@@ -17,6 +32,7 @@ import de.fxdiagram.examples.login.LoginNode
 import de.fxdiagram.examples.neonsign.NeonSignNode
 import de.fxdiagram.examples.slides.eclipsecon.IntroductionSlideDeck
 import de.fxdiagram.examples.slides.eclipsecon.SummarySlideDeck
+import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
 import de.fxdiagram.lib.media.MovieNode
@@ -65,6 +81,23 @@ class Demo extends Application {
 			new JavaModelProvider,
 			new LcarsModelProvider,
 			resourceProvider
+		]
+		root.diagramActionRegistry += #[
+			new CenterAction,
+			new ExitAction,
+			new DeleteAction,
+			new LayoutAction(LayoutType.DOT),
+			new ExportSvgAction,
+			new UndoAction,
+			new RedoAction,
+			new LoadAction,
+			new SaveAction,
+			new SelectAllAction,
+			new ZoomToFitAction,
+			new NavigatePreviousAction,
+			new NavigateNextAction,
+			new FullScreenAction,
+			new UndoRedoPlayerAction
 		]
 		diagram => [
 //			nodes += new DemoCampIntroSlides
