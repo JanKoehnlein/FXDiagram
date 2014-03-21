@@ -15,7 +15,6 @@ import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior;
 import de.fxdiagram.core.behavior.NavigationBehavior;
-import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
@@ -23,6 +22,7 @@ import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.extensions.InitializingMapListener;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
+import de.fxdiagram.core.viewport.ViewportTransform;
 import java.util.HashMap;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -66,7 +66,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
   
-  private AccumulativeTransform2D canvasTransform;
+  private ViewportTransform canvasTransform;
   
   private boolean needsCentering = true;
   
@@ -101,8 +101,8 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
       }
     };
     this.isRootDiagramProperty.addListener(_function_1);
-    AccumulativeTransform2D _accumulativeTransform2D = new AccumulativeTransform2D();
-    this.canvasTransform = _accumulativeTransform2D;
+    ViewportTransform _viewportTransform = new ViewportTransform();
+    this.canvasTransform = _viewportTransform;
     ObservableList<Transform> _transforms = this.getTransforms();
     Transform _transform = this.canvasTransform.getTransform();
     _transforms.setAll(_transform);
@@ -115,7 +115,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     _transforms_1.addListener(_function_2);
   }
   
-  public AccumulativeTransform2D getCanvasTransform() {
+  public ViewportTransform getCanvasTransform() {
     return this.canvasTransform;
   }
   

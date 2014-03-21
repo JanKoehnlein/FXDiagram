@@ -10,7 +10,6 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.css.JavaToCss;
-import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.Model;
@@ -22,6 +21,7 @@ import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.SelectionTool;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
+import de.fxdiagram.core.viewport.ViewportTransform;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +83,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   private Model model;
   
-  private CommandStack commandStack = new CommandStack();
+  private CommandStack commandStack = new CommandStack(this);
   
   public XRoot() {
     ObservableList<Node> _children = this.getChildren();
@@ -163,7 +163,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     return this.diagramCanvas;
   }
   
-  public AccumulativeTransform2D getDiagramTransform() {
+  public ViewportTransform getDiagramTransform() {
     XDiagram _diagram = this.getDiagram();
     return _diagram.getCanvasTransform();
   }

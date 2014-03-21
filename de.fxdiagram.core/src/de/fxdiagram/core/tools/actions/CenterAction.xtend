@@ -2,6 +2,7 @@ package de.fxdiagram.core.tools.actions
 
 import de.fxdiagram.core.XRoot
 import eu.hansolo.enzo.radialmenu.Symbol
+import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
@@ -9,7 +10,7 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import javafx.scene.input.KeyCode
+import de.fxdiagram.core.viewport.ViewportTransition
 
 class CenterAction implements DiagramAction {
 	
@@ -32,7 +33,7 @@ class CenterAction implements DiagramAction {
 			val targetScale = min(1, 
 					min(root.scene.width / selectionBounds.width, 
 						root.scene.height / selectionBounds.height))
-			new ScrollToAndScaleTransition(root, selectionBounds.center, targetScale).play
+			new ViewportTransition(root, selectionBounds.center, targetScale).play
 		}
 	}
 }

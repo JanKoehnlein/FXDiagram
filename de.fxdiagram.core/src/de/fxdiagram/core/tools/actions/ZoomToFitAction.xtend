@@ -10,6 +10,7 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.viewport.ViewportTransition
 
 class ZoomToFitAction implements DiagramAction {
 	
@@ -32,7 +33,7 @@ class ZoomToFitAction implements DiagramAction {
 			val targetScale =  
 					min(root.scene.width / selectionBounds.width, 
 						root.scene.height / selectionBounds.height)
-			new ScrollToAndScaleTransition(root, selectionBounds.center, targetScale).play
+			new ViewportTransition(root, selectionBounds.center, targetScale).play
 		}
 	}
 }

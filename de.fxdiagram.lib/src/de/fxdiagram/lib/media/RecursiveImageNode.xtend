@@ -6,7 +6,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.export.SvgExportable
 import de.fxdiagram.core.export.SvgExporter
-import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
+import de.fxdiagram.core.services.ResourceDescriptor
 import java.util.Deque
 import java.util.LinkedList
 import javafx.beans.property.DoubleProperty
@@ -24,7 +24,7 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.services.ResourceDescriptor
+import de.fxdiagram.core.viewport.ViewportTransition
 
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'x', 'y', 'scale'])
 class RecursiveImageNode extends XNode implements SvgExportable {
@@ -79,7 +79,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 			actualHeightProperty.get * 0.5 * (1 - scale + 2 * this.y / actualHeightProperty.get) *
 				(1 / (1 - scale))
 		)
-		new ScrollToAndScaleTransition(root, centerInDiagram, 500) => [
+		new ViewportTransition(root, centerInDiagram, 500) => [
 			duration = 5.seconds
 			interpolator = [
 				exp(log(10000) * it) / 10000
@@ -93,7 +93,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 		if(!isZoomedIn)
 			return
 		val centerInDiagram = localToRootDiagram(boundsInLocal.center)
-		new ScrollToAndScaleTransition(root, centerInDiagram, 1) => [
+		new ViewportTransition(root, centerInDiagram, 1) => [
 			duration = 5.seconds
 			interpolator = [
 				log(it * 10000)/log(10000)

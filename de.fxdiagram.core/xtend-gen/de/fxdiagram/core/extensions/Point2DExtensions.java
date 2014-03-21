@@ -107,6 +107,11 @@ public class Point2DExtensions {
   }
   
   @Pure
+  public static double norm(final double x, final double y) {
+    return Math.sqrt(((x * x) + (y * y)));
+  }
+  
+  @Pure
   public static double linear(final double x, final double y, final double lambda) {
     return (x + ((y - x) * lambda));
   }

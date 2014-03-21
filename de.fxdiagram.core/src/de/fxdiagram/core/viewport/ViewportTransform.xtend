@@ -1,8 +1,11 @@
-package de.fxdiagram.core.extensions
+package de.fxdiagram.core.viewport
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ReadOnly
+import de.fxdiagram.core.extensions.TransformExtensions
+import javafx.beans.property.Property
 import javafx.geometry.Point2D
+import javafx.scene.Node
 import javafx.scene.transform.Affine
 import javafx.scene.transform.Transform
 
@@ -19,7 +22,7 @@ import static extension java.lang.Math.*
  * As opposed to the {@link TransformExtensions} this class exposes scale, rotation and translation 
  * as JavaFX {@link Property Properties}, such that clients can e.g. react on changes of the scale. 
  */
-class AccumulativeTransform2D {
+class ViewportTransform {
 
 	public static val MIN_SCALE = EPSILON
 
@@ -115,4 +118,16 @@ class AccumulativeTransform2D {
 	def Transform getTransform() {
 		transform
 	}
+	
+	def createMemento() {
+		new ViewportMemento(translateX, translateY, scale, rotate)
+	}
+	
+	def applyMemento(ViewportMemento it) {
+		this.translateX = translateX
+		this.translateY = translateY
+		this.scale = scale
+		this.rotate = rotate
+	}
 }
+

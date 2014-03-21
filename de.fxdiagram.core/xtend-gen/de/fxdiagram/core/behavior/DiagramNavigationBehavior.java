@@ -10,7 +10,7 @@ import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.NavigationBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
+import de.fxdiagram.core.viewport.ViewportTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -90,15 +90,15 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
     return (!Objects.equal(previous, null));
   }
   
-  protected ScrollToAndScaleTransition reveal(final XShape node) {
+  protected ViewportTransition reveal(final XShape node) {
     XDiagram _host = this.getHost();
     XRoot _root = CoreExtensions.getRoot(_host);
     Bounds _boundsInLocal = node.getBoundsInLocal();
     Point2D _center = BoundsExtensions.center(_boundsInLocal);
     Point2D _localToDiagram = CoreExtensions.localToDiagram(node, _center);
-    ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, _localToDiagram, 1);
-    final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
-      public void apply(final ScrollToAndScaleTransition it) {
+    ViewportTransition _viewportTransition = new ViewportTransition(_root, _localToDiagram, 1);
+    final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
+      public void apply(final ViewportTransition it) {
         final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
           public void handle(final ActionEvent it) {
             XDiagram _host = DiagramNavigationBehavior.this.getHost();
@@ -117,6 +117,6 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
         it.play();
       }
     };
-    return ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+    return ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function);
   }
 }

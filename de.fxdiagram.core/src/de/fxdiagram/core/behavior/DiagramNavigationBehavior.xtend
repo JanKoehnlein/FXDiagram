@@ -3,10 +3,10 @@ package de.fxdiagram.core.behavior
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
-import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.viewport.ViewportTransition
 
 interface NavigationBehavior extends Behavior {
 	
@@ -53,7 +53,7 @@ class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> implement
 	}
 
 	protected def reveal(XShape node) {
-		new ScrollToAndScaleTransition(host.root, node.localToDiagram(node.boundsInLocal.center), 1) => [
+		new ViewportTransition(host.root, node.localToDiagram(node.boundsInLocal.center), 1) => [
 			onFinished = [
 				host.root.currentSelection.forEach[selected = false]
 				node.selected = true

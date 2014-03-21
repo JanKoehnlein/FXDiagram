@@ -9,12 +9,12 @@ import de.fxdiagram.core.behavior.AbstractCloseBehavior;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.CommandStack;
-import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
+import de.fxdiagram.core.viewport.ViewportTransform;
+import de.fxdiagram.core.viewport.ViewportTransition;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
 import de.fxdiagram.lib.simple.OpenDiagramParameters;
@@ -158,9 +158,9 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
       double _min = Math.min(_divide, _divide_1);
       double _min_1 = Math.min(1, _min);
       double _divide_2 = (_min_1 / initialScale);
-      double _max = Math.max(AccumulativeTransform2D.MIN_SCALE, _divide_2);
+      double _max = Math.max(ViewportTransform.MIN_SCALE, _divide_2);
       XRoot _root_2 = this.params.getRoot();
-      AccumulativeTransform2D _diagramTransform = _root_2.getDiagramTransform();
+      ViewportTransform _diagramTransform = _root_2.getDiagramTransform();
       double _scale = _diagramTransform.getScale();
       final double targetScale = (_max * _scale);
       ParallelTransition _parallelTransition = new ParallelTransition();
@@ -169,9 +169,9 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
           ObservableList<Animation> _children = it.getChildren();
           XRoot _root = OpenCloseDiagramCommand.this.params.getRoot();
           Point2D _nodeCenterInDiagram = OpenCloseDiagramCommand.this.params.getNodeCenterInDiagram();
-          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, _nodeCenterInDiagram, targetScale);
-          final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
-            public void apply(final ScrollToAndScaleTransition it) {
+          ViewportTransition _viewportTransition = new ViewportTransition(_root, _nodeCenterInDiagram, targetScale);
+          final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
+            public void apply(final ViewportTransition it) {
               it.setDuration(duration);
               final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                 public void handle(final ActionEvent it) {
@@ -222,7 +222,7 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
               it.setOnFinished(_function);
             }
           };
-          ScrollToAndScaleTransition _doubleArrow = ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+          ViewportTransition _doubleArrow = ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function);
           _children.add(_doubleArrow);
           ObservableList<Animation> _children_1 = it.getChildren();
           FadeTransition _fadeTransition = new FadeTransition();
@@ -298,9 +298,9 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
           ObservableList<Animation> _children = it.getChildren();
           XRoot _root = OpenCloseDiagramCommand.this.params.getRoot();
           Point2D _nodeCenterInDiagram = OpenCloseDiagramCommand.this.params.getNodeCenterInDiagram();
-          ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, _nodeCenterInDiagram, 1);
-          final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
-            public void apply(final ScrollToAndScaleTransition it) {
+          ViewportTransition _viewportTransition = new ViewportTransition(_root, _nodeCenterInDiagram, 1);
+          final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
+            public void apply(final ViewportTransition it) {
               it.setDuration(duration);
               final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                 public void handle(final ActionEvent it) {
@@ -321,7 +321,7 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
               it.setOnFinished(_function);
             }
           };
-          ScrollToAndScaleTransition _doubleArrow = ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+          ViewportTransition _doubleArrow = ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function);
           _children.add(_doubleArrow);
           ObservableList<Animation> _children_1 = it.getChildren();
           FadeTransition _fadeTransition = new FadeTransition();

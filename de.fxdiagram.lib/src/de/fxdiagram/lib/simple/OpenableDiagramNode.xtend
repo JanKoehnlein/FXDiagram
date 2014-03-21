@@ -10,9 +10,8 @@ import de.fxdiagram.core.behavior.AbstractCloseBehavior
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.command.AbstractAnimationCommand
 import de.fxdiagram.core.command.CommandContext
-import de.fxdiagram.core.extensions.AccumulativeTransform2D
 import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition
+import de.fxdiagram.core.viewport.ViewportTransform
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import eu.hansolo.enzo.radialmenu.Symbol
@@ -38,6 +37,7 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
+import de.fxdiagram.core.viewport.ViewportTransition
 
 @Logging
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'innerDiagram'])
@@ -151,12 +151,12 @@ class OpenCloseDiagramCommand extends AbstractAnimationCommand {
 		diagramScaler.activate
 		val initialScale = host.innerDiagram.localToScene(new BoundingBox(0,0,1,0)).width
 		val diagramBoundsInLocal = host.innerDiagram.boundsInLocal
-		val targetScale = max(AccumulativeTransform2D.MIN_SCALE, 
+		val targetScale = max(ViewportTransform.MIN_SCALE, 
 			min(1, 
 				min(root.scene.width / diagramBoundsInLocal.width, 
 					root.scene.height / diagramBoundsInLocal.height)) / initialScale) * root.diagramTransform.scale
 		new ParallelTransition => [
-			children += new ScrollToAndScaleTransition(root, nodeCenterInDiagram, targetScale) => [
+			children += new ViewportTransition(root, nodeCenterInDiagram, targetScale) => [
 				it.duration = duration
 				onFinished = [
 					diagramScaler.deactivate
@@ -199,7 +199,7 @@ class OpenCloseDiagramCommand extends AbstractAnimationCommand {
 		host.innerDiagram.layout
 		diagramScaler.activate
 		new ParallelTransition => [
-			children += new ScrollToAndScaleTransition(root, nodeCenterInDiagram, 1) => [
+			children += new ViewportTransition(root, nodeCenterInDiagram, 1) => [
 				it.duration = duration
 				onFinished = [
 					diagramScaler.deactivate

@@ -38,7 +38,7 @@ class DiagramGestureTool implements XDiagramTool {
 		]
 		rotateHandler = [
 			if (shortcutDown)
-				root.diagramTransform.rotateRelative(angle, sceneX, sceneY)
+				root.diagramTransform.rotateRelative(-angle, sceneX, sceneY)
 		]
 	}
 

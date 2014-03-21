@@ -60,7 +60,7 @@ class XRoot extends Parent implements XActivatable {
 	
 	Model model
 	
-	CommandStack commandStack = new CommandStack
+	CommandStack commandStack = new CommandStack(this)
 	
 	new() {
 		children += diagramCanvas

@@ -62,6 +62,11 @@ class Point2DExtensions {
 	}
 	
 	@Pure
+	static def norm(double x, double y) {
+		sqrt(x*x + y*y)
+	}
+	
+	@Pure
 	static def linear(double x, double y, double lambda) {
 		x + (y-x) * lambda
 	}

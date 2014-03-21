@@ -6,11 +6,11 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.viewport.ViewportTransform;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
@@ -119,7 +119,7 @@ public class LevelOfDetailDiagramNode extends XNode {
       LevelOfDetailDiagramNode.LOG.severe(_plus_1);
     } else {
       XDiagram _diagram = CoreExtensions.getDiagram(this);
-      AccumulativeTransform2D _canvasTransform = _diagram.getCanvasTransform();
+      ViewportTransform _canvasTransform = _diagram.getCanvasTransform();
       ReadOnlyDoubleProperty _scaleProperty = _canvasTransform.scaleProperty();
       final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {

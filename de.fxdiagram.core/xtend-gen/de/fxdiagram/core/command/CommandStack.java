@@ -1,5 +1,6 @@
 package de.fxdiagram.core.command;
 
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.Command;
 import de.fxdiagram.core.command.CommandContext;
 import java.util.LinkedList;
@@ -11,7 +12,12 @@ public class CommandStack {
   
   private LinkedList<Command> redoStack = CollectionLiterals.<Command>newLinkedList();
   
-  private CommandContext context = new CommandContext();
+  private CommandContext context;
+  
+  public CommandStack(final XRoot root) {
+    CommandContext _commandContext = new CommandContext(root);
+    this.context = _commandContext;
+  }
   
   public boolean canUndo() {
     boolean _and = false;

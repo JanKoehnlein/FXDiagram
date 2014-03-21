@@ -12,7 +12,7 @@ import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ResourceDescriptor;
-import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
+import de.fxdiagram.core.viewport.ViewportTransition;
 import de.fxdiagram.lib.media.FirstRecursiveImageNode;
 import javafx.animation.Interpolator;
 import javafx.beans.property.DoubleProperty;
@@ -135,9 +135,9 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     double _multiply_7 = (_multiply_6 * _divide_3);
     final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(this, _multiply_3, _multiply_7);
     XRoot _root = CoreExtensions.getRoot(this);
-    ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, centerInDiagram, 500);
-    final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
-      public void apply(final ScrollToAndScaleTransition it) {
+    ViewportTransition _viewportTransition = new ViewportTransition(_root, centerInDiagram, 500);
+    final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
+      public void apply(final ViewportTransition it) {
         Duration _seconds = Duration.seconds(5);
         it.setDuration(_seconds);
         final Interpolator _function = new Interpolator() {
@@ -153,7 +153,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
         it.play();
       }
     };
-    ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+    ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function);
     this.isZoomedIn = true;
   }
   
@@ -165,9 +165,9 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     Point2D _center = BoundsExtensions.center(_boundsInLocal);
     final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(this, _center);
     XRoot _root = CoreExtensions.getRoot(this);
-    ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(_root, centerInDiagram, 1);
-    final Procedure1<ScrollToAndScaleTransition> _function = new Procedure1<ScrollToAndScaleTransition>() {
-      public void apply(final ScrollToAndScaleTransition it) {
+    ViewportTransition _viewportTransition = new ViewportTransition(_root, centerInDiagram, 1);
+    final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
+      public void apply(final ViewportTransition it) {
         Duration _seconds = Duration.seconds(5);
         it.setDuration(_seconds);
         final Interpolator _function = new Interpolator() {
@@ -182,7 +182,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
         it.play();
       }
     };
-    ObjectExtensions.<ScrollToAndScaleTransition>operator_doubleArrow(_scrollToAndScaleTransition, _function);
+    ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function);
     this.isZoomedIn = false;
   }
   

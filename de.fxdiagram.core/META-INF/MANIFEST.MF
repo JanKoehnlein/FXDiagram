@@ -38,7 +38,8 @@ Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.tools,
  de.fxdiagram.core.tools.actions,
  de.fxdiagram.core.tools.chooser,
- de.fxdiagram.core.transform
+ de.fxdiagram.core.transform,
+ de.fxdiagram.core.viewport
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",

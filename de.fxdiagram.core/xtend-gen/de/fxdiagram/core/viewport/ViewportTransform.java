@@ -1,13 +1,16 @@
-package de.fxdiagram.core.extensions;
+package de.fxdiagram.core.viewport;
 
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
+import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.viewport.ViewportMemento;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.eclipse.xtend.lib.Property;
 
 /**
  * Container for a {@link Transform} that allows basic 2D transformations.
@@ -19,12 +22,12 @@ import org.eclipse.xtend.lib.Property;
  * as JavaFX {@link Property Properties}, such that clients can e.g. react on changes of the scale.
  */
 @SuppressWarnings("all")
-public class AccumulativeTransform2D {
+public class ViewportTransform {
   public final static double MIN_SCALE = NumberExpressionExtensions.EPSILON;
   
   private Affine transform;
   
-  public AccumulativeTransform2D() {
+  public ViewportTransform() {
     Affine _affine = new Affine();
     this.transform = _affine;
     DoubleProperty _txProperty = this.transform.txProperty();
@@ -65,7 +68,7 @@ public class AccumulativeTransform2D {
   public double scaleRelative(final double deltaScale) {
     double _scale = this.getScale();
     double _multiply = (_scale * deltaScale);
-    final double safeNewScale = Math.max(AccumulativeTransform2D.MIN_SCALE, _multiply);
+    final double safeNewScale = Math.max(ViewportTransform.MIN_SCALE, _multiply);
     double _scale_1 = this.getScale();
     final double safeDeltaScale = (safeNewScale / _scale_1);
     double _rotate = this.getRotate();
@@ -81,7 +84,7 @@ public class AccumulativeTransform2D {
   }
   
   public double setScale(final double newScale) {
-    double _max = Math.max(AccumulativeTransform2D.MIN_SCALE, newScale);
+    double _max = Math.max(ViewportTransform.MIN_SCALE, newScale);
     this.scaleProperty.set(_max);
     double _scale = this.getScale();
     double _rotate = this.getRotate();
@@ -160,6 +163,25 @@ public class AccumulativeTransform2D {
   
   public Transform getTransform() {
     return this.transform;
+  }
+  
+  public ViewportMemento createMemento() {
+    double _translateX = this.getTranslateX();
+    double _translateY = this.getTranslateY();
+    double _scale = this.getScale();
+    double _rotate = this.getRotate();
+    return new ViewportMemento(_translateX, _translateY, _scale, _rotate);
+  }
+  
+  public void applyMemento(final ViewportMemento it) {
+    double _translateX = it.getTranslateX();
+    this.setTranslateX(_translateX);
+    double _translateY = it.getTranslateY();
+    this.setTranslateY(_translateY);
+    double _scale = it.getScale();
+    this.setScale(_scale);
+    double _rotate = it.getRotate();
+    this.setRotate(_rotate);
   }
   
   private ReadOnlyDoubleWrapper scaleProperty = new ReadOnlyDoubleWrapper(this, "scale",_initScale());

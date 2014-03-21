@@ -11,7 +11,7 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import de.fxdiagram.core.tools.actions.ScrollToAndScaleTransition;
+import de.fxdiagram.core.viewport.ViewportTransition;
 import eu.hansolo.enzo.radialmenu.Symbol;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
@@ -98,8 +98,8 @@ public class CenterAction implements DiagramAction {
       double _min = Math.min(_divide, _divide_1);
       final double targetScale = Math.min(1, _min);
       Point2D _center = BoundsExtensions.center(selectionBounds);
-      ScrollToAndScaleTransition _scrollToAndScaleTransition = new ScrollToAndScaleTransition(root, _center, targetScale);
-      _scrollToAndScaleTransition.play();
+      ViewportTransition _viewportTransition = new ViewportTransition(root, _center, targetScale);
+      _viewportTransition.play();
     }
   }
 }

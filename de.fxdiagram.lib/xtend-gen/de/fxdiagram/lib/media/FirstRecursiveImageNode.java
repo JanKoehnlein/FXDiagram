@@ -3,8 +3,8 @@ package de.fxdiagram.lib.media;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.viewport.ViewportTransform;
 import de.fxdiagram.lib.media.RecursiveImageNode;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -56,7 +56,7 @@ public class FirstRecursiveImageNode extends XNode {
     _scaleYProperty.bind(_scaleProperty_1);
     this.updateChildPanes();
     XDiagram _diagram = CoreExtensions.getDiagram(this);
-    AccumulativeTransform2D _canvasTransform = _diagram.getCanvasTransform();
+    ViewportTransform _canvasTransform = _diagram.getCanvasTransform();
     ReadOnlyDoubleProperty _scaleProperty_2 = _canvasTransform.scaleProperty();
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {

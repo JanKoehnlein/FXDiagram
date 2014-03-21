@@ -2,9 +2,9 @@ package de.fxdiagram.core.tools;
 
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.extensions.AccumulativeTransform2D;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.ZoomContext;
+import de.fxdiagram.core.viewport.ViewportTransform;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -44,12 +44,12 @@ public class DiagramGestureTool implements XDiagramTool {
         double _totalZoomFactor = it.getTotalZoomFactor();
         double _previousScale = DiagramGestureTool.this.zoomContext.getPreviousScale();
         final double scale = (_totalZoomFactor / _previousScale);
-        AccumulativeTransform2D _diagramTransform = root.getDiagramTransform();
+        ViewportTransform _diagramTransform = root.getDiagramTransform();
         _diagramTransform.scaleRelative(scale);
         XDiagram _diagram = root.getDiagram();
         Point2D _pivotInDiagram = DiagramGestureTool.this.zoomContext.getPivotInDiagram();
         final Point2D pivotInScene = _diagram.localToScene(_pivotInDiagram);
-        AccumulativeTransform2D _diagramTransform_1 = root.getDiagramTransform();
+        ViewportTransform _diagramTransform_1 = root.getDiagramTransform();
         double _sceneX = it.getSceneX();
         double _x = pivotInScene.getX();
         double _minus = (_sceneX - _x);
@@ -64,7 +64,7 @@ public class DiagramGestureTool implements XDiagramTool {
     this.zoomHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
       public void handle(final ScrollEvent it) {
-        AccumulativeTransform2D _diagramTransform = root.getDiagramTransform();
+        ViewportTransform _diagramTransform = root.getDiagramTransform();
         double _deltaX = it.getDeltaX();
         double _deltaY = it.getDeltaY();
         _diagramTransform.translateRelative(_deltaX, _deltaY);
@@ -75,11 +75,12 @@ public class DiagramGestureTool implements XDiagramTool {
       public void handle(final RotateEvent it) {
         boolean _isShortcutDown = it.isShortcutDown();
         if (_isShortcutDown) {
-          AccumulativeTransform2D _diagramTransform = root.getDiagramTransform();
+          ViewportTransform _diagramTransform = root.getDiagramTransform();
           double _angle = it.getAngle();
+          double _minus = (-_angle);
           double _sceneX = it.getSceneX();
           double _sceneY = it.getSceneY();
-          _diagramTransform.rotateRelative(_angle, _sceneX, _sceneY);
+          _diagramTransform.rotateRelative(_minus, _sceneX, _sceneY);
         }
       }
     };

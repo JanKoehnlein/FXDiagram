@@ -1,13 +1,18 @@
 package de.fxdiagram.core.command
 
 import java.util.LinkedList
+import de.fxdiagram.core.XRoot
 
 class CommandStack {
 	
 	LinkedList<Command> undoStack = newLinkedList
 	LinkedList<Command> redoStack = newLinkedList
 
-	CommandContext context = new CommandContext
+	CommandContext context 
+	
+	new(XRoot root) {
+		context = new CommandContext(root)
+	}
 	
 	def boolean canUndo() {
 		return !undoStack.empty && undoStack.last?.canUndo

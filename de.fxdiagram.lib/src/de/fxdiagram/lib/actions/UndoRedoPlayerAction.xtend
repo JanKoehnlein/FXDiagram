@@ -2,6 +2,7 @@ package de.fxdiagram.lib.actions
 
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.command.AnimationQueueListener
+import de.fxdiagram.core.tools.actions.DiagramAction
 import javafx.animation.FadeTransition
 import javafx.geometry.Pos
 import javafx.scene.Node
@@ -12,10 +13,11 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import javafx.scene.shape.Rectangle
 
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import static extension de.fxdiagram.core.extensions.UriExtensions.*
+import static de.fxdiagram.core.extensions.UriExtensions.*
 
-class UndoRedoPlayerAction implements de.fxdiagram.core.tools.actions.DiagramAction {
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+
+class UndoRedoPlayerAction implements DiagramAction {
 	
     XRoot root
 

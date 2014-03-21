@@ -8,10 +8,10 @@ import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
 import de.fxdiagram.core.behavior.Behavior
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior
 import de.fxdiagram.core.behavior.NavigationBehavior
-import de.fxdiagram.core.extensions.AccumulativeTransform2D
 import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.extensions.InitializingMapListener
+import de.fxdiagram.core.viewport.ViewportTransform
 import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
 import javafx.collections.ListChangeListener
@@ -58,7 +58,7 @@ class XDiagram extends Group implements XActivatable {
 	
 	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
 	
-	AccumulativeTransform2D canvasTransform
+	ViewportTransform canvasTransform
 	
 	boolean needsCentering = true
 
@@ -78,7 +78,7 @@ class XDiagram extends Group implements XActivatable {
 			else 
 				nodeLayer.children -= connections
 		]
-		canvasTransform = new AccumulativeTransform2D
+		canvasTransform = new ViewportTransform
 		transforms.setAll(canvasTransform.transform)
 		transforms.addListener([ListChangeListener.Change<Transform> change | 
 			throw new IllegalStateException("Illegal attempt to change the transforms of an XDiagram")
