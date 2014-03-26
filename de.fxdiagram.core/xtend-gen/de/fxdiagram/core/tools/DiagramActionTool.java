@@ -77,7 +77,10 @@ public class DiagramActionTool implements XDiagramTool {
         boolean _equals = Objects.equal(_code, KeyCode.ESCAPE);
         if (_equals) {
           event.consume();
-          RadialMenu.State _state = DiagramActionTool.this.menu.getState();
+          RadialMenu.State _state = null;
+          if (DiagramActionTool.this.menu!=null) {
+            _state=DiagramActionTool.this.menu.getState();
+          }
           boolean _equals_1 = Objects.equal(_state, RadialMenu.State.OPENED);
           if (_equals_1) {
             DiagramActionTool.this.closeMenu();

@@ -40,7 +40,7 @@ class DiagramActionTool implements XDiagramTool {
 				]
 			if(event.code == KeyCode.ESCAPE) {
 				event.consume
-				if(menu.state == State.OPENED) {
+				if(menu?.state == State.OPENED) {
 					closeMenu
 					return
 				} else {
