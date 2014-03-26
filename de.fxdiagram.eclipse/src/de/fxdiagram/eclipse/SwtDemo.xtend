@@ -19,7 +19,7 @@ class SwtDemo {
 		val shell = new Shell(display)
 		shell.layout = new FillLayout
 		val canvas = new FXCanvas(shell, SWT.NONE)
-		SwtToFXGestureConverter.register(canvas);
+		val gestureConverter = new SwtToFXGestureConverter(canvas)
 		val scene = createScene
 		canvas.scene = scene
 		shell.open
@@ -27,6 +27,7 @@ class SwtDemo {
 			if (!display.readAndDispatch)
 				display.sleep
 		}
+		gestureConverter.dispose
 		display.dispose
 	}
 }

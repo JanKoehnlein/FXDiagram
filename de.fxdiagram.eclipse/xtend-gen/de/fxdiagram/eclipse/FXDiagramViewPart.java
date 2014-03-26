@@ -12,12 +12,20 @@ import org.eclipse.ui.part.ViewPart;
 public class FXDiagramViewPart extends ViewPart {
   private FXCanvas canvas;
   
+  private SwtToFXGestureConverter gestureConverter;
+  
   public void createPartControl(final Composite parent) {
     FXCanvas _fXCanvas = new FXCanvas(parent, SWT.NONE);
     this.canvas = _fXCanvas;
-    SwtToFXGestureConverter.register(this.canvas);
+    SwtToFXGestureConverter _swtToFXGestureConverter = new SwtToFXGestureConverter(this.canvas);
+    this.gestureConverter = _swtToFXGestureConverter;
     Scene _createFxScene = this.createFxScene();
     this.canvas.setScene(_createFxScene);
+  }
+  
+  public void dispose() {
+    this.gestureConverter.dispose();
+    super.dispose();
   }
   
   protected Scene createFxScene() {

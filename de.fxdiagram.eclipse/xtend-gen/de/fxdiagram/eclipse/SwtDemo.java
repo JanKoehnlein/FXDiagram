@@ -22,7 +22,7 @@ public class SwtDemo {
     FillLayout _fillLayout = new FillLayout();
     shell.setLayout(_fillLayout);
     final FXCanvas canvas = new FXCanvas(shell, SWT.NONE);
-    SwtToFXGestureConverter.register(canvas);
+    final SwtToFXGestureConverter gestureConverter = new SwtToFXGestureConverter(canvas);
     final Scene scene = SwtDemo.createScene();
     canvas.setScene(scene);
     shell.open();
@@ -39,6 +39,7 @@ public class SwtDemo {
       boolean _not_2 = (!_isDisposed_1);
       _while = _not_2;
     }
+    gestureConverter.dispose();
     display.dispose();
   }
 }

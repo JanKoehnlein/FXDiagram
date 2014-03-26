@@ -12,10 +12,17 @@ class FXDiagramViewPart extends ViewPart {
 
 	FXCanvas canvas
 	
+	SwtToFXGestureConverter gestureConverter
+	
 	override createPartControl(Composite parent) {
 		canvas = new FXCanvas(parent, SWT.NONE)
-		SwtToFXGestureConverter.register(canvas);
+		gestureConverter = new SwtToFXGestureConverter(canvas)
 		canvas.scene = createFxScene
+	}
+	
+	override dispose() {
+		gestureConverter.dispose()
+		super.dispose()
 	}
 	
 	protected def Scene createFxScene() {
