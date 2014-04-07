@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="de.fxdiagram.xtext.glue.FXDiagramView"
+            icon="icons/FXDiagram.png"
+            id="org.eclipse.xtext.glue.FXDiagramView"
+            name="Diagram View"
+            restorable="true">
+      </view>
+   </extension>
+      <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.ui.category.navigate"
+            description="Show Element in FXDiagram"
+            id="de.fxdiagram.xtext.glue.showInDiagramCommand"
+            name="Show in FXDiagram">
+      </command>
+   </extension>
+   <extension point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+             <command
+                 commandId="de.fxdiagram.xtext.glue.showInDiagramCommand"
+                 style="push"
+                 tooltip="Open in FXDiagram">
+         </command>  
+         </menuContribution>
+	</extension>
+   
+
+</plugin>
