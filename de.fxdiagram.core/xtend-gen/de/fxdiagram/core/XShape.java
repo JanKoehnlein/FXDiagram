@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.extensions.InitializingMapListener;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
@@ -13,8 +14,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -73,15 +72,22 @@ public abstract class XShape extends Parent implements XActivatable {
       this.initializeGraphics();
       this.doActivate();
       this.isActiveProperty.set(true);
-      final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-        public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldVlaue, final Boolean newValue) {
-          XShape.this.selectionFeedback((newValue).booleanValue());
-          if ((newValue).booleanValue()) {
-            XShape.this.toFront();
-          }
+      InitializingListener<Boolean> _initializingListener = new InitializingListener<Boolean>();
+      final Procedure1<InitializingListener<Boolean>> _function = new Procedure1<InitializingListener<Boolean>>() {
+        public void apply(final InitializingListener<Boolean> it) {
+          final Procedure1<Boolean> _function = new Procedure1<Boolean>() {
+            public void apply(final Boolean it) {
+              XShape.this.selectionFeedback((it).booleanValue());
+              if ((it).booleanValue()) {
+                XShape.this.toFront();
+              }
+            }
+          };
+          it.setSet(_function);
         }
       };
-      this.selectedProperty.addListener(_function);
+      InitializingListener<Boolean> _doubleArrow = ObjectExtensions.<InitializingListener<Boolean>>operator_doubleArrow(_initializingListener, _function);
+      CoreExtensions.<Boolean>addInitializingListener(this.selectedProperty, _doubleArrow);
       InitializingMapListener<Class<? extends Behavior>,Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
       final Procedure1<InitializingMapListener<Class<? extends Behavior>,Behavior>> _function_1 = new Procedure1<InitializingMapListener<Class<? extends Behavior>,Behavior>>() {
         public void apply(final InitializingMapListener<Class<? extends Behavior>,Behavior> it) {
@@ -93,8 +99,8 @@ public abstract class XShape extends Parent implements XActivatable {
           it.setPut(_function);
         }
       };
-      InitializingMapListener<Class<? extends Behavior>,Behavior> _doubleArrow = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>,Behavior>>operator_doubleArrow(_initializingMapListener, _function_1);
-      CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow);
+      InitializingMapListener<Class<? extends Behavior>,Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>,Behavior>>operator_doubleArrow(_initializingMapListener, _function_1);
+      CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow_1);
     }
   }
   

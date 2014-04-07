@@ -15,6 +15,7 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.annotations.logging.Logging
 import javafx.beans.property.SimpleObjectProperty
+import de.fxdiagram.core.extensions.InitializingListener
 
 @Logging
 abstract class XShape extends Parent implements XActivatable {
@@ -45,7 +46,7 @@ abstract class XShape extends Parent implements XActivatable {
 	
 	protected def Node createNode()
 	
-	def initializeGraphics() {
+	def initializeGraphics() {  
 		if(getNode() == null)
 			LOG.severe("Node is null")
 	}
@@ -55,12 +56,13 @@ abstract class XShape extends Parent implements XActivatable {
 			initializeGraphics
 			doActivate
 			isActiveProperty.set(true)
-			selectedProperty.addListener [
-				property, oldVlaue, newValue |
-				selectionFeedback(newValue)
-				if(newValue)
-					toFront
-			]
+			selectedProperty.addInitializingListener (new InitializingListener => [
+				set = [
+					selectionFeedback(it)
+					if(it)
+						toFront
+				]
+			])
 			behaviors.addInitializingListener(new InitializingMapListener => [
 				put = [ key, Behavior value | value.activate ]
 			])
