@@ -40,7 +40,9 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 			.forEach[
 				val accessor = getPropertyAccessor(annotatedClass, it, true)
 				if(accessor == null) 
-					modelAnnotation.addError("Cannot find JavaFX property '" + it + "'")
+					modelAnnotation.addError("Cannot find JavaFX property '" + it + "'"
+//						+ annotatedClass.hierarchy
+					)
 				else 
 					validPropertyNames += it
 			]
@@ -62,6 +64,14 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 			'''
 		])
 	}
+	
+	protected def CharSequence getHierarchy(ClassDeclaration clazz) '''
+		Class: «clazz.simpleName»
+			«FOR m: clazz.declaredMethods»
+				«m.simpleName»
+			«ENDFOR»
+		«(clazz.extendedClass?.type as ClassDeclaration)?.hierarchy ?: ''»
+	'''
 	
 	protected def MemberDeclaration getPropertyAccessor(ClassDeclaration clazz, String propertyName, boolean allowPrivate) {
 		val field = clazz.findDeclaredField(propertyName) 

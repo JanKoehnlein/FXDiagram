@@ -28,6 +28,7 @@ import org.eclipse.xtend.lib.macro.declaration.MutableMethodDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.Type;
 import org.eclipse.xtend.lib.macro.declaration.TypeReference;
 import org.eclipse.xtend.lib.macro.declaration.Visibility;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtend2.lib.StringConcatenationClient;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -113,6 +114,45 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
       }
     };
     annotatedClass.addMethod("populate", _function_2);
+  }
+  
+  protected CharSequence getHierarchy(final ClassDeclaration clazz) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Class: ");
+    String _simpleName = clazz.getSimpleName();
+    _builder.append(_simpleName, "");
+    _builder.newLineIfNotEmpty();
+    {
+      Iterable<? extends MethodDeclaration> _declaredMethods = clazz.getDeclaredMethods();
+      for(final MethodDeclaration m : _declaredMethods) {
+        _builder.append("\t");
+        String _simpleName_1 = m.getSimpleName();
+        _builder.append(_simpleName_1, "\t");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    CharSequence _elvis = null;
+    TypeReference _extendedClass = clazz.getExtendedClass();
+    Type _type = null;
+    if (_extendedClass!=null) {
+      _type=_extendedClass.getType();
+    }
+    CharSequence _hierarchy = null;
+    if (((ClassDeclaration) _type)!=null) {
+      Type _type_1 = null;
+      if (_extendedClass!=null) {
+        _type_1=_extendedClass.getType();
+      }
+      _hierarchy=this.getHierarchy(((ClassDeclaration) _type_1));
+    }
+    if (_hierarchy != null) {
+      _elvis = _hierarchy;
+    } else {
+      _elvis = "";
+    }
+    _builder.append(_elvis, "");
+    _builder.newLineIfNotEmpty();
+    return _builder;
   }
   
   protected MemberDeclaration getPropertyAccessor(final ClassDeclaration clazz, final String propertyName, final boolean allowPrivate) {
