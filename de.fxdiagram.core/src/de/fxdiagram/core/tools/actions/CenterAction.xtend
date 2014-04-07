@@ -11,6 +11,7 @@ import static java.lang.Math.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.viewport.ViewportTransition
+import de.fxdiagram.core.command.ViewportCommand
 
 class CenterAction implements DiagramAction {
 	
@@ -23,17 +24,21 @@ class CenterAction implements DiagramAction {
 	}
 
 	override perform(XRoot root) {
-		val elements = 
-			if(root.currentSelection.empty) 
-		  		root.diagram.nodes + root.diagram.connections
-		  	else
-		  		root.currentSelection
-		val selectionBounds = elements.map[localToRootDiagram(snapBounds)].reduce[a,b|a+b]
-		if(selectionBounds != null && selectionBounds.width > EPSILON && selectionBounds.height > EPSILON) {
-			val targetScale = min(1, 
-					min(root.scene.width / selectionBounds.width, 
-						root.scene.height / selectionBounds.height))
-			new ViewportTransition(root, selectionBounds.center, targetScale).play
-		}
+		root.commandStack.execute(new ViewportCommand [|
+			val elements = 
+				if(root.currentSelection.empty) 
+			  		root.diagram.nodes + root.diagram.connections
+			  	else
+			  		root.currentSelection
+			val selectionBounds = elements.map[localToRootDiagram(snapBounds)].reduce[a,b|a+b]
+			if(selectionBounds != null && selectionBounds.width > EPSILON && selectionBounds.height > EPSILON) {
+				val targetScale = min(1, 
+						min(root.scene.width / selectionBounds.width, 
+							root.scene.height / selectionBounds.height))
+				return new ViewportTransition(root, selectionBounds.center, targetScale)
+			} else {
+				return null
+			}
+		])
 	}
 }

@@ -14,4 +14,5 @@ class ViewportMemento {
 		norm(translateX - other.translateX, translateY - other.translateY) 
 			+ 10 * abs((scale - other.scale)/scale) + 10 * abs(rotate - other.rotate)
 	}
+	
 }

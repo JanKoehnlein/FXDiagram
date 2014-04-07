@@ -18,8 +18,8 @@ class ViewportTransition extends Transition {
 	
 	new(XRoot root, ViewportMemento toMemento, Duration duration) {
 		this.root = root
-		from = root.diagramTransform.createMemento
-		to = toMemento
+		this.from = root.diagramTransform.createMemento
+		this.to = toMemento
 		cycleDuration = new Duration(min(duration.toMillis, from.dist(to)))
 	}
 
@@ -30,23 +30,20 @@ class ViewportTransition extends Transition {
 	new(XRoot root, Point2D targetCenterInDiagram, double targetScale, double targetAngle) {
 		this.root = root
 		this.from = root.diagramTransform.createMemento
-		
-		val toScale = max(ViewportTransform.MIN_SCALE, targetScale)
-		root.diagramTransform => [
-			scaleRelative(toScale/from.scale)
-			rotate = targetAngle
-		]
-		val centerInScene = root.diagram.localToScene(targetCenterInDiagram)
-		val toTranslation = new Point2D(
-					0.5 * root.scene.width - centerInScene.x + root.diagramTransform.translateX,
-					0.5 * root.scene.height - centerInScene.y + root.diagramTransform.translateY)
-		root.diagramTransform.applyMemento(from)
-		this.to = new ViewportMemento(toTranslation.x, toTranslation.y, toScale, targetAngle)
+		this.to = calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle)
 		cycleDuration = 500.millis
 	}
 	
 	def setDuration(Duration duration) {
 		cycleDuration = duration		
+	}
+	
+	def getFrom() {
+		from
+	}
+	
+	def getTo() {
+		to
 	}
 	
 	override protected interpolate(double frac) {
@@ -57,4 +54,19 @@ class ViewportTransition extends Transition {
 			translateY = (1-frac) * from.translateY + frac * to.translateY
 		]
 	}
+	
+	def calculateTargetMemento(Point2D targetCenterInDiagram, double targetScale, double targetAngle) {
+		val toScale = max(ViewportTransform.MIN_SCALE, targetScale)
+		root.diagramTransform => [
+			scaleRelative(toScale/from.scale)
+			rotate = targetAngle
+		]
+		val centerInScene = root.diagram.localToScene(targetCenterInDiagram)
+		val toTranslation = new Point2D(
+					0.5 * root.scene.width - centerInScene.x + root.diagramTransform.translateX,
+					0.5 * root.scene.height - centerInScene.y + root.diagramTransform.translateY)
+		root.diagramTransform.applyMemento(from)
+		return new ViewportMemento(toTranslation.x, toTranslation.y, toScale, targetAngle)
+	}
+	
 }

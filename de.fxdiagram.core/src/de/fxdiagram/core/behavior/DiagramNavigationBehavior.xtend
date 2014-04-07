@@ -7,6 +7,7 @@ import de.fxdiagram.core.XShape
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.viewport.ViewportTransition
+import de.fxdiagram.core.command.ViewportCommand
 
 interface NavigationBehavior extends Behavior {
 	
@@ -53,12 +54,13 @@ class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> implement
 	}
 
 	protected def reveal(XShape node) {
-		new ViewportTransition(host.root, node.localToDiagram(node.boundsInLocal.center), 1) => [
-			onFinished = [
-				host.root.currentSelection.forEach[selected = false]
-				node.selected = true
+		node.root.commandStack.execute(new ViewportCommand [|
+			new ViewportTransition(host.root, node.localToDiagram(node.boundsInLocal.center), 1) => [
+				onFinished = [
+					host.root.currentSelection.forEach[selected = false]
+					node.selected = true
+				]
 			]
-			play
-		]
+		])
 	}
 }

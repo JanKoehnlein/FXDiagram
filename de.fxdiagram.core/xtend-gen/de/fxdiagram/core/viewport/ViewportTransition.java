@@ -41,48 +41,22 @@ public class ViewportTransition extends Transition {
     ViewportTransform _diagramTransform = root.getDiagramTransform();
     ViewportMemento _createMemento = _diagramTransform.createMemento();
     this.from = _createMemento;
-    final double toScale = Math.max(ViewportTransform.MIN_SCALE, targetScale);
-    ViewportTransform _diagramTransform_1 = root.getDiagramTransform();
-    final Procedure1<ViewportTransform> _function = new Procedure1<ViewportTransform>() {
-      public void apply(final ViewportTransform it) {
-        double _scale = ViewportTransition.this.from.getScale();
-        double _divide = (toScale / _scale);
-        it.scaleRelative(_divide);
-        it.setRotate(targetAngle);
-      }
-    };
-    ObjectExtensions.<ViewportTransform>operator_doubleArrow(_diagramTransform_1, _function);
-    XDiagram _diagram = root.getDiagram();
-    final Point2D centerInScene = _diagram.localToScene(targetCenterInDiagram);
-    Scene _scene = root.getScene();
-    double _width = _scene.getWidth();
-    double _multiply = (0.5 * _width);
-    double _x = centerInScene.getX();
-    double _minus = (_multiply - _x);
-    ViewportTransform _diagramTransform_2 = root.getDiagramTransform();
-    double _translateX = _diagramTransform_2.getTranslateX();
-    double _plus = (_minus + _translateX);
-    Scene _scene_1 = root.getScene();
-    double _height = _scene_1.getHeight();
-    double _multiply_1 = (0.5 * _height);
-    double _y = centerInScene.getY();
-    double _minus_1 = (_multiply_1 - _y);
-    ViewportTransform _diagramTransform_3 = root.getDiagramTransform();
-    double _translateY = _diagramTransform_3.getTranslateY();
-    double _plus_1 = (_minus_1 + _translateY);
-    final Point2D toTranslation = new Point2D(_plus, _plus_1);
-    ViewportTransform _diagramTransform_4 = root.getDiagramTransform();
-    _diagramTransform_4.applyMemento(this.from);
-    double _x_1 = toTranslation.getX();
-    double _y_1 = toTranslation.getY();
-    ViewportMemento _viewportMemento = new ViewportMemento(_x_1, _y_1, toScale, targetAngle);
-    this.to = _viewportMemento;
+    ViewportMemento _calculateTargetMemento = this.calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle);
+    this.to = _calculateTargetMemento;
     Duration _millis = Duration.millis(500);
     this.setCycleDuration(_millis);
   }
   
   public void setDuration(final Duration duration) {
     this.setCycleDuration(duration);
+  }
+  
+  public ViewportMemento getFrom() {
+    return this.from;
+  }
+  
+  public ViewportMemento getTo() {
+    return this.to;
   }
   
   protected void interpolate(final double frac) {
@@ -116,5 +90,43 @@ public class ViewportTransition extends Transition {
       }
     };
     ObjectExtensions.<ViewportTransform>operator_doubleArrow(_diagramTransform, _function);
+  }
+  
+  public ViewportMemento calculateTargetMemento(final Point2D targetCenterInDiagram, final double targetScale, final double targetAngle) {
+    final double toScale = Math.max(ViewportTransform.MIN_SCALE, targetScale);
+    ViewportTransform _diagramTransform = this.root.getDiagramTransform();
+    final Procedure1<ViewportTransform> _function = new Procedure1<ViewportTransform>() {
+      public void apply(final ViewportTransform it) {
+        double _scale = ViewportTransition.this.from.getScale();
+        double _divide = (toScale / _scale);
+        it.scaleRelative(_divide);
+        it.setRotate(targetAngle);
+      }
+    };
+    ObjectExtensions.<ViewportTransform>operator_doubleArrow(_diagramTransform, _function);
+    XDiagram _diagram = this.root.getDiagram();
+    final Point2D centerInScene = _diagram.localToScene(targetCenterInDiagram);
+    Scene _scene = this.root.getScene();
+    double _width = _scene.getWidth();
+    double _multiply = (0.5 * _width);
+    double _x = centerInScene.getX();
+    double _minus = (_multiply - _x);
+    ViewportTransform _diagramTransform_1 = this.root.getDiagramTransform();
+    double _translateX = _diagramTransform_1.getTranslateX();
+    double _plus = (_minus + _translateX);
+    Scene _scene_1 = this.root.getScene();
+    double _height = _scene_1.getHeight();
+    double _multiply_1 = (0.5 * _height);
+    double _y = centerInScene.getY();
+    double _minus_1 = (_multiply_1 - _y);
+    ViewportTransform _diagramTransform_2 = this.root.getDiagramTransform();
+    double _translateY = _diagramTransform_2.getTranslateY();
+    double _plus_1 = (_minus_1 + _translateY);
+    final Point2D toTranslation = new Point2D(_plus, _plus_1);
+    ViewportTransform _diagramTransform_3 = this.root.getDiagramTransform();
+    _diagramTransform_3.applyMemento(this.from);
+    double _x_1 = toTranslation.getX();
+    double _y_1 = toTranslation.getY();
+    return new ViewportMemento(_x_1, _y_1, toScale, targetAngle);
   }
 }
