@@ -6,11 +6,9 @@ import de.fxdiagram.annotations.properties.ModelNode
 interface DomainObjectDescriptor extends XModelProvider {
 	def String getName()
 	def String getId()
-	def Object getDomainObject()
 }
 
-@ModelNode(#['id', 'name', 'provider'])
-class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
+abstract class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	
 	@FxProperty /* @ReadOnly */ DomainObjectProvider provider
 	
@@ -18,18 +16,12 @@ class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	
 	@FxProperty /* @ReadOnly */ String name
 	
-	T cachedDomainObject
+	new() {}
 	
 	new(String id, String name, DomainObjectProvider provider) {
 		idProperty.set(id)
 		nameProperty.set(name)
 		providerProperty.set(provider)
-	}
-	
-	override T getDomainObject() {
-		if(cachedDomainObject == null)
-			cachedDomainObject = provider.resolveDomainObject(this) as T
-		return cachedDomainObject
 	}
 	
 	override equals(Object obj) {
@@ -39,6 +31,30 @@ class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	override hashCode() {
 		id.hashCode
 	}
+	
+	def <U> U withDomainObject((T)=>U lambda)
+}
+
+abstract class CachedDomainObjectDescriptor<T> extends DomainObjectDescriptorImpl<T> {
+	
+	T cachedDomainObject
+
+	new() {}
+		
+	new(T domainObject, String id, String name, DomainObjectProvider provider) {
+		super(id, name, provider) 
+		this.cachedDomainObject = domainObject
+	}
+	
+	def getDomainObject() {
+		cachedDomainObject ?: (cachedDomainObject = resolveDomainObject())
+	}
+	
+	override <U> withDomainObject((T)=>U lambda) {
+		lambda.apply(domainObject)
+	}
+	
+	def T resolveDomainObject()
 }
 
 @ModelNode(#['name'])
@@ -51,10 +67,6 @@ class StringDescriptor implements DomainObjectDescriptor {
 	}
 	
 	override getId() {
-		name
-	}
-	
-	override getDomainObject() {
 		name
 	}
 }

@@ -660,8 +660,7 @@ public class LcarsNode extends XNode {
   
   public DBObject getData() {
     DomainObjectDescriptor _domainObject = this.getDomainObject();
-    Object _domainObject_1 = _domainObject.getDomainObject();
-    return ((DBObject) _domainObject_1);
+    return ((LcarsEntryDescriptor) _domainObject).getDomainObject();
   }
   
   public void selectionFeedback(final boolean isSelected) {

@@ -36,10 +36,6 @@ class XtextDomainObjectProvider implements DomainObjectProvider {
 		}
 		return null
 	}
-
-	override resolveDomainObject(DomainObjectDescriptor descriptor) {
-		throw new UnsupportedOperationException("Need a transaction to access EObjects")
-	}
 }
 
 @Data
@@ -78,10 +74,6 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 		getFqn
 	}
 
-	override getDomainObject() {
-		throw new UnsupportedOperationException("Need a transaction to access EObjects")
-	}
-	
 	def <T> T withDomainObject((ECLASS)=>T lambda) {
 		val uriAsURI = URI.createURI(uri)
 		val editor = Access.getIURIEditorOpener.get.open(uriAsURI, true)

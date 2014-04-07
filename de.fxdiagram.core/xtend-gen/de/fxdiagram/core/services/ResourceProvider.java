@@ -42,21 +42,6 @@ public class ResourceProvider implements DomainObjectProviderWithState {
     return _inverse.get(classLoader);
   }
   
-  public Object resolveDomainObject(final DomainObjectDescriptor descriptor) {
-    ResourceHandle _switchResult = null;
-    boolean _matched = false;
-    if (!_matched) {
-      if (descriptor instanceof ResourceDescriptor) {
-        _matched=true;
-        _switchResult = this.resolveResourceHandle(((ResourceDescriptor)descriptor));
-      }
-    }
-    if (!_matched) {
-      throw new IllegalArgumentException(("Cannot handle " + descriptor));
-    }
-    return _switchResult;
-  }
-  
   protected ResourceHandle resolveResourceHandle(final ResourceDescriptor description) {
     String _name = description.getName();
     Class<?> _loadClass = this.loadClass(description);

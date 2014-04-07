@@ -1,8 +1,7 @@
 package de.fxdiagram.examples.ecore
 
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.core.model.DomainObjectDescriptorImpl
+import de.fxdiagram.core.model.CachedDomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EClass
@@ -35,20 +34,6 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 		new ESuperTypeDescriptor(object, this)
 	}
 
-	override resolveDomainObject(DomainObjectDescriptor descriptor) {
-		val uri = URI.createURI(descriptor.id)
-		val ePackage = EPackage.Registry.INSTANCE.getEPackage(uri.trimFragment.toString)
-		val posEquals = uri.fragment.indexOf('=')
-		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
-		val eObject = ePackage.eResource.getEObject(fragment)
-		if(descriptor instanceof ESuperTypeDescriptor) {
-			val eClass = eObject as EClass
-			return new ESuperTypeHandle(eClass, eClass.EAllSuperTypes.get(Integer.parseInt(uri.fragment.substring(posEquals + 1))))
-		} else {
-			return eObject
-		}
-	}
-	
 	def String getId(EObject it) {
 		EcoreUtil.getURI(it).toString
 	}
@@ -63,18 +48,34 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class EClassDescriptor extends DomainObjectDescriptorImpl<EClass> {
+class EClassDescriptor extends CachedDomainObjectDescriptor<EClass> {
 	
 	new(EClass eClass, extension EcoreDomainObjectProvider provider) {
-		super(eClass.id, eClass.fqn, provider)
+		super(eClass, eClass.id, eClass.fqn, provider)
+	}
+
+	override resolveDomainObject() {
+		val uri = URI.createURI(id)
+		val ePackage = EPackage.Registry.INSTANCE.getEPackage(uri.trimFragment.toString)
+		val posEquals = uri.fragment.indexOf('=')
+		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
+		ePackage.eResource.getEObject(fragment) as EClass
 	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class EReferenceDescriptor extends DomainObjectDescriptorImpl<EReference> {
+class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReference> {
 	
 	new(EReference eReference, extension EcoreDomainObjectProvider provider) {
-		super(eReference.id, eReference.fqn, provider)
+		super(eReference, eReference.id, eReference.fqn, provider)
+	}
+
+	override resolveDomainObject() {
+		val uri = URI.createURI(id)
+		val ePackage = EPackage.Registry.INSTANCE.getEPackage(uri.trimFragment.toString)
+		val posEquals = uri.fragment.indexOf('=')
+		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
+		ePackage.eResource.getEObject(fragment) as EReference
 	}
 	
 	override hashCode() {
@@ -90,13 +91,24 @@ class EReferenceDescriptor extends DomainObjectDescriptorImpl<EReference> {
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class ESuperTypeDescriptor extends DomainObjectDescriptorImpl<ESuperTypeHandle> {
+class ESuperTypeDescriptor extends CachedDomainObjectDescriptor<ESuperTypeHandle> {
+	
 	
 	new(ESuperTypeHandle it, extension EcoreDomainObjectProvider provider) {
-		super(subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),
+		super(it, subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),
 			subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),
 			provider
 		)
+	}
+
+	override resolveDomainObject() {
+		val uri = URI.createURI(id)
+		val ePackage = EPackage.Registry.INSTANCE.getEPackage(uri.trimFragment.toString)
+		val posEquals = uri.fragment.indexOf('=')
+		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
+		val eObject = ePackage.eResource.getEObject(fragment)
+		val eClass = eObject as EClass
+		new ESuperTypeHandle(eClass, eClass.EAllSuperTypes.get(Integer.parseInt(uri.fragment.substring(posEquals + 1))))
 	}
 }
 

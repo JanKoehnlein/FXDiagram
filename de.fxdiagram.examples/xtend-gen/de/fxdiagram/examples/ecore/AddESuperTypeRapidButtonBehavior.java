@@ -27,6 +27,7 @@ import javafx.geometry.Side;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -52,11 +53,15 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
   }
   
   protected XNode createNode(final ESuperTypeDescriptor key) {
-    EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
-    ESuperTypeHandle _domainObject = key.getDomainObject();
-    EClass _superType = _domainObject.getSuperType();
-    EClassDescriptor _createEClassDescriptor = _domainObjectProvider.createEClassDescriptor(_superType);
-    return new EClassNode(_createEClassDescriptor);
+    final Function1<ESuperTypeHandle,EClassDescriptor> _function = new Function1<ESuperTypeHandle,EClassDescriptor>() {
+      public EClassDescriptor apply(final ESuperTypeHandle it) {
+        EcoreDomainObjectProvider _domainObjectProvider = AddESuperTypeRapidButtonBehavior.this.getDomainObjectProvider();
+        EClass _superType = it.getSuperType();
+        return _domainObjectProvider.createEClassDescriptor(_superType);
+      }
+    };
+    EClassDescriptor _withDomainObject = key.<EClassDescriptor>withDomainObject(_function);
+    return new EClassNode(_withDomainObject);
   }
   
   protected EcoreDomainObjectProvider getDomainObjectProvider() {
@@ -79,8 +84,8 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
       };
       IterableExtensions.<ESuperTypeDescriptor>forEach(availableChoiceKeys, _function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor key) {
-          XConnection _xConnection = new XConnection(host, choice, key);
+        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor descriptor) {
+          XConnection _xConnection = new XConnection(host, choice, descriptor);
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
             public void apply(final XConnection it) {
               ObjectProperty<Paint> _strokeProperty = it.strokeProperty();

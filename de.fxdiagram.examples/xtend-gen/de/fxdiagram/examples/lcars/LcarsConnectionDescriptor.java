@@ -1,16 +1,20 @@
 package de.fxdiagram.examples.lcars;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectDescriptorImpl;
+import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 
 @ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
-public class LcarsConnectionDescriptor extends DomainObjectDescriptorImpl<String> {
+public class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<String> {
   public LcarsConnectionDescriptor(final String fieldName, final LcarsModelProvider provider) {
-    super(fieldName, fieldName, provider);
+    super(fieldName, fieldName, fieldName, provider);
+  }
+  
+  public String resolveDomainObject() {
+    return this.getId();
   }
   
   /**

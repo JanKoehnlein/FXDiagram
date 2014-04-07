@@ -49,7 +49,7 @@ class JavaTypeNode extends XNode {
 	}
 	
 	def getJavaType() {
-		domainObject.domainObject as Class<?>
+		(domainObject as JavaTypeDescriptor).domainObject
 	}
 	
 	def getJavaTypeModel() {

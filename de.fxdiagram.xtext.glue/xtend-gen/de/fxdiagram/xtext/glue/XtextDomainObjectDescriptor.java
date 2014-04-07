@@ -39,10 +39,6 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     return this.getFqn();
   }
   
-  public Object getDomainObject() {
-    throw new UnsupportedOperationException("Need a transaction to access EObjects");
-  }
-  
   public <T extends Object> T withDomainObject(final Function1<? super ECLASS,? extends T> lambda) {
     T _xblockexpression = null;
     {

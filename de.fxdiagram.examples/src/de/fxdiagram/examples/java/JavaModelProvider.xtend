@@ -1,8 +1,7 @@
 package de.fxdiagram.examples.java
 
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.core.model.DomainObjectDescriptorImpl
+import de.fxdiagram.core.model.CachedDomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
 
 @ModelNode
@@ -28,46 +27,48 @@ class JavaModelProvider implements DomainObjectProvider {
 	def createJavaTypeDescriptor(Class<?> clazz) {
 		return new JavaTypeDescriptor(clazz, this)
 	}
-	
-	override resolveDomainObject(DomainObjectDescriptor descriptor) {
-		switch descriptor {
-			JavaTypeDescriptor: return Class.forName(descriptor.id)
-			JavaPropertyDescriptor: {
-				val split = descriptor.id.split(' ')
-				new JavaProperty(split.get(1), Class.forName(split.get(0)))
-			}
-			JavaSuperTypeDescriptor: {
-				val split = descriptor.id.split('->')
-				new JavaSuperTypeHandle(Class.forName(split.get(0)), Class.forName(split.get(1)))
-			}
-		}
-	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class JavaTypeDescriptor extends DomainObjectDescriptorImpl<Class<?>> {
+class JavaTypeDescriptor extends CachedDomainObjectDescriptor<Class<?>> {
 	
 	new(Class<?> javaClass, JavaModelProvider provider) {
-		super(javaClass.canonicalName, javaClass.canonicalName, provider)
+		super(javaClass, javaClass.canonicalName, javaClass.canonicalName, provider)
+	}
+	
+	override resolveDomainObject() {
+		Class.forName(id)
 	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class JavaPropertyDescriptor extends DomainObjectDescriptorImpl<JavaProperty> {
+class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaProperty> {
+	
 	
 	new(JavaProperty it, JavaModelProvider provider) {
-		super(type.canonicalName + ' ' + name, type.canonicalName + ' ' + name, provider)
+		super(it, type.canonicalName + ' ' + name, type.canonicalName + ' ' + name, provider)
+	}
+
+	override resolveDomainObject() {
+		val split = id.split(' ')
+		new JavaProperty(split.get(1), Class.forName(split.get(0)))
 	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class JavaSuperTypeDescriptor extends DomainObjectDescriptorImpl<JavaSuperTypeHandle> {
+class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSuperTypeHandle> {
 
 	new(JavaSuperTypeHandle it, JavaModelProvider provider) {
-		super(subType.canonicalName + '->' + superType.canonicalName,
+		super(it, subType.canonicalName + '->' + superType.canonicalName,
 			subType.canonicalName + '->' + superType.canonicalName,
 			provider
 		)
 	}
+	
+	override resolveDomainObject() {
+		val split = id.split('->')
+		new JavaSuperTypeHandle(Class.forName(split.get(0)), Class.forName(split.get(1)))
+	}
+	
 }
 

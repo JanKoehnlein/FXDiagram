@@ -309,7 +309,7 @@ class LcarsNode extends XNode {
 	}
 	
 	def getData() {
-		domainObject.domainObject as DBObject
+		(domainObject as LcarsEntryDescriptor).domainObject
 	}
 	
 	override selectionFeedback(boolean isSelected) {

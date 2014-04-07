@@ -45,6 +45,11 @@ public class EClassNode extends XNode {
     super(domainObject);
   }
   
+  public EClass getEClass() {
+    DomainObjectDescriptor _domainObject = this.getDomainObject();
+    return ((EClassDescriptor) _domainObject).getDomainObject();
+  }
+  
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
@@ -108,76 +113,75 @@ public class EClassNode extends XNode {
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
   
-  public EClass getEClass() {
-    DomainObjectDescriptor _domainObject = this.getDomainObject();
-    Object _domainObject_1 = _domainObject.getDomainObject();
-    return ((EClass) _domainObject_1);
-  }
-  
   protected Anchors createAnchors() {
     return new RoundedRectangleAnchors(this, 12, 12);
   }
   
-  public void populateCompartments() {
-    EClass _eClass = this.getEClass();
-    EList<EAttribute> _eAttributes = _eClass.getEAttributes();
-    List<EAttribute> _limit = this.<EAttribute>limit(_eAttributes);
-    final Procedure1<EAttribute> _function = new Procedure1<EAttribute>() {
-      public void apply(final EAttribute attribute) {
-        ObservableList<Node> _children = EClassNode.this.attributeCompartment.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            StringConcatenation _builder = new StringConcatenation();
-            String _name = attribute.getName();
-            _builder.append(_name, "");
-            _builder.append(": ");
-            EClassifier _eType = attribute.getEType();
-            String _name_1 = _eType.getName();
-            _builder.append(_name_1, "");
-            it.setText(_builder.toString());
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    IterableExtensions.<EAttribute>forEach(_limit, _function);
-    EClass _eClass_1 = this.getEClass();
-    EList<EOperation> _eOperations = _eClass_1.getEOperations();
-    List<EOperation> _limit_1 = this.<EOperation>limit(_eOperations);
-    final Procedure1<EOperation> _function_1 = new Procedure1<EOperation>() {
-      public void apply(final EOperation operation) {
-        ObservableList<Node> _children = EClassNode.this.operationCompartment.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            StringConcatenation _builder = new StringConcatenation();
-            String _name = operation.getName();
-            _builder.append(_name, "");
-            _builder.append("(");
-            EList<EParameter> _eParameters = operation.getEParameters();
-            final Function1<EParameter,String> _function = new Function1<EParameter,String>() {
-              public String apply(final EParameter it) {
-                EClassifier _eType = it.getEType();
-                return _eType.getName();
-              }
-            };
-            List<String> _map = ListExtensions.<EParameter, String>map(_eParameters, _function);
-            String _join = IterableExtensions.join(_map, ", ");
-            _builder.append(_join, "");
-            _builder.append("): ");
-            EClassifier _eType = operation.getEType();
-            String _name_1 = _eType.getName();
-            _builder.append(_name_1, "");
-            it.setText(_builder.toString());
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
-    };
-    IterableExtensions.<EOperation>forEach(_limit_1, _function_1);
+  public Object populateCompartments() {
+    Object _xblockexpression = null;
+    {
+      EClass _eClass = this.getEClass();
+      EList<EAttribute> _eAttributes = _eClass.getEAttributes();
+      List<EAttribute> _limit = this.<EAttribute>limit(_eAttributes);
+      final Procedure1<EAttribute> _function = new Procedure1<EAttribute>() {
+        public void apply(final EAttribute attribute) {
+          ObservableList<Node> _children = EClassNode.this.attributeCompartment.getChildren();
+          Text _text = new Text();
+          final Procedure1<Text> _function = new Procedure1<Text>() {
+            public void apply(final Text it) {
+              StringConcatenation _builder = new StringConcatenation();
+              String _name = attribute.getName();
+              _builder.append(_name, "");
+              _builder.append(": ");
+              EClassifier _eType = attribute.getEType();
+              String _name_1 = _eType.getName();
+              _builder.append(_name_1, "");
+              it.setText(_builder.toString());
+            }
+          };
+          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+      IterableExtensions.<EAttribute>forEach(_limit, _function);
+      EClass _eClass_1 = this.getEClass();
+      EList<EOperation> _eOperations = _eClass_1.getEOperations();
+      List<EOperation> _limit_1 = this.<EOperation>limit(_eOperations);
+      final Procedure1<EOperation> _function_1 = new Procedure1<EOperation>() {
+        public void apply(final EOperation operation) {
+          ObservableList<Node> _children = EClassNode.this.operationCompartment.getChildren();
+          Text _text = new Text();
+          final Procedure1<Text> _function = new Procedure1<Text>() {
+            public void apply(final Text it) {
+              StringConcatenation _builder = new StringConcatenation();
+              String _name = operation.getName();
+              _builder.append(_name, "");
+              _builder.append("(");
+              EList<EParameter> _eParameters = operation.getEParameters();
+              final Function1<EParameter,String> _function = new Function1<EParameter,String>() {
+                public String apply(final EParameter it) {
+                  EClassifier _eType = it.getEType();
+                  return _eType.getName();
+                }
+              };
+              List<String> _map = ListExtensions.<EParameter, String>map(_eParameters, _function);
+              String _join = IterableExtensions.join(_map, ", ");
+              _builder.append(_join, "");
+              _builder.append("): ");
+              EClassifier _eType = operation.getEType();
+              String _name_1 = _eType.getName();
+              _builder.append(_name_1, "");
+              it.setText(_builder.toString());
+            }
+          };
+          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+          _children.add(_doubleArrow);
+        }
+      };
+      IterableExtensions.<EOperation>forEach(_limit_1, _function_1);
+      _xblockexpression = null;
+    }
+    return _xblockexpression;
   }
   
   protected <T extends Object> List<T> limit(final List<T> list) {

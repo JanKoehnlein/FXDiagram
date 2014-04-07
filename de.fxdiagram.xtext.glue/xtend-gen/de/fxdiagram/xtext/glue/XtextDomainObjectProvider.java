@@ -68,10 +68,6 @@ public class XtextDomainObjectProvider implements DomainObjectProvider {
     return null;
   }
   
-  public Object resolveDomainObject(final DomainObjectDescriptor descriptor) {
-    throw new UnsupportedOperationException("Need a transaction to access EObjects");
-  }
-  
   public void populate(final ModelElementImpl modelElement) {
     
   }

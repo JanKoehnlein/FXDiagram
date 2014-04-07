@@ -1,5 +1,6 @@
 package de.fxdiagram.examples.ecore
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
@@ -12,8 +13,6 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
-import org.eclipse.emf.ecore.EClass
-import de.fxdiagram.annotations.properties.ModelNode
 
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class EClassNode extends XNode {
@@ -25,11 +24,15 @@ class EClassNode extends XNode {
 		super(domainObject)
 	}			
 
+	def getEClass() {
+		(domainObject as EClassDescriptor).domainObject
+	}
+
 	protected override createNode() {
 		new RectangleBorderPane => [
 			children += new VBox => [
 				children += new Text => [
-					text = EClass.name
+					text = EClass.name 
 					textOrigin = VPos.TOP
 					font = Font.font(getFont.family, FontWeight.BOLD, getFont.size * 1.1)
 					VBox.setMargin(it, new Insets(12, 12, 12, 12))
@@ -47,10 +50,6 @@ class EClassNode extends XNode {
 		]
 	}
 
-	def getEClass() {
-		domainObject.domainObject as EClass
-	}
-	
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
@@ -68,6 +67,7 @@ class EClassNode extends XNode {
 				text = '''«operation.name»(«operation.EParameters.map[EType.name].join(', ')»): «operation.EType.name»''' 
 			]
 		]
+		null
 	}
 	
 	protected def <T> limit(List<T> list) {

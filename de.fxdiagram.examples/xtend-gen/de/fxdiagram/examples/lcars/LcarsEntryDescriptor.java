@@ -2,16 +2,21 @@ package de.fxdiagram.examples.lcars;
 
 import com.mongodb.DBObject;
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectDescriptorImpl;
+import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 
 @ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
-public class LcarsEntryDescriptor extends DomainObjectDescriptorImpl<DBObject> {
+public class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject> {
   public LcarsEntryDescriptor(final String dbId, final String name, final LcarsModelProvider provider) {
-    super(dbId, name, provider);
+    super(null, dbId, name, provider);
+  }
+  
+  public DBObject resolveDomainObject() {
+    DomainObjectProvider _provider = this.getProvider();
+    return ((LcarsModelProvider) _provider).<Object>resolveDomainObject(this);
   }
   
   /**

@@ -35,13 +35,6 @@ class ResourceProvider implements DomainObjectProviderWithState {
 		classLoaderMap.inverse.get(classLoader)
 	}
 
-	override resolveDomainObject(DomainObjectDescriptor descriptor) {
-		switch descriptor {
-			ResourceDescriptor: resolveResourceHandle(descriptor)
-			default: throw new IllegalArgumentException('Cannot handle ' + descriptor) 
-		}
-	}
-	
 	protected def ResourceHandle resolveResourceHandle(ResourceDescriptor description) {
 		new ResourceHandle(description.name, loadClass(description), description.relativePath)
 	}
@@ -95,17 +88,12 @@ class ResourceDescriptor implements DomainObjectDescriptor {
 		this.provider = provider
 	}
 
-	override ResourceHandle getDomainObject() {
-		provider.resolveResourceHandle(this)
-	}
-
 	override getId() {
 		classLoaderId + ':' + className + ':' + relativePath
 	}
 	
 	def toURI() {
-		val handle = domainObject
-		handle.context.toURI(handle.relativePath)
+		provider.resolveResourceHandle(this).context.toURI(relativePath)
 	}
 }
 

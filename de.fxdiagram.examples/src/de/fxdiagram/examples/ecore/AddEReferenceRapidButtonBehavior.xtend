@@ -43,7 +43,7 @@ class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 			chooser.addChoice(it.createNode, it)
 		]
 		chooser.connectionProvider = [ host, choice, descriptor |
-			val reference = descriptor.domainObject as EReference
+			val reference = (descriptor as EReferenceDescriptor).domainObject
 			new XConnection(host, choice, descriptor) => [
 				targetArrowHead = if (reference.container)
 						new DiamondArrowHead(it, false)

@@ -7,6 +7,4 @@ public interface DomainObjectDescriptor extends XModelProvider {
   public abstract String getName();
   
   public abstract String getId();
-  
-  public abstract Object getDomainObject();
 }

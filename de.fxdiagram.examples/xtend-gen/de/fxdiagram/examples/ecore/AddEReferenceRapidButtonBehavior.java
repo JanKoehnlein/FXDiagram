@@ -81,8 +81,7 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
         public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor descriptor) {
           XConnection _xblockexpression = null;
           {
-            Object _domainObject = descriptor.getDomainObject();
-            final EReference reference = ((EReference) _domainObject);
+            final EReference reference = ((EReferenceDescriptor) descriptor).getDomainObject();
             XConnection _xConnection = new XConnection(host, choice, descriptor);
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {

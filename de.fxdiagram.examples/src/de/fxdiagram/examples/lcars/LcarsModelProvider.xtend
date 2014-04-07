@@ -6,8 +6,8 @@ import com.mongodb.DBCollection
 import com.mongodb.DBObject
 import com.mongodb.Mongo
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.core.model.CachedDomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.core.model.DomainObjectDescriptorImpl
 import de.fxdiagram.core.model.DomainObjectProvider
 import org.bson.types.ObjectId
 
@@ -29,7 +29,7 @@ class LcarsModelProvider implements DomainObjectProvider{
 		]) as Iterable<DBObject>).toList
 	}
 	
-	override resolveDomainObject(DomainObjectDescriptor descriptor) {
+	def protected <T> resolveDomainObject(DomainObjectDescriptor descriptor) {
 		lcars.findOne(new BasicDBObject => [
 			put("_id", new ObjectId(descriptor.id))
 		])
@@ -55,17 +55,25 @@ class LcarsModelProvider implements DomainObjectProvider{
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class LcarsEntryDescriptor extends DomainObjectDescriptorImpl<DBObject> {
+class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject> {
 	
 	new(String dbId, String name, LcarsModelProvider provider) {
-		super(dbId, name, provider)
+		super(null, dbId, name, provider)
+	}
+	
+	override resolveDomainObject() {
+		(provider as LcarsModelProvider).resolveDomainObject(this)
 	}
 }
 
 @ModelNode(#['id', 'name', 'provider'])
-class LcarsConnectionDescriptor extends DomainObjectDescriptorImpl<String> {
+class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<String> {
 	
 	new(String fieldName, LcarsModelProvider provider) {
-		super(fieldName, fieldName, provider)  
+		super(fieldName, fieldName, fieldName, provider)  
+	}
+	
+	override resolveDomainObject() {
+		id
 	}
 }

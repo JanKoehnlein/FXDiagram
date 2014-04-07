@@ -24,11 +24,14 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 	}
 	
 	override protected getChoiceKey(EClass superType) {
-		domainObjectProvider.createESuperClassDescriptor(new ESuperTypeHandle(host.EClass, superType)) 
+		domainObjectProvider.createESuperClassDescriptor(
+			new ESuperTypeHandle(host.EClass, superType))
 	}
 	
 	override protected createNode(ESuperTypeDescriptor key) {
-		new EClassNode(domainObjectProvider.createEClassDescriptor(key.domainObject.superType))
+		new EClassNode(key.withDomainObject[
+			domainObjectProvider.createEClassDescriptor(it.superType)
+		])
 	}
 	
 	protected def getDomainObjectProvider() {
@@ -41,8 +44,8 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 			chooser.addChoice(it.createNode, it)
 		]
 		chooser.connectionProvider = [
-			host, choice, key |
-			new XConnection(host, choice, key) => [
+			host, choice, descriptor |
+			new XConnection(host, choice, descriptor) => [
 				targetArrowHead = new TriangleArrowHead(it, 10, 15, 
 					it.strokeProperty, host.diagram.backgroundPaintProperty, false)
 			]

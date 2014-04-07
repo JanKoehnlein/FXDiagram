@@ -1,17 +1,35 @@
 package de.fxdiagram.examples.java;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectDescriptorImpl;
+import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaProperty;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
-public class JavaPropertyDescriptor extends DomainObjectDescriptorImpl<JavaProperty> {
+public class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaProperty> {
   public JavaPropertyDescriptor(final JavaProperty it, final JavaModelProvider provider) {
-    super(((it.getType().getCanonicalName() + " ") + it.getName()), ((it.getType().getCanonicalName() + " ") + it.getName()), provider);
+    super(it, ((it.getType().getCanonicalName() + " ") + it.getName()), ((it.getType().getCanonicalName() + " ") + it.getName()), provider);
+  }
+  
+  public JavaProperty resolveDomainObject() {
+    try {
+      JavaProperty _xblockexpression = null;
+      {
+        String _id = this.getId();
+        final String[] split = _id.split(" ");
+        String _get = split[1];
+        String _get_1 = split[0];
+        Class<?> _forName = Class.forName(_get_1);
+        _xblockexpression = new JavaProperty(_get, _forName);
+      }
+      return _xblockexpression;
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
+    }
   }
   
   /**

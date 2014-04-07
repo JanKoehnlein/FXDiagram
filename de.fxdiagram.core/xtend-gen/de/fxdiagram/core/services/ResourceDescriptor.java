@@ -22,11 +22,6 @@ public class ResourceDescriptor implements DomainObjectDescriptor {
     this.setProvider(provider);
   }
   
-  public ResourceHandle getDomainObject() {
-    ResourceProvider _provider = this.getProvider();
-    return _provider.resolveResourceHandle(this);
-  }
-  
   public String getId() {
     String _classLoaderId = this.getClassLoaderId();
     String _plus = (_classLoaderId + ":");
@@ -38,14 +33,11 @@ public class ResourceDescriptor implements DomainObjectDescriptor {
   }
   
   public String toURI() {
-    String _xblockexpression = null;
-    {
-      final ResourceHandle handle = this.getDomainObject();
-      Class<?> _context = handle.getContext();
-      String _relativePath = handle.getRelativePath();
-      _xblockexpression = UriExtensions.toURI(_context, _relativePath);
-    }
-    return _xblockexpression;
+    ResourceProvider _provider = this.getProvider();
+    ResourceHandle _resolveResourceHandle = _provider.resolveResourceHandle(this);
+    Class<?> _context = _resolveResourceHandle.getContext();
+    String _relativePath = this.getRelativePath();
+    return UriExtensions.toURI(_context, _relativePath);
   }
   
   /**

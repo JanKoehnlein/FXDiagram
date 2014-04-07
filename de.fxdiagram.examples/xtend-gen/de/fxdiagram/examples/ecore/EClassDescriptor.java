@@ -1,18 +1,47 @@
 package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectDescriptorImpl;
+import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.xbase.lib.Extension;
 
 @ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
-public class EClassDescriptor extends DomainObjectDescriptorImpl<EClass> {
+public class EClassDescriptor extends CachedDomainObjectDescriptor<EClass> {
   public EClassDescriptor(final EClass eClass, @Extension final EcoreDomainObjectProvider provider) {
-    super(provider.getId(eClass), provider.getFqn(eClass), provider);
+    super(eClass, provider.getId(eClass), provider.getFqn(eClass), provider);
+  }
+  
+  public EClass resolveDomainObject() {
+    EClass _xblockexpression = null;
+    {
+      String _id = this.getId();
+      final URI uri = URI.createURI(_id);
+      URI _trimFragment = uri.trimFragment();
+      String _string = _trimFragment.toString();
+      final EPackage ePackage = EPackage.Registry.INSTANCE.getEPackage(_string);
+      String _fragment = uri.fragment();
+      final int posEquals = _fragment.indexOf("=");
+      String _xifexpression = null;
+      if ((posEquals == (-1))) {
+        _xifexpression = uri.fragment();
+      } else {
+        String _fragment_1 = uri.fragment();
+        _xifexpression = _fragment_1.substring(0, posEquals);
+      }
+      final String fragment = _xifexpression;
+      Resource _eResource = ePackage.eResource();
+      EObject _eObject = _eResource.getEObject(fragment);
+      _xblockexpression = ((EClass) _eObject);
+    }
+    return _xblockexpression;
   }
   
   /**
