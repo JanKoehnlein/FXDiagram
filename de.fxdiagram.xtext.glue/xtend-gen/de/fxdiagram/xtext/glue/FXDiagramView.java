@@ -32,6 +32,8 @@ import de.fxdiagram.xtext.glue.EditorListener;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.BaseMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
+import de.fxdiagram.xtext.glue.mapping.NodeMapping;
+import de.fxdiagram.xtext.glue.mapping.TransformationContext;
 import de.fxdiagram.xtext.glue.mapping.XDiagramProvider;
 import java.util.Collections;
 import java.util.Set;
@@ -145,6 +147,13 @@ public class FXDiagramView extends ViewPart {
         this.root.setDiagram(_createDiagram);
         LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
         _layoutAction.perform(this.root);
+      }
+    } else {
+      if ((mapping instanceof NodeMapping<?>)) {
+        this.register(editor);
+        final XDiagram diagram = this.root.getDiagram();
+        TransformationContext _transformationContext = new TransformationContext(diagram);
+        this.diagramProvider.<T>createNode(element, ((NodeMapping<T>) mapping), _transformationContext);
       }
     }
     final DomainObjectDescriptor descriptor = this.domainObjectProvider.createDescriptor(element);

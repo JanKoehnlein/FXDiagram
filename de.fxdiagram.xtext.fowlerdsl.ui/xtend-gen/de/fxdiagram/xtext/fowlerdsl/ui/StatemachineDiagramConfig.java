@@ -75,13 +75,12 @@ public class StatemachineDiagramConfig implements XDiagramConfig {
     final ConnectionMapping<Transition> transitionConnection = ObjectExtensions.<ConnectionMapping<Transition>>operator_doubleArrow(_connectionMapping, _function_1);
     final Procedure1<DiagramMapping<Statemachine>> _function_2 = new Procedure1<DiagramMapping<Statemachine>>() {
       public void apply(final DiagramMapping<Statemachine> it) {
-        final Function1<Statemachine,State> _function = new Function1<Statemachine,State>() {
-          public State apply(final Statemachine it) {
-            EList<State> _states = it.getStates();
-            return IterableExtensions.<State>head(_states);
+        final Function1<Statemachine,EList<State>> _function = new Function1<Statemachine,EList<State>>() {
+          public EList<State> apply(final Statemachine it) {
+            return it.getStates();
           }
         };
-        it.<State>nodeFor(stateNode, _function);
+        it.<State>nodeForEach(stateNode, _function);
       }
     };
     DiagramMapping<Statemachine> _doubleArrow = ObjectExtensions.<DiagramMapping<Statemachine>>operator_doubleArrow(statemachineDiagram, _function_2);

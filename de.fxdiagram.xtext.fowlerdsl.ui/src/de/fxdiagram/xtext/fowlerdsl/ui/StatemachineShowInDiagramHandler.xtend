@@ -40,7 +40,7 @@ class StatemachineDiagramConfig implements XDiagramConfig {
 			]
 		] 
 		mappings += statemachineDiagram => [
-			nodeFor(stateNode, [states.head])
+			nodeForEach(stateNode, [states])
 		] 
 		mappings += stateNode => [
 			outConnectionForEach(transitionConnection, [transitions]).makeLazy

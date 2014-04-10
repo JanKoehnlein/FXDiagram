@@ -32,6 +32,8 @@ import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
+import de.fxdiagram.xtext.glue.mapping.NodeMapping
+import de.fxdiagram.xtext.glue.mapping.TransformationContext
 
 class FXDiagramView extends ViewPart {
 
@@ -96,11 +98,15 @@ class FXDiagramView extends ViewPart {
 
 	def <T> void revealElement(T element, BaseMapping<T> mapping, XtextEditor editor) {
 		if(mapping instanceof DiagramMapping<?>) {
-			editor.register()
+			editor.register
 			if(changedEditors.remove(editor)) {
 				root.diagram = diagramProvider.createDiagram(element, mapping as DiagramMapping<T>)
 				new LayoutAction(LayoutType.DOT).perform(root)
 			} 
+		} else if(mapping instanceof NodeMapping<?>) {
+			editor.register
+			val diagram = root.diagram
+			diagramProvider.createNode(element, mapping as NodeMapping<T>, new TransformationContext(diagram))			
 		}
 		val descriptor = domainObjectProvider.createDescriptor(element)
 		root.diagram.nodes.forEach[selected = domainObject == descriptor]
