@@ -6,7 +6,9 @@ abstract class AbstractConnectionMappingCall<T, ARG> {
 	boolean lazy = false
 	def isLazy() { lazy }
 	def makeLazy() { lazy = true } 
+	@Property String role
 	def ConnectionMapping<T> getConnectionMapping()
+	
 }
 
 @Data

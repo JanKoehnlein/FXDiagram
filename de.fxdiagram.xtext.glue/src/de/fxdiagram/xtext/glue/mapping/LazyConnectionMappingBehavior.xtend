@@ -27,11 +27,11 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 	
 	boolean hostIsSource
 
-	new(XNode host, AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramProvider diagramProvider, String tooltip, boolean hostIsSource) {
+	new(XNode host, AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramProvider diagramProvider, boolean hostIsSource) {
 		super(host)
 		this.mappingCall = mappingCall
 		this.diagramProvider = diagramProvider
-		this.tooltip = tooltip
+		this.tooltip = 'Add ' + mappingCall.role
 		this.hostIsSource = hostIsSource
 	}
 	
@@ -120,10 +120,10 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 				]
 			]
 			nodeMappingCasted.outgoing.filter[lazy].forEach[
-				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, 'TODO', true))
+				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, true))
 			]
 			nodeMappingCasted.incoming.filter[lazy].forEach[
-				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, 'TODO', false))
+				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, false))
 			]
 			node
 		} else { 

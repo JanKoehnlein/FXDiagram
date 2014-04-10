@@ -52,11 +52,13 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
   
   private boolean hostIsSource;
   
-  public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramProvider diagramProvider, final String tooltip, final boolean hostIsSource) {
+  public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramProvider diagramProvider, final boolean hostIsSource) {
     super(host);
     this.mappingCall = mappingCall;
     this.diagramProvider = diagramProvider;
-    this.tooltip = tooltip;
+    String _role = mappingCall.getRole();
+    String _plus = ("Add " + _role);
+    this.tooltip = _plus;
     this.hostIsSource = hostIsSource;
   }
   
@@ -253,7 +255,7 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
         Iterable<AbstractConnectionMappingCall<?,NODE>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_outgoing, _function_1);
         final Procedure1<AbstractConnectionMappingCall<?,NODE>> _function_2 = new Procedure1<AbstractConnectionMappingCall<?,NODE>>() {
           public void apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionMappingBehavior.this.diagramProvider, "TODO", true);
+            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionMappingBehavior.this.diagramProvider, true);
             node.addBehavior(_lazyConnectionMappingBehavior);
           }
         };
@@ -267,7 +269,7 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
         Iterable<AbstractConnectionMappingCall<?,NODE>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_incoming, _function_3);
         final Procedure1<AbstractConnectionMappingCall<?,NODE>> _function_4 = new Procedure1<AbstractConnectionMappingCall<?,NODE>>() {
           public void apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionMappingBehavior.this.diagramProvider, "TODO", false);
+            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionMappingBehavior.this.diagramProvider, false);
             node.addBehavior(_lazyConnectionMappingBehavior);
           }
         };

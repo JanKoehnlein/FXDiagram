@@ -40,13 +40,13 @@ class XDiagramProvider {
 			context.addNode(node)
 			nodeMapping.incoming.forEach[
 				if(lazy) 
-					node.addBehavior(new LazyConnectionMappingBehavior(node, it, this, 'TODO', false))
+					node.addBehavior(new LazyConnectionMappingBehavior(node, it, this, false))
 				else
 					execute(nodeObject, context).forEach[target = node]
 			]
 			nodeMapping.outgoing.forEach[
 				if(lazy) 
-					node.addBehavior(new LazyConnectionMappingBehavior(node, it, this, 'TODO', true))
+					node.addBehavior(new LazyConnectionMappingBehavior(node, it, this, true))
 				else
 					execute(nodeObject, context).forEach[source = node]
 			]

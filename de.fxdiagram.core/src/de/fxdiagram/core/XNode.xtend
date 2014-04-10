@@ -32,7 +32,7 @@ class XNode extends XShape {
 	Effect selectionEffect
 	Effect originalEffect
 
-	Anchors anchors 
+	Anchors anchors
 	
  	new(DomainObjectDescriptor domainObject) {
  		domainObjectProperty.set(domainObject)
