@@ -25,7 +25,7 @@ public class ModelElementImpl implements ModelElement {
     this.node = node;
   }
   
-  public <T extends Object> Class<?> addProperty(final Property<T> property, final Class<? extends T> propertyType) {
+  public Class<?> addProperty(final Property<?> property, final Class<?> propertyType) {
     Class<?> _xifexpression = null;
     boolean _notEquals = (!Objects.equal(property, null));
     if (_notEquals) {
@@ -45,7 +45,7 @@ public class ModelElementImpl implements ModelElement {
     return _xifexpression;
   }
   
-  public <T extends Object> Class<?> addProperty(final ListProperty<T> listProperty, final Class<? extends T> componentType) {
+  public Class<?> addProperty(final ListProperty<?> listProperty, final Class<?> componentType) {
     Class<?> _xblockexpression = null;
     {
       boolean _equals = Objects.equal(this.listProperties, null);

@@ -4,7 +4,6 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider
 import java.util.List
 
@@ -33,10 +32,7 @@ class XDiagramProvider {
 			if (existingNode != null)
 				return existingNode
 			val node = nodeMapping.createNode.apply(descriptor)
-			node.onMouseClicked = [
-				if (clickCount == 2)
-					descriptor.revealInEditor
-			]
+			node.addBehavior(new OpenElementInEditorBehavior(node))
 			context.addNode(node)
 			nodeMapping.incoming.forEach[
 				if(lazy) 
@@ -130,7 +126,7 @@ class XDiagramProvider {
 	}
 
 	def <T> getDescriptor(T domainObject, BaseMapping<T> mapping) {
-		domainObjectProvider.createDescriptor(domainObject) as XtextDomainObjectDescriptor<T>
+		domainObjectProvider.createDescriptor(domainObject, mapping)
 	}
 }
 

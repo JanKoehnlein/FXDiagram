@@ -4,29 +4,25 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
+import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.BaseMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import java.util.List;
+import javafx.collections.ObservableList;
 import javafx.scene.text.Text;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class StatemachineDiagramConfig implements XDiagramConfig {
-  private List<BaseMapping<?>> mappings = CollectionLiterals.<BaseMapping<?>>newArrayList();
-  
+public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   public StatemachineDiagramConfig() {
     final DiagramMapping<Statemachine> statemachineDiagram = new DiagramMapping<Statemachine>(Statemachine.class);
     NodeMapping<State> _nodeMapping = new NodeMapping<State>(State.class);
@@ -73,6 +69,7 @@ public class StatemachineDiagramConfig implements XDiagramConfig {
       }
     };
     final ConnectionMapping<Transition> transitionConnection = ObjectExtensions.<ConnectionMapping<Transition>>operator_doubleArrow(_connectionMapping, _function_1);
+    ObservableList<BaseMapping<?>> _mappings = this.getMappings();
     final Procedure1<DiagramMapping<Statemachine>> _function_2 = new Procedure1<DiagramMapping<Statemachine>>() {
       public void apply(final DiagramMapping<Statemachine> it) {
         final Function1<Statemachine,EList<State>> _function = new Function1<Statemachine,EList<State>>() {
@@ -84,7 +81,8 @@ public class StatemachineDiagramConfig implements XDiagramConfig {
       }
     };
     DiagramMapping<Statemachine> _doubleArrow = ObjectExtensions.<DiagramMapping<Statemachine>>operator_doubleArrow(statemachineDiagram, _function_2);
-    this.mappings.add(_doubleArrow);
+    _mappings.add(_doubleArrow);
+    ObservableList<BaseMapping<?>> _mappings_1 = this.getMappings();
     final Procedure1<NodeMapping<State>> _function_3 = new Procedure1<NodeMapping<State>>() {
       public void apply(final NodeMapping<State> it) {
         final Function1<State,EList<Transition>> _function = new Function1<State,EList<Transition>>() {
@@ -97,7 +95,8 @@ public class StatemachineDiagramConfig implements XDiagramConfig {
       }
     };
     NodeMapping<State> _doubleArrow_1 = ObjectExtensions.<NodeMapping<State>>operator_doubleArrow(stateNode, _function_3);
-    this.mappings.add(_doubleArrow_1);
+    _mappings_1.add(_doubleArrow_1);
+    ObservableList<BaseMapping<?>> _mappings_2 = this.getMappings();
     final Procedure1<ConnectionMapping<Transition>> _function_4 = new Procedure1<ConnectionMapping<Transition>>() {
       public void apply(final ConnectionMapping<Transition> it) {
         final Function1<Transition,State> _function = new Function1<Transition,State>() {
@@ -109,22 +108,6 @@ public class StatemachineDiagramConfig implements XDiagramConfig {
       }
     };
     ConnectionMapping<Transition> _doubleArrow_2 = ObjectExtensions.<ConnectionMapping<Transition>>operator_doubleArrow(transitionConnection, _function_4);
-    this.mappings.add(_doubleArrow_2);
-  }
-  
-  public <T extends Object> List<? extends BaseMapping<T>> getMappings(final T domainObject) {
-    final Function1<BaseMapping<?>,Boolean> _function = new Function1<BaseMapping<?>,Boolean>() {
-      public Boolean apply(final BaseMapping<?> it) {
-        return Boolean.valueOf(it.isApplicable(domainObject));
-      }
-    };
-    Iterable<BaseMapping<?>> _filter = IterableExtensions.<BaseMapping<?>>filter(this.mappings, _function);
-    final Function1<BaseMapping<?>,BaseMapping<T>> _function_1 = new Function1<BaseMapping<?>,BaseMapping<T>>() {
-      public BaseMapping<T> apply(final BaseMapping<?> it) {
-        return ((BaseMapping<T>) it);
-      }
-    };
-    Iterable<BaseMapping<T>> _map = IterableExtensions.<BaseMapping<?>, BaseMapping<T>>map(_filter, _function_1);
-    return IterableExtensions.<BaseMapping<T>>toList(_map);
+    _mappings_2.add(_doubleArrow_2);
   }
 }

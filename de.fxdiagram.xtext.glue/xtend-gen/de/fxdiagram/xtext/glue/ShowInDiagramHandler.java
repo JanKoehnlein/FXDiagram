@@ -65,6 +65,8 @@ public abstract class ShowInDiagramHandler extends AbstractHandler {
                   IWorkbenchPage _activePage = _activeWorkbenchWindow.getActivePage();
                   final IViewPart view = _activePage.showView("org.eclipse.xtext.glue.FXDiagramView");
                   if ((view instanceof FXDiagramView)) {
+                    XDiagramConfig _diagramConfig_1 = ShowInDiagramHandler.this.getDiagramConfig();
+                    ((FXDiagramView)view).addConfig(_diagramConfig_1);
                     BaseMapping<EObject> _head = IterableExtensions.head(mappings);
                     ((FXDiagramView)view).<EObject>revealElement(selectedElement, _head, editor);
                   }

@@ -35,10 +35,6 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 		this.hostIsSource = hostIsSource
 	}
 	
-	new(XNode host) {
-		super(host)
-	}
-	
 	override getBehaviorKey() {
 		class
 	}
@@ -92,10 +88,7 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 			chooser.connectionProvider = [ host, other, connectionDesc |
 				val descriptor = connectionDesc as XtextDomainObjectDescriptor<MODEL>
 				mappingCall.connectionMapping.createConnection.apply(descriptor) => [
-					onMouseClicked = [
-						if (clickCount == 2)
-							descriptor.revealInEditor
-					]
+					addBehavior(new OpenElementInEditorBehavior(it))
 					if(hostIsSource) {
 						source = host
 						target = other
@@ -113,12 +106,8 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 		if (nodeMapping.isApplicable(nodeDomainObject)) {
 			val nodeMappingCasted = nodeMapping as NodeMapping<NODE>
 			val descriptor = diagramProvider.getDescriptor(nodeDomainObject as NODE, nodeMappingCasted)
-			val node = nodeMappingCasted.createNode.apply(descriptor) => [
-				onMouseClicked = [
-					if (clickCount == 2)
-						descriptor.revealInEditor
-				]
-			]
+			val node = nodeMappingCasted.createNode.apply(descriptor) 
+			node.addBehavior(new OpenElementInEditorBehavior(node))
 			nodeMappingCasted.outgoing.filter[lazy].forEach[
 				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, true))
 			]

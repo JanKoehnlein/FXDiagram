@@ -6,6 +6,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
+import de.fxdiagram.xtext.glue.mapping.BaseMapping;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -22,13 +23,14 @@ import org.eclipse.xtext.ui.shared.Access;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
-@ModelNode({ "provider", "uri", "fqn" })
+@ModelNode({ "provider", "uri", "fqn", "mapping" })
 @SuppressWarnings("all")
 public class XtextDomainObjectDescriptor<ECLASS extends Object> implements DomainObjectDescriptor {
-  public XtextDomainObjectDescriptor(final String uri, final String fqn, final XtextDomainObjectProvider provider) {
+  public XtextDomainObjectDescriptor(final String uri, final String fqn, final BaseMapping<ECLASS> mapping, final XtextDomainObjectProvider provider) {
     this.uriProperty.set(uri);
     this.fqnProperty.set(fqn);
     this.providerProperty.set(provider);
+    this.mappingProperty.set(mapping);
   }
   
   public String getName() {
@@ -44,9 +46,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     {
       String _uri = this.getUri();
       final URI uriAsURI = URI.createURI(_uri);
-      Provider<IURIEditorOpener> _iURIEditorOpener = Access.getIURIEditorOpener();
-      IURIEditorOpener _get = _iURIEditorOpener.get();
-      final IEditorPart editor = _get.open(uriAsURI, true);
+      final IEditorPart editor = this.revealInEditor();
       T _xifexpression = null;
       if ((editor instanceof XtextEditor)) {
         IXtextDocument _document = ((XtextEditor)editor).getDocument();
@@ -82,12 +82,12 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     return (103 * _hashCode);
   }
   
-  public void revealInEditor() {
+  public IEditorPart revealInEditor() {
     Provider<IURIEditorOpener> _iURIEditorOpener = Access.getIURIEditorOpener();
     IURIEditorOpener _get = _iURIEditorOpener.get();
     String _uri = this.getUri();
     URI _createURI = URI.createURI(_uri);
-    _get.open(_createURI, true);
+    return _get.open(_createURI, true);
   }
   
   /**
@@ -100,6 +100,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     modelElement.addProperty(providerProperty, XtextDomainObjectProvider.class);
     modelElement.addProperty(uriProperty, String.class);
     modelElement.addProperty(fqnProperty, String.class);
+    modelElement.addProperty(mappingProperty, BaseMapping.class);
   }
   
   private ReadOnlyObjectWrapper<XtextDomainObjectProvider> providerProperty = new ReadOnlyObjectWrapper<XtextDomainObjectProvider>(this, "provider");
@@ -130,5 +131,15 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
   
   public ReadOnlyStringProperty uriProperty() {
     return this.uriProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyObjectWrapper<BaseMapping<ECLASS>> mappingProperty = new ReadOnlyObjectWrapper<BaseMapping<ECLASS>>(this, "mapping");
+  
+  public BaseMapping<ECLASS> getMapping() {
+    return this.mappingProperty.get();
+  }
+  
+  public ReadOnlyObjectProperty<BaseMapping<ECLASS>> mappingProperty() {
+    return this.mappingProperty.getReadOnlyProperty();
   }
 }

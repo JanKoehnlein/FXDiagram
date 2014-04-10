@@ -29,11 +29,13 @@ import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import de.fxdiagram.xtext.glue.EditorListener;
+import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.BaseMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.TransformationContext;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.XDiagramProvider;
 import java.util.Collections;
 import java.util.Set;
@@ -41,6 +43,7 @@ import javafx.collections.ObservableList;
 import javafx.embed.swt.FXCanvas;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener2;
@@ -132,13 +135,13 @@ public class FXDiagramView extends ViewPart {
   
   public void setFocus() {
     this.canvas.setFocus();
-    this.setFxFocus();
   }
   
-  protected void setFxFocus() {
+  public boolean addConfig(final XDiagramConfig config) {
+    return this.domainObjectProvider.addDiagramConfig(config);
   }
   
-  public <T extends Object> void revealElement(final T element, final BaseMapping<T> mapping, final XtextEditor editor) {
+  public <T extends EObject> void revealElement(final T element, final BaseMapping<T> mapping, final XtextEditor editor) {
     if ((mapping instanceof DiagramMapping<?>)) {
       this.register(editor);
       boolean _remove = this.changedEditors.remove(editor);
@@ -156,7 +159,7 @@ public class FXDiagramView extends ViewPart {
         this.diagramProvider.<T>createNode(element, ((NodeMapping<T>) mapping), _transformationContext);
       }
     }
-    final DomainObjectDescriptor descriptor = this.domainObjectProvider.createDescriptor(element);
+    final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, mapping);
     XDiagram _diagram = this.root.getDiagram();
     ObservableList<XNode> _nodes = _diagram.getNodes();
     final Procedure1<XNode> _function = new Procedure1<XNode>() {

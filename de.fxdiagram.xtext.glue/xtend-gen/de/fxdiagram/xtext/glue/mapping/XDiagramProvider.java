@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
@@ -19,12 +18,14 @@ import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
+import de.fxdiagram.xtext.glue.mapping.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.TransformationContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -81,19 +82,11 @@ public class XDiagramProvider {
       }
       Function1<? super XtextDomainObjectDescriptor<T>,? extends XNode> _createNode = nodeMapping.getCreateNode();
       final XNode node = _createNode.apply(descriptor);
-      final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent it) {
-          int _clickCount = it.getClickCount();
-          boolean _equals = (_clickCount == 2);
-          if (_equals) {
-            descriptor.revealInEditor();
-          }
-        }
-      };
-      node.setOnMouseClicked(_function);
+      OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(node);
+      node.addBehavior(_openElementInEditorBehavior);
       context.addNode(node);
       List<AbstractConnectionMappingCall<?,T>> _incoming = nodeMapping.getIncoming();
-      final Procedure1<AbstractConnectionMappingCall<?,T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
+      final Procedure1<AbstractConnectionMappingCall<?,T>> _function = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
           boolean _isLazy = it.isLazy();
           if (_isLazy) {
@@ -110,9 +103,9 @@ public class XDiagramProvider {
           }
         }
       };
-      IterableExtensions.<AbstractConnectionMappingCall<?,T>>forEach(_incoming, _function_1);
+      IterableExtensions.<AbstractConnectionMappingCall<?,T>>forEach(_incoming, _function);
       List<AbstractConnectionMappingCall<?,T>> _outgoing = nodeMapping.getOutgoing();
-      final Procedure1<AbstractConnectionMappingCall<?,T>> _function_2 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
+      final Procedure1<AbstractConnectionMappingCall<?,T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
           boolean _isLazy = it.isLazy();
           if (_isLazy) {
@@ -129,7 +122,7 @@ public class XDiagramProvider {
           }
         }
       };
-      IterableExtensions.<AbstractConnectionMappingCall<?,T>>forEach(_outgoing, _function_2);
+      IterableExtensions.<AbstractConnectionMappingCall<?,T>>forEach(_outgoing, _function_1);
       return node;
     } else {
       return null;
@@ -271,7 +264,6 @@ public class XDiagramProvider {
   }
   
   public <T extends Object> XtextDomainObjectDescriptor<T> getDescriptor(final T domainObject, final BaseMapping<T> mapping) {
-    DomainObjectDescriptor _createDescriptor = this.domainObjectProvider.createDescriptor(domainObject);
-    return ((XtextDomainObjectDescriptor<T>) _createDescriptor);
+    return this.domainObjectProvider.<T, EObject>createDescriptor(domainObject, mapping);
   }
 }

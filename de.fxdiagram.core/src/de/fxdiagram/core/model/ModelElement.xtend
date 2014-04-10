@@ -34,7 +34,7 @@ class ModelElementImpl implements ModelElement {
 		this.node = node
 	}
 	
-	def <T> addProperty(Property<T> property, Class<? extends T> propertyType) {
+	def addProperty(Property<?> property, Class<?> propertyType) {
 		// TODO handle null
 		if (property != null) {
 			if (properties == null)
@@ -44,7 +44,7 @@ class ModelElementImpl implements ModelElement {
 		}
 	}
 
-	def <T> addProperty(ListProperty<T> listProperty, Class<? extends T> componentType) {
+	def addProperty(ListProperty<?> listProperty, Class<?> componentType) {
 		if (listProperties == null)
 			listProperties = newArrayList
 		listProperties += listProperty

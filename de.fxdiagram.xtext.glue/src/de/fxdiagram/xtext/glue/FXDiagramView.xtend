@@ -34,6 +34,8 @@ import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.TransformationContext
+import org.eclipse.emf.ecore.EObject
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
 
 class FXDiagramView extends ViewPart {
 
@@ -90,13 +92,13 @@ class FXDiagramView extends ViewPart {
 	
 	override setFocus() {
 		canvas.setFocus
-		setFxFocus
 	}
 	
-	protected def void setFxFocus() {
-	}
+	def addConfig(XDiagramConfig config) {
+		domainObjectProvider.addDiagramConfig(config)
+	}	
 
-	def <T> void revealElement(T element, BaseMapping<T> mapping, XtextEditor editor) {
+	def <T extends EObject> void revealElement(T element, BaseMapping<T> mapping, XtextEditor editor) {
 		if(mapping instanceof DiagramMapping<?>) {
 			editor.register
 			if(changedEditors.remove(editor)) {
@@ -108,7 +110,7 @@ class FXDiagramView extends ViewPart {
 			val diagram = root.diagram
 			diagramProvider.createNode(element, mapping as NodeMapping<T>, new TransformationContext(diagram))			
 		}
-		val descriptor = domainObjectProvider.createDescriptor(element)
+		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
 		root.diagram.nodes.forEach[selected = domainObject == descriptor]
 		root.diagram.connections.forEach[selected = domainObject == descriptor]
 		new CenterAction().perform(root)

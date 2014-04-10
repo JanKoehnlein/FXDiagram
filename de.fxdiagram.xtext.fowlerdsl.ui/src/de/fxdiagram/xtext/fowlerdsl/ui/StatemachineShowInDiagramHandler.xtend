@@ -4,12 +4,10 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.lib.simple.SimpleNode
 import de.fxdiagram.xtext.glue.ShowInDiagramHandler
-import de.fxdiagram.xtext.glue.mapping.BaseMapping
+import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
-import java.util.List
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
@@ -21,9 +19,7 @@ class StatemachineShowInDiagramHandler extends ShowInDiagramHandler {
 	}
 }
 
-class StatemachineDiagramConfig implements XDiagramConfig {
-	
-	List<BaseMapping<?>> mappings = newArrayList
+class StatemachineDiagramConfig extends AbstractDiagramConfig {
 	 
 	new() {
 		val statemachineDiagram = new DiagramMapping(Statemachine)
@@ -50,7 +46,5 @@ class StatemachineDiagramConfig implements XDiagramConfig {
 		]
 	}
 	
-	override <T> getMappings(T domainObject) {
-		mappings.filter[isApplicable(domainObject)].map[it as BaseMapping<T>].toList
-	}
+	
 }

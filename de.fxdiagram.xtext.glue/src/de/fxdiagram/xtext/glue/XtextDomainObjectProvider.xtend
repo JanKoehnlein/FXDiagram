@@ -5,6 +5,9 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
+import de.fxdiagram.xtext.glue.mapping.BaseMapping
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
+import javafx.collections.ObservableList
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -14,56 +17,67 @@ import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.shared.Access
 
-@ModelNode
+import static javafx.collections.FXCollections.*
+
+@ModelNode(#['diagramConfigs'])
 class XtextDomainObjectProvider implements DomainObjectProvider {
 
-	override createDescriptor(Object domainObject) {
-		if (domainObject instanceof EObject) {
-			val resource = domainObject.eResource()
-			if (resource instanceof XtextResource) {
-				val resourceServiceProvider = resource.resourceServiceProvider
-				if (resourceServiceProvider != null) {
-					val fqn = resourceServiceProvider.get(IQualifiedNameProvider)?.getFullyQualifiedName(domainObject)
-					val fqnString = if(fqn != null)
-							resourceServiceProvider.get(IQualifiedNameConverter)?.toString(fqn)
-						else
-							'unnamed'
-					val uri = EcoreUtil.getURI(domainObject)?.toString
-					if (fqnString != null && uri != null)
-						return new XtextDomainObjectDescriptor(uri, fqnString, this)
-				}
-			}
-		}
+	@FxProperty @ReadOnly ObservableList<XDiagramConfig> diagramConfigs = observableArrayList
+	 
+	override createDescriptor(Object it) {
+		if (it instanceof MappedEObjectHandle<?>) 
+			return new XtextDomainObjectDescriptor(URI.toString, fullyQualifiedName, mapping, this)
 		return null
 	}
-}
-
-@Data
-class XtextEObjectHandle<ECLASS> {
-
-	URI uri
-
-	def <T> T withEObject((ECLASS)=>T lambda) {
-		val editor = Access.getIURIEditorOpener.get.open(getUri, true)
-		if (editor instanceof XtextEditor) {
-			editor.document.readOnly [
-				lambda.apply(resourceSet.getEObject(getUri, true) as ECLASS)
-			]
-		}
+	
+	def <T, U extends EObject> createDescriptor(T domainObject, BaseMapping<?> mapping) {
+		new MappedEObjectHandle(domainObject as U, mapping as BaseMapping<U>).createDescriptor as XtextDomainObjectDescriptor<T>
+	}
+	
+	def addDiagramConfig(XDiagramConfig config) {
+		if(!diagramConfigs.contains(config)) 
+			return diagramConfigs.add(config)
+		else
+			return false
 	}
 }
 
-@ModelNode(#['provider', 'uri', 'fqn'])
+class MappedEObjectHandle<MODEL extends EObject> {
+	URI uri
+	String fqn
+	BaseMapping<MODEL> mapping
+	
+	new(MODEL domainObject, BaseMapping<MODEL> mapping) {
+		val resource = domainObject.eResource()
+		this.uri = EcoreUtil.getURI(domainObject)
+		this.mapping = mapping
+		this.fqn = 'unnamed'
+		if (resource instanceof XtextResource) {
+			val resourceServiceProvider = resource.resourceServiceProvider
+			val qualifiedName = resourceServiceProvider.get(IQualifiedNameProvider)?.getFullyQualifiedName(domainObject)
+			this.fqn = if(qualifiedName != null)
+					resourceServiceProvider.get(IQualifiedNameConverter)?.toString(qualifiedName)
+		}
+	}
+	
+	def getURI() { uri }
+	def getFullyQualifiedName() { fqn }
+	def getMapping() { mapping }
+}
+
+@ModelNode(#['provider', 'uri', 'fqn', 'mapping'])
 class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
 	@FxProperty @ReadOnly XtextDomainObjectProvider provider
 	@FxProperty @ReadOnly String fqn
 	@FxProperty @ReadOnly String uri
+	@FxProperty @ReadOnly BaseMapping<ECLASS> mapping
 
-	new(String uri, String fqn, XtextDomainObjectProvider provider) {
+	new(String uri, String fqn, BaseMapping<ECLASS> mapping, XtextDomainObjectProvider provider) {
 		uriProperty.set(uri)
 		fqnProperty.set(fqn)
 		providerProperty.set(provider)
+		mappingProperty.set(mapping)
 	}
 
 	override getName() {
@@ -76,7 +90,7 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
 	def <T> T withDomainObject((ECLASS)=>T lambda) {
 		val uriAsURI = URI.createURI(uri)
-		val editor = Access.getIURIEditorOpener.get.open(uriAsURI, true)
+		val editor = revealInEditor
 		if (editor instanceof XtextEditor) {
 			editor.document.readOnly [
 				lambda.apply(resourceSet.getEObject(uriAsURI, true) as ECLASS)
@@ -95,7 +109,7 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 		103 * uri.hashCode
 	}
 	
-	def void revealInEditor() {
+	def revealInEditor() {
 		Access.getIURIEditorOpener.get.open(URI.createURI(uri), true)
 	}
 }

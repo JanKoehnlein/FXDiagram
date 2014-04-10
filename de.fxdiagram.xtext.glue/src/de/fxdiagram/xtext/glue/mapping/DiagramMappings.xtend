@@ -6,7 +6,9 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.simple.SimpleNode
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import java.util.List
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode
 abstract class BaseMapping<T> {
 	
 	@Property Class<T> typeGuard

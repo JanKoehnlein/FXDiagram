@@ -84,7 +84,7 @@ public class ModelFactory {
     {
       final ModelElementImpl element = new ModelElementImpl(text);
       StringProperty _textProperty = text.textProperty();
-      element.<String>addProperty(_textProperty, String.class);
+      element.addProperty(_textProperty, String.class);
       _xblockexpression = element;
     }
     return _xblockexpression;

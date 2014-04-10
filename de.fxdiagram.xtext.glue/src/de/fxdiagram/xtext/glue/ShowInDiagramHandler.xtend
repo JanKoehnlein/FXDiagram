@@ -33,8 +33,10 @@ abstract class ShowInDiagramHandler extends AbstractHandler {
 						val mappings = getDiagramConfig.getMappings(selectedElement)
 						if(!mappings.empty) {
 							val view = workbench.activeWorkbenchWindow.activePage.showView("org.eclipse.xtext.glue.FXDiagramView")
-							if(view instanceof FXDiagramView) 
+							if(view instanceof FXDiagramView) {
+								view.addConfig(getDiagramConfig)								
 								view.revealElement(selectedElement, mappings.head(), editor)
+							} 
 						}					
 					}
 					null

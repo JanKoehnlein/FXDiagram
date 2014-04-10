@@ -170,14 +170,4 @@ public abstract class XShape extends Parent implements XActivatable {
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
   }
-  
-  private ReadOnlyBooleanWrapper isPreviewActiveProperty = new ReadOnlyBooleanWrapper(this, "isPreviewActive");
-  
-  public boolean getIsPreviewActive() {
-    return this.isPreviewActiveProperty.get();
-  }
-  
-  public ReadOnlyBooleanProperty isPreviewActiveProperty() {
-    return this.isPreviewActiveProperty.getReadOnlyProperty();
-  }
 }
