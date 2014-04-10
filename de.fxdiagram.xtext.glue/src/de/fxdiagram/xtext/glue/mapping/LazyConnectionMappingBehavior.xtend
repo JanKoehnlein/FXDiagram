@@ -8,9 +8,9 @@ import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import java.util.List
+import javafx.geometry.VPos
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
-import static javafx.geometry.Pos.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
@@ -62,7 +62,7 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 		
 	def protected createChooser(XRapidButton button) {
 		val position = button.chooserPosition
-		val chooser = if(position.vpos == CENTER) {
+		val chooser = if(position.vpos == VPos.CENTER) {
 			new CarusselChooser(host, position)
 		} else {
 			new CoverFlowChooser(host, position)			

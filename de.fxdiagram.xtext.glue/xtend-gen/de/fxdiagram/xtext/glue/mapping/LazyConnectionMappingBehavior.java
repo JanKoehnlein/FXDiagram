@@ -106,7 +106,7 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
       final Pos position = button.getChooserPosition();
       AbstractChooser _xifexpression = null;
       VPos _vpos = position.getVpos();
-      boolean _equals = Objects.equal(_vpos, Pos.CENTER);
+      boolean _equals = Objects.equal(_vpos, VPos.CENTER);
       if (_equals) {
         XNode _host = this.getHost();
         _xifexpression = new CarusselChooser(_host, position);
