@@ -4,7 +4,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
@@ -13,7 +13,7 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
-public class NodeMapping<T extends Object> extends BaseMapping<T> {
+public class NodeMapping<T extends Object> extends AbstractMapping<T> {
   private List<AbstractConnectionMappingCall<?,T>> outgoing = CollectionLiterals.<AbstractConnectionMappingCall<?,T>>newArrayList();
   
   private List<AbstractConnectionMappingCall<?,T>> incoming = CollectionLiterals.<AbstractConnectionMappingCall<?,T>>newArrayList();

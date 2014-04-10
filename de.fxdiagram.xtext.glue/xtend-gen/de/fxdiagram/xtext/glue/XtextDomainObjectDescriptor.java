@@ -6,7 +6,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -26,7 +26,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 @ModelNode({ "provider", "uri", "fqn", "mapping" })
 @SuppressWarnings("all")
 public class XtextDomainObjectDescriptor<ECLASS extends Object> implements DomainObjectDescriptor {
-  public XtextDomainObjectDescriptor(final String uri, final String fqn, final BaseMapping<ECLASS> mapping, final XtextDomainObjectProvider provider) {
+  public XtextDomainObjectDescriptor(final String uri, final String fqn, final AbstractMapping<ECLASS> mapping, final XtextDomainObjectProvider provider) {
     this.uriProperty.set(uri);
     this.fqnProperty.set(fqn);
     this.providerProperty.set(provider);
@@ -100,7 +100,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     modelElement.addProperty(providerProperty, XtextDomainObjectProvider.class);
     modelElement.addProperty(uriProperty, String.class);
     modelElement.addProperty(fqnProperty, String.class);
-    modelElement.addProperty(mappingProperty, BaseMapping.class);
+    modelElement.addProperty(mappingProperty, AbstractMapping.class);
   }
   
   private ReadOnlyObjectWrapper<XtextDomainObjectProvider> providerProperty = new ReadOnlyObjectWrapper<XtextDomainObjectProvider>(this, "provider");
@@ -133,13 +133,13 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     return this.uriProperty.getReadOnlyProperty();
   }
   
-  private ReadOnlyObjectWrapper<BaseMapping<ECLASS>> mappingProperty = new ReadOnlyObjectWrapper<BaseMapping<ECLASS>>(this, "mapping");
+  private ReadOnlyObjectWrapper<AbstractMapping<ECLASS>> mappingProperty = new ReadOnlyObjectWrapper<AbstractMapping<ECLASS>>(this, "mapping");
   
-  public BaseMapping<ECLASS> getMapping() {
+  public AbstractMapping<ECLASS> getMapping() {
     return this.mappingProperty.get();
   }
   
-  public ReadOnlyObjectProperty<BaseMapping<ECLASS>> mappingProperty() {
+  public ReadOnlyObjectProperty<AbstractMapping<ECLASS>> mappingProperty() {
     return this.mappingProperty.getReadOnlyProperty();
   }
 }

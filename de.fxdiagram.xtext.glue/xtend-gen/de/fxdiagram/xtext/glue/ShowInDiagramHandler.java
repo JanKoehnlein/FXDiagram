@@ -3,7 +3,7 @@ package de.fxdiagram.xtext.glue;
 import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import de.fxdiagram.xtext.glue.FXDiagramView;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -57,7 +57,7 @@ public abstract class ShowInDiagramHandler extends AbstractHandler {
               boolean _notEquals = (!Objects.equal(selectedElement, null));
               if (_notEquals) {
                 XDiagramConfig _diagramConfig = ShowInDiagramHandler.this.getDiagramConfig();
-                final List<? extends BaseMapping<EObject>> mappings = _diagramConfig.<EObject>getMappings(selectedElement);
+                final List<? extends AbstractMapping<EObject>> mappings = _diagramConfig.<EObject>getMappings(selectedElement);
                 boolean _isEmpty = mappings.isEmpty();
                 boolean _not = (!_isEmpty);
                 if (_not) {
@@ -67,7 +67,7 @@ public abstract class ShowInDiagramHandler extends AbstractHandler {
                   if ((view instanceof FXDiagramView)) {
                     XDiagramConfig _diagramConfig_1 = ShowInDiagramHandler.this.getDiagramConfig();
                     ((FXDiagramView)view).addConfig(_diagramConfig_1);
-                    BaseMapping<EObject> _head = IterableExtensions.head(mappings);
+                    AbstractMapping<EObject> _head = IterableExtensions.head(mappings);
                     ((FXDiagramView)view).<EObject>revealElement(selectedElement, _head, editor);
                   }
                 }

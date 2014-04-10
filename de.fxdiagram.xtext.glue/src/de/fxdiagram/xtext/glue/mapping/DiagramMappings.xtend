@@ -9,7 +9,7 @@ import java.util.List
 import de.fxdiagram.annotations.properties.ModelNode
 
 @ModelNode
-abstract class BaseMapping<T> {
+abstract class AbstractMapping<T> {
 	
 	@Property Class<T> typeGuard
 	
@@ -22,7 +22,7 @@ abstract class BaseMapping<T> {
 	}
 }
 
-class DiagramMapping<T> extends BaseMapping<T> {
+class DiagramMapping<T> extends AbstractMapping<T> {
 	
 	List<AbstractNodeMappingCall<?, T>> nodes = newArrayList 
 	List<AbstractConnectionMappingCall<?, T>> connections = newArrayList()
@@ -54,7 +54,7 @@ class DiagramMapping<T> extends BaseMapping<T> {
 	}
 }
 
-class NodeMapping<T> extends BaseMapping<T> {
+class NodeMapping<T> extends AbstractMapping<T> {
 	
 	List<AbstractConnectionMappingCall<?,T>> outgoing = newArrayList
 	List<AbstractConnectionMappingCall<?,T>> incoming = newArrayList()
@@ -94,7 +94,7 @@ class NodeMapping<T> extends BaseMapping<T> {
 	}
 }
 
-class ConnectionMapping<T> extends BaseMapping<T> {
+class ConnectionMapping<T> extends AbstractMapping<T> {
 
 	NodeMappingCall<?, T> source
 	NodeMappingCall<?, T> target

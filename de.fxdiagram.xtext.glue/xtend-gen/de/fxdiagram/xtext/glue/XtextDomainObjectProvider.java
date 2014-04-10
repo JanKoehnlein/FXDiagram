@@ -6,7 +6,7 @@ import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.glue.MappedEObjectHandle;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -23,14 +23,14 @@ public class XtextDomainObjectProvider implements DomainObjectProvider {
       URI _uRI = ((MappedEObjectHandle<?>)it).getURI();
       String _string = _uRI.toString();
       String _fullyQualifiedName = ((MappedEObjectHandle<?>)it).getFullyQualifiedName();
-      BaseMapping<? extends EObject> _mapping = ((MappedEObjectHandle<?>)it).getMapping();
+      AbstractMapping<? extends EObject> _mapping = ((MappedEObjectHandle<?>)it).getMapping();
       return new XtextDomainObjectDescriptor(_string, _fullyQualifiedName, _mapping, this);
     }
     return null;
   }
   
-  public <T extends Object, U extends EObject> XtextDomainObjectDescriptor<T> createDescriptor(final T domainObject, final BaseMapping<?> mapping) {
-    MappedEObjectHandle<U> _mappedEObjectHandle = new MappedEObjectHandle<U>(((U) domainObject), ((BaseMapping<U>) mapping));
+  public <T extends Object, U extends EObject> XtextDomainObjectDescriptor<T> createDescriptor(final T domainObject, final AbstractMapping<?> mapping) {
+    MappedEObjectHandle<U> _mappedEObjectHandle = new MappedEObjectHandle<U>(((U) domainObject), ((AbstractMapping<U>) mapping));
     DomainObjectDescriptor _createDescriptor = this.createDescriptor(_mappedEObjectHandle);
     return ((XtextDomainObjectDescriptor<T>) _createDescriptor);
   }

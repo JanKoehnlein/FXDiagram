@@ -5,7 +5,6 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
-import de.fxdiagram.xtext.glue.mapping.BaseMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
 import javafx.collections.ObservableList
 import org.eclipse.emf.common.util.URI
@@ -18,6 +17,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.shared.Access
 
 import static javafx.collections.FXCollections.*
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping
 
 @ModelNode(#['diagramConfigs'])
 class XtextDomainObjectProvider implements DomainObjectProvider {
@@ -30,8 +30,8 @@ class XtextDomainObjectProvider implements DomainObjectProvider {
 		return null
 	}
 	
-	def <T, U extends EObject> createDescriptor(T domainObject, BaseMapping<?> mapping) {
-		new MappedEObjectHandle(domainObject as U, mapping as BaseMapping<U>).createDescriptor as XtextDomainObjectDescriptor<T>
+	def <T, U extends EObject> createDescriptor(T domainObject, AbstractMapping<?> mapping) {
+		new MappedEObjectHandle(domainObject as U, mapping as AbstractMapping<U>).createDescriptor as XtextDomainObjectDescriptor<T>
 	}
 	
 	def addDiagramConfig(XDiagramConfig config) {
@@ -45,9 +45,9 @@ class XtextDomainObjectProvider implements DomainObjectProvider {
 class MappedEObjectHandle<MODEL extends EObject> {
 	URI uri
 	String fqn
-	BaseMapping<MODEL> mapping
+	AbstractMapping<MODEL> mapping
 	
-	new(MODEL domainObject, BaseMapping<MODEL> mapping) {
+	new(MODEL domainObject, AbstractMapping<MODEL> mapping) {
 		val resource = domainObject.eResource()
 		this.uri = EcoreUtil.getURI(domainObject)
 		this.mapping = mapping
@@ -71,9 +71,9 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 	@FxProperty @ReadOnly XtextDomainObjectProvider provider
 	@FxProperty @ReadOnly String fqn
 	@FxProperty @ReadOnly String uri
-	@FxProperty @ReadOnly BaseMapping<ECLASS> mapping
+	@FxProperty @ReadOnly AbstractMapping<ECLASS> mapping
 
-	new(String uri, String fqn, BaseMapping<ECLASS> mapping, XtextDomainObjectProvider provider) {
+	new(String uri, String fqn, AbstractMapping<ECLASS> mapping, XtextDomainObjectProvider provider) {
 		uriProperty.set(uri)
 		fqnProperty.set(fqn)
 		providerProperty.set(provider)

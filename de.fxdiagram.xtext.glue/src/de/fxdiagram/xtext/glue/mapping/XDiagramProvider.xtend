@@ -125,7 +125,7 @@ class XDiagramProvider {
 			connection.target = connectionMapping.target?.execute(connectionObject, context).head
 	}
 
-	def <T> getDescriptor(T domainObject, BaseMapping<T> mapping) {
+	def <T> getDescriptor(T domainObject, AbstractMapping<T> mapping) {
 		domainObjectProvider.createDescriptor(domainObject, mapping)
 	}
 }

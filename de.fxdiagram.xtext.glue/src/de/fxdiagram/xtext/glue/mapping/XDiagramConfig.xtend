@@ -9,15 +9,15 @@ import static javafx.collections.FXCollections.*
 
 interface XDiagramConfig {
 
-	def <T> List<? extends BaseMapping<T>> getMappings(T domainObject)
+	def <T> List<? extends AbstractMapping<T>> getMappings(T domainObject)
 }
 
 @ModelNode(#['mappings'])
 class AbstractDiagramConfig implements XDiagramConfig {
 	
-	@FxProperty ObservableList<BaseMapping<?>> mappings = observableArrayList
+	@FxProperty ObservableList<AbstractMapping<?>> mappings = observableArrayList
 	
 	override <T> getMappings(T domainObject) {
-		mappings.filter[isApplicable(domainObject)].map[it as BaseMapping<T>].toList
+		mappings.filter[isApplicable(domainObject)].map[it as AbstractMapping<T>].toList
 	}
 } 

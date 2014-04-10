@@ -1,7 +1,7 @@
 package de.fxdiagram.xtext.glue;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -18,9 +18,9 @@ public class MappedEObjectHandle<MODEL extends EObject> {
   
   private String fqn;
   
-  private BaseMapping<MODEL> mapping;
+  private AbstractMapping<MODEL> mapping;
   
-  public MappedEObjectHandle(final MODEL domainObject, final BaseMapping<MODEL> mapping) {
+  public MappedEObjectHandle(final MODEL domainObject, final AbstractMapping<MODEL> mapping) {
     final Resource resource = domainObject.eResource();
     URI _uRI = EcoreUtil.getURI(domainObject);
     this.uri = _uRI;
@@ -56,7 +56,7 @@ public class MappedEObjectHandle<MODEL extends EObject> {
     return this.fqn;
   }
   
-  public BaseMapping<MODEL> getMapping() {
+  public AbstractMapping<MODEL> getMapping() {
     return this.mapping;
   }
 }

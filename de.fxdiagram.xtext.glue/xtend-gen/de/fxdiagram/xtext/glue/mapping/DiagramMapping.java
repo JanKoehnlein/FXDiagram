@@ -3,8 +3,8 @@ package de.fxdiagram.xtext.glue.mapping;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
@@ -16,7 +16,7 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
-public class DiagramMapping<T extends Object> extends BaseMapping<T> {
+public class DiagramMapping<T extends Object> extends AbstractMapping<T> {
   private List<AbstractNodeMappingCall<?,T>> nodes = CollectionLiterals.<AbstractNodeMappingCall<?,T>>newArrayList();
   
   private List<AbstractConnectionMappingCall<?,T>> connections = CollectionLiterals.<AbstractConnectionMappingCall<?,T>>newArrayList();

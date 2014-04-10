@@ -8,8 +8,8 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
@@ -263,7 +263,7 @@ public class XDiagramProvider {
     }
   }
   
-  public <T extends Object> XtextDomainObjectDescriptor<T> getDescriptor(final T domainObject, final BaseMapping<T> mapping) {
+  public <T extends Object> XtextDomainObjectDescriptor<T> getDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
     return this.domainObjectProvider.<T, EObject>createDescriptor(domainObject, mapping);
   }
 }

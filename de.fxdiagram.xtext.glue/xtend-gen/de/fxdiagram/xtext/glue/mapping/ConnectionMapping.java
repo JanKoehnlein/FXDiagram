@@ -2,13 +2,13 @@ package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
-public class ConnectionMapping<T extends Object> extends BaseMapping<T> {
+public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
   private NodeMappingCall<?,T> source;
   
   private NodeMappingCall<?,T> target;

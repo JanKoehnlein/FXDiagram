@@ -31,7 +31,7 @@ import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import de.fxdiagram.xtext.glue.EditorListener;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.TransformationContext;
@@ -141,7 +141,7 @@ public class FXDiagramView extends ViewPart {
     return this.domainObjectProvider.addDiagramConfig(config);
   }
   
-  public <T extends EObject> void revealElement(final T element, final BaseMapping<T> mapping, final XtextEditor editor) {
+  public <T extends EObject> void revealElement(final T element, final AbstractMapping<T> mapping, final XtextEditor editor) {
     if ((mapping instanceof DiagramMapping<?>)) {
       this.register(editor);
       boolean _remove = this.changedEditors.remove(editor);

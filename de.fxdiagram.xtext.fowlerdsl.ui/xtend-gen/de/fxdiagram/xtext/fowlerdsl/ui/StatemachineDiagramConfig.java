@@ -5,7 +5,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.BaseMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
@@ -69,7 +69,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
       }
     };
     final ConnectionMapping<Transition> transitionConnection = ObjectExtensions.<ConnectionMapping<Transition>>operator_doubleArrow(_connectionMapping, _function_1);
-    ObservableList<BaseMapping<?>> _mappings = this.getMappings();
+    ObservableList<AbstractMapping<?>> _mappings = this.getMappings();
     final Procedure1<DiagramMapping<Statemachine>> _function_2 = new Procedure1<DiagramMapping<Statemachine>>() {
       public void apply(final DiagramMapping<Statemachine> it) {
         final Function1<Statemachine,EList<State>> _function = new Function1<Statemachine,EList<State>>() {
@@ -82,7 +82,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     };
     DiagramMapping<Statemachine> _doubleArrow = ObjectExtensions.<DiagramMapping<Statemachine>>operator_doubleArrow(statemachineDiagram, _function_2);
     _mappings.add(_doubleArrow);
-    ObservableList<BaseMapping<?>> _mappings_1 = this.getMappings();
+    ObservableList<AbstractMapping<?>> _mappings_1 = this.getMappings();
     final Procedure1<NodeMapping<State>> _function_3 = new Procedure1<NodeMapping<State>>() {
       public void apply(final NodeMapping<State> it) {
         final Function1<State,EList<Transition>> _function = new Function1<State,EList<Transition>>() {
@@ -96,7 +96,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     };
     NodeMapping<State> _doubleArrow_1 = ObjectExtensions.<NodeMapping<State>>operator_doubleArrow(stateNode, _function_3);
     _mappings_1.add(_doubleArrow_1);
-    ObservableList<BaseMapping<?>> _mappings_2 = this.getMappings();
+    ObservableList<AbstractMapping<?>> _mappings_2 = this.getMappings();
     final Procedure1<ConnectionMapping<Transition>> _function_4 = new Procedure1<ConnectionMapping<Transition>>() {
       public void apply(final ConnectionMapping<Transition> it) {
         final Function1<Transition,State> _function = new Function1<Transition,State>() {

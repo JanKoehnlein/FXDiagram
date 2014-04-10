@@ -19,7 +19,6 @@ import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
-import de.fxdiagram.xtext.glue.mapping.BaseMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramProvider
 import java.util.Set
@@ -36,6 +35,7 @@ import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.TransformationContext
 import org.eclipse.emf.ecore.EObject
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping
 
 class FXDiagramView extends ViewPart {
 
@@ -98,7 +98,7 @@ class FXDiagramView extends ViewPart {
 		domainObjectProvider.addDiagramConfig(config)
 	}	
 
-	def <T extends EObject> void revealElement(T element, BaseMapping<T> mapping, XtextEditor editor) {
+	def <T extends EObject> void revealElement(T element, AbstractMapping<T> mapping, XtextEditor editor) {
 		if(mapping instanceof DiagramMapping<?>) {
 			editor.register
 			if(changedEditors.remove(editor)) {
