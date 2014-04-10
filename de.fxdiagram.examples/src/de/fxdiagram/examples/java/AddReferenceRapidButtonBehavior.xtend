@@ -3,6 +3,7 @@ package de.fxdiagram.examples.java
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRapidButton
+import de.fxdiagram.core.XRapidButtonAction
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
 import de.fxdiagram.lib.tools.CarusselChooser
@@ -53,7 +54,7 @@ class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 		chooser
 	}
 	
-	override protected createButtons((XRapidButton)=>void addConnectionAction) {
+	override protected createButtons(XRapidButtonAction addConnectionAction) {
 		#[	new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover properties'), addConnectionAction),
 			new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover properties'), addConnectionAction) ]
 	}

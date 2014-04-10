@@ -5,6 +5,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRapidButtonAction;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
@@ -107,7 +108,7 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
     return _xblockexpression;
   }
   
-  protected Iterable<XRapidButton> createButtons(final Procedure1<? super XRapidButton> addConnectionAction) {
+  protected Iterable<XRapidButton> createButtons(final XRapidButtonAction addConnectionAction) {
     JavaTypeNode _host = this.getHost();
     SVGPath _arrowButton = ButtonExtensions.getArrowButton(Side.LEFT, "Discover properties");
     XRapidButton _xRapidButton = new XRapidButton(_host, 0, 0.5, _arrowButton, addConnectionAction);

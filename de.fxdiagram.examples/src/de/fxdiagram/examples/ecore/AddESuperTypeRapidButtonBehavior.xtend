@@ -12,6 +12,7 @@ import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.XRapidButtonAction
 
 class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EClass, ESuperTypeDescriptor> {
 	
@@ -53,7 +54,7 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 		chooser
 	}
 	
-	override protected createButtons((XRapidButton)=>void addConnectionAction) {
+	override protected createButtons(XRapidButtonAction addConnectionAction) {
 		#[	new XRapidButton(host, 0.5, 0, getTriangleButton(TOP, 'Discover supertypes'), addConnectionAction),
 			new XRapidButton(host, 0.5, 1, getTriangleButton(BOTTOM, 'Discover supertypes'), addConnectionAction)
 		]

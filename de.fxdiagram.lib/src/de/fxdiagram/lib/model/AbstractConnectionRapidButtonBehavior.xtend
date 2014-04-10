@@ -11,6 +11,7 @@ import java.util.List
 import java.util.Set
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.XRapidButtonAction
 
 abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, KEY extends DomainObjectDescriptor> extends AbstractHostBehavior<HOST> {
 	
@@ -30,7 +31,7 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 	override protected doActivate() {
 		availableChoiceKeys += initialModelChoices.map[choiceKey]
 		if(!availableChoiceKeys.empty) {
-			val addConnectionAction = [
+			val XRapidButtonAction addConnectionAction = [
 				XRapidButton button |
 				val chooser = createChooser(button, availableChoiceKeys, unavailableChoiceKeys)
 				host.root.currentTool = chooser
@@ -62,7 +63,7 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 	
 	protected def XNode createNode(KEY key)
 
-	protected def Iterable<XRapidButton> createButtons((XRapidButton)=>void addConnectionAction) 
+	protected def Iterable<XRapidButton> createButtons(XRapidButtonAction addConnectionAction) 
 		
 	protected def AbstractChooser createChooser(XRapidButton button, Set<KEY> availableChoiceKeys, Set<KEY> unavailableChoiceKeys) 
 	

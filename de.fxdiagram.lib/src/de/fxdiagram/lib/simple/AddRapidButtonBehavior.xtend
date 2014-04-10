@@ -16,6 +16,7 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.command.AddRemoveCommand
+import de.fxdiagram.core.XRapidButtonAction
 
 class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavior<T> {
 
@@ -37,7 +38,7 @@ class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavior<T> {
 
 	override doActivate() {
 		val host = this.getHost as XNode
-		val addAction = [ XRapidButton button |
+		val XRapidButtonAction addAction = [ XRapidButton button |
 			val target = new SimpleNode("New Node")
 			val source = button.getHost
 			val connection = new XConnection(source, target)
@@ -45,17 +46,17 @@ class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavior<T> {
 			target.layoutY = 150 * (button.getPlacer.getYPos - 0.5) + source.layoutY
 			host.root.commandStack.execute(AddRemoveCommand.newAddCommand(host.diagram, target, connection))
 		]
-		val chooseAction = [ XRapidButton button |
+		val XRapidButtonAction chooseAction = [ XRapidButton button |
 			val chooser = new CarusselChooser(host, button.getChooserPosition)
 			chooser.addChoices
 			host.root.currentTool = chooser
 		]
-		val cubeChooseAction = [ XRapidButton button |
+		val XRapidButtonAction cubeChooseAction = [ XRapidButton button |
 			val chooser = new CubeChooser(host, button.getChooserPosition)
 			chooser.addChoices
 			host.root.currentTool = chooser
 		]
-		val coverFlowChooseAction = [ XRapidButton button |
+		val XRapidButtonAction coverFlowChooseAction = [ XRapidButton button |
 			val chooser = new CoverFlowChooser(host, button.getChooserPosition)
 			chooser.addChoices
 			host.root.currentTool = chooser

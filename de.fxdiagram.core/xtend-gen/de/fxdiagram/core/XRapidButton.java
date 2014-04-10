@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.Placer;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRapidButtonAction;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -34,11 +35,11 @@ public class XRapidButton extends Parent implements XActivatable {
   
   private Placer placer;
   
-  private Procedure1<? super XRapidButton> action;
+  private XRapidButtonAction action;
   
   private Timeline timeline;
   
-  public XRapidButton(final XNode host, final double xPos, final double yPos, final Image image, final Procedure1<? super XRapidButton> action) {
+  public XRapidButton(final XNode host, final double xPos, final double yPos, final Image image, final XRapidButtonAction action) {
     this.host = host;
     this.action = action;
     ObservableList<Node> _children = this.getChildren();
@@ -54,7 +55,7 @@ public class XRapidButton extends Parent implements XActivatable {
     this.placer = _placer;
   }
   
-  public XRapidButton(final XNode host, final double xPos, final double yPos, final Node image, final Procedure1<? super XRapidButton> action) {
+  public XRapidButton(final XNode host, final double xPos, final double yPos, final Node image, final XRapidButtonAction action) {
     this.host = host;
     this.action = action;
     ObservableList<Node> _children = this.getChildren();
@@ -90,7 +91,7 @@ public class XRapidButton extends Parent implements XActivatable {
       public void handle(final MouseEvent it) {
         XRapidButton.this.setOpacity(0);
         XRapidButton.this.setVisible(false);
-        XRapidButton.this.action.apply(XRapidButton.this);
+        XRapidButton.this.action.perform(XRapidButton.this);
         it.consume();
       }
     };
@@ -146,10 +147,13 @@ public class XRapidButton extends Parent implements XActivatable {
   }
   
   public void show() {
-    Timeline _timeline = this.getTimeline();
-    _timeline.stop();
-    this.setVisible(true);
-    this.setOpacity(1.0);
+    boolean _isEnabled = this.action.isEnabled(this);
+    if (_isEnabled) {
+      Timeline _timeline = this.getTimeline();
+      _timeline.stop();
+      this.setVisible(true);
+      this.setOpacity(1.0);
+    }
   }
   
   public void fade() {

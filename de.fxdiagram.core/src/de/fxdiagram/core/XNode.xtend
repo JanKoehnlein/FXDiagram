@@ -31,7 +31,7 @@ class XNode extends XShape {
 	Effect mouseOverEffect
 	Effect selectionEffect
 	Effect originalEffect
-
+ 
 	Anchors anchors
 	
  	new(DomainObjectDescriptor domainObject) {

@@ -14,6 +14,7 @@ import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.XRapidButtonAction
 
 class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EReference, EReferenceDescriptor> {
 	
@@ -69,7 +70,7 @@ class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 		chooser
 	}
 	
-	override protected createButtons((XRapidButton)=>void addConnectionAction) {
+	override protected createButtons(XRapidButtonAction addConnectionAction) {
 		#[	new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover references'), addConnectionAction),
 			new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover references'), addConnectionAction) ]
 	}

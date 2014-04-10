@@ -2,6 +2,7 @@ package de.fxdiagram.examples.java
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XRapidButton
+import de.fxdiagram.core.XRapidButtonAction
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
 import de.fxdiagram.lib.tools.CoverFlowChooser
@@ -49,7 +50,7 @@ class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 		chooser
 	}
 	
-	override protected createButtons((XRapidButton)=>void addConnectionAction) {
+	override protected createButtons(XRapidButtonAction addConnectionAction) {
 		#[	new XRapidButton(host, 0.5, 0, getTriangleButton(TOP, 'Discover supertypes'), addConnectionAction),
 			new XRapidButton(host, 0.5, 1, getTriangleButton(BOTTOM, 'Discover supertypes'), addConnectionAction)
 		]

@@ -5,6 +5,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRapidButtonAction;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
@@ -104,7 +105,7 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
     return _xblockexpression;
   }
   
-  protected Iterable<XRapidButton> createButtons(final Procedure1<? super XRapidButton> addConnectionAction) {
+  protected Iterable<XRapidButton> createButtons(final XRapidButtonAction addConnectionAction) {
     EClassNode _host = this.getHost();
     SVGPath _triangleButton = ButtonExtensions.getTriangleButton(Side.TOP, "Discover supertypes");
     XRapidButton _xRapidButton = new XRapidButton(_host, 0.5, 0, _triangleButton, addConnectionAction);

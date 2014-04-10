@@ -7,6 +7,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRapidButtonAction;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
@@ -49,8 +50,9 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
   public void doActivate() {
     T _host = this.getHost();
     final XNode host = ((XNode) _host);
-    final Procedure1<XRapidButton> _function = new Procedure1<XRapidButton>() {
-      public void apply(final XRapidButton button) {
+    final XRapidButtonAction _function = new XRapidButtonAction() {
+      @Override
+      public void perform(final XRapidButton button) {
         final SimpleNode target = new SimpleNode("New Node");
         final XNode source = button.getHost();
         final XConnection connection = new XConnection(source, target);
@@ -75,9 +77,10 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
         _commandStack.execute(_newAddCommand);
       }
     };
-    final Procedure1<XRapidButton> addAction = _function;
-    final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
-      public void apply(final XRapidButton button) {
+    final XRapidButtonAction addAction = _function;
+    final XRapidButtonAction _function_1 = new XRapidButtonAction() {
+      @Override
+      public void perform(final XRapidButton button) {
         Pos _chooserPosition = button.getChooserPosition();
         final CarusselChooser chooser = new CarusselChooser(host, _chooserPosition);
         AddRapidButtonBehavior.this.addChoices(chooser);
@@ -85,9 +88,10 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
         _root.setCurrentTool(chooser);
       }
     };
-    final Procedure1<XRapidButton> chooseAction = _function_1;
-    final Procedure1<XRapidButton> _function_2 = new Procedure1<XRapidButton>() {
-      public void apply(final XRapidButton button) {
+    final XRapidButtonAction chooseAction = _function_1;
+    final XRapidButtonAction _function_2 = new XRapidButtonAction() {
+      @Override
+      public void perform(final XRapidButton button) {
         Pos _chooserPosition = button.getChooserPosition();
         final CubeChooser chooser = new CubeChooser(host, _chooserPosition);
         AddRapidButtonBehavior.this.addChoices(chooser);
@@ -95,9 +99,10 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
         _root.setCurrentTool(chooser);
       }
     };
-    final Procedure1<XRapidButton> cubeChooseAction = _function_2;
-    final Procedure1<XRapidButton> _function_3 = new Procedure1<XRapidButton>() {
-      public void apply(final XRapidButton button) {
+    final XRapidButtonAction cubeChooseAction = _function_2;
+    final XRapidButtonAction _function_3 = new XRapidButtonAction() {
+      @Override
+      public void perform(final XRapidButton button) {
         Pos _chooserPosition = button.getChooserPosition();
         final CoverFlowChooser chooser = new CoverFlowChooser(host, _chooserPosition);
         AddRapidButtonBehavior.this.addChoices(chooser);
@@ -105,7 +110,7 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
         _root.setCurrentTool(chooser);
       }
     };
-    final Procedure1<XRapidButton> coverFlowChooseAction = _function_3;
+    final XRapidButtonAction coverFlowChooseAction = _function_3;
     SVGPath _filledTriangle = ButtonExtensions.getFilledTriangle(Side.TOP, "Add node");
     XRapidButton _xRapidButton = new XRapidButton(host, 0.5, 0, _filledTriangle, cubeChooseAction);
     SVGPath _filledTriangle_1 = ButtonExtensions.getFilledTriangle(Side.BOTTOM, "Add node");

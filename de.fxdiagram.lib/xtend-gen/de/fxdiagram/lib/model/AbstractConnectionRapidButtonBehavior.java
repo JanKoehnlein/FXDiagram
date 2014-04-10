@@ -5,6 +5,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRapidButtonAction;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
@@ -49,15 +50,16 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
     boolean _isEmpty = this.availableChoiceKeys.isEmpty();
     boolean _not = (!_isEmpty);
     if (_not) {
-      final Procedure1<XRapidButton> _function_1 = new Procedure1<XRapidButton>() {
-        public void apply(final XRapidButton button) {
+      final XRapidButtonAction _function_1 = new XRapidButtonAction() {
+        @Override
+        public void perform(final XRapidButton button) {
           final AbstractChooser chooser = AbstractConnectionRapidButtonBehavior.this.createChooser(button, AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys, AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys);
           HOST _host = AbstractConnectionRapidButtonBehavior.this.getHost();
           XRoot _root = CoreExtensions.getRoot(_host);
           _root.setCurrentTool(chooser);
         }
       };
-      final Procedure1<XRapidButton> addConnectionAction = _function_1;
+      final XRapidButtonAction addConnectionAction = _function_1;
       Iterable<XRapidButton> _createButtons = this.createButtons(addConnectionAction);
       Iterables.<XRapidButton>addAll(this.buttons, _createButtons);
       HOST _host = this.getHost();
@@ -119,7 +121,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
   
   protected abstract XNode createNode(final KEY key);
   
-  protected abstract Iterable<XRapidButton> createButtons(final Procedure1<? super XRapidButton> addConnectionAction);
+  protected abstract Iterable<XRapidButton> createButtons(final XRapidButtonAction addConnectionAction);
   
   protected abstract AbstractChooser createChooser(final XRapidButton button, final Set<KEY> availableChoiceKeys, final Set<KEY> unavailableChoiceKeys);
 }

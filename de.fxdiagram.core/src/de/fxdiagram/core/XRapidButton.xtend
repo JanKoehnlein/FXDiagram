@@ -30,12 +30,12 @@ class XRapidButton extends Parent implements XActivatable {
 	
 	Placer placer
 	
-	(XRapidButton)=>void action
+	XRapidButtonAction action
 
 	Timeline timeline
 	
 	new(XNode host, double xPos, double yPos, 
-		Image image, (XRapidButton)=>void action) {
+		Image image, XRapidButtonAction action) {
 		this.host = host
 		this.action = action
 		children += new ImageView => [
@@ -45,7 +45,7 @@ class XRapidButton extends Parent implements XActivatable {
 	}
 	
 	new(XNode host, double xPos, double yPos, 
-		Node image, (XRapidButton)=>void action) {
+		Node image, XRapidButtonAction action) {
 		this.host = host
 		this.action = action
 		children += image
@@ -65,7 +65,7 @@ class XRapidButton extends Parent implements XActivatable {
 		onMousePressed = [ 
 			opacity = 0
 			visible = false 
-			action.apply(this)
+			action.perform(this)
 			consume
 		]
 		placer.activate
@@ -96,9 +96,11 @@ class XRapidButton extends Parent implements XActivatable {
 	def getPlacer() { placer }
 	
 	def show() {
-		getTimeline.stop
-		visible = true
-		opacity = 1.0
+		if(action.isEnabled(this)) {
+			getTimeline.stop
+			visible = true
+			opacity = 1.0
+		}
 	}
 	
 	def fade() {
@@ -134,6 +136,15 @@ class XRapidButton extends Parent implements XActivatable {
 			else 
 				BOTTOM		
 		Pos.valueOf(vpos + '_' + hpos)
+	}
+}
+
+abstract class XRapidButtonAction {
+	
+	def void perform(XRapidButton button)
+	 
+	def boolean isEnabled(XRapidButton button) {
+		true
 	}
 }
 
