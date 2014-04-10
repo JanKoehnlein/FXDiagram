@@ -39,12 +39,12 @@ public class ConnectionMapping<T extends Object> extends BaseMapping<T> {
     return this.target;
   }
   
-  public <U extends Object> NodeMappingCall<?,T> setSource(final NodeMapping<U> nodeMapping, final Function1<? super T,? extends U> selector) {
+  public <U extends Object> NodeMappingCall<?,T> source(final NodeMapping<U> nodeMapping, final Function1<? super T,? extends U> selector) {
     NodeMappingCall<U,T> _nodeMappingCall = new NodeMappingCall<U, T>(selector, nodeMapping);
     return this.source = _nodeMappingCall;
   }
   
-  public <U extends Object> NodeMappingCall<?,T> setTarget(final NodeMapping<U> nodeMapping, final Function1<? super T,? extends U> selector) {
+  public <U extends Object> NodeMappingCall<?,T> target(final NodeMapping<U> nodeMapping, final Function1<? super T,? extends U> selector) {
     NodeMappingCall<U,T> _nodeMappingCall = new NodeMappingCall<U, T>(selector, nodeMapping);
     return this.target = _nodeMappingCall;
   }

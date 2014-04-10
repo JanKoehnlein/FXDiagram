@@ -5,7 +5,6 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import javafx.collections.ObservableList;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -28,7 +27,7 @@ public class TransformationContext {
     return _connections.add(connection);
   }
   
-  public <T extends Object> XConnection getConnection(final XtextDomainObjectDescriptor<T> descriptor) {
+  public <T extends Object> XConnection getConnection(final DomainObjectDescriptor descriptor) {
     ObservableList<XConnection> _connections = this.diagram.getConnections();
     final Function1<XConnection,Boolean> _function = new Function1<XConnection,Boolean>() {
       public Boolean apply(final XConnection it) {
@@ -39,7 +38,7 @@ public class TransformationContext {
     return IterableExtensions.<XConnection>findFirst(_connections, _function);
   }
   
-  public <T extends Object> XNode getNode(final XtextDomainObjectDescriptor<T> descriptor) {
+  public <T extends Object> XNode getNode(final DomainObjectDescriptor descriptor) {
     ObservableList<XNode> _nodes = this.diagram.getNodes();
     final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
       public Boolean apply(final XNode it) {

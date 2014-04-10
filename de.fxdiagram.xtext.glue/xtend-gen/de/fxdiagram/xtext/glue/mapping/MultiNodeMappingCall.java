@@ -9,10 +9,10 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
 @SuppressWarnings("all")
-public class MultiNodeMappingCall<T extends Object, U extends Object> extends AbstractNodeMappingCall<T> {
-  private final Function1<? super U,? extends List<? extends T>> _selector;
+public class MultiNodeMappingCall<T extends Object, ARG extends Object> extends AbstractNodeMappingCall<T,ARG> {
+  private final Function1<? super ARG,? extends List<? extends T>> _selector;
   
-  public Function1<? super U,? extends List<? extends T>> getSelector() {
+  public Function1<? super ARG,? extends List<? extends T>> getSelector() {
     return this._selector;
   }
   
@@ -22,7 +22,7 @@ public class MultiNodeMappingCall<T extends Object, U extends Object> extends Ab
     return this._nodeMapping;
   }
   
-  public MultiNodeMappingCall(final Function1<? super U,? extends List<? extends T>> selector, final NodeMapping<T> nodeMapping) {
+  public MultiNodeMappingCall(final Function1<? super ARG,? extends List<? extends T>> selector, final NodeMapping<T> nodeMapping) {
     super();
     this._selector = selector;
     this._nodeMapping = nodeMapping;

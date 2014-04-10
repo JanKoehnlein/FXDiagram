@@ -94,24 +94,52 @@ public class XConnection extends XShape implements XModelProvider {
   }
   
   public void setSource(final XNode source) {
+    XNode _source = this.getSource();
+    boolean _notEquals = (!Objects.equal(_source, null));
+    if (_notEquals) {
+      XNode _source_1 = this.getSource();
+      ObservableList<XConnection> _outgoingConnections = _source_1.getOutgoingConnections();
+      _outgoingConnections.remove(this);
+    }
     this.sourceProperty.set(source);
-    ObservableList<XConnection> _outgoingConnections = source.getOutgoingConnections();
-    boolean _contains = _outgoingConnections.contains(this);
-    boolean _not = (!_contains);
-    if (_not) {
+    boolean _and = false;
+    boolean _notEquals_1 = (!Objects.equal(source, null));
+    if (!_notEquals_1) {
+      _and = false;
+    } else {
       ObservableList<XConnection> _outgoingConnections_1 = source.getOutgoingConnections();
-      _outgoingConnections_1.add(this);
+      boolean _contains = _outgoingConnections_1.contains(this);
+      boolean _not = (!_contains);
+      _and = _not;
+    }
+    if (_and) {
+      ObservableList<XConnection> _outgoingConnections_2 = source.getOutgoingConnections();
+      _outgoingConnections_2.add(this);
     }
   }
   
   public void setTarget(final XNode target) {
+    XNode _target = this.getTarget();
+    boolean _notEquals = (!Objects.equal(_target, null));
+    if (_notEquals) {
+      XNode _target_1 = this.getTarget();
+      ObservableList<XConnection> _incomingConnections = _target_1.getIncomingConnections();
+      _incomingConnections.remove(this);
+    }
     this.targetProperty.set(target);
-    ObservableList<XConnection> _incomingConnections = target.getIncomingConnections();
-    boolean _contains = _incomingConnections.contains(this);
-    boolean _not = (!_contains);
-    if (_not) {
+    boolean _and = false;
+    boolean _notEquals_1 = (!Objects.equal(target, null));
+    if (!_notEquals_1) {
+      _and = false;
+    } else {
       ObservableList<XConnection> _incomingConnections_1 = target.getIncomingConnections();
-      _incomingConnections_1.add(this);
+      boolean _contains = _incomingConnections_1.contains(this);
+      boolean _not = (!_contains);
+      _and = _not;
+    }
+    if (_and) {
+      ObservableList<XConnection> _incomingConnections_2 = target.getIncomingConnections();
+      _incomingConnections_2.add(this);
     }
   }
   
@@ -468,9 +496,9 @@ public class XConnection extends XShape implements XModelProvider {
   
   public void layoutChildren() {
     super.layoutChildren();
-    ConnectionRouter _connectionRouter = this.getConnectionRouter();
-    _connectionRouter.calculatePoints();
     try {
+      ConnectionRouter _connectionRouter = this.getConnectionRouter();
+      _connectionRouter.calculatePoints();
       ObservableList<XConnectionLabel> _labels = this.getLabels();
       final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
         public void apply(final XConnectionLabel it) {

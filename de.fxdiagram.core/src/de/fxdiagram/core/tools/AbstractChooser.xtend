@@ -267,14 +267,13 @@ abstract class AbstractChooser implements XDiagramTool {
 			getNodes.forEach[onMouseClicked = null]
 			group.children.remove(choice)
 			val shapesToAdd = <XShape>newArrayList
-			var existingChoice = diagram.nodes.findFirst[name == choice.name]
+			var existingChoice = diagram.nodes.findFirst[domainObject == choice.domainObject]
 			if(existingChoice == null) {
 				existingChoice = choice
 				val unlayoutedBounds = choice.layoutBounds
 				choice.effect = null
 				var center = group.localToDiagram(0, 0)
 				choice.transforms.clear
-				diagram.nodes += choice
 				choice.layout
 				val bounds = choice.layoutBounds
 				choice.layoutX = center.x - 0.5 * bounds.width 
@@ -306,8 +305,6 @@ abstract class AbstractChooser implements XDiagramTool {
 			if(newConnection != currentConnection) {
 				removeConnection(currentConnection)
 				currentConnection = newConnection
-				if(newConnection != null && !diagram.connections.contains(newConnection)) 
-					diagram.connections += newConnection
 			}
 			choice.toFront
 			currentConnection.toFront

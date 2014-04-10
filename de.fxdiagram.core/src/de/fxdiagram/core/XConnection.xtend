@@ -76,14 +76,18 @@ class XConnection extends XShape {
 	}
 	
 	def void setSource(XNode source) {
+		if(getSource != null)
+			getSource.outgoingConnections.remove(this)
 		sourceProperty.set(source)
-		if(!source.outgoingConnections.contains(this))
+		if(source != null && !source.outgoingConnections.contains(this))
 			source.outgoingConnections.add(this)
 	}
 	
 	def void setTarget(XNode target) {
+		if(getTarget != null)
+			getTarget.incomingConnections.remove(this)
 		targetProperty.set(target)
-		if(!target.incomingConnections.contains(this))
+		if(target != null && !target.incomingConnections.contains(this))
 			target.incomingConnections.add(this)
 	}
 	
@@ -225,8 +229,8 @@ class XConnection extends XShape {
 
 	override layoutChildren() {
 		super.layoutChildren
-		connectionRouter.calculatePoints
 		try {
+			connectionRouter.calculatePoints
 			labels.forEach[ place(controlPoints) ]	
 			sourceArrowHead?.place
 			targetArrowHead?.place

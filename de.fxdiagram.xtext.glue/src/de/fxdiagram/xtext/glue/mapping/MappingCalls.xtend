@@ -2,34 +2,38 @@ package de.fxdiagram.xtext.glue.mapping
 
 import java.util.List
 
-@Data
-abstract class AbstractConnectionMappingCall<T> {
+abstract class AbstractConnectionMappingCall<T, ARG> {
+	boolean lazy = false
+	def isLazy() { lazy }
+	def makeLazy() { lazy = true } 
+	def ConnectionMapping<T> getConnectionMapping()
 }
 
 @Data
-class ConnectionMappingCall<T, U> extends AbstractConnectionMappingCall<T> {
-	(U)=>T selector
+class ConnectionMappingCall<T, ARG> extends AbstractConnectionMappingCall<T, ARG> {
+	(ARG)=>T selector
 	ConnectionMapping<T> connectionMapping
 }
 
 @Data
-class MultiConnectionMappingCall<T, U> extends AbstractConnectionMappingCall<T> {
-	(U)=>List<? extends T> selector
+class MultiConnectionMappingCall<T, ARG> extends AbstractConnectionMappingCall<T, ARG> {
+	(ARG)=>List<? extends T> selector
 	ConnectionMapping<T> connectionMapping
 }
 
-abstract class AbstractNodeMappingCall<T> {
+abstract class AbstractNodeMappingCall<T, ARG> {
+	def NodeMapping<T> getNodeMapping()
 }
 
 @Data
-class NodeMappingCall<T, U> extends AbstractNodeMappingCall<T> {
-	(U)=>T selector
+class NodeMappingCall<T, ARG> extends AbstractNodeMappingCall<T, ARG> {
+	(ARG)=>T selector
 	NodeMapping<T> nodeMapping	
 }
 
 @Data
-class MultiNodeMappingCall<T, U> extends AbstractNodeMappingCall<T> {
-	(U)=>List<? extends T> selector
+class MultiNodeMappingCall<T, ARG> extends AbstractNodeMappingCall<T, ARG> {
+	(ARG)=>List<? extends T> selector
 	NodeMapping<T> nodeMapping	
 }
 

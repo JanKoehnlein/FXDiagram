@@ -529,9 +529,9 @@ public abstract class AbstractChooser implements XDiagramTool {
         ObservableList<XNode> _nodes_1 = _diagram.getNodes();
         final Function1<XNode,Boolean> _function_1 = new Function1<XNode,Boolean>() {
           public Boolean apply(final XNode it) {
-            String _name = it.getName();
-            String _name_1 = choice.getName();
-            return Boolean.valueOf(Objects.equal(_name, _name_1));
+            DomainObjectDescriptor _domainObject = it.getDomainObject();
+            DomainObjectDescriptor _domainObject_1 = choice.getDomainObject();
+            return Boolean.valueOf(Objects.equal(_domainObject, _domainObject_1));
           }
         };
         XNode existingChoice = IterableExtensions.<XNode>findFirst(_nodes_1, _function_1);
@@ -543,9 +543,6 @@ public abstract class AbstractChooser implements XDiagramTool {
           Point2D center = CoreExtensions.localToDiagram(this.group, 0, 0);
           ObservableList<Transform> _transforms = choice.getTransforms();
           _transforms.clear();
-          XDiagram _diagram_1 = this.diagram();
-          ObservableList<XNode> _nodes_2 = _diagram_1.getNodes();
-          _nodes_2.add(choice);
           choice.layout();
           final Bounds bounds = choice.getLayoutBounds();
           double _x = center.getX();
@@ -615,8 +612,8 @@ public abstract class AbstractChooser implements XDiagramTool {
         shapesToAdd.add(_connectChoice);
         XRoot _root = CoreExtensions.getRoot(this.host);
         CommandStack _commandStack = _root.getCommandStack();
-        XDiagram _diagram_2 = CoreExtensions.getDiagram(this.host);
-        AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram_2, ((XShape[])Conversions.unwrapArray(shapesToAdd, XShape.class)));
+        XDiagram _diagram_1 = CoreExtensions.getDiagram(this.host);
+        AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(_diagram_1, ((XShape[])Conversions.unwrapArray(shapesToAdd, XShape.class)));
         _commandStack.execute(_newAddCommand);
         _xblockexpression = this.currentConnection = null;
       }
@@ -643,22 +640,6 @@ public abstract class AbstractChooser implements XDiagramTool {
         if (_notEquals) {
           this.removeConnection(this.currentConnection);
           this.currentConnection = newConnection;
-          boolean _and_1 = false;
-          boolean _notEquals_1 = (!Objects.equal(newConnection, null));
-          if (!_notEquals_1) {
-            _and_1 = false;
-          } else {
-            XDiagram _diagram = this.diagram();
-            ObservableList<XConnection> _connections = _diagram.getConnections();
-            boolean _contains = _connections.contains(newConnection);
-            boolean _not = (!_contains);
-            _and_1 = _not;
-          }
-          if (_and_1) {
-            XDiagram _diagram_1 = this.diagram();
-            ObservableList<XConnection> _connections_1 = _diagram_1.getConnections();
-            _connections_1.add(newConnection);
-          }
         }
         choice.toFront();
         this.currentConnection.toFront();

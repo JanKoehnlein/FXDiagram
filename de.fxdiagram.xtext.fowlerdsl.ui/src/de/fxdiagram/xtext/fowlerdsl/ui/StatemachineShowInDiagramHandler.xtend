@@ -28,7 +28,7 @@ class StatemachineDiagramConfig implements XDiagramConfig {
 	new() {
 		val statemachineDiagram = new DiagramMapping(Statemachine)
 		val stateNode = new NodeMapping(State) => [
-			createNode = [ new SimpleNode(it)]
+			createNode = [ new SimpleNode(it) ]
 		]
 		val transitionConnection = new ConnectionMapping(Transition) => [
 			createConnection = [ descriptor |
@@ -39,15 +39,14 @@ class StatemachineDiagramConfig implements XDiagramConfig {
 				]
 			]
 		] 
-		
 		mappings += statemachineDiagram => [
-			addNodeForEach(stateNode, [states])
+			nodeFor(stateNode, [states.head])
 		] 
 		mappings += stateNode => [
-			addOutgoingForEach(transitionConnection, [transitions])
+			outConnectionForEach(transitionConnection, [transitions]).makeLazy
 		]
 		mappings += transitionConnection => [
-			setTarget(stateNode, [state])
+			target(stateNode, [state])
 		]
 	}
 	

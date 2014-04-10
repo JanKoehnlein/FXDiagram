@@ -8,10 +8,10 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
 @SuppressWarnings("all")
-public class NodeMappingCall<T extends Object, U extends Object> extends AbstractNodeMappingCall<T> {
-  private final Function1<? super U,? extends T> _selector;
+public class NodeMappingCall<T extends Object, ARG extends Object> extends AbstractNodeMappingCall<T,ARG> {
+  private final Function1<? super ARG,? extends T> _selector;
   
-  public Function1<? super U,? extends T> getSelector() {
+  public Function1<? super ARG,? extends T> getSelector() {
     return this._selector;
   }
   
@@ -21,7 +21,7 @@ public class NodeMappingCall<T extends Object, U extends Object> extends Abstrac
     return this._nodeMapping;
   }
   
-  public NodeMappingCall(final Function1<? super U,? extends T> selector, final NodeMapping<T> nodeMapping) {
+  public NodeMappingCall(final Function1<? super ARG,? extends T> selector, final NodeMapping<T> nodeMapping) {
     super();
     this._selector = selector;
     this._nodeMapping = nodeMapping;

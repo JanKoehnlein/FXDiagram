@@ -7,6 +7,7 @@ import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.BaseMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
+import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.List;
@@ -74,12 +75,13 @@ public class StatemachineDiagramConfig implements XDiagramConfig {
     final ConnectionMapping<Transition> transitionConnection = ObjectExtensions.<ConnectionMapping<Transition>>operator_doubleArrow(_connectionMapping, _function_1);
     final Procedure1<DiagramMapping<Statemachine>> _function_2 = new Procedure1<DiagramMapping<Statemachine>>() {
       public void apply(final DiagramMapping<Statemachine> it) {
-        final Function1<Statemachine,EList<State>> _function = new Function1<Statemachine,EList<State>>() {
-          public EList<State> apply(final Statemachine it) {
-            return it.getStates();
+        final Function1<Statemachine,State> _function = new Function1<Statemachine,State>() {
+          public State apply(final Statemachine it) {
+            EList<State> _states = it.getStates();
+            return IterableExtensions.<State>head(_states);
           }
         };
-        it.<State>addNodeForEach(stateNode, _function);
+        it.<State>nodeFor(stateNode, _function);
       }
     };
     DiagramMapping<Statemachine> _doubleArrow = ObjectExtensions.<DiagramMapping<Statemachine>>operator_doubleArrow(statemachineDiagram, _function_2);
@@ -91,7 +93,8 @@ public class StatemachineDiagramConfig implements XDiagramConfig {
             return it.getTransitions();
           }
         };
-        it.<Transition>addOutgoingForEach(transitionConnection, _function);
+        MultiConnectionMappingCall<Transition,State> _outConnectionForEach = it.<Transition>outConnectionForEach(transitionConnection, _function);
+        _outConnectionForEach.makeLazy();
       }
     };
     NodeMapping<State> _doubleArrow_1 = ObjectExtensions.<NodeMapping<State>>operator_doubleArrow(stateNode, _function_3);
@@ -103,7 +106,7 @@ public class StatemachineDiagramConfig implements XDiagramConfig {
             return it.getState();
           }
         };
-        it.<State>setTarget(stateNode, _function);
+        it.<State>target(stateNode, _function);
       }
     };
     ConnectionMapping<Transition> _doubleArrow_2 = ObjectExtensions.<ConnectionMapping<Transition>>operator_doubleArrow(transitionConnection, _function_4);
