@@ -50,11 +50,14 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
   
   private String tooltip;
   
-  public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramProvider diagramProvider, final String tooltip) {
+  private boolean hostIsSource;
+  
+  public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramProvider diagramProvider, final String tooltip, final boolean hostIsSource) {
     super(host);
     this.mappingCall = mappingCall;
     this.diagramProvider = diagramProvider;
     this.tooltip = tooltip;
+    this.hostIsSource = hostIsSource;
   }
   
   public LazyConnectionMappingBehavior(final XNode host) {
@@ -191,8 +194,13 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
                         }
                       };
                       it.setOnMouseClicked(_function);
-                      it.setSource(host);
-                      it.setTarget(other);
+                      if (LazyConnectionMappingBehavior.this.hostIsSource) {
+                        it.setSource(host);
+                        it.setTarget(other);
+                      } else {
+                        it.setSource(other);
+                        it.setTarget(host);
+                      }
                     }
                   };
                   _xblockexpression = ObjectExtensions.<XConnection>operator_doubleArrow(_apply, _function);
@@ -236,22 +244,34 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
           }
         };
         final XNode node = ObjectExtensions.<XNode>operator_doubleArrow(_apply, _function);
-        List<AbstractConnectionMappingCall<?,NODE>> _incoming = nodeMappingCasted.getIncoming();
         List<AbstractConnectionMappingCall<?,NODE>> _outgoing = nodeMappingCasted.getOutgoing();
-        Iterable<AbstractConnectionMappingCall<?,NODE>> _plus = Iterables.<AbstractConnectionMappingCall<?,NODE>>concat(_incoming, _outgoing);
         final Function1<AbstractConnectionMappingCall<?,NODE>,Boolean> _function_1 = new Function1<AbstractConnectionMappingCall<?,NODE>,Boolean>() {
           public Boolean apply(final AbstractConnectionMappingCall<?,NODE> it) {
             return Boolean.valueOf(it.isLazy());
           }
         };
-        Iterable<AbstractConnectionMappingCall<?,NODE>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_plus, _function_1);
+        Iterable<AbstractConnectionMappingCall<?,NODE>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_outgoing, _function_1);
         final Procedure1<AbstractConnectionMappingCall<?,NODE>> _function_2 = new Procedure1<AbstractConnectionMappingCall<?,NODE>>() {
           public void apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionMappingBehavior.this.diagramProvider, "TODO");
+            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionMappingBehavior.this.diagramProvider, "TODO", true);
             node.addBehavior(_lazyConnectionMappingBehavior);
           }
         };
         IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>forEach(_filter, _function_2);
+        List<AbstractConnectionMappingCall<?,NODE>> _incoming = nodeMappingCasted.getIncoming();
+        final Function1<AbstractConnectionMappingCall<?,NODE>,Boolean> _function_3 = new Function1<AbstractConnectionMappingCall<?,NODE>,Boolean>() {
+          public Boolean apply(final AbstractConnectionMappingCall<?,NODE> it) {
+            return Boolean.valueOf(it.isLazy());
+          }
+        };
+        Iterable<AbstractConnectionMappingCall<?,NODE>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_incoming, _function_3);
+        final Procedure1<AbstractConnectionMappingCall<?,NODE>> _function_4 = new Procedure1<AbstractConnectionMappingCall<?,NODE>>() {
+          public void apply(final AbstractConnectionMappingCall<?,NODE> it) {
+            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionMappingBehavior.this.diagramProvider, "TODO", false);
+            node.addBehavior(_lazyConnectionMappingBehavior);
+          }
+        };
+        IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>forEach(_filter_1, _function_4);
         _xblockexpression = node;
       }
       _xifexpression = _xblockexpression;

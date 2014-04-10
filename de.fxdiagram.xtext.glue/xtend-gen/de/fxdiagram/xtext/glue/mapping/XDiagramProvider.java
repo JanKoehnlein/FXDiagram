@@ -97,7 +97,7 @@ public class XDiagramProvider {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
           boolean _isLazy = it.isLazy();
           if (_isLazy) {
-            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramProvider.this, "TODO");
+            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramProvider.this, "TODO", false);
             node.addBehavior(_lazyConnectionMappingBehavior);
           } else {
             List<XConnection> _execute = XDiagramProvider.this.execute(it, nodeObject, context);
@@ -116,7 +116,7 @@ public class XDiagramProvider {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
           boolean _isLazy = it.isLazy();
           if (_isLazy) {
-            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramProvider.this, "TODO");
+            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramProvider.this, "TODO", true);
             node.addBehavior(_lazyConnectionMappingBehavior);
           } else {
             List<XConnection> _execute = XDiagramProvider.this.execute(it, nodeObject, context);

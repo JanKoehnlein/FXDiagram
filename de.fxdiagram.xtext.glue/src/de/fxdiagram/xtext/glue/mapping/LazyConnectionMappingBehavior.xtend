@@ -24,12 +24,15 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 	List<XRapidButton> buttons = newArrayList
 	
 	String tooltip
+	
+	boolean hostIsSource
 
-	new(XNode host, AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramProvider diagramProvider, String tooltip) {
+	new(XNode host, AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramProvider diagramProvider, String tooltip, boolean hostIsSource) {
 		super(host)
 		this.mappingCall = mappingCall
 		this.diagramProvider = diagramProvider
 		this.tooltip = tooltip
+		this.hostIsSource = hostIsSource
 	}
 	
 	new(XNode host) {
@@ -93,9 +96,13 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 						if (clickCount == 2)
 							descriptor.revealInEditor
 					]
-					// TODO: consider container node mapping
-					source = host
-					target = other
+					if(hostIsSource) {
+						source = host
+						target = other
+					} else {
+						source = other
+						target = host
+					}
 				]
 			]	
 			null
@@ -112,8 +119,11 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 						descriptor.revealInEditor
 				]
 			]
-			(nodeMappingCasted.incoming + nodeMappingCasted.outgoing).filter[lazy].forEach[
-				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, 'TODO'))
+			nodeMappingCasted.outgoing.filter[lazy].forEach[
+				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, 'TODO', true))
+			]
+			nodeMappingCasted.incoming.filter[lazy].forEach[
+				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, 'TODO', false))
 			]
 			node
 		} else { 
