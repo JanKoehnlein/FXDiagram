@@ -1,10 +1,12 @@
 package de.fxdiagram.xtext.glue;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import de.fxdiagram.xtext.glue.FXDiagramView;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;
@@ -25,10 +27,12 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.utils.EditorUtils;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.Exceptions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 
 @SuppressWarnings("all")
-public abstract class ShowInDiagramHandler extends AbstractHandler {
+public class ShowInDiagramHandler extends AbstractHandler {
   private final static Logger LOG = Logger.getLogger(ShowInDiagramHandler.class);
   
   @Inject
@@ -36,8 +40,6 @@ public abstract class ShowInDiagramHandler extends AbstractHandler {
   
   @Inject
   private IWorkbench workbench;
-  
-  private XDiagramConfig diagramConfig;
   
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     try {
@@ -56,18 +58,23 @@ public abstract class ShowInDiagramHandler extends AbstractHandler {
               final EObject selectedElement = ShowInDiagramHandler.this.eObjectAtOffsetHelper.resolveElementAt(it, _offset);
               boolean _notEquals = (!Objects.equal(selectedElement, null));
               if (_notEquals) {
-                XDiagramConfig _diagramConfig = ShowInDiagramHandler.this.getDiagramConfig();
-                final List<? extends AbstractMapping<EObject>> mappings = _diagramConfig.<EObject>getMappings(selectedElement);
-                boolean _isEmpty = mappings.isEmpty();
+                XDiagramConfigRegistry _instance = XDiagramConfigRegistry.getInstance();
+                List<XDiagramConfig> _configurations = _instance.getConfigurations();
+                final Function1<XDiagramConfig,List<? extends AbstractMapping<EObject>>> _function = new Function1<XDiagramConfig,List<? extends AbstractMapping<EObject>>>() {
+                  public List<? extends AbstractMapping<EObject>> apply(final XDiagramConfig it) {
+                    return it.<EObject>getMappings(selectedElement);
+                  }
+                };
+                List<List<? extends AbstractMapping<EObject>>> _map = ListExtensions.<XDiagramConfig, List<? extends AbstractMapping<EObject>>>map(_configurations, _function);
+                final Iterable<AbstractMapping<EObject>> mappings = Iterables.<AbstractMapping<EObject>>concat(_map);
+                boolean _isEmpty = IterableExtensions.isEmpty(mappings);
                 boolean _not = (!_isEmpty);
                 if (_not) {
                   IWorkbenchWindow _activeWorkbenchWindow = ShowInDiagramHandler.this.workbench.getActiveWorkbenchWindow();
                   IWorkbenchPage _activePage = _activeWorkbenchWindow.getActivePage();
                   final IViewPart view = _activePage.showView("org.eclipse.xtext.glue.FXDiagramView");
                   if ((view instanceof FXDiagramView)) {
-                    XDiagramConfig _diagramConfig_1 = ShowInDiagramHandler.this.getDiagramConfig();
-                    ((FXDiagramView)view).addConfig(_diagramConfig_1);
-                    AbstractMapping<EObject> _head = IterableExtensions.head(mappings);
+                    AbstractMapping<EObject> _head = IterableExtensions.<AbstractMapping<EObject>>head(mappings);
                     ((FXDiagramView)view).<EObject>revealElement(selectedElement, _head, editor);
                   }
                 }
@@ -89,18 +96,4 @@ public abstract class ShowInDiagramHandler extends AbstractHandler {
     }
     return null;
   }
-  
-  protected XDiagramConfig getDiagramConfig() {
-    XDiagramConfig _elvis = null;
-    if (this.diagramConfig != null) {
-      _elvis = this.diagramConfig;
-    } else {
-      XDiagramConfig _createDiagramConfig = this.createDiagramConfig();
-      XDiagramConfig _diagramConfig = this.diagramConfig = _createDiagramConfig;
-      _elvis = _diagramConfig;
-    }
-    return _elvis;
-  }
-  
-  protected abstract XDiagramConfig createDiagramConfig();
 }

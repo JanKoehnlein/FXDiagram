@@ -13,14 +13,14 @@ import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
+import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.LazyConnectionMappingBehavior;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
-import de.fxdiagram.xtext.glue.mapping.OpenElementInEditorBehavior;
-import de.fxdiagram.xtext.glue.mapping.XDiagramProvider;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.List;
 import java.util.Set;
 import javafx.collections.ObservableList;
@@ -34,15 +34,15 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends Object> extends XRapidButtonAction {
-  private XDiagramProvider diagramProvider;
+  private XDiagramConfigInterpreter configInterpreter;
   
   private AbstractConnectionMappingCall<MODEL,ARG> mappingCall;
   
   private boolean hostIsSource;
   
-  public LazyConnectionRapidButtonAction(final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramProvider diagramProvider, final boolean hostIsSource) {
+  public LazyConnectionRapidButtonAction(final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
     this.mappingCall = mappingCall;
-    this.diagramProvider = diagramProvider;
+    this.configInterpreter = configInterpreter;
     this.hostIsSource = hostIsSource;
   }
   
@@ -64,11 +64,11 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
       final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
       final Function1<ARG,Boolean> _function_1 = new Function1<ARG,Boolean>() {
         public Boolean apply(final ARG domainArgument) {
-          final List<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.diagramProvider.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
+          final List<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
           for (final MODEL connectionDomainObject : connectionDomainObjects) {
             {
               ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-              final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.diagramProvider.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
+              final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
               boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
               if (_add) {
                 NodeMappingCall<?,MODEL> _elvis = null;
@@ -82,7 +82,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                   _elvis = _target;
                 }
                 final NodeMappingCall<?,MODEL> nodeMappingCall = _elvis;
-                final List<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.diagramProvider.select(nodeMappingCall, connectionDomainObject);
+                final List<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
                 boolean _isEmpty = nodeDomainObjects.isEmpty();
                 return Boolean.valueOf((!_isEmpty));
               }
@@ -143,11 +143,11 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         public Object apply(final ARG domainArgument) {
           Object _xblockexpression = null;
           {
-            final List<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.diagramProvider.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
+            final List<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
             final Procedure1<MODEL> _function = new Procedure1<MODEL>() {
               public void apply(final MODEL connectionDomainObject) {
                 ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-                final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.diagramProvider.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
+                final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
                 boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
                 if (_add) {
                   NodeMappingCall<?,MODEL> _elvis = null;
@@ -161,7 +161,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                     _elvis = _target;
                   }
                   final NodeMappingCall<?,MODEL> nodeMappingCall = _elvis;
-                  final List<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.diagramProvider.select(nodeMappingCall, connectionDomainObject);
+                  final List<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
                   final Procedure1<Object> _function = new Procedure1<Object>() {
                     public void apply(final Object it) {
                       NodeMapping<?> _nodeMapping = nodeMappingCall.getNodeMapping();
@@ -218,7 +218,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
       XNode _xblockexpression = null;
       {
         final NodeMapping<NODE> nodeMappingCasted = ((NodeMapping<NODE>) nodeMapping);
-        final XtextDomainObjectDescriptor<NODE> descriptor = this.diagramProvider.<NODE>getDescriptor(((NODE) nodeDomainObject), nodeMappingCasted);
+        final XtextDomainObjectDescriptor<NODE> descriptor = this.configInterpreter.<NODE>getDescriptor(((NODE) nodeDomainObject), nodeMappingCasted);
         Function1<? super XtextDomainObjectDescriptor<NODE>,? extends XNode> _createNode = nodeMappingCasted.getCreateNode();
         final XNode node = _createNode.apply(descriptor);
         OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(node);
@@ -232,7 +232,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         Iterable<AbstractConnectionMappingCall<?,NODE>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_outgoing, _function);
         final Procedure1<AbstractConnectionMappingCall<?,NODE>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,NODE>>() {
           public void apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionRapidButtonAction.this.diagramProvider, true);
+            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionRapidButtonAction.this.configInterpreter, true);
             node.addBehavior(_lazyConnectionMappingBehavior);
           }
         };
@@ -246,7 +246,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         Iterable<AbstractConnectionMappingCall<?,NODE>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_incoming, _function_2);
         final Procedure1<AbstractConnectionMappingCall<?,NODE>> _function_3 = new Procedure1<AbstractConnectionMappingCall<?,NODE>>() {
           public void apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionRapidButtonAction.this.diagramProvider, false);
+            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionRapidButtonAction.this.configInterpreter, false);
             node.addBehavior(_lazyConnectionMappingBehavior);
           }
         };

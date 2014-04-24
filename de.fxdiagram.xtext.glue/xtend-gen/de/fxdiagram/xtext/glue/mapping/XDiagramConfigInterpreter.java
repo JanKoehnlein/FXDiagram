@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
@@ -18,7 +19,6 @@ import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
-import de.fxdiagram.xtext.glue.mapping.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.TransformationContext;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,10 +33,10 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class XDiagramProvider {
+public class XDiagramConfigInterpreter {
   private XtextDomainObjectProvider domainObjectProvider;
   
-  public XDiagramProvider(final XtextDomainObjectProvider domainObjectProvider) {
+  public XDiagramConfigInterpreter(final XtextDomainObjectProvider domainObjectProvider) {
     this.domainObjectProvider = domainObjectProvider;
   }
   
@@ -55,14 +55,14 @@ public class XDiagramProvider {
       List<AbstractNodeMappingCall<?,T>> _nodes = diagramMapping.getNodes();
       final Procedure1<AbstractNodeMappingCall<?,T>> _function = new Procedure1<AbstractNodeMappingCall<?,T>>() {
         public void apply(final AbstractNodeMappingCall<?,T> it) {
-          XDiagramProvider.this.execute(it, diagramObject, context);
+          XDiagramConfigInterpreter.this.execute(it, diagramObject, context);
         }
       };
       IterableExtensions.<AbstractNodeMappingCall<?,T>>forEach(_nodes, _function);
       List<AbstractConnectionMappingCall<?,T>> _connections = diagramMapping.getConnections();
       final Procedure1<AbstractConnectionMappingCall<?,T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
-          XDiagramProvider.this.execute(it, diagramObject, context);
+          XDiagramConfigInterpreter.this.execute(it, diagramObject, context);
         }
       };
       IterableExtensions.<AbstractConnectionMappingCall<?,T>>forEach(_connections, _function_1);
@@ -90,10 +90,10 @@ public class XDiagramProvider {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
           boolean _isLazy = it.isLazy();
           if (_isLazy) {
-            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramProvider.this, false);
+            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramConfigInterpreter.this, false);
             node.addBehavior(_lazyConnectionMappingBehavior);
           } else {
-            List<XConnection> _execute = XDiagramProvider.this.execute(it, nodeObject, context);
+            List<XConnection> _execute = XDiagramConfigInterpreter.this.execute(it, nodeObject, context);
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setTarget(node);
@@ -109,10 +109,10 @@ public class XDiagramProvider {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
           boolean _isLazy = it.isLazy();
           if (_isLazy) {
-            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramProvider.this, true);
+            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramConfigInterpreter.this, true);
             node.addBehavior(_lazyConnectionMappingBehavior);
           } else {
-            List<XConnection> _execute = XDiagramProvider.this.execute(it, nodeObject, context);
+            List<XConnection> _execute = XDiagramConfigInterpreter.this.execute(it, nodeObject, context);
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setSource(node);
@@ -153,7 +153,7 @@ public class XDiagramProvider {
             }
           };
           it.setOnMouseClicked(_function);
-          XDiagramProvider.this.<T>createEndpoints(connectionMapping, connectionObject, connection, context);
+          XDiagramConfigInterpreter.this.<T>createEndpoints(connectionMapping, connectionObject, connection, context);
           context.addConnection(connection);
         }
       };

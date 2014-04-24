@@ -1,5 +1,4 @@
 HIGH
-Introduce extension point for diagram configs
 Fix loading of diagrams / classloader
 Add more diagram configs
 Make lazy connection behavior configurable in the mapping
@@ -15,3 +14,4 @@ refactor AbstractChooser to work on descriptors instead of XNodes
 
 DONE
 don't show rapid buttons if chooser is empty
+Introduce extension point for diagram configs

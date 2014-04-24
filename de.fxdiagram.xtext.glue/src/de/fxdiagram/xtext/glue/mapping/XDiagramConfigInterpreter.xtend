@@ -4,10 +4,11 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider
 import java.util.List
 
-class XDiagramProvider {
+class XDiagramConfigInterpreter {
 
 	XtextDomainObjectProvider domainObjectProvider
 

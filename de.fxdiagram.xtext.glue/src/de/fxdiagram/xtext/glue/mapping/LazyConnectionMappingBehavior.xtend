@@ -7,6 +7,7 @@ import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.tools.AbstractChooser
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
+import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import java.util.List
 import javafx.geometry.VPos
@@ -24,10 +25,10 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 	
 	XRapidButtonAction action
 
-	new(XNode host, AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramProvider diagramProvider, boolean hostIsSource) {
+	new(XNode host, AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramConfigInterpreter configInterpreter, boolean hostIsSource) {
 		super(host)
 		this.tooltip = 'Add ' + mappingCall.role
-		this.action = createAction(mappingCall, diagramProvider, hostIsSource)
+		this.action = createAction(mappingCall, configInterpreter, hostIsSource)
 	}
 	
 	override getBehaviorKey() {
@@ -39,8 +40,8 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 		host.diagram.buttons += buttons
 	}	
 
-	protected def XRapidButtonAction createAction(AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramProvider diagramProvider, boolean hostIsSource) {
-		new LazyConnectionRapidButtonAction(mappingCall, diagramProvider, hostIsSource)
+	protected def XRapidButtonAction createAction(AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramConfigInterpreter configInterpreter, boolean hostIsSource) {
+		new LazyConnectionRapidButtonAction(mappingCall, configInterpreter, hostIsSource)
 	}
 	
 	protected def Iterable<XRapidButton> createButtons() {
@@ -55,15 +56,15 @@ class LazyConnectionMappingBehavior<MODEL, ARG> extends AbstractHostBehavior<XNo
 
 class LazyConnectionRapidButtonAction<MODEL, ARG> extends XRapidButtonAction {
 	
-	XDiagramProvider diagramProvider
+	XDiagramConfigInterpreter configInterpreter
 
 	AbstractConnectionMappingCall<MODEL, ARG> mappingCall
 
 	boolean hostIsSource
 
-	new(AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramProvider diagramProvider, boolean hostIsSource) {
+	new(AbstractConnectionMappingCall<MODEL, ARG> mappingCall, XDiagramConfigInterpreter configInterpreter, boolean hostIsSource) {
 		this.mappingCall = mappingCall
-		this.diagramProvider = diagramProvider
+		this.configInterpreter = configInterpreter
 		this.hostIsSource = hostIsSource
 	}
 	
@@ -72,12 +73,12 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends XRapidButtonAction {
 		val existingConnectionDescriptors = button.host.diagram.connections.map[domainObject].toSet
 		hostDescriptor.withDomainObject[ 
 			domainArgument |
-			val connectionDomainObjects = diagramProvider.select(mappingCall, domainArgument)
+			val connectionDomainObjects = configInterpreter.select(mappingCall, domainArgument)
 			for(connectionDomainObject: connectionDomainObjects) {
-				val connectionDescriptor = diagramProvider.getDescriptor(connectionDomainObject, mappingCall.connectionMapping)
+				val connectionDescriptor = configInterpreter.getDescriptor(connectionDomainObject, mappingCall.connectionMapping)
 				if(existingConnectionDescriptors.add(connectionDescriptor)) {
 					val nodeMappingCall = (mappingCall.connectionMapping.source ?: mappingCall.connectionMapping.target)
-					val nodeDomainObjects = diagramProvider.select(nodeMappingCall, connectionDomainObject)
+					val nodeDomainObjects = configInterpreter.select(nodeMappingCall, connectionDomainObject)
 					return !nodeDomainObjects.empty
 				}
 			}
@@ -106,12 +107,12 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends XRapidButtonAction {
 		val existingConnectionDescriptors = host.diagram.connections.map[domainObject].toSet
 		hostDescriptor.withDomainObject[ 
 			domainArgument |
-			val connectionDomainObjects = diagramProvider.select(mappingCall, domainArgument)
+			val connectionDomainObjects = configInterpreter.select(mappingCall, domainArgument)
 			connectionDomainObjects.forEach [ connectionDomainObject |
-				val connectionDescriptor = diagramProvider.getDescriptor(connectionDomainObject, mappingCall.connectionMapping)
+				val connectionDescriptor = configInterpreter.getDescriptor(connectionDomainObject, mappingCall.connectionMapping)
 				if(existingConnectionDescriptors.add(connectionDescriptor)) {
 					val nodeMappingCall = (mappingCall.connectionMapping.source ?: mappingCall.connectionMapping.target)
-					val nodeDomainObjects = diagramProvider.select(nodeMappingCall, connectionDomainObject)
+					val nodeDomainObjects = configInterpreter.select(nodeMappingCall, connectionDomainObject)
 					nodeDomainObjects.forEach [	
 						chooser.addChoice(createNode(nodeMappingCall.nodeMapping), connectionDescriptor)
 					]
@@ -137,14 +138,14 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends XRapidButtonAction {
 	protected def <NODE> createNode(Object nodeDomainObject, NodeMapping<?> nodeMapping) {
 		if (nodeMapping.isApplicable(nodeDomainObject)) {
 			val nodeMappingCasted = nodeMapping as NodeMapping<NODE>
-			val descriptor = diagramProvider.getDescriptor(nodeDomainObject as NODE, nodeMappingCasted)
+			val descriptor = configInterpreter.getDescriptor(nodeDomainObject as NODE, nodeMappingCasted)
 			val node = nodeMappingCasted.createNode.apply(descriptor) 
 			node.addBehavior(new OpenElementInEditorBehavior(node))
 			nodeMappingCasted.outgoing.filter[lazy].forEach[
-				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, true))
+				node.addBehavior(new LazyConnectionMappingBehavior(node, it, configInterpreter, true))
 			]
 			nodeMappingCasted.incoming.filter[lazy].forEach[
-				node.addBehavior(new LazyConnectionMappingBehavior(node, it, diagramProvider, false))
+				node.addBehavior(new LazyConnectionMappingBehavior(node, it, configInterpreter, false))
 			]
 			node
 		} else { 

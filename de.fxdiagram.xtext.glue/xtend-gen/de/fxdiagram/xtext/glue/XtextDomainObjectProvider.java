@@ -8,6 +8,8 @@ import de.fxdiagram.xtext.glue.MappedEObjectHandle;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
@@ -18,6 +20,12 @@ import org.eclipse.emf.ecore.EObject;
 @ModelNode({ "diagramConfigs" })
 @SuppressWarnings("all")
 public class XtextDomainObjectProvider implements DomainObjectProvider {
+  public XtextDomainObjectProvider() {
+    XDiagramConfigRegistry _instance = XDiagramConfigRegistry.getInstance();
+    ListProperty<XDiagramConfig> _configsProperty = _instance.configsProperty();
+    this.diagramConfigsProperty.bindBidirectional(_configsProperty);
+  }
+  
   public DomainObjectDescriptor createDescriptor(final Object it) {
     if ((it instanceof MappedEObjectHandle<?>)) {
       URI _uRI = ((MappedEObjectHandle<?>)it).getURI();
@@ -33,18 +41,6 @@ public class XtextDomainObjectProvider implements DomainObjectProvider {
     MappedEObjectHandle<U> _mappedEObjectHandle = new MappedEObjectHandle<U>(((U) domainObject), ((AbstractMapping<U>) mapping));
     DomainObjectDescriptor _createDescriptor = this.createDescriptor(_mappedEObjectHandle);
     return ((XtextDomainObjectDescriptor<T>) _createDescriptor);
-  }
-  
-  public boolean addDiagramConfig(final XDiagramConfig config) {
-    ObservableList<XDiagramConfig> _diagramConfigs = this.getDiagramConfigs();
-    boolean _contains = _diagramConfigs.contains(config);
-    boolean _not = (!_contains);
-    if (_not) {
-      ObservableList<XDiagramConfig> _diagramConfigs_1 = this.getDiagramConfigs();
-      return _diagramConfigs_1.add(config);
-    } else {
-      return false;
-    }
   }
   
   public void populate(final ModelElementImpl modelElement) {

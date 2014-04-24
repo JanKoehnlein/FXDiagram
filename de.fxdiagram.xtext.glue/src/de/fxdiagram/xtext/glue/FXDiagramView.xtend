@@ -19,23 +19,22 @@ import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
-import de.fxdiagram.xtext.glue.mapping.XDiagramProvider
+import de.fxdiagram.xtext.glue.mapping.NodeMapping
+import de.fxdiagram.xtext.glue.mapping.TransformationContext
 import java.util.Set
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
-import de.fxdiagram.xtext.glue.mapping.NodeMapping
-import de.fxdiagram.xtext.glue.mapping.TransformationContext
-import org.eclipse.emf.ecore.EObject
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
-import de.fxdiagram.xtext.glue.mapping.AbstractMapping
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 
 class FXDiagramView extends ViewPart {
 
@@ -51,7 +50,7 @@ class FXDiagramView extends ViewPart {
 	IPartListener2 listener 
 	
 	val domainObjectProvider = new XtextDomainObjectProvider
-	val diagramProvider = new XDiagramProvider(domainObjectProvider)
+	val configInterpreter = new XDiagramConfigInterpreter(domainObjectProvider)
 	
 	override createPartControl(Composite parent) {
 		canvas = new FXCanvas(parent, SWT.NONE)
@@ -62,7 +61,7 @@ class FXDiagramView extends ViewPart {
 	protected def Scene createFxScene() {
 		new Scene(
 			root = new XRoot => [
-			 	classLoader = class.classLoader
+			 	classLoader = this.class.classLoader
 			 	rootDiagram = new XDiagram()
 			 	getDomainObjectProviders += #[
 			 		new ResourceProvider(class.classLoader),
@@ -94,21 +93,17 @@ class FXDiagramView extends ViewPart {
 		canvas.setFocus
 	}
 	
-	def addConfig(XDiagramConfig config) {
-		domainObjectProvider.addDiagramConfig(config)
-	}	
-
 	def <T extends EObject> void revealElement(T element, AbstractMapping<T> mapping, XtextEditor editor) {
 		if(mapping instanceof DiagramMapping<?>) {
 			editor.register
 			if(changedEditors.remove(editor)) {
-				root.diagram = diagramProvider.createDiagram(element, mapping as DiagramMapping<T>)
+				root.diagram = configInterpreter.createDiagram(element, mapping as DiagramMapping<T>)
 				new LayoutAction(LayoutType.DOT).perform(root)
 			} 
 		} else if(mapping instanceof NodeMapping<?>) {
 			editor.register
 			val diagram = root.diagram
-			diagramProvider.createNode(element, mapping as NodeMapping<T>, new TransformationContext(diagram))			
+			configInterpreter.createNode(element, mapping as NodeMapping<T>, new TransformationContext(diagram))			
 		}
 		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
 		root.diagram.nodes.forEach[selected = domainObject == descriptor]

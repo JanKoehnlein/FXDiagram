@@ -35,8 +35,7 @@ import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.TransformationContext;
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.XDiagramProvider;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.Collections;
 import java.util.Set;
 import javafx.collections.ObservableList;
@@ -77,7 +76,7 @@ public class FXDiagramView extends ViewPart {
   
   private final XtextDomainObjectProvider domainObjectProvider = new XtextDomainObjectProvider();
   
-  private final XDiagramProvider diagramProvider = new XDiagramProvider(this.domainObjectProvider);
+  private final XDiagramConfigInterpreter configInterpreter = new XDiagramConfigInterpreter(this.domainObjectProvider);
   
   public void createPartControl(final Composite parent) {
     FXCanvas _fXCanvas = new FXCanvas(parent, SWT.NONE);
@@ -92,7 +91,7 @@ public class FXDiagramView extends ViewPart {
     XRoot _xRoot = new XRoot();
     final Procedure1<XRoot> _function = new Procedure1<XRoot>() {
       public void apply(final XRoot it) {
-        Class<? extends XRoot> _class = it.getClass();
+        Class<? extends FXDiagramView> _class = FXDiagramView.this.getClass();
         ClassLoader _classLoader = _class.getClassLoader();
         it.setClassLoader(_classLoader);
         XDiagram _xDiagram = new XDiagram();
@@ -137,16 +136,12 @@ public class FXDiagramView extends ViewPart {
     this.canvas.setFocus();
   }
   
-  public boolean addConfig(final XDiagramConfig config) {
-    return this.domainObjectProvider.addDiagramConfig(config);
-  }
-  
   public <T extends EObject> void revealElement(final T element, final AbstractMapping<T> mapping, final XtextEditor editor) {
     if ((mapping instanceof DiagramMapping<?>)) {
       this.register(editor);
       boolean _remove = this.changedEditors.remove(editor);
       if (_remove) {
-        XDiagram _createDiagram = this.diagramProvider.<T>createDiagram(element, ((DiagramMapping<T>) mapping));
+        XDiagram _createDiagram = this.configInterpreter.<T>createDiagram(element, ((DiagramMapping<T>) mapping));
         this.root.setDiagram(_createDiagram);
         LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
         _layoutAction.perform(this.root);
@@ -156,7 +151,7 @@ public class FXDiagramView extends ViewPart {
         this.register(editor);
         final XDiagram diagram = this.root.getDiagram();
         TransformationContext _transformationContext = new TransformationContext(diagram);
-        this.diagramProvider.<T>createNode(element, ((NodeMapping<T>) mapping), _transformationContext);
+        this.configInterpreter.<T>createNode(element, ((NodeMapping<T>) mapping), _transformationContext);
       }
     }
     final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, mapping);

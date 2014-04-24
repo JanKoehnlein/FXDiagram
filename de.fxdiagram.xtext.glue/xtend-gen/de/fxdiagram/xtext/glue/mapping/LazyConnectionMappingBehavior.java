@@ -12,7 +12,7 @@ import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.LazyConnectionRapidButtonAction;
-import de.fxdiagram.xtext.glue.mapping.XDiagramProvider;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.Collections;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -28,12 +28,12 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
   
   private XRapidButtonAction action;
   
-  public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramProvider diagramProvider, final boolean hostIsSource) {
+  public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
     super(host);
     String _role = mappingCall.getRole();
     String _plus = ("Add " + _role);
     this.tooltip = _plus;
-    XRapidButtonAction _createAction = this.createAction(mappingCall, diagramProvider, hostIsSource);
+    XRapidButtonAction _createAction = this.createAction(mappingCall, configInterpreter, hostIsSource);
     this.action = _createAction;
   }
   
@@ -50,8 +50,8 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
     Iterables.<XRapidButton>addAll(_buttons, this.buttons);
   }
   
-  protected XRapidButtonAction createAction(final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramProvider diagramProvider, final boolean hostIsSource) {
-    return new LazyConnectionRapidButtonAction<MODEL, ARG>(mappingCall, diagramProvider, hostIsSource);
+  protected XRapidButtonAction createAction(final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
+    return new LazyConnectionRapidButtonAction<MODEL, ARG>(mappingCall, configInterpreter, hostIsSource);
   }
   
   protected Iterable<XRapidButton> createButtons() {

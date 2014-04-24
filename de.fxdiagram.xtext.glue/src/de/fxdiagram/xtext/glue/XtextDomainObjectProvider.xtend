@@ -5,7 +5,7 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping
 import javafx.collections.ObservableList
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
@@ -17,12 +17,17 @@ import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.shared.Access
 
 import static javafx.collections.FXCollections.*
-import de.fxdiagram.xtext.glue.mapping.AbstractMapping
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry
 
 @ModelNode(#['diagramConfigs'])
 class XtextDomainObjectProvider implements DomainObjectProvider {
 
 	@FxProperty @ReadOnly ObservableList<XDiagramConfig> diagramConfigs = observableArrayList
+	 
+	new() {
+		diagramConfigsProperty.bindBidirectional(XDiagramConfigRegistry.instance.configsProperty)
+	}
 	 
 	override createDescriptor(Object it) {
 		if (it instanceof MappedEObjectHandle<?>) 
@@ -34,12 +39,6 @@ class XtextDomainObjectProvider implements DomainObjectProvider {
 		new MappedEObjectHandle(domainObject as U, mapping as AbstractMapping<U>).createDescriptor as XtextDomainObjectDescriptor<T>
 	}
 	
-	def addDiagramConfig(XDiagramConfig config) {
-		if(!diagramConfigs.contains(config)) 
-			return diagramConfigs.add(config)
-		else
-			return false
-	}
 }
 
 class MappedEObjectHandle<MODEL extends EObject> {

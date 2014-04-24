@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.glue.mapping
+package de.fxdiagram.xtext.glue
 
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractHostBehavior
