@@ -93,6 +93,12 @@ class FXDiagramView extends ViewPart {
 		canvas.setFocus
 	}
 	
+	def clear() {
+		contributingEditors.clear
+		changedEditors.clear
+		root.diagram = new XDiagram
+	}
+	
 	def <T extends EObject> void revealElement(T element, AbstractMapping<T> mapping, XtextEditor editor) {
 		if(mapping instanceof DiagramMapping<?>) {
 			editor.register

@@ -45,11 +45,11 @@ class DiagramMapping<T> extends AbstractMapping<T> {
 		connections += new ConnectionMappingCall(selector, connectionMapping)
 	}
 
-	def <U> nodeForEach(NodeMapping<U> nodeMapping, (T)=>List<? extends U> selector) {
+	def <U> nodeForEach(NodeMapping<U> nodeMapping, (T)=>Iterable<? extends U> selector) {
 		nodes += new MultiNodeMappingCall(selector, nodeMapping)
 	}
 
-	def <U> connectionForEach(ConnectionMapping<U> connectionMapping, (T)=>List<? extends U> selector) {
+	def <U> connectionForEach(ConnectionMapping<U> connectionMapping, (T)=>Iterable<? extends U> selector) {
 		connections += new MultiConnectionMappingCall(selector, connectionMapping)
 	}
 }
@@ -81,13 +81,13 @@ class NodeMapping<T> extends AbstractMapping<T> {
 		call
 	}
 	
-	def <U> outConnectionForEach(ConnectionMapping<U> connectionMapping, (T)=>List<? extends U> selector) {
+	def <U> outConnectionForEach(ConnectionMapping<U> connectionMapping, (T)=>Iterable<? extends U> selector) {
 		val call = new MultiConnectionMappingCall(selector, connectionMapping)
 		outgoing += call
 		call
 	}
 	
-	def <U> inConnectionForEach(ConnectionMapping<U> connectionMapping, (T)=>List<? extends U> selector) {
+	def <U> inConnectionForEach(ConnectionMapping<U> connectionMapping, (T)=>Iterable<? extends U> selector) {
 		val call = new MultiConnectionMappingCall(selector, connectionMapping)
 		incoming += call
 		call

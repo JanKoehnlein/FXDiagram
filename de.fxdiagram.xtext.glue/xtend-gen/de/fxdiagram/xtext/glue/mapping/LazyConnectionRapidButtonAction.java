@@ -64,7 +64,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
       final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
       final Function1<ARG,Boolean> _function_1 = new Function1<ARG,Boolean>() {
         public Boolean apply(final ARG domainArgument) {
-          final List<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
+          final Iterable<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
           for (final MODEL connectionDomainObject : connectionDomainObjects) {
             {
               ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
@@ -82,8 +82,8 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                   _elvis = _target;
                 }
                 final NodeMappingCall<?,MODEL> nodeMappingCall = _elvis;
-                final List<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
-                boolean _isEmpty = nodeDomainObjects.isEmpty();
+                final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
+                boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
                 return Boolean.valueOf((!_isEmpty));
               }
             }
@@ -143,7 +143,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         public Object apply(final ARG domainArgument) {
           Object _xblockexpression = null;
           {
-            final List<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
+            final Iterable<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
             final Procedure1<MODEL> _function = new Procedure1<MODEL>() {
               public void apply(final MODEL connectionDomainObject) {
                 ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
@@ -161,7 +161,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                     _elvis = _target;
                   }
                   final NodeMappingCall<?,MODEL> nodeMappingCall = _elvis;
-                  final List<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
+                  final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
                   final Procedure1<Object> _function = new Procedure1<Object>() {
                     public void apply(final Object it) {
                       NodeMapping<?> _nodeMapping = nodeMappingCall.getNodeMapping();

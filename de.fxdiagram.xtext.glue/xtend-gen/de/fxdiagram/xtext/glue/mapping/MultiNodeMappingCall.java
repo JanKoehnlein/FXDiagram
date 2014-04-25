@@ -2,7 +2,6 @@ package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import java.util.List;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
@@ -10,9 +9,9 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 @Data
 @SuppressWarnings("all")
 public class MultiNodeMappingCall<T extends Object, ARG extends Object> extends AbstractNodeMappingCall<T,ARG> {
-  private final Function1<? super ARG,? extends List<? extends T>> _selector;
+  private final Function1<? super ARG,? extends Iterable<? extends T>> _selector;
   
-  public Function1<? super ARG,? extends List<? extends T>> getSelector() {
+  public Function1<? super ARG,? extends Iterable<? extends T>> getSelector() {
     return this._selector;
   }
   
@@ -22,7 +21,7 @@ public class MultiNodeMappingCall<T extends Object, ARG extends Object> extends 
     return this._nodeMapping;
   }
   
-  public MultiNodeMappingCall(final Function1<? super ARG,? extends List<? extends T>> selector, final NodeMapping<T> nodeMapping) {
+  public MultiNodeMappingCall(final Function1<? super ARG,? extends Iterable<? extends T>> selector, final NodeMapping<T> nodeMapping) {
     super();
     this._selector = selector;
     this._nodeMapping = nodeMapping;

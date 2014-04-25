@@ -2,7 +2,6 @@ package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
-import java.util.List;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
@@ -10,9 +9,9 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 @Data
 @SuppressWarnings("all")
 public class MultiConnectionMappingCall<T extends Object, ARG extends Object> extends AbstractConnectionMappingCall<T,ARG> {
-  private final Function1<? super ARG,? extends List<? extends T>> _selector;
+  private final Function1<? super ARG,? extends Iterable<? extends T>> _selector;
   
-  public Function1<? super ARG,? extends List<? extends T>> getSelector() {
+  public Function1<? super ARG,? extends Iterable<? extends T>> getSelector() {
     return this._selector;
   }
   
@@ -22,7 +21,7 @@ public class MultiConnectionMappingCall<T extends Object, ARG extends Object> ex
     return this._connectionMapping;
   }
   
-  public MultiConnectionMappingCall(final Function1<? super ARG,? extends List<? extends T>> selector, final ConnectionMapping<T> connectionMapping) {
+  public MultiConnectionMappingCall(final Function1<? super ARG,? extends Iterable<? extends T>> selector, final ConnectionMapping<T> connectionMapping) {
     super();
     this._selector = selector;
     this._connectionMapping = connectionMapping;

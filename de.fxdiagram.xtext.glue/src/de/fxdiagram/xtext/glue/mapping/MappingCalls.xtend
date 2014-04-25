@@ -1,7 +1,5 @@
 package de.fxdiagram.xtext.glue.mapping
 
-import java.util.List
-
 abstract class AbstractConnectionMappingCall<T, ARG> {
 	boolean lazy = false
 	def isLazy() { lazy }
@@ -19,7 +17,7 @@ class ConnectionMappingCall<T, ARG> extends AbstractConnectionMappingCall<T, ARG
 
 @Data
 class MultiConnectionMappingCall<T, ARG> extends AbstractConnectionMappingCall<T, ARG> {
-	(ARG)=>List<? extends T> selector
+	(ARG)=>Iterable<? extends T> selector
 	ConnectionMapping<T> connectionMapping
 }
 
@@ -35,7 +33,7 @@ class NodeMappingCall<T, ARG> extends AbstractNodeMappingCall<T, ARG> {
 
 @Data
 class MultiNodeMappingCall<T, ARG> extends AbstractNodeMappingCall<T, ARG> {
-	(ARG)=>List<? extends T> selector
+	(ARG)=>Iterable<? extends T> selector
 	NodeMapping<T> nodeMapping	
 }
 

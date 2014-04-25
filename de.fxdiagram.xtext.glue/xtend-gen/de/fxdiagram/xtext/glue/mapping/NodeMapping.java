@@ -64,7 +64,7 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
     return _xblockexpression;
   }
   
-  public <U extends Object> MultiConnectionMappingCall<U,T> outConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends List<? extends U>> selector) {
+  public <U extends Object> MultiConnectionMappingCall<U,T> outConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends Iterable<? extends U>> selector) {
     MultiConnectionMappingCall<U,T> _xblockexpression = null;
     {
       final MultiConnectionMappingCall<U,T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
@@ -74,7 +74,7 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
     return _xblockexpression;
   }
   
-  public <U extends Object> MultiConnectionMappingCall<U,T> inConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends List<? extends U>> selector) {
+  public <U extends Object> MultiConnectionMappingCall<U,T> inConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends Iterable<? extends U>> selector) {
     MultiConnectionMappingCall<U,T> _xblockexpression = null;
     {
       final MultiConnectionMappingCall<U,T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);

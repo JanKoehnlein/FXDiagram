@@ -136,6 +136,13 @@ public class FXDiagramView extends ViewPart {
     this.canvas.setFocus();
   }
   
+  public void clear() {
+    this.contributingEditors.clear();
+    this.changedEditors.clear();
+    XDiagram _xDiagram = new XDiagram();
+    this.root.setDiagram(_xDiagram);
+  }
+  
   public <T extends EObject> void revealElement(final T element, final AbstractMapping<T> mapping, final XtextEditor editor) {
     if ((mapping instanceof DiagramMapping<?>)) {
       this.register(editor);

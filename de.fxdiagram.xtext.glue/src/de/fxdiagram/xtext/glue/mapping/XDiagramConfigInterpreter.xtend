@@ -6,7 +6,6 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider
-import java.util.List
 
 class XDiagramConfigInterpreter {
 
@@ -22,7 +21,7 @@ class XDiagramConfigInterpreter {
 		val diagram = diagramMapping.createDiagram.apply(diagramObject.getDescriptor(diagramMapping))
 		val context = new TransformationContext(diagram)
 		diagramMapping.nodes.forEach[execute(diagramObject, context)]
-		diagramMapping.connections.forEach[execute(diagramObject, context)]
+		diagramMapping.connections.forEach[execute(diagramObject, [], context)]
 		diagram
 	}
 
@@ -39,13 +38,13 @@ class XDiagramConfigInterpreter {
 				if(lazy) 
 					node.addBehavior(new LazyConnectionMappingBehavior(node, it, this, false))
 				else
-					execute(nodeObject, context).forEach[target = node]
+					execute(nodeObject, [target = node], context) 
 			]
 			nodeMapping.outgoing.forEach[
 				if(lazy) 
 					node.addBehavior(new LazyConnectionMappingBehavior(node, it, this, true))
 				else
-					execute(nodeObject, context).forEach[source = node]
+					execute(nodeObject, [source = node], context)
 			]
 			return node
 		} else {
@@ -53,7 +52,7 @@ class XDiagramConfigInterpreter {
 		}
 	}
 
-	def <T> createConnection(T connectionObject, ConnectionMapping<T> connectionMapping, TransformationContext context) {
+	protected def <T> createConnection(T connectionObject, ConnectionMapping<T> connectionMapping, TransformationContext context) {
 		if (connectionMapping.isApplicable(connectionObject)) {
 			val connectionMappingCasted = connectionMapping as ConnectionMapping<T>
 			val descriptor = connectionObject.getDescriptor(connectionMappingCasted)
@@ -66,8 +65,6 @@ class XDiagramConfigInterpreter {
 					if (clickCount == 2)
 						descriptor.revealInEditor
 				]
-				createEndpoints(connectionMapping, connectionObject, connection, context)
-				context.addConnection(connection)
 			]
 			return connection
 		} else {
@@ -75,18 +72,18 @@ class XDiagramConfigInterpreter {
 		}
 	}
 
-	def <T,U> List<T> select(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument) {
+	def <T,U> Iterable<T> select(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument) {
 		if (nodeMappingCall instanceof NodeMappingCall<?,?>) {
 			val nodeMappingCallCasted = nodeMappingCall as NodeMappingCall<T,U>
 			val nodeObject = (nodeMappingCallCasted.selector as (Object)=>T).apply(domainArgument)
 			return #[nodeObject]
 		} else if (nodeMappingCall instanceof MultiNodeMappingCall<?,?>) {
 			val nodeMappingCallCasted = nodeMappingCall as MultiNodeMappingCall<T,U>
-			return (nodeMappingCallCasted.selector as (Object)=>List<T>).apply(domainArgument)
+			return (nodeMappingCallCasted.selector as (Object)=>Iterable<T>).apply(domainArgument)
 		}
 	}
 	
-	protected def <T,U> List<XNode> execute(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument,
+	protected def <T,U> Iterable<XNode> execute(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument,
 		TransformationContext context) {
 		val nodeObjects = select(nodeMappingCall, domainArgument)
 		val result = newArrayList
@@ -95,25 +92,27 @@ class XDiagramConfigInterpreter {
 		return result
 	}
 
-	def <T,U> List<T> select(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument) {
+	def <T,U> Iterable<T> select(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument) {
 		if (connectionMappingCall instanceof ConnectionMappingCall<?,?>) {
 			val connectionMappingCasted = connectionMappingCall as ConnectionMappingCall<T,U>
 			val connectionObject = (connectionMappingCasted.selector as (Object)=>T).apply(domainArgument)
 			return #[connectionObject]
 		} else if (connectionMappingCall instanceof MultiConnectionMappingCall<?,?>) {
 			val connectionMappingCasted = connectionMappingCall as MultiConnectionMappingCall<T,U>
-			return (connectionMappingCasted.selector as (Object)=>List<T>).apply(domainArgument)
+			return (connectionMappingCasted.selector as (Object)=>Iterable<T>).apply(domainArgument)
 		}
 	}
 
-	protected def <T,U> List<XConnection> execute(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument,
-		TransformationContext context) {
+	protected def <T,U> Iterable<XConnection> execute(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument,
+		(XConnection)=>void initializer, TransformationContext context) {
 		val connectionObjects = select(connectionMappingCall, domainArgument)
 			val result = newArrayList
 		for (connectionObject : connectionObjects) {
 			val connection = createConnection(connectionObject, connectionMappingCall.connectionMapping, context)
 			result += connection
+			initializer.apply(connection)
 			createEndpoints(connectionMappingCall.connectionMapping, connectionObject, connection, context)
+			context.addConnection(connection)
 		}
 		return result
 	}

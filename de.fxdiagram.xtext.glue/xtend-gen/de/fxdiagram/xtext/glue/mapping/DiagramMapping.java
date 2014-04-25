@@ -57,12 +57,12 @@ public class DiagramMapping<T extends Object> extends AbstractMapping<T> {
     return this.connections.add(_connectionMappingCall);
   }
   
-  public <U extends Object> boolean nodeForEach(final NodeMapping<U> nodeMapping, final Function1<? super T,? extends List<? extends U>> selector) {
+  public <U extends Object> boolean nodeForEach(final NodeMapping<U> nodeMapping, final Function1<? super T,? extends Iterable<? extends U>> selector) {
     MultiNodeMappingCall<U,T> _multiNodeMappingCall = new MultiNodeMappingCall<U, T>(selector, nodeMapping);
     return this.nodes.add(_multiNodeMappingCall);
   }
   
-  public <U extends Object> boolean connectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends List<? extends U>> selector) {
+  public <U extends Object> boolean connectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends Iterable<? extends U>> selector) {
     MultiConnectionMappingCall<U,T> _multiConnectionMappingCall = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
     return this.connections.add(_multiConnectionMappingCall);
   }

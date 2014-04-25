@@ -20,6 +20,13 @@
             id="de.fxdiagram.xtext.glue.showInDiagramCommand"
             name="Show in FXDiagram">
       </command>
+      <command
+            categoryId="org.eclipse.ui.category.views"
+            defaultHandler="de.fxdiagram.xtext.glue.commands.ClearDiagramHandler"
+            description="Clear the current FXDiagram"
+            id="de.fxdiagram.xtext.glue.ClearDiagram"
+            name="Clear Diagram">
+      </command>
    </extension>
    <extension point="org.eclipse.ui.menus">
         <menuContribution
@@ -31,6 +38,19 @@
          </command>  
          </menuContribution>
 	</extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.xtext.glue.FXDiagramView">
+         <command
+               commandId="de.fxdiagram.xtext.glue.ClearDiagram"
+               icon="icons/delete.gif"
+               label="Clear Diagram"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
    
 
 </plugin>
