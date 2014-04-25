@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.glue;
+package de.fxdiagram.xtext.glue.behavior;
 
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;

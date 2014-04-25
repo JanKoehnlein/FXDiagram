@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.glue.mapping;
+package de.fxdiagram.xtext.glue.behavior;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
@@ -13,11 +13,11 @@ import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
-import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
+import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
+import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
-import de.fxdiagram.xtext.glue.mapping.LazyConnectionMappingBehavior;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;

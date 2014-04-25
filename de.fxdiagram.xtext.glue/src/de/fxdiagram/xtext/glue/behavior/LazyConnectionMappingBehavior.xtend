@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.glue.mapping
+package de.fxdiagram.xtext.glue.behavior
 
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRapidButton
@@ -7,8 +7,10 @@ import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.tools.AbstractChooser
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
-import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
+import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall
+import de.fxdiagram.xtext.glue.mapping.NodeMapping
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 import java.util.List
 import javafx.geometry.VPos
 

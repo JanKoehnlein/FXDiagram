@@ -5,21 +5,21 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
+import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
+import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
-import de.fxdiagram.xtext.glue.mapping.LazyConnectionMappingBehavior;
+import de.fxdiagram.xtext.glue.mapping.InterpreterContext;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
-import de.fxdiagram.xtext.glue.mapping.TransformationContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +51,7 @@ public class XDiagramConfigInterpreter {
       Function1<? super XtextDomainObjectDescriptor<T>,? extends XDiagram> _createDiagram = diagramMapping.getCreateDiagram();
       XtextDomainObjectDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
       final XDiagram diagram = _createDiagram.apply(_descriptor);
-      final TransformationContext context = new TransformationContext(diagram);
+      final InterpreterContext context = new InterpreterContext(diagram);
       List<AbstractNodeMappingCall<?,T>> _nodes = diagramMapping.getNodes();
       final Procedure1<AbstractNodeMappingCall<?,T>> _function = new Procedure1<AbstractNodeMappingCall<?,T>>() {
         public void apply(final AbstractNodeMappingCall<?,T> it) {
@@ -75,7 +75,7 @@ public class XDiagramConfigInterpreter {
     return _xblockexpression;
   }
   
-  public <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final TransformationContext context) {
+  public <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final InterpreterContext context) {
     boolean _isApplicable = nodeMapping.isApplicable(nodeObject);
     if (_isApplicable) {
       final XtextDomainObjectDescriptor<T> descriptor = this.<T>getDescriptor(nodeObject, nodeMapping);
@@ -131,7 +131,7 @@ public class XDiagramConfigInterpreter {
     }
   }
   
-  protected <T extends Object> XConnection createConnection(final T connectionObject, final ConnectionMapping<T> connectionMapping, final TransformationContext context) {
+  protected <T extends Object> XConnection createConnection(final T connectionObject, final ConnectionMapping<T> connectionMapping, final InterpreterContext context) {
     boolean _isApplicable = connectionMapping.isApplicable(connectionObject);
     if (_isApplicable) {
       final ConnectionMapping<T> connectionMappingCasted = ((ConnectionMapping<T>) connectionMapping);
@@ -180,7 +180,7 @@ public class XDiagramConfigInterpreter {
     return null;
   }
   
-  protected <T extends Object, U extends Object> Iterable<XNode> execute(final AbstractNodeMappingCall<T,U> nodeMappingCall, final U domainArgument, final TransformationContext context) {
+  protected <T extends Object, U extends Object> Iterable<XNode> execute(final AbstractNodeMappingCall<T,U> nodeMappingCall, final U domainArgument, final InterpreterContext context) {
     final Iterable<T> nodeObjects = this.<T, U>select(nodeMappingCall, domainArgument);
     final ArrayList<XNode> result = CollectionLiterals.<XNode>newArrayList();
     for (final T nodeObject : nodeObjects) {
@@ -207,7 +207,7 @@ public class XDiagramConfigInterpreter {
     return null;
   }
   
-  protected <T extends Object, U extends Object> Iterable<XConnection> execute(final AbstractConnectionMappingCall<T,U> connectionMappingCall, final U domainArgument, final Procedure1<? super XConnection> initializer, final TransformationContext context) {
+  protected <T extends Object, U extends Object> Iterable<XConnection> execute(final AbstractConnectionMappingCall<T,U> connectionMappingCall, final U domainArgument, final Procedure1<? super XConnection> initializer, final InterpreterContext context) {
     final Iterable<T> connectionObjects = this.<T, U>select(connectionMappingCall, domainArgument);
     final ArrayList<XConnection> result = CollectionLiterals.<XConnection>newArrayList();
     for (final T connectionObject : connectionObjects) {
@@ -224,7 +224,7 @@ public class XDiagramConfigInterpreter {
     return result;
   }
   
-  protected <T extends Object> void createEndpoints(final ConnectionMapping<T> connectionMapping, final T connectionObject, final XConnection connection, final TransformationContext context) {
+  protected <T extends Object> void createEndpoints(final ConnectionMapping<T> connectionMapping, final T connectionObject, final XConnection connection, final InterpreterContext context) {
     boolean _and = false;
     XNode _source = connection.getSource();
     boolean _equals = Objects.equal(_source, null);

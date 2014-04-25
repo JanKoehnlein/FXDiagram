@@ -22,7 +22,7 @@ import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
-import de.fxdiagram.xtext.glue.mapping.TransformationContext
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 import java.util.Set
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
@@ -34,7 +34,7 @@ import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.xtext.glue.mapping.InterpreterContext
 
 class FXDiagramView extends ViewPart {
 
@@ -108,8 +108,10 @@ class FXDiagramView extends ViewPart {
 			} 
 		} else if(mapping instanceof NodeMapping<?>) {
 			editor.register
-			val diagram = root.diagram
-			configInterpreter.createNode(element, mapping as NodeMapping<T>, new TransformationContext(diagram))			
+			val transformationContext = new InterpreterContext(root.diagram)
+			configInterpreter.createNode(element, mapping as NodeMapping<T>, transformationContext)		
+			if(transformationContext.needsLayout)
+				new LayoutAction(LayoutType.DOT).perform(root)
 		}
 		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
 		root.diagram.nodes.forEach[selected = domainObject == descriptor]

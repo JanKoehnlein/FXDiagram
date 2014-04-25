@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.glue.mapping;
+package de.fxdiagram.xtext.glue.behavior;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -10,8 +10,8 @@ import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.xtext.glue.behavior.LazyConnectionRapidButtonAction;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
-import de.fxdiagram.xtext.glue.mapping.LazyConnectionRapidButtonAction;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.Collections;
 import java.util.List;

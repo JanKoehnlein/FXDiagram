@@ -33,8 +33,8 @@ import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
+import de.fxdiagram.xtext.glue.mapping.InterpreterContext;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import de.fxdiagram.xtext.glue.mapping.TransformationContext;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.Collections;
 import java.util.Set;
@@ -156,14 +156,19 @@ public class FXDiagramView extends ViewPart {
     } else {
       if ((mapping instanceof NodeMapping<?>)) {
         this.register(editor);
-        final XDiagram diagram = this.root.getDiagram();
-        TransformationContext _transformationContext = new TransformationContext(diagram);
-        this.configInterpreter.<T>createNode(element, ((NodeMapping<T>) mapping), _transformationContext);
+        XDiagram _diagram = this.root.getDiagram();
+        final InterpreterContext transformationContext = new InterpreterContext(_diagram);
+        this.configInterpreter.<T>createNode(element, ((NodeMapping<T>) mapping), transformationContext);
+        boolean _needsLayout = transformationContext.needsLayout();
+        if (_needsLayout) {
+          LayoutAction _layoutAction_1 = new LayoutAction(LayoutType.DOT);
+          _layoutAction_1.perform(this.root);
+        }
       }
     }
     final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, mapping);
-    XDiagram _diagram = this.root.getDiagram();
-    ObservableList<XNode> _nodes = _diagram.getNodes();
+    XDiagram _diagram_1 = this.root.getDiagram();
+    ObservableList<XNode> _nodes = _diagram_1.getNodes();
     final Procedure1<XNode> _function = new Procedure1<XNode>() {
       public void apply(final XNode it) {
         DomainObjectDescriptor _domainObject = it.getDomainObject();
@@ -172,8 +177,8 @@ public class FXDiagramView extends ViewPart {
       }
     };
     IterableExtensions.<XNode>forEach(_nodes, _function);
-    XDiagram _diagram_1 = this.root.getDiagram();
-    ObservableList<XConnection> _connections = _diagram_1.getConnections();
+    XDiagram _diagram_2 = this.root.getDiagram();
+    ObservableList<XConnection> _connections = _diagram_2.getConnections();
     final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
       public void apply(final XConnection it) {
         DomainObjectDescriptor _domainObject = it.getDomainObject();

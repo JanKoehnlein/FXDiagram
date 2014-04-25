@@ -10,21 +10,34 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
-public class TransformationContext {
+public class InterpreterContext {
   private XDiagram diagram;
   
-  public TransformationContext(final XDiagram diagram) {
+  private int numAddedShapes;
+  
+  public InterpreterContext(final XDiagram diagram) {
     this.diagram = diagram;
   }
   
-  public boolean addNode(final XNode node) {
-    ObservableList<XNode> _nodes = this.diagram.getNodes();
-    return _nodes.add(node);
+  public int addNode(final XNode node) {
+    int _xblockexpression = (int) 0;
+    {
+      ObservableList<XNode> _nodes = this.diagram.getNodes();
+      _nodes.add(node);
+      node.layout();
+      _xblockexpression = this.numAddedShapes = (this.numAddedShapes + 1);
+    }
+    return _xblockexpression;
   }
   
-  public boolean addConnection(final XConnection connection) {
-    ObservableList<XConnection> _connections = this.diagram.getConnections();
-    return _connections.add(connection);
+  public int addConnection(final XConnection connection) {
+    int _xblockexpression = (int) 0;
+    {
+      ObservableList<XConnection> _connections = this.diagram.getConnections();
+      _connections.add(connection);
+      _xblockexpression = this.numAddedShapes = (this.numAddedShapes + 1);
+    }
+    return _xblockexpression;
   }
   
   public <T extends Object> XConnection getConnection(final DomainObjectDescriptor descriptor) {
@@ -47,5 +60,9 @@ public class TransformationContext {
       }
     };
     return IterableExtensions.<XNode>findFirst(_nodes, _function);
+  }
+  
+  public boolean needsLayout() {
+    return (this.numAddedShapes > 1);
   }
 }

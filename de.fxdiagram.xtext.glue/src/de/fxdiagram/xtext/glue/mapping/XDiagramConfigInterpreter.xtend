@@ -1,11 +1,10 @@
 package de.fxdiagram.xtext.glue.mapping
 
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.xtext.glue.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider
+import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior
+import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
 
 class XDiagramConfigInterpreter {
 
@@ -19,13 +18,13 @@ class XDiagramConfigInterpreter {
 		if (!diagramMapping.isApplicable(diagramObject))
 			return null
 		val diagram = diagramMapping.createDiagram.apply(diagramObject.getDescriptor(diagramMapping))
-		val context = new TransformationContext(diagram)
+		val context = new InterpreterContext(diagram)
 		diagramMapping.nodes.forEach[execute(diagramObject, context)]
 		diagramMapping.connections.forEach[execute(diagramObject, [], context)]
 		diagram
 	}
 
-	def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, TransformationContext context) {
+	def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context) {
 		if (nodeMapping.isApplicable(nodeObject)) {
 			val descriptor = nodeObject.getDescriptor(nodeMapping)
 			val existingNode = context.getNode(descriptor)
@@ -52,7 +51,7 @@ class XDiagramConfigInterpreter {
 		}
 	}
 
-	protected def <T> createConnection(T connectionObject, ConnectionMapping<T> connectionMapping, TransformationContext context) {
+	protected def <T> createConnection(T connectionObject, ConnectionMapping<T> connectionMapping, InterpreterContext context) {
 		if (connectionMapping.isApplicable(connectionObject)) {
 			val connectionMappingCasted = connectionMapping as ConnectionMapping<T>
 			val descriptor = connectionObject.getDescriptor(connectionMappingCasted)
@@ -84,7 +83,7 @@ class XDiagramConfigInterpreter {
 	}
 	
 	protected def <T,U> Iterable<XNode> execute(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument,
-		TransformationContext context) {
+		InterpreterContext context) {
 		val nodeObjects = select(nodeMappingCall, domainArgument)
 		val result = newArrayList
 		for (nodeObject : nodeObjects)
@@ -104,7 +103,7 @@ class XDiagramConfigInterpreter {
 	}
 
 	protected def <T,U> Iterable<XConnection> execute(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument,
-		(XConnection)=>void initializer, TransformationContext context) {
+		(XConnection)=>void initializer, InterpreterContext context) {
 		val connectionObjects = select(connectionMappingCall, domainArgument)
 			val result = newArrayList
 		for (connectionObject : connectionObjects) {
@@ -118,7 +117,7 @@ class XDiagramConfigInterpreter {
 	}
 
 	protected def <T> createEndpoints(ConnectionMapping<T> connectionMapping, T connectionObject, XConnection connection,
-		TransformationContext context) {
+		InterpreterContext context) {
 		if(connection.source == null && connectionMapping.source != null) 
 			connection.source = connectionMapping.source?.execute(connectionObject, context).head
 		if(connection.target == null && connectionMapping.target != null) 
@@ -130,27 +129,4 @@ class XDiagramConfigInterpreter {
 	}
 }
 
-class TransformationContext {
 
-	XDiagram diagram
-
-	new(XDiagram diagram) {
-		this.diagram = diagram
-	}
-
-	def addNode(XNode node) {
-		diagram.nodes += node
-	}
-
-	def addConnection(XConnection connection) {
-		diagram.connections += connection
-	}
-
-	def <T> getConnection(DomainObjectDescriptor descriptor) {
-		diagram.connections.findFirst[domainObject == descriptor]
-	}
-
-	def <T> getNode(DomainObjectDescriptor descriptor) {
-		diagram.nodes.findFirst[domainObject == descriptor]
-	}
-}
