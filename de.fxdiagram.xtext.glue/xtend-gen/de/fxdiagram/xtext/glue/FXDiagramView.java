@@ -91,15 +91,10 @@ public class FXDiagramView extends ViewPart {
     XRoot _xRoot = new XRoot();
     final Procedure1<XRoot> _function = new Procedure1<XRoot>() {
       public void apply(final XRoot it) {
-        Class<? extends FXDiagramView> _class = FXDiagramView.this.getClass();
-        ClassLoader _classLoader = _class.getClassLoader();
-        it.setClassLoader(_classLoader);
         XDiagram _xDiagram = new XDiagram();
         it.setRootDiagram(_xDiagram);
         ObservableList<DomainObjectProvider> _domainObjectProviders = it.getDomainObjectProviders();
-        Class<? extends XRoot> _class_1 = it.getClass();
-        ClassLoader _classLoader_1 = _class_1.getClassLoader();
-        ResourceProvider _resourceProvider = new ResourceProvider(_classLoader_1);
+        ResourceProvider _resourceProvider = new ResourceProvider();
         Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(Lists.<DomainObjectProvider>newArrayList(_resourceProvider, FXDiagramView.this.domainObjectProvider)));
         DiagramActionRegistry _diagramActionRegistry = it.getDiagramActionRegistry();
         CenterAction _centerAction = new CenterAction();

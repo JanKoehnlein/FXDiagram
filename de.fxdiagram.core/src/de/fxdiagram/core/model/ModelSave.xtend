@@ -13,6 +13,7 @@ import javafx.beans.property.Property
 import javafx.beans.property.StringProperty
 import javax.json.Json
 import javax.json.stream.JsonGenerator
+import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @Logging
 class ModelSave {
@@ -44,7 +45,7 @@ class ModelSave {
 					gen.write(cachedId)
 			} else {
 				idMap.put(element, currentId)
-				val className = element.node.class.canonicalName
+				val className = element.node.class.serialize
 				if(propertyName != null)
 					gen.writeStartObject(propertyName)
 				else

@@ -29,10 +29,7 @@ class ModelLoad {
 	 
 	List<CrossRefData> crossRefs
 	
-	ClassLoader classLoader
-
-	def Object load(Reader in, ClassLoader classLoader) {
-		this.classLoader = classLoader
+	def Object load(Reader in) {
 		modelFactory = new ModelFactory
 		crossRefs = newArrayList
 		idMap = newHashMap
@@ -45,7 +42,7 @@ class ModelLoad {
 	
 	protected def Object readNode(JsonObject jsonObject, String currentID) {
 		val className = jsonObject.getString('__class')
-		val model = modelFactory.createElement(className, classLoader)
+		val model = modelFactory.createElement(className)
 		idMap.put(currentID, model)
 		model.properties.forEach [
 			jsonObject.readProperty(it, model.getType(it), currentID)
@@ -128,7 +125,6 @@ class ModelLoad {
 			}
 		}
 	}
-	
 	
 	protected def resolveCrossReference(CrossRefData crossRef) {
 		val crossRefTarget = idMap.get(crossRef.href)?.node

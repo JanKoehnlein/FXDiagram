@@ -2,8 +2,8 @@ package de.fxdiagram.lib.media;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ResourceDescriptor;
@@ -103,7 +103,7 @@ public class MovieNode extends FlipNode {
   public void initializeGraphics() {
     super.initializeGraphics();
     ObservableList<String> _stylesheets = this.getStylesheets();
-    String _uRI = UriExtensions.toURI(this, "MovieNode.css");
+    String _uRI = ClassLoaderExtensions.toURI(this, "MovieNode.css");
     _stylesheets.add(_uRI);
   }
   

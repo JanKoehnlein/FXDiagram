@@ -17,8 +17,8 @@ import static de.fxdiagram.core.XControlPointType.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
-import static extension de.fxdiagram.core.extensions.UriExtensions.*
 import static extension java.lang.Math.*
+import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @ModelNode(#['layoutX', 'layoutY', 'type'])
 class XControlPoint extends XShape {

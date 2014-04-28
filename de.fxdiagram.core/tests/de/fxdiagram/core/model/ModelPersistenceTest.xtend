@@ -16,7 +16,7 @@ class ModelPersistenceTest {
 						"class":"de.fxdiagram.core.model.TestBean",
 						"testEnum":"BAR"
 					}
-				'''), class.classLoader)
+				'''))
 		assertTrue(object instanceof TestBean)
 		TestEnum.BAR.assertEquals((object as TestBean).testEnum)
 	}

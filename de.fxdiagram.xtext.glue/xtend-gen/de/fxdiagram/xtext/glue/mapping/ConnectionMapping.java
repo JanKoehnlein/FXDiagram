@@ -19,6 +19,10 @@ public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
     }
   };
   
+  public ConnectionMapping(final String id, final Class<T> typeGuard) {
+    super(id, typeGuard);
+  }
+  
   public ConnectionMapping(final Class<T> typeGuard) {
     super(typeGuard);
   }

@@ -123,7 +123,6 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends XRapidButtonAction {
 			chooser.connectionProvider = [ thisNode, thatNode, connectionDesc |
 				val descriptor = connectionDesc as XtextDomainObjectDescriptor<MODEL>
 				mappingCall.connectionMapping.createConnection.apply(descriptor) => [
-					addBehavior(new OpenElementInEditorBehavior(it))
 					if(hostIsSource) {
 						source = thisNode
 						target = thatNode
@@ -142,13 +141,6 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends XRapidButtonAction {
 			val nodeMappingCasted = nodeMapping as NodeMapping<NODE>
 			val descriptor = configInterpreter.getDescriptor(nodeDomainObject as NODE, nodeMappingCasted)
 			val node = nodeMappingCasted.createNode.apply(descriptor) 
-			node.addBehavior(new OpenElementInEditorBehavior(node))
-			nodeMappingCasted.outgoing.filter[lazy].forEach[
-				node.addBehavior(new LazyConnectionMappingBehavior(node, it, configInterpreter, true))
-			]
-			nodeMappingCasted.incoming.filter[lazy].forEach[
-				node.addBehavior(new LazyConnectionMappingBehavior(node, it, configInterpreter, false))
-			]
 			node
 		} else { 
 			null

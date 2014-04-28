@@ -6,6 +6,7 @@ import de.fxdiagram.core.behavior.OpenBehavior
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
+import javafx.scene.input.MouseEvent
 
 class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implements OpenBehavior {
 	
@@ -18,10 +19,10 @@ class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implement
 	}
 	
 	override protected doActivate() {
-		host.onMouseClicked = [
+		host.addEventHandler(MouseEvent.MOUSE_CLICKED, [
 			if (clickCount == 2)
 				open()
-		]
+		])
 	}
 	
 	override open() {

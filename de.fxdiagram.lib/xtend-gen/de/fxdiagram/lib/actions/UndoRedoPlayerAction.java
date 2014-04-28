@@ -7,8 +7,8 @@ import de.fxdiagram.core.command.AnimationQueue;
 import de.fxdiagram.core.command.AnimationQueueListener;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
-import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.Symbol;
 import javafx.animation.FadeTransition;
@@ -185,7 +185,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
         HBox _doubleArrow_1 = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function_1);
         _children_1.add(_doubleArrow_1);
         ObservableList<String> _stylesheets = it.getStylesheets();
-        String _uRI = UriExtensions.toURI(UndoRedoPlayerAction.this, "../media/MovieNode.css");
+        String _uRI = ClassLoaderExtensions.toURI(UndoRedoPlayerAction.this, "../media/MovieNode.css");
         _stylesheets.add(_uRI);
       }
     };

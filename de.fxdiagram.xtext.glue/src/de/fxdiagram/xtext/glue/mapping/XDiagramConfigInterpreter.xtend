@@ -3,8 +3,6 @@ package de.fxdiagram.xtext.glue.mapping
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider
-import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior
-import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
 
 class XDiagramConfigInterpreter {
 
@@ -31,18 +29,13 @@ class XDiagramConfigInterpreter {
 			if (existingNode != null)
 				return existingNode
 			val node = nodeMapping.createNode.apply(descriptor)
-			node.addBehavior(new OpenElementInEditorBehavior(node))
 			context.addNode(node)
 			nodeMapping.incoming.forEach[
-				if(lazy) 
-					node.addBehavior(new LazyConnectionMappingBehavior(node, it, this, false))
-				else
+				if(!lazy) 
 					execute(nodeObject, [target = node], context) 
 			]
 			nodeMapping.outgoing.forEach[
-				if(lazy) 
-					node.addBehavior(new LazyConnectionMappingBehavior(node, it, this, true))
-				else
+				if(!lazy) 
 					execute(nodeObject, [source = node], context)
 			]
 			return node

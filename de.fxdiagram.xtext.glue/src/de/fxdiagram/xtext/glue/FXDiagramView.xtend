@@ -21,6 +21,7 @@ import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
+import de.fxdiagram.xtext.glue.mapping.InterpreterContext
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 import java.util.Set
@@ -34,7 +35,6 @@ import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
-import de.fxdiagram.xtext.glue.mapping.InterpreterContext
 
 class FXDiagramView extends ViewPart {
 
@@ -61,10 +61,9 @@ class FXDiagramView extends ViewPart {
 	protected def Scene createFxScene() {
 		new Scene(
 			root = new XRoot => [
-			 	classLoader = this.class.classLoader
 			 	rootDiagram = new XDiagram()
 			 	getDomainObjectProviders += #[
-			 		new ResourceProvider(class.classLoader),
+			 		new ResourceProvider,
 			 		domainObjectProvider
 			 	]
 				getDiagramActionRegistry += #[
@@ -81,7 +80,7 @@ class FXDiagramView extends ViewPart {
 					new NavigatePreviousAction,
 					new NavigateNextAction,
 					new FullScreenAction,
-					new UndoRedoPlayerAction ( ) ]
+					new UndoRedoPlayerAction ]
 			] 
 		) => [
 			camera = new PerspectiveCamera

@@ -7,6 +7,8 @@ import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -23,14 +25,17 @@ import org.eclipse.xtext.ui.shared.Access;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
-@ModelNode({ "provider", "uri", "fqn", "mapping" })
+@ModelNode({ "provider", "uri", "fqn", "mappingConfigID", "mappingID" })
 @SuppressWarnings("all")
 public class XtextDomainObjectDescriptor<ECLASS extends Object> implements DomainObjectDescriptor {
-  public XtextDomainObjectDescriptor(final String uri, final String fqn, final AbstractMapping<ECLASS> mapping, final XtextDomainObjectProvider provider) {
+  private AbstractMapping<ECLASS> mapping;
+  
+  public XtextDomainObjectDescriptor(final String uri, final String fqn, final String mappingConfigID, final String mappingID, final XtextDomainObjectProvider provider) {
     this.uriProperty.set(uri);
     this.fqnProperty.set(fqn);
     this.providerProperty.set(provider);
-    this.mappingProperty.set(mapping);
+    this.mappingIDProperty.set(mappingID);
+    this.mappingConfigIDProperty.set(mappingConfigID);
   }
   
   public String getName() {
@@ -39,6 +44,23 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
   
   public String getId() {
     return this.getFqn();
+  }
+  
+  public AbstractMapping<ECLASS> getMapping() {
+    AbstractMapping<ECLASS> _xblockexpression = null;
+    {
+      boolean _equals = Objects.equal(this.mapping, null);
+      if (_equals) {
+        XDiagramConfigRegistry _instance = XDiagramConfigRegistry.getInstance();
+        String _mappingConfigID = this.getMappingConfigID();
+        final XDiagramConfig config = _instance.getConfigByID(_mappingConfigID);
+        String _mappingID = this.getMappingID();
+        AbstractMapping<?> _mappingByID = config.getMappingByID(_mappingID);
+        this.mapping = ((AbstractMapping<ECLASS>) _mappingByID);
+      }
+      _xblockexpression = this.mapping;
+    }
+    return _xblockexpression;
   }
   
   public <T extends Object> T withDomainObject(final Function1<? super ECLASS,? extends T> lambda) {
@@ -100,7 +122,8 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     modelElement.addProperty(providerProperty, XtextDomainObjectProvider.class);
     modelElement.addProperty(uriProperty, String.class);
     modelElement.addProperty(fqnProperty, String.class);
-    modelElement.addProperty(mappingProperty, AbstractMapping.class);
+    modelElement.addProperty(mappingConfigIDProperty, String.class);
+    modelElement.addProperty(mappingIDProperty, String.class);
   }
   
   private ReadOnlyObjectWrapper<XtextDomainObjectProvider> providerProperty = new ReadOnlyObjectWrapper<XtextDomainObjectProvider>(this, "provider");
@@ -133,13 +156,23 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     return this.uriProperty.getReadOnlyProperty();
   }
   
-  private ReadOnlyObjectWrapper<AbstractMapping<ECLASS>> mappingProperty = new ReadOnlyObjectWrapper<AbstractMapping<ECLASS>>(this, "mapping");
+  private ReadOnlyStringWrapper mappingConfigIDProperty = new ReadOnlyStringWrapper(this, "mappingConfigID");
   
-  public AbstractMapping<ECLASS> getMapping() {
-    return this.mappingProperty.get();
+  public String getMappingConfigID() {
+    return this.mappingConfigIDProperty.get();
   }
   
-  public ReadOnlyObjectProperty<AbstractMapping<ECLASS>> mappingProperty() {
-    return this.mappingProperty.getReadOnlyProperty();
+  public ReadOnlyStringProperty mappingConfigIDProperty() {
+    return this.mappingConfigIDProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyStringWrapper mappingIDProperty = new ReadOnlyStringWrapper(this, "mappingID");
+  
+  public String getMappingID() {
+    return this.mappingIDProperty.get();
+  }
+  
+  public ReadOnlyStringProperty mappingIDProperty() {
+    return this.mappingIDProperty.getReadOnlyProperty();
   }
 }

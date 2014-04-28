@@ -91,18 +91,13 @@ public class Demo extends Application {
     {
       XRoot _xRoot = new XRoot();
       this.root = _xRoot;
-      Class<? extends Demo> _class = this.getClass();
-      ClassLoader _classLoader = _class.getClassLoader();
-      this.root.setClassLoader(_classLoader);
       final Scene scene = new Scene(this.root, 1024, 768);
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       scene.setCamera(_perspectiveCamera);
       this.root.activate();
       final XDiagram diagram = new XDiagram();
       this.root.setRootDiagram(diagram);
-      Class<? extends Demo> _class_1 = this.getClass();
-      ClassLoader _classLoader_1 = _class_1.getClassLoader();
-      ResourceProvider _resourceProvider = new ResourceProvider(_classLoader_1);
+      ResourceProvider _resourceProvider = new ResourceProvider();
       this.resourceProvider = _resourceProvider;
       ObservableList<DomainObjectProvider> _domainObjectProviders = this.root.getDomainObjectProviders();
       EcoreDomainObjectProvider _ecoreDomainObjectProvider = new EcoreDomainObjectProvider();

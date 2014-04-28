@@ -6,13 +6,13 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.command.CommandStack
 import de.fxdiagram.core.model.DomainObjectProvider
-import de.fxdiagram.core.model.DomainObjectProviderWithState
 import de.fxdiagram.core.model.Model
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramActionTool
 import de.fxdiagram.core.tools.DiagramGestureTool
 import de.fxdiagram.core.tools.SelectionTool
 import de.fxdiagram.core.tools.XDiagramTool
+import de.fxdiagram.core.tools.actions.DiagramActionRegistry
 import java.util.List
 import java.util.Map
 import javafx.beans.Observable
@@ -28,7 +28,6 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
-import de.fxdiagram.core.tools.actions.DiagramActionRegistry
 
 @Logging
 @ModelNode(#['domainObjectProviders', 'rootDiagram', 'diagram'])
@@ -56,17 +55,12 @@ class XRoot extends Parent implements XActivatable {
 	
 	Map<Class<? extends DomainObjectProvider>, DomainObjectProvider> domainObjectProviderCache
 	
-	@Property ClassLoader classLoader 
-	
-	Model model
-	
 	CommandStack commandStack = new CommandStack(this)
 	
 	new() {
 		children += diagramCanvas
 		children += headsUpDisplay
 		domainObjectProviders.addListener[Observable o | domainObjectProviderCache = null]
-		classLoader = this.class.classLoader
 	}
 	
 	def setRootDiagram(XDiagram rootDiagram) {
@@ -162,18 +156,15 @@ class XRoot extends Parent implements XActivatable {
 	def replaceDomainObjectProviders(List<DomainObjectProvider> newDomainObjectProviders) {
 		newDomainObjectProviders.forEach[ newProvider |
 			val oldProvider = getDomainObjectProvider(newProvider.class)
-			if(oldProvider != null) {
-				if(newProvider instanceof DomainObjectProviderWithState)
-					newProvider.copyState(oldProvider as DomainObjectProviderWithState)
+			if(oldProvider != null) 
 				domainObjectProviders.set(domainObjectProviders.indexOf(oldProvider), newProvider)
-			} else {
+			else 
 				domainObjectProviders.add(newProvider)
-			}
 		]
 	}
 	
 	def Model getModel() {
-		model ?: (model = new Model(this))
+		new Model(this)
 	}
 	
 	def getCommandStack() {

@@ -1,54 +1,76 @@
 package de.fxdiagram.xtext.glue.mapping;
 
-import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.model.XModelProvider;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import java.util.List;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.logging.Logger;
+import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
-@ModelNode({ "mappings" })
+@Logging
 @SuppressWarnings("all")
-public class AbstractDiagramConfig implements XDiagramConfig, XModelProvider {
-  public <T extends Object> List<? extends AbstractMapping<T>> getMappings(final T domainObject) {
-    ObservableList<AbstractMapping<?>> _mappings = this.getMappings();
+public class AbstractDiagramConfig implements XDiagramConfig {
+  private Map<String,AbstractMapping<?>> mappings = CollectionLiterals.<String, AbstractMapping<?>>newHashMap();
+  
+  private String _ID;
+  
+  public String getID() {
+    return this._ID;
+  }
+  
+  public void setID(final String ID) {
+    this._ID = ID;
+  }
+  
+  public <T extends Object> Iterable<? extends AbstractMapping<T>> getMappings(final T domainObject) {
+    Collection<AbstractMapping<?>> _values = this.mappings.values();
     final Function1<AbstractMapping<?>,Boolean> _function = new Function1<AbstractMapping<?>,Boolean>() {
       public Boolean apply(final AbstractMapping<?> it) {
         return Boolean.valueOf(it.isApplicable(domainObject));
       }
     };
-    Iterable<AbstractMapping<?>> _filter = IterableExtensions.<AbstractMapping<?>>filter(_mappings, _function);
+    Iterable<AbstractMapping<?>> _filter = IterableExtensions.<AbstractMapping<?>>filter(_values, _function);
     final Function1<AbstractMapping<?>,AbstractMapping<T>> _function_1 = new Function1<AbstractMapping<?>,AbstractMapping<T>>() {
       public AbstractMapping<T> apply(final AbstractMapping<?> it) {
         return ((AbstractMapping<T>) it);
       }
     };
-    Iterable<AbstractMapping<T>> _map = IterableExtensions.<AbstractMapping<?>, AbstractMapping<T>>map(_filter, _function_1);
-    return IterableExtensions.<AbstractMapping<T>>toList(_map);
+    return IterableExtensions.<AbstractMapping<?>, AbstractMapping<T>>map(_filter, _function_1);
   }
   
-  public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(mappingsProperty, AbstractMapping.class);
+  public AbstractMapping<?> getMappingByID(final String mappingID) {
+    return this.mappings.get(mappingID);
   }
   
-  private SimpleListProperty<AbstractMapping<?>> mappingsProperty = new SimpleListProperty<AbstractMapping<?>>(this, "mappings",_initMappings());
-  
-  private static final ObservableList<AbstractMapping<?>> _initMappings() {
-    ObservableList<AbstractMapping<?>> _observableArrayList = FXCollections.<AbstractMapping<?>>observableArrayList();
-    return _observableArrayList;
+  public AbstractMapping<?> addMapping(final AbstractMapping<?> mapping) {
+    AbstractMapping<?> _xifexpression = null;
+    String _iD = mapping.getID();
+    boolean _containsKey = this.mappings.containsKey(_iD);
+    if (_containsKey) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("Duplicate mapping id=");
+      String _iD_1 = mapping.getID();
+      _builder.append(_iD_1, "");
+      _builder.append(" in ");
+      String _iD_2 = this.getID();
+      _builder.append(_iD_2, "");
+      AbstractDiagramConfig.LOG.severe(_builder.toString());
+    } else {
+      AbstractMapping<?> _xblockexpression = null;
+      {
+        mapping.setConfig(this);
+        String _iD_3 = mapping.getID();
+        _xblockexpression = this.mappings.put(_iD_3, mapping);
+      }
+      _xifexpression = _xblockexpression;
+    }
+    return _xifexpression;
   }
   
-  public ObservableList<AbstractMapping<?>> getMappings() {
-    return this.mappingsProperty.get();
-  }
-  
-  public ListProperty<AbstractMapping<?>> mappingsProperty() {
-    return this.mappingsProperty;
-  }
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig");
+    ;
 }

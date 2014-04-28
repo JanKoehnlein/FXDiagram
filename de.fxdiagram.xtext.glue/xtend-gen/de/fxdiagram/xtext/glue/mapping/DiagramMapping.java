@@ -27,6 +27,10 @@ public class DiagramMapping<T extends Object> extends AbstractMapping<T> {
     }
   };
   
+  public DiagramMapping(final String id, final Class<T> typeGuard) {
+    super(id, typeGuard);
+  }
+  
   public DiagramMapping(final Class<T> typeGuard) {
     super(typeGuard);
   }

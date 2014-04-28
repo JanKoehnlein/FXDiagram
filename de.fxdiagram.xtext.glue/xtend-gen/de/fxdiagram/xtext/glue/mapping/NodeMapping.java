@@ -1,13 +1,13 @@
 package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.xtext.glue.shapes.BaseNode;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -18,11 +18,15 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
   
   private List<AbstractConnectionMappingCall<?,T>> incoming = CollectionLiterals.<AbstractConnectionMappingCall<?,T>>newArrayList();
   
-  private Function1<? super XtextDomainObjectDescriptor<T>,? extends XNode> createNode = new Function1<XtextDomainObjectDescriptor<T>,SimpleNode>() {
-    public SimpleNode apply(final XtextDomainObjectDescriptor<T> it) {
-      return new SimpleNode(it);
+  private Function1<? super XtextDomainObjectDescriptor<T>,? extends XNode> createNode = new Function1<XtextDomainObjectDescriptor<T>,BaseNode<T>>() {
+    public BaseNode<T> apply(final XtextDomainObjectDescriptor<T> it) {
+      return new BaseNode<T>(it);
     }
   };
+  
+  public NodeMapping(final String id, final Class<T> typeGuard) {
+    super(id, typeGuard);
+  }
   
   public NodeMapping(final Class<T> typeGuard) {
     super(typeGuard);

@@ -69,13 +69,12 @@ class Demo extends Application {
 
 	def createScene() {
 		root = new XRoot
-		root.classLoader = class.classLoader
 		val scene = new Scene(root, 1024, 768)
 		scene.setCamera(new PerspectiveCamera)
 		root.activate
 		val diagram = new XDiagram
 		root.rootDiagram = diagram
-		resourceProvider = new ResourceProvider(class.classLoader)
+		resourceProvider = new ResourceProvider
 		root.domainObjectProviders += #[ 
 			new EcoreDomainObjectProvider,
 			new JavaModelProvider,

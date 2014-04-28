@@ -20,10 +20,10 @@ import javafx.scene.media.MediaPlayer
 import javafx.scene.media.MediaView
 import javafx.scene.text.Text
 
-import static de.fxdiagram.core.extensions.UriExtensions.*
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
+import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class MovieNode extends FlipNode {

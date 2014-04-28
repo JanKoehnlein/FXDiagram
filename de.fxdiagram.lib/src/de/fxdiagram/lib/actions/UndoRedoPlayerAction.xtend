@@ -13,9 +13,9 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import javafx.scene.shape.Rectangle
 
-import static de.fxdiagram.core.extensions.UriExtensions.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 class UndoRedoPlayerAction implements DiagramAction {
 	

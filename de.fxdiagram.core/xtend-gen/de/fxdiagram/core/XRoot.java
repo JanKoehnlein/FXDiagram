@@ -11,7 +11,6 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
@@ -71,18 +70,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   private Map<Class<? extends DomainObjectProvider>,DomainObjectProvider> domainObjectProviderCache;
   
-  private ClassLoader _classLoader;
-  
-  public ClassLoader getClassLoader() {
-    return this._classLoader;
-  }
-  
-  public void setClassLoader(final ClassLoader classLoader) {
-    this._classLoader = classLoader;
-  }
-  
-  private Model model;
-  
   private CommandStack commandStack = new CommandStack(this);
   
   public XRoot() {
@@ -97,9 +84,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       }
     };
     _domainObjectProviders.addListener(_function);
-    Class<? extends XRoot> _class = this.getClass();
-    ClassLoader _classLoader = _class.getClassLoader();
-    this.setClassLoader(_classLoader);
   }
   
   public void setRootDiagram(final XDiagram rootDiagram) {
@@ -293,9 +277,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
         final DomainObjectProvider oldProvider = XRoot.this.getDomainObjectProvider(_class);
         boolean _notEquals = (!Objects.equal(oldProvider, null));
         if (_notEquals) {
-          if ((newProvider instanceof DomainObjectProviderWithState)) {
-            ((DomainObjectProviderWithState)newProvider).copyState(((DomainObjectProviderWithState) oldProvider));
-          }
           ObservableList<DomainObjectProvider> _domainObjectProviders = XRoot.this.getDomainObjectProviders();
           ObservableList<DomainObjectProvider> _domainObjectProviders_1 = XRoot.this.getDomainObjectProviders();
           int _indexOf = _domainObjectProviders_1.indexOf(oldProvider);
@@ -310,15 +291,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   }
   
   public Model getModel() {
-    Model _elvis = null;
-    if (this.model != null) {
-      _elvis = this.model;
-    } else {
-      Model _model = new Model(this);
-      Model _model_1 = this.model = _model;
-      _elvis = _model_1;
-    }
-    return _elvis;
+    return new Model(this);
   }
   
   public CommandStack getCommandStack() {

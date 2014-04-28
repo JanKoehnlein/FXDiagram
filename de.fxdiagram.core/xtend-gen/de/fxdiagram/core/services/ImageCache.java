@@ -1,7 +1,7 @@
 package de.fxdiagram.core.services;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.extensions.UriExtensions;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import java.io.ByteArrayInputStream;
 import java.util.Map;
 import javafx.scene.image.Image;
@@ -37,7 +37,7 @@ public class ImageCache {
       } else {
         Image _xblockexpression_1 = null;
         {
-          String _uRI = UriExtensions.toURI(context, file);
+          String _uRI = ClassLoaderExtensions.toURI(context, file);
           final Image image = new Image(_uRI);
           this.put(file, image);
           _xblockexpression_1 = image;

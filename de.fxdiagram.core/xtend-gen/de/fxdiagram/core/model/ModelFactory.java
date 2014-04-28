@@ -3,6 +3,7 @@ package de.fxdiagram.core.model;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.ColorAdapter;
 import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -31,7 +32,7 @@ public class ModelFactory {
     }
   }.apply();
   
-  protected ModelElement createElement(final String className, final ClassLoader classLoader) {
+  protected ModelElement createElement(final String className) {
     try {
       ModelElement _xblockexpression = null;
       {
@@ -43,7 +44,7 @@ public class ModelFactory {
         } else {
           ModelElement _xblockexpression_1 = null;
           {
-            final Class<?> clazz = classLoader.loadClass(className);
+            final Class<?> clazz = ClassLoaderExtensions.deserialize(className);
             final Object node = clazz.newInstance();
             _xblockexpression_1 = this.createElement(node);
           }

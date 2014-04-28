@@ -3,7 +3,6 @@ package de.fxdiagram.xtext.domainmodel
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
-import de.fxdiagram.lib.simple.SimpleNode
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
@@ -20,9 +19,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 	 
 	new() {
 		val packageDiagram = new DiagramMapping(PackageDeclaration)
-		val entityNode = new NodeMapping(Entity) => [
-			createNode = [ new SimpleNode(it) ]
-		]
+		val entityNode = new NodeMapping(Entity)
 		val propertyConnection = new ConnectionMapping(Property) => [
 			createConnection = [ descriptor |
 				new XConnection(descriptor) => [
@@ -33,19 +30,19 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 				]
 			]
 		] 
-		mappings += packageDiagram => [
+		addMapping(packageDiagram => [
 			nodeForEach(entityNode, [elements.filter(Entity)])
-		] 
-		mappings += entityNode => [
+		])
+		addMapping(entityNode => [
 			outConnectionForEach(propertyConnection, [
 				features
 					.filter(Property)
 					.filter[referencedEntity != null]
 				]).makeLazy
-		]
-		mappings += propertyConnection => [
+		])
+		addMapping(propertyConnection => [
 			target(entityNode, [referencedEntity])
-		]
+		])
 	}
 	
 	def getReferencedEntity(Property it) {

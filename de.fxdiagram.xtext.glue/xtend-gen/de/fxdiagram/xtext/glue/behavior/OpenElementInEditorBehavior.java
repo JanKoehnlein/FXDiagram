@@ -32,7 +32,7 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
         }
       }
     };
-    _host.setOnMouseClicked(_function);
+    _host.<MouseEvent>addEventHandler(MouseEvent.MOUSE_CLICKED, _function);
   }
   
   public void open() {

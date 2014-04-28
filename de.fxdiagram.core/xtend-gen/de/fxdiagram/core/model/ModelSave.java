@@ -3,6 +3,7 @@ package de.fxdiagram.core.model;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElement;
 import java.io.Writer;
@@ -72,7 +73,7 @@ public class ModelSave {
         this.idMap.put(element, currentId);
         Object _node = element.getNode();
         Class<?> _class = _node.getClass();
-        final String className = _class.getCanonicalName();
+        final String className = ClassLoaderExtensions.serialize(_class);
         boolean _notEquals_2 = (!Objects.equal(propertyName, null));
         if (_notEquals_2) {
           gen.writeStartObject(propertyName);

@@ -7,8 +7,6 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
-import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
@@ -86,17 +84,13 @@ public class XDiagramConfigInterpreter {
       }
       Function1<? super XtextDomainObjectDescriptor<T>,? extends XNode> _createNode = nodeMapping.getCreateNode();
       final XNode node = _createNode.apply(descriptor);
-      OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(node);
-      node.addBehavior(_openElementInEditorBehavior);
       context.addNode(node);
       List<AbstractConnectionMappingCall<?,T>> _incoming = nodeMapping.getIncoming();
       final Procedure1<AbstractConnectionMappingCall<?,T>> _function = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
           boolean _isLazy = it.isLazy();
-          if (_isLazy) {
-            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramConfigInterpreter.this, false);
-            node.addBehavior(_lazyConnectionMappingBehavior);
-          } else {
+          boolean _not = (!_isLazy);
+          if (_not) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setTarget(node);
@@ -111,10 +105,8 @@ public class XDiagramConfigInterpreter {
       final Procedure1<AbstractConnectionMappingCall<?,T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
           boolean _isLazy = it.isLazy();
-          if (_isLazy) {
-            LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, XDiagramConfigInterpreter.this, true);
-            node.addBehavior(_lazyConnectionMappingBehavior);
-          } else {
+          boolean _not = (!_isLazy);
+          if (_not) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setSource(node);

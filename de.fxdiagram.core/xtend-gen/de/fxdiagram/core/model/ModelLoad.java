@@ -42,10 +42,7 @@ public class ModelLoad {
   
   private List<CrossRefData> crossRefs;
   
-  private ClassLoader classLoader;
-  
-  public Object load(final Reader in, final ClassLoader classLoader) {
-    this.classLoader = classLoader;
+  public Object load(final Reader in) {
     ModelFactory _modelFactory = new ModelFactory();
     this.modelFactory = _modelFactory;
     ArrayList<CrossRefData> _newArrayList = CollectionLiterals.<CrossRefData>newArrayList();
@@ -68,7 +65,7 @@ public class ModelLoad {
     Object _xblockexpression = null;
     {
       final String className = jsonObject.getString("__class");
-      final ModelElement model = this.modelFactory.createElement(className, this.classLoader);
+      final ModelElement model = this.modelFactory.createElement(className);
       this.idMap.put(currentID, model);
       List<? extends Property<?>> _properties = model.getProperties();
       final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {

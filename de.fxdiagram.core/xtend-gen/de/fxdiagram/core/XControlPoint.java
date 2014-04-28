@@ -5,9 +5,9 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import java.net.URL;
@@ -218,7 +218,7 @@ public class XControlPoint extends XShape implements XModelProvider {
       public void apply(final Group it) {
         try {
           ObservableList<Node> _children = it.getChildren();
-          String _uRI = UriExtensions.toURI(XControlPoint.this, "images/Magnet.fxml");
+          String _uRI = ClassLoaderExtensions.toURI(XControlPoint.this, "images/Magnet.fxml");
           URL _uRL = new URL(_uRI);
           Node _load = FXMLLoader.<Node>load(_uRL);
           _children.add(_load);

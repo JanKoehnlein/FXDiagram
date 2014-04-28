@@ -7,7 +7,6 @@ import de.fxdiagram.xtext.glue.FXDiagramView;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry;
-import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -29,7 +28,6 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
 
 @SuppressWarnings("all")
 public class ShowInDiagramHandler extends AbstractHandler {
@@ -59,13 +57,13 @@ public class ShowInDiagramHandler extends AbstractHandler {
               boolean _notEquals = (!Objects.equal(selectedElement, null));
               if (_notEquals) {
                 XDiagramConfigRegistry _instance = XDiagramConfigRegistry.getInstance();
-                List<XDiagramConfig> _configurations = _instance.getConfigurations();
-                final Function1<XDiagramConfig,List<? extends AbstractMapping<EObject>>> _function = new Function1<XDiagramConfig,List<? extends AbstractMapping<EObject>>>() {
-                  public List<? extends AbstractMapping<EObject>> apply(final XDiagramConfig it) {
+                Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
+                final Function1<XDiagramConfig,Iterable<? extends AbstractMapping<EObject>>> _function = new Function1<XDiagramConfig,Iterable<? extends AbstractMapping<EObject>>>() {
+                  public Iterable<? extends AbstractMapping<EObject>> apply(final XDiagramConfig it) {
                     return it.<EObject>getMappings(selectedElement);
                   }
                 };
-                List<List<? extends AbstractMapping<EObject>>> _map = ListExtensions.<XDiagramConfig, List<? extends AbstractMapping<EObject>>>map(_configurations, _function);
+                Iterable<Iterable<? extends AbstractMapping<EObject>>> _map = IterableExtensions.map(_configurations, _function);
                 final Iterable<AbstractMapping<EObject>> mappings = Iterables.<AbstractMapping<EObject>>concat(_map);
                 boolean _isEmpty = IterableExtensions.isEmpty(mappings);
                 boolean _not = (!_isEmpty);

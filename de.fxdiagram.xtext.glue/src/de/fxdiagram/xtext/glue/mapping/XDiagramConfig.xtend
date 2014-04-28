@@ -1,49 +1,76 @@
 package de.fxdiagram.xtext.glue.mapping
 
-import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ModelNode
-import java.util.List
-import javafx.collections.ObservableList
+import java.util.Map
 
-import static javafx.collections.FXCollections.*
 import static org.eclipse.core.runtime.Platform.*
+import de.fxdiagram.annotations.logging.Logging
 
 interface XDiagramConfig {
 
-	def <T> List<? extends AbstractMapping<T>> getMappings(T domainObject)
+	def <T> Iterable<? extends AbstractMapping<T>> getMappings(T domainObject)
+	
+	def AbstractMapping<?> getMappingByID(String mappingID)
+	
+	def String getID()
 }
 
-@ModelNode(#['mappings'])
+@Logging
 class AbstractDiagramConfig implements XDiagramConfig {
 	
-	@FxProperty ObservableList<AbstractMapping<?>> mappings = observableArrayList
+	Map<String, AbstractMapping<?>> mappings = newHashMap
+
+	@Property String ID
 	
 	override <T> getMappings(T domainObject) {
-		mappings.filter[isApplicable(domainObject)].map[it as AbstractMapping<T>].toList
+		mappings.values.filter[isApplicable(domainObject)].map[it as AbstractMapping<T>]
+	}
+	
+	override getMappingByID(String mappingID) {
+		mappings.get(mappingID)
+	}
+	
+	def addMapping(AbstractMapping<?> mapping) {
+		if(mappings.containsKey(mapping.ID)) {
+			LOG.severe('''Duplicate mapping id=«mapping.ID» in «ID»''')
+		} else {
+			mapping.config = this
+			mappings.put(mapping.getID(), mapping)
+		}
 	}
 } 
 
+@Logging
 class XDiagramConfigRegistry {
 	
 	static XDiagramConfigRegistry instance
 	
-	@FxProperty ObservableList<XDiagramConfig> configs = observableArrayList
+	Map<String, XDiagramConfig> configs = newHashMap
 	
 	static def getInstance() {
 		instance ?: (instance = new XDiagramConfigRegistry)
 	}
 	
 	private new() {
-		configs += staticConfigurations
+		addStaticConfigurations
 	}
 	
-	def List<XDiagramConfig> getConfigurations() {
-		configs
+	def Iterable<? extends XDiagramConfig> getConfigurations() {
+		configs.values
 	}
 	
-	protected def getStaticConfigurations() {
-		extensionRegistry.getConfigurationElementsFor('de.fxdiagram.xtext.glue.fxDiagramConfig').map[
-			createExecutableExtension('class') as XDiagramConfig
-		].toList
+	protected def addStaticConfigurations() {
+		extensionRegistry.getConfigurationElementsFor('de.fxdiagram.xtext.glue.fxDiagramConfig').forEach[
+			val config = createExecutableExtension('class') as AbstractDiagramConfig
+			val id = getAttribute('id')
+			config.setID(id)
+			if(configs.containsKey(id))
+				LOG.severe("Duplicate fxDiagramConfig id=" + id)
+			else
+				configs.put(id, config)
+		]
+	}
+	
+	def XDiagramConfig getConfigByID(String configID) {
+		configs.get(configID)
 	}
 }

@@ -3,6 +3,7 @@ package de.fxdiagram.core.model
 import de.fxdiagram.annotations.logging.Logging
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
+import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @Logging
 class ModelFactory {
@@ -11,12 +12,12 @@ class ModelFactory {
 		Color.name -> ColorAdapter
 	}
 	
-	protected def ModelElement createElement(String className, ClassLoader classLoader) {
+	protected def ModelElement createElement(String className) {
 		val valueAdapter = valueAdapters.get(className)
 		if(valueAdapter != null) {
 			valueAdapter.newInstance()
 		} else {
-			val clazz = classLoader.loadClass(className)
+			val clazz = className.deserialize
 			val node = clazz.newInstance()
 			createElement(node)
 		}

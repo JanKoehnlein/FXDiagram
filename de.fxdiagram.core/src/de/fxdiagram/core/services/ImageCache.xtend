@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream
 import java.util.Map
 import javafx.scene.image.Image
 
-import static de.fxdiagram.core.extensions.UriExtensions.*
+import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 class ImageCache {
 	

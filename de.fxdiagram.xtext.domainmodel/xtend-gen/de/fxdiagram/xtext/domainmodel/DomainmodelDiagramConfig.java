@@ -5,15 +5,12 @@ import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.anchors.LineArrowHead;
-import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import javafx.collections.ObservableList;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.eclipse.emf.common.util.EList;
@@ -40,20 +37,9 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   
   public DomainmodelDiagramConfig() {
     final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(PackageDeclaration.class);
-    NodeMapping<Entity> _nodeMapping = new NodeMapping<Entity>(Entity.class);
-    final Procedure1<NodeMapping<Entity>> _function = new Procedure1<NodeMapping<Entity>>() {
-      public void apply(final NodeMapping<Entity> it) {
-        final Function1<XtextDomainObjectDescriptor<Entity>,SimpleNode> _function = new Function1<XtextDomainObjectDescriptor<Entity>,SimpleNode>() {
-          public SimpleNode apply(final XtextDomainObjectDescriptor<Entity> it) {
-            return new SimpleNode(it);
-          }
-        };
-        it.setCreateNode(_function);
-      }
-    };
-    final NodeMapping<Entity> entityNode = ObjectExtensions.<NodeMapping<Entity>>operator_doubleArrow(_nodeMapping, _function);
+    final NodeMapping<Entity> entityNode = new NodeMapping<Entity>(Entity.class);
     ConnectionMapping<Property> _connectionMapping = new ConnectionMapping<Property>(Property.class);
-    final Procedure1<ConnectionMapping<Property>> _function_1 = new Procedure1<ConnectionMapping<Property>>() {
+    final Procedure1<ConnectionMapping<Property>> _function = new Procedure1<ConnectionMapping<Property>>() {
       public void apply(final ConnectionMapping<Property> it) {
         final Function1<XtextDomainObjectDescriptor<Property>,XConnection> _function = new Function1<XtextDomainObjectDescriptor<Property>,XConnection>() {
           public XConnection apply(final XtextDomainObjectDescriptor<Property> descriptor) {
@@ -84,9 +70,8 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         it.setCreateConnection(_function);
       }
     };
-    final ConnectionMapping<Property> propertyConnection = ObjectExtensions.<ConnectionMapping<Property>>operator_doubleArrow(_connectionMapping, _function_1);
-    ObservableList<AbstractMapping<?>> _mappings = this.getMappings();
-    final Procedure1<DiagramMapping<PackageDeclaration>> _function_2 = new Procedure1<DiagramMapping<PackageDeclaration>>() {
+    final ConnectionMapping<Property> propertyConnection = ObjectExtensions.<ConnectionMapping<Property>>operator_doubleArrow(_connectionMapping, _function);
+    final Procedure1<DiagramMapping<PackageDeclaration>> _function_1 = new Procedure1<DiagramMapping<PackageDeclaration>>() {
       public void apply(final DiagramMapping<PackageDeclaration> it) {
         final Function1<PackageDeclaration,Iterable<Entity>> _function = new Function1<PackageDeclaration,Iterable<Entity>>() {
           public Iterable<Entity> apply(final PackageDeclaration it) {
@@ -97,10 +82,9 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         it.<Entity>nodeForEach(entityNode, _function);
       }
     };
-    DiagramMapping<PackageDeclaration> _doubleArrow = ObjectExtensions.<DiagramMapping<PackageDeclaration>>operator_doubleArrow(packageDiagram, _function_2);
-    _mappings.add(_doubleArrow);
-    ObservableList<AbstractMapping<?>> _mappings_1 = this.getMappings();
-    final Procedure1<NodeMapping<Entity>> _function_3 = new Procedure1<NodeMapping<Entity>>() {
+    DiagramMapping<PackageDeclaration> _doubleArrow = ObjectExtensions.<DiagramMapping<PackageDeclaration>>operator_doubleArrow(packageDiagram, _function_1);
+    this.addMapping(_doubleArrow);
+    final Procedure1<NodeMapping<Entity>> _function_2 = new Procedure1<NodeMapping<Entity>>() {
       public void apply(final NodeMapping<Entity> it) {
         final Function1<Entity,Iterable<Property>> _function = new Function1<Entity,Iterable<Property>>() {
           public Iterable<Property> apply(final Entity it) {
@@ -119,10 +103,9 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         _outConnectionForEach.makeLazy();
       }
     };
-    NodeMapping<Entity> _doubleArrow_1 = ObjectExtensions.<NodeMapping<Entity>>operator_doubleArrow(entityNode, _function_3);
-    _mappings_1.add(_doubleArrow_1);
-    ObservableList<AbstractMapping<?>> _mappings_2 = this.getMappings();
-    final Procedure1<ConnectionMapping<Property>> _function_4 = new Procedure1<ConnectionMapping<Property>>() {
+    NodeMapping<Entity> _doubleArrow_1 = ObjectExtensions.<NodeMapping<Entity>>operator_doubleArrow(entityNode, _function_2);
+    this.addMapping(_doubleArrow_1);
+    final Procedure1<ConnectionMapping<Property>> _function_3 = new Procedure1<ConnectionMapping<Property>>() {
       public void apply(final ConnectionMapping<Property> it) {
         final Function1<Property,Entity> _function = new Function1<Property,Entity>() {
           public Entity apply(final Property it) {
@@ -132,8 +115,8 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         it.<Entity>target(entityNode, _function);
       }
     };
-    ConnectionMapping<Property> _doubleArrow_2 = ObjectExtensions.<ConnectionMapping<Property>>operator_doubleArrow(propertyConnection, _function_4);
-    _mappings_2.add(_doubleArrow_2);
+    ConnectionMapping<Property> _doubleArrow_2 = ObjectExtensions.<ConnectionMapping<Property>>operator_doubleArrow(propertyConnection, _function_3);
+    this.addMapping(_doubleArrow_2);
   }
   
   public Entity getReferencedEntity(final Property it) {

@@ -18,12 +18,12 @@ import javafx.scene.text.Font
 import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
 
-import static de.fxdiagram.core.extensions.UriExtensions.*
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.scene.layout.VBox.*
 import static extension javafx.util.Duration.*
 import de.fxdiagram.annotations.properties.ModelNode
+import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class NeonSignNode extends FlipNode {

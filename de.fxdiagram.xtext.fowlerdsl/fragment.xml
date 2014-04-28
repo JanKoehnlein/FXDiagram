@@ -16,6 +16,7 @@
    <extension
          point="de.fxdiagram.xtext.glue.fxDiagramConfig">
       <config
+      		id="de.fxdiagram.xtext.fowlerdsl.StatemachineDiagramConfig"
             class="org.eclipse.xtext.example.fowlerdsl.ui.StatemachineExecutableExtensionFactory:de.fxdiagram.xtext.fowlerdsl.StatemachineDiagramConfig">
       </config>
    </extension>

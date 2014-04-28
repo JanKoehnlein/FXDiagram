@@ -6,7 +6,7 @@ import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping
-import javafx.collections.ObservableList
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -16,29 +16,18 @@ import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.shared.Access
 
-import static javafx.collections.FXCollections.*
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry
-
-@ModelNode(#['diagramConfigs'])
+@ModelNode
 class XtextDomainObjectProvider implements DomainObjectProvider {
 
-	@FxProperty @ReadOnly ObservableList<XDiagramConfig> diagramConfigs = observableArrayList
-	 
-	new() {
-		diagramConfigsProperty.bindBidirectional(XDiagramConfigRegistry.instance.configsProperty)
-	}
-	 
 	override createDescriptor(Object it) {
 		if (it instanceof MappedEObjectHandle<?>) 
-			return new XtextDomainObjectDescriptor(URI.toString, fullyQualifiedName, mapping, this)
+			return new XtextDomainObjectDescriptor(URI.toString, fullyQualifiedName, mapping.config.ID, mapping.ID, this)
 		return null
 	}
 	
 	def <T, U extends EObject> createDescriptor(T domainObject, AbstractMapping<?> mapping) {
 		new MappedEObjectHandle(domainObject as U, mapping as AbstractMapping<U>).createDescriptor as XtextDomainObjectDescriptor<T>
 	}
-	
 }
 
 class MappedEObjectHandle<MODEL extends EObject> {
@@ -64,19 +53,22 @@ class MappedEObjectHandle<MODEL extends EObject> {
 	def getMapping() { mapping }
 }
 
-@ModelNode(#['provider', 'uri', 'fqn', 'mapping'])
+@ModelNode(#['provider', 'uri', 'fqn', 'mappingConfigID', 'mappingID'])
 class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
 	@FxProperty @ReadOnly XtextDomainObjectProvider provider
 	@FxProperty @ReadOnly String fqn
 	@FxProperty @ReadOnly String uri
-	@FxProperty @ReadOnly AbstractMapping<ECLASS> mapping
+	@FxProperty @ReadOnly String mappingConfigID
+	@FxProperty @ReadOnly String mappingID
+	AbstractMapping<ECLASS> mapping
 
-	new(String uri, String fqn, AbstractMapping<ECLASS> mapping, XtextDomainObjectProvider provider) {
+	new(String uri, String fqn, String mappingConfigID, String mappingID, XtextDomainObjectProvider provider) {
 		uriProperty.set(uri)
 		fqnProperty.set(fqn)
 		providerProperty.set(provider)
-		mappingProperty.set(mapping)
+		mappingIDProperty.set(mappingID)
+		mappingConfigIDProperty.set(mappingConfigID)
 	}
 
 	override getName() {
@@ -85,6 +77,14 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
 	override getId() {
 		getFqn
+	}
+
+	def AbstractMapping<ECLASS> getMapping() {
+		if(mapping == null) {
+			val config = XDiagramConfigRegistry.instance.getConfigByID(mappingConfigID)
+			mapping = config.getMappingByID(mappingID) as AbstractMapping<ECLASS>
+		}
+		mapping
 	}
 
 	def <T> T withDomainObject((ECLASS)=>T lambda) {
@@ -112,3 +112,5 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 		Access.getIURIEditorOpener.get.open(URI.createURI(uri), true)
 	}
 }
+
+

@@ -14,8 +14,6 @@ import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
@@ -184,8 +182,6 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                   XConnection _apply = _createConnection.apply(descriptor);
                   final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
                     public void apply(final XConnection it) {
-                      OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(it);
-                      it.addBehavior(_openElementInEditorBehavior);
                       if (LazyConnectionRapidButtonAction.this.hostIsSource) {
                         it.setSource(thisNode);
                         it.setTarget(thatNode);
@@ -221,36 +217,6 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         final XtextDomainObjectDescriptor<NODE> descriptor = this.configInterpreter.<NODE>getDescriptor(((NODE) nodeDomainObject), nodeMappingCasted);
         Function1<? super XtextDomainObjectDescriptor<NODE>,? extends XNode> _createNode = nodeMappingCasted.getCreateNode();
         final XNode node = _createNode.apply(descriptor);
-        OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(node);
-        node.addBehavior(_openElementInEditorBehavior);
-        List<AbstractConnectionMappingCall<?,NODE>> _outgoing = nodeMappingCasted.getOutgoing();
-        final Function1<AbstractConnectionMappingCall<?,NODE>,Boolean> _function = new Function1<AbstractConnectionMappingCall<?,NODE>,Boolean>() {
-          public Boolean apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            return Boolean.valueOf(it.isLazy());
-          }
-        };
-        Iterable<AbstractConnectionMappingCall<?,NODE>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_outgoing, _function);
-        final Procedure1<AbstractConnectionMappingCall<?,NODE>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,NODE>>() {
-          public void apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionRapidButtonAction.this.configInterpreter, true);
-            node.addBehavior(_lazyConnectionMappingBehavior);
-          }
-        };
-        IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>forEach(_filter, _function_1);
-        List<AbstractConnectionMappingCall<?,NODE>> _incoming = nodeMappingCasted.getIncoming();
-        final Function1<AbstractConnectionMappingCall<?,NODE>,Boolean> _function_2 = new Function1<AbstractConnectionMappingCall<?,NODE>,Boolean>() {
-          public Boolean apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            return Boolean.valueOf(it.isLazy());
-          }
-        };
-        Iterable<AbstractConnectionMappingCall<?,NODE>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>filter(_incoming, _function_2);
-        final Procedure1<AbstractConnectionMappingCall<?,NODE>> _function_3 = new Procedure1<AbstractConnectionMappingCall<?,NODE>>() {
-          public void apply(final AbstractConnectionMappingCall<?,NODE> it) {
-            LazyConnectionMappingBehavior<?,NODE> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(node, it, LazyConnectionRapidButtonAction.this.configInterpreter, false);
-            node.addBehavior(_lazyConnectionMappingBehavior);
-          }
-        };
-        IterableExtensions.<AbstractConnectionMappingCall<?,NODE>>forEach(_filter_1, _function_3);
         _xblockexpression = node;
       }
       _xifexpression = _xblockexpression;

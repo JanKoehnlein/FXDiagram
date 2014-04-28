@@ -1,8 +1,8 @@
 package de.fxdiagram.examples.neonsign;
 
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.extensions.UriExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ImageCache;
@@ -120,7 +120,7 @@ public class NeonSignNode extends FlipNode {
       public void apply(final VBox it) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("-fx-background-image: url(\"");
-        String _uRI = UriExtensions.toURI(NeonSignNode.this, "brick.jpg");
+        String _uRI = ClassLoaderExtensions.toURI(NeonSignNode.this, "brick.jpg");
         _builder.append(_uRI, "");
         _builder.append("\");");
         _builder.newLineIfNotEmpty();

@@ -3,22 +3,34 @@ package de.fxdiagram.xtext.glue.mapping
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
-import de.fxdiagram.lib.simple.SimpleNode
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
+import de.fxdiagram.xtext.glue.shapes.BaseNode
 import java.util.List
-import de.fxdiagram.annotations.properties.ModelNode
 
-@ModelNode
 abstract class AbstractMapping<T> {
-	
+		
+	String id
+
 	@Property Class<T> typeGuard
 	
+	@Property XDiagramConfig config
+	
+	new(String id, Class<T> typeGuard) {
+		this.id = id
+		this.typeGuard = typeGuard
+	}
+	 
 	new(Class<T> typeGuard) {
+		this.id = typeGuard.simpleName
 		this.typeGuard = typeGuard
 	}
 	 
 	def boolean isApplicable(Object domainObject) {
 		typeGuard.isInstance(domainObject)	
+	}
+	
+	def String getID() {
+		id
 	}
 }
 
@@ -27,6 +39,10 @@ class DiagramMapping<T> extends AbstractMapping<T> {
 	List<AbstractNodeMappingCall<?, T>> nodes = newArrayList 
 	List<AbstractConnectionMappingCall<?, T>> connections = newArrayList()
 	(XtextDomainObjectDescriptor<T>)=>XDiagram createDiagram = [ new XDiagram ]
+	
+	new(String id, Class<T> typeGuard) {
+		super(id, typeGuard)
+	}
 	
 	new(Class<T> typeGuard) {
 		super(typeGuard)
@@ -58,7 +74,11 @@ class NodeMapping<T> extends AbstractMapping<T> {
 	
 	List<AbstractConnectionMappingCall<?,T>> outgoing = newArrayList
 	List<AbstractConnectionMappingCall<?,T>> incoming = newArrayList()
-	(XtextDomainObjectDescriptor<T>)=>XNode createNode = [ new SimpleNode(it) ]
+	(XtextDomainObjectDescriptor<T>)=>XNode createNode = [ new BaseNode(it) ]
+	
+	new(String id, Class<T> typeGuard) {
+		super(id, typeGuard)
+	}
 	
 	new(Class<T> typeGuard) {
 		super(typeGuard)
@@ -99,6 +119,10 @@ class ConnectionMapping<T> extends AbstractMapping<T> {
 	NodeMappingCall<?, T> source
 	NodeMappingCall<?, T> target
 	(XtextDomainObjectDescriptor<T>)=>XConnection createConnection = [ new XConnection(it) ]
+	
+	new(String id, Class<T> typeGuard) {
+		super(id, typeGuard)
+	}
 	
 	new(Class<T> typeGuard) {
 		super(typeGuard)

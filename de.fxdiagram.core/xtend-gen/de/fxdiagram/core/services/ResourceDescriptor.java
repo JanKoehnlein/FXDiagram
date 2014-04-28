@@ -1,7 +1,7 @@
 package de.fxdiagram.core.services;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.extensions.UriExtensions;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ResourceHandle;
@@ -11,25 +11,21 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-@ModelNode({ "name", "classLoaderId", "className", "relativePath", "provider" })
+@ModelNode({ "name", "classLoaderClassName", "relativePath", "provider" })
 @SuppressWarnings("all")
 public class ResourceDescriptor implements DomainObjectDescriptor {
-  public ResourceDescriptor(final String classLoaderId, final String className, final String relativePath, final String name, final ResourceProvider provider) {
+  public ResourceDescriptor(final String classLoaderClassName, final String relativePath, final String name, final ResourceProvider provider) {
     this.setRelativePath(relativePath);
-    this.setClassLoaderId(classLoaderId);
-    this.setClassName(className);
+    this.setClassLoaderClassName(classLoaderClassName);
     this.setName(name);
     this.setProvider(provider);
   }
   
   public String getId() {
-    String _classLoaderId = this.getClassLoaderId();
-    String _plus = (_classLoaderId + ":");
-    String _className = this.getClassName();
-    String _plus_1 = (_plus + _className);
-    String _plus_2 = (_plus_1 + ":");
+    String _classLoaderClassName = this.getClassLoaderClassName();
+    String _plus = (_classLoaderClassName + "/");
     String _relativePath = this.getRelativePath();
-    return (_plus_2 + _relativePath);
+    return (_plus + _relativePath);
   }
   
   public String toURI() {
@@ -37,7 +33,7 @@ public class ResourceDescriptor implements DomainObjectDescriptor {
     ResourceHandle _resolveResourceHandle = _provider.resolveResourceHandle(this);
     Class<?> _context = _resolveResourceHandle.getContext();
     String _relativePath = this.getRelativePath();
-    return UriExtensions.toURI(_context, _relativePath);
+    return ClassLoaderExtensions.toURI(_context, _relativePath);
   }
   
   /**
@@ -48,38 +44,23 @@ public class ResourceDescriptor implements DomainObjectDescriptor {
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(nameProperty, String.class);
-    modelElement.addProperty(classLoaderIdProperty, String.class);
-    modelElement.addProperty(classNameProperty, String.class);
+    modelElement.addProperty(classLoaderClassNameProperty, String.class);
     modelElement.addProperty(relativePathProperty, String.class);
     modelElement.addProperty(providerProperty, ResourceProvider.class);
   }
   
-  private SimpleStringProperty classLoaderIdProperty = new SimpleStringProperty(this, "classLoaderId");
+  private SimpleStringProperty classLoaderClassNameProperty = new SimpleStringProperty(this, "classLoaderClassName");
   
-  public String getClassLoaderId() {
-    return this.classLoaderIdProperty.get();
+  public String getClassLoaderClassName() {
+    return this.classLoaderClassNameProperty.get();
   }
   
-  public void setClassLoaderId(final String classLoaderId) {
-    this.classLoaderIdProperty.set(classLoaderId);
+  public void setClassLoaderClassName(final String classLoaderClassName) {
+    this.classLoaderClassNameProperty.set(classLoaderClassName);
   }
   
-  public StringProperty classLoaderIdProperty() {
-    return this.classLoaderIdProperty;
-  }
-  
-  private SimpleStringProperty classNameProperty = new SimpleStringProperty(this, "className");
-  
-  public String getClassName() {
-    return this.classNameProperty.get();
-  }
-  
-  public void setClassName(final String className) {
-    this.classNameProperty.set(className);
-  }
-  
-  public StringProperty classNameProperty() {
-    return this.classNameProperty;
+  public StringProperty classLoaderClassNameProperty() {
+    return this.classLoaderClassNameProperty;
   }
   
   private SimpleStringProperty relativePathProperty = new SimpleStringProperty(this, "relativePath");
