@@ -25,7 +25,7 @@ import static extension javafx.util.Duration.*
 import de.fxdiagram.annotations.properties.ModelNode
 import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class NeonSignNode extends FlipNode {
 
 	TextField textField

@@ -2,11 +2,13 @@ package de.fxdiagram.lib.nodes;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractOpenBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
+import de.fxdiagram.core.model.ModelElementImpl;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
@@ -26,6 +28,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
+@ModelNode
 @SuppressWarnings("all")
 public class FlipNode extends XNode {
   private Node front;
@@ -272,4 +275,8 @@ public class FlipNode extends XNode {
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.lib.nodes.FlipNode");
     ;
+  
+  public void populate(final ModelElementImpl modelElement) {
+    super.populate(modelElement);
+  }
 }

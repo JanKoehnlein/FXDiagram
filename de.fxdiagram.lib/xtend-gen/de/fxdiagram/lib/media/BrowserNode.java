@@ -3,7 +3,6 @@ package de.fxdiagram.lib.media;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.FlipNode;
@@ -22,7 +21,7 @@ import javafx.scene.web.WebView;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height", "pageUrl" })
+@ModelNode({ "pageUrl" })
 @SuppressWarnings("all")
 public class BrowserNode extends FlipNode {
   public BrowserNode(final String name) {
@@ -92,11 +91,7 @@ public class BrowserNode extends FlipNode {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(layoutXProperty(), Double.class);
-    modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
-    modelElement.addProperty(widthProperty(), Double.class);
-    modelElement.addProperty(heightProperty(), Double.class);
+    super.populate(modelElement);
     modelElement.addProperty(pageUrlProperty, String.class);
   }
   

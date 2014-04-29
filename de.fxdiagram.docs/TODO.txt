@@ -1,8 +1,6 @@
 TODO
 - container node to big when closing a zoomed subdiagram
-- domainModel abstraction
 - persistence: 
-  - handle lazy properties
   - review ModelElement
   - revise image cache
   - XDiagram needs a hook like createNode
@@ -48,5 +46,6 @@ DONE
 - undo close
 - undo layout
 - menu icons for save / load / undo / redo / delete
+- domainModel abstraction
 
   

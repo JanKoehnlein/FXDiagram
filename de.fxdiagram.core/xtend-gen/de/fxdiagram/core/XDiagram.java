@@ -30,6 +30,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -531,17 +532,13 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     return this.connectionPaintProperty;
   }
   
-  private SimpleObjectProperty<XDiagram> parentDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "parentDiagram");
+  private ReadOnlyObjectWrapper<XDiagram> parentDiagramProperty = new ReadOnlyObjectWrapper<XDiagram>(this, "parentDiagram");
   
   public XDiagram getParentDiagram() {
     return this.parentDiagramProperty.get();
   }
   
-  public void setParentDiagram(final XDiagram parentDiagram) {
-    this.parentDiagramProperty.set(parentDiagram);
-  }
-  
-  public ObjectProperty<XDiagram> parentDiagramProperty() {
-    return this.parentDiagramProperty;
+  public ReadOnlyObjectProperty<XDiagram> parentDiagramProperty() {
+    return this.parentDiagramProperty.getReadOnlyProperty();
   }
 }

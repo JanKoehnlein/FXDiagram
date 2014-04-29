@@ -9,4 +9,5 @@ import org.eclipse.xtend.lib.macro.Active;
 @Target(ElementType.TYPE)
 public @interface ModelNode {
   public String[] value() default {};
+  public boolean inherit() default true;
 }

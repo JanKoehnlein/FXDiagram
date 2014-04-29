@@ -6,6 +6,7 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.command.CommandStack
 import de.fxdiagram.core.model.DomainObjectProvider
+import de.fxdiagram.core.model.DomainObjectProviderWithState
 import de.fxdiagram.core.model.Model
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramActionTool
@@ -156,10 +157,13 @@ class XRoot extends Parent implements XActivatable {
 	def replaceDomainObjectProviders(List<DomainObjectProvider> newDomainObjectProviders) {
 		newDomainObjectProviders.forEach[ newProvider |
 			val oldProvider = getDomainObjectProvider(newProvider.class)
-			if(oldProvider != null) 
+			if(oldProvider != null) {
 				domainObjectProviders.set(domainObjectProviders.indexOf(oldProvider), newProvider)
-			else 
+				if(newProvider instanceof DomainObjectProviderWithState)
+					newProvider.copyState(oldProvider as DomainObjectProviderWithState)				
+			} else {
 				domainObjectProviders.add(newProvider)
+			} 
 		]
 	}
 	

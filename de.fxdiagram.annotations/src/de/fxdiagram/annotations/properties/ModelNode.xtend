@@ -25,6 +25,7 @@ import org.eclipse.xtend.lib.macro.declaration.FieldDeclaration
 @Target(ElementType.TYPE)
 annotation ModelNode {
 	String[] value = #[]
+	val inherit = true
 }
 
 class ModelNodeProcessor extends AbstractClassProcessor {
@@ -53,11 +54,16 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 			]
 		}
 		val modelProviderType = newTypeReference('de.fxdiagram.core.model.XModelProvider')
+		
+		val isInherit = modelAnnotation.getValue('inherit') != Boolean.FALSE 
+//		modelAnnotation.getBooleanValue('inherit') 
+			&& annotatedClass.extendedClass != null && modelProviderType.isAssignableFrom(annotatedClass.extendedClass)
 		if(!modelProviderType.type.isAssignableFrom(annotatedClass))
 			annotatedClass.implementedInterfaces = annotatedClass.implementedInterfaces + #[modelProviderType]
 		annotatedClass.addMethod('populate', [
 			addParameter('modelElement', newTypeReference('de.fxdiagram.core.model.ModelElementImpl'))
 			body = '''
+				«IF isInherit»super.populate(modelElement);«ENDIF»
 				«FOR accessor: validPropertyNames.map[getPropertyAccessor(annotatedClass, it, true)]»
 					modelElement.addProperty(«accessor.call», «newTypeReference(accessor.componentType.type)».class);
 				«ENDFOR»

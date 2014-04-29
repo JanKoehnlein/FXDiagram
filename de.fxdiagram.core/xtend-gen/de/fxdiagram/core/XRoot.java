@@ -11,6 +11,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.model.DomainObjectProvider;
+import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
@@ -281,6 +282,9 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
           ObservableList<DomainObjectProvider> _domainObjectProviders_1 = XRoot.this.getDomainObjectProviders();
           int _indexOf = _domainObjectProviders_1.indexOf(oldProvider);
           _domainObjectProviders.set(_indexOf, newProvider);
+          if ((newProvider instanceof DomainObjectProviderWithState)) {
+            ((DomainObjectProviderWithState)newProvider).copyState(((DomainObjectProviderWithState) oldProvider));
+          }
         } else {
           ObservableList<DomainObjectProvider> _domainObjectProviders_2 = XRoot.this.getDomainObjectProviders();
           _domainObjectProviders_2.add(newProvider);

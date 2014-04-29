@@ -17,7 +17,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @Logging
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class LevelOfDetailDiagramNode extends XNode {
 
 	RectangleBorderPane pane = new RectangleBorderPane

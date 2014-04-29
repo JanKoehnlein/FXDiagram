@@ -1,5 +1,7 @@
 package de.fxdiagram.examples.slides.eclipsecon;
 
+import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.slides.Animations;
 import de.fxdiagram.examples.slides.Slide;
@@ -21,6 +23,7 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@ModelNode
 @SuppressWarnings("all")
 public class SummarySlideDeck extends OpenableDiagramNode {
   public SummarySlideDeck() {
@@ -173,5 +176,9 @@ public class SummarySlideDeck extends OpenableDiagramNode {
       }
     };
     return ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
+  }
+  
+  public void populate(final ModelElementImpl modelElement) {
+    super.populate(modelElement);
   }
 }

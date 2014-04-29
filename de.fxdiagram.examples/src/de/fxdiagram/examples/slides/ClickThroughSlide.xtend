@@ -9,7 +9,9 @@ import javafx.scene.image.Image
 import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode
 class ClickThroughSlide extends Slide {
 	
 	Group pane 

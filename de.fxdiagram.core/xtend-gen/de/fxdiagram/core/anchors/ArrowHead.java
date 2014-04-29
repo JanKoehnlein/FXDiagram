@@ -1,10 +1,13 @@
 package de.fxdiagram.core.anchors;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.XModelProvider;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -19,8 +22,9 @@ import javafx.scene.Parent;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
+@ModelNode({ "connection", "isSource" })
 @SuppressWarnings("all")
-public abstract class ArrowHead extends Parent {
+public abstract class ArrowHead extends Parent implements XModelProvider {
   private Node node;
   
   public void activatePreview() {
@@ -136,6 +140,11 @@ public abstract class ArrowHead extends Parent {
     TransformExtensions.translate(trafo, _x_1, _y_1);
     ObservableList<Transform> _transforms = this.getTransforms();
     _transforms.setAll(trafo);
+  }
+  
+  public void populate(final ModelElementImpl modelElement) {
+    modelElement.addProperty(connectionProperty, XConnection.class);
+    modelElement.addProperty(isSourceProperty, Boolean.class);
   }
   
   private SimpleObjectProperty<XConnection> connectionProperty = new SimpleObjectProperty<XConnection>(this, "connection");

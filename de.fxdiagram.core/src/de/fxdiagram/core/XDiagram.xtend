@@ -50,7 +50,7 @@ class XDiagram extends Group implements XActivatable {
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
 	
-	@FxProperty /* @ReadOnly */ XDiagram parentDiagram
+	@FxProperty @ReadOnly XDiagram parentDiagram
 
 	(XDiagram)=>void contentsInitializer
 

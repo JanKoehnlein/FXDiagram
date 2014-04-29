@@ -1,5 +1,4 @@
 HIGH
--fix loading of diagrams / classloader
 -EReference mappings
 -add more diagram configs
 -improve lazy connection behavior configurable in the mapping
@@ -16,3 +15,4 @@ DONE
 -don't show rapid buttons if chooser is empty
 -introduce extension point for diagram configs
 -clear diagram action
+-fix loading of diagrams / classloader

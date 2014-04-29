@@ -2,7 +2,6 @@ package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.ESuperTypeHandle;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
@@ -14,7 +13,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.xbase.lib.Extension;
 
-@ModelNode({ "id", "name", "provider" })
+@ModelNode
 @SuppressWarnings("all")
 public class ESuperTypeDescriptor extends CachedDomainObjectDescriptor<ESuperTypeHandle> {
   public ESuperTypeDescriptor(final ESuperTypeHandle it, @Extension final EcoreDomainObjectProvider provider) {
@@ -60,8 +59,6 @@ public class ESuperTypeDescriptor extends CachedDomainObjectDescriptor<ESuperTyp
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(nameProperty(), String.class);
-    modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
+    super.populate(modelElement);
   }
 }

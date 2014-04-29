@@ -36,7 +36,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height", "x", "y", "scale" })
+@ModelNode({ "x", "y", "scale" })
 @SuppressWarnings("all")
 public class RecursiveImageNode extends XNode implements SvgExportable {
   private Image image;
@@ -258,11 +258,7 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(layoutXProperty(), Double.class);
-    modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
-    modelElement.addProperty(widthProperty(), Double.class);
-    modelElement.addProperty(heightProperty(), Double.class);
+    super.populate(modelElement);
     modelElement.addProperty(xProperty, Double.class);
     modelElement.addProperty(yProperty, Double.class);
     modelElement.addProperty(scaleProperty, Double.class);

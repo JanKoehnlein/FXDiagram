@@ -2,20 +2,22 @@ package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.annotations.properties.ReadOnly
 
 interface DomainObjectDescriptor extends XModelProvider {
 	def String getName()
 	def String getId()
 }
 
+@ModelNode(#['id', 'name', 'provider'])
 abstract class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	
-	@FxProperty /* @ReadOnly */ DomainObjectProvider provider
+	@FxProperty @ReadOnly String id
 	
-	@FxProperty /* @ReadOnly */ String id
+	@FxProperty @ReadOnly String name
 	
-	@FxProperty /* @ReadOnly */ String name
-	
+	@FxProperty @ReadOnly DomainObjectProvider provider
+
 	new() {}
 	
 	new(String id, String name, DomainObjectProvider provider) {
@@ -57,10 +59,10 @@ abstract class CachedDomainObjectDescriptor<T> extends DomainObjectDescriptorImp
 	def T resolveDomainObject()
 }
 
-@ModelNode(#['name'])
+@ModelNode(#['name']) 
 class StringDescriptor implements DomainObjectDescriptor {
 	
-	@FxProperty /* @ReadOnly */String name = null
+	@FxProperty @ReadOnly String name = null
 	
 	new(String name) {
 		nameProperty.set(name)

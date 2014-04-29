@@ -73,9 +73,28 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
       annotatedClass.addConstructor(_function_1);
     }
     final TypeReference modelProviderType = this.context.newTypeReference("de.fxdiagram.core.model.XModelProvider");
+    boolean _and = false;
+    boolean _and_1 = false;
+    Object _value = modelAnnotation.getValue("inherit");
+    boolean _notEquals = (!Objects.equal(_value, Boolean.FALSE));
+    if (!_notEquals) {
+      _and_1 = false;
+    } else {
+      TypeReference _extendedClass = annotatedClass.getExtendedClass();
+      boolean _notEquals_1 = (!Objects.equal(_extendedClass, null));
+      _and_1 = _notEquals_1;
+    }
+    if (!_and_1) {
+      _and = false;
+    } else {
+      TypeReference _extendedClass_1 = annotatedClass.getExtendedClass();
+      boolean _isAssignableFrom = modelProviderType.isAssignableFrom(_extendedClass_1);
+      _and = _isAssignableFrom;
+    }
+    final boolean isInherit = _and;
     Type _type = modelProviderType.getType();
-    boolean _isAssignableFrom = _type.isAssignableFrom(annotatedClass);
-    boolean _not = (!_isAssignableFrom);
+    boolean _isAssignableFrom_1 = _type.isAssignableFrom(annotatedClass);
+    boolean _not = (!_isAssignableFrom_1);
     if (_not) {
       Iterable<? extends TypeReference> _implementedInterfaces = annotatedClass.getImplementedInterfaces();
       Iterable<TypeReference> _plus = Iterables.<TypeReference>concat(_implementedInterfaces, Collections.<TypeReference>unmodifiableList(Lists.<TypeReference>newArrayList(modelProviderType)));
@@ -88,6 +107,12 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
         StringConcatenationClient _client = new StringConcatenationClient() {
           @Override
           protected void appendTo(StringConcatenationClient.TargetStringConcatenation _builder) {
+            {
+              if (isInherit) {
+                _builder.append("super.populate(modelElement);");
+              }
+            }
+            _builder.newLineIfNotEmpty();
             {
               final Function1<String,MemberDeclaration> _function = new Function1<String,MemberDeclaration>() {
                 public MemberDeclaration apply(final String it) {

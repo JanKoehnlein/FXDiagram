@@ -2,7 +2,6 @@ package de.fxdiagram.examples.slides;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.CloseBehavior;
@@ -27,7 +26,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "nodes", "connections", "parentDiagram", "slides" })
+@ModelNode({ "slides" })
 @SuppressWarnings("all")
 public class SlideDiagram extends XDiagram {
   public SlideDiagram() {
@@ -203,9 +202,7 @@ public class SlideDiagram extends XDiagram {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(nodesProperty(), XNode.class);
-    modelElement.addProperty(connectionsProperty(), XConnection.class);
-    modelElement.addProperty(parentDiagramProperty(), XDiagram.class);
+    super.populate(modelElement);
     modelElement.addProperty(slidesProperty, Slide.class);
   }
   

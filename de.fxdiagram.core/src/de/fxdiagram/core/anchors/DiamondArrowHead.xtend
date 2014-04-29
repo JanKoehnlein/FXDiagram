@@ -8,7 +8,7 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Polygon
 import javafx.scene.shape.StrokeType
 
-@ModelNode(#['connection', 'isSource', 'width', 'height', 'stroke', 'fill'])
+@ModelNode(#['width', 'height', 'stroke', 'fill'])
 class DiamondArrowHead extends ArrowHead {
 	
 	@FxProperty double width 

@@ -5,7 +5,6 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -19,9 +18,9 @@ import javafx.scene.shape.StrokeType;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "connection", "isSource", "width", "height", "stroke", "fill" })
+@ModelNode({ "width", "height", "stroke", "fill" })
 @SuppressWarnings("all")
-public class TriangleArrowHead extends ArrowHead implements XModelProvider {
+public class TriangleArrowHead extends ArrowHead {
   public TriangleArrowHead(final XConnection connection, final double width, final double height, final Property<Paint> strokeProperty, final Property<Paint> fillProperty, final boolean isSource) {
     this.setConnection(connection);
     this.setIsSource(isSource);
@@ -76,8 +75,7 @@ public class TriangleArrowHead extends ArrowHead implements XModelProvider {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(connectionProperty(), XConnection.class);
-    modelElement.addProperty(isSourceProperty(), Boolean.class);
+    super.populate(modelElement);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
     modelElement.addProperty(strokeProperty, Paint.class);

@@ -17,14 +17,15 @@ import javafx.scene.effect.InnerShadow
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
+import de.fxdiagram.annotations.properties.ReadOnly
 
 @Logging
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height']) 
 class XNode extends XShape {
 
-	@FxProperty @Lazy double width
-	@FxProperty @Lazy double height
-	@FxProperty /* @ReadOnly */ DomainObjectDescriptor domainObject
+	@FxProperty double width
+	@FxProperty double height
+	@FxProperty @ReadOnly DomainObjectDescriptor domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	

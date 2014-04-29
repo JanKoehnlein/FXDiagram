@@ -6,7 +6,6 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
-import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -29,7 +28,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode
 @SuppressWarnings("all")
 public class BrickBreakerNode extends FlipNode {
   public BrickBreakerNode(final String name) {
@@ -148,10 +147,6 @@ public class BrickBreakerNode extends FlipNode {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(layoutXProperty(), Double.class);
-    modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
-    modelElement.addProperty(widthProperty(), Double.class);
-    modelElement.addProperty(heightProperty(), Double.class);
+    super.populate(modelElement);
   }
 }

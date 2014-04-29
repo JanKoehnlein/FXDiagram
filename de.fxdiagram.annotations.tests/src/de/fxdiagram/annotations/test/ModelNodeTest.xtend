@@ -14,13 +14,13 @@ class ModelNodeTest {
 			}
 		''', '''
 			import de.fxdiagram.annotations.properties.ModelNode;
-			import de.fxdiagram.core.model.ModelElement;
+			import de.fxdiagram.core.model.ModelElementImpl;
 			import de.fxdiagram.core.model.XModelProvider;
 			
 			@ModelNode
 			@SuppressWarnings("all")
 			public class Foo implements XModelProvider {
-			  public void populate(final ModelElement modelElement) {
+			  public void populate(final ModelElementImpl modelElement) {
 			    
 			  }
 			}
@@ -38,7 +38,7 @@ class ModelNodeTest {
 			}
 		''', '''
 			import de.fxdiagram.annotations.properties.ModelNode;
-			import de.fxdiagram.core.model.ModelElement;
+			import de.fxdiagram.core.model.ModelElementImpl;
 			import de.fxdiagram.core.model.XModelProvider;
 			
 			@ModelNode
@@ -53,7 +53,7 @@ class ModelNodeTest {
 			  public Foo() {
 			  }
 			  
-			  public void populate(final ModelElement modelElement) {
+			  public void populate(final ModelElementImpl modelElement) {
 			    
 			  }
 			}
@@ -86,7 +86,7 @@ class ModelNodeTest {
 			}
 		''', '''
 			import de.fxdiagram.annotations.properties.ModelNode;
-			import de.fxdiagram.core.model.ModelElement;
+			import de.fxdiagram.core.model.ModelElementImpl;
 			import de.fxdiagram.core.model.XModelProvider;
 			import javafx.beans.property.BooleanProperty;
 			import javafx.beans.property.FloatProperty;
@@ -116,7 +116,7 @@ class ModelNodeTest {
 			  
 			  private ListProperty<String> names;
 			  
-			  public void populate(final ModelElement modelElement) {
+			  public void populate(final ModelElementImpl modelElement) {
 			    modelElement.addProperty(layoutXProperty(), Double.class);
 			    modelElement.addProperty(stringProperty, String.class);
 			    modelElement.addProperty(integer, Integer.class);
@@ -147,7 +147,7 @@ class ModelNodeTest {
 			}
 		''', '''
 			import de.fxdiagram.annotations.properties.ModelNode;
-			import de.fxdiagram.core.model.ModelElement;
+			import de.fxdiagram.core.model.ModelElementImpl;
 			import de.fxdiagram.core.model.XModelProvider;
 			import javafx.beans.property.DoubleProperty;
 			import javafx.beans.property.ListProperty;
@@ -163,7 +163,7 @@ class ModelNodeTest {
 			@ModelNode({ "myDouble", "myString", "myObject", "myList" })
 			@SuppressWarnings("all")
 			public class ActiveAnnotationsTest implements XModelProvider {
-			  public void populate(final ModelElement modelElement) {
+			  public void populate(final ModelElementImpl modelElement) {
 			    modelElement.addProperty(myDoubleProperty, Double.class);
 			    modelElement.addProperty(myStringProperty, String.class);
 			    modelElement.addProperty(myObjectProperty, Object.class);
@@ -232,6 +232,106 @@ class ModelNodeTest {
 			    return this.myListProperty;
 			  }
 			}
+		''')
+	}
+	
+	@Test
+	def void testInherit() {
+		assertCompilesTo('''
+			import de.fxdiagram.annotations.properties.ModelNode
+			import javafx.beans.property.BooleanProperty
+			
+			@ModelNode(#['bool'])
+			class Foo {
+				BooleanProperty bool
+			}
+
+			@ModelNode
+			class Bar extends Foo {
+			}
+		''', '''
+			MULTIPLE FILES WERE GENERATED
+
+			File 1 : Bar.java
+			
+			import de.fxdiagram.annotations.properties.ModelNode;
+			import de.fxdiagram.core.model.ModelElementImpl;
+			
+			@ModelNode
+			@SuppressWarnings("all")
+			public class Bar extends Foo {
+			  public void populate(final ModelElementImpl modelElement) {
+			    super.populate(modelElement);
+			  }
+			}
+			
+			File 2 : Foo.java
+			
+			import de.fxdiagram.annotations.properties.ModelNode;
+			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.XModelProvider;
+			import javafx.beans.property.BooleanProperty;
+			
+			@ModelNode({ "bool" })
+			@SuppressWarnings("all")
+			public class Foo implements XModelProvider {
+			  private BooleanProperty bool;
+			  
+			  public void populate(final ModelElementImpl modelElement) {
+			    modelElement.addProperty(bool, Boolean.class);
+			  }
+			}
+			
+		''')
+	}
+	
+	@Test
+	def void testNoInherit() {
+		assertCompilesTo('''
+			import de.fxdiagram.annotations.properties.ModelNode
+			import javafx.beans.property.BooleanProperty
+			
+			@ModelNode(#['bool'])
+			class Foo {
+				BooleanProperty bool
+			}
+
+			@ModelNode(inherit=false)
+			class Bar extends Foo {
+			}
+		''', '''
+			MULTIPLE FILES WERE GENERATED
+
+			File 1 : Bar.java
+			
+			import de.fxdiagram.annotations.properties.ModelNode;
+			import de.fxdiagram.core.model.ModelElementImpl;
+			
+			@ModelNode(inherit = false)
+			@SuppressWarnings("all")
+			public class Bar extends Foo {
+			  public void populate(final ModelElementImpl modelElement) {
+			    
+			  }
+			}
+			
+			File 2 : Foo.java
+			
+			import de.fxdiagram.annotations.properties.ModelNode;
+			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.XModelProvider;
+			import javafx.beans.property.BooleanProperty;
+			
+			@ModelNode({ "bool" })
+			@SuppressWarnings("all")
+			public class Foo implements XModelProvider {
+			  private BooleanProperty bool;
+			  
+			  public void populate(final ModelElementImpl modelElement) {
+			    modelElement.addProperty(bool, Boolean.class);
+			  }
+			}
+			
 		''')
 	}
 	

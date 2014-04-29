@@ -35,7 +35,7 @@ import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode
 @SuppressWarnings("all")
 public class MovieNode extends FlipNode {
   private Media media;
@@ -306,10 +306,6 @@ public class MovieNode extends FlipNode {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(layoutXProperty(), Double.class);
-    modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
-    modelElement.addProperty(widthProperty(), Double.class);
-    modelElement.addProperty(heightProperty(), Double.class);
+    super.populate(modelElement);
   }
 }

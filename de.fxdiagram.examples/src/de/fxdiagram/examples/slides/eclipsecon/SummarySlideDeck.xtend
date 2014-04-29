@@ -12,7 +12,9 @@ import javafx.scene.layout.VBox
 import static de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory.*
 
 import static extension de.fxdiagram.examples.slides.Animations.*
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode
 class SummarySlideDeck extends OpenableDiagramNode {
 	
 	new() {

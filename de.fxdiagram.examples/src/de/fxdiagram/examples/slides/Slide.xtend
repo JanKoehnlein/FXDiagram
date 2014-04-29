@@ -11,7 +11,7 @@ import javafx.scene.layout.StackPane
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class Slide extends XNode {
 	
 	@FxProperty Image backgroundImage

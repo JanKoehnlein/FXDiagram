@@ -4,7 +4,6 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import javafx.beans.property.ObjectProperty;
@@ -18,7 +17,7 @@ import javafx.scene.layout.StackPane;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode
 @SuppressWarnings("all")
 public class Slide extends XNode {
   private ImageView imageView;
@@ -84,11 +83,7 @@ public class Slide extends XNode {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(layoutXProperty(), Double.class);
-    modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
-    modelElement.addProperty(widthProperty(), Double.class);
-    modelElement.addProperty(heightProperty(), Double.class);
+    super.populate(modelElement);
   }
   
   private SimpleObjectProperty<Image> backgroundImageProperty = new SimpleObjectProperty<Image>(this, "backgroundImage");

@@ -21,7 +21,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "nodes", "connections", "parentDiagram", "nameSuffix" })
+@ModelNode({ "nameSuffix" })
 @SuppressWarnings("all")
 public class LazyExampleDiagram extends XDiagram {
   public LazyExampleDiagram(final String nameSuffix) {
@@ -222,9 +222,7 @@ public class LazyExampleDiagram extends XDiagram {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(nodesProperty(), XNode.class);
-    modelElement.addProperty(connectionsProperty(), XConnection.class);
-    modelElement.addProperty(parentDiagramProperty(), XDiagram.class);
+    super.populate(modelElement);
     modelElement.addProperty(nameSuffixProperty, String.class);
   }
   

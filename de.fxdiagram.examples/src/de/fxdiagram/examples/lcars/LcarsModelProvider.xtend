@@ -54,7 +54,7 @@ class LcarsModelProvider implements DomainObjectProvider{
 	}
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode
 class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject> {
 	
 	new(String dbId, String name, LcarsModelProvider provider) {
@@ -66,7 +66,7 @@ class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject> {
 	}
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode
 class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<String> {
 	
 	new(String fieldName, LcarsModelProvider provider) {

@@ -2,13 +2,12 @@ package de.fxdiagram.examples.java;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaProperty;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
-@ModelNode({ "id", "name", "provider" })
+@ModelNode
 @SuppressWarnings("all")
 public class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaProperty> {
   public JavaPropertyDescriptor(final JavaProperty it, final JavaModelProvider provider) {
@@ -39,8 +38,6 @@ public class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaPro
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(nameProperty(), String.class);
-    modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
+    super.populate(modelElement);
   }
 }

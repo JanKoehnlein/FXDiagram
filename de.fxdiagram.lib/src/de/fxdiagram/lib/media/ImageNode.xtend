@@ -6,9 +6,12 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import de.fxdiagram.core.services.ResourceDescriptor
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class ImageNode extends XNode {
 
+	new() {
+		println()
+	}
 	new(ResourceDescriptor imageDescriptor) {
 		super(imageDescriptor)
 	}

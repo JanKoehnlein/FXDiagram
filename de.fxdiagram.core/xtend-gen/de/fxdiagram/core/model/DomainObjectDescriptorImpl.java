@@ -1,14 +1,17 @@
 package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import de.fxdiagram.core.model.ModelElementImpl;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
+@ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
 public abstract class DomainObjectDescriptorImpl<T extends Object> implements DomainObjectDescriptor {
   public DomainObjectDescriptorImpl() {
@@ -50,45 +53,39 @@ public abstract class DomainObjectDescriptorImpl<T extends Object> implements Do
   
   public abstract <U extends Object> U withDomainObject(final Function1<? super T,? extends U> lambda);
   
-  private SimpleObjectProperty<DomainObjectProvider> providerProperty = new SimpleObjectProperty<DomainObjectProvider>(this, "provider");
-  
-  public DomainObjectProvider getProvider() {
-    return this.providerProperty.get();
+  public void populate(final ModelElementImpl modelElement) {
+    modelElement.addProperty(idProperty, String.class);
+    modelElement.addProperty(nameProperty, String.class);
+    modelElement.addProperty(providerProperty, DomainObjectProvider.class);
   }
   
-  public void setProvider(final DomainObjectProvider provider) {
-    this.providerProperty.set(provider);
-  }
-  
-  public ObjectProperty<DomainObjectProvider> providerProperty() {
-    return this.providerProperty;
-  }
-  
-  private SimpleStringProperty idProperty = new SimpleStringProperty(this, "id");
+  private ReadOnlyStringWrapper idProperty = new ReadOnlyStringWrapper(this, "id");
   
   public String getId() {
     return this.idProperty.get();
   }
   
-  public void setId(final String id) {
-    this.idProperty.set(id);
+  public ReadOnlyStringProperty idProperty() {
+    return this.idProperty.getReadOnlyProperty();
   }
   
-  public StringProperty idProperty() {
-    return this.idProperty;
-  }
-  
-  private SimpleStringProperty nameProperty = new SimpleStringProperty(this, "name");
+  private ReadOnlyStringWrapper nameProperty = new ReadOnlyStringWrapper(this, "name");
   
   public String getName() {
     return this.nameProperty.get();
   }
   
-  public void setName(final String name) {
-    this.nameProperty.set(name);
+  public ReadOnlyStringProperty nameProperty() {
+    return this.nameProperty.getReadOnlyProperty();
   }
   
-  public StringProperty nameProperty() {
-    return this.nameProperty;
+  private ReadOnlyObjectWrapper<DomainObjectProvider> providerProperty = new ReadOnlyObjectWrapper<DomainObjectProvider>(this, "provider");
+  
+  public DomainObjectProvider getProvider() {
+    return this.providerProperty.get();
+  }
+  
+  public ReadOnlyObjectProperty<DomainObjectProvider> providerProperty() {
+    return this.providerProperty.getReadOnlyProperty();
   }
 }

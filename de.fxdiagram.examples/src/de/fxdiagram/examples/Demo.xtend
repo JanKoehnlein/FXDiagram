@@ -6,8 +6,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
-import de.fxdiagram.core.services.ResourceHandle
-import de.fxdiagram.core.services.ResourceProvider
+import de.fxdiagram.core.services.ClassLoaderProvider
 import de.fxdiagram.core.tools.actions.CenterAction
 import de.fxdiagram.core.tools.actions.DeleteAction
 import de.fxdiagram.core.tools.actions.ExitAction
@@ -54,7 +53,7 @@ class Demo extends Application {
 
 	XRoot root
 	
-	ResourceProvider resourceProvider
+	ClassLoaderProvider classLoaderProvider
 	
 	def static main(String... args) {
 		launch(args)
@@ -74,12 +73,14 @@ class Demo extends Application {
 		root.activate
 		val diagram = new XDiagram
 		root.rootDiagram = diagram
-		resourceProvider = new ResourceProvider
+		classLoaderProvider = new ClassLoaderProvider => [
+			rootClassLoader = this.class.classLoader
+		]
 		root.domainObjectProviders += #[ 
 			new EcoreDomainObjectProvider,
 			new JavaModelProvider,
 			new LcarsModelProvider,
-			resourceProvider
+			classLoaderProvider
 		]
 		root.diagramActionRegistry += #[
 			new CenterAction,
@@ -246,7 +247,7 @@ class Demo extends Application {
 		task.run
 	}
 	
-	protected def newResource(String name, String relativePath) {
-		resourceProvider.createResourceDescriptor(new ResourceHandle(name, this.class, relativePath))
+	protected def newResource(String name,  String relativePath) {
+		classLoaderProvider.createResourceDescriptor(name, this.class, relativePath)
 	}
 }

@@ -19,8 +19,10 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.annotations.properties.ModelNode
 
 @Logging
+@ModelNode
 class FlipNode extends XNode {
 
 	Node front

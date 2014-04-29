@@ -33,7 +33,7 @@ import static extension javafx.scene.layout.VBox.*
 import de.fxdiagram.annotations.properties.ModelNode
 
 @Logging
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class LcarsNode extends XNode {
 
 	static val PAGE_STRUCTURE = #{ 

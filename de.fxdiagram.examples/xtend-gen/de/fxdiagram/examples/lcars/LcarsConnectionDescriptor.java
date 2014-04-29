@@ -2,11 +2,10 @@ package de.fxdiagram.examples.lcars;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.lcars.LcarsModelProvider;
 
-@ModelNode({ "id", "name", "provider" })
+@ModelNode
 @SuppressWarnings("all")
 public class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<String> {
   public LcarsConnectionDescriptor(final String fieldName, final LcarsModelProvider provider) {
@@ -24,8 +23,6 @@ public class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<Stri
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(nameProperty(), String.class);
-    modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
+    super.populate(modelElement);
   }
 }

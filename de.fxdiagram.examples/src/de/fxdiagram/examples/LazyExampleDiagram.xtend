@@ -12,7 +12,7 @@ import de.fxdiagram.lib.simple.SimpleNode
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.annotations.properties.FxProperty
 
-@ModelNode(#['nodes', 'connections', 'parentDiagram', 'nameSuffix'])
+@ModelNode(#['nameSuffix'])
 class LazyExampleDiagram extends XDiagram {
 	
 	@FxProperty String nameSuffix

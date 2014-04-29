@@ -3,7 +3,7 @@ package de.fxdiagram.xtext.glue
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.LayoutType
-import de.fxdiagram.core.services.ResourceProvider
+import de.fxdiagram.core.services.ClassLoaderProvider
 import de.fxdiagram.core.tools.actions.CenterAction
 import de.fxdiagram.core.tools.actions.DeleteAction
 import de.fxdiagram.core.tools.actions.ExportSvgAction
@@ -63,7 +63,7 @@ class FXDiagramView extends ViewPart {
 			root = new XRoot => [
 			 	rootDiagram = new XDiagram()
 			 	getDomainObjectProviders += #[
-			 		new ResourceProvider,
+			 		new ClassLoaderProvider,
 			 		domainObjectProvider
 			 	]
 				getDiagramActionRegistry += #[

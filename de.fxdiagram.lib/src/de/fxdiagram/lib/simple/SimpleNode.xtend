@@ -11,7 +11,7 @@ import javafx.scene.effect.InnerShadow
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class SimpleNode extends XNode {
 
 	Text label

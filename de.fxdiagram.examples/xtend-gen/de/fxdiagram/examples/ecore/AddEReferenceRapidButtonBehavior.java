@@ -93,7 +93,7 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
                 } else {
                   _xifexpression = new LineArrowHead(it, false);
                 }
-                it.setTargetArrowHead(((ArrowHead)_xifexpression));
+                it.setTargetArrowHead(_xifexpression);
                 ArrowHead _xifexpression_1 = null;
                 boolean _isContainment = reference.isContainment();
                 if (_isContainment) {
@@ -115,7 +115,7 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
                   }
                   _xifexpression_1 = _xifexpression_2;
                 }
-                it.setSourceArrowHead(((ArrowHead)_xifexpression_1));
+                it.setSourceArrowHead(_xifexpression_1);
                 XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
                 final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
                   public void apply(final XConnectionLabel it) {

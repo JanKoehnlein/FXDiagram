@@ -25,7 +25,7 @@ import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
 import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class MovieNode extends FlipNode {
 
 	Media media

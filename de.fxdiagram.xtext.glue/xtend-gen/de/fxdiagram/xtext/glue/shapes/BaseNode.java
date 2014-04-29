@@ -1,8 +1,6 @@
 package de.fxdiagram.xtext.glue.shapes;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.simple.SimpleNode;
@@ -19,7 +17,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode
 @SuppressWarnings("all")
 public class BaseNode<T extends Object> extends SimpleNode {
   public BaseNode(final XtextDomainObjectDescriptor<T> descriptor) {
@@ -29,11 +27,6 @@ public class BaseNode<T extends Object> extends SimpleNode {
   protected XtextDomainObjectDescriptor<T> getDescriptor() {
     DomainObjectDescriptor _domainObject = this.getDomainObject();
     return ((XtextDomainObjectDescriptor<T>) _domainObject);
-  }
-  
-  protected XtextDomainObjectProvider getXtextDomainObjectProvider() {
-    XRoot _root = CoreExtensions.getRoot(this);
-    return _root.<XtextDomainObjectProvider>getDomainObjectProvider(XtextDomainObjectProvider.class);
   }
   
   public void doActivate() {
@@ -53,8 +46,9 @@ public class BaseNode<T extends Object> extends SimpleNode {
       Iterable<AbstractConnectionMappingCall<?,T>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?,T>>filter(_outgoing, _function);
       final Procedure1<AbstractConnectionMappingCall<?,T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
-          XtextDomainObjectProvider _xtextDomainObjectProvider = BaseNode.this.getXtextDomainObjectProvider();
-          XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter(_xtextDomainObjectProvider);
+          XtextDomainObjectDescriptor<T> _descriptor = BaseNode.this.getDescriptor();
+          XtextDomainObjectProvider _provider = _descriptor.getProvider();
+          XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter(_provider);
           LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(BaseNode.this, it, _xDiagramConfigInterpreter, true);
           BaseNode.this.addBehavior(_lazyConnectionMappingBehavior);
         }
@@ -69,8 +63,9 @@ public class BaseNode<T extends Object> extends SimpleNode {
       Iterable<AbstractConnectionMappingCall<?,T>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?,T>>filter(_incoming, _function_2);
       final Procedure1<AbstractConnectionMappingCall<?,T>> _function_3 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
-          XtextDomainObjectProvider _xtextDomainObjectProvider = BaseNode.this.getXtextDomainObjectProvider();
-          XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter(_xtextDomainObjectProvider);
+          XtextDomainObjectDescriptor<T> _descriptor = BaseNode.this.getDescriptor();
+          XtextDomainObjectProvider _provider = _descriptor.getProvider();
+          XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter(_provider);
           LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(BaseNode.this, it, _xDiagramConfigInterpreter, false);
           BaseNode.this.addBehavior(_lazyConnectionMappingBehavior);
         }
@@ -88,10 +83,6 @@ public class BaseNode<T extends Object> extends SimpleNode {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(layoutXProperty(), Double.class);
-    modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
-    modelElement.addProperty(widthProperty(), Double.class);
-    modelElement.addProperty(heightProperty(), Double.class);
+    super.populate(modelElement);
   }
 }

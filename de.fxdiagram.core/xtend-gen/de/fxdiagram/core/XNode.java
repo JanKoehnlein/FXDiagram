@@ -18,10 +18,10 @@ import de.fxdiagram.core.model.XModelProvider;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -35,8 +35,8 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@Logging/* 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" }) */
+@Logging
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class XNode extends XShape implements XModelProvider {
   private Effect mouseOverEffect;
@@ -259,61 +259,49 @@ public class XNode extends XShape implements XModelProvider {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
   }
   
-  private final static double DEFAULT_WIDTH = 0d;
-  
-  private SimpleDoubleProperty widthProperty;
+  private SimpleDoubleProperty widthProperty = new SimpleDoubleProperty(this, "width");
   
   public double getWidth() {
-    return (this.widthProperty != null)? this.widthProperty.get() : DEFAULT_WIDTH;
+    return this.widthProperty.get();
   }
   
   public void setWidth(final double width) {
-    this.widthProperty().set(width);
+    this.widthProperty.set(width);
   }
   
   public DoubleProperty widthProperty() {
-    if (this.widthProperty == null) { 
-    	this.widthProperty = new SimpleDoubleProperty(this, "width", DEFAULT_WIDTH);
-    }
     return this.widthProperty;
   }
   
-  private final static double DEFAULT_HEIGHT = 0d;
-  
-  private SimpleDoubleProperty heightProperty;
+  private SimpleDoubleProperty heightProperty = new SimpleDoubleProperty(this, "height");
   
   public double getHeight() {
-    return (this.heightProperty != null)? this.heightProperty.get() : DEFAULT_HEIGHT;
+    return this.heightProperty.get();
   }
   
   public void setHeight(final double height) {
-    this.heightProperty().set(height);
+    this.heightProperty.set(height);
   }
   
   public DoubleProperty heightProperty() {
-    if (this.heightProperty == null) { 
-    	this.heightProperty = new SimpleDoubleProperty(this, "height", DEFAULT_HEIGHT);
-    }
     return this.heightProperty;
   }
   
-  private SimpleObjectProperty<DomainObjectDescriptor> domainObjectProperty = new SimpleObjectProperty<DomainObjectDescriptor>(this, "domainObject");
+  private ReadOnlyObjectWrapper<DomainObjectDescriptor> domainObjectProperty = new ReadOnlyObjectWrapper<DomainObjectDescriptor>(this, "domainObject");
   
   public DomainObjectDescriptor getDomainObject() {
     return this.domainObjectProperty.get();
   }
   
-  public void setDomainObject(final DomainObjectDescriptor domainObject) {
-    this.domainObjectProperty.set(domainObject);
-  }
-  
-  public ObjectProperty<DomainObjectDescriptor> domainObjectProperty() {
-    return this.domainObjectProperty;
+  public ReadOnlyObjectProperty<DomainObjectDescriptor> domainObjectProperty() {
+    return this.domainObjectProperty.getReadOnlyProperty();
   }
   
   private SimpleListProperty<XConnection> incomingConnectionsProperty = new SimpleListProperty<XConnection>(this, "incomingConnections",_initIncomingConnections());

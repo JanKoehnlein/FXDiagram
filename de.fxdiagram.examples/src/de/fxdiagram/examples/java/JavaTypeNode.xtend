@@ -14,7 +14,7 @@ import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import de.fxdiagram.annotations.properties.ModelNode
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class JavaTypeNode extends XNode {
 	
 	val propertyCompartment = new VBox

@@ -4,6 +4,7 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
+import de.fxdiagram.xtext.glue.shapes.BaseConnection
 import de.fxdiagram.xtext.glue.shapes.BaseNode
 import java.util.List
 
@@ -118,7 +119,7 @@ class ConnectionMapping<T> extends AbstractMapping<T> {
 
 	NodeMappingCall<?, T> source
 	NodeMappingCall<?, T> target
-	(XtextDomainObjectDescriptor<T>)=>XConnection createConnection = [ new XConnection(it) ]
+	(XtextDomainObjectDescriptor<T>)=>XConnection createConnection = [ new BaseConnection(it) ]
 	
 	new(String id, Class<T> typeGuard) {
 		super(id, typeGuard)

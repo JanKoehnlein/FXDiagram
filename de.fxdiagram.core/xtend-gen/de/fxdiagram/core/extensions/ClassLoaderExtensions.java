@@ -51,11 +51,6 @@ public class ClassLoaderExtensions {
     }
   }
   
-  public static String toURI(final ClassLoader classLoader, final String path) {
-    URL _resource = classLoader.getResource(path);
-    return ClassLoaderExtensions.toURI(_resource);
-  }
-  
   public static Node fxmlNode(final Object context, final String file) {
     try {
       String _uRI = ClassLoaderExtensions.toURI(context, file);
@@ -124,10 +119,6 @@ public class ClassLoaderExtensions {
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
-  }
-  
-  public static Object getClassLoader(final String bundleName) {
-    return null;
   }
   
   public static boolean isEquinox() {

@@ -9,9 +9,8 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectProvider;
+import de.fxdiagram.core.services.ClassLoaderProvider;
 import de.fxdiagram.core.services.ResourceDescriptor;
-import de.fxdiagram.core.services.ResourceHandle;
-import de.fxdiagram.core.services.ResourceProvider;
 import de.fxdiagram.core.tools.actions.CenterAction;
 import de.fxdiagram.core.tools.actions.DeleteAction;
 import de.fxdiagram.core.tools.actions.DiagramAction;
@@ -73,7 +72,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 public class Demo extends Application {
   private XRoot root;
   
-  private ResourceProvider resourceProvider;
+  private ClassLoaderProvider classLoaderProvider;
   
   public static void main(final String... args) {
     Application.launch(args);
@@ -97,13 +96,21 @@ public class Demo extends Application {
       this.root.activate();
       final XDiagram diagram = new XDiagram();
       this.root.setRootDiagram(diagram);
-      ResourceProvider _resourceProvider = new ResourceProvider();
-      this.resourceProvider = _resourceProvider;
+      ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
+      final Procedure1<ClassLoaderProvider> _function = new Procedure1<ClassLoaderProvider>() {
+        public void apply(final ClassLoaderProvider it) {
+          Class<? extends Demo> _class = Demo.this.getClass();
+          ClassLoader _classLoader = _class.getClassLoader();
+          it.setRootClassLoader(_classLoader);
+        }
+      };
+      ClassLoaderProvider _doubleArrow = ObjectExtensions.<ClassLoaderProvider>operator_doubleArrow(_classLoaderProvider, _function);
+      this.classLoaderProvider = _doubleArrow;
       ObservableList<DomainObjectProvider> _domainObjectProviders = this.root.getDomainObjectProviders();
       EcoreDomainObjectProvider _ecoreDomainObjectProvider = new EcoreDomainObjectProvider();
       JavaModelProvider _javaModelProvider = new JavaModelProvider();
       LcarsModelProvider _lcarsModelProvider = new LcarsModelProvider();
-      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(Lists.<DomainObjectProvider>newArrayList(_ecoreDomainObjectProvider, _javaModelProvider, _lcarsModelProvider, this.resourceProvider)));
+      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(Lists.<DomainObjectProvider>newArrayList(_ecoreDomainObjectProvider, _javaModelProvider, _lcarsModelProvider, this.classLoaderProvider)));
       DiagramActionRegistry _diagramActionRegistry = this.root.getDiagramActionRegistry();
       CenterAction _centerAction = new CenterAction();
       ExitAction _exitAction = new ExitAction();
@@ -121,7 +128,7 @@ public class Demo extends Application {
       FullScreenAction _fullScreenAction = new FullScreenAction();
       UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
       _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(Lists.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction)));
-      final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
+      final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
         public void apply(final XDiagram it) {
           ObservableList<XNode> _nodes = it.getNodes();
           IntroductionSlideDeck _introductionSlideDeck = new IntroductionSlideDeck();
@@ -233,14 +240,14 @@ public class Demo extends Application {
           IterableExtensions.<XNode>forEach(_subList, _function_3);
         }
       };
-      ObjectExtensions.<XDiagram>operator_doubleArrow(diagram, _function);
+      ObjectExtensions.<XDiagram>operator_doubleArrow(diagram, _function_1);
       this.warmUpLayouter();
-      final Runnable _function_1 = new Runnable() {
+      final Runnable _function_2 = new Runnable() {
         public void run() {
           diagram.centerDiagram(true);
         }
       };
-      Platform.runLater(_function_1);
+      Platform.runLater(_function_2);
       _xblockexpression = scene;
     }
     return _xblockexpression;
@@ -461,7 +468,6 @@ public class Demo extends Application {
   
   protected ResourceDescriptor newResource(final String name, final String relativePath) {
     Class<? extends Demo> _class = this.getClass();
-    ResourceHandle _resourceHandle = new ResourceHandle(name, _class, relativePath);
-    return this.resourceProvider.createResourceDescriptor(_resourceHandle);
+    return this.classLoaderProvider.createResourceDescriptor(name, _class, relativePath);
   }
 }

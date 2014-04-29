@@ -68,7 +68,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode
 @SuppressWarnings("all")
 public class LcarsNode extends XNode {
   private final static Map<String,List<String>> PAGE_STRUCTURE = new Function0<Map<String,List<String>>>() {
@@ -685,11 +685,7 @@ public class LcarsNode extends XNode {
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(layoutXProperty(), Double.class);
-    modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty(), DomainObjectDescriptor.class);
-    modelElement.addProperty(widthProperty(), Double.class);
-    modelElement.addProperty(heightProperty(), Double.class);
+    super.populate(modelElement);
   }
   
   private SimpleDoubleProperty imageRatioProperty = new SimpleDoubleProperty(this, "imageRatio",_initImageRatio());

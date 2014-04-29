@@ -40,7 +40,7 @@ import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import de.fxdiagram.core.viewport.ViewportTransition
 
 @Logging
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'innerDiagram'])
+@ModelNode(#['innerDiagram'])
 class OpenableDiagramNode extends XNode {
 	
 	@FxProperty XDiagram innerDiagram

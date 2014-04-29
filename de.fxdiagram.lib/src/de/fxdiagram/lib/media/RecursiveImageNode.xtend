@@ -26,7 +26,7 @@ import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension javafx.util.Duration.*
 import de.fxdiagram.core.viewport.ViewportTransition
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height', 'x', 'y', 'scale'])
+@ModelNode(#['x', 'y', 'scale'])
 class RecursiveImageNode extends XNode implements SvgExportable {
 
 	Image image

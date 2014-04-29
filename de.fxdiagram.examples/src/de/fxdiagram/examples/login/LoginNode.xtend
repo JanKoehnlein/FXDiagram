@@ -20,7 +20,7 @@ import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class LoginNode extends FlipNode {
 
 	@FxProperty String userName = ""

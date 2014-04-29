@@ -15,7 +15,7 @@ import javafx.scene.text.Text
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class BrickBreakerNode extends FlipNode {
 
 	new(String name) {

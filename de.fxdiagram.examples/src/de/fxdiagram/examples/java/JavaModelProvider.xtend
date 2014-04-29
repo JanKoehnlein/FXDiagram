@@ -29,7 +29,7 @@ class JavaModelProvider implements DomainObjectProvider {
 	}
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode
 class JavaTypeDescriptor extends CachedDomainObjectDescriptor<Class<?>> {
 	
 	new(Class<?> javaClass, JavaModelProvider provider) {
@@ -41,7 +41,7 @@ class JavaTypeDescriptor extends CachedDomainObjectDescriptor<Class<?>> {
 	}
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode
 class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaProperty> {
 	
 	
@@ -55,7 +55,7 @@ class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaProperty> 
 	}
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode
 class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSuperTypeHandle> {
 
 	new(JavaSuperTypeHandle it, JavaModelProvider provider) {

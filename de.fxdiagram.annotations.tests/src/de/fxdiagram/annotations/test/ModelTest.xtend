@@ -32,6 +32,6 @@ class Modeltest2 {
 	@FxProperty ObservableList<DomainObjectDescriptor> objects = FXCollections.observableArrayList
 } 
 
-@ModelNode(#['domainObject']) 
+@ModelNode(inherit=false) 
 class Modeltest3 extends XNode {
-}
+}  

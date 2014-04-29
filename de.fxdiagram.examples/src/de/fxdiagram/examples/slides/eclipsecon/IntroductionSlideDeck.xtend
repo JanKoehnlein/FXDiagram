@@ -18,7 +18,7 @@ import static de.fxdiagram.examples.slides.eclipsecon.EclipseConSlideFactory.*
 import static extension de.fxdiagram.examples.slides.Animations.*
 import de.fxdiagram.annotations.properties.ModelNode
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class IntroductionSlideDeck extends OpenableDiagramNode {
 	
 	new() {

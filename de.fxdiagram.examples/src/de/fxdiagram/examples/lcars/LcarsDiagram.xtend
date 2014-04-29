@@ -6,7 +6,7 @@ import javafx.scene.paint.Color
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
-@ModelNode(#['nodes', 'connections', 'parentDiagram'])
+@ModelNode
 class LcarsDiagram extends XDiagram {
 
 	new() {

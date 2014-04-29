@@ -1,6 +1,8 @@
 package de.fxdiagram.core.anchors
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XConnection
 import javafx.geometry.Point2D
 import javafx.scene.Node
@@ -12,8 +14,8 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
-import de.fxdiagram.annotations.properties.ReadOnly
 
+@ModelNode(#['connection', 'isSource'])
 abstract class ArrowHead extends Parent {
 	
 	Node node

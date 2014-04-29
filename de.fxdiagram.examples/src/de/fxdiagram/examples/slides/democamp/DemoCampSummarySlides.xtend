@@ -12,7 +12,7 @@ import static de.fxdiagram.examples.slides.democamp.DemoCampSlideFactory.*
 import static extension de.fxdiagram.examples.slides.Animations.*
 import de.fxdiagram.annotations.properties.ModelNode
 
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
+@ModelNode
 class DemoCampSummarySlides extends OpenableDiagramNode {
 
 	new() {

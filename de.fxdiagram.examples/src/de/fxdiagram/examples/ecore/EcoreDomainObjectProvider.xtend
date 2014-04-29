@@ -47,7 +47,7 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 	}
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode
 class EClassDescriptor extends CachedDomainObjectDescriptor<EClass> {
 	
 	new(EClass eClass, extension EcoreDomainObjectProvider provider) {
@@ -63,7 +63,7 @@ class EClassDescriptor extends CachedDomainObjectDescriptor<EClass> {
 	}
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode
 class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReference> {
 	
 	new(EReference eReference, extension EcoreDomainObjectProvider provider) {
@@ -90,9 +90,8 @@ class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReference> {
 	}
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode
 class ESuperTypeDescriptor extends CachedDomainObjectDescriptor<ESuperTypeHandle> {
-	
 	
 	new(ESuperTypeHandle it, extension EcoreDomainObjectProvider provider) {
 		super(it, subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),

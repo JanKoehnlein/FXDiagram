@@ -2,13 +2,12 @@ package de.fxdiagram.examples.java;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaSuperTypeHandle;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
-@ModelNode({ "id", "name", "provider" })
+@ModelNode
 @SuppressWarnings("all")
 public class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSuperTypeHandle> {
   public JavaSuperTypeDescriptor(final JavaSuperTypeHandle it, final JavaModelProvider provider) {
@@ -41,8 +40,6 @@ public class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSu
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(idProperty(), String.class);
-    modelElement.addProperty(nameProperty(), String.class);
-    modelElement.addProperty(providerProperty(), DomainObjectProvider.class);
+    super.populate(modelElement);
   }
 }

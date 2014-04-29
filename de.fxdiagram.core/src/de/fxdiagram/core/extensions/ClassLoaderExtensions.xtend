@@ -17,14 +17,10 @@ class ClassLoaderExtensions {
 	}
 	
 	protected def static toURI(URL resource) {
-		if(equinox)
+		if(isEquinox)
 			FileLocator.toFileURL(resource).toExternalForm
 		else
 			resource.toExternalForm
-	}
-	
-	def static toURI(ClassLoader classLoader, String path) {
-		toURI(classLoader.getResource(path))
 	}
 	
 	def static fxmlNode(Object context, String file) {
@@ -51,10 +47,6 @@ class ClassLoaderExtensions {
 		} else {
 			return ClassLoaderExtensions.classLoader.loadClass(className)
 		}	
-	}
-	
-	def static getClassLoader(String bundleName) {
-		
 	}
 	
 	def static isEquinox() {

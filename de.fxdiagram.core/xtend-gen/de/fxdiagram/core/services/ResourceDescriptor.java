@@ -1,39 +1,31 @@
 package de.fxdiagram.core.services;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.extensions.ClassLoaderExtensions;
-import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.services.ResourceHandle;
-import de.fxdiagram.core.services.ResourceProvider;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import de.fxdiagram.core.services.ClassLoaderDescriptor;
+import de.fxdiagram.core.services.ClassLoaderProvider;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 
-@ModelNode({ "name", "classLoaderClassName", "relativePath", "provider" })
+@ModelNode({ "name", "absolutePath" })
 @SuppressWarnings("all")
-public class ResourceDescriptor implements DomainObjectDescriptor {
-  public ResourceDescriptor(final String classLoaderClassName, final String relativePath, final String name, final ResourceProvider provider) {
-    this.setRelativePath(relativePath);
-    this.setClassLoaderClassName(classLoaderClassName);
-    this.setName(name);
-    this.setProvider(provider);
+public class ResourceDescriptor extends ClassLoaderDescriptor {
+  public ResourceDescriptor(final String classLoaderID, final String relativePath, final String name, final ClassLoaderProvider provider) {
+    super(classLoaderID, provider);
+    this.absolutePathProperty.set(relativePath);
+    this.nameProperty.set(name);
   }
   
   public String getId() {
-    String _classLoaderClassName = this.getClassLoaderClassName();
-    String _plus = (_classLoaderClassName + "/");
-    String _relativePath = this.getRelativePath();
-    return (_plus + _relativePath);
+    String _classLoaderID = this.getClassLoaderID();
+    String _plus = (_classLoaderID + "/");
+    String _absolutePath = this.getAbsolutePath();
+    return (_plus + _absolutePath);
   }
   
   public String toURI() {
-    ResourceProvider _provider = this.getProvider();
-    ResourceHandle _resolveResourceHandle = _provider.resolveResourceHandle(this);
-    Class<?> _context = _resolveResourceHandle.getContext();
-    String _relativePath = this.getRelativePath();
-    return ClassLoaderExtensions.toURI(_context, _relativePath);
+    String _absolutePath = this.getAbsolutePath();
+    return super.toURI(_absolutePath);
   }
   
   /**
@@ -43,65 +35,28 @@ public class ResourceDescriptor implements DomainObjectDescriptor {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    super.populate(modelElement);
     modelElement.addProperty(nameProperty, String.class);
-    modelElement.addProperty(classLoaderClassNameProperty, String.class);
-    modelElement.addProperty(relativePathProperty, String.class);
-    modelElement.addProperty(providerProperty, ResourceProvider.class);
+    modelElement.addProperty(absolutePathProperty, String.class);
   }
   
-  private SimpleStringProperty classLoaderClassNameProperty = new SimpleStringProperty(this, "classLoaderClassName");
+  private ReadOnlyStringWrapper absolutePathProperty = new ReadOnlyStringWrapper(this, "absolutePath");
   
-  public String getClassLoaderClassName() {
-    return this.classLoaderClassNameProperty.get();
+  public String getAbsolutePath() {
+    return this.absolutePathProperty.get();
   }
   
-  public void setClassLoaderClassName(final String classLoaderClassName) {
-    this.classLoaderClassNameProperty.set(classLoaderClassName);
+  public ReadOnlyStringProperty absolutePathProperty() {
+    return this.absolutePathProperty.getReadOnlyProperty();
   }
   
-  public StringProperty classLoaderClassNameProperty() {
-    return this.classLoaderClassNameProperty;
-  }
-  
-  private SimpleStringProperty relativePathProperty = new SimpleStringProperty(this, "relativePath");
-  
-  public String getRelativePath() {
-    return this.relativePathProperty.get();
-  }
-  
-  public void setRelativePath(final String relativePath) {
-    this.relativePathProperty.set(relativePath);
-  }
-  
-  public StringProperty relativePathProperty() {
-    return this.relativePathProperty;
-  }
-  
-  private SimpleStringProperty nameProperty = new SimpleStringProperty(this, "name");
+  private ReadOnlyStringWrapper nameProperty = new ReadOnlyStringWrapper(this, "name");
   
   public String getName() {
     return this.nameProperty.get();
   }
   
-  public void setName(final String name) {
-    this.nameProperty.set(name);
-  }
-  
-  public StringProperty nameProperty() {
-    return this.nameProperty;
-  }
-  
-  private SimpleObjectProperty<ResourceProvider> providerProperty = new SimpleObjectProperty<ResourceProvider>(this, "provider");
-  
-  public ResourceProvider getProvider() {
-    return this.providerProperty.get();
-  }
-  
-  public void setProvider(final ResourceProvider provider) {
-    this.providerProperty.set(provider);
-  }
-  
-  public ObjectProperty<ResourceProvider> providerProperty() {
-    return this.providerProperty;
+  public ReadOnlyStringProperty nameProperty() {
+    return this.nameProperty.getReadOnlyProperty();
   }
 }

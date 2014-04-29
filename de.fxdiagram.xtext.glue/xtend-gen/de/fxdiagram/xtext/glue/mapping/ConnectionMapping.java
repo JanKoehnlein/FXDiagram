@@ -5,6 +5,7 @@ import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
+import de.fxdiagram.xtext.glue.shapes.BaseConnection;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
@@ -13,9 +14,9 @@ public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
   
   private NodeMappingCall<?,T> target;
   
-  private Function1<? super XtextDomainObjectDescriptor<T>,? extends XConnection> createConnection = new Function1<XtextDomainObjectDescriptor<T>,XConnection>() {
-    public XConnection apply(final XtextDomainObjectDescriptor<T> it) {
-      return new XConnection(it);
+  private Function1<? super XtextDomainObjectDescriptor<T>,? extends XConnection> createConnection = new Function1<XtextDomainObjectDescriptor<T>,BaseConnection<T>>() {
+    public BaseConnection<T> apply(final XtextDomainObjectDescriptor<T> it) {
+      return new BaseConnection<T>(it);
     }
   };
   
