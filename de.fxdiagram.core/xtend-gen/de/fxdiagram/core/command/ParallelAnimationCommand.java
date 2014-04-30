@@ -16,7 +16,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class CompositeAnimationCommand extends AbstractAnimationCommand {
+public class ParallelAnimationCommand extends AbstractAnimationCommand {
   private List<AnimationCommand> commands = CollectionLiterals.<AnimationCommand>newArrayList();
   
   public boolean operator_add(final AnimationCommand command) {
@@ -33,7 +33,7 @@ public class CompositeAnimationCommand extends AbstractAnimationCommand {
             return it.getExecuteAnimation(context);
           }
         };
-        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
+        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(ParallelAnimationCommand.this.commands, _function);
         Iterable<Animation> _filterNull = IterableExtensions.<Animation>filterNull(_map);
         Iterables.<Animation>addAll(_children, _filterNull);
       }
@@ -51,7 +51,7 @@ public class CompositeAnimationCommand extends AbstractAnimationCommand {
             return it.getUndoAnimation(context);
           }
         };
-        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
+        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(ParallelAnimationCommand.this.commands, _function);
         Iterable<Animation> _filterNull = IterableExtensions.<Animation>filterNull(_map);
         Iterables.<Animation>addAll(_children, _filterNull);
       }
@@ -69,7 +69,7 @@ public class CompositeAnimationCommand extends AbstractAnimationCommand {
             return it.getRedoAnimation(context);
           }
         };
-        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
+        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(ParallelAnimationCommand.this.commands, _function);
         Iterable<Animation> _filterNull = IterableExtensions.<Animation>filterNull(_map);
         Iterables.<Animation>addAll(_children, _filterNull);
       }

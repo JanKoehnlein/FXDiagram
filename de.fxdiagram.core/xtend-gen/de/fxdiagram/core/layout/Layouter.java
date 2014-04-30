@@ -27,9 +27,9 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
-import de.fxdiagram.core.command.CompositeAnimationCommand;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.MoveCommand;
+import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.layout.ConnectionMorphCommand;
 import de.fxdiagram.core.layout.LayoutType;
 import java.util.HashMap;
@@ -94,8 +94,8 @@ public class Layouter {
     return ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
   }
   
-  protected CompositeAnimationCommand composeCommand(final Map<Object,KGraphElement> map, final Duration duration) {
-    final CompositeAnimationCommand composite = new CompositeAnimationCommand();
+  protected ParallelAnimationCommand composeCommand(final Map<Object,KGraphElement> map, final Duration duration) {
+    final ParallelAnimationCommand composite = new ParallelAnimationCommand();
     Set<Map.Entry<Object,KGraphElement>> _entrySet = map.entrySet();
     for (final Map.Entry<Object,KGraphElement> entry : _entrySet) {
       {

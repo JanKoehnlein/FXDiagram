@@ -10,6 +10,7 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 class SelectAndRevealCommand extends ViewportCommand {
 
@@ -29,6 +30,7 @@ class SelectAndRevealCommand extends ViewportCommand {
 				selected = true
 				return it 
 			} else {
+				selected = false
 				return null
 			}
 		].filterNull
@@ -41,7 +43,9 @@ class SelectAndRevealCommand extends ViewportCommand {
 			val targetScale = min(1, 
 					min(root.scene.width / selectionBounds.width, 
 						root.scene.height / selectionBounds.height))
-			return new ViewportTransition(root, selectionBounds.center, targetScale)
+			return new ViewportTransition(root, selectionBounds.center, targetScale) => [
+				maxDuration = 400.millis
+			]
 		} else {
 			return null
 		}

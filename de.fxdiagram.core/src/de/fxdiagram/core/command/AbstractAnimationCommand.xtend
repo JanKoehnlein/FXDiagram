@@ -4,6 +4,7 @@ import de.fxdiagram.core.viewport.ViewportMemento
 import de.fxdiagram.core.viewport.ViewportTransition
 import javafx.animation.Animation
 import javafx.animation.SequentialTransition
+import static de.fxdiagram.core.command.ChainedAnimationUtil.*
 
 abstract class AbstractAnimationCommand implements AnimationCommand {
 

@@ -2,7 +2,7 @@ package de.fxdiagram.core.viewport;
 
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import org.eclipse.xtend.lib.Data;
-import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
+import org.eclipse.xtend2.lib.StringConcatenation;
 
 @Data
 @SuppressWarnings("all")
@@ -60,6 +60,24 @@ public class ViewportMemento {
     return _xblockexpression;
   }
   
+  public String toString() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("ViewportMemento [translateX=");
+    double _translateX = this.getTranslateX();
+    _builder.append(_translateX, "");
+    _builder.append(", translateY=");
+    double _translateY = this.getTranslateY();
+    _builder.append(_translateY, "");
+    _builder.append(", scale=");
+    double _scale = this.getScale();
+    _builder.append(_scale, "");
+    _builder.append(", rotate=");
+    double _rotate = this.getRotate();
+    _builder.append(_rotate, "");
+    _builder.append("]");
+    return _builder.toString();
+  }
+  
   public ViewportMemento(final double translateX, final double translateY, final double scale, final double rotate) {
     super();
     this._translateX = translateX;
@@ -97,11 +115,5 @@ public class ViewportMemento {
     if (Double.doubleToLongBits(other._rotate) != Double.doubleToLongBits(_rotate))
       return false;
     return true;
-  }
-  
-  @Override
-  public String toString() {
-    String result = new ToStringHelper().toString(this);
-    return result;
   }
 }

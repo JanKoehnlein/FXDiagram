@@ -40,6 +40,7 @@ import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.command.SequentialAnimationCommand
 
 class FXDiagramView extends ViewPart {
 
@@ -115,9 +116,22 @@ class FXDiagramView extends ViewPart {
 			interpreterContext.diagram = root.diagram
 			configInterpreter.createNode(element, mapping as NodeMapping<T>, interpreterContext)		
 		}
+//		val command = new SequentialAnimationCommand
+//		command += interpreterContext.command
+//		if(interpreterContext.needsLayout)
+//			command += new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 200.millis)
+//		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
+//		command += new SelectAndRevealCommand(root, [
+//			switch it {
+//				XNode: domainObject == descriptor
+//				XConnection: domainObject == descriptor
+//				default: false
+//			}
+//		])
+//		root.commandStack.execute(command)
 		root.commandStack.execute(interpreterContext.command)
 		if(interpreterContext.needsLayout)
-			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 300.millis))
+			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 200.millis))
 		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
 		root.commandStack.execute(new SelectAndRevealCommand(root, [
 			switch it {

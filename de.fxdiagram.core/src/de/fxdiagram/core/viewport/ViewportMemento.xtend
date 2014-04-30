@@ -16,4 +16,8 @@ class ViewportMemento {
 		val deltaAngle =  7 * abs(rotate - other.rotate)
 		delta + deltaScale + deltaAngle
 	}
+	
+	override toString() {
+		'''ViewportMemento [translateX=«translateX», translateY=«translateY», scale=«scale», rotate=«rotate»]'''
+	}
 }

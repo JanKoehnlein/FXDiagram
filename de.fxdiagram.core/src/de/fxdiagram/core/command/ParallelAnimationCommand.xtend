@@ -3,7 +3,7 @@ package de.fxdiagram.core.command
 import java.util.List
 import javafx.animation.ParallelTransition
 
-class CompositeAnimationCommand extends AbstractAnimationCommand {
+class ParallelAnimationCommand extends AbstractAnimationCommand {
 
 	List<AnimationCommand> commands = newArrayList
 

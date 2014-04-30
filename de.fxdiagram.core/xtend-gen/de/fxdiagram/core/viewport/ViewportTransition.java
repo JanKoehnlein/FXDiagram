@@ -25,12 +25,7 @@ public class ViewportTransition extends Transition {
     ViewportMemento _createMemento = _viewportTransform.createMemento();
     this.from = _createMemento;
     this.to = toMemento;
-    double _millis = maxDuration.toMillis();
-    Duration _defaultDuration = this.getDefaultDuration();
-    double _millis_1 = _defaultDuration.toMillis();
-    double _min = Math.min(_millis, _millis_1);
-    Duration _duration = new Duration(_min);
-    this.setCycleDuration(_duration);
+    this.setMaxDuration(maxDuration);
   }
   
   public ViewportTransition(final XRoot root, final Point2D targetCenterInDiagram, final double targetScale) {
@@ -56,6 +51,15 @@ public class ViewportTransition extends Transition {
   
   public void setDuration(final Duration duration) {
     this.setCycleDuration(duration);
+  }
+  
+  public void setMaxDuration(final Duration maxDuration) {
+    double _millis = maxDuration.toMillis();
+    Duration _defaultDuration = this.getDefaultDuration();
+    double _millis_1 = _defaultDuration.toMillis();
+    double _min = Math.min(_millis, _millis_1);
+    Duration _duration = new Duration(_min);
+    this.setCycleDuration(_duration);
   }
   
   public ViewportMemento getFrom() {

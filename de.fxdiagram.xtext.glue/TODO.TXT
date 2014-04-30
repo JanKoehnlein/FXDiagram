@@ -1,4 +1,5 @@
 HIGH
+-make sequential animation command work
 -EReference mappings
 -add more diagram configs
 -improve lazy connection behavior configurable in the mapping

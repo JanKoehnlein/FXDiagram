@@ -11,6 +11,7 @@ import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.ViewportCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.viewport.ViewportTransition;
 import java.util.Set;
@@ -19,10 +20,12 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -51,6 +54,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
           ((XShape)it).setSelected(true);
           return ((XShape)it);
         } else {
+          ((XShape)it).setSelected(false);
           return null;
         }
       }
@@ -111,7 +115,14 @@ public class SelectAndRevealCommand extends ViewportCommand {
       double _min = Math.min(_divide, _divide_1);
       final double targetScale = Math.min(1, _min);
       Point2D _center = BoundsExtensions.center(selectionBounds);
-      return new ViewportTransition(root, _center, targetScale);
+      ViewportTransition _viewportTransition = new ViewportTransition(root, _center, targetScale);
+      final Procedure1<ViewportTransition> _function_3 = new Procedure1<ViewportTransition>() {
+        public void apply(final ViewportTransition it) {
+          Duration _millis = DurationExtensions.millis(400);
+          it.setMaxDuration(_millis);
+        }
+      };
+      return ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function_3);
     } else {
       return null;
     }

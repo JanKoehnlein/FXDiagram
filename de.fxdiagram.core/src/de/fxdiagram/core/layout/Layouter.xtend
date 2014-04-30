@@ -16,7 +16,6 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.command.CompositeAnimationCommand
 import de.fxdiagram.core.command.MoveCommand
 import java.util.Map
 import javafx.geometry.Point2D
@@ -24,6 +23,7 @@ import javafx.util.Duration
 
 import static de.fxdiagram.core.XConnectionKind.*
 import de.fxdiagram.core.command.LazyCommand
+import de.fxdiagram.core.command.ParallelAnimationCommand
 
 class Layouter { 
 
@@ -58,7 +58,7 @@ class Layouter {
 	}
 	
 	protected def composeCommand(Map<Object,KGraphElement> map, Duration duration) {
-		val composite = new CompositeAnimationCommand
+		val composite = new ParallelAnimationCommand
 		for(entry: map.entrySet) {
 			val xElement = entry.key
 			val kElement = entry.value
