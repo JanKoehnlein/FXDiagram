@@ -28,17 +28,17 @@ class DiagramGestureTool implements XDiagramTool {
 		]
 		zoomHandler = [
 			val scale = totalZoomFactor / zoomContext.previousScale
-			root.diagramTransform.scaleRelative(scale)
+			root.viewportTransform.scaleRelative(scale)
 			val pivotInScene = root.diagram.localToScene(zoomContext.pivotInDiagram)
-			root.diagramTransform.translateRelative(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
+			root.viewportTransform.translateRelative(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
 			zoomContext.previousScale = totalZoomFactor
 		]
 		scrollHandler = [
-			root.diagramTransform.translateRelative(deltaX, deltaY)
+			root.viewportTransform.translateRelative(deltaX, deltaY)
 		]
 		rotateHandler = [
 			if (shortcutDown)
-				root.diagramTransform.rotateRelative(-angle, sceneX, sceneY)
+				root.viewportTransform.rotateRelative(-angle, sceneX, sceneY)
 		]
 	}
 

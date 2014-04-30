@@ -161,7 +161,7 @@ class FirstRecursiveImageNode extends XNode {
 		scaleXProperty.bind(recursiveImageNode.scaleProperty)
 		scaleYProperty.bind(recursiveImageNode.scaleProperty)
 		updateChildPanes
-		diagram.canvasTransform.scaleProperty.addListener [ prop, oldVal, newVal |
+		diagram.viewportTransform.scaleProperty.addListener [ prop, oldVal, newVal |
 			updateChildPanes
 		]
 	}

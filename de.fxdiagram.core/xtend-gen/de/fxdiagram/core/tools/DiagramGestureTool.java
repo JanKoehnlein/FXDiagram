@@ -44,19 +44,19 @@ public class DiagramGestureTool implements XDiagramTool {
         double _totalZoomFactor = it.getTotalZoomFactor();
         double _previousScale = DiagramGestureTool.this.zoomContext.getPreviousScale();
         final double scale = (_totalZoomFactor / _previousScale);
-        ViewportTransform _diagramTransform = root.getDiagramTransform();
-        _diagramTransform.scaleRelative(scale);
+        ViewportTransform _viewportTransform = root.getViewportTransform();
+        _viewportTransform.scaleRelative(scale);
         XDiagram _diagram = root.getDiagram();
         Point2D _pivotInDiagram = DiagramGestureTool.this.zoomContext.getPivotInDiagram();
         final Point2D pivotInScene = _diagram.localToScene(_pivotInDiagram);
-        ViewportTransform _diagramTransform_1 = root.getDiagramTransform();
+        ViewportTransform _viewportTransform_1 = root.getViewportTransform();
         double _sceneX = it.getSceneX();
         double _x = pivotInScene.getX();
         double _minus = (_sceneX - _x);
         double _sceneY = it.getSceneY();
         double _y = pivotInScene.getY();
         double _minus_1 = (_sceneY - _y);
-        _diagramTransform_1.translateRelative(_minus, _minus_1);
+        _viewportTransform_1.translateRelative(_minus, _minus_1);
         double _totalZoomFactor_1 = it.getTotalZoomFactor();
         DiagramGestureTool.this.zoomContext.setPreviousScale(_totalZoomFactor_1);
       }
@@ -64,10 +64,10 @@ public class DiagramGestureTool implements XDiagramTool {
     this.zoomHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
       public void handle(final ScrollEvent it) {
-        ViewportTransform _diagramTransform = root.getDiagramTransform();
+        ViewportTransform _viewportTransform = root.getViewportTransform();
         double _deltaX = it.getDeltaX();
         double _deltaY = it.getDeltaY();
-        _diagramTransform.translateRelative(_deltaX, _deltaY);
+        _viewportTransform.translateRelative(_deltaX, _deltaY);
       }
     };
     this.scrollHandler = _function_2;
@@ -75,12 +75,12 @@ public class DiagramGestureTool implements XDiagramTool {
       public void handle(final RotateEvent it) {
         boolean _isShortcutDown = it.isShortcutDown();
         if (_isShortcutDown) {
-          ViewportTransform _diagramTransform = root.getDiagramTransform();
+          ViewportTransform _viewportTransform = root.getViewportTransform();
           double _angle = it.getAngle();
           double _minus = (-_angle);
           double _sceneX = it.getSceneX();
           double _sceneY = it.getSceneY();
-          _diagramTransform.rotateRelative(_minus, _sceneX, _sceneY);
+          _viewportTransform.rotateRelative(_minus, _sceneX, _sceneY);
         }
       }
     };

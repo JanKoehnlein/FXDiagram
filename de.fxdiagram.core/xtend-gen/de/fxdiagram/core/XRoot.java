@@ -148,9 +148,9 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     return this.diagramCanvas;
   }
   
-  public ViewportTransform getDiagramTransform() {
+  public ViewportTransform getViewportTransform() {
     XDiagram _diagram = this.getDiagram();
-    return _diagram.getCanvasTransform();
+    return _diagram.getViewportTransform();
   }
   
   public void activate() {

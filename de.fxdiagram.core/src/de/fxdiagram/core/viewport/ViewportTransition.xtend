@@ -18,7 +18,14 @@ class ViewportTransition extends Transition {
 	
 	new(XRoot root, ViewportMemento toMemento, Duration duration) {
 		this.root = root
-		this.from = root.diagramTransform.createMemento
+		this.from = root.viewportTransform.createMemento
+		this.to = toMemento
+		cycleDuration = new Duration(min(duration.toMillis, from.dist(to)))
+	}
+
+	new(XRoot root, ViewportMemento fromMemento, ViewportMemento toMemento, Duration duration) {
+		this.root = root
+		this.from = root.viewportTransform.createMemento
 		this.to = toMemento
 		cycleDuration = new Duration(min(duration.toMillis, from.dist(to)))
 	}
@@ -29,7 +36,7 @@ class ViewportTransition extends Transition {
 	
 	new(XRoot root, Point2D targetCenterInDiagram, double targetScale, double targetAngle) {
 		this.root = root
-		this.from = root.diagramTransform.createMemento
+		this.from = root.viewportTransform.createMemento
 		this.to = calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle)
 		cycleDuration = 500.millis
 	}
@@ -47,7 +54,7 @@ class ViewportTransition extends Transition {
 	}
 	
 	override protected interpolate(double frac) {
-		root.diagramTransform => [
+		root.viewportTransform => [
 			rotate = (1-frac) * from.rotate + frac * to.rotate
 			scale = (1-frac) * from.scale + frac * to.scale
 			translateX = (1-frac) * from.translateX + frac * to.translateX
@@ -57,15 +64,15 @@ class ViewportTransition extends Transition {
 	
 	def calculateTargetMemento(Point2D targetCenterInDiagram, double targetScale, double targetAngle) {
 		val toScale = max(ViewportTransform.MIN_SCALE, targetScale)
-		root.diagramTransform => [
+		root.viewportTransform => [
 			scaleRelative(toScale/from.scale)
 			rotate = targetAngle
 		]
 		val centerInScene = root.diagram.localToScene(targetCenterInDiagram)
 		val toTranslation = new Point2D(
-					0.5 * root.scene.width - centerInScene.x + root.diagramTransform.translateX,
-					0.5 * root.scene.height - centerInScene.y + root.diagramTransform.translateY)
-		root.diagramTransform.applyMemento(from)
+					0.5 * root.scene.width - centerInScene.x + root.viewportTransform.translateX,
+					0.5 * root.scene.height - centerInScene.y + root.viewportTransform.translateY)
+		root.viewportTransform.applyMemento(from)
 		return new ViewportMemento(toTranslation.x, toTranslation.y, toScale, targetAngle)
 	}
 	

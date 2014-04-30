@@ -162,7 +162,7 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
       double _divide_2 = (_min_1 / initialScale);
       double _max = Math.max(ViewportTransform.MIN_SCALE, _divide_2);
       XRoot _root_2 = this.params.getRoot();
-      ViewportTransform _diagramTransform = _root_2.getDiagramTransform();
+      ViewportTransform _diagramTransform = _root_2.getViewportTransform();
       double _scale = _diagramTransform.getScale();
       final double targetScale = (_max * _scale);
       ParallelTransition _parallelTransition = new ParallelTransition();

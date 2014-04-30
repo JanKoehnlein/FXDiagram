@@ -56,8 +56,8 @@ public class FirstRecursiveImageNode extends XNode {
     _scaleYProperty.bind(_scaleProperty_1);
     this.updateChildPanes();
     XDiagram _diagram = CoreExtensions.getDiagram(this);
-    ViewportTransform _canvasTransform = _diagram.getCanvasTransform();
-    ReadOnlyDoubleProperty _scaleProperty_2 = _canvasTransform.scaleProperty();
+    ViewportTransform _viewportTransform = _diagram.getViewportTransform();
+    ReadOnlyDoubleProperty _scaleProperty_2 = _viewportTransform.scaleProperty();
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         FirstRecursiveImageNode.this.updateChildPanes();

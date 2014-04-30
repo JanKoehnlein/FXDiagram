@@ -57,7 +57,7 @@ class XDiagram extends Group implements XActivatable {
 	
 	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
 	
-	ViewportTransform canvasTransform
+	ViewportTransform viewportTransform
 	
 	boolean needsCentering = true
 
@@ -77,15 +77,15 @@ class XDiagram extends Group implements XActivatable {
 			else 
 				nodeLayer.children -= connections
 		]
-		canvasTransform = new ViewportTransform
-		transforms.setAll(canvasTransform.transform)
+		viewportTransform = new ViewportTransform
+		transforms.setAll(viewportTransform.transform)
 		transforms.addListener([ListChangeListener.Change<Transform> change | 
 			throw new IllegalStateException("Illegal attempt to change the transforms of an XDiagram")
 		])
 	}
 	
-	def getCanvasTransform() {
-		canvasTransform
+	def getViewportTransform() {
+		viewportTransform
 	}
 	
 	override activate() {
@@ -141,13 +141,13 @@ class XDiagram extends Group implements XActivatable {
 	}
 	
 	def void centerDiagram(boolean useForce) {
-		if(needsCentering|| useForce) {
+		if(needsCentering || useForce) {
 			layout
 			if(layoutBounds.width * layoutBounds.height > 1) {
 				val scale = min(1, min(scene.width / layoutBounds.width, scene.height / layoutBounds.height))
-				canvasTransform.scale = scale
+				viewportTransform.scale = scale
 				val centerInScene = localToScene(boundsInLocal).center
-				canvasTransform.setTranslate(0.5 * scene.width - centerInScene.x, 0.5 * scene.height - centerInScene.y)
+				viewportTransform.setTranslate(0.5 * scene.width - centerInScene.x, 0.5 * scene.height - centerInScene.y)
 			}
 		}
 		needsCentering = false

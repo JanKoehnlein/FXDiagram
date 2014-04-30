@@ -24,8 +24,8 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
   
   public Animation getExecuteAnimation(final CommandContext context) {
     XRoot _root = context.getRoot();
-    ViewportTransform _diagramTransform = _root.getDiagramTransform();
-    ViewportMemento _createMemento = _diagramTransform.createMemento();
+    ViewportTransform _viewportTransform = _root.getViewportTransform();
+    ViewportMemento _createMemento = _viewportTransform.createMemento();
     this.fromMemento = _createMemento;
     final Animation animation = this.createExecuteAnimation(context);
     boolean _notEquals = (!Objects.equal(animation, null));
@@ -38,8 +38,8 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent it) {
               XRoot _root = context.getRoot();
-              ViewportTransform _diagramTransform = _root.getDiagramTransform();
-              ViewportMemento _createMemento = _diagramTransform.createMemento();
+              ViewportTransform _viewportTransform = _root.getViewportTransform();
+              ViewportMemento _createMemento = _viewportTransform.createMemento();
               AbstractAnimationCommand.this.toMemento = _createMemento;
             }
           };

@@ -8,9 +8,10 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.behavior.AbstractCloseBehavior
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
-import de.fxdiagram.core.command.AbstractAnimationCommand
+import de.fxdiagram.core.command.AnimationCommand
 import de.fxdiagram.core.command.CommandContext
 import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.core.viewport.ViewportMemento
 import de.fxdiagram.core.viewport.ViewportTransform
 import de.fxdiagram.core.viewport.ViewportTransition
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
@@ -19,6 +20,7 @@ import eu.hansolo.enzo.radialmenu.Symbol
 import eu.hansolo.enzo.radialmenu.SymbolCanvas
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
+import javafx.animation.SequentialTransition
 import javafx.geometry.BoundingBox
 import javafx.geometry.Insets
 import javafx.geometry.Point2D
@@ -52,6 +54,16 @@ class OpenableDiagramNode extends XNode {
 	RectangleBorderPane pane = new RectangleBorderPane
 	
 	Text textNode
+	 
+	double delayFactor = 0.1
+	
+	Point2D nodeCenterInDiagram
+	
+	DiagramScaler diagramScaler
+	
+	BoundingBox nodeBounds
+	
+	ViewportMemento viewportBeforeOpen
 	
 	new(String name) {
 		super(name)
@@ -96,172 +108,163 @@ class OpenableDiagramNode extends XNode {
 	
 	 def getPane() {
 		pane
-	}
+	} 
 
 	def getTextNode() {
 		textNode
 	}
 	
 	def openDiagram() {
-		root.commandStack.execute(OpenCloseDiagramCommand.newOpenCommand(this))
-	}
-}
-
-@Logging
-class OpenCloseDiagramCommand extends AbstractAnimationCommand {
-	
-	double delayFactor = 0.1
-	
-	boolean isOpenCommand
-	
-	extension OpenDiagramParameters params
-	
-	OpenableDiagramNode host
-	
-	static def newOpenCommand(OpenableDiagramNode node) {
-		new OpenCloseDiagramCommand(node)
-	}
-	
-	static def newCloseCommand(XRoot root, OpenDiagramParameters params) {
-		new OpenCloseDiagramCommand(params) 
-	}
-	
-	protected new(OpenDiagramParameters params) {
-		this.isOpenCommand = false
-		this.params = params
-		this.host = params.host
-	}
-	
-	protected new(OpenableDiagramNode host) {
-		this.isOpenCommand = true
-		this.host = host
-	}
-	
-	protected def calculateParams() {
-		val nodeBounds = host.layoutBounds - new Insets(5,5,5,5)
-		val nodeCenterInDiagram = host.localToRootDiagram(nodeBounds.center)
-		val diagramScaler = new DiagramScaler(host.innerDiagram) => [
-			width = nodeBounds.width
-			height = nodeBounds.height
-		]
-		new OpenDiagramParameters(host, host.root, diagramScaler, nodeCenterInDiagram)		
+		root.commandStack.execute(new OpenDiagramCommand(this))
 	}
 	
 	protected def openDiagram(Duration duration) {
-		params = calculateParams
-		host.innerDiagram.opacity = 0
-		host.pane.children.add(new Group => [
-			children += host.innerDiagram
+		viewportBeforeOpen = diagram.viewportTransform.createMemento
+		nodeBounds = layoutBounds - new Insets(5,5,5,5)
+		nodeCenterInDiagram = localToRootDiagram(nodeBounds.center)
+		diagramScaler = new DiagramScaler(innerDiagram) => [
+			width = nodeBounds.width
+			height = nodeBounds.height
+		]
+		innerDiagram.opacity = 0
+		pane.children.add(new Group => [
+			children += innerDiagram
 		])
-		host.innerDiagram.activate
-		val AbstractCloseBehavior closeBehavior = [| root.commandStack.execute(newCloseCommand(root, params)) ]
-		host.innerDiagram.addBehavior(closeBehavior)
-		host.innerDiagram.layout
+		innerDiagram.activate
+		val AbstractCloseBehavior closeBehavior = [| root.commandStack.execute(new CloseDiagramCommand(this)) ]
+		innerDiagram.addBehavior(closeBehavior)
+		innerDiagram.layout
 		diagramScaler.activate
-		val initialScale = host.innerDiagram.localToScene(new BoundingBox(0,0,1,0)).width
-		val diagramBoundsInLocal = host.innerDiagram.boundsInLocal
+		val initialScale = innerDiagram.localToScene(new BoundingBox(0,0,1,0)).width
+		val diagramBoundsInLocal = innerDiagram.boundsInLocal
 		val targetScale = max(ViewportTransform.MIN_SCALE, 
 			min(1, 
 				min(root.scene.width / diagramBoundsInLocal.width, 
-					root.scene.height / diagramBoundsInLocal.height)) / initialScale) * root.diagramTransform.scale
+					root.scene.height / diagramBoundsInLocal.height)) / initialScale) * root.viewportTransform.scale
 		new ParallelTransition => [
 			children += new ViewportTransition(root, nodeCenterInDiagram, targetScale) => [
 				it.duration = duration
 				onFinished = [
 					diagramScaler.deactivate
-					host.parentDiagram = root.diagram
-					host.pane.children.setAll(host.textNode)
+					parentDiagram = root.diagram
+					pane.children.setAll(textNode)
 					val toParentButton = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY) => [
 						onMouseClicked = [
 							root.headsUpDisplay.children -= target as Node
-							root.commandStack.execute(newCloseCommand(root, params))
+							root.commandStack.execute(new CloseDiagramCommand(this))
 						]
 						tooltip = "Parent diagram"
 						
 					]
-					host.innerDiagram.fixedButtons.put(toParentButton, Pos.TOP_RIGHT)
-					root.diagram = host.innerDiagram				
+					innerDiagram.fixedButtons.put(toParentButton, Pos.TOP_RIGHT)
+					root.diagram = innerDiagram				
 				]
 			]
 			children += new FadeTransition => [
 				it. duration = (1 - delayFactor) * duration  
 				fromValue = 1
 				toValue = 0
-				node = host.textNode
+				node = textNode
 			]
 			children += new FadeTransition => [
 				delay = delayFactor * duration 
 				it.duration = (1 - delayFactor) * duration
 				fromValue = 0
 				toValue = 1
-				node = host.innerDiagram
+				node = innerDiagram
 			]
 		]
 	}
 	
 	protected def closeDiagram(Duration duration) {
-		root.diagram = host.parentDiagram
-		host.pane.children += new Group => [
-			children += host.innerDiagram
-		]
-		host.innerDiagram.activate
-		host.innerDiagram.layout
-		diagramScaler.activate
-		new ParallelTransition => [
-			children += new ViewportTransition(root, nodeCenterInDiagram, 1) => [
-				it.duration = duration
-				onFinished = [
-					diagramScaler.deactivate
-					host.parentDiagram = root.diagram
-					host.pane.children.setAll(host.textNode)
-				]
-			]
+		val innerDiagramCenter = innerDiagram.nodes
+				.map[layoutBounds.translate(layoutX, layoutY)]
+				.reduce[b0, b1 | b0 + b1].center
+		val phaseOne = new ViewportTransition(root, innerDiagramCenter, 1)
+		val phaseTwo = new ParallelTransition => [
 			children += new FadeTransition => [
 				delay = delayFactor * duration
 				it.duration = (1 - delayFactor) * duration 
 				fromValue = 0
 				toValue = 1
-				node = host.textNode
+				node = textNode
 			]
 			children += new FadeTransition => [
 				it.duration = (1 - delayFactor) * duration
 				fromValue = 1
 				toValue = 0
-				node = host.innerDiagram
+				node = innerDiagram
 			]
 		]
+		new SequentialTransition => [
+			children += phaseOne => [
+				it.duration = duration * 0.3
+				onFinished = [
+					root.diagram = parentDiagram
+					pane.children += new Group => [
+						children += innerDiagram
+					]
+					diagramScaler.activate
+					phaseTwo.children.add(0, new ViewportTransition(root, viewportBeforeOpen, duration) => [
+						onFinished = [
+							diagramScaler.deactivate
+							parentDiagram = root.diagram
+							pane.children.setAll(textNode)
+						]
+					])
+				]
+			]
+			children += phaseTwo
+		]
 	}
-	
-	override createExecuteAnimation(CommandContext context) {
-		if(isOpenCommand)
-			openDiagram(context.defaultExecuteDuration)
-		else 
-			closeDiagram(context.defaultExecuteDuration)
-	}
-	
-	override createUndoAnimation(CommandContext context) {
-		if(isOpenCommand)
-			closeDiagram(context.defaultUndoDuration)
-		else 
-			openDiagram(context.defaultUndoDuration)
-	}
-	
-	override createRedoAnimation(CommandContext context) {
-		if(isOpenCommand)
-			openDiagram(context.defaultUndoDuration)
-		else 
-			closeDiagram(context.defaultUndoDuration)
-	}
+}
 
-	protected def isDiagramOpen() {
-		root.diagram == host.innerDiagram
+class OpenDiagramCommand implements AnimationCommand {
+	
+	OpenableDiagramNode host
+	
+	new(OpenableDiagramNode host) {
+		this.host = host
+	}
+	
+	override getExecuteAnimation(CommandContext context) {
+		host.openDiagram(context.defaultExecuteDuration)
+	}
+	
+	override getUndoAnimation(CommandContext context) {
+		host.closeDiagram(context.defaultUndoDuration)
+	}
+	
+	override getRedoAnimation(CommandContext context) {
+		host.openDiagram(context.defaultUndoDuration)
+	}
+	
+	override clearRedoStackOnExecute() {
+		true
 	}
 } 
 
-@Data 
-class OpenDiagramParameters {
+class CloseDiagramCommand implements AnimationCommand {
+	
 	OpenableDiagramNode host
-	XRoot root
-	DiagramScaler diagramScaler
-	Point2D nodeCenterInDiagram
-}
+	
+	new(OpenableDiagramNode host) {
+		this.host = host
+	}
+	
+	override getExecuteAnimation(CommandContext context) {
+		host.closeDiagram(context.defaultExecuteDuration)
+	}
+	
+	override getUndoAnimation(CommandContext context) {
+		host.openDiagram(context.defaultUndoDuration)
+	}
+	
+	override getRedoAnimation(CommandContext context) {
+		host.closeDiagram(context.defaultUndoDuration)
+	}
+
+	override clearRedoStackOnExecute() {
+		true
+	}
+} 

@@ -93,8 +93,8 @@ class XRoot extends Parent implements XActivatable {
 		diagramCanvas
 	}
 	
-	def getDiagramTransform() {
-		diagram.canvasTransform
+	def getViewportTransform() {
+		diagram.viewportTransform
 	}
 	
 	override activate() {		

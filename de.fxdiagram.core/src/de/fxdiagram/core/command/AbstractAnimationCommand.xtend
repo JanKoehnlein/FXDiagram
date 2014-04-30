@@ -11,13 +11,13 @@ abstract class AbstractAnimationCommand implements AnimationCommand {
 	ViewportMemento toMemento
 
 	override getExecuteAnimation(CommandContext context) {
-		fromMemento = context.root.diagramTransform.createMemento
+		fromMemento = context.root.viewportTransform.createMemento
 		val animation = createExecuteAnimation(context)
 		if(animation != null) {
 			return new SequentialTransition => [
 				children += animation
 				onFinished = [
-					toMemento = context.root.diagramTransform.createMemento
+					toMemento = context.root.viewportTransform.createMemento
 				]
 			]
 		} else {

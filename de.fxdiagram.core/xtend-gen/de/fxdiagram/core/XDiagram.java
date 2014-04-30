@@ -67,7 +67,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
   
-  private ViewportTransform canvasTransform;
+  private ViewportTransform viewportTransform;
   
   private boolean needsCentering = true;
   
@@ -103,9 +103,9 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     };
     this.isRootDiagramProperty.addListener(_function_1);
     ViewportTransform _viewportTransform = new ViewportTransform();
-    this.canvasTransform = _viewportTransform;
+    this.viewportTransform = _viewportTransform;
     ObservableList<Transform> _transforms = this.getTransforms();
-    Transform _transform = this.canvasTransform.getTransform();
+    Transform _transform = this.viewportTransform.getTransform();
     _transforms.setAll(_transform);
     ObservableList<Transform> _transforms_1 = this.getTransforms();
     final ListChangeListener<Transform> _function_2 = new ListChangeListener<Transform>() {
@@ -116,8 +116,8 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     _transforms_1.addListener(_function_2);
   }
   
-  public ViewportTransform getCanvasTransform() {
-    return this.canvasTransform;
+  public ViewportTransform getViewportTransform() {
+    return this.viewportTransform;
   }
   
   public void activate() {
@@ -286,7 +286,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
         double _divide_1 = (_height_1 / _height_2);
         double _min = Math.min(_divide, _divide_1);
         final double scale = Math.min(1, _min);
-        this.canvasTransform.setScale(scale);
+        this.viewportTransform.setScale(scale);
         Bounds _boundsInLocal = this.getBoundsInLocal();
         Bounds _localToScene = this.localToScene(_boundsInLocal);
         final Point2D centerInScene = BoundsExtensions.center(_localToScene);
@@ -300,7 +300,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
         double _multiply_2 = (0.5 * _height_3);
         double _y = centerInScene.getY();
         double _minus_1 = (_multiply_2 - _y);
-        this.canvasTransform.setTranslate(_minus, _minus_1);
+        this.viewportTransform.setTranslate(_minus, _minus_1);
       }
     }
     this.needsCentering = false;

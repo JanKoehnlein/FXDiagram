@@ -119,8 +119,8 @@ public class LevelOfDetailDiagramNode extends XNode {
       LevelOfDetailDiagramNode.LOG.severe(_plus_1);
     } else {
       XDiagram _diagram = CoreExtensions.getDiagram(this);
-      ViewportTransform _canvasTransform = _diagram.getCanvasTransform();
-      ReadOnlyDoubleProperty _scaleProperty = _canvasTransform.scaleProperty();
+      ViewportTransform _viewportTransform = _diagram.getViewportTransform();
+      ReadOnlyDoubleProperty _scaleProperty = _viewportTransform.scaleProperty();
       final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
         public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
           Bounds _boundsInLocal = LevelOfDetailDiagramNode.this.getBoundsInLocal();
