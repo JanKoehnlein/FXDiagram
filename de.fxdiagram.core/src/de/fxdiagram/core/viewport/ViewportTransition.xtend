@@ -38,7 +38,7 @@ class ViewportTransition extends Transition {
 		this.root = root
 		this.from = root.viewportTransform.createMemento
 		this.to = calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle)
-		cycleDuration = 500.millis
+		cycleDuration = (1000 / from.dist(to)).seconds
 	}
 	
 	def setDuration(Duration duration) {

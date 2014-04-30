@@ -11,8 +11,11 @@ class ViewportMemento {
 	double rotate
 	
 	def double dist(ViewportMemento other) {
-		norm(translateX - other.translateX, translateY - other.translateY) 
-			+ 10 * abs((scale - other.scale)/scale) + 10 * abs(rotate - other.rotate)
+		val delta = norm(translateX - other.translateX, translateY - other.translateY)
+		val deltaScale = 500 * log(max(scale, other.scale) / min(scale, other.scale))
+		val deltaAngle =  7 * abs(rotate - other.rotate)
+		println(delta + " " + deltaScale + " " + deltaAngle)
+		delta + deltaScale + deltaAngle
 	}
 	
 }

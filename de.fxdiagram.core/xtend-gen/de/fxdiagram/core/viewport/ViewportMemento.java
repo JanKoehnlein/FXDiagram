@@ -2,6 +2,7 @@ package de.fxdiagram.core.viewport;
 
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
@@ -32,27 +33,37 @@ public class ViewportMemento {
   }
   
   public double dist(final ViewportMemento other) {
-    double _translateX = this.getTranslateX();
-    double _translateX_1 = other.getTranslateX();
-    double _minus = (_translateX - _translateX_1);
-    double _translateY = this.getTranslateY();
-    double _translateY_1 = other.getTranslateY();
-    double _minus_1 = (_translateY - _translateY_1);
-    double _norm = Point2DExtensions.norm(_minus, _minus_1);
-    double _scale = this.getScale();
-    double _scale_1 = other.getScale();
-    double _minus_2 = (_scale - _scale_1);
-    double _scale_2 = this.getScale();
-    double _divide = (_minus_2 / _scale_2);
-    double _abs = Math.abs(_divide);
-    double _multiply = (10 * _abs);
-    double _plus = (_norm + _multiply);
-    double _rotate = this.getRotate();
-    double _rotate_1 = other.getRotate();
-    double _minus_3 = (_rotate - _rotate_1);
-    double _abs_1 = Math.abs(_minus_3);
-    double _multiply_1 = (10 * _abs_1);
-    return (_plus + _multiply_1);
+    double _xblockexpression = (double) 0;
+    {
+      double _translateX = this.getTranslateX();
+      double _translateX_1 = other.getTranslateX();
+      double _minus = (_translateX - _translateX_1);
+      double _translateY = this.getTranslateY();
+      double _translateY_1 = other.getTranslateY();
+      double _minus_1 = (_translateY - _translateY_1);
+      final double delta = Point2DExtensions.norm(_minus, _minus_1);
+      double _scale = this.getScale();
+      double _scale_1 = other.getScale();
+      double _max = Math.max(_scale, _scale_1);
+      double _scale_2 = this.getScale();
+      double _scale_3 = other.getScale();
+      double _min = Math.min(_scale_2, _scale_3);
+      double _divide = (_max / _min);
+      double _log = Math.log(_divide);
+      final double deltaScale = (500 * _log);
+      double _rotate = this.getRotate();
+      double _rotate_1 = other.getRotate();
+      double _minus_2 = (_rotate - _rotate_1);
+      double _abs = Math.abs(_minus_2);
+      final double deltaAngle = (7 * _abs);
+      String _plus = (Double.valueOf(delta) + " ");
+      String _plus_1 = (_plus + Double.valueOf(deltaScale));
+      String _plus_2 = (_plus_1 + " ");
+      String _plus_3 = (_plus_2 + Double.valueOf(deltaAngle));
+      InputOutput.<String>println(_plus_3);
+      _xblockexpression = ((delta + deltaScale) + deltaAngle);
+    }
+    return _xblockexpression;
   }
   
   public ViewportMemento(final double translateX, final double translateY, final double scale, final double rotate) {

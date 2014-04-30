@@ -56,8 +56,10 @@ public class ViewportTransition extends Transition {
     this.from = _createMemento;
     ViewportMemento _calculateTargetMemento = this.calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle);
     this.to = _calculateTargetMemento;
-    Duration _millis = Duration.millis(500);
-    this.setCycleDuration(_millis);
+    double _dist = this.from.dist(this.to);
+    double _divide = (1000 / _dist);
+    Duration _seconds = Duration.seconds(_divide);
+    this.setCycleDuration(_seconds);
   }
   
   public void setDuration(final Duration duration) {
