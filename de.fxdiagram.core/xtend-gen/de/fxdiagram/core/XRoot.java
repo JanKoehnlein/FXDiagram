@@ -12,7 +12,6 @@ import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.DomainObjectProviderWithState;
-import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
@@ -292,10 +291,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       }
     };
     IterableExtensions.<DomainObjectProvider>forEach(newDomainObjectProviders, _function);
-  }
-  
-  public Model getModel() {
-    return new Model(this);
   }
   
   public CommandStack getCommandStack() {

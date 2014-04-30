@@ -17,7 +17,7 @@ public class ModelPersistenceTest {
     _builder.append("{");
     _builder.newLine();
     _builder.append("\t");
-    _builder.append("\"class\":\"de.fxdiagram.core.model.TestBean\",");
+    _builder.append("\"__class\":\"de.fxdiagram.core.model.TestBean\",");
     _builder.newLine();
     _builder.append("\t");
     _builder.append("\"testEnum\":\"BAR\"");

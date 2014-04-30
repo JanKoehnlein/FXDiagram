@@ -13,7 +13,7 @@ class ModelPersistenceTest {
 	def void testReadEnum() {
 		val object = new ModelLoad().load(new StringReader('''
 					{
-						"class":"de.fxdiagram.core.model.TestBean",
+						"__class":"de.fxdiagram.core.model.TestBean",
 						"testEnum":"BAR"
 					}
 				'''))

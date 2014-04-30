@@ -1,6 +1,5 @@
 TODO
 - persistence: 
-  - review ModelElement
   - revise image cache
   - XDiagram needs a hook like createNode
     
@@ -47,5 +46,7 @@ DONE
 - menu icons for save / load / undo / redo / delete
 - domainModel abstraction
 - container node to big when closing a zoomed subdiagram
+- persistence: 
+  - review ModelElement
 
   

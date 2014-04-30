@@ -166,10 +166,6 @@ class XRoot extends Parent implements XActivatable {
 		]
 	}
 	
-	def Model getModel() {
-		new Model(this)
-	}
-	
 	def getCommandStack() {
 		commandStack
 	}
