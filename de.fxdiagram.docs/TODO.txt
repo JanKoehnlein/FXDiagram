@@ -1,5 +1,4 @@
 TODO
-- container node to big when closing a zoomed subdiagram
 - persistence: 
   - review ModelElement
   - revise image cache
@@ -47,5 +46,6 @@ DONE
 - undo layout
 - menu icons for save / load / undo / redo / delete
 - domainModel abstraction
+- container node to big when closing a zoomed subdiagram
 
   

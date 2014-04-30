@@ -2,7 +2,6 @@ package de.fxdiagram.core.viewport;
 
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import org.eclipse.xtend.lib.Data;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
@@ -56,11 +55,6 @@ public class ViewportMemento {
       double _minus_2 = (_rotate - _rotate_1);
       double _abs = Math.abs(_minus_2);
       final double deltaAngle = (7 * _abs);
-      String _plus = (Double.valueOf(delta) + " ");
-      String _plus_1 = (_plus + Double.valueOf(deltaScale));
-      String _plus_2 = (_plus_1 + " ");
-      String _plus_3 = (_plus_2 + Double.valueOf(deltaAngle));
-      InputOutput.<String>println(_plus_3);
       _xblockexpression = ((delta + deltaScale) + deltaAngle);
     }
     return _xblockexpression;

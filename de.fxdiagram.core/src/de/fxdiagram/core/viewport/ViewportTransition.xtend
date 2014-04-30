@@ -16,18 +16,11 @@ class ViewportTransition extends Transition {
 	ViewportMemento from
 	ViewportMemento to
 	
-	new(XRoot root, ViewportMemento toMemento, Duration duration) {
+	new(XRoot root, ViewportMemento toMemento, Duration maxDuration) {
 		this.root = root
 		this.from = root.viewportTransform.createMemento
 		this.to = toMemento
-		cycleDuration = new Duration(min(duration.toMillis, from.dist(to)))
-	}
-
-	new(XRoot root, ViewportMemento fromMemento, ViewportMemento toMemento, Duration duration) {
-		this.root = root
-		this.from = root.viewportTransform.createMemento
-		this.to = toMemento
-		cycleDuration = new Duration(min(duration.toMillis, from.dist(to)))
+		cycleDuration = new Duration(min(maxDuration.toMillis, defaultDuration.toMillis))
 	}
 
 	new(XRoot root, Point2D targetCenterInDiagram, double targetScale) {
@@ -38,7 +31,11 @@ class ViewportTransition extends Transition {
 		this.root = root
 		this.from = root.viewportTransform.createMemento
 		this.to = calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle)
-		cycleDuration = (1000 / from.dist(to)).seconds
+		cycleDuration = defaultDuration
+	}
+	
+	def getDefaultDuration() {
+		(1000 / from.dist(to)).seconds
 	}
 	
 	def setDuration(Duration duration) {

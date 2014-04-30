@@ -19,28 +19,16 @@ public class ViewportTransition extends Transition {
   
   private ViewportMemento to;
   
-  public ViewportTransition(final XRoot root, final ViewportMemento toMemento, final Duration duration) {
+  public ViewportTransition(final XRoot root, final ViewportMemento toMemento, final Duration maxDuration) {
     this.root = root;
     ViewportTransform _viewportTransform = root.getViewportTransform();
     ViewportMemento _createMemento = _viewportTransform.createMemento();
     this.from = _createMemento;
     this.to = toMemento;
-    double _millis = duration.toMillis();
-    double _dist = this.from.dist(this.to);
-    double _min = Math.min(_millis, _dist);
-    Duration _duration = new Duration(_min);
-    this.setCycleDuration(_duration);
-  }
-  
-  public ViewportTransition(final XRoot root, final ViewportMemento fromMemento, final ViewportMemento toMemento, final Duration duration) {
-    this.root = root;
-    ViewportTransform _viewportTransform = root.getViewportTransform();
-    ViewportMemento _createMemento = _viewportTransform.createMemento();
-    this.from = _createMemento;
-    this.to = toMemento;
-    double _millis = duration.toMillis();
-    double _dist = this.from.dist(this.to);
-    double _min = Math.min(_millis, _dist);
+    double _millis = maxDuration.toMillis();
+    Duration _defaultDuration = this.getDefaultDuration();
+    double _millis_1 = _defaultDuration.toMillis();
+    double _min = Math.min(_millis, _millis_1);
     Duration _duration = new Duration(_min);
     this.setCycleDuration(_duration);
   }
@@ -56,10 +44,14 @@ public class ViewportTransition extends Transition {
     this.from = _createMemento;
     ViewportMemento _calculateTargetMemento = this.calculateTargetMemento(targetCenterInDiagram, targetScale, targetAngle);
     this.to = _calculateTargetMemento;
+    Duration _defaultDuration = this.getDefaultDuration();
+    this.setCycleDuration(_defaultDuration);
+  }
+  
+  public Duration getDefaultDuration() {
     double _dist = this.from.dist(this.to);
     double _divide = (1000 / _dist);
-    Duration _seconds = Duration.seconds(_divide);
-    this.setCycleDuration(_seconds);
+    return Duration.seconds(_divide);
   }
   
   public void setDuration(final Duration duration) {

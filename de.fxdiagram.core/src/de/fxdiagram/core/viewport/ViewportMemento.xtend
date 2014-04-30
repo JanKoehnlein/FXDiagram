@@ -14,8 +14,6 @@ class ViewportMemento {
 		val delta = norm(translateX - other.translateX, translateY - other.translateY)
 		val deltaScale = 500 * log(max(scale, other.scale) / min(scale, other.scale))
 		val deltaAngle =  7 * abs(rotate - other.rotate)
-		println(delta + " " + deltaScale + " " + deltaAngle)
 		delta + deltaScale + deltaAngle
 	}
-	
 }
