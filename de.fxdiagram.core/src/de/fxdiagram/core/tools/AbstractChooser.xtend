@@ -1,7 +1,6 @@
 package de.fxdiagram.core.tools
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
@@ -35,7 +34,7 @@ import de.fxdiagram.core.XShape
 
 abstract class AbstractChooser implements XDiagramTool {
 
-	@FxProperty @ReadOnly boolean isActive = false
+	@FxProperty(readOnly) boolean isActive = false
 
 	@FxProperty Label filterLabel
 

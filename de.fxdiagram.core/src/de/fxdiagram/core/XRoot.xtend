@@ -3,7 +3,6 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.command.CommandStack
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.core.model.DomainObjectProviderWithState
@@ -34,11 +33,11 @@ import static extension de.fxdiagram.core.css.JavaToCss.*
 @ModelNode(#['domainObjectProviders', 'rootDiagram', 'diagram'])
 class XRoot extends Parent implements XActivatable {
 	
-	@FxProperty @ReadOnly boolean isActive
+	@FxProperty(readOnly) boolean isActive
 
-	@FxProperty @ReadOnly XDiagram rootDiagram
+	@FxProperty(readOnly) XDiagram rootDiagram
 
-	@FxProperty @ReadOnly XDiagram diagram
+	@FxProperty(readOnly) XDiagram diagram
 
 	@FxProperty ObservableList<DomainObjectProvider> domainObjectProviders = FXCollections.observableArrayList
 	

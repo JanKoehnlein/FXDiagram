@@ -2,7 +2,6 @@ package de.fxdiagram.core.services
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import org.eclipse.core.runtime.FileLocator
 import org.eclipse.core.runtime.Platform
@@ -71,8 +70,8 @@ class ClassLoaderProvider implements DomainObjectProviderWithState {
 @ModelNode(#['classLoaderID', 'provider'])
 class ClassLoaderDescriptor implements DomainObjectDescriptor {
 	
-	@FxProperty @ReadOnly String classLoaderID
-	@FxProperty @ReadOnly ClassLoaderProvider provider
+	@FxProperty(readOnly) String classLoaderID
+	@FxProperty(readOnly) ClassLoaderProvider provider
 	
 	new(String classLoaderID, ClassLoaderProvider provider) {
 		classLoaderIDProperty.set(classLoaderID)
@@ -99,9 +98,9 @@ class ClassLoaderDescriptor implements DomainObjectDescriptor {
 @ModelNode(#['name', 'absolutePath'])
 class ResourceDescriptor extends ClassLoaderDescriptor {
 
-	@FxProperty @ReadOnly String absolutePath
+	@FxProperty(readOnly) String absolutePath
 	
-	@FxProperty @ReadOnly String name
+	@FxProperty(readOnly) String name
 	
 	new(String classLoaderID, String relativePath, String name, ClassLoaderProvider provider) {
 		super(classLoaderID, provider)

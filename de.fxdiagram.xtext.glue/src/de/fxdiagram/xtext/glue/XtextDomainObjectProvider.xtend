@@ -2,7 +2,6 @@ package de.fxdiagram.xtext.glue
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping
@@ -56,11 +55,11 @@ class MappedEObjectHandle<MODEL extends EObject> {
 @ModelNode(#['provider', 'uri', 'fqn', 'mappingConfigID', 'mappingID'])
 class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
-	@FxProperty @ReadOnly XtextDomainObjectProvider provider
-	@FxProperty @ReadOnly String fqn
-	@FxProperty @ReadOnly String uri
-	@FxProperty @ReadOnly String mappingConfigID
-	@FxProperty @ReadOnly String mappingID
+	@FxProperty(readOnly) XtextDomainObjectProvider provider
+	@FxProperty(readOnly) String fqn
+	@FxProperty(readOnly) String uri
+	@FxProperty(readOnly) String mappingConfigID
+	@FxProperty(readOnly) String mappingID
 	AbstractMapping<ECLASS> mapping
 
 	new(String uri, String fqn, String mappingConfigID, String mappingID, XtextDomainObjectProvider provider) {

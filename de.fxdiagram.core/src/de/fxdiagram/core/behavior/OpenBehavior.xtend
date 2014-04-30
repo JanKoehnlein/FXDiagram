@@ -1,7 +1,6 @@
 package de.fxdiagram.core.behavior
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
 
 interface OpenBehavior extends Behavior {
 	def void open()
@@ -9,7 +8,7 @@ interface OpenBehavior extends Behavior {
 
 abstract class AbstractOpenBehavior implements OpenBehavior {
 	
-	@FxProperty@ReadOnly boolean isActive
+	@FxProperty(readOnly) boolean isActive
 	
 	override activate() {
 		if(!isActive)

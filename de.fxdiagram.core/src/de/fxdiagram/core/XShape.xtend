@@ -1,7 +1,6 @@
 package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.behavior.Behavior
 import de.fxdiagram.core.extensions.InitializingMapListener
 import javafx.beans.property.ObjectProperty
@@ -24,7 +23,7 @@ abstract class XShape extends Parent implements XActivatable {
 
 	@FxProperty boolean selected
 	
-	@FxProperty@ReadOnly boolean isActive
+	@FxProperty(readOnly) boolean isActive
 	
 	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
 	

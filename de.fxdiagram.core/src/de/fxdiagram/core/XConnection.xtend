@@ -3,7 +3,6 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
 import de.fxdiagram.core.anchors.TriangleArrowHead
@@ -36,18 +35,18 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 @ModelNode(#['domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead'])
 class XConnection extends XShape {
 	
-	@FxProperty @ReadOnly XNode source
-	@FxProperty @ReadOnly XNode target
+	@FxProperty(readOnly) XNode source
+	@FxProperty(readOnly) XNode target
 	@FxProperty ObservableList<XConnectionLabel> labels = observableArrayList
 	@FxProperty ArrowHead sourceArrowHead
 	@FxProperty ArrowHead targetArrowHead
 	@FxProperty XConnectionKind kind = POLYLINE
-	@FxProperty @ReadOnly ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
+	@FxProperty(readOnly) ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
 	
 	@FxProperty double strokeWidth = 2.0
 	@FxProperty Paint stroke
 
-	@FxProperty @ReadOnly DomainObjectDescriptor domainObject
+	@FxProperty(readOnly) DomainObjectDescriptor domainObject
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group

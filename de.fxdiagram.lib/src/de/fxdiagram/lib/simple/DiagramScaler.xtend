@@ -12,13 +12,12 @@ import javafx.scene.shape.Rectangle
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
-import de.fxdiagram.annotations.properties.ReadOnly
 
 class DiagramScaler implements XActivatable {
 
 	@FxProperty double width = 80
 	@FxProperty double height = 60
-	@FxProperty@ReadOnly boolean isActive
+	@FxProperty(readOnly) boolean isActive
 
 	ChangeListener<Bounds> boundsInLocalListener
 	ChangeListener<Number> layoutListener

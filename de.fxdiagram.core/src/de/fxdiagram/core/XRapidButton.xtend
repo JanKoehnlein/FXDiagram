@@ -1,7 +1,6 @@
 package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline
@@ -24,7 +23,7 @@ import javafx.scene.Node
 
 class XRapidButton extends Parent implements XActivatable {
 	
-	@FxProperty@ReadOnly boolean isActive
+	@FxProperty(readOnly) boolean isActive
 	
 	XNode host
 	

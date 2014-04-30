@@ -3,7 +3,6 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
@@ -19,12 +18,12 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
 @Logging
-@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height']) 
+@ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])  
 class XNode extends XShape {
 
 	@FxProperty double width
 	@FxProperty double height
-	@FxProperty @ReadOnly DomainObjectDescriptor domainObject
+	@FxProperty(readOnly) DomainObjectDescriptor domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	

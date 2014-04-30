@@ -2,7 +2,6 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
 import de.fxdiagram.core.behavior.Behavior
@@ -39,9 +38,9 @@ class XDiagram extends Group implements XActivatable {
 
 	@FxProperty ObservableMap<Node, Pos> fixedButtons = observableMap(newHashMap)
 
-	@FxProperty @ReadOnly boolean isActive
-	@FxProperty @ReadOnly boolean isPreviewActive
-	@FxProperty @ReadOnly boolean isRootDiagram
+	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly) boolean isPreviewActive
+	@FxProperty(readOnly) boolean isRootDiagram
 
 	@FxProperty Paint backgroundPaint = Color.WHITE
 	@FxProperty Paint foregroundPaint = Color.BLACK
@@ -50,7 +49,7 @@ class XDiagram extends Group implements XActivatable {
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
 	
-	@FxProperty @ReadOnly XDiagram parentDiagram
+	@FxProperty(readOnly) XDiagram parentDiagram
 
 	(XDiagram)=>void contentsInitializer
 

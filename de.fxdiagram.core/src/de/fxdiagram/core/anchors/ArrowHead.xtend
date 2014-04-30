@@ -2,7 +2,6 @@ package de.fxdiagram.core.anchors
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XConnection
 import javafx.geometry.Point2D
 import javafx.scene.Node
@@ -24,7 +23,7 @@ abstract class ArrowHead extends Parent {
 	
 	@FxProperty boolean isSource
 	
-	@FxProperty @ReadOnly boolean isPreviewActive
+	@FxProperty(readOnly) boolean isPreviewActive
 	
 	def void activatePreview() {
 		if(!isPreviewActive) {

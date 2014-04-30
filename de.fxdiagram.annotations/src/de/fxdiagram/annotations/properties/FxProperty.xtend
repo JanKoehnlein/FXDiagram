@@ -40,8 +40,6 @@ import org.eclipse.xtend.lib.macro.TransformationContext
 import org.eclipse.xtend.lib.macro.TransformationParticipant
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration
 import org.eclipse.xtend.lib.macro.declaration.MutableFieldDeclaration
-import org.eclipse.xtend.lib.macro.declaration.Type
-import org.eclipse.xtend.lib.macro.declaration.TypeDeclaration
 import org.eclipse.xtend.lib.macro.declaration.TypeReference
 import org.eclipse.xtend.lib.macro.declaration.Visibility
 
@@ -61,40 +59,31 @@ import org.eclipse.xtend.lib.macro.declaration.Visibility
 @Active(FxPropertyCompilationParticipant)
 @Target(ElementType.FIELD)
 annotation FxProperty {
+	val readOnly = false
 }
 
 class FxPropertyCompilationParticipant implements TransformationParticipant<MutableFieldDeclaration> {
 
 	override doTransform(List<? extends MutableFieldDeclaration> fields, extension TransformationContext context) {
-		val fxImmutableAnnotation = Immutable.findTypeGlobally
-		val dataAnnotation = Data.findTypeGlobally
-		val fxReadonlyAnnotation = ReadOnly.findTypeGlobally
-		val fxLazyAnnotation = Lazy.findTypeGlobally
-
+		val annotationType = findTypeGlobally(FxProperty)
 		for (f : fields) {
-			val readonly = f.readonly(fxReadonlyAnnotation)
-			val lazy = f.lazy(fxLazyAnnotation)
-			val immutableType = f.immutableType(fxImmutableAnnotation, dataAnnotation)
+			val annotation = f.findAnnotation(annotationType)
+			val isReadOnly = annotation.getValue('readOnly') != Boolean.FALSE
             val isList = f.type.type.qualifiedName == 'javafx.collections.ObservableList' 
 			val fieldName = f.simpleName
 			val fieldType = f.type
 			val propName = f.simpleName + 'Property'
-			val propType = f.type.toPropertyType(readonly, context)
-			val propTypeAPI = f.type.toPropertyType_API(readonly, context)
+			val propType = f.type.toPropertyType(isReadOnly, context)
+			val propTypeAPI = f.type.toPropertyType_API(isReadOnly, context)
 
 			val clazz = f.declaringType as MutableClassDeclaration
-			if (lazy) {
-				createLazyField(immutableType, f, clazz, propName, propType, fieldName, fieldType, readonly, isList,
+				createField(f, clazz, propName, propType, fieldName, fieldType, isReadOnly, isList,
 					propTypeAPI)
-			} else {
-				createNonLazyField(immutableType, f, clazz, propName, propType, fieldName, fieldType, readonly, isList,
-					propTypeAPI)
-			}
 		}
 	}
 
-	def createNonLazyField(boolean immutableType, MutableFieldDeclaration f, MutableClassDeclaration clazz,
-		String propName, TypeReference propType, String fieldName, TypeReference fieldType, boolean readonly,
+	def createField(MutableFieldDeclaration f, MutableClassDeclaration clazz,
+		String propName, TypeReference propType, String fieldName, TypeReference fieldType, boolean isReadOnly,
 		boolean isList, TypeReference propTypeAPI) {
 		if (f.initializer == null) {
 			clazz.addField(propName) [
@@ -124,7 +113,7 @@ class FxPropertyCompilationParticipant implements TransformationParticipant<Muta
 				''']
 		]
 
-		if (! readonly && !isList) {
+		if (!isReadOnly && !isList) {
 			clazz.addMethod('set' + fieldName.toFirstUpper) [
 				addParameter(fieldName, fieldType)
 				body = [
@@ -138,126 +127,11 @@ class FxPropertyCompilationParticipant implements TransformationParticipant<Muta
 			returnType = propTypeAPI
 			body = [
 				'''
-					return «IF readonly»this.«propName».getReadOnlyProperty()«ELSE»this.«propName»«ENDIF»;
+					return «IF isReadOnly»this.«propName».getReadOnlyProperty()«ELSE»this.«propName»«ENDIF»;
 				''']
 		]
 
 		f.remove
-	}
-
-	def createLazyField(boolean immutableType, MutableFieldDeclaration f, MutableClassDeclaration clazz, String propName,
-		TypeReference propType, String fieldName, TypeReference fieldType, boolean readonly, boolean isList,
-		TypeReference propTypeAPI) {
-		if (immutableType) {
-			if (f.initializer == null) {
-				clazz.addField("DEFAULT_" + f.simpleName.toUpperCase) [
-					type = f.type
-					initializer = [f.type.defaultValue]
-					final = true
-					static = true
-				]
-			} else {
-				clazz.addField("DEFAULT_" + f.simpleName.toUpperCase) [
-					type = f.type
-					initializer = f.initializer
-					final = true
-					static = true
-				]
-			}
-		}
-
-		// add the property field
-		clazz.addField(propName) [
-			type = propType
-		]
-
-		// add the getter
-		clazz.addMethod('get' + fieldName.toFirstUpper) [
-			returnType = fieldType
-			body = [
-				'''
-					return (this.«propName» != null)? this.«propName».get() : «IF immutableType»DEFAULT_«fieldName.toUpperCase»«ELSE»this.«fieldName»«ENDIF»;
-				''']
-		]
-
-		if (! readonly && !isList) {
-
-			// add the setter
-			clazz.addMethod('set' + fieldName.toFirstUpper) [
-				addParameter(fieldName, fieldType)
-				body = [
-					'''
-						«IF immutableType»
-							this.«propName»().set(«fieldName»);
-						«ELSE»
-							if («propName» != null) {
-								this.«propName».set(«fieldName»);
-							} else {
-								this.«fieldName» = «fieldName»;
-							}
-						«ENDIF»
-					''']
-			]
-		}
-
-		// add the property accessor
-		clazz.addMethod(fieldName + 'Property') [
-			returnType = propTypeAPI
-			body = [
-				'''
-					if (this.«propName» == null) { 
-						this.«propName» = new «toJavaCode(propType)»(this, "«fieldName»", «IF immutableType»DEFAULT_«fieldName.toUpperCase»«ELSE»this.«fieldName»«ENDIF»);
-					}
-					return «IF readonly»this.«propName».getReadOnlyProperty()«ELSE»this.«propName»«ENDIF»;
-				''']
-		]
-
-		// remove the property if it is immutable
-		if (immutableType) {
-			f.remove
-		}
-	}
-
-	def boolean readonly(MutableFieldDeclaration field, Type readonlyAnnotation) {
-		return field.findAnnotation(readonlyAnnotation) != null
-	}
-
-	def boolean lazy(MutableFieldDeclaration field, Type noneLazyAnnotation) {
-		return field.findAnnotation(noneLazyAnnotation) != null;
-	}
-
-	def boolean immutableType(MutableFieldDeclaration field, Type fxImmutableAnnotation, Type dataAnnotation) {
-
-		/*
-		 * we could be more clever here e.g. java.lang.Integer is also immutable 
-		 * and maybe support custom types who are annotated with @Immutable
-		 */
-		switch field.type.toString {
-			case 'boolean':
-				true
-			case 'double':
-				true
-			case 'float':
-				true
-			case 'long':
-				true
-			case 'String':
-				true
-			case 'int':
-				true
-			case 'javafx.collections.ObservableList':
-				false
-			default:
-				if (field.findAnnotation(fxImmutableAnnotation) != null) {
-					return true;
-				} else if (field.type.type instanceof TypeDeclaration) {
-					val t = field.type.type as TypeDeclaration
-					val rv = t.findAnnotation(fxImmutableAnnotation) != null || t.findAnnotation(dataAnnotation) != null;
-					return rv;
-				} else {
-					return false;
-				}
-		}
 	}
 
 	def String defaultValue(TypeReference ref) {
@@ -271,8 +145,8 @@ class FxPropertyCompilationParticipant implements TransformationParticipant<Muta
 		}
 	}
 	
-	def TypeReference toPropertyType_API(TypeReference ref, boolean readonly, extension TransformationContext context) {
-		if (readonly) {
+	def TypeReference toPropertyType_API(TypeReference ref, boolean isReadOnly, extension TransformationContext context) {
+		if (isReadOnly) {
 			switch ref.type.qualifiedName {
 				case 'boolean': ReadOnlyBooleanProperty.newTypeReference
 				case 'double': ReadOnlyDoubleProperty.newTypeReference
@@ -298,8 +172,8 @@ class FxPropertyCompilationParticipant implements TransformationParticipant<Muta
 		}
 	}
 
-	def TypeReference toPropertyType(TypeReference ref, boolean readonly, extension TransformationContext context) {
-		if (readonly) {
+	def TypeReference toPropertyType(TypeReference ref, boolean isReadOnly, extension TransformationContext context) {
+		if (isReadOnly) {
 			switch ref.type.qualifiedName {
 				case 'boolean': ReadOnlyBooleanWrapper.newTypeReference
 				case 'double': ReadOnlyDoubleWrapper.newTypeReference

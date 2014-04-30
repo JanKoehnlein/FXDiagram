@@ -2,7 +2,6 @@ package de.fxdiagram.core.anchors
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.XActivatable
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
@@ -22,7 +21,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 @Logging
 class ConnectionRouter implements XActivatable {
 	
-	@FxProperty@ReadOnly boolean isActive
+	@FxProperty(readOnly) boolean isActive
 		
 	XConnection connection
 

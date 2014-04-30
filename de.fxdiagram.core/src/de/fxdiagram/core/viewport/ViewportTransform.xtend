@@ -1,7 +1,6 @@
 package de.fxdiagram.core.viewport
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.extensions.TransformExtensions
 import javafx.beans.property.Property
 import javafx.geometry.Point2D
@@ -26,10 +25,10 @@ class ViewportTransform {
 
 	public static val MIN_SCALE = EPSILON
 
-	@FxProperty @ReadOnly double scale = 1
-	@FxProperty @ReadOnly double rotate = 0
-	@FxProperty @ReadOnly double translateX
-	@FxProperty @ReadOnly double translateY
+	@FxProperty(readOnly) double scale = 1
+	@FxProperty(readOnly) double rotate = 0
+	@FxProperty(readOnly) double translateX
+	@FxProperty(readOnly) double translateY
 
 	Affine transform
 

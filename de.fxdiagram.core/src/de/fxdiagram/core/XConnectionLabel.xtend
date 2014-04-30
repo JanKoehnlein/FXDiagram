@@ -2,7 +2,6 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.behavior.MoveBehavior
 import java.util.List
 import javafx.geometry.VPos
@@ -18,7 +17,7 @@ import static extension java.lang.Math.*
 @ModelNode(#['connection', 'text'])
 class XConnectionLabel extends XShape {
 
-	@FxProperty@ReadOnly XConnection connection
+	@FxProperty(readOnly) XConnection connection
 	@FxProperty Text text = new Text
 	@FxProperty double position = 0.5
 

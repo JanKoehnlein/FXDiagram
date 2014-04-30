@@ -1,7 +1,6 @@
 package de.fxdiagram.core.behavior
 
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ReadOnly
 
 
 interface CloseBehavior extends Behavior {
@@ -10,7 +9,7 @@ interface CloseBehavior extends Behavior {
 
 abstract class AbstractCloseBehavior implements CloseBehavior {
 	
-	@FxProperty@ReadOnly boolean isActive
+	@FxProperty(readOnly) boolean isActive
 	
 	override getBehaviorKey() {
 		CloseBehavior
