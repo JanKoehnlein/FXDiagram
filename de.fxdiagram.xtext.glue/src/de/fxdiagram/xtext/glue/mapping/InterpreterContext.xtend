@@ -3,38 +3,42 @@ package de.fxdiagram.xtext.glue.mapping
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.model.DomainObjectDescriptor
+import java.util.List
 
 class InterpreterContext {
 
 	XDiagram diagram
 
-	int numAddedShapes 
-
-	new(XDiagram diagram) {
+	List<XNode> addedNodes = newArrayList
+	List<XConnection> addedConnections = newArrayList
+	
+	def setDiagram(XDiagram diagram) {
 		this.diagram = diagram
 	}
 
 	def addNode(XNode node) {
-		diagram.nodes += node
-		node.layout
-		numAddedShapes = numAddedShapes + 1
+		addedNodes += node
 	}
 
 	def addConnection(XConnection connection) {
-		diagram.connections += connection
-		numAddedShapes = numAddedShapes + 1
+		addedConnections += connection
 	}
 
 	def <T> getConnection(DomainObjectDescriptor descriptor) {
-		diagram.connections.findFirst[domainObject == descriptor]
+		(addedConnections + diagram.connections).findFirst[domainObject == descriptor]
 	}
 
 	def <T> getNode(DomainObjectDescriptor descriptor) {
-		diagram.nodes.findFirst[domainObject == descriptor]
+		(addedNodes + diagram.nodes).findFirst[domainObject == descriptor]
 	}
 	
 	def boolean needsLayout() {
-		numAddedShapes > 1		
+		addedNodes.size + addedConnections.size  > 1		
+	}
+	
+	def getCommand() {
+		AddRemoveCommand.newAddCommand(diagram, addedNodes + addedConnections)
 	}
 }

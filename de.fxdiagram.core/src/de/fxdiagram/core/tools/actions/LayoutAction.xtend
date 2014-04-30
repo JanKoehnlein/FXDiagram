@@ -26,7 +26,8 @@ class LayoutAction implements DiagramAction {
 	}
 
 	override perform(XRoot root) {
-		new Layouter().layout(layoutType, root.diagram, 1000.millis)
+		val layoutCommand = new Layouter().createLayoutCommand(layoutType, root.diagram, 1000.millis)
+		root.commandStack.execute(layoutCommand)
 	}
 	
 }

@@ -12,11 +12,11 @@ class XDiagramConfigInterpreter {
 		this.domainObjectProvider = domainObjectProvider
 	}
 
-	def <T> createDiagram(T diagramObject, DiagramMapping<T> diagramMapping) {
+	def <T> createDiagram(T diagramObject, DiagramMapping<T> diagramMapping, InterpreterContext context) {
 		if (!diagramMapping.isApplicable(diagramObject))
 			return null
 		val diagram = diagramMapping.createDiagram.apply(diagramObject.getDescriptor(diagramMapping))
-		val context = new InterpreterContext(diagram)
+		context.diagram = diagram
 		diagramMapping.nodes.forEach[execute(diagramObject, context)]
 		diagramMapping.connections.forEach[execute(diagramObject, [], context)]
 		diagram

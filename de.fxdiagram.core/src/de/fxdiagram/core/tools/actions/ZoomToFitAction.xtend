@@ -24,7 +24,7 @@ class ZoomToFitAction implements DiagramAction {
 	}
 
 	override perform(XRoot root) {
-		root.commandStack.execute(new ViewportCommand [|
+		val ViewportCommand command = [
 			val elements = 
 				if(root.currentSelection.empty) 
 			  		root.diagram.nodes + root.diagram.connections
@@ -39,6 +39,7 @@ class ZoomToFitAction implements DiagramAction {
 			} else {
 				null
 			}
-		])
+		]
+		root.commandStack.execute(command)
 	}
 }

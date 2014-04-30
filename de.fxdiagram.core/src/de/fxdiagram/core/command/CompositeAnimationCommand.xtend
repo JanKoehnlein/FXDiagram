@@ -5,36 +5,27 @@ import javafx.animation.ParallelTransition
 
 class CompositeAnimationCommand extends AbstractAnimationCommand {
 
-	List<AbstractAnimationCommand> commands = newArrayList
+	List<AnimationCommand> commands = newArrayList
 
-	def operator_add(AbstractAnimationCommand command) {
+	def operator_add(AnimationCommand command) {
 		this.commands += command
 	} 
 
 	override createExecuteAnimation(CommandContext context) {
 		new ParallelTransition => [
-			children += commands.map[createExecuteAnimation(context)].filterNull
+			children += commands.map[getExecuteAnimation(context)].filterNull
 		]
 	}
 
 	override createUndoAnimation(CommandContext context) {
 		new ParallelTransition => [
-			children += commands.map[createUndoAnimation(context)].filterNull
+			children += commands.map[getUndoAnimation(context)].filterNull
 		]
 	}
 	
 	override createRedoAnimation(CommandContext context) {
 		new ParallelTransition => [
-			children += commands.map[createRedoAnimation(context)].filterNull
+			children += commands.map[getRedoAnimation(context)].filterNull
 		]
 	}
-	
-	override canUndo() {
-		commands.forall[canUndo]
-	}
-	
-	override canRedo() {
-		commands.forall[canRedo]
-	}
-	
 }

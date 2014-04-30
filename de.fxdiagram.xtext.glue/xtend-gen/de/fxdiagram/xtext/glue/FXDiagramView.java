@@ -7,7 +7,14 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.command.AddRemoveCommand;
+import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.command.LazyCommand;
+import de.fxdiagram.core.command.SelectAndRevealCommand;
+import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.layout.LayoutType;
+import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.services.ClassLoaderProvider;
@@ -42,6 +49,7 @@ import javafx.collections.ObservableList;
 import javafx.embed.swt.FXCanvas;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.util.Duration;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -56,7 +64,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.model.IXtextModelListener;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -139,51 +147,62 @@ public class FXDiagramView extends ViewPart {
   }
   
   public <T extends EObject> void revealElement(final T element, final AbstractMapping<T> mapping, final XtextEditor editor) {
+    final InterpreterContext interpreterContext = new InterpreterContext();
     if ((mapping instanceof DiagramMapping<?>)) {
       this.register(editor);
       boolean _remove = this.changedEditors.remove(editor);
       if (_remove) {
-        XDiagram _createDiagram = this.configInterpreter.<T>createDiagram(element, ((DiagramMapping<T>) mapping));
+        XDiagram _createDiagram = this.configInterpreter.<T>createDiagram(element, ((DiagramMapping<T>) mapping), interpreterContext);
         this.root.setDiagram(_createDiagram);
-        LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
-        _layoutAction.perform(this.root);
       }
     } else {
       if ((mapping instanceof NodeMapping<?>)) {
         this.register(editor);
         XDiagram _diagram = this.root.getDiagram();
-        final InterpreterContext transformationContext = new InterpreterContext(_diagram);
-        this.configInterpreter.<T>createNode(element, ((NodeMapping<T>) mapping), transformationContext);
-        boolean _needsLayout = transformationContext.needsLayout();
-        if (_needsLayout) {
-          LayoutAction _layoutAction_1 = new LayoutAction(LayoutType.DOT);
-          _layoutAction_1.perform(this.root);
-        }
+        interpreterContext.setDiagram(_diagram);
+        this.configInterpreter.<T>createNode(element, ((NodeMapping<T>) mapping), interpreterContext);
       }
     }
+    CommandStack _commandStack = this.root.getCommandStack();
+    AddRemoveCommand _command = interpreterContext.getCommand();
+    _commandStack.execute(_command);
+    boolean _needsLayout = interpreterContext.needsLayout();
+    if (_needsLayout) {
+      CommandStack _commandStack_1 = this.root.getCommandStack();
+      Layouter _layouter = new Layouter();
+      XDiagram _diagram_1 = this.root.getDiagram();
+      Duration _millis = DurationExtensions.millis(300);
+      LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_1, _millis);
+      _commandStack_1.execute(_createLayoutCommand);
+    }
     final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, mapping);
-    XDiagram _diagram_1 = this.root.getDiagram();
-    ObservableList<XNode> _nodes = _diagram_1.getNodes();
-    final Procedure1<XNode> _function = new Procedure1<XNode>() {
-      public void apply(final XNode it) {
-        DomainObjectDescriptor _domainObject = it.getDomainObject();
-        boolean _equals = Objects.equal(_domainObject, descriptor);
-        it.setSelected(_equals);
+    CommandStack _commandStack_2 = this.root.getCommandStack();
+    final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
+      public Boolean apply(final XShape it) {
+        boolean _switchResult = false;
+        boolean _matched = false;
+        if (!_matched) {
+          if (it instanceof XNode) {
+            _matched=true;
+            DomainObjectDescriptor _domainObject = ((XNode)it).getDomainObject();
+            _switchResult = Objects.equal(_domainObject, descriptor);
+          }
+        }
+        if (!_matched) {
+          if (it instanceof XConnection) {
+            _matched=true;
+            DomainObjectDescriptor _domainObject = ((XConnection)it).getDomainObject();
+            _switchResult = Objects.equal(_domainObject, descriptor);
+          }
+        }
+        if (!_matched) {
+          _switchResult = false;
+        }
+        return Boolean.valueOf(_switchResult);
       }
     };
-    IterableExtensions.<XNode>forEach(_nodes, _function);
-    XDiagram _diagram_2 = this.root.getDiagram();
-    ObservableList<XConnection> _connections = _diagram_2.getConnections();
-    final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
-      public void apply(final XConnection it) {
-        DomainObjectDescriptor _domainObject = it.getDomainObject();
-        boolean _equals = Objects.equal(_domainObject, descriptor);
-        it.setSelected(_equals);
-      }
-    };
-    IterableExtensions.<XConnection>forEach(_connections, _function_1);
-    CenterAction _centerAction = new CenterAction();
-    _centerAction.perform(this.root);
+    SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function);
+    _commandStack_2.execute(_selectAndRevealCommand);
   }
   
   public void register(final XtextEditor editor) {

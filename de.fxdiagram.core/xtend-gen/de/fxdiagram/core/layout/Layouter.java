@@ -25,12 +25,11 @@ import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CompositeAnimationCommand;
+import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.MoveCommand;
-import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.layout.ConnectionMorphCommand;
 import de.fxdiagram.core.layout.LayoutType;
 import java.util.HashMap;
@@ -64,20 +63,24 @@ public class Layouter {
     _layoutProvider.dispose();
   }
   
-  public void layout(final LayoutType type, final XDiagram diagram, final Duration duration) {
-    final HashMap<Object,KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
-    final KNode kRoot = this.toKRootNode(diagram, cache);
-    final AbstractLayoutProvider provider = this.getLayoutProvider(type);
-    try {
-      BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
-      provider.doLayout(kRoot, _basicProgressMonitor);
-      XRoot _root = CoreExtensions.getRoot(diagram);
-      CommandStack _commandStack = _root.getCommandStack();
-      CompositeAnimationCommand _createCommand = this.createCommand(cache, duration);
-      _commandStack.execute(_createCommand);
-    } finally {
-      provider.dispose();
-    }
+  public LazyCommand createLayoutCommand(final LayoutType type, final XDiagram diagram, final Duration duration) {
+    final LazyCommand _function = new LazyCommand() {
+      @Override
+      protected AbstractAnimationCommand createDelegate() {
+        final HashMap<Object,KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
+        diagram.layout();
+        final KNode kRoot = Layouter.this.toKRootNode(diagram, cache);
+        final AbstractLayoutProvider provider = Layouter.this.getLayoutProvider(type);
+        try {
+          BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
+          provider.doLayout(kRoot, _basicProgressMonitor);
+          return Layouter.this.composeCommand(cache, duration);
+        } finally {
+          provider.dispose();
+        }
+      }
+    };
+    return _function;
   }
   
   protected AbstractLayoutProvider getLayoutProvider(final LayoutType type) {
@@ -91,7 +94,7 @@ public class Layouter {
     return ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
   }
   
-  protected CompositeAnimationCommand createCommand(final Map<Object,KGraphElement> map, final Duration duration) {
+  protected CompositeAnimationCommand composeCommand(final Map<Object,KGraphElement> map, final Duration duration) {
     final CompositeAnimationCommand composite = new CompositeAnimationCommand();
     Set<Map.Entry<Object,KGraphElement>> _entrySet = map.entrySet();
     for (final Map.Entry<Object,KGraphElement> entry : _entrySet) {

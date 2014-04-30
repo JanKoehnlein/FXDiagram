@@ -54,13 +54,14 @@ class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> implement
 	}
 
 	protected def reveal(XShape node) {
-		node.root.commandStack.execute(new ViewportCommand [|
+		val ViewportCommand command = [
 			new ViewportTransition(host.root, node.localToDiagram(node.boundsInLocal.center), 1) => [
 				onFinished = [
 					host.root.currentSelection.forEach[selected = false]
 					node.selected = true
 				]
 			]
-		])
+		]
+		node.root.commandStack.execute(command)
 	}
 }

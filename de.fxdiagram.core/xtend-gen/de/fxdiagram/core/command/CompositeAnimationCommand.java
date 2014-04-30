@@ -2,6 +2,7 @@ package de.fxdiagram.core.command;
 
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
+import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import java.util.List;
 import javafx.animation.Animation;
@@ -16,9 +17,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class CompositeAnimationCommand extends AbstractAnimationCommand {
-  private List<AbstractAnimationCommand> commands = CollectionLiterals.<AbstractAnimationCommand>newArrayList();
+  private List<AnimationCommand> commands = CollectionLiterals.<AnimationCommand>newArrayList();
   
-  public boolean operator_add(final AbstractAnimationCommand command) {
+  public boolean operator_add(final AnimationCommand command) {
     return this.commands.add(command);
   }
   
@@ -27,12 +28,12 @@ public class CompositeAnimationCommand extends AbstractAnimationCommand {
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
-        final Function1<AbstractAnimationCommand,Animation> _function = new Function1<AbstractAnimationCommand,Animation>() {
-          public Animation apply(final AbstractAnimationCommand it) {
-            return it.createExecuteAnimation(context);
+        final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+          public Animation apply(final AnimationCommand it) {
+            return it.getExecuteAnimation(context);
           }
         };
-        List<Animation> _map = ListExtensions.<AbstractAnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
+        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
         Iterable<Animation> _filterNull = IterableExtensions.<Animation>filterNull(_map);
         Iterables.<Animation>addAll(_children, _filterNull);
       }
@@ -45,12 +46,12 @@ public class CompositeAnimationCommand extends AbstractAnimationCommand {
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
-        final Function1<AbstractAnimationCommand,Animation> _function = new Function1<AbstractAnimationCommand,Animation>() {
-          public Animation apply(final AbstractAnimationCommand it) {
-            return it.createUndoAnimation(context);
+        final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+          public Animation apply(final AnimationCommand it) {
+            return it.getUndoAnimation(context);
           }
         };
-        List<Animation> _map = ListExtensions.<AbstractAnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
+        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
         Iterable<Animation> _filterNull = IterableExtensions.<Animation>filterNull(_map);
         Iterables.<Animation>addAll(_children, _filterNull);
       }
@@ -63,34 +64,16 @@ public class CompositeAnimationCommand extends AbstractAnimationCommand {
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
-        final Function1<AbstractAnimationCommand,Animation> _function = new Function1<AbstractAnimationCommand,Animation>() {
-          public Animation apply(final AbstractAnimationCommand it) {
-            return it.createRedoAnimation(context);
+        final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+          public Animation apply(final AnimationCommand it) {
+            return it.getRedoAnimation(context);
           }
         };
-        List<Animation> _map = ListExtensions.<AbstractAnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
+        List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(CompositeAnimationCommand.this.commands, _function);
         Iterable<Animation> _filterNull = IterableExtensions.<Animation>filterNull(_map);
         Iterables.<Animation>addAll(_children, _filterNull);
       }
     };
     return ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
-  }
-  
-  public boolean canUndo() {
-    final Function1<AbstractAnimationCommand,Boolean> _function = new Function1<AbstractAnimationCommand,Boolean>() {
-      public Boolean apply(final AbstractAnimationCommand it) {
-        return Boolean.valueOf(it.canUndo());
-      }
-    };
-    return IterableExtensions.<AbstractAnimationCommand>forall(this.commands, _function);
-  }
-  
-  public boolean canRedo() {
-    final Function1<AbstractAnimationCommand,Boolean> _function = new Function1<AbstractAnimationCommand,Boolean>() {
-      public Boolean apply(final AbstractAnimationCommand it) {
-        return Boolean.valueOf(it.canRedo());
-      }
-    };
-    return IterableExtensions.<AbstractAnimationCommand>forall(this.commands, _function);
   }
 }

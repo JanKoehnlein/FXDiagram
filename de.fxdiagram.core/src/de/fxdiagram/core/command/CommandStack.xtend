@@ -1,12 +1,12 @@
 package de.fxdiagram.core.command
 
-import java.util.LinkedList
 import de.fxdiagram.core.XRoot
+import java.util.LinkedList
 
 class CommandStack {
 	
-	LinkedList<Command> undoStack = newLinkedList
-	LinkedList<Command> redoStack = newLinkedList
+	LinkedList<AnimationCommand> undoStack = newLinkedList
+	LinkedList<AnimationCommand> redoStack = newLinkedList
 
 	CommandContext context 
 	
@@ -15,17 +15,19 @@ class CommandStack {
 	}
 	
 	def boolean canUndo() {
-		return !undoStack.empty && undoStack.last?.canUndo
+		return !undoStack.empty 
 	}
 	
 	def boolean canRedo() {
-		return !redoStack.empty && redoStack.last?.canRedo
+		return !redoStack.empty 
 	}
 	
 	def void undo() {
 		if(canUndo) {
 			val command = undoStack.pop
-			command.undo(context)
+			context.animationQueue.enqueue[|
+				command.getUndoAnimation(context)
+			]
 			redoStack.push(command)
 		}
 	}
@@ -33,16 +35,22 @@ class CommandStack {
 	def void redo() {
 		if(canRedo) {
 			val command = redoStack.pop
-			command.redo(context)
+			context.animationQueue.enqueue[|
+				command.getRedoAnimation(context)
+			]
 			undoStack.push(command)
 		}
 	}
 	
-	def execute(Command command) {
-		command.execute(context)
+	def execute(AnimationCommand command) {
+		context.animationQueue.enqueue[| 
+			command.getExecuteAnimation(context)
+		]
 		undoStack.push(command)
+		if(command.clearRedoStackOnExecute)
+			redoStack.clear
 	}
-	
+
 	def getContext() {
 		context
 	}

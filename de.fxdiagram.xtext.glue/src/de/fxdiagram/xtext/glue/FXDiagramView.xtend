@@ -35,6 +35,11 @@ import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
+import de.fxdiagram.core.layout.Layouter
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.command.SelectAndRevealCommand
+import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XConnection
 
 class FXDiagramView extends ViewPart {
 
@@ -99,23 +104,28 @@ class FXDiagramView extends ViewPart {
 	}
 	
 	def <T extends EObject> void revealElement(T element, AbstractMapping<T> mapping, XtextEditor editor) {
+		val interpreterContext = new InterpreterContext
 		if(mapping instanceof DiagramMapping<?>) {
 			editor.register
 			if(changedEditors.remove(editor)) {
-				root.diagram = configInterpreter.createDiagram(element, mapping as DiagramMapping<T>)
-				new LayoutAction(LayoutType.DOT).perform(root)
+				root.diagram = configInterpreter.createDiagram(element, mapping as DiagramMapping<T>, interpreterContext)
 			} 
 		} else if(mapping instanceof NodeMapping<?>) {
 			editor.register
-			val transformationContext = new InterpreterContext(root.diagram)
-			configInterpreter.createNode(element, mapping as NodeMapping<T>, transformationContext)		
-			if(transformationContext.needsLayout)
-				new LayoutAction(LayoutType.DOT).perform(root)
+			interpreterContext.diagram = root.diagram
+			configInterpreter.createNode(element, mapping as NodeMapping<T>, interpreterContext)		
 		}
+		root.commandStack.execute(interpreterContext.command)
+		if(interpreterContext.needsLayout)
+			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 300.millis))
 		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
-		root.diagram.nodes.forEach[selected = domainObject == descriptor]
-		root.diagram.connections.forEach[selected = domainObject == descriptor]
-		new CenterAction().perform(root)
+		root.commandStack.execute(new SelectAndRevealCommand(root, [
+			switch it {
+				XNode: domainObject == descriptor
+				XConnection: domainObject == descriptor
+				default: false
+			}
+		]))
 	}
 	
 	def void register(XtextEditor editor) {

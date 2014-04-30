@@ -3,6 +3,8 @@ package de.fxdiagram.core.tools.actions;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.tools.actions.DiagramAction;
@@ -40,6 +42,8 @@ public class LayoutAction implements DiagramAction {
     Layouter _layouter = new Layouter();
     XDiagram _diagram = root.getDiagram();
     Duration _millis = Duration.millis(1000);
-    _layouter.layout(this.layoutType, _diagram, _millis);
+    final LazyCommand layoutCommand = _layouter.createLayoutCommand(this.layoutType, _diagram, _millis);
+    CommandStack _commandStack = root.getCommandStack();
+    _commandStack.execute(layoutCommand);
   }
 }

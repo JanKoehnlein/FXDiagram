@@ -3,45 +3,31 @@ package de.fxdiagram.core.command
 import de.fxdiagram.core.viewport.ViewportMemento
 import de.fxdiagram.core.viewport.ViewportTransition
 
-class ViewportCommand implements Command {
+abstract class ViewportCommand implements AnimationCommand {
 	
 	ViewportMemento fromMemento
 	ViewportMemento toMemento
 	
-	()=>ViewportTransition transitionFactory
-
-	new(()=>ViewportTransition transitionFactory) {
-		this.transitionFactory = transitionFactory
+	override clearRedoStackOnExecute() {
+		false
 	}
 	
-	override execute(CommandContext context) {
-		val transition = transitionFactory.apply()
+	abstract def ViewportTransition createViewportTransiton(CommandContext context)
+		
+	override getExecuteAnimation(CommandContext context) {
+		val transition = createViewportTransiton(context)
 		if(transition != null) {
 			fromMemento =  transition.from
 			toMemento =  transition.to
-			context.animationQueue.enqueue[|
-				transition
-			]
+			transition
 		}
 	}
 	
-	override canUndo() {
-		fromMemento != null
+	override getUndoAnimation(CommandContext context) {
+		new ViewportTransition(context.root, fromMemento, context.defaultUndoDuration)
 	}
 	
-	override undo(CommandContext context) {
-		context.animationQueue.enqueue[| 
-			new ViewportTransition(context.root, fromMemento, context.defaultUndoDuration)
-		]
-	}
-	
-	override canRedo() {
-		toMemento != null
-	}
-	
-	override redo(CommandContext context) {
-		context.animationQueue.enqueue[|
-			new ViewportTransition(context.root, toMemento, context.defaultUndoDuration)
-		]
+	override getRedoAnimation(CommandContext context) {
+		new ViewportTransition(context.root, toMemento, context.defaultUndoDuration)
 	}
 }

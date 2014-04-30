@@ -12,6 +12,7 @@ import de.fxdiagram.core.command.AbstractAnimationCommand
 import de.fxdiagram.core.command.CommandContext
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.viewport.ViewportTransform
+import de.fxdiagram.core.viewport.ViewportTransition
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import eu.hansolo.enzo.radialmenu.Symbol
@@ -37,7 +38,6 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import de.fxdiagram.core.viewport.ViewportTransition
 
 @Logging
 @ModelNode(#['innerDiagram'])
@@ -116,20 +116,28 @@ class OpenCloseDiagramCommand extends AbstractAnimationCommand {
 	
 	extension OpenDiagramParameters params
 	
+	OpenableDiagramNode host
+	
 	static def newOpenCommand(OpenableDiagramNode node) {
-		new OpenCloseDiagramCommand(true, node.calculateParams)
+		new OpenCloseDiagramCommand(node)
 	}
 	
 	static def newCloseCommand(XRoot root, OpenDiagramParameters params) {
-		new OpenCloseDiagramCommand(false, params) 
+		new OpenCloseDiagramCommand(params) 
 	}
 	
-	protected new(boolean isOpenCommand, OpenDiagramParameters params) {
-		this.isOpenCommand = isOpenCommand
+	protected new(OpenDiagramParameters params) {
+		this.isOpenCommand = false
 		this.params = params
+		this.host = params.host
 	}
 	
-	protected static def calculateParams(OpenableDiagramNode host) {
+	protected new(OpenableDiagramNode host) {
+		this.isOpenCommand = true
+		this.host = host
+	}
+	
+	protected def calculateParams() {
 		val nodeBounds = host.layoutBounds - new Insets(5,5,5,5)
 		val nodeCenterInDiagram = host.localToRootDiagram(nodeBounds.center)
 		val diagramScaler = new DiagramScaler(host.innerDiagram) => [
@@ -140,6 +148,7 @@ class OpenCloseDiagramCommand extends AbstractAnimationCommand {
 	}
 	
 	protected def openDiagram(Duration duration) {
+		params = calculateParams
 		host.innerDiagram.opacity = 0
 		host.pane.children.add(new Group => [
 			children += host.innerDiagram

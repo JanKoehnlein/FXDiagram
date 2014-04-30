@@ -38,7 +38,7 @@ public class XDiagramConfigInterpreter {
     this.domainObjectProvider = domainObjectProvider;
   }
   
-  public <T extends Object> XDiagram createDiagram(final T diagramObject, final DiagramMapping<T> diagramMapping) {
+  public <T extends Object> XDiagram createDiagram(final T diagramObject, final DiagramMapping<T> diagramMapping, final InterpreterContext context) {
     XDiagram _xblockexpression = null;
     {
       boolean _isApplicable = diagramMapping.isApplicable(diagramObject);
@@ -49,7 +49,7 @@ public class XDiagramConfigInterpreter {
       Function1<? super XtextDomainObjectDescriptor<T>,? extends XDiagram> _createDiagram = diagramMapping.getCreateDiagram();
       XtextDomainObjectDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
       final XDiagram diagram = _createDiagram.apply(_descriptor);
-      final InterpreterContext context = new InterpreterContext(diagram);
+      context.setDiagram(diagram);
       List<AbstractNodeMappingCall<?,T>> _nodes = diagramMapping.getNodes();
       final Procedure1<AbstractNodeMappingCall<?,T>> _function = new Procedure1<AbstractNodeMappingCall<?,T>>() {
         public void apply(final AbstractNodeMappingCall<?,T> it) {

@@ -23,8 +23,7 @@ import javafx.geometry.Point2D
 import javafx.util.Duration
 
 import static de.fxdiagram.core.XConnectionKind.*
-
-import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.command.LazyCommand
 
 class Layouter { 
 
@@ -37,37 +36,33 @@ class Layouter {
 		getLayoutProvider(LayoutType.DOT).dispose
 	}
 	
-	def layout(LayoutType type, XDiagram diagram, Duration duration) {
-		val cache = <Object, KGraphElement> newHashMap
-		val kRoot = diagram.toKRootNode(cache)
-		val provider = getLayoutProvider(type)
-		try {
-			provider.doLayout(kRoot, new BasicProgressMonitor())
-			diagram.root.commandStack.execute(createCommand(cache, duration))
-		} finally {
-			provider.dispose
-		}
+	def LazyCommand createLayoutCommand(LayoutType type, XDiagram diagram, Duration duration) {
+		[|
+			val cache = <Object, KGraphElement> newHashMap
+			diagram.layout
+			val kRoot = diagram.toKRootNode(cache)
+			val provider = getLayoutProvider(type)
+			try {
+				provider.doLayout(kRoot, new BasicProgressMonitor())
+				return composeCommand(cache, duration)
+			} finally {
+				provider.dispose
+			}
+		]
 	}
-
+	
 	protected def AbstractLayoutProvider getLayoutProvider(LayoutType type) {
 		new GraphvizLayoutProvider => [
 			initialize(type.toString)
 		]
 	}
 	
-	protected def createCommand(Map<Object,KGraphElement> map, Duration duration) {
+	protected def composeCommand(Map<Object,KGraphElement> map, Duration duration) {
 		val composite = new CompositeAnimationCommand
 		for(entry: map.entrySet) {
 			val xElement = entry.key
 			val kElement = entry.value
 			switch xElement { 
-//				XConnectionLabel: { 
-//					val shapeLayout = kElement.data.filter(KShapeLayout).head
-//					animations += createTransition(xElement,
-//						shapeLayout.xpos, shapeLayout.ypos, 
-//						LayoutTransitionStyle.CURVE_XFIRST, duration
-//					)
-//				}
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					composite += new MoveCommand(xElement, shapeLayout.xpos - xElement.layoutBounds.minX, shapeLayout.ypos - xElement.layoutBounds.minY)

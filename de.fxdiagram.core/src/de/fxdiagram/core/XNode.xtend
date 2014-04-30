@@ -2,8 +2,8 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.Lazy
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.annotations.properties.ReadOnly
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
@@ -17,7 +17,6 @@ import javafx.scene.effect.InnerShadow
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
-import de.fxdiagram.annotations.properties.ReadOnly
 
 @Logging
 @ModelNode(#['layoutX', 'layoutY', 'domainObject', 'width', 'height']) 

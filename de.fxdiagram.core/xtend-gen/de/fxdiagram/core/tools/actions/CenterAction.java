@@ -7,6 +7,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.ViewportCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
@@ -21,7 +22,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -46,9 +46,9 @@ public class CenterAction implements DiagramAction {
   }
   
   public void perform(final XRoot root) {
-    CommandStack _commandStack = root.getCommandStack();
-    final Function0<ViewportTransition> _function = new Function0<ViewportTransition>() {
-      public ViewportTransition apply() {
+    final ViewportCommand _function = new ViewportCommand() {
+      @Override
+      public ViewportTransition createViewportTransiton(final CommandContext it) {
         Iterable<XShape> _xifexpression = null;
         Iterable<XShape> _currentSelection = root.getCurrentSelection();
         boolean _isEmpty = IterableExtensions.isEmpty(_currentSelection);
@@ -110,7 +110,8 @@ public class CenterAction implements DiagramAction {
         }
       }
     };
-    ViewportCommand _viewportCommand = new ViewportCommand(_function);
-    _commandStack.execute(_viewportCommand);
+    final ViewportCommand command = _function;
+    CommandStack _commandStack = root.getCommandStack();
+    _commandStack.execute(command);
   }
 }

@@ -1,16 +1,19 @@
 package de.fxdiagram.core.command;
 
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.command.Command;
+import de.fxdiagram.core.command.AnimationCommand;
+import de.fxdiagram.core.command.AnimationQueue;
 import de.fxdiagram.core.command.CommandContext;
 import java.util.LinkedList;
+import javafx.animation.Animation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
 @SuppressWarnings("all")
 public class CommandStack {
-  private LinkedList<Command> undoStack = CollectionLiterals.<Command>newLinkedList();
+  private LinkedList<AnimationCommand> undoStack = CollectionLiterals.<AnimationCommand>newLinkedList();
   
-  private LinkedList<Command> redoStack = CollectionLiterals.<Command>newLinkedList();
+  private LinkedList<AnimationCommand> redoStack = CollectionLiterals.<AnimationCommand>newLinkedList();
   
   private CommandContext context;
   
@@ -20,44 +23,26 @@ public class CommandStack {
   }
   
   public boolean canUndo() {
-    boolean _and = false;
     boolean _isEmpty = this.undoStack.isEmpty();
-    boolean _not = (!_isEmpty);
-    if (!_not) {
-      _and = false;
-    } else {
-      Command _last = this.undoStack.getLast();
-      boolean _canUndo = false;
-      if (_last!=null) {
-        _canUndo=_last.canUndo();
-      }
-      _and = _canUndo;
-    }
-    return _and;
+    return (!_isEmpty);
   }
   
   public boolean canRedo() {
-    boolean _and = false;
     boolean _isEmpty = this.redoStack.isEmpty();
-    boolean _not = (!_isEmpty);
-    if (!_not) {
-      _and = false;
-    } else {
-      Command _last = this.redoStack.getLast();
-      boolean _canRedo = false;
-      if (_last!=null) {
-        _canRedo=_last.canRedo();
-      }
-      _and = _canRedo;
-    }
-    return _and;
+    return (!_isEmpty);
   }
   
   public void undo() {
     boolean _canUndo = this.canUndo();
     if (_canUndo) {
-      final Command command = this.undoStack.pop();
-      command.undo(this.context);
+      final AnimationCommand command = this.undoStack.pop();
+      AnimationQueue _animationQueue = this.context.getAnimationQueue();
+      final Function0<Animation> _function = new Function0<Animation>() {
+        public Animation apply() {
+          return command.getUndoAnimation(CommandStack.this.context);
+        }
+      };
+      _animationQueue.enqueue(_function);
       this.redoStack.push(command);
     }
   }
@@ -65,15 +50,31 @@ public class CommandStack {
   public void redo() {
     boolean _canRedo = this.canRedo();
     if (_canRedo) {
-      final Command command = this.redoStack.pop();
-      command.redo(this.context);
+      final AnimationCommand command = this.redoStack.pop();
+      AnimationQueue _animationQueue = this.context.getAnimationQueue();
+      final Function0<Animation> _function = new Function0<Animation>() {
+        public Animation apply() {
+          return command.getRedoAnimation(CommandStack.this.context);
+        }
+      };
+      _animationQueue.enqueue(_function);
       this.undoStack.push(command);
     }
   }
   
-  public void execute(final Command command) {
-    command.execute(this.context);
+  public void execute(final AnimationCommand command) {
+    AnimationQueue _animationQueue = this.context.getAnimationQueue();
+    final Function0<Animation> _function = new Function0<Animation>() {
+      public Animation apply() {
+        return command.getExecuteAnimation(CommandStack.this.context);
+      }
+    };
+    _animationQueue.enqueue(_function);
     this.undoStack.push(command);
+    boolean _clearRedoStackOnExecute = command.clearRedoStackOnExecute();
+    if (_clearRedoStackOnExecute) {
+      this.redoStack.clear();
+    }
   }
   
   public CommandContext getContext() {

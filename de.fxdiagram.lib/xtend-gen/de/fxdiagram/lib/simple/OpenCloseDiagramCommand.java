@@ -57,29 +57,37 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
   @Extension
   private OpenDiagramParameters params;
   
+  private OpenableDiagramNode host;
+  
   public static OpenCloseDiagramCommand newOpenCommand(final OpenableDiagramNode node) {
-    OpenDiagramParameters _calculateParams = OpenCloseDiagramCommand.calculateParams(node);
-    return new OpenCloseDiagramCommand(true, _calculateParams);
+    return new OpenCloseDiagramCommand(node);
   }
   
   public static OpenCloseDiagramCommand newCloseCommand(final XRoot root, final OpenDiagramParameters params) {
-    return new OpenCloseDiagramCommand(false, params);
+    return new OpenCloseDiagramCommand(params);
   }
   
-  protected OpenCloseDiagramCommand(final boolean isOpenCommand, final OpenDiagramParameters params) {
-    this.isOpenCommand = isOpenCommand;
+  protected OpenCloseDiagramCommand(final OpenDiagramParameters params) {
+    this.isOpenCommand = false;
     this.params = params;
+    OpenableDiagramNode _host = params.getHost();
+    this.host = _host;
   }
   
-  protected static OpenDiagramParameters calculateParams(final OpenableDiagramNode host) {
+  protected OpenCloseDiagramCommand(final OpenableDiagramNode host) {
+    this.isOpenCommand = true;
+    this.host = host;
+  }
+  
+  protected OpenDiagramParameters calculateParams() {
     OpenDiagramParameters _xblockexpression = null;
     {
-      Bounds _layoutBounds = host.getLayoutBounds();
+      Bounds _layoutBounds = this.host.getLayoutBounds();
       Insets _insets = new Insets(5, 5, 5, 5);
       final BoundingBox nodeBounds = BoundsExtensions.operator_minus(_layoutBounds, _insets);
       Point2D _center = BoundsExtensions.center(nodeBounds);
-      final Point2D nodeCenterInDiagram = CoreExtensions.localToRootDiagram(host, _center);
-      XDiagram _innerDiagram = host.getInnerDiagram();
+      final Point2D nodeCenterInDiagram = CoreExtensions.localToRootDiagram(this.host, _center);
+      XDiagram _innerDiagram = this.host.getInnerDiagram();
       DiagramScaler _diagramScaler = new DiagramScaler(_innerDiagram);
       final Procedure1<DiagramScaler> _function = new Procedure1<DiagramScaler>() {
         public void apply(final DiagramScaler it) {
@@ -90,8 +98,8 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
         }
       };
       final DiagramScaler diagramScaler = ObjectExtensions.<DiagramScaler>operator_doubleArrow(_diagramScaler, _function);
-      XRoot _root = CoreExtensions.getRoot(host);
-      _xblockexpression = new OpenDiagramParameters(host, _root, diagramScaler, nodeCenterInDiagram);
+      XRoot _root = CoreExtensions.getRoot(this.host);
+      _xblockexpression = new OpenDiagramParameters(this.host, _root, diagramScaler, nodeCenterInDiagram);
     }
     return _xblockexpression;
   }
@@ -99,25 +107,23 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
   protected ParallelTransition openDiagram(final Duration duration) {
     ParallelTransition _xblockexpression = null;
     {
-      OpenableDiagramNode _host = this.params.getHost();
-      XDiagram _innerDiagram = _host.getInnerDiagram();
+      OpenDiagramParameters _calculateParams = this.calculateParams();
+      this.params = _calculateParams;
+      XDiagram _innerDiagram = this.host.getInnerDiagram();
       _innerDiagram.setOpacity(0);
-      OpenableDiagramNode _host_1 = this.params.getHost();
-      RectangleBorderPane _pane = _host_1.getPane();
+      RectangleBorderPane _pane = this.host.getPane();
       ObservableList<Node> _children = _pane.getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
         public void apply(final Group it) {
           ObservableList<Node> _children = it.getChildren();
-          OpenableDiagramNode _host = OpenCloseDiagramCommand.this.params.getHost();
-          XDiagram _innerDiagram = _host.getInnerDiagram();
+          XDiagram _innerDiagram = OpenCloseDiagramCommand.this.host.getInnerDiagram();
           _children.add(_innerDiagram);
         }
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
       _children.add(_doubleArrow);
-      OpenableDiagramNode _host_2 = this.params.getHost();
-      XDiagram _innerDiagram_1 = _host_2.getInnerDiagram();
+      XDiagram _innerDiagram_1 = this.host.getInnerDiagram();
       _innerDiagram_1.activate();
       final AbstractCloseBehavior _function_1 = new AbstractCloseBehavior() {
         public void close() {
@@ -129,21 +135,17 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
         }
       };
       final AbstractCloseBehavior closeBehavior = _function_1;
-      OpenableDiagramNode _host_3 = this.params.getHost();
-      XDiagram _innerDiagram_2 = _host_3.getInnerDiagram();
+      XDiagram _innerDiagram_2 = this.host.getInnerDiagram();
       _innerDiagram_2.addBehavior(closeBehavior);
-      OpenableDiagramNode _host_4 = this.params.getHost();
-      XDiagram _innerDiagram_3 = _host_4.getInnerDiagram();
+      XDiagram _innerDiagram_3 = this.host.getInnerDiagram();
       _innerDiagram_3.layout();
       DiagramScaler _diagramScaler = this.params.getDiagramScaler();
       _diagramScaler.activate();
-      OpenableDiagramNode _host_5 = this.params.getHost();
-      XDiagram _innerDiagram_4 = _host_5.getInnerDiagram();
+      XDiagram _innerDiagram_4 = this.host.getInnerDiagram();
       BoundingBox _boundingBox = new BoundingBox(0, 0, 1, 0);
       Bounds _localToScene = _innerDiagram_4.localToScene(_boundingBox);
       final double initialScale = _localToScene.getWidth();
-      OpenableDiagramNode _host_6 = this.params.getHost();
-      XDiagram _innerDiagram_5 = _host_6.getInnerDiagram();
+      XDiagram _innerDiagram_5 = this.host.getInnerDiagram();
       final Bounds diagramBoundsInLocal = _innerDiagram_5.getBoundsInLocal();
       XRoot _root = this.params.getRoot();
       Scene _scene = _root.getScene();
@@ -177,15 +179,12 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
                 public void handle(final ActionEvent it) {
                   DiagramScaler _diagramScaler = OpenCloseDiagramCommand.this.params.getDiagramScaler();
                   _diagramScaler.deactivate();
-                  OpenableDiagramNode _host = OpenCloseDiagramCommand.this.params.getHost();
                   XRoot _root = OpenCloseDiagramCommand.this.params.getRoot();
                   XDiagram _diagram = _root.getDiagram();
-                  _host.setParentDiagram(_diagram);
-                  OpenableDiagramNode _host_1 = OpenCloseDiagramCommand.this.params.getHost();
-                  RectangleBorderPane _pane = _host_1.getPane();
+                  OpenCloseDiagramCommand.this.host.setParentDiagram(_diagram);
+                  RectangleBorderPane _pane = OpenCloseDiagramCommand.this.host.getPane();
                   ObservableList<Node> _children = _pane.getChildren();
-                  OpenableDiagramNode _host_2 = OpenCloseDiagramCommand.this.params.getHost();
-                  Text _textNode = _host_2.getTextNode();
+                  Text _textNode = OpenCloseDiagramCommand.this.host.getTextNode();
                   _children.setAll(_textNode);
                   Canvas _symbol = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY);
                   final Procedure1<Canvas> _function = new Procedure1<Canvas>() {
@@ -209,13 +208,11 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
                     }
                   };
                   final Canvas toParentButton = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);
-                  OpenableDiagramNode _host_3 = OpenCloseDiagramCommand.this.params.getHost();
-                  XDiagram _innerDiagram = _host_3.getInnerDiagram();
+                  XDiagram _innerDiagram = OpenCloseDiagramCommand.this.host.getInnerDiagram();
                   ObservableMap<Node,Pos> _fixedButtons = _innerDiagram.getFixedButtons();
                   _fixedButtons.put(toParentButton, Pos.TOP_RIGHT);
                   XRoot _root_1 = OpenCloseDiagramCommand.this.params.getRoot();
-                  OpenableDiagramNode _host_4 = OpenCloseDiagramCommand.this.params.getHost();
-                  XDiagram _innerDiagram_1 = _host_4.getInnerDiagram();
+                  XDiagram _innerDiagram_1 = OpenCloseDiagramCommand.this.host.getInnerDiagram();
                   _root_1.setDiagram(_innerDiagram_1);
                 }
               };
@@ -232,8 +229,7 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
               it.setDuration(_multiply);
               it.setFromValue(1);
               it.setToValue(0);
-              OpenableDiagramNode _host = OpenCloseDiagramCommand.this.params.getHost();
-              Text _textNode = _host.getTextNode();
+              Text _textNode = OpenCloseDiagramCommand.this.host.getTextNode();
               it.setNode(_textNode);
             }
           };
@@ -249,8 +245,7 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
               it.setDuration(_multiply_1);
               it.setFromValue(0);
               it.setToValue(1);
-              OpenableDiagramNode _host = OpenCloseDiagramCommand.this.params.getHost();
-              XDiagram _innerDiagram = _host.getInnerDiagram();
+              XDiagram _innerDiagram = OpenCloseDiagramCommand.this.host.getInnerDiagram();
               it.setNode(_innerDiagram);
             }
           };
@@ -267,28 +262,23 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
     ParallelTransition _xblockexpression = null;
     {
       XRoot _root = this.params.getRoot();
-      OpenableDiagramNode _host = this.params.getHost();
-      XDiagram _parentDiagram = _host.getParentDiagram();
+      XDiagram _parentDiagram = this.host.getParentDiagram();
       _root.setDiagram(_parentDiagram);
-      OpenableDiagramNode _host_1 = this.params.getHost();
-      RectangleBorderPane _pane = _host_1.getPane();
+      RectangleBorderPane _pane = this.host.getPane();
       ObservableList<Node> _children = _pane.getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
         public void apply(final Group it) {
           ObservableList<Node> _children = it.getChildren();
-          OpenableDiagramNode _host = OpenCloseDiagramCommand.this.params.getHost();
-          XDiagram _innerDiagram = _host.getInnerDiagram();
+          XDiagram _innerDiagram = OpenCloseDiagramCommand.this.host.getInnerDiagram();
           _children.add(_innerDiagram);
         }
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
       _children.add(_doubleArrow);
-      OpenableDiagramNode _host_2 = this.params.getHost();
-      XDiagram _innerDiagram = _host_2.getInnerDiagram();
+      XDiagram _innerDiagram = this.host.getInnerDiagram();
       _innerDiagram.activate();
-      OpenableDiagramNode _host_3 = this.params.getHost();
-      XDiagram _innerDiagram_1 = _host_3.getInnerDiagram();
+      XDiagram _innerDiagram_1 = this.host.getInnerDiagram();
       _innerDiagram_1.layout();
       DiagramScaler _diagramScaler = this.params.getDiagramScaler();
       _diagramScaler.activate();
@@ -306,15 +296,12 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
                 public void handle(final ActionEvent it) {
                   DiagramScaler _diagramScaler = OpenCloseDiagramCommand.this.params.getDiagramScaler();
                   _diagramScaler.deactivate();
-                  OpenableDiagramNode _host = OpenCloseDiagramCommand.this.params.getHost();
                   XRoot _root = OpenCloseDiagramCommand.this.params.getRoot();
                   XDiagram _diagram = _root.getDiagram();
-                  _host.setParentDiagram(_diagram);
-                  OpenableDiagramNode _host_1 = OpenCloseDiagramCommand.this.params.getHost();
-                  RectangleBorderPane _pane = _host_1.getPane();
+                  OpenCloseDiagramCommand.this.host.setParentDiagram(_diagram);
+                  RectangleBorderPane _pane = OpenCloseDiagramCommand.this.host.getPane();
                   ObservableList<Node> _children = _pane.getChildren();
-                  OpenableDiagramNode _host_2 = OpenCloseDiagramCommand.this.params.getHost();
-                  Text _textNode = _host_2.getTextNode();
+                  Text _textNode = OpenCloseDiagramCommand.this.host.getTextNode();
                   _children.setAll(_textNode);
                 }
               };
@@ -333,8 +320,7 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
               it.setDuration(_multiply_1);
               it.setFromValue(0);
               it.setToValue(1);
-              OpenableDiagramNode _host = OpenCloseDiagramCommand.this.params.getHost();
-              Text _textNode = _host.getTextNode();
+              Text _textNode = OpenCloseDiagramCommand.this.host.getTextNode();
               it.setNode(_textNode);
             }
           };
@@ -348,8 +334,7 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
               it.setDuration(_multiply);
               it.setFromValue(1);
               it.setToValue(0);
-              OpenableDiagramNode _host = OpenCloseDiagramCommand.this.params.getHost();
-              XDiagram _innerDiagram = _host.getInnerDiagram();
+              XDiagram _innerDiagram = OpenCloseDiagramCommand.this.host.getInnerDiagram();
               it.setNode(_innerDiagram);
             }
           };
@@ -401,8 +386,7 @@ public class OpenCloseDiagramCommand extends AbstractAnimationCommand {
   protected boolean isDiagramOpen() {
     XRoot _root = this.params.getRoot();
     XDiagram _diagram = _root.getDiagram();
-    OpenableDiagramNode _host = this.params.getHost();
-    XDiagram _innerDiagram = _host.getInnerDiagram();
+    XDiagram _innerDiagram = this.host.getInnerDiagram();
     return Objects.equal(_diagram, _innerDiagram);
   }
   
