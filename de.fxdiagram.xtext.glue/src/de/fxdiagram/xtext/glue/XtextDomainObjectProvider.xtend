@@ -71,7 +71,7 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 	}
 
 	override getName() {
-		getFqn
+		getFqn?.split('\\.')?.last
 	}
 
 	override getId() {

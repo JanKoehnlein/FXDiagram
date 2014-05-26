@@ -171,7 +171,7 @@ public class FXDiagramView extends ViewPart {
       CommandStack _commandStack_1 = this.root.getCommandStack();
       Layouter _layouter = new Layouter();
       XDiagram _diagram_1 = this.root.getDiagram();
-      Duration _millis = DurationExtensions.millis(200);
+      Duration _millis = DurationExtensions.millis(500);
       LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_1, _millis);
       _commandStack_1.execute(_createLayoutCommand);
     }

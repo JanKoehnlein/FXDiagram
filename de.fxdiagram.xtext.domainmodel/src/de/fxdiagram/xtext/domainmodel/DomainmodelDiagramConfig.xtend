@@ -7,19 +7,24 @@ import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
+import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode
 import javax.inject.Inject
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property
-import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 
 class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 	
-	@Inject extension IJvmModelAssociations
+	@Inject extension DomainModelUtil domainModelUtil
 	 
 	new() {
 		val packageDiagram = new DiagramMapping(PackageDeclaration)
-		val entityNode = new NodeMapping(Entity)
+		val packageNode = new NodeMapping('packageNode', PackageDeclaration) => [
+			createNode = [ descriptor | new BaseDiagramNode(descriptor) ]
+		]
+		val entityNode = new NodeMapping(Entity) => [ 
+			createNode = [ descriptor | new EntityNode(descriptor, domainModelUtil) ] 
+		]
 		val propertyConnection = new ConnectionMapping(Property) => [
 			createConnection = [ descriptor |
 				new XConnection(descriptor) => [
@@ -30,26 +35,40 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 				]
 			]
 		] 
+//		val superTypeConnection = new ConnectionMapping('superType', Entity) => [
+//			createConnection = [ descriptor |
+//				new XConnection(descriptor) => [
+//					targetArrowHead = new TriangleArrowHead(it, false)
+//				]
+//			]
+//		] 
 		addMapping(packageDiagram => [
 			nodeForEach(entityNode, [elements.filter(Entity)])
+			nodeForEach(packageNode, [elements.filter(PackageDeclaration)])
 		])
 		addMapping(entityNode => [
 			outConnectionForEach(propertyConnection, [
 				features
 					.filter(Property)
-					.filter[referencedEntity != null]
+					.filter[type.referencedEntity != null]
 				]).makeLazy
+//			outConnectionForEach(superTypeConnection, [
+//				val superEntity = superType?.referencedEntity
+//				if(superEntity == null) 
+//					emptyList 
+//				else 
+//					#[superEntity] 
+//			]).makeLazy
+		])
+		addMapping(packageNode => [
+			nestedDiagramFor(packageDiagram, [ it ])
 		])
 		addMapping(propertyConnection => [
-			target(entityNode, [referencedEntity])
+			target(entityNode, [type.referencedEntity])
 		])
+//		addMapping(superTypeConnection => [
+//			target(entityNode, [superType.referencedEntity])
+//		])
 	}
 	
-	def getReferencedEntity(Property it) {
-		val sourceType = type.type.primarySourceElement
-		if(sourceType instanceof Entity) 
-			return sourceType
-		else 
-			null
-	}
 }

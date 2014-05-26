@@ -14,7 +14,7 @@ import javafx.scene.text.Text
 @ModelNode
 class SimpleNode extends XNode {
 
-	Text label
+	protected Text label
 	
 	new(DomainObjectDescriptor domainObject) {
 		super(domainObject)

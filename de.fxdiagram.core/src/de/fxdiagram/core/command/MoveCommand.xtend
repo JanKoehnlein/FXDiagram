@@ -34,7 +34,7 @@ class MoveCommand extends AbstractAnimationCommand {
 	}
 	
 	override createExecuteAnimation(CommandContext context) {
-		createMoveTransition(fromX, fromY, toX, toY, context.defaultExecuteDuration)
+		createMoveTransition(fromX, fromY, toX, toY, context.executeDuration)
 	}
 	
 	override createUndoAnimation(CommandContext context) {

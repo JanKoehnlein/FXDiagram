@@ -37,3 +37,8 @@ class MultiNodeMappingCall<T, ARG> extends AbstractNodeMappingCall<T, ARG> {
 	NodeMapping<T> nodeMapping	
 }
 
+@Data
+class DiagramMappingCall<T, ARG> {
+	(ARG)=>T selector
+	DiagramMapping<T> diagramMapping
+}

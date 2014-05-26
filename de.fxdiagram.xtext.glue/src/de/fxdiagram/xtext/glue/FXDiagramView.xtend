@@ -1,8 +1,12 @@
 package de.fxdiagram.xtext.glue
 
+import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.layout.LayoutType
+import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.services.ClassLoaderProvider
 import de.fxdiagram.core.tools.actions.CenterAction
 import de.fxdiagram.core.tools.actions.DeleteAction
@@ -35,12 +39,8 @@ import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
-import de.fxdiagram.core.layout.Layouter
+
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.core.command.SelectAndRevealCommand
-import de.fxdiagram.core.XNode
-import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.command.SequentialAnimationCommand
 
 class FXDiagramView extends ViewPart {
 
@@ -131,7 +131,7 @@ class FXDiagramView extends ViewPart {
 //		root.commandStack.execute(command)
 		root.commandStack.execute(interpreterContext.command)
 		if(interpreterContext.needsLayout)
-			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 200.millis))
+			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis))
 		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
 		root.commandStack.execute(new SelectAndRevealCommand(root, [
 			switch it {

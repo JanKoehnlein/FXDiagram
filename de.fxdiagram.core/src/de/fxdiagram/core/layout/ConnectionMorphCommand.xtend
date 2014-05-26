@@ -36,7 +36,7 @@ class ConnectionMorphCommand extends AbstractAnimationCommand {
 	override createExecuteAnimation(CommandContext context) {
 		this.fromKind = connection.kind
 		this.fromPoints = newArrayList(connection.controlPoints.map[new Point2D(layoutX, layoutY)])
-		createMorphTransition(fromPoints, toKind, toPoints, context.defaultExecuteDuration)
+		createMorphTransition(fromPoints, toKind, toPoints, context.executeDuration)
 	}
 
 	override createUndoAnimation(CommandContext context) {

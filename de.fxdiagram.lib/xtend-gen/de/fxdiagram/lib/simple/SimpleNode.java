@@ -20,7 +20,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode
 @SuppressWarnings("all")
 public class SimpleNode extends XNode {
-  private Text label;
+  protected Text label;
   
   public SimpleNode(final DomainObjectDescriptor domainObject) {
     super(domainObject);

@@ -75,6 +75,7 @@ class NodeMapping<T> extends AbstractMapping<T> {
 	
 	List<AbstractConnectionMappingCall<?,T>> outgoing = newArrayList
 	List<AbstractConnectionMappingCall<?,T>> incoming = newArrayList()
+	DiagramMappingCall<?,T> nestedDiagram = null
 	(XtextDomainObjectDescriptor<T>)=>XNode createNode = [ new BaseNode(it) ]
 	
 	new(String id, Class<T> typeGuard) {
@@ -87,6 +88,9 @@ class NodeMapping<T> extends AbstractMapping<T> {
 	
 	def getOutgoing() { outgoing }
 	def getIncoming() { incoming }
+	def getNestedDiagram() { nestedDiagram } 
+	def setNestedDiagram(DiagramMappingCall<?,T> nestedDiagram) { this.nestedDiagram = nestedDiagram }
+	
 	def getCreateNode() { createNode }
 	def setCreateNode((XtextDomainObjectDescriptor<T>)=>XNode createNode) { this.createNode = createNode }
 	
@@ -100,6 +104,10 @@ class NodeMapping<T> extends AbstractMapping<T> {
 		val call = new ConnectionMappingCall(selector, connectionMapping)
 		incoming += call
 		call
+	}
+	
+	def <U> nestedDiagramFor(DiagramMapping<U> connectionMapping, (T)=>U selector) {
+		nestedDiagram = new DiagramMappingCall(selector, connectionMapping)
 	}
 	
 	def <U> outConnectionForEach(ConnectionMapping<U> connectionMapping, (T)=>Iterable<? extends U> selector) {

@@ -117,7 +117,13 @@ public class Layouter {
             double _minY = _layoutBounds_1.getMinY();
             double _minus_1 = (_ypos - _minY);
             MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus, _minus_1);
-            composite.operator_add(_moveCommand);
+            final Procedure1<MoveCommand> _function = new Procedure1<MoveCommand>() {
+              public void apply(final MoveCommand it) {
+                it.setExecuteDuration(duration);
+              }
+            };
+            MoveCommand _doubleArrow = ObjectExtensions.<MoveCommand>operator_doubleArrow(_moveCommand, _function);
+            composite.operator_add(_doubleArrow);
           }
         }
         if (!_matched) {
@@ -169,7 +175,13 @@ public class Layouter {
             };
             List<Point2D> _map = ListExtensions.<KVector, Point2D>map(layoutPoints, _function);
             ConnectionMorphCommand _connectionMorphCommand = new ConnectionMorphCommand(((XConnection)xElement), newKind, _map);
-            composite.operator_add(_connectionMorphCommand);
+            final Procedure1<ConnectionMorphCommand> _function_1 = new Procedure1<ConnectionMorphCommand>() {
+              public void apply(final ConnectionMorphCommand it) {
+                it.setExecuteDuration(duration);
+              }
+            };
+            ConnectionMorphCommand _doubleArrow = ObjectExtensions.<ConnectionMorphCommand>operator_doubleArrow(_connectionMorphCommand, _function_1);
+            composite.operator_add(_doubleArrow);
           }
         }
       }

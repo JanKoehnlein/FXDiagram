@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
@@ -13,6 +14,7 @@ import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
+import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
 import de.fxdiagram.xtext.glue.mapping.InterpreterContext;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
@@ -49,7 +51,7 @@ public class XDiagramConfigInterpreter {
       Function1<? super XtextDomainObjectDescriptor<T>,? extends XDiagram> _createDiagram = diagramMapping.getCreateDiagram();
       XtextDomainObjectDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
       final XDiagram diagram = _createDiagram.apply(_descriptor);
-      context.setDiagram(diagram);
+      context.diagram = diagram;
       List<AbstractNodeMappingCall<?,T>> _nodes = diagramMapping.getNodes();
       final Procedure1<AbstractNodeMappingCall<?,T>> _function = new Procedure1<AbstractNodeMappingCall<?,T>>() {
         public void apply(final AbstractNodeMappingCall<?,T> it) {
@@ -88,9 +90,16 @@ public class XDiagramConfigInterpreter {
       List<AbstractConnectionMappingCall<?,T>> _incoming = nodeMapping.getIncoming();
       final Procedure1<AbstractConnectionMappingCall<?,T>> _function = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
+          boolean _or = false;
           boolean _isLazy = it.isLazy();
           boolean _not = (!_isLazy);
           if (_not) {
+            _or = true;
+          } else {
+            boolean _isIsIgnoreLazy = context.isIsIgnoreLazy();
+            _or = _isIsIgnoreLazy;
+          }
+          if (_or) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setTarget(node);
@@ -104,9 +113,16 @@ public class XDiagramConfigInterpreter {
       List<AbstractConnectionMappingCall<?,T>> _outgoing = nodeMapping.getOutgoing();
       final Procedure1<AbstractConnectionMappingCall<?,T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
         public void apply(final AbstractConnectionMappingCall<?,T> it) {
+          boolean _or = false;
           boolean _isLazy = it.isLazy();
           boolean _not = (!_isLazy);
           if (_not) {
+            _or = true;
+          } else {
+            boolean _isIsIgnoreLazy = context.isIsIgnoreLazy();
+            _or = _isIsIgnoreLazy;
+          }
+          if (_or) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setSource(node);
@@ -117,6 +133,14 @@ public class XDiagramConfigInterpreter {
         }
       };
       IterableExtensions.<AbstractConnectionMappingCall<?,T>>forEach(_outgoing, _function_1);
+      if ((node instanceof OpenableDiagramNode)) {
+        DiagramMappingCall<?,T> _nestedDiagram = nodeMapping.getNestedDiagram();
+        XDiagram _execute = null;
+        if (_nestedDiagram!=null) {
+          _execute=this.execute(_nestedDiagram, nodeObject, context);
+        }
+        ((OpenableDiagramNode)node).setInnerDiagram(_execute);
+      }
       return node;
     } else {
       return null;
@@ -255,6 +279,21 @@ public class XDiagramConfigInterpreter {
       XNode _head_1 = IterableExtensions.<XNode>head(_execute_1);
       connection.setTarget(_head_1);
     }
+  }
+  
+  protected <T extends Object, U extends Object> XDiagram execute(final DiagramMappingCall<T,U> diagramMappingCall, final U domainArgument, final InterpreterContext context) {
+    Function1<? super U,? extends T> _selector = diagramMappingCall.getSelector();
+    final T diagramObject = _selector.apply(domainArgument);
+    DiagramMapping<T> _diagramMapping = diagramMappingCall.getDiagramMapping();
+    InterpreterContext _interpreterContext = new InterpreterContext();
+    final Procedure1<InterpreterContext> _function = new Procedure1<InterpreterContext>() {
+      public void apply(final InterpreterContext it) {
+        it.setIsIgnoreLazy(true);
+      }
+    };
+    InterpreterContext _doubleArrow = ObjectExtensions.<InterpreterContext>operator_doubleArrow(_interpreterContext, _function);
+    final XDiagram result = this.<T>createDiagram(diagramObject, _diagramMapping, _doubleArrow);
+    return result;
   }
   
   public <T extends Object> XtextDomainObjectDescriptor<T> getDescriptor(final T domainObject, final AbstractMapping<T> mapping) {

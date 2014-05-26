@@ -65,7 +65,9 @@ class Layouter {
 			switch xElement { 
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
-					composite += new MoveCommand(xElement, shapeLayout.xpos - xElement.layoutBounds.minX, shapeLayout.ypos - xElement.layoutBounds.minY)
+					composite += new MoveCommand(xElement, shapeLayout.xpos - xElement.layoutBounds.minX, shapeLayout.ypos - xElement.layoutBounds.minY) => [
+						executeDuration = duration
+					]
 				}
 				XConnection: {
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
@@ -82,7 +84,9 @@ class Layouter {
 						default:
 							POLYLINE
 					}
-					composite += new ConnectionMorphCommand(xElement, newKind, layoutPoints.map[new Point2D(x,y)])
+					composite += new ConnectionMorphCommand(xElement, newKind, layoutPoints.map[new Point2D(x,y)]) => [
+						executeDuration = duration
+					]
 				}
 			}
 		}

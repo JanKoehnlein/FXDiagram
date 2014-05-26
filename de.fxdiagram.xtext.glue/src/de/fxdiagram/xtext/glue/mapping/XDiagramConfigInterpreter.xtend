@@ -3,6 +3,8 @@ package de.fxdiagram.xtext.glue.mapping
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider
+import de.fxdiagram.core.XDiagram
+import de.fxdiagram.lib.simple.OpenableDiagramNode
 
 class XDiagramConfigInterpreter {
 
@@ -31,13 +33,15 @@ class XDiagramConfigInterpreter {
 			val node = nodeMapping.createNode.apply(descriptor)
 			context.addNode(node)
 			nodeMapping.incoming.forEach[
-				if(!lazy) 
+				if(!lazy || context.isIgnoreLazy) 
 					execute(nodeObject, [target = node], context) 
 			]
 			nodeMapping.outgoing.forEach[
-				if(!lazy) 
+				if(!lazy || context.isIgnoreLazy) 
 					execute(nodeObject, [source = node], context)
 			]
+			if(node instanceof OpenableDiagramNode)
+				node.innerDiagram = nodeMapping.nestedDiagram?.execute(nodeObject, context)
 			return node
 		} else {
 			return null
@@ -115,6 +119,15 @@ class XDiagramConfigInterpreter {
 			connection.source = connectionMapping.source?.execute(connectionObject, context).head
 		if(connection.target == null && connectionMapping.target != null) 
 			connection.target = connectionMapping.target?.execute(connectionObject, context).head
+	}
+
+	protected def <T,U> XDiagram execute(DiagramMappingCall<T, U> diagramMappingCall, U domainArgument,
+		InterpreterContext context) {
+		val diagramObject = diagramMappingCall.selector.apply(domainArgument)
+		val result = createDiagram(diagramObject, diagramMappingCall.diagramMapping, new InterpreterContext => [
+			isIgnoreLazy = true
+		])
+		return result
 	}
 
 	def <T> getDescriptor(T domainObject, AbstractMapping<T> mapping) {

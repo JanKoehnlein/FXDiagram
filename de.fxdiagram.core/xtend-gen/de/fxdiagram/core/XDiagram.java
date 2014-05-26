@@ -9,21 +9,28 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagramChildrenListener;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior;
 import de.fxdiagram.core.behavior.NavigationBehavior;
+import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.extensions.InitializingMapListener;
+import de.fxdiagram.core.layout.LayoutType;
+import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import java.util.HashMap;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -31,6 +38,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -49,6 +57,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Transform;
+import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -256,6 +265,16 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     };
     InitializingMapListener<Class<? extends Behavior>,Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>,Behavior>>operator_doubleArrow(_initializingMapListener, _function_3);
     CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow_1);
+    boolean _isLayoutOnActivate = this.getIsLayoutOnActivate();
+    if (_isLayoutOnActivate) {
+      this.setIsLayoutOnActivate(false);
+      XRoot _root = CoreExtensions.getRoot(this);
+      CommandStack _commandStack = _root.getCommandStack();
+      Layouter _layouter = new Layouter();
+      Duration _millis = DurationExtensions.millis(50);
+      LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, this, _millis);
+      _commandStack.execute(_createLayoutCommand);
+    }
   }
   
   public void centerDiagram(final boolean useForce) {
@@ -475,6 +494,20 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   public ReadOnlyBooleanProperty isRootDiagramProperty() {
     return this.isRootDiagramProperty.getReadOnlyProperty();
+  }
+  
+  private SimpleBooleanProperty isLayoutOnActivateProperty = new SimpleBooleanProperty(this, "isLayoutOnActivate");
+  
+  public boolean getIsLayoutOnActivate() {
+    return this.isLayoutOnActivateProperty.get();
+  }
+  
+  public void setIsLayoutOnActivate(final boolean isLayoutOnActivate) {
+    this.isLayoutOnActivateProperty.set(isLayoutOnActivate);
+  }
+  
+  public BooleanProperty isLayoutOnActivateProperty() {
+    return this.isLayoutOnActivateProperty;
   }
   
   private SimpleObjectProperty<Paint> backgroundPaintProperty = new SimpleObjectProperty<Paint>(this, "backgroundPaint",_initBackgroundPaint());

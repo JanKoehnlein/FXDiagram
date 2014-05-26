@@ -28,6 +28,9 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.layout.Layouter
+import de.fxdiagram.core.layout.LayoutType
 
 @ModelNode(#['nodes', 'connections', 'parentDiagram'])
 class XDiagram extends Group implements XActivatable {
@@ -41,6 +44,7 @@ class XDiagram extends Group implements XActivatable {
 	@FxProperty(readOnly) boolean isActive
 	@FxProperty(readOnly) boolean isPreviewActive
 	@FxProperty(readOnly) boolean isRootDiagram
+	@FxProperty boolean isLayoutOnActivate
 
 	@FxProperty Paint backgroundPaint = Color.WHITE
 	@FxProperty Paint foregroundPaint = Color.BLACK
@@ -138,6 +142,10 @@ class XDiagram extends Group implements XActivatable {
 		behaviors.addInitializingListener(new InitializingMapListener => [
 			put = [ key, Behavior value | value.activate() ]
 		])
+		if(isLayoutOnActivate) {
+			isLayoutOnActivate = false
+			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, this, 50.millis))
+		}
 	}
 	
 	def void centerDiagram(boolean useForce) {

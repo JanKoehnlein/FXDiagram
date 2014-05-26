@@ -49,8 +49,8 @@ public class MoveCommand extends AbstractAnimationCommand {
   }
   
   public Animation createExecuteAnimation(final CommandContext context) {
-    Duration _defaultExecuteDuration = context.getDefaultExecuteDuration();
-    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _defaultExecuteDuration);
+    Duration _executeDuration = this.getExecuteDuration(context);
+    return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _executeDuration);
   }
   
   public Animation createUndoAnimation(final CommandContext context) {

@@ -23,7 +23,9 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.shared.Access;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @ModelNode({ "provider", "uri", "fqn", "mappingConfigID", "mappingID" })
 @SuppressWarnings("all")
@@ -39,7 +41,16 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
   }
   
   public String getName() {
-    return this.getFqn();
+    String _fqn = this.getFqn();
+    String[] _split = null;
+    if (_fqn!=null) {
+      _split=_fqn.split("\\.");
+    }
+    String _last = null;
+    if (((Iterable<String>)Conversions.doWrapArray(_split))!=null) {
+      _last=IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
+    }
+    return _last;
   }
   
   public String getId() {

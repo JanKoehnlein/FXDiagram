@@ -5,8 +5,10 @@ import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AddRemoveCommand;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -17,7 +19,17 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class InterpreterContext {
-  private XDiagram diagram;
+  protected XDiagram diagram;
+  
+  private boolean _isIgnoreLazy;
+  
+  public boolean isIsIgnoreLazy() {
+    return this._isIgnoreLazy;
+  }
+  
+  public void setIsIgnoreLazy(final boolean isIgnoreLazy) {
+    this._isIgnoreLazy = isIgnoreLazy;
+  }
   
   private List<XNode> addedNodes = CollectionLiterals.<XNode>newArrayList();
   
@@ -28,11 +40,29 @@ public class InterpreterContext {
   }
   
   public boolean addNode(final XNode node) {
-    return this.addedNodes.add(node);
+    boolean _xifexpression = false;
+    XRoot _root = CoreExtensions.getRoot(this.diagram);
+    boolean _notEquals = (!Objects.equal(_root, null));
+    if (_notEquals) {
+      _xifexpression = this.addedNodes.add(node);
+    } else {
+      ObservableList<XNode> _nodes = this.diagram.getNodes();
+      _xifexpression = _nodes.add(node);
+    }
+    return _xifexpression;
   }
   
   public boolean addConnection(final XConnection connection) {
-    return this.addedConnections.add(connection);
+    boolean _xifexpression = false;
+    XRoot _root = CoreExtensions.getRoot(this.diagram);
+    boolean _notEquals = (!Objects.equal(_root, null));
+    if (_notEquals) {
+      _xifexpression = this.addedConnections.add(connection);
+    } else {
+      ObservableList<XConnection> _connections = this.diagram.getConnections();
+      _xifexpression = _connections.add(connection);
+    }
+    return _xifexpression;
   }
   
   public <T extends Object> XConnection getConnection(final DomainObjectDescriptor descriptor) {

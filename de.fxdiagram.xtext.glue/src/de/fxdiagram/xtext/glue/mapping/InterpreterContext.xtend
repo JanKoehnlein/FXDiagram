@@ -6,10 +6,13 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import java.util.List
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class InterpreterContext {
 
-	XDiagram diagram
+	protected XDiagram diagram
+	
+	@Property boolean isIgnoreLazy
 
 	List<XNode> addedNodes = newArrayList
 	List<XConnection> addedConnections = newArrayList
@@ -19,11 +22,17 @@ class InterpreterContext {
 	}
 
 	def addNode(XNode node) {
-		addedNodes += node
+		if(diagram.root != null)
+			addedNodes += node
+		else 
+			diagram.nodes += node
 	}
 
 	def addConnection(XConnection connection) {
-		addedConnections += connection
+		if(diagram.root != null)
+			addedConnections += connection
+		else 
+			diagram.connections += connection
 	}
 
 	def <T> getConnection(DomainObjectDescriptor descriptor) {

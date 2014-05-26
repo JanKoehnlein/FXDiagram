@@ -64,8 +64,8 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
       List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
       ArrayList<Point2D> _newArrayList = CollectionLiterals.<Point2D>newArrayList(((Point2D[])Conversions.unwrapArray(_map, Point2D.class)));
       this.fromPoints = _newArrayList;
-      Duration _defaultExecuteDuration = context.getDefaultExecuteDuration();
-      _xblockexpression = this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _defaultExecuteDuration);
+      Duration _executeDuration = this.getExecuteDuration(context);
+      _xblockexpression = this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _executeDuration);
     }
     return _xblockexpression;
   }

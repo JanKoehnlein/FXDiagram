@@ -22,6 +22,8 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
   
   private ViewportMemento toMemento;
   
+  private Duration executeDuration;
+  
   public Animation getExecuteAnimation(final CommandContext context) {
     XRoot _root = context.getRoot();
     ViewportTransform _viewportTransform = _root.getViewportTransform();
@@ -95,5 +97,20 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
   
   public boolean clearRedoStackOnExecute() {
     return true;
+  }
+  
+  public Duration setExecuteDuration(final Duration executeDuration) {
+    return this.executeDuration = executeDuration;
+  }
+  
+  public Duration getExecuteDuration(final CommandContext context) {
+    Duration _elvis = null;
+    if (this.executeDuration != null) {
+      _elvis = this.executeDuration;
+    } else {
+      Duration _defaultExecuteDuration = context.getDefaultExecuteDuration();
+      _elvis = _defaultExecuteDuration;
+    }
+    return _elvis;
   }
 }

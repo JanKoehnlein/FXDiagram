@@ -5,24 +5,24 @@ import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.anchors.LineArrowHead;
+import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
+import de.fxdiagram.xtext.domainmodel.EntityNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
+import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Feature;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property;
-import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -33,13 +33,36 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   @Inject
   @Extension
-  private IJvmModelAssociations _iJvmModelAssociations;
+  private DomainModelUtil domainModelUtil;
   
   public DomainmodelDiagramConfig() {
     final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(PackageDeclaration.class);
-    final NodeMapping<Entity> entityNode = new NodeMapping<Entity>(Entity.class);
+    NodeMapping<PackageDeclaration> _nodeMapping = new NodeMapping<PackageDeclaration>("packageNode", PackageDeclaration.class);
+    final Procedure1<NodeMapping<PackageDeclaration>> _function = new Procedure1<NodeMapping<PackageDeclaration>>() {
+      public void apply(final NodeMapping<PackageDeclaration> it) {
+        final Function1<XtextDomainObjectDescriptor<PackageDeclaration>,BaseDiagramNode<PackageDeclaration>> _function = new Function1<XtextDomainObjectDescriptor<PackageDeclaration>,BaseDiagramNode<PackageDeclaration>>() {
+          public BaseDiagramNode<PackageDeclaration> apply(final XtextDomainObjectDescriptor<PackageDeclaration> descriptor) {
+            return new BaseDiagramNode<PackageDeclaration>(descriptor);
+          }
+        };
+        it.setCreateNode(_function);
+      }
+    };
+    final NodeMapping<PackageDeclaration> packageNode = ObjectExtensions.<NodeMapping<PackageDeclaration>>operator_doubleArrow(_nodeMapping, _function);
+    NodeMapping<Entity> _nodeMapping_1 = new NodeMapping<Entity>(Entity.class);
+    final Procedure1<NodeMapping<Entity>> _function_1 = new Procedure1<NodeMapping<Entity>>() {
+      public void apply(final NodeMapping<Entity> it) {
+        final Function1<XtextDomainObjectDescriptor<Entity>,EntityNode> _function = new Function1<XtextDomainObjectDescriptor<Entity>,EntityNode>() {
+          public EntityNode apply(final XtextDomainObjectDescriptor<Entity> descriptor) {
+            return new EntityNode(descriptor, DomainmodelDiagramConfig.this.domainModelUtil);
+          }
+        };
+        it.setCreateNode(_function);
+      }
+    };
+    final NodeMapping<Entity> entityNode = ObjectExtensions.<NodeMapping<Entity>>operator_doubleArrow(_nodeMapping_1, _function_1);
     ConnectionMapping<Property> _connectionMapping = new ConnectionMapping<Property>(Property.class);
-    final Procedure1<ConnectionMapping<Property>> _function = new Procedure1<ConnectionMapping<Property>>() {
+    final Procedure1<ConnectionMapping<Property>> _function_2 = new Procedure1<ConnectionMapping<Property>>() {
       public void apply(final ConnectionMapping<Property> it) {
         final Function1<XtextDomainObjectDescriptor<Property>,XConnection> _function = new Function1<XtextDomainObjectDescriptor<Property>,XConnection>() {
           public XConnection apply(final XtextDomainObjectDescriptor<Property> descriptor) {
@@ -70,8 +93,8 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         it.setCreateConnection(_function);
       }
     };
-    final ConnectionMapping<Property> propertyConnection = ObjectExtensions.<ConnectionMapping<Property>>operator_doubleArrow(_connectionMapping, _function);
-    final Procedure1<DiagramMapping<PackageDeclaration>> _function_1 = new Procedure1<DiagramMapping<PackageDeclaration>>() {
+    final ConnectionMapping<Property> propertyConnection = ObjectExtensions.<ConnectionMapping<Property>>operator_doubleArrow(_connectionMapping, _function_2);
+    final Procedure1<DiagramMapping<PackageDeclaration>> _function_3 = new Procedure1<DiagramMapping<PackageDeclaration>>() {
       public void apply(final DiagramMapping<PackageDeclaration> it) {
         final Function1<PackageDeclaration,Iterable<Entity>> _function = new Function1<PackageDeclaration,Iterable<Entity>>() {
           public Iterable<Entity> apply(final PackageDeclaration it) {
@@ -80,11 +103,18 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
           }
         };
         it.<Entity>nodeForEach(entityNode, _function);
+        final Function1<PackageDeclaration,Iterable<PackageDeclaration>> _function_1 = new Function1<PackageDeclaration,Iterable<PackageDeclaration>>() {
+          public Iterable<PackageDeclaration> apply(final PackageDeclaration it) {
+            EList<AbstractElement> _elements = it.getElements();
+            return Iterables.<PackageDeclaration>filter(_elements, PackageDeclaration.class);
+          }
+        };
+        it.<PackageDeclaration>nodeForEach(packageNode, _function_1);
       }
     };
-    DiagramMapping<PackageDeclaration> _doubleArrow = ObjectExtensions.<DiagramMapping<PackageDeclaration>>operator_doubleArrow(packageDiagram, _function_1);
+    DiagramMapping<PackageDeclaration> _doubleArrow = ObjectExtensions.<DiagramMapping<PackageDeclaration>>operator_doubleArrow(packageDiagram, _function_3);
     this.addMapping(_doubleArrow);
-    final Procedure1<NodeMapping<Entity>> _function_2 = new Procedure1<NodeMapping<Entity>>() {
+    final Procedure1<NodeMapping<Entity>> _function_4 = new Procedure1<NodeMapping<Entity>>() {
       public void apply(final NodeMapping<Entity> it) {
         final Function1<Entity,Iterable<Property>> _function = new Function1<Entity,Iterable<Property>>() {
           public Iterable<Property> apply(final Entity it) {
@@ -92,7 +122,8 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
             Iterable<Property> _filter = Iterables.<Property>filter(_features, Property.class);
             final Function1<Property,Boolean> _function = new Function1<Property,Boolean>() {
               public Boolean apply(final Property it) {
-                Entity _referencedEntity = DomainmodelDiagramConfig.this.getReferencedEntity(it);
+                JvmTypeReference _type = it.getType();
+                Entity _referencedEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_type);
                 return Boolean.valueOf((!Objects.equal(_referencedEntity, null)));
               }
             };
@@ -103,36 +134,32 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         _outConnectionForEach.makeLazy();
       }
     };
-    NodeMapping<Entity> _doubleArrow_1 = ObjectExtensions.<NodeMapping<Entity>>operator_doubleArrow(entityNode, _function_2);
+    NodeMapping<Entity> _doubleArrow_1 = ObjectExtensions.<NodeMapping<Entity>>operator_doubleArrow(entityNode, _function_4);
     this.addMapping(_doubleArrow_1);
-    final Procedure1<ConnectionMapping<Property>> _function_3 = new Procedure1<ConnectionMapping<Property>>() {
+    final Procedure1<NodeMapping<PackageDeclaration>> _function_5 = new Procedure1<NodeMapping<PackageDeclaration>>() {
+      public void apply(final NodeMapping<PackageDeclaration> it) {
+        final Function1<PackageDeclaration,PackageDeclaration> _function = new Function1<PackageDeclaration,PackageDeclaration>() {
+          public PackageDeclaration apply(final PackageDeclaration it) {
+            return it;
+          }
+        };
+        it.<PackageDeclaration>nestedDiagramFor(packageDiagram, _function);
+      }
+    };
+    NodeMapping<PackageDeclaration> _doubleArrow_2 = ObjectExtensions.<NodeMapping<PackageDeclaration>>operator_doubleArrow(packageNode, _function_5);
+    this.addMapping(_doubleArrow_2);
+    final Procedure1<ConnectionMapping<Property>> _function_6 = new Procedure1<ConnectionMapping<Property>>() {
       public void apply(final ConnectionMapping<Property> it) {
         final Function1<Property,Entity> _function = new Function1<Property,Entity>() {
           public Entity apply(final Property it) {
-            return DomainmodelDiagramConfig.this.getReferencedEntity(it);
+            JvmTypeReference _type = it.getType();
+            return DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_type);
           }
         };
         it.<Entity>target(entityNode, _function);
       }
     };
-    ConnectionMapping<Property> _doubleArrow_2 = ObjectExtensions.<ConnectionMapping<Property>>operator_doubleArrow(propertyConnection, _function_3);
-    this.addMapping(_doubleArrow_2);
-  }
-  
-  public Entity getReferencedEntity(final Property it) {
-    Entity _xblockexpression = null;
-    {
-      JvmTypeReference _type = it.getType();
-      JvmType _type_1 = _type.getType();
-      final EObject sourceType = this._iJvmModelAssociations.getPrimarySourceElement(_type_1);
-      Entity _xifexpression = null;
-      if ((sourceType instanceof Entity)) {
-        return ((Entity)sourceType);
-      } else {
-        _xifexpression = null;
-      }
-      _xblockexpression = _xifexpression;
-    }
-    return _xblockexpression;
+    ConnectionMapping<Property> _doubleArrow_3 = ObjectExtensions.<ConnectionMapping<Property>>operator_doubleArrow(propertyConnection, _function_6);
+    this.addMapping(_doubleArrow_3);
   }
 }

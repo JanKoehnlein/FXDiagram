@@ -4,12 +4,13 @@ import de.fxdiagram.core.viewport.ViewportMemento
 import de.fxdiagram.core.viewport.ViewportTransition
 import javafx.animation.Animation
 import javafx.animation.SequentialTransition
-import static de.fxdiagram.core.command.ChainedAnimationUtil.*
+import javafx.util.Duration
 
 abstract class AbstractAnimationCommand implements AnimationCommand {
 
 	ViewportMemento fromMemento
 	ViewportMemento toMemento
+	Duration executeDuration
 
 	override getExecuteAnimation(CommandContext context) {
 		fromMemento = context.root.viewportTransform.createMemento
@@ -49,5 +50,13 @@ abstract class AbstractAnimationCommand implements AnimationCommand {
 	
 	override clearRedoStackOnExecute() {
 		true
+	}
+	
+	def setExecuteDuration(Duration executeDuration) {
+		this.executeDuration = executeDuration
+	}
+	
+	def getExecuteDuration(CommandContext context) {
+		executeDuration ?: context.defaultExecuteDuration
 	}
 } 
