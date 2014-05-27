@@ -50,7 +50,7 @@ public class LcarsModelProvider implements DomainObjectProvider {
     return IterableExtensions.<DBObject>toList(((Iterable<DBObject>) _find));
   }
   
-  protected <T extends Object> DBObject resolveDomainObject(final DomainObjectDescriptor descriptor) {
+  public <T extends Object> DBObject resolveDomainObject(final DomainObjectDescriptor descriptor) {
     BasicDBObject _basicDBObject = new BasicDBObject();
     final Procedure1<BasicDBObject> _function = new Procedure1<BasicDBObject>() {
       public void apply(final BasicDBObject it) {

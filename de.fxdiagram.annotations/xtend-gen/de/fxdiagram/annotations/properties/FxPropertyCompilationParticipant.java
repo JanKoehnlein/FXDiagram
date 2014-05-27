@@ -37,8 +37,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.eclipse.xtend.lib.macro.TransformationContext;
 import org.eclipse.xtend.lib.macro.TransformationParticipant;
+import org.eclipse.xtend.lib.macro.declaration.AnnotationReference;
 import org.eclipse.xtend.lib.macro.declaration.CompilationStrategy;
-import org.eclipse.xtend.lib.macro.declaration.MutableAnnotationReference;
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableFieldDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableMethodDeclaration;
@@ -59,7 +59,7 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
     final Type annotationType = context.findTypeGlobally(FxProperty.class);
     for (final MutableFieldDeclaration f : fields) {
       {
-        final MutableAnnotationReference annotation = f.findAnnotation(annotationType);
+        final AnnotationReference annotation = f.findAnnotation(annotationType);
         Object _value = annotation.getValue("readOnly");
         final boolean isReadOnly = (!Objects.equal(_value, Boolean.FALSE));
         TypeReference _type = f.getType();
@@ -217,31 +217,31 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
     String _string = ref.toString();
     boolean _matched = false;
     if (!_matched) {
-      if (Objects.equal(_string,"boolean")) {
+      if (Objects.equal(_string, "boolean")) {
         _matched=true;
         _switchResult = "false";
       }
     }
     if (!_matched) {
-      if (Objects.equal(_string,"double")) {
+      if (Objects.equal(_string, "double")) {
         _matched=true;
         _switchResult = "0d";
       }
     }
     if (!_matched) {
-      if (Objects.equal(_string,"float")) {
+      if (Objects.equal(_string, "float")) {
         _matched=true;
         _switchResult = "0f";
       }
     }
     if (!_matched) {
-      if (Objects.equal(_string,"long")) {
+      if (Objects.equal(_string, "long")) {
         _matched=true;
         _switchResult = "0";
       }
     }
     if (!_matched) {
-      if (Objects.equal(_string,"int")) {
+      if (Objects.equal(_string, "int")) {
         _matched=true;
         _switchResult = "0";
       }
@@ -260,43 +260,43 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       String _qualifiedName = _type.getQualifiedName();
       boolean _matched = false;
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"boolean")) {
+        if (Objects.equal(_qualifiedName, "boolean")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyBooleanProperty.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"double")) {
+        if (Objects.equal(_qualifiedName, "double")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyDoubleProperty.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"float")) {
+        if (Objects.equal(_qualifiedName, "float")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyFloatProperty.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"long")) {
+        if (Objects.equal(_qualifiedName, "long")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyLongProperty.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"java.lang.String")) {
+        if (Objects.equal(_qualifiedName, "java.lang.String")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyStringProperty.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"int")) {
+        if (Objects.equal(_qualifiedName, "int")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyIntegerProperty.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"javafx.collections.ObservableList")) {
+        if (Objects.equal(_qualifiedName, "javafx.collections.ObservableList")) {
           _matched=true;
           List<TypeReference> _actualTypeArguments = ref.getActualTypeArguments();
           TypeReference _head = IterableExtensions.<TypeReference>head(_actualTypeArguments);
@@ -313,43 +313,43 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       String _qualifiedName_1 = _type_1.getQualifiedName();
       boolean _matched_1 = false;
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"boolean")) {
+        if (Objects.equal(_qualifiedName_1, "boolean")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(BooleanProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"double")) {
+        if (Objects.equal(_qualifiedName_1, "double")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(DoubleProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"float")) {
+        if (Objects.equal(_qualifiedName_1, "float")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(FloatProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"long")) {
+        if (Objects.equal(_qualifiedName_1, "long")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(LongProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"java.lang.String")) {
+        if (Objects.equal(_qualifiedName_1, "java.lang.String")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(StringProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"int")) {
+        if (Objects.equal(_qualifiedName_1, "int")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(IntegerProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"javafx.collections.ObservableList")) {
+        if (Objects.equal(_qualifiedName_1, "javafx.collections.ObservableList")) {
           _matched_1=true;
           List<TypeReference> _actualTypeArguments_1 = ref.getActualTypeArguments();
           TypeReference _head_1 = IterableExtensions.<TypeReference>head(_actualTypeArguments_1);
@@ -372,43 +372,43 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       String _qualifiedName = _type.getQualifiedName();
       boolean _matched = false;
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"boolean")) {
+        if (Objects.equal(_qualifiedName, "boolean")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyBooleanWrapper.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"double")) {
+        if (Objects.equal(_qualifiedName, "double")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyDoubleWrapper.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"float")) {
+        if (Objects.equal(_qualifiedName, "float")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyFloatWrapper.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"long")) {
+        if (Objects.equal(_qualifiedName, "long")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyLongWrapper.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"java.lang.String")) {
+        if (Objects.equal(_qualifiedName, "java.lang.String")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyStringWrapper.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"int")) {
+        if (Objects.equal(_qualifiedName, "int")) {
           _matched=true;
           _switchResult = context.newTypeReference(ReadOnlyIntegerWrapper.class);
         }
       }
       if (!_matched) {
-        if (Objects.equal(_qualifiedName,"javafx.collections.ObservableList")) {
+        if (Objects.equal(_qualifiedName, "javafx.collections.ObservableList")) {
           _matched=true;
           List<TypeReference> _actualTypeArguments = ref.getActualTypeArguments();
           TypeReference _head = IterableExtensions.<TypeReference>head(_actualTypeArguments);
@@ -425,43 +425,43 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
       String _qualifiedName_1 = _type_1.getQualifiedName();
       boolean _matched_1 = false;
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"boolean")) {
+        if (Objects.equal(_qualifiedName_1, "boolean")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(SimpleBooleanProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"double")) {
+        if (Objects.equal(_qualifiedName_1, "double")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(SimpleDoubleProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"float")) {
+        if (Objects.equal(_qualifiedName_1, "float")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(SimpleFloatProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"long")) {
+        if (Objects.equal(_qualifiedName_1, "long")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(SimpleLongProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"java.lang.String")) {
+        if (Objects.equal(_qualifiedName_1, "java.lang.String")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(SimpleStringProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"int")) {
+        if (Objects.equal(_qualifiedName_1, "int")) {
           _matched_1=true;
           _switchResult_1 = context.newTypeReference(SimpleIntegerProperty.class);
         }
       }
       if (!_matched_1) {
-        if (Objects.equal(_qualifiedName_1,"javafx.collections.ObservableList")) {
+        if (Objects.equal(_qualifiedName_1, "javafx.collections.ObservableList")) {
           _matched_1=true;
           List<TypeReference> _actualTypeArguments_1 = ref.getActualTypeArguments();
           TypeReference _head_1 = IterableExtensions.<TypeReference>head(_actualTypeArguments_1);

@@ -95,7 +95,7 @@ public class SvgExporter {
       _builder.newLineIfNotEmpty();
       {
         ObservableList<Node> _childrenUnmodifiable = diagram.getChildrenUnmodifiable();
-        final Function1<Node,Boolean> _function = new Function1<Node,Boolean>() {
+        final Function1<Node, Boolean> _function = new Function1<Node, Boolean>() {
           public Boolean apply(final Node it) {
             return Boolean.valueOf(it.isVisible());
           }
@@ -427,7 +427,7 @@ public class SvgExporter {
       final CharSequence clipPath = this.toSvgClip(it);
       CharSequence _xifexpression = null;
       ObservableList<Node> _childrenUnmodifiable = it.getChildrenUnmodifiable();
-      final Function1<Node,Boolean> _function = new Function1<Node,Boolean>() {
+      final Function1<Node, Boolean> _function = new Function1<Node, Boolean>() {
         public Boolean apply(final Node it) {
           return Boolean.valueOf(it.isVisible());
         }
@@ -451,7 +451,7 @@ public class SvgExporter {
         _builder.newLineIfNotEmpty();
         {
           ObservableList<Node> _childrenUnmodifiable_1 = it.getChildrenUnmodifiable();
-          final Function1<Node,Boolean> _function_1 = new Function1<Node,Boolean>() {
+          final Function1<Node, Boolean> _function_1 = new Function1<Node, Boolean>() {
             public Boolean apply(final Node it) {
               return Boolean.valueOf(it.isVisible());
             }

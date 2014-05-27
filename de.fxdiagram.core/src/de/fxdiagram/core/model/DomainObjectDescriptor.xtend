@@ -8,7 +8,7 @@ interface DomainObjectDescriptor extends XModelProvider {
 	def String getId()
 }
 
-@ModelNode(#['id', 'name', 'provider'])
+@ModelNode('id', 'name', 'provider')
 abstract class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	
 	@FxProperty(readOnly) String id

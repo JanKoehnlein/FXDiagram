@@ -29,7 +29,7 @@ class LcarsModelProvider implements DomainObjectProvider{
 		]) as Iterable<DBObject>).toList
 	}
 	
-	def protected <T> resolveDomainObject(DomainObjectDescriptor descriptor) {
+	def <T> resolveDomainObject(DomainObjectDescriptor descriptor) {
 		lcars.findOne(new BasicDBObject => [
 			put("_id", new ObjectId(descriptor.id))
 		])

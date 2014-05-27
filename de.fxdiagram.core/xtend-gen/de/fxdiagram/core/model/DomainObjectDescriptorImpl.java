@@ -51,7 +51,7 @@ public abstract class DomainObjectDescriptorImpl<T extends Object> implements Do
     return _id.hashCode();
   }
   
-  public abstract <U extends Object> U withDomainObject(final Function1<? super T,? extends U> lambda);
+  public abstract <U extends Object> U withDomainObject(final Function1<? super T, ? extends U> lambda);
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty, String.class);

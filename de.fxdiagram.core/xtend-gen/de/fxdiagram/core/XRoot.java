@@ -68,7 +68,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   private XDiagramTool currentTool;
   
-  private Map<Class<? extends DomainObjectProvider>,DomainObjectProvider> domainObjectProviderCache;
+  private Map<Class<? extends DomainObjectProvider>, DomainObjectProvider> domainObjectProviderCache;
   
   private CommandStack commandStack = new CommandStack(this);
   
@@ -100,7 +100,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       _children.remove(_diagram_1);
       ObservableList<Node> _children_1 = this.headsUpDisplay.getChildren();
       XDiagram _diagram_2 = this.getDiagram();
-      ObservableMap<Node,Pos> _fixedButtons = _diagram_2.getFixedButtons();
+      ObservableMap<Node, Pos> _fixedButtons = _diagram_2.getFixedButtons();
       Set<Node> _keySet = _fixedButtons.keySet();
       Iterables.removeAll(_children_1, _keySet);
     }
@@ -126,16 +126,16 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     _builder.newLineIfNotEmpty();
     this.diagramCanvas.setStyle(_builder.toString());
     XDiagram _diagram_3 = this.getDiagram();
-    ObservableMap<Node,Pos> _fixedButtons_1 = _diagram_3.getFixedButtons();
-    Set<Map.Entry<Node,Pos>> _entrySet = _fixedButtons_1.entrySet();
-    final Procedure1<Map.Entry<Node,Pos>> _function = new Procedure1<Map.Entry<Node,Pos>>() {
-      public void apply(final Map.Entry<Node,Pos> it) {
+    ObservableMap<Node, Pos> _fixedButtons_1 = _diagram_3.getFixedButtons();
+    Set<Map.Entry<Node, Pos>> _entrySet = _fixedButtons_1.entrySet();
+    final Procedure1<Map.Entry<Node, Pos>> _function = new Procedure1<Map.Entry<Node, Pos>>() {
+      public void apply(final Map.Entry<Node, Pos> it) {
         Node _key = it.getKey();
         Pos _value = it.getValue();
         XRoot.this.headsUpDisplay.add(_key, _value);
       }
     };
-    IterableExtensions.<Map.Entry<Node,Pos>>forEach(_entrySet, _function);
+    IterableExtensions.<Map.Entry<Node, Pos>>forEach(_entrySet, _function);
     newDiagram.centerDiagram(false);
   }
   
@@ -232,7 +232,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   public Iterable<XShape> getCurrentSelection() {
     XDiagram _diagram = this.getDiagram();
     Iterable<XShape> _allShapes = _diagram.getAllShapes();
-    final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
+    final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
       public Boolean apply(final XShape it) {
         boolean _and = false;
         boolean _isSelectable = it.isSelectable();
@@ -253,7 +253,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     {
       boolean _equals = Objects.equal(this.domainObjectProviderCache, null);
       if (_equals) {
-        HashMap<Class<? extends DomainObjectProvider>,DomainObjectProvider> _newHashMap = CollectionLiterals.<Class<? extends DomainObjectProvider>, DomainObjectProvider>newHashMap();
+        HashMap<Class<? extends DomainObjectProvider>, DomainObjectProvider> _newHashMap = CollectionLiterals.<Class<? extends DomainObjectProvider>, DomainObjectProvider>newHashMap();
         this.domainObjectProviderCache = _newHashMap;
         ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
         final Procedure1<DomainObjectProvider> _function = new Procedure1<DomainObjectProvider>() {

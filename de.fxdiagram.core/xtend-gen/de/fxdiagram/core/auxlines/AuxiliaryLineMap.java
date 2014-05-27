@@ -14,9 +14,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AuxiliaryLineMap<T extends Object> {
-  private Multimap<Integer,AuxiliaryLine> store = HashMultimap.<Integer, AuxiliaryLine>create();
+  private Multimap<Integer, AuxiliaryLine> store = HashMultimap.<Integer, AuxiliaryLine>create();
   
-  private Map<XNode,AuxiliaryLine> node2entry = CollectionLiterals.<XNode, AuxiliaryLine>newHashMap();
+  private Map<XNode, AuxiliaryLine> node2entry = CollectionLiterals.<XNode, AuxiliaryLine>newHashMap();
   
   private double threshold;
   

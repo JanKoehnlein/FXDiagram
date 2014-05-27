@@ -25,7 +25,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     ConnectionMapping<Transition> _connectionMapping = new ConnectionMapping<Transition>(Transition.class);
     final Procedure1<ConnectionMapping<Transition>> _function = new Procedure1<ConnectionMapping<Transition>>() {
       public void apply(final ConnectionMapping<Transition> it) {
-        final Function1<XtextDomainObjectDescriptor<Transition>,XConnection> _function = new Function1<XtextDomainObjectDescriptor<Transition>,XConnection>() {
+        final Function1<XtextDomainObjectDescriptor<Transition>, XConnection> _function = new Function1<XtextDomainObjectDescriptor<Transition>, XConnection>() {
           public XConnection apply(final XtextDomainObjectDescriptor<Transition> descriptor) {
             XConnection _xConnection = new XConnection(descriptor);
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
@@ -34,7 +34,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
                 final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
                   public void apply(final XConnectionLabel label) {
                     Text _text = label.getText();
-                    final Function1<Transition,String> _function = new Function1<Transition,String>() {
+                    final Function1<Transition, String> _function = new Function1<Transition, String>() {
                       public String apply(final Transition it) {
                         Event _event = it.getEvent();
                         return _event.getName();
@@ -56,7 +56,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     final ConnectionMapping<Transition> transitionConnection = ObjectExtensions.<ConnectionMapping<Transition>>operator_doubleArrow(_connectionMapping, _function);
     final Procedure1<DiagramMapping<Statemachine>> _function_1 = new Procedure1<DiagramMapping<Statemachine>>() {
       public void apply(final DiagramMapping<Statemachine> it) {
-        final Function1<Statemachine,EList<State>> _function = new Function1<Statemachine,EList<State>>() {
+        final Function1<Statemachine, EList<State>> _function = new Function1<Statemachine, EList<State>>() {
           public EList<State> apply(final Statemachine it) {
             return it.getStates();
           }
@@ -68,7 +68,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     this.addMapping(_doubleArrow);
     final Procedure1<NodeMapping<State>> _function_2 = new Procedure1<NodeMapping<State>>() {
       public void apply(final NodeMapping<State> it) {
-        final Function1<State,EList<Transition>> _function = new Function1<State,EList<Transition>>() {
+        final Function1<State, EList<Transition>> _function = new Function1<State, EList<Transition>>() {
           public EList<Transition> apply(final State it) {
             return it.getTransitions();
           }
@@ -80,7 +80,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     this.addMapping(_doubleArrow_1);
     final Procedure1<ConnectionMapping<Transition>> _function_3 = new Procedure1<ConnectionMapping<Transition>>() {
       public void apply(final ConnectionMapping<Transition> it) {
-        final Function1<Transition,State> _function = new Function1<Transition,State>() {
+        final Function1<Transition, State> _function = new Function1<Transition, State>() {
           public State apply(final Transition it) {
             return it.getState();
           }

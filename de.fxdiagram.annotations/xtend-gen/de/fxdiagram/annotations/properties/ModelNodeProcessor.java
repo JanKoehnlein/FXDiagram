@@ -17,11 +17,11 @@ import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import org.eclipse.xtend.lib.macro.AbstractClassProcessor;
 import org.eclipse.xtend.lib.macro.TransformationContext;
+import org.eclipse.xtend.lib.macro.declaration.AnnotationReference;
 import org.eclipse.xtend.lib.macro.declaration.ClassDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.FieldDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MemberDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration;
-import org.eclipse.xtend.lib.macro.declaration.MutableAnnotationReference;
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableConstructorDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableMethodDeclaration;
@@ -47,7 +47,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
   public void doTransform(final MutableClassDeclaration annotatedClass, final TransformationContext context) {
     this.context = context;
     Type _findTypeGlobally = this.context.findTypeGlobally(ModelNode.class);
-    final MutableAnnotationReference modelAnnotation = annotatedClass.findAnnotation(_findTypeGlobally);
+    final AnnotationReference modelAnnotation = annotatedClass.findAnnotation(_findTypeGlobally);
     final ArrayList<String> validPropertyNames = CollectionLiterals.<String>newArrayList();
     String[] _stringArrayValue = modelAnnotation.getStringArrayValue("value");
     final Procedure1<String> _function = new Procedure1<String>() {
@@ -114,7 +114,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
             }
             _builder.newLineIfNotEmpty();
             {
-              final Function1<String,MemberDeclaration> _function = new Function1<String,MemberDeclaration>() {
+              final Function1<String, MemberDeclaration> _function = new Function1<String, MemberDeclaration>() {
                 public MemberDeclaration apply(final String it) {
                   return ModelNodeProcessor.this.getPropertyAccessor(annotatedClass, it, true);
                 }

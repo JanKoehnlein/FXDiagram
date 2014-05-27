@@ -79,13 +79,13 @@ public class SoftTooltip {
     this.timer = _tooltipTimer;
   }
   
-  protected void install(final Node host) {
+  public void install(final Node host) {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
         EventType<? extends Event> _eventType = it.getEventType();
         boolean _matched = false;
         if (!_matched) {
-          if (Objects.equal(_eventType,MouseEvent.MOUSE_ENTERED_TARGET)) {
+          if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED_TARGET)) {
             _matched=true;
             SoftTooltip.this.isHideOnTrigger = false;
             double _sceneX = it.getSceneX();
@@ -97,12 +97,12 @@ public class SoftTooltip {
           }
         }
         if (!_matched) {
-          if (Objects.equal(_eventType,MouseEvent.MOUSE_EXITED_TARGET)) {
+          if (Objects.equal(_eventType, MouseEvent.MOUSE_EXITED_TARGET)) {
             _matched=true;
           }
         }
         if (!_matched) {
-          if (Objects.equal(_eventType,MouseEvent.MOUSE_ENTERED)) {
+          if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED)) {
             _matched=true;
             SoftTooltip.this.isHideOnTrigger = false;
             double _sceneX_1 = it.getSceneX();
@@ -114,7 +114,7 @@ public class SoftTooltip {
           }
         }
         if (!_matched) {
-          if (Objects.equal(_eventType,MouseEvent.MOUSE_MOVED)) {
+          if (Objects.equal(_eventType, MouseEvent.MOUSE_MOVED)) {
             _matched=true;
             double _sceneX_2 = it.getSceneX();
             double _sceneY_2 = it.getSceneY();

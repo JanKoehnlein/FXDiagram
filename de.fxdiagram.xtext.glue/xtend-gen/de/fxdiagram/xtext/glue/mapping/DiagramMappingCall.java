@@ -8,9 +8,9 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 @Data
 @SuppressWarnings("all")
 public class DiagramMappingCall<T extends Object, ARG extends Object> {
-  private final Function1<? super ARG,? extends T> _selector;
+  private final Function1<? super ARG, ? extends T> _selector;
   
-  public Function1<? super ARG,? extends T> getSelector() {
+  public Function1<? super ARG, ? extends T> getSelector() {
     return this._selector;
   }
   
@@ -20,7 +20,7 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> {
     return this._diagramMapping;
   }
   
-  public DiagramMappingCall(final Function1<? super ARG,? extends T> selector, final DiagramMapping<T> diagramMapping) {
+  public DiagramMappingCall(final Function1<? super ARG, ? extends T> selector, final DiagramMapping<T> diagramMapping) {
     super();
     this._selector = selector;
     this._diagramMapping = diagramMapping;

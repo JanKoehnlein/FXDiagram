@@ -61,7 +61,7 @@ public class SelectionTool implements XDiagramTool {
           _and = _equals_1;
         }
         if (_and) {
-          final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
+          final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
             public Boolean apply(final XShape it) {
               return Boolean.valueOf(true);
             }
@@ -100,14 +100,14 @@ public class SelectionTool implements XDiagramTool {
                   _switchResult = null;
                 }
                 final XShape skip = _switchResult;
-                final Function1<XShape,Boolean> _function_1 = new Function1<XShape,Boolean>() {
+                final Function1<XShape, Boolean> _function_1 = new Function1<XShape, Boolean>() {
                   public Boolean apply(final XShape it) {
                     return Boolean.valueOf((!Objects.equal(it, skip)));
                   }
                 };
                 SelectionTool.this.deselect(selection, _function_1);
               }
-              final Function1<XShape,Boolean> _function_2 = new Function1<XShape,Boolean>() {
+              final Function1<XShape, Boolean> _function_2 = new Function1<XShape, Boolean>() {
                 public Boolean apply(final XShape it) {
                   XDiagram _diagram = CoreExtensions.getDiagram(it);
                   XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
@@ -193,14 +193,14 @@ public class SelectionTool implements XDiagramTool {
   }
   
   protected void updatePositionTooltip(final Iterable<? extends XShape> selection, final double screenX, final double screenY) {
-    final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
+    final Function1<XShape, Bounds> _function = new Function1<XShape, Bounds>() {
       public Bounds apply(final XShape it) {
         Bounds _snapBounds = it.getSnapBounds();
         return CoreExtensions.localToRootDiagram(it, _snapBounds);
       }
     };
     Iterable<Bounds> _map = IterableExtensions.map(selection, _function);
-    final Function2<Bounds,Bounds,Bounds> _function_1 = new Function2<Bounds,Bounds,Bounds>() {
+    final Function2<Bounds, Bounds, Bounds> _function_1 = new Function2<Bounds, Bounds, Bounds>() {
       public Bounds apply(final Bounds a, final Bounds b) {
         return BoundsExtensions.operator_plus(a, b);
       }
@@ -257,7 +257,7 @@ public class SelectionTool implements XDiagramTool {
     return _xblockexpression;
   }
   
-  protected void deselect(final Collection<XShape> selection, final Function1<? super XShape,? extends Boolean> filter) {
+  protected void deselect(final Collection<XShape> selection, final Function1<? super XShape, ? extends Boolean> filter) {
     final Iterator<XShape> i = selection.iterator();
     boolean _hasNext = i.hasNext();
     boolean _while = _hasNext;

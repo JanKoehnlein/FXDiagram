@@ -34,7 +34,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode,EClass,ESuperTypeDescriptor> {
+public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EClass, ESuperTypeDescriptor> {
   public AddESuperTypeRapidButtonBehavior(final EClassNode host) {
     super(host);
   }
@@ -54,7 +54,7 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
   }
   
   protected XNode createNode(final ESuperTypeDescriptor key) {
-    final Function1<ESuperTypeHandle,EClassDescriptor> _function = new Function1<ESuperTypeHandle,EClassDescriptor>() {
+    final Function1<ESuperTypeHandle, EClassDescriptor> _function = new Function1<ESuperTypeHandle, EClassDescriptor>() {
       public EClassDescriptor apply(final ESuperTypeHandle it) {
         EcoreDomainObjectProvider _domainObjectProvider = AddESuperTypeRapidButtonBehavior.this.getDomainObjectProvider();
         EClass _superType = it.getSuperType();

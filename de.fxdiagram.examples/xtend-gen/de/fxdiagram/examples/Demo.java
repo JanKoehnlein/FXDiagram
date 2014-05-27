@@ -208,7 +208,7 @@ public class Demo extends Application {
           int _plus_1 = (_size_1 + 2);
           final double deltaY = (_height / _plus_1);
           ObservableList<XNode> _nodes_11 = it.getNodes();
-          final Procedure2<XNode,Integer> _function_2 = new Procedure2<XNode,Integer>() {
+          final Procedure2<XNode, Integer> _function_2 = new Procedure2<XNode, Integer>() {
             public void apply(final XNode node, final Integer i) {
               Bounds _layoutBounds = node.getLayoutBounds();
               double _width = _layoutBounds.getWidth();
@@ -228,7 +228,7 @@ public class Demo extends Application {
           int _size_2 = _nodes_13.size();
           int _minus = (_size_2 - 1);
           List<XNode> _subList = _nodes_12.subList(0, _minus);
-          final Procedure2<XNode,Integer> _function_3 = new Procedure2<XNode,Integer>() {
+          final Procedure2<XNode, Integer> _function_3 = new Procedure2<XNode, Integer>() {
             public void apply(final XNode node, final Integer i) {
               ObservableList<XConnection> _connections = it.getConnections();
               ObservableList<XNode> _nodes = it.getNodes();

@@ -60,11 +60,11 @@ class AuxiliaryLinesCache {
 
 	def watchNode(XNode node) {
 		val ChangeListener<Number> scalarListener = [ 
-			ObservableValue<Number> scalar, Number oldValue, Number newValue | 
+			ObservableValue<? extends Number> scalar, Number oldValue, Number newValue | 
 			updateNode(node)
 		]
 		val ChangeListener<Bounds> boundsListener = [ 
-			ObservableValue<Bounds> scalar, Bounds oldValue, Bounds newValue | 
+			ObservableValue<? extends Bounds> scalar, Bounds oldValue, Bounds newValue | 
 			updateNode(node)
 		]
 		node.layoutXProperty.addListener(scalarListener)

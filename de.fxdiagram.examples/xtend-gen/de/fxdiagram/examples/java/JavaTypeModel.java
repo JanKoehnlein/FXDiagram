@@ -33,7 +33,7 @@ public class JavaTypeModel {
   
   public JavaTypeModel(final Class<?> javaType) {
     Constructor<?>[] _declaredConstructors = javaType.getDeclaredConstructors();
-    final Function1<Constructor<?>,Boolean> _function = new Function1<Constructor<?>,Boolean>() {
+    final Function1<Constructor<?>, Boolean> _function = new Function1<Constructor<?>, Boolean>() {
       public Boolean apply(final Constructor<?> it) {
         int _modifiers = it.getModifiers();
         return Boolean.valueOf(Modifier.isPublic(_modifiers));
@@ -42,9 +42,9 @@ public class JavaTypeModel {
     Iterable<Constructor<?>> _filter = IterableExtensions.<Constructor<?>>filter(((Iterable<Constructor<?>>)Conversions.doWrapArray(_declaredConstructors)), _function);
     List<Constructor<?>> _list = IterableExtensions.<Constructor<?>>toList(_filter);
     this.constructors = _list;
-    final HashMultimap<String,Pair<Class<?>,Method>> propertyMethods = HashMultimap.<String, Pair<Class<?>,Method>>create();
+    final HashMultimap<String, Pair<Class<?>, Method>> propertyMethods = HashMultimap.<String, Pair<Class<?>, Method>>create();
     Method[] _declaredMethods = javaType.getDeclaredMethods();
-    final Function1<Method,Boolean> _function_1 = new Function1<Method,Boolean>() {
+    final Function1<Method, Boolean> _function_1 = new Function1<Method, Boolean>() {
       public Boolean apply(final Method it) {
         boolean _and = false;
         int _modifiers = it.getModifiers();
@@ -64,7 +64,7 @@ public class JavaTypeModel {
     List<Method> _list_1 = IterableExtensions.<Method>toList(_filter_1);
     this.operations = _list_1;
     Method[] _declaredMethods_1 = javaType.getDeclaredMethods();
-    final Function1<Method,Boolean> _function_2 = new Function1<Method,Boolean>() {
+    final Function1<Method, Boolean> _function_2 = new Function1<Method, Boolean>() {
       public Boolean apply(final Method it) {
         int _modifiers = it.getModifiers();
         return Boolean.valueOf(Modifier.isPublic(_modifiers));
@@ -73,12 +73,12 @@ public class JavaTypeModel {
     Iterable<Method> _filter_2 = IterableExtensions.<Method>filter(((Iterable<Method>)Conversions.doWrapArray(_declaredMethods_1)), _function_2);
     final Procedure1<Method> _function_3 = new Procedure1<Method>() {
       public void apply(final Method method) {
-        final Pair<String,Class<?>> nameAndType = JavaTypeModel.this.getPropertyNameAndType(method);
+        final Pair<String, Class<?>> nameAndType = JavaTypeModel.this.getPropertyNameAndType(method);
         boolean _notEquals = (!Objects.equal(nameAndType, null));
         if (_notEquals) {
           String _key = nameAndType.getKey();
           Class<?> _value = nameAndType.getValue();
-          Pair<Class<?>,Method> _mappedTo = Pair.<Class<?>, Method>of(_value, method);
+          Pair<Class<?>, Method> _mappedTo = Pair.<Class<?>, Method>of(_value, method);
           propertyMethods.put(_key, _mappedTo);
         }
       }
@@ -87,24 +87,24 @@ public class JavaTypeModel {
     Set<String> _keySet = propertyMethods.keySet();
     for (final String propertyName : _keySet) {
       {
-        final Set<Pair<Class<?>,Method>> type2Method = propertyMethods.get(propertyName);
-        final Function1<Pair<Class<?>,Method>,Class<?>> _function_4 = new Function1<Pair<Class<?>,Method>,Class<?>>() {
-          public Class<?> apply(final Pair<Class<?>,Method> it) {
+        final Set<Pair<Class<?>, Method>> type2Method = propertyMethods.get(propertyName);
+        final Function1<Pair<Class<?>, Method>, Class<?>> _function_4 = new Function1<Pair<Class<?>, Method>, Class<?>>() {
+          public Class<?> apply(final Pair<Class<?>, Method> it) {
             return it.getKey();
           }
         };
-        Iterable<Class<?>> _map = IterableExtensions.<Pair<Class<?>,Method>, Class<?>>map(type2Method, _function_4);
+        Iterable<Class<?>> _map = IterableExtensions.<Pair<Class<?>, Method>, Class<?>>map(type2Method, _function_4);
         Iterable<Class<?>> _filterNull = IterableExtensions.<Class<?>>filterNull(_map);
         final Set<Class<?>> types = IterableExtensions.<Class<?>>toSet(_filterNull);
         int _size = types.size();
         boolean _equals = (_size == 1);
         if (_equals) {
-          final Function1<Pair<Class<?>,Method>,Method> _function_5 = new Function1<Pair<Class<?>,Method>,Method>() {
-            public Method apply(final Pair<Class<?>,Method> it) {
+          final Function1<Pair<Class<?>, Method>, Method> _function_5 = new Function1<Pair<Class<?>, Method>, Method>() {
+            public Method apply(final Pair<Class<?>, Method> it) {
               return it.getValue();
             }
           };
-          Iterable<Method> _map_1 = IterableExtensions.<Pair<Class<?>,Method>, Method>map(type2Method, _function_5);
+          Iterable<Method> _map_1 = IterableExtensions.<Pair<Class<?>, Method>, Method>map(type2Method, _function_5);
           CollectionExtensions.<Method>removeAll(this.operations, _map_1);
           Class<?> _head = IterableExtensions.<Class<?>>head(types);
           boolean _isPrimitiveOrString = this.isPrimitiveOrString(_head);
@@ -123,13 +123,13 @@ public class JavaTypeModel {
         }
       }
     }
-    final Function1<Method,String> _function_4 = new Function1<Method,String>() {
+    final Function1<Method, String> _function_4 = new Function1<Method, String>() {
       public String apply(final Method it) {
         return it.getName();
       }
     };
     ListExtensions.<Method, String>sortInplaceBy(this.operations, _function_4);
-    final Function1<JavaProperty,String> _function_5 = new Function1<JavaProperty,String>() {
+    final Function1<JavaProperty, String> _function_5 = new Function1<JavaProperty, String>() {
       public String apply(final JavaProperty it) {
         return it.getName();
       }
@@ -145,14 +145,14 @@ public class JavaTypeModel {
     CollectionExtensions.<Class<?>>addAll(this.superTypes, _interfaces);
   }
   
-  protected Pair<String,Class<?>> getPropertyNameAndType(final Method method) {
-    Pair<String,Class<?>> _xblockexpression = null;
+  protected Pair<String, Class<?>> getPropertyNameAndType(final Method method) {
+    Pair<String, Class<?>> _xblockexpression = null;
     {
       final String methodName = method.getName();
-      Pair<String,Class<?>> _xifexpression = null;
+      Pair<String, Class<?>> _xifexpression = null;
       boolean _startsWith = methodName.startsWith("get");
       if (_startsWith) {
-        Pair<String,Class<?>> _xifexpression_1 = null;
+        Pair<String, Class<?>> _xifexpression_1 = null;
         Class<?>[] _parameterTypes = method.getParameterTypes();
         int _size = ((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)).size();
         boolean _equals = (_size == 0);
@@ -164,10 +164,10 @@ public class JavaTypeModel {
         }
         _xifexpression = _xifexpression_1;
       } else {
-        Pair<String,Class<?>> _xifexpression_2 = null;
+        Pair<String, Class<?>> _xifexpression_2 = null;
         boolean _startsWith_1 = methodName.startsWith("set");
         if (_startsWith_1) {
-          Pair<String,Class<?>> _xifexpression_3 = null;
+          Pair<String, Class<?>> _xifexpression_3 = null;
           Class<?>[] _parameterTypes_1 = method.getParameterTypes();
           int _size_1 = ((List<Class<?>>)Conversions.doWrapArray(_parameterTypes_1)).size();
           boolean _equals_1 = (_size_1 == 1);
@@ -180,10 +180,10 @@ public class JavaTypeModel {
           }
           _xifexpression_2 = _xifexpression_3;
         } else {
-          Pair<String,Class<?>> _xifexpression_4 = null;
+          Pair<String, Class<?>> _xifexpression_4 = null;
           boolean _startsWith_2 = methodName.startsWith("is");
           if (_startsWith_2) {
-            Pair<String,Class<?>> _xifexpression_5 = null;
+            Pair<String, Class<?>> _xifexpression_5 = null;
             Class<?>[] _parameterTypes_3 = method.getParameterTypes();
             int _size_2 = ((List<Class<?>>)Conversions.doWrapArray(_parameterTypes_3)).size();
             boolean _equals_2 = (_size_2 == 0);
@@ -195,7 +195,7 @@ public class JavaTypeModel {
             }
             _xifexpression_4 = _xifexpression_5;
           } else {
-            Pair<String,Class<?>> _xifexpression_6 = null;
+            Pair<String, Class<?>> _xifexpression_6 = null;
             boolean _endsWith = methodName.endsWith("Property");
             if (_endsWith) {
               int _length = methodName.length();

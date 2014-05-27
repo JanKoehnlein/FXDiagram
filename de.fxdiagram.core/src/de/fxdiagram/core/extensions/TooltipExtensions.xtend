@@ -57,7 +57,7 @@ class SoftTooltip {
 		this.timer = new TooltipTimer(this)
 	}
 
-	protected def void install(Node host) {
+	def void install(Node host) {
 		host.addEventHandler(MouseEvent.ANY, [
 			switch eventType {
 				case MouseEvent.MOUSE_ENTERED_TARGET: {

@@ -40,7 +40,7 @@ public class CubeChooser extends AbstractChooser {
   
   protected void doSetInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _nodes = this.getNodes();
-    final Function2<Double,XNode,Double> _function = new Function2<Double,XNode,Double>() {
+    final Function2<Double, XNode, Double> _function = new Function2<Double, XNode, Double>() {
       public Double apply(final Double a, final XNode b) {
         Bounds _layoutBounds = b.getLayoutBounds();
         double _width = _layoutBounds.getWidth();
@@ -61,7 +61,7 @@ public class CubeChooser extends AbstractChooser {
     final int rightNodeIndex = ((((int) interpolatedPosition) + 1) % _size_1);
     this.applyTransform(rightNodeIndex, (angle - 90));
     ArrayList<XNode> _nodes_3 = this.getNodes();
-    final Procedure2<XNode,Integer> _function_1 = new Procedure2<XNode,Integer>() {
+    final Procedure2<XNode, Integer> _function_1 = new Procedure2<XNode, Integer>() {
       public void apply(final XNode node, final Integer i) {
         if (((i != leftNodeIndex) && (i != rightNodeIndex))) {
           node.setVisible(false);

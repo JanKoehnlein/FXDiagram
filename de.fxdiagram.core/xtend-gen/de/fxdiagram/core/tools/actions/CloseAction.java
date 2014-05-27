@@ -22,7 +22,7 @@ public class CloseAction implements DiagramAction {
   }
   
   public void perform(final XRoot root) {
-    final Function1<CloseBehavior,Boolean> _function = new Function1<CloseBehavior,Boolean>() {
+    final Function1<CloseBehavior, Boolean> _function = new Function1<CloseBehavior, Boolean>() {
       public Boolean apply(final CloseBehavior it) {
         boolean _xblockexpression = false;
         {

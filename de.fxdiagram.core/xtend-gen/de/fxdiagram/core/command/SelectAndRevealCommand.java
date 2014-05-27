@@ -32,9 +32,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class SelectAndRevealCommand extends ViewportCommand {
   private Set<XShape> originalSelection = CollectionLiterals.<XShape>newHashSet();
   
-  private Function1<? super XShape,? extends Boolean> selectionPredicate;
+  private Function1<? super XShape, ? extends Boolean> selectionPredicate;
   
-  public SelectAndRevealCommand(final XRoot root, final Function1<? super XShape,? extends Boolean> selectionPredicate) {
+  public SelectAndRevealCommand(final XRoot root, final Function1<? super XShape, ? extends Boolean> selectionPredicate) {
     this.selectionPredicate = selectionPredicate;
   }
   
@@ -47,7 +47,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
     XDiagram _diagram_1 = root.getDiagram();
     ObservableList<XConnection> _connections = _diagram_1.getConnections();
     Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
-    final Function1<XShape,XShape> _function = new Function1<XShape,XShape>() {
+    final Function1<XShape, XShape> _function = new Function1<XShape, XShape>() {
       public XShape apply(final XShape it) {
         Boolean _apply = SelectAndRevealCommand.this.selectionPredicate.apply(((XShape)it));
         if ((_apply).booleanValue()) {
@@ -73,14 +73,14 @@ public class SelectAndRevealCommand extends ViewportCommand {
       _xifexpression = selection;
     }
     selection = _xifexpression;
-    final Function1<XShape,Bounds> _function_1 = new Function1<XShape,Bounds>() {
+    final Function1<XShape, Bounds> _function_1 = new Function1<XShape, Bounds>() {
       public Bounds apply(final XShape it) {
         Bounds _snapBounds = ((XShape)it).getSnapBounds();
         return CoreExtensions.localToRootDiagram(((XShape)it), _snapBounds);
       }
     };
     Iterable<Bounds> _map_1 = IterableExtensions.<XShape, Bounds>map(selection, _function_1);
-    final Function2<Bounds,Bounds,Bounds> _function_2 = new Function2<Bounds,Bounds,Bounds>() {
+    final Function2<Bounds, Bounds, Bounds> _function_2 = new Function2<Bounds, Bounds, Bounds>() {
       public Bounds apply(final Bounds a, final Bounds b) {
         return BoundsExtensions.operator_plus(a, b);
       }

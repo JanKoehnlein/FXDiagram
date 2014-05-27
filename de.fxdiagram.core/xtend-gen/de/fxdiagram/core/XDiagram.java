@@ -74,7 +74,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   private AuxiliaryLinesSupport auxiliaryLinesSupport;
   
-  private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
+  private ObservableMap<Class<? extends Behavior>, Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
   
   private ViewportTransform viewportTransform;
   
@@ -252,10 +252,10 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
       DiagramNavigationBehavior _diagramNavigationBehavior = new DiagramNavigationBehavior(this);
       this.addBehavior(_diagramNavigationBehavior);
     }
-    InitializingMapListener<Class<? extends Behavior>,Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
-    final Procedure1<InitializingMapListener<Class<? extends Behavior>,Behavior>> _function_3 = new Procedure1<InitializingMapListener<Class<? extends Behavior>,Behavior>>() {
-      public void apply(final InitializingMapListener<Class<? extends Behavior>,Behavior> it) {
-        final Procedure2<Class<? extends Behavior>,Behavior> _function = new Procedure2<Class<? extends Behavior>,Behavior>() {
+    InitializingMapListener<Class<? extends Behavior>, Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
+    final Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>> _function_3 = new Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>>() {
+      public void apply(final InitializingMapListener<Class<? extends Behavior>, Behavior> it) {
+        final Procedure2<Class<? extends Behavior>, Behavior> _function = new Procedure2<Class<? extends Behavior>, Behavior>() {
           public void apply(final Class<? extends Behavior> key, final Behavior value) {
             value.activate();
           }
@@ -263,7 +263,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
         it.setPut(_function);
       }
     };
-    InitializingMapListener<Class<? extends Behavior>,Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>,Behavior>>operator_doubleArrow(_initializingMapListener, _function_3);
+    InitializingMapListener<Class<? extends Behavior>, Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>, Behavior>>operator_doubleArrow(_initializingMapListener, _function_3);
     CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow_1);
     boolean _isLayoutOnActivate = this.getIsLayoutOnActivate();
     if (_isLayoutOnActivate) {
@@ -446,23 +446,23 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     return this.buttonsProperty;
   }
   
-  private SimpleObjectProperty<ObservableMap<Node,Pos>> fixedButtonsProperty = new SimpleObjectProperty<ObservableMap<Node, Pos>>(this, "fixedButtons",_initFixedButtons());
+  private SimpleObjectProperty<ObservableMap<Node, Pos>> fixedButtonsProperty = new SimpleObjectProperty<ObservableMap<Node, Pos>>(this, "fixedButtons",_initFixedButtons());
   
-  private static final ObservableMap<Node,Pos> _initFixedButtons() {
-    HashMap<Node,Pos> _newHashMap = CollectionLiterals.<Node, Pos>newHashMap();
-    ObservableMap<Node,Pos> _observableMap = FXCollections.<Node, Pos>observableMap(_newHashMap);
+  private static final ObservableMap<Node, Pos> _initFixedButtons() {
+    HashMap<Node, Pos> _newHashMap = CollectionLiterals.<Node, Pos>newHashMap();
+    ObservableMap<Node, Pos> _observableMap = FXCollections.<Node, Pos>observableMap(_newHashMap);
     return _observableMap;
   }
   
-  public ObservableMap<Node,Pos> getFixedButtons() {
+  public ObservableMap<Node, Pos> getFixedButtons() {
     return this.fixedButtonsProperty.get();
   }
   
-  public void setFixedButtons(final ObservableMap<Node,Pos> fixedButtons) {
+  public void setFixedButtons(final ObservableMap<Node, Pos> fixedButtons) {
     this.fixedButtonsProperty.set(fixedButtons);
   }
   
-  public ObjectProperty<ObservableMap<Node,Pos>> fixedButtonsProperty() {
+  public ObjectProperty<ObservableMap<Node, Pos>> fixedButtonsProperty() {
     return this.fixedButtonsProperty;
   }
   

@@ -73,7 +73,7 @@ class ModelNodeTest {
 			import javafx.scene.shape.Polygon
 			import javafx.beans.property.ListProperty
 			
-			@ModelNode(#['layoutX', 'string', 'integer', 'long', 'bool', 'unprecise', 'names', 'selfRef']) 
+			@ModelNode('layoutX', 'string', 'integer', 'long', 'bool', 'unprecise', 'names', 'selfRef') 
 			abstract class ModelTest extends Polygon {
 				IntegerProperty integer
 				LongProperty longProperty
@@ -138,7 +138,7 @@ class ModelNodeTest {
 			import javafx.collections.FXCollections
 			import javafx.collections.ObservableList
 			
-			@ModelNode(#['myDouble', 'myString', 'myObject', 'myList'])
+			@ModelNode('myDouble', 'myString', 'myObject', 'myList')
 			class ActiveAnnotationsTest {
 				@FxProperty double myDouble
 				@FxProperty String myString

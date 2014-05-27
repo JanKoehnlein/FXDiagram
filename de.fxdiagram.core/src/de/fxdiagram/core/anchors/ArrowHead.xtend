@@ -14,7 +14,7 @@ import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
-@ModelNode(#['connection', 'isSource'])
+@ModelNode('connection', 'isSource')
 abstract class ArrowHead extends Parent {
 	
 	Node node

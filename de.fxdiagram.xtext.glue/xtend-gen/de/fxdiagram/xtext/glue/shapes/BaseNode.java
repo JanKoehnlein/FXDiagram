@@ -37,40 +37,40 @@ public class BaseNode<T extends Object> extends SimpleNode {
       XtextDomainObjectDescriptor<T> _descriptor_1 = this.getDescriptor();
       AbstractMapping<T> _mapping_1 = _descriptor_1.getMapping();
       final NodeMapping<T> nodeMapping = ((NodeMapping<T>) _mapping_1);
-      List<AbstractConnectionMappingCall<?,T>> _outgoing = nodeMapping.getOutgoing();
-      final Function1<AbstractConnectionMappingCall<?,T>,Boolean> _function = new Function1<AbstractConnectionMappingCall<?,T>,Boolean>() {
-        public Boolean apply(final AbstractConnectionMappingCall<?,T> it) {
+      List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
+      final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function = new Function1<AbstractConnectionMappingCall<?, T>, Boolean>() {
+        public Boolean apply(final AbstractConnectionMappingCall<?, T> it) {
           return Boolean.valueOf(it.isLazy());
         }
       };
-      Iterable<AbstractConnectionMappingCall<?,T>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?,T>>filter(_outgoing, _function);
-      final Procedure1<AbstractConnectionMappingCall<?,T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
-        public void apply(final AbstractConnectionMappingCall<?,T> it) {
+      Iterable<AbstractConnectionMappingCall<?, T>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(_outgoing, _function);
+      final Procedure1<AbstractConnectionMappingCall<?, T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?, T>>() {
+        public void apply(final AbstractConnectionMappingCall<?, T> it) {
           XtextDomainObjectDescriptor<T> _descriptor = BaseNode.this.getDescriptor();
           XtextDomainObjectProvider _provider = _descriptor.getProvider();
           XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter(_provider);
-          LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(BaseNode.this, it, _xDiagramConfigInterpreter, true);
+          LazyConnectionMappingBehavior<?, T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(BaseNode.this, it, _xDiagramConfigInterpreter, true);
           BaseNode.this.addBehavior(_lazyConnectionMappingBehavior);
         }
       };
-      IterableExtensions.<AbstractConnectionMappingCall<?,T>>forEach(_filter, _function_1);
-      List<AbstractConnectionMappingCall<?,T>> _incoming = nodeMapping.getIncoming();
-      final Function1<AbstractConnectionMappingCall<?,T>,Boolean> _function_2 = new Function1<AbstractConnectionMappingCall<?,T>,Boolean>() {
-        public Boolean apply(final AbstractConnectionMappingCall<?,T> it) {
+      IterableExtensions.<AbstractConnectionMappingCall<?, T>>forEach(_filter, _function_1);
+      List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
+      final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function_2 = new Function1<AbstractConnectionMappingCall<?, T>, Boolean>() {
+        public Boolean apply(final AbstractConnectionMappingCall<?, T> it) {
           return Boolean.valueOf(it.isLazy());
         }
       };
-      Iterable<AbstractConnectionMappingCall<?,T>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?,T>>filter(_incoming, _function_2);
-      final Procedure1<AbstractConnectionMappingCall<?,T>> _function_3 = new Procedure1<AbstractConnectionMappingCall<?,T>>() {
-        public void apply(final AbstractConnectionMappingCall<?,T> it) {
+      Iterable<AbstractConnectionMappingCall<?, T>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(_incoming, _function_2);
+      final Procedure1<AbstractConnectionMappingCall<?, T>> _function_3 = new Procedure1<AbstractConnectionMappingCall<?, T>>() {
+        public void apply(final AbstractConnectionMappingCall<?, T> it) {
           XtextDomainObjectDescriptor<T> _descriptor = BaseNode.this.getDescriptor();
           XtextDomainObjectProvider _provider = _descriptor.getProvider();
           XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter(_provider);
-          LazyConnectionMappingBehavior<?,T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(BaseNode.this, it, _xDiagramConfigInterpreter, false);
+          LazyConnectionMappingBehavior<?, T> _lazyConnectionMappingBehavior = new LazyConnectionMappingBehavior(BaseNode.this, it, _xDiagramConfigInterpreter, false);
           BaseNode.this.addBehavior(_lazyConnectionMappingBehavior);
         }
       };
-      IterableExtensions.<AbstractConnectionMappingCall<?,T>>forEach(_filter_1, _function_3);
+      IterableExtensions.<AbstractConnectionMappingCall<?, T>>forEach(_filter_1, _function_3);
     }
     OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(this);
     this.addBehavior(_openElementInEditorBehavior);

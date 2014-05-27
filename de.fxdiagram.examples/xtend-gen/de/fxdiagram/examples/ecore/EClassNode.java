@@ -158,7 +158,7 @@ public class EClassNode extends XNode {
               _builder.append(_name, "");
               _builder.append("(");
               EList<EParameter> _eParameters = operation.getEParameters();
-              final Function1<EParameter,String> _function = new Function1<EParameter,String>() {
+              final Function1<EParameter, String> _function = new Function1<EParameter, String>() {
                 public String apply(final EParameter it) {
                   EClassifier _eType = it.getEType();
                   return _eType.getName();

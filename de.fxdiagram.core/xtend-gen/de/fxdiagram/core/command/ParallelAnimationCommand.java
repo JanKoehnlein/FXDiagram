@@ -28,7 +28,7 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
-        final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+        final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
           public Animation apply(final AnimationCommand it) {
             return it.getExecuteAnimation(context);
           }
@@ -46,7 +46,7 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
-        final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+        final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
           public Animation apply(final AnimationCommand it) {
             return it.getUndoAnimation(context);
           }
@@ -64,7 +64,7 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
-        final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+        final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
           public Animation apply(final AnimationCommand it) {
             return it.getRedoAnimation(context);
           }

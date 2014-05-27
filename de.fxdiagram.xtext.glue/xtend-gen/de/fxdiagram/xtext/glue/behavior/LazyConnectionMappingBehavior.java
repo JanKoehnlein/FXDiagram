@@ -28,7 +28,7 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
   
   private XRapidButtonAction action;
   
-  public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
+  public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL, ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
     super(host);
     String _role = mappingCall.getRole();
     String _plus = ("Add " + _role);
@@ -50,7 +50,7 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
     Iterables.<XRapidButton>addAll(_buttons, this.buttons);
   }
   
-  protected XRapidButtonAction createAction(final AbstractConnectionMappingCall<MODEL,ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
+  protected XRapidButtonAction createAction(final AbstractConnectionMappingCall<MODEL, ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
     return new LazyConnectionRapidButtonAction<MODEL, ARG>(mappingCall, configInterpreter, hostIsSource);
   }
   

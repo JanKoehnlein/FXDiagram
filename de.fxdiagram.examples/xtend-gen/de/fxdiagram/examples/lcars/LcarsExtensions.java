@@ -9,7 +9,7 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
 public class LcarsExtensions {
-  private static Map<Double,Font> cache = CollectionLiterals.<Double, Font>newHashMap();
+  private static Map<Double, Font> cache = CollectionLiterals.<Double, Font>newHashMap();
   
   public static Font lcarsFont(final double size) {
     Font _xblockexpression = null;

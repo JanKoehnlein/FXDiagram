@@ -32,7 +32,7 @@ import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.layout.LayoutType
 
-@ModelNode(#['nodes', 'connections', 'parentDiagram'])
+@ModelNode('nodes', 'connections', 'parentDiagram')
 class XDiagram extends Group implements XActivatable {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
@@ -83,7 +83,7 @@ class XDiagram extends Group implements XActivatable {
 		]
 		viewportTransform = new ViewportTransform
 		transforms.setAll(viewportTransform.transform)
-		transforms.addListener([ListChangeListener.Change<Transform> change | 
+		transforms.addListener([ListChangeListener.Change<? extends Transform> change | 
 			throw new IllegalStateException("Illegal attempt to change the transforms of an XDiagram")
 		])
 	}

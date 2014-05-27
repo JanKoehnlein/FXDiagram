@@ -21,11 +21,11 @@ import org.eclipse.xtext.xbase.lib.Functions.Function0;
 @Logging
 @SuppressWarnings("all")
 public class ModelFactory {
-  private final Map<String,Class<ColorAdapter>> valueAdapters = new Function0<Map<String,Class<ColorAdapter>>>() {
-    public Map<String,Class<ColorAdapter>> apply() {
-      Map<String,Class<ColorAdapter>> _xsetliteral = null;
+  private final Map<String, Class<ColorAdapter>> valueAdapters = new Function0<Map<String, Class<ColorAdapter>>>() {
+    public Map<String, Class<ColorAdapter>> apply() {
+      Map<String, Class<ColorAdapter>> _xsetliteral = null;
       String _name = Color.class.getName();
-      Map<String,Class<ColorAdapter>> _tempMap = Maps.<String, Class<ColorAdapter>>newHashMap();
+      Map<String, Class<ColorAdapter>> _tempMap = Maps.<String, Class<ColorAdapter>>newHashMap();
       _tempMap.put(_name, ColorAdapter.class);
       _xsetliteral = Collections.<String, Class<ColorAdapter>>unmodifiableMap(_tempMap);
       return _xsetliteral;

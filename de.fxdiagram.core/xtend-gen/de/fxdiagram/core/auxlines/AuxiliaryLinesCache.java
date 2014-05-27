@@ -26,9 +26,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class AuxiliaryLinesCache {
   private ListChangeListener<XNode> nodesListener;
   
-  private Map<XNode,ChangeListener<Number>> node2scalarListener = CollectionLiterals.<XNode, ChangeListener<Number>>newHashMap();
+  private Map<XNode, ChangeListener<Number>> node2scalarListener = CollectionLiterals.<XNode, ChangeListener<Number>>newHashMap();
   
-  private Map<XNode,ChangeListener<Bounds>> node2boundsListener = CollectionLiterals.<XNode, ChangeListener<Bounds>>newHashMap();
+  private Map<XNode, ChangeListener<Bounds>> node2boundsListener = CollectionLiterals.<XNode, ChangeListener<Bounds>>newHashMap();
   
   private AuxiliaryLineMap<Bounds> leftMap = new AuxiliaryLineMap<Bounds>();
   

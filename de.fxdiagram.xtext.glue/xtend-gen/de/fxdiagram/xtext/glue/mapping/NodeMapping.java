@@ -16,13 +16,13 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
 public class NodeMapping<T extends Object> extends AbstractMapping<T> {
-  private List<AbstractConnectionMappingCall<?,T>> outgoing = CollectionLiterals.<AbstractConnectionMappingCall<?,T>>newArrayList();
+  private List<AbstractConnectionMappingCall<?, T>> outgoing = CollectionLiterals.<AbstractConnectionMappingCall<?, T>>newArrayList();
   
-  private List<AbstractConnectionMappingCall<?,T>> incoming = CollectionLiterals.<AbstractConnectionMappingCall<?,T>>newArrayList();
+  private List<AbstractConnectionMappingCall<?, T>> incoming = CollectionLiterals.<AbstractConnectionMappingCall<?, T>>newArrayList();
   
-  private DiagramMappingCall<?,T> nestedDiagram = null;
+  private DiagramMappingCall<?, T> nestedDiagram = null;
   
-  private Function1<? super XtextDomainObjectDescriptor<T>,? extends XNode> createNode = new Function1<XtextDomainObjectDescriptor<T>,BaseNode<T>>() {
+  private Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> createNode = new Function1<XtextDomainObjectDescriptor<T>, BaseNode<T>>() {
     public BaseNode<T> apply(final XtextDomainObjectDescriptor<T> it) {
       return new BaseNode<T>(it);
     }
@@ -36,69 +36,69 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
     super(typeGuard);
   }
   
-  public List<AbstractConnectionMappingCall<?,T>> getOutgoing() {
+  public List<AbstractConnectionMappingCall<?, T>> getOutgoing() {
     return this.outgoing;
   }
   
-  public List<AbstractConnectionMappingCall<?,T>> getIncoming() {
+  public List<AbstractConnectionMappingCall<?, T>> getIncoming() {
     return this.incoming;
   }
   
-  public DiagramMappingCall<?,T> getNestedDiagram() {
+  public DiagramMappingCall<?, T> getNestedDiagram() {
     return this.nestedDiagram;
   }
   
-  public DiagramMappingCall<?,T> setNestedDiagram(final DiagramMappingCall<?,T> nestedDiagram) {
+  public DiagramMappingCall<?, T> setNestedDiagram(final DiagramMappingCall<?, T> nestedDiagram) {
     return this.nestedDiagram = nestedDiagram;
   }
   
-  public Function1<? super XtextDomainObjectDescriptor<T>,? extends XNode> getCreateNode() {
+  public Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> getCreateNode() {
     return this.createNode;
   }
   
-  public Function1<? super XtextDomainObjectDescriptor<T>,? extends XNode> setCreateNode(final Function1<? super XtextDomainObjectDescriptor<T>,? extends XNode> createNode) {
+  public Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> setCreateNode(final Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> createNode) {
     return this.createNode = createNode;
   }
   
-  public <U extends Object> ConnectionMappingCall<U,T> outConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends U> selector) {
-    ConnectionMappingCall<U,T> _xblockexpression = null;
+  public <U extends Object> ConnectionMappingCall<U, T> outConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
+    ConnectionMappingCall<U, T> _xblockexpression = null;
     {
-      final ConnectionMappingCall<U,T> call = new ConnectionMappingCall<U, T>(selector, connectionMapping);
+      final ConnectionMappingCall<U, T> call = new ConnectionMappingCall<U, T>(selector, connectionMapping);
       this.outgoing.add(call);
       _xblockexpression = call;
     }
     return _xblockexpression;
   }
   
-  public <U extends Object> ConnectionMappingCall<U,T> inConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends U> selector) {
-    ConnectionMappingCall<U,T> _xblockexpression = null;
+  public <U extends Object> ConnectionMappingCall<U, T> inConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
+    ConnectionMappingCall<U, T> _xblockexpression = null;
     {
-      final ConnectionMappingCall<U,T> call = new ConnectionMappingCall<U, T>(selector, connectionMapping);
+      final ConnectionMappingCall<U, T> call = new ConnectionMappingCall<U, T>(selector, connectionMapping);
       this.incoming.add(call);
       _xblockexpression = call;
     }
     return _xblockexpression;
   }
   
-  public <U extends Object> DiagramMappingCall<?,T> nestedDiagramFor(final DiagramMapping<U> connectionMapping, final Function1<? super T,? extends U> selector) {
-    DiagramMappingCall<U,T> _diagramMappingCall = new DiagramMappingCall<U, T>(selector, connectionMapping);
+  public <U extends Object> DiagramMappingCall<?, T> nestedDiagramFor(final DiagramMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
+    DiagramMappingCall<U, T> _diagramMappingCall = new DiagramMappingCall<U, T>(selector, connectionMapping);
     return this.nestedDiagram = _diagramMappingCall;
   }
   
-  public <U extends Object> MultiConnectionMappingCall<U,T> outConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends Iterable<? extends U>> selector) {
-    MultiConnectionMappingCall<U,T> _xblockexpression = null;
+  public <U extends Object> MultiConnectionMappingCall<U, T> outConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
+    MultiConnectionMappingCall<U, T> _xblockexpression = null;
     {
-      final MultiConnectionMappingCall<U,T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
+      final MultiConnectionMappingCall<U, T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
       this.outgoing.add(call);
       _xblockexpression = call;
     }
     return _xblockexpression;
   }
   
-  public <U extends Object> MultiConnectionMappingCall<U,T> inConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T,? extends Iterable<? extends U>> selector) {
-    MultiConnectionMappingCall<U,T> _xblockexpression = null;
+  public <U extends Object> MultiConnectionMappingCall<U, T> inConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
+    MultiConnectionMappingCall<U, T> _xblockexpression = null;
     {
-      final MultiConnectionMappingCall<U,T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
+      final MultiConnectionMappingCall<U, T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
       this.incoming.add(call);
       _xblockexpression = call;
     }

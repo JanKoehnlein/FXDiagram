@@ -20,7 +20,7 @@ import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
-@ModelNode(#['layoutX', 'layoutY', 'type'])
+@ModelNode('layoutX', 'layoutY', 'type')
 class XControlPoint extends XShape {
 
 	@FxProperty XControlPointType type = CONTROL_POINT

@@ -75,13 +75,13 @@ public class EntityNode extends BaseNode<Entity> {
             final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
               public void apply(final VBox attributeCompartment) {
                 XtextDomainObjectDescriptor<Entity> _descriptor = EntityNode.this.getDescriptor();
-                final Function1<Entity,Object> _function = new Function1<Entity,Object>() {
+                final Function1<Entity, Object> _function = new Function1<Entity, Object>() {
                   public Object apply(final Entity entity) {
                     Object _xblockexpression = null;
                     {
                       EList<Feature> _features = entity.getFeatures();
                       Iterable<Property> _filter = Iterables.<Property>filter(_features, Property.class);
-                      final Function1<Property,Boolean> _function = new Function1<Property,Boolean>() {
+                      final Function1<Property, Boolean> _function = new Function1<Property, Boolean>() {
                         public Boolean apply(final Property it) {
                           JvmTypeReference _type = it.getType();
                           Entity _referencedEntity = EntityNode.this.util.getReferencedEntity(_type);

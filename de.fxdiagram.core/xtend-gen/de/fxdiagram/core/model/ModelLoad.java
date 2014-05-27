@@ -38,7 +38,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class ModelLoad {
   private ModelFactory modelFactory;
   
-  private Map<String,ModelElement> idMap;
+  private Map<String, ModelElement> idMap;
   
   private List<CrossRefData> crossRefs;
   
@@ -47,7 +47,7 @@ public class ModelLoad {
     this.modelFactory = _modelFactory;
     ArrayList<CrossRefData> _newArrayList = CollectionLiterals.<CrossRefData>newArrayList();
     this.crossRefs = _newArrayList;
-    HashMap<String,ModelElement> _newHashMap = CollectionLiterals.<String, ModelElement>newHashMap();
+    HashMap<String, ModelElement> _newHashMap = CollectionLiterals.<String, ModelElement>newHashMap();
     this.idMap = _newHashMap;
     final JsonReader reader = Json.createReader(in);
     final JsonObject jsonObject = reader.readObject();
@@ -97,7 +97,7 @@ public class ModelLoad {
         boolean _switchResult = false;
         boolean _matched = false;
         if (!_matched) {
-          if (Objects.equal(propertyType,String.class)) {
+          if (Objects.equal(propertyType, String.class)) {
             _matched=true;
             String _name_1 = property.getName();
             String _string = it.getString(_name_1);
@@ -105,7 +105,7 @@ public class ModelLoad {
           }
         }
         if (!_matched) {
-          if (Objects.equal(propertyType,Double.class)) {
+          if (Objects.equal(propertyType, Double.class)) {
             _matched=true;
             String _name_2 = property.getName();
             JsonNumber _jsonNumber = it.getJsonNumber(_name_2);
@@ -114,7 +114,7 @@ public class ModelLoad {
           }
         }
         if (!_matched) {
-          if (Objects.equal(propertyType,Float.class)) {
+          if (Objects.equal(propertyType, Float.class)) {
             _matched=true;
             String _name_3 = property.getName();
             JsonNumber _jsonNumber_1 = it.getJsonNumber(_name_3);
@@ -123,7 +123,7 @@ public class ModelLoad {
           }
         }
         if (!_matched) {
-          if (Objects.equal(propertyType,Long.class)) {
+          if (Objects.equal(propertyType, Long.class)) {
             _matched=true;
             String _name_4 = property.getName();
             JsonNumber _jsonNumber_2 = it.getJsonNumber(_name_4);
@@ -132,7 +132,7 @@ public class ModelLoad {
           }
         }
         if (!_matched) {
-          if (Objects.equal(propertyType,Integer.class)) {
+          if (Objects.equal(propertyType, Integer.class)) {
             _matched=true;
             String _name_5 = property.getName();
             int _int = it.getInt(_name_5);
@@ -140,7 +140,7 @@ public class ModelLoad {
           }
         }
         if (!_matched) {
-          if (Objects.equal(propertyType,Boolean.class)) {
+          if (Objects.equal(propertyType, Boolean.class)) {
             _matched=true;
             String _name_6 = property.getName();
             boolean _boolean = it.getBoolean(_name_6);
@@ -214,42 +214,42 @@ public class ModelLoad {
             final JsonValue jsonValue = jsonValues.get((i).intValue());
             boolean _matched = false;
             if (!_matched) {
-              if (Objects.equal(componentType,String.class)) {
+              if (Objects.equal(componentType, String.class)) {
                 _matched=true;
                 String _string = ((JsonString) jsonValue).toString();
                 ((List<String>) property).add(_string);
               }
             }
             if (!_matched) {
-              if (Objects.equal(componentType,Double.class)) {
+              if (Objects.equal(componentType, Double.class)) {
                 _matched=true;
                 double _doubleValue = ((JsonNumber) jsonValue).doubleValue();
                 ((List<Double>) property).add(Double.valueOf(_doubleValue));
               }
             }
             if (!_matched) {
-              if (Objects.equal(componentType,Float.class)) {
+              if (Objects.equal(componentType, Float.class)) {
                 _matched=true;
                 double _doubleValue_1 = ((JsonNumber) jsonValue).doubleValue();
                 ((List<Float>) property).add(Float.valueOf(((float) _doubleValue_1)));
               }
             }
             if (!_matched) {
-              if (Objects.equal(componentType,Long.class)) {
+              if (Objects.equal(componentType, Long.class)) {
                 _matched=true;
                 long _longValue = ((JsonNumber) jsonValue).longValue();
                 ((List<Long>) property).add(Long.valueOf(_longValue));
               }
             }
             if (!_matched) {
-              if (Objects.equal(componentType,Integer.class)) {
+              if (Objects.equal(componentType, Integer.class)) {
                 _matched=true;
                 int _intValue = ((JsonNumber) jsonValue).intValue();
                 ((List<Integer>) property).add(Integer.valueOf(_intValue));
               }
             }
             if (!_matched) {
-              if (Objects.equal(componentType,Boolean.class)) {
+              if (Objects.equal(componentType, Boolean.class)) {
                 _matched=true;
                 boolean _equals = Objects.equal(jsonValue, JsonValue.TRUE);
                 ((List<Boolean>) property).add(Boolean.valueOf(_equals));

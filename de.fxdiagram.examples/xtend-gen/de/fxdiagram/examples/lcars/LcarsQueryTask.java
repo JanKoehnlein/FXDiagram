@@ -56,14 +56,14 @@ public class LcarsQueryTask extends Task<Void> {
       chooser.setConnectionProvider(this.connectionProvider);
       LcarsNode _lcarsNode = this.host.getLcarsNode();
       ObservableList<XConnection> _incomingConnections = _lcarsNode.getIncomingConnections();
-      final Function1<XConnection,Boolean> _function = new Function1<XConnection,Boolean>() {
+      final Function1<XConnection, Boolean> _function = new Function1<XConnection, Boolean>() {
         public Boolean apply(final XConnection it) {
           DomainObjectDescriptor _domainObject = it.getDomainObject();
           return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
         }
       };
       Iterable<XConnection> _filter = IterableExtensions.<XConnection>filter(_incomingConnections, _function);
-      final Function1<XConnection,XNode> _function_1 = new Function1<XConnection,XNode>() {
+      final Function1<XConnection, XNode> _function_1 = new Function1<XConnection, XNode>() {
         public XNode apply(final XConnection it) {
           return it.getSource();
         }
@@ -71,14 +71,14 @@ public class LcarsQueryTask extends Task<Void> {
       Iterable<XNode> _map = IterableExtensions.<XConnection, XNode>map(_filter, _function_1);
       LcarsNode _lcarsNode_1 = this.host.getLcarsNode();
       ObservableList<XConnection> _outgoingConnections = _lcarsNode_1.getOutgoingConnections();
-      final Function1<XConnection,Boolean> _function_2 = new Function1<XConnection,Boolean>() {
+      final Function1<XConnection, Boolean> _function_2 = new Function1<XConnection, Boolean>() {
         public Boolean apply(final XConnection it) {
           DomainObjectDescriptor _domainObject = it.getDomainObject();
           return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
         }
       };
       Iterable<XConnection> _filter_1 = IterableExtensions.<XConnection>filter(_outgoingConnections, _function_2);
-      final Function1<XConnection,XNode> _function_3 = new Function1<XConnection,XNode>() {
+      final Function1<XConnection, XNode> _function_3 = new Function1<XConnection, XNode>() {
         public XNode apply(final XConnection it) {
           return it.getTarget();
         }
@@ -86,7 +86,7 @@ public class LcarsQueryTask extends Task<Void> {
       Iterable<XNode> _map_1 = IterableExtensions.<XConnection, XNode>map(_filter_1, _function_3);
       Iterable<XNode> _plus = Iterables.<XNode>concat(_map, _map_1);
       Iterable<LcarsNode> _filter_2 = Iterables.<LcarsNode>filter(_plus, LcarsNode.class);
-      final Function1<LcarsNode,String> _function_4 = new Function1<LcarsNode,String>() {
+      final Function1<LcarsNode, String> _function_4 = new Function1<LcarsNode, String>() {
         public String apply(final LcarsNode it) {
           DomainObjectDescriptor _domainObject = it.getDomainObject();
           return _domainObject.getId();
@@ -97,7 +97,7 @@ public class LcarsQueryTask extends Task<Void> {
       DomainObjectDescriptor _domainObject = lcarsNode.getDomainObject();
       String _id = _domainObject.getId();
       alreadyConnected.add(_id);
-      final Function1<DBObject,Boolean> _function_5 = new Function1<DBObject,Boolean>() {
+      final Function1<DBObject, Boolean> _function_5 = new Function1<DBObject, Boolean>() {
         public Boolean apply(final DBObject it) {
           Object _get = it.get("_id");
           String _string = _get.toString();
@@ -106,7 +106,7 @@ public class LcarsQueryTask extends Task<Void> {
         }
       };
       Iterable<DBObject> _filter_3 = IterableExtensions.<DBObject>filter(siblings, _function_5);
-      final Procedure2<DBObject,Integer> _function_6 = new Procedure2<DBObject,Integer>() {
+      final Procedure2<DBObject, Integer> _function_6 = new Procedure2<DBObject, Integer>() {
         public void apply(final DBObject it, final Integer i) {
           final LcarsEntryDescriptor descriptor = modelProvider.createLcarsEntryDescriptor(it);
           LcarsNode _lcarsNode = new LcarsNode(descriptor);

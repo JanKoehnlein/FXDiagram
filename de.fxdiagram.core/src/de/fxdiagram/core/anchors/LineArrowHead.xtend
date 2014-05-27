@@ -9,7 +9,7 @@ import javafx.scene.shape.Polyline
 import javafx.scene.shape.StrokeType
 import de.fxdiagram.annotations.properties.FxProperty
 
-@ModelNode(#['width', 'height', 'stroke'])
+@ModelNode('width', 'height', 'stroke')
 class LineArrowHead extends ArrowHead {
 	
 	@FxProperty double width 

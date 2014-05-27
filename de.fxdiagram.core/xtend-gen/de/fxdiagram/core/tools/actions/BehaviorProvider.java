@@ -11,10 +11,10 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class BehaviorProvider {
-  public static <T extends Behavior> void triggerBehavior(final XRoot root, final Class<T> type, final Function1<? super T,? extends Boolean> exec) {
+  public static <T extends Behavior> void triggerBehavior(final XRoot root, final Class<T> type, final Function1<? super T, ? extends Boolean> exec) {
     XDiagram _diagram = root.getDiagram();
     ObservableList<XNode> _nodes = _diagram.getNodes();
-    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
+    final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
       public Boolean apply(final XNode it) {
         return Boolean.valueOf(it.getSelected());
       }

@@ -57,7 +57,7 @@ public class DiagramActionTool implements XDiagramTool {
       public void handle(final KeyEvent event) {
         DiagramActionRegistry _diagramActionRegistry = root.getDiagramActionRegistry();
         ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
-        final Function1<DiagramAction,Boolean> _function = new Function1<DiagramAction,Boolean>() {
+        final Function1<DiagramAction, Boolean> _function = new Function1<DiagramAction, Boolean>() {
           public Boolean apply(final DiagramAction it) {
             return Boolean.valueOf(it.matches(event));
           }
@@ -147,14 +147,14 @@ public class DiagramActionTool implements XDiagramTool {
       Options _doubleArrow = ObjectExtensions.<Options>operator_doubleArrow(_options, _function);
       DiagramActionRegistry _diagramActionRegistry = this.root.getDiagramActionRegistry();
       ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
-      final Function1<DiagramAction,Symbol.Type> _function_1 = new Function1<DiagramAction,Symbol.Type>() {
+      final Function1<DiagramAction, Symbol.Type> _function_1 = new Function1<DiagramAction, Symbol.Type>() {
         public Symbol.Type apply(final DiagramAction it) {
           return it.getSymbol();
         }
       };
       List<Symbol.Type> _map = ListExtensions.<DiagramAction, Symbol.Type>map(_actions, _function_1);
       Iterable<Symbol.Type> _filterNull = IterableExtensions.<Symbol.Type>filterNull(_map);
-      final Function1<Symbol.Type,MenuItem> _function_2 = new Function1<Symbol.Type,MenuItem>() {
+      final Function1<Symbol.Type, MenuItem> _function_2 = new Function1<Symbol.Type, MenuItem>() {
         public MenuItem apply(final Symbol.Type actionSymbol) {
           MenuItem _menuItem = new MenuItem();
           final Procedure1<MenuItem> _function = new Procedure1<MenuItem>() {

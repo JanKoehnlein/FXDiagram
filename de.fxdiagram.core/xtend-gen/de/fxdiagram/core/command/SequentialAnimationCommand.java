@@ -19,7 +19,7 @@ public class SequentialAnimationCommand extends AbstractAnimationCommand {
   }
   
   public Animation createExecuteAnimation(final CommandContext context) {
-    final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+    final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
       public Animation apply(final AnimationCommand it) {
         return it.getExecuteAnimation(context);
       }
@@ -29,7 +29,7 @@ public class SequentialAnimationCommand extends AbstractAnimationCommand {
   
   public Animation createUndoAnimation(final CommandContext context) {
     List<AnimationCommand> _reverseView = ListExtensions.<AnimationCommand>reverseView(this.commands);
-    final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+    final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
       public Animation apply(final AnimationCommand it) {
         return it.getUndoAnimation(context);
       }
@@ -38,7 +38,7 @@ public class SequentialAnimationCommand extends AbstractAnimationCommand {
   }
   
   public Animation createRedoAnimation(final CommandContext context) {
-    final Function1<AnimationCommand,Animation> _function = new Function1<AnimationCommand,Animation>() {
+    final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
       public Animation apply(final AnimationCommand it) {
         return it.getRedoAnimation(context);
       }

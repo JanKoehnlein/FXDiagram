@@ -54,7 +54,7 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
       XConnectionKind _kind = this.connection.getKind();
       this.fromKind = _kind;
       ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
-      final Function1<XControlPoint,Point2D> _function = new Function1<XControlPoint,Point2D>() {
+      final Function1<XControlPoint, Point2D> _function = new Function1<XControlPoint, Point2D>() {
         public Point2D apply(final XControlPoint it) {
           double _layoutX = it.getLayoutX();
           double _layoutY = it.getLayoutY();

@@ -13,12 +13,12 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class ChainedAnimationUtil {
-  public static <T extends Object> Animation createChainedAnimation(final Iterable<T> iterable, final Function1<? super T,? extends Animation> animationFactory) {
+  public static <T extends Object> Animation createChainedAnimation(final Iterable<T> iterable, final Function1<? super T, ? extends Animation> animationFactory) {
     Iterator<T> _iterator = iterable.iterator();
     return ChainedAnimationUtil.<T>createChainedAnimation(_iterator, animationFactory);
   }
   
-  protected static <T extends Object> Animation createChainedAnimation(final Iterator<T> iterator, final Function1<? super T,? extends Animation> animationFactory) {
+  protected static <T extends Object> Animation createChainedAnimation(final Iterator<T> iterator, final Function1<? super T, ? extends Animation> animationFactory) {
     boolean _hasNext = iterator.hasNext();
     boolean _not = (!_hasNext);
     if (_not) {

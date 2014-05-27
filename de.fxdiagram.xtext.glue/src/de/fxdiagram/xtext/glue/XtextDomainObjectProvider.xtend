@@ -52,7 +52,7 @@ class MappedEObjectHandle<MODEL extends EObject> {
 	def getMapping() { mapping }
 }
 
-@ModelNode(#['provider', 'uri', 'fqn', 'mappingConfigID', 'mappingID'])
+@ModelNode('provider', 'uri', 'fqn', 'mappingConfigID', 'mappingID')
 class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
 	@FxProperty(readOnly) XtextDomainObjectProvider provider

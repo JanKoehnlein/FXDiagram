@@ -72,14 +72,14 @@ public class ZoomToFitAction implements DiagramAction {
             _xifexpression = root.getCurrentSelection();
           }
           final Iterable<XShape> elements = _xifexpression;
-          final Function1<XShape,Bounds> _function = new Function1<XShape,Bounds>() {
+          final Function1<XShape, Bounds> _function = new Function1<XShape, Bounds>() {
             public Bounds apply(final XShape it) {
               Bounds _snapBounds = it.getSnapBounds();
               return CoreExtensions.localToRootDiagram(it, _snapBounds);
             }
           };
           Iterable<Bounds> _map = IterableExtensions.<XShape, Bounds>map(elements, _function);
-          final Function2<Bounds,Bounds,Bounds> _function_1 = new Function2<Bounds,Bounds,Bounds>() {
+          final Function2<Bounds, Bounds, Bounds> _function_1 = new Function2<Bounds, Bounds, Bounds>() {
             public Bounds apply(final Bounds a, final Bounds b) {
               return BoundsExtensions.operator_plus(a, b);
             }

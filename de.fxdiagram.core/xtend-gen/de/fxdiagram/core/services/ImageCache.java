@@ -10,7 +10,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
 @SuppressWarnings("all")
 public class ImageCache {
-  private Map<String,Image> cache = CollectionLiterals.<String, Image>newHashMap();
+  private Map<String, Image> cache = CollectionLiterals.<String, Image>newHashMap();
   
   private static ImageCache INSTANCE;
   

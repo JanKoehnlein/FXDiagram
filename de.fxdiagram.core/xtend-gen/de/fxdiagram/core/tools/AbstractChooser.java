@@ -79,9 +79,9 @@ public abstract class AbstractChooser implements XDiagramTool {
   
   private Group group = new Group();
   
-  private final LinkedHashMap<String,XNode> nodeMap = CollectionLiterals.<String, XNode>newLinkedHashMap();
+  private final LinkedHashMap<String, XNode> nodeMap = CollectionLiterals.<String, XNode>newLinkedHashMap();
   
-  private final HashMap<XNode,DomainObjectDescriptor> node2choiceInfo = CollectionLiterals.<XNode, DomainObjectDescriptor>newHashMap();
+  private final HashMap<XNode, DomainObjectDescriptor> node2choiceInfo = CollectionLiterals.<XNode, DomainObjectDescriptor>newHashMap();
   
   private ChooserConnectionProvider connectionProvider = new ChooserConnectionProvider() {
     public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor choiceInfo) {
@@ -132,13 +132,13 @@ public abstract class AbstractChooser implements XDiagramTool {
         EventType<? extends Event> _eventType = it.getEventType();
         boolean _matched = false;
         if (!_matched) {
-          if (Objects.equal(_eventType,SwipeEvent.SWIPE_DOWN)) {
+          if (Objects.equal(_eventType, SwipeEvent.SWIPE_DOWN)) {
             _matched=true;
             _switchResult = (-1);
           }
         }
         if (!_matched) {
-          if (Objects.equal(_eventType,SwipeEvent.SWIPE_RIGHT)) {
+          if (Objects.equal(_eventType, SwipeEvent.SWIPE_RIGHT)) {
             _matched=true;
             _switchResult = (-1);
           }
@@ -527,7 +527,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         final ArrayList<XShape> shapesToAdd = CollectionLiterals.<XShape>newArrayList();
         XDiagram _diagram = this.diagram();
         ObservableList<XNode> _nodes_1 = _diagram.getNodes();
-        final Function1<XNode,Boolean> _function_1 = new Function1<XNode,Boolean>() {
+        final Function1<XNode, Boolean> _function_1 = new Function1<XNode, Boolean>() {
           public Boolean apply(final XNode it) {
             DomainObjectDescriptor _domainObject = it.getDomainObject();
             DomainObjectDescriptor _domainObject_1 = choice.getDomainObject();
@@ -782,8 +782,8 @@ public abstract class AbstractChooser implements XDiagramTool {
     int mapIndex = 0;
     double maxWidth = 0.0;
     double maxHeight = 0.0;
-    Set<Map.Entry<String,XNode>> _entrySet = this.nodeMap.entrySet();
-    for (final Map.Entry<String,XNode> entry : _entrySet) {
+    Set<Map.Entry<String, XNode>> _entrySet = this.nodeMap.entrySet();
+    for (final Map.Entry<String, XNode> entry : _entrySet) {
       {
         XNode _value = entry.getValue();
         boolean _matchesFilter = this.matchesFilter(_value);

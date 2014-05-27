@@ -30,7 +30,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 public abstract class XShape extends Parent implements XActivatable {
   private ObjectProperty<Node> nodeProperty = new SimpleObjectProperty<Node>(this, "node");
   
-  private ObservableMap<Class<? extends Behavior>,Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
+  private ObservableMap<Class<? extends Behavior>, Behavior> behaviors = FXCollections.<Class<? extends Behavior>, Behavior>observableHashMap();
   
   public Node getNode() {
     Node _xblockexpression = null;
@@ -88,10 +88,10 @@ public abstract class XShape extends Parent implements XActivatable {
       };
       InitializingListener<Boolean> _doubleArrow = ObjectExtensions.<InitializingListener<Boolean>>operator_doubleArrow(_initializingListener, _function);
       CoreExtensions.<Boolean>addInitializingListener(this.selectedProperty, _doubleArrow);
-      InitializingMapListener<Class<? extends Behavior>,Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
-      final Procedure1<InitializingMapListener<Class<? extends Behavior>,Behavior>> _function_1 = new Procedure1<InitializingMapListener<Class<? extends Behavior>,Behavior>>() {
-        public void apply(final InitializingMapListener<Class<? extends Behavior>,Behavior> it) {
-          final Procedure2<Class<? extends Behavior>,Behavior> _function = new Procedure2<Class<? extends Behavior>,Behavior>() {
+      InitializingMapListener<Class<? extends Behavior>, Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
+      final Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>> _function_1 = new Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>>() {
+        public void apply(final InitializingMapListener<Class<? extends Behavior>, Behavior> it) {
+          final Procedure2<Class<? extends Behavior>, Behavior> _function = new Procedure2<Class<? extends Behavior>, Behavior>() {
             public void apply(final Class<? extends Behavior> key, final Behavior value) {
               value.activate();
             }
@@ -99,7 +99,7 @@ public abstract class XShape extends Parent implements XActivatable {
           it.setPut(_function);
         }
       };
-      InitializingMapListener<Class<? extends Behavior>,Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>,Behavior>>operator_doubleArrow(_initializingMapListener, _function_1);
+      InitializingMapListener<Class<? extends Behavior>, Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>, Behavior>>operator_doubleArrow(_initializingMapListener, _function_1);
       CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow_1);
     }
   }

@@ -64,14 +64,14 @@ public class CoverFlowChooser extends AbstractChooser {
     boolean _notEquals = (_size != 0);
     if (_notEquals) {
       ArrayList<XNode> _nodes_1 = this.getNodes();
-      final Function1<XNode,Double> _function = new Function1<XNode,Double>() {
+      final Function1<XNode, Double> _function = new Function1<XNode, Double>() {
         public Double apply(final XNode it) {
           Bounds _layoutBounds = it.getLayoutBounds();
           return Double.valueOf(_layoutBounds.getWidth());
         }
       };
       List<Double> _map = ListExtensions.<XNode, Double>map(_nodes_1, _function);
-      final Function2<Double,Double,Double> _function_1 = new Function2<Double,Double,Double>() {
+      final Function2<Double, Double, Double> _function_1 = new Function2<Double, Double, Double>() {
         public Double apply(final Double a, final Double b) {
           return Double.valueOf(DoubleExtensions.operator_plus(a, b));
         }

@@ -71,10 +71,10 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode
 @SuppressWarnings("all")
 public class LcarsNode extends XNode {
-  private final static Map<String,List<String>> PAGE_STRUCTURE = new Function0<Map<String,List<String>>>() {
-    public Map<String,List<String>> apply() {
-      Map<String,List<String>> _xsetliteral = null;
-      Map<String,List<String>> _tempMap = Maps.<String, List<String>>newHashMap();
+  private final static Map<String, List<String>> PAGE_STRUCTURE = new Function0<Map<String, List<String>>>() {
+    public Map<String, List<String>> apply() {
+      Map<String, List<String>> _xsetliteral = null;
+      Map<String, List<String>> _tempMap = Maps.<String, List<String>>newHashMap();
       _tempMap.put("person", Collections.<String>unmodifiableList(Lists.<String>newArrayList("gender", "species", "born", "status", "died", "marital_status")));
       _tempMap.put("profession", Collections.<String>unmodifiableList(Lists.<String>newArrayList("occupation", "affiliation", "rank", "serial_number")));
       _tempMap.put("family", Collections.<String>unmodifiableList(Lists.<String>newArrayList("spouses", "children", "mother", "father", "siblings", "other_relatives")));
@@ -88,7 +88,7 @@ public class LcarsNode extends XNode {
   @Extension
   private NameShortener _nameShortener = new NameShortener();
   
-  private Map<String,List<LcarsField>> pages;
+  private Map<String, List<LcarsField>> pages;
   
   private List<String> imageUrls = CollectionLiterals.<String>newArrayList();
   
@@ -115,7 +115,7 @@ public class LcarsNode extends XNode {
     {
       DBObject _data = this.getData();
       Object _get = _data.get("images");
-      final Function1<DBObject,String> _function = new Function1<DBObject,String>() {
+      final Function1<DBObject, String> _function = new Function1<DBObject, String>() {
         public String apply(final DBObject it) {
           Object _get = it.get("url");
           return _get.toString();
@@ -352,10 +352,10 @@ public class LcarsNode extends XNode {
     return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
   }
   
-  protected LinkedHashMap<String,List<LcarsField>> createPages(final DBObject data) {
-    LinkedHashMap<String,List<LcarsField>> _xblockexpression = null;
+  protected LinkedHashMap<String, List<LcarsField>> createPages(final DBObject data) {
+    LinkedHashMap<String, List<LcarsField>> _xblockexpression = null;
     {
-      final LinkedHashMap<String,List<LcarsField>> pages = CollectionLiterals.<String, List<LcarsField>>newLinkedHashMap();
+      final LinkedHashMap<String, List<LcarsField>> pages = CollectionLiterals.<String, List<LcarsField>>newLinkedHashMap();
       final HashSet<String> handledKeys = CollectionLiterals.<String>newHashSet();
       CollectionExtensions.<String>addAll(handledKeys, "name", "_id", "images");
       Set<String> _keySet = LcarsNode.PAGE_STRUCTURE.keySet();
@@ -373,7 +373,7 @@ public class LcarsNode extends XNode {
         }
       }
       Set<String> _keySet_1 = data.keySet();
-      final Function1<String,Boolean> _function = new Function1<String,Boolean>() {
+      final Function1<String, Boolean> _function = new Function1<String, Boolean>() {
         public Boolean apply(final String it) {
           boolean _contains = handledKeys.contains(it);
           return Boolean.valueOf((!_contains));
@@ -415,7 +415,7 @@ public class LcarsNode extends XNode {
       public byte[] apply() {
         DBObject _data = LcarsNode.this.getData();
         Object _get = _data.get("images");
-        final Function1<DBObject,Boolean> _function = new Function1<DBObject,Boolean>() {
+        final Function1<DBObject, Boolean> _function = new Function1<DBObject, Boolean>() {
           public Boolean apply(final DBObject it) {
             Object _get = it.get("url");
             String _string = _get.toString();
@@ -493,7 +493,7 @@ public class LcarsNode extends XNode {
     String _name = this.getName();
     this.nameField.setText(_name);
     DBObject _data = this.getData();
-    LinkedHashMap<String,List<LcarsField>> _createPages = this.createPages(_data);
+    LinkedHashMap<String, List<LcarsField>> _createPages = this.createPages(_data);
     this.pages = _createPages;
     final Procedure1<VBox> _function = new Procedure1<VBox>() {
       public void apply(final VBox it) {
@@ -501,7 +501,7 @@ public class LcarsNode extends XNode {
         final Node lastStripe = IterableExtensions.<Node>last(_children);
         ObservableList<Node> _children_1 = it.getChildren();
         _children_1.remove(lastStripe);
-        final Function1<String,Boolean> _function = new Function1<String,Boolean>() {
+        final Function1<String, Boolean> _function = new Function1<String, Boolean>() {
           public Boolean apply(final String it) {
             return Boolean.valueOf(LcarsNode.this.pages.containsKey(it));
           }
@@ -519,7 +519,7 @@ public class LcarsNode extends XNode {
                 int _indexOf = LcarsNode.pageOrder.indexOf(pageTitle);
                 boolean _matched = false;
                 if (!_matched) {
-                  if (Objects.equal(_indexOf,0)) {
+                  if (Objects.equal(_indexOf, 0)) {
                     _matched=true;
                     _switchResult = VPos.BOTTOM;
                   }
@@ -528,7 +528,7 @@ public class LcarsNode extends XNode {
                   Set<String> _keySet = LcarsNode.this.pages.keySet();
                   int _size = _keySet.size();
                   int _minus = (_size - 1);
-                  if (Objects.equal(_indexOf,_minus)) {
+                  if (Objects.equal(_indexOf, _minus)) {
                     _matched=true;
                     _switchResult = VPos.TOP;
                   }

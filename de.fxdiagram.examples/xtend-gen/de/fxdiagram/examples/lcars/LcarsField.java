@@ -181,7 +181,7 @@ public class LcarsField extends Parent {
               XDiagram _diagram = CoreExtensions.getDiagram(LcarsField.this);
               ObservableList<XNode> _nodes = _diagram.getNodes();
               Iterable<LcarsNode> _filter = Iterables.<LcarsNode>filter(_nodes, LcarsNode.class);
-              final Function1<LcarsNode,Boolean> _function = new Function1<LcarsNode,Boolean>() {
+              final Function1<LcarsNode, Boolean> _function = new Function1<LcarsNode, Boolean>() {
                 public Boolean apply(final LcarsNode it) {
                   boolean _and = false;
                   boolean _and_1 = false;
@@ -199,7 +199,7 @@ public class LcarsField extends Parent {
                     _and_1 = false;
                   } else {
                     ObservableList<XConnection> _outgoingConnections = it.getOutgoingConnections();
-                    final Function1<XConnection,Boolean> _function = new Function1<XConnection,Boolean>() {
+                    final Function1<XConnection, Boolean> _function = new Function1<XConnection, Boolean>() {
                       public Boolean apply(final XConnection it) {
                         boolean _and = false;
                         XNode _target = it.getTarget();
@@ -222,7 +222,7 @@ public class LcarsField extends Parent {
                     _and = false;
                   } else {
                     ObservableList<XConnection> _incomingConnections = it.getIncomingConnections();
-                    final Function1<XConnection,Boolean> _function_1 = new Function1<XConnection,Boolean>() {
+                    final Function1<XConnection, Boolean> _function_1 = new Function1<XConnection, Boolean>() {
                       public Boolean apply(final XConnection it) {
                         boolean _and = false;
                         XNode _source = it.getSource();
@@ -245,7 +245,7 @@ public class LcarsField extends Parent {
                 }
               };
               Iterable<LcarsNode> _filter_1 = IterableExtensions.<LcarsNode>filter(_filter, _function);
-              final Function1<LcarsNode,XConnection> _function_1 = new Function1<LcarsNode,XConnection>() {
+              final Function1<LcarsNode, XConnection> _function_1 = new Function1<LcarsNode, XConnection>() {
                 public XConnection apply(final LcarsNode it) {
                   return connectionProvider.getConnection(node, it, null);
                 }

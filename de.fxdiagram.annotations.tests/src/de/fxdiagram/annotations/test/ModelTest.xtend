@@ -15,7 +15,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.shape.Polygon
 
-@ModelNode(#['layoutX', 'string', 'integer', 'long', 'bool', 'unprecise', 'names', 'selfRef']) 
+@ModelNode('layoutX', 'string', 'integer', 'long', 'bool', 'unprecise', 'names', 'selfRef') 
 abstract class ModelTest extends Polygon {
 	IntegerProperty integer
 	LongProperty longProperty

@@ -21,7 +21,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class HeadsUpDisplay extends Group {
-  private Map<Node,Pos> alignments = CollectionLiterals.<Node, Pos>newHashMap();
+  private Map<Node, Pos> alignments = CollectionLiterals.<Node, Pos>newHashMap();
   
   private ChangeListener<Number> sceneListener;
   

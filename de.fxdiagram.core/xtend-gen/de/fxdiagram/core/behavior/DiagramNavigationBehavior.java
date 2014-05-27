@@ -40,7 +40,7 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
   public boolean next() {
     XDiagram _host = this.getHost();
     final ObservableList<XNode> nodes = _host.getNodes();
-    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
+    final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
       public Boolean apply(final XNode it) {
         return Boolean.valueOf(it.getSelected());
       }
@@ -67,7 +67,7 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
   public boolean previous() {
     XDiagram _host = this.getHost();
     final ObservableList<XNode> nodes = _host.getNodes();
-    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
+    final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
       public Boolean apply(final XNode it) {
         return Boolean.valueOf(it.getSelected());
       }

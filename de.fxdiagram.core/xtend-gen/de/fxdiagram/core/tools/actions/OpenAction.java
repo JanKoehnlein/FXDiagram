@@ -36,7 +36,7 @@ public class OpenAction implements DiagramAction {
   public void perform(final XRoot root) {
     XDiagram _diagram = root.getDiagram();
     ObservableList<XNode> _nodes = _diagram.getNodes();
-    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
+    final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
       public Boolean apply(final XNode it) {
         return Boolean.valueOf(it.getSelected());
       }

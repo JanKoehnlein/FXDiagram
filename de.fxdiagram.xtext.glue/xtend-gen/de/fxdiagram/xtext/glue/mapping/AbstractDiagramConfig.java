@@ -14,7 +14,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 @Logging
 @SuppressWarnings("all")
 public class AbstractDiagramConfig implements XDiagramConfig {
-  private Map<String,AbstractMapping<?>> mappings = CollectionLiterals.<String, AbstractMapping<?>>newHashMap();
+  private Map<String, AbstractMapping<?>> mappings = CollectionLiterals.<String, AbstractMapping<?>>newHashMap();
   
   private String _ID;
   
@@ -28,13 +28,13 @@ public class AbstractDiagramConfig implements XDiagramConfig {
   
   public <T extends Object> Iterable<? extends AbstractMapping<T>> getMappings(final T domainObject) {
     Collection<AbstractMapping<?>> _values = this.mappings.values();
-    final Function1<AbstractMapping<?>,Boolean> _function = new Function1<AbstractMapping<?>,Boolean>() {
+    final Function1<AbstractMapping<?>, Boolean> _function = new Function1<AbstractMapping<?>, Boolean>() {
       public Boolean apply(final AbstractMapping<?> it) {
         return Boolean.valueOf(it.isApplicable(domainObject));
       }
     };
     Iterable<AbstractMapping<?>> _filter = IterableExtensions.<AbstractMapping<?>>filter(_values, _function);
-    final Function1<AbstractMapping<?>,AbstractMapping<T>> _function_1 = new Function1<AbstractMapping<?>,AbstractMapping<T>>() {
+    final Function1<AbstractMapping<?>, AbstractMapping<T>> _function_1 = new Function1<AbstractMapping<?>, AbstractMapping<T>>() {
       public AbstractMapping<T> apply(final AbstractMapping<?> it) {
         return ((AbstractMapping<T>) it);
       }

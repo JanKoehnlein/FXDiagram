@@ -15,7 +15,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class Model {
-  private Map<Object,ModelElement> index = new IdentityHashMap<Object, ModelElement>();
+  private Map<Object, ModelElement> index = new IdentityHashMap<Object, ModelElement>();
   
   private ModelElement rootElement;
   
@@ -28,7 +28,7 @@ public class Model {
     this.rootElement = _addElement;
   }
   
-  Map<Object,ModelElement> getIndex() {
+  Map<Object, ModelElement> getIndex() {
     return this.index;
   }
   

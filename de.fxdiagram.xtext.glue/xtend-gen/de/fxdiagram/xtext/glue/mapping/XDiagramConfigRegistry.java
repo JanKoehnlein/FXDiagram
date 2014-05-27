@@ -19,7 +19,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class XDiagramConfigRegistry {
   private static XDiagramConfigRegistry instance;
   
-  private Map<String,XDiagramConfig> configs = CollectionLiterals.<String, XDiagramConfig>newHashMap();
+  private Map<String, XDiagramConfig> configs = CollectionLiterals.<String, XDiagramConfig>newHashMap();
   
   public static XDiagramConfigRegistry getInstance() {
     XDiagramConfigRegistry _elvis = null;

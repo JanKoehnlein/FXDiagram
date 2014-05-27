@@ -67,7 +67,7 @@ class ClassLoaderProvider implements DomainObjectProviderWithState {
 	
 }
 
-@ModelNode(#['classLoaderID', 'provider'])
+@ModelNode('classLoaderID', 'provider')
 class ClassLoaderDescriptor implements DomainObjectDescriptor {
 	
 	@FxProperty(readOnly) String classLoaderID
@@ -95,7 +95,7 @@ class ClassLoaderDescriptor implements DomainObjectDescriptor {
 	}
 }
 
-@ModelNode(#['name', 'absolutePath'])
+@ModelNode('name', 'absolutePath')
 class ResourceDescriptor extends ClassLoaderDescriptor {
 
 	@FxProperty(readOnly) String absolutePath

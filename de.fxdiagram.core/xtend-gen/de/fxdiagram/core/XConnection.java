@@ -450,11 +450,11 @@ public class XConnection extends XShape implements XModelProvider {
       final Polyline polyline = ObjectExtensions.<Polyline>operator_doubleArrow(_elvis, _function);
       ObservableList<Double> _points = polyline.getPoints();
       ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-      final Function1<XControlPoint,List<Double>> _function_1 = new Function1<XControlPoint,List<Double>>() {
+      final Function1<XControlPoint, List<Double>> _function_1 = new Function1<XControlPoint, List<Double>>() {
         public List<Double> apply(final XControlPoint it) {
           double _layoutX = it.getLayoutX();
           double _layoutY = it.getLayoutY();
-          return Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(_layoutX, _layoutY));
+          return Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(_layoutX), Double.valueOf(_layoutY)));
         }
       };
       List<List<Double>> _map = ListExtensions.<XControlPoint, List<Double>>map(_controlPoints_4, _function_1);

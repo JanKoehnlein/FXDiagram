@@ -8,10 +8,10 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
 @SuppressWarnings("all")
-public class ConnectionMappingCall<T extends Object, ARG extends Object> extends AbstractConnectionMappingCall<T,ARG> {
-  private final Function1<? super ARG,? extends T> _selector;
+public class ConnectionMappingCall<T extends Object, ARG extends Object> extends AbstractConnectionMappingCall<T, ARG> {
+  private final Function1<? super ARG, ? extends T> _selector;
   
-  public Function1<? super ARG,? extends T> getSelector() {
+  public Function1<? super ARG, ? extends T> getSelector() {
     return this._selector;
   }
   
@@ -21,7 +21,7 @@ public class ConnectionMappingCall<T extends Object, ARG extends Object> extends
     return this._connectionMapping;
   }
   
-  public ConnectionMappingCall(final Function1<? super ARG,? extends T> selector, final ConnectionMapping<T> connectionMapping) {
+  public ConnectionMappingCall(final Function1<? super ARG, ? extends T> selector, final ConnectionMapping<T> connectionMapping) {
     super();
     this._selector = selector;
     this._connectionMapping = connectionMapping;

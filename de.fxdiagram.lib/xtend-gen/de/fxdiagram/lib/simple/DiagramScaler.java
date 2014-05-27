@@ -103,7 +103,7 @@ public class DiagramScaler implements XActivatable {
       this.diagram.setClip(null);
     } else {
       ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
-      final Function1<XNode,BoundingBox> _function = new Function1<XNode,BoundingBox>() {
+      final Function1<XNode, BoundingBox> _function = new Function1<XNode, BoundingBox>() {
         public BoundingBox apply(final XNode it) {
           Bounds _layoutBounds = it.getLayoutBounds();
           double _layoutX = it.getLayoutX();
@@ -112,7 +112,7 @@ public class DiagramScaler implements XActivatable {
         }
       };
       List<BoundingBox> _map = ListExtensions.<XNode, BoundingBox>map(_nodes_1, _function);
-      final Function2<BoundingBox,BoundingBox,BoundingBox> _function_1 = new Function2<BoundingBox,BoundingBox,BoundingBox>() {
+      final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = new Function2<BoundingBox, BoundingBox, BoundingBox>() {
         public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
           return BoundsExtensions.operator_plus(b0, b1);
         }

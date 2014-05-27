@@ -134,7 +134,7 @@ public class ModelNodeTest {
     _builder.append("import javafx.beans.property.ListProperty");
     _builder.newLine();
     _builder.newLine();
-    _builder.append("@ModelNode(#[\'layoutX\', \'string\', \'integer\', \'long\', \'bool\', \'unprecise\', \'names\', \'selfRef\']) ");
+    _builder.append("@ModelNode(\'layoutX\', \'string\', \'integer\', \'long\', \'bool\', \'unprecise\', \'names\', \'selfRef\') ");
     _builder.newLine();
     _builder.append("abstract class ModelTest extends Polygon {");
     _builder.newLine();
@@ -281,7 +281,7 @@ public class ModelNodeTest {
     _builder.append("import javafx.collections.ObservableList");
     _builder.newLine();
     _builder.newLine();
-    _builder.append("@ModelNode(#[\'myDouble\', \'myString\', \'myObject\', \'myList\'])");
+    _builder.append("@ModelNode(\'myDouble\', \'myString\', \'myObject\', \'myList\')");
     _builder.newLine();
     _builder.append("class ActiveAnnotationsTest {");
     _builder.newLine();

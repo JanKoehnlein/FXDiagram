@@ -276,7 +276,7 @@ public class OpenableDiagramNode extends XNode {
                   };
                   final Canvas toParentButton = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);
                   XDiagram _innerDiagram = OpenableDiagramNode.this.getInnerDiagram();
-                  ObservableMap<Node,Pos> _fixedButtons = _innerDiagram.getFixedButtons();
+                  ObservableMap<Node, Pos> _fixedButtons = _innerDiagram.getFixedButtons();
                   _fixedButtons.put(toParentButton, Pos.TOP_RIGHT);
                   XDiagram _innerDiagram_1 = OpenableDiagramNode.this.getInnerDiagram();
                   OpenableDiagramNode.this.root.setDiagram(_innerDiagram_1);
@@ -328,7 +328,7 @@ public class OpenableDiagramNode extends XNode {
     {
       XDiagram _innerDiagram = this.getInnerDiagram();
       ObservableList<XNode> _nodes = _innerDiagram.getNodes();
-      final Function1<XNode,BoundingBox> _function = new Function1<XNode,BoundingBox>() {
+      final Function1<XNode, BoundingBox> _function = new Function1<XNode, BoundingBox>() {
         public BoundingBox apply(final XNode it) {
           Bounds _layoutBounds = it.getLayoutBounds();
           double _layoutX = it.getLayoutX();
@@ -337,7 +337,7 @@ public class OpenableDiagramNode extends XNode {
         }
       };
       List<BoundingBox> _map = ListExtensions.<XNode, BoundingBox>map(_nodes, _function);
-      final Function2<BoundingBox,BoundingBox,BoundingBox> _function_1 = new Function2<BoundingBox,BoundingBox,BoundingBox>() {
+      final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = new Function2<BoundingBox, BoundingBox, BoundingBox>() {
         public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
           return BoundsExtensions.operator_plus(b0, b1);
         }

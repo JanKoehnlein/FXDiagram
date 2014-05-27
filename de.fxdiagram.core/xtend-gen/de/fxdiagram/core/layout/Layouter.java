@@ -67,7 +67,7 @@ public class Layouter {
     final LazyCommand _function = new LazyCommand() {
       @Override
       protected AbstractAnimationCommand createDelegate() {
-        final HashMap<Object,KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
+        final HashMap<Object, KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
         diagram.layout();
         final KNode kRoot = Layouter.this.toKRootNode(diagram, cache);
         final AbstractLayoutProvider provider = Layouter.this.getLayoutProvider(type);
@@ -94,10 +94,10 @@ public class Layouter {
     return ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
   }
   
-  protected ParallelAnimationCommand composeCommand(final Map<Object,KGraphElement> map, final Duration duration) {
+  protected ParallelAnimationCommand composeCommand(final Map<Object, KGraphElement> map, final Duration duration) {
     final ParallelAnimationCommand composite = new ParallelAnimationCommand();
-    Set<Map.Entry<Object,KGraphElement>> _entrySet = map.entrySet();
-    for (final Map.Entry<Object,KGraphElement> entry : _entrySet) {
+    Set<Map.Entry<Object, KGraphElement>> _entrySet = map.entrySet();
+    for (final Map.Entry<Object, KGraphElement> entry : _entrySet) {
       {
         final Object xElement = entry.getKey();
         final KGraphElement kElement = entry.getValue();
@@ -168,7 +168,7 @@ public class Layouter {
               _switchResult_1 = XConnectionKind.POLYLINE;
             }
             final XConnectionKind newKind = _switchResult_1;
-            final Function1<KVector,Point2D> _function = new Function1<KVector,Point2D>() {
+            final Function1<KVector, Point2D> _function = new Function1<KVector, Point2D>() {
               public Point2D apply(final KVector it) {
                 return new Point2D(it.x, it.y);
               }
@@ -189,7 +189,7 @@ public class Layouter {
     return composite;
   }
   
-  protected KNode toKRootNode(final XDiagram it, final Map<Object,KGraphElement> cache) {
+  protected KNode toKRootNode(final XDiagram it, final Map<Object, KGraphElement> cache) {
     KNode _xblockexpression = null;
     {
       final KNode kRoot = this._kGraphFactory.createKNode();
@@ -221,7 +221,7 @@ public class Layouter {
     return _xblockexpression;
   }
   
-  protected KNode toKNode(final XNode it, final Map<Object,KGraphElement> cache) {
+  protected KNode toKNode(final XNode it, final Map<Object, KGraphElement> cache) {
     KNode _xblockexpression = null;
     {
       final KNode kNode = this._kGraphFactory.createKNode();
@@ -239,7 +239,7 @@ public class Layouter {
     return _xblockexpression;
   }
   
-  protected KEdge toKEdge(final XConnection it, final Map<Object,KGraphElement> cache) {
+  protected KEdge toKEdge(final XConnection it, final Map<Object, KGraphElement> cache) {
     KEdge _xblockexpression = null;
     {
       XNode _source = it.getSource();
@@ -288,7 +288,7 @@ public class Layouter {
     return _xblockexpression;
   }
   
-  protected KLabel toKLabel(final XConnectionLabel it, final Map<Object,KGraphElement> cache) {
+  protected KLabel toKLabel(final XConnectionLabel it, final Map<Object, KGraphElement> cache) {
     KLabel _xblockexpression = null;
     {
       final KLabel kLabel = this._kGraphFactory.createKLabel();

@@ -121,7 +121,7 @@ public class BrickBreakerNode extends FlipNode {
         constructor.setAccessible(true);
         final Main.MainFrame mainFrame = constructor.newInstance(main, root);
         Field[] _declaredFields = Main.class.getDeclaredFields();
-        final Function1<Field,Boolean> _function_1 = new Function1<Field,Boolean>() {
+        final Function1<Field, Boolean> _function_1 = new Function1<Field, Boolean>() {
           public Boolean apply(final Field it) {
             String _name = it.getName();
             return Boolean.valueOf(Objects.equal(_name, "mainFrame"));

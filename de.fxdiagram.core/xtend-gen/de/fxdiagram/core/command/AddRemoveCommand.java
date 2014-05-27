@@ -34,7 +34,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   
   private List<? extends XShape> shapes;
   
-  private Map<XConnection,Pair<XNode,XNode>> connectedNodesMap = CollectionLiterals.<XConnection, Pair<XNode,XNode>>newHashMap();
+  private Map<XConnection, Pair<XNode, XNode>> connectedNodesMap = CollectionLiterals.<XConnection, Pair<XNode, XNode>>newHashMap();
   
   public static AddRemoveCommand newAddCommand(final XDiagram diagram, final XShape... shapes) {
     return new AddRemoveCommand(true, diagram, shapes);
@@ -76,7 +76,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
             _matched=true;
             XNode _source = ((XConnection)it).getSource();
             XNode _target = ((XConnection)it).getTarget();
-            Pair<XNode,XNode> _mappedTo = Pair.<XNode, XNode>of(_source, _target);
+            Pair<XNode, XNode> _mappedTo = Pair.<XNode, XNode>of(_source, _target);
             AddRemoveCommand.this.connectedNodesMap.put(((XConnection)it), _mappedTo);
             if (AddRemoveCommand.this.isAdd) {
               ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
@@ -123,7 +123,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
-        final Function1<XShape,Animation> _function = new Function1<XShape,Animation>() {
+        final Function1<XShape, Animation> _function = new Function1<XShape, Animation>() {
           public Animation apply(final XShape it) {
             Duration _defaultUndoDuration = context.getDefaultUndoDuration();
             return AddRemoveCommand.this.disappear(it, _defaultUndoDuration);
@@ -177,7 +177,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
           if (!_matched) {
             if (it instanceof XConnection) {
               _matched=true;
-              final Pair<XNode,XNode> nodes = AddRemoveCommand.this.connectedNodesMap.get(it);
+              final Pair<XNode, XNode> nodes = AddRemoveCommand.this.connectedNodesMap.get(it);
               XNode _key = nodes.getKey();
               ((XConnection)it).setSource(_key);
               XNode _value = nodes.getValue();
@@ -193,7 +193,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
       final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
         public void apply(final ParallelTransition it) {
           ObservableList<Animation> _children = it.getChildren();
-          final Function1<XShape,Animation> _function = new Function1<XShape,Animation>() {
+          final Function1<XShape, Animation> _function = new Function1<XShape, Animation>() {
             public Animation apply(final XShape it) {
               Duration _defaultUndoDuration = context.getDefaultUndoDuration();
               return AddRemoveCommand.this.appear(it, _defaultUndoDuration);

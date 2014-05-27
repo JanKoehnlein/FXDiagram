@@ -5,30 +5,30 @@ import javafx.collections.MapChangeListener;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
 @SuppressWarnings("all")
-public class InitializingMapListener<T extends Object, U extends Object> implements MapChangeListener<T,U> {
-  private Procedure2<? super T,? super U> _put;
+public class InitializingMapListener<T extends Object, U extends Object> implements MapChangeListener<T, U> {
+  private Procedure2<? super T, ? super U> _put;
   
-  public Procedure2<? super T,? super U> getPut() {
+  public Procedure2<? super T, ? super U> getPut() {
     return this._put;
   }
   
-  public void setPut(final Procedure2<? super T,? super U> put) {
+  public void setPut(final Procedure2<? super T, ? super U> put) {
     this._put = put;
   }
   
-  private Procedure2<? super T,? super U> _remove;
+  private Procedure2<? super T, ? super U> _remove;
   
-  public Procedure2<? super T,? super U> getRemove() {
+  public Procedure2<? super T, ? super U> getRemove() {
     return this._remove;
   }
   
-  public void setRemove(final Procedure2<? super T,? super U> remove) {
+  public void setRemove(final Procedure2<? super T, ? super U> remove) {
     this._remove = remove;
   }
   
-  public void onChanged(final MapChangeListener.Change<? extends T,? extends U> c) {
+  public void onChanged(final MapChangeListener.Change<? extends T, ? extends U> c) {
     boolean _and = false;
-    Procedure2<? super T,? super U> _put = this.getPut();
+    Procedure2<? super T, ? super U> _put = this.getPut();
     boolean _notEquals = (!Objects.equal(_put, null));
     if (!_notEquals) {
       _and = false;
@@ -37,13 +37,13 @@ public class InitializingMapListener<T extends Object, U extends Object> impleme
       _and = _wasAdded;
     }
     if (_and) {
-      Procedure2<? super T,? super U> _put_1 = this.getPut();
+      Procedure2<? super T, ? super U> _put_1 = this.getPut();
       T _key = c.getKey();
       U _valueAdded = c.getValueAdded();
       _put_1.apply(_key, _valueAdded);
     }
     boolean _and_1 = false;
-    Procedure2<? super T,? super U> _remove = this.getRemove();
+    Procedure2<? super T, ? super U> _remove = this.getRemove();
     boolean _notEquals_1 = (!Objects.equal(_remove, null));
     if (!_notEquals_1) {
       _and_1 = false;
@@ -52,7 +52,7 @@ public class InitializingMapListener<T extends Object, U extends Object> impleme
       _and_1 = _wasRemoved;
     }
     if (_and_1) {
-      Procedure2<? super T,? super U> _remove_1 = this.getRemove();
+      Procedure2<? super T, ? super U> _remove_1 = this.getRemove();
       T _key_1 = c.getKey();
       U _valueRemoved = c.getValueRemoved();
       _remove_1.apply(_key_1, _valueRemoved);

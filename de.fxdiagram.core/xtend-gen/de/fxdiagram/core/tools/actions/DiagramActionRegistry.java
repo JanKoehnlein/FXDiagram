@@ -15,7 +15,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class DiagramActionRegistry {
   private List<DiagramAction> actions = CollectionLiterals.<DiagramAction>newArrayList();
   
-  private Map<Symbol.Type,DiagramAction> symbol2action = CollectionLiterals.<Symbol.Type, DiagramAction>newHashMap();
+  private Map<Symbol.Type, DiagramAction> symbol2action = CollectionLiterals.<Symbol.Type, DiagramAction>newHashMap();
   
   public void operator_add(final Iterable<? extends DiagramAction> diagramActions) {
     final Procedure1<DiagramAction> _function = new Procedure1<DiagramAction>() {

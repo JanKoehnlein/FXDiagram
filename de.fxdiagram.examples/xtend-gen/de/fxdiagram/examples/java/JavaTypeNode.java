@@ -172,7 +172,7 @@ public class JavaTypeNode extends XNode {
             _builder.append(_simpleName, "");
             _builder.append("(");
             Class<?>[] _parameterTypes = constructor.getParameterTypes();
-            final Function1<Class<?>,String> _function = new Function1<Class<?>,String>() {
+            final Function1<Class<?>, String> _function = new Function1<Class<?>, String>() {
               public String apply(final Class<?> it) {
                 return it.getSimpleName();
               }
@@ -203,7 +203,7 @@ public class JavaTypeNode extends XNode {
             _builder.append(_name, "");
             _builder.append("(");
             Class<?>[] _parameterTypes = method.getParameterTypes();
-            final Function1<Class<?>,String> _function = new Function1<Class<?>,String>() {
+            final Function1<Class<?>, String> _function = new Function1<Class<?>, String>() {
               public String apply(final Class<?> it) {
                 return it.getSimpleName();
               }

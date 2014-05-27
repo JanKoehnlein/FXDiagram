@@ -14,7 +14,7 @@ import javafx.scene.transform.Affine
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
-@ModelNode(#['connection', 'text'])
+@ModelNode('connection', 'text')
 class XConnectionLabel extends XShape {
 
 	@FxProperty(readOnly) XConnection connection

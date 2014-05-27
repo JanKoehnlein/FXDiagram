@@ -34,7 +34,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
     if (!_matched) {
       if (domainObject instanceof Class) {
         _matched=true;
-        String _classLoaderID = this.getClassLoaderID(((Class<Object>)domainObject));
+        String _classLoaderID = this.getClassLoaderID(((Class<?>)domainObject));
         return new ClassLoaderDescriptor(_classLoaderID, this);
       }
     }

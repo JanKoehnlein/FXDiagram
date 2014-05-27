@@ -48,7 +48,7 @@ public class CarusselChooser extends AbstractChooser {
   
   protected void doSetInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _nodes = this.getNodes();
-    final Function2<Double,XNode,Double> _function = new Function2<Double,XNode,Double>() {
+    final Function2<Double, XNode, Double> _function = new Function2<Double, XNode, Double>() {
       public Double apply(final Double a, final XNode b) {
         Bounds _layoutBounds = b.getLayoutBounds();
         double _height = _layoutBounds.getHeight();

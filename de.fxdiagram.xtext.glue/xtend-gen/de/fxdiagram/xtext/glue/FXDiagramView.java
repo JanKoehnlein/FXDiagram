@@ -177,7 +177,7 @@ public class FXDiagramView extends ViewPart {
     }
     final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, mapping);
     CommandStack _commandStack_2 = this.root.getCommandStack();
-    final Function1<XShape,Boolean> _function = new Function1<XShape,Boolean>() {
+    final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
       public Boolean apply(final XShape it) {
         boolean _switchResult = false;
         boolean _matched = false;

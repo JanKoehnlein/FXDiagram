@@ -19,7 +19,7 @@ public class ModelElementImpl implements ModelElement {
   
   private List<ListProperty<?>> listProperties;
   
-  private Map<String,Class<?>> propertyTypes = CollectionLiterals.<String, Class<?>>newHashMap();
+  private Map<String, Class<?>> propertyTypes = CollectionLiterals.<String, Class<?>>newHashMap();
   
   public ModelElementImpl(final Object node) {
     this.node = node;

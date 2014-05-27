@@ -8,7 +8,7 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Polygon
 import javafx.scene.shape.StrokeType
 
-@ModelNode(#['width', 'height', 'stroke', 'fill'])
+@ModelNode('width', 'height', 'stroke', 'fill')
 class TriangleArrowHead extends ArrowHead {
 	
 	@FxProperty double width 

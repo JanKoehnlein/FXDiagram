@@ -280,7 +280,7 @@ public class ConnectionRouter implements XActivatable {
         this.calculateSelfEdge();
       }
     }
-    final Pair<Point2D,Point2D> anchors = this.findClosestAnchors();
+    final Pair<Point2D, Point2D> anchors = this.findClosestAnchors();
     boolean _and = false;
     Point2D _key = anchors.getKey();
     boolean _notEquals = (!Objects.equal(_key, null));
@@ -509,8 +509,8 @@ public class ConnectionRouter implements XActivatable {
     return _xblockexpression;
   }
   
-  protected Pair<Point2D,Point2D> findClosestAnchors() {
-    Pair<Point2D,Point2D> _xifexpression = null;
+  protected Pair<Point2D, Point2D> findClosestAnchors() {
+    Pair<Point2D, Point2D> _xifexpression = null;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
     int _size = _controlPoints.size();
     boolean _lessEqualsThan = (_size <= 2);

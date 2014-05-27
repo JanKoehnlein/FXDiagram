@@ -48,7 +48,7 @@ public class ShowInDiagramHandler extends AbstractHandler {
         ISelection _selection = _selectionProvider.getSelection();
         final ITextSelection selection = ((ITextSelection) _selection);
         IXtextDocument _document = editor.getDocument();
-        final IUnitOfWork<Object,XtextResource> _function = new IUnitOfWork<Object,XtextResource>() {
+        final IUnitOfWork<Object, XtextResource> _function = new IUnitOfWork<Object, XtextResource>() {
           public Object exec(final XtextResource it) throws Exception {
             Object _xblockexpression = null;
             {
@@ -58,7 +58,7 @@ public class ShowInDiagramHandler extends AbstractHandler {
               if (_notEquals) {
                 XDiagramConfigRegistry _instance = XDiagramConfigRegistry.getInstance();
                 Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-                final Function1<XDiagramConfig,Iterable<? extends AbstractMapping<EObject>>> _function = new Function1<XDiagramConfig,Iterable<? extends AbstractMapping<EObject>>>() {
+                final Function1<XDiagramConfig, Iterable<? extends AbstractMapping<EObject>>> _function = new Function1<XDiagramConfig, Iterable<? extends AbstractMapping<EObject>>>() {
                   public Iterable<? extends AbstractMapping<EObject>> apply(final XDiagramConfig it) {
                     return it.<EObject>getMappings(selectedElement);
                   }

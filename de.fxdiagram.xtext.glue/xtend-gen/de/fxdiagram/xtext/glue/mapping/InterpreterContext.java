@@ -68,7 +68,7 @@ public class InterpreterContext {
   public <T extends Object> XConnection getConnection(final DomainObjectDescriptor descriptor) {
     ObservableList<XConnection> _connections = this.diagram.getConnections();
     Iterable<XConnection> _plus = Iterables.<XConnection>concat(this.addedConnections, _connections);
-    final Function1<XConnection,Boolean> _function = new Function1<XConnection,Boolean>() {
+    final Function1<XConnection, Boolean> _function = new Function1<XConnection, Boolean>() {
       public Boolean apply(final XConnection it) {
         DomainObjectDescriptor _domainObject = it.getDomainObject();
         return Boolean.valueOf(Objects.equal(_domainObject, descriptor));
@@ -80,7 +80,7 @@ public class InterpreterContext {
   public <T extends Object> XNode getNode(final DomainObjectDescriptor descriptor) {
     ObservableList<XNode> _nodes = this.diagram.getNodes();
     Iterable<XNode> _plus = Iterables.<XNode>concat(this.addedNodes, _nodes);
-    final Function1<XNode,Boolean> _function = new Function1<XNode,Boolean>() {
+    final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
       public Boolean apply(final XNode it) {
         DomainObjectDescriptor _domainObject = it.getDomainObject();
         return Boolean.valueOf(Objects.equal(_domainObject, descriptor));

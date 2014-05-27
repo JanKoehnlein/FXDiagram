@@ -57,7 +57,7 @@ public class CoreExtensions {
     {
       boolean _matched = false;
       if (!_matched) {
-        if (Objects.equal(node,null)) {
+        if (Objects.equal(node, null)) {
           _matched=true;
           return null;
         }
@@ -83,7 +83,7 @@ public class CoreExtensions {
     {
       boolean _matched = false;
       if (!_matched) {
-        if (Objects.equal(node,null)) {
+        if (Objects.equal(node, null)) {
           _matched=true;
           return null;
         }
@@ -113,7 +113,7 @@ public class CoreExtensions {
     Point2D _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
-      if (Objects.equal(node,null)) {
+      if (Objects.equal(node, null)) {
         _matched=true;
         _switchResult = null;
       }
@@ -136,7 +136,7 @@ public class CoreExtensions {
     Bounds _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
-      if (Objects.equal(node,null)) {
+      if (Objects.equal(node, null)) {
         _matched=true;
         _switchResult = null;
       }
@@ -186,7 +186,7 @@ public class CoreExtensions {
     XDiagram _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
-      if (Objects.equal(it,null)) {
+      if (Objects.equal(it, null)) {
         _matched=true;
         _switchResult = null;
       }
@@ -208,7 +208,7 @@ public class CoreExtensions {
     XDiagram _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
-      if (Objects.equal(it,null)) {
+      if (Objects.equal(it, null)) {
         _matched=true;
         _switchResult = null;
       }
@@ -238,7 +238,7 @@ public class CoreExtensions {
     XRoot _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
-      if (Objects.equal(it,null)) {
+      if (Objects.equal(it, null)) {
         _matched=true;
         _switchResult = null;
       }
@@ -272,7 +272,7 @@ public class CoreExtensions {
     XShape _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
-      if (Objects.equal(it,null)) {
+      if (Objects.equal(it, null)) {
         _matched=true;
         _switchResult = null;
       }
@@ -306,7 +306,7 @@ public class CoreExtensions {
     XRapidButton _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
-      if (Objects.equal(it,null)) {
+      if (Objects.equal(it, null)) {
         _matched=true;
         _switchResult = null;
       }
@@ -333,7 +333,7 @@ public class CoreExtensions {
     ObservableList<Node> _childrenUnmodifiable = node.getChildrenUnmodifiable();
     ObservableList<Node> _childrenUnmodifiable_1 = node.getChildrenUnmodifiable();
     Iterable<Parent> _filter = Iterables.<Parent>filter(_childrenUnmodifiable_1, Parent.class);
-    final Function1<Parent,Iterable<? extends Node>> _function = new Function1<Parent,Iterable<? extends Node>>() {
+    final Function1<Parent, Iterable<? extends Node>> _function = new Function1<Parent, Iterable<? extends Node>>() {
       public Iterable<? extends Node> apply(final Parent it) {
         return CoreExtensions.getAllChildren(it);
       }
@@ -343,17 +343,17 @@ public class CoreExtensions {
     return Iterables.<Node>concat(_childrenUnmodifiable, _flatten);
   }
   
-  public static <T extends Object, U extends Object> void addInitializingListener(final ObservableMap<T,U> map, final InitializingMapListener<T,U> mapListener) {
-    Set<Map.Entry<T,U>> _entrySet = map.entrySet();
-    final Procedure1<Map.Entry<T,U>> _function = new Procedure1<Map.Entry<T,U>>() {
-      public void apply(final Map.Entry<T,U> it) {
-        Procedure2<? super T,? super U> _put = mapListener.getPut();
+  public static <T extends Object, U extends Object> void addInitializingListener(final ObservableMap<T, U> map, final InitializingMapListener<T, U> mapListener) {
+    Set<Map.Entry<T, U>> _entrySet = map.entrySet();
+    final Procedure1<Map.Entry<T, U>> _function = new Procedure1<Map.Entry<T, U>>() {
+      public void apply(final Map.Entry<T, U> it) {
+        Procedure2<? super T, ? super U> _put = mapListener.getPut();
         T _key = it.getKey();
         U _value = it.getValue();
         _put.apply(_key, _value);
       }
     };
-    IterableExtensions.<Map.Entry<T,U>>forEach(_entrySet, _function);
+    IterableExtensions.<Map.Entry<T, U>>forEach(_entrySet, _function);
     map.addListener(mapListener);
   }
   
@@ -379,15 +379,15 @@ public class CoreExtensions {
     }
   }
   
-  public static <T extends Object, U extends Object> void removeInitializingListener(final ObservableMap<T,U> map, final InitializingMapListener<T,U> mapListener) {
+  public static <T extends Object, U extends Object> void removeInitializingListener(final ObservableMap<T, U> map, final InitializingMapListener<T, U> mapListener) {
     map.removeListener(mapListener);
-    final Set<Map.Entry<T,U>> entries = map.entrySet();
+    final Set<Map.Entry<T, U>> entries = map.entrySet();
     int _size = entries.size();
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size, true);
     for (final Integer i : _doubleDotLessThan) {
       {
-        final Map.Entry<T,U> entry = ((Map.Entry<T,U>[])Conversions.unwrapArray(entries, Map.Entry.class))[(i).intValue()];
-        Procedure2<? super T,? super U> _remove = mapListener.getRemove();
+        final Map.Entry<T, U> entry = ((Map.Entry<T, U>[])Conversions.unwrapArray(entries, Map.Entry.class))[(i).intValue()];
+        Procedure2<? super T, ? super U> _remove = mapListener.getRemove();
         T _key = entry.getKey();
         U _value = entry.getValue();
         _remove.apply(_key, _value);

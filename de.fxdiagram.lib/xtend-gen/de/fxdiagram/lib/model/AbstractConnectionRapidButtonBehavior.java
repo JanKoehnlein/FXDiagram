@@ -40,7 +40,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
   
   protected void doActivate() {
     Iterable<MODEL> _initialModelChoices = this.getInitialModelChoices();
-    final Function1<MODEL,KEY> _function = new Function1<MODEL,KEY>() {
+    final Function1<MODEL, KEY> _function = new Function1<MODEL, KEY>() {
       public KEY apply(final MODEL it) {
         return AbstractConnectionRapidButtonBehavior.this.getChoiceKey(it);
       }
