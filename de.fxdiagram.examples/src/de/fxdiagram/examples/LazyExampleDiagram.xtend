@@ -1,7 +1,8 @@
 package de.fxdiagram.examples
 
+import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XConnectionKind
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
@@ -9,8 +10,6 @@ import de.fxdiagram.lib.simple.AddRapidButtonBehavior
 import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.lib.simple.SimpleNode
-import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.annotations.properties.FxProperty
 
 @ModelNode(#['nameSuffix'])
 class LazyExampleDiagram extends XDiagram {
@@ -45,13 +44,13 @@ class LazyExampleDiagram extends XDiagram {
 					]
 				]
 				connections += new XConnection(openable, levelOfDetail) => [
-					kind = XConnectionKind.QUAD_CURVE
+					kind = XConnection.Kind.QUAD_CURVE
 					new XConnectionLabel(it) => [
 						text.text = 'quadratic'
 					]
 				]
 				connections += new XConnection(simple, levelOfDetail) => [
-					kind = XConnectionKind.CUBIC_CURVE
+					kind = XConnection.Kind.CUBIC_CURVE
 					new XConnectionLabel(it) => [
 						text.text = 'cubic'
 					]

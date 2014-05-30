@@ -15,21 +15,21 @@ import javafx.scene.shape.Polygon;
 @ModelNode({ "layoutX", "string", "integer", "long", "bool", "unprecise", "names", "selfRef" })
 @SuppressWarnings("all")
 public abstract class ModelTest extends Polygon implements XModelProvider {
-  private IntegerProperty integer;
+  public IntegerProperty integer;
   
-  private LongProperty longProperty;
+  public LongProperty longProperty;
   
-  private BooleanProperty bool;
+  public BooleanProperty bool;
   
-  private FloatProperty unprecise;
+  public FloatProperty unprecise;
   
-  private ObjectProperty<String> stringProperty;
+  public ObjectProperty<String> stringProperty;
   
-  private StringProperty string1;
+  public StringProperty string1;
   
-  private ObjectProperty<ModelTest> selfRef;
+  public ObjectProperty<ModelTest> selfRef;
   
-  private ListProperty<String> names;
+  public ListProperty<String> names;
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);

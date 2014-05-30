@@ -21,7 +21,6 @@ import de.cau.cs.kieler.kiml.options.EdgeLabelPlacement;
 import de.cau.cs.kieler.kiml.options.EdgeRouting;
 import de.cau.cs.kieler.kiml.options.LayoutOptions;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -133,41 +132,41 @@ public class Layouter {
             Iterable<KEdgeLayout> _filter = Iterables.<KEdgeLayout>filter(_data, KEdgeLayout.class);
             final KEdgeLayout edgeLayout = IterableExtensions.<KEdgeLayout>head(_filter);
             final KVectorChain layoutPoints = edgeLayout.createVectorChain();
-            XConnectionKind _switchResult_1 = null;
+            XConnection.Kind _switchResult_1 = null;
             EdgeRouting _property = edgeLayout.<EdgeRouting>getProperty(LayoutOptions.EDGE_ROUTING);
             if (_property != null) {
               switch (_property) {
                 case SPLINES:
-                  XConnectionKind _xifexpression = null;
+                  XConnection.Kind _xifexpression = null;
                   int _size = layoutPoints.size();
                   int _minus = (_size - 1);
                   int _modulo = (_minus % 3);
                   boolean _equals = (_modulo == 0);
                   if (_equals) {
-                    _xifexpression = XConnectionKind.CUBIC_CURVE;
+                    _xifexpression = XConnection.Kind.CUBIC_CURVE;
                   } else {
-                    XConnectionKind _xifexpression_1 = null;
+                    XConnection.Kind _xifexpression_1 = null;
                     int _size_1 = layoutPoints.size();
                     int _minus_1 = (_size_1 - 1);
                     int _modulo_1 = (_minus_1 % 2);
                     boolean _equals_1 = (_modulo_1 == 0);
                     if (_equals_1) {
-                      _xifexpression_1 = XConnectionKind.QUAD_CURVE;
+                      _xifexpression_1 = XConnection.Kind.QUAD_CURVE;
                     } else {
-                      _xifexpression_1 = XConnectionKind.POLYLINE;
+                      _xifexpression_1 = XConnection.Kind.POLYLINE;
                     }
                     _xifexpression = _xifexpression_1;
                   }
                   _switchResult_1 = _xifexpression;
                   break;
                 default:
-                  _switchResult_1 = XConnectionKind.POLYLINE;
+                  _switchResult_1 = XConnection.Kind.POLYLINE;
                   break;
               }
             } else {
-              _switchResult_1 = XConnectionKind.POLYLINE;
+              _switchResult_1 = XConnection.Kind.POLYLINE;
             }
-            final XConnectionKind newKind = _switchResult_1;
+            final XConnection.Kind newKind = _switchResult_1;
             final Function1<KVector, Point2D> _function = new Function1<KVector, Point2D>() {
               public Point2D apply(final KVector it) {
                 return new Point2D(it.x, it.y);

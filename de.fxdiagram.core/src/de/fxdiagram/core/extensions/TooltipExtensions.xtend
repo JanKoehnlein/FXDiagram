@@ -23,7 +23,7 @@ class TooltipExtensions {
 }
 
 /**
- * JavaFX's {@link Tooltip} affectes gesture events in an unpredictable way. 
+ * JavaFX's {@link Tooltip} affects gesture events in an unpredictable way. 
  * This tooltip is a lightweight version not using a pop-up.
  */
 class SoftTooltip {

@@ -67,13 +67,14 @@ class DiagramGestureTool implements XDiagramTool {
 		scene.removeEventHandler(RotateEvent.ROTATION_FINISHED, rotateHandler)
 		true
 	}
-}
-
-class ZoomContext {
-	@Property double previousScale = 1
-	@Property Point2D pivotInDiagram
-
-	new(Point2D pivotInDiagram) {
-		this.pivotInDiagram = pivotInDiagram
+	
+	static class ZoomContext {
+		@Property double previousScale = 1
+		@Property Point2D pivotInDiagram
+	
+		new(Point2D pivotInDiagram) {
+			this.pivotInDiagram = pivotInDiagram
+		}
 	}
 }
+

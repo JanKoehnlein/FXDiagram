@@ -1,6 +1,5 @@
 package de.fxdiagram.core.extensions
 
-import static javafx.util.Duration.*
 import javafx.util.Duration
 
 class DurationExtensions {

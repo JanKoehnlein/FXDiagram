@@ -24,7 +24,7 @@ import javafx.scene.shape.QuadCurve
 import javafx.scene.shape.Shape
 import javafx.scene.shape.StrokeLineCap
 
-import static de.fxdiagram.core.XConnectionKind.*
+import static de.fxdiagram.core.XConnection.Kind.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 import static javafx.collections.FXCollections.*
 
@@ -40,7 +40,7 @@ class XConnection extends XShape {
 	@FxProperty ObservableList<XConnectionLabel> labels = observableArrayList
 	@FxProperty ArrowHead sourceArrowHead
 	@FxProperty ArrowHead targetArrowHead
-	@FxProperty XConnectionKind kind = POLYLINE
+	@FxProperty Kind kind = POLYLINE
 	@FxProperty(readOnly) ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
 	
 	@FxProperty double strokeWidth = 2.0
@@ -308,9 +308,9 @@ class XConnection extends XShape {
 		}
 	}
 	
+	enum Kind {
+		POLYLINE, QUAD_CURVE, CUBIC_CURVE 
+	}
 }
 
-enum XConnectionKind {
-	POLYLINE, QUAD_CURVE, CUBIC_CURVE 
-}
 

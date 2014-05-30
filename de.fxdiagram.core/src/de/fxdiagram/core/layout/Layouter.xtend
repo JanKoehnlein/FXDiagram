@@ -21,7 +21,7 @@ import java.util.Map
 import javafx.geometry.Point2D
 import javafx.util.Duration
 
-import static de.fxdiagram.core.XConnectionKind.*
+import static de.fxdiagram.core.XConnection.Kind.*
 import de.fxdiagram.core.command.LazyCommand
 import de.fxdiagram.core.command.ParallelAnimationCommand
 

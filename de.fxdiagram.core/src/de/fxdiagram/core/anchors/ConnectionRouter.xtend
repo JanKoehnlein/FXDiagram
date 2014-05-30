@@ -11,8 +11,8 @@ import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
 
-import static de.fxdiagram.core.XConnectionKind.*
-import static de.fxdiagram.core.XControlPointType.*
+import static de.fxdiagram.core.XConnection.Kind.*
+import static de.fxdiagram.core.XControlPoint.Type.*
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*

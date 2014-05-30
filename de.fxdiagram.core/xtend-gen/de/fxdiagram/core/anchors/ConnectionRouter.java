@@ -5,9 +5,7 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XControlPoint;
-import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.ArrowHead;
@@ -213,10 +211,10 @@ public class ConnectionRouter implements XActivatable {
     }
     ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
     XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_1);
-    _head.setType(XControlPointType.ANCHOR);
+    _head.setType(XControlPoint.Type.ANCHOR);
     ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
     XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_2);
-    _last.setType(XControlPointType.ANCHOR);
+    _last.setType(XControlPoint.Type.ANCHOR);
     ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
     int _size_1 = _controlPoints_3.size();
     int _minus = (_size_1 - 1);
@@ -225,28 +223,28 @@ public class ConnectionRouter implements XActivatable {
       {
         ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
         final XControlPoint currentPoint = _controlPoints_4.get((i).intValue());
-        XControlPointType _switchResult = null;
-        XConnectionKind _kind = this.connection.getKind();
+        XControlPoint.Type _switchResult = null;
+        XConnection.Kind _kind = this.connection.getKind();
         if (_kind != null) {
           switch (_kind) {
             case POLYLINE:
-              _switchResult = XControlPointType.INTERPOLATED;
+              _switchResult = XControlPoint.Type.INTERPOLATED;
               break;
             case QUAD_CURVE:
-              XControlPointType _xifexpression = null;
+              XControlPoint.Type _xifexpression = null;
               if ((((i).intValue() % 2) == 0)) {
-                _xifexpression = XControlPointType.INTERPOLATED;
+                _xifexpression = XControlPoint.Type.INTERPOLATED;
               } else {
-                _xifexpression = XControlPointType.CONTROL_POINT;
+                _xifexpression = XControlPoint.Type.CONTROL_POINT;
               }
               _switchResult = _xifexpression;
               break;
             case CUBIC_CURVE:
-              XControlPointType _xifexpression_1 = null;
+              XControlPoint.Type _xifexpression_1 = null;
               if ((((i).intValue() % 3) == 0)) {
-                _xifexpression_1 = XControlPointType.INTERPOLATED;
+                _xifexpression_1 = XControlPoint.Type.INTERPOLATED;
               } else {
-                _xifexpression_1 = XControlPointType.CONTROL_POINT;
+                _xifexpression_1 = XControlPoint.Type.CONTROL_POINT;
               }
               _switchResult = _xifexpression_1;
               break;
@@ -306,7 +304,7 @@ public class ConnectionRouter implements XActivatable {
             it.setLayoutX(_x);
             double _y = sourcePoint.getY();
             it.setLayoutY(_y);
-            it.setType(XControlPointType.ANCHOR);
+            it.setType(XControlPoint.Type.ANCHOR);
           }
         };
         XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
@@ -317,13 +315,13 @@ public class ConnectionRouter implements XActivatable {
             it.setLayoutX(_x);
             double _y = targetPoint.getY();
             it.setLayoutY(_y);
-            it.setType(XControlPointType.ANCHOR);
+            it.setType(XControlPoint.Type.ANCHOR);
           }
         };
         XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
         _controlPoints_3.setAll(
           Collections.<XControlPoint>unmodifiableList(Lists.<XControlPoint>newArrayList(_doubleArrow, _doubleArrow_1)));
-        XConnectionKind _kind = this.connection.getKind();
+        XConnection.Kind _kind = this.connection.getKind();
         if (_kind != null) {
           switch (_kind) {
             case CUBIC_CURVE:
@@ -393,18 +391,18 @@ public class ConnectionRouter implements XActivatable {
       XControlPoint _xControlPoint = new XControlPoint();
       final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
         public void apply(final XControlPoint it) {
-          it.setType(XControlPointType.ANCHOR);
+          it.setType(XControlPoint.Type.ANCHOR);
         }
       };
       XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
       _controlPoints_1.add(_doubleArrow);
-      XConnectionKind _kind = this.connection.getKind();
-      boolean _equals = Objects.equal(_kind, XConnectionKind.QUAD_CURVE);
+      XConnection.Kind _kind = this.connection.getKind();
+      boolean _equals = Objects.equal(_kind, XConnection.Kind.QUAD_CURVE);
       if (_equals) {
         ConnectionRouter.LOG.severe("self-edges cannot be QUAD_CURVEs. Switching to CUBIC_CURVE");
-        this.connection.setKind(XConnectionKind.CUBIC_CURVE);
+        this.connection.setKind(XConnection.Kind.CUBIC_CURVE);
       }
-      XConnectionKind _kind_1 = this.connection.getKind();
+      XConnection.Kind _kind_1 = this.connection.getKind();
       if (_kind_1 != null) {
         switch (_kind_1) {
           case POLYLINE:
@@ -424,7 +422,7 @@ public class ConnectionRouter implements XActivatable {
                 double _minY = boundsInDiagram.getMinY();
                 double _plus = (_minY + deltaY);
                 it.setLayoutY(_plus);
-                it.setType(XControlPointType.CONTROL_POINT);
+                it.setType(XControlPoint.Type.CONTROL_POINT);
               }
             };
             XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
@@ -439,7 +437,7 @@ public class ConnectionRouter implements XActivatable {
                 double _minY = boundsInDiagram.getMinY();
                 double _minus_1 = (_minY - deltaY);
                 it.setLayoutY(_minus_1);
-                it.setType(XControlPointType.CONTROL_POINT);
+                it.setType(XControlPoint.Type.CONTROL_POINT);
               }
             };
             XControlPoint _doubleArrow_2 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_2, _function_2);
@@ -454,7 +452,7 @@ public class ConnectionRouter implements XActivatable {
                 double _minY = boundsInDiagram.getMinY();
                 double _minus = (_minY - deltaY);
                 it.setLayoutY(_minus);
-                it.setType(XControlPointType.CONTROL_POINT);
+                it.setType(XControlPoint.Type.CONTROL_POINT);
               }
             };
             XControlPoint _doubleArrow_3 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_3, _function_3);
@@ -471,7 +469,7 @@ public class ConnectionRouter implements XActivatable {
                 double _minY = boundsInDiagram.getMinY();
                 double _plus = (_minY + (0.3 * ConnectionRouter.this.selfEdgeDist));
                 it.setLayoutY(_plus);
-                it.setType(XControlPointType.CONTROL_POINT);
+                it.setType(XControlPoint.Type.CONTROL_POINT);
               }
             };
             XControlPoint _doubleArrow_4 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_4, _function_4);
@@ -486,7 +484,7 @@ public class ConnectionRouter implements XActivatable {
                 double _minY = boundsInDiagram.getMinY();
                 double _minus = (_minY - ConnectionRouter.this.selfEdgeDist);
                 it.setLayoutY(_minus);
-                it.setType(XControlPointType.CONTROL_POINT);
+                it.setType(XControlPoint.Type.CONTROL_POINT);
               }
             };
             XControlPoint _doubleArrow_5 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_5, _function_5);
@@ -500,7 +498,7 @@ public class ConnectionRouter implements XActivatable {
       XControlPoint _xControlPoint_6 = new XControlPoint();
       final Procedure1<XControlPoint> _function_6 = new Procedure1<XControlPoint>() {
         public void apply(final XControlPoint it) {
-          it.setType(XControlPointType.ANCHOR);
+          it.setType(XControlPoint.Type.ANCHOR);
         }
       };
       XControlPoint _doubleArrow_6 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_6, _function_6);

@@ -100,9 +100,9 @@ class XDiagram extends Group implements XActivatable {
 	}
 	
 	def void doActivate() {
-		nodes.addInitializingListener(new XDiagramChildrenListener<XNode>(this, nodeLayer))
-		connections.addInitializingListener(new XDiagramChildrenListener<XConnection>(this, connectionLayer))
-		buttons.addInitializingListener(new XDiagramChildrenListener<XRapidButton>(this, buttonLayer))
+		nodes.addInitializingListener(new ChildrenListener<XNode>(this, nodeLayer))
+		connections.addInitializingListener(new ChildrenListener<XConnection>(this, connectionLayer))
+		buttons.addInitializingListener(new ChildrenListener<XRapidButton>(this, buttonLayer))
 		val arrowHeadListener = new InitializingListener<ArrowHead> => [
 			set = [ 
 				if(!connectionLayer.children.contains(it)) {
@@ -206,26 +206,26 @@ class XDiagram extends Group implements XActivatable {
 	def getButtonLayer() {
 		buttonLayer
 	}
-}
-
-class XDiagramChildrenListener<T extends Node & XActivatable> extends InitializingListListener<T> {
 	
-	Group layer
-	XDiagram diagram
-	
-	new(XDiagram diagram, Group layer) {
-		this.layer = layer
-		this.diagram = diagram
-		add = [
-			if (it instanceof XShape)
-				initializeGraphics
-			layer.children += it
-			if(diagram.isActive)
-				it.activate
-		]
-		remove = [
-			layer.children -= it
-		]
+	static class ChildrenListener<T extends Node & XActivatable> extends InitializingListListener<T> {
+		Group layer
+		XDiagram diagram
+		
+		new(XDiagram diagram, Group layer) {
+			this.layer = layer
+			this.diagram = diagram
+			add = [
+				if (it instanceof XShape)
+					initializeGraphics
+				layer.children += it
+				if(diagram.isActive)
+					it.activate
+			]
+			remove = [
+				layer.children -= it
+			]
+		}
 	}
 }
+
 	

@@ -13,7 +13,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.scene.transform.Affine
 
-import static de.fxdiagram.core.XControlPointType.*
+import static de.fxdiagram.core.XControlPoint.Type.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
@@ -23,7 +23,7 @@ import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 @ModelNode('layoutX', 'layoutY', 'type')
 class XControlPoint extends XShape {
 
-	@FxProperty XControlPointType type = CONTROL_POINT
+	@FxProperty Type type = CONTROL_POINT
 
 	protected override createNode() {
 		switch type {
@@ -76,7 +76,7 @@ class XControlPoint extends XShape {
 	}
 
 	override isSelectable() {
-		type != XControlPointType.ANCHOR && super.isSelectable()
+		type != ANCHOR && super.isSelectable()
 	}
 
 	override toString() {
@@ -109,10 +109,11 @@ class XControlPoint extends XShape {
 			children += FXMLLoader.<Node>load(new URL(this.toURI('images/Magnet.fxml')))
 		]
 	}
+	
+	enum Type {
+		ANCHOR,
+		INTERPOLATED,
+		CONTROL_POINT
+	}
 }
 
-enum XControlPointType {
-	ANCHOR,
-	INTERPOLATED,
-	CONTROL_POINT
-}

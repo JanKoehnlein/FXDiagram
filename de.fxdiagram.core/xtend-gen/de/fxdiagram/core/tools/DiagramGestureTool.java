@@ -3,7 +3,6 @@ package de.fxdiagram.core.tools;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.tools.XDiagramTool;
-import de.fxdiagram.core.tools.ZoomContext;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -14,9 +13,35 @@ import javafx.scene.input.ZoomEvent;
 
 @SuppressWarnings("all")
 public class DiagramGestureTool implements XDiagramTool {
+  public static class ZoomContext {
+    private double _previousScale = 1;
+    
+    public double getPreviousScale() {
+      return this._previousScale;
+    }
+    
+    public void setPreviousScale(final double previousScale) {
+      this._previousScale = previousScale;
+    }
+    
+    private Point2D _pivotInDiagram;
+    
+    public Point2D getPivotInDiagram() {
+      return this._pivotInDiagram;
+    }
+    
+    public void setPivotInDiagram(final Point2D pivotInDiagram) {
+      this._pivotInDiagram = pivotInDiagram;
+    }
+    
+    public ZoomContext(final Point2D pivotInDiagram) {
+      this.setPivotInDiagram(pivotInDiagram);
+    }
+  }
+  
   private XRoot root;
   
-  private ZoomContext zoomContext;
+  private DiagramGestureTool.ZoomContext zoomContext;
   
   private EventHandler<ZoomEvent> zoomStartHandler;
   
@@ -34,7 +59,7 @@ public class DiagramGestureTool implements XDiagramTool {
         double _sceneX = it.getSceneX();
         double _sceneY = it.getSceneY();
         Point2D _sceneToLocal = _diagram.sceneToLocal(_sceneX, _sceneY);
-        ZoomContext _zoomContext = new ZoomContext(_sceneToLocal);
+        DiagramGestureTool.ZoomContext _zoomContext = new DiagramGestureTool.ZoomContext(_sceneToLocal);
         DiagramGestureTool.this.zoomContext = _zoomContext;
       }
     };

@@ -1,7 +1,6 @@
 package de.fxdiagram.core.layout
 
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XConnectionKind
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.command.AbstractAnimationCommand
 import de.fxdiagram.core.command.CommandContext
@@ -21,13 +20,13 @@ class ConnectionMorphCommand extends AbstractAnimationCommand {
 	
 	XConnection connection
 	
-	XConnectionKind fromKind
-	XConnectionKind toKind
+	XConnection.Kind fromKind
+	XConnection.Kind toKind
 	
 	List<Point2D> fromPoints
 	List<Point2D> toPoints
 	
-	new(XConnection connection, XConnectionKind toKind, List<Point2D> toPoints) {
+	new(XConnection connection, XConnection.Kind toKind, List<Point2D> toPoints) {
 		this.connection = connection
 		this.toKind = toKind
 		this.toPoints = toPoints
@@ -47,7 +46,7 @@ class ConnectionMorphCommand extends AbstractAnimationCommand {
 		createMorphTransition(fromPoints, toKind, toPoints, context.defaultUndoDuration)
 	}
 	
-	def createMorphTransition(List<Point2D> from, XConnectionKind toKind, List<Point2D> to, Duration duration) {
+	def createMorphTransition(List<Point2D> from, XConnection.Kind toKind, List<Point2D> to, Duration duration) {
 		val morph = new ParallelTransition
 		connection.kind = toKind
 		connection.connectionRouter.growToSize(to.size)

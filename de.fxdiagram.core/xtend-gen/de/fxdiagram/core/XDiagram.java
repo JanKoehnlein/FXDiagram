@@ -6,7 +6,6 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
-import de.fxdiagram.core.XDiagramChildrenListener;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
@@ -66,6 +65,38 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 @ModelNode({ "nodes", "connections", "parentDiagram" })
 @SuppressWarnings("all")
 public class XDiagram extends Group implements XActivatable, XModelProvider {
+  public static class ChildrenListener<T extends Node & XActivatable> extends InitializingListListener<T> {
+    private Group layer;
+    
+    private XDiagram diagram;
+    
+    public ChildrenListener(final XDiagram diagram, final Group layer) {
+      this.layer = layer;
+      this.diagram = diagram;
+      final Procedure1<T> _function = new Procedure1<T>() {
+        public void apply(final T it) {
+          if ((it instanceof XShape)) {
+            ((XShape)it).initializeGraphics();
+          }
+          ObservableList<Node> _children = layer.getChildren();
+          _children.add(it);
+          boolean _isActive = diagram.getIsActive();
+          if (_isActive) {
+            it.activate();
+          }
+        }
+      };
+      this.setAdd(_function);
+      final Procedure1<T> _function_1 = new Procedure1<T>() {
+        public void apply(final T it) {
+          ObservableList<Node> _children = layer.getChildren();
+          _children.remove(it);
+        }
+      };
+      this.setRemove(_function_1);
+    }
+  }
+  
   private Group nodeLayer = new Group();
   
   private Group buttonLayer = new Group();
@@ -140,15 +171,15 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   public void doActivate() {
     ObservableList<XNode> _nodes = this.getNodes();
-    XDiagramChildrenListener<XNode> _xDiagramChildrenListener = new XDiagramChildrenListener<XNode>(this, this.nodeLayer);
-    CoreExtensions.<XNode>addInitializingListener(_nodes, _xDiagramChildrenListener);
+    XDiagram.ChildrenListener<XNode> _childrenListener = new XDiagram.ChildrenListener<XNode>(this, this.nodeLayer);
+    CoreExtensions.<XNode>addInitializingListener(_nodes, _childrenListener);
     ObservableList<XConnection> _connections = this.getConnections();
     Group _connectionLayer = this.getConnectionLayer();
-    XDiagramChildrenListener<XConnection> _xDiagramChildrenListener_1 = new XDiagramChildrenListener<XConnection>(this, _connectionLayer);
-    CoreExtensions.<XConnection>addInitializingListener(_connections, _xDiagramChildrenListener_1);
+    XDiagram.ChildrenListener<XConnection> _childrenListener_1 = new XDiagram.ChildrenListener<XConnection>(this, _connectionLayer);
+    CoreExtensions.<XConnection>addInitializingListener(_connections, _childrenListener_1);
     ObservableList<XRapidButton> _buttons = this.getButtons();
-    XDiagramChildrenListener<XRapidButton> _xDiagramChildrenListener_2 = new XDiagramChildrenListener<XRapidButton>(this, this.buttonLayer);
-    CoreExtensions.<XRapidButton>addInitializingListener(_buttons, _xDiagramChildrenListener_2);
+    XDiagram.ChildrenListener<XRapidButton> _childrenListener_2 = new XDiagram.ChildrenListener<XRapidButton>(this, this.buttonLayer);
+    CoreExtensions.<XRapidButton>addInitializingListener(_buttons, _childrenListener_2);
     InitializingListener<ArrowHead> _initializingListener = new InitializingListener<ArrowHead>();
     final Procedure1<InitializingListener<ArrowHead>> _function = new Procedure1<InitializingListener<ArrowHead>>() {
       public void apply(final InitializingListener<ArrowHead> it) {

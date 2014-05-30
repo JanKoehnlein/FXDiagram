@@ -6,7 +6,6 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.command.CommandStack
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.core.model.DomainObjectProviderWithState
-import de.fxdiagram.core.model.Model
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramActionTool
 import de.fxdiagram.core.tools.DiagramGestureTool

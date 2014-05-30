@@ -2,7 +2,6 @@ package de.fxdiagram.examples;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -87,7 +86,7 @@ public class LazyExampleDiagram extends XDiagram {
           XConnection _xConnection_1 = new XConnection(openable, levelOfDetail);
           final Procedure1<XConnection> _function_4 = new Procedure1<XConnection>() {
             public void apply(final XConnection it) {
-              it.setKind(XConnectionKind.QUAD_CURVE);
+              it.setKind(XConnection.Kind.QUAD_CURVE);
               XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
               final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
                 public void apply(final XConnectionLabel it) {
@@ -104,7 +103,7 @@ public class LazyExampleDiagram extends XDiagram {
           XConnection _xConnection_2 = new XConnection(simple, levelOfDetail);
           final Procedure1<XConnection> _function_5 = new Procedure1<XConnection>() {
             public void apply(final XConnection it) {
-              it.setKind(XConnectionKind.CUBIC_CURVE);
+              it.setKind(XConnection.Kind.CUBIC_CURVE);
               XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
               final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
                 public void apply(final XConnectionLabel it) {

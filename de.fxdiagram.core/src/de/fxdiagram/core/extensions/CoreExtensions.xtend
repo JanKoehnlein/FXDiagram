@@ -7,7 +7,6 @@ import de.fxdiagram.core.XShape
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.collections.ListChangeListener
-import javafx.collections.ListChangeListener.Change
 import javafx.collections.MapChangeListener
 import javafx.collections.ObservableList
 import javafx.collections.ObservableMap

@@ -136,6 +136,47 @@ class XRapidButton extends Parent implements XActivatable {
 				BOTTOM		
 		Pos.valueOf(vpos + '_' + hpos)
 	}
+	
+	static class Placer extends ObjectBinding<Point2D> {
+		
+		XRapidButton button
+		double xPos
+		double yPos
+		
+		new(XRapidButton button, double xPos, double yPos) {
+			this.button = button
+			this.xPos = xPos
+			this.yPos = yPos
+			activate
+		}
+		
+		def activate() {
+			val node = button.host
+			bind(node.layoutXProperty, node.layoutYProperty, 
+				node.scaleXProperty, node.scaleYProperty, 
+				node.layoutBoundsProperty)
+		}
+	
+		override protected computeValue() {
+			val node = button.host
+			val boundsInDiagram = node.localToDiagram(node.layoutBounds)
+			if(boundsInDiagram != null) {
+				val buttonBounds = button.boundsInLocal
+				val totalWidth = boundsInDiagram.width + 2 * buttonBounds.width
+				val totalHeight = boundsInDiagram.height + 2 * buttonBounds.height
+				val position = new Point2D(
+					boundsInDiagram.minX - 1.5 * buttonBounds.width - buttonBounds.minX + xPos * totalWidth,
+					boundsInDiagram.minY - 1.5 * buttonBounds.height - buttonBounds.minY + yPos * totalHeight)
+				position
+			} else {
+				null
+			}
+		}
+		
+		def getXPos() { xPos }
+		
+		def getYPos() { yPos }
+	}
 }
 
 abstract class XRapidButtonAction {
@@ -147,44 +188,3 @@ abstract class XRapidButtonAction {
 	}
 }
 
-class Placer extends ObjectBinding<Point2D> {
-	
-	XRapidButton button
-	double xPos
-	double yPos
-	
-	new(XRapidButton button, double xPos, double yPos) {
-		this.button = button
-		this.xPos = xPos
-		this.yPos = yPos
-		activate
-	}
-	
-	def activate() {
-		val node = button.host
-		bind(node.layoutXProperty, node.layoutYProperty, 
-			node.scaleXProperty, node.scaleYProperty, 
-			node.layoutBoundsProperty)
-	}
-
-	override protected computeValue() {
-		val node = button.host
-		val boundsInDiagram = node.localToDiagram(node.layoutBounds)
-		if(boundsInDiagram != null) {
-			val buttonBounds = button.boundsInLocal
-			val totalWidth = boundsInDiagram.width + 2 * buttonBounds.width
-			val totalHeight = boundsInDiagram.height + 2 * buttonBounds.height
-			val position = new Point2D(
-				boundsInDiagram.minX - 1.5 * buttonBounds.width - buttonBounds.minX + xPos * totalWidth,
-				boundsInDiagram.minY - 1.5 * buttonBounds.height - buttonBounds.minY + yPos * totalHeight)
-			position
-		} else {
-			null
-		}
-	}
-	
-	def getXPos() { xPos }
-	
-	def getYPos() { yPos }
-	
-}

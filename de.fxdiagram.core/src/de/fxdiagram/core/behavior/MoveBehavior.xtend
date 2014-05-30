@@ -57,13 +57,13 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			host.layoutY = newPositionInDiagram.y			
 		}
 	}
-}
-
-@Data 
-class DragContext {
-	double initialX
-	double initialY
-	double mouseAnchorX 
-	double mouseAnchorY
-	Point2D initialPosInScene
+	
+	@Data 
+	static class DragContext {
+		double initialX
+		double initialY
+		double mouseAnchorX 
+		double mouseAnchorY
+		Point2D initialPosInScene
+	}
 }

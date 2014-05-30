@@ -80,6 +80,4 @@ class Point2DExtensions {
 	static def isClockwise(double x0, double y0, double x1, double y1, double x2, double y2) {
 		(x1 - x0) * (y1 + y0) + (x2 - x1) * (y2 + y1) + (x0 - x2) * (y0 + y2) > 0
 	}
-	
-	
 }

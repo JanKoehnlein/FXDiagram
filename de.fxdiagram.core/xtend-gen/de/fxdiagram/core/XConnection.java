@@ -5,7 +5,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
@@ -67,6 +66,14 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode({ "domainObject", "source", "target", "kind", "controlPoints", "labels", "sourceArrowHead", "targetArrowHead" })
 @SuppressWarnings("all")
 public class XConnection extends XShape implements XModelProvider {
+  public enum Kind {
+    POLYLINE,
+    
+    QUAD_CURVE,
+    
+    CUBIC_CURVE;
+  }
+  
   private Group controlPointGroup = new Group();
   
   private Group shapeGroup = new Group();
@@ -266,7 +273,7 @@ public class XConnection extends XShape implements XModelProvider {
   
   public void updateShapes() {
     int remainder = (-1);
-    XConnectionKind _kind = this.getKind();
+    XConnection.Kind _kind = this.getKind();
     if (_kind != null) {
       switch (_kind) {
         case CUBIC_CURVE:
@@ -543,7 +550,7 @@ public class XConnection extends XShape implements XModelProvider {
         return new Point2D(_layoutX, _layoutY);
       }
       Point2D _switchResult = null;
-      XConnectionKind _kind = this.getKind();
+      XConnection.Kind _kind = this.getKind();
       if (_kind != null) {
         switch (_kind) {
           case CUBIC_CURVE:
@@ -613,7 +620,7 @@ public class XConnection extends XShape implements XModelProvider {
         throw new IllegalArgumentException("Argument must be between 0 and 1");
       }
       Point2D _switchResult = null;
-      XConnectionKind _kind = this.getKind();
+      XConnection.Kind _kind = this.getKind();
       if (_kind != null) {
         switch (_kind) {
           case CUBIC_CURVE:
@@ -700,7 +707,7 @@ public class XConnection extends XShape implements XModelProvider {
     modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
     modelElement.addProperty(sourceProperty, XNode.class);
     modelElement.addProperty(targetProperty, XNode.class);
-    modelElement.addProperty(kindProperty, XConnectionKind.class);
+    modelElement.addProperty(kindProperty, XConnection.Kind.class);
     modelElement.addProperty(controlPointsProperty, XControlPoint.class);
     modelElement.addProperty(labelsProperty, XConnectionLabel.class);
     modelElement.addProperty(sourceArrowHeadProperty, ArrowHead.class);
@@ -770,21 +777,21 @@ public class XConnection extends XShape implements XModelProvider {
     return this.targetArrowHeadProperty;
   }
   
-  private SimpleObjectProperty<XConnectionKind> kindProperty = new SimpleObjectProperty<XConnectionKind>(this, "kind",_initKind());
+  private SimpleObjectProperty<XConnection.Kind> kindProperty = new SimpleObjectProperty<XConnection.Kind>(this, "kind",_initKind());
   
-  private static final XConnectionKind _initKind() {
-    return XConnectionKind.POLYLINE;
+  private static final XConnection.Kind _initKind() {
+    return XConnection.Kind.POLYLINE;
   }
   
-  public XConnectionKind getKind() {
+  public XConnection.Kind getKind() {
     return this.kindProperty.get();
   }
   
-  public void setKind(final XConnectionKind kind) {
+  public void setKind(final XConnection.Kind kind) {
     this.kindProperty.set(kind);
   }
   
-  public ObjectProperty<XConnectionKind> kindProperty() {
+  public ObjectProperty<XConnection.Kind> kindProperty() {
     return this.kindProperty;
   }
   

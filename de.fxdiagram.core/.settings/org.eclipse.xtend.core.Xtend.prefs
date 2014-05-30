@@ -9,6 +9,7 @@ org.eclipse.xtext.xbase.validation.IssueCodes.equals_with_null=ignore
 org.eclipse.xtext.xbase.validation.IssueCodes.forbidden_reference=org.eclipse.jdt.core.compiler.problem.forbiddenReference\:warning
 org.eclipse.xtext.xbase.validation.IssueCodes.import_unsued=org.eclipse.jdt.core.compiler.problem.unusedImport\:warning
 org.eclipse.xtext.xbase.validation.IssueCodes.import_wildcard_deprecated=warning
+org.eclipse.xtext.xbase.validation.IssueCodes.incomplete_cases_on_enum=ignore
 org.eclipse.xtext.xbase.validation.IssueCodes.null_safe_feature_call_on_primitive_valued_feature=ignore
 org.eclipse.xtext.xbase.validation.IssueCodes.obsolete_cast=org.eclipse.jdt.core.compiler.problem.unnecessaryTypeCheck\:warning
 org.eclipse.xtext.xbase.validation.IssueCodes.obsolete_instanceof=org.eclipse.jdt.core.compiler.problem.unnecessaryTypeCheck\:warning

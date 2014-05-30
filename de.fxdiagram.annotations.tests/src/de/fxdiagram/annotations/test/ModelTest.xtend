@@ -17,14 +17,14 @@ import javafx.scene.shape.Polygon
 
 @ModelNode('layoutX', 'string', 'integer', 'long', 'bool', 'unprecise', 'names', 'selfRef') 
 abstract class ModelTest extends Polygon {
-	IntegerProperty integer
-	LongProperty longProperty
-	BooleanProperty bool
-	FloatProperty unprecise 
-	ObjectProperty<String> stringProperty	
-	StringProperty string1
-	ObjectProperty<ModelTest> selfRef
-	ListProperty<String> names	
+	public IntegerProperty integer
+	public LongProperty longProperty
+	public BooleanProperty bool
+	public FloatProperty unprecise 
+	public ObjectProperty<String> stringProperty	
+	public StringProperty string1
+	public ObjectProperty<ModelTest> selfRef
+	public ListProperty<String> names	
 }
 
 @ModelNode(#['objects']) 

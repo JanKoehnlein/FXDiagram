@@ -2,7 +2,6 @@ package de.fxdiagram.lib.simple;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import de.fxdiagram.core.Placer;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -56,14 +55,14 @@ public class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavi
         final SimpleNode target = new SimpleNode("New Node");
         final XNode source = button.getHost();
         final XConnection connection = new XConnection(source, target);
-        Placer _placer = button.getPlacer();
+        XRapidButton.Placer _placer = button.getPlacer();
         double _xPos = _placer.getXPos();
         double _minus = (_xPos - 0.5);
         double _multiply = (200 * _minus);
         double _layoutX = source.getLayoutX();
         double _plus = (_multiply + _layoutX);
         target.setLayoutX(_plus);
-        Placer _placer_1 = button.getPlacer();
+        XRapidButton.Placer _placer_1 = button.getPlacer();
         double _yPos = _placer_1.getYPos();
         double _minus_1 = (_yPos - 0.5);
         double _multiply_1 = (150 * _minus_1);

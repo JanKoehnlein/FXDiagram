@@ -5,7 +5,6 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
-import de.fxdiagram.core.behavior.DragContext;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -14,10 +13,97 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @SuppressWarnings("all")
 public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
-  private DragContext dragContext;
+  @Data
+  public static class DragContext {
+    private final double _initialX;
+    
+    public double getInitialX() {
+      return this._initialX;
+    }
+    
+    private final double _initialY;
+    
+    public double getInitialY() {
+      return this._initialY;
+    }
+    
+    private final double _mouseAnchorX;
+    
+    public double getMouseAnchorX() {
+      return this._mouseAnchorX;
+    }
+    
+    private final double _mouseAnchorY;
+    
+    public double getMouseAnchorY() {
+      return this._mouseAnchorY;
+    }
+    
+    private final Point2D _initialPosInScene;
+    
+    public Point2D getInitialPosInScene() {
+      return this._initialPosInScene;
+    }
+    
+    public DragContext(final double initialX, final double initialY, final double mouseAnchorX, final double mouseAnchorY, final Point2D initialPosInScene) {
+      super();
+      this._initialX = initialX;
+      this._initialY = initialY;
+      this._mouseAnchorX = mouseAnchorX;
+      this._mouseAnchorY = mouseAnchorY;
+      this._initialPosInScene = initialPosInScene;
+    }
+    
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + (int) (Double.doubleToLongBits(_initialX) ^ (Double.doubleToLongBits(_initialX) >>> 32));
+      result = prime * result + (int) (Double.doubleToLongBits(_initialY) ^ (Double.doubleToLongBits(_initialY) >>> 32));
+      result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorX) ^ (Double.doubleToLongBits(_mouseAnchorX) >>> 32));
+      result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorY) ^ (Double.doubleToLongBits(_mouseAnchorY) >>> 32));
+      result = prime * result + ((_initialPosInScene== null) ? 0 : _initialPosInScene.hashCode());
+      return result;
+    }
+    
+    @Override
+    public boolean equals(final Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      DragContext other = (DragContext) obj;
+      if (Double.doubleToLongBits(other._initialX) != Double.doubleToLongBits(_initialX))
+        return false;
+      if (Double.doubleToLongBits(other._initialY) != Double.doubleToLongBits(_initialY))
+        return false;
+      if (Double.doubleToLongBits(other._mouseAnchorX) != Double.doubleToLongBits(_mouseAnchorX))
+        return false;
+      if (Double.doubleToLongBits(other._mouseAnchorY) != Double.doubleToLongBits(_mouseAnchorY))
+        return false;
+      if (_initialPosInScene == null) {
+        if (other._initialPosInScene != null)
+          return false;
+      } else if (!_initialPosInScene.equals(other._initialPosInScene))
+        return false;
+      return true;
+    }
+    
+    @Override
+    public String toString() {
+      String result = new ToStringHelper().toString(this);
+      return result;
+    }
+  }
+  
+  private MoveBehavior.DragContext dragContext;
   
   public MoveBehavior(final T host) {
     super(host);
@@ -81,8 +167,8 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     return MoveBehavior.class;
   }
   
-  public DragContext mousePressed(final MouseEvent it) {
-    DragContext _xblockexpression = null;
+  public MoveBehavior.DragContext mousePressed(final MouseEvent it) {
+    MoveBehavior.DragContext _xblockexpression = null;
     {
       T _host = this.getHost();
       Parent _parent = _host.getParent();
@@ -97,7 +183,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       double _layoutY_1 = _host_4.getLayoutY();
       double _screenX = it.getScreenX();
       double _screenY = it.getScreenY();
-      DragContext _dragContext = new DragContext(_layoutX_1, _layoutY_1, _screenX, _screenY, initialPositionInScene);
+      MoveBehavior.DragContext _dragContext = new MoveBehavior.DragContext(_layoutX_1, _layoutY_1, _screenX, _screenY, initialPositionInScene);
       _xblockexpression = this.dragContext = _dragContext;
     }
     return _xblockexpression;

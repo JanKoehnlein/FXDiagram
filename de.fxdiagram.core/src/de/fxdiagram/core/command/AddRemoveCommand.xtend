@@ -6,10 +6,10 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import java.util.List
 import java.util.Map
-import javafx.animation.Animation
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
 import javafx.util.Duration
+import javafx.animation.Animation
 
 class AddRemoveCommand extends AbstractAnimationCommand {
 	
@@ -109,7 +109,7 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 		]
 	}
 	
-	// Xtend bug: why do I have to state return type
+	// have to state return type due to Xtend bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=436230
 	protected def Animation appear(XShape node, Duration duration) {
 		new FadeTransition => [
 			it.node = node
@@ -120,6 +120,7 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 		]
 	}
 	
+	// have to state return type due to Xtend bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=436230
 	protected def Animation disappear(XShape node, Duration duration) {
 		new FadeTransition => [
 			it.node = node

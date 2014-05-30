@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.AnimationQueue;
-import de.fxdiagram.core.command.AnimationQueueListener;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
@@ -32,7 +31,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class UndoRedoPlayerAction implements DiagramAction {
   private XRoot root;
   
-  private AnimationQueueListener animationQueueListener;
+  private AnimationQueue.Listener animationQueueListener;
   
   private Node controlPanel;
   
@@ -242,7 +241,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
   protected void startFastMode(final boolean isUndo) {
     this.stopFastMode();
     final CommandStack commandStack = this.root.getCommandStack();
-    final AnimationQueueListener _function = new AnimationQueueListener() {
+    final AnimationQueue.Listener _function = new AnimationQueue.Listener() {
       public void handleQueueEmpty() {
         boolean _and = false;
         if (!isUndo) {

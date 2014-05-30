@@ -2,7 +2,6 @@ package de.fxdiagram.core.command;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import de.fxdiagram.core.command.AnimationQueueListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -19,31 +18,44 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AnimationQueue {
+  public interface Listener {
+    public abstract void handleQueueEmpty();
+  }
+  
   private Queue<Function0<? extends Animation>> queue = CollectionLiterals.<Function0<? extends Animation>>newLinkedList();
   
-  private List<AnimationQueueListener> listeners = CollectionLiterals.<AnimationQueueListener>newArrayList();
+  private List<AnimationQueue.Listener> listeners = CollectionLiterals.<AnimationQueue.Listener>newArrayList();
   
-  public void addListener(final AnimationQueueListener listener) {
+  public void addListener(final AnimationQueue.Listener listener) {
     this.listeners.add(listener);
   }
   
-  public void removeListener(final AnimationQueueListener listener) {
+  public void removeListener(final AnimationQueue.Listener listener) {
     this.listeners.remove(listener);
   }
   
   public void enqueue(final Function0<? extends Animation> animationFactory) {
     boolean _notEquals = (!Objects.equal(animationFactory, null));
     if (_notEquals) {
-      final boolean isEmpty = this.queue.isEmpty();
-      this.queue.add(animationFactory);
-      if (isEmpty) {
-        this.executeNext();
+      /* this.queue; */
+      synchronized (this.queue) {
+        {
+          final boolean isEmpty = this.queue.isEmpty();
+          this.queue.add(animationFactory);
+          if (isEmpty) {
+            this.executeNext();
+          }
+        }
       }
     }
   }
   
   protected void executeNext() {
-    final Function0<? extends Animation> next = this.queue.peek();
+    Function0<? extends Animation> _xsynchronizedexpression = null;
+    synchronized (this.queue) {
+      _xsynchronizedexpression = this.queue.poll();
+    }
+    final Function0<? extends Animation> next = _xsynchronizedexpression;
     boolean _notEquals = (!Objects.equal(next, null));
     if (_notEquals) {
       final Animation animation = next.apply();
@@ -56,7 +68,6 @@ public class AnimationQueue {
             _children.add(animation);
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
               public void handle(final ActionEvent it) {
-                AnimationQueue.this.queue.poll();
                 AnimationQueue.this.executeNext();
               }
             };
@@ -66,17 +77,16 @@ public class AnimationQueue {
         };
         ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       } else {
-        this.queue.poll();
         this.executeNext();
       }
     } else {
-      ArrayList<AnimationQueueListener> _newArrayList = Lists.<AnimationQueueListener>newArrayList(this.listeners);
-      final Procedure1<AnimationQueueListener> _function_1 = new Procedure1<AnimationQueueListener>() {
-        public void apply(final AnimationQueueListener it) {
+      ArrayList<AnimationQueue.Listener> _newArrayList = Lists.<AnimationQueue.Listener>newArrayList(this.listeners);
+      final Procedure1<AnimationQueue.Listener> _function_1 = new Procedure1<AnimationQueue.Listener>() {
+        public void apply(final AnimationQueue.Listener it) {
           it.handleQueueEmpty();
         }
       };
-      IterableExtensions.<AnimationQueueListener>forEach(_newArrayList, _function_1);
+      IterableExtensions.<AnimationQueue.Listener>forEach(_newArrayList, _function_1);
     }
   }
 }

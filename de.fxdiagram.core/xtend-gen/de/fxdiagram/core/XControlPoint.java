@@ -2,7 +2,6 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.XControlPointType;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
@@ -34,8 +33,16 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode({ "layoutX", "layoutY", "type" })
 @SuppressWarnings("all")
 public class XControlPoint extends XShape implements XModelProvider {
+  public enum Type {
+    ANCHOR,
+    
+    INTERPOLATED,
+    
+    CONTROL_POINT;
+  }
+  
   protected Node createNode() {
-    XControlPointType _type = this.getType();
+    XControlPoint.Type _type = this.getType();
     if (_type != null) {
       switch (_type) {
         case ANCHOR:
@@ -69,16 +76,16 @@ public class XControlPoint extends XShape implements XModelProvider {
   }
   
   protected void doActivate() {
-    final ChangeListener<XControlPointType> _function = new ChangeListener<XControlPointType>() {
-      public void changed(final ObservableValue<? extends XControlPointType> p, final XControlPointType o, final XControlPointType n) {
+    final ChangeListener<XControlPoint.Type> _function = new ChangeListener<XControlPoint.Type>() {
+      public void changed(final ObservableValue<? extends XControlPoint.Type> p, final XControlPoint.Type o, final XControlPoint.Type n) {
         ObjectProperty<Node> _nodeProperty = XControlPoint.this.nodeProperty();
         Node _createNode = XControlPoint.this.createNode();
         _nodeProperty.set(_createNode);
       }
     };
     this.typeProperty.addListener(_function);
-    XControlPointType _type = this.getType();
-    boolean _notEquals = (!Objects.equal(_type, XControlPointType.ANCHOR));
+    XControlPoint.Type _type = this.getType();
+    boolean _notEquals = (!Objects.equal(_type, XControlPoint.Type.ANCHOR));
     if (_notEquals) {
       MoveBehavior<XControlPoint> _moveBehavior = new MoveBehavior<XControlPoint>(this);
       this.addBehavior(_moveBehavior);
@@ -87,7 +94,7 @@ public class XControlPoint extends XShape implements XModelProvider {
   
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
-      XControlPointType _type = this.getType();
+      XControlPoint.Type _type = this.getType();
       if (_type != null) {
         switch (_type) {
           case CONTROL_POINT:
@@ -104,7 +111,7 @@ public class XControlPoint extends XShape implements XModelProvider {
         }
       }
     } else {
-      XControlPointType _type_1 = this.getType();
+      XControlPoint.Type _type_1 = this.getType();
       if (_type_1 != null) {
         switch (_type_1) {
           case CONTROL_POINT:
@@ -124,8 +131,8 @@ public class XControlPoint extends XShape implements XModelProvider {
   
   public boolean isSelectable() {
     boolean _and = false;
-    XControlPointType _type = this.getType();
-    boolean _notEquals = (!Objects.equal(_type, XControlPointType.ANCHOR));
+    XControlPoint.Type _type = this.getType();
+    boolean _notEquals = (!Objects.equal(_type, XControlPoint.Type.ANCHOR));
     if (!_notEquals) {
       _and = false;
     } else {
@@ -149,8 +156,8 @@ public class XControlPoint extends XShape implements XModelProvider {
   
   public boolean update(final List<XControlPoint> siblings) {
     boolean _xifexpression = false;
-    XControlPointType _type = this.getType();
-    boolean _equals = Objects.equal(_type, XControlPointType.CONTROL_POINT);
+    XControlPoint.Type _type = this.getType();
+    boolean _equals = Objects.equal(_type, XControlPoint.Type.CONTROL_POINT);
     if (_equals) {
       boolean _xblockexpression = false;
       {
@@ -233,24 +240,24 @@ public class XControlPoint extends XShape implements XModelProvider {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(typeProperty, XControlPointType.class);
+    modelElement.addProperty(typeProperty, XControlPoint.Type.class);
   }
   
-  private SimpleObjectProperty<XControlPointType> typeProperty = new SimpleObjectProperty<XControlPointType>(this, "type",_initType());
+  private SimpleObjectProperty<XControlPoint.Type> typeProperty = new SimpleObjectProperty<XControlPoint.Type>(this, "type",_initType());
   
-  private static final XControlPointType _initType() {
-    return XControlPointType.CONTROL_POINT;
+  private static final XControlPoint.Type _initType() {
+    return XControlPoint.Type.CONTROL_POINT;
   }
   
-  public XControlPointType getType() {
+  public XControlPoint.Type getType() {
     return this.typeProperty.get();
   }
   
-  public void setType(final XControlPointType type) {
+  public void setType(final XControlPoint.Type type) {
     this.typeProperty.set(type);
   }
   
-  public ObjectProperty<XControlPointType> typeProperty() {
+  public ObjectProperty<XControlPoint.Type> typeProperty() {
     return this.typeProperty;
   }
 }

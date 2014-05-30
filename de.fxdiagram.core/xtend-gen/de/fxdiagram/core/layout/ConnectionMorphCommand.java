@@ -1,7 +1,6 @@
 package de.fxdiagram.core.layout;
 
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionKind;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
@@ -34,15 +33,15 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class ConnectionMorphCommand extends AbstractAnimationCommand {
   private XConnection connection;
   
-  private XConnectionKind fromKind;
+  private XConnection.Kind fromKind;
   
-  private XConnectionKind toKind;
+  private XConnection.Kind toKind;
   
   private List<Point2D> fromPoints;
   
   private List<Point2D> toPoints;
   
-  public ConnectionMorphCommand(final XConnection connection, final XConnectionKind toKind, final List<Point2D> toPoints) {
+  public ConnectionMorphCommand(final XConnection connection, final XConnection.Kind toKind, final List<Point2D> toPoints) {
     this.connection = connection;
     this.toKind = toKind;
     this.toPoints = toPoints;
@@ -51,7 +50,7 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
   public Animation createExecuteAnimation(final CommandContext context) {
     ParallelTransition _xblockexpression = null;
     {
-      XConnectionKind _kind = this.connection.getKind();
+      XConnection.Kind _kind = this.connection.getKind();
       this.fromKind = _kind;
       ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
       final Function1<XControlPoint, Point2D> _function = new Function1<XControlPoint, Point2D>() {
@@ -80,7 +79,7 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
     return this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _defaultUndoDuration);
   }
   
-  public ParallelTransition createMorphTransition(final List<Point2D> from, final XConnectionKind toKind, final List<Point2D> to, final Duration duration) {
+  public ParallelTransition createMorphTransition(final List<Point2D> from, final XConnection.Kind toKind, final List<Point2D> to, final Duration duration) {
     final ParallelTransition morph = new ParallelTransition();
     this.connection.setKind(toKind);
     ConnectionRouter _connectionRouter = this.connection.getConnectionRouter();
