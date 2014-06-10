@@ -1,6 +1,5 @@
 package de.fxdiagram.core.viewport;
 
-import de.fxdiagram.core.extensions.Point2DExtensions;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtend2.lib.StringConcatenation;
 
@@ -29,35 +28,6 @@ public class ViewportMemento {
   
   public double getRotate() {
     return this._rotate;
-  }
-  
-  public double dist(final ViewportMemento other) {
-    double _xblockexpression = (double) 0;
-    {
-      double _translateX = this.getTranslateX();
-      double _translateX_1 = other.getTranslateX();
-      double _minus = (_translateX - _translateX_1);
-      double _translateY = this.getTranslateY();
-      double _translateY_1 = other.getTranslateY();
-      double _minus_1 = (_translateY - _translateY_1);
-      final double delta = Point2DExtensions.norm(_minus, _minus_1);
-      double _scale = this.getScale();
-      double _scale_1 = other.getScale();
-      double _max = Math.max(_scale, _scale_1);
-      double _scale_2 = this.getScale();
-      double _scale_3 = other.getScale();
-      double _min = Math.min(_scale_2, _scale_3);
-      double _divide = (_max / _min);
-      double _log = Math.log(_divide);
-      final double deltaScale = (500 * _log);
-      double _rotate = this.getRotate();
-      double _rotate_1 = other.getRotate();
-      double _minus_2 = (_rotate - _rotate_1);
-      double _abs = Math.abs(_minus_2);
-      final double deltaAngle = (7 * _abs);
-      _xblockexpression = ((delta + deltaScale) + deltaAngle);
-    }
-    return _xblockexpression;
   }
   
   public String toString() {

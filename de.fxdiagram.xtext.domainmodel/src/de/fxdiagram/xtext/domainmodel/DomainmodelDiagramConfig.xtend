@@ -34,7 +34,6 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 		override calls() {
 			packageDiagram.nestedDiagramFor[ it ]			
 		}
-			
 	}
 
 	val entityNode = new NodeMapping<Entity>(this, 'entityNode') {

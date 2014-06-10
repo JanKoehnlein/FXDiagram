@@ -83,6 +83,8 @@ public class OpenableDiagramNode extends XNode {
   
   private ViewportMemento viewportBeforeOpen;
   
+  private boolean isOpen = false;
+  
   public OpenableDiagramNode(final String name) {
     super(name);
   }
@@ -160,10 +162,17 @@ public class OpenableDiagramNode extends XNode {
     return this.textNode;
   }
   
-  public void openDiagram() {
-    CommandStack _commandStack = this.root.getCommandStack();
-    OpenDiagramCommand _openDiagramCommand = new OpenDiagramCommand(this);
-    _commandStack.execute(_openDiagramCommand);
+  public boolean openDiagram() {
+    boolean _xblockexpression = false;
+    {
+      if ((!this.isOpen)) {
+        CommandStack _commandStack = this.root.getCommandStack();
+        OpenDiagramCommand _openDiagramCommand = new OpenDiagramCommand(this);
+        _commandStack.execute(_openDiagramCommand);
+      }
+      _xblockexpression = this.isOpen = true;
+    }
+    return _xblockexpression;
   }
   
   protected ParallelTransition openDiagram(final Duration duration) {
@@ -209,9 +218,7 @@ public class OpenableDiagramNode extends XNode {
       _innerDiagram_2.activate();
       final AbstractCloseBehavior _function_2 = new AbstractCloseBehavior() {
         public void close() {
-          CommandStack _commandStack = OpenableDiagramNode.this.root.getCommandStack();
-          CloseDiagramCommand _closeDiagramCommand = new CloseDiagramCommand(OpenableDiagramNode.this);
-          _commandStack.execute(_closeDiagramCommand);
+          OpenableDiagramNode.this.closeDiagram();
         }
       };
       final AbstractCloseBehavior closeBehavior = _function_2;
@@ -265,9 +272,7 @@ public class OpenableDiagramNode extends XNode {
                           ObservableList<Node> _children = _headsUpDisplay.getChildren();
                           EventTarget _target = it.getTarget();
                           _children.remove(((Node) _target));
-                          CommandStack _commandStack = OpenableDiagramNode.this.root.getCommandStack();
-                          CloseDiagramCommand _closeDiagramCommand = new CloseDiagramCommand(OpenableDiagramNode.this);
-                          _commandStack.execute(_closeDiagramCommand);
+                          OpenableDiagramNode.this.closeDiagram();
                         }
                       };
                       it.setOnMouseClicked(_function);
@@ -319,6 +324,19 @@ public class OpenableDiagramNode extends XNode {
         }
       };
       _xblockexpression = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_3);
+    }
+    return _xblockexpression;
+  }
+  
+  protected boolean closeDiagram() {
+    boolean _xblockexpression = false;
+    {
+      if (this.isOpen) {
+        CommandStack _commandStack = this.root.getCommandStack();
+        CloseDiagramCommand _closeDiagramCommand = new CloseDiagramCommand(this);
+        _commandStack.execute(_closeDiagramCommand);
+      }
+      _xblockexpression = this.isOpen = false;
     }
     return _xblockexpression;
   }

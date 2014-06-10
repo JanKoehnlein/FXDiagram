@@ -65,6 +65,8 @@ class OpenableDiagramNode extends XNode {
 	
 	ViewportMemento viewportBeforeOpen
 	
+	boolean isOpen = false
+	
 	new(String name) {
 		super(name)
 	}
@@ -115,7 +117,9 @@ class OpenableDiagramNode extends XNode {
 	}
 	
 	def openDiagram() {
-		root.commandStack.execute(new OpenDiagramCommand(this))
+		if(!isOpen)
+			root.commandStack.execute(new OpenDiagramCommand(this))
+		isOpen = true
 	}
 	
 	protected def openDiagram(Duration duration) {
@@ -131,7 +135,7 @@ class OpenableDiagramNode extends XNode {
 			children += innerDiagram
 		])
 		innerDiagram.activate
-		val AbstractCloseBehavior closeBehavior = [| root.commandStack.execute(new CloseDiagramCommand(this)) ]
+		val AbstractCloseBehavior closeBehavior = [| closeDiagram() ]
 		innerDiagram.addBehavior(closeBehavior)
 		innerDiagram.layout
 		diagramScaler.activate
@@ -151,7 +155,7 @@ class OpenableDiagramNode extends XNode {
 					val toParentButton = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY) => [
 						onMouseClicked = [
 							root.headsUpDisplay.children -= target as Node
-							root.commandStack.execute(new CloseDiagramCommand(this))
+							closeDiagram
 						]
 						tooltip = "Parent diagram"
 						
@@ -174,6 +178,12 @@ class OpenableDiagramNode extends XNode {
 				node = innerDiagram
 			]
 		]
+	}
+	
+	protected def closeDiagram() {
+		if(isOpen)
+			root.commandStack.execute(new CloseDiagramCommand(this))
+		isOpen = false
 	}
 	
 	protected def closeDiagram(Duration duration) {

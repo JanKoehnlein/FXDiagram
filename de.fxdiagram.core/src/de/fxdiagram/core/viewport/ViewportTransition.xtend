@@ -35,7 +35,7 @@ class ViewportTransition extends Transition {
 	}
 	
 	def getDefaultDuration() {
-		(1000 / from.dist(to)).seconds
+		0.5.seconds
 	}
 	
 	def setDuration(Duration duration) {

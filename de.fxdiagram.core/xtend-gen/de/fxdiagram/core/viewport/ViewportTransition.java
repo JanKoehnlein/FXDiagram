@@ -44,9 +44,7 @@ public class ViewportTransition extends Transition {
   }
   
   public Duration getDefaultDuration() {
-    double _dist = this.from.dist(this.to);
-    double _divide = (1000 / _dist);
-    return Duration.seconds(_divide);
+    return Duration.seconds(0.5);
   }
   
   public void setDuration(final Duration duration) {
