@@ -92,7 +92,7 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
 	def <T> T withDomainObject((ECLASS)=>T lambda) {
 		val uriAsURI = URI.createURI(uri)
-		val editor = revealInEditor
+		val editor = openInEditor(false)
 		if (editor instanceof XtextEditor) {
 			editor.document.readOnly [
 				lambda.apply(resourceSet.getEObject(uriAsURI, true) as ECLASS)
@@ -111,8 +111,8 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 		103 * uri.hashCode
 	}
 	
-	def revealInEditor() {
-		Access.IURIEditorOpener.get.open(URI.createURI(uri), true)
+	def openInEditor(boolean isSelect) {
+		Access.IURIEditorOpener.get.open(URI.createURI(uri), isSelect)
 	}
 	
 	def injectMembers(Object it) {

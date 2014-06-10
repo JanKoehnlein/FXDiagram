@@ -83,7 +83,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     {
       String _uri = this.getUri();
       final URI uriAsURI = URI.createURI(_uri);
-      final IEditorPart editor = this.revealInEditor();
+      final IEditorPart editor = this.openInEditor(false);
       T _xifexpression = null;
       if ((editor instanceof XtextEditor)) {
         IXtextDocument _document = ((XtextEditor)editor).getDocument();
@@ -119,12 +119,12 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     return (103 * _hashCode);
   }
   
-  public IEditorPart revealInEditor() {
+  public IEditorPart openInEditor(final boolean isSelect) {
     Provider<IURIEditorOpener> _iURIEditorOpener = Access.getIURIEditorOpener();
     IURIEditorOpener _get = _iURIEditorOpener.get();
     String _uri = this.getUri();
     URI _createURI = URI.createURI(_uri);
-    return _get.open(_createURI, true);
+    return _get.open(_createURI, isSelect);
   }
   
   public void injectMembers(final Object it) {

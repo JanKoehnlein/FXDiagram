@@ -26,7 +26,7 @@ class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implement
 	}
 	
 	override open() {
-		domainObject.revealInEditor
+		domainObject.openInEditor(true)
 	}
 	
 	private def getDomainObject() {

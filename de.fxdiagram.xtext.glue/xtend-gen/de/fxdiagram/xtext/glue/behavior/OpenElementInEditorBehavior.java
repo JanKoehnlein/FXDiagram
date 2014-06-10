@@ -37,7 +37,7 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
   
   public void open() {
     XtextDomainObjectDescriptor<?> _domainObject = this.getDomainObject();
-    _domainObject.revealInEditor();
+    _domainObject.openInEditor(true);
   }
   
   private XtextDomainObjectDescriptor<?> getDomainObject() {

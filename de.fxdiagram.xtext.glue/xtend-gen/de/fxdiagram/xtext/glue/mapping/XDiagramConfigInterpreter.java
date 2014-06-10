@@ -163,7 +163,7 @@ public class XDiagramConfigInterpreter {
               int _clickCount = it.getClickCount();
               boolean _equals = (_clickCount == 2);
               if (_equals) {
-                descriptor.revealInEditor();
+                descriptor.openInEditor(true);
               }
             }
           };

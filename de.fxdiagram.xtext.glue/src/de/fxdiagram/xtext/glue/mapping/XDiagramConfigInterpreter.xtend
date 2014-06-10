@@ -59,7 +59,7 @@ class XDiagramConfigInterpreter {
 			connection => [
 				onMouseClicked = [
 					if (clickCount == 2)
-						descriptor.revealInEditor
+						descriptor.openInEditor(true)
 				]
 			]
 			return connection
