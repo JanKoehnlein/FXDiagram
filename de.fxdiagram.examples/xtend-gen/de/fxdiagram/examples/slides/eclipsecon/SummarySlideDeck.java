@@ -130,7 +130,7 @@ public class SummarySlideDeck extends OpenableDiagramNode {
                 HBox _createMixedText_2 = SummarySlideDeck.this.createMixedText("The KIELER framework", "for auto-layout");
                 _children_3.add(_createMixedText_2);
                 ObservableList<Node> _children_4 = it.getChildren();
-                HBox _createMixedText_3 = SummarySlideDeck.this.createMixedText("GaphViz", "for the layout algorithm");
+                HBox _createMixedText_3 = SummarySlideDeck.this.createMixedText("GraphViz", "for the layout algorithm");
                 _children_4.add(_createMixedText_3);
                 ObservableList<Node> _children_5 = it.getChildren();
                 HBox _createMixedText_4 = SummarySlideDeck.this.createMixedText("Memory Alpha", "for the data on StarTrek");

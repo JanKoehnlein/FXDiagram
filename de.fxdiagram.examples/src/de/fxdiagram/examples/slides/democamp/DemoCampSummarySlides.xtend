@@ -30,7 +30,7 @@ class DemoCampSummarySlides extends OpenableDiagramNode {
 					children += createMixedText('Gerrit Grunwald', 'for JavaFX inspiration')
 					children += createMixedText('Tom Schindl', 'for e(fx)clipse')
 					children += createMixedText('The KIELER framework', 'for auto-layout')
-					children += createMixedText('GaphViz', 'for the layout algorithm')
+					children += createMixedText('GraphViz', 'for the layout algorithm')
 					children += createMixedText('Memory Alpha', 'for the data on StarTrek')
 					children += createMixedText('GTJLCARS', 'for the StarTrek font')
 				]
