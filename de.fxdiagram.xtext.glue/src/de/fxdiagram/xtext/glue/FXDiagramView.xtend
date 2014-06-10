@@ -40,7 +40,6 @@ import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.core.XShape
 
 class FXDiagramView extends ViewPart {
 
@@ -134,9 +133,7 @@ class FXDiagramView extends ViewPart {
 		if(interpreterContext.needsLayout)
 			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis))
 		val descriptor = domainObjectProvider.createDescriptor(element, mappingCall.mapping)
-		root.commandStack.execute(new SelectAndRevealCommand(root, [ XShape it | 
-			// have to declare parameter type
-			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=436886
+		root.commandStack.execute(new SelectAndRevealCommand(root, [
 			switch it {
 				XNode: domainObject == descriptor
 				XConnection: domainObject == descriptor

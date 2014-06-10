@@ -144,7 +144,7 @@ class XDiagram extends Group implements XActivatable {
 		])
 		if(isLayoutOnActivate) {
 			isLayoutOnActivate = false
-			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, this, 50.millis))
+			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, this, 250.millis))
 		}
 	}
 	

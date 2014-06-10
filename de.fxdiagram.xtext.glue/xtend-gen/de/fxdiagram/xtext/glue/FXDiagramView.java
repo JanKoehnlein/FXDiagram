@@ -177,9 +177,15 @@ public class FXDiagramView extends ViewPart {
       LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_1, _millis);
       _commandStack_1.execute(_createLayoutCommand);
     }
+    CommandStack _commandStack_2 = this.root.getCommandStack();
+    Layouter _layouter_1 = new Layouter();
+    XDiagram _diagram_2 = this.root.getDiagram();
+    Duration _millis_1 = DurationExtensions.millis(200);
+    LazyCommand _createLayoutCommand_1 = _layouter_1.createLayoutCommand(LayoutType.DOT, _diagram_2, _millis_1);
+    _commandStack_2.execute(_createLayoutCommand_1);
     AbstractMapping<?> _mapping = mappingCall.getMapping();
     final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, _mapping);
-    CommandStack _commandStack_2 = this.root.getCommandStack();
+    CommandStack _commandStack_3 = this.root.getCommandStack();
     final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
       public Boolean apply(final XShape it) {
         boolean _switchResult = false;
@@ -205,7 +211,7 @@ public class FXDiagramView extends ViewPart {
       }
     };
     SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function);
-    _commandStack_2.execute(_selectAndRevealCommand);
+    _commandStack_3.execute(_selectAndRevealCommand);
   }
   
   public void register(final XtextEditor editor) {
