@@ -39,9 +39,10 @@ import de.fxdiagram.xtext.glue.EditorListener;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
-import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
+import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
 import de.fxdiagram.xtext.glue.mapping.InterpreterContext;
-import de.fxdiagram.xtext.glue.mapping.NodeMapping;
+import de.fxdiagram.xtext.glue.mapping.MappingCall;
+import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.Collections;
 import java.util.Set;
@@ -146,21 +147,22 @@ public class FXDiagramView extends ViewPart {
     this.root.setDiagram(_xDiagram);
   }
   
-  public <T extends EObject> void revealElement(final T element, final AbstractMapping<T> mapping, final XtextEditor editor) {
+  public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final XtextEditor editor) {
     final InterpreterContext interpreterContext = new InterpreterContext();
-    if ((mapping instanceof DiagramMapping<?>)) {
+    if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
       this.register(editor);
       boolean _remove = this.changedEditors.remove(editor);
       if (_remove) {
-        XDiagram _createDiagram = this.configInterpreter.<T>createDiagram(element, ((DiagramMapping<T>) mapping), interpreterContext);
-        this.root.setDiagram(_createDiagram);
+        interpreterContext.setIsNewDiagram(true);
+        XDiagram _execute = this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
+        this.root.setDiagram(_execute);
       }
     } else {
-      if ((mapping instanceof NodeMapping<?>)) {
+      if ((mappingCall instanceof NodeMappingCall<?, ?>)) {
         this.register(editor);
         XDiagram _diagram = this.root.getDiagram();
         interpreterContext.setDiagram(_diagram);
-        this.configInterpreter.<T>createNode(element, ((NodeMapping<T>) mapping), interpreterContext);
+        this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext);
       }
     }
     CommandStack _commandStack = this.root.getCommandStack();
@@ -175,7 +177,8 @@ public class FXDiagramView extends ViewPart {
       LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_1, _millis);
       _commandStack_1.execute(_createLayoutCommand);
     }
-    final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, mapping);
+    AbstractMapping<?> _mapping = mappingCall.getMapping();
+    final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, _mapping);
     CommandStack _commandStack_2 = this.root.getCommandStack();
     final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
       public Boolean apply(final XShape it) {

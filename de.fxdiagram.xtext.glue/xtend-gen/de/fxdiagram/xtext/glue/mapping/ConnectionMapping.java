@@ -5,6 +5,7 @@ import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import de.fxdiagram.xtext.glue.shapes.BaseConnection;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
@@ -14,34 +15,30 @@ public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
   
   private NodeMappingCall<?, T> target;
   
-  private Function1<? super XtextDomainObjectDescriptor<T>, ? extends XConnection> createConnection = new Function1<XtextDomainObjectDescriptor<T>, BaseConnection<T>>() {
-    public BaseConnection<T> apply(final XtextDomainObjectDescriptor<T> it) {
-      return new BaseConnection<T>(it);
-    }
-  };
-  
-  public ConnectionMapping(final String id, final Class<T> typeGuard) {
-    super(id, typeGuard);
+  public ConnectionMapping(final XDiagramConfig config, final String id) {
+    super(config, id);
   }
   
-  public ConnectionMapping(final Class<T> typeGuard) {
-    super(typeGuard);
-  }
-  
-  public Function1<? super XtextDomainObjectDescriptor<T>, ? extends XConnection> getCreateConnection() {
-    return this.createConnection;
-  }
-  
-  public Function1<? super XtextDomainObjectDescriptor<T>, ? extends XConnection> setCreateConnection(final Function1<? super XtextDomainObjectDescriptor<T>, ? extends XConnection> createConnection) {
-    return this.createConnection = createConnection;
+  public XConnection createConnection(final XtextDomainObjectDescriptor<T> descriptor) {
+    return new BaseConnection<T>(descriptor);
   }
   
   public NodeMappingCall<?, T> getSource() {
-    return this.source;
+    NodeMappingCall<?, T> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.source;
+    }
+    return _xblockexpression;
   }
   
   public NodeMappingCall<?, T> getTarget() {
-    return this.target;
+    NodeMappingCall<?, T> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.target;
+    }
+    return _xblockexpression;
   }
   
   public <U extends Object> NodeMappingCall<?, T> source(final NodeMapping<U> nodeMapping, final Function1<? super T, ? extends U> selector) {

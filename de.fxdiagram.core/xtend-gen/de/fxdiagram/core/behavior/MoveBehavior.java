@@ -63,11 +63,11 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + (int) (Double.doubleToLongBits(_initialX) ^ (Double.doubleToLongBits(_initialX) >>> 32));
-      result = prime * result + (int) (Double.doubleToLongBits(_initialY) ^ (Double.doubleToLongBits(_initialY) >>> 32));
-      result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorX) ^ (Double.doubleToLongBits(_mouseAnchorX) >>> 32));
-      result = prime * result + (int) (Double.doubleToLongBits(_mouseAnchorY) ^ (Double.doubleToLongBits(_mouseAnchorY) >>> 32));
-      result = prime * result + ((_initialPosInScene== null) ? 0 : _initialPosInScene.hashCode());
+      result = prime * result + (int) (Double.doubleToLongBits(this._initialX) ^ (Double.doubleToLongBits(this._initialX) >>> 32));
+      result = prime * result + (int) (Double.doubleToLongBits(this._initialY) ^ (Double.doubleToLongBits(this._initialY) >>> 32));
+      result = prime * result + (int) (Double.doubleToLongBits(this._mouseAnchorX) ^ (Double.doubleToLongBits(this._mouseAnchorX) >>> 32));
+      result = prime * result + (int) (Double.doubleToLongBits(this._mouseAnchorY) ^ (Double.doubleToLongBits(this._mouseAnchorY) >>> 32));
+      result = prime * result + ((this._initialPosInScene== null) ? 0 : this._initialPosInScene.hashCode());
       return result;
     }
     
@@ -80,18 +80,18 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       if (getClass() != obj.getClass())
         return false;
       DragContext other = (DragContext) obj;
-      if (Double.doubleToLongBits(other._initialX) != Double.doubleToLongBits(_initialX))
+      if (Double.doubleToLongBits(other._initialX) != Double.doubleToLongBits(this._initialX))
         return false;
-      if (Double.doubleToLongBits(other._initialY) != Double.doubleToLongBits(_initialY))
+      if (Double.doubleToLongBits(other._initialY) != Double.doubleToLongBits(this._initialY))
         return false;
-      if (Double.doubleToLongBits(other._mouseAnchorX) != Double.doubleToLongBits(_mouseAnchorX))
+      if (Double.doubleToLongBits(other._mouseAnchorX) != Double.doubleToLongBits(this._mouseAnchorX))
         return false;
-      if (Double.doubleToLongBits(other._mouseAnchorY) != Double.doubleToLongBits(_mouseAnchorY))
+      if (Double.doubleToLongBits(other._mouseAnchorY) != Double.doubleToLongBits(this._mouseAnchorY))
         return false;
-      if (_initialPosInScene == null) {
+      if (this._initialPosInScene == null) {
         if (other._initialPosInScene != null)
           return false;
-      } else if (!_initialPosInScene.equals(other._initialPosInScene))
+      } else if (!this._initialPosInScene.equals(other._initialPosInScene))
         return false;
       return true;
     }

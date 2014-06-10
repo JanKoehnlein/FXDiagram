@@ -178,8 +178,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                 {
                   final XtextDomainObjectDescriptor<MODEL> descriptor = ((XtextDomainObjectDescriptor<MODEL>) connectionDesc);
                   ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-                  Function1<? super XtextDomainObjectDescriptor<MODEL>, ? extends XConnection> _createConnection = _connectionMapping.getCreateConnection();
-                  XConnection _apply = _createConnection.apply(descriptor);
+                  XConnection _createConnection = _connectionMapping.createConnection(descriptor);
                   final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
                     public void apply(final XConnection it) {
                       if (LazyConnectionRapidButtonAction.this.hostIsSource) {
@@ -191,7 +190,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                       }
                     }
                   };
-                  _xblockexpression = ObjectExtensions.<XConnection>operator_doubleArrow(_apply, _function);
+                  _xblockexpression = ObjectExtensions.<XConnection>operator_doubleArrow(_createConnection, _function);
                 }
                 return _xblockexpression;
               }
@@ -215,8 +214,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
       {
         final NodeMapping<NODE> nodeMappingCasted = ((NodeMapping<NODE>) nodeMapping);
         final XtextDomainObjectDescriptor<NODE> descriptor = this.configInterpreter.<NODE>getDescriptor(((NODE) nodeDomainObject), nodeMappingCasted);
-        Function1<? super XtextDomainObjectDescriptor<NODE>, ? extends XNode> _createNode = nodeMappingCasted.getCreateNode();
-        final XNode node = _createNode.apply(descriptor);
+        final XNode node = nodeMappingCasted.createNode(descriptor);
         _xblockexpression = node;
       }
       _xifexpression = _xblockexpression;

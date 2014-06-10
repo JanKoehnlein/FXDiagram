@@ -11,44 +11,41 @@ import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
-public class DiagramMapping<T extends Object> extends AbstractMapping<T> {
+public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T> {
   private List<AbstractNodeMappingCall<?, T>> nodes = CollectionLiterals.<AbstractNodeMappingCall<?, T>>newArrayList();
   
   private List<AbstractConnectionMappingCall<?, T>> connections = CollectionLiterals.<AbstractConnectionMappingCall<?, T>>newArrayList();
   
-  private Function1<? super XtextDomainObjectDescriptor<T>, ? extends XDiagram> createDiagram = new Function1<XtextDomainObjectDescriptor<T>, XDiagram>() {
-    public XDiagram apply(final XtextDomainObjectDescriptor<T> it) {
-      return new XDiagram();
-    }
-  };
-  
-  public DiagramMapping(final String id, final Class<T> typeGuard) {
-    super(id, typeGuard);
-  }
-  
-  public DiagramMapping(final Class<T> typeGuard) {
-    super(typeGuard);
+  public DiagramMapping(final XDiagramConfig config, final String id) {
+    super(config, id);
   }
   
   public List<AbstractNodeMappingCall<?, T>> getNodes() {
-    return this.nodes;
+    List<AbstractNodeMappingCall<?, T>> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.nodes;
+    }
+    return _xblockexpression;
   }
   
   public List<AbstractConnectionMappingCall<?, T>> getConnections() {
-    return this.connections;
+    List<AbstractConnectionMappingCall<?, T>> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.connections;
+    }
+    return _xblockexpression;
   }
   
-  public Function1<? super XtextDomainObjectDescriptor<T>, ? extends XDiagram> getCreateDiagram() {
-    return this.createDiagram;
-  }
-  
-  public Function1<? super XtextDomainObjectDescriptor<T>, ? extends XDiagram> setCreateDiagram(final Function1<? super XtextDomainObjectDescriptor<T>, ? extends XDiagram> createDiagram) {
-    return this.createDiagram = createDiagram;
+  public XDiagram createDiagram(final XtextDomainObjectDescriptor<T> descriptor) {
+    return new XDiagram();
   }
   
   public <U extends Object> boolean nodeFor(final NodeMapping<U> nodeMapping, final Function1<? super T, ? extends U> selector) {

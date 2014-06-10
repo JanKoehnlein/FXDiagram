@@ -13,6 +13,7 @@ class InterpreterContext {
 	protected XDiagram diagram
 	
 	@Property boolean isIgnoreLazy
+	@Property boolean isNewDiagram
 
 	List<XNode> addedNodes = newArrayList
 	List<XConnection> addedConnections = newArrayList
@@ -44,7 +45,7 @@ class InterpreterContext {
 	}
 	
 	def boolean needsLayout() {
-		addedNodes.size + addedConnections.size  > 1		
+		isNewDiagram || addedNodes.size + addedConnections.size  > 1		
 	}
 	
 	def getCommand() {

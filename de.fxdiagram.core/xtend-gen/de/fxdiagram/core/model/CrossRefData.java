@@ -36,9 +36,9 @@ public class CrossRefData {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_href== null) ? 0 : _href.hashCode());
-    result = prime * result + ((_property== null) ? 0 : _property.hashCode());
-    result = prime * result + _index;
+    result = prime * result + ((this._href== null) ? 0 : this._href.hashCode());
+    result = prime * result + ((this._property== null) ? 0 : this._property.hashCode());
+    result = prime * result + this._index;
     return result;
   }
   
@@ -51,17 +51,17 @@ public class CrossRefData {
     if (getClass() != obj.getClass())
       return false;
     CrossRefData other = (CrossRefData) obj;
-    if (_href == null) {
+    if (this._href == null) {
       if (other._href != null)
         return false;
-    } else if (!_href.equals(other._href))
+    } else if (!this._href.equals(other._href))
       return false;
-    if (_property == null) {
+    if (this._property == null) {
       if (other._property != null)
         return false;
-    } else if (!_property.equals(other._property))
+    } else if (!this._property.equals(other._property))
       return false;
-    if (other._index != _index)
+    if (other._index != this._index)
       return false;
     return true;
   }

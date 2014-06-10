@@ -31,6 +31,16 @@ public class InterpreterContext {
     this._isIgnoreLazy = isIgnoreLazy;
   }
   
+  private boolean _isNewDiagram;
+  
+  public boolean isIsNewDiagram() {
+    return this._isNewDiagram;
+  }
+  
+  public void setIsNewDiagram(final boolean isNewDiagram) {
+    this._isNewDiagram = isNewDiagram;
+  }
+  
   private List<XNode> addedNodes = CollectionLiterals.<XNode>newArrayList();
   
   private List<XConnection> addedConnections = CollectionLiterals.<XConnection>newArrayList();
@@ -90,10 +100,18 @@ public class InterpreterContext {
   }
   
   public boolean needsLayout() {
-    int _size = this.addedNodes.size();
-    int _size_1 = this.addedConnections.size();
-    int _plus = (_size + _size_1);
-    return (_plus > 1);
+    boolean _or = false;
+    boolean _isIsNewDiagram = this.isIsNewDiagram();
+    if (_isIsNewDiagram) {
+      _or = true;
+    } else {
+      int _size = this.addedNodes.size();
+      int _size_1 = this.addedConnections.size();
+      int _plus = (_size + _size_1);
+      boolean _greaterThan = (_plus > 1);
+      _or = _greaterThan;
+    }
+    return _or;
   }
   
   public AddRemoveCommand getCommand() {

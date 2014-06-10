@@ -90,10 +90,10 @@ public class ViewportMemento {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + (int) (Double.doubleToLongBits(_translateX) ^ (Double.doubleToLongBits(_translateX) >>> 32));
-    result = prime * result + (int) (Double.doubleToLongBits(_translateY) ^ (Double.doubleToLongBits(_translateY) >>> 32));
-    result = prime * result + (int) (Double.doubleToLongBits(_scale) ^ (Double.doubleToLongBits(_scale) >>> 32));
-    result = prime * result + (int) (Double.doubleToLongBits(_rotate) ^ (Double.doubleToLongBits(_rotate) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(this._translateX) ^ (Double.doubleToLongBits(this._translateX) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(this._translateY) ^ (Double.doubleToLongBits(this._translateY) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(this._scale) ^ (Double.doubleToLongBits(this._scale) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(this._rotate) ^ (Double.doubleToLongBits(this._rotate) >>> 32));
     return result;
   }
   
@@ -106,13 +106,13 @@ public class ViewportMemento {
     if (getClass() != obj.getClass())
       return false;
     ViewportMemento other = (ViewportMemento) obj;
-    if (Double.doubleToLongBits(other._translateX) != Double.doubleToLongBits(_translateX))
+    if (Double.doubleToLongBits(other._translateX) != Double.doubleToLongBits(this._translateX))
       return false;
-    if (Double.doubleToLongBits(other._translateY) != Double.doubleToLongBits(_translateY))
+    if (Double.doubleToLongBits(other._translateY) != Double.doubleToLongBits(this._translateY))
       return false;
-    if (Double.doubleToLongBits(other._scale) != Double.doubleToLongBits(_scale))
+    if (Double.doubleToLongBits(other._scale) != Double.doubleToLongBits(this._scale))
       return false;
-    if (Double.doubleToLongBits(other._rotate) != Double.doubleToLongBits(_rotate))
+    if (Double.doubleToLongBits(other._rotate) != Double.doubleToLongBits(this._rotate))
       return false;
     return true;
   }

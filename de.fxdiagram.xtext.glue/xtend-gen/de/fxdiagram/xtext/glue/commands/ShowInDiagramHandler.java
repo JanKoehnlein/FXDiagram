@@ -4,9 +4,8 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import de.fxdiagram.xtext.glue.FXDiagramView;
-import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -56,15 +55,15 @@ public class ShowInDiagramHandler extends AbstractHandler {
               final EObject selectedElement = ShowInDiagramHandler.this.eObjectAtOffsetHelper.resolveElementAt(it, _offset);
               boolean _notEquals = (!Objects.equal(selectedElement, null));
               if (_notEquals) {
-                XDiagramConfigRegistry _instance = XDiagramConfigRegistry.getInstance();
+                XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
                 Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-                final Function1<XDiagramConfig, Iterable<? extends AbstractMapping<EObject>>> _function = new Function1<XDiagramConfig, Iterable<? extends AbstractMapping<EObject>>>() {
-                  public Iterable<? extends AbstractMapping<EObject>> apply(final XDiagramConfig it) {
-                    return it.<EObject>getMappings(selectedElement);
+                final Function1<XDiagramConfig, Iterable<? extends MappingCall<?, EObject>>> _function = new Function1<XDiagramConfig, Iterable<? extends MappingCall<?, EObject>>>() {
+                  public Iterable<? extends MappingCall<?, EObject>> apply(final XDiagramConfig it) {
+                    return it.<EObject>getEntryCalls(selectedElement);
                   }
                 };
-                Iterable<Iterable<? extends AbstractMapping<EObject>>> _map = IterableExtensions.map(_configurations, _function);
-                final Iterable<AbstractMapping<EObject>> mappings = Iterables.<AbstractMapping<EObject>>concat(_map);
+                Iterable<Iterable<? extends MappingCall<?, EObject>>> _map = IterableExtensions.map(_configurations, _function);
+                final Iterable<MappingCall<?, EObject>> mappings = Iterables.<MappingCall<?, EObject>>concat(_map);
                 boolean _isEmpty = IterableExtensions.isEmpty(mappings);
                 boolean _not = (!_isEmpty);
                 if (_not) {
@@ -72,7 +71,7 @@ public class ShowInDiagramHandler extends AbstractHandler {
                   IWorkbenchPage _activePage = _activeWorkbenchWindow.getActivePage();
                   final IViewPart view = _activePage.showView("org.eclipse.xtext.glue.FXDiagramView");
                   if ((view instanceof FXDiagramView)) {
-                    AbstractMapping<EObject> _head = IterableExtensions.<AbstractMapping<EObject>>head(mappings);
+                    MappingCall<?, EObject> _head = IterableExtensions.<MappingCall<?, EObject>>head(mappings);
                     ((FXDiagramView)view).<EObject>revealElement(selectedElement, _head, editor);
                   }
                 }

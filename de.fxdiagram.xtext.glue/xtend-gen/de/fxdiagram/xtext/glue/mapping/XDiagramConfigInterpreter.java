@@ -48,9 +48,8 @@ public class XDiagramConfigInterpreter {
       if (_not) {
         return null;
       }
-      Function1<? super XtextDomainObjectDescriptor<T>, ? extends XDiagram> _createDiagram = diagramMapping.getCreateDiagram();
       XtextDomainObjectDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
-      final XDiagram diagram = _createDiagram.apply(_descriptor);
+      final XDiagram diagram = diagramMapping.createDiagram(_descriptor);
       context.diagram = diagram;
       List<AbstractNodeMappingCall<?, T>> _nodes = diagramMapping.getNodes();
       final Procedure1<AbstractNodeMappingCall<?, T>> _function = new Procedure1<AbstractNodeMappingCall<?, T>>() {
@@ -75,7 +74,7 @@ public class XDiagramConfigInterpreter {
     return _xblockexpression;
   }
   
-  public <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final InterpreterContext context) {
+  protected <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final InterpreterContext context) {
     boolean _isApplicable = nodeMapping.isApplicable(nodeObject);
     if (_isApplicable) {
       final XtextDomainObjectDescriptor<T> descriptor = this.<T>getDescriptor(nodeObject, nodeMapping);
@@ -84,8 +83,7 @@ public class XDiagramConfigInterpreter {
       if (_notEquals) {
         return existingNode;
       }
-      Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> _createNode = nodeMapping.getCreateNode();
-      final XNode node = _createNode.apply(descriptor);
+      final XNode node = nodeMapping.createNode(descriptor);
       context.addNode(node);
       List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
       final Procedure1<AbstractConnectionMappingCall<?, T>> _function = new Procedure1<AbstractConnectionMappingCall<?, T>>() {
@@ -157,8 +155,7 @@ public class XDiagramConfigInterpreter {
       if (_notEquals) {
         return existingConnection;
       }
-      Function1<? super XtextDomainObjectDescriptor<T>, ? extends XConnection> _createConnection = connectionMappingCasted.getCreateConnection();
-      final XConnection connection = _createConnection.apply(descriptor);
+      final XConnection connection = connectionMappingCasted.createConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
@@ -196,7 +193,7 @@ public class XDiagramConfigInterpreter {
     return null;
   }
   
-  protected <T extends Object, U extends Object> Iterable<XNode> execute(final AbstractNodeMappingCall<T, U> nodeMappingCall, final U domainArgument, final InterpreterContext context) {
+  public <T extends Object, U extends Object> Iterable<XNode> execute(final AbstractNodeMappingCall<T, U> nodeMappingCall, final U domainArgument, final InterpreterContext context) {
     final Iterable<T> nodeObjects = this.<T, U>select(nodeMappingCall, domainArgument);
     final ArrayList<XNode> result = CollectionLiterals.<XNode>newArrayList();
     for (final T nodeObject : nodeObjects) {
@@ -281,7 +278,7 @@ public class XDiagramConfigInterpreter {
     }
   }
   
-  protected <T extends Object, U extends Object> XDiagram execute(final DiagramMappingCall<T, U> diagramMappingCall, final U domainArgument, final InterpreterContext context) {
+  public <T extends Object, U extends Object> XDiagram execute(final DiagramMappingCall<T, U> diagramMappingCall, final U domainArgument, final InterpreterContext context) {
     Function1<? super U, ? extends T> _selector = diagramMappingCall.getSelector();
     final T diagramObject = _selector.apply(domainArgument);
     DiagramMapping<T> _diagramMapping = diagramMappingCall.getDiagramMapping();

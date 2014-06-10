@@ -28,8 +28,8 @@ public class JavaProperty {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name== null) ? 0 : _name.hashCode());
-    result = prime * result + ((_type== null) ? 0 : _type.hashCode());
+    result = prime * result + ((this._name== null) ? 0 : this._name.hashCode());
+    result = prime * result + ((this._type== null) ? 0 : this._type.hashCode());
     return result;
   }
   
@@ -42,15 +42,15 @@ public class JavaProperty {
     if (getClass() != obj.getClass())
       return false;
     JavaProperty other = (JavaProperty) obj;
-    if (_name == null) {
+    if (this._name == null) {
       if (other._name != null)
         return false;
-    } else if (!_name.equals(other._name))
+    } else if (!this._name.equals(other._name))
       return false;
-    if (_type == null) {
+    if (this._type == null) {
       if (other._type != null)
         return false;
-    } else if (!_type.equals(other._type))
+    } else if (!this._type.equals(other._type))
       return false;
     return true;
   }

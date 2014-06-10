@@ -23,16 +23,15 @@ import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
-import de.fxdiagram.xtext.glue.mapping.AbstractMapping
-import de.fxdiagram.xtext.glue.mapping.DiagramMapping
+import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall
 import de.fxdiagram.xtext.glue.mapping.InterpreterContext
-import de.fxdiagram.xtext.glue.mapping.NodeMapping
+import de.fxdiagram.xtext.glue.mapping.MappingCall
+import de.fxdiagram.xtext.glue.mapping.NodeMappingCall
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 import java.util.Set
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.ui.IPartListener2
@@ -41,6 +40,7 @@ import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.XShape
 
 class FXDiagramView extends ViewPart {
 
@@ -104,17 +104,18 @@ class FXDiagramView extends ViewPart {
 		root.diagram = new XDiagram
 	}
 	
-	def <T extends EObject> void revealElement(T element, AbstractMapping<T> mapping, XtextEditor editor) {
+	def <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall, XtextEditor editor) {
 		val interpreterContext = new InterpreterContext
-		if(mapping instanceof DiagramMapping<?>) {
+		if(mappingCall instanceof DiagramMappingCall<?, ?>) {
 			editor.register
 			if(changedEditors.remove(editor)) {
-				root.diagram = configInterpreter.createDiagram(element, mapping as DiagramMapping<T>, interpreterContext)
+				interpreterContext.isNewDiagram = true
+				root.diagram = configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
 			} 
-		} else if(mapping instanceof NodeMapping<?>) {
+		} else if(mappingCall instanceof NodeMappingCall<?, ?>) {
 			editor.register
 			interpreterContext.diagram = root.diagram
-			configInterpreter.createNode(element, mapping as NodeMapping<T>, interpreterContext)		
+			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext)		
 		}
 //		val command = new SequentialAnimationCommand
 //		command += interpreterContext.command
@@ -132,8 +133,10 @@ class FXDiagramView extends ViewPart {
 		root.commandStack.execute(interpreterContext.command)
 		if(interpreterContext.needsLayout)
 			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis))
-		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
-		root.commandStack.execute(new SelectAndRevealCommand(root, [
+		val descriptor = domainObjectProvider.createDescriptor(element, mappingCall.mapping)
+		root.commandStack.execute(new SelectAndRevealCommand(root, [ XShape it | 
+			// have to declare parameter type
+			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=436886
 			switch it {
 				XNode: domainObject == descriptor
 				XConnection: domainObject == descriptor

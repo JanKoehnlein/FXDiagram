@@ -8,7 +8,6 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -62,7 +61,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     {
       boolean _equals = Objects.equal(this.mapping, null);
       if (_equals) {
-        XDiagramConfigRegistry _instance = XDiagramConfigRegistry.getInstance();
+        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
         String _mappingConfigID = this.getMappingConfigID();
         final XDiagramConfig config = _instance.getConfigByID(_mappingConfigID);
         String _mappingID = this.getMappingID();

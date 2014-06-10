@@ -1,76 +1,105 @@
 package de.fxdiagram.xtext.glue.mapping
 
+import de.fxdiagram.annotations.logging.Logging
+import java.util.List
 import java.util.Map
 
 import static org.eclipse.core.runtime.Platform.*
-import de.fxdiagram.annotations.logging.Logging
 
 interface XDiagramConfig {
 
-	def <T> Iterable<? extends AbstractMapping<T>> getMappings(T domainObject)
+	def <ARG> Iterable<? extends MappingCall<?, ARG>> getEntryCalls(ARG domainObject)
 	
 	def AbstractMapping<?> getMappingByID(String mappingID)
 	
 	def String getID()
+	
+	def <ARG> void addMapping(AbstractMapping<ARG> mapping)
+	
+	@Logging  
+	static class Registry {
+ 	
+		static XDiagramConfig.Registry instance
+		
+		Map<String, XDiagramConfig> configs = newHashMap
+		
+		static def getInstance() {
+			instance ?: (instance = new XDiagramConfig.Registry)
+		}
+		
+		private new() {
+			addStaticConfigurations
+		}
+		
+		def Iterable<? extends XDiagramConfig> getConfigurations() {
+			configs.values
+		}
+		
+		protected def addStaticConfigurations() {
+			extensionRegistry.getConfigurationElementsFor('de.fxdiagram.xtext.glue.fxDiagramConfig').forEach[
+				val config = createExecutableExtension('class') as AbstractDiagramConfig
+				val id = getAttribute('id')
+				config.setID(id)
+				if(configs.containsKey(id))
+					LOG.severe("Duplicate fxDiagramConfig id=" + id)
+				else
+					configs.put(id, config)
+			]
+		}
+		
+		def XDiagramConfig getConfigByID(String configID) {
+			configs.get(configID)
+		}
+	}
 }
 
 @Logging
-class AbstractDiagramConfig implements XDiagramConfig {
+abstract class AbstractDiagramConfig implements XDiagramConfig {
 	
 	Map<String, AbstractMapping<?>> mappings = newHashMap
 
 	@Property String ID
-	
-	override <T> getMappings(T domainObject) {
-		mappings.values.filter[isApplicable(domainObject)].map[it as AbstractMapping<T>]
-	}
-	
+	 
 	override getMappingByID(String mappingID) {
 		mappings.get(mappingID)
 	}
 	
-	def addMapping(AbstractMapping<?> mapping) {
+	protected abstract def <ARG> void entryCalls(ARG domainArgument, MappingAcceptor<ARG> acceptor)
+	
+	override <ARG> getEntryCalls(ARG domainArgument) {
+		val acceptor = new MappingAcceptor<ARG>
+		entryCalls(domainArgument, acceptor)
+		acceptor.mappingCalls
+	}
+
+	//TODO: remove and make sure serialization works	
+	override <ARG> addMapping(AbstractMapping<ARG> mapping) {
 		if(mappings.containsKey(mapping.ID)) {
 			LOG.severe('''Duplicate mapping id=«mapping.ID» in «ID»''')
 		} else {
-			mapping.config = this
-			mappings.put(mapping.getID(), mapping)
+			mappings.put(mapping.ID, mapping)
 		}
 	}
 } 
 
-@Logging
-class XDiagramConfigRegistry {
+class MappingAcceptor<ARG> {
 	
-	static XDiagramConfigRegistry instance
+	val List<MappingCall<?, ARG>> mappingCalls = newArrayList
 	
-	Map<String, XDiagramConfig> configs = newHashMap
-	
-	static def getInstance() {
-		instance ?: (instance = new XDiagramConfigRegistry)
+	def add(AbstractMapping<?> mapping) {
+		add(mapping as AbstractMapping<ARG>, [it])
 	}
 	
-	private new() {
-		addStaticConfigurations
+	def <T> add(AbstractMapping<T> mapping, (ARG)=>T selector) {
+		mappingCalls.add(switch mapping {
+			NodeMapping<T>: new NodeMappingCall(selector, mapping)
+			DiagramMapping<T>: new DiagramMappingCall(selector, mapping) 
+			ConnectionMapping<T>: new ConnectionMappingCall(selector, mapping) 
+		})
 	}
 	
-	def Iterable<? extends XDiagramConfig> getConfigurations() {
-		configs.values
-	}
-	
-	protected def addStaticConfigurations() {
-		extensionRegistry.getConfigurationElementsFor('de.fxdiagram.xtext.glue.fxDiagramConfig').forEach[
-			val config = createExecutableExtension('class') as AbstractDiagramConfig
-			val id = getAttribute('id')
-			config.setID(id)
-			if(configs.containsKey(id))
-				LOG.severe("Duplicate fxDiagramConfig id=" + id)
-			else
-				configs.put(id, config)
-		]
-	}
-	
-	def XDiagramConfig getConfigByID(String configID) {
-		configs.get(configID)
+	def getMappingCalls() {
+		mappingCalls
 	}
 }
+

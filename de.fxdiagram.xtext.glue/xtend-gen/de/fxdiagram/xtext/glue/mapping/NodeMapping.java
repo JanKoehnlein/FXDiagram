@@ -9,6 +9,7 @@ import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -22,42 +23,39 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
   
   private DiagramMappingCall<?, T> nestedDiagram = null;
   
-  private Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> createNode = new Function1<XtextDomainObjectDescriptor<T>, BaseNode<T>>() {
-    public BaseNode<T> apply(final XtextDomainObjectDescriptor<T> it) {
-      return new BaseNode<T>(it);
-    }
-  };
-  
-  public NodeMapping(final String id, final Class<T> typeGuard) {
-    super(id, typeGuard);
-  }
-  
-  public NodeMapping(final Class<T> typeGuard) {
-    super(typeGuard);
+  public NodeMapping(final XDiagramConfig config, final String id) {
+    super(config, id);
   }
   
   public List<AbstractConnectionMappingCall<?, T>> getOutgoing() {
-    return this.outgoing;
+    List<AbstractConnectionMappingCall<?, T>> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.outgoing;
+    }
+    return _xblockexpression;
   }
   
   public List<AbstractConnectionMappingCall<?, T>> getIncoming() {
-    return this.incoming;
+    List<AbstractConnectionMappingCall<?, T>> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.incoming;
+    }
+    return _xblockexpression;
   }
   
   public DiagramMappingCall<?, T> getNestedDiagram() {
-    return this.nestedDiagram;
+    DiagramMappingCall<?, T> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.nestedDiagram;
+    }
+    return _xblockexpression;
   }
   
-  public DiagramMappingCall<?, T> setNestedDiagram(final DiagramMappingCall<?, T> nestedDiagram) {
-    return this.nestedDiagram = nestedDiagram;
-  }
-  
-  public Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> getCreateNode() {
-    return this.createNode;
-  }
-  
-  public Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> setCreateNode(final Function1<? super XtextDomainObjectDescriptor<T>, ? extends XNode> createNode) {
-    return this.createNode = createNode;
+  public XNode createNode(final XtextDomainObjectDescriptor<T> descriptor) {
+    return new BaseNode<T>(descriptor);
   }
   
   public <U extends Object> ConnectionMappingCall<U, T> outConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {

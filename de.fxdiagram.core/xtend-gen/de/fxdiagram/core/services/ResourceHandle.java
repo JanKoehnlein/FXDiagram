@@ -35,9 +35,9 @@ public class ResourceHandle {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name== null) ? 0 : _name.hashCode());
-    result = prime * result + ((_context== null) ? 0 : _context.hashCode());
-    result = prime * result + ((_relativePath== null) ? 0 : _relativePath.hashCode());
+    result = prime * result + ((this._name== null) ? 0 : this._name.hashCode());
+    result = prime * result + ((this._context== null) ? 0 : this._context.hashCode());
+    result = prime * result + ((this._relativePath== null) ? 0 : this._relativePath.hashCode());
     return result;
   }
   
@@ -50,20 +50,20 @@ public class ResourceHandle {
     if (getClass() != obj.getClass())
       return false;
     ResourceHandle other = (ResourceHandle) obj;
-    if (_name == null) {
+    if (this._name == null) {
       if (other._name != null)
         return false;
-    } else if (!_name.equals(other._name))
+    } else if (!this._name.equals(other._name))
       return false;
-    if (_context == null) {
+    if (this._context == null) {
       if (other._context != null)
         return false;
-    } else if (!_context.equals(other._context))
+    } else if (!this._context.equals(other._context))
       return false;
-    if (_relativePath == null) {
+    if (this._relativePath == null) {
       if (other._relativePath != null)
         return false;
-    } else if (!_relativePath.equals(other._relativePath))
+    } else if (!this._relativePath.equals(other._relativePath))
       return false;
     return true;
   }

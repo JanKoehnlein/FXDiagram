@@ -13,24 +13,24 @@ class XDiagramConfigInterpreter {
 	new(XtextDomainObjectProvider domainObjectProvider) {
 		this.domainObjectProvider = domainObjectProvider
 	}
-
+	
 	def <T> createDiagram(T diagramObject, DiagramMapping<T> diagramMapping, InterpreterContext context) {
 		if (!diagramMapping.isApplicable(diagramObject))
 			return null
-		val diagram = diagramMapping.createDiagram.apply(diagramObject.getDescriptor(diagramMapping))
+		val diagram = diagramMapping.createDiagram(diagramObject.getDescriptor(diagramMapping))
 		context.diagram = diagram
 		diagramMapping.nodes.forEach[execute(diagramObject, context)]
 		diagramMapping.connections.forEach[execute(diagramObject, [], context)]
 		diagram
 	}
 
-	def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context) {
+	protected def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context) {
 		if (nodeMapping.isApplicable(nodeObject)) {
 			val descriptor = nodeObject.getDescriptor(nodeMapping)
 			val existingNode = context.getNode(descriptor)
 			if (existingNode != null)
 				return existingNode
-			val node = nodeMapping.createNode.apply(descriptor)
+			val node = nodeMapping.createNode(descriptor)
 			context.addNode(node)
 			nodeMapping.incoming.forEach[
 				if(!lazy || context.isIgnoreLazy) 
@@ -55,7 +55,7 @@ class XDiagramConfigInterpreter {
 			val existingConnection = context.getConnection(descriptor)
 			if (existingConnection != null)
 				return existingConnection
-			val connection = connectionMappingCasted.createConnection.apply(descriptor)
+			val connection = connectionMappingCasted.createConnection(descriptor)
 			connection => [
 				onMouseClicked = [
 					if (clickCount == 2)
@@ -79,7 +79,7 @@ class XDiagramConfigInterpreter {
 		}
 	}
 	
-	protected def <T,U> Iterable<XNode> execute(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument,
+	def <T,U> Iterable<XNode> execute(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument,
 		InterpreterContext context) {
 		val nodeObjects = select(nodeMappingCall, domainArgument)
 		val result = newArrayList
@@ -121,7 +121,7 @@ class XDiagramConfigInterpreter {
 			connection.target = connectionMapping.target?.execute(connectionObject, context).head
 	}
 
-	protected def <T,U> XDiagram execute(DiagramMappingCall<T, U> diagramMappingCall, U domainArgument,
+	def <T,U> XDiagram execute(DiagramMappingCall<T, U> diagramMappingCall, U domainArgument,
 		InterpreterContext context) {
 		val diagramObject = diagramMappingCall.selector.apply(domainArgument)
 		val result = createDiagram(diagramObject, diagramMappingCall.diagramMapping, new InterpreterContext => [

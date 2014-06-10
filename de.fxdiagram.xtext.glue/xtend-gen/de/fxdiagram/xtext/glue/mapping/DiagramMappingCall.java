@@ -1,13 +1,15 @@
 package de.fxdiagram.xtext.glue.mapping;
 
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
+import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
 @SuppressWarnings("all")
-public class DiagramMappingCall<T extends Object, ARG extends Object> {
+public class DiagramMappingCall<T extends Object, ARG extends Object> implements MappingCall<T, ARG> {
   private final Function1<? super ARG, ? extends T> _selector;
   
   public Function1<? super ARG, ? extends T> getSelector() {
@@ -20,6 +22,10 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> {
     return this._diagramMapping;
   }
   
+  public AbstractMapping<T> getMapping() {
+    return this.getDiagramMapping();
+  }
+  
   public DiagramMappingCall(final Function1<? super ARG, ? extends T> selector, final DiagramMapping<T> diagramMapping) {
     super();
     this._selector = selector;
@@ -30,8 +36,8 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_selector== null) ? 0 : _selector.hashCode());
-    result = prime * result + ((_diagramMapping== null) ? 0 : _diagramMapping.hashCode());
+    result = prime * result + ((this._selector== null) ? 0 : this._selector.hashCode());
+    result = prime * result + ((this._diagramMapping== null) ? 0 : this._diagramMapping.hashCode());
     return result;
   }
   
@@ -44,15 +50,15 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> {
     if (getClass() != obj.getClass())
       return false;
     DiagramMappingCall other = (DiagramMappingCall) obj;
-    if (_selector == null) {
+    if (this._selector == null) {
       if (other._selector != null)
         return false;
-    } else if (!_selector.equals(other._selector))
+    } else if (!this._selector.equals(other._selector))
       return false;
-    if (_diagramMapping == null) {
+    if (this._diagramMapping == null) {
       if (other._diagramMapping != null)
         return false;
-    } else if (!_diagramMapping.equals(other._diagramMapping))
+    } else if (!this._diagramMapping.equals(other._diagramMapping))
       return false;
     return true;
   }

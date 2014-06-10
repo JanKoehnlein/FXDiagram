@@ -5,7 +5,7 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfigRegistry
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -80,7 +80,7 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
 	def AbstractMapping<ECLASS> getMapping() {
 		if(mapping == null) {
-			val config = XDiagramConfigRegistry.instance.getConfigByID(mappingConfigID)
+			val config = XDiagramConfig.Registry.instance.getConfigByID(mappingConfigID)
 			mapping = config.getMappingByID(mappingID) as AbstractMapping<ECLASS>
 		}
 		mapping
@@ -108,7 +108,7 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 	}
 	
 	def revealInEditor() {
-		Access.getIURIEditorOpener.get.open(URI.createURI(uri), true)
+		Access.IURIEditorOpener.get.open(URI.createURI(uri), true)
 	}
 }
 

@@ -31,8 +31,8 @@ public class MultiConnectionMappingCall<T extends Object, ARG extends Object> ex
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_selector== null) ? 0 : _selector.hashCode());
-    result = prime * result + ((_connectionMapping== null) ? 0 : _connectionMapping.hashCode());
+    result = prime * result + ((this._selector== null) ? 0 : this._selector.hashCode());
+    result = prime * result + ((this._connectionMapping== null) ? 0 : this._connectionMapping.hashCode());
     return result;
   }
   
@@ -47,15 +47,15 @@ public class MultiConnectionMappingCall<T extends Object, ARG extends Object> ex
     if (!super.equals(obj))
       return false;
     MultiConnectionMappingCall other = (MultiConnectionMappingCall) obj;
-    if (_selector == null) {
+    if (this._selector == null) {
       if (other._selector != null)
         return false;
-    } else if (!_selector.equals(other._selector))
+    } else if (!this._selector.equals(other._selector))
       return false;
-    if (_connectionMapping == null) {
+    if (this._connectionMapping == null) {
       if (other._connectionMapping != null)
         return false;
-    } else if (!_connectionMapping.equals(other._connectionMapping))
+    } else if (!this._connectionMapping.equals(other._connectionMapping))
       return false;
     return true;
   }

@@ -29,8 +29,8 @@ public class ESuperTypeHandle {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_subType== null) ? 0 : _subType.hashCode());
-    result = prime * result + ((_superType== null) ? 0 : _superType.hashCode());
+    result = prime * result + ((this._subType== null) ? 0 : this._subType.hashCode());
+    result = prime * result + ((this._superType== null) ? 0 : this._superType.hashCode());
     return result;
   }
   
@@ -43,15 +43,15 @@ public class ESuperTypeHandle {
     if (getClass() != obj.getClass())
       return false;
     ESuperTypeHandle other = (ESuperTypeHandle) obj;
-    if (_subType == null) {
+    if (this._subType == null) {
       if (other._subType != null)
         return false;
-    } else if (!_subType.equals(other._subType))
+    } else if (!this._subType.equals(other._subType))
       return false;
-    if (_superType == null) {
+    if (this._superType == null) {
       if (other._superType != null)
         return false;
-    } else if (!_superType.equals(other._superType))
+    } else if (!this._superType.equals(other._superType))
       return false;
     return true;
   }
