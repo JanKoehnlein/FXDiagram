@@ -32,9 +32,10 @@
         <menuContribution
             locationURI="popup:#TextEditorContext?after=group.edit">
              <command
-                 commandId="de.fxdiagram.xtext.glue.showInDiagramCommand"
-                 style="push"
-                 tooltip="Open in FXDiagram">
+                   commandId="de.fxdiagram.xtext.glue.showInDiagramCommand"
+                   icon="icons/FXDiagram.png"
+                   style="push"
+                   tooltip="Open in FXDiagram">
          </command>  
          </menuContribution>
 	</extension>
