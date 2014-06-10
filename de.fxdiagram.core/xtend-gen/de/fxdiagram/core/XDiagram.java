@@ -190,7 +190,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
             boolean _contains = _children.contains(it);
             boolean _not = (!_contains);
             if (_not) {
-              it.activatePreview();
+              it.initializeGraphics();
               Group _connectionLayer_1 = XDiagram.this.getConnectionLayer();
               ObservableList<Node> _children_1 = _connectionLayer_1.getChildren();
               _children_1.add(it);
@@ -302,7 +302,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
       XRoot _root = CoreExtensions.getRoot(this);
       CommandStack _commandStack = _root.getCommandStack();
       Layouter _layouter = new Layouter();
-      Duration _millis = DurationExtensions.millis(50);
+      Duration _millis = DurationExtensions.millis(250);
       LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, this, _millis);
       _commandStack.execute(_createLayoutCommand);
     }

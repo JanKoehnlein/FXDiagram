@@ -106,7 +106,7 @@ class XDiagram extends Group implements XActivatable {
 		val arrowHeadListener = new InitializingListener<ArrowHead> => [
 			set = [ 
 				if(!connectionLayer.children.contains(it)) {
-					activatePreview					
+					initializeGraphics					
 					connectionLayer.children += it
 				}
 			]

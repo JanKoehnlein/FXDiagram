@@ -1,11 +1,14 @@
 package de.fxdiagram.core.anchors
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
+import javafx.beans.property.Property
 import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.Parent
+import javafx.scene.paint.Paint
 import javafx.scene.transform.Affine
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
@@ -14,40 +17,51 @@ import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
-@ModelNode('connection', 'isSource')
+@ModelNode('connection', 'isSource', 'width', 'height', 'stroke')
+@Logging
 abstract class ArrowHead extends Parent {
 	
-	Node node
-	
 	@FxProperty XConnection connection
-	
 	@FxProperty boolean isSource
+	@FxProperty double width 
+	@FxProperty double height 
+	Property<Paint> strokeProperty
 	
-	@FxProperty(readOnly) boolean isPreviewActive
+	Node node
+
+	new(XConnection connection, double width, double height, 
+		Property<Paint> strokeProperty, boolean isSource) {
+		this.connection = connection
+		this.isSource = isSource
+		this.width = width
+		this.height = height
+		this.strokeProperty = strokeProperty
+	}
+
+	def strokeProperty() {
+		strokeProperty ?: connection.strokeProperty
+	}
+
+	def initializeGraphics() {  
+		if(getNode() == null)
+			LOG.severe("Node is null")
+	}
 	
-	def void activatePreview() {
-		if(!isPreviewActive) {
-			doActivatePreview()
+	def Node getNode() {
+		if(node == null) {
+			node = createNode()
 			children += node
 			this.isSource = isSource
 			if(isSource)
 				connection.sourceArrowHead = this
 			else 
 				connection.targetArrowHead = this
-			isPreviewActiveProperty.set(true)
 		}
-	}
-	
-	def void doActivatePreview() 
-	
-	protected def setNode(Node node) {
-		this.node = node
-	} 
-	
-	def getNode() {
 		node
 	}
-
+	
+	def Node createNode() 
+	
 	def getLineCut() {
 		connection.strokeWidth
 	} 

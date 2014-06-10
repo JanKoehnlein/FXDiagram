@@ -8,40 +8,32 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Polygon
 import javafx.scene.shape.StrokeType
 
-@ModelNode('width', 'height', 'stroke', 'fill')
+@ModelNode(#['fill'])
 class DiamondArrowHead extends ArrowHead {
 	
-	@FxProperty double width 
-	@FxProperty double height 
-	@FxProperty Paint stroke
 	@FxProperty Paint fill
 	
 	new(XConnection connection, double width, double height, 
 		Property<Paint> strokeProperty, Property<Paint> fillProperty, 
 		boolean isSource) {
-		this.connection = connection
-		this.isSource = isSource
-		this.width = width
-		this.height = height
-		this.strokeProperty.bind(strokeProperty)
+		super(connection, width, height, strokeProperty, isSource)
 		this.fillProperty.bind(fillProperty)
-		activatePreview
 	}
 	
 	new(XConnection connection, boolean isSource) {
 		this(connection, 10, 10, connection.strokeProperty, connection.strokeProperty, isSource)
 	}
 
-	override doActivatePreview() {
-		node = new Polygon => [
+	override createNode() {
+		new Polygon => [
 			points.setAll(#[
 				0.0, 0.0,
 				0.5 * width, -0.5 * height, 
 				width, 0.0, 
 				0.5 * width, 0.5 * height
 			])
-			it.fillProperty.bind(fillProperty)
-			it.strokeProperty.bind(strokeProperty)
+			it.fillProperty.bind(this.fillProperty)
+			it.strokeProperty.bind(this.strokeProperty)
 			strokeWidthProperty.bind(connection.strokeWidthProperty)
 			strokeType = StrokeType.CENTERED
 		]

@@ -9,8 +9,6 @@ import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -20,23 +18,18 @@ import javafx.scene.shape.StrokeType;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "width", "height", "stroke" })
+@ModelNode
 @SuppressWarnings("all")
 public class LineArrowHead extends ArrowHead {
   public LineArrowHead(final XConnection connection, final double width, final double height, final Property<Paint> strokeProperty, final boolean isSource) {
-    this.setConnection(connection);
-    this.setIsSource(isSource);
-    this.setWidth(width);
-    this.setHeight(height);
-    this.strokeProperty.bind(strokeProperty);
-    this.activatePreview();
+    super(connection, width, height, strokeProperty, isSource);
   }
   
   public LineArrowHead(final XConnection connection, final boolean isSource) {
-    this(connection, 7, 10, connection.strokeProperty(), isSource);
+    this(connection, 7, 10, null, isSource);
   }
   
-  public void doActivatePreview() {
+  public Node createNode() {
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
       public void apply(final Group it) {
@@ -52,7 +45,8 @@ public class LineArrowHead extends ArrowHead {
             double _multiply_1 = (0.5 * _height_1);
             _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-            _strokeProperty.bind(LineArrowHead.this.strokeProperty);
+            Property<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
+            _strokeProperty.bind(_strokeProperty_1);
             DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
             XConnection _connection = LineArrowHead.this.getConnection();
             DoubleProperty _strokeWidthProperty_1 = _connection.strokeWidthProperty();
@@ -73,7 +67,8 @@ public class LineArrowHead extends ArrowHead {
             double _minus = (_width - _strokeWidth);
             _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-            _strokeProperty.bind(LineArrowHead.this.strokeProperty);
+            Property<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
+            _strokeProperty.bind(_strokeProperty_1);
             DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
             XConnection _connection_1 = LineArrowHead.this.getConnection();
             DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
@@ -85,8 +80,7 @@ public class LineArrowHead extends ArrowHead {
         _children_1.add(_doubleArrow_1);
       }
     };
-    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-    this.setNode(_doubleArrow);
+    return ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
   }
   
   public double getLineCut() {
@@ -104,50 +98,5 @@ public class LineArrowHead extends ArrowHead {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
-    modelElement.addProperty(widthProperty, Double.class);
-    modelElement.addProperty(heightProperty, Double.class);
-    modelElement.addProperty(strokeProperty, Paint.class);
-  }
-  
-  private SimpleDoubleProperty widthProperty = new SimpleDoubleProperty(this, "width");
-  
-  public double getWidth() {
-    return this.widthProperty.get();
-  }
-  
-  public void setWidth(final double width) {
-    this.widthProperty.set(width);
-  }
-  
-  public DoubleProperty widthProperty() {
-    return this.widthProperty;
-  }
-  
-  private SimpleDoubleProperty heightProperty = new SimpleDoubleProperty(this, "height");
-  
-  public double getHeight() {
-    return this.heightProperty.get();
-  }
-  
-  public void setHeight(final double height) {
-    this.heightProperty.set(height);
-  }
-  
-  public DoubleProperty heightProperty() {
-    return this.heightProperty;
-  }
-  
-  private SimpleObjectProperty<Paint> strokeProperty = new SimpleObjectProperty<Paint>(this, "stroke");
-  
-  public Paint getStroke() {
-    return this.strokeProperty.get();
-  }
-  
-  public void setStroke(final Paint stroke) {
-    this.strokeProperty.set(stroke);
-  }
-  
-  public ObjectProperty<Paint> strokeProperty() {
-    return this.strokeProperty;
   }
 }

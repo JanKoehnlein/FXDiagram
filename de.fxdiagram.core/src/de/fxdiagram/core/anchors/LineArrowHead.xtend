@@ -7,40 +7,30 @@ import javafx.scene.Group
 import javafx.scene.paint.Paint
 import javafx.scene.shape.Polyline
 import javafx.scene.shape.StrokeType
-import de.fxdiagram.annotations.properties.FxProperty
 
-@ModelNode('width', 'height', 'stroke')
+@ModelNode
 class LineArrowHead extends ArrowHead {
-	
-	@FxProperty double width 
-	@FxProperty double height 
-	@FxProperty Paint stroke
 	
 	new(XConnection connection, double width, double height, 
 		Property<Paint> strokeProperty, boolean isSource) {
-		this.connection = connection
-		this.isSource = isSource
-		this.width = width
-		this.height = height
-		this.strokeProperty.bind(strokeProperty)
-		activatePreview()
+		super(connection, width, height, strokeProperty, isSource)
 	}
-	
+
 	new(XConnection connection, boolean isSource) {
-		this(connection, 7, 10, connection.strokeProperty, isSource)
+		this(connection, 7, 10, null, isSource)
 	}
-	
-	override doActivatePreview() {
-		node = new Group => [
+
+	override createNode() {
+		new Group => [
 			children += new Polyline => [
 				points.setAll(#[0.0, -0.5 * height, width, 0.0, 0.0, 0.5 * height])
-				it.strokeProperty.bind(strokeProperty)
+				it.strokeProperty.bind(this.strokeProperty)
 				strokeWidthProperty.bind(connection.strokeWidthProperty)
 				strokeType = StrokeType.CENTERED
 			]
 			children += new Polyline => [
 				points.setAll(#[0.0, 0.0, width - connection.strokeWidth, 0.0])
-				it.strokeProperty.bind(strokeProperty)
+				it.strokeProperty.bind(this.strokeProperty)
 				strokeWidthProperty.bind(connection.strokeWidthProperty)
 				strokeType = StrokeType.CENTERED
 			]
