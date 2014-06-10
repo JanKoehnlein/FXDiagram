@@ -38,7 +38,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 
 	val entityNode = new NodeMapping<Entity>(this, 'entityNode') {
 		override createNode(XtextDomainObjectDescriptor<Entity> descriptor) {
-			new EntityNode(descriptor, domainModelUtil) 
+			new EntityNode(descriptor) 
 		}
 		
 		override calls() {

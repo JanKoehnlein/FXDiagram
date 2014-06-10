@@ -11,8 +11,17 @@ import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 @ModelNode
 class BaseNode<T> extends SimpleNode {
 	
+	new() {
+		domainObjectProperty.addListener [
+			prop, oldVal, newVal |
+			if(newVal instanceof XtextDomainObjectDescriptor<?>)
+				newVal.injectMembers(this)
+		]
+	}
+	
 	new(XtextDomainObjectDescriptor<T> descriptor) {
 		super(descriptor)
+		descriptor.injectMembers(this)
 	}
 
 	protected def getDescriptor() {

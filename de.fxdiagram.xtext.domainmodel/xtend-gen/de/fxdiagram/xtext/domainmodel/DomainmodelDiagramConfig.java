@@ -73,7 +73,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   
   private final NodeMapping<Entity> entityNode = new NodeMapping<Entity>(this, "entityNode") {
     public XNode createNode(final XtextDomainObjectDescriptor<Entity> descriptor) {
-      return new EntityNode(descriptor, DomainmodelDiagramConfig.this.domainModelUtil);
+      return new EntityNode(descriptor);
     }
     
     public void calls() {

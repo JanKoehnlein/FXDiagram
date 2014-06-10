@@ -1,5 +1,6 @@
 package de.fxdiagram.xtext.domainmodel
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.shapes.BaseNode
@@ -13,14 +14,15 @@ import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property
+import javax.inject.Inject
 
+@ModelNode
 class EntityNode extends BaseNode<Entity> {
 	
-	extension DomainModelUtil util;
+	@Inject extension DomainModelUtil util;
 	
-	new(XtextDomainObjectDescriptor<Entity> descriptor, DomainModelUtil util) {
+	new(XtextDomainObjectDescriptor<Entity> descriptor) {
 		super(descriptor)
-		this.util = util	
 	}
 	
 	override protected createNode() {

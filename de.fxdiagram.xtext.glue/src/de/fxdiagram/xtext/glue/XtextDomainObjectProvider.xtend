@@ -1,5 +1,6 @@
 package de.fxdiagram.xtext.glue
 
+import com.google.inject.Injector
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
@@ -11,9 +12,11 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.naming.IQualifiedNameProvider
+import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.shared.Access
+import de.fxdiagram.annotations.logging.Logging
 
 @ModelNode
 class XtextDomainObjectProvider implements DomainObjectProvider {
@@ -53,6 +56,7 @@ class MappedEObjectHandle<MODEL extends EObject> {
 }
 
 @ModelNode('provider', 'uri', 'fqn', 'mappingConfigID', 'mappingID')
+@Logging
 class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 
 	@FxProperty(readOnly) XtextDomainObjectProvider provider
@@ -109,6 +113,15 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 	
 	def revealInEditor() {
 		Access.IURIEditorOpener.get.open(URI.createURI(uri), true)
+	}
+	
+	def injectMembers(Object it) {
+		val resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE
+					.getResourceServiceProvider(URI.createURI(uri))
+		if(resourceServiceProvider == null) 
+			LOG.severe('Cannot find IResourceServiceProvider for ' + uri)
+		else
+			resourceServiceProvider.get(Injector).injectMembers(it)
 	}
 }
 
