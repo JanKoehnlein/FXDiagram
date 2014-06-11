@@ -86,8 +86,7 @@ class FXDiagramView extends ViewPart {
 					new NavigateNextAction,
 					new FullScreenAction,
 					new UndoRedoPlayerAction ]
-			] 
-		) => [
+			]) => [
 			camera = new PerspectiveCamera
 			root.activate
 		]
@@ -104,6 +103,23 @@ class FXDiagramView extends ViewPart {
 	}
 	
 	def <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall, XtextEditor editor) {
+		// OMG! the scene's width and height is set asynchronously but needed for centering the selection
+		if(canvas.scene.width == 0) {
+			canvas.scene.widthProperty.addListener [ p, o, n |
+				canvas.scene.widthProperty.removeListener(self)
+				revealElement(element, mappingCall, editor)
+			]
+		} else if(canvas.scene.height == 0) {
+			canvas.scene.heightProperty.addListener [ p, o, n |
+				canvas.scene.heightProperty.removeListener(self)
+				revealElement(element, mappingCall, editor)
+			]
+		} else {
+			doRevealElement(element, mappingCall, editor)
+		}
+	} 
+	
+	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, XtextEditor editor) {
 		val interpreterContext = new InterpreterContext
 		if(mappingCall instanceof DiagramMappingCall<?, ?>) {
 			editor.register

@@ -46,6 +46,9 @@ import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.Collections;
 import java.util.Set;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.embed.swt.FXCanvas;
 import javafx.scene.PerspectiveCamera;
@@ -148,6 +151,44 @@ public class FXDiagramView extends ViewPart {
   }
   
   public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final XtextEditor editor) {
+    Scene _scene = this.canvas.getScene();
+    double _width = _scene.getWidth();
+    boolean _equals = (_width == 0);
+    if (_equals) {
+      Scene _scene_1 = this.canvas.getScene();
+      ReadOnlyDoubleProperty _widthProperty = _scene_1.widthProperty();
+      final ChangeListener<Number> _function = new ChangeListener<Number>() {
+        public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
+          Scene _scene = FXDiagramView.this.canvas.getScene();
+          ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
+          _widthProperty.removeListener(this);
+          FXDiagramView.this.<T>revealElement(element, mappingCall, editor);
+        }
+      };
+      _widthProperty.addListener(_function);
+    } else {
+      Scene _scene_2 = this.canvas.getScene();
+      double _height = _scene_2.getHeight();
+      boolean _equals_1 = (_height == 0);
+      if (_equals_1) {
+        Scene _scene_3 = this.canvas.getScene();
+        ReadOnlyDoubleProperty _heightProperty = _scene_3.heightProperty();
+        final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
+          public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
+            Scene _scene = FXDiagramView.this.canvas.getScene();
+            ReadOnlyDoubleProperty _heightProperty = _scene.heightProperty();
+            _heightProperty.removeListener(this);
+            FXDiagramView.this.<T>revealElement(element, mappingCall, editor);
+          }
+        };
+        _heightProperty.addListener(_function_1);
+      } else {
+        this.<T>doRevealElement(element, mappingCall, editor);
+      }
+    }
+  }
+  
+  protected <T extends Object> void doRevealElement(final T element, final MappingCall<?, ? super T> mappingCall, final XtextEditor editor) {
     final InterpreterContext interpreterContext = new InterpreterContext();
     if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
       this.register(editor);
