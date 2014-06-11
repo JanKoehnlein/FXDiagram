@@ -128,5 +128,9 @@ class ViewportTransform {
 		this.scale = scale
 		this.rotate = rotate
 	}
+	
+	override toString() {
+		'''ViewportTransform [translateX=«translateX», translateY=«translateY», scale=«scale», rotate=«rotate»]'''
+	}
 }
 

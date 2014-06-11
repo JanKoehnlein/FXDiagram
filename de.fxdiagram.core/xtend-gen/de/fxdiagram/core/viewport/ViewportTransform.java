@@ -11,6 +11,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.eclipse.xtend2.lib.StringConcatenation;
 
 /**
  * Container for a {@link Transform} that allows basic 2D transformations.
@@ -182,6 +183,24 @@ public class ViewportTransform {
     this.setScale(_scale);
     double _rotate = it.getRotate();
     this.setRotate(_rotate);
+  }
+  
+  public String toString() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("ViewportTransform [translateX=");
+    double _translateX = this.getTranslateX();
+    _builder.append(_translateX, "");
+    _builder.append(", translateY=");
+    double _translateY = this.getTranslateY();
+    _builder.append(_translateY, "");
+    _builder.append(", scale=");
+    double _scale = this.getScale();
+    _builder.append(_scale, "");
+    _builder.append(", rotate=");
+    double _rotate = this.getRotate();
+    _builder.append(_rotate, "");
+    _builder.append("]");
+    return _builder.toString();
   }
   
   private ReadOnlyDoubleWrapper scaleProperty = new ReadOnlyDoubleWrapper(this, "scale",_initScale());
