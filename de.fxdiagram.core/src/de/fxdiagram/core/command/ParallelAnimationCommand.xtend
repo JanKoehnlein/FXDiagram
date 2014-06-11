@@ -14,7 +14,7 @@ class ParallelAnimationCommand extends AbstractAnimationCommand {
 	override createExecuteAnimation(CommandContext context) {
 		new ParallelTransition => [
 			children += commands.map[getExecuteAnimation(context)].filterNull
-		]
+		] 
 	}
 
 	override createUndoAnimation(CommandContext context) {

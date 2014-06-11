@@ -53,7 +53,7 @@ public class AnimationQueue {
   protected void executeNext() {
     Function0<? extends Animation> _xsynchronizedexpression = null;
     synchronized (this.queue) {
-      _xsynchronizedexpression = this.queue.poll();
+      _xsynchronizedexpression = this.queue.peek();
     }
     final Function0<? extends Animation> next = _xsynchronizedexpression;
     boolean _notEquals = (!Objects.equal(next, null));
@@ -68,6 +68,10 @@ public class AnimationQueue {
             _children.add(animation);
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
               public void handle(final ActionEvent it) {
+                /* AnimationQueue.this.queue; */
+                synchronized (AnimationQueue.this.queue) {
+                  AnimationQueue.this.queue.poll();
+                }
                 AnimationQueue.this.executeNext();
               }
             };
@@ -77,6 +81,10 @@ public class AnimationQueue {
         };
         ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       } else {
+        /* this.queue; */
+        synchronized (this.queue) {
+          this.queue.poll();
+        }
         this.executeNext();
       }
     } else {

@@ -33,7 +33,7 @@ class AnimationQueue {
 
 	protected def void executeNext() {
 		val next = synchronized(queue) {
-			queue.poll
+			queue.peek
 		}
 		if(next != null) {
 			val animation = next.apply
@@ -41,11 +41,13 @@ class AnimationQueue {
 				new SequentialTransition => [
 					children += animation
 					onFinished = [
+						synchronized(queue) queue.poll
 						executeNext
 					]
 					play
 				]
 			} else {
+				synchronized(queue) queue.poll
 				executeNext
 			} 
 		} else {
