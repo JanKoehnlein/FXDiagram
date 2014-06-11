@@ -60,7 +60,7 @@ class ModelSave {
 	}
 
 	protected def write(JsonGenerator gen, Property<?> property, Class<?> propertyType, String currentId) {
-		if(property.value != null) {
+		if(property.value != null && !property.bound) {
 			switch propertyType {
 				case String:
 					gen.write(property.name, (property as StringProperty).value)

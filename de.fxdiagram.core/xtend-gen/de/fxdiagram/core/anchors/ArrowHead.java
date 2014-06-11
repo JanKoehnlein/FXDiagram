@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -30,28 +29,17 @@ import javafx.scene.transform.Transform;
 @Logging
 @SuppressWarnings("all")
 public abstract class ArrowHead extends Parent implements XModelProvider {
-  private Property<Paint> strokeProperty;
-  
   private Node node;
   
-  public ArrowHead(final XConnection connection, final double width, final double height, final Property<Paint> strokeProperty, final boolean isSource) {
+  public ArrowHead(final XConnection connection, final double width, final double height, final Paint stroke, final boolean isSource) {
     this.setConnection(connection);
     this.setIsSource(isSource);
     this.setWidth(width);
     this.setHeight(height);
-    this.strokeProperty = strokeProperty;
-  }
-  
-  public Property<Paint> strokeProperty() {
-    Property<Paint> _elvis = null;
-    if (this.strokeProperty != null) {
-      _elvis = this.strokeProperty;
-    } else {
-      XConnection _connection = this.getConnection();
-      ObjectProperty<Paint> _strokeProperty = _connection.strokeProperty();
-      _elvis = _strokeProperty;
+    boolean _notEquals = (!Objects.equal(stroke, null));
+    if (_notEquals) {
+      this.strokeProperty.set(stroke);
     }
-    return _elvis;
   }
   
   public void initializeGraphics() {
@@ -65,8 +53,15 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
   public Node getNode() {
     Node _xblockexpression = null;
     {
-      boolean _equals = Objects.equal(this.node, null);
+      Paint _stroke = this.getStroke();
+      boolean _equals = Objects.equal(_stroke, null);
       if (_equals) {
+        XConnection _connection = this.getConnection();
+        ObjectProperty<Paint> _strokeProperty = _connection.strokeProperty();
+        this.strokeProperty.bind(_strokeProperty);
+      }
+      boolean _equals_1 = Objects.equal(this.node, null);
+      if (_equals_1) {
         Node _createNode = this.createNode();
         this.node = _createNode;
         ObservableList<Node> _children = this.getChildren();
@@ -75,11 +70,11 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
         this.setIsSource(_isSource);
         boolean _isSource_1 = this.getIsSource();
         if (_isSource_1) {
-          XConnection _connection = this.getConnection();
-          _connection.setSourceArrowHead(this);
-        } else {
           XConnection _connection_1 = this.getConnection();
-          _connection_1.setTargetArrowHead(this);
+          _connection_1.setSourceArrowHead(this);
+        } else {
+          XConnection _connection_2 = this.getConnection();
+          _connection_2.setTargetArrowHead(this);
         }
       }
       _xblockexpression = this.node;
@@ -244,5 +239,19 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
   
   public DoubleProperty heightProperty() {
     return this.heightProperty;
+  }
+  
+  private SimpleObjectProperty<Paint> strokeProperty = new SimpleObjectProperty<Paint>(this, "stroke");
+  
+  public Paint getStroke() {
+    return this.strokeProperty.get();
+  }
+  
+  public void setStroke(final Paint stroke) {
+    this.strokeProperty.set(stroke);
+  }
+  
+  public ObjectProperty<Paint> strokeProperty() {
+    return this.strokeProperty;
   }
 }

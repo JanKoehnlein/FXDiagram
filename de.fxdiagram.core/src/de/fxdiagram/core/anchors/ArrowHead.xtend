@@ -4,7 +4,6 @@ import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
-import javafx.beans.property.Property
 import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.Parent
@@ -25,21 +24,18 @@ abstract class ArrowHead extends Parent {
 	@FxProperty boolean isSource
 	@FxProperty double width 
 	@FxProperty double height 
-	Property<Paint> strokeProperty
+	@FxProperty Paint stroke
 	
 	Node node
 
 	new(XConnection connection, double width, double height, 
-		Property<Paint> strokeProperty, boolean isSource) {
+		Paint stroke, boolean isSource) {
 		this.connection = connection
 		this.isSource = isSource
 		this.width = width
 		this.height = height
-		this.strokeProperty = strokeProperty
-	}
-
-	def strokeProperty() {
-		strokeProperty ?: connection.strokeProperty
+		if(stroke != null)
+			strokeProperty.set(stroke)
 	}
 
 	def initializeGraphics() {  
@@ -48,6 +44,8 @@ abstract class ArrowHead extends Parent {
 	}
 	
 	def Node getNode() {
+		if(stroke == null)
+			strokeProperty.bind(connection.strokeProperty)
 		if(node == null) {
 			node = createNode()
 			children += node

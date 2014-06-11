@@ -22,7 +22,6 @@ import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import java.util.Collections;
 import java.util.Set;
-import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.paint.Paint;
@@ -89,10 +88,10 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
           XConnection _xConnection = new XConnection(host, choice, descriptor);
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
             public void apply(final XConnection it) {
-              ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
               XDiagram _diagram = CoreExtensions.getDiagram(host);
-              ObjectProperty<Paint> _backgroundPaintProperty = _diagram.backgroundPaintProperty();
-              TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, _strokeProperty, _backgroundPaintProperty, false);
+              Paint _backgroundPaint = _diagram.getBackgroundPaint();
+              TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
+                null, _backgroundPaint, false);
               it.setTargetArrowHead(_triangleArrowHead);
             }
           };

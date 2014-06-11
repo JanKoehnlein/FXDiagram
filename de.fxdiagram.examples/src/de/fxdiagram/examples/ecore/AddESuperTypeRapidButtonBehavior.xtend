@@ -48,7 +48,7 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 			host, choice, descriptor |
 			new XConnection(host, choice, descriptor) => [
 				targetArrowHead = new TriangleArrowHead(it, 10, 15, 
-					it.strokeProperty, host.diagram.backgroundPaintProperty, false)
+					null, host.diagram.backgroundPaint, false)
 			]
 		]
 		chooser

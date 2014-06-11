@@ -106,9 +106,17 @@ public class ModelSave {
   
   protected JsonGenerator write(final JsonGenerator gen, final Property<?> property, final Class<?> propertyType, final String currentId) {
     JsonGenerator _xifexpression = null;
+    boolean _and = false;
     Object _value = property.getValue();
     boolean _notEquals = (!Objects.equal(_value, null));
-    if (_notEquals) {
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _isBound = property.isBound();
+      boolean _not = (!_isBound);
+      _and = _not;
+    }
+    if (_and) {
       JsonGenerator _switchResult = null;
       boolean _matched = false;
       if (!_matched) {

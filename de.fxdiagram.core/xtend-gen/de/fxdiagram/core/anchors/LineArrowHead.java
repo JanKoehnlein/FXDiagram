@@ -8,7 +8,6 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -21,8 +20,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode
 @SuppressWarnings("all")
 public class LineArrowHead extends ArrowHead {
-  public LineArrowHead(final XConnection connection, final double width, final double height, final Property<Paint> strokeProperty, final boolean isSource) {
-    super(connection, width, height, strokeProperty, isSource);
+  public LineArrowHead(final XConnection connection, final double width, final double height, final Paint stroke, final boolean isSource) {
+    super(connection, width, height, stroke, isSource);
   }
   
   public LineArrowHead(final XConnection connection, final boolean isSource) {
@@ -45,7 +44,7 @@ public class LineArrowHead extends ArrowHead {
             double _multiply_1 = (0.5 * _height_1);
             _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-            Property<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
+            ObjectProperty<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
             _strokeProperty.bind(_strokeProperty_1);
             DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
             XConnection _connection = LineArrowHead.this.getConnection();
@@ -67,7 +66,7 @@ public class LineArrowHead extends ArrowHead {
             double _minus = (_width - _strokeWidth);
             _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-            Property<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
+            ObjectProperty<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
             _strokeProperty.bind(_strokeProperty_1);
             DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
             XConnection _connection_1 = LineArrowHead.this.getConnection();

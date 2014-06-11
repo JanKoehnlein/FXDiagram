@@ -3,7 +3,6 @@ package de.fxdiagram.core.anchors
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
-import javafx.beans.property.Property
 import javafx.scene.paint.Paint
 import javafx.scene.shape.Polygon
 import javafx.scene.shape.StrokeType
@@ -14,17 +13,18 @@ class DiamondArrowHead extends ArrowHead {
 	@FxProperty Paint fill
 	
 	new(XConnection connection, double width, double height, 
-		Property<Paint> strokeProperty, Property<Paint> fillProperty, 
-		boolean isSource) {
-		super(connection, width, height, strokeProperty, isSource)
+		Paint stroke, Paint fill, boolean isSource) {
+		super(connection, width, height, stroke, isSource)
 		this.fillProperty.bind(fillProperty)
 	}
 	
 	new(XConnection connection, boolean isSource) {
-		this(connection, 10, 10, connection.strokeProperty, connection.strokeProperty, isSource)
+		this(connection, 10, 10, null, null, isSource)
 	}
 
 	override createNode() {
+		if(fill == null)
+			fillProperty.bind(connection.strokeProperty)
 		new Polygon => [
 			points.setAll(#[
 				0.0, 0.0,

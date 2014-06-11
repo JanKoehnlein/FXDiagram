@@ -2,7 +2,6 @@ package de.fxdiagram.core.anchors
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
-import javafx.beans.property.Property
 import javafx.scene.Group
 import javafx.scene.paint.Paint
 import javafx.scene.shape.Polyline
@@ -12,8 +11,8 @@ import javafx.scene.shape.StrokeType
 class LineArrowHead extends ArrowHead {
 	
 	new(XConnection connection, double width, double height, 
-		Property<Paint> strokeProperty, boolean isSource) {
-		super(connection, width, height, strokeProperty, isSource)
+		Paint stroke, boolean isSource) {
+		super(connection, width, height, stroke, isSource)
 	}
 
 	new(XConnection connection, boolean isSource) {
