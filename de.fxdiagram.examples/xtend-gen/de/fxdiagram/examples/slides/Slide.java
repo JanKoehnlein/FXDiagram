@@ -15,12 +15,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure0;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @ModelNode
 @SuppressWarnings("all")
 public class Slide extends XNode {
   private ImageView imageView;
+  
+  private Procedure0 onActivate;
   
   public Slide(final String name) {
     super(name);
@@ -66,6 +69,13 @@ public class Slide extends XNode {
     ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
     XRoot _root = CoreExtensions.getRoot(this);
     _zoomToFitAction.perform(_root);
+    if (this.onActivate!=null) {
+      this.onActivate.apply();
+    }
+  }
+  
+  public Procedure0 setOnActivate(final Procedure0 onActivate) {
+    return this.onActivate = onActivate;
   }
   
   public StackPane getStackPane() {

@@ -1,20 +1,20 @@
 package de.fxdiagram.examples.slides
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.behavior.NavigationBehavior
 import javafx.animation.FadeTransition
-import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.image.Image
+import javafx.scene.layout.Pane
 import javafx.scene.shape.Rectangle
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.annotations.properties.ModelNode
 
 @ModelNode
 class ClickThroughSlide extends Slide {
 	
-	Group pane 
+	Pane pane 
 	Node currentNode 
 	
 	new(String name) {
@@ -35,7 +35,7 @@ class ClickThroughSlide extends Slide {
 	
 	protected override createNode() {
 		val node = super.createNode()
-		node.children += pane = new Group
+		node.children += pane = new Pane
 		node
 	}
 	

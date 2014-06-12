@@ -18,6 +18,8 @@ class Slide extends XNode {
 	
 	ImageView imageView
 	
+	()=>void onActivate
+	
 	new(String name) {
 		super(name)
 	}
@@ -43,6 +45,11 @@ class Slide extends XNode {
 		super.doActivate()
 		imageView.image = backgroundImage
 		new ZoomToFitAction().perform(root)
+		onActivate?.apply
+	}
+	
+	def setOnActivate(()=>void onActivate) {
+		this.onActivate = onActivate
 	}
 	
 	def getStackPane() {

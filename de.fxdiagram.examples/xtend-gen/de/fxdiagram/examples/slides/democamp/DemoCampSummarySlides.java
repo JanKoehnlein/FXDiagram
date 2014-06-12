@@ -16,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -31,8 +32,36 @@ public class DemoCampSummarySlides extends OpenableDiagramNode {
     final Procedure1<SlideDiagram> _function = new Procedure1<SlideDiagram>() {
       public void apply(final SlideDiagram it) {
         ObservableList<Slide> _slides = it.getSlides();
-        Slide _createSlide = DemoCampSlideFactory.createSlide("Credits");
+        Slide _createSlide = DemoCampSlideFactory.createSlide("Conclusion");
         final Procedure1<Slide> _function = new Procedure1<Slide>() {
+          public void apply(final Slide it) {
+            StackPane _stackPane = it.getStackPane();
+            ObservableList<Node> _children = _stackPane.getChildren();
+            Text _createText = DemoCampSlideFactory.createText("Conclusion", 100);
+            _children.add(_createText);
+          }
+        };
+        Slide _doubleArrow = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide, _function);
+        _slides.add(_doubleArrow);
+        ObservableList<Slide> _slides_1 = it.getSlides();
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("Focus on users");
+        _builder.newLine();
+        _builder.append("not on developers.");
+        _builder.newLine();
+        Slide _createSlideWithText = DemoCampSlideFactory.createSlideWithText("Conclusion 2", _builder.toString(), 72);
+        _slides_1.add(_createSlideWithText);
+        ObservableList<Slide> _slides_2 = it.getSlides();
+        StringConcatenation _builder_1 = new StringConcatenation();
+        _builder_1.append("Take back control and");
+        _builder_1.newLine();
+        _builder_1.append("start programming again.");
+        _builder_1.newLine();
+        Slide _createSlideWithText_1 = DemoCampSlideFactory.createSlideWithText("Conclusion 3", _builder_1.toString(), 72);
+        _slides_2.add(_createSlideWithText_1);
+        ObservableList<Slide> _slides_3 = it.getSlides();
+        Slide _createSlide_1 = DemoCampSlideFactory.createSlide("Credits");
+        final Procedure1<Slide> _function_1 = new Procedure1<Slide>() {
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
             ObservableList<Node> _children = _stackPane.getChildren();
@@ -74,8 +103,8 @@ public class DemoCampSummarySlides extends OpenableDiagramNode {
             _children.add(_doubleArrow);
           }
         };
-        Slide _doubleArrow = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide, _function);
-        _slides.add(_doubleArrow);
+        Slide _doubleArrow_1 = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide_1, _function_1);
+        _slides_3.add(_doubleArrow_1);
       }
     };
     SlideDiagram _doubleArrow = ObjectExtensions.<SlideDiagram>operator_doubleArrow(_slideDiagram, _function);

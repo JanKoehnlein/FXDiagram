@@ -7,10 +7,10 @@ import de.fxdiagram.examples.slides.RevealBehavior;
 import de.fxdiagram.examples.slides.Slide;
 import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -21,7 +21,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode
 @SuppressWarnings("all")
 public class ClickThroughSlide extends Slide {
-  private Group pane;
+  private Pane pane;
   
   private Node currentNode;
   
@@ -35,8 +35,8 @@ public class ClickThroughSlide extends Slide {
   
   public void initializeGraphics() {
     super.initializeGraphics();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      public void apply(final Group it) {
+    final Procedure1<Pane> _function = new Procedure1<Pane>() {
+      public void apply(final Pane it) {
         ObservableList<Node> _children = it.getChildren();
         Iterable<Node> _tail = IterableExtensions.<Node>tail(_children);
         final Procedure1<Node> _function = new Procedure1<Node>() {
@@ -47,7 +47,7 @@ public class ClickThroughSlide extends Slide {
         IterableExtensions.<Node>forEach(_tail, _function);
       }
     };
-    ObjectExtensions.<Group>operator_doubleArrow(
+    ObjectExtensions.<Pane>operator_doubleArrow(
       this.pane, _function);
     ObservableList<Node> _children = this.pane.getChildren();
     Node _head = IterableExtensions.<Node>head(_children);
@@ -59,9 +59,9 @@ public class ClickThroughSlide extends Slide {
     {
       final StackPane node = super.createNode();
       ObservableList<Node> _children = node.getChildren();
-      Group _group = new Group();
-      Group _pane = this.pane = _group;
-      _children.add(_pane);
+      Pane _pane = new Pane();
+      Pane _pane_1 = this.pane = _pane;
+      _children.add(_pane_1);
       _xblockexpression = node;
     }
     return _xblockexpression;
@@ -132,7 +132,7 @@ public class ClickThroughSlide extends Slide {
     }
   }
   
-  public Group getPane() {
+  public Pane getPane() {
     return this.pane;
   }
   

@@ -225,7 +225,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ClickThroughSlide _createClickThroughSlide = EclipseConSlideFactory.createClickThroughSlide("Darkness images");
         final Procedure1<ClickThroughSlide> _function_2 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
-            Group _pane = it.getPane();
+            Pane _pane = it.getPane();
             ObservableList<Node> _children = _pane.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
@@ -239,7 +239,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             };
             ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
             _children.add(_doubleArrow);
-            Group _pane_1 = it.getPane();
+            Pane _pane_1 = it.getPane();
             ObservableList<Node> _children_1 = _pane_1.getChildren();
             ImageView _imageView_1 = new ImageView();
             final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
@@ -264,7 +264,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ClickThroughSlide _createClickThroughSlide_1 = EclipseConSlideFactory.createClickThroughSlide("Behavior images");
         final Procedure1<ClickThroughSlide> _function_3 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
-            Group _pane = it.getPane();
+            Pane _pane = it.getPane();
             ObservableList<Node> _children = _pane.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
@@ -278,7 +278,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             };
             ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
             _children.add(_doubleArrow);
-            Group _pane_1 = it.getPane();
+            Pane _pane_1 = it.getPane();
             ObservableList<Node> _children_1 = _pane_1.getChildren();
             ImageView _imageView_1 = new ImageView();
             final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
@@ -303,9 +303,9 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ClickThroughSlide _createClickThroughSlide_2 = EclipseConSlideFactory.createClickThroughSlide("Recycling images");
         final Procedure1<ClickThroughSlide> _function_4 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
-            Group _pane = it.getPane();
-            final Procedure1<Group> _function = new Procedure1<Group>() {
-              public void apply(final Group it) {
+            Pane _pane = it.getPane();
+            final Procedure1<Pane> _function = new Procedure1<Pane>() {
+              public void apply(final Pane it) {
                 ObservableList<Node> _children = it.getChildren();
                 ImageView _imageView = new ImageView();
                 final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
@@ -548,7 +548,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 _children_7.add(_doubleArrow_7);
               }
             };
-            ObjectExtensions.<Group>operator_doubleArrow(_pane, _function);
+            ObjectExtensions.<Pane>operator_doubleArrow(_pane, _function);
           }
         };
         ClickThroughSlide _doubleArrow_4 = ObjectExtensions.<ClickThroughSlide>operator_doubleArrow(_createClickThroughSlide_2, _function_4);
@@ -560,7 +560,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ClickThroughSlide _createClickThroughSlide_3 = EclipseConSlideFactory.createClickThroughSlide("Reproduction images");
         final Procedure1<ClickThroughSlide> _function_5 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
-            Group _pane = it.getPane();
+            Pane _pane = it.getPane();
             ObservableList<Node> _children = _pane.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
@@ -574,7 +574,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             };
             ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
             _children.add(_doubleArrow);
-            Group _pane_1 = it.getPane();
+            Pane _pane_1 = it.getPane();
             ObservableList<Node> _children_1 = _pane_1.getChildren();
             VBox _vBox = new VBox();
             final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
@@ -614,7 +614,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             };
             VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
             _children_1.add(_doubleArrow_1);
-            Group _pane_2 = it.getPane();
+            Pane _pane_2 = it.getPane();
             ObservableList<Node> _children_2 = _pane_2.getChildren();
             ImageView _imageView_1 = new ImageView();
             final Procedure1<ImageView> _function_2 = new Procedure1<ImageView>() {
@@ -639,7 +639,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ClickThroughSlide _createClickThroughSlide_4 = EclipseConSlideFactory.createClickThroughSlide("Tablet");
         final Procedure1<ClickThroughSlide> _function_6 = new Procedure1<ClickThroughSlide>() {
           public void apply(final ClickThroughSlide it) {
-            Group _pane = it.getPane();
+            Pane _pane = it.getPane();
             ObservableList<Node> _children = _pane.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
@@ -655,7 +655,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             };
             ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
             _children.add(_doubleArrow);
-            Group _pane_1 = it.getPane();
+            Pane _pane_1 = it.getPane();
             ObservableList<Node> _children_1 = _pane_1.getChildren();
             ImageView _imageView_1 = new ImageView();
             final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {

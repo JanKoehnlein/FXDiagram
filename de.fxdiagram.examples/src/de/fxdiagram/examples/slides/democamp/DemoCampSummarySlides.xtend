@@ -1,5 +1,6 @@
 package de.fxdiagram.examples.slides.democamp
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.examples.slides.SlideDiagram
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import javafx.geometry.Insets
@@ -10,7 +11,6 @@ import javafx.scene.layout.VBox
 import static de.fxdiagram.examples.slides.democamp.DemoCampSlideFactory.*
 
 import static extension de.fxdiagram.examples.slides.Animations.*
-import de.fxdiagram.annotations.properties.ModelNode
 
 @ModelNode
 class DemoCampSummarySlides extends OpenableDiagramNode {
@@ -21,6 +21,17 @@ class DemoCampSummarySlides extends OpenableDiagramNode {
 	
 	override doActivate() {
 		innerDiagram = new SlideDiagram => [
+			slides += createSlide('Conclusion') => [
+				stackPane.children += createText('Conclusion', 100)
+			]
+			slides += createSlideWithText('Conclusion 2', '''
+					Focus on users
+					not on developers.
+				''', 72)
+			slides += createSlideWithText('Conclusion 3', '''
+					Take back control and
+					start programming again.
+				''', 72)
 			slides += createSlide('Credits') => [
 				stackPane.children += new VBox => [
 					alignment = Pos.CENTER

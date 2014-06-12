@@ -29,8 +29,8 @@ import de.fxdiagram.examples.lcars.LcarsDiagram
 import de.fxdiagram.examples.lcars.LcarsModelProvider
 import de.fxdiagram.examples.login.LoginNode
 import de.fxdiagram.examples.neonsign.NeonSignNode
-import de.fxdiagram.examples.slides.eclipsecon.IntroductionSlideDeck
-import de.fxdiagram.examples.slides.eclipsecon.SummarySlideDeck
+import de.fxdiagram.examples.slides.democamp.DemoCampIntroSlides
+import de.fxdiagram.examples.slides.democamp.DemoCampSummarySlides
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
@@ -100,8 +100,8 @@ class Demo extends Application {
 			new UndoRedoPlayerAction
 		]
 		diagram => [
-//			nodes += new DemoCampIntroSlides
-			nodes += new IntroductionSlideDeck
+			nodes += new DemoCampIntroSlides
+//			nodes += new IntroductionSlideDeck
 			nodes += new OpenableDiagramNode('Basic') => [
 				innerDiagram = new LazyExampleDiagram('')
 			]
@@ -113,16 +113,17 @@ class Demo extends Application {
 					nodes += newMovieNode
 					nodes += newBrowserNode
 					nodes += newBrickBreakerNode
+					isLayoutOnActivate = true
 				]
 			]
 			nodes += openableDiagram('Xtend', newNeonSignNode)
-			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
-			nodes += openableDiagram('Ecore Explorer', newEClassNode)
+//			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
+//			nodes += openableDiagram('Ecore Explorer', newEClassNode)
 			nodes += newLcarsDiagramNode
-			nodes += new SimpleNode('Eclipse')
+			nodes += new SimpleNode('Xtext Views')
 //			nodes += newGalleryDiagramNode()
-//			nodes += new DemoCampSummarySlides
-			nodes += new SummarySlideDeck
+			nodes += new DemoCampSummarySlides
+//			nodes += new SummarySlideDeck
 			val deltaX = scene.width / (nodes.size + 2)
 			val deltaY = scene.height / (nodes.size + 2)
 			nodes.forEach[
