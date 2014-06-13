@@ -12,6 +12,7 @@ import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.services.ClassLoaderProvider;
 import de.fxdiagram.core.services.ResourceDescriptor;
 import de.fxdiagram.core.tools.actions.CenterAction;
+import de.fxdiagram.core.tools.actions.CloseAction;
 import de.fxdiagram.core.tools.actions.DeleteAction;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
@@ -22,6 +23,7 @@ import de.fxdiagram.core.tools.actions.LayoutAction;
 import de.fxdiagram.core.tools.actions.LoadAction;
 import de.fxdiagram.core.tools.actions.NavigateNextAction;
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
+import de.fxdiagram.core.tools.actions.OpenAction;
 import de.fxdiagram.core.tools.actions.RedoAction;
 import de.fxdiagram.core.tools.actions.SaveAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
@@ -125,9 +127,11 @@ public class Demo extends Application {
       ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
       NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
       NavigateNextAction _navigateNextAction = new NavigateNextAction();
+      OpenAction _openAction = new OpenAction();
+      CloseAction _closeAction = new CloseAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
       UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(Lists.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction)));
+      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(Lists.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _openAction, _closeAction, _fullScreenAction, _undoRedoPlayerAction)));
       final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
         public void apply(final XDiagram it) {
           ObservableList<XNode> _nodes = it.getNodes();
@@ -378,7 +382,7 @@ public class Demo extends Application {
   }
   
   public MovieNode newMovieNode() {
-    ResourceDescriptor _newResource = this.newResource("Movie", "media/Usability.mp4");
+    ResourceDescriptor _newResource = this.newResource("Movie", "media/HelloComputer.mp4");
     MovieNode _movieNode = new MovieNode(_newResource);
     final Procedure1<MovieNode> _function = new Procedure1<MovieNode>() {
       public void apply(final MovieNode it) {

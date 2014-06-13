@@ -8,6 +8,7 @@ import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.services.ClassLoaderProvider
 import de.fxdiagram.core.tools.actions.CenterAction
+import de.fxdiagram.core.tools.actions.CloseAction
 import de.fxdiagram.core.tools.actions.DeleteAction
 import de.fxdiagram.core.tools.actions.ExitAction
 import de.fxdiagram.core.tools.actions.ExportSvgAction
@@ -16,6 +17,7 @@ import de.fxdiagram.core.tools.actions.LayoutAction
 import de.fxdiagram.core.tools.actions.LoadAction
 import de.fxdiagram.core.tools.actions.NavigateNextAction
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction
+import de.fxdiagram.core.tools.actions.OpenAction
 import de.fxdiagram.core.tools.actions.RedoAction
 import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
@@ -96,6 +98,8 @@ class Demo extends Application {
 			new ZoomToFitAction,
 			new NavigatePreviousAction,
 			new NavigateNextAction,
+			new OpenAction,
+			new CloseAction,
 			new FullScreenAction,
 			new UndoRedoPlayerAction
 		]
