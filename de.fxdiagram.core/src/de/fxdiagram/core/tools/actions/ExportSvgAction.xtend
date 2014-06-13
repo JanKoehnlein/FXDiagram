@@ -5,9 +5,9 @@ import com.google.common.io.Files
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.export.SvgExporter
 import eu.hansolo.enzo.radialmenu.Symbol
-import java.io.File
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import javafx.stage.FileChooser
 
 class ExportSvgAction implements DiagramAction {
 	
@@ -20,8 +20,13 @@ class ExportSvgAction implements DiagramAction {
 	}
 
 	override perform(XRoot root) {
-		val svgCode = new SvgExporter().toSvg(root.diagram)
-		Files.write(svgCode, new File("Diagram.svg"), Charsets.UTF_8)
+		val fileChooser = new FileChooser()
+		fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FX Diagram", "*.svg")
+		val file = (fileChooser).showSaveDialog(root.scene.window)
+		if(file != null) {
+			val svgCode = new SvgExporter().toSvg(root.diagram)
+			Files.write(svgCode, file, Charsets.UTF_8)
+		}
 	}
 	
 }

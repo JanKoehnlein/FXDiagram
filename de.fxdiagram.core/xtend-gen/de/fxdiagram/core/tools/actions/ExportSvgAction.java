@@ -9,8 +9,12 @@ import de.fxdiagram.core.export.SvgExporter;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.Symbol;
 import java.io.File;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
@@ -34,11 +38,20 @@ public class ExportSvgAction implements DiagramAction {
   
   public void perform(final XRoot root) {
     try {
-      SvgExporter _svgExporter = new SvgExporter();
-      XDiagram _diagram = root.getDiagram();
-      final CharSequence svgCode = _svgExporter.toSvg(_diagram);
-      File _file = new File("Diagram.svg");
-      Files.write(svgCode, _file, Charsets.UTF_8);
+      final FileChooser fileChooser = new FileChooser();
+      ObservableList<FileChooser.ExtensionFilter> _extensionFilters = fileChooser.getExtensionFilters();
+      FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FX Diagram", "*.svg");
+      _extensionFilters.add(_extensionFilter);
+      Scene _scene = root.getScene();
+      Window _window = _scene.getWindow();
+      final File file = fileChooser.showSaveDialog(_window);
+      boolean _notEquals = (!Objects.equal(file, null));
+      if (_notEquals) {
+        SvgExporter _svgExporter = new SvgExporter();
+        XDiagram _diagram = root.getDiagram();
+        final CharSequence svgCode = _svgExporter.toSvg(_diagram);
+        Files.write(svgCode, file, Charsets.UTF_8);
+      }
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
