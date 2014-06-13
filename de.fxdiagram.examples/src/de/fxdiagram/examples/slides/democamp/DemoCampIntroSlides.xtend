@@ -83,8 +83,8 @@ class DemoCampIntroSlides extends OpenableDiagramNode {
 					addComparison('Framework', 'Product', 72, 100) 
 					addComparison('Designed For Developers', 'Designed For Users', 48, 250)
 					addComparison('High-level Abstractions', 'Customizability', 48, 325)
-					addComparison('Pragmatic Behavior', 'Fun to Use', 48, 400)
-					addComparison('Max Features w/ Min Effort', 'Embrace All Usecases', 48, 475)
+					addComparison('Max Features w/ Min Effort', 'Embrace All Usecases', 48, 400)
+					addComparison('Pragmatic Behavior', 'Fun to Use', 48, 475)
 					addComparison('Simplify Rendering', 'Appealing Visuals', 48, 550)
 				]
 			]

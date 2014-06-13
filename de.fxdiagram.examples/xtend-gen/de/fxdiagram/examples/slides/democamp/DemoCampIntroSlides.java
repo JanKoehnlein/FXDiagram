@@ -182,8 +182,8 @@ public class DemoCampIntroSlides extends OpenableDiagramNode {
                 DemoCampIntroSlides.this.addComparison(it, "Framework", "Product", 72, 100);
                 DemoCampIntroSlides.this.addComparison(it, "Designed For Developers", "Designed For Users", 48, 250);
                 DemoCampIntroSlides.this.addComparison(it, "High-level Abstractions", "Customizability", 48, 325);
-                DemoCampIntroSlides.this.addComparison(it, "Pragmatic Behavior", "Fun to Use", 48, 400);
-                DemoCampIntroSlides.this.addComparison(it, "Max Features w/ Min Effort", "Embrace All Usecases", 48, 475);
+                DemoCampIntroSlides.this.addComparison(it, "Max Features w/ Min Effort", "Embrace All Usecases", 48, 400);
+                DemoCampIntroSlides.this.addComparison(it, "Pragmatic Behavior", "Fun to Use", 48, 475);
                 DemoCampIntroSlides.this.addComparison(it, "Simplify Rendering", "Appealing Visuals", 48, 550);
               }
             };
