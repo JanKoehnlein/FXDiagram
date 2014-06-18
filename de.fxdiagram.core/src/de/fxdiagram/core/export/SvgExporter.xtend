@@ -32,7 +32,10 @@ class SvgExporter {
 	
 	List<String> defs
 	
-	def toSvg(XDiagram diagram) {
+	File baseDir
+	
+	def toSvg(XDiagram diagram, File baseDir) {
+		this.baseDir = baseDir
 		defs = newArrayList
 		currentID = 0
 		val bounds = diagram.boundsInParent
@@ -125,7 +128,7 @@ class SvgExporter {
 			else
 				buffered.getSubimage(viewport.minX as int, viewport.minY as int, 
 					viewport.width as int, viewport.height as int)
-			ImageIO.write(visible, 'png', new File(fileName));
+			ImageIO.write(visible, 'png', new File(baseDir, fileName));
     	} catch (IOException e) {
     		LOG.log(Level.SEVERE, "Error exporting " + class.name + " to SVG", e)
     	}

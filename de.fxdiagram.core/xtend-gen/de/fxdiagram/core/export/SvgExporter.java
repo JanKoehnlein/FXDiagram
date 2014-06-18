@@ -48,9 +48,12 @@ public class SvgExporter {
   
   private List<String> defs;
   
-  public CharSequence toSvg(final XDiagram diagram) {
+  private File baseDir;
+  
+  public CharSequence toSvg(final XDiagram diagram, final File baseDir) {
     CharSequence _xblockexpression = null;
     {
+      this.baseDir = baseDir;
       ArrayList<String> _newArrayList = CollectionLiterals.<String>newArrayList();
       this.defs = _newArrayList;
       this.currentID = 0;
@@ -393,7 +396,7 @@ public class SvgExporter {
             ((int) _width), ((int) _height));
         }
         final BufferedImage visible = _xifexpression;
-        File _file = new File(fileName);
+        File _file = new File(this.baseDir, fileName);
         ImageIO.write(visible, "png", _file);
       } catch (final Throwable _t) {
         if (_t instanceof IOException) {

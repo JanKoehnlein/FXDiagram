@@ -49,7 +49,8 @@ public class ExportSvgAction implements DiagramAction {
       if (_notEquals) {
         SvgExporter _svgExporter = new SvgExporter();
         XDiagram _diagram = root.getDiagram();
-        final CharSequence svgCode = _svgExporter.toSvg(_diagram);
+        File _parentFile = file.getParentFile();
+        final CharSequence svgCode = _svgExporter.toSvg(_diagram, _parentFile);
         Files.write(svgCode, file, Charsets.UTF_8);
       }
     } catch (Throwable _e) {
