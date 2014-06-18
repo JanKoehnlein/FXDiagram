@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -48,14 +47,6 @@ public class SimpleNode extends XNode {
         _children.add(_label);
         Insets _insets = new Insets(10, 20, 10, 20);
         StackPane.setMargin(SimpleNode.this.label, _insets);
-        InnerShadow _innerShadow = new InnerShadow();
-        final Procedure1<InnerShadow> _function_1 = new Procedure1<InnerShadow>() {
-          public void apply(final InnerShadow it) {
-            it.setRadius(7);
-          }
-        };
-        InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
-        it.setEffect(_doubleArrow_1);
       }
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
