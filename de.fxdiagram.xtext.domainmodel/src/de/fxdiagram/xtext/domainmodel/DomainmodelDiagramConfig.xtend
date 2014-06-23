@@ -3,6 +3,7 @@ package de.fxdiagram.xtext.domainmodel
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
+import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
@@ -10,10 +11,13 @@ import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode
+import javafx.scene.paint.Color
 import javax.inject.Inject
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property
+
+import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 
 class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 	
@@ -46,14 +50,14 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 				features
 					.filter(Property)
 					.filter[domainModelUtil.getReferencedEntity(type) != null]
-			].makeLazy
-//			superTypeConnection.outConnectionForEach [
-//				val superEntity = domainModelUtil.getReferencedEntity(superType)
-//				if(superEntity == null) 
-//					emptyList 
-//				else 
-//					#[superEntity] 
-//			].makeLazy
+			].makeLazy[getArrowButton("Add property")]
+			superTypeConnection.outConnectionForEach [
+				val superEntity = domainModelUtil.getReferencedEntity(superType)
+				if(superEntity == null) 
+					emptyList 
+				else 
+					#[superEntity] 
+			].makeLazy[getTriangleButton("Add superclass")]
 		}
 	} 
 
@@ -72,17 +76,18 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 		}
 	}
 	
-//	val superTypeConnection = new ConnectionMapping<Entity>(this, 'superTypeConnection') {
-//		override createConnection(XtextDomainObjectDescriptor<Entity> descriptor) {
-//			new XConnection(descriptor) => [
-//				targetArrowHead = new TriangleArrowHead(it, false)
-//			]
-//		}
-//		
-//		override calls() {
-//			entityNode.target [domainModelUtil.getReferencedEntity(superType)]
-//		}
-//	}
+	val superTypeConnection = new ConnectionMapping<Entity>(this, 'superTypeConnection') {
+		override createConnection(XtextDomainObjectDescriptor<Entity> descriptor) {
+			new XConnection(descriptor) => [
+				targetArrowHead = new TriangleArrowHead(it, 10, 15, 
+					null, Color.WHITE, false)
+			]
+		}
+		
+		override calls() {
+			entityNode.target [it]
+		}
+	}
 
 	override protected <ARG> entryCalls(ARG domainArgument, extension MappingAcceptor<ARG> acceptor) {
 		switch domainArgument {

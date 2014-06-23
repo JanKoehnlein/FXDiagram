@@ -23,7 +23,10 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class DiamondArrowHead extends ArrowHead {
   public DiamondArrowHead(final XConnection connection, final double width, final double height, final Paint stroke, final Paint fill, final boolean isSource) {
     super(connection, width, height, stroke, isSource);
-    this.fillProperty.bind(this.fillProperty);
+    boolean _notEquals = (!Objects.equal(fill, null));
+    if (_notEquals) {
+      this.setFill(fill);
+    }
   }
   
   public DiamondArrowHead(final XConnection connection, final boolean isSource) {

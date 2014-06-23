@@ -1,18 +1,19 @@
 package de.fxdiagram.examples.ecore
 
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.lib.buttons.RapidButton
+import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import java.util.Set
+import javafx.geometry.Side
 import org.eclipse.emf.ecore.EClass
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.XRapidButtonAction
 
 class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EClass, ESuperTypeDescriptor> {
 	
@@ -39,8 +40,8 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 		host.root.getDomainObjectProvider(EcoreDomainObjectProvider)
 	}
 	
-	override protected createChooser(XRapidButton button, Set<ESuperTypeDescriptor> availableChoiceKeys, Set<ESuperTypeDescriptor> unavailableChoiceKeys) {
-		val chooser = new CoverFlowChooser(host, button.chooserPosition)
+	override protected createChooser(RapidButton button, Set<ESuperTypeDescriptor> availableChoiceKeys, Set<ESuperTypeDescriptor> unavailableChoiceKeys) {
+		val chooser = new CoverFlowChooser(host, button.position)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)
 		]
@@ -54,9 +55,9 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 		chooser
 	}
 	
-	override protected createButtons(XRapidButtonAction addConnectionAction) {
-		#[	new XRapidButton(host, 0.5, 0, getTriangleButton(TOP, 'Discover supertypes'), addConnectionAction),
-			new XRapidButton(host, 0.5, 1, getTriangleButton(BOTTOM, 'Discover supertypes'), addConnectionAction)
+	override protected createButtons(RapidButtonAction addConnectionAction) {
+		#[	new RapidButton(host, Side.TOP, getTriangleButton(TOP, 'Discover supertypes'), addConnectionAction),
+			new RapidButton(host, Side.BOTTOM, getTriangleButton(BOTTOM, 'Discover supertypes'), addConnectionAction)
 		]
 	}
 }

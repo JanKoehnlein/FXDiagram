@@ -2,10 +2,13 @@ package de.fxdiagram.xtext.domainmodel;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.LineArrowHead;
+import de.fxdiagram.core.anchors.TriangleArrowHead;
+import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
 import de.fxdiagram.xtext.domainmodel.EntityNode;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
@@ -16,15 +19,22 @@ import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode;
+import java.util.Collections;
+import java.util.List;
+import javafx.geometry.Side;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.xtext.common.types.JvmParameterizedTypeReference;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Feature;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -92,7 +102,37 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         }
       };
       MultiConnectionMappingCall<Property, Entity> _outConnectionForEach = this.<Property>outConnectionForEach(DomainmodelDiagramConfig.this.propertyConnection, _function);
-      _outConnectionForEach.makeLazy();
+      final Function1<Side, SVGPath> _function_1 = new Function1<Side, SVGPath>() {
+        public SVGPath apply(final Side it) {
+          return ButtonExtensions.getArrowButton(it, "Add property");
+        }
+      };
+      _outConnectionForEach.makeLazy(_function_1);
+      final Function1<Entity, List<Entity>> _function_2 = new Function1<Entity, List<Entity>>() {
+        public List<Entity> apply(final Entity it) {
+          List<Entity> _xblockexpression = null;
+          {
+            JvmParameterizedTypeReference _superType = it.getSuperType();
+            final Entity superEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_superType);
+            List<Entity> _xifexpression = null;
+            boolean _equals = Objects.equal(superEntity, null);
+            if (_equals) {
+              _xifexpression = CollectionLiterals.<Entity>emptyList();
+            } else {
+              _xifexpression = Collections.<Entity>unmodifiableList(Lists.<Entity>newArrayList(superEntity));
+            }
+            _xblockexpression = _xifexpression;
+          }
+          return _xblockexpression;
+        }
+      };
+      MultiConnectionMappingCall<Entity, Entity> _outConnectionForEach_1 = this.<Entity>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_2);
+      final Function1<Side, SVGPath> _function_3 = new Function1<Side, SVGPath>() {
+        public SVGPath apply(final Side it) {
+          return ButtonExtensions.getTriangleButton(it, "Add superclass");
+        }
+      };
+      _outConnectionForEach_1.makeLazy(_function_3);
     }
   };
   
@@ -127,6 +167,29 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         public Entity apply(final Property it) {
           JvmTypeReference _type = it.getType();
           return DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_type);
+        }
+      };
+      this.<Entity>target(DomainmodelDiagramConfig.this.entityNode, _function);
+    }
+  };
+  
+  private final ConnectionMapping<Entity> superTypeConnection = new ConnectionMapping<Entity>(this, "superTypeConnection") {
+    public XConnection createConnection(final XtextDomainObjectDescriptor<Entity> descriptor) {
+      XConnection _xConnection = new XConnection(descriptor);
+      final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+        public void apply(final XConnection it) {
+          TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
+            null, Color.WHITE, false);
+          it.setTargetArrowHead(_triangleArrowHead);
+        }
+      };
+      return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+    }
+    
+    public void calls() {
+      final Function1<Entity, Entity> _function = new Function1<Entity, Entity>() {
+        public Entity apply(final Entity it) {
+          return it;
         }
       };
       this.<Entity>target(DomainmodelDiagramConfig.this.entityNode, _function);

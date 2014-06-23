@@ -3,7 +3,6 @@ package de.fxdiagram.core.extensions;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XDiagram;
-import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.extensions.InitializingListListener;
@@ -286,40 +285,6 @@ public class CoreExtensions {
     if (!_matched) {
       Parent _parent = it.getParent();
       _switchResult = CoreExtensions.getContainerShape(_parent);
-    }
-    return _switchResult;
-  }
-  
-  public static XRapidButton getTargetButton(final MouseEvent event) {
-    XRapidButton _xifexpression = null;
-    EventTarget _target = event.getTarget();
-    if ((_target instanceof Node)) {
-      EventTarget _target_1 = event.getTarget();
-      _xifexpression = CoreExtensions.getContainerButton(((Node) _target_1));
-    } else {
-      _xifexpression = null;
-    }
-    return _xifexpression;
-  }
-  
-  public static XRapidButton getContainerButton(final Node it) {
-    XRapidButton _switchResult = null;
-    boolean _matched = false;
-    if (!_matched) {
-      if (Objects.equal(it, null)) {
-        _matched=true;
-        _switchResult = null;
-      }
-    }
-    if (!_matched) {
-      if (it instanceof XRapidButton) {
-        _matched=true;
-        _switchResult = ((XRapidButton)it);
-      }
-    }
-    if (!_matched) {
-      Parent _parent = it.getParent();
-      _switchResult = CoreExtensions.getContainerButton(_parent);
     }
     return _switchResult;
   }

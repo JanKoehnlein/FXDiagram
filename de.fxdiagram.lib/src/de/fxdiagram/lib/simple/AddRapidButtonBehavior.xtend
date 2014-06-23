@@ -2,25 +2,21 @@ package de.fxdiagram.lib.simple
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.XRapidButton
-import de.fxdiagram.core.XShape
+import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.tools.AbstractChooser
+import de.fxdiagram.lib.buttons.RapidButton
+import de.fxdiagram.lib.buttons.RapidButtonAction
+import de.fxdiagram.lib.buttons.RapidButtonBehavior
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import de.fxdiagram.lib.tools.CubeChooser
-import java.util.List
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.behavior.AbstractHostBehavior
-import de.fxdiagram.core.command.AddRemoveCommand
-import de.fxdiagram.core.XRapidButtonAction
 
-class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavior<T> {
-
-	List<XRapidButton> rapidButtons
+class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior<T> {
 
 	(AbstractChooser)=>void choiceInitializer
 
@@ -38,34 +34,39 @@ class AddRapidButtonBehavior<T extends XShape> extends AbstractHostBehavior<T> {
 
 	override doActivate() {
 		val host = this.getHost as XNode
-		val XRapidButtonAction addAction = [ XRapidButton button |
+		val RapidButtonAction addAction = [ RapidButton button |
 			val target = new SimpleNode("New Node")
 			val source = button.getHost
 			val connection = new XConnection(source, target)
-			target.layoutX = 200 * (button.getPlacer.getXPos - 0.5) + source.layoutX
-			target.layoutY = 150 * (button.getPlacer.getYPos - 0.5) + source.layoutY
+			target.layoutX = source.layoutX
+			target.layoutY = source.layoutY
+			switch button.position {
+				case TOP: target.layoutY = target.layoutY - 150  
+				case BOTTOM: target.layoutY = target.layoutY + 150 
+				case LEFT: target.layoutX = target.layoutX - 200
+				case RIGHT: target.layoutX = target.layoutX +200
+			}
 			host.root.commandStack.execute(AddRemoveCommand.newAddCommand(host.diagram, target, connection))
 		]
-		val XRapidButtonAction chooseAction = [ XRapidButton button |
-			val chooser = new CarusselChooser(host, button.getChooserPosition)
+		val RapidButtonAction chooseAction = [ RapidButton button |
+			val chooser = new CarusselChooser(host, button.position)
 			chooser.addChoices
 			host.root.currentTool = chooser
 		]
-		val XRapidButtonAction cubeChooseAction = [ XRapidButton button |
-			val chooser = new CubeChooser(host, button.getChooserPosition)
+		val RapidButtonAction cubeChooseAction = [ RapidButton button |
+			val chooser = new CubeChooser(host, button.position)
 			chooser.addChoices
 			host.root.currentTool = chooser
 		]
-		val XRapidButtonAction coverFlowChooseAction = [ XRapidButton button |
-			val chooser = new CoverFlowChooser(host, button.getChooserPosition)
+		val RapidButtonAction coverFlowChooseAction = [ RapidButton button |
+			val chooser = new CoverFlowChooser(host, button.position)
 			chooser.addChoices
 			host.root.currentTool = chooser
 		]
-		rapidButtons = #[new XRapidButton(host, 0.5, 0, getFilledTriangle(TOP, 'Add node'), cubeChooseAction),
-			new XRapidButton(host, 0.5, 1, getFilledTriangle(BOTTOM, 'Add node'), coverFlowChooseAction),
-			new XRapidButton(host, 0, 0.5, getFilledTriangle(LEFT, 'Add node'), chooseAction),
-			new XRapidButton(host, 1, 0.5, getFilledTriangle(RIGHT, 'Add node'), addAction)]
-		host.diagram.buttons += rapidButtons
+		add(new RapidButton(host, TOP, getFilledTriangle(TOP, 'Add node'), cubeChooseAction))
+		add(new RapidButton(host, BOTTOM, getFilledTriangle(BOTTOM, 'Add node'), coverFlowChooseAction))
+		add(new RapidButton(host, LEFT, getFilledTriangle(LEFT, 'Add node'), chooseAction))
+		add(new RapidButton(host, RIGHT, getFilledTriangle(RIGHT, 'Add node'), addAction))
 	}
 
 	protected def addChoices(AbstractChooser chooser) {

@@ -1,7 +1,6 @@
 package de.fxdiagram.core.extensions
 
 import de.fxdiagram.core.XDiagram
-import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import javafx.beans.value.ChangeListener
@@ -120,21 +119,6 @@ class CoreExtensions {
 		}
 	}
 
-	def static getTargetButton(MouseEvent event) {
-		if (event.target instanceof Node)
-			getContainerButton(event.target as Node)
-		else
-			null
-	}
-	
-	def static XRapidButton getContainerButton(Node it) {
-		switch it {
-			case null: null
-			XRapidButton: it
-			default: getContainerButton(parent)
-		}
-	}
-	
 	def static Iterable<? extends Node> getAllChildren(Parent node) {
 		node.allChildrenInternal.toSet
 	}

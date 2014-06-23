@@ -1,16 +1,15 @@
 package de.fxdiagram.xtext.glue.behavior;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRapidButton;
-import de.fxdiagram.core.XRapidButtonAction;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.lib.buttons.RapidButton;
+import de.fxdiagram.lib.buttons.RapidButtonAction;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
@@ -22,8 +21,7 @@ import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.List;
 import java.util.Set;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
+import javafx.geometry.Side;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
@@ -31,7 +29,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends Object> extends XRapidButtonAction {
+public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends Object> extends RapidButtonAction {
   private XDiagramConfigInterpreter configInterpreter;
   
   private AbstractConnectionMappingCall<MODEL, ARG> mappingCall;
@@ -44,24 +42,22 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     this.hostIsSource = hostIsSource;
   }
   
-  public boolean isEnabled(final XRapidButton button) {
-    Boolean _xblockexpression = null;
-    {
-      XNode _host = button.getHost();
-      DomainObjectDescriptor _domainObject = _host.getDomainObject();
-      final XtextDomainObjectDescriptor<ARG> hostDescriptor = ((XtextDomainObjectDescriptor<ARG>) _domainObject);
-      XNode _host_1 = button.getHost();
-      XDiagram _diagram = CoreExtensions.getDiagram(_host_1);
-      ObservableList<XConnection> _connections = _diagram.getConnections();
-      final Function1<XConnection, DomainObjectDescriptor> _function = new Function1<XConnection, DomainObjectDescriptor>() {
-        public DomainObjectDescriptor apply(final XConnection it) {
-          return it.getDomainObject();
-        }
-      };
-      List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
-      final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
-      final Function1<ARG, Boolean> _function_1 = new Function1<ARG, Boolean>() {
-        public Boolean apply(final ARG domainArgument) {
+  public void updateEnablement(final XNode host) {
+    DomainObjectDescriptor _domainObject = host.getDomainObject();
+    final XtextDomainObjectDescriptor<ARG> hostDescriptor = ((XtextDomainObjectDescriptor<ARG>) _domainObject);
+    XDiagram _diagram = CoreExtensions.getDiagram(host);
+    ObservableList<XConnection> _connections = _diagram.getConnections();
+    final Function1<XConnection, DomainObjectDescriptor> _function = new Function1<XConnection, DomainObjectDescriptor>() {
+      public DomainObjectDescriptor apply(final XConnection it) {
+        return it.getDomainObject();
+      }
+    };
+    List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
+    final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
+    final Function1<ARG, Object> _function_1 = new Function1<ARG, Object>() {
+      public Object apply(final ARG domainArgument) {
+        Object _xblockexpression = null;
+        {
           final Iterable<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
           for (final MODEL connectionDomainObject : connectionDomainObjects) {
             {
@@ -82,19 +78,24 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                 final NodeMappingCall<?, MODEL> nodeMappingCall = _elvis;
                 final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
                 boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
-                return Boolean.valueOf((!_isEmpty));
+                boolean _not = (!_isEmpty);
+                if (_not) {
+                  LazyConnectionRapidButtonAction.this.setEnabled(true);
+                  return null;
+                }
               }
             }
           }
-          return Boolean.valueOf(false);
+          LazyConnectionRapidButtonAction.this.setEnabled(false);
+          _xblockexpression = null;
         }
-      };
-      _xblockexpression = hostDescriptor.<Boolean>withDomainObject(_function_1);
-    }
-    return (_xblockexpression).booleanValue();
+        return _xblockexpression;
+      }
+    };
+    hostDescriptor.<Object>withDomainObject(_function_1);
   }
   
-  public void perform(final XRapidButton button) {
+  public void perform(final RapidButton button) {
     final AbstractChooser chooser = this.createChooser(button);
     XNode _host = button.getHost();
     this.populateChooser(chooser, _host);
@@ -103,14 +104,13 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     _root.setCurrentTool(chooser);
   }
   
-  protected AbstractChooser createChooser(final XRapidButton button) {
+  protected AbstractChooser createChooser(final RapidButton button) {
     AbstractChooser _xblockexpression = null;
     {
-      final Pos position = button.getChooserPosition();
+      final Side position = button.getPosition();
       AbstractChooser _xifexpression = null;
-      VPos _vpos = position.getVpos();
-      boolean _equals = Objects.equal(_vpos, VPos.CENTER);
-      if (_equals) {
+      boolean _isVertical = position.isVertical();
+      if (_isVertical) {
         XNode _host = button.getHost();
         _xifexpression = new CarusselChooser(_host, position);
       } else {

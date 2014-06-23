@@ -3,6 +3,8 @@ package de.fxdiagram.core.tools
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XShape
+import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
@@ -11,9 +13,8 @@ import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.value.ChangeListener
 import javafx.event.EventHandler
 import javafx.geometry.Bounds
-import javafx.geometry.HPos
 import javafx.geometry.Pos
-import javafx.geometry.VPos
+import javafx.geometry.Side
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.Label
@@ -29,8 +30,6 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.command.AddRemoveCommand
-import de.fxdiagram.core.XShape
 
 abstract class AbstractChooser implements XDiagramTool {
 
@@ -74,13 +73,13 @@ abstract class AbstractChooser implements XDiagramTool {
 
 	ChangeListener<String> filterChangeListener
 
-	Pos layoutPosition
+	Side layoutPosition
 
 	Node plusButton
 
 	Node minusButton
 
-	new(XNode host, Pos layoutPosition, boolean hasButtons) {
+	new(XNode host, Side layoutPosition, boolean hasButtons) {
 		this.host = host
 		this.layoutPosition = layoutPosition
 		positionListener = [ element, oldValue, newValue |
@@ -139,8 +138,7 @@ abstract class AbstractChooser implements XDiagramTool {
 			calculateVisibleNodes
 		]
 		if (hasButtons) {
-			val isVertical = layoutPosition.hpos != HPos.CENTER && layoutPosition.hpos != null
-			minusButton = (if (isVertical) 
+			minusButton = (if(layoutPosition.vertical) 
 					getArrowButton(BOTTOM, 'previous')
 				else 
 					getArrowButton(RIGHT, "previous")
@@ -149,7 +147,7 @@ abstract class AbstractChooser implements XDiagramTool {
 						spinToPosition.targetPositionDelta = -1
 					]
 				]
-			plusButton = (if(isVertical) 
+			plusButton = (if(layoutPosition.vertical)
 					getArrowButton(TOP, 'next')
 				else 
 					getArrowButton(LEFT, 'next')
@@ -277,16 +275,14 @@ abstract class AbstractChooser implements XDiagramTool {
 				val bounds = choice.layoutBounds
 				choice.layoutX = center.x - 0.5 * bounds.width 
 				choice.layoutY = center.y - 0.5 * bounds.height
-				switch layoutPosition.hpos {
-					case HPos.LEFT:
+				switch layoutPosition {
+					case LEFT:
 						choice.layoutX = choice.layoutX - 0.5 * (bounds.width - unlayoutedBounds.width)
-					case HPos.RIGHT:
+					case RIGHT:
 						choice.layoutX = choice.layoutX + 0.5 * (bounds.width - unlayoutedBounds.width)
-				}
-				switch layoutPosition.vpos {
-					case VPos.TOP:
+					case TOP:
 						choice.layoutY = choice.layoutY - 0.5 * (bounds.height - unlayoutedBounds.height)
-					case VPos.BOTTOM:
+					case BOTTOM:
 						choice.layoutY = choice.layoutY + 0.5 * (bounds.height - unlayoutedBounds.height)
 				}
 				shapesToAdd += choice
@@ -400,14 +396,14 @@ abstract class AbstractChooser implements XDiagramTool {
 			}
 			mapIndex = mapIndex + 1
 		}
-		group.layoutX = switch layoutPosition.hpos {
-			case HPos.LEFT: host.layoutX - getLayoutDistance - 0.5 * maxWidth
-			case HPos.RIGHT: host.layoutX + host.layoutBounds.width + getLayoutDistance + 0.5 * maxWidth
+		group.layoutX = switch layoutPosition {
+			case LEFT: host.layoutX - getLayoutDistance - 0.5 * maxWidth
+			case RIGHT: host.layoutX + host.layoutBounds.width + getLayoutDistance + 0.5 * maxWidth
 			default: host.layoutX + 0.5 * host.layoutBounds.width
 		}
-		group.layoutY = switch layoutPosition.vpos {
-			case VPos.TOP: host.layoutY - getLayoutDistance - 0.5 * maxHeight
-			case VPos.BOTTOM: host.layoutY + host.layoutBounds.height + getLayoutDistance + 0.5 * maxHeight
+		group.layoutY = switch layoutPosition {
+			case TOP: host.layoutY - getLayoutDistance - 0.5 * maxHeight
+			case BOTTOM: host.layoutY + host.layoutBounds.height + getLayoutDistance + 0.5 * maxHeight
 			default: host.layoutY + 0.5 * host.layoutBounds.height
 		}
 		interpolatedPosition = getCurrentPosition

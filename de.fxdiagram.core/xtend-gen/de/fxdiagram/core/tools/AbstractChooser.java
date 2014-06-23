@@ -44,11 +44,9 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Bounds;
-import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -105,13 +103,13 @@ public abstract class AbstractChooser implements XDiagramTool {
   
   private ChangeListener<String> filterChangeListener;
   
-  private Pos layoutPosition;
+  private Side layoutPosition;
   
   private Node plusButton;
   
   private Node minusButton;
   
-  public AbstractChooser(final XNode host, final Pos layoutPosition, final boolean hasButtons) {
+  public AbstractChooser(final XNode host, final Side layoutPosition, final boolean hasButtons) {
     this.host = host;
     this.layoutPosition = layoutPosition;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
@@ -238,19 +236,9 @@ public abstract class AbstractChooser implements XDiagramTool {
     };
     this.filterChangeListener = _function_4;
     if (hasButtons) {
-      boolean _and = false;
-      HPos _hpos = layoutPosition.getHpos();
-      boolean _notEquals = (!Objects.equal(_hpos, HPos.CENTER));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        HPos _hpos_1 = layoutPosition.getHpos();
-        boolean _notEquals_1 = (!Objects.equal(_hpos_1, null));
-        _and = _notEquals_1;
-      }
-      final boolean isVertical = _and;
       SVGPath _xifexpression = null;
-      if (isVertical) {
+      boolean _isVertical = layoutPosition.isVertical();
+      if (_isVertical) {
         _xifexpression = ButtonExtensions.getArrowButton(Side.BOTTOM, "previous");
       } else {
         _xifexpression = ButtonExtensions.getArrowButton(Side.RIGHT, "previous");
@@ -268,7 +256,8 @@ public abstract class AbstractChooser implements XDiagramTool {
       SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_xifexpression, _function_5);
       this.minusButton = _doubleArrow;
       SVGPath _xifexpression_1 = null;
-      if (isVertical) {
+      boolean _isVertical_1 = layoutPosition.isVertical();
+      if (_isVertical_1) {
         _xifexpression_1 = ButtonExtensions.getArrowButton(Side.TOP, "next");
       } else {
         _xifexpression_1 = ButtonExtensions.getArrowButton(Side.LEFT, "next");
@@ -555,9 +544,9 @@ public abstract class AbstractChooser implements XDiagramTool {
           double _multiply_1 = (0.5 * _height);
           double _minus_1 = (_y - _multiply_1);
           choice.setLayoutY(_minus_1);
-          HPos _hpos = this.layoutPosition.getHpos();
-          if (_hpos != null) {
-            switch (_hpos) {
+          final Side layoutPosition = this.layoutPosition;
+          if (layoutPosition != null) {
+            switch (layoutPosition) {
               case LEFT:
                 double _layoutX = choice.getLayoutX();
                 double _width_1 = bounds.getWidth();
@@ -576,13 +565,6 @@ public abstract class AbstractChooser implements XDiagramTool {
                 double _plus = (_layoutX_1 + _multiply_3);
                 choice.setLayoutX(_plus);
                 break;
-              default:
-                break;
-            }
-          }
-          VPos _vpos = this.layoutPosition.getVpos();
-          if (_vpos != null) {
-            switch (_vpos) {
               case TOP:
                 double _layoutY = choice.getLayoutY();
                 double _height_1 = bounds.getHeight();
@@ -833,9 +815,9 @@ public abstract class AbstractChooser implements XDiagramTool {
       }
     }
     double _switchResult = (double) 0;
-    HPos _hpos = this.layoutPosition.getHpos();
-    if (_hpos != null) {
-      switch (_hpos) {
+    final Side layoutPosition = this.layoutPosition;
+    if (layoutPosition != null) {
+      switch (layoutPosition) {
         case LEFT:
           double _layoutX = this.host.getLayoutX();
           double _layoutDistance = this.getLayoutDistance();
@@ -868,9 +850,9 @@ public abstract class AbstractChooser implements XDiagramTool {
     }
     this.group.setLayoutX(_switchResult);
     double _switchResult_1 = (double) 0;
-    VPos _vpos = this.layoutPosition.getVpos();
-    if (_vpos != null) {
-      switch (_vpos) {
+    final Side layoutPosition_1 = this.layoutPosition;
+    if (layoutPosition_1 != null) {
+      switch (layoutPosition_1) {
         case TOP:
           double _layoutY = this.host.getLayoutY();
           double _layoutDistance_2 = this.getLayoutDistance();

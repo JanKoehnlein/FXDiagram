@@ -1,14 +1,14 @@
 package de.fxdiagram.lib.tools
 
 import de.fxdiagram.core.XNode
-import javafx.geometry.Pos
+import de.fxdiagram.core.tools.AbstractChooser
+import javafx.geometry.Side
 import javafx.scene.Node
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
 import javafx.scene.transform.Transform
 
 import static java.lang.Math.*
-import de.fxdiagram.core.tools.AbstractChooser
 
 class CarusselChooser extends AbstractChooser {
 
@@ -18,7 +18,7 @@ class CarusselChooser extends AbstractChooser {
 
 	double radius
 	
-	new(XNode host, Pos layoutPosition) {
+	new(XNode host, Side layoutPosition) {
 		super(host, layoutPosition, true)
 		currentNodeEffect = new InnerShadow
 	}

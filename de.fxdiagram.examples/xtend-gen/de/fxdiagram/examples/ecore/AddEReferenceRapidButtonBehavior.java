@@ -5,8 +5,6 @@ import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRapidButton;
-import de.fxdiagram.core.XRapidButtonAction;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.DiamondArrowHead;
@@ -20,11 +18,12 @@ import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.examples.ecore.EReferenceDescriptor;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
+import de.fxdiagram.lib.buttons.RapidButton;
+import de.fxdiagram.lib.buttons.RapidButtonAction;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
 import java.util.Set;
-import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
@@ -65,12 +64,12 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
-  protected AbstractChooser createChooser(final XRapidButton button, final Set<EReferenceDescriptor> availableChoiceKeys, final Set<EReferenceDescriptor> unavailableChoiceKeys) {
+  protected AbstractChooser createChooser(final RapidButton button, final Set<EReferenceDescriptor> availableChoiceKeys, final Set<EReferenceDescriptor> unavailableChoiceKeys) {
     CarusselChooser _xblockexpression = null;
     {
       EClassNode _host = this.getHost();
-      Pos _chooserPosition = button.getChooserPosition();
-      final CarusselChooser chooser = new CarusselChooser(_host, _chooserPosition);
+      Side _position = button.getPosition();
+      final CarusselChooser chooser = new CarusselChooser(_host, _position);
       final Procedure1<EReferenceDescriptor> _function = new Procedure1<EReferenceDescriptor>() {
         public void apply(final EReferenceDescriptor it) {
           XNode _createNode = AddEReferenceRapidButtonBehavior.this.createNode(it);
@@ -154,13 +153,13 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     return _xblockexpression;
   }
   
-  protected Iterable<XRapidButton> createButtons(final XRapidButtonAction addConnectionAction) {
+  protected Iterable<RapidButton> createButtons(final RapidButtonAction addConnectionAction) {
     EClassNode _host = this.getHost();
     SVGPath _arrowButton = ButtonExtensions.getArrowButton(Side.LEFT, "Discover references");
-    XRapidButton _xRapidButton = new XRapidButton(_host, 0, 0.5, _arrowButton, addConnectionAction);
+    RapidButton _rapidButton = new RapidButton(_host, Side.LEFT, _arrowButton, addConnectionAction);
     EClassNode _host_1 = this.getHost();
     SVGPath _arrowButton_1 = ButtonExtensions.getArrowButton(Side.RIGHT, "Discover references");
-    XRapidButton _xRapidButton_1 = new XRapidButton(_host_1, 1, 0.5, _arrowButton_1, addConnectionAction);
-    return Collections.<XRapidButton>unmodifiableList(Lists.<XRapidButton>newArrayList(_xRapidButton, _xRapidButton_1));
+    RapidButton _rapidButton_1 = new RapidButton(_host_1, Side.RIGHT, _arrowButton_1, addConnectionAction);
+    return Collections.<RapidButton>unmodifiableList(Lists.<RapidButton>newArrayList(_rapidButton, _rapidButton_1));
   }
 }

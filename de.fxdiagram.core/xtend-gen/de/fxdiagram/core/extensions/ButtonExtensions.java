@@ -1,7 +1,13 @@
 package de.fxdiagram.core.extensions;
 
+import com.google.common.base.Objects;
+import de.fxdiagram.core.XButton;
 import de.fxdiagram.core.extensions.TooltipExtensions;
+import javafx.event.EventTarget;
 import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeLineCap;
@@ -108,5 +114,39 @@ public class ButtonExtensions {
       }
     };
     return ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
+  }
+  
+  public static XButton getTargetButton(final MouseEvent event) {
+    XButton _xifexpression = null;
+    EventTarget _target = event.getTarget();
+    if ((_target instanceof Node)) {
+      EventTarget _target_1 = event.getTarget();
+      _xifexpression = ButtonExtensions.getContainerButton(((Node) _target_1));
+    } else {
+      _xifexpression = null;
+    }
+    return _xifexpression;
+  }
+  
+  public static XButton getContainerButton(final Node it) {
+    XButton _switchResult = null;
+    boolean _matched = false;
+    if (!_matched) {
+      if (Objects.equal(it, null)) {
+        _matched=true;
+        _switchResult = null;
+      }
+    }
+    if (!_matched) {
+      if (it instanceof XButton) {
+        _matched=true;
+        _switchResult = ((XButton)it);
+      }
+    }
+    if (!_matched) {
+      Parent _parent = it.getParent();
+      _switchResult = ButtonExtensions.getContainerButton(_parent);
+    }
+    return _switchResult;
   }
 }

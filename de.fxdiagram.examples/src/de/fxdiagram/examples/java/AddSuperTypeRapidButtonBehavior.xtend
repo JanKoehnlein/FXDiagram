@@ -1,9 +1,9 @@
 package de.fxdiagram.examples.java
 
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XRapidButton
-import de.fxdiagram.core.XRapidButtonAction
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.lib.buttons.RapidButton
+import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import java.util.Set
@@ -35,8 +35,8 @@ class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 		host.root.getDomainObjectProvider(JavaModelProvider)
 	}
 	
-	override protected createChooser(XRapidButton button, Set<JavaSuperTypeDescriptor> availableChoiceKeys, Set<JavaSuperTypeDescriptor> unavailableChoiceKeys) {
-		val chooser = new CoverFlowChooser(host, button.chooserPosition)
+	override protected createChooser(RapidButton button, Set<JavaSuperTypeDescriptor> availableChoiceKeys, Set<JavaSuperTypeDescriptor> unavailableChoiceKeys) {
+		val chooser = new CoverFlowChooser(host, button.position)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)
 		]
@@ -50,9 +50,9 @@ class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 		chooser
 	}
 	
-	override protected createButtons(XRapidButtonAction addConnectionAction) {
-		#[	new XRapidButton(host, 0.5, 0, getTriangleButton(TOP, 'Discover supertypes'), addConnectionAction),
-			new XRapidButton(host, 0.5, 1, getTriangleButton(BOTTOM, 'Discover supertypes'), addConnectionAction)
+	override protected createButtons(RapidButtonAction addConnectionAction) {
+		#[	new RapidButton(host, TOP, getTriangleButton(TOP, 'Discover supertypes'), addConnectionAction),
+			new RapidButton(host, BOTTOM, getTriangleButton(BOTTOM, 'Discover supertypes'), addConnectionAction)
 		]
 	}
 }

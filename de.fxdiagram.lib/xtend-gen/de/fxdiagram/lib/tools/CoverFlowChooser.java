@@ -10,7 +10,7 @@ import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
-import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Reflection;
 import javafx.scene.paint.Color;
@@ -50,7 +50,7 @@ public class CoverFlowChooser extends AbstractChooser {
   
   private double gap;
   
-  public CoverFlowChooser(final XNode host, final Pos layoutPosition) {
+  public CoverFlowChooser(final XNode host, final Side layoutPosition) {
     super(host, layoutPosition, false);
   }
   

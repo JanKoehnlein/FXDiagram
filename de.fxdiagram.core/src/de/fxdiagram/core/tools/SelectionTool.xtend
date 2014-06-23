@@ -1,9 +1,10 @@
 package de.fxdiagram.core.tools
 
+import de.fxdiagram.core.XButton
 import de.fxdiagram.core.XControlPoint
-import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
+import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.extensions.SoftTooltip
 import java.util.Collection
 import javafx.event.EventHandler
@@ -13,9 +14,9 @@ import javafx.scene.input.MouseEvent
 import static de.fxdiagram.core.extensions.TimerExtensions.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.core.behavior.MoveBehavior
 
 class SelectionTool implements XDiagramTool {
 
@@ -33,7 +34,7 @@ class SelectionTool implements XDiagramTool {
 			val selection = root.currentSelection.toSet
 			if(event.target == root.diagramCanvas && event.button == MouseButton.PRIMARY) {
 				selection.deselect[true]
-			} else if (!(event.targetButton instanceof XRapidButton)) {
+			} else if (!(event.targetButton instanceof XButton)) {
 				val targetShape = event.targetShape
 				if (targetShape?.isSelectable) {
 					if (!targetShape.selected && !event.shortcutDown) {

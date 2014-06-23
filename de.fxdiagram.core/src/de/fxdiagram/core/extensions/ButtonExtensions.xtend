@@ -1,6 +1,9 @@
 package de.fxdiagram.core.extensions
 
+import de.fxdiagram.core.XButton
 import javafx.geometry.Side
+import javafx.scene.Node
+import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 import javafx.scene.shape.SVGPath
 import javafx.scene.shape.StrokeLineCap
@@ -53,5 +56,20 @@ class ButtonExtensions {
 			strokeLineCap = StrokeLineCap.ROUND
 			it.tooltip = tooltip
 		]
+	}
+	
+	def static getTargetButton(MouseEvent event) {
+		if (event.target instanceof Node)
+			getContainerButton(event.target as Node)
+		else
+			null
+	}
+	
+	def static XButton getContainerButton(Node it) {
+		switch it {
+			case null: null
+			XButton: it
+			default: getContainerButton(parent)
+		}
 	}
 }

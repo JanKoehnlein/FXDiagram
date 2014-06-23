@@ -7,7 +7,6 @@ import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
@@ -177,9 +176,6 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     Group _connectionLayer = this.getConnectionLayer();
     XDiagram.ChildrenListener<XConnection> _childrenListener_1 = new XDiagram.ChildrenListener<XConnection>(this, _connectionLayer);
     CoreExtensions.<XConnection>addInitializingListener(_connections, _childrenListener_1);
-    ObservableList<XRapidButton> _buttons = this.getButtons();
-    XDiagram.ChildrenListener<XRapidButton> _childrenListener_2 = new XDiagram.ChildrenListener<XRapidButton>(this, this.buttonLayer);
-    CoreExtensions.<XRapidButton>addInitializingListener(_buttons, _childrenListener_2);
     InitializingListener<ArrowHead> _initializingListener = new InitializingListener<ArrowHead>();
     final Procedure1<InitializingListener<ArrowHead>> _function = new Procedure1<InitializingListener<ArrowHead>>() {
       public void apply(final InitializingListener<ArrowHead> it) {
@@ -460,21 +456,6 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   public ListProperty<XConnection> connectionsProperty() {
     return this.connectionsProperty;
-  }
-  
-  private SimpleListProperty<XRapidButton> buttonsProperty = new SimpleListProperty<XRapidButton>(this, "buttons",_initButtons());
-  
-  private static final ObservableList<XRapidButton> _initButtons() {
-    ObservableList<XRapidButton> _observableArrayList = FXCollections.<XRapidButton>observableArrayList();
-    return _observableArrayList;
-  }
-  
-  public ObservableList<XRapidButton> getButtons() {
-    return this.buttonsProperty.get();
-  }
-  
-  public ListProperty<XRapidButton> buttonsProperty() {
-    return this.buttonsProperty;
   }
   
   private SimpleObjectProperty<ObservableMap<Node, Pos>> fixedButtonsProperty = new SimpleObjectProperty<ObservableMap<Node, Pos>>(this, "fixedButtons",_initFixedButtons());

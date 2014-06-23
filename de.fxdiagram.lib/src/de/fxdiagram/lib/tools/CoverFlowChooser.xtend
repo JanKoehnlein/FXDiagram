@@ -1,8 +1,9 @@
 package de.fxdiagram.lib.tools
 
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.tools.AbstractChooser
 import javafx.geometry.Point3D
-import javafx.geometry.Pos
+import javafx.geometry.Side
 import javafx.scene.effect.ColorAdjust
 import javafx.scene.effect.Reflection
 import javafx.scene.paint.Color
@@ -11,7 +12,6 @@ import javafx.scene.transform.Affine
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
-import de.fxdiagram.core.tools.AbstractChooser
 
 class CoverFlowChooser extends AbstractChooser {
 
@@ -20,7 +20,7 @@ class CoverFlowChooser extends AbstractChooser {
 	
 	double gap
 
-	new(XNode host, Pos layoutPosition) {
+	new(XNode host, Side layoutPosition) {
 		super(host, layoutPosition, false)
 	}
 

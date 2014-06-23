@@ -3,6 +3,7 @@ package de.fxdiagram.examples.lcars
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.tools.ChooserConnectionProvider
 import de.fxdiagram.core.tools.actions.LayoutAction
@@ -15,7 +16,7 @@ import javafx.application.Platform
 import javafx.concurrent.Service
 import javafx.concurrent.Task
 import javafx.geometry.Insets
-import javafx.geometry.Pos
+import javafx.geometry.Side
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.input.MouseButton
@@ -29,7 +30,6 @@ import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.core.command.AddRemoveCommand
 
 class LcarsField extends Parent {
 
@@ -186,7 +186,7 @@ class LcarsQueryTask extends Task<Void> {
 		val connectionDescriptor = modelProvider.createLcarsConnectionDescriptor(fieldName)
 		val siblings = modelProvider.query(fieldName, fieldValue)
 		val lcarsNode = host.lcarsNode
-		val chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER)
+		val chooser = new CoverFlowChooser(lcarsNode, Side.BOTTOM)
 		chooser.connectionProvider = connectionProvider
 		val alreadyConnected = 
 			(host.lcarsNode.incomingConnections.filter[domainObject == connectionDescriptor].map[source] 

@@ -2,23 +2,20 @@ package de.fxdiagram.lib.model
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.XRapidButton
-import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.tools.AbstractChooser
-import java.util.List
+import de.fxdiagram.lib.buttons.RapidButton
+import de.fxdiagram.lib.buttons.RapidButtonAction
+import de.fxdiagram.lib.buttons.RapidButtonBehavior
 import java.util.Set
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.XRapidButtonAction
 
-abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, KEY extends DomainObjectDescriptor> extends AbstractHostBehavior<HOST> {
+abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, KEY extends DomainObjectDescriptor> extends RapidButtonBehavior<HOST> {
 	
 	Set<KEY> availableChoiceKeys = newLinkedHashSet	
 	Set<KEY> unavailableChoiceKeys = newHashSet
-	
-	List<XRapidButton> buttons = newArrayList
 	
 	new(HOST host) {
 		super(host)
@@ -29,27 +26,27 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 	}
 	
 	override protected doActivate() {
+		super.doActivate
 		availableChoiceKeys += initialModelChoices.map[choiceKey]
 		if(!availableChoiceKeys.empty) {
-			val XRapidButtonAction addConnectionAction = [
-				XRapidButton button |
+			val RapidButtonAction addConnectionAction = [
+				RapidButton button |
 				val chooser = createChooser(button, availableChoiceKeys, unavailableChoiceKeys)
 				host.root.currentTool = chooser
 			]
-			buttons += createButtons(addConnectionAction)
-			host.diagram.buttons += buttons
+			createButtons(addConnectionAction).forEach[add]
 			host.diagram.connections.addInitializingListener(new InitializingListListener() => [
 				add = [ XConnection it |
 					if(availableChoiceKeys.remove(domainObject)) {
 						if(availableChoiceKeys.empty)						
-							host.diagram.buttons -= buttons
+							addConnectionAction.enabled = false
 						unavailableChoiceKeys.add(domainObject as KEY)
 					}
 				]
 				remove = [ XConnection it |
 					if(unavailableChoiceKeys.remove(domainObject)) {
 						if(availableChoiceKeys.empty) 
-							host.diagram.buttons += buttons
+							addConnectionAction.enabled = true
 						availableChoiceKeys.add(domainObject as KEY)
 					} 
 				]
@@ -63,9 +60,9 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 	
 	protected def XNode createNode(KEY key)
 
-	protected def Iterable<XRapidButton> createButtons(XRapidButtonAction addConnectionAction) 
+	protected def Iterable<RapidButton> createButtons(RapidButtonAction addConnectionAction) 
 		
-	protected def AbstractChooser createChooser(XRapidButton button, Set<KEY> availableChoiceKeys, Set<KEY> unavailableChoiceKeys) 
+	protected def AbstractChooser createChooser(RapidButton button, Set<KEY> availableChoiceKeys, Set<KEY> unavailableChoiceKeys) 
 	
 }
 

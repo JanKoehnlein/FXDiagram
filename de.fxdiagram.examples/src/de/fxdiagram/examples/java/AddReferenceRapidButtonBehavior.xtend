@@ -2,9 +2,9 @@ package de.fxdiagram.examples.java
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
-import de.fxdiagram.core.XRapidButton
-import de.fxdiagram.core.XRapidButtonAction
 import de.fxdiagram.core.anchors.LineArrowHead
+import de.fxdiagram.lib.buttons.RapidButton
+import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
 import de.fxdiagram.lib.tools.CarusselChooser
 import java.util.Set
@@ -36,8 +36,8 @@ class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 		host.root.getDomainObjectProvider(JavaModelProvider)
 	}
 	
-	override protected createChooser(XRapidButton button, Set<JavaPropertyDescriptor> availableChoiceKeys, Set<JavaPropertyDescriptor> unavailableChoiceKeys) {
-		val chooser = new CarusselChooser(host, button.chooserPosition)
+	override protected createChooser(RapidButton button, Set<JavaPropertyDescriptor> availableChoiceKeys, Set<JavaPropertyDescriptor> unavailableChoiceKeys) {
+		val chooser = new CarusselChooser(host, button.position)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)
 		]
@@ -54,8 +54,8 @@ class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehav
 		chooser
 	}
 	
-	override protected createButtons(XRapidButtonAction addConnectionAction) {
-		#[	new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover properties'), addConnectionAction),
-			new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover properties'), addConnectionAction) ]
+	override protected createButtons(RapidButtonAction addConnectionAction) {
+		#[	new RapidButton(host, LEFT, getArrowButton(LEFT, 'Discover properties'), addConnectionAction),
+			new RapidButton(host, RIGHT, getArrowButton(RIGHT, 'Discover properties'), addConnectionAction) ]
 	}
 }

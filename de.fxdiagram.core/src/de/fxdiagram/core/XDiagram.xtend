@@ -37,7 +37,6 @@ class XDiagram extends Group implements XActivatable {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
 	@FxProperty ObservableList<XConnection> connections = observableArrayList
-	@FxProperty ObservableList<XRapidButton> buttons = observableArrayList
 
 	@FxProperty ObservableMap<Node, Pos> fixedButtons = observableMap(newHashMap)
 
@@ -102,7 +101,6 @@ class XDiagram extends Group implements XActivatable {
 	def void doActivate() {
 		nodes.addInitializingListener(new ChildrenListener<XNode>(this, nodeLayer))
 		connections.addInitializingListener(new ChildrenListener<XConnection>(this, connectionLayer))
-		buttons.addInitializingListener(new ChildrenListener<XRapidButton>(this, buttonLayer))
 		val arrowHeadListener = new InitializingListener<ArrowHead> => [
 			set = [ 
 				if(!connectionLayer.children.contains(it)) {

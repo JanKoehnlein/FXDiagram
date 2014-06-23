@@ -32,12 +32,21 @@ class BaseNode<T> extends SimpleNode {
 		super.doActivate()
 		if(descriptor.mapping instanceof NodeMapping<?>) {
 			val nodeMapping = descriptor.mapping as NodeMapping<T>
-			nodeMapping.outgoing.filter[lazy].forEach[
-				addBehavior(new LazyConnectionMappingBehavior(this, it, new XDiagramConfigInterpreter(descriptor.provider), true))
-			]
-			nodeMapping.incoming.filter[lazy].forEach[
-				addBehavior(new LazyConnectionMappingBehavior(this, it, new XDiagramConfigInterpreter(descriptor.provider), false))
-			]
+			var LazyConnectionMappingBehavior<T> lazyBehavior = null 
+			val lazyOutgoing = nodeMapping.outgoing.filter[lazy]
+			if(!lazyOutgoing.empty) {
+				lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(this)
+				for(out : lazyOutgoing) 
+					lazyBehavior.addConnectionMappingCall(out, new XDiagramConfigInterpreter(descriptor.provider), true)
+			}
+			val lazyIncoming = nodeMapping.incoming.filter[lazy]
+			if(!lazyIncoming.empty) {
+				lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(this)
+				for(in : lazyIncoming) 
+					lazyBehavior.addConnectionMappingCall(in, new XDiagramConfigInterpreter(descriptor.provider), false)
+			}
+			if(lazyBehavior != null)
+				addBehavior(lazyBehavior)
 		}
 		addBehavior(new OpenElementInEditorBehavior(this))
 	}

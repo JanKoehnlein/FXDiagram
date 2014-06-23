@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
-import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
@@ -30,7 +30,7 @@ public class CubeChooser extends AbstractChooser {
   
   private double maxWidth;
   
-  public CubeChooser(final XNode host, final Pos layoutPosition) {
+  public CubeChooser(final XNode host, final Side layoutPosition) {
     super(host, layoutPosition, true);
   }
   

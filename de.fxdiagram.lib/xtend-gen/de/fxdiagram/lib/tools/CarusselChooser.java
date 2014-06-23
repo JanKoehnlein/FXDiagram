@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.Effect;
@@ -36,7 +36,7 @@ public class CarusselChooser extends AbstractChooser {
   
   private double radius;
   
-  public CarusselChooser(final XNode host, final Pos layoutPosition) {
+  public CarusselChooser(final XNode host, final Side layoutPosition) {
     super(host, layoutPosition, true);
     InnerShadow _innerShadow = new InnerShadow();
     this.currentNodeEffect = _innerShadow;

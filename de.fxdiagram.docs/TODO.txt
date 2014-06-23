@@ -2,6 +2,9 @@ TODO
 - persistence: 
   - revise image cache
   - XDiagram needs a hook like createNode
+- remove rapid buttons on node remove
+- fix layout of rapid buttons  
+- placement of new nodes after choosing
     
 BUGS
 - player.seek doesn't work
@@ -25,6 +28,7 @@ MINOR
 - allow different anchors for faces of flipNodes 
  
 DONE 
+- fix enablement of rapid buttons in examples
 - save nestedDiagrams 
 - save all diagrams
 - properly calculate existing edges

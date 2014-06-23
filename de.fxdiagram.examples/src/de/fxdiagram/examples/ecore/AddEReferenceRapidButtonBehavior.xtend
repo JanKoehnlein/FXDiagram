@@ -2,9 +2,10 @@ package de.fxdiagram.examples.ecore
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
-import de.fxdiagram.core.XRapidButton
 import de.fxdiagram.core.anchors.DiamondArrowHead
 import de.fxdiagram.core.anchors.LineArrowHead
+import de.fxdiagram.lib.buttons.RapidButton
+import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
 import de.fxdiagram.lib.tools.CarusselChooser
 import java.util.Set
@@ -14,7 +15,6 @@ import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.XRapidButtonAction
 
 class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBehavior<EClassNode, EReference, EReferenceDescriptor> {
 	
@@ -38,8 +38,8 @@ class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 		host.root.getDomainObjectProvider(EcoreDomainObjectProvider)
 	}
 
-	override protected createChooser(XRapidButton button, Set<EReferenceDescriptor> availableChoiceKeys, Set<EReferenceDescriptor> unavailableChoiceKeys) {
-		val chooser = new CarusselChooser(host, button.chooserPosition)
+	override protected createChooser(RapidButton button, Set<EReferenceDescriptor> availableChoiceKeys, Set<EReferenceDescriptor> unavailableChoiceKeys) {
+		val chooser = new CarusselChooser(host, button.position)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)
 		]
@@ -70,9 +70,9 @@ class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 		chooser
 	}
 	
-	override protected createButtons(XRapidButtonAction addConnectionAction) {
-		#[	new XRapidButton(host, 0, 0.5, getArrowButton(LEFT, 'Discover references'), addConnectionAction),
-			new XRapidButton(host, 1, 0.5, getArrowButton(RIGHT, 'Discover references'), addConnectionAction) ]
+	override protected createButtons(RapidButtonAction addConnectionAction) {
+		#[	new RapidButton(host, LEFT, getArrowButton(LEFT, 'Discover references'), addConnectionAction),
+			new RapidButton(host, RIGHT, getArrowButton(RIGHT, 'Discover references'), addConnectionAction) ]
 	}
 }
 

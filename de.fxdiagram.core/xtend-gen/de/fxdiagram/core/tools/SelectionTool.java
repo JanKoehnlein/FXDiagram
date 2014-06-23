@@ -2,14 +2,15 @@ package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.HeadsUpDisplay;
+import de.fxdiagram.core.XButton;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
-import de.fxdiagram.core.XRapidButton;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
+import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.SoftTooltip;
@@ -68,8 +69,8 @@ public class SelectionTool implements XDiagramTool {
           };
           SelectionTool.this.deselect(selection, _function);
         } else {
-          XRapidButton _targetButton = CoreExtensions.getTargetButton(event);
-          if ((!(_targetButton instanceof XRapidButton))) {
+          XButton _targetButton = ButtonExtensions.getTargetButton(event);
+          if ((!(_targetButton instanceof XButton))) {
             final XShape targetShape = CoreExtensions.getTargetShape(event);
             boolean _isSelectable = false;
             if (targetShape!=null) {

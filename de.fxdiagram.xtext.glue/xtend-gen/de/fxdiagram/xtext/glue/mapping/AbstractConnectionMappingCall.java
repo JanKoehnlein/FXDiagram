@@ -1,19 +1,27 @@
 package de.fxdiagram.xtext.glue.mapping;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
+import javafx.geometry.Side;
+import javafx.scene.Node;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
 public abstract class AbstractConnectionMappingCall<T extends Object, ARG extends Object> implements MappingCall<T, ARG> {
-  private boolean lazy = false;
+  private Function1<? super Side, ? extends Node> imageFactory;
   
   public boolean isLazy() {
-    return this.lazy;
+    return (!Objects.equal(this.imageFactory, null));
   }
   
-  public boolean makeLazy() {
-    return this.lazy = true;
+  public Function1<? super Side, ? extends Node> makeLazy(final Function1<? super Side, ? extends Node> imageFactory) {
+    return this.imageFactory = imageFactory;
+  }
+  
+  public Node getImage(final Side side) {
+    return this.imageFactory.apply(side);
   }
   
   private String _role;

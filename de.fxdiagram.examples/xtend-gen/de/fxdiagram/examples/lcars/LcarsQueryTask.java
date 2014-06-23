@@ -20,7 +20,7 @@ import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -52,7 +52,7 @@ public class LcarsQueryTask extends Task<Void> {
       final LcarsConnectionDescriptor connectionDescriptor = modelProvider.createLcarsConnectionDescriptor(this.fieldName);
       final List<DBObject> siblings = modelProvider.query(this.fieldName, this.fieldValue);
       final LcarsNode lcarsNode = this.host.getLcarsNode();
-      final CoverFlowChooser chooser = new CoverFlowChooser(lcarsNode, Pos.BOTTOM_CENTER);
+      final CoverFlowChooser chooser = new CoverFlowChooser(lcarsNode, Side.BOTTOM);
       chooser.setConnectionProvider(this.connectionProvider);
       LcarsNode _lcarsNode = this.host.getLcarsNode();
       ObservableList<XConnection> _incomingConnections = _lcarsNode.getIncomingConnections();

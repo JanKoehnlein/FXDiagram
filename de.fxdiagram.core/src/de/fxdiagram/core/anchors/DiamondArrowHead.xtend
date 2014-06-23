@@ -15,7 +15,9 @@ class DiamondArrowHead extends ArrowHead {
 	new(XConnection connection, double width, double height, 
 		Paint stroke, Paint fill, boolean isSource) {
 		super(connection, width, height, stroke, isSource)
-		this.fillProperty.bind(fillProperty)
+		if(fill != null)
+			this.fill = fill
+
 	}
 	
 	new(XConnection connection, boolean isSource) {

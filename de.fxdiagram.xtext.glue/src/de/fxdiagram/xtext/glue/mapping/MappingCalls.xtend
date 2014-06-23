@@ -1,14 +1,28 @@
 package de.fxdiagram.xtext.glue.mapping
 
+import javafx.scene.Node
+import javafx.geometry.Side
+
 interface MappingCall<T, ARG> {
 	def AbstractMapping<T> getMapping()
 }
 
 abstract class AbstractConnectionMappingCall<T, ARG> implements MappingCall<T, ARG>{
-	boolean lazy = false
-	def isLazy() { lazy }
-	def makeLazy() { lazy = true } 
+
+	(Side)=>Node imageFactory
+
+	def isLazy() { imageFactory != null }
+
+	def makeLazy((Side)=>Node imageFactory) {
+		this.imageFactory = imageFactory
+	}
+	
+	def getImage(Side side) {
+		imageFactory.apply(side)
+	} 
+
 	@Property String role
+
 	def ConnectionMapping<T> getConnectionMapping()
 	
 	override getMapping() {
