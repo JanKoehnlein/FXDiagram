@@ -25,12 +25,25 @@ class DemoCampSummarySlides extends OpenableDiagramNode {
 				stackPane.children += createText('Conclusion', 100)
 			]
 			slides += createSlideWithText('Conclusion 2', '''
-					Focus on users
-					not on developers.
+					Diagram frameworks
+					don't help when you want to build
+					user-centric editors.
 				''', 72)
 			slides += createSlideWithText('Conclusion 3', '''
-					Take back control and
-					start programming again.
+					Use
+					a state-of-the-art graphics engine
+					combined with a 
+					powerful programming language...
+				''', 72)
+			slides += createSlideWithText('Conclusion 4', '''
+					...to take back the control
+					over
+					quality and usability...
+				''', 72)
+			slides += createSlideWithText('Conclusion 5', '''
+					...and build diagram editors
+					that really make 
+					a dent in the universe.
 				''', 72)
 			slides += createSlide('Credits') => [
 				stackPane.children += new VBox => [

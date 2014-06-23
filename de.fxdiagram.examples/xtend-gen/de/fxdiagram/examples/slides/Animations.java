@@ -356,7 +356,7 @@ public class Animations {
     return _xblockexpression;
   }
   
-  public static ParallelTransition orbit(final Node creature, final double radiusX, final double radiusY) {
+  public static ParallelTransition orbit(final Node creature, final double radiusX, final double radiusY, final Duration cycleTime, final double initialAngle) {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
@@ -365,13 +365,17 @@ public class Animations {
         final Procedure1<RotateTransition> _function = new Procedure1<RotateTransition>() {
           public void apply(final RotateTransition it) {
             it.setNode(creature);
-            it.setFromAngle(0);
-            it.setToAngle(360);
+            it.setFromAngle(initialAngle);
+            it.setToAngle((initialAngle + 360));
             Point3D _point3D = new Point3D(0, 1, 0);
             it.setAxis(_point3D);
             it.setCycleCount((-1));
-            Duration _seconds = DurationExtensions.seconds(2);
+            Duration _seconds = DurationExtensions.seconds(5);
             it.setDuration(_seconds);
+            double _random = Math.random();
+            Duration _seconds_1 = DurationExtensions.seconds(5);
+            Duration _multiply = DurationExtensions.operator_multiply(_random, _seconds_1);
+            it.setDelay(_multiply);
             it.setInterpolator(Interpolator.LINEAR);
           }
         };
@@ -448,8 +452,10 @@ public class Animations {
             };
             Path _doubleArrow = ObjectExtensions.<Path>operator_doubleArrow(_path, _function);
             it.setPath(_doubleArrow);
-            Duration _seconds = DurationExtensions.seconds(30);
-            it.setDuration(_seconds);
+            it.setDuration(cycleTime);
+            Duration _multiply = DurationExtensions.operator_multiply(cycleTime, initialAngle);
+            Duration _divide = DurationExtensions.operator_divide(_multiply, 360.0);
+            it.setDelay(_divide);
             it.setInterpolator(Interpolator.LINEAR);
             it.setCycleCount((-1));
           }
@@ -482,46 +488,7 @@ public class Animations {
     return ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition, _function);
   }
   
-  public static SequentialTransition warp(final Node creature, final double distance) {
-    SequentialTransition _sequentialTransition = new SequentialTransition();
-    final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-      public void apply(final SequentialTransition it) {
-        ObservableList<Animation> _children = it.getChildren();
-        SequentialTransition _warpOut = Animations.warpOut(creature, distance);
-        final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-          public void apply(final SequentialTransition it) {
-            Duration _seconds = DurationExtensions.seconds(2);
-            double _random = Math.random();
-            Duration _seconds_1 = DurationExtensions.seconds(2);
-            Duration _multiply = DurationExtensions.operator_multiply(_random, _seconds_1);
-            Duration _plus = DurationExtensions.operator_plus(_seconds, _multiply);
-            it.setDelay(_plus);
-          }
-        };
-        SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_warpOut, _function);
-        _children.add(_doubleArrow);
-        ObservableList<Animation> _children_1 = it.getChildren();
-        SequentialTransition _warpIn = Animations.warpIn(creature, (-distance));
-        final Procedure1<SequentialTransition> _function_1 = new Procedure1<SequentialTransition>() {
-          public void apply(final SequentialTransition it) {
-            Duration _seconds = DurationExtensions.seconds(4);
-            double _random = Math.random();
-            Duration _seconds_1 = DurationExtensions.seconds(2);
-            Duration _multiply = DurationExtensions.operator_multiply(_random, _seconds_1);
-            Duration _plus = DurationExtensions.operator_plus(_seconds, _multiply);
-            it.setDelay(_plus);
-          }
-        };
-        SequentialTransition _doubleArrow_1 = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_warpIn, _function_1);
-        _children_1.add(_doubleArrow_1);
-        it.setCycleCount((-1));
-        it.play();
-      }
-    };
-    return ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
-  }
-  
-  protected static SequentialTransition warpOut(final Node creature, final double stepSize) {
+  public static SequentialTransition warpOut(final Node creature, final double stepSize) {
     SequentialTransition _xblockexpression = null;
     {
       double _random = Math.random();
@@ -645,8 +612,10 @@ public class Animations {
           ScaleTransition _scaleTransition = new ScaleTransition();
           final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
             public void apply(final ScaleTransition it) {
-              it.setToX(1.8);
-              it.setToY(0.3);
+              it.setFromX(1.8);
+              it.setToX(1);
+              it.setFromY(0.3);
+              it.setToY(1);
               Duration _seconds = DurationExtensions.seconds(0);
               it.setDuration(_seconds);
             }
@@ -658,20 +627,34 @@ public class Animations {
           final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
             public void apply(final TranslateTransition it) {
               it.setNode(creature);
+              double _layoutX = creature.getLayoutX();
               double _rotate = creature.getRotate();
               double _radians = Math.toRadians(_rotate);
               double _cos = Math.cos(_radians);
               double _multiply = (stepSize * _cos);
-              it.setByX(_multiply);
+              double _minus = (_layoutX - _multiply);
+              it.setFromX(_minus);
+              double _layoutY = creature.getLayoutY();
               double _rotate_1 = creature.getRotate();
               double _radians_1 = Math.toRadians(_rotate_1);
               double _sin = Math.sin(_radians_1);
               double _multiply_1 = (stepSize * _sin);
-              it.setByY(_multiply_1);
-              Duration _multiply_2 = DurationExtensions.operator_multiply(0.2, stepDuration);
-              it.setDuration(_multiply_2);
-              Duration _multiply_3 = DurationExtensions.operator_multiply(0.2, stepDuration);
-              it.setDelay(_multiply_3);
+              double _minus_1 = (_layoutY - _multiply_1);
+              it.setFromY(_minus_1);
+              double _rotate_2 = creature.getRotate();
+              double _radians_2 = Math.toRadians(_rotate_2);
+              double _cos_1 = Math.cos(_radians_2);
+              double _multiply_2 = (stepSize * _cos_1);
+              it.setByX(_multiply_2);
+              double _rotate_3 = creature.getRotate();
+              double _radians_3 = Math.toRadians(_rotate_3);
+              double _sin_1 = Math.sin(_radians_3);
+              double _multiply_3 = (stepSize * _sin_1);
+              it.setByY(_multiply_3);
+              Duration _multiply_4 = DurationExtensions.operator_multiply(0.2, stepDuration);
+              it.setDuration(_multiply_4);
+              Duration _multiply_5 = DurationExtensions.operator_multiply(0.2, stepDuration);
+              it.setDelay(_multiply_5);
             }
           };
           TranslateTransition _doubleArrow_1 = ObjectExtensions.<TranslateTransition>operator_doubleArrow(_translateTransition, _function_1);

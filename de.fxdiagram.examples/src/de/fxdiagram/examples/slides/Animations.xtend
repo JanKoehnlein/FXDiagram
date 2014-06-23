@@ -22,6 +22,7 @@ import javafx.animation.PathTransition
 import javafx.scene.shape.Path
 import javafx.scene.shape.CubicCurveTo
 import javafx.scene.shape.MoveTo
+import javafx.util.Duration
 
 class Animations {
 	
@@ -160,15 +161,16 @@ class Animations {
 		]
 	}
 	
-	static def orbit(Node creature, double radiusX, double radiusY) {
+	static def orbit(Node creature, double radiusX, double radiusY, Duration cycleTime, double initialAngle) {
 		new ParallelTransition => [
 			children += new RotateTransition => [
 				node = creature
-				fromAngle = 0
-				toAngle = 360
+				fromAngle = initialAngle
+				toAngle = initialAngle + 360
 				axis = new Point3D(0,1,0)
 				cycleCount = -1
-				duration = 2.seconds
+				duration = 5.seconds
+				delay = random * 5.seconds
 				interpolator = Interpolator.LINEAR
 			]
 			children += new PathTransition => [
@@ -208,7 +210,8 @@ class Animations {
 						y = 0 
 					]
 				]
-				duration = 30.seconds
+				duration = cycleTime
+				delay = cycleTime * initialAngle / 360.0
 				interpolator = Interpolator.LINEAR
 				cycleCount = -1 
 			]
@@ -230,21 +233,7 @@ class Animations {
 		]
 	}
 
-	static def warp(Node creature, double distance) {
-		new SequentialTransition => [
-		 	children += warpOut(creature, distance) => [
-		 		delay = 2.seconds + random * 2.seconds
-		 	]
-		 	children += warpIn(creature, -distance) => [
-		 		delay = 4.seconds + random * 2.seconds
-		 	]
-		 	cycleCount = -1
-			play
-		]
-
-	}
-
-	protected static def warpOut(Node creature, double stepSize) {
+	public static def warpOut(Node creature, double stepSize) {
 		val stepDuration = random * 300.millis + 600.millis
 		new SequentialTransition => [
 			children += new ParallelTransition => [
@@ -284,12 +273,16 @@ class Animations {
 		val stepDuration = random * 300.millis + 600.millis
 		new SequentialTransition => [
 			children += new ScaleTransition => [
-				toX = 1.8
-				toY = 0.3
+				fromX = 1.8
+				toX = 1
+				fromY = 0.3
+				toY = 1
 				duration = 0.seconds
 			]
 			children += new TranslateTransition => [
 				node = creature
+				fromX = creature.layoutX - stepSize * cos(creature.rotate.toRadians)
+				fromY = creature.layoutY - stepSize * sin(creature.rotate.toRadians)
 				byX = stepSize * cos(creature.rotate.toRadians)
 				byY = stepSize * sin(creature.rotate.toRadians)
 				duration = 0.2 * stepDuration

@@ -45,21 +45,47 @@ public class DemoCampSummarySlides extends OpenableDiagramNode {
         _slides.add(_doubleArrow);
         ObservableList<Slide> _slides_1 = it.getSlides();
         StringConcatenation _builder = new StringConcatenation();
-        _builder.append("Focus on users");
+        _builder.append("Diagram frameworks");
         _builder.newLine();
-        _builder.append("not on developers.");
+        _builder.append("don\'t help when you want to build");
+        _builder.newLine();
+        _builder.append("user-centric editors.");
         _builder.newLine();
         Slide _createSlideWithText = DemoCampSlideFactory.createSlideWithText("Conclusion 2", _builder.toString(), 72);
         _slides_1.add(_createSlideWithText);
         ObservableList<Slide> _slides_2 = it.getSlides();
         StringConcatenation _builder_1 = new StringConcatenation();
-        _builder_1.append("Take back control and");
+        _builder_1.append("Use");
         _builder_1.newLine();
-        _builder_1.append("start programming again.");
+        _builder_1.append("a state-of-the-art graphics engine");
+        _builder_1.newLine();
+        _builder_1.append("combined with a ");
+        _builder_1.newLine();
+        _builder_1.append("powerful programming language...");
         _builder_1.newLine();
         Slide _createSlideWithText_1 = DemoCampSlideFactory.createSlideWithText("Conclusion 3", _builder_1.toString(), 72);
         _slides_2.add(_createSlideWithText_1);
         ObservableList<Slide> _slides_3 = it.getSlides();
+        StringConcatenation _builder_2 = new StringConcatenation();
+        _builder_2.append("...to take back the control");
+        _builder_2.newLine();
+        _builder_2.append("over");
+        _builder_2.newLine();
+        _builder_2.append("quality and usability...");
+        _builder_2.newLine();
+        Slide _createSlideWithText_2 = DemoCampSlideFactory.createSlideWithText("Conclusion 4", _builder_2.toString(), 72);
+        _slides_3.add(_createSlideWithText_2);
+        ObservableList<Slide> _slides_4 = it.getSlides();
+        StringConcatenation _builder_3 = new StringConcatenation();
+        _builder_3.append("...and build diagram editors");
+        _builder_3.newLine();
+        _builder_3.append("that really make ");
+        _builder_3.newLine();
+        _builder_3.append("a dent in the universe.");
+        _builder_3.newLine();
+        Slide _createSlideWithText_3 = DemoCampSlideFactory.createSlideWithText("Conclusion 5", _builder_3.toString(), 72);
+        _slides_4.add(_createSlideWithText_3);
+        ObservableList<Slide> _slides_5 = it.getSlides();
         Slide _createSlide_1 = DemoCampSlideFactory.createSlide("Credits");
         final Procedure1<Slide> _function_1 = new Procedure1<Slide>() {
           public void apply(final Slide it) {
@@ -104,7 +130,7 @@ public class DemoCampSummarySlides extends OpenableDiagramNode {
           }
         };
         Slide _doubleArrow_1 = ObjectExtensions.<Slide>operator_doubleArrow(_createSlide_1, _function_1);
-        _slides_3.add(_doubleArrow_1);
+        _slides_5.add(_doubleArrow_1);
       }
     };
     SlideDiagram _doubleArrow = ObjectExtensions.<SlideDiagram>operator_doubleArrow(_slideDiagram, _function);
