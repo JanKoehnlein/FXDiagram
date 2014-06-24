@@ -1,10 +1,8 @@
 package de.fxdiagram.eclipse;
 
 import de.fxdiagram.examples.Demo;
-import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import javafx.embed.swt.FXCanvas;
 import javafx.scene.Scene;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
@@ -12,20 +10,16 @@ import org.eclipse.ui.part.ViewPart;
 public class FXDiagramViewPart extends ViewPart {
   private FXCanvas canvas;
   
-  private SwtToFXGestureConverter gestureConverter;
+  private /* SwtToFXGestureConverter */Object gestureConverter;
   
   public void createPartControl(final Composite parent) {
-    FXCanvas _fXCanvas = new FXCanvas(parent, SWT.NONE);
-    this.canvas = _fXCanvas;
-    SwtToFXGestureConverter _swtToFXGestureConverter = new SwtToFXGestureConverter(this.canvas);
-    this.gestureConverter = _swtToFXGestureConverter;
-    Scene _createFxScene = this.createFxScene();
-    this.canvas.setScene(_createFxScene);
+    throw new Error("Unresolved compilation problems:"
+      + "\nSwtToFXGestureConverter cannot be resolved.");
   }
   
   public void dispose() {
-    this.gestureConverter.dispose();
-    super.dispose();
+    throw new Error("Unresolved compilation problems:"
+      + "\ndispose cannot be resolved");
   }
   
   protected Scene createFxScene() {

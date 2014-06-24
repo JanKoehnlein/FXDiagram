@@ -58,48 +58,28 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
     return new BaseNode<T>(descriptor);
   }
   
-  public <U extends Object> ConnectionMappingCall<U, T> outConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
-    ConnectionMappingCall<U, T> _xblockexpression = null;
-    {
-      final ConnectionMappingCall<U, T> call = new ConnectionMappingCall<U, T>(selector, connectionMapping);
-      this.outgoing.add(call);
-      _xblockexpression = call;
-    }
-    return _xblockexpression;
+  public <U extends Object> ConnectionMappingCall<?, T> outConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor ConnectionMappingCall() is not applicable for the arguments ((T)=>U,ConnectionMapping<U>)");
   }
   
-  public <U extends Object> ConnectionMappingCall<U, T> inConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
-    ConnectionMappingCall<U, T> _xblockexpression = null;
-    {
-      final ConnectionMappingCall<U, T> call = new ConnectionMappingCall<U, T>(selector, connectionMapping);
-      this.incoming.add(call);
-      _xblockexpression = call;
-    }
-    return _xblockexpression;
+  public <U extends Object> ConnectionMappingCall<?, T> inConnectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor ConnectionMappingCall() is not applicable for the arguments ((T)=>U,ConnectionMapping<U>)");
   }
   
   public <U extends Object> DiagramMappingCall<?, T> nestedDiagramFor(final DiagramMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
-    DiagramMappingCall<U, T> _diagramMappingCall = new DiagramMappingCall<U, T>(selector, connectionMapping);
-    return this.nestedDiagram = _diagramMappingCall;
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor DiagramMappingCall() is not applicable for the arguments ((T)=>U,DiagramMapping<U>)");
   }
   
-  public <U extends Object> MultiConnectionMappingCall<U, T> outConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
-    MultiConnectionMappingCall<U, T> _xblockexpression = null;
-    {
-      final MultiConnectionMappingCall<U, T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
-      this.outgoing.add(call);
-      _xblockexpression = call;
-    }
-    return _xblockexpression;
+  public <U extends Object> MultiConnectionMappingCall<?, T> outConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor MultiConnectionMappingCall() is not applicable for the arguments ((T)=>Iterable<? extends U>,ConnectionMapping<U>)");
   }
   
-  public <U extends Object> MultiConnectionMappingCall<U, T> inConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
-    MultiConnectionMappingCall<U, T> _xblockexpression = null;
-    {
-      final MultiConnectionMappingCall<U, T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
-      this.incoming.add(call);
-      _xblockexpression = call;
-    }
-    return _xblockexpression;
+  public <U extends Object> MultiConnectionMappingCall<?, T> inConnectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor MultiConnectionMappingCall() is not applicable for the arguments ((T)=>Iterable<? extends U>,ConnectionMapping<U>)");
   }
 }

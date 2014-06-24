@@ -23,4 +23,3 @@ class ActiveAnnotationsTest {
 	@FxProperty(readOnly) ObservableList<Object> myReadOnlyList = FXCollections.observableArrayList
 } 
 
- 

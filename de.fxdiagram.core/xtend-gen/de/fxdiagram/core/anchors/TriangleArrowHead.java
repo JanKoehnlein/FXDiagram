@@ -6,7 +6,6 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -21,7 +20,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @ModelNode({ "fill" })
 @SuppressWarnings("all")
-public class TriangleArrowHead extends ArrowHead implements XModelProvider {
+public class TriangleArrowHead extends ArrowHead {
   public TriangleArrowHead(final XConnection connection, final double width, final double height, final Paint stroke, final Paint fill, final boolean isSource) {
     super(connection, width, height, stroke, isSource);
     boolean _notEquals = (!Objects.equal(fill, null));
@@ -85,6 +84,7 @@ public class TriangleArrowHead extends ArrowHead implements XModelProvider {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    super.populate(modelElement);
     modelElement.addProperty(fillProperty, Paint.class);
   }
   

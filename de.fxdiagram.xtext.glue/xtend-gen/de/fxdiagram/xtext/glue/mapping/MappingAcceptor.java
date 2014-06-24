@@ -1,13 +1,7 @@
 package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
-import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
-import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
-import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
-import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
-import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -26,27 +20,10 @@ public class MappingAcceptor<ARG extends Object> {
   }
   
   public <T extends Object> boolean add(final AbstractMapping<T> mapping, final Function1<? super ARG, ? extends T> selector) {
-    MappingCall<T, ARG> _switchResult = null;
-    boolean _matched = false;
-    if (!_matched) {
-      if (mapping instanceof NodeMapping) {
-        _matched=true;
-        _switchResult = new NodeMappingCall<T, ARG>(selector, ((NodeMapping<T>)mapping));
-      }
-    }
-    if (!_matched) {
-      if (mapping instanceof DiagramMapping) {
-        _matched=true;
-        _switchResult = new DiagramMappingCall<T, ARG>(selector, ((DiagramMapping<T>)mapping));
-      }
-    }
-    if (!_matched) {
-      if (mapping instanceof ConnectionMapping) {
-        _matched=true;
-        _switchResult = new ConnectionMappingCall<T, ARG>(selector, ((ConnectionMapping<T>)mapping));
-      }
-    }
-    return this.mappingCalls.add(_switchResult);
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor NodeMappingCall() is not applicable for the arguments ((ARG)=>T,NodeMapping<T>)"
+      + "\nInvalid number of arguments. The constructor DiagramMappingCall() is not applicable for the arguments ((ARG)=>T,DiagramMapping<T>)"
+      + "\nInvalid number of arguments. The constructor ConnectionMappingCall() is not applicable for the arguments ((ARG)=>T,ConnectionMapping<T>)");
   }
   
   public List<MappingCall<?, ARG>> getMappingCalls() {

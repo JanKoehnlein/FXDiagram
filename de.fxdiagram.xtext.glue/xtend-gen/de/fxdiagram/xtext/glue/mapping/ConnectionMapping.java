@@ -42,12 +42,12 @@ public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
   }
   
   public <U extends Object> NodeMappingCall<?, T> source(final NodeMapping<U> nodeMapping, final Function1<? super T, ? extends U> selector) {
-    NodeMappingCall<U, T> _nodeMappingCall = new NodeMappingCall<U, T>(selector, nodeMapping);
-    return this.source = _nodeMappingCall;
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor NodeMappingCall() is not applicable for the arguments ((T)=>U,NodeMapping<U>)");
   }
   
   public <U extends Object> NodeMappingCall<?, T> target(final NodeMapping<U> nodeMapping, final Function1<? super T, ? extends U> selector) {
-    NodeMappingCall<U, T> _nodeMappingCall = new NodeMappingCall<U, T>(selector, nodeMapping);
-    return this.target = _nodeMappingCall;
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor NodeMappingCall() is not applicable for the arguments ((T)=>U,NodeMapping<U>)");
   }
 }

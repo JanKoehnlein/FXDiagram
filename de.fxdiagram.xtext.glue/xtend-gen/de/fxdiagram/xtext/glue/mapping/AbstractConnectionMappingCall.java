@@ -16,15 +16,8 @@ public abstract class AbstractConnectionMappingCall<T extends Object, ARG extend
     return this.lazy = true;
   }
   
-  private String _role;
-  
-  public String getRole() {
-    return this._role;
-  }
-  
-  public void setRole(final String role) {
-    this._role = role;
-  }
+  /* @Property
+   */private String role;
   
   public abstract ConnectionMapping<T> getConnectionMapping();
   

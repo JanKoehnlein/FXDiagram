@@ -29,12 +29,8 @@ public class LazyConnectionMappingBehavior<MODEL extends Object, ARG extends Obj
   private XRapidButtonAction action;
   
   public LazyConnectionMappingBehavior(final XNode host, final AbstractConnectionMappingCall<MODEL, ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
-    super(host);
-    String _role = mappingCall.getRole();
-    String _plus = ("Add " + _role);
-    this.tooltip = _plus;
-    XRapidButtonAction _createAction = this.createAction(mappingCall, configInterpreter, hostIsSource);
-    this.action = _createAction;
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe field role is not visible");
   }
   
   public Class<? extends Behavior> getBehaviorKey() {

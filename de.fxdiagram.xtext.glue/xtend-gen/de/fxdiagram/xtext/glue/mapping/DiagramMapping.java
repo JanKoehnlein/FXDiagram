@@ -6,11 +6,7 @@ import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
-import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
-import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
-import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -49,22 +45,22 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
   }
   
   public <U extends Object> boolean nodeFor(final NodeMapping<U> nodeMapping, final Function1<? super T, ? extends U> selector) {
-    NodeMappingCall<U, T> _nodeMappingCall = new NodeMappingCall<U, T>(selector, nodeMapping);
-    return this.nodes.add(_nodeMappingCall);
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor NodeMappingCall() is not applicable for the arguments ((T)=>U,NodeMapping<U>)");
   }
   
   public <U extends Object> boolean connectionFor(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends U> selector) {
-    ConnectionMappingCall<U, T> _connectionMappingCall = new ConnectionMappingCall<U, T>(selector, connectionMapping);
-    return this.connections.add(_connectionMappingCall);
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor ConnectionMappingCall() is not applicable for the arguments ((T)=>U,ConnectionMapping<U>)");
   }
   
   public <U extends Object> boolean nodeForEach(final NodeMapping<U> nodeMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
-    MultiNodeMappingCall<U, T> _multiNodeMappingCall = new MultiNodeMappingCall<U, T>(selector, nodeMapping);
-    return this.nodes.add(_multiNodeMappingCall);
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor MultiNodeMappingCall() is not applicable for the arguments ((T)=>Iterable<? extends U>,NodeMapping<U>)");
   }
   
   public <U extends Object> boolean connectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
-    MultiConnectionMappingCall<U, T> _multiConnectionMappingCall = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
-    return this.connections.add(_multiConnectionMappingCall);
+    throw new Error("Unresolved compilation problems:"
+      + "\nInvalid number of arguments. The constructor MultiConnectionMappingCall() is not applicable for the arguments ((T)=>Iterable<? extends U>,ConnectionMapping<U>)");
   }
 }
