@@ -23,7 +23,7 @@
          version="0.0.0"
          unpack="false"/>
 
-   <fragment
+   <plugin
          id="de.fxdiagram.xtext.domainmodel"
          download-size="0"
          install-size="0"
@@ -31,7 +31,7 @@
          fragment="true"
          unpack="false"/>
 
-   <fragment
+   <plugin
          id="de.fxdiagram.xtext.fowlerdsl"
          download-size="0"
          install-size="0"
