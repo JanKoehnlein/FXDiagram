@@ -166,9 +166,9 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
     if (((ClassDeclaration) _type)!=null) {
       Type _type_1 = null;
       if (_extendedClass!=null) {
-        _type=_extendedClass.getType();
+        _type_1=_extendedClass.getType();
       }
-      _hierarchy=this.getHierarchy(((ClassDeclaration) _type));
+      _hierarchy=this.getHierarchy(((ClassDeclaration) _type_1));
     }
     if (_hierarchy != null) {
       _elvis = _hierarchy;

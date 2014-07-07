@@ -21,11 +21,25 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 public class InterpreterContext {
   protected XDiagram diagram;
   
-  /* @Property
-   */private boolean isIgnoreLazy;
+  private boolean _isIgnoreLazy;
   
-  /* @Property
-   */private boolean isNewDiagram;
+  public boolean isIsIgnoreLazy() {
+    return this._isIgnoreLazy;
+  }
+  
+  public void setIsIgnoreLazy(final boolean isIgnoreLazy) {
+    this._isIgnoreLazy = isIgnoreLazy;
+  }
+  
+  private boolean _isNewDiagram;
+  
+  public boolean isIsNewDiagram() {
+    return this._isNewDiagram;
+  }
+  
+  public void setIsNewDiagram(final boolean isNewDiagram) {
+    this._isNewDiagram = isNewDiagram;
+  }
   
   private List<XNode> addedNodes = CollectionLiterals.<XNode>newArrayList();
   
@@ -87,7 +101,8 @@ public class InterpreterContext {
   
   public boolean needsLayout() {
     boolean _or = false;
-    if (this.isNewDiagram) {
+    boolean _isIsNewDiagram = this.isIsNewDiagram();
+    if (_isIsNewDiagram) {
       _or = true;
     } else {
       int _size = this.addedNodes.size();

@@ -3,6 +3,7 @@ package de.fxdiagram.xtext.glue.shapes;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,5 +32,9 @@ public class BaseConnection<T extends Object> extends XConnection {
   protected XtextDomainObjectDescriptor<T> getDescriptor() {
     DomainObjectDescriptor _domainObject = this.getDomainObject();
     return ((XtextDomainObjectDescriptor<T>) _domainObject);
+  }
+  
+  public void populate(final ModelElementImpl modelElement) {
+    super.populate(modelElement);
   }
 }

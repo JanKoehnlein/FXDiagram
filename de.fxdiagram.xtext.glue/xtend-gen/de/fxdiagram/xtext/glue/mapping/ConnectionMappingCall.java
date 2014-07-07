@@ -2,12 +2,67 @@ package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
+import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
-/* @Data
- */@SuppressWarnings("all")
+@Data
+@SuppressWarnings("all")
 public class ConnectionMappingCall<T extends Object, ARG extends Object> extends AbstractConnectionMappingCall<T, ARG> {
-  private Function1<? super ARG, ? extends T> selector;
+  private final Function1<? super ARG, ? extends T> _selector;
   
-  private ConnectionMapping<T> connectionMapping;
+  public Function1<? super ARG, ? extends T> getSelector() {
+    return this._selector;
+  }
+  
+  private final ConnectionMapping<T> _connectionMapping;
+  
+  public ConnectionMapping<T> getConnectionMapping() {
+    return this._connectionMapping;
+  }
+  
+  public ConnectionMappingCall(final Function1<? super ARG, ? extends T> selector, final ConnectionMapping<T> connectionMapping) {
+    super();
+    this._selector = selector;
+    this._connectionMapping = connectionMapping;
+  }
+  
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((this._selector== null) ? 0 : this._selector.hashCode());
+    result = prime * result + ((this._connectionMapping== null) ? 0 : this._connectionMapping.hashCode());
+    return result;
+  }
+  
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    if (!super.equals(obj))
+      return false;
+    ConnectionMappingCall other = (ConnectionMappingCall) obj;
+    if (this._selector == null) {
+      if (other._selector != null)
+        return false;
+    } else if (!this._selector.equals(other._selector))
+      return false;
+    if (this._connectionMapping == null) {
+      if (other._connectionMapping != null)
+        return false;
+    } else if (!this._connectionMapping.equals(other._connectionMapping))
+      return false;
+    return true;
+  }
+  
+  @Override
+  public String toString() {
+    String result = new ToStringHelper().toString(this);
+    return result;
+  }
 }

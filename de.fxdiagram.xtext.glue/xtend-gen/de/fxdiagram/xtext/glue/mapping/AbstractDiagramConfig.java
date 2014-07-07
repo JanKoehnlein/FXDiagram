@@ -7,6 +7,8 @@ import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @Logging
@@ -14,8 +16,15 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 public abstract class AbstractDiagramConfig implements XDiagramConfig {
   private Map<String, AbstractMapping<?>> mappings = CollectionLiterals.<String, AbstractMapping<?>>newHashMap();
   
-  /* @Property
-   */private String ID;
+  private String _ID;
+  
+  public String getID() {
+    return this._ID;
+  }
+  
+  public void setID(final String ID) {
+    this._ID = ID;
+  }
   
   public AbstractMapping<?> getMappingByID(final String mappingID) {
     return this.mappings.get(mappingID);
@@ -34,8 +43,23 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   }
   
   public <ARG extends Object> void addMapping(final AbstractMapping<ARG> mapping) {
-    throw new Error("Unresolved compilation problems:"
-      + "\nThe method or field LOG is undefined for the type AbstractDiagramConfig"
-      + "\nsevere cannot be resolved");
+    String _iD = mapping.getID();
+    boolean _containsKey = this.mappings.containsKey(_iD);
+    if (_containsKey) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("Duplicate mapping id=");
+      String _iD_1 = mapping.getID();
+      _builder.append(_iD_1, "");
+      _builder.append(" in ");
+      String _iD_2 = this.getID();
+      _builder.append(_iD_2, "");
+      AbstractDiagramConfig.LOG.severe(_builder.toString());
+    } else {
+      String _iD_3 = mapping.getID();
+      this.mappings.put(_iD_3, mapping);
+    }
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig");
+    ;
 }

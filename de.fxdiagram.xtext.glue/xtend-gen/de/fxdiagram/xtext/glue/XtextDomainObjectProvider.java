@@ -3,6 +3,7 @@ package de.fxdiagram.xtext.glue;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.glue.MappedEObjectHandle;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
@@ -32,5 +33,9 @@ public class XtextDomainObjectProvider implements DomainObjectProvider {
     MappedEObjectHandle<U> _mappedEObjectHandle = new MappedEObjectHandle<U>(((U) domainObject), ((AbstractMapping<U>) mapping));
     DomainObjectDescriptor _createDescriptor = this.createDescriptor(_mappedEObjectHandle);
     return ((XtextDomainObjectDescriptor<T>) _createDescriptor);
+  }
+  
+  public void populate(final ModelElementImpl modelElement) {
+    
   }
 }
