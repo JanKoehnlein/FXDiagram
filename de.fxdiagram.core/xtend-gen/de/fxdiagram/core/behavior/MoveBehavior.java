@@ -130,33 +130,36 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     Node _node_2 = _host_2.getNode();
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
-        boolean _or = false;
-        double _initialX = MoveBehavior.this.dragContext.getInitialX();
-        T _host = MoveBehavior.this.getHost();
-        double _layoutX = _host.getLayoutX();
-        boolean _notEquals = (_initialX != _layoutX);
+        boolean _notEquals = (!Objects.equal(MoveBehavior.this.dragContext, null));
         if (_notEquals) {
-          _or = true;
-        } else {
-          double _initialY = MoveBehavior.this.dragContext.getInitialY();
-          T _host_1 = MoveBehavior.this.getHost();
-          double _layoutY = _host_1.getLayoutY();
-          boolean _notEquals_1 = (_initialY != _layoutY);
-          _or = _notEquals_1;
-        }
-        if (_or) {
-          T _host_2 = MoveBehavior.this.getHost();
-          XRoot _root = CoreExtensions.getRoot(_host_2);
-          CommandStack _commandStack = _root.getCommandStack();
-          T _host_3 = MoveBehavior.this.getHost();
-          double _initialX_1 = MoveBehavior.this.dragContext.getInitialX();
-          double _initialY_1 = MoveBehavior.this.dragContext.getInitialY();
-          T _host_4 = MoveBehavior.this.getHost();
-          double _layoutX_1 = _host_4.getLayoutX();
-          T _host_5 = MoveBehavior.this.getHost();
-          double _layoutY_1 = _host_5.getLayoutY();
-          MoveCommand _moveCommand = new MoveCommand(_host_3, _initialX_1, _initialY_1, _layoutX_1, _layoutY_1);
-          _commandStack.execute(_moveCommand);
+          boolean _or = false;
+          double _initialX = MoveBehavior.this.dragContext.getInitialX();
+          T _host = MoveBehavior.this.getHost();
+          double _layoutX = _host.getLayoutX();
+          boolean _notEquals_1 = (_initialX != _layoutX);
+          if (_notEquals_1) {
+            _or = true;
+          } else {
+            double _initialY = MoveBehavior.this.dragContext.getInitialY();
+            T _host_1 = MoveBehavior.this.getHost();
+            double _layoutY = _host_1.getLayoutY();
+            boolean _notEquals_2 = (_initialY != _layoutY);
+            _or = _notEquals_2;
+          }
+          if (_or) {
+            T _host_2 = MoveBehavior.this.getHost();
+            XRoot _root = CoreExtensions.getRoot(_host_2);
+            CommandStack _commandStack = _root.getCommandStack();
+            T _host_3 = MoveBehavior.this.getHost();
+            double _initialX_1 = MoveBehavior.this.dragContext.getInitialX();
+            double _initialY_1 = MoveBehavior.this.dragContext.getInitialY();
+            T _host_4 = MoveBehavior.this.getHost();
+            double _layoutX_1 = _host_4.getLayoutX();
+            T _host_5 = MoveBehavior.this.getHost();
+            double _layoutY_1 = _host_5.getLayoutY();
+            MoveCommand _moveCommand = new MoveCommand(_host_3, _initialX_1, _initialY_1, _layoutX_1, _layoutY_1);
+            _commandStack.execute(_moveCommand);
+          }
         }
       }
     };
