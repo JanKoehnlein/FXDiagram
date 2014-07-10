@@ -22,12 +22,14 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			mouseDragged	
 		]
 		host.node.onMouseReleased = [
-			if(dragContext.initialX != host.layoutX || dragContext.initialY != host.layoutY) {
-				host.root.commandStack.execute(new MoveCommand(
-					host,
-					dragContext.initialX, dragContext.initialY,
-					host.layoutX, host.layoutY
-				))
+			if(dragContext != null) {
+				if(dragContext.initialX != host.layoutX || dragContext.initialY != host.layoutY) {
+					host.root.commandStack.execute(new MoveCommand(
+						host,
+						dragContext.initialX, dragContext.initialY,
+						host.layoutX, host.layoutY
+					))
+				}
 			}
 		]
 	}
