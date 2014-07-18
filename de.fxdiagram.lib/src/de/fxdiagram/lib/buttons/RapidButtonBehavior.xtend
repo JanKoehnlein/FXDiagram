@@ -89,6 +89,8 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 		allButtons.onMousePressed = [
 			allButtons.visible = false
 		]
+		allButtons.onMouseEntered = [ show ]
+		allButtons.onMouseExited = [ fade ]
 		pos2group.values.forEach[
 			layoutBoundsProperty.addListener [
 				p, o, n | 
