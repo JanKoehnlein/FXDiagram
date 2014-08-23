@@ -1,5 +1,7 @@
 package de.fxdiagram.core.viewport
 
+import org.eclipse.xtend.lib.annotations.Data
+
 @Data
 class ViewportMemento {
 	double translateX

@@ -6,7 +6,7 @@ import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import javafx.geometry.Side;
 import javafx.scene.Node;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
@@ -26,8 +26,8 @@ public abstract class AbstractConnectionMappingCall<T extends Object, ARG extend
     return this.imageFactory.apply(side);
   }
   
-  @Property
-  private String _role;
+  @Accessors
+  private String role;
   
   public abstract ConnectionMapping<T> getConnectionMapping();
   
@@ -37,10 +37,10 @@ public abstract class AbstractConnectionMappingCall<T extends Object, ARG extend
   
   @Pure
   public String getRole() {
-    return this._role;
+    return this.role;
   }
   
   public void setRole(final String role) {
-    this._role = role;
+    this.role = role;
   }
 }

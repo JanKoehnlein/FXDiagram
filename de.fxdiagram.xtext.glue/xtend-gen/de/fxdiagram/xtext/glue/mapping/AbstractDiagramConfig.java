@@ -8,7 +8,7 @@ import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Pure;
@@ -18,8 +18,8 @@ import org.eclipse.xtext.xbase.lib.Pure;
 public abstract class AbstractDiagramConfig implements XDiagramConfig {
   private Map<String, AbstractMapping<?>> mappings = CollectionLiterals.<String, AbstractMapping<?>>newHashMap();
   
-  @Property
-  private String _iD;
+  @Accessors
+  private String ID;
   
   public AbstractMapping<?> getMappingByID(final String mappingID) {
     return this.mappings.get(mappingID);
@@ -46,12 +46,11 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
       String _iD_1 = mapping.getID();
       _builder.append(_iD_1, "");
       _builder.append(" in ");
-      String _iD_2 = this.getID();
-      _builder.append(_iD_2, "");
+      _builder.append(this.ID, "");
       AbstractDiagramConfig.LOG.severe(_builder.toString());
     } else {
-      String _iD_3 = mapping.getID();
-      this.mappings.put(_iD_3, mapping);
+      String _iD_2 = mapping.getID();
+      this.mappings.put(_iD_2, mapping);
     }
   }
   
@@ -60,10 +59,10 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   
   @Pure
   public String getID() {
-    return this._iD;
+    return this.ID;
   }
   
   public void setID(final String ID) {
-    this._iD = ID;
+    this.ID = ID;
   }
 }

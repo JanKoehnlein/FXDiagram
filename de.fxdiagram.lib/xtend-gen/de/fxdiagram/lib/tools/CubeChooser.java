@@ -12,7 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
@@ -20,8 +20,8 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class CubeChooser extends AbstractChooser {
-  @Property
-  private double _spacing = 6.0;
+  @Accessors
+  private double spacing = 6.0;
   
   private double maxWidth;
   
@@ -43,8 +43,7 @@ public class CubeChooser extends AbstractChooser {
       }
     };
     Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
-    double _spacing = this.getSpacing();
-    double _plus = ((_fold).doubleValue() + _spacing);
+    double _plus = ((_fold).doubleValue() + this.spacing);
     this.maxWidth = _plus;
     final double angle = ((interpolatedPosition - ((int) interpolatedPosition)) * 90);
     ArrayList<XNode> _nodes_1 = this.getNodes();
@@ -131,10 +130,10 @@ public class CubeChooser extends AbstractChooser {
   
   @Pure
   public double getSpacing() {
-    return this._spacing;
+    return this.spacing;
   }
   
   public void setSpacing(final double spacing) {
-    this._spacing = spacing;
+    this.spacing = spacing;
   }
 }

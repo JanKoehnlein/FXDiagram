@@ -6,6 +6,7 @@ import javafx.geometry.Point3D
 import javafx.geometry.Side
 import javafx.scene.Node
 import javafx.scene.transform.Affine
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static java.lang.Math.*
 
@@ -13,7 +14,7 @@ import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
 class CubeChooser extends AbstractChooser {
 
-	@Property var double spacing = 6.0
+	@Accessors double spacing = 6.0
 
 	double maxWidth
 

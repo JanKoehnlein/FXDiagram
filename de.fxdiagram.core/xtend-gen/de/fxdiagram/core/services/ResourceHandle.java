@@ -1,23 +1,23 @@
 package de.fxdiagram.core.services;
 
-import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Pure;
-import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
+import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
 public class ResourceHandle {
-  private final String _name;
+  private final String name;
   
-  private final Class<?> _context;
+  private final Class<?> context;
   
-  private final String _relativePath;
+  private final String relativePath;
   
   public ResourceHandle(final String name, final Class<?> context, final String relativePath) {
     super();
-    this._name = name;
-    this._context = context;
-    this._relativePath = relativePath;
+    this.name = name;
+    this.context = context;
+    this.relativePath = relativePath;
   }
   
   @Override
@@ -25,9 +25,9 @@ public class ResourceHandle {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((this._name== null) ? 0 : this._name.hashCode());
-    result = prime * result + ((this._context== null) ? 0 : this._context.hashCode());
-    result = prime * result + ((this._relativePath== null) ? 0 : this._relativePath.hashCode());
+    result = prime * result + ((this.name== null) ? 0 : this.name.hashCode());
+    result = prime * result + ((this.context== null) ? 0 : this.context.hashCode());
+    result = prime * result + ((this.relativePath== null) ? 0 : this.relativePath.hashCode());
     return result;
   }
   
@@ -41,20 +41,20 @@ public class ResourceHandle {
     if (getClass() != obj.getClass())
       return false;
     ResourceHandle other = (ResourceHandle) obj;
-    if (this._name == null) {
-      if (other._name != null)
+    if (this.name == null) {
+      if (other.name != null)
         return false;
-    } else if (!this._name.equals(other._name))
+    } else if (!this.name.equals(other.name))
       return false;
-    if (this._context == null) {
-      if (other._context != null)
+    if (this.context == null) {
+      if (other.context != null)
         return false;
-    } else if (!this._context.equals(other._context))
+    } else if (!this.context.equals(other.context))
       return false;
-    if (this._relativePath == null) {
-      if (other._relativePath != null)
+    if (this.relativePath == null) {
+      if (other.relativePath != null)
         return false;
-    } else if (!this._relativePath.equals(other._relativePath))
+    } else if (!this.relativePath.equals(other.relativePath))
       return false;
     return true;
   }
@@ -62,22 +62,25 @@ public class ResourceHandle {
   @Override
   @Pure
   public String toString() {
-    String result = new ToStringHelper().toString(this);
-    return result;
+    ToStringBuilder b = new ToStringBuilder(this);
+    b.add("name", this.name);
+    b.add("context", this.context);
+    b.add("relativePath", this.relativePath);
+    return b.toString();
   }
   
   @Pure
   public String getName() {
-    return this._name;
+    return this.name;
   }
   
   @Pure
   public Class<?> getContext() {
-    return this._context;
+    return this.context;
   }
   
   @Pure
   public String getRelativePath() {
-    return this._relativePath;
+    return this.relativePath;
   }
 }

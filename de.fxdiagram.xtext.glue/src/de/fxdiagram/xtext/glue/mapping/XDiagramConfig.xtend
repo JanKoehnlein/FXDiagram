@@ -3,6 +3,7 @@ package de.fxdiagram.xtext.glue.mapping
 import de.fxdiagram.annotations.logging.Logging
 import java.util.List
 import java.util.Map
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static org.eclipse.core.runtime.Platform.*
 
@@ -58,7 +59,7 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 	
 	Map<String, AbstractMapping<?>> mappings = newHashMap
 
-	@Property String ID
+	@Accessors String ID
 	 
 	override getMappingByID(String mappingID) {
 		mappings.get(mappingID)

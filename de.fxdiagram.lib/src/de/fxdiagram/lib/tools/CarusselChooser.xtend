@@ -7,12 +7,13 @@ import javafx.scene.Node
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
 import javafx.scene.transform.Transform
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static java.lang.Math.*
 
 class CarusselChooser extends AbstractChooser {
 
-	@Property double spacing = 6
+	@Accessors double spacing = 6
 
 	Effect currentNodeEffect
 

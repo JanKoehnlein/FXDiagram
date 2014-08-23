@@ -10,6 +10,7 @@ import javafx.scene.Group
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static javafx.collections.FXCollections.*
 import static javafx.geometry.Side.*
@@ -21,7 +22,7 @@ import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
 class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST> {
 
-	@Property double border
+	@Accessors double border
 
 	val pos2group = #{
 		TOP -> new HBox,

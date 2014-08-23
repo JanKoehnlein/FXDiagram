@@ -36,7 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -46,8 +46,8 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST> {
-  @Property
-  private double _border;
+  @Accessors
+  private double border;
   
   private final Map<Side, Pane> pos2group = Collections.<Side, Pane>unmodifiableMap(CollectionLiterals.<Side, Pane>newHashMap(Pair.<Side, HBox>of(Side.TOP, new HBox()), Pair.<Side, HBox>of(Side.BOTTOM, new HBox()), Pair.<Side, VBox>of(Side.LEFT, new VBox()), Pair.<Side, VBox>of(Side.RIGHT, new VBox())));
   
@@ -261,16 +261,14 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
                 case LEFT:
                   double _width = hostBounds.getWidth();
                   double _multiply = ((-0.5) * _width);
-                  double _border = RapidButtonBehavior.this.getBorder();
-                  double _minus = (_multiply - _border);
+                  double _minus = (_multiply - RapidButtonBehavior.this.border);
                   double _width_1 = groupBounds.getWidth();
                   _switchResult = (_minus - _width_1);
                   break;
                 case RIGHT:
                   double _width_2 = hostBounds.getWidth();
                   double _multiply_1 = (0.5 * _width_2);
-                  double _border_1 = RapidButtonBehavior.this.getBorder();
-                  double _plus = (_multiply_1 + _border_1);
+                  double _plus = (_multiply_1 + RapidButtonBehavior.this.border);
                   double _width_3 = groupBounds.getWidth();
                   _switchResult = (_plus + _width_3);
                   break;
@@ -290,16 +288,14 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
                 case TOP:
                   double _height = hostBounds.getHeight();
                   double _multiply_2 = ((-0.5) * _height);
-                  double _border_2 = RapidButtonBehavior.this.getBorder();
-                  double _minus_1 = (_multiply_2 - _border_2);
+                  double _minus_1 = (_multiply_2 - RapidButtonBehavior.this.border);
                   double _height_1 = groupBounds.getHeight();
                   _switchResult_1 = (_minus_1 - _height_1);
                   break;
                 case BOTTOM:
                   double _height_2 = hostBounds.getHeight();
                   double _multiply_3 = (0.5 * _height_2);
-                  double _border_3 = RapidButtonBehavior.this.getBorder();
-                  double _plus_2 = (_multiply_3 + _border_3);
+                  double _plus_2 = (_multiply_3 + RapidButtonBehavior.this.border);
                   double _height_3 = groupBounds.getHeight();
                   _switchResult_1 = (_plus_2 + _height_3);
                   break;
@@ -321,10 +317,10 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   
   @Pure
   public double getBorder() {
-    return this._border;
+    return this.border;
   }
   
   public void setBorder(final double border) {
-    this._border = border;
+    this.border = border;
   }
 }

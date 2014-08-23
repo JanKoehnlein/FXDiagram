@@ -3,22 +3,21 @@ package de.fxdiagram.core.extensions;
 import com.google.common.base.Objects;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class InitializingListener<T extends Object> implements ChangeListener<T> {
-  @Property
-  private Procedure1<? super T> _set;
+  @Accessors
+  private Procedure1<? super T> set;
   
-  @Property
-  private Procedure1<? super T> _unset;
+  @Accessors
+  private Procedure1<? super T> unset;
   
   public void changed(final ObservableValue<? extends T> value, final T oldValue, final T newValue) {
     boolean _and = false;
-    Procedure1<? super T> _unset = this.getUnset();
-    boolean _notEquals = (!Objects.equal(_unset, null));
+    boolean _notEquals = (!Objects.equal(this.unset, null));
     if (!_notEquals) {
       _and = false;
     } else {
@@ -26,12 +25,10 @@ public class InitializingListener<T extends Object> implements ChangeListener<T>
       _and = _notEquals_1;
     }
     if (_and) {
-      Procedure1<? super T> _unset_1 = this.getUnset();
-      _unset_1.apply(oldValue);
+      this.unset.apply(oldValue);
     }
     boolean _and_1 = false;
-    Procedure1<? super T> _set = this.getSet();
-    boolean _notEquals_2 = (!Objects.equal(_set, null));
+    boolean _notEquals_2 = (!Objects.equal(this.set, null));
     if (!_notEquals_2) {
       _and_1 = false;
     } else {
@@ -39,26 +36,25 @@ public class InitializingListener<T extends Object> implements ChangeListener<T>
       _and_1 = _notEquals_3;
     }
     if (_and_1) {
-      Procedure1<? super T> _set_1 = this.getSet();
-      _set_1.apply(newValue);
+      this.set.apply(newValue);
     }
   }
   
   @Pure
   public Procedure1<? super T> getSet() {
-    return this._set;
+    return this.set;
   }
   
   public void setSet(final Procedure1<? super T> set) {
-    this._set = set;
+    this.set = set;
   }
   
   @Pure
   public Procedure1<? super T> getUnset() {
-    return this._unset;
+    return this.unset;
   }
   
   public void setUnset(final Procedure1<? super T> unset) {
-    this._unset = unset;
+    this.unset = unset;
   }
 }

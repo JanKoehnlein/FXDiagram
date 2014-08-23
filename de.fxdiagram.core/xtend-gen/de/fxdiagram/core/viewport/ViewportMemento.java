@@ -1,44 +1,40 @@
 package de.fxdiagram.core.viewport;
 
-import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @Data
 @SuppressWarnings("all")
 public class ViewportMemento {
-  private final double _translateX;
+  private final double translateX;
   
-  private final double _translateY;
+  private final double translateY;
   
-  private final double _scale;
+  private final double scale;
   
-  private final double _rotate;
+  private final double rotate;
   
   public String toString() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("ViewportMemento [translateX=");
-    double _translateX = this.getTranslateX();
-    _builder.append(_translateX, "");
+    _builder.append(this.translateX, "");
     _builder.append(", translateY=");
-    double _translateY = this.getTranslateY();
-    _builder.append(_translateY, "");
+    _builder.append(this.translateY, "");
     _builder.append(", scale=");
-    double _scale = this.getScale();
-    _builder.append(_scale, "");
+    _builder.append(this.scale, "");
     _builder.append(", rotate=");
-    double _rotate = this.getRotate();
-    _builder.append(_rotate, "");
+    _builder.append(this.rotate, "");
     _builder.append("]");
     return _builder.toString();
   }
   
   public ViewportMemento(final double translateX, final double translateY, final double scale, final double rotate) {
     super();
-    this._translateX = translateX;
-    this._translateY = translateY;
-    this._scale = scale;
-    this._rotate = rotate;
+    this.translateX = translateX;
+    this.translateY = translateY;
+    this.scale = scale;
+    this.rotate = rotate;
   }
   
   @Override
@@ -46,10 +42,10 @@ public class ViewportMemento {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + (int) (Double.doubleToLongBits(this._translateX) ^ (Double.doubleToLongBits(this._translateX) >>> 32));
-    result = prime * result + (int) (Double.doubleToLongBits(this._translateY) ^ (Double.doubleToLongBits(this._translateY) >>> 32));
-    result = prime * result + (int) (Double.doubleToLongBits(this._scale) ^ (Double.doubleToLongBits(this._scale) >>> 32));
-    result = prime * result + (int) (Double.doubleToLongBits(this._rotate) ^ (Double.doubleToLongBits(this._rotate) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(this.translateX) ^ (Double.doubleToLongBits(this.translateX) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(this.translateY) ^ (Double.doubleToLongBits(this.translateY) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(this.scale) ^ (Double.doubleToLongBits(this.scale) >>> 32));
+    result = prime * result + (int) (Double.doubleToLongBits(this.rotate) ^ (Double.doubleToLongBits(this.rotate) >>> 32));
     return result;
   }
   
@@ -63,34 +59,34 @@ public class ViewportMemento {
     if (getClass() != obj.getClass())
       return false;
     ViewportMemento other = (ViewportMemento) obj;
-    if (Double.doubleToLongBits(other._translateX) != Double.doubleToLongBits(this._translateX))
+    if (Double.doubleToLongBits(other.translateX) != Double.doubleToLongBits(this.translateX))
       return false; 
-    if (Double.doubleToLongBits(other._translateY) != Double.doubleToLongBits(this._translateY))
+    if (Double.doubleToLongBits(other.translateY) != Double.doubleToLongBits(this.translateY))
       return false; 
-    if (Double.doubleToLongBits(other._scale) != Double.doubleToLongBits(this._scale))
+    if (Double.doubleToLongBits(other.scale) != Double.doubleToLongBits(this.scale))
       return false; 
-    if (Double.doubleToLongBits(other._rotate) != Double.doubleToLongBits(this._rotate))
+    if (Double.doubleToLongBits(other.rotate) != Double.doubleToLongBits(this.rotate))
       return false; 
     return true;
   }
   
   @Pure
   public double getTranslateX() {
-    return this._translateX;
+    return this.translateX;
   }
   
   @Pure
   public double getTranslateY() {
-    return this._translateY;
+    return this.translateY;
   }
   
   @Pure
   public double getScale() {
-    return this._scale;
+    return this.scale;
   }
   
   @Pure
   public double getRotate() {
-    return this._rotate;
+    return this.rotate;
   }
 }

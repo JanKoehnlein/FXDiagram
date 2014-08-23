@@ -6,13 +6,15 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import java.util.List
+import org.eclipse.xtend.lib.annotations.Accessors
+
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class InterpreterContext {
 
 	protected XDiagram diagram
 	
-	@Property boolean isNewDiagram
+	@Accessors boolean isNewDiagram
 
 	List<XNode> addedNodes = newArrayList
 	List<XConnection> addedConnections = newArrayList

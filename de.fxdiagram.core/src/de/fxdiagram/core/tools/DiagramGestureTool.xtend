@@ -6,6 +6,7 @@ import javafx.geometry.Point2D
 import javafx.scene.input.RotateEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.ZoomEvent
+import org.eclipse.xtend.lib.annotations.Accessors
 
 class DiagramGestureTool implements XDiagramTool {
 
@@ -69,8 +70,8 @@ class DiagramGestureTool implements XDiagramTool {
 	}
 	
 	static class ZoomContext {
-		@Property double previousScale = 1
-		@Property Point2D pivotInDiagram
+		@Accessors double previousScale = 1
+		@Accessors Point2D pivotInDiagram
 	
 		new(Point2D pivotInDiagram) {
 			this.pivotInDiagram = pivotInDiagram

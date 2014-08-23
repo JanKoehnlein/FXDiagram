@@ -4,7 +4,7 @@ import com.google.common.collect.HashMultimap
 import java.lang.reflect.Constructor
 import java.lang.reflect.Method
 import java.util.List
-import org.eclipse.xtext.xbase.lib.Pair
+import org.eclipse.xtend.lib.annotations.Data
 
 import static java.lang.reflect.Modifier.*
 

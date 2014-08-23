@@ -19,6 +19,7 @@ import javax.json.JsonString
 import javax.json.JsonValue
 
 import static javax.json.JsonValue.ValueType.*
+import org.eclipse.xtend.lib.annotations.Data
 
 @Logging
 class ModelLoad {

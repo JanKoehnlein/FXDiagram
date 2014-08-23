@@ -3,26 +3,26 @@ package de.fxdiagram.xtext.glue.mapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
-import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Pure;
-import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
+import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
 public class DiagramMappingCall<T extends Object, ARG extends Object> implements MappingCall<T, ARG> {
-  private final Function1<? super ARG, ? extends T> _selector;
+  private final Function1<? super ARG, ? extends T> selector;
   
-  private final DiagramMapping<T> _diagramMapping;
+  private final DiagramMapping<T> diagramMapping;
   
   public AbstractMapping<T> getMapping() {
-    return this.getDiagramMapping();
+    return this.diagramMapping;
   }
   
   public DiagramMappingCall(final Function1<? super ARG, ? extends T> selector, final DiagramMapping<T> diagramMapping) {
     super();
-    this._selector = selector;
-    this._diagramMapping = diagramMapping;
+    this.selector = selector;
+    this.diagramMapping = diagramMapping;
   }
   
   @Override
@@ -30,8 +30,8 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> implements
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((this._selector== null) ? 0 : this._selector.hashCode());
-    result = prime * result + ((this._diagramMapping== null) ? 0 : this._diagramMapping.hashCode());
+    result = prime * result + ((this.selector== null) ? 0 : this.selector.hashCode());
+    result = prime * result + ((this.diagramMapping== null) ? 0 : this.diagramMapping.hashCode());
     return result;
   }
   
@@ -45,15 +45,15 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> implements
     if (getClass() != obj.getClass())
       return false;
     DiagramMappingCall<?, ?> other = (DiagramMappingCall<?, ?>) obj;
-    if (this._selector == null) {
-      if (other._selector != null)
+    if (this.selector == null) {
+      if (other.selector != null)
         return false;
-    } else if (!this._selector.equals(other._selector))
+    } else if (!this.selector.equals(other.selector))
       return false;
-    if (this._diagramMapping == null) {
-      if (other._diagramMapping != null)
+    if (this.diagramMapping == null) {
+      if (other.diagramMapping != null)
         return false;
-    } else if (!this._diagramMapping.equals(other._diagramMapping))
+    } else if (!this.diagramMapping.equals(other.diagramMapping))
       return false;
     return true;
   }
@@ -61,17 +61,19 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> implements
   @Override
   @Pure
   public String toString() {
-    String result = new ToStringHelper().toString(this);
-    return result;
+    ToStringBuilder b = new ToStringBuilder(this);
+    b.add("selector", this.selector);
+    b.add("diagramMapping", this.diagramMapping);
+    return b.toString();
   }
   
   @Pure
   public Function1<? super ARG, ? extends T> getSelector() {
-    return this._selector;
+    return this.selector;
   }
   
   @Pure
   public DiagramMapping<T> getDiagramMapping() {
-    return this._diagramMapping;
+    return this.diagramMapping;
   }
 }

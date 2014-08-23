@@ -10,38 +10,38 @@ import javafx.scene.Scene;
 import javafx.scene.input.RotateEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class DiagramGestureTool implements XDiagramTool {
   public static class ZoomContext {
-    @Property
-    private double _previousScale = 1;
+    @Accessors
+    private double previousScale = 1;
     
-    @Property
-    private Point2D _pivotInDiagram;
+    @Accessors
+    private Point2D pivotInDiagram;
     
     public ZoomContext(final Point2D pivotInDiagram) {
-      this.setPivotInDiagram(pivotInDiagram);
+      this.pivotInDiagram = pivotInDiagram;
     }
     
     @Pure
     public double getPreviousScale() {
-      return this._previousScale;
+      return this.previousScale;
     }
     
     public void setPreviousScale(final double previousScale) {
-      this._previousScale = previousScale;
+      this.previousScale = previousScale;
     }
     
     @Pure
     public Point2D getPivotInDiagram() {
-      return this._pivotInDiagram;
+      return this.pivotInDiagram;
     }
     
     public void setPivotInDiagram(final Point2D pivotInDiagram) {
-      this._pivotInDiagram = pivotInDiagram;
+      this.pivotInDiagram = pivotInDiagram;
     }
   }
   
@@ -73,13 +73,11 @@ public class DiagramGestureTool implements XDiagramTool {
     final EventHandler<ZoomEvent> _function_1 = new EventHandler<ZoomEvent>() {
       public void handle(final ZoomEvent it) {
         double _totalZoomFactor = it.getTotalZoomFactor();
-        double _previousScale = DiagramGestureTool.this.zoomContext.getPreviousScale();
-        final double scale = (_totalZoomFactor / _previousScale);
+        final double scale = (_totalZoomFactor / DiagramGestureTool.this.zoomContext.previousScale);
         ViewportTransform _viewportTransform = root.getViewportTransform();
         _viewportTransform.scaleRelative(scale);
         XDiagram _diagram = root.getDiagram();
-        Point2D _pivotInDiagram = DiagramGestureTool.this.zoomContext.getPivotInDiagram();
-        final Point2D pivotInScene = _diagram.localToScene(_pivotInDiagram);
+        final Point2D pivotInScene = _diagram.localToScene(DiagramGestureTool.this.zoomContext.pivotInDiagram);
         ViewportTransform _viewportTransform_1 = root.getViewportTransform();
         double _sceneX = it.getSceneX();
         double _x = pivotInScene.getX();
@@ -89,7 +87,7 @@ public class DiagramGestureTool implements XDiagramTool {
         double _minus_1 = (_sceneY - _y);
         _viewportTransform_1.translateRelative(_minus, _minus_1);
         double _totalZoomFactor_1 = it.getTotalZoomFactor();
-        DiagramGestureTool.this.zoomContext.setPreviousScale(_totalZoomFactor_1);
+        DiagramGestureTool.this.zoomContext.previousScale = _totalZoomFactor_1;
       }
     };
     this.zoomHandler = _function_1;

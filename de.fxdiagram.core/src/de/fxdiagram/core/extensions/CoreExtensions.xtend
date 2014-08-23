@@ -16,6 +16,7 @@ import javafx.scene.Parent
 import javafx.scene.input.MouseEvent
 import javafx.scene.transform.Affine
 import javafx.scene.transform.Transform
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
@@ -167,8 +168,8 @@ class CoreExtensions {
 
 class InitializingMapListener<T,U> implements MapChangeListener<T, U> {
 	
-	@Property var (T,U)=>void put
-	@Property var (T,U)=>void remove
+	@Accessors var (T,U)=>void put
+	@Accessors var (T,U)=>void remove
 	
 	override onChanged(MapChangeListener.Change<? extends T, ? extends U> c) {
 		if(put != null && c.wasAdded) 
@@ -180,9 +181,9 @@ class InitializingMapListener<T,U> implements MapChangeListener<T, U> {
 
 class InitializingListListener<T> implements ListChangeListener<T> {
 	
-	@Property var (Change<? extends T>)=>void change
-	@Property var (T)=>void add
-	@Property var (T)=>void remove
+	@Accessors var (Change<? extends T>)=>void change
+	@Accessors var (T)=>void add
+	@Accessors var (T)=>void remove
 	
 	override onChanged(Change<? extends T> c) {
 		if(change != null)
@@ -197,8 +198,8 @@ class InitializingListListener<T> implements ListChangeListener<T> {
 
 class InitializingListener<T> implements ChangeListener<T> {
 	
-	@Property var (T)=>void set
-	@Property var (T)=>void unset
+	@Accessors var (T)=>void set
+	@Accessors var (T)=>void unset
 	
 	override changed(ObservableValue<? extends T> value, T oldValue, T newValue) {
 		if(unset != null && oldValue != null)

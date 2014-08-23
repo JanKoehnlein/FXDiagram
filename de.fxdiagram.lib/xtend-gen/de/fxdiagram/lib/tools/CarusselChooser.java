@@ -15,7 +15,7 @@ import javafx.scene.effect.InnerShadow;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
@@ -24,8 +24,8 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class CarusselChooser extends AbstractChooser {
-  @Property
-  private double _spacing = 6;
+  @Accessors
+  private double spacing = 6;
   
   private Effect currentNodeEffect;
   
@@ -51,8 +51,7 @@ public class CarusselChooser extends AbstractChooser {
       }
     };
     Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
-    double _spacing = this.getSpacing();
-    final double maxHeight = ((_fold).doubleValue() + _spacing);
+    final double maxHeight = ((_fold).doubleValue() + this.spacing);
     ArrayList<XNode> _nodes_1 = this.getNodes();
     int _size = _nodes_1.size();
     final double angle = (Math.PI / _size);
@@ -86,9 +85,7 @@ public class CarusselChooser extends AbstractChooser {
           double _width = _layoutBounds.getWidth();
           double _minus = (-_width);
           double _divide_1 = (_minus / 2);
-          double _spacing_1 = this.getSpacing();
-          double _divide_2 = (_spacing_1 / 2);
-          Translate _translate_1 = Transform.translate(_divide_1, _divide_2);
+          Translate _translate_1 = Transform.translate(_divide_1, (this.spacing / 2));
           _transforms.setAll(
             Collections.<Transform>unmodifiableList(CollectionLiterals.<Transform>newArrayList(_translate, _scale, _translate_1)));
           node.setOpacity(((scaleY * scaleY) * scaleY));
@@ -143,10 +140,10 @@ public class CarusselChooser extends AbstractChooser {
   
   @Pure
   public double getSpacing() {
-    return this._spacing;
+    return this.spacing;
   }
   
   public void setSpacing(final double spacing) {
-    this._spacing = spacing;
+    this.spacing = spacing;
   }
 }

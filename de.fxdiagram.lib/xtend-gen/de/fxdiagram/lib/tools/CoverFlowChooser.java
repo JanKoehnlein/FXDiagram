@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -30,11 +30,11 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class CoverFlowChooser extends AbstractChooser {
-  @Property
-  private double _angle = 60;
+  @Accessors
+  private double angle = 60;
   
-  @Property
-  private double _deltaX = 20;
+  @Accessors
+  private double deltaX = 20;
   
   private double gap;
   
@@ -154,15 +154,9 @@ public class CoverFlowChooser extends AbstractChooser {
             double _height = _layoutBounds_1.getHeight();
             double _multiply_1 = ((-0.5) * _height);
             TransformExtensions.translate(trafo, _multiply, _multiply_1, 0);
-            double _angle = this.getAngle();
-            double _multiply_2 = (direction * _angle);
-            double _multiply_3 = (_multiply_2 * fraction);
             Point3D _point3D = new Point3D(0, 1, 0);
-            TransformExtensions.rotate(trafo, _multiply_3, _point3D);
-            double _deltaX = this.getDeltaX();
-            double _multiply_4 = ((i - interpolatedPosition) * _deltaX);
-            double _plus = (_multiply_4 + (((0.5 * fraction) * direction) * this.gap));
-            TransformExtensions.translate(trafo, _plus, 0, (-fraction));
+            TransformExtensions.rotate(trafo, ((direction * this.angle) * fraction), _point3D);
+            TransformExtensions.translate(trafo, (((i - interpolatedPosition) * this.deltaX) + (((0.5 * fraction) * direction) * this.gap)), 0, (-fraction));
             final Procedure1<XNode> _function = new Procedure1<XNode>() {
               public void apply(final XNode it) {
                 ObservableList<Transform> _transforms = node.getTransforms();
@@ -200,19 +194,19 @@ public class CoverFlowChooser extends AbstractChooser {
   
   @Pure
   public double getAngle() {
-    return this._angle;
+    return this.angle;
   }
   
   public void setAngle(final double angle) {
-    this._angle = angle;
+    this.angle = angle;
   }
   
   @Pure
   public double getDeltaX() {
-    return this._deltaX;
+    return this.deltaX;
   }
   
   public void setDeltaX(final double deltaX) {
-    this._deltaX = deltaX;
+    this.deltaX = deltaX;
   }
 }

@@ -8,6 +8,7 @@ import javafx.scene.effect.ColorAdjust
 import javafx.scene.effect.Reflection
 import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static java.lang.Math.*
 
@@ -15,8 +16,8 @@ import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
 class CoverFlowChooser extends AbstractChooser {
 
-	@Property double angle = 60
-	@Property double deltaX = 20
+	@Accessors double angle = 60
+	@Accessors double deltaX = 20
 	
 	double gap
 

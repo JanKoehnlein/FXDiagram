@@ -1,20 +1,20 @@
 package de.fxdiagram.examples.java;
 
-import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Pure;
-import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
+import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
 public class JavaSuperTypeHandle {
-  private final Class<?> _subType;
+  private final Class<?> subType;
   
-  private final Class<?> _superType;
+  private final Class<?> superType;
   
   public JavaSuperTypeHandle(final Class<?> subType, final Class<?> superType) {
     super();
-    this._subType = subType;
-    this._superType = superType;
+    this.subType = subType;
+    this.superType = superType;
   }
   
   @Override
@@ -22,8 +22,8 @@ public class JavaSuperTypeHandle {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((this._subType== null) ? 0 : this._subType.hashCode());
-    result = prime * result + ((this._superType== null) ? 0 : this._superType.hashCode());
+    result = prime * result + ((this.subType== null) ? 0 : this.subType.hashCode());
+    result = prime * result + ((this.superType== null) ? 0 : this.superType.hashCode());
     return result;
   }
   
@@ -37,15 +37,15 @@ public class JavaSuperTypeHandle {
     if (getClass() != obj.getClass())
       return false;
     JavaSuperTypeHandle other = (JavaSuperTypeHandle) obj;
-    if (this._subType == null) {
-      if (other._subType != null)
+    if (this.subType == null) {
+      if (other.subType != null)
         return false;
-    } else if (!this._subType.equals(other._subType))
+    } else if (!this.subType.equals(other.subType))
       return false;
-    if (this._superType == null) {
-      if (other._superType != null)
+    if (this.superType == null) {
+      if (other.superType != null)
         return false;
-    } else if (!this._superType.equals(other._superType))
+    } else if (!this.superType.equals(other.superType))
       return false;
     return true;
   }
@@ -53,17 +53,19 @@ public class JavaSuperTypeHandle {
   @Override
   @Pure
   public String toString() {
-    String result = new ToStringHelper().toString(this);
-    return result;
+    ToStringBuilder b = new ToStringBuilder(this);
+    b.add("subType", this.subType);
+    b.add("superType", this.superType);
+    return b.toString();
   }
   
   @Pure
   public Class<?> getSubType() {
-    return this._subType;
+    return this.subType;
   }
   
   @Pure
   public Class<?> getSuperType() {
-    return this._superType;
+    return this.superType;
   }
 }

@@ -1,9 +1,11 @@
 package de.fxdiagram.core.behavior
 
 import de.fxdiagram.core.XShape
+import de.fxdiagram.core.command.MoveCommand
 import javafx.geometry.Point2D
 import javafx.scene.input.MouseEvent
-import de.fxdiagram.core.command.MoveCommand
+import org.eclipse.xtend.lib.annotations.Data
+
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {

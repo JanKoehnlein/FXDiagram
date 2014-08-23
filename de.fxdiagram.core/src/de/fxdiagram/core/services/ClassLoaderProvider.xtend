@@ -3,15 +3,18 @@ package de.fxdiagram.core.services
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.core.model.DomainObjectProviderWithState
+import org.eclipse.core.internal.runtime.Activator
 import org.eclipse.core.runtime.FileLocator
 import org.eclipse.core.runtime.Platform
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.xtend.lib.annotations.Data
 import org.osgi.framework.BundleReference
-import de.fxdiagram.core.model.DomainObjectProviderWithState
 
 @ModelNode
 class ClassLoaderProvider implements DomainObjectProviderWithState {
 	
-	@Property ClassLoader rootClassLoader
+	@Accessors ClassLoader rootClassLoader
 	
 	override <T> createDescriptor(T domainObject) {
 		switch domainObject {
@@ -58,7 +61,7 @@ class ClassLoaderProvider implements DomainObjectProviderWithState {
 	}
 
 	def static isEquinox() {
-		org.eclipse.core.internal.runtime.Activator.getDefault != null
+		Activator.getDefault != null
 	}
 	
 	override copyState(DomainObjectProviderWithState from) {

@@ -2,22 +2,22 @@ package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Pure;
-import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
+import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
 public class NodeMappingCall<T extends Object, ARG extends Object> extends AbstractNodeMappingCall<T, ARG> {
-  private final Function1<? super ARG, ? extends T> _selector;
+  private final Function1<? super ARG, ? extends T> selector;
   
-  private final NodeMapping<T> _nodeMapping;
+  private final NodeMapping<T> nodeMapping;
   
   public NodeMappingCall(final Function1<? super ARG, ? extends T> selector, final NodeMapping<T> nodeMapping) {
     super();
-    this._selector = selector;
-    this._nodeMapping = nodeMapping;
+    this.selector = selector;
+    this.nodeMapping = nodeMapping;
   }
   
   @Override
@@ -25,8 +25,8 @@ public class NodeMappingCall<T extends Object, ARG extends Object> extends Abstr
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((this._selector== null) ? 0 : this._selector.hashCode());
-    result = prime * result + ((this._nodeMapping== null) ? 0 : this._nodeMapping.hashCode());
+    result = prime * result + ((this.selector== null) ? 0 : this.selector.hashCode());
+    result = prime * result + ((this.nodeMapping== null) ? 0 : this.nodeMapping.hashCode());
     return result;
   }
   
@@ -42,15 +42,15 @@ public class NodeMappingCall<T extends Object, ARG extends Object> extends Abstr
     if (!super.equals(obj))
       return false;
     NodeMappingCall<?, ?> other = (NodeMappingCall<?, ?>) obj;
-    if (this._selector == null) {
-      if (other._selector != null)
+    if (this.selector == null) {
+      if (other.selector != null)
         return false;
-    } else if (!this._selector.equals(other._selector))
+    } else if (!this.selector.equals(other.selector))
       return false;
-    if (this._nodeMapping == null) {
-      if (other._nodeMapping != null)
+    if (this.nodeMapping == null) {
+      if (other.nodeMapping != null)
         return false;
-    } else if (!this._nodeMapping.equals(other._nodeMapping))
+    } else if (!this.nodeMapping.equals(other.nodeMapping))
       return false;
     return true;
   }
@@ -58,17 +58,19 @@ public class NodeMappingCall<T extends Object, ARG extends Object> extends Abstr
   @Override
   @Pure
   public String toString() {
-    String result = new ToStringHelper().toString(this);
+    String result = new ToStringBuilder(this)
+    	.addAllFields()
+    	.toString();
     return result;
   }
   
   @Pure
   public Function1<? super ARG, ? extends T> getSelector() {
-    return this._selector;
+    return this.selector;
   }
   
   @Pure
   public NodeMapping<T> getNodeMapping() {
-    return this._nodeMapping;
+    return this.nodeMapping;
   }
 }

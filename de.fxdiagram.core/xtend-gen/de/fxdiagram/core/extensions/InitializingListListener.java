@@ -3,33 +3,30 @@ package de.fxdiagram.core.extensions;
 import com.google.common.base.Objects;
 import java.util.List;
 import javafx.collections.ListChangeListener;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class InitializingListListener<T extends Object> implements ListChangeListener<T> {
-  @Property
-  private Procedure1<? super ListChangeListener.Change<? extends T>> _change;
+  @Accessors
+  private Procedure1<? super ListChangeListener.Change<? extends T>> change;
   
-  @Property
-  private Procedure1<? super T> _add;
+  @Accessors
+  private Procedure1<? super T> add;
   
-  @Property
-  private Procedure1<? super T> _remove;
+  @Accessors
+  private Procedure1<? super T> remove;
   
   public void onChanged(final ListChangeListener.Change<? extends T> c) {
-    Procedure1<? super ListChangeListener.Change<? extends T>> _change = this.getChange();
-    boolean _notEquals = (!Objects.equal(_change, null));
+    boolean _notEquals = (!Objects.equal(this.change, null));
     if (_notEquals) {
-      Procedure1<? super ListChangeListener.Change<? extends T>> _change_1 = this.getChange();
-      _change_1.apply(c);
+      this.change.apply(c);
     }
     while (c.next()) {
       boolean _and = false;
-      Procedure1<? super T> _add = this.getAdd();
-      boolean _notEquals_1 = (!Objects.equal(_add, null));
+      boolean _notEquals_1 = (!Objects.equal(this.add, null));
       if (!_notEquals_1) {
         _and = false;
       } else {
@@ -40,16 +37,14 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
         List<? extends T> _addedSubList = c.getAddedSubList();
         final Procedure1<T> _function = new Procedure1<T>() {
           public void apply(final T it) {
-            Procedure1<? super T> _add = InitializingListListener.this.getAdd();
-            _add.apply(it);
+            InitializingListListener.this.add.apply(it);
           }
         };
         IterableExtensions.forEach(_addedSubList, _function);
       }
     }
     boolean _and = false;
-    Procedure1<? super T> _remove = this.getRemove();
-    boolean _notEquals_1 = (!Objects.equal(_remove, null));
+    boolean _notEquals_1 = (!Objects.equal(this.remove, null));
     if (!_notEquals_1) {
       _and = false;
     } else {
@@ -60,8 +55,7 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
       List<? extends T> _removed = c.getRemoved();
       final Procedure1<T> _function = new Procedure1<T>() {
         public void apply(final T it) {
-          Procedure1<? super T> _remove = InitializingListListener.this.getRemove();
-          _remove.apply(it);
+          InitializingListListener.this.remove.apply(it);
         }
       };
       IterableExtensions.forEach(_removed, _function);
@@ -70,28 +64,28 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
   
   @Pure
   public Procedure1<? super ListChangeListener.Change<? extends T>> getChange() {
-    return this._change;
+    return this.change;
   }
   
   public void setChange(final Procedure1<? super ListChangeListener.Change<? extends T>> change) {
-    this._change = change;
+    this.change = change;
   }
   
   @Pure
   public Procedure1<? super T> getAdd() {
-    return this._add;
+    return this.add;
   }
   
   public void setAdd(final Procedure1<? super T> add) {
-    this._add = add;
+    this.add = add;
   }
   
   @Pure
   public Procedure1<? super T> getRemove() {
-    return this._remove;
+    return this.remove;
   }
   
   public void setRemove(final Procedure1<? super T> remove) {
-    this._remove = remove;
+    this.remove = remove;
   }
 }

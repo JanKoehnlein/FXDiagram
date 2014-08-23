@@ -12,7 +12,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import java.util.List;
 import javafx.collections.ObservableList;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -23,8 +23,8 @@ import org.eclipse.xtext.xbase.lib.Pure;
 public class InterpreterContext {
   protected XDiagram diagram;
   
-  @Property
-  private boolean _isNewDiagram;
+  @Accessors
+  private boolean isNewDiagram;
   
   private List<XNode> addedNodes = CollectionLiterals.<XNode>newArrayList();
   
@@ -86,8 +86,7 @@ public class InterpreterContext {
   
   public boolean needsLayout() {
     boolean _or = false;
-    boolean _isIsNewDiagram = this.isIsNewDiagram();
-    if (_isIsNewDiagram) {
+    if (this.isNewDiagram) {
       _or = true;
     } else {
       int _size = this.addedNodes.size();
@@ -106,10 +105,10 @@ public class InterpreterContext {
   
   @Pure
   public boolean isIsNewDiagram() {
-    return this._isNewDiagram;
+    return this.isNewDiagram;
   }
   
   public void setIsNewDiagram(final boolean isNewDiagram) {
-    this._isNewDiagram = isNewDiagram;
+    this.isNewDiagram = isNewDiagram;
   }
 }

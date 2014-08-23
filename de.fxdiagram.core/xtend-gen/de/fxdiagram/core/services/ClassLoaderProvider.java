@@ -12,7 +12,7 @@ import java.net.URL;
 import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.osgi.framework.Bundle;
@@ -21,8 +21,8 @@ import org.osgi.framework.BundleReference;
 @ModelNode
 @SuppressWarnings("all")
 public class ClassLoaderProvider implements DomainObjectProviderWithState {
-  @Property
-  private ClassLoader _rootClassLoader;
+  @Accessors
+  private ClassLoader rootClassLoader;
   
   public <T extends Object> DomainObjectDescriptor createDescriptor(final T domainObject) {
     boolean _matched = false;
@@ -65,8 +65,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
     if (!_isEquinox) {
       _and = false;
     } else {
-      ClassLoader _rootClassLoader = this.getRootClassLoader();
-      boolean _notEquals = (!Objects.equal(_rootClassLoader, null));
+      boolean _notEquals = (!Objects.equal(this.rootClassLoader, null));
       _and = _notEquals;
     }
     if (_and) {
@@ -93,8 +92,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
         _or = _not;
       }
       if (_or) {
-        ClassLoader _rootClassLoader = this.getRootClassLoader();
-        _xifexpression = _rootClassLoader.loadClass(className);
+        _xifexpression = this.rootClassLoader.loadClass(className);
       } else {
         String _classLoaderID_1 = descriptor.getClassLoaderID();
         Bundle _bundle = Platform.getBundle(_classLoaderID_1);
@@ -124,8 +122,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
         _or = _not;
       }
       if (_or) {
-        ClassLoader _rootClassLoader = this.getRootClassLoader();
-        _xifexpression = _rootClassLoader.getResource(resourcePath);
+        _xifexpression = this.rootClassLoader.getResource(resourcePath);
       } else {
         String _classLoaderID_1 = descriptor.getClassLoaderID();
         Bundle _bundle = Platform.getBundle(_classLoaderID_1);
@@ -148,8 +145,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   }
   
   public void copyState(final DomainObjectProviderWithState from) {
-    ClassLoader _rootClassLoader = ((ClassLoaderProvider) from).getRootClassLoader();
-    this.setRootClassLoader(_rootClassLoader);
+    this.rootClassLoader = ((ClassLoaderProvider) from).rootClassLoader;
   }
   
   public void populate(final ModelElementImpl modelElement) {
@@ -158,10 +154,10 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   
   @Pure
   public ClassLoader getRootClassLoader() {
-    return this._rootClassLoader;
+    return this.rootClassLoader;
   }
   
   public void setRootClassLoader(final ClassLoader rootClassLoader) {
-    this._rootClassLoader = rootClassLoader;
+    this.rootClassLoader = rootClassLoader;
   }
 }

@@ -1,7 +1,9 @@
 package de.fxdiagram.xtext.glue.mapping
 
-import javafx.scene.Node
 import javafx.geometry.Side
+import javafx.scene.Node
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.xtend.lib.annotations.Data
 
 interface MappingCall<T, ARG> {
 	def AbstractMapping<T> getMapping()
@@ -21,7 +23,7 @@ abstract class AbstractConnectionMappingCall<T, ARG> implements MappingCall<T, A
 		imageFactory.apply(side)
 	} 
 
-	@Property String role
+	@Accessors String role
 
 	def ConnectionMapping<T> getConnectionMapping()
 	

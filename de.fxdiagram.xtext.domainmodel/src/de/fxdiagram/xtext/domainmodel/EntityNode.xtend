@@ -7,14 +7,13 @@ import de.fxdiagram.xtext.glue.shapes.BaseNode
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.VPos
-import javafx.scene.effect.InnerShadow
 import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
+import javax.inject.Inject
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property
-import javax.inject.Inject
 
 @ModelNode
 class EntityNode extends BaseNode<Entity> {
