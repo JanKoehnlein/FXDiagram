@@ -19,6 +19,11 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.IURIEditorOpener;
@@ -120,11 +125,27 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
   }
   
   public IEditorPart openInEditor(final boolean isSelect) {
-    Provider<IURIEditorOpener> _iURIEditorOpener = Access.getIURIEditorOpener();
-    IURIEditorOpener _get = _iURIEditorOpener.get();
-    String _uri = this.getUri();
-    URI _createURI = URI.createURI(_uri);
-    return _get.open(_createURI, isSelect);
+    IEditorPart _xifexpression = null;
+    if (isSelect) {
+      Provider<IURIEditorOpener> _iURIEditorOpener = Access.getIURIEditorOpener();
+      IURIEditorOpener _get = _iURIEditorOpener.get();
+      String _uri = this.getUri();
+      URI _createURI = URI.createURI(_uri);
+      _xifexpression = _get.open(_createURI, isSelect);
+    } else {
+      IWorkbench _workbench = PlatformUI.getWorkbench();
+      IWorkbenchWindow _activeWorkbenchWindow = _workbench.getActiveWorkbenchWindow();
+      final IWorkbenchPage activePage = _activeWorkbenchWindow.getActivePage();
+      final IWorkbenchPart activePart = activePage.getActivePart();
+      Provider<IURIEditorOpener> _iURIEditorOpener_1 = Access.getIURIEditorOpener();
+      IURIEditorOpener _get_1 = _iURIEditorOpener_1.get();
+      String _uri_1 = this.getUri();
+      URI _createURI_1 = URI.createURI(_uri_1);
+      final IEditorPart editor = _get_1.open(_createURI_1, isSelect);
+      activePage.activate(activePart);
+      return editor;
+    }
+    return _xifexpression;
   }
   
   public void injectMembers(final Object it) {

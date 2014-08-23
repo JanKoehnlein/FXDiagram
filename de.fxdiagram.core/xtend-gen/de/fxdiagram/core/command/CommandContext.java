@@ -13,7 +13,7 @@ public class CommandContext {
   
   private Duration defaultExecuteDuration = DurationExtensions.millis(1000);
   
-  private Duration defaultUndoDuration = DurationExtensions.millis(150);
+  private Duration defaultUndoDuration = DurationExtensions.millis(250);
   
   public CommandContext(final XRoot root) {
     this.root = root;

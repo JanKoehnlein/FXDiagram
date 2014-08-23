@@ -21,16 +21,6 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 public class InterpreterContext {
   protected XDiagram diagram;
   
-  private boolean _isIgnoreLazy;
-  
-  public boolean isIsIgnoreLazy() {
-    return this._isIgnoreLazy;
-  }
-  
-  public void setIsIgnoreLazy(final boolean isIgnoreLazy) {
-    this._isIgnoreLazy = isIgnoreLazy;
-  }
-  
   private boolean _isNewDiagram;
   
   public boolean isIsNewDiagram() {

@@ -12,7 +12,7 @@ class CommandContext {
 	
 	Duration defaultExecuteDuration = 1000.millis
 	
-	Duration defaultUndoDuration = 150.millis
+	Duration defaultUndoDuration = 250.millis
 	
 	new(XRoot root) {
 		this.root = root

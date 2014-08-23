@@ -203,7 +203,7 @@ public class FXDiagramView extends ViewPart {
         this.register(editor);
         XDiagram _diagram = this.root.getDiagram();
         interpreterContext.setDiagram(_diagram);
-        this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext);
+        this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext, true);
       }
     }
     CommandStack _commandStack = this.root.getCommandStack();

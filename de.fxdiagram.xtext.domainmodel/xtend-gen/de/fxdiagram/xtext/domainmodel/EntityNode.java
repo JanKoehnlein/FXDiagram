@@ -13,7 +13,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -46,6 +45,8 @@ public class EntityNode extends BaseNode<Entity> {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
+        it.setBorderRadius(6);
+        it.setBackgroundRadius(6);
         ObservableList<Node> _children = it.getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
@@ -129,14 +130,6 @@ public class EntityNode extends BaseNode<Entity> {
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
         _children.add(_doubleArrow);
-        InnerShadow _innerShadow = new InnerShadow();
-        final Procedure1<InnerShadow> _function_1 = new Procedure1<InnerShadow>() {
-          public void apply(final InnerShadow it) {
-            it.setRadius(7);
-          }
-        };
-        InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_1);
-        it.setEffect(_doubleArrow_1);
       }
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);

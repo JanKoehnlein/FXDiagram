@@ -32,7 +32,7 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 		0, 0, 1, 1, 
 		true, CycleMethod.NO_CYCLE,
 		#[
-			new Stop(0, Color.gray(0.4)), 
+			new Stop(0, Color.gray(0.7)), 
 			new Stop(1, Color.gray(1))
 		]) 
 	

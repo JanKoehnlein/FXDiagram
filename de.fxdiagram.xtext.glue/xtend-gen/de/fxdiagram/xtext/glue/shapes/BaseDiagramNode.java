@@ -48,9 +48,9 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
     RectangleBorderPane _pane = this.getPane();
     _pane.setBackgroundPaint(Color.BLANCHEDALMOND);
     RectangleBorderPane _pane_1 = this.getPane();
-    _pane_1.setBorderRadius(0);
+    _pane_1.setBorderRadius(6);
     RectangleBorderPane _pane_2 = this.getPane();
-    _pane_2.setBackgroundRadius(0);
+    _pane_2.setBackgroundRadius(6);
   }
   
   protected XtextDomainObjectDescriptor<T> getDescriptor() {

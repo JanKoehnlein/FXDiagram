@@ -12,7 +12,6 @@ class InterpreterContext {
 
 	protected XDiagram diagram
 	
-	@Property boolean isIgnoreLazy
 	@Property boolean isNewDiagram
 
 	List<XNode> addedNodes = newArrayList

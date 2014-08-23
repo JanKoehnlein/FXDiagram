@@ -28,8 +28,8 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 	override initializeGraphics() {
 		super.initializeGraphics()
 		pane.backgroundPaint = Color.BLANCHEDALMOND
-		pane.borderRadius = 0
-		pane.backgroundRadius = 0
+		pane.borderRadius = 6
+		pane.backgroundRadius = 6
 	}
 
 	protected def getDescriptor() {

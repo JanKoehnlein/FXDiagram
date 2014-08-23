@@ -19,26 +19,44 @@ class XDiagramConfigInterpreter {
 			return null
 		val diagram = diagramMapping.createDiagram(diagramObject.getDescriptor(diagramMapping))
 		context.diagram = diagram
-		diagramMapping.nodes.forEach[execute(diagramObject, context)]
-		diagramMapping.connections.forEach[execute(diagramObject, [], context)]
+		diagramMapping.nodes.forEach[execute(diagramObject, context, true)]
+		diagramMapping.connections.forEach[execute(diagramObject, [], context, true)]
+		diagramMapping.nodes.forEach[connectNodesEagerly(diagramObject, context)]
 		diagram
 	}
 
-	protected def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context) {
+	protected def <T> connectNodesEagerly(AbstractNodeMappingCall<?,T> it, T diagramObject, InterpreterContext context) {
+		val nodeObjects = select(diagramObject)
+		val nodeMappingCasted = nodeMapping as NodeMapping<Object>
+		for(nodeObject: nodeObjects) {
+			val descriptor = nodeObject.getDescriptor(nodeMappingCasted)
+			val node = context.getNode(descriptor)
+			if(node != null) {
+				nodeMappingCasted.incoming.filter[lazy].forEach[
+					execute(nodeObject, [target = node], context, false) 
+				]
+				nodeMappingCasted.outgoing.filter[lazy].forEach[
+					execute(nodeObject, [source = node], context, false) 
+				]
+			}
+		}
+	}
+
+	protected def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context, boolean isCreateOnDemand) {
 		if (nodeMapping.isApplicable(nodeObject)) {
 			val descriptor = nodeObject.getDescriptor(nodeMapping)
 			val existingNode = context.getNode(descriptor)
-			if (existingNode != null)
+			if (existingNode != null || !isCreateOnDemand)
 				return existingNode
 			val node = nodeMapping.createNode(descriptor)
 			context.addNode(node)
 			nodeMapping.incoming.forEach[
-				if(!lazy || context.isIgnoreLazy) 
-					execute(nodeObject, [target = node], context) 
+				if(!lazy) 
+					execute(nodeObject, [target = node], context, true) 
 			]
 			nodeMapping.outgoing.forEach[
-				if(!lazy || context.isIgnoreLazy) 
-					execute(nodeObject, [source = node], context)
+				if(!lazy) 
+					execute(nodeObject, [source = node], context, true)
 			]
 			if(node instanceof OpenableDiagramNode)
 				node.innerDiagram = nodeMapping.nestedDiagram?.execute(nodeObject, context)
@@ -80,11 +98,11 @@ class XDiagramConfigInterpreter {
 	}
 	
 	def <T,U> Iterable<XNode> execute(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument,
-		InterpreterContext context) {
+		InterpreterContext context, boolean isCreateNodeOnDemand) {
 		val nodeObjects = select(nodeMappingCall, domainArgument)
 		val result = newArrayList
 		for (nodeObject : nodeObjects)
-			result += createNode(nodeObject, nodeMappingCall.nodeMapping, context)
+			result += createNode(nodeObject, nodeMappingCall.nodeMapping, context, isCreateNodeOnDemand)
 		return result
 	}
 
@@ -100,33 +118,32 @@ class XDiagramConfigInterpreter {
 	}
 
 	protected def <T,U> Iterable<XConnection> execute(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument,
-		(XConnection)=>void initializer, InterpreterContext context) {
+		(XConnection)=>void initializer, InterpreterContext context, boolean isCreateEndpointsOnDemand) {
 		val connectionObjects = select(connectionMappingCall, domainArgument)
 			val result = newArrayList
 		for (connectionObject : connectionObjects) {
 			val connection = createConnection(connectionObject, connectionMappingCall.connectionMapping, context)
 			result += connection
 			initializer.apply(connection)
-			createEndpoints(connectionMappingCall.connectionMapping, connectionObject, connection, context)
-			context.addConnection(connection)
+			createEndpoints(connectionMappingCall.connectionMapping, connectionObject, connection, context, isCreateEndpointsOnDemand)
+			if(connection.source != null && connection.target != null)
+				context.addConnection(connection)
 		}
 		return result
 	}
 
 	protected def <T> createEndpoints(ConnectionMapping<T> connectionMapping, T connectionObject, XConnection connection,
-		InterpreterContext context) {
+		InterpreterContext context, boolean isCreateEndpointsOnDemand) {
 		if(connection.source == null && connectionMapping.source != null) 
-			connection.source = connectionMapping.source?.execute(connectionObject, context).head
+			connection.source = connectionMapping.source?.execute(connectionObject, context, isCreateEndpointsOnDemand).head
 		if(connection.target == null && connectionMapping.target != null) 
-			connection.target = connectionMapping.target?.execute(connectionObject, context).head
+			connection.target = connectionMapping.target?.execute(connectionObject, context, isCreateEndpointsOnDemand).head
 	}
 
 	def <T,U> XDiagram execute(DiagramMappingCall<T, U> diagramMappingCall, U domainArgument,
 		InterpreterContext context) {
 		val diagramObject = diagramMappingCall.selector.apply(domainArgument)
-		val result = createDiagram(diagramObject, diagramMappingCall.diagramMapping, new InterpreterContext => [
-			isIgnoreLazy = true
-		])
+		val result = createDiagram(diagramObject, diagramMappingCall.diagramMapping, new InterpreterContext)
 		return result
 	}
 

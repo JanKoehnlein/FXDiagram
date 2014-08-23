@@ -28,7 +28,7 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   public final static LinearGradient DEFAULT_BACKGROUND = new LinearGradient(
     0, 0, 1, 1, 
     true, CycleMethod.NO_CYCLE, 
-    Collections.<Stop>unmodifiableList(Lists.<Stop>newArrayList(new Stop(0, Color.gray(0.4)), new Stop(1, Color.gray(1)))));
+    Collections.<Stop>unmodifiableList(Lists.<Stop>newArrayList(new Stop(0, Color.gray(0.7)), new Stop(1, Color.gray(1)))));
   
   public RectangleBorderPane() {
     this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);

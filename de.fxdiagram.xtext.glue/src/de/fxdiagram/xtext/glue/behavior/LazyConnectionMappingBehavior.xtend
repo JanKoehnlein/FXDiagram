@@ -66,7 +66,10 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 	
 	def void updateEnablement(XNode host) {
 		val hostDescriptor = host.domainObject as XtextDomainObjectDescriptor<ARG>
-		val existingConnectionDescriptors = host.diagram.connections.map[domainObject].toSet
+		val diagram = host.diagram
+		if(diagram == null) 
+			return
+		val existingConnectionDescriptors = diagram.connections.map[domainObject].toSet
 		hostDescriptor.withDomainObject[ 
 			domainArgument |
 			val connectionDomainObjects = configInterpreter.select(mappingCall, domainArgument)

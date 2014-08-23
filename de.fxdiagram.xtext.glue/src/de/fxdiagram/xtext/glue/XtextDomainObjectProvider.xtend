@@ -1,6 +1,7 @@
 package de.fxdiagram.xtext.glue
 
 import com.google.inject.Injector
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
@@ -10,13 +11,13 @@ import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.ui.PlatformUI
 import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.shared.Access
-import de.fxdiagram.annotations.logging.Logging
 
 @ModelNode
 class XtextDomainObjectProvider implements DomainObjectProvider {
@@ -112,7 +113,15 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 	}
 	
 	def openInEditor(boolean isSelect) {
-		Access.IURIEditorOpener.get.open(URI.createURI(uri), isSelect)
+		if(isSelect) {
+			Access.IURIEditorOpener.get.open(URI.createURI(uri), isSelect)
+		} else {
+			val activePage = PlatformUI.getWorkbench.activeWorkbenchWindow.activePage
+			val activePart = activePage.activePart
+			val editor = Access.IURIEditorOpener.get.open(URI.createURI(uri), isSelect)
+			activePage.activate(activePart)
+			return editor
+		}
 	}
 	
 	def injectMembers(Object it) {

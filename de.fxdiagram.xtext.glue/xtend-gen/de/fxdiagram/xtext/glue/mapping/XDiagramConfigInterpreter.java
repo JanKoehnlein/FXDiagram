@@ -54,7 +54,7 @@ public class XDiagramConfigInterpreter {
       List<AbstractNodeMappingCall<?, T>> _nodes = diagramMapping.getNodes();
       final Procedure1<AbstractNodeMappingCall<?, T>> _function = new Procedure1<AbstractNodeMappingCall<?, T>>() {
         public void apply(final AbstractNodeMappingCall<?, T> it) {
-          XDiagramConfigInterpreter.this.execute(it, diagramObject, context);
+          XDiagramConfigInterpreter.this.execute(it, diagramObject, context, true);
         }
       };
       IterableExtensions.<AbstractNodeMappingCall<?, T>>forEach(_nodes, _function);
@@ -65,22 +65,86 @@ public class XDiagramConfigInterpreter {
             public void apply(final XConnection it) {
             }
           };
-          XDiagramConfigInterpreter.this.execute(it, diagramObject, _function, context);
+          XDiagramConfigInterpreter.this.execute(it, diagramObject, _function, context, true);
         }
       };
       IterableExtensions.<AbstractConnectionMappingCall<?, T>>forEach(_connections, _function_1);
+      List<AbstractNodeMappingCall<?, T>> _nodes_1 = diagramMapping.getNodes();
+      final Procedure1<AbstractNodeMappingCall<?, T>> _function_2 = new Procedure1<AbstractNodeMappingCall<?, T>>() {
+        public void apply(final AbstractNodeMappingCall<?, T> it) {
+          XDiagramConfigInterpreter.this.<T>connectNodesEagerly(it, diagramObject, context);
+        }
+      };
+      IterableExtensions.<AbstractNodeMappingCall<?, T>>forEach(_nodes_1, _function_2);
       _xblockexpression = diagram;
     }
     return _xblockexpression;
   }
   
-  protected <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final InterpreterContext context) {
+  protected <T extends Object> void connectNodesEagerly(final AbstractNodeMappingCall<?, T> it, final T diagramObject, final InterpreterContext context) {
+    final Iterable<?> nodeObjects = this.select(it, diagramObject);
+    NodeMapping<?> _nodeMapping = it.getNodeMapping();
+    final NodeMapping<Object> nodeMappingCasted = ((NodeMapping<Object>) _nodeMapping);
+    for (final Object nodeObject : nodeObjects) {
+      {
+        final XtextDomainObjectDescriptor<Object> descriptor = this.<Object>getDescriptor(nodeObject, nodeMappingCasted);
+        final XNode node = context.<Object>getNode(descriptor);
+        boolean _notEquals = (!Objects.equal(node, null));
+        if (_notEquals) {
+          List<AbstractConnectionMappingCall<?, Object>> _incoming = nodeMappingCasted.getIncoming();
+          final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function = new Function1<AbstractConnectionMappingCall<?, Object>, Boolean>() {
+            public Boolean apply(final AbstractConnectionMappingCall<?, Object> it) {
+              return Boolean.valueOf(it.isLazy());
+            }
+          };
+          Iterable<AbstractConnectionMappingCall<?, Object>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?, Object>>filter(_incoming, _function);
+          final Procedure1<AbstractConnectionMappingCall<?, Object>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?, Object>>() {
+            public void apply(final AbstractConnectionMappingCall<?, Object> it) {
+              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                public void apply(final XConnection it) {
+                  it.setTarget(node);
+                }
+              };
+              XDiagramConfigInterpreter.this.execute(it, nodeObject, _function, context, false);
+            }
+          };
+          IterableExtensions.<AbstractConnectionMappingCall<?, Object>>forEach(_filter, _function_1);
+          List<AbstractConnectionMappingCall<?, Object>> _outgoing = nodeMappingCasted.getOutgoing();
+          final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function_2 = new Function1<AbstractConnectionMappingCall<?, Object>, Boolean>() {
+            public Boolean apply(final AbstractConnectionMappingCall<?, Object> it) {
+              return Boolean.valueOf(it.isLazy());
+            }
+          };
+          Iterable<AbstractConnectionMappingCall<?, Object>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?, Object>>filter(_outgoing, _function_2);
+          final Procedure1<AbstractConnectionMappingCall<?, Object>> _function_3 = new Procedure1<AbstractConnectionMappingCall<?, Object>>() {
+            public void apply(final AbstractConnectionMappingCall<?, Object> it) {
+              final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                public void apply(final XConnection it) {
+                  it.setSource(node);
+                }
+              };
+              XDiagramConfigInterpreter.this.execute(it, nodeObject, _function, context, false);
+            }
+          };
+          IterableExtensions.<AbstractConnectionMappingCall<?, Object>>forEach(_filter_1, _function_3);
+        }
+      }
+    }
+  }
+  
+  protected <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final InterpreterContext context, final boolean isCreateOnDemand) {
     boolean _isApplicable = nodeMapping.isApplicable(nodeObject);
     if (_isApplicable) {
       final XtextDomainObjectDescriptor<T> descriptor = this.<T>getDescriptor(nodeObject, nodeMapping);
       final XNode existingNode = context.<Object>getNode(descriptor);
+      boolean _or = false;
       boolean _notEquals = (!Objects.equal(existingNode, null));
       if (_notEquals) {
+        _or = true;
+      } else {
+        _or = (!isCreateOnDemand);
+      }
+      if (_or) {
         return existingNode;
       }
       final XNode node = nodeMapping.createNode(descriptor);
@@ -88,22 +152,15 @@ public class XDiagramConfigInterpreter {
       List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
       final Procedure1<AbstractConnectionMappingCall<?, T>> _function = new Procedure1<AbstractConnectionMappingCall<?, T>>() {
         public void apply(final AbstractConnectionMappingCall<?, T> it) {
-          boolean _or = false;
           boolean _isLazy = it.isLazy();
           boolean _not = (!_isLazy);
           if (_not) {
-            _or = true;
-          } else {
-            boolean _isIsIgnoreLazy = context.isIsIgnoreLazy();
-            _or = _isIsIgnoreLazy;
-          }
-          if (_or) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setTarget(node);
               }
             };
-            XDiagramConfigInterpreter.this.execute(it, nodeObject, _function, context);
+            XDiagramConfigInterpreter.this.execute(it, nodeObject, _function, context, true);
           }
         }
       };
@@ -111,22 +168,15 @@ public class XDiagramConfigInterpreter {
       List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
       final Procedure1<AbstractConnectionMappingCall<?, T>> _function_1 = new Procedure1<AbstractConnectionMappingCall<?, T>>() {
         public void apply(final AbstractConnectionMappingCall<?, T> it) {
-          boolean _or = false;
           boolean _isLazy = it.isLazy();
           boolean _not = (!_isLazy);
           if (_not) {
-            _or = true;
-          } else {
-            boolean _isIsIgnoreLazy = context.isIsIgnoreLazy();
-            _or = _isIsIgnoreLazy;
-          }
-          if (_or) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               public void apply(final XConnection it) {
                 it.setSource(node);
               }
             };
-            XDiagramConfigInterpreter.this.execute(it, nodeObject, _function, context);
+            XDiagramConfigInterpreter.this.execute(it, nodeObject, _function, context, true);
           }
         }
       };
@@ -193,12 +243,12 @@ public class XDiagramConfigInterpreter {
     return null;
   }
   
-  public <T extends Object, U extends Object> Iterable<XNode> execute(final AbstractNodeMappingCall<T, U> nodeMappingCall, final U domainArgument, final InterpreterContext context) {
+  public <T extends Object, U extends Object> Iterable<XNode> execute(final AbstractNodeMappingCall<T, U> nodeMappingCall, final U domainArgument, final InterpreterContext context, final boolean isCreateNodeOnDemand) {
     final Iterable<T> nodeObjects = this.<T, U>select(nodeMappingCall, domainArgument);
     final ArrayList<XNode> result = CollectionLiterals.<XNode>newArrayList();
     for (final T nodeObject : nodeObjects) {
       NodeMapping<T> _nodeMapping = nodeMappingCall.getNodeMapping();
-      XNode _createNode = this.<T>createNode(nodeObject, _nodeMapping, context);
+      XNode _createNode = this.<T>createNode(nodeObject, _nodeMapping, context, isCreateNodeOnDemand);
       result.add(_createNode);
     }
     return result;
@@ -220,7 +270,7 @@ public class XDiagramConfigInterpreter {
     return null;
   }
   
-  protected <T extends Object, U extends Object> Iterable<XConnection> execute(final AbstractConnectionMappingCall<T, U> connectionMappingCall, final U domainArgument, final Procedure1<? super XConnection> initializer, final InterpreterContext context) {
+  protected <T extends Object, U extends Object> Iterable<XConnection> execute(final AbstractConnectionMappingCall<T, U> connectionMappingCall, final U domainArgument, final Procedure1<? super XConnection> initializer, final InterpreterContext context, final boolean isCreateEndpointsOnDemand) {
     final Iterable<T> connectionObjects = this.<T, U>select(connectionMappingCall, domainArgument);
     final ArrayList<XConnection> result = CollectionLiterals.<XConnection>newArrayList();
     for (final T connectionObject : connectionObjects) {
@@ -230,14 +280,26 @@ public class XDiagramConfigInterpreter {
         result.add(connection);
         initializer.apply(connection);
         ConnectionMapping<T> _connectionMapping_1 = connectionMappingCall.getConnectionMapping();
-        this.<T>createEndpoints(_connectionMapping_1, connectionObject, connection, context);
-        context.addConnection(connection);
+        this.<T>createEndpoints(_connectionMapping_1, connectionObject, connection, context, isCreateEndpointsOnDemand);
+        boolean _and = false;
+        XNode _source = connection.getSource();
+        boolean _notEquals = (!Objects.equal(_source, null));
+        if (!_notEquals) {
+          _and = false;
+        } else {
+          XNode _target = connection.getTarget();
+          boolean _notEquals_1 = (!Objects.equal(_target, null));
+          _and = _notEquals_1;
+        }
+        if (_and) {
+          context.addConnection(connection);
+        }
       }
     }
     return result;
   }
   
-  protected <T extends Object> void createEndpoints(final ConnectionMapping<T> connectionMapping, final T connectionObject, final XConnection connection, final InterpreterContext context) {
+  protected <T extends Object> void createEndpoints(final ConnectionMapping<T> connectionMapping, final T connectionObject, final XConnection connection, final InterpreterContext context, final boolean isCreateEndpointsOnDemand) {
     boolean _and = false;
     XNode _source = connection.getSource();
     boolean _equals = Objects.equal(_source, null);
@@ -252,7 +314,7 @@ public class XDiagramConfigInterpreter {
       NodeMappingCall<?, T> _source_2 = connectionMapping.getSource();
       Iterable<XNode> _execute = null;
       if (_source_2!=null) {
-        _execute=this.execute(_source_2, connectionObject, context);
+        _execute=this.execute(_source_2, connectionObject, context, isCreateEndpointsOnDemand);
       }
       XNode _head = IterableExtensions.<XNode>head(_execute);
       connection.setSource(_head);
@@ -271,7 +333,7 @@ public class XDiagramConfigInterpreter {
       NodeMappingCall<?, T> _target_2 = connectionMapping.getTarget();
       Iterable<XNode> _execute_1 = null;
       if (_target_2!=null) {
-        _execute_1=this.execute(_target_2, connectionObject, context);
+        _execute_1=this.execute(_target_2, connectionObject, context, isCreateEndpointsOnDemand);
       }
       XNode _head_1 = IterableExtensions.<XNode>head(_execute_1);
       connection.setTarget(_head_1);
@@ -283,13 +345,7 @@ public class XDiagramConfigInterpreter {
     final T diagramObject = _selector.apply(domainArgument);
     DiagramMapping<T> _diagramMapping = diagramMappingCall.getDiagramMapping();
     InterpreterContext _interpreterContext = new InterpreterContext();
-    final Procedure1<InterpreterContext> _function = new Procedure1<InterpreterContext>() {
-      public void apply(final InterpreterContext it) {
-        it.setIsIgnoreLazy(true);
-      }
-    };
-    InterpreterContext _doubleArrow = ObjectExtensions.<InterpreterContext>operator_doubleArrow(_interpreterContext, _function);
-    final XDiagram result = this.<T>createDiagram(diagramObject, _diagramMapping, _doubleArrow);
+    final XDiagram result = this.<T>createDiagram(diagramObject, _diagramMapping, _interpreterContext);
     return result;
   }
   

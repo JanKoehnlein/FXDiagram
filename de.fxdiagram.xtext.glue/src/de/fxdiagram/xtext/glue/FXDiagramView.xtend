@@ -130,7 +130,7 @@ class FXDiagramView extends ViewPart {
 		} else if(mappingCall instanceof NodeMappingCall<?, ?>) {
 			editor.register
 			interpreterContext.diagram = root.diagram
-			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext)		
+			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)		
 		}
 //		val command = new SequentialAnimationCommand
 //		command += interpreterContext.command

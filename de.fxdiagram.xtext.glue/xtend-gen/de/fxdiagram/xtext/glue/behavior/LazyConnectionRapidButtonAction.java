@@ -1,5 +1,6 @@
 package de.fxdiagram.xtext.glue.behavior;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -45,8 +46,12 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
   public void updateEnablement(final XNode host) {
     DomainObjectDescriptor _domainObject = host.getDomainObject();
     final XtextDomainObjectDescriptor<ARG> hostDescriptor = ((XtextDomainObjectDescriptor<ARG>) _domainObject);
-    XDiagram _diagram = CoreExtensions.getDiagram(host);
-    ObservableList<XConnection> _connections = _diagram.getConnections();
+    final XDiagram diagram = CoreExtensions.getDiagram(host);
+    boolean _equals = Objects.equal(diagram, null);
+    if (_equals) {
+      return;
+    }
+    ObservableList<XConnection> _connections = diagram.getConnections();
     final Function1<XConnection, DomainObjectDescriptor> _function = new Function1<XConnection, DomainObjectDescriptor>() {
       public DomainObjectDescriptor apply(final XConnection it) {
         return it.getDomainObject();
