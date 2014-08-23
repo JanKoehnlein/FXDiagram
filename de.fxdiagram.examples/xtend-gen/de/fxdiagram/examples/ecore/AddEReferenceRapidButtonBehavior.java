@@ -1,7 +1,6 @@
 package de.fxdiagram.examples.ecore;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
@@ -29,6 +28,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -160,6 +160,6 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     EClassNode _host_1 = this.getHost();
     SVGPath _arrowButton_1 = ButtonExtensions.getArrowButton(Side.RIGHT, "Discover references");
     RapidButton _rapidButton_1 = new RapidButton(_host_1, Side.RIGHT, _arrowButton_1, addConnectionAction);
-    return Collections.<RapidButton>unmodifiableList(Lists.<RapidButton>newArrayList(_rapidButton, _rapidButton_1));
+    return Collections.<RapidButton>unmodifiableList(CollectionLiterals.<RapidButton>newArrayList(_rapidButton, _rapidButton_1));
   }
 }

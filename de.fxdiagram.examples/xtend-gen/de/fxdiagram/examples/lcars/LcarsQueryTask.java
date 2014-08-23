@@ -45,7 +45,7 @@ public class LcarsQueryTask extends Task<Void> {
   }
   
   protected Void call() throws Exception {
-    Void _xblockexpression = null;
+    Object _xblockexpression = null;
     {
       XRoot _root = CoreExtensions.getRoot(this.host);
       final LcarsModelProvider modelProvider = _root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
@@ -133,6 +133,6 @@ public class LcarsQueryTask extends Task<Void> {
       Platform.runLater(_function_7);
       _xblockexpression = null;
     }
-    return _xblockexpression;
+    return ((Void)_xblockexpression);
   }
 }

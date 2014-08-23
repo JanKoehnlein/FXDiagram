@@ -155,30 +155,24 @@ public class CoreExtensions {
   }
   
   public static Transform localToDiagramTransform(final Node node) {
-    Transform _xblockexpression = null;
+    Object _xblockexpression = null;
     {
       final Affine transform = new Affine();
       Node currentNode = node;
-      Parent _parent = currentNode.getParent();
-      boolean _notEquals = (!Objects.equal(_parent, null));
-      boolean _while = _notEquals;
-      while (_while) {
+      while ((!Objects.equal(currentNode.getParent(), null))) {
         {
           Transform _localToParentTransform = currentNode.getLocalToParentTransform();
           TransformExtensions.leftMultiply(transform, _localToParentTransform);
-          Parent _parent_1 = currentNode.getParent();
-          currentNode = _parent_1;
+          Parent _parent = currentNode.getParent();
+          currentNode = _parent;
           if ((currentNode instanceof XDiagram)) {
             return transform;
           }
         }
-        Parent _parent_1 = currentNode.getParent();
-        boolean _notEquals_1 = (!Objects.equal(_parent_1, null));
-        _while = _notEquals_1;
       }
       _xblockexpression = null;
     }
-    return _xblockexpression;
+    return ((Transform)_xblockexpression);
   }
   
   public static XDiagram getDiagram(final Node it) {

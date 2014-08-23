@@ -12,24 +12,19 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import java.util.List;
 import javafx.collections.ObservableList;
+import org.eclipse.xtend.lib.Property;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class InterpreterContext {
   protected XDiagram diagram;
   
+  @Property
   private boolean _isNewDiagram;
-  
-  public boolean isIsNewDiagram() {
-    return this._isNewDiagram;
-  }
-  
-  public void setIsNewDiagram(final boolean isNewDiagram) {
-    this._isNewDiagram = isNewDiagram;
-  }
   
   private List<XNode> addedNodes = CollectionLiterals.<XNode>newArrayList();
   
@@ -107,5 +102,14 @@ public class InterpreterContext {
   public AddRemoveCommand getCommand() {
     Iterable<XShape> _plus = Iterables.<XShape>concat(this.addedNodes, this.addedConnections);
     return AddRemoveCommand.newAddCommand(this.diagram, ((XShape[])Conversions.unwrapArray(_plus, XShape.class)));
+  }
+  
+  @Pure
+  public boolean isIsNewDiagram() {
+    return this._isNewDiagram;
+  }
+  
+  public void setIsNewDiagram(final boolean isNewDiagram) {
+    this._isNewDiagram = isNewDiagram;
   }
 }

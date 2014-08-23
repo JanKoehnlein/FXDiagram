@@ -272,8 +272,7 @@ public class LcarsField extends Parent {
       }
     };
     FlowPane _doubleArrow = ObjectExtensions.<FlowPane>operator_doubleArrow(_flowPane, _function_1);
-    FlowPane _flowPane_1 = this.flowPane = _doubleArrow;
-    _children.add(_flowPane_1);
+    _children.add((this.flowPane = _doubleArrow));
   }
   
   public LcarsNode getLcarsNode() {

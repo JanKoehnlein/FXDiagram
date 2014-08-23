@@ -1,7 +1,6 @@
 package de.fxdiagram.examples;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -64,6 +63,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -112,7 +112,7 @@ public class Demo extends Application {
       EcoreDomainObjectProvider _ecoreDomainObjectProvider = new EcoreDomainObjectProvider();
       JavaModelProvider _javaModelProvider = new JavaModelProvider();
       LcarsModelProvider _lcarsModelProvider = new LcarsModelProvider();
-      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(Lists.<DomainObjectProvider>newArrayList(_ecoreDomainObjectProvider, _javaModelProvider, _lcarsModelProvider, this.classLoaderProvider)));
+      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(CollectionLiterals.<DomainObjectProvider>newArrayList(_ecoreDomainObjectProvider, _javaModelProvider, _lcarsModelProvider, this.classLoaderProvider)));
       DiagramActionRegistry _diagramActionRegistry = this.root.getDiagramActionRegistry();
       CenterAction _centerAction = new CenterAction();
       ExitAction _exitAction = new ExitAction();
@@ -131,7 +131,7 @@ public class Demo extends Application {
       CloseAction _closeAction = new CloseAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
       UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(Lists.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _openAction, _closeAction, _fullScreenAction, _undoRedoPlayerAction)));
+      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _openAction, _closeAction, _fullScreenAction, _undoRedoPlayerAction)));
       final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
         public void apply(final XDiagram it) {
           ObservableList<XNode> _nodes = it.getNodes();
@@ -459,12 +459,12 @@ public class Demo extends Application {
     final Task<Void> _function = new Task<Void>() {
       @Override
       protected Void call() throws Exception {
-        Void _xblockexpression = null;
+        Object _xblockexpression = null;
         {
           new Layouter();
           _xblockexpression = null;
         }
-        return _xblockexpression;
+        return ((Void)_xblockexpression);
       }
     };
     final Task<Void> task = _function;

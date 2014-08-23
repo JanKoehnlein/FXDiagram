@@ -134,8 +134,7 @@ public class NeonSignNode extends FlipNode {
           }
         };
         TextField _doubleArrow = ObjectExtensions.<TextField>operator_doubleArrow(_textField, _function);
-        TextField _textField_1 = NeonSignNode.this.textField = _doubleArrow;
-        _children.add(_textField_1);
+        _children.add((NeonSignNode.this.textField = _doubleArrow));
         ObservableList<Node> _children_1 = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_1 = new Procedure1<Text>() {
@@ -174,8 +173,7 @@ public class NeonSignNode extends FlipNode {
           }
         };
         Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
-        Text _neonText = NeonSignNode.this.neonText = _doubleArrow_1;
-        _children_1.add(_neonText);
+        _children_1.add((NeonSignNode.this.neonText = _doubleArrow_1));
       }
     };
     return ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);

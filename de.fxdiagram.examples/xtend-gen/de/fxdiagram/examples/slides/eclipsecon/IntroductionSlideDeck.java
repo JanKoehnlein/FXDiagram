@@ -1,7 +1,6 @@
 package de.fxdiagram.examples.slides.eclipsecon;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ImageCache;
@@ -26,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -340,7 +340,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
-                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(244.0), Double.valueOf(226.0), Double.valueOf(537.0), Double.valueOf(356.0))));
+                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(244.0), Double.valueOf(226.0), Double.valueOf(537.0), Double.valueOf(356.0))));
                         Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
                         it.setStroke(_jungleGreen);
                         it.setStrokeWidth(2);
@@ -371,7 +371,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
-                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(176.0), Double.valueOf(439.0), Double.valueOf(501.0), Double.valueOf(367.0))));
+                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(176.0), Double.valueOf(439.0), Double.valueOf(501.0), Double.valueOf(367.0))));
                         Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
                         it.setStroke(_jungleGreen);
                         it.setStrokeWidth(2);
@@ -402,7 +402,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
-                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(307.0), Double.valueOf(611.0), Double.valueOf(489.0), Double.valueOf(433.0))));
+                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(307.0), Double.valueOf(611.0), Double.valueOf(489.0), Double.valueOf(433.0))));
                         Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
                         it.setStroke(_jungleGreen);
                         it.setStrokeWidth(2);
@@ -433,7 +433,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
-                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(714.0), Double.valueOf(662.0), Double.valueOf(588.0), Double.valueOf(458.0))));
+                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(714.0), Double.valueOf(662.0), Double.valueOf(588.0), Double.valueOf(458.0))));
                         Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
                         it.setStroke(_jungleGreen);
                         it.setStrokeWidth(2);
@@ -468,7 +468,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
-                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(803.0), Double.valueOf(462.0), Double.valueOf(658.0), Double.valueOf(416.0))));
+                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(803.0), Double.valueOf(462.0), Double.valueOf(658.0), Double.valueOf(416.0))));
                         Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
                         it.setStroke(_jungleGreen);
                         it.setStrokeWidth(2);
@@ -503,7 +503,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
-                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(766.0), Double.valueOf(206.0), Double.valueOf(662.0), Double.valueOf(281.0))));
+                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(766.0), Double.valueOf(206.0), Double.valueOf(662.0), Double.valueOf(281.0))));
                         Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
                         it.setStroke(_jungleGreen);
                         it.setStrokeWidth(2);
@@ -534,7 +534,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
-                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(519.0), Double.valueOf(101.0), Double.valueOf(525.0), Double.valueOf(188.0))));
+                        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(519.0), Double.valueOf(101.0), Double.valueOf(525.0), Double.valueOf(188.0))));
                         Color _jungleGreen = EclipseConSlideFactory.jungleGreen();
                         it.setStroke(_jungleGreen);
                         it.setStrokeWidth(2);

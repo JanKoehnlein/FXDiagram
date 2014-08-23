@@ -1,7 +1,6 @@
 package de.fxdiagram.core.anchors;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
@@ -80,33 +79,13 @@ public class ConnectionRouter implements XActivatable {
     Node current = host.getNode();
     ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = current.layoutBoundsProperty();
     _layoutBoundsProperty.addListener(this.boundsListener);
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(current, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _isRootDiagram = CoreExtensions.isRootDiagram(current);
-      boolean _not = (!_isRootDiagram);
-      _and = _not;
-    }
-    boolean _while = _and;
-    while (_while) {
+    while (((!Objects.equal(current, null)) && (!CoreExtensions.isRootDiagram(current)))) {
       {
         ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = current.boundsInParentProperty();
         _boundsInParentProperty.addListener(this.boundsListener);
         Parent _parent = current.getParent();
         current = _parent;
       }
-      boolean _and_1 = false;
-      boolean _notEquals_1 = (!Objects.equal(current, null));
-      if (!_notEquals_1) {
-        _and_1 = false;
-      } else {
-        boolean _isRootDiagram_1 = CoreExtensions.isRootDiagram(current);
-        boolean _not_1 = (!_isRootDiagram_1);
-        _and_1 = _not_1;
-      }
-      _while = _and_1;
     }
   }
   
@@ -320,7 +299,7 @@ public class ConnectionRouter implements XActivatable {
         };
         XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
         _controlPoints_3.setAll(
-          Collections.<XControlPoint>unmodifiableList(Lists.<XControlPoint>newArrayList(_doubleArrow, _doubleArrow_1)));
+          Collections.<XControlPoint>unmodifiableList(CollectionLiterals.<XControlPoint>newArrayList(_doubleArrow, _doubleArrow_1)));
         XConnection.Kind _kind = this.connection.getKind();
         if (_kind != null) {
           switch (_kind) {

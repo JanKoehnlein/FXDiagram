@@ -194,7 +194,7 @@ public class ModelLoad {
         }
         _xifexpression = _switchResult;
       }
-      return _xifexpression;
+      return Boolean.valueOf(_xifexpression);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }

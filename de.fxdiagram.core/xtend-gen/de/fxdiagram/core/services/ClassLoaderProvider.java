@@ -12,22 +12,17 @@ import java.net.URL;
 import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.xtend.lib.Property;
 import org.eclipse.xtext.xbase.lib.Exceptions;
+import org.eclipse.xtext.xbase.lib.Pure;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 
 @ModelNode
 @SuppressWarnings("all")
 public class ClassLoaderProvider implements DomainObjectProviderWithState {
+  @Property
   private ClassLoader _rootClassLoader;
-  
-  public ClassLoader getRootClassLoader() {
-    return this._rootClassLoader;
-  }
-  
-  public void setRootClassLoader(final ClassLoader rootClassLoader) {
-    this._rootClassLoader = rootClassLoader;
-  }
   
   public <T extends Object> DomainObjectDescriptor createDescriptor(final T domainObject) {
     boolean _matched = false;
@@ -159,5 +154,14 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   
   public void populate(final ModelElementImpl modelElement) {
     
+  }
+  
+  @Pure
+  public ClassLoader getRootClassLoader() {
+    return this._rootClassLoader;
+  }
+  
+  public void setRootClassLoader(final ClassLoader rootClassLoader) {
+    this._rootClassLoader = rootClassLoader;
   }
 }

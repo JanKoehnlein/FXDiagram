@@ -1,6 +1,7 @@
 package de.fxdiagram.examples.java;
 
 import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
@@ -8,15 +9,7 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 public class JavaSuperTypeHandle {
   private final Class<?> _subType;
   
-  public Class<?> getSubType() {
-    return this._subType;
-  }
-  
   private final Class<?> _superType;
-  
-  public Class<?> getSuperType() {
-    return this._superType;
-  }
   
   public JavaSuperTypeHandle(final Class<?> subType, final Class<?> superType) {
     super();
@@ -25,6 +18,7 @@ public class JavaSuperTypeHandle {
   }
   
   @Override
+  @Pure
   public int hashCode() {
     final int prime = 31;
     int result = 1;
@@ -34,6 +28,7 @@ public class JavaSuperTypeHandle {
   }
   
   @Override
+  @Pure
   public boolean equals(final Object obj) {
     if (this == obj)
       return true;
@@ -56,8 +51,19 @@ public class JavaSuperTypeHandle {
   }
   
   @Override
+  @Pure
   public String toString() {
     String result = new ToStringHelper().toString(this);
     return result;
+  }
+  
+  @Pure
+  public Class<?> getSubType() {
+    return this._subType;
+  }
+  
+  @Pure
+  public Class<?> getSuperType() {
+    return this._superType;
   }
 }

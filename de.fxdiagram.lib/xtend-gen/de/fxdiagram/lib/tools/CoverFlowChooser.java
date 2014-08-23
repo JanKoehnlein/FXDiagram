@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.eclipse.xtend.lib.Property;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -25,28 +26,15 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class CoverFlowChooser extends AbstractChooser {
+  @Property
   private double _angle = 60;
   
-  public double getAngle() {
-    return this._angle;
-  }
-  
-  public void setAngle(final double angle) {
-    this._angle = angle;
-  }
-  
+  @Property
   private double _deltaX = 20;
-  
-  public double getDeltaX() {
-    return this._deltaX;
-  }
-  
-  public void setDeltaX(final double deltaX) {
-    this._deltaX = deltaX;
-  }
   
   private double gap;
   
@@ -208,5 +196,23 @@ public class CoverFlowChooser extends AbstractChooser {
       _xifexpression = _xblockexpression;
     }
     return _xifexpression;
+  }
+  
+  @Pure
+  public double getAngle() {
+    return this._angle;
+  }
+  
+  public void setAngle(final double angle) {
+    this._angle = angle;
+  }
+  
+  @Pure
+  public double getDeltaX() {
+    return this._deltaX;
+  }
+  
+  public void setDeltaX(final double deltaX) {
+    this._deltaX = deltaX;
   }
 }

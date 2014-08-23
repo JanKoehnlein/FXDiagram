@@ -55,8 +55,7 @@ public class Slide extends XNode {
           }
         };
         ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
-        ImageView _imageView_1 = Slide.this.imageView = _doubleArrow;
-        _children.add(_imageView_1);
+        _children.add((Slide.this.imageView = _doubleArrow));
       }
     };
     return ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);

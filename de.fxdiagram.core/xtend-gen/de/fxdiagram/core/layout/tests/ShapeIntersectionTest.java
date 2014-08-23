@@ -1,12 +1,12 @@
 package de.fxdiagram.core.layout.tests;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import java.util.Collections;
 import javafx.collections.ObservableList;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Shape;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -28,7 +28,7 @@ public class ShapeIntersectionTest {
     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
       public void apply(final Polyline it) {
         ObservableList<Double> _points = it.getPoints();
-        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf((-1.0)), Double.valueOf((-1.0)), Double.valueOf(1.0), Double.valueOf(1.0))));
+        Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf((-1.0)), Double.valueOf((-1.0)), Double.valueOf(1.0), Double.valueOf(1.0))));
       }
     };
     final Polyline line = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_1);

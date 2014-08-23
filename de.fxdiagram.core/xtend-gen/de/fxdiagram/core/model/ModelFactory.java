@@ -1,7 +1,6 @@
 package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Maps;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.ColorAdapter;
@@ -15,22 +14,14 @@ import java.util.logging.Logger;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtext.xbase.lib.Pair;
 
 @Logging
 @SuppressWarnings("all")
 public class ModelFactory {
-  private final Map<String, Class<ColorAdapter>> valueAdapters = new Function0<Map<String, Class<ColorAdapter>>>() {
-    public Map<String, Class<ColorAdapter>> apply() {
-      Map<String, Class<ColorAdapter>> _xsetliteral = null;
-      String _name = Color.class.getName();
-      Map<String, Class<ColorAdapter>> _tempMap = Maps.<String, Class<ColorAdapter>>newHashMap();
-      _tempMap.put(_name, ColorAdapter.class);
-      _xsetliteral = Collections.<String, Class<ColorAdapter>>unmodifiableMap(_tempMap);
-      return _xsetliteral;
-    }
-  }.apply();
+  private final Map<String, Class<ColorAdapter>> valueAdapters = Collections.<String, Class<ColorAdapter>>unmodifiableMap(CollectionLiterals.<String, Class<ColorAdapter>>newHashMap(Pair.<String, Class<ColorAdapter>>of(Color.class.getName(), ColorAdapter.class)));
   
   protected ModelElement createElement(final String className) {
     try {
@@ -101,14 +92,14 @@ public class ModelFactory {
   }
   
   protected ModelElement _create(final Object object) {
-    ModelElement _xblockexpression = null;
+    Object _xblockexpression = null;
     {
       String _string = object.toString();
       String _plus = ("No model population strategy for " + _string);
       ModelFactory.LOG.severe(_plus);
       _xblockexpression = null;
     }
-    return _xblockexpression;
+    return ((ModelElement)_xblockexpression);
   }
   
   protected ModelElement create(final Object text) {

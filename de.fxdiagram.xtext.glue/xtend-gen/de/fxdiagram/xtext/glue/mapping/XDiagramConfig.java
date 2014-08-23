@@ -29,8 +29,7 @@ public interface XDiagramConfig {
         _elvis = XDiagramConfig.Registry.instance;
       } else {
         XDiagramConfig.Registry _registry = new XDiagramConfig.Registry();
-        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.instance = _registry;
-        _elvis = _instance;
+        _elvis = (XDiagramConfig.Registry.instance = _registry);
       }
       return _elvis;
     }

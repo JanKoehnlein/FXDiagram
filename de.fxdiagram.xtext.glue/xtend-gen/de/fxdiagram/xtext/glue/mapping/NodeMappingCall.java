@@ -4,6 +4,7 @@ import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
@@ -11,15 +12,7 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 public class NodeMappingCall<T extends Object, ARG extends Object> extends AbstractNodeMappingCall<T, ARG> {
   private final Function1<? super ARG, ? extends T> _selector;
   
-  public Function1<? super ARG, ? extends T> getSelector() {
-    return this._selector;
-  }
-  
   private final NodeMapping<T> _nodeMapping;
-  
-  public NodeMapping<T> getNodeMapping() {
-    return this._nodeMapping;
-  }
   
   public NodeMappingCall(final Function1<? super ARG, ? extends T> selector, final NodeMapping<T> nodeMapping) {
     super();
@@ -28,6 +21,7 @@ public class NodeMappingCall<T extends Object, ARG extends Object> extends Abstr
   }
   
   @Override
+  @Pure
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
@@ -37,6 +31,7 @@ public class NodeMappingCall<T extends Object, ARG extends Object> extends Abstr
   }
   
   @Override
+  @Pure
   public boolean equals(final Object obj) {
     if (this == obj)
       return true;
@@ -46,7 +41,7 @@ public class NodeMappingCall<T extends Object, ARG extends Object> extends Abstr
       return false;
     if (!super.equals(obj))
       return false;
-    NodeMappingCall other = (NodeMappingCall) obj;
+    NodeMappingCall<?, ?> other = (NodeMappingCall<?, ?>) obj;
     if (this._selector == null) {
       if (other._selector != null)
         return false;
@@ -61,8 +56,19 @@ public class NodeMappingCall<T extends Object, ARG extends Object> extends Abstr
   }
   
   @Override
+  @Pure
   public String toString() {
     String result = new ToStringHelper().toString(this);
     return result;
+  }
+  
+  @Pure
+  public Function1<? super ARG, ? extends T> getSelector() {
+    return this._selector;
+  }
+  
+  @Pure
+  public NodeMapping<T> getNodeMapping() {
+    return this._nodeMapping;
   }
 }

@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @SuppressWarnings("all")
@@ -22,33 +23,13 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   public static class DragContext {
     private final double _initialX;
     
-    public double getInitialX() {
-      return this._initialX;
-    }
-    
     private final double _initialY;
-    
-    public double getInitialY() {
-      return this._initialY;
-    }
     
     private final double _mouseAnchorX;
     
-    public double getMouseAnchorX() {
-      return this._mouseAnchorX;
-    }
-    
     private final double _mouseAnchorY;
     
-    public double getMouseAnchorY() {
-      return this._mouseAnchorY;
-    }
-    
     private final Point2D _initialPosInScene;
-    
-    public Point2D getInitialPosInScene() {
-      return this._initialPosInScene;
-    }
     
     public DragContext(final double initialX, final double initialY, final double mouseAnchorX, final double mouseAnchorY, final Point2D initialPosInScene) {
       super();
@@ -60,6 +41,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     }
     
     @Override
+    @Pure
     public int hashCode() {
       final int prime = 31;
       int result = 1;
@@ -72,6 +54,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     }
     
     @Override
+    @Pure
     public boolean equals(final Object obj) {
       if (this == obj)
         return true;
@@ -79,15 +62,15 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
         return false;
       if (getClass() != obj.getClass())
         return false;
-      DragContext other = (DragContext) obj;
+      MoveBehavior.DragContext other = (MoveBehavior.DragContext) obj;
       if (Double.doubleToLongBits(other._initialX) != Double.doubleToLongBits(this._initialX))
-        return false;
+        return false; 
       if (Double.doubleToLongBits(other._initialY) != Double.doubleToLongBits(this._initialY))
-        return false;
+        return false; 
       if (Double.doubleToLongBits(other._mouseAnchorX) != Double.doubleToLongBits(this._mouseAnchorX))
-        return false;
+        return false; 
       if (Double.doubleToLongBits(other._mouseAnchorY) != Double.doubleToLongBits(this._mouseAnchorY))
-        return false;
+        return false; 
       if (this._initialPosInScene == null) {
         if (other._initialPosInScene != null)
           return false;
@@ -97,9 +80,35 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     }
     
     @Override
+    @Pure
     public String toString() {
       String result = new ToStringHelper().toString(this);
       return result;
+    }
+    
+    @Pure
+    public double getInitialX() {
+      return this._initialX;
+    }
+    
+    @Pure
+    public double getInitialY() {
+      return this._initialY;
+    }
+    
+    @Pure
+    public double getMouseAnchorX() {
+      return this._mouseAnchorX;
+    }
+    
+    @Pure
+    public double getMouseAnchorY() {
+      return this._mouseAnchorY;
+    }
+    
+    @Pure
+    public Point2D getInitialPosInScene() {
+      return this._initialPosInScene;
     }
   }
   

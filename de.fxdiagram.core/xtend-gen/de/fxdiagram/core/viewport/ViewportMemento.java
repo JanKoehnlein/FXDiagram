@@ -2,33 +2,18 @@ package de.fxdiagram.core.viewport;
 
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @Data
 @SuppressWarnings("all")
 public class ViewportMemento {
   private final double _translateX;
   
-  public double getTranslateX() {
-    return this._translateX;
-  }
-  
   private final double _translateY;
-  
-  public double getTranslateY() {
-    return this._translateY;
-  }
   
   private final double _scale;
   
-  public double getScale() {
-    return this._scale;
-  }
-  
   private final double _rotate;
-  
-  public double getRotate() {
-    return this._rotate;
-  }
   
   public String toString() {
     StringConcatenation _builder = new StringConcatenation();
@@ -57,6 +42,7 @@ public class ViewportMemento {
   }
   
   @Override
+  @Pure
   public int hashCode() {
     final int prime = 31;
     int result = 1;
@@ -68,6 +54,7 @@ public class ViewportMemento {
   }
   
   @Override
+  @Pure
   public boolean equals(final Object obj) {
     if (this == obj)
       return true;
@@ -77,13 +64,33 @@ public class ViewportMemento {
       return false;
     ViewportMemento other = (ViewportMemento) obj;
     if (Double.doubleToLongBits(other._translateX) != Double.doubleToLongBits(this._translateX))
-      return false;
+      return false; 
     if (Double.doubleToLongBits(other._translateY) != Double.doubleToLongBits(this._translateY))
-      return false;
+      return false; 
     if (Double.doubleToLongBits(other._scale) != Double.doubleToLongBits(this._scale))
-      return false;
+      return false; 
     if (Double.doubleToLongBits(other._rotate) != Double.doubleToLongBits(this._rotate))
-      return false;
+      return false; 
     return true;
+  }
+  
+  @Pure
+  public double getTranslateX() {
+    return this._translateX;
+  }
+  
+  @Pure
+  public double getTranslateY() {
+    return this._translateY;
+  }
+  
+  @Pure
+  public double getScale() {
+    return this._scale;
+  }
+  
+  @Pure
+  public double getRotate() {
+    return this._rotate;
   }
 }

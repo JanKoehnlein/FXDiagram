@@ -1,7 +1,6 @@
 package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Maps;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.Model;
@@ -27,6 +26,7 @@ import javax.json.stream.JsonGeneratorFactory;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
@@ -44,11 +44,8 @@ public class ModelSave {
     if (_notEquals) {
       HashMap<ModelElement, String> _newHashMap = CollectionLiterals.<ModelElement, String>newHashMap();
       this.idMap = _newHashMap;
-      Map<String, Boolean> _xsetliteral = null;
-      Map<String, Boolean> _tempMap = Maps.<String, Boolean>newHashMap();
-      _tempMap.put(JsonGenerator.PRETTY_PRINTING, Boolean.valueOf(true));
-      _xsetliteral = Collections.<String, Boolean>unmodifiableMap(_tempMap);
-      JsonGeneratorFactory _createGeneratorFactory = Json.createGeneratorFactory(_xsetliteral);
+      Pair<String, Boolean> _mappedTo = Pair.<String, Boolean>of(JsonGenerator.PRETTY_PRINTING, Boolean.valueOf(true));
+      JsonGeneratorFactory _createGeneratorFactory = Json.createGeneratorFactory(Collections.<String, Boolean>unmodifiableMap(CollectionLiterals.<String, Boolean>newHashMap(_mappedTo)));
       JsonGenerator _createGenerator = _createGeneratorFactory.createGenerator(out);
       ModelElement _rootElement_1 = this.model.getRootElement();
       JsonGenerator _write = this.write(_createGenerator, _rootElement_1, null, "");

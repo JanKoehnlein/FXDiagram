@@ -38,8 +38,7 @@ public class ChooserTransition extends Transition {
     double _currentPosition = this.tool.getCurrentPosition();
     this.startPosition = _currentPosition;
     this.endPosition = ((int) (this.startPosition + targetPositionDelta));
-    boolean _while = (this.endPosition < 0);
-    while (_while) {
+    while ((this.endPosition < 0)) {
       {
         ArrayList<XNode> _nodes = this.tool.getNodes();
         int _size = _nodes.size();
@@ -50,7 +49,6 @@ public class ChooserTransition extends Transition {
         double _plus_1 = (this.endPosition + _size_1);
         this.endPosition = _plus_1;
       }
-      _while = (this.endPosition < 0);
     }
     this.setDuration(2000);
     this.playFromStart();

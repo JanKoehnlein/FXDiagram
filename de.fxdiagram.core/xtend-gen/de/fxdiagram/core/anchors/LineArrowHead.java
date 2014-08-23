@@ -1,6 +1,5 @@
 package de.fxdiagram.core.anchors;
 
-import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
@@ -14,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.StrokeType;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -42,7 +42,7 @@ public class LineArrowHead extends ArrowHead {
             double _width = LineArrowHead.this.getWidth();
             double _height_1 = LineArrowHead.this.getHeight();
             double _multiply_1 = (0.5 * _height_1);
-            _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
+            _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
             ObjectProperty<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
             _strokeProperty.bind(_strokeProperty_1);
@@ -64,7 +64,7 @@ public class LineArrowHead extends ArrowHead {
             XConnection _connection = LineArrowHead.this.getConnection();
             double _strokeWidth = _connection.getStrokeWidth();
             double _minus = (_width - _strokeWidth);
-            _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
+            _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
             ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
             ObjectProperty<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
             _strokeProperty.bind(_strokeProperty_1);

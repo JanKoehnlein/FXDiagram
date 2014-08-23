@@ -2,6 +2,7 @@ package de.fxdiagram.core.model;
 
 import javafx.beans.property.Property;
 import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
@@ -9,21 +10,9 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 public class CrossRefData {
   private final String _href;
   
-  public String getHref() {
-    return this._href;
-  }
-  
   private final Property<?> _property;
   
-  public Property<?> getProperty() {
-    return this._property;
-  }
-  
   private final int _index;
-  
-  public int getIndex() {
-    return this._index;
-  }
   
   public CrossRefData(final String href, final Property<?> property, final int index) {
     super();
@@ -33,6 +22,7 @@ public class CrossRefData {
   }
   
   @Override
+  @Pure
   public int hashCode() {
     final int prime = 31;
     int result = 1;
@@ -43,6 +33,7 @@ public class CrossRefData {
   }
   
   @Override
+  @Pure
   public boolean equals(final Object obj) {
     if (this == obj)
       return true;
@@ -67,8 +58,24 @@ public class CrossRefData {
   }
   
   @Override
+  @Pure
   public String toString() {
     String result = new ToStringHelper().toString(this);
     return result;
+  }
+  
+  @Pure
+  public String getHref() {
+    return this._href;
+  }
+  
+  @Pure
+  public Property<?> getProperty() {
+    return this._property;
+  }
+  
+  @Pure
+  public int getIndex() {
+    return this._index;
   }
 }

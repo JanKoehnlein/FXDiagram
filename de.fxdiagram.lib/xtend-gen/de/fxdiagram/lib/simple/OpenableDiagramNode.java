@@ -108,8 +108,7 @@ public class OpenableDiagramNode extends XNode {
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        Text _textNode = OpenableDiagramNode.this.textNode = _doubleArrow;
-        _children.add(_textNode);
+        _children.add((OpenableDiagramNode.this.textNode = _doubleArrow));
       }
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(

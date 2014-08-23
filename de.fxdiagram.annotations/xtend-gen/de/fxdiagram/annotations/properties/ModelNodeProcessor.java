@@ -2,7 +2,6 @@ package de.fxdiagram.annotations.properties;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.properties.ModelNode;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,7 +96,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
     boolean _not = (!_isAssignableFrom_1);
     if (_not) {
       Iterable<? extends TypeReference> _implementedInterfaces = annotatedClass.getImplementedInterfaces();
-      Iterable<TypeReference> _plus = Iterables.<TypeReference>concat(_implementedInterfaces, Collections.<TypeReference>unmodifiableList(Lists.<TypeReference>newArrayList(modelProviderType)));
+      Iterable<TypeReference> _plus = Iterables.<TypeReference>concat(_implementedInterfaces, Collections.<TypeReference>unmodifiableList(CollectionLiterals.<TypeReference>newArrayList(modelProviderType)));
       annotatedClass.setImplementedInterfaces(_plus);
     }
     final Procedure1<MutableMethodDeclaration> _function_2 = new Procedure1<MutableMethodDeclaration>() {

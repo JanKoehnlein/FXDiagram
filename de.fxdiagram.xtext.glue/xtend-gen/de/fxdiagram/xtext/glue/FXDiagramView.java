@@ -2,7 +2,6 @@ package de.fxdiagram.xtext.glue;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -107,7 +106,7 @@ public class FXDiagramView extends ViewPart {
         it.setRootDiagram(_xDiagram);
         ObservableList<DomainObjectProvider> _domainObjectProviders = it.getDomainObjectProviders();
         ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
-        Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(Lists.<DomainObjectProvider>newArrayList(_classLoaderProvider, FXDiagramView.this.domainObjectProvider)));
+        Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(CollectionLiterals.<DomainObjectProvider>newArrayList(_classLoaderProvider, FXDiagramView.this.domainObjectProvider)));
         DiagramActionRegistry _diagramActionRegistry = it.getDiagramActionRegistry();
         CenterAction _centerAction = new CenterAction();
         DeleteAction _deleteAction = new DeleteAction();
@@ -123,12 +122,12 @@ public class FXDiagramView extends ViewPart {
         NavigateNextAction _navigateNextAction = new NavigateNextAction();
         FullScreenAction _fullScreenAction = new FullScreenAction();
         UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-        _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(Lists.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction)));
+        _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction)));
       }
     };
     XRoot _doubleArrow = ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
-    XRoot _root = this.root = _doubleArrow;
-    Scene _scene = new Scene(_root);
+    Scene _scene = new Scene(
+      this.root = _doubleArrow);
     final Procedure1<Scene> _function_1 = new Procedure1<Scene>() {
       public void apply(final Scene it) {
         PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();

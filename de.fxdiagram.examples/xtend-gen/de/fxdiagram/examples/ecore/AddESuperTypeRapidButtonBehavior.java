@@ -1,6 +1,5 @@
 package de.fxdiagram.examples.ecore;
 
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -26,6 +25,7 @@ import javafx.geometry.Side;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -110,6 +110,6 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
     EClassNode _host_1 = this.getHost();
     SVGPath _triangleButton_1 = ButtonExtensions.getTriangleButton(Side.BOTTOM, "Discover supertypes");
     RapidButton _rapidButton_1 = new RapidButton(_host_1, Side.BOTTOM, _triangleButton_1, addConnectionAction);
-    return Collections.<RapidButton>unmodifiableList(Lists.<RapidButton>newArrayList(_rapidButton, _rapidButton_1));
+    return Collections.<RapidButton>unmodifiableList(CollectionLiterals.<RapidButton>newArrayList(_rapidButton, _rapidButton_1));
   }
 }

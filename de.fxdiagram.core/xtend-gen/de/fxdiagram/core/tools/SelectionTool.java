@@ -260,9 +260,7 @@ public class SelectionTool implements XDiagramTool {
   
   protected void deselect(final Collection<XShape> selection, final Function1<? super XShape, ? extends Boolean> filter) {
     final Iterator<XShape> i = selection.iterator();
-    boolean _hasNext = i.hasNext();
-    boolean _while = _hasNext;
-    while (_while) {
+    while (i.hasNext()) {
       {
         final XShape element = i.next();
         Boolean _apply = filter.apply(element);
@@ -271,8 +269,6 @@ public class SelectionTool implements XDiagramTool {
           i.remove();
         }
       }
-      boolean _hasNext_1 = i.hasNext();
-      _while = _hasNext_1;
     }
   }
   

@@ -67,8 +67,7 @@ public class LevelOfDetailDiagramNode extends XNode {
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        Text _label = LevelOfDetailDiagramNode.this.label = _doubleArrow;
-        _children.add(_label);
+        _children.add((LevelOfDetailDiagramNode.this.label = _doubleArrow));
       }
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
@@ -88,8 +87,7 @@ public class LevelOfDetailDiagramNode extends XNode {
         }
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-      Group _innerDiagramGroup = this.innerDiagramGroup = _doubleArrow;
-      _children.add(_innerDiagramGroup);
+      _children.add((this.innerDiagramGroup = _doubleArrow));
       DiagramScaler _diagramScaler = new DiagramScaler(innerDiagram);
       _xblockexpression = this.diagramScaler = _diagramScaler;
     }

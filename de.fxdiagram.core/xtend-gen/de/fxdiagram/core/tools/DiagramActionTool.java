@@ -222,8 +222,7 @@ public class DiagramActionTool implements XDiagramTool {
         }
       };
       Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_3);
-      Group _menuGroup = this.menuGroup = _doubleArrow_1;
-      _xblockexpression = _children.add(_menuGroup);
+      _xblockexpression = _children.add((this.menuGroup = _doubleArrow_1));
     }
     return _xblockexpression;
   }

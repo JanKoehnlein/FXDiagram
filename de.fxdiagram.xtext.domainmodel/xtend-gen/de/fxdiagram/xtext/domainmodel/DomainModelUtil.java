@@ -24,7 +24,7 @@ public class DomainModelUtil {
   private CommonTypeComputationServices services;
   
   public Entity getReferencedEntity(final JvmTypeReference it) {
-    Entity _xblockexpression = null;
+    Object _xblockexpression = null;
     {
       JvmTypeReference _componentType = null;
       if (it!=null) {
@@ -39,7 +39,7 @@ public class DomainModelUtil {
         _primarySourceElement=this._iJvmModelAssociations.getPrimarySourceElement(_type);
       }
       final EObject sourceType = _primarySourceElement;
-      Entity _xifexpression = null;
+      Object _xifexpression = null;
       if ((sourceType instanceof Entity)) {
         return ((Entity)sourceType);
       } else {
@@ -47,7 +47,7 @@ public class DomainModelUtil {
       }
       _xblockexpression = _xifexpression;
     }
-    return _xblockexpression;
+    return ((Entity)_xblockexpression);
   }
   
   public JvmTypeReference getComponentType(final JvmTypeReference it) {

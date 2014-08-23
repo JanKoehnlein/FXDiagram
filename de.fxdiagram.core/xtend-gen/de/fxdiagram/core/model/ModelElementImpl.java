@@ -1,7 +1,6 @@
 package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
 import de.fxdiagram.core.model.ModelElement;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,7 +89,7 @@ public class ModelElementImpl implements ModelElement {
   public boolean isPrimitive(final Property<?> property) {
     final Class<?> type = this.getType(property);
     boolean _or = false;
-    boolean _contains = Collections.<Class<? extends Object>>unmodifiableSet(Sets.<Class<? extends Object>>newHashSet(Double.class, Float.class, Integer.class, Long.class, Boolean.class, String.class)).contains(type);
+    boolean _contains = Collections.<Class<? extends Object>>unmodifiableSet(CollectionLiterals.<Class<? extends Object>>newHashSet(Double.class, Float.class, Integer.class, Long.class, Boolean.class, String.class)).contains(type);
     if (_contains) {
       _or = true;
     } else {

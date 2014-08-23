@@ -51,9 +51,7 @@ public class DiagramScaler implements XActivatable {
     this.layoutListener = _function_1;
     final ListChangeListener<XNode> _function_2 = new ListChangeListener<XNode>() {
       public void onChanged(final ListChangeListener.Change<? extends XNode> change) {
-        boolean _next = change.next();
-        boolean _while = _next;
-        while (_while) {
+        while (change.next()) {
           {
             boolean _wasAdded = change.wasAdded();
             if (_wasAdded) {
@@ -86,8 +84,6 @@ public class DiagramScaler implements XActivatable {
               IterableExtensions.forEach(_removed, _function_1);
             }
           }
-          boolean _next_1 = change.next();
-          _while = _next_1;
         }
       }
     };

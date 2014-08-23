@@ -71,8 +71,7 @@ public class EntityNode extends BaseNode<Entity> {
               }
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-            Text _label = EntityNode.this.label = _doubleArrow;
-            _children.add(_label);
+            _children.add((EntityNode.this.label = _doubleArrow));
             Insets _insets_1 = new Insets(0, 0, 10, 0);
             VBox.setMargin(EntityNode.this.label, _insets_1);
             ObservableList<Node> _children_1 = it.getChildren();

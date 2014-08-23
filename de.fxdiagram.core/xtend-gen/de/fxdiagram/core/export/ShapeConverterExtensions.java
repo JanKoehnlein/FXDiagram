@@ -755,8 +755,7 @@ public class ShapeConverterExtensions {
       if (((size % 2) == 0)) {
         final List<Double> coordinates = points;
         int i = 0;
-        boolean _while = (i < size);
-        while (_while) {
+        while ((i < size)) {
           {
             StringConcatenation _builder = new StringConcatenation();
             {
@@ -778,7 +777,6 @@ public class ShapeConverterExtensions {
             it.append(_builder);
             i = (i + 2);
           }
-          _while = (i < size);
         }
       }
       _xblockexpression = it.toString();

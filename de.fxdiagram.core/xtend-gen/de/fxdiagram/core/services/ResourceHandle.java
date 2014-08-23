@@ -1,6 +1,7 @@
 package de.fxdiagram.core.services;
 
 import org.eclipse.xtend.lib.Data;
+import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
@@ -8,21 +9,9 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 public class ResourceHandle {
   private final String _name;
   
-  public String getName() {
-    return this._name;
-  }
-  
   private final Class<?> _context;
   
-  public Class<?> getContext() {
-    return this._context;
-  }
-  
   private final String _relativePath;
-  
-  public String getRelativePath() {
-    return this._relativePath;
-  }
   
   public ResourceHandle(final String name, final Class<?> context, final String relativePath) {
     super();
@@ -32,6 +21,7 @@ public class ResourceHandle {
   }
   
   @Override
+  @Pure
   public int hashCode() {
     final int prime = 31;
     int result = 1;
@@ -42,6 +32,7 @@ public class ResourceHandle {
   }
   
   @Override
+  @Pure
   public boolean equals(final Object obj) {
     if (this == obj)
       return true;
@@ -69,8 +60,24 @@ public class ResourceHandle {
   }
   
   @Override
+  @Pure
   public String toString() {
     String result = new ToStringHelper().toString(this);
     return result;
+  }
+  
+  @Pure
+  public String getName() {
+    return this._name;
+  }
+  
+  @Pure
+  public Class<?> getContext() {
+    return this._context;
+  }
+  
+  @Pure
+  public String getRelativePath() {
+    return this._relativePath;
   }
 }

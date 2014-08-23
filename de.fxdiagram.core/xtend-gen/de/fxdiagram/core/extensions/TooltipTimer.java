@@ -42,7 +42,6 @@ public class TooltipTimer implements Runnable {
   public void run() {
     try {
       long delay = 0;
-      boolean _dowhile = false;
       do {
         {
           long _currentTimeMillis = System.currentTimeMillis();
@@ -55,8 +54,7 @@ public class TooltipTimer implements Runnable {
           long _minus_1 = (this.endTime - _currentTimeMillis_1);
           delay = _minus_1;
         }
-        _dowhile = (delay > 0);
-      } while(_dowhile);
+      } while((delay > 0));
       if (this.isRunning) {
         final Runnable _function = new Runnable() {
           public void run() {

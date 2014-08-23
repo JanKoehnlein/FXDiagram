@@ -13,7 +13,7 @@ import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
 class CubeChooser extends AbstractChooser {
 
-	@Property var spacing = 6.0
+	@Property var double spacing = 6.0
 
 	double maxWidth
 

@@ -2,29 +2,17 @@ package de.fxdiagram.core.extensions;
 
 import com.google.common.base.Objects;
 import javafx.collections.MapChangeListener;
+import org.eclipse.xtend.lib.Property;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class InitializingMapListener<T extends Object, U extends Object> implements MapChangeListener<T, U> {
+  @Property
   private Procedure2<? super T, ? super U> _put;
   
-  public Procedure2<? super T, ? super U> getPut() {
-    return this._put;
-  }
-  
-  public void setPut(final Procedure2<? super T, ? super U> put) {
-    this._put = put;
-  }
-  
+  @Property
   private Procedure2<? super T, ? super U> _remove;
-  
-  public Procedure2<? super T, ? super U> getRemove() {
-    return this._remove;
-  }
-  
-  public void setRemove(final Procedure2<? super T, ? super U> remove) {
-    this._remove = remove;
-  }
   
   public void onChanged(final MapChangeListener.Change<? extends T, ? extends U> c) {
     boolean _and = false;
@@ -57,5 +45,23 @@ public class InitializingMapListener<T extends Object, U extends Object> impleme
       U _valueRemoved = c.getValueRemoved();
       _remove_1.apply(_key_1, _valueRemoved);
     }
+  }
+  
+  @Pure
+  public Procedure2<? super T, ? super U> getPut() {
+    return this._put;
+  }
+  
+  public void setPut(final Procedure2<? super T, ? super U> put) {
+    this._put = put;
+  }
+  
+  @Pure
+  public Procedure2<? super T, ? super U> getRemove() {
+    return this._remove;
+  }
+  
+  public void setRemove(final Procedure2<? super T, ? super U> remove) {
+    this._remove = remove;
   }
 }

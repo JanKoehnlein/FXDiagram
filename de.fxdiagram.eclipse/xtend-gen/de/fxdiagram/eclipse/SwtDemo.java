@@ -26,18 +26,12 @@ public class SwtDemo {
     final Scene scene = SwtDemo.createScene();
     canvas.setScene(scene);
     shell.open();
-    boolean _isDisposed = shell.isDisposed();
-    boolean _not = (!_isDisposed);
-    boolean _while = _not;
-    while (_while) {
+    while ((!shell.isDisposed())) {
       boolean _readAndDispatch = display.readAndDispatch();
-      boolean _not_1 = (!_readAndDispatch);
-      if (_not_1) {
+      boolean _not = (!_readAndDispatch);
+      if (_not) {
         display.sleep();
       }
-      boolean _isDisposed_1 = shell.isDisposed();
-      boolean _not_2 = (!_isDisposed_1);
-      _while = _not_2;
     }
     gestureConverter.dispose();
     display.dispose();

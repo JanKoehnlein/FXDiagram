@@ -60,8 +60,7 @@ public class ClickThroughSlide extends Slide {
       final StackPane node = super.createNode();
       ObservableList<Node> _children = node.getChildren();
       Pane _pane = new Pane();
-      Pane _pane_1 = this.pane = _pane;
-      _children.add(_pane_1);
+      _children.add((this.pane = _pane));
       _xblockexpression = node;
     }
     return _xblockexpression;

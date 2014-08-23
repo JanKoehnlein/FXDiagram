@@ -2,7 +2,6 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnectionLabel;
@@ -52,6 +51,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -290,20 +290,11 @@ public class XConnection extends XShape implements XModelProvider {
             ObservableList<Node> _children = this.shapeGroup.getChildren();
             Iterable<CubicCurve> _filter = Iterables.<CubicCurve>filter(_children, CubicCurve.class);
             final List<CubicCurve> curves = IterableExtensions.<CubicCurve>toList(_filter);
-            int _size_2 = curves.size();
-            boolean _greaterThan = (_size_2 > numSegments);
-            boolean _while = _greaterThan;
-            while (_while) {
+            while ((curves.size() > numSegments)) {
               CubicCurve _last = IterableExtensions.<CubicCurve>last(curves);
               curves.remove(_last);
-              int _size_3 = curves.size();
-              boolean _greaterThan_1 = (_size_3 > numSegments);
-              _while = _greaterThan_1;
             }
-            int _size_3 = curves.size();
-            boolean _lessThan = (_size_3 < numSegments);
-            boolean _while_1 = _lessThan;
-            while (_while_1) {
+            while ((curves.size() < numSegments)) {
               CubicCurve _cubicCurve = new CubicCurve();
               final Procedure1<CubicCurve> _function = new Procedure1<CubicCurve>() {
                 public void apply(final CubicCurve it) {
@@ -313,9 +304,6 @@ public class XConnection extends XShape implements XModelProvider {
               };
               CubicCurve _doubleArrow = ObjectExtensions.<CubicCurve>operator_doubleArrow(_cubicCurve, _function);
               curves.add(_doubleArrow);
-              int _size_4 = curves.size();
-              boolean _lessThan_1 = (_size_4 < numSegments);
-              _while_1 = _lessThan_1;
             }
             ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, numSegments, true);
             for (final Integer i : _doubleDotLessThan) {
@@ -361,32 +349,23 @@ public class XConnection extends XShape implements XModelProvider {
           break;
         case QUAD_CURVE:
           ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-          int _size_4 = _controlPoints_2.size();
-          int _minus_2 = (_size_4 - 1);
+          int _size_2 = _controlPoints_2.size();
+          int _minus_2 = (_size_2 - 1);
           int _modulo_1 = (_minus_2 % 2);
           remainder = _modulo_1;
           if ((remainder == 0)) {
             ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-            int _size_5 = _controlPoints_3.size();
-            int _minus_3 = (_size_5 - 1);
+            int _size_3 = _controlPoints_3.size();
+            int _minus_3 = (_size_3 - 1);
             final int numSegments_1 = (_minus_3 / 2);
             ObservableList<Node> _children_1 = this.shapeGroup.getChildren();
             Iterable<QuadCurve> _filter_1 = Iterables.<QuadCurve>filter(_children_1, QuadCurve.class);
             final List<QuadCurve> curves_1 = IterableExtensions.<QuadCurve>toList(_filter_1);
-            int _size_6 = curves_1.size();
-            boolean _greaterThan_1 = (_size_6 > numSegments_1);
-            boolean _while_2 = _greaterThan_1;
-            while (_while_2) {
+            while ((curves_1.size() > numSegments_1)) {
               QuadCurve _last = IterableExtensions.<QuadCurve>last(curves_1);
               curves_1.remove(_last);
-              int _size_7 = curves_1.size();
-              boolean _greaterThan_2 = (_size_7 > numSegments_1);
-              _while_2 = _greaterThan_2;
             }
-            int _size_7 = curves_1.size();
-            boolean _lessThan_1 = (_size_7 < numSegments_1);
-            boolean _while_3 = _lessThan_1;
-            while (_while_3) {
+            while ((curves_1.size() < numSegments_1)) {
               QuadCurve _quadCurve = new QuadCurve();
               final Procedure1<QuadCurve> _function = new Procedure1<QuadCurve>() {
                 public void apply(final QuadCurve it) {
@@ -396,9 +375,6 @@ public class XConnection extends XShape implements XModelProvider {
               };
               QuadCurve _doubleArrow = ObjectExtensions.<QuadCurve>operator_doubleArrow(_quadCurve, _function);
               curves_1.add(_doubleArrow);
-              int _size_8 = curves_1.size();
-              boolean _lessThan_2 = (_size_8 < numSegments_1);
-              _while_3 = _lessThan_2;
             }
             ExclusiveRange _doubleDotLessThan_1 = new ExclusiveRange(0, numSegments_1, true);
             for (final Integer i_1 : _doubleDotLessThan_1) {
@@ -461,13 +437,13 @@ public class XConnection extends XShape implements XModelProvider {
         public List<Double> apply(final XControlPoint it) {
           double _layoutX = it.getLayoutX();
           double _layoutY = it.getLayoutY();
-          return Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(_layoutX), Double.valueOf(_layoutY)));
+          return Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(_layoutX), Double.valueOf(_layoutY)));
         }
       };
       List<List<Double>> _map = ListExtensions.<XControlPoint, List<Double>>map(_controlPoints_4, _function_1);
       Iterable<Double> _flatten = Iterables.<Double>concat(_map);
       _points.setAll(((Double[])Conversions.unwrapArray(_flatten, Double.class)));
-      this.setShapes(Collections.<Polyline>unmodifiableList(Lists.<Polyline>newArrayList(polyline)));
+      this.setShapes(Collections.<Polyline>unmodifiableList(CollectionLiterals.<Polyline>newArrayList(polyline)));
     }
     ObservableList<Node> _children_3 = this.controlPointGroup.getChildren();
     ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();

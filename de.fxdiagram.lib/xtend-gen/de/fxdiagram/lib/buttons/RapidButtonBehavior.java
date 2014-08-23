@@ -2,7 +2,6 @@ package de.fxdiagram.lib.buttons;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
@@ -37,39 +36,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import org.eclipse.xtext.xbase.lib.Functions.Function0;
+import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST> {
+  @Property
   private double _border;
   
-  public double getBorder() {
-    return this._border;
-  }
-  
-  public void setBorder(final double border) {
-    this._border = border;
-  }
-  
-  private final Map<Side, Pane> pos2group = new Function0<Map<Side, Pane>>() {
-    public Map<Side, Pane> apply() {
-      Map<Side, Pane> _xsetliteral = null;
-      HBox _hBox = new HBox();
-      HBox _hBox_1 = new HBox();
-      VBox _vBox = new VBox();
-      VBox _vBox_1 = new VBox();
-      Map<Side, Pane> _tempMap = Maps.<Side, Pane>newHashMap();
-      _tempMap.put(Side.TOP, _hBox);
-      _tempMap.put(Side.BOTTOM, _hBox_1);
-      _tempMap.put(Side.LEFT, _vBox);
-      _tempMap.put(Side.RIGHT, _vBox_1);
-      _xsetliteral = Collections.<Side, Pane>unmodifiableMap(_tempMap);
-      return _xsetliteral;
-    }
-  }.apply();
+  private final Map<Side, Pane> pos2group = Collections.<Side, Pane>unmodifiableMap(CollectionLiterals.<Side, Pane>newHashMap(Pair.<Side, HBox>of(Side.TOP, new HBox()), Pair.<Side, HBox>of(Side.BOTTOM, new HBox()), Pair.<Side, VBox>of(Side.LEFT, new VBox()), Pair.<Side, VBox>of(Side.RIGHT, new VBox())));
   
   private ObservableList<RapidButton> buttonsProperty = FXCollections.<RapidButton>observableArrayList();
   
@@ -337,5 +317,14 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
         ObjectExtensions.<Pane>operator_doubleArrow(group, _function);
       }
     }
+  }
+  
+  @Pure
+  public double getBorder() {
+    return this._border;
+  }
+  
+  public void setBorder(final double border) {
+    this._border = border;
   }
 }

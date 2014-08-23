@@ -22,8 +22,7 @@ public abstract class CachedDomainObjectDescriptor<T extends Object> extends Dom
       _elvis = this.cachedDomainObject;
     } else {
       T _resolveDomainObject = this.resolveDomainObject();
-      T _cachedDomainObject = this.cachedDomainObject = _resolveDomainObject;
-      _elvis = _cachedDomainObject;
+      _elvis = (this.cachedDomainObject = _resolveDomainObject);
     }
     return _elvis;
   }

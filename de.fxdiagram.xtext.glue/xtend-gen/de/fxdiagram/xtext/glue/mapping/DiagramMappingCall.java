@@ -5,6 +5,7 @@ import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import org.eclipse.xtend.lib.Data;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 
 @Data
@@ -12,15 +13,7 @@ import org.eclipse.xtext.xbase.lib.util.ToStringHelper;
 public class DiagramMappingCall<T extends Object, ARG extends Object> implements MappingCall<T, ARG> {
   private final Function1<? super ARG, ? extends T> _selector;
   
-  public Function1<? super ARG, ? extends T> getSelector() {
-    return this._selector;
-  }
-  
   private final DiagramMapping<T> _diagramMapping;
-  
-  public DiagramMapping<T> getDiagramMapping() {
-    return this._diagramMapping;
-  }
   
   public AbstractMapping<T> getMapping() {
     return this.getDiagramMapping();
@@ -33,6 +26,7 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> implements
   }
   
   @Override
+  @Pure
   public int hashCode() {
     final int prime = 31;
     int result = 1;
@@ -42,6 +36,7 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> implements
   }
   
   @Override
+  @Pure
   public boolean equals(final Object obj) {
     if (this == obj)
       return true;
@@ -49,7 +44,7 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> implements
       return false;
     if (getClass() != obj.getClass())
       return false;
-    DiagramMappingCall other = (DiagramMappingCall) obj;
+    DiagramMappingCall<?, ?> other = (DiagramMappingCall<?, ?>) obj;
     if (this._selector == null) {
       if (other._selector != null)
         return false;
@@ -64,8 +59,19 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> implements
   }
   
   @Override
+  @Pure
   public String toString() {
     String result = new ToStringHelper().toString(this);
     return result;
+  }
+  
+  @Pure
+  public Function1<? super ARG, ? extends T> getSelector() {
+    return this._selector;
+  }
+  
+  @Pure
+  public DiagramMapping<T> getDiagramMapping() {
+    return this._diagramMapping;
   }
 }

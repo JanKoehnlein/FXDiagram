@@ -1,7 +1,6 @@
 package de.fxdiagram.core.anchors;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
@@ -15,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -52,7 +52,7 @@ public class TriangleArrowHead extends ArrowHead {
           double _width = TriangleArrowHead.this.getWidth();
           double _height_1 = TriangleArrowHead.this.getHeight();
           double _multiply_1 = (0.5 * _height_1);
-          _points.setAll(Collections.<Double>unmodifiableList(Lists.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
+          _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
           ObjectProperty<Paint> _fillProperty = it.fillProperty();
           _fillProperty.bind(TriangleArrowHead.this.fillProperty);
           ObjectProperty<Paint> _strokeProperty = it.strokeProperty();

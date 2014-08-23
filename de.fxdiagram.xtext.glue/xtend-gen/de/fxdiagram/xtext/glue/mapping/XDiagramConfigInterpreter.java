@@ -1,7 +1,6 @@
 package de.fxdiagram.xtext.glue.mapping;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -232,7 +231,7 @@ public class XDiagramConfigInterpreter {
       final NodeMappingCall<T, U> nodeMappingCallCasted = ((NodeMappingCall<T, U>) nodeMappingCall);
       Function1<? super U, ? extends T> _selector = nodeMappingCallCasted.getSelector();
       final T nodeObject = ((Function1<? super Object, ? extends T>) ((Function1<? super Object, ? extends T>)_selector)).apply(domainArgument);
-      return Collections.<T>unmodifiableList(Lists.<T>newArrayList(nodeObject));
+      return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList(nodeObject));
     } else {
       if ((nodeMappingCall instanceof MultiNodeMappingCall<?, ?>)) {
         final MultiNodeMappingCall<T, U> nodeMappingCallCasted_1 = ((MultiNodeMappingCall<T, U>) nodeMappingCall);
@@ -259,7 +258,7 @@ public class XDiagramConfigInterpreter {
       final ConnectionMappingCall<T, U> connectionMappingCasted = ((ConnectionMappingCall<T, U>) connectionMappingCall);
       Function1<? super U, ? extends T> _selector = connectionMappingCasted.getSelector();
       final T connectionObject = ((Function1<? super Object, ? extends T>) ((Function1<? super Object, ? extends T>)_selector)).apply(domainArgument);
-      return Collections.<T>unmodifiableList(Lists.<T>newArrayList(connectionObject));
+      return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList(connectionObject));
     } else {
       if ((connectionMappingCall instanceof MultiConnectionMappingCall<?, ?>)) {
         final MultiConnectionMappingCall<T, U> connectionMappingCasted_1 = ((MultiConnectionMappingCall<T, U>) connectionMappingCall);

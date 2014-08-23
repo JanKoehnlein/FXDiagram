@@ -70,10 +70,7 @@ public class FirstRecursiveImageNode extends XNode {
   }
   
   public void updateChildPanes() {
-    boolean _isEmpty = this.panes.isEmpty();
-    boolean _not = (!_isEmpty);
-    boolean _while = _not;
-    while (_while) {
+    while ((!this.panes.isEmpty())) {
       {
         final Group child = this.panes.pop();
         final Group parent = this.panes.peek();
@@ -104,9 +101,6 @@ public class FirstRecursiveImageNode extends XNode {
           }
         }
       }
-      boolean _isEmpty_1 = this.panes.isEmpty();
-      boolean _not_1 = (!_isEmpty_1);
-      _while = _not_1;
     }
   }
   

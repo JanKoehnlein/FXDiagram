@@ -1,7 +1,6 @@
 package de.fxdiagram.core.tools;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
@@ -660,7 +659,7 @@ public abstract class AbstractChooser implements XDiagramTool {
         Group _nodeLayer = _rootDiagram.getNodeLayer();
         XDiagram _rootDiagram_1 = CoreExtensions.getRootDiagram(AbstractChooser.this.host);
         Group _connectionLayer = _rootDiagram_1.getConnectionLayer();
-        for (final Group layer : Collections.<Group>unmodifiableList(Lists.<Group>newArrayList(_nodeLayer, _connectionLayer))) {
+        for (final Group layer : Collections.<Group>unmodifiableList(CollectionLiterals.<Group>newArrayList(_nodeLayer, _connectionLayer))) {
           ObservableList<Animation> _children = it.getChildren();
           FadeTransition _fadeTransition = new FadeTransition();
           final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {

@@ -10,12 +10,23 @@ import javafx.scene.Scene;
 import javafx.scene.input.RotateEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
+import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class DiagramGestureTool implements XDiagramTool {
   public static class ZoomContext {
+    @Property
     private double _previousScale = 1;
     
+    @Property
+    private Point2D _pivotInDiagram;
+    
+    public ZoomContext(final Point2D pivotInDiagram) {
+      this.setPivotInDiagram(pivotInDiagram);
+    }
+    
+    @Pure
     public double getPreviousScale() {
       return this._previousScale;
     }
@@ -24,18 +35,13 @@ public class DiagramGestureTool implements XDiagramTool {
       this._previousScale = previousScale;
     }
     
-    private Point2D _pivotInDiagram;
-    
+    @Pure
     public Point2D getPivotInDiagram() {
       return this._pivotInDiagram;
     }
     
     public void setPivotInDiagram(final Point2D pivotInDiagram) {
       this._pivotInDiagram = pivotInDiagram;
-    }
-    
-    public ZoomContext(final Point2D pivotInDiagram) {
-      this.setPivotInDiagram(pivotInDiagram);
     }
   }
   

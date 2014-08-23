@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.tools;
 
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.tools.AbstractChooser;
@@ -16,21 +15,17 @@ import javafx.scene.effect.InnerShadow;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.eclipse.xtend.lib.Property;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class CarusselChooser extends AbstractChooser {
+  @Property
   private double _spacing = 6;
-  
-  public double getSpacing() {
-    return this._spacing;
-  }
-  
-  public void setSpacing(final double spacing) {
-    this._spacing = spacing;
-  }
   
   private Effect currentNodeEffect;
   
@@ -95,7 +90,7 @@ public class CarusselChooser extends AbstractChooser {
           double _divide_2 = (_spacing_1 / 2);
           Translate _translate_1 = Transform.translate(_divide_1, _divide_2);
           _transforms.setAll(
-            Collections.<Transform>unmodifiableList(Lists.<Transform>newArrayList(_translate, _scale, _translate_1)));
+            Collections.<Transform>unmodifiableList(CollectionLiterals.<Transform>newArrayList(_translate, _scale, _translate_1)));
           node.setOpacity(((scaleY * scaleY) * scaleY));
           double _abs = Math.abs(nodeCenterAngle);
           boolean _lessThan_1 = (_abs < angle);
@@ -144,5 +139,14 @@ public class CarusselChooser extends AbstractChooser {
     double _height = _layoutBounds_2.getHeight();
     double _minus_3 = (_minus_2 - _height);
     plusButton.setLayoutY(_minus_3);
+  }
+  
+  @Pure
+  public double getSpacing() {
+    return this._spacing;
+  }
+  
+  public void setSpacing(final double spacing) {
+    this._spacing = spacing;
   }
 }

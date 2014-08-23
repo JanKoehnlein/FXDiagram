@@ -45,9 +45,7 @@ public class AuxiliaryLinesCache {
   public AuxiliaryLinesCache(final XDiagram diagram) {
     final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
       public void onChanged(final ListChangeListener.Change<? extends XNode> it) {
-        boolean _next = it.next();
-        boolean _while = _next;
-        while (_while) {
+        while (it.next()) {
           {
             boolean _wasAdded = it.wasAdded();
             if (_wasAdded) {
@@ -70,8 +68,6 @@ public class AuxiliaryLinesCache {
               IterableExtensions.forEach(_removed, _function_1);
             }
           }
-          boolean _next_1 = it.next();
-          _while = _next_1;
         }
       }
     };

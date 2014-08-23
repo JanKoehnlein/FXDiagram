@@ -2,8 +2,6 @@ package de.fxdiagram.examples.lcars;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
@@ -65,25 +63,16 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
 @ModelNode
 @SuppressWarnings("all")
 public class LcarsNode extends XNode {
-  private final static Map<String, List<String>> PAGE_STRUCTURE = new Function0<Map<String, List<String>>>() {
-    public Map<String, List<String>> apply() {
-      Map<String, List<String>> _xsetliteral = null;
-      Map<String, List<String>> _tempMap = Maps.<String, List<String>>newHashMap();
-      _tempMap.put("person", Collections.<String>unmodifiableList(Lists.<String>newArrayList("gender", "species", "born", "status", "died", "marital_status")));
-      _tempMap.put("profession", Collections.<String>unmodifiableList(Lists.<String>newArrayList("occupation", "affiliation", "rank", "serial_number")));
-      _tempMap.put("family", Collections.<String>unmodifiableList(Lists.<String>newArrayList("spouses", "children", "mother", "father", "siblings", "other_relatives")));
-      _xsetliteral = Collections.<String, List<String>>unmodifiableMap(_tempMap);
-      return _xsetliteral;
-    }
-  }.apply();
+  private final static Map<String, List<String>> PAGE_STRUCTURE = Collections.<String, List<String>>unmodifiableMap(CollectionLiterals.<String, List<String>>newHashMap(Pair.<String, List<String>>of("person", Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("gender", "species", "born", "status", "died", "marital_status"))), Pair.<String, List<String>>of("profession", Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("occupation", "affiliation", "rank", "serial_number"))), Pair.<String, List<String>>of("family", Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("spouses", "children", "mother", "father", "siblings", "other_relatives")))));
   
-  private final static List<String> pageOrder = Collections.<String>unmodifiableList(Lists.<String>newArrayList("person", "profession", "family", "other"));
+  private final static List<String> pageOrder = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("person", "profession", "family", "other"));
   
   @Extension
   private NameShortener _nameShortener = new NameShortener();
@@ -228,8 +217,7 @@ public class LcarsNode extends XNode {
                     }
                   };
                   VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-                  Pane _infoTextBox = LcarsNode.this.infoTextBox = _doubleArrow;
-                  _children.add(_infoTextBox);
+                  _children.add((LcarsNode.this.infoTextBox = _doubleArrow));
                   ObservableList<Node> _children_1 = it.getChildren();
                   ImageView _imageView = new ImageView();
                   final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
@@ -246,8 +234,7 @@ public class LcarsNode extends XNode {
                     }
                   };
                   ImageView _doubleArrow_1 = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_1);
-                  ImageView _imageView_1 = LcarsNode.this.imageView = _doubleArrow_1;
-                  _children_1.add(_imageView_1);
+                  _children_1.add((LcarsNode.this.imageView = _doubleArrow_1));
                   String _last = IterableExtensions.<String>last(LcarsNode.this.imageUrls);
                   LcarsNode.this.showImage(_last);
                   Insets _insets = new Insets(5, 6, 5, 5);
@@ -279,20 +266,10 @@ public class LcarsNode extends XNode {
       final RectangleBorderPane node = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
       final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
         public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
-          Bounds _boundsInLocal = LcarsNode.this.nameField.getBoundsInLocal();
-          double _width = _boundsInLocal.getWidth();
-          double _width_1 = newValue.getWidth();
-          boolean _greaterThan = (_width > _width_1);
-          boolean _while = _greaterThan;
-          while (_while) {
+          while ((LcarsNode.this.nameField.getBoundsInLocal().getWidth() > newValue.getWidth())) {
             String _text = LcarsNode.this.nameField.getText();
             String _shortenName = LcarsNode.this._nameShortener.shortenName(_text);
             LcarsNode.this.nameField.setText(_shortenName);
-            Bounds _boundsInLocal_1 = LcarsNode.this.nameField.getBoundsInLocal();
-            double _width_2 = _boundsInLocal_1.getWidth();
-            double _width_3 = newValue.getWidth();
-            boolean _greaterThan_1 = (_width_2 > _width_3);
-            _while = _greaterThan_1;
           }
         }
       };

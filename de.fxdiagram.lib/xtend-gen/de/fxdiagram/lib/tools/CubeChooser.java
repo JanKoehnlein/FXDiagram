@@ -12,21 +12,16 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.eclipse.xtend.lib.Property;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class CubeChooser extends AbstractChooser {
+  @Property
   private double _spacing = 6.0;
-  
-  public double getSpacing() {
-    return this._spacing;
-  }
-  
-  public void setSpacing(final double spacing) {
-    this._spacing = spacing;
-  }
   
   private double maxWidth;
   
@@ -101,7 +96,7 @@ public class CubeChooser extends AbstractChooser {
       }
       _xblockexpression = _xifexpression;
     }
-    return _xblockexpression;
+    return Boolean.valueOf(_xblockexpression);
   }
   
   public void relocateButtons(final Node minusButton, final Node plusButton) {
@@ -132,5 +127,14 @@ public class CubeChooser extends AbstractChooser {
     double _multiply_1 = (0.5 * _height_1);
     double _minus_3 = (_layoutY_1 - _multiply_1);
     plusButton.setLayoutY(_minus_3);
+  }
+  
+  @Pure
+  public double getSpacing() {
+    return this._spacing;
+  }
+  
+  public void setSpacing(final double spacing) {
+    this._spacing = spacing;
   }
 }

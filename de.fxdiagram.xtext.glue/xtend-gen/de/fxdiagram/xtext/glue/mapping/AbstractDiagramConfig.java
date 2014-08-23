@@ -8,23 +8,18 @@ import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import org.eclipse.xtend.lib.Property;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @Logging
 @SuppressWarnings("all")
 public abstract class AbstractDiagramConfig implements XDiagramConfig {
   private Map<String, AbstractMapping<?>> mappings = CollectionLiterals.<String, AbstractMapping<?>>newHashMap();
   
-  private String _ID;
-  
-  public String getID() {
-    return this._ID;
-  }
-  
-  public void setID(final String ID) {
-    this._ID = ID;
-  }
+  @Property
+  private String _iD;
   
   public AbstractMapping<?> getMappingByID(final String mappingID) {
     return this.mappings.get(mappingID);
@@ -62,4 +57,13 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig");
     ;
+  
+  @Pure
+  public String getID() {
+    return this._iD;
+  }
+  
+  public void setID(final String ID) {
+    this._iD = ID;
+  }
 }

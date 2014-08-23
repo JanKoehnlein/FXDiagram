@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.nodes;
 
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.css.JavaToCss;
 import de.fxdiagram.core.export.SvgExportable;
 import de.fxdiagram.core.export.SvgExporter;
@@ -21,6 +20,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 
 @SuppressWarnings("all")
@@ -28,7 +28,7 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   public final static LinearGradient DEFAULT_BACKGROUND = new LinearGradient(
     0, 0, 1, 1, 
     true, CycleMethod.NO_CYCLE, 
-    Collections.<Stop>unmodifiableList(Lists.<Stop>newArrayList(new Stop(0, Color.gray(0.7)), new Stop(1, Color.gray(1)))));
+    Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(new Stop(0, Color.gray(0.7)), new Stop(1, Color.gray(1)))));
   
   public RectangleBorderPane() {
     this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);

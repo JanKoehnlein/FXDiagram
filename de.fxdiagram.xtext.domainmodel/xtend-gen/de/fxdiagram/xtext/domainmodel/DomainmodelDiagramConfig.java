@@ -2,7 +2,6 @@ package de.fxdiagram.xtext.domainmodel;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
@@ -119,7 +118,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
             if (_equals) {
               _xifexpression = CollectionLiterals.<Entity>emptyList();
             } else {
-              _xifexpression = Collections.<Entity>unmodifiableList(Lists.<Entity>newArrayList(superEntity));
+              _xifexpression = Collections.<Entity>unmodifiableList(CollectionLiterals.<Entity>newArrayList(superEntity));
             }
             _xblockexpression = _xifexpression;
           }

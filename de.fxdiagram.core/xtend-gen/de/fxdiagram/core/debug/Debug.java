@@ -31,17 +31,7 @@ public class Debug {
     };
     final ChangeListener<Number> debugger = _function;
     Node currentNode = node;
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(currentNode, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _isRootDiagram = CoreExtensions.isRootDiagram(currentNode);
-      boolean _not = (!_isRootDiagram);
-      _and = _not;
-    }
-    boolean _while = _and;
-    while (_while) {
+    while (((!Objects.equal(currentNode, null)) && (!CoreExtensions.isRootDiagram(currentNode)))) {
       {
         DoubleProperty _layoutXProperty = currentNode.layoutXProperty();
         _layoutXProperty.addListener(debugger);
@@ -54,16 +44,6 @@ public class Debug {
         Parent _parent = currentNode.getParent();
         currentNode = _parent;
       }
-      boolean _and_1 = false;
-      boolean _notEquals_1 = (!Objects.equal(currentNode, null));
-      if (!_notEquals_1) {
-        _and_1 = false;
-      } else {
-        boolean _isRootDiagram_1 = CoreExtensions.isRootDiagram(currentNode);
-        boolean _not_1 = (!_isRootDiagram_1);
-        _and_1 = _not_1;
-      }
-      _while = _and_1;
     }
   }
   
@@ -87,33 +67,13 @@ public class Debug {
     };
     final ChangeListener<Bounds> debugger = _function;
     Node currentNode = node;
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(currentNode, null));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _isRootDiagram = CoreExtensions.isRootDiagram(currentNode);
-      boolean _not = (!_isRootDiagram);
-      _and = _not;
-    }
-    boolean _while = _and;
-    while (_while) {
+    while (((!Objects.equal(currentNode, null)) && (!CoreExtensions.isRootDiagram(currentNode)))) {
       {
         ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = currentNode.layoutBoundsProperty();
         _layoutBoundsProperty.addListener(debugger);
         Parent _parent = currentNode.getParent();
         currentNode = _parent;
       }
-      boolean _and_1 = false;
-      boolean _notEquals_1 = (!Objects.equal(currentNode, null));
-      if (!_notEquals_1) {
-        _and_1 = false;
-      } else {
-        boolean _isRootDiagram_1 = CoreExtensions.isRootDiagram(currentNode);
-        boolean _not_1 = (!_isRootDiagram_1);
-        _and_1 = _not_1;
-      }
-      _while = _and_1;
     }
   }
   
@@ -160,10 +120,7 @@ public class Debug {
     double _layoutY_1 = it.getLayoutY();
     Point2D currentPosition = new Point2D(_layoutX_1, _layoutY_1);
     Bounds currentBounds = it.getLayoutBounds();
-    Parent _parent = current.getParent();
-    boolean _notEquals = (!Objects.equal(_parent, null));
-    boolean _while = _notEquals;
-    while (_while) {
+    while ((!Objects.equal(current.getParent(), null))) {
       {
         Bounds _localToParent = current.localToParent(currentBounds);
         currentBounds = _localToParent;
@@ -172,8 +129,8 @@ public class Debug {
         StringConcatenation _builder_1 = new StringConcatenation();
         _builder_1.append(null, "");
         _builder_1.append("\tin ");
-        Parent _parent_1 = current.getParent();
-        Class<? extends Parent> _class_1 = _parent_1.getClass();
+        Parent _parent = current.getParent();
+        Class<? extends Parent> _class_1 = _parent.getClass();
         String _simpleName_1 = _class_1.getSimpleName();
         _builder_1.append(_simpleName_1, "");
         _builder_1.append(": (");
@@ -187,12 +144,9 @@ public class Debug {
         _builder_1.newLineIfNotEmpty();
         String _plus = (message + _builder_1);
         message = _plus;
-        Parent _parent_2 = current.getParent();
-        current = _parent_2;
+        Parent _parent_1 = current.getParent();
+        current = _parent_1;
       }
-      Parent _parent_1 = current.getParent();
-      boolean _notEquals_1 = (!Objects.equal(_parent_1, null));
-      _while = _notEquals_1;
     }
     Debug.LOG.info(message);
   }

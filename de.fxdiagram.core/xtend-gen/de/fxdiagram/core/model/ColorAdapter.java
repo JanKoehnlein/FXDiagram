@@ -1,7 +1,6 @@
 package de.fxdiagram.core.model;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.model.ValueAdapter;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +39,7 @@ public class ColorAdapter implements ValueAdapter<Color> {
   }
   
   public List<? extends Property<?>> getProperties() {
-    return Collections.<SimpleDoubleProperty>unmodifiableList(Lists.<SimpleDoubleProperty>newArrayList(this.redProperty, this.greenProperty, this.blueProperty, this.opacityProperty));
+    return Collections.<SimpleDoubleProperty>unmodifiableList(CollectionLiterals.<SimpleDoubleProperty>newArrayList(this.redProperty, this.greenProperty, this.blueProperty, this.opacityProperty));
   }
   
   public List<? extends ListProperty<?>> getListProperties() {

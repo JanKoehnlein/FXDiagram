@@ -1,6 +1,5 @@
 package de.fxdiagram.examples.java;
 
-import com.google.common.collect.Lists;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -26,6 +25,7 @@ import java.util.Set;
 import javafx.geometry.Side;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -105,6 +105,6 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
     JavaTypeNode _host_1 = this.getHost();
     SVGPath _triangleButton_1 = ButtonExtensions.getTriangleButton(Side.BOTTOM, "Discover supertypes");
     RapidButton _rapidButton_1 = new RapidButton(_host_1, Side.BOTTOM, _triangleButton_1, addConnectionAction);
-    return Collections.<RapidButton>unmodifiableList(Lists.<RapidButton>newArrayList(_rapidButton, _rapidButton_1));
+    return Collections.<RapidButton>unmodifiableList(CollectionLiterals.<RapidButton>newArrayList(_rapidButton, _rapidButton_1));
   }
 }
