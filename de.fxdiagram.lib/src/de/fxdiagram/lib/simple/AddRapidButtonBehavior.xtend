@@ -67,6 +67,7 @@ class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior<T> {
 		add(new RapidButton(host, BOTTOM, getFilledTriangle(BOTTOM, 'Add node'), coverFlowChooseAction))
 		add(new RapidButton(host, LEFT, getFilledTriangle(LEFT, 'Add node'), chooseAction))
 		add(new RapidButton(host, RIGHT, getFilledTriangle(RIGHT, 'Add node'), addAction))
+		super.doActivate
 	}
 
 	protected def addChoices(AbstractChooser chooser) {

@@ -130,6 +130,7 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
     SVGPath _filledTriangle_3 = ButtonExtensions.getFilledTriangle(Side.RIGHT, "Add node");
     RapidButton _rapidButton_3 = new RapidButton(host, Side.RIGHT, _filledTriangle_3, addAction);
     this.add(_rapidButton_3);
+    super.doActivate();
   }
   
   protected void addChoices(final AbstractChooser chooser) {
