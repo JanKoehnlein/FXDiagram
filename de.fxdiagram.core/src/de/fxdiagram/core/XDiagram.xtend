@@ -99,8 +99,17 @@ class XDiagram extends Group implements XActivatable {
 	}
 	
 	def void doActivate() {
-		nodes.addInitializingListener(new ChildrenListener<XNode>(this, nodeLayer))
-		connections.addInitializingListener(new ChildrenListener<XConnection>(this, connectionLayer))
+		nodes.addInitializingListener(new InitializingListListener<XNode>() => [
+			add = [
+				initializeGraphics
+				getNodeLayer.children += it
+				if(XDiagram.this.isActive)
+					it.activate
+			]
+			remove = [
+				diagram.getNodeLayer.children -= it
+			]
+		])
 		val arrowHeadListener = new InitializingListener<ArrowHead> => [
 			set = [ 
 				if(!connectionLayer.children.contains(it)) {
@@ -117,21 +126,23 @@ class XDiagram extends Group implements XActivatable {
 			]
 			remove = [ connectionLayer.children -= it ]
 		]
-		connectionLayer.children.addInitializingListener(new InitializingListListener  => [
-			add = [ 
-				if (it instanceof XConnection) {
-					labelsProperty.addInitializingListener(labelListener)
-					sourceArrowHeadProperty.addInitializingListener(arrowHeadListener)
-					targetArrowHeadProperty.addInitializingListener(arrowHeadListener)
-				} 
+		connections.addInitializingListener(new InitializingListListener<XConnection>() => [
+			add = [
+				initializeGraphics
+				getConnectionLayer.children += it
+				if(XDiagram.this.isActive)
+					it.activate
+				labelsProperty.addInitializingListener(labelListener)
+				sourceArrowHeadProperty.addInitializingListener(arrowHeadListener)
+				targetArrowHeadProperty.addInitializingListener(arrowHeadListener)
 			]
-			remove = [ 
-				if(it instanceof XConnection) {
-					labelsProperty.removeInitializingListener(labelListener)
-					sourceArrowHeadProperty.removeInitializingListener(arrowHeadListener)
-					targetArrowHeadProperty.removeInitializingListener(arrowHeadListener)
-				} 
+			remove = [
+				diagram.getConnectionLayer.children -= it
+				labelsProperty.removeInitializingListener(labelListener)
+				sourceArrowHeadProperty.removeInitializingListener(arrowHeadListener)
+				targetArrowHeadProperty.removeInitializingListener(arrowHeadListener)
 			]
+			
 		])
 		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
 		contentsInitializer?.apply(this)
@@ -203,26 +214,6 @@ class XDiagram extends Group implements XActivatable {
 	
 	def getButtonLayer() {
 		buttonLayer
-	}
-	
-	static class ChildrenListener<T extends Node & XActivatable> extends InitializingListListener<T> {
-		Group layer
-		XDiagram diagram
-		
-		new(XDiagram diagram, Group layer) {
-			this.layer = layer
-			this.diagram = diagram
-			add = [
-				if (it instanceof XShape)
-					initializeGraphics
-				layer.children += it
-				if(diagram.isActive)
-					it.activate
-			]
-			remove = [
-				layer.children -= it
-			]
-		}
 	}
 }
 
