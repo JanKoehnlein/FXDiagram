@@ -216,11 +216,11 @@ class OpenableDiagramNode extends XNode {
 					root.diagram = parentDiagram
 					pane.children += new Group => [
 						children += innerDiagram
-						// due to https://javafx-jira.kenai.com/browse/RT-37879
-						// we have to manually layout the node in order to fix the bounds
-						layout
 					]
 					diagramScaler.activate
+					// due to https://javafx-jira.kenai.com/browse/RT-37879
+					// we have to manually layout the node in order to fix the bounds
+					layout
 					phaseTwo.children.add(0, new ViewportTransition(root, viewportBeforeOpen, duration) => [
 						onFinished = [
 							diagramScaler.deactivate

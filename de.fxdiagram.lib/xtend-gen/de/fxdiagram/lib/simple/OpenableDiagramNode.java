@@ -417,12 +417,12 @@ public class OpenableDiagramNode extends XNode {
                       ObservableList<Node> _children = it.getChildren();
                       XDiagram _innerDiagram = OpenableDiagramNode.this.getInnerDiagram();
                       _children.add(_innerDiagram);
-                      it.layout();
                     }
                   };
                   Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
                   _children.add(_doubleArrow);
                   OpenableDiagramNode.this.diagramScaler.activate();
+                  OpenableDiagramNode.this.layout();
                   ObservableList<Animation> _children_1 = phaseTwo.getChildren();
                   ViewportTransition _viewportTransition = new ViewportTransition(OpenableDiagramNode.this.root, OpenableDiagramNode.this.viewportBeforeOpen, duration);
                   final Procedure1<ViewportTransition> _function_1 = new Procedure1<ViewportTransition>() {
