@@ -149,11 +149,11 @@ class TooltipTimer implements Runnable {
 	}
 	
 	def restart() {
+		endTime = System.currentTimeMillis + (tooltip.delay.toMillis as long) 
 		if(!isRunning) {
 			isRunning = true
 			new Thread(this).start
 		}
-		endTime = System.currentTimeMillis + (tooltip.delay.toMillis as long) 
 	}
 	
 	override run() {

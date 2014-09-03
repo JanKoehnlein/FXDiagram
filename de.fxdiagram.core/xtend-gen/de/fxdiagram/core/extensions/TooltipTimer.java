@@ -22,21 +22,17 @@ public class TooltipTimer implements Runnable {
     return this.isRunning = false;
   }
   
-  public long restart() {
-    long _xblockexpression = (long) 0;
-    {
-      if ((!this.isRunning)) {
-        this.isRunning = true;
-        Thread _thread = new Thread(this);
-        _thread.start();
-      }
-      long _currentTimeMillis = System.currentTimeMillis();
-      Duration _delay = this.tooltip.getDelay();
-      double _millis = _delay.toMillis();
-      long _plus = (_currentTimeMillis + ((long) _millis));
-      _xblockexpression = this.endTime = _plus;
+  public void restart() {
+    long _currentTimeMillis = System.currentTimeMillis();
+    Duration _delay = this.tooltip.getDelay();
+    double _millis = _delay.toMillis();
+    long _plus = (_currentTimeMillis + ((long) _millis));
+    this.endTime = _plus;
+    if ((!this.isRunning)) {
+      this.isRunning = true;
+      Thread _thread = new Thread(this);
+      _thread.start();
     }
-    return _xblockexpression;
   }
   
   public void run() {
