@@ -10,6 +10,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -20,7 +21,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AuxiliaryLinesCache {
@@ -50,22 +50,22 @@ public class AuxiliaryLinesCache {
             boolean _wasAdded = it.wasAdded();
             if (_wasAdded) {
               List<? extends XNode> _addedSubList = it.getAddedSubList();
-              final Procedure1<XNode> _function = new Procedure1<XNode>() {
-                public void apply(final XNode it) {
+              final Consumer<XNode> _function = new Consumer<XNode>() {
+                public void accept(final XNode it) {
                   AuxiliaryLinesCache.this.watchNode(it);
                 }
               };
-              IterableExtensions.forEach(_addedSubList, _function);
+              _addedSubList.forEach(_function);
             }
             boolean _wasRemoved = it.wasRemoved();
             if (_wasRemoved) {
               List<? extends XNode> _removed = it.getRemoved();
-              final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-                public void apply(final XNode it) {
+              final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+                public void accept(final XNode it) {
                   AuxiliaryLinesCache.this.unwatchNode(it);
                 }
               };
-              IterableExtensions.forEach(_removed, _function_1);
+              _removed.forEach(_function_1);
             }
           }
         }
@@ -75,12 +75,12 @@ public class AuxiliaryLinesCache {
     ObservableList<XNode> _nodes = diagram.getNodes();
     _nodes.addListener(this.nodesListener);
     ObservableList<XNode> _nodes_1 = diagram.getNodes();
-    final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-      public void apply(final XNode it) {
+    final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+      public void accept(final XNode it) {
         AuxiliaryLinesCache.this.watchNode(it);
       }
     };
-    IterableExtensions.<XNode>forEach(_nodes_1, _function_1);
+    _nodes_1.forEach(_function_1);
   }
   
   public Iterable<AuxiliaryLine> getAuxiliaryLines(final XNode node) {

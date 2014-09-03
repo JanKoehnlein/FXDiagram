@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -128,14 +129,14 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     XDiagram _diagram_3 = this.getDiagram();
     ObservableMap<Node, Pos> _fixedButtons_1 = _diagram_3.getFixedButtons();
     Set<Map.Entry<Node, Pos>> _entrySet = _fixedButtons_1.entrySet();
-    final Procedure1<Map.Entry<Node, Pos>> _function = new Procedure1<Map.Entry<Node, Pos>>() {
-      public void apply(final Map.Entry<Node, Pos> it) {
+    final Consumer<Map.Entry<Node, Pos>> _function = new Consumer<Map.Entry<Node, Pos>>() {
+      public void accept(final Map.Entry<Node, Pos> it) {
         Node _key = it.getKey();
         Pos _value = it.getValue();
         XRoot.this.headsUpDisplay.add(_key, _value);
       }
     };
-    IterableExtensions.<Map.Entry<Node, Pos>>forEach(_entrySet, _function);
+    _entrySet.forEach(_function);
     newDiagram.centerDiagram(false);
   }
   
@@ -256,13 +257,13 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
         HashMap<Class<? extends DomainObjectProvider>, DomainObjectProvider> _newHashMap = CollectionLiterals.<Class<? extends DomainObjectProvider>, DomainObjectProvider>newHashMap();
         this.domainObjectProviderCache = _newHashMap;
         ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
-        final Procedure1<DomainObjectProvider> _function = new Procedure1<DomainObjectProvider>() {
-          public void apply(final DomainObjectProvider it) {
+        final Consumer<DomainObjectProvider> _function = new Consumer<DomainObjectProvider>() {
+          public void accept(final DomainObjectProvider it) {
             Class<? extends DomainObjectProvider> _class = it.getClass();
             XRoot.this.domainObjectProviderCache.put(_class, it);
           }
         };
-        IterableExtensions.<DomainObjectProvider>forEach(_domainObjectProviders, _function);
+        _domainObjectProviders.forEach(_function);
       }
       DomainObjectProvider _get = this.domainObjectProviderCache.get(providerClazz);
       _xblockexpression = ((T) _get);
@@ -271,8 +272,8 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   }
   
   public void replaceDomainObjectProviders(final List<DomainObjectProvider> newDomainObjectProviders) {
-    final Procedure1<DomainObjectProvider> _function = new Procedure1<DomainObjectProvider>() {
-      public void apply(final DomainObjectProvider newProvider) {
+    final Consumer<DomainObjectProvider> _function = new Consumer<DomainObjectProvider>() {
+      public void accept(final DomainObjectProvider newProvider) {
         Class<? extends DomainObjectProvider> _class = newProvider.getClass();
         final DomainObjectProvider oldProvider = XRoot.this.getDomainObjectProvider(_class);
         boolean _notEquals = (!Objects.equal(oldProvider, null));
@@ -290,7 +291,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
         }
       }
     };
-    IterableExtensions.<DomainObjectProvider>forEach(newDomainObjectProviders, _function);
+    newDomainObjectProviders.forEach(_function);
   }
   
   public CommandStack getCommandStack() {

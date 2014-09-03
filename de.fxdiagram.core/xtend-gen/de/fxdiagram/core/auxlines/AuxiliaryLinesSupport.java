@@ -6,11 +6,11 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesCache;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AuxiliaryLinesSupport {
@@ -35,14 +35,14 @@ public class AuxiliaryLinesSupport {
     if (_equals) {
       XNode _head = IterableExtensions.<XNode>head(selectedNodes);
       final Iterable<AuxiliaryLine> lines = this.cache.getAuxiliaryLines(_head);
-      final Procedure1<AuxiliaryLine> _function = new Procedure1<AuxiliaryLine>() {
-        public void apply(final AuxiliaryLine it) {
+      final Consumer<AuxiliaryLine> _function = new Consumer<AuxiliaryLine>() {
+        public void accept(final AuxiliaryLine it) {
           ObservableList<Node> _children = AuxiliaryLinesSupport.this.group.getChildren();
           Node _createNode = it.createNode();
           _children.add(_createNode);
         }
       };
-      IterableExtensions.<AuxiliaryLine>forEach(lines, _function);
+      lines.forEach(_function);
     }
   }
   

@@ -2,9 +2,9 @@ package de.fxdiagram.core.extensions;
 
 import com.google.common.base.Objects;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.collections.ListChangeListener;
 import org.eclipse.xtend.lib.annotations.Accessors;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
@@ -35,12 +35,12 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
       }
       if (_and) {
         List<? extends T> _addedSubList = c.getAddedSubList();
-        final Procedure1<T> _function = new Procedure1<T>() {
-          public void apply(final T it) {
+        final Consumer<T> _function = new Consumer<T>() {
+          public void accept(final T it) {
             InitializingListListener.this.add.apply(it);
           }
         };
-        IterableExtensions.forEach(_addedSubList, _function);
+        _addedSubList.forEach(_function);
       }
     }
     boolean _and = false;
@@ -53,12 +53,12 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
     }
     if (_and) {
       List<? extends T> _removed = c.getRemoved();
-      final Procedure1<T> _function = new Procedure1<T>() {
-        public void apply(final T it) {
+      final Consumer<T> _function = new Consumer<T>() {
+        public void accept(final T it) {
           InitializingListListener.this.remove.apply(it);
         }
       };
-      IterableExtensions.forEach(_removed, _function);
+      _removed.forEach(_function);
     }
   }
   

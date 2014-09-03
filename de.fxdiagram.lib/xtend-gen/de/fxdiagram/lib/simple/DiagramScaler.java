@@ -17,12 +17,12 @@ import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -98,16 +98,17 @@ public class DiagramScaler implements XActivatable {
       this.diagram.setScaleY(1);
       this.diagram.setClip(null);
     } else {
-      ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
-      final Function1<XNode, BoundingBox> _function = new Function1<XNode, BoundingBox>() {
-        public BoundingBox apply(final XNode it) {
+      Group _nodeLayer = this.diagram.getNodeLayer();
+      ObservableList<Node> _children = _nodeLayer.getChildren();
+      final Function1<Node, BoundingBox> _function = new Function1<Node, BoundingBox>() {
+        public BoundingBox apply(final Node it) {
           Bounds _layoutBounds = it.getLayoutBounds();
           double _layoutX = it.getLayoutX();
           double _layoutY = it.getLayoutY();
           return BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
         }
       };
-      List<BoundingBox> _map = ListExtensions.<XNode, BoundingBox>map(_nodes_1, _function);
+      List<BoundingBox> _map = ListExtensions.<Node, BoundingBox>map(_children, _function);
       final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = new Function2<BoundingBox, BoundingBox, BoundingBox>() {
         public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
           return BoundsExtensions.operator_plus(b0, b1);
@@ -141,14 +142,6 @@ public class DiagramScaler implements XActivatable {
       final double newScale = Math.min(newScaleX, newScaleY);
       this.diagram.setScaleX(newScale);
       this.diagram.setScaleY(newScale);
-      Rectangle _rectangle = new Rectangle();
-      final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
-        public void apply(final Rectangle it) {
-          DiagramScaler.this.fit(it, newScale, newScaleX, newScaleY, myBounds);
-        }
-      };
-      Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
-      this.diagram.setClip(_doubleArrow);
     }
   }
   

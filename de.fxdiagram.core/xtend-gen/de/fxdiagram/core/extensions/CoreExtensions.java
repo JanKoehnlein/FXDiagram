@@ -11,6 +11,7 @@ import de.fxdiagram.core.extensions.InitializingMapListener;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -304,15 +305,15 @@ public class CoreExtensions {
   
   public static <T extends Object, U extends Object> void addInitializingListener(final ObservableMap<T, U> map, final InitializingMapListener<T, U> mapListener) {
     Set<Map.Entry<T, U>> _entrySet = map.entrySet();
-    final Procedure1<Map.Entry<T, U>> _function = new Procedure1<Map.Entry<T, U>>() {
-      public void apply(final Map.Entry<T, U> it) {
+    final Consumer<Map.Entry<T, U>> _function = new Consumer<Map.Entry<T, U>>() {
+      public void accept(final Map.Entry<T, U> it) {
         Procedure2<? super T, ? super U> _put = mapListener.getPut();
         T _key = it.getKey();
         U _value = it.getValue();
         _put.apply(_key, _value);
       }
     };
-    IterableExtensions.<Map.Entry<T, U>>forEach(_entrySet, _function);
+    _entrySet.forEach(_function);
     map.addListener(mapListener);
   }
   
@@ -355,13 +356,13 @@ public class CoreExtensions {
   }
   
   public static <T extends Object> void removeInitializingListener(final ObservableList<T> list, final InitializingListListener<T> listListener) {
-    final Procedure1<T> _function = new Procedure1<T>() {
-      public void apply(final T it) {
+    final Consumer<T> _function = new Consumer<T>() {
+      public void accept(final T it) {
         Procedure1<? super T> _remove = listListener.getRemove();
         _remove.apply(it);
       }
     };
-    IterableExtensions.<T>forEach(list, _function);
+    list.forEach(_function);
     list.removeListener(listListener);
   }
   

@@ -14,6 +14,7 @@ import eu.hansolo.enzo.radialmenu.RadialMenu;
 import eu.hansolo.enzo.radialmenu.Symbol;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -63,8 +64,8 @@ public class DiagramActionTool implements XDiagramTool {
           }
         };
         Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function);
-        final Procedure1<DiagramAction> _function_1 = new Procedure1<DiagramAction>() {
-          public void apply(final DiagramAction it) {
+        final Consumer<DiagramAction> _function_1 = new Consumer<DiagramAction>() {
+          public void accept(final DiagramAction it) {
             boolean _isConsumed = event.isConsumed();
             boolean _not = (!_isConsumed);
             if (_not) {
@@ -72,7 +73,7 @@ public class DiagramActionTool implements XDiagramTool {
             }
           }
         };
-        IterableExtensions.<DiagramAction>forEach(_filter, _function_1);
+        _filter.forEach(_function_1);
         KeyCode _code = event.getCode();
         boolean _equals = Objects.equal(_code, KeyCode.ESCAPE);
         if (_equals) {

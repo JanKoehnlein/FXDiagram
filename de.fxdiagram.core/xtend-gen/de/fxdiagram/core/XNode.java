@@ -15,6 +15,7 @@ import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringDescriptor;
 import de.fxdiagram.core.model.XModelProvider;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
@@ -31,7 +32,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -147,12 +147,12 @@ public class XNode extends XShape implements XModelProvider {
       ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
       ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
       Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
-      final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-        public void apply(final XConnection it) {
+      final Consumer<XConnection> _function = new Consumer<XConnection>() {
+        public void accept(final XConnection it) {
           it.toFront();
         }
       };
-      IterableExtensions.<XConnection>forEach(_plus, _function);
+      _plus.forEach(_function);
     } else {
       this.setEffect(null);
       this.setScaleX(1.0);

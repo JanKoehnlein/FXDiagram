@@ -12,6 +12,7 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -347,13 +348,13 @@ public class ConnectionRouter implements XActivatable {
         ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
       }
       ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
-      final Procedure1<XControlPoint> _function_4 = new Procedure1<XControlPoint>() {
-        public void apply(final XControlPoint it) {
+      final Consumer<XControlPoint> _function_4 = new Consumer<XControlPoint>() {
+        public void accept(final XControlPoint it) {
           ObservableList<XControlPoint> _controlPoints = ConnectionRouter.this.getControlPoints();
           it.update(_controlPoints);
         }
       };
-      IterableExtensions.<XControlPoint>forEach(_controlPoints_7, _function_4);
+      _controlPoints_7.forEach(_function_4);
     }
   }
   

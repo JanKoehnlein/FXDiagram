@@ -7,9 +7,8 @@ import eu.hansolo.enzo.radialmenu.Symbol;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class DiagramActionRegistry {
@@ -18,12 +17,12 @@ public class DiagramActionRegistry {
   private Map<Symbol.Type, DiagramAction> symbol2action = CollectionLiterals.<Symbol.Type, DiagramAction>newHashMap();
   
   public void operator_add(final Iterable<? extends DiagramAction> diagramActions) {
-    final Procedure1<DiagramAction> _function = new Procedure1<DiagramAction>() {
-      public void apply(final DiagramAction it) {
+    final Consumer<DiagramAction> _function = new Consumer<DiagramAction>() {
+      public void accept(final DiagramAction it) {
         DiagramActionRegistry.this.operator_add(it);
       }
     };
-    IterableExtensions.forEach(diagramActions, _function);
+    diagramActions.forEach(_function);
   }
   
   public void operator_add(final DiagramAction diagramAction) {

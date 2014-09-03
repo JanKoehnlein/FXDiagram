@@ -10,7 +10,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
@@ -82,7 +81,7 @@ public class SoftTooltip {
   public void install(final Node host) {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
-        EventType<? extends Event> _eventType = it.getEventType();
+        EventType<? extends MouseEvent> _eventType = it.getEventType();
         boolean _matched = false;
         if (!_matched) {
           if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED_TARGET)) {

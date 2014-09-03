@@ -2,6 +2,7 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import java.util.Map;
+import java.util.function.Consumer;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -16,8 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class HeadsUpDisplay extends Group {
@@ -29,12 +28,12 @@ public class HeadsUpDisplay extends Group {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> property, final Number oldVlaue, final Number newValue) {
         ObservableList<Node> _children = HeadsUpDisplay.this.getChildren();
-        final Procedure1<Node> _function = new Procedure1<Node>() {
-          public void apply(final Node it) {
+        final Consumer<Node> _function = new Consumer<Node>() {
+          public void accept(final Node it) {
             HeadsUpDisplay.this.place(it);
           }
         };
-        IterableExtensions.<Node>forEach(_children, _function);
+        _children.forEach(_function);
       }
     };
     this.sceneListener = _function;

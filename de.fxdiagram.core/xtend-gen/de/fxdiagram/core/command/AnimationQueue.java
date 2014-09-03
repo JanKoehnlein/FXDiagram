@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.SequentialTransition;
 import javafx.collections.ObservableList;
@@ -12,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -89,12 +89,12 @@ public class AnimationQueue {
       }
     } else {
       ArrayList<AnimationQueue.Listener> _newArrayList = Lists.<AnimationQueue.Listener>newArrayList(this.listeners);
-      final Procedure1<AnimationQueue.Listener> _function_1 = new Procedure1<AnimationQueue.Listener>() {
-        public void apply(final AnimationQueue.Listener it) {
+      final Consumer<AnimationQueue.Listener> _function_1 = new Consumer<AnimationQueue.Listener>() {
+        public void accept(final AnimationQueue.Listener it) {
           it.handleQueueEmpty();
         }
       };
-      IterableExtensions.<AnimationQueue.Listener>forEach(_newArrayList, _function_1);
+      _newArrayList.forEach(_function_1);
     }
   }
 }

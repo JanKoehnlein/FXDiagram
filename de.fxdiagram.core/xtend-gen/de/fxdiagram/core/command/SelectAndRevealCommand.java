@@ -15,6 +15,7 @@ import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.viewport.ViewportTransition;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
@@ -138,13 +139,13 @@ public class SelectAndRevealCommand extends ViewportCommand {
       XDiagram _diagram_1 = _root_1.getDiagram();
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
       Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
-      final Procedure1<XShape> _function = new Procedure1<XShape>() {
-        public void apply(final XShape it) {
+      final Consumer<XShape> _function = new Consumer<XShape>() {
+        public void accept(final XShape it) {
           boolean _contains = SelectAndRevealCommand.this.originalSelection.contains(((XShape)it));
           ((XShape)it).setSelected(_contains);
         }
       };
-      IterableExtensions.<XShape>forEach(_plus, _function);
+      _plus.forEach(_function);
       _xblockexpression = super.getUndoAnimation(context);
     }
     return _xblockexpression;
@@ -160,13 +161,13 @@ public class SelectAndRevealCommand extends ViewportCommand {
       XDiagram _diagram_1 = _root_1.getDiagram();
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
       Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
-      final Procedure1<XShape> _function = new Procedure1<XShape>() {
-        public void apply(final XShape it) {
-          Boolean _apply = SelectAndRevealCommand.this.selectionPredicate.apply(((XShape)it));
+      final Consumer<XShape> _function = new Consumer<XShape>() {
+        public void accept(final XShape it) {
+          Boolean _apply = SelectAndRevealCommand.this.selectionPredicate.apply(it);
           ((XShape)it).setSelected((_apply).booleanValue());
         }
       };
-      IterableExtensions.<XShape>forEach(_plus, _function);
+      _plus.forEach(_function);
       _xblockexpression = super.getRedoAnimation(context);
     }
     return _xblockexpression;

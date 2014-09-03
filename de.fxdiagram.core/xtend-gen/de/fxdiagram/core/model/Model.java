@@ -7,11 +7,10 @@ import de.fxdiagram.core.model.XModelProvider;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class Model {
@@ -58,8 +57,8 @@ public class Model {
       final ModelElement element = _elvis;
       this.index.put(node, element);
       List<? extends Property<?>> _properties = element.getProperties();
-      final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
-        public void apply(final Property<?> it) {
+      final Consumer<Property<?>> _function = new Consumer<Property<?>>() {
+        public void accept(final Property<?> it) {
           boolean _isPrimitive = element.isPrimitive(it);
           boolean _not = (!_isPrimitive);
           if (_not) {
@@ -70,26 +69,26 @@ public class Model {
           }
         }
       };
-      IterableExtensions.forEach(_properties, _function);
+      _properties.forEach(_function);
       List<? extends ListProperty<?>> _listProperties = element.getListProperties();
-      final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
-        public void apply(final ListProperty<?> it) {
+      final Consumer<ListProperty<?>> _function_1 = new Consumer<ListProperty<?>>() {
+        public void accept(final ListProperty<?> it) {
           boolean _isPrimitive = element.isPrimitive(it);
           boolean _not = (!_isPrimitive);
           if (_not) {
             ObservableList<?> _value = it.getValue();
-            final Procedure1<Object> _function = new Procedure1<Object>() {
-              public void apply(final Object it) {
+            final Consumer<Object> _function = new Consumer<Object>() {
+              public void accept(final Object it) {
                 if (it!=null) {
                   Model.this.addElement(it);
                 }
               }
             };
-            IterableExtensions.forEach(_value, _function);
+            _value.forEach(_function);
           }
         }
       };
-      IterableExtensions.forEach(_listProperties, _function_1);
+      _listProperties.forEach(_function_1);
       _xblockexpression = element;
     }
     return _xblockexpression;

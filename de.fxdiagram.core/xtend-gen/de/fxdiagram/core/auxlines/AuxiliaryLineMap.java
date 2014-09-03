@@ -6,11 +6,11 @@ import com.google.common.collect.Multimap;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AuxiliaryLineMap<T extends Object> {
@@ -30,25 +30,25 @@ public class AuxiliaryLineMap<T extends Object> {
   
   public void add(final AuxiliaryLine line) {
     XNode[] _relatedNodes = line.getRelatedNodes();
-    if (((Iterable<XNode>)Conversions.doWrapArray(_relatedNodes))!=null) {
-      final Procedure1<XNode> _function = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
+    if (((List<XNode>)Conversions.doWrapArray(_relatedNodes))!=null) {
+      final Consumer<XNode> _function = new Consumer<XNode>() {
+        public void accept(final XNode it) {
           AuxiliaryLineMap.this.removeByNode(it);
         }
       };
-      IterableExtensions.<XNode>forEach(((Iterable<XNode>)Conversions.doWrapArray(_relatedNodes)), _function);
+      ((List<XNode>)Conversions.doWrapArray(_relatedNodes)).forEach(_function);
     }
     double _position = line.getPosition();
     int _key = this.getKey(_position);
     this.store.put(Integer.valueOf(_key), line);
     XNode[] _relatedNodes_1 = line.getRelatedNodes();
-    if (((Iterable<XNode>)Conversions.doWrapArray(_relatedNodes_1))!=null) {
-      final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
+    if (((List<XNode>)Conversions.doWrapArray(_relatedNodes_1))!=null) {
+      final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+        public void accept(final XNode it) {
           AuxiliaryLineMap.this.node2entry.put(it, line);
         }
       };
-      IterableExtensions.<XNode>forEach(((Iterable<XNode>)Conversions.doWrapArray(_relatedNodes_1)), _function_1);
+      ((List<XNode>)Conversions.doWrapArray(_relatedNodes_1)).forEach(_function_1);
     }
   }
   

@@ -54,7 +54,7 @@ class DiagramScaler implements XActivatable {
 			diagram.scaleY = 1
 			diagram.clip = null
 		} else {
-			val myBounds = diagram.nodes
+			val myBounds = diagram.nodeLayer.children
 				.map[layoutBounds.translate(layoutX, layoutY)]
 				.reduce[b0, b1 | b0 + b1]
 			val newScaleX = if (myBounds.width != 0)
@@ -68,10 +68,10 @@ class DiagramScaler implements XActivatable {
 			val newScale = min(newScaleX, newScaleY)
 			diagram.scaleX = newScale
 			diagram.scaleY = newScale
-						
-			diagram.clip = new Rectangle => [
-				fit(newScale, newScaleX, newScaleY, myBounds)
-			]
+			// TODO: fix clipping
+//			diagram.clip = new Rectangle => [
+//				fit(newScale, newScaleX, newScaleY, myBounds)
+//			]
 		}
 	}
 	

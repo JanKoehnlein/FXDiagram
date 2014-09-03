@@ -9,6 +9,7 @@ import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -20,7 +21,6 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
@@ -51,8 +51,8 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   }
   
   public Animation createExecuteAnimation(final CommandContext context) {
-    final Procedure1<XShape> _function = new Procedure1<XShape>() {
-      public void apply(final XShape it) {
+    final Consumer<XShape> _function = new Consumer<XShape>() {
+      public void accept(final XShape it) {
         boolean _matched = false;
         if (!_matched) {
           if (it instanceof XNode) {
@@ -94,7 +94,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         }
       }
     };
-    IterableExtensions.forEach(this.shapes, _function);
+    this.shapes.forEach(_function);
     return null;
   }
   
@@ -133,8 +133,8 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         Iterables.<Animation>addAll(_children, _map);
         final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
           public void handle(final ActionEvent it) {
-            final Procedure1<XShape> _function = new Procedure1<XShape>() {
-              public void apply(final XShape it) {
+            final Consumer<XShape> _function = new Consumer<XShape>() {
+              public void accept(final XShape it) {
                 boolean _matched = false;
                 if (!_matched) {
                   if (it instanceof XNode) {
@@ -152,7 +152,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
                 }
               }
             };
-            IterableExtensions.forEach(AddRemoveCommand.this.shapes, _function);
+            AddRemoveCommand.this.shapes.forEach(_function);
           }
         };
         it.setOnFinished(_function_1);
@@ -164,8 +164,8 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   protected ParallelTransition remove(@Extension final CommandContext context) {
     ParallelTransition _xblockexpression = null;
     {
-      final Procedure1<XShape> _function = new Procedure1<XShape>() {
-        public void apply(final XShape it) {
+      final Consumer<XShape> _function = new Consumer<XShape>() {
+        public void accept(final XShape it) {
           boolean _matched = false;
           if (!_matched) {
             if (it instanceof XNode) {
@@ -188,7 +188,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
           }
         }
       };
-      IterableExtensions.forEach(this.shapes, _function);
+      this.shapes.forEach(_function);
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
         public void apply(final ParallelTransition it) {

@@ -14,6 +14,7 @@ import de.fxdiagram.core.command.ViewportCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.viewport.ViewportTransition;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -110,12 +111,12 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
                 XDiagram _host = DiagramNavigationBehavior.this.getHost();
                 XRoot _root = CoreExtensions.getRoot(_host);
                 Iterable<XShape> _currentSelection = _root.getCurrentSelection();
-                final Procedure1<XShape> _function = new Procedure1<XShape>() {
-                  public void apply(final XShape it) {
+                final Consumer<XShape> _function = new Consumer<XShape>() {
+                  public void accept(final XShape it) {
                     it.setSelected(false);
                   }
                 };
-                IterableExtensions.<XShape>forEach(_currentSelection, _function);
+                _currentSelection.forEach(_function);
                 node.setSelected(true);
               }
             };

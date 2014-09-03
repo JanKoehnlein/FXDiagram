@@ -22,6 +22,7 @@ import de.fxdiagram.core.model.StringDescriptor;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
@@ -235,12 +236,12 @@ public class XConnection extends XShape implements XModelProvider {
     InitializingListListener<XControlPoint> _doubleArrow = ObjectExtensions.<InitializingListListener<XControlPoint>>operator_doubleArrow(_initializingListListener, _function_1);
     CoreExtensions.<XControlPoint>addInitializingListener(_controlPoints, _doubleArrow);
     ObservableList<XConnectionLabel> _labels = this.getLabels();
-    final Procedure1<XConnectionLabel> _function_2 = new Procedure1<XConnectionLabel>() {
-      public void apply(final XConnectionLabel it) {
+    final Consumer<XConnectionLabel> _function_2 = new Consumer<XConnectionLabel>() {
+      public void accept(final XConnectionLabel it) {
         it.activate();
       }
     };
-    IterableExtensions.<XConnectionLabel>forEach(_labels, _function_2);
+    _labels.forEach(_function_2);
     ConnectionRouter _connectionRouter = this.getConnectionRouter();
     _connectionRouter.activate();
     this.updateShapes();
@@ -462,15 +463,15 @@ public class XConnection extends XShape implements XModelProvider {
     double _height = strokeBoundsInRoot.getHeight();
     double _plus = (_width + _height);
     final double strokeInRoot = (0.5 * _plus);
-    final Procedure1<Shape> _function = new Procedure1<Shape>() {
-      public void apply(final Shape it) {
+    final Consumer<Shape> _function = new Consumer<Shape>() {
+      public void accept(final Shape it) {
         Paint _stroke = XConnection.this.getStroke();
         it.setStroke(_stroke);
         it.setStrokeLineCap(StrokeLineCap.ROUND);
         it.setStrokeWidth(strokeInRoot);
       }
     };
-    IterableExtensions.forEach(shapes, _function);
+    shapes.forEach(_function);
   }
   
   public boolean isSelectable() {
@@ -483,13 +484,13 @@ public class XConnection extends XShape implements XModelProvider {
       ConnectionRouter _connectionRouter = this.getConnectionRouter();
       _connectionRouter.calculatePoints();
       ObservableList<XConnectionLabel> _labels = this.getLabels();
-      final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-        public void apply(final XConnectionLabel it) {
+      final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
+        public void accept(final XConnectionLabel it) {
           ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
           it.place(_controlPoints);
         }
       };
-      IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
+      _labels.forEach(_function);
       ArrowHead _sourceArrowHead = this.getSourceArrowHead();
       if (_sourceArrowHead!=null) {
         _sourceArrowHead.place();

@@ -6,10 +6,9 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.Symbol;
+import java.util.function.Consumer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class SelectAllAction implements DiagramAction {
@@ -33,14 +32,14 @@ public class SelectAllAction implements DiagramAction {
   public void perform(final XRoot root) {
     XDiagram _diagram = root.getDiagram();
     Iterable<XShape> _allShapes = _diagram.getAllShapes();
-    final Procedure1<XShape> _function = new Procedure1<XShape>() {
-      public void apply(final XShape it) {
+    final Consumer<XShape> _function = new Consumer<XShape>() {
+      public void accept(final XShape it) {
         boolean _isSelectable = it.isSelectable();
         if (_isSelectable) {
           it.setSelected(true);
         }
       }
     };
-    IterableExtensions.<XShape>forEach(_allShapes, _function);
+    _allShapes.forEach(_function);
   }
 }

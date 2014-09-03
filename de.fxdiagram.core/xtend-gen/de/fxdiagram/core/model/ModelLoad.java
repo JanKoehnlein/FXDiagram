@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -30,8 +31,6 @@ import javax.json.JsonValue;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
 @SuppressWarnings("all")
@@ -52,12 +51,12 @@ public class ModelLoad {
     final JsonReader reader = Json.createReader(in);
     final JsonObject jsonObject = reader.readObject();
     final Object node = this.readNode(jsonObject, "");
-    final Procedure1<CrossRefData> _function = new Procedure1<CrossRefData>() {
-      public void apply(final CrossRefData it) {
+    final Consumer<CrossRefData> _function = new Consumer<CrossRefData>() {
+      public void accept(final CrossRefData it) {
         ModelLoad.this.resolveCrossReference(it);
       }
     };
-    IterableExtensions.<CrossRefData>forEach(this.crossRefs, _function);
+    this.crossRefs.forEach(_function);
     return node;
   }
   
@@ -68,21 +67,21 @@ public class ModelLoad {
       final ModelElement model = this.modelFactory.createElement(className);
       this.idMap.put(currentID, model);
       List<? extends Property<?>> _properties = model.getProperties();
-      final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
-        public void apply(final Property<?> it) {
+      final Consumer<Property<?>> _function = new Consumer<Property<?>>() {
+        public void accept(final Property<?> it) {
           Class<?> _type = model.getType(it);
           ModelLoad.this.readProperty(jsonObject, it, _type, currentID);
         }
       };
-      IterableExtensions.forEach(_properties, _function);
+      _properties.forEach(_function);
       List<? extends ListProperty<?>> _listProperties = model.getListProperties();
-      final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
-        public void apply(final ListProperty<?> it) {
+      final Consumer<ListProperty<?>> _function_1 = new Consumer<ListProperty<?>>() {
+        public void accept(final ListProperty<?> it) {
           Class<?> _type = model.getType(it);
           ModelLoad.this.readListProperty(jsonObject, it, _type, currentID);
         }
       };
-      IterableExtensions.forEach(_listProperties, _function_1);
+      _listProperties.forEach(_function_1);
       _xblockexpression = model.getNode();
     }
     return _xblockexpression;

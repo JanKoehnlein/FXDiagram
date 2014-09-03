@@ -226,6 +226,7 @@ public class OpenableDiagramNode extends XNode {
       XDiagram _innerDiagram_4 = this.getInnerDiagram();
       _innerDiagram_4.layout();
       this.diagramScaler.activate();
+      this.layout();
       XDiagram _innerDiagram_5 = this.getInnerDiagram();
       BoundingBox _boundingBox = new BoundingBox(0, 0, 1, 0);
       Bounds _localToScene = _innerDiagram_5.localToScene(_boundingBox);
@@ -416,6 +417,7 @@ public class OpenableDiagramNode extends XNode {
                       ObservableList<Node> _children = it.getChildren();
                       XDiagram _innerDiagram = OpenableDiagramNode.this.getInnerDiagram();
                       _children.add(_innerDiagram);
+                      it.layout();
                     }
                   };
                   Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);

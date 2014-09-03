@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -200,21 +201,21 @@ public class Layouter {
       _data.add(shapeLayout);
       cache.put(it, kRoot);
       ObservableList<XNode> _nodes = it.getNodes();
-      final Procedure1<XNode> _function = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
+      final Consumer<XNode> _function = new Consumer<XNode>() {
+        public void accept(final XNode it) {
           EList<KNode> _children = kRoot.getChildren();
           KNode _kNode = Layouter.this.toKNode(it, cache);
           _children.add(_kNode);
         }
       };
-      IterableExtensions.<XNode>forEach(_nodes, _function);
+      _nodes.forEach(_function);
       ObservableList<XConnection> _connections = it.getConnections();
-      final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
-        public void apply(final XConnection it) {
+      final Consumer<XConnection> _function_1 = new Consumer<XConnection>() {
+        public void accept(final XConnection it) {
           Layouter.this.toKEdge(it, cache);
         }
       };
-      IterableExtensions.<XConnection>forEach(_connections, _function_1);
+      _connections.forEach(_function_1);
       _xblockexpression = kRoot;
     }
     return _xblockexpression;
@@ -269,13 +270,13 @@ public class Layouter {
           _data.add(edgeLayout);
           cache.put(it, kEdge);
           ObservableList<XConnectionLabel> _labels = it.getLabels();
-          final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-            public void apply(final XConnectionLabel it) {
+          final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
+            public void accept(final XConnectionLabel it) {
               KLabel _kLabel = Layouter.this.toKLabel(it, cache);
               _kLabel.setParent(kEdge);
             }
           };
-          IterableExtensions.<XConnectionLabel>forEach(_labels, _function);
+          _labels.forEach(_function);
           _xblockexpression_1 = kEdge;
         }
         _xifexpression = _xblockexpression_1;

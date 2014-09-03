@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -25,9 +26,7 @@ import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
 @SuppressWarnings("all")
@@ -80,21 +79,21 @@ public class ModelSave {
         }
         gen.write("__class", className);
         List<? extends Property<?>> _properties = element.getProperties();
-        final Procedure1<Property<?>> _function = new Procedure1<Property<?>>() {
-          public void apply(final Property<?> it) {
+        final Consumer<Property<?>> _function = new Consumer<Property<?>>() {
+          public void accept(final Property<?> it) {
             Class<?> _type = element.getType(it);
             ModelSave.this.write(gen, it, _type, currentId);
           }
         };
-        IterableExtensions.forEach(_properties, _function);
+        _properties.forEach(_function);
         List<? extends ListProperty<?>> _listProperties = element.getListProperties();
-        final Procedure1<ListProperty<?>> _function_1 = new Procedure1<ListProperty<?>>() {
-          public void apply(final ListProperty<?> it) {
+        final Consumer<ListProperty<?>> _function_1 = new Consumer<ListProperty<?>>() {
+          public void accept(final ListProperty<?> it) {
             Class<?> _type = element.getType(it);
             ModelSave.this.write(gen, it, _type, currentId);
           }
         };
-        IterableExtensions.forEach(_listProperties, _function_1);
+        _listProperties.forEach(_function_1);
         gen.writeEnd();
       }
     }

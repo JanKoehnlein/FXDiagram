@@ -19,6 +19,7 @@ import de.fxdiagram.core.tools.XDiagramTool;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
@@ -30,7 +31,6 @@ import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class SelectionTool implements XDiagramTool {
@@ -126,15 +126,15 @@ public class SelectionTool implements XDiagramTool {
               if (_selected_1) {
                 selection.add(targetShape);
               }
-              final Procedure1<XShape> _function_3 = new Procedure1<XShape>() {
-                public void apply(final XShape it) {
+              final Consumer<XShape> _function_3 = new Consumer<XShape>() {
+                public void accept(final XShape it) {
                   MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
                   if (_behavior!=null) {
                     _behavior.mousePressed(event);
                   }
                 }
               };
-              IterableExtensions.<XShape>forEach(selection, _function_3);
+              selection.forEach(_function_3);
               MoveBehavior _behavior = targetShape.<MoveBehavior>getBehavior(MoveBehavior.class);
               if (_behavior!=null) {
                 _behavior.mousePressed(event);
