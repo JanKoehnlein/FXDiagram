@@ -11,21 +11,29 @@ I tested on MacOSX only.
 The LCARS demo won't run as it depends on a currently unreleased database. 
 
 
+
 PREREQUISITES
-- Java 7 SDK (including JavaFX)
+EITHER
+- Java 7 SDK
 - Eclipse Kepler 4.3
 	- Xtext SDK 2.7 (including Xtend 2.7)
 	- e(fx)clipse 0.9 
+OR
+- Java 8 SDK build 40+
+  (must include fix for https://javafx-jira.kenai.com/browse/RT-37879)
+- Eclipse Luna 4.4
+	- Xtext SDK 2.7
+	- e(fx)clipse 1.0
 	
-Unfortunately, it currently doesn't run with JavaFX 8 (Java 8 SDK). As 
-e(fx)clipse decideded to no longer support Java 7, you need the old 0.9 
-version. The latter runs on Kepler only. This is why the Java 8 issues
-have top priority to be solved.
+As of version 1.0 e(fx)clipse no longer supports Java 7. If you're stuck 
+with Java 7 you need the e(fx)clipse version 0.9 which runs on Kepler only. 
 
 You need some plug-ins from the KIELER project. Use 
 the kielerProjectSet.psf to get them. Unfortunately, KIELER does not 
 run without Equinox. If you want to run the standalone demo you have to 
 apply the patch kieler.patch for some quick workarounds.
+
+Graphviz must be installed on your system.
 
 'de.fxdiagram.eclipse' contains the integration as an Eclipse view (needs   
 https://github.com/JanKoehnlein/JavaFX-SWT-Gesture-Bridge) If you don't 
@@ -33,6 +41,7 @@ need that just close the project.
 
 The *.xtext.* projects require the respective Xtext examples in the 
 workspace. Use New > Example > Xtext > ... to instantiate them.
+
 
 
 RUN
