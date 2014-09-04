@@ -18,13 +18,14 @@ import de.fxdiagram.core.XRoot
 
 class TooltipExtensions {
 	static def setTooltip(Node host, String text) {
-		new SoftTooltip(host, text).install(host)
+		new SoftTooltip(host, text).install()
 	}  
 }
 
 /**
- * JavaFX's {@link Tooltip} affects gesture events in an unpredictable way. 
+ * In Java7, JavaFX's {@link Tooltip} affects gesture events in an unpredictable way. 
  * This tooltip is a lightweight version not using a pop-up.
+ * Obsolete for Java8.
  */
 class SoftTooltip {
 	
@@ -57,7 +58,7 @@ class SoftTooltip {
 		this.timer = new TooltipTimer(this)
 	}
 
-	def void install(Node host) {
+	def void install() {
 		host.addEventHandler(MouseEvent.ANY, [
 			switch eventType {
 				case MouseEvent.MOUSE_ENTERED_TARGET: {
@@ -122,14 +123,21 @@ class SoftTooltip {
 	def show() {
 		if(!isShowing) {
 			root = host.root
-			root?.headsUpDisplay?.children?.add(tooltip)
+			if(tooltip.parent != root?.headsUpDisplay)
+				root?.headsUpDisplay?.children?.add(tooltip)
+			tooltip.opacity = 1
 		}
 		isShowing = true
 	}
 	
 	def hide() {
-		if(isShowing) 
-			root?.headsUpDisplay?.children?.remove(tooltip)
+		if(isShowing) {
+			// Java8 bug:
+			// Removing the tooltip from its parent does not force a redraw
+			// so we leave it and make it transparent instead
+			tooltip.opacity = 0
+//			root?.headsUpDisplay?.children?.remove(tooltip)
+		} 
 		isShowing = false
 	}
 }

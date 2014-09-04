@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -24,8 +25,9 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 /**
- * JavaFX's {@link Tooltip} affects gesture events in an unpredictable way.
+ * In Java7, JavaFX's {@link Tooltip} affects gesture events in an unpredictable way.
  * This tooltip is a lightweight version not using a pop-up.
+ * Obsolete for Java8.
  */
 @SuppressWarnings("all")
 public class SoftTooltip {
@@ -78,7 +80,7 @@ public class SoftTooltip {
     this.timer = _tooltipTimer;
   }
   
-  public void install(final Node host) {
+  public void install() {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       public void handle(final MouseEvent it) {
         EventType<? extends MouseEvent> _eventType = it.getEventType();
@@ -133,7 +135,7 @@ public class SoftTooltip {
         }
       }
     };
-    host.<MouseEvent>addEventHandler(MouseEvent.ANY, _function);
+    this.host.<MouseEvent>addEventHandler(MouseEvent.ANY, _function);
   }
   
   public String getText() {
@@ -188,17 +190,26 @@ public class SoftTooltip {
       if ((!this.isShowing)) {
         XRoot _root = CoreExtensions.getRoot(this.host);
         this.root = _root;
+        Parent _parent = this.tooltip.getParent();
         HeadsUpDisplay _headsUpDisplay = null;
         if (this.root!=null) {
           _headsUpDisplay=this.root.getHeadsUpDisplay();
         }
-        ObservableList<Node> _children = null;
-        if (_headsUpDisplay!=null) {
-          _children=_headsUpDisplay.getChildren();
+        boolean _notEquals = (!Objects.equal(_parent, _headsUpDisplay));
+        if (_notEquals) {
+          HeadsUpDisplay _headsUpDisplay_1 = null;
+          if (this.root!=null) {
+            _headsUpDisplay_1=this.root.getHeadsUpDisplay();
+          }
+          ObservableList<Node> _children = null;
+          if (_headsUpDisplay_1!=null) {
+            _children=_headsUpDisplay_1.getChildren();
+          }
+          if (_children!=null) {
+            _children.add(this.tooltip);
+          }
         }
-        if (_children!=null) {
-          _children.add(this.tooltip);
-        }
+        this.tooltip.setOpacity(1);
       }
       _xblockexpression = this.isShowing = true;
     }
@@ -209,17 +220,7 @@ public class SoftTooltip {
     boolean _xblockexpression = false;
     {
       if (this.isShowing) {
-        HeadsUpDisplay _headsUpDisplay = null;
-        if (this.root!=null) {
-          _headsUpDisplay=this.root.getHeadsUpDisplay();
-        }
-        ObservableList<Node> _children = null;
-        if (_headsUpDisplay!=null) {
-          _children=_headsUpDisplay.getChildren();
-        }
-        if (_children!=null) {
-          _children.remove(this.tooltip);
-        }
+        this.tooltip.setOpacity(0);
       }
       _xblockexpression = this.isShowing = false;
     }

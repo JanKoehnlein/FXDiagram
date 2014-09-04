@@ -7,6 +7,6 @@ import javafx.scene.Node;
 public class TooltipExtensions {
   public static void setTooltip(final Node host, final String text) {
     SoftTooltip _softTooltip = new SoftTooltip(host, text);
-    _softTooltip.install(host);
+    _softTooltip.install();
   }
 }
