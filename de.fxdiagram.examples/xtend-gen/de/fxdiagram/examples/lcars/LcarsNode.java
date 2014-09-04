@@ -8,6 +8,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
+import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.services.ImageCache;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -34,6 +36,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -55,6 +58,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -616,12 +620,51 @@ public class LcarsNode extends XNode {
     };
     ObjectExtensions.<VBox>operator_doubleArrow(
       this.vbox, _function);
-    Set<String> _keySet = this.pages.keySet();
-    Iterator<String> _iterator = _keySet.iterator();
-    String _next = _iterator.next();
-    this.showPage(_next);
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty_1 = this.infoBox.boundsInLocalProperty();
-    _boundsInLocalProperty_1.addListener(this.nameShortener);
+    this.inflateInfoTextBox();
+  }
+  
+  public Transition inflateInfoTextBox() {
+    abstract class __LcarsNode_1 extends Transition {
+      public abstract void setDuration(final Duration duration);
+    }
+    
+    __LcarsNode_1 _xblockexpression = null;
+    {
+      final Rectangle spacer = new Rectangle(0, 0, 1, 1);
+      ObservableList<Node> _children = this.infoTextBox.getChildren();
+      _children.add(spacer);
+      __LcarsNode_1 ___LcarsNode_1 = new __LcarsNode_1() {
+        public void setDuration(final Duration duration) {
+          this.setCycleDuration(duration);
+        }
+        
+        protected void interpolate(final double alpha) {
+          spacer.setWidth((150 * alpha));
+        }
+      };
+      final Procedure1<__LcarsNode_1> _function = new Procedure1<__LcarsNode_1>() {
+        public void apply(final __LcarsNode_1 it) {
+          Duration _millis = DurationExtensions.millis(500);
+          it.setDuration(_millis);
+          final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+            public void handle(final ActionEvent it) {
+              ObservableList<Node> _children = LcarsNode.this.infoTextBox.getChildren();
+              _children.remove(spacer);
+              Set<String> _keySet = LcarsNode.this.pages.keySet();
+              Iterator<String> _iterator = _keySet.iterator();
+              String _next = _iterator.next();
+              LcarsNode.this.showPage(_next);
+              ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = LcarsNode.this.infoTextBox.boundsInLocalProperty();
+              _boundsInLocalProperty.addListener(LcarsNode.this.nameShortener);
+            }
+          };
+          it.setOnFinished(_function);
+          it.play();
+        }
+      };
+      _xblockexpression = ObjectExtensions.<__LcarsNode_1>operator_doubleArrow(___LcarsNode_1, _function);
+    }
+    return _xblockexpression;
   }
   
   protected void invertColors(final RectangleBorderPane box) {

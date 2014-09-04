@@ -3,12 +3,14 @@ package de.fxdiagram.examples.lcars
 import com.mongodb.DBObject
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.services.ImageCache
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.util.List
 import java.util.Map
 import javafx.animation.Timeline
+import javafx.animation.Transition
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.geometry.Insets
@@ -25,12 +27,13 @@ import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
+import javafx.util.Duration
 
 import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension javafx.scene.layout.VBox.*
-import de.fxdiagram.annotations.properties.ModelNode
 
 @Logging
 @ModelNode
@@ -292,14 +295,35 @@ class LcarsNode extends XNode {
 			}
 			children += lastStripe
 		]
-		showPage(pages.keySet.iterator.next)
-		infoBox.boundsInLocalProperty.addListener(nameShortener) 
+		inflateInfoTextBox()
 //		tooltip = '''
 //			Click on a property to connect with equivalents,
 //			Right-click to add new equivalents.'''
 		
 	}
 	
+	def inflateInfoTextBox() {
+		val spacer = new Rectangle(0,0,1,1)
+		infoTextBox.children += spacer
+		new Transition() {
+			def setDuration(Duration duration) {
+				cycleDuration = duration	
+			}
+			
+			override protected interpolate(double alpha) {
+				spacer.width = 150 * alpha
+			}
+		} => [
+			duration = 500.millis
+			onFinished = [ 
+				infoTextBox.children -= spacer
+				showPage(pages.keySet.iterator.next)
+				infoTextBox.boundsInLocalProperty.addListener(nameShortener) 
+			]
+			play
+		]
+	}
+
 	protected def invertColors(RectangleBorderPane box) {
 		val text = box.children.head as Text
 		val textColor = text.fill
