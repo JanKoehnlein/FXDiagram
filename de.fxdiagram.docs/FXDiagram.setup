@@ -21,7 +21,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.release"
-      value="http://download.eclipse.org/efxclipse/updates-released/0.9.0/site"/>
+      value="http://download.eclipse.org/efxclipse/updates-released/1.0.0/site"/>
   <setupTask
       xsi:type="setup:ResourceCreationTask"
       excludedTriggers="STARTUP MANUAL"
@@ -30,8 +30,8 @@
       encoding="UTF-8"/>
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-1.7"
-      location="${jre.location-1.7}"/>
+      version="JavaSE-1.8"
+      location="${jre.location-1.8}"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Xmx"
@@ -44,23 +44,23 @@
   <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
-        id="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
+        name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.version.feature.group"/>
+        name="org.eclipse.oomph.version.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.launches.feature.group"/>
+        name="org.eclipse.oomph.launches.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.manifests.feature.group"/>
+        name="org.eclipse.oomph.manifests.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.projectconfig.feature.group"/>
+        name="org.eclipse.oomph.projectconfig.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.projectcopy.feature.group"/>
+        name="org.eclipse.oomph.projectcopy.feature.group"/>
     <requirement
-        id="org.eclipse.oomph.workingsets.feature.group"/>
+        name="org.eclipse.oomph.workingsets.feature.group"/>
     <requirement
-        id="org.eclipse.xtext.sdk.feature.group"/>
+        name="org.eclipse.xtext.sdk.feature.group"/>
     <requirement
-        id="org.eclipse.fx.ide.all.kepler.feature.feature.group"/>
+        name="org.eclipse.fx.ide.feature.feature.group"/>
     <repository
         url="${xtext.releases.composite}"/>
     <repository
@@ -133,13 +133,13 @@
         name="FXDiagram"
         activeRepositoryList="">
       <requirement
-          id="org.eclipse.platform.feature.group"/>
+          name="org.eclipse.platform.feature.group"/>
       <requirement
-          id="org.eclipse.pde.feature.group"/>
+          name="org.eclipse.pde.feature.group"/>
       <requirement
-          id="de.fxdiagram.base.feature.feature.group"/>
+          name="de.fxdiagram.base.feature.feature.group"/>
       <requirement
-          id="de.fxdiagram.xtext.feature.feature.group"/>
+          name="de.fxdiagram.xtext.feature.feature.group"/>
       <sourceLocator
           rootFolder="${fxdiagram.git.clone.location}"/>
       <sourceLocator
@@ -153,9 +153,9 @@
         <repository
             url="${xtext.releases.composite}"/>
         <repository
-            url="http://download.eclipse.org/efxclipse/runtime-released/0.9.0/site"/>
+            url="${efxclipse.release}"/>
         <repository
-            url="http://meysholdt.github.io/xtext_examples/repositories/generated-with-xtext_2_6_0/"/>
+            url="http://meysholdt.github.io/xtext_examples/repositories/generated-with-xtext_2_7_0/"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -168,6 +168,12 @@
         <operand
             xsi:type="predicates:RepositoryPredicate"
             project="de.fxdiagram.core"/>
+        <operand
+            xsi:type="predicates:NotPredicate">
+          <operand
+              xsi:type="predicates:NamePredicate"
+              pattern="de\.fxdiagram\.xtext\.*"/>
+        </operand>
       </predicate>
     </workingSet>
     <workingSet
