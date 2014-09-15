@@ -172,7 +172,7 @@
             xsi:type="predicates:NotPredicate">
           <operand
               xsi:type="predicates:NamePredicate"
-              pattern="de\.fxdiagram\.xtext\.*"/>
+              pattern="de\.fxdiagram\.xtext\..*"/>
         </operand>
       </predicate>
     </workingSet>
@@ -194,7 +194,7 @@
             project="de.fxdiagram.core"/>
         <operand
             xsi:type="predicates:NamePredicate"
-            pattern="de\.fxdiagram\.xtext\.*"/>
+            pattern="de\.fxdiagram\.xtext\..*"/>
       </predicate>
     </workingSet>
   </setupTask>
