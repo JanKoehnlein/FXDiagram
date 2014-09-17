@@ -38,6 +38,14 @@ public class ShowInDiagramHandler extends AbstractHandler {
   @Inject
   private IWorkbench workbench;
   
+  public boolean isEnabled() {
+    return super.isEnabled();
+  }
+  
+  public void setEnabled(final Object evaluationContext) {
+    super.setEnabled(evaluationContext);
+  }
+  
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     try {
       final XtextEditor editor = EditorUtils.getActiveXtextEditor(event);

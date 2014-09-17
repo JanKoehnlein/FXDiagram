@@ -7,7 +7,7 @@ import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.OpenBehavior;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 

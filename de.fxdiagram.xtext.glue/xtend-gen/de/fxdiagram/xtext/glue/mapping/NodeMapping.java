@@ -1,7 +1,6 @@
 package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
@@ -10,6 +9,7 @@ import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;

@@ -1,13 +1,13 @@
-package de.fxdiagram.xtext.glue;
+package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.xtext.glue.MappedEObjectHandle;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.MappedEObjectHandle;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 

@@ -7,14 +7,13 @@ import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import java.util.List;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -86,9 +85,7 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
         }
         lazyBehavior = _elvis;
         for (final AbstractConnectionMappingCall<?, T> out : lazyOutgoing) {
-          XtextDomainObjectDescriptor<T> _descriptor_2 = this.getDescriptor();
-          XtextDomainObjectProvider _provider = _descriptor_2.getProvider();
-          XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter(_provider);
+          XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter();
           lazyBehavior.addConnectionMappingCall(out, _xDiagramConfigInterpreter, true);
         }
       }
@@ -111,9 +108,7 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
         }
         lazyBehavior = _elvis_1;
         for (final AbstractConnectionMappingCall<?, T> in : lazyIncoming) {
-          XtextDomainObjectDescriptor<T> _descriptor_3 = this.getDescriptor();
-          XtextDomainObjectProvider _provider_1 = _descriptor_3.getProvider();
-          XDiagramConfigInterpreter _xDiagramConfigInterpreter_1 = new XDiagramConfigInterpreter(_provider_1);
+          XDiagramConfigInterpreter _xDiagramConfigInterpreter_1 = new XDiagramConfigInterpreter();
           lazyBehavior.addConnectionMappingCall(in, _xDiagramConfigInterpreter_1, false);
         }
       }

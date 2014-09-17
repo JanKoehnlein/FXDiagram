@@ -2,12 +2,12 @@ package de.fxdiagram.xtext.fowlerdsl
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition

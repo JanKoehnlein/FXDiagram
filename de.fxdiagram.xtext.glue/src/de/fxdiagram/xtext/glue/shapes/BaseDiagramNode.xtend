@@ -2,11 +2,11 @@ package de.fxdiagram.xtext.glue.shapes
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.simple.OpenableDiagramNode
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
 import javafx.scene.paint.Color
 
 @ModelNode
@@ -45,13 +45,13 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 			if(!lazyOutgoing.empty) {
 				lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(this)
 				for(out : lazyOutgoing) 
-					lazyBehavior.addConnectionMappingCall(out, new XDiagramConfigInterpreter(descriptor.provider), true)
+					lazyBehavior.addConnectionMappingCall(out, new XDiagramConfigInterpreter, true)
 			}
 			val lazyIncoming = nodeMapping.incoming.filter[lazy]
 			if(!lazyIncoming.empty) {
 				lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(this)
 				for(in : lazyIncoming) 
-					lazyBehavior.addConnectionMappingCall(in, new XDiagramConfigInterpreter(descriptor.provider), false)
+					lazyBehavior.addConnectionMappingCall(in, new XDiagramConfigInterpreter, false)
 			}
 			if(lazyBehavior != null)
 				addBehavior(lazyBehavior)

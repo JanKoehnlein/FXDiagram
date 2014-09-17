@@ -1,11 +1,11 @@
 package de.fxdiagram.xtext.glue.behavior
 
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.behavior.OpenBehavior
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
-import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XNode
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
 import javafx.scene.input.MouseEvent
 
 class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implements OpenBehavior {

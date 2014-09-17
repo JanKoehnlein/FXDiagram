@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.glue;
+package de.fxdiagram.xtext.glue.mapping;
 
 import com.google.common.base.Objects;
 import com.google.inject.Injector;
@@ -7,9 +7,9 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -149,18 +149,22 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
   }
   
   public void injectMembers(final Object it) {
-    String _uri = this.getUri();
-    URI _createURI = URI.createURI(_uri);
-    final IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);
+    final IResourceServiceProvider resourceServiceProvider = this.getResourceServiceProvider();
     boolean _equals = Objects.equal(resourceServiceProvider, null);
     if (_equals) {
-      String _uri_1 = this.getUri();
-      String _plus = ("Cannot find IResourceServiceProvider for " + _uri_1);
+      String _uri = this.getUri();
+      String _plus = ("Cannot find IResourceServiceProvider for " + _uri);
       XtextDomainObjectDescriptor.LOG.severe(_plus);
     } else {
       Injector _get = resourceServiceProvider.<Injector>get(Injector.class);
       _get.injectMembers(it);
     }
+  }
+  
+  protected IResourceServiceProvider getResourceServiceProvider() {
+    String _uri = this.getUri();
+    URI _createURI = URI.createURI(_uri);
+    return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);
   }
   
   /**
@@ -177,7 +181,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     modelElement.addProperty(mappingIDProperty, String.class);
   }
   
-  private static Logger LOG = Logger.getLogger("de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor");
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor");
     ;
   
   private ReadOnlyObjectWrapper<XtextDomainObjectProvider> providerProperty = new ReadOnlyObjectWrapper<XtextDomainObjectProvider>(this, "provider");

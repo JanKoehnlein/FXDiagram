@@ -1,11 +1,11 @@
 package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseConnection;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 

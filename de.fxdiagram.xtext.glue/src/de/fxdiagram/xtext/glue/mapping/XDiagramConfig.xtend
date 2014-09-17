@@ -17,6 +17,8 @@ interface XDiagramConfig {
 	
 	def <ARG> void addMapping(AbstractMapping<ARG> mapping)
 	
+	def XtextDomainObjectProvider getDomainObjectProvider()
+	
 	@Logging  
 	static class Registry {
  	
@@ -60,7 +62,14 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 	Map<String, AbstractMapping<?>> mappings = newHashMap
 
 	@Accessors String ID
-	 
+	
+	@Accessors(PUBLIC_GETTER)
+	XtextDomainObjectProvider domainObjectProvider = createDomainObjectProvider()
+	
+	protected def XtextDomainObjectProvider createDomainObjectProvider() {
+		new XtextDomainObjectProvider
+	}
+	
 	override getMappingByID(String mappingID) {
 		mappings.get(mappingID)
 	}

@@ -4,12 +4,12 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.anchors.TriangleArrowHead
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode
 import javafx.scene.paint.Color
 import javax.inject.Inject

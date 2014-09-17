@@ -5,9 +5,11 @@ import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -20,6 +22,13 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   
   @Accessors
   private String ID;
+  
+  @Accessors(AccessorType.PUBLIC_GETTER)
+  private XtextDomainObjectProvider domainObjectProvider = this.createDomainObjectProvider();
+  
+  protected XtextDomainObjectProvider createDomainObjectProvider() {
+    return new XtextDomainObjectProvider();
+  }
   
   public AbstractMapping<?> getMappingByID(final String mappingID) {
     return this.mappings.get(mappingID);
@@ -64,5 +73,10 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   
   public void setID(final String ID) {
     this.ID = ID;
+  }
+  
+  @Pure
+  public XtextDomainObjectProvider getDomainObjectProvider() {
+    return this.domainObjectProvider;
   }
 }

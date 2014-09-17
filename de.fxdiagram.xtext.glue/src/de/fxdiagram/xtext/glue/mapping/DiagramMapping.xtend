@@ -1,7 +1,6 @@
 package de.fxdiagram.xtext.glue.mapping
 
 import de.fxdiagram.core.XDiagram
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import java.util.List
 
 abstract class DiagramMapping<T> extends AbstractMapping<T> {

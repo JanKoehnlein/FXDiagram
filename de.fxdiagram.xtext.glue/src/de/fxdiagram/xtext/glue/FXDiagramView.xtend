@@ -27,6 +27,7 @@ import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall
 import de.fxdiagram.xtext.glue.mapping.InterpreterContext
 import de.fxdiagram.xtext.glue.mapping.MappingCall
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 import java.util.Set
 import javafx.embed.swt.FXCanvas
@@ -54,8 +55,7 @@ class FXDiagramView extends ViewPart {
 	
 	IPartListener2 listener 
 	
-	val domainObjectProvider = new XtextDomainObjectProvider
-	val configInterpreter = new XDiagramConfigInterpreter(domainObjectProvider)
+	val configInterpreter = new XDiagramConfigInterpreter
 	
 	override createPartControl(Composite parent) {
 		canvas = new FXCanvas(parent, SWT.NONE)
@@ -67,10 +67,9 @@ class FXDiagramView extends ViewPart {
 		new Scene(
 			root = new XRoot => [
 			 	rootDiagram = new XDiagram()
-			 	getDomainObjectProviders += #[
-			 		new ClassLoaderProvider,
-			 		domainObjectProvider
-			 	]
+			 	getDomainObjectProviders += new ClassLoaderProvider
+			 	getDomainObjectProviders += XDiagramConfig.Registry.getInstance
+			 		.configurations.map[domainObjectProvider].toSet
 				getDiagramActionRegistry += #[
 					new CenterAction,
 					new DeleteAction,
@@ -148,7 +147,7 @@ class FXDiagramView extends ViewPart {
 		root.commandStack.execute(interpreterContext.command)
 		if(interpreterContext.needsLayout)
 			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis))
-		val descriptor = domainObjectProvider.createDescriptor(element, mappingCall.mapping)
+		val descriptor = mappingCall.mapping.config.domainObjectProvider.createDescriptor(element, mappingCall.mapping)
 		root.commandStack.execute(new SelectAndRevealCommand(root, [
 			switch it {
 				XNode: domainObject == descriptor

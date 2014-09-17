@@ -20,6 +20,14 @@ class ShowInDiagramHandler extends AbstractHandler {
 	
 	@Inject IWorkbench workbench
 	
+	override isEnabled() {
+		super.isEnabled()
+	}
+	
+	override setEnabled(Object evaluationContext) {
+		super.setEnabled(evaluationContext)
+	}
+	
 	override Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
 			val editor = EditorUtils.getActiveXtextEditor(event)

@@ -3,7 +3,6 @@ package de.fxdiagram.xtext.domainmodel
 import com.google.inject.Inject
 import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
-import org.eclipse.xtext.example.domainmodel.domainmodel.Property
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 import org.eclipse.xtext.xbase.typesystem.legacy.StandardTypeReferenceOwner
 import org.eclipse.xtext.xbase.typesystem.references.OwnedConverter

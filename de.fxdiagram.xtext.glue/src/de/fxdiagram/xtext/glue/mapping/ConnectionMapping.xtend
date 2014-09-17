@@ -1,7 +1,6 @@
 package de.fxdiagram.xtext.glue.mapping
 
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.shapes.BaseConnection
 
 class ConnectionMapping<T> extends AbstractMapping<T> {

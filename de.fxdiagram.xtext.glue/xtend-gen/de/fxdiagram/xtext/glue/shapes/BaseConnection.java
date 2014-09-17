@@ -4,7 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

@@ -2,7 +2,7 @@ package de.fxdiagram.xtext.glue.shapes
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
 
 @ModelNode
 class BaseConnection<T> extends XConnection  {

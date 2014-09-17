@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.glue
+package de.fxdiagram.xtext.glue.mapping
 
 import com.google.inject.Injector
 import de.fxdiagram.annotations.logging.Logging
@@ -6,8 +6,6 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
-import de.fxdiagram.xtext.glue.mapping.AbstractMapping
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -43,12 +41,14 @@ class MappedEObjectHandle<MODEL extends EObject> {
 		this.uri = EcoreUtil.getURI(domainObject)
 		this.mapping = mapping
 		this.fqn = 'unnamed'
-		if (resource instanceof XtextResource) {
-			val resourceServiceProvider = resource.resourceServiceProvider
-			val qualifiedName = resourceServiceProvider.get(IQualifiedNameProvider)?.getFullyQualifiedName(domainObject)
-			this.fqn = if(qualifiedName != null)
-					resourceServiceProvider.get(IQualifiedNameConverter)?.toString(qualifiedName)
-		}
+		val resourceServiceProvider = if (resource instanceof XtextResource) {
+				resource.resourceServiceProvider
+			} else {
+				IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(resource.URI)
+			}
+		val qualifiedName = resourceServiceProvider?.get(IQualifiedNameProvider)?.getFullyQualifiedName(domainObject)
+		this.fqn = if(qualifiedName != null)
+				resourceServiceProvider.get(IQualifiedNameConverter)?.toString(qualifiedName)
 	}
 	
 	def getURI() { uri }
@@ -125,12 +125,15 @@ class XtextDomainObjectDescriptor<ECLASS> implements DomainObjectDescriptor {
 	}
 	
 	def injectMembers(Object it) {
-		val resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE
-					.getResourceServiceProvider(URI.createURI(uri))
+		val resourceServiceProvider = getResourceServiceProvider()
 		if(resourceServiceProvider == null) 
 			LOG.severe('Cannot find IResourceServiceProvider for ' + uri)
 		else
 			resourceServiceProvider.get(Injector).injectMembers(it)
+	}
+	
+	protected def getResourceServiceProvider() {
+		IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI(uri))
 	}
 }
 

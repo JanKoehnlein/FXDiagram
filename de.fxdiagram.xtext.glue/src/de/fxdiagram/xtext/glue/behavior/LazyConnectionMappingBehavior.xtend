@@ -8,10 +8,10 @@ import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.buttons.RapidButtonBehavior
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
 import java.util.List
 import javafx.collections.ListChangeListener
 

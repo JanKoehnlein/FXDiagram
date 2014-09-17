@@ -5,8 +5,6 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
@@ -19,6 +17,9 @@ import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +35,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class XDiagramConfigInterpreter {
-  private XtextDomainObjectProvider domainObjectProvider;
-  
-  public XDiagramConfigInterpreter(final XtextDomainObjectProvider domainObjectProvider) {
-    this.domainObjectProvider = domainObjectProvider;
-  }
-  
   public <T extends Object> XDiagram createDiagram(final T diagramObject, final DiagramMapping<T> diagramMapping, final InterpreterContext context) {
     XDiagram _xblockexpression = null;
     {
@@ -350,6 +345,8 @@ public class XDiagramConfigInterpreter {
   }
   
   public <T extends Object> XtextDomainObjectDescriptor<T> getDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
-    return this.domainObjectProvider.<T, EObject>createDescriptor(domainObject, mapping);
+    XDiagramConfig _config = mapping.getConfig();
+    XtextDomainObjectProvider _domainObjectProvider = _config.getDomainObjectProvider();
+    return _domainObjectProvider.<T, EObject>createDescriptor(domainObject, mapping);
   }
 }

@@ -35,14 +35,15 @@ import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import de.fxdiagram.xtext.glue.EditorListener;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
 import de.fxdiagram.xtext.glue.mapping.InterpreterContext;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
+import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import java.util.Collections;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -68,6 +69,7 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.model.IXtextModelListener;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -85,9 +87,7 @@ public class FXDiagramView extends ViewPart {
   
   private IPartListener2 listener;
   
-  private final XtextDomainObjectProvider domainObjectProvider = new XtextDomainObjectProvider();
-  
-  private final XDiagramConfigInterpreter configInterpreter = new XDiagramConfigInterpreter(this.domainObjectProvider);
+  private final XDiagramConfigInterpreter configInterpreter = new XDiagramConfigInterpreter();
   
   public void createPartControl(final Composite parent) {
     FXCanvas _fXCanvas = new FXCanvas(parent, SWT.NONE);
@@ -106,7 +106,18 @@ public class FXDiagramView extends ViewPart {
         it.setRootDiagram(_xDiagram);
         ObservableList<DomainObjectProvider> _domainObjectProviders = it.getDomainObjectProviders();
         ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
-        Iterables.<DomainObjectProvider>addAll(_domainObjectProviders, Collections.<DomainObjectProvider>unmodifiableList(CollectionLiterals.<DomainObjectProvider>newArrayList(_classLoaderProvider, FXDiagramView.this.domainObjectProvider)));
+        _domainObjectProviders.add(_classLoaderProvider);
+        ObservableList<DomainObjectProvider> _domainObjectProviders_1 = it.getDomainObjectProviders();
+        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
+        Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
+        final Function1<XDiagramConfig, XtextDomainObjectProvider> _function = new Function1<XDiagramConfig, XtextDomainObjectProvider>() {
+          public XtextDomainObjectProvider apply(final XDiagramConfig it) {
+            return it.getDomainObjectProvider();
+          }
+        };
+        Iterable<XtextDomainObjectProvider> _map = IterableExtensions.map(_configurations, _function);
+        Set<XtextDomainObjectProvider> _set = IterableExtensions.<XtextDomainObjectProvider>toSet(_map);
+        Iterables.<DomainObjectProvider>addAll(_domainObjectProviders_1, _set);
         DiagramActionRegistry _diagramActionRegistry = it.getDiagramActionRegistry();
         CenterAction _centerAction = new CenterAction();
         DeleteAction _deleteAction = new DeleteAction();
@@ -218,7 +229,10 @@ public class FXDiagramView extends ViewPart {
       _commandStack_1.execute(_createLayoutCommand);
     }
     AbstractMapping<?> _mapping = mappingCall.getMapping();
-    final XtextDomainObjectDescriptor<T> descriptor = this.domainObjectProvider.<T, EObject>createDescriptor(element, _mapping);
+    XDiagramConfig _config = _mapping.getConfig();
+    XtextDomainObjectProvider _domainObjectProvider = _config.getDomainObjectProvider();
+    AbstractMapping<?> _mapping_1 = mappingCall.getMapping();
+    final XtextDomainObjectDescriptor<T> descriptor = _domainObjectProvider.<T, EObject>createDescriptor(element, _mapping_1);
     CommandStack _commandStack_2 = this.root.getCommandStack();
     final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
       public Boolean apply(final XShape it) {

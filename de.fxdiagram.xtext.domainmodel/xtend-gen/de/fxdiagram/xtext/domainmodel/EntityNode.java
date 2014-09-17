@@ -6,7 +6,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
-import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
+import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;

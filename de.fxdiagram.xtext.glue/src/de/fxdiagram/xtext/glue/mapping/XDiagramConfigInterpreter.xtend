@@ -1,19 +1,12 @@
 package de.fxdiagram.xtext.glue.mapping
 
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XNode
-import de.fxdiagram.xtext.glue.XtextDomainObjectProvider
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 
 class XDiagramConfigInterpreter {
 
-	XtextDomainObjectProvider domainObjectProvider
-
-	new(XtextDomainObjectProvider domainObjectProvider) {
-		this.domainObjectProvider = domainObjectProvider
-	}
-	
 	def <T> createDiagram(T diagramObject, DiagramMapping<T> diagramMapping, InterpreterContext context) {
 		if (!diagramMapping.isApplicable(diagramObject))
 			return null
@@ -148,7 +141,7 @@ class XDiagramConfigInterpreter {
 	}
 
 	def <T> getDescriptor(T domainObject, AbstractMapping<T> mapping) {
-		domainObjectProvider.createDescriptor(domainObject, mapping)
+		mapping.config.domainObjectProvider.createDescriptor(domainObject, mapping)
 	}
 }
 
