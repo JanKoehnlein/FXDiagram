@@ -35,8 +35,8 @@ import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@Logging/* 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" }) */
+@Logging
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class XNode extends XShape implements XModelProvider {
   private Effect mouseOverEffect;
@@ -259,6 +259,8 @@ public class XNode extends XShape implements XModelProvider {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
