@@ -22,11 +22,11 @@ import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.geometry.Side;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -70,13 +70,13 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
       JavaTypeNode _host = this.getHost();
       Side _position = button.getPosition();
       final CoverFlowChooser chooser = new CoverFlowChooser(_host, _position);
-      final Procedure1<JavaSuperTypeDescriptor> _function = new Procedure1<JavaSuperTypeDescriptor>() {
-        public void apply(final JavaSuperTypeDescriptor it) {
+      final Consumer<JavaSuperTypeDescriptor> _function = new Consumer<JavaSuperTypeDescriptor>() {
+        public void accept(final JavaSuperTypeDescriptor it) {
           XNode _createNode = AddSuperTypeRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
         }
       };
-      IterableExtensions.<JavaSuperTypeDescriptor>forEach(availableChoiceKeys, _function);
+      availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
         public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor key) {
           XConnection _xConnection = new XConnection(host, choice, key);

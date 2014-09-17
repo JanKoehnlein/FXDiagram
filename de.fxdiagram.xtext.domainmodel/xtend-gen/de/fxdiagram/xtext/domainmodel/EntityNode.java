@@ -8,6 +8,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
 import de.fxdiagram.xtext.glue.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -93,8 +94,8 @@ public class EntityNode extends BaseNode<Entity> {
                         }
                       };
                       Iterable<Property> _filter_1 = IterableExtensions.<Property>filter(_filter, _function);
-                      final Procedure1<Property> _function_1 = new Procedure1<Property>() {
-                        public void apply(final Property attribute) {
+                      final Consumer<Property> _function_1 = new Consumer<Property>() {
+                        public void accept(final Property attribute) {
                           ObservableList<Node> _children = attributeCompartment.getChildren();
                           Text _text = new Text();
                           final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -114,7 +115,7 @@ public class EntityNode extends BaseNode<Entity> {
                           _children.add(_doubleArrow);
                         }
                       };
-                      IterableExtensions.<Property>forEach(_filter_1, _function_1);
+                      _filter_1.forEach(_function_1);
                       _xblockexpression = null;
                     }
                     return _xblockexpression;

@@ -11,12 +11,12 @@ import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
 import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.lib.simple.SimpleNode;
+import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -121,8 +121,8 @@ public class LazyExampleDiagram extends XDiagram {
       this.setContentsInitializer(_function);
     } else {
       ObservableList<XNode> _nodes_1 = this.getNodes();
-      final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
+      final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+        public void accept(final XNode it) {
           boolean _or = false;
           String _nameSuffix = LazyExampleDiagram.this.getNameSuffix();
           boolean _isEmpty = _nameSuffix.isEmpty();
@@ -138,7 +138,7 @@ public class LazyExampleDiagram extends XDiagram {
           }
         }
       };
-      IterableExtensions.<XNode>forEach(_nodes_1, _function_1);
+      _nodes_1.forEach(_function_1);
     }
     super.doActivate();
   }

@@ -23,13 +23,13 @@ import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.geometry.Side;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -70,13 +70,13 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
       EClassNode _host = this.getHost();
       Side _position = button.getPosition();
       final CarusselChooser chooser = new CarusselChooser(_host, _position);
-      final Procedure1<EReferenceDescriptor> _function = new Procedure1<EReferenceDescriptor>() {
-        public void apply(final EReferenceDescriptor it) {
+      final Consumer<EReferenceDescriptor> _function = new Consumer<EReferenceDescriptor>() {
+        public void accept(final EReferenceDescriptor it) {
           XNode _createNode = AddEReferenceRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
         }
       };
-      IterableExtensions.<EReferenceDescriptor>forEach(availableChoiceKeys, _function);
+      availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
         public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor descriptor) {
           XConnection _xblockexpression = null;

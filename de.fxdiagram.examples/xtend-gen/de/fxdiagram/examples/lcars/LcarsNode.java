@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.animation.Timeline;
 import javafx.animation.Transition;
@@ -458,12 +459,12 @@ public class LcarsNode extends XNode {
     ObservableList<Node> _children_1 = this.infoTextBox.getChildren();
     Iterables.<Node>addAll(_children_1, fields);
     final Timeline timeline = new Timeline();
-    final Procedure1<LcarsField> _function = new Procedure1<LcarsField>() {
-      public void apply(final LcarsField it) {
+    final Consumer<LcarsField> _function = new Consumer<LcarsField>() {
+      public void accept(final LcarsField it) {
         it.addAnimation(timeline);
       }
     };
-    IterableExtensions.<LcarsField>forEach(fields, _function);
+    fields.forEach(_function);
     timeline.play();
   }
   
@@ -687,12 +688,12 @@ public class LcarsNode extends XNode {
     ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
     ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
     Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
-    final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-      public void apply(final XConnection it) {
+    final Consumer<XConnection> _function = new Consumer<XConnection>() {
+      public void accept(final XConnection it) {
         it.toFront();
       }
     };
-    IterableExtensions.<XConnection>forEach(_plus, _function);
+    _plus.forEach(_function);
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.examples.lcars.LcarsNode");

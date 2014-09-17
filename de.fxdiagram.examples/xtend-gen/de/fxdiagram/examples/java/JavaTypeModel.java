@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -16,7 +17,6 @@ import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
@@ -71,8 +71,8 @@ public class JavaTypeModel {
       }
     };
     Iterable<Method> _filter_2 = IterableExtensions.<Method>filter(((Iterable<Method>)Conversions.doWrapArray(_declaredMethods_1)), _function_2);
-    final Procedure1<Method> _function_3 = new Procedure1<Method>() {
-      public void apply(final Method method) {
+    final Consumer<Method> _function_3 = new Consumer<Method>() {
+      public void accept(final Method method) {
         final Pair<String, Class<?>> nameAndType = JavaTypeModel.this.getPropertyNameAndType(method);
         boolean _notEquals = (!Objects.equal(nameAndType, null));
         if (_notEquals) {
@@ -83,7 +83,7 @@ public class JavaTypeModel {
         }
       }
     };
-    IterableExtensions.<Method>forEach(_filter_2, _function_3);
+    _filter_2.forEach(_function_3);
     Set<String> _keySet = propertyMethods.keySet();
     for (final String propertyName : _keySet) {
       {

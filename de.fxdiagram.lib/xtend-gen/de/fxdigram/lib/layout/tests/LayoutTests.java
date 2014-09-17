@@ -5,6 +5,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.lib.simple.DiagramScaler;
 import de.fxdiagram.lib.simple.SimpleNode;
+import java.util.function.Consumer;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
@@ -13,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.eclipse.xtext.xbase.lib.InputOutput;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -85,21 +85,21 @@ public class LayoutTests extends Application {
       this.diagram, _function_1);
     stage.show();
     ObservableList<XNode> _nodes = this.nestedDiagram.getNodes();
-    final Procedure1<XNode> _function_2 = new Procedure1<XNode>() {
-      public void apply(final XNode it) {
+    final Consumer<XNode> _function_2 = new Consumer<XNode>() {
+      public void accept(final XNode it) {
         LayoutTests.this.printLayoutGeometry(it);
       }
     };
-    IterableExtensions.<XNode>forEach(_nodes, _function_2);
+    _nodes.forEach(_function_2);
     this.printLayoutGeometry(this.nestedDiagram);
     this.printLayoutGeometry(rectangleBorderPane);
     ObservableList<XNode> _nodes_1 = this.nestedDiagram.getNodes();
-    final Procedure1<XNode> _function_3 = new Procedure1<XNode>() {
-      public void apply(final XNode it) {
+    final Consumer<XNode> _function_3 = new Consumer<XNode>() {
+      public void accept(final XNode it) {
         LayoutTests.this.printSizes(it);
       }
     };
-    IterableExtensions.<XNode>forEach(_nodes_1, _function_3);
+    _nodes_1.forEach(_function_3);
     this.printSizes(this.nestedDiagram);
     this.printSizes(rectangleBorderPane);
     this.nestedDiagram.getNodeLayer();

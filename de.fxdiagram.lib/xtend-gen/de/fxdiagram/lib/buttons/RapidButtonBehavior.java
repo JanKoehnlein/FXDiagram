@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.animation.FadeTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -38,7 +39,6 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -191,8 +191,8 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     };
     this.allButtons.setOnMouseExited(_function_5);
     Collection<Pane> _values = this.pos2group.values();
-    final Procedure1<Pane> _function_6 = new Procedure1<Pane>() {
-      public void apply(final Pane it) {
+    final Consumer<Pane> _function_6 = new Consumer<Pane>() {
+      public void accept(final Pane it) {
         ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = it.layoutBoundsProperty();
         final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
           public void changed(final ObservableValue<? extends Bounds> p, final Bounds o, final Bounds n) {
@@ -202,7 +202,7 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
         _layoutBoundsProperty.addListener(_function);
       }
     };
-    IterableExtensions.<Pane>forEach(_values, _function_6);
+    _values.forEach(_function_6);
     HOST _host_3 = this.getHost();
     ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _host_3.boundsInParentProperty();
     final ChangeListener<Bounds> _function_7 = new ChangeListener<Bounds>() {

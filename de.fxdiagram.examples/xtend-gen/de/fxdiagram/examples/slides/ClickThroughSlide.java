@@ -5,6 +5,7 @@ import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.slides.RevealBehavior;
 import de.fxdiagram.examples.slides.Slide;
+import java.util.function.Consumer;
 import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -39,12 +40,12 @@ public class ClickThroughSlide extends Slide {
       public void apply(final Pane it) {
         ObservableList<Node> _children = it.getChildren();
         Iterable<Node> _tail = IterableExtensions.<Node>tail(_children);
-        final Procedure1<Node> _function = new Procedure1<Node>() {
-          public void apply(final Node it) {
+        final Consumer<Node> _function = new Consumer<Node>() {
+          public void accept(final Node it) {
             it.setOpacity(0);
           }
         };
-        IterableExtensions.<Node>forEach(_tail, _function);
+        _tail.forEach(_function);
       }
     };
     ObjectExtensions.<Pane>operator_doubleArrow(

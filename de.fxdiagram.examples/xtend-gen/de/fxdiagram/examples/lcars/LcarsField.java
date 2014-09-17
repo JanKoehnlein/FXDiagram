@@ -24,6 +24,7 @@ import de.fxdiagram.examples.lcars.LcarsNode;
 import de.fxdiagram.examples.lcars.LcarsQueryTask;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -146,12 +147,12 @@ public class LcarsField extends Parent {
         final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
           public void handle(final MouseEvent event) {
             Iterable<Text> _allTextNodes = LcarsField.this.getAllTextNodes();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              public void apply(final Text it) {
+            final Consumer<Text> _function = new Consumer<Text>() {
+              public void accept(final Text it) {
                 it.setFill(LcarsExtensions.RED);
               }
             };
-            IterableExtensions.<Text>forEach(_allTextNodes, _function);
+            _allTextNodes.forEach(_function);
             RectangleBorderPane _createQueryProgress = LcarsField.this.createQueryProgress();
             LcarsField.this.queryProgress = _createQueryProgress;
             LcarsNode _lcarsNode = LcarsField.this.getLcarsNode();
@@ -336,12 +337,12 @@ public class LcarsField extends Parent {
     _head.setFill(LcarsExtensions.FLESH);
     Iterable<Text> _allTextNodes_1 = this.getAllTextNodes();
     Iterable<Text> _tail = IterableExtensions.<Text>tail(_allTextNodes_1);
-    final Procedure1<Text> _function = new Procedure1<Text>() {
-      public void apply(final Text it) {
+    final Consumer<Text> _function = new Consumer<Text>() {
+      public void accept(final Text it) {
         it.setFill(LcarsExtensions.ORANGE);
       }
     };
-    IterableExtensions.<Text>forEach(_tail, _function);
+    _tail.forEach(_function);
   }
   
   public RectangleBorderPane createQueryProgress() {

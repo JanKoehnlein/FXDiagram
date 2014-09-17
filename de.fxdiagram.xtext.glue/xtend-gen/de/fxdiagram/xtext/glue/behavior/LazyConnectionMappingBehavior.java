@@ -10,13 +10,12 @@ import de.fxdiagram.xtext.glue.behavior.LazyConnectionRapidButtonAction;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.beans.property.ListProperty;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButtonBehavior<XNode> {
@@ -58,25 +57,25 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
   
   protected void doActivate() {
     super.doActivate();
-    final Procedure1<LazyConnectionRapidButtonAction<?, ARG>> _function = new Procedure1<LazyConnectionRapidButtonAction<?, ARG>>() {
-      public void apply(final LazyConnectionRapidButtonAction<?, ARG> it) {
+    final Consumer<LazyConnectionRapidButtonAction<?, ARG>> _function = new Consumer<LazyConnectionRapidButtonAction<?, ARG>>() {
+      public void accept(final LazyConnectionRapidButtonAction<?, ARG> it) {
         XNode _host = LazyConnectionMappingBehavior.this.getHost();
         it.updateEnablement(_host);
       }
     };
-    IterableExtensions.<LazyConnectionRapidButtonAction<?, ARG>>forEach(this.actions, _function);
+    this.actions.forEach(_function);
     XNode _host = this.getHost();
     XDiagram _diagram = CoreExtensions.getDiagram(_host);
     ListProperty<XConnection> _connectionsProperty = _diagram.connectionsProperty();
     final ListChangeListener<XConnection> _function_1 = new ListChangeListener<XConnection>() {
       public void onChanged(final ListChangeListener.Change<? extends XConnection> it) {
-        final Procedure1<LazyConnectionRapidButtonAction<?, ARG>> _function = new Procedure1<LazyConnectionRapidButtonAction<?, ARG>>() {
-          public void apply(final LazyConnectionRapidButtonAction<?, ARG> it) {
+        final Consumer<LazyConnectionRapidButtonAction<?, ARG>> _function = new Consumer<LazyConnectionRapidButtonAction<?, ARG>>() {
+          public void accept(final LazyConnectionRapidButtonAction<?, ARG> it) {
             XNode _host = LazyConnectionMappingBehavior.this.getHost();
             it.updateEnablement(_host);
           }
         };
-        IterableExtensions.<LazyConnectionRapidButtonAction<?, ARG>>forEach(LazyConnectionMappingBehavior.this.actions, _function);
+        LazyConnectionMappingBehavior.this.actions.forEach(_function);
       }
     };
     _connectionsProperty.addListener(_function_1);

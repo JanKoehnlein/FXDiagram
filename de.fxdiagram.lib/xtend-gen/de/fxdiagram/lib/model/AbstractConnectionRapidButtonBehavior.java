@@ -14,6 +14,7 @@ import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
 import de.fxdiagram.lib.buttons.RapidButtonBehavior;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -59,12 +60,12 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
       };
       final RapidButtonAction addConnectionAction = _function_1;
       Iterable<RapidButton> _createButtons = this.createButtons(addConnectionAction);
-      final Procedure1<RapidButton> _function_2 = new Procedure1<RapidButton>() {
-        public void apply(final RapidButton it) {
+      final Consumer<RapidButton> _function_2 = new Consumer<RapidButton>() {
+        public void accept(final RapidButton it) {
           AbstractConnectionRapidButtonBehavior.this.add(it);
         }
       };
-      IterableExtensions.<RapidButton>forEach(_createButtons, _function_2);
+      _createButtons.forEach(_function_2);
       HOST _host = this.getHost();
       XDiagram _diagram = CoreExtensions.getDiagram(_host);
       ObservableList<XConnection> _connections = _diagram.getConnections();

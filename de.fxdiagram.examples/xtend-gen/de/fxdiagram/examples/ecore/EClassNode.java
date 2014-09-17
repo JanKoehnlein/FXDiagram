@@ -11,6 +11,7 @@ import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -123,8 +124,8 @@ public class EClassNode extends XNode {
       EClass _eClass = this.getEClass();
       EList<EAttribute> _eAttributes = _eClass.getEAttributes();
       List<EAttribute> _limit = this.<EAttribute>limit(_eAttributes);
-      final Procedure1<EAttribute> _function = new Procedure1<EAttribute>() {
-        public void apply(final EAttribute attribute) {
+      final Consumer<EAttribute> _function = new Consumer<EAttribute>() {
+        public void accept(final EAttribute attribute) {
           ObservableList<Node> _children = EClassNode.this.attributeCompartment.getChildren();
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -143,12 +144,12 @@ public class EClassNode extends XNode {
           _children.add(_doubleArrow);
         }
       };
-      IterableExtensions.<EAttribute>forEach(_limit, _function);
+      _limit.forEach(_function);
       EClass _eClass_1 = this.getEClass();
       EList<EOperation> _eOperations = _eClass_1.getEOperations();
       List<EOperation> _limit_1 = this.<EOperation>limit(_eOperations);
-      final Procedure1<EOperation> _function_1 = new Procedure1<EOperation>() {
-        public void apply(final EOperation operation) {
+      final Consumer<EOperation> _function_1 = new Consumer<EOperation>() {
+        public void accept(final EOperation operation) {
           ObservableList<Node> _children = EClassNode.this.operationCompartment.getChildren();
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -178,7 +179,7 @@ public class EClassNode extends XNode {
           _children.add(_doubleArrow);
         }
       };
-      IterableExtensions.<EOperation>forEach(_limit_1, _function_1);
+      _limit_1.forEach(_function_1);
       _xblockexpression = null;
     }
     return _xblockexpression;

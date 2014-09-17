@@ -6,6 +6,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
@@ -49,8 +50,8 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
     final AnnotationReference modelAnnotation = annotatedClass.findAnnotation(_findTypeGlobally);
     final ArrayList<String> validPropertyNames = CollectionLiterals.<String>newArrayList();
     String[] _stringArrayValue = modelAnnotation.getStringArrayValue("value");
-    final Procedure1<String> _function = new Procedure1<String>() {
-      public void apply(final String it) {
+    final Consumer<String> _function = new Consumer<String>() {
+      public void accept(final String it) {
         final MemberDeclaration accessor = ModelNodeProcessor.this.getPropertyAccessor(annotatedClass, it, true);
         boolean _equals = Objects.equal(accessor, null);
         if (_equals) {
@@ -60,7 +61,7 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
         }
       }
     };
-    IterableExtensions.<String>forEach(((Iterable<String>)Conversions.doWrapArray(_stringArrayValue)), _function);
+    ((List<String>)Conversions.doWrapArray(_stringArrayValue)).forEach(_function);
     final MutableConstructorDeclaration existingNoArgConstructor = annotatedClass.findDeclaredConstructor();
     boolean _equals = Objects.equal(existingNoArgConstructor, null);
     if (_equals) {

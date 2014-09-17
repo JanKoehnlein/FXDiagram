@@ -16,6 +16,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -137,8 +138,8 @@ public class JavaTypeNode extends XNode {
     JavaTypeModel _javaTypeModel = this.getJavaTypeModel();
     List<JavaProperty> _properties = _javaTypeModel.getProperties();
     List<JavaProperty> _limit = this.<JavaProperty>limit(_properties);
-    final Procedure1<JavaProperty> _function = new Procedure1<JavaProperty>() {
-      public void apply(final JavaProperty property) {
+    final Consumer<JavaProperty> _function = new Consumer<JavaProperty>() {
+      public void accept(final JavaProperty property) {
         ObservableList<Node> _children = JavaTypeNode.this.propertyCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -157,11 +158,11 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<JavaProperty>forEach(_limit, _function);
+    _limit.forEach(_function);
     JavaTypeModel _javaTypeModel_1 = this.getJavaTypeModel();
     List<Constructor<?>> _constructors = _javaTypeModel_1.getConstructors();
-    final Procedure1<Constructor<?>> _function_1 = new Procedure1<Constructor<?>>() {
-      public void apply(final Constructor<?> constructor) {
+    final Consumer<Constructor<?>> _function_1 = new Consumer<Constructor<?>>() {
+      public void accept(final Constructor<?> constructor) {
         ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -188,12 +189,12 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Constructor<?>>forEach(_constructors, _function_1);
+    _constructors.forEach(_function_1);
     JavaTypeModel _javaTypeModel_2 = this.getJavaTypeModel();
     List<Method> _operations = _javaTypeModel_2.getOperations();
     List<Method> _limit_1 = this.<Method>limit(_operations);
-    final Procedure1<Method> _function_2 = new Procedure1<Method>() {
-      public void apply(final Method method) {
+    final Consumer<Method> _function_2 = new Consumer<Method>() {
+      public void accept(final Method method) {
         ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -222,7 +223,7 @@ public class JavaTypeNode extends XNode {
         _children.add(_doubleArrow);
       }
     };
-    IterableExtensions.<Method>forEach(_limit_1, _function_2);
+    _limit_1.forEach(_function_2);
   }
   
   protected <T extends Object> List<T> limit(final List<T> list) {

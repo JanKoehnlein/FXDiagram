@@ -5,6 +5,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -23,7 +24,6 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class DiagramScaler implements XActivatable {
@@ -56,8 +56,8 @@ public class DiagramScaler implements XActivatable {
             boolean _wasAdded = change.wasAdded();
             if (_wasAdded) {
               List<? extends XNode> _addedSubList = change.getAddedSubList();
-              final Procedure1<XNode> _function = new Procedure1<XNode>() {
-                public void apply(final XNode it) {
+              final Consumer<XNode> _function = new Consumer<XNode>() {
+                public void accept(final XNode it) {
                   ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
                   _boundsInLocalProperty.addListener(DiagramScaler.this.boundsInLocalListener);
                   DoubleProperty _layoutXProperty = it.layoutXProperty();
@@ -66,13 +66,13 @@ public class DiagramScaler implements XActivatable {
                   _layoutYProperty.addListener(DiagramScaler.this.layoutListener);
                 }
               };
-              IterableExtensions.forEach(_addedSubList, _function);
+              _addedSubList.forEach(_function);
             }
             boolean _wasRemoved = change.wasRemoved();
             if (_wasRemoved) {
               List<? extends XNode> _removed = change.getRemoved();
-              final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
-                public void apply(final XNode it) {
+              final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+                public void accept(final XNode it) {
                   ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
                   _boundsInLocalProperty.removeListener(DiagramScaler.this.boundsInLocalListener);
                   DoubleProperty _layoutXProperty = it.layoutXProperty();
@@ -81,7 +81,7 @@ public class DiagramScaler implements XActivatable {
                   _layoutYProperty.removeListener(DiagramScaler.this.layoutListener);
                 }
               };
-              IterableExtensions.forEach(_removed, _function_1);
+              _removed.forEach(_function_1);
             }
           }
         }
@@ -189,8 +189,8 @@ public class DiagramScaler implements XActivatable {
       this.widthProperty.addListener(this.layoutListener);
       this.heightProperty.addListener(this.layoutListener);
       ObservableList<XNode> _nodes = this.diagram.getNodes();
-      final Procedure1<XNode> _function = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
+      final Consumer<XNode> _function = new Consumer<XNode>() {
+        public void accept(final XNode it) {
           ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
           _boundsInLocalProperty.addListener(DiagramScaler.this.boundsInLocalListener);
           DoubleProperty _layoutXProperty = it.layoutXProperty();
@@ -199,7 +199,7 @@ public class DiagramScaler implements XActivatable {
           _layoutYProperty.addListener(DiagramScaler.this.layoutListener);
         }
       };
-      IterableExtensions.<XNode>forEach(_nodes, _function);
+      _nodes.forEach(_function);
       ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
       _nodes_1.addListener(this.listChangeListener);
       Group _buttonLayer = this.diagram.getButtonLayer();
@@ -224,8 +224,8 @@ public class DiagramScaler implements XActivatable {
       ObservableList<XNode> _nodes = this.diagram.getNodes();
       _nodes.removeListener(this.listChangeListener);
       ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
-      final Procedure1<XNode> _function = new Procedure1<XNode>() {
-        public void apply(final XNode it) {
+      final Consumer<XNode> _function = new Consumer<XNode>() {
+        public void accept(final XNode it) {
           ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
           _boundsInLocalProperty.removeListener(DiagramScaler.this.boundsInLocalListener);
           DoubleProperty _layoutXProperty = it.layoutXProperty();
@@ -234,7 +234,7 @@ public class DiagramScaler implements XActivatable {
           _layoutYProperty.removeListener(DiagramScaler.this.layoutListener);
         }
       };
-      IterableExtensions.<XNode>forEach(_nodes_1, _function);
+      _nodes_1.forEach(_function);
       this.isActiveProperty.set(false);
     }
   }

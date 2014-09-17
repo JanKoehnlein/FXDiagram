@@ -140,6 +140,10 @@
           name="de.fxdiagram.base.feature.feature.group"/>
       <requirement
           name="de.fxdiagram.xtext.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.xtend.sdk.feature.group"/>
+      <requirement
+          name="org.eclipse.fx.ide.basic.feature.feature.group"/>
       <sourceLocator
           rootFolder="${fxdiagram.git.clone.location}"/>
       <sourceLocator

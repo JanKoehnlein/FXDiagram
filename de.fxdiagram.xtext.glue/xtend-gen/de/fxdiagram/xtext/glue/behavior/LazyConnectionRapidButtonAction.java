@@ -21,6 +21,7 @@ import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -147,8 +148,8 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
           Object _xblockexpression = null;
           {
             final Iterable<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
-            final Procedure1<MODEL> _function = new Procedure1<MODEL>() {
-              public void apply(final MODEL connectionDomainObject) {
+            final Consumer<MODEL> _function = new Consumer<MODEL>() {
+              public void accept(final MODEL connectionDomainObject) {
                 ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
                 final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
                 boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
@@ -165,18 +166,18 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                   }
                   final NodeMappingCall<?, MODEL> nodeMappingCall = _elvis;
                   final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
-                  final Procedure1<Object> _function = new Procedure1<Object>() {
-                    public void apply(final Object it) {
+                  final Consumer<Object> _function = new Consumer<Object>() {
+                    public void accept(final Object it) {
                       NodeMapping<?> _nodeMapping = nodeMappingCall.getNodeMapping();
                       XNode _createNode = LazyConnectionRapidButtonAction.this.<Object>createNode(it, _nodeMapping);
                       chooser.addChoice(_createNode, connectionDescriptor);
                     }
                   };
-                  IterableExtensions.forEach(nodeDomainObjects, _function);
+                  nodeDomainObjects.forEach(_function);
                 }
               }
             };
-            IterableExtensions.<MODEL>forEach(connectionDomainObjects, _function);
+            connectionDomainObjects.forEach(_function);
             final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
               public XConnection getConnection(final XNode thisNode, final XNode thatNode, final DomainObjectDescriptor connectionDesc) {
                 XConnection _xblockexpression = null;
