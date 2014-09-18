@@ -1,6 +1,5 @@
 package de.fxdiagram.xtext.glue.behavior
 
-import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.tools.AbstractChooser
 import de.fxdiagram.lib.buttons.RapidButton
@@ -13,7 +12,6 @@ import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
 import java.util.List
-import javafx.collections.ListChangeListener
 
 import static javafx.geometry.Side.*
 
@@ -43,10 +41,6 @@ class LazyConnectionMappingBehavior<ARG> extends RapidButtonBehavior<XNode> {
 	
 	override protected doActivate() {
 		super.doActivate()
-		actions.forEach[updateEnablement(host)]
-		host.diagram.connectionsProperty.addListener [ ListChangeListener.Change<? extends XConnection> it |
-			actions.forEach[updateEnablement(host)]
-		]
 	}
 }
 
@@ -64,13 +58,14 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 		this.hostIsSource = hostIsSource
 	}
 	
-	def void updateEnablement(XNode host) {
+	override isEnabled(RapidButton button) {
+		val host = button.host
 		val hostDescriptor = host.domainObject as XtextDomainObjectDescriptor<ARG>
 		val diagram = host.diagram
 		if(diagram == null) 
-			return
+			return false
 		val existingConnectionDescriptors = diagram.connections.map[domainObject].toSet
-		hostDescriptor.withDomainObject[ 
+		val result = hostDescriptor.withDomainObject[ 
 			domainArgument |
 			val connectionDomainObjects = configInterpreter.select(mappingCall, domainArgument)
 			for(connectionDomainObject: connectionDomainObjects) {
@@ -78,15 +73,13 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 				if(existingConnectionDescriptors.add(connectionDescriptor)) {
 					val nodeMappingCall = (mappingCall.connectionMapping.source ?: mappingCall.connectionMapping.target)
 					val nodeDomainObjects = configInterpreter.select(nodeMappingCall, connectionDomainObject)
-					if(!nodeDomainObjects.empty) {
-						enabled = true
-						return null						
-					}
+					if(!nodeDomainObjects.empty) 
+						return true
 				}
 			}
-			enabled = false
-			null
+			return false
 		]
+		return if(result == null) false else result
 	}
 	
 	override perform(RapidButton button) {

@@ -3,7 +3,6 @@ package de.fxdiagram.lib.buttons
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.extensions.InitializingListListener
-import de.fxdiagram.core.extensions.InitializingListener
 import javafx.animation.FadeTransition
 import javafx.collections.ObservableList
 import javafx.scene.Group
@@ -56,6 +55,7 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 		val group = pos2group.get(button.position)
 		if(group == null)
 			throw new IllegalArgumentException('Illegal XRapidButton position ' + button.position)
+		group.children += button
 		buttonsProperty += button
 	}
 
@@ -63,25 +63,14 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 		val group = pos2group.get(button.position)
 		if(group == null)
 			throw new IllegalArgumentException('Illegal XRapidButton position ' + button.position)
+		group.children -= button
 		buttonsProperty -= button
 	}
 
 	override protected doActivate() {
 		host.diagram.buttonLayer.children += allButtons
 		buttonsProperty.addInitializingListener(new InitializingListListener<RapidButton>() => [
-			add = [button | 
-				button.activate
-				val group = pos2group.get(button.position)
-				button.enabledProperty.addInitializingListener(new InitializingListener => [
-					set = [ 
-						if(it) 
-							group.children += button
-						else 
-							group.children -= button
-						layout
-					]
-				])
-			]
+			add = [ button | button.activate ]
 		])
 		
 		layout
@@ -105,7 +94,11 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 	
 	def show() {
 		fadeTransition.stop
+		buttonsProperty.forEach[
+			visible = action.isEnabled(it)
+		]
 		allButtons => [
+			children.forEach[layout]
 			visible = true
 			opacity = 1.0
 		]

@@ -44,13 +44,14 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     this.hostIsSource = hostIsSource;
   }
   
-  public void updateEnablement(final XNode host) {
+  public boolean isEnabled(final RapidButton button) {
+    final XNode host = button.getHost();
     DomainObjectDescriptor _domainObject = host.getDomainObject();
     final XtextDomainObjectDescriptor<ARG> hostDescriptor = ((XtextDomainObjectDescriptor<ARG>) _domainObject);
     final XDiagram diagram = CoreExtensions.getDiagram(host);
     boolean _equals = Objects.equal(diagram, null);
     if (_equals) {
-      return;
+      return false;
     }
     ObservableList<XConnection> _connections = diagram.getConnections();
     final Function1<XConnection, DomainObjectDescriptor> _function = new Function1<XConnection, DomainObjectDescriptor>() {
@@ -60,45 +61,47 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     };
     List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
     final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
-    final Function1<ARG, Object> _function_1 = new Function1<ARG, Object>() {
-      public Object apply(final ARG domainArgument) {
-        Object _xblockexpression = null;
-        {
-          final Iterable<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
-          for (final MODEL connectionDomainObject : connectionDomainObjects) {
-            {
-              ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-              final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
-              boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
-              if (_add) {
-                NodeMappingCall<?, MODEL> _elvis = null;
-                ConnectionMapping<MODEL> _connectionMapping_1 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-                NodeMappingCall<?, MODEL> _source = _connectionMapping_1.getSource();
-                if (_source != null) {
-                  _elvis = _source;
-                } else {
-                  ConnectionMapping<MODEL> _connectionMapping_2 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-                  NodeMappingCall<?, MODEL> _target = _connectionMapping_2.getTarget();
-                  _elvis = _target;
-                }
-                final NodeMappingCall<?, MODEL> nodeMappingCall = _elvis;
-                final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
-                boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
-                boolean _not = (!_isEmpty);
-                if (_not) {
-                  LazyConnectionRapidButtonAction.this.setEnabled(true);
-                  return null;
-                }
+    final Function1<ARG, Boolean> _function_1 = new Function1<ARG, Boolean>() {
+      public Boolean apply(final ARG domainArgument) {
+        final Iterable<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
+        for (final MODEL connectionDomainObject : connectionDomainObjects) {
+          {
+            ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
+            final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
+            boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
+            if (_add) {
+              NodeMappingCall<?, MODEL> _elvis = null;
+              ConnectionMapping<MODEL> _connectionMapping_1 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
+              NodeMappingCall<?, MODEL> _source = _connectionMapping_1.getSource();
+              if (_source != null) {
+                _elvis = _source;
+              } else {
+                ConnectionMapping<MODEL> _connectionMapping_2 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
+                NodeMappingCall<?, MODEL> _target = _connectionMapping_2.getTarget();
+                _elvis = _target;
+              }
+              final NodeMappingCall<?, MODEL> nodeMappingCall = _elvis;
+              final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
+              boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
+              boolean _not = (!_isEmpty);
+              if (_not) {
+                return Boolean.valueOf(true);
               }
             }
           }
-          LazyConnectionRapidButtonAction.this.setEnabled(false);
-          _xblockexpression = null;
         }
-        return _xblockexpression;
+        return Boolean.valueOf(false);
       }
     };
-    hostDescriptor.<Object>withDomainObject(_function_1);
+    final Boolean result = hostDescriptor.<Boolean>withDomainObject(_function_1);
+    Boolean _xifexpression = null;
+    boolean _equals_1 = Objects.equal(result, null);
+    if (_equals_1) {
+      _xifexpression = Boolean.valueOf(false);
+    } else {
+      _xifexpression = result;
+    }
+    return (_xifexpression).booleanValue();
   }
   
   public void perform(final RapidButton button) {

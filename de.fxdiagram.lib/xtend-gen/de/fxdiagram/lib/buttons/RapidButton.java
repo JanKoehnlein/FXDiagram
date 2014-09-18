@@ -3,7 +3,6 @@ package de.fxdiagram.lib.buttons;
 import de.fxdiagram.core.XButton;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.ObservableList;
@@ -56,8 +55,8 @@ public class RapidButton extends Parent implements XButton {
     return this.host;
   }
   
-  public BooleanProperty enabledProperty() {
-    return this.action.enabledProperty();
+  public RapidButtonAction getAction() {
+    return this.action;
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");

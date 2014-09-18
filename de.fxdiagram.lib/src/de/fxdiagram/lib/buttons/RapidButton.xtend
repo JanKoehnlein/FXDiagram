@@ -41,10 +41,7 @@ class RapidButton extends Parent implements XButton {
 	def getPosition() { position }
 
 	def getHost() {	host }
-	
-	def enabledProperty() {
-		action.enabledProperty
-	}
-	
+
+	def getAction() { action }	
 }
 

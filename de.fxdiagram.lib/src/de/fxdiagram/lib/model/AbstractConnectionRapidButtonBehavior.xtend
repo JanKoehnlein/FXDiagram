@@ -29,24 +29,25 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 		super.doActivate
 		availableChoiceKeys += initialModelChoices.map[choiceKey]
 		if(!availableChoiceKeys.empty) {
-			val RapidButtonAction addConnectionAction = [
-				RapidButton button |
-				val chooser = createChooser(button, availableChoiceKeys, unavailableChoiceKeys)
-				host.root.currentTool = chooser
-			]
+			val RapidButtonAction addConnectionAction = new RapidButtonAction() {
+				override perform(RapidButton button) {
+					val chooser = createChooser(button, availableChoiceKeys, unavailableChoiceKeys)
+					host.root.currentTool = chooser
+				}
+				
+				override isEnabled(RapidButton button) {
+					availableChoiceKeys.empty
+				}
+			}
 			createButtons(addConnectionAction).forEach[add]
 			host.diagram.connections.addInitializingListener(new InitializingListListener() => [
 				add = [ XConnection it |
 					if(availableChoiceKeys.remove(domainObject)) {
-						if(availableChoiceKeys.empty)						
-							addConnectionAction.enabled = false
 						unavailableChoiceKeys.add(domainObject as KEY)
 					}
 				]
 				remove = [ XConnection it |
 					if(unavailableChoiceKeys.remove(domainObject)) {
-						if(availableChoiceKeys.empty) 
-							addConnectionAction.enabled = true
 						availableChoiceKeys.add(domainObject as KEY)
 					} 
 				]
@@ -65,4 +66,3 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 	protected def AbstractChooser createChooser(RapidButton button, Set<KEY> availableChoiceKeys, Set<KEY> unavailableChoiceKeys) 
 	
 }
-

@@ -1,18 +1,12 @@
 package de.fxdiagram.xtext.glue.behavior;
 
-import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonBehavior;
 import de.fxdiagram.xtext.glue.behavior.LazyConnectionRapidButtonAction;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
 import java.util.List;
-import java.util.function.Consumer;
-import javafx.beans.property.ListProperty;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -57,27 +51,5 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
   
   protected void doActivate() {
     super.doActivate();
-    final Consumer<LazyConnectionRapidButtonAction<?, ARG>> _function = new Consumer<LazyConnectionRapidButtonAction<?, ARG>>() {
-      public void accept(final LazyConnectionRapidButtonAction<?, ARG> it) {
-        XNode _host = LazyConnectionMappingBehavior.this.getHost();
-        it.updateEnablement(_host);
-      }
-    };
-    this.actions.forEach(_function);
-    XNode _host = this.getHost();
-    XDiagram _diagram = CoreExtensions.getDiagram(_host);
-    ListProperty<XConnection> _connectionsProperty = _diagram.connectionsProperty();
-    final ListChangeListener<XConnection> _function_1 = new ListChangeListener<XConnection>() {
-      public void onChanged(final ListChangeListener.Change<? extends XConnection> it) {
-        final Consumer<LazyConnectionRapidButtonAction<?, ARG>> _function = new Consumer<LazyConnectionRapidButtonAction<?, ARG>>() {
-          public void accept(final LazyConnectionRapidButtonAction<?, ARG> it) {
-            XNode _host = LazyConnectionMappingBehavior.this.getHost();
-            it.updateEnablement(_host);
-          }
-        };
-        LazyConnectionMappingBehavior.this.actions.forEach(_function);
-      }
-    };
-    _connectionsProperty.addListener(_function_1);
   }
 }

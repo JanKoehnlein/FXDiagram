@@ -49,38 +49,36 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
     boolean _isEmpty = this.availableChoiceKeys.isEmpty();
     boolean _not = (!_isEmpty);
     if (_not) {
-      final RapidButtonAction _function_1 = new RapidButtonAction() {
-        @Override
+      final RapidButtonAction addConnectionAction = new RapidButtonAction() {
         public void perform(final RapidButton button) {
           final AbstractChooser chooser = AbstractConnectionRapidButtonBehavior.this.createChooser(button, AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys, AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys);
           HOST _host = AbstractConnectionRapidButtonBehavior.this.getHost();
           XRoot _root = CoreExtensions.getRoot(_host);
           _root.setCurrentTool(chooser);
         }
+        
+        public boolean isEnabled(final RapidButton button) {
+          return AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
+        }
       };
-      final RapidButtonAction addConnectionAction = _function_1;
       Iterable<RapidButton> _createButtons = this.createButtons(addConnectionAction);
-      final Consumer<RapidButton> _function_2 = new Consumer<RapidButton>() {
+      final Consumer<RapidButton> _function_1 = new Consumer<RapidButton>() {
         public void accept(final RapidButton it) {
           AbstractConnectionRapidButtonBehavior.this.add(it);
         }
       };
-      _createButtons.forEach(_function_2);
+      _createButtons.forEach(_function_1);
       HOST _host = this.getHost();
       XDiagram _diagram = CoreExtensions.getDiagram(_host);
       ObservableList<XConnection> _connections = _diagram.getConnections();
       InitializingListListener<XConnection> _initializingListListener = new InitializingListListener<XConnection>();
-      final Procedure1<InitializingListListener<XConnection>> _function_3 = new Procedure1<InitializingListListener<XConnection>>() {
+      final Procedure1<InitializingListListener<XConnection>> _function_2 = new Procedure1<InitializingListListener<XConnection>>() {
         public void apply(final InitializingListListener<XConnection> it) {
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
             public void apply(final XConnection it) {
               DomainObjectDescriptor _domainObject = it.getDomainObject();
               boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_domainObject);
               if (_remove) {
-                boolean _isEmpty = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
-                if (_isEmpty) {
-                  addConnectionAction.setEnabled(false);
-                }
                 DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
                 AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
               }
@@ -92,10 +90,6 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
               DomainObjectDescriptor _domainObject = it.getDomainObject();
               boolean _remove = AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.remove(_domainObject);
               if (_remove) {
-                boolean _isEmpty = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
-                if (_isEmpty) {
-                  addConnectionAction.setEnabled(true);
-                }
                 DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
                 AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.add(((KEY) _domainObject_1));
               }
@@ -104,7 +98,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
           it.setRemove(_function_1);
         }
       };
-      InitializingListListener<XConnection> _doubleArrow = ObjectExtensions.<InitializingListListener<XConnection>>operator_doubleArrow(_initializingListListener, _function_3);
+      InitializingListListener<XConnection> _doubleArrow = ObjectExtensions.<InitializingListListener<XConnection>>operator_doubleArrow(_initializingListListener, _function_2);
       CoreExtensions.<XConnection>addInitializingListener(_connections, _doubleArrow);
     }
   }
