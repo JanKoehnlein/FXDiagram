@@ -5,7 +5,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.behavior.OpenBehavior
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 import javafx.scene.input.MouseEvent
 
 class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implements OpenBehavior {
@@ -34,6 +34,6 @@ class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implement
 			XNode: domainObject
 			XConnection: domainObject
 			default: null
-		} as XtextDomainObjectDescriptor<?>
+		} as AbstractXtextDescriptor<?>
 	}
 }

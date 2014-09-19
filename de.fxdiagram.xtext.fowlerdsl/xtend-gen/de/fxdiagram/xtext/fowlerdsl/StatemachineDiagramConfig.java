@@ -3,11 +3,11 @@ package de.fxdiagram.xtext.fowlerdsl;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import javafx.scene.text.Text;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event;
@@ -44,7 +44,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final ConnectionMapping<Transition> transitionConnection = new ConnectionMapping<Transition>(this, "transitionConnection") {
-    public XConnection createConnection(final XtextDomainObjectDescriptor<Transition> descriptor) {
+    public XConnection createConnection(final AbstractXtextDescriptor<Transition> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {

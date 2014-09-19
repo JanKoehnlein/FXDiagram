@@ -9,12 +9,12 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
-public class MultiNodeMappingCall<T extends Object, ARG extends Object> extends AbstractNodeMappingCall<T, ARG> {
-  private final Function1<? super ARG, ? extends Iterable<? extends T>> selector;
+public class MultiNodeMappingCall<RESULT extends Object, ARG extends Object> extends AbstractNodeMappingCall<RESULT, ARG> {
+  private final Function1<? super ARG, ? extends Iterable<? extends RESULT>> selector;
   
-  private final NodeMapping<T> nodeMapping;
+  private final NodeMapping<RESULT> nodeMapping;
   
-  public MultiNodeMappingCall(final Function1<? super ARG, ? extends Iterable<? extends T>> selector, final NodeMapping<T> nodeMapping) {
+  public MultiNodeMappingCall(final Function1<? super ARG, ? extends Iterable<? extends RESULT>> selector, final NodeMapping<RESULT> nodeMapping) {
     super();
     this.selector = selector;
     this.nodeMapping = nodeMapping;
@@ -65,12 +65,12 @@ public class MultiNodeMappingCall<T extends Object, ARG extends Object> extends 
   }
   
   @Pure
-  public Function1<? super ARG, ? extends Iterable<? extends T>> getSelector() {
+  public Function1<? super ARG, ? extends Iterable<? extends RESULT>> getSelector() {
     return this.selector;
   }
   
   @Pure
-  public NodeMapping<T> getNodeMapping() {
+  public NodeMapping<RESULT> getNodeMapping() {
     return this.nodeMapping;
   }
 }

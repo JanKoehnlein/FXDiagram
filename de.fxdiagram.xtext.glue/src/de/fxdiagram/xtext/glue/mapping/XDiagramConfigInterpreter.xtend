@@ -141,7 +141,7 @@ class XDiagramConfigInterpreter {
 	}
 
 	def <T> getDescriptor(T domainObject, AbstractMapping<T> mapping) {
-		mapping.config.domainObjectProvider.createDescriptor(domainObject, mapping)
+		mapping.config.domainObjectProvider.createMappedDescriptor(domainObject, mapping)
 	}
 }
 

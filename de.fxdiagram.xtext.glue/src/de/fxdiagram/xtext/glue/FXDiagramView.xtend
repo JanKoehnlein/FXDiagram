@@ -41,6 +41,7 @@ import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import org.eclipse.ui.IEditorPart
 
 class FXDiagramView extends ViewPart {
 
@@ -50,8 +51,8 @@ class FXDiagramView extends ViewPart {
 	
 	SwtToFXGestureConverter gestureConverter
 	
-	Set<XtextEditor> contributingEditors = newHashSet
-	Set<XtextEditor> changedEditors = newHashSet
+	Set<IEditorPart> contributingEditors = newHashSet
+	Set<IEditorPart> changedEditors = newHashSet
 	
 	IPartListener2 listener 
 	
@@ -101,7 +102,7 @@ class FXDiagramView extends ViewPart {
 		root.diagram = new XDiagram
 	}
 	
-	def <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall, XtextEditor editor) {
+	def <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
 		// OMG! the scene's width and height is set asynchronously but needed for centering the selection
 		if(canvas.scene.width == 0) {
 			canvas.scene.widthProperty.addListener [ p, o, n |
@@ -118,7 +119,7 @@ class FXDiagramView extends ViewPart {
 		}
 	} 
 	
-	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, XtextEditor editor) {
+	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
 		val interpreterContext = new InterpreterContext
 		if(mappingCall instanceof DiagramMappingCall<?, ?>) {
 			editor.register
@@ -147,7 +148,7 @@ class FXDiagramView extends ViewPart {
 		root.commandStack.execute(interpreterContext.command)
 		if(interpreterContext.needsLayout)
 			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis))
-		val descriptor = mappingCall.mapping.config.domainObjectProvider.createDescriptor(element, mappingCall.mapping)
+		val descriptor = mappingCall.mapping.config.domainObjectProvider.createMappedDescriptor2(element, mappingCall.mapping)
 		root.commandStack.execute(new SelectAndRevealCommand(root, [
 			switch it {
 				XNode: domainObject == descriptor
@@ -157,12 +158,14 @@ class FXDiagramView extends ViewPart {
 		]))
 	}
 	
-	def void register(XtextEditor editor) {
+	def void register(IEditorPart editor) {
 		if(contributingEditors.add(editor)) {
 			changedEditors += editor
-			editor.document.addModelListener [
-				changedEditors += editor
-			]
+			if(editor instanceof XtextEditor) 
+				editor.document.addModelListener [
+					changedEditors += editor
+				]
+			// TODO handle other editor types
 		}
 		if(listener == null) {
 			listener = new EditorListener(this)

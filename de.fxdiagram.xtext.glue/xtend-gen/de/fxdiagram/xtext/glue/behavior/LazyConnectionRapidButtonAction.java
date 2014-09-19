@@ -14,11 +14,11 @@ import de.fxdiagram.lib.buttons.RapidButtonAction;
 import de.fxdiagram.lib.tools.CarusselChooser;
 import de.fxdiagram.lib.tools.CoverFlowChooser;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -47,7 +47,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
   public boolean isEnabled(final RapidButton button) {
     final XNode host = button.getHost();
     DomainObjectDescriptor _domainObject = host.getDomainObject();
-    final XtextDomainObjectDescriptor<ARG> hostDescriptor = ((XtextDomainObjectDescriptor<ARG>) _domainObject);
+    final AbstractXtextDescriptor<ARG> hostDescriptor = ((AbstractXtextDescriptor<ARG>) _domainObject);
     final XDiagram diagram = CoreExtensions.getDiagram(host);
     boolean _equals = Objects.equal(diagram, null);
     if (_equals) {
@@ -67,7 +67,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         for (final MODEL connectionDomainObject : connectionDomainObjects) {
           {
             ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-            final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
+            final AbstractXtextDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
             boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
             if (_add) {
               NodeMappingCall<?, MODEL> _elvis = null;
@@ -136,7 +136,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     Object _xblockexpression = null;
     {
       DomainObjectDescriptor _domainObject = host.getDomainObject();
-      final XtextDomainObjectDescriptor<ARG> hostDescriptor = ((XtextDomainObjectDescriptor<ARG>) _domainObject);
+      final AbstractXtextDescriptor<ARG> hostDescriptor = ((AbstractXtextDescriptor<ARG>) _domainObject);
       XDiagram _diagram = CoreExtensions.getDiagram(host);
       ObservableList<XConnection> _connections = _diagram.getConnections();
       final Function1<XConnection, DomainObjectDescriptor> _function = new Function1<XConnection, DomainObjectDescriptor>() {
@@ -154,7 +154,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
             final Consumer<MODEL> _function = new Consumer<MODEL>() {
               public void accept(final MODEL connectionDomainObject) {
                 ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-                final XtextDomainObjectDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
+                final AbstractXtextDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
                 boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
                 if (_add) {
                   NodeMappingCall<?, MODEL> _elvis = null;
@@ -185,7 +185,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
               public XConnection getConnection(final XNode thisNode, final XNode thatNode, final DomainObjectDescriptor connectionDesc) {
                 XConnection _xblockexpression = null;
                 {
-                  final XtextDomainObjectDescriptor<MODEL> descriptor = ((XtextDomainObjectDescriptor<MODEL>) connectionDesc);
+                  final AbstractXtextDescriptor<MODEL> descriptor = ((AbstractXtextDescriptor<MODEL>) connectionDesc);
                   ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
                   XConnection _createConnection = _connectionMapping.createConnection(descriptor);
                   final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
@@ -222,7 +222,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
       XNode _xblockexpression = null;
       {
         final NodeMapping<NODE> nodeMappingCasted = ((NodeMapping<NODE>) nodeMapping);
-        final XtextDomainObjectDescriptor<NODE> descriptor = this.configInterpreter.<NODE>getDescriptor(((NODE) nodeDomainObject), nodeMappingCasted);
+        final AbstractXtextDescriptor<NODE> descriptor = this.configInterpreter.<NODE>getDescriptor(((NODE) nodeDomainObject), nodeMappingCasted);
         final XNode node = nodeMappingCasted.createNode(descriptor);
         _xblockexpression = node;
       }

@@ -5,10 +5,10 @@ import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 
 @SuppressWarnings("all")
-public abstract class AbstractNodeMappingCall<T extends Object, ARG extends Object> implements MappingCall<T, ARG> {
-  public abstract NodeMapping<T> getNodeMapping();
+public abstract class AbstractNodeMappingCall<RESULT extends Object, ARG extends Object> implements MappingCall<RESULT, ARG> {
+  public abstract NodeMapping<RESULT> getNodeMapping();
   
-  public AbstractMapping<T> getMapping() {
+  public AbstractMapping<RESULT> getMapping() {
     return this.getNodeMapping();
   }
 }

@@ -3,13 +3,13 @@ package de.fxdiagram.xtext.glue.mapping;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -54,7 +54,7 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
     return _xblockexpression;
   }
   
-  public XNode createNode(final XtextDomainObjectDescriptor<T> descriptor) {
+  public XNode createNode(final AbstractXtextDescriptor<T> descriptor) {
     return new BaseNode<T>(descriptor);
   }
   

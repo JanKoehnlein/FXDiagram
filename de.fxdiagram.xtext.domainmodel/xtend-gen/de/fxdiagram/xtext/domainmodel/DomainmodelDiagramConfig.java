@@ -11,12 +11,13 @@ import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
 import de.fxdiagram.xtext.domainmodel.EntityNode;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
+import de.fxdiagram.xtext.glue.mapping.ESetting;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.common.types.JvmParameterizedTypeReference;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
+import org.eclipse.xtext.example.domainmodel.domainmodel.DomainmodelPackage;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Feature;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
@@ -66,7 +68,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode") {
-    public XNode createNode(final XtextDomainObjectDescriptor<PackageDeclaration> descriptor) {
+    public XNode createNode(final AbstractXtextDescriptor<PackageDeclaration> descriptor) {
       return new BaseDiagramNode<PackageDeclaration>(descriptor);
     }
     
@@ -81,7 +83,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final NodeMapping<Entity> entityNode = new NodeMapping<Entity>(this, "entityNode") {
-    public XNode createNode(final XtextDomainObjectDescriptor<Entity> descriptor) {
+    public XNode createNode(final AbstractXtextDescriptor<Entity> descriptor) {
       return new EntityNode(descriptor);
     }
     
@@ -107,25 +109,26 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         }
       };
       _outConnectionForEach.makeLazy(_function_1);
-      final Function1<Entity, List<Entity>> _function_2 = new Function1<Entity, List<Entity>>() {
-        public List<Entity> apply(final Entity it) {
-          List<Entity> _xblockexpression = null;
+      final Function1<Entity, List<ESetting<Entity>>> _function_2 = new Function1<Entity, List<ESetting<Entity>>>() {
+        public List<ESetting<Entity>> apply(final Entity entity) {
+          List<ESetting<Entity>> _xblockexpression = null;
           {
-            JvmParameterizedTypeReference _superType = it.getSuperType();
+            JvmParameterizedTypeReference _superType = entity.getSuperType();
             final Entity superEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_superType);
-            List<Entity> _xifexpression = null;
+            List<ESetting<Entity>> _xifexpression = null;
             boolean _equals = Objects.equal(superEntity, null);
             if (_equals) {
-              _xifexpression = CollectionLiterals.<Entity>emptyList();
+              _xifexpression = CollectionLiterals.<ESetting<Entity>>emptyList();
             } else {
-              _xifexpression = Collections.<Entity>unmodifiableList(CollectionLiterals.<Entity>newArrayList(superEntity));
+              ESetting<Entity> _eSetting = new ESetting<Entity>(entity, DomainmodelPackage.Literals.ENTITY__SUPER_TYPE, 0);
+              _xifexpression = Collections.<ESetting<Entity>>unmodifiableList(CollectionLiterals.<ESetting<Entity>>newArrayList(_eSetting));
             }
             _xblockexpression = _xifexpression;
           }
           return _xblockexpression;
         }
       };
-      MultiConnectionMappingCall<Entity, Entity> _outConnectionForEach_1 = this.<Entity>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_2);
+      MultiConnectionMappingCall<ESetting<Entity>, Entity> _outConnectionForEach_1 = this.<ESetting<Entity>>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_2);
       final Function1<Side, SVGPath> _function_3 = new Function1<Side, SVGPath>() {
         public SVGPath apply(final Side it) {
           return ButtonExtensions.getTriangleButton(it, "Add superclass");
@@ -136,7 +139,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final ConnectionMapping<Property> propertyConnection = new ConnectionMapping<Property>(this, "propertyConnection") {
-    public XConnection createConnection(final XtextDomainObjectDescriptor<Property> descriptor) {
+    public XConnection createConnection(final AbstractXtextDescriptor<Property> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {
@@ -172,8 +175,8 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<Entity> superTypeConnection = new ConnectionMapping<Entity>(this, "superTypeConnection") {
-    public XConnection createConnection(final XtextDomainObjectDescriptor<Entity> descriptor) {
+  private final ConnectionMapping<ESetting<Entity>> superTypeConnection = new ConnectionMapping<ESetting<Entity>>(this, "superTypeConnection") {
+    public XConnection createConnection(final AbstractXtextDescriptor<ESetting<Entity>> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {
@@ -186,9 +189,10 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
     }
     
     public void calls() {
-      final Function1<Entity, Entity> _function = new Function1<Entity, Entity>() {
-        public Entity apply(final Entity it) {
-          return it;
+      final Function1<ESetting<Entity>, Entity> _function = new Function1<ESetting<Entity>, Entity>() {
+        public Entity apply(final ESetting<Entity> it) {
+          Object _target = it.getTarget();
+          return DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(((JvmTypeReference) _target));
         }
       };
       this.<Entity>target(DomainmodelDiagramConfig.this.entityNode, _function);

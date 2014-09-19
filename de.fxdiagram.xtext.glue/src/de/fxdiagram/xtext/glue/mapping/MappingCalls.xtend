@@ -5,11 +5,11 @@ import javafx.scene.Node
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.Data
 
-interface MappingCall<T, ARG> {
-	def AbstractMapping<T> getMapping()
+interface MappingCall<RESULT, ARG> {
+	def AbstractMapping<RESULT> getMapping()
 }
 
-abstract class AbstractConnectionMappingCall<T, ARG> implements MappingCall<T, ARG>{
+abstract class AbstractConnectionMappingCall<RESULT, ARG> implements MappingCall<RESULT, ARG>{
 
 	(Side)=>Node imageFactory
 
@@ -25,7 +25,7 @@ abstract class AbstractConnectionMappingCall<T, ARG> implements MappingCall<T, A
 
 	@Accessors String role
 
-	def ConnectionMapping<T> getConnectionMapping()
+	def ConnectionMapping<RESULT> getConnectionMapping()
 	
 	override getMapping() {
 		connectionMapping
@@ -33,20 +33,20 @@ abstract class AbstractConnectionMappingCall<T, ARG> implements MappingCall<T, A
 }
 
 @Data
-class ConnectionMappingCall<T, ARG> extends AbstractConnectionMappingCall<T, ARG> {
-	(ARG)=>T selector
-	ConnectionMapping<T> connectionMapping
+class ConnectionMappingCall<RESULT, ARG> extends AbstractConnectionMappingCall<RESULT, ARG> {
+	(ARG)=>RESULT selector
+	ConnectionMapping<RESULT> connectionMapping
 	
 }
 
 @Data
-class MultiConnectionMappingCall<T, ARG> extends AbstractConnectionMappingCall<T, ARG> {
-	(ARG)=>Iterable<? extends T> selector
-	ConnectionMapping<T> connectionMapping
+class MultiConnectionMappingCall<RESULT, ARG> extends AbstractConnectionMappingCall<RESULT, ARG> {
+	(ARG)=>Iterable<? extends RESULT> selector
+	ConnectionMapping<RESULT> connectionMapping
 }
 
-abstract class AbstractNodeMappingCall<T, ARG> implements MappingCall<T, ARG> {
-	def NodeMapping<T> getNodeMapping()
+abstract class AbstractNodeMappingCall<RESULT, ARG> implements MappingCall<RESULT, ARG> {
+	def NodeMapping<RESULT> getNodeMapping()
 
 	override getMapping() {
 		nodeMapping
@@ -54,21 +54,21 @@ abstract class AbstractNodeMappingCall<T, ARG> implements MappingCall<T, ARG> {
 }
 
 @Data
-class NodeMappingCall<T, ARG> extends AbstractNodeMappingCall<T, ARG> {
-	(ARG)=>T selector
-	NodeMapping<T> nodeMapping	
+class NodeMappingCall<RESULT, ARG> extends AbstractNodeMappingCall<RESULT, ARG> {
+	(ARG)=>RESULT selector
+	NodeMapping<RESULT> nodeMapping	
 }
 
 @Data
-class MultiNodeMappingCall<T, ARG> extends AbstractNodeMappingCall<T, ARG> {
-	(ARG)=>Iterable<? extends T> selector
-	NodeMapping<T> nodeMapping	
+class MultiNodeMappingCall<RESULT, ARG> extends AbstractNodeMappingCall<RESULT, ARG> {
+	(ARG)=>Iterable<? extends RESULT> selector
+	NodeMapping<RESULT> nodeMapping	
 }
 
 @Data
-class DiagramMappingCall<T, ARG> implements MappingCall<T, ARG> {
-	(ARG)=>T selector
-	DiagramMapping<T> diagramMapping
+class DiagramMappingCall<RESULT, ARG> implements MappingCall<RESULT, ARG> {
+	(ARG)=>RESULT selector
+	DiagramMapping<RESULT> diagramMapping
 	
 	override getMapping() {
 		diagramMapping

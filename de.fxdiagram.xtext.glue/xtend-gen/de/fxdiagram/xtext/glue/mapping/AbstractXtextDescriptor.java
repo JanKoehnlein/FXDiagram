@@ -16,8 +16,6 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -25,12 +23,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
-import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.IURIEditorOpener;
-import org.eclipse.xtext.ui.editor.XtextEditor;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.shared.Access;
-import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -38,10 +32,10 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 @ModelNode({ "provider", "uri", "fqn", "mappingConfigID", "mappingID" })
 @Logging
 @SuppressWarnings("all")
-public class XtextDomainObjectDescriptor<ECLASS extends Object> implements DomainObjectDescriptor {
-  private AbstractMapping<ECLASS> mapping;
+public abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING extends Object> implements DomainObjectDescriptor {
+  private AbstractMapping<ECLASS_OR_ESETTING> mapping;
   
-  public XtextDomainObjectDescriptor(final String uri, final String fqn, final String mappingConfigID, final String mappingID, final XtextDomainObjectProvider provider) {
+  public AbstractXtextDescriptor(final String uri, final String fqn, final String mappingConfigID, final String mappingID, final XtextDomainObjectProvider provider) {
     this.uriProperty.set(uri);
     this.fqnProperty.set(fqn);
     this.providerProperty.set(provider);
@@ -66,8 +60,8 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     return this.getFqn();
   }
   
-  public AbstractMapping<ECLASS> getMapping() {
-    AbstractMapping<ECLASS> _xblockexpression = null;
+  public AbstractMapping<ECLASS_OR_ESETTING> getMapping() {
+    AbstractMapping<ECLASS_OR_ESETTING> _xblockexpression = null;
     {
       boolean _equals = Objects.equal(this.mapping, null);
       if (_equals) {
@@ -76,53 +70,14 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
         final XDiagramConfig config = _instance.getConfigByID(_mappingConfigID);
         String _mappingID = this.getMappingID();
         AbstractMapping<?> _mappingByID = config.getMappingByID(_mappingID);
-        this.mapping = ((AbstractMapping<ECLASS>) _mappingByID);
+        this.mapping = ((AbstractMapping<ECLASS_OR_ESETTING>) _mappingByID);
       }
       _xblockexpression = this.mapping;
     }
     return _xblockexpression;
   }
   
-  public <T extends Object> T withDomainObject(final Function1<? super ECLASS, ? extends T> lambda) {
-    T _xblockexpression = null;
-    {
-      String _uri = this.getUri();
-      final URI uriAsURI = URI.createURI(_uri);
-      final IEditorPart editor = this.openInEditor(false);
-      T _xifexpression = null;
-      if ((editor instanceof XtextEditor)) {
-        IXtextDocument _document = ((XtextEditor)editor).getDocument();
-        final IUnitOfWork<T, XtextResource> _function = new IUnitOfWork<T, XtextResource>() {
-          public T exec(final XtextResource it) throws Exception {
-            ResourceSet _resourceSet = it.getResourceSet();
-            EObject _eObject = _resourceSet.getEObject(uriAsURI, true);
-            return lambda.apply(((ECLASS) _eObject));
-          }
-        };
-        _xifexpression = _document.<T>readOnly(_function);
-      }
-      _xblockexpression = _xifexpression;
-    }
-    return _xblockexpression;
-  }
-  
-  public boolean equals(final Object obj) {
-    boolean _xifexpression = false;
-    if ((obj instanceof XtextDomainObjectDescriptor<?>)) {
-      String _uri = ((XtextDomainObjectDescriptor<?>)obj).getUri();
-      String _uri_1 = this.getUri();
-      _xifexpression = Objects.equal(_uri, _uri_1);
-    } else {
-      _xifexpression = false;
-    }
-    return _xifexpression;
-  }
-  
-  public int hashCode() {
-    String _uri = this.getUri();
-    int _hashCode = _uri.hashCode();
-    return (103 * _hashCode);
-  }
+  public abstract <T extends Object> T withDomainObject(final Function1<? super ECLASS_OR_ESETTING, ? extends T> lambda);
   
   public IEditorPart openInEditor(final boolean isSelect) {
     IEditorPart _xifexpression = null;
@@ -154,7 +109,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     if (_equals) {
       String _uri = this.getUri();
       String _plus = ("Cannot find IResourceServiceProvider for " + _uri);
-      XtextDomainObjectDescriptor.LOG.severe(_plus);
+      AbstractXtextDescriptor.LOG.severe(_plus);
     } else {
       Injector _get = resourceServiceProvider.<Injector>get(Injector.class);
       _get.injectMembers(it);
@@ -170,7 +125,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
   /**
    * Automatically generated by @ModelNode. Needed for deserialization.
    */
-  public XtextDomainObjectDescriptor() {
+  public AbstractXtextDescriptor() {
   }
   
   public void populate(final ModelElementImpl modelElement) {
@@ -180,9 +135,6 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
     modelElement.addProperty(mappingConfigIDProperty, String.class);
     modelElement.addProperty(mappingIDProperty, String.class);
   }
-  
-  private static Logger LOG = Logger.getLogger("de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor");
-    ;
   
   private ReadOnlyObjectWrapper<XtextDomainObjectProvider> providerProperty = new ReadOnlyObjectWrapper<XtextDomainObjectProvider>(this, "provider");
   
@@ -233,4 +185,7 @@ public class XtextDomainObjectDescriptor<ECLASS extends Object> implements Domai
   public ReadOnlyStringProperty mappingIDProperty() {
     return this.mappingIDProperty.getReadOnlyProperty();
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor");
+    ;
 }

@@ -2,7 +2,6 @@ package de.fxdiagram.xtext.domainmodel
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
 import de.fxdiagram.xtext.glue.shapes.BaseNode
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -14,13 +13,15 @@ import javafx.scene.text.Text
 import javax.inject.Inject
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property
+import de.fxdiagram.xtext.glue.mapping.XtextEObjectDescriptor
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 
 @ModelNode
 class EntityNode extends BaseNode<Entity> {
 	
 	@Inject extension DomainModelUtil util;
 	
-	new(XtextDomainObjectDescriptor<Entity> descriptor) {
+	new(AbstractXtextDescriptor<Entity> descriptor) {
 		super(descriptor)
 	}
 	

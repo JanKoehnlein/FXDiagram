@@ -6,7 +6,7 @@ import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 
 @ModelNode
 class BaseNode<T> extends SimpleNode {
@@ -14,18 +14,18 @@ class BaseNode<T> extends SimpleNode {
 	new() {
 		domainObjectProperty.addListener [
 			prop, oldVal, newVal |
-			if(newVal instanceof XtextDomainObjectDescriptor<?>)
+			if(newVal instanceof AbstractXtextDescriptor<?>)
 				newVal.injectMembers(this)
 		]
 	}
 	
-	new(XtextDomainObjectDescriptor<T> descriptor) {
+	new(AbstractXtextDescriptor<T> descriptor) {
 		super(descriptor)
 		descriptor.injectMembers(this)
 	}
 	
 	protected def getDescriptor() {
-		domainObject as XtextDomainObjectDescriptor<T>
+		domainObject as AbstractXtextDescriptor<T>
 	}
 	
 	override doActivate() {

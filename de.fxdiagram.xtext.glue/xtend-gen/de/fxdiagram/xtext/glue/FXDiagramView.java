@@ -36,13 +36,13 @@ import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import de.fxdiagram.xtext.glue.EditorListener;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
 import de.fxdiagram.xtext.glue.mapping.InterpreterContext;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import java.util.Collections;
 import java.util.Set;
@@ -54,9 +54,9 @@ import javafx.embed.swt.FXCanvas;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.util.Duration;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -81,9 +81,9 @@ public class FXDiagramView extends ViewPart {
   
   private SwtToFXGestureConverter gestureConverter;
   
-  private Set<XtextEditor> contributingEditors = CollectionLiterals.<XtextEditor>newHashSet();
+  private Set<IEditorPart> contributingEditors = CollectionLiterals.<IEditorPart>newHashSet();
   
-  private Set<XtextEditor> changedEditors = CollectionLiterals.<XtextEditor>newHashSet();
+  private Set<IEditorPart> changedEditors = CollectionLiterals.<IEditorPart>newHashSet();
   
   private IPartListener2 listener;
   
@@ -160,7 +160,7 @@ public class FXDiagramView extends ViewPart {
     this.root.setDiagram(_xDiagram);
   }
   
-  public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final XtextEditor editor) {
+  public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
     Scene _scene = this.canvas.getScene();
     double _width = _scene.getWidth();
     boolean _equals = (_width == 0);
@@ -198,7 +198,7 @@ public class FXDiagramView extends ViewPart {
     }
   }
   
-  protected <T extends Object> void doRevealElement(final T element, final MappingCall<?, ? super T> mappingCall, final XtextEditor editor) {
+  protected <T extends Object> void doRevealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
     final InterpreterContext interpreterContext = new InterpreterContext();
     if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
       this.register(editor);
@@ -232,7 +232,7 @@ public class FXDiagramView extends ViewPart {
     XDiagramConfig _config = _mapping.getConfig();
     XtextDomainObjectProvider _domainObjectProvider = _config.getDomainObjectProvider();
     AbstractMapping<?> _mapping_1 = mappingCall.getMapping();
-    final XtextDomainObjectDescriptor<T> descriptor = _domainObjectProvider.<T, EObject>createDescriptor(element, _mapping_1);
+    final AbstractXtextDescriptor<T> descriptor = _domainObjectProvider.<T, Object>createMappedDescriptor2(element, _mapping_1);
     CommandStack _commandStack_2 = this.root.getCommandStack();
     final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
       public Boolean apply(final XShape it) {
@@ -262,17 +262,19 @@ public class FXDiagramView extends ViewPart {
     _commandStack_2.execute(_selectAndRevealCommand);
   }
   
-  public void register(final XtextEditor editor) {
+  public void register(final IEditorPart editor) {
     boolean _add = this.contributingEditors.add(editor);
     if (_add) {
       this.changedEditors.add(editor);
-      IXtextDocument _document = editor.getDocument();
-      final IXtextModelListener _function = new IXtextModelListener() {
-        public void modelChanged(final XtextResource it) {
-          FXDiagramView.this.changedEditors.add(editor);
-        }
-      };
-      _document.addModelListener(_function);
+      if ((editor instanceof XtextEditor)) {
+        IXtextDocument _document = ((XtextEditor)editor).getDocument();
+        final IXtextModelListener _function = new IXtextModelListener() {
+          public void modelChanged(final XtextResource it) {
+            FXDiagramView.this.changedEditors.add(((XtextEditor)editor));
+          }
+        };
+        _document.addModelListener(_function);
+      }
     }
     boolean _equals = Objects.equal(this.listener, null);
     if (_equals) {

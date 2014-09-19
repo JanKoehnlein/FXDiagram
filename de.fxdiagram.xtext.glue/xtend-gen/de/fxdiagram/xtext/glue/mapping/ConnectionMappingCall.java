@@ -9,12 +9,12 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
-public class ConnectionMappingCall<T extends Object, ARG extends Object> extends AbstractConnectionMappingCall<T, ARG> {
-  private final Function1<? super ARG, ? extends T> selector;
+public class ConnectionMappingCall<RESULT extends Object, ARG extends Object> extends AbstractConnectionMappingCall<RESULT, ARG> {
+  private final Function1<? super ARG, ? extends RESULT> selector;
   
-  private final ConnectionMapping<T> connectionMapping;
+  private final ConnectionMapping<RESULT> connectionMapping;
   
-  public ConnectionMappingCall(final Function1<? super ARG, ? extends T> selector, final ConnectionMapping<T> connectionMapping) {
+  public ConnectionMappingCall(final Function1<? super ARG, ? extends RESULT> selector, final ConnectionMapping<RESULT> connectionMapping) {
     super();
     this.selector = selector;
     this.connectionMapping = connectionMapping;
@@ -65,12 +65,12 @@ public class ConnectionMappingCall<T extends Object, ARG extends Object> extends
   }
   
   @Pure
-  public Function1<? super ARG, ? extends T> getSelector() {
+  public Function1<? super ARG, ? extends RESULT> getSelector() {
     return this.selector;
   }
   
   @Pure
-  public ConnectionMapping<T> getConnectionMapping() {
+  public ConnectionMapping<RESULT> getConnectionMapping() {
     return this.connectionMapping;
   }
 }

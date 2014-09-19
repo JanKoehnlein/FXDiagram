@@ -11,7 +11,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
-public abstract class AbstractConnectionMappingCall<T extends Object, ARG extends Object> implements MappingCall<T, ARG> {
+public abstract class AbstractConnectionMappingCall<RESULT extends Object, ARG extends Object> implements MappingCall<RESULT, ARG> {
   private Function1<? super Side, ? extends Node> imageFactory;
   
   public boolean isLazy() {
@@ -29,9 +29,9 @@ public abstract class AbstractConnectionMappingCall<T extends Object, ARG extend
   @Accessors
   private String role;
   
-  public abstract ConnectionMapping<T> getConnectionMapping();
+  public abstract ConnectionMapping<RESULT> getConnectionMapping();
   
-  public AbstractMapping<T> getMapping() {
+  public AbstractMapping<RESULT> getMapping() {
     return this.getConnectionMapping();
   }
   

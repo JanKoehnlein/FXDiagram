@@ -8,6 +8,7 @@ import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
@@ -18,7 +19,6 @@ import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -43,7 +42,7 @@ public class XDiagramConfigInterpreter {
       if (_not) {
         return null;
       }
-      XtextDomainObjectDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
+      AbstractXtextDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
       final XDiagram diagram = diagramMapping.createDiagram(_descriptor);
       context.diagram = diagram;
       List<AbstractNodeMappingCall<?, T>> _nodes = diagramMapping.getNodes();
@@ -82,7 +81,7 @@ public class XDiagramConfigInterpreter {
     final NodeMapping<Object> nodeMappingCasted = ((NodeMapping<Object>) _nodeMapping);
     for (final Object nodeObject : nodeObjects) {
       {
-        final XtextDomainObjectDescriptor<Object> descriptor = this.<Object>getDescriptor(nodeObject, nodeMappingCasted);
+        final AbstractXtextDescriptor<Object> descriptor = this.<Object>getDescriptor(nodeObject, nodeMappingCasted);
         final XNode node = context.<Object>getNode(descriptor);
         boolean _notEquals = (!Objects.equal(node, null));
         if (_notEquals) {
@@ -130,7 +129,7 @@ public class XDiagramConfigInterpreter {
   protected <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final InterpreterContext context, final boolean isCreateOnDemand) {
     boolean _isApplicable = nodeMapping.isApplicable(nodeObject);
     if (_isApplicable) {
-      final XtextDomainObjectDescriptor<T> descriptor = this.<T>getDescriptor(nodeObject, nodeMapping);
+      final AbstractXtextDescriptor<T> descriptor = this.<T>getDescriptor(nodeObject, nodeMapping);
       final XNode existingNode = context.<Object>getNode(descriptor);
       boolean _or = false;
       boolean _notEquals = (!Objects.equal(existingNode, null));
@@ -194,7 +193,7 @@ public class XDiagramConfigInterpreter {
     boolean _isApplicable = connectionMapping.isApplicable(connectionObject);
     if (_isApplicable) {
       final ConnectionMapping<T> connectionMappingCasted = ((ConnectionMapping<T>) connectionMapping);
-      final XtextDomainObjectDescriptor<T> descriptor = this.<T>getDescriptor(connectionObject, connectionMappingCasted);
+      final AbstractXtextDescriptor<T> descriptor = this.<T>getDescriptor(connectionObject, connectionMappingCasted);
       final XConnection existingConnection = context.<Object>getConnection(descriptor);
       boolean _notEquals = (!Objects.equal(existingConnection, null));
       if (_notEquals) {
@@ -344,9 +343,9 @@ public class XDiagramConfigInterpreter {
     return result;
   }
   
-  public <T extends Object> XtextDomainObjectDescriptor<T> getDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
+  public <T extends Object> AbstractXtextDescriptor<T> getDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
     XDiagramConfig _config = mapping.getConfig();
     XtextDomainObjectProvider _domainObjectProvider = _config.getDomainObjectProvider();
-    return _domainObjectProvider.<T, EObject>createDescriptor(domainObject, mapping);
+    return _domainObjectProvider.<T>createMappedDescriptor(domainObject, mapping);
   }
 }

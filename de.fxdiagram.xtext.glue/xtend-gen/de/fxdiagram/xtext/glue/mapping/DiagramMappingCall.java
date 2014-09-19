@@ -10,16 +10,16 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
-public class DiagramMappingCall<T extends Object, ARG extends Object> implements MappingCall<T, ARG> {
-  private final Function1<? super ARG, ? extends T> selector;
+public class DiagramMappingCall<RESULT extends Object, ARG extends Object> implements MappingCall<RESULT, ARG> {
+  private final Function1<? super ARG, ? extends RESULT> selector;
   
-  private final DiagramMapping<T> diagramMapping;
+  private final DiagramMapping<RESULT> diagramMapping;
   
-  public AbstractMapping<T> getMapping() {
+  public AbstractMapping<RESULT> getMapping() {
     return this.diagramMapping;
   }
   
-  public DiagramMappingCall(final Function1<? super ARG, ? extends T> selector, final DiagramMapping<T> diagramMapping) {
+  public DiagramMappingCall(final Function1<? super ARG, ? extends RESULT> selector, final DiagramMapping<RESULT> diagramMapping) {
     super();
     this.selector = selector;
     this.diagramMapping = diagramMapping;
@@ -68,12 +68,12 @@ public class DiagramMappingCall<T extends Object, ARG extends Object> implements
   }
   
   @Pure
-  public Function1<? super ARG, ? extends T> getSelector() {
+  public Function1<? super ARG, ? extends RESULT> getSelector() {
     return this.selector;
   }
   
   @Pure
-  public DiagramMapping<T> getDiagramMapping() {
+  public DiagramMapping<RESULT> getDiagramMapping() {
     return this.diagramMapping;
   }
 }

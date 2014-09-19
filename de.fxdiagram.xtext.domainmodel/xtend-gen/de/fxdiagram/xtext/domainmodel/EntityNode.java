@@ -6,7 +6,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
@@ -38,7 +38,7 @@ public class EntityNode extends BaseNode<Entity> {
   @Extension
   private DomainModelUtil util;
   
-  public EntityNode(final XtextDomainObjectDescriptor<Entity> descriptor) {
+  public EntityNode(final AbstractXtextDescriptor<Entity> descriptor) {
     super(descriptor);
   }
   
@@ -79,7 +79,7 @@ public class EntityNode extends BaseNode<Entity> {
             VBox _vBox = new VBox();
             final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
               public void apply(final VBox attributeCompartment) {
-                XtextDomainObjectDescriptor<Entity> _descriptor = EntityNode.this.getDescriptor();
+                AbstractXtextDescriptor<Entity> _descriptor = EntityNode.this.getDescriptor();
                 final Function1<Entity, Object> _function = new Function1<Entity, Object>() {
                   public Object apply(final Entity entity) {
                     Object _xblockexpression = null;

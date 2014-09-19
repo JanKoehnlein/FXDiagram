@@ -14,7 +14,7 @@ abstract class DiagramMapping<T> extends AbstractMapping<T> {
 	
 	def getNodes() { initialize ; nodes }
 	def getConnections() { initialize ; connections }
-	def XDiagram createDiagram(XtextDomainObjectDescriptor<T> descriptor) { new XDiagram }
+	def XDiagram createDiagram(AbstractXtextDescriptor<T> descriptor) { new XDiagram }
 	
 	def <U> nodeFor(NodeMapping<U> nodeMapping, (T)=>U selector) {
 		nodes += new NodeMappingCall(selector, nodeMapping)

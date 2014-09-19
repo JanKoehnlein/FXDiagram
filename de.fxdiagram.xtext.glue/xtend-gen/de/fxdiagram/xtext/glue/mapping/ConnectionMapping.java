@@ -2,10 +2,10 @@ package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseConnection;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
@@ -19,7 +19,7 @@ public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
     super(config, id);
   }
   
-  public XConnection createConnection(final XtextDomainObjectDescriptor<T> descriptor) {
+  public XConnection createConnection(final AbstractXtextDescriptor<T> descriptor) {
     return new BaseConnection<T>(descriptor);
   }
   
