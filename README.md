@@ -17,7 +17,7 @@ on usability aspects.
   * e(fx)clipse 0.9 
 
 * OR
- * Java 8 SDK build 40+
+ * Java 8 SDK 40 early access build >=5 (https://jdk8.java.net/download.html)
   (must include fix for https://javafx-jira.kenai.com/browse/RT-37879)
  * Eclipse Luna 4.4
   * Xtext SDK 2.7
