@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+   <extension point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.ui.category.navigate"
+            description="Show Element in Class Diagram"
+            id="de.fxdiagram.xtext.xbase.showInJvmDiagramCommand"
+            name="Show in Class Diagram">
+      </command>
+   </extension>
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            class="de.fxdiagram.xtext.xbase.ShowInJvmDiagramHandler"
+            commandId="de.fxdiagram.xtext.xbase.showInJvmDiagramCommand">
+      </handler>
+   </extension>
+   <extension point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+             <command
+                   commandId="de.fxdiagram.xtext.xbase.showInJvmDiagramCommand"
+                   icon="icons/FXDiagram.png"
+                   style="push"
+                   tooltip="Open in Class Diagram">
+         	</command>  
+         </menuContribution>
+		<menuContribution
+        	locationURI="popup:org.eclipse.jdt.ui.CompilationUnitEditor.EditorContext?after=additions"
+        	allPopups="true">
+        	<command
+                   commandId="de.fxdiagram.xtext.xbase.showInJvmDiagramCommand"
+                   icon="icons/FXDiagram.png"
+                   style="push"
+                   tooltip="Open in Class Diagram">
+         	</command>
+         </menuContribution>
+	</extension>
+   <extension
+         point="de.fxdiagram.xtext.glue.fxDiagramConfig">
+      <config
+            class="org.eclipse.xtext.xbase.ui.XbaseExecutableExtensionFactory:de.fxdiagram.xtext.xbase.JvmClassDiagramConfig"
+            id="de.fxdiagram.xtext.xbase.JvmClassDiagramConfig">
+      </config>
+   </extension>
+</fragment>
