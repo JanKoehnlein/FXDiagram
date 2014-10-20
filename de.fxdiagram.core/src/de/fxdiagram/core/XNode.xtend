@@ -16,6 +16,9 @@ import javafx.scene.effect.InnerShadow
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
+import javafx.geometry.Pos
+import org.eclipse.xtend.lib.annotations.Accessors
+import javafx.geometry.Side
 
 @Logging
 @ModelNode('layoutX', 'layoutY', 'domainObject', 'width', 'height')
@@ -32,6 +35,9 @@ class XNode extends XShape {
 	Effect originalEffect
 
 	Anchors anchors
+	
+	@Accessors
+	Side placementHint
 	
  	new(DomainObjectDescriptor domainObject) {
  		domainObjectProperty.set(domainObject)

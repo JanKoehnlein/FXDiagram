@@ -276,7 +276,7 @@ abstract class AbstractChooser implements XDiagramTool {
 				choice.layoutX = center.x - 0.5 * bounds.width 
 				choice.layoutY = center.y - 0.5 * bounds.height
 				switch layoutPosition {
-					case LEFT:
+					case LEFT: 
 						choice.layoutX = choice.layoutX - 0.5 * (bounds.width - unlayoutedBounds.width)
 					case RIGHT:
 						choice.layoutX = choice.layoutX + 0.5 * (bounds.width - unlayoutedBounds.width)
@@ -285,6 +285,7 @@ abstract class AbstractChooser implements XDiagramTool {
 					case BOTTOM:
 						choice.layoutY = choice.layoutY + 0.5 * (bounds.height - unlayoutedBounds.height)
 				}
+				choice.placementHint = layoutPosition
 				shapesToAdd += choice
 			}
 			shapesToAdd += connectChoice(existingChoice, node2choiceInfo.get(choice))

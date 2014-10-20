@@ -6,14 +6,18 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
+import de.fxdiagram.xtext.xbase.CompartmentInflator;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.ObservableList;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -24,6 +28,7 @@ import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -33,6 +38,8 @@ public class JvmTypeNode extends BaseNode<JvmDeclaredType> {
   @Inject
   @Extension
   private JvmDomainUtil _jvmDomainUtil;
+  
+  private Pane contentArea;
   
   public JvmTypeNode(final JvmEObjectDescriptor<JvmDeclaredType> descriptor) {
     super(descriptor);
@@ -69,57 +76,52 @@ public class JvmTypeNode extends BaseNode<JvmDeclaredType> {
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add((JvmTypeNode.this.label = _doubleArrow));
-            Insets _insets_1 = new Insets(0, 0, 10, 0);
-            VBox.setMargin(JvmTypeNode.this.label, _insets_1);
-            ObservableList<Node> _children_1 = it.getChildren();
-            VBox _vBox = new VBox();
-            final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
-              public void apply(final VBox fieldCompartment) {
-                AbstractXtextDescriptor<JvmDeclaredType> _descriptor = JvmTypeNode.this.getDescriptor();
-                final Function1<JvmDeclaredType, Object> _function = new Function1<JvmDeclaredType, Object>() {
-                  public Object apply(final JvmDeclaredType type) {
-                    Object _xblockexpression = null;
-                    {
-                      Iterable<JvmField> _attributes = JvmTypeNode.this._jvmDomainUtil.getAttributes(type);
-                      final Consumer<JvmField> _function = new Consumer<JvmField>() {
-                        public void accept(final JvmField field) {
-                          ObservableList<Node> _children = fieldCompartment.getChildren();
-                          Text _text = new Text();
-                          final Procedure1<Text> _function = new Procedure1<Text>() {
-                            public void apply(final Text it) {
-                              it.setTextOrigin(VPos.TOP);
-                              StringConcatenation _builder = new StringConcatenation();
-                              String _simpleName = field.getSimpleName();
-                              _builder.append(_simpleName, "");
-                              _builder.append(": ");
-                              JvmTypeReference _type = field.getType();
-                              String _simpleName_1 = _type.getSimpleName();
-                              _builder.append(_simpleName_1, "");
-                              it.setText(_builder.toString());
-                            }
-                          };
-                          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-                          _children.add(_doubleArrow);
-                        }
-                      };
-                      _attributes.forEach(_function);
-                      _xblockexpression = null;
-                    }
-                    return _xblockexpression;
-                  }
-                };
-                _descriptor.<Object>withDomainObject(_function);
-              }
-            };
-            VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
-            _children_1.add(_doubleArrow_1);
           }
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-        _children.add(_doubleArrow);
+        _children.add((JvmTypeNode.this.contentArea = _doubleArrow));
       }
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+  }
+  
+  public void activate() {
+    super.activate();
+    Insets _insets = new Insets(0, 0, 10, 0);
+    VBox.setMargin(this.label, _insets);
+    AbstractXtextDescriptor<JvmDeclaredType> _descriptor = this.getDescriptor();
+    final Function1<JvmDeclaredType, Iterable<Text>> _function = new Function1<JvmDeclaredType, Iterable<Text>>() {
+      public Iterable<Text> apply(final JvmDeclaredType type) {
+        Iterable<JvmField> _attributes = JvmTypeNode.this._jvmDomainUtil.getAttributes(type);
+        final Function1<JvmField, Text> _function = new Function1<JvmField, Text>() {
+          public Text apply(final JvmField field) {
+            Text _text = new Text();
+            final Procedure1<Text> _function = new Procedure1<Text>() {
+              public void apply(final Text it) {
+                it.setTextOrigin(VPos.TOP);
+                StringConcatenation _builder = new StringConcatenation();
+                String _simpleName = field.getSimpleName();
+                _builder.append(_simpleName, "");
+                _builder.append(": ");
+                JvmTypeReference _type = field.getType();
+                String _simpleName_1 = _type.getSimpleName();
+                _builder.append(_simpleName_1, "");
+                it.setText(_builder.toString());
+                it.setOpacity(0);
+              }
+            };
+            return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+          }
+        };
+        return IterableExtensions.<JvmField, Text>map(_attributes, _function);
+      }
+    };
+    Iterable<Text> _withDomainObject = _descriptor.<Iterable<Text>>withDomainObject(_function);
+    List<Text> _list = IterableExtensions.<Text>toList(_withDomainObject);
+    final ArrayList<Text> fields = new ArrayList<Text>(_list);
+    Dimension2D _dimension = CompartmentInflator.getDimension(this.label);
+    double _width = _dimension.getWidth();
+    CompartmentInflator.inflate(this, fields, this.contentArea, _width);
   }
   
   /**

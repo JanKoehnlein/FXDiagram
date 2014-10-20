@@ -7,16 +7,22 @@ import de.fxdiagram.xtext.glue.shapes.BaseNode
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.VPos
+import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import org.eclipse.xtext.common.types.JvmDeclaredType
 
+import static extension de.fxdiagram.xtext.xbase.CompartmentInflator.*
+import java.util.ArrayList
+
 @ModelNode
 class JvmTypeNode extends BaseNode<JvmDeclaredType> {
 	
 	@Inject extension JvmDomainUtil 
+	
+	Pane contentArea
 	
 	new(JvmEObjectDescriptor<JvmDeclaredType> descriptor) {
 		super(descriptor)
@@ -26,7 +32,7 @@ class JvmTypeNode extends BaseNode<JvmDeclaredType> {
 		new RectangleBorderPane => [
 			borderRadius = 6
 			backgroundRadius = 6
-			children += new VBox => [
+			children += contentArea = new VBox => [
 				padding = new Insets(10, 20, 10, 20)
 				alignment = Pos.CENTER
 				children += label = new Text => [
@@ -34,19 +40,22 @@ class JvmTypeNode extends BaseNode<JvmDeclaredType> {
 					text = name
 					font = Font.font(font.family, FontWeight.BOLD, font.size * 1.1)
 				]
-				VBox.setMargin(label, new Insets(0, 0, 10, 0))
-				children += new VBox => [ fieldCompartment |
-					descriptor.withDomainObject[ type |
-						type.attributes.forEach[ field |
-							fieldCompartment.children += new Text => [
-								textOrigin = VPos.TOP
-								text = '''«field.simpleName»: «field.type.simpleName»'''
-							]
-						]
-						null
-					]
-				]
 			]
 		]
+	}
+	
+	override activate() {
+		super.activate()
+		VBox.setMargin(label, new Insets(0, 0, 10, 0))
+		val fields = new ArrayList(descriptor.withDomainObject[ type |
+			type.attributes.map[ field |
+				new Text => [
+					textOrigin = VPos.TOP
+					text = '''«field.simpleName»: «field.type.simpleName»'''
+					opacity = 0
+				]
+			]
+		].toList)
+		inflate(fields, contentArea, label.dimension.width)		
 	}
 }

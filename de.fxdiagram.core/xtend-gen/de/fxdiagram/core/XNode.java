@@ -27,16 +27,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
-@Logging/* 
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" }) */
+@Logging
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class XNode extends XShape implements XModelProvider {
   private Effect mouseOverEffect;
@@ -46,6 +49,9 @@ public class XNode extends XShape implements XModelProvider {
   private Effect originalEffect;
   
   private Anchors anchors;
+  
+  @Accessors
+  private Side placementHint;
   
   public XNode(final DomainObjectDescriptor domainObject) {
     this.domainObjectProperty.set(domainObject);
@@ -259,6 +265,8 @@ public class XNode extends XShape implements XModelProvider {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    modelElement.addProperty(layoutXProperty(), Double.class);
+    modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
@@ -330,5 +338,14 @@ public class XNode extends XShape implements XModelProvider {
   
   public ListProperty<XConnection> outgoingConnectionsProperty() {
     return this.outgoingConnectionsProperty;
+  }
+  
+  @Pure
+  public Side getPlacementHint() {
+    return this.placementHint;
+  }
+  
+  public void setPlacementHint(final Side placementHint) {
+    this.placementHint = placementHint;
   }
 }

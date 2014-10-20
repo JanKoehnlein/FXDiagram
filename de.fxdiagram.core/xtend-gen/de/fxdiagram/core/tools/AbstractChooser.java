@@ -586,6 +586,7 @@ public abstract class AbstractChooser implements XDiagramTool {
                 break;
             }
           }
+          choice.setPlacementHint(this.layoutPosition);
           shapesToAdd.add(choice);
         }
         DomainObjectDescriptor _get = this.node2choiceInfo.get(choice);
