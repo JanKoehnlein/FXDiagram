@@ -9,6 +9,7 @@ import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.StringDescriptor
 import javafx.collections.ObservableList
+import javafx.geometry.Side
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
@@ -16,12 +17,9 @@ import javafx.scene.effect.InnerShadow
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
-import javafx.geometry.Pos
-import org.eclipse.xtend.lib.annotations.Accessors
-import javafx.geometry.Side
 
 @Logging
-@ModelNode('layoutX', 'layoutY', 'domainObject', 'width', 'height')
+@ModelNode('layoutX', 'layoutY', 'domainObject', 'width', 'height', 'placementHint')
 class XNode extends XShape {
 
 	@FxProperty double width
@@ -29,15 +27,13 @@ class XNode extends XShape {
 	@FxProperty(readOnly) DomainObjectDescriptor domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
+	@FxProperty Side placementHint
 	
 	Effect mouseOverEffect
 	Effect selectionEffect
 	Effect originalEffect
 
 	Anchors anchors
-	
-	@Accessors
-	Side placementHint
 	
  	new(DomainObjectDescriptor domainObject) {
  		domainObjectProperty.set(domainObject)

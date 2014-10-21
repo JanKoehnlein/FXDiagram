@@ -2,17 +2,16 @@ package de.fxdiagram.xtext.xbase;
 
 import com.google.inject.Inject;
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.extensions.TextExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
-import de.fxdiagram.xtext.xbase.CompartmentInflator;
+import de.fxdiagram.xtext.xbase.InflatableCompartment;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
-import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -28,7 +27,6 @@ import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -89,39 +87,45 @@ public class JvmTypeNode extends BaseNode<JvmDeclaredType> {
     super.activate();
     Insets _insets = new Insets(0, 0, 10, 0);
     VBox.setMargin(this.label, _insets);
+    float _offlineWidth = TextExtensions.getOfflineWidth(this.label);
+    final InflatableCompartment attributeCompartment = new InflatableCompartment(this, _offlineWidth);
+    ObservableList<Node> _children = this.contentArea.getChildren();
+    _children.add(attributeCompartment);
     AbstractXtextDescriptor<JvmDeclaredType> _descriptor = this.getDescriptor();
-    final Function1<JvmDeclaredType, Iterable<Text>> _function = new Function1<JvmDeclaredType, Iterable<Text>>() {
-      public Iterable<Text> apply(final JvmDeclaredType type) {
-        Iterable<JvmField> _attributes = JvmTypeNode.this._jvmDomainUtil.getAttributes(type);
-        final Function1<JvmField, Text> _function = new Function1<JvmField, Text>() {
-          public Text apply(final JvmField field) {
-            Text _text = new Text();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              public void apply(final Text it) {
-                it.setTextOrigin(VPos.TOP);
-                StringConcatenation _builder = new StringConcatenation();
-                String _simpleName = field.getSimpleName();
-                _builder.append(_simpleName, "");
-                _builder.append(": ");
-                JvmTypeReference _type = field.getType();
-                String _simpleName_1 = _type.getSimpleName();
-                _builder.append(_simpleName_1, "");
-                it.setText(_builder.toString());
-                it.setOpacity(0);
-              }
-            };
-            return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-          }
-        };
-        return IterableExtensions.<JvmField, Text>map(_attributes, _function);
+    final Function1<JvmDeclaredType, Object> _function = new Function1<JvmDeclaredType, Object>() {
+      public Object apply(final JvmDeclaredType type) {
+        Object _xblockexpression = null;
+        {
+          Iterable<JvmField> _attributes = JvmTypeNode.this._jvmDomainUtil.getAttributes(type);
+          final Consumer<JvmField> _function = new Consumer<JvmField>() {
+            public void accept(final JvmField field) {
+              Text _text = new Text();
+              final Procedure1<Text> _function = new Procedure1<Text>() {
+                public void apply(final Text it) {
+                  it.setTextOrigin(VPos.TOP);
+                  StringConcatenation _builder = new StringConcatenation();
+                  String _simpleName = field.getSimpleName();
+                  _builder.append(_simpleName, "");
+                  _builder.append(": ");
+                  JvmTypeReference _type = field.getType();
+                  String _simpleName_1 = _type.getSimpleName();
+                  _builder.append(_simpleName_1, "");
+                  it.setText(_builder.toString());
+                  it.setOpacity(0);
+                }
+              };
+              Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+              attributeCompartment.add(_doubleArrow);
+            }
+          };
+          _attributes.forEach(_function);
+          _xblockexpression = null;
+        }
+        return _xblockexpression;
       }
     };
-    Iterable<Text> _withDomainObject = _descriptor.<Iterable<Text>>withDomainObject(_function);
-    List<Text> _list = IterableExtensions.<Text>toList(_withDomainObject);
-    final ArrayList<Text> fields = new ArrayList<Text>(_list);
-    Dimension2D _dimension = CompartmentInflator.getDimension(this.label);
-    double _width = _dimension.getWidth();
-    CompartmentInflator.inflate(this, fields, this.contentArea, _width);
+    _descriptor.<Object>withDomainObject(_function);
+    attributeCompartment.inflate();
   }
   
   /**

@@ -14,8 +14,7 @@ import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import org.eclipse.xtext.common.types.JvmDeclaredType
 
-import static extension de.fxdiagram.xtext.xbase.CompartmentInflator.*
-import java.util.ArrayList
+import static extension de.fxdiagram.core.extensions.TextExtensions.*
 
 @ModelNode
 class JvmTypeNode extends BaseNode<JvmDeclaredType> {
@@ -47,15 +46,18 @@ class JvmTypeNode extends BaseNode<JvmDeclaredType> {
 	override activate() {
 		super.activate()
 		VBox.setMargin(label, new Insets(0, 0, 10, 0))
-		val fields = new ArrayList(descriptor.withDomainObject[ type |
-			type.attributes.map[ field |
-				new Text => [
+		val attributeCompartment = new InflatableCompartment(this, label.offlineWidth)
+		contentArea.children += attributeCompartment
+		descriptor.withDomainObject[ type |
+			type.attributes.forEach[ field |
+				attributeCompartment.add(new Text => [
 					textOrigin = VPos.TOP
 					text = '''«field.simpleName»: «field.type.simpleName»'''
 					opacity = 0
-				]
+				])
 			]
-		].toList)
-		inflate(fields, contentArea, label.dimension.width)		
+			null
+		]
+		attributeCompartment.inflate		
 	}
 }

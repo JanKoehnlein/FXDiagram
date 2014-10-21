@@ -1,6 +1,5 @@
 package de.fxdiagram.xtext.xbase
 
-import com.sun.javafx.tk.Toolkit
 import de.fxdiagram.core.XNode
 import java.util.List
 import javafx.animation.FadeTransition
@@ -9,7 +8,7 @@ import javafx.animation.KeyValue
 import javafx.animation.SequentialTransition
 import javafx.animation.Timeline
 import javafx.geometry.Dimension2D
-import javafx.scene.layout.Pane
+import javafx.scene.Parent
 import javafx.scene.layout.VBox
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
@@ -17,35 +16,49 @@ import javafx.scene.text.Text
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import static extension de.fxdiagram.core.extensions.TextExtensions.*
 
-class CompartmentInflator {
+class InflatableCompartment extends Parent {
 	
-	static def inflate(XNode parent, List<Text> labels, Pane contentArea, double minWidth) {
+	XNode containerNode
+	double deflatedWidth
+	
+	List<Text> labels = newArrayList
+	
+	new(XNode containerNode, double deflatedWidth) {
+		this.containerNode = containerNode
+		this.deflatedWidth = deflatedWidth
+		managed = true
+	}
+	
+	def add(Text label) {
+		labels += label
+	}
+	
+	def inflate() {
 		val maxLabelSize = (labels
-			.map[dimension] + #[new Dimension2D(minWidth, 0)])
+			.map[offlineDimension] + #[new Dimension2D(deflatedWidth, 0)])
 			.reduce[new Dimension2D(max($0.width, $1.width), max($0.height, $1.height))]
-		val spacer = new Rectangle(0, 0, minWidth, 0) => [
+		val spacer = new Rectangle(0, 0, deflatedWidth, 0) => [
 			opacity = 0
 		]
-		contentArea.children += spacer
+		children += spacer
 		val allChildrenHeight = maxLabelSize.height * labels.size
-		val endX = parent.layoutX - switch parent.placementHint {
-			case TOP,
-			case BOTTOM:
-				0.5 * (maxLabelSize.width - minWidth)
+		val endX = containerNode.layoutX - switch containerNode.placementHint {
 			case LEFT:
-				maxLabelSize.width - minWidth
-			default:
-				0	
-		} 
-		val endY = parent.layoutY - switch parent.placementHint {
-			case LEFT,
+				maxLabelSize.width - deflatedWidth
 			case RIGHT:
-				0.5 * allChildrenHeight
+				0	
+			default:
+				0.5 * (maxLabelSize.width - deflatedWidth)
+		} 
+		val endY = containerNode.layoutY - switch containerNode.placementHint {
 			case TOP:
 				allChildrenHeight
+			case BOTTOM:
+				0
 			default:
-				0	
+				0.5 * allChildrenHeight
 		} 
 		new SequentialTransition => [
 			children += new Timeline => [
@@ -54,18 +67,18 @@ class CompartmentInflator {
 				autoReverse = false
 				keyFrames += new KeyFrame(
 					300.millis,
-					new KeyValue(parent.layoutXProperty, endX),
-					new KeyValue(parent.layoutYProperty, endY),
+					new KeyValue(containerNode.layoutXProperty, endX),
+					new KeyValue(containerNode.layoutYProperty, endY),
 					new KeyValue(spacer.widthProperty, maxLabelSize.width),
 					new KeyValue(spacer.heightProperty, allChildrenHeight)
 				) 
 				onFinished = [
-					contentArea => [
-						children -= spacer
-						children += new VBox => [
-							children += labels
-						]
-					] 
+					children -= spacer
+					children += new VBox => [
+						children += labels
+					]
+					parent.requestLayout
+					parent.layout
 				]
 			]
 			children += labels.map [ label |
@@ -78,15 +91,5 @@ class CompartmentInflator {
 			]
 			play
 		]
-	}
-	
-	private static def getFontLoader() {
-		Toolkit.toolkit.fontLoader
-	}
-	
-	static def Dimension2D getDimension(Text it) {
-		new Dimension2D(
-			fontLoader.computeStringWidth(text, font),
-			fontLoader.getFontMetrics(font).lineHeight)
 	}
 }

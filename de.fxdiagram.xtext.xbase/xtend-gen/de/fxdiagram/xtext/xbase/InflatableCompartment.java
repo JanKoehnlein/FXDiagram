@@ -1,11 +1,9 @@
 package de.fxdiagram.xtext.xbase;
 
 import com.google.common.collect.Iterables;
-import com.sun.javafx.tk.FontLoader;
-import com.sun.javafx.tk.FontMetrics;
-import com.sun.javafx.tk.Toolkit;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.DurationExtensions;
+import de.fxdiagram.core.extensions.TextExtensions;
 import java.util.Collections;
 import java.util.List;
 import javafx.animation.Animation;
@@ -21,10 +19,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
+import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -36,17 +33,33 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class CompartmentInflator {
-  public static SequentialTransition inflate(final XNode parent, final List<Text> labels, final Pane contentArea, final double minWidth) {
+public class InflatableCompartment extends Parent {
+  private XNode containerNode;
+  
+  private double deflatedWidth;
+  
+  private List<Text> labels = CollectionLiterals.<Text>newArrayList();
+  
+  public InflatableCompartment(final XNode containerNode, final double deflatedWidth) {
+    this.containerNode = containerNode;
+    this.deflatedWidth = deflatedWidth;
+    this.setManaged(true);
+  }
+  
+  public boolean add(final Text label) {
+    return this.labels.add(label);
+  }
+  
+  public SequentialTransition inflate() {
     SequentialTransition _xblockexpression = null;
     {
       final Function1<Text, Dimension2D> _function = new Function1<Text, Dimension2D>() {
         public Dimension2D apply(final Text it) {
-          return CompartmentInflator.getDimension(it);
+          return TextExtensions.getOfflineDimension(it);
         }
       };
-      List<Dimension2D> _map = ListExtensions.<Text, Dimension2D>map(labels, _function);
-      Dimension2D _dimension2D = new Dimension2D(minWidth, 0);
+      List<Dimension2D> _map = ListExtensions.<Text, Dimension2D>map(this.labels, _function);
+      Dimension2D _dimension2D = new Dimension2D(this.deflatedWidth, 0);
       Iterable<Dimension2D> _plus = Iterables.<Dimension2D>concat(_map, Collections.<Dimension2D>unmodifiableList(CollectionLiterals.<Dimension2D>newArrayList(_dimension2D)));
       final Function2<Dimension2D, Dimension2D, Dimension2D> _function_1 = new Function2<Dimension2D, Dimension2D, Dimension2D>() {
         public Dimension2D apply(final Dimension2D $0, final Dimension2D $1) {
@@ -60,59 +73,59 @@ public class CompartmentInflator {
         }
       };
       final Dimension2D maxLabelSize = IterableExtensions.<Dimension2D>reduce(_plus, _function_1);
-      Rectangle _rectangle = new Rectangle(0, 0, minWidth, 0);
+      Rectangle _rectangle = new Rectangle(0, 0, this.deflatedWidth, 0);
       final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
         public void apply(final Rectangle it) {
           it.setOpacity(0);
         }
       };
       final Rectangle spacer = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
-      ObservableList<Node> _children = contentArea.getChildren();
+      ObservableList<Node> _children = this.getChildren();
       _children.add(spacer);
       double _height = maxLabelSize.getHeight();
-      int _size = labels.size();
+      int _size = this.labels.size();
       final double allChildrenHeight = (_height * _size);
-      double _layoutX = parent.getLayoutX();
+      double _layoutX = this.containerNode.getLayoutX();
       double _switchResult = (double) 0;
-      Side _placementHint = parent.getPlacementHint();
+      Side _placementHint = this.containerNode.getPlacementHint();
       if (_placementHint != null) {
         switch (_placementHint) {
-          case TOP:
-          case BOTTOM:
-            double _width = maxLabelSize.getWidth();
-            double _minus = (_width - minWidth);
-            _switchResult = (0.5 * _minus);
-            break;
           case LEFT:
-            double _width_1 = maxLabelSize.getWidth();
-            _switchResult = (_width_1 - minWidth);
+            double _width = maxLabelSize.getWidth();
+            _switchResult = (_width - this.deflatedWidth);
+            break;
+          case RIGHT:
+            _switchResult = 0;
             break;
           default:
-            _switchResult = 0;
+            double _width_1 = maxLabelSize.getWidth();
+            double _minus = (_width_1 - this.deflatedWidth);
+            _switchResult = (0.5 * _minus);
             break;
         }
       } else {
-        _switchResult = 0;
+        double _width_1 = maxLabelSize.getWidth();
+        double _minus = (_width_1 - this.deflatedWidth);
+        _switchResult = (0.5 * _minus);
       }
       final double endX = (_layoutX - _switchResult);
-      double _layoutY = parent.getLayoutY();
+      double _layoutY = this.containerNode.getLayoutY();
       double _switchResult_1 = (double) 0;
-      Side _placementHint_1 = parent.getPlacementHint();
+      Side _placementHint_1 = this.containerNode.getPlacementHint();
       if (_placementHint_1 != null) {
         switch (_placementHint_1) {
-          case LEFT:
-          case RIGHT:
-            _switchResult_1 = (0.5 * allChildrenHeight);
-            break;
           case TOP:
             _switchResult_1 = allChildrenHeight;
             break;
-          default:
+          case BOTTOM:
             _switchResult_1 = 0;
+            break;
+          default:
+            _switchResult_1 = (0.5 * allChildrenHeight);
             break;
         }
       } else {
-        _switchResult_1 = 0;
+        _switchResult_1 = (0.5 * allChildrenHeight);
       }
       final double endY = (_layoutY - _switchResult_1);
       SequentialTransition _sequentialTransition = new SequentialTransition();
@@ -128,9 +141,9 @@ public class CompartmentInflator {
               it.setAutoReverse(false);
               ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
               Duration _millis_1 = DurationExtensions.millis(300);
-              DoubleProperty _layoutXProperty = parent.layoutXProperty();
+              DoubleProperty _layoutXProperty = InflatableCompartment.this.containerNode.layoutXProperty();
               KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(endX));
-              DoubleProperty _layoutYProperty = parent.layoutYProperty();
+              DoubleProperty _layoutYProperty = InflatableCompartment.this.containerNode.layoutYProperty();
               KeyValue _keyValue_1 = new <Number>KeyValue(_layoutYProperty, Double.valueOf(endY));
               DoubleProperty _widthProperty = spacer.widthProperty();
               double _width = maxLabelSize.getWidth();
@@ -141,23 +154,22 @@ public class CompartmentInflator {
               _keyFrames.add(_keyFrame);
               final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                 public void handle(final ActionEvent it) {
-                  final Procedure1<Pane> _function = new Procedure1<Pane>() {
-                    public void apply(final Pane it) {
+                  ObservableList<Node> _children = InflatableCompartment.this.getChildren();
+                  _children.remove(spacer);
+                  ObservableList<Node> _children_1 = InflatableCompartment.this.getChildren();
+                  VBox _vBox = new VBox();
+                  final Procedure1<VBox> _function = new Procedure1<VBox>() {
+                    public void apply(final VBox it) {
                       ObservableList<Node> _children = it.getChildren();
-                      _children.remove(spacer);
-                      ObservableList<Node> _children_1 = it.getChildren();
-                      VBox _vBox = new VBox();
-                      final Procedure1<VBox> _function = new Procedure1<VBox>() {
-                        public void apply(final VBox it) {
-                          ObservableList<Node> _children = it.getChildren();
-                          Iterables.<Node>addAll(_children, labels);
-                        }
-                      };
-                      VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-                      _children_1.add(_doubleArrow);
+                      Iterables.<Node>addAll(_children, InflatableCompartment.this.labels);
                     }
                   };
-                  ObjectExtensions.<Pane>operator_doubleArrow(contentArea, _function);
+                  VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
+                  _children_1.add(_doubleArrow);
+                  Parent _parent = InflatableCompartment.this.getParent();
+                  _parent.requestLayout();
+                  Parent _parent_1 = InflatableCompartment.this.getParent();
+                  _parent_1.layout();
                 }
               };
               it.setOnFinished(_function);
@@ -181,7 +193,7 @@ public class CompartmentInflator {
               return ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
             }
           };
-          List<Animation> _map = ListExtensions.<Text, Animation>map(labels, _function_1);
+          List<Animation> _map = ListExtensions.<Text, Animation>map(InflatableCompartment.this.labels, _function_1);
           Iterables.<Animation>addAll(_children_1, _map);
           it.play();
         }
@@ -189,22 +201,5 @@ public class CompartmentInflator {
       _xblockexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function_3);
     }
     return _xblockexpression;
-  }
-  
-  private static FontLoader getFontLoader() {
-    Toolkit _toolkit = Toolkit.getToolkit();
-    return _toolkit.getFontLoader();
-  }
-  
-  public static Dimension2D getDimension(final Text it) {
-    FontLoader _fontLoader = CompartmentInflator.getFontLoader();
-    String _text = it.getText();
-    Font _font = it.getFont();
-    float _computeStringWidth = _fontLoader.computeStringWidth(_text, _font);
-    FontLoader _fontLoader_1 = CompartmentInflator.getFontLoader();
-    Font _font_1 = it.getFont();
-    FontMetrics _fontMetrics = _fontLoader_1.getFontMetrics(_font_1);
-    float _lineHeight = _fontMetrics.getLineHeight();
-    return new Dimension2D(_computeStringWidth, _lineHeight);
   }
 }

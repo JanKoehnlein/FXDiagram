@@ -19,10 +19,12 @@ import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -33,13 +35,11 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
-import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.Pure;
 
 @Logging
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height", "placementHint" })
 @SuppressWarnings("all")
 public class XNode extends XShape implements XModelProvider {
   private Effect mouseOverEffect;
@@ -49,9 +49,6 @@ public class XNode extends XShape implements XModelProvider {
   private Effect originalEffect;
   
   private Anchors anchors;
-  
-  @Accessors
-  private Side placementHint;
   
   public XNode(final DomainObjectDescriptor domainObject) {
     this.domainObjectProperty.set(domainObject);
@@ -270,6 +267,7 @@ public class XNode extends XShape implements XModelProvider {
     modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
+    modelElement.addProperty(placementHintProperty, Side.class);
   }
   
   private SimpleDoubleProperty widthProperty = new SimpleDoubleProperty(this, "width");
@@ -340,12 +338,17 @@ public class XNode extends XShape implements XModelProvider {
     return this.outgoingConnectionsProperty;
   }
   
-  @Pure
+  private SimpleObjectProperty<Side> placementHintProperty = new SimpleObjectProperty<Side>(this, "placementHint");
+  
   public Side getPlacementHint() {
-    return this.placementHint;
+    return this.placementHintProperty.get();
   }
   
   public void setPlacementHint(final Side placementHint) {
-    this.placementHint = placementHint;
+    this.placementHintProperty.set(placementHint);
+  }
+  
+  public ObjectProperty<Side> placementHintProperty() {
+    return this.placementHintProperty;
   }
 }
