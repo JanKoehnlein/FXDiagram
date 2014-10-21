@@ -13,6 +13,8 @@ interface DiagramAction {
 	
 	def Symbol.Type getSymbol() 
 	
+	def String getTooltip()
+	
 	def void perform(XRoot root)
 }
 

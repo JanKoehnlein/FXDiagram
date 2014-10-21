@@ -25,6 +25,10 @@ class LayoutAction implements DiagramAction {
 		Symbol.Type.GRAPH
 	}
 
+	override getTooltip() {
+		'Layout diagram'
+	}
+
 	override perform(XRoot root) {
 		val layoutCommand = new Layouter().createLayoutCommand(layoutType, root.diagram, 1000.millis)
 		root.commandStack.execute(layoutCommand)

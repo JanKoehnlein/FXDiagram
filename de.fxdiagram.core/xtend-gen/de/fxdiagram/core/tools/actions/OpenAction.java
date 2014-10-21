@@ -33,6 +33,10 @@ public class OpenAction implements DiagramAction {
     return null;
   }
   
+  public String getTooltip() {
+    return "Close node";
+  }
+  
   public void perform(final XRoot root) {
     XDiagram _diagram = root.getDiagram();
     ObservableList<XNode> _nodes = _diagram.getNodes();

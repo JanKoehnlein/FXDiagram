@@ -54,6 +54,10 @@ public class UndoRedoPlayerAction implements DiagramAction {
     return null;
   }
   
+  public String getTooltip() {
+    return "Undo player";
+  }
+  
   public void perform(final XRoot root) {
     this.root = root;
     StackPane _createControlPanel = this.createControlPanel();

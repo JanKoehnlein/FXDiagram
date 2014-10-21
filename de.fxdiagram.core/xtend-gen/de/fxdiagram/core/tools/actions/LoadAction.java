@@ -36,6 +36,10 @@ public class LoadAction implements DiagramAction {
     return Symbol.Type.CLOUD;
   }
   
+  public String getTooltip() {
+    return "Load diagram";
+  }
+  
   public void perform(final XRoot root) {
     try {
       final FileChooser fileChooser = new FileChooser();

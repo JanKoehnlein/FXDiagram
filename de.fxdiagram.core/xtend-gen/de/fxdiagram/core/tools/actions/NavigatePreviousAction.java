@@ -30,6 +30,10 @@ public class NavigatePreviousAction implements DiagramAction {
     return null;
   }
   
+  public String getTooltip() {
+    return "Previous";
+  }
+  
   public void perform(final XRoot root) {
     final Function1<NavigationBehavior, Boolean> _function = new Function1<NavigationBehavior, Boolean>() {
       public Boolean apply(final NavigationBehavior it) {

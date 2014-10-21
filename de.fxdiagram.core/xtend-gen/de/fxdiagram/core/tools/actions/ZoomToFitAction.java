@@ -53,6 +53,10 @@ public class ZoomToFitAction implements DiagramAction {
     return Symbol.Type.ZOOM_IN;
   }
   
+  public String getTooltip() {
+    return "Fit selection";
+  }
+  
   public void perform(final XRoot root) {
     final ViewportCommand _function = new ViewportCommand() {
       @Override

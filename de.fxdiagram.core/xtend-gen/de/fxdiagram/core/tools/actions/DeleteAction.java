@@ -38,6 +38,10 @@ public class DeleteAction implements DiagramAction {
     return Symbol.Type.TRASH;
   }
   
+  public String getTooltip() {
+    return "Delete selection";
+  }
+  
   public void perform(final XRoot root) {
     final Iterable<XShape> elements = root.getCurrentSelection();
     final Iterable<XNode> nodes = Iterables.<XNode>filter(elements, XNode.class);

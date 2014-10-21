@@ -13,7 +13,6 @@ import eu.hansolo.enzo.radialmenu.Options;
 import eu.hansolo.enzo.radialmenu.RadialMenu;
 import eu.hansolo.enzo.radialmenu.Symbol;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -33,7 +32,6 @@ import javafx.scene.layout.Pane;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -148,27 +146,30 @@ public class DiagramActionTool implements XDiagramTool {
       Options _doubleArrow = ObjectExtensions.<Options>operator_doubleArrow(_options, _function);
       DiagramActionRegistry _diagramActionRegistry = this.root.getDiagramActionRegistry();
       ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
-      final Function1<DiagramAction, Symbol.Type> _function_1 = new Function1<DiagramAction, Symbol.Type>() {
-        public Symbol.Type apply(final DiagramAction it) {
-          return it.getSymbol();
+      final Function1<DiagramAction, Boolean> _function_1 = new Function1<DiagramAction, Boolean>() {
+        public Boolean apply(final DiagramAction it) {
+          Symbol.Type _symbol = it.getSymbol();
+          return Boolean.valueOf((!Objects.equal(_symbol, null)));
         }
       };
-      List<Symbol.Type> _map = ListExtensions.<DiagramAction, Symbol.Type>map(_actions, _function_1);
-      Iterable<Symbol.Type> _filterNull = IterableExtensions.<Symbol.Type>filterNull(_map);
-      final Function1<Symbol.Type, MenuItem> _function_2 = new Function1<Symbol.Type, MenuItem>() {
-        public MenuItem apply(final Symbol.Type actionSymbol) {
+      Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function_1);
+      final Function1<DiagramAction, MenuItem> _function_2 = new Function1<DiagramAction, MenuItem>() {
+        public MenuItem apply(final DiagramAction action) {
           MenuItem _menuItem = new MenuItem();
           final Procedure1<MenuItem> _function = new Procedure1<MenuItem>() {
             public void apply(final MenuItem it) {
-              it.setSymbol(actionSymbol);
+              Symbol.Type _symbol = action.getSymbol();
+              it.setSymbol(_symbol);
+              String _tooltip = action.getTooltip();
+              it.setTooltip(_tooltip);
               it.setSize(64);
             }
           };
           return ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function);
         }
       };
-      Iterable<MenuItem> _map_1 = IterableExtensions.<Symbol.Type, MenuItem>map(_filterNull, _function_2);
-      RadialMenu _radialMenu = new RadialMenu(_doubleArrow, ((MenuItem[])Conversions.unwrapArray(_map_1, MenuItem.class)));
+      Iterable<MenuItem> _map = IterableExtensions.<DiagramAction, MenuItem>map(_filter, _function_2);
+      RadialMenu _radialMenu = new RadialMenu(_doubleArrow, ((MenuItem[])Conversions.unwrapArray(_map, MenuItem.class)));
       this.menu = _radialMenu;
       HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
       ObservableList<Node> _children = _headsUpDisplay.getChildren();

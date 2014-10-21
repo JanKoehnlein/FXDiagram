@@ -15,6 +15,10 @@ class UndoAction implements DiagramAction {
 		Symbol.Type.REWIND
 	}
 
+	override getTooltip() {
+		'Undo'
+	}
+	
 	override perform(XRoot root) {
 		root.commandStack.undo
 	}
@@ -31,6 +35,10 @@ class RedoAction implements DiagramAction {
 		Symbol.Type.FORWARD
 	}
 
+	override getTooltip() {
+		'Redo'
+	}
+	
 	override perform(XRoot root) {
 		root.commandStack.redo
 	}

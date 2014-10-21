@@ -34,6 +34,10 @@ public class RedoAction implements DiagramAction {
     return Symbol.Type.FORWARD;
   }
   
+  public String getTooltip() {
+    return "Redo";
+  }
+  
   public void perform(final XRoot root) {
     CommandStack _commandStack = root.getCommandStack();
     _commandStack.redo();

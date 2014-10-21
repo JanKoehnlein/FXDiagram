@@ -26,6 +26,10 @@ public class ExitAction implements DiagramAction {
     return Symbol.Type.EJECT;
   }
   
+  public String getTooltip() {
+    return "Exit FXDiagram";
+  }
+  
   public void perform(final XRoot root) {
     System.exit(0);
   }

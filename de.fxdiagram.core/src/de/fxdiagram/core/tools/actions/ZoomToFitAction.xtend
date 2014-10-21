@@ -22,6 +22,10 @@ class ZoomToFitAction implements DiagramAction {
 	override getSymbol() {
 		Symbol.Type.ZOOM_IN
 	}
+	
+	override getTooltip() {
+		'Fit selection'
+	}
 
 	override perform(XRoot root) {
 		val ViewportCommand command = [

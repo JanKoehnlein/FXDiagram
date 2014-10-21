@@ -22,6 +22,10 @@ class CenterAction implements DiagramAction {
 	override getSymbol() {
 		Symbol.Type.SELECTION2
 	}
+	
+	override getTooltip() {
+		'Center selection'
+	}
 
 	override perform(XRoot root) {
 		val ViewportCommand command = [

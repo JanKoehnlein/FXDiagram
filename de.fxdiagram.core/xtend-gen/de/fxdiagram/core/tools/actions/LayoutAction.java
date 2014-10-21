@@ -38,6 +38,10 @@ public class LayoutAction implements DiagramAction {
     return Symbol.Type.GRAPH;
   }
   
+  public String getTooltip() {
+    return "Layout diagram";
+  }
+  
   public void perform(final XRoot root) {
     Layouter _layouter = new Layouter();
     XDiagram _diagram = root.getDiagram();

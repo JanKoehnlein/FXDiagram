@@ -71,11 +71,11 @@ class DiagramActionTool implements XDiagramTool {
 					buttonAlpha = 1.0
 				],
 				root.diagramActionRegistry.actions
-					.map[symbol]
-					.filterNull
-					.map[ actionSymbol | 
+					.filter[symbol != null]
+					.map[ action |
 						new MenuItem => [
-							symbol = actionSymbol
+							symbol = action.symbol
+							tooltip = action.tooltip
 							size = 64
 						]
 				])

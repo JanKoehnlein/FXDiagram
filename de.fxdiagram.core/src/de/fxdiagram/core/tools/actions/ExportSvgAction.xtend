@@ -19,6 +19,10 @@ class ExportSvgAction implements DiagramAction {
 		Symbol.Type.CAMERA
 	}
 
+	override getTooltip() {
+		'Export to SVG'
+	}
+	
 	override perform(XRoot root) {
 		val fileChooser = new FileChooser()
 		fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FX Diagram", "*.svg")

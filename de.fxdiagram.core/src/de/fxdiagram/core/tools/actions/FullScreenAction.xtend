@@ -15,6 +15,10 @@ class FullScreenAction implements DiagramAction {
 		null
 	}
 
+	override getTooltip() {
+		'Toggle full screen mode'
+	}
+
 	override perform(XRoot root) {
 		val window = root.scene.window
 		if (window instanceof Stage) {

@@ -45,6 +45,10 @@ public class CenterAction implements DiagramAction {
     return Symbol.Type.SELECTION2;
   }
   
+  public String getTooltip() {
+    return "Center selection";
+  }
+  
   public void perform(final XRoot root) {
     final ViewportCommand _function = new ViewportCommand() {
       @Override

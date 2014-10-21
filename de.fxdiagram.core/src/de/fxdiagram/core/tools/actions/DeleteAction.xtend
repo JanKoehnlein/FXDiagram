@@ -17,6 +17,10 @@ class DeleteAction implements DiagramAction {
 		Symbol.Type.TRASH
 	}
 	
+	override getTooltip() {
+		'Delete selection'
+	}
+	
 	override perform(XRoot root) {
   		val elements = root.currentSelection
 		val nodes = elements.filter(XNode)

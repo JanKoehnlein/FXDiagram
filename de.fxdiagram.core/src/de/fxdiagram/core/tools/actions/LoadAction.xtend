@@ -17,6 +17,10 @@ class LoadAction implements DiagramAction {
 	override getSymbol() {
 		Symbol.Type.CLOUD
 	}
+	
+	override getTooltip() {
+		'Load diagram'
+	}
 
 	override perform(XRoot root) {
 		val fileChooser = new FileChooser()

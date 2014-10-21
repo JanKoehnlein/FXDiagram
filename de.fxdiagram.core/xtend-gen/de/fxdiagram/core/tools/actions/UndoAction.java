@@ -35,6 +35,10 @@ public class UndoAction implements DiagramAction {
     return Symbol.Type.REWIND;
   }
   
+  public String getTooltip() {
+    return "Undo";
+  }
+  
   public void perform(final XRoot root) {
     CommandStack _commandStack = root.getCommandStack();
     _commandStack.undo();

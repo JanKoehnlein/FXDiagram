@@ -17,6 +17,11 @@ class SaveAction implements DiagramAction {
 	override getSymbol() {
 		Symbol.Type.ROCKET
 	}
+	
+	override getTooltip() {
+		'Save diagram'
+	}
+	
 
 	override perform(XRoot root) {
 		if(root.diagram != null) {

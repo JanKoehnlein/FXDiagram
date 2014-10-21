@@ -34,6 +34,10 @@ class UndoRedoPlayerAction implements DiagramAction {
 	override getSymbol() {
 		null
 	}
+	
+	override getTooltip() {
+		'Undo player'
+	}
 
 	override perform(XRoot root) {
 		this.root = root

@@ -36,6 +36,10 @@ public class FullScreenAction implements DiagramAction {
     return null;
   }
   
+  public String getTooltip() {
+    return "Toggle full screen mode";
+  }
+  
   public void perform(final XRoot root) {
     Scene _scene = root.getScene();
     final Window window = _scene.getWindow();

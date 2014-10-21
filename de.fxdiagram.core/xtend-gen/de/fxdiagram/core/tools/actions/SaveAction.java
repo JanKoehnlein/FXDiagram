@@ -35,6 +35,10 @@ public class SaveAction implements DiagramAction {
     return Symbol.Type.ROCKET;
   }
   
+  public String getTooltip() {
+    return "Save diagram";
+  }
+  
   public void perform(final XRoot root) {
     try {
       XDiagram _diagram = root.getDiagram();

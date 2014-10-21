@@ -19,6 +19,10 @@ class NavigateNextAction implements DiagramAction {
 	override getSymbol() {
 		null
 	}
+	
+	override getTooltip() {
+		'Next'
+	}
 
 	override perform(XRoot root) {
 		root.triggerBehavior(NavigationBehavior, [next])
@@ -33,6 +37,10 @@ class NavigatePreviousAction implements DiagramAction {
 	
 	override getSymbol() {
 		null
+	}
+	
+	override getTooltip() {
+		'Previous'
 	}
 
 	override perform(XRoot root) {
@@ -49,6 +57,10 @@ class CloseAction implements DiagramAction {
 	override getSymbol() {
 		null
 	}
+	
+	override getTooltip() {
+		'Open node'
+	}
 
 	override perform(XRoot root) {
 		root.triggerBehavior(CloseBehavior, [ close; true ])
@@ -63,6 +75,10 @@ class OpenAction implements DiagramAction {
 	
 	override getSymbol() {
 		null
+	}
+
+	override getTooltip() {
+		'Close node'
 	}
 
 	override perform(XRoot root) {

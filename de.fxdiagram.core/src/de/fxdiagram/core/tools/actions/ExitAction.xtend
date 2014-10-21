@@ -15,6 +15,10 @@ class ExitAction implements DiagramAction {
 		Symbol.Type.EJECT
 	}
 
+	override getTooltip() {
+		'Exit FXDiagram'
+	}
+
 	override perform(XRoot root) {
 		System.exit(0)
 	}

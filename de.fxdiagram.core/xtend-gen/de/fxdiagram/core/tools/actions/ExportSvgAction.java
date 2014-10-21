@@ -36,6 +36,10 @@ public class ExportSvgAction implements DiagramAction {
     return Symbol.Type.CAMERA;
   }
   
+  public String getTooltip() {
+    return "Export to SVG";
+  }
+  
   public void perform(final XRoot root) {
     try {
       final FileChooser fileChooser = new FileChooser();

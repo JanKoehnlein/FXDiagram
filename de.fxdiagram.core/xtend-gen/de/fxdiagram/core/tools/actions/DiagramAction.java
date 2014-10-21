@@ -10,5 +10,7 @@ public interface DiagramAction {
   
   public abstract Symbol.Type getSymbol();
   
+  public abstract String getTooltip();
+  
   public abstract void perform(final XRoot root);
 }
