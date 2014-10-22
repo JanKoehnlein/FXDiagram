@@ -9,9 +9,8 @@ import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.typesystem.legacy.StandardTypeReferenceOwner;
 import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference;
-import org.eclipse.xtext.xbase.typesystem.references.OwnedConverter;
+import org.eclipse.xtext.xbase.typesystem.references.StandardTypeReferenceOwner;
 import org.eclipse.xtext.xbase.typesystem.util.CommonTypeComputationServices;
 
 @SuppressWarnings("all")
@@ -52,8 +51,7 @@ public class DomainModelUtil {
   
   public JvmTypeReference getComponentType(final JvmTypeReference it) {
     StandardTypeReferenceOwner _standardTypeReferenceOwner = new StandardTypeReferenceOwner(this.services, it);
-    OwnedConverter _ownedConverter = new OwnedConverter(_standardTypeReferenceOwner);
-    final LightweightTypeReference type = _ownedConverter.apply(it);
+    final LightweightTypeReference type = _standardTypeReferenceOwner.toLightweightTypeReference(it);
     LightweightTypeReference _xifexpression = null;
     boolean _isArray = type.isArray();
     if (_isArray) {

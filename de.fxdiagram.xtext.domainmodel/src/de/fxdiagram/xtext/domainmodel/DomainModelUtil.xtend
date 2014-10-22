@@ -4,8 +4,7 @@ import com.google.inject.Inject
 import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
-import org.eclipse.xtext.xbase.typesystem.legacy.StandardTypeReferenceOwner
-import org.eclipse.xtext.xbase.typesystem.references.OwnedConverter
+import org.eclipse.xtext.xbase.typesystem.references.StandardTypeReferenceOwner
 import org.eclipse.xtext.xbase.typesystem.util.CommonTypeComputationServices
 
 class DomainModelUtil {
@@ -23,7 +22,7 @@ class DomainModelUtil {
 	}
 	
 	def getComponentType(JvmTypeReference it) {
-		val type = new OwnedConverter(new StandardTypeReferenceOwner(services, it)).apply(it)
+		val type = new StandardTypeReferenceOwner(services, it).toLightweightTypeReference(it)
 		val componentType = if(type.isArray) 
 				type.componentType
 			else if(type.isSubtypeOf(Iterable) && !type.typeArguments.empty) 
