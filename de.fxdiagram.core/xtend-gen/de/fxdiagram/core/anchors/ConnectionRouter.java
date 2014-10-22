@@ -524,7 +524,8 @@ public class ConnectionRouter implements XActivatable {
   }
   
   protected Point2D midPoint(final XNode node) {
-    Bounds _boundsInLocal = node.getBoundsInLocal();
+    Node _node = node.getNode();
+    Bounds _boundsInLocal = _node.getBoundsInLocal();
     Point2D _center = BoundsExtensions.center(_boundsInLocal);
     return CoreExtensions.localToRootDiagram(node, _center);
   }
