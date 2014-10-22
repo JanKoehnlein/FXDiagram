@@ -1,20 +1,10 @@
 HIGH
 -make sequential animation command work
--EReference mappings
--add more diagram configs
--improve lazy connection behavior configurable in the mapping
 -non-Xtext sources
--allow multiple lazy connections 
  
 MEDIUM
 -improve config api
--allow nesting of diagrams in nodes
 
 LOW
 -refactor AbstractChooser to work on descriptors instead of XNodes
 
-DONE
--don't show rapid buttons if chooser is empty
--introduce extension point for diagram configs
--clear diagram action
--fix loading of diagrams / classloader

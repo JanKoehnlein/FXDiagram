@@ -23,13 +23,6 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 
 	@Accessors double border
 
-	val pos2group = #{
-		TOP -> new HBox,
-		BOTTOM -> new HBox,
-		LEFT -> new VBox, 
-		RIGHT -> new VBox
-	}
-	
 	ObservableList<RapidButton> buttonsProperty = observableArrayList
 	
 	Group allButtons = new Group
@@ -47,58 +40,42 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 
 	new(HOST host) {
 		super(host)
-		allButtons.children += pos2group.values
 		allButtons.visible = false
 	}
 
 	def add(RapidButton button) {
-		val group = pos2group.get(button.position)
-		if(group == null)
-			throw new IllegalArgumentException('Illegal XRapidButton position ' + button.position)
-		group.children += button
 		buttonsProperty += button
 	}
 
 	def remove(RapidButton button) {
-		val group = pos2group.get(button.position)
-		if(group == null)
-			throw new IllegalArgumentException('Illegal XRapidButton position ' + button.position)
-		group.children -= button
 		buttonsProperty -= button
 	}
 
 	override protected doActivate() {
 		host.diagram.buttonLayer.children += allButtons
 		buttonsProperty.addInitializingListener(new InitializingListListener<RapidButton>() => [
-			add = [ button | button.activate ]
+			add = [ button | 
+				button.activate
+				button.addEventHandler(MouseEvent.MOUSE_CLICKED, [ allButtons.visible = false ])
+			]
 		])
-		
 		layout
 		host.node.addEventHandler(MouseEvent.MOUSE_ENTERED, [ show ])
 		host.node.addEventHandler(MouseEvent.MOUSE_EXITED, [ fade ])
-		allButtons.onMousePressed = [
-			allButtons.visible = false
-		]
 		allButtons.onMouseEntered = [ show ]
 		allButtons.onMouseExited = [ fade ]
-		pos2group.values.forEach[
-			layoutBoundsProperty.addListener [
-				p, o, n | 
-				layout
-			]
-		]
 		host.boundsInParentProperty.addListener [
-			p, o, n | layout
+			p, o, n |
+			if(allButtons.visible) 
+				layout
 		]
 	}
 	
 	def show() {
 		fadeTransition.stop
-		buttonsProperty.forEach[
-			visible = action.isEnabled(it)
-		]
+		if(!allButtons.visible) 
+			layout
 		allButtons => [
-			children.forEach[layout]
 			visible = true
 			opacity = 1.0
 		]
@@ -112,12 +89,22 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 		class
 	}
 	
-	def layout() {
+	protected def layout() {
 		val hostBounds = host.localToDiagram(host.layoutBounds)
 		val hostCenter = hostBounds.center
-		for(pos2group: pos2group.entrySet) {
-			val pos = pos2group.key
-			val group = pos2group.value
+		val pos2group = #{
+			TOP -> new HBox,
+			BOTTOM -> new HBox,
+			LEFT -> new VBox,
+			RIGHT -> new VBox			
+		} 
+		allButtons.children.setAll(pos2group.values)
+		for(button: buttonsProperty.filter[action.isEnabled(it)]) 
+			pos2group.get(button.position).children += button
+		
+		for(entry: pos2group.entrySet) {
+			val pos = entry.key
+			val group = entry.value
 			group.layout
 			val groupBounds = group.boundsInLocal
 			val centered = hostCenter - groupBounds.center

@@ -3,7 +3,6 @@ TODO
   - revise image cache
   - XDiagram needs a hook like createNode
 - remove rapid buttons on node remove
-- fix layout of rapid buttons  
 - placement of new nodes after choosing
     
 BUGS
@@ -11,9 +10,7 @@ BUGS
 - labels snap back after being repositioned
 
 ENHANCEMENT
-- better animation for add/delete
 - delete rapid button on delete node
-- tooltips for menu items
 - scroll to reveal choosers
 - find better colors
 - collapsible compartments
@@ -26,31 +23,3 @@ MINOR
 - SVG export: arc size
 - can't set size of browser node
 - allow different anchors for faces of flipNodes 
- 
-DONE 
-- fix enablement of rapid buttons in examples
-- save nestedDiagrams 
-- save all diagrams
-- properly calculate existing edges
-- rename handle -> descriptor
-- XNode.key -> name, DomainObjectHandle.key -> name
-- restore labels, XConnectionPointTypes
-- add constructor XNode(domainObject), load domainObject first
-- fix LCARS example
-- Fix movie node
-- @ModelNode add initialize method automatically
-- switch to object based loading
-- switch to object based loading
-- fix connection initialization
-- activatePreview -> createNode
-- fix LOD node
-- undo open
-- undo close
-- undo layout
-- menu icons for save / load / undo / redo / delete
-- domainModel abstraction
-- container node to big when closing a zoomed subdiagram
-- persistence: 
-  - review ModelElement
-
-  
