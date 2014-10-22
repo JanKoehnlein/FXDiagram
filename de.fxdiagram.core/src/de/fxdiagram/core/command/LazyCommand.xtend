@@ -13,6 +13,10 @@ abstract class LazyCommand implements AnimationCommand {
 		delegate?.clearRedoStackOnExecute
 	}
 	
+	override skipViewportRestore() {
+		delegate?.skipViewportRestore
+	}
+	
 	override getExecuteAnimation(CommandContext context) {
 		delegate = createDelegate
 		delegate.getExecuteAnimation(context)

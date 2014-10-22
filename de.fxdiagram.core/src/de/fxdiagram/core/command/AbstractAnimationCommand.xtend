@@ -11,19 +11,28 @@ abstract class AbstractAnimationCommand implements AnimationCommand {
 	ViewportMemento fromMemento
 	ViewportMemento toMemento
 	Duration executeDuration
+	
+	boolean isRestoreViewport = true
+	
+	override skipViewportRestore() {
+		isRestoreViewport = false
+	}
 
 	override getExecuteAnimation(CommandContext context) {
-		fromMemento = context.root.viewportTransform.createMemento
+		if(isRestoreViewport)
+			fromMemento = context.root.viewportTransform.createMemento
 		val animation = createExecuteAnimation(context)
 		if(animation != null) {
 			return new SequentialTransition => [
 				children += animation
 				onFinished = [
-					toMemento = context.root.viewportTransform.createMemento
+					if(isRestoreViewport)
+						toMemento = context.root.viewportTransform.createMemento
 				]
 			]
 		} else {
-			toMemento = fromMemento
+			if(isRestoreViewport)
+				toMemento = fromMemento
 			return null
 		}	
 	}
@@ -31,19 +40,31 @@ abstract class AbstractAnimationCommand implements AnimationCommand {
 	def Animation createExecuteAnimation(CommandContext context)
 	
 	override getUndoAnimation(CommandContext context) {
-		new SequentialTransition => [
-			children += new ViewportTransition(context.root, toMemento, context.defaultUndoDuration)
-			children += createUndoAnimation(context)
-		]
+		val undoAnimation = createUndoAnimation(context)
+		if(toMemento != null || undoAnimation != null) {
+			new SequentialTransition => [
+				if(toMemento != null)
+					children += new ViewportTransition(context.root, toMemento, context.defaultUndoDuration)
+				children += undoAnimation
+			]
+		} else {
+			null
+		}
 	}
 	
 	def Animation createUndoAnimation(CommandContext context)
 	
 	override getRedoAnimation(CommandContext context) {
-		new SequentialTransition => [
-			children += new ViewportTransition(context.root, fromMemento, context.defaultUndoDuration)
-			children += createRedoAnimation(context)
-		]
+		val redoAnimation = createRedoAnimation(context)
+		if(fromMemento != null || redoAnimation != null) {
+			new SequentialTransition => [
+				if(fromMemento != null)
+					children += new ViewportTransition(context.root, fromMemento, context.defaultUndoDuration)
+				children += redoAnimation
+			]
+		} else {
+			null
+		}
 	}
 
 	def Animation createRedoAnimation(CommandContext context)

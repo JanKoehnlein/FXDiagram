@@ -22,6 +22,12 @@ public abstract class LazyCommand implements AnimationCommand {
     return _clearRedoStackOnExecute;
   }
   
+  public void skipViewportRestore() {
+    if (this.delegate!=null) {
+      this.delegate.skipViewportRestore();
+    }
+  }
+  
   public Animation getExecuteAnimation(final CommandContext context) {
     Animation _xblockexpression = null;
     {

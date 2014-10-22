@@ -7,4 +7,5 @@ interface AnimationCommand {
 	def Animation getUndoAnimation(CommandContext context)
 	def Animation getRedoAnimation(CommandContext context)
 	def boolean clearRedoStackOnExecute()
+	def void skipViewportRestore()
 }

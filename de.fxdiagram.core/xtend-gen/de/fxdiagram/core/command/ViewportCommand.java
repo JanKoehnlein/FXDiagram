@@ -19,6 +19,9 @@ public abstract class ViewportCommand implements AnimationCommand {
     return false;
   }
   
+  public void skipViewportRestore() {
+  }
+  
   public abstract ViewportTransition createViewportTransiton(final CommandContext context);
   
   public Animation getExecuteAnimation(final CommandContext context) {
@@ -37,6 +40,8 @@ public abstract class ViewportCommand implements AnimationCommand {
           _xblockexpression_1 = transition;
         }
         _xifexpression = _xblockexpression_1;
+      } else {
+        _xifexpression = null;
       }
       _xblockexpression = _xifexpression;
     }

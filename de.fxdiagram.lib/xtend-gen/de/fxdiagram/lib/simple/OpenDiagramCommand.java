@@ -32,4 +32,7 @@ public class OpenDiagramCommand implements AnimationCommand {
   public boolean clearRedoStackOnExecute() {
     return true;
   }
+  
+  public void skipViewportRestore() {
+  }
 }

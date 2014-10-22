@@ -12,4 +12,6 @@ public interface AnimationCommand {
   public abstract Animation getRedoAnimation(final CommandContext context);
   
   public abstract boolean clearRedoStackOnExecute();
+  
+  public abstract void skipViewportRestore();
 }

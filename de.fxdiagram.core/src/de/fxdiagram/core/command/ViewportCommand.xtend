@@ -12,6 +12,9 @@ abstract class ViewportCommand implements AnimationCommand {
 		false
 	}
 	
+	override skipViewportRestore() {
+	}
+	
 	abstract def ViewportTransition createViewportTransiton(CommandContext context)
 		
 	override getExecuteAnimation(CommandContext context) {
@@ -20,6 +23,8 @@ abstract class ViewportCommand implements AnimationCommand {
 			fromMemento =  transition.from
 			toMemento =  transition.to
 			transition
+		} else {
+			null
 		}
 	}
 	

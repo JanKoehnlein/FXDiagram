@@ -16,14 +16,14 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.command.LazyCommand
 import de.fxdiagram.core.command.MoveCommand
+import de.fxdiagram.core.command.ParallelAnimationCommand
 import java.util.Map
 import javafx.geometry.Point2D
 import javafx.util.Duration
 
 import static de.fxdiagram.core.XConnection.Kind.*
-import de.fxdiagram.core.command.LazyCommand
-import de.fxdiagram.core.command.ParallelAnimationCommand
 
 class Layouter { 
 

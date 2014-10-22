@@ -258,6 +258,9 @@ class OpenDiagramCommand implements AnimationCommand {
 	override clearRedoStackOnExecute() {
 		true
 	}
+
+	override skipViewportRestore() {
+	}
 } 
 
 class CloseDiagramCommand implements AnimationCommand {
@@ -283,4 +286,8 @@ class CloseDiagramCommand implements AnimationCommand {
 	override clearRedoStackOnExecute() {
 		true
 	}
+	
+	override skipViewportRestore() {
+	}
+	
 } 
