@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.xbase;
+package de.fxdiagram.lib.nodes;
 
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XNode;

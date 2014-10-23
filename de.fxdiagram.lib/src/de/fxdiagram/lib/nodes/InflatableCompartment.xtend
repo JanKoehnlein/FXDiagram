@@ -1,4 +1,4 @@
-package de.fxdiagram.xtext.xbase
+package de.fxdiagram.lib.nodes
 
 import de.fxdiagram.core.XNode
 import java.util.List

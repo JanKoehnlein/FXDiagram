@@ -2,6 +2,7 @@ package de.fxdiagram.xtext.xbase
 
 import com.google.inject.Inject
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.lib.nodes.InflatableCompartment
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.xtext.glue.shapes.BaseNode
 import javafx.geometry.Insets
@@ -13,10 +14,10 @@ import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import org.eclipse.xtext.common.types.JvmDeclaredType
+import org.eclipse.xtext.xbase.validation.UIStrings
 
 import static extension de.fxdiagram.core.extensions.TextExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import org.eclipse.xtext.xbase.validation.UIStrings
 
 @ModelNode
 class JvmTypeNode extends BaseNode<JvmDeclaredType> {
