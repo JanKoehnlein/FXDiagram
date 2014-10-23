@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.buttons;
 
+import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
@@ -35,8 +36,6 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -48,6 +47,8 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   private double border;
   
   private ObservableList<RapidButton> buttonsProperty = FXCollections.<RapidButton>observableArrayList();
+  
+  private final Map<Side, Pane> pos2group = Collections.<Side, Pane>unmodifiableMap(CollectionLiterals.<Side, Pane>newHashMap(Pair.<Side, HBox>of(Side.TOP, new HBox()), Pair.<Side, HBox>of(Side.BOTTOM, new HBox()), Pair.<Side, VBox>of(Side.LEFT, new VBox()), Pair.<Side, VBox>of(Side.RIGHT, new VBox())));
   
   private Group allButtons = new Group();
   
@@ -72,6 +73,9 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   public RapidButtonBehavior(final HOST host) {
     super(host);
     this.allButtons.setVisible(false);
+    ObservableList<Node> _children = this.allButtons.getChildren();
+    Collection<Pane> _values = this.pos2group.values();
+    Iterables.<Node>addAll(_children, _values);
   }
   
   public boolean add(final RapidButton button) {
@@ -107,6 +111,7 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     };
     InitializingListListener<RapidButton> _doubleArrow = ObjectExtensions.<InitializingListListener<RapidButton>>operator_doubleArrow(_initializingListListener, _function);
     CoreExtensions.<RapidButton>addInitializingListener(this.buttonsProperty, _doubleArrow);
+    this.updateButtons();
     this.layout();
     HOST _host_1 = this.getHost();
     Node _node = _host_1.getNode();
@@ -156,6 +161,7 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
       boolean _isVisible = this.allButtons.isVisible();
       boolean _not = (!_isVisible);
       if (_not) {
+        this.updateButtons();
         this.layout();
       }
       final Procedure1<Group> _function = new Procedure1<Group>() {
@@ -178,47 +184,46 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     return this.getClass();
   }
   
+  protected void updateButtons() {
+    for (final RapidButton button : this.buttonsProperty) {
+      {
+        Side _position = button.getPosition();
+        Pane _get = this.pos2group.get(_position);
+        final ObservableList<Node> group = _get.getChildren();
+        RapidButtonAction _action = button.getAction();
+        HOST _host = this.getHost();
+        boolean _isEnabled = _action.isEnabled(_host);
+        if (_isEnabled) {
+          boolean _contains = group.contains(button);
+          boolean _not = (!_contains);
+          if (_not) {
+            group.add(button);
+          }
+        } else {
+          boolean _contains_1 = group.contains(button);
+          if (_contains_1) {
+            group.remove(button);
+          }
+        }
+      }
+    }
+  }
+  
   protected void layout() {
     HOST _host = this.getHost();
     HOST _host_1 = this.getHost();
     Bounds _layoutBounds = _host_1.getLayoutBounds();
     final Bounds hostBounds = CoreExtensions.localToDiagram(_host, _layoutBounds);
     final Point2D hostCenter = BoundsExtensions.center(hostBounds);
-    HBox _hBox = new HBox();
-    Pair<Side, HBox> _mappedTo = Pair.<Side, HBox>of(Side.TOP, _hBox);
-    HBox _hBox_1 = new HBox();
-    Pair<Side, HBox> _mappedTo_1 = Pair.<Side, HBox>of(Side.BOTTOM, _hBox_1);
-    VBox _vBox = new VBox();
-    Pair<Side, VBox> _mappedTo_2 = Pair.<Side, VBox>of(Side.LEFT, _vBox);
-    VBox _vBox_1 = new VBox();
-    Pair<Side, VBox> _mappedTo_3 = Pair.<Side, VBox>of(Side.RIGHT, _vBox_1);
-    final Map<Side, Pane> pos2group = Collections.<Side, Pane>unmodifiableMap(CollectionLiterals.<Side, Pane>newHashMap(_mappedTo, _mappedTo_1, _mappedTo_2, _mappedTo_3));
-    ObservableList<Node> _children = this.allButtons.getChildren();
-    Collection<Pane> _values = pos2group.values();
-    _children.setAll(_values);
-    final Function1<RapidButton, Boolean> _function = new Function1<RapidButton, Boolean>() {
-      public Boolean apply(final RapidButton it) {
-        RapidButtonAction _action = it.getAction();
-        return Boolean.valueOf(_action.isEnabled(it));
-      }
-    };
-    Iterable<RapidButton> _filter = IterableExtensions.<RapidButton>filter(this.buttonsProperty, _function);
-    for (final RapidButton button : _filter) {
-      Side _position = button.getPosition();
-      Pane _get = pos2group.get(_position);
-      ObservableList<Node> _children_1 = _get.getChildren();
-      _children_1.add(button);
-    }
-    Set<Map.Entry<Side, Pane>> _entrySet = pos2group.entrySet();
+    Set<Map.Entry<Side, Pane>> _entrySet = this.pos2group.entrySet();
     for (final Map.Entry<Side, Pane> entry : _entrySet) {
       {
         final Side pos = entry.getKey();
         final Pane group = entry.getValue();
-        group.layout();
         final Bounds groupBounds = group.getBoundsInLocal();
         Point2D _center = BoundsExtensions.center(groupBounds);
         final Point2D centered = Point2DExtensions.operator_minus(hostCenter, _center);
-        final Procedure1<Pane> _function_1 = new Procedure1<Pane>() {
+        final Procedure1<Pane> _function = new Procedure1<Pane>() {
           public void apply(final Pane it) {
             double _x = centered.getX();
             double _switchResult = (double) 0;
@@ -276,7 +281,7 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
             it.setLayoutY(_plus_3);
           }
         };
-        ObjectExtensions.<Pane>operator_doubleArrow(group, _function_1);
+        ObjectExtensions.<Pane>operator_doubleArrow(group, _function);
       }
     }
   }

@@ -1,9 +1,11 @@
 package de.fxdiagram.xtext.xbase
 
 import com.google.inject.Inject
+import java.util.Map
 import org.eclipse.jdt.core.IJavaElement
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.common.types.JvmField
+import org.eclipse.xtext.common.types.JvmOperation
 import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.common.types.ui.refactoring.participant.JvmElementFinder
 import org.eclipse.xtext.common.types.util.Primitives
@@ -27,6 +29,46 @@ class JvmDomainUtil {
 		owner.declaredFields.filter[isAttributeType]
 	}
 
+	def getMethods(JvmDeclaredType owner) {
+		val fields = owner.declaredFields.toMap[simpleName]
+		owner.declaredOperations.filter [
+			!isSetter(fields) && !isGetter(fields)
+		]
+	}
+	
+	def getSignature(JvmField it) {
+		'''«visibility.toString.toLowerCase» «
+			IF static»static «ENDIF»«
+			IF final»final «ENDIF»«
+			IF volatile»volatile «ENDIF»«
+			type.qualifiedName» «simpleName»'''
+		.toString		
+	}
+		
+	protected def isSetter(JvmOperation it, Map<String, JvmField> fields) {
+		if(simpleName.startsWith('set') && parameters.size == 1) {
+			val field = fields.get(simpleName.substring(3).toFirstLower)
+			val fieldType = field?.type?.lightweight
+			if(fieldType!=null) 
+				return fieldType.isAssignableFrom(parameters.head.parameterType.lightweight)
+		}
+		return false
+	}
+
+	protected def isGetter(JvmOperation it, Map<String, JvmField> fields) {
+		if(parameters.size == 0 && returnType != null) {
+			val field = 
+				if(simpleName.startsWith('get'))
+					fields.get(simpleName.substring(3).toFirstLower)
+				else if(simpleName.startsWith('is')) 
+					fields.get(simpleName.substring(2).toFirstLower)
+				else return false
+			return returnType.lightweight.isAssignableFrom(field?.type.lightweight)
+		} else {
+			return false
+		} 
+	}
+
 	def getReferences(JvmDeclaredType owner) {
 		owner.declaredFields.filter[!isAttributeType]
 	}
@@ -37,7 +79,7 @@ class JvmDomainUtil {
 	}
 
 	def getComponentType(JvmTypeReference it) {
-		val type = new StandardTypeReferenceOwner(services, it).toLightweightTypeReference(it)
+		val type = lightweight
 		val componentType = if (type.isArray)
 				type.componentType
 			else if (type.isSubtypeOf(Iterable) && !type.typeArguments.empty)
@@ -45,6 +87,13 @@ class JvmDomainUtil {
 			else
 				type
 		return componentType.toJavaCompliantTypeReference
+	}
+	
+	protected def getLightweight(JvmTypeReference it) {
+		return if(it == null)
+				null 
+			else 
+		 		new StandardTypeReferenceOwner(services, it).toLightweightTypeReference(it)
 	}
 	
 	def getJvmType(IJavaElement javaElement) {

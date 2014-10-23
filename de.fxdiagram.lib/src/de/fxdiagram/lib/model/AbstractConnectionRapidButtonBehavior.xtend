@@ -35,7 +35,7 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 					host.root.currentTool = chooser
 				}
 				
-				override isEnabled(RapidButton button) {
+				override isEnabled(XNode host) {
 					availableChoiceKeys.empty
 				}
 			}

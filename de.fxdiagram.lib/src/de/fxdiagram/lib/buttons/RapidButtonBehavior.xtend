@@ -25,6 +25,13 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 
 	ObservableList<RapidButton> buttonsProperty = observableArrayList
 	
+	val pos2group = #{
+		TOP -> new HBox,
+		BOTTOM -> new HBox,
+		LEFT -> new VBox,
+		RIGHT -> new VBox			
+	} 
+	
 	Group allButtons = new Group
 	
 	val fadeTransition = new FadeTransition => [
@@ -41,6 +48,7 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 	new(HOST host) {
 		super(host)
 		allButtons.visible = false
+		allButtons.children += pos2group.values
 	}
 
 	def add(RapidButton button) {
@@ -59,6 +67,7 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 				button.addEventHandler(MouseEvent.MOUSE_CLICKED, [ allButtons.visible = false ])
 			]
 		])
+		updateButtons
 		layout
 		host.node.addEventHandler(MouseEvent.MOUSE_ENTERED, [ show ])
 		host.node.addEventHandler(MouseEvent.MOUSE_EXITED, [ fade ])
@@ -73,8 +82,10 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 	
 	def show() {
 		fadeTransition.stop
-		if(!allButtons.visible) 
+		if(!allButtons.visible)  {
+			updateButtons			
 			layout
+		}
 		allButtons => [
 			visible = true
 			opacity = 1.0
@@ -89,23 +100,25 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 		class
 	}
 	
+	protected def updateButtons() {
+		for(button: buttonsProperty) {
+			val group = pos2group.get(button.position).children
+			if(button.action.isEnabled(host)) {
+				if(!group.contains(button)) 
+					group += button
+			} else {
+				if(group.contains(button))
+					group -= button
+			}
+		} 
+	}
+	
 	protected def layout() {
 		val hostBounds = host.localToDiagram(host.layoutBounds)
 		val hostCenter = hostBounds.center
-		val pos2group = #{
-			TOP -> new HBox,
-			BOTTOM -> new HBox,
-			LEFT -> new VBox,
-			RIGHT -> new VBox			
-		} 
-		allButtons.children.setAll(pos2group.values)
-		for(button: buttonsProperty.filter[action.isEnabled(it)]) 
-			pos2group.get(button.position).children += button
-		
 		for(entry: pos2group.entrySet) {
 			val pos = entry.key
 			val group = entry.value
-			group.layout
 			val groupBounds = group.boundsInLocal
 			val centered = hostCenter - groupBounds.center
 			group => [

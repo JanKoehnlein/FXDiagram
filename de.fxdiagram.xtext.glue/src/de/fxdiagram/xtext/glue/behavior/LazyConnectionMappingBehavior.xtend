@@ -58,8 +58,7 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 		this.hostIsSource = hostIsSource
 	}
 	
-	override isEnabled(RapidButton button) {
-		val host = button.host
+	override isEnabled(XNode host) {
 		val hostDescriptor = host.domainObject as AbstractXtextDescriptor<ARG>
 		val diagram = host.diagram
 		if(diagram == null) 

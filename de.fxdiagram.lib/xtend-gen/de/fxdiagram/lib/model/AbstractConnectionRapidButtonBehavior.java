@@ -57,7 +57,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
           _root.setCurrentTool(chooser);
         }
         
-        public boolean isEnabled(final RapidButton button) {
+        public boolean isEnabled(final XNode host) {
           return AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
         }
       };

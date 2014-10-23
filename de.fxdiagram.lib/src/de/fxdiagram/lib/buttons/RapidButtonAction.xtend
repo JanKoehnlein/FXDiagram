@@ -1,8 +1,10 @@
 package de.fxdiagram.lib.buttons
 
+import de.fxdiagram.core.XNode
+
 abstract class RapidButtonAction {
 	
 	def void perform(RapidButton button)
 	 
-	def isEnabled(RapidButton button) { true }
+	def isEnabled(XNode host) { true }
 }

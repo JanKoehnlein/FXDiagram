@@ -44,8 +44,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     this.hostIsSource = hostIsSource;
   }
   
-  public boolean isEnabled(final RapidButton button) {
-    final XNode host = button.getHost();
+  public boolean isEnabled(final XNode host) {
     DomainObjectDescriptor _domainObject = host.getDomainObject();
     final AbstractXtextDescriptor<ARG> hostDescriptor = ((AbstractXtextDescriptor<ARG>) _domainObject);
     final XDiagram diagram = CoreExtensions.getDiagram(host);
