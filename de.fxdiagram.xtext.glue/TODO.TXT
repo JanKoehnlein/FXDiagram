@@ -1,7 +1,3 @@
-VERY HIGH
-- colors
-- sorting in context menu
-
 HIGH
 -make sequential animation command work
 -non-Xtext sources

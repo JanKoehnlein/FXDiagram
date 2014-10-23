@@ -17,7 +17,7 @@
    </extension>
    <extension point="org.eclipse.ui.menus">
         <menuContribution
-            locationURI="popup:#TextEditorContext?after=group.edit">
+            locationURI="popup:#TextEditorContext?before=group.edit">
              <command
                    commandId="de.fxdiagram.xtext.xbase.showInJvmDiagramCommand"
                    icon="icons/FXDiagram.png"
@@ -26,7 +26,7 @@
          	</command>  
          </menuContribution>
 		<menuContribution
-        	locationURI="popup:org.eclipse.jdt.ui.CompilationUnitEditor.EditorContext?after=additions"
+        	locationURI="popup:org.eclipse.jdt.ui.CompilationUnitEditor.EditorContext?before=group.edit"
         	allPopups="true">
         	<command
                    commandId="de.fxdiagram.xtext.xbase.showInJvmDiagramCommand"
