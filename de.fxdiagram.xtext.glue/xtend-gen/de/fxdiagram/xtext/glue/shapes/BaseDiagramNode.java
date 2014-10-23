@@ -14,11 +14,16 @@ import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
+import java.util.Collections;
 import java.util.List;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
@@ -45,11 +50,15 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
   public void initializeGraphics() {
     super.initializeGraphics();
     RectangleBorderPane _pane = this.getPane();
-    _pane.setBackgroundPaint(Color.BLANCHEDALMOND);
-    RectangleBorderPane _pane_1 = this.getPane();
-    _pane_1.setBorderRadius(6);
-    RectangleBorderPane _pane_2 = this.getPane();
-    _pane_2.setBackgroundRadius(6);
+    Color _rgb = Color.rgb(242, 236, 181);
+    Stop _stop = new Stop(0, _rgb);
+    Color _rgb_1 = Color.rgb(255, 248, 202);
+    Stop _stop_1 = new Stop(1, _rgb_1);
+    LinearGradient _linearGradient = new LinearGradient(
+      0, 0, 1, 1, 
+      true, CycleMethod.NO_CYCLE, 
+      Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop, _stop_1)));
+    _pane.setBackgroundPaint(_linearGradient);
   }
   
   protected AbstractXtextDescriptor<T> getDescriptor() {

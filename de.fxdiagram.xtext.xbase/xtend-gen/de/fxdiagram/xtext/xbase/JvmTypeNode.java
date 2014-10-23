@@ -11,6 +11,7 @@ import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
+import java.util.Collections;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -19,6 +20,10 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -27,6 +32,7 @@ import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmOperation;
 import org.eclipse.xtext.common.types.JvmTypeReference;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -51,12 +57,21 @@ public class JvmTypeNode extends BaseNode<JvmDeclaredType> {
   }
   
   protected Node createNode() {
-    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+    Node _createNode = super.createNode();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
-        it.setBorderRadius(6);
-        it.setBackgroundRadius(6);
+        Color _rgb = Color.rgb(225, 158, 168);
+        Stop _stop = new Stop(0, _rgb);
+        Color _rgb_1 = Color.rgb(255, 193, 201);
+        Stop _stop_1 = new Stop(1, _rgb_1);
+        LinearGradient _linearGradient = new LinearGradient(
+          0, 0, 1, 1, 
+          true, CycleMethod.NO_CYCLE, 
+          Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop, _stop_1)));
+        it.setBackgroundPaint(_linearGradient);
         ObservableList<Node> _children = it.getChildren();
+        _children.clear();
+        ObservableList<Node> _children_1 = it.getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
           public void apply(final VBox it) {
@@ -93,10 +108,11 @@ public class JvmTypeNode extends BaseNode<JvmDeclaredType> {
           }
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-        _children.add((JvmTypeNode.this.contentArea = _doubleArrow));
+        _children_1.add((JvmTypeNode.this.contentArea = _doubleArrow));
       }
     };
-    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
+      ((RectangleBorderPane) _createNode), _function);
   }
   
   public void activate() {

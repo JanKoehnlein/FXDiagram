@@ -43,12 +43,12 @@ public class EntityNode extends BaseNode<Entity> {
   }
   
   protected Node createNode() {
-    RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
+    Node _createNode = super.createNode();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
       public void apply(final RectangleBorderPane it) {
-        it.setBorderRadius(6);
-        it.setBackgroundRadius(6);
         ObservableList<Node> _children = it.getChildren();
+        _children.clear();
+        ObservableList<Node> _children_1 = it.getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
           public void apply(final VBox it) {
@@ -129,10 +129,11 @@ public class EntityNode extends BaseNode<Entity> {
           }
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-        _children.add(_doubleArrow);
+        _children_1.add(_doubleArrow);
       }
     };
-    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
+      ((RectangleBorderPane) _createNode), _function);
   }
   
   /**

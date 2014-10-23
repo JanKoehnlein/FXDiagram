@@ -18,7 +18,7 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 
 	@FxProperty double borderWidth = 1.2
 	
-	@FxProperty double borderRadius = 12.0
+	@FxProperty double borderRadius = 6.0
 
 	@FxProperty Insets borderInsets = new Insets(0.9, 0.9, 0.9, 0.9)
 
@@ -26,7 +26,7 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 
 	@FxProperty Paint backgroundPaint = DEFAULT_BACKGROUND
 	
-	@FxProperty double backgroundRadius = 12.0
+	@FxProperty double backgroundRadius = 6.0
 
 	public static val DEFAULT_BACKGROUND = new LinearGradient(
 		0, 0, 1, 1, 

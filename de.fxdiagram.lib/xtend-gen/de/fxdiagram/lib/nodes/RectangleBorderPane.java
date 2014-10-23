@@ -197,7 +197,7 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   private SimpleDoubleProperty borderRadiusProperty = new SimpleDoubleProperty(this, "borderRadius",_initBorderRadius());
   
   private static final double _initBorderRadius() {
-    return 12.0;
+    return 6.0;
   }
   
   public double getBorderRadius() {
@@ -270,7 +270,7 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   private SimpleDoubleProperty backgroundRadiusProperty = new SimpleDoubleProperty(this, "backgroundRadius",_initBackgroundRadius());
   
   private static final double _initBackgroundRadius() {
-    return 12.0;
+    return 6.0;
   }
   
   public double getBackgroundRadius() {

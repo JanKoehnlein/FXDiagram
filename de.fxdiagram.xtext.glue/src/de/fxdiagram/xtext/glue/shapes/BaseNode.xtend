@@ -4,9 +4,14 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.simple.SimpleNode
 import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
+import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
+import de.fxdiagram.lib.nodes.RectangleBorderPane
+import javafx.scene.paint.LinearGradient
+import javafx.scene.paint.CycleMethod
+import javafx.scene.paint.Stop
+import javafx.scene.paint.Color
 
 @ModelNode
 class BaseNode<T> extends SimpleNode {
@@ -22,6 +27,19 @@ class BaseNode<T> extends SimpleNode {
 	new(AbstractXtextDescriptor<T> descriptor) {
 		super(descriptor)
 		descriptor.injectMembers(this)
+	}
+	
+	
+	override protected createNode() {
+		val pane = super.createNode() as RectangleBorderPane
+		pane.backgroundPaint = new LinearGradient(
+			0, 0, 1, 1, 
+			true, CycleMethod.NO_CYCLE,
+			#[
+				new Stop(0, Color.rgb(158, 188, 227)), 
+				new Stop(1, Color.rgb(220, 230, 255))
+			]) 
+		pane
 	}
 	
 	protected def getDescriptor() {

@@ -25,9 +25,8 @@ class EntityNode extends BaseNode<Entity> {
 	}
 	
 	override protected createNode() {
-		new RectangleBorderPane => [
-			borderRadius = 6
-			backgroundRadius = 6
+		super.createNode as RectangleBorderPane => [
+			children.clear
 			children += new VBox => [
 				padding = new Insets(10, 20, 10, 20)
 				alignment = Pos.CENTER
@@ -50,7 +49,6 @@ class EntityNode extends BaseNode<Entity> {
 				]
 			]
 		]
- 
 	}
 	
 }

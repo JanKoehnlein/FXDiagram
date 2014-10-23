@@ -8,6 +8,9 @@ import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 import javafx.scene.paint.Color
+import javafx.scene.paint.CycleMethod
+import javafx.scene.paint.LinearGradient
+import javafx.scene.paint.Stop
 
 @ModelNode
 class BaseDiagramNode<T> extends OpenableDiagramNode {
@@ -27,9 +30,13 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 
 	override initializeGraphics() {
 		super.initializeGraphics()
-		pane.backgroundPaint = Color.BLANCHEDALMOND
-		pane.borderRadius = 6
-		pane.backgroundRadius = 6
+		pane.backgroundPaint = new LinearGradient(
+			0, 0, 1, 1, 
+			true, CycleMethod.NO_CYCLE,
+			#[
+				new Stop(0, Color.rgb(242,236,181)), 
+				new Stop(1, Color.rgb(255,248,202))
+			]) 
 	}
 
 	protected def getDescriptor() {
