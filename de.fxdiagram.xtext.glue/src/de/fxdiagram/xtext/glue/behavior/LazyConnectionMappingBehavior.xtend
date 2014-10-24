@@ -21,6 +21,27 @@ class LazyConnectionMappingBehavior<ARG> extends RapidButtonBehavior<XNode> {
 	
 	List<LazyConnectionRapidButtonAction<?, ARG>> actions = newArrayList
 
+	static def <T> addLazyBehavior(XNode node, AbstractXtextDescriptor<T> descriptor) {
+		if(descriptor.mapping instanceof NodeMapping<?>) {
+			val nodeMapping = descriptor.mapping as NodeMapping<T>
+			var LazyConnectionMappingBehavior<T> lazyBehavior = null 
+			val lazyOutgoing = nodeMapping.outgoing.filter[lazy]
+			if(!lazyOutgoing.empty) {
+				lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(node)
+				for(out : lazyOutgoing) 
+					lazyBehavior.addConnectionMappingCall(out, new XDiagramConfigInterpreter, true)
+			}
+			val lazyIncoming = nodeMapping.incoming.filter[lazy]
+			if(!lazyIncoming.empty) {
+				lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(node)
+				for(in : lazyIncoming) 
+					lazyBehavior.addConnectionMappingCall(in, new XDiagramConfigInterpreter, false)
+			}
+			if(lazyBehavior != null)
+				node.addBehavior(lazyBehavior)
+		}
+	}
+
 	new(XNode host) {
 		super(host)
 	}

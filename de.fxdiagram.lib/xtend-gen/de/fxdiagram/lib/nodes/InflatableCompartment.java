@@ -1,11 +1,12 @@
 package de.fxdiagram.lib.nodes;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.TextExtensions;
 import java.util.Collections;
-import java.util.List;
+import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -28,7 +29,6 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -38,7 +38,7 @@ public class InflatableCompartment extends Parent {
   
   private double deflatedWidth;
   
-  private List<Text> labels = CollectionLiterals.<Text>newArrayList();
+  private VBox labelContainer = new VBox();
   
   public InflatableCompartment(final XNode containerNode, final double deflatedWidth) {
     this.containerNode = containerNode;
@@ -47,18 +47,25 @@ public class InflatableCompartment extends Parent {
   }
   
   public boolean add(final Text label) {
-    return this.labels.add(label);
+    ObservableList<Node> _children = this.labelContainer.getChildren();
+    return _children.add(label);
+  }
+  
+  protected Iterable<Text> getLabels() {
+    ObservableList<Node> _children = this.labelContainer.getChildren();
+    return Iterables.<Text>filter(_children, Text.class);
   }
   
   public SequentialTransition inflate() {
     SequentialTransition _xblockexpression = null;
     {
+      Iterable<Text> _labels = this.getLabels();
       final Function1<Text, Dimension2D> _function = new Function1<Text, Dimension2D>() {
         public Dimension2D apply(final Text it) {
           return TextExtensions.getOfflineDimension(it);
         }
       };
-      List<Dimension2D> _map = ListExtensions.<Text, Dimension2D>map(this.labels, _function);
+      Iterable<Dimension2D> _map = IterableExtensions.<Text, Dimension2D>map(_labels, _function);
       Dimension2D _dimension2D = new Dimension2D(this.deflatedWidth, 0);
       Iterable<Dimension2D> _plus = Iterables.<Dimension2D>concat(_map, Collections.<Dimension2D>unmodifiableList(CollectionLiterals.<Dimension2D>newArrayList(_dimension2D)));
       final Function2<Dimension2D, Dimension2D, Dimension2D> _function_1 = new Function2<Dimension2D, Dimension2D, Dimension2D>() {
@@ -83,7 +90,8 @@ public class InflatableCompartment extends Parent {
       ObservableList<Node> _children = this.getChildren();
       _children.add(spacer);
       double _height = maxLabelSize.getHeight();
-      int _size = this.labels.size();
+      Iterable<Text> _labels_1 = this.getLabels();
+      int _size = IterableExtensions.size(_labels_1);
       final double allChildrenHeight = (_height * _size);
       double _layoutX = this.containerNode.getLayoutX();
       double _switchResult = (double) 0;
@@ -154,18 +162,14 @@ public class InflatableCompartment extends Parent {
               _keyFrames.add(_keyFrame);
               final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
                 public void handle(final ActionEvent it) {
-                  ObservableList<Node> _children = InflatableCompartment.this.getChildren();
-                  _children.remove(spacer);
-                  ObservableList<Node> _children_1 = InflatableCompartment.this.getChildren();
-                  VBox _vBox = new VBox();
-                  final Procedure1<VBox> _function = new Procedure1<VBox>() {
-                    public void apply(final VBox it) {
-                      ObservableList<Node> _children = it.getChildren();
-                      Iterables.<Node>addAll(_children, InflatableCompartment.this.labels);
+                  ObservableList<Node> _children = InflatableCompartment.this.labelContainer.getChildren();
+                  final Consumer<Node> _function = new Consumer<Node>() {
+                    public void accept(final Node it) {
+                      it.setOpacity(0);
                     }
                   };
-                  VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-                  _children_1.add(_doubleArrow);
+                  _children.forEach(_function);
+                  InflatableCompartment.this.populate();
                   Parent _parent = InflatableCompartment.this.getParent();
                   _parent.requestLayout();
                   Parent _parent_1 = InflatableCompartment.this.getParent();
@@ -178,6 +182,7 @@ public class InflatableCompartment extends Parent {
           Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function);
           _children.add(_doubleArrow);
           ObservableList<Animation> _children_1 = it.getChildren();
+          Iterable<Text> _labels = InflatableCompartment.this.getLabels();
           final Function1<Text, FadeTransition> _function_1 = new Function1<Text, FadeTransition>() {
             public FadeTransition apply(final Text label) {
               FadeTransition _fadeTransition = new FadeTransition();
@@ -193,7 +198,7 @@ public class InflatableCompartment extends Parent {
               return ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
             }
           };
-          List<Animation> _map = ListExtensions.<Text, Animation>map(InflatableCompartment.this.labels, _function_1);
+          Iterable<Animation> _map = IterableExtensions.<Text, Animation>map(_labels, _function_1);
           Iterables.<Animation>addAll(_children_1, _map);
           it.play();
         }
@@ -201,5 +206,17 @@ public class InflatableCompartment extends Parent {
       _xblockexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function_3);
     }
     return _xblockexpression;
+  }
+  
+  public void populate() {
+    Parent _parent = this.labelContainer.getParent();
+    boolean _equals = Objects.equal(_parent, this);
+    if (_equals) {
+      return;
+    }
+    ObservableList<Node> _children = this.getChildren();
+    _children.clear();
+    ObservableList<Node> _children_1 = this.getChildren();
+    _children_1.add(this.labelContainer);
   }
 }

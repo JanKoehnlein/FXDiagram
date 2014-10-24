@@ -1,7 +1,6 @@
 package de.fxdiagram.lib.nodes
 
 import de.fxdiagram.core.XNode
-import java.util.List
 import javafx.animation.FadeTransition
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
@@ -22,8 +21,7 @@ class InflatableCompartment extends Parent {
 	
 	XNode containerNode
 	double deflatedWidth
-	
-	List<Text> labels = newArrayList
+	VBox labelContainer = new VBox
 	
 	new(XNode containerNode, double deflatedWidth) {
 		this.containerNode = containerNode
@@ -32,7 +30,11 @@ class InflatableCompartment extends Parent {
 	}
 	
 	def add(Text label) {
-		labels += label
+		labelContainer.children += label
+	}
+	
+	protected def getLabels() {
+		labelContainer.children.filter(Text)
 	}
 	
 	def inflate() {
@@ -73,10 +75,8 @@ class InflatableCompartment extends Parent {
 					new KeyValue(spacer.heightProperty, allChildrenHeight)
 				) 
 				onFinished = [
-					children -= spacer
-					children += new VBox => [
-						children += labels
-					]
+					labelContainer.children.forEach[ opacity = 0 ]
+					populate
 					parent.requestLayout
 					parent.layout
 				]
@@ -91,5 +91,12 @@ class InflatableCompartment extends Parent {
 			]
 			play
 		]
+	}
+	
+	def populate() {
+		if(labelContainer.parent == this)
+			return;
+		children.clear
+		children += labelContainer
 	}
 }
