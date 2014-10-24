@@ -12,10 +12,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -31,7 +30,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.IGrammarAccess;
-import org.eclipse.xtext.common.types.TypesPackage;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
@@ -70,14 +68,12 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
               final EObject selectedElement = Action.this.eObjectAtOffsetHelper.resolveElementAt(it, _offset);
               boolean _notEquals = (!Objects.equal(selectedElement, null));
               if (_notEquals) {
-                EClass _eClass = selectedElement.eClass();
-                EPackage _ePackage = _eClass.getEPackage();
-                boolean _equals = Objects.equal(_ePackage, TypesPackage.eINSTANCE);
-                if (_equals) {
-                  ShowInJvmDiagramHandler.showElement(selectedElement, editor);
+                final EObject primary = Action.this._iJvmModelAssociations.getPrimaryJvmElement(selectedElement);
+                boolean _notEquals_1 = (!Objects.equal(primary, null));
+                if (_notEquals_1) {
+                  ShowInJvmDiagramHandler.showElement(primary, editor);
                 } else {
-                  EObject _primaryJvmElement = Action.this._iJvmModelAssociations.getPrimaryJvmElement(selectedElement);
-                  ShowInJvmDiagramHandler.showElement(_primaryJvmElement, editor);
+                  ShowInJvmDiagramHandler.showElement(selectedElement, editor);
                 }
               }
               _xblockexpression = null;
@@ -134,8 +130,14 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
           PolymorphicDispatcher<IJavaElement> _createForSingleTarget = PolymorphicDispatcher.<IJavaElement>createForSingleTarget("getElementAt", 1, 1, editor);
           int _offset = selection.getOffset();
           final IJavaElement javaElement = _createForSingleTarget.invoke(Integer.valueOf(_offset));
-          final IJavaElement javaType = javaElement.getAncestor(IJavaElement.TYPE);
-          ShowInJvmDiagramHandler.showElement(javaType, editor);
+          int _xifexpression = (int) 0;
+          if ((javaElement instanceof PackageDeclaration)) {
+            _xifexpression = IJavaElement.PACKAGE_FRAGMENT;
+          } else {
+            _xifexpression = IJavaElement.TYPE;
+          }
+          final IJavaElement javaElementToShow = javaElement.getAncestor(_xifexpression);
+          ShowInJvmDiagramHandler.showElement(javaElementToShow, editor);
         }
       }
     } catch (final Throwable _t) {

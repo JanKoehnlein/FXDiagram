@@ -8,10 +8,13 @@ import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
+import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.ESetting
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
+import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode
 import javafx.scene.paint.Color
+import org.eclipse.jdt.core.IType
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.common.types.JvmField
 import org.eclipse.xtext.common.types.JvmTypeReference
@@ -19,11 +22,17 @@ import org.eclipse.xtext.common.types.JvmTypeReference
 import static org.eclipse.xtext.common.types.TypesPackage.Literals.*
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
-import org.eclipse.jdt.core.IType
+import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration
+import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.resource.IResourceServiceProvider
+import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 
 class JvmClassDiagramConfig extends AbstractDiagramConfig {
 
 	@Inject extension JvmDomainUtil
+	
+	@Inject extension IResourceServiceProvider.Registry
 
 	val typeNode = new NodeMapping<JvmDeclaredType>(this, 'typeNode') {
 		override createNode(AbstractXtextDescriptor<JvmDeclaredType> descriptor) {
@@ -74,10 +83,37 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 			typeNode.target[((target as JvmTypeReference).type as JvmDeclaredType).originalJvmType]
 		}
 	}
+	
+	val packageDiagram = new DiagramMapping<PackageDeclaration>(this, 'packageDiagram') {
+		override calls() {
+			typeNode.nodeForEach[elements.filter(Entity).map[primaryJvmElement].filter(JvmDeclaredType)]
+			packageNode.nodeForEach[elements.filter(PackageDeclaration)]
+		}
+	}
+	
+	val packageNode = new NodeMapping<PackageDeclaration>(this, 'packageNode') {
+		override createNode(AbstractXtextDescriptor<PackageDeclaration> descriptor) {
+			 new BaseDiagramNode(descriptor) 	
+		}
+		
+		override calls() {
+			packageDiagram.nestedDiagramFor[ it ]			
+		}
+	}
 
+	protected def getPrimaryJvmElement(EObject element) {
+		getResourceServiceProvider(element.eResource.URI)
+			?.get(IJvmModelAssociations)
+			?.getPrimaryJvmElement(element)
+	}
+	
 	override protected <ARG> entryCalls(ARG domainArgument, extension MappingAcceptor<ARG> acceptor) {
-		if (domainArgument instanceof JvmDeclaredType || domainArgument instanceof IType)
-			acceptor.add(typeNode)
+		switch domainArgument {
+			JvmDeclaredType, IType:
+				acceptor.add(typeNode)
+		 	PackageDeclaration:
+		 		acceptor.add(packageNode)
+		}
 	}
 	
 	override protected createDomainObjectProvider() {

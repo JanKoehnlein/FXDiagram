@@ -1,5 +1,6 @@
 package de.fxdiagram.xtext.xbase;
 
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
@@ -10,11 +11,13 @@ import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
+import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.ESetting;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
+import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
@@ -25,15 +28,24 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.common.types.TypesPackage;
+import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
+import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
+import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
+import org.eclipse.xtext.resource.IResourceServiceProvider;
+import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -42,6 +54,10 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
   @Inject
   @Extension
   private JvmDomainUtil _jvmDomainUtil;
+  
+  @Inject
+  @Extension
+  private IResourceServiceProvider.Registry _registry;
   
   private final NodeMapping<JvmDeclaredType> typeNode = new NodeMapping<JvmDeclaredType>(this, "typeNode") {
     public XNode createNode(final AbstractXtextDescriptor<JvmDeclaredType> descriptor) {
@@ -155,15 +171,82 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
-    boolean _or = false;
-    if ((domainArgument instanceof JvmDeclaredType)) {
-      _or = true;
-    } else {
-      _or = (domainArgument instanceof IType);
+  private final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(this, "packageDiagram") {
+    public void calls() {
+      final Function1<PackageDeclaration, Iterable<JvmDeclaredType>> _function = new Function1<PackageDeclaration, Iterable<JvmDeclaredType>>() {
+        public Iterable<JvmDeclaredType> apply(final PackageDeclaration it) {
+          EList<AbstractElement> _elements = it.getElements();
+          Iterable<Entity> _filter = Iterables.<Entity>filter(_elements, Entity.class);
+          final Function1<Entity, EObject> _function = new Function1<Entity, EObject>() {
+            public EObject apply(final Entity it) {
+              return JvmClassDiagramConfig.this.getPrimaryJvmElement(it);
+            }
+          };
+          Iterable<EObject> _map = IterableExtensions.<Entity, EObject>map(_filter, _function);
+          return Iterables.<JvmDeclaredType>filter(_map, JvmDeclaredType.class);
+        }
+      };
+      this.<JvmDeclaredType>nodeForEach(JvmClassDiagramConfig.this.typeNode, _function);
+      final Function1<PackageDeclaration, Iterable<PackageDeclaration>> _function_1 = new Function1<PackageDeclaration, Iterable<PackageDeclaration>>() {
+        public Iterable<PackageDeclaration> apply(final PackageDeclaration it) {
+          EList<AbstractElement> _elements = it.getElements();
+          return Iterables.<PackageDeclaration>filter(_elements, PackageDeclaration.class);
+        }
+      };
+      this.<PackageDeclaration>nodeForEach(JvmClassDiagramConfig.this.packageNode, _function_1);
     }
-    if (_or) {
-      acceptor.add(this.typeNode);
+  };
+  
+  private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode") {
+    public XNode createNode(final AbstractXtextDescriptor<PackageDeclaration> descriptor) {
+      return new BaseDiagramNode<PackageDeclaration>(descriptor);
+    }
+    
+    public void calls() {
+      final Function1<PackageDeclaration, PackageDeclaration> _function = new Function1<PackageDeclaration, PackageDeclaration>() {
+        public PackageDeclaration apply(final PackageDeclaration it) {
+          return it;
+        }
+      };
+      this.<PackageDeclaration>nestedDiagramFor(JvmClassDiagramConfig.this.packageDiagram, _function);
+    }
+  };
+  
+  protected EObject getPrimaryJvmElement(final EObject element) {
+    Resource _eResource = element.eResource();
+    URI _uRI = _eResource.getURI();
+    IResourceServiceProvider _resourceServiceProvider = this._registry.getResourceServiceProvider(_uRI);
+    IJvmModelAssociations _get = null;
+    if (_resourceServiceProvider!=null) {
+      _get=_resourceServiceProvider.<IJvmModelAssociations>get(IJvmModelAssociations.class);
+    }
+    EObject _primaryJvmElement = null;
+    if (_get!=null) {
+      _primaryJvmElement=_get.getPrimaryJvmElement(element);
+    }
+    return _primaryJvmElement;
+  }
+  
+  protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
+    boolean _matched = false;
+    if (!_matched) {
+      if (domainArgument instanceof JvmDeclaredType) {
+        _matched=true;
+      }
+      if (!_matched) {
+        if (domainArgument instanceof IType) {
+          _matched=true;
+        }
+      }
+      if (_matched) {
+        acceptor.add(this.typeNode);
+      }
+    }
+    if (!_matched) {
+      if (domainArgument instanceof PackageDeclaration) {
+        _matched=true;
+        acceptor.add(this.packageNode);
+      }
     }
   }
   

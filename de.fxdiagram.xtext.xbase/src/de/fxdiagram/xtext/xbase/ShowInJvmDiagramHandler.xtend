@@ -9,13 +9,13 @@ import org.eclipse.core.commands.ExecutionEvent
 import org.eclipse.core.commands.ExecutionException
 import org.eclipse.core.expressions.IEvaluationContext
 import org.eclipse.jdt.core.IJavaElement
+import org.eclipse.jdt.core.dom.PackageDeclaration
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor
 import org.eclipse.jface.text.ITextSelection
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.ISources
 import org.eclipse.ui.handlers.HandlerUtil
 import org.eclipse.xtext.IGrammarAccess
-import org.eclipse.xtext.common.types.TypesPackage
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.ui.editor.XtextEditor
@@ -56,8 +56,12 @@ class ShowInJvmDiagramHandler extends AbstractHandler {
 				val IJavaElement javaElement = PolymorphicDispatcher
 					.createForSingleTarget("getElementAt", 1, 1, editor)
 					.invoke(selection.getOffset())
-				val javaType = javaElement.getAncestor(IJavaElement.TYPE)
-				showElement(javaType, editor)
+				val javaElementToShow = javaElement.getAncestor(
+						if(javaElement instanceof PackageDeclaration) 
+							IJavaElement.PACKAGE_FRAGMENT
+						else
+							IJavaElement.TYPE)  
+				showElement(javaElementToShow, editor)
 			}
 		} catch (Exception exc) {
 			LOG.error("Error opening element in diagram", exc)
@@ -97,10 +101,11 @@ class ShowInJvmDiagramHandler extends AbstractHandler {
 			editor.document.readOnly [
 				val selectedElement = eObjectAtOffsetHelper.resolveElementAt(it, selection.offset)
 				if (selectedElement != null) {
-					if(selectedElement.eClass.EPackage == TypesPackage.eINSTANCE)
+					val primary = selectedElement.getPrimaryJvmElement
+					if(primary != null)
+						showElement(primary, editor)
+					else
 						showElement(selectedElement, editor)
-					else 
-						showElement(selectedElement.getPrimaryJvmElement, editor)
 				}
 				null
 			]
