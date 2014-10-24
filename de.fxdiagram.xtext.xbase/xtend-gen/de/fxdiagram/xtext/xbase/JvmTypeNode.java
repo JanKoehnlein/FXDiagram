@@ -3,6 +3,8 @@ package de.fxdiagram.xtext.xbase;
 import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.extensions.AnimationExtensions;
+import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.TextExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -12,7 +14,11 @@ import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseFlipNode;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
+import javafx.animation.Animation;
+import javafx.animation.SequentialTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -37,15 +43,19 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmOperation;
 import org.eclipse.xtext.common.types.JvmTypeReference;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.Functions.Function2;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.validation.UIStrings;
@@ -121,7 +131,6 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
             public void apply(final VBox it) {
               Insets _insets = new Insets(10, 20, 10, 20);
               it.setPadding(_insets);
-              it.setSpacing(10);
               ObservableList<Node> _children = it.getChildren();
               VBox _vBox = new VBox();
               final Procedure1<VBox> _function = new Procedure1<VBox>() {
@@ -244,8 +253,9 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
       }
     };
     this.bindCheckbox(this.showPackageProperty, this.packageBox, this.packageLabel, this.titleArea, _function);
-    float _offlineWidth = TextExtensions.getOfflineWidth(this.label);
-    final InflatableCompartment attributeCompartment = new InflatableCompartment(this, _offlineWidth);
+    Insets _insets = new Insets(10, 0, 0, 0);
+    final InflatableCompartment attributeCompartment = new InflatableCompartment(this, _insets);
+    final ArrayList<Function0<? extends Animation>> animations = CollectionLiterals.<Function0<? extends Animation>>newArrayList();
     AbstractXtextDescriptor<JvmDeclaredType> _descriptor = this.getDescriptor();
     final Function1<JvmDeclaredType, Object> _function_1 = new Function1<JvmDeclaredType, Object>() {
       public Object apply(final JvmDeclaredType type) {
@@ -286,9 +296,9 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
         return Integer.valueOf(1);
       }
     };
-    this.activate(attributeCompartment, this.showAttributesProperty, this.attributesBox, _function_2);
-    float _offlineWidth_1 = TextExtensions.getOfflineWidth(this.label);
-    final InflatableCompartment methodCompartment = new InflatableCompartment(this, _offlineWidth_1);
+    this.activate(attributeCompartment, this.showAttributesProperty, this.attributesBox, _function_2, animations);
+    Insets _insets_1 = new Insets(10, 0, 0, 0);
+    final InflatableCompartment methodCompartment = new InflatableCompartment(this, _insets_1);
     AbstractXtextDescriptor<JvmDeclaredType> _descriptor_1 = this.getDescriptor();
     final Function1<JvmDeclaredType, Object> _function_3 = new Function1<JvmDeclaredType, Object>() {
       public Object apply(final JvmDeclaredType type) {
@@ -330,19 +340,66 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
         return Integer.valueOf(_children.size());
       }
     };
-    this.activate(methodCompartment, this.showMethodsProperty, this.methodsBox, _function_4);
+    this.activate(methodCompartment, this.showMethodsProperty, this.methodsBox, _function_4, animations);
+    Iterable<Function0<? extends Animation>> _filterNull = IterableExtensions.<Function0<? extends Animation>>filterNull(animations);
+    final Function2<Function0<? extends Animation>, Function0<? extends Animation>, Function0<? extends Animation>> _function_5 = new Function2<Function0<? extends Animation>, Function0<? extends Animation>, Function0<? extends Animation>>() {
+      public Function0<? extends Animation> apply(final Function0<? extends Animation> $0, final Function0<? extends Animation> $1) {
+        return AnimationExtensions.chain($0, $1);
+      }
+    };
+    Function0<? extends Animation> _reduce = IterableExtensions.<Function0<? extends Animation>>reduce(_filterNull, _function_5);
+    Animation _apply = null;
+    if (_reduce!=null) {
+      _apply=_reduce.apply();
+    }
+    final Animation inflate = _apply;
+    boolean _notEquals = (!Objects.equal(inflate, null));
+    if (_notEquals) {
+      final Procedure1<Animation> _function_6 = new Procedure1<Animation>() {
+        public void apply(final Animation it) {
+          Duration _millis = DurationExtensions.millis(300);
+          it.setDelay(_millis);
+          it.play();
+        }
+      };
+      ObjectExtensions.<Animation>operator_doubleArrow(inflate, _function_6);
+    }
   }
   
-  protected void activate(final InflatableCompartment compartment, final BooleanProperty showProperty, final CheckBox box, final Function0<? extends Integer> index) {
-    boolean _get = showProperty.get();
-    if (_get) {
-      ObservableList<Node> _children = this.contentArea.getChildren();
-      _children.add(compartment);
-      compartment.inflate();
-    } else {
-      compartment.populate();
+  protected Boolean activate(final InflatableCompartment compartment, final BooleanProperty showProperty, final CheckBox box, final Function0<? extends Integer> index, final List<Function0<? extends Animation>> animations) {
+    boolean _xblockexpression = false;
+    {
+      this.bindCheckbox(showProperty, box, compartment, this.contentArea, index);
+      boolean _xifexpression = false;
+      boolean _get = showProperty.get();
+      if (_get) {
+        boolean _xblockexpression_1 = false;
+        {
+          ObservableList<Node> _children = this.contentArea.getChildren();
+          _children.add(compartment);
+          final Function0<SequentialTransition> _function = new Function0<SequentialTransition>() {
+            public SequentialTransition apply() {
+              float _offlineWidth = TextExtensions.getOfflineWidth(JvmTypeNode.this.label);
+              double _width = JvmTypeNode.this.contentArea.getWidth();
+              Insets _padding = JvmTypeNode.this.contentArea.getPadding();
+              double _left = _padding.getLeft();
+              double _minus = (_width - _left);
+              Insets _padding_1 = JvmTypeNode.this.contentArea.getPadding();
+              double _right = _padding_1.getRight();
+              double _minus_1 = (_minus - _right);
+              double _max = Math.max(_offlineWidth, _minus_1);
+              return compartment.getInflateAnimation(_max);
+            }
+          };
+          _xblockexpression_1 = animations.add(_function);
+        }
+        _xifexpression = _xblockexpression_1;
+      } else {
+        compartment.populate();
+      }
+      _xblockexpression = _xifexpression;
     }
-    this.bindCheckbox(showProperty, box, compartment, this.contentArea, index);
+    return Boolean.valueOf(_xblockexpression);
   }
   
   protected void bindCheckbox(final BooleanProperty property, final CheckBox box, final Node node, final Pane container, final Function0<? extends Integer> index) {

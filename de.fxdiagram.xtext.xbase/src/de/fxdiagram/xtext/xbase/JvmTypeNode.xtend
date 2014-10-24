@@ -6,6 +6,8 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.nodes.InflatableCompartment
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.xtext.glue.shapes.BaseFlipNode
+import java.util.List
+import javafx.animation.Animation
 import javafx.beans.property.BooleanProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -23,8 +25,12 @@ import javafx.scene.text.Text
 import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.xbase.validation.UIStrings
+
+import static java.lang.Math.*
 import static javafx.scene.input.MouseButton.*
 
+import static extension de.fxdiagram.core.extensions.AnimationExtensions.*
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TextExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
@@ -69,7 +75,6 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 			backgroundPaintProperty.bind(bgColorProperty)
 			children += contentArea = new VBox => [
 				padding = new Insets(10, 20, 10, 20)
-				spacing = 10
 				children += titleArea = new VBox => [
 					alignment = Pos.CENTER
 					children += label = new Text => [
@@ -105,12 +110,13 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 	
 	override doActivate() {
 		super.doActivate()
-		
+
 		if(showPackage)
 			titleArea.children.add(0, packageLabel)
 		showPackageProperty.bindCheckbox(packageBox, packageLabel, titleArea, [ 0 ])
-
-		val attributeCompartment = new InflatableCompartment(this, label.offlineWidth)
+		
+		val attributeCompartment = new InflatableCompartment(this, new Insets(10,0,0,0))
+		val animations = newArrayList
 		descriptor.withDomainObject[ type |
 			type.attributes.forEach[ field |
 				attributeCompartment.add(new Text => [
@@ -121,9 +127,9 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 			]
 			null
 		]
-		attributeCompartment.activate(showAttributesProperty, attributesBox, [1])
+		attributeCompartment.activate(showAttributesProperty, attributesBox, [1], animations)
 
-		val methodCompartment = new InflatableCompartment(this, label.offlineWidth)
+		val methodCompartment = new InflatableCompartment(this, new Insets(10,0,0,0))
 		descriptor.withDomainObject[ type |
 			type.methods.forEach[ operation |
 				methodCompartment.add(new Text => [
@@ -134,17 +140,24 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 			]
 			null
 		]
-		methodCompartment.activate(showMethodsProperty, methodsBox, [contentArea.children.size])
+		methodCompartment.activate(showMethodsProperty, methodsBox, [contentArea.children.size], animations)
+		val inflate = animations.filterNull.reduce[$0.chain($1)]?.apply
+		if(inflate != null) {
+			inflate => [
+				delay = 300.millis
+				play
+			]
+		}
 	}
 	
-	protected def activate(InflatableCompartment compartment, BooleanProperty showProperty, CheckBox box, ()=>int index) {
+	protected def activate(InflatableCompartment compartment, BooleanProperty showProperty, CheckBox box, ()=>int index, List<()=>Animation> animations) {
+		showProperty.bindCheckbox(box, compartment, contentArea, index)
 		if(showProperty.get) {
 			contentArea.children += compartment
-			compartment.inflate
+			animations.add([compartment.getInflateAnimation(max(label.offlineWidth, contentArea.width - contentArea.padding.left - contentArea.padding.right))])
 		} else {
-			compartment.populate		
+			compartment.populate
 		} 
-		showProperty.bindCheckbox(box, compartment, contentArea, index)
 	}
 	
 	protected def bindCheckbox(BooleanProperty property, CheckBox box, Node node, Pane container, ()=>int index) {
