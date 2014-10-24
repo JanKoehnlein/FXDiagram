@@ -1,12 +1,12 @@
 package de.fxdiagram.lib.nodes
 
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractOpenBehavior
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import javafx.animation.RotateTransition
 import javafx.animation.SequentialTransition
-import javafx.event.EventHandler
 import javafx.geometry.Point2D
 import javafx.geometry.Point3D
 import javafx.scene.Cursor
@@ -15,11 +15,11 @@ import javafx.scene.Node
 import javafx.scene.input.MouseEvent
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
+import static javafx.scene.input.MouseButton.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
-import de.fxdiagram.annotations.properties.ModelNode
 
 @Logging
 @ModelNode
@@ -33,8 +33,6 @@ class FlipNode extends XNode {
 
 	boolean isCurrentFront = true
 
-	EventHandler<MouseEvent> clickHandler
-	
 	new() {}
 
 	new(String name) {
@@ -60,22 +58,18 @@ class FlipNode extends XNode {
 	override doActivate() {
 		super.doActivate()
 		cursor = Cursor.HAND
-		flipOnDoubleClick = true
+		registerOnClick
 		val AbstractOpenBehavior openBehavior = [| flip(true) ]
 		addBehavior(openBehavior)
 	}
-
-	def setFlipOnDoubleClick(boolean isFlipOnDoubleClick) {
-		clickHandler = if(isFlipOnDoubleClick) 
-				[ event |
-					if (event.clickCount == 2) {
-						if (front != null && back != null) 
-							flip(isHorizontal(event))
-					}
-				]
-			else 
-				null
-		onMouseClicked = clickHandler
+	
+	def registerOnClick() {
+		onMouseClicked = [ 
+			if (button == PRIMARY && clickCount == 2) {
+				if (front != null && back != null) 
+					flip(isHorizontal(it))
+			}
+		]
 	}
 
 	def void flip(boolean isHorizontal) {

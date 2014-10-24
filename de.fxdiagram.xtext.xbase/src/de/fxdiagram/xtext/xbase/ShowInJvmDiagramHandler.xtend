@@ -8,6 +8,7 @@ import org.eclipse.core.commands.AbstractHandler
 import org.eclipse.core.commands.ExecutionEvent
 import org.eclipse.core.commands.ExecutionException
 import org.eclipse.core.expressions.IEvaluationContext
+import org.eclipse.jdt.core.IJavaElement
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor
 import org.eclipse.jface.text.ITextSelection
 import org.eclipse.ui.IEditorPart
@@ -24,8 +25,6 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 import static de.fxdiagram.xtext.xbase.ShowInJvmDiagramHandler.*
 
 import static extension org.eclipse.xtext.GrammarUtil.*
-import org.eclipse.jdt.core.IJavaElement
-import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditorActionContributor
 
 class ShowInJvmDiagramHandler extends AbstractHandler {
 

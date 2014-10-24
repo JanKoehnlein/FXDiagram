@@ -22,6 +22,7 @@ import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -38,8 +39,6 @@ public class FlipNode extends XNode {
   private Group pane;
   
   private boolean isCurrentFront = true;
-  
-  private EventHandler<MouseEvent> clickHandler;
   
   public FlipNode() {
   }
@@ -72,7 +71,7 @@ public class FlipNode extends XNode {
   public void doActivate() {
     super.doActivate();
     this.setCursor(Cursor.HAND);
-    this.setFlipOnDoubleClick(true);
+    this.registerOnClick();
     final AbstractOpenBehavior _function = new AbstractOpenBehavior() {
       public void open() {
         FlipNode.this.flip(true);
@@ -82,35 +81,36 @@ public class FlipNode extends XNode {
     this.addBehavior(openBehavior);
   }
   
-  public void setFlipOnDoubleClick(final boolean isFlipOnDoubleClick) {
-    EventHandler<MouseEvent> _xifexpression = null;
-    if (isFlipOnDoubleClick) {
-      final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-        public void handle(final MouseEvent event) {
-          int _clickCount = event.getClickCount();
-          boolean _equals = (_clickCount == 2);
-          if (_equals) {
-            boolean _and = false;
-            boolean _notEquals = (!Objects.equal(FlipNode.this.front, null));
-            if (!_notEquals) {
-              _and = false;
-            } else {
-              boolean _notEquals_1 = (!Objects.equal(FlipNode.this.back, null));
-              _and = _notEquals_1;
-            }
-            if (_and) {
-              boolean _isHorizontal = FlipNode.this.isHorizontal(event);
-              FlipNode.this.flip(_isHorizontal);
-            }
+  public void registerOnClick() {
+    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+      public void handle(final MouseEvent it) {
+        boolean _and = false;
+        MouseButton _button = it.getButton();
+        boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
+        if (!_equals) {
+          _and = false;
+        } else {
+          int _clickCount = it.getClickCount();
+          boolean _equals_1 = (_clickCount == 2);
+          _and = _equals_1;
+        }
+        if (_and) {
+          boolean _and_1 = false;
+          boolean _notEquals = (!Objects.equal(FlipNode.this.front, null));
+          if (!_notEquals) {
+            _and_1 = false;
+          } else {
+            boolean _notEquals_1 = (!Objects.equal(FlipNode.this.back, null));
+            _and_1 = _notEquals_1;
+          }
+          if (_and_1) {
+            boolean _isHorizontal = FlipNode.this.isHorizontal(it);
+            FlipNode.this.flip(_isHorizontal);
           }
         }
-      };
-      _xifexpression = _function;
-    } else {
-      _xifexpression = null;
-    }
-    this.clickHandler = _xifexpression;
-    this.setOnMouseClicked(this.clickHandler);
+      }
+    };
+    this.setOnMouseClicked(_function);
   }
   
   public void flip(final boolean isHorizontal) {

@@ -1,5 +1,6 @@
 package de.fxdiagram.xtext.xbase;
 
+import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.TextExtensions;
@@ -11,25 +12,28 @@ import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseFlipNode;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
-import java.util.Collections;
 import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -39,7 +43,6 @@ import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmOperation;
 import org.eclipse.xtext.common.types.JvmTypeReference;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -47,7 +50,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.validation.UIStrings;
 
-@ModelNode({ "showPackage", "showAttributes", "showMethods" })
+@ModelNode({ "showPackage", "showAttributes", "showMethods", "bgColor" })
 @SuppressWarnings("all")
 public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
   @Inject
@@ -76,6 +79,32 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
     super(descriptor);
   }
   
+  public void registerOnClick() {
+    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+      public void handle(final MouseEvent it) {
+        MouseButton _button = it.getButton();
+        boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
+        if (_equals) {
+          boolean _and = false;
+          Node _front = JvmTypeNode.this.getFront();
+          boolean _notEquals = (!Objects.equal(_front, null));
+          if (!_notEquals) {
+            _and = false;
+          } else {
+            Node _back = JvmTypeNode.this.getBack();
+            boolean _notEquals_1 = (!Objects.equal(_back, null));
+            _and = _notEquals_1;
+          }
+          if (_and) {
+            boolean _isHorizontal = JvmTypeNode.this.isHorizontal(it);
+            JvmTypeNode.this.flip(_isHorizontal);
+          }
+        }
+      }
+    };
+    this.setOnMouseClicked(_function);
+  }
+  
   public Node createNode() {
     Node _xblockexpression = null;
     {
@@ -83,15 +112,9 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
         public void apply(final RectangleBorderPane it) {
-          Color _rgb = Color.rgb(225, 158, 168);
-          Stop _stop = new Stop(0, _rgb);
-          Color _rgb_1 = Color.rgb(255, 193, 201);
-          Stop _stop_1 = new Stop(1, _rgb_1);
-          LinearGradient _linearGradient = new LinearGradient(
-            0, 0, 1, 1, 
-            true, CycleMethod.NO_CYCLE, 
-            Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop, _stop_1)));
-          it.setBackgroundPaint(_linearGradient);
+          TooltipExtensions.setTooltip(it, "Right-click to configure");
+          ObjectProperty<Paint> _backgroundPaintProperty = it.backgroundPaintProperty();
+          _backgroundPaintProperty.bind(JvmTypeNode.this.bgColorProperty);
           ObservableList<Node> _children = it.getChildren();
           VBox _vBox = new VBox();
           final Procedure1<VBox> _function = new Procedure1<VBox>() {
@@ -137,6 +160,9 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
       RectangleBorderPane _rectangleBorderPane_1 = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
         public void apply(final RectangleBorderPane it) {
+          TooltipExtensions.setTooltip(it, "Right-click to show node");
+          ObjectProperty<Paint> _backgroundPaintProperty = it.backgroundPaintProperty();
+          _backgroundPaintProperty.bind(JvmTypeNode.this.bgColorProperty);
           ObservableList<Node> _children = it.getChildren();
           VBox _vBox = new VBox();
           final Procedure1<VBox> _function = new Procedure1<VBox>() {
@@ -160,6 +186,16 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
               ObservableList<Node> _children_3 = it.getChildren();
               CheckBox _checkBox_2 = new CheckBox("Methods");
               _children_3.add((JvmTypeNode.this.methodsBox = _checkBox_2));
+              ObservableList<Node> _children_4 = it.getChildren();
+              ColorPicker _colorPicker = new ColorPicker();
+              final Procedure1<ColorPicker> _function = new Procedure1<ColorPicker>() {
+                public void apply(final ColorPicker it) {
+                  ObjectProperty<Color> _valueProperty = it.valueProperty();
+                  _valueProperty.bindBidirectional(JvmTypeNode.this.bgColorProperty);
+                }
+              };
+              ColorPicker _doubleArrow = ObjectExtensions.<ColorPicker>operator_doubleArrow(_colorPicker, _function);
+              _children_4.add(_doubleArrow);
             }
           };
           VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
@@ -195,8 +231,8 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
     return _xblockexpression;
   }
   
-  public void activate() {
-    super.activate();
+  public void doActivate() {
+    super.doActivate();
     boolean _showPackage = this.getShowPackage();
     if (_showPackage) {
       ObservableList<Node> _children = this.titleArea.getChildren();
@@ -344,6 +380,7 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
     modelElement.addProperty(showPackageProperty, Boolean.class);
     modelElement.addProperty(showAttributesProperty, Boolean.class);
     modelElement.addProperty(showMethodsProperty, Boolean.class);
+    modelElement.addProperty(bgColorProperty, Color.class);
   }
   
   private SimpleBooleanProperty showPackageProperty = new SimpleBooleanProperty(this, "showPackage",_initShowPackage());
@@ -398,5 +435,24 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
   
   public BooleanProperty showMethodsProperty() {
     return this.showMethodsProperty;
+  }
+  
+  private SimpleObjectProperty<Color> bgColorProperty = new SimpleObjectProperty<Color>(this, "bgColor",_initBgColor());
+  
+  private static final Color _initBgColor() {
+    Color _web = Color.web("#ffe6cc");
+    return _web;
+  }
+  
+  public Color getBgColor() {
+    return this.bgColorProperty.get();
+  }
+  
+  public void setBgColor(final Color bgColor) {
+    this.bgColorProperty.set(bgColor);
+  }
+  
+  public ObjectProperty<Color> bgColorProperty() {
+    return this.bgColorProperty;
   }
 }
