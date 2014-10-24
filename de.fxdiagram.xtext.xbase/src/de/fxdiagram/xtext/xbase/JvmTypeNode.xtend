@@ -3,11 +3,9 @@ package de.fxdiagram.xtext.xbase
 import com.google.inject.Inject
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.lib.nodes.InflatableCompartment
+import de.fxdiagram.lib.animations.Inflator
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.xtext.glue.shapes.BaseFlipNode
-import java.util.List
-import javafx.animation.Animation
 import javafx.beans.property.BooleanProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -26,12 +24,8 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.xbase.validation.UIStrings
 
-import static java.lang.Math.*
 import static javafx.scene.input.MouseButton.*
 
-import static extension de.fxdiagram.core.extensions.AnimationExtensions.*
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import static extension de.fxdiagram.core.extensions.TextExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @ModelNode("showPackage", "showAttributes", "showMethods", "bgColor")
@@ -115,49 +109,43 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 			titleArea.children.add(0, packageLabel)
 		showPackageProperty.bindCheckbox(packageBox, packageLabel, titleArea, [ 0 ])
 		
-		val attributeCompartment = new InflatableCompartment(this, new Insets(10,0,0,0))
-		val animations = newArrayList
-		descriptor.withDomainObject[ type |
-			type.attributes.forEach[ field |
-				attributeCompartment.add(new Text => [
-					textOrigin = VPos.TOP
-					text = '''«field.simpleName»: «field.type.simpleName»'''
-					tooltip = field.signature
-				])
+		val inflator = new Inflator(this, contentArea)
+		
+		val attributeCompartment = new VBox => [ c |
+			descriptor.withDomainObject[ type |
+				type.attributes.forEach[ field |
+					c.children += new Text => [
+						textOrigin = VPos.TOP
+						text = '''«field.simpleName»: «field.type.simpleName»'''
+						tooltip = field.signature
+					]
+				]
+				null
 			]
-			null
 		]
-		attributeCompartment.activate(showAttributesProperty, attributesBox, [1], animations)
+		attributeCompartment.activate(showAttributesProperty, attributesBox, [1], inflator)
 
-		val methodCompartment = new InflatableCompartment(this, new Insets(10,0,0,0))
-		descriptor.withDomainObject[ type |
-			type.methods.forEach[ operation |
-				methodCompartment.add(new Text => [
-					textOrigin = VPos.TOP
-					text = '''«operation.simpleName»: «operation.returnType.simpleName»'''
-					tooltip = operation.signature
-				])
+		val methodCompartment = new VBox => [ c |
+			descriptor.withDomainObject[ type |
+				type.methods.forEach[ operation |
+					c.children += new Text => [
+						textOrigin = VPos.TOP
+						text = '''«operation.simpleName»: «operation.returnType.simpleName»'''
+						tooltip = operation.signature
+					]
+				]
+				null
 			]
-			null
 		]
-		methodCompartment.activate(showMethodsProperty, methodsBox, [contentArea.children.size], animations)
-		val inflate = animations.filterNull.reduce[$0.chain($1)]?.apply
-		if(inflate != null) {
-			inflate => [
-				delay = 300.millis
-				play
-			]
-		}
+		methodCompartment.activate(showMethodsProperty, methodsBox, [contentArea.children.size], inflator)
+		inflator.inflateAnimation?.play
 	}
 	
-	protected def activate(InflatableCompartment compartment, BooleanProperty showProperty, CheckBox box, ()=>int index, List<()=>Animation> animations) {
+	protected def activate(VBox compartment, BooleanProperty showProperty, CheckBox box, ()=>int index, Inflator inflator) {
+		compartment.padding = new Insets(10,0,0,0)
 		showProperty.bindCheckbox(box, compartment, contentArea, index)
-		if(showProperty.get) {
-			contentArea.children += compartment
-			animations.add([compartment.getInflateAnimation(max(label.offlineWidth, contentArea.width - contentArea.padding.left - contentArea.padding.right))])
-		} else {
-			compartment.populate
-		} 
+		if(showProperty.get) 
+			inflator.addInflatable(compartment, index.apply)
 	}
 	
 	protected def bindCheckbox(BooleanProperty property, CheckBox box, Node node, Pane container, ()=>int index) {
