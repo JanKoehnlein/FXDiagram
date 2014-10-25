@@ -30,7 +30,6 @@ class Inflator {
 	new(XNode host, Pane container) {
 		this.host = host
 		this.container = container
-		
 	}
 	
 	def addInflatable(VBox inflatable, int index) {

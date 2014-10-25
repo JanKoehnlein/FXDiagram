@@ -14,6 +14,8 @@ import org.eclipse.xtext.xbase.typesystem.references.StandardTypeReferenceOwner
 import org.eclipse.xtext.xbase.typesystem.util.CommonTypeComputationServices
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
+import org.eclipse.xtext.common.types.util.jdt.JavaElementFinder
+import org.eclipse.xtext.common.types.JvmIdentifiableElement
 
 class JvmDomainUtil {
 
@@ -22,6 +24,8 @@ class JvmDomainUtil {
 	@Inject CommonTypeComputationServices services
 	
 	@Inject extension JvmElementFinder
+
+	@Inject extension JavaElementFinder
 	
 	@Inject IResourceSetProvider resourceSetProvider
 
@@ -63,10 +67,10 @@ class JvmDomainUtil {
 				else if(simpleName.startsWith('is')) 
 					fields.get(simpleName.substring(2).toFirstLower)
 				else return false
-			return returnType.lightweight.isAssignableFrom(field?.type.lightweight)
-		} else {
-			return false
+			if(field != null)
+				return returnType.lightweight.isAssignableFrom(field?.type.lightweight)
 		} 
+		return false
 	}
 
 	def getReferences(JvmDeclaredType owner) {
@@ -96,12 +100,19 @@ class JvmDomainUtil {
 		 		new StandardTypeReferenceOwner(services, it).toLightweightTypeReference(it)
 	}
 	
-	def getJvmType(IJavaElement javaElement) {
+	def getJvmElement(IJavaElement javaElement) {
 		val project = javaElement.javaProject.project
 		val resourceSet = resourceSetProvider.get(project)
-		val jvmElement = javaElement.getCorrespondingJvmElement(resourceSet)
+		val jvmElement = javaElement.getCorrespondingJvmElement(resourceSet) as JvmIdentifiableElement
 		val jvmType = jvmElement.getContainerOfType(JvmDeclaredType)
-		return getOriginalJvmType(jvmType)
+		val originalType = getOriginalJvmType(jvmType)
+		if(jvmElement != jvmType) {
+			if(originalType != jvmType) 
+				return null
+			else 
+				return jvmElement
+		}
+		return originalType
 	}
 	
 	def getOriginalJvmType(JvmDeclaredType jvmType) {
@@ -111,5 +122,9 @@ class JvmDomainUtil {
 				indexedJvmType 
 			else 
 				jvmType
+	}
+	
+	def getJavaElement(JvmIdentifiableElement type) {
+		type.findElementFor
 	}
 }

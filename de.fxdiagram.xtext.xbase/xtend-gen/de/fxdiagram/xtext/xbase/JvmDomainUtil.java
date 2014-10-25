@@ -16,11 +16,13 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmFormalParameter;
+import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.common.types.JvmOperation;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.common.types.JvmVisibility;
 import org.eclipse.xtext.common.types.ui.refactoring.participant.JvmElementFinder;
 import org.eclipse.xtext.common.types.util.Primitives;
+import org.eclipse.xtext.common.types.util.jdt.JavaElementFinder;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -42,6 +44,10 @@ public class JvmDomainUtil {
   @Inject
   @Extension
   private JvmElementFinder _jvmElementFinder;
+  
+  @Inject
+  @Extension
+  private JavaElementFinder _javaElementFinder;
   
   @Inject
   private IResourceSetProvider resourceSetProvider;
@@ -195,17 +201,19 @@ public class JvmDomainUtil {
         _xifexpression = _xifexpression_1;
       }
       final JvmField field = _xifexpression;
-      JvmTypeReference _returnType_1 = it.getReturnType();
-      LightweightTypeReference _lightweight = this.getLightweight(_returnType_1);
-      JvmTypeReference _type = null;
-      if (field!=null) {
-        _type=field.getType();
+      boolean _notEquals_1 = (!Objects.equal(field, null));
+      if (_notEquals_1) {
+        JvmTypeReference _returnType_1 = it.getReturnType();
+        LightweightTypeReference _lightweight = this.getLightweight(_returnType_1);
+        JvmTypeReference _type = null;
+        if (field!=null) {
+          _type=field.getType();
+        }
+        LightweightTypeReference _lightweight_1 = this.getLightweight(_type);
+        return _lightweight.isAssignableFrom(_lightweight_1);
       }
-      LightweightTypeReference _lightweight_1 = this.getLightweight(_type);
-      return _lightweight.isAssignableFrom(_lightweight_1);
-    } else {
-      return false;
     }
+    return false;
   }
   
   public Iterable<JvmField> getReferences(final JvmDeclaredType owner) {
@@ -281,13 +289,24 @@ public class JvmDomainUtil {
     return _xifexpression;
   }
   
-  public JvmDeclaredType getJvmType(final IJavaElement javaElement) {
+  public JvmIdentifiableElement getJvmElement(final IJavaElement javaElement) {
     IJavaProject _javaProject = javaElement.getJavaProject();
     final IProject project = _javaProject.getProject();
     final ResourceSet resourceSet = this.resourceSetProvider.get(project);
-    final EObject jvmElement = this._jvmElementFinder.getCorrespondingJvmElement(javaElement, resourceSet);
+    EObject _correspondingJvmElement = this._jvmElementFinder.getCorrespondingJvmElement(javaElement, resourceSet);
+    final JvmIdentifiableElement jvmElement = ((JvmIdentifiableElement) _correspondingJvmElement);
     final JvmDeclaredType jvmType = EcoreUtil2.<JvmDeclaredType>getContainerOfType(jvmElement, JvmDeclaredType.class);
-    return this.getOriginalJvmType(jvmType);
+    final JvmDeclaredType originalType = this.getOriginalJvmType(jvmType);
+    boolean _notEquals = (!Objects.equal(jvmElement, jvmType));
+    if (_notEquals) {
+      boolean _notEquals_1 = (!Objects.equal(originalType, jvmType));
+      if (_notEquals_1) {
+        return null;
+      } else {
+        return jvmElement;
+      }
+    }
+    return originalType;
   }
   
   public JvmDeclaredType getOriginalJvmType(final JvmDeclaredType jvmType) {
@@ -301,5 +320,9 @@ public class JvmDomainUtil {
       _xifexpression = jvmType;
     }
     return _xifexpression;
+  }
+  
+  public IJavaElement getJavaElement(final JvmIdentifiableElement type) {
+    return this._javaElementFinder.findElementFor(type);
   }
 }

@@ -13,15 +13,14 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.xtext.common.types.JvmDeclaredType;
-import org.eclipse.xtext.common.types.JvmType;
+import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @ModelNode("handleIdentifier")
 @SuppressWarnings("all")
-public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmType> {
+public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableElement> {
   public JavaElementDescriptor() {
   }
   
@@ -35,7 +34,7 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmType> {
     return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);
   }
   
-  public <T extends Object> T withDomainObject(final Function1<? super JvmType, ? extends T> lambda) {
+  public <T extends Object> T withDomainObject(final Function1<? super JvmIdentifiableElement, ? extends T> lambda) {
     T _xblockexpression = null;
     {
       String _handleIdentifier = this.getHandleIdentifier();
@@ -44,8 +43,8 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmType> {
       String _uri = this.getUri();
       URI _createURI = URI.createURI(_uri);
       final JvmDomainUtil domainUtil = ((JvmDomainObjectProvider) _provider).getJvmDomainUtil(_createURI);
-      final JvmDeclaredType jvmType = domainUtil.getJvmType(javaElement);
-      _xblockexpression = lambda.apply(jvmType);
+      final JvmIdentifiableElement jvmElement = domainUtil.getJvmElement(javaElement);
+      _xblockexpression = lambda.apply(jvmElement);
     }
     return _xblockexpression;
   }

@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EReference
 import org.eclipse.jdt.core.IJavaElement
 import org.eclipse.jdt.core.JavaCore
 import org.eclipse.jdt.ui.JavaUI
-import org.eclipse.xtext.common.types.JvmType
+import org.eclipse.xtext.common.types.JvmIdentifiableElement
 import org.eclipse.xtext.resource.IResourceServiceProvider
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
@@ -33,12 +33,17 @@ class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 	override createDescriptor(Object handle) {
 		if(handle instanceof MappedElement<?>) {
 			switch it: handle.element {
-				EObject: 
+				JvmIdentifiableElement: {
+					if(eResource.URI.scheme.endsWith('java')) {
+						val javaElement = getJvmDomainUtil(eResource.URI).getJavaElement(it)
+						return new JavaElementDescriptor(URI.toString, fullyQualifiedName, javaElement.handleIdentifier, handle.mapping.config.ID, handle.mapping.ID, this)	
+					}
 					return new JvmEObjectDescriptor(URI.toString, fullyQualifiedName, handle.mapping.config.ID, handle.mapping.ID, this)
+				} 
 				ESetting<?>:
 					return new JvmESettingDescriptor(owner.URI.toString, owner.fullyQualifiedName, reference, index, handle.mapping.config.ID, handle.mapping.ID, this)
 				IJavaElement: {
-					val jvmType = getJvmDomainUtil(URI.createURI('dummy.___xbase')).getJvmType(it)					
+					val jvmType = getJvmDomainUtil(URI.createURI('dummy.___xbase')).getJvmElement(it)					
 					return new JavaElementDescriptor(jvmType.URI.toString, jvmType.fullyQualifiedName, handleIdentifier, handle.mapping.config.ID, handle.mapping.ID, this)
 				}
 				default:
@@ -79,7 +84,7 @@ class JvmESettingDescriptor<ECLASS extends EObject> extends XtextESettingDescrip
 }
 
 @ModelNode('handleIdentifier')
-class JavaElementDescriptor extends JvmEObjectDescriptor<JvmType> {
+class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableElement> {
 
 	@FxProperty(readOnly) String handleIdentifier
 
@@ -95,11 +100,11 @@ class JavaElementDescriptor extends JvmEObjectDescriptor<JvmType> {
 		 IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(URI.createURI('dummy.___xbase'))
 	}
 	
-	override <T> withDomainObject((JvmType)=>T lambda) {
+	override <T> withDomainObject((JvmIdentifiableElement)=>T lambda) {
 		val javaElement = JavaCore.create(handleIdentifier)
 		val domainUtil = (provider as JvmDomainObjectProvider).getJvmDomainUtil(URI.createURI(uri))
-		val jvmType = domainUtil.getJvmType(javaElement)
-		lambda.apply(jvmType)
+		val jvmElement = domainUtil.getJvmElement(javaElement)
+		lambda.apply(jvmElement)
 	}
 
 	override openInEditor(boolean isSelect) {
