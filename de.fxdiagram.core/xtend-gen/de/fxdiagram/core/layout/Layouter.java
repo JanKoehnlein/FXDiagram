@@ -52,6 +52,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class Layouter {
+  private final static int NODE_PADDING = 8;
+  
   @Extension
   private KLayoutDataFactory _kLayoutDataFactory = KLayoutDataFactory.eINSTANCE;
   
@@ -112,11 +114,13 @@ public class Layouter {
             Bounds _layoutBounds = ((XNode)xElement).getLayoutBounds();
             double _minX = _layoutBounds.getMinX();
             double _minus = (_xpos - _minX);
+            double _plus = (_minus + (Layouter.NODE_PADDING / 2));
             float _ypos = shapeLayout.getYpos();
             Bounds _layoutBounds_1 = ((XNode)xElement).getLayoutBounds();
             double _minY = _layoutBounds_1.getMinY();
             double _minus_1 = (_ypos - _minY);
-            MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus, _minus_1);
+            double _plus_1 = (_minus_1 + (Layouter.NODE_PADDING / 2));
+            MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _plus, _plus_1);
             final Procedure1<MoveCommand> _function = new Procedure1<MoveCommand>() {
               public void apply(final MoveCommand it) {
                 it.setExecuteDuration(duration);
@@ -226,11 +230,9 @@ public class Layouter {
     {
       final KNode kNode = this._kGraphFactory.createKNode();
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
-      Bounds _layoutBounds = it.getLayoutBounds();
-      double _width = _layoutBounds.getWidth();
-      Bounds _layoutBounds_1 = it.getLayoutBounds();
-      double _height = _layoutBounds_1.getHeight();
-      shapeLayout.setSize(((float) _width), ((float) _height));
+      shapeLayout.setSize(
+        (((float) it.getLayoutBounds().getWidth()) + Layouter.NODE_PADDING), 
+        (((float) it.getLayoutBounds().getHeight()) + Layouter.NODE_PADDING));
       EList<KGraphData> _data = kNode.getData();
       _data.add(shapeLayout);
       cache.put(it, kNode);

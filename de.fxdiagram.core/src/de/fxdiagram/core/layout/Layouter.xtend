@@ -27,6 +27,9 @@ import static de.fxdiagram.core.XConnection.Kind.*
 
 class Layouter { 
 
+	// tell layout nodes are bigger to avoid control points too close to the border
+	static val NODE_PADDING = 8
+
 	extension KLayoutDataFactory = KLayoutDataFactory.eINSTANCE
 	
 	extension KGraphFactory = KGraphFactory.eINSTANCE
@@ -65,7 +68,10 @@ class Layouter {
 			switch xElement { 
 				XNode: { 
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
-					composite += new MoveCommand(xElement, shapeLayout.xpos - xElement.layoutBounds.minX, shapeLayout.ypos - xElement.layoutBounds.minY) => [
+					composite += new MoveCommand(xElement, 
+						shapeLayout.xpos - xElement.layoutBounds.minX + NODE_PADDING / 2, 
+						shapeLayout.ypos - xElement.layoutBounds.minY + NODE_PADDING / 2
+					) => [
 						executeDuration = duration
 					]
 				}
@@ -84,7 +90,9 @@ class Layouter {
 						default:
 							POLYLINE
 					}
-					composite += new ConnectionMorphCommand(xElement, newKind, layoutPoints.map[new Point2D(x,y)]) => [
+					composite += new ConnectionMorphCommand(xElement, newKind, 
+						layoutPoints.map[new Point2D(x,y)]
+					) => [
 						executeDuration = duration
 					]
 				}
@@ -113,7 +121,10 @@ class Layouter {
 	protected def toKNode(XNode it, Map<Object, KGraphElement> cache) {
 		val kNode = createKNode
 		val shapeLayout = createKShapeLayout
-		shapeLayout.setSize(layoutBounds.width as float, layoutBounds.height as float)
+		shapeLayout.setSize(
+			layoutBounds.width as float + NODE_PADDING, 
+			layoutBounds.height as float + NODE_PADDING
+		)
 		kNode.data += shapeLayout
 		cache.put(it, kNode)
 		kNode	
