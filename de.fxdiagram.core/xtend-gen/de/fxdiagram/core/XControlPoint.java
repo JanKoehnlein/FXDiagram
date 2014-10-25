@@ -78,9 +78,12 @@ public class XControlPoint extends XShape implements XModelProvider {
   protected void doActivate() {
     final ChangeListener<XControlPoint.Type> _function = new ChangeListener<XControlPoint.Type>() {
       public void changed(final ObservableValue<? extends XControlPoint.Type> p, final XControlPoint.Type o, final XControlPoint.Type n) {
+        ObservableList<Node> _children = XControlPoint.this.getChildren();
+        Node _node = XControlPoint.this.getNode();
+        _children.remove(_node);
         ObjectProperty<Node> _nodeProperty = XControlPoint.this.nodeProperty();
-        Node _createNode = XControlPoint.this.createNode();
-        _nodeProperty.set(_createNode);
+        _nodeProperty.set(null);
+        XControlPoint.this.getNode();
       }
     };
     this.typeProperty.addListener(_function);

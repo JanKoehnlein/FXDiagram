@@ -52,7 +52,9 @@ class XControlPoint extends XShape {
 	override protected doActivate() {
 		typeProperty.addListener [
 			p, o, n |
-			nodeProperty.set(createNode())
+			children.remove(node)
+			nodeProperty.set(null)
+			getNode
 		]
 		if (type != ANCHOR)
 			addBehavior(new MoveBehavior(this))
