@@ -90,13 +90,13 @@ class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescr
 	
 	override equals(Object obj) {
 		if(obj instanceof XtextESettingDescriptor<?>) 
-			obj.uri == uri && reference == obj.reference && index == obj.index  
+			obj.uri == uri && getReference == obj.getReference && index == obj.index  
 		else
 			false		
 	}
 	
 	override hashCode() {
-		103 * uri.hashCode + 37 * reference.hashCode + 11 * index
+		103 * uri.hashCode + 37 * getReference.hashCode + 11 * index
 	}
 }
 

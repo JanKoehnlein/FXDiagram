@@ -118,7 +118,9 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
       if (!_equals) {
         _and_1 = false;
       } else {
-        boolean _equals_1 = Objects.equal(this.reference, ((XtextESettingDescriptor<?>)obj).reference);
+        EReference _reference = this.getReference();
+        EReference _reference_1 = ((XtextESettingDescriptor<?>)obj).getReference();
+        boolean _equals_1 = Objects.equal(_reference, _reference_1);
         _and_1 = _equals_1;
       }
       if (!_and_1) {
@@ -140,7 +142,8 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
     String _uri = this.getUri();
     int _hashCode = _uri.hashCode();
     int _multiply = (103 * _hashCode);
-    int _hashCode_1 = this.reference.hashCode();
+    EReference _reference = this.getReference();
+    int _hashCode_1 = _reference.hashCode();
     int _multiply_1 = (37 * _hashCode_1);
     int _plus = (_multiply + _multiply_1);
     int _index = this.getIndex();
