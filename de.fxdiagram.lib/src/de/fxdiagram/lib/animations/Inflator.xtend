@@ -132,16 +132,20 @@ class Inflator {
 					inflatedWidth - deflatedSize.width
 				case RIGHT:
 					0
-				default:
+				case TOP, case BOTTOM:
 					0.5 * (inflatedWidth - deflatedSize.width)
+				default:
+					0
 			},
 			host.layoutY - switch host.placementHint {
 				case TOP:
 					inflatedHeight
 				case BOTTOM:
 					0
-				default:
+				case LEFT, case RIGHT:
 					0.5 * inflatedHeight
+				default:
+					0
 			})
 	}
 	

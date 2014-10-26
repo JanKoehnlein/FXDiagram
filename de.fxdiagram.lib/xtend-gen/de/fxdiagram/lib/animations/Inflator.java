@@ -259,16 +259,18 @@ public class Inflator {
         case RIGHT:
           _switchResult = 0;
           break;
-        default:
+        case TOP:
+        case BOTTOM:
           double _width_1 = deflatedSize.getWidth();
           double _minus = (inflatedWidth - _width_1);
           _switchResult = (0.5 * _minus);
           break;
+        default:
+          _switchResult = 0;
+          break;
       }
     } else {
-      double _width_1 = deflatedSize.getWidth();
-      double _minus = (inflatedWidth - _width_1);
-      _switchResult = (0.5 * _minus);
+      _switchResult = 0;
     }
     double _minus_1 = (_layoutX - _switchResult);
     double _layoutY = this.host.getLayoutY();
@@ -282,12 +284,16 @@ public class Inflator {
         case BOTTOM:
           _switchResult_1 = 0;
           break;
-        default:
+        case LEFT:
+        case RIGHT:
           _switchResult_1 = (0.5 * inflatedHeight);
+          break;
+        default:
+          _switchResult_1 = 0;
           break;
       }
     } else {
-      _switchResult_1 = (0.5 * inflatedHeight);
+      _switchResult_1 = 0;
     }
     double _minus_2 = (_layoutY - _switchResult_1);
     return new Point2D(_minus_1, _minus_2);
