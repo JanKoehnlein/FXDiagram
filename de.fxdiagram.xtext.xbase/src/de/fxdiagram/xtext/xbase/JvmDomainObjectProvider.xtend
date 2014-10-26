@@ -33,9 +33,9 @@ class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 	override createDescriptor(Object handle) {
 		if(handle instanceof MappedElement<?>) {
 			switch it: handle.element {
-				JvmIdentifiableElement: {
-					if(eResource.URI.scheme.endsWith('java')) {
-						val javaElement = getJvmDomainUtil(eResource.URI).getJavaElement(it)
+				EObject: {
+					if(eResource.URI.scheme.endsWith('java') && it instanceof JvmIdentifiableElement) {
+						val javaElement = getJvmDomainUtil(eResource.URI).getJavaElement(it as JvmIdentifiableElement)
 						return new JavaElementDescriptor(URI.toString, fullyQualifiedName, javaElement.handleIdentifier, handle.mapping.config.ID, handle.mapping.ID, this)	
 					}
 					return new JvmEObjectDescriptor(URI.toString, fullyQualifiedName, handle.mapping.config.ID, handle.mapping.ID, this)

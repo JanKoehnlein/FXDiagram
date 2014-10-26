@@ -46,17 +46,23 @@ public class JvmDomainObjectProvider extends XtextDomainObjectProvider {
       final Object it = _element;
       boolean _matched = false;
       if (!_matched) {
-        if (it instanceof JvmIdentifiableElement) {
+        if (it instanceof EObject) {
           _matched=true;
-          Resource _eResource = ((JvmIdentifiableElement)it).eResource();
+          boolean _and = false;
+          Resource _eResource = ((EObject)it).eResource();
           URI _uRI = _eResource.getURI();
           String _scheme = _uRI.scheme();
           boolean _endsWith = _scheme.endsWith("java");
-          if (_endsWith) {
-            Resource _eResource_1 = ((JvmIdentifiableElement)it).eResource();
+          if (!_endsWith) {
+            _and = false;
+          } else {
+            _and = (it instanceof JvmIdentifiableElement);
+          }
+          if (_and) {
+            Resource _eResource_1 = ((EObject)it).eResource();
             URI _uRI_1 = _eResource_1.getURI();
             JvmDomainUtil _jvmDomainUtil = this.getJvmDomainUtil(_uRI_1);
-            final IJavaElement javaElement = _jvmDomainUtil.getJavaElement(((JvmIdentifiableElement)it));
+            final IJavaElement javaElement = _jvmDomainUtil.getJavaElement(((JvmIdentifiableElement) it));
             URI _uRI_2 = EcoreUtil.getURI(((EObject)it));
             String _string = _uRI_2.toString();
             String _fullyQualifiedName = this.getFullyQualifiedName(((EObject)it));
