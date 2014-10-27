@@ -10,6 +10,9 @@ on usability aspects.
 * The LCARS demo won't run as it depends on a currently unreleased database. 
 
 ## PREREQUISITES
+The fastest way to get it running is to use [Eclipse Oomph] (https://wiki.eclipse.org/Eclipse_Oomph_Installer) and the [FXDiagram.setup] (https://github.com/JanKoehnlein/FXDiagram/blob/master/de.fxdiagram.docs/FXDiagram.setup). The configuration requires Java 8 SDK 40 early access build >= 5 (see below) and will install everything but Graphviz (see below).
+
+If you want to setup the environement manually, you can use 
 * EITHER
  * Java 7 SDK
  * Eclipse Kepler 4.3
