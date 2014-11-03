@@ -3,9 +3,9 @@ package de.fxdiagram.xtext.fowlerdsl;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import javafx.scene.text.Text;
@@ -44,7 +44,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final ConnectionMapping<Transition> transitionConnection = new ConnectionMapping<Transition>(this, "transitionConnection") {
-    public XConnection createConnection(final AbstractXtextDescriptor<Transition> descriptor) {
+    public XConnection createConnection(final IMappedElementDescriptor<Transition> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {

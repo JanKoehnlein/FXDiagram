@@ -8,6 +8,7 @@ import de.fxdiagram.lib.simple.SimpleNode;
 import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import java.util.Collections;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -26,17 +27,27 @@ public class BaseNode<T extends Object> extends SimpleNode {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectProperty = this.domainObjectProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
       public void changed(final ObservableValue<? extends DomainObjectDescriptor> prop, final DomainObjectDescriptor oldVal, final DomainObjectDescriptor newVal) {
-        if ((newVal instanceof AbstractXtextDescriptor<?>)) {
-          ((AbstractXtextDescriptor<?>)newVal).injectMembers(BaseNode.this);
-        }
+        BaseNode.this.injectMembers();
       }
     };
     _domainObjectProperty.addListener(_function);
   }
   
-  public BaseNode(final AbstractXtextDescriptor<T> descriptor) {
+  public BaseNode(final IMappedElementDescriptor<T> descriptor) {
     super(descriptor);
-    descriptor.injectMembers(this);
+    this.injectMembers();
+  }
+  
+  protected void injectMembers() {
+    final IMappedElementDescriptor<T> domainObject = this.getDomainObject();
+    if ((domainObject instanceof AbstractXtextDescriptor<?>)) {
+      ((AbstractXtextDescriptor<?>)domainObject).injectMembers(this);
+    }
+  }
+  
+  public IMappedElementDescriptor<T> getDomainObject() {
+    DomainObjectDescriptor _domainObject = super.getDomainObject();
+    return ((IMappedElementDescriptor<T>) _domainObject);
   }
   
   protected Node createNode() {
@@ -58,15 +69,10 @@ public class BaseNode<T extends Object> extends SimpleNode {
     return _xblockexpression;
   }
   
-  protected AbstractXtextDescriptor<T> getDescriptor() {
-    DomainObjectDescriptor _domainObject = this.getDomainObject();
-    return ((AbstractXtextDescriptor<T>) _domainObject);
-  }
-  
   public void doActivate() {
     super.doActivate();
-    AbstractXtextDescriptor<T> _descriptor = this.getDescriptor();
-    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _descriptor);
+    IMappedElementDescriptor<T> _domainObject = this.getDomainObject();
+    LazyConnectionMappingBehavior.<Object>addLazyBehavior(this, _domainObject);
     OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(this);
     this.addBehavior(_openElementInEditorBehavior);
   }

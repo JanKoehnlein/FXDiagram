@@ -17,7 +17,7 @@ interface XDiagramConfig {
 	
 	def <ARG> void addMapping(AbstractMapping<ARG> mapping)
 	
-	def XtextDomainObjectProvider getDomainObjectProvider()
+	def IMappedElementDescriptorProvider getDomainObjectProvider()
 	
 	@Logging  
 	static class Registry {
@@ -64,9 +64,9 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 	@Accessors String ID
 	
 	@Accessors(PUBLIC_GETTER)
-	XtextDomainObjectProvider domainObjectProvider = createDomainObjectProvider()
+	IMappedElementDescriptorProvider domainObjectProvider = createDomainObjectProvider()
 	
-	protected def XtextDomainObjectProvider createDomainObjectProvider() {
+	protected def IMappedElementDescriptorProvider createDomainObjectProvider() {
 		new XtextDomainObjectProvider
 	}
 	

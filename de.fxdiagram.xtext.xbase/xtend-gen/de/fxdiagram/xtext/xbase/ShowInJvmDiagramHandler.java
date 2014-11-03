@@ -37,9 +37,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.PolymorphicDispatcher;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
-import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations;
 import org.eclipse.xtext.xbase.lib.Exceptions;
-import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
@@ -48,10 +46,6 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
   public static class Action {
     @Inject
     private EObjectAtOffsetHelper eObjectAtOffsetHelper;
-    
-    @Inject
-    @Extension
-    private IJvmModelAssociations _iJvmModelAssociations;
     
     public Object run(final XtextEditor editor) {
       Object _xblockexpression = null;
@@ -68,13 +62,7 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
               final EObject selectedElement = Action.this.eObjectAtOffsetHelper.resolveElementAt(it, _offset);
               boolean _notEquals = (!Objects.equal(selectedElement, null));
               if (_notEquals) {
-                final EObject primary = Action.this._iJvmModelAssociations.getPrimaryJvmElement(selectedElement);
-                boolean _notEquals_1 = (!Objects.equal(primary, null));
-                if (_notEquals_1) {
-                  ShowInJvmDiagramHandler.showElement(primary, editor);
-                } else {
-                  ShowInJvmDiagramHandler.showElement(selectedElement, editor);
-                }
+                ShowInJvmDiagramHandler.showElement(selectedElement, editor);
               }
               _xblockexpression = null;
             }

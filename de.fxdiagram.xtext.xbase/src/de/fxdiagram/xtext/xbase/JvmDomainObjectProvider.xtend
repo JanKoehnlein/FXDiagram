@@ -2,8 +2,9 @@ package de.fxdiagram.xtext.xbase
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping
 import de.fxdiagram.xtext.glue.mapping.ESetting
-import de.fxdiagram.xtext.glue.mapping.MappedElement
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider
 import de.fxdiagram.xtext.glue.mapping.XtextEObjectDescriptor
 import de.fxdiagram.xtext.glue.mapping.XtextESettingDescriptor
@@ -30,28 +31,29 @@ class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 		resourceServiceProvider.get(JvmDomainUtil)
 	}
 	
-	override createDescriptor(Object handle) {
-		if(handle instanceof MappedElement<?>) {
-			switch it: handle.element {
+	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
+		switch it: domainObject {
 				EObject: {
 					if(eResource.URI.scheme.endsWith('java') && it instanceof JvmIdentifiableElement) {
 						val javaElement = getJvmDomainUtil(eResource.URI).getJavaElement(it as JvmIdentifiableElement)
-						return new JavaElementDescriptor(URI.toString, fullyQualifiedName, javaElement.handleIdentifier, handle.mapping.config.ID, handle.mapping.ID, this)	
+						return new JavaElementDescriptor(URI.toString, fullyQualifiedName, javaElement.handleIdentifier, mapping.config.ID, mapping.ID, this)
+							as IMappedElementDescriptor<T>	
 					}
-					return new JvmEObjectDescriptor(URI.toString, fullyQualifiedName, handle.mapping.config.ID, handle.mapping.ID, this)
+					return new JvmEObjectDescriptor(URI.toString, fullyQualifiedName, mapping.config.ID, mapping.ID, this)
+						as IMappedElementDescriptor<T>
 				} 
 				ESetting<?>:
-					return new JvmESettingDescriptor(owner.URI.toString, owner.fullyQualifiedName, reference, index, handle.mapping.config.ID, handle.mapping.ID, this)
+					return new JvmESettingDescriptor(owner.URI.toString, owner.fullyQualifiedName, reference, index, mapping.config.ID, mapping.ID, this)
 				IJavaElement: {
 					val jvmType = getJvmDomainUtil(URI.createURI('dummy.___xbase')).getJvmElement(it)					
-					return new JavaElementDescriptor(jvmType.URI.toString, jvmType.fullyQualifiedName, handleIdentifier, handle.mapping.config.ID, handle.mapping.ID, this)
+					return new JavaElementDescriptor(jvmType.URI.toString, jvmType.fullyQualifiedName, handleIdentifier, mapping.config.ID, mapping.ID, this)
+						as IMappedElementDescriptor<T>
 				}
 				default:
 					return null
 			}
-		}
-		return null
 	}
+	
 }
 
 class JvmEObjectDescriptor<ECLASS extends EObject> extends XtextEObjectDescriptor<ECLASS> {

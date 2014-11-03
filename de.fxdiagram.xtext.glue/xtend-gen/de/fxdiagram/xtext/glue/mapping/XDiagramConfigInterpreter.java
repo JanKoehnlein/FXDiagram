@@ -8,28 +8,25 @@ import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.xtext.glue.mapping.InterpreterContext;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.NodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -42,7 +39,7 @@ public class XDiagramConfigInterpreter {
       if (_not) {
         return null;
       }
-      AbstractXtextDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
+      IMappedElementDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
       final XDiagram diagram = diagramMapping.createDiagram(_descriptor);
       context.diagram = diagram;
       List<AbstractNodeMappingCall<?, T>> _nodes = diagramMapping.getNodes();
@@ -81,7 +78,7 @@ public class XDiagramConfigInterpreter {
     final NodeMapping<Object> nodeMappingCasted = ((NodeMapping<Object>) _nodeMapping);
     for (final Object nodeObject : nodeObjects) {
       {
-        final AbstractXtextDescriptor<Object> descriptor = this.<Object>getDescriptor(nodeObject, nodeMappingCasted);
+        final IMappedElementDescriptor<Object> descriptor = this.<Object>getDescriptor(nodeObject, nodeMappingCasted);
         final XNode node = context.<Object>getNode(descriptor);
         boolean _notEquals = (!Objects.equal(node, null));
         if (_notEquals) {
@@ -129,7 +126,7 @@ public class XDiagramConfigInterpreter {
   protected <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final InterpreterContext context, final boolean isCreateOnDemand) {
     boolean _isApplicable = nodeMapping.isApplicable(nodeObject);
     if (_isApplicable) {
-      final AbstractXtextDescriptor<T> descriptor = this.<T>getDescriptor(nodeObject, nodeMapping);
+      final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(nodeObject, nodeMapping);
       final XNode existingNode = context.<Object>getNode(descriptor);
       boolean _or = false;
       boolean _notEquals = (!Objects.equal(existingNode, null));
@@ -193,28 +190,13 @@ public class XDiagramConfigInterpreter {
     boolean _isApplicable = connectionMapping.isApplicable(connectionObject);
     if (_isApplicable) {
       final ConnectionMapping<T> connectionMappingCasted = ((ConnectionMapping<T>) connectionMapping);
-      final AbstractXtextDescriptor<T> descriptor = this.<T>getDescriptor(connectionObject, connectionMappingCasted);
+      final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(connectionObject, connectionMappingCasted);
       final XConnection existingConnection = context.<Object>getConnection(descriptor);
       boolean _notEquals = (!Objects.equal(existingConnection, null));
       if (_notEquals) {
         return existingConnection;
       }
       final XConnection connection = connectionMappingCasted.createConnection(descriptor);
-      final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-        public void apply(final XConnection it) {
-          final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-            public void handle(final MouseEvent it) {
-              int _clickCount = it.getClickCount();
-              boolean _equals = (_clickCount == 2);
-              if (_equals) {
-                descriptor.openInEditor(true);
-              }
-            }
-          };
-          it.setOnMouseClicked(_function);
-        }
-      };
-      ObjectExtensions.<XConnection>operator_doubleArrow(connection, _function);
       return connection;
     } else {
       return null;
@@ -343,9 +325,9 @@ public class XDiagramConfigInterpreter {
     return result;
   }
   
-  public <T extends Object> AbstractXtextDescriptor<T> getDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
+  public <T extends Object> IMappedElementDescriptor<T> getDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
     XDiagramConfig _config = mapping.getConfig();
-    XtextDomainObjectProvider _domainObjectProvider = _config.getDomainObjectProvider();
-    return _domainObjectProvider.<T>createMappedDescriptor(domainObject, mapping);
+    IMappedElementDescriptorProvider _domainObjectProvider = _config.getDomainObjectProvider();
+    return _domainObjectProvider.<T>createMappedElementDescriptor(domainObject, mapping);
   }
 }

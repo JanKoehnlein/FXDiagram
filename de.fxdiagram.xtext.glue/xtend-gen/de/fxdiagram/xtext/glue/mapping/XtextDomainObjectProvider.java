@@ -3,12 +3,11 @@ package de.fxdiagram.xtext.glue.mapping;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ESetting;
-import de.fxdiagram.xtext.glue.mapping.MappedElement;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.XtextEObjectDescriptor;
 import de.fxdiagram.xtext.glue.mapping.XtextESettingDescriptor;
@@ -25,59 +24,9 @@ import org.eclipse.xtext.resource.XtextResource;
 
 @ModelNode
 @SuppressWarnings("all")
-public class XtextDomainObjectProvider implements DomainObjectProvider {
+public class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
   public DomainObjectDescriptor createDescriptor(final Object handle) {
-    if ((handle instanceof MappedElement<?>)) {
-      Object _element = ((MappedElement<?>)handle).getElement();
-      final Object it = _element;
-      boolean _matched = false;
-      if (!_matched) {
-        if (it instanceof EObject) {
-          _matched=true;
-          URI _uRI = EcoreUtil.getURI(((EObject)it));
-          String _string = _uRI.toString();
-          String _fullyQualifiedName = this.getFullyQualifiedName(((EObject)it));
-          AbstractMapping<?> _mapping = ((MappedElement<?>)handle).getMapping();
-          XDiagramConfig _config = _mapping.getConfig();
-          String _iD = _config.getID();
-          AbstractMapping<?> _mapping_1 = ((MappedElement<?>)handle).getMapping();
-          String _iD_1 = _mapping_1.getID();
-          return new XtextEObjectDescriptor<EObject>(_string, _fullyQualifiedName, _iD, _iD_1, this);
-        }
-      }
-      if (!_matched) {
-        if (it instanceof ESetting) {
-          _matched=true;
-          EObject _owner = ((ESetting<?>)it).getOwner();
-          URI _uRI = EcoreUtil.getURI(_owner);
-          String _string = _uRI.toString();
-          EObject _owner_1 = ((ESetting<?>)it).getOwner();
-          String _fullyQualifiedName = this.getFullyQualifiedName(_owner_1);
-          EReference _reference = ((ESetting<?>)it).getReference();
-          int _index = ((ESetting<?>)it).getIndex();
-          AbstractMapping<?> _mapping = ((MappedElement<?>)handle).getMapping();
-          XDiagramConfig _config = _mapping.getConfig();
-          String _iD = _config.getID();
-          AbstractMapping<?> _mapping_1 = ((MappedElement<?>)handle).getMapping();
-          String _iD_1 = _mapping_1.getID();
-          return new XtextESettingDescriptor<EObject>(_string, _fullyQualifiedName, _reference, _index, _iD, _iD_1, this);
-        }
-      }
-      return null;
-    }
     return null;
-  }
-  
-  public <T extends Object> AbstractXtextDescriptor<T> createMappedDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
-    MappedElement<T> _mappedElement = new MappedElement<T>(domainObject, mapping);
-    DomainObjectDescriptor _createDescriptor = this.createDescriptor(_mappedElement);
-    return ((AbstractXtextDescriptor<T>) _createDescriptor);
-  }
-  
-  public <T extends Object, U extends Object> AbstractXtextDescriptor<T> createMappedDescriptor2(final T domainObject, final AbstractMapping<?> mapping) {
-    MappedElement<?> _mappedElement = new MappedElement(domainObject, mapping);
-    DomainObjectDescriptor _createDescriptor = this.createDescriptor(_mappedElement);
-    return ((AbstractXtextDescriptor<T>) _createDescriptor);
   }
   
   public String getFullyQualifiedName(final EObject domainObject) {
@@ -110,6 +59,41 @@ public class XtextDomainObjectProvider implements DomainObjectProvider {
     } else {
       return "unnamed";
     }
+  }
+  
+  public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
+    final T it = domainObject;
+    boolean _matched = false;
+    if (!_matched) {
+      if (it instanceof EObject) {
+        _matched=true;
+        URI _uRI = EcoreUtil.getURI(((EObject)it));
+        String _string = _uRI.toString();
+        String _fullyQualifiedName = this.getFullyQualifiedName(((EObject)it));
+        XDiagramConfig _config = mapping.getConfig();
+        String _iD = _config.getID();
+        String _iD_1 = mapping.getID();
+        XtextEObjectDescriptor<EObject> _xtextEObjectDescriptor = new XtextEObjectDescriptor<EObject>(_string, _fullyQualifiedName, _iD, _iD_1, this);
+        return ((IMappedElementDescriptor<T>) _xtextEObjectDescriptor);
+      }
+    }
+    if (!_matched) {
+      if (it instanceof ESetting) {
+        _matched=true;
+        EObject _owner = ((ESetting<?>)it).getOwner();
+        URI _uRI = EcoreUtil.getURI(_owner);
+        String _string = _uRI.toString();
+        EObject _owner_1 = ((ESetting<?>)it).getOwner();
+        String _fullyQualifiedName = this.getFullyQualifiedName(_owner_1);
+        EReference _reference = ((ESetting<?>)it).getReference();
+        int _index = ((ESetting<?>)it).getIndex();
+        XDiagramConfig _config = mapping.getConfig();
+        String _iD = _config.getID();
+        String _iD_1 = mapping.getID();
+        return new XtextESettingDescriptor(_string, _fullyQualifiedName, _reference, _index, _iD, _iD_1, this);
+      }
+    }
+    return null;
   }
   
   public void populate(final ModelElementImpl modelElement) {

@@ -4,7 +4,6 @@ import com.google.inject.Injector
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.model.DomainObjectDescriptor
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
@@ -100,43 +99,27 @@ class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescr
 	}
 }
 
-@ModelNode('provider', 'uri', 'fqn', 'mappingConfigID', 'mappingID')
 @Logging
-abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING> implements DomainObjectDescriptor {
+abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING> extends AbstractMappedElementDescriptor<ECLASS_OR_ESETTING> {
 
-	@FxProperty(readOnly) XtextDomainObjectProvider provider
-	@FxProperty(readOnly) String fqn
-	@FxProperty(readOnly) String uri
-	@FxProperty(readOnly) String mappingConfigID
-	@FxProperty(readOnly) String mappingID
-	AbstractMapping<ECLASS_OR_ESETTING> mapping
-
+	new() {}
+	
 	new(String uri, String fqn, String mappingConfigID, String mappingID, XtextDomainObjectProvider provider) {
-		uriProperty.set(uri)
-		fqnProperty.set(fqn)
-		providerProperty.set(provider)
-		mappingIDProperty.set(mappingID)
-		mappingConfigIDProperty.set(mappingConfigID)
+		super(uri, fqn, mappingConfigID, mappingID, provider)
 	}
 
 	override getName() {
-		getFqn?.split('\\.')?.last
-	}
-
-	override getId() {
-		getFqn
-	}
-
-	def AbstractMapping<ECLASS_OR_ESETTING> getMapping() {
-		if(mapping == null) {
-			val config = XDiagramConfig.Registry.instance.getConfigByID(mappingConfigID)
-			mapping = config.getMappingByID(mappingID) as AbstractMapping<ECLASS_OR_ESETTING>
-		}
-		mapping
+		nameProperty.get?.split('\\.')?.last
 	}
 	
-	abstract def <T> T withDomainObject((ECLASS_OR_ESETTING)=>T lambda)
-	
+	def String getFqn() {
+		nameProperty.get
+	}
+
+	def getUri() {
+		id
+	}
+
 	def openInEditor(boolean isSelect) {
 		if(isSelect) {
 			Access.IURIEditorOpener.get.open(URI.createURI(uri), isSelect)

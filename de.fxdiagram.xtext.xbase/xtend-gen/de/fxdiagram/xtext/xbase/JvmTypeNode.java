@@ -7,7 +7,7 @@ import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseFlipNode;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
@@ -78,6 +78,11 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
   
   public JvmTypeNode(final JvmEObjectDescriptor<JvmDeclaredType> descriptor) {
     super(descriptor);
+  }
+  
+  public JvmEObjectDescriptor<JvmDeclaredType> getDomainObject() {
+    IMappedElementDescriptor<JvmDeclaredType> _domainObject = super.getDomainObject();
+    return ((JvmEObjectDescriptor<JvmDeclaredType>) _domainObject);
   }
   
   public void registerOnClick() {
@@ -171,8 +176,8 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
               it.setPadding(_insets);
               it.setSpacing(5);
               ObservableList<Node> _children = it.getChildren();
-              AbstractXtextDescriptor<JvmDeclaredType> _descriptor = JvmTypeNode.this.getDescriptor();
-              String _uri = _descriptor.getUri();
+              JvmEObjectDescriptor<JvmDeclaredType> _domainObject = JvmTypeNode.this.getDomainObject();
+              String _uri = _domainObject.getUri();
               URI _createURI = URI.createURI(_uri);
               String _lastSegment = _createURI.lastSegment();
               Label _label = new Label(_lastSegment);
@@ -215,10 +220,10 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
           double _multiply = (_size * 0.8);
           Font _font_2 = Font.font(_family, _multiply);
           it.setFont(_font_2);
-          AbstractXtextDescriptor<JvmDeclaredType> _descriptor = JvmTypeNode.this.getDescriptor();
-          String _fqn = _descriptor.getFqn();
-          AbstractXtextDescriptor<JvmDeclaredType> _descriptor_1 = JvmTypeNode.this.getDescriptor();
-          String _fqn_1 = _descriptor_1.getFqn();
+          JvmEObjectDescriptor<JvmDeclaredType> _domainObject = JvmTypeNode.this.getDomainObject();
+          String _fqn = _domainObject.getFqn();
+          JvmEObjectDescriptor<JvmDeclaredType> _domainObject_1 = JvmTypeNode.this.getDomainObject();
+          String _fqn_1 = _domainObject_1.getFqn();
           int _lastIndexOf = _fqn_1.lastIndexOf(".");
           String _substring = _fqn.substring(0, _lastIndexOf);
           it.setText(_substring);
@@ -248,7 +253,7 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
     VBox _vBox = new VBox();
     final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
       public void apply(final VBox c) {
-        AbstractXtextDescriptor<JvmDeclaredType> _descriptor = JvmTypeNode.this.getDescriptor();
+        JvmEObjectDescriptor<JvmDeclaredType> _domainObject = JvmTypeNode.this.getDomainObject();
         final Function1<JvmDeclaredType, Object> _function = new Function1<JvmDeclaredType, Object>() {
           public Object apply(final JvmDeclaredType type) {
             Object _xblockexpression = null;
@@ -283,7 +288,7 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
             return _xblockexpression;
           }
         };
-        _descriptor.<Object>withDomainObject(_function);
+        _domainObject.<Object>withDomainObject(_function);
       }
     };
     final VBox attributeCompartment = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
@@ -296,7 +301,7 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
     VBox _vBox_1 = new VBox();
     final Procedure1<VBox> _function_3 = new Procedure1<VBox>() {
       public void apply(final VBox c) {
-        AbstractXtextDescriptor<JvmDeclaredType> _descriptor = JvmTypeNode.this.getDescriptor();
+        JvmEObjectDescriptor<JvmDeclaredType> _domainObject = JvmTypeNode.this.getDomainObject();
         final Function1<JvmDeclaredType, Object> _function = new Function1<JvmDeclaredType, Object>() {
           public Object apply(final JvmDeclaredType type) {
             Object _xblockexpression = null;
@@ -331,7 +336,7 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
             return _xblockexpression;
           }
         };
-        _descriptor.<Object>withDomainObject(_function);
+        _domainObject.<Object>withDomainObject(_function);
       }
     };
     final VBox methodCompartment = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_3);

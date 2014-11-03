@@ -5,12 +5,12 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 
 class StatemachineDiagramConfig extends AbstractDiagramConfig {
 	 
@@ -27,7 +27,7 @@ class StatemachineDiagramConfig extends AbstractDiagramConfig {
 	}
 	
 	val transitionConnection = new ConnectionMapping<Transition>(this, "transitionConnection") {
-		override createConnection(AbstractXtextDescriptor<Transition> descriptor) {
+		override createConnection(IMappedElementDescriptor<Transition> descriptor) {
 			new XConnection(descriptor) => [
 				new XConnectionLabel(it) => [ label |
 					label.text.text = descriptor.withDomainObject[event.name]

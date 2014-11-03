@@ -6,27 +6,27 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.ESetting
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode
 import javafx.scene.paint.Color
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.jdt.core.IType
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.common.types.JvmField
 import org.eclipse.xtext.common.types.JvmTypeReference
+import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
+import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration
+import org.eclipse.xtext.resource.IResourceServiceProvider
+import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 
 import static org.eclipse.xtext.common.types.TypesPackage.Literals.*
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
-import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration
-import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.xtext.resource.IResourceServiceProvider
-import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 
 class JvmClassDiagramConfig extends AbstractDiagramConfig {
 
@@ -35,7 +35,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 	@Inject extension IResourceServiceProvider.Registry
 
 	val typeNode = new NodeMapping<JvmDeclaredType>(this, 'typeNode') {
-		override createNode(AbstractXtextDescriptor<JvmDeclaredType> descriptor) {
+		override createNode(IMappedElementDescriptor<JvmDeclaredType> descriptor) {
 			new JvmTypeNode(descriptor as JvmEObjectDescriptor<JvmDeclaredType>)
 		}
 
@@ -57,7 +57,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 	}
 
 	val referenceConnection = new ConnectionMapping<JvmField>(this, 'referenceConnection') {
-		override createConnection(AbstractXtextDescriptor<JvmField> descriptor) {
+		override createConnection(IMappedElementDescriptor<JvmField> descriptor) {
 			new XConnection(descriptor) => [
 				targetArrowHead = new LineArrowHead(it, false)
 				new XConnectionLabel(it) => [ label |
@@ -72,7 +72,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 	}
 
 	val superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, 'superTypeConnection') {
-		override createConnection(AbstractXtextDescriptor<ESetting<JvmDeclaredType>> descriptor) {
+		override createConnection(IMappedElementDescriptor<ESetting<JvmDeclaredType>> descriptor) {
 			new XConnection(descriptor) => [
 				targetArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false)
 				// TODO set strokeDashOffset for interfaces			
@@ -92,7 +92,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 	}
 	
 	val packageNode = new NodeMapping<PackageDeclaration>(this, 'packageNode') {
-		override createNode(AbstractXtextDescriptor<PackageDeclaration> descriptor) {
+		override createNode(IMappedElementDescriptor<PackageDeclaration> descriptor) {
 			 new BaseDiagramNode(descriptor) 	
 		}
 		

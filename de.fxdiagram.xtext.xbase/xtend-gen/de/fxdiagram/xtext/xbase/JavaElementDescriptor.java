@@ -1,8 +1,8 @@
 package de.fxdiagram.xtext.xbase;
 
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
@@ -39,7 +39,7 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
     {
       String _handleIdentifier = this.getHandleIdentifier();
       final IJavaElement javaElement = JavaCore.create(_handleIdentifier);
-      XtextDomainObjectProvider _provider = this.getProvider();
+      DomainObjectProvider _provider = this.getProvider();
       String _uri = this.getUri();
       URI _createURI = URI.createURI(_uri);
       final JvmDomainUtil domainUtil = ((JvmDomainObjectProvider) _provider).getJvmDomainUtil(_createURI);

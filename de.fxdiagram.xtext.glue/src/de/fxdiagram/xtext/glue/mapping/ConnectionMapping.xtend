@@ -12,7 +12,7 @@ class ConnectionMapping<T> extends AbstractMapping<T> {
 		super(config, id)
 	}
 
-	def XConnection createConnection(AbstractXtextDescriptor<T> descriptor) {
+	def XConnection createConnection(IMappedElementDescriptor<T> descriptor) {
 		new BaseConnection(descriptor)
 	}
 

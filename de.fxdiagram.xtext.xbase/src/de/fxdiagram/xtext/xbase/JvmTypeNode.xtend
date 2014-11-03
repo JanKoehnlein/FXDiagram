@@ -53,6 +53,10 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 		super(descriptor)
 	}
 	
+	override JvmEObjectDescriptor<JvmDeclaredType> getDomainObject() {
+		super.getDomainObject as JvmEObjectDescriptor<JvmDeclaredType>
+	}
+	
 	override registerOnClick() {
 		onMouseClicked = [ 
 			if (button == SECONDARY) {
@@ -85,7 +89,7 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 			children += new VBox => [
 				padding = new Insets(10, 20, 10, 20)
 				spacing = 5
-				children += new Label(URI.createURI(descriptor.uri).lastSegment)
+				children += new Label(URI.createURI(domainObject.uri).lastSegment)
 				children += packageBox = new CheckBox('Package')
 				children += attributesBox = new CheckBox('Attributes')
 				children += methodsBox = new CheckBox('Methods')
@@ -97,7 +101,7 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 		packageLabel = new Text => [
 			textOrigin = VPos.TOP
 			font = Font.font(font.family, font.size * 0.8)
-			text = descriptor.fqn.substring(0, descriptor.fqn.lastIndexOf('.'))		
+			text = domainObject.fqn.substring(0, domainObject.fqn.lastIndexOf('.'))		
 		]
 		pane
 	}
@@ -112,7 +116,7 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 		val inflator = new Inflator(this, contentArea)
 		
 		val attributeCompartment = new VBox => [ c |
-			descriptor.withDomainObject[ type |
+			domainObject.withDomainObject[ type |
 				type.attributes.forEach[ field |
 					c.children += new Text => [
 						textOrigin = VPos.TOP
@@ -126,7 +130,7 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 		attributeCompartment.activate(showAttributesProperty, attributesBox, [1], inflator)
 
 		val methodCompartment = new VBox => [ c |
-			descriptor.withDomainObject[ type |
+			domainObject.withDomainObject[ type |
 				type.methods.forEach[ operation |
 					c.children += new Text => [
 						textOrigin = VPos.TOP

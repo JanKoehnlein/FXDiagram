@@ -2,6 +2,7 @@ package de.fxdiagram.xtext.glue.mapping;
 
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
@@ -24,9 +25,9 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   private String ID;
   
   @Accessors(AccessorType.PUBLIC_GETTER)
-  private XtextDomainObjectProvider domainObjectProvider = this.createDomainObjectProvider();
+  private IMappedElementDescriptorProvider domainObjectProvider = this.createDomainObjectProvider();
   
-  protected XtextDomainObjectProvider createDomainObjectProvider() {
+  protected IMappedElementDescriptorProvider createDomainObjectProvider() {
     return new XtextDomainObjectProvider();
   }
   
@@ -76,7 +77,7 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   }
   
   @Pure
-  public XtextDomainObjectProvider getDomainObjectProvider() {
+  public IMappedElementDescriptorProvider getDomainObjectProvider() {
     return this.domainObjectProvider;
   }
 }

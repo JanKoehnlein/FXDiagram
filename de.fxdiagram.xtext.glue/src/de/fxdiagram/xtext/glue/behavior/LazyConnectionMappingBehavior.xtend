@@ -16,12 +16,13 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 
 class LazyConnectionMappingBehavior<ARG> extends RapidButtonBehavior<XNode> {
 	
 	List<LazyConnectionRapidButtonAction<?, ARG>> actions = newArrayList
 
-	static def <T> addLazyBehavior(XNode node, AbstractXtextDescriptor<T> descriptor) {
+	static def <T> addLazyBehavior(XNode node, IMappedElementDescriptor descriptor) {
 		if(descriptor.mapping instanceof NodeMapping<?>) {
 			val nodeMapping = descriptor.mapping as NodeMapping<T>
 			var LazyConnectionMappingBehavior<T> lazyBehavior = null 
@@ -119,7 +120,7 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 	}
 	
 	protected def populateChooser(AbstractChooser chooser, XNode host) {
-		val hostDescriptor = host.domainObject as AbstractXtextDescriptor<ARG>
+		val hostDescriptor = host.domainObject as IMappedElementDescriptor<ARG>
 		val existingConnectionDescriptors = host.diagram.connections.map[domainObject].toSet
 		hostDescriptor.withDomainObject[ 
 			domainArgument |

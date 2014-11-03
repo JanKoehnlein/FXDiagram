@@ -18,7 +18,7 @@ class NodeMapping<T> extends AbstractMapping<T> {
 	def getIncoming() { initialize; incoming }
 	def getNestedDiagram() { initialize; nestedDiagram } 
 	
-	def XNode createNode(AbstractXtextDescriptor<T> descriptor) { new BaseNode(descriptor) }
+	def XNode createNode(IMappedElementDescriptor<T> descriptor) { new BaseNode(descriptor) }
 	
 	def <U> outConnectionFor(ConnectionMapping<U> connectionMapping, (T)=>U selector) {
 		val call = new ConnectionMappingCall(selector, connectionMapping)

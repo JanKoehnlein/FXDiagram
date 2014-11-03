@@ -67,12 +67,6 @@ class XDiagramConfigInterpreter {
 			if (existingConnection != null)
 				return existingConnection
 			val connection = connectionMappingCasted.createConnection(descriptor)
-			connection => [
-				onMouseClicked = [
-					if (clickCount == 2)
-						descriptor.openInEditor(true)
-				]
-			]
 			return connection
 		} else {
 			return null
@@ -141,7 +135,7 @@ class XDiagramConfigInterpreter {
 	}
 
 	def <T> getDescriptor(T domainObject, AbstractMapping<T> mapping) {
-		mapping.config.domainObjectProvider.createMappedDescriptor(domainObject, mapping)
+		 mapping.config.domainObjectProvider.createMappedElementDescriptor(domainObject, mapping)
 	}
 }
 

@@ -2,7 +2,7 @@ package de.fxdiagram.xtext.domainmodel
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import de.fxdiagram.xtext.glue.shapes.BaseNode
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -20,7 +20,7 @@ class EntityNode extends BaseNode<Entity> {
 	
 	@Inject extension DomainModelUtil util;
 	
-	new(AbstractXtextDescriptor<Entity> descriptor) {
+	new(IMappedElementDescriptor<Entity> descriptor) {
 		super(descriptor)
 	}
 	
@@ -37,7 +37,7 @@ class EntityNode extends BaseNode<Entity> {
 				]
 				VBox.setMargin(label, new Insets(0, 0, 10, 0))
 				children += new VBox => [ attributeCompartment |
-					descriptor.withDomainObject[ entity |
+					domainObject.withDomainObject[ entity |
 						entity.features.filter(Property).filter[type.referencedEntity == null].forEach[ attribute |
 							attributeCompartment.children += new Text => [
 								textOrigin = VPos.TOP

@@ -4,9 +4,9 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
 import de.fxdiagram.xtext.glue.mapping.AbstractNodeMappingCall;
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMappingCall;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.MultiNodeMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
@@ -44,7 +44,7 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
     return _xblockexpression;
   }
   
-  public XDiagram createDiagram(final AbstractXtextDescriptor<T> descriptor) {
+  public XDiagram createDiagram(final IMappedElementDescriptor<T> descriptor) {
     return new XDiagram();
   }
   

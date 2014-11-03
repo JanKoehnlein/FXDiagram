@@ -5,10 +5,10 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping
 import de.fxdiagram.xtext.glue.mapping.ESetting
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode
@@ -35,7 +35,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 	}
 	
 	val packageNode = new NodeMapping<PackageDeclaration>(this, 'packageNode') {
-		override createNode(AbstractXtextDescriptor<PackageDeclaration> descriptor) {
+		override createNode(IMappedElementDescriptor<PackageDeclaration> descriptor) {
 			 new BaseDiagramNode(descriptor) 	
 		}
 		
@@ -45,7 +45,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 	}
 
 	val entityNode = new NodeMapping<Entity>(this, 'entityNode') {
-		override createNode(AbstractXtextDescriptor<Entity> descriptor) {
+		override createNode(IMappedElementDescriptor<Entity> descriptor) {
 			new EntityNode(descriptor) 
 		}
 		
@@ -66,7 +66,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 	} 
 
 	val propertyConnection = new ConnectionMapping<Property>(this, 'propertyConnection') {
-		override createConnection(AbstractXtextDescriptor<Property> descriptor) {
+		override createConnection(IMappedElementDescriptor<Property> descriptor) {
 			new XConnection(descriptor) => [
 				targetArrowHead = new LineArrowHead(it, false)
 				new XConnectionLabel(it) => [ label |
@@ -81,7 +81,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 	}
 	
 	val superTypeConnection = new ConnectionMapping<ESetting<Entity>>(this, 'superTypeConnection') {
-		override createConnection(AbstractXtextDescriptor<ESetting<Entity>> descriptor) {
+		override createConnection(IMappedElementDescriptor<ESetting<Entity>> descriptor) {
 			new XConnection(descriptor) => [
 				targetArrowHead = new TriangleArrowHead(it, 10, 15, 
 					null, Color.WHITE, false)

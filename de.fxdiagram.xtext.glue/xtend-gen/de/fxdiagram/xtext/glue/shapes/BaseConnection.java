@@ -4,7 +4,9 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,22 +18,33 @@ public class BaseConnection<T extends Object> extends XConnection {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectProperty = this.domainObjectProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
       public void changed(final ObservableValue<? extends DomainObjectDescriptor> prop, final DomainObjectDescriptor oldVal, final DomainObjectDescriptor newVal) {
-        if ((newVal instanceof AbstractXtextDescriptor<?>)) {
-          ((AbstractXtextDescriptor<?>)newVal).injectMembers(BaseConnection.this);
-        }
+        BaseConnection.this.injectMembers();
       }
     };
     _domainObjectProperty.addListener(_function);
   }
   
-  public BaseConnection(final AbstractXtextDescriptor<T> descriptor) {
+  public BaseConnection(final IMappedElementDescriptor<T> descriptor) {
     super(descriptor);
-    descriptor.injectMembers(this);
+    this.injectMembers();
   }
   
-  protected AbstractXtextDescriptor<T> getDescriptor() {
-    DomainObjectDescriptor _domainObject = this.getDomainObject();
-    return ((AbstractXtextDescriptor<T>) _domainObject);
+  public DomainObjectDescriptor getDomainObject() {
+    DomainObjectDescriptor _domainObject = super.getDomainObject();
+    return ((IMappedElementDescriptor<T>) _domainObject);
+  }
+  
+  protected void injectMembers() {
+    final DomainObjectDescriptor descriptor = this.getDomainObject();
+    if ((descriptor instanceof AbstractXtextDescriptor<?>)) {
+      ((AbstractXtextDescriptor<?>)descriptor).injectMembers(this);
+    }
+  }
+  
+  public void doActivate() {
+    super.doActivate();
+    OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(this);
+    this.addBehavior(_openElementInEditorBehavior);
   }
   
   public void populate(final ModelElementImpl modelElement) {

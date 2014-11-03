@@ -11,10 +11,10 @@ import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
 import de.fxdiagram.xtext.domainmodel.EntityNode;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.ESetting;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
@@ -68,7 +68,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode") {
-    public XNode createNode(final AbstractXtextDescriptor<PackageDeclaration> descriptor) {
+    public XNode createNode(final IMappedElementDescriptor<PackageDeclaration> descriptor) {
       return new BaseDiagramNode<PackageDeclaration>(descriptor);
     }
     
@@ -83,7 +83,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final NodeMapping<Entity> entityNode = new NodeMapping<Entity>(this, "entityNode") {
-    public XNode createNode(final AbstractXtextDescriptor<Entity> descriptor) {
+    public XNode createNode(final IMappedElementDescriptor<Entity> descriptor) {
       return new EntityNode(descriptor);
     }
     
@@ -139,7 +139,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final ConnectionMapping<Property> propertyConnection = new ConnectionMapping<Property>(this, "propertyConnection") {
-    public XConnection createConnection(final AbstractXtextDescriptor<Property> descriptor) {
+    public XConnection createConnection(final IMappedElementDescriptor<Property> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {
@@ -176,7 +176,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final ConnectionMapping<ESetting<Entity>> superTypeConnection = new ConnectionMapping<ESetting<Entity>>(this, "superTypeConnection") {
-    public XConnection createConnection(final AbstractXtextDescriptor<ESetting<Entity>> descriptor) {
+    public XConnection createConnection(final IMappedElementDescriptor<ESetting<Entity>> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {

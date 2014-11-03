@@ -9,14 +9,14 @@ import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
 import de.fxdiagram.xtext.glue.mapping.ESetting;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
@@ -60,7 +60,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
   private IResourceServiceProvider.Registry _registry;
   
   private final NodeMapping<JvmDeclaredType> typeNode = new NodeMapping<JvmDeclaredType>(this, "typeNode") {
-    public XNode createNode(final AbstractXtextDescriptor<JvmDeclaredType> descriptor) {
+    public XNode createNode(final IMappedElementDescriptor<JvmDeclaredType> descriptor) {
       return new JvmTypeNode(((JvmEObjectDescriptor<JvmDeclaredType>) descriptor));
     }
     
@@ -109,7 +109,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final ConnectionMapping<JvmField> referenceConnection = new ConnectionMapping<JvmField>(this, "referenceConnection") {
-    public XConnection createConnection(final AbstractXtextDescriptor<JvmField> descriptor) {
+    public XConnection createConnection(final IMappedElementDescriptor<JvmField> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {
@@ -148,7 +148,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final ConnectionMapping<ESetting<JvmDeclaredType>> superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, "superTypeConnection") {
-    public XConnection createConnection(final AbstractXtextDescriptor<ESetting<JvmDeclaredType>> descriptor) {
+    public XConnection createConnection(final IMappedElementDescriptor<ESetting<JvmDeclaredType>> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
         public void apply(final XConnection it) {
@@ -198,7 +198,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode") {
-    public XNode createNode(final AbstractXtextDescriptor<PackageDeclaration> descriptor) {
+    public XNode createNode(final IMappedElementDescriptor<PackageDeclaration> descriptor) {
       return new BaseDiagramNode<PackageDeclaration>(descriptor);
     }
     
@@ -250,7 +250,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
     }
   }
   
-  protected XtextDomainObjectProvider createDomainObjectProvider() {
+  protected IMappedElementDescriptorProvider createDomainObjectProvider() {
     return new JvmDomainObjectProvider();
   }
 }

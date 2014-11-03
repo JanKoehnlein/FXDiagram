@@ -5,6 +5,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.lib.simple.SimpleNode
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
@@ -18,16 +19,24 @@ class BaseNode<T> extends SimpleNode {
 	new() {
 		domainObjectProperty.addListener [
 			prop, oldVal, newVal |
-			if(newVal instanceof AbstractXtextDescriptor<?>)
-				newVal.injectMembers(this)
+			injectMembers
 		]
 	}
 	
-	new(AbstractXtextDescriptor<T> descriptor) {
+	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)
-		descriptor.injectMembers(this)
+		injectMembers
 	}
 	
+	protected def injectMembers() {
+		val domainObject = getDomainObject
+		if(domainObject instanceof AbstractXtextDescriptor<?>)
+			domainObject.injectMembers(this)
+	}
+	
+	override IMappedElementDescriptor<T> getDomainObject() {
+		super.getDomainObject() as IMappedElementDescriptor<T>
+	}
 	
 	override protected createNode() {
 		val pane = super.createNode() as RectangleBorderPane
@@ -41,13 +50,9 @@ class BaseNode<T> extends SimpleNode {
 		pane
 	}
 	
-	protected def getDescriptor() {
-		domainObject as AbstractXtextDescriptor<T>
-	}
-	
 	override doActivate() {
 		super.doActivate()
-		addLazyBehavior(descriptor)
+		addLazyBehavior(domainObject)
 		addBehavior(new OpenElementInEditorBehavior(this))
 	}
 }	

@@ -1,7 +1,6 @@
 package de.fxdiagram.xtext.glue.mapping
 
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.model.DomainObjectProvider
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.naming.IQualifiedNameProvider
@@ -11,28 +10,10 @@ import org.eclipse.xtext.resource.XtextResource
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
 @ModelNode
-class XtextDomainObjectProvider implements DomainObjectProvider {
+class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 
 	override createDescriptor(Object handle) {
-		if(handle instanceof MappedElement<?>) {
-			switch it: handle.element {
-				EObject: 
-					return new XtextEObjectDescriptor(URI.toString, fullyQualifiedName, handle.mapping.config.ID, handle.mapping.ID, this)
-				ESetting<?>: {
-					return new XtextESettingDescriptor(owner.URI.toString, owner.fullyQualifiedName, reference, index, handle.mapping.config.ID, handle.mapping.ID, this)
-				}
-				default:
-					return null
-			}
-		}
-	}
-	
-	def <T> createMappedDescriptor(T domainObject, AbstractMapping<T> mapping) {
-		 new MappedElement(domainObject, mapping).createDescriptor as AbstractXtextDescriptor<T>
-	}
-	
-	def <T, U> createMappedDescriptor2(T domainObject, AbstractMapping<?> mapping) {
-		 new MappedElement(domainObject, mapping).createDescriptor as AbstractXtextDescriptor<T>
+		null
 	}
 	
 	def getFullyQualifiedName(EObject domainObject) {
@@ -48,6 +29,20 @@ class XtextDomainObjectProvider implements DomainObjectProvider {
 			else 
 				return 'unnamed'
 	}
+	
+	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
+		switch it: domainObject {
+			EObject: 
+				return new XtextEObjectDescriptor(URI.toString, fullyQualifiedName, mapping.config.ID, mapping.ID, this)
+					as IMappedElementDescriptor<T>
+			ESetting<?>: {
+				return new XtextESettingDescriptor(owner.URI.toString, owner.fullyQualifiedName, reference, index, mapping.config.ID, mapping.ID, this)
+			}
+			default:
+				return null
+		}
+	}
+	
 }
 
 

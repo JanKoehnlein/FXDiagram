@@ -3,8 +3,8 @@ package de.fxdiagram.xtext.glue.mapping;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.xtext.glue.mapping.MappingCall;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -83,5 +83,5 @@ public interface XDiagramConfig {
   
   public abstract <ARG extends Object> void addMapping(final AbstractMapping<ARG> mapping);
   
-  public abstract XtextDomainObjectProvider getDomainObjectProvider();
+  public abstract IMappedElementDescriptorProvider getDomainObjectProvider();
 }
