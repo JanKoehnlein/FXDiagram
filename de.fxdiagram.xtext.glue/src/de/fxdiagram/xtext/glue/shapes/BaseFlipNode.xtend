@@ -5,6 +5,8 @@ import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 
+import static javafx.scene.input.MouseButton.*
+
 import static extension de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior.*
 
 class BaseFlipNode<T> extends FlipNode {
@@ -35,5 +37,14 @@ class BaseFlipNode<T> extends FlipNode {
 		super.doActivate()
 		addLazyBehavior(domainObject)
 		addBehavior(new OpenElementInEditorBehavior(this))
+	}
+	
+	override registerOnClick() {
+		onMouseClicked = [ 
+			if (button == SECONDARY) {
+				if (front != null && back != null) 
+					flip(isHorizontal(it))
+			}
+		]
 	}
 }

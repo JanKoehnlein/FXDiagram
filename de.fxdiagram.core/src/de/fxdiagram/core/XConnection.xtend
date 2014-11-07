@@ -45,6 +45,8 @@ class XConnection extends XShape {
 	
 	@FxProperty double strokeWidth = 2.0
 	@FxProperty Paint stroke
+	@FxProperty double strokeDashOffset = 0.0
+	@FxProperty ObservableList<Double> strokeDashArray = observableArrayList 
 
 	@FxProperty(readOnly) DomainObjectDescriptor domainObject
 
@@ -219,6 +221,8 @@ class XConnection extends XShape {
 			stroke = this.stroke
 			strokeLineCap = StrokeLineCap.ROUND
 			strokeWidth = strokeInRoot
+			strokeDashArray.setAll(this.strokeDashArray)
+			strokeDashOffset = this.strokeDashOffset
 		]
 	}
 	

@@ -1,6 +1,5 @@
 package de.fxdiagram.xtext.xbase;
 
-import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.TooltipExtensions;
@@ -12,7 +11,7 @@ import de.fxdiagram.xtext.glue.shapes.BaseFlipNode;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
 import java.util.function.Consumer;
-import javafx.animation.SequentialTransition;
+import javafx.animation.Transition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,7 +19,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -28,8 +26,6 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -83,32 +79,6 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
   public JvmEObjectDescriptor<JvmDeclaredType> getDomainObject() {
     IMappedElementDescriptor<JvmDeclaredType> _domainObject = super.getDomainObject();
     return ((JvmEObjectDescriptor<JvmDeclaredType>) _domainObject);
-  }
-  
-  public void registerOnClick() {
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      public void handle(final MouseEvent it) {
-        MouseButton _button = it.getButton();
-        boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
-        if (_equals) {
-          boolean _and = false;
-          Node _front = JvmTypeNode.this.getFront();
-          boolean _notEquals = (!Objects.equal(_front, null));
-          if (!_notEquals) {
-            _and = false;
-          } else {
-            Node _back = JvmTypeNode.this.getBack();
-            boolean _notEquals_1 = (!Objects.equal(_back, null));
-            _and = _notEquals_1;
-          }
-          if (_and) {
-            boolean _isHorizontal = JvmTypeNode.this.isHorizontal(it);
-            JvmTypeNode.this.flip(_isHorizontal);
-          }
-        }
-      }
-    };
-    this.setOnMouseClicked(_function);
   }
   
   public Node createNode() {
@@ -347,7 +317,7 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
       }
     };
     this.activate(methodCompartment, this.showMethodsProperty, this.methodsBox, _function_4, inflator);
-    SequentialTransition _inflateAnimation = inflator.getInflateAnimation();
+    Transition _inflateAnimation = inflator.getInflateAnimation();
     if (_inflateAnimation!=null) {
       _inflateAnimation.play();
     }

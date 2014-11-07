@@ -469,6 +469,11 @@ public class XConnection extends XShape implements XModelProvider {
         it.setStroke(_stroke);
         it.setStrokeLineCap(StrokeLineCap.ROUND);
         it.setStrokeWidth(strokeInRoot);
+        ObservableList<Double> _strokeDashArray = it.getStrokeDashArray();
+        ObservableList<Double> _strokeDashArray_1 = XConnection.this.getStrokeDashArray();
+        _strokeDashArray.setAll(_strokeDashArray_1);
+        double _strokeDashOffset = XConnection.this.getStrokeDashOffset();
+        it.setStrokeDashOffset(_strokeDashOffset);
       }
     };
     shapes.forEach(_function);
@@ -817,6 +822,39 @@ public class XConnection extends XShape implements XModelProvider {
   
   public ObjectProperty<Paint> strokeProperty() {
     return this.strokeProperty;
+  }
+  
+  private SimpleDoubleProperty strokeDashOffsetProperty = new SimpleDoubleProperty(this, "strokeDashOffset",_initStrokeDashOffset());
+  
+  private static final double _initStrokeDashOffset() {
+    return 0.0;
+  }
+  
+  public double getStrokeDashOffset() {
+    return this.strokeDashOffsetProperty.get();
+  }
+  
+  public void setStrokeDashOffset(final double strokeDashOffset) {
+    this.strokeDashOffsetProperty.set(strokeDashOffset);
+  }
+  
+  public DoubleProperty strokeDashOffsetProperty() {
+    return this.strokeDashOffsetProperty;
+  }
+  
+  private SimpleListProperty<Double> strokeDashArrayProperty = new SimpleListProperty<Double>(this, "strokeDashArray",_initStrokeDashArray());
+  
+  private static final ObservableList<Double> _initStrokeDashArray() {
+    ObservableList<Double> _observableArrayList = FXCollections.<Double>observableArrayList();
+    return _observableArrayList;
+  }
+  
+  public ObservableList<Double> getStrokeDashArray() {
+    return this.strokeDashArrayProperty.get();
+  }
+  
+  public ListProperty<Double> strokeDashArrayProperty() {
+    return this.strokeDashArrayProperty;
   }
   
   private ReadOnlyObjectWrapper<DomainObjectDescriptor> domainObjectProperty = new ReadOnlyObjectWrapper<DomainObjectDescriptor>(this, "domainObject");

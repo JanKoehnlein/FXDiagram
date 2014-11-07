@@ -5,11 +5,14 @@ import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.core.model.DomainObjectDescriptorImpl
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import org.eclipse.ui.IEditorPart
 
 interface IMappedElementDescriptor<T> extends DomainObjectDescriptor {
 	def AbstractMapping<T> getMapping()
 	
 	def <U> U withDomainObject((T)=>U lambda)
+	
+	def IEditorPart openInEditor(boolean select)
 }
 
 @ModelNode('mappingConfigID', 'mappingID')

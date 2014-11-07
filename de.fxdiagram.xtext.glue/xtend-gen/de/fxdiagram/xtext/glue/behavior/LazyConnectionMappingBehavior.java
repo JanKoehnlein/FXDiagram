@@ -22,13 +22,13 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButtonBehavior<XNode> {
   private List<LazyConnectionRapidButtonAction<?, ARG>> actions = CollectionLiterals.<LazyConnectionRapidButtonAction<?, ARG>>newArrayList();
   
-  public static <T extends Object> Behavior addLazyBehavior(final XNode node, final IMappedElementDescriptor descriptor) {
+  public static <T extends Object> Behavior addLazyBehavior(final XNode node, final IMappedElementDescriptor<T> descriptor) {
     Behavior _xifexpression = null;
-    AbstractMapping _mapping = descriptor.getMapping();
+    AbstractMapping<T> _mapping = descriptor.getMapping();
     if ((_mapping instanceof NodeMapping<?>)) {
       Behavior _xblockexpression = null;
       {
-        AbstractMapping _mapping_1 = descriptor.getMapping();
+        AbstractMapping<T> _mapping_1 = descriptor.getMapping();
         final NodeMapping<T> nodeMapping = ((NodeMapping<T>) _mapping_1);
         LazyConnectionMappingBehavior<T> lazyBehavior = null;
         List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();

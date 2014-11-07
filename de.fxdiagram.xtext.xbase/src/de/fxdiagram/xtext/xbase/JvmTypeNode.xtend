@@ -24,8 +24,6 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.xbase.validation.UIStrings
 
-import static javafx.scene.input.MouseButton.*
-
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @ModelNode("showPackage", "showAttributes", "showMethods", "bgColor")
@@ -55,15 +53,6 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 	
 	override JvmEObjectDescriptor<JvmDeclaredType> getDomainObject() {
 		super.getDomainObject as JvmEObjectDescriptor<JvmDeclaredType>
-	}
-	
-	override registerOnClick() {
-		onMouseClicked = [ 
-			if (button == SECONDARY) {
-				if (front != null && back != null) 
-					flip(isHorizontal(it))
-			}
-		]
 	}
 	
 	override createNode() {

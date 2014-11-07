@@ -58,6 +58,22 @@ class ButtonExtensions {
 		]
 	}
 	
+	def static getInverseArrowButton(Side side, String tooltip) {
+		new SVGPath => [
+			content = switch side {
+				case Side.BOTTOM: "m 0,9 7,-9 7,9"
+				case Side.TOP: "m 0,0 7,9 7,-9"
+				case Side.RIGHT: "m 9,0 -9,7 9,7"
+				case Side.LEFT: "m 0,0 9,7 -9,7"
+			}
+			stroke = Color.DARKGREEN
+			fill = Color.TRANSPARENT
+			strokeWidth = 3.5
+			strokeLineCap = StrokeLineCap.ROUND
+			it.tooltip = tooltip
+		]
+	}
+	
 	def static getTargetButton(MouseEvent event) {
 		if (event.target instanceof Node)
 			getContainerButton(event.target as Node)

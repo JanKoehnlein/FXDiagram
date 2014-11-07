@@ -120,7 +120,7 @@ abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING> extends AbstractMappe
 		id
 	}
 
-	def openInEditor(boolean isSelect) {
+	override openInEditor(boolean isSelect) {
 		if(isSelect) {
 			Access.IURIEditorOpener.get.open(URI.createURI(uri), isSelect)
 		} else {

@@ -1,6 +1,7 @@
 package de.fxdiagram.core.extensions
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.core.XRoot
 import javafx.application.Platform
 import javafx.beans.property.StringProperty
 import javafx.geometry.Insets
@@ -14,9 +15,9 @@ import javafx.util.Duration
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension javafx.scene.layout.StackPane.*
-import de.fxdiagram.core.XRoot
 
 class TooltipExtensions {
+	
 	static def setTooltip(Node host, String text) {
 		new SoftTooltip(host, text).install()
 	}  
@@ -35,7 +36,7 @@ class SoftTooltip {
 	Node host
 	XRoot root
 	Node tooltip 
-	TooltipTimer timer
+	Timer timer
 	
 	boolean isHideOnTrigger = false
 	boolean isShowing
@@ -55,7 +56,7 @@ class SoftTooltip {
 			]
 			mouseTransparent = true
 		]
-		this.timer = new TooltipTimer(this)
+		this.timer = new Timer(this)
 	}
 
 	def void install() {
@@ -140,41 +141,43 @@ class SoftTooltip {
 		} 
 		isShowing = false
 	}
-}
-
-class TooltipTimer implements Runnable {
-	SoftTooltip tooltip
-	boolean isRunning
-	long endTime
 	
-	new(SoftTooltip behavior) {
-		this.tooltip = behavior
-		isRunning = false
-	}
-	
-	def stop() {
-		isRunning = false
-	}
-	
-	def restart() {
-		endTime = System.currentTimeMillis + (tooltip.delay.toMillis as long) 
-		if(!isRunning) {
-			isRunning = true
-			new Thread(this).start
+	static class Timer implements Runnable {
+		SoftTooltip tooltip
+		boolean isRunning
+		long endTime
+		
+		new(SoftTooltip behavior) {
+			this.tooltip = behavior
+			isRunning = false
+		}
+		
+		def stop() {
+			isRunning = false
+		}
+		
+		def restart() {
+			endTime = System.currentTimeMillis + (tooltip.delay.toMillis as long) 
+			if(!isRunning) {
+				isRunning = true
+				new Thread(this).start
+			}
+		}
+		
+		override run() {
+			var long delay
+			do {
+				Thread.sleep(endTime - System.currentTimeMillis)
+				if(!isRunning) 
+					return;
+				delay = endTime - System.currentTimeMillis
+			} while(delay > 0)
+			if(isRunning) 
+				Platform.runLater[| tooltip.trigger]	
+			isRunning = false
 		}
 	}
-	
-	override run() {
-		var long delay
-		do {
-			Thread.sleep(endTime - System.currentTimeMillis)
-			if(!isRunning) 
-				return;
-			delay = endTime - System.currentTimeMillis
-		} while(delay > 0)
-		if(isRunning) 
-			Platform.runLater[| tooltip.trigger]	
-		isRunning = false
-	}
 }
+
+
 

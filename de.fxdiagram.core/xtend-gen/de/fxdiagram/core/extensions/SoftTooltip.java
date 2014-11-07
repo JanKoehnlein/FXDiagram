@@ -5,7 +5,7 @@ import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
-import de.fxdiagram.core.extensions.TooltipTimer;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -21,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -31,6 +32,66 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  */
 @SuppressWarnings("all")
 public class SoftTooltip {
+  public static class Timer implements Runnable {
+    private SoftTooltip tooltip;
+    
+    private boolean isRunning;
+    
+    private long endTime;
+    
+    public Timer(final SoftTooltip behavior) {
+      this.tooltip = behavior;
+      this.isRunning = false;
+    }
+    
+    public boolean stop() {
+      return this.isRunning = false;
+    }
+    
+    public void restart() {
+      long _currentTimeMillis = System.currentTimeMillis();
+      Duration _delay = this.tooltip.getDelay();
+      double _millis = _delay.toMillis();
+      long _plus = (_currentTimeMillis + ((long) _millis));
+      this.endTime = _plus;
+      if ((!this.isRunning)) {
+        this.isRunning = true;
+        Thread _thread = new Thread(this);
+        _thread.start();
+      }
+    }
+    
+    public void run() {
+      try {
+        long delay = 0;
+        do {
+          {
+            long _currentTimeMillis = System.currentTimeMillis();
+            long _minus = (this.endTime - _currentTimeMillis);
+            Thread.sleep(_minus);
+            if ((!this.isRunning)) {
+              return;
+            }
+            long _currentTimeMillis_1 = System.currentTimeMillis();
+            long _minus_1 = (this.endTime - _currentTimeMillis_1);
+            delay = _minus_1;
+          }
+        } while((delay > 0));
+        if (this.isRunning) {
+          final Runnable _function = new Runnable() {
+            public void run() {
+              Timer.this.tooltip.trigger();
+            }
+          };
+          Platform.runLater(_function);
+        }
+        this.isRunning = false;
+      } catch (Throwable _e) {
+        throw Exceptions.sneakyThrow(_e);
+      }
+    }
+  }
+  
   private StringProperty textProperty;
   
   private Node host;
@@ -39,7 +100,7 @@ public class SoftTooltip {
   
   private Node tooltip;
   
-  private TooltipTimer timer;
+  private SoftTooltip.Timer timer;
   
   private boolean isHideOnTrigger = false;
   
@@ -76,8 +137,8 @@ public class SoftTooltip {
     };
     StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     this.tooltip = _doubleArrow;
-    TooltipTimer _tooltipTimer = new TooltipTimer(this);
-    this.timer = _tooltipTimer;
+    SoftTooltip.Timer _timer = new SoftTooltip.Timer(this);
+    this.timer = _timer;
   }
   
   public void install() {

@@ -8,6 +8,7 @@ import de.fxdiagram.lib.buttons.RapidButtonBehavior
 import de.fxdiagram.lib.tools.CarusselChooser
 import de.fxdiagram.lib.tools.CoverFlowChooser
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
 import java.util.List
@@ -15,14 +16,12 @@ import java.util.List
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
-import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 
 class LazyConnectionMappingBehavior<ARG> extends RapidButtonBehavior<XNode> {
 	
 	List<LazyConnectionRapidButtonAction<?, ARG>> actions = newArrayList
 
-	static def <T> addLazyBehavior(XNode node, IMappedElementDescriptor descriptor) {
+	static def <T> addLazyBehavior(XNode node, IMappedElementDescriptor<T> descriptor) {
 		if(descriptor.mapping instanceof NodeMapping<?>) {
 			val nodeMapping = descriptor.mapping as NodeMapping<T>
 			var LazyConnectionMappingBehavior<T> lazyBehavior = null 
@@ -81,7 +80,7 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 	}
 	
 	override isEnabled(XNode host) {
-		val hostDescriptor = host.domainObject as AbstractXtextDescriptor<ARG>
+		val hostDescriptor = host.domainObject as IMappedElementDescriptor<ARG>
 		val diagram = host.diagram
 		if(diagram == null) 
 			return false
@@ -136,7 +135,7 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 				}
 			]
 			chooser.connectionProvider = [ thisNode, thatNode, connectionDesc |
-				val descriptor = connectionDesc as AbstractXtextDescriptor<MODEL>
+				val descriptor = connectionDesc as IMappedElementDescriptor<MODEL>
 				mappingCall.connectionMapping.createConnection(descriptor) => [
 					if(hostIsSource) {
 						source = thisNode

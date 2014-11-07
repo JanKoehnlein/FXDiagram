@@ -7,7 +7,7 @@ import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.OpenBehavior;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
+import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
@@ -36,11 +36,11 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
   }
   
   public void open() {
-    AbstractXtextDescriptor<?> _domainObject = this.getDomainObject();
+    IMappedElementDescriptor<?> _domainObject = this.getDomainObject();
     _domainObject.openInEditor(true);
   }
   
-  private AbstractXtextDescriptor<?> getDomainObject() {
+  private IMappedElementDescriptor<?> getDomainObject() {
     DomainObjectDescriptor _switchResult = null;
     XShape _host = this.getHost();
     final XShape it = _host;
@@ -60,6 +60,6 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
     if (!_matched) {
       _switchResult = null;
     }
-    return ((AbstractXtextDescriptor<?>) _switchResult);
+    return ((IMappedElementDescriptor<?>) _switchResult);
   }
 }
