@@ -73,8 +73,8 @@ class ClassLoaderProvider implements DomainObjectProviderWithState {
 @ModelNode('classLoaderID', 'provider')
 class ClassLoaderDescriptor implements DomainObjectDescriptor {
 	
-	@FxProperty(readOnly) String classLoaderID
-	@FxProperty(readOnly) ClassLoaderProvider provider
+	@FxProperty(readOnly=true) String classLoaderID
+	@FxProperty(readOnly=true) ClassLoaderProvider provider
 	
 	new(String classLoaderID, ClassLoaderProvider provider) {
 		classLoaderIDProperty.set(classLoaderID)
@@ -101,9 +101,9 @@ class ClassLoaderDescriptor implements DomainObjectDescriptor {
 @ModelNode('name', 'absolutePath')
 class ResourceDescriptor extends ClassLoaderDescriptor {
 
-	@FxProperty(readOnly) String absolutePath
+	@FxProperty(readOnly=true) String absolutePath
 	
-	@FxProperty(readOnly) String name
+	@FxProperty(readOnly=true) String name
 	
 	new(String classLoaderID, String relativePath, String name, ClassLoaderProvider provider) {
 		super(classLoaderID, provider)

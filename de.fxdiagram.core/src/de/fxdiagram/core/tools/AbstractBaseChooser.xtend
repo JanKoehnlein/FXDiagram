@@ -35,7 +35,7 @@ import javafx.geometry.Point2D
 
 abstract class AbstractBaseChooser implements XDiagramTool {
 
-	@FxProperty(readOnly) boolean isActive = false
+	@FxProperty(readOnly=true) boolean isActive = false
 
 	@FxProperty Label filterLabel
 

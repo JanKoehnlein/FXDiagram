@@ -17,7 +17,8 @@
       xsi:type="setup:VariableTask"
       id=""
       name="xtext.releases.composite"
-      value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases"/>
+      value="https://hudson.eclipse.org/xtext/view/Xtext-Xtend/job/xtext-xtend-maintenance/lastSuccessfulBuild/artifact/build-result/p2.repository/"
+      defaultValue=""/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.release"

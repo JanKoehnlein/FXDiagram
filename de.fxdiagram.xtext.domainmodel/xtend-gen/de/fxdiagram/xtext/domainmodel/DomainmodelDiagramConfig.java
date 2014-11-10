@@ -22,8 +22,8 @@ import de.fxdiagram.xtext.glue.shapes.BaseDiagramNode;
 import java.util.Collections;
 import java.util.List;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.eclipse.emf.common.util.EList;
@@ -50,15 +50,15 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   
   private final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(this, "packageDiagram") {
     public void calls() {
-      final Function1<PackageDeclaration, Iterable<Entity>> _function = new Function1<PackageDeclaration, Iterable<Entity>>() {
-        public Iterable<Entity> apply(final PackageDeclaration it) {
+      final Function1<PackageDeclaration, Iterable<? extends Entity>> _function = new Function1<PackageDeclaration, Iterable<? extends Entity>>() {
+        public Iterable<? extends Entity> apply(final PackageDeclaration it) {
           EList<AbstractElement> _elements = it.getElements();
           return Iterables.<Entity>filter(_elements, Entity.class);
         }
       };
       this.<Entity>nodeForEach(DomainmodelDiagramConfig.this.entityNode, _function);
-      final Function1<PackageDeclaration, Iterable<PackageDeclaration>> _function_1 = new Function1<PackageDeclaration, Iterable<PackageDeclaration>>() {
-        public Iterable<PackageDeclaration> apply(final PackageDeclaration it) {
+      final Function1<PackageDeclaration, Iterable<? extends PackageDeclaration>> _function_1 = new Function1<PackageDeclaration, Iterable<? extends PackageDeclaration>>() {
+        public Iterable<? extends PackageDeclaration> apply(final PackageDeclaration it) {
           EList<AbstractElement> _elements = it.getElements();
           return Iterables.<PackageDeclaration>filter(_elements, PackageDeclaration.class);
         }
@@ -88,8 +88,8 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
     }
     
     public void calls() {
-      final Function1<Entity, Iterable<Property>> _function = new Function1<Entity, Iterable<Property>>() {
-        public Iterable<Property> apply(final Entity it) {
+      final Function1<Entity, Iterable<? extends Property>> _function = new Function1<Entity, Iterable<? extends Property>>() {
+        public Iterable<? extends Property> apply(final Entity it) {
           EList<Feature> _features = it.getFeatures();
           Iterable<Property> _filter = Iterables.<Property>filter(_features, Property.class);
           final Function1<Property, Boolean> _function = new Function1<Property, Boolean>() {
@@ -103,14 +103,14 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         }
       };
       MultiConnectionMappingCall<Property, Entity> _outConnectionForEach = this.<Property>outConnectionForEach(DomainmodelDiagramConfig.this.propertyConnection, _function);
-      final Function1<Side, SVGPath> _function_1 = new Function1<Side, SVGPath>() {
-        public SVGPath apply(final Side it) {
+      final Function1<Side, Node> _function_1 = new Function1<Side, Node>() {
+        public Node apply(final Side it) {
           return ButtonExtensions.getArrowButton(it, "Add property");
         }
       };
       _outConnectionForEach.makeLazy(_function_1);
-      final Function1<Entity, List<ESetting<Entity>>> _function_2 = new Function1<Entity, List<ESetting<Entity>>>() {
-        public List<ESetting<Entity>> apply(final Entity entity) {
+      final Function1<Entity, Iterable<? extends ESetting<Entity>>> _function_2 = new Function1<Entity, Iterable<? extends ESetting<Entity>>>() {
+        public Iterable<? extends ESetting<Entity>> apply(final Entity entity) {
           List<ESetting<Entity>> _xblockexpression = null;
           {
             JvmParameterizedTypeReference _superType = entity.getSuperType();
@@ -129,8 +129,8 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         }
       };
       MultiConnectionMappingCall<ESetting<Entity>, Entity> _outConnectionForEach_1 = this.<ESetting<Entity>>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_2);
-      final Function1<Side, SVGPath> _function_3 = new Function1<Side, SVGPath>() {
-        public SVGPath apply(final Side it) {
+      final Function1<Side, Node> _function_3 = new Function1<Side, Node>() {
+        public Node apply(final Side it) {
           return ButtonExtensions.getTriangleButton(it, "Add superclass");
         }
       };

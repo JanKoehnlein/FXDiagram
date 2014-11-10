@@ -11,11 +11,11 @@ interface DomainObjectDescriptor extends XModelProvider {
 @ModelNode('id', 'name', 'provider')
 abstract class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	
-	@FxProperty(readOnly) String id
+	@FxProperty(readOnly=true) String id
 	
-	@FxProperty(readOnly) String name
+	@FxProperty(readOnly=true) String name
 	
-	@FxProperty(readOnly) DomainObjectProvider provider
+	@FxProperty(readOnly=true) DomainObjectProvider provider
 
 	new() {}
 	
@@ -61,7 +61,7 @@ abstract class CachedDomainObjectDescriptor<T> extends DomainObjectDescriptorImp
 @ModelNode(#['name']) 
 class StringDescriptor implements DomainObjectDescriptor {
 	
-	@FxProperty(readOnly) String name = null
+	@FxProperty(readOnly=true) String name = null
 	
 	new(String name) {
 		nameProperty.set(name)

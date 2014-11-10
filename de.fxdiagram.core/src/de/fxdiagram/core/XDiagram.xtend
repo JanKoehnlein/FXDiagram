@@ -40,9 +40,9 @@ class XDiagram extends Group implements XActivatable {
 
 	@FxProperty ObservableMap<Node, Pos> fixedButtons = observableMap(newHashMap)
 
-	@FxProperty(readOnly) boolean isActive
-	@FxProperty(readOnly) boolean isPreviewActive
-	@FxProperty(readOnly) boolean isRootDiagram
+	@FxProperty(readOnly=true) boolean isActive
+	@FxProperty(readOnly=true) boolean isPreviewActive
+	@FxProperty(readOnly=true) boolean isRootDiagram
 	@FxProperty boolean isLayoutOnActivate
 
 	@FxProperty Paint backgroundPaint = Color.WHITE
@@ -52,7 +52,7 @@ class XDiagram extends Group implements XActivatable {
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group
 	
-	@FxProperty(readOnly) XDiagram parentDiagram
+	@FxProperty(readOnly=true) XDiagram parentDiagram
 
 	(XDiagram)=>void contentsInitializer
 

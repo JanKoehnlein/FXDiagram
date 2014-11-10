@@ -18,8 +18,8 @@ interface IMappedElementDescriptor<T> extends DomainObjectDescriptor {
 @ModelNode('mappingConfigID', 'mappingID')
 abstract class AbstractMappedElementDescriptor<T> extends DomainObjectDescriptorImpl<T> implements IMappedElementDescriptor<T> {
 	
-	@FxProperty(readOnly) String mappingConfigID
-	@FxProperty(readOnly) String mappingID
+	@FxProperty(readOnly=true) String mappingConfigID
+	@FxProperty(readOnly=true) String mappingID
 	AbstractMapping<T> mapping
 	
 	new(String id, String name, String mappingConfigID, String mappingID, IMappedElementDescriptorProvider provider) {

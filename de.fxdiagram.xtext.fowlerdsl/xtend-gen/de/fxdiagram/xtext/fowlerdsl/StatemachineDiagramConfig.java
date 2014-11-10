@@ -9,7 +9,6 @@ import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import javafx.scene.text.Text;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine;
@@ -23,8 +22,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   private final DiagramMapping<Statemachine> statemachineDiagram = new DiagramMapping<Statemachine>(this, "statemachineDiagram") {
     public void calls() {
-      final Function1<Statemachine, EList<State>> _function = new Function1<Statemachine, EList<State>>() {
-        public EList<State> apply(final Statemachine it) {
+      final Function1<Statemachine, Iterable<? extends State>> _function = new Function1<Statemachine, Iterable<? extends State>>() {
+        public Iterable<? extends State> apply(final Statemachine it) {
           return it.getStates();
         }
       };
@@ -34,8 +33,8 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   
   private final NodeMapping<State> stateNode = new NodeMapping<State>(this, "stateNode") {
     public void calls() {
-      final Function1<State, EList<Transition>> _function = new Function1<State, EList<Transition>>() {
-        public EList<Transition> apply(final State it) {
+      final Function1<State, Iterable<? extends Transition>> _function = new Function1<State, Iterable<? extends Transition>>() {
+        public Iterable<? extends Transition> apply(final State it) {
           return it.getTransitions();
         }
       };

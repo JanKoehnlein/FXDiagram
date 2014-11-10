@@ -24,7 +24,7 @@ class XNode extends XShape {
 
 	@FxProperty double width
 	@FxProperty double height
-	@FxProperty(readOnly) DomainObjectDescriptor domainObject
+	@FxProperty(readOnly=true) DomainObjectDescriptor domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	@FxProperty Side placementHint

@@ -88,7 +88,7 @@ class JvmESettingDescriptor<ECLASS extends EObject> extends XtextESettingDescrip
 @ModelNode('handleIdentifier')
 class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableElement> {
 
-	@FxProperty(readOnly) String handleIdentifier
+	@FxProperty(readOnly=true) String handleIdentifier
 
 	new() {
 	}

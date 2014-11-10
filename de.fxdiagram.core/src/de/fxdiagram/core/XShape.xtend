@@ -23,7 +23,7 @@ abstract class XShape extends Parent implements XActivatable {
 
 	@FxProperty boolean selected
 	
-	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly=true) boolean isActive
 	
 	ObservableMap<Class<? extends Behavior>, Behavior> behaviors = observableHashMap
 	

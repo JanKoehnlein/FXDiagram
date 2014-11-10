@@ -7,7 +7,7 @@ abstract class AbstractHostBehavior <T extends Node> implements Behavior {
 	
 	T host 
 	
-	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly=true) boolean isActive
 	
 	new(T host) {
 		this.host = host	

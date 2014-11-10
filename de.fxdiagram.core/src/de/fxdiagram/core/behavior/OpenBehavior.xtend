@@ -8,7 +8,7 @@ interface OpenBehavior extends Behavior {
 
 abstract class AbstractOpenBehavior implements OpenBehavior {
 	
-	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly=true) boolean isActive
 	
 	override activate() {
 		if(!isActive)

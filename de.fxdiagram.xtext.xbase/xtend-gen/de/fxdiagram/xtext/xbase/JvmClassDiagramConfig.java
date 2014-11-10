@@ -24,8 +24,8 @@ import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
 import de.fxdiagram.xtext.xbase.JvmTypeNode;
 import java.util.ArrayList;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -65,20 +65,20 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
     }
     
     public void calls() {
-      final Function1<JvmDeclaredType, Iterable<JvmField>> _function = new Function1<JvmDeclaredType, Iterable<JvmField>>() {
-        public Iterable<JvmField> apply(final JvmDeclaredType it) {
+      final Function1<JvmDeclaredType, Iterable<? extends JvmField>> _function = new Function1<JvmDeclaredType, Iterable<? extends JvmField>>() {
+        public Iterable<? extends JvmField> apply(final JvmDeclaredType it) {
           return JvmClassDiagramConfig.this._jvmDomainUtil.getReferences(it);
         }
       };
       MultiConnectionMappingCall<JvmField, JvmDeclaredType> _outConnectionForEach = this.<JvmField>outConnectionForEach(JvmClassDiagramConfig.this.referenceConnection, _function);
-      final Function1<Side, SVGPath> _function_1 = new Function1<Side, SVGPath>() {
-        public SVGPath apply(final Side it) {
+      final Function1<Side, Node> _function_1 = new Function1<Side, Node>() {
+        public Node apply(final Side it) {
           return ButtonExtensions.getArrowButton(it, "Add reference");
         }
       };
       _outConnectionForEach.makeLazy(_function_1);
-      final Function1<JvmDeclaredType, ArrayList<ESetting<JvmDeclaredType>>> _function_2 = new Function1<JvmDeclaredType, ArrayList<ESetting<JvmDeclaredType>>>() {
-        public ArrayList<ESetting<JvmDeclaredType>> apply(final JvmDeclaredType it) {
+      final Function1<JvmDeclaredType, Iterable<? extends ESetting<JvmDeclaredType>>> _function_2 = new Function1<JvmDeclaredType, Iterable<? extends ESetting<JvmDeclaredType>>>() {
+        public Iterable<? extends ESetting<JvmDeclaredType>> apply(final JvmDeclaredType it) {
           ArrayList<ESetting<JvmDeclaredType>> _xblockexpression = null;
           {
             final ArrayList<ESetting<JvmDeclaredType>> result = CollectionLiterals.<ESetting<JvmDeclaredType>>newArrayList();
@@ -99,8 +99,8 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
         }
       };
       MultiConnectionMappingCall<ESetting<JvmDeclaredType>, JvmDeclaredType> _outConnectionForEach_1 = this.<ESetting<JvmDeclaredType>>outConnectionForEach(JvmClassDiagramConfig.this.superTypeConnection, _function_2);
-      final Function1<Side, SVGPath> _function_3 = new Function1<Side, SVGPath>() {
-        public SVGPath apply(final Side it) {
+      final Function1<Side, Node> _function_3 = new Function1<Side, Node>() {
+        public Node apply(final Side it) {
           return ButtonExtensions.getTriangleButton(it, "Add supertype");
         }
       };
@@ -173,8 +173,8 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
   
   private final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(this, "packageDiagram") {
     public void calls() {
-      final Function1<PackageDeclaration, Iterable<JvmDeclaredType>> _function = new Function1<PackageDeclaration, Iterable<JvmDeclaredType>>() {
-        public Iterable<JvmDeclaredType> apply(final PackageDeclaration it) {
+      final Function1<PackageDeclaration, Iterable<? extends JvmDeclaredType>> _function = new Function1<PackageDeclaration, Iterable<? extends JvmDeclaredType>>() {
+        public Iterable<? extends JvmDeclaredType> apply(final PackageDeclaration it) {
           EList<AbstractElement> _elements = it.getElements();
           Iterable<Entity> _filter = Iterables.<Entity>filter(_elements, Entity.class);
           final Function1<Entity, EObject> _function = new Function1<Entity, EObject>() {
@@ -187,8 +187,8 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
         }
       };
       this.<JvmDeclaredType>nodeForEach(JvmClassDiagramConfig.this.typeNode, _function);
-      final Function1<PackageDeclaration, Iterable<PackageDeclaration>> _function_1 = new Function1<PackageDeclaration, Iterable<PackageDeclaration>>() {
-        public Iterable<PackageDeclaration> apply(final PackageDeclaration it) {
+      final Function1<PackageDeclaration, Iterable<? extends PackageDeclaration>> _function_1 = new Function1<PackageDeclaration, Iterable<? extends PackageDeclaration>>() {
+        public Iterable<? extends PackageDeclaration> apply(final PackageDeclaration it) {
           EList<AbstractElement> _elements = it.getElements();
           return Iterables.<PackageDeclaration>filter(_elements, PackageDeclaration.class);
         }

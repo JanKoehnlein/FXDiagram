@@ -35,20 +35,20 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 @ModelNode('domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead')
 class XConnection extends XShape {
 	
-	@FxProperty(readOnly) XNode source
-	@FxProperty(readOnly) XNode target
+	@FxProperty(readOnly=true) XNode source
+	@FxProperty(readOnly=true) XNode target
 	@FxProperty ObservableList<XConnectionLabel> labels = observableArrayList
 	@FxProperty ArrowHead sourceArrowHead
 	@FxProperty ArrowHead targetArrowHead
 	@FxProperty Kind kind = POLYLINE
-	@FxProperty(readOnly) ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
+	@FxProperty(readOnly=true) ObservableList<XControlPoint> controlPoints = FXCollections.observableArrayList
 	
 	@FxProperty double strokeWidth = 2.0
 	@FxProperty Paint stroke
 	@FxProperty double strokeDashOffset = 0.0
 	@FxProperty ObservableList<Double> strokeDashArray = observableArrayList 
 
-	@FxProperty(readOnly) DomainObjectDescriptor domainObject
+	@FxProperty(readOnly=true) DomainObjectDescriptor domainObject
 
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group

@@ -17,7 +17,7 @@ class DiagramScaler implements XActivatable {
 
 	@FxProperty double width = 80
 	@FxProperty double height = 60
-	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly=true) boolean isActive
 
 	ChangeListener<Bounds> boundsInLocalListener
 	ChangeListener<Number> layoutListener

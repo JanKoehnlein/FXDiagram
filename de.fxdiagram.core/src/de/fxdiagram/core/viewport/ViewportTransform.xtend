@@ -25,10 +25,10 @@ class ViewportTransform {
 
 	public static val MIN_SCALE = EPSILON
 
-	@FxProperty(readOnly) double scale = 1
-	@FxProperty(readOnly) double rotate = 0
-	@FxProperty(readOnly) double translateX
-	@FxProperty(readOnly) double translateY
+	@FxProperty(readOnly=true) double scale = 1
+	@FxProperty(readOnly=true) double rotate = 0
+	@FxProperty(readOnly=true) double translateX
+	@FxProperty(readOnly=true) double translateY
 
 	Affine transform
 

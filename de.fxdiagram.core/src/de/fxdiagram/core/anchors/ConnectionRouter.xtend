@@ -21,7 +21,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 @Logging
 class ConnectionRouter implements XActivatable {
 	
-	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly=true) boolean isActive
 		
 	XConnection connection
 

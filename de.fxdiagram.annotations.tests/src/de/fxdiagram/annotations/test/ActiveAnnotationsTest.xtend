@@ -16,10 +16,10 @@ class ActiveAnnotationsTest {
 
 	@FxProperty(readOnly=true) double myReadOnlyDouble = 1.0
 
-	@FxProperty(readOnly) String myReadOnlyString = ""
+	@FxProperty(readOnly=true) String myReadOnlyString = ""
 
-	@FxProperty(readOnly) Object myReadOnlyObject = new Object
+	@FxProperty(readOnly=true) Object myReadOnlyObject = new Object
 
-	@FxProperty(readOnly) ObservableList<Object> myReadOnlyList = FXCollections.observableArrayList
+	@FxProperty(readOnly=true) ObservableList<Object> myReadOnlyList = FXCollections.observableArrayList
 } 
 

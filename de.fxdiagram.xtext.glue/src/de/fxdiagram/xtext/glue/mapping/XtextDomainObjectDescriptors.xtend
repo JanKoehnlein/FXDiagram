@@ -48,8 +48,8 @@ class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtextDescri
 @ModelNode('referenceURI', 'index')
 class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescriptor<ESetting<ECLASS>> {
 	
-	@FxProperty(readOnly) String referenceURI
-	@FxProperty(readOnly) int index
+	@FxProperty(readOnly=true) String referenceURI
+	@FxProperty(readOnly=true) int index
 	EReference reference
 	
 	new() {}

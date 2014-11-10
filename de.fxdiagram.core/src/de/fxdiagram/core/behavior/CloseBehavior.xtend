@@ -9,7 +9,7 @@ interface CloseBehavior extends Behavior {
 
 abstract class AbstractCloseBehavior implements CloseBehavior {
 	
-	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly=true) boolean isActive
 	
 	override getBehaviorKey() {
 		CloseBehavior

@@ -17,7 +17,7 @@ import static extension java.lang.Math.*
 @ModelNode('connection', 'text')
 class XConnectionLabel extends XShape {
 
-	@FxProperty(readOnly) XConnection connection
+	@FxProperty(readOnly=true) XConnection connection
 	@FxProperty Text text = new Text
 	@FxProperty double position = 0.5
 

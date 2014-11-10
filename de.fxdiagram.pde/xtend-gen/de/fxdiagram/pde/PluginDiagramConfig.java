@@ -20,7 +20,7 @@ import de.fxdiagram.xtext.glue.shapes.BaseConnection;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
-import javafx.scene.shape.SVGPath;
+import javafx.scene.Node;
 import javafx.scene.text.Text;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.pde.core.plugin.IPluginBase;
@@ -47,8 +47,8 @@ public class PluginDiagramConfig extends AbstractDiagramConfig {
     }
     
     public void calls() {
-      final Function1<IPluginModelBase, Iterable<IPluginImport>> _function = new Function1<IPluginModelBase, Iterable<IPluginImport>>() {
-        public Iterable<IPluginImport> apply(final IPluginModelBase it) {
+      final Function1<IPluginModelBase, Iterable<? extends IPluginImport>> _function = new Function1<IPluginModelBase, Iterable<? extends IPluginImport>>() {
+        public Iterable<? extends IPluginImport> apply(final IPluginModelBase it) {
           IPluginBase _pluginBase = it.getPluginBase();
           IPluginImport[] _imports = _pluginBase.getImports();
           List<IPluginImport> _list = IterableExtensions.<IPluginImport>toList(((Iterable<IPluginImport>)Conversions.doWrapArray(_imports)));
@@ -65,14 +65,14 @@ public class PluginDiagramConfig extends AbstractDiagramConfig {
         }
       };
       MultiConnectionMappingCall<IPluginImport, IPluginModelBase> _outConnectionForEach = this.<IPluginImport>outConnectionForEach(PluginDiagramConfig.this.importConnection, _function);
-      final Function1<Side, SVGPath> _function_1 = new Function1<Side, SVGPath>() {
-        public SVGPath apply(final Side it) {
+      final Function1<Side, Node> _function_1 = new Function1<Side, Node>() {
+        public Node apply(final Side it) {
           return ButtonExtensions.getArrowButton(it, "Add dependency");
         }
       };
       _outConnectionForEach.makeLazy(_function_1);
-      final Function1<IPluginModelBase, Iterable<IPluginImport>> _function_2 = new Function1<IPluginModelBase, Iterable<IPluginImport>>() {
-        public Iterable<IPluginImport> apply(final IPluginModelBase plugin) {
+      final Function1<IPluginModelBase, Iterable<? extends IPluginImport>> _function_2 = new Function1<IPluginModelBase, Iterable<? extends IPluginImport>>() {
+        public Iterable<? extends IPluginImport> apply(final IPluginModelBase plugin) {
           BundleDescription _bundleDescription = plugin.getBundleDescription();
           BundleDescription[] _dependents = _bundleDescription.getDependents();
           final Function1<BundleDescription, IPluginImport> _function = new Function1<BundleDescription, IPluginImport>() {
@@ -104,8 +104,8 @@ public class PluginDiagramConfig extends AbstractDiagramConfig {
         }
       };
       MultiConnectionMappingCall<IPluginImport, IPluginModelBase> _inConnectionForEach = this.<IPluginImport>inConnectionForEach(PluginDiagramConfig.this.exportConnection, _function_2);
-      final Function1<Side, SVGPath> _function_3 = new Function1<Side, SVGPath>() {
-        public SVGPath apply(final Side it) {
+      final Function1<Side, Node> _function_3 = new Function1<Side, Node>() {
+        public Node apply(final Side it) {
           return ButtonExtensions.getInverseArrowButton(it, "Add dependent");
         }
       };

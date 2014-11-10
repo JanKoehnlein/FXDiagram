@@ -32,11 +32,11 @@ import static extension de.fxdiagram.core.css.JavaToCss.*
 @ModelNode('domainObjectProviders', 'rootDiagram', 'diagram')
 class XRoot extends Parent implements XActivatable {
 	
-	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly=true) boolean isActive
 
-	@FxProperty(readOnly) XDiagram rootDiagram
+	@FxProperty(readOnly=true) XDiagram rootDiagram
 
-	@FxProperty(readOnly) XDiagram diagram
+	@FxProperty(readOnly=true) XDiagram diagram
 
 	@FxProperty ObservableList<DomainObjectProvider> domainObjectProviders = FXCollections.observableArrayList
 	

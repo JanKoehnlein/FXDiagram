@@ -340,7 +340,7 @@ public class Inflator {
                 return ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
               }
             };
-            Iterable<Animation> _map = IterableExtensions.<Node, Animation>map(contents, _function);
+            Iterable<FadeTransition> _map = IterableExtensions.<Node, FadeTransition>map(contents, _function);
             Iterables.<Animation>addAll(_children, _map);
           }
         };
@@ -396,7 +396,7 @@ public class Inflator {
                 return ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
               }
             };
-            Iterable<Animation> _map = IterableExtensions.<Node, Animation>map(contents, _function);
+            Iterable<FadeTransition> _map = IterableExtensions.<Node, FadeTransition>map(contents, _function);
             Iterables.<Animation>addAll(_children, _map);
             final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
               public void handle(final ActionEvent it) {

@@ -9,7 +9,7 @@ import javafx.scene.Parent
 
 class RapidButton extends Parent implements XButton {
 	
-	@FxProperty(readOnly) boolean isActive
+	@FxProperty(readOnly=true) boolean isActive
 	
 	XNode host
 	
