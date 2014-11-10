@@ -6,12 +6,12 @@ import static java.lang.Math.*
 
 class ChooserTransition extends Transition {
 
-	AbstractChooser tool
+	AbstractBaseChooser tool
 
 	double startPosition
 	double endPosition
 
-	new(AbstractChooser tool) {
+	new(AbstractBaseChooser tool) {
 		this.tool = tool
 		interpolator = [alpha|1 - (1 - alpha) * (1 - alpha)]
 		onFinished = [

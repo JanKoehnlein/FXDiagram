@@ -58,7 +58,8 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
         }
         
         public boolean isEnabled(final XNode host) {
-          return AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
+          boolean _isEmpty = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
+          return (!_isEmpty);
         }
       };
       Iterable<RapidButton> _createButtons = this.createButtons(addConnectionAction);

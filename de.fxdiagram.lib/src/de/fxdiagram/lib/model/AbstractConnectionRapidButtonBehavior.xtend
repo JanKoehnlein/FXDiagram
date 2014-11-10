@@ -36,7 +36,7 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 				}
 				
 				override isEnabled(XNode host) {
-					availableChoiceKeys.empty
+					!availableChoiceKeys.empty
 				}
 			}
 			createButtons(addConnectionAction).forEach[add]

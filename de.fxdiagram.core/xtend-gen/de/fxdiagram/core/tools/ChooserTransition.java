@@ -1,7 +1,7 @@
 package de.fxdiagram.core.tools;
 
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.tools.AbstractChooser;
+import de.fxdiagram.core.tools.AbstractBaseChooser;
 import java.util.ArrayList;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
@@ -11,13 +11,13 @@ import javafx.util.Duration;
 
 @SuppressWarnings("all")
 public class ChooserTransition extends Transition {
-  private AbstractChooser tool;
+  private AbstractBaseChooser tool;
   
   private double startPosition;
   
   private double endPosition;
   
-  public ChooserTransition(final AbstractChooser tool) {
+  public ChooserTransition(final AbstractBaseChooser tool) {
     this.tool = tool;
     final Interpolator _function = new Interpolator() {
       @Override

@@ -1,6 +1,5 @@
 package de.fxdiagram.lib.tools;
 
-import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.tools.AbstractChooser;
 import java.util.ArrayList;
@@ -101,13 +100,9 @@ public class CarusselChooser extends AbstractChooser {
     }
   }
   
-  protected XConnection nodeChosen(final XNode choice) {
-    XConnection _xblockexpression = null;
-    {
-      choice.setEffect(null);
-      _xblockexpression = super.nodeChosen(choice);
-    }
-    return _xblockexpression;
+  protected void nodeChosen(final XNode choice) {
+    choice.setEffect(null);
+    super.nodeChosen(choice);
   }
   
   public void relocateButtons(final Node minusButton, final Node plusButton) {
