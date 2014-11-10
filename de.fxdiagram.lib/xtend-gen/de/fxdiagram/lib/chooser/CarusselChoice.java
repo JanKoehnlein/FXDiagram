@@ -1,12 +1,11 @@
-package de.fxdiagram.lib.tools;
+package de.fxdiagram.lib.chooser;
 
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.tools.AbstractChooser;
+import de.fxdiagram.lib.chooser.AbstractChoiceGraphics;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.Effect;
@@ -22,26 +21,16 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
-public class CarusselChooser extends AbstractChooser {
+public class CarusselChoice extends AbstractChoiceGraphics {
   @Accessors
   private double spacing = 6;
   
-  private Effect currentNodeEffect;
+  private Effect currentNodeEffect = new InnerShadow();
   
   private double radius;
   
-  public CarusselChooser(final XNode host, final Side layoutPosition) {
-    super(host, layoutPosition, true);
-    InnerShadow _innerShadow = new InnerShadow();
-    this.currentNodeEffect = _innerShadow;
-  }
-  
-  public boolean activate() {
-    return super.activate();
-  }
-  
-  protected void doSetInterpolatedPosition(final double interpolatedPosition) {
-    ArrayList<XNode> _nodes = this.getNodes();
+  public void setInterpolatedPosition(final double interpolatedPosition) {
+    ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
     final Function2<Double, XNode, Double> _function = new Function2<Double, XNode, Double>() {
       public Double apply(final Double a, final XNode b) {
         Bounds _layoutBounds = b.getLayoutBounds();
@@ -49,23 +38,23 @@ public class CarusselChooser extends AbstractChooser {
         return Double.valueOf(Math.max((a).doubleValue(), _height));
       }
     };
-    Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
+    Double _fold = IterableExtensions.<XNode, Double>fold(_choiceNodes, Double.valueOf(0.0), _function);
     final double maxHeight = ((_fold).doubleValue() + this.spacing);
-    ArrayList<XNode> _nodes_1 = this.getNodes();
-    int _size = _nodes_1.size();
+    ArrayList<XNode> _choiceNodes_1 = this.getChoiceNodes();
+    int _size = _choiceNodes_1.size();
     final double angle = (Math.PI / _size);
     double _sin = Math.sin(angle);
     double _divide = ((maxHeight / 2) / _sin);
     this.radius = _divide;
-    ArrayList<XNode> _nodes_2 = this.getNodes();
-    int _size_1 = _nodes_2.size();
+    ArrayList<XNode> _choiceNodes_2 = this.getChoiceNodes();
+    int _size_1 = _choiceNodes_2.size();
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size_1, true);
     for (final Integer i : _doubleDotLessThan) {
       {
-        ArrayList<XNode> _nodes_3 = this.getNodes();
-        final XNode node = _nodes_3.get((i).intValue());
-        ArrayList<XNode> _nodes_4 = this.getNodes();
-        int _size_2 = _nodes_4.size();
+        ArrayList<XNode> _choiceNodes_3 = this.getChoiceNodes();
+        final XNode node = _choiceNodes_3.get((i).intValue());
+        ArrayList<XNode> _choiceNodes_4 = this.getChoiceNodes();
+        int _size_2 = _choiceNodes_4.size();
         final double nodeCenterAngle = (((2 * Math.PI) * ((i).intValue() - interpolatedPosition)) / _size_2);
         double _cos = Math.cos(nodeCenterAngle);
         boolean _lessThan = (_cos < 0);
@@ -100,32 +89,33 @@ public class CarusselChooser extends AbstractChooser {
     }
   }
   
-  protected void nodeChosen(final XNode choice) {
-    choice.setEffect(null);
-    super.nodeChosen(choice);
+  public void nodeChosen(final XNode choice) {
+    if (choice!=null) {
+      choice.setEffect(null);
+    }
   }
   
   public void relocateButtons(final Node minusButton, final Node plusButton) {
-    Group _group = this.getGroup();
-    double _layoutX = _group.getLayoutX();
+    Group _choiceGroup = this.getChoiceGroup();
+    double _layoutX = _choiceGroup.getLayoutX();
     Bounds _layoutBounds = minusButton.getLayoutBounds();
     double _width = _layoutBounds.getWidth();
     double _multiply = (0.5 * _width);
     double _minus = (_layoutX - _multiply);
     minusButton.setLayoutX(_minus);
-    Group _group_1 = this.getGroup();
-    double _layoutY = _group_1.getLayoutY();
+    Group _choiceGroup_1 = this.getChoiceGroup();
+    double _layoutY = _choiceGroup_1.getLayoutY();
     double _plus = (_layoutY + this.radius);
     minusButton.setLayoutY(_plus);
-    Group _group_2 = this.getGroup();
-    double _layoutX_1 = _group_2.getLayoutX();
+    Group _choiceGroup_2 = this.getChoiceGroup();
+    double _layoutX_1 = _choiceGroup_2.getLayoutX();
     Bounds _layoutBounds_1 = plusButton.getLayoutBounds();
     double _width_1 = _layoutBounds_1.getWidth();
     double _multiply_1 = (0.5 * _width_1);
     double _minus_1 = (_layoutX_1 - _multiply_1);
     plusButton.setLayoutX(_minus_1);
-    Group _group_3 = this.getGroup();
-    double _layoutY_1 = _group_3.getLayoutY();
+    Group _choiceGroup_3 = this.getChoiceGroup();
+    double _layoutY_1 = _choiceGroup_3.getLayoutY();
     double _minus_2 = (_layoutY_1 - this.radius);
     Bounds _layoutBounds_2 = plusButton.getLayoutBounds();
     double _height = _layoutBounds_2.getHeight();

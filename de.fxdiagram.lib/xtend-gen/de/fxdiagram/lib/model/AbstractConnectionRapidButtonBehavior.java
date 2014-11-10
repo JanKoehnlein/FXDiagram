@@ -9,10 +9,10 @@ import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
 import de.fxdiagram.lib.buttons.RapidButtonBehavior;
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
@@ -51,7 +51,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
     if (_not) {
       final RapidButtonAction addConnectionAction = new RapidButtonAction() {
         public void perform(final RapidButton button) {
-          final AbstractChooser chooser = AbstractConnectionRapidButtonBehavior.this.createChooser(button, AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys, AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys);
+          final ConnectedNodeChooser chooser = AbstractConnectionRapidButtonBehavior.this.createChooser(button, AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys, AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys);
           HOST _host = AbstractConnectionRapidButtonBehavior.this.getHost();
           XRoot _root = CoreExtensions.getRoot(_host);
           _root.setCurrentTool(chooser);
@@ -112,5 +112,5 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
   
   protected abstract Iterable<RapidButton> createButtons(final RapidButtonAction addConnectionAction);
   
-  protected abstract AbstractChooser createChooser(final RapidButton button, final Set<KEY> availableChoiceKeys, final Set<KEY> unavailableChoiceKeys);
+  protected abstract ConnectedNodeChooser createChooser(final RapidButton button, final Set<KEY> availableChoiceKeys, final Set<KEY> unavailableChoiceKeys);
 }

@@ -8,8 +8,6 @@ import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.tools.AbstractChooser;
-import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.examples.ecore.ESuperTypeDescriptor;
@@ -17,8 +15,10 @@ import de.fxdiagram.examples.ecore.ESuperTypeHandle;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
+import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
+import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
-import de.fxdiagram.lib.tools.CoverFlowChooser;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -69,12 +69,13 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
     return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
-  protected AbstractChooser createChooser(final RapidButton button, final Set<ESuperTypeDescriptor> availableChoiceKeys, final Set<ESuperTypeDescriptor> unavailableChoiceKeys) {
-    CoverFlowChooser _xblockexpression = null;
+  protected ConnectedNodeChooser createChooser(final RapidButton button, final Set<ESuperTypeDescriptor> availableChoiceKeys, final Set<ESuperTypeDescriptor> unavailableChoiceKeys) {
+    ConnectedNodeChooser _xblockexpression = null;
     {
       EClassNode _host = this.getHost();
       Side _position = button.getPosition();
-      final CoverFlowChooser chooser = new CoverFlowChooser(_host, _position);
+      CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
+      final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _coverFlowChoice);
       final Consumer<ESuperTypeDescriptor> _function = new Consumer<ESuperTypeDescriptor>() {
         public void accept(final ESuperTypeDescriptor it) {
           XNode _createNode = AddESuperTypeRapidButtonBehavior.this.createNode(it);

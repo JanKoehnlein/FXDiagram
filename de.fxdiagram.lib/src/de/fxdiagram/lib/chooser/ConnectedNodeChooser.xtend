@@ -1,4 +1,4 @@
-package de.fxdiagram.core.tools
+package de.fxdiagram.lib.chooser
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnection
@@ -10,7 +10,7 @@ import javafx.scene.Group
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import javafx.geometry.Point2D
 
-abstract class AbstractChooser extends AbstractBaseChooser {
+class ConnectedNodeChooser extends AbstractBaseChooser {
 
 	@FxProperty double layoutDistance = 60
 
@@ -24,8 +24,8 @@ abstract class AbstractChooser extends AbstractBaseChooser {
 	
 	XConnection currentConnection
 	
-	new(XNode host, Side layoutPosition, boolean hasButtons) {
-		super(layoutPosition, hasButtons)
+	new(XNode host, Side layoutPosition, ChoiceGraphics graphics) {
+		super(layoutPosition, graphics)
 		this.host = host
 	}
 	

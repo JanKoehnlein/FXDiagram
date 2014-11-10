@@ -1,4 +1,4 @@
-package de.fxdiagram.core.tools
+package de.fxdiagram.lib.chooser
 
 import javafx.animation.Transition
 import static extension javafx.util.Duration.*

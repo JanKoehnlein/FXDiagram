@@ -1,9 +1,6 @@
-package de.fxdiagram.lib.tools
+package de.fxdiagram.lib.chooser
 
-import de.fxdiagram.core.XNode
-import de.fxdiagram.core.tools.AbstractChooser
 import javafx.geometry.Point3D
-import javafx.geometry.Side
 import javafx.scene.effect.ColorAdjust
 import javafx.scene.effect.Reflection
 import javafx.scene.paint.Color
@@ -14,47 +11,39 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
-class CoverFlowChooser extends AbstractChooser {
+class CoverFlowChoice extends AbstractChoiceGraphics {
 
 	@Accessors double angle = 60
 	@Accessors double deltaX = 20
 	
 	double gap
-
-	new(XNode host, Side layoutPosition) {
-		super(host, layoutPosition, false)
-	}
-
-	override activate() {
-		super.activate()
-	}
-
-	override protected doSetInterpolatedPosition(double interpolatedPosition) {
-		if(nodes.size != 0) {
-			gap = nodes.map[layoutBounds.width].reduce[a,b|a+b] / nodes.size
-			val currentIndex = (interpolatedPosition as int) % nodes.size()
-			val leftIndex = if (currentIndex == nodes.size - 1)
+	
+	override setInterpolatedPosition(double interpolatedPosition) {
+		if(choiceNodes.size != 0) {
+			gap = choiceNodes.map[layoutBounds.width].reduce[a,b|a+b] / choiceNodes.size
+			val currentIndex = (interpolatedPosition as int) % choiceNodes.size()
+			val leftIndex = if (currentIndex == choiceNodes.size - 1)
 					currentIndex - 1
 				else
 					currentIndex
-			val rightIndex = if (currentIndex == nodes.size - 1)
+			val rightIndex = if (currentIndex == choiceNodes.size - 1)
 					currentIndex
 				else
 					currentIndex + 1
 			for (i : 0 ..< leftIndex)
 				transformNode(i, interpolatedPosition, true, 1)
-			for (i : nodes.size() >.. rightIndex + 1)
+			for (i : choiceNodes.size() >.. rightIndex + 1)
 				transformNode(i, interpolatedPosition, false, 1)
 			transformNode(rightIndex, interpolatedPosition, false, rightIndex - interpolatedPosition)
 			transformNode(leftIndex, interpolatedPosition, true, interpolatedPosition - leftIndex)
 			if(rightIndex > 0 && abs(leftIndex - interpolatedPosition) > abs(rightIndex - interpolatedPosition))
-				nodes.get(rightIndex).toFront
+				choiceNodes.get(rightIndex).toFront
 		}
 	}
 
 	protected def transformNode(int i, double interpolatedPosition, boolean isLeft, double fraction) {
 		if (i >= 0) {
-			val node = nodes.get(i)
+			val node = choiceNodes.get(i)
 			val distanceFromSelection = abs(i - interpolatedPosition)
 			val opacity = 1 - 0.2 * distanceFromSelection
 			if (opacity < 0) {
@@ -70,7 +59,7 @@ class CoverFlowChooser extends AbstractChooser {
 					node.transforms.setAll(trafo)
 					node.toFront
 					node.effect = new ColorAdjust => [
-						if(diagram.backgroundPaint == Color.BLACK)
+						if(chooser.diagram.backgroundPaint == Color.BLACK)
 							brightness = opacity - 1
 						else 
 							brightness = 1 - opacity
@@ -80,4 +69,9 @@ class CoverFlowChooser extends AbstractChooser {
 			}
 		}
 	}
+	
+	override hasButtons() {
+		false
+	}
+	
 }

@@ -1,13 +1,12 @@
-package de.fxdiagram.lib.tools;
+package de.fxdiagram.lib.chooser;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import de.fxdiagram.core.tools.AbstractChooser;
+import de.fxdiagram.lib.chooser.AbstractChoiceGraphics;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
-import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
@@ -19,22 +18,14 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
-public class CubeChooser extends AbstractChooser {
+public class CubeChoice extends AbstractChoiceGraphics {
   @Accessors
   private double spacing = 6.0;
   
   private double maxWidth;
   
-  public CubeChooser(final XNode host, final Side layoutPosition) {
-    super(host, layoutPosition, true);
-  }
-  
-  public boolean activate() {
-    return super.activate();
-  }
-  
-  protected void doSetInterpolatedPosition(final double interpolatedPosition) {
-    ArrayList<XNode> _nodes = this.getNodes();
+  public void setInterpolatedPosition(final double interpolatedPosition) {
+    ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
     final Function2<Double, XNode, Double> _function = new Function2<Double, XNode, Double>() {
       public Double apply(final Double a, final XNode b) {
         Bounds _layoutBounds = b.getLayoutBounds();
@@ -42,19 +33,19 @@ public class CubeChooser extends AbstractChooser {
         return Double.valueOf(Math.max((a).doubleValue(), _width));
       }
     };
-    Double _fold = IterableExtensions.<XNode, Double>fold(_nodes, Double.valueOf(0.0), _function);
+    Double _fold = IterableExtensions.<XNode, Double>fold(_choiceNodes, Double.valueOf(0.0), _function);
     double _plus = ((_fold).doubleValue() + this.spacing);
     this.maxWidth = _plus;
     final double angle = ((interpolatedPosition - ((int) interpolatedPosition)) * 90);
-    ArrayList<XNode> _nodes_1 = this.getNodes();
-    int _size = _nodes_1.size();
+    ArrayList<XNode> _choiceNodes_1 = this.getChoiceNodes();
+    int _size = _choiceNodes_1.size();
     final int leftNodeIndex = (((int) interpolatedPosition) % _size);
     this.applyTransform(leftNodeIndex, angle);
-    ArrayList<XNode> _nodes_2 = this.getNodes();
-    int _size_1 = _nodes_2.size();
+    ArrayList<XNode> _choiceNodes_2 = this.getChoiceNodes();
+    int _size_1 = _choiceNodes_2.size();
     final int rightNodeIndex = ((((int) interpolatedPosition) + 1) % _size_1);
     this.applyTransform(rightNodeIndex, (angle - 90));
-    ArrayList<XNode> _nodes_3 = this.getNodes();
+    ArrayList<XNode> _choiceNodes_3 = this.getChoiceNodes();
     final Procedure2<XNode, Integer> _function_1 = new Procedure2<XNode, Integer>() {
       public void apply(final XNode node, final Integer i) {
         if (((i != leftNodeIndex) && (i != rightNodeIndex))) {
@@ -62,14 +53,14 @@ public class CubeChooser extends AbstractChooser {
         }
       }
     };
-    IterableExtensions.<XNode>forEach(_nodes_3, _function_1);
+    IterableExtensions.<XNode>forEach(_choiceNodes_3, _function_1);
   }
   
   protected Boolean applyTransform(final int nodeIndex, final double angle) {
     boolean _xblockexpression = false;
     {
-      ArrayList<XNode> _nodes = this.getNodes();
-      final XNode node = _nodes.get(nodeIndex);
+      ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
+      final XNode node = _choiceNodes.get(nodeIndex);
       boolean _xifexpression = false;
       double _abs = Math.abs(angle);
       boolean _greaterThan = (_abs > 86);
@@ -101,26 +92,26 @@ public class CubeChooser extends AbstractChooser {
   public void relocateButtons(final Node minusButton, final Node plusButton) {
     double _sqrt = Math.sqrt(2);
     final double groupMaxWidthHalf = ((0.5 * this.maxWidth) * _sqrt);
-    Group _group = this.getGroup();
-    double _layoutX = _group.getLayoutX();
+    Group _choiceGroup = this.getChoiceGroup();
+    double _layoutX = _choiceGroup.getLayoutX();
     double _plus = (_layoutX + groupMaxWidthHalf);
     minusButton.setLayoutX(_plus);
-    Group _group_1 = this.getGroup();
-    double _layoutY = _group_1.getLayoutY();
+    Group _choiceGroup_1 = this.getChoiceGroup();
+    double _layoutY = _choiceGroup_1.getLayoutY();
     Bounds _layoutBounds = minusButton.getLayoutBounds();
     double _height = _layoutBounds.getHeight();
     double _multiply = (0.5 * _height);
     double _minus = (_layoutY - _multiply);
     minusButton.setLayoutY(_minus);
-    Group _group_2 = this.getGroup();
-    double _layoutX_1 = _group_2.getLayoutX();
+    Group _choiceGroup_2 = this.getChoiceGroup();
+    double _layoutX_1 = _choiceGroup_2.getLayoutX();
     double _minus_1 = (_layoutX_1 - groupMaxWidthHalf);
     Bounds _layoutBounds_1 = plusButton.getLayoutBounds();
     double _width = _layoutBounds_1.getWidth();
     double _minus_2 = (_minus_1 - _width);
     plusButton.setLayoutX(_minus_2);
-    Group _group_3 = this.getGroup();
-    double _layoutY_1 = _group_3.getLayoutY();
+    Group _choiceGroup_3 = this.getChoiceGroup();
+    double _layoutY_1 = _choiceGroup_3.getLayoutY();
     Bounds _layoutBounds_2 = plusButton.getLayoutBounds();
     double _height_1 = _layoutBounds_2.getHeight();
     double _multiply_1 = (0.5 * _height_1);

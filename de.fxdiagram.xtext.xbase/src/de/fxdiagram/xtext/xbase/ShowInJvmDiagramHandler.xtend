@@ -20,6 +20,7 @@ import org.eclipse.xtext.resource.EObjectAtOffsetHelper
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.util.PolymorphicDispatcher
+import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 
 import static de.fxdiagram.xtext.xbase.ShowInJvmDiagramHandler.*
 
@@ -91,18 +92,23 @@ class ShowInJvmDiagramHandler extends AbstractHandler {
 	}
 
 	static class Action {
-
+		
 		@Inject EObjectAtOffsetHelper eObjectAtOffsetHelper
+		@Inject extension IJvmModelAssociations
 
 		def run(XtextEditor editor) {
 			val selection = editor.selectionProvider.selection as ITextSelection
 			editor.document.readOnly [
 				val selectedElement = eObjectAtOffsetHelper.resolveElementAt(it, selection.offset)
-				if (selectedElement != null) 
-					showElement(selectedElement, editor)
+				if (selectedElement != null) {
+					val primary = selectedElement.getPrimaryJvmElement
+					if(primary != null)
+						showElement(primary, editor)
+					else
+						showElement(selectedElement, editor)
+				}
 				null
 			]
 		}
-		
 	}
 }

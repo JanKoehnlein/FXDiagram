@@ -1,16 +1,16 @@
-package de.fxdiagram.lib.tools;
+package de.fxdiagram.lib.chooser;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.extensions.TransformExtensions;
-import de.fxdiagram.core.tools.AbstractChooser;
+import de.fxdiagram.lib.chooser.AbstractBaseChooser;
+import de.fxdiagram.lib.chooser.AbstractChoiceGraphics;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
-import javafx.geometry.Side;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Reflection;
 import javafx.scene.paint.Color;
@@ -29,7 +29,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
-public class CoverFlowChooser extends AbstractChooser {
+public class CoverFlowChoice extends AbstractChoiceGraphics {
   @Accessors
   private double angle = 60;
   
@@ -38,43 +38,35 @@ public class CoverFlowChooser extends AbstractChooser {
   
   private double gap;
   
-  public CoverFlowChooser(final XNode host, final Side layoutPosition) {
-    super(host, layoutPosition, false);
-  }
-  
-  public boolean activate() {
-    return super.activate();
-  }
-  
-  protected void doSetInterpolatedPosition(final double interpolatedPosition) {
-    ArrayList<XNode> _nodes = this.getNodes();
-    int _size = _nodes.size();
+  public void setInterpolatedPosition(final double interpolatedPosition) {
+    ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
+    int _size = _choiceNodes.size();
     boolean _notEquals = (_size != 0);
     if (_notEquals) {
-      ArrayList<XNode> _nodes_1 = this.getNodes();
+      ArrayList<XNode> _choiceNodes_1 = this.getChoiceNodes();
       final Function1<XNode, Double> _function = new Function1<XNode, Double>() {
         public Double apply(final XNode it) {
           Bounds _layoutBounds = it.getLayoutBounds();
           return Double.valueOf(_layoutBounds.getWidth());
         }
       };
-      List<Double> _map = ListExtensions.<XNode, Double>map(_nodes_1, _function);
+      List<Double> _map = ListExtensions.<XNode, Double>map(_choiceNodes_1, _function);
       final Function2<Double, Double, Double> _function_1 = new Function2<Double, Double, Double>() {
         public Double apply(final Double a, final Double b) {
           return Double.valueOf(DoubleExtensions.operator_plus(a, b));
         }
       };
       Double _reduce = IterableExtensions.<Double>reduce(_map, _function_1);
-      ArrayList<XNode> _nodes_2 = this.getNodes();
-      int _size_1 = _nodes_2.size();
+      ArrayList<XNode> _choiceNodes_2 = this.getChoiceNodes();
+      int _size_1 = _choiceNodes_2.size();
       double _divide = ((_reduce).doubleValue() / _size_1);
       this.gap = _divide;
-      ArrayList<XNode> _nodes_3 = this.getNodes();
-      int _size_2 = _nodes_3.size();
+      ArrayList<XNode> _choiceNodes_3 = this.getChoiceNodes();
+      int _size_2 = _choiceNodes_3.size();
       final int currentIndex = (((int) interpolatedPosition) % _size_2);
       int _xifexpression = (int) 0;
-      ArrayList<XNode> _nodes_4 = this.getNodes();
-      int _size_3 = _nodes_4.size();
+      ArrayList<XNode> _choiceNodes_4 = this.getChoiceNodes();
+      int _size_3 = _choiceNodes_4.size();
       int _minus = (_size_3 - 1);
       boolean _equals = (currentIndex == _minus);
       if (_equals) {
@@ -84,8 +76,8 @@ public class CoverFlowChooser extends AbstractChooser {
       }
       final int leftIndex = _xifexpression;
       int _xifexpression_1 = (int) 0;
-      ArrayList<XNode> _nodes_5 = this.getNodes();
-      int _size_4 = _nodes_5.size();
+      ArrayList<XNode> _choiceNodes_5 = this.getChoiceNodes();
+      int _size_4 = _choiceNodes_5.size();
       int _minus_1 = (_size_4 - 1);
       boolean _equals_1 = (currentIndex == _minus_1);
       if (_equals_1) {
@@ -98,8 +90,8 @@ public class CoverFlowChooser extends AbstractChooser {
       for (final Integer i : _doubleDotLessThan) {
         this.transformNode((i).intValue(), interpolatedPosition, true, 1);
       }
-      ArrayList<XNode> _nodes_6 = this.getNodes();
-      int _size_5 = _nodes_6.size();
+      ArrayList<XNode> _choiceNodes_6 = this.getChoiceNodes();
+      int _size_5 = _choiceNodes_6.size();
       ExclusiveRange _greaterThanDoubleDot = new ExclusiveRange(_size_5, (rightIndex + 1), false);
       for (final Integer i_1 : _greaterThanDoubleDot) {
         this.transformNode((i_1).intValue(), interpolatedPosition, false, 1);
@@ -116,8 +108,8 @@ public class CoverFlowChooser extends AbstractChooser {
         _and = _greaterThan;
       }
       if (_and) {
-        ArrayList<XNode> _nodes_7 = this.getNodes();
-        XNode _get = _nodes_7.get(rightIndex);
+        ArrayList<XNode> _choiceNodes_7 = this.getChoiceNodes();
+        XNode _get = _choiceNodes_7.get(rightIndex);
         _get.toFront();
       }
     }
@@ -128,8 +120,8 @@ public class CoverFlowChooser extends AbstractChooser {
     if ((i >= 0)) {
       XNode _xblockexpression = null;
       {
-        ArrayList<XNode> _nodes = this.getNodes();
-        final XNode node = _nodes.get(i);
+        ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
+        final XNode node = _choiceNodes.get(i);
         final double distanceFromSelection = Math.abs((i - interpolatedPosition));
         final double opacity = (1 - (0.2 * distanceFromSelection));
         XNode _xifexpression_1 = null;
@@ -165,7 +157,8 @@ public class CoverFlowChooser extends AbstractChooser {
                 ColorAdjust _colorAdjust = new ColorAdjust();
                 final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
                   public void apply(final ColorAdjust it) {
-                    XDiagram _diagram = CoverFlowChooser.this.getDiagram();
+                    AbstractBaseChooser _chooser = CoverFlowChoice.this.getChooser();
+                    XDiagram _diagram = _chooser.getDiagram();
                     Paint _backgroundPaint = _diagram.getBackgroundPaint();
                     boolean _equals = Objects.equal(_backgroundPaint, Color.BLACK);
                     if (_equals) {
@@ -190,6 +183,10 @@ public class CoverFlowChooser extends AbstractChooser {
       _xifexpression = _xblockexpression;
     }
     return _xifexpression;
+  }
+  
+  public boolean hasButtons() {
+    return false;
   }
   
   @Pure

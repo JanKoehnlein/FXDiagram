@@ -4,10 +4,10 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.core.tools.AbstractChooser
 import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.buttons.RapidButtonBehavior
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser
 import java.util.Set
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
@@ -63,6 +63,6 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 
 	protected def Iterable<RapidButton> createButtons(RapidButtonAction addConnectionAction) 
 		
-	protected def AbstractChooser createChooser(RapidButton button, Set<KEY> availableChoiceKeys, Set<KEY> unavailableChoiceKeys) 
+	protected def ConnectedNodeChooser createChooser(RapidButton button, Set<KEY> availableChoiceKeys, Set<KEY> unavailableChoiceKeys) 
 	
 }

@@ -5,10 +5,9 @@ import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.layout.LayoutType
-import de.fxdiagram.core.tools.ChooserConnectionProvider
 import de.fxdiagram.core.tools.actions.LayoutAction
+import de.fxdiagram.lib.chooser.ChooserConnectionProvider
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import de.fxdiagram.lib.tools.CoverFlowChooser
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
 import javafx.animation.Timeline
@@ -30,6 +29,8 @@ import static de.fxdiagram.examples.lcars.LcarsExtensions.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser
+import de.fxdiagram.lib.chooser.CoverFlowChoice
 
 class LcarsField extends Parent {
 
@@ -186,7 +187,7 @@ class LcarsQueryTask extends Task<Void> {
 		val connectionDescriptor = modelProvider.createLcarsConnectionDescriptor(fieldName)
 		val siblings = modelProvider.query(fieldName, fieldValue)
 		val lcarsNode = host.lcarsNode
-		val chooser = new CoverFlowChooser(lcarsNode, Side.BOTTOM)
+		val chooser = new ConnectedNodeChooser(lcarsNode, Side.BOTTOM, new CoverFlowChoice)
 		chooser.connectionProvider = connectionProvider
 		val alreadyConnected = 
 			(host.lcarsNode.incomingConnections.filter[domainObject == connectionDescriptor].map[source] 

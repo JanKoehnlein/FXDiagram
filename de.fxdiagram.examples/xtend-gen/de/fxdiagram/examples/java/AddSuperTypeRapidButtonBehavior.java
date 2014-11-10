@@ -8,8 +8,6 @@ import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.tools.AbstractChooser;
-import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaSuperTypeDescriptor;
 import de.fxdiagram.examples.java.JavaSuperTypeHandle;
@@ -18,8 +16,10 @@ import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
+import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
+import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
-import de.fxdiagram.lib.tools.CoverFlowChooser;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -64,12 +64,13 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
     return _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
   }
   
-  protected AbstractChooser createChooser(final RapidButton button, final Set<JavaSuperTypeDescriptor> availableChoiceKeys, final Set<JavaSuperTypeDescriptor> unavailableChoiceKeys) {
-    CoverFlowChooser _xblockexpression = null;
+  protected ConnectedNodeChooser createChooser(final RapidButton button, final Set<JavaSuperTypeDescriptor> availableChoiceKeys, final Set<JavaSuperTypeDescriptor> unavailableChoiceKeys) {
+    ConnectedNodeChooser _xblockexpression = null;
     {
       JavaTypeNode _host = this.getHost();
       Side _position = button.getPosition();
-      final CoverFlowChooser chooser = new CoverFlowChooser(_host, _position);
+      CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
+      final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _coverFlowChoice);
       final Consumer<JavaSuperTypeDescriptor> _function = new Consumer<JavaSuperTypeDescriptor>() {
         public void accept(final JavaSuperTypeDescriptor it) {
           XNode _createNode = AddSuperTypeRapidButtonBehavior.this.createNode(it);

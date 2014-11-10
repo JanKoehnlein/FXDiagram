@@ -1,4 +1,4 @@
-package de.fxdiagram.core.tools
+package de.fxdiagram.lib.chooser
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XDiagram
@@ -32,6 +32,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
 import javafx.geometry.Point2D
+import de.fxdiagram.core.tools.XDiagramTool
 
 abstract class AbstractBaseChooser implements XDiagramTool {
 
@@ -63,14 +64,18 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 
 	ChangeListener<String> filterChangeListener
 
-	protected Side layoutPosition
+	protected val Side layoutPosition
+
+	val ChoiceGraphics graphics
 
 	Node plusButton
 
 	Node minusButton
 
-	new(Side layoutPosition, boolean hasButtons) {
+	new(Side layoutPosition, ChoiceGraphics graphics) {
 		this.layoutPosition = layoutPosition
+		this.graphics = graphics
+		graphics.chooser = this
 		positionListener = [ element, oldValue, newValue |
 			val newVal = newValue.doubleValue
 			interpolatedPosition = newVal % getNodes.size
@@ -126,7 +131,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 		filterChangeListener = [ property, oldValue, newValue |
 			calculateVisibleNodes
 		]
-		if (hasButtons) {
+		if (graphics.hasButtons) {
 			minusButton = (if(layoutPosition.vertical) 
 					getArrowButton(BOTTOM, 'previous')
 				else 
@@ -221,17 +226,17 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			diagram.buttonLayer.children += plusButton
 			diagram.buttonLayer.children += minusButton
 			val ChangeListener<Bounds> relocateButtons_0 = [ prop, oldVal, newVal |
-				relocateButtons(minusButton, plusButton)
+				graphics.relocateButtons(minusButton, plusButton)
 			]
 			val ChangeListener<Number> relocateButtons_1 = [ prop, oldVal, newVal |
-				relocateButtons(minusButton, plusButton)
+				graphics.relocateButtons(minusButton, plusButton)
 			]
 			minusButton.layoutBoundsProperty.addListener(relocateButtons_0)
 			plusButton.layoutBoundsProperty.addListener(relocateButtons_0)
 			group.layoutBoundsProperty.addListener(relocateButtons_0)
 			group.layoutXProperty.addListener(relocateButtons_1)
 			group.layoutYProperty.addListener(relocateButtons_1)
-			relocateButtons(minusButton, plusButton)
+			graphics.relocateButtons(minusButton, plusButton)
 		}
 		true
 	}
@@ -255,6 +260,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 	}
 
 	protected def nodeChosen(XNode choice) {
+		graphics.nodeChosen(choice)
 		if (choice != null) {
 			getNodes.forEach[onMouseClicked = null]
 			group.children.remove(choice)
@@ -309,10 +315,8 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 	}
 
 	protected def void setInterpolatedPosition(double interpolatedPosition) {
-		doSetInterpolatedPosition(interpolatedPosition)
+		graphics.interpolatedPosition = interpolatedPosition
 	}
-
-	protected def void doSetInterpolatedPosition(double interpolatedPosition)
 
 	def getCurrentPosition() {
 		var result = currentPositionProperty.get % getNodes.size
@@ -390,6 +394,4 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			node.name.contains(filterString)
 	}
 
-	def void relocateButtons(Node minusButton, Node plusButton) {
-	}
 }

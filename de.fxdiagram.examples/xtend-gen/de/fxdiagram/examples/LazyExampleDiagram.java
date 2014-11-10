@@ -6,7 +6,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.tools.AbstractChooser;
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
 import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
@@ -147,8 +147,8 @@ public class LazyExampleDiagram extends XDiagram {
     AddRapidButtonBehavior<XNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<XNode>(node);
     final Procedure1<AddRapidButtonBehavior<XNode>> _function = new Procedure1<AddRapidButtonBehavior<XNode>>() {
       public void apply(final AddRapidButtonBehavior<XNode> it) {
-        final Procedure1<AbstractChooser> _function = new Procedure1<AbstractChooser>() {
-          public void apply(final AbstractChooser it) {
+        final Procedure1<ConnectedNodeChooser> _function = new Procedure1<ConnectedNodeChooser>() {
+          public void apply(final ConnectedNodeChooser it) {
             IntegerRange _upTo = new IntegerRange(5, 20);
             for (final Integer i : _upTo) {
               SimpleNode _newSimpleNode = LazyExampleDiagram.this.newSimpleNode((" " + i));

@@ -1,4 +1,4 @@
-package de.fxdiagram.core.tools;
+package de.fxdiagram.lib.chooser;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
@@ -8,8 +8,9 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.tools.AbstractBaseChooser;
-import de.fxdiagram.core.tools.ChooserConnectionProvider;
+import de.fxdiagram.lib.chooser.AbstractBaseChooser;
+import de.fxdiagram.lib.chooser.ChoiceGraphics;
+import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,7 @@ import javafx.scene.Group;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
-public abstract class AbstractChooser extends AbstractBaseChooser {
+public class ConnectedNodeChooser extends AbstractBaseChooser {
   private XNode host;
   
   private XNode currentChoice;
@@ -36,8 +37,8 @@ public abstract class AbstractChooser extends AbstractBaseChooser {
   
   private XConnection currentConnection;
   
-  public AbstractChooser(final XNode host, final Side layoutPosition, final boolean hasButtons) {
-    super(layoutPosition, hasButtons);
+  public ConnectedNodeChooser(final XNode host, final Side layoutPosition, final ChoiceGraphics graphics) {
+    super(layoutPosition, graphics);
     this.host = host;
   }
   

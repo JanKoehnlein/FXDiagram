@@ -1,7 +1,7 @@
-package de.fxdiagram.core.tools;
+package de.fxdiagram.lib.chooser;
 
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.tools.AbstractBaseChooser;
+import de.fxdiagram.lib.chooser.AbstractBaseChooser;
 import java.util.ArrayList;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;

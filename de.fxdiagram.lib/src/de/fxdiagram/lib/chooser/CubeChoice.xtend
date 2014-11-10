@@ -1,9 +1,7 @@
-package de.fxdiagram.lib.tools
+package de.fxdiagram.lib.chooser
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.tools.AbstractChooser
 import javafx.geometry.Point3D
-import javafx.geometry.Side
 import javafx.scene.Node
 import javafx.scene.transform.Affine
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -12,35 +10,27 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
-class CubeChooser extends AbstractChooser {
+class CubeChoice extends AbstractChoiceGraphics {
 
 	@Accessors double spacing = 6.0
 
 	double maxWidth
-
-	new(XNode host, Side layoutPosition) {
-		super(host, layoutPosition, true)
-	}
-
-	override activate() {
-		super.activate()
-	}
-
-	override protected doSetInterpolatedPosition(double interpolatedPosition) {
-		maxWidth = nodes.fold(0.0, [a, b|max(a, b.layoutBounds.width)]) + spacing
+	
+	override setInterpolatedPosition(double interpolatedPosition) {
+		maxWidth = choiceNodes.fold(0.0, [a, b|max(a, b.layoutBounds.width)]) + spacing
 		val angle = (interpolatedPosition - (interpolatedPosition as int)) * 90
-		val leftNodeIndex = interpolatedPosition as int % nodes.size
+		val leftNodeIndex = interpolatedPosition as int % choiceNodes.size
 		applyTransform(leftNodeIndex, angle)
-		val rightNodeIndex = (interpolatedPosition as int + 1) % nodes.size
+		val rightNodeIndex = (interpolatedPosition as int + 1) % choiceNodes.size
 		applyTransform(rightNodeIndex, angle - 90)
-		nodes.forEach [ XNode node, int i |
+		choiceNodes.forEach [ XNode node, int i |
 			if (i != leftNodeIndex && i != rightNodeIndex)
 				node.visible = false
 		]
 	}
 
 	protected def applyTransform(int nodeIndex, double angle) {
-		val node = nodes.get(nodeIndex)
+		val node = choiceNodes.get(nodeIndex)
 		if (abs(angle) > 86)
 			node.visible = false
 		else {
@@ -57,10 +47,10 @@ class CubeChooser extends AbstractChooser {
 	
 	override relocateButtons(Node minusButton, Node plusButton) {
 		val groupMaxWidthHalf = 0.5 * maxWidth * sqrt(2)
-		minusButton.layoutX = group.layoutX + groupMaxWidthHalf 
-		minusButton.layoutY = group.layoutY - 0.5 * minusButton.layoutBounds.height
-		plusButton.layoutX = group.layoutX - groupMaxWidthHalf - plusButton.layoutBounds.width 
-		plusButton.layoutY = group.layoutY - 0.5 * plusButton.layoutBounds.height
+		minusButton.layoutX = choiceGroup.layoutX + groupMaxWidthHalf 
+		minusButton.layoutY = choiceGroup.layoutY - 0.5 * minusButton.layoutBounds.height
+		plusButton.layoutX = choiceGroup.layoutX - groupMaxWidthHalf - plusButton.layoutBounds.width 
+		plusButton.layoutY = choiceGroup.layoutY - 0.5 * plusButton.layoutBounds.height
 	}
 	
 }

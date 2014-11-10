@@ -8,8 +8,6 @@ import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.tools.AbstractChooser;
-import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaProperty;
 import de.fxdiagram.examples.java.JavaPropertyDescriptor;
@@ -18,8 +16,10 @@ import de.fxdiagram.examples.java.JavaTypeModel;
 import de.fxdiagram.examples.java.JavaTypeNode;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
+import de.fxdiagram.lib.chooser.CarusselChoice;
+import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
-import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -61,12 +61,13 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
     return _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
   }
   
-  protected AbstractChooser createChooser(final RapidButton button, final Set<JavaPropertyDescriptor> availableChoiceKeys, final Set<JavaPropertyDescriptor> unavailableChoiceKeys) {
-    CarusselChooser _xblockexpression = null;
+  protected ConnectedNodeChooser createChooser(final RapidButton button, final Set<JavaPropertyDescriptor> availableChoiceKeys, final Set<JavaPropertyDescriptor> unavailableChoiceKeys) {
+    ConnectedNodeChooser _xblockexpression = null;
     {
       JavaTypeNode _host = this.getHost();
       Side _position = button.getPosition();
-      final CarusselChooser chooser = new CarusselChooser(_host, _position);
+      CarusselChoice _carusselChoice = new CarusselChoice();
+      final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _carusselChoice);
       final Consumer<JavaPropertyDescriptor> _function = new Consumer<JavaPropertyDescriptor>() {
         public void accept(final JavaPropertyDescriptor it) {
           XNode _createNode = AddReferenceRapidButtonBehavior.this.createNode(it);

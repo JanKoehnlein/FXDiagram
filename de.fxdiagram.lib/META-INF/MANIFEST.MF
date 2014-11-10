@@ -14,11 +14,11 @@ Export-Package: de.fxdiagram.lib.actions,
  de.fxdiagram.lib.anchors,
  de.fxdiagram.lib.animations,
  de.fxdiagram.lib.buttons,
+ de.fxdiagram.lib.chooser,
  de.fxdiagram.lib.media,
  de.fxdiagram.lib.model,
  de.fxdiagram.lib.nodes,
- de.fxdiagram.lib.simple,
- de.fxdiagram.lib.tools
+ de.fxdiagram.lib.simple
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",

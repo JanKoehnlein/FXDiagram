@@ -6,8 +6,9 @@ import de.fxdiagram.core.anchors.DiamondArrowHead
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.buttons.RapidButtonAction
+import de.fxdiagram.lib.chooser.CarusselChoice
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior
-import de.fxdiagram.lib.tools.CarusselChooser
 import java.util.Set
 import org.eclipse.emf.ecore.EReference
 
@@ -39,7 +40,7 @@ class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 	}
 
 	override protected createChooser(RapidButton button, Set<EReferenceDescriptor> availableChoiceKeys, Set<EReferenceDescriptor> unavailableChoiceKeys) {
-		val chooser = new CarusselChooser(host, button.position)
+		val chooser = new ConnectedNodeChooser(host, button.position, new CarusselChoice)
 		availableChoiceKeys.forEach[
 			chooser.addChoice(it.createNode, it)
 		]

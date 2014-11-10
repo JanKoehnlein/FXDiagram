@@ -7,12 +7,12 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.tools.AbstractChooser;
-import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
-import de.fxdiagram.lib.tools.CarusselChooser;
-import de.fxdiagram.lib.tools.CoverFlowChooser;
+import de.fxdiagram.lib.chooser.CarusselChoice;
+import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
+import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
@@ -104,7 +104,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
   }
   
   public void perform(final RapidButton button) {
-    final AbstractChooser chooser = this.createChooser(button);
+    final ConnectedNodeChooser chooser = this.createChooser(button);
     XNode _host = button.getHost();
     this.populateChooser(chooser, _host);
     XNode _host_1 = button.getHost();
@@ -112,26 +112,28 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     _root.setCurrentTool(chooser);
   }
   
-  protected AbstractChooser createChooser(final RapidButton button) {
-    AbstractChooser _xblockexpression = null;
+  protected ConnectedNodeChooser createChooser(final RapidButton button) {
+    ConnectedNodeChooser _xblockexpression = null;
     {
       final Side position = button.getPosition();
-      AbstractChooser _xifexpression = null;
+      ConnectedNodeChooser _xifexpression = null;
       boolean _isVertical = position.isVertical();
       if (_isVertical) {
         XNode _host = button.getHost();
-        _xifexpression = new CarusselChooser(_host, position);
+        CarusselChoice _carusselChoice = new CarusselChoice();
+        _xifexpression = new ConnectedNodeChooser(_host, position, _carusselChoice);
       } else {
         XNode _host_1 = button.getHost();
-        _xifexpression = new CoverFlowChooser(_host_1, position);
+        CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
+        _xifexpression = new ConnectedNodeChooser(_host_1, position, _coverFlowChoice);
       }
-      final AbstractChooser chooser = _xifexpression;
+      final ConnectedNodeChooser chooser = _xifexpression;
       _xblockexpression = chooser;
     }
     return _xblockexpression;
   }
   
-  protected Object populateChooser(final AbstractChooser chooser, final XNode host) {
+  protected Object populateChooser(final ConnectedNodeChooser chooser, final XNode host) {
     Object _xblockexpression = null;
     {
       DomainObjectDescriptor _domainObject = host.getDomainObject();

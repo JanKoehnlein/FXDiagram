@@ -9,21 +9,21 @@ import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.core.tools.AbstractChooser;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
 import de.fxdiagram.lib.buttons.RapidButtonBehavior;
+import de.fxdiagram.lib.chooser.CarusselChoice;
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
+import de.fxdiagram.lib.chooser.CoverFlowChoice;
+import de.fxdiagram.lib.chooser.CubeChoice;
 import de.fxdiagram.lib.simple.SimpleNode;
-import de.fxdiagram.lib.tools.CarusselChooser;
-import de.fxdiagram.lib.tools.CoverFlowChooser;
-import de.fxdiagram.lib.tools.CubeChooser;
 import javafx.geometry.Side;
 import javafx.scene.shape.SVGPath;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior<T> {
-  private Procedure1<? super AbstractChooser> choiceInitializer;
+  private Procedure1<? super ConnectedNodeChooser> choiceInitializer;
   
   public AddRapidButtonBehavior(final T host) {
     super(host);
@@ -33,7 +33,7 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
     return AddRapidButtonBehavior.class;
   }
   
-  public Procedure1<? super AbstractChooser> setChoiceInitializer(final Procedure1<? super AbstractChooser> choiceInitializer) {
+  public Procedure1<? super ConnectedNodeChooser> setChoiceInitializer(final Procedure1<? super ConnectedNodeChooser> choiceInitializer) {
     return this.choiceInitializer = choiceInitializer;
   }
   
@@ -89,7 +89,8 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
       @Override
       public void perform(final RapidButton button) {
         Side _position = button.getPosition();
-        final CarusselChooser chooser = new CarusselChooser(host, _position);
+        CarusselChoice _carusselChoice = new CarusselChoice();
+        final ConnectedNodeChooser chooser = new ConnectedNodeChooser(host, _position, _carusselChoice);
         AddRapidButtonBehavior.this.addChoices(chooser);
         XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);
@@ -100,7 +101,8 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
       @Override
       public void perform(final RapidButton button) {
         Side _position = button.getPosition();
-        final CubeChooser chooser = new CubeChooser(host, _position);
+        CubeChoice _cubeChoice = new CubeChoice();
+        final ConnectedNodeChooser chooser = new ConnectedNodeChooser(host, _position, _cubeChoice);
         AddRapidButtonBehavior.this.addChoices(chooser);
         XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);
@@ -111,7 +113,8 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
       @Override
       public void perform(final RapidButton button) {
         Side _position = button.getPosition();
-        final CoverFlowChooser chooser = new CoverFlowChooser(host, _position);
+        CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
+        final ConnectedNodeChooser chooser = new ConnectedNodeChooser(host, _position, _coverFlowChoice);
         AddRapidButtonBehavior.this.addChoices(chooser);
         XRoot _root = CoreExtensions.getRoot(host);
         _root.setCurrentTool(chooser);
@@ -133,7 +136,7 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
     super.doActivate();
   }
   
-  protected void addChoices(final AbstractChooser chooser) {
+  protected void addChoices(final ConnectedNodeChooser chooser) {
     this.choiceInitializer.apply(chooser);
   }
 }

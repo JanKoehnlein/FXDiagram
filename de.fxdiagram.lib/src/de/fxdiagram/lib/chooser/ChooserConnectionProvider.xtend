@@ -1,4 +1,4 @@
-package de.fxdiagram.core.tools
+package de.fxdiagram.lib.chooser
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode

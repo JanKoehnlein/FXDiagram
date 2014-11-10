@@ -1,12 +1,12 @@
 package de.fxdiagram.xtext.glue.behavior
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.tools.AbstractChooser
 import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.buttons.RapidButtonBehavior
-import de.fxdiagram.lib.tools.CarusselChooser
-import de.fxdiagram.lib.tools.CoverFlowChooser
+import de.fxdiagram.lib.chooser.CarusselChoice
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser
+import de.fxdiagram.lib.chooser.CoverFlowChoice
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
@@ -111,14 +111,14 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 	def protected createChooser(RapidButton button) {
 		val position = button.position
 		val chooser = if(position.vertical) {
-			new CarusselChooser(button.host, position)
+			new ConnectedNodeChooser(button.host, position, new CarusselChoice)
 		} else {
-			new CoverFlowChooser(button.host, position)			
+			new ConnectedNodeChooser(button.host, position, new CoverFlowChoice)			
 		}
 		chooser
 	}
 	
-	protected def populateChooser(AbstractChooser chooser, XNode host) {
+	protected def populateChooser(ConnectedNodeChooser chooser, XNode host) {
 		val hostDescriptor = host.domainObject as IMappedElementDescriptor<ARG>
 		val existingConnectionDescriptors = host.diagram.connections.map[domainObject].toSet
 		hostDescriptor.withDomainObject[ 

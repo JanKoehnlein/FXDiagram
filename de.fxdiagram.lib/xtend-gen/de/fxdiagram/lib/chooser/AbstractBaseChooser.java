@@ -1,4 +1,4 @@
-package de.fxdiagram.core.tools;
+package de.fxdiagram.lib.chooser;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
@@ -13,8 +13,9 @@ import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.tools.ChooserTransition;
 import de.fxdiagram.core.tools.XDiagramTool;
+import de.fxdiagram.lib.chooser.ChoiceGraphics;
+import de.fxdiagram.lib.chooser.ChooserTransition;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -89,14 +90,18 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   
   private ChangeListener<String> filterChangeListener;
   
-  protected Side layoutPosition;
+  protected final Side layoutPosition;
+  
+  private final ChoiceGraphics graphics;
   
   private Node plusButton;
   
   private Node minusButton;
   
-  public AbstractBaseChooser(final Side layoutPosition, final boolean hasButtons) {
+  public AbstractBaseChooser(final Side layoutPosition, final ChoiceGraphics graphics) {
     this.layoutPosition = layoutPosition;
+    this.graphics = graphics;
+    graphics.setChooser(this);
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
       public void changed(final ObservableValue<? extends Number> element, final Number oldValue, final Number newValue) {
         final double newVal = newValue.doubleValue();
@@ -220,7 +225,8 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       }
     };
     this.filterChangeListener = _function_4;
-    if (hasButtons) {
+    boolean _hasButtons = graphics.hasButtons();
+    if (_hasButtons) {
       SVGPath _xifexpression = null;
       boolean _isVertical = layoutPosition.isVertical();
       if (_isVertical) {
@@ -417,13 +423,13 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         _children_2.add(this.minusButton);
         final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
           public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-            AbstractBaseChooser.this.relocateButtons(AbstractBaseChooser.this.minusButton, AbstractBaseChooser.this.plusButton);
+            AbstractBaseChooser.this.graphics.relocateButtons(AbstractBaseChooser.this.minusButton, AbstractBaseChooser.this.plusButton);
           }
         };
         final ChangeListener<Bounds> relocateButtons_0 = _function_2;
         final ChangeListener<Number> _function_3 = new ChangeListener<Number>() {
           public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-            AbstractBaseChooser.this.relocateButtons(AbstractBaseChooser.this.minusButton, AbstractBaseChooser.this.plusButton);
+            AbstractBaseChooser.this.graphics.relocateButtons(AbstractBaseChooser.this.minusButton, AbstractBaseChooser.this.plusButton);
           }
         };
         final ChangeListener<Number> relocateButtons_1 = _function_3;
@@ -437,7 +443,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         _layoutXProperty.addListener(relocateButtons_1);
         DoubleProperty _layoutYProperty = this.group.layoutYProperty();
         _layoutYProperty.addListener(relocateButtons_1);
-        this.relocateButtons(this.minusButton, this.plusButton);
+        this.graphics.relocateButtons(this.minusButton, this.plusButton);
       }
       _xblockexpression = true;
     }
@@ -490,6 +496,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   }
   
   protected void nodeChosen(final XNode choice) {
+    this.graphics.nodeChosen(choice);
     boolean _notEquals = (!Objects.equal(choice, null));
     if (_notEquals) {
       ArrayList<XNode> _nodes = this.getNodes();
@@ -634,10 +641,8 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   }
   
   protected void setInterpolatedPosition(final double interpolatedPosition) {
-    this.doSetInterpolatedPosition(interpolatedPosition);
+    this.graphics.setInterpolatedPosition(interpolatedPosition);
   }
-  
-  protected abstract void doSetInterpolatedPosition(final double interpolatedPosition);
   
   public double getCurrentPosition() {
     double _xblockexpression = (double) 0;
@@ -814,9 +819,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       _xifexpression = _name_1.contains(_filterString_3);
     }
     return _xifexpression;
-  }
-  
-  public void relocateButtons(final Node minusButton, final Node plusButton) {
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive",_initIsActive());

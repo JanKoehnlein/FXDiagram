@@ -11,16 +11,16 @@ import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.tools.AbstractChooser;
-import de.fxdiagram.core.tools.ChooserConnectionProvider;
 import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.examples.ecore.EClassNode;
 import de.fxdiagram.examples.ecore.EReferenceDescriptor;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
+import de.fxdiagram.lib.chooser.CarusselChoice;
+import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
+import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.model.AbstractConnectionRapidButtonBehavior;
-import de.fxdiagram.lib.tools.CarusselChooser;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -64,12 +64,13 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
-  protected AbstractChooser createChooser(final RapidButton button, final Set<EReferenceDescriptor> availableChoiceKeys, final Set<EReferenceDescriptor> unavailableChoiceKeys) {
-    CarusselChooser _xblockexpression = null;
+  protected ConnectedNodeChooser createChooser(final RapidButton button, final Set<EReferenceDescriptor> availableChoiceKeys, final Set<EReferenceDescriptor> unavailableChoiceKeys) {
+    ConnectedNodeChooser _xblockexpression = null;
     {
       EClassNode _host = this.getHost();
       Side _position = button.getPosition();
-      final CarusselChooser chooser = new CarusselChooser(_host, _position);
+      CarusselChoice _carusselChoice = new CarusselChoice();
+      final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _carusselChoice);
       final Consumer<EReferenceDescriptor> _function = new Consumer<EReferenceDescriptor>() {
         public void accept(final EReferenceDescriptor it) {
           XNode _createNode = AddEReferenceRapidButtonBehavior.this.createNode(it);
