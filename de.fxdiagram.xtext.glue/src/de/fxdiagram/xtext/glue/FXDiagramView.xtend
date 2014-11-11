@@ -23,6 +23,7 @@ import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
+import de.fxdiagram.xtext.glue.mapping.AbstractMapping
 import de.fxdiagram.xtext.glue.mapping.DiagramMappingCall
 import de.fxdiagram.xtext.glue.mapping.InterpreterContext
 import de.fxdiagram.xtext.glue.mapping.MappingCall
@@ -35,15 +36,13 @@ import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
+import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import org.eclipse.ui.IEditorPart
-import de.fxdiagram.xtext.glue.mapping.AbstractMapping
-import de.fxdiagram.xtext.glue.mapping.MappedElement
 
 class FXDiagramView extends ViewPart {
 

@@ -3,13 +3,15 @@ package de.fxdiagram.xtext.glue.shapes
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
+import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 
+import static javafx.geometry.Side.*
 import static javafx.scene.input.MouseButton.*
 
 import static extension de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior.*
 
-class BaseFlipNode<T> extends FlipNode {
+class BaseFlipNode<T> extends FlipNode implements INodeWithLazyMappings {
 
 	new() {
 		domainObjectProperty.addListener [ 
@@ -47,4 +49,9 @@ class BaseFlipNode<T> extends FlipNode {
 			}
 		]
 	}
+	
+	override getButtonSides(ConnectionMapping<?> mapping) {
+		#[ TOP, BOTTOM, LEFT, RIGHT ]
+	}
+	
 }

@@ -7,6 +7,7 @@ import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.core.tools.XDiagramTool
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
 import javafx.beans.property.DoubleProperty
@@ -14,8 +15,8 @@ import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.value.ChangeListener
 import javafx.event.EventHandler
 import javafx.geometry.Bounds
+import javafx.geometry.Point2D
 import javafx.geometry.Pos
-import javafx.geometry.Side
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.control.Label
@@ -31,8 +32,6 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
-import javafx.geometry.Point2D
-import de.fxdiagram.core.tools.XDiagramTool
 
 abstract class AbstractBaseChooser implements XDiagramTool {
 
@@ -64,16 +63,13 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 
 	ChangeListener<String> filterChangeListener
 
-	protected val Side layoutPosition
-
 	val ChoiceGraphics graphics
 
 	Node plusButton
 
 	Node minusButton
 
-	new(Side layoutPosition, ChoiceGraphics graphics) {
-		this.layoutPosition = layoutPosition
+	new(ChoiceGraphics graphics, boolean isVertical) {
 		this.graphics = graphics
 		graphics.chooser = this
 		positionListener = [ element, oldValue, newValue |
@@ -132,7 +128,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			calculateVisibleNodes
 		]
 		if (graphics.hasButtons) {
-			minusButton = (if(layoutPosition.vertical) 
+			minusButton = (if(isVertical) 
 					getArrowButton(BOTTOM, 'previous')
 				else 
 					getArrowButton(RIGHT, "previous")
@@ -141,7 +137,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 						spinToPosition.targetPositionDelta = -1
 					]
 				]
-			plusButton = (if(layoutPosition.vertical)
+			plusButton = (if(isVertical)
 					getArrowButton(TOP, 'next')
 				else 
 					getArrowButton(LEFT, 'next')
@@ -260,7 +256,6 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 	}
 
 	protected def nodeChosen(XNode choice) {
-		graphics.nodeChosen(choice)
 		if (choice != null) {
 			getNodes.forEach[onMouseClicked = null]
 			group.children.remove(choice)
@@ -272,35 +267,34 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 				choice.effect = null
 				var center = group.localToDiagram(0, 0)
 				choice.transforms.clear
+				choice.autosize
 				choice.layout
 				val bounds = choice.layoutBounds
 				choice.layoutX = center.x - 0.5 * bounds.width 
 				choice.layoutY = center.y - 0.5 * bounds.height
-				switch layoutPosition {
-					case LEFT: 
-						choice.layoutX = choice.layoutX - 0.5 * (bounds.width - unlayoutedBounds.width)
-					case RIGHT:
-						choice.layoutX = choice.layoutX + 0.5 * (bounds.width - unlayoutedBounds.width)
-					case TOP:
-						choice.layoutY = choice.layoutY - 0.5 * (bounds.height - unlayoutedBounds.height)
-					case BOTTOM:
-						choice.layoutY = choice.layoutY + 0.5 * (bounds.height - unlayoutedBounds.height)
-				}
-				choice.placementHint = layoutPosition
+				graphics.nodeChosen(choice)
+				adjustNewNode(choice, 
+					bounds.width - unlayoutedBounds.width,
+					bounds.height - unlayoutedBounds.height)
 				shapesToAdd += choice
 			}
-			shapesToAdd += getAdditionalShapesToAdd(existingChoice)
+			shapesToAdd += getAdditionalShapesToAdd(existingChoice, node2choiceInfo.get(choice))
 			root.commandStack.execute(AddRemoveCommand.newAddCommand(diagram, shapesToAdd))
 		}
 	}
 	
-	protected def Iterable<? extends XShape> getAdditionalShapesToAdd(XNode choice) {
+	protected def adjustNewNode(XNode choice, double widthDelta, double heightDelta) {
+		choice.layoutX = choice.layoutX - 0.5 * widthDelta
+		choice.layoutY = choice.layoutY - 0.5 * heightDelta
+	}
+	
+	protected def Iterable<? extends XShape> getAdditionalShapesToAdd(XNode choice, DomainObjectDescriptor choiceInfo) {
 		#[]
 	}
 	
 	protected def setBlurDiagram(boolean isBlur) {
 		new ParallelTransition => [
-			for (layer : #[root.diagram.nodeLayer, root.diagram.connectionLayer])
+			for (layer : #[diagram.nodeLayer, diagram.connectionLayer])
 				children += new FadeTransition => [
 					node = layer
 					toValue = if(isBlur) 0.3 else 1
@@ -369,22 +363,14 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			}
 			mapIndex = mapIndex + 1
 		}
-		resizeGroup(group, maxWidth, maxHeight)
+		alignGroup(group, maxWidth, maxHeight)
 		interpolatedPosition = getCurrentPosition
 		spinToPosition.resetTargetPosition
 	}
 
-	protected def resizeGroup(Group group, double maxWidth, double maxHeight) {
-		group.layoutX = switch layoutPosition {
-			case LEFT: position.x - maxWidth
-			case RIGHT: position.x
-			default: position.x + 0.5 * maxWidth
-		}
-		group.layoutY = switch layoutPosition {
-			case TOP: position.y - maxHeight
-			case BOTTOM: position.y
-			default: position.y + 0.5 * maxWidth
-		}
+	protected def alignGroup(Group node, double maxWidth, double maxHeight) {
+		group.layoutX = position.x - 0.5 * maxWidth
+		group.layoutY = position.y - 0.5 * maxHeight
 	}
 
 	def protected matchesFilter(XNode node) {

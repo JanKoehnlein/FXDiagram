@@ -6,17 +6,23 @@ import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
+import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
+import de.fxdiagram.xtext.glue.shapes.INodeWithLazyMappings;
+import java.util.Collections;
+import java.util.List;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
-public class BaseFlipNode<T extends Object> extends FlipNode {
+public class BaseFlipNode<T extends Object> extends FlipNode implements INodeWithLazyMappings {
   public BaseFlipNode() {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectProperty = this.domainObjectProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
@@ -76,5 +82,9 @@ public class BaseFlipNode<T extends Object> extends FlipNode {
       }
     };
     this.setOnMouseClicked(_function);
+  }
+  
+  public List<Side> getButtonSides(final ConnectionMapping<?> mapping) {
+    return Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.TOP, Side.BOTTOM, Side.LEFT, Side.RIGHT));
   }
 }

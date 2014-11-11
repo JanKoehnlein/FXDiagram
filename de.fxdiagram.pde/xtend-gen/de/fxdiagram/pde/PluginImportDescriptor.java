@@ -1,9 +1,9 @@
 package de.fxdiagram.pde;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.pde.PluginDescriptorProvider;
+import de.fxdiagram.pde.PluginUtil;
 import de.fxdiagram.xtext.glue.mapping.AbstractMappedElementDescriptor;
 import java.util.Collections;
 import org.eclipse.pde.core.plugin.IPluginImport;
@@ -24,11 +24,10 @@ public class PluginImportDescriptor extends AbstractMappedElementDescriptor<IPlu
   public <U extends Object> U withDomainObject(final Function1<? super IPluginImport, ? extends U> lambda) {
     U _xblockexpression = null;
     {
-      DomainObjectProvider _provider = this.getProvider();
       String _ownerSymbolicName = this.getOwnerSymbolicName();
       String _ownerVersion = this.getOwnerVersion();
       String _importSymbolicName = this.getImportSymbolicName();
-      final IPluginImport handle = ((PluginDescriptorProvider) _provider).getPluginImport(_ownerSymbolicName, _ownerVersion, _importSymbolicName);
+      final IPluginImport handle = PluginUtil.findPluginImport(_ownerSymbolicName, _ownerVersion, _importSymbolicName);
       _xblockexpression = lambda.apply(handle);
     }
     return _xblockexpression;

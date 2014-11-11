@@ -1,9 +1,9 @@
 package de.fxdiagram.pde;
 
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.pde.PluginDescriptorProvider;
+import de.fxdiagram.pde.PluginUtil;
 import de.fxdiagram.xtext.glue.mapping.AbstractMappedElementDescriptor;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.ui.IEditorPart;
@@ -21,10 +21,9 @@ public class PluginDescriptor extends AbstractMappedElementDescriptor<IPluginMod
   public <U extends Object> U withDomainObject(final Function1<? super IPluginModelBase, ? extends U> lambda) {
     U _xblockexpression = null;
     {
-      DomainObjectProvider _provider = this.getProvider();
       String _symbolicName = this.getSymbolicName();
       String _version = this.getVersion();
-      final IPluginModelBase plugin = ((PluginDescriptorProvider) _provider).getPlugin(_symbolicName, _version);
+      final IPluginModelBase plugin = PluginUtil.findPlugin(_symbolicName, _version);
       _xblockexpression = lambda.apply(plugin);
     }
     return _xblockexpression;

@@ -5,9 +5,8 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.behavior.OpenBehavior
-import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
-import javafx.scene.input.MouseEvent
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
+import javafx.scene.input.MouseEvent
 
 class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implements OpenBehavior {
 	

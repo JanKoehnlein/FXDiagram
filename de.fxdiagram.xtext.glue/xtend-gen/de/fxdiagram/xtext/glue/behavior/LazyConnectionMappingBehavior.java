@@ -8,13 +8,17 @@ import de.fxdiagram.lib.buttons.RapidButtonBehavior;
 import de.fxdiagram.xtext.glue.behavior.LazyConnectionRapidButtonAction;
 import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
+import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter;
+import de.fxdiagram.xtext.glue.shapes.INodeWithLazyMappings;
+import java.util.Collections;
 import java.util.List;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
@@ -51,7 +55,8 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
           lazyBehavior = _elvis;
           for (final AbstractConnectionMappingCall<?, T> out : lazyOutgoing) {
             XDiagramConfigInterpreter _xDiagramConfigInterpreter = new XDiagramConfigInterpreter();
-            lazyBehavior.addConnectionMappingCall(out, _xDiagramConfigInterpreter, true);
+            List<Side> _buttonSides = LazyConnectionMappingBehavior.getButtonSides(node, out);
+            lazyBehavior.addConnectionMappingCall(out, _xDiagramConfigInterpreter, true, ((Side[])Conversions.unwrapArray(_buttonSides, Side.class)));
           }
         }
         List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
@@ -74,7 +79,8 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
           lazyBehavior = _elvis_1;
           for (final AbstractConnectionMappingCall<?, T> in : lazyIncoming) {
             XDiagramConfigInterpreter _xDiagramConfigInterpreter_1 = new XDiagramConfigInterpreter();
-            lazyBehavior.addConnectionMappingCall(in, _xDiagramConfigInterpreter_1, false);
+            List<Side> _buttonSides_1 = LazyConnectionMappingBehavior.getButtonSides(node, in);
+            lazyBehavior.addConnectionMappingCall(in, _xDiagramConfigInterpreter_1, false, ((Side[])Conversions.unwrapArray(_buttonSides_1, Side.class)));
           }
         }
         Behavior _xifexpression_1 = null;
@@ -89,35 +95,36 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
     return _xifexpression;
   }
   
+  public static List<Side> getButtonSides(final XNode node, final AbstractConnectionMappingCall<?, ?> out) {
+    List<Side> _xifexpression = null;
+    if ((node instanceof INodeWithLazyMappings)) {
+      ConnectionMapping<?> _connectionMapping = out.getConnectionMapping();
+      _xifexpression = ((INodeWithLazyMappings)node).getButtonSides(_connectionMapping);
+    } else {
+      _xifexpression = Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.TOP, Side.BOTTOM, Side.LEFT, Side.RIGHT));
+    }
+    return _xifexpression;
+  }
+  
   public LazyConnectionMappingBehavior(final XNode host) {
     super(host);
   }
   
-  public boolean addConnectionMappingCall(final AbstractConnectionMappingCall<?, ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
-    LazyConnectionRapidButtonAction<?, ARG> _createAction = this.createAction(mappingCall, configInterpreter, hostIsSource);
+  public boolean addConnectionMappingCall(final AbstractConnectionMappingCall<?, ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource, final Side... sides) {
+    LazyConnectionRapidButtonAction<?, ARG> _createAction = this.createAction(mappingCall, configInterpreter, hostIsSource, sides);
     return this.actions.add(_createAction);
   }
   
-  protected LazyConnectionRapidButtonAction<?, ARG> createAction(final AbstractConnectionMappingCall<?, ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource) {
+  protected LazyConnectionRapidButtonAction<?, ARG> createAction(final AbstractConnectionMappingCall<?, ARG> mappingCall, final XDiagramConfigInterpreter configInterpreter, final boolean hostIsSource, final Side... sides) {
     LazyConnectionRapidButtonAction<?, ARG> _xblockexpression = null;
     {
       final LazyConnectionRapidButtonAction<?, ARG> action = new LazyConnectionRapidButtonAction(mappingCall, configInterpreter, hostIsSource);
-      XNode _host = this.getHost();
-      Node _image = mappingCall.getImage(Side.LEFT);
-      RapidButton _rapidButton = new RapidButton(_host, Side.LEFT, _image, action);
-      this.add(_rapidButton);
-      XNode _host_1 = this.getHost();
-      Node _image_1 = mappingCall.getImage(Side.RIGHT);
-      RapidButton _rapidButton_1 = new RapidButton(_host_1, Side.RIGHT, _image_1, action);
-      this.add(_rapidButton_1);
-      XNode _host_2 = this.getHost();
-      Node _image_2 = mappingCall.getImage(Side.TOP);
-      RapidButton _rapidButton_2 = new RapidButton(_host_2, Side.TOP, _image_2, action);
-      this.add(_rapidButton_2);
-      XNode _host_3 = this.getHost();
-      Node _image_3 = mappingCall.getImage(Side.BOTTOM);
-      RapidButton _rapidButton_3 = new RapidButton(_host_3, Side.BOTTOM, _image_3, action);
-      this.add(_rapidButton_3);
+      for (final Side side : sides) {
+        XNode _host = this.getHost();
+        Node _image = mappingCall.getImage(side);
+        RapidButton _rapidButton = new RapidButton(_host, side, _image, action);
+        this.add(_rapidButton);
+      }
       _xblockexpression = action;
     }
     return _xblockexpression;

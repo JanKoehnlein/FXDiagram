@@ -90,16 +90,13 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   
   private ChangeListener<String> filterChangeListener;
   
-  protected final Side layoutPosition;
-  
   private final ChoiceGraphics graphics;
   
   private Node plusButton;
   
   private Node minusButton;
   
-  public AbstractBaseChooser(final Side layoutPosition, final ChoiceGraphics graphics) {
-    this.layoutPosition = layoutPosition;
+  public AbstractBaseChooser(final ChoiceGraphics graphics, final boolean isVertical) {
     this.graphics = graphics;
     graphics.setChooser(this);
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
@@ -228,8 +225,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     boolean _hasButtons = graphics.hasButtons();
     if (_hasButtons) {
       SVGPath _xifexpression = null;
-      boolean _isVertical = layoutPosition.isVertical();
-      if (_isVertical) {
+      if (isVertical) {
         _xifexpression = ButtonExtensions.getArrowButton(Side.BOTTOM, "previous");
       } else {
         _xifexpression = ButtonExtensions.getArrowButton(Side.RIGHT, "previous");
@@ -247,8 +243,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_xifexpression, _function_5);
       this.minusButton = _doubleArrow;
       SVGPath _xifexpression_1 = null;
-      boolean _isVertical_1 = layoutPosition.isVertical();
-      if (_isVertical_1) {
+      if (isVertical) {
         _xifexpression_1 = ButtonExtensions.getArrowButton(Side.TOP, "next");
       } else {
         _xifexpression_1 = ButtonExtensions.getArrowButton(Side.LEFT, "next");
@@ -496,7 +491,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   }
   
   protected void nodeChosen(final XNode choice) {
-    this.graphics.nodeChosen(choice);
     boolean _notEquals = (!Objects.equal(choice, null));
     if (_notEquals) {
       ArrayList<XNode> _nodes = this.getNodes();
@@ -527,6 +521,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         Point2D center = CoreExtensions.localToDiagram(this.group, 0, 0);
         ObservableList<Transform> _transforms = choice.getTransforms();
         _transforms.clear();
+        choice.autosize();
         choice.layout();
         final Bounds bounds = choice.getLayoutBounds();
         double _x = center.getX();
@@ -539,53 +534,18 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         double _multiply_1 = (0.5 * _height);
         double _minus_1 = (_y - _multiply_1);
         choice.setLayoutY(_minus_1);
-        final Side layoutPosition = this.layoutPosition;
-        if (layoutPosition != null) {
-          switch (layoutPosition) {
-            case LEFT:
-              double _layoutX = choice.getLayoutX();
-              double _width_1 = bounds.getWidth();
-              double _width_2 = unlayoutedBounds.getWidth();
-              double _minus_2 = (_width_1 - _width_2);
-              double _multiply_2 = (0.5 * _minus_2);
-              double _minus_3 = (_layoutX - _multiply_2);
-              choice.setLayoutX(_minus_3);
-              break;
-            case RIGHT:
-              double _layoutX_1 = choice.getLayoutX();
-              double _width_3 = bounds.getWidth();
-              double _width_4 = unlayoutedBounds.getWidth();
-              double _minus_4 = (_width_3 - _width_4);
-              double _multiply_3 = (0.5 * _minus_4);
-              double _plus = (_layoutX_1 + _multiply_3);
-              choice.setLayoutX(_plus);
-              break;
-            case TOP:
-              double _layoutY = choice.getLayoutY();
-              double _height_1 = bounds.getHeight();
-              double _height_2 = unlayoutedBounds.getHeight();
-              double _minus_5 = (_height_1 - _height_2);
-              double _multiply_4 = (0.5 * _minus_5);
-              double _minus_6 = (_layoutY - _multiply_4);
-              choice.setLayoutY(_minus_6);
-              break;
-            case BOTTOM:
-              double _layoutY_1 = choice.getLayoutY();
-              double _height_3 = bounds.getHeight();
-              double _height_4 = unlayoutedBounds.getHeight();
-              double _minus_7 = (_height_3 - _height_4);
-              double _multiply_5 = (0.5 * _minus_7);
-              double _plus_1 = (_layoutY_1 + _multiply_5);
-              choice.setLayoutY(_plus_1);
-              break;
-            default:
-              break;
-          }
-        }
-        choice.setPlacementHint(this.layoutPosition);
+        this.graphics.nodeChosen(choice);
+        double _width_1 = bounds.getWidth();
+        double _width_2 = unlayoutedBounds.getWidth();
+        double _minus_2 = (_width_1 - _width_2);
+        double _height_1 = bounds.getHeight();
+        double _height_2 = unlayoutedBounds.getHeight();
+        double _minus_3 = (_height_1 - _height_2);
+        this.adjustNewNode(choice, _minus_2, _minus_3);
         shapesToAdd.add(choice);
       }
-      Iterable<? extends XShape> _additionalShapesToAdd = this.getAdditionalShapesToAdd(existingChoice);
+      DomainObjectDescriptor _get = this.node2choiceInfo.get(choice);
+      Iterable<? extends XShape> _additionalShapesToAdd = this.getAdditionalShapesToAdd(existingChoice, _get);
       Iterables.<XShape>addAll(shapesToAdd, _additionalShapesToAdd);
       XRoot _root = this.getRoot();
       CommandStack _commandStack = _root.getCommandStack();
@@ -595,7 +555,16 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     }
   }
   
-  protected Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice) {
+  protected void adjustNewNode(final XNode choice, final double widthDelta, final double heightDelta) {
+    double _layoutX = choice.getLayoutX();
+    double _minus = (_layoutX - (0.5 * widthDelta));
+    choice.setLayoutX(_minus);
+    double _layoutY = choice.getLayoutY();
+    double _minus_1 = (_layoutY - (0.5 * heightDelta));
+    choice.setLayoutY(_minus_1);
+  }
+  
+  protected Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice, final DomainObjectDescriptor choiceInfo) {
     return Collections.<XShape>unmodifiableList(CollectionLiterals.<XShape>newArrayList());
   }
   
@@ -603,11 +572,9 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
-        XRoot _root = AbstractBaseChooser.this.getRoot();
-        XDiagram _diagram = _root.getDiagram();
+        XDiagram _diagram = AbstractBaseChooser.this.getDiagram();
         Group _nodeLayer = _diagram.getNodeLayer();
-        XRoot _root_1 = AbstractBaseChooser.this.getRoot();
-        XDiagram _diagram_1 = _root_1.getDiagram();
+        XDiagram _diagram_1 = AbstractBaseChooser.this.getDiagram();
         Group _connectionLayer = _diagram_1.getConnectionLayer();
         for (final Group layer : Collections.<Group>unmodifiableList(CollectionLiterals.<Group>newArrayList(_nodeLayer, _connectionLayer))) {
           ObservableList<Animation> _children = it.getChildren();
@@ -743,63 +710,21 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         mapIndex = (mapIndex + 1);
       }
     }
-    this.resizeGroup(this.group, maxWidth, maxHeight);
+    this.alignGroup(this.group, maxWidth, maxHeight);
     double _currentPosition = this.getCurrentPosition();
     this.setInterpolatedPosition(_currentPosition);
     this.spinToPosition.resetTargetPosition();
   }
   
-  protected void resizeGroup(final Group group, final double maxWidth, final double maxHeight) {
-    double _switchResult = (double) 0;
-    final Side layoutPosition = this.layoutPosition;
-    if (layoutPosition != null) {
-      switch (layoutPosition) {
-        case LEFT:
-          Point2D _position = this.getPosition();
-          double _x = _position.getX();
-          _switchResult = (_x - maxWidth);
-          break;
-        case RIGHT:
-          Point2D _position_1 = this.getPosition();
-          _switchResult = _position_1.getX();
-          break;
-        default:
-          Point2D _position_2 = this.getPosition();
-          double _x_1 = _position_2.getX();
-          _switchResult = (_x_1 + (0.5 * maxWidth));
-          break;
-      }
-    } else {
-      Point2D _position_2 = this.getPosition();
-      double _x_1 = _position_2.getX();
-      _switchResult = (_x_1 + (0.5 * maxWidth));
-    }
-    group.setLayoutX(_switchResult);
-    double _switchResult_1 = (double) 0;
-    final Side layoutPosition_1 = this.layoutPosition;
-    if (layoutPosition_1 != null) {
-      switch (layoutPosition_1) {
-        case TOP:
-          Point2D _position_3 = this.getPosition();
-          double _y = _position_3.getY();
-          _switchResult_1 = (_y - maxHeight);
-          break;
-        case BOTTOM:
-          Point2D _position_4 = this.getPosition();
-          _switchResult_1 = _position_4.getY();
-          break;
-        default:
-          Point2D _position_5 = this.getPosition();
-          double _y_1 = _position_5.getY();
-          _switchResult_1 = (_y_1 + (0.5 * maxWidth));
-          break;
-      }
-    } else {
-      Point2D _position_5 = this.getPosition();
-      double _y_1 = _position_5.getY();
-      _switchResult_1 = (_y_1 + (0.5 * maxWidth));
-    }
-    group.setLayoutY(_switchResult_1);
+  protected void alignGroup(final Group node, final double maxWidth, final double maxHeight) {
+    Point2D _position = this.getPosition();
+    double _x = _position.getX();
+    double _minus = (_x - (0.5 * maxWidth));
+    this.group.setLayoutX(_minus);
+    Point2D _position_1 = this.getPosition();
+    double _y = _position_1.getY();
+    double _minus_1 = (_y - (0.5 * maxHeight));
+    this.group.setLayoutY(_minus_1);
   }
   
   protected boolean matchesFilter(final XNode node) {

@@ -4,6 +4,8 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.xtext.glue.mapping.AbstractMappedElementDescriptor
 import org.eclipse.pde.core.plugin.IPluginModelBase
 
+import static de.fxdiagram.pde.PluginUtil.*
+
 @ModelNode
 class PluginDescriptor extends AbstractMappedElementDescriptor<IPluginModelBase> {
 	
@@ -12,7 +14,7 @@ class PluginDescriptor extends AbstractMappedElementDescriptor<IPluginModelBase>
 	}	
 	
 	override <U> withDomainObject((IPluginModelBase)=>U lambda) {
-		val plugin = (provider as PluginDescriptorProvider).getPlugin(symbolicName, version)
+		val plugin = findPlugin(symbolicName, version)
 		lambda.apply(plugin) 
 	}
 	

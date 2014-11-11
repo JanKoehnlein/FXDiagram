@@ -90,9 +90,8 @@ public class CarusselChoice extends AbstractChoiceGraphics {
   }
   
   public void nodeChosen(final XNode choice) {
-    if (choice!=null) {
-      choice.setEffect(null);
-    }
+    super.nodeChosen(choice);
+    choice.setEffect(null);
   }
   
   public void relocateButtons(final Node minusButton, final Node plusButton) {

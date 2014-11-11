@@ -8,13 +8,17 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior;
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor;
+import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
+import de.fxdiagram.xtext.glue.shapes.INodeWithLazyMappings;
 import java.util.Collections;
+import java.util.List;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Side;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -31,7 +35,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @ModelNode
 @SuppressWarnings("all")
-public class BaseNode<T extends Object> extends XNode {
+public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMappings {
   public BaseNode() {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectProperty = this.domainObjectProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
@@ -103,6 +107,10 @@ public class BaseNode<T extends Object> extends XNode {
     LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObject);
     OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(this);
     this.addBehavior(_openElementInEditorBehavior);
+  }
+  
+  public List<Side> getButtonSides(final ConnectionMapping<?> mapping) {
+    return Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.TOP, Side.BOTTOM, Side.LEFT, Side.RIGHT));
   }
   
   public void populate(final ModelElementImpl modelElement) {

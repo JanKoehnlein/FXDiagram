@@ -9,6 +9,7 @@ import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.pde.PluginDescriptor;
 import de.fxdiagram.pde.PluginDescriptorProvider;
 import de.fxdiagram.pde.PluginNode;
+import de.fxdiagram.pde.PluginUtil;
 import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
 import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
@@ -54,11 +55,10 @@ public class PluginDiagramConfig extends AbstractDiagramConfig {
           List<IPluginImport> _list = IterableExtensions.<IPluginImport>toList(((Iterable<IPluginImport>)Conversions.doWrapArray(_imports)));
           final Function1<IPluginImport, Boolean> _function = new Function1<IPluginImport, Boolean>() {
             public Boolean apply(final IPluginImport it) {
-              IMappedElementDescriptorProvider _domainObjectProvider = PluginDiagramConfig.this.getDomainObjectProvider();
               String _id = it.getId();
               String _version = it.getVersion();
-              IPluginModelBase _plugin = ((PluginDescriptorProvider) _domainObjectProvider).getPlugin(_id, _version);
-              return Boolean.valueOf((!Objects.equal(_plugin, null)));
+              IPluginModelBase _findPlugin = PluginUtil.findPlugin(_id, _version);
+              return Boolean.valueOf((!Objects.equal(_findPlugin, null)));
             }
           };
           return IterableExtensions.<IPluginImport>filter(_list, _function);
@@ -79,11 +79,10 @@ public class PluginDiagramConfig extends AbstractDiagramConfig {
             public IPluginImport apply(final BundleDescription it) {
               IPluginImport _xblockexpression = null;
               {
-                IMappedElementDescriptorProvider _domainObjectProvider = PluginDiagramConfig.this.getDomainObjectProvider();
                 String _symbolicName = it.getSymbolicName();
                 Version _version = it.getVersion();
                 String _string = _version.toString();
-                final IPluginModelBase dependent = ((PluginDescriptorProvider) _domainObjectProvider).getPlugin(_symbolicName, _string);
+                final IPluginModelBase dependent = PluginUtil.findPlugin(_symbolicName, _string);
                 IPluginBase _pluginBase = dependent.getPluginBase();
                 IPluginImport[] _imports = _pluginBase.getImports();
                 final Function1<IPluginImport, Boolean> _function = new Function1<IPluginImport, Boolean>() {
@@ -117,10 +116,9 @@ public class PluginDiagramConfig extends AbstractDiagramConfig {
     public void calls() {
       final Function1<IPluginImport, IPluginModelBase> _function = new Function1<IPluginImport, IPluginModelBase>() {
         public IPluginModelBase apply(final IPluginImport it) {
-          IMappedElementDescriptorProvider _domainObjectProvider = PluginDiagramConfig.this.getDomainObjectProvider();
           String _id = it.getId();
           String _version = it.getVersion();
-          return ((PluginDescriptorProvider) _domainObjectProvider).getPlugin(_id, _version);
+          return PluginUtil.findPlugin(_id, _version);
         }
       };
       this.<IPluginModelBase>target(PluginDiagramConfig.this.pluginNode, _function);

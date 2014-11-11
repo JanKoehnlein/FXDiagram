@@ -5,6 +5,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.xtext.glue.behavior.OpenElementInEditorBehavior
 import de.fxdiagram.xtext.glue.mapping.AbstractXtextDescriptor
+import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import javafx.geometry.Insets
 import javafx.geometry.VPos
@@ -17,10 +18,12 @@ import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 
+import static javafx.geometry.Side.*
+
 import static extension de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior.*
 
 @ModelNode
-class BaseNode<T> extends XNode {
+class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 	
 	new() {
 		domainObjectProperty.addListener [
@@ -67,4 +70,9 @@ class BaseNode<T> extends XNode {
 		addLazyBehavior(domainObject)
 		addBehavior(new OpenElementInEditorBehavior(this))
 	}
+	
+	override getButtonSides(ConnectionMapping<?> mapping) {
+		#[ TOP, BOTTOM, LEFT, RIGHT ]
+	}
+	
 }	

@@ -1,11 +1,17 @@
 package de.fxdiagram.pde
 
+import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.lib.animations.Inflator
+import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.nodes.RectangleBorderPane
+import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior
 import de.fxdiagram.xtext.glue.shapes.BaseNode
+import javafx.animation.ParallelTransition
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.VPos
+import javafx.scene.input.MouseButton
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
@@ -13,19 +19,20 @@ import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 import javafx.scene.text.Font
+import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import org.eclipse.pde.core.plugin.IPluginModelBase
 
+import static de.fxdiagram.core.extensions.ButtonExtensions.*
+import static javafx.geometry.Side.*
+
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import de.fxdiagram.lib.animations.Inflator
-import javafx.scene.text.FontPosture
-import javafx.animation.ParallelTransition
-import javafx.scene.input.MouseButton
-import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.xtext.glue.shapes.INodeWithLazyMappings
+import de.fxdiagram.xtext.glue.mapping.ConnectionMapping
 
 @ModelNode('inflated')
-class PluginNode extends BaseNode<IPluginModelBase> {
+class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMappings {
 
 	@FxProperty boolean inflated = false
 
@@ -101,7 +108,7 @@ class PluginNode extends BaseNode<IPluginModelBase> {
 			children += new Text => [
 				textOrigin = VPos.TOP
 				text = domainObject.withDomainObject[
-					pluginBase.providerName
+					pluginBase.getResourceString(pluginBase.providerName)
 				]
 			]
 			children += new Text => [
@@ -116,6 +123,14 @@ class PluginNode extends BaseNode<IPluginModelBase> {
 			if(button == MouseButton.SECONDARY) 
 				toggleInflated
 		]
+		val importPathAction = new AddImportPathAction(true)
+		val rapidButtonBehavior = getBehavior(LazyConnectionMappingBehavior) 
+		rapidButtonBehavior.add(new RapidButton(this, TOP, getFilledTriangle(TOP, 'Add import path'), importPathAction))
+		rapidButtonBehavior.add(new RapidButton(this, BOTTOM, getFilledTriangle(BOTTOM, 'Add import path'), importPathAction))
+		
+		val dependentPathAction = new AddImportPathAction(false)
+		rapidButtonBehavior.add(new RapidButton(this, TOP, getFilledTriangle(BOTTOM, 'Add imported path'), dependentPathAction))
+		rapidButtonBehavior.add(new RapidButton(this, BOTTOM, getFilledTriangle(TOP, 'Add imported path'), dependentPathAction))
 	}
 	
 	protected def toggleInflated() {
@@ -135,4 +150,9 @@ class PluginNode extends BaseNode<IPluginModelBase> {
 			]
 		}
 	}
+	
+	override getButtonSides(ConnectionMapping<?> mapping) {
+		#[ LEFT, RIGHT ]
+	}
+	
 }

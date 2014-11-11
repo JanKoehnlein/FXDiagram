@@ -11,7 +11,9 @@ import de.fxdiagram.xtext.glue.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
 import de.fxdiagram.xtext.glue.mapping.NodeMapping
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.xtext.glue.shapes.INodeWithLazyMappings
 import java.util.List
+import javafx.geometry.Side
 
 import static javafx.geometry.Side.*
 
@@ -29,36 +31,40 @@ class LazyConnectionMappingBehavior<ARG> extends RapidButtonBehavior<XNode> {
 			if(!lazyOutgoing.empty) {
 				lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(node)
 				for(out : lazyOutgoing) 
-					lazyBehavior.addConnectionMappingCall(out, new XDiagramConfigInterpreter, true)
+					lazyBehavior.addConnectionMappingCall(out, new XDiagramConfigInterpreter, true, getButtonSides(node, out))
 			}
 			val lazyIncoming = nodeMapping.incoming.filter[lazy]
 			if(!lazyIncoming.empty) {
 				lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(node)
 				for(in : lazyIncoming) 
-					lazyBehavior.addConnectionMappingCall(in, new XDiagramConfigInterpreter, false)
+					lazyBehavior.addConnectionMappingCall(in, new XDiagramConfigInterpreter, false, getButtonSides(node, in))
 			}
 			if(lazyBehavior != null)
 				node.addBehavior(lazyBehavior)
 		}
+	}
+	
+	def static getButtonSides(XNode node, AbstractConnectionMappingCall<?, ?> out) {
+		if(node instanceof INodeWithLazyMappings) 
+			node.getButtonSides(out.connectionMapping)
+		else
+			# [TOP, BOTTOM, LEFT, RIGHT]
 	}
 
 	new(XNode host) {
 		super(host)
 	}
 
-	def addConnectionMappingCall(AbstractConnectionMappingCall<?, ARG> mappingCall, XDiagramConfigInterpreter configInterpreter, boolean hostIsSource) {
-		actions += createAction(mappingCall, configInterpreter, hostIsSource)
+	def addConnectionMappingCall(AbstractConnectionMappingCall<?, ARG> mappingCall, XDiagramConfigInterpreter configInterpreter, boolean hostIsSource, Side... sides) {
+		actions += createAction(mappingCall, configInterpreter, hostIsSource, sides)
 	}
 	
-	protected def createAction(AbstractConnectionMappingCall<?, ARG> mappingCall, XDiagramConfigInterpreter configInterpreter, boolean hostIsSource) {
+	protected def createAction(AbstractConnectionMappingCall<?, ARG> mappingCall, XDiagramConfigInterpreter configInterpreter, boolean hostIsSource, Side... sides) {
 		val action = new LazyConnectionRapidButtonAction(mappingCall, configInterpreter, hostIsSource)
-		add(new RapidButton(host, LEFT, mappingCall.getImage(LEFT), action))
-		add(new RapidButton(host, RIGHT, mappingCall.getImage(RIGHT), action))
-		add(new RapidButton(host, TOP, mappingCall.getImage(TOP), action))
-		add(new RapidButton(host, BOTTOM, mappingCall.getImage(BOTTOM), action)) 
+		for(side: sides) 
+			add(new RapidButton(host, side, mappingCall.getImage(side), action))
 		action
 	}
-	
 	
 	override protected doActivate() {
 		super.doActivate()

@@ -2,14 +2,21 @@ package de.fxdiagram.pde;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.animations.Inflator;
+import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
+import de.fxdiagram.pde.AddImportPathAction;
 import de.fxdiagram.pde.PluginDescriptor;
+import de.fxdiagram.xtext.glue.behavior.LazyConnectionMappingBehavior;
+import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
 import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
 import de.fxdiagram.xtext.glue.shapes.BaseNode;
+import de.fxdiagram.xtext.glue.shapes.INodeWithLazyMappings;
 import java.util.Collections;
+import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Transition;
@@ -19,6 +26,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
@@ -29,6 +37,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -45,7 +54,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @ModelNode("inflated")
 @SuppressWarnings("all")
-public class PluginNode extends BaseNode<IPluginModelBase> {
+public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMappings {
   private Pane contentArea;
   
   private VBox titleArea;
@@ -204,7 +213,9 @@ public class PluginNode extends BaseNode<IPluginModelBase> {
             final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
               public String apply(final IPluginModelBase it) {
                 IPluginBase _pluginBase = it.getPluginBase();
-                return _pluginBase.getProviderName();
+                IPluginBase _pluginBase_1 = it.getPluginBase();
+                String _providerName = _pluginBase_1.getProviderName();
+                return _pluginBase.getResourceString(_providerName);
               }
             };
             String _withDomainObject = _domainObject.<String>withDomainObject(_function);
@@ -247,6 +258,21 @@ public class PluginNode extends BaseNode<IPluginModelBase> {
       }
     };
     this.setOnMouseClicked(_function_2);
+    final AddImportPathAction importPathAction = new AddImportPathAction(true);
+    final LazyConnectionMappingBehavior rapidButtonBehavior = this.<LazyConnectionMappingBehavior>getBehavior(LazyConnectionMappingBehavior.class);
+    SVGPath _filledTriangle = ButtonExtensions.getFilledTriangle(Side.TOP, "Add import path");
+    RapidButton _rapidButton = new RapidButton(this, Side.TOP, _filledTriangle, importPathAction);
+    rapidButtonBehavior.add(_rapidButton);
+    SVGPath _filledTriangle_1 = ButtonExtensions.getFilledTriangle(Side.BOTTOM, "Add import path");
+    RapidButton _rapidButton_1 = new RapidButton(this, Side.BOTTOM, _filledTriangle_1, importPathAction);
+    rapidButtonBehavior.add(_rapidButton_1);
+    final AddImportPathAction dependentPathAction = new AddImportPathAction(false);
+    SVGPath _filledTriangle_2 = ButtonExtensions.getFilledTriangle(Side.BOTTOM, "Add imported path");
+    RapidButton _rapidButton_2 = new RapidButton(this, Side.TOP, _filledTriangle_2, dependentPathAction);
+    rapidButtonBehavior.add(_rapidButton_2);
+    SVGPath _filledTriangle_3 = ButtonExtensions.getFilledTriangle(Side.TOP, "Add imported path");
+    RapidButton _rapidButton_3 = new RapidButton(this, Side.BOTTOM, _filledTriangle_3, dependentPathAction);
+    rapidButtonBehavior.add(_rapidButton_3);
   }
   
   protected ParallelTransition toggleInflated() {
@@ -293,6 +319,10 @@ public class PluginNode extends BaseNode<IPluginModelBase> {
       _xifexpression = _xblockexpression_1;
     }
     return _xifexpression;
+  }
+  
+  public List<Side> getButtonSides(final ConnectionMapping<?> mapping) {
+    return Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.LEFT, Side.RIGHT));
   }
   
   /**

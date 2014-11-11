@@ -37,9 +37,12 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
   
   private XConnection currentConnection;
   
+  protected final Side layoutPosition;
+  
   public ConnectedNodeChooser(final XNode host, final Side layoutPosition, final ChoiceGraphics graphics) {
-    super(layoutPosition, graphics);
+    super(graphics, layoutPosition.isVertical());
     this.host = host;
+    this.layoutPosition = layoutPosition;
   }
   
   public XRoot getRoot() {
@@ -74,7 +77,38 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     return _xblockexpression;
   }
   
-  public Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice) {
+  protected void adjustNewNode(final XNode choice, final double widthDelta, final double heightDelta) {
+    final Side layoutPosition = this.layoutPosition;
+    if (layoutPosition != null) {
+      switch (layoutPosition) {
+        case LEFT:
+          double _layoutX = choice.getLayoutX();
+          double _minus = (_layoutX - (0.5 * widthDelta));
+          choice.setLayoutX(_minus);
+          break;
+        case RIGHT:
+          double _layoutX_1 = choice.getLayoutX();
+          double _plus = (_layoutX_1 + (0.5 * widthDelta));
+          choice.setLayoutX(_plus);
+          break;
+        case TOP:
+          double _layoutY = choice.getLayoutY();
+          double _minus_1 = (_layoutY - (0.5 * heightDelta));
+          choice.setLayoutY(_minus_1);
+          break;
+        case BOTTOM:
+          double _layoutY_1 = choice.getLayoutY();
+          double _plus_1 = (_layoutY_1 + (0.5 * heightDelta));
+          choice.setLayoutY(_plus_1);
+          break;
+        default:
+          break;
+      }
+    }
+    choice.setPlacementHint(this.layoutPosition);
+  }
+  
+  public Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice, final DomainObjectDescriptor choiceInfo) {
     DomainObjectDescriptor _choiceInfo = this.getChoiceInfo(choice);
     XConnection _connectChoice = this.connectChoice(choice, _choiceInfo);
     final List<XConnection> result = Collections.<XConnection>unmodifiableList(CollectionLiterals.<XConnection>newArrayList(_connectChoice));
@@ -160,7 +194,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     return _xifexpression;
   }
   
-  protected void resizeGroup(final Group group, final double maxWidth, final double maxHeight) {
+  protected void alignGroup(final Group group, final double maxWidth, final double maxHeight) {
     double _switchResult = (double) 0;
     final Side layoutPosition = this.layoutPosition;
     if (layoutPosition != null) {

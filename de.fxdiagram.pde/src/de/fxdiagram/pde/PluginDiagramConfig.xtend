@@ -11,6 +11,8 @@ import de.fxdiagram.xtext.glue.shapes.BaseConnection
 import org.eclipse.pde.core.plugin.IPluginImport
 import org.eclipse.pde.core.plugin.IPluginModelBase
 
+import static de.fxdiagram.pde.PluginUtil.*
+
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 
 class PluginDiagramConfig extends AbstractDiagramConfig {
@@ -28,12 +30,12 @@ class PluginDiagramConfig extends AbstractDiagramConfig {
 		override calls() {
 			importConnection.outConnectionForEach[ 
 				pluginBase.imports.toList.filter[
-					(domainObjectProvider as PluginDescriptorProvider).getPlugin(id, version) != null
+					findPlugin(id, version) != null
 				]
 			].makeLazy[getArrowButton("Add dependency")]
 			exportConnection.inConnectionForEach[ plugin |
 				plugin.bundleDescription.dependents.map[
-					val dependent = (domainObjectProvider as PluginDescriptorProvider).getPlugin(symbolicName, version.toString)
+					val dependent = findPlugin(symbolicName, version.toString)
 					dependent.pluginBase.imports.findFirst[getId == plugin.pluginBase.id]
 				].filterNull
 			].makeLazy[getInverseArrowButton("Add dependent")]
@@ -43,7 +45,7 @@ class PluginDiagramConfig extends AbstractDiagramConfig {
 	val importConnection = new ConnectionMapping<IPluginImport>(this, "importConnection") {
 		override calls() {
 			pluginNode.target [
-				(domainObjectProvider as PluginDescriptorProvider).getPlugin(id, version)
+				findPlugin(id, version)
 			]
 		}
 		

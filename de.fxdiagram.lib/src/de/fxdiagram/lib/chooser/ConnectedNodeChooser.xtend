@@ -4,11 +4,11 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
+import javafx.geometry.Point2D
 import javafx.geometry.Side
 import javafx.scene.Group
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import javafx.geometry.Point2D
 
 class ConnectedNodeChooser extends AbstractBaseChooser {
 
@@ -24,9 +24,12 @@ class ConnectedNodeChooser extends AbstractBaseChooser {
 	
 	XConnection currentConnection
 	
+	protected val Side layoutPosition
+	
 	new(XNode host, Side layoutPosition, ChoiceGraphics graphics) {
-		super(layoutPosition, graphics)
+		super(graphics, layoutPosition.vertical)
 		this.host = host
+		this.layoutPosition = layoutPosition
 	}
 	
 	override getRoot() {
@@ -52,8 +55,21 @@ class ConnectedNodeChooser extends AbstractBaseChooser {
 		super.deactivate
 	}
 
+	protected override adjustNewNode(XNode choice, double widthDelta, double heightDelta) {
+		switch layoutPosition {
+			case LEFT: 
+				choice.layoutX = choice.layoutX - 0.5 * widthDelta
+			case RIGHT:
+				choice.layoutX = choice.layoutX + 0.5 * widthDelta
+			case TOP:
+				choice.layoutY = choice.layoutY - 0.5 * heightDelta
+			case BOTTOM:
+				choice.layoutY = choice.layoutY + 0.5 * heightDelta
+		}
+		choice.placementHint = layoutPosition
+	}
 	
-	override getAdditionalShapesToAdd(XNode choice) {
+	override getAdditionalShapesToAdd(XNode choice, DomainObjectDescriptor choiceInfo) {
 		val result = #[connectChoice(choice, choice.choiceInfo)]
 		currentConnection = null
 		return result
@@ -95,7 +111,7 @@ class ConnectedNodeChooser extends AbstractBaseChooser {
 		}
 	}
 
-	protected override resizeGroup(Group group, double maxWidth, double maxHeight) {
+	protected override alignGroup(Group group, double maxWidth, double maxHeight) {
 		group.layoutX = switch layoutPosition {
 			case LEFT: host.layoutX - getLayoutDistance - 0.5 * maxWidth
 			case RIGHT: host.layoutX + host.layoutBounds.width + getLayoutDistance + 0.5 * maxWidth

@@ -46,7 +46,8 @@ class CarusselChoice extends AbstractChoiceGraphics {
 	}
 
 	override nodeChosen(XNode choice) {
-		choice?.setEffect(null)
+		super.nodeChosen(choice)
+		choice.setEffect(null)
 	}
 	
 	override relocateButtons(Node minusButton, Node plusButton) {
