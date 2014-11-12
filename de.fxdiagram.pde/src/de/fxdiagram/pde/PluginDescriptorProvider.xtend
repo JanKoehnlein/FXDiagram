@@ -18,7 +18,6 @@ public class PluginDescriptorProvider implements DomainObjectProvider, IMappedEl
 		switch domainObject {
 			IPluginModelBase: {
 				new PluginDescriptor(domainObject.pluginBase.id, domainObject.pluginBase.version, 
-					domainObject.getResourceString(domainObject.pluginBase.name), 
 					mapping.config.ID, mapping.ID, this)
 					as IMappedElementDescriptor<T>
 			}

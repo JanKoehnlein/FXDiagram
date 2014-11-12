@@ -32,13 +32,10 @@ public class PluginDescriptorProvider implements DomainObjectProvider, IMappedEl
         String _id = _pluginBase.getId();
         IPluginBase _pluginBase_1 = ((IPluginModelBase)domainObject).getPluginBase();
         String _version = _pluginBase_1.getVersion();
-        IPluginBase _pluginBase_2 = ((IPluginModelBase)domainObject).getPluginBase();
-        String _name = _pluginBase_2.getName();
-        String _resourceString = ((IPluginModelBase)domainObject).getResourceString(_name);
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        PluginDescriptor _pluginDescriptor = new PluginDescriptor(_id, _version, _resourceString, _iD, _iD_1, this);
+        PluginDescriptor _pluginDescriptor = new PluginDescriptor(_id, _version, _iD, _iD_1, this);
         _switchResult = ((IMappedElementDescriptor<T>) _pluginDescriptor);
       }
     }

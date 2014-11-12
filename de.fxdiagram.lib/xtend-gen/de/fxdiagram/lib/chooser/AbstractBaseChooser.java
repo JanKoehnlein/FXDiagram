@@ -88,6 +88,8 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   
   private EventHandler<KeyEvent> keyHandler;
   
+  private EventHandler<KeyEvent> keyTypedHandler;
+  
   private ChangeListener<String> filterChangeListener;
   
   private final ChoiceGraphics graphics;
@@ -201,27 +203,35 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
               }
               break;
             default:
-              String _filterString = AbstractBaseChooser.this.getFilterString();
-              String _text = it.getText();
-              String _plus = (_filterString + _text);
-              AbstractBaseChooser.this.setFilterString(_plus);
               break;
           }
-        } else {
-          String _filterString = AbstractBaseChooser.this.getFilterString();
-          String _text = it.getText();
-          String _plus = (_filterString + _text);
-          AbstractBaseChooser.this.setFilterString(_plus);
         }
       }
     };
     this.keyHandler = _function_3;
-    final ChangeListener<String> _function_4 = new ChangeListener<String>() {
+    final EventHandler<KeyEvent> _function_4 = new EventHandler<KeyEvent>() {
+      public void handle(final KeyEvent it) {
+        String _filterString = AbstractBaseChooser.this.getFilterString();
+        String _character = it.getCharacter();
+        char[] _charArray = _character.toCharArray();
+        final Function1<Character, Boolean> _function = new Function1<Character, Boolean>() {
+          public Boolean apply(final Character it) {
+            return Boolean.valueOf(((it).charValue() > 31));
+          }
+        };
+        Iterable<Character> _filter = IterableExtensions.<Character>filter(((Iterable<Character>)Conversions.doWrapArray(_charArray)), _function);
+        String _string = new String(((char[])Conversions.unwrapArray(_filter, char.class)));
+        String _plus = (_filterString + _string);
+        AbstractBaseChooser.this.setFilterString(_plus);
+      }
+    };
+    this.keyTypedHandler = _function_4;
+    final ChangeListener<String> _function_5 = new ChangeListener<String>() {
       public void changed(final ObservableValue<? extends String> property, final String oldValue, final String newValue) {
         AbstractBaseChooser.this.calculateVisibleNodes();
       }
     };
-    this.filterChangeListener = _function_4;
+    this.filterChangeListener = _function_5;
     boolean _hasButtons = graphics.hasButtons();
     if (_hasButtons) {
       SVGPath _xifexpression = null;
@@ -230,7 +240,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       } else {
         _xifexpression = ButtonExtensions.getArrowButton(Side.RIGHT, "previous");
       }
-      final Procedure1<SVGPath> _function_5 = new Procedure1<SVGPath>() {
+      final Procedure1<SVGPath> _function_6 = new Procedure1<SVGPath>() {
         public void apply(final SVGPath it) {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
             public void handle(final MouseEvent it) {
@@ -240,7 +250,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
           it.setOnMouseClicked(_function);
         }
       };
-      SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_xifexpression, _function_5);
+      SVGPath _doubleArrow = ObjectExtensions.<SVGPath>operator_doubleArrow(_xifexpression, _function_6);
       this.minusButton = _doubleArrow;
       SVGPath _xifexpression_1 = null;
       if (isVertical) {
@@ -248,7 +258,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       } else {
         _xifexpression_1 = ButtonExtensions.getArrowButton(Side.LEFT, "next");
       }
-      final Procedure1<SVGPath> _function_6 = new Procedure1<SVGPath>() {
+      final Procedure1<SVGPath> _function_7 = new Procedure1<SVGPath>() {
         public void apply(final SVGPath it) {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
             public void handle(final MouseEvent it) {
@@ -258,11 +268,11 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
           it.setOnMouseClicked(_function);
         }
       };
-      SVGPath _doubleArrow_1 = ObjectExtensions.<SVGPath>operator_doubleArrow(_xifexpression_1, _function_6);
+      SVGPath _doubleArrow_1 = ObjectExtensions.<SVGPath>operator_doubleArrow(_xifexpression_1, _function_7);
       this.plusButton = _doubleArrow_1;
     }
     Label _label = new Label();
-    final Procedure1<Label> _function_7 = new Procedure1<Label>() {
+    final Procedure1<Label> _function_8 = new Procedure1<Label>() {
       public void apply(final Label it) {
         StringProperty _textProperty = it.textProperty();
         StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractBaseChooser.this.filterStringProperty);
@@ -270,7 +280,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         _textProperty.bind(_plus_1);
       }
     };
-    Label _doubleArrow_2 = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_7);
+    Label _doubleArrow_2 = ObjectExtensions.<Label>operator_doubleArrow(_label, _function_8);
     this.setFilterLabel(_doubleArrow_2);
   }
   
@@ -390,6 +400,9 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       XDiagram _diagram_3 = this.getDiagram();
       Scene _scene_2 = _diagram_3.getScene();
       _scene_2.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+      XDiagram _diagram_4 = this.getDiagram();
+      Scene _scene_3 = _diagram_4.getScene();
+      _scene_3.<KeyEvent>addEventHandler(KeyEvent.KEY_TYPED, this.keyTypedHandler);
       this.currentPositionProperty.addListener(this.positionListener);
       this.filterStringProperty.addListener(this.filterChangeListener);
       XRoot _root = this.getRoot();
@@ -408,12 +421,12 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       ObjectExtensions.<Label>operator_doubleArrow(_filterLabel_1, _function_1);
       boolean _notEquals_1 = (!Objects.equal(this.minusButton, null));
       if (_notEquals_1) {
-        XDiagram _diagram_4 = this.getDiagram();
-        Group _buttonLayer_1 = _diagram_4.getButtonLayer();
+        XDiagram _diagram_5 = this.getDiagram();
+        Group _buttonLayer_1 = _diagram_5.getButtonLayer();
         ObservableList<Node> _children_1 = _buttonLayer_1.getChildren();
         _children_1.add(this.plusButton);
-        XDiagram _diagram_5 = this.getDiagram();
-        Group _buttonLayer_2 = _diagram_5.getButtonLayer();
+        XDiagram _diagram_6 = this.getDiagram();
+        Group _buttonLayer_2 = _diagram_6.getButtonLayer();
         ObservableList<Node> _children_2 = _buttonLayer_2.getChildren();
         _children_2.add(this.minusButton);
         final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {

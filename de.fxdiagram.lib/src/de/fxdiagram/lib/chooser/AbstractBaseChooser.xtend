@@ -60,6 +60,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 	EventHandler<ScrollEvent> scrollHandler
 
 	EventHandler<KeyEvent> keyHandler
+	EventHandler<KeyEvent> keyTypedHandler
 
 	ChangeListener<String> filterChangeListener
 
@@ -119,10 +120,10 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 					if (!oldFilter.empty)
 						filterString = oldFilter.substring(0, oldFilter.length - 1)
 				}
-				default: {
-					filterString = getFilterString + text
-				}
 			}
+		]
+		keyTypedHandler = [
+			filterString = getFilterString + new String(character.toCharArray.filter[it > 31])
 		]
 		filterChangeListener = [ property, oldValue, newValue |
 			calculateVisibleNodes
@@ -211,6 +212,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 		diagram.scene.addEventHandler(SwipeEvent.ANY, swipeHandler)
 		diagram.scene.addEventHandler(ScrollEvent.ANY, scrollHandler)
 		diagram.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
+		diagram.scene.addEventHandler(KeyEvent.KEY_TYPED, keyTypedHandler)
 		currentPositionProperty.addListener(positionListener)
 		filterStringProperty.addListener(filterChangeListener)
 		root.headsUpDisplay.add(filterLabel, Pos.BOTTOM_LEFT)

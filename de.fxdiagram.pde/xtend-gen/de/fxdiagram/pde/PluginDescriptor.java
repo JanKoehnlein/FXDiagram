@@ -15,8 +15,8 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 @ModelNode
 @SuppressWarnings("all")
 public class PluginDescriptor extends AbstractMappedElementDescriptor<IPluginModelBase> {
-  public PluginDescriptor(final String symbolicName, final String version, final String name, final String mappingConfigID, final String mappingID, final PluginDescriptorProvider provider) {
-    super(((symbolicName + "#") + version), name, mappingConfigID, mappingID, provider);
+  public PluginDescriptor(final String symbolicName, final String version, final String mappingConfigID, final String mappingID, final PluginDescriptorProvider provider) {
+    super(((symbolicName + "#") + version), symbolicName, mappingConfigID, mappingID, provider);
   }
   
   public <U extends Object> U withDomainObject(final Function1<? super IPluginModelBase, ? extends U> lambda) {

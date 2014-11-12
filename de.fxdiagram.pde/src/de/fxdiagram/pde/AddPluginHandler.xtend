@@ -20,7 +20,7 @@ class AddPluginHandler extends AbstractHandler {
 	override setEnabled(Object evaluationContext) {
 		if (evaluationContext instanceof IEvaluationContext) {
 			val selection = evaluationContext.getVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME)
-			baseEnabled = selection.pluginBases != null
+			baseEnabled = !selection.pluginBases.empty
 		} else {
 			super.setEnabled(evaluationContext)
 		}
@@ -29,7 +29,7 @@ class AddPluginHandler extends AbstractHandler {
 	protected def getPluginBases(Object selection) {
 		// TODO selection from plugin-dependencies
 		if(selection instanceof IStructuredSelection) 
-			return selection.iterator.filter(IAdaptable).map[getAdapter(IProject) as IProject].map[findModel].toSet
+			return selection.iterator.filter(IAdaptable).map[getAdapter(IProject) as IProject].map[findModel].filterNull.toSet
 		else
 			return #{}
 	}

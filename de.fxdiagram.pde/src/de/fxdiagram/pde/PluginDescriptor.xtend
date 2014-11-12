@@ -10,8 +10,8 @@ import static de.fxdiagram.pde.PluginUtil.*
 @ModelNode
 class PluginDescriptor extends AbstractMappedElementDescriptor<IPluginModelBase> {
 	
-	new(String symbolicName, String version, String name, String mappingConfigID, String mappingID, PluginDescriptorProvider provider) {
-		super(symbolicName + '#' + version, name, mappingConfigID, mappingID, provider)
+	new(String symbolicName, String version, String mappingConfigID, String mappingID, PluginDescriptorProvider provider) {
+		super(symbolicName + '#' + version, symbolicName, mappingConfigID, mappingID, provider)
 	}	
 	
 	override <U> withDomainObject((IPluginModelBase)=>U lambda) {

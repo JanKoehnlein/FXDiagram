@@ -1,6 +1,5 @@
 package de.fxdiagram.pde;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterators;
 import de.fxdiagram.pde.PluginDiagramConfig;
 import de.fxdiagram.xtext.glue.FXDiagramView;
@@ -39,8 +38,9 @@ public class AddPluginHandler extends AbstractHandler {
     if ((evaluationContext instanceof IEvaluationContext)) {
       final Object selection = ((IEvaluationContext)evaluationContext).getVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME);
       Set<IPluginModelBase> _pluginBases = this.getPluginBases(selection);
-      boolean _notEquals = (!Objects.equal(_pluginBases, null));
-      this.setBaseEnabled(_notEquals);
+      boolean _isEmpty = _pluginBases.isEmpty();
+      boolean _not = (!_isEmpty);
+      this.setBaseEnabled(_not);
     } else {
       super.setEnabled(evaluationContext);
     }
@@ -63,7 +63,8 @@ public class AddPluginHandler extends AbstractHandler {
         }
       };
       Iterator<IPluginModelBase> _map_1 = IteratorExtensions.<IProject, IPluginModelBase>map(_map, _function_1);
-      return IteratorExtensions.<IPluginModelBase>toSet(_map_1);
+      Iterator<IPluginModelBase> _filterNull = IteratorExtensions.<IPluginModelBase>filterNull(_map_1);
+      return IteratorExtensions.<IPluginModelBase>toSet(_filterNull);
     } else {
       return Collections.<IPluginModelBase>unmodifiableSet(CollectionLiterals.<IPluginModelBase>newHashSet());
     }
