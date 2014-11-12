@@ -36,25 +36,21 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 	}
 	
 	override createExecuteAnimation(CommandContext context) {
-		shapes.forEach[
-			switch it {
-				XNode: {
-					if(isAdd) {
-						if(!diagram.nodes.contains(it)) 
-							diagram.nodes += it
-					} else {
-						diagram.nodes -= it
-					}
-				}
-				XConnection: {
-					connectedNodesMap.put(it, source -> target)					
-					if(isAdd) {
-						if(!diagram.connections.contains(it)) 
-							diagram.connections += it
-					} else {
-						diagram.connections -= it
-					}
-				}
+		shapes.filter(XNode).forEach[
+			if(isAdd) {
+				if(!diagram.nodes.contains(it)) 
+					diagram.nodes += it
+			} else {
+				diagram.nodes -= it
+			}
+		]
+		shapes.filter(XConnection).forEach[
+			connectedNodesMap.put(it, source -> target)					
+			if(isAdd) {
+				if(!diagram.connections.contains(it)) 
+					diagram.connections += it
+			} else {
+				diagram.connections -= it
 			}
 		]
 		return null
@@ -62,47 +58,42 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 
 	override createUndoAnimation(CommandContext context) {
 		if(isAdd)
-			add(context)
-		else 
 			remove(context)
+		else 
+			add(context)
 
 	}
 	
 	override createRedoAnimation(CommandContext context) {
 		if(isAdd)
-			remove(context)
-		else 
 			add(context)
+		else 
+			remove(context)
 	}
 	
-	protected def add(extension CommandContext context) {
+	protected def remove(extension CommandContext context) {
 		new ParallelTransition => [ 
 			children += shapes.map[disappear(defaultUndoDuration)]
 			onFinished = [
-				shapes.forEach[
-					switch it {
-						XNode: 
-							diagram.nodes -= it
-						XConnection: 	
-							diagram.connections -= it
-					}
+				shapes.filter(XConnection).forEach[
+					diagram.connections -= it
+				]
+				shapes.filter(XNode).forEach[
+					diagram.nodes -= it
 				]
 			]
 		]
 	}
 	
-	protected def remove(extension CommandContext context) {
-		shapes.forEach[
-			switch it {
-				XNode:  
-					diagram.nodes += it
-				XConnection: {
-					val nodes = connectedNodesMap.get(it)
-					source = nodes.key
-					target = nodes.value				
-					diagram.connections += it
-				}
-			}
+	protected def add(extension CommandContext context) {
+		shapes.filter(XNode).forEach[
+			diagram.nodes += it
+		]
+		shapes.filter(XConnection).forEach[
+			val nodes = connectedNodesMap.get(it)
+			source = nodes.key
+			target = nodes.value				
+			diagram.connections += it
 		]
 		new ParallelTransition => [ 
 			children += shapes.map[appear(defaultUndoDuration)]

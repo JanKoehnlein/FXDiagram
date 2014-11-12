@@ -59,7 +59,7 @@ class AddImportPathAction extends RapidButtonAction {
 				for (it : super.getAdditionalShapesToAdd(choice, choiceInfo).filter(XConnection))
 					removeConnection
 				val diagram = host.diagram
-				val additionalShapes = <XShape>newLinkedHashSet()
+				val additionalShapes = <XShape>newHashSet()
 				(choice.domainObject as PluginDescriptor).withDomainObject [
 					chosenPlugin |
 					paths.filter [

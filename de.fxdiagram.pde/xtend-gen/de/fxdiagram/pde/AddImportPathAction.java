@@ -32,7 +32,7 @@ import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -106,7 +106,7 @@ public class AddImportPathAction extends RapidButtonAction {
             this.removeConnection(it);
           }
           final XDiagram diagram = CoreExtensions.getDiagram(host);
-          final LinkedHashSet<XShape> additionalShapes = CollectionLiterals.<XShape>newLinkedHashSet();
+          final HashSet<XShape> additionalShapes = CollectionLiterals.<XShape>newHashSet();
           DomainObjectDescriptor _domainObject = choice.getDomainObject();
           final Function1<IPluginModelBase, Object> _function = new Function1<IPluginModelBase, Object>() {
             public Object apply(final IPluginModelBase chosenPlugin) {

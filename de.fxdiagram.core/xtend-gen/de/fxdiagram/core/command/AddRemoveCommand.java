@@ -51,59 +51,55 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   }
   
   public Animation createExecuteAnimation(final CommandContext context) {
-    final Consumer<XShape> _function = new Consumer<XShape>() {
-      public void accept(final XShape it) {
-        boolean _matched = false;
-        if (!_matched) {
-          if (it instanceof XNode) {
-            _matched=true;
-            if (AddRemoveCommand.this.isAdd) {
-              ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
-              boolean _contains = _nodes.contains(it);
-              boolean _not = (!_contains);
-              if (_not) {
-                ObservableList<XNode> _nodes_1 = AddRemoveCommand.this.diagram.getNodes();
-                _nodes_1.add(((XNode)it));
-              }
-            } else {
-              ObservableList<XNode> _nodes_2 = AddRemoveCommand.this.diagram.getNodes();
-              _nodes_2.remove(((XNode)it));
-            }
+    Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
+    final Consumer<XNode> _function = new Consumer<XNode>() {
+      public void accept(final XNode it) {
+        if (AddRemoveCommand.this.isAdd) {
+          ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
+          boolean _contains = _nodes.contains(it);
+          boolean _not = (!_contains);
+          if (_not) {
+            ObservableList<XNode> _nodes_1 = AddRemoveCommand.this.diagram.getNodes();
+            _nodes_1.add(it);
           }
-        }
-        if (!_matched) {
-          if (it instanceof XConnection) {
-            _matched=true;
-            XNode _source = ((XConnection)it).getSource();
-            XNode _target = ((XConnection)it).getTarget();
-            Pair<XNode, XNode> _mappedTo = Pair.<XNode, XNode>of(_source, _target);
-            AddRemoveCommand.this.connectedNodesMap.put(((XConnection)it), _mappedTo);
-            if (AddRemoveCommand.this.isAdd) {
-              ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
-              boolean _contains = _connections.contains(it);
-              boolean _not = (!_contains);
-              if (_not) {
-                ObservableList<XConnection> _connections_1 = AddRemoveCommand.this.diagram.getConnections();
-                _connections_1.add(((XConnection)it));
-              }
-            } else {
-              ObservableList<XConnection> _connections_2 = AddRemoveCommand.this.diagram.getConnections();
-              _connections_2.remove(((XConnection)it));
-            }
-          }
+        } else {
+          ObservableList<XNode> _nodes_2 = AddRemoveCommand.this.diagram.getNodes();
+          _nodes_2.remove(it);
         }
       }
     };
-    this.shapes.forEach(_function);
+    _filter.forEach(_function);
+    Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(this.shapes, XConnection.class);
+    final Consumer<XConnection> _function_1 = new Consumer<XConnection>() {
+      public void accept(final XConnection it) {
+        XNode _source = it.getSource();
+        XNode _target = it.getTarget();
+        Pair<XNode, XNode> _mappedTo = Pair.<XNode, XNode>of(_source, _target);
+        AddRemoveCommand.this.connectedNodesMap.put(it, _mappedTo);
+        if (AddRemoveCommand.this.isAdd) {
+          ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
+          boolean _contains = _connections.contains(it);
+          boolean _not = (!_contains);
+          if (_not) {
+            ObservableList<XConnection> _connections_1 = AddRemoveCommand.this.diagram.getConnections();
+            _connections_1.add(it);
+          }
+        } else {
+          ObservableList<XConnection> _connections_2 = AddRemoveCommand.this.diagram.getConnections();
+          _connections_2.remove(it);
+        }
+      }
+    };
+    _filter_1.forEach(_function_1);
     return null;
   }
   
   public Animation createUndoAnimation(final CommandContext context) {
     ParallelTransition _xifexpression = null;
     if (this.isAdd) {
-      _xifexpression = this.add(context);
-    } else {
       _xifexpression = this.remove(context);
+    } else {
+      _xifexpression = this.add(context);
     }
     return _xifexpression;
   }
@@ -111,14 +107,14 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   public Animation createRedoAnimation(final CommandContext context) {
     ParallelTransition _xifexpression = null;
     if (this.isAdd) {
-      _xifexpression = this.remove(context);
-    } else {
       _xifexpression = this.add(context);
+    } else {
+      _xifexpression = this.remove(context);
     }
     return _xifexpression;
   }
   
-  protected ParallelTransition add(@Extension final CommandContext context) {
+  protected ParallelTransition remove(@Extension final CommandContext context) {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
       public void apply(final ParallelTransition it) {
@@ -133,26 +129,22 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         Iterables.<Animation>addAll(_children, _map);
         final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
           public void handle(final ActionEvent it) {
-            final Consumer<XShape> _function = new Consumer<XShape>() {
-              public void accept(final XShape it) {
-                boolean _matched = false;
-                if (!_matched) {
-                  if (it instanceof XNode) {
-                    _matched=true;
-                    ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
-                    _nodes.remove(((XNode)it));
-                  }
-                }
-                if (!_matched) {
-                  if (it instanceof XConnection) {
-                    _matched=true;
-                    ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
-                    _connections.remove(((XConnection)it));
-                  }
-                }
+            Iterable<XConnection> _filter = Iterables.<XConnection>filter(AddRemoveCommand.this.shapes, XConnection.class);
+            final Consumer<XConnection> _function = new Consumer<XConnection>() {
+              public void accept(final XConnection it) {
+                ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
+                _connections.remove(it);
               }
             };
-            AddRemoveCommand.this.shapes.forEach(_function);
+            _filter.forEach(_function);
+            Iterable<XNode> _filter_1 = Iterables.<XNode>filter(AddRemoveCommand.this.shapes, XNode.class);
+            final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+              public void accept(final XNode it) {
+                ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
+                _nodes.remove(it);
+              }
+            };
+            _filter_1.forEach(_function_1);
           }
         };
         it.setOnFinished(_function_1);
@@ -161,36 +153,32 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     return ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
   }
   
-  protected ParallelTransition remove(@Extension final CommandContext context) {
+  protected ParallelTransition add(@Extension final CommandContext context) {
     ParallelTransition _xblockexpression = null;
     {
-      final Consumer<XShape> _function = new Consumer<XShape>() {
-        public void accept(final XShape it) {
-          boolean _matched = false;
-          if (!_matched) {
-            if (it instanceof XNode) {
-              _matched=true;
-              ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
-              _nodes.add(((XNode)it));
-            }
-          }
-          if (!_matched) {
-            if (it instanceof XConnection) {
-              _matched=true;
-              final Pair<XNode, XNode> nodes = AddRemoveCommand.this.connectedNodesMap.get(it);
-              XNode _key = nodes.getKey();
-              ((XConnection)it).setSource(_key);
-              XNode _value = nodes.getValue();
-              ((XConnection)it).setTarget(_value);
-              ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
-              _connections.add(((XConnection)it));
-            }
-          }
+      Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
+      final Consumer<XNode> _function = new Consumer<XNode>() {
+        public void accept(final XNode it) {
+          ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
+          _nodes.add(it);
         }
       };
-      this.shapes.forEach(_function);
+      _filter.forEach(_function);
+      Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(this.shapes, XConnection.class);
+      final Consumer<XConnection> _function_1 = new Consumer<XConnection>() {
+        public void accept(final XConnection it) {
+          final Pair<XNode, XNode> nodes = AddRemoveCommand.this.connectedNodesMap.get(it);
+          XNode _key = nodes.getKey();
+          it.setSource(_key);
+          XNode _value = nodes.getValue();
+          it.setTarget(_value);
+          ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
+          _connections.add(it);
+        }
+      };
+      _filter_1.forEach(_function_1);
       ParallelTransition _parallelTransition = new ParallelTransition();
-      final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
+      final Procedure1<ParallelTransition> _function_2 = new Procedure1<ParallelTransition>() {
         public void apply(final ParallelTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           final Function1<XShape, Animation> _function = new Function1<XShape, Animation>() {
@@ -203,7 +191,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
           Iterables.<Animation>addAll(_children, _map);
         }
       };
-      _xblockexpression = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_1);
+      _xblockexpression = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_2);
     }
     return _xblockexpression;
   }
