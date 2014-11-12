@@ -12,21 +12,39 @@
          point="org.eclipse.ui.commands">
       <command
             categoryId="org.eclipse.ui.category.views"
+            defaultHandler="de.fxdiagram.pde.ShowPluginHandler"
+            description="Show plug-in in FXDiagram"
+            id="de.fxdiagram.pde.showPlugin"
+            name="Show plug-in">
+      </command>
+      <command
+            categoryId="org.eclipse.ui.category.views"
             defaultHandler="de.fxdiagram.pde.AddPluginHandler"
             description="Show plug-in in FXDiagram"
             id="de.fxdiagram.pde.addPlugin"
-            name="Add Bundle">
+            name="Add plug-in">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
 	      <command 
-	      	commandId="de.fxdiagram.pde.addPlugin"
+	      	commandId="de.fxdiagram.pde.showPlugin"
 	        icon="icons/FXDiagram.png"
 	        label="Show plug-in in FXDiagram" 
 	        style="push">
 	      </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.xtext.glue.FXDiagramView">
+         <command
+               commandId="de.fxdiagram.pde.addPlugin"
+               icon="icons/plugins_and_fragments.gif"
+               label="Add plug-in"
+               style="push">
+         </command>
+      </menuContribution>
+      
    </extension>
 </plugin>

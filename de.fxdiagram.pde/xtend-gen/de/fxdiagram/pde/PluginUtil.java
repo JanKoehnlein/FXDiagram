@@ -97,6 +97,10 @@ public class PluginUtil {
     ((List<IPluginImport>)Conversions.doWrapArray(_imports)).forEach(_function);
   }
   
+  public static IPluginModelBase[] allPlugins() {
+    return PluginRegistry.getAllModels();
+  }
+  
   public static IPluginModelBase findPlugin(final String id, final String version) {
     return PluginRegistry.findModel(id, version, IMatchRules.GREATER_OR_EQUAL, null);
   }

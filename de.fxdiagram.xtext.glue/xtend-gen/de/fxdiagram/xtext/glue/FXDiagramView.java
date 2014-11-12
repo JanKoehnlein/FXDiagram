@@ -63,6 +63,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
@@ -72,11 +74,13 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class FXDiagramView extends ViewPart {
   private FXCanvas canvas;
   
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private XRoot root;
   
   private SwtToFXGestureConverter gestureConverter;
@@ -201,16 +205,27 @@ public class FXDiagramView extends ViewPart {
   protected <T extends Object> void doRevealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
     final InterpreterContext interpreterContext = new InterpreterContext();
     if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
-      this.register(editor);
-      boolean _remove = this.changedEditors.remove(editor);
-      if (_remove) {
+      if (editor!=null) {
+        this.register(editor);
+      }
+      boolean _or = false;
+      boolean _equals = Objects.equal(editor, null);
+      if (_equals) {
+        _or = true;
+      } else {
+        boolean _remove = this.changedEditors.remove(editor);
+        _or = _remove;
+      }
+      if (_or) {
         interpreterContext.setIsNewDiagram(true);
         XDiagram _execute = this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
         this.root.setDiagram(_execute);
       }
     } else {
       if ((mappingCall instanceof NodeMappingCall<?, ?>)) {
-        this.register(editor);
+        if (editor!=null) {
+          this.register(editor);
+        }
         XDiagram _diagram = this.root.getDiagram();
         interpreterContext.setDiagram(_diagram);
         this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext, true);
@@ -311,5 +326,10 @@ public class FXDiagramView extends ViewPart {
   public void dispose() {
     this.gestureConverter.dispose();
     super.dispose();
+  }
+  
+  @Pure
+  public XRoot getRoot() {
+    return this.root;
   }
 }

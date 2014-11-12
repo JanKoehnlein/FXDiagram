@@ -51,6 +51,11 @@ class PluginUtil {
 		]
 	}
 	
+	
+	static def allPlugins() {
+		allModels
+	}
+	
 	static def findPlugin(String id, String version) {
 		findModel(id, version, IMatchRules.GREATER_OR_EQUAL, null)
 	}

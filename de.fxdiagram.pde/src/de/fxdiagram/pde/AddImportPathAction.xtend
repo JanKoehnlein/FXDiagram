@@ -59,14 +59,13 @@ class AddImportPathAction extends RapidButtonAction {
 				for (it : super.getAdditionalShapesToAdd(choice, choiceInfo).filter(XConnection))
 					removeConnection
 				val diagram = host.diagram
-				val additionalShapes = <XShape>newHashSet()
+				val additionalShapes = <XShape>newLinkedHashSet()
 				(choice.domainObject as PluginDescriptor).withDomainObject [
 					chosenPlugin |
 					paths.filter [
 						elements.last.plugin == chosenPlugin
 					].forEach [ 
 						path |
-						println(path.elements.map[plugin.pluginBase.id].join(' - '))					
 						var source = host
 						for (pathElement : path.elements) {
 							val midDescriptor = provider.createMappedElementDescriptor(pathElement.plugin, pluginNodeMapping) as PluginDescriptor

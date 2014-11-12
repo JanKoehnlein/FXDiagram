@@ -32,7 +32,7 @@ import de.fxdiagram.xtext.glue.mapping.NodeMapping;
 import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -44,7 +44,6 @@ import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 
@@ -106,7 +105,7 @@ public class AddImportPathAction extends RapidButtonAction {
             this.removeConnection(it);
           }
           final XDiagram diagram = CoreExtensions.getDiagram(host);
-          final HashSet<XShape> additionalShapes = CollectionLiterals.<XShape>newHashSet();
+          final LinkedHashSet<XShape> additionalShapes = CollectionLiterals.<XShape>newLinkedHashSet();
           DomainObjectDescriptor _domainObject = choice.getDomainObject();
           final Function1<IPluginModelBase, Object> _function = new Function1<IPluginModelBase, Object>() {
             public Object apply(final IPluginModelBase chosenPlugin) {
@@ -123,20 +122,9 @@ public class AddImportPathAction extends RapidButtonAction {
                 Iterable<PluginDependencyPath> _filter = IterableExtensions.<PluginDependencyPath>filter(paths, _function);
                 final Consumer<PluginDependencyPath> _function_1 = new Consumer<PluginDependencyPath>() {
                   public void accept(final PluginDependencyPath path) {
-                    List<? extends PluginDependencyPath.PathElement> _elements = path.getElements();
-                    final Function1<PluginDependencyPath.PathElement, String> _function = new Function1<PluginDependencyPath.PathElement, String>() {
-                      public String apply(final PluginDependencyPath.PathElement it) {
-                        IPluginModelBase _plugin = it.getPlugin();
-                        IPluginBase _pluginBase = _plugin.getPluginBase();
-                        return _pluginBase.getId();
-                      }
-                    };
-                    List<String> _map = ListExtensions.map(_elements, _function);
-                    String _join = IterableExtensions.join(_map, " - ");
-                    InputOutput.<String>println(_join);
                     XNode source = host;
-                    List<? extends PluginDependencyPath.PathElement> _elements_1 = path.getElements();
-                    for (final PluginDependencyPath.PathElement pathElement : _elements_1) {
+                    List<? extends PluginDependencyPath.PathElement> _elements = path.getElements();
+                    for (final PluginDependencyPath.PathElement pathElement : _elements) {
                       {
                         IPluginModelBase _plugin = pathElement.getPlugin();
                         IMappedElementDescriptor<IPluginModelBase> _createMappedElementDescriptor = provider.<IPluginModelBase>createMappedElementDescriptor(_plugin, pluginNodeMapping);
@@ -145,13 +133,13 @@ public class AddImportPathAction extends RapidButtonAction {
                         Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, additionalShapes);
                         Iterable<XShape> _plus_1 = Iterables.<XShape>concat(_plus, Collections.<XNode>unmodifiableList(CollectionLiterals.<XNode>newArrayList(choice)));
                         Iterable<XNode> _filter = Iterables.<XNode>filter(_plus_1, XNode.class);
-                        final Function1<XNode, Boolean> _function_1 = new Function1<XNode, Boolean>() {
+                        final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
                           public Boolean apply(final XNode it) {
                             DomainObjectDescriptor _domainObject = it.getDomainObject();
                             return Boolean.valueOf(Objects.equal(_domainObject, midDescriptor));
                           }
                         };
-                        XNode target = IterableExtensions.<XNode>findFirst(_filter, _function_1);
+                        XNode target = IterableExtensions.<XNode>findFirst(_filter, _function);
                         boolean _equals = Objects.equal(target, null);
                         if (_equals) {
                           XNode _createNode = pluginNodeMapping.createNode(midDescriptor);
@@ -163,13 +151,13 @@ public class AddImportPathAction extends RapidButtonAction {
                         ObservableList<XConnection> _connections = diagram.getConnections();
                         Iterable<XShape> _plus_2 = Iterables.<XShape>concat(_connections, additionalShapes);
                         Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(_plus_2, XConnection.class);
-                        final Function1<XConnection, Boolean> _function_2 = new Function1<XConnection, Boolean>() {
+                        final Function1<XConnection, Boolean> _function_1 = new Function1<XConnection, Boolean>() {
                           public Boolean apply(final XConnection it) {
                             DomainObjectDescriptor _domainObject = it.getDomainObject();
                             return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
                           }
                         };
-                        XConnection connection = IterableExtensions.<XConnection>findFirst(_filter_1, _function_2);
+                        XConnection connection = IterableExtensions.<XConnection>findFirst(_filter_1, _function_1);
                         boolean _equals_1 = Objects.equal(connection, null);
                         if (_equals_1) {
                           XConnection _createConnection = importConnectionMapping.createConnection(connectionDescriptor);

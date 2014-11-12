@@ -43,12 +43,13 @@ import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtext.ui.editor.XtextEditor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import org.eclipse.xtend.lib.annotations.Accessors
 
 class FXDiagramView extends ViewPart {
 
 	FXCanvas canvas
 	
-	XRoot root
+	@Accessors(PUBLIC_GETTER) XRoot root
 	
 	SwtToFXGestureConverter gestureConverter
 	
@@ -123,13 +124,13 @@ class FXDiagramView extends ViewPart {
 	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
 		val interpreterContext = new InterpreterContext
 		if(mappingCall instanceof DiagramMappingCall<?, ?>) {
-			editor.register
-			if(changedEditors.remove(editor)) {
+			editor?.register
+			if(editor == null || changedEditors.remove(editor)) {
 				interpreterContext.isNewDiagram = true
 				root.diagram = configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
 			} 
 		} else if(mappingCall instanceof NodeMappingCall<?, ?>) {
-			editor.register
+			editor?.register
 			interpreterContext.diagram = root.diagram
 			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)		
 		}

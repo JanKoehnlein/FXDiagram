@@ -22,6 +22,7 @@ import org.eclipse.xtext.xbase.lib.DoubleExtensions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -126,6 +127,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
         final double opacity = (1 - (0.2 * distanceFromSelection));
         XNode _xifexpression_1 = null;
         if ((opacity < 0)) {
+          InputOutput.<XNode>println(node);
           node.setVisible(false);
         } else {
           XNode _xblockexpression_1 = null;

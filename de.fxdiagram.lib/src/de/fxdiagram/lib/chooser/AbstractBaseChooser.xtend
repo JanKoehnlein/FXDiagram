@@ -120,6 +120,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 					if (!oldFilter.empty)
 						filterString = oldFilter.substring(0, oldFilter.length - 1)
 				}
+				default: {}
 			}
 		]
 		keyTypedHandler = [
@@ -244,6 +245,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			return false
 		root.headsUpDisplay.children -= filterLabel
 		isActiveProperty.set(false)
+		diagram.scene.removeEventHandler(KeyEvent.KEY_TYPED, keyTypedHandler)
 		diagram.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		diagram.scene.removeEventHandler(ScrollEvent.ANY, scrollHandler)
 		diagram.scene.removeEventHandler(SwipeEvent.ANY, swipeHandler)

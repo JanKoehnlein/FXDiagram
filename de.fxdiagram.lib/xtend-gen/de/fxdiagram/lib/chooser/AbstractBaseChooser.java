@@ -205,6 +205,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
             default:
               break;
           }
+        } else {
         }
       }
     };
@@ -474,28 +475,31 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       this.isActiveProperty.set(false);
       XDiagram _diagram = this.getDiagram();
       Scene _scene = _diagram.getScene();
-      _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+      _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_TYPED, this.keyTypedHandler);
       XDiagram _diagram_1 = this.getDiagram();
       Scene _scene_1 = _diagram_1.getScene();
-      _scene_1.<ScrollEvent>removeEventHandler(ScrollEvent.ANY, this.scrollHandler);
+      _scene_1.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       XDiagram _diagram_2 = this.getDiagram();
       Scene _scene_2 = _diagram_2.getScene();
-      _scene_2.<SwipeEvent>removeEventHandler(SwipeEvent.ANY, this.swipeHandler);
+      _scene_2.<ScrollEvent>removeEventHandler(ScrollEvent.ANY, this.scrollHandler);
+      XDiagram _diagram_3 = this.getDiagram();
+      Scene _scene_3 = _diagram_3.getScene();
+      _scene_3.<SwipeEvent>removeEventHandler(SwipeEvent.ANY, this.swipeHandler);
       this.spinToPosition.stop();
       this.setBlurDiagram(false);
       boolean _notEquals = (!Objects.equal(this.minusButton, null));
       if (_notEquals) {
-        XDiagram _diagram_3 = this.getDiagram();
-        Group _buttonLayer = _diagram_3.getButtonLayer();
+        XDiagram _diagram_4 = this.getDiagram();
+        Group _buttonLayer = _diagram_4.getButtonLayer();
         ObservableList<Node> _children_1 = _buttonLayer.getChildren();
         _children_1.remove(this.minusButton);
-        XDiagram _diagram_4 = this.getDiagram();
-        Group _buttonLayer_1 = _diagram_4.getButtonLayer();
+        XDiagram _diagram_5 = this.getDiagram();
+        Group _buttonLayer_1 = _diagram_5.getButtonLayer();
         ObservableList<Node> _children_2 = _buttonLayer_1.getChildren();
         _children_2.remove(this.plusButton);
       }
-      XDiagram _diagram_5 = this.getDiagram();
-      Group _buttonLayer_2 = _diagram_5.getButtonLayer();
+      XDiagram _diagram_6 = this.getDiagram();
+      Group _buttonLayer_2 = _diagram_6.getButtonLayer();
       ObservableList<Node> _children_3 = _buttonLayer_2.getChildren();
       _children_3.remove(this.group);
       _xblockexpression = true;
