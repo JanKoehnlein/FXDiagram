@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.core.expressions;bundle-version="3.4.600",
  org.eclipse.xtext.xbase.lib,
  de.fxdiagram.core;bundle-version="1.0.0",
  de.fxdiagram.lib;bundle-version="1.0.0",
- de.fxdiagram.xtext.glue;bundle-version="1.0.0"
+ de.fxdiagram.xtext.glue;bundle-version="1.0.0",
+ org.eclipse.pde.ui;bundle-version="3.8.101"
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",

@@ -3,6 +3,7 @@ package de.fxdiagram.pde
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.xtext.glue.mapping.AbstractMappedElementDescriptor
 import org.eclipse.pde.core.plugin.IPluginModelBase
+import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor
 
 import static de.fxdiagram.pde.PluginUtil.*
 
@@ -27,8 +28,8 @@ class PluginDescriptor extends AbstractMappedElementDescriptor<IPluginModelBase>
 	}
 	
 	override openInEditor(boolean select) {
-		// TODO: open manifest multi-page editor
-		null
+		withDomainObject[
+			ManifestEditor.openPluginEditor(it)	
+		]
 	}
-	
 }

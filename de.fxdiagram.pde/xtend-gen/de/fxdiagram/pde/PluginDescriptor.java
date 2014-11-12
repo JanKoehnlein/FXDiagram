@@ -6,6 +6,7 @@ import de.fxdiagram.pde.PluginDescriptorProvider;
 import de.fxdiagram.pde.PluginUtil;
 import de.fxdiagram.xtext.glue.mapping.AbstractMappedElementDescriptor;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -42,7 +43,12 @@ public class PluginDescriptor extends AbstractMappedElementDescriptor<IPluginMod
   }
   
   public IEditorPart openInEditor(final boolean select) {
-    return null;
+    final Function1<IPluginModelBase, IEditorPart> _function = new Function1<IPluginModelBase, IEditorPart>() {
+      public IEditorPart apply(final IPluginModelBase it) {
+        return ManifestEditor.openPluginEditor(it);
+      }
+    };
+    return this.<IEditorPart>withDomainObject(_function);
   }
   
   /**
