@@ -47,7 +47,6 @@ class CoverFlowChoice extends AbstractChoiceGraphics {
 			val distanceFromSelection = abs(i - interpolatedPosition)
 			val opacity = 1 - 0.2 * distanceFromSelection
 			if (opacity < 0) {
-				println(node)
 				node.visible = false
 			} else {
 				node.visible = true

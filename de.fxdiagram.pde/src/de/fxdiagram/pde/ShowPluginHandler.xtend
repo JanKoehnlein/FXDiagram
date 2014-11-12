@@ -40,7 +40,7 @@ class ShowPluginHandler extends AbstractHandler {
 		if(!pluginBases.empty) {
 			val config = XDiagramConfig.Registry.getInstance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig") as PluginDiagramConfig
 			val page = PlatformUI.workbench.activeWorkbenchWindow.activePage
-			val view = page.findView("org.eclipse.xtext.glue.FXDiagramView")
+			val view = page.showView("org.eclipse.xtext.glue.FXDiagramView")
 			if(view instanceof FXDiagramView) {
 				pluginBases.forEach[
 					val call = config.getEntryCalls(it).head

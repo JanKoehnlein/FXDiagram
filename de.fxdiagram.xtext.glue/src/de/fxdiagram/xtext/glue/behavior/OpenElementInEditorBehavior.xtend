@@ -20,8 +20,10 @@ class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implement
 	
 	override protected doActivate() {
 		host.addEventHandler(MouseEvent.MOUSE_CLICKED, [
-			if (clickCount == 2)
-				open()
+			if (clickCount == 2) {
+				open
+				consume
+			}
 		])
 	}
 	

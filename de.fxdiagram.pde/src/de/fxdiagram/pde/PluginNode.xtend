@@ -103,7 +103,9 @@ class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMapp
 			alignment = Pos.CENTER
 			children += new Text => [
 				textOrigin = VPos.TOP
-				text = domainObject.name
+				text = domainObject.withDomainObject[
+					pluginBase.getResourceString(pluginBase.name)
+				]
 			]
 			children += new Text => [
 				textOrigin = VPos.TOP

@@ -22,12 +22,15 @@
             defaultHandler="de.fxdiagram.pde.AddPluginHandler"
             description="Show plug-in in FXDiagram"
             id="de.fxdiagram.pde.addPlugin"
-            name="Add plug-in">
+            name="Double-click adds plug-in">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
-      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?endof=group.edit">
+	      <separator
+	             name="de.fxdiagram.pde.separator1" visible="true">
+	      </separator>
 	      <command 
 	      	commandId="de.fxdiagram.pde.showPlugin"
 	        icon="icons/FXDiagram.png"
@@ -41,8 +44,8 @@
          <command
                commandId="de.fxdiagram.pde.addPlugin"
                icon="icons/plugins_and_fragments.gif"
-               label="Add plug-in"
-               style="push">
+               label="Double-click adds plug-in"
+               style="toggle">
          </command>
       </menuContribution>
       

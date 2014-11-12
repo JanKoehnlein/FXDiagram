@@ -206,6 +206,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 					case 2: {
 						nodeChosen(getCurrentNode)
 						root.restoreDefaultTool
+						consume
 					}
 				}
 			]
@@ -373,8 +374,8 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 	}
 
 	protected def alignGroup(Group node, double maxWidth, double maxHeight) {
-		group.layoutX = position.x - 0.5 * maxWidth
-		group.layoutY = position.y - 0.5 * maxHeight
+		group.layoutX = position.x 
+		group.layoutY = position.y 
 	}
 
 	def protected matchesFilter(XNode node) {

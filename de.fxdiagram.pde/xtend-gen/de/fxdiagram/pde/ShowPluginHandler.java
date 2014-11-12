@@ -28,6 +28,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
@@ -71,34 +72,38 @@ public class ShowPluginHandler extends AbstractHandler {
   }
   
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    Object _xblockexpression = null;
-    {
-      final ISelection selection = HandlerUtil.getActiveMenuSelection(event);
-      final Set<IPluginModelBase> pluginBases = this.getPluginBases(selection);
-      boolean _isEmpty = pluginBases.isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
-        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-        XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig");
-        final PluginDiagramConfig config = ((PluginDiagramConfig) _configByID);
-        IWorkbench _workbench = PlatformUI.getWorkbench();
-        IWorkbenchWindow _activeWorkbenchWindow = _workbench.getActiveWorkbenchWindow();
-        final IWorkbenchPage page = _activeWorkbenchWindow.getActivePage();
-        final IViewPart view = page.findView("org.eclipse.xtext.glue.FXDiagramView");
-        if ((view instanceof FXDiagramView)) {
-          final Consumer<IPluginModelBase> _function = new Consumer<IPluginModelBase>() {
-            public void accept(final IPluginModelBase it) {
-              Iterable<? extends MappingCall<?, IPluginModelBase>> _entryCalls = config.<IPluginModelBase>getEntryCalls(it);
-              final MappingCall<?, IPluginModelBase> call = IterableExtensions.head(_entryCalls);
-              IEditorPart _activeEditor = page.getActiveEditor();
-              ((FXDiagramView)view).<IPluginModelBase>revealElement(it, call, _activeEditor);
-            }
-          };
-          pluginBases.forEach(_function);
+    try {
+      Object _xblockexpression = null;
+      {
+        final ISelection selection = HandlerUtil.getActiveMenuSelection(event);
+        final Set<IPluginModelBase> pluginBases = this.getPluginBases(selection);
+        boolean _isEmpty = pluginBases.isEmpty();
+        boolean _not = (!_isEmpty);
+        if (_not) {
+          XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
+          XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig");
+          final PluginDiagramConfig config = ((PluginDiagramConfig) _configByID);
+          IWorkbench _workbench = PlatformUI.getWorkbench();
+          IWorkbenchWindow _activeWorkbenchWindow = _workbench.getActiveWorkbenchWindow();
+          final IWorkbenchPage page = _activeWorkbenchWindow.getActivePage();
+          final IViewPart view = page.showView("org.eclipse.xtext.glue.FXDiagramView");
+          if ((view instanceof FXDiagramView)) {
+            final Consumer<IPluginModelBase> _function = new Consumer<IPluginModelBase>() {
+              public void accept(final IPluginModelBase it) {
+                Iterable<? extends MappingCall<?, IPluginModelBase>> _entryCalls = config.<IPluginModelBase>getEntryCalls(it);
+                final MappingCall<?, IPluginModelBase> call = IterableExtensions.head(_entryCalls);
+                IEditorPart _activeEditor = page.getActiveEditor();
+                ((FXDiagramView)view).<IPluginModelBase>revealElement(it, call, _activeEditor);
+              }
+            };
+            pluginBases.forEach(_function);
+          }
         }
+        _xblockexpression = null;
       }
-      _xblockexpression = null;
+      return _xblockexpression;
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
     }
-    return _xblockexpression;
   }
 }

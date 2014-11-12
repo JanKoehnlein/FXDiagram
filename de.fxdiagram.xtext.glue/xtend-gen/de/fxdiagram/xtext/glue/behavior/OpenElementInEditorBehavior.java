@@ -29,6 +29,7 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
         boolean _equals = (_clickCount == 2);
         if (_equals) {
           OpenElementInEditorBehavior.this.open();
+          it.consume();
         }
       }
     };

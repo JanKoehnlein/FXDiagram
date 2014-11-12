@@ -384,6 +384,7 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
                   AbstractBaseChooser.this.nodeChosen(_currentNode);
                   XRoot _root = AbstractBaseChooser.this.getRoot();
                   _root.restoreDefaultTool();
+                  it.consume();
                   break;
               }
             }
@@ -736,12 +737,10 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   protected void alignGroup(final Group node, final double maxWidth, final double maxHeight) {
     Point2D _position = this.getPosition();
     double _x = _position.getX();
-    double _minus = (_x - (0.5 * maxWidth));
-    this.group.setLayoutX(_minus);
+    this.group.setLayoutX(_x);
     Point2D _position_1 = this.getPosition();
     double _y = _position_1.getY();
-    double _minus_1 = (_y - (0.5 * maxHeight));
-    this.group.setLayoutY(_minus_1);
+    this.group.setLayoutY(_y);
   }
   
   protected boolean matchesFilter(final XNode node) {

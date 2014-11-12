@@ -198,8 +198,16 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
             PluginDescriptor _domainObject = PluginNode.this.getDomainObject();
-            String _name = _domainObject.getName();
-            it.setText(_name);
+            final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
+              public String apply(final IPluginModelBase it) {
+                IPluginBase _pluginBase = it.getPluginBase();
+                IPluginBase _pluginBase_1 = it.getPluginBase();
+                String _name = _pluginBase_1.getName();
+                return _pluginBase.getResourceString(_name);
+              }
+            };
+            String _withDomainObject = _domainObject.<String>withDomainObject(_function);
+            it.setText(_withDomainObject);
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
