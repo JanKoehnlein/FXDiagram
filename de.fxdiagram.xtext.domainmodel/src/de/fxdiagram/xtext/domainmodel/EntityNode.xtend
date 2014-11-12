@@ -2,8 +2,8 @@ package de.fxdiagram.xtext.domainmodel
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor
-import de.fxdiagram.xtext.glue.shapes.BaseNode
+import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
+import de.fxdiagram.eclipse.shapes.BaseNode
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.VPos

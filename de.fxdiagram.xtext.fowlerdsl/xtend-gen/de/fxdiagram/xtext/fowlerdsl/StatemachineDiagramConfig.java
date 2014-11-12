@@ -2,12 +2,12 @@ package de.fxdiagram.xtext.fowlerdsl;
 
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
-import de.fxdiagram.xtext.glue.mapping.AbstractDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.ConnectionMapping;
-import de.fxdiagram.xtext.glue.mapping.DiagramMapping;
-import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
-import de.fxdiagram.xtext.glue.mapping.MappingAcceptor;
-import de.fxdiagram.xtext.glue.mapping.NodeMapping;
+import de.fxdiagram.eclipse.mapping.AbstractDiagramConfig;
+import de.fxdiagram.eclipse.mapping.ConnectionMapping;
+import de.fxdiagram.eclipse.mapping.DiagramMapping;
+import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
+import de.fxdiagram.eclipse.mapping.MappingAcceptor;
+import de.fxdiagram.eclipse.mapping.NodeMapping;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State;

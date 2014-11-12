@@ -1,11 +1,11 @@
 package de.fxdiagram.xtext.xbase;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.xtext.glue.mapping.AbstractMapping;
-import de.fxdiagram.xtext.glue.mapping.ESetting;
-import de.fxdiagram.xtext.glue.mapping.IMappedElementDescriptor;
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
+import de.fxdiagram.eclipse.mapping.AbstractMapping;
+import de.fxdiagram.eclipse.mapping.ESetting;
+import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
+import de.fxdiagram.eclipse.mapping.XDiagramConfig;
+import de.fxdiagram.eclipse.mapping.XtextDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JavaElementDescriptor;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;

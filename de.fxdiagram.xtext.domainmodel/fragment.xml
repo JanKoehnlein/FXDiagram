@@ -4,8 +4,8 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.eclipse.xtext.example.domainmodel.ui.DomainmodelExecutableExtensionFactory:de.fxdiagram.xtext.glue.commands.ShowInDiagramHandler"
-            commandId="de.fxdiagram.xtext.glue.showInDiagramCommand">
+            class="org.eclipse.xtext.example.domainmodel.ui.DomainmodelExecutableExtensionFactory:de.fxdiagram.eclipse.commands.ShowInDiagramHandler"
+            commandId="de.fxdiagram.eclipse.showInDiagramCommand">
             <activeWhen>
                <reference
                      definitionId="org.eclipse.xtext.example.domainmodel.Domainmodel.Editor.opened">
@@ -14,7 +14,7 @@
       </handler>
    </extension>
    <extension
-         point="de.fxdiagram.xtext.glue.fxDiagramConfig">
+         point="de.fxdiagram.eclipse.fxDiagramConfig">
       <config
       		id="de.fxdiagram.xtext.domainmodel.DomainmodelDiagramConfig"
             class="org.eclipse.xtext.example.domainmodel.ui.DomainmodelExecutableExtensionFactory:de.fxdiagram.xtext.domainmodel.DomainmodelDiagramConfig">

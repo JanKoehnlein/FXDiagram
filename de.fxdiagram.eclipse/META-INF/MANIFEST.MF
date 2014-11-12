@@ -1,18 +1,26 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse
+Bundle-Name: FXDiagram Eclipse Integration
 Bundle-SymbolicName: de.fxdiagram.eclipse;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: de.fxdiagram.eclipse.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- de.fxdiagram.examples;bundle-version="1.0.0",
- org.eclipse.xtend.lib,
- com.google.guava,
- org.eclipse.xtext.xbase.lib,
- de.fxdiagram.swtfx;bundle-version="1.0.0"
+ de.fxdiagram.swtfx;bundle-version="1.0.0",
+ de.fxdiagram.core;bundle-version="1.0.0";visibility:=reexport,
+ de.fxdiagram.annotations;bundle-version="1.0.0",
+ org.eclipse.xtext.ui.shared;bundle-version="2.5.3",
+ org.eclipse.xtext.ui;bundle-version="2.5.3",
+ de.fxdiagram.lib;bundle-version="1.0.0",
+ de.fxdiagram.external;bundle-version="1.0.0",
+ org.eclipse.xtend.lib;bundle-version="2.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Export-Package: de.fxdiagram.eclipse,
+ de.fxdiagram.eclipse.behavior,
+ de.fxdiagram.eclipse.commands,
+ de.fxdiagram.eclipse.mapping,
+ de.fxdiagram.eclipse.shapes
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",
@@ -21,6 +29,7 @@ Import-Package: javafx.animation;version="2.2.0",
  javafx.beans.property.adapter;version="2.2.0",
  javafx.beans.value;version="2.2.0",
  javafx.collections;version="2.2.0",
+ javafx.collections.transformation;version="8.0.0",
  javafx.concurrent;version="2.2.0",
  javafx.css;version="8.0.0",
  javafx.embed.swing;version="2.2.0",
@@ -28,6 +37,7 @@ Import-Package: javafx.animation;version="2.2.0",
  javafx.event;version="2.2.0",
  javafx.fxml;version="2.2.0",
  javafx.geometry;version="2.2.0",
+ javafx.print;version="8.0.0",
  javafx.scene;version="2.2.0",
  javafx.scene.canvas;version="2.2.0",
  javafx.scene.chart;version="2.2.0",
@@ -45,5 +55,6 @@ Import-Package: javafx.animation;version="2.2.0",
  javafx.scene.web;version="2.2.0",
  javafx.stage;version="2.2.0",
  javafx.util;version="2.2.0",
- javafx.util.converter;version="2.2.0"
+ javafx.util.converter;version="2.2.0",
+ org.apache.log4j;version="1.2.15"
 

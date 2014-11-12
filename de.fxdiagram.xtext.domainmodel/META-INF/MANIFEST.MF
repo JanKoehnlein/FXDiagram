@@ -40,6 +40,6 @@ Import-Package: javafx.animation;version="2.2.0",
  javafx.stage;version="2.2.0",
  javafx.util;version="2.2.0",
  javafx.util.converter;version="2.2.0"
-Require-Bundle: de.fxdiagram.xtext.glue;bundle-version="1.0.0",
- de.fxdiagram.lib;bundle-version="1.0.0"
+Require-Bundle: de.fxdiagram.lib;bundle-version="1.0.0",
+ de.fxdiagram.eclipse;bundle-version="1.0.0"
 Export-Package: de.fxdiagram.xtext.domainmodel

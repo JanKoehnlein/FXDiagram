@@ -2,8 +2,8 @@ package de.fxdiagram.xtext.xbase;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.xtext.glue.mapping.XtextDomainObjectProvider;
-import de.fxdiagram.xtext.glue.mapping.XtextESettingDescriptor;
+import de.fxdiagram.eclipse.mapping.XtextDomainObjectProvider;
+import de.fxdiagram.eclipse.mapping.XtextESettingDescriptor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;

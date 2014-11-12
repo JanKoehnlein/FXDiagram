@@ -2,9 +2,9 @@ package de.fxdiagram.xtext.xbase;
 
 import com.google.common.base.Objects;
 import com.google.inject.Inject;
-import de.fxdiagram.xtext.glue.FXDiagramView;
-import de.fxdiagram.xtext.glue.mapping.MappingCall;
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig;
+import de.fxdiagram.eclipse.FXDiagramView;
+import de.fxdiagram.eclipse.mapping.MappingCall;
+import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;
@@ -183,7 +183,7 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
           final IWorkbench workbench = _workbenchWindow.getWorkbench();
           IWorkbenchWindow _activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
           IWorkbenchPage _activePage = _activeWorkbenchWindow.getActivePage();
-          final IViewPart view = _activePage.showView("org.eclipse.xtext.glue.FXDiagramView");
+          final IViewPart view = _activePage.showView("de.fxdiagram.eclipse.FXDiagramView");
           if ((view instanceof FXDiagramView)) {
             MappingCall<?, Object> _head = IterableExtensions.head(mappings);
             ((FXDiagramView)view).<Object>revealElement(element, _head, editor);

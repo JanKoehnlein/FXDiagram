@@ -37,7 +37,7 @@ class XNode extends XShape {
 	
  	new(DomainObjectDescriptor domainObject) {
  		domainObjectProperty.set(domainObject)
- 	} 
+ 	}
  	
  	new(String name) {
  		this(new StringDescriptor(name))

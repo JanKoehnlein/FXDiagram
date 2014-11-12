@@ -5,7 +5,7 @@ import org.osgi.framework.BundleContext
 
 class Activator extends AbstractUIPlugin {
 
-	public static val PLUGIN_ID = "de.fxdiagram.eclipse"
+	public static val String PLUGIN_ID = 'de.fxdiagram.eclipse'
 
 	static Activator plugin
 	
@@ -19,7 +19,7 @@ class Activator extends AbstractUIPlugin {
 		super.stop(context)
 	}
 
-	def static Activator getDefault() {
+ 	static def getDefault() {
 		plugin
 	}
 }

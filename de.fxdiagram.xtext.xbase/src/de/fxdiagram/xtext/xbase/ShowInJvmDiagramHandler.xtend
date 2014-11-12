@@ -1,8 +1,8 @@
 package de.fxdiagram.xtext.xbase
 
 import com.google.inject.Inject
-import de.fxdiagram.xtext.glue.FXDiagramView
-import de.fxdiagram.xtext.glue.mapping.XDiagramConfig
+import de.fxdiagram.eclipse.FXDiagramView
+import de.fxdiagram.eclipse.mapping.XDiagramConfig
 import org.apache.log4j.Logger
 import org.eclipse.core.commands.AbstractHandler
 import org.eclipse.core.commands.ExecutionEvent
@@ -84,7 +84,7 @@ class ShowInJvmDiagramHandler extends AbstractHandler {
 			val mappings = diagramConfig.getEntryCalls(element)
 			if (!mappings.empty) {
 				val workbench = editor.site.page.workbenchWindow.workbench
-				val view = workbench.activeWorkbenchWindow.activePage.showView("org.eclipse.xtext.glue.FXDiagramView")
+				val view = workbench.activeWorkbenchWindow.activePage.showView("de.fxdiagram.eclipse.FXDiagramView")
 				if (view instanceof FXDiagramView)
 					view.revealElement(element, mappings.head(), editor)
 			}

@@ -17,13 +17,6 @@
    </license>
 
    <plugin
-         id="de.fxdiagram.xtext.glue"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="de.fxdiagram.xtext.domainmodel"
          download-size="0"
          install-size="0"
@@ -33,6 +26,35 @@
 
    <plugin
          id="de.fxdiagram.xtext.fowlerdsl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.eclipse"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.eclipse.example"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.eclipse.pde"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.xtext.xbase"
          download-size="0"
          install-size="0"
          version="0.0.0"

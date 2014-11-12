@@ -5,7 +5,7 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.lib.animations.Inflator
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import de.fxdiagram.xtext.glue.shapes.BaseFlipNode
+import de.fxdiagram.eclipse.shapes.BaseFlipNode
 import javafx.beans.property.BooleanProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos

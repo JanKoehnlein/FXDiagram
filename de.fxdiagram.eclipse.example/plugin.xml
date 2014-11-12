@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="JavaFX Demo View"
+            icon="icons/FXDiagram.png"
+            class="de.fxdiagram.eclipse.FXDiagramViewPart"
+            id="de.fxdiagram.eclipse.FXDiagramViewPart">
+      </view>
+   </extension>
+</plugin>

@@ -6,8 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: itemis
 Fragment-Host: org.eclipse.xtext.example.fowlerdsl.ui;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: de.fxdiagram.xtext.glue;bundle-version="1.0.0",
- de.fxdiagram.lib;bundle-version="1.0.0"
+Require-Bundle: de.fxdiagram.lib;bundle-version="1.0.0",
+ de.fxdiagram.eclipse;bundle-version="1.0.0"
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",
