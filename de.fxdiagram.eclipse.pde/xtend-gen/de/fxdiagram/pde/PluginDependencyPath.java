@@ -1,10 +1,9 @@
 package de.fxdiagram.pde;
 
 import com.google.common.collect.Iterables;
+import de.fxdiagram.pde.PluginDependency;
 import java.util.Collections;
 import java.util.List;
-import org.eclipse.pde.core.plugin.IPluginImport;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -14,84 +13,19 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 @Data
 @SuppressWarnings("all")
 public class PluginDependencyPath {
-  @Data
-  public static class PathElement {
-    private final IPluginImport pluginImport;
-    
-    private final IPluginModelBase plugin;
-    
-    public PathElement(final IPluginImport pluginImport, final IPluginModelBase plugin) {
-      super();
-      this.pluginImport = pluginImport;
-      this.plugin = plugin;
-    }
-    
-    @Override
-    @Pure
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((this.pluginImport== null) ? 0 : this.pluginImport.hashCode());
-      result = prime * result + ((this.plugin== null) ? 0 : this.plugin.hashCode());
-      return result;
-    }
-    
-    @Override
-    @Pure
-    public boolean equals(final Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      PluginDependencyPath.PathElement other = (PluginDependencyPath.PathElement) obj;
-      if (this.pluginImport == null) {
-        if (other.pluginImport != null)
-          return false;
-      } else if (!this.pluginImport.equals(other.pluginImport))
-        return false;
-      if (this.plugin == null) {
-        if (other.plugin != null)
-          return false;
-      } else if (!this.plugin.equals(other.plugin))
-        return false;
-      return true;
-    }
-    
-    @Override
-    @Pure
-    public String toString() {
-      ToStringBuilder b = new ToStringBuilder(this);
-      b.add("pluginImport", this.pluginImport);
-      b.add("plugin", this.plugin);
-      return b.toString();
-    }
-    
-    @Pure
-    public IPluginImport getPluginImport() {
-      return this.pluginImport;
-    }
-    
-    @Pure
-    public IPluginModelBase getPlugin() {
-      return this.plugin;
-    }
-  }
-  
-  private final List<? extends PluginDependencyPath.PathElement> elements;
+  private final List<? extends PluginDependency> elements;
   
   public PluginDependencyPath() {
-    this.elements = Collections.<PluginDependencyPath.PathElement>unmodifiableList(CollectionLiterals.<PluginDependencyPath.PathElement>newArrayList());
+    this.elements = Collections.<PluginDependency>unmodifiableList(CollectionLiterals.<PluginDependency>newArrayList());
   }
   
-  private PluginDependencyPath(final List<PluginDependencyPath.PathElement> elements) {
+  private PluginDependencyPath(final List<PluginDependency> elements) {
     this.elements = elements;
   }
   
-  public PluginDependencyPath append(final PluginDependencyPath.PathElement element) {
-    Iterable<PluginDependencyPath.PathElement> _plus = Iterables.<PluginDependencyPath.PathElement>concat(this.elements, Collections.<PluginDependencyPath.PathElement>unmodifiableList(CollectionLiterals.<PluginDependencyPath.PathElement>newArrayList(element)));
-    List<PluginDependencyPath.PathElement> _list = IterableExtensions.<PluginDependencyPath.PathElement>toList(_plus);
+  public PluginDependencyPath append(final PluginDependency element) {
+    Iterable<PluginDependency> _plus = Iterables.<PluginDependency>concat(this.elements, Collections.<PluginDependency>unmodifiableList(CollectionLiterals.<PluginDependency>newArrayList(element)));
+    List<PluginDependency> _list = IterableExtensions.<PluginDependency>toList(_plus);
     return new PluginDependencyPath(_list);
   }
   
@@ -131,7 +65,7 @@ public class PluginDependencyPath {
   }
   
   @Pure
-  public List<? extends PluginDependencyPath.PathElement> getElements() {
+  public List<? extends PluginDependency> getElements() {
     return this.elements;
   }
 }

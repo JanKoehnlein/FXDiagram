@@ -8,12 +8,12 @@ import de.fxdiagram.eclipse.mapping.AbstractMapping;
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.eclipse.mapping.XDiagramConfig;
+import de.fxdiagram.pde.PluginDependency;
+import de.fxdiagram.pde.PluginDependencyDescriptor;
 import de.fxdiagram.pde.PluginDescriptor;
-import de.fxdiagram.pde.PluginImportDescriptor;
+import org.eclipse.osgi.service.resolver.VersionRange;
 import org.eclipse.pde.core.plugin.IPluginBase;
-import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
-import org.eclipse.pde.core.plugin.IPluginObject;
 
 @ModelNode
 @SuppressWarnings("all")
@@ -40,21 +40,24 @@ public class PluginDescriptorProvider implements DomainObjectProvider, IMappedEl
       }
     }
     if (!_matched) {
-      if (domainObject instanceof IPluginImport) {
+      if (domainObject instanceof PluginDependency) {
         _matched=true;
-        IPluginObject _parent = ((IPluginImport)domainObject).getParent();
-        IPluginBase _pluginBase = _parent.getPluginBase();
+        IPluginModelBase _owner = ((PluginDependency)domainObject).getOwner();
+        IPluginBase _pluginBase = _owner.getPluginBase();
         String _id = _pluginBase.getId();
-        IPluginObject _parent_1 = ((IPluginImport)domainObject).getParent();
-        IPluginBase _pluginBase_1 = _parent_1.getPluginBase();
+        IPluginModelBase _owner_1 = ((PluginDependency)domainObject).getOwner();
+        IPluginBase _pluginBase_1 = _owner_1.getPluginBase();
         String _version = _pluginBase_1.getVersion();
-        String _id_1 = ((IPluginImport)domainObject).getId();
-        String _version_1 = ((IPluginImport)domainObject).getVersion();
+        IPluginModelBase _dependency = ((PluginDependency)domainObject).getDependency();
+        IPluginBase _pluginBase_2 = _dependency.getPluginBase();
+        String _id_1 = _pluginBase_2.getId();
+        VersionRange _versionRange = ((PluginDependency)domainObject).getVersionRange();
+        String _string = _versionRange.toString();
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        PluginImportDescriptor _pluginImportDescriptor = new PluginImportDescriptor(_id, _version, _id_1, _version_1, _iD, _iD_1, this);
-        _switchResult = ((IMappedElementDescriptor<T>) _pluginImportDescriptor);
+        PluginDependencyDescriptor _pluginDependencyDescriptor = new PluginDependencyDescriptor(_id, _version, _id_1, _string, _iD, _iD_1, this);
+        _switchResult = ((IMappedElementDescriptor<T>) _pluginDependencyDescriptor);
       }
     }
     if (!_matched) {

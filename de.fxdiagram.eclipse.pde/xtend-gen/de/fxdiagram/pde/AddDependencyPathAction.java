@@ -14,7 +14,6 @@ import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.eclipse.mapping.AbstractMapping;
 import de.fxdiagram.eclipse.mapping.ConnectionMapping;
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
 import de.fxdiagram.eclipse.mapping.NodeMapping;
@@ -26,9 +25,11 @@ import de.fxdiagram.lib.chooser.CarusselChoice;
 import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
+import de.fxdiagram.pde.PluginDependency;
 import de.fxdiagram.pde.PluginDependencyPath;
 import de.fxdiagram.pde.PluginDescriptor;
 import de.fxdiagram.pde.PluginDescriptorProvider;
+import de.fxdiagram.pde.PluginDiagramConfig;
 import de.fxdiagram.pde.PluginUtil;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +41,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.util.Duration;
 import org.eclipse.pde.core.plugin.IPluginBase;
-import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -48,11 +48,11 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 
 @SuppressWarnings("all")
-public class AddImportPathAction extends RapidButtonAction {
-  private boolean isImport;
+public class AddDependencyPathAction extends RapidButtonAction {
+  private boolean isInverse;
   
-  public AddImportPathAction(final boolean isImport) {
-    this.isImport = isImport;
+  public AddDependencyPathAction(final boolean isInverse) {
+    this.isInverse = isInverse;
   }
   
   public void perform(final RapidButton button) {
@@ -61,7 +61,7 @@ public class AddImportPathAction extends RapidButtonAction {
     final PluginDescriptor descriptor = ((PluginDescriptor) _domainObject);
     final Function1<IPluginModelBase, Object> _function = new Function1<IPluginModelBase, Object>() {
       public Object apply(final IPluginModelBase it) {
-        return AddImportPathAction.this.doPerform(button, it);
+        return AddDependencyPathAction.this.doPerform(button, it);
       }
     };
     descriptor.<Object>withDomainObject(_function);
@@ -71,21 +71,18 @@ public class AddImportPathAction extends RapidButtonAction {
     Object _xblockexpression = null;
     {
       ArrayList<PluginDependencyPath> _xifexpression = null;
-      if (this.isImport) {
-        _xifexpression = PluginUtil.getAllImportPaths(it);
+      if (this.isInverse) {
+        _xifexpression = PluginUtil.getAllInverseDependencies(it);
       } else {
-        _xifexpression = PluginUtil.getAllDependentsPaths(it);
+        _xifexpression = PluginUtil.getAllDependencies(it);
       }
       final ArrayList<PluginDependencyPath> paths = _xifexpression;
       XNode _host = button.getHost();
       final XRoot root = CoreExtensions.getRoot(_host);
       final PluginDescriptorProvider provider = root.<PluginDescriptorProvider>getDomainObjectProvider(PluginDescriptorProvider.class);
       XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-      final XDiagramConfig diagramConfig = _instance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig");
-      AbstractMapping<?> _mappingByID = diagramConfig.getMappingByID("pluginNode");
-      final NodeMapping<IPluginModelBase> pluginNodeMapping = ((NodeMapping<IPluginModelBase>) _mappingByID);
-      AbstractMapping<?> _mappingByID_1 = diagramConfig.getMappingByID("importConnection");
-      final ConnectionMapping<IPluginImport> importConnectionMapping = ((ConnectionMapping<IPluginImport>) _mappingByID_1);
+      XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig");
+      final PluginDiagramConfig config = ((PluginDiagramConfig) _configByID);
       final XNode host = button.getHost();
       AbstractChoiceGraphics _xifexpression_1 = null;
       Side _position = button.getPosition();
@@ -113,21 +110,28 @@ public class AddImportPathAction extends RapidButtonAction {
               {
                 final Function1<PluginDependencyPath, Boolean> _function = new Function1<PluginDependencyPath, Boolean>() {
                   public Boolean apply(final PluginDependencyPath it) {
-                    List<? extends PluginDependencyPath.PathElement> _elements = it.getElements();
-                    PluginDependencyPath.PathElement _last = IterableExtensions.last(_elements);
-                    IPluginModelBase _plugin = _last.getPlugin();
-                    return Boolean.valueOf(Objects.equal(_plugin, chosenPlugin));
+                    List<? extends PluginDependency> _elements = it.getElements();
+                    PluginDependency _last = IterableExtensions.last(_elements);
+                    IPluginModelBase _owner = _last.getOwner();
+                    return Boolean.valueOf(Objects.equal(_owner, chosenPlugin));
                   }
                 };
                 Iterable<PluginDependencyPath> _filter = IterableExtensions.<PluginDependencyPath>filter(paths, _function);
                 final Consumer<PluginDependencyPath> _function_1 = new Consumer<PluginDependencyPath>() {
                   public void accept(final PluginDependencyPath path) {
                     XNode source = host;
-                    List<? extends PluginDependencyPath.PathElement> _elements = path.getElements();
-                    for (final PluginDependencyPath.PathElement pathElement : _elements) {
+                    List<? extends PluginDependency> _elements = path.getElements();
+                    for (final PluginDependency pathElement : _elements) {
                       {
-                        IPluginModelBase _plugin = pathElement.getPlugin();
-                        IMappedElementDescriptor<IPluginModelBase> _createMappedElementDescriptor = provider.<IPluginModelBase>createMappedElementDescriptor(_plugin, pluginNodeMapping);
+                        IPluginModelBase _xifexpression = null;
+                        if (AddDependencyPathAction.this.isInverse) {
+                          _xifexpression = pathElement.getOwner();
+                        } else {
+                          _xifexpression = pathElement.getDependency();
+                        }
+                        final IPluginModelBase targetPlugin = _xifexpression;
+                        NodeMapping<IPluginModelBase> _pluginNode = config.getPluginNode();
+                        IMappedElementDescriptor<IPluginModelBase> _createMappedElementDescriptor = provider.<IPluginModelBase>createMappedElementDescriptor(targetPlugin, _pluginNode);
                         final PluginDescriptor midDescriptor = ((PluginDescriptor) _createMappedElementDescriptor);
                         ObservableList<XNode> _nodes = diagram.getNodes();
                         Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, additionalShapes);
@@ -142,12 +146,13 @@ public class AddImportPathAction extends RapidButtonAction {
                         XNode target = IterableExtensions.<XNode>findFirst(_filter, _function);
                         boolean _equals = Objects.equal(target, null);
                         if (_equals) {
-                          XNode _createNode = pluginNodeMapping.createNode(midDescriptor);
+                          NodeMapping<IPluginModelBase> _pluginNode_1 = config.getPluginNode();
+                          XNode _createNode = _pluginNode_1.createNode(midDescriptor);
                           target = _createNode;
                           additionalShapes.add(target);
                         }
-                        IPluginImport _pluginImport = pathElement.getPluginImport();
-                        final IMappedElementDescriptor<IPluginImport> connectionDescriptor = provider.<IPluginImport>createMappedElementDescriptor(_pluginImport, importConnectionMapping);
+                        ConnectionMapping<PluginDependency> _dependencyConnection = config.getDependencyConnection();
+                        final IMappedElementDescriptor<PluginDependency> connectionDescriptor = provider.<PluginDependency>createMappedElementDescriptor(pathElement, _dependencyConnection);
                         ObservableList<XConnection> _connections = diagram.getConnections();
                         Iterable<XShape> _plus_2 = Iterables.<XShape>concat(_connections, additionalShapes);
                         Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(_plus_2, XConnection.class);
@@ -160,14 +165,15 @@ public class AddImportPathAction extends RapidButtonAction {
                         XConnection connection = IterableExtensions.<XConnection>findFirst(_filter_1, _function_1);
                         boolean _equals_1 = Objects.equal(connection, null);
                         if (_equals_1) {
-                          XConnection _createConnection = importConnectionMapping.createConnection(connectionDescriptor);
+                          ConnectionMapping<PluginDependency> _dependencyConnection_1 = config.getDependencyConnection();
+                          XConnection _createConnection = _dependencyConnection_1.createConnection(connectionDescriptor);
                           connection = _createConnection;
-                          if (AddImportPathAction.this.isImport) {
-                            connection.setSource(source);
-                            connection.setTarget(target);
-                          } else {
+                          if (AddDependencyPathAction.this.isInverse) {
                             connection.setSource(target);
                             connection.setTarget(source);
+                          } else {
+                            connection.setSource(source);
+                            connection.setTarget(target);
                           }
                           additionalShapes.add(connection);
                         }
@@ -201,7 +207,7 @@ public class AddImportPathAction extends RapidButtonAction {
           }
         }
       };
-      if ((!this.isImport)) {
+      if (this.isInverse) {
         final ChooserConnectionProvider _function = new ChooserConnectionProvider() {
           public XConnection getConnection(final XNode source, final XNode target, final DomainObjectDescriptor choiceInfo) {
             return new XConnection(target, source);
@@ -211,9 +217,9 @@ public class AddImportPathAction extends RapidButtonAction {
       }
       final Function1<PluginDependencyPath, IPluginModelBase> _function_1 = new Function1<PluginDependencyPath, IPluginModelBase>() {
         public IPluginModelBase apply(final PluginDependencyPath it) {
-          List<? extends PluginDependencyPath.PathElement> _elements = it.getElements();
-          PluginDependencyPath.PathElement _last = IterableExtensions.last(_elements);
-          return _last.getPlugin();
+          List<? extends PluginDependency> _elements = it.getElements();
+          PluginDependency _last = IterableExtensions.last(_elements);
+          return _last.getOwner();
         }
       };
       List<IPluginModelBase> _map = ListExtensions.<PluginDependencyPath, IPluginModelBase>map(paths, _function_1);
@@ -227,9 +233,11 @@ public class AddImportPathAction extends RapidButtonAction {
       List<IPluginModelBase> _sortBy = IterableExtensions.<IPluginModelBase, String>sortBy(_set, _function_2);
       final Consumer<IPluginModelBase> _function_3 = new Consumer<IPluginModelBase>() {
         public void accept(final IPluginModelBase it) {
-          IMappedElementDescriptor<IPluginModelBase> _createMappedElementDescriptor = provider.<IPluginModelBase>createMappedElementDescriptor(it, pluginNodeMapping);
+          NodeMapping<IPluginModelBase> _pluginNode = config.getPluginNode();
+          IMappedElementDescriptor<IPluginModelBase> _createMappedElementDescriptor = provider.<IPluginModelBase>createMappedElementDescriptor(it, _pluginNode);
           final PluginDescriptor leafDescriptor = ((PluginDescriptor) _createMappedElementDescriptor);
-          XNode _createNode = pluginNodeMapping.createNode(leafDescriptor);
+          NodeMapping<IPluginModelBase> _pluginNode_1 = config.getPluginNode();
+          XNode _createNode = _pluginNode_1.createNode(leafDescriptor);
           chooser.addChoice(_createNode);
         }
       };

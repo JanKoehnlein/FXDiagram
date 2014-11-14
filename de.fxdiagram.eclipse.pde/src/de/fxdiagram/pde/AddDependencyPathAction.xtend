@@ -5,15 +5,12 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.model.DomainObjectDescriptor
+import de.fxdiagram.eclipse.mapping.XDiagramConfig
 import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.chooser.CarusselChoice
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser
 import de.fxdiagram.lib.chooser.CoverFlowChoice
-import de.fxdiagram.eclipse.mapping.ConnectionMapping
-import de.fxdiagram.eclipse.mapping.NodeMapping
-import de.fxdiagram.eclipse.mapping.XDiagramConfig
-import org.eclipse.pde.core.plugin.IPluginImport
 import org.eclipse.pde.core.plugin.IPluginModelBase
 
 import static de.fxdiagram.core.layout.LayoutType.*
@@ -22,12 +19,12 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.pde.PluginUtil.*
 
-class AddImportPathAction extends RapidButtonAction {
+class AddDependencyPathAction extends RapidButtonAction {
 
-	boolean isImport
+	boolean isInverse
 	
-	new(boolean isImport) {
-		this.isImport = isImport 
+	new(boolean isInverse) {
+		this.isInverse = isInverse 
 	}
 
 	override perform(RapidButton button) {
@@ -39,15 +36,13 @@ class AddImportPathAction extends RapidButtonAction {
 	
 	def doPerform(RapidButton button, IPluginModelBase it) {
 		val paths = 
-			if(isImport) 
-				allImportPaths
+			if(isInverse) 
+				allInverseDependencies
 			else 
-				allDependentsPaths
+				allDependencies
 		val root = button.host.root
 		val provider = root.getDomainObjectProvider(PluginDescriptorProvider)
-		val diagramConfig = XDiagramConfig.Registry.getInstance.getConfigByID('de.fxdiagram.pde.PluginDiagramConfig')
-		val pluginNodeMapping = diagramConfig.getMappingByID('pluginNode') as NodeMapping<IPluginModelBase>
-		val importConnectionMapping = diagramConfig.getMappingByID('importConnection') as ConnectionMapping<IPluginImport>
+		val config = XDiagramConfig.Registry.getInstance.getConfigByID('de.fxdiagram.pde.PluginDiagramConfig') as PluginDiagramConfig
 		val host = button.host
 		val choiceGraphics = if (button.position.vertical)
 				new CarusselChoice
@@ -63,32 +58,37 @@ class AddImportPathAction extends RapidButtonAction {
 				(choice.domainObject as PluginDescriptor).withDomainObject [
 					chosenPlugin |
 					paths.filter [
-						elements.last.plugin == chosenPlugin
+						elements.last.owner == chosenPlugin
 					].forEach [ 
 						path |
 						var source = host
 						for (pathElement : path.elements) {
-							val midDescriptor = provider.createMappedElementDescriptor(pathElement.plugin, pluginNodeMapping) as PluginDescriptor
+							val targetPlugin = 
+								if(isInverse) 
+									pathElement.owner
+								else
+									pathElement.dependency
+							val midDescriptor = provider.createMappedElementDescriptor(targetPlugin, config.pluginNode) as PluginDescriptor
 							var target = (diagram.nodes + additionalShapes + #[choice]).filter(XNode).findFirst[
 								domainObject == midDescriptor
 							]
 							if (target == null) {
-								target = pluginNodeMapping.createNode(midDescriptor)
+								target = config.pluginNode.createNode(midDescriptor)
 								additionalShapes += target
 							}
-							val connectionDescriptor = provider.createMappedElementDescriptor(pathElement.pluginImport,
-								importConnectionMapping)
+							val connectionDescriptor = provider.createMappedElementDescriptor(pathElement,
+								config.dependencyConnection)
 							var connection = (diagram.connections + additionalShapes).filter(XConnection).findFirst[
 								domainObject == connectionDescriptor
 							]
 							if (connection == null) {
-								connection = importConnectionMapping.createConnection(connectionDescriptor)
-								if(isImport) {
-									connection.source = source
-									connection.target = target
-								} else {
+								connection = config.dependencyConnection.createConnection(connectionDescriptor)
+								if(isInverse) {
 									connection.source = target
 									connection.target = source
+								} else {
+									connection.source = source
+									connection.target = target
 								}
 								additionalShapes += connection
 							}
@@ -107,15 +107,15 @@ class AddImportPathAction extends RapidButtonAction {
 						new Layouter().createLayoutCommand(DOT, host.root.diagram, 500.millis))
 			}
 		}
-		if(!isImport) {
+		if(isInverse) {
 			chooser.connectionProvider = [
 				source, target, choiceInfo |
 				new XConnection(target, source)
 			]
 		}
-		paths.map[elements.last.plugin].toSet().sortBy[pluginBase.id].forEach [
-			val leafDescriptor = provider.createMappedElementDescriptor(it, pluginNodeMapping) as PluginDescriptor
-			chooser.addChoice(pluginNodeMapping.createNode(leafDescriptor))
+		paths.map[elements.last.owner].toSet().sortBy[pluginBase.id].forEach [
+			val leafDescriptor = provider.createMappedElementDescriptor(it, config.pluginNode) as PluginDescriptor
+			chooser.addChoice(config.pluginNode.createNode(leafDescriptor))
 		]
 		root.currentTool = chooser
 		null

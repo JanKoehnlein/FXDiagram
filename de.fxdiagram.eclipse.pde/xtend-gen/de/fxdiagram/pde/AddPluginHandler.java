@@ -4,7 +4,6 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.eclipse.FXDiagramView;
-import de.fxdiagram.eclipse.mapping.AbstractMapping;
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.eclipse.mapping.NodeMapping;
@@ -43,8 +42,6 @@ public class AddPluginHandler extends AbstractHandler {
           XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
           XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig");
           final PluginDiagramConfig config = ((PluginDiagramConfig) _configByID);
-          AbstractMapping<?> _mappingByID = config.getMappingByID("pluginNode");
-          final NodeMapping<IPluginModelBase> nodeMapping = ((NodeMapping<IPluginModelBase>) _mappingByID);
           final XRoot root = ((FXDiagramView)view).getRoot();
           XDiagram _diagram = root.getDiagram();
           double _sceneX = it.getSceneX();
@@ -57,8 +54,10 @@ public class AddPluginHandler extends AbstractHandler {
           final Consumer<IPluginModelBase> _function = new Consumer<IPluginModelBase>() {
             public void accept(final IPluginModelBase it) {
               IMappedElementDescriptorProvider _domainObjectProvider = config.getDomainObjectProvider();
-              final IMappedElementDescriptor<IPluginModelBase> descriptor = _domainObjectProvider.<IPluginModelBase>createMappedElementDescriptor(it, nodeMapping);
-              XNode _createNode = nodeMapping.createNode(descriptor);
+              NodeMapping<IPluginModelBase> _pluginNode = config.getPluginNode();
+              final IMappedElementDescriptor<IPluginModelBase> descriptor = _domainObjectProvider.<IPluginModelBase>createMappedElementDescriptor(it, _pluginNode);
+              NodeMapping<IPluginModelBase> _pluginNode_1 = config.getPluginNode();
+              XNode _createNode = _pluginNode_1.createNode(descriptor);
               nodeChooser.addChoice(_createNode);
             }
           };

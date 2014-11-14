@@ -5,7 +5,6 @@ import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.eclipse.mapping.AbstractMapping
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider
-import org.eclipse.pde.core.plugin.IPluginImport
 import org.eclipse.pde.core.plugin.IPluginModelBase
 
 @ModelNode
@@ -21,12 +20,12 @@ public class PluginDescriptorProvider implements DomainObjectProvider, IMappedEl
 					mapping.config.ID, mapping.ID, this)
 					as IMappedElementDescriptor<T>
 			}
-			IPluginImport: {
-				new PluginImportDescriptor(
-					domainObject.parent.pluginBase.id,
-					domainObject.parent.pluginBase.version, 
-					domainObject.id,
-					domainObject.version,
+			PluginDependency: {
+				new PluginDependencyDescriptor(
+					domainObject.owner.pluginBase.id,
+					domainObject.owner.pluginBase.version, 
+					domainObject.dependency.pluginBase.id,
+					domainObject.versionRange.toString,
 					mapping.config.ID, mapping.ID,
 					this) as IMappedElementDescriptor<T>
 			}

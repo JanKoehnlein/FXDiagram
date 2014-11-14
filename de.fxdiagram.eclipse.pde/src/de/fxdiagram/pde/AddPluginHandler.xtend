@@ -1,16 +1,14 @@
 package de.fxdiagram.pde
 
+import de.fxdiagram.eclipse.FXDiagramView
+import de.fxdiagram.eclipse.mapping.XDiagramConfig
 import de.fxdiagram.lib.chooser.CoverFlowChoice
 import de.fxdiagram.lib.chooser.NodeChooser
-import de.fxdiagram.eclipse.FXDiagramView
-import de.fxdiagram.eclipse.mapping.NodeMapping
-import de.fxdiagram.eclipse.mapping.XDiagramConfig
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 import org.eclipse.core.commands.AbstractHandler
 import org.eclipse.core.commands.ExecutionEvent
 import org.eclipse.core.commands.ExecutionException
-import org.eclipse.pde.core.plugin.IPluginModelBase
 import org.eclipse.swt.widgets.Event
 import org.eclipse.swt.widgets.ToolItem
 import org.eclipse.ui.PlatformUI
@@ -24,13 +22,12 @@ class AddPluginHandler extends AbstractHandler {
 			val view = diagramView
 			if (view instanceof FXDiagramView) {
 				val config = XDiagramConfig.Registry.getInstance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig") as PluginDiagramConfig
-				val nodeMapping = config.getMappingByID("pluginNode") as NodeMapping<IPluginModelBase>
 				val root = view.root
 				val center = root.diagram.sceneToLocal(sceneX, sceneY)
 				val nodeChooser = new NodeChooser(root.diagram, center, new CoverFlowChoice, false)
 				allPlugins.forEach[
-					val descriptor = config.domainObjectProvider.createMappedElementDescriptor(it, nodeMapping)
-					nodeChooser.addChoice(nodeMapping.createNode(descriptor))
+					val descriptor = config.domainObjectProvider.createMappedElementDescriptor(it, config.pluginNode)
+					nodeChooser.addChoice(config.pluginNode.createNode(descriptor))
 				]
 				root.currentTool = nodeChooser
 			}

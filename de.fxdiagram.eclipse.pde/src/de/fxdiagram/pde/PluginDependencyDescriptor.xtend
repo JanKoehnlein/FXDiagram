@@ -2,12 +2,11 @@ package de.fxdiagram.pde
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.eclipse.mapping.AbstractMappedElementDescriptor
-import org.eclipse.pde.core.plugin.IPluginImport
 
 import static de.fxdiagram.pde.PluginUtil.*
 
 @ModelNode
-class PluginImportDescriptor extends AbstractMappedElementDescriptor<IPluginImport> {
+class PluginDependencyDescriptor extends AbstractMappedElementDescriptor<PluginDependency> {
 
 	new(String ownerSymbolicName, String ownerVersion, String importSymbolicName, String importVersionRange,
 		String mappingConfigID, String mappingID, PluginDescriptorProvider provider) {
@@ -15,8 +14,8 @@ class PluginImportDescriptor extends AbstractMappedElementDescriptor<IPluginImpo
 			importSymbolicName + ' ' + importVersionRange, mappingConfigID, mappingID, provider)
 	}
 
-	override <U> withDomainObject((IPluginImport)=>U lambda) {
-		val handle = findPluginImport(ownerSymbolicName, ownerVersion, importSymbolicName)
+	override <U> withDomainObject((PluginDependency)=>U lambda) {
+		val handle = findPluginDependency(ownerSymbolicName, ownerVersion, importSymbolicName, importVersionRange)
 		lambda.apply(handle)
 	}
 

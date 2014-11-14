@@ -13,7 +13,7 @@ import de.fxdiagram.eclipse.shapes.INodeWithLazyMappings;
 import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
-import de.fxdiagram.pde.AddImportPathAction;
+import de.fxdiagram.pde.AddDependencyPathAction;
 import de.fxdiagram.pde.PluginDescriptor;
 import java.util.Collections;
 import java.util.List;
@@ -266,20 +266,20 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
       }
     };
     this.setOnMouseClicked(_function_2);
-    final AddImportPathAction importPathAction = new AddImportPathAction(true);
+    final AddDependencyPathAction dependencyPathAction = new AddDependencyPathAction(false);
     final LazyConnectionMappingBehavior rapidButtonBehavior = this.<LazyConnectionMappingBehavior>getBehavior(LazyConnectionMappingBehavior.class);
-    SVGPath _filledTriangle = ButtonExtensions.getFilledTriangle(Side.TOP, "Add import path");
-    RapidButton _rapidButton = new RapidButton(this, Side.TOP, _filledTriangle, importPathAction);
+    SVGPath _filledTriangle = ButtonExtensions.getFilledTriangle(Side.TOP, "Add dependency path");
+    RapidButton _rapidButton = new RapidButton(this, Side.TOP, _filledTriangle, dependencyPathAction);
     rapidButtonBehavior.add(_rapidButton);
-    SVGPath _filledTriangle_1 = ButtonExtensions.getFilledTriangle(Side.BOTTOM, "Add import path");
-    RapidButton _rapidButton_1 = new RapidButton(this, Side.BOTTOM, _filledTriangle_1, importPathAction);
+    SVGPath _filledTriangle_1 = ButtonExtensions.getFilledTriangle(Side.BOTTOM, "Add dependency path");
+    RapidButton _rapidButton_1 = new RapidButton(this, Side.BOTTOM, _filledTriangle_1, dependencyPathAction);
     rapidButtonBehavior.add(_rapidButton_1);
-    final AddImportPathAction dependentPathAction = new AddImportPathAction(false);
-    SVGPath _filledTriangle_2 = ButtonExtensions.getFilledTriangle(Side.BOTTOM, "Add imported path");
-    RapidButton _rapidButton_2 = new RapidButton(this, Side.TOP, _filledTriangle_2, dependentPathAction);
+    final AddDependencyPathAction inverseDependencyPathAction = new AddDependencyPathAction(true);
+    SVGPath _filledTriangle_2 = ButtonExtensions.getFilledTriangle(Side.BOTTOM, "Add inverse dependency path");
+    RapidButton _rapidButton_2 = new RapidButton(this, Side.TOP, _filledTriangle_2, inverseDependencyPathAction);
     rapidButtonBehavior.add(_rapidButton_2);
-    SVGPath _filledTriangle_3 = ButtonExtensions.getFilledTriangle(Side.TOP, "Add imported path");
-    RapidButton _rapidButton_3 = new RapidButton(this, Side.BOTTOM, _filledTriangle_3, dependentPathAction);
+    SVGPath _filledTriangle_3 = ButtonExtensions.getFilledTriangle(Side.TOP, "Add inverse dependency path");
+    RapidButton _rapidButton_3 = new RapidButton(this, Side.BOTTOM, _filledTriangle_3, inverseDependencyPathAction);
     rapidButtonBehavior.add(_rapidButton_3);
   }
   

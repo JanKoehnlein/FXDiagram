@@ -176,8 +176,14 @@
         <operand
             xsi:type="predicates:NotPredicate">
           <operand
-              xsi:type="predicates:NamePredicate"
-              pattern="de\.fxdiagram\.xtext\..*"/>
+              xsi:type="predicates:OrPredicate">
+            <operand
+                xsi:type="predicates:NamePredicate"
+                pattern="de\.fxdiagram\.xtext\..*"/>
+            <operand
+                xsi:type="predicates:NamePredicate"
+                pattern="de\.fxdiagram\.eclipse.*"/>
+          </operand>
         </operand>
       </predicate>
     </workingSet>
@@ -191,15 +197,27 @@
       </predicate>
     </workingSet>
     <workingSet
-        name="Xtext">
+        name="Eclipse">
       <predicate
-          xsi:type="predicates:AndPredicate">
+          xsi:type="predicates:OrPredicate">
+        <operand
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="de.fxdiagram.core"/>
+          <operand
+              xsi:type="predicates:OrPredicate">
+            <operand
+                xsi:type="predicates:NamePredicate"
+                pattern="de\.fxdiagram\.xtext\..*"/>
+            <operand
+                xsi:type="predicates:NamePredicate"
+                pattern="de\.fxdiagram\.eclipse.*"/>
+          </operand>
+        </operand>
         <operand
             xsi:type="predicates:RepositoryPredicate"
-            project="de.fxdiagram.core"/>
-        <operand
-            xsi:type="predicates:NamePredicate"
-            pattern="de\.fxdiagram\.xtext\..*"/>
+            project="de.fxdiagram.swtfx"/>
       </predicate>
     </workingSet>
   </setupTask>

@@ -125,14 +125,14 @@ class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMapp
 			if(button == MouseButton.SECONDARY) 
 				toggleInflated
 		]
-		val importPathAction = new AddImportPathAction(true)
+		val dependencyPathAction = new AddDependencyPathAction(false)
 		val rapidButtonBehavior = getBehavior(LazyConnectionMappingBehavior) 
-		rapidButtonBehavior.add(new RapidButton(this, TOP, getFilledTriangle(TOP, 'Add import path'), importPathAction))
-		rapidButtonBehavior.add(new RapidButton(this, BOTTOM, getFilledTriangle(BOTTOM, 'Add import path'), importPathAction))
+		rapidButtonBehavior.add(new RapidButton(this, TOP, getFilledTriangle(TOP, 'Add dependency path'), dependencyPathAction))
+		rapidButtonBehavior.add(new RapidButton(this, BOTTOM, getFilledTriangle(BOTTOM, 'Add dependency path'), dependencyPathAction))
 		
-		val dependentPathAction = new AddImportPathAction(false)
-		rapidButtonBehavior.add(new RapidButton(this, TOP, getFilledTriangle(BOTTOM, 'Add imported path'), dependentPathAction))
-		rapidButtonBehavior.add(new RapidButton(this, BOTTOM, getFilledTriangle(TOP, 'Add imported path'), dependentPathAction))
+		val inverseDependencyPathAction = new AddDependencyPathAction(true)
+		rapidButtonBehavior.add(new RapidButton(this, TOP, getFilledTriangle(BOTTOM, 'Add inverse dependency path'), inverseDependencyPathAction))
+		rapidButtonBehavior.add(new RapidButton(this, BOTTOM, getFilledTriangle(TOP, 'Add inverse dependency path'), inverseDependencyPathAction))
 	}
 	
 	protected def toggleInflated() {
