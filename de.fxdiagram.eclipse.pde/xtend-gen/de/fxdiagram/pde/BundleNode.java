@@ -43,6 +43,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.pde.core.plugin.IPluginBase;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -195,13 +197,16 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
             BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
-            final Function1<BundleDescription, String> _function = new Function1<BundleDescription, String>() {
-              public String apply(final BundleDescription it) {
-                return it.getName();
+            final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
+              public String apply(final IPluginModelBase it) {
+                IPluginBase _pluginBase = it.getPluginBase();
+                IPluginBase _pluginBase_1 = it.getPluginBase();
+                String _name = _pluginBase_1.getName();
+                return _pluginBase.getResourceString(_name);
               }
             };
-            String _withDomainObject = _domainObject.<String>withDomainObject(_function);
-            it.setText(_withDomainObject);
+            String _withPlugin = _domainObject.<String>withPlugin(_function);
+            it.setText(_withPlugin);
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
@@ -209,6 +214,26 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
         ObservableList<Node> _children_1 = it.getChildren();
         Text _text_1 = new Text();
         final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setTextOrigin(VPos.TOP);
+            BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+            final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
+              public String apply(final IPluginModelBase it) {
+                IPluginBase _pluginBase = it.getPluginBase();
+                IPluginBase _pluginBase_1 = it.getPluginBase();
+                String _providerName = _pluginBase_1.getProviderName();
+                return _pluginBase.getResourceString(_providerName);
+              }
+            };
+            String _withPlugin = _domainObject.<String>withPlugin(_function);
+            it.setText(_withPlugin);
+          }
+        };
+        Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_1);
+        _children_1.add(_doubleArrow_1);
+        ObservableList<Node> _children_2 = it.getChildren();
+        Text _text_2 = new Text();
+        final Procedure1<Text> _function_2 = new Procedure1<Text>() {
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
             BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
@@ -222,8 +247,8 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
             it.setText(_withDomainObject);
           }
         };
-        Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_1);
-        _children_1.add(_doubleArrow_1);
+        Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text_2, _function_2);
+        _children_2.add(_doubleArrow_2);
       }
     };
     VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_1);

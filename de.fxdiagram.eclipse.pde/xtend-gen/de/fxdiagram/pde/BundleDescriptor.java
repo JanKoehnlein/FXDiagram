@@ -50,6 +50,29 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
     return _xblockexpression;
   }
   
+  public <U extends Object> U withPlugin(final Function1<? super IPluginModelBase, ? extends U> lambda) {
+    U _xblockexpression = null;
+    {
+      String _symbolicName = this.getSymbolicName();
+      String _version = this.getVersion();
+      final IPluginModelBase plugin = PluginRegistry.findModel(_symbolicName, _version, IMatchRules.PERFECT, null);
+      U _xifexpression = null;
+      boolean _notEquals = (!Objects.equal(plugin, null));
+      if (_notEquals) {
+        _xifexpression = lambda.apply(plugin);
+      } else {
+        Object _xblockexpression_1 = null;
+        {
+          BundleDescriptor.LOG.warn(("Invalid BundleDescriptor " + this));
+          _xblockexpression_1 = null;
+        }
+        _xifexpression = ((U)_xblockexpression_1);
+      }
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
   public String getSymbolicName() {
     String _id = this.getId();
     String[] _split = _id.split("#");

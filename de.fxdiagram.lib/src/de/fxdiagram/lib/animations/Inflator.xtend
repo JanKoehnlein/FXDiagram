@@ -56,7 +56,7 @@ class Inflator {
 		deflatedWidth = containerSize.width - padding.left - padding.right
 		deflatedHeight = containerSize.height - padding.top - padding.bottom
 		new SequentialTransition => [
-			delay = 300.millis
+			delay = 200.millis
 			children += inflate
 			children += appear	
 			onFinished = [
@@ -96,7 +96,7 @@ class Inflator {
 						new KeyValue(spacer.heightProperty, 0)
 					)	
 					keyFrames += new KeyFrame(
-						500.millis,
+						200.millis,
 						new KeyValue(spacer.widthProperty, size.width),
 						new KeyValue(spacer.heightProperty, size.height)
 					)	
@@ -106,7 +106,7 @@ class Inflator {
 			pt.children += new Timeline => [
 				autoReverse = false
 				keyFrames += new KeyFrame(
-					500.millis,
+					200.millis,
 					new KeyValue(host.layoutXProperty, inflatedHostPos.x),
 					new KeyValue(host.layoutYProperty, inflatedHostPos.y)
 				)
@@ -132,7 +132,7 @@ class Inflator {
 					cycleCount = 1
 					autoReverse = false
 					keyFrames += new KeyFrame(
-						500.millis,
+						200.millis,
 						new KeyValue(spacer.widthProperty, deflatedWidth),
 						new KeyValue(spacer.heightProperty, 0)
 					)	
@@ -142,7 +142,7 @@ class Inflator {
 			pt.children += new Timeline => [
 				autoReverse = false
 				keyFrames += new KeyFrame(
-					500.millis,
+					200.millis,
 					new KeyValue(host.layoutXProperty, deflatedHostPos.x),
 					new KeyValue(host.layoutYProperty, deflatedHostPos.y)
 				)

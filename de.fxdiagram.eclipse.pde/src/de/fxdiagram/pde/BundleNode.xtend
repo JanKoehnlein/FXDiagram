@@ -103,16 +103,16 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 			alignment = Pos.CENTER
 			children += new Text => [
 				textOrigin = VPos.TOP
-				text = domainObject.withDomainObject[
-					name
+				text = domainObject.withPlugin[
+					pluginBase.getResourceString(pluginBase.name)
 				]
 			]
-//			children += new Text => [
-//				textOrigin = VPos.TOP
-//				text = domainObject.withDomainObject[
-//					pluginBase.getResourceString(pluginBase.providerName)
-//				]
-//			]
+			children += new Text => [
+				textOrigin = VPos.TOP
+				text = domainObject.withPlugin[
+					pluginBase.getResourceString(pluginBase.providerName)
+				]
+			]
 			children += new Text => [
 				textOrigin = VPos.TOP
 				text = domainObject.withDomainObject[

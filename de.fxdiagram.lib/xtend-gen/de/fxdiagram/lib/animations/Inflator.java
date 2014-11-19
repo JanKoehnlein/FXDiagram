@@ -104,7 +104,7 @@ public class Inflator {
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
         public void apply(final SequentialTransition it) {
-          Duration _millis = DurationExtensions.millis(300);
+          Duration _millis = DurationExtensions.millis(200);
           it.setDelay(_millis);
           ObservableList<Animation> _children = it.getChildren();
           ParallelTransition _inflate = Inflator.this.inflate();
@@ -193,7 +193,7 @@ public class Inflator {
                 KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
                 _keyFrames.add(_keyFrame);
                 ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
-                Duration _millis_1 = DurationExtensions.millis(500);
+                Duration _millis_1 = DurationExtensions.millis(200);
                 DoubleProperty _widthProperty_1 = spacer.widthProperty();
                 double _width = size.getWidth();
                 KeyValue _keyValue_2 = new <Number>KeyValue(_widthProperty_1, Double.valueOf(_width));
@@ -215,7 +215,7 @@ public class Inflator {
           public void apply(final Timeline it) {
             it.setAutoReverse(false);
             ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
-            Duration _millis = DurationExtensions.millis(500);
+            Duration _millis = DurationExtensions.millis(200);
             DoubleProperty _layoutXProperty = Inflator.this.host.layoutXProperty();
             double _x = inflatedHostPos.getX();
             KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(_x));
@@ -268,7 +268,7 @@ public class Inflator {
               it.setCycleCount(1);
               it.setAutoReverse(false);
               ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
-              Duration _millis = DurationExtensions.millis(500);
+              Duration _millis = DurationExtensions.millis(200);
               DoubleProperty _widthProperty = spacer.widthProperty();
               KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(Inflator.this.deflatedWidth));
               DoubleProperty _heightProperty = spacer.heightProperty();
@@ -287,7 +287,7 @@ public class Inflator {
           public void apply(final Timeline it) {
             it.setAutoReverse(false);
             ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
-            Duration _millis = DurationExtensions.millis(500);
+            Duration _millis = DurationExtensions.millis(200);
             DoubleProperty _layoutXProperty = Inflator.this.host.layoutXProperty();
             double _x = deflatedHostPos.getX();
             KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(_x));

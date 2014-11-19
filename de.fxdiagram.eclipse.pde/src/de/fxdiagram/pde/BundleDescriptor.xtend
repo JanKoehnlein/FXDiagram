@@ -5,6 +5,7 @@ import de.fxdiagram.eclipse.mapping.AbstractMappedElementDescriptor
 import org.apache.log4j.Logger
 import org.eclipse.osgi.service.resolver.BundleDescription
 import org.eclipse.pde.core.plugin.IMatchRules
+import org.eclipse.pde.core.plugin.IPluginModelBase
 import org.eclipse.pde.core.plugin.PluginRegistry
 import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor
 
@@ -23,6 +24,16 @@ class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription
 		val bundle = findBundle(symbolicName, version)
 		if(bundle != null) {
 			lambda.apply(bundle)
+		} else {
+			LOG.warn('Invalid BundleDescriptor ' + this) 
+			null			
+		}
+	}
+	
+	def <U> withPlugin((IPluginModelBase)=>U lambda) {
+		val plugin = PluginRegistry.findModel(symbolicName, version, IMatchRules.PERFECT, null)
+		if(plugin != null) {
+			lambda.apply(plugin)
 		} else {
 			LOG.warn('Invalid BundleDescriptor ' + this) 
 			null			
