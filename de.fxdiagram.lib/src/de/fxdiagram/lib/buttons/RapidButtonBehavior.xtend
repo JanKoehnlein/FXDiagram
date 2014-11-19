@@ -119,6 +119,7 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 		for(entry: pos2group.entrySet) {
 			val pos = entry.key
 			val group = entry.value
+			group.autosize
 			val groupBounds = group.boundsInLocal
 			val centered = hostCenter - groupBounds.center
 			group => [

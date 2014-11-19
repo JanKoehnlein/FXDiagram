@@ -220,6 +220,7 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
       {
         final Side pos = entry.getKey();
         final Pane group = entry.getValue();
+        group.autosize();
         final Bounds groupBounds = group.getBoundsInLocal();
         Point2D _center = BoundsExtensions.center(groupBounds);
         final Point2D centered = Point2DExtensions.operator_minus(hostCenter, _center);
