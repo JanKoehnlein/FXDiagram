@@ -1,7 +1,7 @@
 package de.fxdiagram.pde;
 
 import com.google.common.collect.Iterables;
-import de.fxdiagram.pde.PluginDependency;
+import de.fxdiagram.pde.BundleDependency;
 import java.util.Collections;
 import java.util.List;
 import org.eclipse.xtend.lib.annotations.Data;
@@ -12,21 +12,21 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
-public class PluginDependencyPath {
-  private final List<? extends PluginDependency> elements;
+public class BundleDependencyPath {
+  private final List<? extends BundleDependency> elements;
   
-  public PluginDependencyPath() {
-    this.elements = Collections.<PluginDependency>unmodifiableList(CollectionLiterals.<PluginDependency>newArrayList());
+  public BundleDependencyPath() {
+    this.elements = Collections.<BundleDependency>unmodifiableList(CollectionLiterals.<BundleDependency>newArrayList());
   }
   
-  private PluginDependencyPath(final List<PluginDependency> elements) {
+  private BundleDependencyPath(final List<BundleDependency> elements) {
     this.elements = elements;
   }
   
-  public PluginDependencyPath append(final PluginDependency element) {
-    Iterable<PluginDependency> _plus = Iterables.<PluginDependency>concat(this.elements, Collections.<PluginDependency>unmodifiableList(CollectionLiterals.<PluginDependency>newArrayList(element)));
-    List<PluginDependency> _list = IterableExtensions.<PluginDependency>toList(_plus);
-    return new PluginDependencyPath(_list);
+  public BundleDependencyPath append(final BundleDependency element) {
+    Iterable<BundleDependency> _plus = Iterables.<BundleDependency>concat(this.elements, Collections.<BundleDependency>unmodifiableList(CollectionLiterals.<BundleDependency>newArrayList(element)));
+    List<BundleDependency> _list = IterableExtensions.<BundleDependency>toList(_plus);
+    return new BundleDependencyPath(_list);
   }
   
   @Override
@@ -47,7 +47,7 @@ public class PluginDependencyPath {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    PluginDependencyPath other = (PluginDependencyPath) obj;
+    BundleDependencyPath other = (BundleDependencyPath) obj;
     if (this.elements == null) {
       if (other.elements != null)
         return false;
@@ -65,7 +65,7 @@ public class PluginDependencyPath {
   }
   
   @Pure
-  public List<? extends PluginDependency> getElements() {
+  public List<? extends BundleDependency> getElements() {
     return this.elements;
   }
 }

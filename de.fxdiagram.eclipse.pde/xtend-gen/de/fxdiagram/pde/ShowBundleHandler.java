@@ -4,7 +4,7 @@ import com.google.common.collect.Iterators;
 import de.fxdiagram.eclipse.FXDiagramView;
 import de.fxdiagram.eclipse.mapping.MappingCall;
 import de.fxdiagram.eclipse.mapping.XDiagramConfig;
-import de.fxdiagram.pde.PluginDiagramConfig;
+import de.fxdiagram.pde.BundleDiagramConfig;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
@@ -34,7 +34,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 
 @SuppressWarnings("all")
-public class ShowPluginHandler extends AbstractHandler {
+public class ShowBundleHandler extends AbstractHandler {
   public void setEnabled(final Object evaluationContext) {
     if ((evaluationContext instanceof IEvaluationContext)) {
       final Object selection = ((IEvaluationContext)evaluationContext).getVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME);
@@ -81,8 +81,8 @@ public class ShowPluginHandler extends AbstractHandler {
         boolean _not = (!_isEmpty);
         if (_not) {
           XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-          XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig");
-          final PluginDiagramConfig config = ((PluginDiagramConfig) _configByID);
+          XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
+          final BundleDiagramConfig config = ((BundleDiagramConfig) _configByID);
           IWorkbench _workbench = PlatformUI.getWorkbench();
           IWorkbenchWindow _activeWorkbenchWindow = _workbench.getActiveWorkbenchWindow();
           final IWorkbenchPage page = _activeWorkbenchWindow.getActivePage();

@@ -15,7 +15,7 @@ import org.eclipse.ui.handlers.HandlerUtil
 
 import static extension org.eclipse.pde.core.plugin.PluginRegistry.*
 
-class ShowPluginHandler extends AbstractHandler {
+class ShowBundleHandler extends AbstractHandler {
 	
 	override setEnabled(Object evaluationContext) {
 		if (evaluationContext instanceof IEvaluationContext) {
@@ -38,7 +38,7 @@ class ShowPluginHandler extends AbstractHandler {
 		val selection = HandlerUtil.getActiveMenuSelection(event)
 		val pluginBases = selection.pluginBases
 		if(!pluginBases.empty) {
-			val config = XDiagramConfig.Registry.getInstance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig") as PluginDiagramConfig
+			val config = XDiagramConfig.Registry.getInstance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig") as BundleDiagramConfig
 			val page = PlatformUI.workbench.activeWorkbenchWindow.activePage
 			val view = page.showView("de.fxdiagram.eclipse.FXDiagramView")
 			if(view instanceof FXDiagramView) {

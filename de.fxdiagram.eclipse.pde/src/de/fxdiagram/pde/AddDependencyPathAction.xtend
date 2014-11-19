@@ -11,13 +11,13 @@ import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.chooser.CarusselChoice
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser
 import de.fxdiagram.lib.chooser.CoverFlowChoice
-import org.eclipse.pde.core.plugin.IPluginModelBase
+import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.core.layout.LayoutType.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import static extension de.fxdiagram.pde.PluginUtil.*
+import static extension de.fxdiagram.pde.BundleUtil.*
 
 class AddDependencyPathAction extends RapidButtonAction {
 
@@ -28,21 +28,16 @@ class AddDependencyPathAction extends RapidButtonAction {
 	}
 
 	override perform(RapidButton button) {
-		val descriptor = button.host.domainObject as PluginDescriptor
+		val descriptor = button.host.domainObject as BundleDescriptor
 		descriptor.withDomainObject [
 			doPerform(button, it)
 		]
 	}
 	
-	def doPerform(RapidButton button, IPluginModelBase it) {
-		val paths = 
-			if(isInverse) 
-				allInverseDependencies
-			else 
-				allDependencies
+	def doPerform(RapidButton button, BundleDescription hostBundle) {
 		val root = button.host.root
-		val provider = root.getDomainObjectProvider(PluginDescriptorProvider)
-		val config = XDiagramConfig.Registry.getInstance.getConfigByID('de.fxdiagram.pde.PluginDiagramConfig') as PluginDiagramConfig
+		val provider = root.getDomainObjectProvider(BundleDescriptorProvider)
+		val config = XDiagramConfig.Registry.getInstance.getConfigByID('de.fxdiagram.pde.BundleDiagramConfig') as BundleDiagramConfig
 		val host = button.host
 		val choiceGraphics = if (button.position.vertical)
 				new CarusselChoice
@@ -55,47 +50,40 @@ class AddDependencyPathAction extends RapidButtonAction {
 					removeConnection
 				val diagram = host.diagram
 				val additionalShapes = <XShape>newLinkedHashSet()
-				(choice.domainObject as PluginDescriptor).withDomainObject [
-					chosenPlugin |
-					paths.filter [
-						elements.last.owner == chosenPlugin
-					].forEach [ 
-						path |
-						var source = host
-						for (pathElement : path.elements) {
-							val targetPlugin = 
-								if(isInverse) 
-									pathElement.owner
-								else
-									pathElement.dependency
-							val midDescriptor = provider.createMappedElementDescriptor(targetPlugin, config.pluginNode) as PluginDescriptor
-							var target = (diagram.nodes + additionalShapes + #[choice]).filter(XNode).findFirst[
-								domainObject == midDescriptor
-							]
-							if (target == null) {
-								target = config.pluginNode.createNode(midDescriptor)
-								additionalShapes += target
-							}
-							val connectionDescriptor = provider.createMappedElementDescriptor(pathElement,
-								config.dependencyConnection)
-							var connection = (diagram.connections + additionalShapes).filter(XConnection).findFirst[
-								domainObject == connectionDescriptor
-							]
-							if (connection == null) {
-								connection = config.dependencyConnection.createConnection(connectionDescriptor)
-								if(isInverse) {
-									connection.source = target
-									connection.target = source
-								} else {
-									connection.source = source
-									connection.target = target
-								}
-								additionalShapes += connection
-							}
-							source = target
-						}
+				(choice.domainObject as BundleDescriptor).withDomainObject [
+					chosenBundle |
+					if (isInverse)
+						chosenBundle.getAllBundleDependencies(hostBundle)
+					else
+						hostBundle.getAllBundleDependencies(chosenBundle)
+				].forEach [ bundleDependency |
+					val owner = provider.createMappedElementDescriptor(bundleDependency.owner, config.pluginNode) as BundleDescriptor
+					var sourceNode = (diagram.nodes + additionalShapes + #[choice]).filter(XNode).findFirst[
+						domainObject == owner
 					]
-					null
+					if (sourceNode == null) {
+						sourceNode = config.pluginNode.createNode(owner)
+						additionalShapes += sourceNode
+					}
+					val dependency = provider.createMappedElementDescriptor(bundleDependency.dependency, config.pluginNode) as BundleDescriptor
+					var targetNode = (diagram.nodes + additionalShapes + #[choice]).filter(XNode).findFirst[
+						domainObject == dependency
+					]
+					if (targetNode == null) {
+						targetNode = config.pluginNode.createNode(dependency)
+						additionalShapes += targetNode
+					}
+					val connectionDescriptor = provider.createMappedElementDescriptor(bundleDependency,
+						config.dependencyConnection)
+					var connection = (diagram.connections + additionalShapes).filter(XConnection).findFirst[
+						domainObject == connectionDescriptor
+					]
+					if (connection == null) {
+						connection = config.dependencyConnection.createConnection(connectionDescriptor)
+						connection.source = sourceNode
+						connection.target = targetNode
+						additionalShapes += connection
+					}
 				]
 				return additionalShapes
 			}
@@ -113,10 +101,16 @@ class AddDependencyPathAction extends RapidButtonAction {
 				new XConnection(target, source)
 			]
 		}
-		paths.map[elements.last.owner].toSet().sortBy[pluginBase.id].forEach [
-			val leafDescriptor = provider.createMappedElementDescriptor(it, config.pluginNode) as PluginDescriptor
-			chooser.addChoice(config.pluginNode.createNode(leafDescriptor))
-		]
+		
+		val candidates = 
+			if(isInverse) 
+				hostBundle.allDependentBundles
+			else 
+				hostBundle.allDependencyBundles
+		candidates.forEach [
+			val candidate = provider.createMappedElementDescriptor(it, config.pluginNode) as BundleDescriptor
+			chooser.addChoice(config.pluginNode.createNode(candidate))
+		]		
 		root.currentTool = chooser
 		null
 	}

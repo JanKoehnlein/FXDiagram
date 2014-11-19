@@ -1,13 +1,11 @@
 package de.fxdiagram.pde;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.pde.PluginDependency;
-import de.fxdiagram.pde.PluginUtil;
+import de.fxdiagram.pde.BundleDependency;
 import org.eclipse.osgi.service.resolver.BaseDescription;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
 import org.eclipse.osgi.service.resolver.VersionRange;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
@@ -15,13 +13,20 @@ import org.osgi.framework.Constants;
 
 @Data
 @SuppressWarnings("all")
-public class PackageImport extends PluginDependency {
+public class PackageImport extends BundleDependency {
   private final ImportPackageSpecification packageImport;
   
-  public IPluginModelBase getDependency() {
+  public BundleDependency.Kind getKind() {
+    return BundleDependency.Kind.PACKAGE_IMPORT;
+  }
+  
+  public BundleDescription getDependency() {
     BaseDescription _supplier = this.packageImport.getSupplier();
-    BundleDescription _supplier_1 = _supplier.getSupplier();
-    return PluginUtil.getPlugin(_supplier_1);
+    BundleDescription _supplier_1 = null;
+    if (_supplier!=null) {
+      _supplier_1=_supplier.getSupplier();
+    }
+    return _supplier_1;
   }
   
   public boolean isReexport() {
@@ -48,7 +53,7 @@ public class PackageImport extends PluginDependency {
     return _xblockexpression;
   }
   
-  public PackageImport(final IPluginModelBase owner, final ImportPackageSpecification packageImport) {
+  public PackageImport(final BundleDescription owner, final ImportPackageSpecification packageImport) {
     super(owner);
     this.packageImport = packageImport;
   }

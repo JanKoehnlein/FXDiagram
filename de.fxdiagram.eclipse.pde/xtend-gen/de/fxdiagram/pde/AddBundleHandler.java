@@ -10,8 +10,8 @@ import de.fxdiagram.eclipse.mapping.NodeMapping;
 import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.lib.chooser.NodeChooser;
-import de.fxdiagram.pde.PluginDiagramConfig;
-import de.fxdiagram.pde.PluginUtil;
+import de.fxdiagram.pde.BundleDiagramConfig;
+import de.fxdiagram.pde.BundleUtil;
 import java.util.List;
 import java.util.function.Consumer;
 import javafx.event.EventHandler;
@@ -20,7 +20,7 @@ import javafx.scene.input.MouseEvent;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IViewPart;
@@ -28,20 +28,19 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.xtext.xbase.lib.Conversions;
 
 @SuppressWarnings("all")
-public class AddPluginHandler extends AbstractHandler {
+public class AddBundleHandler extends AbstractHandler {
   private EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
     public void handle(final MouseEvent it) {
       int _clickCount = it.getClickCount();
       boolean _equals = (_clickCount == 2);
       if (_equals) {
-        final IViewPart view = AddPluginHandler.this.getDiagramView();
+        final IViewPart view = AddBundleHandler.this.getDiagramView();
         if ((view instanceof FXDiagramView)) {
           XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-          XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig");
-          final PluginDiagramConfig config = ((PluginDiagramConfig) _configByID);
+          XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
+          final BundleDiagramConfig config = ((BundleDiagramConfig) _configByID);
           final XRoot root = ((FXDiagramView)view).getRoot();
           XDiagram _diagram = root.getDiagram();
           double _sceneX = it.getSceneX();
@@ -50,18 +49,18 @@ public class AddPluginHandler extends AbstractHandler {
           XDiagram _diagram_1 = root.getDiagram();
           CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
           final NodeChooser nodeChooser = new NodeChooser(_diagram_1, center, _coverFlowChoice, false);
-          IPluginModelBase[] _allPlugins = PluginUtil.allPlugins();
-          final Consumer<IPluginModelBase> _function = new Consumer<IPluginModelBase>() {
-            public void accept(final IPluginModelBase it) {
+          List<BundleDescription> _allBundles = BundleUtil.allBundles();
+          final Consumer<BundleDescription> _function = new Consumer<BundleDescription>() {
+            public void accept(final BundleDescription it) {
               IMappedElementDescriptorProvider _domainObjectProvider = config.getDomainObjectProvider();
-              NodeMapping<IPluginModelBase> _pluginNode = config.getPluginNode();
-              final IMappedElementDescriptor<IPluginModelBase> descriptor = _domainObjectProvider.<IPluginModelBase>createMappedElementDescriptor(it, _pluginNode);
-              NodeMapping<IPluginModelBase> _pluginNode_1 = config.getPluginNode();
+              NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
+              final IMappedElementDescriptor<BundleDescription> descriptor = _domainObjectProvider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
+              NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
               XNode _createNode = _pluginNode_1.createNode(descriptor);
               nodeChooser.addChoice(_createNode);
             }
           };
-          ((List<IPluginModelBase>)Conversions.doWrapArray(_allPlugins)).forEach(_function);
+          _allBundles.forEach(_function);
           root.setCurrentTool(nodeChooser);
         }
       }

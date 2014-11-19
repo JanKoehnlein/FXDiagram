@@ -13,15 +13,16 @@ import de.fxdiagram.eclipse.mapping.MappingAcceptor;
 import de.fxdiagram.eclipse.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.eclipse.mapping.NodeMapping;
 import de.fxdiagram.eclipse.shapes.BaseConnection;
-import de.fxdiagram.pde.PluginDependency;
-import de.fxdiagram.pde.PluginDescriptor;
-import de.fxdiagram.pde.PluginDescriptorProvider;
-import de.fxdiagram.pde.PluginNode;
-import de.fxdiagram.pde.PluginUtil;
+import de.fxdiagram.pde.BundleDependency;
+import de.fxdiagram.pde.BundleDescriptor;
+import de.fxdiagram.pde.BundleDescriptorProvider;
+import de.fxdiagram.pde.BundleNode;
+import de.fxdiagram.pde.BundleUtil;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
+import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.VersionRange;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -30,35 +31,35 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class PluginDiagramConfig extends AbstractDiagramConfig {
+public class BundleDiagramConfig extends AbstractDiagramConfig {
   protected IMappedElementDescriptorProvider createDomainObjectProvider() {
-    return new PluginDescriptorProvider();
+    return new BundleDescriptorProvider();
   }
   
-  private final NodeMapping<IPluginModelBase> pluginNode = new NodeMapping<IPluginModelBase>(this, "pluginNode") {
-    public XNode createNode(final IMappedElementDescriptor<IPluginModelBase> descriptor) {
-      return new PluginNode(((PluginDescriptor) descriptor));
+  private final NodeMapping<BundleDescription> pluginNode = new NodeMapping<BundleDescription>(this, "pluginNode") {
+    public XNode createNode(final IMappedElementDescriptor<BundleDescription> descriptor) {
+      return new BundleNode(((BundleDescriptor) descriptor));
     }
     
     public void calls() {
-      final Function1<IPluginModelBase, Iterable<? extends PluginDependency>> _function = new Function1<IPluginModelBase, Iterable<? extends PluginDependency>>() {
-        public Iterable<? extends PluginDependency> apply(final IPluginModelBase it) {
-          return PluginUtil.getDependencies(it);
+      final Function1<BundleDescription, Iterable<? extends BundleDependency>> _function = new Function1<BundleDescription, Iterable<? extends BundleDependency>>() {
+        public Iterable<? extends BundleDependency> apply(final BundleDescription it) {
+          return BundleUtil.getBundleDependencies(it);
         }
       };
-      MultiConnectionMappingCall<PluginDependency, IPluginModelBase> _outConnectionForEach = this.<PluginDependency>outConnectionForEach(PluginDiagramConfig.this.dependencyConnection, _function);
+      MultiConnectionMappingCall<BundleDependency, BundleDescription> _outConnectionForEach = this.<BundleDependency>outConnectionForEach(BundleDiagramConfig.this.dependencyConnection, _function);
       final Function1<Side, Node> _function_1 = new Function1<Side, Node>() {
         public Node apply(final Side it) {
           return ButtonExtensions.getArrowButton(it, "Add dependency");
         }
       };
       _outConnectionForEach.makeLazy(_function_1);
-      final Function1<IPluginModelBase, Iterable<? extends PluginDependency>> _function_2 = new Function1<IPluginModelBase, Iterable<? extends PluginDependency>>() {
-        public Iterable<? extends PluginDependency> apply(final IPluginModelBase it) {
-          return PluginUtil.getInverseDependencies(it);
+      final Function1<BundleDescription, Iterable<? extends BundleDependency>> _function_2 = new Function1<BundleDescription, Iterable<? extends BundleDependency>>() {
+        public Iterable<? extends BundleDependency> apply(final BundleDescription it) {
+          return BundleUtil.getInverseBundleDependencies(it);
         }
       };
-      MultiConnectionMappingCall<PluginDependency, IPluginModelBase> _inConnectionForEach = this.<PluginDependency>inConnectionForEach(PluginDiagramConfig.this.inverseDependencyConnection, _function_2);
+      MultiConnectionMappingCall<BundleDependency, BundleDescription> _inConnectionForEach = this.<BundleDependency>inConnectionForEach(BundleDiagramConfig.this.inverseDependencyConnection, _function_2);
       final Function1<Side, Node> _function_3 = new Function1<Side, Node>() {
         public Node apply(final Side it) {
           return ButtonExtensions.getInverseArrowButton(it, "Add inverse dependency");
@@ -68,55 +69,55 @@ public class PluginDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  public NodeMapping<IPluginModelBase> getPluginNode() {
+  public NodeMapping<BundleDescription> getPluginNode() {
     return this.pluginNode;
   }
   
-  private final ConnectionMapping<PluginDependency> dependencyConnection = new ConnectionMapping<PluginDependency>(this, "dependencyConnection") {
+  private final ConnectionMapping<BundleDependency> dependencyConnection = new ConnectionMapping<BundleDependency>(this, "dependencyConnection") {
     public void calls() {
-      final Function1<PluginDependency, IPluginModelBase> _function = new Function1<PluginDependency, IPluginModelBase>() {
-        public IPluginModelBase apply(final PluginDependency it) {
+      final Function1<BundleDependency, BundleDescription> _function = new Function1<BundleDependency, BundleDescription>() {
+        public BundleDescription apply(final BundleDependency it) {
           return it.getDependency();
         }
       };
-      this.<IPluginModelBase>target(PluginDiagramConfig.this.pluginNode, _function);
+      this.<BundleDescription>target(BundleDiagramConfig.this.pluginNode, _function);
     }
     
-    public XConnection createConnection(final IMappedElementDescriptor<PluginDependency> descriptor) {
-      return PluginDiagramConfig.this.createPluginImportConnection(descriptor);
+    public XConnection createConnection(final IMappedElementDescriptor<BundleDependency> descriptor) {
+      return BundleDiagramConfig.this.createPluginImportConnection(descriptor);
     }
   };
   
-  public ConnectionMapping<PluginDependency> getDependencyConnection() {
+  public ConnectionMapping<BundleDependency> getDependencyConnection() {
     return this.dependencyConnection;
   }
   
-  private final ConnectionMapping<PluginDependency> inverseDependencyConnection = new ConnectionMapping<PluginDependency>(this, "inverseDependencyConnection") {
+  private final ConnectionMapping<BundleDependency> inverseDependencyConnection = new ConnectionMapping<BundleDependency>(this, "inverseDependencyConnection") {
     public void calls() {
-      final Function1<PluginDependency, IPluginModelBase> _function = new Function1<PluginDependency, IPluginModelBase>() {
-        public IPluginModelBase apply(final PluginDependency it) {
+      final Function1<BundleDependency, BundleDescription> _function = new Function1<BundleDependency, BundleDescription>() {
+        public BundleDescription apply(final BundleDependency it) {
           return it.getOwner();
         }
       };
-      this.<IPluginModelBase>source(PluginDiagramConfig.this.pluginNode, _function);
+      this.<BundleDescription>source(BundleDiagramConfig.this.pluginNode, _function);
     }
     
-    public XConnection createConnection(final IMappedElementDescriptor<PluginDependency> descriptor) {
-      return PluginDiagramConfig.this.createPluginImportConnection(descriptor);
+    public XConnection createConnection(final IMappedElementDescriptor<BundleDependency> descriptor) {
+      return BundleDiagramConfig.this.createPluginImportConnection(descriptor);
     }
   };
   
-  public ConnectionMapping<PluginDependency> getInverseDependencyConnection() {
+  public ConnectionMapping<BundleDependency> getInverseDependencyConnection() {
     return this.inverseDependencyConnection;
   }
   
-  protected BaseConnection<PluginDependency> createPluginImportConnection(final IMappedElementDescriptor<PluginDependency> descriptor) {
-    BaseConnection<PluginDependency> _baseConnection = new BaseConnection<PluginDependency>(descriptor);
-    final Procedure1<BaseConnection<PluginDependency>> _function = new Procedure1<BaseConnection<PluginDependency>>() {
-      public void apply(final BaseConnection<PluginDependency> connection) {
+  protected BaseConnection<BundleDependency> createPluginImportConnection(final IMappedElementDescriptor<BundleDependency> descriptor) {
+    BaseConnection<BundleDependency> _baseConnection = new BaseConnection<BundleDependency>(descriptor);
+    final Procedure1<BaseConnection<BundleDependency>> _function = new Procedure1<BaseConnection<BundleDependency>>() {
+      public void apply(final BaseConnection<BundleDependency> connection) {
         final XConnectionLabel label = new XConnectionLabel(connection);
-        final Function1<PluginDependency, Object> _function = new Function1<PluginDependency, Object>() {
-          public Object apply(final PluginDependency it) {
+        final Function1<BundleDependency, Object> _function = new Function1<BundleDependency, Object>() {
+          public Object apply(final BundleDependency it) {
             Object _xblockexpression = null;
             {
               VersionRange _versionRange = it.getVersionRange();
@@ -147,7 +148,7 @@ public class PluginDiagramConfig extends AbstractDiagramConfig {
         descriptor.<Object>withDomainObject(_function);
       }
     };
-    return ObjectExtensions.<BaseConnection<PluginDependency>>operator_doubleArrow(_baseConnection, _function);
+    return ObjectExtensions.<BaseConnection<BundleDependency>>operator_doubleArrow(_baseConnection, _function);
   }
   
   protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {

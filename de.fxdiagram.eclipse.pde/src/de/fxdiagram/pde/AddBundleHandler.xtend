@@ -13,19 +13,19 @@ import org.eclipse.swt.widgets.Event
 import org.eclipse.swt.widgets.ToolItem
 import org.eclipse.ui.PlatformUI
 
-import static de.fxdiagram.pde.PluginUtil.*
+import static de.fxdiagram.pde.BundleUtil.*
 
-class AddPluginHandler extends AbstractHandler {
+class AddBundleHandler extends AbstractHandler {
 
 	EventHandler<MouseEvent> mouseHandler = [
 		if(clickCount == 2) {
 			val view = diagramView
 			if (view instanceof FXDiagramView) {
-				val config = XDiagramConfig.Registry.getInstance.getConfigByID("de.fxdiagram.pde.PluginDiagramConfig") as PluginDiagramConfig
+				val config = XDiagramConfig.Registry.getInstance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig") as BundleDiagramConfig
 				val root = view.root
 				val center = root.diagram.sceneToLocal(sceneX, sceneY)
 				val nodeChooser = new NodeChooser(root.diagram, center, new CoverFlowChoice, false)
-				allPlugins.forEach[
+				allBundles.forEach[
 					val descriptor = config.domainObjectProvider.createMappedElementDescriptor(it, config.pluginNode)
 					nodeChooser.addChoice(config.pluginNode.createNode(descriptor))
 				]

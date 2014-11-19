@@ -5,26 +5,27 @@ import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.eclipse.mapping.AbstractMapping
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider
-import org.eclipse.pde.core.plugin.IPluginModelBase
+import org.eclipse.osgi.service.resolver.BundleDescription
 
 @ModelNode
-public class PluginDescriptorProvider implements DomainObjectProvider, IMappedElementDescriptorProvider {
+public class BundleDescriptorProvider implements DomainObjectProvider, IMappedElementDescriptorProvider {
 	
 	override <T> createDescriptor(T domainObject) {
 	}
 	
 	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
 		switch domainObject {
-			IPluginModelBase: {
-				new PluginDescriptor(domainObject.pluginBase.id, domainObject.pluginBase.version, 
+			BundleDescription: {
+				new BundleDescriptor(domainObject.symbolicName, domainObject.version.toString, 
 					mapping.config.ID, mapping.ID, this)
 					as IMappedElementDescriptor<T>
 			}
-			PluginDependency: {
-				new PluginDependencyDescriptor(
-					domainObject.owner.pluginBase.id,
-					domainObject.owner.pluginBase.version, 
-					domainObject.dependency.pluginBase.id,
+			BundleDependency: {
+				new BundleDependencyDescriptor(
+					domainObject.kind,
+					domainObject.owner.symbolicName,
+					domainObject.owner.version.toString, 
+					domainObject.dependency.symbolicName,
 					domainObject.versionRange.toString,
 					mapping.config.ID, mapping.ID,
 					this) as IMappedElementDescriptor<T>

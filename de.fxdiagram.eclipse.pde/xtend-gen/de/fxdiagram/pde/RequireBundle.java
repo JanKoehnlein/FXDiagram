@@ -1,25 +1,30 @@
 package de.fxdiagram.pde;
 
-import de.fxdiagram.pde.PluginDependency;
-import de.fxdiagram.pde.PluginUtil;
+import de.fxdiagram.pde.BundleDependency;
 import org.eclipse.osgi.service.resolver.BaseDescription;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.BundleSpecification;
 import org.eclipse.osgi.service.resolver.VersionRange;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @Data
 @SuppressWarnings("all")
-public class RequireBundle extends PluginDependency {
+public class RequireBundle extends BundleDependency {
   private final BundleSpecification required;
   
-  public IPluginModelBase getDependency() {
+  public BundleDependency.Kind getKind() {
+    return BundleDependency.Kind.REQUIRE_BUNDLE;
+  }
+  
+  public BundleDescription getDependency() {
     BaseDescription _supplier = this.required.getSupplier();
-    BundleDescription _supplier_1 = _supplier.getSupplier();
-    return PluginUtil.getPlugin(_supplier_1);
+    BundleDescription _supplier_1 = null;
+    if (_supplier!=null) {
+      _supplier_1=_supplier.getSupplier();
+    }
+    return _supplier_1;
   }
   
   public VersionRange getVersionRange() {
@@ -41,7 +46,7 @@ public class RequireBundle extends PluginDependency {
     return this.required.isOptional();
   }
   
-  public RequireBundle(final IPluginModelBase owner, final BundleSpecification required) {
+  public RequireBundle(final BundleDescription owner, final BundleSpecification required) {
     super(owner);
     this.required = required;
   }

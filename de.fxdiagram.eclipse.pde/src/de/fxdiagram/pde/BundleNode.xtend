@@ -2,11 +2,13 @@ package de.fxdiagram.pde
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.eclipse.behavior.LazyConnectionMappingBehavior
+import de.fxdiagram.eclipse.mapping.ConnectionMapping
+import de.fxdiagram.eclipse.shapes.BaseNode
+import de.fxdiagram.eclipse.shapes.INodeWithLazyMappings
 import de.fxdiagram.lib.animations.Inflator
 import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import de.fxdiagram.eclipse.behavior.LazyConnectionMappingBehavior
-import de.fxdiagram.eclipse.shapes.BaseNode
 import javafx.animation.ParallelTransition
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -22,17 +24,15 @@ import javafx.scene.text.Font
 import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
-import org.eclipse.pde.core.plugin.IPluginModelBase
+import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import de.fxdiagram.eclipse.shapes.INodeWithLazyMappings
-import de.fxdiagram.eclipse.mapping.ConnectionMapping
 
 @ModelNode('inflated')
-class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMappings {
+class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMappings {
 
 	@FxProperty boolean inflated = false
 
@@ -48,12 +48,12 @@ class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMapp
 	
 	Inflator detailsInflator
 	
-	new(PluginDescriptor descriptor) {
+	new(BundleDescriptor descriptor) {
 		super(descriptor)
 	}
 	
-	override PluginDescriptor getDomainObject() {
-		super.getDomainObject() as PluginDescriptor
+	override BundleDescriptor getDomainObject() {
+		super.getDomainObject() as BundleDescriptor
 	}
 	
 	override createNode() {
@@ -67,7 +67,7 @@ class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMapp
 						textOrigin = VPos.TOP
 						text = domainObject.symbolicName
 						val isSingleton = domainObject.withDomainObject[
-							bundleDescription.isSingleton
+							isSingleton
 						]
 						if(isSingleton) 
 							font = Font.font(font.family, FontWeight.BOLD, FontPosture.ITALIC, font.size * 1.1)
@@ -104,19 +104,19 @@ class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMapp
 			children += new Text => [
 				textOrigin = VPos.TOP
 				text = domainObject.withDomainObject[
-					pluginBase.getResourceString(pluginBase.name)
+					name
 				]
 			]
+//			children += new Text => [
+//				textOrigin = VPos.TOP
+//				text = domainObject.withDomainObject[
+//					pluginBase.getResourceString(pluginBase.providerName)
+//				]
+//			]
 			children += new Text => [
 				textOrigin = VPos.TOP
 				text = domainObject.withDomainObject[
-					pluginBase.getResourceString(pluginBase.providerName)
-				]
-			]
-			children += new Text => [
-				textOrigin = VPos.TOP
-				text = domainObject.withDomainObject[
-					bundleDescription.executionEnvironments.join(', ')
+					executionEnvironments.join(', ')
 				]
 			]
 		]

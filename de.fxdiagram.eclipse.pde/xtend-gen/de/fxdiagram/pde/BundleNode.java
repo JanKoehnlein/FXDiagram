@@ -14,7 +14,7 @@ import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.pde.AddDependencyPathAction;
-import de.fxdiagram.pde.PluginDescriptor;
+import de.fxdiagram.pde.BundleDescriptor;
 import java.util.Collections;
 import java.util.List;
 import javafx.animation.Animation;
@@ -43,8 +43,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.eclipse.osgi.service.resolver.BundleDescription;
-import org.eclipse.pde.core.plugin.IPluginBase;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -54,7 +52,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @ModelNode("inflated")
 @SuppressWarnings("all")
-public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithLazyMappings {
+public class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMappings {
   private Pane contentArea;
   
   private VBox titleArea;
@@ -69,13 +67,13 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
   
   private Inflator detailsInflator;
   
-  public PluginNode(final PluginDescriptor descriptor) {
+  public BundleNode(final BundleDescriptor descriptor) {
     super(descriptor);
   }
   
-  public PluginDescriptor getDomainObject() {
-    IMappedElementDescriptor<IPluginModelBase> _domainObject = super.getDomainObject();
-    return ((PluginDescriptor) _domainObject);
+  public BundleDescriptor getDomainObject() {
+    IMappedElementDescriptor<BundleDescription> _domainObject = super.getDomainObject();
+    return ((BundleDescriptor) _domainObject);
   }
   
   public Node createNode() {
@@ -99,14 +97,13 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
                 final Procedure1<Text> _function = new Procedure1<Text>() {
                   public void apply(final Text it) {
                     it.setTextOrigin(VPos.TOP);
-                    PluginDescriptor _domainObject = PluginNode.this.getDomainObject();
+                    BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
                     String _symbolicName = _domainObject.getSymbolicName();
                     it.setText(_symbolicName);
-                    PluginDescriptor _domainObject_1 = PluginNode.this.getDomainObject();
-                    final Function1<IPluginModelBase, Boolean> _function = new Function1<IPluginModelBase, Boolean>() {
-                      public Boolean apply(final IPluginModelBase it) {
-                        BundleDescription _bundleDescription = it.getBundleDescription();
-                        return Boolean.valueOf(_bundleDescription.isSingleton());
+                    BundleDescriptor _domainObject_1 = BundleNode.this.getDomainObject();
+                    final Function1<BundleDescription, Boolean> _function = new Function1<BundleDescription, Boolean>() {
+                      public Boolean apply(final BundleDescription it) {
+                        return Boolean.valueOf(it.isSingleton());
                       }
                     };
                     final Boolean isSingleton = _domainObject_1.<Boolean>withDomainObject(_function);
@@ -130,15 +127,15 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
                   }
                 };
                 Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-                _children.add((PluginNode.this.nameLabel = _doubleArrow));
+                _children.add((BundleNode.this.nameLabel = _doubleArrow));
               }
             };
             VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-            _children.add((PluginNode.this.titleArea = _doubleArrow));
+            _children.add((BundleNode.this.titleArea = _doubleArrow));
           }
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-        _children.add((PluginNode.this.contentArea = _doubleArrow));
+        _children.add((BundleNode.this.contentArea = _doubleArrow));
         Color _rgb = Color.rgb(158, 188, 227);
         Stop _stop = new Stop(0, _rgb);
         Color _rgb_1 = Color.rgb(220, 230, 255);
@@ -166,7 +163,7 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
-            PluginDescriptor _domainObject = PluginNode.this.getDomainObject();
+            BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
             String _version = _domainObject.getVersion();
             it.setText(_version);
             Font _font = it.getFont();
@@ -179,7 +176,7 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
           }
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add((PluginNode.this.versionLabel = _doubleArrow));
+        _children.add((BundleNode.this.versionLabel = _doubleArrow));
       }
     };
     VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
@@ -197,13 +194,10 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
         final Procedure1<Text> _function = new Procedure1<Text>() {
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
-            PluginDescriptor _domainObject = PluginNode.this.getDomainObject();
-            final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
-              public String apply(final IPluginModelBase it) {
-                IPluginBase _pluginBase = it.getPluginBase();
-                IPluginBase _pluginBase_1 = it.getPluginBase();
-                String _name = _pluginBase_1.getName();
-                return _pluginBase.getResourceString(_name);
+            BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+            final Function1<BundleDescription, String> _function = new Function1<BundleDescription, String>() {
+              public String apply(final BundleDescription it) {
+                return it.getName();
               }
             };
             String _withDomainObject = _domainObject.<String>withDomainObject(_function);
@@ -217,13 +211,11 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
         final Procedure1<Text> _function_1 = new Procedure1<Text>() {
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
-            PluginDescriptor _domainObject = PluginNode.this.getDomainObject();
-            final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
-              public String apply(final IPluginModelBase it) {
-                IPluginBase _pluginBase = it.getPluginBase();
-                IPluginBase _pluginBase_1 = it.getPluginBase();
-                String _providerName = _pluginBase_1.getProviderName();
-                return _pluginBase.getResourceString(_providerName);
+            BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+            final Function1<BundleDescription, String> _function = new Function1<BundleDescription, String>() {
+              public String apply(final BundleDescription it) {
+                String[] _executionEnvironments = it.getExecutionEnvironments();
+                return IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(_executionEnvironments)), ", ");
               }
             };
             String _withDomainObject = _domainObject.<String>withDomainObject(_function);
@@ -232,25 +224,6 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
         };
         Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_1);
         _children_1.add(_doubleArrow_1);
-        ObservableList<Node> _children_2 = it.getChildren();
-        Text _text_2 = new Text();
-        final Procedure1<Text> _function_2 = new Procedure1<Text>() {
-          public void apply(final Text it) {
-            it.setTextOrigin(VPos.TOP);
-            PluginDescriptor _domainObject = PluginNode.this.getDomainObject();
-            final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
-              public String apply(final IPluginModelBase it) {
-                BundleDescription _bundleDescription = it.getBundleDescription();
-                String[] _executionEnvironments = _bundleDescription.getExecutionEnvironments();
-                return IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(_executionEnvironments)), ", ");
-              }
-            };
-            String _withDomainObject = _domainObject.<String>withDomainObject(_function);
-            it.setText(_withDomainObject);
-          }
-        };
-        Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text_2, _function_2);
-        _children_2.add(_doubleArrow_2);
       }
     };
     VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_1);
@@ -261,7 +234,7 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
         MouseButton _button = it.getButton();
         boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
         if (_equals) {
-          PluginNode.this.toggleInflated();
+          BundleNode.this.toggleInflated();
         }
       }
     };
@@ -295,10 +268,10 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
         final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
           public void apply(final ParallelTransition it) {
             ObservableList<Animation> _children = it.getChildren();
-            Transition _inflateAnimation = PluginNode.this.titleInflator.getInflateAnimation();
+            Transition _inflateAnimation = BundleNode.this.titleInflator.getInflateAnimation();
             _children.add(_inflateAnimation);
             ObservableList<Animation> _children_1 = it.getChildren();
-            Transition _inflateAnimation_1 = PluginNode.this.detailsInflator.getInflateAnimation();
+            Transition _inflateAnimation_1 = BundleNode.this.detailsInflator.getInflateAnimation();
             _children_1.add(_inflateAnimation_1);
             it.play();
           }
@@ -314,10 +287,10 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
         final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
           public void apply(final ParallelTransition it) {
             ObservableList<Animation> _children = it.getChildren();
-            Transition _deflateAnimation = PluginNode.this.titleInflator.getDeflateAnimation();
+            Transition _deflateAnimation = BundleNode.this.titleInflator.getDeflateAnimation();
             _children.add(_deflateAnimation);
             ObservableList<Animation> _children_1 = it.getChildren();
-            Transition _deflateAnimation_1 = PluginNode.this.detailsInflator.getDeflateAnimation();
+            Transition _deflateAnimation_1 = BundleNode.this.detailsInflator.getDeflateAnimation();
             _children_1.add(_deflateAnimation_1);
             it.play();
           }
@@ -336,7 +309,7 @@ public class PluginNode extends BaseNode<IPluginModelBase> implements INodeWithL
   /**
    * Automatically generated by @ModelNode. Needed for deserialization.
    */
-  public PluginNode() {
+  public BundleNode() {
   }
   
   public void populate(final ModelElementImpl modelElement) {

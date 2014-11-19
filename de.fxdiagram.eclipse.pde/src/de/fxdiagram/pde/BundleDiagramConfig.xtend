@@ -11,61 +11,62 @@ import de.fxdiagram.eclipse.shapes.BaseConnection
 import org.eclipse.pde.core.plugin.IPluginModelBase
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
-import static extension de.fxdiagram.pde.PluginUtil.*
+import org.eclipse.osgi.service.resolver.BundleDescription
+import static extension de.fxdiagram.pde.BundleUtil.*
 
-class PluginDiagramConfig extends AbstractDiagramConfig {
+class BundleDiagramConfig extends AbstractDiagramConfig {
 
 	override protected createDomainObjectProvider() {
-		new PluginDescriptorProvider
+		new BundleDescriptorProvider
 	}
 	
-	val pluginNode = new NodeMapping<IPluginModelBase>(this, "pluginNode") {
+	val pluginNode = new NodeMapping<BundleDescription>(this, "pluginNode") {
 		
-		override createNode(IMappedElementDescriptor<IPluginModelBase> descriptor) {
-			new PluginNode(descriptor as PluginDescriptor)
+		override createNode(IMappedElementDescriptor<BundleDescription> descriptor) {
+			new BundleNode(descriptor as BundleDescriptor)
 		}
 		
 		override calls() {
-			dependencyConnection.outConnectionForEach[ 
-				dependencies
+			dependencyConnection.outConnectionForEach [
+				bundleDependencies
 			].makeLazy[getArrowButton("Add dependency")]
-			inverseDependencyConnection.inConnectionForEach[ 
-				inverseDependencies
+			inverseDependencyConnection.inConnectionForEach [
+				inverseBundleDependencies
 			].makeLazy[getInverseArrowButton("Add inverse dependency")]
 		}
 	}
 	
 	def getPluginNode() { pluginNode }
 	
-	val dependencyConnection = new ConnectionMapping<PluginDependency>(this, "dependencyConnection") {
+	val dependencyConnection = new ConnectionMapping<BundleDependency>(this, "dependencyConnection") {
 		override calls() {
 			pluginNode.target [
 				dependency
 			]
 		}
 		
-		override createConnection(IMappedElementDescriptor<PluginDependency> descriptor) {
+		override createConnection(IMappedElementDescriptor<BundleDependency> descriptor) {
 			createPluginImportConnection(descriptor)
 		}
 	}  
 	
 	def getDependencyConnection() { dependencyConnection }
 
-	val inverseDependencyConnection = new ConnectionMapping<PluginDependency>(this, "inverseDependencyConnection") {
+	val inverseDependencyConnection = new ConnectionMapping<BundleDependency>(this, "inverseDependencyConnection") {
 		override calls() {
 			pluginNode.source [
 				owner
 			]
 		}
 		
-		override createConnection(IMappedElementDescriptor<PluginDependency> descriptor) {
+		override createConnection(IMappedElementDescriptor<BundleDependency> descriptor) {
 			createPluginImportConnection(descriptor)
 		}
 	}  
 
 	def getInverseDependencyConnection() { inverseDependencyConnection }
 	
-	protected def createPluginImportConnection(IMappedElementDescriptor<PluginDependency> descriptor) {
+	protected def createPluginImportConnection(IMappedElementDescriptor<BundleDependency> descriptor) {
 		new BaseConnection(descriptor) => [ connection |
 			val label = new XConnectionLabel(connection)
 			descriptor.withDomainObject [
