@@ -1,8 +1,10 @@
 package de.fxdiagram.pde;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.anchors.CircleArrowHead;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.eclipse.mapping.AbstractDiagramConfig;
@@ -139,6 +141,12 @@ public class BundleDiagramConfig extends AbstractDiagramConfig {
               if (_not_1) {
                 LineArrowHead _lineArrowHead = new LineArrowHead(connection, false);
                 connection.setTargetArrowHead(_lineArrowHead);
+              }
+              BundleDependency.Kind _kind = it.getKind();
+              boolean _equals = Objects.equal(_kind, BundleDependency.Kind.FRAGMENT_HOST);
+              if (_equals) {
+                CircleArrowHead _circleArrowHead = new CircleArrowHead(connection, true);
+                connection.setSourceArrowHead(_circleArrowHead);
               }
               _xblockexpression = null;
             }

@@ -14,9 +14,7 @@ class BundleUtil {
 	static val LOG = Logger.getLogger(BundleUtil)
 	
 	static def getDependencyBundles(BundleDescription bundle) {
-		(bundle.resolvedRequires + bundle.resolvedImports.map[bundle] + bundle.fragments).filter [
-			supplier?.supplier != null
-		]
+		bundle.resolvedRequires + bundle.resolvedImports.map[bundle] + bundle.fragments
 	} 
 	
 	static def getAllDependencyBundles(BundleDescription bundle) {
@@ -91,7 +89,7 @@ class BundleUtil {
 			result += new PackageImport(bundle, it)
 		]
 		bundle.fragments.forEach [
-			result += new FragmentHost(bundle, it, host)
+			result += new FragmentHost(bundle, it)
 		]
 		return result.filter [ dependency != null ]
 	}
@@ -109,9 +107,8 @@ class BundleUtil {
 			].forEach[
 				result += new PackageImport(owner, it)					
 			] 
-			if(owner.host != null) {
-				result += new FragmentHost(owner, bundle, owner.host)
-			}
+			if(bundle.host?.supplier?.supplier == owner) 
+				result += new FragmentHost(owner, bundle)
 		]
 		return result.filter [ dependency != null ]
 	}
@@ -151,15 +148,15 @@ class BundleUtil {
 			}
 			case FRAGMENT_HOST: {
 				val fragment = owner.fragments.findFirst [
-					symbolicName == dependencyID && dependencyVersionRange.isIncluded(version)
+					symbolicName == dependencyID
 				]
 				if(fragment != null)
-					return new FragmentHost(owner, fragment, fragment.host)
-				return null
+					return new FragmentHost(owner, fragment)
 			}
 			case UNQUALIFIED: {
 				new UnqualifiedDependency(owner, findCompatibleBundle(dependencyID, dependencyVersionRange.toString))
 			}
 		}
+		return null
 	}
 }

@@ -113,19 +113,18 @@ class RequireBundle extends BundleDependency {
 
 @Data
 class FragmentHost extends BundleDependency {
-	BundleDescription host
-	HostSpecification hostSpecification
+	BundleDescription fragment
 
 	override getKind() {
 		FRAGMENT_HOST
 	}
 
 	override getDependency() {
-		hostSpecification.supplier?.supplier
+		fragment
 	}
 
 	override getVersionRange() {
-		hostSpecification.versionRange ?: VersionRange.emptyRange
+		VersionRange.emptyRange
 	}
 
 	override isReexport() {

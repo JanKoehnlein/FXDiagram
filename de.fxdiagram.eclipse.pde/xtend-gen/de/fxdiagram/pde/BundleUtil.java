@@ -32,7 +32,6 @@ import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
-import org.osgi.framework.Version;
 
 @SuppressWarnings("all")
 public class BundleUtil {
@@ -49,18 +48,7 @@ public class BundleUtil {
     List<BundleDescription> _map = ListExtensions.<ExportPackageDescription, BundleDescription>map(((List<ExportPackageDescription>)Conversions.doWrapArray(_resolvedImports)), _function);
     Iterable<BundleDescription> _plus = Iterables.<BundleDescription>concat(((Iterable<? extends BundleDescription>)Conversions.doWrapArray(_resolvedRequires)), _map);
     BundleDescription[] _fragments = bundle.getFragments();
-    Iterable<BundleDescription> _plus_1 = Iterables.<BundleDescription>concat(_plus, ((Iterable<? extends BundleDescription>)Conversions.doWrapArray(_fragments)));
-    final Function1<BundleDescription, Boolean> _function_1 = new Function1<BundleDescription, Boolean>() {
-      public Boolean apply(final BundleDescription it) {
-        BundleDescription _supplier = it.getSupplier();
-        BundleDescription _supplier_1 = null;
-        if (_supplier!=null) {
-          _supplier_1=_supplier.getSupplier();
-        }
-        return Boolean.valueOf((!Objects.equal(_supplier_1, null)));
-      }
-    };
-    return IterableExtensions.<BundleDescription>filter(_plus_1, _function_1);
+    return Iterables.<BundleDescription>concat(_plus, ((Iterable<? extends BundleDescription>)Conversions.doWrapArray(_fragments)));
   }
   
   public static HashSet<BundleDescription> getAllDependencyBundles(final BundleDescription bundle) {
@@ -203,8 +191,7 @@ public class BundleUtil {
     BundleDescription[] _fragments = bundle.getFragments();
     final Consumer<BundleDescription> _function_2 = new Consumer<BundleDescription>() {
       public void accept(final BundleDescription it) {
-        HostSpecification _host = it.getHost();
-        FragmentHost _fragmentHost = new FragmentHost(bundle, it, _host);
+        FragmentHost _fragmentHost = new FragmentHost(bundle, it);
         result.add(_fragmentHost);
       }
     };
@@ -261,11 +248,18 @@ public class BundleUtil {
           }
         };
         _filter_1.forEach(_function_3);
-        HostSpecification _host = owner.getHost();
-        boolean _notEquals = (!Objects.equal(_host, null));
-        if (_notEquals) {
-          HostSpecification _host_1 = owner.getHost();
-          FragmentHost _fragmentHost = new FragmentHost(owner, bundle, _host_1);
+        HostSpecification _host = bundle.getHost();
+        BaseDescription _supplier = null;
+        if (_host!=null) {
+          _supplier=_host.getSupplier();
+        }
+        BundleDescription _supplier_1 = null;
+        if (_supplier!=null) {
+          _supplier_1=_supplier.getSupplier();
+        }
+        boolean _equals = Objects.equal(_supplier_1, owner);
+        if (_equals) {
+          FragmentHost _fragmentHost = new FragmentHost(owner, bundle);
           result.add(_fragmentHost);
         }
       }
@@ -307,7 +301,6 @@ public class BundleUtil {
   }
   
   public static BundleDependency findBundleDependency(final BundleDependency.Kind kind, final BundleDescription owner, final String dependencyID, final VersionRange dependencyVersionRange) {
-    UnqualifiedDependency _switchResult = null;
     if (kind != null) {
       switch (kind) {
         case REQUIRE_BUNDLE:
@@ -364,35 +357,25 @@ public class BundleUtil {
           BundleDescription[] _fragments = owner.getFragments();
           final Function1<BundleDescription, Boolean> _function_2 = new Function1<BundleDescription, Boolean>() {
             public Boolean apply(final BundleDescription it) {
-              boolean _and = false;
               String _symbolicName = it.getSymbolicName();
-              boolean _equals = Objects.equal(_symbolicName, dependencyID);
-              if (!_equals) {
-                _and = false;
-              } else {
-                Version _version = it.getVersion();
-                boolean _isIncluded = dependencyVersionRange.isIncluded(_version);
-                _and = _isIncluded;
-              }
-              return Boolean.valueOf(_and);
+              return Boolean.valueOf(Objects.equal(_symbolicName, dependencyID));
             }
           };
           final BundleDescription fragment = IterableExtensions.<BundleDescription>findFirst(((Iterable<BundleDescription>)Conversions.doWrapArray(_fragments)), _function_2);
           boolean _notEquals_2 = (!Objects.equal(fragment, null));
           if (_notEquals_2) {
-            HostSpecification _host = fragment.getHost();
-            return new FragmentHost(owner, fragment, _host);
+            return new FragmentHost(owner, fragment);
           }
-          return null;
+          break;
         case UNQUALIFIED:
           String _string = dependencyVersionRange.toString();
           BundleDescription _findCompatibleBundle = BundleUtil.findCompatibleBundle(dependencyID, _string);
-          _switchResult = new UnqualifiedDependency(owner, _findCompatibleBundle);
+          new UnqualifiedDependency(owner, _findCompatibleBundle);
           break;
         default:
           break;
       }
     }
-    return _switchResult;
+    return null;
   }
 }

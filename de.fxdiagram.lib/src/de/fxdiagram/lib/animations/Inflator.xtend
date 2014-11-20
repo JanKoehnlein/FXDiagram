@@ -73,6 +73,7 @@ class Inflator {
 			children += deflate
 			onFinished = [
 				isInflated = false
+				host.layout
 			]
 		]					
 	}

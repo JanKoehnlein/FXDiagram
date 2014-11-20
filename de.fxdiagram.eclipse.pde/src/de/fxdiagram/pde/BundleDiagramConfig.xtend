@@ -13,6 +13,7 @@ import org.eclipse.pde.core.plugin.IPluginModelBase
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import org.eclipse.osgi.service.resolver.BundleDescription
 import static extension de.fxdiagram.pde.BundleUtil.*
+import de.fxdiagram.core.anchors.CircleArrowHead
 
 class BundleDiagramConfig extends AbstractDiagramConfig {
 
@@ -76,6 +77,8 @@ class BundleDiagramConfig extends AbstractDiagramConfig {
 			 		connection.strokeDashArray.setAll(5.0, 5.0)
 			 	if(!reexport)
 			 		connection.targetArrowHead = new LineArrowHead(connection, false)
+			 	if(kind == BundleDependency.Kind.FRAGMENT_HOST) 
+			 		connection.sourceArrowHead = new CircleArrowHead(connection, true)
 			 	null
 			]
 		]
