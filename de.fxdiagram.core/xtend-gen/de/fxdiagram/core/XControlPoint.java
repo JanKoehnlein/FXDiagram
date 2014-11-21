@@ -4,21 +4,18 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.images.Magnet;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
-import java.net.URL;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
@@ -26,7 +23,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtend2.lib.StringConcatenation;
-import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -56,7 +52,7 @@ public class XControlPoint extends XShape implements XModelProvider {
           };
           return ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
         case CONTROL_POINT:
-          return this.newMagnet();
+          return new Magnet();
         case INTERPOLATED:
           Circle _circle_1 = new Circle();
           final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
@@ -220,24 +216,6 @@ public class XControlPoint extends XShape implements XModelProvider {
       _xifexpression = _xblockexpression;
     }
     return _xifexpression;
-  }
-  
-  protected Node newMagnet() {
-    Group _group = new Group();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      public void apply(final Group it) {
-        try {
-          ObservableList<Node> _children = it.getChildren();
-          String _uRI = ClassLoaderExtensions.toURI(XControlPoint.this, "images/Magnet.fxml");
-          URL _uRL = new URL(_uRI);
-          Node _load = FXMLLoader.<Node>load(_uRL);
-          _children.add(_load);
-        } catch (Throwable _e) {
-          throw Exceptions.sneakyThrow(_e);
-        }
-      }
-    };
-    return ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
   }
   
   public void populate(final ModelElementImpl modelElement) {

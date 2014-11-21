@@ -3,11 +3,8 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.MoveBehavior
-import java.net.URL
+import de.fxdiagram.core.images.Magnet
 import java.util.List
-import javafx.fxml.FXMLLoader
-import javafx.scene.Group
-import javafx.scene.Node
 import javafx.scene.effect.DropShadow
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
@@ -18,7 +15,6 @@ import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
-import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @ModelNode('layoutX', 'layoutY', 'type')
 class XControlPoint extends XShape {
@@ -35,7 +31,7 @@ class XControlPoint extends XShape {
 				]
 			}
 			case CONTROL_POINT: {
-				return newMagnet
+				return new Magnet
 			}
 			case INTERPOLATED: {
 				return new Circle => [
@@ -106,12 +102,6 @@ class XControlPoint extends XShape {
 		}
 	}
 
-	protected def Node newMagnet() {
-		new Group => [
-			children += FXMLLoader.<Node>load(new URL(this.toURI('images/Magnet.fxml')))
-		]
-	}
-	
 	enum Type {
 		ANCHOR,
 		INTERPOLATED,
