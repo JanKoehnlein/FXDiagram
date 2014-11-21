@@ -16,6 +16,14 @@
       [Enter License Description here.]
    </license>
 
+   <includes
+         id="de.fxdiagram.base.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="de.fxdiagram.eclipse.feature"
+         version="0.0.0"/>
+
    <plugin
          id="de.fxdiagram.xtext.domainmodel"
          download-size="0"
@@ -30,27 +38,6 @@
          install-size="0"
          version="0.0.0"
          fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.eclipse"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.eclipse.example"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.eclipse.pde"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
          unpack="false"/>
 
    <plugin
