@@ -22,7 +22,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.release"
-      value="http://download.eclipse.org/efxclipse/updates-released/1.0.0/site"/>
+      value="http://download.eclipse.org/efxclipse/updates-released/1.1.0/site"/>
   <setupTask
       xsi:type="setup:ResourceCreationTask"
       excludedTriggers="STARTUP MANUAL"
