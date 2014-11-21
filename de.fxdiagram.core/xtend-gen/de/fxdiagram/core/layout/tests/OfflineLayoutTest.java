@@ -32,7 +32,6 @@ public class OfflineLayoutTest extends Application {
     };
     final VBox root = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
     final Scene scene = new Scene(root);
-    root.applyCss();
     root.autosize();
     double _width = root.getWidth();
     String _plus = (Double.valueOf(_width) + " ");

@@ -21,7 +21,7 @@ class OfflineLayoutTest extends Application {
 			children += new Text('barbar')
 		]
 		val scene = new Scene(root)
-		root.applyCss
+//		root.applyCss
 //		root.layout
 		root.autosize
 		println(root.width+' '+root.height)
