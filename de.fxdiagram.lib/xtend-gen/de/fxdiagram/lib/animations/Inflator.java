@@ -150,7 +150,6 @@ public class Inflator {
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
             public void handle(final ActionEvent it) {
               Inflator.this.isInflated = false;
-              Inflator.this.host.layout();
             }
           };
           it.setOnFinished(_function);
