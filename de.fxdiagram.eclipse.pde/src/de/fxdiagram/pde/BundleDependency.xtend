@@ -2,7 +2,6 @@ package de.fxdiagram.pde
 
 import org.eclipse.osgi.service.resolver.BundleDescription
 import org.eclipse.osgi.service.resolver.BundleSpecification
-import org.eclipse.osgi.service.resolver.HostSpecification
 import org.eclipse.osgi.service.resolver.ImportPackageSpecification
 import org.eclipse.osgi.service.resolver.VersionRange
 import org.eclipse.xtend.lib.annotations.Data

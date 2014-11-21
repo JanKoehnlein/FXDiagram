@@ -27,6 +27,15 @@ class AddDependencyPathAction extends RapidButtonAction {
 		this.isInverse = isInverse 
 	}
 
+	override isEnabled(XNode host) {
+		(host.domainObject as BundleDescriptor).withDomainObject[
+			if(isInverse) 
+				!dependentBundles.empty
+			else 
+				!dependencyBundles.empty
+		]
+	}
+	
 	override perform(RapidButton button) {
 		val descriptor = button.host.domainObject as BundleDescriptor
 		descriptor.withDomainObject [
@@ -50,6 +59,9 @@ class AddDependencyPathAction extends RapidButtonAction {
 					removeConnection
 				val diagram = host.diagram
 				val additionalShapes = <XShape>newLinkedHashSet()
+				val descriptor2node = diagram.nodes.toMap[domainObject]
+				descriptor2node.put(choice.domainObject, choice)
+				val descriptor2connection = diagram.connections.toMap[domainObject] 
 				(choice.domainObject as BundleDescriptor).withDomainObject [
 					chosenBundle |
 					if (isInverse)
@@ -58,31 +70,28 @@ class AddDependencyPathAction extends RapidButtonAction {
 						hostBundle.getAllBundleDependencies(chosenBundle)
 				].forEach [ bundleDependency |
 					val owner = provider.createMappedElementDescriptor(bundleDependency.owner, config.pluginNode) as BundleDescriptor
-					var sourceNode = (diagram.nodes + additionalShapes + #[choice]).filter(XNode).findFirst[
-						domainObject == owner
-					]
+					var sourceNode = descriptor2node.get(owner)
 					if (sourceNode == null) {
 						sourceNode = config.pluginNode.createNode(owner)
 						additionalShapes += sourceNode
+						descriptor2node.put(owner, sourceNode)
 					}
 					val dependency = provider.createMappedElementDescriptor(bundleDependency.dependency, config.pluginNode) as BundleDescriptor
-					var targetNode = (diagram.nodes + additionalShapes + #[choice]).filter(XNode).findFirst[
-						domainObject == dependency
-					]
+					var targetNode = descriptor2node.get(dependency)
 					if (targetNode == null) {
 						targetNode = config.pluginNode.createNode(dependency)
 						additionalShapes += targetNode
+						descriptor2node.put(dependency, targetNode)
 					}
 					val connectionDescriptor = provider.createMappedElementDescriptor(bundleDependency,
 						config.dependencyConnection)
-					var connection = (diagram.connections + additionalShapes).filter(XConnection).findFirst[
-						domainObject == connectionDescriptor
-					]
+					var connection = descriptor2connection.get(connectionDescriptor)
 					if (connection == null) {
 						connection = config.dependencyConnection.createConnection(connectionDescriptor)
 						connection.source = sourceNode
 						connection.target = targetNode
 						additionalShapes += connection
+						descriptor2connection.put(connectionDescriptor, connection)
 					}
 				]
 				return additionalShapes
@@ -91,7 +100,7 @@ class AddDependencyPathAction extends RapidButtonAction {
 			override protected nodeChosen(XNode choice) {
 				super.nodeChosen(choice)
 				if (choice != null)
-					host.root.commandStack.execute(
+					root.commandStack.execute(
 						new Layouter().createLayoutCommand(DOT, host.root.diagram, 500.millis))
 			}
 		}

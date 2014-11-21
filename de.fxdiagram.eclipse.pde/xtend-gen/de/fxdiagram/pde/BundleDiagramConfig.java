@@ -26,7 +26,6 @@ import javafx.scene.Node;
 import javafx.scene.text.Text;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.VersionRange;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -162,7 +161,7 @@ public class BundleDiagramConfig extends AbstractDiagramConfig {
   protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
     boolean _matched = false;
     if (!_matched) {
-      if (domainArgument instanceof IPluginModelBase) {
+      if (domainArgument instanceof BundleDescription) {
         _matched=true;
         acceptor.add(this.pluginNode);
       }

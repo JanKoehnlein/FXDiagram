@@ -13,10 +13,6 @@ class BundleUtil {
 	
 	static val LOG = Logger.getLogger(BundleUtil)
 	
-	static def getDependencyBundles(BundleDescription bundle) {
-		bundle.resolvedRequires + bundle.resolvedImports.map[bundle] + bundle.fragments
-	} 
-	
 	static def getAllDependencyBundles(BundleDescription bundle) {
 		val result = newHashSet
 		bundle.addDependencies(result)
@@ -30,6 +26,10 @@ class BundleUtil {
 		]
 	}
 	
+	static def getDependencyBundles(BundleDescription bundle) {
+		bundle.resolvedRequires + bundle.resolvedImports.map[bundle] + bundle.fragments
+	} 
+	
 	static def getAllDependentBundles(BundleDescription bundle) {
 		val result = newHashSet
 		bundle.addInverseDependencies(result)
@@ -37,11 +37,17 @@ class BundleUtil {
 	}
 	
 	protected static def void addInverseDependencies(BundleDescription bundle, Set<BundleDescription> inverseDependencies) {
-		bundle.dependents.forEach [
+		bundle.dependentBundles.forEach [
 			if(inverseDependencies.add(it)) 
 				addInverseDependencies(inverseDependencies)
 		]
 	}
+	
+	static def getDependentBundles(BundleDescription bundle) {
+		bundle.dependents.filter[host?.supplier?.supplier != bundle]
+	} 
+	
+	
 	
 	static def getAllBundleDependencies(BundleDescription source, BundleDescription target) {
 		val paths = <BundleDependencyPath>newLinkedList

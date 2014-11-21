@@ -31,10 +31,9 @@ import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleDiagramConfig;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.function.Consumer;
+import java.util.Map;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.util.Duration;
@@ -42,6 +41,7 @@ import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AddDependencyPathAction extends RapidButtonAction {
@@ -49,6 +49,26 @@ public class AddDependencyPathAction extends RapidButtonAction {
   
   public AddDependencyPathAction(final boolean isInverse) {
     this.isInverse = isInverse;
+  }
+  
+  public boolean isEnabled(final XNode host) {
+    DomainObjectDescriptor _domainObject = host.getDomainObject();
+    final Function1<BundleDescription, Boolean> _function = new Function1<BundleDescription, Boolean>() {
+      public Boolean apply(final BundleDescription it) {
+        boolean _xifexpression = false;
+        if (AddDependencyPathAction.this.isInverse) {
+          Iterable<BundleDescription> _dependentBundles = BundleUtil.getDependentBundles(it);
+          boolean _isEmpty = IterableExtensions.isEmpty(_dependentBundles);
+          _xifexpression = (!_isEmpty);
+        } else {
+          Iterable<BundleDescription> _dependencyBundles = BundleUtil.getDependencyBundles(it);
+          boolean _isEmpty_1 = IterableExtensions.isEmpty(_dependencyBundles);
+          _xifexpression = (!_isEmpty_1);
+        }
+        return Boolean.valueOf(_xifexpression);
+      }
+    };
+    return (((BundleDescriptor) _domainObject).<Boolean>withDomainObject(_function)).booleanValue();
   }
   
   public void perform(final RapidButton button) {
@@ -92,8 +112,24 @@ public class AddDependencyPathAction extends RapidButtonAction {
           }
           final XDiagram diagram = CoreExtensions.getDiagram(host);
           final LinkedHashSet<XShape> additionalShapes = CollectionLiterals.<XShape>newLinkedHashSet();
+          ObservableList<XNode> _nodes = diagram.getNodes();
+          final Function1<XNode, DomainObjectDescriptor> _function = new Function1<XNode, DomainObjectDescriptor>() {
+            public DomainObjectDescriptor apply(final XNode it) {
+              return it.getDomainObject();
+            }
+          };
+          final Map<DomainObjectDescriptor, XNode> descriptor2node = IterableExtensions.<DomainObjectDescriptor, XNode>toMap(_nodes, _function);
           DomainObjectDescriptor _domainObject = choice.getDomainObject();
-          final Function1<BundleDescription, ArrayList<BundleDependency>> _function = new Function1<BundleDescription, ArrayList<BundleDependency>>() {
+          descriptor2node.put(_domainObject, choice);
+          ObservableList<XConnection> _connections = diagram.getConnections();
+          final Function1<XConnection, DomainObjectDescriptor> _function_1 = new Function1<XConnection, DomainObjectDescriptor>() {
+            public DomainObjectDescriptor apply(final XConnection it) {
+              return it.getDomainObject();
+            }
+          };
+          final Map<DomainObjectDescriptor, XConnection> descriptor2connection = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_connections, _function_1);
+          DomainObjectDescriptor _domainObject_1 = choice.getDomainObject();
+          final Function1<BundleDescription, ArrayList<BundleDependency>> _function_2 = new Function1<BundleDescription, ArrayList<BundleDependency>>() {
             public ArrayList<BundleDependency> apply(final BundleDescription chosenBundle) {
               ArrayList<BundleDependency> _xifexpression = null;
               if (AddDependencyPathAction.this.isInverse) {
@@ -104,65 +140,38 @@ public class AddDependencyPathAction extends RapidButtonAction {
               return _xifexpression;
             }
           };
-          ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObject).<ArrayList<BundleDependency>>withDomainObject(_function);
-          final Consumer<BundleDependency> _function_1 = new Consumer<BundleDependency>() {
-            public void accept(final BundleDependency bundleDependency) {
+          ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObject_1).<ArrayList<BundleDependency>>withDomainObject(_function_2);
+          final Procedure1<BundleDependency> _function_3 = new Procedure1<BundleDependency>() {
+            public void apply(final BundleDependency bundleDependency) {
               BundleDescription _owner = bundleDependency.getOwner();
               NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
               IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(_owner, _pluginNode);
               final BundleDescriptor owner = ((BundleDescriptor) _createMappedElementDescriptor);
-              ObservableList<XNode> _nodes = diagram.getNodes();
-              Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, additionalShapes);
-              Iterable<XShape> _plus_1 = Iterables.<XShape>concat(_plus, Collections.<XNode>unmodifiableList(CollectionLiterals.<XNode>newArrayList(choice)));
-              Iterable<XNode> _filter = Iterables.<XNode>filter(_plus_1, XNode.class);
-              final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
-                public Boolean apply(final XNode it) {
-                  DomainObjectDescriptor _domainObject = it.getDomainObject();
-                  return Boolean.valueOf(Objects.equal(_domainObject, owner));
-                }
-              };
-              XNode sourceNode = IterableExtensions.<XNode>findFirst(_filter, _function);
+              XNode sourceNode = descriptor2node.get(owner);
               boolean _equals = Objects.equal(sourceNode, null);
               if (_equals) {
                 NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
                 XNode _createNode = _pluginNode_1.createNode(owner);
                 sourceNode = _createNode;
                 additionalShapes.add(sourceNode);
+                descriptor2node.put(owner, sourceNode);
               }
               BundleDescription _dependency = bundleDependency.getDependency();
               NodeMapping<BundleDescription> _pluginNode_2 = config.getPluginNode();
               IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor_1 = provider.<BundleDescription>createMappedElementDescriptor(_dependency, _pluginNode_2);
               final BundleDescriptor dependency = ((BundleDescriptor) _createMappedElementDescriptor_1);
-              ObservableList<XNode> _nodes_1 = diagram.getNodes();
-              Iterable<XShape> _plus_2 = Iterables.<XShape>concat(_nodes_1, additionalShapes);
-              Iterable<XShape> _plus_3 = Iterables.<XShape>concat(_plus_2, Collections.<XNode>unmodifiableList(CollectionLiterals.<XNode>newArrayList(choice)));
-              Iterable<XNode> _filter_1 = Iterables.<XNode>filter(_plus_3, XNode.class);
-              final Function1<XNode, Boolean> _function_1 = new Function1<XNode, Boolean>() {
-                public Boolean apply(final XNode it) {
-                  DomainObjectDescriptor _domainObject = it.getDomainObject();
-                  return Boolean.valueOf(Objects.equal(_domainObject, dependency));
-                }
-              };
-              XNode targetNode = IterableExtensions.<XNode>findFirst(_filter_1, _function_1);
+              XNode targetNode = descriptor2node.get(dependency);
               boolean _equals_1 = Objects.equal(targetNode, null);
               if (_equals_1) {
                 NodeMapping<BundleDescription> _pluginNode_3 = config.getPluginNode();
                 XNode _createNode_1 = _pluginNode_3.createNode(dependency);
                 targetNode = _createNode_1;
                 additionalShapes.add(targetNode);
+                descriptor2node.put(dependency, targetNode);
               }
               ConnectionMapping<BundleDependency> _dependencyConnection = config.getDependencyConnection();
               final IMappedElementDescriptor<BundleDependency> connectionDescriptor = provider.<BundleDependency>createMappedElementDescriptor(bundleDependency, _dependencyConnection);
-              ObservableList<XConnection> _connections = diagram.getConnections();
-              Iterable<XShape> _plus_4 = Iterables.<XShape>concat(_connections, additionalShapes);
-              Iterable<XConnection> _filter_2 = Iterables.<XConnection>filter(_plus_4, XConnection.class);
-              final Function1<XConnection, Boolean> _function_2 = new Function1<XConnection, Boolean>() {
-                public Boolean apply(final XConnection it) {
-                  DomainObjectDescriptor _domainObject = it.getDomainObject();
-                  return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
-                }
-              };
-              XConnection connection = IterableExtensions.<XConnection>findFirst(_filter_2, _function_2);
+              XConnection connection = descriptor2connection.get(connectionDescriptor);
               boolean _equals_2 = Objects.equal(connection, null);
               if (_equals_2) {
                 ConnectionMapping<BundleDependency> _dependencyConnection_1 = config.getDependencyConnection();
@@ -171,10 +180,11 @@ public class AddDependencyPathAction extends RapidButtonAction {
                 connection.setSource(sourceNode);
                 connection.setTarget(targetNode);
                 additionalShapes.add(connection);
+                descriptor2connection.put(connectionDescriptor, connection);
               }
             }
           };
-          _withDomainObject.forEach(_function_1);
+          IterableExtensions.<BundleDependency>forEach(_withDomainObject, _function_3);
           return additionalShapes;
         }
         
@@ -182,7 +192,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
           super.nodeChosen(choice);
           boolean _notEquals = (!Objects.equal(choice, null));
           if (_notEquals) {
-            XRoot _root = CoreExtensions.getRoot(host);
+            XRoot _root = this.getRoot();
             CommandStack _commandStack = _root.getCommandStack();
             Layouter _layouter = new Layouter();
             XRoot _root_1 = CoreExtensions.getRoot(host);
@@ -208,8 +218,8 @@ public class AddDependencyPathAction extends RapidButtonAction {
         _xifexpression_1 = BundleUtil.getAllDependencyBundles(hostBundle);
       }
       final HashSet<BundleDescription> candidates = _xifexpression_1;
-      final Consumer<BundleDescription> _function_1 = new Consumer<BundleDescription>() {
-        public void accept(final BundleDescription it) {
+      final Procedure1<BundleDescription> _function_1 = new Procedure1<BundleDescription>() {
+        public void apply(final BundleDescription it) {
           NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
           IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
           final BundleDescriptor candidate = ((BundleDescriptor) _createMappedElementDescriptor);
@@ -218,7 +228,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
           chooser.addChoice(_createNode);
         }
       };
-      candidates.forEach(_function_1);
+      IterableExtensions.<BundleDescription>forEach(candidates, _function_1);
       root.setCurrentTool(chooser);
       _xblockexpression = null;
     }

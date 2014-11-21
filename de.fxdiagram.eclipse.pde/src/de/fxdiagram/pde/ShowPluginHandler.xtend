@@ -20,29 +20,29 @@ class ShowBundleHandler extends AbstractHandler {
 	override setEnabled(Object evaluationContext) {
 		if (evaluationContext instanceof IEvaluationContext) {
 			val selection = evaluationContext.getVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME)
-			baseEnabled = !selection.pluginBases.empty
+			baseEnabled = !selection.bundleDescriptions.empty
 		} else {
 			super.setEnabled(evaluationContext)
 		}
 	}
 	
-	protected def getPluginBases(Object selection) {
+	protected def getBundleDescriptions(Object selection) {
 		// TODO selection from plugin-dependencies
 		if(selection instanceof IStructuredSelection) 
-			return selection.iterator.filter(IAdaptable).map[getAdapter(IProject) as IProject].map[findModel].filterNull.toSet
+			return selection.iterator.filter(IAdaptable).map[getAdapter(IProject) as IProject].map[findModel.bundleDescription].filterNull.toSet
 		else
 			return #{}
 	}
 	
 	override execute(ExecutionEvent event) throws ExecutionException {
 		val selection = HandlerUtil.getActiveMenuSelection(event)
-		val pluginBases = selection.pluginBases
-		if(!pluginBases.empty) {
+		val bundleDescriptions = selection.bundleDescriptions
+		if(!bundleDescriptions.empty) {
 			val config = XDiagramConfig.Registry.getInstance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig") as BundleDiagramConfig
 			val page = PlatformUI.workbench.activeWorkbenchWindow.activePage
 			val view = page.showView("de.fxdiagram.eclipse.FXDiagramView")
 			if(view instanceof FXDiagramView) {
-				pluginBases.forEach[
+				bundleDescriptions.forEach[
 					val call = config.getEntryCalls(it).head
 					view.revealElement(it, call, page.activeEditor)
 				]
