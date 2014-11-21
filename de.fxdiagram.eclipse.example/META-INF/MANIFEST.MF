@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse
 Bundle-SymbolicName: de.fxdiagram.eclipse.example;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: de.fxdiagram.eclipse.Activator
+Bundle-Activator: de.fxdiagram.eclipse.example.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  de.fxdiagram.examples;bundle-version="1.0.0",
@@ -46,4 +46,5 @@ Import-Package: javafx.animation;version="2.2.0",
  javafx.stage;version="2.2.0",
  javafx.util;version="2.2.0",
  javafx.util.converter;version="2.2.0"
+Export-Package: de.fxdiagram.eclipse.example
 

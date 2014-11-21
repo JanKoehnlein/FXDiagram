@@ -6,8 +6,8 @@
       <view
             name="JavaFX Demo View"
             icon="icons/FXDiagram.png"
-            class="de.fxdiagram.eclipse.FXDiagramViewPart"
-            id="de.fxdiagram.eclipse.FXDiagramViewPart">
+            class="de.fxdiagram.eclipse.example.FXDiagramViewPart"
+            id="de.fxdiagram.eclipse.example.FXDiagramViewPart">
       </view>
    </extension>
 </plugin>
