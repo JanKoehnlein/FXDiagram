@@ -13,8 +13,24 @@ class BundleUtil {
 	
 	static val LOG = Logger.getLogger(BundleUtil)
 	
+	static boolean isConsiderFragments
+	 
 	static def isConsiderFragments() {
-		false
+		isConsiderFragments
+	}
+	
+	static def setConsiderFragments(boolean considerFragments) {
+		isConsiderFragments = considerFragments
+	}
+	
+	static boolean isConsiderOptional
+	
+	static def isConsiderOptional() {
+		isConsiderOptional
+	}
+	
+	static def setConsiderOptional(boolean considerOptional) {
+		isConsiderOptional = considerOptional	
 	}
 	
 	static def getAllDependencyBundles(BundleDescription bundle) {
@@ -105,7 +121,7 @@ class BundleUtil {
 				result += new FragmentHost(bundle, it)
 			]
 		}
-		return result.filter [ dependency != null ]
+		return result.filter [ dependency != null && (considerOptional || !optional) ]
 	}
 	
 	static def getInverseBundleDependencies(BundleDescription bundle) {
@@ -124,7 +140,7 @@ class BundleUtil {
 			if(considerFragments && bundle.host?.supplier?.supplier == owner) 
 				result += new FragmentHost(owner, bundle)
 		]
-		return result.filter [ dependency != null ]
+		return result.filter [ dependency != null && (considerOptional || !optional) ]
 	}
 	
 	static def allBundles() {

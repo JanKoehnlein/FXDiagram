@@ -54,3 +54,19 @@ class AddBundleHandler extends AbstractHandler {
 	}
 
 }
+
+class ConsiderOptionalDependeniesHandler extends AbstractHandler {
+	
+	override execute(ExecutionEvent event) throws ExecutionException {
+		val selected = (((event.trigger as Event).widget) as ToolItem).selection
+		BundleUtil.setConsiderOptional(selected)
+	}
+}
+
+class ConsiderFragmentDependeniesHandler extends AbstractHandler {
+	
+	override execute(ExecutionEvent event) throws ExecutionException {
+		val selected = (((event.trigger as Event).widget) as ToolItem).selection
+		BundleUtil.setConsiderFragments(selected)
+	}
+}

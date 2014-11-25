@@ -37,8 +37,24 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class BundleUtil {
   private final static Logger LOG = Logger.getLogger(BundleUtil.class);
   
+  private static boolean isConsiderFragments;
+  
   public static boolean isConsiderFragments() {
-    return false;
+    return BundleUtil.isConsiderFragments;
+  }
+  
+  public static boolean setConsiderFragments(final boolean considerFragments) {
+    return BundleUtil.isConsiderFragments = considerFragments;
+  }
+  
+  private static boolean isConsiderOptional;
+  
+  public static boolean isConsiderOptional() {
+    return BundleUtil.isConsiderOptional;
+  }
+  
+  public static boolean setConsiderOptional(final boolean considerOptional) {
+    return BundleUtil.isConsiderOptional = considerOptional;
   }
   
   public static HashSet<BundleDescription> getAllDependencyBundles(final BundleDescription bundle) {
@@ -235,8 +251,24 @@ public class BundleUtil {
     }
     final Function1<BundleDependency, Boolean> _function_3 = new Function1<BundleDependency, Boolean>() {
       public Boolean apply(final BundleDependency it) {
+        boolean _and = false;
         BundleDescription _dependency = it.getDependency();
-        return Boolean.valueOf((!Objects.equal(_dependency, null)));
+        boolean _notEquals = (!Objects.equal(_dependency, null));
+        if (!_notEquals) {
+          _and = false;
+        } else {
+          boolean _or = false;
+          boolean _isConsiderOptional = BundleUtil.isConsiderOptional();
+          if (_isConsiderOptional) {
+            _or = true;
+          } else {
+            boolean _isOptional = it.isOptional();
+            boolean _not = (!_isOptional);
+            _or = _not;
+          }
+          _and = _or;
+        }
+        return Boolean.valueOf(_and);
       }
     };
     return IterableExtensions.<BundleDependency>filter(result, _function_3);
@@ -311,8 +343,24 @@ public class BundleUtil {
     IterableExtensions.<BundleDescription>forEach(((Iterable<BundleDescription>)Conversions.doWrapArray(_dependents)), _function);
     final Function1<BundleDependency, Boolean> _function_1 = new Function1<BundleDependency, Boolean>() {
       public Boolean apply(final BundleDependency it) {
+        boolean _and = false;
         BundleDescription _dependency = it.getDependency();
-        return Boolean.valueOf((!Objects.equal(_dependency, null)));
+        boolean _notEquals = (!Objects.equal(_dependency, null));
+        if (!_notEquals) {
+          _and = false;
+        } else {
+          boolean _or = false;
+          boolean _isConsiderOptional = BundleUtil.isConsiderOptional();
+          if (_isConsiderOptional) {
+            _or = true;
+          } else {
+            boolean _isOptional = it.isOptional();
+            boolean _not = (!_isOptional);
+            _or = _not;
+          }
+          _and = _or;
+        }
+        return Boolean.valueOf(_and);
       }
     };
     return IterableExtensions.<BundleDependency>filter(result, _function_1);
