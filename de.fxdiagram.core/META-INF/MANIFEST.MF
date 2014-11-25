@@ -18,8 +18,8 @@ Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
  com.google.inject,
  de.fxdiagram.annotations;bundle-version="1.0.0";visibility:=reexport,
  de.fxdiagram.external;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.xtend.core;bundle-version="2.5.1",
- org.eclipse.xtext.xbase.junit;bundle-version="2.5.1"
+ org.eclipse.xtend.core;bundle-version="2.5.1";resolution:=optional,
+ org.eclipse.xtext.xbase.junit;bundle-version="2.5.1";resolution:=optional
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.anchors,
