@@ -70,7 +70,7 @@ class ConnectedNodeChooser extends AbstractBaseChooser {
 	}
 	
 	override getAdditionalShapesToAdd(XNode choice, DomainObjectDescriptor choiceInfo) {
-		val result = #[connectChoice(choice, choice.choiceInfo)]
+		val result = #[connectChoice(choice, choiceInfo)]
 		currentConnection = null
 		return result
 	}

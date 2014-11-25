@@ -109,8 +109,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
   }
   
   public Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice, final DomainObjectDescriptor choiceInfo) {
-    DomainObjectDescriptor _choiceInfo = this.getChoiceInfo(choice);
-    XConnection _connectChoice = this.connectChoice(choice, _choiceInfo);
+    XConnection _connectChoice = this.connectChoice(choice, choiceInfo);
     final List<XConnection> result = Collections.<XConnection>unmodifiableList(CollectionLiterals.<XConnection>newArrayList(_connectChoice));
     this.currentConnection = null;
     return result;
