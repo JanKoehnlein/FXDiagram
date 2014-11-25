@@ -13,6 +13,10 @@ class BundleUtil {
 	
 	static val LOG = Logger.getLogger(BundleUtil)
 	
+	static def isConsiderFragments() {
+		false
+	}
+	
 	static def getAllDependencyBundles(BundleDescription bundle) {
 		val result = newHashSet
 		bundle.addDependencies(result)
@@ -27,7 +31,11 @@ class BundleUtil {
 	}
 	
 	static def getDependencyBundles(BundleDescription bundle) {
-		bundle.resolvedRequires + bundle.resolvedImports.map[bundle] + bundle.fragments
+		val dependencies = bundle.resolvedRequires + bundle.resolvedImports.map[bundle]
+		if(considerFragments) 
+			dependencies + bundle.fragments
+		else 
+			dependencies
 	} 
 	
 	static def getAllDependentBundles(BundleDescription bundle) {
@@ -46,8 +54,6 @@ class BundleUtil {
 	static def getDependentBundles(BundleDescription bundle) {
 		bundle.dependents.filter[host?.supplier?.supplier != bundle]
 	} 
-	
-	
 	
 	static def getAllBundleDependencies(BundleDescription source, BundleDescription target) {
 		val paths = <BundleDependencyPath>newLinkedList
@@ -94,9 +100,11 @@ class BundleUtil {
 		bundle.importPackages.forEach [
 			result += new PackageImport(bundle, it)
 		]
-		bundle.fragments.forEach [
-			result += new FragmentHost(bundle, it)
-		]
+		if(considerFragments) {
+			bundle.fragments.forEach [
+				result += new FragmentHost(bundle, it)
+			]
+		}
 		return result.filter [ dependency != null ]
 	}
 	
@@ -113,7 +121,7 @@ class BundleUtil {
 			].forEach[
 				result += new PackageImport(owner, it)					
 			] 
-			if(bundle.host?.supplier?.supplier == owner) 
+			if(considerFragments && bundle.host?.supplier?.supplier == owner) 
 				result += new FragmentHost(owner, bundle)
 		]
 		return result.filter [ dependency != null ]

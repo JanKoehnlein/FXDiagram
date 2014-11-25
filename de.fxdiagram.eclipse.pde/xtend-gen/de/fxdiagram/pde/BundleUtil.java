@@ -37,6 +37,10 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class BundleUtil {
   private final static Logger LOG = Logger.getLogger(BundleUtil.class);
   
+  public static boolean isConsiderFragments() {
+    return false;
+  }
+  
   public static HashSet<BundleDescription> getAllDependencyBundles(final BundleDescription bundle) {
     HashSet<BundleDescription> _xblockexpression = null;
     {
@@ -61,17 +65,28 @@ public class BundleUtil {
   }
   
   public static Iterable<BundleDescription> getDependencyBundles(final BundleDescription bundle) {
-    BundleDescription[] _resolvedRequires = bundle.getResolvedRequires();
-    ExportPackageDescription[] _resolvedImports = bundle.getResolvedImports();
-    final Function1<ExportPackageDescription, BundleDescription> _function = new Function1<ExportPackageDescription, BundleDescription>() {
-      public BundleDescription apply(final ExportPackageDescription it) {
-        return bundle;
+    Iterable<BundleDescription> _xblockexpression = null;
+    {
+      BundleDescription[] _resolvedRequires = bundle.getResolvedRequires();
+      ExportPackageDescription[] _resolvedImports = bundle.getResolvedImports();
+      final Function1<ExportPackageDescription, BundleDescription> _function = new Function1<ExportPackageDescription, BundleDescription>() {
+        public BundleDescription apply(final ExportPackageDescription it) {
+          return bundle;
+        }
+      };
+      List<BundleDescription> _map = ListExtensions.<ExportPackageDescription, BundleDescription>map(((List<ExportPackageDescription>)Conversions.doWrapArray(_resolvedImports)), _function);
+      final Iterable<BundleDescription> dependencies = Iterables.<BundleDescription>concat(((Iterable<? extends BundleDescription>)Conversions.doWrapArray(_resolvedRequires)), _map);
+      Iterable<BundleDescription> _xifexpression = null;
+      boolean _isConsiderFragments = BundleUtil.isConsiderFragments();
+      if (_isConsiderFragments) {
+        BundleDescription[] _fragments = bundle.getFragments();
+        _xifexpression = Iterables.<BundleDescription>concat(dependencies, ((Iterable<? extends BundleDescription>)Conversions.doWrapArray(_fragments)));
+      } else {
+        _xifexpression = dependencies;
       }
-    };
-    List<BundleDescription> _map = ListExtensions.<ExportPackageDescription, BundleDescription>map(((List<ExportPackageDescription>)Conversions.doWrapArray(_resolvedImports)), _function);
-    Iterable<BundleDescription> _plus = Iterables.<BundleDescription>concat(((Iterable<? extends BundleDescription>)Conversions.doWrapArray(_resolvedRequires)), _map);
-    BundleDescription[] _fragments = bundle.getFragments();
-    return Iterables.<BundleDescription>concat(_plus, ((Iterable<? extends BundleDescription>)Conversions.doWrapArray(_fragments)));
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
   }
   
   public static HashSet<BundleDescription> getAllDependentBundles(final BundleDescription bundle) {
@@ -207,14 +222,17 @@ public class BundleUtil {
       }
     };
     IterableExtensions.<ImportPackageSpecification>forEach(((Iterable<ImportPackageSpecification>)Conversions.doWrapArray(_importPackages)), _function_1);
-    BundleDescription[] _fragments = bundle.getFragments();
-    final Procedure1<BundleDescription> _function_2 = new Procedure1<BundleDescription>() {
-      public void apply(final BundleDescription it) {
-        FragmentHost _fragmentHost = new FragmentHost(bundle, it);
-        result.add(_fragmentHost);
-      }
-    };
-    IterableExtensions.<BundleDescription>forEach(((Iterable<BundleDescription>)Conversions.doWrapArray(_fragments)), _function_2);
+    boolean _isConsiderFragments = BundleUtil.isConsiderFragments();
+    if (_isConsiderFragments) {
+      BundleDescription[] _fragments = bundle.getFragments();
+      final Procedure1<BundleDescription> _function_2 = new Procedure1<BundleDescription>() {
+        public void apply(final BundleDescription it) {
+          FragmentHost _fragmentHost = new FragmentHost(bundle, it);
+          result.add(_fragmentHost);
+        }
+      };
+      IterableExtensions.<BundleDescription>forEach(((Iterable<BundleDescription>)Conversions.doWrapArray(_fragments)), _function_2);
+    }
     final Function1<BundleDependency, Boolean> _function_3 = new Function1<BundleDependency, Boolean>() {
       public Boolean apply(final BundleDependency it) {
         BundleDescription _dependency = it.getDependency();
@@ -267,17 +285,24 @@ public class BundleUtil {
           }
         };
         IterableExtensions.<ImportPackageSpecification>forEach(_filter_1, _function_3);
-        HostSpecification _host = bundle.getHost();
-        BaseDescription _supplier = null;
-        if (_host!=null) {
-          _supplier=_host.getSupplier();
+        boolean _and = false;
+        boolean _isConsiderFragments = BundleUtil.isConsiderFragments();
+        if (!_isConsiderFragments) {
+          _and = false;
+        } else {
+          HostSpecification _host = bundle.getHost();
+          BaseDescription _supplier = null;
+          if (_host!=null) {
+            _supplier=_host.getSupplier();
+          }
+          BundleDescription _supplier_1 = null;
+          if (_supplier!=null) {
+            _supplier_1=_supplier.getSupplier();
+          }
+          boolean _equals = Objects.equal(_supplier_1, owner);
+          _and = _equals;
         }
-        BundleDescription _supplier_1 = null;
-        if (_supplier!=null) {
-          _supplier_1=_supplier.getSupplier();
-        }
-        boolean _equals = Objects.equal(_supplier_1, owner);
-        if (_equals) {
+        if (_and) {
           FragmentHost _fragmentHost = new FragmentHost(owner, bundle);
           result.add(_fragmentHost);
         }
