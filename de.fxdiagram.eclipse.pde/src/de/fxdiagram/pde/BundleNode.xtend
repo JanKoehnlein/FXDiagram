@@ -76,13 +76,21 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 					]
 				]
 			]
+			val backgroundStops = 
+				if(domainObject.withPlugin[isFragmentModel]) 
+					#[
+						new Stop(0, Color.rgb(255, 193, 210)), 
+						new Stop(1, Color.rgb(255, 215, 215))
+					]
+			else
+					#[
+						new Stop(0, Color.rgb(158, 188, 227)), 
+						new Stop(1, Color.rgb(220, 230, 255))
+					]
 			backgroundPaint = new LinearGradient(
 				0, 0, 1, 1, 
 				true, CycleMethod.NO_CYCLE,
-				#[
-					new Stop(0, Color.rgb(158, 188, 227)), 
-					new Stop(1, Color.rgb(220, 230, 255))
-				])
+				backgroundStops)
 		]
 	}
 	

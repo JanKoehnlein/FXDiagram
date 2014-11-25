@@ -138,14 +138,31 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
         };
         VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
         _children.add((BundleNode.this.contentArea = _doubleArrow));
-        Color _rgb = Color.rgb(158, 188, 227);
-        Stop _stop = new Stop(0, _rgb);
-        Color _rgb_1 = Color.rgb(220, 230, 255);
-        Stop _stop_1 = new Stop(1, _rgb_1);
+        List<Stop> _xifexpression = null;
+        BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+        final Function1<IPluginModelBase, Boolean> _function_1 = new Function1<IPluginModelBase, Boolean>() {
+          public Boolean apply(final IPluginModelBase it) {
+            return Boolean.valueOf(it.isFragmentModel());
+          }
+        };
+        Boolean _withPlugin = _domainObject.<Boolean>withPlugin(_function_1);
+        if ((_withPlugin).booleanValue()) {
+          Color _rgb = Color.rgb(255, 193, 210);
+          Stop _stop = new Stop(0, _rgb);
+          Color _rgb_1 = Color.rgb(255, 215, 215);
+          Stop _stop_1 = new Stop(1, _rgb_1);
+          _xifexpression = Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop, _stop_1));
+        } else {
+          Color _rgb_2 = Color.rgb(158, 188, 227);
+          Stop _stop_2 = new Stop(0, _rgb_2);
+          Color _rgb_3 = Color.rgb(220, 230, 255);
+          Stop _stop_3 = new Stop(1, _rgb_3);
+          _xifexpression = Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop_2, _stop_3));
+        }
+        final List<Stop> backgroundStops = _xifexpression;
         LinearGradient _linearGradient = new LinearGradient(
           0, 0, 1, 1, 
-          true, CycleMethod.NO_CYCLE, 
-          Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop, _stop_1)));
+          true, CycleMethod.NO_CYCLE, backgroundStops);
         it.setBackgroundPaint(_linearGradient);
       }
     };
