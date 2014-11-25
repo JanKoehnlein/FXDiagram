@@ -190,17 +190,17 @@ class ConnectionRouter implements XActivatable {
 				controlPoints += new XControlPoint => [
 					layoutX = boundsInDiagram.minX - deltaX
 					layoutY = boundsInDiagram.minY + deltaY
-					type = CONTROL_POINT
+					type = INTERPOLATED
 				]	
 				controlPoints += new XControlPoint => [
 					layoutX = boundsInDiagram.minX - deltaX
 					layoutY = boundsInDiagram.minY - deltaY
-					type = CONTROL_POINT
+					type = INTERPOLATED
 				]	
 				controlPoints += new XControlPoint => [
 					layoutX = boundsInDiagram.minX + deltaX
 					layoutY = boundsInDiagram.minY - deltaY
-					type = CONTROL_POINT
+					type = INTERPOLATED
 				]	
 			}
 			case CUBIC_CURVE: {

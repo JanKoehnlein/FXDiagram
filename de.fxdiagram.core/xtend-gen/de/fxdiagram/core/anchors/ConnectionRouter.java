@@ -402,7 +402,7 @@ public class ConnectionRouter implements XActivatable {
                 double _minY = boundsInDiagram.getMinY();
                 double _plus = (_minY + deltaY);
                 it.setLayoutY(_plus);
-                it.setType(XControlPoint.Type.CONTROL_POINT);
+                it.setType(XControlPoint.Type.INTERPOLATED);
               }
             };
             XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
@@ -417,7 +417,7 @@ public class ConnectionRouter implements XActivatable {
                 double _minY = boundsInDiagram.getMinY();
                 double _minus_1 = (_minY - deltaY);
                 it.setLayoutY(_minus_1);
-                it.setType(XControlPoint.Type.CONTROL_POINT);
+                it.setType(XControlPoint.Type.INTERPOLATED);
               }
             };
             XControlPoint _doubleArrow_2 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_2, _function_2);
@@ -432,7 +432,7 @@ public class ConnectionRouter implements XActivatable {
                 double _minY = boundsInDiagram.getMinY();
                 double _minus = (_minY - deltaY);
                 it.setLayoutY(_minus);
-                it.setType(XControlPoint.Type.CONTROL_POINT);
+                it.setType(XControlPoint.Type.INTERPOLATED);
               }
             };
             XControlPoint _doubleArrow_3 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_3, _function_3);
