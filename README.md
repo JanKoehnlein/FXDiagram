@@ -24,7 +24,7 @@ If you want to setup the environement manually, you can use
   (must include fix for https://javafx-jira.kenai.com/browse/RT-37879)
  * Eclipse Luna 4.4
   * Xtext SDK 2.7
-  * e(fx)clipse 1.0
+  * e(fx)clipse 1.1
 	
 As of version 1.0 e(fx)clipse no longer supports Java 7. If you're stuck 
 with Java 7 you need the e(fx)clipse version 0.9 which runs on Kepler only. 
@@ -42,6 +42,10 @@ need that just close the project.
 
 The `*.xtext.*` projects require the respective Xtext examples in the 
 workspace. Use *New > Example > Xtext > ...* to instantiate them.
+
+## BUILD
+Due to a bug in Xtend, you may have error markers in XNode.xtend. To get rid of it, open the file in 
+an editor, apply a small change and save. 
 
 ## RUN
 * Run the launch config in `de.fxdiagram.examples` (standalone demo)
