@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: de.fxdiagram.eclipse.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.eclipse.swt,
  de.fxdiagram.swtfx;bundle-version="1.0.0",
  de.fxdiagram.core;bundle-version="1.0.0";visibility:=reexport,
  de.fxdiagram.annotations;bundle-version="1.0.0",

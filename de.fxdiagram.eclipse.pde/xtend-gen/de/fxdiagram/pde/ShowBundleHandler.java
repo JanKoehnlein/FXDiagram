@@ -8,6 +8,7 @@ import de.fxdiagram.pde.BundleDiagramConfig;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Consumer;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -32,7 +33,6 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class ShowBundleHandler extends AbstractHandler {
@@ -90,15 +90,15 @@ public class ShowBundleHandler extends AbstractHandler {
           final IWorkbenchPage page = _activeWorkbenchWindow.getActivePage();
           final IViewPart view = page.showView("de.fxdiagram.eclipse.FXDiagramView");
           if ((view instanceof FXDiagramView)) {
-            final Procedure1<BundleDescription> _function = new Procedure1<BundleDescription>() {
-              public void apply(final BundleDescription it) {
+            final Consumer<BundleDescription> _function = new Consumer<BundleDescription>() {
+              public void accept(final BundleDescription it) {
                 Iterable<? extends MappingCall<?, BundleDescription>> _entryCalls = config.<BundleDescription>getEntryCalls(it);
                 final MappingCall<?, BundleDescription> call = IterableExtensions.head(_entryCalls);
                 IEditorPart _activeEditor = page.getActiveEditor();
                 ((FXDiagramView)view).<BundleDescription>revealElement(it, call, _activeEditor);
               }
             };
-            IterableExtensions.<BundleDescription>forEach(bundleDescriptions, _function);
+            bundleDescriptions.forEach(_function);
           }
         }
         _xblockexpression = null;

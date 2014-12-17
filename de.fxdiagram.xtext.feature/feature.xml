@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="de.fxdiagram.xtext.feature"
-      label="Feature"
+      label="FX Diagram Xtext Examples"
       version="1.0.0.qualifier">
 
    <description url="http://www.example.com/description">
@@ -23,6 +23,12 @@
    <includes
          id="de.fxdiagram.eclipse.feature"
          version="0.0.0"/>
+
+   <requires>
+      <import plugin="org.eclipse.xtext.example.domainmodel.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.example.fowlerdsl.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.example.domainmodel" version="2.6.2" match="greaterOrEqual"/>
+   </requires>
 
    <plugin
          id="de.fxdiagram.xtext.domainmodel"
@@ -46,6 +52,34 @@
          install-size="0"
          version="0.0.0"
          fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.xtext.example.domainmodel"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.xtext.example.domainmodel.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.xtext.example.fowlerdsl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.xtext.example.fowlerdsl.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

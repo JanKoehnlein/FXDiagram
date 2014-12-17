@@ -21,18 +21,16 @@
          version="0.0.0"/>
 
    <requires>
-      <import feature="de.fxdiagram.kieler.feature" version="1.0.0.qualifier"/>
+      <import plugin="de.cau.cs.kieler.core.kgraph" version="0.4.2" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.core" version="0.8.1" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.kiml" version="0.12.0" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.kiml.graphviz.dot" version="0.6.1" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.kiml.graphviz.layouter" version="0.6.2" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.kiml.service" version="0.4.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="de.fxdiagram.annotations"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.annotations.tests"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -59,13 +57,6 @@
 
    <plugin
          id="de.fxdiagram.lib"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.fxdiagram.docs"
          download-size="0"
          install-size="0"
          version="0.0.0"

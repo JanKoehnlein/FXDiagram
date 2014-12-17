@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.util.Duration;
@@ -41,7 +42,6 @@ import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AddDependencyPathAction extends RapidButtonAction {
@@ -141,8 +141,8 @@ public class AddDependencyPathAction extends RapidButtonAction {
             }
           };
           ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObject_1).<ArrayList<BundleDependency>>withDomainObject(_function_2);
-          final Procedure1<BundleDependency> _function_3 = new Procedure1<BundleDependency>() {
-            public void apply(final BundleDependency bundleDependency) {
+          final Consumer<BundleDependency> _function_3 = new Consumer<BundleDependency>() {
+            public void accept(final BundleDependency bundleDependency) {
               BundleDescription _owner = bundleDependency.getOwner();
               NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
               IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(_owner, _pluginNode);
@@ -184,7 +184,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
               }
             }
           };
-          IterableExtensions.<BundleDependency>forEach(_withDomainObject, _function_3);
+          _withDomainObject.forEach(_function_3);
           return additionalShapes;
         }
         
@@ -218,8 +218,8 @@ public class AddDependencyPathAction extends RapidButtonAction {
         _xifexpression_1 = BundleUtil.getAllDependencyBundles(hostBundle);
       }
       final HashSet<BundleDescription> candidates = _xifexpression_1;
-      final Procedure1<BundleDescription> _function_1 = new Procedure1<BundleDescription>() {
-        public void apply(final BundleDescription it) {
+      final Consumer<BundleDescription> _function_1 = new Consumer<BundleDescription>() {
+        public void accept(final BundleDescription it) {
           NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
           IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
           final BundleDescriptor candidate = ((BundleDescriptor) _createMappedElementDescriptor);
@@ -228,7 +228,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
           chooser.addChoice(_createNode);
         }
       };
-      IterableExtensions.<BundleDescription>forEach(candidates, _function_1);
+      candidates.forEach(_function_1);
       root.setCurrentTool(chooser);
       _xblockexpression = null;
     }

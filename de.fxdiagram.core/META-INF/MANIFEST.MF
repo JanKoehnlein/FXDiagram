@@ -8,7 +8,6 @@ Bundle-ClassPath: .,
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
- org.eclipse.xtext.xbase.lib;visibility:=reexport,
  de.cau.cs.kieler.core.kgraph;bundle-version="0.4.2",
  de.cau.cs.kieler.core;bundle-version="0.8.1",
  de.cau.cs.kieler.kiml;bundle-version="0.12.0",
@@ -18,8 +17,7 @@ Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
  com.google.inject,
  de.fxdiagram.annotations;bundle-version="1.0.0";visibility:=reexport,
  de.fxdiagram.external;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.xtend.core;bundle-version="2.5.1";resolution:=optional,
- org.eclipse.xtext.xbase.junit;bundle-version="2.5.1";resolution:=optional
+ org.eclipse.xtend.lib
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.core,
  de.fxdiagram.core.anchors,

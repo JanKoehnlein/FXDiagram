@@ -13,6 +13,7 @@ import de.fxdiagram.lib.chooser.NodeChooser;
 import de.fxdiagram.pde.BundleDiagramConfig;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -27,8 +28,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AddBundleHandler extends AbstractHandler {
@@ -51,8 +50,8 @@ public class AddBundleHandler extends AbstractHandler {
           CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
           final NodeChooser nodeChooser = new NodeChooser(_diagram_1, center, _coverFlowChoice, false);
           List<BundleDescription> _allBundles = BundleUtil.allBundles();
-          final Procedure1<BundleDescription> _function = new Procedure1<BundleDescription>() {
-            public void apply(final BundleDescription it) {
+          final Consumer<BundleDescription> _function = new Consumer<BundleDescription>() {
+            public void accept(final BundleDescription it) {
               IMappedElementDescriptorProvider _domainObjectProvider = config.getDomainObjectProvider();
               NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
               final IMappedElementDescriptor<BundleDescription> descriptor = _domainObjectProvider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
@@ -61,7 +60,7 @@ public class AddBundleHandler extends AbstractHandler {
               nodeChooser.addChoice(_createNode);
             }
           };
-          IterableExtensions.<BundleDescription>forEach(_allBundles, _function);
+          _allBundles.forEach(_function);
           root.setCurrentTool(nodeChooser);
         }
       }

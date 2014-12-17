@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="de.fxdiagram.base.feature">
+      <category name="FXDiagram"/>
+   </feature>
+   <feature id="de.fxdiagram.eclipse.feature">
+      <category name="FXDiagram"/>
+   </feature>
+   <feature id="de.fxdiagram.xtext.feature">
+      <category name="FXDiagram"/>
+   </feature>
+   <bundle id="org.eclipse.xtext.example.domainmodel" version="2.6.2.201408271016"/>
+   <bundle id="org.eclipse.xtext.example.domainmodel.ui" version="2.6.2.201408271016"/>
+   <bundle id="org.eclipse.xtext.example.fowlerdsl" version="2.6.2.201408271016"/>
+   <bundle id="org.eclipse.xtext.example.fowlerdsl.ui" version="2.6.2.201408271016"/>
+   <bundle id="de.cau.cs.kieler.core"/>
+   <bundle id="de.cau.cs.kieler.core.kgraph"/>
+   <bundle id="de.cau.cs.kieler.kiml"/>
+   <bundle id="de.cau.cs.kieler.kiml.formats"/>
+   <bundle id="de.cau.cs.kieler.kiml.graphviz.dot"/>
+   <bundle id="de.cau.cs.kieler.kiml.graphviz.layouter"/>
+   <bundle id="de.cau.cs.kieler.kiml.service"/>
+   <category-def name="FXDiagram" label="FX Diagram"/>
+</site>
