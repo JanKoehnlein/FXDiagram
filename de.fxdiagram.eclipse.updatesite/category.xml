@@ -9,16 +9,43 @@
    <feature id="de.fxdiagram.xtext.feature">
       <category name="FXDiagram"/>
    </feature>
-   <bundle id="org.eclipse.xtext.example.domainmodel" version="2.6.2.201408271016"/>
-   <bundle id="org.eclipse.xtext.example.domainmodel.ui" version="2.6.2.201408271016"/>
-   <bundle id="org.eclipse.xtext.example.fowlerdsl" version="2.6.2.201408271016"/>
-   <bundle id="org.eclipse.xtext.example.fowlerdsl.ui" version="2.6.2.201408271016"/>
-   <bundle id="de.cau.cs.kieler.core"/>
-   <bundle id="de.cau.cs.kieler.core.kgraph"/>
-   <bundle id="de.cau.cs.kieler.kiml"/>
-   <bundle id="de.cau.cs.kieler.kiml.formats"/>
-   <bundle id="de.cau.cs.kieler.kiml.graphviz.dot"/>
-   <bundle id="de.cau.cs.kieler.kiml.graphviz.layouter"/>
-   <bundle id="de.cau.cs.kieler.kiml.service"/>
+   <bundle id="de.cau.cs.kieler.core">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="de.cau.cs.kieler.core.kgraph">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="de.cau.cs.kieler.kiml">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="de.cau.cs.kieler.kiml.formats">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="de.cau.cs.kieler.kiml.graphviz.dot">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="de.cau.cs.kieler.kiml.graphviz.layouter">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="de.cau.cs.kieler.kiml.service">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="org.eclipse.xtext.example.domainmodel">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="org.eclipse.xtext.example.domainmodel.ui">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="org.eclipse.xtext.example.fowlerdsl">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
+   <bundle id="org.eclipse.xtext.example.fowlerdsl.ui">
+      <category name="FXDiagram.third.party"/>
+   </bundle>
    <category-def name="FXDiagram" label="FX Diagram"/>
+   <category-def name="FXDiagram.third.party" label="FXDiagram third-party dependencies">
+      <description>
+         Needed plug-ins from KIELER and Xtext examples not available as small features.
+      </description>
+   </category-def>
 </site>
