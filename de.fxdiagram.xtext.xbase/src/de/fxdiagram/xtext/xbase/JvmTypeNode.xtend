@@ -3,9 +3,9 @@ package de.fxdiagram.xtext.xbase
 import com.google.inject.Inject
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.eclipse.shapes.BaseFlipNode
 import de.fxdiagram.lib.animations.Inflator
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import de.fxdiagram.eclipse.shapes.BaseFlipNode
 import javafx.beans.property.BooleanProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -90,7 +90,11 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 		packageLabel = new Text => [
 			textOrigin = VPos.TOP
 			font = Font.font(font.family, font.size * 0.8)
-			text = domainObject.fqn.substring(0, domainObject.fqn.lastIndexOf('.'))		
+			val lastIndexOf = domainObject.fqn.lastIndexOf('.')
+			text = if(lastIndexOf != -1) 
+					domainObject.fqn.substring(0, lastIndexOf)
+				else
+					'<default>'
 		]
 		pane
 	}

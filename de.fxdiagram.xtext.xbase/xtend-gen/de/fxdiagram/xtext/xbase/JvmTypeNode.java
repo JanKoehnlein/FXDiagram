@@ -192,11 +192,16 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
           it.setFont(_font_2);
           JvmEObjectDescriptor<JvmDeclaredType> _domainObject = JvmTypeNode.this.getDomainObject();
           String _fqn = _domainObject.getFqn();
-          JvmEObjectDescriptor<JvmDeclaredType> _domainObject_1 = JvmTypeNode.this.getDomainObject();
-          String _fqn_1 = _domainObject_1.getFqn();
-          int _lastIndexOf = _fqn_1.lastIndexOf(".");
-          String _substring = _fqn.substring(0, _lastIndexOf);
-          it.setText(_substring);
+          final int lastIndexOf = _fqn.lastIndexOf(".");
+          String _xifexpression = null;
+          if ((lastIndexOf != (-1))) {
+            JvmEObjectDescriptor<JvmDeclaredType> _domainObject_1 = JvmTypeNode.this.getDomainObject();
+            String _fqn_1 = _domainObject_1.getFqn();
+            _xifexpression = _fqn_1.substring(0, lastIndexOf);
+          } else {
+            _xifexpression = "<default>";
+          }
+          it.setText(_xifexpression);
         }
       };
       Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
