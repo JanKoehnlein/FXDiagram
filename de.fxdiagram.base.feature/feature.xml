@@ -5,8 +5,7 @@
       version="1.0.0.qualifier">
 
    <description>
-      FXDiagram - A diagram framework based on JavaFX.
-This feature contains the base functionality.
+      FXDiagram - A diagram framework based on JavaFX. This feature contains the base functionality.
    </description>
 
    <copyright>

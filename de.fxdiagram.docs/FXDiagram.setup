@@ -246,6 +246,9 @@
           <operand
               xsi:type="predicates:NaturePredicate"
               nature="org.eclipse.pde.UpdateSiteNature"/>
+          <operand
+              xsi:type="predicates:NamePredicate"
+              pattern="de\.fxdiagram\.maven"/>
         </operand>
       </predicate>
     </workingSet>

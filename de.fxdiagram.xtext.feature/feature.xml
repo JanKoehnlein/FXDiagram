@@ -5,9 +5,7 @@
       version="1.0.0.qualifier">
 
    <description>
-      FXDIagram FXDiagram - A diagram framework based on JavaFX.
-
-Example configurations for the Xtext example languages &quot;domainmodel&quot; and &quot;fowlerdsl&quot;.
+      FXDiagram - A diagram framework based on JavaFX. Example configurations for the Xtext example languages &quot;domainmodel&quot; and &quot;fowlerdsl&quot;.
    </description>
 
    <copyright>

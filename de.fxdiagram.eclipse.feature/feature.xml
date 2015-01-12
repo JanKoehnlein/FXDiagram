@@ -5,9 +5,7 @@
       version="1.0.0.qualifier">
 
    <description>
-      FXDiagram - A diagram framework based on JavaFX.
-
-Bridges to Eclipse and Xtext, as well as an example PDE bundle dependency tool.
+      FXDiagram - A diagram framework based on JavaFX. Integration with Eclipse and Xtext, as well as an example PDE bundle dependency tool.
    </description>
 
    <copyright>
