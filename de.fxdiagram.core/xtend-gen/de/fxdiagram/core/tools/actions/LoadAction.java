@@ -58,7 +58,7 @@ public class LoadAction implements DiagramAction {
           ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();
           root.replaceDomainObjectProviders(_domainObjectProviders);
           XDiagram _diagram = ((XRoot)node).getDiagram();
-          root.setDiagram(_diagram);
+          root.setRootDiagram(_diagram);
         }
       }
     } catch (Throwable _e) {
