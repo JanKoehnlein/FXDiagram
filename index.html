@@ -34,12 +34,11 @@
         <h3>
 <a id="welcome-to-fxdiagram" class="anchor" href="#welcome-to-fxdiagram" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to FXDiagram.</h3>
 
-<p>FXDiagram is a framework for creating diagram tools based on JavaFX. FXDiagram does not hide the power of JavaFX, but adds a thin layer of graph abstractions only. Additional library classes can be selectively added for higher-level functionality trimmed for best user experience. </p>
+<p>FXDiagram is a framework for creating diagram tools based on JavaFX. By adding a thin layer of abstractions only, the programmer can still use the full power of JavaFX. FXDiagram provides additional library classes to selectively add higher-level functionality trimmed for best user experience. </p>
 
-<p>The code is almost entirely written in Xtend, which allows for very concise and readable code while still being fully compatible with Java. IDE integration for Xtend is currently available for Eclipse only, but IDEA support is under development.</p>
+<p>FXDiagram is almost entirely written in <a href="http://www.xtend-lang.org">Xtend</a>, which allows for very concise and readable code while still being fully compatible with Java. </p>
 
-<p>FXDiagram offers Eclipse integration via the JavaFX-SWT-Bridge and Tom Schindl's e(fx)clipse project. There is also support for graphical views on Xtext-based models and an exemplary browser for Eclipse plug-in dependencies.
-To give it a try, point your Eclipse update manager to <a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest"></a><a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest">http://jankoehnlein.github.io/FXDiagram/p2/updates/latest</a></p>
+<p>FXDiagram integrates well with <a href="http://www.eclipse.org">Eclipse</a>. Adding a diagram view for an Xtext-based language is easy. Have a look at the example diagrams for Xtext's example languages <em>domainmodel</em> and <em>fowlerdsl</em>, as well as the generic class diagram browser for Java, Xtend and Xbase-languages. There is also a graphical tool for the analysis of Eclipse plug-in dependencies. To give them a try, point your Eclipse update manager to <a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest"></a><a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest">http://jankoehnlein.github.io/FXDiagram/p2/updates/latest</a></p>
 
 <p>You can find more information on my blog (<a href="http://koehnlein.blogspot.com">http://koehnlein.blogspot.com</a>).</p>
 
@@ -48,33 +47,18 @@ To give it a try, point your Eclipse update manager to <a href="http://jankoehnl
 
 <p>FXDiagram is currently being developed in Eclipse. The fastest way to get it running is to use <a href="https://wiki.eclipse.org/Eclipse_Oomph_Installer">Eclipse Oomph</a> and the <a href="https://github.com/JanKoehnlein/FXDiagram/blob/master/de.fxdiagram.docs/FXDiagram.setup">FXDiagram.setup</a>. The configuration requires Java 8 SDK 40 early access build &gt;= 5 (see below) and will install everything but <a href="http://www.graphviz.org/">Graphviz</a>.</p>
 
-<p>If you decide to setup the environment manually, you can use </p>
-
-<ul>
-<li>
-<p>EITHER</p>
-
-<ul>
-<li>Java 7 SDK</li>
-<li>Eclipse Kepler 4.3</li>
-<li>Xtext SDK 2.7 (including Xtend 2.7)</li>
-<li>e(fx)clipse 0.9 </li>
-</ul>
-</li>
-<li>
-<p>OR</p>
+<p>If you decide to setup the environment manually, you need</p>
 
 <ul>
 <li>Java 8 SDK 40 early access build &gt;=5 (<a href="https://jdk8.java.net/download.html">https://jdk8.java.net/download.html</a>)</li>
-<li>Eclipse Luna 4.4</li>
+<li>Eclipse Luna 4.4
+
+<ul>
 <li>Xtext SDK 2.7</li>
 <li>e(fx)clipse 1.1</li>
 </ul>
 </li>
 </ul>
-
-<p>As of version 1.0 e(fx)clipse no longer supports Java 7. If you're stuck 
-with Java 7 you need the e(fx)clipse version 0.9 which runs on Kepler only. </p>
 
 <p>You need some plug-ins from the <a href="http://www.informatik.uni-kiel.de/rtsys/kieler/">KIELER</a> project. Use 
 the <code>kielerProjectSet.psf</code> to get them. Unfortunately, KIELER does not 
