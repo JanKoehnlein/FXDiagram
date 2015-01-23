@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Domainmodel
 Bundle-SymbolicName: de.fxdiagram.xtext.domainmodel;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Fragment-Host: org.eclipse.xtext.example.domainmodel.ui;bundle-version="1.0.0"
+Fragment-Host: org.eclipse.xtext.example.domainmodel.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",

@@ -8,13 +8,13 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho-version>0.22.0</tycho-version>
-		<xtext-version>2.7.3</xtext-version>
+		<xtext-version>2.8.0-SNAPSHOT</xtext-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<modules>
 		<module>../de.fxdiagram.external</module>
 		<module>../de.fxdiagram.annotations</module>
-		<module>../de.fxdiagram.annotations.tests</module>
+	  	<module>../de.fxdiagram.annotations.tests</module>
 		<module>../de.fxdiagram.core</module>
 		<module>../de.fxdiagram.lib</module>
 		<module>../de.fxdiagram.examples</module>
@@ -114,6 +114,11 @@
 					</environments>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>0.22.0</version>
+			</plugin>
 		</plugins>
 
 		<!-- defines the default settings for the used plugins -->
@@ -144,9 +149,14 @@
 					<version>${xtext-version}</version>
 					<executions>
 						<execution>
-							<phase>generate-sources</phase>
 							<goals>
 								<goal>compile</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>installdebuginfo</id>
+							<goals>
+								<goal>xtend-install-debug-info</goal>
 							</goals>
 						</execution>
 					</executions>
