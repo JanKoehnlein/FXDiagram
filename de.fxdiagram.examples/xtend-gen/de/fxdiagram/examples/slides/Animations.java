@@ -37,6 +37,7 @@ public class Animations {
     {
       Rotate _rotate = new Rotate();
       final Procedure1<Rotate> _function = new Procedure1<Rotate>() {
+        @Override
         public void apply(final Rotate it) {
           Point3D _point3D = new Point3D(0, 0, 1);
           it.setAxis(_point3D);
@@ -47,6 +48,7 @@ public class Animations {
       _transforms.add(transform);
       Timeline _timeline = new Timeline();
       final Procedure1<Timeline> _function_1 = new Procedure1<Timeline>() {
+        @Override
         public void apply(final Timeline it) {
           IntegerRange _upTo = new IntegerRange(0, 10);
           for (final Integer i : _upTo) {
@@ -82,6 +84,7 @@ public class Animations {
   public static FillTransition flicker(final Shape creature, final Color fromColor, final Color toColor) {
     FillTransition _fillTransition = new FillTransition();
     final Procedure1<FillTransition> _function = new Procedure1<FillTransition>() {
+      @Override
       public void apply(final FillTransition it) {
         it.setShape(creature);
         it.setFromValue(fromColor);
@@ -102,14 +105,17 @@ public class Animations {
   public static SequentialTransition breathe(final Shape creature, final Color fromColor, final Color toColor) {
     SequentialTransition _sequentialTransition = new SequentialTransition();
     final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+      @Override
       public void apply(final SequentialTransition it) {
         ObservableList<Animation> _children = it.getChildren();
         ParallelTransition _parallelTransition = new ParallelTransition();
         final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+          @Override
           public void apply(final ParallelTransition it) {
             ObservableList<Animation> _children = it.getChildren();
             ScaleTransition _scaleTransition = new ScaleTransition();
             final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+              @Override
               public void apply(final ScaleTransition it) {
                 it.setFromX(1);
                 it.setToX(1.15);
@@ -127,6 +133,7 @@ public class Animations {
             ObservableList<Animation> _children_1 = it.getChildren();
             FillTransition _fillTransition = new FillTransition();
             final Procedure1<FillTransition> _function_1 = new Procedure1<FillTransition>() {
+              @Override
               public void apply(final FillTransition it) {
                 it.setShape(creature);
                 it.setFromValue(toColor);
@@ -147,10 +154,12 @@ public class Animations {
         ObservableList<Animation> _children_1 = it.getChildren();
         ParallelTransition _parallelTransition_1 = new ParallelTransition();
         final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
+          @Override
           public void apply(final ParallelTransition it) {
             ObservableList<Animation> _children = it.getChildren();
             ScaleTransition _scaleTransition = new ScaleTransition();
             final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+              @Override
               public void apply(final ScaleTransition it) {
                 it.setFromX(1.15);
                 it.setToX(1);
@@ -168,6 +177,7 @@ public class Animations {
             ObservableList<Animation> _children_1 = it.getChildren();
             FillTransition _fillTransition = new FillTransition();
             final Procedure1<FillTransition> _function_1 = new Procedure1<FillTransition>() {
+              @Override
               public void apply(final FillTransition it) {
                 it.setShape(creature);
                 it.setFromValue(fromColor);
@@ -208,6 +218,7 @@ public class Animations {
       final int numSteps = ((int) _plus);
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+        @Override
         public void apply(final SequentialTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           SequentialTransition _crawlOneWay = Animations.crawlOneWay(creature, stepSize, numSteps);
@@ -215,6 +226,7 @@ public class Animations {
           ObservableList<Animation> _children_1 = it.getChildren();
           SequentialTransition _crawlOneWay_1 = Animations.crawlOneWay(creature, (-stepSize), numSteps);
           final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+            @Override
             public void apply(final SequentialTransition it) {
               double _random = Math.random();
               Duration _seconds = DurationExtensions.seconds(1);
@@ -247,6 +259,7 @@ public class Animations {
       final Duration stepDuration = DurationExtensions.operator_plus(_multiply, _millis_1);
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+        @Override
         public void apply(final SequentialTransition it) {
           IntegerRange _upTo = new IntegerRange(1, numSteps);
           for (final Integer i : _upTo) {
@@ -254,10 +267,12 @@ public class Animations {
               ObservableList<Animation> _children = it.getChildren();
               ParallelTransition _parallelTransition = new ParallelTransition();
               final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+                @Override
                 public void apply(final ParallelTransition it) {
                   ObservableList<Animation> _children = it.getChildren();
                   ScaleTransition _scaleTransition = new ScaleTransition();
                   final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+                    @Override
                     public void apply(final ScaleTransition it) {
                       it.setNode(creature);
                       it.setFromX(1);
@@ -275,6 +290,7 @@ public class Animations {
                   ObservableList<Animation> _children_1 = it.getChildren();
                   TranslateTransition _translateTransition = new TranslateTransition();
                   final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
+                    @Override
                     public void apply(final TranslateTransition it) {
                       it.setNode(creature);
                       double _rotate = creature.getRotate();
@@ -302,10 +318,12 @@ public class Animations {
               ObservableList<Animation> _children_1 = it.getChildren();
               ParallelTransition _parallelTransition_1 = new ParallelTransition();
               final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
+                @Override
                 public void apply(final ParallelTransition it) {
                   ObservableList<Animation> _children = it.getChildren();
                   ScaleTransition _scaleTransition = new ScaleTransition();
                   final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+                    @Override
                     public void apply(final ScaleTransition it) {
                       it.setNode(creature);
                       it.setFromX(1.2);
@@ -323,6 +341,7 @@ public class Animations {
                   ObservableList<Animation> _children_1 = it.getChildren();
                   TranslateTransition _translateTransition = new TranslateTransition();
                   final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
+                    @Override
                     public void apply(final TranslateTransition it) {
                       it.setNode(creature);
                       double _rotate = creature.getRotate();
@@ -359,10 +378,12 @@ public class Animations {
   public static ParallelTransition orbit(final Node creature, final double radiusX, final double radiusY, final Duration cycleTime, final double initialAngle) {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+      @Override
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
         RotateTransition _rotateTransition = new RotateTransition();
         final Procedure1<RotateTransition> _function = new Procedure1<RotateTransition>() {
+          @Override
           public void apply(final RotateTransition it) {
             it.setNode(creature);
             it.setFromAngle(initialAngle);
@@ -384,10 +405,12 @@ public class Animations {
         ObservableList<Animation> _children_1 = it.getChildren();
         PathTransition _pathTransition = new PathTransition();
         final Procedure1<PathTransition> _function_1 = new Procedure1<PathTransition>() {
+          @Override
           public void apply(final PathTransition it) {
             it.setNode(creature);
             Path _path = new Path();
             final Procedure1<Path> _function = new Procedure1<Path>() {
+              @Override
               public void apply(final Path it) {
                 ObservableList<PathElement> _elements = it.getElements();
                 MoveTo _moveTo = new MoveTo((-radiusX), 0);
@@ -395,6 +418,7 @@ public class Animations {
                 ObservableList<PathElement> _elements_1 = it.getElements();
                 CubicCurveTo _cubicCurveTo = new CubicCurveTo();
                 final Procedure1<CubicCurveTo> _function = new Procedure1<CubicCurveTo>() {
+                  @Override
                   public void apply(final CubicCurveTo it) {
                     it.setControlX1((-radiusX));
                     it.setControlY1((0.5 * radiusY));
@@ -409,6 +433,7 @@ public class Animations {
                 ObservableList<PathElement> _elements_2 = it.getElements();
                 CubicCurveTo _cubicCurveTo_1 = new CubicCurveTo();
                 final Procedure1<CubicCurveTo> _function_1 = new Procedure1<CubicCurveTo>() {
+                  @Override
                   public void apply(final CubicCurveTo it) {
                     it.setControlX1((0.5 * radiusX));
                     it.setControlY1(radiusY);
@@ -423,6 +448,7 @@ public class Animations {
                 ObservableList<PathElement> _elements_3 = it.getElements();
                 CubicCurveTo _cubicCurveTo_2 = new CubicCurveTo();
                 final Procedure1<CubicCurveTo> _function_2 = new Procedure1<CubicCurveTo>() {
+                  @Override
                   public void apply(final CubicCurveTo it) {
                     it.setControlX1(radiusX);
                     it.setControlY1(((-0.5) * radiusY));
@@ -437,6 +463,7 @@ public class Animations {
                 ObservableList<PathElement> _elements_4 = it.getElements();
                 CubicCurveTo _cubicCurveTo_3 = new CubicCurveTo();
                 final Procedure1<CubicCurveTo> _function_3 = new Procedure1<CubicCurveTo>() {
+                  @Override
                   public void apply(final CubicCurveTo it) {
                     it.setControlX1(((-0.5) * radiusX));
                     it.setControlY1((-radiusY));
@@ -472,6 +499,7 @@ public class Animations {
   public static RotateTransition spin(final Node creature) {
     RotateTransition _rotateTransition = new RotateTransition();
     final Procedure1<RotateTransition> _function = new Procedure1<RotateTransition>() {
+      @Override
       public void apply(final RotateTransition it) {
         it.setNode(creature);
         it.setFromAngle(0);
@@ -498,14 +526,17 @@ public class Animations {
       final Duration stepDuration = DurationExtensions.operator_plus(_multiply, _millis_1);
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+        @Override
         public void apply(final SequentialTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           ParallelTransition _parallelTransition = new ParallelTransition();
           final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+            @Override
             public void apply(final ParallelTransition it) {
               ObservableList<Animation> _children = it.getChildren();
               ScaleTransition _scaleTransition = new ScaleTransition();
               final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+                @Override
                 public void apply(final ScaleTransition it) {
                   it.setNode(creature);
                   it.setFromX(1);
@@ -523,6 +554,7 @@ public class Animations {
               ObservableList<Animation> _children_1 = it.getChildren();
               TranslateTransition _translateTransition = new TranslateTransition();
               final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
+                @Override
                 public void apply(final TranslateTransition it) {
                   it.setNode(creature);
                   double _signum = Math.signum(stepSize);
@@ -558,6 +590,7 @@ public class Animations {
           ObservableList<Animation> _children_1 = it.getChildren();
           TranslateTransition _translateTransition = new TranslateTransition();
           final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
+            @Override
             public void apply(final TranslateTransition it) {
               it.setNode(creature);
               double _rotate = creature.getRotate();
@@ -581,6 +614,7 @@ public class Animations {
           ObservableList<Animation> _children_2 = it.getChildren();
           ScaleTransition _scaleTransition = new ScaleTransition();
           final Procedure1<ScaleTransition> _function_2 = new Procedure1<ScaleTransition>() {
+            @Override
             public void apply(final ScaleTransition it) {
               it.setToX(1);
               it.setToY(1);
@@ -607,10 +641,12 @@ public class Animations {
       final Duration stepDuration = DurationExtensions.operator_plus(_multiply, _millis_1);
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+        @Override
         public void apply(final SequentialTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           ScaleTransition _scaleTransition = new ScaleTransition();
           final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+            @Override
             public void apply(final ScaleTransition it) {
               it.setFromX(1.8);
               it.setToX(1);
@@ -625,6 +661,7 @@ public class Animations {
           ObservableList<Animation> _children_1 = it.getChildren();
           TranslateTransition _translateTransition = new TranslateTransition();
           final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
+            @Override
             public void apply(final TranslateTransition it) {
               it.setNode(creature);
               double _layoutX = creature.getLayoutX();
@@ -662,10 +699,12 @@ public class Animations {
           ObservableList<Animation> _children_2 = it.getChildren();
           ParallelTransition _parallelTransition = new ParallelTransition();
           final Procedure1<ParallelTransition> _function_2 = new Procedure1<ParallelTransition>() {
+            @Override
             public void apply(final ParallelTransition it) {
               ObservableList<Animation> _children = it.getChildren();
               ScaleTransition _scaleTransition = new ScaleTransition();
               final Procedure1<ScaleTransition> _function = new Procedure1<ScaleTransition>() {
+                @Override
                 public void apply(final ScaleTransition it) {
                   it.setNode(creature);
                   it.setFromX(1.8);
@@ -681,6 +720,7 @@ public class Animations {
               ObservableList<Animation> _children_1 = it.getChildren();
               TranslateTransition _translateTransition = new TranslateTransition();
               final Procedure1<TranslateTransition> _function_1 = new Procedure1<TranslateTransition>() {
+                @Override
                 public void apply(final TranslateTransition it) {
                   it.setNode(creature);
                   double _signum = Math.signum(stepSize);

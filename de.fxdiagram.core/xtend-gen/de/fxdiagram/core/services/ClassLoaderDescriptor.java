@@ -17,10 +17,12 @@ public class ClassLoaderDescriptor implements DomainObjectDescriptor {
     this.providerProperty.set(provider);
   }
   
+  @Override
   public String getName() {
     return this.getClassLoaderID();
   }
   
+  @Override
   public String getId() {
     return this.getClassLoaderID();
   }

@@ -12,22 +12,27 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 public class FragmentHost extends BundleDependency {
   private final BundleDescription fragment;
   
+  @Override
   public BundleDependency.Kind getKind() {
     return BundleDependency.Kind.FRAGMENT_HOST;
   }
   
+  @Override
   public BundleDescription getDependency() {
     return this.fragment;
   }
   
+  @Override
   public VersionRange getVersionRange() {
     return VersionRange.emptyRange;
   }
   
+  @Override
   public boolean isReexport() {
     return false;
   }
   
+  @Override
   public boolean isOptional() {
     return false;
   }

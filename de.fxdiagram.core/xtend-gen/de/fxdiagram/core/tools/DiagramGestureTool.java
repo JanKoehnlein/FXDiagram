@@ -60,6 +60,7 @@ public class DiagramGestureTool implements XDiagramTool {
   public DiagramGestureTool(final XRoot root) {
     this.root = root;
     final EventHandler<ZoomEvent> _function = new EventHandler<ZoomEvent>() {
+      @Override
       public void handle(final ZoomEvent it) {
         XDiagram _diagram = root.getDiagram();
         double _sceneX = it.getSceneX();
@@ -71,6 +72,7 @@ public class DiagramGestureTool implements XDiagramTool {
     };
     this.zoomStartHandler = _function;
     final EventHandler<ZoomEvent> _function_1 = new EventHandler<ZoomEvent>() {
+      @Override
       public void handle(final ZoomEvent it) {
         double _totalZoomFactor = it.getTotalZoomFactor();
         final double scale = (_totalZoomFactor / DiagramGestureTool.this.zoomContext.previousScale);
@@ -92,6 +94,7 @@ public class DiagramGestureTool implements XDiagramTool {
     };
     this.zoomHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
+      @Override
       public void handle(final ScrollEvent it) {
         ViewportTransform _viewportTransform = root.getViewportTransform();
         double _deltaX = it.getDeltaX();
@@ -101,6 +104,7 @@ public class DiagramGestureTool implements XDiagramTool {
     };
     this.scrollHandler = _function_2;
     final EventHandler<RotateEvent> _function_3 = new EventHandler<RotateEvent>() {
+      @Override
       public void handle(final RotateEvent it) {
         boolean _isShortcutDown = it.isShortcutDown();
         if (_isShortcutDown) {
@@ -116,6 +120,7 @@ public class DiagramGestureTool implements XDiagramTool {
     this.rotateHandler = _function_3;
   }
   
+  @Override
   public boolean activate() {
     boolean _xblockexpression = false;
     {
@@ -133,6 +138,7 @@ public class DiagramGestureTool implements XDiagramTool {
     return _xblockexpression;
   }
   
+  @Override
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {

@@ -23,6 +23,7 @@ public abstract class DomainObjectDescriptorImpl<T extends Object> implements Do
     this.providerProperty.set(provider);
   }
   
+  @Override
   public boolean equals(final Object obj) {
     boolean _and = false;
     boolean _and_1 = false;
@@ -46,6 +47,7 @@ public abstract class DomainObjectDescriptorImpl<T extends Object> implements Do
     return _and;
   }
   
+  @Override
   public int hashCode() {
     String _id = this.getId();
     return _id.hashCode();

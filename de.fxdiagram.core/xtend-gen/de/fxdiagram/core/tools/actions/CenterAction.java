@@ -28,6 +28,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class CenterAction implements DiagramAction {
+  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _isShortcutDown = it.isShortcutDown();
@@ -41,14 +42,17 @@ public class CenterAction implements DiagramAction {
     return _and;
   }
   
+  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.SELECTION2;
   }
   
+  @Override
   public String getTooltip() {
     return "Center selection";
   }
   
+  @Override
   public void perform(final XRoot root) {
     final ViewportCommand _function = new ViewportCommand() {
       @Override
@@ -67,6 +71,7 @@ public class CenterAction implements DiagramAction {
         }
         final Iterable<XShape> elements = _xifexpression;
         final Function1<XShape, Bounds> _function = new Function1<XShape, Bounds>() {
+          @Override
           public Bounds apply(final XShape it) {
             Bounds _snapBounds = it.getSnapBounds();
             return CoreExtensions.localToRootDiagram(it, _snapBounds);
@@ -74,6 +79,7 @@ public class CenterAction implements DiagramAction {
         };
         Iterable<Bounds> _map = IterableExtensions.<XShape, Bounds>map(elements, _function);
         final Function2<Bounds, Bounds, Bounds> _function_1 = new Function2<Bounds, Bounds, Bounds>() {
+          @Override
           public Bounds apply(final Bounds a, final Bounds b) {
             return BoundsExtensions.operator_plus(a, b);
           }

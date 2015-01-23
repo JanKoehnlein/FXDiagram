@@ -27,6 +27,7 @@ public abstract class CachedDomainObjectDescriptor<T extends Object> extends Dom
     return _elvis;
   }
   
+  @Override
   public <U extends Object> U withDomainObject(final Function1<? super T, ? extends U> lambda) {
     T _domainObject = this.getDomainObject();
     return lambda.apply(_domainObject);

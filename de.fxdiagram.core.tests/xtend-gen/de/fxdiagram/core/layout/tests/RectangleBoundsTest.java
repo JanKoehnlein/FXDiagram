@@ -18,17 +18,13 @@ public class RectangleBoundsTest {
   public void testBoundInLocalEvent() {
     final ArrayList<Object> result = CollectionLiterals.<Object>newArrayList();
     Rectangle _rectangle = new Rectangle();
-    final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-      public void apply(final Rectangle it) {
-        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-        final InvalidationListener _function = new InvalidationListener() {
-          public void invalidated(final Observable it) {
-            Object _object = new Object();
-            result.add(_object);
-          }
-        };
-        _boundsInLocalProperty.addListener(_function);
-      }
+    final Procedure1<Rectangle> _function = (Rectangle it) -> {
+      ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+      final InvalidationListener _function_1 = (Observable it_1) -> {
+        Object _object = new Object();
+        result.add(_object);
+      };
+      _boundsInLocalProperty.addListener(_function_1);
     };
     final Rectangle r = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
     r.setWidth(7);

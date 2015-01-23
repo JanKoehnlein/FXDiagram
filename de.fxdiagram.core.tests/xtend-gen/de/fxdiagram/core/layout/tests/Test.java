@@ -24,15 +24,14 @@ public class Test extends Application {
   
   private Node r;
   
+  @Override
   public void start(final Stage primaryStage) throws Exception {
     XRoot _xRoot = new XRoot();
-    final Procedure1<XRoot> _function = new Procedure1<XRoot>() {
-      public void apply(final XRoot it) {
-        HeadsUpDisplay _headsUpDisplay = it.getHeadsUpDisplay();
-        ObservableList<Node> _children = _headsUpDisplay.getChildren();
-        Rectangle _rectangle = new Rectangle(10, 10, 10, 10);
-        _children.add((Test.this.r = _rectangle));
-      }
+    final Procedure1<XRoot> _function = (XRoot it) -> {
+      HeadsUpDisplay _headsUpDisplay = it.getHeadsUpDisplay();
+      ObservableList<Node> _children = _headsUpDisplay.getChildren();
+      Rectangle _rectangle = new Rectangle(10, 10, 10, 10);
+      _children.add((this.r = _rectangle));
     };
     XRoot _doubleArrow = ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
     Scene _scene = new Scene(
@@ -40,16 +39,15 @@ public class Test extends Application {
     primaryStage.setScene(_scene);
     primaryStage.show();
     new Thread() {
+      @Override
       public void run() {
         try {
           Thread.sleep(1000);
-          final Runnable _function = new Runnable() {
-            public void run() {
-              HeadsUpDisplay _headsUpDisplay = Test.this.root.getHeadsUpDisplay();
-              ObservableList<Node> _children = _headsUpDisplay.getChildren();
-              _children.remove(Test.this.r);
-              InputOutput.<String>println("click");
-            }
+          final Runnable _function = () -> {
+            HeadsUpDisplay _headsUpDisplay = Test.this.root.getHeadsUpDisplay();
+            ObservableList<Node> _children = _headsUpDisplay.getChildren();
+            _children.remove(Test.this.r);
+            InputOutput.<String>println("click");
           };
           Platform.runLater(_function);
         } catch (Throwable _e) {

@@ -93,12 +93,15 @@ public class OpenableDiagramNode extends XNode {
     super(domainObject);
   }
   
+  @Override
   protected Node createNode() {
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      @Override
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
+          @Override
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
             String _name = OpenableDiagramNode.this.getName();
@@ -115,10 +118,12 @@ public class OpenableDiagramNode extends XNode {
       this.pane, _function);
   }
   
+  @Override
   public Anchors createAnchors() {
     return new RoundedRectangleAnchors(this, 12, 12);
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     TooltipExtensions.setTooltip(this.pane, "Double-click to open");
@@ -134,6 +139,7 @@ public class OpenableDiagramNode extends XNode {
     } else {
       Node _node = this.getNode();
       final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+        @Override
         public void handle(final MouseEvent it) {
           int _clickCount = it.getClickCount();
           boolean _equals = (_clickCount == 2);
@@ -145,6 +151,7 @@ public class OpenableDiagramNode extends XNode {
       _node.setOnMouseClicked(_function);
     }
     final AbstractOpenBehavior _function_1 = new AbstractOpenBehavior() {
+      @Override
       public void open() {
         OpenableDiagramNode.this.openDiagram();
       }
@@ -191,6 +198,7 @@ public class OpenableDiagramNode extends XNode {
       XDiagram _innerDiagram = this.getInnerDiagram();
       DiagramScaler _diagramScaler = new DiagramScaler(_innerDiagram);
       final Procedure1<DiagramScaler> _function = new Procedure1<DiagramScaler>() {
+        @Override
         public void apply(final DiagramScaler it) {
           double _width = OpenableDiagramNode.this.nodeBounds.getWidth();
           it.setWidth(_width);
@@ -205,6 +213,7 @@ public class OpenableDiagramNode extends XNode {
       ObservableList<Node> _children = this.pane.getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function_1 = new Procedure1<Group>() {
+        @Override
         public void apply(final Group it) {
           ObservableList<Node> _children = it.getChildren();
           XDiagram _innerDiagram = OpenableDiagramNode.this.getInnerDiagram();
@@ -216,6 +225,7 @@ public class OpenableDiagramNode extends XNode {
       XDiagram _innerDiagram_2 = this.getInnerDiagram();
       _innerDiagram_2.activate();
       final AbstractCloseBehavior _function_2 = new AbstractCloseBehavior() {
+        @Override
         public void close() {
           OpenableDiagramNode.this.closeDiagram();
         }
@@ -250,13 +260,16 @@ public class OpenableDiagramNode extends XNode {
       final double targetScale = (_max * _scale);
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function_3 = new Procedure1<ParallelTransition>() {
+        @Override
         public void apply(final ParallelTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           ViewportTransition _viewportTransition = new ViewportTransition(OpenableDiagramNode.this.root, OpenableDiagramNode.this.nodeCenterInDiagram, targetScale);
           final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
+            @Override
             public void apply(final ViewportTransition it) {
               it.setDuration(duration);
               final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                @Override
                 public void handle(final ActionEvent it) {
                   OpenableDiagramNode.this.diagramScaler.deactivate();
                   XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();
@@ -265,8 +278,10 @@ public class OpenableDiagramNode extends XNode {
                   _children.setAll(OpenableDiagramNode.this.textNode);
                   Canvas _symbol = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY);
                   final Procedure1<Canvas> _function = new Procedure1<Canvas>() {
+                    @Override
                     public void apply(final Canvas it) {
                       final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+                        @Override
                         public void handle(final MouseEvent it) {
                           HeadsUpDisplay _headsUpDisplay = OpenableDiagramNode.this.root.getHeadsUpDisplay();
                           ObservableList<Node> _children = _headsUpDisplay.getChildren();
@@ -295,6 +310,7 @@ public class OpenableDiagramNode extends XNode {
           ObservableList<Animation> _children_1 = it.getChildren();
           FadeTransition _fadeTransition = new FadeTransition();
           final Procedure1<FadeTransition> _function_1 = new Procedure1<FadeTransition>() {
+            @Override
             public void apply(final FadeTransition it) {
               Duration _multiply = DurationExtensions.operator_multiply((1 - OpenableDiagramNode.this.delayFactor), duration);
               it.setDuration(_multiply);
@@ -308,6 +324,7 @@ public class OpenableDiagramNode extends XNode {
           ObservableList<Animation> _children_2 = it.getChildren();
           FadeTransition _fadeTransition_1 = new FadeTransition();
           final Procedure1<FadeTransition> _function_2 = new Procedure1<FadeTransition>() {
+            @Override
             public void apply(final FadeTransition it) {
               Duration _multiply = DurationExtensions.operator_multiply(OpenableDiagramNode.this.delayFactor, duration);
               it.setDelay(_multiply);
@@ -347,6 +364,7 @@ public class OpenableDiagramNode extends XNode {
       XDiagram _innerDiagram = this.getInnerDiagram();
       ObservableList<XNode> _nodes = _innerDiagram.getNodes();
       final Function1<XNode, BoundingBox> _function = new Function1<XNode, BoundingBox>() {
+        @Override
         public BoundingBox apply(final XNode it) {
           Bounds _layoutBounds = it.getLayoutBounds();
           double _layoutX = it.getLayoutX();
@@ -356,6 +374,7 @@ public class OpenableDiagramNode extends XNode {
       };
       List<BoundingBox> _map = ListExtensions.<XNode, BoundingBox>map(_nodes, _function);
       final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = new Function2<BoundingBox, BoundingBox, BoundingBox>() {
+        @Override
         public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
           return BoundsExtensions.operator_plus(b0, b1);
         }
@@ -365,10 +384,12 @@ public class OpenableDiagramNode extends XNode {
       final ViewportTransition phaseOne = new ViewportTransition(this.root, innerDiagramCenter, 1);
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function_2 = new Procedure1<ParallelTransition>() {
+        @Override
         public void apply(final ParallelTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           FadeTransition _fadeTransition = new FadeTransition();
           final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+            @Override
             public void apply(final FadeTransition it) {
               Duration _multiply = DurationExtensions.operator_multiply(OpenableDiagramNode.this.delayFactor, duration);
               it.setDelay(_multiply);
@@ -384,6 +405,7 @@ public class OpenableDiagramNode extends XNode {
           ObservableList<Animation> _children_1 = it.getChildren();
           FadeTransition _fadeTransition_1 = new FadeTransition();
           final Procedure1<FadeTransition> _function_1 = new Procedure1<FadeTransition>() {
+            @Override
             public void apply(final FadeTransition it) {
               Duration _multiply = DurationExtensions.operator_multiply((1 - OpenableDiagramNode.this.delayFactor), duration);
               it.setDuration(_multiply);
@@ -400,19 +422,23 @@ public class OpenableDiagramNode extends XNode {
       final ParallelTransition phaseTwo = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_2);
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function_3 = new Procedure1<SequentialTransition>() {
+        @Override
         public void apply(final SequentialTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
+            @Override
             public void apply(final ViewportTransition it) {
               Duration _multiply = DurationExtensions.operator_multiply(duration, 0.3);
               it.setDuration(_multiply);
               final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                @Override
                 public void handle(final ActionEvent it) {
                   XDiagram _parentDiagram = OpenableDiagramNode.this.getParentDiagram();
                   OpenableDiagramNode.this.root.setDiagram(_parentDiagram);
                   ObservableList<Node> _children = OpenableDiagramNode.this.pane.getChildren();
                   Group _group = new Group();
                   final Procedure1<Group> _function = new Procedure1<Group>() {
+                    @Override
                     public void apply(final Group it) {
                       ObservableList<Node> _children = it.getChildren();
                       XDiagram _innerDiagram = OpenableDiagramNode.this.getInnerDiagram();
@@ -426,8 +452,10 @@ public class OpenableDiagramNode extends XNode {
                   ObservableList<Animation> _children_1 = phaseTwo.getChildren();
                   ViewportTransition _viewportTransition = new ViewportTransition(OpenableDiagramNode.this.root, OpenableDiagramNode.this.viewportBeforeOpen, duration);
                   final Procedure1<ViewportTransition> _function_1 = new Procedure1<ViewportTransition>() {
+                    @Override
                     public void apply(final ViewportTransition it) {
                       final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                        @Override
                         public void handle(final ActionEvent it) {
                           OpenableDiagramNode.this.diagramScaler.deactivate();
                           XDiagram _diagram = OpenableDiagramNode.this.root.getDiagram();

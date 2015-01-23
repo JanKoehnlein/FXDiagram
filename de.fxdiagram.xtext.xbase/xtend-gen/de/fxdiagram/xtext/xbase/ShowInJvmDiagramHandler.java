@@ -60,26 +60,24 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
         ISelection _selection = _selectionProvider.getSelection();
         final ITextSelection selection = ((ITextSelection) _selection);
         IXtextDocument _document = editor.getDocument();
-        final IUnitOfWork<Object, XtextResource> _function = new IUnitOfWork<Object, XtextResource>() {
-          public Object exec(final XtextResource it) throws Exception {
-            Object _xblockexpression = null;
-            {
-              int _offset = selection.getOffset();
-              final EObject selectedElement = Action.this.eObjectAtOffsetHelper.resolveElementAt(it, _offset);
-              boolean _notEquals = (!Objects.equal(selectedElement, null));
-              if (_notEquals) {
-                final EObject primary = Action.this._iJvmModelAssociations.getPrimaryJvmElement(selectedElement);
-                boolean _notEquals_1 = (!Objects.equal(primary, null));
-                if (_notEquals_1) {
-                  ShowInJvmDiagramHandler.showElement(primary, editor);
-                } else {
-                  ShowInJvmDiagramHandler.showElement(selectedElement, editor);
-                }
+        final IUnitOfWork<Object, XtextResource> _function = (XtextResource it) -> {
+          Object _xblockexpression_1 = null;
+          {
+            int _offset = selection.getOffset();
+            final EObject selectedElement = this.eObjectAtOffsetHelper.resolveElementAt(it, _offset);
+            boolean _notEquals = (!Objects.equal(selectedElement, null));
+            if (_notEquals) {
+              final EObject primary = this._iJvmModelAssociations.getPrimaryJvmElement(selectedElement);
+              boolean _notEquals_1 = (!Objects.equal(primary, null));
+              if (_notEquals_1) {
+                ShowInJvmDiagramHandler.showElement(primary, editor);
+              } else {
+                ShowInJvmDiagramHandler.showElement(selectedElement, editor);
               }
-              _xblockexpression = null;
             }
-            return _xblockexpression;
+            _xblockexpression_1 = null;
           }
+          return _xblockexpression_1;
         };
         _xblockexpression = _document.<Object>readOnly(_function);
       }
@@ -89,6 +87,7 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
   
   private final static Logger LOG = Logger.getLogger(ShowInJvmDiagramHandler.class);
   
+  @Override
   public void setEnabled(final Object evaluationContext) {
     if ((evaluationContext instanceof IEvaluationContext)) {
       final Object editor = ((IEvaluationContext)evaluationContext).getVariable(ISources.ACTIVE_EDITOR_NAME);
@@ -96,11 +95,9 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
         final IGrammarAccess languageService = this.<IGrammarAccess>getLanguageService(((XtextEditor)editor), IGrammarAccess.class);
         Grammar _grammar = languageService.getGrammar();
         List<Grammar> _allUsedGrammars = GrammarUtil.allUsedGrammars(_grammar);
-        final Function1<Grammar, Boolean> _function = new Function1<Grammar, Boolean>() {
-          public Boolean apply(final Grammar it) {
-            String _name = it.getName();
-            return Boolean.valueOf(Objects.equal(_name, "org.eclipse.xtext.xbase.Xbase"));
-          }
+        final Function1<Grammar, Boolean> _function = (Grammar it) -> {
+          String _name = it.getName();
+          return Boolean.valueOf(Objects.equal(_name, "org.eclipse.xtext.xbase.Xbase"));
         };
         final boolean usesXbase = IterableExtensions.<Grammar>exists(_allUsedGrammars, _function);
         this.setBaseEnabled(usesXbase);
@@ -112,6 +109,7 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
     super.setEnabled(evaluationContext);
   }
   
+  @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     try {
       final IEditorPart editor = HandlerUtil.getActiveEditor(event);
@@ -153,10 +151,8 @@ public class ShowInJvmDiagramHandler extends AbstractHandler {
   
   protected <T extends Object> T getLanguageService(final XtextEditor editor, final Class<T> service) {
     IXtextDocument _document = editor.getDocument();
-    final IUnitOfWork<URI, XtextResource> _function = new IUnitOfWork<URI, XtextResource>() {
-      public URI exec(final XtextResource it) throws Exception {
-        return it.getURI();
-      }
+    final IUnitOfWork<URI, XtextResource> _function = (XtextResource it) -> {
+      return it.getURI();
     };
     final URI uri = _document.<URI>readOnly(_function);
     final IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(uri);

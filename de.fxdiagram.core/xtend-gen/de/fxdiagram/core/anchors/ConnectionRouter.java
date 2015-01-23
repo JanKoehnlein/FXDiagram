@@ -47,12 +47,14 @@ public class ConnectionRouter implements XActivatable {
   public ConnectionRouter(final XConnection connection) {
     this.connection = connection;
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
+      @Override
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         connection.requestLayout();
       }
     };
     this.scalarListener = _function;
     final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
+      @Override
       public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
         connection.requestLayout();
       }
@@ -64,6 +66,7 @@ public class ConnectionRouter implements XActivatable {
     return this.connection.getControlPoints();
   }
   
+  @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
@@ -112,6 +115,7 @@ public class ConnectionRouter implements XActivatable {
         {
           XControlPoint _xControlPoint = new XControlPoint();
           final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+            @Override
             public void apply(final XControlPoint it) {
               final double lambda = (delta * (i).intValue());
               double _layoutX = first.getLayoutX();
@@ -279,6 +283,7 @@ public class ConnectionRouter implements XActivatable {
         ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
         XControlPoint _xControlPoint = new XControlPoint();
         final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+          @Override
           public void apply(final XControlPoint it) {
             double _x = sourcePoint.getX();
             it.setLayoutX(_x);
@@ -290,6 +295,7 @@ public class ConnectionRouter implements XActivatable {
         XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
         XControlPoint _xControlPoint_1 = new XControlPoint();
         final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
+          @Override
           public void apply(final XControlPoint it) {
             double _x = targetPoint.getX();
             it.setLayoutX(_x);
@@ -327,6 +333,7 @@ public class ConnectionRouter implements XActivatable {
         ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
         XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_5);
         final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
+          @Override
           public void apply(final XControlPoint it) {
             double _x = sourcePoint.getX();
             it.setLayoutX(_x);
@@ -338,6 +345,7 @@ public class ConnectionRouter implements XActivatable {
         ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
         XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_6);
         final Procedure1<XControlPoint> _function_3 = new Procedure1<XControlPoint>() {
+          @Override
           public void apply(final XControlPoint it) {
             double _x = targetPoint.getX();
             it.setLayoutX(_x);
@@ -349,6 +357,7 @@ public class ConnectionRouter implements XActivatable {
       }
       ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
       final Consumer<XControlPoint> _function_4 = new Consumer<XControlPoint>() {
+        @Override
         public void accept(final XControlPoint it) {
           ObservableList<XControlPoint> _controlPoints = ConnectionRouter.this.getControlPoints();
           it.update(_controlPoints);
@@ -370,6 +379,7 @@ public class ConnectionRouter implements XActivatable {
       ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
       XControlPoint _xControlPoint = new XControlPoint();
       final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
+        @Override
         public void apply(final XControlPoint it) {
           it.setType(XControlPoint.Type.ANCHOR);
         }
@@ -395,6 +405,7 @@ public class ConnectionRouter implements XActivatable {
             ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
             XControlPoint _xControlPoint_1 = new XControlPoint();
             final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
+              @Override
               public void apply(final XControlPoint it) {
                 double _minX = boundsInDiagram.getMinX();
                 double _minus = (_minX - deltaX);
@@ -410,6 +421,7 @@ public class ConnectionRouter implements XActivatable {
             ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
             XControlPoint _xControlPoint_2 = new XControlPoint();
             final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
+              @Override
               public void apply(final XControlPoint it) {
                 double _minX = boundsInDiagram.getMinX();
                 double _minus = (_minX - deltaX);
@@ -425,6 +437,7 @@ public class ConnectionRouter implements XActivatable {
             ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
             XControlPoint _xControlPoint_3 = new XControlPoint();
             final Procedure1<XControlPoint> _function_3 = new Procedure1<XControlPoint>() {
+              @Override
               public void apply(final XControlPoint it) {
                 double _minX = boundsInDiagram.getMinX();
                 double _plus = (_minX + deltaX);
@@ -442,6 +455,7 @@ public class ConnectionRouter implements XActivatable {
             ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
             XControlPoint _xControlPoint_4 = new XControlPoint();
             final Procedure1<XControlPoint> _function_4 = new Procedure1<XControlPoint>() {
+              @Override
               public void apply(final XControlPoint it) {
                 double _minX = boundsInDiagram.getMinX();
                 double _minus = (_minX - ConnectionRouter.this.selfEdgeDist);
@@ -457,6 +471,7 @@ public class ConnectionRouter implements XActivatable {
             ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
             XControlPoint _xControlPoint_5 = new XControlPoint();
             final Procedure1<XControlPoint> _function_5 = new Procedure1<XControlPoint>() {
+              @Override
               public void apply(final XControlPoint it) {
                 double _minX = boundsInDiagram.getMinX();
                 double _plus = (_minX + (0.3 * ConnectionRouter.this.selfEdgeDist));
@@ -477,6 +492,7 @@ public class ConnectionRouter implements XActivatable {
       ObservableList<XControlPoint> _controlPoints_7 = this.getControlPoints();
       XControlPoint _xControlPoint_6 = new XControlPoint();
       final Procedure1<XControlPoint> _function_6 = new Procedure1<XControlPoint>() {
+        @Override
         public void apply(final XControlPoint it) {
           it.setType(XControlPoint.Type.ANCHOR);
         }

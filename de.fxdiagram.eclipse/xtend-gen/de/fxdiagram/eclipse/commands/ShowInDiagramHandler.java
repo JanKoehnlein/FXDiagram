@@ -38,14 +38,17 @@ public class ShowInDiagramHandler extends AbstractHandler {
   @Inject
   private IWorkbench workbench;
   
+  @Override
   public boolean isEnabled() {
     return super.isEnabled();
   }
   
+  @Override
   public void setEnabled(final Object evaluationContext) {
     super.setEnabled(evaluationContext);
   }
   
+  @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     try {
       final XtextEditor editor = EditorUtils.getActiveXtextEditor(event);
@@ -56,6 +59,7 @@ public class ShowInDiagramHandler extends AbstractHandler {
         final ITextSelection selection = ((ITextSelection) _selection);
         IXtextDocument _document = editor.getDocument();
         final IUnitOfWork<Object, XtextResource> _function = new IUnitOfWork<Object, XtextResource>() {
+          @Override
           public Object exec(final XtextResource it) throws Exception {
             Object _xblockexpression = null;
             {
@@ -66,6 +70,7 @@ public class ShowInDiagramHandler extends AbstractHandler {
                 XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
                 Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
                 final Function1<XDiagramConfig, Iterable<? extends MappingCall<?, EObject>>> _function = new Function1<XDiagramConfig, Iterable<? extends MappingCall<?, EObject>>>() {
+                  @Override
                   public Iterable<? extends MappingCall<?, EObject>> apply(final XDiagramConfig it) {
                     return it.<EObject>getEntryCalls(selectedElement);
                   }

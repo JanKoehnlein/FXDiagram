@@ -37,6 +37,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
   
   private FadeTransition fadeTransition;
   
+  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _isShortcutDown = it.isShortcutDown();
@@ -50,14 +51,17 @@ public class UndoRedoPlayerAction implements DiagramAction {
     return _and;
   }
   
+  @Override
   public Symbol.Type getSymbol() {
     return null;
   }
   
+  @Override
   public String getTooltip() {
     return "Undo player";
   }
   
+  @Override
   public void perform(final XRoot root) {
     this.root = root;
     StackPane _createControlPanel = this.createControlPanel();
@@ -69,11 +73,13 @@ public class UndoRedoPlayerAction implements DiagramAction {
   protected StackPane createControlPanel() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+      @Override
       public void apply(final StackPane it) {
         it.setAlignment(Pos.CENTER);
         ObservableList<Node> _children = it.getChildren();
         Rectangle _rectangle = new Rectangle();
         final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+          @Override
           public void apply(final Rectangle it) {
             it.setWidth(400);
             it.setHeight(60);
@@ -85,15 +91,18 @@ public class UndoRedoPlayerAction implements DiagramAction {
         ObservableList<Node> _children_1 = it.getChildren();
         HBox _hBox = new HBox();
         final Procedure1<HBox> _function_1 = new Procedure1<HBox>() {
+          @Override
           public void apply(final HBox it) {
             it.setAlignment(Pos.CENTER);
             ObservableList<Node> _children = it.getChildren();
             Button _button = new Button();
             final Procedure1<Button> _function = new Procedure1<Button>() {
+              @Override
               public void apply(final Button it) {
                 it.setId("back-button");
                 it.setText("Back");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                  @Override
                   public void handle(final ActionEvent it) {
                     UndoRedoPlayerAction.this.startFastMode(true);
                   }
@@ -106,10 +115,12 @@ public class UndoRedoPlayerAction implements DiagramAction {
             ObservableList<Node> _children_1 = it.getChildren();
             Button _button_1 = new Button();
             final Procedure1<Button> _function_1 = new Procedure1<Button>() {
+              @Override
               public void apply(final Button it) {
                 it.setId("reverse-button");
                 it.setText("undo");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                  @Override
                   public void handle(final ActionEvent it) {
                     UndoRedoPlayerAction.this.stopFastMode();
                     CommandStack _commandStack = UndoRedoPlayerAction.this.root.getCommandStack();
@@ -124,10 +135,12 @@ public class UndoRedoPlayerAction implements DiagramAction {
             ObservableList<Node> _children_2 = it.getChildren();
             Button _button_2 = new Button();
             final Procedure1<Button> _function_2 = new Procedure1<Button>() {
+              @Override
               public void apply(final Button it) {
                 it.setId("pause-button");
                 it.setText("pause");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                  @Override
                   public void handle(final ActionEvent it) {
                     UndoRedoPlayerAction.this.stopFastMode();
                   }
@@ -140,10 +153,12 @@ public class UndoRedoPlayerAction implements DiagramAction {
             ObservableList<Node> _children_3 = it.getChildren();
             Button _button_3 = new Button();
             final Procedure1<Button> _function_3 = new Procedure1<Button>() {
+              @Override
               public void apply(final Button it) {
                 it.setId("play-button");
                 it.setText("redo");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                  @Override
                   public void handle(final ActionEvent it) {
                     UndoRedoPlayerAction.this.stopFastMode();
                     CommandStack _commandStack = UndoRedoPlayerAction.this.root.getCommandStack();
@@ -158,10 +173,12 @@ public class UndoRedoPlayerAction implements DiagramAction {
             ObservableList<Node> _children_4 = it.getChildren();
             Button _button_4 = new Button();
             final Procedure1<Button> _function_4 = new Procedure1<Button>() {
+              @Override
               public void apply(final Button it) {
                 it.setId("forward-button");
                 it.setText("forward");
                 final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+                  @Override
                   public void handle(final ActionEvent it) {
                     UndoRedoPlayerAction.this.startFastMode(false);
                   }
@@ -172,12 +189,14 @@ public class UndoRedoPlayerAction implements DiagramAction {
             Button _doubleArrow_4 = ObjectExtensions.<Button>operator_doubleArrow(_button_4, _function_4);
             _children_4.add(_doubleArrow_4);
             final EventHandler<MouseEvent> _function_5 = new EventHandler<MouseEvent>() {
+              @Override
               public void handle(final MouseEvent it) {
                 UndoRedoPlayerAction.this.fade();
               }
             };
             it.setOnMouseExited(_function_5);
             final EventHandler<MouseEvent> _function_6 = new EventHandler<MouseEvent>() {
+              @Override
               public void handle(final MouseEvent it) {
                 UndoRedoPlayerAction.this.show();
               }
@@ -209,6 +228,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
       this.stopFastMode();
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+        @Override
         public void apply(final FadeTransition it) {
           it.setNode(UndoRedoPlayerAction.this.controlPanel);
           Duration _seconds = DurationExtensions.seconds(1);
@@ -216,6 +236,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
           it.setFromValue(1);
           it.setToValue(0);
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+            @Override
             public void handle(final ActionEvent it) {
               HeadsUpDisplay _headsUpDisplay = UndoRedoPlayerAction.this.root.getHeadsUpDisplay();
               ObservableList<Node> _children = _headsUpDisplay.getChildren();
@@ -246,6 +267,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
     this.stopFastMode();
     final CommandStack commandStack = this.root.getCommandStack();
     final AnimationQueue.Listener _function = new AnimationQueue.Listener() {
+      @Override
       public void handleQueueEmpty() {
         boolean _and = false;
         if (!isUndo) {

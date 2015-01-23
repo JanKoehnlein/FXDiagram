@@ -30,6 +30,7 @@ public class FirstRecursiveImageNode extends XNode {
     this.recursiveImageNode = parent;
   }
   
+  @Override
   protected Node createNode() {
     Group _xblockexpression = null;
     {
@@ -40,6 +41,7 @@ public class FirstRecursiveImageNode extends XNode {
     return _xblockexpression;
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     DoubleProperty _layoutXProperty = this.layoutXProperty();
@@ -59,6 +61,7 @@ public class FirstRecursiveImageNode extends XNode {
     ViewportTransform _viewportTransform = _diagram.getViewportTransform();
     ReadOnlyDoubleProperty _scaleProperty_2 = _viewportTransform.scaleProperty();
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
+      @Override
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         FirstRecursiveImageNode.this.updateChildPanes();
       }
@@ -66,6 +69,7 @@ public class FirstRecursiveImageNode extends XNode {
     _scaleProperty_2.addListener(_function);
   }
   
+  @Override
   public void selectionFeedback(final boolean isSelected) {
   }
   
@@ -107,6 +111,7 @@ public class FirstRecursiveImageNode extends XNode {
   public Group createScaledPane() {
     Group _createPane = this.recursiveImageNode.createPane();
     final Procedure1<Group> _function = new Procedure1<Group>() {
+      @Override
       public void apply(final Group it) {
         DoubleProperty _scaleXProperty = it.scaleXProperty();
         DoubleProperty _scaleProperty = FirstRecursiveImageNode.this.recursiveImageNode.scaleProperty();

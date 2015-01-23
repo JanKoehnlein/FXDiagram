@@ -13,6 +13,7 @@ public class JavaTypeDescriptor extends CachedDomainObjectDescriptor<Class<?>> {
     super(javaClass, javaClass.getCanonicalName(), javaClass.getCanonicalName(), provider);
   }
   
+  @Override
   public Class<?> resolveDomainObject() {
     try {
       String _id = this.getId();

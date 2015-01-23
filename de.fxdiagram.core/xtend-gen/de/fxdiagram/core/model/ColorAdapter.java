@@ -30,6 +30,7 @@ public class ColorAdapter implements ValueAdapter<Color> {
     this.color = color;
   }
   
+  @Override
   public Color getValueObject() {
     double _red = this.getRed();
     double _green = this.getGreen();
@@ -38,22 +39,27 @@ public class ColorAdapter implements ValueAdapter<Color> {
     return new Color(_red, _green, _blue, _opacity);
   }
   
+  @Override
   public List<? extends Property<?>> getProperties() {
-    return Collections.<SimpleDoubleProperty>unmodifiableList(CollectionLiterals.<SimpleDoubleProperty>newArrayList(this.redProperty, this.greenProperty, this.blueProperty, this.opacityProperty));
+    return Collections.<Property<?>>unmodifiableList(CollectionLiterals.<Property<?>>newArrayList(this.redProperty, this.greenProperty, this.blueProperty, this.opacityProperty));
   }
   
+  @Override
   public List<? extends ListProperty<?>> getListProperties() {
     return CollectionLiterals.<ListProperty<?>>emptyList();
   }
   
+  @Override
   public Class<?> getType(final Property<?> property) {
     return Double.class;
   }
   
+  @Override
   public boolean isPrimitive(final Property<?> property) {
     return true;
   }
   
+  @Override
   public Object getNode() {
     Color _xblockexpression = null;
     {

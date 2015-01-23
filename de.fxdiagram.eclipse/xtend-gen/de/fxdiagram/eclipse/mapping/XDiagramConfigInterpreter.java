@@ -44,6 +44,7 @@ public class XDiagramConfigInterpreter {
       context.diagram = diagram;
       List<AbstractNodeMappingCall<?, T>> _nodes = diagramMapping.getNodes();
       final Consumer<AbstractNodeMappingCall<?, T>> _function = new Consumer<AbstractNodeMappingCall<?, T>>() {
+        @Override
         public void accept(final AbstractNodeMappingCall<?, T> it) {
           XDiagramConfigInterpreter.this.execute(it, diagramObject, context, true);
         }
@@ -51,8 +52,10 @@ public class XDiagramConfigInterpreter {
       _nodes.forEach(_function);
       List<AbstractConnectionMappingCall<?, T>> _connections = diagramMapping.getConnections();
       final Consumer<AbstractConnectionMappingCall<?, T>> _function_1 = new Consumer<AbstractConnectionMappingCall<?, T>>() {
+        @Override
         public void accept(final AbstractConnectionMappingCall<?, T> it) {
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+            @Override
             public void apply(final XConnection it) {
             }
           };
@@ -62,6 +65,7 @@ public class XDiagramConfigInterpreter {
       _connections.forEach(_function_1);
       List<AbstractNodeMappingCall<?, T>> _nodes_1 = diagramMapping.getNodes();
       final Consumer<AbstractNodeMappingCall<?, T>> _function_2 = new Consumer<AbstractNodeMappingCall<?, T>>() {
+        @Override
         public void accept(final AbstractNodeMappingCall<?, T> it) {
           XDiagramConfigInterpreter.this.<T>connectNodesEagerly(it, diagramObject, context);
         }
@@ -84,14 +88,17 @@ public class XDiagramConfigInterpreter {
         if (_notEquals) {
           List<AbstractConnectionMappingCall<?, Object>> _incoming = nodeMappingCasted.getIncoming();
           final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function = new Function1<AbstractConnectionMappingCall<?, Object>, Boolean>() {
+            @Override
             public Boolean apply(final AbstractConnectionMappingCall<?, Object> it) {
               return Boolean.valueOf(it.isLazy());
             }
           };
           Iterable<AbstractConnectionMappingCall<?, Object>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?, Object>>filter(_incoming, _function);
           final Consumer<AbstractConnectionMappingCall<?, Object>> _function_1 = new Consumer<AbstractConnectionMappingCall<?, Object>>() {
+            @Override
             public void accept(final AbstractConnectionMappingCall<?, Object> it) {
               final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                @Override
                 public void apply(final XConnection it) {
                   it.setTarget(node);
                 }
@@ -102,14 +109,17 @@ public class XDiagramConfigInterpreter {
           _filter.forEach(_function_1);
           List<AbstractConnectionMappingCall<?, Object>> _outgoing = nodeMappingCasted.getOutgoing();
           final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function_2 = new Function1<AbstractConnectionMappingCall<?, Object>, Boolean>() {
+            @Override
             public Boolean apply(final AbstractConnectionMappingCall<?, Object> it) {
               return Boolean.valueOf(it.isLazy());
             }
           };
           Iterable<AbstractConnectionMappingCall<?, Object>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?, Object>>filter(_outgoing, _function_2);
           final Consumer<AbstractConnectionMappingCall<?, Object>> _function_3 = new Consumer<AbstractConnectionMappingCall<?, Object>>() {
+            @Override
             public void accept(final AbstractConnectionMappingCall<?, Object> it) {
               final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                @Override
                 public void apply(final XConnection it) {
                   it.setSource(node);
                 }
@@ -142,11 +152,13 @@ public class XDiagramConfigInterpreter {
       context.addNode(node);
       List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
       final Consumer<AbstractConnectionMappingCall<?, T>> _function = new Consumer<AbstractConnectionMappingCall<?, T>>() {
+        @Override
         public void accept(final AbstractConnectionMappingCall<?, T> it) {
           boolean _isLazy = it.isLazy();
           boolean _not = (!_isLazy);
           if (_not) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+              @Override
               public void apply(final XConnection it) {
                 it.setTarget(node);
               }
@@ -158,11 +170,13 @@ public class XDiagramConfigInterpreter {
       _incoming.forEach(_function);
       List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
       final Consumer<AbstractConnectionMappingCall<?, T>> _function_1 = new Consumer<AbstractConnectionMappingCall<?, T>>() {
+        @Override
         public void accept(final AbstractConnectionMappingCall<?, T> it) {
           boolean _isLazy = it.isLazy();
           boolean _not = (!_isLazy);
           if (_not) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+              @Override
               public void apply(final XConnection it) {
                 it.setSource(node);
               }

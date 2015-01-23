@@ -13,6 +13,7 @@ import de.fxdiagram.examples.java.JavaTypeDescriptor;
 @ModelNode
 @SuppressWarnings("all")
 public class JavaModelProvider implements DomainObjectProvider {
+  @Override
   public DomainObjectDescriptor createDescriptor(final Object domainObject) {
     boolean _matched = false;
     if (!_matched) {

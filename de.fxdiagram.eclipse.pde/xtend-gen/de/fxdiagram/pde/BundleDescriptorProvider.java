@@ -18,10 +18,12 @@ import org.osgi.framework.Version;
 @ModelNode
 @SuppressWarnings("all")
 public class BundleDescriptorProvider implements DomainObjectProvider, IMappedElementDescriptorProvider {
+  @Override
   public <T extends Object> DomainObjectDescriptor createDescriptor(final T domainObject) {
     return null;
   }
   
+  @Override
   public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
     IMappedElementDescriptor<T> _switchResult = null;
     boolean _matched = false;

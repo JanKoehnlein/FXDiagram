@@ -22,6 +22,7 @@ public class RoundedRectangleAnchors extends RectangleAnchors {
     this.radiusY = radiusY;
   }
   
+  @Override
   public Point2D getAnchor(final double x, final double y) {
     Point2D _xblockexpression = null;
     {

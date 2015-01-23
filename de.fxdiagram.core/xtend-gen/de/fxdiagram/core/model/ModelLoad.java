@@ -52,6 +52,7 @@ public class ModelLoad {
     final JsonObject jsonObject = reader.readObject();
     final Object node = this.readNode(jsonObject, "");
     final Consumer<CrossRefData> _function = new Consumer<CrossRefData>() {
+      @Override
       public void accept(final CrossRefData it) {
         ModelLoad.this.resolveCrossReference(it);
       }
@@ -68,6 +69,7 @@ public class ModelLoad {
       this.idMap.put(currentID, model);
       List<? extends Property<?>> _properties = model.getProperties();
       final Consumer<Property<?>> _function = new Consumer<Property<?>>() {
+        @Override
         public void accept(final Property<?> it) {
           Class<?> _type = model.getType(it);
           ModelLoad.this.readProperty(jsonObject, it, _type, currentID);
@@ -76,6 +78,7 @@ public class ModelLoad {
       _properties.forEach(_function);
       List<? extends ListProperty<?>> _listProperties = model.getListProperties();
       final Consumer<ListProperty<?>> _function_1 = new Consumer<ListProperty<?>>() {
+        @Override
         public void accept(final ListProperty<?> it) {
           Class<?> _type = model.getType(it);
           ModelLoad.this.readListProperty(jsonObject, it, _type, currentID);

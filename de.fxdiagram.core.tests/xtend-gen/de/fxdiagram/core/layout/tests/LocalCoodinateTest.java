@@ -30,11 +30,9 @@ public class LocalCoodinateTest {
   public void scaleIsLocalToParent() {
     final TestPane pane = new TestPane();
     Group _group = new Group();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      public void apply(final Group it) {
-        ObservableList<Node> _children = it.getChildren();
-        _children.add(pane);
-      }
+    final Procedure1<Group> _function = (Group it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      _children.add(pane);
     };
     ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
     pane.setScaleX(0.5);
@@ -58,19 +56,15 @@ public class LocalCoodinateTest {
   @Test
   public void stackPane() {
     Rectangle _rectangle = new Rectangle();
-    final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-      public void apply(final Rectangle it) {
-        it.setWidth(5);
-        it.setHeight(1);
-      }
+    final Procedure1<Rectangle> _function = (Rectangle it) -> {
+      it.setWidth(5);
+      it.setHeight(1);
     };
     final Rectangle r0 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
     Rectangle _rectangle_1 = new Rectangle();
-    final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
-      public void apply(final Rectangle it) {
-        it.setWidth(10);
-        it.setHeight(5);
-      }
+    final Procedure1<Rectangle> _function_1 = (Rectangle it) -> {
+      it.setWidth(10);
+      it.setHeight(5);
     };
     final Rectangle r1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle_1, _function_1);
     Bounds _layoutBounds = r0.getLayoutBounds();
@@ -86,14 +80,12 @@ public class LocalCoodinateTest {
     double _layoutY_1 = r1.getLayoutY();
     InputOutput.<Double>println(Double.valueOf(_layoutY_1));
     StackPane _stackPane = new StackPane();
-    final Procedure1<StackPane> _function_2 = new Procedure1<StackPane>() {
-      public void apply(final StackPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        _children.add(r0);
-        ObservableList<Node> _children_1 = it.getChildren();
-        _children_1.add(r1);
-        it.layout();
-      }
+    final Procedure1<StackPane> _function_2 = (StackPane it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      _children.add(r0);
+      ObservableList<Node> _children_1 = it.getChildren();
+      _children_1.add(r1);
+      it.layout();
     };
     final StackPane pane = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function_2);
     Bounds _layoutBounds_2 = r0.getLayoutBounds();

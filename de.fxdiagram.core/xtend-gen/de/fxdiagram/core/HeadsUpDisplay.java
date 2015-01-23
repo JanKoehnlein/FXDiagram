@@ -26,9 +26,11 @@ public class HeadsUpDisplay extends Group {
   
   public HeadsUpDisplay() {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
+      @Override
       public void changed(final ObservableValue<? extends Number> property, final Number oldVlaue, final Number newValue) {
         ObservableList<Node> _children = HeadsUpDisplay.this.getChildren();
         final Consumer<Node> _function = new Consumer<Node>() {
+          @Override
           public void accept(final Node it) {
             HeadsUpDisplay.this.place(it);
           }
@@ -39,6 +41,7 @@ public class HeadsUpDisplay extends Group {
     this.sceneListener = _function;
     ReadOnlyObjectProperty<Scene> _sceneProperty = this.sceneProperty();
     final ChangeListener<Scene> _function_1 = new ChangeListener<Scene>() {
+      @Override
       public void changed(final ObservableValue<? extends Scene> property, final Scene oldVal, final Scene newVal) {
         ReadOnlyDoubleProperty _widthProperty = null;
         if (oldVal!=null) {
@@ -84,6 +87,7 @@ public class HeadsUpDisplay extends Group {
       this.place(child);
       ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = child.boundsInParentProperty();
       final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
+        @Override
         public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
           Parent _parent = child.getParent();
           boolean _notEquals = (!Objects.equal(_parent, HeadsUpDisplay.this));

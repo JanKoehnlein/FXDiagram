@@ -51,11 +51,13 @@ public class FlipNode extends XNode {
     super(domainObject);
   }
   
+  @Override
   protected Node createNode() {
     Group _group = new Group();
     return this.pane = _group;
   }
   
+  @Override
   public void initializeGraphics() {
     super.initializeGraphics();
     boolean _equals = Objects.equal(this.front, null);
@@ -68,11 +70,13 @@ public class FlipNode extends XNode {
     }
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     this.setCursor(Cursor.HAND);
     this.registerOnClick();
     final AbstractOpenBehavior _function = new AbstractOpenBehavior() {
+      @Override
       public void open() {
         FlipNode.this.flip(true);
       }
@@ -83,6 +87,7 @@ public class FlipNode extends XNode {
   
   public void registerOnClick() {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent it) {
         boolean _and = false;
         MouseButton _button = it.getButton();
@@ -147,10 +152,12 @@ public class FlipNode extends XNode {
     final Point3D turnAxis = _xifexpression;
     SequentialTransition _sequentialTransition = new SequentialTransition();
     final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+      @Override
       public void apply(final SequentialTransition it) {
         ObservableList<Animation> _children = it.getChildren();
         RotateTransition _rotateTransition = new RotateTransition();
         final Procedure1<RotateTransition> _function = new Procedure1<RotateTransition>() {
+          @Override
           public void apply(final RotateTransition it) {
             Node _currentVisible = FlipNode.this.getCurrentVisible();
             it.setNode(_currentVisible);
@@ -160,6 +167,7 @@ public class FlipNode extends XNode {
             it.setFromAngle(0);
             it.setToAngle(90);
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+              @Override
               public void handle(final ActionEvent it) {
                 Node _currentVisible = FlipNode.this.getCurrentVisible();
                 _currentVisible.setVisible(false);
@@ -176,6 +184,7 @@ public class FlipNode extends XNode {
         ObservableList<Animation> _children_1 = it.getChildren();
         RotateTransition _rotateTransition_1 = new RotateTransition();
         final Procedure1<RotateTransition> _function_1 = new Procedure1<RotateTransition>() {
+          @Override
           public void apply(final RotateTransition it) {
             Node _currentInvisible = FlipNode.this.getCurrentInvisible();
             it.setNode(_currentInvisible);

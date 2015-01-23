@@ -14,14 +14,17 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class LoggingProcessor extends AbstractClassProcessor {
+  @Override
   public void doTransform(final MutableClassDeclaration annotatedClass, @Extension final TransformationContext context) {
     final Procedure1<MutableFieldDeclaration> _function = new Procedure1<MutableFieldDeclaration>() {
+      @Override
       public void apply(final MutableFieldDeclaration it) {
         it.setStatic(true);
         Type _findTypeGlobally = context.findTypeGlobally(Logger.class);
         TypeReference _newTypeReference = context.newTypeReference(_findTypeGlobally);
         it.setType(_newTypeReference);
         final CompilationStrategy _function = new CompilationStrategy() {
+          @Override
           public CharSequence compile(final CompilationStrategy.CompilationContext it) {
             StringConcatenation _builder = new StringConcatenation();
             _builder.append("Logger.getLogger(\"");

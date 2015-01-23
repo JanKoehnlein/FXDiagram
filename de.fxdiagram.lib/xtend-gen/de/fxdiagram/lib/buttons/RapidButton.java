@@ -28,6 +28,7 @@ public class RapidButton extends Parent implements XButton {
     _children.add(image);
   }
   
+  @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
@@ -39,6 +40,7 @@ public class RapidButton extends Parent implements XButton {
   
   public void doActivate() {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent it) {
         RapidButton.this.action.perform(RapidButton.this);
         it.consume();

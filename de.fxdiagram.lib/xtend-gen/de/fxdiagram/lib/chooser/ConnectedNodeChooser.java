@@ -30,6 +30,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
   private XNode currentChoice;
   
   private ChooserConnectionProvider connectionProvider = new ChooserConnectionProvider() {
+    @Override
     public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor choiceInfo) {
       return new XConnection(host, choice);
     }
@@ -45,14 +46,17 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     this.layoutPosition = layoutPosition;
   }
   
+  @Override
   public XRoot getRoot() {
     return CoreExtensions.getRoot(this.host);
   }
   
+  @Override
   public XDiagram getDiagram() {
     return CoreExtensions.getDiagram(this.host);
   }
   
+  @Override
   public Point2D getPosition() {
     double _layoutX = this.host.getLayoutX();
     double _layoutY = this.host.getLayoutY();
@@ -63,6 +67,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     this.connectionProvider = connectionProvider;
   }
   
+  @Override
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
@@ -77,6 +82,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     return _xblockexpression;
   }
   
+  @Override
   protected void adjustNewNode(final XNode choice, final double widthDelta, final double heightDelta) {
     final Side layoutPosition = this.layoutPosition;
     if (layoutPosition != null) {
@@ -108,6 +114,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     choice.setPlacementHint(this.layoutPosition);
   }
   
+  @Override
   public Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice, final DomainObjectDescriptor choiceInfo) {
     XConnection _connectChoice = this.connectChoice(choice, choiceInfo);
     final List<XConnection> result = Collections.<XConnection>unmodifiableList(CollectionLiterals.<XConnection>newArrayList(_connectChoice));
@@ -115,6 +122,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     return result;
   }
   
+  @Override
   protected void setInterpolatedPosition(final double interpolatedPosition) {
     super.setInterpolatedPosition(interpolatedPosition);
     ArrayList<XNode> _nodes = this.getNodes();
@@ -211,6 +219,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
     return _xifexpression;
   }
   
+  @Override
   protected void alignGroup(final Group group, final double maxWidth, final double maxHeight) {
     double _switchResult = (double) 0;
     final Side layoutPosition = this.layoutPosition;

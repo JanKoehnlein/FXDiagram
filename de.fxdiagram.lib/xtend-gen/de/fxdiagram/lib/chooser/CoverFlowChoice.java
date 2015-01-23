@@ -38,6 +38,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
   
   private double gap;
   
+  @Override
   public void setInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
     int _size = _choiceNodes.size();
@@ -45,6 +46,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
     if (_notEquals) {
       ArrayList<XNode> _choiceNodes_1 = this.getChoiceNodes();
       final Function1<XNode, Double> _function = new Function1<XNode, Double>() {
+        @Override
         public Double apply(final XNode it) {
           Bounds _layoutBounds = it.getLayoutBounds();
           return Double.valueOf(_layoutBounds.getWidth());
@@ -52,6 +54,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
       };
       List<Double> _map = ListExtensions.<XNode, Double>map(_choiceNodes_1, _function);
       final Function2<Double, Double, Double> _function_1 = new Function2<Double, Double, Double>() {
+        @Override
         public Double apply(final Double a, final Double b) {
           return Double.valueOf(DoubleExtensions.operator_plus(a, b));
         }
@@ -150,12 +153,14 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
             TransformExtensions.rotate(trafo, ((direction * this.angle) * fraction), _point3D);
             TransformExtensions.translate(trafo, (((i - interpolatedPosition) * this.deltaX) + (((0.5 * fraction) * direction) * this.gap)), 0, (-fraction));
             final Procedure1<XNode> _function = new Procedure1<XNode>() {
+              @Override
               public void apply(final XNode it) {
                 ObservableList<Transform> _transforms = node.getTransforms();
                 _transforms.setAll(trafo);
                 node.toFront();
                 ColorAdjust _colorAdjust = new ColorAdjust();
                 final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
+                  @Override
                   public void apply(final ColorAdjust it) {
                     AbstractBaseChooser _chooser = CoverFlowChoice.this.getChooser();
                     XDiagram _diagram = _chooser.getDiagram();
@@ -185,6 +190,7 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
     return _xifexpression;
   }
   
+  @Override
   public boolean hasButtons() {
     return false;
   }

@@ -15,6 +15,7 @@ public class ViewportMemento {
   
   private final double rotate;
   
+  @Override
   public String toString() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("ViewportMemento [translateX=");

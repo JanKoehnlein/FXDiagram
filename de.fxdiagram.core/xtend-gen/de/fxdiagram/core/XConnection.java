@@ -151,12 +151,14 @@ public class XConnection extends XShape implements XModelProvider {
     }
   }
   
+  @Override
   protected Node createNode() {
     Group _xblockexpression = null;
     {
       final Group node = this.shapeGroup;
       ObservableList<Node> _children = this.getChildren();
       final Procedure1<Group> _function = new Procedure1<Group>() {
+        @Override
         public void apply(final Group it) {
           it.setVisible(false);
         }
@@ -172,6 +174,7 @@ public class XConnection extends XShape implements XModelProvider {
     return _xblockexpression;
   }
   
+  @Override
   public void doActivate() {
     Paint _stroke = this.getStroke();
     boolean _equals = Objects.equal(_stroke, null);
@@ -181,6 +184,7 @@ public class XConnection extends XShape implements XModelProvider {
       this.setStroke(_connectionPaint);
     }
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
+      @Override
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         XConnection.this.updateShapes();
       }
@@ -189,14 +193,17 @@ public class XConnection extends XShape implements XModelProvider {
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
     InitializingListListener<XControlPoint> _initializingListListener = new InitializingListListener<XControlPoint>();
     final Procedure1<InitializingListListener<XControlPoint>> _function_1 = new Procedure1<InitializingListListener<XControlPoint>>() {
+      @Override
       public void apply(final InitializingListListener<XControlPoint> it) {
         final Procedure1<ListChangeListener.Change<? extends XControlPoint>> _function = new Procedure1<ListChangeListener.Change<? extends XControlPoint>>() {
+          @Override
           public void apply(final ListChangeListener.Change<? extends XControlPoint> it) {
             XConnection.this.updateShapes();
           }
         };
         it.setChange(_function);
         final Procedure1<XControlPoint> _function_1 = new Procedure1<XControlPoint>() {
+          @Override
           public void apply(final XControlPoint it) {
             ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
             final int index = _controlPoints.indexOf(it);
@@ -223,6 +230,7 @@ public class XConnection extends XShape implements XModelProvider {
         };
         it.setAdd(_function_1);
         final Procedure1<XControlPoint> _function_2 = new Procedure1<XControlPoint>() {
+          @Override
           public void apply(final XControlPoint it) {
             DoubleProperty _layoutXProperty = it.layoutXProperty();
             _layoutXProperty.removeListener(XConnection.this.controlPointListener);
@@ -237,6 +245,7 @@ public class XConnection extends XShape implements XModelProvider {
     CoreExtensions.<XControlPoint>addInitializingListener(_controlPoints, _doubleArrow);
     ObservableList<XConnectionLabel> _labels = this.getLabels();
     final Consumer<XConnectionLabel> _function_2 = new Consumer<XConnectionLabel>() {
+      @Override
       public void accept(final XConnectionLabel it) {
         it.activate();
       }
@@ -247,6 +256,7 @@ public class XConnection extends XShape implements XModelProvider {
     this.updateShapes();
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
     final ChangeListener<Parent> _function_3 = new ChangeListener<Parent>() {
+      @Override
       public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
         boolean _equals = Objects.equal(newValue, null);
         if (_equals) {
@@ -262,6 +272,7 @@ public class XConnection extends XShape implements XModelProvider {
     _parentProperty.addListener(_function_3);
   }
   
+  @Override
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       XNode _source = this.getSource();
@@ -298,6 +309,7 @@ public class XConnection extends XShape implements XModelProvider {
             while ((curves.size() < numSegments)) {
               CubicCurve _cubicCurve = new CubicCurve();
               final Procedure1<CubicCurve> _function = new Procedure1<CubicCurve>() {
+                @Override
                 public void apply(final CubicCurve it) {
                   it.setFill(null);
                   it.setStroke(Color.BLACK);
@@ -369,6 +381,7 @@ public class XConnection extends XShape implements XModelProvider {
             while ((curves_1.size() < numSegments_1)) {
               QuadCurve _quadCurve = new QuadCurve();
               final Procedure1<QuadCurve> _function = new Procedure1<QuadCurve>() {
+                @Override
                 public void apply(final QuadCurve it) {
                   it.setFill(null);
                   it.setStroke(Color.BLACK);
@@ -427,6 +440,7 @@ public class XConnection extends XShape implements XModelProvider {
         _elvis = _polyline;
       }
       final Procedure1<Polyline> _function = new Procedure1<Polyline>() {
+        @Override
         public void apply(final Polyline it) {
           it.setStroke(Color.BLACK);
         }
@@ -435,6 +449,7 @@ public class XConnection extends XShape implements XModelProvider {
       ObservableList<Double> _points = polyline.getPoints();
       ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
       final Function1<XControlPoint, List<Double>> _function_1 = new Function1<XControlPoint, List<Double>>() {
+        @Override
         public List<Double> apply(final XControlPoint it) {
           double _layoutX = it.getLayoutX();
           double _layoutY = it.getLayoutY();
@@ -444,7 +459,7 @@ public class XConnection extends XShape implements XModelProvider {
       List<List<Double>> _map = ListExtensions.<XControlPoint, List<Double>>map(_controlPoints_4, _function_1);
       Iterable<Double> _flatten = Iterables.<Double>concat(_map);
       _points.setAll(((Double[])Conversions.unwrapArray(_flatten, Double.class)));
-      this.setShapes(Collections.<Polyline>unmodifiableList(CollectionLiterals.<Polyline>newArrayList(polyline)));
+      this.setShapes(Collections.<Shape>unmodifiableList(CollectionLiterals.<Shape>newArrayList(polyline)));
     }
     ObservableList<Node> _children_3 = this.controlPointGroup.getChildren();
     ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
@@ -464,6 +479,7 @@ public class XConnection extends XShape implements XModelProvider {
     double _plus = (_width + _height);
     final double strokeInRoot = (0.5 * _plus);
     final Consumer<Shape> _function = new Consumer<Shape>() {
+      @Override
       public void accept(final Shape it) {
         Paint _stroke = XConnection.this.getStroke();
         it.setStroke(_stroke);
@@ -479,10 +495,12 @@ public class XConnection extends XShape implements XModelProvider {
     shapes.forEach(_function);
   }
   
+  @Override
   public boolean isSelectable() {
     return this.getIsActive();
   }
   
+  @Override
   public void layoutChildren() {
     super.layoutChildren();
     try {
@@ -490,6 +508,7 @@ public class XConnection extends XShape implements XModelProvider {
       _connectionRouter.calculatePoints();
       ObservableList<XConnectionLabel> _labels = this.getLabels();
       final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
+        @Override
         public void accept(final XConnectionLabel it) {
           ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
           it.place(_controlPoints);

@@ -12,21 +12,26 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
 public class CloseAction implements DiagramAction {
+  @Override
   public boolean matches(final KeyEvent it) {
     KeyCode _code = it.getCode();
     return Objects.equal(_code, KeyCode.ESCAPE);
   }
   
+  @Override
   public Symbol.Type getSymbol() {
     return null;
   }
   
+  @Override
   public String getTooltip() {
     return "Open node";
   }
   
+  @Override
   public void perform(final XRoot root) {
     final Function1<CloseBehavior, Boolean> _function = new Function1<CloseBehavior, Boolean>() {
+      @Override
       public Boolean apply(final CloseBehavior it) {
         boolean _xblockexpression = false;
         {

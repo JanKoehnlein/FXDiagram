@@ -99,6 +99,7 @@ public class SvgExporter {
       {
         ObservableList<Node> _childrenUnmodifiable = diagram.getChildrenUnmodifiable();
         final Function1<Node, Boolean> _function = new Function1<Node, Boolean>() {
+          @Override
           public Boolean apply(final Node it) {
             return Boolean.valueOf(it.isVisible());
           }
@@ -431,6 +432,7 @@ public class SvgExporter {
       CharSequence _xifexpression = null;
       ObservableList<Node> _childrenUnmodifiable = it.getChildrenUnmodifiable();
       final Function1<Node, Boolean> _function = new Function1<Node, Boolean>() {
+        @Override
         public Boolean apply(final Node it) {
           return Boolean.valueOf(it.isVisible());
         }
@@ -455,6 +457,7 @@ public class SvgExporter {
         {
           ObservableList<Node> _childrenUnmodifiable_1 = it.getChildrenUnmodifiable();
           final Function1<Node, Boolean> _function_1 = new Function1<Node, Boolean>() {
+            @Override
             public Boolean apply(final Node it) {
               return Boolean.valueOf(it.isVisible());
             }

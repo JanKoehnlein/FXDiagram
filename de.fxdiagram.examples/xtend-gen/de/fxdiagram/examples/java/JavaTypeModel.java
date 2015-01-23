@@ -34,6 +34,7 @@ public class JavaTypeModel {
   public JavaTypeModel(final Class<?> javaType) {
     Constructor<?>[] _declaredConstructors = javaType.getDeclaredConstructors();
     final Function1<Constructor<?>, Boolean> _function = new Function1<Constructor<?>, Boolean>() {
+      @Override
       public Boolean apply(final Constructor<?> it) {
         int _modifiers = it.getModifiers();
         return Boolean.valueOf(Modifier.isPublic(_modifiers));
@@ -45,6 +46,7 @@ public class JavaTypeModel {
     final HashMultimap<String, Pair<Class<?>, Method>> propertyMethods = HashMultimap.<String, Pair<Class<?>, Method>>create();
     Method[] _declaredMethods = javaType.getDeclaredMethods();
     final Function1<Method, Boolean> _function_1 = new Function1<Method, Boolean>() {
+      @Override
       public Boolean apply(final Method it) {
         boolean _and = false;
         int _modifiers = it.getModifiers();
@@ -65,6 +67,7 @@ public class JavaTypeModel {
     this.operations = _list_1;
     Method[] _declaredMethods_1 = javaType.getDeclaredMethods();
     final Function1<Method, Boolean> _function_2 = new Function1<Method, Boolean>() {
+      @Override
       public Boolean apply(final Method it) {
         int _modifiers = it.getModifiers();
         return Boolean.valueOf(Modifier.isPublic(_modifiers));
@@ -72,6 +75,7 @@ public class JavaTypeModel {
     };
     Iterable<Method> _filter_2 = IterableExtensions.<Method>filter(((Iterable<Method>)Conversions.doWrapArray(_declaredMethods_1)), _function_2);
     final Consumer<Method> _function_3 = new Consumer<Method>() {
+      @Override
       public void accept(final Method method) {
         final Pair<String, Class<?>> nameAndType = JavaTypeModel.this.getPropertyNameAndType(method);
         boolean _notEquals = (!Objects.equal(nameAndType, null));
@@ -89,6 +93,7 @@ public class JavaTypeModel {
       {
         final Set<Pair<Class<?>, Method>> type2Method = propertyMethods.get(propertyName);
         final Function1<Pair<Class<?>, Method>, Class<?>> _function_4 = new Function1<Pair<Class<?>, Method>, Class<?>>() {
+          @Override
           public Class<?> apply(final Pair<Class<?>, Method> it) {
             return it.getKey();
           }
@@ -100,6 +105,7 @@ public class JavaTypeModel {
         boolean _equals = (_size == 1);
         if (_equals) {
           final Function1<Pair<Class<?>, Method>, Method> _function_5 = new Function1<Pair<Class<?>, Method>, Method>() {
+            @Override
             public Method apply(final Pair<Class<?>, Method> it) {
               return it.getValue();
             }
@@ -124,12 +130,14 @@ public class JavaTypeModel {
       }
     }
     final Function1<Method, String> _function_4 = new Function1<Method, String>() {
+      @Override
       public String apply(final Method it) {
         return it.getName();
       }
     };
     ListExtensions.<Method, String>sortInplaceBy(this.operations, _function_4);
     final Function1<JavaProperty, String> _function_5 = new Function1<JavaProperty, String>() {
+      @Override
       public String apply(final JavaProperty it) {
         return it.getName();
       }

@@ -32,10 +32,12 @@ public class ChainedAnimationUtil {
     }
     SequentialTransition _sequentialTransition = new SequentialTransition();
     final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+      @Override
       public void apply(final SequentialTransition it) {
         ObservableList<Animation> _children = it.getChildren();
         _children.add(nextAnimation);
         final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+          @Override
           public void handle(final ActionEvent it) {
             Animation _createChainedAnimation = ChainedAnimationUtil.<T>createChainedAnimation(iterator, animationFactory);
             if (_createChainedAnimation!=null) {

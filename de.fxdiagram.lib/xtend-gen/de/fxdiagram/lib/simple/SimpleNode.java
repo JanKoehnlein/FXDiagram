@@ -29,13 +29,16 @@ public class SimpleNode extends XNode {
     super(name);
   }
   
+  @Override
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      @Override
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
+          @Override
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
             String _name = SimpleNode.this.getName();
@@ -51,12 +54,14 @@ public class SimpleNode extends XNode {
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     String _name = this.getName();
     this.label.setText(_name);
   }
   
+  @Override
   protected Anchors createAnchors() {
     return new RoundedRectangleAnchors(this, 12, 12);
   }

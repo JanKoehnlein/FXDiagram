@@ -12,6 +12,7 @@ import javafx.scene.input.KeyEvent;
 
 @SuppressWarnings("all")
 public class SelectAllAction implements DiagramAction {
+  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _isShortcutDown = it.isShortcutDown();
@@ -25,18 +26,22 @@ public class SelectAllAction implements DiagramAction {
     return _and;
   }
   
+  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.SELECTION1;
   }
   
+  @Override
   public String getTooltip() {
     return "Select all";
   }
   
+  @Override
   public void perform(final XRoot root) {
     XDiagram _diagram = root.getDiagram();
     Iterable<XShape> _allShapes = _diagram.getAllShapes();
     final Consumer<XShape> _function = new Consumer<XShape>() {
+      @Override
       public void accept(final XShape it) {
         boolean _isSelectable = it.isSelectable();
         if (_isSelectable) {

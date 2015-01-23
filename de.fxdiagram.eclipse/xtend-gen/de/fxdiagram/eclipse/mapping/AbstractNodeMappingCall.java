@@ -8,6 +8,7 @@ import de.fxdiagram.eclipse.mapping.NodeMapping;
 public abstract class AbstractNodeMappingCall<RESULT extends Object, ARG extends Object> implements MappingCall<RESULT, ARG> {
   public abstract NodeMapping<RESULT> getNodeMapping();
   
+  @Override
   public AbstractMapping<RESULT> getMapping() {
     return this.getNodeMapping();
   }

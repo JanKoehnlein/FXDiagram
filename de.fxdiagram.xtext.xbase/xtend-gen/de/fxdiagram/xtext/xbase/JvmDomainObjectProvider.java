@@ -39,6 +39,7 @@ public class JvmDomainObjectProvider extends XtextDomainObjectProvider {
     return _xblockexpression;
   }
   
+  @Override
   public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
     final T it = domainObject;
     boolean _matched = false;

@@ -8,6 +8,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 public class TimerExtensions {
   public static void defer(final Runnable runnable, final Duration time) {
     final Runnable _function = new Runnable() {
+      @Override
       public void run() {
         try {
           double _millis = time.toMillis();

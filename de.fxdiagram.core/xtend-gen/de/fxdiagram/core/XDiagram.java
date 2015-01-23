@@ -86,6 +86,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     this.isRootDiagramProperty.set(true);
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
     final ChangeListener<Parent> _function = new ChangeListener<Parent>() {
+      @Override
       public void changed(final ObservableValue<? extends Parent> property, final Parent oldValue, final Parent newValue) {
         XDiagram _diagram = CoreExtensions.getDiagram(newValue);
         XDiagram.this.parentDiagramProperty.set(_diagram);
@@ -96,6 +97,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     };
     _parentProperty.addListener(_function);
     final ChangeListener<Boolean> _function_1 = new ChangeListener<Boolean>() {
+      @Override
       public void changed(final ObservableValue<? extends Boolean> property, final Boolean oldValue, final Boolean newValue) {
         if ((newValue).booleanValue()) {
           ObservableList<Node> _children = XDiagram.this.nodeLayer.getChildren();
@@ -116,6 +118,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     _transforms.setAll(_transform);
     ObservableList<Transform> _transforms_1 = this.getTransforms();
     final ListChangeListener<Transform> _function_2 = new ListChangeListener<Transform>() {
+      @Override
       public void onChanged(final ListChangeListener.Change<? extends Transform> change) {
         throw new IllegalStateException("Illegal attempt to change the transforms of an XDiagram");
       }
@@ -127,6 +130,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     return this.viewportTransform;
   }
   
+  @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
@@ -140,8 +144,10 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     ObservableList<XNode> _nodes = this.getNodes();
     InitializingListListener<XNode> _initializingListListener = new InitializingListListener<XNode>();
     final Procedure1<InitializingListListener<XNode>> _function = new Procedure1<InitializingListListener<XNode>>() {
+      @Override
       public void apply(final InitializingListListener<XNode> it) {
         final Procedure1<XNode> _function = new Procedure1<XNode>() {
+          @Override
           public void apply(final XNode it) {
             it.initializeGraphics();
             Group _nodeLayer = XDiagram.this.getNodeLayer();
@@ -155,6 +161,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
         };
         it.setAdd(_function);
         final Procedure1<XNode> _function_1 = new Procedure1<XNode>() {
+          @Override
           public void apply(final XNode it) {
             XDiagram _diagram = CoreExtensions.getDiagram(it);
             Group _nodeLayer = _diagram.getNodeLayer();
@@ -169,8 +176,10 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     CoreExtensions.<XNode>addInitializingListener(_nodes, _doubleArrow);
     InitializingListener<ArrowHead> _initializingListener = new InitializingListener<ArrowHead>();
     final Procedure1<InitializingListener<ArrowHead>> _function_1 = new Procedure1<InitializingListener<ArrowHead>>() {
+      @Override
       public void apply(final InitializingListener<ArrowHead> it) {
         final Procedure1<ArrowHead> _function = new Procedure1<ArrowHead>() {
+          @Override
           public void apply(final ArrowHead it) {
             Group _connectionLayer = XDiagram.this.getConnectionLayer();
             ObservableList<Node> _children = _connectionLayer.getChildren();
@@ -186,6 +195,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
         };
         it.setSet(_function);
         final Procedure1<ArrowHead> _function_1 = new Procedure1<ArrowHead>() {
+          @Override
           public void apply(final ArrowHead it) {
             Group _connectionLayer = XDiagram.this.getConnectionLayer();
             ObservableList<Node> _children = _connectionLayer.getChildren();
@@ -198,8 +208,10 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     final InitializingListener<ArrowHead> arrowHeadListener = ObjectExtensions.<InitializingListener<ArrowHead>>operator_doubleArrow(_initializingListener, _function_1);
     InitializingListListener<XConnectionLabel> _initializingListListener_1 = new InitializingListListener<XConnectionLabel>();
     final Procedure1<InitializingListListener<XConnectionLabel>> _function_2 = new Procedure1<InitializingListListener<XConnectionLabel>>() {
+      @Override
       public void apply(final InitializingListListener<XConnectionLabel> it) {
         final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+          @Override
           public void apply(final XConnectionLabel it) {
             Group _connectionLayer = XDiagram.this.getConnectionLayer();
             ObservableList<Node> _children = _connectionLayer.getChildren();
@@ -214,6 +226,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
         };
         it.setAdd(_function);
         final Procedure1<XConnectionLabel> _function_1 = new Procedure1<XConnectionLabel>() {
+          @Override
           public void apply(final XConnectionLabel it) {
             Group _connectionLayer = XDiagram.this.getConnectionLayer();
             ObservableList<Node> _children = _connectionLayer.getChildren();
@@ -227,8 +240,10 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     ObservableList<XConnection> _connections = this.getConnections();
     InitializingListListener<XConnection> _initializingListListener_2 = new InitializingListListener<XConnection>();
     final Procedure1<InitializingListListener<XConnection>> _function_3 = new Procedure1<InitializingListListener<XConnection>>() {
+      @Override
       public void apply(final InitializingListListener<XConnection> it) {
         final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+          @Override
           public void apply(final XConnection it) {
             it.initializeGraphics();
             Group _connectionLayer = XDiagram.this.getConnectionLayer();
@@ -248,6 +263,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
         };
         it.setAdd(_function);
         final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
+          @Override
           public void apply(final XConnection it) {
             XDiagram _diagram = CoreExtensions.getDiagram(it);
             Group _connectionLayer = _diagram.getConnectionLayer();
@@ -279,8 +295,10 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     }
     InitializingMapListener<Class<? extends Behavior>, Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
     final Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>> _function_4 = new Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>>() {
+      @Override
       public void apply(final InitializingMapListener<Class<? extends Behavior>, Behavior> it) {
         final Procedure2<Class<? extends Behavior>, Behavior> _function = new Procedure2<Class<? extends Behavior>, Behavior>() {
+          @Override
           public void apply(final Class<? extends Behavior> key, final Behavior value) {
             value.activate();
           }

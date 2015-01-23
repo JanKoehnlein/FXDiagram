@@ -13,6 +13,7 @@ public class StringDescriptor implements DomainObjectDescriptor {
     this.nameProperty.set(name);
   }
   
+  @Override
   public String getId() {
     return this.getName();
   }

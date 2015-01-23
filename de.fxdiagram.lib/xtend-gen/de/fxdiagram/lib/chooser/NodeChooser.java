@@ -19,14 +19,17 @@ public class NodeChooser extends AbstractBaseChooser {
     this.position = position;
   }
   
+  @Override
   public XRoot getRoot() {
     return CoreExtensions.getRoot(this.diagram);
   }
   
+  @Override
   public XDiagram getDiagram() {
     return this.diagram;
   }
   
+  @Override
   public Point2D getPosition() {
     return this.position;
   }

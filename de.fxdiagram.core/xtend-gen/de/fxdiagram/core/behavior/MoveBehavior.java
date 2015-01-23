@@ -123,10 +123,12 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     super(host);
   }
   
+  @Override
   public void doActivate() {
     T _host = this.getHost();
     Node _node = _host.getNode();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent it) {
         MoveBehavior.this.mousePressed(it);
       }
@@ -135,6 +137,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     T _host_1 = this.getHost();
     Node _node_1 = _host_1.getNode();
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent it) {
         MoveBehavior.this.mouseDragged(it);
       }
@@ -143,6 +146,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     T _host_2 = this.getHost();
     Node _node_2 = _host_2.getNode();
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent it) {
         boolean _notEquals = (!Objects.equal(MoveBehavior.this.dragContext, null));
         if (_notEquals) {
@@ -177,6 +181,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     _node_2.setOnMouseReleased(_function_2);
   }
   
+  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return MoveBehavior.class;
   }

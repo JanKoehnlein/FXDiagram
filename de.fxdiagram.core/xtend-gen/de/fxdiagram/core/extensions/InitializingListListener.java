@@ -19,6 +19,7 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
   @Accessors
   private Procedure1<? super T> remove;
   
+  @Override
   public void onChanged(final ListChangeListener.Change<? extends T> c) {
     boolean _notEquals = (!Objects.equal(this.change, null));
     if (_notEquals) {
@@ -36,6 +37,7 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
       if (_and) {
         List<? extends T> _addedSubList = c.getAddedSubList();
         final Consumer<T> _function = new Consumer<T>() {
+          @Override
           public void accept(final T it) {
             InitializingListListener.this.add.apply(it);
           }
@@ -54,6 +56,7 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
     if (_and) {
       List<? extends T> _removed = c.getRemoved();
       final Consumer<T> _function = new Consumer<T>() {
+        @Override
         public void accept(final T it) {
           InitializingListListener.this.remove.apply(it);
         }

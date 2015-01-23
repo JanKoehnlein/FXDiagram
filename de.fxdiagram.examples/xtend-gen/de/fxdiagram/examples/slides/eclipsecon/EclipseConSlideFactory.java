@@ -20,6 +20,7 @@ public class EclipseConSlideFactory {
     Image _backgroundImage = EclipseConSlideFactory.getBackgroundImage();
     Slide _slide = new Slide(slideName, _backgroundImage);
     final Procedure1<Slide> _function = new Procedure1<Slide>() {
+      @Override
       public void apply(final Slide it) {
         it.initializeGraphics();
       }
@@ -31,10 +32,12 @@ public class EclipseConSlideFactory {
     Image _backgroundImage = EclipseConSlideFactory.getBackgroundImage();
     Slide _slide = new Slide(text, _backgroundImage);
     final Procedure1<Slide> _function = new Procedure1<Slide>() {
+      @Override
       public void apply(final Slide it) {
         it.initializeGraphics();
         StackPane _stackPane = it.getStackPane();
         final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+          @Override
           public void apply(final StackPane it) {
             ObservableList<Node> _children = it.getChildren();
             Text _createText = EclipseConSlideFactory.createText(text, fontSize);
@@ -51,6 +54,7 @@ public class EclipseConSlideFactory {
     Image _backgroundImage = EclipseConSlideFactory.getBackgroundImage();
     ClickThroughSlide _clickThroughSlide = new ClickThroughSlide(slideName, _backgroundImage);
     final Procedure1<ClickThroughSlide> _function = new Procedure1<ClickThroughSlide>() {
+      @Override
       public void apply(final ClickThroughSlide it) {
         it.initializeGraphics();
       }
@@ -74,6 +78,7 @@ public class EclipseConSlideFactory {
   public static Text createText(final String text, final String fontName, final int fontSize) {
     Text _text = new Text();
     final Procedure1<Text> _function = new Procedure1<Text>() {
+      @Override
       public void apply(final Text it) {
         String _trim = text.trim();
         it.setText(_trim);

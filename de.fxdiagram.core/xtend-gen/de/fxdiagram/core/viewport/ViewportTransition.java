@@ -68,9 +68,11 @@ public class ViewportTransition extends Transition {
     return this.to;
   }
   
+  @Override
   protected void interpolate(final double frac) {
     ViewportTransform _viewportTransform = this.root.getViewportTransform();
     final Procedure1<ViewportTransform> _function = new Procedure1<ViewportTransform>() {
+      @Override
       public void apply(final ViewportTransform it) {
         double _rotate = ViewportTransition.this.from.getRotate();
         double _multiply = ((1 - frac) * _rotate);
@@ -105,6 +107,7 @@ public class ViewportTransition extends Transition {
     final double toScale = Math.max(ViewportTransform.MIN_SCALE, targetScale);
     ViewportTransform _viewportTransform = this.root.getViewportTransform();
     final Procedure1<ViewportTransform> _function = new Procedure1<ViewportTransform>() {
+      @Override
       public void apply(final ViewportTransform it) {
         double _scale = ViewportTransition.this.from.getScale();
         double _divide = (toScale / _scale);

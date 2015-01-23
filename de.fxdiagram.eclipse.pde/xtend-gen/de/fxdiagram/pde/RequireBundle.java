@@ -14,10 +14,12 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 public class RequireBundle extends BundleDependency {
   private final BundleSpecification required;
   
+  @Override
   public BundleDependency.Kind getKind() {
     return BundleDependency.Kind.REQUIRE_BUNDLE;
   }
   
+  @Override
   public BundleDescription getDependency() {
     BaseDescription _supplier = this.required.getSupplier();
     BundleDescription _supplier_1 = null;
@@ -27,6 +29,7 @@ public class RequireBundle extends BundleDependency {
     return _supplier_1;
   }
   
+  @Override
   public VersionRange getVersionRange() {
     VersionRange _elvis = null;
     VersionRange _versionRange = this.required.getVersionRange();
@@ -38,10 +41,12 @@ public class RequireBundle extends BundleDependency {
     return _elvis;
   }
   
+  @Override
   public boolean isReexport() {
     return this.required.isExported();
   }
   
+  @Override
   public boolean isOptional() {
     return this.required.isOptional();
   }

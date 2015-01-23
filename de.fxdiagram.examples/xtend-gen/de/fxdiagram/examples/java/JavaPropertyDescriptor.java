@@ -14,6 +14,7 @@ public class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaPro
     super(it, ((it.getType().getCanonicalName() + " ") + it.getName()), ((it.getType().getCanonicalName() + " ") + it.getName()), provider);
   }
   
+  @Override
   public JavaProperty resolveDomainObject() {
     try {
       JavaProperty _xblockexpression = null;

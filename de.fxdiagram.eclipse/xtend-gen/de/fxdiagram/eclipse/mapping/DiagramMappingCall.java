@@ -15,6 +15,7 @@ public class DiagramMappingCall<RESULT extends Object, ARG extends Object> imple
   
   private final DiagramMapping<RESULT> diagramMapping;
   
+  @Override
   public AbstractMapping<RESULT> getMapping() {
     return this.diagramMapping;
   }

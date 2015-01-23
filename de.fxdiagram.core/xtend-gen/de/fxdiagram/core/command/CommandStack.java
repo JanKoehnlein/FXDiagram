@@ -38,6 +38,7 @@ public class CommandStack {
       final AnimationCommand command = this.undoStack.pop();
       AnimationQueue _animationQueue = this.context.getAnimationQueue();
       final Function0<Animation> _function = new Function0<Animation>() {
+        @Override
         public Animation apply() {
           return command.getUndoAnimation(CommandStack.this.context);
         }
@@ -53,6 +54,7 @@ public class CommandStack {
       final AnimationCommand command = this.redoStack.pop();
       AnimationQueue _animationQueue = this.context.getAnimationQueue();
       final Function0<Animation> _function = new Function0<Animation>() {
+        @Override
         public Animation apply() {
           return command.getRedoAnimation(CommandStack.this.context);
         }
@@ -65,6 +67,7 @@ public class CommandStack {
   public void execute(final AnimationCommand command) {
     AnimationQueue _animationQueue = this.context.getAnimationQueue();
     final Function0<Animation> _function = new Function0<Animation>() {
+      @Override
       public Animation apply() {
         return command.getExecuteAnimation(CommandStack.this.context);
       }

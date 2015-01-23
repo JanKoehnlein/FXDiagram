@@ -17,18 +17,17 @@ public class OfflineLayoutTest extends Application {
     Application.launch();
   }
   
+  @Override
   public void start(final Stage primaryStage) throws Exception {
     final Text text = new Text("foo");
     VBox _vBox = new VBox();
-    final Procedure1<VBox> _function = new Procedure1<VBox>() {
-      public void apply(final VBox it) {
-        it.setSpacing(10);
-        ObservableList<Node> _children = it.getChildren();
-        _children.add(text);
-        ObservableList<Node> _children_1 = it.getChildren();
-        Text _text = new Text("barbar");
-        _children_1.add(_text);
-      }
+    final Procedure1<VBox> _function = (VBox it) -> {
+      it.setSpacing(10);
+      ObservableList<Node> _children = it.getChildren();
+      _children.add(text);
+      ObservableList<Node> _children_1 = it.getChildren();
+      Text _text = new Text("barbar");
+      _children_1.add(_text);
     };
     final VBox root = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
     final Scene scene = new Scene(root);
