@@ -1,3 +1,3 @@
 # FXDiagram
 
-All information is now on the the projects's [githug.io pages] (http://jankoehnlein.github.io/FXDiagram/) 
+All information is now maintained on the [the projects's github.io pages] (http://jankoehnlein.github.io/FXDiagram/) 
