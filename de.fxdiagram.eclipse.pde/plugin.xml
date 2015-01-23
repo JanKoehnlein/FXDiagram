@@ -56,6 +56,16 @@
             allPopups="false"
             locationURI="toolbar:de.fxdiagram.eclipse.FXDiagramView">
          <command
+               id="de.fxdiagram.eclipse.pde.pulldownMenu"
+               commandId="de.fxdiagram.pde.addPlugin"
+               icon="icons/plugins_and_fragments.gif"
+               label="PDE diagram options"
+               style="pulldown">
+         </command>
+      </menuContribution>
+      <menuContribution locationURI="menu:de.fxdiagram.eclipse.pde.pulldownMenu">
+         <command
+               id="de.fxdiagram.eclipse.pde.pulldownMenu"
                commandId="de.fxdiagram.pde.addPlugin"
                icon="icons/plugins_and_fragments.gif"
                label="Double-click adds plug-in"
@@ -73,6 +83,6 @@
                label="Consider fragment dependencies"
                style="toggle">
          </command>
-      </menuContribution>
+     </menuContribution>
    </extension>
 </plugin>

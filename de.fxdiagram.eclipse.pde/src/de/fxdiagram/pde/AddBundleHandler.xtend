@@ -10,10 +10,13 @@ import org.eclipse.core.commands.AbstractHandler
 import org.eclipse.core.commands.ExecutionEvent
 import org.eclipse.core.commands.ExecutionException
 import org.eclipse.swt.widgets.Event
+import org.eclipse.swt.widgets.MenuItem
 import org.eclipse.swt.widgets.ToolItem
 import org.eclipse.ui.PlatformUI
 
 import static de.fxdiagram.pde.BundleUtil.*
+
+import static extension de.fxdiagram.pde.HandlerHelper.*
 
 class AddBundleHandler extends AbstractHandler {
 
@@ -35,10 +38,9 @@ class AddBundleHandler extends AbstractHandler {
 	]
 
 	override execute(ExecutionEvent event) throws ExecutionException {
-		val selected = (((event.trigger as Event).widget) as ToolItem).selection
 		val view = diagramView
 		if(view instanceof FXDiagramView) {
-			if(selected) {
+			if(event.isWidgetChecked) {
 				view.root.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseHandler)								
 			} else {
 				view.root.removeEventHandler(MouseEvent.MOUSE_CLICKED, mouseHandler)
@@ -52,21 +54,29 @@ class AddBundleHandler extends AbstractHandler {
 		val view = page?.findView("de.fxdiagram.eclipse.FXDiagramView")
 		return view
 	}
-
 }
 
 class ConsiderOptionalDependeniesHandler extends AbstractHandler {
 	
 	override execute(ExecutionEvent event) throws ExecutionException {
-		val selected = (((event.trigger as Event).widget) as ToolItem).selection
-		BundleUtil.setConsiderOptional(selected)
+		BundleUtil.setConsiderOptional(event.isWidgetChecked)
 	}
 }
 
 class ConsiderFragmentDependeniesHandler extends AbstractHandler {
 	
 	override execute(ExecutionEvent event) throws ExecutionException {
-		val selected = (((event.trigger as Event).widget) as ToolItem).selection
-		BundleUtil.setConsiderFragments(selected)
+		BundleUtil.setConsiderFragments(event.isWidgetChecked)
+	}
+}
+
+package class HandlerHelper {
+	static def isWidgetChecked(ExecutionEvent event) {
+		val widget = (event.trigger as Event).widget
+		switch widget {
+			MenuItem: widget.selection
+			ToolItem: widget.selection
+			default: false
+		}
 	}
 }
