@@ -27,19 +27,15 @@ public class LayoutTests extends Application {
     Application.launch();
   }
   
-  @Override
   public void start(final Stage stage) throws Exception {
     XDiagram _xDiagram = new XDiagram();
     final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-      @Override
       public void apply(final XDiagram it) {
         final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-          @Override
           public void apply(final XDiagram it) {
             ObservableList<XNode> _nodes = it.getNodes();
             SimpleNode _simpleNode = new SimpleNode("Foo");
             final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
-              @Override
               public void apply(final SimpleNode it) {
                 it.relocate((-100), (-100));
                 it.setWidth(65);
@@ -51,7 +47,6 @@ public class LayoutTests extends Application {
             ObservableList<XNode> _nodes_1 = it.getNodes();
             SimpleNode _simpleNode_1 = new SimpleNode("Bar");
             final Procedure1<SimpleNode> _function_1 = new Procedure1<SimpleNode>() {
-              @Override
               public void apply(final SimpleNode it) {
                 it.relocate(100, 100);
               }
@@ -73,13 +68,11 @@ public class LayoutTests extends Application {
     stage.setScene(_scene);
     final StackPane rectangleBorderPane = new StackPane();
     final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
-      @Override
       public void apply(final XDiagram it) {
         it.activate();
         ObservableList<XNode> _nodes = it.getNodes();
         XNode _xNode = new XNode("");
         final Procedure1<XNode> _function = new Procedure1<XNode>() {
-          @Override
           public void apply(final XNode it) {
           }
         };
@@ -93,7 +86,6 @@ public class LayoutTests extends Application {
     stage.show();
     ObservableList<XNode> _nodes = this.nestedDiagram.getNodes();
     final Consumer<XNode> _function_2 = new Consumer<XNode>() {
-      @Override
       public void accept(final XNode it) {
         LayoutTests.this.printLayoutGeometry(it);
       }
@@ -103,7 +95,6 @@ public class LayoutTests extends Application {
     this.printLayoutGeometry(rectangleBorderPane);
     ObservableList<XNode> _nodes_1 = this.nestedDiagram.getNodes();
     final Consumer<XNode> _function_3 = new Consumer<XNode>() {
-      @Override
       public void accept(final XNode it) {
         LayoutTests.this.printSizes(it);
       }

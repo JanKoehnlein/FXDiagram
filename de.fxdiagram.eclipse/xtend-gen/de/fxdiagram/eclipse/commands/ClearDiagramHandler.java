@@ -12,7 +12,6 @@ import org.eclipse.ui.PlatformUI;
 
 @SuppressWarnings("all")
 public class ClearDiagramHandler extends AbstractHandler {
-  @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     Object _xblockexpression = null;
     {

@@ -19,7 +19,7 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
 @Logging
-@ModelNode('layoutX', 'layoutY', 'domainObject', 'width', 'height')
+@ModelNode(inherit=false, value=#['layoutX', 'layoutY', 'domainObject', 'width', 'height'])
 class XNode extends XShape {
 
 	@FxProperty double width

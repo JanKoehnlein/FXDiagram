@@ -17,7 +17,6 @@ public abstract class AbstractHostBehavior<T extends Node> implements Behavior {
     return this.host;
   }
   
-  @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);

@@ -19,7 +19,6 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 public class Debug {
   public static void debugTranslation(final Node node) {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
-      @Override
       public void changed(final ObservableValue<? extends Number> element, final Number oldVal, final Number newVal) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Position changed from ");
@@ -50,7 +49,6 @@ public class Debug {
   
   public static void debugSize(final Node node) {
     final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
-      @Override
       public void changed(final ObservableValue<? extends Bounds> element, final Bounds oldVal, final Bounds newVal) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("Bounds changed from");

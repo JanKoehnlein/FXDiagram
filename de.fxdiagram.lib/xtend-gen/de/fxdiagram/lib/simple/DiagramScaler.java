@@ -38,21 +38,18 @@ public class DiagramScaler implements XActivatable {
   public DiagramScaler(final XDiagram diagram) {
     this.diagram = diagram;
     final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
-      @Override
       public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
         DiagramScaler.this.scaleToFit();
       }
     };
     this.boundsInLocalListener = _function;
     final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-      @Override
       public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
         DiagramScaler.this.scaleToFit();
       }
     };
     this.layoutListener = _function_1;
     final ListChangeListener<XNode> _function_2 = new ListChangeListener<XNode>() {
-      @Override
       public void onChanged(final ListChangeListener.Change<? extends XNode> change) {
         while (change.next()) {
           {
@@ -60,7 +57,6 @@ public class DiagramScaler implements XActivatable {
             if (_wasAdded) {
               List<? extends XNode> _addedSubList = change.getAddedSubList();
               final Consumer<XNode> _function = new Consumer<XNode>() {
-                @Override
                 public void accept(final XNode it) {
                   ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
                   _boundsInLocalProperty.addListener(DiagramScaler.this.boundsInLocalListener);
@@ -76,7 +72,6 @@ public class DiagramScaler implements XActivatable {
             if (_wasRemoved) {
               List<? extends XNode> _removed = change.getRemoved();
               final Consumer<XNode> _function_1 = new Consumer<XNode>() {
-                @Override
                 public void accept(final XNode it) {
                   ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
                   _boundsInLocalProperty.removeListener(DiagramScaler.this.boundsInLocalListener);
@@ -106,7 +101,6 @@ public class DiagramScaler implements XActivatable {
       Group _nodeLayer = this.diagram.getNodeLayer();
       ObservableList<Node> _children = _nodeLayer.getChildren();
       final Function1<Node, BoundingBox> _function = new Function1<Node, BoundingBox>() {
-        @Override
         public BoundingBox apply(final Node it) {
           Bounds _layoutBounds = it.getLayoutBounds();
           double _layoutX = it.getLayoutX();
@@ -116,7 +110,6 @@ public class DiagramScaler implements XActivatable {
       };
       List<BoundingBox> _map = ListExtensions.<Node, BoundingBox>map(_children, _function);
       final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = new Function2<BoundingBox, BoundingBox, BoundingBox>() {
-        @Override
         public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
           return BoundsExtensions.operator_plus(b0, b1);
         }
@@ -189,7 +182,6 @@ public class DiagramScaler implements XActivatable {
     }
   }
   
-  @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
@@ -198,7 +190,6 @@ public class DiagramScaler implements XActivatable {
       this.heightProperty.addListener(this.layoutListener);
       ObservableList<XNode> _nodes = this.diagram.getNodes();
       final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
         public void accept(final XNode it) {
           ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
           _boundsInLocalProperty.addListener(DiagramScaler.this.boundsInLocalListener);
@@ -234,7 +225,6 @@ public class DiagramScaler implements XActivatable {
       _nodes.removeListener(this.listChangeListener);
       ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
       final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
         public void accept(final XNode it) {
           ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
           _boundsInLocalProperty.removeListener(DiagramScaler.this.boundsInLocalListener);

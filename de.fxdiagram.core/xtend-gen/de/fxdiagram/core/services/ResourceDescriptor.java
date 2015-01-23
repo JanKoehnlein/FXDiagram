@@ -16,7 +16,6 @@ public class ResourceDescriptor extends ClassLoaderDescriptor {
     this.nameProperty.set(name);
   }
   
-  @Override
   public String getId() {
     String _classLoaderID = this.getClassLoaderID();
     String _plus = (_classLoaderID + "/");

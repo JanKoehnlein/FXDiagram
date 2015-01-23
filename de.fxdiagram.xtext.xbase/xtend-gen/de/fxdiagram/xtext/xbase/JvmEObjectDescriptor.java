@@ -15,7 +15,6 @@ public class JvmEObjectDescriptor<ECLASS extends EObject> extends XtextEObjectDe
     super(uri, fqn, mappingConfigID, mappingID, provider);
   }
   
-  @Override
   protected IResourceServiceProvider getResourceServiceProvider() {
     URI _createURI = URI.createURI("dummy.___xbase");
     return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);

@@ -15,7 +15,6 @@ public class BehaviorProvider {
     XDiagram _diagram = root.getDiagram();
     ObservableList<XNode> _nodes = _diagram.getNodes();
     final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
-      @Override
       public Boolean apply(final XNode it) {
         return Boolean.valueOf(it.getSelected());
       }

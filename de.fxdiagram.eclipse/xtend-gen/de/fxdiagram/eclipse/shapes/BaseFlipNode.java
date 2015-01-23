@@ -26,7 +26,6 @@ public class BaseFlipNode<T extends Object> extends FlipNode implements INodeWit
   public BaseFlipNode() {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectProperty = this.domainObjectProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
-      @Override
       public void changed(final ObservableValue<? extends DomainObjectDescriptor> prop, final DomainObjectDescriptor oldVal, final DomainObjectDescriptor newVal) {
         BaseFlipNode.this.injectMembers();
       }
@@ -46,13 +45,11 @@ public class BaseFlipNode<T extends Object> extends FlipNode implements INodeWit
     }
   }
   
-  @Override
   public IMappedElementDescriptor<T> getDomainObject() {
     DomainObjectDescriptor _domainObject = super.getDomainObject();
     return ((IMappedElementDescriptor<T>) _domainObject);
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     IMappedElementDescriptor<T> _domainObject = this.getDomainObject();
@@ -61,10 +58,8 @@ public class BaseFlipNode<T extends Object> extends FlipNode implements INodeWit
     this.addBehavior(_openElementInEditorBehavior);
   }
   
-  @Override
   public void registerOnClick() {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         MouseButton _button = it.getButton();
         boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
@@ -89,7 +84,6 @@ public class BaseFlipNode<T extends Object> extends FlipNode implements INodeWit
     this.setOnMouseClicked(_function);
   }
   
-  @Override
   public List<Side> getButtonSides(final ConnectionMapping<?> mapping) {
     return Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.TOP, Side.BOTTOM, Side.LEFT, Side.RIGHT));
   }

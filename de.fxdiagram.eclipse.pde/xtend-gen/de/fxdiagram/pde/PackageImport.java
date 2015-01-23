@@ -16,12 +16,10 @@ import org.osgi.framework.Constants;
 public class PackageImport extends BundleDependency {
   private final ImportPackageSpecification packageImport;
   
-  @Override
   public BundleDependency.Kind getKind() {
     return BundleDependency.Kind.PACKAGE_IMPORT;
   }
   
-  @Override
   public BundleDescription getDependency() {
     BaseDescription _supplier = this.packageImport.getSupplier();
     BundleDescription _supplier_1 = null;
@@ -31,12 +29,10 @@ public class PackageImport extends BundleDependency {
     return _supplier_1;
   }
   
-  @Override
   public boolean isReexport() {
     return false;
   }
   
-  @Override
   public VersionRange getVersionRange() {
     VersionRange _elvis = null;
     VersionRange _versionRange = this.packageImport.getVersionRange();
@@ -48,7 +44,6 @@ public class PackageImport extends BundleDependency {
     return _elvis;
   }
   
-  @Override
   public boolean isOptional() {
     boolean _xblockexpression = false;
     {

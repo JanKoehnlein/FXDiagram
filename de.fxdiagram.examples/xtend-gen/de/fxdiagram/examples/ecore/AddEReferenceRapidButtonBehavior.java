@@ -39,20 +39,17 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     super(host);
   }
   
-  @Override
   protected Iterable<EReference> getInitialModelChoices() {
     EClassNode _host = this.getHost();
     EClass _eClass = _host.getEClass();
     return _eClass.getEReferences();
   }
   
-  @Override
   protected EReferenceDescriptor getChoiceKey(final EReference model) {
     EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
     return _domainObjectProvider.createEReferenceDescriptor(model);
   }
   
-  @Override
   protected XNode createNode(final EReferenceDescriptor handle) {
     EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
     EReference _domainObject = handle.getDomainObject();
@@ -67,7 +64,6 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
-  @Override
   protected ConnectedNodeChooser createChooser(final RapidButton button, final Set<EReferenceDescriptor> availableChoiceKeys, final Set<EReferenceDescriptor> unavailableChoiceKeys) {
     ConnectedNodeChooser _xblockexpression = null;
     {
@@ -76,7 +72,6 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
       CarusselChoice _carusselChoice = new CarusselChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _carusselChoice);
       final Consumer<EReferenceDescriptor> _function = new Consumer<EReferenceDescriptor>() {
-        @Override
         public void accept(final EReferenceDescriptor it) {
           XNode _createNode = AddEReferenceRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
@@ -84,14 +79,12 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
       };
       availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        @Override
         public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor descriptor) {
           XConnection _xblockexpression = null;
           {
             final EReference reference = ((EReferenceDescriptor) descriptor).getDomainObject();
             XConnection _xConnection = new XConnection(host, choice, descriptor);
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-              @Override
               public void apply(final XConnection it) {
                 ArrowHead _xifexpression = null;
                 boolean _isContainer = reference.isContainer();
@@ -125,7 +118,6 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
                 it.setSourceArrowHead(_xifexpression_1);
                 XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
                 final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                  @Override
                   public void apply(final XConnectionLabel it) {
                     Text _text = it.getText();
                     String _name = reference.getName();
@@ -139,7 +131,6 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
                 if (_notEquals_1) {
                   XConnectionLabel _xConnectionLabel_1 = new XConnectionLabel(it);
                   final Procedure1<XConnectionLabel> _function_1 = new Procedure1<XConnectionLabel>() {
-                    @Override
                     public void apply(final XConnectionLabel it) {
                       Text _text = it.getText();
                       EReference _eOpposite = reference.getEOpposite();
@@ -163,7 +154,6 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
     return _xblockexpression;
   }
   
-  @Override
   protected Iterable<RapidButton> createButtons(final RapidButtonAction addConnectionAction) {
     EClassNode _host = this.getHost();
     SVGPath _arrowButton = ButtonExtensions.getArrowButton(Side.LEFT, "Discover references");

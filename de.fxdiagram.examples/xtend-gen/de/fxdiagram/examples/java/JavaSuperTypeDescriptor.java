@@ -15,7 +15,6 @@ public class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSu
       ((it.getSubType().getCanonicalName() + "->") + it.getSuperType().getCanonicalName()), provider);
   }
   
-  @Override
   public JavaSuperTypeHandle resolveDomainObject() {
     try {
       JavaSuperTypeHandle _xblockexpression = null;

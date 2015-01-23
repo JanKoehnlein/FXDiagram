@@ -80,7 +80,6 @@ public class Demo extends Application {
     Application.launch(args);
   }
   
-  @Override
   public void start(final Stage it) {
     it.setTitle("FX Diagram Demo");
     Scene _createScene = this.createScene();
@@ -101,7 +100,6 @@ public class Demo extends Application {
       this.root.setRootDiagram(diagram);
       ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
       final Procedure1<ClassLoaderProvider> _function = new Procedure1<ClassLoaderProvider>() {
-        @Override
         public void apply(final ClassLoaderProvider it) {
           Class<? extends Demo> _class = Demo.this.getClass();
           ClassLoader _classLoader = _class.getClassLoader();
@@ -135,7 +133,6 @@ public class Demo extends Application {
       UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
       _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _openAction, _closeAction, _fullScreenAction, _undoRedoPlayerAction)));
       final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
-        @Override
         public void apply(final XDiagram it) {
           ObservableList<XNode> _nodes = it.getNodes();
           DemoCampIntroSlides _demoCampIntroSlides = new DemoCampIntroSlides();
@@ -143,7 +140,6 @@ public class Demo extends Application {
           ObservableList<XNode> _nodes_1 = it.getNodes();
           OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Basic");
           final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
-            @Override
             public void apply(final OpenableDiagramNode it) {
               LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram("");
               it.setInnerDiagram(_lazyExampleDiagram);
@@ -154,11 +150,9 @@ public class Demo extends Application {
           ObservableList<XNode> _nodes_2 = it.getNodes();
           OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode("JavaFX");
           final Procedure1<OpenableDiagramNode> _function_1 = new Procedure1<OpenableDiagramNode>() {
-            @Override
             public void apply(final OpenableDiagramNode it) {
               XDiagram _xDiagram = new XDiagram();
               final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-                @Override
                 public void apply(final XDiagram it) {
                   ObservableList<XNode> _nodes = it.getNodes();
                   LoginNode _newLoginNode = Demo.this.newLoginNode();
@@ -220,7 +214,6 @@ public class Demo extends Application {
           final double deltaY = (_height / _plus_1);
           ObservableList<XNode> _nodes_11 = it.getNodes();
           final Procedure2<XNode, Integer> _function_2 = new Procedure2<XNode, Integer>() {
-            @Override
             public void apply(final XNode node, final Integer i) {
               Bounds _layoutBounds = node.getLayoutBounds();
               double _width = _layoutBounds.getWidth();
@@ -241,7 +234,6 @@ public class Demo extends Application {
           int _minus = (_size_2 - 1);
           List<XNode> _subList = _nodes_12.subList(0, _minus);
           final Procedure2<XNode, Integer> _function_3 = new Procedure2<XNode, Integer>() {
-            @Override
             public void apply(final XNode node, final Integer i) {
               ObservableList<XConnection> _connections = it.getConnections();
               ObservableList<XNode> _nodes = it.getNodes();
@@ -256,7 +248,6 @@ public class Demo extends Application {
       ObjectExtensions.<XDiagram>operator_doubleArrow(diagram, _function_1);
       this.warmUpLayouter();
       final Runnable _function_2 = new Runnable() {
-        @Override
         public void run() {
           diagram.centerDiagram(true);
         }
@@ -270,14 +261,11 @@ public class Demo extends Application {
   public OpenableDiagramNode newGalleryDiagramNode() {
     OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Gallery");
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
-      @Override
       public void apply(final OpenableDiagramNode it) {
         XDiagram _xDiagram = new XDiagram();
         final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-          @Override
           public void apply(final XDiagram it) {
             final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-              @Override
               public void apply(final XDiagram it) {
                 ObservableList<XNode> _nodes = it.getNodes();
                 SimpleNode _simpleNode = new SimpleNode("Simple");
@@ -285,7 +273,6 @@ public class Demo extends Application {
                 ObservableList<XNode> _nodes_1 = it.getNodes();
                 OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Openable");
                 final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
-                  @Override
                   public void apply(final OpenableDiagramNode it) {
                     LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram("(n)");
                     it.setInnerDiagram(_lazyExampleDiagram);
@@ -296,7 +283,6 @@ public class Demo extends Application {
                 ObservableList<XNode> _nodes_2 = it.getNodes();
                 LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode("Embedded");
                 final Procedure1<LevelOfDetailDiagramNode> _function_1 = new Procedure1<LevelOfDetailDiagramNode>() {
-                  @Override
                   public void apply(final LevelOfDetailDiagramNode it) {
                     LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram("(e)");
                     it.setInnerDiagram(_lazyExampleDiagram);
@@ -349,7 +335,6 @@ public class Demo extends Application {
   public OpenableDiagramNode newLcarsDiagramNode() {
     OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("LCARS");
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
-      @Override
       public void apply(final OpenableDiagramNode it) {
         LcarsDiagram _lcarsDiagram = new LcarsDiagram();
         it.setInnerDiagram(_lcarsDiagram);
@@ -361,11 +346,9 @@ public class Demo extends Application {
   protected OpenableDiagramNode openableDiagram(final String name, final XNode node) {
     OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(name);
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
-      @Override
       public void apply(final OpenableDiagramNode it) {
         XDiagram _xDiagram = new XDiagram();
         final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-          @Override
           public void apply(final XDiagram it) {
             ObservableList<XNode> _nodes = it.getNodes();
             _nodes.add(node);
@@ -410,7 +393,6 @@ public class Demo extends Application {
     ResourceDescriptor _newResource = this.newResource("Movie", "media/Usability.mp4");
     MovieNode _movieNode = new MovieNode(_newResource);
     final Procedure1<MovieNode> _function = new Procedure1<MovieNode>() {
-      @Override
       public void apply(final MovieNode it) {
         it.setWidth(640);
         it.setHeight(360);
@@ -422,7 +404,6 @@ public class Demo extends Application {
   public BrowserNode newBrowserNode() {
     BrowserNode _browserNode = new BrowserNode("Browser");
     final Procedure1<BrowserNode> _function = new Procedure1<BrowserNode>() {
-      @Override
       public void apply(final BrowserNode it) {
         try {
           it.setWidth(120);
@@ -440,7 +421,6 @@ public class Demo extends Application {
   public BrickBreakerNode newBrickBreakerNode() {
     BrickBreakerNode _brickBreakerNode = new BrickBreakerNode("BrickBreaker");
     final Procedure1<BrickBreakerNode> _function = new Procedure1<BrickBreakerNode>() {
-      @Override
       public void apply(final BrickBreakerNode it) {
         it.setWidth(640);
         it.setHeight(480);
@@ -453,7 +433,6 @@ public class Demo extends Application {
     ResourceDescriptor _newResource = this.newResource("laptop", "media/laptop.jpg");
     RecursiveImageNode _recursiveImageNode = new RecursiveImageNode(_newResource);
     final Procedure1<RecursiveImageNode> _function = new Procedure1<RecursiveImageNode>() {
-      @Override
       public void apply(final RecursiveImageNode it) {
         it.setX(0);
         it.setY((-3));
@@ -469,7 +448,6 @@ public class Demo extends Application {
     ResourceDescriptor _newResource = this.newResource("seltsam", "media/seltsam.jpg");
     ImageNode _imageNode = new ImageNode(_newResource);
     final Procedure1<ImageNode> _function = new Procedure1<ImageNode>() {
-      @Override
       public void apply(final ImageNode it) {
         it.setWidth(100);
       }

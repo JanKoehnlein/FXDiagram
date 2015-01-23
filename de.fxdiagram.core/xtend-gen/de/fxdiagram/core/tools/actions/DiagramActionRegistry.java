@@ -18,7 +18,6 @@ public class DiagramActionRegistry {
   
   public void operator_add(final Iterable<? extends DiagramAction> diagramActions) {
     final Consumer<DiagramAction> _function = new Consumer<DiagramAction>() {
-      @Override
       public void accept(final DiagramAction it) {
         DiagramActionRegistry.this.operator_add(it);
       }

@@ -20,7 +20,6 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class DeleteAction implements DiagramAction {
-  @Override
   public boolean matches(final KeyEvent event) {
     boolean _or = false;
     KeyCode _code = event.getCode();
@@ -35,22 +34,18 @@ public class DeleteAction implements DiagramAction {
     return _or;
   }
   
-  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.TRASH;
   }
   
-  @Override
   public String getTooltip() {
     return "Delete selection";
   }
   
-  @Override
   public void perform(final XRoot root) {
     final Iterable<XShape> elements = root.getCurrentSelection();
     final Iterable<XNode> nodes = Iterables.<XNode>filter(elements, XNode.class);
     final Function1<XNode, ObservableList<XConnection>> _function = new Function1<XNode, ObservableList<XConnection>>() {
-      @Override
       public ObservableList<XConnection> apply(final XNode it) {
         return it.getIncomingConnections();
       }
@@ -58,7 +53,6 @@ public class DeleteAction implements DiagramAction {
     Iterable<ObservableList<XConnection>> _map = IterableExtensions.<XNode, ObservableList<XConnection>>map(nodes, _function);
     Iterable<XConnection> _flatten = Iterables.<XConnection>concat(_map);
     final Function1<XNode, ObservableList<XConnection>> _function_1 = new Function1<XNode, ObservableList<XConnection>>() {
-      @Override
       public ObservableList<XConnection> apply(final XNode it) {
         return it.getOutgoingConnections();
       }

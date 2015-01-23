@@ -93,7 +93,6 @@ public class FXDiagramView extends ViewPart {
   
   private final XDiagramConfigInterpreter configInterpreter = new XDiagramConfigInterpreter();
   
-  @Override
   public void createPartControl(final Composite parent) {
     FXCanvas _fXCanvas = new FXCanvas(parent, SWT.NONE);
     this.canvas = _fXCanvas;
@@ -106,7 +105,6 @@ public class FXDiagramView extends ViewPart {
   protected Scene createFxScene() {
     XRoot _xRoot = new XRoot();
     final Procedure1<XRoot> _function = new Procedure1<XRoot>() {
-      @Override
       public void apply(final XRoot it) {
         XDiagram _xDiagram = new XDiagram();
         it.setRootDiagram(_xDiagram);
@@ -117,7 +115,6 @@ public class FXDiagramView extends ViewPart {
         XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
         Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
         final Function1<XDiagramConfig, IMappedElementDescriptorProvider> _function = new Function1<XDiagramConfig, IMappedElementDescriptorProvider>() {
-          @Override
           public IMappedElementDescriptorProvider apply(final XDiagramConfig it) {
             return it.getDomainObjectProvider();
           }
@@ -147,7 +144,6 @@ public class FXDiagramView extends ViewPart {
     Scene _scene = new Scene(
       this.root = _doubleArrow);
     final Procedure1<Scene> _function_1 = new Procedure1<Scene>() {
-      @Override
       public void apply(final Scene it) {
         PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
         it.setCamera(_perspectiveCamera);
@@ -157,7 +153,6 @@ public class FXDiagramView extends ViewPart {
     return ObjectExtensions.<Scene>operator_doubleArrow(_scene, _function_1);
   }
   
-  @Override
   public void setFocus() {
     this.canvas.setFocus();
   }
@@ -177,7 +172,6 @@ public class FXDiagramView extends ViewPart {
       Scene _scene_1 = this.canvas.getScene();
       ReadOnlyDoubleProperty _widthProperty = _scene_1.widthProperty();
       final ChangeListener<Number> _function = new ChangeListener<Number>() {
-        @Override
         public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
           Scene _scene = FXDiagramView.this.canvas.getScene();
           ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
@@ -194,7 +188,6 @@ public class FXDiagramView extends ViewPart {
         Scene _scene_3 = this.canvas.getScene();
         ReadOnlyDoubleProperty _heightProperty = _scene_3.heightProperty();
         final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-          @Override
           public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
             Scene _scene = FXDiagramView.this.canvas.getScene();
             ReadOnlyDoubleProperty _heightProperty = _scene.heightProperty();
@@ -254,7 +247,6 @@ public class FXDiagramView extends ViewPart {
     final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element, _mapping);
     CommandStack _commandStack_2 = this.root.getCommandStack();
     final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
-      @Override
       public Boolean apply(final XShape it) {
         boolean _switchResult = false;
         boolean _matched = false;
@@ -295,7 +287,6 @@ public class FXDiagramView extends ViewPart {
       if ((editor instanceof XtextEditor)) {
         IXtextDocument _document = ((XtextEditor)editor).getDocument();
         final IXtextModelListener _function = new IXtextModelListener() {
-          @Override
           public void modelChanged(final XtextResource it) {
             FXDiagramView.this.changedEditors.add(((XtextEditor)editor));
           }
@@ -332,7 +323,6 @@ public class FXDiagramView extends ViewPart {
     return _xblockexpression;
   }
   
-  @Override
   public void dispose() {
     this.gestureConverter.dispose();
     super.dispose();

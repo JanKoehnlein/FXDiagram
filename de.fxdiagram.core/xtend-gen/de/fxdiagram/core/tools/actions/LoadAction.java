@@ -19,7 +19,6 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
 public class LoadAction implements DiagramAction {
-  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _isShortcutDown = it.isShortcutDown();
@@ -33,17 +32,14 @@ public class LoadAction implements DiagramAction {
     return _and;
   }
   
-  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.CLOUD;
   }
   
-  @Override
   public String getTooltip() {
     return "Load diagram";
   }
   
-  @Override
   public void perform(final XRoot root) {
     try {
       final FileChooser fileChooser = new FileChooser();

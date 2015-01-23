@@ -36,7 +36,6 @@ import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 
 @SuppressWarnings("all")
 public class ShowBundleHandler extends AbstractHandler {
-  @Override
   public void setEnabled(final Object evaluationContext) {
     if ((evaluationContext instanceof IEvaluationContext)) {
       final Object selection = ((IEvaluationContext)evaluationContext).getVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME);
@@ -53,14 +52,18 @@ public class ShowBundleHandler extends AbstractHandler {
     if ((selection instanceof IStructuredSelection)) {
       Iterator _iterator = ((IStructuredSelection)selection).iterator();
       Iterator<IAdaptable> _filter = Iterators.<IAdaptable>filter(_iterator, IAdaptable.class);
-      final Function1<IAdaptable, IProject> _function = (IAdaptable it) -> {
-        Object _adapter = it.getAdapter(IProject.class);
-        return ((IProject) _adapter);
+      final Function1<IAdaptable, IProject> _function = new Function1<IAdaptable, IProject>() {
+        public IProject apply(final IAdaptable it) {
+          Object _adapter = it.getAdapter(IProject.class);
+          return ((IProject) _adapter);
+        }
       };
       Iterator<IProject> _map = IteratorExtensions.<IAdaptable, IProject>map(_filter, _function);
-      final Function1<IProject, BundleDescription> _function_1 = (IProject it) -> {
-        IPluginModelBase _findModel = PluginRegistry.findModel(it);
-        return _findModel.getBundleDescription();
+      final Function1<IProject, BundleDescription> _function_1 = new Function1<IProject, BundleDescription>() {
+        public BundleDescription apply(final IProject it) {
+          IPluginModelBase _findModel = PluginRegistry.findModel(it);
+          return _findModel.getBundleDescription();
+        }
       };
       Iterator<BundleDescription> _map_1 = IteratorExtensions.<IProject, BundleDescription>map(_map, _function_1);
       Iterator<BundleDescription> _filterNull = IteratorExtensions.<BundleDescription>filterNull(_map_1);
@@ -70,7 +73,6 @@ public class ShowBundleHandler extends AbstractHandler {
     }
   }
   
-  @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     try {
       Object _xblockexpression = null;
@@ -88,11 +90,13 @@ public class ShowBundleHandler extends AbstractHandler {
           final IWorkbenchPage page = _activeWorkbenchWindow.getActivePage();
           final IViewPart view = page.showView("de.fxdiagram.eclipse.FXDiagramView");
           if ((view instanceof FXDiagramView)) {
-            final Consumer<BundleDescription> _function = (BundleDescription it) -> {
-              Iterable<? extends MappingCall<?, BundleDescription>> _entryCalls = config.<BundleDescription>getEntryCalls(it);
-              final MappingCall<?, BundleDescription> call = IterableExtensions.head(_entryCalls);
-              IEditorPart _activeEditor = page.getActiveEditor();
-              ((FXDiagramView)view).<BundleDescription>revealElement(it, call, _activeEditor);
+            final Consumer<BundleDescription> _function = new Consumer<BundleDescription>() {
+              public void accept(final BundleDescription it) {
+                Iterable<? extends MappingCall<?, BundleDescription>> _entryCalls = config.<BundleDescription>getEntryCalls(it);
+                final MappingCall<?, BundleDescription> call = IterableExtensions.head(_entryCalls);
+                IEditorPart _activeEditor = page.getActiveEditor();
+                ((FXDiagramView)view).<BundleDescription>revealElement(it, call, _activeEditor);
+              }
             };
             bundleDescriptions.forEach(_function);
           }

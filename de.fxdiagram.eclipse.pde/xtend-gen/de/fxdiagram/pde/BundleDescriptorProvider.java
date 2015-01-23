@@ -15,15 +15,13 @@ import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.Version;
 
-@ModelNode
+@ModelNode(inherit = false)
 @SuppressWarnings("all")
 public class BundleDescriptorProvider implements DomainObjectProvider, IMappedElementDescriptorProvider {
-  @Override
   public <T extends Object> DomainObjectDescriptor createDescriptor(final T domainObject) {
     return null;
   }
   
-  @Override
   public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
     IMappedElementDescriptor<T> _switchResult = null;
     boolean _matched = false;

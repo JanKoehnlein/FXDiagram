@@ -18,7 +18,6 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
 public class SaveAction implements DiagramAction {
-  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _isShortcutDown = it.isShortcutDown();
@@ -32,17 +31,14 @@ public class SaveAction implements DiagramAction {
     return _and;
   }
   
-  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.ROCKET;
   }
   
-  @Override
   public String getTooltip() {
     return "Save diagram";
   }
   
-  @Override
   public void perform(final XRoot root) {
     try {
       XDiagram _diagram = root.getDiagram();

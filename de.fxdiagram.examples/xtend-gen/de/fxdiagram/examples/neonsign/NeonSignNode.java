@@ -44,7 +44,6 @@ public class NeonSignNode extends FlipNode {
     super(name);
   }
   
-  @Override
   protected Node createNode() {
     Node _xblockexpression = null;
     {
@@ -53,7 +52,6 @@ public class NeonSignNode extends FlipNode {
       this.setFront(_neonSign);
       ImageView _imageView = new ImageView();
       final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-        @Override
         public void apply(final ImageView it) {
           ImageCache _get = ImageCache.get();
           Image _image = _get.getImage(NeonSignNode.this, "code.png");
@@ -67,20 +65,16 @@ public class NeonSignNode extends FlipNode {
     return _xblockexpression;
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     Node _front = this.getFront();
     final Procedure1<Node> _function = new Procedure1<Node>() {
-      @Override
       public void apply(final Node it) {
         TooltipExtensions.setTooltip(it, "Double-click for Xtend code");
         final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-          @Override
           public void handle(final MouseEvent it) {
             Timeline _timeline = new Timeline();
             final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
-              @Override
               public void apply(final Timeline it) {
                 it.setCycleCount(20);
                 ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
@@ -122,7 +116,6 @@ public class NeonSignNode extends FlipNode {
   protected VBox getNeonSign() {
     VBox _vBox = new VBox();
     final Procedure1<VBox> _function = new Procedure1<VBox>() {
-      @Override
       public void apply(final VBox it) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("-fx-background-image: url(\"");
@@ -134,7 +127,6 @@ public class NeonSignNode extends FlipNode {
         ObservableList<Node> _children = it.getChildren();
         TextField _textField = new TextField();
         final Procedure1<TextField> _function = new Procedure1<TextField>() {
-          @Override
           public void apply(final TextField it) {
             it.setText("JavaFX loves Xtend");
             Insets _insets = new Insets(10, 40, 10, 40);
@@ -146,7 +138,6 @@ public class NeonSignNode extends FlipNode {
         ObservableList<Node> _children_1 = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function_1 = new Procedure1<Text>() {
-          @Override
           public void apply(final Text it) {
             StringProperty _textProperty = it.textProperty();
             StringProperty _textProperty_1 = NeonSignNode.this.textField.textProperty();
@@ -160,14 +151,12 @@ public class NeonSignNode extends FlipNode {
             it.setFill(_web);
             Blend _blend = new Blend();
             final Procedure1<Blend> _function = new Procedure1<Blend>() {
-              @Override
               public void apply(final Blend it) {
                 it.setMode(BlendMode.MULTIPLY);
                 Bloom _bloom = new Bloom();
                 it.setTopInput(_bloom);
                 InnerShadow _innerShadow = new InnerShadow();
                 final Procedure1<InnerShadow> _function = new Procedure1<InnerShadow>() {
-                  @Override
                   public void apply(final InnerShadow it) {
                     Color _web = Color.web("#f13a00");
                     it.setColor(_web);

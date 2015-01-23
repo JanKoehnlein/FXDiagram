@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -20,7 +21,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @ModelNode({ "fill" })
 @SuppressWarnings("all")
-public class TriangleArrowHead extends ArrowHead {
+public class TriangleArrowHead extends ArrowHead implements XModelProvider {
   public TriangleArrowHead(final XConnection connection, final double width, final double height, final Paint stroke, final Paint fill, final boolean isSource) {
     super(connection, width, height, stroke, isSource);
     boolean _notEquals = (!Objects.equal(fill, null));
@@ -33,7 +34,6 @@ public class TriangleArrowHead extends ArrowHead {
     this(connection, 5, 10, null, null, isSource);
   }
   
-  @Override
   public Node createNode() {
     Polygon _xblockexpression = null;
     {
@@ -46,7 +46,6 @@ public class TriangleArrowHead extends ArrowHead {
       }
       Polygon _polygon = new Polygon();
       final Procedure1<Polygon> _function = new Procedure1<Polygon>() {
-        @Override
         public void apply(final Polygon it) {
           ObservableList<Double> _points = it.getPoints();
           double _height = TriangleArrowHead.this.getHeight();
@@ -72,7 +71,6 @@ public class TriangleArrowHead extends ArrowHead {
     return _xblockexpression;
   }
   
-  @Override
   public double getLineCut() {
     double _width = this.getWidth();
     XConnection _connection = this.getConnection();

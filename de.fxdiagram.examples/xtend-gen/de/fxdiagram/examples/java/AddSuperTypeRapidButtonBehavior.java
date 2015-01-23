@@ -36,14 +36,12 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
     super(host);
   }
   
-  @Override
   protected Iterable<Class<?>> getInitialModelChoices() {
     JavaTypeNode _host = this.getHost();
     JavaTypeModel _javaTypeModel = _host.getJavaTypeModel();
     return _javaTypeModel.getSuperTypes();
   }
   
-  @Override
   protected JavaSuperTypeDescriptor getChoiceKey(final Class<?> superType) {
     JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
     JavaTypeNode _host = this.getHost();
@@ -52,7 +50,6 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
     return _domainObjectProvider.createJavaSuperClassDescriptor(_javaSuperTypeHandle);
   }
   
-  @Override
   protected XNode createNode(final JavaSuperTypeDescriptor key) {
     JavaModelProvider _domainObjectProvider = this.getDomainObjectProvider();
     JavaSuperTypeHandle _domainObject = key.getDomainObject();
@@ -67,7 +64,6 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
     return _root.<JavaModelProvider>getDomainObjectProvider(JavaModelProvider.class);
   }
   
-  @Override
   protected ConnectedNodeChooser createChooser(final RapidButton button, final Set<JavaSuperTypeDescriptor> availableChoiceKeys, final Set<JavaSuperTypeDescriptor> unavailableChoiceKeys) {
     ConnectedNodeChooser _xblockexpression = null;
     {
@@ -76,7 +72,6 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
       CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _coverFlowChoice);
       final Consumer<JavaSuperTypeDescriptor> _function = new Consumer<JavaSuperTypeDescriptor>() {
-        @Override
         public void accept(final JavaSuperTypeDescriptor it) {
           XNode _createNode = AddSuperTypeRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
@@ -84,11 +79,9 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
       };
       availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        @Override
         public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor key) {
           XConnection _xConnection = new XConnection(host, choice, key);
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-            @Override
             public void apply(final XConnection it) {
               XDiagram _diagram = CoreExtensions.getDiagram(host);
               Paint _backgroundPaint = _diagram.getBackgroundPaint();
@@ -106,7 +99,6 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
     return _xblockexpression;
   }
   
-  @Override
   protected Iterable<RapidButton> createButtons(final RapidButtonAction addConnectionAction) {
     JavaTypeNode _host = this.getHost();
     SVGPath _triangleButton = ButtonExtensions.getTriangleButton(Side.TOP, "Discover supertypes");

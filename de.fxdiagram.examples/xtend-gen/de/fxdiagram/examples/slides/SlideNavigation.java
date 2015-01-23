@@ -11,22 +11,18 @@ public class SlideNavigation extends AbstractHostBehavior<SlideDiagram> implemen
     super(host);
   }
   
-  @Override
   protected void doActivate() {
   }
   
-  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return NavigationBehavior.class;
   }
   
-  @Override
   public boolean next() {
     SlideDiagram _host = this.getHost();
     return _host.next();
   }
   
-  @Override
   public boolean previous() {
     SlideDiagram _host = this.getHost();
     return _host.previous();

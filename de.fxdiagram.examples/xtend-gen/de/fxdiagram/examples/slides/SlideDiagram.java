@@ -37,7 +37,6 @@ public class SlideDiagram extends XDiagram {
     return _slides.add(slide);
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     this.setBackgroundPaint(Color.BLACK);
@@ -126,7 +125,6 @@ public class SlideDiagram extends XDiagram {
     if (_notEquals) {
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-        @Override
         public void apply(final FadeTransition it) {
           it.setNode(oldSlide);
           Duration _millis = DurationExtensions.millis(200);
@@ -134,7 +132,6 @@ public class SlideDiagram extends XDiagram {
           it.setFromValue(1);
           it.setToValue(0);
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-            @Override
             public void handle(final ActionEvent it) {
               ObservableList<XNode> _nodes = SlideDiagram.this.getNodes();
               _nodes.remove(oldSlide);
@@ -158,7 +155,6 @@ public class SlideDiagram extends XDiagram {
         newSlide.setSelected(true);
         FadeTransition _fadeTransition_1 = new FadeTransition();
         final Procedure1<FadeTransition> _function_1 = new Procedure1<FadeTransition>() {
-          @Override
           public void apply(final FadeTransition it) {
             it.setNode(newSlide);
             Duration _millis = DurationExtensions.millis(200);
@@ -185,7 +181,6 @@ public class SlideDiagram extends XDiagram {
     if (_and) {
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
-        @Override
         public void apply(final ParallelTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           _children.add(fade);

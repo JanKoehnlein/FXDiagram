@@ -35,19 +35,16 @@ public class LoginNode extends FlipNode {
     super(name);
   }
   
-  @Override
   protected Node createNode() {
     Node _xblockexpression = null;
     {
       final Node node = super.createNode();
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-        @Override
         public void apply(final RectangleBorderPane it) {
           ObservableList<Node> _children = it.getChildren();
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
-            @Override
             public void apply(final Text it) {
               it.setTextOrigin(VPos.TOP);
               it.setText("Login");
@@ -75,12 +72,10 @@ public class LoginNode extends FlipNode {
       final StringExpression welcomeMessage = StringExpressionExtensions.operator_plus(_plus, "!");
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-        @Override
         public void apply(final RectangleBorderPane it) {
           ObservableList<Node> _children = it.getChildren();
           GridPane _gridPane = new GridPane();
           final Procedure1<GridPane> _function = new Procedure1<GridPane>() {
-            @Override
             public void apply(final GridPane it) {
               it.setHgap(10);
               it.setVgap(10);
@@ -88,7 +83,6 @@ public class LoginNode extends FlipNode {
               it.setPadding(_insets);
               Text _text = new Text();
               final Procedure1<Text> _function = new Procedure1<Text>() {
-                @Override
                 public void apply(final Text it) {
                   it.setTextOrigin(VPos.TOP);
                   Font _font = Font.font("Tahoma", FontWeight.NORMAL, 20);
@@ -103,7 +97,6 @@ public class LoginNode extends FlipNode {
               it.add(_label, 0, 1);
               TextField _textField = new TextField();
               final Procedure1<TextField> _function_1 = new Procedure1<TextField>() {
-                @Override
                 public void apply(final TextField it) {
                   StringProperty _textProperty = it.textProperty();
                   _textProperty.bindBidirectional(LoginNode.this.userNameProperty);
@@ -115,7 +108,6 @@ public class LoginNode extends FlipNode {
               it.add(_label_1, 0, 2);
               PasswordField _passwordField = new PasswordField();
               final Procedure1<PasswordField> _function_2 = new Procedure1<PasswordField>() {
-                @Override
                 public void apply(final PasswordField it) {
                   StringProperty _textProperty = it.textProperty();
                   _textProperty.bindBidirectional(LoginNode.this.passwordProperty);
@@ -125,16 +117,13 @@ public class LoginNode extends FlipNode {
               it.add(_doubleArrow_2, 1, 2);
               HBox _hBox = new HBox(10);
               final Procedure1<HBox> _function_3 = new Procedure1<HBox>() {
-                @Override
                 public void apply(final HBox it) {
                   it.setAlignment(Pos.BOTTOM_RIGHT);
                   ObservableList<Node> _children = it.getChildren();
                   Button _button = new Button("Sign in");
                   final Procedure1<Button> _function = new Procedure1<Button>() {
-                    @Override
                     public void apply(final Button it) {
                       final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                        @Override
                         public void handle(final ActionEvent it) {
                           LoginNode.this.flip(true);
                         }

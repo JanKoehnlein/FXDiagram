@@ -31,7 +31,6 @@ public abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING extends Object>
     super(uri, fqn, mappingConfigID, mappingID, provider);
   }
   
-  @Override
   public String getName() {
     ReadOnlyStringProperty _nameProperty = this.nameProperty();
     String _get = _nameProperty.get();
@@ -55,7 +54,6 @@ public abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING extends Object>
     return this.getId();
   }
   
-  @Override
   public IEditorPart openInEditor(final boolean isSelect) {
     IEditorPart _xifexpression = null;
     if (isSelect) {

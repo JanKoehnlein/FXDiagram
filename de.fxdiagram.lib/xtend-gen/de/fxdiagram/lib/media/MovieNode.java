@@ -54,7 +54,6 @@ public class MovieNode extends FlipNode {
     super(movieDescriptor);
   }
   
-  @Override
   protected Node createNode() {
     Node _xblockexpression = null;
     {
@@ -67,12 +66,10 @@ public class MovieNode extends FlipNode {
       this.player = _mediaPlayer;
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-        @Override
         public void apply(final RectangleBorderPane it) {
           ObservableList<Node> _children = it.getChildren();
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
-            @Override
             public void apply(final Text it) {
               String _name = MovieNode.this.getName();
               it.setText(_name);
@@ -88,7 +85,6 @@ public class MovieNode extends FlipNode {
       RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
       this.setFront(_doubleArrow);
       final Procedure1<StackPane> _function_1 = new Procedure1<StackPane>() {
-        @Override
         public void apply(final StackPane it) {
           it.setId("pane");
           Insets _insets = new Insets(MovieNode.this.border, MovieNode.this.border, MovieNode.this.border, MovieNode.this.border);
@@ -104,7 +100,6 @@ public class MovieNode extends FlipNode {
     return _xblockexpression;
   }
   
-  @Override
   public void initializeGraphics() {
     super.initializeGraphics();
     ObservableList<String> _stylesheets = this.getStylesheets();
@@ -112,14 +107,12 @@ public class MovieNode extends FlipNode {
     _stylesheets.add(_uRI);
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     Node _front = this.getFront();
     TooltipExtensions.setTooltip(_front, "Double-click to watch");
     BooleanProperty _visibleProperty = this.pane.visibleProperty();
     final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-      @Override
       public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
         MediaPlayer _xifexpression = null;
         if ((newVal).booleanValue()) {
@@ -134,14 +127,11 @@ public class MovieNode extends FlipNode {
     HBox _createControlBar = this.createControlBar();
     this.controlBar = _createControlBar;
     final Procedure1<StackPane> _function_1 = new Procedure1<StackPane>() {
-      @Override
       public void apply(final StackPane it) {
         final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-          @Override
           public void handle(final MouseEvent it) {
             FadeTransition _fadeTransition = new FadeTransition();
             final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-              @Override
               public void apply(final FadeTransition it) {
                 it.setNode(MovieNode.this.controlBar);
                 it.setToValue(1.0);
@@ -156,11 +146,9 @@ public class MovieNode extends FlipNode {
         };
         it.setOnMouseEntered(_function);
         final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-          @Override
           public void handle(final MouseEvent it) {
             FadeTransition _fadeTransition = new FadeTransition();
             final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-              @Override
               public void apply(final FadeTransition it) {
                 it.setNode(MovieNode.this.controlBar);
                 it.setToValue(0);
@@ -177,7 +165,6 @@ public class MovieNode extends FlipNode {
         ObservableList<Node> _children = it.getChildren();
         Group _group = new Group();
         final Procedure1<Group> _function_2 = new Procedure1<Group>() {
-          @Override
           public void apply(final Group it) {
             ObservableList<Node> _children = it.getChildren();
             _children.add(MovieNode.this.controlBar);
@@ -193,7 +180,6 @@ public class MovieNode extends FlipNode {
       this.pane, _function_1);
   }
   
-  @Override
   protected Anchors createAnchors() {
     return new RoundedRectangleAnchors(this, 12, 12);
   }
@@ -201,7 +187,6 @@ public class MovieNode extends FlipNode {
   protected HBox createControlBar() {
     HBox _hBox = new HBox();
     final Procedure1<HBox> _function = new Procedure1<HBox>() {
-      @Override
       public void apply(final HBox it) {
         it.setId("controlbar");
         it.setSpacing(0);
@@ -209,12 +194,10 @@ public class MovieNode extends FlipNode {
         ObservableList<Node> _children = it.getChildren();
         Button _button = new Button();
         final Procedure1<Button> _function = new Procedure1<Button>() {
-          @Override
           public void apply(final Button it) {
             it.setId("back-button");
             it.setText("Back");
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
               public void handle(final ActionEvent it) {
                 MovieNode.this.player.seek(Duration.ZERO);
               }
@@ -227,12 +210,10 @@ public class MovieNode extends FlipNode {
         ObservableList<Node> _children_1 = it.getChildren();
         Button _button_1 = new Button();
         final Procedure1<Button> _function_1 = new Procedure1<Button>() {
-          @Override
           public void apply(final Button it) {
             it.setId("stop-button");
             it.setText("Stop");
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
               public void handle(final ActionEvent it) {
                 MovieNode.this.player.stop();
               }
@@ -245,12 +226,10 @@ public class MovieNode extends FlipNode {
         ObservableList<Node> _children_2 = it.getChildren();
         Button _button_2 = new Button();
         final Procedure1<Button> _function_2 = new Procedure1<Button>() {
-          @Override
           public void apply(final Button it) {
             it.setId("play-button");
             it.setText("Play");
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
               public void handle(final ActionEvent it) {
                 MovieNode.this.player.play();
               }
@@ -263,12 +242,10 @@ public class MovieNode extends FlipNode {
         ObservableList<Node> _children_3 = it.getChildren();
         Button _button_3 = new Button();
         final Procedure1<Button> _function_3 = new Procedure1<Button>() {
-          @Override
           public void apply(final Button it) {
             it.setId("pause-button");
             it.setText("Pause");
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
               public void handle(final ActionEvent it) {
                 MovieNode.this.player.pause();
               }
@@ -281,12 +258,10 @@ public class MovieNode extends FlipNode {
         ObservableList<Node> _children_4 = it.getChildren();
         Button _button_4 = new Button();
         final Procedure1<Button> _function_4 = new Procedure1<Button>() {
-          @Override
           public void apply(final Button it) {
             it.setId("forward-button");
             it.setText("Forward");
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
               public void handle(final ActionEvent it) {
                 Duration _currentTime = MovieNode.this.player.getCurrentTime();
                 double _seconds = _currentTime.toSeconds();
@@ -306,13 +281,11 @@ public class MovieNode extends FlipNode {
     return ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
   }
   
-  @Override
   public void setWidth(final double width) {
     super.setWidth(width);
     this.view.setFitWidth((width - (2 * this.border)));
   }
   
-  @Override
   public void setHeight(final double height) {
     super.setHeight(height);
     this.view.setFitHeight((height - (2 * this.border)));

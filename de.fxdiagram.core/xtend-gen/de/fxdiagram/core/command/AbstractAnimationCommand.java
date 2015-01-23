@@ -26,12 +26,10 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
   
   private boolean isRestoreViewport = true;
   
-  @Override
   public void skipViewportRestore() {
     this.isRestoreViewport = false;
   }
   
-  @Override
   public Animation getExecuteAnimation(final CommandContext context) {
     if (this.isRestoreViewport) {
       XRoot _root = context.getRoot();
@@ -44,12 +42,10 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
     if (_notEquals) {
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-        @Override
         public void apply(final SequentialTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           _children.add(animation);
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-            @Override
             public void handle(final ActionEvent it) {
               if (AbstractAnimationCommand.this.isRestoreViewport) {
                 XRoot _root = context.getRoot();
@@ -73,7 +69,6 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
   
   public abstract Animation createExecuteAnimation(final CommandContext context);
   
-  @Override
   public Animation getUndoAnimation(final CommandContext context) {
     SequentialTransition _xblockexpression = null;
     {
@@ -90,7 +85,6 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
       if (_or) {
         SequentialTransition _sequentialTransition = new SequentialTransition();
         final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-          @Override
           public void apply(final SequentialTransition it) {
             boolean _notEquals = (!Objects.equal(AbstractAnimationCommand.this.toMemento, null));
             if (_notEquals) {
@@ -115,7 +109,6 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
   
   public abstract Animation createUndoAnimation(final CommandContext context);
   
-  @Override
   public Animation getRedoAnimation(final CommandContext context) {
     SequentialTransition _xblockexpression = null;
     {
@@ -132,7 +125,6 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
       if (_or) {
         SequentialTransition _sequentialTransition = new SequentialTransition();
         final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-          @Override
           public void apply(final SequentialTransition it) {
             boolean _notEquals = (!Objects.equal(AbstractAnimationCommand.this.fromMemento, null));
             if (_notEquals) {
@@ -157,7 +149,6 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
   
   public abstract Animation createRedoAnimation(final CommandContext context);
   
-  @Override
   public boolean clearRedoStackOnExecute() {
     return true;
   }

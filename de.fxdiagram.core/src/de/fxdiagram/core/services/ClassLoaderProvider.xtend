@@ -11,7 +11,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.Data
 import org.osgi.framework.BundleReference
 
-@ModelNode
+@ModelNode(inherit = false)
 class ClassLoaderProvider implements DomainObjectProviderWithState {
 	
 	@Accessors ClassLoader rootClassLoader
@@ -70,7 +70,7 @@ class ClassLoaderProvider implements DomainObjectProviderWithState {
 	
 }
 
-@ModelNode('classLoaderID', 'provider')
+@ModelNode(inherit=false, value=#['classLoaderID', 'provider'])
 class ClassLoaderDescriptor implements DomainObjectDescriptor {
 	
 	@FxProperty(readOnly=true) String classLoaderID

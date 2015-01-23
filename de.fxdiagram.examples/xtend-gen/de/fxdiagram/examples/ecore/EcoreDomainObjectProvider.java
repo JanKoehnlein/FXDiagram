@@ -15,10 +15,9 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-@ModelNode
+@ModelNode(inherit = false)
 @SuppressWarnings("all")
 public class EcoreDomainObjectProvider implements DomainObjectProvider {
-  @Override
   public DomainObjectDescriptor createDescriptor(final Object domainObject) {
     boolean _matched = false;
     if (!_matched) {

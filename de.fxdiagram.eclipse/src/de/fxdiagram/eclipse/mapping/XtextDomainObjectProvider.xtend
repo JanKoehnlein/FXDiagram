@@ -9,7 +9,7 @@ import org.eclipse.xtext.resource.XtextResource
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
-@ModelNode
+@ModelNode(inherit=false)
 class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 
 	override createDescriptor(Object handle) {

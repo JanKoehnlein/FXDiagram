@@ -73,182 +73,211 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
     super(descriptor);
   }
   
-  @Override
   public BundleDescriptor getDomainObject() {
     IMappedElementDescriptor<BundleDescription> _domainObject = super.getDomainObject();
     return ((BundleDescriptor) _domainObject);
   }
   
-  @Override
   public Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-    final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
-      TooltipExtensions.setTooltip(it, "Right-click to toggle details");
-      ObservableList<Node> _children = it.getChildren();
-      VBox _vBox = new VBox();
-      final Procedure1<VBox> _function_1 = (VBox it_1) -> {
-        Insets _insets = new Insets(10, 20, 10, 20);
-        it_1.setPadding(_insets);
-        ObservableList<Node> _children_1 = it_1.getChildren();
-        VBox _vBox_1 = new VBox();
-        final Procedure1<VBox> _function_2 = (VBox it_2) -> {
-          it_2.setAlignment(Pos.CENTER);
-          ObservableList<Node> _children_2 = it_2.getChildren();
-          Text _text = new Text();
-          final Procedure1<Text> _function_3 = (Text it_3) -> {
-            it_3.setTextOrigin(VPos.TOP);
-            BundleDescriptor _domainObject = this.getDomainObject();
-            String _symbolicName = _domainObject.getSymbolicName();
-            it_3.setText(_symbolicName);
-            BundleDescriptor _domainObject_1 = this.getDomainObject();
-            final Function1<BundleDescription, Boolean> _function_4 = (BundleDescription it_4) -> {
-              return Boolean.valueOf(it_4.isSingleton());
+    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      public void apply(final RectangleBorderPane it) {
+        TooltipExtensions.setTooltip(it, "Right-click to toggle details");
+        ObservableList<Node> _children = it.getChildren();
+        VBox _vBox = new VBox();
+        final Procedure1<VBox> _function = new Procedure1<VBox>() {
+          public void apply(final VBox it) {
+            Insets _insets = new Insets(10, 20, 10, 20);
+            it.setPadding(_insets);
+            ObservableList<Node> _children = it.getChildren();
+            VBox _vBox = new VBox();
+            final Procedure1<VBox> _function = new Procedure1<VBox>() {
+              public void apply(final VBox it) {
+                it.setAlignment(Pos.CENTER);
+                ObservableList<Node> _children = it.getChildren();
+                Text _text = new Text();
+                final Procedure1<Text> _function = new Procedure1<Text>() {
+                  public void apply(final Text it) {
+                    it.setTextOrigin(VPos.TOP);
+                    BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+                    String _symbolicName = _domainObject.getSymbolicName();
+                    it.setText(_symbolicName);
+                    BundleDescriptor _domainObject_1 = BundleNode.this.getDomainObject();
+                    final Function1<BundleDescription, Boolean> _function = new Function1<BundleDescription, Boolean>() {
+                      public Boolean apply(final BundleDescription it) {
+                        return Boolean.valueOf(it.isSingleton());
+                      }
+                    };
+                    final Boolean isSingleton = _domainObject_1.<Boolean>withDomainObject(_function);
+                    if ((isSingleton).booleanValue()) {
+                      Font _font = it.getFont();
+                      String _family = _font.getFamily();
+                      Font _font_1 = it.getFont();
+                      double _size = _font_1.getSize();
+                      double _multiply = (_size * 1.1);
+                      Font _font_2 = Font.font(_family, FontWeight.BOLD, FontPosture.ITALIC, _multiply);
+                      it.setFont(_font_2);
+                    } else {
+                      Font _font_3 = it.getFont();
+                      String _family_1 = _font_3.getFamily();
+                      Font _font_4 = it.getFont();
+                      double _size_1 = _font_4.getSize();
+                      double _multiply_1 = (_size_1 * 1.1);
+                      Font _font_5 = Font.font(_family_1, FontWeight.BOLD, _multiply_1);
+                      it.setFont(_font_5);
+                    }
+                  }
+                };
+                Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+                _children.add((BundleNode.this.nameLabel = _doubleArrow));
+              }
             };
-            final Boolean isSingleton = _domainObject_1.<Boolean>withDomainObject(_function_4);
-            if ((isSingleton).booleanValue()) {
-              Font _font = it_3.getFont();
-              String _family = _font.getFamily();
-              Font _font_1 = it_3.getFont();
-              double _size = _font_1.getSize();
-              double _multiply = (_size * 1.1);
-              Font _font_2 = Font.font(_family, FontWeight.BOLD, FontPosture.ITALIC, _multiply);
-              it_3.setFont(_font_2);
-            } else {
-              Font _font_3 = it_3.getFont();
-              String _family_1 = _font_3.getFamily();
-              Font _font_4 = it_3.getFont();
-              double _size_1 = _font_4.getSize();
-              double _multiply_1 = (_size_1 * 1.1);
-              Font _font_5 = Font.font(_family_1, FontWeight.BOLD, _multiply_1);
-              it_3.setFont(_font_5);
-            }
-          };
-          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_3);
-          _children_2.add((this.nameLabel = _doubleArrow));
+            VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
+            _children.add((BundleNode.this.titleArea = _doubleArrow));
+          }
         };
-        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_2);
-        _children_1.add((this.titleArea = _doubleArrow));
-      };
-      VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
-      _children.add((this.contentArea = _doubleArrow));
-      List<Stop> _xifexpression = null;
-      BundleDescriptor _domainObject = this.getDomainObject();
-      final Function1<IPluginModelBase, Boolean> _function_2 = (IPluginModelBase it_1) -> {
-        return Boolean.valueOf(it_1.isFragmentModel());
-      };
-      Boolean _withPlugin = _domainObject.<Boolean>withPlugin(_function_2);
-      if ((_withPlugin).booleanValue()) {
-        Color _rgb = Color.rgb(255, 193, 210);
-        Stop _stop = new Stop(0, _rgb);
-        Color _rgb_1 = Color.rgb(255, 215, 215);
-        Stop _stop_1 = new Stop(1, _rgb_1);
-        _xifexpression = Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop, _stop_1));
-      } else {
-        Color _rgb_2 = Color.rgb(158, 188, 227);
-        Stop _stop_2 = new Stop(0, _rgb_2);
-        Color _rgb_3 = Color.rgb(220, 230, 255);
-        Stop _stop_3 = new Stop(1, _rgb_3);
-        _xifexpression = Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop_2, _stop_3));
+        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
+        _children.add((BundleNode.this.contentArea = _doubleArrow));
+        List<Stop> _xifexpression = null;
+        BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+        final Function1<IPluginModelBase, Boolean> _function_1 = new Function1<IPluginModelBase, Boolean>() {
+          public Boolean apply(final IPluginModelBase it) {
+            return Boolean.valueOf(it.isFragmentModel());
+          }
+        };
+        Boolean _withPlugin = _domainObject.<Boolean>withPlugin(_function_1);
+        if ((_withPlugin).booleanValue()) {
+          Color _rgb = Color.rgb(255, 193, 210);
+          Stop _stop = new Stop(0, _rgb);
+          Color _rgb_1 = Color.rgb(255, 215, 215);
+          Stop _stop_1 = new Stop(1, _rgb_1);
+          _xifexpression = Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop, _stop_1));
+        } else {
+          Color _rgb_2 = Color.rgb(158, 188, 227);
+          Stop _stop_2 = new Stop(0, _rgb_2);
+          Color _rgb_3 = Color.rgb(220, 230, 255);
+          Stop _stop_3 = new Stop(1, _rgb_3);
+          _xifexpression = Collections.<Stop>unmodifiableList(CollectionLiterals.<Stop>newArrayList(_stop_2, _stop_3));
+        }
+        final List<Stop> backgroundStops = _xifexpression;
+        LinearGradient _linearGradient = new LinearGradient(
+          0, 0, 1, 1, 
+          true, CycleMethod.NO_CYCLE, backgroundStops);
+        it.setBackgroundPaint(_linearGradient);
       }
-      final List<Stop> backgroundStops = _xifexpression;
-      LinearGradient _linearGradient = new LinearGradient(
-        0, 0, 1, 1, 
-        true, CycleMethod.NO_CYCLE, backgroundStops);
-      it.setBackgroundPaint(_linearGradient);
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     Inflator _inflator = new Inflator(this, this.titleArea);
     this.titleInflator = _inflator;
     VBox _vBox = new VBox();
-    final Procedure1<VBox> _function = (VBox it) -> {
-      it.setAlignment(Pos.CENTER);
-      ObservableList<Node> _children = it.getChildren();
-      Text _text = new Text();
-      final Procedure1<Text> _function_1 = (Text it_1) -> {
-        it_1.setTextOrigin(VPos.TOP);
-        BundleDescriptor _domainObject = this.getDomainObject();
-        String _version = _domainObject.getVersion();
-        it_1.setText(_version);
-        Font _font = it_1.getFont();
-        String _family = _font.getFamily();
-        Font _font_1 = it_1.getFont();
-        double _size = _font_1.getSize();
-        double _multiply = (_size * 0.8);
-        Font _font_2 = Font.font(_family, _multiply);
-        it_1.setFont(_font_2);
-      };
-      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
-      _children.add((this.versionLabel = _doubleArrow));
+    final Procedure1<VBox> _function = new Procedure1<VBox>() {
+      public void apply(final VBox it) {
+        it.setAlignment(Pos.CENTER);
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setTextOrigin(VPos.TOP);
+            BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+            String _version = _domainObject.getVersion();
+            it.setText(_version);
+            Font _font = it.getFont();
+            String _family = _font.getFamily();
+            Font _font_1 = it.getFont();
+            double _size = _font_1.getSize();
+            double _multiply = (_size * 0.8);
+            Font _font_2 = Font.font(_family, _multiply);
+            it.setFont(_font_2);
+          }
+        };
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+        _children.add((BundleNode.this.versionLabel = _doubleArrow));
+      }
     };
     VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
     this.titleInflator.addInflatable(_doubleArrow, 1);
     Inflator _inflator_1 = new Inflator(this, this.contentArea);
     this.detailsInflator = _inflator_1;
     VBox _vBox_1 = new VBox();
-    final Procedure1<VBox> _function_1 = (VBox it) -> {
-      Insets _insets = new Insets(10, 0, 0, 0);
-      it.setPadding(_insets);
-      it.setAlignment(Pos.CENTER);
-      ObservableList<Node> _children = it.getChildren();
-      Text _text = new Text();
-      final Procedure1<Text> _function_2 = (Text it_1) -> {
-        it_1.setTextOrigin(VPos.TOP);
-        BundleDescriptor _domainObject = this.getDomainObject();
-        final Function1<IPluginModelBase, String> _function_3 = (IPluginModelBase it_2) -> {
-          IPluginBase _pluginBase = it_2.getPluginBase();
-          IPluginBase _pluginBase_1 = it_2.getPluginBase();
-          String _name = _pluginBase_1.getName();
-          return _pluginBase.getResourceString(_name);
+    final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
+      public void apply(final VBox it) {
+        Insets _insets = new Insets(10, 0, 0, 0);
+        it.setPadding(_insets);
+        it.setAlignment(Pos.CENTER);
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setTextOrigin(VPos.TOP);
+            BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+            final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
+              public String apply(final IPluginModelBase it) {
+                IPluginBase _pluginBase = it.getPluginBase();
+                IPluginBase _pluginBase_1 = it.getPluginBase();
+                String _name = _pluginBase_1.getName();
+                return _pluginBase.getResourceString(_name);
+              }
+            };
+            String _withPlugin = _domainObject.<String>withPlugin(_function);
+            it.setText(_withPlugin);
+          }
         };
-        String _withPlugin = _domainObject.<String>withPlugin(_function_3);
-        it_1.setText(_withPlugin);
-      };
-      Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
-      _children.add(_doubleArrow_1);
-      ObservableList<Node> _children_1 = it.getChildren();
-      Text _text_1 = new Text();
-      final Procedure1<Text> _function_3 = (Text it_1) -> {
-        it_1.setTextOrigin(VPos.TOP);
-        BundleDescriptor _domainObject = this.getDomainObject();
-        final Function1<IPluginModelBase, String> _function_4 = (IPluginModelBase it_2) -> {
-          IPluginBase _pluginBase = it_2.getPluginBase();
-          IPluginBase _pluginBase_1 = it_2.getPluginBase();
-          String _providerName = _pluginBase_1.getProviderName();
-          return _pluginBase.getResourceString(_providerName);
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+        _children.add(_doubleArrow);
+        ObservableList<Node> _children_1 = it.getChildren();
+        Text _text_1 = new Text();
+        final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setTextOrigin(VPos.TOP);
+            BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+            final Function1<IPluginModelBase, String> _function = new Function1<IPluginModelBase, String>() {
+              public String apply(final IPluginModelBase it) {
+                IPluginBase _pluginBase = it.getPluginBase();
+                IPluginBase _pluginBase_1 = it.getPluginBase();
+                String _providerName = _pluginBase_1.getProviderName();
+                return _pluginBase.getResourceString(_providerName);
+              }
+            };
+            String _withPlugin = _domainObject.<String>withPlugin(_function);
+            it.setText(_withPlugin);
+          }
         };
-        String _withPlugin = _domainObject.<String>withPlugin(_function_4);
-        it_1.setText(_withPlugin);
-      };
-      Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_3);
-      _children_1.add(_doubleArrow_2);
-      ObservableList<Node> _children_2 = it.getChildren();
-      Text _text_2 = new Text();
-      final Procedure1<Text> _function_4 = (Text it_1) -> {
-        it_1.setTextOrigin(VPos.TOP);
-        BundleDescriptor _domainObject = this.getDomainObject();
-        final Function1<BundleDescription, String> _function_5 = (BundleDescription it_2) -> {
-          String[] _executionEnvironments = it_2.getExecutionEnvironments();
-          return IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(_executionEnvironments)), ", ");
+        Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_1);
+        _children_1.add(_doubleArrow_1);
+        ObservableList<Node> _children_2 = it.getChildren();
+        Text _text_2 = new Text();
+        final Procedure1<Text> _function_2 = new Procedure1<Text>() {
+          public void apply(final Text it) {
+            it.setTextOrigin(VPos.TOP);
+            BundleDescriptor _domainObject = BundleNode.this.getDomainObject();
+            final Function1<BundleDescription, String> _function = new Function1<BundleDescription, String>() {
+              public String apply(final BundleDescription it) {
+                String[] _executionEnvironments = it.getExecutionEnvironments();
+                return IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(_executionEnvironments)), ", ");
+              }
+            };
+            String _withDomainObject = _domainObject.<String>withDomainObject(_function);
+            it.setText(_withDomainObject);
+          }
         };
-        String _withDomainObject = _domainObject.<String>withDomainObject(_function_5);
-        it_1.setText(_withDomainObject);
-      };
-      Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_text_2, _function_4);
-      _children_2.add(_doubleArrow_3);
+        Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text_2, _function_2);
+        _children_2.add(_doubleArrow_2);
+      }
     };
     VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_1);
     this.detailsArea = _doubleArrow_1;
     this.detailsInflator.addInflatable(this.detailsArea, 1);
-    final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
-      MouseButton _button = it.getButton();
-      boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
-      if (_equals) {
-        this.toggleInflated();
+    final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
+      public void handle(final MouseEvent it) {
+        MouseButton _button = it.getButton();
+        boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
+        if (_equals) {
+          BundleNode.this.toggleInflated();
+        }
       }
     };
     this.setOnMouseClicked(_function_2);
@@ -278,14 +307,16 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
       {
         this.setInflated(true);
         ParallelTransition _parallelTransition = new ParallelTransition();
-        final Procedure1<ParallelTransition> _function = (ParallelTransition it) -> {
-          ObservableList<Animation> _children = it.getChildren();
-          Transition _inflateAnimation = this.titleInflator.getInflateAnimation();
-          _children.add(_inflateAnimation);
-          ObservableList<Animation> _children_1 = it.getChildren();
-          Transition _inflateAnimation_1 = this.detailsInflator.getInflateAnimation();
-          _children_1.add(_inflateAnimation_1);
-          it.play();
+        final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+          public void apply(final ParallelTransition it) {
+            ObservableList<Animation> _children = it.getChildren();
+            Transition _inflateAnimation = BundleNode.this.titleInflator.getInflateAnimation();
+            _children.add(_inflateAnimation);
+            ObservableList<Animation> _children_1 = it.getChildren();
+            Transition _inflateAnimation_1 = BundleNode.this.detailsInflator.getInflateAnimation();
+            _children_1.add(_inflateAnimation_1);
+            it.play();
+          }
         };
         _xblockexpression = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
       }
@@ -295,14 +326,16 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
       {
         this.setInflated(false);
         ParallelTransition _parallelTransition = new ParallelTransition();
-        final Procedure1<ParallelTransition> _function = (ParallelTransition it) -> {
-          ObservableList<Animation> _children = it.getChildren();
-          Transition _deflateAnimation = this.titleInflator.getDeflateAnimation();
-          _children.add(_deflateAnimation);
-          ObservableList<Animation> _children_1 = it.getChildren();
-          Transition _deflateAnimation_1 = this.detailsInflator.getDeflateAnimation();
-          _children_1.add(_deflateAnimation_1);
-          it.play();
+        final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+          public void apply(final ParallelTransition it) {
+            ObservableList<Animation> _children = it.getChildren();
+            Transition _deflateAnimation = BundleNode.this.titleInflator.getDeflateAnimation();
+            _children.add(_deflateAnimation);
+            ObservableList<Animation> _children_1 = it.getChildren();
+            Transition _deflateAnimation_1 = BundleNode.this.detailsInflator.getDeflateAnimation();
+            _children_1.add(_deflateAnimation_1);
+            it.play();
+          }
         };
         _xblockexpression_1 = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
       }
@@ -311,7 +344,6 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
     return _xifexpression;
   }
   
-  @Override
   public List<Side> getButtonSides(final ConnectionMapping<?> mapping) {
     return Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.LEFT, Side.RIGHT));
   }

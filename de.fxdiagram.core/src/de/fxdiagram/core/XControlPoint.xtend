@@ -16,7 +16,7 @@ import static de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
-@ModelNode('layoutX', 'layoutY', 'type')
+@ModelNode(inherit=false, value=#['layoutX', 'layoutY', 'type'])
 class XControlPoint extends XShape {
 
 	@FxProperty Type type = CONTROL_POINT

@@ -294,7 +294,6 @@ public class CoreExtensions {
     ObservableList<Node> _childrenUnmodifiable_1 = node.getChildrenUnmodifiable();
     Iterable<Parent> _filter = Iterables.<Parent>filter(_childrenUnmodifiable_1, Parent.class);
     final Function1<Parent, Iterable<? extends Node>> _function = new Function1<Parent, Iterable<? extends Node>>() {
-      @Override
       public Iterable<? extends Node> apply(final Parent it) {
         return CoreExtensions.getAllChildren(it);
       }
@@ -307,7 +306,6 @@ public class CoreExtensions {
   public static <T extends Object, U extends Object> void addInitializingListener(final ObservableMap<T, U> map, final InitializingMapListener<T, U> mapListener) {
     Set<Map.Entry<T, U>> _entrySet = map.entrySet();
     final Consumer<Map.Entry<T, U>> _function = new Consumer<Map.Entry<T, U>>() {
-      @Override
       public void accept(final Map.Entry<T, U> it) {
         Procedure2<? super T, ? super U> _put = mapListener.getPut();
         T _key = it.getKey();
@@ -359,7 +357,6 @@ public class CoreExtensions {
   
   public static <T extends Object> void removeInitializingListener(final ObservableList<T> list, final InitializingListListener<T> listListener) {
     final Consumer<T> _function = new Consumer<T>() {
-      @Override
       public void accept(final T it) {
         Procedure1<? super T> _remove = listListener.getRemove();
         _remove.apply(it);

@@ -48,11 +48,9 @@ public class EntityNode extends BaseNode<Entity> {
     super(descriptor);
   }
   
-  @Override
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      @Override
       public void apply(final RectangleBorderPane it) {
         Color _rgb = Color.rgb(158, 188, 227);
         Stop _stop = new Stop(0, _rgb);
@@ -66,7 +64,6 @@ public class EntityNode extends BaseNode<Entity> {
         ObservableList<Node> _children = it.getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
-          @Override
           public void apply(final VBox it) {
             Insets _insets = new Insets(10, 20, 10, 20);
             it.setPadding(_insets);
@@ -74,7 +71,6 @@ public class EntityNode extends BaseNode<Entity> {
             ObservableList<Node> _children = it.getChildren();
             Text _text = new Text();
             final Procedure1<Text> _function = new Procedure1<Text>() {
-              @Override
               public void apply(final Text it) {
                 it.setTextOrigin(VPos.TOP);
                 String _name = EntityNode.this.getName();
@@ -95,18 +91,15 @@ public class EntityNode extends BaseNode<Entity> {
             ObservableList<Node> _children_1 = it.getChildren();
             VBox _vBox = new VBox();
             final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
-              @Override
               public void apply(final VBox attributeCompartment) {
                 IMappedElementDescriptor<Entity> _domainObject = EntityNode.this.getDomainObject();
                 final Function1<Entity, Object> _function = new Function1<Entity, Object>() {
-                  @Override
                   public Object apply(final Entity entity) {
                     Object _xblockexpression = null;
                     {
                       EList<Feature> _features = entity.getFeatures();
                       Iterable<Property> _filter = Iterables.<Property>filter(_features, Property.class);
                       final Function1<Property, Boolean> _function = new Function1<Property, Boolean>() {
-                        @Override
                         public Boolean apply(final Property it) {
                           JvmTypeReference _type = it.getType();
                           Entity _referencedEntity = EntityNode.this.util.getReferencedEntity(_type);
@@ -115,12 +108,10 @@ public class EntityNode extends BaseNode<Entity> {
                       };
                       Iterable<Property> _filter_1 = IterableExtensions.<Property>filter(_filter, _function);
                       final Consumer<Property> _function_1 = new Consumer<Property>() {
-                        @Override
                         public void accept(final Property attribute) {
                           ObservableList<Node> _children = attributeCompartment.getChildren();
                           Text _text = new Text();
                           final Procedure1<Text> _function = new Procedure1<Text>() {
-                            @Override
                             public void apply(final Text it) {
                               it.setTextOrigin(VPos.TOP);
                               StringConcatenation _builder = new StringConcatenation();

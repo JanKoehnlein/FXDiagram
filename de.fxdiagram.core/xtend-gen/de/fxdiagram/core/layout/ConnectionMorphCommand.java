@@ -47,7 +47,6 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
     this.toPoints = toPoints;
   }
   
-  @Override
   public Animation createExecuteAnimation(final CommandContext context) {
     ParallelTransition _xblockexpression = null;
     {
@@ -55,7 +54,6 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
       this.fromKind = _kind;
       ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
       final Function1<XControlPoint, Point2D> _function = new Function1<XControlPoint, Point2D>() {
-        @Override
         public Point2D apply(final XControlPoint it) {
           double _layoutX = it.getLayoutX();
           double _layoutY = it.getLayoutY();
@@ -71,13 +69,11 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
     return _xblockexpression;
   }
   
-  @Override
   public Animation createUndoAnimation(final CommandContext context) {
     Duration _defaultUndoDuration = context.getDefaultUndoDuration();
     return this.createMorphTransition(this.toPoints, this.fromKind, this.fromPoints, _defaultUndoDuration);
   }
   
-  @Override
   public Animation createRedoAnimation(final CommandContext context) {
     Duration _defaultUndoDuration = context.getDefaultUndoDuration();
     return this.createMorphTransition(this.fromPoints, this.toKind, this.toPoints, _defaultUndoDuration);
@@ -110,7 +106,6 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
       }
     }
     final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-      @Override
       public void handle(final ActionEvent it) {
         ConnectionRouter _connectionRouter = ConnectionMorphCommand.this.connection.getConnectionRouter();
         int _size = to.size();
@@ -126,7 +121,6 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
     {
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
         public void apply(final Group it) {
           double _x = from.getX();
           it.setTranslateX(_x);
@@ -143,14 +137,12 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
       _layoutYProperty.bind(_translateYProperty);
       PathTransition _pathTransition = new PathTransition();
       final Procedure1<PathTransition> _function_1 = new Procedure1<PathTransition>() {
-        @Override
         public void apply(final PathTransition it) {
           it.setNode(dummyNode);
           it.setDuration(duration);
           it.setCycleCount(1);
           Path _path = new Path();
           final Procedure1<Path> _function = new Procedure1<Path>() {
-            @Override
             public void apply(final Path it) {
               ObservableList<PathElement> _elements = it.getElements();
               double _x = from.getX();
@@ -167,10 +159,8 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
           Path _doubleArrow = ObjectExtensions.<Path>operator_doubleArrow(_path, _function);
           it.setPath(_doubleArrow);
           final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
-            @Override
             public void handle(final ActionEvent it) {
               final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-                @Override
                 public void apply(final XControlPoint it) {
                   DoubleProperty _layoutXProperty = it.layoutXProperty();
                   _layoutXProperty.unbind();

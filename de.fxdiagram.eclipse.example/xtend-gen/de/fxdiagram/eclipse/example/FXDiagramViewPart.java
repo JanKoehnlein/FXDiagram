@@ -14,7 +14,6 @@ public class FXDiagramViewPart extends ViewPart {
   
   private SwtToFXGestureConverter gestureConverter;
   
-  @Override
   public void createPartControl(final Composite parent) {
     FXCanvas _fXCanvas = new FXCanvas(parent, SWT.NONE);
     this.canvas = _fXCanvas;
@@ -24,7 +23,6 @@ public class FXDiagramViewPart extends ViewPart {
     this.canvas.setScene(_createFxScene);
   }
   
-  @Override
   public void dispose() {
     this.gestureConverter.dispose();
     super.dispose();
@@ -35,7 +33,6 @@ public class FXDiagramViewPart extends ViewPart {
     return _demo.createScene();
   }
   
-  @Override
   public void setFocus() {
     this.canvas.setFocus();
     this.setFxFocus();

@@ -31,7 +31,7 @@ import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "connection", "text" })
+@ModelNode(inherit = false, value = { "connection", "text" })
 @SuppressWarnings("all")
 public class XConnectionLabel extends XShape implements XModelProvider {
   private Effect selectionEffect = new DropShadow();
@@ -55,11 +55,9 @@ public class XConnectionLabel extends XShape implements XModelProvider {
     return _xblockexpression;
   }
   
-  @Override
   protected Node createNode() {
     Text _text = this.getText();
     final Procedure1<Text> _function = new Procedure1<Text>() {
-      @Override
       public void apply(final Text it) {
         it.setTextOrigin(VPos.TOP);
         Font _font = it.getFont();
@@ -74,7 +72,6 @@ public class XConnectionLabel extends XShape implements XModelProvider {
     return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
   }
   
-  @Override
   public void doActivate() {
     Text _text = this.getText();
     ObjectProperty<Paint> _fillProperty = _text.fillProperty();
@@ -85,7 +82,6 @@ public class XConnectionLabel extends XShape implements XModelProvider {
     this.addBehavior(_moveBehavior);
   }
   
-  @Override
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       this.setEffect(this.selectionEffect);

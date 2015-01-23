@@ -17,7 +17,6 @@ public class BaseConnection<T extends Object> extends XConnection {
   public BaseConnection() {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectProperty = this.domainObjectProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
-      @Override
       public void changed(final ObservableValue<? extends DomainObjectDescriptor> prop, final DomainObjectDescriptor oldVal, final DomainObjectDescriptor newVal) {
         BaseConnection.this.injectMembers();
       }
@@ -30,7 +29,6 @@ public class BaseConnection<T extends Object> extends XConnection {
     this.injectMembers();
   }
   
-  @Override
   public DomainObjectDescriptor getDomainObject() {
     DomainObjectDescriptor _domainObject = super.getDomainObject();
     return ((IMappedElementDescriptor<T>) _domainObject);
@@ -43,7 +41,6 @@ public class BaseConnection<T extends Object> extends XConnection {
     }
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     OpenElementInEditorBehavior _openElementInEditorBehavior = new OpenElementInEditorBehavior(this);

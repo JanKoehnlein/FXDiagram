@@ -26,14 +26,12 @@ public class DemoCampSlideFactory {
     Image _backgroundImage = DemoCampSlideFactory.getBackgroundImage();
     Slide _slide = new Slide(slideName, _backgroundImage);
     final Procedure1<Slide> _function = new Procedure1<Slide>() {
-      @Override
       public void apply(final Slide it) {
         StackPane _stackPane = it.getStackPane();
         ObservableList<Node> _children = _stackPane.getChildren();
         String _trim = text.trim();
         Text _createText = DemoCampSlideFactory.createText(_trim, fontSize);
         final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
           public void apply(final Text it) {
             it.setTextAlignment(TextAlignment.CENTER);
           }
@@ -49,7 +47,6 @@ public class DemoCampSlideFactory {
     Image _backgroundImage = DemoCampSlideFactory.getBackgroundImage();
     ClickThroughSlide _clickThroughSlide = new ClickThroughSlide(slideName, _backgroundImage);
     final Procedure1<ClickThroughSlide> _function = new Procedure1<ClickThroughSlide>() {
-      @Override
       public void apply(final ClickThroughSlide it) {
         it.initializeGraphics();
       }
@@ -60,7 +57,6 @@ public class DemoCampSlideFactory {
   public static Text createText(final String text, final double size) {
     Text _text = new Text();
     final Procedure1<Text> _function = new Procedure1<Text>() {
-      @Override
       public void apply(final Text it) {
         it.setText(text);
         Font _lcarsFont = LcarsExtensions.lcarsFont(size);

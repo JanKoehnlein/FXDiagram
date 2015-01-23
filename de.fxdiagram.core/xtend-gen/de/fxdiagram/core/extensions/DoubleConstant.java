@@ -10,7 +10,6 @@ public class DoubleConstant extends DoubleBinding {
     this.value = value;
   }
   
-  @Override
   protected double computeValue() {
     return this.value;
   }

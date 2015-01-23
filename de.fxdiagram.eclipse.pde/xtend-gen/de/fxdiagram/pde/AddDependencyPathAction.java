@@ -51,32 +51,34 @@ public class AddDependencyPathAction extends RapidButtonAction {
     this.isInverse = isInverse;
   }
   
-  @Override
   public boolean isEnabled(final XNode host) {
     DomainObjectDescriptor _domainObject = host.getDomainObject();
-    final Function1<BundleDescription, Boolean> _function = (BundleDescription it) -> {
-      boolean _xifexpression = false;
-      if (this.isInverse) {
-        Iterable<BundleDescription> _dependentBundles = BundleUtil.getDependentBundles(it);
-        boolean _isEmpty = IterableExtensions.isEmpty(_dependentBundles);
-        _xifexpression = (!_isEmpty);
-      } else {
-        Iterable<BundleDescription> _dependencyBundles = BundleUtil.getDependencyBundles(it);
-        boolean _isEmpty_1 = IterableExtensions.isEmpty(_dependencyBundles);
-        _xifexpression = (!_isEmpty_1);
+    final Function1<BundleDescription, Boolean> _function = new Function1<BundleDescription, Boolean>() {
+      public Boolean apply(final BundleDescription it) {
+        boolean _xifexpression = false;
+        if (AddDependencyPathAction.this.isInverse) {
+          Iterable<BundleDescription> _dependentBundles = BundleUtil.getDependentBundles(it);
+          boolean _isEmpty = IterableExtensions.isEmpty(_dependentBundles);
+          _xifexpression = (!_isEmpty);
+        } else {
+          Iterable<BundleDescription> _dependencyBundles = BundleUtil.getDependencyBundles(it);
+          boolean _isEmpty_1 = IterableExtensions.isEmpty(_dependencyBundles);
+          _xifexpression = (!_isEmpty_1);
+        }
+        return Boolean.valueOf(_xifexpression);
       }
-      return Boolean.valueOf(_xifexpression);
     };
     return (((BundleDescriptor) _domainObject).<Boolean>withDomainObject(_function)).booleanValue();
   }
   
-  @Override
   public void perform(final RapidButton button) {
     XNode _host = button.getHost();
     DomainObjectDescriptor _domainObject = _host.getDomainObject();
     final BundleDescriptor descriptor = ((BundleDescriptor) _domainObject);
-    final Function1<BundleDescription, Object> _function = (BundleDescription it) -> {
-      return this.doPerform(button, it);
+    final Function1<BundleDescription, Object> _function = new Function1<BundleDescription, Object>() {
+      public Object apply(final BundleDescription it) {
+        return AddDependencyPathAction.this.doPerform(button, it);
+      }
     };
     descriptor.<Object>withDomainObject(_function);
   }
@@ -102,7 +104,6 @@ public class AddDependencyPathAction extends RapidButtonAction {
       final AbstractChoiceGraphics choiceGraphics = _xifexpression;
       Side _position_1 = button.getPosition();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(host, _position_1, choiceGraphics) {
-        @Override
         public Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice, final DomainObjectDescriptor choiceInfo) {
           Iterable<? extends XShape> _additionalShapesToAdd = super.getAdditionalShapesToAdd(choice, choiceInfo);
           Iterable<XConnection> _filter = Iterables.<XConnection>filter(_additionalShapesToAdd, XConnection.class);
@@ -112,74 +113,81 @@ public class AddDependencyPathAction extends RapidButtonAction {
           final XDiagram diagram = CoreExtensions.getDiagram(host);
           final LinkedHashSet<XShape> additionalShapes = CollectionLiterals.<XShape>newLinkedHashSet();
           ObservableList<XNode> _nodes = diagram.getNodes();
-          final Function1<XNode, DomainObjectDescriptor> _function = (XNode it_1) -> {
-            return it_1.getDomainObject();
+          final Function1<XNode, DomainObjectDescriptor> _function = new Function1<XNode, DomainObjectDescriptor>() {
+            public DomainObjectDescriptor apply(final XNode it) {
+              return it.getDomainObject();
+            }
           };
           final Map<DomainObjectDescriptor, XNode> descriptor2node = IterableExtensions.<DomainObjectDescriptor, XNode>toMap(_nodes, _function);
           DomainObjectDescriptor _domainObject = choice.getDomainObject();
           descriptor2node.put(_domainObject, choice);
           ObservableList<XConnection> _connections = diagram.getConnections();
-          final Function1<XConnection, DomainObjectDescriptor> _function_1 = (XConnection it_1) -> {
-            return it_1.getDomainObject();
+          final Function1<XConnection, DomainObjectDescriptor> _function_1 = new Function1<XConnection, DomainObjectDescriptor>() {
+            public DomainObjectDescriptor apply(final XConnection it) {
+              return it.getDomainObject();
+            }
           };
           final Map<DomainObjectDescriptor, XConnection> descriptor2connection = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_connections, _function_1);
           DomainObjectDescriptor _domainObject_1 = choice.getDomainObject();
-          final Function1<BundleDescription, ArrayList<BundleDependency>> _function_2 = (BundleDescription chosenBundle) -> {
-            ArrayList<BundleDependency> _xifexpression = null;
-            if (AddDependencyPathAction.this.isInverse) {
-              _xifexpression = BundleUtil.getAllBundleDependencies(chosenBundle, hostBundle);
-            } else {
-              _xifexpression = BundleUtil.getAllBundleDependencies(hostBundle, chosenBundle);
+          final Function1<BundleDescription, ArrayList<BundleDependency>> _function_2 = new Function1<BundleDescription, ArrayList<BundleDependency>>() {
+            public ArrayList<BundleDependency> apply(final BundleDescription chosenBundle) {
+              ArrayList<BundleDependency> _xifexpression = null;
+              if (AddDependencyPathAction.this.isInverse) {
+                _xifexpression = BundleUtil.getAllBundleDependencies(chosenBundle, hostBundle);
+              } else {
+                _xifexpression = BundleUtil.getAllBundleDependencies(hostBundle, chosenBundle);
+              }
+              return _xifexpression;
             }
-            return _xifexpression;
           };
           ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObject_1).<ArrayList<BundleDependency>>withDomainObject(_function_2);
-          final Consumer<BundleDependency> _function_3 = (BundleDependency bundleDependency) -> {
-            BundleDescription _owner = bundleDependency.getOwner();
-            NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-            IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(_owner, _pluginNode);
-            final BundleDescriptor owner = ((BundleDescriptor) _createMappedElementDescriptor);
-            XNode sourceNode = descriptor2node.get(owner);
-            boolean _equals = Objects.equal(sourceNode, null);
-            if (_equals) {
-              NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
-              XNode _createNode = _pluginNode_1.createNode(owner);
-              sourceNode = _createNode;
-              additionalShapes.add(sourceNode);
-              descriptor2node.put(owner, sourceNode);
-            }
-            BundleDescription _dependency = bundleDependency.getDependency();
-            NodeMapping<BundleDescription> _pluginNode_2 = config.getPluginNode();
-            IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor_1 = provider.<BundleDescription>createMappedElementDescriptor(_dependency, _pluginNode_2);
-            final BundleDescriptor dependency = ((BundleDescriptor) _createMappedElementDescriptor_1);
-            XNode targetNode = descriptor2node.get(dependency);
-            boolean _equals_1 = Objects.equal(targetNode, null);
-            if (_equals_1) {
-              NodeMapping<BundleDescription> _pluginNode_3 = config.getPluginNode();
-              XNode _createNode_1 = _pluginNode_3.createNode(dependency);
-              targetNode = _createNode_1;
-              additionalShapes.add(targetNode);
-              descriptor2node.put(dependency, targetNode);
-            }
-            ConnectionMapping<BundleDependency> _dependencyConnection = config.getDependencyConnection();
-            final IMappedElementDescriptor<BundleDependency> connectionDescriptor = provider.<BundleDependency>createMappedElementDescriptor(bundleDependency, _dependencyConnection);
-            XConnection connection = descriptor2connection.get(connectionDescriptor);
-            boolean _equals_2 = Objects.equal(connection, null);
-            if (_equals_2) {
-              ConnectionMapping<BundleDependency> _dependencyConnection_1 = config.getDependencyConnection();
-              XConnection _createConnection = _dependencyConnection_1.createConnection(connectionDescriptor);
-              connection = _createConnection;
-              connection.setSource(sourceNode);
-              connection.setTarget(targetNode);
-              additionalShapes.add(connection);
-              descriptor2connection.put(connectionDescriptor, connection);
+          final Consumer<BundleDependency> _function_3 = new Consumer<BundleDependency>() {
+            public void accept(final BundleDependency bundleDependency) {
+              BundleDescription _owner = bundleDependency.getOwner();
+              NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
+              IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(_owner, _pluginNode);
+              final BundleDescriptor owner = ((BundleDescriptor) _createMappedElementDescriptor);
+              XNode sourceNode = descriptor2node.get(owner);
+              boolean _equals = Objects.equal(sourceNode, null);
+              if (_equals) {
+                NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
+                XNode _createNode = _pluginNode_1.createNode(owner);
+                sourceNode = _createNode;
+                additionalShapes.add(sourceNode);
+                descriptor2node.put(owner, sourceNode);
+              }
+              BundleDescription _dependency = bundleDependency.getDependency();
+              NodeMapping<BundleDescription> _pluginNode_2 = config.getPluginNode();
+              IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor_1 = provider.<BundleDescription>createMappedElementDescriptor(_dependency, _pluginNode_2);
+              final BundleDescriptor dependency = ((BundleDescriptor) _createMappedElementDescriptor_1);
+              XNode targetNode = descriptor2node.get(dependency);
+              boolean _equals_1 = Objects.equal(targetNode, null);
+              if (_equals_1) {
+                NodeMapping<BundleDescription> _pluginNode_3 = config.getPluginNode();
+                XNode _createNode_1 = _pluginNode_3.createNode(dependency);
+                targetNode = _createNode_1;
+                additionalShapes.add(targetNode);
+                descriptor2node.put(dependency, targetNode);
+              }
+              ConnectionMapping<BundleDependency> _dependencyConnection = config.getDependencyConnection();
+              final IMappedElementDescriptor<BundleDependency> connectionDescriptor = provider.<BundleDependency>createMappedElementDescriptor(bundleDependency, _dependencyConnection);
+              XConnection connection = descriptor2connection.get(connectionDescriptor);
+              boolean _equals_2 = Objects.equal(connection, null);
+              if (_equals_2) {
+                ConnectionMapping<BundleDependency> _dependencyConnection_1 = config.getDependencyConnection();
+                XConnection _createConnection = _dependencyConnection_1.createConnection(connectionDescriptor);
+                connection = _createConnection;
+                connection.setSource(sourceNode);
+                connection.setTarget(targetNode);
+                additionalShapes.add(connection);
+                descriptor2connection.put(connectionDescriptor, connection);
+              }
             }
           };
           _withDomainObject.forEach(_function_3);
           return additionalShapes;
         }
         
-        @Override
         protected void nodeChosen(final XNode choice) {
           super.nodeChosen(choice);
           boolean _notEquals = (!Objects.equal(choice, null));
@@ -196,8 +204,10 @@ public class AddDependencyPathAction extends RapidButtonAction {
         }
       };
       if (this.isInverse) {
-        final ChooserConnectionProvider _function = (XNode source, XNode target, DomainObjectDescriptor choiceInfo) -> {
-          return new XConnection(target, source);
+        final ChooserConnectionProvider _function = new ChooserConnectionProvider() {
+          public XConnection getConnection(final XNode source, final XNode target, final DomainObjectDescriptor choiceInfo) {
+            return new XConnection(target, source);
+          }
         };
         chooser.setConnectionProvider(_function);
       }
@@ -208,13 +218,15 @@ public class AddDependencyPathAction extends RapidButtonAction {
         _xifexpression_1 = BundleUtil.getAllDependencyBundles(hostBundle);
       }
       final HashSet<BundleDescription> candidates = _xifexpression_1;
-      final Consumer<BundleDescription> _function_1 = (BundleDescription it) -> {
-        NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-        IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
-        final BundleDescriptor candidate = ((BundleDescriptor) _createMappedElementDescriptor);
-        NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
-        XNode _createNode = _pluginNode_1.createNode(candidate);
-        chooser.addChoice(_createNode);
+      final Consumer<BundleDescription> _function_1 = new Consumer<BundleDescription>() {
+        public void accept(final BundleDescription it) {
+          NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
+          IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
+          final BundleDescriptor candidate = ((BundleDescriptor) _createMappedElementDescriptor);
+          NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
+          XNode _createNode = _pluginNode_1.createNode(candidate);
+          chooser.addChoice(_createNode);
+        }
       };
       candidates.forEach(_function_1);
       root.setCurrentTool(chooser);

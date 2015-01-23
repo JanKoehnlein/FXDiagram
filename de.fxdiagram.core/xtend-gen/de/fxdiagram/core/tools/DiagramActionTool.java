@@ -53,19 +53,16 @@ public class DiagramActionTool implements XDiagramTool {
   public DiagramActionTool(final XRoot root) {
     this.root = root;
     final EventHandler<KeyEvent> _function = new EventHandler<KeyEvent>() {
-      @Override
       public void handle(final KeyEvent event) {
         DiagramActionRegistry _diagramActionRegistry = root.getDiagramActionRegistry();
         ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
         final Function1<DiagramAction, Boolean> _function = new Function1<DiagramAction, Boolean>() {
-          @Override
           public Boolean apply(final DiagramAction it) {
             return Boolean.valueOf(it.matches(event));
           }
         };
         Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function);
         final Consumer<DiagramAction> _function_1 = new Consumer<DiagramAction>() {
-          @Override
           public void accept(final DiagramAction it) {
             boolean _isConsumed = event.isConsumed();
             boolean _not = (!_isConsumed);
@@ -95,7 +92,6 @@ public class DiagramActionTool implements XDiagramTool {
     };
     this.keyHandler = _function;
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         MouseButton _button = it.getButton();
         boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
@@ -139,7 +135,6 @@ public class DiagramActionTool implements XDiagramTool {
     {
       Options _options = new Options();
       final Procedure1<Options> _function = new Procedure1<Options>() {
-        @Override
         public void apply(final Options it) {
           it.setDegrees(360);
           it.setOffset((-90));
@@ -152,7 +147,6 @@ public class DiagramActionTool implements XDiagramTool {
       DiagramActionRegistry _diagramActionRegistry = this.root.getDiagramActionRegistry();
       ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
       final Function1<DiagramAction, Boolean> _function_1 = new Function1<DiagramAction, Boolean>() {
-        @Override
         public Boolean apply(final DiagramAction it) {
           Symbol.Type _symbol = it.getSymbol();
           return Boolean.valueOf((!Objects.equal(_symbol, null)));
@@ -160,11 +154,9 @@ public class DiagramActionTool implements XDiagramTool {
       };
       Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function_1);
       final Function1<DiagramAction, MenuItem> _function_2 = new Function1<DiagramAction, MenuItem>() {
-        @Override
         public MenuItem apply(final DiagramAction action) {
           MenuItem _menuItem = new MenuItem();
           final Procedure1<MenuItem> _function = new Procedure1<MenuItem>() {
-            @Override
             public void apply(final MenuItem it) {
               Symbol.Type _symbol = action.getSymbol();
               it.setSymbol(_symbol);
@@ -183,7 +175,6 @@ public class DiagramActionTool implements XDiagramTool {
       ObservableList<Node> _children = _headsUpDisplay.getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function_3 = new Procedure1<Group>() {
-        @Override
         public void apply(final Group it) {
           BorderPane.setAlignment(it, Pos.CENTER);
           Scene _scene = DiagramActionTool.this.root.getScene();
@@ -196,12 +187,10 @@ public class DiagramActionTool implements XDiagramTool {
           it.setTranslateY(_multiply_1);
           ObservableList<Node> _children = it.getChildren();
           final Procedure1<RadialMenu> _function = new Procedure1<RadialMenu>() {
-            @Override
             public void apply(final RadialMenu it) {
               it.show();
               it.open();
               final EventHandler<RadialMenu.ItemEvent> _function = new EventHandler<RadialMenu.ItemEvent>() {
-                @Override
                 public void handle(final RadialMenu.ItemEvent it) {
                   MenuItem _item = it.getItem();
                   DiagramActionTool.this.selection = _item;
@@ -209,7 +198,6 @@ public class DiagramActionTool implements XDiagramTool {
               };
               it.setOnItemSelected(_function);
               final EventHandler<RadialMenu.MenuEvent> _function_1 = new EventHandler<RadialMenu.MenuEvent>() {
-                @Override
                 public void handle(final RadialMenu.MenuEvent it) {
                   DiagramActionTool.this.closeMenu();
                   boolean _notEquals = (!Objects.equal(DiagramActionTool.this.selection, null));
@@ -265,7 +253,6 @@ public class DiagramActionTool implements XDiagramTool {
     return _xblockexpression;
   }
   
-  @Override
   public boolean activate() {
     boolean _xblockexpression = false;
     {
@@ -278,7 +265,6 @@ public class DiagramActionTool implements XDiagramTool {
     return _xblockexpression;
   }
   
-  @Override
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {

@@ -14,7 +14,6 @@ public class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject>
     super(null, dbId, name, provider);
   }
   
-  @Override
   public DBObject resolveDomainObject() {
     DomainObjectProvider _provider = this.getProvider();
     return ((LcarsModelProvider) _provider).<Object>resolveDomainObject(this);

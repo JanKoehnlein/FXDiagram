@@ -13,24 +13,20 @@ import org.osgi.framework.Version;
 public class UnqualifiedDependency extends BundleDependency {
   private final BundleDescription dependency;
   
-  @Override
   public boolean isReexport() {
     return false;
   }
   
-  @Override
   public boolean isOptional() {
     return false;
   }
   
-  @Override
   public VersionRange getVersionRange() {
     Version _version = this.dependency.getVersion();
     Version _version_1 = this.dependency.getVersion();
     return new VersionRange(_version, true, _version_1, true);
   }
   
-  @Override
   public BundleDependency.Kind getKind() {
     return BundleDependency.Kind.UNQUALIFIED;
   }

@@ -48,19 +48,16 @@ public class MoveCommand extends AbstractAnimationCommand {
     this.toY = toY;
   }
   
-  @Override
   public Animation createExecuteAnimation(final CommandContext context) {
     Duration _executeDuration = this.getExecuteDuration(context);
     return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _executeDuration);
   }
   
-  @Override
   public Animation createUndoAnimation(final CommandContext context) {
     Duration _defaultUndoDuration = context.getDefaultUndoDuration();
     return this.createMoveTransition(this.toX, this.toY, this.fromX, this.fromY, _defaultUndoDuration);
   }
   
-  @Override
   public Animation createRedoAnimation(final CommandContext context) {
     Duration _defaultUndoDuration = context.getDefaultUndoDuration();
     return this.createMoveTransition(this.fromX, this.fromY, this.toX, this.toY, _defaultUndoDuration);
@@ -84,7 +81,6 @@ public class MoveCommand extends AbstractAnimationCommand {
       }
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
         public void apply(final Group it) {
           it.setTranslateX(fromX);
           it.setTranslateY(fromY);
@@ -99,14 +95,12 @@ public class MoveCommand extends AbstractAnimationCommand {
       _layoutYProperty.bind(_translateYProperty);
       PathTransition _pathTransition = new PathTransition();
       final Procedure1<PathTransition> _function_1 = new Procedure1<PathTransition>() {
-        @Override
         public void apply(final PathTransition it) {
           it.setNode(dummyNode);
           it.setDuration(duration);
           it.setCycleCount(1);
           Path _path = new Path();
           final Procedure1<Path> _function = new Procedure1<Path>() {
-            @Override
             public void apply(final Path it) {
               ObservableList<PathElement> _elements = it.getElements();
               MoveTo _moveTo = new MoveTo(fromX, fromY);
@@ -119,10 +113,8 @@ public class MoveCommand extends AbstractAnimationCommand {
           Path _doubleArrow = ObjectExtensions.<Path>operator_doubleArrow(_path, _function);
           it.setPath(_doubleArrow);
           final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
-            @Override
             public void handle(final ActionEvent it) {
               final Procedure1<XShape> _function = new Procedure1<XShape>() {
-                @Override
                 public void apply(final XShape it) {
                   DoubleProperty _layoutXProperty = it.layoutXProperty();
                   _layoutXProperty.unbind();

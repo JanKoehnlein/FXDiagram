@@ -26,7 +26,7 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "layoutX", "layoutY", "type" })
+@ModelNode(inherit = false, value = { "layoutX", "layoutY", "type" })
 @SuppressWarnings("all")
 public class XControlPoint extends XShape implements XModelProvider {
   public enum Type {
@@ -37,7 +37,6 @@ public class XControlPoint extends XShape implements XModelProvider {
     CONTROL_POINT;
   }
   
-  @Override
   protected Node createNode() {
     XControlPoint.Type _type = this.getType();
     if (_type != null) {
@@ -45,7 +44,6 @@ public class XControlPoint extends XShape implements XModelProvider {
         case ANCHOR:
           Circle _circle = new Circle();
           final Procedure1<Circle> _function = new Procedure1<Circle>() {
-            @Override
             public void apply(final Circle it) {
               it.setRadius(3);
               it.setStroke(Color.BLUE);
@@ -58,7 +56,6 @@ public class XControlPoint extends XShape implements XModelProvider {
         case INTERPOLATED:
           Circle _circle_1 = new Circle();
           final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
-            @Override
             public void apply(final Circle it) {
               it.setRadius(5);
               it.setStroke(Color.RED);
@@ -74,10 +71,8 @@ public class XControlPoint extends XShape implements XModelProvider {
     }
   }
   
-  @Override
   protected void doActivate() {
     final ChangeListener<XControlPoint.Type> _function = new ChangeListener<XControlPoint.Type>() {
-      @Override
       public void changed(final ObservableValue<? extends XControlPoint.Type> p, final XControlPoint.Type o, final XControlPoint.Type n) {
         ObservableList<Node> _children = XControlPoint.this.getChildren();
         Node _node = XControlPoint.this.getNode();
@@ -96,7 +91,6 @@ public class XControlPoint extends XShape implements XModelProvider {
     }
   }
   
-  @Override
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       XControlPoint.Type _type = this.getType();
@@ -134,7 +128,6 @@ public class XControlPoint extends XShape implements XModelProvider {
     }
   }
   
-  @Override
   public boolean isSelectable() {
     boolean _and = false;
     XControlPoint.Type _type = this.getType();
@@ -148,7 +141,6 @@ public class XControlPoint extends XShape implements XModelProvider {
     return _and;
   }
   
-  @Override
   public String toString() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("XControlPoint at (");

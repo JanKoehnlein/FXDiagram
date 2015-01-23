@@ -69,10 +69,12 @@ public class BundleUtil {
   
   protected static void addDependencies(final BundleDescription bundle, final Set<BundleDescription> dependencies) {
     Iterable<BundleDescription> _dependencyBundles = BundleUtil.getDependencyBundles(bundle);
-    final Consumer<BundleDescription> _function = (BundleDescription it) -> {
-      boolean _add = dependencies.add(it);
-      if (_add) {
-        BundleUtil.addDependencies(it, dependencies);
+    final Consumer<BundleDescription> _function = new Consumer<BundleDescription>() {
+      public void accept(final BundleDescription it) {
+        boolean _add = dependencies.add(it);
+        if (_add) {
+          BundleUtil.addDependencies(it, dependencies);
+        }
       }
     };
     _dependencyBundles.forEach(_function);
@@ -83,8 +85,10 @@ public class BundleUtil {
     {
       BundleDescription[] _resolvedRequires = bundle.getResolvedRequires();
       ExportPackageDescription[] _resolvedImports = bundle.getResolvedImports();
-      final Function1<ExportPackageDescription, BundleDescription> _function = (ExportPackageDescription it) -> {
-        return bundle;
+      final Function1<ExportPackageDescription, BundleDescription> _function = new Function1<ExportPackageDescription, BundleDescription>() {
+        public BundleDescription apply(final ExportPackageDescription it) {
+          return bundle;
+        }
       };
       List<BundleDescription> _map = ListExtensions.<ExportPackageDescription, BundleDescription>map(((List<ExportPackageDescription>)Conversions.doWrapArray(_resolvedImports)), _function);
       final Iterable<BundleDescription> dependencies = Iterables.<BundleDescription>concat(((Iterable<? extends BundleDescription>)Conversions.doWrapArray(_resolvedRequires)), _map);
@@ -113,10 +117,12 @@ public class BundleUtil {
   
   protected static void addInverseDependencies(final BundleDescription bundle, final Set<BundleDescription> inverseDependencies) {
     Iterable<BundleDescription> _dependentBundles = BundleUtil.getDependentBundles(bundle);
-    final Consumer<BundleDescription> _function = (BundleDescription it) -> {
-      boolean _add = inverseDependencies.add(it);
-      if (_add) {
-        BundleUtil.addInverseDependencies(it, inverseDependencies);
+    final Consumer<BundleDescription> _function = new Consumer<BundleDescription>() {
+      public void accept(final BundleDescription it) {
+        boolean _add = inverseDependencies.add(it);
+        if (_add) {
+          BundleUtil.addInverseDependencies(it, inverseDependencies);
+        }
       }
     };
     _dependentBundles.forEach(_function);
@@ -124,17 +130,19 @@ public class BundleUtil {
   
   public static Iterable<BundleDescription> getDependentBundles(final BundleDescription bundle) {
     BundleDescription[] _dependents = bundle.getDependents();
-    final Function1<BundleDescription, Boolean> _function = (BundleDescription it) -> {
-      HostSpecification _host = it.getHost();
-      BaseDescription _supplier = null;
-      if (_host!=null) {
-        _supplier=_host.getSupplier();
+    final Function1<BundleDescription, Boolean> _function = new Function1<BundleDescription, Boolean>() {
+      public Boolean apply(final BundleDescription it) {
+        HostSpecification _host = it.getHost();
+        BaseDescription _supplier = null;
+        if (_host!=null) {
+          _supplier=_host.getSupplier();
+        }
+        BundleDescription _supplier_1 = null;
+        if (_supplier!=null) {
+          _supplier_1=_supplier.getSupplier();
+        }
+        return Boolean.valueOf((!Objects.equal(_supplier_1, bundle)));
       }
-      BundleDescription _supplier_1 = null;
-      if (_supplier!=null) {
-        _supplier_1=_supplier.getSupplier();
-      }
-      return Boolean.valueOf((!Objects.equal(_supplier_1, bundle)));
     };
     return IterableExtensions.<BundleDescription>filter(((Iterable<BundleDescription>)Conversions.doWrapArray(_dependents)), _function);
   }
@@ -170,13 +178,17 @@ public class BundleUtil {
                 Iterables.<BundleDependency>addAll(result, _elements_1);
                 i.remove();
                 List<? extends BundleDependency> _elements_2 = path.getElements();
-                final Function1<BundleDependency, BundleDescription> _function = (BundleDependency it) -> {
-                  return it.getOwner();
+                final Function1<BundleDependency, BundleDescription> _function = new Function1<BundleDependency, BundleDescription>() {
+                  public BundleDescription apply(final BundleDependency it) {
+                    return it.getOwner();
+                  }
                 };
                 List<BundleDescription> _map = ListExtensions.map(_elements_2, _function);
-                final Function1<BundleDescription, Boolean> _function_1 = (BundleDescription it) -> {
-                  boolean _contains_1 = processedEndNodes.contains(it);
-                  return Boolean.valueOf((!_contains_1));
+                final Function1<BundleDescription, Boolean> _function_1 = new Function1<BundleDescription, Boolean>() {
+                  public Boolean apply(final BundleDescription it) {
+                    boolean _contains = processedEndNodes.contains(it);
+                    return Boolean.valueOf((!_contains));
+                  }
                 };
                 Iterable<BundleDescription> _filter = IterableExtensions.<BundleDescription>filter(_map, _function_1);
                 Iterables.<BundleDescription>addAll(newEndNodes, _filter);
@@ -194,13 +206,15 @@ public class BundleUtil {
   
   protected static void addBundleDependencies(final BundleDescription bundle, final BundleDependencyPath currentPath, final List<BundleDependencyPath> pathes, final Set<BundleDependency> processed) {
     Iterable<BundleDependency> _bundleDependencies = BundleUtil.getBundleDependencies(bundle);
-    final Consumer<BundleDependency> _function = (BundleDependency it) -> {
-      boolean _add = processed.add(it);
-      if (_add) {
-        final BundleDependencyPath newPath = currentPath.append(it);
-        pathes.add(newPath);
-        BundleDescription _dependency = it.getDependency();
-        BundleUtil.addBundleDependencies(_dependency, newPath, pathes, processed);
+    final Consumer<BundleDependency> _function = new Consumer<BundleDependency>() {
+      public void accept(final BundleDependency it) {
+        boolean _add = processed.add(it);
+        if (_add) {
+          final BundleDependencyPath newPath = currentPath.append(it);
+          pathes.add(newPath);
+          BundleDescription _dependency = it.getDependency();
+          BundleUtil.addBundleDependencies(_dependency, newPath, pathes, processed);
+        }
       }
     };
     _bundleDependencies.forEach(_function);
@@ -209,45 +223,53 @@ public class BundleUtil {
   public static Iterable<BundleDependency> getBundleDependencies(final BundleDescription bundle) {
     final ArrayList<BundleDependency> result = CollectionLiterals.<BundleDependency>newArrayList();
     BundleSpecification[] _requiredBundles = bundle.getRequiredBundles();
-    final Consumer<BundleSpecification> _function = (BundleSpecification it) -> {
-      RequireBundle _requireBundle = new RequireBundle(bundle, it);
-      result.add(_requireBundle);
+    final Consumer<BundleSpecification> _function = new Consumer<BundleSpecification>() {
+      public void accept(final BundleSpecification it) {
+        RequireBundle _requireBundle = new RequireBundle(bundle, it);
+        result.add(_requireBundle);
+      }
     };
     ((List<BundleSpecification>)Conversions.doWrapArray(_requiredBundles)).forEach(_function);
     ImportPackageSpecification[] _importPackages = bundle.getImportPackages();
-    final Consumer<ImportPackageSpecification> _function_1 = (ImportPackageSpecification it) -> {
-      PackageImport _packageImport = new PackageImport(bundle, it);
-      result.add(_packageImport);
+    final Consumer<ImportPackageSpecification> _function_1 = new Consumer<ImportPackageSpecification>() {
+      public void accept(final ImportPackageSpecification it) {
+        PackageImport _packageImport = new PackageImport(bundle, it);
+        result.add(_packageImport);
+      }
     };
     ((List<ImportPackageSpecification>)Conversions.doWrapArray(_importPackages)).forEach(_function_1);
     boolean _isConsiderFragments = BundleUtil.isConsiderFragments();
     if (_isConsiderFragments) {
       BundleDescription[] _fragments = bundle.getFragments();
-      final Consumer<BundleDescription> _function_2 = (BundleDescription it) -> {
-        FragmentHost _fragmentHost = new FragmentHost(bundle, it);
-        result.add(_fragmentHost);
+      final Consumer<BundleDescription> _function_2 = new Consumer<BundleDescription>() {
+        public void accept(final BundleDescription it) {
+          FragmentHost _fragmentHost = new FragmentHost(bundle, it);
+          result.add(_fragmentHost);
+        }
       };
       ((List<BundleDescription>)Conversions.doWrapArray(_fragments)).forEach(_function_2);
     }
-    final Function1<BundleDependency, Boolean> _function_3 = (BundleDependency it) -> {
-      boolean _and = false;
-      BundleDescription _dependency = it.getDependency();
-      boolean _notEquals = (!Objects.equal(_dependency, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        boolean _or = false;
-        boolean _isConsiderOptional = BundleUtil.isConsiderOptional();
-        if (_isConsiderOptional) {
-          _or = true;
+    final Function1<BundleDependency, Boolean> _function_3 = new Function1<BundleDependency, Boolean>() {
+      public Boolean apply(final BundleDependency it) {
+        boolean _and = false;
+        BundleDescription _dependency = it.getDependency();
+        boolean _notEquals = (!Objects.equal(_dependency, null));
+        if (!_notEquals) {
+          _and = false;
         } else {
-          boolean _isOptional = it.isOptional();
-          boolean _not = (!_isOptional);
-          _or = _not;
+          boolean _or = false;
+          boolean _isConsiderOptional = BundleUtil.isConsiderOptional();
+          if (_isConsiderOptional) {
+            _or = true;
+          } else {
+            boolean _isOptional = it.isOptional();
+            boolean _not = (!_isOptional);
+            _or = _not;
+          }
+          _and = _or;
         }
-        _and = _or;
+        return Boolean.valueOf(_and);
       }
-      return Boolean.valueOf(_and);
     };
     return IterableExtensions.<BundleDependency>filter(result, _function_3);
   }
@@ -255,87 +277,101 @@ public class BundleUtil {
   public static Iterable<BundleDependency> getInverseBundleDependencies(final BundleDescription bundle) {
     final ArrayList<BundleDependency> result = CollectionLiterals.<BundleDependency>newArrayList();
     BundleDescription[] _dependents = bundle.getDependents();
-    final Consumer<BundleDescription> _function = (BundleDescription owner) -> {
-      BundleSpecification[] _requiredBundles = owner.getRequiredBundles();
-      final Function1<BundleSpecification, Boolean> _function_1 = (BundleSpecification it) -> {
-        BaseDescription _supplier = it.getSupplier();
-        BundleDescription _supplier_1 = null;
-        if (_supplier!=null) {
-          _supplier_1=_supplier.getSupplier();
+    final Consumer<BundleDescription> _function = new Consumer<BundleDescription>() {
+      public void accept(final BundleDescription owner) {
+        BundleSpecification[] _requiredBundles = owner.getRequiredBundles();
+        final Function1<BundleSpecification, Boolean> _function = new Function1<BundleSpecification, Boolean>() {
+          public Boolean apply(final BundleSpecification it) {
+            BaseDescription _supplier = it.getSupplier();
+            BundleDescription _supplier_1 = null;
+            if (_supplier!=null) {
+              _supplier_1=_supplier.getSupplier();
+            }
+            return Boolean.valueOf(Objects.equal(_supplier_1, bundle));
+          }
+        };
+        Iterable<BundleSpecification> _filter = IterableExtensions.<BundleSpecification>filter(((Iterable<BundleSpecification>)Conversions.doWrapArray(_requiredBundles)), _function);
+        final Consumer<BundleSpecification> _function_1 = new Consumer<BundleSpecification>() {
+          public void accept(final BundleSpecification it) {
+            RequireBundle _requireBundle = new RequireBundle(owner, it);
+            result.add(_requireBundle);
+          }
+        };
+        _filter.forEach(_function_1);
+        ImportPackageSpecification[] _importPackages = owner.getImportPackages();
+        final Function1<ImportPackageSpecification, Boolean> _function_2 = new Function1<ImportPackageSpecification, Boolean>() {
+          public Boolean apply(final ImportPackageSpecification it) {
+            BaseDescription _supplier = it.getSupplier();
+            BundleDescription _supplier_1 = null;
+            if (_supplier!=null) {
+              _supplier_1=_supplier.getSupplier();
+            }
+            return Boolean.valueOf(Objects.equal(_supplier_1, bundle));
+          }
+        };
+        Iterable<ImportPackageSpecification> _filter_1 = IterableExtensions.<ImportPackageSpecification>filter(((Iterable<ImportPackageSpecification>)Conversions.doWrapArray(_importPackages)), _function_2);
+        final Consumer<ImportPackageSpecification> _function_3 = new Consumer<ImportPackageSpecification>() {
+          public void accept(final ImportPackageSpecification it) {
+            PackageImport _packageImport = new PackageImport(owner, it);
+            result.add(_packageImport);
+          }
+        };
+        _filter_1.forEach(_function_3);
+        boolean _and = false;
+        boolean _isConsiderFragments = BundleUtil.isConsiderFragments();
+        if (!_isConsiderFragments) {
+          _and = false;
+        } else {
+          HostSpecification _host = bundle.getHost();
+          BaseDescription _supplier = null;
+          if (_host!=null) {
+            _supplier=_host.getSupplier();
+          }
+          BundleDescription _supplier_1 = null;
+          if (_supplier!=null) {
+            _supplier_1=_supplier.getSupplier();
+          }
+          boolean _equals = Objects.equal(_supplier_1, owner);
+          _and = _equals;
         }
-        return Boolean.valueOf(Objects.equal(_supplier_1, bundle));
-      };
-      Iterable<BundleSpecification> _filter = IterableExtensions.<BundleSpecification>filter(((Iterable<BundleSpecification>)Conversions.doWrapArray(_requiredBundles)), _function_1);
-      final Consumer<BundleSpecification> _function_2 = (BundleSpecification it) -> {
-        RequireBundle _requireBundle = new RequireBundle(owner, it);
-        result.add(_requireBundle);
-      };
-      _filter.forEach(_function_2);
-      ImportPackageSpecification[] _importPackages = owner.getImportPackages();
-      final Function1<ImportPackageSpecification, Boolean> _function_3 = (ImportPackageSpecification it) -> {
-        BaseDescription _supplier = it.getSupplier();
-        BundleDescription _supplier_1 = null;
-        if (_supplier!=null) {
-          _supplier_1=_supplier.getSupplier();
+        if (_and) {
+          FragmentHost _fragmentHost = new FragmentHost(owner, bundle);
+          result.add(_fragmentHost);
         }
-        return Boolean.valueOf(Objects.equal(_supplier_1, bundle));
-      };
-      Iterable<ImportPackageSpecification> _filter_1 = IterableExtensions.<ImportPackageSpecification>filter(((Iterable<ImportPackageSpecification>)Conversions.doWrapArray(_importPackages)), _function_3);
-      final Consumer<ImportPackageSpecification> _function_4 = (ImportPackageSpecification it) -> {
-        PackageImport _packageImport = new PackageImport(owner, it);
-        result.add(_packageImport);
-      };
-      _filter_1.forEach(_function_4);
-      boolean _and = false;
-      boolean _isConsiderFragments = BundleUtil.isConsiderFragments();
-      if (!_isConsiderFragments) {
-        _and = false;
-      } else {
-        HostSpecification _host = bundle.getHost();
-        BaseDescription _supplier = null;
-        if (_host!=null) {
-          _supplier=_host.getSupplier();
-        }
-        BundleDescription _supplier_1 = null;
-        if (_supplier!=null) {
-          _supplier_1=_supplier.getSupplier();
-        }
-        boolean _equals = Objects.equal(_supplier_1, owner);
-        _and = _equals;
-      }
-      if (_and) {
-        FragmentHost _fragmentHost = new FragmentHost(owner, bundle);
-        result.add(_fragmentHost);
       }
     };
     ((List<BundleDescription>)Conversions.doWrapArray(_dependents)).forEach(_function);
-    final Function1<BundleDependency, Boolean> _function_1 = (BundleDependency it) -> {
-      boolean _and = false;
-      BundleDescription _dependency = it.getDependency();
-      boolean _notEquals = (!Objects.equal(_dependency, null));
-      if (!_notEquals) {
-        _and = false;
-      } else {
-        boolean _or = false;
-        boolean _isConsiderOptional = BundleUtil.isConsiderOptional();
-        if (_isConsiderOptional) {
-          _or = true;
+    final Function1<BundleDependency, Boolean> _function_1 = new Function1<BundleDependency, Boolean>() {
+      public Boolean apply(final BundleDependency it) {
+        boolean _and = false;
+        BundleDescription _dependency = it.getDependency();
+        boolean _notEquals = (!Objects.equal(_dependency, null));
+        if (!_notEquals) {
+          _and = false;
         } else {
-          boolean _isOptional = it.isOptional();
-          boolean _not = (!_isOptional);
-          _or = _not;
+          boolean _or = false;
+          boolean _isConsiderOptional = BundleUtil.isConsiderOptional();
+          if (_isConsiderOptional) {
+            _or = true;
+          } else {
+            boolean _isOptional = it.isOptional();
+            boolean _not = (!_isOptional);
+            _or = _not;
+          }
+          _and = _or;
         }
-        _and = _or;
+        return Boolean.valueOf(_and);
       }
-      return Boolean.valueOf(_and);
     };
     return IterableExtensions.<BundleDependency>filter(result, _function_1);
   }
   
   public static List<BundleDescription> allBundles() {
     IPluginModelBase[] _allModels = PluginRegistry.getAllModels();
-    final Function1<IPluginModelBase, BundleDescription> _function = (IPluginModelBase it) -> {
-      return it.getBundleDescription();
+    final Function1<IPluginModelBase, BundleDescription> _function = new Function1<IPluginModelBase, BundleDescription>() {
+      public BundleDescription apply(final IPluginModelBase it) {
+        return it.getBundleDescription();
+      }
     };
     return ListExtensions.<IPluginModelBase, BundleDescription>map(((List<IPluginModelBase>)Conversions.doWrapArray(_allModels)), _function);
   }
@@ -361,22 +397,24 @@ public class BundleUtil {
       switch (kind) {
         case REQUIRE_BUNDLE:
           BundleSpecification[] _requiredBundles = owner.getRequiredBundles();
-          final Function1<BundleSpecification, Boolean> _function = (BundleSpecification it) -> {
-            boolean _and = false;
-            BaseDescription _supplier = it.getSupplier();
-            String _name = null;
-            if (_supplier!=null) {
-              _name=_supplier.getName();
+          final Function1<BundleSpecification, Boolean> _function = new Function1<BundleSpecification, Boolean>() {
+            public Boolean apply(final BundleSpecification it) {
+              boolean _and = false;
+              BaseDescription _supplier = it.getSupplier();
+              String _name = null;
+              if (_supplier!=null) {
+                _name=_supplier.getName();
+              }
+              boolean _equals = Objects.equal(_name, dependencyID);
+              if (!_equals) {
+                _and = false;
+              } else {
+                VersionRange _versionRange = it.getVersionRange();
+                boolean _equals_1 = Objects.equal(_versionRange, dependencyVersionRange);
+                _and = _equals_1;
+              }
+              return Boolean.valueOf(_and);
             }
-            boolean _equals = Objects.equal(_name, dependencyID);
-            if (!_equals) {
-              _and = false;
-            } else {
-              VersionRange _versionRange = it.getVersionRange();
-              boolean _equals_1 = Objects.equal(_versionRange, dependencyVersionRange);
-              _and = _equals_1;
-            }
-            return Boolean.valueOf(_and);
           };
           final BundleSpecification requireBundle = IterableExtensions.<BundleSpecification>findFirst(((Iterable<BundleSpecification>)Conversions.doWrapArray(_requiredBundles)), _function);
           boolean _notEquals = (!Objects.equal(requireBundle, null));
@@ -386,18 +424,20 @@ public class BundleUtil {
           break;
         case PACKAGE_IMPORT:
           ImportPackageSpecification[] _importPackages = owner.getImportPackages();
-          final Function1<ImportPackageSpecification, Boolean> _function_1 = (ImportPackageSpecification it) -> {
-            boolean _and = false;
-            String _name = it.getName();
-            boolean _equals = Objects.equal(_name, dependencyID);
-            if (!_equals) {
-              _and = false;
-            } else {
-              VersionRange _versionRange = it.getVersionRange();
-              boolean _equals_1 = Objects.equal(_versionRange, dependencyVersionRange);
-              _and = _equals_1;
+          final Function1<ImportPackageSpecification, Boolean> _function_1 = new Function1<ImportPackageSpecification, Boolean>() {
+            public Boolean apply(final ImportPackageSpecification it) {
+              boolean _and = false;
+              String _name = it.getName();
+              boolean _equals = Objects.equal(_name, dependencyID);
+              if (!_equals) {
+                _and = false;
+              } else {
+                VersionRange _versionRange = it.getVersionRange();
+                boolean _equals_1 = Objects.equal(_versionRange, dependencyVersionRange);
+                _and = _equals_1;
+              }
+              return Boolean.valueOf(_and);
             }
-            return Boolean.valueOf(_and);
           };
           final ImportPackageSpecification packageImport = IterableExtensions.<ImportPackageSpecification>findFirst(((Iterable<ImportPackageSpecification>)Conversions.doWrapArray(_importPackages)), _function_1);
           boolean _notEquals_1 = (!Objects.equal(packageImport, null));
@@ -407,9 +447,11 @@ public class BundleUtil {
           break;
         case FRAGMENT_HOST:
           BundleDescription[] _fragments = owner.getFragments();
-          final Function1<BundleDescription, Boolean> _function_2 = (BundleDescription it) -> {
-            String _symbolicName = it.getSymbolicName();
-            return Boolean.valueOf(Objects.equal(_symbolicName, dependencyID));
+          final Function1<BundleDescription, Boolean> _function_2 = new Function1<BundleDescription, Boolean>() {
+            public Boolean apply(final BundleDescription it) {
+              String _symbolicName = it.getSymbolicName();
+              return Boolean.valueOf(Objects.equal(_symbolicName, dependencyID));
+            }
           };
           final BundleDescription fragment = IterableExtensions.<BundleDescription>findFirst(((Iterable<BundleDescription>)Conversions.doWrapArray(_fragments)), _function_2);
           boolean _notEquals_2 = (!Objects.equal(fragment, null));

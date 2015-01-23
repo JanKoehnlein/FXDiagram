@@ -28,7 +28,6 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
     this.kindProperty.set(kind);
   }
   
-  @Override
   public <U extends Object> U withDomainObject(final Function1<? super BundleDependency, ? extends U> lambda) {
     U _xblockexpression = null;
     {
@@ -79,7 +78,6 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
     return IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
   }
   
-  @Override
   public IEditorPart openInEditor(final boolean select) {
     return null;
   }

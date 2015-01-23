@@ -65,7 +65,6 @@ public abstract class XShape extends Parent implements XActivatable {
     }
   }
   
-  @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
@@ -75,10 +74,8 @@ public abstract class XShape extends Parent implements XActivatable {
       this.isActiveProperty.set(true);
       InitializingListener<Boolean> _initializingListener = new InitializingListener<Boolean>();
       final Procedure1<InitializingListener<Boolean>> _function = new Procedure1<InitializingListener<Boolean>>() {
-        @Override
         public void apply(final InitializingListener<Boolean> it) {
           final Procedure1<Boolean> _function = new Procedure1<Boolean>() {
-            @Override
             public void apply(final Boolean it) {
               XShape.this.selectionFeedback((it).booleanValue());
               if ((it).booleanValue()) {
@@ -93,10 +90,8 @@ public abstract class XShape extends Parent implements XActivatable {
       CoreExtensions.<Boolean>addInitializingListener(this.selectedProperty, _doubleArrow);
       InitializingMapListener<Class<? extends Behavior>, Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
       final Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>> _function_1 = new Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>>() {
-        @Override
         public void apply(final InitializingMapListener<Class<? extends Behavior>, Behavior> it) {
           final Procedure2<Class<? extends Behavior>, Behavior> _function = new Procedure2<Class<? extends Behavior>, Behavior>() {
-            @Override
             public void apply(final Class<? extends Behavior> key, final Behavior value) {
               value.activate();
             }

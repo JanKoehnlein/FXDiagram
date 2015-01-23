@@ -34,7 +34,6 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
   public BaseDiagramNode() {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectProperty = this.domainObjectProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
-      @Override
       public void changed(final ObservableValue<? extends DomainObjectDescriptor> prop, final DomainObjectDescriptor oldVal, final DomainObjectDescriptor newVal) {
         BaseDiagramNode.this.injectMembers();
       }
@@ -54,13 +53,11 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
     }
   }
   
-  @Override
   public DomainObjectDescriptor getDomainObject() {
     DomainObjectDescriptor _domainObject = super.getDomainObject();
     return ((IMappedElementDescriptor<T>) _domainObject);
   }
   
-  @Override
   public void initializeGraphics() {
     super.initializeGraphics();
     RectangleBorderPane _pane = this.getPane();
@@ -75,7 +72,6 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
     _pane.setBackgroundPaint(_linearGradient);
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     final DomainObjectDescriptor descriptor = this.getDomainObject();
@@ -87,7 +83,6 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
         LazyConnectionMappingBehavior<T> lazyBehavior = null;
         List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
         final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function = new Function1<AbstractConnectionMappingCall<?, T>, Boolean>() {
-          @Override
           public Boolean apply(final AbstractConnectionMappingCall<?, T> it) {
             return Boolean.valueOf(it.isLazy());
           }
@@ -111,7 +106,6 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
         }
         List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
         final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function_1 = new Function1<AbstractConnectionMappingCall<?, T>, Boolean>() {
-          @Override
           public Boolean apply(final AbstractConnectionMappingCall<?, T> it) {
             return Boolean.valueOf(it.isLazy());
           }

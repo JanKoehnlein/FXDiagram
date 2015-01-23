@@ -32,7 +32,6 @@ public class AuxiliaryLineMap<T extends Object> {
     XNode[] _relatedNodes = line.getRelatedNodes();
     if (((List<XNode>)Conversions.doWrapArray(_relatedNodes))!=null) {
       final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
         public void accept(final XNode it) {
           AuxiliaryLineMap.this.removeByNode(it);
         }
@@ -45,7 +44,6 @@ public class AuxiliaryLineMap<T extends Object> {
     XNode[] _relatedNodes_1 = line.getRelatedNodes();
     if (((List<XNode>)Conversions.doWrapArray(_relatedNodes_1))!=null) {
       final Consumer<XNode> _function_1 = new Consumer<XNode>() {
-        @Override
         public void accept(final XNode it) {
           AuxiliaryLineMap.this.node2entry.put(it, line);
         }

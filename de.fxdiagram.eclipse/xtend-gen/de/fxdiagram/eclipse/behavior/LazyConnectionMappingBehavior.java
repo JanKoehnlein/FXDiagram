@@ -37,7 +37,6 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
         LazyConnectionMappingBehavior<T> lazyBehavior = null;
         List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
         final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function = new Function1<AbstractConnectionMappingCall<?, T>, Boolean>() {
-          @Override
           public Boolean apply(final AbstractConnectionMappingCall<?, T> it) {
             return Boolean.valueOf(it.isLazy());
           }
@@ -62,7 +61,6 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
         }
         List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
         final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function_1 = new Function1<AbstractConnectionMappingCall<?, T>, Boolean>() {
-          @Override
           public Boolean apply(final AbstractConnectionMappingCall<?, T> it) {
             return Boolean.valueOf(it.isLazy());
           }
@@ -132,7 +130,6 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
     return _xblockexpression;
   }
   
-  @Override
   protected void doActivate() {
     super.doActivate();
   }

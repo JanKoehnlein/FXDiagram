@@ -29,7 +29,6 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
     super(host);
   }
   
-  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return AddRapidButtonBehavior.class;
   }
@@ -38,7 +37,6 @@ public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior
     return this.choiceInitializer = choiceInitializer;
   }
   
-  @Override
   public void doActivate() {
     T _host = this.getHost();
     final XNode host = ((XNode) _host);

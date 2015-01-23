@@ -53,7 +53,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     super(imageDescriptor);
   }
   
-  @Override
   protected Node createNode() {
     DomainObjectDescriptor _domainObject = this.getDomainObject();
     String _uRI = ((ResourceDescriptor) _domainObject).toURI();
@@ -63,7 +62,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     this.pivot = _firstRecursiveImageNode;
     Group _createPane = this.createPane();
     final Procedure1<Group> _function = new Procedure1<Group>() {
-      @Override
       public void apply(final Group it) {
         ObservableList<Node> _children = it.getChildren();
         _children.add(RecursiveImageNode.this.pivot);
@@ -72,12 +70,10 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     return ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     TooltipExtensions.setTooltip(this, "Double-click to zoom in");
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         int _clickCount = it.getClickCount();
         boolean _equals = (_clickCount == 2);
@@ -92,7 +88,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     };
     this.setOnMouseClicked(_function);
     final AbstractOpenBehavior _function_1 = new AbstractOpenBehavior() {
-      @Override
       public void open() {
         if (RecursiveImageNode.this.isZoomedIn) {
           RecursiveImageNode.this.zoomOut();
@@ -142,7 +137,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     XRoot _root = CoreExtensions.getRoot(this);
     ViewportTransition _viewportTransition = new ViewportTransition(_root, centerInDiagram, 500);
     final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
-      @Override
       public void apply(final ViewportTransition it) {
         Duration _seconds = Duration.seconds(5);
         it.setDuration(_seconds);
@@ -173,7 +167,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     XRoot _root = CoreExtensions.getRoot(this);
     ViewportTransition _viewportTransition = new ViewportTransition(_root, centerInDiagram, 1);
     final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
-      @Override
       public void apply(final ViewportTransition it) {
         Duration _seconds = Duration.seconds(5);
         it.setDuration(_seconds);
@@ -198,12 +191,10 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     {
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
         public void apply(final Group it) {
           final ImageView imageView = new ImageView();
           ObservableList<Node> _children = it.getChildren();
           final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-            @Override
             public void apply(final ImageView it) {
               it.setImage(RecursiveImageNode.this.image);
               it.setPreserveRatio(true);
@@ -219,7 +210,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
           _children.add(_doubleArrow);
           Rectangle _rectangle = new Rectangle();
           final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
-            @Override
             public void apply(final Rectangle it) {
               it.setX(0);
               it.setY(0);
@@ -236,7 +226,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
           RecursiveImageNode.this.updateActualDimension(_boundsInLocal);
           ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = imageView.boundsInLocalProperty();
           final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
-            @Override
             public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
               RecursiveImageNode.this.updateActualDimension(newValue);
             }
@@ -257,7 +246,6 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     this.actualHeightProperty.set(_height);
   }
   
-  @Override
   public CharSequence toSvgElement(@Extension final SvgExporter exporter) {
     Node _node = this.getNode();
     return exporter.snapshotToSvgElement(_node);

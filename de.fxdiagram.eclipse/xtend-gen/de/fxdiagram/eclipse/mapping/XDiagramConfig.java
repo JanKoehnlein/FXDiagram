@@ -47,7 +47,6 @@ public interface XDiagramConfig {
       IExtensionRegistry _extensionRegistry = Platform.getExtensionRegistry();
       IConfigurationElement[] _configurationElementsFor = _extensionRegistry.getConfigurationElementsFor("de.fxdiagram.eclipse.fxDiagramConfig");
       final Consumer<IConfigurationElement> _function = new Consumer<IConfigurationElement>() {
-        @Override
         public void accept(final IConfigurationElement it) {
           try {
             Object _createExecutableExtension = it.createExecutableExtension("class");

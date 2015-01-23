@@ -15,18 +15,15 @@ public abstract class ViewportCommand implements AnimationCommand {
   
   private ViewportMemento toMemento;
   
-  @Override
   public boolean clearRedoStackOnExecute() {
     return false;
   }
   
-  @Override
   public void skipViewportRestore() {
   }
   
   public abstract ViewportTransition createViewportTransiton(final CommandContext context);
   
-  @Override
   public Animation getExecuteAnimation(final CommandContext context) {
     ViewportTransition _xblockexpression = null;
     {
@@ -51,14 +48,12 @@ public abstract class ViewportCommand implements AnimationCommand {
     return _xblockexpression;
   }
   
-  @Override
   public Animation getUndoAnimation(final CommandContext context) {
     XRoot _root = context.getRoot();
     Duration _defaultUndoDuration = context.getDefaultUndoDuration();
     return new ViewportTransition(_root, this.fromMemento, _defaultUndoDuration);
   }
   
-  @Override
   public Animation getRedoAnimation(final CommandContext context) {
     XRoot _root = context.getRoot();
     Duration _defaultUndoDuration = context.getDefaultUndoDuration();

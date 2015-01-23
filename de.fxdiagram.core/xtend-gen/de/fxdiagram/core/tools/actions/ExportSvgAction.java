@@ -19,7 +19,6 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
 public class ExportSvgAction implements DiagramAction {
-  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _isShortcutDown = it.isShortcutDown();
@@ -33,17 +32,14 @@ public class ExportSvgAction implements DiagramAction {
     return _and;
   }
   
-  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.CAMERA;
   }
   
-  @Override
   public String getTooltip() {
     return "Export to SVG";
   }
   
-  @Override
   public void perform(final XRoot root) {
     try {
       final FileChooser fileChooser = new FileChooser();

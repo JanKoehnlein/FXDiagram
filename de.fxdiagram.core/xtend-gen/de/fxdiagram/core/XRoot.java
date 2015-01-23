@@ -54,7 +54,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
-@ModelNode({ "domainObjectProviders", "rootDiagram", "diagram" })
+@ModelNode(inherit = false, value = { "domainObjectProviders", "rootDiagram", "diagram" })
 @SuppressWarnings("all")
 public class XRoot extends Parent implements XActivatable, XModelProvider {
   private DiagramActionRegistry diagramActionRegistry = new DiagramActionRegistry();
@@ -80,7 +80,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     _children_1.add(this.headsUpDisplay);
     ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
     final InvalidationListener _function = new InvalidationListener() {
-      @Override
       public void invalidated(final Observable o) {
         XRoot.this.domainObjectProviderCache = null;
       }
@@ -131,7 +130,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     ObservableMap<Node, Pos> _fixedButtons_1 = _diagram_3.getFixedButtons();
     Set<Map.Entry<Node, Pos>> _entrySet = _fixedButtons_1.entrySet();
     final Consumer<Map.Entry<Node, Pos>> _function = new Consumer<Map.Entry<Node, Pos>>() {
-      @Override
       public void accept(final Map.Entry<Node, Pos> it) {
         Node _key = it.getKey();
         Pos _value = it.getValue();
@@ -155,7 +153,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     return _diagram.getViewportTransform();
   }
   
-  @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
@@ -180,7 +177,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
       _diagram.activate();
     }
     final Procedure1<Pane> _function = new Procedure1<Pane>() {
-      @Override
       public void apply(final Pane it) {
         DoubleProperty _prefWidthProperty = it.prefWidthProperty();
         Scene _scene = it.getScene();
@@ -238,7 +234,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     XDiagram _diagram = this.getDiagram();
     Iterable<XShape> _allShapes = _diagram.getAllShapes();
     final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
-      @Override
       public Boolean apply(final XShape it) {
         boolean _and = false;
         boolean _isSelectable = it.isSelectable();
@@ -263,7 +258,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
         this.domainObjectProviderCache = _newHashMap;
         ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
         final Consumer<DomainObjectProvider> _function = new Consumer<DomainObjectProvider>() {
-          @Override
           public void accept(final DomainObjectProvider it) {
             Class<? extends DomainObjectProvider> _class = it.getClass();
             XRoot.this.domainObjectProviderCache.put(_class, it);
@@ -279,7 +273,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   public void replaceDomainObjectProviders(final List<DomainObjectProvider> newDomainObjectProviders) {
     final Consumer<DomainObjectProvider> _function = new Consumer<DomainObjectProvider>() {
-      @Override
       public void accept(final DomainObjectProvider newProvider) {
         Class<? extends DomainObjectProvider> _class = newProvider.getClass();
         final DomainObjectProvider oldProvider = XRoot.this.getDomainObjectProvider(_class);

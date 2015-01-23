@@ -67,17 +67,14 @@ public class LcarsField extends Parent {
     LcarsModelProvider _domainObjectProvider = _root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
     final LcarsConnectionDescriptor connectionDescriptor = _domainObjectProvider.createLcarsConnectionDescriptor(name);
     final ChooserConnectionProvider _function = new ChooserConnectionProvider() {
-      @Override
       public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor choiceInfo) {
         XConnection _xConnection = new XConnection(host, choice, connectionDescriptor);
         final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-          @Override
           public void apply(final XConnection it) {
             TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, true);
             it.setSourceArrowHead(_triangleArrowHead);
             XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
             final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-              @Override
               public void apply(final XConnectionLabel it) {
                 Text _text = it.getText();
                 String _replace = name.replace("_", " ");
@@ -94,13 +91,11 @@ public class LcarsField extends Parent {
     ObservableList<Node> _children = this.getChildren();
     FlowPane _flowPane = new FlowPane();
     final Procedure1<FlowPane> _function_1 = new Procedure1<FlowPane>() {
-      @Override
       public void apply(final FlowPane it) {
         it.setPrefWrapLength(150);
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
           public void apply(final Text it) {
             String _replace = name.replace("_", " ");
             String _plus = (_replace + ": ");
@@ -122,7 +117,6 @@ public class LcarsField extends Parent {
               ObservableList<Node> _children_1 = it.getChildren();
               Text _text_1 = new Text(currentWord);
               final Procedure1<Text> _function_1 = new Procedure1<Text>() {
-                @Override
                 public void apply(final Text it) {
                   Font _lcarsFont = LcarsExtensions.lcarsFont(12);
                   it.setFont(_lcarsFont);
@@ -141,7 +135,6 @@ public class LcarsField extends Parent {
           ObservableList<Node> _children_1 = it.getChildren();
           Text _text_1 = new Text(currentWord);
           final Procedure1<Text> _function_1 = new Procedure1<Text>() {
-            @Override
             public void apply(final Text it) {
               Font _lcarsFont = LcarsExtensions.lcarsFont(12);
               it.setFont(_lcarsFont);
@@ -152,11 +145,9 @@ public class LcarsField extends Parent {
           _children_1.add(_doubleArrow_1);
         }
         final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
-          @Override
           public void handle(final MouseEvent event) {
             Iterable<Text> _allTextNodes = LcarsField.this.getAllTextNodes();
             final Consumer<Text> _function = new Consumer<Text>() {
-              @Override
               public void accept(final Text it) {
                 it.setFill(LcarsExtensions.RED);
               }
@@ -184,7 +175,6 @@ public class LcarsField extends Parent {
         };
         it.setOnMousePressed(_function_2);
         final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
-          @Override
           public void handle(final MouseEvent it) {
             MouseButton _button = it.getButton();
             boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
@@ -193,7 +183,6 @@ public class LcarsField extends Parent {
               ObservableList<XNode> _nodes = _diagram.getNodes();
               Iterable<LcarsNode> _filter = Iterables.<LcarsNode>filter(_nodes, LcarsNode.class);
               final Function1<LcarsNode, Boolean> _function = new Function1<LcarsNode, Boolean>() {
-                @Override
                 public Boolean apply(final LcarsNode it) {
                   boolean _and = false;
                   boolean _and_1 = false;
@@ -212,7 +201,6 @@ public class LcarsField extends Parent {
                   } else {
                     ObservableList<XConnection> _outgoingConnections = it.getOutgoingConnections();
                     final Function1<XConnection, Boolean> _function = new Function1<XConnection, Boolean>() {
-                      @Override
                       public Boolean apply(final XConnection it) {
                         boolean _and = false;
                         XNode _target = it.getTarget();
@@ -236,7 +224,6 @@ public class LcarsField extends Parent {
                   } else {
                     ObservableList<XConnection> _incomingConnections = it.getIncomingConnections();
                     final Function1<XConnection, Boolean> _function_1 = new Function1<XConnection, Boolean>() {
-                      @Override
                       public Boolean apply(final XConnection it) {
                         boolean _and = false;
                         XNode _source = it.getSource();
@@ -260,7 +247,6 @@ public class LcarsField extends Parent {
               };
               Iterable<LcarsNode> _filter_1 = IterableExtensions.<LcarsNode>filter(_filter, _function);
               final Function1<LcarsNode, XConnection> _function_1 = new Function1<LcarsNode, XConnection>() {
-                @Override
                 public XConnection apply(final LcarsNode it) {
                   return connectionProvider.getConnection(node, it, null);
                 }
@@ -307,7 +293,6 @@ public class LcarsField extends Parent {
     Timeline _xblockexpression = null;
     {
       final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
-        @Override
         public void apply(final Timeline it) {
           Iterable<Text> _allTextNodes = LcarsField.this.getAllTextNodes();
           for (final Text textNode : _allTextNodes) {
@@ -353,7 +338,6 @@ public class LcarsField extends Parent {
     Iterable<Text> _allTextNodes_1 = this.getAllTextNodes();
     Iterable<Text> _tail = IterableExtensions.<Text>tail(_allTextNodes_1);
     final Consumer<Text> _function = new Consumer<Text>() {
-      @Override
       public void accept(final Text it) {
         it.setFill(LcarsExtensions.ORANGE);
       }
@@ -367,11 +351,9 @@ public class LcarsField extends Parent {
       final Text label = new Text();
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-        @Override
         public void apply(final RectangleBorderPane it) {
           ObservableList<Node> _children = it.getChildren();
           final Procedure1<Text> _function = new Procedure1<Text>() {
-            @Override
             public void apply(final Text it) {
               it.setText("querying...");
               Font _lcarsFont = LcarsExtensions.lcarsFont(42);
@@ -391,7 +373,6 @@ public class LcarsField extends Parent {
       final RectangleBorderPane node = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
       Timeline _timeline = new Timeline();
       final Procedure1<Timeline> _function_1 = new Procedure1<Timeline>() {
-        @Override
         public void apply(final Timeline it) {
           ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
           Duration _millis = Duration.millis(0);

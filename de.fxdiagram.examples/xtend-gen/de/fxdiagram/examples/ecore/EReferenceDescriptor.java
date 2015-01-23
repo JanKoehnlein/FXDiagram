@@ -19,7 +19,6 @@ public class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReferenc
     super(eReference, provider.getId(eReference), provider.getFqn(eReference), provider);
   }
   
-  @Override
   public EReference resolveDomainObject() {
     EReference _xblockexpression = null;
     {
@@ -45,7 +44,6 @@ public class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReferenc
     return _xblockexpression;
   }
   
-  @Override
   public int hashCode() {
     EReference _domainObject = this.getDomainObject();
     int _hashCode = _domainObject.hashCode();
@@ -62,7 +60,6 @@ public class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReferenc
     return (_hashCode + _hashCode_1);
   }
   
-  @Override
   public boolean equals(final Object other) {
     if ((other instanceof EReferenceDescriptor)) {
       boolean _or = false;

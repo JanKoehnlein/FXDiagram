@@ -102,7 +102,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     this.graphics = graphics;
     graphics.setChooser(this);
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
-      @Override
       public void changed(final ObservableValue<? extends Number> element, final Number oldValue, final Number newValue) {
         final double newVal = newValue.doubleValue();
         ArrayList<XNode> _nodes = AbstractBaseChooser.this.getNodes();
@@ -115,7 +114,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     ChooserTransition _chooserTransition = new ChooserTransition(this);
     this.spinToPosition = _chooserTransition;
     final EventHandler<SwipeEvent> _function_1 = new EventHandler<SwipeEvent>() {
-      @Override
       public void handle(final SwipeEvent it) {
         int _switchResult = (int) 0;
         EventType<SwipeEvent> _eventType = it.getEventType();
@@ -141,7 +139,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     };
     this.swipeHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = new EventHandler<ScrollEvent>() {
-      @Override
       public void handle(final ScrollEvent it) {
         boolean _isShortcutDown = it.isShortcutDown();
         boolean _not = (!_isShortcutDown);
@@ -166,7 +163,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     };
     this.scrollHandler = _function_2;
     final EventHandler<KeyEvent> _function_3 = new EventHandler<KeyEvent>() {
-      @Override
       public void handle(final KeyEvent it) {
         KeyCode _code = it.getCode();
         if (_code != null) {
@@ -215,13 +211,11 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     };
     this.keyHandler = _function_3;
     final EventHandler<KeyEvent> _function_4 = new EventHandler<KeyEvent>() {
-      @Override
       public void handle(final KeyEvent it) {
         String _filterString = AbstractBaseChooser.this.getFilterString();
         String _character = it.getCharacter();
         char[] _charArray = _character.toCharArray();
         final Function1<Character, Boolean> _function = new Function1<Character, Boolean>() {
-          @Override
           public Boolean apply(final Character it) {
             return Boolean.valueOf(((it).charValue() > 31));
           }
@@ -234,7 +228,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     };
     this.keyTypedHandler = _function_4;
     final ChangeListener<String> _function_5 = new ChangeListener<String>() {
-      @Override
       public void changed(final ObservableValue<? extends String> property, final String oldValue, final String newValue) {
         AbstractBaseChooser.this.calculateVisibleNodes();
       }
@@ -249,10 +242,8 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         _xifexpression = ButtonExtensions.getArrowButton(Side.RIGHT, "previous");
       }
       final Procedure1<SVGPath> _function_6 = new Procedure1<SVGPath>() {
-        @Override
         public void apply(final SVGPath it) {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-            @Override
             public void handle(final MouseEvent it) {
               AbstractBaseChooser.this.spinToPosition.setTargetPositionDelta((-1));
             }
@@ -269,10 +260,8 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         _xifexpression_1 = ButtonExtensions.getArrowButton(Side.LEFT, "next");
       }
       final Procedure1<SVGPath> _function_7 = new Procedure1<SVGPath>() {
-        @Override
         public void apply(final SVGPath it) {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-            @Override
             public void handle(final MouseEvent it) {
               AbstractBaseChooser.this.spinToPosition.setTargetPositionDelta(1);
             }
@@ -285,7 +274,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     }
     Label _label = new Label();
     final Procedure1<Label> _function_8 = new Procedure1<Label>() {
-      @Override
       public void apply(final Label it) {
         StringProperty _textProperty = it.textProperty();
         StringExpression _plus = StringExpressionExtensions.operator_plus("Filter: ", AbstractBaseChooser.this.filterStringProperty);
@@ -341,7 +329,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     return this.node2choiceInfo.get(choice);
   }
   
-  @Override
   public boolean activate() {
     boolean _xblockexpression = false;
     {
@@ -381,10 +368,8 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       }
       ArrayList<XNode> _nodes_4 = this.getNodes();
       final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
         public void accept(final XNode node) {
           final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-            @Override
             public void handle(final MouseEvent it) {
               int _clickCount = it.getClickCount();
               switch (_clickCount) {
@@ -428,7 +413,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       _headsUpDisplay.add(_filterLabel, Pos.BOTTOM_LEFT);
       Label _filterLabel_1 = this.getFilterLabel();
       final Procedure1<Label> _function_1 = new Procedure1<Label>() {
-        @Override
         public void apply(final Label it) {
           XDiagram _diagram = AbstractBaseChooser.this.getDiagram();
           Paint _foregroundPaint = _diagram.getForegroundPaint();
@@ -448,14 +432,12 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         ObservableList<Node> _children_2 = _buttonLayer_2.getChildren();
         _children_2.add(this.minusButton);
         final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
-          @Override
           public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
             AbstractBaseChooser.this.graphics.relocateButtons(AbstractBaseChooser.this.minusButton, AbstractBaseChooser.this.plusButton);
           }
         };
         final ChangeListener<Bounds> relocateButtons_0 = _function_2;
         final ChangeListener<Number> _function_3 = new ChangeListener<Number>() {
-          @Override
           public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
             AbstractBaseChooser.this.graphics.relocateButtons(AbstractBaseChooser.this.minusButton, AbstractBaseChooser.this.plusButton);
           }
@@ -478,7 +460,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     return _xblockexpression;
   }
   
-  @Override
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
@@ -532,7 +513,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
     if (_notEquals) {
       ArrayList<XNode> _nodes = this.getNodes();
       final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
         public void accept(final XNode it) {
           it.setOnMouseClicked(null);
         }
@@ -544,7 +524,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       XDiagram _diagram = this.getDiagram();
       ObservableList<XNode> _nodes_1 = _diagram.getNodes();
       final Function1<XNode, Boolean> _function_1 = new Function1<XNode, Boolean>() {
-        @Override
         public Boolean apply(final XNode it) {
           DomainObjectDescriptor _domainObject = it.getDomainObject();
           DomainObjectDescriptor _domainObject_1 = choice.getDomainObject();
@@ -610,7 +589,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   protected ParallelTransition setBlurDiagram(final boolean isBlur) {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
-      @Override
       public void apply(final ParallelTransition it) {
         XDiagram _diagram = AbstractBaseChooser.this.getDiagram();
         Group _nodeLayer = _diagram.getNodeLayer();
@@ -620,7 +598,6 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
           ObservableList<Animation> _children = it.getChildren();
           FadeTransition _fadeTransition = new FadeTransition();
           final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-            @Override
             public void apply(final FadeTransition it) {
               it.setNode(layer);
               double _xifexpression = (double) 0;

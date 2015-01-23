@@ -52,15 +52,12 @@ public class LevelOfDetailDiagramNode extends XNode {
     super(domainObject);
   }
   
-  @Override
   protected Node createNode() {
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      @Override
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
             String _name = LevelOfDetailDiagramNode.this.getName();
@@ -84,7 +81,6 @@ public class LevelOfDetailDiagramNode extends XNode {
       ObservableList<Node> _children = this.pane.getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
         public void apply(final Group it) {
           ObservableList<Node> _children = it.getChildren();
           _children.setAll(innerDiagram);
@@ -98,16 +94,13 @@ public class LevelOfDetailDiagramNode extends XNode {
     return _xblockexpression;
   }
   
-  @Override
   protected Anchors createAnchors() {
     return new RoundedRectangleAnchors(this, 12, 12);
   }
   
-  @Override
   public void doActivate() {
     super.doActivate();
     final Procedure1<Text> _function = new Procedure1<Text>() {
-      @Override
       public void apply(final Text it) {
         String _name = LevelOfDetailDiagramNode.this.getName();
         it.setText(_name);
@@ -127,7 +120,6 @@ public class LevelOfDetailDiagramNode extends XNode {
       ViewportTransform _viewportTransform = _diagram.getViewportTransform();
       ReadOnlyDoubleProperty _scaleProperty = _viewportTransform.scaleProperty();
       final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-        @Override
         public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
           Bounds _boundsInLocal = LevelOfDetailDiagramNode.this.getBoundsInLocal();
           final Bounds bounds = LevelOfDetailDiagramNode.this.localToScene(_boundsInLocal);
@@ -143,7 +135,6 @@ public class LevelOfDetailDiagramNode extends XNode {
             LevelOfDetailDiagramNode.this.innerDiagramGroup.setVisible(true);
             LevelOfDetailDiagramNode.this.innerDiagram.activate();
             final Procedure1<DiagramScaler> _function = new Procedure1<DiagramScaler>() {
-              @Override
               public void apply(final DiagramScaler it) {
                 Bounds _layoutBounds = LevelOfDetailDiagramNode.this.label.getLayoutBounds();
                 double _width = _layoutBounds.getWidth();

@@ -30,39 +30,42 @@ import org.eclipse.ui.PlatformUI;
 
 @SuppressWarnings("all")
 public class AddBundleHandler extends AbstractHandler {
-  private EventHandler<MouseEvent> mouseHandler = ((EventHandler<MouseEvent>) (MouseEvent it) -> {
-    int _clickCount = it.getClickCount();
-    boolean _equals = (_clickCount == 2);
-    if (_equals) {
-      final IViewPart view = this.getDiagramView();
-      if ((view instanceof FXDiagramView)) {
-        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-        XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
-        final BundleDiagramConfig config = ((BundleDiagramConfig) _configByID);
-        final XRoot root = ((FXDiagramView)view).getRoot();
-        XDiagram _diagram = root.getDiagram();
-        double _sceneX = it.getSceneX();
-        double _sceneY = it.getSceneY();
-        final Point2D center = _diagram.sceneToLocal(_sceneX, _sceneY);
-        XDiagram _diagram_1 = root.getDiagram();
-        CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
-        final NodeChooser nodeChooser = new NodeChooser(_diagram_1, center, _coverFlowChoice, false);
-        List<BundleDescription> _allBundles = BundleUtil.allBundles();
-        final Consumer<BundleDescription> _function = (BundleDescription it_1) -> {
-          IMappedElementDescriptorProvider _domainObjectProvider = config.getDomainObjectProvider();
-          NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-          final IMappedElementDescriptor<BundleDescription> descriptor = _domainObjectProvider.<BundleDescription>createMappedElementDescriptor(it_1, _pluginNode);
-          NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
-          XNode _createNode = _pluginNode_1.createNode(descriptor);
-          nodeChooser.addChoice(_createNode);
-        };
-        _allBundles.forEach(_function);
-        root.setCurrentTool(nodeChooser);
+  private EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
+    public void handle(final MouseEvent it) {
+      int _clickCount = it.getClickCount();
+      boolean _equals = (_clickCount == 2);
+      if (_equals) {
+        final IViewPart view = AddBundleHandler.this.getDiagramView();
+        if ((view instanceof FXDiagramView)) {
+          XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
+          XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
+          final BundleDiagramConfig config = ((BundleDiagramConfig) _configByID);
+          final XRoot root = ((FXDiagramView)view).getRoot();
+          XDiagram _diagram = root.getDiagram();
+          double _sceneX = it.getSceneX();
+          double _sceneY = it.getSceneY();
+          final Point2D center = _diagram.sceneToLocal(_sceneX, _sceneY);
+          XDiagram _diagram_1 = root.getDiagram();
+          CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
+          final NodeChooser nodeChooser = new NodeChooser(_diagram_1, center, _coverFlowChoice, false);
+          List<BundleDescription> _allBundles = BundleUtil.allBundles();
+          final Consumer<BundleDescription> _function = new Consumer<BundleDescription>() {
+            public void accept(final BundleDescription it) {
+              IMappedElementDescriptorProvider _domainObjectProvider = config.getDomainObjectProvider();
+              NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
+              final IMappedElementDescriptor<BundleDescription> descriptor = _domainObjectProvider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
+              NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
+              XNode _createNode = _pluginNode_1.createNode(descriptor);
+              nodeChooser.addChoice(_createNode);
+            }
+          };
+          _allBundles.forEach(_function);
+          root.setCurrentTool(nodeChooser);
+        }
       }
     }
-  });
+  };
   
-  @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     Object _xblockexpression = null;
     {

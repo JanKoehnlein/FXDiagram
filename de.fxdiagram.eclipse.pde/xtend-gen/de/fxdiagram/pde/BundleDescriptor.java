@@ -27,7 +27,6 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
     super(((symbolicName + "#") + version), symbolicName, mappingConfigID, mappingID, provider);
   }
   
-  @Override
   public <U extends Object> U withDomainObject(final Function1<? super BundleDescription, ? extends U> lambda) {
     U _xblockexpression = null;
     {
@@ -86,18 +85,19 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
     return IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
   }
   
-  @Override
   public IEditorPart openInEditor(final boolean select) {
-    final Function1<BundleDescription, IEditorPart> _function = (BundleDescription it) -> {
-      IEditorPart _xblockexpression = null;
-      {
-        String _symbolicName = it.getSymbolicName();
-        Version _version = it.getVersion();
-        String _string = _version.toString();
-        final IPluginModelBase plugin = PluginRegistry.findModel(_symbolicName, _string, IMatchRules.PERFECT, null);
-        _xblockexpression = ManifestEditor.openPluginEditor(plugin);
+    final Function1<BundleDescription, IEditorPart> _function = new Function1<BundleDescription, IEditorPart>() {
+      public IEditorPart apply(final BundleDescription it) {
+        IEditorPart _xblockexpression = null;
+        {
+          String _symbolicName = it.getSymbolicName();
+          Version _version = it.getVersion();
+          String _string = _version.toString();
+          final IPluginModelBase plugin = PluginRegistry.findModel(_symbolicName, _string, IMatchRules.PERFECT, null);
+          _xblockexpression = ManifestEditor.openPluginEditor(plugin);
+        }
+        return _xblockexpression;
       }
-      return _xblockexpression;
     };
     return this.<IEditorPart>withDomainObject(_function);
   }

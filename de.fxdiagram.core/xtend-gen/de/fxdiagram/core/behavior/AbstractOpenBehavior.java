@@ -7,7 +7,6 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 
 @SuppressWarnings("all")
 public abstract class AbstractOpenBehavior implements OpenBehavior {
-  @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
@@ -17,7 +16,6 @@ public abstract class AbstractOpenBehavior implements OpenBehavior {
     this.isActiveProperty.set(true);
   }
   
-  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return OpenBehavior.class;
   }

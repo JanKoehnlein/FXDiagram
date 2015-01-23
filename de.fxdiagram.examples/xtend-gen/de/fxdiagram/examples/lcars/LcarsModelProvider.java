@@ -19,7 +19,7 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode
+@ModelNode(inherit = false)
 @SuppressWarnings("all")
 public class LcarsModelProvider implements DomainObjectProvider {
   private DB db;
@@ -41,7 +41,6 @@ public class LcarsModelProvider implements DomainObjectProvider {
   public List<DBObject> query(final String fieldName, final Object fieldValue) {
     BasicDBObject _basicDBObject = new BasicDBObject();
     final Procedure1<BasicDBObject> _function = new Procedure1<BasicDBObject>() {
-      @Override
       public void apply(final BasicDBObject it) {
         it.put(fieldName, fieldValue);
       }
@@ -54,7 +53,6 @@ public class LcarsModelProvider implements DomainObjectProvider {
   public <T extends Object> DBObject resolveDomainObject(final DomainObjectDescriptor descriptor) {
     BasicDBObject _basicDBObject = new BasicDBObject();
     final Procedure1<BasicDBObject> _function = new Procedure1<BasicDBObject>() {
-      @Override
       public void apply(final BasicDBObject it) {
         String _id = descriptor.getId();
         ObjectId _objectId = new ObjectId(_id);
@@ -65,7 +63,6 @@ public class LcarsModelProvider implements DomainObjectProvider {
     return this.lcars.findOne(_doubleArrow);
   }
   
-  @Override
   public DomainObjectDescriptor createDescriptor(final Object it) {
     boolean _matched = false;
     if (!_matched) {

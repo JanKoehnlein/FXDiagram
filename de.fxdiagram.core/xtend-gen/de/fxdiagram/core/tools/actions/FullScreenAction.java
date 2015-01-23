@@ -12,7 +12,6 @@ import javafx.stage.Window;
 
 @SuppressWarnings("all")
 public class FullScreenAction implements DiagramAction {
-  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _and_1 = false;
@@ -33,17 +32,14 @@ public class FullScreenAction implements DiagramAction {
     return _and;
   }
   
-  @Override
   public Symbol.Type getSymbol() {
     return null;
   }
   
-  @Override
   public String getTooltip() {
     return "Toggle full screen mode";
   }
   
-  @Override
   public void perform(final XRoot root) {
     Scene _scene = root.getScene();
     final Window window = _scene.getWindow();

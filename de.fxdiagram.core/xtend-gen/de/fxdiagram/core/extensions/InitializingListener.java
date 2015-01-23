@@ -15,7 +15,6 @@ public class InitializingListener<T extends Object> implements ChangeListener<T>
   @Accessors
   private Procedure1<? super T> unset;
   
-  @Override
   public void changed(final ObservableValue<? extends T> value, final T oldValue, final T newValue) {
     boolean _and = false;
     boolean _notEquals = (!Objects.equal(this.unset, null));

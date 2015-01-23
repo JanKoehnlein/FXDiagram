@@ -39,7 +39,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode(inherit = false, value = { "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")
 public class XNode extends XShape implements XModelProvider {
   private Effect mouseOverEffect;
@@ -83,7 +83,6 @@ public class XNode extends XShape implements XModelProvider {
   protected DropShadow createSelectionEffect() {
     DropShadow _dropShadow = new DropShadow();
     final Procedure1<DropShadow> _function = new Procedure1<DropShadow>() {
-      @Override
       public void apply(final DropShadow it) {
         it.setOffsetX(4.0);
         it.setOffsetY(4.0);
@@ -96,7 +95,6 @@ public class XNode extends XShape implements XModelProvider {
     return new RectangleAnchors(this);
   }
   
-  @Override
   public void initializeGraphics() {
     super.initializeGraphics();
     InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
@@ -107,17 +105,14 @@ public class XNode extends XShape implements XModelProvider {
     this.anchors = _createAnchors;
   }
   
-  @Override
   protected Node createNode() {
     return null;
   }
   
-  @Override
   public void doActivate() {
     MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
     this.addBehavior(_moveBehavior);
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         Node _node = XNode.this.getNode();
         Effect _effect = _node.getEffect();
@@ -134,7 +129,6 @@ public class XNode extends XShape implements XModelProvider {
     };
     this.setOnMouseEntered(_function);
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         Node _node = XNode.this.getNode();
         _node.setEffect(XNode.this.originalEffect);
@@ -148,7 +142,6 @@ public class XNode extends XShape implements XModelProvider {
     }
   }
   
-  @Override
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       this.setEffect(this.selectionEffect);
@@ -158,7 +151,6 @@ public class XNode extends XShape implements XModelProvider {
       ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
       Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
       final Consumer<XConnection> _function = new Consumer<XConnection>() {
-        @Override
         public void accept(final XConnection it) {
           it.toFront();
         }
@@ -171,7 +163,6 @@ public class XNode extends XShape implements XModelProvider {
     }
   }
   
-  @Override
   public Bounds getSnapBounds() {
     Node _node = this.getNode();
     Bounds _boundsInParent = _node.getBoundsInParent();
@@ -186,7 +177,6 @@ public class XNode extends XShape implements XModelProvider {
     return this.anchors;
   }
   
-  @Override
   public double minWidth(final double height) {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.widthProperty, null));
@@ -198,7 +188,6 @@ public class XNode extends XShape implements XModelProvider {
     return _xifexpression;
   }
   
-  @Override
   public double minHeight(final double width) {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.heightProperty, null));
@@ -210,7 +199,6 @@ public class XNode extends XShape implements XModelProvider {
     return _xifexpression;
   }
   
-  @Override
   public double prefWidth(final double height) {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.widthProperty, null));
@@ -222,7 +210,6 @@ public class XNode extends XShape implements XModelProvider {
     return _xifexpression;
   }
   
-  @Override
   public double prefHeight(final double width) {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.heightProperty, null));
@@ -234,7 +221,6 @@ public class XNode extends XShape implements XModelProvider {
     return _xifexpression;
   }
   
-  @Override
   public double maxWidth(final double height) {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.widthProperty, null));
@@ -246,7 +232,6 @@ public class XNode extends XShape implements XModelProvider {
     return _xifexpression;
   }
   
-  @Override
   public double maxHeight(final double width) {
     double _xifexpression = (double) 0;
     boolean _notEquals = (!Objects.equal(this.heightProperty, null));
@@ -258,7 +243,6 @@ public class XNode extends XShape implements XModelProvider {
     return _xifexpression;
   }
   
-  @Override
   public String toString() {
     Class<? extends XNode> _class = this.getClass();
     String _name = _class.getName();

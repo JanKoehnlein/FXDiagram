@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-@ModelNode({ "objects" })
+@ModelNode(inherit = false, value = { "objects" })
 @SuppressWarnings("all")
 public class Modeltest2 implements XModelProvider {
   public void populate(final ModelElementImpl modelElement) {

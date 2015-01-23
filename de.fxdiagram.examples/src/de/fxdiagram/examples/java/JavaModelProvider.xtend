@@ -4,7 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
 
-@ModelNode
+@ModelNode(inherit=false)
 class JavaModelProvider implements DomainObjectProvider {
 	
 	override createDescriptor(Object domainObject) {

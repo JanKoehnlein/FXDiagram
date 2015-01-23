@@ -53,7 +53,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   private Group allButtons = new Group();
   
   private final FadeTransition fadeTransition = ObjectExtensions.<FadeTransition>operator_doubleArrow(new FadeTransition(), new Procedure1<FadeTransition>() {
-    @Override
     public void apply(final FadeTransition it) {
       it.setNode(RapidButtonBehavior.this.allButtons);
       Duration _millis = DurationExtensions.millis(500);
@@ -63,7 +62,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
       it.setFromValue(1);
       it.setToValue(0);
       final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-        @Override
         public void handle(final ActionEvent it) {
           RapidButtonBehavior.this.allButtons.setVisible(false);
         }
@@ -88,7 +86,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     return this.buttonsProperty.remove(button);
   }
   
-  @Override
   protected void doActivate() {
     HOST _host = this.getHost();
     XDiagram _diagram = CoreExtensions.getDiagram(_host);
@@ -97,14 +94,11 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     _children.add(this.allButtons);
     InitializingListListener<RapidButton> _initializingListListener = new InitializingListListener<RapidButton>();
     final Procedure1<InitializingListListener<RapidButton>> _function = new Procedure1<InitializingListListener<RapidButton>>() {
-      @Override
       public void apply(final InitializingListListener<RapidButton> it) {
         final Procedure1<RapidButton> _function = new Procedure1<RapidButton>() {
-          @Override
           public void apply(final RapidButton button) {
             button.activate();
             final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-              @Override
               public void handle(final MouseEvent it) {
                 RapidButtonBehavior.this.allButtons.setVisible(false);
               }
@@ -122,7 +116,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     HOST _host_1 = this.getHost();
     Node _node = _host_1.getNode();
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         RapidButtonBehavior.this.show();
       }
@@ -131,21 +124,18 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     HOST _host_2 = this.getHost();
     Node _node_1 = _host_2.getNode();
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         RapidButtonBehavior.this.fade();
       }
     };
     _node_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_EXITED, _function_2);
     final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         RapidButtonBehavior.this.show();
       }
     };
     this.allButtons.setOnMouseEntered(_function_3);
     final EventHandler<MouseEvent> _function_4 = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         RapidButtonBehavior.this.fade();
       }
@@ -154,7 +144,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     HOST _host_3 = this.getHost();
     ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _host_3.boundsInParentProperty();
     final ChangeListener<Bounds> _function_5 = new ChangeListener<Bounds>() {
-      @Override
       public void changed(final ObservableValue<? extends Bounds> p, final Bounds o, final Bounds n) {
         boolean _isVisible = RapidButtonBehavior.this.allButtons.isVisible();
         if (_isVisible) {
@@ -176,7 +165,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
         this.layout();
       }
       final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
         public void apply(final Group it) {
           it.setVisible(true);
           it.setOpacity(1.0);
@@ -192,7 +180,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     this.fadeTransition.play();
   }
   
-  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return this.getClass();
   }
@@ -238,7 +225,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
         Point2D _center = BoundsExtensions.center(groupBounds);
         final Point2D centered = Point2DExtensions.operator_minus(hostCenter, _center);
         final Procedure1<Pane> _function = new Procedure1<Pane>() {
-          @Override
           public void apply(final Pane it) {
             double _x = centered.getX();
             double _switchResult = (double) 0;

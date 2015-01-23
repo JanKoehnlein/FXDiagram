@@ -10,7 +10,6 @@ import javafx.scene.input.KeyEvent;
 
 @SuppressWarnings("all")
 public class UndoAction implements DiagramAction {
-  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _and_1 = false;
@@ -32,17 +31,14 @@ public class UndoAction implements DiagramAction {
     return _and;
   }
   
-  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.REWIND;
   }
   
-  @Override
   public String getTooltip() {
     return "Undo";
   }
   
-  @Override
   public void perform(final XRoot root) {
     CommandStack _commandStack = root.getCommandStack();
     _commandStack.undo();

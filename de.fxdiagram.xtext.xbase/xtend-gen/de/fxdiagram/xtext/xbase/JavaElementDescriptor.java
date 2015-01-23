@@ -29,13 +29,11 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
     this.handleIdentifierProperty.set(javaElementHandle);
   }
   
-  @Override
   protected IResourceServiceProvider getResourceServiceProvider() {
     URI _createURI = URI.createURI("dummy.___xbase");
     return IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);
   }
   
-  @Override
   public <T extends Object> T withDomainObject(final Function1<? super JvmIdentifiableElement, ? extends T> lambda) {
     T _xblockexpression = null;
     {
@@ -51,7 +49,6 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
     return _xblockexpression;
   }
   
-  @Override
   public IEditorPart openInEditor(final boolean isSelect) {
     try {
       IEditorPart _xblockexpression = null;

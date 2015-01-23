@@ -21,10 +21,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   private final DiagramMapping<Statemachine> statemachineDiagram = new DiagramMapping<Statemachine>(this, "statemachineDiagram") {
-    @Override
     public void calls() {
       final Function1<Statemachine, Iterable<? extends State>> _function = new Function1<Statemachine, Iterable<? extends State>>() {
-        @Override
         public Iterable<? extends State> apply(final Statemachine it) {
           return it.getStates();
         }
@@ -34,10 +32,8 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final NodeMapping<State> stateNode = new NodeMapping<State>(this, "stateNode") {
-    @Override
     public void calls() {
       final Function1<State, Iterable<? extends Transition>> _function = new Function1<State, Iterable<? extends Transition>>() {
-        @Override
         public Iterable<? extends Transition> apply(final State it) {
           return it.getTransitions();
         }
@@ -47,19 +43,15 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   };
   
   private final ConnectionMapping<Transition> transitionConnection = new ConnectionMapping<Transition>(this, "transitionConnection") {
-    @Override
     public XConnection createConnection(final IMappedElementDescriptor<Transition> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
       final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-        @Override
         public void apply(final XConnection it) {
           XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
           final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-            @Override
             public void apply(final XConnectionLabel label) {
               Text _text = label.getText();
               final Function1<Transition, String> _function = new Function1<Transition, String>() {
-                @Override
                 public String apply(final Transition it) {
                   Event _event = it.getEvent();
                   return _event.getName();
@@ -75,10 +67,8 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
       return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
     }
     
-    @Override
     public void calls() {
       final Function1<Transition, State> _function = new Function1<Transition, State>() {
-        @Override
         public State apply(final Transition it) {
           return it.getState();
         }
@@ -87,7 +77,6 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  @Override
   protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
     boolean _matched = false;
     if (!_matched) {

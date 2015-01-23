@@ -21,7 +21,6 @@ public class ESuperTypeDescriptor extends CachedDomainObjectDescriptor<ESuperTyp
       ((provider.getId(it.getSubType()) + "=") + Integer.valueOf(it.getSubType().getEAllSuperTypes().indexOf(it.getSuperType()))), provider);
   }
   
-  @Override
   public ESuperTypeHandle resolveDomainObject() {
     ESuperTypeHandle _xblockexpression = null;
     {

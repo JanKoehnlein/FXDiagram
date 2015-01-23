@@ -31,21 +31,17 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
     super(host);
   }
   
-  @Override
   protected void doActivate() {
   }
   
-  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return NavigationBehavior.class;
   }
   
-  @Override
   public boolean next() {
     XDiagram _host = this.getHost();
     final ObservableList<XNode> nodes = _host.getNodes();
     final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
-      @Override
       public Boolean apply(final XNode it) {
         return Boolean.valueOf(it.getSelected());
       }
@@ -69,12 +65,10 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
     return (!Objects.equal(next, null));
   }
   
-  @Override
   public boolean previous() {
     XDiagram _host = this.getHost();
     final ObservableList<XNode> nodes = _host.getNodes();
     final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
-      @Override
       public Boolean apply(final XNode it) {
         return Boolean.valueOf(it.getSelected());
       }
@@ -111,16 +105,13 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
         Point2D _localToDiagram = CoreExtensions.localToDiagram(node, _center);
         ViewportTransition _viewportTransition = new ViewportTransition(_root, _localToDiagram, 1);
         final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
-          @Override
           public void apply(final ViewportTransition it) {
             final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
               public void handle(final ActionEvent it) {
                 XDiagram _host = DiagramNavigationBehavior.this.getHost();
                 XRoot _root = CoreExtensions.getRoot(_host);
                 Iterable<XShape> _currentSelection = _root.getCurrentSelection();
                 final Consumer<XShape> _function = new Consumer<XShape>() {
-                  @Override
                   public void accept(final XShape it) {
                     it.setSelected(false);
                   }

@@ -59,7 +59,6 @@ public class ModelElementImpl implements ModelElement {
     return _xblockexpression;
   }
   
-  @Override
   public List<? extends Property<?>> getProperties() {
     List<? extends Property<?>> _elvis = null;
     if (this.properties != null) {
@@ -71,7 +70,6 @@ public class ModelElementImpl implements ModelElement {
     return _elvis;
   }
   
-  @Override
   public List<? extends ListProperty<?>> getListProperties() {
     List<? extends ListProperty<?>> _elvis = null;
     if (this.listProperties != null) {
@@ -83,13 +81,11 @@ public class ModelElementImpl implements ModelElement {
     return _elvis;
   }
   
-  @Override
   public Class<?> getType(final Property<?> property) {
     String _name = property.getName();
     return this.propertyTypes.get(_name);
   }
   
-  @Override
   public boolean isPrimitive(final Property<?> property) {
     final Class<?> type = this.getType(property);
     boolean _or = false;
@@ -103,7 +99,6 @@ public class ModelElementImpl implements ModelElement {
     return _or;
   }
   
-  @Override
   public Object getNode() {
     return this.node;
   }

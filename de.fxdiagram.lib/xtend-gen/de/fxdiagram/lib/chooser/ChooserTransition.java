@@ -27,7 +27,6 @@ public class ChooserTransition extends Transition {
     };
     this.setInterpolator(_function);
     final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
-      @Override
       public void handle(final ActionEvent it) {
         tool.setCurrentPosition(ChooserTransition.this.endPosition);
       }
@@ -101,7 +100,6 @@ public class ChooserTransition extends Transition {
     this.setCycleDuration(_millis);
   }
   
-  @Override
   protected void interpolate(final double alpha) {
     Interpolator _interpolator = this.getInterpolator();
     double _interpolate = _interpolator.interpolate(this.startPosition, this.endPosition, alpha);

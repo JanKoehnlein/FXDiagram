@@ -10,10 +10,9 @@ import de.fxdiagram.examples.java.JavaSuperTypeDescriptor;
 import de.fxdiagram.examples.java.JavaSuperTypeHandle;
 import de.fxdiagram.examples.java.JavaTypeDescriptor;
 
-@ModelNode
+@ModelNode(inherit = false)
 @SuppressWarnings("all")
 public class JavaModelProvider implements DomainObjectProvider {
-  @Override
   public DomainObjectDescriptor createDescriptor(final Object domainObject) {
     boolean _matched = false;
     if (!_matched) {

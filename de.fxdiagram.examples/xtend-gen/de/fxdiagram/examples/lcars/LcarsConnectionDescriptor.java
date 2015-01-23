@@ -12,7 +12,6 @@ public class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<Stri
     super(fieldName, fieldName, fieldName, provider);
   }
   
-  @Override
   public String resolveDomainObject() {
     return this.getId();
   }

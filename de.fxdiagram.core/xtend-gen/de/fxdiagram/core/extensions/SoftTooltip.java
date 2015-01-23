@@ -61,7 +61,6 @@ public class SoftTooltip {
       }
     }
     
-    @Override
     public void run() {
       try {
         long delay = 0;
@@ -80,7 +79,6 @@ public class SoftTooltip {
         } while((delay > 0));
         if (this.isRunning) {
           final Runnable _function = new Runnable() {
-            @Override
             public void run() {
               Timer.this.tooltip.trigger();
             }
@@ -112,7 +110,6 @@ public class SoftTooltip {
     this.host = host;
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-      @Override
       public void apply(final StackPane it) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append("-fx-border-color: black;");
@@ -125,7 +122,6 @@ public class SoftTooltip {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
           public void apply(final Text it) {
             it.setText(text);
             StringProperty _textProperty = it.textProperty();
@@ -147,7 +143,6 @@ public class SoftTooltip {
   
   public void install() {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
       public void handle(final MouseEvent it) {
         EventType<? extends MouseEvent> _eventType = it.getEventType();
         boolean _matched = false;
@@ -222,7 +217,6 @@ public class SoftTooltip {
   
   public Node setPosition(final double positionX, final double positionY) {
     final Procedure1<Node> _function = new Procedure1<Node>() {
-      @Override
       public void apply(final Node it) {
         it.setLayoutX(positionX);
         it.setLayoutY(positionY);

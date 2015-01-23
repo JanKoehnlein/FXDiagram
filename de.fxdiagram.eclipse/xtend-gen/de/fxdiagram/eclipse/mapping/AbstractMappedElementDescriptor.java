@@ -22,7 +22,6 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> extends 
     this.mappingIDProperty.set(mappingID);
   }
   
-  @Override
   public AbstractMapping<T> getMapping() {
     AbstractMapping<T> _xblockexpression = null;
     {

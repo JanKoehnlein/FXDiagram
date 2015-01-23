@@ -19,7 +19,6 @@ public class ButtonExtensions {
   public static SVGPath getTriangleButton(final Side side, final String tooltip) {
     SVGPath _sVGPath = new SVGPath();
     final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
-      @Override
       public void apply(final SVGPath it) {
         String _switchResult = null;
         if (side != null) {
@@ -53,7 +52,6 @@ public class ButtonExtensions {
   public static SVGPath getFilledTriangle(final Side side, final String tooltip) {
     SVGPath _sVGPath = new SVGPath();
     final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
-      @Override
       public void apply(final SVGPath it) {
         String _switchResult = null;
         if (side != null) {
@@ -87,7 +85,6 @@ public class ButtonExtensions {
   public static SVGPath getArrowButton(final Side side, final String tooltip) {
     SVGPath _sVGPath = new SVGPath();
     final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
-      @Override
       public void apply(final SVGPath it) {
         String _switchResult = null;
         if (side != null) {
@@ -122,7 +119,6 @@ public class ButtonExtensions {
   public static SVGPath getInverseArrowButton(final Side side, final String tooltip) {
     SVGPath _sVGPath = new SVGPath();
     final Procedure1<SVGPath> _function = new Procedure1<SVGPath>() {
-      @Override
       public void apply(final SVGPath it) {
         String _switchResult = null;
         if (side != null) {

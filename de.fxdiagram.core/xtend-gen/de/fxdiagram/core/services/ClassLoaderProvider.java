@@ -18,13 +18,12 @@ import org.eclipse.xtext.xbase.lib.Pure;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 
-@ModelNode
+@ModelNode(inherit = false)
 @SuppressWarnings("all")
 public class ClassLoaderProvider implements DomainObjectProviderWithState {
   @Accessors
   private ClassLoader rootClassLoader;
   
-  @Override
   public <T extends Object> DomainObjectDescriptor createDescriptor(final T domainObject) {
     boolean _matched = false;
     if (!_matched) {
@@ -145,7 +144,6 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
     return (!Objects.equal(_default, null));
   }
   
-  @Override
   public void copyState(final DomainObjectProviderWithState from) {
     this.rootClassLoader = ((ClassLoaderProvider) from).rootClassLoader;
   }

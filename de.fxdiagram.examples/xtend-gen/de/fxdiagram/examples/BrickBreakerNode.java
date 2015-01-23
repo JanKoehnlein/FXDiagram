@@ -35,19 +35,16 @@ public class BrickBreakerNode extends FlipNode {
     super(name);
   }
   
-  @Override
   protected Node createNode() {
     Node _xblockexpression = null;
     {
       final Node flipNode = super.createNode();
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-        @Override
         public void apply(final RectangleBorderPane it) {
           ObservableList<Node> _children = it.getChildren();
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
-            @Override
             public void apply(final Text it) {
               String _name = BrickBreakerNode.this.getName();
               it.setText(_name);
@@ -64,12 +61,10 @@ public class BrickBreakerNode extends FlipNode {
       this.setFront(_doubleArrow);
       Group _group = new Group();
       final Procedure1<Group> _function_1 = new Procedure1<Group>() {
-        @Override
         public void apply(final Group it) {
           ObservableList<Node> _children = it.getChildren();
           Group _group = new Group();
           final Procedure1<Group> _function = new Procedure1<Group>() {
-            @Override
             public void apply(final Group it) {
               ObservableList<Node> _children = it.getChildren();
               Group _createRoot = BrickBreakerNode.this.createRoot();
@@ -95,7 +90,6 @@ public class BrickBreakerNode extends FlipNode {
     return _xblockexpression;
   }
   
-  @Override
   public void activate() {
     super.activate();
     Node _front = this.getFront();
@@ -109,11 +103,9 @@ public class BrickBreakerNode extends FlipNode {
         Config.initialize();
         Group _group = new Group();
         final Procedure1<Group> _function = new Procedure1<Group>() {
-          @Override
           public void apply(final Group it) {
             Rectangle _rectangle = new Rectangle();
             final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-              @Override
               public void apply(final Rectangle it) {
                 it.setWidth(Config.SCREEN_WIDTH);
                 it.setHeight(Config.SCREEN_HEIGHT);
@@ -130,7 +122,6 @@ public class BrickBreakerNode extends FlipNode {
         final Main.MainFrame mainFrame = constructor.newInstance(main, root);
         Field[] _declaredFields = Main.class.getDeclaredFields();
         final Function1<Field, Boolean> _function_1 = new Function1<Field, Boolean>() {
-          @Override
           public Boolean apply(final Field it) {
             String _name = it.getName();
             return Boolean.valueOf(Objects.equal(_name, "mainFrame"));

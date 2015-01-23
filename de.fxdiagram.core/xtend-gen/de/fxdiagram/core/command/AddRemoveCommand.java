@@ -50,11 +50,9 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     this.shapes = ((List<? extends XShape>)Conversions.doWrapArray(shapes));
   }
   
-  @Override
   public Animation createExecuteAnimation(final CommandContext context) {
     Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
     final Consumer<XNode> _function = new Consumer<XNode>() {
-      @Override
       public void accept(final XNode it) {
         if (AddRemoveCommand.this.isAdd) {
           ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
@@ -73,7 +71,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     _filter.forEach(_function);
     Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(this.shapes, XConnection.class);
     final Consumer<XConnection> _function_1 = new Consumer<XConnection>() {
-      @Override
       public void accept(final XConnection it) {
         XNode _source = it.getSource();
         XNode _target = it.getTarget();
@@ -97,7 +94,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     return null;
   }
   
-  @Override
   public Animation createUndoAnimation(final CommandContext context) {
     ParallelTransition _xifexpression = null;
     if (this.isAdd) {
@@ -108,7 +104,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     return _xifexpression;
   }
   
-  @Override
   public Animation createRedoAnimation(final CommandContext context) {
     ParallelTransition _xifexpression = null;
     if (this.isAdd) {
@@ -122,11 +117,9 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   protected ParallelTransition remove(@Extension final CommandContext context) {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
-      @Override
       public void apply(final ParallelTransition it) {
         ObservableList<Animation> _children = it.getChildren();
         final Function1<XShape, Animation> _function = new Function1<XShape, Animation>() {
-          @Override
           public Animation apply(final XShape it) {
             Duration _defaultUndoDuration = context.getDefaultUndoDuration();
             return AddRemoveCommand.this.disappear(it, _defaultUndoDuration);
@@ -135,11 +128,9 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         List<Animation> _map = ListExtensions.map(AddRemoveCommand.this.shapes, _function);
         Iterables.<Animation>addAll(_children, _map);
         final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
-          @Override
           public void handle(final ActionEvent it) {
             Iterable<XConnection> _filter = Iterables.<XConnection>filter(AddRemoveCommand.this.shapes, XConnection.class);
             final Consumer<XConnection> _function = new Consumer<XConnection>() {
-              @Override
               public void accept(final XConnection it) {
                 ObservableList<XConnection> _connections = AddRemoveCommand.this.diagram.getConnections();
                 _connections.remove(it);
@@ -148,7 +139,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
             _filter.forEach(_function);
             Iterable<XNode> _filter_1 = Iterables.<XNode>filter(AddRemoveCommand.this.shapes, XNode.class);
             final Consumer<XNode> _function_1 = new Consumer<XNode>() {
-              @Override
               public void accept(final XNode it) {
                 ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
                 _nodes.remove(it);
@@ -168,7 +158,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     {
       Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
       final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
         public void accept(final XNode it) {
           ObservableList<XNode> _nodes = AddRemoveCommand.this.diagram.getNodes();
           _nodes.add(it);
@@ -177,7 +166,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
       _filter.forEach(_function);
       Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(this.shapes, XConnection.class);
       final Consumer<XConnection> _function_1 = new Consumer<XConnection>() {
-        @Override
         public void accept(final XConnection it) {
           final Pair<XNode, XNode> nodes = AddRemoveCommand.this.connectedNodesMap.get(it);
           XNode _key = nodes.getKey();
@@ -191,11 +179,9 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
       _filter_1.forEach(_function_1);
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function_2 = new Procedure1<ParallelTransition>() {
-        @Override
         public void apply(final ParallelTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           final Function1<XShape, Animation> _function = new Function1<XShape, Animation>() {
-            @Override
             public Animation apply(final XShape it) {
               Duration _defaultUndoDuration = context.getDefaultUndoDuration();
               return AddRemoveCommand.this.appear(it, _defaultUndoDuration);
@@ -213,7 +199,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   protected Animation appear(final XShape node, final Duration duration) {
     FadeTransition _fadeTransition = new FadeTransition();
     final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-      @Override
       public void apply(final FadeTransition it) {
         it.setNode(node);
         it.setFromValue(0);
@@ -228,7 +213,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   protected Animation disappear(final XShape node, final Duration duration) {
     FadeTransition _fadeTransition = new FadeTransition();
     final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-      @Override
       public void apply(final FadeTransition it) {
         it.setNode(node);
         it.setFromValue(1);

@@ -10,7 +10,6 @@ import javafx.scene.input.KeyEvent;
 
 @SuppressWarnings("all")
 public class RedoAction implements DiagramAction {
-  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _and_1 = false;
@@ -31,17 +30,14 @@ public class RedoAction implements DiagramAction {
     return _and;
   }
   
-  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.FORWARD;
   }
   
-  @Override
   public String getTooltip() {
     return "Redo";
   }
   
-  @Override
   public void perform(final XRoot root) {
     CommandStack _commandStack = root.getCommandStack();
     _commandStack.redo();

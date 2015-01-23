@@ -30,11 +30,9 @@ public class SummarySlideDeck extends OpenableDiagramNode {
     super("Summary");
   }
   
-  @Override
   public void doActivate() {
     SlideDiagram _slideDiagram = new SlideDiagram();
     final Procedure1<SlideDiagram> _function = new Procedure1<SlideDiagram>() {
-      @Override
       public void apply(final SlideDiagram it) {
         ObservableList<Slide> _slides = it.getSlides();
         Slide _createSlide = EclipseConSlideFactory.createSlide("Summary", 144);
@@ -52,19 +50,16 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_2 = it.getSlides();
         Slide _createSlide_2 = EclipseConSlideFactory.createSlide("JavaFX advantages");
         final Procedure1<Slide> _function = new Procedure1<Slide>() {
-          @Override
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
             ObservableList<Node> _children = _stackPane.getChildren();
             VBox _vBox = new VBox();
             final Procedure1<VBox> _function = new Procedure1<VBox>() {
-              @Override
               public void apply(final VBox it) {
                 it.setAlignment(Pos.CENTER);
                 ObservableList<Node> _children = it.getChildren();
                 ImageView _imageView = new ImageView();
                 final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-                  @Override
                   public void apply(final ImageView it) {
                     ImageCache _get = ImageCache.get();
                     Image _image = _get.getImage(SummarySlideDeck.this, "images/javafx.png");
@@ -108,19 +103,16 @@ public class SummarySlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_4 = it.getSlides();
         Slide _createSlide_4 = EclipseConSlideFactory.createSlide("Thanks");
         final Procedure1<Slide> _function_1 = new Procedure1<Slide>() {
-          @Override
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
             ObservableList<Node> _children = _stackPane.getChildren();
             VBox _vBox = new VBox();
             final Procedure1<VBox> _function = new Procedure1<VBox>() {
-              @Override
               public void apply(final VBox it) {
                 it.setAlignment(Pos.CENTER);
                 ObservableList<Node> _children = it.getChildren();
                 Text _createText = EclipseConSlideFactory.createText("Thanks to", 144);
                 final Procedure1<Text> _function = new Procedure1<Text>() {
-                  @Override
                   public void apply(final Text it) {
                     Insets _insets = new Insets(0, 0, 30, 0);
                     VBox.setMargin(it, _insets);
@@ -164,14 +156,12 @@ public class SummarySlideDeck extends OpenableDiagramNode {
   protected HBox createMixedText(final String jungleText, final String normalText) {
     HBox _hBox = new HBox();
     final Procedure1<HBox> _function = new Procedure1<HBox>() {
-      @Override
       public void apply(final HBox it) {
         it.setAlignment(Pos.CENTER);
         it.setSpacing(16);
         ObservableList<Node> _children = it.getChildren();
         Text _createJungleText = EclipseConSlideFactory.createJungleText(jungleText, 36);
         final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
           public void apply(final Text it) {
             Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
             Color _jungleDarkestGreen = EclipseConSlideFactory.jungleDarkestGreen();
