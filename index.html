@@ -1,11 +1,104 @@
+<!DOCTYPE html>
 <html>
-<head>
-<title>FXDiagram - Web</title>
-</head>
-<body>
-<h1>FXDiagram - Eclipse Updates</h1>
-To install FXDiagram and examples, point your Eclipse update manager to
-<a href="p2/updates">http://jankoehnlein.github.io/FXDiagram/p2/updates/latest</a>
-<p>
-Source code is on github at <a href="https://github.com/JanKoehnlein/FXDiagram">https://github.com/JanKoehnlein/FXDiagram</a>
-</body>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="FXDiagram : A framework for diagrams using JavaFX">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>FXDiagram</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/JanKoehnlein/FXDiagram">View on GitHub</a>
+
+          <h1 id="project_title">FXDiagram</h1>
+          <h2 id="project_tagline">A framework for diagrams using JavaFX</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/JanKoehnlein/FXDiagram/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/JanKoehnlein/FXDiagram/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a id="welcome-to-fxdiagram" class="anchor" href="#welcome-to-fxdiagram" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to FXDiagram.</h3>
+
+<p>FXDiagram is a framework for creating diagram tools based on JavaFX. FXDiagram does not hide the power of JavaFX, but adds a thin layer of graph abstractions only. Additional library classes can be selectively added for higher-level functionality trimmed for best user experience. </p>
+
+<p>The code is almost entirely written in Xtend, which allows for very concise and readable code while still being fully compatible with Java. IDE integration for Xtend is currently available for Eclipse only, but IDEA support is under development.</p>
+
+<p>FXDiagram offers Eclipse integration via the JavaFX-SWT-Bridge and Tom Schindl's e(fx)clipse project. There is also support for graphical views on Xtext-based models and an exemplary browser for Eclipse plug-in dependencies.
+To give it a try, point your Eclipse update manager to <a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest"></a><a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest">http://jankoehnlein.github.io/FXDiagram/p2/updates/latest</a></p>
+
+<p>You can find more information on my blog (<a href="http://koehnlein.blogspot.com">http://koehnlein.blogspot.com</a>).</p>
+
+<h3>
+<a id="development" class="anchor" href="#development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development</h3>
+
+<p>FXDiagram is currently being developed in Eclipse. The fastest way to get it running is to use <a href="https://wiki.eclipse.org/Eclipse_Oomph_Installer">Eclipse Oomph</a> and the <a href="https://github.com/JanKoehnlein/FXDiagram/blob/master/de.fxdiagram.docs/FXDiagram.setup">FXDiagram.setup</a>. The configuration requires Java 8 SDK 40 early access build &gt;= 5 (see below) and will install everything but <a href="http://www.graphviz.org/">Graphviz</a>.</p>
+
+<p>If you decide to setup the environment manually, you can use </p>
+
+<ul>
+<li>
+<p>EITHER</p>
+
+<ul>
+<li>Java 7 SDK</li>
+<li>Eclipse Kepler 4.3</li>
+<li>Xtext SDK 2.7 (including Xtend 2.7)</li>
+<li>e(fx)clipse 0.9 </li>
+</ul>
+</li>
+<li>
+<p>OR</p>
+
+<ul>
+<li>Java 8 SDK 40 early access build &gt;=5 (<a href="https://jdk8.java.net/download.html">https://jdk8.java.net/download.html</a>)</li>
+<li>Eclipse Luna 4.4</li>
+<li>Xtext SDK 2.7</li>
+<li>e(fx)clipse 1.1</li>
+</ul>
+</li>
+</ul>
+
+<p>As of version 1.0 e(fx)clipse no longer supports Java 7. If you're stuck 
+with Java 7 you need the e(fx)clipse version 0.9 which runs on Kepler only. </p>
+
+<p>You need some plug-ins from the <a href="http://www.informatik.uni-kiel.de/rtsys/kieler/">KIELER</a> project. Use 
+the <code>kielerProjectSet.psf</code> to get them. Unfortunately, KIELER does not 
+run without Equinox. If you want to run the standalone demo you have to 
+apply the patch kieler.patch for some quick workarounds.</p>
+
+<p><a href="http://www.graphviz.org/">Graphviz</a> must be installed on your system.</p>
+
+<h3>
+<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>FXDiagram is developed by <a href="https://github.com/JanKoehnlein" class="user-mention">@JanKoehnlein</a>. The code is licensed under the EPL (<a href="https://www.eclipse.org/legal/epl-v10.html">https://www.eclipse.org/legal/epl-v10.html</a>). There is currently neither support nor an official release. If you're interested in more feel free to contact me (<a href="https://github.com/JanKoehnlein" class="user-mention">@JanKoehnlein</a>).</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">FXDiagram maintained by <a href="https://github.com/JanKoehnlein">JanKoehnlein</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
