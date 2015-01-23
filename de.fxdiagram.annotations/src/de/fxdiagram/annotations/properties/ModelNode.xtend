@@ -14,12 +14,13 @@ import org.eclipse.xtend.lib.macro.AbstractClassProcessor
 import org.eclipse.xtend.lib.macro.Active
 import org.eclipse.xtend.lib.macro.TransformationContext
 import org.eclipse.xtend.lib.macro.declaration.ClassDeclaration
+import org.eclipse.xtend.lib.macro.declaration.FieldDeclaration
 import org.eclipse.xtend.lib.macro.declaration.MemberDeclaration
 import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration
+import org.eclipse.xtend.lib.macro.declaration.TypeDeclaration
 import org.eclipse.xtend.lib.macro.declaration.TypeReference
 import org.eclipse.xtend.lib.macro.declaration.Visibility
-import org.eclipse.xtend.lib.macro.declaration.FieldDeclaration
 
 @Active(ModelNodeProcessor)
 @Target(ElementType.TYPE)
@@ -34,18 +35,17 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 	
 	override doTransform(MutableClassDeclaration annotatedClass, TransformationContext context) {
 		this.context = context
-		val modelAnnotation = annotatedClass.findAnnotation(findTypeGlobally(ModelNode))
+		val modelNodeAnnotationType = findTypeGlobally(ModelNode)
+		val modelAnnotation = annotatedClass.findAnnotation(modelNodeAnnotationType)
 		val validPropertyNames = newArrayList
 		modelAnnotation
 			.getStringArrayValue('value')
 			.forEach[
 				val accessor = getPropertyAccessor(annotatedClass, it, true)
-				if(accessor == null) 
-					modelAnnotation.addError("Cannot find JavaFX property '" + it + "'"
-//						+ annotatedClass.hierarchy
-					)
-				else 
-					validPropertyNames += it
+				if(accessor == null) {
+					modelAnnotation.addWarning("Cannot find JavaFX property '" + it + "'")
+				}
+				validPropertyNames += it
 			]
 		val existingNoArgConstructor = annotatedClass.findDeclaredConstructor()
 		if(existingNoArgConstructor == null) {
@@ -54,14 +54,20 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 			]
 		}
 		val modelProviderType = newTypeReference('de.fxdiagram.core.model.XModelProvider')
-		
-		val isInherit = modelAnnotation.getValue('inherit') != Boolean.FALSE 
-//		modelAnnotation.getBooleanValue('inherit') 
-			&& annotatedClass.extendedClass != null && modelProviderType.isAssignableFrom(annotatedClass.extendedClass)
 		if(!modelProviderType.type.isAssignableFrom(annotatedClass))
 			annotatedClass.implementedInterfaces = annotatedClass.implementedInterfaces + #[modelProviderType]
 		annotatedClass.addMethod('populate', [
 			addParameter('modelElement', newTypeReference('de.fxdiagram.core.model.ModelElementImpl'))
+			val isInheritAttribtueSet = modelAnnotation.getValue('inherit') != Boolean.FALSE
+			val superClass = annotatedClass.extendedClass
+			val isInherit = isInheritAttribtueSet &&
+				if(superClass != null) {
+					val isSuperImplementsModelProvider = modelProviderType.isAssignableFrom(superClass)
+					val isSuperHasModelNodeAnnotation = (superClass.type as TypeDeclaration).findAnnotation(modelNodeAnnotationType) != null
+					isSuperImplementsModelProvider || isSuperHasModelNodeAnnotation
+				} else {
+					false
+				}
 			body = '''
 				«IF isInherit»super.populate(modelElement);«ENDIF»
 				«FOR accessor: validPropertyNames.map[getPropertyAccessor(annotatedClass, it, true)]»
