@@ -58,34 +58,66 @@ Selected features:
 
 <p>FXDiagram is almost entirely written in <a href="http://www.xtend-lang.org">Xtend</a>, which allows for very concise and readable code while still being fully compatible with Java. </p>
 
-<p>FXDiagram integrates well with <a href="http://www.eclipse.org">Eclipse</a>. Adding a diagram view for an <a href="http://www.xtext.org">Xtext</a> language is easy. Have a look at the example diagrams for Xtext's example languages <em>domainmodel</em> and <em>fowlerdsl</em>, as well as the generic class diagram browser for Java, Xtend and Xbase-languages. There is also a graphical tool for the analysis of Eclipse plug-in dependencies. To give them a try, point your Eclipse update manager to <a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest"></a><a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest">http://jankoehnlein.github.io/FXDiagram/p2/updates/latest</a></p>
+<p>FXDiagram runs with plain Java applications but also integrates well with <a href="http://www.eclipse.org">Eclipse</a>. Adding a diagram view for an <a href="http://www.xtext.org">Xtext</a> language is easy. Have a look at the <a href="#examples">examples</a> below.</p>
 
 <p>You can find more information on my <a href="http://koehnlein.blogspot.com">blog</a>.</p>
 
 <h3>
 <a id="development" class="anchor" href="#development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development</h3>
 
-<p>FXDiagram is currently being developed in Eclipse. The fastest way to get it running is to use <a href="https://wiki.eclipse.org/Eclipse_Oomph_Installer">Eclipse Oomph</a> and the <a href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/FXDiagram.setup">FXDiagram.setup</a>. The configuration requires Java 8 SDK 40 early access build &gt;= 5 (see below) and will install everything but <a href="http://www.graphviz.org/">Graphviz</a>.</p>
-
-<p>If you decide to setup the environment manually, you need</p>
-
+<p>
+You need
 <ul>
-<li>Java 8 SDK 40 early access build &gt;=5 (<a href="https://jdk8.java.net/download.html">https://jdk8.java.net/download.html</a>)</li>
-<li>Eclipse Luna 4.4
-
-<ul>
-<li>Xtext SDK 2.7</li>
-<li>e(fx)clipse 1.1</li>
-</ul>
-</li>
+<li>A recent <a href="https://jdk8.java.net/download.html">Java 8 SDK 40 early access build</a>. Build number must be greater than 5</li>
+<li><a href="http://www.graphviz.org/">Graphviz</a></li>
 </ul>
 
-<p>You need some plug-ins from the <a href="http://www.informatik.uni-kiel.de/rtsys/kieler/">KIELER</a> project. Use 
-the <code>kielerProjectSet.psf</code> to get them. Unfortunately, KIELER does not 
-run without Equinox. If you want to run the standalone demo you have to 
-apply the patch kieler.patch for some quick workarounds.</p>
+FXDiagram is currently being developed in Eclipse. The best way to set up the development environment is to use 
+<a href="https://wiki.eclipse.org/Eclipse_Oomph_Installer">Eclipse Oomph</a>.
+Once Oomph is started
+<ul>
+<li>Switch to advanced mode (the tools icon in the top-left)</li>
+<li>Choose <em>Eclipse standard (discontinued after Luna)</em> and 
+enter the path to the Java 8 SDK 40 home directory in the lower part.</li>
+<li>On the next page, select <em>github.com</em> in the tree, click on the green plus icon and enter the URL of the 
+<a href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/FXDiagram.setup">FXDiagram.setup</a>.
+Double click on the new node for FXDiagram.</li> 
+<li>On the next page, enter the installation directory and choose the GitHub access type.</li>
+</ul>
+Once you click <em>Finish</em>, Oomph will automatically compose the IDE, start it, populate the target platform, clone 
+the git repositories and configure the workspace. This may take a couple of minutes.
+</p>
 
-<p><a href="http://www.graphviz.org/">Graphviz</a> must be installed on your system.</p>
+
+<h3>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running Examples</h3>
+
+<p>
+FXDiagram performs best with native JavaFX applications. There is a pre-configured launch configuration <em>FX Diagram Example</em> in the 
+development environment to start the demo. Before running it, you have to 
+apply the patch <a href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/kieler.patch">kieler.patch</a> to the KIELER working set
+to make the layout work independent of Equinox.</p>
+</p>
+
+<p>
+For Eclipse, FXDiagram ships with example diagrams for Xtext's sample languages <em>domainmodel</em> and <em>fowlerdsl</em>, 
+as well as the generic class diagram browser for Java, Xtend and Xbase-languages. There is also a graphical tool 
+for the analysis of Eclipse plug-in dependencies. 
+</p>
+
+<p>
+To give them a try start the launch configuration <em>FX Diagram in Eclipse</em> from the development environment. 
+Alternatively, you can install the pre-compiled examples into an Eclipse Luna from the update site
+<a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest">http://jankoehnlein.github.io/FXDiagram/p2/updates/latest</a>.
+The diagram view will automatically be opened and populated once you choose the appropriate action from the context menu:
+<ul>
+<li><em>Show in FX Diagram</em> on a statemachine, a state or a transition in the <em>fowlerdsl</em> editor.</li>
+<li><em>Show in FX Diagram</em> on an entity or package in the <em>dmodel</em> editor.</li>
+<li><em>Show in Class Diagram</em> on a Java/Xtend/Xbase type in the respective editor.</li>
+<li><em>Show in Plug-in Diagram</em> on a plug-in project in the navigator to explore the dependencies of Eclipse plug-ins.</li>
+</ul>
+Most nodes can be explored. Watch out for tooltips.
+</p>
 
 <h3>
 <a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
