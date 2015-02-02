@@ -4,7 +4,6 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProviderWithState
-import org.eclipse.core.internal.runtime.Activator
 import org.eclipse.core.runtime.FileLocator
 import org.eclipse.core.runtime.Platform
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -61,7 +60,7 @@ class ClassLoaderProvider implements DomainObjectProviderWithState {
 	}
 
 	def static isEquinox() {
-		Activator.getDefault != null
+		Platform.isRunning
 	}
 	
 	override copyState(DomainObjectProviderWithState from) {

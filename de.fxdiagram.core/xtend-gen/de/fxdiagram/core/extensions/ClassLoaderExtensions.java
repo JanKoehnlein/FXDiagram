@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.List;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -122,7 +121,6 @@ public class ClassLoaderExtensions {
   }
   
   public static boolean isEquinox() {
-    Activator _default = Activator.getDefault();
-    return (!Objects.equal(_default, null));
+    return Platform.isRunning();
   }
 }

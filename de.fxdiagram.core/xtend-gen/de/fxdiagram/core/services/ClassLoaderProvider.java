@@ -9,7 +9,6 @@ import de.fxdiagram.core.services.ClassLoaderDescriptor;
 import de.fxdiagram.core.services.ResourceDescriptor;
 import de.fxdiagram.core.services.ResourceHandle;
 import java.net.URL;
-import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.xtend.lib.annotations.Accessors;
@@ -140,8 +139,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   }
   
   public static boolean isEquinox() {
-    Activator _default = Activator.getDefault();
-    return (!Objects.equal(_default, null));
+    return Platform.isRunning();
   }
   
   public void copyState(final DomainObjectProviderWithState from) {

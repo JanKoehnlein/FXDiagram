@@ -16,7 +16,7 @@ class ClassLoaderExtensions {
 		toURI(resource)
 	}
 	
-	protected def static toURI(URL resource) {
+	protected def static String toURI(URL resource) {
 		if(isEquinox)
 			FileLocator.toFileURL(resource).toExternalForm
 		else
@@ -50,6 +50,6 @@ class ClassLoaderExtensions {
 	}
 	
 	def static isEquinox() {
-		org.eclipse.core.internal.runtime.Activator.getDefault != null
+		Platform.isRunning()
 	}
 }
