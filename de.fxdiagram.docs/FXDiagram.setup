@@ -78,7 +78,8 @@
   <setupTask
       xsi:type="git:GitCloneTask"
       id="fxdiagram.git.clone"
-      remoteURI="JanKoehnlein/FXDiagram">
+      remoteURI="JanKoehnlein/FXDiagram"
+      checkoutBranch="master">
     <annotation
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
       <detail
@@ -100,7 +101,8 @@
       xsi:type="git:GitCloneTask"
       id="fxdiagram.swtfx.git.clone"
       remoteURI="JanKoehnlein/JavaFX-SWT-Gesture-Bridge"
-      pushURI="">
+      pushURI=""
+      checkoutBranch="master">
     <annotation
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
       <detail
