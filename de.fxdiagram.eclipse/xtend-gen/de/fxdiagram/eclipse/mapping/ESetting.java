@@ -6,7 +6,11 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
+import org.w3c.dom.EntityReference;
 
+/**
+ * The value of an {@link EntityReference} in the context of an {@link EObject}.
+ */
 @Data
 @SuppressWarnings("all")
 public class ESetting<ECLASS extends EObject> {

@@ -31,6 +31,21 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
+/**
+ * A line connecting two {@link XNode}s.
+ * 
+ * A {@link XConnection} is always directed, i.e. it has a dedicated {@link #source} and {@link #target}.
+ * These properties are automatically kept in sync with their counterparts {@link XNode#outgoingConnections}
+ * and {@link XNode#incomingConnections}.
+ * 
+ * Independent of {@link #source} and {@link #target}, it can have {@link ArrowHead}s at the respective ends. 
+ * It may also have a {@link XconnectionLabel}. The actual shape of a connection is determined by its 
+ * {@link ConnectionRouter} and its {@link Kind}.
+ * 
+ * A connection can refer to a {@link #domainObject} as its underlying semantic element.
+ * 
+ * Clients usually don't extend this class, but configure its label and appearance properties. 
+ */
 @Logging
 @ModelNode('domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead')
 class XConnection extends XShape {

@@ -1,18 +1,26 @@
 package de.fxdiagram.eclipse.shapes
 
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.lib.simple.OpenableDiagramNode
-import de.fxdiagram.eclipse.behavior.LazyConnectionMappingBehavior
+import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XNode
 import de.fxdiagram.eclipse.behavior.OpenElementInEditorBehavior
 import de.fxdiagram.eclipse.mapping.AbstractXtextDescriptor
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
-import de.fxdiagram.eclipse.mapping.NodeMapping
-import de.fxdiagram.eclipse.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.lib.simple.OpenableDiagramNode
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 
+import static de.fxdiagram.eclipse.behavior.LazyConnectionMappingBehavior.*
+
+/**
+ * Base implementation for a {@link XNode} with a nested {@link XDiagram} that belongs to an
+ * {@link IMappedElementDescriptor}.
+ * 
+ * If the descriptor is an {@link AbstractXtextDescriptor}, members are automatically injected using
+ * the Xtext language's injector. 
+ */
 @ModelNode
 class BaseDiagramNode<T> extends OpenableDiagramNode {
 	
@@ -52,26 +60,8 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 	override doActivate() {
 		super.doActivate()
 		val descriptor = domainObject
-		if(descriptor instanceof IMappedElementDescriptor<?>) {
-			if(descriptor.mapping instanceof NodeMapping<?>) {
-				val nodeMapping = descriptor.mapping as NodeMapping<T>
-				var LazyConnectionMappingBehavior<T> lazyBehavior = null 
-				val lazyOutgoing = nodeMapping.outgoing.filter[lazy]
-				if(!lazyOutgoing.empty) {
-					lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(this)
-					for(out : lazyOutgoing) 
-						lazyBehavior.addConnectionMappingCall(out, new XDiagramConfigInterpreter, true)
-				}
-				val lazyIncoming = nodeMapping.incoming.filter[lazy]
-				if(!lazyIncoming.empty) {
-					lazyBehavior = lazyBehavior ?: new LazyConnectionMappingBehavior<T>(this)
-					for(in : lazyIncoming) 
-						lazyBehavior.addConnectionMappingCall(in, new XDiagramConfigInterpreter, false)
-				}
-				if(lazyBehavior != null)
-					addBehavior(lazyBehavior)
-			}
-		}
+		if(descriptor instanceof IMappedElementDescriptor<?>) 
+			addLazyBehavior(this, descriptor)
 		addBehavior(new OpenElementInEditorBehavior(this))
 		innerDiagram.isLayoutOnActivate = true
 	}

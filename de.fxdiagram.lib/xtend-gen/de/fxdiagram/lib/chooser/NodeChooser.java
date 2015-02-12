@@ -7,6 +7,11 @@ import de.fxdiagram.lib.chooser.AbstractBaseChooser;
 import de.fxdiagram.lib.chooser.ChoiceGraphics;
 import javafx.geometry.Point2D;
 
+/**
+ * An {@link AbstractBaseChooser} to add unrelated nodes without connections to the diagram.
+ * 
+ * @see AbstractBaseChooser
+ */
 @SuppressWarnings("all")
 public class NodeChooser extends AbstractBaseChooser {
   private XDiagram diagram;

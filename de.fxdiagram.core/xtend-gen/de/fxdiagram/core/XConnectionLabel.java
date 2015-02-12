@@ -31,6 +31,16 @@ import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * A label on an {@link XConnection}.
+ * 
+ * The {@link text} property denotes the actual text.
+ * 
+ * The label placed next to the connection the given {@link position} which is in between
+ * 0 (start of the connection) and 1 (end of the connection). It is also rotated such that
+ * it is always tangeltial to the curve of the connection at the given position and upside
+ * up.
+ */
 @ModelNode({ "connection", "text" })
 @SuppressWarnings("all")
 public class XConnectionLabel extends XShape implements XModelProvider {

@@ -18,6 +18,28 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * A very simple example how to create a diagram mapping for an the Fowler DSL shipped
+ * as an Xtext example language.
+ * 
+ * We implemented it as a fragment such that we can use the example plug-ins as they are,
+ * but usually you would just add the code to the UI plug-in of your language.
+ * 
+ * The configuration contains three mappings:
+ * <ol>
+ * <li>A {@link Statemachine} is mapped to a diagram,</li>
+ * <li>A {@link State} is mapped to a node, and</li>
+ * <li>A {@link Transition} is mapped to a connection.</li>
+ * </ol>
+ * 
+ * In addition to this class, you just have to apply two changes to the plugin/fragment.xml:
+ * <ol>
+ * <li>Register this configuration to the extension point
+ * <code>de.fxdiagram.eclipse.fxDiagramConfig</code>.</li>
+ * <li>Add a handler for the commandId <code>de.fxdiagram.eclipse.showInDiagramCommand</code>
+ * that adds the selected element in the editor to the diagram.
+ * </ol>
+ */
 @SuppressWarnings("all")
 public class StatemachineDiagramConfig extends AbstractDiagramConfig {
   private final DiagramMapping<Statemachine> statemachineDiagram = new DiagramMapping<Statemachine>(this, "statemachineDiagram") {

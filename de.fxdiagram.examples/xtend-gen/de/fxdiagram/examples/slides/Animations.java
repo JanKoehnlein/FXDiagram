@@ -30,6 +30,9 @@ import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * Some fancy animations for elements on a slide.
+ */
 @SuppressWarnings("all")
 public class Animations {
   public static Timeline dangle(final Node creature) {

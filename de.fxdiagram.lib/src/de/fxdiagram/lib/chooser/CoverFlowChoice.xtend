@@ -11,6 +11,9 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
+/**
+ * A 3D effect to select a candidate node from a list similar to Apple's cover flow.
+ */
 class CoverFlowChoice extends AbstractChoiceGraphics {
 
 	@Accessors double angle = 60

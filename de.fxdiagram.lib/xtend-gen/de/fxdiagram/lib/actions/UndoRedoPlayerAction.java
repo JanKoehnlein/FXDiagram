@@ -27,6 +27,9 @@ import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * An action adding a media control to rewind/replay changes from the undo stack.
+ */
 @SuppressWarnings("all")
 public class UndoRedoPlayerAction implements DiagramAction {
   private XRoot root;

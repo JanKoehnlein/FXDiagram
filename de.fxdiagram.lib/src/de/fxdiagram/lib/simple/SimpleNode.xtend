@@ -10,6 +10,9 @@ import javafx.geometry.VPos
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 
+/**
+ * A simple {@link XNode} showing some label in a rounded rectangle box.
+ */
 @ModelNode
 class SimpleNode extends XNode {
 

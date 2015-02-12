@@ -16,6 +16,16 @@ import static de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
+/**
+ * A point belonging to an {@link XConnection}.
+ * 
+ * Its {@link Type} denotes 
+ * <ul>
+ * <li>{@link Type#ANCHOR} an endpoint touching one of the connectied nodes,</li>
+ * <li>{@link Type#INTERPOLATED} a point on the curve,</li>  
+ * <li>{@link Type#CONTROL_POINT} a point next to the curve controling its shape, e.g. for spline curves.</li> 
+ * <li> 
+ */
 @ModelNode('layoutX', 'layoutY', 'type')
 class XControlPoint extends XShape {
 

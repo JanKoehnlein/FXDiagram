@@ -31,7 +31,23 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.layout.LayoutType
+import de.fxdiagram.core.extensions.CoreExtensions
 
+/**
+ * A diagram with {@link XNode}s and {@link XConnection}s.
+ * 
+ * Being added to the {@link #nodes} or {@link #connections}, {@link XShapes} will get 
+ * automatically be activated.
+ * 
+ * To find the {@link XDiagram} of an {@link XShape}, use the {@link CoreExtensions}.
+ * 
+ * Diagrams can be nested ({@link parentDiagram}).  
+ * An optional {@link contentsInitializer} allows lazy population of the diagram.
+ * Just like an {@link XShape}, an {@link XDiagram} can be customized with composable 
+ * {@link Behavior}s.
+ *  
+ * A {@link viewportTransform} stores the current viewport of the diagram.
+ */
 @ModelNode('nodes', 'connections', 'parentDiagram')
 class XDiagram extends Group implements XActivatable {
 	
@@ -41,7 +57,6 @@ class XDiagram extends Group implements XActivatable {
 	@FxProperty ObservableMap<Node, Pos> fixedButtons = observableMap(newHashMap)
 
 	@FxProperty(readOnly=true) boolean isActive
-	@FxProperty(readOnly=true) boolean isPreviewActive
 	@FxProperty(readOnly=true) boolean isRootDiagram
 	@FxProperty boolean isLayoutOnActivate
 

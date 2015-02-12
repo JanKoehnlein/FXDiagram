@@ -7,8 +7,21 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static org.eclipse.core.runtime.Platform.*
 
+/**
+ * Stores a set of {@link AbstractMapping}s for a sepecific domain.
+ * 
+ * {@link XDiagramConfig}s must be registered to the {@link XDiagramConfig$Registry}
+ * to be picked up by the runtime using the extension point 
+ * <code>de.fxdiagram.eclipse.fxDiagramConfig</code>.
+ * 
+ * Consider inheriting from {@link AbstractDiagramConfig} instead of directly 
+ * implementing this interface.
+ */
 interface XDiagramConfig {
 
+	/**
+	 * @return all possible calls to add a diagram element for the given domain object 
+	 */
 	def <ARG> Iterable<? extends MappingCall<?, ARG>> getEntryCalls(ARG domainObject)
 	
 	def AbstractMapping<?> getMappingByID(String mappingID)

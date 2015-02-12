@@ -16,6 +16,9 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
+/** 
+ * Examplary rapid button behavior. Should be moved to examples.
+ */
 class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior<T> {
 
 	(ConnectedNodeChooser)=>void choiceInitializer

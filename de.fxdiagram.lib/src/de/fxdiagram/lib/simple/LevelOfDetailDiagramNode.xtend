@@ -16,6 +16,9 @@ import javafx.scene.text.Text
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
+/**
+ * An {@link XNode} containing another diagram that is revealed when the user zooms in.
+ */
 @Logging
 @ModelNode
 class LevelOfDetailDiagramNode extends XNode {

@@ -76,6 +76,11 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
+/**
+ * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
+ * 
+ * Uses {@link AbstractMapping} API to map domain objects to diagram elements.
+ */
 @SuppressWarnings("all")
 public class FXDiagramView extends ViewPart {
   private FXCanvas canvas;

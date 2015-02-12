@@ -10,6 +10,12 @@ import javafx.scene.Group
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
+/**
+ * A {@link AbstractBaseChooser} to add new nodes to the diagram and connect them 
+ * to the given host {@link XNode}.
+ * 
+ * @see AbstractBaseChooser
+ */
 class ConnectedNodeChooser extends AbstractBaseChooser {
 
 	@FxProperty double layoutDistance = 60

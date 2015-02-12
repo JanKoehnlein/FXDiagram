@@ -6,7 +6,7 @@ import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.QuadCurve;
 
 /**
- * De Casteljau algorithm
+ * De-Casteljau-algorithm
  */
 @SuppressWarnings("all")
 public class BezierExtensions {

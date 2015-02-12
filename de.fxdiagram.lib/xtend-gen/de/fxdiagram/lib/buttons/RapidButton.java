@@ -12,6 +12,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * A button that pops up when the mouse hovers over its {@link #host}.
+ * 
+ * @see RapidButtonBehavior
+ */
 @SuppressWarnings("all")
 public class RapidButton extends Parent implements XButton {
   private XNode host;

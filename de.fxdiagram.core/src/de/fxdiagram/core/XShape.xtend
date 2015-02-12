@@ -16,6 +16,15 @@ import de.fxdiagram.annotations.logging.Logging
 import javafx.beans.property.SimpleObjectProperty
 import de.fxdiagram.core.extensions.InitializingListener
 
+/**
+ * Common superclass of {@link XNode}, {@link XConnection} and {@link XControlPoint}.
+ * 
+ * <ul>
+ * <li>Handles activation and FX node creation.</li>
+ * <li>Allows composing {@link Behavior}s.</li>
+ * <li>Supports selection.</li>
+ * </ul>
+ */
 @Logging
 abstract class XShape extends Parent implements XActivatable {
 
@@ -42,13 +51,28 @@ abstract class XShape extends Parent implements XActivatable {
 		nodeProperty
 	}
 	
+	/**
+	 * Override this to create your FX nodes for the non-active shape, e.g. as used by 
+	 * node choosers. 
+	 * There is no connection to any scene graph yet, so {@link CoreExtensions} will return 
+	 * <code>null</code>.
+	 */
 	protected def Node createNode()
 	
+	/**
+	 * Override this to update your FX node, e.g. on connection or on activation.
+	 * You are now connected to the scenegraph, and can safely use {@link CoreExtensions}
+	 * to access the diagram/root now.
+	 */
 	def initializeGraphics() {  
 		if(getNode() == null)
 			LOG.severe("Node is null")
 	}
 
+	/**
+	 * Don't override this unless ou know what you're doning. 
+	 * Override {@link #doActivate} instead.
+	 */
 	override activate() {
 		if(!isActive) {
 			initializeGraphics
@@ -67,6 +91,9 @@ abstract class XShape extends Parent implements XActivatable {
 		}
 	}
 	
+	/**
+	 * Override this to add behavior and register event listeners on activation. 
+	 */
 	protected def void doActivate()
 	
 	def <T extends Behavior> T getBehavior(Class<T> key) {
@@ -98,6 +125,9 @@ abstract class XShape extends Parent implements XActivatable {
 		}
 	}
 	
+	/**
+	 * The 'real' bounds for layout calculation, i.e. without any scaling caused by selection. 
+	 */
 	def getSnapBounds() {
 		boundsInLocal
 	}

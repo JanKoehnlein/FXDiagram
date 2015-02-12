@@ -41,6 +41,16 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
+/**
+ * An {@link XNode} containing a diagram that is shown when the user double-clicks.
+ * 
+ * A smooth transition zooms in, embedds the diagram, and zooms on until the inner
+ * diagram has scale 1:1. Then the inner diagram becomes the new visible diagram.
+ * The inner diagram can be left by clicking on the button in the top-right corner, 
+ * once again with a smooth transition.
+ * 
+ * This class requires Java SDK 7 or Java SDK 1.8.0_40 build &gt;5 to work.
+ */
 @Logging
 @ModelNode('innerDiagram')
 class OpenableDiagramNode extends XNode {

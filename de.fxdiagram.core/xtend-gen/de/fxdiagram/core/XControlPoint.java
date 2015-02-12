@@ -26,6 +26,16 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * A point belonging to an {@link XConnection}.
+ * 
+ * Its {@link Type} denotes
+ * <ul>
+ * <li>{@link Type#ANCHOR} an endpoint touching one of the connectied nodes,</li>
+ * <li>{@link Type#INTERPOLATED} a point on the curve,</li>
+ * <li>{@link Type#CONTROL_POINT} a point next to the curve controling its shape, e.g. for spline curves.</li>
+ * <li>
+ */
 @ModelNode({ "layoutX", "layoutY", "type" })
 @SuppressWarnings("all")
 public class XControlPoint extends XShape implements XModelProvider {

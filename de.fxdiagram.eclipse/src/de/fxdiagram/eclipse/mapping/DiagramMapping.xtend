@@ -3,7 +3,13 @@ package de.fxdiagram.eclipse.mapping
 import de.fxdiagram.core.XDiagram
 import java.util.List
 
-abstract class DiagramMapping<T> extends AbstractMapping<T> {
+/**
+ * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor} 
+ * to an {@link XDiagram}.
+ * 
+ * @see AbstractMapping
+ */
+ abstract class DiagramMapping<T> extends AbstractMapping<T> {
 	
 	List<AbstractNodeMappingCall<?, T>> nodes = newArrayList 
 	List<AbstractConnectionMappingCall<?, T>> connections = newArrayList()

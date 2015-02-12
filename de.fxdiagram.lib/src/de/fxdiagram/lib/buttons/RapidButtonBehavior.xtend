@@ -19,6 +19,11 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
+/**
+ * Adds rapid buttons to a host {@link XNode}.
+ * 
+ * @see RapidButton
+ */
 class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST> {
 
 	@Accessors double border

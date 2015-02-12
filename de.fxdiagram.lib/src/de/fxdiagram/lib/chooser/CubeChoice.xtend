@@ -10,6 +10,9 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
+/**
+ * A 3D effect to choose a candidate from a list by rotating a cube.
+ */
 class CubeChoice extends AbstractChoiceGraphics {
 
 	@Accessors double spacing = 6.0

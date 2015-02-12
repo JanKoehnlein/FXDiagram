@@ -23,6 +23,12 @@ import javafx.geometry.Side;
 import javafx.scene.Group;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
+/**
+ * A {@link AbstractBaseChooser} to add new nodes to the diagram and connect them
+ * to the given host {@link XNode}.
+ * 
+ * @see AbstractBaseChooser
+ */
 @SuppressWarnings("all")
 public class ConnectedNodeChooser extends AbstractBaseChooser {
   private XNode host;

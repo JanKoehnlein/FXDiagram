@@ -19,6 +19,11 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
+/**
+ * A {@link RapidButtonBehavior} to add lazy connection mappings to a node.
+ * 
+ * @see AbstractConnectionMappingCall
+ */
 class LazyConnectionMappingBehavior<ARG> extends RapidButtonBehavior<XNode> {
 	
 	List<LazyConnectionRapidButtonAction<?, ARG>> actions = newArrayList

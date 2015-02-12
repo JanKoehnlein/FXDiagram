@@ -13,6 +13,9 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 
+/**
+ * Helper tool for nodes with nested diagrams.
+ */
 class DiagramScaler implements XActivatable {
 
 	@FxProperty double width = 80

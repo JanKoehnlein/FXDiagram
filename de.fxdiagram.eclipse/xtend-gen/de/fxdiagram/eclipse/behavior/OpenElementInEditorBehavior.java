@@ -11,6 +11,9 @@ import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Opens the domain object of this {@link XShape} in th respective Eclipse editor.
+ */
 @SuppressWarnings("all")
 public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implements OpenBehavior {
   public OpenElementInEditorBehavior(final XShape host) {

@@ -6,6 +6,9 @@ import javafx.animation.Animation
 import javafx.animation.SequentialTransition
 import com.google.common.collect.Lists
 
+/** 
+ * Clients should not access this class.
+ */
 class AnimationQueue {
 	
 	Queue<()=>Animation> queue = newLinkedList

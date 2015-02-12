@@ -9,6 +9,11 @@ import javafx.animation.Animation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
+/**
+ * Executes and stores {@link AnimationCommands} for undo/redo functionality.
+ * 
+ * The command stack is reachable via the {@link XRoot} of the application.
+ */
 @SuppressWarnings("all")
 public class CommandStack {
   private LinkedList<AnimationCommand> undoStack = CollectionLiterals.<AnimationCommand>newLinkedList();

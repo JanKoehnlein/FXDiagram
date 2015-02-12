@@ -5,6 +5,9 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 
+/**
+ * Executes an {@link XDiagramConfig} on a given domain object.
+ */
 class XDiagramConfigInterpreter {
 
 	def <T> createDiagram(T diagramObject, DiagramMapping<T> diagramMapping, InterpreterContext context) {

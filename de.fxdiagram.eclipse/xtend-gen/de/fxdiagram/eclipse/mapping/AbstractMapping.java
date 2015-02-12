@@ -2,6 +2,12 @@ package de.fxdiagram.eclipse.mapping;
 
 import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 
+/**
+ * Describes a fixed mapping of a domain object represented by a {@link IMappedElementDescriptor}
+ * to a diagram element.
+ * 
+ * Mappings are collected in an {@link XDiagramConfiguration}.
+ */
 @SuppressWarnings("all")
 public abstract class AbstractMapping<T extends Object> {
   private String id;
@@ -31,6 +37,10 @@ public abstract class AbstractMapping<T extends Object> {
     return _xblockexpression;
   }
   
+  /**
+   * Executed when a mapping of this type is established. Add calls to other mappings here,
+   * if you want to recursively add further elements automatically.
+   */
   protected void calls() {
   }
   

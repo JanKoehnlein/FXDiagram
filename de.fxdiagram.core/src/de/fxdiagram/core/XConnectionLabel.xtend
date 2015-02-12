@@ -14,6 +14,16 @@ import javafx.scene.transform.Affine
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
+/**
+ * A label on an {@link XConnection}.
+ * 
+ * The {@link text} property denotes the actual text.
+ *   
+ * The label placed next to the connection the given {@link position} which is in between 
+ * 0 (start of the connection) and 1 (end of the connection). It is also rotated such that 
+ * it is always tangeltial to the curve of the connection at the given position and upside 
+ * up.  
+ */
 @ModelNode('connection', 'text')
 class XConnectionLabel extends XShape {
 
@@ -28,7 +38,7 @@ class XConnectionLabel extends XShape {
 	}
 
 	def setConnection(XConnection connection) {
-		if(this.connection != null)
+		if (this.connection != null)
 			throw new IllegalStateException("Cannot reset the connection on a label")
 		connectionProperty.set(connection)
 		connection.labels += this
@@ -45,7 +55,7 @@ class XConnectionLabel extends XShape {
 		text.fillProperty.bind(connection.strokeProperty)
 		addBehavior(new MoveBehavior(this))
 	}
-	
+
 	override selectionFeedback(boolean isSelected) {
 		if (isSelected) {
 			effect = selectionEffect

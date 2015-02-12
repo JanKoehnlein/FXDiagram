@@ -44,16 +44,15 @@ import org.eclipse.xtend.lib.macro.declaration.TypeReference
 import org.eclipse.xtend.lib.macro.declaration.Visibility
 
 /** 
- * An active annotation which turns simple fields into
- * lazy JavaFX properties as described  
+ * An active annotation which turns a simple field into a lazy JavaFX property as described  
  * <a href="http://blog.netopyr.com/2011/05/19/creating-javafx-properties/">here</a>.
  * 
  * That is it 
  * <ul>
  *  <li> adds a field with the corresponding JavaFX property type,
  *  <li> a getter method
- *  <li> a setter method
- *  <li> and an accessor to the JavaFX property.
+ *  <li> a setter method (not for {@link #readOnly} properties)
+ *  <li> and an accessor to the JavaFX property (a <code>ReadOnlyXWrapper</code> for {@link #readOnly} properties).
  * </ul>
  */
 @Active(FxPropertyCompilationParticipant)

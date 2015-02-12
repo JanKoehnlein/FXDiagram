@@ -8,6 +8,9 @@ import de.fxdiagram.core.behavior.OpenBehavior
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
 import javafx.scene.input.MouseEvent
 
+/**
+ * Opens the domain object of this {@link XShape} in th respective Eclipse editor. 
+ */
 class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implements OpenBehavior {
 	
 	new(XShape host) {

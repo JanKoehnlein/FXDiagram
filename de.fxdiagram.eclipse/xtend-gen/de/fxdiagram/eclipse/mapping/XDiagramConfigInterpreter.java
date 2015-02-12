@@ -29,6 +29,9 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * Executes an {@link XDiagramConfig} on a given domain object.
+ */
 @SuppressWarnings("all")
 public class XDiagramConfigInterpreter {
   public <T extends Object> XDiagram createDiagram(final T diagramObject, final DiagramMapping<T> diagramMapping, final InterpreterContext context) {

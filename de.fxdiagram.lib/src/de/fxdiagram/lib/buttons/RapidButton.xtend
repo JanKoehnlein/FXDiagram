@@ -7,6 +7,11 @@ import javafx.geometry.Side
 import javafx.scene.Node
 import javafx.scene.Parent
 
+/**
+ * A button that pops up when the mouse hovers over its {@link #host}.
+ * 
+ * @see RapidButtonBehavior
+ */
 class RapidButton extends Parent implements XButton {
 	
 	@FxProperty(readOnly=true) boolean isActive

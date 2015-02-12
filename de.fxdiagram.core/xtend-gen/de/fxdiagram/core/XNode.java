@@ -38,6 +38,25 @@ import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * A node in an {@link XDiagram} that can be connected to other {@link XNode}s via
+ * {@link XConnections}.
+ * 
+ * Clients should inherit from this class and usually adapt
+ * <ul>
+ * <li>{@link #createNode} to customize the node's initial apperance</li>
+ * <li>{@link #initializeGraphics} to customize the node's appearance after activation</li>
+ * <li>{@link #doActivate} to register event listeners and initialize behaviors</li>
+ * </ul>
+ * and pass the nderlying semantic element as {@link #domainObject} in the super constructor.
+ * 
+ * An {@link XNode} knows its {@link outgoingConnections} and {incomingConnections}. These
+ * properties are automatically kept in sync with their counterparts {@link XConnection#source}
+ * and {@link XConnection#target}.
+ * 
+ * The {@link anchors} describe how {@link XConnection}s should connect graphically with
+ * the node.
+ */
 @Logging
 @ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
 @SuppressWarnings("all")

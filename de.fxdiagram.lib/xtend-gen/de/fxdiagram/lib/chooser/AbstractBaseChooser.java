@@ -66,6 +66,23 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * Interactive {@link XDiagramTool} to add new nodes and edges the diagram in a user
+ * friendly way.
+ * 
+ * A {@link ChoiceGraphics} describes the visual effect and behavior to show and select
+ * the candidates.
+ * 
+ * Currently there are two concrete subclasses: {@link NodeChooser} to add unrelated
+ * nodes, e.g. to initially populate the diagram, and {@link ConnectedNodeChooser} to
+ * add nodes connected to a given host node, e.g. for exploration diagrams. To use them
+ * you usually
+ * <ol>
+ * <li>Create an instance with the appropriate {@link ChoiceGraphics},</li>
+ * <li>Add choices using {@link #addChoice},</li>
+ * <li>Make it the current tool by calling {@link XRoot#setCurrentTool}.</li>
+ * </ol>
+ */
 @SuppressWarnings("all")
 public abstract class AbstractBaseChooser implements XDiagramTool {
   private DoubleProperty currentPositionProperty = new SimpleDoubleProperty(0.0);

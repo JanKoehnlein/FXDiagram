@@ -4,6 +4,10 @@ import de.fxdiagram.annotations.properties.FxProperty
 import javafx.scene.paint.Color
 import javafx.beans.property.Property
 
+/**
+ * Adapter interface for serializing instances of classes that don't implement
+ * {@link XModelProvider}.  
+ */
 interface ValueAdapter<T> extends ModelElement {
 	
 	def T getValueObject()

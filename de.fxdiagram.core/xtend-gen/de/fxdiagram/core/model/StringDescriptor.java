@@ -6,6 +6,10 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
+/**
+ * A {@link DomainObjectDescriptor} that has a simple {@link String} as domain object.
+ * Mainly used in the examples.
+ */
 @ModelNode("name")
 @SuppressWarnings("all")
 public class StringDescriptor implements DomainObjectDescriptor {

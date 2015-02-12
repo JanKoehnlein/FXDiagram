@@ -22,6 +22,12 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * Commodity class to add rapid-button-based exploration behavior to your {@link XNodes}
+ * by only overriding a couple of template methods.
+ * 
+ * See the examples for usage scenarios.
+ */
 @SuppressWarnings("all")
 public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL extends Object, KEY extends DomainObjectDescriptor> extends RapidButtonBehavior<HOST> {
   private Set<KEY> availableChoiceKeys = CollectionLiterals.<KEY>newLinkedHashSet();

@@ -6,9 +6,11 @@ import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration
 import org.eclipse.xtend.lib.macro.TransformationContext
 import java.util.logging.Logger
 
+/**
+ * Active annotation that adds a static final {@link Logger} to the annotated type.
+ */
 @Active(LoggingProcessor)
 annotation Logging {
-	
 }
 
 class LoggingProcessor extends AbstractClassProcessor {

@@ -17,6 +17,9 @@ import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
+/**
+ * An action adding a media control to rewind/replay changes from the undo stack. 
+ */
 class UndoRedoPlayerAction implements DiagramAction {
 	
     XRoot root

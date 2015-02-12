@@ -4,6 +4,10 @@ import de.fxdiagram.core.model.DomainObjectDescriptorImpl;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
+/**
+ * Base class for {@link DomainObjectDescriptor}s whose domain object is constant and can
+ * be cached.
+ */
 @SuppressWarnings("all")
 public abstract class CachedDomainObjectDescriptor<T extends Object> extends DomainObjectDescriptorImpl<T> {
   private T cachedDomainObject;

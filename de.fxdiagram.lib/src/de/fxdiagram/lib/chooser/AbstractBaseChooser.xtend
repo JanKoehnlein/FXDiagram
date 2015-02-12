@@ -33,6 +33,23 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
 
+/**
+ * Interactive {@link XDiagramTool} to add new nodes and edges the diagram in a user
+ * friendly way.
+ * 
+ * A {@link ChoiceGraphics} describes the visual effect and behavior to show and select
+ * the candidates.
+ * 
+ * Currently there are two concrete subclasses: {@link NodeChooser} to add unrelated
+ * nodes, e.g. to initially populate the diagram, and {@link ConnectedNodeChooser} to 
+ * add nodes connected to a given host node, e.g. for exploration diagrams. To use them
+ * you usually
+ * <ol>
+ * <li>Create an instance with the appropriate {@link ChoiceGraphics},</li>
+ * <li>Add choices using {@link #addChoice},</li>
+ * <li>Make it the current tool by calling {@link XRoot#setCurrentTool}.</li>
+ * </ol>
+ */
 abstract class AbstractBaseChooser implements XDiagramTool {
 
 	@FxProperty(readOnly=true) boolean isActive = false

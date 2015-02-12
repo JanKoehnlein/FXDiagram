@@ -28,6 +28,9 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
+/**
+ * A 3D effect to select a candidate node from a list similar to Apple's cover flow.
+ */
 @SuppressWarnings("all")
 public class CoverFlowChoice extends AbstractChoiceGraphics {
   @Accessors

@@ -7,7 +7,7 @@ import javafx.scene.shape.QuadCurve
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 /**
- * De Casteljau algorithm
+ * De-Casteljau-algorithm
  */
 class BezierExtensions {
 

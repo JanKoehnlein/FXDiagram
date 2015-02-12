@@ -16,6 +16,11 @@ import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * Base class for animation commands.
+ * 
+ * Handles viewport restoration and on-demand animation creation.
+ */
 @SuppressWarnings("all")
 public abstract class AbstractAnimationCommand implements AnimationCommand {
   private ViewportMemento fromMemento;

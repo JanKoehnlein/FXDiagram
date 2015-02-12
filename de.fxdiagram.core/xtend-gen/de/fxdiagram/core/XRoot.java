@@ -10,6 +10,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.css.JavaToCss;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -19,6 +20,7 @@ import de.fxdiagram.core.tools.DiagramActionTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
 import de.fxdiagram.core.tools.SelectionTool;
 import de.fxdiagram.core.tools.XDiagramTool;
+import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import java.util.HashMap;
@@ -53,6 +55,22 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * The root object in the scenegraph of FXDiagram. Embed this in our applications scenegraph.
+ * 
+ * The {@link XRoot} shows a single active {@link #diagram} and aa {@link HeadsUpDisplay} on
+ * top.
+ * 
+ * The {@link XRoot} gives access to the common services, like {@link DiagramAction}s,
+ * {@link DomainObjectProvider}s and the {@link CommandStack}. It also stores the current
+ * {@link XDiagramTool}
+ * 
+ * To find the {@link XRoot} of an {@link XShape} or {@link XDiagram}
+ * use the {@link CoreExtensions}.
+ * 
+ * The {@link XRoot} is also the root element for serialization. This is why it keeps track of the
+ * {@link #rootDiagram} as well.
+ */
 @Logging
 @ModelNode({ "domainObjectProviders", "rootDiagram", "diagram" })
 @SuppressWarnings("all")

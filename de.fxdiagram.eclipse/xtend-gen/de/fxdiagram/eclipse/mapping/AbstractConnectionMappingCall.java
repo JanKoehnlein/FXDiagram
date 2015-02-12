@@ -1,14 +1,14 @@
 package de.fxdiagram.eclipse.mapping;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.eclipse.behavior.LazyConnectionMappingBehavior;
 import de.fxdiagram.eclipse.mapping.AbstractMapping;
 import de.fxdiagram.eclipse.mapping.ConnectionMapping;
 import de.fxdiagram.eclipse.mapping.MappingCall;
+import de.fxdiagram.lib.buttons.RapidButton;
 import javafx.geometry.Side;
 import javafx.scene.Node;
-import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public abstract class AbstractConnectionMappingCall<RESULT extends Object, ARG extends Object> implements MappingCall<RESULT, ARG> {
@@ -18,6 +18,11 @@ public abstract class AbstractConnectionMappingCall<RESULT extends Object, ARG e
     return (!Objects.equal(this.imageFactory, null));
   }
   
+  /**
+   * Instead of immediately adding this connection and the connected node, create
+   * a {@link LazyConnectionMappingBehavior} that allows to explore this connection
+   * using a {@link RapidButton}.
+   */
   public Function1<? super Side, ? extends Node> makeLazy(final Function1<? super Side, ? extends Node> imageFactory) {
     return this.imageFactory = imageFactory;
   }
@@ -26,22 +31,10 @@ public abstract class AbstractConnectionMappingCall<RESULT extends Object, ARG e
     return this.imageFactory.apply(side);
   }
   
-  @Accessors
-  private String role;
-  
   public abstract ConnectionMapping<RESULT> getConnectionMapping();
   
   @Override
   public AbstractMapping<RESULT> getMapping() {
     return this.getConnectionMapping();
-  }
-  
-  @Pure
-  public String getRole() {
-    return this.role;
-  }
-  
-  public void setRole(final String role) {
-    this.role = role;
   }
 }

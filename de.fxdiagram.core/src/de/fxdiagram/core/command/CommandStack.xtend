@@ -3,6 +3,11 @@ package de.fxdiagram.core.command
 import de.fxdiagram.core.XRoot
 import java.util.LinkedList
 
+/**
+ * Executes and stores {@link AnimationCommands} for undo/redo functionality.
+ * 
+ * The command stack is reachable via the {@link XRoot} of the application.
+ */
 class CommandStack {
 	
 	LinkedList<AnimationCommand> undoStack = newLinkedList

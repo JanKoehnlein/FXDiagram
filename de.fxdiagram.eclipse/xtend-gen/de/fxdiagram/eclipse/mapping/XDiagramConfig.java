@@ -16,6 +16,16 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
+/**
+ * Stores a set of {@link AbstractMapping}s for a sepecific domain.
+ * 
+ * {@link XDiagramConfig}s must be registered to the {@link XDiagramConfig$Registry}
+ * to be picked up by the runtime using the extension point
+ * <code>de.fxdiagram.eclipse.fxDiagramConfig</code>.
+ * 
+ * Consider inheriting from {@link AbstractDiagramConfig} instead of directly
+ * implementing this interface.
+ */
 @SuppressWarnings("all")
 public interface XDiagramConfig {
   @Logging
@@ -76,6 +86,9 @@ public interface XDiagramConfig {
       ;
   }
   
+  /**
+   * @return all possible calls to add a diagram element for the given domain object
+   */
   public abstract <ARG extends Object> Iterable<? extends MappingCall<?, ARG>> getEntryCalls(final ARG domainObject);
   
   public abstract AbstractMapping<?> getMappingByID(final String mappingID);

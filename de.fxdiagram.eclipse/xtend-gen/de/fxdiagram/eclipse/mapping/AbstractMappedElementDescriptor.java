@@ -11,6 +11,9 @@ import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
+/**
+ * Base implementation of {@link IMappedElementDescriptor}.
+ */
 @ModelNode({ "mappingConfigID", "mappingID" })
 @SuppressWarnings("all")
 public abstract class AbstractMappedElementDescriptor<T extends Object> extends DomainObjectDescriptorImpl<T> implements IMappedElementDescriptor<T> {

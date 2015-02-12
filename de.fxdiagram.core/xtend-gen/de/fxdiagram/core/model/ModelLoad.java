@@ -6,6 +6,7 @@ import de.fxdiagram.core.model.CrossRefData;
 import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelFactory;
 import de.fxdiagram.core.model.ParseException;
+import de.fxdiagram.core.tools.actions.LoadAction;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,9 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 
+/**
+ * Functionality of a {@link LoadAction}.
+ */
 @Logging
 @SuppressWarnings("all")
 public class ModelLoad {

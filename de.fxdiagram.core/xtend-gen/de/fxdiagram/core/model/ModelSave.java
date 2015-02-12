@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.tools.actions.SaveAction;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +29,9 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.Pair;
 
+/**
+ * Functionality of a {@link SaveAction}
+ */
 @Logging
 @SuppressWarnings("all")
 public class ModelSave {

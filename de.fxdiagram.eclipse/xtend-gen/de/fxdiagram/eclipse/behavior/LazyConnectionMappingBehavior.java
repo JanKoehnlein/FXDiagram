@@ -22,6 +22,11 @@ import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
+/**
+ * A {@link RapidButtonBehavior} to add lazy connection mappings to a node.
+ * 
+ * @see AbstractConnectionMappingCall
+ */
 @SuppressWarnings("all")
 public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButtonBehavior<XNode> {
   private List<LazyConnectionRapidButtonAction<?, ARG>> actions = CollectionLiterals.<LazyConnectionRapidButtonAction<?, ARG>>newArrayList();

@@ -16,6 +16,9 @@ import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * Clients should not access this class.
+ */
 @SuppressWarnings("all")
 public class AnimationQueue {
   public interface Listener {

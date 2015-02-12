@@ -25,6 +25,15 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
+/**
+ * Common superclass of {@link XNode}, {@link XConnection} and {@link XControlPoint}.
+ * 
+ * <ul>
+ * <li>Handles activation and FX node creation.</li>
+ * <li>Allows composing {@link Behavior}s.</li>
+ * <li>Supports selection.</li>
+ * </ul>
+ */
 @Logging
 @SuppressWarnings("all")
 public abstract class XShape extends Parent implements XActivatable {
@@ -55,8 +64,19 @@ public abstract class XShape extends Parent implements XActivatable {
     return this.nodeProperty;
   }
   
+  /**
+   * Override this to create your FX nodes for the non-active shape, e.g. as used by
+   * node choosers.
+   * There is no connection to any scene graph yet, so {@link CoreExtensions} will return
+   * <code>null</code>.
+   */
   protected abstract Node createNode();
   
+  /**
+   * Override this to update your FX node, e.g. on connection or on activation.
+   * You are now connected to the scenegraph, and can safely use {@link CoreExtensions}
+   * to access the diagram/root now.
+   */
   public void initializeGraphics() {
     Node _node = this.getNode();
     boolean _equals = Objects.equal(_node, null);
@@ -65,6 +85,10 @@ public abstract class XShape extends Parent implements XActivatable {
     }
   }
   
+  /**
+   * Don't override this unless ou know what you're doning.
+   * Override {@link #doActivate} instead.
+   */
   @Override
   public void activate() {
     boolean _isActive = this.getIsActive();
@@ -109,6 +133,9 @@ public abstract class XShape extends Parent implements XActivatable {
     }
   }
   
+  /**
+   * Override this to add behavior and register event listeners on activation.
+   */
   protected abstract void doActivate();
   
   public <T extends Behavior> T getBehavior(final Class<T> key) {
@@ -145,6 +172,9 @@ public abstract class XShape extends Parent implements XActivatable {
     }
   }
   
+  /**
+   * The 'real' bounds for layout calculation, i.e. without any scaling caused by selection.
+   */
   public Bounds getSnapBounds() {
     return this.getBoundsInLocal();
   }

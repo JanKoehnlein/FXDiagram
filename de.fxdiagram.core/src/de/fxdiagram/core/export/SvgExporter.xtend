@@ -23,6 +23,22 @@ import javafx.scene.text.Text
 import javafx.scene.transform.Transform
 import javax.imageio.ImageIO
 
+/**
+ * Exports a given diagram to SVG.
+ * 
+ * SVG was chosen because it can be converted to a number of different other scalable 
+ * vector formats with third-party open-source tools and because it is easy to 
+ * generate and inspect as text.
+ * 
+ * The class will produce scalable graphics for all {@link Shape}s and {@link Text} 
+ * elements. For {@link ImageView} and {@link MediaView}, the respective content will be 
+ * copied without transformation, and thus be as scalable as the original. Custom SVG 
+ * export can be provided by implementing {@link SvgExportable}. For all remaining nodes, 
+ * snapshots will be taken and embedded as images (i.e. not scalable).
+ * 
+ * In Java 7, the CSS styling of nodes was not inspectable. This is why we are currently
+ * still bound to this strategy. By fully migrating to Java 8, we should extend that. 
+ */
 @Logging
 class SvgExporter {
 	

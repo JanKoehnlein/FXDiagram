@@ -21,6 +21,10 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension java.lang.Math.*
 import static extension javafx.util.Duration.*
 
+/**
+ * An {@link XNode} with a front and a back side that can be flipped with a 3D effect 
+ * on click. 
+ */
 @Logging
 @ModelNode
 class FlipNode extends XNode {

@@ -24,6 +24,9 @@ import javafx.scene.shape.CubicCurveTo
 import javafx.scene.shape.MoveTo
 import javafx.util.Duration
 
+/**
+ * Some fancy animations for elements on a slide.
+ */
 class Animations {
 	
 	def static dangle(Node creature) {

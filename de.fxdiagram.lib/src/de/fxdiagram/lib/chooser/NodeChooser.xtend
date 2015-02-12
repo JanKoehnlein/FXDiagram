@@ -4,6 +4,11 @@ import javafx.geometry.Point2D
 import de.fxdiagram.core.XDiagram
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
+/**
+ * An {@link AbstractBaseChooser} to add unrelated nodes without connections to the diagram.
+ * 
+ * @see AbstractBaseChooser
+ */
 class NodeChooser extends AbstractBaseChooser {
 	
 	XDiagram diagram

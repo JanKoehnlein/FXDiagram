@@ -14,6 +14,11 @@ import javafx.scene.paint.Stop
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
 
+/** 
+ * In Java 7 it was not possible to inspect the CSS styles of a node, so we needed this
+ * class to have simple box with some content that can be exported to SVG.
+ * Still widely used in the examples. 
+ */
 class RectangleBorderPane extends StackPane implements SvgExportable {
 
 	@FxProperty double borderWidth = 1.2

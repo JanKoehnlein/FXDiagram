@@ -41,6 +41,11 @@ import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
+/**
+ * Adds rapid buttons to a host {@link XNode}.
+ * 
+ * @see RapidButton
+ */
 @SuppressWarnings("all")
 public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST> {
   @Accessors

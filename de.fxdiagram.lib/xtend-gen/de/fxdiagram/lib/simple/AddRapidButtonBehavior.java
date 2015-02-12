@@ -21,6 +21,9 @@ import javafx.geometry.Side;
 import javafx.scene.shape.SVGPath;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * Examplary rapid button behavior. Should be moved to examples.
+ */
 @SuppressWarnings("all")
 public class AddRapidButtonBehavior<T extends XNode> extends RapidButtonBehavior<T> {
   private Procedure1<? super ConnectedNodeChooser> choiceInitializer;

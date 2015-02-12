@@ -70,6 +70,13 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
+/**
+ * Application to demonstarte the capabilities of FXDiagram in standalone (non-OSGi) mode.
+ * I used this for various talks on FXDiagram that's why it also contains some slides.
+ * 
+ * Have a look at {@link #createScene()} as a starting point if you want to create your own
+ * FXDiagram application.
+ */
 @SuppressWarnings("all")
 public class Demo extends Application {
   private XRoot root;
@@ -82,12 +89,16 @@ public class Demo extends Application {
   
   @Override
   public void start(final Stage it) {
-    it.setTitle("FX Diagram Demo");
+    it.setTitle("FXDiagram Demo");
     Scene _createScene = this.createScene();
     it.setScene(_createScene);
     it.show();
   }
   
+  /**
+   * Sets up the scene with an {@link XRoot} and configures its services and actions.
+   * Then sets up the initial diagram.
+   */
   public Scene createScene() {
     Scene _xblockexpression = null;
     {

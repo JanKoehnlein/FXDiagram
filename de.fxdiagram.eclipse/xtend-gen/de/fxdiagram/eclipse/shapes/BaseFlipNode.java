@@ -21,6 +21,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
+/**
+ * Base implementation for a flipable {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
+ * 
+ * If the descriptor is an {@link AbstractXtextDescriptor}, members are automatically injected using
+ * the Xtext language's injector.
+ */
 @SuppressWarnings("all")
 public class BaseFlipNode<T extends Object> extends FlipNode implements INodeWithLazyMappings {
   public BaseFlipNode() {

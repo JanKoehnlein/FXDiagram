@@ -4,7 +4,13 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.eclipse.shapes.BaseNode
 import java.util.List
 
-class NodeMapping<T> extends AbstractMapping<T> {
+/**
+ * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor} 
+ * to an {@link XNode}.
+ * 
+ * @see AbstractMapping
+ */
+ class NodeMapping<T> extends AbstractMapping<T> {
 	
 	List<AbstractConnectionMappingCall<?,T>> outgoing = newArrayList
 	List<AbstractConnectionMappingCall<?,T>> incoming = newArrayList()

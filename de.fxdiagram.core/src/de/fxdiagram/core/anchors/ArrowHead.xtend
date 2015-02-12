@@ -16,6 +16,16 @@ import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
 
+/**
+ * Arrow head for the start or end of an {@link XConnection}.
+ * 
+ * In order to avoid ugly overlapping with the connections curve, the curve ends 
+ * {@link #getLineCut()} units before the anchor point, but will have the same 
+ * tangent as calculated for the exact anchor point.
+ * 
+ * For the node's coordiante system consider that it is the target arrow head of 
+ * a connection comming from (-infinity, 0) ending in (0,0).
+ */
 @ModelNode('connection', 'isSource', 'width', 'height', 'stroke')
 @Logging
 abstract class ArrowHead extends Parent {

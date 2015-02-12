@@ -61,6 +61,21 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
+/**
+ * A diagram with {@link XNode}s and {@link XConnection}s.
+ * 
+ * Being added to the {@link #nodes} or {@link #connections}, {@link XShapes} will get
+ * automatically be activated.
+ * 
+ * To find the {@link XDiagram} of an {@link XShape}, use the {@link CoreExtensions}.
+ * 
+ * Diagrams can be nested ({@link parentDiagram}).
+ * An optional {@link contentsInitializer} allows lazy population of the diagram.
+ * Just like an {@link XShape}, an {@link XDiagram} can be customized with composable
+ * {@link Behavior}s.
+ * 
+ * A {@link viewportTransform} stores the current viewport of the diagram.
+ */
 @ModelNode({ "nodes", "connections", "parentDiagram" })
 @SuppressWarnings("all")
 public class XDiagram extends Group implements XActivatable, XModelProvider {
@@ -502,16 +517,6 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
-  }
-  
-  private ReadOnlyBooleanWrapper isPreviewActiveProperty = new ReadOnlyBooleanWrapper(this, "isPreviewActive");
-  
-  public boolean getIsPreviewActive() {
-    return this.isPreviewActiveProperty.get();
-  }
-  
-  public ReadOnlyBooleanProperty isPreviewActiveProperty() {
-    return this.isPreviewActiveProperty.getReadOnlyProperty();
   }
   
   private ReadOnlyBooleanWrapper isRootDiagramProperty = new ReadOnlyBooleanWrapper(this, "isRootDiagram");

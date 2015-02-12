@@ -22,6 +22,12 @@ import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.eclipse.behavior.LazyConnectionMappingBehavior.*
 
+/**
+ * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
+ * 
+ * If the descriptor is an {@link AbstractXtextDescriptor}, members are automatically injected using
+ * the Xtext language's injector. 
+ */
 @ModelNode
 class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 	

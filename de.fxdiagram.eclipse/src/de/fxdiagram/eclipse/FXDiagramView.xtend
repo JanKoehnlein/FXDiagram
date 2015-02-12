@@ -45,6 +45,11 @@ import org.eclipse.xtext.ui.editor.XtextEditor
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import org.eclipse.xtend.lib.annotations.Accessors
 
+/**
+ * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
+ * 
+ * Uses {@link AbstractMapping} API to map domain objects to diagram elements.
+ */
 class FXDiagramView extends ViewPart {
 
 	FXCanvas canvas

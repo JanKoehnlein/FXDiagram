@@ -9,6 +9,12 @@ import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 import de.fxdiagram.eclipse.shapes.BaseConnection;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
+/**
+ * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor}
+ * to an {@link XConnection}.
+ * 
+ * @see AbstractMapping
+ */
 @SuppressWarnings("all")
 public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
   private NodeMappingCall<?, T> source;
@@ -19,6 +25,11 @@ public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
     super(config, id);
   }
   
+  /**
+   * Called to instantiate the {@link XConnection} of this mapping. Override
+   * if you want to change the way the {@link XConnection} should look like,
+   * e.g. add a label or arrow heads.
+   */
   public XConnection createConnection(final IMappedElementDescriptor<T> descriptor) {
     return new BaseConnection<T>(descriptor);
   }

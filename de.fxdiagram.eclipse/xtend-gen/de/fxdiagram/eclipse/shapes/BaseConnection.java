@@ -11,6 +11,12 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
+/**
+ * Base implementation for a {@link XConnection} that belongs to an {@link IMappedElementDescriptor}.
+ * 
+ * If the descriptor is an {@link AbstractXtextDescriptor}, members are automatically injected using
+ * the Xtext language's injector.
+ */
 @ModelNode
 @SuppressWarnings("all")
 public class BaseConnection<T extends Object> extends XConnection {

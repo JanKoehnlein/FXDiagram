@@ -8,7 +8,11 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import de.fxdiagram.core.model.DomainObjectProvider
 
+/**
+ * A {@link DomainObjectProvider} for Xtext based domain objects.
+ */
 @ModelNode
 class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 

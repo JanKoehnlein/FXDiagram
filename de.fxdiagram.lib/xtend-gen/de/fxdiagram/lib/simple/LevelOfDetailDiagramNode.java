@@ -30,6 +30,9 @@ import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * An {@link XNode} containing another diagram that is revealed when the user zooms in.
+ */
 @Logging
 @ModelNode
 @SuppressWarnings("all")

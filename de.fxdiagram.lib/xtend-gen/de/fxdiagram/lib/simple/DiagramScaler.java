@@ -25,6 +25,9 @@ import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 
+/**
+ * Helper tool for nodes with nested diagrams.
+ */
 @SuppressWarnings("all")
 public class DiagramScaler implements XActivatable {
   private ChangeListener<Bounds> boundsInLocalListener;

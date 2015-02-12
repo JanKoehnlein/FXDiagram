@@ -23,6 +23,11 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 
+/**
+ * In Java 7 it was not possible to inspect the CSS styles of a node, so we needed this
+ * class to have simple box with some content that can be exported to SVG.
+ * Still widely used in the examples.
+ */
 @SuppressWarnings("all")
 public class RectangleBorderPane extends StackPane implements SvgExportable {
   public final static LinearGradient DEFAULT_BACKGROUND = new LinearGradient(

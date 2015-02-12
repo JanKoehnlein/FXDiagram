@@ -6,6 +6,11 @@ import javafx.animation.Animation
 import javafx.animation.SequentialTransition
 import javafx.util.Duration
 
+/**
+ * Base class for animation commands.
+ * 
+ * Handles viewport restoration and on-demand animation creation. 
+ */
 abstract class AbstractAnimationCommand implements AnimationCommand {
 
 	ViewportMemento fromMemento

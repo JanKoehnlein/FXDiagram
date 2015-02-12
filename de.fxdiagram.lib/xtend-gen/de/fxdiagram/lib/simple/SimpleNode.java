@@ -16,6 +16,9 @@ import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * A simple {@link XNode} showing some label in a rounded rectangle box.
+ */
 @ModelNode
 @SuppressWarnings("all")
 public class SimpleNode extends XNode {

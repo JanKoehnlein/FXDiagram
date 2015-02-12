@@ -11,6 +11,11 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
+/**
+ * Base implementation of a {@link DomainObjectDescriptor} that can be serialized and
+ * uses its {@link DomainObjectProvider} to recover the domain object and execute a
+ * lambda expression on it.
+ */
 @ModelNode({ "id", "name", "provider" })
 @SuppressWarnings("all")
 public abstract class DomainObjectDescriptorImpl<T extends Object> implements DomainObjectDescriptor {
@@ -53,6 +58,9 @@ public abstract class DomainObjectDescriptorImpl<T extends Object> implements Do
     return _id.hashCode();
   }
   
+  /**
+   * Recover the domain object and execute the lambda expression on it.
+   */
   public abstract <U extends Object> U withDomainObject(final Function1<? super T, ? extends U> lambda);
   
   public void populate(final ModelElementImpl modelElement) {

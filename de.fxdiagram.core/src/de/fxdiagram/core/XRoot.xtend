@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.command.CommandStack
+import de.fxdiagram.core.extensions.CoreExtensions
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.core.model.DomainObjectProviderWithState
 import de.fxdiagram.core.tools.CompositeTool
@@ -27,7 +28,24 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
+import de.fxdiagram.core.tools.actions.DiagramAction
 
+/**
+ * The root object in the scenegraph of FXDiagram. Embed this in our applications scenegraph.
+ * 
+ * The {@link XRoot} shows a single active {@link #diagram} and aa {@link HeadsUpDisplay} on
+ * top.
+ * 
+ * The {@link XRoot} gives access to the common services, like {@link DiagramAction}s,
+ * {@link DomainObjectProvider}s and the {@link CommandStack}. It also stores the current 
+ * {@link XDiagramTool} 
+ *   
+ * To find the {@link XRoot} of an {@link XShape} or {@link XDiagram}
+ * use the {@link CoreExtensions}.
+ * 
+ * The {@link XRoot} is also the root element for serialization. This is why it keeps track of the 
+ * {@link #rootDiagram} as well. 
+ */
 @Logging
 @ModelNode('domainObjectProviders', 'rootDiagram', 'diagram')
 class XRoot extends Parent implements XActivatable {

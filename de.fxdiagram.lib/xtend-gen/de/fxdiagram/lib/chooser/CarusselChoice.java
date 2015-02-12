@@ -20,6 +20,9 @@ import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Pure;
 
+/**
+ * A pseudo 3D effect that projects all choices on a spinning wheel, similar to a slot machine.
+ */
 @SuppressWarnings("all")
 public class CarusselChoice extends AbstractChoiceGraphics {
   @Accessors

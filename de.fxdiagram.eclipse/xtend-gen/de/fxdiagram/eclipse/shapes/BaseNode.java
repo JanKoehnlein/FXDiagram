@@ -33,6 +33,12 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
+ * 
+ * If the descriptor is an {@link AbstractXtextDescriptor}, members are automatically injected using
+ * the Xtext language's injector.
+ */
 @ModelNode
 @SuppressWarnings("all")
 public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMappings {

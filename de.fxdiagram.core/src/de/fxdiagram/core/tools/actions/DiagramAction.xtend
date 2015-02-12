@@ -7,6 +7,11 @@ import java.util.List
 import java.util.Map
 import javafx.scene.input.KeyEvent
 
+/**
+ * Some action that can happen on an {@link XDiagram}.
+ * 
+ * Usually triggered by the diagram's menu or a keystroke.
+ */
 interface DiagramAction {
 	
 	def boolean matches(KeyEvent event) 

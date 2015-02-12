@@ -28,6 +28,10 @@ import javafx.util.Duration;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * An {@link XNode} with a front and a back side that can be flipped with a 3D effect
+ * on click.
+ */
 @Logging
 @ModelNode
 @SuppressWarnings("all")

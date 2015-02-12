@@ -3,11 +3,32 @@ package de.fxdiagram.core.model
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 
+/**
+ * Links a domain object (some POJO) to to an {@link XNode} or an {@link XConnection}.
+ * 
+ * A {@link DomainObjectProvider} translates between {@link DomainObjectDescriptor}s and
+ * the real domain object. The descriptor must contain all information needed to recover 
+ * the domain object.
+ * 
+ * This indirection serves two purposes:
+ * <ol> 
+ * <li>We cannot make assumptions on how a domain object can be serialized. So when we
+ * store a diagram, we store the descriptors instead.</li>
+ * <li>Domain objects might have different lifecycles than their associated diagram elements, 
+ * i.e. it may be forbidden to store a reference to the real domain object across transaction
+ * boundaries.</li>
+ * </ol>
+ */
 interface DomainObjectDescriptor extends XModelProvider {
 	def String getName()
 	def String getId()
 }
 
+/**
+ * Base implementation of a {@link DomainObjectDescriptor} that can be serialized and
+ * uses its {@link DomainObjectProvider} to recover the domain object and execute a
+ * lambda expression on it. 
+ */
 @ModelNode('id', 'name', 'provider')
 abstract class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	
@@ -33,9 +54,16 @@ abstract class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 		id.hashCode
 	}
 	
+	/**
+	 * Recover the domain object and execute the lambda expression on it.
+	 */
 	def <U> U withDomainObject((T)=>U lambda)
 }
 
+/**
+ * Base class for {@link DomainObjectDescriptor}s whose domain object is constant and can 
+ * be cached.
+ */
 abstract class CachedDomainObjectDescriptor<T> extends DomainObjectDescriptorImpl<T> {
 	
 	T cachedDomainObject
@@ -58,6 +86,10 @@ abstract class CachedDomainObjectDescriptor<T> extends DomainObjectDescriptorImp
 	def T resolveDomainObject()
 }
 
+/**
+ * A {@link DomainObjectDescriptor} that has a simple {@link String} as domain object.
+ * Mainly used in the examples.
+ */
 @ModelNode('name') 
 class StringDescriptor implements DomainObjectDescriptor {
 	

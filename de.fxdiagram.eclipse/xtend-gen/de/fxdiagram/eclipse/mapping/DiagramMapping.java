@@ -16,6 +16,12 @@ import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
+/**
+ * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor}
+ * to an {@link XDiagram}.
+ * 
+ * @see AbstractMapping
+ */
 @SuppressWarnings("all")
 public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T> {
   private List<AbstractNodeMappingCall<?, T>> nodes = CollectionLiterals.<AbstractNodeMappingCall<?, T>>newArrayList();

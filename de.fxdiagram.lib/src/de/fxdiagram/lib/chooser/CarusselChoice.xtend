@@ -9,6 +9,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static java.lang.Math.*
 
+/**
+ * A pseudo 3D effect that projects all choices on a spinning wheel, similar to a slot machine. 
+ */
 class CarusselChoice extends AbstractChoiceGraphics {
 
 	@Accessors double spacing = 6
@@ -16,7 +19,7 @@ class CarusselChoice extends AbstractChoiceGraphics {
 	Effect currentNodeEffect = new InnerShadow
 
 	double radius
-	
+
 	override setInterpolatedPosition(double interpolatedPosition) {
 		val maxHeight = choiceNodes.fold(0.0, [a, b|max(a, b.layoutBounds.height)]) + spacing
 		val angle = PI / choiceNodes.size
@@ -49,7 +52,7 @@ class CarusselChoice extends AbstractChoiceGraphics {
 		super.nodeChosen(choice)
 		choice.setEffect(null)
 	}
-	
+
 	override relocateButtons(Node minusButton, Node plusButton) {
 		minusButton.layoutX = choiceGroup.layoutX - 0.5 * minusButton.layoutBounds.width
 		minusButton.layoutY = choiceGroup.layoutY + radius

@@ -17,6 +17,9 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 import org.eclipse.xtext.xbase.lib.Pure;
 
+/**
+ * A 3D effect to choose a candidate from a list by rotating a cube.
+ */
 @SuppressWarnings("all")
 public class CubeChoice extends AbstractChoiceGraphics {
   @Accessors

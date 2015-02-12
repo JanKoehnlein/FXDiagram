@@ -6,6 +6,12 @@ import de.fxdiagram.eclipse.behavior.OpenElementInEditorBehavior
 import de.fxdiagram.eclipse.mapping.AbstractXtextDescriptor
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
 
+/**
+ * Base implementation for a {@link XConnection} that belongs to an {@link IMappedElementDescriptor}.
+ * 
+ * If the descriptor is an {@link AbstractXtextDescriptor}, members are automatically injected using
+ * the Xtext language's injector. 
+ */
 @ModelNode
 class BaseConnection<T> extends XConnection  {
 	

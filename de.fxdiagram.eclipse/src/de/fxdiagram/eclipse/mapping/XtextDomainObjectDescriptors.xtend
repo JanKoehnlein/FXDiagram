@@ -15,7 +15,16 @@ import org.eclipse.xtext.ui.shared.Access
 
 import static extension org.eclipse.emf.common.util.URI.*
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import de.fxdiagram.core.model.DomainObjectDescriptor
 
+/**
+ * A {@link DomainObjectDescriptor} that points to an {@link EObject} from an Xtext document.
+ * 
+ * Xtext objects only exist in a read-only transaction on an Xtext editor's document.
+ * They can be recovered from their URI.
+ * The descriptor also allows to use the {@link Injector} of the langage the domain object 
+ * belongs to.
+ */
 class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtextDescriptor<ECLASS> {
 	new() {}
 	
@@ -44,6 +53,13 @@ class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtextDescri
 		103 * uri.hashCode
 	}
 }
+
+/**
+ * A {@link DomainObjectDescriptor} that points to an {@link ESetting} from an Xtext document.
+ * 
+ * Xtext objects only exist in a read-only transaction on an Xtext editor's document.
+ * They can be recovered from their URI.
+ */
 
 @ModelNode('referenceURI', 'index')
 class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescriptor<ESetting<ECLASS>> {

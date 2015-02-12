@@ -7,6 +7,12 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import org.eclipse.ui.IEditorPart
 
+/**
+ * A {@link DomainObjectDescriptor} that describes a domain object that can be mapped 
+ * to a diagram element as described by an {@link AbstractMapping}.
+ * 
+ * Each domain object can only appear once with the same mapping in the same diagram.
+ */
 interface IMappedElementDescriptor<T> extends DomainObjectDescriptor {
 	def AbstractMapping<T> getMapping()
 	
@@ -15,6 +21,9 @@ interface IMappedElementDescriptor<T> extends DomainObjectDescriptor {
 	def IEditorPart openInEditor(boolean select)
 }
 
+/**
+ * Base implementation of {@link IMappedElementDescriptor}.
+ */
 @ModelNode('mappingConfigID', 'mappingID')
 abstract class AbstractMappedElementDescriptor<T> extends DomainObjectDescriptorImpl<T> implements IMappedElementDescriptor<T> {
 	
@@ -37,6 +46,10 @@ abstract class AbstractMappedElementDescriptor<T> extends DomainObjectDescriptor
 	}
 }
 
+/**
+ * A {@link DomainObjectProvider} that translates between domain objects with a mapping 
+ * and {@link IMappedElementDescriptor}s.
+ */
 interface IMappedElementDescriptorProvider extends DomainObjectProvider {
 	def <T> IMappedElementDescriptor<T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping)
 }

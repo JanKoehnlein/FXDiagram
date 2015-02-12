@@ -2,6 +2,7 @@ package de.fxdiagram.eclipse.mapping;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.eclipse.mapping.AbstractXtextDescriptor;
 import de.fxdiagram.eclipse.mapping.ESetting;
@@ -24,6 +25,12 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
+/**
+ * A {@link DomainObjectDescriptor} that points to an {@link ESetting} from an Xtext document.
+ * 
+ * Xtext objects only exist in a read-only transaction on an Xtext editor's document.
+ * They can be recovered from their URI.
+ */
 @ModelNode({ "referenceURI", "index" })
 @SuppressWarnings("all")
 public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescriptor<ESetting<ECLASS>> {

@@ -51,6 +51,13 @@ import javafx.scene.control.Button
 import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
 
+/**
+ * Application to demonstarte the capabilities of FXDiagram in standalone (non-OSGi) mode.
+ * I used this for various talks on FXDiagram that's why it also contains some slides.
+ * 
+ * Have a look at {@link #createScene()} as a starting point if you want to create your own 
+ * FXDiagram application.
+ */
 class Demo extends Application {
 
 	XRoot root
@@ -62,12 +69,16 @@ class Demo extends Application {
 	}
 
 	override start(Stage it) {
-		title = 'FX Diagram Demo'
+		title = 'FXDiagram Demo'
 		scene = createScene
 //		fullScreen = true
 		show
 	}
 
+	/**
+	 * Sets up the scene with an {@link XRoot} and configures its services and actions.
+	 * Then sets up the initial diagram.
+	 */
 	def createScene() {
 		root = new XRoot
 		val scene = new Scene(root, 1024, 768)

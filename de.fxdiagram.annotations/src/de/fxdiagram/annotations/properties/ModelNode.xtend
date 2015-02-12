@@ -22,6 +22,13 @@ import org.eclipse.xtend.lib.macro.declaration.TypeDeclaration
 import org.eclipse.xtend.lib.macro.declaration.TypeReference
 import org.eclipse.xtend.lib.macro.declaration.Visibility
 
+/**
+ * An active annotation that makes the annotated type as serializable by implementing
+ * {@link XModelProvider} and adding all properties listed in the {@link value} field.
+ * The properties' types must be primitive or implement {@link XModelProvider}. 
+ * 
+ * @see de.fxdiagram.core.model
+ */
 @Active(ModelNodeProcessor)
 @Target(ElementType.TYPE)
 annotation ModelNode {

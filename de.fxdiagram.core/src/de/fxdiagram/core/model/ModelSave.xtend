@@ -14,7 +14,12 @@ import javafx.beans.property.StringProperty
 import javax.json.Json
 import javax.json.stream.JsonGenerator
 import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
+import de.fxdiagram.core.tools.actions.SaveAction
 
+/**
+ * Functionality of a {@link SaveAction}
+ * 
+ */
 @Logging
 class ModelSave {
 

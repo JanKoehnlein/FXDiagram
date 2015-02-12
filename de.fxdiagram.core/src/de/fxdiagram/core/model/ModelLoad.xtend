@@ -17,10 +17,12 @@ import javax.json.JsonNumber
 import javax.json.JsonObject
 import javax.json.JsonString
 import javax.json.JsonValue
-
-import static javax.json.JsonValue.ValueType.*
 import org.eclipse.xtend.lib.annotations.Data
+import de.fxdiagram.core.tools.actions.LoadAction
 
+/**
+ * Functionality of a {@link LoadAction}. 
+ */
 @Logging
 class ModelLoad {
 

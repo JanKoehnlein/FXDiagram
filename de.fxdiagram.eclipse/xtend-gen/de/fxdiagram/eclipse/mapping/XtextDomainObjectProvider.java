@@ -3,6 +3,7 @@ package de.fxdiagram.eclipse.mapping;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
+import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.eclipse.mapping.AbstractMapping;
 import de.fxdiagram.eclipse.mapping.ESetting;
@@ -22,6 +23,9 @@ import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 
+/**
+ * A {@link DomainObjectProvider} for Xtext based domain objects.
+ */
 @ModelNode
 @SuppressWarnings("all")
 public class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {

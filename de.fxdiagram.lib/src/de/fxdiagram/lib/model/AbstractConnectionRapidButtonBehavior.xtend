@@ -12,6 +12,12 @@ import java.util.Set
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
+/**
+ * Commodity class to add rapid-button-based exploration behavior to your {@link XNodes}
+ * by only overriding a couple of template methods.
+ * 
+ * See the examples for usage scenarios.
+ */
 abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, KEY extends DomainObjectDescriptor> extends RapidButtonBehavior<HOST> {
 	
 	Set<KEY> availableChoiceKeys = newLinkedHashSet	
