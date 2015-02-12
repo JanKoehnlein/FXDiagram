@@ -39,15 +39,15 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="fxdiagram.git.clone.location"
-      value="${workspace.location/.git/}${fxdiagram.swtfx.git.clone.remoteURI|gitRepository}"/>
+      value="${installation.location/git/}${fxdiagram.git.clone.remoteURI|gitRepository}"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="fxdiagram.swtfx.git.clone.location"
-      value="${workspace.location/.git/}${fxdiagram.swtfx.git.clone.remoteURI|gitRepository}"/>
+      value="${installation.location/git/}${fxdiagram.swtfx.git.clone.remoteURI|gitRepository}"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="kieler.git.clone.location"
-      value="${workspace.location/.git/}${kieler.git.clone.remoteURI|gitRepository}"/>
+      value="${installation.location/git/}${kieler.git.clone.remoteURI|gitRepository}"/>
   <setupTask
       xsi:type="setup:ResourceCreationTask"
       excludedTriggers="STARTUP MANUAL"
