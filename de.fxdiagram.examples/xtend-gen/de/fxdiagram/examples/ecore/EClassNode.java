@@ -51,17 +51,21 @@ public class EClassNode extends XNode {
     return ((EClassDescriptor) _domainObject).getDomainObject();
   }
   
+  @Override
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      @Override
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
+          @Override
           public void apply(final VBox it) {
             ObservableList<Node> _children = it.getChildren();
             Text _text = new Text();
             final Procedure1<Text> _function = new Procedure1<Text>() {
+              @Override
               public void apply(final Text it) {
                 EClass _eClass = EClassNode.this.getEClass();
                 String _name = _eClass.getName();
@@ -85,6 +89,7 @@ public class EClassNode extends XNode {
             _children_1.add(_separator);
             ObservableList<Node> _children_2 = it.getChildren();
             final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
+              @Override
               public void apply(final VBox it) {
                 Insets _insets = new Insets(5, 10, 5, 10);
                 VBox.setMargin(it, _insets);
@@ -97,6 +102,7 @@ public class EClassNode extends XNode {
             _children_3.add(_separator_1);
             ObservableList<Node> _children_4 = it.getChildren();
             final Procedure1<VBox> _function_2 = new Procedure1<VBox>() {
+              @Override
               public void apply(final VBox it) {
                 Insets _insets = new Insets(5, 10, 5, 10);
                 VBox.setMargin(it, _insets);
@@ -114,6 +120,7 @@ public class EClassNode extends XNode {
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
   
+  @Override
   protected Anchors createAnchors() {
     return new RoundedRectangleAnchors(this, 12, 12);
   }
@@ -125,10 +132,12 @@ public class EClassNode extends XNode {
       EList<EAttribute> _eAttributes = _eClass.getEAttributes();
       List<EAttribute> _limit = this.<EAttribute>limit(_eAttributes);
       final Consumer<EAttribute> _function = new Consumer<EAttribute>() {
+        @Override
         public void accept(final EAttribute attribute) {
           ObservableList<Node> _children = EClassNode.this.attributeCompartment.getChildren();
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
+            @Override
             public void apply(final Text it) {
               StringConcatenation _builder = new StringConcatenation();
               String _name = attribute.getName();
@@ -149,10 +158,12 @@ public class EClassNode extends XNode {
       EList<EOperation> _eOperations = _eClass_1.getEOperations();
       List<EOperation> _limit_1 = this.<EOperation>limit(_eOperations);
       final Consumer<EOperation> _function_1 = new Consumer<EOperation>() {
+        @Override
         public void accept(final EOperation operation) {
           ObservableList<Node> _children = EClassNode.this.operationCompartment.getChildren();
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
+            @Override
             public void apply(final Text it) {
               StringConcatenation _builder = new StringConcatenation();
               String _name = operation.getName();
@@ -160,6 +171,7 @@ public class EClassNode extends XNode {
               _builder.append("(");
               EList<EParameter> _eParameters = operation.getEParameters();
               final Function1<EParameter, String> _function = new Function1<EParameter, String>() {
+                @Override
                 public String apply(final EParameter it) {
                   EClassifier _eType = it.getEType();
                   return _eType.getName();
@@ -205,6 +217,7 @@ public class EClassNode extends XNode {
     return _xifexpression;
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     this.populateCompartments();

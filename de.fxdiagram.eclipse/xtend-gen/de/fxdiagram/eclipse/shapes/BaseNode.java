@@ -39,6 +39,7 @@ public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMa
   public BaseNode() {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectProperty = this.domainObjectProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
+      @Override
       public void changed(final ObservableValue<? extends DomainObjectDescriptor> prop, final DomainObjectDescriptor oldVal, final DomainObjectDescriptor newVal) {
         BaseNode.this.injectMembers();
       }
@@ -58,18 +59,22 @@ public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMa
     }
   }
   
+  @Override
   public IMappedElementDescriptor<T> getDomainObject() {
     DomainObjectDescriptor _domainObject = super.getDomainObject();
     return ((IMappedElementDescriptor<T>) _domainObject);
   }
   
+  @Override
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      @Override
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
+          @Override
           public void apply(final Text it) {
             it.setTextOrigin(VPos.TOP);
             String _name = BaseNode.this.getName();
@@ -101,6 +106,7 @@ public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMa
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     IMappedElementDescriptor<T> _domainObject = this.getDomainObject();
@@ -109,6 +115,7 @@ public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMa
     this.addBehavior(_openElementInEditorBehavior);
   }
   
+  @Override
   public List<Side> getButtonSides(final ConnectionMapping<?> mapping) {
     return Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.TOP, Side.BOTTOM, Side.LEFT, Side.RIGHT));
   }

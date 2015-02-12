@@ -7,7 +7,7 @@ import de.fxdiagram.core.model.XModelProvider;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-@ModelNode(inherit = false, value = { "testEnum" })
+@ModelNode("testEnum")
 @SuppressWarnings("all")
 public class TestBean implements XModelProvider {
   public void populate(final ModelElementImpl modelElement) {

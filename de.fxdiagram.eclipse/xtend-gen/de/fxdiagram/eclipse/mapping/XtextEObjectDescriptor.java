@@ -22,6 +22,7 @@ public class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtex
     super(uri, fqn, mappingConfigID, mappingID, provider);
   }
   
+  @Override
   public <T extends Object> T withDomainObject(final Function1<? super ECLASS, ? extends T> lambda) {
     T _xblockexpression = null;
     {
@@ -32,6 +33,7 @@ public class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtex
       if ((editor instanceof XtextEditor)) {
         IXtextDocument _document = ((XtextEditor)editor).getDocument();
         final IUnitOfWork<T, XtextResource> _function = new IUnitOfWork<T, XtextResource>() {
+          @Override
           public T exec(final XtextResource it) throws Exception {
             ResourceSet _resourceSet = it.getResourceSet();
             EObject _eObject = _resourceSet.getEObject(uriAsURI, true);
@@ -45,6 +47,7 @@ public class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtex
     return _xblockexpression;
   }
   
+  @Override
   public boolean equals(final Object obj) {
     boolean _xifexpression = false;
     if ((obj instanceof XtextEObjectDescriptor<?>)) {
@@ -57,6 +60,7 @@ public class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtex
     return _xifexpression;
   }
   
+  @Override
   public int hashCode() {
     String _uri = this.getUri();
     int _hashCode = _uri.hashCode();

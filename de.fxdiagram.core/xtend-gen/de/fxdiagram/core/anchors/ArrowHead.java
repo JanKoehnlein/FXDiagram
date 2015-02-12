@@ -25,7 +25,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
-@ModelNode(inherit = false, value = { "connection", "isSource", "width", "height", "stroke" })
+@ModelNode({ "connection", "isSource", "width", "height", "stroke" })
 @Logging
 @SuppressWarnings("all")
 public abstract class ArrowHead extends Parent implements XModelProvider {

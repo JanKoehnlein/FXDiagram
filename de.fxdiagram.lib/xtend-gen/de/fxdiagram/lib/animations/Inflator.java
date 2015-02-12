@@ -62,6 +62,7 @@ public class Inflator {
     {
       Rectangle _rectangle = new Rectangle(0, 0, 0, 0);
       final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
+        @Override
         public void apply(final Rectangle it) {
           it.setOpacity(0);
         }
@@ -103,6 +104,7 @@ public class Inflator {
       this.deflatedHeight = _minus_3;
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+        @Override
         public void apply(final SequentialTransition it) {
           Duration _millis = DurationExtensions.millis(200);
           it.setDelay(_millis);
@@ -113,6 +115,7 @@ public class Inflator {
           Transition _appear = Inflator.this.appear();
           _children_1.add(_appear);
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+            @Override
             public void handle(final ActionEvent it) {
               Inflator.this.isInflated = true;
             }
@@ -140,6 +143,7 @@ public class Inflator {
       }
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
+        @Override
         public void apply(final SequentialTransition it) {
           ObservableList<Animation> _children = it.getChildren();
           Transition _disappear = Inflator.this.disappear();
@@ -148,6 +152,7 @@ public class Inflator {
           ParallelTransition _deflate = Inflator.this.deflate();
           _children_1.add(_deflate);
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+            @Override
             public void handle(final ActionEvent it) {
               Inflator.this.isInflated = false;
             }
@@ -163,6 +168,7 @@ public class Inflator {
   protected ParallelTransition inflate() {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+      @Override
       public void apply(final ParallelTransition pt) {
         Inflator.this.inflatedWidth = Inflator.this.deflatedWidth;
         Inflator.this.inflatedHeight = 0.0;
@@ -181,6 +187,7 @@ public class Inflator {
             ObservableList<Animation> _children = pt.getChildren();
             Timeline _timeline = new Timeline();
             final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
+              @Override
               public void apply(final Timeline it) {
                 it.setCycleCount(1);
                 it.setAutoReverse(false);
@@ -212,6 +219,7 @@ public class Inflator {
         ObservableList<Animation> _children = pt.getChildren();
         Timeline _timeline = new Timeline();
         final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
+          @Override
           public void apply(final Timeline it) {
             it.setAutoReverse(false);
             ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
@@ -229,6 +237,7 @@ public class Inflator {
         Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function);
         _children.add(_doubleArrow);
         final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
+          @Override
           public void handle(final ActionEvent it) {
             Set<Map.Entry<VBox, Rectangle>> _entrySet = Inflator.this.inflatable2spacer.entrySet();
             for (final Map.Entry<VBox, Rectangle> it_1 : _entrySet) {
@@ -237,6 +246,7 @@ public class Inflator {
                 final Rectangle spacer = it_1.getValue();
                 ObservableList<Node> _children = inflatable.getChildren();
                 final Consumer<Node> _function = new Consumer<Node>() {
+                  @Override
                   public void accept(final Node it) {
                     it.setOpacity(0);
                   }
@@ -258,12 +268,14 @@ public class Inflator {
   protected ParallelTransition deflate() {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
+      @Override
       public void apply(final ParallelTransition pt) {
         Collection<Rectangle> _values = Inflator.this.inflatable2spacer.values();
         for (final Rectangle spacer : _values) {
           ObservableList<Animation> _children = pt.getChildren();
           Timeline _timeline = new Timeline();
           final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
+            @Override
             public void apply(final Timeline it) {
               it.setCycleCount(1);
               it.setAutoReverse(false);
@@ -284,6 +296,7 @@ public class Inflator {
         ObservableList<Animation> _children_1 = pt.getChildren();
         Timeline _timeline_1 = new Timeline();
         final Procedure1<Timeline> _function_1 = new Procedure1<Timeline>() {
+          @Override
           public void apply(final Timeline it) {
             it.setAutoReverse(false);
             ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
@@ -310,6 +323,7 @@ public class Inflator {
     {
       Set<VBox> _keySet = this.inflatable2spacer.keySet();
       final Function1<VBox, ObservableList<Node>> _function = new Function1<VBox, ObservableList<Node>>() {
+        @Override
         public ObservableList<Node> apply(final VBox it) {
           return it.getChildren();
         }
@@ -323,12 +337,15 @@ public class Inflator {
       } else {
         SequentialTransition _sequentialTransition = new SequentialTransition();
         final Procedure1<SequentialTransition> _function_1 = new Procedure1<SequentialTransition>() {
+          @Override
           public void apply(final SequentialTransition it) {
             ObservableList<Animation> _children = it.getChildren();
             final Function1<Node, FadeTransition> _function = new Function1<Node, FadeTransition>() {
+              @Override
               public FadeTransition apply(final Node child) {
                 FadeTransition _fadeTransition = new FadeTransition();
                 final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+                  @Override
                   public void apply(final FadeTransition it) {
                     it.setNode(child);
                     Duration _millis = DurationExtensions.millis(30);
@@ -353,6 +370,7 @@ public class Inflator {
   
   protected Transition createEmptyTransition() {
     return new Transition() {
+      @Override
       protected void interpolate(final double frac) {
       }
     };
@@ -363,6 +381,7 @@ public class Inflator {
     {
       Set<VBox> _keySet = this.inflatable2spacer.keySet();
       final Function1<VBox, ObservableList<Node>> _function = new Function1<VBox, ObservableList<Node>>() {
+        @Override
         public ObservableList<Node> apply(final VBox it) {
           return it.getChildren();
         }
@@ -373,18 +392,22 @@ public class Inflator {
       boolean _isEmpty = IterableExtensions.isEmpty(contents);
       if (_isEmpty) {
         _xifexpression = new Transition() {
+          @Override
           protected void interpolate(final double frac) {
           }
         };
       } else {
         ParallelTransition _parallelTransition = new ParallelTransition();
         final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
+          @Override
           public void apply(final ParallelTransition it) {
             ObservableList<Animation> _children = it.getChildren();
             final Function1<Node, FadeTransition> _function = new Function1<Node, FadeTransition>() {
+              @Override
               public FadeTransition apply(final Node child) {
                 FadeTransition _fadeTransition = new FadeTransition();
                 final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+                  @Override
                   public void apply(final FadeTransition it) {
                     it.setNode(child);
                     Duration _millis = DurationExtensions.millis(30);
@@ -399,9 +422,11 @@ public class Inflator {
             Iterable<FadeTransition> _map = IterableExtensions.<Node, FadeTransition>map(contents, _function);
             Iterables.<Animation>addAll(_children, _map);
             final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
+              @Override
               public void handle(final ActionEvent it) {
                 Set<Map.Entry<VBox, Rectangle>> _entrySet = Inflator.this.inflatable2spacer.entrySet();
                 final Consumer<Map.Entry<VBox, Rectangle>> _function = new Consumer<Map.Entry<VBox, Rectangle>>() {
+                  @Override
                   public void accept(final Map.Entry<VBox, Rectangle> it) {
                     ObservableList<Node> _children = Inflator.this.container.getChildren();
                     VBox _key = it.getKey();

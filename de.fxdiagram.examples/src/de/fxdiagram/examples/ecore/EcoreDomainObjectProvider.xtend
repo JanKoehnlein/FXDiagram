@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Data
 
-@ModelNode(inherit=false)
+@ModelNode
 class EcoreDomainObjectProvider implements DomainObjectProvider {
 	
 	override createDescriptor(Object domainObject) {

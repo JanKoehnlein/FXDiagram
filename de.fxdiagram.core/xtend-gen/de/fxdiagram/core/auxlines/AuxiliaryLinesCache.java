@@ -44,6 +44,7 @@ public class AuxiliaryLinesCache {
   
   public AuxiliaryLinesCache(final XDiagram diagram) {
     final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
+      @Override
       public void onChanged(final ListChangeListener.Change<? extends XNode> it) {
         while (it.next()) {
           {
@@ -51,6 +52,7 @@ public class AuxiliaryLinesCache {
             if (_wasAdded) {
               List<? extends XNode> _addedSubList = it.getAddedSubList();
               final Consumer<XNode> _function = new Consumer<XNode>() {
+                @Override
                 public void accept(final XNode it) {
                   AuxiliaryLinesCache.this.watchNode(it);
                 }
@@ -61,6 +63,7 @@ public class AuxiliaryLinesCache {
             if (_wasRemoved) {
               List<? extends XNode> _removed = it.getRemoved();
               final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+                @Override
                 public void accept(final XNode it) {
                   AuxiliaryLinesCache.this.unwatchNode(it);
                 }
@@ -76,6 +79,7 @@ public class AuxiliaryLinesCache {
     _nodes.addListener(this.nodesListener);
     ObservableList<XNode> _nodes_1 = diagram.getNodes();
     final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+      @Override
       public void accept(final XNode it) {
         AuxiliaryLinesCache.this.watchNode(it);
       }
@@ -135,12 +139,14 @@ public class AuxiliaryLinesCache {
   
   public void watchNode(final XNode node) {
     final ChangeListener<Number> _function = new ChangeListener<Number>() {
+      @Override
       public void changed(final ObservableValue<? extends Number> scalar, final Number oldValue, final Number newValue) {
         AuxiliaryLinesCache.this.updateNode(node);
       }
     };
     final ChangeListener<Number> scalarListener = _function;
     final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
+      @Override
       public void changed(final ObservableValue<? extends Bounds> scalar, final Bounds oldValue, final Bounds newValue) {
         AuxiliaryLinesCache.this.updateNode(node);
       }

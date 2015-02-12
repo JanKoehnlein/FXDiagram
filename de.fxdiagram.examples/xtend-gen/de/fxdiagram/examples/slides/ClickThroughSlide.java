@@ -34,13 +34,16 @@ public class ClickThroughSlide extends Slide {
     super(name, backgroundImage);
   }
   
+  @Override
   public void initializeGraphics() {
     super.initializeGraphics();
     final Procedure1<Pane> _function = new Procedure1<Pane>() {
+      @Override
       public void apply(final Pane it) {
         ObservableList<Node> _children = it.getChildren();
         Iterable<Node> _tail = IterableExtensions.<Node>tail(_children);
         final Consumer<Node> _function = new Consumer<Node>() {
+          @Override
           public void accept(final Node it) {
             it.setOpacity(0);
           }
@@ -55,6 +58,7 @@ public class ClickThroughSlide extends Slide {
     this.currentNode = _head;
   }
   
+  @Override
   protected StackPane createNode() {
     StackPane _xblockexpression = null;
     {
@@ -67,6 +71,7 @@ public class ClickThroughSlide extends Slide {
     return _xblockexpression;
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     Scene _scene = this.getScene();
@@ -82,6 +87,7 @@ public class ClickThroughSlide extends Slide {
   public FadeTransition getRevealTransition(final Node childNode) {
     FadeTransition _fadeTransition = new FadeTransition();
     final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
+      @Override
       public void apply(final FadeTransition it) {
         it.setNode(childNode);
         it.setFromValue(0);

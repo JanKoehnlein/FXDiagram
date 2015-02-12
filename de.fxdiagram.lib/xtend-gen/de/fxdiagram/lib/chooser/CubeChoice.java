@@ -24,9 +24,11 @@ public class CubeChoice extends AbstractChoiceGraphics {
   
   private double maxWidth;
   
+  @Override
   public void setInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
     final Function2<Double, XNode, Double> _function = new Function2<Double, XNode, Double>() {
+      @Override
       public Double apply(final Double a, final XNode b) {
         Bounds _layoutBounds = b.getLayoutBounds();
         double _width = _layoutBounds.getWidth();
@@ -47,6 +49,7 @@ public class CubeChoice extends AbstractChoiceGraphics {
     this.applyTransform(rightNodeIndex, (angle - 90));
     ArrayList<XNode> _choiceNodes_3 = this.getChoiceNodes();
     final Procedure2<XNode, Integer> _function_1 = new Procedure2<XNode, Integer>() {
+      @Override
       public void apply(final XNode node, final Integer i) {
         if (((i != leftNodeIndex) && (i != rightNodeIndex))) {
           node.setVisible(false);
@@ -89,6 +92,7 @@ public class CubeChoice extends AbstractChoiceGraphics {
     return Boolean.valueOf(_xblockexpression);
   }
   
+  @Override
   public void relocateButtons(final Node minusButton, final Node plusButton) {
     double _sqrt = Math.sqrt(2);
     final double groupMaxWidthHalf = ((0.5 * this.maxWidth) * _sqrt);

@@ -21,6 +21,7 @@ public class LayoutAction implements DiagramAction {
     this.layoutType = layoutType;
   }
   
+  @Override
   public boolean matches(final KeyEvent it) {
     boolean _and = false;
     boolean _isShortcutDown = it.isShortcutDown();
@@ -34,14 +35,17 @@ public class LayoutAction implements DiagramAction {
     return _and;
   }
   
+  @Override
   public Symbol.Type getSymbol() {
     return Symbol.Type.GRAPH;
   }
   
+  @Override
   public String getTooltip() {
     return "Layout diagram";
   }
   
+  @Override
   public void perform(final XRoot root) {
     Layouter _layouter = new Layouter();
     XDiagram _diagram = root.getDiagram();

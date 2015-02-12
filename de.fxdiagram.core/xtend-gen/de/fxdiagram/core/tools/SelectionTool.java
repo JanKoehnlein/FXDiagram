@@ -47,6 +47,7 @@ public class SelectionTool implements XDiagramTool {
   public SelectionTool(final XRoot root) {
     this.root = root;
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent event) {
         Iterable<XShape> _currentSelection = root.getCurrentSelection();
         final Set<XShape> selection = IterableExtensions.<XShape>toSet(_currentSelection);
@@ -63,6 +64,7 @@ public class SelectionTool implements XDiagramTool {
         }
         if (_and) {
           final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
+            @Override
             public Boolean apply(final XShape it) {
               return Boolean.valueOf(true);
             }
@@ -102,6 +104,7 @@ public class SelectionTool implements XDiagramTool {
                 }
                 final XShape skip = _switchResult;
                 final Function1<XShape, Boolean> _function_1 = new Function1<XShape, Boolean>() {
+                  @Override
                   public Boolean apply(final XShape it) {
                     return Boolean.valueOf((!Objects.equal(it, skip)));
                   }
@@ -109,6 +112,7 @@ public class SelectionTool implements XDiagramTool {
                 SelectionTool.this.deselect(selection, _function_1);
               }
               final Function1<XShape, Boolean> _function_2 = new Function1<XShape, Boolean>() {
+                @Override
                 public Boolean apply(final XShape it) {
                   XDiagram _diagram = CoreExtensions.getDiagram(it);
                   XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
@@ -127,6 +131,7 @@ public class SelectionTool implements XDiagramTool {
                 selection.add(targetShape);
               }
               final Consumer<XShape> _function_3 = new Consumer<XShape>() {
+                @Override
                 public void accept(final XShape it) {
                   MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
                   if (_behavior!=null) {
@@ -143,6 +148,7 @@ public class SelectionTool implements XDiagramTool {
               double _sceneY = event.getSceneY();
               SelectionTool.this.updatePositionTooltip(selection, _sceneX, _sceneY);
               final Runnable _function_4 = new Runnable() {
+                @Override
                 public void run() {
                   SelectionTool.this.showPositionTooltip();
                 }
@@ -156,6 +162,7 @@ public class SelectionTool implements XDiagramTool {
     };
     this.mousePressedHandler = _function;
     final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent it) {
         final Iterable<XShape> selection = root.getCurrentSelection();
         for (final XShape shape : selection) {
@@ -181,6 +188,7 @@ public class SelectionTool implements XDiagramTool {
     };
     this.mouseDraggedHandler = _function_1;
     final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent it) {
         XDiagram _diagram = root.getDiagram();
         AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
@@ -195,6 +203,7 @@ public class SelectionTool implements XDiagramTool {
   
   protected void updatePositionTooltip(final Iterable<? extends XShape> selection, final double screenX, final double screenY) {
     final Function1<XShape, Bounds> _function = new Function1<XShape, Bounds>() {
+      @Override
       public Bounds apply(final XShape it) {
         Bounds _snapBounds = it.getSnapBounds();
         return CoreExtensions.localToRootDiagram(it, _snapBounds);
@@ -202,6 +211,7 @@ public class SelectionTool implements XDiagramTool {
     };
     Iterable<Bounds> _map = IterableExtensions.map(selection, _function);
     final Function2<Bounds, Bounds, Bounds> _function_1 = new Function2<Bounds, Bounds, Bounds>() {
+      @Override
       public Bounds apply(final Bounds a, final Bounds b) {
         return BoundsExtensions.operator_plus(a, b);
       }
@@ -272,6 +282,7 @@ public class SelectionTool implements XDiagramTool {
     }
   }
   
+  @Override
   public boolean activate() {
     boolean _xblockexpression = false;
     {
@@ -283,6 +294,7 @@ public class SelectionTool implements XDiagramTool {
     return _xblockexpression;
   }
   
+  @Override
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {

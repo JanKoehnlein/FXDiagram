@@ -31,12 +31,14 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
     return new XtextDomainObjectProvider();
   }
   
+  @Override
   public AbstractMapping<?> getMappingByID(final String mappingID) {
     return this.mappings.get(mappingID);
   }
   
   protected abstract <ARG extends Object> void entryCalls(final ARG domainArgument, final MappingAcceptor<ARG> acceptor);
   
+  @Override
   public <ARG extends Object> Iterable<? extends MappingCall<?, ARG>> getEntryCalls(final ARG domainArgument) {
     List<MappingCall<?, ARG>> _xblockexpression = null;
     {
@@ -47,6 +49,7 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
     return _xblockexpression;
   }
   
+  @Override
   public <ARG extends Object> void addMapping(final AbstractMapping<ARG> mapping) {
     String _iD = mapping.getID();
     boolean _containsKey = this.mappings.containsKey(_iD);

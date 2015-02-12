@@ -11,7 +11,7 @@ import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
 import org.bson.types.ObjectId
 
-@ModelNode(inherit=false)
+@ModelNode
 class LcarsModelProvider implements DomainObjectProvider{
 	
 	DB db

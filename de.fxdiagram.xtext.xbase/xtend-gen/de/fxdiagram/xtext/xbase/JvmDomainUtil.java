@@ -54,10 +54,8 @@ public class JvmDomainUtil {
   
   public Iterable<JvmField> getAttributes(final JvmDeclaredType owner) {
     Iterable<JvmField> _declaredFields = owner.getDeclaredFields();
-    final Function1<JvmField, Boolean> _function = new Function1<JvmField, Boolean>() {
-      public Boolean apply(final JvmField it) {
-        return Boolean.valueOf(JvmDomainUtil.this.isAttributeType(it));
-      }
+    final Function1<JvmField, Boolean> _function = (JvmField it) -> {
+      return Boolean.valueOf(this.isAttributeType(it));
     };
     return IterableExtensions.<JvmField>filter(_declaredFields, _function);
   }
@@ -66,27 +64,23 @@ public class JvmDomainUtil {
     Iterable<JvmOperation> _xblockexpression = null;
     {
       Iterable<JvmField> _declaredFields = owner.getDeclaredFields();
-      final Function1<JvmField, String> _function = new Function1<JvmField, String>() {
-        public String apply(final JvmField it) {
-          return it.getSimpleName();
-        }
+      final Function1<JvmField, String> _function = (JvmField it) -> {
+        return it.getSimpleName();
       };
       final Map<String, JvmField> fields = IterableExtensions.<String, JvmField>toMap(_declaredFields, _function);
       Iterable<JvmOperation> _declaredOperations = owner.getDeclaredOperations();
-      final Function1<JvmOperation, Boolean> _function_1 = new Function1<JvmOperation, Boolean>() {
-        public Boolean apply(final JvmOperation it) {
-          boolean _and = false;
-          boolean _isSetter = JvmDomainUtil.this.isSetter(it, fields);
-          boolean _not = (!_isSetter);
-          if (!_not) {
-            _and = false;
-          } else {
-            boolean _isGetter = JvmDomainUtil.this.isGetter(it, fields);
-            boolean _not_1 = (!_isGetter);
-            _and = _not_1;
-          }
-          return Boolean.valueOf(_and);
+      final Function1<JvmOperation, Boolean> _function_1 = (JvmOperation it) -> {
+        boolean _and = false;
+        boolean _isSetter = this.isSetter(it, fields);
+        boolean _not = (!_isSetter);
+        if (!_not) {
+          _and = false;
+        } else {
+          boolean _isGetter = this.isGetter(it, fields);
+          boolean _not_1 = (!_isGetter);
+          _and = _not_1;
         }
+        return Boolean.valueOf(_and);
       };
       _xblockexpression = IterableExtensions.<JvmOperation>filter(_declaredOperations, _function_1);
     }
@@ -218,11 +212,9 @@ public class JvmDomainUtil {
   
   public Iterable<JvmField> getReferences(final JvmDeclaredType owner) {
     Iterable<JvmField> _declaredFields = owner.getDeclaredFields();
-    final Function1<JvmField, Boolean> _function = new Function1<JvmField, Boolean>() {
-      public Boolean apply(final JvmField it) {
-        boolean _isAttributeType = JvmDomainUtil.this.isAttributeType(it);
-        return Boolean.valueOf((!_isAttributeType));
-      }
+    final Function1<JvmField, Boolean> _function = (JvmField it) -> {
+      boolean _isAttributeType = this.isAttributeType(it);
+      return Boolean.valueOf((!_isAttributeType));
     };
     return IterableExtensions.<JvmField>filter(_declaredFields, _function);
   }

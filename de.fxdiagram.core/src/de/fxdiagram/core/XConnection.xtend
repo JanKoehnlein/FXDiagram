@@ -32,7 +32,7 @@ import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 @Logging
-@ModelNode(inherit=false, value=#['domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead'])
+@ModelNode('domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead')
 class XConnection extends XShape {
 	
 	@FxProperty(readOnly=true) XNode source

@@ -11,18 +11,22 @@ public class RevealBehavior extends AbstractHostBehavior<ClickThroughSlide> impl
     super(slide);
   }
   
+  @Override
   protected void doActivate() {
   }
   
+  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return NavigationBehavior.class;
   }
   
+  @Override
   public boolean next() {
     ClickThroughSlide _host = this.getHost();
     return _host.next();
   }
   
+  @Override
   public boolean previous() {
     ClickThroughSlide _host = this.getHost();
     return _host.previous();

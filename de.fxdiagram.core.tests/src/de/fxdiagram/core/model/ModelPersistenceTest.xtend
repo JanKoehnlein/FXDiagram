@@ -22,7 +22,7 @@ class ModelPersistenceTest {
 	}
 }
 
-@ModelNode(inherit=false, value=#['testEnum'])
+@ModelNode('testEnum')
 class TestBean {
 	@FxProperty TestEnum testEnum
 }

@@ -14,7 +14,7 @@ import javafx.scene.web.WebView
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import de.fxdiagram.annotations.properties.FxProperty
 
-@ModelNode(#['pageUrl'])
+@ModelNode('pageUrl')
 class BrowserNode extends FlipNode {
 	
 	@FxProperty String pageUrl

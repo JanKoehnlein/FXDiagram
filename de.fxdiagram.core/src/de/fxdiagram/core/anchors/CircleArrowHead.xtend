@@ -7,7 +7,7 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Circle
 import javafx.scene.shape.StrokeType
 
-@ModelNode(#['fill'])
+@ModelNode('fill')
 class CircleArrowHead extends ArrowHead {
 	
 	@FxProperty Paint fill

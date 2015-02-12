@@ -48,17 +48,21 @@ public class JavaTypeNode extends XNode {
     super(domainObject);
   }
   
+  @Override
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      @Override
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
         VBox _vBox = new VBox();
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
+          @Override
           public void apply(final VBox it) {
             ObservableList<Node> _children = it.getChildren();
             Text _text = new Text();
             final Procedure1<Text> _function = new Procedure1<Text>() {
+              @Override
               public void apply(final Text it) {
                 Class<?> _javaType = JavaTypeNode.this.getJavaType();
                 String _simpleName = _javaType.getSimpleName();
@@ -82,6 +86,7 @@ public class JavaTypeNode extends XNode {
             _children_1.add(_separator);
             ObservableList<Node> _children_2 = it.getChildren();
             final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
+              @Override
               public void apply(final VBox it) {
                 Insets _insets = new Insets(5, 10, 5, 10);
                 VBox.setMargin(it, _insets);
@@ -94,6 +99,7 @@ public class JavaTypeNode extends XNode {
             _children_3.add(_separator_1);
             ObservableList<Node> _children_4 = it.getChildren();
             final Procedure1<VBox> _function_2 = new Procedure1<VBox>() {
+              @Override
               public void apply(final VBox it) {
                 Insets _insets = new Insets(5, 10, 5, 10);
                 VBox.setMargin(it, _insets);
@@ -130,6 +136,7 @@ public class JavaTypeNode extends XNode {
     return _xblockexpression;
   }
   
+  @Override
   protected Anchors createAnchors() {
     return new RoundedRectangleAnchors(this, 12, 12);
   }
@@ -139,10 +146,12 @@ public class JavaTypeNode extends XNode {
     List<JavaProperty> _properties = _javaTypeModel.getProperties();
     List<JavaProperty> _limit = this.<JavaProperty>limit(_properties);
     final Consumer<JavaProperty> _function = new Consumer<JavaProperty>() {
+      @Override
       public void accept(final JavaProperty property) {
         ObservableList<Node> _children = JavaTypeNode.this.propertyCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
+          @Override
           public void apply(final Text it) {
             StringConcatenation _builder = new StringConcatenation();
             String _name = property.getName();
@@ -162,10 +171,12 @@ public class JavaTypeNode extends XNode {
     JavaTypeModel _javaTypeModel_1 = this.getJavaTypeModel();
     List<Constructor<?>> _constructors = _javaTypeModel_1.getConstructors();
     final Consumer<Constructor<?>> _function_1 = new Consumer<Constructor<?>>() {
+      @Override
       public void accept(final Constructor<?> constructor) {
         ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
+          @Override
           public void apply(final Text it) {
             StringConcatenation _builder = new StringConcatenation();
             Class<?> _javaType = JavaTypeNode.this.getJavaType();
@@ -174,6 +185,7 @@ public class JavaTypeNode extends XNode {
             _builder.append("(");
             Class<?>[] _parameterTypes = constructor.getParameterTypes();
             final Function1<Class<?>, String> _function = new Function1<Class<?>, String>() {
+              @Override
               public String apply(final Class<?> it) {
                 return it.getSimpleName();
               }
@@ -194,10 +206,12 @@ public class JavaTypeNode extends XNode {
     List<Method> _operations = _javaTypeModel_2.getOperations();
     List<Method> _limit_1 = this.<Method>limit(_operations);
     final Consumer<Method> _function_2 = new Consumer<Method>() {
+      @Override
       public void accept(final Method method) {
         ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
         Text _text = new Text();
         final Procedure1<Text> _function = new Procedure1<Text>() {
+          @Override
           public void apply(final Text it) {
             StringConcatenation _builder = new StringConcatenation();
             String _name = method.getName();
@@ -205,6 +219,7 @@ public class JavaTypeNode extends XNode {
             _builder.append("(");
             Class<?>[] _parameterTypes = method.getParameterTypes();
             final Function1<Class<?>, String> _function = new Function1<Class<?>, String>() {
+              @Override
               public String apply(final Class<?> it) {
                 return it.getSimpleName();
               }
@@ -246,6 +261,7 @@ public class JavaTypeNode extends XNode {
     return _xifexpression;
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     this.populateCompartments();
@@ -255,6 +271,7 @@ public class JavaTypeNode extends XNode {
     this.addBehavior(_addReferenceRapidButtonBehavior);
   }
   
+  @Override
   public String toString() {
     Class<?> _javaType = this.getJavaType();
     return _javaType.getSimpleName();

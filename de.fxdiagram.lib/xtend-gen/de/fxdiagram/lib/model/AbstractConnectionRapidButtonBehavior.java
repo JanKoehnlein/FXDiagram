@@ -32,14 +32,17 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
     super(host);
   }
   
+  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return this.getClass();
   }
   
+  @Override
   protected void doActivate() {
     super.doActivate();
     Iterable<MODEL> _initialModelChoices = this.getInitialModelChoices();
     final Function1<MODEL, KEY> _function = new Function1<MODEL, KEY>() {
+      @Override
       public KEY apply(final MODEL it) {
         return AbstractConnectionRapidButtonBehavior.this.getChoiceKey(it);
       }
@@ -50,6 +53,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
     boolean _not = (!_isEmpty);
     if (_not) {
       final RapidButtonAction addConnectionAction = new RapidButtonAction() {
+        @Override
         public void perform(final RapidButton button) {
           final ConnectedNodeChooser chooser = AbstractConnectionRapidButtonBehavior.this.createChooser(button, AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys, AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys);
           HOST _host = AbstractConnectionRapidButtonBehavior.this.getHost();
@@ -57,6 +61,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
           _root.setCurrentTool(chooser);
         }
         
+        @Override
         public boolean isEnabled(final XNode host) {
           boolean _isEmpty = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.isEmpty();
           return (!_isEmpty);
@@ -64,6 +69,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
       };
       Iterable<RapidButton> _createButtons = this.createButtons(addConnectionAction);
       final Consumer<RapidButton> _function_1 = new Consumer<RapidButton>() {
+        @Override
         public void accept(final RapidButton it) {
           AbstractConnectionRapidButtonBehavior.this.add(it);
         }
@@ -74,8 +80,10 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
       ObservableList<XConnection> _connections = _diagram.getConnections();
       InitializingListListener<XConnection> _initializingListListener = new InitializingListListener<XConnection>();
       final Procedure1<InitializingListListener<XConnection>> _function_2 = new Procedure1<InitializingListListener<XConnection>>() {
+        @Override
         public void apply(final InitializingListListener<XConnection> it) {
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+            @Override
             public void apply(final XConnection it) {
               DomainObjectDescriptor _domainObject = it.getDomainObject();
               boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_domainObject);
@@ -87,6 +95,7 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
           };
           it.setAdd(_function);
           final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
+            @Override
             public void apply(final XConnection it) {
               DomainObjectDescriptor _domainObject = it.getDomainObject();
               boolean _remove = AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.remove(_domainObject);

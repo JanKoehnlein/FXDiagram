@@ -39,6 +39,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
     this.selectionPredicate = selectionPredicate;
   }
   
+  @Override
   public ViewportTransition createViewportTransiton(final CommandContext context) {
     final XRoot root = context.getRoot();
     Iterable<XShape> _currentSelection = root.getCurrentSelection();
@@ -49,6 +50,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
     ObservableList<XConnection> _connections = _diagram_1.getConnections();
     Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
     final Function1<XShape, XShape> _function = new Function1<XShape, XShape>() {
+      @Override
       public XShape apply(final XShape it) {
         Boolean _apply = SelectAndRevealCommand.this.selectionPredicate.apply(((XShape)it));
         if ((_apply).booleanValue()) {
@@ -75,6 +77,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
     }
     selection = _xifexpression;
     final Function1<XShape, Bounds> _function_1 = new Function1<XShape, Bounds>() {
+      @Override
       public Bounds apply(final XShape it) {
         Bounds _snapBounds = ((XShape)it).getSnapBounds();
         return CoreExtensions.localToRootDiagram(((XShape)it), _snapBounds);
@@ -82,6 +85,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
     };
     Iterable<Bounds> _map_1 = IterableExtensions.<XShape, Bounds>map(selection, _function_1);
     final Function2<Bounds, Bounds, Bounds> _function_2 = new Function2<Bounds, Bounds, Bounds>() {
+      @Override
       public Bounds apply(final Bounds a, final Bounds b) {
         return BoundsExtensions.operator_plus(a, b);
       }
@@ -118,6 +122,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
       Point2D _center = BoundsExtensions.center(selectionBounds);
       ViewportTransition _viewportTransition = new ViewportTransition(root, _center, targetScale);
       final Procedure1<ViewportTransition> _function_3 = new Procedure1<ViewportTransition>() {
+        @Override
         public void apply(final ViewportTransition it) {
           Duration _millis = DurationExtensions.millis(400);
           it.setMaxDuration(_millis);
@@ -129,6 +134,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
     }
   }
   
+  @Override
   public Animation getUndoAnimation(final CommandContext context) {
     Animation _xblockexpression = null;
     {
@@ -140,6 +146,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
       Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
       final Consumer<XShape> _function = new Consumer<XShape>() {
+        @Override
         public void accept(final XShape it) {
           boolean _contains = SelectAndRevealCommand.this.originalSelection.contains(((XShape)it));
           ((XShape)it).setSelected(_contains);
@@ -151,6 +158,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
     return _xblockexpression;
   }
   
+  @Override
   public Animation getRedoAnimation(final CommandContext context) {
     Animation _xblockexpression = null;
     {
@@ -162,6 +170,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
       Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
       final Consumer<XShape> _function = new Consumer<XShape>() {
+        @Override
         public void accept(final XShape it) {
           Boolean _apply = SelectAndRevealCommand.this.selectionPredicate.apply(((XShape)it));
           ((XShape)it).setSelected((_apply).booleanValue());

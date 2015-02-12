@@ -7,7 +7,7 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Polygon
 import javafx.scene.shape.StrokeType
 
-@ModelNode(#['fill'])
+@ModelNode('fill')
 class DiamondArrowHead extends ArrowHead {
 	
 	@FxProperty Paint fill

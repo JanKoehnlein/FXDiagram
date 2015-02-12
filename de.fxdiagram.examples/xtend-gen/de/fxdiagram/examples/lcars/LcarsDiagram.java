@@ -25,11 +25,13 @@ public class LcarsDiagram extends XDiagram {
     this.setConnectionPaint(Color.WHITE);
   }
   
+  @Override
   public void doActivate() {
     ObservableList<XNode> _nodes = this.getNodes();
     boolean _isEmpty = _nodes.isEmpty();
     if (_isEmpty) {
       final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
+        @Override
         public void apply(final XDiagram it) {
           XRoot _root = CoreExtensions.getRoot(it);
           final LcarsModelProvider provider = _root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
@@ -39,6 +41,7 @@ public class LcarsDiagram extends XDiagram {
           ObservableList<XNode> _nodes = it.getNodes();
           LcarsNode _lcarsNode = new LcarsNode(handle);
           final Procedure1<LcarsNode> _function = new Procedure1<LcarsNode>() {
+            @Override
             public void apply(final LcarsNode it) {
               it.setWidth(120);
             }

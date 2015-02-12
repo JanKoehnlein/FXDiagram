@@ -34,16 +34,20 @@ public class Slide extends XNode {
     this.setBackgroundImage(backgroundImage);
   }
   
+  @Override
   protected StackPane createNode() {
     StackPane _stackPane = new StackPane();
     final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+      @Override
       public void apply(final StackPane it) {
         ObservableList<Node> _children = it.getChildren();
         ImageView _imageView = new ImageView();
         final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+          @Override
           public void apply(final ImageView it) {
             ColorAdjust _colorAdjust = new ColorAdjust();
             final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
+              @Override
               public void apply(final ColorAdjust it) {
                 it.setBrightness((-0.5));
                 it.setSaturation(0);
@@ -61,6 +65,7 @@ public class Slide extends XNode {
     return ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     Image _backgroundImage = this.getBackgroundImage();
@@ -82,6 +87,7 @@ public class Slide extends XNode {
     return ((StackPane) _node);
   }
   
+  @Override
   public void selectionFeedback(final boolean isSelected) {
   }
   

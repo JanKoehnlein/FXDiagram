@@ -12,7 +12,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.shape.Polygon;
 
-@ModelNode(inherit = false, value = { "layoutX", "string", "integer", "long", "bool", "unprecise", "names", "selfRef" })
+@ModelNode({ "layoutX", "string", "integer", "long", "bool", "unprecise", "names", "selfRef" })
 @SuppressWarnings("all")
 public abstract class ModelTest extends Polygon implements XModelProvider {
   public IntegerProperty integer;

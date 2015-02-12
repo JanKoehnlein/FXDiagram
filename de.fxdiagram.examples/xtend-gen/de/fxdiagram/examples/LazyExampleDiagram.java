@@ -20,18 +20,20 @@ import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "nameSuffix" })
+@ModelNode("nameSuffix")
 @SuppressWarnings("all")
 public class LazyExampleDiagram extends XDiagram {
   public LazyExampleDiagram(final String nameSuffix) {
     this.setNameSuffix(nameSuffix);
   }
   
+  @Override
   public void doActivate() {
     ObservableList<XNode> _nodes = this.getNodes();
     boolean _isEmpty = _nodes.isEmpty();
     if (_isEmpty) {
       final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
+        @Override
         public void apply(final XDiagram it) {
           String _nameSuffix = LazyExampleDiagram.this.getNameSuffix();
           final SimpleNode simple = LazyExampleDiagram.this.newSimpleNode(_nameSuffix);
@@ -41,6 +43,7 @@ public class LazyExampleDiagram extends XDiagram {
           final LevelOfDetailDiagramNode levelOfDetail = LazyExampleDiagram.this.newEmbeddedDiagramNode(_nameSuffix_2);
           ObservableList<XNode> _nodes = it.getNodes();
           final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
+            @Override
             public void apply(final SimpleNode it) {
               it.setLayoutX(75);
               it.setLayoutY(50);
@@ -50,6 +53,7 @@ public class LazyExampleDiagram extends XDiagram {
           _nodes.add(_doubleArrow);
           ObservableList<XNode> _nodes_1 = it.getNodes();
           final Procedure1<OpenableDiagramNode> _function_1 = new Procedure1<OpenableDiagramNode>() {
+            @Override
             public void apply(final OpenableDiagramNode it) {
               it.setLayoutX(350);
               it.setLayoutY(150);
@@ -59,6 +63,7 @@ public class LazyExampleDiagram extends XDiagram {
           _nodes_1.add(_doubleArrow_1);
           ObservableList<XNode> _nodes_2 = it.getNodes();
           final Procedure1<LevelOfDetailDiagramNode> _function_2 = new Procedure1<LevelOfDetailDiagramNode>() {
+            @Override
             public void apply(final LevelOfDetailDiagramNode it) {
               it.setLayoutX(50);
               it.setLayoutY(300);
@@ -69,9 +74,11 @@ public class LazyExampleDiagram extends XDiagram {
           ObservableList<XConnection> _connections = it.getConnections();
           XConnection _xConnection = new XConnection(simple, openable);
           final Procedure1<XConnection> _function_3 = new Procedure1<XConnection>() {
+            @Override
             public void apply(final XConnection it) {
               XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
               final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+                @Override
                 public void apply(final XConnectionLabel it) {
                   Text _text = it.getText();
                   _text.setText("polyline");
@@ -85,10 +92,12 @@ public class LazyExampleDiagram extends XDiagram {
           ObservableList<XConnection> _connections_1 = it.getConnections();
           XConnection _xConnection_1 = new XConnection(openable, levelOfDetail);
           final Procedure1<XConnection> _function_4 = new Procedure1<XConnection>() {
+            @Override
             public void apply(final XConnection it) {
               it.setKind(XConnection.Kind.QUAD_CURVE);
               XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
               final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+                @Override
                 public void apply(final XConnectionLabel it) {
                   Text _text = it.getText();
                   _text.setText("quadratic");
@@ -102,10 +111,12 @@ public class LazyExampleDiagram extends XDiagram {
           ObservableList<XConnection> _connections_2 = it.getConnections();
           XConnection _xConnection_2 = new XConnection(simple, levelOfDetail);
           final Procedure1<XConnection> _function_5 = new Procedure1<XConnection>() {
+            @Override
             public void apply(final XConnection it) {
               it.setKind(XConnection.Kind.CUBIC_CURVE);
               XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
               final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
+                @Override
                 public void apply(final XConnectionLabel it) {
                   Text _text = it.getText();
                   _text.setText("cubic");
@@ -122,6 +133,7 @@ public class LazyExampleDiagram extends XDiagram {
     } else {
       ObservableList<XNode> _nodes_1 = this.getNodes();
       final Consumer<XNode> _function_1 = new Consumer<XNode>() {
+        @Override
         public void accept(final XNode it) {
           boolean _or = false;
           String _nameSuffix = LazyExampleDiagram.this.getNameSuffix();
@@ -146,8 +158,10 @@ public class LazyExampleDiagram extends XDiagram {
   protected void addRapidButtons(final XNode node, final String nameSuffix) {
     AddRapidButtonBehavior<XNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<XNode>(node);
     final Procedure1<AddRapidButtonBehavior<XNode>> _function = new Procedure1<AddRapidButtonBehavior<XNode>>() {
+      @Override
       public void apply(final AddRapidButtonBehavior<XNode> it) {
         final Procedure1<ConnectedNodeChooser> _function = new Procedure1<ConnectedNodeChooser>() {
+          @Override
           public void apply(final ConnectedNodeChooser it) {
             IntegerRange _upTo = new IntegerRange(5, 20);
             for (final Integer i : _upTo) {
@@ -179,6 +193,7 @@ public class LazyExampleDiagram extends XDiagram {
   public SimpleNode newSimpleNode(final String nameSuffix) {
     SimpleNode _simpleNode = new SimpleNode(("Node" + nameSuffix));
     final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
+      @Override
       public void apply(final SimpleNode it) {
         boolean _isEmpty = nameSuffix.isEmpty();
         boolean _not = (!_isEmpty);
@@ -193,6 +208,7 @@ public class LazyExampleDiagram extends XDiagram {
   public OpenableDiagramNode newOpenableDiagramNode(final String nameSuffix) {
     OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(("Nested" + nameSuffix));
     final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
+      @Override
       public void apply(final OpenableDiagramNode it) {
         LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram((nameSuffix + " (n)"));
         it.setInnerDiagram(_lazyExampleDiagram);
@@ -205,6 +221,7 @@ public class LazyExampleDiagram extends XDiagram {
   public LevelOfDetailDiagramNode newEmbeddedDiagramNode(final String nameSuffix) {
     LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode(("Embedded" + nameSuffix));
     final Procedure1<LevelOfDetailDiagramNode> _function = new Procedure1<LevelOfDetailDiagramNode>() {
+      @Override
       public void apply(final LevelOfDetailDiagramNode it) {
         LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram((nameSuffix + " (e)"));
         it.setInnerDiagram(_lazyExampleDiagram);

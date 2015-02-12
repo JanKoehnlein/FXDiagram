@@ -3,8 +3,8 @@ package de.fxdiagram.pde
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.eclipse.mapping.AbstractMappedElementDescriptor
-
 import org.apache.log4j.Logger
+
 import static de.fxdiagram.pde.BundleUtil.*
 
 @ModelNode('kind')

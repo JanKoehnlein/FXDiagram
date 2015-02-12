@@ -60,153 +60,134 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
   private IResourceServiceProvider.Registry _registry;
   
   private final NodeMapping<JvmDeclaredType> typeNode = new NodeMapping<JvmDeclaredType>(this, "typeNode") {
+    @Override
     public XNode createNode(final IMappedElementDescriptor<JvmDeclaredType> descriptor) {
       return new JvmTypeNode(((JvmEObjectDescriptor<JvmDeclaredType>) descriptor));
     }
     
+    @Override
     public void calls() {
-      final Function1<JvmDeclaredType, Iterable<? extends JvmField>> _function = new Function1<JvmDeclaredType, Iterable<? extends JvmField>>() {
-        public Iterable<? extends JvmField> apply(final JvmDeclaredType it) {
-          return JvmClassDiagramConfig.this._jvmDomainUtil.getReferences(it);
-        }
+      final Function1<JvmDeclaredType, Iterable<? extends JvmField>> _function = (JvmDeclaredType it) -> {
+        return JvmClassDiagramConfig.this._jvmDomainUtil.getReferences(it);
       };
       MultiConnectionMappingCall<JvmField, JvmDeclaredType> _outConnectionForEach = this.<JvmField>outConnectionForEach(JvmClassDiagramConfig.this.referenceConnection, _function);
-      final Function1<Side, Node> _function_1 = new Function1<Side, Node>() {
-        public Node apply(final Side it) {
-          return ButtonExtensions.getArrowButton(it, "Add reference");
-        }
+      final Function1<Side, Node> _function_1 = (Side it) -> {
+        return ButtonExtensions.getArrowButton(it, "Add reference");
       };
       _outConnectionForEach.makeLazy(_function_1);
-      final Function1<JvmDeclaredType, Iterable<? extends ESetting<JvmDeclaredType>>> _function_2 = new Function1<JvmDeclaredType, Iterable<? extends ESetting<JvmDeclaredType>>>() {
-        public Iterable<? extends ESetting<JvmDeclaredType>> apply(final JvmDeclaredType it) {
-          ArrayList<ESetting<JvmDeclaredType>> _xblockexpression = null;
-          {
-            final ArrayList<ESetting<JvmDeclaredType>> result = CollectionLiterals.<ESetting<JvmDeclaredType>>newArrayList();
-            for (int i = 0; (i < it.getSuperTypes().size()); i++) {
-              {
-                EList<JvmTypeReference> _superTypes = it.getSuperTypes();
-                final JvmTypeReference superType = _superTypes.get(i);
-                JvmType _type = superType.getType();
-                if ((_type instanceof JvmDeclaredType)) {
-                  ESetting<JvmDeclaredType> _eSetting = new ESetting<JvmDeclaredType>(it, TypesPackage.Literals.JVM_DECLARED_TYPE__SUPER_TYPES, i);
-                  result.add(_eSetting);
-                }
+      final Function1<JvmDeclaredType, Iterable<? extends ESetting<JvmDeclaredType>>> _function_2 = (JvmDeclaredType it) -> {
+        ArrayList<ESetting<JvmDeclaredType>> _xblockexpression = null;
+        {
+          final ArrayList<ESetting<JvmDeclaredType>> result = CollectionLiterals.<ESetting<JvmDeclaredType>>newArrayList();
+          for (int i = 0; (i < it.getSuperTypes().size()); i++) {
+            {
+              EList<JvmTypeReference> _superTypes = it.getSuperTypes();
+              final JvmTypeReference superType = _superTypes.get(i);
+              JvmType _type = superType.getType();
+              if ((_type instanceof JvmDeclaredType)) {
+                ESetting<JvmDeclaredType> _eSetting = new ESetting<JvmDeclaredType>(it, TypesPackage.Literals.JVM_DECLARED_TYPE__SUPER_TYPES, i);
+                result.add(_eSetting);
               }
             }
-            _xblockexpression = result;
           }
-          return _xblockexpression;
+          _xblockexpression = result;
         }
+        return _xblockexpression;
       };
       MultiConnectionMappingCall<ESetting<JvmDeclaredType>, JvmDeclaredType> _outConnectionForEach_1 = this.<ESetting<JvmDeclaredType>>outConnectionForEach(JvmClassDiagramConfig.this.superTypeConnection, _function_2);
-      final Function1<Side, Node> _function_3 = new Function1<Side, Node>() {
-        public Node apply(final Side it) {
-          return ButtonExtensions.getTriangleButton(it, "Add supertype");
-        }
+      final Function1<Side, Node> _function_3 = (Side it) -> {
+        return ButtonExtensions.getTriangleButton(it, "Add supertype");
       };
       _outConnectionForEach_1.makeLazy(_function_3);
     }
   };
   
   private final ConnectionMapping<JvmField> referenceConnection = new ConnectionMapping<JvmField>(this, "referenceConnection") {
+    @Override
     public XConnection createConnection(final IMappedElementDescriptor<JvmField> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
-      final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-        public void apply(final XConnection it) {
-          LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
-          it.setTargetArrowHead(_lineArrowHead);
-          XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-          final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-            public void apply(final XConnectionLabel label) {
-              Text _text = label.getText();
-              final Function1<JvmField, String> _function = new Function1<JvmField, String>() {
-                public String apply(final JvmField it) {
-                  return it.getSimpleName();
-                }
-              };
-              String _withDomainObject = descriptor.<String>withDomainObject(_function);
-              _text.setText(_withDomainObject);
-            }
+      final Procedure1<XConnection> _function = (XConnection it) -> {
+        LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
+        it.setTargetArrowHead(_lineArrowHead);
+        XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
+        final Procedure1<XConnectionLabel> _function_1 = (XConnectionLabel label) -> {
+          Text _text = label.getText();
+          final Function1<JvmField, String> _function_2 = (JvmField it_1) -> {
+            return it_1.getSimpleName();
           };
-          ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-        }
+          String _withDomainObject = descriptor.<String>withDomainObject(_function_2);
+          _text.setText(_withDomainObject);
+        };
+        ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_1);
       };
       return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
     }
     
+    @Override
     public void calls() {
-      final Function1<JvmField, JvmDeclaredType> _function = new Function1<JvmField, JvmDeclaredType>() {
-        public JvmDeclaredType apply(final JvmField it) {
-          JvmTypeReference _type = it.getType();
-          JvmTypeReference _componentType = JvmClassDiagramConfig.this._jvmDomainUtil.getComponentType(_type);
-          JvmType _type_1 = _componentType.getType();
-          return JvmClassDiagramConfig.this._jvmDomainUtil.getOriginalJvmType(((JvmDeclaredType) _type_1));
-        }
+      final Function1<JvmField, JvmDeclaredType> _function = (JvmField it) -> {
+        JvmTypeReference _type = it.getType();
+        JvmTypeReference _componentType = JvmClassDiagramConfig.this._jvmDomainUtil.getComponentType(_type);
+        JvmType _type_1 = _componentType.getType();
+        return JvmClassDiagramConfig.this._jvmDomainUtil.getOriginalJvmType(((JvmDeclaredType) _type_1));
       };
       this.<JvmDeclaredType>target(JvmClassDiagramConfig.this.typeNode, _function);
     }
   };
   
   private final ConnectionMapping<ESetting<JvmDeclaredType>> superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, "superTypeConnection") {
+    @Override
     public XConnection createConnection(final IMappedElementDescriptor<ESetting<JvmDeclaredType>> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
-      final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-        public void apply(final XConnection it) {
-          TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false);
-          it.setTargetArrowHead(_triangleArrowHead);
-        }
+      final Procedure1<XConnection> _function = (XConnection it) -> {
+        TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false);
+        it.setTargetArrowHead(_triangleArrowHead);
       };
       return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
     }
     
+    @Override
     public void calls() {
-      final Function1<ESetting<JvmDeclaredType>, JvmDeclaredType> _function = new Function1<ESetting<JvmDeclaredType>, JvmDeclaredType>() {
-        public JvmDeclaredType apply(final ESetting<JvmDeclaredType> it) {
-          Object _target = it.getTarget();
-          JvmType _type = ((JvmTypeReference) _target).getType();
-          return JvmClassDiagramConfig.this._jvmDomainUtil.getOriginalJvmType(((JvmDeclaredType) _type));
-        }
+      final Function1<ESetting<JvmDeclaredType>, JvmDeclaredType> _function = (ESetting<JvmDeclaredType> it) -> {
+        Object _target = it.getTarget();
+        JvmType _type = ((JvmTypeReference) _target).getType();
+        return JvmClassDiagramConfig.this._jvmDomainUtil.getOriginalJvmType(((JvmDeclaredType) _type));
       };
       this.<JvmDeclaredType>target(JvmClassDiagramConfig.this.typeNode, _function);
     }
   };
   
   private final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(this, "packageDiagram") {
+    @Override
     public void calls() {
-      final Function1<PackageDeclaration, Iterable<? extends JvmDeclaredType>> _function = new Function1<PackageDeclaration, Iterable<? extends JvmDeclaredType>>() {
-        public Iterable<? extends JvmDeclaredType> apply(final PackageDeclaration it) {
-          EList<AbstractElement> _elements = it.getElements();
-          Iterable<Entity> _filter = Iterables.<Entity>filter(_elements, Entity.class);
-          final Function1<Entity, EObject> _function = new Function1<Entity, EObject>() {
-            public EObject apply(final Entity it) {
-              return JvmClassDiagramConfig.this.getPrimaryJvmElement(it);
-            }
-          };
-          Iterable<EObject> _map = IterableExtensions.<Entity, EObject>map(_filter, _function);
-          return Iterables.<JvmDeclaredType>filter(_map, JvmDeclaredType.class);
-        }
+      final Function1<PackageDeclaration, Iterable<? extends JvmDeclaredType>> _function = (PackageDeclaration it) -> {
+        EList<AbstractElement> _elements = it.getElements();
+        Iterable<Entity> _filter = Iterables.<Entity>filter(_elements, Entity.class);
+        final Function1<Entity, EObject> _function_1 = (Entity it_1) -> {
+          return JvmClassDiagramConfig.this.getPrimaryJvmElement(it_1);
+        };
+        Iterable<EObject> _map = IterableExtensions.<Entity, EObject>map(_filter, _function_1);
+        return Iterables.<JvmDeclaredType>filter(_map, JvmDeclaredType.class);
       };
       this.<JvmDeclaredType>nodeForEach(JvmClassDiagramConfig.this.typeNode, _function);
-      final Function1<PackageDeclaration, Iterable<? extends PackageDeclaration>> _function_1 = new Function1<PackageDeclaration, Iterable<? extends PackageDeclaration>>() {
-        public Iterable<? extends PackageDeclaration> apply(final PackageDeclaration it) {
-          EList<AbstractElement> _elements = it.getElements();
-          return Iterables.<PackageDeclaration>filter(_elements, PackageDeclaration.class);
-        }
+      final Function1<PackageDeclaration, Iterable<? extends PackageDeclaration>> _function_1 = (PackageDeclaration it) -> {
+        EList<AbstractElement> _elements = it.getElements();
+        return Iterables.<PackageDeclaration>filter(_elements, PackageDeclaration.class);
       };
       this.<PackageDeclaration>nodeForEach(JvmClassDiagramConfig.this.packageNode, _function_1);
     }
   };
   
   private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode") {
+    @Override
     public XNode createNode(final IMappedElementDescriptor<PackageDeclaration> descriptor) {
       return new BaseDiagramNode<PackageDeclaration>(descriptor);
     }
     
+    @Override
     public void calls() {
-      final Function1<PackageDeclaration, PackageDeclaration> _function = new Function1<PackageDeclaration, PackageDeclaration>() {
-        public PackageDeclaration apply(final PackageDeclaration it) {
-          return it;
-        }
+      final Function1<PackageDeclaration, PackageDeclaration> _function = (PackageDeclaration it) -> {
+        return it;
       };
       this.<PackageDeclaration>nestedDiagramFor(JvmClassDiagramConfig.this.packageDiagram, _function);
     }
@@ -227,6 +208,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
     return _primaryJvmElement;
   }
   
+  @Override
   protected <ARG extends Object> void entryCalls(final ARG domainArgument, @Extension final MappingAcceptor<ARG> acceptor) {
     boolean _matched = false;
     if (!_matched) {
@@ -250,6 +232,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
     }
   }
   
+  @Override
   protected IMappedElementDescriptorProvider createDomainObjectProvider() {
     return new JvmDomainObjectProvider();
   }

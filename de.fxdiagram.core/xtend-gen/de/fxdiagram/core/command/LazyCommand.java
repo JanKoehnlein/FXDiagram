@@ -14,6 +14,7 @@ public abstract class LazyCommand implements AnimationCommand {
   
   protected abstract AbstractAnimationCommand createDelegate();
   
+  @Override
   public boolean clearRedoStackOnExecute() {
     boolean _clearRedoStackOnExecute = false;
     if (this.delegate!=null) {
@@ -22,12 +23,14 @@ public abstract class LazyCommand implements AnimationCommand {
     return _clearRedoStackOnExecute;
   }
   
+  @Override
   public void skipViewportRestore() {
     if (this.delegate!=null) {
       this.delegate.skipViewportRestore();
     }
   }
   
+  @Override
   public Animation getExecuteAnimation(final CommandContext context) {
     Animation _xblockexpression = null;
     {
@@ -38,10 +41,12 @@ public abstract class LazyCommand implements AnimationCommand {
     return _xblockexpression;
   }
   
+  @Override
   public Animation getUndoAnimation(final CommandContext context) {
     return this.delegate.getUndoAnimation(context);
   }
   
+  @Override
   public Animation getRedoAnimation(final CommandContext context) {
     return this.delegate.getRedoAnimation(context);
   }

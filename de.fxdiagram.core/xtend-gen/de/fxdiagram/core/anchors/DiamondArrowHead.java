@@ -18,7 +18,7 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "fill" })
+@ModelNode("fill")
 @SuppressWarnings("all")
 public class DiamondArrowHead extends ArrowHead {
   public DiamondArrowHead(final XConnection connection, final double width, final double height, final Paint stroke, final Paint fill, final boolean isSource) {
@@ -33,6 +33,7 @@ public class DiamondArrowHead extends ArrowHead {
     this(connection, 10, 10, null, null, isSource);
   }
   
+  @Override
   public Node createNode() {
     Polygon _xblockexpression = null;
     {
@@ -45,6 +46,7 @@ public class DiamondArrowHead extends ArrowHead {
       }
       Polygon _polygon = new Polygon();
       final Procedure1<Polygon> _function = new Procedure1<Polygon>() {
+        @Override
         public void apply(final Polygon it) {
           ObservableList<Double> _points = it.getPoints();
           double _width = DiamondArrowHead.this.getWidth();
@@ -75,6 +77,7 @@ public class DiamondArrowHead extends ArrowHead {
     return _xblockexpression;
   }
   
+  @Override
   public double getLineCut() {
     double _width = this.getWidth();
     XConnection _connection = this.getConnection();

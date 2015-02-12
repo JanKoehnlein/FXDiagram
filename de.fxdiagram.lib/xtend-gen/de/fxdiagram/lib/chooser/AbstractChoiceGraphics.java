@@ -22,15 +22,19 @@ public abstract class AbstractChoiceGraphics implements ChoiceGraphics {
     return this.chooser.getGroup();
   }
   
+  @Override
   public void activate() {
   }
   
+  @Override
   public void nodeChosen(final XNode choice) {
   }
   
+  @Override
   public void relocateButtons(final Node minusButton, final Node plusButton) {
   }
   
+  @Override
   public boolean hasButtons() {
     return true;
   }

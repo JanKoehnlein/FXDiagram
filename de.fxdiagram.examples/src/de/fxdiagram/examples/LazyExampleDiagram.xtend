@@ -11,7 +11,7 @@ import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.lib.simple.SimpleNode
 
-@ModelNode(#['nameSuffix'])
+@ModelNode('nameSuffix')
 class LazyExampleDiagram extends XDiagram {
 	
 	@FxProperty String nameSuffix

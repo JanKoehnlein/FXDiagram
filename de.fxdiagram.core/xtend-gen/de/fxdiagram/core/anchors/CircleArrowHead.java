@@ -15,7 +15,7 @@ import javafx.scene.shape.StrokeType;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "fill" })
+@ModelNode("fill")
 @SuppressWarnings("all")
 public class CircleArrowHead extends ArrowHead {
   public CircleArrowHead(final XConnection connection, final double radius, final Paint stroke, final Paint fill, final boolean isSource) {
@@ -33,6 +33,7 @@ public class CircleArrowHead extends ArrowHead {
     this(connection, 4, null, null, isSource);
   }
   
+  @Override
   public Node createNode() {
     Circle _xblockexpression = null;
     {
@@ -45,6 +46,7 @@ public class CircleArrowHead extends ArrowHead {
       }
       Circle _circle = new Circle();
       final Procedure1<Circle> _function = new Procedure1<Circle>() {
+        @Override
         public void apply(final Circle it) {
           double _width = CircleArrowHead.this.getWidth();
           it.setRadius(_width);
@@ -69,6 +71,7 @@ public class CircleArrowHead extends ArrowHead {
     return _xblockexpression;
   }
   
+  @Override
   public double getLineCut() {
     double _width = this.getWidth();
     XConnection _connection = this.getConnection();

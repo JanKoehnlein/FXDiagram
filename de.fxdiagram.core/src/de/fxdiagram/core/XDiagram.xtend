@@ -32,7 +32,7 @@ import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.layout.LayoutType
 
-@ModelNode(inherit=false, value=#['nodes', 'connections', 'parentDiagram'])
+@ModelNode('nodes', 'connections', 'parentDiagram')
 class XDiagram extends Group implements XActivatable {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList

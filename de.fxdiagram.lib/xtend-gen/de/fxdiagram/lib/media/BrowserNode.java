@@ -21,23 +21,26 @@ import javafx.scene.web.WebView;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-@ModelNode({ "pageUrl" })
+@ModelNode("pageUrl")
 @SuppressWarnings("all")
 public class BrowserNode extends FlipNode {
   public BrowserNode(final String name) {
     super(name);
   }
   
+  @Override
   protected Node createNode() {
     Node _xblockexpression = null;
     {
       final Node node = super.createNode();
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+        @Override
         public void apply(final RectangleBorderPane it) {
           ObservableList<Node> _children = it.getChildren();
           Text _text = new Text();
           final Procedure1<Text> _function = new Procedure1<Text>() {
+            @Override
             public void apply(final Text it) {
               String _name = BrowserNode.this.getName();
               it.setText(_name);
@@ -54,6 +57,7 @@ public class BrowserNode extends FlipNode {
       this.setFront(_doubleArrow);
       WebView _webView = new WebView();
       final Procedure1<WebView> _function_1 = new Procedure1<WebView>() {
+        @Override
         public void apply(final WebView it) {
           WebEngine _engine = it.getEngine();
           String _pageUrl = BrowserNode.this.getPageUrl();
@@ -67,6 +71,7 @@ public class BrowserNode extends FlipNode {
     return _xblockexpression;
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     Node _front = this.getFront();
@@ -80,6 +85,7 @@ public class BrowserNode extends FlipNode {
     this.setPageUrl(_string);
   }
   
+  @Override
   protected Anchors createAnchors() {
     return new RoundedRectangleAnchors(this, 12, 12);
   }

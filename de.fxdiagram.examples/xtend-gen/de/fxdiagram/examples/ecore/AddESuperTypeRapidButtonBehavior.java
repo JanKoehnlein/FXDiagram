@@ -37,12 +37,14 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
     super(host);
   }
   
+  @Override
   protected Iterable<EClass> getInitialModelChoices() {
     EClassNode _host = this.getHost();
     EClass _eClass = _host.getEClass();
     return _eClass.getESuperTypes();
   }
   
+  @Override
   protected ESuperTypeDescriptor getChoiceKey(final EClass superType) {
     EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
     EClassNode _host = this.getHost();
@@ -51,8 +53,10 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
     return _domainObjectProvider.createESuperClassDescriptor(_eSuperTypeHandle);
   }
   
+  @Override
   protected XNode createNode(final ESuperTypeDescriptor key) {
     final Function1<ESuperTypeHandle, EClassDescriptor> _function = new Function1<ESuperTypeHandle, EClassDescriptor>() {
+      @Override
       public EClassDescriptor apply(final ESuperTypeHandle it) {
         EcoreDomainObjectProvider _domainObjectProvider = AddESuperTypeRapidButtonBehavior.this.getDomainObjectProvider();
         EClass _superType = it.getSuperType();
@@ -69,6 +73,7 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
     return _root.<EcoreDomainObjectProvider>getDomainObjectProvider(EcoreDomainObjectProvider.class);
   }
   
+  @Override
   protected ConnectedNodeChooser createChooser(final RapidButton button, final Set<ESuperTypeDescriptor> availableChoiceKeys, final Set<ESuperTypeDescriptor> unavailableChoiceKeys) {
     ConnectedNodeChooser _xblockexpression = null;
     {
@@ -77,6 +82,7 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
       CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _coverFlowChoice);
       final Consumer<ESuperTypeDescriptor> _function = new Consumer<ESuperTypeDescriptor>() {
+        @Override
         public void accept(final ESuperTypeDescriptor it) {
           XNode _createNode = AddESuperTypeRapidButtonBehavior.this.createNode(it);
           chooser.addChoice(_createNode, it);
@@ -84,9 +90,11 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
       };
       availableChoiceKeys.forEach(_function);
       final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
+        @Override
         public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor descriptor) {
           XConnection _xConnection = new XConnection(host, choice, descriptor);
           final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+            @Override
             public void apply(final XConnection it) {
               XDiagram _diagram = CoreExtensions.getDiagram(host);
               Paint _backgroundPaint = _diagram.getBackgroundPaint();
@@ -104,6 +112,7 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
     return _xblockexpression;
   }
   
+  @Override
   protected Iterable<RapidButton> createButtons(final RapidButtonAction addConnectionAction) {
     EClassNode _host = this.getHost();
     SVGPath _triangleButton = ButtonExtensions.getTriangleButton(Side.TOP, "Discover supertypes");

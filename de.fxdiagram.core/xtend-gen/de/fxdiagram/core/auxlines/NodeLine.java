@@ -47,6 +47,7 @@ public class NodeLine extends AuxiliaryLine {
     return this.orientation;
   }
   
+  @Override
   public Node createNode() {
     Line _switchResult = null;
     final Orientation orientation = this.orientation;
@@ -55,6 +56,7 @@ public class NodeLine extends AuxiliaryLine {
         case HORIZONTAL:
           Line _line = new Line();
           final Procedure1<Line> _function = new Procedure1<Line>() {
+            @Override
             public void apply(final Line it) {
               it.setStartX((NodeLine.this.min - NodeLine.this.overlap));
               double _position = NodeLine.this.getPosition();
@@ -69,6 +71,7 @@ public class NodeLine extends AuxiliaryLine {
         case VERTICAL:
           Line _line_1 = new Line();
           final Procedure1<Line> _function_1 = new Procedure1<Line>() {
+            @Override
             public void apply(final Line it) {
               double _position = NodeLine.this.getPosition();
               it.setStartX(_position);
@@ -85,6 +88,7 @@ public class NodeLine extends AuxiliaryLine {
       }
     }
     final Procedure1<Line> _function_2 = new Procedure1<Line>() {
+      @Override
       public void apply(final Line it) {
         it.setStroke(Color.RED);
         it.setStrokeWidth(2);

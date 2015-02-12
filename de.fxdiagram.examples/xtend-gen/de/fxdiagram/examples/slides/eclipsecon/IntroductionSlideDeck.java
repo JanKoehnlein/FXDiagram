@@ -36,20 +36,25 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
     super("Introduction");
   }
   
+  @Override
   public void doActivate() {
     SlideDiagram _slideDiagram = new SlideDiagram();
     final Procedure1<SlideDiagram> _function = new Procedure1<SlideDiagram>() {
+      @Override
       public void apply(final SlideDiagram it) {
         ObservableList<Slide> _slides = it.getSlides();
         Slide _createSlide = EclipseConSlideFactory.createSlide("Title");
         final Procedure1<Slide> _function = new Procedure1<Slide>() {
+          @Override
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
             final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+              @Override
               public void apply(final StackPane it) {
                 ObservableList<Node> _children = it.getChildren();
                 VBox _vBox = new VBox();
                 final Procedure1<VBox> _function = new Procedure1<VBox>() {
+                  @Override
                   public void apply(final VBox it) {
                     it.setAlignment(Pos.CENTER);
                     Insets _insets = new Insets(200, 0, 0, 0);
@@ -57,6 +62,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children = it.getChildren();
                     Text _createText = EclipseConSlideFactory.createText("Eclipse Discovery Channel", 36);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
@@ -67,6 +73,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Text _createText_1 = EclipseConSlideFactory.createText("presents", 30);
                     final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
@@ -77,6 +84,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_2 = it.getChildren();
                     Text _createText_2 = EclipseConSlideFactory.createText("Eclipse Diagram Editors", 93);
                     final Procedure1<Text> _function_2 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _rgb = Color.rgb(238, 191, 171);
                         it.setFill(_rgb);
@@ -87,6 +95,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_3 = it.getChildren();
                     Text _createText_3 = EclipseConSlideFactory.createText("An Endangered Species", 48);
                     final Procedure1<Text> _function_3 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                       }
                     };
@@ -109,18 +118,22 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_2 = it.getSlides();
         Slide _createSlide_2 = EclipseConSlideFactory.createSlide("Jungle images");
         final Procedure1<Slide> _function_1 = new Procedure1<Slide>() {
+          @Override
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
             final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+              @Override
               public void apply(final StackPane it) {
                 ObservableList<Node> _children = it.getChildren();
                 Pane _pane = new Pane();
                 final Procedure1<Pane> _function = new Procedure1<Pane>() {
+                  @Override
                   public void apply(final Pane it) {
                     it.setPrefSize(1024, 768);
                     ObservableList<Node> _children = it.getChildren();
                     Text _createJungleText = EclipseConSlideFactory.createJungleText("GEF", 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
@@ -137,6 +150,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Text _createJungleText_1 = EclipseConSlideFactory.createJungleText("Draw2D", 48);
                     final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
@@ -151,6 +165,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_2 = it.getChildren();
                     Text _createJungleText_2 = EclipseConSlideFactory.createJungleText("GMF RT", 48);
                     final Procedure1<Text> _function_2 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
@@ -165,6 +180,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_3 = it.getChildren();
                     Text _createJungleText_3 = EclipseConSlideFactory.createJungleText("GMF Tooling", 48);
                     final Procedure1<Text> _function_3 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
@@ -181,6 +197,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_4 = it.getChildren();
                     Text _createJungleText_4 = EclipseConSlideFactory.createJungleText("Graphiti", 48);
                     final Procedure1<Text> _function_4 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
@@ -194,6 +211,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_5 = it.getChildren();
                     Text _createJungleText_5 = EclipseConSlideFactory.createJungleText("Sirius", 48);
                     final Procedure1<Text> _function_5 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _jungleDarkGreen = EclipseConSlideFactory.jungleDarkGreen();
                         it.setFill(_jungleDarkGreen);
@@ -224,11 +242,13 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_4 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide = EclipseConSlideFactory.createClickThroughSlide("Darkness images");
         final Procedure1<ClickThroughSlide> _function_2 = new Procedure1<ClickThroughSlide>() {
+          @Override
           public void apply(final ClickThroughSlide it) {
             Pane _pane = it.getPane();
             ObservableList<Node> _children = _pane.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+              @Override
               public void apply(final ImageView it) {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/darkness1.png");
@@ -243,6 +263,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_1 = _pane_1.getChildren();
             ImageView _imageView_1 = new ImageView();
             final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+              @Override
               public void apply(final ImageView it) {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/darkness2.png");
@@ -263,11 +284,13 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_6 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide_1 = EclipseConSlideFactory.createClickThroughSlide("Behavior images");
         final Procedure1<ClickThroughSlide> _function_3 = new Procedure1<ClickThroughSlide>() {
+          @Override
           public void apply(final ClickThroughSlide it) {
             Pane _pane = it.getPane();
             ObservableList<Node> _children = _pane.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+              @Override
               public void apply(final ImageView it) {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/graphiti.png");
@@ -282,6 +305,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_1 = _pane_1.getChildren();
             ImageView _imageView_1 = new ImageView();
             final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+              @Override
               public void apply(final ImageView it) {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/properties.png");
@@ -302,13 +326,16 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_8 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide_2 = EclipseConSlideFactory.createClickThroughSlide("Recycling images");
         final Procedure1<ClickThroughSlide> _function_4 = new Procedure1<ClickThroughSlide>() {
+          @Override
           public void apply(final ClickThroughSlide it) {
             Pane _pane = it.getPane();
             final Procedure1<Pane> _function = new Procedure1<Pane>() {
+              @Override
               public void apply(final Pane it) {
                 ObservableList<Node> _children = it.getChildren();
                 ImageView _imageView = new ImageView();
                 final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+                  @Override
                   public void apply(final ImageView it) {
                     ImageCache _get = ImageCache.get();
                     Image _image = _get.getImage(IntroductionSlideDeck.this, "images/onion.png");
@@ -324,10 +351,12 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children_1 = it.getChildren();
                 Group _group = new Group();
                 final Procedure1<Group> _function_1 = new Procedure1<Group>() {
+                  @Override
                   public void apply(final Group it) {
                     ObservableList<Node> _children = it.getChildren();
                     Text _createJungleText = EclipseConSlideFactory.createJungleText("OS", 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         it.setLayoutX(173);
                         it.setLayoutY(216);
@@ -338,6 +367,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Polyline _polyline = new Polyline();
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
+                      @Override
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
                         Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(244.0), Double.valueOf(226.0), Double.valueOf(537.0), Double.valueOf(356.0))));
@@ -355,10 +385,12 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children_2 = it.getChildren();
                 Group _group_1 = new Group();
                 final Procedure1<Group> _function_2 = new Procedure1<Group>() {
+                  @Override
                   public void apply(final Group it) {
                     ObservableList<Node> _children = it.getChildren();
                     Text _createJungleText = EclipseConSlideFactory.createJungleText("SWT", 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         it.setLayoutX(62);
                         it.setLayoutY(458);
@@ -369,6 +401,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Polyline _polyline = new Polyline();
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
+                      @Override
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
                         Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(176.0), Double.valueOf(439.0), Double.valueOf(501.0), Double.valueOf(367.0))));
@@ -386,10 +419,12 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children_3 = it.getChildren();
                 Group _group_2 = new Group();
                 final Procedure1<Group> _function_3 = new Procedure1<Group>() {
+                  @Override
                   public void apply(final Group it) {
                     ObservableList<Node> _children = it.getChildren();
                     Text _createJungleText = EclipseConSlideFactory.createJungleText("Draw2D", 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         it.setLayoutX(129);
                         it.setLayoutY(666);
@@ -400,6 +435,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Polyline _polyline = new Polyline();
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
+                      @Override
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
                         Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(307.0), Double.valueOf(611.0), Double.valueOf(489.0), Double.valueOf(433.0))));
@@ -417,10 +453,12 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children_4 = it.getChildren();
                 Group _group_3 = new Group();
                 final Procedure1<Group> _function_4 = new Procedure1<Group>() {
+                  @Override
                   public void apply(final Group it) {
                     ObservableList<Node> _children = it.getChildren();
                     Text _createJungleText = EclipseConSlideFactory.createJungleText("GEF MVC", 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         it.setLayoutX(581);
                         it.setLayoutY(712);
@@ -431,6 +469,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Polyline _polyline = new Polyline();
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
+                      @Override
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
                         Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(714.0), Double.valueOf(662.0), Double.valueOf(588.0), Double.valueOf(458.0))));
@@ -448,6 +487,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children_5 = it.getChildren();
                 Group _group_4 = new Group();
                 final Procedure1<Group> _function_5 = new Procedure1<Group>() {
+                  @Override
                   public void apply(final Group it) {
                     ObservableList<Node> _children = it.getChildren();
                     StringConcatenation _builder = new StringConcatenation();
@@ -456,6 +496,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     _builder.append("Runtime");
                     Text _createJungleText = EclipseConSlideFactory.createJungleText(_builder.toString(), 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         it.setLayoutX(770);
                         it.setLayoutY(462);
@@ -466,6 +507,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Polyline _polyline = new Polyline();
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
+                      @Override
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
                         Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(803.0), Double.valueOf(462.0), Double.valueOf(658.0), Double.valueOf(416.0))));
@@ -483,6 +525,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children_6 = it.getChildren();
                 Group _group_5 = new Group();
                 final Procedure1<Group> _function_6 = new Procedure1<Group>() {
+                  @Override
                   public void apply(final Group it) {
                     ObservableList<Node> _children = it.getChildren();
                     StringConcatenation _builder = new StringConcatenation();
@@ -491,6 +534,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     _builder.append("Tooling");
                     Text _createJungleText = EclipseConSlideFactory.createJungleText(_builder.toString(), 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         it.setLayoutX(770);
                         it.setLayoutY(184);
@@ -501,6 +545,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Polyline _polyline = new Polyline();
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
+                      @Override
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
                         Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(766.0), Double.valueOf(206.0), Double.valueOf(662.0), Double.valueOf(281.0))));
@@ -518,10 +563,12 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children_7 = it.getChildren();
                 Group _group_6 = new Group();
                 final Procedure1<Group> _function_7 = new Procedure1<Group>() {
+                  @Override
                   public void apply(final Group it) {
                     ObservableList<Node> _children = it.getChildren();
                     Text _createJungleText = EclipseConSlideFactory.createJungleText("...", 48);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         it.setLayoutX(405);
                         it.setLayoutY(88);
@@ -532,6 +579,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Polyline _polyline = new Polyline();
                     final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
+                      @Override
                       public void apply(final Polyline it) {
                         ObservableList<Double> _points = it.getPoints();
                         Iterables.<Double>addAll(_points, Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(519.0), Double.valueOf(101.0), Double.valueOf(525.0), Double.valueOf(188.0))));
@@ -559,11 +607,13 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_10 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide_3 = EclipseConSlideFactory.createClickThroughSlide("Reproduction images");
         final Procedure1<ClickThroughSlide> _function_5 = new Procedure1<ClickThroughSlide>() {
+          @Override
           public void apply(final ClickThroughSlide it) {
             Pane _pane = it.getPane();
             ObservableList<Node> _children = _pane.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+              @Override
               public void apply(final ImageView it) {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/graphiti_code.png");
@@ -578,6 +628,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_1 = _pane_1.getChildren();
             VBox _vBox = new VBox();
             final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
+              @Override
               public void apply(final VBox it) {
                 it.setLayoutX(313);
                 it.setLayoutY(81);
@@ -595,6 +646,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children = it.getChildren();
                 Text _createText = EclipseConSlideFactory.createText("34 Files", 36);
                 final Procedure1<Text> _function = new Procedure1<Text>() {
+                  @Override
                   public void apply(final Text it) {
                     it.setFill(Color.BLACK);
                   }
@@ -604,6 +656,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                 ObservableList<Node> _children_1 = it.getChildren();
                 Text _createText_1 = EclipseConSlideFactory.createText("2730 LOC", 36);
                 final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+                  @Override
                   public void apply(final Text it) {
                     it.setFill(Color.BLACK);
                   }
@@ -618,6 +671,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_2 = _pane_2.getChildren();
             ImageView _imageView_1 = new ImageView();
             final Procedure1<ImageView> _function_2 = new Procedure1<ImageView>() {
+              @Override
               public void apply(final ImageView it) {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/gmf_dashboard.png");
@@ -638,11 +692,13 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_12 = it.getSlides();
         ClickThroughSlide _createClickThroughSlide_4 = EclipseConSlideFactory.createClickThroughSlide("Tablet");
         final Procedure1<ClickThroughSlide> _function_6 = new Procedure1<ClickThroughSlide>() {
+          @Override
           public void apply(final ClickThroughSlide it) {
             Pane _pane = it.getPane();
             ObservableList<Node> _children = _pane.getChildren();
             ImageView _imageView = new ImageView();
             final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+              @Override
               public void apply(final ImageView it) {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/tablet.png");
@@ -659,6 +715,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
             ObservableList<Node> _children_1 = _pane_1.getChildren();
             ImageView _imageView_1 = new ImageView();
             final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+              @Override
               public void apply(final ImageView it) {
                 ImageCache _get = ImageCache.get();
                 Image _image = _get.getImage(IntroductionSlideDeck.this, "images/hand.png");
@@ -676,19 +733,23 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_13 = it.getSlides();
         Slide _createSlide_8 = EclipseConSlideFactory.createSlide("Help");
         final Procedure1<Slide> _function_7 = new Procedure1<Slide>() {
+          @Override
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
             final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+              @Override
               public void apply(final StackPane it) {
                 ObservableList<Node> _children = it.getChildren();
                 VBox _vBox = new VBox();
                 final Procedure1<VBox> _function = new Procedure1<VBox>() {
+                  @Override
                   public void apply(final VBox it) {
                     it.setAlignment(Pos.CENTER);
                     it.setSpacing(50);
                     ObservableList<Node> _children = it.getChildren();
                     Text _createText = EclipseConSlideFactory.createText("Help Us", 144);
                     final Procedure1<Text> _function = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                       }
                     };
@@ -697,6 +758,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_1 = it.getChildren();
                     Text _createText_1 = EclipseConSlideFactory.createText("save the", 72);
                     final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                       }
                     };
@@ -705,6 +767,7 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
                     ObservableList<Node> _children_2 = it.getChildren();
                     Text _createText_2 = EclipseConSlideFactory.createText("Eclipse Diagram Editors", 96);
                     final Procedure1<Text> _function_2 = new Procedure1<Text>() {
+                      @Override
                       public void apply(final Text it) {
                         Color _rgb = Color.rgb(238, 191, 171);
                         it.setFill(_rgb);
@@ -743,13 +806,16 @@ public class IntroductionSlideDeck extends OpenableDiagramNode {
         ObservableList<Slide> _slides_16 = it.getSlides();
         Slide _createSlide_11 = EclipseConSlideFactory.createSlide("JavaFX");
         final Procedure1<Slide> _function_8 = new Procedure1<Slide>() {
+          @Override
           public void apply(final Slide it) {
             StackPane _stackPane = it.getStackPane();
             final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
+              @Override
               public void apply(final StackPane it) {
                 ObservableList<Node> _children = it.getChildren();
                 ImageView _imageView = new ImageView();
                 final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+                  @Override
                   public void apply(final ImageView it) {
                     ImageCache _get = ImageCache.get();
                     Image _image = _get.getImage(IntroductionSlideDeck.this, "images/javafx.png");

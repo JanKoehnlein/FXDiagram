@@ -31,6 +31,7 @@ public abstract class AbstractConnectionMappingCall<RESULT extends Object, ARG e
   
   public abstract ConnectionMapping<RESULT> getConnectionMapping();
   
+  @Override
   public AbstractMapping<RESULT> getMapping() {
     return this.getConnectionMapping();
   }

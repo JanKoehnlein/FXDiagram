@@ -42,7 +42,7 @@ import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @Logging
-@ModelNode(#['innerDiagram'])
+@ModelNode('innerDiagram')
 class OpenableDiagramNode extends XNode {
 	
 	@FxProperty XDiagram innerDiagram

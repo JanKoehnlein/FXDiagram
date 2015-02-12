@@ -104,12 +104,14 @@ public class LcarsNode extends XNode {
     super(descriptor);
   }
   
+  @Override
   protected Node createNode() {
     RectangleBorderPane _xblockexpression = null;
     {
       DBObject _data = this.getData();
       Object _get = _data.get("images");
       final Function1<DBObject, String> _function = new Function1<DBObject, String>() {
+        @Override
         public String apply(final DBObject it) {
           Object _get = it.get("url");
           return _get.toString();
@@ -121,6 +123,7 @@ public class LcarsNode extends XNode {
       this.vbox = _vBox;
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
       final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+        @Override
         public void apply(final RectangleBorderPane it) {
           it.setBackgroundRadius(0);
           it.setBorderRadius(0);
@@ -128,17 +131,20 @@ public class LcarsNode extends XNode {
           it.setBorderPaint(Color.BLACK);
           ObservableList<Node> _children = it.getChildren();
           final Procedure1<VBox> _function = new Procedure1<VBox>() {
+            @Override
             public void apply(final VBox it) {
               it.setSpacing(2);
               it.setFillWidth(true);
               ObservableList<Node> _children = it.getChildren();
               HBox _hBox = new HBox();
               final Procedure1<HBox> _function = new Procedure1<HBox>() {
+                @Override
                 public void apply(final HBox it) {
                   VBox.setVgrow(it, Priority.ALWAYS);
                   ObservableList<Node> _children = it.getChildren();
                   RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.DARKBLUE);
                   final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+                    @Override
                     public void apply(final RectangleBorderPane it) {
                       it.setAlignment(Pos.TOP_LEFT);
                       HBox.setHgrow(it, Priority.ALWAYS);
@@ -150,6 +156,7 @@ public class LcarsNode extends XNode {
                   LcarsNode.this.nameField = _text;
                   ObservableList<Node> _children_1 = it.getChildren();
                   final Procedure1<Text> _function_1 = new Procedure1<Text>() {
+                    @Override
                     public void apply(final Text it) {
                       String _name = LcarsNode.this.getName();
                       it.setText(_name);
@@ -169,6 +176,7 @@ public class LcarsNode extends XNode {
               ObservableList<Node> _children_1 = it.getChildren();
               RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.VIOLET);
               final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+                @Override
                 public void apply(final RectangleBorderPane it) {
                   VBox.setVgrow(it, Priority.ALWAYS);
                 }
@@ -177,6 +185,7 @@ public class LcarsNode extends XNode {
               _children_1.add(_doubleArrow_1);
               Rectangle _rectangle = new Rectangle();
               final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
+                @Override
                 public void apply(final Rectangle it) {
                   it.setX(0);
                   it.setY(0);
@@ -202,6 +211,7 @@ public class LcarsNode extends XNode {
           ObservableList<Node> _children_1 = it.getChildren();
           RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
           final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+            @Override
             public void apply(final RectangleBorderPane it) {
               it.setBackgroundPaint(Color.BLACK);
               it.setBackgroundRadius(8);
@@ -213,11 +223,13 @@ public class LcarsNode extends XNode {
               LcarsNode.this.infoBox = _hBox;
               ObservableList<Node> _children = it.getChildren();
               final Procedure1<HBox> _function = new Procedure1<HBox>() {
+                @Override
                 public void apply(final HBox it) {
                   it.setSpacing(5);
                   ObservableList<Node> _children = it.getChildren();
                   VBox _vBox = new VBox();
                   final Procedure1<VBox> _function = new Procedure1<VBox>() {
+                    @Override
                     public void apply(final VBox it) {
                     }
                   };
@@ -226,6 +238,7 @@ public class LcarsNode extends XNode {
                   ObservableList<Node> _children_1 = it.getChildren();
                   ImageView _imageView = new ImageView();
                   final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+                    @Override
                     public void apply(final ImageView it) {
                       DoubleProperty _fitWidthProperty = it.fitWidthProperty();
                       DoubleProperty _widthProperty = LcarsNode.this.widthProperty();
@@ -250,6 +263,7 @@ public class LcarsNode extends XNode {
               _children.add(_doubleArrow);
               Rectangle _rectangle = new Rectangle();
               final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
+                @Override
                 public void apply(final Rectangle it) {
                   DoubleProperty _widthProperty = it.widthProperty();
                   ReadOnlyDoubleProperty _widthProperty_1 = LcarsNode.this.vbox.widthProperty();
@@ -270,6 +284,7 @@ public class LcarsNode extends XNode {
       };
       final RectangleBorderPane node = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
       final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
+        @Override
         public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
           while ((LcarsNode.this.nameField.getBoundsInLocal().getWidth() > newValue.getWidth())) {
             String _text = LcarsNode.this.nameField.getText();
@@ -289,6 +304,7 @@ public class LcarsNode extends XNode {
   protected RectangleBorderPane createBox(final Color color) {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
     final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
+      @Override
       public void apply(final RectangleBorderPane it) {
         it.setBorderPaint(color);
         it.setBackgroundPaint(color);
@@ -304,6 +320,7 @@ public class LcarsNode extends XNode {
   protected Text createButtonText(final String buttonText, final VPos alignment) {
     Text _text = new Text();
     final Procedure1<Text> _function = new Procedure1<Text>() {
+      @Override
       public void apply(final Text it) {
         Font _lcarsFont = LcarsExtensions.lcarsFont(4);
         it.setFont(_lcarsFont);
@@ -356,6 +373,7 @@ public class LcarsNode extends XNode {
       }
       Set<String> _keySet_1 = data.keySet();
       final Function1<String, Boolean> _function = new Function1<String, Boolean>() {
+        @Override
         public Boolean apply(final String it) {
           boolean _contains = handledKeys.contains(it);
           return Boolean.valueOf((!_contains));
@@ -394,10 +412,12 @@ public class LcarsNode extends XNode {
   public void showImage(final String imageUrl) {
     final ImageCache imageCache = ImageCache.get();
     final Function0<byte[]> _function = new Function0<byte[]>() {
+      @Override
       public byte[] apply() {
         DBObject _data = LcarsNode.this.getData();
         Object _get = _data.get("images");
         final Function1<DBObject, Boolean> _function = new Function1<DBObject, Boolean>() {
+          @Override
           public Boolean apply(final DBObject it) {
             Object _get = it.get("url");
             String _string = _get.toString();
@@ -415,6 +435,7 @@ public class LcarsNode extends XNode {
     if (_notEquals) {
       this.currentImageUrl = imageUrl;
       final Procedure1<ImageView> _function_1 = new Procedure1<ImageView>() {
+        @Override
         public void apply(final ImageView it) {
           it.setImage(image);
           double _width = image.getWidth();
@@ -460,6 +481,7 @@ public class LcarsNode extends XNode {
     Iterables.<Node>addAll(_children_1, fields);
     final Timeline timeline = new Timeline();
     final Consumer<LcarsField> _function = new Consumer<LcarsField>() {
+      @Override
       public void accept(final LcarsField it) {
         it.addAnimation(timeline);
       }
@@ -468,6 +490,7 @@ public class LcarsNode extends XNode {
     timeline.play();
   }
   
+  @Override
   public void doActivate() {
     super.doActivate();
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = this.infoBox.boundsInLocalProperty();
@@ -478,12 +501,14 @@ public class LcarsNode extends XNode {
     LinkedHashMap<String, List<LcarsField>> _createPages = this.createPages(_data);
     this.pages = _createPages;
     final Procedure1<VBox> _function = new Procedure1<VBox>() {
+      @Override
       public void apply(final VBox it) {
         ObservableList<Node> _children = it.getChildren();
         final Node lastStripe = IterableExtensions.<Node>last(_children);
         ObservableList<Node> _children_1 = it.getChildren();
         _children_1.remove(lastStripe);
         final Function1<String, Boolean> _function = new Function1<String, Boolean>() {
+          @Override
           public Boolean apply(final String it) {
             return Boolean.valueOf(LcarsNode.this.pages.containsKey(it));
           }
@@ -494,6 +519,7 @@ public class LcarsNode extends XNode {
             final RectangleBorderPane box = LcarsNode.this.createBox(LcarsExtensions.FLESH);
             ObservableList<Node> _children_2 = it.getChildren();
             final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+              @Override
               public void apply(final RectangleBorderPane it) {
                 VBox.setVgrow(it, Priority.SOMETIMES);
                 ObservableList<Node> _children = it.getChildren();
@@ -521,6 +547,7 @@ public class LcarsNode extends XNode {
                 Text _createButtonText = LcarsNode.this.createButtonText(pageTitle, _switchResult);
                 _children.add(_createButtonText);
                 final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+                  @Override
                   public void handle(final MouseEvent it) {
                     LcarsNode.this.showPage(pageTitle);
                     LcarsNode.this.invertColors(box);
@@ -528,6 +555,7 @@ public class LcarsNode extends XNode {
                 };
                 it.setOnMousePressed(_function);
                 final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+                  @Override
                   public void handle(final MouseEvent it) {
                     LcarsNode.this.invertColors(box);
                   }
@@ -545,12 +573,14 @@ public class LcarsNode extends XNode {
           final RectangleBorderPane previous_box = LcarsNode.this.createBox(LcarsExtensions.RED);
           ObservableList<Node> _children_2 = it.getChildren();
           final Procedure1<RectangleBorderPane> _function_1 = new Procedure1<RectangleBorderPane>() {
+            @Override
             public void apply(final RectangleBorderPane it) {
               VBox.setVgrow(it, Priority.SOMETIMES);
               ObservableList<Node> _children = it.getChildren();
               Text _createButtonText = LcarsNode.this.createButtonText("previous pic", VPos.BOTTOM);
               _children.add(_createButtonText);
               final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+                @Override
                 public void handle(final MouseEvent it) {
                   int _indexOf = LcarsNode.this.imageUrls.indexOf(LcarsNode.this.currentImageUrl);
                   int _plus = (_indexOf + 1);
@@ -563,6 +593,7 @@ public class LcarsNode extends XNode {
               };
               it.setOnMousePressed(_function);
               final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+                @Override
                 public void handle(final MouseEvent it) {
                   LcarsNode.this.invertColors(previous_box);
                 }
@@ -575,12 +606,14 @@ public class LcarsNode extends XNode {
           final RectangleBorderPane next_box = LcarsNode.this.createBox(LcarsExtensions.RED);
           ObservableList<Node> _children_3 = it.getChildren();
           final Procedure1<RectangleBorderPane> _function_2 = new Procedure1<RectangleBorderPane>() {
+            @Override
             public void apply(final RectangleBorderPane it) {
               VBox.setVgrow(it, Priority.SOMETIMES);
               ObservableList<Node> _children = it.getChildren();
               Text _createButtonText = LcarsNode.this.createButtonText("next pic", VPos.TOP);
               _children.add(_createButtonText);
               final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+                @Override
                 public void handle(final MouseEvent it) {
                   int _indexOf = LcarsNode.this.imageUrls.indexOf(LcarsNode.this.currentImageUrl);
                   int _size = LcarsNode.this.imageUrls.size();
@@ -595,6 +628,7 @@ public class LcarsNode extends XNode {
               };
               it.setOnMousePressed(_function);
               final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
+                @Override
                 public void handle(final MouseEvent it) {
                   LcarsNode.this.invertColors(next_box);
                 }
@@ -608,6 +642,7 @@ public class LcarsNode extends XNode {
           ObservableList<Node> _children_4 = it.getChildren();
           RectangleBorderPane _createBox = LcarsNode.this.createBox(LcarsExtensions.RED);
           final Procedure1<RectangleBorderPane> _function_3 = new Procedure1<RectangleBorderPane>() {
+            @Override
             public void apply(final RectangleBorderPane it) {
               VBox.setVgrow(it, Priority.ALWAYS);
             }
@@ -639,15 +674,18 @@ public class LcarsNode extends XNode {
           this.setCycleDuration(duration);
         }
         
+        @Override
         protected void interpolate(final double alpha) {
           spacer.setWidth((150 * alpha));
         }
       };
       final Procedure1<__LcarsNode_1> _function = new Procedure1<__LcarsNode_1>() {
+        @Override
         public void apply(final __LcarsNode_1 it) {
           Duration _millis = DurationExtensions.millis(500);
           it.setDuration(_millis);
           final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
+            @Override
             public void handle(final ActionEvent it) {
               ObservableList<Node> _children = LcarsNode.this.infoTextBox.getChildren();
               _children.remove(spacer);
@@ -684,11 +722,13 @@ public class LcarsNode extends XNode {
     return ((LcarsEntryDescriptor) _domainObject).getDomainObject();
   }
   
+  @Override
   public void selectionFeedback(final boolean isSelected) {
     ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
     ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
     Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
     final Consumer<XConnection> _function = new Consumer<XConnection>() {
+      @Override
       public void accept(final XConnection it) {
         it.toFront();
       }

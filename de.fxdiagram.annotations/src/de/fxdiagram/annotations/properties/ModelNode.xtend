@@ -60,17 +60,17 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 		annotatedClass.addMethod('populate', [
 			addParameter('modelElement', newTypeReference('de.fxdiagram.core.model.ModelElementImpl'))
 			val isInheritAttribtueSet = modelAnnotation.getValue('inherit') != Boolean.FALSE
-//			val superClass = annotatedClass.extendedClass
-//			val isInherit = isInheritAttribtueSet &&
-//				if(superClass != null) {
-//					val isSuperImplementsModelProvider = modelProviderType.isAssignableFrom(superClass)
-//					val isSuperHasModelNodeAnnotation = (superClass.type as TypeDeclaration).findAnnotation(modelNodeAnnotationType) != null
-//					isSuperImplementsModelProvider || isSuperHasModelNodeAnnotation
-//				} else {
-//					false
-//				}
+			val superClass = annotatedClass.extendedClass
+			val isInherit = isInheritAttribtueSet &&
+				if(superClass != null) {
+					val isSuperImplementsModelProvider = modelProviderType.isAssignableFrom(superClass)
+					val isSuperHasModelNodeAnnotation = (superClass.type as TypeDeclaration).findAnnotation(modelNodeAnnotationType) != null
+					isSuperImplementsModelProvider || isSuperHasModelNodeAnnotation
+				} else {
+					false
+				}
 			body = '''
-				«IF isInheritAttribtueSet»super.populate(modelElement);«ENDIF»
+				«IF isInherit»super.populate(modelElement);«ENDIF»
 				«FOR accessor: validPropertyNames.map[getPropertyAccessor(annotatedClass, it, true)]»
 					modelElement.addProperty(«accessor.call», «newTypeReference(accessor.componentType.type)».class);
 				«ENDFOR»

@@ -7,7 +7,7 @@ import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider
 import org.eclipse.osgi.service.resolver.BundleDescription
 
-@ModelNode(inherit=false)
+@ModelNode
 public class BundleDescriptorProvider implements DomainObjectProvider, IMappedElementDescriptorProvider {
 	
 	override <T> createDescriptor(T domainObject) {

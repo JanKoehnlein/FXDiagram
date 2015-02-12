@@ -88,6 +88,7 @@ public class Layouter {
   protected AbstractLayoutProvider getLayoutProvider(final LayoutType type) {
     GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
     final Procedure1<GraphvizLayoutProvider> _function = new Procedure1<GraphvizLayoutProvider>() {
+      @Override
       public void apply(final GraphvizLayoutProvider it) {
         String _string = type.toString();
         it.initialize(_string);
@@ -122,6 +123,7 @@ public class Layouter {
             double _plus_1 = (_minus_1 + (Layouter.NODE_PADDING / 2));
             MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _plus, _plus_1);
             final Procedure1<MoveCommand> _function = new Procedure1<MoveCommand>() {
+              @Override
               public void apply(final MoveCommand it) {
                 it.setExecuteDuration(duration);
               }
@@ -173,6 +175,7 @@ public class Layouter {
             }
             final XConnection.Kind newKind = _switchResult_1;
             final Function1<KVector, Point2D> _function = new Function1<KVector, Point2D>() {
+              @Override
               public Point2D apply(final KVector it) {
                 return new Point2D(it.x, it.y);
               }
@@ -180,6 +183,7 @@ public class Layouter {
             List<Point2D> _map = ListExtensions.<KVector, Point2D>map(layoutPoints, _function);
             ConnectionMorphCommand _connectionMorphCommand = new ConnectionMorphCommand(((XConnection)xElement), newKind, _map);
             final Procedure1<ConnectionMorphCommand> _function_1 = new Procedure1<ConnectionMorphCommand>() {
+              @Override
               public void apply(final ConnectionMorphCommand it) {
                 it.setExecuteDuration(duration);
               }
@@ -206,6 +210,7 @@ public class Layouter {
       cache.put(it, kRoot);
       ObservableList<XNode> _nodes = it.getNodes();
       final Consumer<XNode> _function = new Consumer<XNode>() {
+        @Override
         public void accept(final XNode it) {
           EList<KNode> _children = kRoot.getChildren();
           KNode _kNode = Layouter.this.toKNode(it, cache);
@@ -215,6 +220,7 @@ public class Layouter {
       _nodes.forEach(_function);
       ObservableList<XConnection> _connections = it.getConnections();
       final Consumer<XConnection> _function_1 = new Consumer<XConnection>() {
+        @Override
         public void accept(final XConnection it) {
           Layouter.this.toKEdge(it, cache);
         }
@@ -273,6 +279,7 @@ public class Layouter {
           cache.put(it, kEdge);
           ObservableList<XConnectionLabel> _labels = it.getLabels();
           final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
+            @Override
             public void accept(final XConnectionLabel it) {
               KLabel _kLabel = Layouter.this.toKLabel(it, cache);
               _kLabel.setParent(kEdge);

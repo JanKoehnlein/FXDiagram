@@ -24,9 +24,11 @@ public class ImageNode extends XNode {
     super(imageDescriptor);
   }
   
+  @Override
   protected Node createNode() {
     ImageView _imageView = new ImageView();
     final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
+      @Override
       public void apply(final ImageView it) {
         it.setPreserveRatio(true);
         DomainObjectDescriptor _domainObject = ImageNode.this.getDomainObject();

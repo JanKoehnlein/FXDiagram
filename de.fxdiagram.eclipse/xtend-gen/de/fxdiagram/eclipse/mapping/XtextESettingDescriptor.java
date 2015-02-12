@@ -77,6 +77,7 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
     }
   }
   
+  @Override
   public <T extends Object> T withDomainObject(final Function1<? super ESetting<ECLASS>, ? extends T> lambda) {
     T _xblockexpression = null;
     {
@@ -87,6 +88,7 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
       if ((editor instanceof XtextEditor)) {
         IXtextDocument _document = ((XtextEditor)editor).getDocument();
         final IUnitOfWork<T, XtextResource> _function = new IUnitOfWork<T, XtextResource>() {
+          @Override
           public T exec(final XtextResource it) throws Exception {
             T _xblockexpression = null;
             {
@@ -107,6 +109,7 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
     return _xblockexpression;
   }
   
+  @Override
   public boolean equals(final Object obj) {
     boolean _xifexpression = false;
     if ((obj instanceof XtextESettingDescriptor<?>)) {
@@ -138,6 +141,7 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
     return _xifexpression;
   }
   
+  @Override
   public int hashCode() {
     String _uri = this.getUri();
     int _hashCode = _uri.hashCode();

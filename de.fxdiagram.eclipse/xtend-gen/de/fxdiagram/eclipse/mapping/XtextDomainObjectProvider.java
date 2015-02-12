@@ -22,9 +22,10 @@ import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 
-@ModelNode(inherit = false)
+@ModelNode
 @SuppressWarnings("all")
 public class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
+  @Override
   public DomainObjectDescriptor createDescriptor(final Object handle) {
     return null;
   }
@@ -61,6 +62,7 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
     }
   }
   
+  @Override
   public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
     final T it = domainObject;
     boolean _matched = false;

@@ -18,6 +18,7 @@ public class EClassDescriptor extends CachedDomainObjectDescriptor<EClass> {
     super(eClass, provider.getId(eClass), provider.getFqn(eClass), provider);
   }
   
+  @Override
   public EClass resolveDomainObject() {
     EClass _xblockexpression = null;
     {

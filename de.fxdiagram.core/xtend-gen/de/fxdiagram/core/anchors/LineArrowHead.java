@@ -28,13 +28,16 @@ public class LineArrowHead extends ArrowHead {
     this(connection, 7, 10, null, isSource);
   }
   
+  @Override
   public Node createNode() {
     Group _group = new Group();
     final Procedure1<Group> _function = new Procedure1<Group>() {
+      @Override
       public void apply(final Group it) {
         ObservableList<Node> _children = it.getChildren();
         Polyline _polyline = new Polyline();
         final Procedure1<Polyline> _function = new Procedure1<Polyline>() {
+          @Override
           public void apply(final Polyline it) {
             ObservableList<Double> _points = it.getPoints();
             double _height = LineArrowHead.this.getHeight();
@@ -58,6 +61,7 @@ public class LineArrowHead extends ArrowHead {
         ObservableList<Node> _children_1 = it.getChildren();
         Polyline _polyline_1 = new Polyline();
         final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
+          @Override
           public void apply(final Polyline it) {
             ObservableList<Double> _points = it.getPoints();
             double _width = LineArrowHead.this.getWidth();
@@ -82,6 +86,7 @@ public class LineArrowHead extends ArrowHead {
     return ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
   }
   
+  @Override
   public double getLineCut() {
     double _width = this.getWidth();
     XConnection _connection = this.getConnection();

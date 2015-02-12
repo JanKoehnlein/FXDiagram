@@ -29,9 +29,11 @@ public class CarusselChoice extends AbstractChoiceGraphics {
   
   private double radius;
   
+  @Override
   public void setInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
     final Function2<Double, XNode, Double> _function = new Function2<Double, XNode, Double>() {
+      @Override
       public Double apply(final Double a, final XNode b) {
         Bounds _layoutBounds = b.getLayoutBounds();
         double _height = _layoutBounds.getHeight();
@@ -89,11 +91,13 @@ public class CarusselChoice extends AbstractChoiceGraphics {
     }
   }
   
+  @Override
   public void nodeChosen(final XNode choice) {
     super.nodeChosen(choice);
     choice.setEffect(null);
   }
   
+  @Override
   public void relocateButtons(final Node minusButton, final Node plusButton) {
     Group _choiceGroup = this.getChoiceGroup();
     double _layoutX = _choiceGroup.getLayoutX();

@@ -17,13 +17,16 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
     super(host);
   }
   
+  @Override
   public Class<? extends Behavior> getBehaviorKey() {
     return OpenBehavior.class;
   }
   
+  @Override
   protected void doActivate() {
     XShape _host = this.getHost();
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
+      @Override
       public void handle(final MouseEvent it) {
         int _clickCount = it.getClickCount();
         boolean _equals = (_clickCount == 2);
@@ -36,6 +39,7 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
     _host.<MouseEvent>addEventHandler(MouseEvent.MOUSE_CLICKED, _function);
   }
   
+  @Override
   public void open() {
     IMappedElementDescriptor<?> _domainObject = this.getDomainObject();
     _domainObject.openInEditor(true);

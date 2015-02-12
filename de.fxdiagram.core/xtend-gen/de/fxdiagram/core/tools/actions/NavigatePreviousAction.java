@@ -12,6 +12,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
 public class NavigatePreviousAction implements DiagramAction {
+  @Override
   public boolean matches(final KeyEvent it) {
     boolean _or = false;
     KeyCode _code = it.getCode();
@@ -26,16 +27,20 @@ public class NavigatePreviousAction implements DiagramAction {
     return _or;
   }
   
+  @Override
   public Symbol.Type getSymbol() {
     return null;
   }
   
+  @Override
   public String getTooltip() {
     return "Previous";
   }
   
+  @Override
   public void perform(final XRoot root) {
     final Function1<NavigationBehavior, Boolean> _function = new Function1<NavigationBehavior, Boolean>() {
+      @Override
       public Boolean apply(final NavigationBehavior it) {
         return Boolean.valueOf(it.previous());
       }

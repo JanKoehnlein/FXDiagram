@@ -9,7 +9,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
-@ModelNode(inherit = false, value = { "classLoaderID", "provider" })
+@ModelNode({ "classLoaderID", "provider" })
 @SuppressWarnings("all")
 public class ClassLoaderDescriptor implements DomainObjectDescriptor {
   public ClassLoaderDescriptor(final String classLoaderID, final ClassLoaderProvider provider) {
@@ -17,10 +17,12 @@ public class ClassLoaderDescriptor implements DomainObjectDescriptor {
     this.providerProperty.set(provider);
   }
   
+  @Override
   public String getName() {
     return this.getClassLoaderID();
   }
   
+  @Override
   public String getId() {
     return this.getClassLoaderID();
   }

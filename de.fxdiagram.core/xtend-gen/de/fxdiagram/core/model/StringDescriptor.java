@@ -6,13 +6,14 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
-@ModelNode(inherit = false, value = { "name" })
+@ModelNode("name")
 @SuppressWarnings("all")
 public class StringDescriptor implements DomainObjectDescriptor {
   public StringDescriptor(final String name) {
     this.nameProperty.set(name);
   }
   
+  @Override
   public String getId() {
     return this.getName();
   }

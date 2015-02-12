@@ -15,7 +15,7 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
-@ModelNode(#['slides'])
+@ModelNode('slides')
 class SlideDiagram extends XDiagram {
 	
 	@FxProperty ObservableList<Slide> slides = observableArrayList

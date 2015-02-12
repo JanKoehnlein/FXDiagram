@@ -44,6 +44,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     this.hostIsSource = hostIsSource;
   }
   
+  @Override
   public boolean isEnabled(final XNode host) {
     DomainObjectDescriptor _domainObject = host.getDomainObject();
     final IMappedElementDescriptor<ARG> hostDescriptor = ((IMappedElementDescriptor<ARG>) _domainObject);
@@ -54,6 +55,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     }
     ObservableList<XConnection> _connections = diagram.getConnections();
     final Function1<XConnection, DomainObjectDescriptor> _function = new Function1<XConnection, DomainObjectDescriptor>() {
+      @Override
       public DomainObjectDescriptor apply(final XConnection it) {
         return it.getDomainObject();
       }
@@ -61,6 +63,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
     final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
     final Function1<ARG, Boolean> _function_1 = new Function1<ARG, Boolean>() {
+      @Override
       public Boolean apply(final ARG domainArgument) {
         final Iterable<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
         for (final MODEL connectionDomainObject : connectionDomainObjects) {
@@ -103,6 +106,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     return (_xifexpression).booleanValue();
   }
   
+  @Override
   public void perform(final RapidButton button) {
     final ConnectedNodeChooser chooser = this.createChooser(button);
     XNode _host = button.getHost();
@@ -141,6 +145,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
       XDiagram _diagram = CoreExtensions.getDiagram(host);
       ObservableList<XConnection> _connections = _diagram.getConnections();
       final Function1<XConnection, DomainObjectDescriptor> _function = new Function1<XConnection, DomainObjectDescriptor>() {
+        @Override
         public DomainObjectDescriptor apply(final XConnection it) {
           return it.getDomainObject();
         }
@@ -148,11 +153,13 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
       List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
       final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
       final Function1<ARG, Object> _function_1 = new Function1<ARG, Object>() {
+        @Override
         public Object apply(final ARG domainArgument) {
           Object _xblockexpression = null;
           {
             final Iterable<MODEL> connectionDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL, ARG>select(LazyConnectionRapidButtonAction.this.mappingCall, domainArgument);
             final Consumer<MODEL> _function = new Consumer<MODEL>() {
+              @Override
               public void accept(final MODEL connectionDomainObject) {
                 ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
                 final IMappedElementDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
@@ -171,6 +178,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                   final NodeMappingCall<?, MODEL> nodeMappingCall = _elvis;
                   final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
                   final Consumer<Object> _function = new Consumer<Object>() {
+                    @Override
                     public void accept(final Object it) {
                       NodeMapping<?> _nodeMapping = nodeMappingCall.getNodeMapping();
                       XNode _createNode = LazyConnectionRapidButtonAction.this.<Object>createNode(it, _nodeMapping);
@@ -183,6 +191,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
             };
             connectionDomainObjects.forEach(_function);
             final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
+              @Override
               public XConnection getConnection(final XNode thisNode, final XNode thatNode, final DomainObjectDescriptor connectionDesc) {
                 XConnection _xblockexpression = null;
                 {
@@ -190,6 +199,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                   ConnectionMapping<MODEL> _connectionMapping = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
                   XConnection _createConnection = _connectionMapping.createConnection(descriptor);
                   final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+                    @Override
                     public void apply(final XConnection it) {
                       if (LazyConnectionRapidButtonAction.this.hostIsSource) {
                         it.setSource(thisNode);

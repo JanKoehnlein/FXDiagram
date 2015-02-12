@@ -15,7 +15,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.shape.Polygon
 
-@ModelNode(inherit=false, value=#['layoutX', 'string', 'integer', 'long', 'bool', 'unprecise', 'names', 'selfRef']) 
+@ModelNode('layoutX', 'string', 'integer', 'long', 'bool', 'unprecise', 'names', 'selfRef') 
 abstract class ModelTest extends Polygon {
 	public IntegerProperty integer
 	public LongProperty longProperty
@@ -27,11 +27,11 @@ abstract class ModelTest extends Polygon {
 	public ListProperty<String> names	
 }
 
-@ModelNode(inherit=false, value = #['objects']) 
+@ModelNode('objects') 
 class Modeltest2 {
 	@FxProperty ObservableList<DomainObjectDescriptor> objects = FXCollections.observableArrayList
 } 
 
-@ModelNode(inherit=false) 
+@ModelNode 
 class Modeltest3 extends XNode {
 }  

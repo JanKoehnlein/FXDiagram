@@ -18,6 +18,7 @@ public class MappingAcceptor<ARG extends Object> {
   
   public boolean add(final AbstractMapping<?> mapping) {
     final Function1<ARG, ARG> _function = new Function1<ARG, ARG>() {
+      @Override
       public ARG apply(final ARG it) {
         return it;
       }
