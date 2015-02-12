@@ -121,6 +121,15 @@ public class ClassLoaderExtensions {
   }
   
   public static boolean isEquinox() {
-    return Platform.isRunning();
+    try {
+      return Platform.isRunning();
+    } catch (final Throwable _t) {
+      if (_t instanceof Exception) {
+        final Exception exc = (Exception)_t;
+        return false;
+      } else {
+        throw Exceptions.sneakyThrow(_t);
+      }
+    }
   }
 }

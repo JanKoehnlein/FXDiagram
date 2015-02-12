@@ -50,6 +50,10 @@ class ClassLoaderExtensions {
 	}
 	
 	def static isEquinox() {
-		Platform.isRunning()
+		try {
+			return Platform.isRunning()
+		} catch (Exception exc) {
+			return false
+		}
 	}
 }

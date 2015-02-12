@@ -2,6 +2,7 @@ package de.fxdiagram.core.services;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -61,7 +62,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   
   protected String getClassLoaderID(final Class<?> clazz) {
     boolean _and = false;
-    boolean _isEquinox = ClassLoaderProvider.isEquinox();
+    boolean _isEquinox = ClassLoaderExtensions.isEquinox();
     if (!_isEquinox) {
       _and = false;
     } else {
@@ -87,7 +88,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
       if (_equals) {
         _or = true;
       } else {
-        boolean _isEquinox = ClassLoaderProvider.isEquinox();
+        boolean _isEquinox = ClassLoaderExtensions.isEquinox();
         boolean _not = (!_isEquinox);
         _or = _not;
       }
@@ -117,7 +118,7 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
       if (_equals) {
         _or = true;
       } else {
-        boolean _isEquinox = ClassLoaderProvider.isEquinox();
+        boolean _isEquinox = ClassLoaderExtensions.isEquinox();
         boolean _not = (!_isEquinox);
         _or = _not;
       }
@@ -137,10 +138,6 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
-  }
-  
-  public static boolean isEquinox() {
-    return Platform.isRunning();
   }
   
   @Override

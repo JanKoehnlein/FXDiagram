@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.Platform
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.Data
 import org.osgi.framework.BundleReference
+import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 @ModelNode
 class ClassLoaderProvider implements DomainObjectProviderWithState {
@@ -59,10 +60,6 @@ class ClassLoaderProvider implements DomainObjectProviderWithState {
 		return url.toExternalForm
 	}
 
-	def static isEquinox() {
-		Platform.isRunning
-	}
-	
 	override copyState(DomainObjectProviderWithState from) {
 		rootClassLoader = (from as ClassLoaderProvider).rootClassLoader
 	}

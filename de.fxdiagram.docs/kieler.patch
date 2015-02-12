@@ -1,144 +1,161 @@
+diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/EclipseRuntimeDetector.java b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/EclipseRuntimeDetector.java
+new file mode 100644
+index 0000000..5ab9af7
+--- /dev/null
++++ b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/EclipseRuntimeDetector.java
+@@ -0,0 +1,15 @@
++package de.cau.cs.kieler.kiml.graphviz.layouter;
++
++import org.eclipse.core.runtime.Platform;
++
++public class EclipseRuntimeDetector {
++
++    public static boolean isEclipseRunning() {
++        try {
++            return Platform.isRunning();
++        } catch (Exception exc) {
++            // assume Eclipse is not running
++            return false;
++        }
++    }
++}
 diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizLayoutProvider.java b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizLayoutProvider.java
-index e15ab0e..03da185 100644
+index 3ddca81..831a232 100644
 --- a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizLayoutProvider.java
 +++ b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizLayoutProvider.java
-@@ -20,11 +20,14 @@
+@@ -13,6 +13,8 @@
+  */
+ package de.cau.cs.kieler.kiml.graphviz.layouter;
+ 
++import static de.cau.cs.kieler.kiml.graphviz.layouter.EclipseRuntimeDetector.isEclipseRunning;
++
+ import java.io.File;
+ import java.io.FileOutputStream;
+ import java.io.IOException;
+@@ -20,7 +22,6 @@
  import java.io.OutputStream;
  import java.util.Map;
  
-+import org.eclipse.core.runtime.Platform;
+-import org.eclipse.core.runtime.Platform;
  import org.eclipse.emf.common.util.URI;
  import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
- import org.eclipse.xtext.resource.SaveOptions;
- import org.eclipse.xtext.resource.XtextResource;
- import org.eclipse.xtext.resource.XtextResourceSet;
-+
-+import com.google.inject.Injector;
- 
- import de.cau.cs.kieler.core.WrappedException;
- import de.cau.cs.kieler.core.alg.IKielerProgressMonitor;
-@@ -36,6 +39,7 @@
+ import org.eclipse.jface.preference.IPreferenceStore;
+@@ -39,9 +40,9 @@
+ import de.cau.cs.kieler.core.util.ForwardingInputStream;
+ import de.cau.cs.kieler.kiml.AbstractLayoutProvider;
+ import de.cau.cs.kieler.kiml.formats.GraphFormatData;
++import de.cau.cs.kieler.kiml.formats.GraphFormatsService;
  import de.cau.cs.kieler.kiml.formats.IGraphFormatHandler;
  import de.cau.cs.kieler.kiml.formats.TransformationData;
- import de.cau.cs.kieler.kiml.formats.GraphFormatsService;
-+import de.cau.cs.kieler.kiml.graphviz.dot.GraphvizDotStandaloneSetup;
+-import de.cau.cs.kieler.kiml.formats.GraphFormatsService;
+ import de.cau.cs.kieler.kiml.graphviz.dot.GraphvizDotStandaloneSetup;
  import de.cau.cs.kieler.kiml.graphviz.dot.dot.GraphvizModel;
  import de.cau.cs.kieler.kiml.graphviz.dot.transform.Command;
- import de.cau.cs.kieler.kiml.graphviz.dot.transform.DotExporter;
-@@ -76,18 +80,30 @@
-         graphvizTool = new GraphvizTool(command);
-         // the dot format handler is indirectly fetched in order to ensure proper injection
-         IGraphFormatHandler<?> handler = null;
--        GraphFormatData formatData = GraphFormatsService.getInstance().getFormatData(
--                DotFormatHandler.ID);
--        if (formatData != null) {
--            handler = formatData.getHandler();
--        }
--        if (handler instanceof DotFormatHandler) {
--            dotHandler = (DotFormatHandler) handler;
-+        if(Platform.isRunning()) {
-+	        GraphFormatData formatData = GraphFormatsService.getInstance().getFormatData(
-+	                DotFormatHandler.ID);
-+	        if (formatData != null) {
-+	            handler = formatData.getHandler();
-+	        }
-+	        if (handler instanceof DotFormatHandler) {
-+	            dotHandler = (DotFormatHandler) handler;
-+	        } else {
-+	            throw new IllegalStateException("The Graphviz Dot language support is not available.");
-+	        }
-         } else {
--            throw new IllegalStateException("The Graphviz Dot language support is not available.");
-+        	dotHandler = getInjector().getInstance(DotFormatHandler.class);
-         }
-     }
-     
-+    private Injector injector;
-+    
-+    private Injector getInjector() {
-+    	if(injector == null) 
-+    		injector = new GraphvizDotStandaloneSetup().createInjectorAndDoEMFRegistration();
-+       	 return injector;
-+    }
-+
-     /**
-      * {@inheritDoc}
+@@ -50,7 +51,7 @@
+ import de.cau.cs.kieler.kiml.graphviz.layouter.GraphvizTool.Cleanup;
+ import de.cau.cs.kieler.kiml.klayoutdata.KShapeLayout;
+ import de.cau.cs.kieler.kiml.options.LayoutOptions;
+-
++	 
+ /**
+  * Layout provider for the Graphviz layout tool.
+  * The actual Graphviz layout that is applied is determined by the parameter
+@@ -79,7 +80,7 @@
+     /** the call number for the current execution. */
+     private int myCallNo;
+     /** the current configuration regarding the process handling. */
+-    private boolean reuseProcess;
++    private boolean reuseProcess = REUSE_PROCESS_DEFAULT;
+     /** a corresponding pref change listener updating {@link #reuseProcess}. */
+     private IPropertyChangeListener prefListener;
+     /** lazily created injector for creating required format handlers if running outside of Eclipse. */
+@@ -90,19 +91,19 @@
       */
+     @Override
+     public void initialize(final String parameter) {
+-        final IPreferenceStore store = GraphvizLayouterPlugin.getDefault().getPreferenceStore();
+-        reuseProcess = store.getBoolean(PREF_GRAPHVIZ_REUSE_PROCESS);
+-        
+-        prefListener = new IPropertyChangeListener() {
+-            
+-            public void propertyChange(final PropertyChangeEvent event) {
+-               if (PREF_GRAPHVIZ_REUSE_PROCESS.equals(event.getProperty())) {
+-                   reuseProcess = ((Boolean) event.getNewValue()).booleanValue();
+-               }
+-            }
+-        };
+-        store.addPropertyChangeListener(prefListener);
+-
++        if (isEclipseRunning()) {
++	        final IPreferenceStore store = GraphvizLayouterPlugin.getDefault().getPreferenceStore();
++	        reuseProcess = store.getBoolean(PREF_GRAPHVIZ_REUSE_PROCESS);
++	        prefListener = new IPropertyChangeListener() {
++	            
++	            public void propertyChange(final PropertyChangeEvent event) {
++	               if (PREF_GRAPHVIZ_REUSE_PROCESS.equals(event.getProperty())) {
++	                   reuseProcess = ((Boolean) event.getNewValue()).booleanValue();
++	               }
++	            }
++	        };
++	        store.addPropertyChangeListener(prefListener);
++        } 
+         command = Command.valueOf(parameter);
+         graphvizTool = new GraphvizTool(command);
+         
+@@ -110,7 +111,7 @@
+         // inside Eclipse, use the GraphFormatsService to retrieve the handler; otherwise, use an
+         // injector to retrieve an instance)
+         IGraphFormatHandler<?> handler = null;
+-        if (Platform.isRunning()) {
++        if (isEclipseRunning()) {
+             GraphFormatData formatData = GraphFormatsService.getInstance().getFormatData(
+                     DotFormatHandler.ID);
+             if (formatData != null) {
 diff --git a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
-index 3f755fc..60cb81b 100644
+index 912b90a..a75fac5 100644
 --- a/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
 +++ b/plugins/de.cau.cs.kieler.kiml.graphviz.layouter/src/de/cau/cs/kieler/kiml/graphviz/layouter/GraphvizTool.java
-@@ -21,6 +21,7 @@
+@@ -21,7 +21,6 @@
  import java.util.ArrayList;
  import java.util.List;
  
-+import org.eclipse.core.runtime.Platform;
+-import org.eclipse.core.runtime.Platform;
  import org.eclipse.jface.preference.IPreferenceStore;
  import org.eclipse.jface.preference.PreferenceDialog;
  import org.eclipse.swt.widgets.Display;
-@@ -197,14 +198,17 @@
-      * @return path to the dot executable, or {@code null} if the executable was not found
-      */
-     public static String getDotExecutable(final boolean promptUser) {
--        // load the graphviz path from the preferences, if any
--        IPreferenceStore preferenceStore = GraphvizLayouterPlugin.getDefault().getPreferenceStore();
--        String dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
--        File dotFile = new File(dotExecutable);
--        if (dotFile.exists() && dotFile.canExecute()) {
--            return dotExecutable;
--        }
--        
-+    	String dotExecutable;
-+    	File dotFile;
-+    	if(Platform.isRunning()) {
-+	        // load the graphviz path from the preferences, if any
-+	        IPreferenceStore preferenceStore = GraphvizLayouterPlugin.getDefault().getPreferenceStore();
-+	        dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
-+	        dotFile = new File(dotExecutable);
-+	        if (dotFile.exists() && dotFile.canExecute()) {
-+	            return dotExecutable;
-+	        }
-+    	}
-         // look in a selection of default locations where it might be installed
-         for (String location : DEFAULT_LOCS) {
-             // Linux
-@@ -222,9 +226,10 @@
-             }
+@@ -34,6 +33,8 @@
+ import de.cau.cs.kieler.core.util.Maybe;
+ import de.cau.cs.kieler.kiml.graphviz.dot.transform.Command;
+ import de.cau.cs.kieler.kiml.graphviz.layouter.preferences.GraphvizPreferencePage;
++
++import static de.cau.cs.kieler.kiml.graphviz.layouter.EclipseRuntimeDetector.*;
+ 
+ /**
+  * Handler for accessing Graphviz via a separate process.
+@@ -203,7 +204,7 @@
+         
+         // Load the graphviz path from the preferences, if any. However, do this only if we're really
+         // running in an Eclipse context
+-        if (Platform.isRunning()) {
++        if (isEclipseRunning()) {
+             IPreferenceStore preferenceStore = GraphvizLayouterPlugin.getDefault().getPreferenceStore();
+             dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
+             dotFile = new File(dotExecutable);
+@@ -230,7 +231,7 @@
          }
          
--        if (promptUser) {
-+        if (promptUser && Platform.isRunning()) {
+         // If we haven't found an executable yet, ask the user if so requested and if Eclipse is running
+-        if (promptUser && Platform.isRunning()) {
++        if (promptUser && isEclipseRunning()) {
              if (handleExecPath()) {
                  // fetch the executable string again after the user has entered a new path
-+    	        IPreferenceStore preferenceStore = GraphvizLayouterPlugin.getDefault().getPreferenceStore();
-                 dotExecutable = preferenceStore.getString(PREF_GRAPHVIZ_EXECUTABLE);
-                 dotFile = new File(dotExecutable);
-                 if (dotFile.exists() && dotFile.canExecute()) {
-@@ -506,11 +511,14 @@
-                 }
+                 IPreferenceStore preferenceStore =
+@@ -517,7 +518,7 @@
                  
                  // retrieve the current timeout value
--                IPreferenceStore preferenceStore =
--                        GraphvizLayouterPlugin.getDefault().getPreferenceStore();
--                int timeout = preferenceStore.getInt(PREF_TIMEOUT);
--                if (timeout < PROCESS_MIN_TIMEOUT) {
--                    timeout = PROCESS_DEF_TIMEOUT;
-+                int timeout = PROCESS_DEF_TIMEOUT;
-+                if(Platform.isRunning()) {
-+                	IPreferenceStore preferenceStore =
-+                			GraphvizLayouterPlugin.getDefault().getPreferenceStore();
-+                	int timeoutPreference = preferenceStore.getInt(PREF_TIMEOUT);
-+                	if (timeoutPreference >= PROCESS_MIN_TIMEOUT) {
-+                		timeout = timeoutPreference;
-+                	}
-                 }
-                 
-                 boolean interrupted = false;
-@@ -534,7 +542,6 @@
-                 
-             } while (watchdog != null);
-         }
--        
-     }
- 
- }
+                 int timeout = PROCESS_DEF_TIMEOUT;
+-                if (Platform.isRunning()) {
++                if (isEclipseRunning()) {
+                     IPreferenceStore preferenceStore =
+                             GraphvizLayouterPlugin.getDefault().getPreferenceStore();
+                     int timeoutPreference = preferenceStore.getInt(PREF_TIMEOUT);
