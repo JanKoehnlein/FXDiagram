@@ -88,7 +88,7 @@
     <requirement
         name="org.eclipse.fx.ide.feature.feature.group"/>
     <repository
-        url="${xtext.releases.composite}"/>
+        url="${xtext.latest.composite}"/>
     <repository
         url="${efxclipse.release}"/>
   </setupTask>
