@@ -83,6 +83,11 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 			if(allButtons.visible) 
 				layout
 		]
+		host.parentProperty.addListener [
+			p, oldParent, newParent |
+			if(newParent==null)
+				oldParent.diagram.buttonLayer.children -= allButtons
+		]
 	}
 	
 	def show() {

@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.buttons;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
@@ -29,6 +30,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -168,6 +170,21 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
       }
     };
     _boundsInParentProperty.addListener(_function_5);
+    HOST _host_4 = this.getHost();
+    ReadOnlyObjectProperty<Parent> _parentProperty = _host_4.parentProperty();
+    final ChangeListener<Parent> _function_6 = new ChangeListener<Parent>() {
+      @Override
+      public void changed(final ObservableValue<? extends Parent> p, final Parent oldParent, final Parent newParent) {
+        boolean _equals = Objects.equal(newParent, null);
+        if (_equals) {
+          XDiagram _diagram = CoreExtensions.getDiagram(oldParent);
+          Group _buttonLayer = _diagram.getButtonLayer();
+          ObservableList<Node> _children = _buttonLayer.getChildren();
+          _children.remove(RapidButtonBehavior.this.allButtons);
+        }
+      }
+    };
+    _parentProperty.addListener(_function_6);
   }
   
   public Group show() {

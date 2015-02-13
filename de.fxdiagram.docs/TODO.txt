@@ -2,18 +2,11 @@ TODO
 - persistence: 
   - revise image cache
   - XDiagram needs a hook like createNode
-- remove rapid buttons on node remove
-- placement of new nodes after choosing
-    
-BUGS
-- player.seek doesn't work
 - labels snap back after being repositioned
 
 ENHANCEMENT
-- delete rapid button on delete node
 - scroll to reveal choosers
 - find better colors
-- collapsible compartments
 - chooser isVertical
 - Make auxlines magnetic
 - more auxiliary lines
