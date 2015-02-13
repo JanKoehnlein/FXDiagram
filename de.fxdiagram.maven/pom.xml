@@ -14,8 +14,10 @@
 	<modules>
 		<module>../de.fxdiagram.external</module>
 		<module>../de.fxdiagram.annotations</module>
-	  	<module>../de.fxdiagram.annotations.tests</module>
+		<module>../de.fxdiagram.annotations.tests</module>
 		<module>../de.fxdiagram.core</module>
+		<module>../de.fxdiagram.core.tests</module>
+		<module>../de.fxdiagram.docs</module>
 		<module>../de.fxdiagram.lib</module>
 		<module>../de.fxdiagram.examples</module>
 		<module>../de.fxdiagram.eclipse</module>
@@ -26,8 +28,7 @@
 		<module>../de.fxdiagram.xtext.fowlerdsl</module>
 		<module>../de.fxdiagram.xtext.xbase</module>
 		<module>../de.fxdiagram.base.feature</module>
-		<module>../de.fxdiagram.eclipse.feature</module>
-		<module>../de.fxdiagram.xtext.feature</module>
+		<module>../de.fxdiagram.sdk.feature</module>
 		<module>../de.fxdiagram.eclipse.updatesite</module>
 	</modules>
 
@@ -117,7 +118,40 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-source-plugin</artifactId>
-				<version>0.22.0</version>
+				<version>${tycho-version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho.extras</groupId>
+				<artifactId>tycho-source-feature-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<excludes>
+						<feature id="org.eclipse.fx.ide.basic.feature"/>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>source-feature</id>
+						<phase>package</phase>
+						<goals>
+							<goal>source-feature</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<executions>
+					<execution>
+						<id>attach-p2-metadata</id>
+						<phase>package</phase>
+						<goals>
+							<goal>p2-metadata</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 

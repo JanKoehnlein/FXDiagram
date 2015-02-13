@@ -25,7 +25,7 @@ class ExportSvgAction implements DiagramAction {
 	
 	override perform(XRoot root) {
 		val fileChooser = new FileChooser()
-		fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FX Diagram", "*.svg")
+		fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.svg")
 		val file = (fileChooser).showSaveDialog(root.scene.window)
 		if(file != null) {
 			val svgCode = new SvgExporter().toSvg(root.diagram, file.parentFile)

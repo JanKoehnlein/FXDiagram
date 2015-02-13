@@ -48,7 +48,7 @@ public class ExportSvgAction implements DiagramAction {
     try {
       final FileChooser fileChooser = new FileChooser();
       ObservableList<FileChooser.ExtensionFilter> _extensionFilters = fileChooser.getExtensionFilters();
-      FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FX Diagram", "*.svg");
+      FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FXDiagram", "*.svg");
       _extensionFilters.add(_extensionFilter);
       Scene _scene = root.getScene();
       Window _window = _scene.getWindow();

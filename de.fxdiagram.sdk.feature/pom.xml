@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.fxdiagram</groupId>
-	<artifactId>de.fxdiagram.xtext.feature</artifactId>
+	<artifactId>de.fxdiagram.sdk.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
 	<parent>
 		<groupId>de.fxdiagram</groupId>

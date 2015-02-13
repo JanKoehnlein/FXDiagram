@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="de.fxdiagram.eclipse.feature"
-      label="FX Diagram Eclipse Feature"
+      id="de.fxdiagram.sdk.feature"
+      label="FXDiagram SDK"
       version="1.0.0.qualifier">
 
    <description>
-      FXDiagram - A diagram framework based on JavaFX. Integration with Eclipse and Xtext, as well as an example PDE bundle dependency tool.
+      FXDiagram - A diagram framework based on JavaFX. Complete SDK.
    </description>
 
    <copyright>
@@ -102,9 +102,49 @@ Everyone is permitted to copy and distribute copies of this Agreement, but in or
 This Agreement is governed by the laws of the State of New York and the intellectual property laws of the United States of America. No party to this Agreement will bring a legal action under this Agreement more than one year after the cause of action arose. Each party waives its rights to a jury trial in any resulting litigation.
    </license>
 
+   <includes
+         id="org.eclipse.fx.ide.basic.feature"
+         version="0.0.0"/>
+
    <requires>
-      <import feature="de.fxdiagram.base.feature" version="1.0.0.qualifier"/>
+      <import plugin="de.cau.cs.kieler.core.kgraph" version="0.4.2" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.core" version="0.8.1" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.kiml" version="0.12.0" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.kiml.graphviz.dot" version="0.6.1" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.kiml.graphviz.layouter" version="0.6.2" match="greaterOrEqual"/>
+      <import plugin="de.cau.cs.kieler.kiml.service" version="0.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.example.domainmodel.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.example.fowlerdsl.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.example.domainmodel" version="2.6.2" match="greaterOrEqual"/>
+      <import feature="org.eclipse.fx.ide.basic.feature" version="1.1.0.201411050807" match="greaterOrEqual"/>
    </requires>
+
+   <plugin
+         id="de.fxdiagram.annotations"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.annotations.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="de.fxdiagram.core.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="de.fxdiagram.eclipse"
@@ -128,10 +168,54 @@ This Agreement is governed by the laws of the State of New York and the intellec
          unpack="false"/>
 
    <plugin
+         id="de.fxdiagram.examples"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="de.fxdiagram.external"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.lib"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="de.fxdiagram.swtfx"
          download-size="0"
          install-size="0"
          version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.xtext.domainmodel"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.xtext.fowlerdsl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.xtext.xbase"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
 </feature>

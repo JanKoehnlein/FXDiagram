@@ -24,7 +24,7 @@ class LoadAction implements DiagramAction {
 
 	override perform(XRoot root) {
 		val fileChooser = new FileChooser()
-		fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FX Diagram", "*.fxd")
+		fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
 		val file = (fileChooser).showOpenDialog(root.scene.window)
 		if(file != null) {
 			val node = new ModelLoad().load(new FileReader(file))

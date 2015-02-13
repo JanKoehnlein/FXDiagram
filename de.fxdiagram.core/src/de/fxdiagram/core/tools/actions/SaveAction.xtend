@@ -26,7 +26,7 @@ class SaveAction implements DiagramAction {
 	override perform(XRoot root) {
 		if(root.diagram != null) {
 			val fileChooser = new FileChooser()
-			fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FX Diagram", "*.fxd")
+			fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
 			val file = (fileChooser).showSaveDialog(root.scene.window)
 			if(file != null) {
 				new ModelSave().save(root, new FileWriter(file))

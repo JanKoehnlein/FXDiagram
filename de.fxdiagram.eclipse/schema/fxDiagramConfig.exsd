@@ -3,7 +3,7 @@
 <schema targetNamespace="de.fxdiagram.eclipse" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="de.fxdiagram.eclipse" id="fxDiagramConfig" name="FX Diagram Configuration"/>
+         <meta.schema plugin="de.fxdiagram.eclipse" id="fxDiagramConfig" name="FXDiagram Configuration"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
