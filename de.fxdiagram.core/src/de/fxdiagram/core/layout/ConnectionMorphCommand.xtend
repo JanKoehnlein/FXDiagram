@@ -14,6 +14,7 @@ import javafx.scene.shape.MoveTo
 import javafx.scene.shape.Path
 import javafx.util.Duration
 
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
 class ConnectionMorphCommand extends AbstractAnimationCommand {
@@ -55,7 +56,8 @@ class ConnectionMorphCommand extends AbstractAnimationCommand {
 			val fromPoint = from.get(min(from.size-1, i))
 			val toPoint = to.get(min(to.size-1, i))
 			val currentControlPoint = controlPoints.get(i)
-			morph.children += createMoveTransition(currentControlPoint, fromPoint, toPoint, duration)
+			if(fromPoint.distance(toPoint) > EPSILON)
+				morph.children += createMoveTransition(currentControlPoint, fromPoint, toPoint, duration)
 		}
 		morph.onFinished = [
 			connection.connectionRouter.shrinkToSize(to.size)

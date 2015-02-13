@@ -5,6 +5,7 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
+import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.Animation;
@@ -104,9 +105,13 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
         int _min_1 = Math.min(_minus_2, (i).intValue());
         final Point2D toPoint = to.get(_min_1);
         final XControlPoint currentControlPoint = controlPoints.get((i).intValue());
-        ObservableList<Animation> _children = morph.getChildren();
-        PathTransition _createMoveTransition = this.createMoveTransition(currentControlPoint, fromPoint, toPoint, duration);
-        _children.add(_createMoveTransition);
+        double _distance = fromPoint.distance(toPoint);
+        boolean _greaterThan = (_distance > NumberExpressionExtensions.EPSILON);
+        if (_greaterThan) {
+          ObservableList<Animation> _children = morph.getChildren();
+          PathTransition _createMoveTransition = this.createMoveTransition(currentControlPoint, fromPoint, toPoint, duration);
+          _children.add(_createMoveTransition);
+        }
       }
     }
     final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
