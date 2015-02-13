@@ -525,8 +525,7 @@ public class XConnection extends XShape implements XModelProvider {
       final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
         @Override
         public void accept(final XConnectionLabel it) {
-          ObservableList<XControlPoint> _controlPoints = XConnection.this.getControlPoints();
-          it.place(_controlPoints);
+          it.place(false);
         }
       };
       _labels.forEach(_function);

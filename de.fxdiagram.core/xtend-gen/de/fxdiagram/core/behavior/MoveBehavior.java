@@ -8,6 +8,8 @@ import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -174,6 +176,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
             MoveCommand _moveCommand = new MoveCommand(_host_3, 
               MoveBehavior.this.dragContext.initialX, MoveBehavior.this.dragContext.initialY, _layoutX_1, _layoutY_1);
             _commandStack.execute(_moveCommand);
+            MoveBehavior.this.setIsManuallyPlaced(true);
           }
         }
       }
@@ -230,5 +233,19 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       double _y_1 = newPositionInDiagram.getY();
       _host_2.setLayoutY(_y_1);
     }
+  }
+  
+  private SimpleBooleanProperty isManuallyPlacedProperty = new SimpleBooleanProperty(this, "isManuallyPlaced");
+  
+  public boolean getIsManuallyPlaced() {
+    return this.isManuallyPlacedProperty.get();
+  }
+  
+  public void setIsManuallyPlaced(final boolean isManuallyPlaced) {
+    this.isManuallyPlacedProperty.set(isManuallyPlaced);
+  }
+  
+  public BooleanProperty isManuallyPlacedProperty() {
+    return this.isManuallyPlacedProperty;
   }
 }

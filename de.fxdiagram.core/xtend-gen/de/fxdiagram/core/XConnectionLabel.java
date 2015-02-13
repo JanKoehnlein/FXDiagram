@@ -3,13 +3,11 @@ package de.fxdiagram.core;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
-import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -110,7 +108,21 @@ public class XConnectionLabel extends XShape implements XModelProvider {
     }
   }
   
-  public void place(final List<XControlPoint> list) {
+  public void place(final boolean force) {
+    final MoveBehavior moveBehavior = this.<MoveBehavior>getBehavior(MoveBehavior.class);
+    boolean _and = false;
+    boolean _isManuallyPlaced = moveBehavior.getIsManuallyPlaced();
+    if (!_isManuallyPlaced) {
+      _and = false;
+    } else {
+      _and = (!force);
+    }
+    if (_and) {
+      return;
+    }
+    if (force) {
+      moveBehavior.setIsManuallyPlaced(false);
+    }
     XConnection _connection = this.getConnection();
     double _position = this.getPosition();
     final Point2D center = _connection.at(_position);

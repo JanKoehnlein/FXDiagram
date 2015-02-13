@@ -249,7 +249,7 @@ class XConnection extends XShape {
 		super.layoutChildren
 		try {
 			connectionRouter.calculatePoints
-			labels.forEach[ place(controlPoints) ]	
+			labels.forEach[ place(false) ]	
 			sourceArrowHead?.place
 			targetArrowHead?.place
 		} catch(Exception exc) {

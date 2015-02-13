@@ -24,6 +24,7 @@ import javafx.geometry.Point2D
 import javafx.util.Duration
 
 import static de.fxdiagram.core.XConnection.Kind.*
+import de.fxdiagram.core.behavior.MoveBehavior
 
 class Layouter { 
 
@@ -67,6 +68,7 @@ class Layouter {
 			val kElement = entry.value
 			switch xElement { 
 				XNode: { 
+					xElement.getBehavior(MoveBehavior).isManuallyPlaced = false
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					composite += new MoveCommand(xElement, 
 						shapeLayout.xpos - xElement.layoutBounds.minX + NODE_PADDING / 2, 
@@ -76,6 +78,7 @@ class Layouter {
 					]
 				}
 				XConnection: {
+					xElement.labels.forEach[ place(true) ]
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain
 					val newKind = switch(edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {

@@ -3,11 +3,13 @@ package de.fxdiagram.core.layout;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.anchors.ConnectionRouter;
+import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
@@ -120,6 +122,17 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
         ConnectionRouter _connectionRouter = ConnectionMorphCommand.this.connection.getConnectionRouter();
         int _size = to.size();
         _connectionRouter.shrinkToSize(_size);
+        ObservableList<XControlPoint> _controlPoints = ConnectionMorphCommand.this.connection.getControlPoints();
+        final Consumer<XControlPoint> _function = new Consumer<XControlPoint>() {
+          @Override
+          public void accept(final XControlPoint it) {
+            MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
+            if (_behavior!=null) {
+              _behavior.setIsManuallyPlaced(false);
+            }
+          }
+        };
+        _controlPoints.forEach(_function);
       }
     };
     morph.setOnFinished(_function);

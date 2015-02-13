@@ -3,7 +3,6 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.MoveBehavior
-import java.util.List
 import javafx.geometry.VPos
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
@@ -68,8 +67,13 @@ class XConnectionLabel extends XShape {
 			scaleY = 1.0
 		}
 	}
-
-	def void place(List<XControlPoint> list) {
+	
+	def void place(boolean force) {
+		val moveBehavior = getBehavior(MoveBehavior)
+		if(moveBehavior.isManuallyPlaced && !force) 
+			return;
+		if(force) 
+			moveBehavior.isManuallyPlaced = false
 		val center = connection.at(position)
 		val derivative = connection.derivativeAt(position)
 		var angle = atan2(derivative.y, derivative.x)

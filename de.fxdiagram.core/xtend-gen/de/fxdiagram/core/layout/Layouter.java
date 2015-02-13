@@ -25,6 +25,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.MoveCommand;
@@ -108,6 +109,8 @@ public class Layouter {
         if (!_matched) {
           if (xElement instanceof XNode) {
             _matched=true;
+            MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
+            _behavior.setIsManuallyPlaced(false);
             EList<KGraphData> _data = kElement.getData();
             Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
             final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
@@ -135,6 +138,14 @@ public class Layouter {
         if (!_matched) {
           if (xElement instanceof XConnection) {
             _matched=true;
+            ObservableList<XConnectionLabel> _labels = ((XConnection)xElement).getLabels();
+            final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
+              @Override
+              public void accept(final XConnectionLabel it) {
+                it.place(true);
+              }
+            };
+            _labels.forEach(_function);
             EList<KGraphData> _data = kElement.getData();
             Iterable<KEdgeLayout> _filter = Iterables.<KEdgeLayout>filter(_data, KEdgeLayout.class);
             final KEdgeLayout edgeLayout = IterableExtensions.<KEdgeLayout>head(_filter);
@@ -174,21 +185,21 @@ public class Layouter {
               _switchResult_1 = XConnection.Kind.POLYLINE;
             }
             final XConnection.Kind newKind = _switchResult_1;
-            final Function1<KVector, Point2D> _function = new Function1<KVector, Point2D>() {
+            final Function1<KVector, Point2D> _function_1 = new Function1<KVector, Point2D>() {
               @Override
               public Point2D apply(final KVector it) {
                 return new Point2D(it.x, it.y);
               }
             };
-            List<Point2D> _map = ListExtensions.<KVector, Point2D>map(layoutPoints, _function);
+            List<Point2D> _map = ListExtensions.<KVector, Point2D>map(layoutPoints, _function_1);
             ConnectionMorphCommand _connectionMorphCommand = new ConnectionMorphCommand(((XConnection)xElement), newKind, _map);
-            final Procedure1<ConnectionMorphCommand> _function_1 = new Procedure1<ConnectionMorphCommand>() {
+            final Procedure1<ConnectionMorphCommand> _function_2 = new Procedure1<ConnectionMorphCommand>() {
               @Override
               public void apply(final ConnectionMorphCommand it) {
                 it.setExecuteDuration(duration);
               }
             };
-            ConnectionMorphCommand _doubleArrow = ObjectExtensions.<ConnectionMorphCommand>operator_doubleArrow(_connectionMorphCommand, _function_1);
+            ConnectionMorphCommand _doubleArrow = ObjectExtensions.<ConnectionMorphCommand>operator_doubleArrow(_connectionMorphCommand, _function_2);
             composite.operator_add(_doubleArrow);
           }
         }

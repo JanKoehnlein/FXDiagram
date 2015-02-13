@@ -2,7 +2,6 @@ TODO
 - persistence: 
   - revise image cache
   - XDiagram needs a hook like createNode
-- labels snap back after being repositioned
 
 ENHANCEMENT
 - scroll to reveal choosers

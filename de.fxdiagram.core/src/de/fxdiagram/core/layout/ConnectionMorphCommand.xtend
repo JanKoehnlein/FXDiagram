@@ -16,6 +16,7 @@ import javafx.util.Duration
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
+import de.fxdiagram.core.behavior.MoveBehavior
 
 class ConnectionMorphCommand extends AbstractAnimationCommand {
 	
@@ -61,6 +62,9 @@ class ConnectionMorphCommand extends AbstractAnimationCommand {
 		}
 		morph.onFinished = [
 			connection.connectionRouter.shrinkToSize(to.size)
+			connection.controlPoints.forEach [
+				getBehavior(MoveBehavior)?.setIsManuallyPlaced(false)
+			]
 		] 
 		return morph		
 	}

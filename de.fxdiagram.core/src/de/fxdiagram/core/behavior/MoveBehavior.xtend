@@ -7,10 +7,13 @@ import javafx.scene.input.MouseEvent
 import org.eclipse.xtend.lib.annotations.Data
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.annotations.properties.FxProperty
 
 class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	
 	DragContext dragContext
+	
+	@FxProperty boolean isManuallyPlaced
 	
 	new(T host) {
 		super(host)
@@ -31,6 +34,7 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 						dragContext.initialX, dragContext.initialY,
 						host.layoutX, host.layoutY
 					))
+					isManuallyPlaced = true
 				}
 			}
 		]
