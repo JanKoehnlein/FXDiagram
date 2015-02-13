@@ -14,6 +14,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.tools.XDiagramTool;
+import de.fxdiagram.core.tools.actions.RevealAction;
 import de.fxdiagram.lib.chooser.ChoiceGraphics;
 import de.fxdiagram.lib.chooser.ChooserTransition;
 import java.util.ArrayList;
@@ -490,6 +491,10 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
         _layoutYProperty.addListener(relocateButtons_1);
         this.graphics.relocateButtons(this.minusButton, this.plusButton);
       }
+      ArrayList<XNode> _nodes_5 = this.getNodes();
+      RevealAction _revealAction = new RevealAction(_nodes_5);
+      XRoot _root_1 = this.getRoot();
+      _revealAction.perform(_root_1);
       _xblockexpression = true;
     }
     return _xblockexpression;

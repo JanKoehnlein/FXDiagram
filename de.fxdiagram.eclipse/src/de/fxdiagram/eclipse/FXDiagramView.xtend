@@ -17,12 +17,11 @@ import de.fxdiagram.core.tools.actions.LoadAction
 import de.fxdiagram.core.tools.actions.NavigateNextAction
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction
 import de.fxdiagram.core.tools.actions.RedoAction
+import de.fxdiagram.core.tools.actions.RevealAction
 import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
-import de.fxdiagram.lib.actions.UndoRedoPlayerAction
-import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import de.fxdiagram.eclipse.mapping.AbstractMapping
 import de.fxdiagram.eclipse.mapping.DiagramMappingCall
 import de.fxdiagram.eclipse.mapping.InterpreterContext
@@ -30,6 +29,8 @@ import de.fxdiagram.eclipse.mapping.MappingCall
 import de.fxdiagram.eclipse.mapping.NodeMappingCall
 import de.fxdiagram.eclipse.mapping.XDiagramConfig
 import de.fxdiagram.eclipse.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.lib.actions.UndoRedoPlayerAction
+import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import java.util.Set
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
@@ -40,10 +41,10 @@ import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.ui.editor.XtextEditor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -85,6 +86,7 @@ class FXDiagramView extends ViewPart {
 					new ExportSvgAction,
 					new UndoAction,
 					new RedoAction,
+					new RevealAction,
 					new LoadAction,
 					new SaveAction,
 					new SelectAllAction,

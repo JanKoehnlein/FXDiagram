@@ -24,6 +24,7 @@ import de.fxdiagram.core.tools.actions.NavigateNextAction;
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
 import de.fxdiagram.core.tools.actions.OpenAction;
 import de.fxdiagram.core.tools.actions.RedoAction;
+import de.fxdiagram.core.tools.actions.RevealAction;
 import de.fxdiagram.core.tools.actions.SaveAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.UndoAction;
@@ -134,6 +135,7 @@ public class Demo extends Application {
       ExportSvgAction _exportSvgAction = new ExportSvgAction();
       UndoAction _undoAction = new UndoAction();
       RedoAction _redoAction = new RedoAction();
+      RevealAction _revealAction = new RevealAction();
       LoadAction _loadAction = new LoadAction();
       SaveAction _saveAction = new SaveAction();
       SelectAllAction _selectAllAction = new SelectAllAction();
@@ -144,7 +146,7 @@ public class Demo extends Application {
       CloseAction _closeAction = new CloseAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
       UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _openAction, _closeAction, _fullScreenAction, _undoRedoPlayerAction)));
+      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _openAction, _closeAction, _fullScreenAction, _undoRedoPlayerAction)));
       final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
         @Override
         public void apply(final XDiagram it) {

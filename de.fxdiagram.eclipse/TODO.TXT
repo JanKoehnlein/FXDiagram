@@ -1,11 +1,7 @@
 HIGH
 -make sequential animation command work
--non-Xtext sources
 -package node for PackageFragments 
  
-MEDIUM
--improve config api
-
 LOW
 -refactor AbstractChooser to work on descriptors instead of XNodes
 

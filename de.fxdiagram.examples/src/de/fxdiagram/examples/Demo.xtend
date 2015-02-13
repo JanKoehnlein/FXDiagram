@@ -50,6 +50,7 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
+import de.fxdiagram.core.tools.actions.RevealAction
 
 /**
  * Application to demonstarte the capabilities of FXDiagram in standalone (non-OSGi) mode.
@@ -103,6 +104,7 @@ class Demo extends Application {
 			new ExportSvgAction,
 			new UndoAction,
 			new RedoAction,
+			new RevealAction,
 			new LoadAction,
 			new SaveAction,
 			new SelectAllAction,

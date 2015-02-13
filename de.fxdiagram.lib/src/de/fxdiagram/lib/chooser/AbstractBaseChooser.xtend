@@ -32,6 +32,7 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.StringExpressionExtensions.*
 import static extension javafx.util.Duration.*
+import de.fxdiagram.core.tools.actions.RevealAction
 
 /**
  * Interactive {@link XDiagramTool} to add new nodes and edges the diagram in a user
@@ -255,6 +256,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			group.layoutYProperty.addListener(relocateButtons_1)
 			graphics.relocateButtons(minusButton, plusButton)
 		}
+		new RevealAction(getNodes).perform(root)
 		true
 	}
 

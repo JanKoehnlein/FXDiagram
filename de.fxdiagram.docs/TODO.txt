@@ -4,7 +4,6 @@ TODO
   - XDiagram needs a hook like createNode
 
 ENHANCEMENT
-- scroll to reveal choosers
 - find better colors
 - chooser isVertical
 - Make auxlines magnetic
