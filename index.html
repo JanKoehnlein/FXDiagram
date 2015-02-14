@@ -46,7 +46,7 @@ Selected features:
 <li>Optimized for usability</li>
 <li>Multi-touch gestures</li>
 <li>Smooth transitions/animations</li>
-<li>Animated auto-layout (based on KIELER and GraphViz)</li>
+<li>Animated auto-layout (based on <a href="http://www.informatik.uni-kiel.de/rtsys/kieler/">KIELER</a> and <a href="http://www.graphviz.org/">Graphviz</a>)</li>
 <li>Animated undo/redo</li>
 <li>JSON persistence</li>
 <li>SVG export</li>
@@ -63,22 +63,55 @@ Selected features:
 <p>You can find more information on my <a href="http://koehnlein.blogspot.com">blog</a>.</p>
 
 <h3>
+<a id="Requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h3>
+
+<p>
+To run or develop FXDiagram you need
+<ul>
+<li>A recent <a href="https://jdk8.java.net/download.html">Java 8 SDK u40</a> (currently that is an early access build). Build number must be greater than 5,</li>
+<li><a href="http://www.graphviz.org/">Graphviz</a> for auto-layout.</li>
+</ul>
+</p>
+
+<h3>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running The Examples</h3>
+
+<p>
+FXDiagram works excellent in plain JavaFX applications. In the development environment, choose <em>Run &gt; Run configurations &gt; Java Application &gt; FXDiagram Example</em> to run the demo. Instead of downloading and installing an entire Eclipse IDE, download <a href="http://jankoehnlein.github.io/FXDiagram/standalone/fxdiagram-jars.zip">fxdiagram-jars.zip</a>, unzip it and run the contained shell script.
+</p>
+
+<p>
+For Eclipse, FXDiagram ships with example diagrams for Xtext's sample languages <em>domainmodel</em> and <em>fowlerdsl</em>, 
+as well as the generic class diagram browser for Java, Xtend and Xbase-languages. There is also a graphical tool for the analysis of Eclipse plug-in dependencies. 
+</p>
+
+<p>
+To give them a try, choose <em>Run &gt; Run configurations &gt; Java Application &gt; FXDiagram in Eclipse</em> from the development environment. 
+Alternatively, you can install the pre-compiled examples as plug-ins into an Eclipse Luna from the update site
+<a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest">http://jankoehnlein.github.io/FXDiagram/p2/updates/latest</a>.
+</p>
+
+<p>The diagram view will automatically be opened and populated once you choose the appropriate action from the context menu:
+<ul>
+<li><em>Show in FXDiagram</em> on a statemachine, a state or a transition in the <em>fowlerdsl</em> editor.</li>
+<li><em>Show in FXDiagram</em> on an entity or package in the <em>dmodel</em> editor.</li>
+<li><em>Show in Class Diagram</em> on a Java/Xtend/Xbase type in the respective editor.</li>
+<li><em>Show in Plug-in Diagram</em> on a plug-in project in the navigator to explore the dependencies of Eclipse plug-ins.</li>
+</ul>
+Most nodes can be explored using rapid buttons. Watch out for tooltips.
+</p>
+
+<h3>
 <a id="development" class="anchor" href="#development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development</h3>
 
 <p>
-You need
-<ul>
-<li>A recent <a href="https://jdk8.java.net/download.html">Java 8 SDK 40 early access build</a>. Build number must be greater than 5</li>
-<li><a href="http://www.graphviz.org/">Graphviz</a></li>
-</ul>
-
 FXDiagram is currently being developed in Eclipse. The best way to set up the development environment is to use 
 <a href="https://wiki.eclipse.org/Eclipse_Oomph_Installer">Eclipse Oomph</a>.
 Once Oomph is started
 <ul>
 <li>Switch to advanced mode (the tools icon in the top-left)</li>
 <li>Choose <em>Eclipse standard (discontinued after Luna)</em> and 
-enter the path to the Java 8 SDK 40 home directory in the lower part.</li>
+enter the path to the Java 8 SDK u40 home directory in the lower part.</li>
 <li>On the next page, select <em>github.com</em> in the tree, click on the green plus icon and enter the URL of the 
 <a href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/FXDiagram.setup">FXDiagram.setup</a>.
 Double click on the new node for FXDiagram.</li> 
@@ -88,34 +121,6 @@ Once you click <em>Finish</em>, Oomph will automatically compose the IDE, start 
 the git repositories and configure the workspace. This may take a couple of minutes.
 </p>
 
-
-<h3>
-<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running Examples</h3>
-
-<p>
-FXDiagram performs best with native JavaFX applications. There is a pre-configured launch configuration <em>FXDiagram Example</em> in the 
-development environment to start the demo.</p>
-</p>
-
-<p>
-For Eclipse, FXDiagram ships with example diagrams for Xtext's sample languages <em>domainmodel</em> and <em>fowlerdsl</em>, 
-as well as the generic class diagram browser for Java, Xtend and Xbase-languages. There is also a graphical tool 
-for the analysis of Eclipse plug-in dependencies. 
-</p>
-
-<p>
-To give them a try start the launch configuration <em>FX Diagram in Eclipse</em> from the development environment. 
-Alternatively, you can install the pre-compiled examples into an Eclipse Luna from the update site
-<a href="http://jankoehnlein.github.io/FXDiagram/p2/updates/latest">http://jankoehnlein.github.io/FXDiagram/p2/updates/latest</a>.
-The diagram view will automatically be opened and populated once you choose the appropriate action from the context menu:
-<ul>
-<li><em>Show in FXDiagram</em> on a statemachine, a state or a transition in the <em>fowlerdsl</em> editor.</li>
-<li><em>Show in FXDiagram</em> on an entity or package in the <em>dmodel</em> editor.</li>
-<li><em>Show in Class Diagram</em> on a Java/Xtend/Xbase type in the respective editor.</li>
-<li><em>Show in Plug-in Diagram</em> on a plug-in project in the navigator to explore the dependencies of Eclipse plug-ins.</li>
-</ul>
-Most nodes can be explored. Watch out for tooltips.
-</p>
 
 <h3>
 <a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
