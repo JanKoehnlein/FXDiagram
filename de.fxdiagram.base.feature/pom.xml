@@ -25,7 +25,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/FXDiagram-standalone-jars</outputDirectory>
+							<outputDirectory>${project.build.directory}/FXDiagram</outputDirectory>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteReleases>true</overWriteReleases>
 							<includeArtifactIds>
