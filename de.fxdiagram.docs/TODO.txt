@@ -1,16 +1,8 @@
-TODO
-- persistence: 
-  - revise image cache
-  - XDiagram needs a hook like createNode
-
 ENHANCEMENT
-- find better colors
-- chooser isVertical
 - Make auxlines magnetic
 - more auxiliary lines
 - Layouter: convert edges as a last step
 
 MINOR
 - SVG export: arc size
-- can't set size of browser node
 - allow different anchors for faces of flipNodes 

@@ -3,7 +3,7 @@ package de.fxdiagram.core;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.behavior.ControlPointMoveBehavior;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.images.Magnet;
@@ -101,8 +101,8 @@ public class XControlPoint extends XShape implements XModelProvider {
     XControlPoint.Type _type = this.getType();
     boolean _notEquals = (!Objects.equal(_type, XControlPoint.Type.ANCHOR));
     if (_notEquals) {
-      MoveBehavior<XControlPoint> _moveBehavior = new MoveBehavior<XControlPoint>(this);
-      this.addBehavior(_moveBehavior);
+      ControlPointMoveBehavior _controlPointMoveBehavior = new ControlPointMoveBehavior(this);
+      this.addBehavior(_controlPointMoveBehavior);
     }
   }
   

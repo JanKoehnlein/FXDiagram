@@ -2,7 +2,7 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.behavior.MoveBehavior
+import de.fxdiagram.core.behavior.ControlPointMoveBehavior
 import de.fxdiagram.core.images.Magnet
 import java.util.List
 import javafx.scene.effect.DropShadow
@@ -63,7 +63,7 @@ class XControlPoint extends XShape {
 			getNode
 		]
 		if (type != ANCHOR)
-			addBehavior(new MoveBehavior(this))
+			addBehavior(new ControlPointMoveBehavior(this))
 	}
 
 	override selectionFeedback(boolean isSelected) {
