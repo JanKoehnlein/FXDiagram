@@ -10,7 +10,7 @@ import static org.eclipse.core.runtime.Platform.*
 /**
  * Stores a set of {@link AbstractMapping}s for a sepecific domain.
  * 
- * {@link XDiagramConfig}s must be registered to the {@link XDiagramConfig$Registry}
+ * {@link XDiagramConfig}s must be registered to the {@link Registry}
  * to be picked up by the runtime using the extension point 
  * <code>de.fxdiagram.eclipse.fxDiagramConfig</code>.
  * 
@@ -23,6 +23,8 @@ interface XDiagramConfig {
 	 * @return all possible calls to add a diagram element for the given domain object 
 	 */
 	def <ARG> Iterable<? extends MappingCall<?, ARG>> getEntryCalls(ARG domainObject)
+
+	def <ARG> Iterable<? extends AbstractMapping<ARG>> getMappings(ARG domainObject)
 	
 	def AbstractMapping<?> getMappingByID(String mappingID)
 	
@@ -88,6 +90,10 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 	}
 	
 	protected abstract def <ARG> void entryCalls(ARG domainArgument, MappingAcceptor<ARG> acceptor)
+
+	override <ARG> getMappings(ARG domainObject) {
+		mappings.values.filter[isApplicable(domainObject)].map[it as AbstractMapping<ARG>]
+	}
 	
 	override <ARG> getEntryCalls(ARG domainArgument) {
 		val acceptor = new MappingAcceptor<ARG>

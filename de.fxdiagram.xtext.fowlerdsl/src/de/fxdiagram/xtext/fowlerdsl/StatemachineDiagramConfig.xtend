@@ -12,6 +12,8 @@ import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
 
+import static extension org.eclipse.xtext.EcoreUtil2.*
+
 /**
  * A very simple example how to create a diagram mapping for an the Fowler DSL shipped 
  * as an Xtext example language.
@@ -71,9 +73,9 @@ class StatemachineDiagramConfig extends AbstractDiagramConfig {
 			Statemachine: 
 				add(statemachineDiagram)
 			State:
-				add(stateNode)
+				add(statemachineDiagram, [domainArgument.getContainerOfType(Statemachine)])
 			Transition:
-				add(transitionConnection)	
+				add(statemachineDiagram, [domainArgument.getContainerOfType(Statemachine)])	
 		}
 	}	
 }

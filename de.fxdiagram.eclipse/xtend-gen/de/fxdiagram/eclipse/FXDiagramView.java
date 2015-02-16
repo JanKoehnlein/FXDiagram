@@ -259,8 +259,7 @@ public class FXDiagramView extends ViewPart {
       LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_1, _millis);
       _commandStack_1.execute(_createLayoutCommand);
     }
-    AbstractMapping<?> _mapping = mappingCall.getMapping();
-    final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element, _mapping);
+    final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element);
     CommandStack _commandStack_2 = this.root.getCommandStack();
     final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
       @Override
@@ -291,10 +290,25 @@ public class FXDiagramView extends ViewPart {
     _commandStack_2.execute(_selectAndRevealCommand);
   }
   
-  protected <T extends Object, U extends Object> IMappedElementDescriptor<T> createMappedDescriptor(final T domainObject, final AbstractMapping<?> mapping) {
-    XDiagramConfig _config = mapping.getConfig();
-    IMappedElementDescriptorProvider _domainObjectProvider = _config.getDomainObjectProvider();
-    return _domainObjectProvider.<T>createMappedElementDescriptor(domainObject, ((AbstractMapping<T>) mapping));
+  protected <T extends Object, U extends Object> IMappedElementDescriptor<T> createMappedDescriptor(final T domainObject) {
+    IMappedElementDescriptor<T> _xblockexpression = null;
+    {
+      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
+      Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
+      final Function1<XDiagramConfig, Iterable<? extends AbstractMapping<T>>> _function = new Function1<XDiagramConfig, Iterable<? extends AbstractMapping<T>>>() {
+        @Override
+        public Iterable<? extends AbstractMapping<T>> apply(final XDiagramConfig it) {
+          return it.<T>getMappings(domainObject);
+        }
+      };
+      Iterable<Iterable<? extends AbstractMapping<T>>> _map = IterableExtensions.map(_configurations, _function);
+      Iterable<AbstractMapping<T>> _flatten = Iterables.<AbstractMapping<T>>concat(_map);
+      final AbstractMapping<T> mapping = IterableExtensions.<AbstractMapping<T>>head(_flatten);
+      XDiagramConfig _config = mapping.getConfig();
+      IMappedElementDescriptorProvider _domainObjectProvider = _config.getDomainObjectProvider();
+      _xblockexpression = _domainObjectProvider.<T>createMappedElementDescriptor(domainObject, mapping);
+    }
+    return _xblockexpression;
   }
   
   public void register(final IEditorPart editor) {

@@ -76,15 +76,15 @@ public class ShowInDiagramHandler extends AbstractHandler {
                   }
                 };
                 Iterable<Iterable<? extends MappingCall<?, EObject>>> _map = IterableExtensions.map(_configurations, _function);
-                final Iterable<MappingCall<?, EObject>> mappings = Iterables.<MappingCall<?, EObject>>concat(_map);
-                boolean _isEmpty = IterableExtensions.isEmpty(mappings);
+                final Iterable<MappingCall<?, EObject>> mappingCalls = Iterables.<MappingCall<?, EObject>>concat(_map);
+                boolean _isEmpty = IterableExtensions.isEmpty(mappingCalls);
                 boolean _not = (!_isEmpty);
                 if (_not) {
                   IWorkbenchWindow _activeWorkbenchWindow = ShowInDiagramHandler.this.workbench.getActiveWorkbenchWindow();
                   IWorkbenchPage _activePage = _activeWorkbenchWindow.getActivePage();
                   final IViewPart view = _activePage.showView("de.fxdiagram.eclipse.FXDiagramView");
                   if ((view instanceof FXDiagramView)) {
-                    MappingCall<?, EObject> _head = IterableExtensions.<MappingCall<?, EObject>>head(mappings);
+                    MappingCall<?, EObject> _head = IterableExtensions.<MappingCall<?, EObject>>head(mappingCalls);
                     ((FXDiagramView)view).<EObject>revealElement(selectedElement, _head, editor);
                   }
                 }

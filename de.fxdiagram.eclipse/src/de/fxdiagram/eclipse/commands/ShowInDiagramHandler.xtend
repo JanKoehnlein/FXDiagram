@@ -37,11 +37,11 @@ class ShowInDiagramHandler extends AbstractHandler {
 					val selectedElement = eObjectAtOffsetHelper.resolveElementAt(it,
 							selection.offset)
 					if (selectedElement != null) {
-						val mappings = XDiagramConfig.Registry.instance.configurations.map[getEntryCalls(selectedElement)].flatten
-						if(!mappings.empty) {
+						val mappingCalls = XDiagramConfig.Registry.instance.configurations.map[getEntryCalls(selectedElement)].flatten
+						if(!mappingCalls.empty) {
 							val view = workbench.activeWorkbenchWindow.activePage.showView("de.fxdiagram.eclipse.FXDiagramView")
 							if(view instanceof FXDiagramView) {
-								view.revealElement(selectedElement, mappings.head(), editor)
+								view.revealElement(selectedElement, mappingCalls.head(), editor)
 							} 
 						}					
 					}

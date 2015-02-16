@@ -159,7 +159,7 @@ class FXDiagramView extends ViewPart {
 		root.commandStack.execute(interpreterContext.command)
 		if(interpreterContext.needsLayout)
 			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis))
-		val descriptor = createMappedDescriptor(element, mappingCall.mapping)
+		val descriptor = createMappedDescriptor(element)
 		root.commandStack.execute(new SelectAndRevealCommand(root, [
 			switch it {
 				XNode: domainObject == descriptor
@@ -169,8 +169,9 @@ class FXDiagramView extends ViewPart {
 		]))
 	}
 	
-	protected def <T, U> createMappedDescriptor(T domainObject, AbstractMapping<?> mapping) {
-		 mapping.config.domainObjectProvider.createMappedElementDescriptor(domainObject, mapping as AbstractMapping<T>)
+	protected def <T, U> createMappedDescriptor(T domainObject) {
+		val mapping = XDiagramConfig.Registry.instance.configurations.map[getMappings(domainObject)].flatten.head
+		mapping.config.domainObjectProvider.createMappedElementDescriptor(domainObject, mapping)
 	}
 	
 	def void register(IEditorPart editor) {

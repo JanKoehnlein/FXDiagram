@@ -9,6 +9,7 @@ import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
 import de.fxdiagram.eclipse.mapping.MappingAcceptor;
 import de.fxdiagram.eclipse.mapping.NodeMapping;
 import javafx.scene.text.Text;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine;
@@ -121,13 +122,25 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     if (!_matched) {
       if (domainArgument instanceof State) {
         _matched=true;
-        acceptor.add(this.stateNode);
+        final Function1<ARG, Statemachine> _function = new Function1<ARG, Statemachine>() {
+          @Override
+          public Statemachine apply(final ARG it) {
+            return EcoreUtil2.<Statemachine>getContainerOfType(((State)domainArgument), Statemachine.class);
+          }
+        };
+        acceptor.<Statemachine>add(this.statemachineDiagram, _function);
       }
     }
     if (!_matched) {
       if (domainArgument instanceof Transition) {
         _matched=true;
-        acceptor.add(this.transitionConnection);
+        final Function1<ARG, Statemachine> _function = new Function1<ARG, Statemachine>() {
+          @Override
+          public Statemachine apply(final ARG it) {
+            return EcoreUtil2.<Statemachine>getContainerOfType(((Transition)domainArgument), Statemachine.class);
+          }
+        };
+        acceptor.<Statemachine>add(this.statemachineDiagram, _function);
       }
     }
   }
