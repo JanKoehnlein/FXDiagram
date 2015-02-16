@@ -29,10 +29,10 @@ class BundleDiagramConfig extends AbstractDiagramConfig {
 		override calls() {
 			dependencyConnection.outConnectionForEach [
 				bundleDependencies
-			].makeLazy[getArrowButton("Add dependency")]
+			].onDemand[getArrowButton("Add dependency")]
 			inverseDependencyConnection.inConnectionForEach [
 				inverseBundleDependencies
-			].makeLazy[getInverseArrowButton("Add inverse dependency")]
+			].onDemand[getInverseArrowButton("Add inverse dependency")]
 		}
 	}
 	

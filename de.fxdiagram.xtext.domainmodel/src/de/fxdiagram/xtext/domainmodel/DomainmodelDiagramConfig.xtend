@@ -54,14 +54,14 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 				features
 					.filter(Property)
 					.filter[domainModelUtil.getReferencedEntity(type) != null]
-			].makeLazy[getArrowButton("Add property")]
+			].onDemand[getArrowButton("Add property")]
 			superTypeConnection.outConnectionForEach [ entity |
 				val superEntity = domainModelUtil.getReferencedEntity(entity.superType)
 				if(superEntity == null) 
 					emptyList 
 				else 
 					#[new ESetting(entity, ENTITY__SUPER_TYPE, 0)] 
-			].makeLazy[getTriangleButton("Add superclass")]
+			].onDemand[getTriangleButton("Add superclass")]
 		}
 	} 
 

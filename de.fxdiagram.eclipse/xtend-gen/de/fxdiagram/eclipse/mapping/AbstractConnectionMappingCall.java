@@ -23,7 +23,7 @@ public abstract class AbstractConnectionMappingCall<RESULT extends Object, ARG e
    * a {@link LazyConnectionMappingBehavior} that allows to explore this connection
    * using a {@link RapidButton}.
    */
-  public Function1<? super Side, ? extends Node> makeLazy(final Function1<? super Side, ? extends Node> imageFactory) {
+  public Function1<? super Side, ? extends Node> onDemand(final Function1<? super Side, ? extends Node> imageFactory) {
     return this.imageFactory = imageFactory;
   }
   

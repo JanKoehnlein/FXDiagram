@@ -42,7 +42,7 @@ abstract class AbstractConnectionMappingCall<RESULT, ARG> implements MappingCall
 	 * a {@link LazyConnectionMappingBehavior} that allows to explore this connection 
 	 * using a {@link RapidButton}.
 	 */
-	def makeLazy((Side)=>Node imageFactory) {
+	def onDemand((Side)=>Node imageFactory) {
 		this.imageFactory = imageFactory
 	}
 	
