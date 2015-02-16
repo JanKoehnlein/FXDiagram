@@ -27,6 +27,11 @@ public class CommandStack {
     this.context = _commandContext;
   }
   
+  public void clear() {
+    this.undoStack.clear();
+    this.redoStack.clear();
+  }
+  
   public boolean canUndo() {
     boolean _isEmpty = this.undoStack.isEmpty();
     return (!_isEmpty);

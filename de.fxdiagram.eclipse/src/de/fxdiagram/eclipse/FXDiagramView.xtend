@@ -106,9 +106,11 @@ class FXDiagramView extends ViewPart {
 	}
 	
 	def clear() {
+		// TODO: undo support ?
 		contributingEditors.clear
 		changedEditors.clear
 		root.diagram = new XDiagram
+		root.commandStack.clear
 	}
 	
 	def <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {

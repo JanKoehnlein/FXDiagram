@@ -174,6 +174,8 @@ public class FXDiagramView extends ViewPart {
     this.changedEditors.clear();
     XDiagram _xDiagram = new XDiagram();
     this.root.setDiagram(_xDiagram);
+    CommandStack _commandStack = this.root.getCommandStack();
+    _commandStack.clear();
   }
   
   public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {

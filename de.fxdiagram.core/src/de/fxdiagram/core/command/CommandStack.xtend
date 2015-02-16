@@ -19,6 +19,11 @@ class CommandStack {
 		context = new CommandContext(root)
 	}
 	
+	def clear() {
+		undoStack.clear
+		redoStack.clear
+	}
+	
 	def boolean canUndo() {
 		return !undoStack.empty 
 	}
