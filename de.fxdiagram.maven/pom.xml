@@ -195,6 +195,7 @@
 						</execution>
 					</executions>
 					<configuration>
+						<javaSourceVersion>1.8</javaSourceVersion>
 						<outputDirectory>${basedir}/xtend-gen</outputDirectory>
 					</configuration>
 				</plugin>

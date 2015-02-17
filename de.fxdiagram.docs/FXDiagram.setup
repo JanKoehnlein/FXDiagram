@@ -6,6 +6,7 @@
     xmlns:git="http://www.eclipse.org/oomph/setup/git/1.0"
     xmlns:jdt="http://www.eclipse.org/oomph/setup/jdt/1.0"
     xmlns:predicates="http://www.eclipse.org/oomph/predicates/1.0"
+    xmlns:projects="http://www.eclipse.org/oomph/setup/projects/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
     xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
@@ -191,6 +192,12 @@
     </targlet>
   </setupTask>
   <setupTask
+      xsi:type="projects:ProjectsImportTask">
+    <sourceLocator
+        rootFolder="${fxdiagram.git.clone.location}"
+        locateNestedProjects="true"/>
+  </setupTask>
+  <setupTask
       xsi:type="setup.workingsets:WorkingSetTask">
     <workingSet
         name="FXDiagram">
@@ -273,6 +280,22 @@
         </operand>
       </predicate>
     </workingSet>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="Preferences">
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        key="/instance/org.eclipse.core.resources/encoding"
+        value="UTF-8"/>
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        key="/instance/org.eclipse.egit.core/core_autoIgnoreDerivedResources"
+        value="false"/>
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        key="/instance/org.eclipse.oomph.setup.ui/showToolBarContributions"
+        value="true"/>
   </setupTask>
   <stream name="master"/>
   <logicalProjectContainer
