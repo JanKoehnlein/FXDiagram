@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Docs
-Bundle-SymbolicName: de.fxdiagram.docs
-Bundle-Version: 1.0.0.qualifier
