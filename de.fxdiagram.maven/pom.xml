@@ -17,7 +17,6 @@
 		<module>../de.fxdiagram.annotations.tests</module>
 		<module>../de.fxdiagram.core</module>
 		<module>../de.fxdiagram.core.tests</module>
-		<module>../de.fxdiagram.docs</module>
 		<module>../de.fxdiagram.lib</module>
 		<module>../de.fxdiagram.examples</module>
 		<module>../de.fxdiagram.eclipse</module>
