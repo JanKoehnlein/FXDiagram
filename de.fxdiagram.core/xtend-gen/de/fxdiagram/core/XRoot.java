@@ -18,6 +18,7 @@ import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramActionTool;
 import de.fxdiagram.core.tools.DiagramGestureTool;
+import de.fxdiagram.core.tools.DiagramMouseTool;
 import de.fxdiagram.core.tools.SelectionTool;
 import de.fxdiagram.core.tools.XDiagramTool;
 import de.fxdiagram.core.tools.actions.DiagramAction;
@@ -190,6 +191,8 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     this.defaultTool.operator_add(_selectionTool);
     DiagramGestureTool _diagramGestureTool = new DiagramGestureTool(this);
     this.defaultTool.operator_add(_diagramGestureTool);
+    DiagramMouseTool _diagramMouseTool = new DiagramMouseTool(this);
+    this.defaultTool.operator_add(_diagramMouseTool);
     DiagramActionTool _diagramActionTool = new DiagramActionTool(this);
     this.defaultTool.operator_add(_diagramActionTool);
     this.tools.add(this.defaultTool);

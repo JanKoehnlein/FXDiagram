@@ -28,12 +28,16 @@ class SelectionTool implements XDiagramTool {
 	
 	SoftTooltip positionTip 
 
+	boolean isActionOnDiagram = false
+	boolean hasDragged = false
+
 	new(XRoot root) {
 		this.root = root
 		this.mousePressedHandler = [ event |
 			val selection = root.currentSelection.toSet
-			if(event.target == root.diagramCanvas && event.button == MouseButton.PRIMARY) {
-				selection.deselect[true]
+			hasDragged = false
+			if(event.target == root.diagramCanvas) {
+				isActionOnDiagram = true
 			} else if (!(event.targetButton instanceof XButton)) {
 				val targetShape = event.targetShape
 				if (targetShape?.isSelectable) {
@@ -58,18 +62,24 @@ class SelectionTool implements XDiagramTool {
 					updatePositionTooltip(selection, event.sceneX, event.sceneY)
 					defer([|showPositionTooltip], 200.millis)
 				}
+				isActionOnDiagram = false
 			}
 		]
 		this.mouseDraggedHandler = [
-			val selection = root.currentSelection
-			for (shape : selection) 
-				shape?.getBehavior(MoveBehavior)?.mouseDragged(it)
-			root.diagram.auxiliaryLinesSupport?.show(selection)	
-			updatePositionTooltip(selection, sceneX, sceneY)
-			showPositionTooltip
-			consume
+			hasDragged = true
+			if(!isActionOnDiagram) {
+				val selection = root.currentSelection
+				for (shape : selection) 
+					shape?.getBehavior(MoveBehavior)?.mouseDragged(it)
+				root.diagram.auxiliaryLinesSupport?.show(selection)	
+				updatePositionTooltip(selection, sceneX, sceneY)
+				showPositionTooltip
+				consume
+			}
 		]
 		this.mouseReleasedHandler = [
+			if(isActionOnDiagram && !hasDragged && it.button == MouseButton.PRIMARY)
+				root.currentSelection.forEach[selected = false]
 			root.diagram.auxiliaryLinesSupport?.hide()
 			hidePositionTooltip
 		]

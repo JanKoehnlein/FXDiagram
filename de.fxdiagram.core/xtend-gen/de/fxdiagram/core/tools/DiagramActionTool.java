@@ -271,8 +271,8 @@ public class DiagramActionTool implements XDiagramTool {
     {
       Scene _scene = this.root.getScene();
       _scene.<KeyEvent>addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-      Pane _diagramCanvas = this.root.getDiagramCanvas();
-      _diagramCanvas.<MouseEvent>addEventHandler(MouseEvent.MOUSE_PRESSED, this.mouseHandler);
+      Scene _scene_1 = this.root.getScene();
+      _scene_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_RELEASED, this.mouseHandler);
       _xblockexpression = true;
     }
     return _xblockexpression;
@@ -282,10 +282,10 @@ public class DiagramActionTool implements XDiagramTool {
   public boolean deactivate() {
     boolean _xblockexpression = false;
     {
-      Pane _diagramCanvas = this.root.getDiagramCanvas();
-      _diagramCanvas.<MouseEvent>removeEventHandler(MouseEvent.MOUSE_PRESSED, this.mouseHandler);
       Scene _scene = this.root.getScene();
-      _scene.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+      _scene.<MouseEvent>removeEventHandler(MouseEvent.MOUSE_RELEASED, this.mouseHandler);
+      Scene _scene_1 = this.root.getScene();
+      _scene_1.<KeyEvent>removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
       _xblockexpression = true;
     }
     return _xblockexpression;

@@ -112,12 +112,12 @@ class DiagramActionTool implements XDiagramTool {
 
 	override activate() {
 		root.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
-		root.diagramCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
+		root.scene.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseHandler)
 		true
 	}
 
 	override deactivate() {
-		root.diagramCanvas.removeEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler)
+		root.scene.removeEventHandler(MouseEvent.MOUSE_RELEASED, mouseHandler)
 		root.scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyHandler)
 		true
 	}

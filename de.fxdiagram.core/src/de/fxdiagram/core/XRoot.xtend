@@ -10,8 +10,10 @@ import de.fxdiagram.core.model.DomainObjectProviderWithState
 import de.fxdiagram.core.tools.CompositeTool
 import de.fxdiagram.core.tools.DiagramActionTool
 import de.fxdiagram.core.tools.DiagramGestureTool
+import de.fxdiagram.core.tools.DiagramMouseTool
 import de.fxdiagram.core.tools.SelectionTool
 import de.fxdiagram.core.tools.XDiagramTool
+import de.fxdiagram.core.tools.actions.DiagramAction
 import de.fxdiagram.core.tools.actions.DiagramActionRegistry
 import java.util.List
 import java.util.Map
@@ -28,7 +30,6 @@ import javafx.scene.Parent
 import javafx.scene.layout.Pane
 
 import static extension de.fxdiagram.core.css.JavaToCss.*
-import de.fxdiagram.core.tools.actions.DiagramAction
 
 /**
  * The root object in the scenegraph of FXDiagram. Embed this in our applications scenegraph.
@@ -124,6 +125,7 @@ class XRoot extends Parent implements XActivatable {
 		defaultTool = new CompositeTool
 		defaultTool += new SelectionTool(this)
 		defaultTool += new DiagramGestureTool(this)
+		defaultTool += new DiagramMouseTool(this)
 		defaultTool += new DiagramActionTool(this)
 		tools += defaultTool
 		diagram?.activate
