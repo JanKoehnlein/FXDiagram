@@ -40,7 +40,7 @@
 		<repository>
 			<id>efxclipse-repo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/efxclipse/updates-released/1.1.0/site</url>
+			<url>http://download.eclipse.org/efxclipse/updates-released/1.2.0/site</url>
 		</repository>
 		<repository>
 			<id>kieler</id>
