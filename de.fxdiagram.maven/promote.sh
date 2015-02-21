@@ -14,6 +14,7 @@ pushd .
 cd $FXDIAGRAM_GIT/de.fxdiagram.base.feature/target/FXDiagram
 mv *-lib/*jar .
 rmdir *-lib
+rm -f org.eclipse.x*2.7*
 for file in *.jar.jar ; do
 	mv $file ${file/.jar.jar/.jar}
 done
