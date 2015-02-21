@@ -2,21 +2,21 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: de.fxdiagram.core;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.1.0.qualifier
 Bundle-ClassPath: .,
  lib/javax.json-1.0.4.jar
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
- de.cau.cs.kieler.core.kgraph;bundle-version="0.4.2",
- de.cau.cs.kieler.core;bundle-version="0.8.1",
- de.cau.cs.kieler.kiml;bundle-version="0.12.0",
- de.cau.cs.kieler.kiml.graphviz.dot;bundle-version="0.6.1",
- de.cau.cs.kieler.kiml.graphviz.layouter;bundle-version="0.6.2",
- de.cau.cs.kieler.kiml.service;bundle-version="0.4.0",
+ de.cau.cs.kieler.core.kgraph,
+ de.cau.cs.kieler.core,
+ de.cau.cs.kieler.kiml,
+ de.cau.cs.kieler.kiml,
+ de.cau.cs.kieler.kiml.graphviz.layouter,
+ de.cau.cs.kieler.kiml.service,
  com.google.inject,
- de.fxdiagram.annotations;bundle-version="1.0.0";visibility:=reexport,
- de.fxdiagram.external;bundle-version="1.0.0";visibility:=reexport,
+ de.fxdiagram.annotations;visibility:=reexport,
+ de.fxdiagram.external;visibility:=reexport,
  org.eclipse.xtend.lib
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.core,

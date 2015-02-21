@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Domainmodel
 Bundle-SymbolicName: de.fxdiagram.xtext.domainmodel;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.1.0.qualifier
 Fragment-Host: org.eclipse.xtext.example.domainmodel.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: javafx.animation;version="2.2.0",
@@ -40,6 +40,6 @@ Import-Package: javafx.animation;version="2.2.0",
  javafx.stage;version="2.2.0",
  javafx.util;version="2.2.0",
  javafx.util.converter;version="2.2.0"
-Require-Bundle: de.fxdiagram.lib;bundle-version="1.0.0",
- de.fxdiagram.eclipse;bundle-version="1.0.0"
+Require-Bundle: de.fxdiagram.lib,
+ de.fxdiagram.eclipse
 Export-Package: de.fxdiagram.xtext.domainmodel

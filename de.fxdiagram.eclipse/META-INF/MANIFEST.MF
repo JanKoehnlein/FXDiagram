@@ -2,19 +2,19 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FXDiagram Eclipse Integration
 Bundle-SymbolicName: de.fxdiagram.eclipse;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: de.fxdiagram.eclipse.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.swt,
- de.fxdiagram.swtfx;bundle-version="1.0.0",
- de.fxdiagram.core;bundle-version="1.0.0";visibility:=reexport,
- de.fxdiagram.annotations;bundle-version="1.0.0",
- org.eclipse.xtext.ui.shared;bundle-version="2.5.3",
- org.eclipse.xtext.ui;bundle-version="2.5.3",
- de.fxdiagram.lib;bundle-version="1.0.0",
- de.fxdiagram.external;bundle-version="1.0.0",
- org.eclipse.xtend.lib;bundle-version="2.7.2"
+ de.fxdiagram.swtfx,
+ de.fxdiagram.core;visibility:=reexport,
+ de.fxdiagram.annotations,
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.ui,
+ de.fxdiagram.lib,
+ de.fxdiagram.external,
+ org.eclipse.xtend.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.eclipse,

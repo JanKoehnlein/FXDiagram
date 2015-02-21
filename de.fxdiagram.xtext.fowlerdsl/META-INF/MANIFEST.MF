@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FowlerDSL FXDiagram
 Bundle-SymbolicName: de.fxdiagram.xtext.fowlerdsl;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: itemis
 Fragment-Host: org.eclipse.xtext.example.fowlerdsl.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: de.fxdiagram.lib;bundle-version="1.0.0",
- de.fxdiagram.eclipse;bundle-version="1.0.0"
+Require-Bundle: de.fxdiagram.lib,
+ de.fxdiagram.eclipse
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",

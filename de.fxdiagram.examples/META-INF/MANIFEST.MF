@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Examples
 Bundle-SymbolicName: de.fxdiagram.examples
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.xtend.lib,
  com.google.guava,
  org.eclipse.xtext.xbase.lib,
- de.fxdiagram.lib;bundle-version="1.0.0",
- de.fxdiagram.core;bundle-version="1.0.0",
- de.fxdiagram.annotations;bundle-version="1.0.0",
- org.eclipse.emf.ecore;bundle-version="2.10.0",
- de.fxdiagram.external;bundle-version="1.0.0"
+ de.fxdiagram.lib,
+ de.fxdiagram.core,
+ de.fxdiagram.annotations,
+ de.fxdiagram.external,
+ org.eclipse.emf.ecore
 Export-Package: de.fxdiagram.examples
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
