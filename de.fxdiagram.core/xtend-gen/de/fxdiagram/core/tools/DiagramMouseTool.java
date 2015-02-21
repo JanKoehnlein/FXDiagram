@@ -109,9 +109,9 @@ public class DiagramMouseTool implements XDiagramTool {
   
   private boolean hasDragged = false;
   
-  private final static ImageCursor zoomInCursor = new ImageCursor(ImageCache.get().getImage(DiagramMouseTool.class, "../images/zoom_in.png"));
+  private final static ImageCursor zoomInCursor = new ImageCursor(ImageCache.get().getImage(DiagramMouseTool.class, "zoom_in.png"));
   
-  private final static ImageCursor zoomOutCursor = new ImageCursor(ImageCache.get().getImage(DiagramMouseTool.class, "../images/zoom_out.png"));
+  private final static ImageCursor zoomOutCursor = new ImageCursor(ImageCache.get().getImage(DiagramMouseTool.class, "zoom_out.png"));
   
   public DiagramMouseTool(final XRoot root) {
     this.root = root;

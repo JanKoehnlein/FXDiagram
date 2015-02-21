@@ -25,8 +25,8 @@ class DiagramMouseTool implements XDiagramTool {
 	
 	boolean hasDragged = false
 
-	static val zoomInCursor = new ImageCursor(ImageCache.get.getImage(DiagramMouseTool, '../images/zoom_in.png'))
-	static val zoomOutCursor = new ImageCursor(ImageCache.get.getImage(DiagramMouseTool, '../images/zoom_out.png'))
+	static val zoomInCursor = new ImageCursor(ImageCache.get.getImage(DiagramMouseTool, 'zoom_in.png'))
+	static val zoomOutCursor = new ImageCursor(ImageCache.get.getImage(DiagramMouseTool, 'zoom_out.png'))
 	
 	new(XRoot root) {
 		this.root = root
