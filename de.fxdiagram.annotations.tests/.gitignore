@@ -2,3 +2,4 @@ bin
 *.log
 /target/
 *.xtendbin
+*.java._trace
