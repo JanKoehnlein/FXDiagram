@@ -9,15 +9,16 @@ import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.AddESuperTypeRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.EClassDescriptor;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
+import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
 import java.util.function.Consumer;
+import javafx.animation.Transition;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -42,6 +43,8 @@ public class EClassNode extends XNode {
   
   private final VBox operationCompartment = new VBox();
   
+  private final VBox contentArea = new VBox();
+  
   public EClassNode(final EClassDescriptor domainObject) {
     super(domainObject);
   }
@@ -58,10 +61,11 @@ public class EClassNode extends XNode {
       @Override
       public void apply(final RectangleBorderPane it) {
         ObservableList<Node> _children = it.getChildren();
-        VBox _vBox = new VBox();
         final Procedure1<VBox> _function = new Procedure1<VBox>() {
           @Override
           public void apply(final VBox it) {
+            Insets _insets = new Insets(15, 20, 15, 20);
+            it.setPadding(_insets);
             ObservableList<Node> _children = it.getChildren();
             Text _text = new Text();
             final Procedure1<Text> _function = new Procedure1<Text>() {
@@ -78,42 +82,14 @@ public class EClassNode extends XNode {
                 double _multiply = (_size * 1.1);
                 Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
                 it.setFont(_font_2);
-                Insets _insets = new Insets(12, 12, 12, 12);
-                VBox.setMargin(it, _insets);
               }
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
             _children.add(_doubleArrow);
-            ObservableList<Node> _children_1 = it.getChildren();
-            Separator _separator = new Separator();
-            _children_1.add(_separator);
-            ObservableList<Node> _children_2 = it.getChildren();
-            final Procedure1<VBox> _function_1 = new Procedure1<VBox>() {
-              @Override
-              public void apply(final VBox it) {
-                Insets _insets = new Insets(5, 10, 5, 10);
-                VBox.setMargin(it, _insets);
-              }
-            };
-            VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(EClassNode.this.attributeCompartment, _function_1);
-            _children_2.add(_doubleArrow_1);
-            ObservableList<Node> _children_3 = it.getChildren();
-            Separator _separator_1 = new Separator();
-            _children_3.add(_separator_1);
-            ObservableList<Node> _children_4 = it.getChildren();
-            final Procedure1<VBox> _function_2 = new Procedure1<VBox>() {
-              @Override
-              public void apply(final VBox it) {
-                Insets _insets = new Insets(5, 10, 5, 10);
-                VBox.setMargin(it, _insets);
-              }
-            };
-            VBox _doubleArrow_2 = ObjectExtensions.<VBox>operator_doubleArrow(EClassNode.this.operationCompartment, _function_2);
-            _children_4.add(_doubleArrow_2);
             it.setAlignment(Pos.CENTER);
           }
         };
-        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
+        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(EClassNode.this.contentArea, _function);
         _children.add(_doubleArrow);
       }
     };
@@ -220,11 +196,22 @@ public class EClassNode extends XNode {
   @Override
   public void doActivate() {
     super.doActivate();
+    Insets _insets = new Insets(15, 0, 0, 0);
+    this.attributeCompartment.setPadding(_insets);
+    Insets _insets_1 = new Insets(10, 0, 0, 0);
+    this.operationCompartment.setPadding(_insets_1);
     this.populateCompartments();
+    final Inflator inflator = new Inflator(this, this.contentArea);
+    inflator.addInflatable(this.attributeCompartment, 1);
+    inflator.addInflatable(this.operationCompartment, 2);
     AddESuperTypeRapidButtonBehavior _addESuperTypeRapidButtonBehavior = new AddESuperTypeRapidButtonBehavior(this);
     this.addBehavior(_addESuperTypeRapidButtonBehavior);
     AddEReferenceRapidButtonBehavior _addEReferenceRapidButtonBehavior = new AddEReferenceRapidButtonBehavior(this);
     this.addBehavior(_addEReferenceRapidButtonBehavior);
+    Transition _inflateAnimation = inflator.getInflateAnimation();
+    if (_inflateAnimation!=null) {
+      _inflateAnimation.play();
+    }
   }
   
   /**

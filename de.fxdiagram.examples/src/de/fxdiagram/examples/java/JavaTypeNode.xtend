@@ -1,24 +1,26 @@
 package de.fxdiagram.examples.java
 
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
+import de.fxdiagram.lib.animations.Inflator
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.util.List
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.geometry.VPos
-import javafx.scene.control.Separator
 import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
-import de.fxdiagram.annotations.properties.ModelNode
 
 @ModelNode
 class JavaTypeNode extends XNode {
 	
 	val propertyCompartment = new VBox
 	val operationCompartment = new VBox
+	
+	val contentArea= new VBox
 	
 	JavaTypeModel model
 	
@@ -28,20 +30,12 @@ class JavaTypeNode extends XNode {
 	
 	protected override createNode() {
 		new RectangleBorderPane => [
-			children += new VBox => [
+			children += contentArea => [
+				padding = new Insets(15, 20, 15, 20)
 				children += new Text => [
 					text = javaType.simpleName
 					textOrigin = VPos.TOP
 					font = Font.font(getFont.family, FontWeight.BOLD, getFont.size * 1.1)
-					VBox.setMargin(it, new Insets(12, 12, 12, 12))
-				]
-				children += new Separator 
-				children += propertyCompartment => [
-					VBox.setMargin(it, new Insets(5, 10, 5, 10))
-				]
-				children += new Separator
-				children += operationCompartment => [
-					VBox.setMargin(it, new Insets(5, 10, 5, 10))
 				]
 				alignment = Pos.CENTER
 			]
@@ -94,7 +88,13 @@ class JavaTypeNode extends XNode {
 	
 	override doActivate() {
 		super.doActivate
+		propertyCompartment.padding = new Insets(15,0,0,0)
+		operationCompartment.padding = new Insets(10,0,0,0)
 		populateCompartments
+		val inflator = new Inflator(this, contentArea)
+		inflator.addInflatable(propertyCompartment, 1)
+		inflator.addInflatable(operationCompartment, 2)
+		inflator.inflateAnimation?.play
 		addBehavior(new AddSuperTypeRapidButtonBehavior(this))
 		addBehavior(new AddReferenceRapidButtonBehavior(this))
 	}
