@@ -72,9 +72,9 @@ class DiagramScaler implements XActivatable {
 			diagram.scaleX = newScale
 			diagram.scaleY = newScale
 			// TODO: fix clipping
-//			diagram.clip = new Rectangle => [
-//				fit(newScale, newScaleX, newScaleY, myBounds)
-//			]
+			diagram.clip = new Rectangle => [
+				fit(newScale, newScaleX, newScaleY, myBounds)
+			]
 		}
 	}
 	

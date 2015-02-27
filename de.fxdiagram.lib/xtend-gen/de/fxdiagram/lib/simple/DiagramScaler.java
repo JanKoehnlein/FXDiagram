@@ -24,6 +24,8 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 /**
  * Helper tool for nodes with nested diagrams.
@@ -152,6 +154,15 @@ public class DiagramScaler implements XActivatable {
       final double newScale = Math.min(newScaleX, newScaleY);
       this.diagram.setScaleX(newScale);
       this.diagram.setScaleY(newScale);
+      Rectangle _rectangle = new Rectangle();
+      final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
+        @Override
+        public void apply(final Rectangle it) {
+          DiagramScaler.this.fit(it, newScale, newScaleX, newScaleY, myBounds);
+        }
+      };
+      Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
+      this.diagram.setClip(_doubleArrow);
     }
   }
   
