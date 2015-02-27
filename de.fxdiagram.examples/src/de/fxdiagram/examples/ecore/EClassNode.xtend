@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 @ModelNode
 class EClassNode extends XNode {
@@ -84,7 +85,7 @@ class EClassNode extends XNode {
 		inflator.addInflatable(operationCompartment, 2)
 		addBehavior(new AddESuperTypeRapidButtonBehavior(this))
 		addBehavior(new AddEReferenceRapidButtonBehavior(this))
-		inflator.inflateAnimation?.play
+		root.commandStack.execute(inflator.inflateCommand)
 	}
 }
 

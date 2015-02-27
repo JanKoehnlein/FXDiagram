@@ -2,7 +2,11 @@ package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.command.AbstractAnimationCommand;
+import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
@@ -13,7 +17,6 @@ import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.List;
 import java.util.function.Consumer;
-import javafx.animation.Transition;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -208,10 +211,10 @@ public class EClassNode extends XNode {
     this.addBehavior(_addESuperTypeRapidButtonBehavior);
     AddEReferenceRapidButtonBehavior _addEReferenceRapidButtonBehavior = new AddEReferenceRapidButtonBehavior(this);
     this.addBehavior(_addEReferenceRapidButtonBehavior);
-    Transition _inflateAnimation = inflator.getInflateAnimation();
-    if (_inflateAnimation!=null) {
-      _inflateAnimation.play();
-    }
+    XRoot _root = CoreExtensions.getRoot(this);
+    CommandStack _commandStack = _root.getCommandStack();
+    AbstractAnimationCommand _inflateCommand = inflator.getInflateCommand();
+    _commandStack.execute(_inflateCommand);
   }
   
   /**

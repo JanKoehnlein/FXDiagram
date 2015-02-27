@@ -18,6 +18,8 @@ import javafx.scene.shape.Rectangle
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.command.AbstractAnimationCommand
+import de.fxdiagram.core.command.CommandContext
 
 class Inflator {
 	
@@ -75,6 +77,24 @@ class Inflator {
 				isInflated = false
 			]
 		]					
+	}
+	
+	def getInflateCommand() {
+		return new AbstractAnimationCommand() {
+			
+			override createExecuteAnimation(CommandContext context) {
+				inflateAnimation
+			}
+			
+			override createUndoAnimation(CommandContext context) {
+				deflateAnimation
+			}
+			
+			override createRedoAnimation(CommandContext context) {
+				inflateAnimation
+			}
+			
+		}
 	}
 	
 	protected def inflate() {
@@ -211,10 +231,8 @@ class Inflator {
 					inflatedWidth - deflatedWidth
 				case RIGHT:
 					0
-				case TOP, case BOTTOM:
-					0.5 * (inflatedWidth - deflatedWidth)
 				default:
-					0
+					0.5 * (inflatedWidth - deflatedWidth)
 			},
 			host.layoutY - switch host.placementHint {
 				case TOP:

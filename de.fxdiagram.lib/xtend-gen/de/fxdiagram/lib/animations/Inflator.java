@@ -2,6 +2,8 @@ package de.fxdiagram.lib.animations;
 
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.command.AbstractAnimationCommand;
+import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import java.util.Collection;
 import java.util.Map;
@@ -163,6 +165,25 @@ public class Inflator {
       _xblockexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
     }
     return _xblockexpression;
+  }
+  
+  public AbstractAnimationCommand getInflateCommand() {
+    return new AbstractAnimationCommand() {
+      @Override
+      public Animation createExecuteAnimation(final CommandContext context) {
+        return Inflator.this.getInflateAnimation();
+      }
+      
+      @Override
+      public Animation createUndoAnimation(final CommandContext context) {
+        return Inflator.this.getDeflateAnimation();
+      }
+      
+      @Override
+      public Animation createRedoAnimation(final CommandContext context) {
+        return Inflator.this.getInflateAnimation();
+      }
+    };
   }
   
   protected ParallelTransition inflate() {
@@ -469,16 +490,12 @@ public class Inflator {
         case RIGHT:
           _switchResult = 0;
           break;
-        case TOP:
-        case BOTTOM:
-          _switchResult = (0.5 * (this.inflatedWidth - this.deflatedWidth));
-          break;
         default:
-          _switchResult = 0;
+          _switchResult = (0.5 * (this.inflatedWidth - this.deflatedWidth));
           break;
       }
     } else {
-      _switchResult = 0;
+      _switchResult = (0.5 * (this.inflatedWidth - this.deflatedWidth));
     }
     double _minus = (_layoutX - _switchResult);
     double _layoutY = this.host.getLayoutY();

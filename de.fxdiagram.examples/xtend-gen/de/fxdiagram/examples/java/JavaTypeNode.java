@@ -3,7 +3,11 @@ package de.fxdiagram.examples.java;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.command.AbstractAnimationCommand;
+import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.java.AddReferenceRapidButtonBehavior;
@@ -18,7 +22,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Consumer;
-import javafx.animation.Transition;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -248,14 +251,14 @@ public class JavaTypeNode extends XNode {
     final Inflator inflator = new Inflator(this, this.contentArea);
     inflator.addInflatable(this.propertyCompartment, 1);
     inflator.addInflatable(this.operationCompartment, 2);
-    Transition _inflateAnimation = inflator.getInflateAnimation();
-    if (_inflateAnimation!=null) {
-      _inflateAnimation.play();
-    }
     AddSuperTypeRapidButtonBehavior _addSuperTypeRapidButtonBehavior = new AddSuperTypeRapidButtonBehavior(this);
     this.addBehavior(_addSuperTypeRapidButtonBehavior);
     AddReferenceRapidButtonBehavior _addReferenceRapidButtonBehavior = new AddReferenceRapidButtonBehavior(this);
     this.addBehavior(_addReferenceRapidButtonBehavior);
+    XRoot _root = CoreExtensions.getRoot(this);
+    CommandStack _commandStack = _root.getCommandStack();
+    AbstractAnimationCommand _inflateCommand = inflator.getInflateCommand();
+    _commandStack.execute(_inflateCommand);
   }
   
   @Override

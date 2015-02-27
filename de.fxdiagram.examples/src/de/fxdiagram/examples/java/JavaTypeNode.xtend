@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 @ModelNode
 class JavaTypeNode extends XNode {
@@ -94,9 +95,9 @@ class JavaTypeNode extends XNode {
 		val inflator = new Inflator(this, contentArea)
 		inflator.addInflatable(propertyCompartment, 1)
 		inflator.addInflatable(operationCompartment, 2)
-		inflator.inflateAnimation?.play
 		addBehavior(new AddSuperTypeRapidButtonBehavior(this))
 		addBehavior(new AddReferenceRapidButtonBehavior(this))
+		root.commandStack.execute(inflator.inflateCommand)
 	}
 	
 	override toString() {
