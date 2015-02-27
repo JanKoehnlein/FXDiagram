@@ -1,5 +1,6 @@
 package de.fxdiagram.core.layout;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.cau.cs.kieler.core.alg.BasicProgressMonitor;
 import de.cau.cs.kieler.core.kgraph.KEdge;
@@ -25,6 +26,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.LazyCommand;
@@ -215,7 +217,6 @@ public class Layouter {
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
-      shapeLayout.<Float>setProperty(LayoutOptions.SPACING, Float.valueOf(60f));
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
       cache.put(it, kRoot);
@@ -229,14 +230,40 @@ public class Layouter {
         }
       };
       _nodes.forEach(_function);
+      double spacing = 60.0;
       ObservableList<XConnection> _connections = it.getConnections();
-      final Consumer<XConnection> _function_1 = new Consumer<XConnection>() {
-        @Override
-        public void accept(final XConnection it) {
-          Layouter.this.toKEdge(it, cache);
+      for (final XConnection it_1 : _connections) {
+        {
+          this.toKEdge(it_1, cache);
+          double minLength = ((double) Layouter.NODE_PADDING);
+          ObservableList<XConnectionLabel> _labels = it_1.getLabels();
+          for (final XConnectionLabel label : _labels) {
+            double _minLength = minLength;
+            Bounds _boundsInLocal = label.getBoundsInLocal();
+            double _width = _boundsInLocal.getWidth();
+            minLength = (_minLength + _width);
+          }
+          ArrowHead _sourceArrowHead = it_1.getSourceArrowHead();
+          boolean _notEquals = (!Objects.equal(_sourceArrowHead, null));
+          if (_notEquals) {
+            double _minLength_1 = minLength;
+            ArrowHead _sourceArrowHead_1 = it_1.getSourceArrowHead();
+            double _width_1 = _sourceArrowHead_1.getWidth();
+            minLength = (_minLength_1 + _width_1);
+          }
+          ArrowHead _targetArrowHead = it_1.getTargetArrowHead();
+          boolean _notEquals_1 = (!Objects.equal(_targetArrowHead, null));
+          if (_notEquals_1) {
+            double _minLength_2 = minLength;
+            ArrowHead _targetArrowHead_1 = it_1.getTargetArrowHead();
+            double _width_2 = _targetArrowHead_1.getWidth();
+            minLength = (_minLength_2 + _width_2);
+          }
+          double _max = Math.max(spacing, minLength);
+          spacing = _max;
         }
-      };
-      _connections.forEach(_function_1);
+      }
+      shapeLayout.<Float>setProperty(LayoutOptions.SPACING, Float.valueOf(((float) spacing)));
       _xblockexpression = kRoot;
     }
     return _xblockexpression;
@@ -288,15 +315,6 @@ public class Layouter {
           EList<KGraphData> _data = kEdge.getData();
           _data.add(edgeLayout);
           cache.put(it, kEdge);
-          ObservableList<XConnectionLabel> _labels = it.getLabels();
-          final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
-            @Override
-            public void accept(final XConnectionLabel it) {
-              KLabel _kLabel = Layouter.this.toKLabel(it, cache);
-              _kLabel.setParent(kEdge);
-            }
-          };
-          _labels.forEach(_function);
           _xblockexpression_1 = kEdge;
         }
         _xifexpression = _xblockexpression_1;

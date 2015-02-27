@@ -16,6 +16,7 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.command.LazyCommand
 import de.fxdiagram.core.command.MoveCommand
 import de.fxdiagram.core.command.ParallelAnimationCommand
@@ -24,7 +25,7 @@ import javafx.geometry.Point2D
 import javafx.util.Duration
 
 import static de.fxdiagram.core.XConnection.Kind.*
-import de.fxdiagram.core.behavior.MoveBehavior
+import static java.lang.Math.*
 
 class Layouter { 
 
@@ -108,16 +109,25 @@ class Layouter {
 		val kRoot = createKNode
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
-		shapeLayout.setProperty(LayoutOptions.SPACING, 60f)
 //		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
 		kRoot.data += shapeLayout
 		cache.put(it, kRoot)
 		nodes.forEach [
 			kRoot.children += toKNode(cache)
 		]
-		connections.forEach [
+		var spacing = 60.0
+		for(it: connections) {
 			toKEdge(cache)
-		]
+			var minLength = NODE_PADDING as double
+			for(label: labels) 
+				minLength += label.boundsInLocal.width
+			if(sourceArrowHead != null)
+				minLength += sourceArrowHead.width
+			if(targetArrowHead != null)
+				minLength += targetArrowHead.width
+			spacing = max(spacing, minLength)
+		}
+		shapeLayout.setProperty(LayoutOptions.SPACING, spacing as float)
 		kRoot
 	}
 	
@@ -145,7 +155,7 @@ class Layouter {
 			edgeLayout.targetPoint = createKPoint
 			kEdge.data += edgeLayout
 			cache.put(it, kEdge)
-			labels.forEach[ toKLabel(cache).parent = kEdge ]
+			//labels.forEach[ toKLabel(cache).parent = kEdge ]
 			kEdge	
 		} else {
 			null
