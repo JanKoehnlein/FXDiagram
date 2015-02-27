@@ -13,5 +13,5 @@ Require-Bundle: de.fxdiagram.annotations,
  de.fxdiagram.core,
  org.eclipse.xtext.junit4,
  org.objectweb.asm
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

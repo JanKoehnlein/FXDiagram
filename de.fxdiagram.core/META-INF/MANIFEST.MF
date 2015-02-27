@@ -6,7 +6,7 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-ClassPath: .,
  lib/javax.json-1.0.4.jar
 Bundle-Vendor: %providerName
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
  de.cau.cs.kieler.core.kgraph,
  de.cau.cs.kieler.core,

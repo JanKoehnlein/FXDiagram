@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  de.fxdiagram.lib,
  de.fxdiagram.external,
  org.eclipse.xtend.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.eclipse,
  de.fxdiagram.eclipse.behavior,

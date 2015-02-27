@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.xtend.lib,
  de.fxdiagram.annotations,
  de.fxdiagram.external
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
 Export-Package: de.fxdiagram.lib.actions,
  de.fxdiagram.lib.anchors,

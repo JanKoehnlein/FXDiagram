@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  com.google.guava,
  org.eclipse.xtext.xbase.lib,
  de.fxdiagram.swtfx
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
