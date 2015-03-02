@@ -94,6 +94,14 @@ public class DiagramMouseTool implements XDiagramTool {
     }
   }
   
+  public enum State {
+    SCROLL,
+    
+    ZOOM_IN,
+    
+    ZOOM_OUT;
+  }
+  
   private XRoot root;
   
   private DiagramMouseTool.DragContext dragContext;
@@ -108,6 +116,8 @@ public class DiagramMouseTool implements XDiagramTool {
   
   private boolean hasDragged = false;
   
+  private DiagramMouseTool.State currentState;
+  
   private final static ImageCursor zoomInCursor = new ImageCursor(ImageCache.get().getImage(DiagramMouseTool.class, "zoom_in.png"));
   
   private final static ImageCursor zoomOutCursor = new ImageCursor(ImageCache.get().getImage(DiagramMouseTool.class, "zoom_out.png"));
@@ -117,49 +127,8 @@ public class DiagramMouseTool implements XDiagramTool {
     final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
       @Override
       public void handle(final MouseEvent event) {
-        DiagramMouseTool.DragContext _dragContext = new DiagramMouseTool.DragContext();
-        final Procedure1<DiagramMouseTool.DragContext> _function = new Procedure1<DiagramMouseTool.DragContext>() {
-          @Override
-          public void apply(final DiagramMouseTool.DragContext it) {
-            ViewportTransform _viewportTransform = root.getViewportTransform();
-            double _translateX = _viewportTransform.getTranslateX();
-            double _sceneX = event.getSceneX();
-            double _minus = (_translateX - _sceneX);
-            it.sceneX = _minus;
-            ViewportTransform _viewportTransform_1 = root.getViewportTransform();
-            double _translateY = _viewportTransform_1.getTranslateY();
-            double _sceneY = event.getSceneY();
-            double _minus_1 = (_translateY - _sceneY);
-            it.sceneY = _minus_1;
-            double _screenX = event.getScreenX();
-            it.screenX = _screenX;
-            double _screenY = event.getScreenY();
-            it.screenY = _screenY;
-            XDiagram _diagram = root.getDiagram();
-            double _sceneX_1 = event.getSceneX();
-            double _sceneY_1 = event.getSceneY();
-            Point2D _sceneToLocal = _diagram.sceneToLocal(_sceneX_1, _sceneY_1);
-            it.pivotInDiagram = _sceneToLocal;
-          }
-        };
-        DiagramMouseTool.DragContext _doubleArrow = ObjectExtensions.<DiagramMouseTool.DragContext>operator_doubleArrow(_dragContext, _function);
-        DiagramMouseTool.this.dragContext = _doubleArrow;
-        boolean _isZoom = DiagramMouseTool.this.isZoom(event);
-        boolean _not = (!_isZoom);
-        if (_not) {
-          Scene _scene = root.getScene();
-          _scene.setCursor(Cursor.OPEN_HAND);
-        } else {
-          boolean _isZoomOut = DiagramMouseTool.this.isZoomOut(event);
-          if (_isZoomOut) {
-            Scene _scene_1 = root.getScene();
-            _scene_1.setCursor(DiagramMouseTool.zoomOutCursor);
-          } else {
-            Scene _scene_2 = root.getScene();
-            _scene_2.setCursor(DiagramMouseTool.zoomInCursor);
-          }
-        }
         DiagramMouseTool.this.hasDragged = false;
+        DiagramMouseTool.this.applyToState(event);
         event.consume();
       }
     };
@@ -170,9 +139,12 @@ public class DiagramMouseTool implements XDiagramTool {
         boolean _notEquals = (!Objects.equal(DiagramMouseTool.this.dragContext, null));
         if (_notEquals) {
           DiagramMouseTool.this.hasDragged = true;
-          boolean _isZoom = DiagramMouseTool.this.isZoom(it);
-          boolean _not = (!_isZoom);
-          if (_not) {
+          boolean _applyToState = DiagramMouseTool.this.applyToState(it);
+          if (_applyToState) {
+            return;
+          }
+          boolean _equals = Objects.equal(DiagramMouseTool.this.currentState, DiagramMouseTool.State.SCROLL);
+          if (_equals) {
             ViewportTransform _viewportTransform = root.getViewportTransform();
             double _sceneX = it.getSceneX();
             double _plus = (DiagramMouseTool.this.dragContext.sceneX + _sceneX);
@@ -189,8 +161,8 @@ public class DiagramMouseTool implements XDiagramTool {
             double _norm = Point2DExtensions.norm(_minus, _minus_1);
             double _divide = (_norm / DiagramMouseTool.ZOOM_SENSITIVITY);
             double totalZoomFactor = (1 + _divide);
-            boolean _isZoomOut = DiagramMouseTool.this.isZoomOut(it);
-            if (_isZoomOut) {
+            boolean _equals_1 = Objects.equal(DiagramMouseTool.this.currentState, DiagramMouseTool.State.ZOOM_OUT);
+            if (_equals_1) {
               totalZoomFactor = (1 / totalZoomFactor);
             }
             final double scale = (totalZoomFactor / DiagramMouseTool.this.dragContext.previousScale);
@@ -221,6 +193,7 @@ public class DiagramMouseTool implements XDiagramTool {
           DiagramMouseTool.this.dragContext = null;
           it.consume();
         }
+        DiagramMouseTool.this.currentState = null;
         Scene _scene = root.getScene();
         _scene.setCursor(Cursor.DEFAULT);
       }
@@ -228,20 +201,79 @@ public class DiagramMouseTool implements XDiagramTool {
     this.releasedHandler = _function_2;
   }
   
-  protected boolean isZoom(final MouseEvent event) {
-    return event.isShortcutDown();
+  protected boolean applyToState(final MouseEvent event) {
+    DiagramMouseTool.State _xifexpression = null;
+    boolean _isShortcutDown = event.isShortcutDown();
+    boolean _not = (!_isShortcutDown);
+    if (_not) {
+      _xifexpression = DiagramMouseTool.State.SCROLL;
+    } else {
+      DiagramMouseTool.State _xifexpression_1 = null;
+      boolean _isShiftDown = event.isShiftDown();
+      if (_isShiftDown) {
+        _xifexpression_1 = DiagramMouseTool.State.ZOOM_OUT;
+      } else {
+        _xifexpression_1 = DiagramMouseTool.State.ZOOM_IN;
+      }
+      _xifexpression = _xifexpression_1;
+    }
+    final DiagramMouseTool.State newState = _xifexpression;
+    boolean _notEquals = (!Objects.equal(this.currentState, newState));
+    if (_notEquals) {
+      this.currentState = newState;
+      this.startDragContext(event);
+      Scene _scene = this.root.getScene();
+      Cursor _switchResult = null;
+      if (newState != null) {
+        switch (newState) {
+          case SCROLL:
+            _switchResult = Cursor.OPEN_HAND;
+            break;
+          case ZOOM_IN:
+            _switchResult = DiagramMouseTool.zoomInCursor;
+            break;
+          case ZOOM_OUT:
+            _switchResult = DiagramMouseTool.zoomOutCursor;
+            break;
+          default:
+            break;
+        }
+      }
+      _scene.setCursor(_switchResult);
+      return true;
+    } else {
+      return false;
+    }
   }
   
-  protected boolean isZoomOut(final MouseEvent event) {
-    boolean _and = false;
-    boolean _isZoom = this.isZoom(event);
-    if (!_isZoom) {
-      _and = false;
-    } else {
-      boolean _isShiftDown = event.isShiftDown();
-      _and = _isShiftDown;
-    }
-    return _and;
+  protected DiagramMouseTool.DragContext startDragContext(final MouseEvent event) {
+    DiagramMouseTool.DragContext _dragContext = new DiagramMouseTool.DragContext();
+    final Procedure1<DiagramMouseTool.DragContext> _function = new Procedure1<DiagramMouseTool.DragContext>() {
+      @Override
+      public void apply(final DiagramMouseTool.DragContext it) {
+        ViewportTransform _viewportTransform = DiagramMouseTool.this.root.getViewportTransform();
+        double _translateX = _viewportTransform.getTranslateX();
+        double _sceneX = event.getSceneX();
+        double _minus = (_translateX - _sceneX);
+        it.sceneX = _minus;
+        ViewportTransform _viewportTransform_1 = DiagramMouseTool.this.root.getViewportTransform();
+        double _translateY = _viewportTransform_1.getTranslateY();
+        double _sceneY = event.getSceneY();
+        double _minus_1 = (_translateY - _sceneY);
+        it.sceneY = _minus_1;
+        double _screenX = event.getScreenX();
+        it.screenX = _screenX;
+        double _screenY = event.getScreenY();
+        it.screenY = _screenY;
+        XDiagram _diagram = DiagramMouseTool.this.root.getDiagram();
+        double _sceneX_1 = event.getSceneX();
+        double _sceneY_1 = event.getSceneY();
+        Point2D _sceneToLocal = _diagram.sceneToLocal(_sceneX_1, _sceneY_1);
+        it.pivotInDiagram = _sceneToLocal;
+      }
+    };
+    DiagramMouseTool.DragContext _doubleArrow = ObjectExtensions.<DiagramMouseTool.DragContext>operator_doubleArrow(_dragContext, _function);
+    return this.dragContext = _doubleArrow;
   }
   
   @Override

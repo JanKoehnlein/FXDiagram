@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
+import static de.fxdiagram.core.tools.DiagramMouseTool.State.*
 
 class DiagramMouseTool implements XDiagramTool {
 	XRoot root
@@ -24,38 +25,30 @@ class DiagramMouseTool implements XDiagramTool {
 	
 	boolean hasDragged = false
 
+	State currentState
+
 	static val zoomInCursor = new ImageCursor(ImageCache.get.getImage(DiagramMouseTool, 'zoom_in.png'))
 	static val zoomOutCursor = new ImageCursor(ImageCache.get.getImage(DiagramMouseTool, 'zoom_out.png'))
 	
 	new(XRoot root) {
 		this.root = root
 		pressedHandler = [ event |
-				dragContext = new DragContext => [
-				sceneX = root.viewportTransform.translateX - event.sceneX
-				sceneY = root.viewportTransform.translateY - event.sceneY
-				screenX = event.screenX
-				screenY = event.screenY
-				pivotInDiagram = root.diagram.sceneToLocal(event.sceneX, event.sceneY)
-			]
-			if(!event.zoom) 
-				root.scene.cursor = Cursor.OPEN_HAND
-			else if(event.zoomOut) 
-				root.scene.cursor = zoomOutCursor
-			else 
-				root.scene.cursor = zoomInCursor
 			hasDragged = false
+			event.applyToState
 			event.consume
 		]
 		dragHandler = [
 			if(dragContext != null) {
 				hasDragged = true
-				if(!zoom) {
+				if(applyToState) 
+					return;
+				if(currentState == SCROLL) {
 					root.viewportTransform.translateX = dragContext.sceneX + sceneX 
 					root.viewportTransform.translateY = dragContext.sceneY + sceneY 
 				} else {
 					var totalZoomFactor = 1 + norm(screenX - dragContext.screenX,
 						screenY - dragContext.screenY) / ZOOM_SENSITIVITY
-					if(zoomOut) 
+					if(currentState == ZOOM_OUT) 
 						totalZoomFactor = 1 / totalZoomFactor	
 					val scale = totalZoomFactor / dragContext.previousScale
 					root.viewportTransform.scaleRelative(scale)
@@ -72,18 +65,42 @@ class DiagramMouseTool implements XDiagramTool {
 				dragContext = null
 				consume
 			}
+			currentState = null
 			root.scene.cursor = Cursor.DEFAULT
 		]
 	}
 	
-	protected def isZoom(MouseEvent event) {
-		event.isShortcutDown
+	protected def applyToState(MouseEvent event) {
+		val newState = if(!event.isShortcutDown)
+				SCROLL
+			else if(event.isShiftDown) 
+				ZOOM_OUT
+			else
+				ZOOM_IN
+		if(currentState != newState) {
+			currentState = newState
+			event.startDragContext
+			root.scene.cursor = switch newState {
+				case SCROLL: Cursor.OPEN_HAND
+				case ZOOM_IN: zoomInCursor
+				case ZOOM_OUT: zoomOutCursor 
+			}	
+			return true
+		} else {
+			return false
+		}
 	}
-
-	protected def isZoomOut(MouseEvent event) {
-		event.isZoom && event.isShiftDown
-	}
-
+	
+	protected def startDragContext(MouseEvent event) {
+		dragContext = new DragContext => [
+			sceneX = root.viewportTransform.translateX - event.sceneX
+			sceneY = root.viewportTransform.translateY - event.sceneY
+			screenX = event.screenX
+			screenY = event.screenY
+			pivotInDiagram = root.diagram.sceneToLocal(event.sceneX, event.sceneY)
+		]
+	} 
+	
 	override activate() {
 		val scene = root.scene
 		scene.addEventHandler(MouseEvent.MOUSE_PRESSED, pressedHandler)
@@ -107,5 +124,9 @@ class DiagramMouseTool implements XDiagramTool {
 		@Accessors double screenY
 		@Accessors double previousScale = 1
 		@Accessors Point2D pivotInDiagram
+	}
+	
+	enum State {
+		SCROLL, ZOOM_IN, ZOOM_OUT
 	}
 }
