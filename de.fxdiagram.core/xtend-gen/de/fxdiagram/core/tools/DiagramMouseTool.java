@@ -12,7 +12,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -145,14 +144,14 @@ public class DiagramMouseTool implements XDiagramTool {
         };
         DiagramMouseTool.DragContext _doubleArrow = ObjectExtensions.<DiagramMouseTool.DragContext>operator_doubleArrow(_dragContext, _function);
         DiagramMouseTool.this.dragContext = _doubleArrow;
-        MouseButton _button = event.getButton();
-        boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
-        if (_equals) {
+        boolean _isZoom = DiagramMouseTool.this.isZoom(event);
+        boolean _not = (!_isZoom);
+        if (_not) {
           Scene _scene = root.getScene();
           _scene.setCursor(Cursor.OPEN_HAND);
         } else {
-          boolean _isShortcutDown = event.isShortcutDown();
-          if (_isShortcutDown) {
+          boolean _isZoomOut = DiagramMouseTool.this.isZoomOut(event);
+          if (_isZoomOut) {
             Scene _scene_1 = root.getScene();
             _scene_1.setCursor(DiagramMouseTool.zoomOutCursor);
           } else {
@@ -171,9 +170,9 @@ public class DiagramMouseTool implements XDiagramTool {
         boolean _notEquals = (!Objects.equal(DiagramMouseTool.this.dragContext, null));
         if (_notEquals) {
           DiagramMouseTool.this.hasDragged = true;
-          MouseButton _button = it.getButton();
-          boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
-          if (_equals) {
+          boolean _isZoom = DiagramMouseTool.this.isZoom(it);
+          boolean _not = (!_isZoom);
+          if (_not) {
             ViewportTransform _viewportTransform = root.getViewportTransform();
             double _sceneX = it.getSceneX();
             double _plus = (DiagramMouseTool.this.dragContext.sceneX + _sceneX);
@@ -190,8 +189,8 @@ public class DiagramMouseTool implements XDiagramTool {
             double _norm = Point2DExtensions.norm(_minus, _minus_1);
             double _divide = (_norm / DiagramMouseTool.ZOOM_SENSITIVITY);
             double totalZoomFactor = (1 + _divide);
-            boolean _isShortcutDown = it.isShortcutDown();
-            if (_isShortcutDown) {
+            boolean _isZoomOut = DiagramMouseTool.this.isZoomOut(it);
+            if (_isZoomOut) {
               totalZoomFactor = (1 / totalZoomFactor);
             }
             final double scale = (totalZoomFactor / DiagramMouseTool.this.dragContext.previousScale);
@@ -227,6 +226,22 @@ public class DiagramMouseTool implements XDiagramTool {
       }
     };
     this.releasedHandler = _function_2;
+  }
+  
+  protected boolean isZoom(final MouseEvent event) {
+    return event.isShortcutDown();
+  }
+  
+  protected boolean isZoomOut(final MouseEvent event) {
+    boolean _and = false;
+    boolean _isZoom = this.isZoom(event);
+    if (!_isZoom) {
+      _and = false;
+    } else {
+      boolean _isShiftDown = event.isShiftDown();
+      _and = _isShiftDown;
+    }
+    return _and;
   }
   
   @Override

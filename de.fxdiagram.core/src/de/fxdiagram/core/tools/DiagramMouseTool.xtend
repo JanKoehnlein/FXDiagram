@@ -6,7 +6,6 @@ import javafx.event.EventHandler
 import javafx.geometry.Point2D
 import javafx.scene.Cursor
 import javafx.scene.ImageCursor
-import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import org.eclipse.xtend.lib.annotations.Accessors
 
@@ -31,16 +30,16 @@ class DiagramMouseTool implements XDiagramTool {
 	new(XRoot root) {
 		this.root = root
 		pressedHandler = [ event |
-			dragContext = new DragContext => [
+				dragContext = new DragContext => [
 				sceneX = root.viewportTransform.translateX - event.sceneX
 				sceneY = root.viewportTransform.translateY - event.sceneY
 				screenX = event.screenX
 				screenY = event.screenY
 				pivotInDiagram = root.diagram.sceneToLocal(event.sceneX, event.sceneY)
 			]
-			if(event.button == MouseButton.PRIMARY) 
+			if(!event.zoom) 
 				root.scene.cursor = Cursor.OPEN_HAND
-			else if(event.shortcutDown) 
+			else if(event.zoomOut) 
 				root.scene.cursor = zoomOutCursor
 			else 
 				root.scene.cursor = zoomInCursor
@@ -50,13 +49,13 @@ class DiagramMouseTool implements XDiagramTool {
 		dragHandler = [
 			if(dragContext != null) {
 				hasDragged = true
-				if(button == MouseButton.PRIMARY) {
+				if(!zoom) {
 					root.viewportTransform.translateX = dragContext.sceneX + sceneX 
 					root.viewportTransform.translateY = dragContext.sceneY + sceneY 
 				} else {
 					var totalZoomFactor = 1 + norm(screenX - dragContext.screenX,
 						screenY - dragContext.screenY) / ZOOM_SENSITIVITY
-					if(shortcutDown) 
+					if(zoomOut) 
 						totalZoomFactor = 1 / totalZoomFactor	
 					val scale = totalZoomFactor / dragContext.previousScale
 					root.viewportTransform.scaleRelative(scale)
@@ -75,6 +74,14 @@ class DiagramMouseTool implements XDiagramTool {
 			}
 			root.scene.cursor = Cursor.DEFAULT
 		]
+	}
+	
+	protected def isZoom(MouseEvent event) {
+		event.isShortcutDown
+	}
+
+	protected def isZoomOut(MouseEvent event) {
+		event.isZoom && event.isShiftDown
 	}
 
 	override activate() {
