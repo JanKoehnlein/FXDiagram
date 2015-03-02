@@ -35,6 +35,7 @@ import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.layout.ConnectionMorphCommand;
 import de.fxdiagram.core.layout.LayoutType;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,6 +70,10 @@ public class Layouter {
   }
   
   public LazyCommand createLayoutCommand(final LayoutType type, final XDiagram diagram, final Duration duration) {
+    return this.createLayoutCommand(type, diagram, duration, null);
+  }
+  
+  public LazyCommand createLayoutCommand(final LayoutType type, final XDiagram diagram, final Duration duration, final XShape fixed) {
     final LazyCommand _function = new LazyCommand() {
       @Override
       protected AbstractAnimationCommand createDelegate() {
@@ -79,7 +84,7 @@ public class Layouter {
         try {
           BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
           provider.doLayout(kRoot, _basicProgressMonitor);
-          return Layouter.this.composeCommand(cache, duration);
+          return Layouter.this.composeCommand(cache, duration, fixed);
         } finally {
           provider.dispose();
         }
@@ -100,8 +105,9 @@ public class Layouter {
     return ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
   }
   
-  protected ParallelAnimationCommand composeCommand(final Map<Object, KGraphElement> map, final Duration duration) {
+  protected ParallelAnimationCommand composeCommand(final Map<Object, KGraphElement> map, final Duration duration, final XShape fixed) {
     final ParallelAnimationCommand composite = new ParallelAnimationCommand();
+    final Point2D delta = this.getDelta(map, fixed);
     Set<Map.Entry<Object, KGraphElement>> _entrySet = map.entrySet();
     for (final Map.Entry<Object, KGraphElement> entry : _entrySet) {
       {
@@ -121,12 +127,16 @@ public class Layouter {
             double _minX = _layoutBounds.getMinX();
             double _minus = (_xpos - _minX);
             double _plus = (_minus + (Layouter.NODE_PADDING / 2));
+            double _x = delta.getX();
+            double _minus_1 = (_plus - _x);
             float _ypos = shapeLayout.getYpos();
             Bounds _layoutBounds_1 = ((XNode)xElement).getLayoutBounds();
             double _minY = _layoutBounds_1.getMinY();
-            double _minus_1 = (_ypos - _minY);
-            double _plus_1 = (_minus_1 + (Layouter.NODE_PADDING / 2));
-            MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _plus, _plus_1);
+            double _minus_2 = (_ypos - _minY);
+            double _plus_1 = (_minus_2 + (Layouter.NODE_PADDING / 2));
+            double _y = delta.getY();
+            double _minus_3 = (_plus_1 - _y);
+            MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus_1, _minus_3);
             final Procedure1<MoveCommand> _function = new Procedure1<MoveCommand>() {
               @Override
               public void apply(final MoveCommand it) {
@@ -190,7 +200,11 @@ public class Layouter {
             final Function1<KVector, Point2D> _function_1 = new Function1<KVector, Point2D>() {
               @Override
               public Point2D apply(final KVector it) {
-                return new Point2D(it.x, it.y);
+                double _x = delta.getX();
+                double _minus = (it.x - _x);
+                double _y = delta.getY();
+                double _minus_1 = (it.y - _y);
+                return new Point2D(_minus, _minus_1);
               }
             };
             List<Point2D> _map = ListExtensions.<KVector, Point2D>map(layoutPoints, _function_1);
@@ -208,6 +222,66 @@ public class Layouter {
       }
     }
     return composite;
+  }
+  
+  protected Point2D getDelta(final Map<Object, KGraphElement> map, final XShape xFixed) {
+    final KGraphElement kFixed = map.get(xFixed);
+    boolean _matched = false;
+    if (!_matched) {
+      if (kFixed instanceof KNode) {
+        _matched=true;
+        EList<KGraphData> _data = ((KNode)kFixed).getData();
+        Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
+        final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
+        float _xpos = shapeLayout.getXpos();
+        Bounds _layoutBounds = xFixed.getLayoutBounds();
+        double _minX = _layoutBounds.getMinX();
+        double _minus = (_xpos - _minX);
+        double _layoutX = xFixed.getLayoutX();
+        double _minus_1 = (_minus - _layoutX);
+        double _plus = (_minus_1 + (Layouter.NODE_PADDING / 2));
+        float _ypos = shapeLayout.getYpos();
+        Bounds _layoutBounds_1 = xFixed.getLayoutBounds();
+        double _minY = _layoutBounds_1.getMinY();
+        double _minus_2 = (_ypos - _minY);
+        double _layoutY = xFixed.getLayoutY();
+        double _minus_3 = (_minus_2 - _layoutY);
+        double _plus_1 = (_minus_3 + (Layouter.NODE_PADDING / 2));
+        return new Point2D(_plus, _plus_1);
+      }
+    }
+    if (!_matched) {
+      if (kFixed instanceof KEdge) {
+        _matched=true;
+        EList<KGraphData> _data = ((KEdge)kFixed).getData();
+        Iterable<KEdgeLayout> _filter = Iterables.<KEdgeLayout>filter(_data, KEdgeLayout.class);
+        final KEdgeLayout edgeLayout = IterableExtensions.<KEdgeLayout>head(_filter);
+        KVectorChain _createVectorChain = edgeLayout.createVectorChain();
+        final Iterator<KVector> layoutPoints = _createVectorChain.iterator();
+        boolean _hasNext = layoutPoints.hasNext();
+        if (_hasNext) {
+          final KVector p = layoutPoints.next();
+          double minX = p.x;
+          double maxX = p.x;
+          double minY = p.y;
+          double maxY = p.y;
+          while (layoutPoints.hasNext()) {
+            {
+              double _min = Math.min(minX, p.x);
+              minX = _min;
+              double _max = Math.max(maxX, p.x);
+              maxX = _max;
+              double _min_1 = Math.min(minY, p.y);
+              minY = _min_1;
+              double _max_1 = Math.max(maxY, p.y);
+              maxY = _max_1;
+            }
+          }
+          return new Point2D((0.5 * (minX + maxX)), (0.5 * (minY + maxY)));
+        }
+      }
+    }
+    return new Point2D(0, 0);
   }
   
   protected KNode toKRootNode(final XDiagram it, final Map<Object, KGraphElement> cache) {

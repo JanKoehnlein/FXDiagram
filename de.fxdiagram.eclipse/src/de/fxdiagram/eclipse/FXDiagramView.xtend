@@ -1,8 +1,6 @@
 package de.fxdiagram.eclipse
 
-import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
-import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.layout.LayoutType
@@ -45,6 +43,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.ui.editor.XtextEditor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XNode
+import de.fxdiagram.core.command.ParallelAnimationCommand
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -137,36 +138,31 @@ class FXDiagramView extends ViewPart {
 			if(editor == null || changedEditors.remove(editor)) {
 				interpreterContext.isNewDiagram = true
 				root.diagram = configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
+				root.commandStack.execute(interpreterContext.command)
 			} 
 		} else if(mappingCall instanceof NodeMappingCall<?, ?>) {
 			editor?.register
 			interpreterContext.diagram = root.diagram
-			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)		
+			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)
+			root.commandStack.execute(interpreterContext.command)		
 		}
-//		val command = new SequentialAnimationCommand
-//		command += interpreterContext.command
-//		if(interpreterContext.needsLayout)
-//			command += new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 200.millis)
-//		val descriptor = domainObjectProvider.createDescriptor(element, mapping)
-//		command += new SelectAndRevealCommand(root, [
-//			switch it {
-//				XNode: domainObject == descriptor
-//				XConnection: domainObject == descriptor
-//				default: false
-//			}
-//		])
-//		root.commandStack.execute(command)
-		root.commandStack.execute(interpreterContext.command)
-		if(interpreterContext.needsLayout)
-			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis))
 		val descriptor = createMappedDescriptor(element)
-		root.commandStack.execute(new SelectAndRevealCommand(root, [
+		val centerShape = root.diagram.allShapes.findFirst[
 			switch it {
-				XNode: domainObject == descriptor
-				XConnection: domainObject == descriptor
-				default: false
+				XNode:
+					domainObject == descriptor
+				XConnection:
+					domainObject == descriptor
+				default:
+					false
 			}
-		]))
+		]
+		root.commandStack.execute(
+			new ParallelAnimationCommand => [
+				if(interpreterContext.needsLayout)
+					it += new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis, centerShape)
+				it += new SelectAndRevealCommand(root, [ it == centerShape ])
+			])
 	}
 	
 	protected def <T, U> createMappedDescriptor(T domainObject) {

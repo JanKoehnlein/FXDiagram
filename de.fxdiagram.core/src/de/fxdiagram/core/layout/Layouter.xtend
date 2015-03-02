@@ -1,6 +1,7 @@
 package de.fxdiagram.core.layout
 
 import de.cau.cs.kieler.core.alg.BasicProgressMonitor
+import de.cau.cs.kieler.core.kgraph.KEdge
 import de.cau.cs.kieler.core.kgraph.KGraphElement
 import de.cau.cs.kieler.core.kgraph.KGraphFactory
 import de.cau.cs.kieler.core.kgraph.KNode
@@ -16,6 +17,7 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.command.LazyCommand
 import de.fxdiagram.core.command.MoveCommand
@@ -42,6 +44,10 @@ class Layouter {
 	}
 	
 	def LazyCommand createLayoutCommand(LayoutType type, XDiagram diagram, Duration duration) {
+		createLayoutCommand(type, diagram, duration, null)
+	}
+	
+	def LazyCommand createLayoutCommand(LayoutType type, XDiagram diagram, Duration duration, XShape fixed) {
 		[|
 			val cache = <Object, KGraphElement> newHashMap
 			diagram.layout
@@ -49,7 +55,7 @@ class Layouter {
 			val provider = getLayoutProvider(type)
 			try {
 				provider.doLayout(kRoot, new BasicProgressMonitor())
-				return composeCommand(cache, duration)
+				return composeCommand(cache, duration, fixed)
 			} finally {
 				provider.dispose
 			}
@@ -62,8 +68,9 @@ class Layouter {
 		]
 	}
 	
-	protected def composeCommand(Map<Object,KGraphElement> map, Duration duration) {
+	protected def composeCommand(Map<Object,KGraphElement> map, Duration duration, XShape fixed) {
 		val composite = new ParallelAnimationCommand
+		val delta = map.getDelta(fixed)
 		for(entry: map.entrySet) {
 			val xElement = entry.key
 			val kElement = entry.value
@@ -72,8 +79,8 @@ class Layouter {
 					xElement.getBehavior(MoveBehavior).isManuallyPlaced = false
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					composite += new MoveCommand(xElement, 
-						shapeLayout.xpos - xElement.layoutBounds.minX + NODE_PADDING / 2, 
-						shapeLayout.ypos - xElement.layoutBounds.minY + NODE_PADDING / 2
+						shapeLayout.xpos - xElement.layoutBounds.minX + NODE_PADDING / 2 - delta.x, 
+						shapeLayout.ypos - xElement.layoutBounds.minY + NODE_PADDING / 2 - delta.y
 					) => [
 						executeDuration = duration
 					]
@@ -95,7 +102,7 @@ class Layouter {
 							POLYLINE
 					}
 					composite += new ConnectionMorphCommand(xElement, newKind, 
-						layoutPoints.map[new Point2D(x,y)]
+						layoutPoints.map[new Point2D(x - delta.x, y - delta.y)]
 					) => [
 						executeDuration = duration
 					]
@@ -103,6 +110,37 @@ class Layouter {
 			}
 		}
 		return composite
+	}
+	
+	protected def getDelta(Map<Object,KGraphElement> map, XShape xFixed) {
+		val kFixed = map.get(xFixed)
+		switch kFixed {
+			KNode: {
+				val shapeLayout = kFixed.data.filter(KShapeLayout).head
+				return new Point2D( 
+						shapeLayout.xpos - xFixed.layoutBounds.minX - xFixed.layoutX + NODE_PADDING / 2, 
+						shapeLayout.ypos - xFixed.layoutBounds.minY - xFixed.layoutY + NODE_PADDING / 2)
+			}
+			KEdge:  {
+				val edgeLayout = kFixed.data.filter(KEdgeLayout).head
+				val layoutPoints = edgeLayout.createVectorChain.iterator
+				if(layoutPoints.hasNext) {
+					val p = layoutPoints.next
+					var minX = p.x
+					var maxX = p.x
+					var minY = p.y
+					var maxY = p.y
+					while(layoutPoints.hasNext) {
+						minX = min(minX, p.x)
+						maxX = max(maxX, p.x)
+						minY = min(minY, p.y)
+						maxY = max(maxY, p.y)
+					}
+					return new Point2D(0.5 * (minX + maxX), 0.5 * (minY + maxY))	
+				}
+			} 
+		} 
+		return new Point2D(0, 0)
 	}
 	
 	protected def toKRootNode(XDiagram it, Map<Object, KGraphElement> cache) {

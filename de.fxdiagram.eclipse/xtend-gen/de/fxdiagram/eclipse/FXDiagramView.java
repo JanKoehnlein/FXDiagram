@@ -10,6 +10,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
+import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.command.SelectAndRevealCommand;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.layout.LayoutType;
@@ -236,6 +237,9 @@ public class FXDiagramView extends ViewPart {
         interpreterContext.setIsNewDiagram(true);
         XDiagram _execute = this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
         this.root.setDiagram(_execute);
+        CommandStack _commandStack = this.root.getCommandStack();
+        AddRemoveCommand _command = interpreterContext.getCommand();
+        _commandStack.execute(_command);
       }
     } else {
       if ((mappingCall instanceof NodeMappingCall<?, ?>)) {
@@ -245,22 +249,14 @@ public class FXDiagramView extends ViewPart {
         XDiagram _diagram = this.root.getDiagram();
         interpreterContext.setDiagram(_diagram);
         this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext, true);
+        CommandStack _commandStack_1 = this.root.getCommandStack();
+        AddRemoveCommand _command_1 = interpreterContext.getCommand();
+        _commandStack_1.execute(_command_1);
       }
     }
-    CommandStack _commandStack = this.root.getCommandStack();
-    AddRemoveCommand _command = interpreterContext.getCommand();
-    _commandStack.execute(_command);
-    boolean _needsLayout = interpreterContext.needsLayout();
-    if (_needsLayout) {
-      CommandStack _commandStack_1 = this.root.getCommandStack();
-      Layouter _layouter = new Layouter();
-      XDiagram _diagram_1 = this.root.getDiagram();
-      Duration _millis = DurationExtensions.millis(500);
-      LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_1, _millis);
-      _commandStack_1.execute(_createLayoutCommand);
-    }
     final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element);
-    CommandStack _commandStack_2 = this.root.getCommandStack();
+    XDiagram _diagram_1 = this.root.getDiagram();
+    Iterable<XShape> _allShapes = _diagram_1.getAllShapes();
     final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
       @Override
       public Boolean apply(final XShape it) {
@@ -286,8 +282,32 @@ public class FXDiagramView extends ViewPart {
         return Boolean.valueOf(_switchResult);
       }
     };
-    SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function);
-    _commandStack_2.execute(_selectAndRevealCommand);
+    final XShape centerShape = IterableExtensions.<XShape>findFirst(_allShapes, _function);
+    CommandStack _commandStack_2 = this.root.getCommandStack();
+    ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
+    final Procedure1<ParallelAnimationCommand> _function_1 = new Procedure1<ParallelAnimationCommand>() {
+      @Override
+      public void apply(final ParallelAnimationCommand it) {
+        boolean _needsLayout = interpreterContext.needsLayout();
+        if (_needsLayout) {
+          Layouter _layouter = new Layouter();
+          XDiagram _diagram = FXDiagramView.this.root.getDiagram();
+          Duration _millis = DurationExtensions.millis(500);
+          LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram, _millis, centerShape);
+          it.operator_add(_createLayoutCommand);
+        }
+        final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
+          @Override
+          public Boolean apply(final XShape it) {
+            return Boolean.valueOf(Objects.equal(it, centerShape));
+          }
+        };
+        SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(FXDiagramView.this.root, _function);
+        it.operator_add(_selectAndRevealCommand);
+      }
+    };
+    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_1);
+    _commandStack_2.execute(_doubleArrow);
   }
   
   protected <T extends Object, U extends Object> IMappedElementDescriptor<T> createMappedDescriptor(final T domainObject) {
