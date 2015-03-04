@@ -1,13 +1,12 @@
 package de.fxdiagram.core.layout.tests
 
-import javafx.application.Application
-import javafx.stage.Stage
-import javafx.scene.Group
-import javafx.scene.shape.Rectangle
-import javafx.application.Platform
-import javafx.scene.Scene
 import de.fxdiagram.core.XRoot
+import javafx.application.Application
+import javafx.application.Platform
 import javafx.scene.Node
+import javafx.scene.Scene
+import javafx.scene.shape.Rectangle
+import javafx.stage.Stage
 
 class Test extends Application{
 

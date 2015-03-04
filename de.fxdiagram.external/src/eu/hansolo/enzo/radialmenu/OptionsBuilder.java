@@ -36,8 +36,9 @@ import java.util.HashMap;
  * Time: 15:56
  * To change this template use File | Settings | File Templates.
  */
+@SuppressWarnings("rawtypes")
 public class OptionsBuilder implements Builder<Options> {
-    private HashMap<String, Property> properties = new HashMap<String, Property>();
+	private HashMap<String, Property> properties = new HashMap<String, Property>();
 
 
     // ******************** Constructors **************************************
@@ -104,7 +105,8 @@ public class OptionsBuilder implements Builder<Options> {
         return this;
     }
 
-    @Override public final Options build() {
+    @SuppressWarnings("unchecked")
+	@Override public final Options build() {
         final Options CONTROL = new Options();
 
         for (String key : properties.keySet()) {

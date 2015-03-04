@@ -2,7 +2,6 @@ package de.fxdiagram.core.layout.tests
 
 import javafx.application.Application
 import javafx.scene.Scene
-import javafx.scene.control.Label
 import javafx.scene.layout.VBox
 import javafx.scene.text.Text
 import javafx.stage.Stage
@@ -20,9 +19,9 @@ class OfflineLayoutTest extends Application {
 			children += text
 			children += new Text('barbar')
 		]
-		val scene = new Scene(root)
-//		root.applyCss
-//		root.layout
+		new Scene(root)
+		root.applyCss
+		root.layout
 		root.autosize
 		println(root.width+' '+root.height)
 	}

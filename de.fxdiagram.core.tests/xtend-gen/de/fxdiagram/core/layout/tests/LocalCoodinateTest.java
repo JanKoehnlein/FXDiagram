@@ -7,23 +7,25 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import junit.framework.Assert;
 import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("all")
 public class LocalCoodinateTest {
+  private final double EPSILON = 1e-9;
+  
   @Test
   public void paneWidthIsLocal() {
     final TestPane pane = new TestPane();
     Bounds _boundsInLocal = pane.getBoundsInLocal();
     double _width = _boundsInLocal.getWidth();
-    Assert.assertEquals(Double.valueOf(100.0), Double.valueOf(_width));
+    Assert.assertEquals(100.0, _width, this.EPSILON);
     Bounds _layoutBounds = pane.getLayoutBounds();
     double _width_1 = _layoutBounds.getWidth();
-    Assert.assertEquals(Double.valueOf(100.0), Double.valueOf(_width_1));
+    Assert.assertEquals(100.0, _width_1, this.EPSILON);
   }
   
   @Test
@@ -38,10 +40,10 @@ public class LocalCoodinateTest {
     pane.setScaleX(0.5);
     Bounds _boundsInLocal = pane.getBoundsInLocal();
     double _width = _boundsInLocal.getWidth();
-    Assert.assertEquals(Double.valueOf(100.0), Double.valueOf(_width));
+    Assert.assertEquals(100.0, _width, this.EPSILON);
     Bounds _boundsInParent = pane.getBoundsInParent();
     double _width_1 = _boundsInParent.getWidth();
-    Assert.assertEquals(Double.valueOf(50.0), Double.valueOf(_width_1));
+    Assert.assertEquals(50.0, _width_1, this.EPSILON);
   }
   
   @Test
@@ -50,7 +52,7 @@ public class LocalCoodinateTest {
     pane.setLayoutX(100);
     Bounds _boundsInLocal = pane.getBoundsInLocal();
     double _minX = _boundsInLocal.getMinX();
-    Assert.assertEquals(Double.valueOf(0.0), Double.valueOf(_minX));
+    Assert.assertEquals(0.0, _minX, this.EPSILON);
   }
   
   @Test

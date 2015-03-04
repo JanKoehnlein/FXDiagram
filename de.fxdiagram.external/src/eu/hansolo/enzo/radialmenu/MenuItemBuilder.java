@@ -36,8 +36,9 @@ import java.util.HashMap;
  * Time: 15:45
  * To change this template use File | Settings | File Templates.
  */
+@SuppressWarnings("rawtypes")
 public class MenuItemBuilder implements Builder<MenuItem> {
-    private HashMap<String, Property> properties = new HashMap<String, Property>();
+	private HashMap<String, Property> properties = new HashMap<String, Property>();
 
 
     // ******************** Constructors **************************************
@@ -84,7 +85,8 @@ public class MenuItemBuilder implements Builder<MenuItem> {
         return this;
     }
 
-    @Override public final MenuItem build() {
+    @SuppressWarnings("unchecked")
+	@Override public final MenuItem build() {
         final MenuItem CONTROL = new MenuItem();
 
         for (String key : properties.keySet()) {

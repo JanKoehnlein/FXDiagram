@@ -34,8 +34,9 @@ import java.util.List;
  * Time: 16:06
  * To change this template use File | Settings | File Templates.
  */
+@SuppressWarnings("all")
 public class RadialMenuBuilder implements Builder<RadialMenu> {
-    private HashMap<String, Property> properties = new HashMap<String, Property>();
+	private HashMap<String, Property> properties = new HashMap<String, Property>();
 
 
     // ******************** Constructors **************************************

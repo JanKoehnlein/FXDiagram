@@ -1,18 +1,22 @@
 package de.fxdiagram.core.layout.tests
 
-import org.junit.Test
-import javafx.scene.layout.Pane
 import javafx.scene.Group
-import static junit.framework.Assert.*
-import javafx.scene.shape.Rectangle
+import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
+import javafx.scene.shape.Rectangle
+import org.junit.Test
+
+import static org.junit.Assert.*
 
 class LocalCoodinateTest {
+	
+	val EPSILON = 1e-9
+	
 	@Test
 	def void paneWidthIsLocal() {
 		val pane = new TestPane		
-		assertEquals(100.0, pane.boundsInLocal.width)
-		assertEquals(100.0, pane.layoutBounds.width)
+		assertEquals(100.0, pane.boundsInLocal.width, EPSILON)
+		assertEquals(100.0, pane.layoutBounds.width, EPSILON)
 	}
 	
 	@Test
@@ -22,15 +26,15 @@ class LocalCoodinateTest {
 			children += pane
 		]
 		pane.scaleX = 0.5
-		assertEquals(100.0, pane.boundsInLocal.width)
-		assertEquals(50.0, pane.boundsInParent.width)
+		assertEquals(100.0, pane.boundsInLocal.width, EPSILON)
+		assertEquals(50.0, pane.boundsInParent.width, EPSILON)
 	}
 	
 	@Test
 	def void layoutXIsInNotLayoutBounds() {
 		val pane = new TestPane		
 		pane.layoutX = 100
-		assertEquals(0.0, pane.boundsInLocal.minX)
+		assertEquals(0.0, pane.boundsInLocal.minX, EPSILON)
 	}
 	
 	@Test
