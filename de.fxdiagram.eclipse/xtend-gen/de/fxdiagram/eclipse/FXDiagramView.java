@@ -224,12 +224,19 @@ public class FXDiagramView extends ViewPart {
   protected <T extends Object> void doRevealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
     final InterpreterContext interpreterContext = new InterpreterContext();
     if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
-      if (editor!=null) {
-        this.register(editor);
-      }
       boolean _or = false;
-      boolean _equals = Objects.equal(editor, null);
-      if (_equals) {
+      boolean _or_1 = false;
+      boolean _register = false;
+      if (editor!=null) {
+        _register=this.register(editor);
+      }
+      if (_register) {
+        _or_1 = true;
+      } else {
+        boolean _equals = Objects.equal(editor, null);
+        _or_1 = _equals;
+      }
+      if (_or_1) {
         _or = true;
       } else {
         boolean _remove = this.changedEditors.remove(editor);
@@ -333,7 +340,8 @@ public class FXDiagramView extends ViewPart {
     return _xblockexpression;
   }
   
-  public void register(final IEditorPart editor) {
+  public boolean register(final IEditorPart editor) {
+    boolean isNew = false;
     boolean _containsKey = this.contributingEditors.containsKey(editor);
     boolean _not = (!_containsKey);
     if (_not) {
@@ -347,6 +355,7 @@ public class FXDiagramView extends ViewPart {
       } else {
         this.contributingEditors.put(editor, null);
       }
+      isNew = true;
     }
     boolean _equals = Objects.equal(this.listener, null);
     if (_equals) {
@@ -356,6 +365,7 @@ public class FXDiagramView extends ViewPart {
       IWorkbenchPage _page = _site.getPage();
       _page.addPartListener(this.listener);
     }
+    return isNew;
   }
   
   public DocumentListener deregister(final IWorkbenchPartReference reference) {

@@ -138,8 +138,7 @@ class FXDiagramView extends ViewPart {
 	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
 		val interpreterContext = new InterpreterContext
 		if(mappingCall instanceof DiagramMappingCall<?, ?>) {
-			editor?.register
-			if(editor == null || changedEditors.remove(editor)) {
+			if(editor?.register || editor == null || changedEditors.remove(editor)) {
 				interpreterContext.isNewDiagram = true
 				root.diagram = configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
 				root.commandStack.execute(interpreterContext.command)
@@ -174,7 +173,8 @@ class FXDiagramView extends ViewPart {
 		mapping.config.domainObjectProvider.createMappedElementDescriptor(domainObject, mapping)
 	}
 	
-	def void register(IEditorPart editor) {
+	def boolean register(IEditorPart editor) {
+		var isNew = false
 		if(!contributingEditors.containsKey(editor)) {
 			if(editor instanceof AbstractTextEditor) {
 				val documentListener = new DocumentListener(this, editor)
@@ -184,11 +184,13 @@ class FXDiagramView extends ViewPart {
 			} else {
 				contributingEditors.put(editor, null)
 			}
+			isNew = true
 		}
 		if(listener == null) {
 			listener = new EditorListener(this)
 			editor.site.page.addPartListener(listener)
 		}
+		return isNew
 	}
 	
 	def deregister(IWorkbenchPartReference reference) {
