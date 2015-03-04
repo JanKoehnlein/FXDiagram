@@ -3,14 +3,12 @@ package de.fxdiagram.eclipse;
 import de.fxdiagram.eclipse.FXDiagramView;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 
+@FinalFieldsConstructor
 @SuppressWarnings("all")
 public class EditorListener implements IPartListener2 {
-  private FXDiagramView view;
-  
-  public EditorListener(final FXDiagramView view) {
-    this.view = view;
-  }
+  private final FXDiagramView view;
   
   @Override
   public void partActivated(final IWorkbenchPartReference partRef) {
@@ -43,5 +41,10 @@ public class EditorListener implements IPartListener2 {
   
   @Override
   public void partVisible(final IWorkbenchPartReference partRef) {
+  }
+  
+  public EditorListener(final FXDiagramView view) {
+    super();
+    this.view = view;
   }
 }

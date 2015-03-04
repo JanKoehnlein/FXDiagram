@@ -34,6 +34,7 @@ import de.fxdiagram.core.tools.actions.SaveAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.UndoAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
+import de.fxdiagram.eclipse.DocumentListener;
 import de.fxdiagram.eclipse.EditorListener;
 import de.fxdiagram.eclipse.mapping.AbstractMapping;
 import de.fxdiagram.eclipse.mapping.DiagramMappingCall;
@@ -47,6 +48,7 @@ import de.fxdiagram.eclipse.mapping.XDiagramConfigInterpreter;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -56,8 +58,10 @@ import javafx.embed.swt.FXCanvas;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.util.Duration;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPage;
@@ -65,12 +69,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
-import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.ui.editor.XtextEditor;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-import org.eclipse.xtext.ui.editor.model.IXtextModelListener;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -92,7 +94,7 @@ public class FXDiagramView extends ViewPart {
   
   private SwtToFXGestureConverter gestureConverter;
   
-  private Set<IEditorPart> contributingEditors = CollectionLiterals.<IEditorPart>newHashSet();
+  private Map<IEditorPart, DocumentListener> contributingEditors = CollectionLiterals.<IEditorPart, DocumentListener>newHashMap();
   
   private Set<IEditorPart> changedEditors = CollectionLiterals.<IEditorPart>newHashSet();
   
@@ -332,18 +334,18 @@ public class FXDiagramView extends ViewPart {
   }
   
   public void register(final IEditorPart editor) {
-    boolean _add = this.contributingEditors.add(editor);
-    if (_add) {
-      this.changedEditors.add(editor);
-      if ((editor instanceof XtextEditor)) {
-        IXtextDocument _document = ((XtextEditor)editor).getDocument();
-        final IXtextModelListener _function = new IXtextModelListener() {
-          @Override
-          public void modelChanged(final XtextResource it) {
-            FXDiagramView.this.changedEditors.add(((XtextEditor)editor));
-          }
-        };
-        _document.addModelListener(_function);
+    boolean _containsKey = this.contributingEditors.containsKey(editor);
+    boolean _not = (!_containsKey);
+    if (_not) {
+      if ((editor instanceof AbstractTextEditor)) {
+        final DocumentListener documentListener = new DocumentListener(this, editor);
+        IDocumentProvider _documentProvider = ((AbstractTextEditor)editor).getDocumentProvider();
+        IEditorInput _editorInput = ((AbstractTextEditor)editor).getEditorInput();
+        final IDocument document = _documentProvider.getDocument(_editorInput);
+        document.addDocumentListener(documentListener);
+        this.contributingEditors.put(editor, documentListener);
+      } else {
+        this.contributingEditors.put(editor, null);
       }
     }
     boolean _equals = Objects.equal(this.listener, null);
@@ -356,16 +358,23 @@ public class FXDiagramView extends ViewPart {
     }
   }
   
-  public boolean deregister(final IWorkbenchPartReference reference) {
-    boolean _xblockexpression = false;
+  public DocumentListener deregister(final IWorkbenchPartReference reference) {
+    DocumentListener _xblockexpression = null;
     {
       final IWorkbenchPart part = reference.getPart(false);
-      boolean _xifexpression = false;
+      DocumentListener _xifexpression = null;
       boolean _notEquals = (!Objects.equal(part, null));
       if (_notEquals) {
-        boolean _xblockexpression_1 = false;
+        DocumentListener _xblockexpression_1 = null;
         {
           this.changedEditors.remove(part);
+          if ((part instanceof AbstractTextEditor)) {
+            final DocumentListener documentListener = this.contributingEditors.get(part);
+            IDocumentProvider _documentProvider = ((AbstractTextEditor)part).getDocumentProvider();
+            IEditorInput _editorInput = ((AbstractTextEditor)part).getEditorInput();
+            final IDocument document = _documentProvider.getDocument(_editorInput);
+            document.removeDocumentListener(documentListener);
+          }
           _xblockexpression_1 = this.contributingEditors.remove(part);
         }
         _xifexpression = _xblockexpression_1;
@@ -373,6 +382,10 @@ public class FXDiagramView extends ViewPart {
       _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
+  }
+  
+  public boolean editorChanged(final IEditorPart editor) {
+    return this.changedEditors.add(editor);
   }
   
   @Override

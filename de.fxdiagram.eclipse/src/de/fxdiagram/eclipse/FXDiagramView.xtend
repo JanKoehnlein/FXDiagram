@@ -1,7 +1,10 @@
 package de.fxdiagram.eclipse
 
+import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
@@ -29,23 +32,24 @@ import de.fxdiagram.eclipse.mapping.XDiagramConfig
 import de.fxdiagram.eclipse.mapping.XDiagramConfigInterpreter
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
+import java.util.Map
 import java.util.Set
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
+import org.eclipse.jface.text.DocumentEvent
+import org.eclipse.jface.text.IDocumentListener
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.part.ViewPart
+import org.eclipse.ui.texteditor.AbstractTextEditor
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.xtext.ui.editor.XtextEditor
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XNode
-import de.fxdiagram.core.command.ParallelAnimationCommand
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -60,7 +64,7 @@ class FXDiagramView extends ViewPart {
 	
 	SwtToFXGestureConverter gestureConverter
 	
-	Set<IEditorPart> contributingEditors = newHashSet
+	Map<IEditorPart, DocumentListener> contributingEditors = newHashMap
 	Set<IEditorPart> changedEditors = newHashSet
 	
 	IPartListener2 listener 
@@ -171,13 +175,15 @@ class FXDiagramView extends ViewPart {
 	}
 	
 	def void register(IEditorPart editor) {
-		if(contributingEditors.add(editor)) {
-			changedEditors += editor
-			if(editor instanceof XtextEditor) 
-				editor.document.addModelListener [
-					changedEditors += editor
-				]
-			// TODO handle other editor types
+		if(!contributingEditors.containsKey(editor)) {
+			if(editor instanceof AbstractTextEditor) {
+				val documentListener = new DocumentListener(this, editor)
+				val document = editor.documentProvider.getDocument(editor.editorInput)
+				document.addDocumentListener(documentListener)
+				contributingEditors.put(editor, documentListener)
+			} else {
+				contributingEditors.put(editor, null)
+			}
 		}
 		if(listener == null) {
 			listener = new EditorListener(this)
@@ -189,8 +195,17 @@ class FXDiagramView extends ViewPart {
 		val part = reference.getPart(false)
 		if(part != null) {
 			changedEditors.remove(part)
+			if(part instanceof AbstractTextEditor) {
+				val documentListener = contributingEditors.get(part)
+				val document = part.documentProvider.getDocument(part.editorInput)
+				document.removeDocumentListener(documentListener)
+			}
 			contributingEditors.remove(part)
 		}
+	}
+	
+	def editorChanged(IEditorPart editor) {
+		changedEditors += editor
 	}
 	
 	override dispose() {
@@ -199,13 +214,24 @@ class FXDiagramView extends ViewPart {
 	}
 }
 
+@FinalFieldsConstructor
+class DocumentListener implements IDocumentListener {
+
+	val FXDiagramView view
+	val IEditorPart editor
+	
+	override documentAboutToBeChanged(DocumentEvent event) {
+	}
+	
+	override documentChanged(DocumentEvent event) {
+		view.editorChanged(editor)
+	}
+}
+
+@FinalFieldsConstructor
 class EditorListener implements IPartListener2 {
 	
-	FXDiagramView view
-	
-	new(FXDiagramView view) {
-		this.view = view
-	}
+	val FXDiagramView view
 	
 	override partActivated(IWorkbenchPartReference partRef) {
 	}
