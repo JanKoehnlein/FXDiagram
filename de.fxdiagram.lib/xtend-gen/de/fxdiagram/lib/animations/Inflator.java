@@ -57,6 +57,20 @@ public class Inflator {
   public Inflator(final XNode host, final Pane container) {
     this.host = host;
     this.container = container;
+    final Dimension2D containerSize = this.calculateSize(container);
+    final Insets padding = container.getPadding();
+    double _width = containerSize.getWidth();
+    double _left = padding.getLeft();
+    double _minus = (_width - _left);
+    double _right = padding.getRight();
+    double _minus_1 = (_minus - _right);
+    this.deflatedWidth = _minus_1;
+    double _height = containerSize.getHeight();
+    double _top = padding.getTop();
+    double _minus_2 = (_height - _top);
+    double _bottom = padding.getBottom();
+    double _minus_3 = (_minus_2 - _bottom);
+    this.deflatedHeight = _minus_3;
   }
   
   public Rectangle addInflatable(final VBox inflatable, final int index) {
@@ -70,9 +84,30 @@ public class Inflator {
         }
       };
       final Rectangle spacer = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-      ObservableList<Node> _children = this.container.getChildren();
-      _children.add(index, spacer);
+      if (this.isInflated) {
+        ObservableList<Node> _children = this.container.getChildren();
+        _children.add(index, inflatable);
+      } else {
+        ObservableList<Node> _children_1 = this.container.getChildren();
+        _children_1.add(index, spacer);
+      }
       _xblockexpression = this.inflatable2spacer.put(inflatable, spacer);
+    }
+    return _xblockexpression;
+  }
+  
+  public boolean removeInflatable(final VBox inflatable) {
+    boolean _xblockexpression = false;
+    {
+      final Rectangle spacer = this.inflatable2spacer.get(inflatable);
+      if (this.isInflated) {
+        ObservableList<Node> _children = this.container.getChildren();
+        _children.remove(inflatable);
+      } else {
+        ObservableList<Node> _children_1 = this.container.getChildren();
+        _children_1.remove(spacer);
+      }
+      _xblockexpression = this.inflatable2spacer.remove(inflatable, spacer);
     }
     return _xblockexpression;
   }
@@ -90,20 +125,6 @@ public class Inflator {
       if (_or) {
         return this.createEmptyTransition();
       }
-      final Dimension2D containerSize = this.calculateSize(this.container);
-      final Insets padding = this.container.getPadding();
-      double _width = containerSize.getWidth();
-      double _left = padding.getLeft();
-      double _minus = (_width - _left);
-      double _right = padding.getRight();
-      double _minus_1 = (_minus - _right);
-      this.deflatedWidth = _minus_1;
-      double _height = containerSize.getHeight();
-      double _top = padding.getTop();
-      double _minus_2 = (_height - _top);
-      double _bottom = padding.getBottom();
-      double _minus_3 = (_minus_2 - _bottom);
-      this.deflatedHeight = _minus_3;
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
         @Override
@@ -342,22 +363,14 @@ public class Inflator {
   protected Transition appear() {
     Transition _xblockexpression = null;
     {
-      Set<VBox> _keySet = this.inflatable2spacer.keySet();
-      final Function1<VBox, ObservableList<Node>> _function = new Function1<VBox, ObservableList<Node>>() {
-        @Override
-        public ObservableList<Node> apply(final VBox it) {
-          return it.getChildren();
-        }
-      };
-      Iterable<ObservableList<Node>> _map = IterableExtensions.<VBox, ObservableList<Node>>map(_keySet, _function);
-      final Iterable<Node> contents = Iterables.<Node>concat(_map);
+      final Iterable<Node> contents = this.getContents();
       Transition _xifexpression = null;
       boolean _isEmpty = IterableExtensions.isEmpty(contents);
       if (_isEmpty) {
         _xifexpression = this.createEmptyTransition();
       } else {
         SequentialTransition _sequentialTransition = new SequentialTransition();
-        final Procedure1<SequentialTransition> _function_1 = new Procedure1<SequentialTransition>() {
+        final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
           @Override
           public void apply(final SequentialTransition it) {
             ObservableList<Animation> _children = it.getChildren();
@@ -382,11 +395,23 @@ public class Inflator {
             Iterables.<Animation>addAll(_children, _map);
           }
         };
-        _xifexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function_1);
+        _xifexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       }
       _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
+  }
+  
+  protected Iterable<Node> getContents() {
+    Set<VBox> _keySet = this.inflatable2spacer.keySet();
+    final Function1<VBox, ObservableList<Node>> _function = new Function1<VBox, ObservableList<Node>>() {
+      @Override
+      public ObservableList<Node> apply(final VBox it) {
+        return it.getChildren();
+      }
+    };
+    Iterable<ObservableList<Node>> _map = IterableExtensions.<VBox, ObservableList<Node>>map(_keySet, _function);
+    return Iterables.<Node>concat(_map);
   }
   
   protected Transition createEmptyTransition() {
@@ -400,15 +425,7 @@ public class Inflator {
   protected Transition disappear() {
     Transition _xblockexpression = null;
     {
-      Set<VBox> _keySet = this.inflatable2spacer.keySet();
-      final Function1<VBox, ObservableList<Node>> _function = new Function1<VBox, ObservableList<Node>>() {
-        @Override
-        public ObservableList<Node> apply(final VBox it) {
-          return it.getChildren();
-        }
-      };
-      Iterable<ObservableList<Node>> _map = IterableExtensions.<VBox, ObservableList<Node>>map(_keySet, _function);
-      final Iterable<Node> contents = Iterables.<Node>concat(_map);
+      final Iterable<Node> contents = this.getContents();
       Transition _xifexpression = null;
       boolean _isEmpty = IterableExtensions.isEmpty(contents);
       if (_isEmpty) {
@@ -419,7 +436,7 @@ public class Inflator {
         };
       } else {
         ParallelTransition _parallelTransition = new ParallelTransition();
-        final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
+        final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
           @Override
           public void apply(final ParallelTransition it) {
             ObservableList<Animation> _children = it.getChildren();
@@ -471,7 +488,7 @@ public class Inflator {
             it.setOnFinished(_function_1);
           }
         };
-        _xifexpression = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_1);
+        _xifexpression = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
       }
       _xblockexpression = _xifexpression;
     }

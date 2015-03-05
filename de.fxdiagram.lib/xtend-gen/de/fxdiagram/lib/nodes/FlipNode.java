@@ -123,30 +123,11 @@ public class FlipNode extends XNode {
   }
   
   public void flip(final boolean isHorizontal) {
-    double _layoutX = this.front.getLayoutX();
-    Bounds _layoutBounds = this.back.getLayoutBounds();
-    double _width = _layoutBounds.getWidth();
-    Bounds _layoutBounds_1 = this.front.getLayoutBounds();
-    double _width_1 = _layoutBounds_1.getWidth();
-    double _minus = (_width - _width_1);
-    double _divide = (_minus / 2);
-    double _minus_1 = (_layoutX - _divide);
-    Bounds _layoutBounds_2 = this.back.getLayoutBounds();
-    double _minX = _layoutBounds_2.getMinX();
-    double _minus_2 = (_minus_1 - _minX);
-    this.back.setLayoutX(_minus_2);
-    double _layoutY = this.front.getLayoutY();
-    Bounds _layoutBounds_3 = this.back.getLayoutBounds();
-    double _height = _layoutBounds_3.getHeight();
-    Bounds _layoutBounds_4 = this.front.getLayoutBounds();
-    double _height_1 = _layoutBounds_4.getHeight();
-    double _minus_3 = (_height - _height_1);
-    double _divide_1 = (_minus_3 / 2);
-    double _minus_4 = (_layoutY - _divide_1);
-    Bounds _layoutBounds_5 = this.back.getLayoutBounds();
-    double _minY = _layoutBounds_5.getMinY();
-    double _minus_5 = (_minus_4 - _minY);
-    this.back.setLayoutY(_minus_5);
+    if (this.isCurrentFront) {
+      this.alignFaces(this.front, this.back);
+    } else {
+      this.alignFaces(this.back, this.front);
+    }
     Point3D _xifexpression = null;
     if (isHorizontal) {
       _xifexpression = new Point3D(1, 0, 0);
@@ -205,6 +186,33 @@ public class FlipNode extends XNode {
       }
     };
     ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
+  }
+  
+  public void alignFaces(final Node fixed, final Node toBeAligned) {
+    double _layoutX = fixed.getLayoutX();
+    Bounds _layoutBounds = toBeAligned.getLayoutBounds();
+    double _width = _layoutBounds.getWidth();
+    Bounds _layoutBounds_1 = fixed.getLayoutBounds();
+    double _width_1 = _layoutBounds_1.getWidth();
+    double _minus = (_width - _width_1);
+    double _divide = (_minus / 2);
+    double _minus_1 = (_layoutX - _divide);
+    Bounds _layoutBounds_2 = toBeAligned.getLayoutBounds();
+    double _minX = _layoutBounds_2.getMinX();
+    double _minus_2 = (_minus_1 - _minX);
+    toBeAligned.setLayoutX(_minus_2);
+    double _layoutY = fixed.getLayoutY();
+    Bounds _layoutBounds_3 = toBeAligned.getLayoutBounds();
+    double _height = _layoutBounds_3.getHeight();
+    Bounds _layoutBounds_4 = fixed.getLayoutBounds();
+    double _height_1 = _layoutBounds_4.getHeight();
+    double _minus_3 = (_height - _height_1);
+    double _divide_1 = (_minus_3 / 2);
+    double _minus_4 = (_layoutY - _divide_1);
+    Bounds _layoutBounds_5 = toBeAligned.getLayoutBounds();
+    double _minY = _layoutBounds_5.getMinY();
+    double _minus_5 = (_minus_4 - _minY);
+    toBeAligned.setLayoutY(_minus_5);
   }
   
   protected boolean isHorizontal(final MouseEvent event) {

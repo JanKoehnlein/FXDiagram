@@ -77,10 +77,10 @@ class FlipNode extends XNode {
 	}
 
 	def void flip(boolean isHorizontal) {
-		back.layoutX = front.layoutX - (back.layoutBounds.width - front.layoutBounds.width) / 2 
-			- back.layoutBounds.minX
-		back.layoutY = front.layoutY - (back.layoutBounds.height - front.layoutBounds.height) / 2 
-			- back.layoutBounds.minY
+		if(isCurrentFront)
+			alignFaces(front, back)
+		else 
+			alignFaces(back, front)
 		val turnAxis = if (isHorizontal)
 				new Point3D(1, 0, 0)
 			else 
@@ -107,6 +107,13 @@ class FlipNode extends XNode {
 			]
 			play
 		]
+	}
+	
+	def alignFaces(Node fixed, Node toBeAligned) {
+		toBeAligned.layoutX = fixed.layoutX - (toBeAligned.layoutBounds.width - fixed.layoutBounds.width) / 2 
+			- toBeAligned.layoutBounds.minX
+		toBeAligned.layoutY = fixed.layoutY - (toBeAligned.layoutBounds.height - fixed.layoutBounds.height) / 2 
+			- toBeAligned.layoutBounds.minY
 	}
 	
 	def protected isHorizontal(MouseEvent event) {

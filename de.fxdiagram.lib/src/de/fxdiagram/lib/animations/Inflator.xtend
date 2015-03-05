@@ -1,6 +1,8 @@
 package de.fxdiagram.lib.animations
 
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.command.AbstractAnimationCommand
+import de.fxdiagram.core.command.CommandContext
 import java.util.Map
 import javafx.animation.FadeTransition
 import javafx.animation.KeyFrame
@@ -18,8 +20,6 @@ import javafx.scene.shape.Rectangle
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.core.command.AbstractAnimationCommand
-import de.fxdiagram.core.command.CommandContext
 
 class Inflator {
 	
@@ -39,24 +39,37 @@ class Inflator {
 	new(XNode host, Pane container) {
 		this.host = host
 		this.container = container
+		val containerSize = calculateSize(container)
+		val padding = container.padding
+		deflatedWidth = containerSize.width - padding.left - padding.right
+		deflatedHeight = containerSize.height - padding.top - padding.bottom
 	}
 	
 	def addInflatable(VBox inflatable, int index) {
 		val spacer = new Rectangle(0, 0, 0, 0) => [
 			opacity = 0
 		]
-		container.children.add(index, spacer)
+		if(isInflated) {
+			container.children.add(index, inflatable)			
+		} else {
+			container.children.add(index, spacer)
+		}
 		inflatable2spacer.put(inflatable, spacer)
 	}
 
+	def removeInflatable(VBox inflatable) {
+		val spacer = inflatable2spacer.get(inflatable)
+		if(isInflated) {
+			container.children -= inflatable
+		} else {
+			container.children -= spacer
+		}
+		inflatable2spacer.remove(inflatable, spacer)
+	}
 
 	def getInflateAnimation() {
 		if(inflatable2spacer.empty || isInflated)
 			return createEmptyTransition
-		val containerSize = calculateSize(container)
-		val padding = container.padding
-		deflatedWidth = containerSize.width - padding.left - padding.right
-		deflatedHeight = containerSize.height - padding.top - padding.bottom
 		new SequentialTransition => [
 			delay = 200.millis
 			children += inflate
@@ -171,7 +184,7 @@ class Inflator {
 	}	
 
 	protected def appear() {
-		val contents = inflatable2spacer.keySet.map[children].flatten
+		val contents = getContents()
 		if(contents.empty) {
 			createEmptyTransition
 		} else {
@@ -188,6 +201,10 @@ class Inflator {
 		} 
 	}
 	
+	protected def getContents() {
+		inflatable2spacer.keySet.map[ children ].flatten
+	}
+	
 	protected def createEmptyTransition() {
 		new Transition() {
 			override protected interpolate(double frac) {
@@ -196,7 +213,7 @@ class Inflator {
 	}
 	
 	protected def disappear() {
-		val contents = inflatable2spacer.keySet.map[children].flatten
+		val contents = getContents()
 		if(contents.empty) {
 			new Transition() {
 				override protected interpolate(double frac) {
