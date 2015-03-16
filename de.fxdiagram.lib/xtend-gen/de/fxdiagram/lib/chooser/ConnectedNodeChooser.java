@@ -155,8 +155,7 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
       if (!_isActive) {
         _and = false;
       } else {
-        boolean _tripleNotEquals = (choice != this.currentChoice);
-        _and = _tripleNotEquals;
+        _and = (choice != this.currentChoice);
       }
       if (_and) {
         this.currentChoice = choice;

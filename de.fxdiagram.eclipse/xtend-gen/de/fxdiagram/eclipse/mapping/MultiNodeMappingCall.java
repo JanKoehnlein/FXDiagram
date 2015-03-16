@@ -24,7 +24,7 @@ public class MultiNodeMappingCall<RESULT extends Object, ARG extends Object> ext
   @Pure
   public int hashCode() {
     final int prime = 31;
-    int result = super.hashCode();
+    int result = 1;
     result = prime * result + ((this.selector== null) ? 0 : this.selector.hashCode());
     result = prime * result + ((this.nodeMapping== null) ? 0 : this.nodeMapping.hashCode());
     return result;
@@ -38,8 +38,6 @@ public class MultiNodeMappingCall<RESULT extends Object, ARG extends Object> ext
     if (obj == null)
       return false;
     if (getClass() != obj.getClass())
-      return false;
-    if (!super.equals(obj))
       return false;
     MultiNodeMappingCall<?, ?> other = (MultiNodeMappingCall<?, ?>) obj;
     if (this.selector == null) {

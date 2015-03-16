@@ -24,7 +24,7 @@ public class ConnectionMappingCall<RESULT extends Object, ARG extends Object> ex
   @Pure
   public int hashCode() {
     final int prime = 31;
-    int result = super.hashCode();
+    int result = 1;
     result = prime * result + ((this.selector== null) ? 0 : this.selector.hashCode());
     result = prime * result + ((this.connectionMapping== null) ? 0 : this.connectionMapping.hashCode());
     return result;
@@ -38,8 +38,6 @@ public class ConnectionMappingCall<RESULT extends Object, ARG extends Object> ex
     if (obj == null)
       return false;
     if (getClass() != obj.getClass())
-      return false;
-    if (!super.equals(obj))
       return false;
     ConnectionMappingCall<?, ?> other = (ConnectionMappingCall<?, ?>) obj;
     if (this.selector == null) {

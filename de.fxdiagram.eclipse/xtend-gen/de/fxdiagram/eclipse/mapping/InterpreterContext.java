@@ -106,7 +106,7 @@ public class InterpreterContext {
   }
   
   @Pure
-  public boolean isIsNewDiagram() {
+  public boolean isNewDiagram() {
     return this.isNewDiagram;
   }
   
