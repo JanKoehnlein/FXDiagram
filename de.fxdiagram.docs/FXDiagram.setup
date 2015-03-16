@@ -33,11 +33,6 @@
       value="http://rtsys.informatik.uni-kiel.de/~kieler/updatesite/release_pragmatics_2015-02"/>
   <setupTask
       xsi:type="setup:VariableTask"
-      name="workspace.location"
-      value="${installation.location/ws}"
-      label=""/>
-  <setupTask
-      xsi:type="setup:VariableTask"
       name="fxdiagram.git.clone.location"
       value="${installation.location/git/}${fxdiagram.git.clone.remoteURI|gitRepository}"/>
   <setupTask
@@ -87,6 +82,8 @@
         name="org.eclipse.xtext.sdk.feature.group"/>
     <requirement
         name="org.eclipse.fx.ide.feature.feature.group"/>
+    <requirement
+        name="org.eclipse.egit.feature.group"/>
     <repository
         url="${xtext.latest.composite}"/>
     <repository
@@ -282,26 +279,6 @@
         </operand>
       </predicate>
     </workingSet>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="Preferences">
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.core.resources/encoding"
-        value="UTF-8"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.egit.core/core_autoIgnoreDerivedResources"
-        value="false"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.oomph.setup.ui/showToolBarContributions"
-        value="true"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.core.runtime/line.separator"
-        value="&#xA;"/>
   </setupTask>
   <stream name="master"/>
   <logicalProjectContainer
