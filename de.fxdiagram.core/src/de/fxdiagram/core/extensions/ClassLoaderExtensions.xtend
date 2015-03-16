@@ -52,7 +52,7 @@ class ClassLoaderExtensions {
 	def static isEquinox() {
 		try {
 			return Platform.isRunning()
-		} catch (Exception exc) {
+		} catch (Throwable exc) {
 			return false
 		}
 	}

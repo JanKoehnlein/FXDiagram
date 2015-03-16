@@ -22,6 +22,7 @@
 		<module>../de.fxdiagram.eclipse</module>
 		<module>../de.fxdiagram.eclipse.example</module>
 		<module>../de.fxdiagram.eclipse.pde</module>
+		<module>../de.fxdiagram.noeclipse</module>
 		<module>../../JavaFX-SWT-Gesture-Bridge/de.fxdiagram.swtfx</module>
 		<module>../de.fxdiagram.xtext.domainmodel</module>
 		<module>../de.fxdiagram.xtext.fowlerdsl</module>
@@ -32,6 +33,11 @@
 	</modules>
 
 	<repositories>
+		<repository>
+			<id>xtext</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</url>
+		</repository>
 		<repository>
 			<id>luna</id>
 			<layout>p2</layout>

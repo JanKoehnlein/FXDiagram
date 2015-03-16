@@ -72,9 +72,10 @@ public class Layouter {
   @Extension
   private KGraphFactory _kGraphFactory = KGraphFactory.eINSTANCE;
   
+  private Map<LayoutType, AbstractLayoutProvider> layoutProviders = CollectionLiterals.<LayoutType, AbstractLayoutProvider>newHashMap();
+  
   public Layouter() {
-    AbstractLayoutProvider _layoutProvider = this.getLayoutProvider(LayoutType.DOT);
-    _layoutProvider.dispose();
+    this.getLayoutProvider(LayoutType.DOT);
   }
   
   public LazyCommand createLayoutCommand(final LayoutType type, final XDiagram diagram, final Duration duration) {
@@ -99,28 +100,31 @@ public class Layouter {
   
   protected HashMap<Object, KGraphElement> calculateLayout(final LayoutType type, final XDiagram diagram) {
     final AbstractLayoutProvider provider = this.getLayoutProvider(type);
-    try {
-      final HashMap<Object, KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
-      diagram.layout();
-      final KNode kRoot = this.toKRootNode(diagram, cache);
-      BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
-      provider.doLayout(kRoot, _basicProgressMonitor);
-      return cache;
-    } finally {
-      provider.dispose();
-    }
+    final HashMap<Object, KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
+    diagram.layout();
+    final KNode kRoot = this.toKRootNode(diagram, cache);
+    BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
+    provider.doLayout(kRoot, _basicProgressMonitor);
+    return cache;
   }
   
   protected AbstractLayoutProvider getLayoutProvider(final LayoutType type) {
-    GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
-    final Procedure1<GraphvizLayoutProvider> _function = new Procedure1<GraphvizLayoutProvider>() {
-      @Override
-      public void apply(final GraphvizLayoutProvider it) {
-        String _string = type.toString();
-        it.initialize(_string);
-      }
-    };
-    return ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
+    AbstractLayoutProvider layoutProvider = this.layoutProviders.get(type);
+    boolean _equals = Objects.equal(layoutProvider, null);
+    if (_equals) {
+      GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
+      final Procedure1<GraphvizLayoutProvider> _function = new Procedure1<GraphvizLayoutProvider>() {
+        @Override
+        public void apply(final GraphvizLayoutProvider it) {
+          String _string = type.toString();
+          it.initialize(_string);
+        }
+      };
+      GraphvizLayoutProvider _doubleArrow = ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
+      layoutProvider = _doubleArrow;
+      this.layoutProviders.put(type, layoutProvider);
+    }
+    return layoutProvider;
   }
   
   protected void applyLayout(final Map<Object, KGraphElement> map, final XShape fixed, final XDiagram diagram) {

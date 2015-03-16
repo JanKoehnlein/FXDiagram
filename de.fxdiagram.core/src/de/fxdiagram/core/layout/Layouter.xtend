@@ -41,10 +41,12 @@ class Layouter {
 	extension KLayoutDataFactory = KLayoutDataFactory.eINSTANCE
 	
 	extension KGraphFactory = KGraphFactory.eINSTANCE
+
+	Map<LayoutType, AbstractLayoutProvider> layoutProviders = newHashMap
 	
 	new() {
 		// pre-initialize
-		getLayoutProvider(LayoutType.DOT).dispose
+		getLayoutProvider(LayoutType.DOT)
 	}
 	
 	def LazyCommand createLayoutCommand(LayoutType type, XDiagram diagram, Duration duration) {
@@ -65,21 +67,22 @@ class Layouter {
 	
 	protected def calculateLayout(LayoutType type, XDiagram diagram) {
 		val provider = getLayoutProvider(type)
-		try {
-			val cache = <Object, KGraphElement> newHashMap
-			diagram.layout
-			val kRoot = diagram.toKRootNode(cache)
-			provider.doLayout(kRoot, new BasicProgressMonitor())
-			return cache
-		} finally {
-			provider.dispose
-		}
+		val cache = <Object, KGraphElement> newHashMap
+		diagram.layout
+		val kRoot = diagram.toKRootNode(cache)
+		provider.doLayout(kRoot, new BasicProgressMonitor())
+		return cache
 	}
 	
 	protected def AbstractLayoutProvider getLayoutProvider(LayoutType type) {
-		new GraphvizLayoutProvider => [
-			initialize(type.toString)
-		]
+		var layoutProvider = layoutProviders.get(type)
+		if(layoutProvider == null) {
+			layoutProvider = new GraphvizLayoutProvider => [
+				initialize(type.toString)
+			]
+			layoutProviders.put(type, layoutProvider)
+		}
+		return layoutProvider
 	}
 	
 	protected def applyLayout(Map<Object,KGraphElement> map, XShape fixed, XDiagram diagram) {
