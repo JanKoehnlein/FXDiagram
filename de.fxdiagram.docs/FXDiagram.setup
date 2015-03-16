@@ -165,6 +165,8 @@
       <requirement
           name="de.fxdiagram.sdk.feature.feature.group"/>
       <requirement
+          name="de.fxdiagram.base.feature.feature.group"/>
+      <requirement
           name="org.eclipse.xtend.sdk.feature.group"/>
       <requirement
           name="org.eclipse.fx.ide.basic.feature.feature.group"/>
