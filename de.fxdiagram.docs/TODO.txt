@@ -1,8 +1,0 @@
-ENHANCEMENT
-- Make auxlines magnetic
-- more auxiliary lines
-- Layouter: convert edges as a last step
-
-MINOR
-- SVG export: arc size
-- allow different anchors for faces of flipNodes 

@@ -1,7 +1,0 @@
-HIGH
--make sequential animation command work
--package node for PackageFragments 
- 
-LOW
--refactor AbstractChooser to work on descriptors instead of XNodes
-
