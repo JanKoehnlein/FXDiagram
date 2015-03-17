@@ -1,12 +1,18 @@
 package de.fxdiagram.core.tools
 
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XControlPoint
+import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import javafx.event.EventHandler
 import javafx.geometry.Point2D
 import javafx.scene.input.RotateEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.input.ZoomEvent
+import javafx.scene.transform.Rotate
 import org.eclipse.xtend.lib.annotations.Accessors
+import de.fxdiagram.core.XShape
+import javafx.geometry.Dimension2D
 
 class DiagramGestureTool implements XDiagramTool {
 
@@ -38,9 +44,40 @@ class DiagramGestureTool implements XDiagramTool {
 			root.viewportTransform.translateRelative(deltaX, deltaY)
 		]
 		rotateHandler = [
-			if (shortcutDown)
-				root.viewportTransform.rotateRelative(-angle, sceneX, sceneY)
+			var selection = root.currentSelection
+			val rotateSet = (
+				if(selection.empty) {
+					root.diagram.nodes + root.diagram.connections.map[nonAnchorPoints].flatten
+				} else {
+					val nodes = selection.filter(XNode).toSet
+					val connections = selection.filter(XConnection) 
+						+ nodes.map[
+							outgoingConnections.filter[nodes.contains(target)]
+							+ incomingConnections.filter[nodes.contains(source)]
+						].flatten
+					nodes + connections.map[nonAnchorPoints].flatten + selection.filter(XControlPoint)
+				}
+			).toSet
+			val pivot = root.diagram.sceneToLocal(sceneX, sceneY)
+			val rotate = new Rotate(angle, pivot.x, pivot.y)
+			rotateSet.forEach[ 
+				val offset = rotateOffset 
+				val newPosition = rotate.transform(layoutX + offset.width, layoutY + offset.height)
+				layoutX = newPosition.x - offset.width
+				layoutY = newPosition.y - offset.height
+			]
 		]
+	}
+	
+	protected def getNonAnchorPoints(XConnection it) {
+		controlPoints.filter[type != XControlPoint.Type.ANCHOR]
+	}
+	
+	protected def getRotateOffset(XShape it) {
+		if (it instanceof XControlPoint) 
+			new Dimension2D(0, 0)
+		else
+			new Dimension2D(0.5 * layoutBounds.width, 0.5 * layoutBounds.height)	
 	}
 
 	override activate() {
