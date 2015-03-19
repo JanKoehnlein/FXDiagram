@@ -215,11 +215,23 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
   
   @Override
   public IHyperlink[] createHyperlinksByOffset(final XtextResource resource, final int offset, final boolean createMultipleHyperlinks) {
-    IHyperlink[] _createHyperlinksByOffset = this.delegate.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks);
-    List<IHyperlink> _emptyListIfNull = this.<IHyperlink>emptyListIfNull(_createHyperlinksByOffset);
-    IHyperlink[] _createHyperlinksByOffset_1 = super.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks);
-    List<IHyperlink> _emptyListIfNull_1 = this.<IHyperlink>emptyListIfNull(_createHyperlinksByOffset_1);
-    return ((IHyperlink[])Conversions.unwrapArray(Iterables.<IHyperlink>concat(_emptyListIfNull, _emptyListIfNull_1), IHyperlink.class));
+    Iterable<IHyperlink> _xblockexpression = null;
+    {
+      IHyperlink[] _createHyperlinksByOffset = this.delegate.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks);
+      List<IHyperlink> _emptyListIfNull = this.<IHyperlink>emptyListIfNull(_createHyperlinksByOffset);
+      IHyperlink[] _createHyperlinksByOffset_1 = super.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks);
+      List<IHyperlink> _emptyListIfNull_1 = this.<IHyperlink>emptyListIfNull(_createHyperlinksByOffset_1);
+      final Iterable<IHyperlink> hyperlinks = Iterables.<IHyperlink>concat(_emptyListIfNull, _emptyListIfNull_1);
+      Iterable<IHyperlink> _xifexpression = null;
+      boolean _isEmpty = IterableExtensions.isEmpty(hyperlinks);
+      if (_isEmpty) {
+        _xifexpression = null;
+      } else {
+        _xifexpression = hyperlinks;
+      }
+      _xblockexpression = _xifexpression;
+    }
+    return ((IHyperlink[])Conversions.unwrapArray(_xblockexpression, IHyperlink.class));
   }
   
   protected <T extends Object> List<T> emptyListIfNull(final T[] array) {

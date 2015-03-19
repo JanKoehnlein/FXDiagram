@@ -33,8 +33,12 @@ class FXDiagramHyperlinkHelper extends HyperlinkHelper {
 	@Inject ILocationInFileProvider locationInFileProvider
 
 	override createHyperlinksByOffset(XtextResource resource, int offset, boolean createMultipleHyperlinks) {
-		delegate.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks).emptyListIfNull
-		+ super.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks).emptyListIfNull
+		val hyperlinks = delegate.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks).emptyListIfNull
+			+ super.createHyperlinksByOffset(resource, offset, createMultipleHyperlinks).emptyListIfNull
+		if(hyperlinks.empty)
+			null
+		else 
+			hyperlinks
 	}
 	
 	protected def <T> List<T> emptyListIfNull(T[] array) {
