@@ -9,6 +9,7 @@ import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import java.util.Set
 
 class InterpreterContext {
 
@@ -16,8 +17,8 @@ class InterpreterContext {
 	
 	@Accessors boolean isNewDiagram
 
-	List<XNode> addedNodes = newArrayList
-	List<XConnection> addedConnections = newArrayList
+	Set<XNode> addedNodes = newHashSet
+	Set<XConnection> addedConnections = newHashSet
 	
 	def setDiagram(XDiagram diagram) {
 		this.diagram = diagram
@@ -26,14 +27,14 @@ class InterpreterContext {
 	def addNode(XNode node) {
 		if(diagram.root != null)
 			addedNodes += node
-		else 
+		else if(!diagram.nodes.contains(node))
 			diagram.nodes += node
 	}
 
 	def addConnection(XConnection connection) {
 		if(diagram.root != null)
 			addedConnections += connection
-		else 
+		else if(!diagram.connections.contains(connection))
 			diagram.connections += connection
 	}
 

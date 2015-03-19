@@ -10,7 +10,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import java.util.List;
+import java.util.Set;
 import javafx.collections.ObservableList;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -26,9 +26,9 @@ public class InterpreterContext {
   @Accessors
   private boolean isNewDiagram;
   
-  private List<XNode> addedNodes = CollectionLiterals.<XNode>newArrayList();
+  private Set<XNode> addedNodes = CollectionLiterals.<XNode>newHashSet();
   
-  private List<XConnection> addedConnections = CollectionLiterals.<XConnection>newArrayList();
+  private Set<XConnection> addedConnections = CollectionLiterals.<XConnection>newHashSet();
   
   public XDiagram setDiagram(final XDiagram diagram) {
     return this.diagram = diagram;
@@ -41,8 +41,15 @@ public class InterpreterContext {
     if (_notEquals) {
       _xifexpression = this.addedNodes.add(node);
     } else {
+      boolean _xifexpression_1 = false;
       ObservableList<XNode> _nodes = this.diagram.getNodes();
-      _xifexpression = _nodes.add(node);
+      boolean _contains = _nodes.contains(node);
+      boolean _not = (!_contains);
+      if (_not) {
+        ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
+        _xifexpression_1 = _nodes_1.add(node);
+      }
+      _xifexpression = _xifexpression_1;
     }
     return _xifexpression;
   }
@@ -54,8 +61,15 @@ public class InterpreterContext {
     if (_notEquals) {
       _xifexpression = this.addedConnections.add(connection);
     } else {
+      boolean _xifexpression_1 = false;
       ObservableList<XConnection> _connections = this.diagram.getConnections();
-      _xifexpression = _connections.add(connection);
+      boolean _contains = _connections.contains(connection);
+      boolean _not = (!_contains);
+      if (_not) {
+        ObservableList<XConnection> _connections_1 = this.diagram.getConnections();
+        _xifexpression_1 = _connections_1.add(connection);
+      }
+      _xifexpression = _xifexpression_1;
     }
     return _xifexpression;
   }
