@@ -119,7 +119,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
           return ButtonExtensions.getArrowButton(it, "Add property");
         }
       };
-      _outConnectionForEach.onDemand(_function_1);
+      _outConnectionForEach.asButton(_function_1);
       final Function1<Entity, Iterable<? extends ESetting<Entity>>> _function_2 = new Function1<Entity, Iterable<? extends ESetting<Entity>>>() {
         @Override
         public Iterable<? extends ESetting<Entity>> apply(final Entity entity) {
@@ -147,7 +147,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
           return ButtonExtensions.getTriangleButton(it, "Add superclass");
         }
       };
-      _outConnectionForEach_1.onDemand(_function_3);
+      _outConnectionForEach_1.asButton(_function_3);
     }
   };
   

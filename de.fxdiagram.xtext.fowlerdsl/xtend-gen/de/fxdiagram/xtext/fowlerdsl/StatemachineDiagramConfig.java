@@ -1,14 +1,22 @@
 package de.fxdiagram.xtext.fowlerdsl;
 
+import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
+import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.eclipse.mapping.AbstractDiagramConfig;
 import de.fxdiagram.eclipse.mapping.ConnectionMapping;
 import de.fxdiagram.eclipse.mapping.DiagramMapping;
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
 import de.fxdiagram.eclipse.mapping.MappingAcceptor;
+import de.fxdiagram.eclipse.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.eclipse.mapping.NodeMapping;
+import java.util.List;
+import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.text.Text;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State;
@@ -16,6 +24,7 @@ import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine;
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -53,19 +62,41 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
         }
       };
       this.<State>nodeForEach(StatemachineDiagramConfig.this.stateNode, _function);
+      final Function1<Statemachine, Iterable<? extends Transition>> _function_1 = new Function1<Statemachine, Iterable<? extends Transition>>() {
+        @Override
+        public Iterable<? extends Transition> apply(final Statemachine it) {
+          EList<State> _states = it.getStates();
+          final Function1<State, EList<Transition>> _function = new Function1<State, EList<Transition>>() {
+            @Override
+            public EList<Transition> apply(final State it) {
+              return it.getTransitions();
+            }
+          };
+          List<EList<Transition>> _map = ListExtensions.<State, EList<Transition>>map(_states, _function);
+          return Iterables.<Transition>concat(_map);
+        }
+      };
+      this.<Transition>connectionForEach(StatemachineDiagramConfig.this.transitionConnection, _function_1);
     }
   };
   
   private final NodeMapping<State> stateNode = new NodeMapping<State>(this, "stateNode") {
     @Override
-    public void calls() {
+    protected void calls() {
       final Function1<State, Iterable<? extends Transition>> _function = new Function1<State, Iterable<? extends Transition>>() {
         @Override
         public Iterable<? extends Transition> apply(final State it) {
           return it.getTransitions();
         }
       };
-      this.<Transition>outConnectionForEach(StatemachineDiagramConfig.this.transitionConnection, _function);
+      MultiConnectionMappingCall<Transition, State> _outConnectionForEach = this.<Transition>outConnectionForEach(StatemachineDiagramConfig.this.transitionConnection, _function);
+      final Function1<Side, Node> _function_1 = new Function1<Side, Node>() {
+        @Override
+        public Node apply(final Side it) {
+          return ButtonExtensions.getArrowButton(it, "Add transition");
+        }
+      };
+      _outConnectionForEach.asButton(_function_1);
     }
   };
   
@@ -99,14 +130,22 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     }
     
     @Override
-    public void calls() {
+    protected void calls() {
       final Function1<Transition, State> _function = new Function1<Transition, State>() {
+        @Override
+        public State apply(final Transition it) {
+          EObject _eContainer = it.eContainer();
+          return ((State) _eContainer);
+        }
+      };
+      this.<State>source(StatemachineDiagramConfig.this.stateNode, _function);
+      final Function1<Transition, State> _function_1 = new Function1<Transition, State>() {
         @Override
         public State apply(final Transition it) {
           return it.getState();
         }
       };
-      this.<State>target(StatemachineDiagramConfig.this.stateNode, _function);
+      this.<State>target(StatemachineDiagramConfig.this.stateNode, _function_1);
     }
   };
   
@@ -129,6 +168,13 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
           }
         };
         acceptor.<Statemachine>add(this.statemachineDiagram, _function);
+        final Function1<ARG, State> _function_1 = new Function1<ARG, State>() {
+          @Override
+          public State apply(final ARG it) {
+            return ((State)((ARG)domainArgument));
+          }
+        };
+        acceptor.<State>add(this.stateNode, _function_1);
       }
     }
     if (!_matched) {
@@ -141,6 +187,13 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
           }
         };
         acceptor.<Statemachine>add(this.statemachineDiagram, _function);
+        final Function1<ARG, Transition> _function_1 = new Function1<ARG, Transition>() {
+          @Override
+          public Transition apply(final ARG it) {
+            return ((Transition)((ARG)domainArgument));
+          }
+        };
+        acceptor.<Transition>add(this.transitionConnection, _function_1);
       }
     }
   }

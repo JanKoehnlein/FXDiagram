@@ -12,6 +12,7 @@ import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
 
+import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
 
 /**
@@ -41,14 +42,18 @@ class StatemachineDiagramConfig extends AbstractDiagramConfig {
 	val statemachineDiagram = new DiagramMapping<Statemachine>(this, "statemachineDiagram") {
 		override calls() {
 			// when adding a statemachine diagram automatically add a node for each state
+			// and a connetion for each transition
 			stateNode.nodeForEach[states]
+			transitionConnection.connectionForEach[states.map[transitions].flatten]
 		}		
 	}
 	
 	val stateNode = new NodeMapping<State>(this, "stateNode") {
-		override calls() {
-			// when adding a state automatically add a connection for each transition
-			transitionConnection.outConnectionForEach[ transitions ]
+		override protected calls() {
+			// when adding a state allow to explore its transitions via rapid button
+			transitionConnection.outConnectionForEach[transitions].asButton[
+				getArrowButton("Add transition")
+			]
 		}
 	}
 	
@@ -62,9 +67,10 @@ class StatemachineDiagramConfig extends AbstractDiagramConfig {
 			]
 		}
 		
-		override calls() {
-			// when adding a transition automatically add a node for the targe state
-			stateNode.target [state]
+		override protected calls() {
+			// when adding a transition, automatically add its source and target
+			stateNode.source[eContainer as State]
+			stateNode.target[state]
 		}
 	}
 
@@ -72,10 +78,14 @@ class StatemachineDiagramConfig extends AbstractDiagramConfig {
 		switch domainArgument {
 			Statemachine: 
 				add(statemachineDiagram)
-			State:
+			State: {
 				add(statemachineDiagram, [domainArgument.getContainerOfType(Statemachine)])
-			Transition:
+				add(stateNode, [domainArgument])
+			}
+			Transition: {
 				add(statemachineDiagram, [domainArgument.getContainerOfType(Statemachine)])	
+				add(transitionConnection, [domainArgument])
+			}
 		}
 	}	
 }

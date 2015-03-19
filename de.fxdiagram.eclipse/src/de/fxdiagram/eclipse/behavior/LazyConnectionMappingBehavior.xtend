@@ -102,7 +102,10 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 			for(connectionDomainObject: connectionDomainObjects) {
 				val connectionDescriptor = configInterpreter.getDescriptor(connectionDomainObject, mappingCall.connectionMapping)
 				if(existingConnectionDescriptors.add(connectionDescriptor)) {
-					val nodeMappingCall = (mappingCall.connectionMapping.source ?: mappingCall.connectionMapping.target)
+					val nodeMappingCall = if(hostIsSource)
+							mappingCall.connectionMapping.target
+						else
+							mappingCall.connectionMapping.source  
 					val nodeDomainObjects = configInterpreter.select(nodeMappingCall, connectionDomainObject)
 					if(!nodeDomainObjects.empty) 
 						return true
@@ -138,7 +141,10 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 			connectionDomainObjects.forEach [ connectionDomainObject |
 				val connectionDescriptor = configInterpreter.getDescriptor(connectionDomainObject, mappingCall.connectionMapping)
 				if(existingConnectionDescriptors.add(connectionDescriptor)) {
-					val nodeMappingCall = (mappingCall.connectionMapping.source ?: mappingCall.connectionMapping.target)
+					val nodeMappingCall = if(hostIsSource)
+							mappingCall.connectionMapping.target
+						else
+							mappingCall.connectionMapping.source  
 					val nodeDomainObjects = configInterpreter.select(nodeMappingCall, connectionDomainObject)
 					nodeDomainObjects.forEach [	
 						chooser.addChoice(createNode(nodeMappingCall.nodeMapping), connectionDescriptor)

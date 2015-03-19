@@ -72,17 +72,15 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
             final IMappedElementDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
             boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
             if (_add) {
-              NodeMappingCall<?, MODEL> _elvis = null;
-              ConnectionMapping<MODEL> _connectionMapping_1 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-              NodeMappingCall<?, MODEL> _source = _connectionMapping_1.getSource();
-              if (_source != null) {
-                _elvis = _source;
+              NodeMappingCall<?, MODEL> _xifexpression = null;
+              if (LazyConnectionRapidButtonAction.this.hostIsSource) {
+                ConnectionMapping<MODEL> _connectionMapping_1 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
+                _xifexpression = _connectionMapping_1.getTarget();
               } else {
                 ConnectionMapping<MODEL> _connectionMapping_2 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-                NodeMappingCall<?, MODEL> _target = _connectionMapping_2.getTarget();
-                _elvis = _target;
+                _xifexpression = _connectionMapping_2.getSource();
               }
-              final NodeMappingCall<?, MODEL> nodeMappingCall = _elvis;
+              final NodeMappingCall<?, MODEL> nodeMappingCall = _xifexpression;
               final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
               boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
               boolean _not = (!_isEmpty);
@@ -165,17 +163,15 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                 final IMappedElementDescriptor<MODEL> connectionDescriptor = LazyConnectionRapidButtonAction.this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
                 boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
                 if (_add) {
-                  NodeMappingCall<?, MODEL> _elvis = null;
-                  ConnectionMapping<MODEL> _connectionMapping_1 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-                  NodeMappingCall<?, MODEL> _source = _connectionMapping_1.getSource();
-                  if (_source != null) {
-                    _elvis = _source;
+                  NodeMappingCall<?, MODEL> _xifexpression = null;
+                  if (LazyConnectionRapidButtonAction.this.hostIsSource) {
+                    ConnectionMapping<MODEL> _connectionMapping_1 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
+                    _xifexpression = _connectionMapping_1.getTarget();
                   } else {
                     ConnectionMapping<MODEL> _connectionMapping_2 = LazyConnectionRapidButtonAction.this.mappingCall.getConnectionMapping();
-                    NodeMappingCall<?, MODEL> _target = _connectionMapping_2.getTarget();
-                    _elvis = _target;
+                    _xifexpression = _connectionMapping_2.getSource();
                   }
-                  final NodeMappingCall<?, MODEL> nodeMappingCall = _elvis;
+                  final NodeMappingCall<?, MODEL> nodeMappingCall = _xifexpression;
                   final Iterable<?> nodeDomainObjects = LazyConnectionRapidButtonAction.this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
                   final Consumer<Object> _function = new Consumer<Object>() {
                     @Override

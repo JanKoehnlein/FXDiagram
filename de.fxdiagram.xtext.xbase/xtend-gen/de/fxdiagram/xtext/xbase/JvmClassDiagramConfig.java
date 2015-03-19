@@ -74,7 +74,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
       final Function1<Side, Node> _function_1 = (Side it) -> {
         return ButtonExtensions.getArrowButton(it, "Add reference");
       };
-      _outConnectionForEach.onDemand(_function_1);
+      _outConnectionForEach.asButton(_function_1);
       final Function1<JvmDeclaredType, Iterable<? extends ESetting<JvmDeclaredType>>> _function_2 = (JvmDeclaredType it) -> {
         ArrayList<ESetting<JvmDeclaredType>> _xblockexpression = null;
         {
@@ -98,7 +98,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
       final Function1<Side, Node> _function_3 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add supertype");
       };
-      _outConnectionForEach_1.onDemand(_function_3);
+      _outConnectionForEach_1.asButton(_function_3);
     }
   };
   

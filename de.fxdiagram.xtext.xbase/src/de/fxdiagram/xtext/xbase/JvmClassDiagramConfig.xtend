@@ -42,7 +42,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 		override calls() {
 			referenceConnection.outConnectionForEach [
 				references
-			].onDemand[getArrowButton("Add reference")]
+			].asButton[getArrowButton("Add reference")]
 			superTypeConnection.outConnectionForEach [ JvmDeclaredType it | 
 				val result = newArrayList
 				for(var i=0; i<superTypes.size(); i++) {
@@ -52,7 +52,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 					}
 				}
 				result
-			].onDemand[getTriangleButton("Add supertype")]
+			].asButton[getTriangleButton("Add supertype")]
 		}
 	}
 

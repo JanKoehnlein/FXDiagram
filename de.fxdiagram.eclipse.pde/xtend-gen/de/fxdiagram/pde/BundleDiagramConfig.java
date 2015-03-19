@@ -53,7 +53,7 @@ public class BundleDiagramConfig extends AbstractDiagramConfig {
       final Function1<Side, Node> _function_1 = (Side it) -> {
         return ButtonExtensions.getArrowButton(it, "Add dependency");
       };
-      _outConnectionForEach.onDemand(_function_1);
+      _outConnectionForEach.asButton(_function_1);
       final Function1<BundleDescription, Iterable<? extends BundleDependency>> _function_2 = (BundleDescription it) -> {
         return BundleUtil.getInverseBundleDependencies(it);
       };
@@ -61,7 +61,7 @@ public class BundleDiagramConfig extends AbstractDiagramConfig {
       final Function1<Side, Node> _function_3 = (Side it) -> {
         return ButtonExtensions.getInverseArrowButton(it, "Add inverse dependency");
       };
-      _inConnectionForEach.onDemand(_function_3);
+      _inConnectionForEach.asButton(_function_3);
     }
   };
   
