@@ -27,6 +27,13 @@
             id="de.fxdiagram.eclipse.ClearDiagram"
             name="Clear Diagram">
       </command>
+      <command
+            categoryId="org.eclipse.ui.category.views"
+            defaultHandler="de.fxdiagram.eclipse.commands.NewDiagramHandler"
+            description="Create a new FXDiagram tab"
+            id="de.fxdiagram.eclipse.NewDiagram"
+            name="New Diagram">
+      </command>
    </extension>
    <extension point="org.eclipse.ui.menus">
         <menuContribution
@@ -48,6 +55,12 @@
                commandId="de.fxdiagram.eclipse.ClearDiagram"
                icon="icons/delete.gif"
                label="Clear Diagram"
+               style="push">
+         </command>
+         <command
+               commandId="de.fxdiagram.eclipse.NewDiagram"
+               icon="icons/add.png"
+               label="New Diagram"
                style="push">
          </command>
       </menuContribution>

@@ -1,84 +1,28 @@
 package de.fxdiagram.eclipse;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Iterables;
-import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XDiagram;
-import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
-import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.command.AddRemoveCommand;
-import de.fxdiagram.core.command.CommandStack;
-import de.fxdiagram.core.command.LazyCommand;
-import de.fxdiagram.core.command.ParallelAnimationCommand;
-import de.fxdiagram.core.command.SelectAndRevealCommand;
-import de.fxdiagram.core.extensions.DurationExtensions;
-import de.fxdiagram.core.layout.LayoutType;
-import de.fxdiagram.core.layout.Layouter;
-import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.services.ClassLoaderProvider;
-import de.fxdiagram.core.tools.actions.CenterAction;
-import de.fxdiagram.core.tools.actions.DeleteAction;
-import de.fxdiagram.core.tools.actions.DiagramAction;
-import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
-import de.fxdiagram.core.tools.actions.ExportSvgAction;
-import de.fxdiagram.core.tools.actions.FullScreenAction;
-import de.fxdiagram.core.tools.actions.LayoutAction;
-import de.fxdiagram.core.tools.actions.LoadAction;
-import de.fxdiagram.core.tools.actions.NavigateNextAction;
-import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
-import de.fxdiagram.core.tools.actions.RedoAction;
-import de.fxdiagram.core.tools.actions.RevealAction;
-import de.fxdiagram.core.tools.actions.SaveAction;
-import de.fxdiagram.core.tools.actions.SelectAllAction;
-import de.fxdiagram.core.tools.actions.UndoAction;
-import de.fxdiagram.core.tools.actions.ZoomToFitAction;
-import de.fxdiagram.eclipse.DocumentListener;
-import de.fxdiagram.eclipse.EditorListener;
+import de.fxdiagram.eclipse.FXDiagramTab;
 import de.fxdiagram.eclipse.mapping.AbstractMapping;
-import de.fxdiagram.eclipse.mapping.DiagramMappingCall;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.eclipse.mapping.InterpreterContext;
 import de.fxdiagram.eclipse.mapping.MappingCall;
-import de.fxdiagram.eclipse.mapping.NodeMappingCall;
-import de.fxdiagram.eclipse.mapping.XDiagramConfig;
-import de.fxdiagram.eclipse.mapping.XDiagramConfigInterpreter;
-import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
-import de.fxdiagram.swtfx.SwtToFXGestureConverter;
-import java.util.Collections;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
+import java.util.function.Consumer;
 import javafx.embed.swt.FXCanvas;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
-import javafx.util.Duration;
-import org.eclipse.jface.text.IDocument;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.texteditor.AbstractTextEditor;
-import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.eclipse.xtend.lib.annotations.AccessorType;
-import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.Pure;
+import org.eclipse.xtext.xbase.lib.Pair;
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -87,325 +31,128 @@ import org.eclipse.xtext.xbase.lib.Pure;
  */
 @SuppressWarnings("all")
 public class FXDiagramView extends ViewPart {
-  private FXCanvas canvas;
+  private CTabFolder tabFolder;
   
-  @Accessors(AccessorType.PUBLIC_GETTER)
-  private XRoot root;
+  private Map<CTabItem, FXDiagramTab> tab2content = CollectionLiterals.<CTabItem, FXDiagramTab>newHashMap();
   
-  private SwtToFXGestureConverter gestureConverter;
-  
-  private Map<IEditorPart, DocumentListener> contributingEditors = CollectionLiterals.<IEditorPart, DocumentListener>newHashMap();
-  
-  private Set<IEditorPart> changedEditors = CollectionLiterals.<IEditorPart>newHashSet();
-  
-  private IPartListener2 listener;
-  
-  private final XDiagramConfigInterpreter configInterpreter = new XDiagramConfigInterpreter();
+  private List<Pair<EventType<?>, EventHandler<?>>> globalEventHandlers = CollectionLiterals.<Pair<EventType<?>, EventHandler<?>>>newArrayList();
   
   @Override
   public void createPartControl(final Composite parent) {
-    FXCanvas _fXCanvas = new FXCanvas(parent, SWT.NONE);
-    this.canvas = _fXCanvas;
-    SwtToFXGestureConverter _swtToFXGestureConverter = new SwtToFXGestureConverter(this.canvas);
-    this.gestureConverter = _swtToFXGestureConverter;
-    Scene _createFxScene = this.createFxScene();
-    this.canvas.setScene(_createFxScene);
+    CTabFolder _cTabFolder = new CTabFolder(parent, (SWT.BORDER + SWT.BOTTOM));
+    this.tabFolder = _cTabFolder;
+    Display _display = parent.getDisplay();
+    Color _systemColor = _display.getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND);
+    this.tabFolder.setBackground(_systemColor);
   }
   
-  protected Scene createFxScene() {
-    XRoot _xRoot = new XRoot();
-    final Procedure1<XRoot> _function = new Procedure1<XRoot>() {
-      @Override
-      public void apply(final XRoot it) {
-        XDiagram _xDiagram = new XDiagram();
-        it.setRootDiagram(_xDiagram);
-        ObservableList<DomainObjectProvider> _domainObjectProviders = it.getDomainObjectProviders();
-        ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
-        _domainObjectProviders.add(_classLoaderProvider);
-        ObservableList<DomainObjectProvider> _domainObjectProviders_1 = it.getDomainObjectProviders();
-        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-        Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-        final Function1<XDiagramConfig, IMappedElementDescriptorProvider> _function = new Function1<XDiagramConfig, IMappedElementDescriptorProvider>() {
-          @Override
-          public IMappedElementDescriptorProvider apply(final XDiagramConfig it) {
-            return it.getDomainObjectProvider();
-          }
-        };
-        Iterable<IMappedElementDescriptorProvider> _map = IterableExtensions.map(_configurations, _function);
-        Set<IMappedElementDescriptorProvider> _set = IterableExtensions.<IMappedElementDescriptorProvider>toSet(_map);
-        Iterables.<DomainObjectProvider>addAll(_domainObjectProviders_1, _set);
-        DiagramActionRegistry _diagramActionRegistry = it.getDiagramActionRegistry();
-        CenterAction _centerAction = new CenterAction();
-        DeleteAction _deleteAction = new DeleteAction();
-        LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
-        ExportSvgAction _exportSvgAction = new ExportSvgAction();
-        UndoAction _undoAction = new UndoAction();
-        RedoAction _redoAction = new RedoAction();
-        RevealAction _revealAction = new RevealAction();
-        LoadAction _loadAction = new LoadAction();
-        SaveAction _saveAction = new SaveAction();
-        SelectAllAction _selectAllAction = new SelectAllAction();
-        ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
-        NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
-        NavigateNextAction _navigateNextAction = new NavigateNextAction();
-        FullScreenAction _fullScreenAction = new FullScreenAction();
-        UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-        _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction)));
-      }
-    };
-    XRoot _doubleArrow = ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
-    Scene _scene = new Scene(
-      this.root = _doubleArrow);
-    final Procedure1<Scene> _function_1 = new Procedure1<Scene>() {
-      @Override
-      public void apply(final Scene it) {
-        PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
-        it.setCamera(_perspectiveCamera);
-        FXDiagramView.this.root.activate();
-      }
-    };
-    return ObjectExtensions.<Scene>operator_doubleArrow(_scene, _function_1);
-  }
-  
-  @Override
-  public void setFocus() {
-    this.canvas.setFocus();
-  }
-  
-  public void clear() {
-    this.contributingEditors.clear();
-    this.changedEditors.clear();
-    XDiagram _xDiagram = new XDiagram();
-    this.root.setDiagram(_xDiagram);
-    CommandStack _commandStack = this.root.getCommandStack();
-    _commandStack.clear();
-  }
-  
-  public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
-    Scene _scene = this.canvas.getScene();
-    double _width = _scene.getWidth();
-    boolean _equals = (_width == 0);
-    if (_equals) {
-      Scene _scene_1 = this.canvas.getScene();
-      ReadOnlyDoubleProperty _widthProperty = _scene_1.widthProperty();
-      final ChangeListener<Number> _function = new ChangeListener<Number>() {
-        @Override
-        public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
-          Scene _scene = FXDiagramView.this.canvas.getScene();
-          ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
-          _widthProperty.removeListener(this);
-          FXDiagramView.this.<T>revealElement(element, mappingCall, editor);
-        }
-      };
-      _widthProperty.addListener(_function);
-    } else {
-      Scene _scene_2 = this.canvas.getScene();
-      double _height = _scene_2.getHeight();
-      boolean _equals_1 = (_height == 0);
-      if (_equals_1) {
-        Scene _scene_3 = this.canvas.getScene();
-        ReadOnlyDoubleProperty _heightProperty = _scene_3.heightProperty();
-        final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-          @Override
-          public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
-            Scene _scene = FXDiagramView.this.canvas.getScene();
-            ReadOnlyDoubleProperty _heightProperty = _scene.heightProperty();
-            _heightProperty.removeListener(this);
-            FXDiagramView.this.<T>revealElement(element, mappingCall, editor);
-          }
-        };
-        _heightProperty.addListener(_function_1);
-      } else {
-        this.<T>doRevealElement(element, mappingCall, editor);
-      }
-    }
-  }
-  
-  protected <T extends Object> void doRevealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
-    final InterpreterContext interpreterContext = new InterpreterContext();
-    if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
-      boolean _or = false;
-      boolean _or_1 = false;
-      boolean _register = false;
-      if (editor!=null) {
-        _register=this.register(editor);
-      }
-      if (_register) {
-        _or_1 = true;
-      } else {
-        boolean _equals = Objects.equal(editor, null);
-        _or_1 = _equals;
-      }
-      if (_or_1) {
-        _or = true;
-      } else {
-        boolean _remove = this.changedEditors.remove(editor);
-        _or = _remove;
-      }
-      if (_or) {
-        interpreterContext.setIsNewDiagram(true);
-        XDiagram _execute = this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
-        this.root.setDiagram(_execute);
-        CommandStack _commandStack = this.root.getCommandStack();
-        AddRemoveCommand _command = interpreterContext.getCommand();
-        _commandStack.execute(_command);
-      }
-    } else {
-      if ((mappingCall instanceof NodeMappingCall<?, ?>)) {
-        if (editor!=null) {
-          this.register(editor);
-        }
-        XDiagram _diagram = this.root.getDiagram();
-        interpreterContext.setDiagram(_diagram);
-        this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext, true);
-        CommandStack _commandStack_1 = this.root.getCommandStack();
-        AddRemoveCommand _command_1 = interpreterContext.getCommand();
-        _commandStack_1.execute(_command_1);
-      }
-    }
-    final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element);
-    XDiagram _diagram_1 = this.root.getDiagram();
-    Iterable<XShape> _allShapes = _diagram_1.getAllShapes();
-    final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
-      @Override
-      public Boolean apply(final XShape it) {
-        boolean _switchResult = false;
-        boolean _matched = false;
-        if (!_matched) {
-          if (it instanceof XNode) {
-            _matched=true;
-            DomainObjectDescriptor _domainObject = ((XNode)it).getDomainObject();
-            _switchResult = Objects.equal(_domainObject, descriptor);
-          }
-        }
-        if (!_matched) {
-          if (it instanceof XConnection) {
-            _matched=true;
-            DomainObjectDescriptor _domainObject = ((XConnection)it).getDomainObject();
-            _switchResult = Objects.equal(_domainObject, descriptor);
-          }
-        }
-        if (!_matched) {
-          _switchResult = false;
-        }
-        return Boolean.valueOf(_switchResult);
-      }
-    };
-    final XShape centerShape = IterableExtensions.<XShape>findFirst(_allShapes, _function);
-    CommandStack _commandStack_2 = this.root.getCommandStack();
-    ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
-    final Procedure1<ParallelAnimationCommand> _function_1 = new Procedure1<ParallelAnimationCommand>() {
-      @Override
-      public void apply(final ParallelAnimationCommand it) {
-        boolean _needsLayout = interpreterContext.needsLayout();
-        if (_needsLayout) {
-          Layouter _layouter = new Layouter();
-          XDiagram _diagram = FXDiagramView.this.root.getDiagram();
-          Duration _millis = DurationExtensions.millis(500);
-          LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram, _millis, centerShape);
-          it.operator_add(_createLayoutCommand);
-        }
-        final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
-          @Override
-          public Boolean apply(final XShape it) {
-            return Boolean.valueOf(Objects.equal(it, centerShape));
-          }
-        };
-        SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(FXDiagramView.this.root, _function);
-        it.operator_add(_selectAndRevealCommand);
-      }
-    };
-    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_1);
-    _commandStack_2.execute(_doubleArrow);
-  }
-  
-  protected <T extends Object, U extends Object> IMappedElementDescriptor<T> createMappedDescriptor(final T domainObject) {
-    IMappedElementDescriptor<T> _xblockexpression = null;
+  public FXDiagramTab createNewTab() {
+    FXDiagramTab _xblockexpression = null;
     {
-      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-      Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-      final Function1<XDiagramConfig, Iterable<? extends AbstractMapping<T>>> _function = new Function1<XDiagramConfig, Iterable<? extends AbstractMapping<T>>>() {
+      final FXDiagramTab diagramTab = new FXDiagramTab(this, this.tabFolder);
+      CTabItem _cTabItem = diagramTab.getCTabItem();
+      this.tab2content.put(_cTabItem, diagramTab);
+      CTabItem _cTabItem_1 = diagramTab.getCTabItem();
+      this.tabFolder.setSelection(_cTabItem_1);
+      final Consumer<Pair<EventType<?>, EventHandler<?>>> _function = new Consumer<Pair<EventType<?>, EventHandler<?>>>() {
         @Override
-        public Iterable<? extends AbstractMapping<T>> apply(final XDiagramConfig it) {
-          return it.<T>getMappings(domainObject);
+        public void accept(final Pair<EventType<?>, EventHandler<?>> it) {
+          XRoot _root = diagramTab.getRoot();
+          EventType<?> _key = it.getKey();
+          EventHandler<?> _value = it.getValue();
+          FXDiagramView.this.addEventHandlerWrapper(_root, ((EventType<? extends Event>) _key), _value);
         }
       };
-      Iterable<Iterable<? extends AbstractMapping<T>>> _map = IterableExtensions.map(_configurations, _function);
-      Iterable<AbstractMapping<T>> _flatten = Iterables.<AbstractMapping<T>>concat(_map);
-      final AbstractMapping<T> mapping = IterableExtensions.<AbstractMapping<T>>head(_flatten);
-      XDiagramConfig _config = mapping.getConfig();
-      IMappedElementDescriptorProvider _domainObjectProvider = _config.getDomainObjectProvider();
-      _xblockexpression = _domainObjectProvider.<T>createMappedElementDescriptor(domainObject, mapping);
+      this.globalEventHandlers.forEach(_function);
+      _xblockexpression = diagramTab;
     }
     return _xblockexpression;
   }
   
-  public boolean register(final IEditorPart editor) {
-    boolean isNew = false;
-    boolean _containsKey = this.contributingEditors.containsKey(editor);
-    boolean _not = (!_containsKey);
-    if (_not) {
-      if ((editor instanceof AbstractTextEditor)) {
-        final DocumentListener documentListener = new DocumentListener(this, editor);
-        IDocumentProvider _documentProvider = ((AbstractTextEditor)editor).getDocumentProvider();
-        IEditorInput _editorInput = ((AbstractTextEditor)editor).getEditorInput();
-        final IDocument document = _documentProvider.getDocument(_editorInput);
-        document.addDocumentListener(documentListener);
-        this.contributingEditors.put(editor, documentListener);
-      } else {
-        this.contributingEditors.put(editor, null);
-      }
-      isNew = true;
-    }
-    boolean _equals = Objects.equal(this.listener, null);
-    if (_equals) {
-      EditorListener _editorListener = new EditorListener(this);
-      this.listener = _editorListener;
-      IWorkbenchPartSite _site = editor.getSite();
-      IWorkbenchPage _page = _site.getPage();
-      _page.addPartListener(this.listener);
-    }
-    return isNew;
+  private <T extends Event> void addEventHandlerWrapper(final XRoot root, final EventType<T> eventType, final EventHandler<?> handler) {
+    root.<T>addEventHandler(eventType, ((EventHandler<? super T>) handler));
   }
   
-  public DocumentListener deregister(final IWorkbenchPartReference reference) {
-    DocumentListener _xblockexpression = null;
+  public <T extends Event> void addGlobalEventHandler(final EventType<T> eventType, final EventHandler<? super T> eventHandler) {
+    Pair<EventType<?>, EventHandler<?>> _mappedTo = Pair.<EventType<?>, EventHandler<?>>of(eventType, eventHandler);
+    this.globalEventHandlers.add(_mappedTo);
+    Collection<FXDiagramTab> _values = this.tab2content.values();
+    final Consumer<FXDiagramTab> _function = new Consumer<FXDiagramTab>() {
+      @Override
+      public void accept(final FXDiagramTab it) {
+        XRoot _root = it.getRoot();
+        _root.<T>addEventHandler(eventType, eventHandler);
+      }
+    };
+    _values.forEach(_function);
+  }
+  
+  public <T extends Event> void removeGlobalEventHandler(final EventType<T> eventType, final EventHandler<? super T> eventHandler) {
+    Pair<EventType<T>, EventHandler<? super T>> _mappedTo = Pair.<EventType<T>, EventHandler<? super T>>of(eventType, eventHandler);
+    this.globalEventHandlers.remove(_mappedTo);
+    Collection<FXDiagramTab> _values = this.tab2content.values();
+    final Consumer<FXDiagramTab> _function = new Consumer<FXDiagramTab>() {
+      @Override
+      public void accept(final FXDiagramTab it) {
+        XRoot _root = it.getRoot();
+        _root.<T>removeEventHandler(eventType, eventHandler);
+      }
+    };
+    _values.forEach(_function);
+  }
+  
+  protected FXDiagramTab getCurrentDiagramTab() {
+    FXDiagramTab _xblockexpression = null;
     {
-      final IWorkbenchPart part = reference.getPart(false);
-      DocumentListener _xifexpression = null;
-      boolean _notEquals = (!Objects.equal(part, null));
+      final CTabItem currentTab = this.tabFolder.getSelection();
+      FXDiagramTab _xifexpression = null;
+      boolean _notEquals = (!Objects.equal(currentTab, null));
       if (_notEquals) {
-        DocumentListener _xblockexpression_1 = null;
-        {
-          this.changedEditors.remove(part);
-          if ((part instanceof AbstractTextEditor)) {
-            final DocumentListener documentListener = this.contributingEditors.get(part);
-            IDocumentProvider _documentProvider = ((AbstractTextEditor)part).getDocumentProvider();
-            IEditorInput _editorInput = ((AbstractTextEditor)part).getEditorInput();
-            final IDocument document = _documentProvider.getDocument(_editorInput);
-            document.removeDocumentListener(documentListener);
-          }
-          _xblockexpression_1 = this.contributingEditors.remove(part);
-        }
-        _xifexpression = _xblockexpression_1;
+        _xifexpression = this.tab2content.get(currentTab);
+      } else {
+        _xifexpression = null;
       }
       _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
   
-  public boolean editorChanged(final IEditorPart editor) {
-    return this.changedEditors.add(editor);
+  public XRoot getCurrentRoot() {
+    FXDiagramTab _elvis = null;
+    FXDiagramTab _currentDiagramTab = this.getCurrentDiagramTab();
+    if (_currentDiagramTab != null) {
+      _elvis = _currentDiagramTab;
+    } else {
+      FXDiagramTab _createNewTab = this.createNewTab();
+      _elvis = _createNewTab;
+    }
+    return _elvis.getRoot();
   }
   
   @Override
-  public void dispose() {
-    this.gestureConverter.dispose();
-    super.dispose();
+  public void setFocus() {
+    FXDiagramTab _currentDiagramTab = this.getCurrentDiagramTab();
+    if (_currentDiagramTab!=null) {
+      _currentDiagramTab.setFocus();
+    }
   }
   
-  @Pure
-  public XRoot getRoot() {
-    return this.root;
+  public void clear() {
+    FXDiagramTab _currentDiagramTab = this.getCurrentDiagramTab();
+    if (_currentDiagramTab!=null) {
+      _currentDiagramTab.clear();
+    }
+  }
+  
+  public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
+    FXDiagramTab _elvis = null;
+    FXDiagramTab _currentDiagramTab = this.getCurrentDiagramTab();
+    if (_currentDiagramTab != null) {
+      _elvis = _currentDiagramTab;
+    } else {
+      FXDiagramTab _createNewTab = this.createNewTab();
+      _elvis = _createNewTab;
+    }
+    _elvis.<T>revealElement(element, mappingCall, editor);
   }
 }

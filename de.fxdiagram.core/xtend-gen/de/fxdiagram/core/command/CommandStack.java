@@ -1,11 +1,16 @@
 package de.fxdiagram.core.command;
 
+import com.google.common.base.Objects;
+import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.AnimationQueue;
 import de.fxdiagram.core.command.CommandContext;
 import java.util.LinkedList;
 import javafx.animation.Animation;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 
@@ -15,16 +20,34 @@ import org.eclipse.xtext.xbase.lib.Functions.Function0;
  * The command stack is reachable via the {@link XRoot} of the application.
  */
 @SuppressWarnings("all")
-public class CommandStack {
+public class CommandStack implements XActivatable {
   private LinkedList<AnimationCommand> undoStack = CollectionLiterals.<AnimationCommand>newLinkedList();
   
   private LinkedList<AnimationCommand> redoStack = CollectionLiterals.<AnimationCommand>newLinkedList();
   
   private CommandContext context;
   
+  private AnimationCommand lastBeforeSave = null;
+  
   public CommandStack(final XRoot root) {
     CommandContext _commandContext = new CommandContext(root);
     this.context = _commandContext;
+  }
+  
+  @Override
+  public void activate() {
+    XRoot _root = this.context.getRoot();
+    BooleanProperty _needsSaveProperty = _root.needsSaveProperty();
+    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
+      @Override
+      public void changed(final ObservableValue<? extends Boolean> p, final Boolean o, final Boolean n) {
+        if (((n).booleanValue() == false)) {
+          AnimationCommand _peek = CommandStack.this.undoStack.peek();
+          CommandStack.this.lastBeforeSave = _peek;
+        }
+      }
+    };
+    _needsSaveProperty.addListener(_function);
   }
   
   public void clear() {
@@ -55,6 +78,10 @@ public class CommandStack {
       };
       _animationQueue.enqueue(_function);
       this.redoStack.push(command);
+      XRoot _root = this.context.getRoot();
+      AnimationCommand _peek = this.undoStack.peek();
+      boolean _notEquals = (!Objects.equal(_peek, this.lastBeforeSave));
+      _root.setNeedsSave(_notEquals);
     }
   }
   
@@ -71,6 +98,10 @@ public class CommandStack {
       };
       _animationQueue.enqueue(_function);
       this.undoStack.push(command);
+      XRoot _root = this.context.getRoot();
+      AnimationCommand _peek = this.undoStack.peek();
+      boolean _notEquals = (!Objects.equal(_peek, this.lastBeforeSave));
+      _root.setNeedsSave(_notEquals);
     }
   }
   
@@ -84,6 +115,10 @@ public class CommandStack {
     };
     _animationQueue.enqueue(_function);
     this.undoStack.push(command);
+    XRoot _root = this.context.getRoot();
+    AnimationCommand _peek = this.undoStack.peek();
+    boolean _notEquals = (!Objects.equal(_peek, this.lastBeforeSave));
+    _root.setNeedsSave(_notEquals);
     boolean _clearRedoStackOnExecute = command.clearRedoStackOnExecute();
     if (_clearRedoStackOnExecute) {
       this.redoStack.clear();

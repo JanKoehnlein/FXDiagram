@@ -59,6 +59,10 @@ class XRoot extends Parent implements XActivatable {
 
 	@FxProperty ObservableList<DomainObjectProvider> domainObjectProviders = FXCollections.observableArrayList
 	
+	@FxProperty String name = "Untitled"
+	
+	@FxProperty boolean needsSave
+	
 	DiagramActionRegistry diagramActionRegistry = new DiagramActionRegistry
 
 	HeadsUpDisplay headsUpDisplay = new HeadsUpDisplay
@@ -122,6 +126,7 @@ class XRoot extends Parent implements XActivatable {
 	}
 
 	def	doActivate() {
+		commandStack.activate
 		defaultTool = new CompositeTool
 		defaultTool += new SelectionTool(this)
 		defaultTool += new DiagramGestureTool(this)
@@ -184,7 +189,7 @@ class XRoot extends Parent implements XActivatable {
 			} 
 		]
 	}
-	
+		
 	def getCommandStack() {
 		commandStack
 	}

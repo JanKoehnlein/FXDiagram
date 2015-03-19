@@ -21,7 +21,6 @@ class SaveAction implements DiagramAction {
 	override getTooltip() {
 		'Save diagram'
 	}
-	
 
 	override perform(XRoot root) {
 		if(root.diagram != null) {
@@ -30,8 +29,14 @@ class SaveAction implements DiagramAction {
 			val file = (fileChooser).showSaveDialog(root.scene.window)
 			if(file != null) {
 				new ModelSave().save(root, new FileWriter(file))
+				val fileName = file.name
+				val dotPos = fileName.lastIndexOf('.')
+				root.name = if(dotPos >= 0) 
+						fileName.substring(0, dotPos)	
+					else
+						fileName 
+				root.needsSave = false
 			}
 		}
 	}
-	
 }

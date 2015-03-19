@@ -2,21 +2,31 @@ package de.fxdiagram.core.command
 
 import de.fxdiagram.core.XRoot
 import java.util.LinkedList
+import de.fxdiagram.core.XActivatable
 
 /**
  * Executes and stores {@link AnimationCommands} for undo/redo functionality.
  * 
  * The command stack is reachable via the {@link XRoot} of the application.
  */
-class CommandStack {
+class CommandStack implements XActivatable {
 	
 	LinkedList<AnimationCommand> undoStack = newLinkedList
 	LinkedList<AnimationCommand> redoStack = newLinkedList
 
 	CommandContext context 
 	
+	AnimationCommand lastBeforeSave = null
+	
 	new(XRoot root) {
 		context = new CommandContext(root)
+	}
+	
+	override activate() {
+		context.root.needsSaveProperty.addListener [ p, o, n |
+			if(n == false)
+				lastBeforeSave = undoStack.peek
+		]
 	}
 	
 	def clear() {
@@ -39,6 +49,7 @@ class CommandStack {
 				command.getUndoAnimation(context)
 			]
 			redoStack.push(command)
+			context.root.needsSave = undoStack.peek != lastBeforeSave
 		}
 	}
 	
@@ -49,6 +60,7 @@ class CommandStack {
 				command.getRedoAnimation(context)
 			]
 			undoStack.push(command)
+			context.root.needsSave = undoStack.peek != lastBeforeSave
 		}
 	}
 	
@@ -57,6 +69,7 @@ class CommandStack {
 			command.getExecuteAnimation(context)
 		]
 		undoStack.push(command)
+		context.root.needsSave = undoStack.peek != lastBeforeSave
 		if(command.clearRedoStackOnExecute)
 			redoStack.clear
 	}

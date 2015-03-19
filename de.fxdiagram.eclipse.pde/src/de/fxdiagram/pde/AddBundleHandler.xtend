@@ -25,7 +25,7 @@ class AddBundleHandler extends AbstractHandler {
 			val view = diagramView
 			if (view instanceof FXDiagramView) {
 				val config = XDiagramConfig.Registry.getInstance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig") as BundleDiagramConfig
-				val root = view.root
+				val root = view.currentRoot
 				val center = root.diagram.sceneToLocal(sceneX, sceneY)
 				val nodeChooser = new NodeChooser(root.diagram, center, new CoverFlowChoice, false)
 				allBundles.forEach[
@@ -41,9 +41,9 @@ class AddBundleHandler extends AbstractHandler {
 		val view = diagramView
 		if(view instanceof FXDiagramView) {
 			if(event.isWidgetChecked) {
-				view.root.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseHandler)								
+				view.addGlobalEventHandler(MouseEvent.MOUSE_CLICKED, mouseHandler)								
 			} else {
-				view.root.removeEventHandler(MouseEvent.MOUSE_CLICKED, mouseHandler)
+				view.removeGlobalEventHandler(MouseEvent.MOUSE_CLICKED, mouseHandler)
 			}
 		}
 		null

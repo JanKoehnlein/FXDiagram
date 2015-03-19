@@ -39,7 +39,7 @@ public class AddBundleHandler extends AbstractHandler {
         XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
         XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
         final BundleDiagramConfig config = ((BundleDiagramConfig) _configByID);
-        final XRoot root = ((FXDiagramView)view).getRoot();
+        final XRoot root = ((FXDiagramView)view).getCurrentRoot();
         XDiagram _diagram = root.getDiagram();
         double _sceneX = it.getSceneX();
         double _sceneY = it.getSceneY();
@@ -70,11 +70,9 @@ public class AddBundleHandler extends AbstractHandler {
       if ((view instanceof FXDiagramView)) {
         boolean _isWidgetChecked = HandlerHelper.isWidgetChecked(event);
         if (_isWidgetChecked) {
-          XRoot _root = ((FXDiagramView)view).getRoot();
-          _root.<MouseEvent>addEventHandler(MouseEvent.MOUSE_CLICKED, this.mouseHandler);
+          ((FXDiagramView)view).<MouseEvent>addGlobalEventHandler(MouseEvent.MOUSE_CLICKED, this.mouseHandler);
         } else {
-          XRoot _root_1 = ((FXDiagramView)view).getRoot();
-          _root_1.<MouseEvent>removeEventHandler(MouseEvent.MOUSE_CLICKED, this.mouseHandler);
+          ((FXDiagramView)view).<MouseEvent>removeGlobalEventHandler(MouseEvent.MOUSE_CLICKED, this.mouseHandler);
         }
       }
       _xblockexpression = null;

@@ -60,6 +60,16 @@ public class SaveAction implements DiagramAction {
           ModelSave _modelSave = new ModelSave();
           FileWriter _fileWriter = new FileWriter(file);
           _modelSave.save(root, _fileWriter);
+          final String fileName = file.getName();
+          final int dotPos = fileName.lastIndexOf(".");
+          String _xifexpression = null;
+          if ((dotPos >= 0)) {
+            _xifexpression = fileName.substring(0, dotPos);
+          } else {
+            _xifexpression = fileName;
+          }
+          root.setName(_xifexpression);
+          root.setNeedsSave(false);
         }
       }
     } catch (Throwable _e) {

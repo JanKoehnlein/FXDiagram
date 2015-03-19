@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -39,7 +40,10 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -185,6 +189,7 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   }
   
   public void doActivate() {
+    this.commandStack.activate();
     CompositeTool _compositeTool = new CompositeTool();
     this.defaultTool = _compositeTool;
     SelectionTool _selectionTool = new SelectionTool(this);
@@ -378,5 +383,37 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   public ListProperty<DomainObjectProvider> domainObjectProvidersProperty() {
     return this.domainObjectProvidersProperty;
+  }
+  
+  private SimpleStringProperty nameProperty = new SimpleStringProperty(this, "name",_initName());
+  
+  private static final String _initName() {
+    return "Untitled";
+  }
+  
+  public String getName() {
+    return this.nameProperty.get();
+  }
+  
+  public void setName(final String name) {
+    this.nameProperty.set(name);
+  }
+  
+  public StringProperty nameProperty() {
+    return this.nameProperty;
+  }
+  
+  private SimpleBooleanProperty needsSaveProperty = new SimpleBooleanProperty(this, "needsSave");
+  
+  public boolean getNeedsSave() {
+    return this.needsSaveProperty.get();
+  }
+  
+  public void setNeedsSave(final boolean needsSave) {
+    this.needsSaveProperty.set(needsSave);
+  }
+  
+  public BooleanProperty needsSaveProperty() {
+    return this.needsSaveProperty;
   }
 }
