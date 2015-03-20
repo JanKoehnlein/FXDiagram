@@ -36,6 +36,8 @@ import de.fxdiagram.core.tools.actions.UndoAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.eclipse.FXDiagramView;
 import de.fxdiagram.eclipse.mapping.AbstractMapping;
+import de.fxdiagram.eclipse.mapping.ConnectionMapping;
+import de.fxdiagram.eclipse.mapping.ConnectionMappingCall;
 import de.fxdiagram.eclipse.mapping.DiagramMappingCall;
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
 import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider;
@@ -363,12 +365,41 @@ public class FXDiagramTab {
         CommandStack _commandStack_1 = this.root.getCommandStack();
         AddRemoveCommand _command_1 = interpreterContext.getCommand();
         _commandStack_1.execute(_command_1);
+      } else {
+        if ((mappingCall instanceof ConnectionMappingCall<?, ?>)) {
+          AbstractMapping<?> _mapping = ((ConnectionMappingCall<?, ?>)mappingCall).getMapping();
+          final ConnectionMapping<?> mapping = ((ConnectionMapping<?>) _mapping);
+          boolean _and = false;
+          NodeMappingCall<?, ?> _source = mapping.getSource();
+          boolean _notEquals = (!Objects.equal(_source, null));
+          if (!_notEquals) {
+            _and = false;
+          } else {
+            NodeMappingCall<?, ?> _target = mapping.getTarget();
+            boolean _notEquals_1 = (!Objects.equal(_target, null));
+            _and = _notEquals_1;
+          }
+          if (_and) {
+            this.register(editor);
+            XDiagram _diagram_1 = this.root.getDiagram();
+            interpreterContext.setDiagram(_diagram_1);
+            final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
+              @Override
+              public void apply(final XConnection it) {
+              }
+            };
+            this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext, true);
+            CommandStack _commandStack_2 = this.root.getCommandStack();
+            AddRemoveCommand _command_2 = interpreterContext.getCommand();
+            _commandStack_2.execute(_command_2);
+          }
+        }
       }
     }
     final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element);
-    XDiagram _diagram_1 = this.root.getDiagram();
-    Iterable<XShape> _allShapes = _diagram_1.getAllShapes();
-    final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
+    XDiagram _diagram_2 = this.root.getDiagram();
+    Iterable<XShape> _allShapes = _diagram_2.getAllShapes();
+    final Function1<XShape, Boolean> _function_1 = new Function1<XShape, Boolean>() {
       @Override
       public Boolean apply(final XShape it) {
         boolean _switchResult = false;
@@ -393,10 +424,10 @@ public class FXDiagramTab {
         return Boolean.valueOf(_switchResult);
       }
     };
-    final XShape centerShape = IterableExtensions.<XShape>findFirst(_allShapes, _function);
-    CommandStack _commandStack_2 = this.root.getCommandStack();
+    final XShape centerShape = IterableExtensions.<XShape>findFirst(_allShapes, _function_1);
+    CommandStack _commandStack_3 = this.root.getCommandStack();
     ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
-    final Procedure1<ParallelAnimationCommand> _function_1 = new Procedure1<ParallelAnimationCommand>() {
+    final Procedure1<ParallelAnimationCommand> _function_2 = new Procedure1<ParallelAnimationCommand>() {
       @Override
       public void apply(final ParallelAnimationCommand it) {
         boolean _needsLayout = interpreterContext.needsLayout();
@@ -417,8 +448,8 @@ public class FXDiagramTab {
         it.operator_add(_selectAndRevealCommand);
       }
     };
-    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_1);
-    _commandStack_2.execute(_doubleArrow);
+    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_2);
+    _commandStack_3.execute(_doubleArrow);
   }
   
   public void clear() {

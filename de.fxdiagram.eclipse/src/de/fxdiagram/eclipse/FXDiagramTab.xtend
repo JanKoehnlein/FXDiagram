@@ -23,6 +23,8 @@ import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
+import de.fxdiagram.eclipse.mapping.ConnectionMapping
+import de.fxdiagram.eclipse.mapping.ConnectionMappingCall
 import de.fxdiagram.eclipse.mapping.DiagramMappingCall
 import de.fxdiagram.eclipse.mapping.InterpreterContext
 import de.fxdiagram.eclipse.mapping.MappingCall
@@ -149,6 +151,14 @@ class FXDiagramTab {
 			interpreterContext.diagram = root.diagram
 			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)
 			root.commandStack.execute(interpreterContext.command)		
+		} else if(mappingCall instanceof ConnectionMappingCall<?, ?>) {
+			val mapping = mappingCall.mapping as ConnectionMapping<?>
+			if(mapping.source != null && mapping.target != null) {
+				register(editor)
+				interpreterContext.diagram = root.diagram
+				configInterpreter.execute(mappingCall as ConnectionMappingCall<?, T>, element, [], interpreterContext, true)
+				root.commandStack.execute(interpreterContext.command)		
+			}
 		}
 		val descriptor = createMappedDescriptor(element)
 		val centerShape = root.diagram.allShapes.findFirst[

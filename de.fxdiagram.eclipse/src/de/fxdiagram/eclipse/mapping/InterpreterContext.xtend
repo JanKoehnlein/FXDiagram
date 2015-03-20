@@ -5,11 +5,10 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.model.DomainObjectDescriptor
-import java.util.List
+import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import java.util.Set
 
 class InterpreterContext {
 

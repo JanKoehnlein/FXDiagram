@@ -263,7 +263,7 @@ public class XDiagramConfigInterpreter {
     return null;
   }
   
-  protected <T extends Object, U extends Object> Iterable<XConnection> execute(final AbstractConnectionMappingCall<T, U> connectionMappingCall, final U domainArgument, final Procedure1<? super XConnection> initializer, final InterpreterContext context, final boolean isCreateEndpointsOnDemand) {
+  public <T extends Object, U extends Object> Iterable<XConnection> execute(final AbstractConnectionMappingCall<T, U> connectionMappingCall, final U domainArgument, final Procedure1<? super XConnection> initializer, final InterpreterContext context, final boolean isCreateEndpointsOnDemand) {
     final Iterable<T> connectionObjects = this.<T, U>select(connectionMappingCall, domainArgument);
     final ArrayList<XConnection> result = CollectionLiterals.<XConnection>newArrayList();
     for (final T connectionObject : connectionObjects) {

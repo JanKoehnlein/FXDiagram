@@ -107,7 +107,7 @@ class XDiagramConfigInterpreter {
 		}
 	}
 
-	protected def <T,U> Iterable<XConnection> execute(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument,
+	def <T,U> Iterable<XConnection> execute(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument,
 		(XConnection)=>void initializer, InterpreterContext context, boolean isCreateEndpointsOnDemand) {
 		val connectionObjects = select(connectionMappingCall, domainArgument)
 		val result = newArrayList
