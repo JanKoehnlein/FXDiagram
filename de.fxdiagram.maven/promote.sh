@@ -2,9 +2,16 @@
 echo Replacing the update site with the lates build
 pushd .
 FXDIAGRAM_GIT=`pwd`/..
-FXDIAGRAM_GHPAGES=$FXDIAGRAM_GIT/../FXDiagram.gh-pages
+FXDIAGRAM_BINTRAY=`pwd`/bintray
 
-cd $FXDIAGRAM_GHPAGES/p2/updates/latest
+rm -rf $FXDIAGRAM_BINTRAY
+mkdir $FXDIAGRAM_BINTRAY
+cd $FXDIAGRAM_BINTRAY/
+mkdir p2
+mkdir p2/updates
+mkdir standalone
+
+cd p2/updates
 rm -rf *
 unzip $FXDIAGRAM_GIT/de.fxdiagram.eclipse.updatesite/target/de.fxdiagram.eclipse.updatesite-*.zip 
 popd
@@ -22,6 +29,6 @@ done
 cp ../../run-demo.sh .
 cd ..
 zip fxdiagram-jars.zip FXDiagram/* 
-cp -f fxdiagram-jars.zip $FXDIAGRAM_GHPAGES/standalone/
+cp -f fxdiagram-jars.zip $FXDIAGRAM_BINTRAY/standalone/
 popd
 echo done

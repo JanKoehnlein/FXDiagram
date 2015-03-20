@@ -124,14 +124,14 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
       final Function1<Entity, Iterable<? extends ESetting<Entity>>> _function_2 = new Function1<Entity, Iterable<? extends ESetting<Entity>>>() {
         @Override
         public Iterable<? extends ESetting<Entity>> apply(final Entity entity) {
-          List<ESetting<Entity>> _xblockexpression = null;
+          List<? extends ESetting<Entity>> _xblockexpression = null;
           {
             JvmParameterizedTypeReference _superType = entity.getSuperType();
             final Entity superEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_superType);
-            List<ESetting<Entity>> _xifexpression = null;
+            List<? extends ESetting<Entity>> _xifexpression = null;
             boolean _equals = Objects.equal(superEntity, null);
             if (_equals) {
-              _xifexpression = CollectionLiterals.<ESetting<Entity>>emptyList();
+              _xifexpression = CollectionLiterals.emptyList();
             } else {
               ESetting<Entity> _eSetting = new ESetting<Entity>(entity, DomainmodelPackage.Literals.ENTITY__SUPER_TYPE, 0);
               _xifexpression = Collections.<ESetting<Entity>>unmodifiableList(CollectionLiterals.<ESetting<Entity>>newArrayList(_eSetting));
