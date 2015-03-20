@@ -14,7 +14,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 @SuppressWarnings("all")
 public interface ISelectionExtractor {
   public interface Acceptor {
-    public abstract void accept(final Object selectedElement);
+    public abstract boolean accept(final Object selectedElement);
   }
   
   public static class Registry {
@@ -63,5 +63,5 @@ public interface ISelectionExtractor {
     }
   }
   
-  public abstract void addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor);
+  public abstract boolean addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor);
 }

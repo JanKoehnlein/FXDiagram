@@ -19,42 +19,39 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 @SuppressWarnings("all")
 public class JvmAssociationSelectionExtractor implements ISelectionExtractor {
   @Override
-  public void addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor) {
+  public boolean addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor) {
     if ((activePart instanceof XtextEditor)) {
       ISelectionProvider _selectionProvider = ((XtextEditor)activePart).getSelectionProvider();
       ISelection _selection = _selectionProvider.getSelection();
       final ITextSelection selection = ((ITextSelection) _selection);
       IXtextDocument _document = ((XtextEditor)activePart).getDocument();
-      final IUnitOfWork<Object, XtextResource> _function = (XtextResource it) -> {
-        Object _xblockexpression = null;
-        {
-          try {
-            IResourceServiceProvider _resourceServiceProvider = it.getResourceServiceProvider();
-            final IJvmModelAssociations associations = _resourceServiceProvider.<IJvmModelAssociations>get(IJvmModelAssociations.class);
-            IResourceServiceProvider _resourceServiceProvider_1 = it.getResourceServiceProvider();
-            final EObjectAtOffsetHelper eObjectAtOffsetHelper = _resourceServiceProvider_1.<EObjectAtOffsetHelper>get(EObjectAtOffsetHelper.class);
-            int _offset = selection.getOffset();
-            final EObject selectedElement = eObjectAtOffsetHelper.resolveElementAt(it, _offset);
-            boolean _notEquals = (!Objects.equal(selectedElement, null));
-            if (_notEquals) {
-              final EObject primary = associations.getPrimaryJvmElement(selectedElement);
-              boolean _notEquals_1 = (!Objects.equal(primary, null));
-              if (_notEquals_1) {
-                acceptor.accept(primary);
-              }
-            }
-          } catch (final Throwable _t) {
-            if (_t instanceof Exception) {
-              final Exception exc = (Exception)_t;
-            } else {
-              throw Exceptions.sneakyThrow(_t);
+      final IUnitOfWork<Boolean, XtextResource> _function = (XtextResource it) -> {
+        try {
+          IResourceServiceProvider _resourceServiceProvider = it.getResourceServiceProvider();
+          final IJvmModelAssociations associations = _resourceServiceProvider.<IJvmModelAssociations>get(IJvmModelAssociations.class);
+          IResourceServiceProvider _resourceServiceProvider_1 = it.getResourceServiceProvider();
+          final EObjectAtOffsetHelper eObjectAtOffsetHelper = _resourceServiceProvider_1.<EObjectAtOffsetHelper>get(EObjectAtOffsetHelper.class);
+          int _offset = selection.getOffset();
+          final EObject selectedElement = eObjectAtOffsetHelper.resolveElementAt(it, _offset);
+          boolean _notEquals = (!Objects.equal(selectedElement, null));
+          if (_notEquals) {
+            final EObject primary = associations.getPrimaryJvmElement(selectedElement);
+            boolean _notEquals_1 = (!Objects.equal(primary, null));
+            if (_notEquals_1) {
+              return Boolean.valueOf(acceptor.accept(primary));
             }
           }
-          _xblockexpression = null;
+        } catch (final Throwable _t) {
+          if (_t instanceof Exception) {
+            final Exception exc = (Exception)_t;
+          } else {
+            throw Exceptions.sneakyThrow(_t);
+          }
         }
-        return _xblockexpression;
+        return Boolean.valueOf(false);
       };
-      _document.<Object>readOnly(_function);
+      return (_document.<Boolean>readOnly(_function)).booleanValue();
     }
+    return false;
   }
 }

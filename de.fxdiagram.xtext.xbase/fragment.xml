@@ -12,6 +12,16 @@
                       id="de.fxdiagram.xtext.xbase.showInDiagramMenu"
                       class="de.fxdiagram.eclipse.commands.ShowInDiagramContribution">
                 </dynamic>
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="activePart">
+                      <test
+                            property="de.fxdiagram.eclipse.hasDiagramMapping"
+                            value="true">
+                      </test>
+                   </with>
+                </visibleWhen>
          	</menu> 
          </menuContribution>
 	</extension>

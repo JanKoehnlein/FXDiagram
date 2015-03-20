@@ -40,6 +40,16 @@
                       id="de.fxdiagram.eclipse.showInDiagramMenu"
                       class="de.fxdiagram.eclipse.commands.ShowInDiagramContribution">
                 </dynamic>
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="activePart">
+                      <test
+                            property="de.fxdiagram.eclipse.hasDiagramMapping"
+                            value="true">
+                      </test>
+                   </with>
+                </visibleWhen>
          	</menu>  
          </menuContribution>
 	</extension>
@@ -67,5 +77,15 @@
       <selectionExtractor
             class="de.fxdiagram.eclipse.xtext.XtextSelectionExtractor">
       </selectionExtractor>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="de.fxdiagram.eclipse.commands.HasMappingPropertyTester"
+            id="de.fxdiagram.eclipse.hasDiagramMapping"
+            namespace="de.fxdiagram.eclipse"
+            properties="hasDiagramMapping"
+            type="org.eclipse.ui.IWorkbenchPart">
+      </propertyTester>
    </extension>
 </plugin>

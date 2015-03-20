@@ -11,12 +11,12 @@ class XtextSelectionExtractor implements ISelectionExtractor {
 	override addSelectedElement(IWorkbenchPart activePart, Acceptor acceptor) {
 		if (activePart instanceof XtextEditor) {
 			val selection = activePart.selectionProvider.selection as ITextSelection
-			activePart.document.readOnly [
+			return activePart.document.readOnly [
 				val eObjectAtOffsetHelper = resourceServiceProvider.get(EObjectAtOffsetHelper)
 				val selectedElement = eObjectAtOffsetHelper.resolveElementAt(it, selection.offset)
 				acceptor.accept(selectedElement)
-				null
 			]
 		}
+		return false
 	}
 }

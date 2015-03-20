@@ -6,10 +6,10 @@ import org.eclipse.core.runtime.Platform
 import org.eclipse.ui.IWorkbenchPart
 
 interface ISelectionExtractor {
-	def void addSelectedElement(IWorkbenchPart activePart, Acceptor acceptor)
+	def boolean addSelectedElement(IWorkbenchPart activePart, Acceptor acceptor)
 	
 	interface Acceptor {
-		def void accept(Object selectedElement)  
+		def boolean accept(Object selectedElement)  
 	}
 	
 	class Registry {

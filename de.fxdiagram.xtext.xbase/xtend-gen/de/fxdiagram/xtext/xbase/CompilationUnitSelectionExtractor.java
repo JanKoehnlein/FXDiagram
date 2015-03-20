@@ -13,7 +13,7 @@ import org.eclipse.xtext.util.PolymorphicDispatcher;
 @SuppressWarnings("all")
 public class CompilationUnitSelectionExtractor implements ISelectionExtractor {
   @Override
-  public void addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor) {
+  public boolean addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor) {
     if ((activePart instanceof CompilationUnitEditor)) {
       ISelectionProvider _selectionProvider = ((CompilationUnitEditor)activePart).getSelectionProvider();
       ISelection _selection = _selectionProvider.getSelection();
@@ -28,7 +28,8 @@ public class CompilationUnitSelectionExtractor implements ISelectionExtractor {
         _xifexpression = IJavaElement.TYPE;
       }
       final IJavaElement javaElementToShow = javaElement.getAncestor(_xifexpression);
-      acceptor.accept(javaElementToShow);
+      return acceptor.accept(javaElementToShow);
     }
+    return false;
   }
 }

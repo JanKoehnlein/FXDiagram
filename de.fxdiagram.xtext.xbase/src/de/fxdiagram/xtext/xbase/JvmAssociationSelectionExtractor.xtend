@@ -13,7 +13,7 @@ class JvmAssociationSelectionExtractor implements ISelectionExtractor {
 	override addSelectedElement(IWorkbenchPart activePart, Acceptor acceptor) {
 		if(activePart instanceof XtextEditor) {
 			val selection = activePart.selectionProvider.selection as ITextSelection
-			activePart.document.readOnly [
+			return activePart.document.readOnly [
 				try {
 					val associations = resourceServiceProvider.get(IJvmModelAssociations)
 					val eObjectAtOffsetHelper = resourceServiceProvider.get(EObjectAtOffsetHelper)
@@ -21,14 +21,15 @@ class JvmAssociationSelectionExtractor implements ISelectionExtractor {
 					if (selectedElement != null) {
 						val primary = associations.getPrimaryJvmElement(selectedElement)
 						if(primary != null)
-							acceptor.accept(primary)
+							return acceptor.accept(primary)
 					}
 				} catch(Exception exc) {
 					// ignore
 				}
-				null
+				return false
 			]
 		}
+		return false
 	}
 	
 }

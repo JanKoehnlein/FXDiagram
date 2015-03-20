@@ -21,8 +21,9 @@ class CompilationUnitSelectionExtractor implements ISelectionExtractor {
 						IJavaElement.PACKAGE_FRAGMENT
 					else
 						IJavaElement.TYPE) 
-			acceptor.accept(javaElementToShow)
+			return acceptor.accept(javaElementToShow)
 		}
+		return false
 	}
 	
 }

@@ -61,9 +61,9 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
       final ArrayList<ContributionItem> contributionItems = CollectionLiterals.<ContributionItem>newArrayList();
       final ISelectionExtractor.Acceptor acceptor = new ISelectionExtractor.Acceptor() {
         @Override
-        public void accept(final Object selectedElement) {
+        public boolean accept(final Object selectedElement) {
           Iterable<? extends ContributionItem> _addMenuItemsForEntryCalls = ShowInDiagramContribution.this.addMenuItemsForEntryCalls(selectedElement, activePart);
-          Iterables.<ContributionItem>addAll(contributionItems, _addMenuItemsForEntryCalls);
+          return Iterables.<ContributionItem>addAll(contributionItems, _addMenuItemsForEntryCalls);
         }
       };
       ISelectionExtractor.Registry _instance = ISelectionExtractor.Registry.getInstance();

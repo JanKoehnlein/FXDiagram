@@ -16,28 +16,28 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 @SuppressWarnings("all")
 public class XtextSelectionExtractor implements ISelectionExtractor {
   @Override
-  public void addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor) {
+  public boolean addSelectedElement(final IWorkbenchPart activePart, final ISelectionExtractor.Acceptor acceptor) {
     if ((activePart instanceof XtextEditor)) {
       ISelectionProvider _selectionProvider = ((XtextEditor)activePart).getSelectionProvider();
       ISelection _selection = _selectionProvider.getSelection();
       final ITextSelection selection = ((ITextSelection) _selection);
       IXtextDocument _document = ((XtextEditor)activePart).getDocument();
-      final IUnitOfWork<Object, XtextResource> _function = new IUnitOfWork<Object, XtextResource>() {
+      final IUnitOfWork<Boolean, XtextResource> _function = new IUnitOfWork<Boolean, XtextResource>() {
         @Override
-        public Object exec(final XtextResource it) throws Exception {
-          Object _xblockexpression = null;
+        public Boolean exec(final XtextResource it) throws Exception {
+          boolean _xblockexpression = false;
           {
             IResourceServiceProvider _resourceServiceProvider = it.getResourceServiceProvider();
             final EObjectAtOffsetHelper eObjectAtOffsetHelper = _resourceServiceProvider.<EObjectAtOffsetHelper>get(EObjectAtOffsetHelper.class);
             int _offset = selection.getOffset();
             final EObject selectedElement = eObjectAtOffsetHelper.resolveElementAt(it, _offset);
-            acceptor.accept(selectedElement);
-            _xblockexpression = null;
+            _xblockexpression = acceptor.accept(selectedElement);
           }
-          return _xblockexpression;
+          return Boolean.valueOf(_xblockexpression);
         }
       };
-      _document.<Object>readOnly(_function);
+      return (_document.<Boolean>readOnly(_function)).booleanValue();
     }
+    return false;
   }
 }
