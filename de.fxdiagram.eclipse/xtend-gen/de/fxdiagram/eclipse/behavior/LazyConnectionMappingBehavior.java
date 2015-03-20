@@ -44,7 +44,7 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
         final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function = new Function1<AbstractConnectionMappingCall<?, T>, Boolean>() {
           @Override
           public Boolean apply(final AbstractConnectionMappingCall<?, T> it) {
-            return Boolean.valueOf(it.isLazy());
+            return Boolean.valueOf(it.isButton());
           }
         };
         final Iterable<AbstractConnectionMappingCall<?, T>> lazyOutgoing = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(_outgoing, _function);
@@ -69,7 +69,7 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
         final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function_1 = new Function1<AbstractConnectionMappingCall<?, T>, Boolean>() {
           @Override
           public Boolean apply(final AbstractConnectionMappingCall<?, T> it) {
-            return Boolean.valueOf(it.isLazy());
+            return Boolean.valueOf(it.isButton());
           }
         };
         final Iterable<AbstractConnectionMappingCall<?, T>> lazyIncoming = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(_incoming, _function_1);

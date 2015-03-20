@@ -14,7 +14,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 public abstract class AbstractConnectionMappingCall<RESULT extends Object, ARG extends Object> implements MappingCall<RESULT, ARG> {
   private Function1<? super Side, ? extends Node> imageFactory;
   
-  public boolean isLazy() {
+  public boolean isButton() {
     return (!Objects.equal(this.imageFactory, null));
   }
   

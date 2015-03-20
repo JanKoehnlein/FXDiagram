@@ -22,7 +22,9 @@ import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -66,20 +68,27 @@ public class XDiagramConfigInterpreter {
         }
       };
       _connections.forEach(_function_1);
-      List<AbstractNodeMappingCall<?, T>> _nodes_1 = diagramMapping.getNodes();
-      final Consumer<AbstractNodeMappingCall<?, T>> _function_2 = new Consumer<AbstractNodeMappingCall<?, T>>() {
-        @Override
-        public void accept(final AbstractNodeMappingCall<?, T> it) {
-          XDiagramConfigInterpreter.this.<T>connectNodesEagerly(it, diagramObject, context);
-        }
-      };
-      _nodes_1.forEach(_function_2);
+      List<ConnectionMapping<?>> _eagerConnections = diagramMapping.getEagerConnections();
+      boolean _isEmpty = _eagerConnections.isEmpty();
+      boolean _not_1 = (!_isEmpty);
+      if (_not_1) {
+        List<ConnectionMapping<?>> _eagerConnections_1 = diagramMapping.getEagerConnections();
+        final HashSet<ConnectionMapping<?>> eagerConnections = new HashSet<ConnectionMapping<?>>(_eagerConnections_1);
+        List<AbstractNodeMappingCall<?, T>> _nodes_1 = diagramMapping.getNodes();
+        final Consumer<AbstractNodeMappingCall<?, T>> _function_2 = new Consumer<AbstractNodeMappingCall<?, T>>() {
+          @Override
+          public void accept(final AbstractNodeMappingCall<?, T> it) {
+            XDiagramConfigInterpreter.this.<T>connectNodesEagerly(it, diagramObject, eagerConnections, context);
+          }
+        };
+        _nodes_1.forEach(_function_2);
+      }
       _xblockexpression = diagram;
     }
     return _xblockexpression;
   }
   
-  protected <T extends Object> void connectNodesEagerly(final AbstractNodeMappingCall<?, T> it, final T diagramObject, final InterpreterContext context) {
+  protected <T extends Object> void connectNodesEagerly(final AbstractNodeMappingCall<?, T> it, final T diagramObject, final Set<ConnectionMapping<?>> eagerConnections, final InterpreterContext context) {
     final Iterable<?> nodeObjects = this.select(it, diagramObject);
     NodeMapping<?> _nodeMapping = it.getNodeMapping();
     final NodeMapping<Object> nodeMappingCasted = ((NodeMapping<Object>) _nodeMapping);
@@ -93,7 +102,16 @@ public class XDiagramConfigInterpreter {
           final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function = new Function1<AbstractConnectionMappingCall<?, Object>, Boolean>() {
             @Override
             public Boolean apply(final AbstractConnectionMappingCall<?, Object> it) {
-              return Boolean.valueOf(it.isLazy());
+              boolean _and = false;
+              boolean _isButton = it.isButton();
+              if (!_isButton) {
+                _and = false;
+              } else {
+                AbstractMapping<?> _mapping = it.getMapping();
+                boolean _contains = eagerConnections.contains(_mapping);
+                _and = _contains;
+              }
+              return Boolean.valueOf(_and);
             }
           };
           Iterable<AbstractConnectionMappingCall<?, Object>> _filter = IterableExtensions.<AbstractConnectionMappingCall<?, Object>>filter(_incoming, _function);
@@ -114,7 +132,16 @@ public class XDiagramConfigInterpreter {
           final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function_2 = new Function1<AbstractConnectionMappingCall<?, Object>, Boolean>() {
             @Override
             public Boolean apply(final AbstractConnectionMappingCall<?, Object> it) {
-              return Boolean.valueOf(it.isLazy());
+              boolean _and = false;
+              boolean _isButton = it.isButton();
+              if (!_isButton) {
+                _and = false;
+              } else {
+                AbstractMapping<?> _mapping = it.getMapping();
+                boolean _contains = eagerConnections.contains(_mapping);
+                _and = _contains;
+              }
+              return Boolean.valueOf(_and);
             }
           };
           Iterable<AbstractConnectionMappingCall<?, Object>> _filter_1 = IterableExtensions.<AbstractConnectionMappingCall<?, Object>>filter(_outgoing, _function_2);
@@ -157,8 +184,8 @@ public class XDiagramConfigInterpreter {
       final Consumer<AbstractConnectionMappingCall<?, T>> _function = new Consumer<AbstractConnectionMappingCall<?, T>>() {
         @Override
         public void accept(final AbstractConnectionMappingCall<?, T> it) {
-          boolean _isLazy = it.isLazy();
-          boolean _not = (!_isLazy);
+          boolean _isButton = it.isButton();
+          boolean _not = (!_isButton);
           if (_not) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               @Override
@@ -175,8 +202,8 @@ public class XDiagramConfigInterpreter {
       final Consumer<AbstractConnectionMappingCall<?, T>> _function_1 = new Consumer<AbstractConnectionMappingCall<?, T>>() {
         @Override
         public void accept(final AbstractConnectionMappingCall<?, T> it) {
-          boolean _isLazy = it.isLazy();
-          boolean _not = (!_isLazy);
+          boolean _isButton = it.isButton();
+          boolean _not = (!_isButton);
           if (_not) {
             final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
               @Override

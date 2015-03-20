@@ -4,6 +4,8 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.simple.OpenableDiagramNode
+import java.util.HashSet
+import java.util.Set
 
 /**
  * Executes an {@link XDiagramConfig} on a given domain object.
@@ -17,21 +19,25 @@ class XDiagramConfigInterpreter {
 		context.diagram = diagram
 		diagramMapping.nodes.forEach[execute(diagramObject, context, true)]
 		diagramMapping.connections.forEach[execute(diagramObject, [], context, true)]
-		diagramMapping.nodes.forEach[connectNodesEagerly(diagramObject, context)]
+		if(!diagramMapping.eagerConnections.empty) {
+			val eagerConnections = new HashSet(diagramMapping.eagerConnections)			
+			diagramMapping.nodes.forEach[connectNodesEagerly(diagramObject, eagerConnections, context)]
+		}
 		diagram
 	}
 
-	protected def <T> connectNodesEagerly(AbstractNodeMappingCall<?,T> it, T diagramObject, InterpreterContext context) {
+	protected def <T> connectNodesEagerly(AbstractNodeMappingCall<?,T> it, T diagramObject, 
+			Set<ConnectionMapping<?>> eagerConnections, InterpreterContext context) {
 		val nodeObjects = select(diagramObject)
 		val nodeMappingCasted = nodeMapping as NodeMapping<Object>
 		for(nodeObject: nodeObjects) {
 			val descriptor = nodeObject.getDescriptor(nodeMappingCasted)
 			val node = context.getNode(descriptor)
 			if(node != null) {
-				nodeMappingCasted.incoming.filter[lazy].forEach[
+				nodeMappingCasted.incoming.filter[button && eagerConnections.contains(mapping)].forEach[
 					execute(nodeObject, [target = node], context, false) 
 				]
-				nodeMappingCasted.outgoing.filter[lazy].forEach[
+				nodeMappingCasted.outgoing.filter[button && eagerConnections.contains(mapping)].forEach[
 					execute(nodeObject, [source = node], context, false) 
 				]
 			}
@@ -47,11 +53,11 @@ class XDiagramConfigInterpreter {
 			val node = nodeMapping.createNode(descriptor)
 			context.addNode(node)
 			nodeMapping.incoming.forEach[
-				if(!lazy) 
+				if(!button) 
 					execute(nodeObject, [target = node], context, true) 
 			]
 			nodeMapping.outgoing.forEach[
-				if(!lazy) 
+				if(!button) 
 					execute(nodeObject, [source = node], context, true)
 			]
 			if(node instanceof OpenableDiagramNode)

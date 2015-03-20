@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="fxDiagramConfig" name="FXDiagram Configuration" schema="schema/fxDiagramConfig.exsd"/>
+   <extension-point id="selectionExtractor" name="Selected Object Extractor" schema="schema/selectionExtractor.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -14,12 +15,6 @@
    </extension>
       <extension
          point="org.eclipse.ui.commands">
-      <command
-            categoryId="org.eclipse.ui.category.navigate"
-            description="Show Element in FXDiagram"
-            id="de.fxdiagram.eclipse.showInDiagramCommand"
-            name="Show in FXDiagram">
-      </command>
       <command
             categoryId="org.eclipse.ui.category.views"
             defaultHandler="de.fxdiagram.eclipse.commands.ClearDiagramHandler"
@@ -38,12 +33,14 @@
    <extension point="org.eclipse.ui.menus">
         <menuContribution
             locationURI="popup:#TextEditorContext?before=group.edit">
-             <command
-                   commandId="de.fxdiagram.eclipse.showInDiagramCommand"
-                   icon="icons/FXDiagram.png"
-                   style="push"
-                   tooltip="Open in FXDiagram">
-         </command>  
+         	<menu
+                label="Show in FXDiagram as..."
+                icon="icons/FXDiagram.png">
+                <dynamic 
+                      id="de.fxdiagram.eclipse.showInDiagramMenu"
+                      class="de.fxdiagram.eclipse.commands.ShowInDiagramContribution">
+                </dynamic>
+         	</menu>  
          </menuContribution>
 	</extension>
    <extension
@@ -65,6 +62,10 @@
          </command>
       </menuContribution>
    </extension>
-   
-
+   <extension
+         point="de.fxdiagram.eclipse.selectionExtractor">
+      <selectionExtractor
+            class="de.fxdiagram.eclipse.xtext.XtextSelectionExtractor">
+      </selectionExtractor>
+   </extension>
 </plugin>

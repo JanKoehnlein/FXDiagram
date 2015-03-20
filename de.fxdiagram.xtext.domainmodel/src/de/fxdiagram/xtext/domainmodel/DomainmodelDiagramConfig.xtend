@@ -31,6 +31,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 		override calls() {
 			entityNode.nodeForEach[elements.filter(Entity)]
 			packageNode.nodeForEach[elements.filter(PackageDeclaration)]
+			eagerly(superTypeConnection, propertyConnection)
 		}
 	}
 	

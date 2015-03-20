@@ -12,7 +12,8 @@ import java.util.List
  abstract class DiagramMapping<T> extends AbstractMapping<T> {
 	
 	List<AbstractNodeMappingCall<?, T>> nodes = newArrayList 
-	List<AbstractConnectionMappingCall<?, T>> connections = newArrayList()
+	List<AbstractConnectionMappingCall<?, T>> connections = newArrayList
+	List<ConnectionMapping<?>> eagerConnections = newArrayList
 	
 	new(XDiagramConfig config, String id) {
 		super(config, id)
@@ -20,6 +21,8 @@ import java.util.List
 	
 	def getNodes() { initialize ; nodes }
 	def getConnections() { initialize ; connections }
+	def getEagerConnections() { initialize; eagerConnections }
+	
 	def XDiagram createDiagram(IMappedElementDescriptor<T> descriptor) { new XDiagram }
 	
 	def <U> nodeFor(NodeMapping<U> nodeMapping, (T)=>U selector) {
@@ -36,6 +39,10 @@ import java.util.List
 
 	def <U> connectionForEach(ConnectionMapping<U> connectionMapping, (T)=>Iterable<? extends U> selector) {
 		connections += new MultiConnectionMappingCall(selector, connectionMapping)
+	}
+	
+	def eagerly(ConnectionMapping<?>... connectionMapping) {
+		eagerConnections += connectionMapping
 	}
 }
 

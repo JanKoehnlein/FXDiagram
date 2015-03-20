@@ -1,5 +1,6 @@
 package de.fxdiagram.eclipse.mapping;
 
+import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.eclipse.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.eclipse.mapping.AbstractMapping;
@@ -14,6 +15,7 @@ import de.fxdiagram.eclipse.mapping.NodeMappingCall;
 import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 /**
@@ -27,6 +29,8 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
   private List<AbstractNodeMappingCall<?, T>> nodes = CollectionLiterals.<AbstractNodeMappingCall<?, T>>newArrayList();
   
   private List<AbstractConnectionMappingCall<?, T>> connections = CollectionLiterals.<AbstractConnectionMappingCall<?, T>>newArrayList();
+  
+  private List<ConnectionMapping<?>> eagerConnections = CollectionLiterals.<ConnectionMapping<?>>newArrayList();
   
   public DiagramMapping(final XDiagramConfig config, final String id) {
     super(config, id);
@@ -46,6 +50,15 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
     {
       this.initialize();
       _xblockexpression = this.connections;
+    }
+    return _xblockexpression;
+  }
+  
+  public List<ConnectionMapping<?>> getEagerConnections() {
+    List<ConnectionMapping<?>> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.eagerConnections;
     }
     return _xblockexpression;
   }
@@ -72,5 +85,9 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
   public <U extends Object> boolean connectionForEach(final ConnectionMapping<U> connectionMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
     MultiConnectionMappingCall<U, T> _multiConnectionMappingCall = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
     return this.connections.add(_multiConnectionMappingCall);
+  }
+  
+  public boolean eagerly(final ConnectionMapping<?>... connectionMapping) {
+    return Iterables.<ConnectionMapping<?>>addAll(this.eagerConnections, ((Iterable<? extends ConnectionMapping<?>>)Conversions.doWrapArray(connectionMapping)));
   }
 }

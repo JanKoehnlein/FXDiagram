@@ -12,13 +12,6 @@
          point="org.eclipse.ui.commands">
       <command
             categoryId="org.eclipse.ui.category.views"
-            defaultHandler="de.fxdiagram.pde.ShowBundleHandler"
-            description="Show plug-in in FXDiagram"
-            id="de.fxdiagram.pde.showPlugin"
-            name="Show plug-in">
-      </command>
-      <command
-            categoryId="org.eclipse.ui.category.views"
             defaultHandler="de.fxdiagram.pde.AddBundleHandler"
             description="Show plug-in in FXDiagram"
             id="de.fxdiagram.pde.addPlugin"
@@ -45,12 +38,14 @@
 	      <separator
 	             name="de.fxdiagram.pde.separator1" visible="true">
 	      </separator>
-	      <command 
-	      	commandId="de.fxdiagram.pde.showPlugin"
-	        icon="icons/FXDiagram.png"
-	        label="Show plug-in in FXDiagram" 
-	        style="push">
-	      </command>
+	      <menu
+                label="Show in FXDiagram as..."
+                icon="icons/FXDiagram.png">
+                <dynamic 
+                      id="de.fxdiagram.eclipse.pde.showInDiagramMenu"
+                      class="de.fxdiagram.eclipse.commands.ShowInDiagramContribution">
+                </dynamic>
+     	  </menu>  
       </menuContribution>
       <menuContribution
             allPopups="false"
@@ -84,5 +79,11 @@
                style="toggle">
          </command>
      </menuContribution>
+   </extension>
+   <extension
+         point="de.fxdiagram.eclipse.selectionExtractor">
+      <selectionExtractor
+            class="de.fxdiagram.pde.BundleSelectionExtractor">
+      </selectionExtractor>
    </extension>
 </plugin>

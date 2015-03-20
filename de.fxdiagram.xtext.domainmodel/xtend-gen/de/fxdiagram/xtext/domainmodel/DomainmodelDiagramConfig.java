@@ -67,6 +67,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
         }
       };
       this.<PackageDeclaration>nodeForEach(DomainmodelDiagramConfig.this.packageNode, _function_1);
+      this.eagerly(DomainmodelDiagramConfig.this.superTypeConnection, DomainmodelDiagramConfig.this.propertyConnection);
     }
   };
   

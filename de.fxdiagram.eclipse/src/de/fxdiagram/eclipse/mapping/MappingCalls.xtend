@@ -35,7 +35,7 @@ abstract class AbstractConnectionMappingCall<RESULT, ARG> implements MappingCall
 
 	(Side)=>Node imageFactory
 
-	def isLazy() { imageFactory != null }
+	def isButton() { imageFactory != null }
 
 	/**
 	 * Instead of immediately adding this connection and the connected node, create
