@@ -34,7 +34,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="kieler.pragmatics"
-      value="http://rtsys.informatik.uni-kiel.de/~kieler/updatesite/release_pragmatics_2015-02"/>
+      value="http://rtsys.informatik.uni-kiel.de/~kieler/updatesite/master"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="fxdiagram.git.clone.location"
