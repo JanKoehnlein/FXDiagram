@@ -15,18 +15,18 @@
     label="FXDiagram">
   <setupTask
       xsi:type="setup:VariableTask"
-      id=""
-      name="xtext.releases.composite"
-      value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"
-      defaultValue=""/>
-  <setupTask
-      xsi:type="setup:VariableTask"
-      name="xtext.latest.composite"
-      value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
-  <setupTask
-      xsi:type="setup:VariableTask"
-      name="xtext.nightly.composite"
-      value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
+      name="xtext.composite"
+      label="Xtext/Xtend version">
+    <choice
+        value="Current release"
+        label="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
+    <choice
+        value="Nightly"
+        label="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
+    <choice
+        value="Latest Build"
+        label="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
+  </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.release"
@@ -89,7 +89,7 @@
     <requirement
         name="org.eclipse.egit.feature.group"/>
     <repository
-        url="${xtext.nightly.composite}"/>
+        url="${xtext.composite}"/>
     <repository
         url="${efxclipse.release}"/>
   </setupTask>
@@ -191,7 +191,7 @@
         <repository
             url="${tp.materialization.url}"/>
         <repository
-            url="${xtext.releases.composite}"/>
+            url="${xtext.composite}"/>
         <repository
             url="${efxclipse.release}"/>
         <repository
