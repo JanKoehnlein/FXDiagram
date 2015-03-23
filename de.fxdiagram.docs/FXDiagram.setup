@@ -25,6 +25,10 @@
       value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
   <setupTask
       xsi:type="setup:VariableTask"
+      name="xtext.nightly.composite"
+      value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
       name="efxclipse.release"
       value="http://download.eclipse.org/efxclipse/updates-released/1.2.0/site"/>
   <setupTask
@@ -85,7 +89,7 @@
     <requirement
         name="org.eclipse.egit.feature.group"/>
     <repository
-        url="${xtext.latest.composite}"/>
+        url="${xtext.nightly.composite}"/>
     <repository
         url="${efxclipse.release}"/>
   </setupTask>
