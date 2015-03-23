@@ -34,7 +34,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 	
 	@Inject extension IResourceServiceProvider.Registry
 
-	val typeNode = new NodeMapping<JvmDeclaredType>(this, 'typeNode') {
+	val typeNode = new NodeMapping<JvmDeclaredType>(this, 'typeNode', 'Type') {
 		override createNode(IMappedElementDescriptor<JvmDeclaredType> descriptor) {
 			new JvmTypeNode(descriptor as JvmEObjectDescriptor<JvmDeclaredType>)
 		}
@@ -56,7 +56,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 		}
 	}
 
-	val referenceConnection = new ConnectionMapping<JvmField>(this, 'referenceConnection') {
+	val referenceConnection = new ConnectionMapping<JvmField>(this, 'referenceConnection', 'Reference') {
 		override createConnection(IMappedElementDescriptor<JvmField> descriptor) {
 			new XConnection(descriptor) => [
 				targetArrowHead = new LineArrowHead(it, false)
@@ -71,7 +71,7 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 		}
 	}
 
-	val superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, 'superTypeConnection') {
+	val superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, 'superTypeConnection', 'Supertype') {
 		override createConnection(IMappedElementDescriptor<ESetting<JvmDeclaredType>> descriptor) {
 			new XConnection(descriptor) => [
 				targetArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false)
@@ -84,20 +84,21 @@ class JvmClassDiagramConfig extends AbstractDiagramConfig {
 		}
 	}
 	
-	val packageDiagram = new DiagramMapping<PackageDeclaration>(this, 'packageDiagram') {
+	val packageDiagram = new DiagramMapping<PackageDeclaration>(this, 'packageDiagram', 'Package diagram') {
 		override calls() {
 			typeNode.nodeForEach[elements.filter(Entity).map[primaryJvmElement].filter(JvmDeclaredType)]
 			packageNode.nodeForEach[elements.filter(PackageDeclaration)]
+			eagerly(superTypeConnection, referenceConnection)
 		}
 	}
 	
-	val packageNode = new NodeMapping<PackageDeclaration>(this, 'packageNode') {
+	val packageNode = new NodeMapping<PackageDeclaration>(this, 'packageNode', 'Package node') {
 		override createNode(IMappedElementDescriptor<PackageDeclaration> descriptor) {
 			 new BaseDiagramNode(descriptor) 	
 		}
 		
 		override calls() {
-			packageDiagram.nestedDiagramFor[ it ]			
+			packageDiagram.nestedDiagramFor[ it ]		
 		}
 	}
 

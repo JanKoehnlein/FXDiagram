@@ -27,7 +27,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 	
 	@Inject extension DomainModelUtil domainModelUtil
 	 
-	val packageDiagram = new DiagramMapping<PackageDeclaration>(this, 'packageDiagram') {
+	val packageDiagram = new DiagramMapping<PackageDeclaration>(this, 'packageDiagram', 'Package diagram') {
 		override calls() {
 			entityNode.nodeForEach[elements.filter(Entity)]
 			packageNode.nodeForEach[elements.filter(PackageDeclaration)]
@@ -35,7 +35,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 		}
 	}
 	
-	val packageNode = new NodeMapping<PackageDeclaration>(this, 'packageNode') {
+	val packageNode = new NodeMapping<PackageDeclaration>(this, 'packageNode', 'Package node') {
 		override createNode(IMappedElementDescriptor<PackageDeclaration> descriptor) {
 			 new BaseDiagramNode(descriptor) 	
 		}
@@ -45,7 +45,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 		}
 	}
 
-	val entityNode = new NodeMapping<Entity>(this, 'entityNode') {
+	val entityNode = new NodeMapping<Entity>(this, 'entityNode', 'Entity') {
 		override createNode(IMappedElementDescriptor<Entity> descriptor) {
 			new EntityNode(descriptor) 
 		}
@@ -66,7 +66,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 		}
 	} 
 
-	val propertyConnection = new ConnectionMapping<Property>(this, 'propertyConnection') {
+	val propertyConnection = new ConnectionMapping<Property>(this, 'propertyConnection', 'Property') {
 		override createConnection(IMappedElementDescriptor<Property> descriptor) {
 			new XConnection(descriptor) => [
 				targetArrowHead = new LineArrowHead(it, false)
@@ -81,7 +81,7 @@ class DomainmodelDiagramConfig extends AbstractDiagramConfig {
 		}
 	}
 	
-	val superTypeConnection = new ConnectionMapping<ESetting<Entity>>(this, 'superTypeConnection') {
+	val superTypeConnection = new ConnectionMapping<ESetting<Entity>>(this, 'superTypeConnection', 'Supertype') {
 		override createConnection(IMappedElementDescriptor<ESetting<Entity>> descriptor) {
 			new XConnection(descriptor) => [
 				targetArrowHead = new TriangleArrowHead(it, 10, 15, 

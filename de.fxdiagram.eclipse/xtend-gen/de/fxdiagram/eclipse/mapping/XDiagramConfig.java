@@ -70,6 +70,8 @@ public interface XDiagramConfig {
             } else {
               Registry.this.configs.put(id, config);
             }
+            String _attribute = it.getAttribute("label");
+            config.setLabel(_attribute);
           } catch (Throwable _e) {
             throw Exceptions.sneakyThrow(_e);
           }
@@ -96,6 +98,8 @@ public interface XDiagramConfig {
   public abstract AbstractMapping<?> getMappingByID(final String mappingID);
   
   public abstract String getID();
+  
+  public abstract String getLabel();
   
   public abstract <ARG extends Object> void addMapping(final AbstractMapping<ARG> mapping);
   

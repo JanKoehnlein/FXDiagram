@@ -27,6 +27,9 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   @Accessors
   private String ID;
   
+  @Accessors
+  private String label;
+  
   @Accessors(AccessorType.PUBLIC_GETTER)
   private IMappedElementDescriptorProvider domainObjectProvider = this.createDomainObjectProvider();
   
@@ -99,6 +102,15 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   
   public void setID(final String ID) {
     this.ID = ID;
+  }
+  
+  @Pure
+  public String getLabel() {
+    return this.label;
+  }
+  
+  public void setLabel(final String label) {
+    this.label = label;
   }
   
   @Pure

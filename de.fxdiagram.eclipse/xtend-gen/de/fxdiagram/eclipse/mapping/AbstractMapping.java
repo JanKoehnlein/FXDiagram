@@ -12,11 +12,14 @@ import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 public abstract class AbstractMapping<T extends Object> {
   private String id;
   
+  private String displayName;
+  
   private XDiagramConfig config;
   
-  public AbstractMapping(final XDiagramConfig config, final String id) {
+  public AbstractMapping(final XDiagramConfig config, final String id, final String displayName) {
     this.config = config;
     this.id = id;
+    this.displayName = displayName;
     config.<T>addMapping(this);
   }
   
@@ -50,5 +53,9 @@ public abstract class AbstractMapping<T extends Object> {
   
   public String getID() {
     return this.id;
+  }
+  
+  public String getDisplayName() {
+    return this.displayName;
   }
 }

@@ -16,8 +16,8 @@ import java.util.List
 	List<AbstractConnectionMappingCall<?,T>> incoming = newArrayList()
 	DiagramMappingCall<?,T> nestedDiagram = null
 	
-	new(XDiagramConfig config, String id) {
-		super(config, id)
+	new(XDiagramConfig config, String id, String displayName) {
+		super(config, id, displayName)
 	}
 	
 	def getOutgoing() { initialize; outgoing }

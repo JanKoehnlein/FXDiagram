@@ -15,8 +15,8 @@ import java.util.List
 	List<AbstractConnectionMappingCall<?, T>> connections = newArrayList
 	List<ConnectionMapping<?>> eagerConnections = newArrayList
 	
-	new(XDiagramConfig config, String id) {
-		super(config, id)
+	new(XDiagramConfig config, String id, String displayName) {
+		super(config, id, displayName)
 	}
 	
 	def getNodes() { initialize ; nodes }

@@ -48,7 +48,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
   @Extension
   private DomainModelUtil domainModelUtil;
   
-  private final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(this, "packageDiagram") {
+  private final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(this, "packageDiagram", "Package diagram") {
     @Override
     public void calls() {
       final Function1<PackageDeclaration, Iterable<? extends Entity>> _function = new Function1<PackageDeclaration, Iterable<? extends Entity>>() {
@@ -71,7 +71,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode") {
+  private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode", "Package node") {
     @Override
     public XNode createNode(final IMappedElementDescriptor<PackageDeclaration> descriptor) {
       return new BaseDiagramNode<PackageDeclaration>(descriptor);
@@ -89,7 +89,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final NodeMapping<Entity> entityNode = new NodeMapping<Entity>(this, "entityNode") {
+  private final NodeMapping<Entity> entityNode = new NodeMapping<Entity>(this, "entityNode", "Entity") {
     @Override
     public XNode createNode(final IMappedElementDescriptor<Entity> descriptor) {
       return new EntityNode(descriptor);
@@ -152,7 +152,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<Property> propertyConnection = new ConnectionMapping<Property>(this, "propertyConnection") {
+  private final ConnectionMapping<Property> propertyConnection = new ConnectionMapping<Property>(this, "propertyConnection", "Property") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<Property> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
@@ -195,7 +195,7 @@ public class DomainmodelDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<ESetting<Entity>> superTypeConnection = new ConnectionMapping<ESetting<Entity>>(this, "superTypeConnection") {
+  private final ConnectionMapping<ESetting<Entity>> superTypeConnection = new ConnectionMapping<ESetting<Entity>>(this, "superTypeConnection", "Supertype") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<ESetting<Entity>> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);

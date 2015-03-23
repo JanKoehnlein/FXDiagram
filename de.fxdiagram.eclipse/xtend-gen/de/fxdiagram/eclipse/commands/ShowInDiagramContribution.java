@@ -119,25 +119,25 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
                   @Override
                   public void apply(final MenuItem it) {
                     AbstractMapping<?> _mapping = call.getMapping();
-                    String _iD = _mapping.getID();
-                    it.setText(_iD);
+                    String _displayName = _mapping.getDisplayName();
+                    it.setText(_displayName);
                     if (hasMultipleConfigs) {
                       String _text = it.getText();
                       String _plus = (_text + " (");
                       AbstractMapping<?> _mapping_1 = call.getMapping();
                       XDiagramConfig _config = _mapping_1.getConfig();
-                      String _iD_1 = _config.getID();
-                      String _plus_1 = (_plus + _iD_1);
+                      String _label = _config.getLabel();
+                      String _plus_1 = (_plus + _label);
                       String _plus_2 = (_plus_1 + ")");
                       it.setText(_plus_2);
                     }
                     AbstractMapping<?> _mapping_2 = call.getMapping();
                     XDiagramConfig _config_1 = _mapping_2.getConfig();
-                    String _iD_2 = _config_1.getID();
-                    String _plus_3 = (_iD_2 + "#");
+                    String _iD = _config_1.getID();
+                    String _plus_3 = (_iD + "#");
                     AbstractMapping<?> _mapping_3 = call.getMapping();
-                    String _iD_3 = _mapping_3.getID();
-                    String _plus_4 = (_plus_3 + _iD_3);
+                    String _iD_1 = _mapping_3.getID();
+                    String _plus_4 = (_plus_3 + _iD_1);
                     _this.setId(_plus_4);
                     it.addSelectionListener(new SelectionListener() {
                       @Override

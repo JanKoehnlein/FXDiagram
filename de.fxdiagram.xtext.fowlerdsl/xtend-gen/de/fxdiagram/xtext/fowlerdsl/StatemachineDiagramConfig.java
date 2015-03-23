@@ -52,7 +52,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  */
 @SuppressWarnings("all")
 public class StatemachineDiagramConfig extends AbstractDiagramConfig {
-  private final DiagramMapping<Statemachine> statemachineDiagram = new DiagramMapping<Statemachine>(this, "statemachineDiagram") {
+  private final DiagramMapping<Statemachine> statemachineDiagram = new DiagramMapping<Statemachine>(this, "statemachineDiagram", "Statemachine") {
     @Override
     public void calls() {
       final Function1<Statemachine, Iterable<? extends State>> _function = new Function1<Statemachine, Iterable<? extends State>>() {
@@ -80,7 +80,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final NodeMapping<State> stateNode = new NodeMapping<State>(this, "stateNode") {
+  private final NodeMapping<State> stateNode = new NodeMapping<State>(this, "stateNode", "State") {
     @Override
     protected void calls() {
       final Function1<State, Iterable<? extends Transition>> _function = new Function1<State, Iterable<? extends Transition>>() {
@@ -100,7 +100,7 @@ public class StatemachineDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<Transition> transitionConnection = new ConnectionMapping<Transition>(this, "transitionConnection") {
+  private final ConnectionMapping<Transition> transitionConnection = new ConnectionMapping<Transition>(this, "transitionConnection", "Transition") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<Transition> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);

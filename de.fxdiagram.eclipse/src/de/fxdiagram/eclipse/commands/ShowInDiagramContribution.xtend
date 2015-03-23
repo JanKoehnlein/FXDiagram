@@ -41,9 +41,9 @@ class ShowInDiagramContribution extends CompoundContributionItem {
 					new ContributionItem() {
 						override fill(Menu menu, int index) {
 							new MenuItem(menu, SWT.CHECK, index) => [
-								text = call.mapping.ID
+								text = call.mapping.displayName
 								if (hasMultipleConfigs)
-									text = text + ' (' + call.mapping.config.ID + ')'
+									text = text + ' (' + call.mapping.config.label + ')'
 								id = call.mapping.config.ID + '#' + call.mapping.ID
 								addSelectionListener(new SelectionListener() {
 									override widgetDefaultSelected(SelectionEvent e) {}

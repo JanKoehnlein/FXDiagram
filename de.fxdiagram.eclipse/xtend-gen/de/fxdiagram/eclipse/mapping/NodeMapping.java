@@ -29,8 +29,8 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
   
   private DiagramMappingCall<?, T> nestedDiagram = null;
   
-  public NodeMapping(final XDiagramConfig config, final String id) {
-    super(config, id);
+  public NodeMapping(final XDiagramConfig config, final String id, final String displayName) {
+    super(config, id, displayName);
   }
   
   public List<AbstractConnectionMappingCall<?, T>> getOutgoing() {

@@ -59,7 +59,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
   @Extension
   private IResourceServiceProvider.Registry _registry;
   
-  private final NodeMapping<JvmDeclaredType> typeNode = new NodeMapping<JvmDeclaredType>(this, "typeNode") {
+  private final NodeMapping<JvmDeclaredType> typeNode = new NodeMapping<JvmDeclaredType>(this, "typeNode", "Type") {
     @Override
     public XNode createNode(final IMappedElementDescriptor<JvmDeclaredType> descriptor) {
       return new JvmTypeNode(((JvmEObjectDescriptor<JvmDeclaredType>) descriptor));
@@ -102,7 +102,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<JvmField> referenceConnection = new ConnectionMapping<JvmField>(this, "referenceConnection") {
+  private final ConnectionMapping<JvmField> referenceConnection = new ConnectionMapping<JvmField>(this, "referenceConnection", "Reference") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<JvmField> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
@@ -135,7 +135,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<ESetting<JvmDeclaredType>> superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, "superTypeConnection") {
+  private final ConnectionMapping<ESetting<JvmDeclaredType>> superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, "superTypeConnection", "Supertype") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<ESetting<JvmDeclaredType>> descriptor) {
       XConnection _xConnection = new XConnection(descriptor);
@@ -157,7 +157,7 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
     }
   };
   
-  private final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(this, "packageDiagram") {
+  private final DiagramMapping<PackageDeclaration> packageDiagram = new DiagramMapping<PackageDeclaration>(this, "packageDiagram", "Package diagram") {
     @Override
     public void calls() {
       final Function1<PackageDeclaration, Iterable<? extends JvmDeclaredType>> _function = (PackageDeclaration it) -> {
@@ -175,10 +175,11 @@ public class JvmClassDiagramConfig extends AbstractDiagramConfig {
         return Iterables.<PackageDeclaration>filter(_elements, PackageDeclaration.class);
       };
       this.<PackageDeclaration>nodeForEach(JvmClassDiagramConfig.this.packageNode, _function_1);
+      this.eagerly(JvmClassDiagramConfig.this.superTypeConnection, JvmClassDiagramConfig.this.referenceConnection);
     }
   };
   
-  private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode") {
+  private final NodeMapping<PackageDeclaration> packageNode = new NodeMapping<PackageDeclaration>(this, "packageNode", "Package node") {
     @Override
     public XNode createNode(final IMappedElementDescriptor<PackageDeclaration> descriptor) {
       return new BaseDiagramNode<PackageDeclaration>(descriptor);

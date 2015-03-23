@@ -14,8 +14,8 @@ class ConnectionMapping<T> extends AbstractMapping<T> {
 	NodeMappingCall<?, T> source
 	NodeMappingCall<?, T> target
 
-	new(XDiagramConfig config, String id) {
-		super(config, id)
+	new(XDiagramConfig config, String id, String displayName) {
+		super(config, id, displayName)
 	}
 
 	/**

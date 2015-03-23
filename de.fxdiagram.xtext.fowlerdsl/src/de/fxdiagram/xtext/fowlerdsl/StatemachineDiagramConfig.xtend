@@ -39,7 +39,7 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
  */
 class StatemachineDiagramConfig extends AbstractDiagramConfig {
 	 
-	val statemachineDiagram = new DiagramMapping<Statemachine>(this, "statemachineDiagram") {
+	val statemachineDiagram = new DiagramMapping<Statemachine>(this, 'statemachineDiagram', 'Statemachine') {
 		override calls() {
 			// when adding a statemachine diagram automatically add a node for each state
 			// and a connetion for each transition
@@ -48,16 +48,16 @@ class StatemachineDiagramConfig extends AbstractDiagramConfig {
 		}		
 	}
 	
-	val stateNode = new NodeMapping<State>(this, "stateNode") {
+	val stateNode = new NodeMapping<State>(this, 'stateNode', 'State') {
 		override protected calls() {
 			// when adding a state allow to explore its transitions via rapid button
 			transitionConnection.outConnectionForEach[transitions].asButton[
-				getArrowButton("Add transition")
+				getArrowButton('Add transition')
 			]
 		}
 	}
 	
-	val transitionConnection = new ConnectionMapping<Transition>(this, "transitionConnection") {
+	val transitionConnection = new ConnectionMapping<Transition>(this, 'transitionConnection', 'Transition') {
 		override createConnection(IMappedElementDescriptor<Transition> descriptor) {
 			// create a connection with a label denoting the transition's event name
 			new XConnection(descriptor) => [

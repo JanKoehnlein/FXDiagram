@@ -29,6 +29,8 @@ interface XDiagramConfig {
 	def AbstractMapping<?> getMappingByID(String mappingID)
 	
 	def String getID()
+
+	def String getLabel()
 	
 	def <ARG> void addMapping(AbstractMapping<ARG> mapping)
 	
@@ -62,6 +64,7 @@ interface XDiagramConfig {
 					LOG.severe("Duplicate fxDiagramConfig id=" + id)
 				else
 					configs.put(id, config)
+				config.setLabel(getAttribute('label'))
 			]
 		}
 		
@@ -77,6 +80,7 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 	Map<String, AbstractMapping<?>> mappings = newHashMap
 
 	@Accessors String ID
+	@Accessors String label
 	
 	@Accessors(PUBLIC_GETTER)
 	IMappedElementDescriptorProvider domainObjectProvider = createDomainObjectProvider()

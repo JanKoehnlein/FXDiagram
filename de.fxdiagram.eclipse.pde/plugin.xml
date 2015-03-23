@@ -5,7 +5,8 @@
          point="de.fxdiagram.eclipse.fxDiagramConfig">
       <config
             class="de.fxdiagram.pde.BundleDiagramConfig"
-            id="de.fxdiagram.pde.BundleDiagramConfig">
+            id="de.fxdiagram.pde.BundleDiagramConfig"
+            label="Plug-in">
       </config>
    </extension>
    <extension

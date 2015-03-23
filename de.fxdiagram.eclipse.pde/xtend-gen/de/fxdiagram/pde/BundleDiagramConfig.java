@@ -38,7 +38,7 @@ public class BundleDiagramConfig extends AbstractDiagramConfig {
     return new BundleDescriptorProvider();
   }
   
-  private final NodeMapping<BundleDescription> pluginNode = new NodeMapping<BundleDescription>(this, "pluginNode") {
+  private final NodeMapping<BundleDescription> pluginNode = new NodeMapping<BundleDescription>(this, "pluginNode", "Plug-in") {
     @Override
     public XNode createNode(final IMappedElementDescriptor<BundleDescription> descriptor) {
       return new BundleNode(((BundleDescriptor) descriptor));
@@ -69,7 +69,7 @@ public class BundleDiagramConfig extends AbstractDiagramConfig {
     return this.pluginNode;
   }
   
-  private final ConnectionMapping<BundleDependency> dependencyConnection = new ConnectionMapping<BundleDependency>(this, "dependencyConnection") {
+  private final ConnectionMapping<BundleDependency> dependencyConnection = new ConnectionMapping<BundleDependency>(this, "dependencyConnection", "Plug-in dependency") {
     @Override
     public void calls() {
       final Function1<BundleDependency, BundleDescription> _function = (BundleDependency it) -> {
@@ -88,7 +88,7 @@ public class BundleDiagramConfig extends AbstractDiagramConfig {
     return this.dependencyConnection;
   }
   
-  private final ConnectionMapping<BundleDependency> inverseDependencyConnection = new ConnectionMapping<BundleDependency>(this, "inverseDependencyConnection") {
+  private final ConnectionMapping<BundleDependency> inverseDependencyConnection = new ConnectionMapping<BundleDependency>(this, "inverseDependencyConnection", "Inverse Plug-in dependency") {
     @Override
     public void calls() {
       final Function1<BundleDependency, BundleDescription> _function = (BundleDependency it) -> {

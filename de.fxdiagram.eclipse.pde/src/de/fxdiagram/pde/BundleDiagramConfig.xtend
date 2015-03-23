@@ -20,7 +20,7 @@ class BundleDiagramConfig extends AbstractDiagramConfig {
 		new BundleDescriptorProvider
 	}
 	
-	val pluginNode = new NodeMapping<BundleDescription>(this, "pluginNode") {
+	val pluginNode = new NodeMapping<BundleDescription>(this, "pluginNode", "Plug-in") {
 		
 		override createNode(IMappedElementDescriptor<BundleDescription> descriptor) {
 			new BundleNode(descriptor as BundleDescriptor)
@@ -38,7 +38,7 @@ class BundleDiagramConfig extends AbstractDiagramConfig {
 	
 	def getPluginNode() { pluginNode }
 	
-	val dependencyConnection = new ConnectionMapping<BundleDependency>(this, "dependencyConnection") {
+	val dependencyConnection = new ConnectionMapping<BundleDependency>(this, "dependencyConnection", "Plug-in dependency") {
 		override calls() {
 			pluginNode.target [
 				dependency
@@ -52,7 +52,7 @@ class BundleDiagramConfig extends AbstractDiagramConfig {
 	
 	def getDependencyConnection() { dependencyConnection }
 
-	val inverseDependencyConnection = new ConnectionMapping<BundleDependency>(this, "inverseDependencyConnection") {
+	val inverseDependencyConnection = new ConnectionMapping<BundleDependency>(this, "inverseDependencyConnection", "Inverse Plug-in dependency") {
 		override calls() {
 			pluginNode.source [
 				owner

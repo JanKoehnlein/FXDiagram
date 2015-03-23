@@ -9,12 +9,13 @@ package de.fxdiagram.eclipse.mapping
 abstract class AbstractMapping<T> {
 		
 	String id
-
+	String displayName
 	XDiagramConfig config
 	
-	new(XDiagramConfig config, String id) {
+	new(XDiagramConfig config, String id, String displayName) {
 		this.config = config
 		this.id = id
+		this.displayName = displayName
 		config.addMapping(this)
 	}
 	
@@ -40,5 +41,9 @@ abstract class AbstractMapping<T> {
 	
 	def String getID() {
 		id
+	}
+	
+	def String getDisplayName() {
+		displayName
 	}
 }

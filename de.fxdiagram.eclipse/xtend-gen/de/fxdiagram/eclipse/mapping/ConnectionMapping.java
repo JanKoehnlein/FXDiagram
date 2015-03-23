@@ -21,8 +21,8 @@ public class ConnectionMapping<T extends Object> extends AbstractMapping<T> {
   
   private NodeMappingCall<?, T> target;
   
-  public ConnectionMapping(final XDiagramConfig config, final String id) {
-    super(config, id);
+  public ConnectionMapping(final XDiagramConfig config, final String id, final String displayName) {
+    super(config, id, displayName);
   }
   
   /**

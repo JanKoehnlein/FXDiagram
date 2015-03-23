@@ -32,8 +32,8 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
   
   private List<ConnectionMapping<?>> eagerConnections = CollectionLiterals.<ConnectionMapping<?>>newArrayList();
   
-  public DiagramMapping(final XDiagramConfig config, final String id) {
-    super(config, id);
+  public DiagramMapping(final XDiagramConfig config, final String id, final String displayName) {
+    super(config, id, displayName);
   }
   
   public List<AbstractNodeMappingCall<?, T>> getNodes() {

@@ -5,6 +5,7 @@
          point="de.fxdiagram.eclipse.fxDiagramConfig">
       <config
       		id="de.fxdiagram.xtext.domainmodel.DomainmodelDiagramConfig"
+      		label="Domainmodel"
             class="org.eclipse.xtext.example.domainmodel.ui.DomainmodelExecutableExtensionFactory:de.fxdiagram.xtext.domainmodel.DomainmodelDiagramConfig">
       </config>
    </extension>

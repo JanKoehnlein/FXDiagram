@@ -29,7 +29,8 @@
          point="de.fxdiagram.eclipse.fxDiagramConfig">
       <config
             class="org.eclipse.xtext.xbase.ui.XbaseExecutableExtensionFactory:de.fxdiagram.xtext.xbase.JvmClassDiagramConfig"
-            id="de.fxdiagram.xtext.xbase.JvmClassDiagramConfig">
+            id="de.fxdiagram.xtext.xbase.JvmClassDiagramConfig"
+            label="Class diagram">
       </config>
    </extension>
    <extension
