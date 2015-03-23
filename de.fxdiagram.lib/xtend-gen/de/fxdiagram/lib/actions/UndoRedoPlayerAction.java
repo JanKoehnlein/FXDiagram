@@ -56,7 +56,7 @@ public class UndoRedoPlayerAction implements DiagramAction {
   
   @Override
   public Symbol.Type getSymbol() {
-    return null;
+    return Symbol.Type.PLAY;
   }
   
   @Override

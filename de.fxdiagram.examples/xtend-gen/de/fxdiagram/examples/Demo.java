@@ -133,8 +133,9 @@ public class Demo extends Application {
       DeleteAction _deleteAction = new DeleteAction();
       LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
       ExportSvgAction _exportSvgAction = new ExportSvgAction();
-      UndoAction _undoAction = new UndoAction();
       RedoAction _redoAction = new RedoAction();
+      UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
+      UndoAction _undoAction = new UndoAction();
       RevealAction _revealAction = new RevealAction();
       LoadAction _loadAction = new LoadAction();
       SaveAction _saveAction = new SaveAction();
@@ -145,8 +146,8 @@ public class Demo extends Application {
       OpenAction _openAction = new OpenAction();
       CloseAction _closeAction = new CloseAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
-      UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _openAction, _closeAction, _fullScreenAction, _undoRedoPlayerAction)));
+      UndoRedoPlayerAction _undoRedoPlayerAction_1 = new UndoRedoPlayerAction();
+      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _exitAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _openAction, _closeAction, _fullScreenAction, _undoRedoPlayerAction_1)));
       final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
         @Override
         public void apply(final XDiagram it) {

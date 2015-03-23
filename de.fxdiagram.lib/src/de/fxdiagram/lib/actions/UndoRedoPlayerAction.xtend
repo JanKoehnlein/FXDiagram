@@ -16,6 +16,7 @@ import javafx.scene.shape.Rectangle
 import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import eu.hansolo.enzo.radialmenu.Symbol
 
 /**
  * An action adding a media control to rewind/replay changes from the undo stack. 
@@ -35,7 +36,7 @@ class UndoRedoPlayerAction implements DiagramAction {
 	}
 	
 	override getSymbol() {
-		null
+		Symbol.Type.PLAY
 	}
 	
 	override getTooltip() {

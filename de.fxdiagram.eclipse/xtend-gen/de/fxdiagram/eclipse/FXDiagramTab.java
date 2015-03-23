@@ -265,8 +265,9 @@ public class FXDiagramTab {
         DeleteAction _deleteAction = new DeleteAction();
         LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
         ExportSvgAction _exportSvgAction = new ExportSvgAction();
-        UndoAction _undoAction = new UndoAction();
         RedoAction _redoAction = new RedoAction();
+        UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
+        UndoAction _undoAction = new UndoAction();
         RevealAction _revealAction = new RevealAction();
         LoadAction _loadAction = new LoadAction();
         SaveAction _saveAction = new SaveAction();
@@ -275,8 +276,8 @@ public class FXDiagramTab {
         NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
         NavigateNextAction _navigateNextAction = new NavigateNextAction();
         FullScreenAction _fullScreenAction = new FullScreenAction();
-        UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-        _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _undoAction, _redoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction)));
+        UndoRedoPlayerAction _undoRedoPlayerAction_1 = new UndoRedoPlayerAction();
+        _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction_1)));
       }
     };
     return ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
