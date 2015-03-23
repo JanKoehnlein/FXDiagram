@@ -420,7 +420,7 @@ public class Demo extends Application {
   }
   
   public MovieNode newMovieNode() {
-    ResourceDescriptor _newResource = this.newResource("Movie", "media/Usability.mp4");
+    ResourceDescriptor _newResource = this.newResource("Movie", "media/quirk.mp4");
     MovieNode _movieNode = new MovieNode(_newResource);
     final Procedure1<MovieNode> _function = new Procedure1<MovieNode>() {
       @Override

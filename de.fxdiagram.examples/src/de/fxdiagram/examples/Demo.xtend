@@ -219,8 +219,7 @@ class Demo extends Application {
 	}
 
 	def newMovieNode() {
-		new MovieNode(newResource('Movie', 'media/Usability.mp4')) => [
-//		new MovieNode(newResource('Movie', 'media/HelloComputer.mp4')) => [
+		new MovieNode(newResource('Movie', 'media/quirk.mp4')) => [
 			width = 640
 			height = 360
 		]
