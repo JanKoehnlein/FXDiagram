@@ -98,35 +98,23 @@ public abstract class XShape extends Parent implements XActivatable {
       this.doActivate();
       this.isActiveProperty.set(true);
       InitializingListener<Boolean> _initializingListener = new InitializingListener<Boolean>();
-      final Procedure1<InitializingListener<Boolean>> _function = new Procedure1<InitializingListener<Boolean>>() {
-        @Override
-        public void apply(final InitializingListener<Boolean> it) {
-          final Procedure1<Boolean> _function = new Procedure1<Boolean>() {
-            @Override
-            public void apply(final Boolean it) {
-              XShape.this.selectionFeedback((it).booleanValue());
-              if ((it).booleanValue()) {
-                XShape.this.toFront();
-              }
-            }
-          };
-          it.setSet(_function);
-        }
+      final Procedure1<InitializingListener<Boolean>> _function = (InitializingListener<Boolean> it) -> {
+        final Procedure1<Boolean> _function_1 = (Boolean it_1) -> {
+          this.selectionFeedback((it_1).booleanValue());
+          if ((it_1).booleanValue()) {
+            this.toFront();
+          }
+        };
+        it.setSet(_function_1);
       };
       InitializingListener<Boolean> _doubleArrow = ObjectExtensions.<InitializingListener<Boolean>>operator_doubleArrow(_initializingListener, _function);
       CoreExtensions.<Boolean>addInitializingListener(this.selectedProperty, _doubleArrow);
       InitializingMapListener<Class<? extends Behavior>, Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
-      final Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>> _function_1 = new Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>>() {
-        @Override
-        public void apply(final InitializingMapListener<Class<? extends Behavior>, Behavior> it) {
-          final Procedure2<Class<? extends Behavior>, Behavior> _function = new Procedure2<Class<? extends Behavior>, Behavior>() {
-            @Override
-            public void apply(final Class<? extends Behavior> key, final Behavior value) {
-              value.activate();
-            }
-          };
-          it.setPut(_function);
-        }
+      final Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>> _function_1 = (InitializingMapListener<Class<? extends Behavior>, Behavior> it) -> {
+        final Procedure2<Class<? extends Behavior>, Behavior> _function_2 = (Class<? extends Behavior> key, Behavior value) -> {
+          value.activate();
+        };
+        it.setPut(_function_2);
       };
       InitializingMapListener<Class<? extends Behavior>, Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>, Behavior>>operator_doubleArrow(_initializingMapListener, _function_1);
       CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow_1);
@@ -143,9 +131,13 @@ public abstract class XShape extends Parent implements XActivatable {
     return ((T) _get);
   }
   
-  public Behavior addBehavior(final Behavior behavior) {
+  public void addBehavior(final Behavior behavior) {
     Class<? extends Behavior> _behaviorKey = behavior.getBehaviorKey();
-    return this.behaviors.put(_behaviorKey, behavior);
+    this.behaviors.put(_behaviorKey, behavior);
+    boolean _isActive = this.getIsActive();
+    if (_isActive) {
+      behavior.activate();
+    }
   }
   
   public Behavior removeBehavior(final String key) {

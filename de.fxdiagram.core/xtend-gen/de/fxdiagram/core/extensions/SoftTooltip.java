@@ -79,11 +79,8 @@ public class SoftTooltip {
           }
         } while((delay > 0));
         if (this.isRunning) {
-          final Runnable _function = new Runnable() {
-            @Override
-            public void run() {
-              Timer.this.tooltip.trigger();
-            }
+          final Runnable _function = () -> {
+            this.tooltip.trigger();
           };
           Platform.runLater(_function);
         }
@@ -111,33 +108,27 @@ public class SoftTooltip {
   public SoftTooltip(final Node host, final String text) {
     this.host = host;
     StackPane _stackPane = new StackPane();
-    final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-      @Override
-      public void apply(final StackPane it) {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("-fx-border-color: black;");
-        _builder.newLine();
-        _builder.append("-fx-border-width: 1;");
-        _builder.newLine();
-        _builder.append("-fx-background-color: #ffffbb;");
-        _builder.newLine();
-        it.setStyle(_builder.toString());
-        ObservableList<Node> _children = it.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
-          public void apply(final Text it) {
-            it.setText(text);
-            StringProperty _textProperty = it.textProperty();
-            SoftTooltip.this.textProperty = _textProperty;
-            Insets _insets = new Insets(2, 2, 2, 2);
-            StackPane.setMargin(it, _insets);
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-        it.setMouseTransparent(true);
-      }
+    final Procedure1<StackPane> _function = (StackPane it) -> {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("-fx-border-color: black;");
+      _builder.newLine();
+      _builder.append("-fx-border-width: 1;");
+      _builder.newLine();
+      _builder.append("-fx-background-color: #ffffbb;");
+      _builder.newLine();
+      it.setStyle(_builder.toString());
+      ObservableList<Node> _children = it.getChildren();
+      Text _text = new Text();
+      final Procedure1<Text> _function_1 = (Text it_1) -> {
+        it_1.setText(text);
+        StringProperty _textProperty = it_1.textProperty();
+        this.textProperty = _textProperty;
+        Insets _insets = new Insets(2, 2, 2, 2);
+        StackPane.setMargin(it_1, _insets);
+      };
+      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+      _children.add(_doubleArrow);
+      it.setMouseTransparent(true);
     };
     StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
     this.tooltip = _doubleArrow;
@@ -146,57 +137,54 @@ public class SoftTooltip {
   }
   
   public void install() {
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        EventType<? extends MouseEvent> _eventType = it.getEventType();
-        boolean _matched = false;
-        if (!_matched) {
-          if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED_TARGET)) {
-            _matched=true;
-            SoftTooltip.this.isHideOnTrigger = false;
-            double _sceneX = it.getSceneX();
-            double _sceneY = it.getSceneY();
-            SoftTooltip.this.setReferencePosition(_sceneX, _sceneY);
-            if (SoftTooltip.this.timer!=null) {
-              SoftTooltip.this.timer.restart();
-            }
+    final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
+      EventType<? extends MouseEvent> _eventType = it.getEventType();
+      boolean _matched = false;
+      if (!_matched) {
+        if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED_TARGET)) {
+          _matched=true;
+          this.isHideOnTrigger = false;
+          double _sceneX = it.getSceneX();
+          double _sceneY = it.getSceneY();
+          this.setReferencePosition(_sceneX, _sceneY);
+          if (this.timer!=null) {
+            this.timer.restart();
           }
         }
-        if (!_matched) {
-          if (Objects.equal(_eventType, MouseEvent.MOUSE_EXITED_TARGET)) {
-            _matched=true;
+      }
+      if (!_matched) {
+        if (Objects.equal(_eventType, MouseEvent.MOUSE_EXITED_TARGET)) {
+          _matched=true;
+        }
+      }
+      if (!_matched) {
+        if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED)) {
+          _matched=true;
+          this.isHideOnTrigger = false;
+          double _sceneX_1 = it.getSceneX();
+          double _sceneY_1 = it.getSceneY();
+          this.setReferencePosition(_sceneX_1, _sceneY_1);
+          if (this.timer!=null) {
+            this.timer.restart();
           }
         }
-        if (!_matched) {
-          if (Objects.equal(_eventType, MouseEvent.MOUSE_ENTERED)) {
-            _matched=true;
-            SoftTooltip.this.isHideOnTrigger = false;
-            double _sceneX_1 = it.getSceneX();
-            double _sceneY_1 = it.getSceneY();
-            SoftTooltip.this.setReferencePosition(_sceneX_1, _sceneY_1);
-            if (SoftTooltip.this.timer!=null) {
-              SoftTooltip.this.timer.restart();
-            }
+      }
+      if (!_matched) {
+        if (Objects.equal(_eventType, MouseEvent.MOUSE_MOVED)) {
+          _matched=true;
+          double _sceneX_2 = it.getSceneX();
+          double _sceneY_2 = it.getSceneY();
+          this.setReferencePosition(_sceneX_2, _sceneY_2);
+          if (this.timer!=null) {
+            this.timer.restart();
           }
         }
-        if (!_matched) {
-          if (Objects.equal(_eventType, MouseEvent.MOUSE_MOVED)) {
-            _matched=true;
-            double _sceneX_2 = it.getSceneX();
-            double _sceneY_2 = it.getSceneY();
-            SoftTooltip.this.setReferencePosition(_sceneX_2, _sceneY_2);
-            if (SoftTooltip.this.timer!=null) {
-              SoftTooltip.this.timer.restart();
-            }
-          }
-        }
-        if (!_matched) {
-          {
-            SoftTooltip.this.isHideOnTrigger = true;
-            if (SoftTooltip.this.timer!=null) {
-              SoftTooltip.this.timer.restart();
-            }
+      }
+      if (!_matched) {
+        {
+          this.isHideOnTrigger = true;
+          if (this.timer!=null) {
+            this.timer.restart();
           }
         }
       }
@@ -221,12 +209,9 @@ public class SoftTooltip {
   }
   
   public Node setPosition(final double positionX, final double positionY) {
-    final Procedure1<Node> _function = new Procedure1<Node>() {
-      @Override
-      public void apply(final Node it) {
-        it.setLayoutX(positionX);
-        it.setLayoutY(positionY);
-      }
+    final Procedure1<Node> _function = (Node it) -> {
+      it.setLayoutX(positionX);
+      it.setLayoutY(positionY);
     };
     return ObjectExtensions.<Node>operator_doubleArrow(
       this.tooltip, _function);

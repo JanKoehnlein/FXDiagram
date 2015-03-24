@@ -54,26 +54,20 @@ public class XControlPoint extends XShape implements XModelProvider {
       switch (_type) {
         case ANCHOR:
           Circle _circle = new Circle();
-          final Procedure1<Circle> _function = new Procedure1<Circle>() {
-            @Override
-            public void apply(final Circle it) {
-              it.setRadius(3);
-              it.setStroke(Color.BLUE);
-              it.setFill(Color.WHITE);
-            }
+          final Procedure1<Circle> _function = (Circle it) -> {
+            it.setRadius(3);
+            it.setStroke(Color.BLUE);
+            it.setFill(Color.WHITE);
           };
           return ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
         case CONTROL_POINT:
           return new Magnet();
         case INTERPOLATED:
           Circle _circle_1 = new Circle();
-          final Procedure1<Circle> _function_1 = new Procedure1<Circle>() {
-            @Override
-            public void apply(final Circle it) {
-              it.setRadius(5);
-              it.setStroke(Color.RED);
-              it.setFill(Color.WHITE);
-            }
+          final Procedure1<Circle> _function_1 = (Circle it) -> {
+            it.setRadius(5);
+            it.setStroke(Color.RED);
+            it.setFill(Color.WHITE);
           };
           return ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
         default:
@@ -86,16 +80,13 @@ public class XControlPoint extends XShape implements XModelProvider {
   
   @Override
   protected void doActivate() {
-    final ChangeListener<XControlPoint.Type> _function = new ChangeListener<XControlPoint.Type>() {
-      @Override
-      public void changed(final ObservableValue<? extends XControlPoint.Type> p, final XControlPoint.Type o, final XControlPoint.Type n) {
-        ObservableList<Node> _children = XControlPoint.this.getChildren();
-        Node _node = XControlPoint.this.getNode();
-        _children.remove(_node);
-        ObjectProperty<Node> _nodeProperty = XControlPoint.this.nodeProperty();
-        _nodeProperty.set(null);
-        XControlPoint.this.getNode();
-      }
+    final ChangeListener<XControlPoint.Type> _function = (ObservableValue<? extends XControlPoint.Type> p, XControlPoint.Type o, XControlPoint.Type n) -> {
+      ObservableList<Node> _children = this.getChildren();
+      Node _node = this.getNode();
+      _children.remove(_node);
+      ObjectProperty<Node> _nodeProperty = this.nodeProperty();
+      _nodeProperty.set(null);
+      this.getNode();
     };
     this.typeProperty.addListener(_function);
     XControlPoint.Type _type = this.getType();

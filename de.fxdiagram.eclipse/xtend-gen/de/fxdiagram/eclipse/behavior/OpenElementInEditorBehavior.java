@@ -7,7 +7,7 @@ import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.OpenBehavior;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.IMappedElementDescriptor;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
@@ -22,21 +22,18 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
   
   @Override
   public Class<? extends Behavior> getBehaviorKey() {
-    return OpenBehavior.class;
+    return OpenElementInEditorBehavior.class;
   }
   
   @Override
   protected void doActivate() {
     XShape _host = this.getHost();
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        int _clickCount = it.getClickCount();
-        boolean _equals = (_clickCount == 2);
-        if (_equals) {
-          OpenElementInEditorBehavior.this.open();
-          it.consume();
-        }
+    final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
+      int _clickCount = it.getClickCount();
+      boolean _equals = (_clickCount == 2);
+      if (_equals) {
+        this.open();
+        it.consume();
       }
     };
     _host.<MouseEvent>addEventHandler(MouseEvent.MOUSE_CLICKED, _function);

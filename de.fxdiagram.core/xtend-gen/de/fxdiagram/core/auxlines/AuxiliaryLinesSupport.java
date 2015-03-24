@@ -35,13 +35,10 @@ public class AuxiliaryLinesSupport {
     if (_equals) {
       XNode _head = IterableExtensions.<XNode>head(selectedNodes);
       final Iterable<AuxiliaryLine> lines = this.cache.getAuxiliaryLines(_head);
-      final Consumer<AuxiliaryLine> _function = new Consumer<AuxiliaryLine>() {
-        @Override
-        public void accept(final AuxiliaryLine it) {
-          ObservableList<Node> _children = AuxiliaryLinesSupport.this.group.getChildren();
-          Node _createNode = it.createNode();
-          _children.add(_createNode);
-        }
+      final Consumer<AuxiliaryLine> _function = (AuxiliaryLine it) -> {
+        ObservableList<Node> _children_1 = this.group.getChildren();
+        Node _createNode = it.createNode();
+        _children_1.add(_createNode);
       };
       lines.forEach(_function);
     }

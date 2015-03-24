@@ -32,122 +32,89 @@ public class LazyExampleDiagram extends XDiagram {
     ObservableList<XNode> _nodes = this.getNodes();
     boolean _isEmpty = _nodes.isEmpty();
     if (_isEmpty) {
-      final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-        @Override
-        public void apply(final XDiagram it) {
-          String _nameSuffix = LazyExampleDiagram.this.getNameSuffix();
-          final SimpleNode simple = LazyExampleDiagram.this.newSimpleNode(_nameSuffix);
-          String _nameSuffix_1 = LazyExampleDiagram.this.getNameSuffix();
-          final OpenableDiagramNode openable = LazyExampleDiagram.this.newOpenableDiagramNode(_nameSuffix_1);
-          String _nameSuffix_2 = LazyExampleDiagram.this.getNameSuffix();
-          final LevelOfDetailDiagramNode levelOfDetail = LazyExampleDiagram.this.newEmbeddedDiagramNode(_nameSuffix_2);
-          ObservableList<XNode> _nodes = it.getNodes();
-          final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
-            @Override
-            public void apply(final SimpleNode it) {
-              it.setLayoutX(75);
-              it.setLayoutY(50);
-            }
+      final Procedure1<XDiagram> _function = (XDiagram it) -> {
+        String _nameSuffix = this.getNameSuffix();
+        final SimpleNode simple = this.newSimpleNode(_nameSuffix);
+        String _nameSuffix_1 = this.getNameSuffix();
+        final OpenableDiagramNode openable = this.newOpenableDiagramNode(_nameSuffix_1);
+        String _nameSuffix_2 = this.getNameSuffix();
+        final LevelOfDetailDiagramNode levelOfDetail = this.newEmbeddedDiagramNode(_nameSuffix_2);
+        ObservableList<XNode> _nodes_1 = it.getNodes();
+        final Procedure1<SimpleNode> _function_1 = (SimpleNode it_1) -> {
+          it_1.setLayoutX(75);
+          it_1.setLayoutY(50);
+        };
+        SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(simple, _function_1);
+        _nodes_1.add(_doubleArrow);
+        ObservableList<XNode> _nodes_2 = it.getNodes();
+        final Procedure1<OpenableDiagramNode> _function_2 = (OpenableDiagramNode it_1) -> {
+          it_1.setLayoutX(350);
+          it_1.setLayoutY(150);
+        };
+        OpenableDiagramNode _doubleArrow_1 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(openable, _function_2);
+        _nodes_2.add(_doubleArrow_1);
+        ObservableList<XNode> _nodes_3 = it.getNodes();
+        final Procedure1<LevelOfDetailDiagramNode> _function_3 = (LevelOfDetailDiagramNode it_1) -> {
+          it_1.setLayoutX(50);
+          it_1.setLayoutY(300);
+        };
+        LevelOfDetailDiagramNode _doubleArrow_2 = ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(levelOfDetail, _function_3);
+        _nodes_3.add(_doubleArrow_2);
+        ObservableList<XConnection> _connections = it.getConnections();
+        XConnection _xConnection = new XConnection(simple, openable);
+        final Procedure1<XConnection> _function_4 = (XConnection it_1) -> {
+          XConnectionLabel _xConnectionLabel = new XConnectionLabel(it_1);
+          final Procedure1<XConnectionLabel> _function_5 = (XConnectionLabel it_2) -> {
+            Text _text = it_2.getText();
+            _text.setText("polyline");
           };
-          SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(simple, _function);
-          _nodes.add(_doubleArrow);
-          ObservableList<XNode> _nodes_1 = it.getNodes();
-          final Procedure1<OpenableDiagramNode> _function_1 = new Procedure1<OpenableDiagramNode>() {
-            @Override
-            public void apply(final OpenableDiagramNode it) {
-              it.setLayoutX(350);
-              it.setLayoutY(150);
-            }
+          ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_5);
+        };
+        XConnection _doubleArrow_3 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_4);
+        _connections.add(_doubleArrow_3);
+        ObservableList<XConnection> _connections_1 = it.getConnections();
+        XConnection _xConnection_1 = new XConnection(openable, levelOfDetail);
+        final Procedure1<XConnection> _function_5 = (XConnection it_1) -> {
+          it_1.setKind(XConnection.Kind.QUAD_CURVE);
+          XConnectionLabel _xConnectionLabel = new XConnectionLabel(it_1);
+          final Procedure1<XConnectionLabel> _function_6 = (XConnectionLabel it_2) -> {
+            Text _text = it_2.getText();
+            _text.setText("quadratic");
           };
-          OpenableDiagramNode _doubleArrow_1 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(openable, _function_1);
-          _nodes_1.add(_doubleArrow_1);
-          ObservableList<XNode> _nodes_2 = it.getNodes();
-          final Procedure1<LevelOfDetailDiagramNode> _function_2 = new Procedure1<LevelOfDetailDiagramNode>() {
-            @Override
-            public void apply(final LevelOfDetailDiagramNode it) {
-              it.setLayoutX(50);
-              it.setLayoutY(300);
-            }
+          ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_6);
+        };
+        XConnection _doubleArrow_4 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_1, _function_5);
+        _connections_1.add(_doubleArrow_4);
+        ObservableList<XConnection> _connections_2 = it.getConnections();
+        XConnection _xConnection_2 = new XConnection(simple, levelOfDetail);
+        final Procedure1<XConnection> _function_6 = (XConnection it_1) -> {
+          it_1.setKind(XConnection.Kind.CUBIC_CURVE);
+          XConnectionLabel _xConnectionLabel = new XConnectionLabel(it_1);
+          final Procedure1<XConnectionLabel> _function_7 = (XConnectionLabel it_2) -> {
+            Text _text = it_2.getText();
+            _text.setText("cubic");
           };
-          LevelOfDetailDiagramNode _doubleArrow_2 = ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(levelOfDetail, _function_2);
-          _nodes_2.add(_doubleArrow_2);
-          ObservableList<XConnection> _connections = it.getConnections();
-          XConnection _xConnection = new XConnection(simple, openable);
-          final Procedure1<XConnection> _function_3 = new Procedure1<XConnection>() {
-            @Override
-            public void apply(final XConnection it) {
-              XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-              final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                @Override
-                public void apply(final XConnectionLabel it) {
-                  Text _text = it.getText();
-                  _text.setText("polyline");
-                }
-              };
-              ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-            }
-          };
-          XConnection _doubleArrow_3 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_3);
-          _connections.add(_doubleArrow_3);
-          ObservableList<XConnection> _connections_1 = it.getConnections();
-          XConnection _xConnection_1 = new XConnection(openable, levelOfDetail);
-          final Procedure1<XConnection> _function_4 = new Procedure1<XConnection>() {
-            @Override
-            public void apply(final XConnection it) {
-              it.setKind(XConnection.Kind.QUAD_CURVE);
-              XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-              final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                @Override
-                public void apply(final XConnectionLabel it) {
-                  Text _text = it.getText();
-                  _text.setText("quadratic");
-                }
-              };
-              ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-            }
-          };
-          XConnection _doubleArrow_4 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_1, _function_4);
-          _connections_1.add(_doubleArrow_4);
-          ObservableList<XConnection> _connections_2 = it.getConnections();
-          XConnection _xConnection_2 = new XConnection(simple, levelOfDetail);
-          final Procedure1<XConnection> _function_5 = new Procedure1<XConnection>() {
-            @Override
-            public void apply(final XConnection it) {
-              it.setKind(XConnection.Kind.CUBIC_CURVE);
-              XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-              final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                @Override
-                public void apply(final XConnectionLabel it) {
-                  Text _text = it.getText();
-                  _text.setText("cubic");
-                }
-              };
-              ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-            }
-          };
-          XConnection _doubleArrow_5 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_2, _function_5);
-          _connections_2.add(_doubleArrow_5);
-        }
+          ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_7);
+        };
+        XConnection _doubleArrow_5 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection_2, _function_6);
+        _connections_2.add(_doubleArrow_5);
       };
       this.setContentsInitializer(_function);
     } else {
       ObservableList<XNode> _nodes_1 = this.getNodes();
-      final Consumer<XNode> _function_1 = new Consumer<XNode>() {
-        @Override
-        public void accept(final XNode it) {
-          boolean _or = false;
-          String _nameSuffix = LazyExampleDiagram.this.getNameSuffix();
-          boolean _isEmpty = _nameSuffix.isEmpty();
-          boolean _not = (!_isEmpty);
-          if (_not) {
-            _or = true;
-          } else {
-            _or = (!(it.getNode() instanceof SimpleNode));
-          }
-          if (_or) {
-            String _nameSuffix_1 = LazyExampleDiagram.this.getNameSuffix();
-            LazyExampleDiagram.this.addRapidButtons(it, _nameSuffix_1);
-          }
+      final Consumer<XNode> _function_1 = (XNode it) -> {
+        boolean _or = false;
+        String _nameSuffix = this.getNameSuffix();
+        boolean _isEmpty_1 = _nameSuffix.isEmpty();
+        boolean _not = (!_isEmpty_1);
+        if (_not) {
+          _or = true;
+        } else {
+          _or = (!(it.getNode() instanceof SimpleNode));
+        }
+        if (_or) {
+          String _nameSuffix_1 = this.getNameSuffix();
+          this.addRapidButtons(it, _nameSuffix_1);
         }
       };
       _nodes_1.forEach(_function_1);
@@ -157,34 +124,28 @@ public class LazyExampleDiagram extends XDiagram {
   
   protected void addRapidButtons(final XNode node, final String nameSuffix) {
     AddRapidButtonBehavior<XNode> _addRapidButtonBehavior = new AddRapidButtonBehavior<XNode>(node);
-    final Procedure1<AddRapidButtonBehavior<XNode>> _function = new Procedure1<AddRapidButtonBehavior<XNode>>() {
-      @Override
-      public void apply(final AddRapidButtonBehavior<XNode> it) {
-        final Procedure1<ConnectedNodeChooser> _function = new Procedure1<ConnectedNodeChooser>() {
-          @Override
-          public void apply(final ConnectedNodeChooser it) {
-            IntegerRange _upTo = new IntegerRange(5, 20);
-            for (final Integer i : _upTo) {
-              SimpleNode _newSimpleNode = LazyExampleDiagram.this.newSimpleNode((" " + i));
-              it.addChoice(_newSimpleNode);
-            }
-            SimpleNode _newSimpleNode_1 = LazyExampleDiagram.this.newSimpleNode(nameSuffix);
-            it.addChoice(_newSimpleNode_1);
-            OpenableDiagramNode _newOpenableDiagramNode = LazyExampleDiagram.this.newOpenableDiagramNode(nameSuffix);
-            it.addChoice(_newOpenableDiagramNode);
-            LevelOfDetailDiagramNode _newEmbeddedDiagramNode = LazyExampleDiagram.this.newEmbeddedDiagramNode(nameSuffix);
-            it.addChoice(_newEmbeddedDiagramNode);
-            IntegerRange _upTo_1 = new IntegerRange(1, 4);
-            for (final Integer i_1 : _upTo_1) {
-              SimpleNode _newSimpleNode_2 = LazyExampleDiagram.this.newSimpleNode((" " + i_1));
-              it.addChoice(_newSimpleNode_2);
-            }
-            SimpleNode _newSimpleNode_3 = LazyExampleDiagram.this.newSimpleNode(nameSuffix);
-            it.addChoice(_newSimpleNode_3);
-          }
-        };
-        it.setChoiceInitializer(_function);
-      }
+    final Procedure1<AddRapidButtonBehavior<XNode>> _function = (AddRapidButtonBehavior<XNode> it) -> {
+      final Procedure1<ConnectedNodeChooser> _function_1 = (ConnectedNodeChooser it_1) -> {
+        IntegerRange _upTo = new IntegerRange(5, 20);
+        for (final Integer i : _upTo) {
+          SimpleNode _newSimpleNode = this.newSimpleNode((" " + i));
+          it_1.addChoice(_newSimpleNode);
+        }
+        SimpleNode _newSimpleNode_1 = this.newSimpleNode(nameSuffix);
+        it_1.addChoice(_newSimpleNode_1);
+        OpenableDiagramNode _newOpenableDiagramNode = this.newOpenableDiagramNode(nameSuffix);
+        it_1.addChoice(_newOpenableDiagramNode);
+        LevelOfDetailDiagramNode _newEmbeddedDiagramNode = this.newEmbeddedDiagramNode(nameSuffix);
+        it_1.addChoice(_newEmbeddedDiagramNode);
+        IntegerRange _upTo_1 = new IntegerRange(1, 4);
+        for (final Integer i_1 : _upTo_1) {
+          SimpleNode _newSimpleNode_2 = this.newSimpleNode((" " + i_1));
+          it_1.addChoice(_newSimpleNode_2);
+        }
+        SimpleNode _newSimpleNode_3 = this.newSimpleNode(nameSuffix);
+        it_1.addChoice(_newSimpleNode_3);
+      };
+      it.setChoiceInitializer(_function_1);
     };
     AddRapidButtonBehavior<XNode> _doubleArrow = ObjectExtensions.<AddRapidButtonBehavior<XNode>>operator_doubleArrow(_addRapidButtonBehavior, _function);
     node.addBehavior(_doubleArrow);
@@ -192,14 +153,11 @@ public class LazyExampleDiagram extends XDiagram {
   
   public SimpleNode newSimpleNode(final String nameSuffix) {
     SimpleNode _simpleNode = new SimpleNode(("Node" + nameSuffix));
-    final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
-      @Override
-      public void apply(final SimpleNode it) {
-        boolean _isEmpty = nameSuffix.isEmpty();
-        boolean _not = (!_isEmpty);
-        if (_not) {
-          LazyExampleDiagram.this.addRapidButtons(it, nameSuffix);
-        }
+    final Procedure1<SimpleNode> _function = (SimpleNode it) -> {
+      boolean _isEmpty = nameSuffix.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        this.addRapidButtons(it, nameSuffix);
       }
     };
     return ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function);
@@ -207,26 +165,20 @@ public class LazyExampleDiagram extends XDiagram {
   
   public OpenableDiagramNode newOpenableDiagramNode(final String nameSuffix) {
     OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode(("Nested" + nameSuffix));
-    final Procedure1<OpenableDiagramNode> _function = new Procedure1<OpenableDiagramNode>() {
-      @Override
-      public void apply(final OpenableDiagramNode it) {
-        LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram((nameSuffix + " (n)"));
-        it.setInnerDiagram(_lazyExampleDiagram);
-        LazyExampleDiagram.this.addRapidButtons(it, nameSuffix);
-      }
+    final Procedure1<OpenableDiagramNode> _function = (OpenableDiagramNode it) -> {
+      LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram((nameSuffix + " (n)"));
+      it.setInnerDiagram(_lazyExampleDiagram);
+      this.addRapidButtons(it, nameSuffix);
     };
     return ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function);
   }
   
   public LevelOfDetailDiagramNode newEmbeddedDiagramNode(final String nameSuffix) {
     LevelOfDetailDiagramNode _levelOfDetailDiagramNode = new LevelOfDetailDiagramNode(("Embedded" + nameSuffix));
-    final Procedure1<LevelOfDetailDiagramNode> _function = new Procedure1<LevelOfDetailDiagramNode>() {
-      @Override
-      public void apply(final LevelOfDetailDiagramNode it) {
-        LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram((nameSuffix + " (e)"));
-        it.setInnerDiagram(_lazyExampleDiagram);
-        LazyExampleDiagram.this.addRapidButtons(it, nameSuffix);
-      }
+    final Procedure1<LevelOfDetailDiagramNode> _function = (LevelOfDetailDiagramNode it) -> {
+      LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram((nameSuffix + " (e)"));
+      it.setInnerDiagram(_lazyExampleDiagram);
+      this.addRapidButtons(it, nameSuffix);
     };
     return ObjectExtensions.<LevelOfDetailDiagramNode>operator_doubleArrow(_levelOfDetailDiagramNode, _function);
   }

@@ -59,88 +59,61 @@ public class LcarsQueryTask extends Task<Void> {
       chooser.setConnectionProvider(this.connectionProvider);
       LcarsNode _lcarsNode = this.host.getLcarsNode();
       ObservableList<XConnection> _incomingConnections = _lcarsNode.getIncomingConnections();
-      final Function1<XConnection, Boolean> _function = new Function1<XConnection, Boolean>() {
-        @Override
-        public Boolean apply(final XConnection it) {
-          DomainObjectDescriptor _domainObject = it.getDomainObject();
-          return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
-        }
+      final Function1<XConnection, Boolean> _function = (XConnection it) -> {
+        DomainObjectDescriptor _domainObject = it.getDomainObject();
+        return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
       };
       Iterable<XConnection> _filter = IterableExtensions.<XConnection>filter(_incomingConnections, _function);
-      final Function1<XConnection, XNode> _function_1 = new Function1<XConnection, XNode>() {
-        @Override
-        public XNode apply(final XConnection it) {
-          return it.getSource();
-        }
+      final Function1<XConnection, XNode> _function_1 = (XConnection it) -> {
+        return it.getSource();
       };
       Iterable<XNode> _map = IterableExtensions.<XConnection, XNode>map(_filter, _function_1);
       LcarsNode _lcarsNode_1 = this.host.getLcarsNode();
       ObservableList<XConnection> _outgoingConnections = _lcarsNode_1.getOutgoingConnections();
-      final Function1<XConnection, Boolean> _function_2 = new Function1<XConnection, Boolean>() {
-        @Override
-        public Boolean apply(final XConnection it) {
-          DomainObjectDescriptor _domainObject = it.getDomainObject();
-          return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
-        }
+      final Function1<XConnection, Boolean> _function_2 = (XConnection it) -> {
+        DomainObjectDescriptor _domainObject = it.getDomainObject();
+        return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
       };
       Iterable<XConnection> _filter_1 = IterableExtensions.<XConnection>filter(_outgoingConnections, _function_2);
-      final Function1<XConnection, XNode> _function_3 = new Function1<XConnection, XNode>() {
-        @Override
-        public XNode apply(final XConnection it) {
-          return it.getTarget();
-        }
+      final Function1<XConnection, XNode> _function_3 = (XConnection it) -> {
+        return it.getTarget();
       };
       Iterable<XNode> _map_1 = IterableExtensions.<XConnection, XNode>map(_filter_1, _function_3);
       Iterable<XNode> _plus = Iterables.<XNode>concat(_map, _map_1);
       Iterable<LcarsNode> _filter_2 = Iterables.<LcarsNode>filter(_plus, LcarsNode.class);
-      final Function1<LcarsNode, String> _function_4 = new Function1<LcarsNode, String>() {
-        @Override
-        public String apply(final LcarsNode it) {
-          DomainObjectDescriptor _domainObject = it.getDomainObject();
-          return _domainObject.getId();
-        }
+      final Function1<LcarsNode, String> _function_4 = (LcarsNode it) -> {
+        DomainObjectDescriptor _domainObject = it.getDomainObject();
+        return _domainObject.getId();
       };
       Iterable<String> _map_2 = IterableExtensions.<LcarsNode, String>map(_filter_2, _function_4);
       final Set<String> alreadyConnected = IterableExtensions.<String>toSet(_map_2);
       DomainObjectDescriptor _domainObject = lcarsNode.getDomainObject();
       String _id = _domainObject.getId();
       alreadyConnected.add(_id);
-      final Function1<DBObject, Boolean> _function_5 = new Function1<DBObject, Boolean>() {
-        @Override
-        public Boolean apply(final DBObject it) {
-          Object _get = it.get("_id");
-          String _string = _get.toString();
-          boolean _contains = alreadyConnected.contains(_string);
-          return Boolean.valueOf((!_contains));
-        }
+      final Function1<DBObject, Boolean> _function_5 = (DBObject it) -> {
+        Object _get = it.get("_id");
+        String _string = _get.toString();
+        boolean _contains = alreadyConnected.contains(_string);
+        return Boolean.valueOf((!_contains));
       };
       Iterable<DBObject> _filter_3 = IterableExtensions.<DBObject>filter(siblings, _function_5);
-      final Procedure2<DBObject, Integer> _function_6 = new Procedure2<DBObject, Integer>() {
-        @Override
-        public void apply(final DBObject it, final Integer i) {
-          final LcarsEntryDescriptor descriptor = modelProvider.createLcarsEntryDescriptor(it);
-          LcarsNode _lcarsNode = new LcarsNode(descriptor);
-          final Procedure1<LcarsNode> _function = new Procedure1<LcarsNode>() {
-            @Override
-            public void apply(final LcarsNode it) {
-              double _width = lcarsNode.getWidth();
-              it.setWidth(_width);
-              double _height = lcarsNode.getHeight();
-              it.setHeight(_height);
-            }
-          };
-          LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode, _function);
-          chooser.addChoice(_doubleArrow);
-        }
+      final Procedure2<DBObject, Integer> _function_6 = (DBObject it, Integer i) -> {
+        final LcarsEntryDescriptor descriptor = modelProvider.createLcarsEntryDescriptor(it);
+        LcarsNode _lcarsNode_2 = new LcarsNode(descriptor);
+        final Procedure1<LcarsNode> _function_7 = (LcarsNode it_1) -> {
+          double _width = lcarsNode.getWidth();
+          it_1.setWidth(_width);
+          double _height = lcarsNode.getHeight();
+          it_1.setHeight(_height);
+        };
+        LcarsNode _doubleArrow = ObjectExtensions.<LcarsNode>operator_doubleArrow(_lcarsNode_2, _function_7);
+        chooser.addChoice(_doubleArrow);
       };
       IterableExtensions.<DBObject>forEach(_filter_3, _function_6);
-      final Runnable _function_7 = new Runnable() {
-        @Override
-        public void run() {
-          XRoot _root = CoreExtensions.getRoot(LcarsQueryTask.this.host);
-          _root.setCurrentTool(chooser);
-          LcarsQueryTask.this.host.resetVisuals();
-        }
+      final Runnable _function_7 = () -> {
+        XRoot _root_1 = CoreExtensions.getRoot(this.host);
+        _root_1.setCurrentTool(chooser);
+        this.host.resetVisuals();
       };
       Platform.runLater(_function_7);
       _xblockexpression = null;

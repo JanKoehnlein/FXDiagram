@@ -43,33 +43,24 @@ public class AuxiliaryLinesCache {
   private AuxiliaryLineMap<Bounds> bottomMap = new AuxiliaryLineMap<Bounds>();
   
   public AuxiliaryLinesCache(final XDiagram diagram) {
-    final ListChangeListener<XNode> _function = new ListChangeListener<XNode>() {
-      @Override
-      public void onChanged(final ListChangeListener.Change<? extends XNode> it) {
-        while (it.next()) {
-          {
-            boolean _wasAdded = it.wasAdded();
-            if (_wasAdded) {
-              List<? extends XNode> _addedSubList = it.getAddedSubList();
-              final Consumer<XNode> _function = new Consumer<XNode>() {
-                @Override
-                public void accept(final XNode it) {
-                  AuxiliaryLinesCache.this.watchNode(it);
-                }
-              };
-              _addedSubList.forEach(_function);
-            }
-            boolean _wasRemoved = it.wasRemoved();
-            if (_wasRemoved) {
-              List<? extends XNode> _removed = it.getRemoved();
-              final Consumer<XNode> _function_1 = new Consumer<XNode>() {
-                @Override
-                public void accept(final XNode it) {
-                  AuxiliaryLinesCache.this.unwatchNode(it);
-                }
-              };
-              _removed.forEach(_function_1);
-            }
+    final ListChangeListener<XNode> _function = (ListChangeListener.Change<? extends XNode> it) -> {
+      while (it.next()) {
+        {
+          boolean _wasAdded = it.wasAdded();
+          if (_wasAdded) {
+            List<? extends XNode> _addedSubList = it.getAddedSubList();
+            final Consumer<XNode> _function_1 = (XNode it_1) -> {
+              this.watchNode(it_1);
+            };
+            _addedSubList.forEach(_function_1);
+          }
+          boolean _wasRemoved = it.wasRemoved();
+          if (_wasRemoved) {
+            List<? extends XNode> _removed = it.getRemoved();
+            final Consumer<XNode> _function_2 = (XNode it_1) -> {
+              this.unwatchNode(it_1);
+            };
+            _removed.forEach(_function_2);
           }
         }
       }
@@ -78,11 +69,8 @@ public class AuxiliaryLinesCache {
     ObservableList<XNode> _nodes = diagram.getNodes();
     _nodes.addListener(this.nodesListener);
     ObservableList<XNode> _nodes_1 = diagram.getNodes();
-    final Consumer<XNode> _function_1 = new Consumer<XNode>() {
-      @Override
-      public void accept(final XNode it) {
-        AuxiliaryLinesCache.this.watchNode(it);
-      }
+    final Consumer<XNode> _function_1 = (XNode it) -> {
+      this.watchNode(it);
     };
     _nodes_1.forEach(_function_1);
   }
@@ -138,18 +126,12 @@ public class AuxiliaryLinesCache {
   }
   
   public void watchNode(final XNode node) {
-    final ChangeListener<Number> _function = new ChangeListener<Number>() {
-      @Override
-      public void changed(final ObservableValue<? extends Number> scalar, final Number oldValue, final Number newValue) {
-        AuxiliaryLinesCache.this.updateNode(node);
-      }
+    final ChangeListener<Number> _function = (ObservableValue<? extends Number> scalar, Number oldValue, Number newValue) -> {
+      this.updateNode(node);
     };
     final ChangeListener<Number> scalarListener = _function;
-    final ChangeListener<Bounds> _function_1 = new ChangeListener<Bounds>() {
-      @Override
-      public void changed(final ObservableValue<? extends Bounds> scalar, final Bounds oldValue, final Bounds newValue) {
-        AuxiliaryLinesCache.this.updateNode(node);
-      }
+    final ChangeListener<Bounds> _function_1 = (ObservableValue<? extends Bounds> scalar, Bounds oldValue, Bounds newValue) -> {
+      this.updateNode(node);
     };
     final ChangeListener<Bounds> boundsListener = _function_1;
     DoubleProperty _layoutXProperty = node.layoutXProperty();

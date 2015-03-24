@@ -2,12 +2,12 @@ package de.fxdiagram.xtext.fowlerdsl
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
-import de.fxdiagram.eclipse.mapping.AbstractDiagramConfig
-import de.fxdiagram.eclipse.mapping.ConnectionMapping
-import de.fxdiagram.eclipse.mapping.DiagramMapping
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
-import de.fxdiagram.eclipse.mapping.MappingAcceptor
-import de.fxdiagram.eclipse.mapping.NodeMapping
+import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig
+import de.fxdiagram.mapping.ConnectionMapping
+import de.fxdiagram.mapping.DiagramMapping
+import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.MappingAcceptor
+import de.fxdiagram.mapping.NodeMapping
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
@@ -37,7 +37,7 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
  * that adds the selected element in the editor to the diagram.
  * </ol>
  */
-class StatemachineDiagramConfig extends AbstractDiagramConfig {
+class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
 	 
 	val statemachineDiagram = new DiagramMapping<Statemachine>(this, 'statemachineDiagram', 'Statemachine') {
 		override calls() {

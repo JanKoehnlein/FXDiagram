@@ -65,24 +65,18 @@ public class AnimationQueue {
       boolean _notEquals_1 = (!Objects.equal(animation, null));
       if (_notEquals_1) {
         SequentialTransition _sequentialTransition = new SequentialTransition();
-        final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-          @Override
-          public void apply(final SequentialTransition it) {
-            ObservableList<Animation> _children = it.getChildren();
-            _children.add(animation);
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
-              public void handle(final ActionEvent it) {
-                /* AnimationQueue.this.queue; */
-                synchronized (AnimationQueue.this.queue) {
-                  AnimationQueue.this.queue.poll();
-                }
-                AnimationQueue.this.executeNext();
-              }
-            };
-            it.setOnFinished(_function);
-            it.play();
-          }
+        final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
+          ObservableList<Animation> _children = it.getChildren();
+          _children.add(animation);
+          final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
+            /* this.queue; */
+            synchronized (this.queue) {
+              this.queue.poll();
+            }
+            this.executeNext();
+          };
+          it.setOnFinished(_function_1);
+          it.play();
         };
         ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       } else {
@@ -94,11 +88,8 @@ public class AnimationQueue {
       }
     } else {
       ArrayList<AnimationQueue.Listener> _newArrayList = Lists.<AnimationQueue.Listener>newArrayList(this.listeners);
-      final Consumer<AnimationQueue.Listener> _function_1 = new Consumer<AnimationQueue.Listener>() {
-        @Override
-        public void accept(final AnimationQueue.Listener it) {
-          it.handleQueueEmpty();
-        }
+      final Consumer<AnimationQueue.Listener> _function_1 = (AnimationQueue.Listener it) -> {
+        it.handleQueueEmpty();
       };
       _newArrayList.forEach(_function_1);
     }

@@ -39,11 +39,8 @@ public class NavigateNextAction implements DiagramAction {
   
   @Override
   public void perform(final XRoot root) {
-    final Function1<NavigationBehavior, Boolean> _function = new Function1<NavigationBehavior, Boolean>() {
-      @Override
-      public Boolean apply(final NavigationBehavior it) {
-        return Boolean.valueOf(it.next());
-      }
+    final Function1<NavigationBehavior, Boolean> _function = (NavigationBehavior it) -> {
+      return Boolean.valueOf(it.next());
     };
     BehaviorProvider.<NavigationBehavior>triggerBehavior(root, NavigationBehavior.class, _function);
   }

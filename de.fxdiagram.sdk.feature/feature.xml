@@ -2,7 +2,7 @@
 <feature
       id="de.fxdiagram.sdk.feature"
       label="FXDiagram SDK"
-      version="0.1.0.qualifier">
+      version="0.2.0.qualifier">
 
    <description>
       FXDiagram - A diagram framework based on JavaFX. Complete SDK.
@@ -212,6 +212,20 @@ This Agreement is governed by the laws of the State of New York and the intellec
          install-size="0"
          version="0.0.0"
          fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.mapping"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.eclipse.xtext"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

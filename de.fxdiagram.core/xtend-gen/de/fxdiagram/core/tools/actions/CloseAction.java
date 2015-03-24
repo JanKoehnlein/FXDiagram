@@ -30,16 +30,13 @@ public class CloseAction implements DiagramAction {
   
   @Override
   public void perform(final XRoot root) {
-    final Function1<CloseBehavior, Boolean> _function = new Function1<CloseBehavior, Boolean>() {
-      @Override
-      public Boolean apply(final CloseBehavior it) {
-        boolean _xblockexpression = false;
-        {
-          it.close();
-          _xblockexpression = true;
-        }
-        return Boolean.valueOf(_xblockexpression);
+    final Function1<CloseBehavior, Boolean> _function = (CloseBehavior it) -> {
+      boolean _xblockexpression = false;
+      {
+        it.close();
+        _xblockexpression = true;
       }
+      return Boolean.valueOf(_xblockexpression);
     };
     BehaviorProvider.<CloseBehavior>triggerBehavior(root, CloseBehavior.class, _function);
   }

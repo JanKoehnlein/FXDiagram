@@ -2,7 +2,7 @@
 <feature
       id="de.fxdiagram.base.feature"
       label="FXDiagram Base Feature"
-      version="0.1.0.qualifier">
+      version="0.2.0.qualifier">
 
    <description>
       FXDiagram - A diagram framework based on JavaFX. This feature contains the non-equinox functionality.
@@ -139,6 +139,13 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
    <plugin
          id="de.fxdiagram.lib"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.fxdiagram.mapping"
          download-size="0"
          install-size="0"
          version="0.0.0"

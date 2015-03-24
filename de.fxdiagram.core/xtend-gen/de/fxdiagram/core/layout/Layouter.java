@@ -113,12 +113,9 @@ public class Layouter {
     boolean _equals = Objects.equal(layoutProvider, null);
     if (_equals) {
       GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
-      final Procedure1<GraphvizLayoutProvider> _function = new Procedure1<GraphvizLayoutProvider>() {
-        @Override
-        public void apply(final GraphvizLayoutProvider it) {
-          String _string = type.toString();
-          it.initialize(_string);
-        }
+      final Procedure1<GraphvizLayoutProvider> _function = (GraphvizLayoutProvider it) -> {
+        String _string = type.toString();
+        it.initialize(_string);
       };
       GraphvizLayoutProvider _doubleArrow = ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
       layoutProvider = _doubleArrow;
@@ -159,11 +156,8 @@ public class Layouter {
           if (xElement instanceof XConnection) {
             _matched=true;
             ObservableList<XConnectionLabel> _labels = ((XConnection)xElement).getLabels();
-            final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
-              @Override
-              public void accept(final XConnectionLabel it) {
-                it.place(true);
-              }
+            final Consumer<XConnectionLabel> _function = (XConnectionLabel it) -> {
+              it.place(true);
             };
             _labels.forEach(_function);
             EList<KGraphData> _data = kElement.getData();
@@ -274,11 +268,8 @@ public class Layouter {
             double _y = delta.getY();
             double _minus_3 = (_plus_1 - _y);
             MoveCommand _moveCommand = new MoveCommand(((XShape)xElement), _minus_1, _minus_3);
-            final Procedure1<MoveCommand> _function = new Procedure1<MoveCommand>() {
-              @Override
-              public void apply(final MoveCommand it) {
-                it.setExecuteDuration(duration);
-              }
+            final Procedure1<MoveCommand> _function = (MoveCommand it) -> {
+              it.setExecuteDuration(duration);
             };
             MoveCommand _doubleArrow = ObjectExtensions.<MoveCommand>operator_doubleArrow(_moveCommand, _function);
             composite.operator_add(_doubleArrow);
@@ -288,11 +279,8 @@ public class Layouter {
           if (xElement instanceof XConnection) {
             _matched=true;
             ObservableList<XConnectionLabel> _labels = ((XConnection)xElement).getLabels();
-            final Consumer<XConnectionLabel> _function = new Consumer<XConnectionLabel>() {
-              @Override
-              public void accept(final XConnectionLabel it) {
-                it.place(true);
-              }
+            final Consumer<XConnectionLabel> _function = (XConnectionLabel it) -> {
+              it.place(true);
             };
             _labels.forEach(_function);
             EList<KGraphData> _data = kElement.getData();
@@ -334,23 +322,17 @@ public class Layouter {
               _switchResult_1 = XConnection.Kind.POLYLINE;
             }
             final XConnection.Kind newKind = _switchResult_1;
-            final Function1<KVector, Point2D> _function_1 = new Function1<KVector, Point2D>() {
-              @Override
-              public Point2D apply(final KVector it) {
-                double _x = delta.getX();
-                double _minus = (it.x - _x);
-                double _y = delta.getY();
-                double _minus_1 = (it.y - _y);
-                return new Point2D(_minus, _minus_1);
-              }
+            final Function1<KVector, Point2D> _function_1 = (KVector it) -> {
+              double _x = delta.getX();
+              double _minus_2 = (it.x - _x);
+              double _y = delta.getY();
+              double _minus_3 = (it.y - _y);
+              return new Point2D(_minus_2, _minus_3);
             };
             List<Point2D> _map = ListExtensions.<KVector, Point2D>map(layoutPoints, _function_1);
             ConnectionMorphCommand _connectionMorphCommand = new ConnectionMorphCommand(((XConnection)xElement), newKind, _map);
-            final Procedure1<ConnectionMorphCommand> _function_2 = new Procedure1<ConnectionMorphCommand>() {
-              @Override
-              public void apply(final ConnectionMorphCommand it) {
-                it.setExecuteDuration(duration);
-              }
+            final Procedure1<ConnectionMorphCommand> _function_2 = (ConnectionMorphCommand it) -> {
+              it.setExecuteDuration(duration);
             };
             ConnectionMorphCommand _doubleArrow = ObjectExtensions.<ConnectionMorphCommand>operator_doubleArrow(_connectionMorphCommand, _function_2);
             composite.operator_add(_doubleArrow);
@@ -366,29 +348,23 @@ public class Layouter {
     if (_equals) {
       Collection<KGraphElement> _values = map.values();
       Iterable<KNode> _filter = Iterables.<KNode>filter(_values, KNode.class);
-      final Function1<KNode, BoundingBox> _function = new Function1<KNode, BoundingBox>() {
-        @Override
-        public BoundingBox apply(final KNode it) {
-          BoundingBox _xblockexpression = null;
-          {
-            EList<KGraphData> _data = it.getData();
-            Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
-            final KShapeLayout layout = IterableExtensions.<KShapeLayout>head(_filter);
-            float _xpos = layout.getXpos();
-            float _ypos = layout.getYpos();
-            float _width = layout.getWidth();
-            float _height = layout.getHeight();
-            _xblockexpression = new BoundingBox(_xpos, _ypos, _width, _height);
-          }
-          return _xblockexpression;
+      final Function1<KNode, BoundingBox> _function = (KNode it) -> {
+        BoundingBox _xblockexpression = null;
+        {
+          EList<KGraphData> _data = it.getData();
+          Iterable<KShapeLayout> _filter_1 = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
+          final KShapeLayout layout = IterableExtensions.<KShapeLayout>head(_filter_1);
+          float _xpos = layout.getXpos();
+          float _ypos = layout.getYpos();
+          float _width = layout.getWidth();
+          float _height = layout.getHeight();
+          _xblockexpression = new BoundingBox(_xpos, _ypos, _width, _height);
         }
+        return _xblockexpression;
       };
       Iterable<BoundingBox> _map = IterableExtensions.<KNode, BoundingBox>map(_filter, _function);
-      final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = new Function2<BoundingBox, BoundingBox, BoundingBox>() {
-        @Override
-        public BoundingBox apply(final BoundingBox $0, final BoundingBox $1) {
-          return BoundsExtensions.operator_plus($0, $1);
-        }
+      final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = (BoundingBox $0, BoundingBox $1) -> {
+        return BoundsExtensions.operator_plus($0, $1);
       };
       BoundingBox _reduce = IterableExtensions.<BoundingBox>reduce(_map, _function_1);
       Point2D _center = null;
@@ -439,18 +415,12 @@ public class Layouter {
         Iterable<KEdgeLayout> _filter_1 = Iterables.<KEdgeLayout>filter(_data, KEdgeLayout.class);
         final KEdgeLayout edgeLayout = IterableExtensions.<KEdgeLayout>head(_filter_1);
         KVectorChain _createVectorChain = edgeLayout.createVectorChain();
-        final Function1<KVector, BoundingBox> _function_2 = new Function1<KVector, BoundingBox>() {
-          @Override
-          public BoundingBox apply(final KVector it) {
-            return new BoundingBox(it.x, it.y, 0, 0);
-          }
+        final Function1<KVector, BoundingBox> _function_2 = (KVector it) -> {
+          return new BoundingBox(it.x, it.y, 0, 0);
         };
         List<BoundingBox> _map_1 = ListExtensions.<KVector, BoundingBox>map(_createVectorChain, _function_2);
-        final Function2<BoundingBox, BoundingBox, BoundingBox> _function_3 = new Function2<BoundingBox, BoundingBox, BoundingBox>() {
-          @Override
-          public BoundingBox apply(final BoundingBox $0, final BoundingBox $1) {
-            return BoundsExtensions.operator_plus($0, $1);
-          }
+        final Function2<BoundingBox, BoundingBox, BoundingBox> _function_3 = (BoundingBox $0, BoundingBox $1) -> {
+          return BoundsExtensions.operator_plus($0, $1);
         };
         BoundingBox _reduce_1 = IterableExtensions.<BoundingBox>reduce(_map_1, _function_3);
         Point2D _center_1 = null;
@@ -478,13 +448,10 @@ public class Layouter {
       _data.add(shapeLayout);
       cache.put(it, kRoot);
       ObservableList<XNode> _nodes = it.getNodes();
-      final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
-        public void accept(final XNode it) {
-          EList<KNode> _children = kRoot.getChildren();
-          KNode _kNode = Layouter.this.toKNode(it, cache);
-          _children.add(_kNode);
-        }
+      final Consumer<XNode> _function = (XNode it_1) -> {
+        EList<KNode> _children = kRoot.getChildren();
+        KNode _kNode = this.toKNode(it_1, cache);
+        _children.add(_kNode);
       };
       _nodes.forEach(_function);
       double spacing = 60.0;

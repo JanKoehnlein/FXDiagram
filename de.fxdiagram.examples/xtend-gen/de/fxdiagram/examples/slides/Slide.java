@@ -37,30 +37,21 @@ public class Slide extends XNode {
   @Override
   protected StackPane createNode() {
     StackPane _stackPane = new StackPane();
-    final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-      @Override
-      public void apply(final StackPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        ImageView _imageView = new ImageView();
-        final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-          @Override
-          public void apply(final ImageView it) {
-            ColorAdjust _colorAdjust = new ColorAdjust();
-            final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
-              @Override
-              public void apply(final ColorAdjust it) {
-                it.setBrightness((-0.5));
-                it.setSaturation(0);
-                it.setContrast((-0.1));
-              }
-            };
-            ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function);
-            it.setEffect(_doubleArrow);
-          }
+    final Procedure1<StackPane> _function = (StackPane it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      ImageView _imageView = new ImageView();
+      final Procedure1<ImageView> _function_1 = (ImageView it_1) -> {
+        ColorAdjust _colorAdjust = new ColorAdjust();
+        final Procedure1<ColorAdjust> _function_2 = (ColorAdjust it_2) -> {
+          it_2.setBrightness((-0.5));
+          it_2.setSaturation(0);
+          it_2.setContrast((-0.1));
         };
-        ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
-        _children.add((Slide.this.imageView = _doubleArrow));
-      }
+        ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function_2);
+        it_1.setEffect(_doubleArrow);
+      };
+      ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function_1);
+      _children.add((this.imageView = _doubleArrow));
     };
     return ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
   }

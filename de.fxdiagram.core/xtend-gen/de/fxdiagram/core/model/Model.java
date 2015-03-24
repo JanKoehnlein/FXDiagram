@@ -57,38 +57,29 @@ public class Model {
       final ModelElement element = _elvis;
       this.index.put(node, element);
       List<? extends Property<?>> _properties = element.getProperties();
-      final Consumer<Property<?>> _function = new Consumer<Property<?>>() {
-        @Override
-        public void accept(final Property<?> it) {
-          boolean _isPrimitive = element.isPrimitive(it);
-          boolean _not = (!_isPrimitive);
-          if (_not) {
-            Object _value = it.getValue();
-            if (_value!=null) {
-              Model.this.addElement(_value);
-            }
+      final Consumer<Property<?>> _function = (Property<?> it) -> {
+        boolean _isPrimitive = element.isPrimitive(it);
+        boolean _not = (!_isPrimitive);
+        if (_not) {
+          Object _value = it.getValue();
+          if (_value!=null) {
+            this.addElement(_value);
           }
         }
       };
       _properties.forEach(_function);
       List<? extends ListProperty<?>> _listProperties = element.getListProperties();
-      final Consumer<ListProperty<?>> _function_1 = new Consumer<ListProperty<?>>() {
-        @Override
-        public void accept(final ListProperty<?> it) {
-          boolean _isPrimitive = element.isPrimitive(it);
-          boolean _not = (!_isPrimitive);
-          if (_not) {
-            ObservableList<?> _value = it.getValue();
-            final Consumer<Object> _function = new Consumer<Object>() {
-              @Override
-              public void accept(final Object it) {
-                if (it!=null) {
-                  Model.this.addElement(it);
-                }
-              }
-            };
-            _value.forEach(_function);
-          }
+      final Consumer<ListProperty<?>> _function_1 = (ListProperty<?> it) -> {
+        boolean _isPrimitive = element.isPrimitive(it);
+        boolean _not = (!_isPrimitive);
+        if (_not) {
+          ObservableList<?> _value = it.getValue();
+          final Consumer<Object> _function_2 = (Object it_1) -> {
+            if (it_1!=null) {
+              this.addElement(it_1);
+            }
+          };
+          _value.forEach(_function_2);
         }
       };
       _listProperties.forEach(_function_1);

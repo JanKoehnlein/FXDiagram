@@ -3,7 +3,7 @@ package de.fxdiagram.pde;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.eclipse.mapping.AbstractMappedElementDescriptor;
+import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleUtil;
 import org.apache.log4j.Logger;
@@ -87,7 +87,7 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
   }
   
   @Override
-  public IEditorPart openInEditor(final boolean select) {
+  public Object openInEditor(final boolean select) {
     final Function1<BundleDescription, IEditorPart> _function = (BundleDescription it) -> {
       IEditorPart _xblockexpression = null;
       {

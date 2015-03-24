@@ -47,11 +47,8 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
   protected void doActivate() {
     super.doActivate();
     Iterable<MODEL> _initialModelChoices = this.getInitialModelChoices();
-    final Function1<MODEL, KEY> _function = new Function1<MODEL, KEY>() {
-      @Override
-      public KEY apply(final MODEL it) {
-        return AbstractConnectionRapidButtonBehavior.this.getChoiceKey(it);
-      }
+    final Function1<MODEL, KEY> _function = (MODEL it) -> {
+      return this.getChoiceKey(it);
     };
     Iterable<KEY> _map = IterableExtensions.<MODEL, KEY>map(_initialModelChoices, _function);
     Iterables.<KEY>addAll(this.availableChoiceKeys, _map);
@@ -74,45 +71,33 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
         }
       };
       Iterable<RapidButton> _createButtons = this.createButtons(addConnectionAction);
-      final Consumer<RapidButton> _function_1 = new Consumer<RapidButton>() {
-        @Override
-        public void accept(final RapidButton it) {
-          AbstractConnectionRapidButtonBehavior.this.add(it);
-        }
+      final Consumer<RapidButton> _function_1 = (RapidButton it) -> {
+        this.add(it);
       };
       _createButtons.forEach(_function_1);
       HOST _host = this.getHost();
       XDiagram _diagram = CoreExtensions.getDiagram(_host);
       ObservableList<XConnection> _connections = _diagram.getConnections();
       InitializingListListener<XConnection> _initializingListListener = new InitializingListListener<XConnection>();
-      final Procedure1<InitializingListListener<XConnection>> _function_2 = new Procedure1<InitializingListListener<XConnection>>() {
-        @Override
-        public void apply(final InitializingListListener<XConnection> it) {
-          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-            @Override
-            public void apply(final XConnection it) {
-              DomainObjectDescriptor _domainObject = it.getDomainObject();
-              boolean _remove = AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.remove(_domainObject);
-              if (_remove) {
-                DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
-                AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
-              }
-            }
-          };
-          it.setAdd(_function);
-          final Procedure1<XConnection> _function_1 = new Procedure1<XConnection>() {
-            @Override
-            public void apply(final XConnection it) {
-              DomainObjectDescriptor _domainObject = it.getDomainObject();
-              boolean _remove = AbstractConnectionRapidButtonBehavior.this.unavailableChoiceKeys.remove(_domainObject);
-              if (_remove) {
-                DomainObjectDescriptor _domainObject_1 = it.getDomainObject();
-                AbstractConnectionRapidButtonBehavior.this.availableChoiceKeys.add(((KEY) _domainObject_1));
-              }
-            }
-          };
-          it.setRemove(_function_1);
-        }
+      final Procedure1<InitializingListListener<XConnection>> _function_2 = (InitializingListListener<XConnection> it) -> {
+        final Procedure1<XConnection> _function_3 = (XConnection it_1) -> {
+          DomainObjectDescriptor _domainObject = it_1.getDomainObject();
+          boolean _remove = this.availableChoiceKeys.remove(_domainObject);
+          if (_remove) {
+            DomainObjectDescriptor _domainObject_1 = it_1.getDomainObject();
+            this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
+          }
+        };
+        it.setAdd(_function_3);
+        final Procedure1<XConnection> _function_4 = (XConnection it_1) -> {
+          DomainObjectDescriptor _domainObject = it_1.getDomainObject();
+          boolean _remove = this.unavailableChoiceKeys.remove(_domainObject);
+          if (_remove) {
+            DomainObjectDescriptor _domainObject_1 = it_1.getDomainObject();
+            this.availableChoiceKeys.add(((KEY) _domainObject_1));
+          }
+        };
+        it.setRemove(_function_4);
       };
       InitializingListListener<XConnection> _doubleArrow = ObjectExtensions.<InitializingListListener<XConnection>>operator_doubleArrow(_initializingListListener, _function_2);
       CoreExtensions.<XConnection>addInitializingListener(_connections, _doubleArrow);

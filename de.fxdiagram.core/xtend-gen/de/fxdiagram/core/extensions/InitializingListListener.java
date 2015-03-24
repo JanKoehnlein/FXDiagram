@@ -36,11 +36,8 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
       }
       if (_and) {
         List<? extends T> _addedSubList = c.getAddedSubList();
-        final Consumer<T> _function = new Consumer<T>() {
-          @Override
-          public void accept(final T it) {
-            InitializingListListener.this.add.apply(it);
-          }
+        final Consumer<T> _function = (T it) -> {
+          this.add.apply(it);
         };
         _addedSubList.forEach(_function);
       }
@@ -55,11 +52,8 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
     }
     if (_and) {
       List<? extends T> _removed = c.getRemoved();
-      final Consumer<T> _function = new Consumer<T>() {
-        @Override
-        public void accept(final T it) {
-          InitializingListListener.this.remove.apply(it);
-        }
+      final Consumer<T> _function = (T it) -> {
+        this.remove.apply(it);
       };
       _removed.forEach(_function);
     }

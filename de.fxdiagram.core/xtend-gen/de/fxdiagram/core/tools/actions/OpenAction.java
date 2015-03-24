@@ -44,11 +44,8 @@ public class OpenAction implements DiagramAction {
   public void perform(final XRoot root) {
     XDiagram _diagram = root.getDiagram();
     ObservableList<XNode> _nodes = _diagram.getNodes();
-    final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
-      @Override
-      public Boolean apply(final XNode it) {
-        return Boolean.valueOf(it.getSelected());
-      }
+    final Function1<XNode, Boolean> _function = (XNode it) -> {
+      return Boolean.valueOf(it.getSelected());
     };
     final Iterable<XNode> selectedNodes = IterableExtensions.<XNode>filter(_nodes, _function);
     int _size = IterableExtensions.size(selectedNodes);

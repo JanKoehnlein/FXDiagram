@@ -5,12 +5,12 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.eclipse.mapping.XDiagramConfig
 import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.chooser.CarusselChoice
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser
 import de.fxdiagram.lib.chooser.CoverFlowChoice
+import de.fxdiagram.mapping.XDiagramConfig
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.core.layout.LayoutType.*
@@ -73,6 +73,7 @@ class AddDependencyPathAction extends RapidButtonAction {
 					var sourceNode = descriptor2node.get(owner)
 					if (sourceNode == null) {
 						sourceNode = config.pluginNode.createNode(owner)
+						config.initialize(sourceNode)
 						additionalShapes += sourceNode
 						descriptor2node.put(owner, sourceNode)
 					}
@@ -80,6 +81,7 @@ class AddDependencyPathAction extends RapidButtonAction {
 					var targetNode = descriptor2node.get(dependency)
 					if (targetNode == null) {
 						targetNode = config.pluginNode.createNode(dependency)
+						config.initialize(targetNode)
 						additionalShapes += targetNode
 						descriptor2node.put(dependency, targetNode)
 					}
@@ -88,6 +90,7 @@ class AddDependencyPathAction extends RapidButtonAction {
 					var connection = descriptor2connection.get(connectionDescriptor)
 					if (connection == null) {
 						connection = config.dependencyConnection.createConnection(connectionDescriptor)
+						config.initialize(connection)
 						connection.source = sourceNode
 						connection.target = targetNode
 						additionalShapes += connection
@@ -118,7 +121,9 @@ class AddDependencyPathAction extends RapidButtonAction {
 				hostBundle.allDependencyBundles
 		candidates.forEach [
 			val candidate = provider.createMappedElementDescriptor(it, config.pluginNode) as BundleDescriptor
-			chooser.addChoice(config.pluginNode.createNode(candidate))
+			val candidateNode = config.pluginNode.createNode(candidate)
+			config.initialize(candidateNode)
+			chooser.addChoice(candidateNode)
 		]		
 		root.currentTool = chooser
 		null

@@ -34,35 +34,26 @@ public class BrowserNode extends FlipNode {
     {
       final Node node = super.createNode();
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-      final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-        @Override
-        public void apply(final RectangleBorderPane it) {
-          ObservableList<Node> _children = it.getChildren();
-          Text _text = new Text();
-          final Procedure1<Text> _function = new Procedure1<Text>() {
-            @Override
-            public void apply(final Text it) {
-              String _name = BrowserNode.this.getName();
-              it.setText(_name);
-              it.setTextOrigin(VPos.TOP);
-              Insets _insets = new Insets(10, 20, 10, 20);
-              StackPane.setMargin(it, _insets);
-            }
-          };
-          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-          _children.add(_doubleArrow);
-        }
+      final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function_1 = (Text it_1) -> {
+          String _name = this.getName();
+          it_1.setText(_name);
+          it_1.setTextOrigin(VPos.TOP);
+          Insets _insets = new Insets(10, 20, 10, 20);
+          StackPane.setMargin(it_1, _insets);
+        };
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+        _children.add(_doubleArrow);
       };
       RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
       this.setFront(_doubleArrow);
       WebView _webView = new WebView();
-      final Procedure1<WebView> _function_1 = new Procedure1<WebView>() {
-        @Override
-        public void apply(final WebView it) {
-          WebEngine _engine = it.getEngine();
-          String _pageUrl = BrowserNode.this.getPageUrl();
-          _engine.load(_pageUrl);
-        }
+      final Procedure1<WebView> _function_1 = (WebView it) -> {
+        WebEngine _engine = it.getEngine();
+        String _pageUrl = this.getPageUrl();
+        _engine.load(_pageUrl);
       };
       WebView _doubleArrow_1 = ObjectExtensions.<WebView>operator_doubleArrow(_webView, _function_1);
       this.setBack(_doubleArrow_1);

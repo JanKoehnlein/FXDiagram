@@ -75,144 +75,99 @@ public class UndoRedoPlayerAction implements DiagramAction {
   
   protected StackPane createControlPanel() {
     StackPane _stackPane = new StackPane();
-    final Procedure1<StackPane> _function = new Procedure1<StackPane>() {
-      @Override
-      public void apply(final StackPane it) {
-        it.setAlignment(Pos.CENTER);
-        ObservableList<Node> _children = it.getChildren();
-        Rectangle _rectangle = new Rectangle();
-        final Procedure1<Rectangle> _function = new Procedure1<Rectangle>() {
-          @Override
-          public void apply(final Rectangle it) {
-            it.setWidth(400);
-            it.setHeight(60);
-            it.setOpacity(0);
-          }
+    final Procedure1<StackPane> _function = (StackPane it) -> {
+      it.setAlignment(Pos.CENTER);
+      ObservableList<Node> _children = it.getChildren();
+      Rectangle _rectangle = new Rectangle();
+      final Procedure1<Rectangle> _function_1 = (Rectangle it_1) -> {
+        it_1.setWidth(400);
+        it_1.setHeight(60);
+        it_1.setOpacity(0);
+      };
+      Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_1);
+      _children.add(_doubleArrow);
+      ObservableList<Node> _children_1 = it.getChildren();
+      HBox _hBox = new HBox();
+      final Procedure1<HBox> _function_2 = (HBox it_1) -> {
+        it_1.setAlignment(Pos.CENTER);
+        ObservableList<Node> _children_2 = it_1.getChildren();
+        Button _button = new Button();
+        final Procedure1<Button> _function_3 = (Button it_2) -> {
+          it_2.setId("back-button");
+          it_2.setText("Back");
+          final EventHandler<ActionEvent> _function_4 = (ActionEvent it_3) -> {
+            this.startFastMode(true);
+          };
+          it_2.setOnAction(_function_4);
         };
-        Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function);
-        _children.add(_doubleArrow);
-        ObservableList<Node> _children_1 = it.getChildren();
-        HBox _hBox = new HBox();
-        final Procedure1<HBox> _function_1 = new Procedure1<HBox>() {
-          @Override
-          public void apply(final HBox it) {
-            it.setAlignment(Pos.CENTER);
-            ObservableList<Node> _children = it.getChildren();
-            Button _button = new Button();
-            final Procedure1<Button> _function = new Procedure1<Button>() {
-              @Override
-              public void apply(final Button it) {
-                it.setId("back-button");
-                it.setText("Back");
-                final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(final ActionEvent it) {
-                    UndoRedoPlayerAction.this.startFastMode(true);
-                  }
-                };
-                it.setOnAction(_function);
-              }
-            };
-            Button _doubleArrow = ObjectExtensions.<Button>operator_doubleArrow(_button, _function);
-            _children.add(_doubleArrow);
-            ObservableList<Node> _children_1 = it.getChildren();
-            Button _button_1 = new Button();
-            final Procedure1<Button> _function_1 = new Procedure1<Button>() {
-              @Override
-              public void apply(final Button it) {
-                it.setId("reverse-button");
-                it.setText("undo");
-                final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(final ActionEvent it) {
-                    UndoRedoPlayerAction.this.stopFastMode();
-                    CommandStack _commandStack = UndoRedoPlayerAction.this.root.getCommandStack();
-                    _commandStack.undo();
-                  }
-                };
-                it.setOnAction(_function);
-              }
-            };
-            Button _doubleArrow_1 = ObjectExtensions.<Button>operator_doubleArrow(_button_1, _function_1);
-            _children_1.add(_doubleArrow_1);
-            ObservableList<Node> _children_2 = it.getChildren();
-            Button _button_2 = new Button();
-            final Procedure1<Button> _function_2 = new Procedure1<Button>() {
-              @Override
-              public void apply(final Button it) {
-                it.setId("pause-button");
-                it.setText("pause");
-                final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(final ActionEvent it) {
-                    UndoRedoPlayerAction.this.stopFastMode();
-                  }
-                };
-                it.setOnAction(_function);
-              }
-            };
-            Button _doubleArrow_2 = ObjectExtensions.<Button>operator_doubleArrow(_button_2, _function_2);
-            _children_2.add(_doubleArrow_2);
-            ObservableList<Node> _children_3 = it.getChildren();
-            Button _button_3 = new Button();
-            final Procedure1<Button> _function_3 = new Procedure1<Button>() {
-              @Override
-              public void apply(final Button it) {
-                it.setId("play-button");
-                it.setText("redo");
-                final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(final ActionEvent it) {
-                    UndoRedoPlayerAction.this.stopFastMode();
-                    CommandStack _commandStack = UndoRedoPlayerAction.this.root.getCommandStack();
-                    _commandStack.redo();
-                  }
-                };
-                it.setOnAction(_function);
-              }
-            };
-            Button _doubleArrow_3 = ObjectExtensions.<Button>operator_doubleArrow(_button_3, _function_3);
-            _children_3.add(_doubleArrow_3);
-            ObservableList<Node> _children_4 = it.getChildren();
-            Button _button_4 = new Button();
-            final Procedure1<Button> _function_4 = new Procedure1<Button>() {
-              @Override
-              public void apply(final Button it) {
-                it.setId("forward-button");
-                it.setText("forward");
-                final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(final ActionEvent it) {
-                    UndoRedoPlayerAction.this.startFastMode(false);
-                  }
-                };
-                it.setOnAction(_function);
-              }
-            };
-            Button _doubleArrow_4 = ObjectExtensions.<Button>operator_doubleArrow(_button_4, _function_4);
-            _children_4.add(_doubleArrow_4);
-            final EventHandler<MouseEvent> _function_5 = new EventHandler<MouseEvent>() {
-              @Override
-              public void handle(final MouseEvent it) {
-                UndoRedoPlayerAction.this.fade();
-              }
-            };
-            it.setOnMouseExited(_function_5);
-            final EventHandler<MouseEvent> _function_6 = new EventHandler<MouseEvent>() {
-              @Override
-              public void handle(final MouseEvent it) {
-                UndoRedoPlayerAction.this.show();
-              }
-            };
-            it.setOnMouseEntered(_function_6);
-          }
+        Button _doubleArrow_1 = ObjectExtensions.<Button>operator_doubleArrow(_button, _function_3);
+        _children_2.add(_doubleArrow_1);
+        ObservableList<Node> _children_3 = it_1.getChildren();
+        Button _button_1 = new Button();
+        final Procedure1<Button> _function_4 = (Button it_2) -> {
+          it_2.setId("reverse-button");
+          it_2.setText("undo");
+          final EventHandler<ActionEvent> _function_5 = (ActionEvent it_3) -> {
+            this.stopFastMode();
+            CommandStack _commandStack = this.root.getCommandStack();
+            _commandStack.undo();
+          };
+          it_2.setOnAction(_function_5);
         };
-        HBox _doubleArrow_1 = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function_1);
-        _children_1.add(_doubleArrow_1);
-        ObservableList<String> _stylesheets = it.getStylesheets();
-        String _uRI = ClassLoaderExtensions.toURI(UndoRedoPlayerAction.this, "../media/MovieNode.css");
-        _stylesheets.add(_uRI);
-      }
+        Button _doubleArrow_2 = ObjectExtensions.<Button>operator_doubleArrow(_button_1, _function_4);
+        _children_3.add(_doubleArrow_2);
+        ObservableList<Node> _children_4 = it_1.getChildren();
+        Button _button_2 = new Button();
+        final Procedure1<Button> _function_5 = (Button it_2) -> {
+          it_2.setId("pause-button");
+          it_2.setText("pause");
+          final EventHandler<ActionEvent> _function_6 = (ActionEvent it_3) -> {
+            this.stopFastMode();
+          };
+          it_2.setOnAction(_function_6);
+        };
+        Button _doubleArrow_3 = ObjectExtensions.<Button>operator_doubleArrow(_button_2, _function_5);
+        _children_4.add(_doubleArrow_3);
+        ObservableList<Node> _children_5 = it_1.getChildren();
+        Button _button_3 = new Button();
+        final Procedure1<Button> _function_6 = (Button it_2) -> {
+          it_2.setId("play-button");
+          it_2.setText("redo");
+          final EventHandler<ActionEvent> _function_7 = (ActionEvent it_3) -> {
+            this.stopFastMode();
+            CommandStack _commandStack = this.root.getCommandStack();
+            _commandStack.redo();
+          };
+          it_2.setOnAction(_function_7);
+        };
+        Button _doubleArrow_4 = ObjectExtensions.<Button>operator_doubleArrow(_button_3, _function_6);
+        _children_5.add(_doubleArrow_4);
+        ObservableList<Node> _children_6 = it_1.getChildren();
+        Button _button_4 = new Button();
+        final Procedure1<Button> _function_7 = (Button it_2) -> {
+          it_2.setId("forward-button");
+          it_2.setText("forward");
+          final EventHandler<ActionEvent> _function_8 = (ActionEvent it_3) -> {
+            this.startFastMode(false);
+          };
+          it_2.setOnAction(_function_8);
+        };
+        Button _doubleArrow_5 = ObjectExtensions.<Button>operator_doubleArrow(_button_4, _function_7);
+        _children_6.add(_doubleArrow_5);
+        final EventHandler<MouseEvent> _function_8 = (MouseEvent it_2) -> {
+          this.fade();
+        };
+        it_1.setOnMouseExited(_function_8);
+        final EventHandler<MouseEvent> _function_9 = (MouseEvent it_2) -> {
+          this.show();
+        };
+        it_1.setOnMouseEntered(_function_9);
+      };
+      HBox _doubleArrow_1 = ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function_2);
+      _children_1.add(_doubleArrow_1);
+      ObservableList<String> _stylesheets = it.getStylesheets();
+      String _uRI = ClassLoaderExtensions.toURI(this, "../media/MovieNode.css");
+      _stylesheets.add(_uRI);
     };
     return ObjectExtensions.<StackPane>operator_doubleArrow(_stackPane, _function);
   }
@@ -230,25 +185,19 @@ public class UndoRedoPlayerAction implements DiagramAction {
     {
       this.stopFastMode();
       FadeTransition _fadeTransition = new FadeTransition();
-      final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-        @Override
-        public void apply(final FadeTransition it) {
-          it.setNode(UndoRedoPlayerAction.this.controlPanel);
-          Duration _seconds = DurationExtensions.seconds(1);
-          it.setDuration(_seconds);
-          it.setFromValue(1);
-          it.setToValue(0);
-          final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent it) {
-              HeadsUpDisplay _headsUpDisplay = UndoRedoPlayerAction.this.root.getHeadsUpDisplay();
-              ObservableList<Node> _children = _headsUpDisplay.getChildren();
-              _children.remove(UndoRedoPlayerAction.this.controlPanel);
-            }
-          };
-          it.setOnFinished(_function);
-          it.play();
-        }
+      final Procedure1<FadeTransition> _function = (FadeTransition it) -> {
+        it.setNode(this.controlPanel);
+        Duration _seconds = DurationExtensions.seconds(1);
+        it.setDuration(_seconds);
+        it.setFromValue(1);
+        it.setToValue(0);
+        final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
+          HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
+          ObservableList<Node> _children = _headsUpDisplay.getChildren();
+          _children.remove(this.controlPanel);
+        };
+        it.setOnFinished(_function_1);
+        it.play();
       };
       FadeTransition _doubleArrow = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
       _xblockexpression = this.fadeTransition = _doubleArrow;
@@ -269,31 +218,28 @@ public class UndoRedoPlayerAction implements DiagramAction {
   protected void startFastMode(final boolean isUndo) {
     this.stopFastMode();
     final CommandStack commandStack = this.root.getCommandStack();
-    final AnimationQueue.Listener _function = new AnimationQueue.Listener() {
-      @Override
-      public void handleQueueEmpty() {
-        boolean _and = false;
-        if (!isUndo) {
-          _and = false;
+    final AnimationQueue.Listener _function = () -> {
+      boolean _and = false;
+      if (!isUndo) {
+        _and = false;
+      } else {
+        boolean _canUndo = commandStack.canUndo();
+        _and = _canUndo;
+      }
+      if (_and) {
+        commandStack.undo();
+      } else {
+        boolean _and_1 = false;
+        if (!(!isUndo)) {
+          _and_1 = false;
         } else {
-          boolean _canUndo = commandStack.canUndo();
-          _and = _canUndo;
+          boolean _canRedo = commandStack.canRedo();
+          _and_1 = _canRedo;
         }
-        if (_and) {
-          commandStack.undo();
+        if (_and_1) {
+          commandStack.redo();
         } else {
-          boolean _and_1 = false;
-          if (!(!isUndo)) {
-            _and_1 = false;
-          } else {
-            boolean _canRedo = commandStack.canRedo();
-            _and_1 = _canRedo;
-          }
-          if (_and_1) {
-            commandStack.redo();
-          } else {
-            UndoRedoPlayerAction.this.stopFastMode();
-          }
+          this.stopFastMode();
         }
       }
     };

@@ -25,52 +25,43 @@ public class HeadsUpDisplay extends Group {
   private ChangeListener<Number> sceneListener;
   
   public HeadsUpDisplay() {
-    final ChangeListener<Number> _function = new ChangeListener<Number>() {
-      @Override
-      public void changed(final ObservableValue<? extends Number> property, final Number oldVlaue, final Number newValue) {
-        ObservableList<Node> _children = HeadsUpDisplay.this.getChildren();
-        final Consumer<Node> _function = new Consumer<Node>() {
-          @Override
-          public void accept(final Node it) {
-            HeadsUpDisplay.this.place(it);
-          }
-        };
-        _children.forEach(_function);
-      }
+    final ChangeListener<Number> _function = (ObservableValue<? extends Number> property, Number oldVlaue, Number newValue) -> {
+      ObservableList<Node> _children = this.getChildren();
+      final Consumer<Node> _function_1 = (Node it) -> {
+        this.place(it);
+      };
+      _children.forEach(_function_1);
     };
     this.sceneListener = _function;
     ReadOnlyObjectProperty<Scene> _sceneProperty = this.sceneProperty();
-    final ChangeListener<Scene> _function_1 = new ChangeListener<Scene>() {
-      @Override
-      public void changed(final ObservableValue<? extends Scene> property, final Scene oldVal, final Scene newVal) {
-        ReadOnlyDoubleProperty _widthProperty = null;
-        if (oldVal!=null) {
-          _widthProperty=oldVal.widthProperty();
-        }
-        if (_widthProperty!=null) {
-          _widthProperty.removeListener(HeadsUpDisplay.this.sceneListener);
-        }
-        ReadOnlyDoubleProperty _heightProperty = null;
-        if (oldVal!=null) {
-          _heightProperty=oldVal.heightProperty();
-        }
-        if (_heightProperty!=null) {
-          _heightProperty.removeListener(HeadsUpDisplay.this.sceneListener);
-        }
-        ReadOnlyDoubleProperty _widthProperty_1 = null;
-        if (newVal!=null) {
-          _widthProperty_1=newVal.widthProperty();
-        }
-        if (_widthProperty_1!=null) {
-          _widthProperty_1.addListener(HeadsUpDisplay.this.sceneListener);
-        }
-        ReadOnlyDoubleProperty _heightProperty_1 = null;
-        if (newVal!=null) {
-          _heightProperty_1=newVal.heightProperty();
-        }
-        if (_heightProperty_1!=null) {
-          _heightProperty_1.addListener(HeadsUpDisplay.this.sceneListener);
-        }
+    final ChangeListener<Scene> _function_1 = (ObservableValue<? extends Scene> property, Scene oldVal, Scene newVal) -> {
+      ReadOnlyDoubleProperty _widthProperty = null;
+      if (oldVal!=null) {
+        _widthProperty=oldVal.widthProperty();
+      }
+      if (_widthProperty!=null) {
+        _widthProperty.removeListener(this.sceneListener);
+      }
+      ReadOnlyDoubleProperty _heightProperty = null;
+      if (oldVal!=null) {
+        _heightProperty=oldVal.heightProperty();
+      }
+      if (_heightProperty!=null) {
+        _heightProperty.removeListener(this.sceneListener);
+      }
+      ReadOnlyDoubleProperty _widthProperty_1 = null;
+      if (newVal!=null) {
+        _widthProperty_1=newVal.widthProperty();
+      }
+      if (_widthProperty_1!=null) {
+        _widthProperty_1.addListener(this.sceneListener);
+      }
+      ReadOnlyDoubleProperty _heightProperty_1 = null;
+      if (newVal!=null) {
+        _heightProperty_1=newVal.heightProperty();
+      }
+      if (_heightProperty_1!=null) {
+        _heightProperty_1.addListener(this.sceneListener);
       }
     };
     _sceneProperty.addListener(_function_1);

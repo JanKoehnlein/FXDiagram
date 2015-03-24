@@ -35,18 +35,18 @@ import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.UndoAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.eclipse.FXDiagramView;
-import de.fxdiagram.eclipse.mapping.AbstractMapping;
-import de.fxdiagram.eclipse.mapping.ConnectionMapping;
-import de.fxdiagram.eclipse.mapping.ConnectionMappingCall;
-import de.fxdiagram.eclipse.mapping.DiagramMappingCall;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.eclipse.mapping.InterpreterContext;
-import de.fxdiagram.eclipse.mapping.MappingCall;
-import de.fxdiagram.eclipse.mapping.NodeMappingCall;
-import de.fxdiagram.eclipse.mapping.XDiagramConfig;
-import de.fxdiagram.eclipse.mapping.XDiagramConfigInterpreter;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
+import de.fxdiagram.mapping.AbstractMapping;
+import de.fxdiagram.mapping.ConnectionMapping;
+import de.fxdiagram.mapping.ConnectionMappingCall;
+import de.fxdiagram.mapping.DiagramMappingCall;
+import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
+import de.fxdiagram.mapping.InterpreterContext;
+import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.NodeMappingCall;
+import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.XDiagramConfigInterpreter;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import java.util.Collections;
 import java.util.Map;
@@ -182,54 +182,39 @@ public class FXDiagramTab {
     String _name = this.root.getName();
     this.tab.setText(_name);
     Scene _scene = new Scene(this.root);
-    final Procedure1<Scene> _function = new Procedure1<Scene>() {
-      @Override
-      public void apply(final Scene it) {
-        PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
-        it.setCamera(_perspectiveCamera);
-        FXDiagramTab.this.root.activate();
-      }
+    final Procedure1<Scene> _function = (Scene it) -> {
+      PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
+      it.setCamera(_perspectiveCamera);
+      this.root.activate();
     };
     Scene _doubleArrow = ObjectExtensions.<Scene>operator_doubleArrow(_scene, _function);
     this.canvas.setScene(_doubleArrow);
-    final DisposeListener _function_1 = new DisposeListener() {
-      @Override
-      public void widgetDisposed(final DisposeEvent it) {
-        FXDiagramTab.this.gestureConverter.dispose();
-        IWorkbenchPartSite _site = view.getSite();
-        IWorkbenchPage _page = _site.getPage();
-        _page.removePartListener(FXDiagramTab.this.listener);
-        Set<IEditorPart> _keySet = FXDiagramTab.this.contributingEditors.keySet();
-        final Consumer<IEditorPart> _function = new Consumer<IEditorPart>() {
-          @Override
-          public void accept(final IEditorPart it) {
-            FXDiagramTab.this.deregister(it);
-          }
-        };
-        _keySet.forEach(_function);
-      }
+    final DisposeListener _function_1 = (DisposeEvent it) -> {
+      this.gestureConverter.dispose();
+      IWorkbenchPartSite _site = view.getSite();
+      IWorkbenchPage _page = _site.getPage();
+      _page.removePartListener(this.listener);
+      Set<IEditorPart> _keySet = this.contributingEditors.keySet();
+      final Consumer<IEditorPart> _function_2 = (IEditorPart it_1) -> {
+        this.deregister(it_1);
+      };
+      _keySet.forEach(_function_2);
     };
     this.tab.addDisposeListener(_function_1);
     StringProperty _nameProperty = this.root.nameProperty();
-    final ChangeListener<String> _function_2 = new ChangeListener<String>() {
-      @Override
-      public void changed(final ObservableValue<? extends String> p, final String o, final String n) {
-        FXDiagramTab.this.tab.setText(n);
-      }
+    final ChangeListener<String> _function_2 = (ObservableValue<? extends String> p, String o, String n) -> {
+      this.tab.setText(n);
     };
     _nameProperty.addListener(_function_2);
     BooleanProperty _needsSaveProperty = this.root.needsSaveProperty();
-    final ChangeListener<Boolean> _function_3 = new ChangeListener<Boolean>() {
-      @Override
-      public void changed(final ObservableValue<? extends Boolean> p, final Boolean o, final Boolean n) {
-        if ((n).booleanValue()) {
-          String _name = FXDiagramTab.this.root.getName();
-          String _plus = ("*" + _name);
-          FXDiagramTab.this.tab.setText(_plus);
-        } else {
-          String _name_1 = FXDiagramTab.this.root.getName();
-          FXDiagramTab.this.tab.setText(_name_1);
-        }
+    final ChangeListener<Boolean> _function_3 = (ObservableValue<? extends Boolean> p, Boolean o, Boolean n) -> {
+      if ((n).booleanValue()) {
+        String _name_1 = this.root.getName();
+        String _plus = ("*" + _name_1);
+        this.tab.setText(_plus);
+      } else {
+        String _name_2 = this.root.getName();
+        this.tab.setText(_name_2);
       }
     };
     _needsSaveProperty.addListener(_function_3);
@@ -240,45 +225,39 @@ public class FXDiagramTab {
   
   protected XRoot createRoot() {
     XRoot _xRoot = new XRoot();
-    final Procedure1<XRoot> _function = new Procedure1<XRoot>() {
-      @Override
-      public void apply(final XRoot it) {
-        XDiagram _xDiagram = new XDiagram();
-        it.setRootDiagram(_xDiagram);
-        ObservableList<DomainObjectProvider> _domainObjectProviders = it.getDomainObjectProviders();
-        ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
-        _domainObjectProviders.add(_classLoaderProvider);
-        ObservableList<DomainObjectProvider> _domainObjectProviders_1 = it.getDomainObjectProviders();
-        XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-        Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-        final Function1<XDiagramConfig, IMappedElementDescriptorProvider> _function = new Function1<XDiagramConfig, IMappedElementDescriptorProvider>() {
-          @Override
-          public IMappedElementDescriptorProvider apply(final XDiagramConfig it) {
-            return it.getDomainObjectProvider();
-          }
-        };
-        Iterable<IMappedElementDescriptorProvider> _map = IterableExtensions.map(_configurations, _function);
-        Set<IMappedElementDescriptorProvider> _set = IterableExtensions.<IMappedElementDescriptorProvider>toSet(_map);
-        Iterables.<DomainObjectProvider>addAll(_domainObjectProviders_1, _set);
-        DiagramActionRegistry _diagramActionRegistry = it.getDiagramActionRegistry();
-        CenterAction _centerAction = new CenterAction();
-        DeleteAction _deleteAction = new DeleteAction();
-        LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
-        ExportSvgAction _exportSvgAction = new ExportSvgAction();
-        RedoAction _redoAction = new RedoAction();
-        UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-        UndoAction _undoAction = new UndoAction();
-        RevealAction _revealAction = new RevealAction();
-        LoadAction _loadAction = new LoadAction();
-        SaveAction _saveAction = new SaveAction();
-        SelectAllAction _selectAllAction = new SelectAllAction();
-        ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
-        NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
-        NavigateNextAction _navigateNextAction = new NavigateNextAction();
-        FullScreenAction _fullScreenAction = new FullScreenAction();
-        UndoRedoPlayerAction _undoRedoPlayerAction_1 = new UndoRedoPlayerAction();
-        _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction_1)));
-      }
+    final Procedure1<XRoot> _function = (XRoot it) -> {
+      XDiagram _xDiagram = new XDiagram();
+      it.setRootDiagram(_xDiagram);
+      ObservableList<DomainObjectProvider> _domainObjectProviders = it.getDomainObjectProviders();
+      ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
+      _domainObjectProviders.add(_classLoaderProvider);
+      ObservableList<DomainObjectProvider> _domainObjectProviders_1 = it.getDomainObjectProviders();
+      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
+      Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
+      final Function1<XDiagramConfig, IMappedElementDescriptorProvider> _function_1 = (XDiagramConfig it_1) -> {
+        return it_1.getDomainObjectProvider();
+      };
+      Iterable<IMappedElementDescriptorProvider> _map = IterableExtensions.map(_configurations, _function_1);
+      Set<IMappedElementDescriptorProvider> _set = IterableExtensions.<IMappedElementDescriptorProvider>toSet(_map);
+      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders_1, _set);
+      DiagramActionRegistry _diagramActionRegistry = it.getDiagramActionRegistry();
+      CenterAction _centerAction = new CenterAction();
+      DeleteAction _deleteAction = new DeleteAction();
+      LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
+      ExportSvgAction _exportSvgAction = new ExportSvgAction();
+      RedoAction _redoAction = new RedoAction();
+      UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
+      UndoAction _undoAction = new UndoAction();
+      RevealAction _revealAction = new RevealAction();
+      LoadAction _loadAction = new LoadAction();
+      SaveAction _saveAction = new SaveAction();
+      SelectAllAction _selectAllAction = new SelectAllAction();
+      ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
+      NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
+      NavigateNextAction _navigateNextAction = new NavigateNextAction();
+      FullScreenAction _fullScreenAction = new FullScreenAction();
+      UndoRedoPlayerAction _undoRedoPlayerAction_1 = new UndoRedoPlayerAction();
+      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction_1)));
     };
     return ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
   }
@@ -384,10 +363,7 @@ public class FXDiagramTab {
             this.register(editor);
             XDiagram _diagram_1 = this.root.getDiagram();
             interpreterContext.setDiagram(_diagram_1);
-            final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-              @Override
-              public void apply(final XConnection it) {
-              }
+            final Procedure1<XConnection> _function = (XConnection it) -> {
             };
             this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext, true);
             CommandStack _commandStack_2 = this.root.getCommandStack();
@@ -400,54 +376,45 @@ public class FXDiagramTab {
     final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element);
     XDiagram _diagram_2 = this.root.getDiagram();
     Iterable<XShape> _allShapes = _diagram_2.getAllShapes();
-    final Function1<XShape, Boolean> _function_1 = new Function1<XShape, Boolean>() {
-      @Override
-      public Boolean apply(final XShape it) {
-        boolean _switchResult = false;
-        boolean _matched = false;
-        if (!_matched) {
-          if (it instanceof XNode) {
-            _matched=true;
-            DomainObjectDescriptor _domainObject = ((XNode)it).getDomainObject();
-            _switchResult = Objects.equal(_domainObject, descriptor);
-          }
+    final Function1<XShape, Boolean> _function_1 = (XShape it) -> {
+      boolean _switchResult = false;
+      boolean _matched = false;
+      if (!_matched) {
+        if (it instanceof XNode) {
+          _matched=true;
+          DomainObjectDescriptor _domainObject = ((XNode)it).getDomainObject();
+          _switchResult = Objects.equal(_domainObject, descriptor);
         }
-        if (!_matched) {
-          if (it instanceof XConnection) {
-            _matched=true;
-            DomainObjectDescriptor _domainObject = ((XConnection)it).getDomainObject();
-            _switchResult = Objects.equal(_domainObject, descriptor);
-          }
-        }
-        if (!_matched) {
-          _switchResult = false;
-        }
-        return Boolean.valueOf(_switchResult);
       }
+      if (!_matched) {
+        if (it instanceof XConnection) {
+          _matched=true;
+          DomainObjectDescriptor _domainObject = ((XConnection)it).getDomainObject();
+          _switchResult = Objects.equal(_domainObject, descriptor);
+        }
+      }
+      if (!_matched) {
+        _switchResult = false;
+      }
+      return Boolean.valueOf(_switchResult);
     };
     final XShape centerShape = IterableExtensions.<XShape>findFirst(_allShapes, _function_1);
     CommandStack _commandStack_3 = this.root.getCommandStack();
     ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
-    final Procedure1<ParallelAnimationCommand> _function_2 = new Procedure1<ParallelAnimationCommand>() {
-      @Override
-      public void apply(final ParallelAnimationCommand it) {
-        boolean _needsLayout = interpreterContext.needsLayout();
-        if (_needsLayout) {
-          Layouter _layouter = new Layouter();
-          XDiagram _diagram = FXDiagramTab.this.root.getDiagram();
-          Duration _millis = DurationExtensions.millis(500);
-          LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram, _millis, centerShape);
-          it.operator_add(_createLayoutCommand);
-        }
-        final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
-          @Override
-          public Boolean apply(final XShape it) {
-            return Boolean.valueOf(Objects.equal(it, centerShape));
-          }
-        };
-        SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(FXDiagramTab.this.root, _function);
-        it.operator_add(_selectAndRevealCommand);
+    final Procedure1<ParallelAnimationCommand> _function_2 = (ParallelAnimationCommand it) -> {
+      boolean _needsLayout = interpreterContext.needsLayout();
+      if (_needsLayout) {
+        Layouter _layouter = new Layouter();
+        XDiagram _diagram_3 = this.root.getDiagram();
+        Duration _millis = DurationExtensions.millis(500);
+        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_3, _millis, centerShape);
+        it.operator_add(_createLayoutCommand);
       }
+      final Function1<XShape, Boolean> _function_3 = (XShape it_1) -> {
+        return Boolean.valueOf(Objects.equal(it_1, centerShape));
+      };
+      SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_3);
+      it.operator_add(_selectAndRevealCommand);
     };
     ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_2);
     _commandStack_3.execute(_doubleArrow);
@@ -470,11 +437,8 @@ public class FXDiagramTab {
     {
       XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
       Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-      final Function1<XDiagramConfig, Iterable<? extends AbstractMapping<T>>> _function = new Function1<XDiagramConfig, Iterable<? extends AbstractMapping<T>>>() {
-        @Override
-        public Iterable<? extends AbstractMapping<T>> apply(final XDiagramConfig it) {
-          return it.<T>getMappings(domainObject);
-        }
+      final Function1<XDiagramConfig, Iterable<? extends AbstractMapping<T>>> _function = (XDiagramConfig it) -> {
+        return it.<T>getMappings(domainObject);
       };
       Iterable<Iterable<? extends AbstractMapping<T>>> _map = IterableExtensions.map(_configurations, _function);
       Iterable<AbstractMapping<T>> _flatten = Iterables.<AbstractMapping<T>>concat(_map);

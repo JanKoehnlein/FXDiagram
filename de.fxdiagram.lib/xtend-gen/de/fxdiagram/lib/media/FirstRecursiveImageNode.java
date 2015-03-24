@@ -60,11 +60,8 @@ public class FirstRecursiveImageNode extends XNode {
     XDiagram _diagram = CoreExtensions.getDiagram(this);
     ViewportTransform _viewportTransform = _diagram.getViewportTransform();
     ReadOnlyDoubleProperty _scaleProperty_2 = _viewportTransform.scaleProperty();
-    final ChangeListener<Number> _function = new ChangeListener<Number>() {
-      @Override
-      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        FirstRecursiveImageNode.this.updateChildPanes();
-      }
+    final ChangeListener<Number> _function = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
+      this.updateChildPanes();
     };
     _scaleProperty_2.addListener(_function);
   }
@@ -110,22 +107,19 @@ public class FirstRecursiveImageNode extends XNode {
   
   public Group createScaledPane() {
     Group _createPane = this.recursiveImageNode.createPane();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      @Override
-      public void apply(final Group it) {
-        DoubleProperty _scaleXProperty = it.scaleXProperty();
-        DoubleProperty _scaleProperty = FirstRecursiveImageNode.this.recursiveImageNode.scaleProperty();
-        _scaleXProperty.bind(_scaleProperty);
-        DoubleProperty _scaleYProperty = it.scaleYProperty();
-        DoubleProperty _scaleProperty_1 = FirstRecursiveImageNode.this.recursiveImageNode.scaleProperty();
-        _scaleYProperty.bind(_scaleProperty_1);
-        DoubleProperty _layoutXProperty = it.layoutXProperty();
-        DoubleProperty _xProperty = FirstRecursiveImageNode.this.recursiveImageNode.xProperty();
-        _layoutXProperty.bind(_xProperty);
-        DoubleProperty _layoutYProperty = it.layoutYProperty();
-        DoubleProperty _yProperty = FirstRecursiveImageNode.this.recursiveImageNode.yProperty();
-        _layoutYProperty.bind(_yProperty);
-      }
+    final Procedure1<Group> _function = (Group it) -> {
+      DoubleProperty _scaleXProperty = it.scaleXProperty();
+      DoubleProperty _scaleProperty = this.recursiveImageNode.scaleProperty();
+      _scaleXProperty.bind(_scaleProperty);
+      DoubleProperty _scaleYProperty = it.scaleYProperty();
+      DoubleProperty _scaleProperty_1 = this.recursiveImageNode.scaleProperty();
+      _scaleYProperty.bind(_scaleProperty_1);
+      DoubleProperty _layoutXProperty = it.layoutXProperty();
+      DoubleProperty _xProperty = this.recursiveImageNode.xProperty();
+      _layoutXProperty.bind(_xProperty);
+      DoubleProperty _layoutYProperty = it.layoutYProperty();
+      DoubleProperty _yProperty = this.recursiveImageNode.yProperty();
+      _layoutYProperty.bind(_yProperty);
     };
     return ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
   }

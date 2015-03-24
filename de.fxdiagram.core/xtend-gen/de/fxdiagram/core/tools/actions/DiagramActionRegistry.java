@@ -17,11 +17,8 @@ public class DiagramActionRegistry {
   private Map<Symbol.Type, DiagramAction> symbol2action = CollectionLiterals.<Symbol.Type, DiagramAction>newHashMap();
   
   public void operator_add(final Iterable<? extends DiagramAction> diagramActions) {
-    final Consumer<DiagramAction> _function = new Consumer<DiagramAction>() {
-      @Override
-      public void accept(final DiagramAction it) {
-        DiagramActionRegistry.this.operator_add(it);
-      }
+    final Consumer<DiagramAction> _function = (DiagramAction it) -> {
+      this.operator_add(it);
     };
     diagramActions.forEach(_function);
   }

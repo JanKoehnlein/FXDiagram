@@ -48,19 +48,13 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
     boolean _notEquals = (_size != 0);
     if (_notEquals) {
       ArrayList<XNode> _choiceNodes_1 = this.getChoiceNodes();
-      final Function1<XNode, Double> _function = new Function1<XNode, Double>() {
-        @Override
-        public Double apply(final XNode it) {
-          Bounds _layoutBounds = it.getLayoutBounds();
-          return Double.valueOf(_layoutBounds.getWidth());
-        }
+      final Function1<XNode, Double> _function = (XNode it) -> {
+        Bounds _layoutBounds = it.getLayoutBounds();
+        return Double.valueOf(_layoutBounds.getWidth());
       };
       List<Double> _map = ListExtensions.<XNode, Double>map(_choiceNodes_1, _function);
-      final Function2<Double, Double, Double> _function_1 = new Function2<Double, Double, Double>() {
-        @Override
-        public Double apply(final Double a, final Double b) {
-          return Double.valueOf(DoubleExtensions.operator_plus(a, b));
-        }
+      final Function2<Double, Double, Double> _function_1 = (Double a, Double b) -> {
+        return Double.valueOf(DoubleExtensions.operator_plus(a, b));
       };
       Double _reduce = IterableExtensions.<Double>reduce(_map, _function_1);
       ArrayList<XNode> _choiceNodes_2 = this.getChoiceNodes();
@@ -155,32 +149,26 @@ public class CoverFlowChoice extends AbstractChoiceGraphics {
             Point3D _point3D = new Point3D(0, 1, 0);
             TransformExtensions.rotate(trafo, ((direction * this.angle) * fraction), _point3D);
             TransformExtensions.translate(trafo, (((i - interpolatedPosition) * this.deltaX) + (((0.5 * fraction) * direction) * this.gap)), 0, (-fraction));
-            final Procedure1<XNode> _function = new Procedure1<XNode>() {
-              @Override
-              public void apply(final XNode it) {
-                ObservableList<Transform> _transforms = node.getTransforms();
-                _transforms.setAll(trafo);
-                node.toFront();
-                ColorAdjust _colorAdjust = new ColorAdjust();
-                final Procedure1<ColorAdjust> _function = new Procedure1<ColorAdjust>() {
-                  @Override
-                  public void apply(final ColorAdjust it) {
-                    AbstractBaseChooser _chooser = CoverFlowChoice.this.getChooser();
-                    XDiagram _diagram = _chooser.getDiagram();
-                    Paint _backgroundPaint = _diagram.getBackgroundPaint();
-                    boolean _equals = Objects.equal(_backgroundPaint, Color.BLACK);
-                    if (_equals) {
-                      it.setBrightness((opacity - 1));
-                    } else {
-                      it.setBrightness((1 - opacity));
-                    }
-                    Reflection _reflection = new Reflection();
-                    it.setInput(_reflection);
-                  }
-                };
-                ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function);
-                node.setEffect(_doubleArrow);
-              }
+            final Procedure1<XNode> _function = (XNode it) -> {
+              ObservableList<Transform> _transforms = node.getTransforms();
+              _transforms.setAll(trafo);
+              node.toFront();
+              ColorAdjust _colorAdjust = new ColorAdjust();
+              final Procedure1<ColorAdjust> _function_1 = (ColorAdjust it_1) -> {
+                AbstractBaseChooser _chooser = this.getChooser();
+                XDiagram _diagram = _chooser.getDiagram();
+                Paint _backgroundPaint = _diagram.getBackgroundPaint();
+                boolean _equals = Objects.equal(_backgroundPaint, Color.BLACK);
+                if (_equals) {
+                  it_1.setBrightness((opacity - 1));
+                } else {
+                  it_1.setBrightness((1 - opacity));
+                }
+                Reflection _reflection = new Reflection();
+                it_1.setInput(_reflection);
+              };
+              ColorAdjust _doubleArrow = ObjectExtensions.<ColorAdjust>operator_doubleArrow(_colorAdjust, _function_1);
+              node.setEffect(_doubleArrow);
             };
             _xblockexpression_1 = ObjectExtensions.<XNode>operator_doubleArrow(node, _function);
           }

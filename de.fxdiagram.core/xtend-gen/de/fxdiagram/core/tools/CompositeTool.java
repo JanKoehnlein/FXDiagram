@@ -18,48 +18,36 @@ public class CompositeTool implements XDiagramTool {
   
   @Override
   public boolean activate() {
-    final Function1<XDiagramTool, Boolean> _function = new Function1<XDiagramTool, Boolean>() {
-      @Override
-      public Boolean apply(final XDiagramTool it) {
-        return Boolean.valueOf(it.activate());
-      }
+    final Function1<XDiagramTool, Boolean> _function = (XDiagramTool it) -> {
+      return Boolean.valueOf(it.activate());
     };
     List<Boolean> _map = ListExtensions.<XDiagramTool, Boolean>map(this.children, _function);
-    final Function2<Boolean, Boolean, Boolean> _function_1 = new Function2<Boolean, Boolean, Boolean>() {
-      @Override
-      public Boolean apply(final Boolean a, final Boolean b) {
-        boolean _or = false;
-        if ((a).booleanValue()) {
-          _or = true;
-        } else {
-          _or = (b).booleanValue();
-        }
-        return Boolean.valueOf(_or);
+    final Function2<Boolean, Boolean, Boolean> _function_1 = (Boolean a, Boolean b) -> {
+      boolean _or = false;
+      if ((a).booleanValue()) {
+        _or = true;
+      } else {
+        _or = (b).booleanValue();
       }
+      return Boolean.valueOf(_or);
     };
     return (boolean) IterableExtensions.<Boolean>reduce(_map, _function_1);
   }
   
   @Override
   public boolean deactivate() {
-    final Function1<XDiagramTool, Boolean> _function = new Function1<XDiagramTool, Boolean>() {
-      @Override
-      public Boolean apply(final XDiagramTool it) {
-        return Boolean.valueOf(it.deactivate());
-      }
+    final Function1<XDiagramTool, Boolean> _function = (XDiagramTool it) -> {
+      return Boolean.valueOf(it.deactivate());
     };
     List<Boolean> _map = ListExtensions.<XDiagramTool, Boolean>map(this.children, _function);
-    final Function2<Boolean, Boolean, Boolean> _function_1 = new Function2<Boolean, Boolean, Boolean>() {
-      @Override
-      public Boolean apply(final Boolean a, final Boolean b) {
-        boolean _or = false;
-        if ((a).booleanValue()) {
-          _or = true;
-        } else {
-          _or = (b).booleanValue();
-        }
-        return Boolean.valueOf(_or);
+    final Function2<Boolean, Boolean, Boolean> _function_1 = (Boolean a, Boolean b) -> {
+      boolean _or = false;
+      if ((a).booleanValue()) {
+        _or = true;
+      } else {
+        _or = (b).booleanValue();
       }
+      return Boolean.valueOf(_or);
     };
     return (boolean) IterableExtensions.<Boolean>reduce(_map, _function_1);
   }

@@ -44,11 +44,8 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
   public boolean next() {
     XDiagram _host = this.getHost();
     final ObservableList<XNode> nodes = _host.getNodes();
-    final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
-      @Override
-      public Boolean apply(final XNode it) {
-        return Boolean.valueOf(it.getSelected());
-      }
+    final Function1<XNode, Boolean> _function = (XNode it) -> {
+      return Boolean.valueOf(it.getSelected());
     };
     final XNode current = IterableExtensions.<XNode>findFirst(nodes, _function);
     XNode _xifexpression = null;
@@ -73,11 +70,8 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
   public boolean previous() {
     XDiagram _host = this.getHost();
     final ObservableList<XNode> nodes = _host.getNodes();
-    final Function1<XNode, Boolean> _function = new Function1<XNode, Boolean>() {
-      @Override
-      public Boolean apply(final XNode it) {
-        return Boolean.valueOf(it.getSelected());
-      }
+    final Function1<XNode, Boolean> _function = (XNode it) -> {
+      return Boolean.valueOf(it.getSelected());
     };
     final XNode current = IterableExtensions.<XNode>findLast(nodes, _function);
     XNode _xifexpression = null;
@@ -110,27 +104,18 @@ public class DiagramNavigationBehavior extends AbstractHostBehavior<XDiagram> im
         Point2D _center = BoundsExtensions.center(_boundsInLocal);
         Point2D _localToDiagram = CoreExtensions.localToDiagram(node, _center);
         ViewportTransition _viewportTransition = new ViewportTransition(_root, _localToDiagram, 1);
-        final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
-          @Override
-          public void apply(final ViewportTransition it) {
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
-              public void handle(final ActionEvent it) {
-                XDiagram _host = DiagramNavigationBehavior.this.getHost();
-                XRoot _root = CoreExtensions.getRoot(_host);
-                Iterable<XShape> _currentSelection = _root.getCurrentSelection();
-                final Consumer<XShape> _function = new Consumer<XShape>() {
-                  @Override
-                  public void accept(final XShape it) {
-                    it.setSelected(false);
-                  }
-                };
-                _currentSelection.forEach(_function);
-                node.setSelected(true);
-              }
+        final Procedure1<ViewportTransition> _function = (ViewportTransition it_1) -> {
+          final EventHandler<ActionEvent> _function_1 = (ActionEvent it_2) -> {
+            XDiagram _host_1 = DiagramNavigationBehavior.this.getHost();
+            XRoot _root_1 = CoreExtensions.getRoot(_host_1);
+            Iterable<XShape> _currentSelection = _root_1.getCurrentSelection();
+            final Consumer<XShape> _function_2 = (XShape it_3) -> {
+              it_3.setSelected(false);
             };
-            it.setOnFinished(_function);
-          }
+            _currentSelection.forEach(_function_2);
+            node.setSelected(true);
+          };
+          it_1.setOnFinished(_function_1);
         };
         return ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function);
       }

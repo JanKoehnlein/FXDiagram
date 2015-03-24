@@ -7,14 +7,14 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.CircleArrowHead;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
-import de.fxdiagram.eclipse.mapping.AbstractDiagramConfig;
-import de.fxdiagram.eclipse.mapping.ConnectionMapping;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.eclipse.mapping.MappingAcceptor;
-import de.fxdiagram.eclipse.mapping.MultiConnectionMappingCall;
-import de.fxdiagram.eclipse.mapping.NodeMapping;
-import de.fxdiagram.eclipse.shapes.BaseConnection;
+import de.fxdiagram.eclipse.mapping.AbstractEclipseDiagramConfig;
+import de.fxdiagram.mapping.ConnectionMapping;
+import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
+import de.fxdiagram.mapping.MappingAcceptor;
+import de.fxdiagram.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.shapes.BaseConnection;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDescriptor;
 import de.fxdiagram.pde.BundleDescriptorProvider;
@@ -32,7 +32,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class BundleDiagramConfig extends AbstractDiagramConfig {
+public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
   @Override
   protected IMappedElementDescriptorProvider createDomainObjectProvider() {
     return new BundleDescriptorProvider();

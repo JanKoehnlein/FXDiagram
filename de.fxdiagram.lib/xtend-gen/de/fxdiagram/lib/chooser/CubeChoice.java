@@ -30,13 +30,10 @@ public class CubeChoice extends AbstractChoiceGraphics {
   @Override
   public void setInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
-    final Function2<Double, XNode, Double> _function = new Function2<Double, XNode, Double>() {
-      @Override
-      public Double apply(final Double a, final XNode b) {
-        Bounds _layoutBounds = b.getLayoutBounds();
-        double _width = _layoutBounds.getWidth();
-        return Double.valueOf(Math.max((a).doubleValue(), _width));
-      }
+    final Function2<Double, XNode, Double> _function = (Double a, XNode b) -> {
+      Bounds _layoutBounds = b.getLayoutBounds();
+      double _width = _layoutBounds.getWidth();
+      return Double.valueOf(Math.max((a).doubleValue(), _width));
     };
     Double _fold = IterableExtensions.<XNode, Double>fold(_choiceNodes, Double.valueOf(0.0), _function);
     double _plus = ((_fold).doubleValue() + this.spacing);
@@ -51,12 +48,9 @@ public class CubeChoice extends AbstractChoiceGraphics {
     final int rightNodeIndex = ((((int) interpolatedPosition) + 1) % _size_1);
     this.applyTransform(rightNodeIndex, (angle - 90));
     ArrayList<XNode> _choiceNodes_3 = this.getChoiceNodes();
-    final Procedure2<XNode, Integer> _function_1 = new Procedure2<XNode, Integer>() {
-      @Override
-      public void apply(final XNode node, final Integer i) {
-        if (((i != leftNodeIndex) && (i != rightNodeIndex))) {
-          node.setVisible(false);
-        }
+    final Procedure2<XNode, Integer> _function_1 = (XNode node, Integer i) -> {
+      if (((i != leftNodeIndex) && (i != rightNodeIndex))) {
+        node.setVisible(false);
       }
     };
     IterableExtensions.<XNode>forEach(_choiceNodes_3, _function_1);

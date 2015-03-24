@@ -125,23 +125,17 @@ public class SlideDiagram extends XDiagram {
     boolean _notEquals = (!Objects.equal(oldSlide, null));
     if (_notEquals) {
       FadeTransition _fadeTransition = new FadeTransition();
-      final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-        @Override
-        public void apply(final FadeTransition it) {
-          it.setNode(oldSlide);
-          Duration _millis = DurationExtensions.millis(200);
-          it.setDuration(_millis);
-          it.setFromValue(1);
-          it.setToValue(0);
-          final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent it) {
-              ObservableList<XNode> _nodes = SlideDiagram.this.getNodes();
-              _nodes.remove(oldSlide);
-            }
-          };
-          it.setOnFinished(_function);
-        }
+      final Procedure1<FadeTransition> _function = (FadeTransition it) -> {
+        it.setNode(oldSlide);
+        Duration _millis = DurationExtensions.millis(200);
+        it.setDuration(_millis);
+        it.setFromValue(1);
+        it.setToValue(0);
+        final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
+          ObservableList<XNode> _nodes = this.getNodes();
+          _nodes.remove(oldSlide);
+        };
+        it.setOnFinished(_function_1);
       };
       _xifexpression = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
     } else {
@@ -157,15 +151,12 @@ public class SlideDiagram extends XDiagram {
         _nodes.add(newSlide);
         newSlide.setSelected(true);
         FadeTransition _fadeTransition_1 = new FadeTransition();
-        final Procedure1<FadeTransition> _function_1 = new Procedure1<FadeTransition>() {
-          @Override
-          public void apply(final FadeTransition it) {
-            it.setNode(newSlide);
-            Duration _millis = DurationExtensions.millis(200);
-            it.setDuration(_millis);
-            it.setFromValue(0);
-            it.setToValue(1);
-          }
+        final Procedure1<FadeTransition> _function_1 = (FadeTransition it) -> {
+          it.setNode(newSlide);
+          Duration _millis = DurationExtensions.millis(200);
+          it.setDuration(_millis);
+          it.setFromValue(0);
+          it.setToValue(1);
         };
         _xblockexpression = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition_1, _function_1);
       }
@@ -184,15 +175,12 @@ public class SlideDiagram extends XDiagram {
     }
     if (_and) {
       ParallelTransition _parallelTransition = new ParallelTransition();
-      final Procedure1<ParallelTransition> _function_1 = new Procedure1<ParallelTransition>() {
-        @Override
-        public void apply(final ParallelTransition it) {
-          ObservableList<Animation> _children = it.getChildren();
-          _children.add(fade);
-          ObservableList<Animation> _children_1 = it.getChildren();
-          _children_1.add(appear);
-          it.play();
-        }
+      final Procedure1<ParallelTransition> _function_1 = (ParallelTransition it) -> {
+        ObservableList<Animation> _children = it.getChildren();
+        _children.add(fade);
+        ObservableList<Animation> _children_1 = it.getChildren();
+        _children_1.add(appear);
+        it.play();
       };
       ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_1);
     } else {

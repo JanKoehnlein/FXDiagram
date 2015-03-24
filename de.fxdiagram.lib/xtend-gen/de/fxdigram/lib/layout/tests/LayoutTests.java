@@ -30,39 +30,27 @@ public class LayoutTests extends Application {
   @Override
   public void start(final Stage stage) throws Exception {
     XDiagram _xDiagram = new XDiagram();
-    final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-      @Override
-      public void apply(final XDiagram it) {
-        final Procedure1<XDiagram> _function = new Procedure1<XDiagram>() {
-          @Override
-          public void apply(final XDiagram it) {
-            ObservableList<XNode> _nodes = it.getNodes();
-            SimpleNode _simpleNode = new SimpleNode("Foo");
-            final Procedure1<SimpleNode> _function = new Procedure1<SimpleNode>() {
-              @Override
-              public void apply(final SimpleNode it) {
-                it.relocate((-100), (-100));
-                it.setWidth(65);
-                it.setHeight(40);
-              }
-            };
-            SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function);
-            _nodes.add(_doubleArrow);
-            ObservableList<XNode> _nodes_1 = it.getNodes();
-            SimpleNode _simpleNode_1 = new SimpleNode("Bar");
-            final Procedure1<SimpleNode> _function_1 = new Procedure1<SimpleNode>() {
-              @Override
-              public void apply(final SimpleNode it) {
-                it.relocate(100, 100);
-              }
-            };
-            SimpleNode _doubleArrow_1 = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode_1, _function_1);
-            _nodes_1.add(_doubleArrow_1);
-          }
+    final Procedure1<XDiagram> _function = (XDiagram it) -> {
+      final Procedure1<XDiagram> _function_1 = (XDiagram it_1) -> {
+        ObservableList<XNode> _nodes = it_1.getNodes();
+        SimpleNode _simpleNode = new SimpleNode("Foo");
+        final Procedure1<SimpleNode> _function_2 = (SimpleNode it_2) -> {
+          it_2.relocate((-100), (-100));
+          it_2.setWidth(65);
+          it_2.setHeight(40);
         };
-        it.setContentsInitializer(_function);
-        new DiagramScaler(LayoutTests.this.nestedDiagram);
-      }
+        SimpleNode _doubleArrow = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode, _function_2);
+        _nodes.add(_doubleArrow);
+        ObservableList<XNode> _nodes_1 = it_1.getNodes();
+        SimpleNode _simpleNode_1 = new SimpleNode("Bar");
+        final Procedure1<SimpleNode> _function_3 = (SimpleNode it_2) -> {
+          it_2.relocate(100, 100);
+        };
+        SimpleNode _doubleArrow_1 = ObjectExtensions.<SimpleNode>operator_doubleArrow(_simpleNode_1, _function_3);
+        _nodes_1.add(_doubleArrow_1);
+      };
+      it.setContentsInitializer(_function_1);
+      new DiagramScaler(this.nestedDiagram);
     };
     XDiagram _doubleArrow = ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function);
     this.nestedDiagram = _doubleArrow;
@@ -72,41 +60,29 @@ public class LayoutTests extends Application {
     Scene _scene = new Scene(this.diagram, 1024, 768);
     stage.setScene(_scene);
     final StackPane rectangleBorderPane = new StackPane();
-    final Procedure1<XDiagram> _function_1 = new Procedure1<XDiagram>() {
-      @Override
-      public void apply(final XDiagram it) {
-        it.activate();
-        ObservableList<XNode> _nodes = it.getNodes();
-        XNode _xNode = new XNode("");
-        final Procedure1<XNode> _function = new Procedure1<XNode>() {
-          @Override
-          public void apply(final XNode it) {
-          }
-        };
-        XNode _doubleArrow = ObjectExtensions.<XNode>operator_doubleArrow(_xNode, _function);
-        _nodes.add(_doubleArrow);
-        LayoutTests.this.nestedDiagram.activate();
-      }
+    final Procedure1<XDiagram> _function_1 = (XDiagram it) -> {
+      it.activate();
+      ObservableList<XNode> _nodes = it.getNodes();
+      XNode _xNode = new XNode("");
+      final Procedure1<XNode> _function_2 = (XNode it_1) -> {
+      };
+      XNode _doubleArrow_1 = ObjectExtensions.<XNode>operator_doubleArrow(_xNode, _function_2);
+      _nodes.add(_doubleArrow_1);
+      this.nestedDiagram.activate();
     };
     ObjectExtensions.<XDiagram>operator_doubleArrow(
       this.diagram, _function_1);
     stage.show();
     ObservableList<XNode> _nodes = this.nestedDiagram.getNodes();
-    final Consumer<XNode> _function_2 = new Consumer<XNode>() {
-      @Override
-      public void accept(final XNode it) {
-        LayoutTests.this.printLayoutGeometry(it);
-      }
+    final Consumer<XNode> _function_2 = (XNode it) -> {
+      this.printLayoutGeometry(it);
     };
     _nodes.forEach(_function_2);
     this.printLayoutGeometry(this.nestedDiagram);
     this.printLayoutGeometry(rectangleBorderPane);
     ObservableList<XNode> _nodes_1 = this.nestedDiagram.getNodes();
-    final Consumer<XNode> _function_3 = new Consumer<XNode>() {
-      @Override
-      public void accept(final XNode it) {
-        LayoutTests.this.printSizes(it);
-      }
+    final Consumer<XNode> _function_3 = (XNode it) -> {
+      this.printSizes(it);
     };
     _nodes_1.forEach(_function_3);
     this.printSizes(this.nestedDiagram);

@@ -52,13 +52,10 @@ public class NeonSignNode extends FlipNode {
       VBox _neonSign = this.getNeonSign();
       this.setFront(_neonSign);
       ImageView _imageView = new ImageView();
-      final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-        @Override
-        public void apply(final ImageView it) {
-          ImageCache _get = ImageCache.get();
-          Image _image = _get.getImage(NeonSignNode.this, "code.png");
-          it.setImage(_image);
-        }
+      final Procedure1<ImageView> _function = (ImageView it) -> {
+        ImageCache _get = ImageCache.get();
+        Image _image = _get.getImage(this, "code.png");
+        it.setImage(_image);
       };
       ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(_imageView, _function);
       this.setBack(_doubleArrow);
@@ -71,121 +68,97 @@ public class NeonSignNode extends FlipNode {
   public void doActivate() {
     super.doActivate();
     Node _front = this.getFront();
-    final Procedure1<Node> _function = new Procedure1<Node>() {
-      @Override
-      public void apply(final Node it) {
-        TooltipExtensions.setTooltip(it, "Double-click for Xtend code");
-        final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(final MouseEvent it) {
-            Timeline _timeline = new Timeline();
-            final Procedure1<Timeline> _function = new Procedure1<Timeline>() {
-              @Override
-              public void apply(final Timeline it) {
-                it.setCycleCount(20);
-                ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
-                Duration _millis = Duration.millis(10);
-                DoubleProperty _opacityProperty = NeonSignNode.this.neonText.opacityProperty();
-                KeyValue _keyValue = new <Number>KeyValue(_opacityProperty, Double.valueOf(0.45));
-                KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
-                _keyFrames.add(_keyFrame);
-                ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
-                Duration _millis_1 = Duration.millis(20);
-                DoubleProperty _opacityProperty_1 = NeonSignNode.this.neonText.opacityProperty();
-                KeyValue _keyValue_1 = new <Number>KeyValue(_opacityProperty_1, Double.valueOf(0.95));
-                KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
-                _keyFrames_1.add(_keyFrame_1);
-                ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
-                Duration _millis_2 = Duration.millis(40);
-                DoubleProperty _opacityProperty_2 = NeonSignNode.this.neonText.opacityProperty();
-                KeyValue _keyValue_2 = new <Number>KeyValue(_opacityProperty_2, Double.valueOf(0.65));
-                KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
-                _keyFrames_2.add(_keyFrame_2);
-                ObservableList<KeyFrame> _keyFrames_3 = it.getKeyFrames();
-                Duration _millis_3 = Duration.millis(50);
-                DoubleProperty _opacityProperty_3 = NeonSignNode.this.neonText.opacityProperty();
-                KeyValue _keyValue_3 = new <Number>KeyValue(_opacityProperty_3, Integer.valueOf(1));
-                KeyFrame _keyFrame_3 = new KeyFrame(_millis_3, _keyValue_3);
-                _keyFrames_3.add(_keyFrame_3);
-                it.play();
-              }
-            };
-            ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function);
-          }
+    final Procedure1<Node> _function = (Node it) -> {
+      TooltipExtensions.setTooltip(it, "Double-click for Xtend code");
+      final EventHandler<MouseEvent> _function_1 = (MouseEvent it_1) -> {
+        Timeline _timeline = new Timeline();
+        final Procedure1<Timeline> _function_2 = (Timeline it_2) -> {
+          it_2.setCycleCount(20);
+          ObservableList<KeyFrame> _keyFrames = it_2.getKeyFrames();
+          Duration _millis = Duration.millis(10);
+          DoubleProperty _opacityProperty = this.neonText.opacityProperty();
+          KeyValue _keyValue = new <Number>KeyValue(_opacityProperty, Double.valueOf(0.45));
+          KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue);
+          _keyFrames.add(_keyFrame);
+          ObservableList<KeyFrame> _keyFrames_1 = it_2.getKeyFrames();
+          Duration _millis_1 = Duration.millis(20);
+          DoubleProperty _opacityProperty_1 = this.neonText.opacityProperty();
+          KeyValue _keyValue_1 = new <Number>KeyValue(_opacityProperty_1, Double.valueOf(0.95));
+          KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
+          _keyFrames_1.add(_keyFrame_1);
+          ObservableList<KeyFrame> _keyFrames_2 = it_2.getKeyFrames();
+          Duration _millis_2 = Duration.millis(40);
+          DoubleProperty _opacityProperty_2 = this.neonText.opacityProperty();
+          KeyValue _keyValue_2 = new <Number>KeyValue(_opacityProperty_2, Double.valueOf(0.65));
+          KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
+          _keyFrames_2.add(_keyFrame_2);
+          ObservableList<KeyFrame> _keyFrames_3 = it_2.getKeyFrames();
+          Duration _millis_3 = Duration.millis(50);
+          DoubleProperty _opacityProperty_3 = this.neonText.opacityProperty();
+          KeyValue _keyValue_3 = new <Number>KeyValue(_opacityProperty_3, Integer.valueOf(1));
+          KeyFrame _keyFrame_3 = new KeyFrame(_millis_3, _keyValue_3);
+          _keyFrames_3.add(_keyFrame_3);
+          it_2.play();
         };
-        it.setOnMouseClicked(_function);
-      }
+        ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_2);
+      };
+      it.setOnMouseClicked(_function_1);
     };
     ObjectExtensions.<Node>operator_doubleArrow(_front, _function);
   }
   
   protected VBox getNeonSign() {
     VBox _vBox = new VBox();
-    final Procedure1<VBox> _function = new Procedure1<VBox>() {
-      @Override
-      public void apply(final VBox it) {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("-fx-background-image: url(\"");
-        String _uRI = ClassLoaderExtensions.toURI(NeonSignNode.this, "brick.jpg");
-        _builder.append(_uRI, "");
-        _builder.append("\");");
-        _builder.newLineIfNotEmpty();
-        it.setStyle(_builder.toString());
-        ObservableList<Node> _children = it.getChildren();
-        TextField _textField = new TextField();
-        final Procedure1<TextField> _function = new Procedure1<TextField>() {
-          @Override
-          public void apply(final TextField it) {
-            it.setText("JavaFX loves Xtend");
-            Insets _insets = new Insets(10, 40, 10, 40);
-            VBox.setMargin(it, _insets);
-          }
+    final Procedure1<VBox> _function = (VBox it) -> {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("-fx-background-image: url(\"");
+      String _uRI = ClassLoaderExtensions.toURI(this, "brick.jpg");
+      _builder.append(_uRI, "");
+      _builder.append("\");");
+      _builder.newLineIfNotEmpty();
+      it.setStyle(_builder.toString());
+      ObservableList<Node> _children = it.getChildren();
+      TextField _textField = new TextField();
+      final Procedure1<TextField> _function_1 = (TextField it_1) -> {
+        it_1.setText("JavaFX loves Xtend");
+        Insets _insets = new Insets(10, 40, 10, 40);
+        VBox.setMargin(it_1, _insets);
+      };
+      TextField _doubleArrow = ObjectExtensions.<TextField>operator_doubleArrow(_textField, _function_1);
+      _children.add((this.textField = _doubleArrow));
+      ObservableList<Node> _children_1 = it.getChildren();
+      Text _text = new Text();
+      final Procedure1<Text> _function_2 = (Text it_1) -> {
+        StringProperty _textProperty = it_1.textProperty();
+        StringProperty _textProperty_1 = this.textField.textProperty();
+        _textProperty.bind(_textProperty_1);
+        it_1.setWrappingWidth(580);
+        it_1.setTextAlignment(TextAlignment.CENTER);
+        it_1.setRotate((-7));
+        Font _font = Font.font("Nanum Pen Script", 100);
+        it_1.setFont(_font);
+        Color _web = Color.web("#feeb42");
+        it_1.setFill(_web);
+        Blend _blend = new Blend();
+        final Procedure1<Blend> _function_3 = (Blend it_2) -> {
+          it_2.setMode(BlendMode.MULTIPLY);
+          Bloom _bloom = new Bloom();
+          it_2.setTopInput(_bloom);
+          InnerShadow _innerShadow = new InnerShadow();
+          final Procedure1<InnerShadow> _function_4 = (InnerShadow it_3) -> {
+            Color _web_1 = Color.web("#f13a00");
+            it_3.setColor(_web_1);
+            it_3.setRadius(5);
+            it_3.setChoke(0.4);
+          };
+          InnerShadow _doubleArrow_1 = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function_4);
+          it_2.setBottomInput(_doubleArrow_1);
         };
-        TextField _doubleArrow = ObjectExtensions.<TextField>operator_doubleArrow(_textField, _function);
-        _children.add((NeonSignNode.this.textField = _doubleArrow));
-        ObservableList<Node> _children_1 = it.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function_1 = new Procedure1<Text>() {
-          @Override
-          public void apply(final Text it) {
-            StringProperty _textProperty = it.textProperty();
-            StringProperty _textProperty_1 = NeonSignNode.this.textField.textProperty();
-            _textProperty.bind(_textProperty_1);
-            it.setWrappingWidth(580);
-            it.setTextAlignment(TextAlignment.CENTER);
-            it.setRotate((-7));
-            Font _font = Font.font("Nanum Pen Script", 100);
-            it.setFont(_font);
-            Color _web = Color.web("#feeb42");
-            it.setFill(_web);
-            Blend _blend = new Blend();
-            final Procedure1<Blend> _function = new Procedure1<Blend>() {
-              @Override
-              public void apply(final Blend it) {
-                it.setMode(BlendMode.MULTIPLY);
-                Bloom _bloom = new Bloom();
-                it.setTopInput(_bloom);
-                InnerShadow _innerShadow = new InnerShadow();
-                final Procedure1<InnerShadow> _function = new Procedure1<InnerShadow>() {
-                  @Override
-                  public void apply(final InnerShadow it) {
-                    Color _web = Color.web("#f13a00");
-                    it.setColor(_web);
-                    it.setRadius(5);
-                    it.setChoke(0.4);
-                  }
-                };
-                InnerShadow _doubleArrow = ObjectExtensions.<InnerShadow>operator_doubleArrow(_innerShadow, _function);
-                it.setBottomInput(_doubleArrow);
-              }
-            };
-            Blend _doubleArrow = ObjectExtensions.<Blend>operator_doubleArrow(_blend, _function);
-            it.setEffect(_doubleArrow);
-          }
-        };
-        Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
-        _children_1.add((NeonSignNode.this.neonText = _doubleArrow_1));
-      }
+        Blend _doubleArrow_1 = ObjectExtensions.<Blend>operator_doubleArrow(_blend, _function_3);
+        it_1.setEffect(_doubleArrow_1);
+      };
+      Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
+      _children_1.add((this.neonText = _doubleArrow_1));
     };
     return ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
   }

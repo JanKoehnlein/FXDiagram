@@ -102,11 +102,8 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     ObservableList<Node> _children_1 = this.getChildren();
     _children_1.add(this.headsUpDisplay);
     ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
-    final InvalidationListener _function = new InvalidationListener() {
-      @Override
-      public void invalidated(final Observable o) {
-        XRoot.this.domainObjectProviderCache = null;
-      }
+    final InvalidationListener _function = (Observable o) -> {
+      this.domainObjectProviderCache = null;
     };
     _domainObjectProviders.addListener(_function);
   }
@@ -153,13 +150,10 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     XDiagram _diagram_3 = this.getDiagram();
     ObservableMap<Node, Pos> _fixedButtons_1 = _diagram_3.getFixedButtons();
     Set<Map.Entry<Node, Pos>> _entrySet = _fixedButtons_1.entrySet();
-    final Consumer<Map.Entry<Node, Pos>> _function = new Consumer<Map.Entry<Node, Pos>>() {
-      @Override
-      public void accept(final Map.Entry<Node, Pos> it) {
-        Node _key = it.getKey();
-        Pos _value = it.getValue();
-        XRoot.this.headsUpDisplay.add(_key, _value);
-      }
+    final Consumer<Map.Entry<Node, Pos>> _function = (Map.Entry<Node, Pos> it) -> {
+      Node _key = it.getKey();
+      Pos _value = it.getValue();
+      this.headsUpDisplay.add(_key, _value);
     };
     _entrySet.forEach(_function);
     newDiagram.centerDiagram(false);
@@ -205,18 +199,15 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     if (_diagram!=null) {
       _diagram.activate();
     }
-    final Procedure1<Pane> _function = new Procedure1<Pane>() {
-      @Override
-      public void apply(final Pane it) {
-        DoubleProperty _prefWidthProperty = it.prefWidthProperty();
-        Scene _scene = it.getScene();
-        ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
-        _prefWidthProperty.bind(_widthProperty);
-        DoubleProperty _prefHeightProperty = it.prefHeightProperty();
-        Scene _scene_1 = it.getScene();
-        ReadOnlyDoubleProperty _heightProperty = _scene_1.heightProperty();
-        _prefHeightProperty.bind(_heightProperty);
-      }
+    final Procedure1<Pane> _function = (Pane it) -> {
+      DoubleProperty _prefWidthProperty = it.prefWidthProperty();
+      Scene _scene = it.getScene();
+      ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
+      _prefWidthProperty.bind(_widthProperty);
+      DoubleProperty _prefHeightProperty = it.prefHeightProperty();
+      Scene _scene_1 = it.getScene();
+      ReadOnlyDoubleProperty _heightProperty = _scene_1.heightProperty();
+      _prefHeightProperty.bind(_heightProperty);
     };
     ObjectExtensions.<Pane>operator_doubleArrow(
       this.diagramCanvas, _function);
@@ -263,19 +254,16 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   public Iterable<XShape> getCurrentSelection() {
     XDiagram _diagram = this.getDiagram();
     Iterable<XShape> _allShapes = _diagram.getAllShapes();
-    final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
-      @Override
-      public Boolean apply(final XShape it) {
-        boolean _and = false;
-        boolean _isSelectable = it.isSelectable();
-        if (!_isSelectable) {
-          _and = false;
-        } else {
-          boolean _selected = it.getSelected();
-          _and = _selected;
-        }
-        return Boolean.valueOf(_and);
+    final Function1<XShape, Boolean> _function = (XShape it) -> {
+      boolean _and = false;
+      boolean _isSelectable = it.isSelectable();
+      if (!_isSelectable) {
+        _and = false;
+      } else {
+        boolean _selected = it.getSelected();
+        _and = _selected;
       }
+      return Boolean.valueOf(_and);
     };
     return IterableExtensions.<XShape>filter(_allShapes, _function);
   }
@@ -288,12 +276,9 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
         HashMap<Class<? extends DomainObjectProvider>, DomainObjectProvider> _newHashMap = CollectionLiterals.<Class<? extends DomainObjectProvider>, DomainObjectProvider>newHashMap();
         this.domainObjectProviderCache = _newHashMap;
         ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
-        final Consumer<DomainObjectProvider> _function = new Consumer<DomainObjectProvider>() {
-          @Override
-          public void accept(final DomainObjectProvider it) {
-            Class<? extends DomainObjectProvider> _class = it.getClass();
-            XRoot.this.domainObjectProviderCache.put(_class, it);
-          }
+        final Consumer<DomainObjectProvider> _function = (DomainObjectProvider it) -> {
+          Class<? extends DomainObjectProvider> _class = it.getClass();
+          this.domainObjectProviderCache.put(_class, it);
         };
         _domainObjectProviders.forEach(_function);
       }
@@ -304,24 +289,21 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   }
   
   public void replaceDomainObjectProviders(final List<DomainObjectProvider> newDomainObjectProviders) {
-    final Consumer<DomainObjectProvider> _function = new Consumer<DomainObjectProvider>() {
-      @Override
-      public void accept(final DomainObjectProvider newProvider) {
-        Class<? extends DomainObjectProvider> _class = newProvider.getClass();
-        final DomainObjectProvider oldProvider = XRoot.this.getDomainObjectProvider(_class);
-        boolean _notEquals = (!Objects.equal(oldProvider, null));
-        if (_notEquals) {
-          ObservableList<DomainObjectProvider> _domainObjectProviders = XRoot.this.getDomainObjectProviders();
-          ObservableList<DomainObjectProvider> _domainObjectProviders_1 = XRoot.this.getDomainObjectProviders();
-          int _indexOf = _domainObjectProviders_1.indexOf(oldProvider);
-          _domainObjectProviders.set(_indexOf, newProvider);
-          if ((newProvider instanceof DomainObjectProviderWithState)) {
-            ((DomainObjectProviderWithState)newProvider).copyState(((DomainObjectProviderWithState) oldProvider));
-          }
-        } else {
-          ObservableList<DomainObjectProvider> _domainObjectProviders_2 = XRoot.this.getDomainObjectProviders();
-          _domainObjectProviders_2.add(newProvider);
+    final Consumer<DomainObjectProvider> _function = (DomainObjectProvider newProvider) -> {
+      Class<? extends DomainObjectProvider> _class = newProvider.getClass();
+      final DomainObjectProvider oldProvider = this.getDomainObjectProvider(_class);
+      boolean _notEquals = (!Objects.equal(oldProvider, null));
+      if (_notEquals) {
+        ObservableList<DomainObjectProvider> _domainObjectProviders = this.getDomainObjectProviders();
+        ObservableList<DomainObjectProvider> _domainObjectProviders_1 = this.getDomainObjectProviders();
+        int _indexOf = _domainObjectProviders_1.indexOf(oldProvider);
+        _domainObjectProviders.set(_indexOf, newProvider);
+        if ((newProvider instanceof DomainObjectProviderWithState)) {
+          ((DomainObjectProviderWithState)newProvider).copyState(((DomainObjectProviderWithState) oldProvider));
         }
+      } else {
+        ObservableList<DomainObjectProvider> _domainObjectProviders_2 = this.getDomainObjectProviders();
+        _domainObjectProviders_2.add(newProvider);
       }
     };
     newDomainObjectProviders.forEach(_function);

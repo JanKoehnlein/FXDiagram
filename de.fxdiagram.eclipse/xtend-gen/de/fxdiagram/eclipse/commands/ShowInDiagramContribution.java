@@ -4,11 +4,10 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.eclipse.FXDiagramView;
 import de.fxdiagram.eclipse.commands.ISelectionExtractor;
-import de.fxdiagram.eclipse.mapping.AbstractMapping;
-import de.fxdiagram.eclipse.mapping.MappingCall;
-import de.fxdiagram.eclipse.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.AbstractMapping;
+import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.XDiagramConfig;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.function.Consumer;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
@@ -68,11 +67,8 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
       };
       ISelectionExtractor.Registry _instance = ISelectionExtractor.Registry.getInstance();
       Iterable<ISelectionExtractor> _selectionExtractors = _instance.getSelectionExtractors();
-      final Consumer<ISelectionExtractor> _function = new Consumer<ISelectionExtractor>() {
-        @Override
-        public void accept(final ISelectionExtractor it) {
-          it.addSelectedElement(activePart, acceptor);
-        }
+      final Consumer<ISelectionExtractor> _function = (ISelectionExtractor it) -> {
+        it.addSelectedElement(activePart, acceptor);
       };
       _selectionExtractors.forEach(_function);
       _xblockexpression = contributionItems;
@@ -85,94 +81,70 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
     if (_notEquals) {
       XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
       Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-      final Function1<XDiagramConfig, Iterable<? extends MappingCall<?, Object>>> _function = new Function1<XDiagramConfig, Iterable<? extends MappingCall<?, Object>>>() {
-        @Override
-        public Iterable<? extends MappingCall<?, Object>> apply(final XDiagramConfig it) {
-          return it.<Object>getEntryCalls(selectedElement);
-        }
+      final Function1<XDiagramConfig, Iterable<? extends MappingCall<?, Object>>> _function = (XDiagramConfig it) -> {
+        return it.<Object>getEntryCalls(selectedElement);
       };
       Iterable<Iterable<? extends MappingCall<?, Object>>> _map = IterableExtensions.map(_configurations, _function);
       final Iterable<MappingCall<?, Object>> mappingCalls = Iterables.<MappingCall<?, Object>>concat(_map);
       boolean _isEmpty = IterableExtensions.isEmpty(mappingCalls);
       boolean _not = (!_isEmpty);
       if (_not) {
-        final Function1<MappingCall<?, Object>, XDiagramConfig> _function_1 = new Function1<MappingCall<?, Object>, XDiagramConfig>() {
-          @Override
-          public XDiagramConfig apply(final MappingCall<?, Object> it) {
-            AbstractMapping<?> _mapping = it.getMapping();
-            return _mapping.getConfig();
-          }
-        };
-        Iterable<XDiagramConfig> _map_1 = IterableExtensions.<MappingCall<?, Object>, XDiagramConfig>map(mappingCalls, _function_1);
-        Set<XDiagramConfig> _set = IterableExtensions.<XDiagramConfig>toSet(_map_1);
-        int _size = _set.size();
-        final boolean hasMultipleConfigs = (_size > 1);
-        final Function1<MappingCall<?, Object>, ContributionItem> _function_2 = new Function1<MappingCall<?, Object>, ContributionItem>() {
-          @Override
-          public ContributionItem apply(final MappingCall<?, Object> call) {
-            return new ContributionItem() {
-              final ContributionItem _this = this;
-              @Override
-              public void fill(final Menu menu, final int index) {
-                MenuItem _menuItem = new MenuItem(menu, SWT.CHECK, index);
-                final Procedure1<MenuItem> _function = new Procedure1<MenuItem>() {
+        final Function1<MappingCall<?, Object>, ContributionItem> _function_1 = (MappingCall<?, Object> call) -> {
+          return new ContributionItem() {
+            final ContributionItem _this = this;
+            @Override
+            public void fill(final Menu menu, final int index) {
+              MenuItem _menuItem = new MenuItem(menu, SWT.CHECK, index);
+              final Procedure1<MenuItem> _function = (MenuItem it) -> {
+                AbstractMapping<?> _mapping = call.getMapping();
+                String _displayName = _mapping.getDisplayName();
+                String _plus = (_displayName + " (");
+                AbstractMapping<?> _mapping_1 = call.getMapping();
+                XDiagramConfig _config = _mapping_1.getConfig();
+                String _label = _config.getLabel();
+                String _plus_1 = (_plus + _label);
+                String _plus_2 = (_plus_1 + ")");
+                it.setText(_plus_2);
+                AbstractMapping<?> _mapping_2 = call.getMapping();
+                XDiagramConfig _config_1 = _mapping_2.getConfig();
+                String _iD = _config_1.getID();
+                String _plus_3 = (_iD + "#");
+                AbstractMapping<?> _mapping_3 = call.getMapping();
+                String _iD_1 = _mapping_3.getID();
+                String _plus_4 = (_plus_3 + _iD_1);
+                this.setId(_plus_4);
+                it.addSelectionListener(new SelectionListener() {
                   @Override
-                  public void apply(final MenuItem it) {
-                    AbstractMapping<?> _mapping = call.getMapping();
-                    String _displayName = _mapping.getDisplayName();
-                    it.setText(_displayName);
-                    if (hasMultipleConfigs) {
-                      String _text = it.getText();
-                      String _plus = (_text + " (");
-                      AbstractMapping<?> _mapping_1 = call.getMapping();
-                      XDiagramConfig _config = _mapping_1.getConfig();
-                      String _label = _config.getLabel();
-                      String _plus_1 = (_plus + _label);
-                      String _plus_2 = (_plus_1 + ")");
-                      it.setText(_plus_2);
-                    }
-                    AbstractMapping<?> _mapping_2 = call.getMapping();
-                    XDiagramConfig _config_1 = _mapping_2.getConfig();
-                    String _iD = _config_1.getID();
-                    String _plus_3 = (_iD + "#");
-                    AbstractMapping<?> _mapping_3 = call.getMapping();
-                    String _iD_1 = _mapping_3.getID();
-                    String _plus_4 = (_plus_3 + _iD_1);
-                    _this.setId(_plus_4);
-                    it.addSelectionListener(new SelectionListener() {
-                      @Override
-                      public void widgetDefaultSelected(final SelectionEvent e) {
-                      }
-                      
-                      @Override
-                      public void widgetSelected(final SelectionEvent e) {
-                        try {
-                          IWorkbenchPartSite _site = activePart.getSite();
-                          IWorkbenchPage _page = _site.getPage();
-                          final IViewPart view = _page.showView("de.fxdiagram.eclipse.FXDiagramView");
-                          if ((view instanceof FXDiagramView)) {
-                            IEditorPart _xifexpression = null;
-                            if ((activePart instanceof IEditorPart)) {
-                              _xifexpression = ((IEditorPart)activePart);
-                            } else {
-                              _xifexpression = null;
-                            }
-                            final IEditorPart editor = _xifexpression;
-                            ((FXDiagramView)view).<Object>revealElement(selectedElement, call, editor);
-                          }
-                        } catch (Throwable _e) {
-                          throw Exceptions.sneakyThrow(_e);
-                        }
-                      }
-                    });
+                  public void widgetDefaultSelected(final SelectionEvent e) {
                   }
-                };
-                ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function);
-              }
-            };
-          }
+                  
+                  @Override
+                  public void widgetSelected(final SelectionEvent e) {
+                    try {
+                      IWorkbenchPartSite _site = activePart.getSite();
+                      IWorkbenchPage _page = _site.getPage();
+                      final IViewPart view = _page.showView("de.fxdiagram.eclipse.FXDiagramView");
+                      if ((view instanceof FXDiagramView)) {
+                        IEditorPart _xifexpression = null;
+                        if ((activePart instanceof IEditorPart)) {
+                          _xifexpression = ((IEditorPart)activePart);
+                        } else {
+                          _xifexpression = null;
+                        }
+                        final IEditorPart editor = _xifexpression;
+                        ((FXDiagramView)view).<Object>revealElement(selectedElement, call, editor);
+                      }
+                    } catch (Throwable _e) {
+                      throw Exceptions.sneakyThrow(_e);
+                    }
+                  }
+                });
+              };
+              ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function);
+            }
+          };
         };
-        return IterableExtensions.<MappingCall<?, Object>, ContributionItem>map(mappingCalls, _function_2);
+        return IterableExtensions.<MappingCall<?, Object>, ContributionItem>map(mappingCalls, _function_1);
       }
     }
     return CollectionLiterals.<ContributionItem>emptyList();

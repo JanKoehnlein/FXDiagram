@@ -2,12 +2,12 @@ package de.fxdiagram.xtext.xbase
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.eclipse.mapping.AbstractMapping
-import de.fxdiagram.eclipse.mapping.ESetting
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
-import de.fxdiagram.eclipse.mapping.XtextDomainObjectProvider
-import de.fxdiagram.eclipse.mapping.XtextEObjectDescriptor
-import de.fxdiagram.eclipse.mapping.XtextESettingDescriptor
+import de.fxdiagram.eclipse.xtext.ESetting
+import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider
+import de.fxdiagram.eclipse.xtext.XtextEObjectDescriptor
+import de.fxdiagram.eclipse.xtext.XtextESettingDescriptor
+import de.fxdiagram.mapping.AbstractMapping
+import de.fxdiagram.mapping.IMappedElementDescriptor
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference

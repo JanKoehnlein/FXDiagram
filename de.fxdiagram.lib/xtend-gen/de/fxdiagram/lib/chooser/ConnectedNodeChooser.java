@@ -35,12 +35,9 @@ public class ConnectedNodeChooser extends AbstractBaseChooser {
   
   private XNode currentChoice;
   
-  private ChooserConnectionProvider connectionProvider = new ChooserConnectionProvider() {
-    @Override
-    public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor choiceInfo) {
-      return new XConnection(host, choice);
-    }
-  };
+  private ChooserConnectionProvider connectionProvider = ((ChooserConnectionProvider) (XNode host, XNode choice, DomainObjectDescriptor choiceInfo) -> {
+    return new XConnection(host, choice);
+  });
   
   private XConnection currentConnection;
   

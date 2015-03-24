@@ -66,36 +66,27 @@ public class MovieNode extends FlipNode {
       MediaPlayer _mediaPlayer = new MediaPlayer(this.media);
       this.player = _mediaPlayer;
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-      final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-        @Override
-        public void apply(final RectangleBorderPane it) {
-          ObservableList<Node> _children = it.getChildren();
-          Text _text = new Text();
-          final Procedure1<Text> _function = new Procedure1<Text>() {
-            @Override
-            public void apply(final Text it) {
-              String _name = MovieNode.this.getName();
-              it.setText(_name);
-              it.setTextOrigin(VPos.TOP);
-              Insets _insets = new Insets(10, 20, 10, 20);
-              StackPane.setMargin(it, _insets);
-            }
-          };
-          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-          _children.add(_doubleArrow);
-        }
+      final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function_1 = (Text it_1) -> {
+          String _name = this.getName();
+          it_1.setText(_name);
+          it_1.setTextOrigin(VPos.TOP);
+          Insets _insets = new Insets(10, 20, 10, 20);
+          StackPane.setMargin(it_1, _insets);
+        };
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+        _children.add(_doubleArrow);
       };
       RectangleBorderPane _doubleArrow = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
       this.setFront(_doubleArrow);
-      final Procedure1<StackPane> _function_1 = new Procedure1<StackPane>() {
-        @Override
-        public void apply(final StackPane it) {
-          it.setId("pane");
-          Insets _insets = new Insets(MovieNode.this.border, MovieNode.this.border, MovieNode.this.border, MovieNode.this.border);
-          it.setPadding(_insets);
-          ObservableList<Node> _children = it.getChildren();
-          _children.add(MovieNode.this.view);
-        }
+      final Procedure1<StackPane> _function_1 = (StackPane it) -> {
+        it.setId("pane");
+        Insets _insets = new Insets(this.border, this.border, this.border, this.border);
+        it.setPadding(_insets);
+        ObservableList<Node> _children = it.getChildren();
+        _children.add(this.view);
       };
       StackPane _doubleArrow_1 = ObjectExtensions.<StackPane>operator_doubleArrow(this.pane, _function_1);
       this.setBack(_doubleArrow_1);
@@ -118,76 +109,55 @@ public class MovieNode extends FlipNode {
     Node _front = this.getFront();
     TooltipExtensions.setTooltip(_front, "Double-click to watch");
     BooleanProperty _visibleProperty = this.pane.visibleProperty();
-    final ChangeListener<Boolean> _function = new ChangeListener<Boolean>() {
-      @Override
-      public void changed(final ObservableValue<? extends Boolean> prop, final Boolean oldVal, final Boolean newVal) {
-        MediaPlayer _xifexpression = null;
-        if ((newVal).booleanValue()) {
-          _xifexpression = MovieNode.this.player;
-        } else {
-          _xifexpression = null;
-        }
-        MovieNode.this.view.setMediaPlayer(_xifexpression);
+    final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> prop, Boolean oldVal, Boolean newVal) -> {
+      MediaPlayer _xifexpression = null;
+      if ((newVal).booleanValue()) {
+        _xifexpression = this.player;
+      } else {
+        _xifexpression = null;
       }
+      this.view.setMediaPlayer(_xifexpression);
     };
     _visibleProperty.addListener(_function);
     HBox _createControlBar = this.createControlBar();
     this.controlBar = _createControlBar;
-    final Procedure1<StackPane> _function_1 = new Procedure1<StackPane>() {
-      @Override
-      public void apply(final StackPane it) {
-        final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(final MouseEvent it) {
-            FadeTransition _fadeTransition = new FadeTransition();
-            final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-              @Override
-              public void apply(final FadeTransition it) {
-                it.setNode(MovieNode.this.controlBar);
-                it.setToValue(1.0);
-                Duration _millis = Duration.millis(200);
-                it.setDuration(_millis);
-                it.setInterpolator(Interpolator.EASE_OUT);
-                it.play();
-              }
-            };
-            ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
-          }
+    final Procedure1<StackPane> _function_1 = (StackPane it) -> {
+      final EventHandler<MouseEvent> _function_2 = (MouseEvent it_1) -> {
+        FadeTransition _fadeTransition = new FadeTransition();
+        final Procedure1<FadeTransition> _function_3 = (FadeTransition it_2) -> {
+          it_2.setNode(this.controlBar);
+          it_2.setToValue(1.0);
+          Duration _millis = Duration.millis(200);
+          it_2.setDuration(_millis);
+          it_2.setInterpolator(Interpolator.EASE_OUT);
+          it_2.play();
         };
-        it.setOnMouseEntered(_function);
-        final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(final MouseEvent it) {
-            FadeTransition _fadeTransition = new FadeTransition();
-            final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-              @Override
-              public void apply(final FadeTransition it) {
-                it.setNode(MovieNode.this.controlBar);
-                it.setToValue(0);
-                Duration _millis = Duration.millis(200);
-                it.setDuration(_millis);
-                it.setInterpolator(Interpolator.EASE_OUT);
-                it.play();
-              }
-            };
-            ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
-          }
+        ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function_3);
+      };
+      it.setOnMouseEntered(_function_2);
+      final EventHandler<MouseEvent> _function_3 = (MouseEvent it_1) -> {
+        FadeTransition _fadeTransition = new FadeTransition();
+        final Procedure1<FadeTransition> _function_4 = (FadeTransition it_2) -> {
+          it_2.setNode(this.controlBar);
+          it_2.setToValue(0);
+          Duration _millis = Duration.millis(200);
+          it_2.setDuration(_millis);
+          it_2.setInterpolator(Interpolator.EASE_OUT);
+          it_2.play();
         };
-        it.setOnMouseExited(_function_1);
-        ObservableList<Node> _children = it.getChildren();
-        Group _group = new Group();
-        final Procedure1<Group> _function_2 = new Procedure1<Group>() {
-          @Override
-          public void apply(final Group it) {
-            ObservableList<Node> _children = it.getChildren();
-            _children.add(MovieNode.this.controlBar);
-            StackPane.setAlignment(it, Pos.BOTTOM_CENTER);
-          }
-        };
-        Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_2);
-        _children.add(_doubleArrow);
-        TooltipExtensions.setTooltip(it, "Double-click to close");
-      }
+        ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function_4);
+      };
+      it.setOnMouseExited(_function_3);
+      ObservableList<Node> _children = it.getChildren();
+      Group _group = new Group();
+      final Procedure1<Group> _function_4 = (Group it_1) -> {
+        ObservableList<Node> _children_1 = it_1.getChildren();
+        _children_1.add(this.controlBar);
+        StackPane.setAlignment(it_1, Pos.BOTTOM_CENTER);
+      };
+      Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_4);
+      _children.add(_doubleArrow);
+      TooltipExtensions.setTooltip(it, "Double-click to close");
     };
     ObjectExtensions.<StackPane>operator_doubleArrow(
       this.pane, _function_1);
@@ -200,108 +170,75 @@ public class MovieNode extends FlipNode {
   
   protected HBox createControlBar() {
     HBox _hBox = new HBox();
-    final Procedure1<HBox> _function = new Procedure1<HBox>() {
-      @Override
-      public void apply(final HBox it) {
-        it.setId("controlbar");
-        it.setSpacing(0);
-        it.setAlignment(Pos.CENTER);
-        ObservableList<Node> _children = it.getChildren();
-        Button _button = new Button();
-        final Procedure1<Button> _function = new Procedure1<Button>() {
-          @Override
-          public void apply(final Button it) {
-            it.setId("back-button");
-            it.setText("Back");
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
-              public void handle(final ActionEvent it) {
-                MovieNode.this.player.seek(Duration.ZERO);
-              }
-            };
-            it.setOnAction(_function);
-          }
+    final Procedure1<HBox> _function = (HBox it) -> {
+      it.setId("controlbar");
+      it.setSpacing(0);
+      it.setAlignment(Pos.CENTER);
+      ObservableList<Node> _children = it.getChildren();
+      Button _button = new Button();
+      final Procedure1<Button> _function_1 = (Button it_1) -> {
+        it_1.setId("back-button");
+        it_1.setText("Back");
+        final EventHandler<ActionEvent> _function_2 = (ActionEvent it_2) -> {
+          this.player.seek(Duration.ZERO);
         };
-        Button _doubleArrow = ObjectExtensions.<Button>operator_doubleArrow(_button, _function);
-        _children.add(_doubleArrow);
-        ObservableList<Node> _children_1 = it.getChildren();
-        Button _button_1 = new Button();
-        final Procedure1<Button> _function_1 = new Procedure1<Button>() {
-          @Override
-          public void apply(final Button it) {
-            it.setId("stop-button");
-            it.setText("Stop");
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
-              public void handle(final ActionEvent it) {
-                MovieNode.this.player.stop();
-              }
-            };
-            it.setOnAction(_function);
-          }
+        it_1.setOnAction(_function_2);
+      };
+      Button _doubleArrow = ObjectExtensions.<Button>operator_doubleArrow(_button, _function_1);
+      _children.add(_doubleArrow);
+      ObservableList<Node> _children_1 = it.getChildren();
+      Button _button_1 = new Button();
+      final Procedure1<Button> _function_2 = (Button it_1) -> {
+        it_1.setId("stop-button");
+        it_1.setText("Stop");
+        final EventHandler<ActionEvent> _function_3 = (ActionEvent it_2) -> {
+          this.player.stop();
         };
-        Button _doubleArrow_1 = ObjectExtensions.<Button>operator_doubleArrow(_button_1, _function_1);
-        _children_1.add(_doubleArrow_1);
-        ObservableList<Node> _children_2 = it.getChildren();
-        Button _button_2 = new Button();
-        final Procedure1<Button> _function_2 = new Procedure1<Button>() {
-          @Override
-          public void apply(final Button it) {
-            it.setId("play-button");
-            it.setText("Play");
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
-              public void handle(final ActionEvent it) {
-                MovieNode.this.player.play();
-              }
-            };
-            it.setOnAction(_function);
-          }
+        it_1.setOnAction(_function_3);
+      };
+      Button _doubleArrow_1 = ObjectExtensions.<Button>operator_doubleArrow(_button_1, _function_2);
+      _children_1.add(_doubleArrow_1);
+      ObservableList<Node> _children_2 = it.getChildren();
+      Button _button_2 = new Button();
+      final Procedure1<Button> _function_3 = (Button it_1) -> {
+        it_1.setId("play-button");
+        it_1.setText("Play");
+        final EventHandler<ActionEvent> _function_4 = (ActionEvent it_2) -> {
+          this.player.play();
         };
-        Button _doubleArrow_2 = ObjectExtensions.<Button>operator_doubleArrow(_button_2, _function_2);
-        _children_2.add(_doubleArrow_2);
-        ObservableList<Node> _children_3 = it.getChildren();
-        Button _button_3 = new Button();
-        final Procedure1<Button> _function_3 = new Procedure1<Button>() {
-          @Override
-          public void apply(final Button it) {
-            it.setId("pause-button");
-            it.setText("Pause");
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
-              public void handle(final ActionEvent it) {
-                MovieNode.this.player.pause();
-              }
-            };
-            it.setOnAction(_function);
-          }
+        it_1.setOnAction(_function_4);
+      };
+      Button _doubleArrow_2 = ObjectExtensions.<Button>operator_doubleArrow(_button_2, _function_3);
+      _children_2.add(_doubleArrow_2);
+      ObservableList<Node> _children_3 = it.getChildren();
+      Button _button_3 = new Button();
+      final Procedure1<Button> _function_4 = (Button it_1) -> {
+        it_1.setId("pause-button");
+        it_1.setText("Pause");
+        final EventHandler<ActionEvent> _function_5 = (ActionEvent it_2) -> {
+          this.player.pause();
         };
-        Button _doubleArrow_3 = ObjectExtensions.<Button>operator_doubleArrow(_button_3, _function_3);
-        _children_3.add(_doubleArrow_3);
-        ObservableList<Node> _children_4 = it.getChildren();
-        Button _button_4 = new Button();
-        final Procedure1<Button> _function_4 = new Procedure1<Button>() {
-          @Override
-          public void apply(final Button it) {
-            it.setId("forward-button");
-            it.setText("Forward");
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
-              public void handle(final ActionEvent it) {
-                Duration _currentTime = MovieNode.this.player.getCurrentTime();
-                double _seconds = _currentTime.toSeconds();
-                double _plus = (_seconds + 10);
-                Duration _seconds_1 = Duration.seconds(_plus);
-                MovieNode.this.player.seek(_seconds_1);
-              }
-            };
-            it.setOnAction(_function);
-          }
+        it_1.setOnAction(_function_5);
+      };
+      Button _doubleArrow_3 = ObjectExtensions.<Button>operator_doubleArrow(_button_3, _function_4);
+      _children_3.add(_doubleArrow_3);
+      ObservableList<Node> _children_4 = it.getChildren();
+      Button _button_4 = new Button();
+      final Procedure1<Button> _function_5 = (Button it_1) -> {
+        it_1.setId("forward-button");
+        it_1.setText("Forward");
+        final EventHandler<ActionEvent> _function_6 = (ActionEvent it_2) -> {
+          Duration _currentTime = this.player.getCurrentTime();
+          double _seconds = _currentTime.toSeconds();
+          double _plus = (_seconds + 10);
+          Duration _seconds_1 = Duration.seconds(_plus);
+          this.player.seek(_seconds_1);
         };
-        Button _doubleArrow_4 = ObjectExtensions.<Button>operator_doubleArrow(_button_4, _function_4);
-        _children_4.add(_doubleArrow_4);
-        it.setOpacity(0);
-      }
+        it_1.setOnAction(_function_6);
+      };
+      Button _doubleArrow_4 = ObjectExtensions.<Button>operator_doubleArrow(_button_4, _function_5);
+      _children_4.add(_doubleArrow_4);
+      it.setOpacity(0);
     };
     return ObjectExtensions.<HBox>operator_doubleArrow(_hBox, _function);
   }

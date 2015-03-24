@@ -45,27 +45,24 @@ public class TriangleArrowHead extends ArrowHead {
         this.fillProperty.bind(_strokeProperty);
       }
       Polygon _polygon = new Polygon();
-      final Procedure1<Polygon> _function = new Procedure1<Polygon>() {
-        @Override
-        public void apply(final Polygon it) {
-          ObservableList<Double> _points = it.getPoints();
-          double _height = TriangleArrowHead.this.getHeight();
-          double _multiply = ((-0.5) * _height);
-          double _width = TriangleArrowHead.this.getWidth();
-          double _height_1 = TriangleArrowHead.this.getHeight();
-          double _multiply_1 = (0.5 * _height_1);
-          _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
-          ObjectProperty<Paint> _fillProperty = it.fillProperty();
-          _fillProperty.bind(TriangleArrowHead.this.fillProperty);
-          ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-          ObjectProperty<Paint> _strokeProperty_1 = TriangleArrowHead.this.strokeProperty();
-          _strokeProperty.bind(_strokeProperty_1);
-          DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
-          XConnection _connection = TriangleArrowHead.this.getConnection();
-          DoubleProperty _strokeWidthProperty_1 = _connection.strokeWidthProperty();
-          _strokeWidthProperty.bind(_strokeWidthProperty_1);
-          it.setStrokeType(StrokeType.CENTERED);
-        }
+      final Procedure1<Polygon> _function = (Polygon it) -> {
+        ObservableList<Double> _points = it.getPoints();
+        double _height = this.getHeight();
+        double _multiply = ((-0.5) * _height);
+        double _width = this.getWidth();
+        double _height_1 = this.getHeight();
+        double _multiply_1 = (0.5 * _height_1);
+        _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
+        ObjectProperty<Paint> _fillProperty = it.fillProperty();
+        _fillProperty.bind(this.fillProperty);
+        ObjectProperty<Paint> _strokeProperty_1 = it.strokeProperty();
+        ObjectProperty<Paint> _strokeProperty_2 = this.strokeProperty();
+        _strokeProperty_1.bind(_strokeProperty_2);
+        DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
+        XConnection _connection_1 = this.getConnection();
+        DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
+        _strokeWidthProperty.bind(_strokeWidthProperty_1);
+        it.setStrokeType(StrokeType.CENTERED);
       };
       _xblockexpression = ObjectExtensions.<Polygon>operator_doubleArrow(_polygon, _function);
     }

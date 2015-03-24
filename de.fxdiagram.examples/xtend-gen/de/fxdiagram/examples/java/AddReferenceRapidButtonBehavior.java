@@ -72,43 +72,31 @@ public class AddReferenceRapidButtonBehavior extends AbstractConnectionRapidButt
       Side _position = button.getPosition();
       CarusselChoice _carusselChoice = new CarusselChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _carusselChoice);
-      final Consumer<JavaPropertyDescriptor> _function = new Consumer<JavaPropertyDescriptor>() {
-        @Override
-        public void accept(final JavaPropertyDescriptor it) {
-          XNode _createNode = AddReferenceRapidButtonBehavior.this.createNode(it);
-          chooser.addChoice(_createNode, it);
-        }
+      final Consumer<JavaPropertyDescriptor> _function = (JavaPropertyDescriptor it) -> {
+        XNode _createNode = this.createNode(it);
+        chooser.addChoice(_createNode, it);
       };
       availableChoiceKeys.forEach(_function);
-      final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        @Override
-        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor choiceInfo) {
-          XConnection _xblockexpression = null;
-          {
-            final JavaPropertyDescriptor reference = ((JavaPropertyDescriptor) choiceInfo);
-            XConnection _xConnection = new XConnection(host, choice, reference);
-            final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-              @Override
-              public void apply(final XConnection it) {
-                LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
-                it.setTargetArrowHead(_lineArrowHead);
-                XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-                final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                  @Override
-                  public void apply(final XConnectionLabel it) {
-                    Text _text = it.getText();
-                    JavaProperty _domainObject = reference.getDomainObject();
-                    String _name = _domainObject.getName();
-                    _text.setText(_name);
-                  }
-                };
-                ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-              }
+      final ChooserConnectionProvider _function_1 = (XNode host, XNode choice, DomainObjectDescriptor choiceInfo) -> {
+        XConnection _xblockexpression_1 = null;
+        {
+          final JavaPropertyDescriptor reference = ((JavaPropertyDescriptor) choiceInfo);
+          XConnection _xConnection = new XConnection(host, choice, reference);
+          final Procedure1<XConnection> _function_2 = (XConnection it) -> {
+            LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
+            it.setTargetArrowHead(_lineArrowHead);
+            XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
+            final Procedure1<XConnectionLabel> _function_3 = (XConnectionLabel it_1) -> {
+              Text _text = it_1.getText();
+              JavaProperty _domainObject = reference.getDomainObject();
+              String _name = _domainObject.getName();
+              _text.setText(_name);
             };
-            _xblockexpression = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-          }
-          return _xblockexpression;
+            ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_3);
+          };
+          _xblockexpression_1 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_2);
         }
+        return _xblockexpression_1;
       };
       chooser.setConnectionProvider(_function_1);
       _xblockexpression = chooser;

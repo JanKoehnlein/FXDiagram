@@ -2,9 +2,9 @@ package de.fxdiagram.pde
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectProvider
-import de.fxdiagram.eclipse.mapping.AbstractMapping
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider
+import de.fxdiagram.mapping.AbstractMapping
+import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.IMappedElementDescriptorProvider
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 @ModelNode

@@ -25,22 +25,16 @@ public class DemoCampSlideFactory {
   public static Slide createSlideWithText(final String slideName, final String text, final int fontSize) {
     Image _backgroundImage = DemoCampSlideFactory.getBackgroundImage();
     Slide _slide = new Slide(slideName, _backgroundImage);
-    final Procedure1<Slide> _function = new Procedure1<Slide>() {
-      @Override
-      public void apply(final Slide it) {
-        StackPane _stackPane = it.getStackPane();
-        ObservableList<Node> _children = _stackPane.getChildren();
-        String _trim = text.trim();
-        Text _createText = DemoCampSlideFactory.createText(_trim, fontSize);
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
-          public void apply(final Text it) {
-            it.setTextAlignment(TextAlignment.CENTER);
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function);
-        _children.add(_doubleArrow);
-      }
+    final Procedure1<Slide> _function = (Slide it) -> {
+      StackPane _stackPane = it.getStackPane();
+      ObservableList<Node> _children = _stackPane.getChildren();
+      String _trim = text.trim();
+      Text _createText = DemoCampSlideFactory.createText(_trim, fontSize);
+      final Procedure1<Text> _function_1 = (Text it_1) -> {
+        it_1.setTextAlignment(TextAlignment.CENTER);
+      };
+      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_createText, _function_1);
+      _children.add(_doubleArrow);
     };
     return ObjectExtensions.<Slide>operator_doubleArrow(_slide, _function);
   }
@@ -48,26 +42,20 @@ public class DemoCampSlideFactory {
   public static ClickThroughSlide createClickThroughSlide(final String slideName) {
     Image _backgroundImage = DemoCampSlideFactory.getBackgroundImage();
     ClickThroughSlide _clickThroughSlide = new ClickThroughSlide(slideName, _backgroundImage);
-    final Procedure1<ClickThroughSlide> _function = new Procedure1<ClickThroughSlide>() {
-      @Override
-      public void apply(final ClickThroughSlide it) {
-        it.initializeGraphics();
-      }
+    final Procedure1<ClickThroughSlide> _function = (ClickThroughSlide it) -> {
+      it.initializeGraphics();
     };
     return ObjectExtensions.<ClickThroughSlide>operator_doubleArrow(_clickThroughSlide, _function);
   }
   
   public static Text createText(final String text, final double size) {
     Text _text = new Text();
-    final Procedure1<Text> _function = new Procedure1<Text>() {
-      @Override
-      public void apply(final Text it) {
-        it.setText(text);
-        Font _lcarsFont = LcarsExtensions.lcarsFont(size);
-        it.setFont(_lcarsFont);
-        Color _textColor = DemoCampSlideFactory.getTextColor();
-        it.setFill(_textColor);
-      }
+    final Procedure1<Text> _function = (Text it) -> {
+      it.setText(text);
+      Font _lcarsFont = LcarsExtensions.lcarsFont(size);
+      it.setFont(_lcarsFont);
+      Color _textColor = DemoCampSlideFactory.getTextColor();
+      it.setFill(_textColor);
     };
     return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
   }

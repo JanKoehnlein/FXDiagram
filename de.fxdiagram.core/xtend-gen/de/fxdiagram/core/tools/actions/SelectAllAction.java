@@ -40,13 +40,10 @@ public class SelectAllAction implements DiagramAction {
   public void perform(final XRoot root) {
     XDiagram _diagram = root.getDiagram();
     Iterable<XShape> _allShapes = _diagram.getAllShapes();
-    final Consumer<XShape> _function = new Consumer<XShape>() {
-      @Override
-      public void accept(final XShape it) {
-        boolean _isSelectable = it.isSelectable();
-        if (_isSelectable) {
-          it.setSelected(true);
-        }
+    final Consumer<XShape> _function = (XShape it) -> {
+      boolean _isSelectable = it.isSelectable();
+      if (_isSelectable) {
+        it.setSelected(true);
       }
     };
     _allShapes.forEach(_function);

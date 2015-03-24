@@ -49,19 +49,13 @@ public class DeleteAction implements DiagramAction {
   public void perform(final XRoot root) {
     final Iterable<XShape> elements = root.getCurrentSelection();
     final Iterable<XNode> nodes = Iterables.<XNode>filter(elements, XNode.class);
-    final Function1<XNode, ObservableList<XConnection>> _function = new Function1<XNode, ObservableList<XConnection>>() {
-      @Override
-      public ObservableList<XConnection> apply(final XNode it) {
-        return it.getIncomingConnections();
-      }
+    final Function1<XNode, ObservableList<XConnection>> _function = (XNode it) -> {
+      return it.getIncomingConnections();
     };
     Iterable<ObservableList<XConnection>> _map = IterableExtensions.<XNode, ObservableList<XConnection>>map(nodes, _function);
     Iterable<XConnection> _flatten = Iterables.<XConnection>concat(_map);
-    final Function1<XNode, ObservableList<XConnection>> _function_1 = new Function1<XNode, ObservableList<XConnection>>() {
-      @Override
-      public ObservableList<XConnection> apply(final XNode it) {
-        return it.getOutgoingConnections();
-      }
+    final Function1<XNode, ObservableList<XConnection>> _function_1 = (XNode it) -> {
+      return it.getOutgoingConnections();
     };
     Iterable<ObservableList<XConnection>> _map_1 = IterableExtensions.<XNode, ObservableList<XConnection>>map(nodes, _function_1);
     Iterable<XConnection> _flatten_1 = Iterables.<XConnection>concat(_map_1);

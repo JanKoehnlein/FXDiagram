@@ -37,46 +37,28 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
   
   public RectangleBorderPane() {
     this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-    final ChangeListener<Number> _function = new ChangeListener<Number>() {
-      @Override
-      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        RectangleBorderPane.this.updateStyle();
-      }
+    final ChangeListener<Number> _function = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
+      this.updateStyle();
     };
     this.borderWidthProperty.addListener(_function);
-    final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-      @Override
-      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        RectangleBorderPane.this.updateStyle();
-      }
+    final ChangeListener<Number> _function_1 = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
+      this.updateStyle();
     };
     this.borderRadiusProperty.addListener(_function_1);
-    final ChangeListener<Insets> _function_2 = new ChangeListener<Insets>() {
-      @Override
-      public void changed(final ObservableValue<? extends Insets> prop, final Insets oldVal, final Insets newVal) {
-        RectangleBorderPane.this.updateStyle();
-      }
+    final ChangeListener<Insets> _function_2 = (ObservableValue<? extends Insets> prop, Insets oldVal, Insets newVal) -> {
+      this.updateStyle();
     };
     this.borderInsetsProperty.addListener(_function_2);
-    final ChangeListener<Paint> _function_3 = new ChangeListener<Paint>() {
-      @Override
-      public void changed(final ObservableValue<? extends Paint> prop, final Paint oldVal, final Paint newVal) {
-        RectangleBorderPane.this.updateStyle();
-      }
+    final ChangeListener<Paint> _function_3 = (ObservableValue<? extends Paint> prop, Paint oldVal, Paint newVal) -> {
+      this.updateStyle();
     };
     this.borderPaintProperty.addListener(_function_3);
-    final ChangeListener<Paint> _function_4 = new ChangeListener<Paint>() {
-      @Override
-      public void changed(final ObservableValue<? extends Paint> prop, final Paint oldVal, final Paint newVal) {
-        RectangleBorderPane.this.updateStyle();
-      }
+    final ChangeListener<Paint> _function_4 = (ObservableValue<? extends Paint> prop, Paint oldVal, Paint newVal) -> {
+      this.updateStyle();
     };
     this.backgroundPaintProperty.addListener(_function_4);
-    final ChangeListener<Number> _function_5 = new ChangeListener<Number>() {
-      @Override
-      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        RectangleBorderPane.this.updateStyle();
-      }
+    final ChangeListener<Number> _function_5 = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
+      this.updateStyle();
     };
     this.backgroundRadiusProperty.addListener(_function_5);
     this.updateStyle();

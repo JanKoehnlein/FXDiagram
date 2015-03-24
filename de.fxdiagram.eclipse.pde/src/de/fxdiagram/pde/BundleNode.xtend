@@ -2,13 +2,13 @@ package de.fxdiagram.pde
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.eclipse.behavior.LazyConnectionMappingBehavior
-import de.fxdiagram.eclipse.mapping.ConnectionMapping
-import de.fxdiagram.eclipse.shapes.BaseNode
-import de.fxdiagram.eclipse.shapes.INodeWithLazyMappings
 import de.fxdiagram.lib.animations.Inflator
 import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.nodes.RectangleBorderPane
+import de.fxdiagram.mapping.ConnectionMapping
+import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior
+import de.fxdiagram.mapping.shapes.BaseNode
+import de.fxdiagram.mapping.shapes.INodeWithLazyMappings
 import javafx.animation.ParallelTransition
 import javafx.geometry.Insets
 import javafx.geometry.Pos

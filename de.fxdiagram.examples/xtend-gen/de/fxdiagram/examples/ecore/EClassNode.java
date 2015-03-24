@@ -60,41 +60,32 @@ public class EClassNode extends XNode {
   @Override
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      @Override
-      public void apply(final RectangleBorderPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        final Procedure1<VBox> _function = new Procedure1<VBox>() {
-          @Override
-          public void apply(final VBox it) {
-            Insets _insets = new Insets(15, 20, 15, 20);
-            it.setPadding(_insets);
-            ObservableList<Node> _children = it.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              @Override
-              public void apply(final Text it) {
-                EClass _eClass = EClassNode.this.getEClass();
-                String _name = _eClass.getName();
-                it.setText(_name);
-                it.setTextOrigin(VPos.TOP);
-                Font _font = it.getFont();
-                String _family = _font.getFamily();
-                Font _font_1 = it.getFont();
-                double _size = _font_1.getSize();
-                double _multiply = (_size * 1.1);
-                Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
-                it.setFont(_font_2);
-              }
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-            _children.add(_doubleArrow);
-            it.setAlignment(Pos.CENTER);
-          }
+    final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      final Procedure1<VBox> _function_1 = (VBox it_1) -> {
+        Insets _insets = new Insets(15, 20, 15, 20);
+        it_1.setPadding(_insets);
+        ObservableList<Node> _children_1 = it_1.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function_2 = (Text it_2) -> {
+          EClass _eClass = this.getEClass();
+          String _name = _eClass.getName();
+          it_2.setText(_name);
+          it_2.setTextOrigin(VPos.TOP);
+          Font _font = it_2.getFont();
+          String _family = _font.getFamily();
+          Font _font_1 = it_2.getFont();
+          double _size = _font_1.getSize();
+          double _multiply = (_size * 1.1);
+          Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
+          it_2.setFont(_font_2);
         };
-        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(EClassNode.this.contentArea, _function);
-        _children.add(_doubleArrow);
-      }
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
+        _children_1.add(_doubleArrow);
+        it_1.setAlignment(Pos.CENTER);
+      };
+      VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(this.contentArea, _function_1);
+      _children.add(_doubleArrow);
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
@@ -110,65 +101,50 @@ public class EClassNode extends XNode {
       EClass _eClass = this.getEClass();
       EList<EAttribute> _eAttributes = _eClass.getEAttributes();
       List<EAttribute> _limit = this.<EAttribute>limit(_eAttributes);
-      final Consumer<EAttribute> _function = new Consumer<EAttribute>() {
-        @Override
-        public void accept(final EAttribute attribute) {
-          ObservableList<Node> _children = EClassNode.this.attributeCompartment.getChildren();
-          Text _text = new Text();
-          final Procedure1<Text> _function = new Procedure1<Text>() {
-            @Override
-            public void apply(final Text it) {
-              StringConcatenation _builder = new StringConcatenation();
-              String _name = attribute.getName();
-              _builder.append(_name, "");
-              _builder.append(": ");
-              EClassifier _eType = attribute.getEType();
-              String _name_1 = _eType.getName();
-              _builder.append(_name_1, "");
-              it.setText(_builder.toString());
-            }
-          };
-          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-          _children.add(_doubleArrow);
-        }
+      final Consumer<EAttribute> _function = (EAttribute attribute) -> {
+        ObservableList<Node> _children = this.attributeCompartment.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function_1 = (Text it) -> {
+          StringConcatenation _builder = new StringConcatenation();
+          String _name = attribute.getName();
+          _builder.append(_name, "");
+          _builder.append(": ");
+          EClassifier _eType = attribute.getEType();
+          String _name_1 = _eType.getName();
+          _builder.append(_name_1, "");
+          it.setText(_builder.toString());
+        };
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+        _children.add(_doubleArrow);
       };
       _limit.forEach(_function);
       EClass _eClass_1 = this.getEClass();
       EList<EOperation> _eOperations = _eClass_1.getEOperations();
       List<EOperation> _limit_1 = this.<EOperation>limit(_eOperations);
-      final Consumer<EOperation> _function_1 = new Consumer<EOperation>() {
-        @Override
-        public void accept(final EOperation operation) {
-          ObservableList<Node> _children = EClassNode.this.operationCompartment.getChildren();
-          Text _text = new Text();
-          final Procedure1<Text> _function = new Procedure1<Text>() {
-            @Override
-            public void apply(final Text it) {
-              StringConcatenation _builder = new StringConcatenation();
-              String _name = operation.getName();
-              _builder.append(_name, "");
-              _builder.append("(");
-              EList<EParameter> _eParameters = operation.getEParameters();
-              final Function1<EParameter, String> _function = new Function1<EParameter, String>() {
-                @Override
-                public String apply(final EParameter it) {
-                  EClassifier _eType = it.getEType();
-                  return _eType.getName();
-                }
-              };
-              List<String> _map = ListExtensions.<EParameter, String>map(_eParameters, _function);
-              String _join = IterableExtensions.join(_map, ", ");
-              _builder.append(_join, "");
-              _builder.append("): ");
-              EClassifier _eType = operation.getEType();
-              String _name_1 = _eType.getName();
-              _builder.append(_name_1, "");
-              it.setText(_builder.toString());
-            }
+      final Consumer<EOperation> _function_1 = (EOperation operation) -> {
+        ObservableList<Node> _children = this.operationCompartment.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function_2 = (Text it) -> {
+          StringConcatenation _builder = new StringConcatenation();
+          String _name = operation.getName();
+          _builder.append(_name, "");
+          _builder.append("(");
+          EList<EParameter> _eParameters = operation.getEParameters();
+          final Function1<EParameter, String> _function_3 = (EParameter it_1) -> {
+            EClassifier _eType = it_1.getEType();
+            return _eType.getName();
           };
-          Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-          _children.add(_doubleArrow);
-        }
+          List<String> _map = ListExtensions.<EParameter, String>map(_eParameters, _function_3);
+          String _join = IterableExtensions.join(_map, ", ");
+          _builder.append(_join, "");
+          _builder.append("): ");
+          EClassifier _eType = operation.getEType();
+          String _name_1 = _eType.getName();
+          _builder.append(_name_1, "");
+          it.setText(_builder.toString());
+        };
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
+        _children.add(_doubleArrow);
       };
       _limit_1.forEach(_function_1);
       _xblockexpression = null;

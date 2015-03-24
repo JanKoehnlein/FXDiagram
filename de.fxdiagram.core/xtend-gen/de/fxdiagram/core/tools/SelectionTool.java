@@ -50,184 +50,154 @@ public class SelectionTool implements XDiagramTool {
   
   public SelectionTool(final XRoot root) {
     this.root = root;
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent event) {
-        Iterable<XShape> _currentSelection = root.getCurrentSelection();
-        final Set<XShape> selection = IterableExtensions.<XShape>toSet(_currentSelection);
-        SelectionTool.this.hasDragged = false;
-        EventTarget _target = event.getTarget();
-        Pane _diagramCanvas = root.getDiagramCanvas();
-        boolean _equals = Objects.equal(_target, _diagramCanvas);
-        if (_equals) {
-          SelectionTool.this.isActionOnDiagram = true;
-        } else {
-          XButton _targetButton = ButtonExtensions.getTargetButton(event);
-          if ((!(_targetButton instanceof XButton))) {
-            final XShape targetShape = CoreExtensions.getTargetShape(event);
-            boolean _isSelectable = false;
-            if (targetShape!=null) {
-              _isSelectable=targetShape.isSelectable();
+    final EventHandler<MouseEvent> _function = (MouseEvent event) -> {
+      Iterable<XShape> _currentSelection = root.getCurrentSelection();
+      final Set<XShape> selection = IterableExtensions.<XShape>toSet(_currentSelection);
+      this.hasDragged = false;
+      EventTarget _target = event.getTarget();
+      Pane _diagramCanvas = root.getDiagramCanvas();
+      boolean _equals = Objects.equal(_target, _diagramCanvas);
+      if (_equals) {
+        this.isActionOnDiagram = true;
+      } else {
+        XButton _targetButton = ButtonExtensions.getTargetButton(event);
+        if ((!(_targetButton instanceof XButton))) {
+          final XShape targetShape = CoreExtensions.getTargetShape(event);
+          boolean _isSelectable = false;
+          if (targetShape!=null) {
+            _isSelectable=targetShape.isSelectable();
+          }
+          if (_isSelectable) {
+            boolean _and = false;
+            boolean _selected = targetShape.getSelected();
+            boolean _not = (!_selected);
+            if (!_not) {
+              _and = false;
+            } else {
+              boolean _isShortcutDown = event.isShortcutDown();
+              boolean _not_1 = (!_isShortcutDown);
+              _and = _not_1;
             }
-            if (_isSelectable) {
-              boolean _and = false;
-              boolean _selected = targetShape.getSelected();
-              boolean _not = (!_selected);
-              if (!_not) {
-                _and = false;
-              } else {
-                boolean _isShortcutDown = event.isShortcutDown();
-                boolean _not_1 = (!_isShortcutDown);
-                _and = _not_1;
+            if (_and) {
+              XShape _switchResult = null;
+              boolean _matched = false;
+              if (!_matched) {
+                if (targetShape instanceof XControlPoint) {
+                  _matched=true;
+                  Parent _parent = ((XControlPoint)targetShape).getParent();
+                  _switchResult = CoreExtensions.getContainerShape(_parent);
+                }
               }
-              if (_and) {
-                XShape _switchResult = null;
-                boolean _matched = false;
-                if (!_matched) {
-                  if (targetShape instanceof XControlPoint) {
-                    _matched=true;
-                    Parent _parent = ((XControlPoint)targetShape).getParent();
-                    _switchResult = CoreExtensions.getContainerShape(_parent);
-                  }
-                }
-                if (!_matched) {
-                  _switchResult = null;
-                }
-                final XShape skip = _switchResult;
-                final Function1<XShape, Boolean> _function = new Function1<XShape, Boolean>() {
-                  @Override
-                  public Boolean apply(final XShape it) {
-                    return Boolean.valueOf((!Objects.equal(it, skip)));
-                  }
-                };
-                SelectionTool.this.deselect(selection, _function);
+              if (!_matched) {
+                _switchResult = null;
               }
-              final Function1<XShape, Boolean> _function_1 = new Function1<XShape, Boolean>() {
-                @Override
-                public Boolean apply(final XShape it) {
-                  XDiagram _diagram = CoreExtensions.getDiagram(it);
-                  XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
-                  return Boolean.valueOf((!Objects.equal(_diagram, _diagram_1)));
-                }
+              final XShape skip = _switchResult;
+              final Function1<XShape, Boolean> _function_1 = (XShape it) -> {
+                return Boolean.valueOf((!Objects.equal(it, skip)));
               };
-              SelectionTool.this.deselect(selection, _function_1);
-              boolean _isShortcutDown_1 = event.isShortcutDown();
-              if (_isShortcutDown_1) {
-                targetShape.toggleSelect(event);
-              } else {
-                targetShape.select(event);
-              }
-              boolean _selected_1 = targetShape.getSelected();
-              if (_selected_1) {
-                selection.add(targetShape);
-              }
-              final Consumer<XShape> _function_2 = new Consumer<XShape>() {
-                @Override
-                public void accept(final XShape it) {
-                  MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
-                  if (_behavior!=null) {
-                    _behavior.mousePressed(event);
-                  }
-                }
-              };
-              selection.forEach(_function_2);
-              MoveBehavior _behavior = targetShape.<MoveBehavior>getBehavior(MoveBehavior.class);
+              this.deselect(selection, _function_1);
+            }
+            final Function1<XShape, Boolean> _function_2 = (XShape it) -> {
+              XDiagram _diagram = CoreExtensions.getDiagram(it);
+              XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
+              return Boolean.valueOf((!Objects.equal(_diagram, _diagram_1)));
+            };
+            this.deselect(selection, _function_2);
+            boolean _isShortcutDown_1 = event.isShortcutDown();
+            if (_isShortcutDown_1) {
+              targetShape.toggleSelect(event);
+            } else {
+              targetShape.select(event);
+            }
+            boolean _selected_1 = targetShape.getSelected();
+            if (_selected_1) {
+              selection.add(targetShape);
+            }
+            final Consumer<XShape> _function_3 = (XShape it) -> {
+              MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
               if (_behavior!=null) {
                 _behavior.mousePressed(event);
               }
-              double _sceneX = event.getSceneX();
-              double _sceneY = event.getSceneY();
-              SelectionTool.this.updatePositionTooltip(selection, _sceneX, _sceneY);
-              final Runnable _function_3 = new Runnable() {
-                @Override
-                public void run() {
-                  SelectionTool.this.showPositionTooltip();
-                }
-              };
-              Duration _millis = DurationExtensions.millis(200);
-              TimerExtensions.defer(_function_3, _millis);
+            };
+            selection.forEach(_function_3);
+            MoveBehavior _behavior = targetShape.<MoveBehavior>getBehavior(MoveBehavior.class);
+            if (_behavior!=null) {
+              _behavior.mousePressed(event);
             }
-            SelectionTool.this.isActionOnDiagram = false;
+            double _sceneX = event.getSceneX();
+            double _sceneY = event.getSceneY();
+            this.updatePositionTooltip(selection, _sceneX, _sceneY);
+            final Runnable _function_4 = () -> {
+              this.showPositionTooltip();
+            };
+            Duration _millis = DurationExtensions.millis(200);
+            TimerExtensions.defer(_function_4, _millis);
           }
+          this.isActionOnDiagram = false;
         }
       }
     };
     this.mousePressedHandler = _function;
-    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        SelectionTool.this.hasDragged = true;
-        if ((!SelectionTool.this.isActionOnDiagram)) {
-          final Iterable<XShape> selection = root.getCurrentSelection();
-          for (final XShape shape : selection) {
-            MoveBehavior _behavior = null;
-            if (shape!=null) {
-              _behavior=shape.<MoveBehavior>getBehavior(MoveBehavior.class);
-            }
-            if (_behavior!=null) {
-              _behavior.mouseDragged(it);
-            }
+    final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
+      this.hasDragged = true;
+      if ((!this.isActionOnDiagram)) {
+        final Iterable<XShape> selection = root.getCurrentSelection();
+        for (final XShape shape : selection) {
+          MoveBehavior _behavior = null;
+          if (shape!=null) {
+            _behavior=shape.<MoveBehavior>getBehavior(MoveBehavior.class);
           }
-          XDiagram _diagram = root.getDiagram();
-          AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
-          if (_auxiliaryLinesSupport!=null) {
-            _auxiliaryLinesSupport.show(selection);
+          if (_behavior!=null) {
+            _behavior.mouseDragged(it);
           }
-          double _sceneX = it.getSceneX();
-          double _sceneY = it.getSceneY();
-          SelectionTool.this.updatePositionTooltip(selection, _sceneX, _sceneY);
-          SelectionTool.this.showPositionTooltip();
-          it.consume();
-        }
-      }
-    };
-    this.mouseDraggedHandler = _function_1;
-    final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        boolean _and = false;
-        if (!(SelectionTool.this.isActionOnDiagram && (!SelectionTool.this.hasDragged))) {
-          _and = false;
-        } else {
-          MouseButton _button = it.getButton();
-          boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
-          _and = _equals;
-        }
-        if (_and) {
-          Iterable<XShape> _currentSelection = root.getCurrentSelection();
-          final Consumer<XShape> _function = new Consumer<XShape>() {
-            @Override
-            public void accept(final XShape it) {
-              it.setSelected(false);
-            }
-          };
-          _currentSelection.forEach(_function);
         }
         XDiagram _diagram = root.getDiagram();
         AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
         if (_auxiliaryLinesSupport!=null) {
-          _auxiliaryLinesSupport.hide();
+          _auxiliaryLinesSupport.show(selection);
         }
-        SelectionTool.this.hidePositionTooltip();
+        double _sceneX = it.getSceneX();
+        double _sceneY = it.getSceneY();
+        this.updatePositionTooltip(selection, _sceneX, _sceneY);
+        this.showPositionTooltip();
+        it.consume();
       }
+    };
+    this.mouseDraggedHandler = _function_1;
+    final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
+      boolean _and = false;
+      if (!(this.isActionOnDiagram && (!this.hasDragged))) {
+        _and = false;
+      } else {
+        MouseButton _button = it.getButton();
+        boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
+        _and = _equals;
+      }
+      if (_and) {
+        Iterable<XShape> _currentSelection = root.getCurrentSelection();
+        final Consumer<XShape> _function_3 = (XShape it_1) -> {
+          it_1.setSelected(false);
+        };
+        _currentSelection.forEach(_function_3);
+      }
+      XDiagram _diagram = root.getDiagram();
+      AuxiliaryLinesSupport _auxiliaryLinesSupport = _diagram.getAuxiliaryLinesSupport();
+      if (_auxiliaryLinesSupport!=null) {
+        _auxiliaryLinesSupport.hide();
+      }
+      this.hidePositionTooltip();
     };
     this.mouseReleasedHandler = _function_2;
   }
   
   protected void updatePositionTooltip(final Iterable<? extends XShape> selection, final double screenX, final double screenY) {
-    final Function1<XShape, Bounds> _function = new Function1<XShape, Bounds>() {
-      @Override
-      public Bounds apply(final XShape it) {
-        Bounds _snapBounds = it.getSnapBounds();
-        return CoreExtensions.localToRootDiagram(it, _snapBounds);
-      }
+    final Function1<XShape, Bounds> _function = (XShape it) -> {
+      Bounds _snapBounds = it.getSnapBounds();
+      return CoreExtensions.localToRootDiagram(it, _snapBounds);
     };
     Iterable<Bounds> _map = IterableExtensions.map(selection, _function);
-    final Function2<Bounds, Bounds, Bounds> _function_1 = new Function2<Bounds, Bounds, Bounds>() {
-      @Override
-      public Bounds apply(final Bounds a, final Bounds b) {
-        return BoundsExtensions.operator_plus(a, b);
-      }
+    final Function2<Bounds, Bounds, Bounds> _function_1 = (Bounds a, Bounds b) -> {
+      return BoundsExtensions.operator_plus(a, b);
     };
     Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
     boolean _notEquals = (!Objects.equal(selectionBounds, null));

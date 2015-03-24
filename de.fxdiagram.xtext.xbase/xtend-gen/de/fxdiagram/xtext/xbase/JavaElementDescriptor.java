@@ -52,7 +52,7 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
   }
   
   @Override
-  public IEditorPart openInEditor(final boolean isSelect) {
+  public Object openInEditor(final boolean isSelect) {
     try {
       IEditorPart _xblockexpression = null;
       {

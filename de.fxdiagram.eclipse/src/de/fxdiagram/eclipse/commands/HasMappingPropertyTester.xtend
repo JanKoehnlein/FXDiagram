@@ -1,6 +1,6 @@
 package de.fxdiagram.eclipse.commands
 
-import de.fxdiagram.eclipse.mapping.XDiagramConfig
+import de.fxdiagram.mapping.XDiagramConfig
 import org.eclipse.core.expressions.PropertyTester
 import org.eclipse.ui.IWorkbenchPart
 

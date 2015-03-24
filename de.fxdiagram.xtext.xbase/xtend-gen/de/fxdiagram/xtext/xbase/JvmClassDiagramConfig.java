@@ -8,16 +8,16 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
-import de.fxdiagram.eclipse.mapping.AbstractDiagramConfig;
-import de.fxdiagram.eclipse.mapping.ConnectionMapping;
-import de.fxdiagram.eclipse.mapping.DiagramMapping;
-import de.fxdiagram.eclipse.mapping.ESetting;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.eclipse.mapping.MappingAcceptor;
-import de.fxdiagram.eclipse.mapping.MultiConnectionMappingCall;
-import de.fxdiagram.eclipse.mapping.NodeMapping;
-import de.fxdiagram.eclipse.shapes.BaseDiagramNode;
+import de.fxdiagram.eclipse.xtext.ESetting;
+import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig;
+import de.fxdiagram.mapping.ConnectionMapping;
+import de.fxdiagram.mapping.DiagramMapping;
+import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
+import de.fxdiagram.mapping.MappingAcceptor;
+import de.fxdiagram.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.shapes.BaseDiagramNode;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
@@ -50,7 +50,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class JvmClassDiagramConfig extends AbstractDiagramConfig {
+public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
   @Inject
   @Extension
   private JvmDomainUtil _jvmDomainUtil;

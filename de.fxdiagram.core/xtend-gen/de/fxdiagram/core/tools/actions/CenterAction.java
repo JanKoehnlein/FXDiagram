@@ -70,19 +70,13 @@ public class CenterAction implements DiagramAction {
           _xifexpression = root.getCurrentSelection();
         }
         final Iterable<XShape> elements = _xifexpression;
-        final Function1<XShape, Bounds> _function = new Function1<XShape, Bounds>() {
-          @Override
-          public Bounds apply(final XShape it) {
-            Bounds _snapBounds = it.getSnapBounds();
-            return CoreExtensions.localToRootDiagram(it, _snapBounds);
-          }
+        final Function1<XShape, Bounds> _function = (XShape it_1) -> {
+          Bounds _snapBounds = it_1.getSnapBounds();
+          return CoreExtensions.localToRootDiagram(it_1, _snapBounds);
         };
         Iterable<Bounds> _map = IterableExtensions.<XShape, Bounds>map(elements, _function);
-        final Function2<Bounds, Bounds, Bounds> _function_1 = new Function2<Bounds, Bounds, Bounds>() {
-          @Override
-          public Bounds apply(final Bounds a, final Bounds b) {
-            return BoundsExtensions.operator_plus(a, b);
-          }
+        final Function2<Bounds, Bounds, Bounds> _function_1 = (Bounds a, Bounds b) -> {
+          return BoundsExtensions.operator_plus(a, b);
         };
         final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map, _function_1);
         boolean _and = false;

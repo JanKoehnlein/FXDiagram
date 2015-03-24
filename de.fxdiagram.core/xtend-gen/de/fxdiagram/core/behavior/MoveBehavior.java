@@ -130,49 +130,40 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   public void doActivate() {
     T _host = this.getHost();
     Node _node = _host.getNode();
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        MoveBehavior.this.mousePressed(it);
-      }
+    final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
+      this.mousePressed(it);
     };
     _node.setOnMousePressed(_function);
     T _host_1 = this.getHost();
     Node _node_1 = _host_1.getNode();
-    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        MoveBehavior.this.mouseDragged(it);
-      }
+    final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
+      this.mouseDragged(it);
     };
     _node_1.setOnMouseDragged(_function_1);
     T _host_2 = this.getHost();
     Node _node_2 = _host_2.getNode();
-    final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        boolean _notEquals = (!Objects.equal(MoveBehavior.this.dragContext, null));
-        if (_notEquals) {
-          boolean _or = false;
-          T _host = MoveBehavior.this.getHost();
-          double _layoutX = _host.getLayoutX();
-          boolean _notEquals_1 = (MoveBehavior.this.dragContext.initialX != _layoutX);
-          if (_notEquals_1) {
-            _or = true;
-          } else {
-            T _host_1 = MoveBehavior.this.getHost();
-            double _layoutY = _host_1.getLayoutY();
-            boolean _notEquals_2 = (MoveBehavior.this.dragContext.initialY != _layoutY);
-            _or = _notEquals_2;
-          }
-          if (_or) {
-            T _host_2 = MoveBehavior.this.getHost();
-            XRoot _root = CoreExtensions.getRoot(_host_2);
-            CommandStack _commandStack = _root.getCommandStack();
-            AnimationCommand _createMoveCommand = MoveBehavior.this.createMoveCommand();
-            _commandStack.execute(_createMoveCommand);
-            MoveBehavior.this.setIsManuallyPlaced(true);
-          }
+    final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
+      boolean _notEquals = (!Objects.equal(this.dragContext, null));
+      if (_notEquals) {
+        boolean _or = false;
+        T _host_3 = this.getHost();
+        double _layoutX = _host_3.getLayoutX();
+        boolean _notEquals_1 = (this.dragContext.initialX != _layoutX);
+        if (_notEquals_1) {
+          _or = true;
+        } else {
+          T _host_4 = this.getHost();
+          double _layoutY = _host_4.getLayoutY();
+          boolean _notEquals_2 = (this.dragContext.initialY != _layoutY);
+          _or = _notEquals_2;
+        }
+        if (_or) {
+          T _host_5 = this.getHost();
+          XRoot _root = CoreExtensions.getRoot(_host_5);
+          CommandStack _commandStack = _root.getCommandStack();
+          AnimationCommand _createMoveCommand = this.createMoveCommand();
+          _commandStack.execute(_createMoveCommand);
+          this.setIsManuallyPlaced(true);
         }
       }
     };

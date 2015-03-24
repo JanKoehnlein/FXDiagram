@@ -83,21 +83,15 @@ public class ModelSave {
         }
         gen.write("__class", className);
         List<? extends Property<?>> _properties = element.getProperties();
-        final Consumer<Property<?>> _function = new Consumer<Property<?>>() {
-          @Override
-          public void accept(final Property<?> it) {
-            Class<?> _type = element.getType(it);
-            ModelSave.this.write(gen, it, _type, currentId);
-          }
+        final Consumer<Property<?>> _function = (Property<?> it) -> {
+          Class<?> _type = element.getType(it);
+          this.write(gen, it, _type, currentId);
         };
         _properties.forEach(_function);
         List<? extends ListProperty<?>> _listProperties = element.getListProperties();
-        final Consumer<ListProperty<?>> _function_1 = new Consumer<ListProperty<?>>() {
-          @Override
-          public void accept(final ListProperty<?> it) {
-            Class<?> _type = element.getType(it);
-            ModelSave.this.write(gen, it, _type, currentId);
-          }
+        final Consumer<ListProperty<?>> _function_1 = (ListProperty<?> it) -> {
+          Class<?> _type = element.getType(it);
+          this.write(gen, it, _type, currentId);
         };
         _listProperties.forEach(_function_1);
         gen.writeEnd();

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="fxDiagramConfig" name="FXDiagram Configuration" schema="schema/fxDiagramConfig.exsd"/>
    <extension-point id="selectionExtractor" name="Selected Object Extractor" schema="schema/selectionExtractor.exsd"/>
    <extension
          point="org.eclipse.ui.views">
@@ -71,12 +70,6 @@
                style="push">
          </command>
       </menuContribution>
-   </extension>
-   <extension
-         point="de.fxdiagram.eclipse.selectionExtractor">
-      <selectionExtractor
-            class="de.fxdiagram.eclipse.xtext.XtextSelectionExtractor">
-      </selectionExtractor>
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">

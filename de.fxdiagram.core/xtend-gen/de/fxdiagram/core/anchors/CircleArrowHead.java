@@ -45,26 +45,23 @@ public class CircleArrowHead extends ArrowHead {
         this.fillProperty.bind(_strokeProperty);
       }
       Circle _circle = new Circle();
-      final Procedure1<Circle> _function = new Procedure1<Circle>() {
-        @Override
-        public void apply(final Circle it) {
-          double _width = CircleArrowHead.this.getWidth();
-          it.setRadius(_width);
-          double _radius = it.getRadius();
-          double _minus = (-_radius);
-          it.setLayoutX(_minus);
-          it.setLayoutY(0);
-          ObjectProperty<Paint> _fillProperty = it.fillProperty();
-          _fillProperty.bind(CircleArrowHead.this.fillProperty);
-          ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-          ObjectProperty<Paint> _strokeProperty_1 = CircleArrowHead.this.strokeProperty();
-          _strokeProperty.bind(_strokeProperty_1);
-          DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
-          XConnection _connection = CircleArrowHead.this.getConnection();
-          DoubleProperty _strokeWidthProperty_1 = _connection.strokeWidthProperty();
-          _strokeWidthProperty.bind(_strokeWidthProperty_1);
-          it.setStrokeType(StrokeType.CENTERED);
-        }
+      final Procedure1<Circle> _function = (Circle it) -> {
+        double _width = this.getWidth();
+        it.setRadius(_width);
+        double _radius = it.getRadius();
+        double _minus = (-_radius);
+        it.setLayoutX(_minus);
+        it.setLayoutY(0);
+        ObjectProperty<Paint> _fillProperty = it.fillProperty();
+        _fillProperty.bind(this.fillProperty);
+        ObjectProperty<Paint> _strokeProperty_1 = it.strokeProperty();
+        ObjectProperty<Paint> _strokeProperty_2 = this.strokeProperty();
+        _strokeProperty_1.bind(_strokeProperty_2);
+        DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
+        XConnection _connection_1 = this.getConnection();
+        DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
+        _strokeWidthProperty.bind(_strokeWidthProperty_1);
+        it.setStrokeType(StrokeType.CENTERED);
       };
       _xblockexpression = ObjectExtensions.<Circle>operator_doubleArrow(_circle, _function);
     }

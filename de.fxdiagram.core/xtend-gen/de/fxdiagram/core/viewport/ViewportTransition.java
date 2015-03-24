@@ -71,34 +71,31 @@ public class ViewportTransition extends Transition {
   @Override
   protected void interpolate(final double frac) {
     ViewportTransform _viewportTransform = this.root.getViewportTransform();
-    final Procedure1<ViewportTransform> _function = new Procedure1<ViewportTransform>() {
-      @Override
-      public void apply(final ViewportTransform it) {
-        double _rotate = ViewportTransition.this.from.getRotate();
-        double _multiply = ((1 - frac) * _rotate);
-        double _rotate_1 = ViewportTransition.this.to.getRotate();
-        double _multiply_1 = (frac * _rotate_1);
-        double _plus = (_multiply + _multiply_1);
-        it.setRotate(_plus);
-        double _scale = ViewportTransition.this.from.getScale();
-        double _multiply_2 = ((1 - frac) * _scale);
-        double _scale_1 = ViewportTransition.this.to.getScale();
-        double _multiply_3 = (frac * _scale_1);
-        double _plus_1 = (_multiply_2 + _multiply_3);
-        it.setScale(_plus_1);
-        double _translateX = ViewportTransition.this.from.getTranslateX();
-        double _multiply_4 = ((1 - frac) * _translateX);
-        double _translateX_1 = ViewportTransition.this.to.getTranslateX();
-        double _multiply_5 = (frac * _translateX_1);
-        double _plus_2 = (_multiply_4 + _multiply_5);
-        it.setTranslateX(_plus_2);
-        double _translateY = ViewportTransition.this.from.getTranslateY();
-        double _multiply_6 = ((1 - frac) * _translateY);
-        double _translateY_1 = ViewportTransition.this.to.getTranslateY();
-        double _multiply_7 = (frac * _translateY_1);
-        double _plus_3 = (_multiply_6 + _multiply_7);
-        it.setTranslateY(_plus_3);
-      }
+    final Procedure1<ViewportTransform> _function = (ViewportTransform it) -> {
+      double _rotate = this.from.getRotate();
+      double _multiply = ((1 - frac) * _rotate);
+      double _rotate_1 = this.to.getRotate();
+      double _multiply_1 = (frac * _rotate_1);
+      double _plus = (_multiply + _multiply_1);
+      it.setRotate(_plus);
+      double _scale = this.from.getScale();
+      double _multiply_2 = ((1 - frac) * _scale);
+      double _scale_1 = this.to.getScale();
+      double _multiply_3 = (frac * _scale_1);
+      double _plus_1 = (_multiply_2 + _multiply_3);
+      it.setScale(_plus_1);
+      double _translateX = this.from.getTranslateX();
+      double _multiply_4 = ((1 - frac) * _translateX);
+      double _translateX_1 = this.to.getTranslateX();
+      double _multiply_5 = (frac * _translateX_1);
+      double _plus_2 = (_multiply_4 + _multiply_5);
+      it.setTranslateX(_plus_2);
+      double _translateY = this.from.getTranslateY();
+      double _multiply_6 = ((1 - frac) * _translateY);
+      double _translateY_1 = this.to.getTranslateY();
+      double _multiply_7 = (frac * _translateY_1);
+      double _plus_3 = (_multiply_6 + _multiply_7);
+      it.setTranslateY(_plus_3);
     };
     ObjectExtensions.<ViewportTransform>operator_doubleArrow(_viewportTransform, _function);
   }
@@ -106,14 +103,11 @@ public class ViewportTransition extends Transition {
   public ViewportMemento calculateTargetMemento(final Point2D targetCenterInDiagram, final double targetScale, final double targetAngle) {
     final double toScale = Math.max(ViewportTransform.MIN_SCALE, targetScale);
     ViewportTransform _viewportTransform = this.root.getViewportTransform();
-    final Procedure1<ViewportTransform> _function = new Procedure1<ViewportTransform>() {
-      @Override
-      public void apply(final ViewportTransform it) {
-        double _scale = ViewportTransition.this.from.getScale();
-        double _divide = (toScale / _scale);
-        it.scaleRelative(_divide);
-        it.setRotate(targetAngle);
-      }
+    final Procedure1<ViewportTransform> _function = (ViewportTransform it) -> {
+      double _scale = this.from.getScale();
+      double _divide = (toScale / _scale);
+      it.scaleRelative(_divide);
+      it.setRotate(targetAngle);
     };
     ObjectExtensions.<ViewportTransform>operator_doubleArrow(_viewportTransform, _function);
     XDiagram _diagram = this.root.getDiagram();

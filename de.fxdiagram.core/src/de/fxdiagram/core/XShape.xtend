@@ -102,6 +102,8 @@ abstract class XShape extends Parent implements XActivatable {
 	
 	def addBehavior(Behavior behavior) {
 		behaviors.put(behavior.behaviorKey, behavior)
+		if(isActive)
+			behavior.activate
 	}
 	
 	def removeBehavior(String key) {

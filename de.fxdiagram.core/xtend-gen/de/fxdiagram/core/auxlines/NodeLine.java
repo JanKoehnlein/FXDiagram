@@ -55,31 +55,25 @@ public class NodeLine extends AuxiliaryLine {
       switch (orientation) {
         case HORIZONTAL:
           Line _line = new Line();
-          final Procedure1<Line> _function = new Procedure1<Line>() {
-            @Override
-            public void apply(final Line it) {
-              it.setStartX((NodeLine.this.min - NodeLine.this.overlap));
-              double _position = NodeLine.this.getPosition();
-              it.setStartY(_position);
-              it.setEndX((NodeLine.this.max + NodeLine.this.overlap));
-              double _position_1 = NodeLine.this.getPosition();
-              it.setEndY(_position_1);
-            }
+          final Procedure1<Line> _function = (Line it) -> {
+            it.setStartX((this.min - this.overlap));
+            double _position = this.getPosition();
+            it.setStartY(_position);
+            it.setEndX((this.max + this.overlap));
+            double _position_1 = this.getPosition();
+            it.setEndY(_position_1);
           };
           _switchResult = ObjectExtensions.<Line>operator_doubleArrow(_line, _function);
           break;
         case VERTICAL:
           Line _line_1 = new Line();
-          final Procedure1<Line> _function_1 = new Procedure1<Line>() {
-            @Override
-            public void apply(final Line it) {
-              double _position = NodeLine.this.getPosition();
-              it.setStartX(_position);
-              it.setStartY((NodeLine.this.min - NodeLine.this.overlap));
-              double _position_1 = NodeLine.this.getPosition();
-              it.setEndX(_position_1);
-              it.setEndY((NodeLine.this.max + NodeLine.this.overlap));
-            }
+          final Procedure1<Line> _function_1 = (Line it) -> {
+            double _position = this.getPosition();
+            it.setStartX(_position);
+            it.setStartY((this.min - this.overlap));
+            double _position_1 = this.getPosition();
+            it.setEndX(_position_1);
+            it.setEndY((this.max + this.overlap));
           };
           _switchResult = ObjectExtensions.<Line>operator_doubleArrow(_line_1, _function_1);
           break;
@@ -87,12 +81,9 @@ public class NodeLine extends AuxiliaryLine {
           break;
       }
     }
-    final Procedure1<Line> _function_2 = new Procedure1<Line>() {
-      @Override
-      public void apply(final Line it) {
-        it.setStroke(Color.RED);
-        it.setStrokeWidth(2);
-      }
+    final Procedure1<Line> _function_2 = (Line it) -> {
+      it.setStroke(Color.RED);
+      it.setStrokeWidth(2);
     };
     return ObjectExtensions.<Line>operator_doubleArrow(_switchResult, _function_2);
   }

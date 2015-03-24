@@ -101,12 +101,9 @@ public class XNode extends XShape implements XModelProvider {
   
   protected DropShadow createSelectionEffect() {
     DropShadow _dropShadow = new DropShadow();
-    final Procedure1<DropShadow> _function = new Procedure1<DropShadow>() {
-      @Override
-      public void apply(final DropShadow it) {
-        it.setOffsetX(4.0);
-        it.setOffsetY(4.0);
-      }
+    final Procedure1<DropShadow> _function = (DropShadow it) -> {
+      it.setOffsetX(4.0);
+      it.setOffsetY(4.0);
     };
     return ObjectExtensions.<DropShadow>operator_doubleArrow(_dropShadow, _function);
   }
@@ -135,29 +132,23 @@ public class XNode extends XShape implements XModelProvider {
   public void doActivate() {
     MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
     this.addBehavior(_moveBehavior);
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        Node _node = XNode.this.getNode();
-        Effect _effect = _node.getEffect();
-        XNode.this.originalEffect = _effect;
-        Node _node_1 = XNode.this.getNode();
-        Effect _elvis = null;
-        if (XNode.this.mouseOverEffect != null) {
-          _elvis = XNode.this.mouseOverEffect;
-        } else {
-          _elvis = XNode.this.originalEffect;
-        }
-        _node_1.setEffect(_elvis);
+    final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
+      Node _node = this.getNode();
+      Effect _effect = _node.getEffect();
+      this.originalEffect = _effect;
+      Node _node_1 = this.getNode();
+      Effect _elvis = null;
+      if (this.mouseOverEffect != null) {
+        _elvis = this.mouseOverEffect;
+      } else {
+        _elvis = this.originalEffect;
       }
+      _node_1.setEffect(_elvis);
     };
     this.setOnMouseEntered(_function);
-    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        Node _node = XNode.this.getNode();
-        _node.setEffect(XNode.this.originalEffect);
-      }
+    final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
+      Node _node = this.getNode();
+      _node.setEffect(this.originalEffect);
     };
     this.setOnMouseExited(_function_1);
     Node _node = this.getNode();
@@ -176,11 +167,8 @@ public class XNode extends XShape implements XModelProvider {
       ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
       ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
       Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
-      final Consumer<XConnection> _function = new Consumer<XConnection>() {
-        @Override
-        public void accept(final XConnection it) {
-          it.toFront();
-        }
+      final Consumer<XConnection> _function = (XConnection it) -> {
+        it.toFront();
       };
       _plus.forEach(_function);
     } else {

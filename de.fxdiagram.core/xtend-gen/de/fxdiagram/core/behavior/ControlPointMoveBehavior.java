@@ -286,13 +286,10 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   public void mousePressed(final MouseEvent it) {
     super.mousePressed(it);
     ObservableList<XControlPoint> _siblings = this.getSiblings();
-    final Function<XControlPoint, Point2D> _function = new Function<XControlPoint, Point2D>() {
-      @Override
-      public Point2D apply(final XControlPoint it) {
-        double _layoutX = it.getLayoutX();
-        double _layoutY = it.getLayoutY();
-        return new Point2D(_layoutX, _layoutY);
-      }
+    final Function<XControlPoint, Point2D> _function = (XControlPoint it_1) -> {
+      double _layoutX = it_1.getLayoutX();
+      double _layoutY = it_1.getLayoutY();
+      return new Point2D(_layoutX, _layoutY);
     };
     ImmutableMap<XControlPoint, Point2D> _map = Maps.<XControlPoint, Point2D>toMap(_siblings, _function);
     this.initialPositions = _map;
@@ -304,38 +301,35 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
     {
       final ParallelAnimationCommand pac = new ParallelAnimationCommand();
       Set<Map.Entry<XControlPoint, Point2D>> _entrySet = this.initialPositions.entrySet();
-      final Consumer<Map.Entry<XControlPoint, Point2D>> _function = new Consumer<Map.Entry<XControlPoint, Point2D>>() {
-        @Override
-        public void accept(final Map.Entry<XControlPoint, Point2D> it) {
-          boolean _or = false;
-          XControlPoint _key = it.getKey();
-          double _layoutX = _key.getLayoutX();
-          Point2D _value = it.getValue();
-          double _x = _value.getX();
-          boolean _notEquals = (_layoutX != _x);
-          if (_notEquals) {
-            _or = true;
-          } else {
-            XControlPoint _key_1 = it.getKey();
-            double _layoutY = _key_1.getLayoutY();
-            Point2D _value_1 = it.getValue();
-            double _y = _value_1.getY();
-            boolean _notEquals_1 = (_layoutY != _y);
-            _or = _notEquals_1;
-          }
-          if (_or) {
-            XControlPoint _key_2 = it.getKey();
-            Point2D _value_2 = it.getValue();
-            double _x_1 = _value_2.getX();
-            Point2D _value_3 = it.getValue();
-            double _y_1 = _value_3.getY();
-            XControlPoint _key_3 = it.getKey();
-            double _layoutX_1 = _key_3.getLayoutX();
-            XControlPoint _key_4 = it.getKey();
-            double _layoutY_1 = _key_4.getLayoutY();
-            MoveCommand _moveCommand = new MoveCommand(_key_2, _x_1, _y_1, _layoutX_1, _layoutY_1);
-            pac.operator_add(_moveCommand);
-          }
+      final Consumer<Map.Entry<XControlPoint, Point2D>> _function = (Map.Entry<XControlPoint, Point2D> it) -> {
+        boolean _or = false;
+        XControlPoint _key = it.getKey();
+        double _layoutX = _key.getLayoutX();
+        Point2D _value = it.getValue();
+        double _x = _value.getX();
+        boolean _notEquals = (_layoutX != _x);
+        if (_notEquals) {
+          _or = true;
+        } else {
+          XControlPoint _key_1 = it.getKey();
+          double _layoutY = _key_1.getLayoutY();
+          Point2D _value_1 = it.getValue();
+          double _y = _value_1.getY();
+          boolean _notEquals_1 = (_layoutY != _y);
+          _or = _notEquals_1;
+        }
+        if (_or) {
+          XControlPoint _key_2 = it.getKey();
+          Point2D _value_2 = it.getValue();
+          double _x_1 = _value_2.getX();
+          Point2D _value_3 = it.getValue();
+          double _y_1 = _value_3.getY();
+          XControlPoint _key_3 = it.getKey();
+          double _layoutX_1 = _key_3.getLayoutX();
+          XControlPoint _key_4 = it.getKey();
+          double _layoutY_1 = _key_4.getLayoutY();
+          MoveCommand _moveCommand = new MoveCommand(_key_2, _x_1, _y_1, _layoutX_1, _layoutY_1);
+          pac.operator_add(_moveCommand);
         }
       };
       _entrySet.forEach(_function);

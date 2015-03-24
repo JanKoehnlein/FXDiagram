@@ -30,11 +30,8 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
   
   @Override
   public Animation createExecuteAnimation(final CommandContext context) {
-    final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
-      @Override
-      public Animation apply(final AnimationCommand it) {
-        return it.getExecuteAnimation(context);
-      }
+    final Function1<AnimationCommand, Animation> _function = (AnimationCommand it) -> {
+      return it.getExecuteAnimation(context);
     };
     List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(this.commands, _function);
     return this.getParallelTransition(_map);
@@ -42,11 +39,8 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
   
   @Override
   public Animation createUndoAnimation(final CommandContext context) {
-    final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
-      @Override
-      public Animation apply(final AnimationCommand it) {
-        return it.getUndoAnimation(context);
-      }
+    final Function1<AnimationCommand, Animation> _function = (AnimationCommand it) -> {
+      return it.getUndoAnimation(context);
     };
     List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(this.commands, _function);
     return this.getParallelTransition(_map);
@@ -54,11 +48,8 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
   
   @Override
   public Animation createRedoAnimation(final CommandContext context) {
-    final Function1<AnimationCommand, Animation> _function = new Function1<AnimationCommand, Animation>() {
-      @Override
-      public Animation apply(final AnimationCommand it) {
-        return it.getRedoAnimation(context);
-      }
+    final Function1<AnimationCommand, Animation> _function = (AnimationCommand it) -> {
+      return it.getRedoAnimation(context);
     };
     List<Animation> _map = ListExtensions.<AnimationCommand, Animation>map(this.commands, _function);
     return this.getParallelTransition(_map);
@@ -71,12 +62,9 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
       return null;
     } else {
       ParallelTransition _parallelTransition = new ParallelTransition();
-      final Procedure1<ParallelTransition> _function = new Procedure1<ParallelTransition>() {
-        @Override
-        public void apply(final ParallelTransition it) {
-          ObservableList<Animation> _children = it.getChildren();
-          Iterables.<Animation>addAll(_children, validAnimations);
-        }
+      final Procedure1<ParallelTransition> _function = (ParallelTransition it) -> {
+        ObservableList<Animation> _children = it.getChildren();
+        Iterables.<Animation>addAll(_children, validAnimations);
       };
       return ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
     }

@@ -84,19 +84,13 @@ public class RevealAction implements DiagramAction {
       _elvis = _xifexpression;
     }
     final Iterable<? extends XShape> theNodes = _elvis;
-    final Function1<XShape, Bounds> _function = new Function1<XShape, Bounds>() {
-      @Override
-      public Bounds apply(final XShape it) {
-        Bounds _boundsInLocal = it.getBoundsInLocal();
-        return it.localToScene(_boundsInLocal);
-      }
+    final Function1<XShape, Bounds> _function = (XShape it) -> {
+      Bounds _boundsInLocal = it.getBoundsInLocal();
+      return it.localToScene(_boundsInLocal);
     };
     Iterable<Bounds> _map = IterableExtensions.map(theNodes, _function);
-    final Function2<Bounds, Bounds, Bounds> _function_1 = new Function2<Bounds, Bounds, Bounds>() {
-      @Override
-      public Bounds apply(final Bounds $0, final Bounds $1) {
-        return BoundsExtensions.operator_plus($0, $1);
-      }
+    final Function2<Bounds, Bounds, Bounds> _function_1 = (Bounds $0, Bounds $1) -> {
+      return BoundsExtensions.operator_plus($0, $1);
     };
     return IterableExtensions.<Bounds>reduce(_map, _function_1);
   }

@@ -1,7 +1,7 @@
 package de.fxdiagram.eclipse.commands
 
 import de.fxdiagram.eclipse.FXDiagramView
-import de.fxdiagram.eclipse.mapping.XDiagramConfig
+import de.fxdiagram.mapping.XDiagramConfig
 import org.eclipse.jface.action.ContributionItem
 import org.eclipse.swt.SWT
 import org.eclipse.swt.events.SelectionEvent
@@ -36,14 +36,11 @@ class ShowInDiagramContribution extends CompoundContributionItem {
 				getEntryCalls(selectedElement)
 			].flatten
 			if (!mappingCalls.empty) {
-				val hasMultipleConfigs = mappingCalls.map[mapping.config].toSet.size > 1
 				return mappingCalls.map [ call |
 					new ContributionItem() {
 						override fill(Menu menu, int index) {
 							new MenuItem(menu, SWT.CHECK, index) => [
-								text = call.mapping.displayName
-								if (hasMultipleConfigs)
-									text = text + ' (' + call.mapping.config.label + ')'
+								text = call.mapping.displayName + ' (' + call.mapping.config.label + ')'
 								id = call.mapping.config.ID + '#' + call.mapping.ID
 								addSelectionListener(new SelectionListener() {
 									override widgetDefaultSelected(SelectionEvent e) {}

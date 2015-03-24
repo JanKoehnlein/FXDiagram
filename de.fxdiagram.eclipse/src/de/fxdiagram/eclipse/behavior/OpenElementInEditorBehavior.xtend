@@ -5,7 +5,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.behavior.OpenBehavior
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.IMappedElementDescriptor
 import javafx.scene.input.MouseEvent
 
 /**
@@ -18,7 +18,7 @@ class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implement
 	}
 	
 	override getBehaviorKey() {
-		OpenBehavior
+		OpenElementInEditorBehavior
 	}
 	
 	override protected doActivate() {

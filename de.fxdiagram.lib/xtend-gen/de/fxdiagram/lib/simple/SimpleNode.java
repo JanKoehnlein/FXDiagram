@@ -35,24 +35,18 @@ public class SimpleNode extends XNode {
   @Override
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      @Override
-      public void apply(final RectangleBorderPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
-          public void apply(final Text it) {
-            it.setTextOrigin(VPos.TOP);
-            String _name = SimpleNode.this.getName();
-            it.setText(_name);
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add((SimpleNode.this.label = _doubleArrow));
-        Insets _insets = new Insets(10, 20, 10, 20);
-        StackPane.setMargin(SimpleNode.this.label, _insets);
-      }
+    final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      Text _text = new Text();
+      final Procedure1<Text> _function_1 = (Text it_1) -> {
+        it_1.setTextOrigin(VPos.TOP);
+        String _name = this.getName();
+        it_1.setText(_name);
+      };
+      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+      _children.add((this.label = _doubleArrow));
+      Insets _insets = new Insets(10, 20, 10, 20);
+      StackPane.setMargin(this.label, _insets);
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }

@@ -26,11 +26,8 @@ public class ChooserTransition extends Transition {
       }
     };
     this.setInterpolator(_function);
-    final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(final ActionEvent it) {
-        tool.setCurrentPosition(ChooserTransition.this.endPosition);
-      }
+    final EventHandler<ActionEvent> _function_1 = (ActionEvent it) -> {
+      tool.setCurrentPosition(this.endPosition);
     };
     this.setOnFinished(_function_1);
   }

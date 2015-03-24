@@ -42,57 +42,42 @@ public class DiagramScaler implements XActivatable {
   
   public DiagramScaler(final XDiagram diagram) {
     this.diagram = diagram;
-    final ChangeListener<Bounds> _function = new ChangeListener<Bounds>() {
-      @Override
-      public void changed(final ObservableValue<? extends Bounds> prop, final Bounds oldVal, final Bounds newVal) {
-        DiagramScaler.this.scaleToFit();
-      }
+    final ChangeListener<Bounds> _function = (ObservableValue<? extends Bounds> prop, Bounds oldVal, Bounds newVal) -> {
+      this.scaleToFit();
     };
     this.boundsInLocalListener = _function;
-    final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-      @Override
-      public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-        DiagramScaler.this.scaleToFit();
-      }
+    final ChangeListener<Number> _function_1 = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
+      this.scaleToFit();
     };
     this.layoutListener = _function_1;
-    final ListChangeListener<XNode> _function_2 = new ListChangeListener<XNode>() {
-      @Override
-      public void onChanged(final ListChangeListener.Change<? extends XNode> change) {
-        while (change.next()) {
-          {
-            boolean _wasAdded = change.wasAdded();
-            if (_wasAdded) {
-              List<? extends XNode> _addedSubList = change.getAddedSubList();
-              final Consumer<XNode> _function = new Consumer<XNode>() {
-                @Override
-                public void accept(final XNode it) {
-                  ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-                  _boundsInLocalProperty.addListener(DiagramScaler.this.boundsInLocalListener);
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.addListener(DiagramScaler.this.layoutListener);
-                  DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.addListener(DiagramScaler.this.layoutListener);
-                }
-              };
-              _addedSubList.forEach(_function);
-            }
-            boolean _wasRemoved = change.wasRemoved();
-            if (_wasRemoved) {
-              List<? extends XNode> _removed = change.getRemoved();
-              final Consumer<XNode> _function_1 = new Consumer<XNode>() {
-                @Override
-                public void accept(final XNode it) {
-                  ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-                  _boundsInLocalProperty.removeListener(DiagramScaler.this.boundsInLocalListener);
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.removeListener(DiagramScaler.this.layoutListener);
-                  DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.removeListener(DiagramScaler.this.layoutListener);
-                }
-              };
-              _removed.forEach(_function_1);
-            }
+    final ListChangeListener<XNode> _function_2 = (ListChangeListener.Change<? extends XNode> change) -> {
+      while (change.next()) {
+        {
+          boolean _wasAdded = change.wasAdded();
+          if (_wasAdded) {
+            List<? extends XNode> _addedSubList = change.getAddedSubList();
+            final Consumer<XNode> _function_3 = (XNode it) -> {
+              ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+              _boundsInLocalProperty.addListener(this.boundsInLocalListener);
+              DoubleProperty _layoutXProperty = it.layoutXProperty();
+              _layoutXProperty.addListener(this.layoutListener);
+              DoubleProperty _layoutYProperty = it.layoutYProperty();
+              _layoutYProperty.addListener(this.layoutListener);
+            };
+            _addedSubList.forEach(_function_3);
+          }
+          boolean _wasRemoved = change.wasRemoved();
+          if (_wasRemoved) {
+            List<? extends XNode> _removed = change.getRemoved();
+            final Consumer<XNode> _function_4 = (XNode it) -> {
+              ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+              _boundsInLocalProperty.removeListener(this.boundsInLocalListener);
+              DoubleProperty _layoutXProperty = it.layoutXProperty();
+              _layoutXProperty.removeListener(this.layoutListener);
+              DoubleProperty _layoutYProperty = it.layoutYProperty();
+              _layoutYProperty.removeListener(this.layoutListener);
+            };
+            _removed.forEach(_function_4);
           }
         }
       }
@@ -110,21 +95,15 @@ public class DiagramScaler implements XActivatable {
     } else {
       Group _nodeLayer = this.diagram.getNodeLayer();
       ObservableList<Node> _children = _nodeLayer.getChildren();
-      final Function1<Node, BoundingBox> _function = new Function1<Node, BoundingBox>() {
-        @Override
-        public BoundingBox apply(final Node it) {
-          Bounds _layoutBounds = it.getLayoutBounds();
-          double _layoutX = it.getLayoutX();
-          double _layoutY = it.getLayoutY();
-          return BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
-        }
+      final Function1<Node, BoundingBox> _function = (Node it) -> {
+        Bounds _layoutBounds = it.getLayoutBounds();
+        double _layoutX = it.getLayoutX();
+        double _layoutY = it.getLayoutY();
+        return BoundsExtensions.translate(_layoutBounds, _layoutX, _layoutY);
       };
       List<BoundingBox> _map = ListExtensions.<Node, BoundingBox>map(_children, _function);
-      final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = new Function2<BoundingBox, BoundingBox, BoundingBox>() {
-        @Override
-        public BoundingBox apply(final BoundingBox b0, final BoundingBox b1) {
-          return BoundsExtensions.operator_plus(b0, b1);
-        }
+      final Function2<BoundingBox, BoundingBox, BoundingBox> _function_1 = (BoundingBox b0, BoundingBox b1) -> {
+        return BoundsExtensions.operator_plus(b0, b1);
       };
       final BoundingBox myBounds = IterableExtensions.<BoundingBox>reduce(_map, _function_1);
       double _xifexpression = (double) 0;
@@ -155,11 +134,8 @@ public class DiagramScaler implements XActivatable {
       this.diagram.setScaleX(newScale);
       this.diagram.setScaleY(newScale);
       Rectangle _rectangle = new Rectangle();
-      final Procedure1<Rectangle> _function_2 = new Procedure1<Rectangle>() {
-        @Override
-        public void apply(final Rectangle it) {
-          DiagramScaler.this.fit(it, newScale, newScaleX, newScaleY, myBounds);
-        }
+      final Procedure1<Rectangle> _function_2 = (Rectangle it) -> {
+        this.fit(it, newScale, newScaleX, newScaleY, myBounds);
       };
       Rectangle _doubleArrow = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
       this.diagram.setClip(_doubleArrow);
@@ -211,16 +187,13 @@ public class DiagramScaler implements XActivatable {
       this.widthProperty.addListener(this.layoutListener);
       this.heightProperty.addListener(this.layoutListener);
       ObservableList<XNode> _nodes = this.diagram.getNodes();
-      final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
-        public void accept(final XNode it) {
-          ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-          _boundsInLocalProperty.addListener(DiagramScaler.this.boundsInLocalListener);
-          DoubleProperty _layoutXProperty = it.layoutXProperty();
-          _layoutXProperty.addListener(DiagramScaler.this.layoutListener);
-          DoubleProperty _layoutYProperty = it.layoutYProperty();
-          _layoutYProperty.addListener(DiagramScaler.this.layoutListener);
-        }
+      final Consumer<XNode> _function = (XNode it) -> {
+        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+        _boundsInLocalProperty.addListener(this.boundsInLocalListener);
+        DoubleProperty _layoutXProperty = it.layoutXProperty();
+        _layoutXProperty.addListener(this.layoutListener);
+        DoubleProperty _layoutYProperty = it.layoutYProperty();
+        _layoutYProperty.addListener(this.layoutListener);
       };
       _nodes.forEach(_function);
       ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
@@ -247,16 +220,13 @@ public class DiagramScaler implements XActivatable {
       ObservableList<XNode> _nodes = this.diagram.getNodes();
       _nodes.removeListener(this.listChangeListener);
       ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
-      final Consumer<XNode> _function = new Consumer<XNode>() {
-        @Override
-        public void accept(final XNode it) {
-          ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
-          _boundsInLocalProperty.removeListener(DiagramScaler.this.boundsInLocalListener);
-          DoubleProperty _layoutXProperty = it.layoutXProperty();
-          _layoutXProperty.removeListener(DiagramScaler.this.layoutListener);
-          DoubleProperty _layoutYProperty = it.layoutYProperty();
-          _layoutYProperty.removeListener(DiagramScaler.this.layoutListener);
-        }
+      final Consumer<XNode> _function = (XNode it) -> {
+        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = it.boundsInLocalProperty();
+        _boundsInLocalProperty.removeListener(this.boundsInLocalListener);
+        DoubleProperty _layoutXProperty = it.layoutXProperty();
+        _layoutXProperty.removeListener(this.layoutListener);
+        DoubleProperty _layoutYProperty = it.layoutYProperty();
+        _layoutYProperty.removeListener(this.layoutListener);
       };
       _nodes_1.forEach(_function);
       this.isActiveProperty.set(false);

@@ -5,14 +5,14 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.anchors.TriangleArrowHead
-import de.fxdiagram.eclipse.mapping.AbstractDiagramConfig
-import de.fxdiagram.eclipse.mapping.ConnectionMapping
-import de.fxdiagram.eclipse.mapping.DiagramMapping
-import de.fxdiagram.eclipse.mapping.ESetting
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
-import de.fxdiagram.eclipse.mapping.MappingAcceptor
-import de.fxdiagram.eclipse.mapping.NodeMapping
-import de.fxdiagram.eclipse.shapes.BaseDiagramNode
+import de.fxdiagram.eclipse.xtext.ESetting
+import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig
+import de.fxdiagram.mapping.ConnectionMapping
+import de.fxdiagram.mapping.DiagramMapping
+import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.MappingAcceptor
+import de.fxdiagram.mapping.NodeMapping
+import de.fxdiagram.mapping.shapes.BaseDiagramNode
 import javafx.scene.paint.Color
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.jdt.core.IType
@@ -28,7 +28,7 @@ import static org.eclipse.xtext.common.types.TypesPackage.Literals.*
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 
-class JvmClassDiagramConfig extends AbstractDiagramConfig {
+class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 
 	@Inject extension JvmDomainUtil
 	

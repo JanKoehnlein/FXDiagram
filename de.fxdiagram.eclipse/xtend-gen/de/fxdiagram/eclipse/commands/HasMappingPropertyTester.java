@@ -2,8 +2,8 @@ package de.fxdiagram.eclipse.commands;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.eclipse.commands.ISelectionExtractor;
-import de.fxdiagram.eclipse.mapping.MappingCall;
-import de.fxdiagram.eclipse.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.XDiagramConfig;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -21,13 +21,10 @@ public class HasMappingPropertyTester extends PropertyTester {
         if (_notEquals) {
           XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
           Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-          final Function1<XDiagramConfig, Boolean> _function = new Function1<XDiagramConfig, Boolean>() {
-            @Override
-            public Boolean apply(final XDiagramConfig it) {
-              Iterable<? extends MappingCall<?, Object>> _entryCalls = it.<Object>getEntryCalls(selectedElement);
-              boolean _isEmpty = IterableExtensions.isEmpty(_entryCalls);
-              return Boolean.valueOf((!_isEmpty));
-            }
+          final Function1<XDiagramConfig, Boolean> _function = (XDiagramConfig it) -> {
+            Iterable<? extends MappingCall<?, Object>> _entryCalls = it.<Object>getEntryCalls(selectedElement);
+            boolean _isEmpty = IterableExtensions.isEmpty(_entryCalls);
+            return Boolean.valueOf((!_isEmpty));
           };
           final boolean hasMapping = IterableExtensions.exists(_configurations, _function);
           return hasMapping;
@@ -37,11 +34,8 @@ public class HasMappingPropertyTester extends PropertyTester {
     };
     ISelectionExtractor.Registry _instance = ISelectionExtractor.Registry.getInstance();
     Iterable<ISelectionExtractor> _selectionExtractors = _instance.getSelectionExtractors();
-    final Function1<ISelectionExtractor, Boolean> _function = new Function1<ISelectionExtractor, Boolean>() {
-      @Override
-      public Boolean apply(final ISelectionExtractor it) {
-        return Boolean.valueOf(it.addSelectedElement(activePart, acceptor));
-      }
+    final Function1<ISelectionExtractor, Boolean> _function = (ISelectionExtractor it) -> {
+      return Boolean.valueOf(it.addSelectedElement(activePart, acceptor));
     };
     return IterableExtensions.<ISelectionExtractor>exists(_selectionExtractors, _function);
   }

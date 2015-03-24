@@ -55,13 +55,10 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
   
   @Override
   protected XNode createNode(final ESuperTypeDescriptor key) {
-    final Function1<ESuperTypeHandle, EClassDescriptor> _function = new Function1<ESuperTypeHandle, EClassDescriptor>() {
-      @Override
-      public EClassDescriptor apply(final ESuperTypeHandle it) {
-        EcoreDomainObjectProvider _domainObjectProvider = AddESuperTypeRapidButtonBehavior.this.getDomainObjectProvider();
-        EClass _superType = it.getSuperType();
-        return _domainObjectProvider.createEClassDescriptor(_superType);
-      }
+    final Function1<ESuperTypeHandle, EClassDescriptor> _function = (ESuperTypeHandle it) -> {
+      EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
+      EClass _superType = it.getSuperType();
+      return _domainObjectProvider.createEClassDescriptor(_superType);
     };
     EClassDescriptor _withDomainObject = key.<EClassDescriptor>withDomainObject(_function);
     return new EClassNode(_withDomainObject);
@@ -81,30 +78,21 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
       Side _position = button.getPosition();
       CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _coverFlowChoice);
-      final Consumer<ESuperTypeDescriptor> _function = new Consumer<ESuperTypeDescriptor>() {
-        @Override
-        public void accept(final ESuperTypeDescriptor it) {
-          XNode _createNode = AddESuperTypeRapidButtonBehavior.this.createNode(it);
-          chooser.addChoice(_createNode, it);
-        }
+      final Consumer<ESuperTypeDescriptor> _function = (ESuperTypeDescriptor it) -> {
+        XNode _createNode = this.createNode(it);
+        chooser.addChoice(_createNode, it);
       };
       availableChoiceKeys.forEach(_function);
-      final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        @Override
-        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor descriptor) {
-          XConnection _xConnection = new XConnection(host, choice, descriptor);
-          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-            @Override
-            public void apply(final XConnection it) {
-              XDiagram _diagram = CoreExtensions.getDiagram(host);
-              Paint _backgroundPaint = _diagram.getBackgroundPaint();
-              TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
-                null, _backgroundPaint, false);
-              it.setTargetArrowHead(_triangleArrowHead);
-            }
-          };
-          return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-        }
+      final ChooserConnectionProvider _function_1 = (XNode host, XNode choice, DomainObjectDescriptor descriptor) -> {
+        XConnection _xConnection = new XConnection(host, choice, descriptor);
+        final Procedure1<XConnection> _function_2 = (XConnection it) -> {
+          XDiagram _diagram = CoreExtensions.getDiagram(host);
+          Paint _backgroundPaint = _diagram.getBackgroundPaint();
+          TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
+            null, _backgroundPaint, false);
+          it.setTargetArrowHead(_triangleArrowHead);
+        };
+        return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_2);
       };
       chooser.setConnectionProvider(_function_1);
       _xblockexpression = chooser;

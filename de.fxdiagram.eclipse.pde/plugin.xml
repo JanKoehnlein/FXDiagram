@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="de.fxdiagram.eclipse.fxDiagramConfig">
+         point="de.fxdiagram.mapping.fxDiagramConfig">
       <config
             class="de.fxdiagram.pde.BundleDiagramConfig"
             id="de.fxdiagram.pde.BundleDiagramConfig"

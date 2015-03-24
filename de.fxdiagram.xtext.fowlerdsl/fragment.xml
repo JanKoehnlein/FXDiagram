@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <fragment>
    <extension
-         point="de.fxdiagram.eclipse.fxDiagramConfig">
+         point="de.fxdiagram.mapping.fxDiagramConfig">
       <config
       		id="de.fxdiagram.xtext.fowlerdsl.StatemachineDiagramConfig"
       		label="Statemachine"

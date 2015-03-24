@@ -114,11 +114,8 @@ public class SvgExporter {
       _builder.newLineIfNotEmpty();
       {
         ObservableList<Node> _childrenUnmodifiable = diagram.getChildrenUnmodifiable();
-        final Function1<Node, Boolean> _function = new Function1<Node, Boolean>() {
-          @Override
-          public Boolean apply(final Node it) {
-            return Boolean.valueOf(it.isVisible());
-          }
+        final Function1<Node, Boolean> _function = (Node it) -> {
+          return Boolean.valueOf(it.isVisible());
         };
         Iterable<Node> _filter = IterableExtensions.<Node>filter(_childrenUnmodifiable, _function);
         for(final Node child : _filter) {
@@ -447,11 +444,8 @@ public class SvgExporter {
       final CharSequence clipPath = this.toSvgClip(it);
       CharSequence _xifexpression = null;
       ObservableList<Node> _childrenUnmodifiable = it.getChildrenUnmodifiable();
-      final Function1<Node, Boolean> _function = new Function1<Node, Boolean>() {
-        @Override
-        public Boolean apply(final Node it) {
-          return Boolean.valueOf(it.isVisible());
-        }
+      final Function1<Node, Boolean> _function = (Node it_1) -> {
+        return Boolean.valueOf(it_1.isVisible());
       };
       Iterable<Node> _filter = IterableExtensions.<Node>filter(_childrenUnmodifiable, _function);
       boolean _isEmpty = IterableExtensions.isEmpty(_filter);
@@ -472,11 +466,8 @@ public class SvgExporter {
         _builder.newLineIfNotEmpty();
         {
           ObservableList<Node> _childrenUnmodifiable_1 = it.getChildrenUnmodifiable();
-          final Function1<Node, Boolean> _function_1 = new Function1<Node, Boolean>() {
-            @Override
-            public Boolean apply(final Node it) {
-              return Boolean.valueOf(it.isVisible());
-            }
+          final Function1<Node, Boolean> _function_1 = (Node it_1) -> {
+            return Boolean.valueOf(it_1.isVisible());
           };
           Iterable<Node> _filter_1 = IterableExtensions.<Node>filter(_childrenUnmodifiable_1, _function_1);
           for(final Node child : _filter_1) {

@@ -31,57 +31,48 @@ public class LineArrowHead extends ArrowHead {
   @Override
   public Node createNode() {
     Group _group = new Group();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      @Override
-      public void apply(final Group it) {
-        ObservableList<Node> _children = it.getChildren();
-        Polyline _polyline = new Polyline();
-        final Procedure1<Polyline> _function = new Procedure1<Polyline>() {
-          @Override
-          public void apply(final Polyline it) {
-            ObservableList<Double> _points = it.getPoints();
-            double _height = LineArrowHead.this.getHeight();
-            double _multiply = ((-0.5) * _height);
-            double _width = LineArrowHead.this.getWidth();
-            double _height_1 = LineArrowHead.this.getHeight();
-            double _multiply_1 = (0.5 * _height_1);
-            _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
-            ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-            ObjectProperty<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
-            _strokeProperty.bind(_strokeProperty_1);
-            DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
-            XConnection _connection = LineArrowHead.this.getConnection();
-            DoubleProperty _strokeWidthProperty_1 = _connection.strokeWidthProperty();
-            _strokeWidthProperty.bind(_strokeWidthProperty_1);
-            it.setStrokeType(StrokeType.CENTERED);
-          }
-        };
-        Polyline _doubleArrow = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function);
-        _children.add(_doubleArrow);
-        ObservableList<Node> _children_1 = it.getChildren();
-        Polyline _polyline_1 = new Polyline();
-        final Procedure1<Polyline> _function_1 = new Procedure1<Polyline>() {
-          @Override
-          public void apply(final Polyline it) {
-            ObservableList<Double> _points = it.getPoints();
-            double _width = LineArrowHead.this.getWidth();
-            XConnection _connection = LineArrowHead.this.getConnection();
-            double _strokeWidth = _connection.getStrokeWidth();
-            double _minus = (_width - _strokeWidth);
-            _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
-            ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-            ObjectProperty<Paint> _strokeProperty_1 = LineArrowHead.this.strokeProperty();
-            _strokeProperty.bind(_strokeProperty_1);
-            DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
-            XConnection _connection_1 = LineArrowHead.this.getConnection();
-            DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
-            _strokeWidthProperty.bind(_strokeWidthProperty_1);
-            it.setStrokeType(StrokeType.CENTERED);
-          }
-        };
-        Polyline _doubleArrow_1 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline_1, _function_1);
-        _children_1.add(_doubleArrow_1);
-      }
+    final Procedure1<Group> _function = (Group it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      Polyline _polyline = new Polyline();
+      final Procedure1<Polyline> _function_1 = (Polyline it_1) -> {
+        ObservableList<Double> _points = it_1.getPoints();
+        double _height = this.getHeight();
+        double _multiply = ((-0.5) * _height);
+        double _width = this.getWidth();
+        double _height_1 = this.getHeight();
+        double _multiply_1 = (0.5 * _height_1);
+        _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_width), Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply_1))));
+        ObjectProperty<Paint> _strokeProperty = it_1.strokeProperty();
+        ObjectProperty<Paint> _strokeProperty_1 = this.strokeProperty();
+        _strokeProperty.bind(_strokeProperty_1);
+        DoubleProperty _strokeWidthProperty = it_1.strokeWidthProperty();
+        XConnection _connection = this.getConnection();
+        DoubleProperty _strokeWidthProperty_1 = _connection.strokeWidthProperty();
+        _strokeWidthProperty.bind(_strokeWidthProperty_1);
+        it_1.setStrokeType(StrokeType.CENTERED);
+      };
+      Polyline _doubleArrow = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_1);
+      _children.add(_doubleArrow);
+      ObservableList<Node> _children_1 = it.getChildren();
+      Polyline _polyline_1 = new Polyline();
+      final Procedure1<Polyline> _function_2 = (Polyline it_1) -> {
+        ObservableList<Double> _points = it_1.getPoints();
+        double _width = this.getWidth();
+        XConnection _connection = this.getConnection();
+        double _strokeWidth = _connection.getStrokeWidth();
+        double _minus = (_width - _strokeWidth);
+        _points.setAll(Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_minus), Double.valueOf(0.0))));
+        ObjectProperty<Paint> _strokeProperty = it_1.strokeProperty();
+        ObjectProperty<Paint> _strokeProperty_1 = this.strokeProperty();
+        _strokeProperty.bind(_strokeProperty_1);
+        DoubleProperty _strokeWidthProperty = it_1.strokeWidthProperty();
+        XConnection _connection_1 = this.getConnection();
+        DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
+        _strokeWidthProperty.bind(_strokeWidthProperty_1);
+        it_1.setStrokeType(StrokeType.CENTERED);
+      };
+      Polyline _doubleArrow_1 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline_1, _function_2);
+      _children_1.add(_doubleArrow_1);
     };
     return ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
   }

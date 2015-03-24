@@ -75,87 +75,72 @@ public class AddEReferenceRapidButtonBehavior extends AbstractConnectionRapidBut
       Side _position = button.getPosition();
       CarusselChoice _carusselChoice = new CarusselChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _carusselChoice);
-      final Consumer<EReferenceDescriptor> _function = new Consumer<EReferenceDescriptor>() {
-        @Override
-        public void accept(final EReferenceDescriptor it) {
-          XNode _createNode = AddEReferenceRapidButtonBehavior.this.createNode(it);
-          chooser.addChoice(_createNode, it);
-        }
+      final Consumer<EReferenceDescriptor> _function = (EReferenceDescriptor it) -> {
+        XNode _createNode = this.createNode(it);
+        chooser.addChoice(_createNode, it);
       };
       availableChoiceKeys.forEach(_function);
-      final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        @Override
-        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor descriptor) {
-          XConnection _xblockexpression = null;
-          {
-            final EReference reference = ((EReferenceDescriptor) descriptor).getDomainObject();
-            XConnection _xConnection = new XConnection(host, choice, descriptor);
-            final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-              @Override
-              public void apply(final XConnection it) {
-                ArrowHead _xifexpression = null;
-                boolean _isContainer = reference.isContainer();
-                if (_isContainer) {
-                  _xifexpression = new DiamondArrowHead(it, false);
-                } else {
-                  _xifexpression = new LineArrowHead(it, false);
-                }
-                it.setTargetArrowHead(_xifexpression);
-                ArrowHead _xifexpression_1 = null;
-                boolean _isContainment = reference.isContainment();
-                if (_isContainment) {
-                  _xifexpression_1 = new DiamondArrowHead(it, true);
-                } else {
-                  LineArrowHead _xifexpression_2 = null;
-                  boolean _and = false;
-                  boolean _isContainer_1 = reference.isContainer();
-                  boolean _not = (!_isContainer_1);
-                  if (!_not) {
-                    _and = false;
-                  } else {
-                    EReference _eOpposite = reference.getEOpposite();
-                    boolean _notEquals = (!Objects.equal(_eOpposite, null));
-                    _and = _notEquals;
-                  }
-                  if (_and) {
-                    _xifexpression_2 = new LineArrowHead(it, true);
-                  }
-                  _xifexpression_1 = _xifexpression_2;
-                }
-                it.setSourceArrowHead(_xifexpression_1);
-                XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-                final Procedure1<XConnectionLabel> _function = new Procedure1<XConnectionLabel>() {
-                  @Override
-                  public void apply(final XConnectionLabel it) {
-                    Text _text = it.getText();
-                    String _name = reference.getName();
-                    _text.setText(_name);
-                    it.setPosition(0.8);
-                  }
-                };
-                ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function);
-                EReference _eOpposite_1 = reference.getEOpposite();
-                boolean _notEquals_1 = (!Objects.equal(_eOpposite_1, null));
-                if (_notEquals_1) {
-                  XConnectionLabel _xConnectionLabel_1 = new XConnectionLabel(it);
-                  final Procedure1<XConnectionLabel> _function_1 = new Procedure1<XConnectionLabel>() {
-                    @Override
-                    public void apply(final XConnectionLabel it) {
-                      Text _text = it.getText();
-                      EReference _eOpposite = reference.getEOpposite();
-                      String _name = _eOpposite.getName();
-                      _text.setText(_name);
-                      it.setPosition(0.2);
-                    }
-                  };
-                  ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel_1, _function_1);
-                }
+      final ChooserConnectionProvider _function_1 = (XNode host, XNode choice, DomainObjectDescriptor descriptor) -> {
+        XConnection _xblockexpression_1 = null;
+        {
+          final EReference reference = ((EReferenceDescriptor) descriptor).getDomainObject();
+          XConnection _xConnection = new XConnection(host, choice, descriptor);
+          final Procedure1<XConnection> _function_2 = (XConnection it) -> {
+            ArrowHead _xifexpression = null;
+            boolean _isContainer = reference.isContainer();
+            if (_isContainer) {
+              _xifexpression = new DiamondArrowHead(it, false);
+            } else {
+              _xifexpression = new LineArrowHead(it, false);
+            }
+            it.setTargetArrowHead(_xifexpression);
+            ArrowHead _xifexpression_1 = null;
+            boolean _isContainment = reference.isContainment();
+            if (_isContainment) {
+              _xifexpression_1 = new DiamondArrowHead(it, true);
+            } else {
+              LineArrowHead _xifexpression_2 = null;
+              boolean _and = false;
+              boolean _isContainer_1 = reference.isContainer();
+              boolean _not = (!_isContainer_1);
+              if (!_not) {
+                _and = false;
+              } else {
+                EReference _eOpposite = reference.getEOpposite();
+                boolean _notEquals = (!Objects.equal(_eOpposite, null));
+                _and = _notEquals;
               }
+              if (_and) {
+                _xifexpression_2 = new LineArrowHead(it, true);
+              }
+              _xifexpression_1 = _xifexpression_2;
+            }
+            it.setSourceArrowHead(_xifexpression_1);
+            XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
+            final Procedure1<XConnectionLabel> _function_3 = (XConnectionLabel it_1) -> {
+              Text _text = it_1.getText();
+              String _name = reference.getName();
+              _text.setText(_name);
+              it_1.setPosition(0.8);
             };
-            _xblockexpression = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-          }
-          return _xblockexpression;
+            ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_3);
+            EReference _eOpposite_1 = reference.getEOpposite();
+            boolean _notEquals_1 = (!Objects.equal(_eOpposite_1, null));
+            if (_notEquals_1) {
+              XConnectionLabel _xConnectionLabel_1 = new XConnectionLabel(it);
+              final Procedure1<XConnectionLabel> _function_4 = (XConnectionLabel it_1) -> {
+                Text _text = it_1.getText();
+                EReference _eOpposite_2 = reference.getEOpposite();
+                String _name = _eOpposite_2.getName();
+                _text.setText(_name);
+                it_1.setPosition(0.2);
+              };
+              ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel_1, _function_4);
+            }
+          };
+          _xblockexpression_1 = ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_2);
         }
+        return _xblockexpression_1;
       };
       chooser.setConnectionProvider(_function_1);
       _xblockexpression = chooser;

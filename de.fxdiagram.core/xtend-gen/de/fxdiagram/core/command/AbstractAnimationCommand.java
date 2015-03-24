@@ -48,24 +48,18 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
     boolean _notEquals = (!Objects.equal(animation, null));
     if (_notEquals) {
       SequentialTransition _sequentialTransition = new SequentialTransition();
-      final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-        @Override
-        public void apply(final SequentialTransition it) {
-          ObservableList<Animation> _children = it.getChildren();
-          _children.add(animation);
-          final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent it) {
-              if (AbstractAnimationCommand.this.isRestoreViewport) {
-                XRoot _root = context.getRoot();
-                ViewportTransform _viewportTransform = _root.getViewportTransform();
-                ViewportMemento _createMemento = _viewportTransform.createMemento();
-                AbstractAnimationCommand.this.toMemento = _createMemento;
-              }
-            }
-          };
-          it.setOnFinished(_function);
-        }
+      final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
+        ObservableList<Animation> _children = it.getChildren();
+        _children.add(animation);
+        final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
+          if (this.isRestoreViewport) {
+            XRoot _root_1 = context.getRoot();
+            ViewportTransform _viewportTransform_1 = _root_1.getViewportTransform();
+            ViewportMemento _createMemento_1 = _viewportTransform_1.createMemento();
+            this.toMemento = _createMemento_1;
+          }
+        };
+        it.setOnFinished(_function_1);
       };
       return ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
     } else {
@@ -94,20 +88,17 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
       }
       if (_or) {
         SequentialTransition _sequentialTransition = new SequentialTransition();
-        final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-          @Override
-          public void apply(final SequentialTransition it) {
-            boolean _notEquals = (!Objects.equal(AbstractAnimationCommand.this.toMemento, null));
-            if (_notEquals) {
-              ObservableList<Animation> _children = it.getChildren();
-              XRoot _root = context.getRoot();
-              Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-              ViewportTransition _viewportTransition = new ViewportTransition(_root, AbstractAnimationCommand.this.toMemento, _defaultUndoDuration);
-              _children.add(_viewportTransition);
-            }
-            ObservableList<Animation> _children_1 = it.getChildren();
-            _children_1.add(undoAnimation);
+        final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
+          boolean _notEquals_2 = (!Objects.equal(this.toMemento, null));
+          if (_notEquals_2) {
+            ObservableList<Animation> _children = it.getChildren();
+            XRoot _root = context.getRoot();
+            Duration _defaultUndoDuration = context.getDefaultUndoDuration();
+            ViewportTransition _viewportTransition = new ViewportTransition(_root, this.toMemento, _defaultUndoDuration);
+            _children.add(_viewportTransition);
           }
+          ObservableList<Animation> _children_1 = it.getChildren();
+          _children_1.add(undoAnimation);
         };
         _xifexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       } else {
@@ -136,20 +127,17 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
       }
       if (_or) {
         SequentialTransition _sequentialTransition = new SequentialTransition();
-        final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-          @Override
-          public void apply(final SequentialTransition it) {
-            boolean _notEquals = (!Objects.equal(AbstractAnimationCommand.this.fromMemento, null));
-            if (_notEquals) {
-              ObservableList<Animation> _children = it.getChildren();
-              XRoot _root = context.getRoot();
-              Duration _defaultUndoDuration = context.getDefaultUndoDuration();
-              ViewportTransition _viewportTransition = new ViewportTransition(_root, AbstractAnimationCommand.this.fromMemento, _defaultUndoDuration);
-              _children.add(_viewportTransition);
-            }
-            ObservableList<Animation> _children_1 = it.getChildren();
-            _children_1.add(redoAnimation);
+        final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
+          boolean _notEquals_2 = (!Objects.equal(this.fromMemento, null));
+          if (_notEquals_2) {
+            ObservableList<Animation> _children = it.getChildren();
+            XRoot _root = context.getRoot();
+            Duration _defaultUndoDuration = context.getDefaultUndoDuration();
+            ViewportTransition _viewportTransition = new ViewportTransition(_root, this.fromMemento, _defaultUndoDuration);
+            _children.add(_viewportTransition);
           }
+          ObservableList<Animation> _children_1 = it.getChildren();
+          _children_1.add(redoAnimation);
         };
         _xifexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       } else {

@@ -86,139 +86,106 @@ public class FxPropertyCompilationParticipant implements TransformationParticipa
     Expression _initializer = f.getInitializer();
     boolean _equals = Objects.equal(_initializer, null);
     if (_equals) {
-      final Procedure1<MutableFieldDeclaration> _function = new Procedure1<MutableFieldDeclaration>() {
-        @Override
-        public void apply(final MutableFieldDeclaration it) {
-          it.setType(propType);
-          final CompilationStrategy _function = new CompilationStrategy() {
-            @Override
-            public CharSequence compile(final CompilationStrategy.CompilationContext it) {
-              StringConcatenation _builder = new StringConcatenation();
-              _builder.append("new ");
-              String _javaCode = it.toJavaCode(propType);
-              _builder.append(_javaCode, "");
-              _builder.append("(this, \"");
-              _builder.append(fieldName, "");
-              _builder.append("\")");
-              return _builder;
-            }
-          };
-          it.setInitializer(_function);
-        }
+      final Procedure1<MutableFieldDeclaration> _function = (MutableFieldDeclaration it) -> {
+        it.setType(propType);
+        final CompilationStrategy _function_1 = (CompilationStrategy.CompilationContext it_1) -> {
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("new ");
+          String _javaCode = it_1.toJavaCode(propType);
+          _builder.append(_javaCode, "");
+          _builder.append("(this, \"");
+          _builder.append(fieldName, "");
+          _builder.append("\")");
+          return _builder;
+        };
+        it.setInitializer(_function_1);
       };
       clazz.addField(propName, _function);
     } else {
-      final Procedure1<MutableFieldDeclaration> _function_1 = new Procedure1<MutableFieldDeclaration>() {
-        @Override
-        public void apply(final MutableFieldDeclaration it) {
-          it.setType(propType);
-          final CompilationStrategy _function = new CompilationStrategy() {
-            @Override
-            public CharSequence compile(final CompilationStrategy.CompilationContext it) {
-              StringConcatenation _builder = new StringConcatenation();
-              _builder.append("new ");
-              String _javaCode = it.toJavaCode(propType);
-              _builder.append(_javaCode, "");
-              _builder.append("(this, \"");
-              _builder.append(fieldName, "");
-              _builder.append("\",_init");
-              String _firstUpper = StringExtensions.toFirstUpper(fieldName);
-              _builder.append(_firstUpper, "");
-              _builder.append("())");
-              return _builder;
-            }
-          };
-          it.setInitializer(_function);
-        }
+      final Procedure1<MutableFieldDeclaration> _function_1 = (MutableFieldDeclaration it) -> {
+        it.setType(propType);
+        final CompilationStrategy _function_2 = (CompilationStrategy.CompilationContext it_1) -> {
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("new ");
+          String _javaCode = it_1.toJavaCode(propType);
+          _builder.append(_javaCode, "");
+          _builder.append("(this, \"");
+          _builder.append(fieldName, "");
+          _builder.append("\",_init");
+          String _firstUpper = StringExtensions.toFirstUpper(fieldName);
+          _builder.append(_firstUpper, "");
+          _builder.append("())");
+          return _builder;
+        };
+        it.setInitializer(_function_2);
       };
       clazz.addField(propName, _function_1);
       String _firstUpper = StringExtensions.toFirstUpper(fieldName);
       String _plus = ("_init" + _firstUpper);
-      final Procedure1<MutableMethodDeclaration> _function_2 = new Procedure1<MutableMethodDeclaration>() {
-        @Override
-        public void apply(final MutableMethodDeclaration it) {
-          it.setReturnType(fieldType);
-          it.setVisibility(Visibility.PRIVATE);
-          it.setStatic(true);
-          it.setFinal(true);
-          Expression _initializer = f.getInitializer();
-          it.setBody(_initializer);
-        }
+      final Procedure1<MutableMethodDeclaration> _function_2 = (MutableMethodDeclaration it) -> {
+        it.setReturnType(fieldType);
+        it.setVisibility(Visibility.PRIVATE);
+        it.setStatic(true);
+        it.setFinal(true);
+        Expression _initializer_1 = f.getInitializer();
+        it.setBody(_initializer_1);
       };
       clazz.addMethod(_plus, _function_2);
     }
     String _firstUpper_1 = StringExtensions.toFirstUpper(fieldName);
     String _plus_1 = ("get" + _firstUpper_1);
-    final Procedure1<MutableMethodDeclaration> _function_3 = new Procedure1<MutableMethodDeclaration>() {
-      @Override
-      public void apply(final MutableMethodDeclaration it) {
-        it.setReturnType(fieldType);
-        final CompilationStrategy _function = new CompilationStrategy() {
-          @Override
-          public CharSequence compile(final CompilationStrategy.CompilationContext it) {
-            StringConcatenation _builder = new StringConcatenation();
-            _builder.append("return this.");
-            _builder.append(propName, "");
-            _builder.append(".get();");
-            _builder.newLineIfNotEmpty();
-            return _builder;
-          }
-        };
-        it.setBody(_function);
-      }
+    final Procedure1<MutableMethodDeclaration> _function_3 = (MutableMethodDeclaration it) -> {
+      it.setReturnType(fieldType);
+      final CompilationStrategy _function_4 = (CompilationStrategy.CompilationContext it_1) -> {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("return this.");
+        _builder.append(propName, "");
+        _builder.append(".get();");
+        _builder.newLineIfNotEmpty();
+        return _builder;
+      };
+      it.setBody(_function_4);
     };
     clazz.addMethod(_plus_1, _function_3);
     if (((!isReadOnly) && (!isList))) {
       String _firstUpper_2 = StringExtensions.toFirstUpper(fieldName);
       String _plus_2 = ("set" + _firstUpper_2);
-      final Procedure1<MutableMethodDeclaration> _function_4 = new Procedure1<MutableMethodDeclaration>() {
-        @Override
-        public void apply(final MutableMethodDeclaration it) {
-          it.addParameter(fieldName, fieldType);
-          final CompilationStrategy _function = new CompilationStrategy() {
-            @Override
-            public CharSequence compile(final CompilationStrategy.CompilationContext it) {
-              StringConcatenation _builder = new StringConcatenation();
-              _builder.append("this.");
-              _builder.append(propName, "");
-              _builder.append(".set(");
-              _builder.append(fieldName, "");
-              _builder.append(");");
-              _builder.newLineIfNotEmpty();
-              return _builder;
-            }
-          };
-          it.setBody(_function);
-        }
+      final Procedure1<MutableMethodDeclaration> _function_4 = (MutableMethodDeclaration it) -> {
+        it.addParameter(fieldName, fieldType);
+        final CompilationStrategy _function_5 = (CompilationStrategy.CompilationContext it_1) -> {
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("this.");
+          _builder.append(propName, "");
+          _builder.append(".set(");
+          _builder.append(fieldName, "");
+          _builder.append(");");
+          _builder.newLineIfNotEmpty();
+          return _builder;
+        };
+        it.setBody(_function_5);
       };
       clazz.addMethod(_plus_2, _function_4);
     }
-    final Procedure1<MutableMethodDeclaration> _function_5 = new Procedure1<MutableMethodDeclaration>() {
-      @Override
-      public void apply(final MutableMethodDeclaration it) {
-        it.setReturnType(propTypeAPI);
-        final CompilationStrategy _function = new CompilationStrategy() {
-          @Override
-          public CharSequence compile(final CompilationStrategy.CompilationContext it) {
-            StringConcatenation _builder = new StringConcatenation();
-            _builder.append("return ");
-            {
-              if (isReadOnly) {
-                _builder.append("this.");
-                _builder.append(propName, "");
-                _builder.append(".getReadOnlyProperty()");
-              } else {
-                _builder.append("this.");
-                _builder.append(propName, "");
-              }
-            }
-            _builder.append(";");
-            _builder.newLineIfNotEmpty();
-            return _builder;
+    final Procedure1<MutableMethodDeclaration> _function_5 = (MutableMethodDeclaration it) -> {
+      it.setReturnType(propTypeAPI);
+      final CompilationStrategy _function_6 = (CompilationStrategy.CompilationContext it_1) -> {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("return ");
+        {
+          if (isReadOnly) {
+            _builder.append("this.");
+            _builder.append(propName, "");
+            _builder.append(".getReadOnlyProperty()");
+          } else {
+            _builder.append("this.");
+            _builder.append(propName, "");
           }
-        };
-        it.setBody(_function);
-      }
+        }
+        _builder.append(";");
+        _builder.newLineIfNotEmpty();
+        return _builder;
+      };
+      it.setBody(_function_6);
     };
     clazz.addMethod((fieldName + "Property"), _function_5);
     f.remove();

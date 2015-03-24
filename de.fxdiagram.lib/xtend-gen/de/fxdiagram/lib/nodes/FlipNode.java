@@ -90,32 +90,29 @@ public class FlipNode extends XNode {
   }
   
   public void registerOnClick() {
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        boolean _and = false;
-        MouseButton _button = it.getButton();
-        boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
-        if (!_equals) {
-          _and = false;
+    final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
+      boolean _and = false;
+      MouseButton _button = it.getButton();
+      boolean _equals = Objects.equal(_button, MouseButton.PRIMARY);
+      if (!_equals) {
+        _and = false;
+      } else {
+        int _clickCount = it.getClickCount();
+        boolean _equals_1 = (_clickCount == 2);
+        _and = _equals_1;
+      }
+      if (_and) {
+        boolean _and_1 = false;
+        boolean _notEquals = (!Objects.equal(this.front, null));
+        if (!_notEquals) {
+          _and_1 = false;
         } else {
-          int _clickCount = it.getClickCount();
-          boolean _equals_1 = (_clickCount == 2);
-          _and = _equals_1;
+          boolean _notEquals_1 = (!Objects.equal(this.back, null));
+          _and_1 = _notEquals_1;
         }
-        if (_and) {
-          boolean _and_1 = false;
-          boolean _notEquals = (!Objects.equal(FlipNode.this.front, null));
-          if (!_notEquals) {
-            _and_1 = false;
-          } else {
-            boolean _notEquals_1 = (!Objects.equal(FlipNode.this.back, null));
-            _and_1 = _notEquals_1;
-          }
-          if (_and_1) {
-            boolean _isHorizontal = FlipNode.this.isHorizontal(it);
-            FlipNode.this.flip(_isHorizontal);
-          }
+        if (_and_1) {
+          boolean _isHorizontal = this.isHorizontal(it);
+          this.flip(_isHorizontal);
         }
       }
     };
@@ -136,54 +133,42 @@ public class FlipNode extends XNode {
     }
     final Point3D turnAxis = _xifexpression;
     SequentialTransition _sequentialTransition = new SequentialTransition();
-    final Procedure1<SequentialTransition> _function = new Procedure1<SequentialTransition>() {
-      @Override
-      public void apply(final SequentialTransition it) {
-        ObservableList<Animation> _children = it.getChildren();
-        RotateTransition _rotateTransition = new RotateTransition();
-        final Procedure1<RotateTransition> _function = new Procedure1<RotateTransition>() {
-          @Override
-          public void apply(final RotateTransition it) {
-            Node _currentVisible = FlipNode.this.getCurrentVisible();
-            it.setNode(_currentVisible);
-            Duration _millis = Duration.millis(250);
-            it.setDuration(_millis);
-            it.setAxis(turnAxis);
-            it.setFromAngle(0);
-            it.setToAngle(90);
-            final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-              @Override
-              public void handle(final ActionEvent it) {
-                Node _currentVisible = FlipNode.this.getCurrentVisible();
-                _currentVisible.setVisible(false);
-                FlipNode.this.isCurrentFront = (!FlipNode.this.isCurrentFront);
-                Node _currentVisible_1 = FlipNode.this.getCurrentVisible();
-                _currentVisible_1.setVisible(true);
-              }
-            };
-            it.setOnFinished(_function);
-          }
+    final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
+      ObservableList<Animation> _children = it.getChildren();
+      RotateTransition _rotateTransition = new RotateTransition();
+      final Procedure1<RotateTransition> _function_1 = (RotateTransition it_1) -> {
+        Node _currentVisible = this.getCurrentVisible();
+        it_1.setNode(_currentVisible);
+        Duration _millis = Duration.millis(250);
+        it_1.setDuration(_millis);
+        it_1.setAxis(turnAxis);
+        it_1.setFromAngle(0);
+        it_1.setToAngle(90);
+        final EventHandler<ActionEvent> _function_2 = (ActionEvent it_2) -> {
+          Node _currentVisible_1 = this.getCurrentVisible();
+          _currentVisible_1.setVisible(false);
+          this.isCurrentFront = (!this.isCurrentFront);
+          Node _currentVisible_2 = this.getCurrentVisible();
+          _currentVisible_2.setVisible(true);
         };
-        RotateTransition _doubleArrow = ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition, _function);
-        _children.add(_doubleArrow);
-        ObservableList<Animation> _children_1 = it.getChildren();
-        RotateTransition _rotateTransition_1 = new RotateTransition();
-        final Procedure1<RotateTransition> _function_1 = new Procedure1<RotateTransition>() {
-          @Override
-          public void apply(final RotateTransition it) {
-            Node _currentInvisible = FlipNode.this.getCurrentInvisible();
-            it.setNode(_currentInvisible);
-            Duration _millis = Duration.millis(250);
-            it.setDuration(_millis);
-            it.setAxis(turnAxis);
-            it.setFromAngle(90);
-            it.setToAngle(0);
-          }
-        };
-        RotateTransition _doubleArrow_1 = ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition_1, _function_1);
-        _children_1.add(_doubleArrow_1);
-        it.play();
-      }
+        it_1.setOnFinished(_function_2);
+      };
+      RotateTransition _doubleArrow = ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition, _function_1);
+      _children.add(_doubleArrow);
+      ObservableList<Animation> _children_1 = it.getChildren();
+      RotateTransition _rotateTransition_1 = new RotateTransition();
+      final Procedure1<RotateTransition> _function_2 = (RotateTransition it_1) -> {
+        Node _currentInvisible = this.getCurrentInvisible();
+        it_1.setNode(_currentInvisible);
+        Duration _millis = Duration.millis(250);
+        it_1.setDuration(_millis);
+        it_1.setAxis(turnAxis);
+        it_1.setFromAngle(90);
+        it_1.setToAngle(0);
+      };
+      RotateTransition _doubleArrow_1 = ObjectExtensions.<RotateTransition>operator_doubleArrow(_rotateTransition_1, _function_2);
+      _children_1.add(_doubleArrow_1);
+      it.play();
     };
     ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
   }

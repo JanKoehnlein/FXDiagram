@@ -3,8 +3,8 @@ package de.fxdiagram.eclipse;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.eclipse.FXDiagramTab;
-import de.fxdiagram.eclipse.mapping.AbstractMapping;
-import de.fxdiagram.eclipse.mapping.MappingCall;
+import de.fxdiagram.mapping.AbstractMapping;
+import de.fxdiagram.mapping.MappingCall;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -54,14 +54,11 @@ public class FXDiagramView extends ViewPart {
       this.tab2content.put(_cTabItem, diagramTab);
       CTabItem _cTabItem_1 = diagramTab.getCTabItem();
       this.tabFolder.setSelection(_cTabItem_1);
-      final Consumer<Pair<EventType<?>, EventHandler<?>>> _function = new Consumer<Pair<EventType<?>, EventHandler<?>>>() {
-        @Override
-        public void accept(final Pair<EventType<?>, EventHandler<?>> it) {
-          XRoot _root = diagramTab.getRoot();
-          EventType<?> _key = it.getKey();
-          EventHandler<?> _value = it.getValue();
-          FXDiagramView.this.addEventHandlerWrapper(_root, ((EventType<? extends Event>) _key), _value);
-        }
+      final Consumer<Pair<EventType<?>, EventHandler<?>>> _function = (Pair<EventType<?>, EventHandler<?>> it) -> {
+        XRoot _root = diagramTab.getRoot();
+        EventType<?> _key = it.getKey();
+        EventHandler<?> _value = it.getValue();
+        this.addEventHandlerWrapper(_root, ((EventType<? extends Event>) _key), _value);
       };
       this.globalEventHandlers.forEach(_function);
       _xblockexpression = diagramTab;
@@ -77,12 +74,9 @@ public class FXDiagramView extends ViewPart {
     Pair<EventType<?>, EventHandler<?>> _mappedTo = Pair.<EventType<?>, EventHandler<?>>of(eventType, eventHandler);
     this.globalEventHandlers.add(_mappedTo);
     Collection<FXDiagramTab> _values = this.tab2content.values();
-    final Consumer<FXDiagramTab> _function = new Consumer<FXDiagramTab>() {
-      @Override
-      public void accept(final FXDiagramTab it) {
-        XRoot _root = it.getRoot();
-        _root.<T>addEventHandler(eventType, eventHandler);
-      }
+    final Consumer<FXDiagramTab> _function = (FXDiagramTab it) -> {
+      XRoot _root = it.getRoot();
+      _root.<T>addEventHandler(eventType, eventHandler);
     };
     _values.forEach(_function);
   }
@@ -91,12 +85,9 @@ public class FXDiagramView extends ViewPart {
     Pair<EventType<T>, EventHandler<? super T>> _mappedTo = Pair.<EventType<T>, EventHandler<? super T>>of(eventType, eventHandler);
     this.globalEventHandlers.remove(_mappedTo);
     Collection<FXDiagramTab> _values = this.tab2content.values();
-    final Consumer<FXDiagramTab> _function = new Consumer<FXDiagramTab>() {
-      @Override
-      public void accept(final FXDiagramTab it) {
-        XRoot _root = it.getRoot();
-        _root.<T>removeEventHandler(eventType, eventHandler);
-      }
+    final Consumer<FXDiagramTab> _function = (FXDiagramTab it) -> {
+      XRoot _root = it.getRoot();
+      _root.<T>removeEventHandler(eventType, eventHandler);
     };
     _values.forEach(_function);
   }

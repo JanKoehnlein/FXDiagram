@@ -35,13 +35,10 @@ public class CarusselChoice extends AbstractChoiceGraphics {
   @Override
   public void setInterpolatedPosition(final double interpolatedPosition) {
     ArrayList<XNode> _choiceNodes = this.getChoiceNodes();
-    final Function2<Double, XNode, Double> _function = new Function2<Double, XNode, Double>() {
-      @Override
-      public Double apply(final Double a, final XNode b) {
-        Bounds _layoutBounds = b.getLayoutBounds();
-        double _height = _layoutBounds.getHeight();
-        return Double.valueOf(Math.max((a).doubleValue(), _height));
-      }
+    final Function2<Double, XNode, Double> _function = (Double a, XNode b) -> {
+      Bounds _layoutBounds = b.getLayoutBounds();
+      double _height = _layoutBounds.getHeight();
+      return Double.valueOf(Math.max((a).doubleValue(), _height));
     };
     Double _fold = IterableExtensions.<XNode, Double>fold(_choiceNodes, Double.valueOf(0.0), _function);
     final double maxHeight = ((_fold).doubleValue() + this.spacing);

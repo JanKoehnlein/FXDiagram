@@ -14,10 +14,6 @@ import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.eclipse.mapping.ConnectionMapping;
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor;
-import de.fxdiagram.eclipse.mapping.NodeMapping;
-import de.fxdiagram.eclipse.mapping.XDiagramConfig;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
 import de.fxdiagram.lib.chooser.AbstractChoiceGraphics;
@@ -25,6 +21,10 @@ import de.fxdiagram.lib.chooser.CarusselChoice;
 import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
+import de.fxdiagram.mapping.ConnectionMapping;
+import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDescriptor;
 import de.fxdiagram.pde.BundleDescriptorProvider;
@@ -145,6 +145,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
               NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
               XNode _createNode = _pluginNode_1.createNode(owner);
               sourceNode = _createNode;
+              config.initialize(sourceNode);
               additionalShapes.add(sourceNode);
               descriptor2node.put(owner, sourceNode);
             }
@@ -158,6 +159,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
               NodeMapping<BundleDescription> _pluginNode_3 = config.getPluginNode();
               XNode _createNode_1 = _pluginNode_3.createNode(dependency);
               targetNode = _createNode_1;
+              config.initialize(targetNode);
               additionalShapes.add(targetNode);
               descriptor2node.put(dependency, targetNode);
             }
@@ -169,6 +171,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
               ConnectionMapping<BundleDependency> _dependencyConnection_1 = config.getDependencyConnection();
               XConnection _createConnection = _dependencyConnection_1.createConnection(connectionDescriptor);
               connection = _createConnection;
+              config.initialize(connection);
               connection.setSource(sourceNode);
               connection.setTarget(targetNode);
               additionalShapes.add(connection);
@@ -213,8 +216,9 @@ public class AddDependencyPathAction extends RapidButtonAction {
         IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
         final BundleDescriptor candidate = ((BundleDescriptor) _createMappedElementDescriptor);
         NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
-        XNode _createNode = _pluginNode_1.createNode(candidate);
-        chooser.addChoice(_createNode);
+        final XNode candidateNode = _pluginNode_1.createNode(candidate);
+        config.initialize(candidateNode);
+        chooser.addChoice(candidateNode);
       };
       candidates.forEach(_function_1);
       root.setCurrentTool(chooser);

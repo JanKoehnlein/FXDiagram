@@ -1,8 +1,8 @@
 package de.fxdiagram.eclipse
 
 import de.fxdiagram.core.XRoot
-import de.fxdiagram.eclipse.mapping.AbstractMapping
-import de.fxdiagram.eclipse.mapping.MappingCall
+import de.fxdiagram.mapping.AbstractMapping
+import de.fxdiagram.mapping.MappingCall
 import java.util.List
 import java.util.Map
 import javafx.embed.swt.FXCanvas

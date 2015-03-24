@@ -40,11 +40,8 @@ public class LcarsModelProvider implements DomainObjectProvider {
   
   public List<DBObject> query(final String fieldName, final Object fieldValue) {
     BasicDBObject _basicDBObject = new BasicDBObject();
-    final Procedure1<BasicDBObject> _function = new Procedure1<BasicDBObject>() {
-      @Override
-      public void apply(final BasicDBObject it) {
-        it.put(fieldName, fieldValue);
-      }
+    final Procedure1<BasicDBObject> _function = (BasicDBObject it) -> {
+      it.put(fieldName, fieldValue);
     };
     BasicDBObject _doubleArrow = ObjectExtensions.<BasicDBObject>operator_doubleArrow(_basicDBObject, _function);
     DBCursor _find = this.lcars.find(_doubleArrow);
@@ -53,13 +50,10 @@ public class LcarsModelProvider implements DomainObjectProvider {
   
   public <T extends Object> DBObject resolveDomainObject(final DomainObjectDescriptor descriptor) {
     BasicDBObject _basicDBObject = new BasicDBObject();
-    final Procedure1<BasicDBObject> _function = new Procedure1<BasicDBObject>() {
-      @Override
-      public void apply(final BasicDBObject it) {
-        String _id = descriptor.getId();
-        ObjectId _objectId = new ObjectId(_id);
-        it.put("_id", _objectId);
-      }
+    final Procedure1<BasicDBObject> _function = (BasicDBObject it) -> {
+      String _id = descriptor.getId();
+      ObjectId _objectId = new ObjectId(_id);
+      it.put("_id", _objectId);
     };
     BasicDBObject _doubleArrow = ObjectExtensions.<BasicDBObject>operator_doubleArrow(_basicDBObject, _function);
     return this.lcars.findOne(_doubleArrow);

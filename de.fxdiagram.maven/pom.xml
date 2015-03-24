@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho-version>0.22.0</tycho-version>
-		<xtext-version>2.8.0-SNAPSHOT</xtext-version>
+		<xtext-version>2.8.1</xtext-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<modules>
@@ -17,11 +17,13 @@
 		<module>../de.fxdiagram.annotations.tests</module>
 		<module>../de.fxdiagram.core</module>
 		<module>../de.fxdiagram.core.tests</module>
-		<module>../de.fxdiagram.lib</module>
 		<module>../de.fxdiagram.examples</module>
+		<module>../de.fxdiagram.lib</module>
+		<module>../de.fxdiagram.mapping</module>
 		<module>../de.fxdiagram.eclipse</module>
 		<module>../de.fxdiagram.eclipse.example</module>
 		<module>../de.fxdiagram.eclipse.pde</module>
+		<module>../de.fxdiagram.eclipse.xtext</module>
 		<module>../de.fxdiagram.noeclipse</module>
 		<module>../../JavaFX-SWT-Gesture-Bridge/de.fxdiagram.swtfx</module>
 		<module>../de.fxdiagram.xtext.domainmodel</module>
@@ -36,12 +38,12 @@
 		<repository>
 			<id>xtext</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</url>
+			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/${xtext-version}</url>
 		</repository>
 		<repository>
 			<id>luna</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/luna</url>
+			<url>http://download.eclipse.org/releases/luna/201502271000</url>
 		</repository>
 		<repository>
 			<id>efxclipse-repo</id>

@@ -44,12 +44,9 @@ public class RapidButton extends Parent implements XButton {
   }
   
   public void doActivate() {
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        RapidButton.this.action.perform(RapidButton.this);
-        it.consume();
-      }
+    final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
+      this.action.perform(this);
+      it.consume();
     };
     this.setOnMousePressed(_function);
   }

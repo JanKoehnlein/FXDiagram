@@ -3,7 +3,7 @@ package de.fxdiagram.pde;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.eclipse.mapping.AbstractMappedElementDescriptor;
+import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleUtil;
@@ -11,7 +11,6 @@ import java.util.Collections;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.apache.log4j.Logger;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -80,7 +79,7 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
   }
   
   @Override
-  public IEditorPart openInEditor(final boolean select) {
+  public Object openInEditor(final boolean select) {
     return null;
   }
   

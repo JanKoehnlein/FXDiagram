@@ -2,28 +2,26 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FXDiagram Eclipse Integration
 Bundle-SymbolicName: de.fxdiagram.eclipse;singleton:=true
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.2.0.qualifier
 Bundle-Activator: de.fxdiagram.eclipse.Activator
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: de.fxdiagram.annotations,
+ de.fxdiagram.core;visibility:=reexport,
+ de.fxdiagram.lib;visibility:=reexport,
+ de.fxdiagram.mapping;visibility:=reexport,
+ de.fxdiagram.swtfx,
+ org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.swt,
- de.fxdiagram.swtfx,
- de.fxdiagram.core;visibility:=reexport,
- de.fxdiagram.annotations,
- org.eclipse.xtext.ui.shared,
- org.eclipse.xtext.ui,
- de.fxdiagram.lib,
- de.fxdiagram.external,
  org.eclipse.xtend.lib,
- org.eclipse.core.expressions;bundle-version="3.4.600"
+ org.eclipse.core.expressions,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.jface.text
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.eclipse,
  de.fxdiagram.eclipse.behavior,
  de.fxdiagram.eclipse.commands,
- de.fxdiagram.eclipse.mapping,
- de.fxdiagram.eclipse.shapes,
- de.fxdiagram.eclipse.xtext
+ de.fxdiagram.eclipse.mapping
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",

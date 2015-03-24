@@ -27,20 +27,17 @@ public interface ISelectionExtractor {
     private Registry() {
       IExtensionRegistry _extensionRegistry = Platform.getExtensionRegistry();
       IConfigurationElement[] _configurationElementsFor = _extensionRegistry.getConfigurationElementsFor("de.fxdiagram.eclipse.selectionExtractor");
-      final Consumer<IConfigurationElement> _function = new Consumer<IConfigurationElement>() {
-        @Override
-        public void accept(final IConfigurationElement it) {
-          try {
-            Object _createExecutableExtension = it.createExecutableExtension("class");
-            final ISelectionExtractor extractor = ((ISelectionExtractor) _createExecutableExtension);
-            Registry.this.extractors.add(extractor);
-          } catch (final Throwable _t) {
-            if (_t instanceof Exception) {
-              final Exception exc = (Exception)_t;
-              ISelectionExtractor.Registry.LOG.error(exc);
-            } else {
-              throw Exceptions.sneakyThrow(_t);
-            }
+      final Consumer<IConfigurationElement> _function = (IConfigurationElement it) -> {
+        try {
+          Object _createExecutableExtension = it.createExecutableExtension("class");
+          final ISelectionExtractor extractor = ((ISelectionExtractor) _createExecutableExtension);
+          this.extractors.add(extractor);
+        } catch (final Throwable _t) {
+          if (_t instanceof Exception) {
+            final Exception exc = (Exception)_t;
+            ISelectionExtractor.Registry.LOG.error(exc);
+          } else {
+            throw Exceptions.sneakyThrow(_t);
           }
         }
       };

@@ -33,58 +33,46 @@ public class JavaTypeModel {
   
   public JavaTypeModel(final Class<?> javaType) {
     Constructor<?>[] _declaredConstructors = javaType.getDeclaredConstructors();
-    final Function1<Constructor<?>, Boolean> _function = new Function1<Constructor<?>, Boolean>() {
-      @Override
-      public Boolean apply(final Constructor<?> it) {
-        int _modifiers = it.getModifiers();
-        return Boolean.valueOf(Modifier.isPublic(_modifiers));
-      }
+    final Function1<Constructor<?>, Boolean> _function = (Constructor<?> it) -> {
+      int _modifiers = it.getModifiers();
+      return Boolean.valueOf(Modifier.isPublic(_modifiers));
     };
     Iterable<Constructor<?>> _filter = IterableExtensions.<Constructor<?>>filter(((Iterable<Constructor<?>>)Conversions.doWrapArray(_declaredConstructors)), _function);
     List<Constructor<?>> _list = IterableExtensions.<Constructor<?>>toList(_filter);
     this.constructors = _list;
     final HashMultimap<String, Pair<Class<?>, Method>> propertyMethods = HashMultimap.<String, Pair<Class<?>, Method>>create();
     Method[] _declaredMethods = javaType.getDeclaredMethods();
-    final Function1<Method, Boolean> _function_1 = new Function1<Method, Boolean>() {
-      @Override
-      public Boolean apply(final Method it) {
-        boolean _and = false;
-        int _modifiers = it.getModifiers();
-        boolean _isPublic = Modifier.isPublic(_modifiers);
-        if (!_isPublic) {
-          _and = false;
-        } else {
-          String _name = it.getName();
-          boolean _startsWith = _name.startsWith("impl_");
-          boolean _not = (!_startsWith);
-          _and = _not;
-        }
-        return Boolean.valueOf(_and);
+    final Function1<Method, Boolean> _function_1 = (Method it) -> {
+      boolean _and = false;
+      int _modifiers = it.getModifiers();
+      boolean _isPublic = Modifier.isPublic(_modifiers);
+      if (!_isPublic) {
+        _and = false;
+      } else {
+        String _name = it.getName();
+        boolean _startsWith = _name.startsWith("impl_");
+        boolean _not = (!_startsWith);
+        _and = _not;
       }
+      return Boolean.valueOf(_and);
     };
     Iterable<Method> _filter_1 = IterableExtensions.<Method>filter(((Iterable<Method>)Conversions.doWrapArray(_declaredMethods)), _function_1);
     List<Method> _list_1 = IterableExtensions.<Method>toList(_filter_1);
     this.operations = _list_1;
     Method[] _declaredMethods_1 = javaType.getDeclaredMethods();
-    final Function1<Method, Boolean> _function_2 = new Function1<Method, Boolean>() {
-      @Override
-      public Boolean apply(final Method it) {
-        int _modifiers = it.getModifiers();
-        return Boolean.valueOf(Modifier.isPublic(_modifiers));
-      }
+    final Function1<Method, Boolean> _function_2 = (Method it) -> {
+      int _modifiers = it.getModifiers();
+      return Boolean.valueOf(Modifier.isPublic(_modifiers));
     };
     Iterable<Method> _filter_2 = IterableExtensions.<Method>filter(((Iterable<Method>)Conversions.doWrapArray(_declaredMethods_1)), _function_2);
-    final Consumer<Method> _function_3 = new Consumer<Method>() {
-      @Override
-      public void accept(final Method method) {
-        final Pair<String, Class<?>> nameAndType = JavaTypeModel.this.getPropertyNameAndType(method);
-        boolean _notEquals = (!Objects.equal(nameAndType, null));
-        if (_notEquals) {
-          String _key = nameAndType.getKey();
-          Class<?> _value = nameAndType.getValue();
-          Pair<Class<?>, Method> _mappedTo = Pair.<Class<?>, Method>of(_value, method);
-          propertyMethods.put(_key, _mappedTo);
-        }
+    final Consumer<Method> _function_3 = (Method method) -> {
+      final Pair<String, Class<?>> nameAndType = this.getPropertyNameAndType(method);
+      boolean _notEquals = (!Objects.equal(nameAndType, null));
+      if (_notEquals) {
+        String _key = nameAndType.getKey();
+        Class<?> _value = nameAndType.getValue();
+        Pair<Class<?>, Method> _mappedTo = Pair.<Class<?>, Method>of(_value, method);
+        propertyMethods.put(_key, _mappedTo);
       }
     };
     _filter_2.forEach(_function_3);
@@ -92,11 +80,8 @@ public class JavaTypeModel {
     for (final String propertyName : _keySet) {
       {
         final Set<Pair<Class<?>, Method>> type2Method = propertyMethods.get(propertyName);
-        final Function1<Pair<Class<?>, Method>, Class<?>> _function_4 = new Function1<Pair<Class<?>, Method>, Class<?>>() {
-          @Override
-          public Class<?> apply(final Pair<Class<?>, Method> it) {
-            return it.getKey();
-          }
+        final Function1<Pair<Class<?>, Method>, Class<?>> _function_4 = (Pair<Class<?>, Method> it) -> {
+          return it.getKey();
         };
         Iterable<Class<?>> _map = IterableExtensions.<Pair<Class<?>, Method>, Class<?>>map(type2Method, _function_4);
         Iterable<Class<?>> _filterNull = IterableExtensions.<Class<?>>filterNull(_map);
@@ -104,11 +89,8 @@ public class JavaTypeModel {
         int _size = types.size();
         boolean _equals = (_size == 1);
         if (_equals) {
-          final Function1<Pair<Class<?>, Method>, Method> _function_5 = new Function1<Pair<Class<?>, Method>, Method>() {
-            @Override
-            public Method apply(final Pair<Class<?>, Method> it) {
-              return it.getValue();
-            }
+          final Function1<Pair<Class<?>, Method>, Method> _function_5 = (Pair<Class<?>, Method> it) -> {
+            return it.getValue();
           };
           Iterable<Method> _map_1 = IterableExtensions.<Pair<Class<?>, Method>, Method>map(type2Method, _function_5);
           CollectionExtensions.<Method>removeAll(this.operations, _map_1);
@@ -129,18 +111,12 @@ public class JavaTypeModel {
         }
       }
     }
-    final Function1<Method, String> _function_4 = new Function1<Method, String>() {
-      @Override
-      public String apply(final Method it) {
-        return it.getName();
-      }
+    final Function1<Method, String> _function_4 = (Method it) -> {
+      return it.getName();
     };
     ListExtensions.<Method, String>sortInplaceBy(this.operations, _function_4);
-    final Function1<JavaProperty, String> _function_5 = new Function1<JavaProperty, String>() {
-      @Override
-      public String apply(final JavaProperty it) {
-        return it.getName();
-      }
+    final Function1<JavaProperty, String> _function_5 = (JavaProperty it) -> {
+      return it.getName();
     };
     ListExtensions.<JavaProperty, String>sortInplaceBy(this.properties, _function_5);
     Class<?> _superclass = javaType.getSuperclass();

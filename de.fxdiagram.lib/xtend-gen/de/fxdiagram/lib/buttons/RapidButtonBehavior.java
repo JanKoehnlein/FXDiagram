@@ -59,25 +59,19 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   
   private Group allButtons = new Group();
   
-  private final FadeTransition fadeTransition = ObjectExtensions.<FadeTransition>operator_doubleArrow(new FadeTransition(), new Procedure1<FadeTransition>() {
-    @Override
-    public void apply(final FadeTransition it) {
-      it.setNode(RapidButtonBehavior.this.allButtons);
-      Duration _millis = DurationExtensions.millis(500);
-      it.setDelay(_millis);
-      Duration _millis_1 = DurationExtensions.millis(500);
-      it.setDuration(_millis_1);
-      it.setFromValue(1);
-      it.setToValue(0);
-      final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(final ActionEvent it) {
-          RapidButtonBehavior.this.allButtons.setVisible(false);
-        }
-      };
-      it.setOnFinished(_function);
-    }
-  });
+  private final FadeTransition fadeTransition = ObjectExtensions.<FadeTransition>operator_doubleArrow(new FadeTransition(), ((Procedure1<FadeTransition>) (FadeTransition it) -> {
+    it.setNode(this.allButtons);
+    Duration _millis = DurationExtensions.millis(500);
+    it.setDelay(_millis);
+    Duration _millis_1 = DurationExtensions.millis(500);
+    it.setDuration(_millis_1);
+    it.setFromValue(1);
+    it.setToValue(0);
+    final EventHandler<ActionEvent> _function = (ActionEvent it_1) -> {
+      this.allButtons.setVisible(false);
+    };
+    it.setOnFinished(_function);
+  }));
   
   public RapidButtonBehavior(final HOST host) {
     super(host);
@@ -103,24 +97,15 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     ObservableList<Node> _children = _buttonLayer.getChildren();
     _children.add(this.allButtons);
     InitializingListListener<RapidButton> _initializingListListener = new InitializingListListener<RapidButton>();
-    final Procedure1<InitializingListListener<RapidButton>> _function = new Procedure1<InitializingListListener<RapidButton>>() {
-      @Override
-      public void apply(final InitializingListListener<RapidButton> it) {
-        final Procedure1<RapidButton> _function = new Procedure1<RapidButton>() {
-          @Override
-          public void apply(final RapidButton button) {
-            button.activate();
-            final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-              @Override
-              public void handle(final MouseEvent it) {
-                RapidButtonBehavior.this.allButtons.setVisible(false);
-              }
-            };
-            button.<MouseEvent>addEventHandler(MouseEvent.MOUSE_CLICKED, _function);
-          }
+    final Procedure1<InitializingListListener<RapidButton>> _function = (InitializingListListener<RapidButton> it) -> {
+      final Procedure1<RapidButton> _function_1 = (RapidButton button) -> {
+        button.activate();
+        final EventHandler<MouseEvent> _function_2 = (MouseEvent it_1) -> {
+          this.allButtons.setVisible(false);
         };
-        it.setAdd(_function);
-      }
+        button.<MouseEvent>addEventHandler(MouseEvent.MOUSE_CLICKED, _function_2);
+      };
+      it.setAdd(_function_1);
     };
     InitializingListListener<RapidButton> _doubleArrow = ObjectExtensions.<InitializingListListener<RapidButton>>operator_doubleArrow(_initializingListListener, _function);
     CoreExtensions.<RapidButton>addInitializingListener(this.buttonsProperty, _doubleArrow);
@@ -128,60 +113,42 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     this.layout();
     HOST _host_1 = this.getHost();
     Node _node = _host_1.getNode();
-    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        RapidButtonBehavior.this.show();
-      }
+    final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
+      this.show();
     };
     _node.<MouseEvent>addEventHandler(MouseEvent.MOUSE_ENTERED, _function_1);
     HOST _host_2 = this.getHost();
     Node _node_1 = _host_2.getNode();
-    final EventHandler<MouseEvent> _function_2 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        RapidButtonBehavior.this.fade();
-      }
+    final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
+      this.fade();
     };
     _node_1.<MouseEvent>addEventHandler(MouseEvent.MOUSE_EXITED, _function_2);
-    final EventHandler<MouseEvent> _function_3 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        RapidButtonBehavior.this.show();
-      }
+    final EventHandler<MouseEvent> _function_3 = (MouseEvent it) -> {
+      this.show();
     };
     this.allButtons.setOnMouseEntered(_function_3);
-    final EventHandler<MouseEvent> _function_4 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        RapidButtonBehavior.this.fade();
-      }
+    final EventHandler<MouseEvent> _function_4 = (MouseEvent it) -> {
+      this.fade();
     };
     this.allButtons.setOnMouseExited(_function_4);
     HOST _host_3 = this.getHost();
     ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _host_3.boundsInParentProperty();
-    final ChangeListener<Bounds> _function_5 = new ChangeListener<Bounds>() {
-      @Override
-      public void changed(final ObservableValue<? extends Bounds> p, final Bounds o, final Bounds n) {
-        boolean _isVisible = RapidButtonBehavior.this.allButtons.isVisible();
-        if (_isVisible) {
-          RapidButtonBehavior.this.layout();
-        }
+    final ChangeListener<Bounds> _function_5 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
+      boolean _isVisible = this.allButtons.isVisible();
+      if (_isVisible) {
+        this.layout();
       }
     };
     _boundsInParentProperty.addListener(_function_5);
     HOST _host_4 = this.getHost();
     ReadOnlyObjectProperty<Parent> _parentProperty = _host_4.parentProperty();
-    final ChangeListener<Parent> _function_6 = new ChangeListener<Parent>() {
-      @Override
-      public void changed(final ObservableValue<? extends Parent> p, final Parent oldParent, final Parent newParent) {
-        boolean _equals = Objects.equal(newParent, null);
-        if (_equals) {
-          XDiagram _diagram = CoreExtensions.getDiagram(oldParent);
-          Group _buttonLayer = _diagram.getButtonLayer();
-          ObservableList<Node> _children = _buttonLayer.getChildren();
-          _children.remove(RapidButtonBehavior.this.allButtons);
-        }
+    final ChangeListener<Parent> _function_6 = (ObservableValue<? extends Parent> p, Parent oldParent, Parent newParent) -> {
+      boolean _equals = Objects.equal(newParent, null);
+      if (_equals) {
+        XDiagram _diagram_1 = CoreExtensions.getDiagram(oldParent);
+        Group _buttonLayer_1 = _diagram_1.getButtonLayer();
+        ObservableList<Node> _children_1 = _buttonLayer_1.getChildren();
+        _children_1.remove(this.allButtons);
       }
     };
     _parentProperty.addListener(_function_6);
@@ -197,12 +164,9 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
         this.updateButtons();
         this.layout();
       }
-      final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
-        public void apply(final Group it) {
-          it.setVisible(true);
-          it.setOpacity(1.0);
-        }
+      final Procedure1<Group> _function = (Group it) -> {
+        it.setVisible(true);
+        it.setOpacity(1.0);
       };
       _xblockexpression = ObjectExtensions.<Group>operator_doubleArrow(
         this.allButtons, _function);
@@ -259,64 +223,61 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
         final Bounds groupBounds = group.getBoundsInLocal();
         Point2D _center = BoundsExtensions.center(groupBounds);
         final Point2D centered = Point2DExtensions.operator_minus(hostCenter, _center);
-        final Procedure1<Pane> _function = new Procedure1<Pane>() {
-          @Override
-          public void apply(final Pane it) {
-            double _x = centered.getX();
-            double _switchResult = (double) 0;
-            if (pos != null) {
-              switch (pos) {
-                case LEFT:
-                  double _width = hostBounds.getWidth();
-                  double _multiply = ((-0.5) * _width);
-                  double _minus = (_multiply - RapidButtonBehavior.this.border);
-                  double _width_1 = groupBounds.getWidth();
-                  _switchResult = (_minus - _width_1);
-                  break;
-                case RIGHT:
-                  double _width_2 = hostBounds.getWidth();
-                  double _multiply_1 = (0.5 * _width_2);
-                  double _plus = (_multiply_1 + RapidButtonBehavior.this.border);
-                  double _width_3 = groupBounds.getWidth();
-                  _switchResult = (_plus + _width_3);
-                  break;
-                default:
-                  _switchResult = 0;
-                  break;
-              }
-            } else {
-              _switchResult = 0;
+        final Procedure1<Pane> _function = (Pane it) -> {
+          double _x = centered.getX();
+          double _switchResult = (double) 0;
+          if (pos != null) {
+            switch (pos) {
+              case LEFT:
+                double _width = hostBounds.getWidth();
+                double _multiply = ((-0.5) * _width);
+                double _minus = (_multiply - this.border);
+                double _width_1 = groupBounds.getWidth();
+                _switchResult = (_minus - _width_1);
+                break;
+              case RIGHT:
+                double _width_2 = hostBounds.getWidth();
+                double _multiply_1 = (0.5 * _width_2);
+                double _plus = (_multiply_1 + this.border);
+                double _width_3 = groupBounds.getWidth();
+                _switchResult = (_plus + _width_3);
+                break;
+              default:
+                _switchResult = 0;
+                break;
             }
-            double _plus_1 = (_x + _switchResult);
-            it.setLayoutX(_plus_1);
-            double _y = centered.getY();
-            double _switchResult_1 = (double) 0;
-            if (pos != null) {
-              switch (pos) {
-                case TOP:
-                  double _height = hostBounds.getHeight();
-                  double _multiply_2 = ((-0.5) * _height);
-                  double _minus_1 = (_multiply_2 - RapidButtonBehavior.this.border);
-                  double _height_1 = groupBounds.getHeight();
-                  _switchResult_1 = (_minus_1 - _height_1);
-                  break;
-                case BOTTOM:
-                  double _height_2 = hostBounds.getHeight();
-                  double _multiply_3 = (0.5 * _height_2);
-                  double _plus_2 = (_multiply_3 + RapidButtonBehavior.this.border);
-                  double _height_3 = groupBounds.getHeight();
-                  _switchResult_1 = (_plus_2 + _height_3);
-                  break;
-                default:
-                  _switchResult_1 = 0;
-                  break;
-              }
-            } else {
-              _switchResult_1 = 0;
-            }
-            double _plus_3 = (_y + _switchResult_1);
-            it.setLayoutY(_plus_3);
+          } else {
+            _switchResult = 0;
           }
+          double _plus_1 = (_x + _switchResult);
+          it.setLayoutX(_plus_1);
+          double _y = centered.getY();
+          double _switchResult_1 = (double) 0;
+          if (pos != null) {
+            switch (pos) {
+              case TOP:
+                double _height = hostBounds.getHeight();
+                double _multiply_2 = ((-0.5) * _height);
+                double _minus_1 = (_multiply_2 - this.border);
+                double _height_1 = groupBounds.getHeight();
+                _switchResult_1 = (_minus_1 - _height_1);
+                break;
+              case BOTTOM:
+                double _height_2 = hostBounds.getHeight();
+                double _multiply_3 = (0.5 * _height_2);
+                double _plus_2 = (_multiply_3 + this.border);
+                double _height_3 = groupBounds.getHeight();
+                _switchResult_1 = (_plus_2 + _height_3);
+                break;
+              default:
+                _switchResult_1 = 0;
+                break;
+            }
+          } else {
+            _switchResult_1 = 0;
+          }
+          double _plus_3 = (_y + _switchResult_1);
+          it.setLayoutY(_plus_3);
         };
         ObjectExtensions.<Pane>operator_doubleArrow(group, _function);
       }

@@ -37,19 +37,13 @@ public class ClickThroughSlide extends Slide {
   @Override
   public void initializeGraphics() {
     super.initializeGraphics();
-    final Procedure1<Pane> _function = new Procedure1<Pane>() {
-      @Override
-      public void apply(final Pane it) {
-        ObservableList<Node> _children = it.getChildren();
-        Iterable<Node> _tail = IterableExtensions.<Node>tail(_children);
-        final Consumer<Node> _function = new Consumer<Node>() {
-          @Override
-          public void accept(final Node it) {
-            it.setOpacity(0);
-          }
-        };
-        _tail.forEach(_function);
-      }
+    final Procedure1<Pane> _function = (Pane it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      Iterable<Node> _tail = IterableExtensions.<Node>tail(_children);
+      final Consumer<Node> _function_1 = (Node it_1) -> {
+        it_1.setOpacity(0);
+      };
+      _tail.forEach(_function_1);
     };
     ObjectExtensions.<Pane>operator_doubleArrow(
       this.pane, _function);
@@ -86,15 +80,12 @@ public class ClickThroughSlide extends Slide {
   
   public FadeTransition getRevealTransition(final Node childNode) {
     FadeTransition _fadeTransition = new FadeTransition();
-    final Procedure1<FadeTransition> _function = new Procedure1<FadeTransition>() {
-      @Override
-      public void apply(final FadeTransition it) {
-        it.setNode(childNode);
-        it.setFromValue(0);
-        it.setToValue(1);
-        Duration _millis = DurationExtensions.millis(200);
-        it.setDuration(_millis);
-      }
+    final Procedure1<FadeTransition> _function = (FadeTransition it) -> {
+      it.setNode(childNode);
+      it.setFromValue(0);
+      it.setToValue(1);
+      Duration _millis = DurationExtensions.millis(200);
+      it.setDuration(_millis);
     };
     return ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function);
   }

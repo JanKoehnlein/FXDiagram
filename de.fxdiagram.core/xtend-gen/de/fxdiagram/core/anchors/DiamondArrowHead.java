@@ -45,32 +45,29 @@ public class DiamondArrowHead extends ArrowHead {
         this.fillProperty.bind(_strokeProperty);
       }
       Polygon _polygon = new Polygon();
-      final Procedure1<Polygon> _function = new Procedure1<Polygon>() {
-        @Override
-        public void apply(final Polygon it) {
-          ObservableList<Double> _points = it.getPoints();
-          double _width = DiamondArrowHead.this.getWidth();
-          double _multiply = (0.5 * _width);
-          double _height = DiamondArrowHead.this.getHeight();
-          double _multiply_1 = ((-0.5) * _height);
-          double _width_1 = DiamondArrowHead.this.getWidth();
-          double _width_2 = DiamondArrowHead.this.getWidth();
-          double _multiply_2 = (0.5 * _width_2);
-          double _height_1 = DiamondArrowHead.this.getHeight();
-          double _multiply_3 = (0.5 * _height_1);
-          _points.setAll(
-            Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_multiply_1), Double.valueOf(_width_1), Double.valueOf(0.0), Double.valueOf(_multiply_2), Double.valueOf(_multiply_3))));
-          ObjectProperty<Paint> _fillProperty = it.fillProperty();
-          _fillProperty.bind(DiamondArrowHead.this.fillProperty);
-          ObjectProperty<Paint> _strokeProperty = it.strokeProperty();
-          ObjectProperty<Paint> _strokeProperty_1 = DiamondArrowHead.this.strokeProperty();
-          _strokeProperty.bind(_strokeProperty_1);
-          DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
-          XConnection _connection = DiamondArrowHead.this.getConnection();
-          DoubleProperty _strokeWidthProperty_1 = _connection.strokeWidthProperty();
-          _strokeWidthProperty.bind(_strokeWidthProperty_1);
-          it.setStrokeType(StrokeType.CENTERED);
-        }
+      final Procedure1<Polygon> _function = (Polygon it) -> {
+        ObservableList<Double> _points = it.getPoints();
+        double _width = this.getWidth();
+        double _multiply = (0.5 * _width);
+        double _height = this.getHeight();
+        double _multiply_1 = ((-0.5) * _height);
+        double _width_1 = this.getWidth();
+        double _width_2 = this.getWidth();
+        double _multiply_2 = (0.5 * _width_2);
+        double _height_1 = this.getHeight();
+        double _multiply_3 = (0.5 * _height_1);
+        _points.setAll(
+          Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(0.0), Double.valueOf(0.0), Double.valueOf(_multiply), Double.valueOf(_multiply_1), Double.valueOf(_width_1), Double.valueOf(0.0), Double.valueOf(_multiply_2), Double.valueOf(_multiply_3))));
+        ObjectProperty<Paint> _fillProperty = it.fillProperty();
+        _fillProperty.bind(this.fillProperty);
+        ObjectProperty<Paint> _strokeProperty_1 = it.strokeProperty();
+        ObjectProperty<Paint> _strokeProperty_2 = this.strokeProperty();
+        _strokeProperty_1.bind(_strokeProperty_2);
+        DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
+        XConnection _connection_1 = this.getConnection();
+        DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
+        _strokeWidthProperty.bind(_strokeWidthProperty_1);
+        it.setStrokeType(StrokeType.CENTERED);
       };
       _xblockexpression = ObjectExtensions.<Polygon>operator_doubleArrow(_polygon, _function);
     }

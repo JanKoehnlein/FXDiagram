@@ -75,30 +75,21 @@ public class AddSuperTypeRapidButtonBehavior extends AbstractConnectionRapidButt
       Side _position = button.getPosition();
       CoverFlowChoice _coverFlowChoice = new CoverFlowChoice();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(_host, _position, _coverFlowChoice);
-      final Consumer<JavaSuperTypeDescriptor> _function = new Consumer<JavaSuperTypeDescriptor>() {
-        @Override
-        public void accept(final JavaSuperTypeDescriptor it) {
-          XNode _createNode = AddSuperTypeRapidButtonBehavior.this.createNode(it);
-          chooser.addChoice(_createNode, it);
-        }
+      final Consumer<JavaSuperTypeDescriptor> _function = (JavaSuperTypeDescriptor it) -> {
+        XNode _createNode = this.createNode(it);
+        chooser.addChoice(_createNode, it);
       };
       availableChoiceKeys.forEach(_function);
-      final ChooserConnectionProvider _function_1 = new ChooserConnectionProvider() {
-        @Override
-        public XConnection getConnection(final XNode host, final XNode choice, final DomainObjectDescriptor key) {
-          XConnection _xConnection = new XConnection(host, choice, key);
-          final Procedure1<XConnection> _function = new Procedure1<XConnection>() {
-            @Override
-            public void apply(final XConnection it) {
-              XDiagram _diagram = CoreExtensions.getDiagram(host);
-              Paint _backgroundPaint = _diagram.getBackgroundPaint();
-              TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
-                null, _backgroundPaint, false);
-              it.setTargetArrowHead(_triangleArrowHead);
-            }
-          };
-          return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
-        }
+      final ChooserConnectionProvider _function_1 = (XNode host, XNode choice, DomainObjectDescriptor key) -> {
+        XConnection _xConnection = new XConnection(host, choice, key);
+        final Procedure1<XConnection> _function_2 = (XConnection it) -> {
+          XDiagram _diagram = CoreExtensions.getDiagram(host);
+          Paint _backgroundPaint = _diagram.getBackgroundPaint();
+          TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
+            null, _backgroundPaint, false);
+          it.setTargetArrowHead(_triangleArrowHead);
+        };
+        return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function_2);
       };
       chooser.setConnectionProvider(_function_1);
       _xblockexpression = chooser;

@@ -57,13 +57,10 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
       XConnection.Kind _kind = this.connection.getKind();
       this.fromKind = _kind;
       ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
-      final Function1<XControlPoint, Point2D> _function = new Function1<XControlPoint, Point2D>() {
-        @Override
-        public Point2D apply(final XControlPoint it) {
-          double _layoutX = it.getLayoutX();
-          double _layoutY = it.getLayoutY();
-          return new Point2D(_layoutX, _layoutY);
-        }
+      final Function1<XControlPoint, Point2D> _function = (XControlPoint it) -> {
+        double _layoutX = it.getLayoutX();
+        double _layoutY = it.getLayoutY();
+        return new Point2D(_layoutX, _layoutY);
       };
       List<Point2D> _map = ListExtensions.<XControlPoint, Point2D>map(_controlPoints, _function);
       ArrayList<Point2D> _newArrayList = CollectionLiterals.<Point2D>newArrayList(((Point2D[])Conversions.unwrapArray(_map, Point2D.class)));
@@ -116,24 +113,18 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
         }
       }
     }
-    final EventHandler<ActionEvent> _function = new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(final ActionEvent it) {
-        ConnectionRouter _connectionRouter = ConnectionMorphCommand.this.connection.getConnectionRouter();
-        int _size = to.size();
-        _connectionRouter.shrinkToSize(_size);
-        ObservableList<XControlPoint> _controlPoints = ConnectionMorphCommand.this.connection.getControlPoints();
-        final Consumer<XControlPoint> _function = new Consumer<XControlPoint>() {
-          @Override
-          public void accept(final XControlPoint it) {
-            MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
-            if (_behavior!=null) {
-              _behavior.setIsManuallyPlaced(false);
-            }
-          }
-        };
-        _controlPoints.forEach(_function);
-      }
+    final EventHandler<ActionEvent> _function = (ActionEvent it) -> {
+      ConnectionRouter _connectionRouter_1 = this.connection.getConnectionRouter();
+      int _size_2 = to.size();
+      _connectionRouter_1.shrinkToSize(_size_2);
+      ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+      final Consumer<XControlPoint> _function_1 = (XControlPoint it_1) -> {
+        MoveBehavior _behavior = it_1.<MoveBehavior>getBehavior(MoveBehavior.class);
+        if (_behavior!=null) {
+          _behavior.setIsManuallyPlaced(false);
+        }
+      };
+      _controlPoints.forEach(_function_1);
     };
     morph.setOnFinished(_function);
     return morph;
@@ -143,14 +134,11 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
     PathTransition _xblockexpression = null;
     {
       Group _group = new Group();
-      final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
-        public void apply(final Group it) {
-          double _x = from.getX();
-          it.setTranslateX(_x);
-          double _y = from.getY();
-          it.setTranslateY(_y);
-        }
+      final Procedure1<Group> _function = (Group it) -> {
+        double _x = from.getX();
+        it.setTranslateX(_x);
+        double _y = from.getY();
+        it.setTranslateY(_y);
       };
       final Group dummyNode = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
       DoubleProperty _layoutXProperty = shape.layoutXProperty();
@@ -160,51 +148,39 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
       DoubleProperty _translateYProperty = dummyNode.translateYProperty();
       _layoutYProperty.bind(_translateYProperty);
       PathTransition _pathTransition = new PathTransition();
-      final Procedure1<PathTransition> _function_1 = new Procedure1<PathTransition>() {
-        @Override
-        public void apply(final PathTransition it) {
-          it.setNode(dummyNode);
-          it.setDuration(duration);
-          it.setCycleCount(1);
-          Path _path = new Path();
-          final Procedure1<Path> _function = new Procedure1<Path>() {
-            @Override
-            public void apply(final Path it) {
-              ObservableList<PathElement> _elements = it.getElements();
-              double _x = from.getX();
-              double _y = from.getY();
-              MoveTo _moveTo = new MoveTo(_x, _y);
-              _elements.add(_moveTo);
-              ObservableList<PathElement> _elements_1 = it.getElements();
-              double _x_1 = to.getX();
-              double _y_1 = to.getY();
-              LineTo _lineTo = new LineTo(_x_1, _y_1);
-              _elements_1.add(_lineTo);
-            }
+      final Procedure1<PathTransition> _function_1 = (PathTransition it) -> {
+        it.setNode(dummyNode);
+        it.setDuration(duration);
+        it.setCycleCount(1);
+        Path _path = new Path();
+        final Procedure1<Path> _function_2 = (Path it_1) -> {
+          ObservableList<PathElement> _elements = it_1.getElements();
+          double _x = from.getX();
+          double _y = from.getY();
+          MoveTo _moveTo = new MoveTo(_x, _y);
+          _elements.add(_moveTo);
+          ObservableList<PathElement> _elements_1 = it_1.getElements();
+          double _x_1 = to.getX();
+          double _y_1 = to.getY();
+          LineTo _lineTo = new LineTo(_x_1, _y_1);
+          _elements_1.add(_lineTo);
+        };
+        Path _doubleArrow = ObjectExtensions.<Path>operator_doubleArrow(_path, _function_2);
+        it.setPath(_doubleArrow);
+        final EventHandler<ActionEvent> _function_3 = (ActionEvent it_1) -> {
+          final Procedure1<XControlPoint> _function_4 = (XControlPoint it_2) -> {
+            DoubleProperty _layoutXProperty_1 = it_2.layoutXProperty();
+            _layoutXProperty_1.unbind();
+            DoubleProperty _layoutYProperty_1 = it_2.layoutYProperty();
+            _layoutYProperty_1.unbind();
+            double _x = to.getX();
+            it_2.setLayoutX(_x);
+            double _y = to.getY();
+            it_2.setLayoutY(_y);
           };
-          Path _doubleArrow = ObjectExtensions.<Path>operator_doubleArrow(_path, _function);
-          it.setPath(_doubleArrow);
-          final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent it) {
-              final Procedure1<XControlPoint> _function = new Procedure1<XControlPoint>() {
-                @Override
-                public void apply(final XControlPoint it) {
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.unbind();
-                  DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.unbind();
-                  double _x = to.getX();
-                  it.setLayoutX(_x);
-                  double _y = to.getY();
-                  it.setLayoutY(_y);
-                }
-              };
-              ObjectExtensions.<XControlPoint>operator_doubleArrow(shape, _function);
-            }
-          };
-          it.setOnFinished(_function_1);
-        }
+          ObjectExtensions.<XControlPoint>operator_doubleArrow(shape, _function_4);
+        };
+        it.setOnFinished(_function_3);
       };
       _xblockexpression = ObjectExtensions.<PathTransition>operator_doubleArrow(_pathTransition, _function_1);
     }

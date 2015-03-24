@@ -57,24 +57,18 @@ public class LevelOfDetailDiagramNode extends XNode {
   
   @Override
   protected Node createNode() {
-    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      @Override
-      public void apply(final RectangleBorderPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
-          public void apply(final Text it) {
-            it.setTextOrigin(VPos.TOP);
-            String _name = LevelOfDetailDiagramNode.this.getName();
-            it.setText(_name);
-            Insets _insets = new Insets(10, 20, 10, 20);
-            StackPane.setMargin(it, _insets);
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add((LevelOfDetailDiagramNode.this.label = _doubleArrow));
-      }
+    final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      Text _text = new Text();
+      final Procedure1<Text> _function_1 = (Text it_1) -> {
+        it_1.setTextOrigin(VPos.TOP);
+        String _name = this.getName();
+        it_1.setText(_name);
+        Insets _insets = new Insets(10, 20, 10, 20);
+        StackPane.setMargin(it_1, _insets);
+      };
+      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+      _children.add((this.label = _doubleArrow));
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
       this.pane, _function);
@@ -86,12 +80,9 @@ public class LevelOfDetailDiagramNode extends XNode {
       this.innerDiagram = innerDiagram;
       ObservableList<Node> _children = this.pane.getChildren();
       Group _group = new Group();
-      final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
-        public void apply(final Group it) {
-          ObservableList<Node> _children = it.getChildren();
-          _children.setAll(innerDiagram);
-        }
+      final Procedure1<Group> _function = (Group it) -> {
+        ObservableList<Node> _children_1 = it.getChildren();
+        _children_1.setAll(innerDiagram);
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
       _children.add((this.innerDiagramGroup = _doubleArrow));
@@ -109,13 +100,10 @@ public class LevelOfDetailDiagramNode extends XNode {
   @Override
   public void doActivate() {
     super.doActivate();
-    final Procedure1<Text> _function = new Procedure1<Text>() {
-      @Override
-      public void apply(final Text it) {
-        String _name = LevelOfDetailDiagramNode.this.getName();
-        it.setText(_name);
-        TooltipExtensions.setTooltip(it, "Zoom to reveal content");
-      }
+    final Procedure1<Text> _function = (Text it) -> {
+      String _name = this.getName();
+      it.setText(_name);
+      TooltipExtensions.setTooltip(it, "Zoom to reveal content");
     };
     ObjectExtensions.<Text>operator_doubleArrow(
       this.label, _function);
@@ -129,41 +117,35 @@ public class LevelOfDetailDiagramNode extends XNode {
       XDiagram _diagram = CoreExtensions.getDiagram(this);
       ViewportTransform _viewportTransform = _diagram.getViewportTransform();
       ReadOnlyDoubleProperty _scaleProperty = _viewportTransform.scaleProperty();
-      final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-        @Override
-        public void changed(final ObservableValue<? extends Number> prop, final Number oldVal, final Number newVal) {
-          Bounds _boundsInLocal = LevelOfDetailDiagramNode.this.getBoundsInLocal();
-          final Bounds bounds = LevelOfDetailDiagramNode.this.localToScene(_boundsInLocal);
-          double _width = bounds.getWidth();
-          double _height = bounds.getHeight();
-          final double area = (_width * _height);
-          if ((area <= 100000)) {
-            LevelOfDetailDiagramNode.this.label.setVisible(true);
-            LevelOfDetailDiagramNode.this.innerDiagramGroup.setVisible(false);
-            LevelOfDetailDiagramNode.this.pane.setBackgroundPaint(RectangleBorderPane.DEFAULT_BACKGROUND);
-          } else {
-            LevelOfDetailDiagramNode.this.label.setVisible(false);
-            LevelOfDetailDiagramNode.this.innerDiagramGroup.setVisible(true);
-            LevelOfDetailDiagramNode.this.innerDiagram.activate();
-            final Procedure1<DiagramScaler> _function = new Procedure1<DiagramScaler>() {
-              @Override
-              public void apply(final DiagramScaler it) {
-                Bounds _layoutBounds = LevelOfDetailDiagramNode.this.label.getLayoutBounds();
-                double _width = _layoutBounds.getWidth();
-                double _plus = (_width + 40);
-                it.setWidth(_plus);
-                Bounds _layoutBounds_1 = LevelOfDetailDiagramNode.this.label.getLayoutBounds();
-                double _height = _layoutBounds_1.getHeight();
-                double _plus_1 = (_height + 20);
-                it.setHeight(_plus_1);
-                it.activate();
-              }
-            };
-            ObjectExtensions.<DiagramScaler>operator_doubleArrow(
-              LevelOfDetailDiagramNode.this.diagramScaler, _function);
-            Paint _backgroundPaint = LevelOfDetailDiagramNode.this.innerDiagram.getBackgroundPaint();
-            LevelOfDetailDiagramNode.this.pane.setBackgroundPaint(_backgroundPaint);
-          }
+      final ChangeListener<Number> _function_1 = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
+        Bounds _boundsInLocal = this.getBoundsInLocal();
+        final Bounds bounds = this.localToScene(_boundsInLocal);
+        double _width = bounds.getWidth();
+        double _height = bounds.getHeight();
+        final double area = (_width * _height);
+        if ((area <= 100000)) {
+          this.label.setVisible(true);
+          this.innerDiagramGroup.setVisible(false);
+          this.pane.setBackgroundPaint(RectangleBorderPane.DEFAULT_BACKGROUND);
+        } else {
+          this.label.setVisible(false);
+          this.innerDiagramGroup.setVisible(true);
+          this.innerDiagram.activate();
+          final Procedure1<DiagramScaler> _function_2 = (DiagramScaler it) -> {
+            Bounds _layoutBounds = this.label.getLayoutBounds();
+            double _width_1 = _layoutBounds.getWidth();
+            double _plus_2 = (_width_1 + 40);
+            it.setWidth(_plus_2);
+            Bounds _layoutBounds_1 = this.label.getLayoutBounds();
+            double _height_1 = _layoutBounds_1.getHeight();
+            double _plus_3 = (_height_1 + 20);
+            it.setHeight(_plus_3);
+            it.activate();
+          };
+          ObjectExtensions.<DiagramScaler>operator_doubleArrow(
+            this.diagramScaler, _function_2);
+          Paint _backgroundPaint = this.innerDiagram.getBackgroundPaint();
+          this.pane.setBackgroundPaint(_backgroundPaint);
         }
       };
       _scaleProperty.addListener(_function_1);

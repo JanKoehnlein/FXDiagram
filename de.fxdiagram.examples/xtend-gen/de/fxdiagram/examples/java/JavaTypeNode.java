@@ -57,41 +57,32 @@ public class JavaTypeNode extends XNode {
   @Override
   protected Node createNode() {
     RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-    final Procedure1<RectangleBorderPane> _function = new Procedure1<RectangleBorderPane>() {
-      @Override
-      public void apply(final RectangleBorderPane it) {
-        ObservableList<Node> _children = it.getChildren();
-        final Procedure1<VBox> _function = new Procedure1<VBox>() {
-          @Override
-          public void apply(final VBox it) {
-            Insets _insets = new Insets(15, 20, 15, 20);
-            it.setPadding(_insets);
-            ObservableList<Node> _children = it.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function = new Procedure1<Text>() {
-              @Override
-              public void apply(final Text it) {
-                Class<?> _javaType = JavaTypeNode.this.getJavaType();
-                String _simpleName = _javaType.getSimpleName();
-                it.setText(_simpleName);
-                it.setTextOrigin(VPos.TOP);
-                Font _font = it.getFont();
-                String _family = _font.getFamily();
-                Font _font_1 = it.getFont();
-                double _size = _font_1.getSize();
-                double _multiply = (_size * 1.1);
-                Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
-                it.setFont(_font_2);
-              }
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-            _children.add(_doubleArrow);
-            it.setAlignment(Pos.CENTER);
-          }
+    final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      final Procedure1<VBox> _function_1 = (VBox it_1) -> {
+        Insets _insets = new Insets(15, 20, 15, 20);
+        it_1.setPadding(_insets);
+        ObservableList<Node> _children_1 = it_1.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function_2 = (Text it_2) -> {
+          Class<?> _javaType = this.getJavaType();
+          String _simpleName = _javaType.getSimpleName();
+          it_2.setText(_simpleName);
+          it_2.setTextOrigin(VPos.TOP);
+          Font _font = it_2.getFont();
+          String _family = _font.getFamily();
+          Font _font_1 = it_2.getFont();
+          double _size = _font_1.getSize();
+          double _multiply = (_size * 1.1);
+          Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
+          it_2.setFont(_font_2);
         };
-        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(JavaTypeNode.this.contentArea, _function);
-        _children.add(_doubleArrow);
-      }
+        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
+        _children_1.add(_doubleArrow);
+        it_1.setAlignment(Pos.CENTER);
+      };
+      VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(this.contentArea, _function_1);
+      _children.add(_doubleArrow);
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }
@@ -124,98 +115,74 @@ public class JavaTypeNode extends XNode {
     JavaTypeModel _javaTypeModel = this.getJavaTypeModel();
     List<JavaProperty> _properties = _javaTypeModel.getProperties();
     List<JavaProperty> _limit = this.<JavaProperty>limit(_properties);
-    final Consumer<JavaProperty> _function = new Consumer<JavaProperty>() {
-      @Override
-      public void accept(final JavaProperty property) {
-        ObservableList<Node> _children = JavaTypeNode.this.propertyCompartment.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
-          public void apply(final Text it) {
-            StringConcatenation _builder = new StringConcatenation();
-            String _name = property.getName();
-            _builder.append(_name, "");
-            _builder.append(": ");
-            Class<?> _type = property.getType();
-            String _simpleName = _type.getSimpleName();
-            _builder.append(_simpleName, "");
-            it.setText(_builder.toString());
-          }
-        };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
+    final Consumer<JavaProperty> _function = (JavaProperty property) -> {
+      ObservableList<Node> _children = this.propertyCompartment.getChildren();
+      Text _text = new Text();
+      final Procedure1<Text> _function_1 = (Text it) -> {
+        StringConcatenation _builder = new StringConcatenation();
+        String _name = property.getName();
+        _builder.append(_name, "");
+        _builder.append(": ");
+        Class<?> _type = property.getType();
+        String _simpleName = _type.getSimpleName();
+        _builder.append(_simpleName, "");
+        it.setText(_builder.toString());
+      };
+      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+      _children.add(_doubleArrow);
     };
     _limit.forEach(_function);
     JavaTypeModel _javaTypeModel_1 = this.getJavaTypeModel();
     List<Constructor<?>> _constructors = _javaTypeModel_1.getConstructors();
-    final Consumer<Constructor<?>> _function_1 = new Consumer<Constructor<?>>() {
-      @Override
-      public void accept(final Constructor<?> constructor) {
-        ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
-          public void apply(final Text it) {
-            StringConcatenation _builder = new StringConcatenation();
-            Class<?> _javaType = JavaTypeNode.this.getJavaType();
-            String _simpleName = _javaType.getSimpleName();
-            _builder.append(_simpleName, "");
-            _builder.append("(");
-            Class<?>[] _parameterTypes = constructor.getParameterTypes();
-            final Function1<Class<?>, String> _function = new Function1<Class<?>, String>() {
-              @Override
-              public String apply(final Class<?> it) {
-                return it.getSimpleName();
-              }
-            };
-            List<String> _map = ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)), _function);
-            String _join = IterableExtensions.join(_map, ", ");
-            _builder.append(_join, "");
-            _builder.append(")");
-            it.setText(_builder.toString());
-          }
+    final Consumer<Constructor<?>> _function_1 = (Constructor<?> constructor) -> {
+      ObservableList<Node> _children = this.operationCompartment.getChildren();
+      Text _text = new Text();
+      final Procedure1<Text> _function_2 = (Text it) -> {
+        StringConcatenation _builder = new StringConcatenation();
+        Class<?> _javaType = this.getJavaType();
+        String _simpleName = _javaType.getSimpleName();
+        _builder.append(_simpleName, "");
+        _builder.append("(");
+        Class<?>[] _parameterTypes = constructor.getParameterTypes();
+        final Function1<Class<?>, String> _function_3 = (Class<?> it_1) -> {
+          return it_1.getSimpleName();
         };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
+        List<String> _map = ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)), _function_3);
+        String _join = IterableExtensions.join(_map, ", ");
+        _builder.append(_join, "");
+        _builder.append(")");
+        it.setText(_builder.toString());
+      };
+      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
+      _children.add(_doubleArrow);
     };
     _constructors.forEach(_function_1);
     JavaTypeModel _javaTypeModel_2 = this.getJavaTypeModel();
     List<Method> _operations = _javaTypeModel_2.getOperations();
     List<Method> _limit_1 = this.<Method>limit(_operations);
-    final Consumer<Method> _function_2 = new Consumer<Method>() {
-      @Override
-      public void accept(final Method method) {
-        ObservableList<Node> _children = JavaTypeNode.this.operationCompartment.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function = new Procedure1<Text>() {
-          @Override
-          public void apply(final Text it) {
-            StringConcatenation _builder = new StringConcatenation();
-            String _name = method.getName();
-            _builder.append(_name, "");
-            _builder.append("(");
-            Class<?>[] _parameterTypes = method.getParameterTypes();
-            final Function1<Class<?>, String> _function = new Function1<Class<?>, String>() {
-              @Override
-              public String apply(final Class<?> it) {
-                return it.getSimpleName();
-              }
-            };
-            List<String> _map = ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)), _function);
-            String _join = IterableExtensions.join(_map, ", ");
-            _builder.append(_join, "");
-            _builder.append("): ");
-            Class<?> _returnType = method.getReturnType();
-            String _simpleName = _returnType.getSimpleName();
-            _builder.append(_simpleName, "");
-            it.setText(_builder.toString());
-          }
+    final Consumer<Method> _function_2 = (Method method) -> {
+      ObservableList<Node> _children = this.operationCompartment.getChildren();
+      Text _text = new Text();
+      final Procedure1<Text> _function_3 = (Text it) -> {
+        StringConcatenation _builder = new StringConcatenation();
+        String _name = method.getName();
+        _builder.append(_name, "");
+        _builder.append("(");
+        Class<?>[] _parameterTypes = method.getParameterTypes();
+        final Function1<Class<?>, String> _function_4 = (Class<?> it_1) -> {
+          return it_1.getSimpleName();
         };
-        Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
-        _children.add(_doubleArrow);
-      }
+        List<String> _map = ListExtensions.<Class<?>, String>map(((List<Class<?>>)Conversions.doWrapArray(_parameterTypes)), _function_4);
+        String _join = IterableExtensions.join(_map, ", ");
+        _builder.append(_join, "");
+        _builder.append("): ");
+        Class<?> _returnType = method.getReturnType();
+        String _simpleName = _returnType.getSimpleName();
+        _builder.append(_simpleName, "");
+        it.setText(_builder.toString());
+      };
+      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_3);
+      _children.add(_doubleArrow);
     };
     _limit_1.forEach(_function_2);
   }

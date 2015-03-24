@@ -3,18 +3,18 @@ package de.fxdiagram.pde
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.CircleArrowHead
 import de.fxdiagram.core.anchors.LineArrowHead
-import de.fxdiagram.eclipse.mapping.AbstractDiagramConfig
-import de.fxdiagram.eclipse.mapping.ConnectionMapping
-import de.fxdiagram.eclipse.mapping.IMappedElementDescriptor
-import de.fxdiagram.eclipse.mapping.MappingAcceptor
-import de.fxdiagram.eclipse.mapping.NodeMapping
-import de.fxdiagram.eclipse.shapes.BaseConnection
+import de.fxdiagram.eclipse.mapping.AbstractEclipseDiagramConfig
+import de.fxdiagram.mapping.ConnectionMapping
+import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.MappingAcceptor
+import de.fxdiagram.mapping.NodeMapping
+import de.fxdiagram.mapping.shapes.BaseConnection
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import static extension de.fxdiagram.pde.BundleUtil.*
 
-class BundleDiagramConfig extends AbstractDiagramConfig {
+class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
 
 	override protected createDomainObjectProvider() {
 		new BundleDescriptorProvider

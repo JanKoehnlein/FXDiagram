@@ -62,12 +62,9 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     FirstRecursiveImageNode _firstRecursiveImageNode = new FirstRecursiveImageNode(this);
     this.pivot = _firstRecursiveImageNode;
     Group _createPane = this.createPane();
-    final Procedure1<Group> _function = new Procedure1<Group>() {
-      @Override
-      public void apply(final Group it) {
-        ObservableList<Node> _children = it.getChildren();
-        _children.add(RecursiveImageNode.this.pivot);
-      }
+    final Procedure1<Group> _function = (Group it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      _children.add(this.pivot);
     };
     return ObjectExtensions.<Group>operator_doubleArrow(_createPane, _function);
   }
@@ -76,17 +73,14 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   public void doActivate() {
     super.doActivate();
     TooltipExtensions.setTooltip(this, "Double-click to zoom in");
-    final EventHandler<MouseEvent> _function = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        int _clickCount = it.getClickCount();
-        boolean _equals = (_clickCount == 2);
-        if (_equals) {
-          if (RecursiveImageNode.this.isZoomedIn) {
-            RecursiveImageNode.this.zoomOut();
-          } else {
-            RecursiveImageNode.this.zoomIn();
-          }
+    final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
+      int _clickCount = it.getClickCount();
+      boolean _equals = (_clickCount == 2);
+      if (_equals) {
+        if (this.isZoomedIn) {
+          this.zoomOut();
+        } else {
+          this.zoomIn();
         }
       }
     };
@@ -141,23 +135,20 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(this, _multiply_3, _multiply_7);
     XRoot _root = CoreExtensions.getRoot(this);
     ViewportTransition _viewportTransition = new ViewportTransition(_root, centerInDiagram, 500);
-    final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
-      @Override
-      public void apply(final ViewportTransition it) {
-        Duration _seconds = Duration.seconds(5);
-        it.setDuration(_seconds);
-        final Interpolator _function = new Interpolator() {
-          @Override
-          protected double curve(final double it) {
-            double _log = Math.log(10000);
-            double _multiply = (_log * it);
-            double _exp = Math.exp(_multiply);
-            return (_exp / 10000);
-          }
-        };
-        it.setInterpolator(_function);
-        it.play();
-      }
+    final Procedure1<ViewportTransition> _function = (ViewportTransition it) -> {
+      Duration _seconds = Duration.seconds(5);
+      it.setDuration(_seconds);
+      final Interpolator _function_1 = new Interpolator() {
+        @Override
+        protected double curve(final double it) {
+          double _log = Math.log(10000);
+          double _multiply = (_log * it);
+          double _exp = Math.exp(_multiply);
+          return (_exp / 10000);
+        }
+      };
+      it.setInterpolator(_function_1);
+      it.play();
     };
     ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function);
     this.isZoomedIn = true;
@@ -172,22 +163,19 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(this, _center);
     XRoot _root = CoreExtensions.getRoot(this);
     ViewportTransition _viewportTransition = new ViewportTransition(_root, centerInDiagram, 1);
-    final Procedure1<ViewportTransition> _function = new Procedure1<ViewportTransition>() {
-      @Override
-      public void apply(final ViewportTransition it) {
-        Duration _seconds = Duration.seconds(5);
-        it.setDuration(_seconds);
-        final Interpolator _function = new Interpolator() {
-          @Override
-          protected double curve(final double it) {
-            double _log = Math.log((it * 10000));
-            double _log_1 = Math.log(10000);
-            return (_log / _log_1);
-          }
-        };
-        it.setInterpolator(_function);
-        it.play();
-      }
+    final Procedure1<ViewportTransition> _function = (ViewportTransition it) -> {
+      Duration _seconds = Duration.seconds(5);
+      it.setDuration(_seconds);
+      final Interpolator _function_1 = new Interpolator() {
+        @Override
+        protected double curve(final double it) {
+          double _log = Math.log((it * 10000));
+          double _log_1 = Math.log(10000);
+          return (_log / _log_1);
+        }
+      };
+      it.setInterpolator(_function_1);
+      it.play();
     };
     ObjectExtensions.<ViewportTransition>operator_doubleArrow(_viewportTransition, _function);
     this.isZoomedIn = false;
@@ -197,52 +185,40 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     Group _xblockexpression = null;
     {
       Group _group = new Group();
-      final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
-        public void apply(final Group it) {
-          final ImageView imageView = new ImageView();
-          ObservableList<Node> _children = it.getChildren();
-          final Procedure1<ImageView> _function = new Procedure1<ImageView>() {
-            @Override
-            public void apply(final ImageView it) {
-              it.setImage(RecursiveImageNode.this.image);
-              it.setPreserveRatio(true);
-              DoubleProperty _fitWidthProperty = it.fitWidthProperty();
-              DoubleProperty _widthProperty = RecursiveImageNode.this.widthProperty();
-              _fitWidthProperty.bind(_widthProperty);
-              DoubleProperty _fitHeightProperty = it.fitHeightProperty();
-              DoubleProperty _heightProperty = RecursiveImageNode.this.heightProperty();
-              _fitHeightProperty.bind(_heightProperty);
-            }
-          };
-          ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(imageView, _function);
-          _children.add(_doubleArrow);
-          Rectangle _rectangle = new Rectangle();
-          final Procedure1<Rectangle> _function_1 = new Procedure1<Rectangle>() {
-            @Override
-            public void apply(final Rectangle it) {
-              it.setX(0);
-              it.setY(0);
-              DoubleProperty _widthProperty = it.widthProperty();
-              _widthProperty.bind(RecursiveImageNode.this.actualWidthProperty);
-              DoubleProperty _heightProperty = it.heightProperty();
-              _heightProperty.bind(RecursiveImageNode.this.actualHeightProperty);
-              it.setStrokeType(StrokeType.INSIDE);
-            }
-          };
-          Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_1);
-          it.setClip(_doubleArrow_1);
-          Bounds _boundsInLocal = imageView.getBoundsInLocal();
-          RecursiveImageNode.this.updateActualDimension(_boundsInLocal);
-          ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = imageView.boundsInLocalProperty();
-          final ChangeListener<Bounds> _function_2 = new ChangeListener<Bounds>() {
-            @Override
-            public void changed(final ObservableValue<? extends Bounds> property, final Bounds oldValue, final Bounds newValue) {
-              RecursiveImageNode.this.updateActualDimension(newValue);
-            }
-          };
-          _boundsInLocalProperty.addListener(_function_2);
-        }
+      final Procedure1<Group> _function = (Group it) -> {
+        final ImageView imageView = new ImageView();
+        ObservableList<Node> _children = it.getChildren();
+        final Procedure1<ImageView> _function_1 = (ImageView it_1) -> {
+          it_1.setImage(this.image);
+          it_1.setPreserveRatio(true);
+          DoubleProperty _fitWidthProperty = it_1.fitWidthProperty();
+          DoubleProperty _widthProperty = this.widthProperty();
+          _fitWidthProperty.bind(_widthProperty);
+          DoubleProperty _fitHeightProperty = it_1.fitHeightProperty();
+          DoubleProperty _heightProperty = this.heightProperty();
+          _fitHeightProperty.bind(_heightProperty);
+        };
+        ImageView _doubleArrow = ObjectExtensions.<ImageView>operator_doubleArrow(imageView, _function_1);
+        _children.add(_doubleArrow);
+        Rectangle _rectangle = new Rectangle();
+        final Procedure1<Rectangle> _function_2 = (Rectangle it_1) -> {
+          it_1.setX(0);
+          it_1.setY(0);
+          DoubleProperty _widthProperty = it_1.widthProperty();
+          _widthProperty.bind(this.actualWidthProperty);
+          DoubleProperty _heightProperty = it_1.heightProperty();
+          _heightProperty.bind(this.actualHeightProperty);
+          it_1.setStrokeType(StrokeType.INSIDE);
+        };
+        Rectangle _doubleArrow_1 = ObjectExtensions.<Rectangle>operator_doubleArrow(_rectangle, _function_2);
+        it.setClip(_doubleArrow_1);
+        Bounds _boundsInLocal = imageView.getBoundsInLocal();
+        this.updateActualDimension(_boundsInLocal);
+        ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = imageView.boundsInLocalProperty();
+        final ChangeListener<Bounds> _function_3 = (ObservableValue<? extends Bounds> property, Bounds oldValue, Bounds newValue) -> {
+          this.updateActualDimension(newValue);
+        };
+        _boundsInLocalProperty.addListener(_function_3);
       };
       final Group pane = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
       _xblockexpression = pane;

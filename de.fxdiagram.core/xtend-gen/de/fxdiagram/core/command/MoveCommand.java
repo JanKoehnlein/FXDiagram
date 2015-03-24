@@ -83,12 +83,9 @@ public class MoveCommand extends AbstractAnimationCommand {
         return null;
       }
       Group _group = new Group();
-      final Procedure1<Group> _function = new Procedure1<Group>() {
-        @Override
-        public void apply(final Group it) {
-          it.setTranslateX(fromX);
-          it.setTranslateY(fromY);
-        }
+      final Procedure1<Group> _function = (Group it) -> {
+        it.setTranslateX(fromX);
+        it.setTranslateY(fromY);
       };
       final Group dummyNode = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
       DoubleProperty _layoutXProperty = this.shape.layoutXProperty();
@@ -98,46 +95,34 @@ public class MoveCommand extends AbstractAnimationCommand {
       DoubleProperty _translateYProperty = dummyNode.translateYProperty();
       _layoutYProperty.bind(_translateYProperty);
       PathTransition _pathTransition = new PathTransition();
-      final Procedure1<PathTransition> _function_1 = new Procedure1<PathTransition>() {
-        @Override
-        public void apply(final PathTransition it) {
-          it.setNode(dummyNode);
-          it.setDuration(duration);
-          it.setCycleCount(1);
-          Path _path = new Path();
-          final Procedure1<Path> _function = new Procedure1<Path>() {
-            @Override
-            public void apply(final Path it) {
-              ObservableList<PathElement> _elements = it.getElements();
-              MoveTo _moveTo = new MoveTo(fromX, fromY);
-              _elements.add(_moveTo);
-              ObservableList<PathElement> _elements_1 = it.getElements();
-              LineTo _lineTo = new LineTo(toX, toY);
-              _elements_1.add(_lineTo);
-            }
+      final Procedure1<PathTransition> _function_1 = (PathTransition it) -> {
+        it.setNode(dummyNode);
+        it.setDuration(duration);
+        it.setCycleCount(1);
+        Path _path = new Path();
+        final Procedure1<Path> _function_2 = (Path it_1) -> {
+          ObservableList<PathElement> _elements = it_1.getElements();
+          MoveTo _moveTo = new MoveTo(fromX, fromY);
+          _elements.add(_moveTo);
+          ObservableList<PathElement> _elements_1 = it_1.getElements();
+          LineTo _lineTo = new LineTo(toX, toY);
+          _elements_1.add(_lineTo);
+        };
+        Path _doubleArrow = ObjectExtensions.<Path>operator_doubleArrow(_path, _function_2);
+        it.setPath(_doubleArrow);
+        final EventHandler<ActionEvent> _function_3 = (ActionEvent it_1) -> {
+          final Procedure1<XShape> _function_4 = (XShape it_2) -> {
+            DoubleProperty _layoutXProperty_1 = it_2.layoutXProperty();
+            _layoutXProperty_1.unbind();
+            DoubleProperty _layoutYProperty_1 = it_2.layoutYProperty();
+            _layoutYProperty_1.unbind();
+            it_2.setLayoutX(toX);
+            it_2.setLayoutY(toY);
           };
-          Path _doubleArrow = ObjectExtensions.<Path>operator_doubleArrow(_path, _function);
-          it.setPath(_doubleArrow);
-          final EventHandler<ActionEvent> _function_1 = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent it) {
-              final Procedure1<XShape> _function = new Procedure1<XShape>() {
-                @Override
-                public void apply(final XShape it) {
-                  DoubleProperty _layoutXProperty = it.layoutXProperty();
-                  _layoutXProperty.unbind();
-                  DoubleProperty _layoutYProperty = it.layoutYProperty();
-                  _layoutYProperty.unbind();
-                  it.setLayoutX(toX);
-                  it.setLayoutY(toY);
-                }
-              };
-              ObjectExtensions.<XShape>operator_doubleArrow(
-                MoveCommand.this.shape, _function);
-            }
-          };
-          it.setOnFinished(_function_1);
-        }
+          ObjectExtensions.<XShape>operator_doubleArrow(
+            this.shape, _function_4);
+        };
+        it.setOnFinished(_function_3);
       };
       _xblockexpression = ObjectExtensions.<PathTransition>operator_doubleArrow(_pathTransition, _function_1);
     }

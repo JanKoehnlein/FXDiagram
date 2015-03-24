@@ -52,81 +52,69 @@ public class DiagramActionTool implements XDiagramTool {
   
   public DiagramActionTool(final XRoot root) {
     this.root = root;
-    final EventHandler<KeyEvent> _function = new EventHandler<KeyEvent>() {
-      @Override
-      public void handle(final KeyEvent event) {
-        DiagramActionRegistry _diagramActionRegistry = root.getDiagramActionRegistry();
-        ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
-        final Function1<DiagramAction, Boolean> _function = new Function1<DiagramAction, Boolean>() {
-          @Override
-          public Boolean apply(final DiagramAction it) {
-            return Boolean.valueOf(it.matches(event));
-          }
-        };
-        Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function);
-        final Consumer<DiagramAction> _function_1 = new Consumer<DiagramAction>() {
-          @Override
-          public void accept(final DiagramAction it) {
-            boolean _isConsumed = event.isConsumed();
-            boolean _not = (!_isConsumed);
-            if (_not) {
-              it.perform(root);
-            }
-          }
-        };
-        _filter.forEach(_function_1);
-        KeyCode _code = event.getCode();
-        boolean _equals = Objects.equal(_code, KeyCode.ESCAPE);
-        if (_equals) {
-          event.consume();
-          RadialMenu.State _state = null;
-          if (DiagramActionTool.this.menu!=null) {
-            _state=DiagramActionTool.this.menu.getState();
-          }
-          boolean _equals_1 = Objects.equal(_state, RadialMenu.State.OPENED);
-          if (_equals_1) {
-            DiagramActionTool.this.closeMenu();
-            return;
-          } else {
-            new CloseAction();
-          }
+    final EventHandler<KeyEvent> _function = (KeyEvent event) -> {
+      DiagramActionRegistry _diagramActionRegistry = root.getDiagramActionRegistry();
+      ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
+      final Function1<DiagramAction, Boolean> _function_1 = (DiagramAction it) -> {
+        return Boolean.valueOf(it.matches(event));
+      };
+      Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function_1);
+      final Consumer<DiagramAction> _function_2 = (DiagramAction it) -> {
+        boolean _isConsumed = event.isConsumed();
+        boolean _not = (!_isConsumed);
+        if (_not) {
+          it.perform(root);
+        }
+      };
+      _filter.forEach(_function_2);
+      KeyCode _code = event.getCode();
+      boolean _equals = Objects.equal(_code, KeyCode.ESCAPE);
+      if (_equals) {
+        event.consume();
+        RadialMenu.State _state = null;
+        if (this.menu!=null) {
+          _state=this.menu.getState();
+        }
+        boolean _equals_1 = Objects.equal(_state, RadialMenu.State.OPENED);
+        if (_equals_1) {
+          this.closeMenu();
+          return;
+        } else {
+          new CloseAction();
         }
       }
     };
     this.keyHandler = _function;
-    final EventHandler<MouseEvent> _function_1 = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(final MouseEvent it) {
-        MouseButton _button = it.getButton();
-        boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
-        if (_equals) {
-          RadialMenu.State _state = null;
-          if (DiagramActionTool.this.menu!=null) {
-            _state=DiagramActionTool.this.menu.getState();
-          }
-          boolean _equals_1 = Objects.equal(_state, RadialMenu.State.OPENED);
-          if (_equals_1) {
-            DiagramActionTool.this.closeMenu();
-            it.consume();
+    final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
+      MouseButton _button = it.getButton();
+      boolean _equals = Objects.equal(_button, MouseButton.SECONDARY);
+      if (_equals) {
+        RadialMenu.State _state = null;
+        if (this.menu!=null) {
+          _state=this.menu.getState();
+        }
+        boolean _equals_1 = Objects.equal(_state, RadialMenu.State.OPENED);
+        if (_equals_1) {
+          this.closeMenu();
+          it.consume();
+        } else {
+          boolean _and = false;
+          EventTarget _target = it.getTarget();
+          Pane _diagramCanvas = root.getDiagramCanvas();
+          boolean _equals_2 = Objects.equal(_target, _diagramCanvas);
+          if (!_equals_2) {
+            _and = false;
           } else {
-            boolean _and = false;
-            EventTarget _target = it.getTarget();
-            Pane _diagramCanvas = root.getDiagramCanvas();
-            boolean _equals_2 = Objects.equal(_target, _diagramCanvas);
-            if (!_equals_2) {
-              _and = false;
-            } else {
-              RadialMenu.State _state_1 = null;
-              if (DiagramActionTool.this.menu!=null) {
-                _state_1=DiagramActionTool.this.menu.getState();
-              }
-              boolean _notEquals = (!Objects.equal(_state_1, RadialMenu.State.OPENED));
-              _and = _notEquals;
+            RadialMenu.State _state_1 = null;
+            if (this.menu!=null) {
+              _state_1=this.menu.getState();
             }
-            if (_and) {
-              DiagramActionTool.this.openMenu();
-              it.consume();
-            }
+            boolean _notEquals = (!Objects.equal(_state_1, RadialMenu.State.OPENED));
+            _and = _notEquals;
+          }
+          if (_and) {
+            this.openMenu();
+            it.consume();
           }
         }
       }
@@ -138,43 +126,31 @@ public class DiagramActionTool implements XDiagramTool {
     boolean _xblockexpression = false;
     {
       Options _options = new Options();
-      final Procedure1<Options> _function = new Procedure1<Options>() {
-        @Override
-        public void apply(final Options it) {
-          it.setDegrees(360);
-          it.setOffset((-90));
-          it.setRadius(200);
-          it.setButtonSize(72);
-          it.setButtonAlpha(1.0);
-        }
+      final Procedure1<Options> _function = (Options it) -> {
+        it.setDegrees(360);
+        it.setOffset((-90));
+        it.setRadius(200);
+        it.setButtonSize(72);
+        it.setButtonAlpha(1.0);
       };
       Options _doubleArrow = ObjectExtensions.<Options>operator_doubleArrow(_options, _function);
       DiagramActionRegistry _diagramActionRegistry = this.root.getDiagramActionRegistry();
       ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
-      final Function1<DiagramAction, Boolean> _function_1 = new Function1<DiagramAction, Boolean>() {
-        @Override
-        public Boolean apply(final DiagramAction it) {
-          Symbol.Type _symbol = it.getSymbol();
-          return Boolean.valueOf((!Objects.equal(_symbol, null)));
-        }
+      final Function1<DiagramAction, Boolean> _function_1 = (DiagramAction it) -> {
+        Symbol.Type _symbol = it.getSymbol();
+        return Boolean.valueOf((!Objects.equal(_symbol, null)));
       };
       Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function_1);
-      final Function1<DiagramAction, MenuItem> _function_2 = new Function1<DiagramAction, MenuItem>() {
-        @Override
-        public MenuItem apply(final DiagramAction action) {
-          MenuItem _menuItem = new MenuItem();
-          final Procedure1<MenuItem> _function = new Procedure1<MenuItem>() {
-            @Override
-            public void apply(final MenuItem it) {
-              Symbol.Type _symbol = action.getSymbol();
-              it.setSymbol(_symbol);
-              String _tooltip = action.getTooltip();
-              it.setTooltip(_tooltip);
-              it.setSize(64);
-            }
-          };
-          return ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function);
-        }
+      final Function1<DiagramAction, MenuItem> _function_2 = (DiagramAction action) -> {
+        MenuItem _menuItem = new MenuItem();
+        final Procedure1<MenuItem> _function_3 = (MenuItem it) -> {
+          Symbol.Type _symbol = action.getSymbol();
+          it.setSymbol(_symbol);
+          String _tooltip = action.getTooltip();
+          it.setTooltip(_tooltip);
+          it.setSize(64);
+        };
+        return ObjectExtensions.<MenuItem>operator_doubleArrow(_menuItem, _function_3);
       };
       Iterable<MenuItem> _map = IterableExtensions.<DiagramAction, MenuItem>map(_filter, _function_2);
       RadialMenu _radialMenu = new RadialMenu(_doubleArrow, ((MenuItem[])Conversions.unwrapArray(_map, MenuItem.class)));
@@ -182,58 +158,46 @@ public class DiagramActionTool implements XDiagramTool {
       HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();
       ObservableList<Node> _children = _headsUpDisplay.getChildren();
       Group _group = new Group();
-      final Procedure1<Group> _function_3 = new Procedure1<Group>() {
-        @Override
-        public void apply(final Group it) {
-          BorderPane.setAlignment(it, Pos.CENTER);
-          Scene _scene = DiagramActionTool.this.root.getScene();
-          double _width = _scene.getWidth();
-          double _multiply = (0.5 * _width);
-          it.setTranslateX(_multiply);
-          Scene _scene_1 = DiagramActionTool.this.root.getScene();
-          double _height = _scene_1.getHeight();
-          double _multiply_1 = (0.5 * _height);
-          it.setTranslateY(_multiply_1);
-          ObservableList<Node> _children = it.getChildren();
-          final Procedure1<RadialMenu> _function = new Procedure1<RadialMenu>() {
-            @Override
-            public void apply(final RadialMenu it) {
-              it.show();
-              it.open();
-              final EventHandler<RadialMenu.ItemEvent> _function = new EventHandler<RadialMenu.ItemEvent>() {
-                @Override
-                public void handle(final RadialMenu.ItemEvent it) {
-                  MenuItem _item = it.getItem();
-                  DiagramActionTool.this.selection = _item;
-                }
-              };
-              it.setOnItemSelected(_function);
-              final EventHandler<RadialMenu.MenuEvent> _function_1 = new EventHandler<RadialMenu.MenuEvent>() {
-                @Override
-                public void handle(final RadialMenu.MenuEvent it) {
-                  DiagramActionTool.this.closeMenu();
-                  boolean _notEquals = (!Objects.equal(DiagramActionTool.this.selection, null));
-                  if (_notEquals) {
-                    DiagramActionRegistry _diagramActionRegistry = DiagramActionTool.this.root.getDiagramActionRegistry();
-                    Symbol.Type _symbol = DiagramActionTool.this.selection.getSymbol();
-                    final DiagramAction action = _diagramActionRegistry.getBySymbol(_symbol);
-                    boolean _equals = Objects.equal(action, null);
-                    if (_equals) {
-                      DiagramActionTool.LOG.warning(("Unhandled menu item " + DiagramActionTool.this.selection));
-                    }
-                    if (action!=null) {
-                      action.perform(DiagramActionTool.this.root);
-                    }
-                  }
-                  DiagramActionTool.this.selection = null;
-                }
-              };
-              it.setOnMenuCloseFinished(_function_1);
-            }
+      final Procedure1<Group> _function_3 = (Group it) -> {
+        BorderPane.setAlignment(it, Pos.CENTER);
+        Scene _scene = this.root.getScene();
+        double _width = _scene.getWidth();
+        double _multiply = (0.5 * _width);
+        it.setTranslateX(_multiply);
+        Scene _scene_1 = this.root.getScene();
+        double _height = _scene_1.getHeight();
+        double _multiply_1 = (0.5 * _height);
+        it.setTranslateY(_multiply_1);
+        ObservableList<Node> _children_1 = it.getChildren();
+        final Procedure1<RadialMenu> _function_4 = (RadialMenu it_1) -> {
+          it_1.show();
+          it_1.open();
+          final EventHandler<RadialMenu.ItemEvent> _function_5 = (RadialMenu.ItemEvent it_2) -> {
+            MenuItem _item = it_2.getItem();
+            this.selection = _item;
           };
-          RadialMenu _doubleArrow = ObjectExtensions.<RadialMenu>operator_doubleArrow(DiagramActionTool.this.menu, _function);
-          _children.add(_doubleArrow);
-        }
+          it_1.setOnItemSelected(_function_5);
+          final EventHandler<RadialMenu.MenuEvent> _function_6 = (RadialMenu.MenuEvent it_2) -> {
+            this.closeMenu();
+            boolean _notEquals = (!Objects.equal(this.selection, null));
+            if (_notEquals) {
+              DiagramActionRegistry _diagramActionRegistry_1 = this.root.getDiagramActionRegistry();
+              Symbol.Type _symbol = this.selection.getSymbol();
+              final DiagramAction action = _diagramActionRegistry_1.getBySymbol(_symbol);
+              boolean _equals = Objects.equal(action, null);
+              if (_equals) {
+                DiagramActionTool.LOG.warning(("Unhandled menu item " + this.selection));
+              }
+              if (action!=null) {
+                action.perform(this.root);
+              }
+            }
+            this.selection = null;
+          };
+          it_1.setOnMenuCloseFinished(_function_6);
+        };
+        RadialMenu _doubleArrow_1 = ObjectExtensions.<RadialMenu>operator_doubleArrow(this.menu, _function_4);
+        _children_1.add(_doubleArrow_1);
       };
       Group _doubleArrow_1 = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_3);
       _xblockexpression = _children.add((this.menuGroup = _doubleArrow_1));

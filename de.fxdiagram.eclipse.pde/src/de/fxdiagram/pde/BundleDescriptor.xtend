@@ -1,7 +1,7 @@
 package de.fxdiagram.pde
 
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.eclipse.mapping.AbstractMappedElementDescriptor
+import de.fxdiagram.mapping.AbstractMappedElementDescriptor
 import org.apache.log4j.Logger
 import org.eclipse.osgi.service.resolver.BundleDescription
 import org.eclipse.pde.core.plugin.IMatchRules

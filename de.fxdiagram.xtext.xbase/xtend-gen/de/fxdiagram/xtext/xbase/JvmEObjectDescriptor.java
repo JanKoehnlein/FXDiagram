@@ -1,6 +1,6 @@
 package de.fxdiagram.xtext.xbase;
 
-import de.fxdiagram.eclipse.mapping.XtextEObjectDescriptor;
+import de.fxdiagram.eclipse.xtext.XtextEObjectDescriptor;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
