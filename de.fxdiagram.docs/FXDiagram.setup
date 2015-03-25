@@ -18,14 +18,14 @@
       name="xtext.composite"
       label="Xtext/Xtend version">
     <choice
-        value="Current release"
-        label="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
+        value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"
+        label="Current release"/>
     <choice
-        value="Nightly"
-        label="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"/>
+        value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/nightly/"
+        label="Nightly"/>
     <choice
-        value="Latest Build"
-        label="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"/>
+        value="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/latest/"
+        label="Latest Build"/>
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
