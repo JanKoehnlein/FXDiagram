@@ -7,11 +7,8 @@ FXDIAGRAM_BINTRAY=`pwd`/bintray
 rm -rf $FXDIAGRAM_BINTRAY
 mkdir $FXDIAGRAM_BINTRAY
 cd $FXDIAGRAM_BINTRAY/
-mkdir p2
-mkdir p2/updates
 mkdir standalone
 
-cd p2/updates
 rm -rf *
 unzip $FXDIAGRAM_GIT/de.fxdiagram.eclipse.updatesite/target/de.fxdiagram.eclipse.updatesite-*.zip 
 popd
