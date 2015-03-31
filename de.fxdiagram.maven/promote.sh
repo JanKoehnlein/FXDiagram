@@ -24,6 +24,7 @@ for file in *.jar.jar ; do
 	mv $file ${file/.jar.jar/.jar}
 done
 cp ../../run-demo.sh .
+cp ../../run-demo.bat .
 cd ..
 zip fxdiagram-jars.zip FXDiagram/* 
 cp -f fxdiagram-jars.zip $FXDIAGRAM_BINTRAY/standalone/
