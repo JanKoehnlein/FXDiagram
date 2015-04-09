@@ -29,6 +29,7 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Feature;
+import org.eclipse.xtext.example.domainmodel.domainmodel.Operation;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -66,6 +67,7 @@ public class EntityNode extends BaseNode<Entity> {
       final Procedure1<VBox> _function_1 = (VBox it_1) -> {
         Insets _insets = new Insets(10, 20, 10, 20);
         it_1.setPadding(_insets);
+        it_1.setSpacing(10);
         it_1.setAlignment(Pos.CENTER);
         ObservableList<Node> _children_1 = it_1.getChildren();
         Text _text = new Text();
@@ -80,26 +82,24 @@ public class EntityNode extends BaseNode<Entity> {
           double _multiply = (_size * 1.1);
           Font _font_2 = Font.font(_family, FontWeight.BOLD, _multiply);
           it_2.setFont(_font_2);
-          Insets _insets_1 = new Insets(0, 0, 10, 0);
-          VBox.setMargin(it_2, _insets_1);
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
         _children_1.add(_doubleArrow);
-        ObservableList<Node> _children_2 = it_1.getChildren();
-        VBox _vBox_1 = new VBox();
-        final Procedure1<VBox> _function_3 = (VBox attributeCompartment) -> {
-          IMappedElementDescriptor<Entity> _domainObject = this.getDomainObject();
-          final Function1<Entity, Object> _function_4 = (Entity entity) -> {
-            Object _xblockexpression = null;
-            {
-              EList<Feature> _features = entity.getFeatures();
-              Iterable<Property> _filter = Iterables.<Property>filter(_features, Property.class);
-              final Function1<Property, Boolean> _function_5 = (Property it_2) -> {
-                JvmTypeReference _type = it_2.getType();
-                Entity _referencedEntity = this.util.getReferencedEntity(_type);
-                return Boolean.valueOf(Objects.equal(_referencedEntity, null));
-              };
-              Iterable<Property> _filter_1 = IterableExtensions.<Property>filter(_filter, _function_5);
+        IMappedElementDescriptor<Entity> _domainObject = this.getDomainObject();
+        final Function1<Entity, Boolean> _function_3 = (Entity entity) -> {
+          boolean _xblockexpression = false;
+          {
+            EList<Feature> _features = entity.getFeatures();
+            Iterable<Property> _filter = Iterables.<Property>filter(_features, Property.class);
+            final Function1<Property, Boolean> _function_4 = (Property it_2) -> {
+              JvmTypeReference _type = it_2.getType();
+              Entity _referencedEntity = this.util.getReferencedEntity(_type);
+              return Boolean.valueOf(Objects.equal(_referencedEntity, null));
+            };
+            final Iterable<Property> attributes = IterableExtensions.<Property>filter(_filter, _function_4);
+            ObservableList<Node> _children_2 = it_1.getChildren();
+            VBox _vBox_1 = new VBox();
+            final Procedure1<VBox> _function_5 = (VBox attributeCompartment) -> {
               final Consumer<Property> _function_6 = (Property attribute) -> {
                 ObservableList<Node> _children_3 = attributeCompartment.getChildren();
                 Text _text_1 = new Text();
@@ -117,15 +117,43 @@ public class EntityNode extends BaseNode<Entity> {
                 Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_7);
                 _children_3.add(_doubleArrow_1);
               };
-              _filter_1.forEach(_function_6);
-              _xblockexpression = null;
+              attributes.forEach(_function_6);
+            };
+            VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_5);
+            _children_2.add(_doubleArrow_1);
+            EList<Feature> _features_1 = entity.getFeatures();
+            final Iterable<Operation> operations = Iterables.<Operation>filter(_features_1, Operation.class);
+            boolean _xifexpression = false;
+            boolean _isEmpty = IterableExtensions.isEmpty(operations);
+            boolean _not = (!_isEmpty);
+            if (_not) {
+              ObservableList<Node> _children_3 = it_1.getChildren();
+              VBox _vBox_2 = new VBox();
+              final Procedure1<VBox> _function_6 = (VBox operationCompartment) -> {
+                final Consumer<Operation> _function_7 = (Operation operation) -> {
+                  ObservableList<Node> _children_4 = operationCompartment.getChildren();
+                  Text _text_1 = new Text();
+                  final Procedure1<Text> _function_8 = (Text it_2) -> {
+                    it_2.setTextOrigin(VPos.TOP);
+                    StringConcatenation _builder = new StringConcatenation();
+                    String _name = operation.getName();
+                    _builder.append(_name, "");
+                    _builder.append("()");
+                    it_2.setText(_builder.toString());
+                  };
+                  Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_8);
+                  _children_4.add(_doubleArrow_2);
+                };
+                operations.forEach(_function_7);
+              };
+              VBox _doubleArrow_2 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_2, _function_6);
+              _xifexpression = _children_3.add(_doubleArrow_2);
             }
-            return _xblockexpression;
-          };
-          _domainObject.<Object>withDomainObject(_function_4);
+            _xblockexpression = _xifexpression;
+          }
+          return Boolean.valueOf(_xblockexpression);
         };
-        VBox _doubleArrow_1 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_3);
-        _children_2.add(_doubleArrow_1);
+        _domainObject.<Boolean>withDomainObject(_function_3);
       };
       VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
       _children.add(_doubleArrow);
