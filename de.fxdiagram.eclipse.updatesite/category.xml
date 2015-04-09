@@ -6,6 +6,9 @@
    <feature id="de.fxdiagram.sdk.feature.source">
       <category name="FXDiagram"/>
    </feature>
+   <feature id="org.eclipse.fx.target.rcp.feature">
+      <category name="FXDiagram.third.party"/>
+   </feature>
    <bundle id="de.cau.cs.kieler.core">
       <category name="FXDiagram.third.party"/>
    </bundle>
@@ -39,9 +42,6 @@
    <bundle id="org.eclipse.xtext.example.fowlerdsl.ui">
       <category name="FXDiagram.third.party"/>
    </bundle>
-   <feature id="org.eclipse.fx.ide.basic.feature">
-      <category name="FXDiagram.third.party"/>
-   </feature>
    <category-def name="FXDiagram" label="FXDiagram"/>
    <category-def name="FXDiagram.third.party" label="FXDiagram third-party dependencies">
       <description>
