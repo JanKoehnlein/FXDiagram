@@ -85,7 +85,7 @@
     <requirement
         name="org.eclipse.xtext.sdk.feature.group"/>
     <requirement
-        name="org.eclipse.fx.target.rcp.feature.feature.group"/>
+        name="org.eclipse.fx.ide.feature.feature.group"/>
     <requirement
         name="org.eclipse.egit.feature.group"/>
     <repository
@@ -173,7 +173,7 @@
       <requirement
           name="org.eclipse.xtend.sdk.feature.group"/>
       <requirement
-          name="org.eclipse.fx.target.rcp.feature.feature.group"/>
+          name="org.eclipse.fx.ide.basic.feature.feature.group"/>
       <requirement
           name="de.fxdiagram.maven"/>
       <requirement
