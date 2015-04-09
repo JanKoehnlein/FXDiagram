@@ -51,6 +51,7 @@ import org.eclipse.ui.texteditor.AbstractTextEditor
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import java.util.ArrayList
 
 class FXDiagramTab {
 	val CTabItem tab
@@ -76,7 +77,7 @@ class FXDiagramTab {
 		tab.addDisposeListener [
 			gestureConverter.dispose
 			view.site.page.removePartListener(listener)
-			contributingEditors.keySet.forEach [
+			new ArrayList(contributingEditors.keySet).forEach [
 				deregister
 			]
 		]

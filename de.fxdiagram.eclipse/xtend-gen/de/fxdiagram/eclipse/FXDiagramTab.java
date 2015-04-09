@@ -47,6 +47,7 @@ import de.fxdiagram.mapping.NodeMappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.XDiagramConfigInterpreter;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -194,10 +195,11 @@ public class FXDiagramTab {
       IWorkbenchPage _page = _site.getPage();
       _page.removePartListener(this.listener);
       Set<IEditorPart> _keySet = this.contributingEditors.keySet();
+      ArrayList<IEditorPart> _arrayList = new ArrayList<IEditorPart>(_keySet);
       final Consumer<IEditorPart> _function_2 = (IEditorPart it_1) -> {
         this.deregister(it_1);
       };
-      _keySet.forEach(_function_2);
+      _arrayList.forEach(_function_2);
     };
     this.tab.addDisposeListener(_function_1);
     StringProperty _nameProperty = this.root.nameProperty();
