@@ -44,9 +44,12 @@ public class XDiagramConfigInterpreter {
       if (_not) {
         return null;
       }
-      IMappedElementDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
-      final XDiagram diagram = diagramMapping.createDiagram(_descriptor);
-      context.diagram = diagram;
+      boolean _isCreateNewDiagram = context.isCreateNewDiagram();
+      if (_isCreateNewDiagram) {
+        IMappedElementDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
+        XDiagram _createDiagram = diagramMapping.createDiagram(_descriptor);
+        context.setNewDiagram(_createDiagram);
+      }
       List<AbstractNodeMappingCall<?, T>> _nodes = diagramMapping.getNodes();
       final Consumer<AbstractNodeMappingCall<?, T>> _function = (AbstractNodeMappingCall<?, T> it) -> {
         this.execute(it, diagramObject, context, true);
@@ -71,7 +74,7 @@ public class XDiagramConfigInterpreter {
         };
         _nodes_1.forEach(_function_2);
       }
-      _xblockexpression = diagram;
+      _xblockexpression = context.getDiagram();
     }
     return _xblockexpression;
   }
@@ -326,8 +329,7 @@ public class XDiagramConfigInterpreter {
     Function1<? super U, ? extends T> _selector = diagramMappingCall.getSelector();
     final T diagramObject = _selector.apply(domainArgument);
     DiagramMapping<T> _diagramMapping = diagramMappingCall.getDiagramMapping();
-    InterpreterContext _interpreterContext = new InterpreterContext();
-    final XDiagram result = this.<T>createDiagram(diagramObject, _diagramMapping, _interpreterContext);
+    final XDiagram result = this.<T>createDiagram(diagramObject, _diagramMapping, context);
     return result;
   }
   

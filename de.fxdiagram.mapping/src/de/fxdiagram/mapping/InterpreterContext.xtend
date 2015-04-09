@@ -9,17 +9,29 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.command.CommandStack
+import de.fxdiagram.core.command.ChangeDiagramCommand
 
 class InterpreterContext {
 
-	protected XDiagram diagram
+	XDiagram diagram
+	XDiagram oldDiagram
 	
-	@Accessors boolean isNewDiagram
+	@Accessors boolean isCreateNewDiagram
 
 	Set<XNode> addedNodes = newHashSet
 	Set<XConnection> addedConnections = newHashSet
 	
-	def setDiagram(XDiagram diagram) {
+	new(XDiagram diagram) {
+		this.diagram = diagram	
+	}
+
+	def getDiagram() {
+		diagram
+	}
+	
+	def setNewDiagram(XDiagram diagram) {
+		this.oldDiagram = this.diagram
 		this.diagram = diagram
 	}
 
@@ -46,10 +58,12 @@ class InterpreterContext {
 	}
 	
 	def boolean needsLayout() {
-		isNewDiagram || addedNodes.size + addedConnections.size  > 1		
+		isCreateNewDiagram || addedNodes.size + addedConnections.size  > 1		
 	}
 	
-	def getCommand() {
-		AddRemoveCommand.newAddCommand(diagram, addedNodes + addedConnections)
+	def executeCommands(CommandStack commandStack) {
+		if(oldDiagram != null) 
+			commandStack.execute(new ChangeDiagramCommand(diagram))
+		commandStack.execute(AddRemoveCommand.newAddCommand(diagram, addedNodes + addedConnections))
 	}
 }

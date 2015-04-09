@@ -8,6 +8,8 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AddRemoveCommand;
+import de.fxdiagram.core.command.ChangeDiagramCommand;
+import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import java.util.Set;
@@ -21,17 +23,32 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class InterpreterContext {
-  protected XDiagram diagram;
+  private XDiagram diagram;
+  
+  private XDiagram oldDiagram;
   
   @Accessors
-  private boolean isNewDiagram;
+  private boolean isCreateNewDiagram;
   
   private Set<XNode> addedNodes = CollectionLiterals.<XNode>newHashSet();
   
   private Set<XConnection> addedConnections = CollectionLiterals.<XConnection>newHashSet();
   
-  public XDiagram setDiagram(final XDiagram diagram) {
-    return this.diagram = diagram;
+  public InterpreterContext(final XDiagram diagram) {
+    this.diagram = diagram;
+  }
+  
+  public XDiagram getDiagram() {
+    return this.diagram;
+  }
+  
+  public XDiagram setNewDiagram(final XDiagram diagram) {
+    XDiagram _xblockexpression = null;
+    {
+      this.oldDiagram = this.diagram;
+      _xblockexpression = this.diagram = diagram;
+    }
+    return _xblockexpression;
   }
   
   public boolean addNode(final XNode node) {
@@ -96,7 +113,7 @@ public class InterpreterContext {
   
   public boolean needsLayout() {
     boolean _or = false;
-    if (this.isNewDiagram) {
+    if (this.isCreateNewDiagram) {
       _or = true;
     } else {
       int _size = this.addedNodes.size();
@@ -108,17 +125,23 @@ public class InterpreterContext {
     return _or;
   }
   
-  public AddRemoveCommand getCommand() {
+  public void executeCommands(final CommandStack commandStack) {
+    boolean _notEquals = (!Objects.equal(this.oldDiagram, null));
+    if (_notEquals) {
+      ChangeDiagramCommand _changeDiagramCommand = new ChangeDiagramCommand(this.diagram);
+      commandStack.execute(_changeDiagramCommand);
+    }
     Iterable<XShape> _plus = Iterables.<XShape>concat(this.addedNodes, this.addedConnections);
-    return AddRemoveCommand.newAddCommand(this.diagram, ((XShape[])Conversions.unwrapArray(_plus, XShape.class)));
+    AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(this.diagram, ((XShape[])Conversions.unwrapArray(_plus, XShape.class)));
+    commandStack.execute(_newAddCommand);
   }
   
   @Pure
-  public boolean isNewDiagram() {
-    return this.isNewDiagram;
+  public boolean isCreateNewDiagram() {
+    return this.isCreateNewDiagram;
   }
   
-  public void setIsNewDiagram(final boolean isNewDiagram) {
-    this.isNewDiagram = isNewDiagram;
+  public void setIsCreateNewDiagram(final boolean isCreateNewDiagram) {
+    this.isCreateNewDiagram = isCreateNewDiagram;
   }
 }

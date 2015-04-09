@@ -140,29 +140,25 @@ class FXDiagramTab {
 	} 	
 
 	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
-		val interpreterContext = new InterpreterContext
+		val interpreterContext = new InterpreterContext(root.diagram)
 		if(mappingCall instanceof DiagramMappingCall<?, ?>) {
-			if(editor == null || register(editor) || changedEditors.remove(editor)) {
-				interpreterContext.isNewDiagram = true
-				root.diagram = configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
-				root.commandStack.execute(interpreterContext.command)
-			} 
+			interpreterContext.isCreateNewDiagram = editor == null || register(editor) || changedEditors.remove(editor)
+			configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
+			interpreterContext.executeCommands(root.commandStack)
 		} else if(mappingCall instanceof NodeMappingCall<?, ?>) {
 			register(editor)
-			interpreterContext.diagram = root.diagram
 			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)
-			root.commandStack.execute(interpreterContext.command)		
+			interpreterContext.executeCommands(root.commandStack)
 		} else if(mappingCall instanceof ConnectionMappingCall<?, ?>) {
 			val mapping = mappingCall.mapping as ConnectionMapping<?>
 			if(mapping.source != null && mapping.target != null) {
 				register(editor)
-				interpreterContext.diagram = root.diagram
 				configInterpreter.execute(mappingCall as ConnectionMappingCall<?, T>, element, [], interpreterContext, true)
-				root.commandStack.execute(interpreterContext.command)		
+				interpreterContext.executeCommands(root.commandStack)
 			}
 		}
 		val descriptor = createMappedDescriptor(element)
-		val centerShape = root.diagram.allShapes.findFirst[
+		val centerShape = (interpreterContext.diagram.nodes + interpreterContext.diagram.connections).findFirst[
 			switch it {
 				XNode:
 					domainObject == descriptor
@@ -175,7 +171,7 @@ class FXDiagramTab {
 		root.commandStack.execute(
 			new ParallelAnimationCommand => [
 				if(interpreterContext.needsLayout)
-					it += new Layouter().createLayoutCommand(LayoutType.DOT, root.diagram, 500.millis, centerShape)
+					it += new Layouter().createLayoutCommand(LayoutType.DOT, interpreterContext.diagram, 500.millis, centerShape)
 				it += new SelectAndRevealCommand(root, [ it == centerShape ])
 			])
 	}

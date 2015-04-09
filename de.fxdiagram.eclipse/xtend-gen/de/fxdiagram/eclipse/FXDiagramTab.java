@@ -7,7 +7,6 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
@@ -311,7 +310,8 @@ public class FXDiagramTab {
   }
   
   protected <T extends Object> void doRevealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
-    final InterpreterContext interpreterContext = new InterpreterContext();
+    XDiagram _diagram = this.root.getDiagram();
+    final InterpreterContext interpreterContext = new InterpreterContext(_diagram);
     if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
       boolean _or = false;
       boolean _or_1 = false;
@@ -328,23 +328,16 @@ public class FXDiagramTab {
         boolean _remove = this.changedEditors.remove(editor);
         _or = _remove;
       }
-      if (_or) {
-        interpreterContext.setIsNewDiagram(true);
-        XDiagram _execute = this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
-        this.root.setDiagram(_execute);
-        CommandStack _commandStack = this.root.getCommandStack();
-        AddRemoveCommand _command = interpreterContext.getCommand();
-        _commandStack.execute(_command);
-      }
+      interpreterContext.setIsCreateNewDiagram(_or);
+      this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
+      CommandStack _commandStack = this.root.getCommandStack();
+      interpreterContext.executeCommands(_commandStack);
     } else {
       if ((mappingCall instanceof NodeMappingCall<?, ?>)) {
         this.register(editor);
-        XDiagram _diagram = this.root.getDiagram();
-        interpreterContext.setDiagram(_diagram);
         this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext, true);
         CommandStack _commandStack_1 = this.root.getCommandStack();
-        AddRemoveCommand _command_1 = interpreterContext.getCommand();
-        _commandStack_1.execute(_command_1);
+        interpreterContext.executeCommands(_commandStack_1);
       } else {
         if ((mappingCall instanceof ConnectionMappingCall<?, ?>)) {
           AbstractMapping<?> _mapping = ((ConnectionMappingCall<?, ?>)mappingCall).getMapping();
@@ -361,21 +354,21 @@ public class FXDiagramTab {
           }
           if (_and) {
             this.register(editor);
-            XDiagram _diagram_1 = this.root.getDiagram();
-            interpreterContext.setDiagram(_diagram_1);
             final Procedure1<XConnection> _function = (XConnection it) -> {
             };
             this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext, true);
             CommandStack _commandStack_2 = this.root.getCommandStack();
-            AddRemoveCommand _command_2 = interpreterContext.getCommand();
-            _commandStack_2.execute(_command_2);
+            interpreterContext.executeCommands(_commandStack_2);
           }
         }
       }
     }
     final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element);
-    XDiagram _diagram_2 = this.root.getDiagram();
-    Iterable<XShape> _allShapes = _diagram_2.getAllShapes();
+    XDiagram _diagram_1 = interpreterContext.getDiagram();
+    ObservableList<XNode> _nodes = _diagram_1.getNodes();
+    XDiagram _diagram_2 = interpreterContext.getDiagram();
+    ObservableList<XConnection> _connections = _diagram_2.getConnections();
+    Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
     final Function1<XShape, Boolean> _function_1 = (XShape it) -> {
       boolean _switchResult = false;
       boolean _matched = false;
@@ -398,20 +391,20 @@ public class FXDiagramTab {
       }
       return Boolean.valueOf(_switchResult);
     };
-    final XShape centerShape = IterableExtensions.<XShape>findFirst(_allShapes, _function_1);
+    final XShape centerShape = ((XShape)IterableExtensions.<XShape>findFirst(_plus, _function_1));
     CommandStack _commandStack_3 = this.root.getCommandStack();
     ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
     final Procedure1<ParallelAnimationCommand> _function_2 = (ParallelAnimationCommand it) -> {
       boolean _needsLayout = interpreterContext.needsLayout();
       if (_needsLayout) {
         Layouter _layouter = new Layouter();
-        XDiagram _diagram_3 = this.root.getDiagram();
+        XDiagram _diagram_3 = interpreterContext.getDiagram();
         Duration _millis = DurationExtensions.millis(500);
-        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_3, _millis, centerShape);
+        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_3, _millis, ((XShape)centerShape));
         it.operator_add(_createLayoutCommand);
       }
       final Function1<XShape, Boolean> _function_3 = (XShape it_1) -> {
-        return Boolean.valueOf(Objects.equal(it_1, centerShape));
+        return Boolean.valueOf(Objects.equal(it_1, ((XShape)centerShape)));
       };
       SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_3);
       it.operator_add(_selectAndRevealCommand);
