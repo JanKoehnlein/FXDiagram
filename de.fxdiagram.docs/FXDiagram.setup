@@ -155,6 +155,9 @@
     <choice
         value="http://download.eclipse.org/releases/luna"
         label="Luna - 4.4"/>
+    <choice
+        value="http://download.eclipse.org/releases/mars"
+        label="Mars - 4.5"/>
     <description>The release train repository location that will be used to materialize a target platform.  EMF and XSD are built and tested with Eclipse 3.5, i.e., Galileo.</description>
   </setupTask>
   <setupTask
