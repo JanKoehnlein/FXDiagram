@@ -22,35 +22,32 @@ import static java.lang.Math.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 class Inflator {
-	
+
 	XNode host
-	
+
 	Pane container
-	
+
 	Map<VBox, Rectangle> inflatable2spacer = newLinkedHashMap
-	
-	double deflatedWidth
-	double deflatedHeight
-	double inflatedWidth
-	double inflatedHeight
-	
+
+	Dimension2D deflatedUnpadded
+
 	boolean isInflated = false
-	 
+
 	new(XNode host, Pane container) {
 		this.host = host
 		this.container = container
 		val containerSize = calculateSize(container)
 		val padding = container.padding
-		deflatedWidth = containerSize.width - padding.left - padding.right
-		deflatedHeight = containerSize.height - padding.top - padding.bottom
+		deflatedUnpadded = new Dimension2D(containerSize.width - padding.left - padding.right,
+			containerSize.height - padding.top - padding.bottom)
 	}
-	
+
 	def addInflatable(VBox inflatable, int index) {
 		val spacer = new Rectangle(0, 0, 0, 0) => [
 			opacity = 0
 		]
-		if(isInflated) {
-			container.children.add(index, inflatable)			
+		if (isInflated) {
+			container.children.add(index, inflatable)
 		} else {
 			container.children.add(index, spacer)
 		}
@@ -59,7 +56,7 @@ class Inflator {
 
 	def removeInflatable(VBox inflatable) {
 		val spacer = inflatable2spacer.get(inflatable)
-		if(isInflated) {
+		if (isInflated) {
 			container.children -= inflatable
 		} else {
 			container.children -= spacer
@@ -68,20 +65,20 @@ class Inflator {
 	}
 
 	def getInflateAnimation() {
-		if(inflatable2spacer.empty || isInflated)
+		if (inflatable2spacer.empty || isInflated)
 			return createEmptyTransition
 		new SequentialTransition => [
 			delay = 200.millis
 			children += inflate
-			children += appear	
+			children += appear
 			onFinished = [
 				isInflated = true
 			]
 		]
 	}
-	
+
 	def getDeflateAnimation() {
-		if(inflatable2spacer.empty || !isInflated)
+		if (inflatable2spacer.empty || !isInflated)
 			return createEmptyTransition
 		new SequentialTransition => [
 			children += disappear
@@ -89,50 +86,64 @@ class Inflator {
 			onFinished = [
 				isInflated = false
 			]
-		]					
+		]
 	}
-	
+
 	def getInflateCommand() {
 		return new AbstractAnimationCommand() {
-			
+
 			override createExecuteAnimation(CommandContext context) {
 				inflateAnimation
 			}
-			
+
 			override createUndoAnimation(CommandContext context) {
 				deflateAnimation
 			}
-			
+
 			override createRedoAnimation(CommandContext context) {
 				inflateAnimation
 			}
-			
+
 		}
 	}
 	
+	def getInflatedSize() {
+		val unpadded = inflatedUnpadded
+		val padding = container.padding
+		new Dimension2D(unpadded.width + padding.left + padding.right, unpadded.height + padding.top + padding.bottom + deflatedUnpadded.height)
+	}
+
+	protected def getInflatedUnpadded() {
+		var inflatedWidth = deflatedUnpadded.width
+		var inflatedHeight = 0.0
+		for (it : inflatable2spacer.entrySet) {
+			val inflatable = key
+			val size = calculateSize(inflatable)
+			inflatedWidth = max(inflatedWidth, size.width)
+			inflatedHeight += size.height
+		}
+		new Dimension2D(inflatedWidth, inflatedHeight)
+	}
+
 	protected def inflate() {
 		new ParallelTransition => [ pt |
-			inflatedWidth = deflatedWidth
-			inflatedHeight = 0.0
-			for(it: inflatable2spacer.entrySet) {
+			for (it : inflatable2spacer.entrySet) {
 				val inflatable = key
 				val spacer = value
 				val size = calculateSize(inflatable)
-				inflatedWidth = max(inflatedWidth, size.width)
-				inflatedHeight += size.height
 				pt.children += new Timeline => [
 					cycleCount = 1
 					autoReverse = false
 					keyFrames += new KeyFrame(
 						0.millis,
-						new KeyValue(spacer.widthProperty, deflatedWidth),
+						new KeyValue(spacer.widthProperty, deflatedUnpadded.width),
 						new KeyValue(spacer.heightProperty, 0)
-					)	
+					)
 					keyFrames += new KeyFrame(
 						200.millis,
 						new KeyValue(spacer.widthProperty, size.width),
 						new KeyValue(spacer.heightProperty, size.height)
-					)	
+					)
 				]
 			}
 			val inflatedHostPos = getInflatedHostPosition
@@ -143,12 +154,12 @@ class Inflator {
 					new KeyValue(host.layoutXProperty, inflatedHostPos.x),
 					new KeyValue(host.layoutYProperty, inflatedHostPos.y)
 				)
-			] 
+			]
 			pt.onFinished = [
-				for(it: inflatable2spacer.entrySet) {
+				for (it : inflatable2spacer.entrySet) {
 					val inflatable = key
 					val spacer = value
-					inflatable.children.forEach[
+					inflatable.children.forEach [
 						opacity = 0
 					]
 					val siblings = container.children
@@ -156,19 +167,19 @@ class Inflator {
 				}
 			]
 		]
-	}	
-	
+	}
+
 	protected def deflate() {
 		new ParallelTransition => [ pt |
-			for(spacer: inflatable2spacer.values) {
+			for (spacer : inflatable2spacer.values) {
 				pt.children += new Timeline => [
 					cycleCount = 1
 					autoReverse = false
 					keyFrames += new KeyFrame(
 						200.millis,
-						new KeyValue(spacer.widthProperty, deflatedWidth),
+						new KeyValue(spacer.widthProperty, deflatedUnpadded.width),
 						new KeyValue(spacer.heightProperty, 0)
-					)	
+					)
 				]
 			}
 			val deflatedHostPos = getDeflatedHostPosition()
@@ -179,55 +190,55 @@ class Inflator {
 					new KeyValue(host.layoutXProperty, deflatedHostPos.x),
 					new KeyValue(host.layoutYProperty, deflatedHostPos.y)
 				)
-			] 
+			]
 		]
-	}	
+	}
 
 	protected def appear() {
 		val contents = getContents()
-		if(contents.empty) {
+		if (contents.empty) {
 			createEmptyTransition
 		} else {
-			new SequentialTransition => [ 
-				children += (contents).map[ child |
+			new SequentialTransition => [
+				children += (contents).map [ child |
 					new FadeTransition => [
 						node = child
 						duration = 30.millis
 						fromValue = 0
 						toValue = 1
-					] 
+					]
 				]
 			]
-		} 
+		}
 	}
-	
+
 	protected def getContents() {
-		inflatable2spacer.keySet.map[ children ].flatten
+		inflatable2spacer.keySet.map[children].flatten
 	}
-	
+
 	protected def createEmptyTransition() {
 		new Transition() {
 			override protected interpolate(double frac) {
 			}
 		}
 	}
-	
+
 	protected def disappear() {
 		val contents = getContents()
-		if(contents.empty) {
+		if (contents.empty) {
 			new Transition() {
 				override protected interpolate(double frac) {
 				}
 			}
 		} else {
-			new ParallelTransition => [ 
-				children += contents.map[ child |
+			new ParallelTransition => [
+				children += contents.map [ child |
 					new FadeTransition => [
 						node = child
 						duration = 30.millis
 						fromValue = 1
 						toValue = 0
-					] 
+					]
 				]
 				onFinished = [
 					inflatable2spacer.entrySet.forEach [
@@ -238,59 +249,60 @@ class Inflator {
 					]
 				]
 			]
-		} 
+		}
 	}
-	
+
 	protected def getInflatedHostPosition() {
-		new Point2D(
-			host.layoutX - switch host.placementHint {
-				case LEFT:
-					inflatedWidth - deflatedWidth
-				case RIGHT:
-					0
-				default:
-					0.5 * (inflatedWidth - deflatedWidth)
-			},
-			host.layoutY - switch host.placementHint {
-				case TOP:
-					inflatedHeight
-				case BOTTOM:
-					0
-				case LEFT, case RIGHT:
-					0.5 * inflatedHeight
-				default:
-					0
-			})
+		val inflatedUnpadded = getInflatedUnpadded
+		new Point2D(host.layoutX - switch host.placementHint {
+			case LEFT:
+				inflatedUnpadded.width - deflatedUnpadded.width
+			case TOP,
+			case BOTTOM:
+				0.5 * (inflatedUnpadded.width - deflatedUnpadded.width)
+			default:
+				0
+		}, host.layoutY - switch host.placementHint {
+			case TOP:
+				inflatedUnpadded.height
+			case BOTTOM:
+				0
+			case LEFT,
+			case RIGHT:
+				0.5 * inflatedUnpadded.height
+			default:
+				0
+		})
 	}
-	
+
 	protected def getDeflatedHostPosition() {
-		new Point2D(
-			host.layoutX + switch host.placementHint {
-				case LEFT:
-					inflatedWidth - deflatedWidth
-				case RIGHT:
-					0
-				case TOP, case BOTTOM:
-					0.5 * (inflatedWidth - deflatedWidth)
-				default:
-					0
-			},
-			host.layoutY + switch host.placementHint {
-				case TOP:
-					inflatedHeight
-				case BOTTOM:
-					0
-				case LEFT, case RIGHT:
-					0.5 * inflatedHeight
-				default:
-					0
-			})
+		val inflatedUnpadded = getInflatedUnpadded
+		new Point2D(host.layoutX + switch host.placementHint {
+			case LEFT:
+				inflatedUnpadded.width - deflatedUnpadded.width
+			case RIGHT:
+				0
+			case TOP,
+			case BOTTOM:
+				0.5 * (inflatedUnpadded.width - deflatedUnpadded.width)
+			default:
+				0
+		}, host.layoutY + switch host.placementHint {
+			case TOP:
+				inflatedUnpadded.height
+			case BOTTOM:
+				0
+			case LEFT,
+			case RIGHT:
+				0.5 * inflatedUnpadded.height
+			default:
+				0
+		})
 	}
-	
-	
+
 	protected def calculateSize(Pane node) {
 		node.autosize
 		new Dimension2D(node.width, node.height)
 	}
-	
+
 }

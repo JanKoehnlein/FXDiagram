@@ -106,9 +106,18 @@ public class XConnectionLabel extends XShape implements XModelProvider {
   }
   
   public void place(final boolean force) {
+    XConnection _connection = this.getConnection();
+    boolean _isActive = _connection.getIsActive();
+    boolean _not = (!_isActive);
+    if (_not) {
+      return;
+    }
     final MoveBehavior moveBehavior = this.<MoveBehavior>getBehavior(MoveBehavior.class);
     boolean _and = false;
-    boolean _isManuallyPlaced = moveBehavior.getIsManuallyPlaced();
+    boolean _isManuallyPlaced = false;
+    if (moveBehavior!=null) {
+      _isManuallyPlaced=moveBehavior.getIsManuallyPlaced();
+    }
     if (!_isManuallyPlaced) {
       _and = false;
     } else {
@@ -118,14 +127,16 @@ public class XConnectionLabel extends XShape implements XModelProvider {
       return;
     }
     if (force) {
-      moveBehavior.setIsManuallyPlaced(false);
+      if (moveBehavior!=null) {
+        moveBehavior.setIsManuallyPlaced(false);
+      }
     }
-    XConnection _connection = this.getConnection();
-    double _position = this.getPosition();
-    final Point2D center = _connection.at(_position);
     XConnection _connection_1 = this.getConnection();
+    double _position = this.getPosition();
+    final Point2D center = _connection_1.at(_position);
+    XConnection _connection_2 = this.getConnection();
     double _position_1 = this.getPosition();
-    final Point2D derivative = _connection_1.derivativeAt(_position_1);
+    final Point2D derivative = _connection_2.derivativeAt(_position_1);
     double _y = derivative.getY();
     double _x = derivative.getX();
     double angle = Math.atan2(_y, _x);

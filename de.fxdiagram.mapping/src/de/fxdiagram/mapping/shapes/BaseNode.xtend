@@ -19,6 +19,7 @@ import javafx.scene.text.Text
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 
 /**
  * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
@@ -53,6 +54,10 @@ class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 					new Stop(1, Color.rgb(220, 230, 255))
 				])
 		] 
+	}
+	
+	override protected createAnchors() {
+		new RoundedRectangleAnchors(this, 6, 6)
 	}
 	
 	override doActivate() {

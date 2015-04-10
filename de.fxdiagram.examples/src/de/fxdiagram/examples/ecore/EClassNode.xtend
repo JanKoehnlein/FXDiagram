@@ -14,6 +14,7 @@ import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import javafx.geometry.Side
 
 @ModelNode
 class EClassNode extends XNode {
@@ -25,6 +26,7 @@ class EClassNode extends XNode {
 	
 	new(EClassDescriptor domainObject) {
 		super(domainObject)
+		placementHint = Side.BOTTOM
 	}			
 
 	def getEClass() {

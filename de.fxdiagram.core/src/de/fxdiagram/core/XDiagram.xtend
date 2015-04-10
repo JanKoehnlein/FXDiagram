@@ -7,9 +7,12 @@ import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
 import de.fxdiagram.core.behavior.Behavior
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior
 import de.fxdiagram.core.behavior.NavigationBehavior
+import de.fxdiagram.core.extensions.CoreExtensions
 import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.extensions.InitializingMapListener
+import de.fxdiagram.core.layout.LayoutType
+import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.viewport.ViewportTransform
 import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
@@ -28,10 +31,6 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.core.layout.Layouter
-import de.fxdiagram.core.layout.LayoutType
-import de.fxdiagram.core.extensions.CoreExtensions
 
 /**
  * A diagram with {@link XNode}s and {@link XConnection}s.
@@ -58,7 +57,7 @@ class XDiagram extends Group implements XActivatable {
 
 	@FxProperty(readOnly=true) boolean isActive
 	@FxProperty(readOnly=true) boolean isRootDiagram
-	@FxProperty boolean isLayoutOnActivate
+	@FxProperty LayoutType layoutOnActivate
 
 	@FxProperty Paint backgroundPaint = Color.WHITE
 	@FxProperty Paint foregroundPaint = Color.BLACK
@@ -114,6 +113,20 @@ class XDiagram extends Group implements XActivatable {
 	}
 	
 	def void doActivate() {
+		contentsInitializer?.apply(this)
+		if(layoutOnActivate != null) {
+			nodes.forEach [
+				node.autosize
+			]
+			connections.forEach [
+				node
+				labels.forEach[
+					node.autosize
+				]
+			]
+			new Layouter().layout(layoutOnActivate, this, null)
+			layoutOnActivate = null
+		}
 		nodes.addInitializingListener(new InitializingListListener<XNode>() => [
 			add = [
 				initializeGraphics
@@ -160,16 +173,11 @@ class XDiagram extends Group implements XActivatable {
 			
 		])
 		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
-		contentsInitializer?.apply(this)
 		if(getBehavior(NavigationBehavior) == null) 
 			addBehavior(new DiagramNavigationBehavior(this))
 		behaviors.addInitializingListener(new InitializingMapListener => [
 			put = [ key, Behavior value | value.activate() ]
 		])
-		if(isLayoutOnActivate) {
-			isLayoutOnActivate = false
-			root.commandStack.execute(new Layouter().createLayoutCommand(LayoutType.DOT, this, 250.millis))
-		}
 	}
 	
 	def void centerDiagram(boolean useForce) {

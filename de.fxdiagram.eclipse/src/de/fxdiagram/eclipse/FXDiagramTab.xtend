@@ -33,6 +33,7 @@ import de.fxdiagram.mapping.NodeMappingCall
 import de.fxdiagram.mapping.XDiagramConfig
 import de.fxdiagram.mapping.XDiagramConfigInterpreter
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
+import java.util.ArrayList
 import java.util.Map
 import java.util.Set
 import javafx.embed.swt.FXCanvas
@@ -49,9 +50,7 @@ import org.eclipse.ui.IWorkbenchPart
 import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.texteditor.AbstractTextEditor
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import java.util.ArrayList
 
 class FXDiagramTab {
 	val CTabItem tab
@@ -143,7 +142,7 @@ class FXDiagramTab {
 	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
 		val interpreterContext = new InterpreterContext(root.diagram)
 		if(mappingCall instanceof DiagramMappingCall<?, ?>) {
-			interpreterContext.isCreateNewDiagram = editor == null || register(editor) || changedEditors.remove(editor)
+			interpreterContext.isReplaceRootDiagram = editor == null || register(editor) || changedEditors.remove(editor)
 			configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
 			interpreterContext.executeCommands(root.commandStack)
 		} else if(mappingCall instanceof NodeMappingCall<?, ?>) {
@@ -171,7 +170,7 @@ class FXDiagramTab {
 		]
 		root.commandStack.execute(
 			new ParallelAnimationCommand => [
-				if(interpreterContext.needsLayout)
+				if(interpreterContext.needsLayoutCommand)
 					it += new Layouter().createLayoutCommand(LayoutType.DOT, interpreterContext.diagram, 500.millis, centerShape)
 				it += new SelectAndRevealCommand(root, [ it == centerShape ])
 			])

@@ -71,6 +71,7 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
   
   public BundleNode(final BundleDescriptor descriptor) {
     super(descriptor);
+    this.setPlacementHint(Side.BOTTOM);
   }
   
   @Override

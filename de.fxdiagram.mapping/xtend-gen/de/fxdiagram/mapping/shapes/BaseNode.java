@@ -2,8 +2,10 @@ package de.fxdiagram.mapping.shapes;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
@@ -80,6 +82,11 @@ public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMa
       it.setBackgroundPaint(_linearGradient);
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+  }
+  
+  @Override
+  protected Anchors createAnchors() {
+    return new RoundedRectangleAnchors(this, 6, 6);
   }
   
   @Override

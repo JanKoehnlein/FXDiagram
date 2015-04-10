@@ -3,6 +3,7 @@ package de.fxdiagram.mapping.shapes;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -59,7 +60,7 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
       LazyConnectionMappingBehavior.addLazyBehavior(this, ((IMappedElementDescriptor<?>)descriptor));
     }
     XDiagram _innerDiagram = this.getInnerDiagram();
-    _innerDiagram.setIsLayoutOnActivate(true);
+    _innerDiagram.setLayoutOnActivate(LayoutType.DOT);
   }
   
   /**

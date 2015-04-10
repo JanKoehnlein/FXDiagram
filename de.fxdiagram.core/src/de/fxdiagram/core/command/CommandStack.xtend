@@ -1,8 +1,8 @@
 package de.fxdiagram.core.command
 
+import de.fxdiagram.core.XActivatable
 import de.fxdiagram.core.XRoot
 import java.util.LinkedList
-import de.fxdiagram.core.XActivatable
 
 /**
  * Executes and stores {@link AnimationCommands} for undo/redo functionality.
@@ -32,6 +32,7 @@ class CommandStack implements XActivatable {
 	def clear() {
 		undoStack.clear
 		redoStack.clear
+		// TODO: should we flush the animation queue?
 	}
 	
 	def boolean canUndo() {

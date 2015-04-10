@@ -347,9 +347,16 @@ public class ConnectionRouter implements XActivatable {
     boolean _xblockexpression = false;
     {
       XNode _source = this.connection.getSource();
+      final Bounds nodeSnapBounds = _source.getSnapBounds();
+      Bounds _elvis = null;
       XNode _source_1 = this.connection.getSource();
-      Bounds _snapBounds = _source_1.getSnapBounds();
-      final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(_source, _snapBounds);
+      Bounds _localToRootDiagram = CoreExtensions.localToRootDiagram(_source_1, nodeSnapBounds);
+      if (_localToRootDiagram != null) {
+        _elvis = _localToRootDiagram;
+      } else {
+        _elvis = nodeSnapBounds;
+      }
+      final Bounds boundsInDiagram = _elvis;
       ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
       _controlPoints.clear();
       ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
@@ -512,7 +519,9 @@ public class ConnectionRouter implements XActivatable {
     {
       boolean _equals = Objects.equal(point, null);
       if (_equals) {
-        return null;
+        Node _node = node.getNode();
+        Bounds _boundsInLocal = _node.getBoundsInLocal();
+        return BoundsExtensions.center(_boundsInLocal);
       }
       double _x = point.getX();
       double _y = point.getY();

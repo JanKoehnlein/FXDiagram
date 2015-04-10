@@ -84,13 +84,14 @@ class XNode extends XShape {
 		new RectangleAnchors(this)
 	}
 
-	override initializeGraphics() {
-		super.initializeGraphics()
+	override getNode() {
+		val node = super.getNode
 		mouseOverEffect = createMouseOverEffect
 		selectionEffect = createSelectionEffect
 		anchors = createAnchors
+		node
 	}
-
+	
 	protected override createNode() {
 		null
 	}

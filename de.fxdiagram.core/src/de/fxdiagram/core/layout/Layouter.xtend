@@ -92,7 +92,7 @@ class Layouter {
 			val kElement = entry.value
 			switch xElement { 
 				XNode: { 
-					xElement.getBehavior(MoveBehavior).isManuallyPlaced = false
+					xElement.getBehavior(MoveBehavior)?.setIsManuallyPlaced(false)
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					xElement.layoutX = shapeLayout.xpos + NODE_PADDING / 2 - delta.x
 					xElement.layoutY = shapeLayout.ypos + NODE_PADDING / 2 - delta.y
@@ -185,8 +185,12 @@ class Layouter {
 				?.center
 			if(newCenter != null) {
 				val scene = diagram.scene
-				val currentCenter = diagram.sceneToLocal(0.5 * scene.width, 0.5 * scene.height)
-				return newCenter - currentCenter 				
+				if(scene == null) {
+					return newCenter
+				} else {
+					val currentCenter = diagram.sceneToLocal(0.5 * scene.width, 0.5 * scene.height)
+					return newCenter - currentCenter 				
+				} 
 			}
 		}
 		val kFixed = map.get(xFixed)
@@ -242,8 +246,8 @@ class Layouter {
 		val kNode = createKNode
 		val shapeLayout = createKShapeLayout
 		shapeLayout.setSize(
-			layoutBounds.width as float + NODE_PADDING, 
-			layoutBounds.height as float + NODE_PADDING
+			autoLayoutDimension.width as float + NODE_PADDING, 
+			autoLayoutDimension.height as float + NODE_PADDING
 		)
 		kNode.data += shapeLayout
 		cache.put(it, kNode)

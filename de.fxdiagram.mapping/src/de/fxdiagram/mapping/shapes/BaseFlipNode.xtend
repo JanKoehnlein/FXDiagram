@@ -5,12 +5,12 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
+import javafx.scene.input.MouseEvent
 
 import static javafx.geometry.Side.*
 import static javafx.scene.input.MouseButton.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import javafx.scene.input.MouseEvent
 
 /**
  * Base implementation for a flipable {@link XNode} that belongs to an {@link IMappedElementDescriptor}.

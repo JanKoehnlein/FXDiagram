@@ -12,6 +12,7 @@ import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
+import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
@@ -76,7 +77,8 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
       final Function1<PackageDeclaration, PackageDeclaration> _function = (PackageDeclaration it) -> {
         return it;
       };
-      this.<PackageDeclaration>nestedDiagramFor(DomainmodelDiagramConfig.this.packageDiagram, _function);
+      DiagramMappingCall<?, PackageDeclaration> _nestedDiagramFor = this.<PackageDeclaration>nestedDiagramFor(DomainmodelDiagramConfig.this.packageDiagram, _function);
+      _nestedDiagramFor.onOpen();
     }
   };
   

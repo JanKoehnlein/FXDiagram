@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
@@ -50,6 +51,7 @@ public class EClassNode extends XNode {
   
   public EClassNode(final EClassDescriptor domainObject) {
     super(domainObject);
+    this.setPlacementHint(Side.BOTTOM);
   }
   
   public EClass getEClass() {

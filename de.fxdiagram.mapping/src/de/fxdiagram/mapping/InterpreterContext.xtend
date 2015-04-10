@@ -11,13 +11,15 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.command.CommandStack
 import de.fxdiagram.core.command.ChangeDiagramCommand
+import java.util.List
 
 class InterpreterContext {
 
 	XDiagram diagram
-	XDiagram oldDiagram
 	
-	@Accessors boolean isCreateNewDiagram
+	@Accessors boolean isReplaceRootDiagram
+
+	List<InterpreterContext> subContexts = newArrayList
 
 	Set<XNode> addedNodes = newHashSet
 	Set<XConnection> addedConnections = newHashSet
@@ -30,11 +32,10 @@ class InterpreterContext {
 		diagram
 	}
 	
-	def setNewDiagram(XDiagram diagram) {
-		this.oldDiagram = this.diagram
-		this.diagram = diagram
+	def addSubContext(InterpreterContext subContext) {
+		subContexts += subContext 	
 	}
-
+	
 	def addNode(XNode node) {
 		if(diagram.root != null)
 			addedNodes += node
@@ -57,13 +58,24 @@ class InterpreterContext {
 		(addedNodes + diagram.nodes).findFirst[domainObject == descriptor]
 	}
 	
-	def boolean needsLayout() {
-		isCreateNewDiagram || addedNodes.size + addedConnections.size  > 1		
+	def boolean needsLayoutCommand() {
+		!replaceRootDiagram && addedNodes.size + addedConnections.size  > 1		
 	}
 	
-	def executeCommands(CommandStack commandStack) {
-		if(oldDiagram != null) 
-			commandStack.execute(new ChangeDiagramCommand(diagram))
+	def void applyChanges() {
+		diagram.nodes += addedNodes
+		diagram.connections += addedConnections
+		subContexts.forEach[
+			applyChanges
+		]
+	}
+	
+	def void executeCommands(CommandStack commandStack) {
+		if(replaceRootDiagram && !subContexts.empty) 
+			commandStack.execute(new ChangeDiagramCommand(subContexts.head.diagram))
 		commandStack.execute(AddRemoveCommand.newAddCommand(diagram, addedNodes + addedConnections))
+		subContexts.forEach [
+			executeCommands(commandStack)
+		]
 	}
 }

@@ -2,6 +2,7 @@ package de.fxdiagram.mapping
 
 import de.fxdiagram.core.XDiagram
 import java.util.List
+import de.fxdiagram.core.layout.LayoutType
 
 /**
  * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor} 
@@ -23,7 +24,11 @@ import java.util.List
 	def getConnections() { initialize ; connections }
 	def getEagerConnections() { initialize; eagerConnections }
 	
-	def XDiagram createDiagram(IMappedElementDescriptor<T> descriptor) { new XDiagram }
+	def XDiagram createDiagram(IMappedElementDescriptor<T> descriptor) { 
+		new XDiagram => [
+			layoutOnActivate = LayoutType.DOT
+		]
+	}
 	
 	def <U> nodeFor(NodeMapping<U> nodeMapping, (T)=>U selector) {
 		nodes += new NodeMappingCall(selector, nodeMapping)

@@ -44,13 +44,7 @@ public class Inflator {
   
   private Map<VBox, Rectangle> inflatable2spacer = CollectionLiterals.<VBox, Rectangle>newLinkedHashMap();
   
-  private double deflatedWidth;
-  
-  private double deflatedHeight;
-  
-  private double inflatedWidth;
-  
-  private double inflatedHeight;
+  private Dimension2D deflatedUnpadded;
   
   private boolean isInflated = false;
   
@@ -64,13 +58,13 @@ public class Inflator {
     double _minus = (_width - _left);
     double _right = padding.getRight();
     double _minus_1 = (_minus - _right);
-    this.deflatedWidth = _minus_1;
     double _height = containerSize.getHeight();
     double _top = padding.getTop();
     double _minus_2 = (_height - _top);
     double _bottom = padding.getBottom();
     double _minus_3 = (_minus_2 - _bottom);
-    this.deflatedHeight = _minus_3;
+    Dimension2D _dimension2D = new Dimension2D(_minus_1, _minus_3);
+    this.deflatedUnpadded = _dimension2D;
   }
   
   public Rectangle addInflatable(final VBox inflatable, final int index) {
@@ -192,23 +186,60 @@ public class Inflator {
     };
   }
   
+  public Dimension2D getInflatedSize() {
+    Dimension2D _xblockexpression = null;
+    {
+      final Dimension2D unpadded = this.getInflatedUnpadded();
+      final Insets padding = this.container.getPadding();
+      double _width = unpadded.getWidth();
+      double _left = padding.getLeft();
+      double _plus = (_width + _left);
+      double _right = padding.getRight();
+      double _plus_1 = (_plus + _right);
+      double _height = unpadded.getHeight();
+      double _top = padding.getTop();
+      double _plus_2 = (_height + _top);
+      double _bottom = padding.getBottom();
+      double _plus_3 = (_plus_2 + _bottom);
+      double _height_1 = this.deflatedUnpadded.getHeight();
+      double _plus_4 = (_plus_3 + _height_1);
+      _xblockexpression = new Dimension2D(_plus_1, _plus_4);
+    }
+    return _xblockexpression;
+  }
+  
+  protected Dimension2D getInflatedUnpadded() {
+    Dimension2D _xblockexpression = null;
+    {
+      double inflatedWidth = this.deflatedUnpadded.getWidth();
+      double inflatedHeight = 0.0;
+      Set<Map.Entry<VBox, Rectangle>> _entrySet = this.inflatable2spacer.entrySet();
+      for (final Map.Entry<VBox, Rectangle> it : _entrySet) {
+        {
+          final VBox inflatable = it.getKey();
+          final Dimension2D size = this.calculateSize(inflatable);
+          double _width = size.getWidth();
+          double _max = Math.max(inflatedWidth, _width);
+          inflatedWidth = _max;
+          double _inflatedHeight = inflatedHeight;
+          double _height = size.getHeight();
+          inflatedHeight = (_inflatedHeight + _height);
+        }
+      }
+      _xblockexpression = new Dimension2D(inflatedWidth, inflatedHeight);
+    }
+    return _xblockexpression;
+  }
+  
   protected ParallelTransition inflate() {
     ParallelTransition _parallelTransition = new ParallelTransition();
     final Procedure1<ParallelTransition> _function = (ParallelTransition pt) -> {
-      this.inflatedWidth = this.deflatedWidth;
-      this.inflatedHeight = 0.0;
       Set<Map.Entry<VBox, Rectangle>> _entrySet = this.inflatable2spacer.entrySet();
       for (final Map.Entry<VBox, Rectangle> it : _entrySet) {
         {
           final VBox inflatable = it.getKey();
           final Rectangle spacer = it.getValue();
           final Dimension2D size = this.calculateSize(inflatable);
-          double _width = size.getWidth();
-          double _max = Math.max(this.inflatedWidth, _width);
-          this.inflatedWidth = _max;
-          double _inflatedHeight = this.inflatedHeight;
-          double _height = size.getHeight();
-          this.inflatedHeight = (_inflatedHeight + _height);
           ObservableList<Animation> _children = pt.getChildren();
           Timeline _timeline = new Timeline();
           final Procedure1<Timeline> _function_1 = (Timeline it_1) -> {
@@ -217,7 +248,8 @@ public class Inflator {
             ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
             Duration _millis = DurationExtensions.millis(0);
             DoubleProperty _widthProperty = spacer.widthProperty();
-            KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(this.deflatedWidth));
+            double _width = this.deflatedUnpadded.getWidth();
+            KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(_width));
             DoubleProperty _heightProperty = spacer.heightProperty();
             KeyValue _keyValue_1 = new <Number>KeyValue(_heightProperty, Integer.valueOf(0));
             KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
@@ -228,8 +260,8 @@ public class Inflator {
             double _width_1 = size.getWidth();
             KeyValue _keyValue_2 = new <Number>KeyValue(_widthProperty_1, Double.valueOf(_width_1));
             DoubleProperty _heightProperty_1 = spacer.heightProperty();
-            double _height_1 = size.getHeight();
-            KeyValue _keyValue_3 = new <Number>KeyValue(_heightProperty_1, Double.valueOf(_height_1));
+            double _height = size.getHeight();
+            KeyValue _keyValue_3 = new <Number>KeyValue(_heightProperty_1, Double.valueOf(_height));
             KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_2, _keyValue_3);
             _keyFrames_1.add(_keyFrame_1);
           };
@@ -290,7 +322,8 @@ public class Inflator {
           ObservableList<KeyFrame> _keyFrames = it.getKeyFrames();
           Duration _millis = DurationExtensions.millis(200);
           DoubleProperty _widthProperty = spacer.widthProperty();
-          KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(this.deflatedWidth));
+          double _width = this.deflatedUnpadded.getWidth();
+          KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(_width));
           DoubleProperty _heightProperty = spacer.heightProperty();
           KeyValue _keyValue_1 = new <Number>KeyValue(_heightProperty, Integer.valueOf(0));
           KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
@@ -430,99 +463,122 @@ public class Inflator {
   }
   
   protected Point2D getInflatedHostPosition() {
-    double _layoutX = this.host.getLayoutX();
-    double _switchResult = (double) 0;
-    Side _placementHint = this.host.getPlacementHint();
-    if (_placementHint != null) {
-      switch (_placementHint) {
-        case LEFT:
-          _switchResult = (this.inflatedWidth - this.deflatedWidth);
-          break;
-        case RIGHT:
-          _switchResult = 0;
-          break;
-        default:
-          _switchResult = (0.5 * (this.inflatedWidth - this.deflatedWidth));
-          break;
+    Point2D _xblockexpression = null;
+    {
+      final Dimension2D inflatedUnpadded = this.getInflatedUnpadded();
+      double _layoutX = this.host.getLayoutX();
+      double _switchResult = (double) 0;
+      Side _placementHint = this.host.getPlacementHint();
+      if (_placementHint != null) {
+        switch (_placementHint) {
+          case LEFT:
+            double _width = inflatedUnpadded.getWidth();
+            double _width_1 = this.deflatedUnpadded.getWidth();
+            _switchResult = (_width - _width_1);
+            break;
+          case TOP:
+          case BOTTOM:
+            double _width_2 = inflatedUnpadded.getWidth();
+            double _width_3 = this.deflatedUnpadded.getWidth();
+            double _minus = (_width_2 - _width_3);
+            _switchResult = (0.5 * _minus);
+            break;
+          default:
+            _switchResult = 0;
+            break;
+        }
+      } else {
+        _switchResult = 0;
       }
-    } else {
-      _switchResult = (0.5 * (this.inflatedWidth - this.deflatedWidth));
-    }
-    double _minus = (_layoutX - _switchResult);
-    double _layoutY = this.host.getLayoutY();
-    double _switchResult_1 = (double) 0;
-    Side _placementHint_1 = this.host.getPlacementHint();
-    if (_placementHint_1 != null) {
-      switch (_placementHint_1) {
-        case TOP:
-          _switchResult_1 = this.inflatedHeight;
-          break;
-        case BOTTOM:
-          _switchResult_1 = 0;
-          break;
-        case LEFT:
-        case RIGHT:
-          _switchResult_1 = (0.5 * this.inflatedHeight);
-          break;
-        default:
-          _switchResult_1 = 0;
-          break;
+      double _minus_1 = (_layoutX - _switchResult);
+      double _layoutY = this.host.getLayoutY();
+      double _switchResult_1 = (double) 0;
+      Side _placementHint_1 = this.host.getPlacementHint();
+      if (_placementHint_1 != null) {
+        switch (_placementHint_1) {
+          case TOP:
+            _switchResult_1 = inflatedUnpadded.getHeight();
+            break;
+          case BOTTOM:
+            _switchResult_1 = 0;
+            break;
+          case LEFT:
+          case RIGHT:
+            double _height = inflatedUnpadded.getHeight();
+            _switchResult_1 = (0.5 * _height);
+            break;
+          default:
+            _switchResult_1 = 0;
+            break;
+        }
+      } else {
+        _switchResult_1 = 0;
       }
-    } else {
-      _switchResult_1 = 0;
+      double _minus_2 = (_layoutY - _switchResult_1);
+      _xblockexpression = new Point2D(_minus_1, _minus_2);
     }
-    double _minus_1 = (_layoutY - _switchResult_1);
-    return new Point2D(_minus, _minus_1);
+    return _xblockexpression;
   }
   
   protected Point2D getDeflatedHostPosition() {
-    double _layoutX = this.host.getLayoutX();
-    double _switchResult = (double) 0;
-    Side _placementHint = this.host.getPlacementHint();
-    if (_placementHint != null) {
-      switch (_placementHint) {
-        case LEFT:
-          _switchResult = (this.inflatedWidth - this.deflatedWidth);
-          break;
-        case RIGHT:
-          _switchResult = 0;
-          break;
-        case TOP:
-        case BOTTOM:
-          _switchResult = (0.5 * (this.inflatedWidth - this.deflatedWidth));
-          break;
-        default:
-          _switchResult = 0;
-          break;
+    Point2D _xblockexpression = null;
+    {
+      final Dimension2D inflatedUnpadded = this.getInflatedUnpadded();
+      double _layoutX = this.host.getLayoutX();
+      double _switchResult = (double) 0;
+      Side _placementHint = this.host.getPlacementHint();
+      if (_placementHint != null) {
+        switch (_placementHint) {
+          case LEFT:
+            double _width = inflatedUnpadded.getWidth();
+            double _width_1 = this.deflatedUnpadded.getWidth();
+            _switchResult = (_width - _width_1);
+            break;
+          case RIGHT:
+            _switchResult = 0;
+            break;
+          case TOP:
+          case BOTTOM:
+            double _width_2 = inflatedUnpadded.getWidth();
+            double _width_3 = this.deflatedUnpadded.getWidth();
+            double _minus = (_width_2 - _width_3);
+            _switchResult = (0.5 * _minus);
+            break;
+          default:
+            _switchResult = 0;
+            break;
+        }
+      } else {
+        _switchResult = 0;
       }
-    } else {
-      _switchResult = 0;
-    }
-    double _plus = (_layoutX + _switchResult);
-    double _layoutY = this.host.getLayoutY();
-    double _switchResult_1 = (double) 0;
-    Side _placementHint_1 = this.host.getPlacementHint();
-    if (_placementHint_1 != null) {
-      switch (_placementHint_1) {
-        case TOP:
-          _switchResult_1 = this.inflatedHeight;
-          break;
-        case BOTTOM:
-          _switchResult_1 = 0;
-          break;
-        case LEFT:
-        case RIGHT:
-          _switchResult_1 = (0.5 * this.inflatedHeight);
-          break;
-        default:
-          _switchResult_1 = 0;
-          break;
+      double _plus = (_layoutX + _switchResult);
+      double _layoutY = this.host.getLayoutY();
+      double _switchResult_1 = (double) 0;
+      Side _placementHint_1 = this.host.getPlacementHint();
+      if (_placementHint_1 != null) {
+        switch (_placementHint_1) {
+          case TOP:
+            _switchResult_1 = inflatedUnpadded.getHeight();
+            break;
+          case BOTTOM:
+            _switchResult_1 = 0;
+            break;
+          case LEFT:
+          case RIGHT:
+            double _height = inflatedUnpadded.getHeight();
+            _switchResult_1 = (0.5 * _height);
+            break;
+          default:
+            _switchResult_1 = 0;
+            break;
+        }
+      } else {
+        _switchResult_1 = 0;
       }
-    } else {
-      _switchResult_1 = 0;
+      double _plus_1 = (_layoutY + _switchResult_1);
+      _xblockexpression = new Point2D(_plus, _plus_1);
     }
-    double _plus_1 = (_layoutY + _switchResult_1);
-    return new Point2D(_plus, _plus_1);
+    return _xblockexpression;
   }
   
   protected Dimension2D calculateSize(final Pane node) {

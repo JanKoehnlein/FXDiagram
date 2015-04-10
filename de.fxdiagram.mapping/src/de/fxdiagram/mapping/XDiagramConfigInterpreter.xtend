@@ -7,23 +7,44 @@ import de.fxdiagram.lib.simple.OpenableDiagramNode
 import java.util.HashSet
 import java.util.Set
 
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+
 /**
  * Executes an {@link XDiagramConfig} on a given domain object.
  */
 class XDiagramConfigInterpreter {
 
-	def <T> createDiagram(T diagramObject, DiagramMapping<T> diagramMapping, InterpreterContext context) {
+	def <T,U> createDiagram(T diagramObject, DiagramMappingCall<T,U> diagramMappingCall, InterpreterContext context) {
+		val diagramMapping = diagramMappingCall.diagramMapping
 		if (!diagramMapping.isApplicable(diagramObject))
 			return null
-		if(context.isCreateNewDiagram) 
-			context.newDiagram = diagramMapping.createDiagram(diagramObject.getDescriptor(diagramMapping))
+		val descriptor = diagramObject.getDescriptor(diagramMapping)
+		val diagram = diagramMapping.createDiagram(descriptor)
+		val newContext = new InterpreterContext(diagram)
+		if(diagramMappingCall.isOnDemand) {
+			diagram.contentsInitializer = [
+				descriptor.withDomainObject[ domainObject |
+					populateDiagram(diagramMapping, domainObject, newContext)
+					newContext.applyChanges
+					val commandStack = diagram.root.commandStack
+					newContext.executeCommands(commandStack)
+					null
+			 	]
+			]
+		} else {
+			populateDiagram(diagramMapping, diagramObject, newContext)
+			context.addSubContext(newContext)
+		}
+		diagram
+	}
+	
+	protected def <T> populateDiagram(DiagramMapping<T> diagramMapping, T diagramObject, InterpreterContext context) {
 		diagramMapping.nodes.forEach[execute(diagramObject, context, true)]
 		diagramMapping.connections.forEach[execute(diagramObject, [], context, true)]
 		if(!diagramMapping.eagerConnections.empty) {
 			val eagerConnections = new HashSet(diagramMapping.eagerConnections)			
 			diagramMapping.nodes.forEach[connectNodesEagerly(diagramObject, eagerConnections, context)]
 		}
-		context.diagram
 	}
 
 	protected def <T> connectNodesEagerly(AbstractNodeMappingCall<?,T> it, T diagramObject, 
@@ -34,10 +55,10 @@ class XDiagramConfigInterpreter {
 			val descriptor = nodeObject.getDescriptor(nodeMappingCasted)
 			val node = context.getNode(descriptor)
 			if(node != null) {
-				nodeMappingCasted.incoming.filter[button && eagerConnections.contains(mapping)].forEach[
+				nodeMappingCasted.incoming.filter[onDemand && eagerConnections.contains(mapping)].forEach[
 					execute(nodeObject, [target = node], context, false) 
 				]
-				nodeMappingCasted.outgoing.filter[button && eagerConnections.contains(mapping)].forEach[
+				nodeMappingCasted.outgoing.filter[onDemand && eagerConnections.contains(mapping)].forEach[
 					execute(nodeObject, [source = node], context, false) 
 				]
 			}
@@ -54,11 +75,11 @@ class XDiagramConfigInterpreter {
 			nodeMapping.config.initialize(node)
 			context.addNode(node)
 			nodeMapping.incoming.forEach[
-				if(!button) 
+				if(!onDemand) 
 					execute(nodeObject, [target = node], context, true) 
 			]
 			nodeMapping.outgoing.forEach[
-				if(!button) 
+				if(!onDemand) 
 					execute(nodeObject, [source = node], context, true)
 			]
 			if(node instanceof OpenableDiagramNode)
@@ -141,7 +162,7 @@ class XDiagramConfigInterpreter {
 	def <T,U> XDiagram execute(DiagramMappingCall<T, U> diagramMappingCall, U domainArgument,
 		InterpreterContext context) {
 		val diagramObject = diagramMappingCall.selector.apply(domainArgument)
-		val result = createDiagram(diagramObject, diagramMappingCall.diagramMapping, context)
+		val result = createDiagram(diagramObject, diagramMappingCall, context)
 		return result
 	}
 

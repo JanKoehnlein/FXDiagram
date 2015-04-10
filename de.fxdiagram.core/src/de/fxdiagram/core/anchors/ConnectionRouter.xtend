@@ -174,7 +174,8 @@ class ConnectionRouter implements XActivatable {
 	}
 	
 	protected def calculateSelfEdge() {
-		val boundsInDiagram = connection.source.localToRootDiagram(connection.source.snapBounds)
+		val nodeSnapBounds = connection.source.snapBounds
+		val boundsInDiagram = connection.source.localToRootDiagram(nodeSnapBounds) ?: nodeSnapBounds
 		controlPoints.clear
 		controlPoints += new XControlPoint => [
 			type = ANCHOR
@@ -241,7 +242,7 @@ class ConnectionRouter implements XActivatable {
 	
 	protected def getNearestAnchor(XNode node, Point2D point, ArrowHead arrowHead) {
 		if(point == null)
-			return null
+			return node.node.boundsInLocal.center
 		getNearestAnchor(node, point.x, point.y, arrowHead)
 	}
 	

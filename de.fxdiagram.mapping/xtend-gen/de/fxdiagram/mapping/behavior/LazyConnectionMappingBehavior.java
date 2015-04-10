@@ -38,7 +38,7 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
       LazyConnectionMappingBehavior<T> lazyBehavior = null;
       List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
       final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function = (AbstractConnectionMappingCall<?, T> it) -> {
-        return Boolean.valueOf(it.isButton());
+        return Boolean.valueOf(it.isOnDemand());
       };
       final Iterable<AbstractConnectionMappingCall<?, T>> lazyOutgoing = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(_outgoing, _function);
       boolean _isEmpty = IterableExtensions.isEmpty(lazyOutgoing);
@@ -60,7 +60,7 @@ public class LazyConnectionMappingBehavior<ARG extends Object> extends RapidButt
       }
       List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
       final Function1<AbstractConnectionMappingCall<?, T>, Boolean> _function_1 = (AbstractConnectionMappingCall<?, T> it) -> {
-        return Boolean.valueOf(it.isButton());
+        return Boolean.valueOf(it.isOnDemand());
       };
       final Iterable<AbstractConnectionMappingCall<?, T>> lazyIncoming = IterableExtensions.<AbstractConnectionMappingCall<?, T>>filter(_incoming, _function_1);
       boolean _isEmpty_1 = IterableExtensions.isEmpty(lazyIncoming);

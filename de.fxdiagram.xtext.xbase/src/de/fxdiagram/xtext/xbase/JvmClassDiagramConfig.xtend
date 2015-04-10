@@ -98,7 +98,7 @@ class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 		}
 		
 		override calls() {
-			packageDiagram.nestedDiagramFor[ it ]		
+			packageDiagram.nestedDiagramFor[ it ].onOpen	
 		}
 	}
 

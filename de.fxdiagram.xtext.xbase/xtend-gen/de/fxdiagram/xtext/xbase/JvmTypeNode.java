@@ -2,8 +2,10 @@ package de.fxdiagram.xtext.xbase;
 
 import com.google.inject.Inject;
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
@@ -19,6 +21,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -26,7 +29,6 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -64,7 +66,15 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
   
   private CheckBox methodsBox;
   
-  private Pane contentArea;
+  private VBox contentArea;
+  
+  private VBox packageLabel;
+  
+  private VBox attributeCompartment;
+  
+  private VBox methodCompartment;
+  
+  private Inflator inflator;
   
   public JvmTypeNode(final JvmEObjectDescriptor<JvmDeclaredType> descriptor) {
     super(descriptor);
@@ -161,87 +171,139 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
       };
       RectangleBorderPane _doubleArrow_1 = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane_1, _function_1);
       this.setBack(_doubleArrow_1);
+      Inflator _inflator = new Inflator(this, this.contentArea);
+      this.inflator = _inflator;
+      VBox _vBox = new VBox();
+      final Procedure1<VBox> _function_2 = (VBox it) -> {
+        it.setAlignment(Pos.CENTER);
+        ObservableList<Node> _children = it.getChildren();
+        Text _text = new Text();
+        final Procedure1<Text> _function_3 = (Text it_1) -> {
+          it_1.setTextOrigin(VPos.TOP);
+          Font _font = it_1.getFont();
+          String _family = _font.getFamily();
+          Font _font_1 = it_1.getFont();
+          double _size = _font_1.getSize();
+          double _multiply = (_size * 0.8);
+          Font _font_2 = Font.font(_family, _multiply);
+          it_1.setFont(_font_2);
+          JvmEObjectDescriptor<JvmDeclaredType> _domainObject = this.getDomainObject();
+          String _fqn = _domainObject.getFqn();
+          final int lastIndexOf = _fqn.lastIndexOf(".");
+          String _xifexpression = null;
+          if ((lastIndexOf != (-1))) {
+            JvmEObjectDescriptor<JvmDeclaredType> _domainObject_1 = this.getDomainObject();
+            String _fqn_1 = _domainObject_1.getFqn();
+            _xifexpression = _fqn_1.substring(0, lastIndexOf);
+          } else {
+            _xifexpression = "<default>";
+          }
+          it_1.setText(_xifexpression);
+        };
+        Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_3);
+        _children.add(_doubleArrow_2);
+        this.addInflatable(it, this.showPackageProperty, this.packageBox, 0, this.inflator);
+      };
+      VBox _doubleArrow_2 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_2);
+      this.packageLabel = _doubleArrow_2;
+      VBox _vBox_1 = new VBox();
+      final Procedure1<VBox> _function_3 = (VBox c) -> {
+        Insets _insets = new Insets(10, 0, 0, 0);
+        c.setPadding(_insets);
+        JvmEObjectDescriptor<JvmDeclaredType> _domainObject = this.getDomainObject();
+        final Function1<JvmDeclaredType, Object> _function_4 = (JvmDeclaredType type) -> {
+          Object _xblockexpression_1 = null;
+          {
+            Iterable<JvmField> _attributes = this._jvmDomainUtil.getAttributes(type);
+            final Consumer<JvmField> _function_5 = (JvmField field) -> {
+              ObservableList<Node> _children = c.getChildren();
+              Text _text = new Text();
+              final Procedure1<Text> _function_6 = (Text it) -> {
+                it.setTextOrigin(VPos.TOP);
+                StringConcatenation _builder = new StringConcatenation();
+                String _simpleName = field.getSimpleName();
+                _builder.append(_simpleName, "");
+                _builder.append(": ");
+                JvmTypeReference _type = field.getType();
+                String _simpleName_1 = _type.getSimpleName();
+                _builder.append(_simpleName_1, "");
+                it.setText(_builder.toString());
+                String _signature = this._jvmDomainUtil.getSignature(field);
+                TooltipExtensions.setTooltip(it, _signature);
+              };
+              Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_6);
+              _children.add(_doubleArrow_3);
+            };
+            _attributes.forEach(_function_5);
+            _xblockexpression_1 = null;
+          }
+          return _xblockexpression_1;
+        };
+        _domainObject.<Object>withDomainObject(_function_4);
+        ObservableList<Node> _children = this.contentArea.getChildren();
+        int _size = _children.size();
+        this.addInflatable(c, this.showAttributesProperty, this.attributesBox, _size, this.inflator);
+      };
+      VBox _doubleArrow_3 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_3);
+      this.attributeCompartment = _doubleArrow_3;
+      VBox _vBox_2 = new VBox();
+      final Procedure1<VBox> _function_4 = (VBox c) -> {
+        Insets _insets = new Insets(10, 0, 0, 0);
+        c.setPadding(_insets);
+        JvmEObjectDescriptor<JvmDeclaredType> _domainObject = this.getDomainObject();
+        final Function1<JvmDeclaredType, Object> _function_5 = (JvmDeclaredType type) -> {
+          Object _xblockexpression_1 = null;
+          {
+            Iterable<JvmOperation> _methods = this._jvmDomainUtil.getMethods(type);
+            final Consumer<JvmOperation> _function_6 = (JvmOperation operation) -> {
+              ObservableList<Node> _children = c.getChildren();
+              Text _text = new Text();
+              final Procedure1<Text> _function_7 = (Text it) -> {
+                it.setTextOrigin(VPos.TOP);
+                StringConcatenation _builder = new StringConcatenation();
+                String _simpleName = operation.getSimpleName();
+                _builder.append(_simpleName, "");
+                _builder.append(": ");
+                JvmTypeReference _returnType = operation.getReturnType();
+                String _simpleName_1 = _returnType.getSimpleName();
+                _builder.append(_simpleName_1, "");
+                it.setText(_builder.toString());
+                String _signature = this._uIStrings.signature(operation);
+                TooltipExtensions.setTooltip(it, _signature);
+              };
+              Text _doubleArrow_4 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_7);
+              _children.add(_doubleArrow_4);
+            };
+            _methods.forEach(_function_6);
+            _xblockexpression_1 = null;
+          }
+          return _xblockexpression_1;
+        };
+        _domainObject.<Object>withDomainObject(_function_5);
+        ObservableList<Node> _children = this.contentArea.getChildren();
+        int _size = _children.size();
+        this.addInflatable(c, this.showMethodsProperty, this.methodsBox, _size, this.inflator);
+      };
+      VBox _doubleArrow_4 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_2, _function_4);
+      this.methodCompartment = _doubleArrow_4;
       _xblockexpression = pane;
     }
     return _xblockexpression;
   }
   
   @Override
+  protected Anchors createAnchors() {
+    return new RoundedRectangleAnchors(this, 6, 6);
+  }
+  
+  @Override
   public void doActivate() {
     super.doActivate();
-    final Inflator inflator = new Inflator(this, this.contentArea);
-    VBox _vBox = new VBox();
-    final Procedure1<VBox> _function = (VBox it) -> {
-      it.setAlignment(Pos.CENTER);
-      ObservableList<Node> _children = it.getChildren();
-      Text _text = new Text();
-      final Procedure1<Text> _function_1 = (Text it_1) -> {
-        it_1.setTextOrigin(VPos.TOP);
-        Font _font = it_1.getFont();
-        String _family = _font.getFamily();
-        Font _font_1 = it_1.getFont();
-        double _size = _font_1.getSize();
-        double _multiply = (_size * 0.8);
-        Font _font_2 = Font.font(_family, _multiply);
-        it_1.setFont(_font_2);
-        JvmEObjectDescriptor<JvmDeclaredType> _domainObject = this.getDomainObject();
-        String _fqn = _domainObject.getFqn();
-        final int lastIndexOf = _fqn.lastIndexOf(".");
-        String _xifexpression = null;
-        if ((lastIndexOf != (-1))) {
-          JvmEObjectDescriptor<JvmDeclaredType> _domainObject_1 = this.getDomainObject();
-          String _fqn_1 = _domainObject_1.getFqn();
-          _xifexpression = _fqn_1.substring(0, lastIndexOf);
-        } else {
-          _xifexpression = "<default>";
-        }
-        it_1.setText(_xifexpression);
-      };
-      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
-      _children.add(_doubleArrow);
-    };
-    final VBox packageLabel = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
-    final Function0<Integer> _function_1 = () -> {
+    final Function0<Integer> _function = () -> {
       return Integer.valueOf(0);
     };
-    this.activate(packageLabel, this.showPackageProperty, this.packageBox, _function_1, inflator);
-    VBox _vBox_1 = new VBox();
-    final Procedure1<VBox> _function_2 = (VBox c) -> {
-      Insets _insets = new Insets(10, 0, 0, 0);
-      c.setPadding(_insets);
-      JvmEObjectDescriptor<JvmDeclaredType> _domainObject = this.getDomainObject();
-      final Function1<JvmDeclaredType, Object> _function_3 = (JvmDeclaredType type) -> {
-        Object _xblockexpression = null;
-        {
-          Iterable<JvmField> _attributes = this._jvmDomainUtil.getAttributes(type);
-          final Consumer<JvmField> _function_4 = (JvmField field) -> {
-            ObservableList<Node> _children = c.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function_5 = (Text it) -> {
-              it.setTextOrigin(VPos.TOP);
-              StringConcatenation _builder = new StringConcatenation();
-              String _simpleName = field.getSimpleName();
-              _builder.append(_simpleName, "");
-              _builder.append(": ");
-              JvmTypeReference _type = field.getType();
-              String _simpleName_1 = _type.getSimpleName();
-              _builder.append(_simpleName_1, "");
-              it.setText(_builder.toString());
-              String _signature = this._jvmDomainUtil.getSignature(field);
-              TooltipExtensions.setTooltip(it, _signature);
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_5);
-            _children.add(_doubleArrow);
-          };
-          _attributes.forEach(_function_4);
-          _xblockexpression = null;
-        }
-        return _xblockexpression;
-      };
-      _domainObject.<Object>withDomainObject(_function_3);
-    };
-    final VBox attributeCompartment = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_2);
-    final Function0<Integer> _function_3 = () -> {
+    this.bindCheckbox(this.showPackageProperty, this.packageBox, this.packageLabel, _function, this.inflator);
+    final Function0<Integer> _function_1 = () -> {
       int _xifexpression = (int) 0;
       boolean _showPackage = this.getShowPackage();
       if (_showPackage) {
@@ -251,67 +313,30 @@ public class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
       }
       return Integer.valueOf(_xifexpression);
     };
-    this.activate(attributeCompartment, this.showAttributesProperty, this.attributesBox, _function_3, inflator);
-    VBox _vBox_2 = new VBox();
-    final Procedure1<VBox> _function_4 = (VBox c) -> {
-      Insets _insets = new Insets(10, 0, 0, 0);
-      c.setPadding(_insets);
-      JvmEObjectDescriptor<JvmDeclaredType> _domainObject = this.getDomainObject();
-      final Function1<JvmDeclaredType, Object> _function_5 = (JvmDeclaredType type) -> {
-        Object _xblockexpression = null;
-        {
-          Iterable<JvmOperation> _methods = this._jvmDomainUtil.getMethods(type);
-          final Consumer<JvmOperation> _function_6 = (JvmOperation operation) -> {
-            ObservableList<Node> _children = c.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function_7 = (Text it) -> {
-              it.setTextOrigin(VPos.TOP);
-              StringConcatenation _builder = new StringConcatenation();
-              String _simpleName = operation.getSimpleName();
-              _builder.append(_simpleName, "");
-              _builder.append(": ");
-              JvmTypeReference _returnType = operation.getReturnType();
-              String _simpleName_1 = _returnType.getSimpleName();
-              _builder.append(_simpleName_1, "");
-              it.setText(_builder.toString());
-              String _signature = this._uIStrings.signature(operation);
-              TooltipExtensions.setTooltip(it, _signature);
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_7);
-            _children.add(_doubleArrow);
-          };
-          _methods.forEach(_function_6);
-          _xblockexpression = null;
-        }
-        return _xblockexpression;
-      };
-      _domainObject.<Object>withDomainObject(_function_5);
-    };
-    final VBox methodCompartment = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_2, _function_4);
-    final Function0<Integer> _function_5 = () -> {
+    this.bindCheckbox(this.showAttributesProperty, this.attributesBox, this.attributeCompartment, _function_1, this.inflator);
+    final Function0<Integer> _function_2 = () -> {
       ObservableList<Node> _children = this.contentArea.getChildren();
       return Integer.valueOf(_children.size());
     };
-    this.activate(methodCompartment, this.showMethodsProperty, this.methodsBox, _function_5, inflator);
-    Transition _inflateAnimation = inflator.getInflateAnimation();
+    this.bindCheckbox(this.showMethodsProperty, this.methodsBox, this.methodCompartment, _function_2, this.inflator);
+    Transition _inflateAnimation = this.inflator.getInflateAnimation();
     if (_inflateAnimation!=null) {
       _inflateAnimation.play();
     }
   }
   
-  protected Rectangle activate(final VBox compartment, final BooleanProperty showProperty, final CheckBox box, final Function0<? extends Integer> index, final Inflator inflator) {
-    Rectangle _xblockexpression = null;
-    {
-      this.bindCheckbox(showProperty, box, compartment, index, inflator);
-      Rectangle _xifexpression = null;
-      boolean _get = showProperty.get();
-      if (_get) {
-        Integer _apply = index.apply();
-        _xifexpression = inflator.addInflatable(compartment, (_apply).intValue());
-      }
-      _xblockexpression = _xifexpression;
+  @Override
+  public Dimension2D getAutoLayoutDimension() {
+    return this.inflator.getInflatedSize();
+  }
+  
+  protected Rectangle addInflatable(final VBox compartment, final BooleanProperty showProperty, final CheckBox box, final int index, final Inflator inflator) {
+    Rectangle _xifexpression = null;
+    boolean _get = showProperty.get();
+    if (_get) {
+      _xifexpression = inflator.addInflatable(compartment, index);
     }
-    return _xblockexpression;
+    return _xifexpression;
   }
   
   protected void bindCheckbox(final BooleanProperty property, final CheckBox box, final VBox compartment, final Function0<? extends Integer> index, final Inflator inflator) {

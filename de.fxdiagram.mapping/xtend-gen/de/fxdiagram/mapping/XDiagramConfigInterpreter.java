@@ -4,6 +4,9 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.command.CommandStack;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
@@ -36,47 +39,70 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  */
 @SuppressWarnings("all")
 public class XDiagramConfigInterpreter {
-  public <T extends Object> XDiagram createDiagram(final T diagramObject, final DiagramMapping<T> diagramMapping, final InterpreterContext context) {
+  public <T extends Object, U extends Object> XDiagram createDiagram(final T diagramObject, final DiagramMappingCall<T, U> diagramMappingCall, final InterpreterContext context) {
     XDiagram _xblockexpression = null;
     {
+      final DiagramMapping<T> diagramMapping = diagramMappingCall.getDiagramMapping();
       boolean _isApplicable = diagramMapping.isApplicable(diagramObject);
       boolean _not = (!_isApplicable);
       if (_not) {
         return null;
       }
-      boolean _isCreateNewDiagram = context.isCreateNewDiagram();
-      if (_isCreateNewDiagram) {
-        IMappedElementDescriptor<T> _descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
-        XDiagram _createDiagram = diagramMapping.createDiagram(_descriptor);
-        context.setNewDiagram(_createDiagram);
-      }
-      List<AbstractNodeMappingCall<?, T>> _nodes = diagramMapping.getNodes();
-      final Consumer<AbstractNodeMappingCall<?, T>> _function = (AbstractNodeMappingCall<?, T> it) -> {
-        this.execute(it, diagramObject, context, true);
-      };
-      _nodes.forEach(_function);
-      List<AbstractConnectionMappingCall<?, T>> _connections = diagramMapping.getConnections();
-      final Consumer<AbstractConnectionMappingCall<?, T>> _function_1 = (AbstractConnectionMappingCall<?, T> it) -> {
-        final Procedure1<XConnection> _function_2 = (XConnection it_1) -> {
+      final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
+      final XDiagram diagram = diagramMapping.createDiagram(descriptor);
+      final InterpreterContext newContext = new InterpreterContext(diagram);
+      boolean _isOnDemand = diagramMappingCall.isOnDemand();
+      if (_isOnDemand) {
+        final Procedure1<XDiagram> _function = (XDiagram it) -> {
+          final Function1<T, Object> _function_1 = (T domainObject) -> {
+            Object _xblockexpression_1 = null;
+            {
+              this.<T>populateDiagram(diagramMapping, domainObject, newContext);
+              newContext.applyChanges();
+              XRoot _root = CoreExtensions.getRoot(diagram);
+              final CommandStack commandStack = _root.getCommandStack();
+              newContext.executeCommands(commandStack);
+              _xblockexpression_1 = null;
+            }
+            return _xblockexpression_1;
+          };
+          descriptor.<Object>withDomainObject(_function_1);
         };
-        this.execute(it, diagramObject, _function_2, context, true);
-      };
-      _connections.forEach(_function_1);
-      List<ConnectionMapping<?>> _eagerConnections = diagramMapping.getEagerConnections();
-      boolean _isEmpty = _eagerConnections.isEmpty();
-      boolean _not_1 = (!_isEmpty);
-      if (_not_1) {
-        List<ConnectionMapping<?>> _eagerConnections_1 = diagramMapping.getEagerConnections();
-        final HashSet<ConnectionMapping<?>> eagerConnections = new HashSet<ConnectionMapping<?>>(_eagerConnections_1);
-        List<AbstractNodeMappingCall<?, T>> _nodes_1 = diagramMapping.getNodes();
-        final Consumer<AbstractNodeMappingCall<?, T>> _function_2 = (AbstractNodeMappingCall<?, T> it) -> {
-          this.<T>connectNodesEagerly(it, diagramObject, eagerConnections, context);
-        };
-        _nodes_1.forEach(_function_2);
+        diagram.setContentsInitializer(_function);
+      } else {
+        this.<T>populateDiagram(diagramMapping, diagramObject, newContext);
+        context.addSubContext(newContext);
       }
-      _xblockexpression = context.getDiagram();
+      _xblockexpression = diagram;
     }
     return _xblockexpression;
+  }
+  
+  protected <T extends Object> void populateDiagram(final DiagramMapping<T> diagramMapping, final T diagramObject, final InterpreterContext context) {
+    List<AbstractNodeMappingCall<?, T>> _nodes = diagramMapping.getNodes();
+    final Consumer<AbstractNodeMappingCall<?, T>> _function = (AbstractNodeMappingCall<?, T> it) -> {
+      this.execute(it, diagramObject, context, true);
+    };
+    _nodes.forEach(_function);
+    List<AbstractConnectionMappingCall<?, T>> _connections = diagramMapping.getConnections();
+    final Consumer<AbstractConnectionMappingCall<?, T>> _function_1 = (AbstractConnectionMappingCall<?, T> it) -> {
+      final Procedure1<XConnection> _function_2 = (XConnection it_1) -> {
+      };
+      this.execute(it, diagramObject, _function_2, context, true);
+    };
+    _connections.forEach(_function_1);
+    List<ConnectionMapping<?>> _eagerConnections = diagramMapping.getEagerConnections();
+    boolean _isEmpty = _eagerConnections.isEmpty();
+    boolean _not = (!_isEmpty);
+    if (_not) {
+      List<ConnectionMapping<?>> _eagerConnections_1 = diagramMapping.getEagerConnections();
+      final HashSet<ConnectionMapping<?>> eagerConnections = new HashSet<ConnectionMapping<?>>(_eagerConnections_1);
+      List<AbstractNodeMappingCall<?, T>> _nodes_1 = diagramMapping.getNodes();
+      final Consumer<AbstractNodeMappingCall<?, T>> _function_2 = (AbstractNodeMappingCall<?, T> it) -> {
+        this.<T>connectNodesEagerly(it, diagramObject, eagerConnections, context);
+      };
+      _nodes_1.forEach(_function_2);
+    }
   }
   
   protected <T extends Object> void connectNodesEagerly(final AbstractNodeMappingCall<?, T> it, final T diagramObject, final Set<ConnectionMapping<?>> eagerConnections, final InterpreterContext context) {
@@ -92,8 +118,8 @@ public class XDiagramConfigInterpreter {
           List<AbstractConnectionMappingCall<?, Object>> _incoming = nodeMappingCasted.getIncoming();
           final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function = (AbstractConnectionMappingCall<?, Object> it_1) -> {
             boolean _and = false;
-            boolean _isButton = it_1.isButton();
-            if (!_isButton) {
+            boolean _isOnDemand = it_1.isOnDemand();
+            if (!_isOnDemand) {
               _and = false;
             } else {
               AbstractMapping<?> _mapping = it_1.getMapping();
@@ -113,8 +139,8 @@ public class XDiagramConfigInterpreter {
           List<AbstractConnectionMappingCall<?, Object>> _outgoing = nodeMappingCasted.getOutgoing();
           final Function1<AbstractConnectionMappingCall<?, Object>, Boolean> _function_2 = (AbstractConnectionMappingCall<?, Object> it_1) -> {
             boolean _and = false;
-            boolean _isButton = it_1.isButton();
-            if (!_isButton) {
+            boolean _isOnDemand = it_1.isOnDemand();
+            if (!_isOnDemand) {
               _and = false;
             } else {
               AbstractMapping<?> _mapping = it_1.getMapping();
@@ -157,8 +183,8 @@ public class XDiagramConfigInterpreter {
       context.addNode(node);
       List<AbstractConnectionMappingCall<?, T>> _incoming = nodeMapping.getIncoming();
       final Consumer<AbstractConnectionMappingCall<?, T>> _function = (AbstractConnectionMappingCall<?, T> it) -> {
-        boolean _isButton = it.isButton();
-        boolean _not = (!_isButton);
+        boolean _isOnDemand = it.isOnDemand();
+        boolean _not = (!_isOnDemand);
         if (_not) {
           final Procedure1<XConnection> _function_1 = (XConnection it_1) -> {
             it_1.setTarget(node);
@@ -169,8 +195,8 @@ public class XDiagramConfigInterpreter {
       _incoming.forEach(_function);
       List<AbstractConnectionMappingCall<?, T>> _outgoing = nodeMapping.getOutgoing();
       final Consumer<AbstractConnectionMappingCall<?, T>> _function_1 = (AbstractConnectionMappingCall<?, T> it) -> {
-        boolean _isButton = it.isButton();
-        boolean _not = (!_isButton);
+        boolean _isOnDemand = it.isOnDemand();
+        boolean _not = (!_isOnDemand);
         if (_not) {
           final Procedure1<XConnection> _function_2 = (XConnection it_1) -> {
             it_1.setSource(node);
@@ -328,8 +354,7 @@ public class XDiagramConfigInterpreter {
   public <T extends Object, U extends Object> XDiagram execute(final DiagramMappingCall<T, U> diagramMappingCall, final U domainArgument, final InterpreterContext context) {
     Function1<? super U, ? extends T> _selector = diagramMappingCall.getSelector();
     final T diagramObject = _selector.apply(domainArgument);
-    DiagramMapping<T> _diagramMapping = diagramMappingCall.getDiagramMapping();
-    final XDiagram result = this.<T>createDiagram(diagramObject, _diagramMapping, context);
+    final XDiagram result = this.<T, U>createDiagram(diagramObject, diagramMappingCall, context);
     return result;
   }
   

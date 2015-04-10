@@ -136,7 +136,9 @@ public class Layouter {
           if (xElement instanceof XNode) {
             _matched=true;
             MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
-            _behavior.setIsManuallyPlaced(false);
+            if (_behavior!=null) {
+              _behavior.setIsManuallyPlaced(false);
+            }
             EList<KGraphData> _data = kElement.getData();
             Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
             final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);
@@ -375,12 +377,17 @@ public class Layouter {
       boolean _notEquals = (!Objects.equal(newCenter, null));
       if (_notEquals) {
         final Scene scene = diagram.getScene();
-        double _width = scene.getWidth();
-        double _multiply = (0.5 * _width);
-        double _height = scene.getHeight();
-        double _multiply_1 = (0.5 * _height);
-        final Point2D currentCenter = diagram.sceneToLocal(_multiply, _multiply_1);
-        return Point2DExtensions.operator_minus(newCenter, currentCenter);
+        boolean _equals_1 = Objects.equal(scene, null);
+        if (_equals_1) {
+          return newCenter;
+        } else {
+          double _width = scene.getWidth();
+          double _multiply = (0.5 * _width);
+          double _height = scene.getHeight();
+          double _multiply_1 = (0.5 * _height);
+          final Point2D currentCenter = diagram.sceneToLocal(_multiply, _multiply_1);
+          return Point2DExtensions.operator_minus(newCenter, currentCenter);
+        }
       }
     }
     final KGraphElement kFixed = map.get(xFixed);
@@ -499,8 +506,8 @@ public class Layouter {
       final KNode kNode = this._kGraphFactory.createKNode();
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
       shapeLayout.setSize(
-        (((float) it.getLayoutBounds().getWidth()) + Layouter.NODE_PADDING), 
-        (((float) it.getLayoutBounds().getHeight()) + Layouter.NODE_PADDING));
+        (((float) it.getAutoLayoutDimension().getWidth()) + Layouter.NODE_PADDING), 
+        (((float) it.getAutoLayoutDimension().getHeight()) + Layouter.NODE_PADDING));
       EList<KGraphData> _data = kNode.getData();
       _data.add(shapeLayout);
       cache.put(it, kNode);

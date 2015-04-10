@@ -41,7 +41,7 @@ class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
 		}
 		
 		override calls() {
-			packageDiagram.nestedDiagramFor[ it ]			
+			packageDiagram.nestedDiagramFor[ it ].onOpen
 		}
 	}
 

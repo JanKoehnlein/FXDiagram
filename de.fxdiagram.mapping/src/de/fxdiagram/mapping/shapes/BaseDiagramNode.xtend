@@ -3,6 +3,7 @@ package de.fxdiagram.mapping.shapes
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import javafx.scene.paint.Color
@@ -46,6 +47,6 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 		val descriptor = domainObject
 		if(descriptor instanceof IMappedElementDescriptor<?>) 
 			addLazyBehavior(this, descriptor)
-		innerDiagram.isLayoutOnActivate = true
+		innerDiagram.layoutOnActivate = LayoutType.DOT
 	}
 }

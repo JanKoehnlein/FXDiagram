@@ -30,6 +30,7 @@ import static de.fxdiagram.core.extensions.ButtonExtensions.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
+import javafx.geometry.Side
 
 @ModelNode('inflated')
 class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMappings {
@@ -50,6 +51,7 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 	
 	new(BundleDescriptor descriptor) {
 		super(descriptor)
+		placementHint = Side.BOTTOM
 	}
 	
 	override BundleDescriptor getDomainObject() {

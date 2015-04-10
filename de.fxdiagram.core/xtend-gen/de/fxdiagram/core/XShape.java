@@ -18,6 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Bounds;
+import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
@@ -86,7 +87,7 @@ public abstract class XShape extends Parent implements XActivatable {
   }
   
   /**
-   * Don't override this unless ou know what you're doning.
+   * Don't override this unless ou know what you're doing.
    * Override {@link #doActivate} instead.
    */
   @Override
@@ -169,6 +170,14 @@ public abstract class XShape extends Parent implements XActivatable {
    */
   public Bounds getSnapBounds() {
     return this.getBoundsInLocal();
+  }
+  
+  public Dimension2D getAutoLayoutDimension() {
+    Bounds _snapBounds = this.getSnapBounds();
+    double _width = _snapBounds.getWidth();
+    Bounds _snapBounds_1 = this.getSnapBounds();
+    double _height = _snapBounds_1.getHeight();
+    return new Dimension2D(_width, _height);
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XShape");

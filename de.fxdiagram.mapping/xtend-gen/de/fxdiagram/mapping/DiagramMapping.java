@@ -2,6 +2,7 @@ package de.fxdiagram.mapping;
 
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.AbstractNodeMappingCall;
@@ -17,6 +18,8 @@ import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 /**
  * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor}
@@ -64,7 +67,11 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
   }
   
   public XDiagram createDiagram(final IMappedElementDescriptor<T> descriptor) {
-    return new XDiagram();
+    XDiagram _xDiagram = new XDiagram();
+    final Procedure1<XDiagram> _function = (XDiagram it) -> {
+      it.setLayoutOnActivate(LayoutType.DOT);
+    };
+    return ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function);
   }
   
   public <U extends Object> boolean nodeFor(final NodeMapping<U> nodeMapping, final Function1<? super T, ? extends U> selector) {

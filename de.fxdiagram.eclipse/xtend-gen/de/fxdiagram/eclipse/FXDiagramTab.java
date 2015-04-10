@@ -330,7 +330,7 @@ public class FXDiagramTab {
         boolean _remove = this.changedEditors.remove(editor);
         _or = _remove;
       }
-      interpreterContext.setIsCreateNewDiagram(_or);
+      interpreterContext.setIsReplaceRootDiagram(_or);
       this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
       CommandStack _commandStack = this.root.getCommandStack();
       interpreterContext.executeCommands(_commandStack);
@@ -397,8 +397,8 @@ public class FXDiagramTab {
     CommandStack _commandStack_3 = this.root.getCommandStack();
     ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
     final Procedure1<ParallelAnimationCommand> _function_2 = (ParallelAnimationCommand it) -> {
-      boolean _needsLayout = interpreterContext.needsLayout();
-      if (_needsLayout) {
+      boolean _needsLayoutCommand = interpreterContext.needsLayoutCommand();
+      if (_needsLayoutCommand) {
         Layouter _layouter = new Layouter();
         XDiagram _diagram_3 = interpreterContext.getDiagram();
         Duration _millis = DurationExtensions.millis(500);

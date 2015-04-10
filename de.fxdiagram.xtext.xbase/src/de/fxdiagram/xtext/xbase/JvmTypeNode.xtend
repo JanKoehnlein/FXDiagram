@@ -3,6 +3,7 @@ package de.fxdiagram.xtext.xbase
 import com.google.inject.Inject
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.animations.Inflator
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.mapping.shapes.BaseFlipNode
@@ -13,7 +14,6 @@ import javafx.geometry.VPos
 import javafx.scene.control.CheckBox
 import javafx.scene.control.ColorPicker
 import javafx.scene.control.Label
-import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
@@ -40,7 +40,12 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 	CheckBox attributesBox
 	CheckBox methodsBox
 	
-	Pane contentArea
+	VBox contentArea
+	VBox packageLabel
+	VBox attributeCompartment
+	VBox methodCompartment
+	
+	Inflator inflator
 	
 	new(JvmEObjectDescriptor<JvmDeclaredType> descriptor) {
 		super(descriptor)
@@ -82,13 +87,8 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 				]
 			]			
 		]
-		pane
-	}
-	
-	override doActivate() {
-		super.doActivate()
-		val inflator = new Inflator(this, contentArea)
-		val packageLabel = new VBox => [
+		inflator = new Inflator(this, contentArea)
+		packageLabel = new VBox => [
 			alignment = Pos.CENTER
 			children += new Text => [
 				textOrigin = VPos.TOP
@@ -99,10 +99,9 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 					else
 						'<default>'
 			]
+			addInflatable(showPackageProperty, packageBox, 0, inflator)
 		]
-		packageLabel.activate(showPackageProperty, packageBox, [ 0 ], inflator)
-		
-		val attributeCompartment = new VBox => [ c |
+		attributeCompartment = new VBox => [ c |
 			c.padding = new Insets(10,0,0,0)
 			domainObject.withDomainObject[ type |
 				type.attributes.forEach[ field |
@@ -114,10 +113,9 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 				]
 				null
 			]
+			c.addInflatable(showAttributesProperty, attributesBox, contentArea.children.size, inflator)
 		]
-		attributeCompartment.activate(showAttributesProperty, attributesBox, [if(showPackage) 2 else 1], inflator)
-		
-		val methodCompartment = new VBox => [ c |
+		methodCompartment = new VBox => [ c |
 			c.padding = new Insets(10,0,0,0)
 			domainObject.withDomainObject[ type |
 				type.methods.forEach[ operation |
@@ -129,15 +127,30 @@ class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
 				]
 				null
 			]
+			c.addInflatable(showMethodsProperty, methodsBox, contentArea.children.size, inflator)						
 		]
-		methodCompartment.activate(showMethodsProperty, methodsBox, [contentArea.children.size], inflator)
+		pane
+	}
+	
+	override protected createAnchors() {
+		new RoundedRectangleAnchors(this, 6, 6)
+	}
+	
+	override doActivate() {
+		super.doActivate()
+		showPackageProperty.bindCheckbox(packageBox, packageLabel, [ 0 ], inflator)
+		showAttributesProperty.bindCheckbox(attributesBox, attributeCompartment, [if(showPackage) 2 else 1], inflator)
+		showMethodsProperty.bindCheckbox(methodsBox, methodCompartment, [contentArea.children.size], inflator)
 		inflator.inflateAnimation?.play
 	}
 	
-	protected def activate(VBox compartment, BooleanProperty showProperty, CheckBox box, ()=>int index, Inflator inflator) {
-		showProperty.bindCheckbox(box, compartment, index, inflator)
+	override getAutoLayoutDimension() {
+		inflator.inflatedSize
+	}
+	
+	protected def addInflatable(VBox compartment, BooleanProperty showProperty, CheckBox box, int index, Inflator inflator) {
 		if(showProperty.get) 
-			inflator.addInflatable(compartment, index.apply)
+			inflator.addInflatable(compartment, index)
 	}
 	
 	protected def bindCheckbox(BooleanProperty property, CheckBox box, VBox compartment, ()=>int index, Inflator inflator) {

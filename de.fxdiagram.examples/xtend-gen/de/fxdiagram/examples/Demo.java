@@ -180,7 +180,7 @@ public class Demo extends Application {
             ObservableList<XNode> _nodes_8 = it_2.getNodes();
             BrickBreakerNode _newBrickBreakerNode = this.newBrickBreakerNode();
             _nodes_8.add(_newBrickBreakerNode);
-            it_2.setIsLayoutOnActivate(true);
+            it_2.setLayoutOnActivate(LayoutType.DOT);
           };
           XDiagram _doubleArrow_2 = ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function_4);
           it_1.setInnerDiagram(_doubleArrow_2);

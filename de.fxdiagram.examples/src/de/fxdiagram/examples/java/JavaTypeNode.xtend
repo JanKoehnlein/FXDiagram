@@ -8,11 +8,13 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane
 import java.util.List
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.geometry.Side
 import javafx.geometry.VPos
 import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
+
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 @ModelNode
@@ -27,6 +29,7 @@ class JavaTypeNode extends XNode {
 	
 	new(JavaTypeDescriptor domainObject) {
 		super(domainObject)
+		placementHint = Side.BOTTOM
 	}
 	
 	protected override createNode() {

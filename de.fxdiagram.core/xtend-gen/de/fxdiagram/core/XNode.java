@@ -113,14 +113,19 @@ public class XNode extends XShape implements XModelProvider {
   }
   
   @Override
-  public void initializeGraphics() {
-    super.initializeGraphics();
-    InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
-    this.mouseOverEffect = _createMouseOverEffect;
-    DropShadow _createSelectionEffect = this.createSelectionEffect();
-    this.selectionEffect = _createSelectionEffect;
-    Anchors _createAnchors = this.createAnchors();
-    this.anchors = _createAnchors;
+  public Node getNode() {
+    Node _xblockexpression = null;
+    {
+      final Node node = super.getNode();
+      InnerShadow _createMouseOverEffect = this.createMouseOverEffect();
+      this.mouseOverEffect = _createMouseOverEffect;
+      DropShadow _createSelectionEffect = this.createSelectionEffect();
+      this.selectionEffect = _createSelectionEffect;
+      Anchors _createAnchors = this.createAnchors();
+      this.anchors = _createAnchors;
+      _xblockexpression = node;
+    }
+    return _xblockexpression;
   }
   
   @Override

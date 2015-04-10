@@ -15,6 +15,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.annotations.logging.Logging
 import javafx.beans.property.SimpleObjectProperty
 import de.fxdiagram.core.extensions.InitializingListener
+import javafx.geometry.Dimension2D
 
 /**
  * Common superclass of {@link XNode}, {@link XConnection} and {@link XControlPoint}.
@@ -70,7 +71,7 @@ abstract class XShape extends Parent implements XActivatable {
 	}
 
 	/**
-	 * Don't override this unless ou know what you're doning. 
+	 * Don't override this unless ou know what you're doing. 
 	 * Override {@link #doActivate} instead.
 	 */
 	override activate() {
@@ -132,5 +133,9 @@ abstract class XShape extends Parent implements XActivatable {
 	 */
 	def getSnapBounds() {
 		boundsInLocal
+	}
+	
+	def getAutoLayoutDimension() {
+		new Dimension2D(snapBounds.width, snapBounds.height)
 	}
 }

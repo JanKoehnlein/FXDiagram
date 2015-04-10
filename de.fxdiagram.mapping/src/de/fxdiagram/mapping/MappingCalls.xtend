@@ -4,7 +4,10 @@ import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior
 import javafx.geometry.Side
 import javafx.scene.Node
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.xtend.lib.annotations.EqualsHashCode
 
 /**
  * The execution of a {@link AbstractMapping} in a certain context.
@@ -35,7 +38,7 @@ abstract class AbstractConnectionMappingCall<RESULT, ARG> implements MappingCall
 
 	(Side)=>Node imageFactory
 
-	def isButton() { imageFactory != null }
+	def isOnDemand() { imageFactory != null }
 
 	/**
 	 * Instead of immediately adding this connection and the connected node, create
@@ -89,12 +92,17 @@ class MultiNodeMappingCall<RESULT, ARG> extends AbstractNodeMappingCall<RESULT, 
 	NodeMapping<RESULT> nodeMapping	
 }
 
-@Data
+@Accessors
+@FinalFieldsConstructor
+@EqualsHashCode
 class DiagramMappingCall<RESULT, ARG> implements MappingCall<RESULT, ARG> {
-	(ARG)=>RESULT selector
-	DiagramMapping<RESULT> diagramMapping
+	val (ARG)=>RESULT selector
+	val DiagramMapping<RESULT> diagramMapping
+	@Accessors(PUBLIC_GETTER) boolean onDemand
 	
 	override getMapping() {
 		diagramMapping
 	}
+	
+	def onOpen() { onDemand = true }
 }

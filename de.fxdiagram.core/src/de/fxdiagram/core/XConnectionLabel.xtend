@@ -69,11 +69,13 @@ class XConnectionLabel extends XShape {
 	}
 	
 	def void place(boolean force) {
+		if(!connection.isActive)
+			return
 		val moveBehavior = getBehavior(MoveBehavior)
-		if(moveBehavior.isManuallyPlaced && !force) 
+		if(moveBehavior?.isManuallyPlaced && !force) 
 			return;
 		if(force) 
-			moveBehavior.isManuallyPlaced = false
+			moveBehavior?.setIsManuallyPlaced(false)
 		val center = connection.at(position)
 		val derivative = connection.derivativeAt(position)
 		var angle = atan2(derivative.y, derivative.x)
