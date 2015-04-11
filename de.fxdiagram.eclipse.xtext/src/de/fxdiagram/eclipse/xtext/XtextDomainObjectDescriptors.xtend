@@ -10,14 +10,12 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.EReference
-import org.eclipse.ui.PlatformUI
 import org.eclipse.xtext.resource.IResourceServiceProvider
+import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.XtextEditor
-import org.eclipse.xtext.ui.shared.Access
 
 import static extension org.eclipse.emf.common.util.URI.*
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
-import org.eclipse.xtext.resource.XtextResource
 
 /**
  * A {@link DomainObjectDescriptor} that points to an {@link EObject} from an Xtext document.
@@ -139,15 +137,7 @@ abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING> extends AbstractMappe
 	}
 
 	override openInEditor(boolean isSelect) {
-		if(isSelect) {
-			Access.IURIEditorOpener.get.open(URI.createURI(uri), isSelect)
-		} else {
-			val activePage = PlatformUI.getWorkbench.activeWorkbenchWindow.activePage
-			val activePart = activePage.activePart
-			val editor = Access.IURIEditorOpener.get.open(URI.createURI(uri), isSelect)
-			activePage.activate(activePart)
-			return editor
-		}
+		(provider as XtextDomainObjectProvider).getCachedEditor(URI.createURI(uri), isSelect, isSelect)
 	}
 	
 	def injectMembers(Object it) {

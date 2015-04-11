@@ -1,6 +1,7 @@
 package de.fxdiagram.eclipse.xtext;
 
 import com.google.common.base.Objects;
+import com.google.inject.Provider;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
@@ -12,16 +13,35 @@ import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.XDiagramConfig;
+import java.util.List;
+import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.ui.editor.IURIEditorOpener;
+import org.eclipse.xtext.ui.shared.Access;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 
 /**
  * A {@link DomainObjectProvider} for Xtext based domain objects.
@@ -29,6 +49,42 @@ import org.eclipse.xtext.resource.XtextResource;
 @ModelNode
 @SuppressWarnings("all")
 public class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
+  public static class CachedEditor {
+    private IEditorInput editorInput;
+    
+    private String editorID;
+    
+    public CachedEditor(final IEditorPart editor) {
+      IEditorInput _editorInput = editor.getEditorInput();
+      this.editorInput = _editorInput;
+      IEditorSite _editorSite = editor.getEditorSite();
+      String _id = _editorSite.getId();
+      this.editorID = _id;
+    }
+    
+    public IEditorPart findOn(final IWorkbenchPage page) {
+      IEditorReference[] _findEditors = page.findEditors(this.editorInput, this.editorID, (IWorkbenchPage.MATCH_ID + IWorkbenchPage.MATCH_INPUT));
+      List<IEditorPart> _map = null;
+      if (((List<IEditorReference>)Conversions.doWrapArray(_findEditors))!=null) {
+        final Function1<IEditorReference, IEditorPart> _function = (IEditorReference it) -> {
+          return it.getEditor(false);
+        };
+        _map=ListExtensions.<IEditorReference, IEditorPart>map(((List<IEditorReference>)Conversions.doWrapArray(_findEditors)), _function);
+      }
+      Iterable<IEditorPart> _filterNull = null;
+      if (_map!=null) {
+        _filterNull=IterableExtensions.<IEditorPart>filterNull(_map);
+      }
+      IEditorPart _head = null;
+      if (_filterNull!=null) {
+        _head=IterableExtensions.<IEditorPart>head(_filterNull);
+      }
+      return _head;
+    }
+  }
+  
+  private Map<URI, XtextDomainObjectProvider.CachedEditor> editorCache = CollectionLiterals.<URI, XtextDomainObjectProvider.CachedEditor>newHashMap();
+  
   @Override
   public DomainObjectDescriptor createDescriptor(final Object handle) {
     return null;
@@ -100,6 +156,38 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
       }
     }
     return null;
+  }
+  
+  public IEditorPart getCachedEditor(final URI elementURI, final boolean isSelect, final boolean isActivate) {
+    final URI uri = elementURI.trimFragment();
+    IWorkbench _workbench = PlatformUI.getWorkbench();
+    IWorkbenchWindow _activeWorkbenchWindow = _workbench.getActiveWorkbenchWindow();
+    final IWorkbenchPage activePage = _activeWorkbenchWindow.getActivePage();
+    XtextDomainObjectProvider.CachedEditor _get = this.editorCache.get(uri);
+    IEditorPart _findOn = null;
+    if (_get!=null) {
+      _findOn=_get.findOn(activePage);
+    }
+    final IEditorPart cachedEditor = _findOn;
+    boolean _notEquals = (!Objects.equal(cachedEditor, null));
+    if (_notEquals) {
+      if (isActivate) {
+        IWorkbenchPartSite _site = cachedEditor.getSite();
+        IWorkbenchPage _page = _site.getPage();
+        _page.activate(cachedEditor);
+      }
+      return cachedEditor;
+    }
+    final IWorkbenchPart activePart = activePage.getActivePart();
+    Provider<IURIEditorOpener> _iURIEditorOpener = Access.getIURIEditorOpener();
+    IURIEditorOpener _get_1 = _iURIEditorOpener.get();
+    final IEditorPart editor = _get_1.open(elementURI, isSelect);
+    XtextDomainObjectProvider.CachedEditor _cachedEditor = new XtextDomainObjectProvider.CachedEditor(editor);
+    this.editorCache.put(uri, _cachedEditor);
+    if ((!isActivate)) {
+      activePage.activate(activePart);
+    }
+    return editor;
   }
   
   public void populate(final ModelElementImpl modelElement) {

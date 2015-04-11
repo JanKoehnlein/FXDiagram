@@ -12,12 +12,23 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import org.eclipse.emf.common.util.URI
+import java.util.Map
+import org.eclipse.ui.IEditorReference
+import org.eclipse.ui.PlatformUI
+import org.eclipse.xtext.ui.shared.Access
+import org.eclipse.ui.IEditorInput
+import org.eclipse.ui.IEditorPart
+import org.eclipse.ui.IWorkbenchPage
+import static org.eclipse.ui.IWorkbenchPage.*
 
 /**
  * A {@link DomainObjectProvider} for Xtext based domain objects.
  */
 @ModelNode
 class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
+
+	Map<URI, CachedEditor> editorCache = newHashMap
 
 	override createDescriptor(Object handle) {
 		null
@@ -50,6 +61,40 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 		}
 	}
 	
+	def getCachedEditor(URI elementURI, boolean isSelect, boolean isActivate) {
+		val uri = elementURI.trimFragment
+		val activePage = PlatformUI.getWorkbench.activeWorkbenchWindow.activePage
+		val cachedEditor = editorCache.get(uri)?.findOn(activePage)
+		if(cachedEditor != null) {
+			if(isActivate) 
+				cachedEditor.site.page.activate(cachedEditor)				
+			return cachedEditor
+		}
+		val activePart = activePage.activePart
+		val editor = Access.IURIEditorOpener.get.open(elementURI, isSelect)
+		editorCache.put(uri, new CachedEditor(editor)) 
+		if(!isActivate)
+			activePage.activate(activePart)
+		return editor
+	}
+	
+	static class CachedEditor {
+		IEditorInput editorInput
+		String editorID
+		
+		new(IEditorPart editor) {
+			this.editorInput = editor.editorInput
+			this.editorID = editor.editorSite.id
+		}
+		
+		def findOn(IWorkbenchPage page) {
+			page
+				.findEditors(editorInput, editorID, MATCH_ID + MATCH_INPUT)
+				?.map[getEditor(false)]
+				?.filterNull
+				?.head
+		}
+	}
 }
 
 
