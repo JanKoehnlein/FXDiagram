@@ -6,9 +6,8 @@ function main() {
 	pushd .
 	cd ../
 	change_versions
-	cd ../JavaFX-SWT-Gesture-Bridge
-	change_versions
 	popd
+	mvn tycho-versions:update-pom
 }
 
 function change_versions() {
