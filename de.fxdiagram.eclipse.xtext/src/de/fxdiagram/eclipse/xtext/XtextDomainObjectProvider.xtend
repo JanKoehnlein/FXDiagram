@@ -5,22 +5,22 @@ import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider
+import java.util.Map
+import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.ui.IEditorInput
+import org.eclipse.ui.IEditorPart
+import org.eclipse.ui.IWorkbenchPage
+import org.eclipse.ui.PlatformUI
 import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
+import org.eclipse.xtext.ui.shared.Access
+
+import static org.eclipse.ui.IWorkbenchPage.*
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
-import org.eclipse.emf.common.util.URI
-import java.util.Map
-import org.eclipse.ui.IEditorReference
-import org.eclipse.ui.PlatformUI
-import org.eclipse.xtext.ui.shared.Access
-import org.eclipse.ui.IEditorInput
-import org.eclipse.ui.IEditorPart
-import org.eclipse.ui.IWorkbenchPage
-import static org.eclipse.ui.IWorkbenchPage.*
 
 /**
  * A {@link DomainObjectProvider} for Xtext based domain objects.
@@ -60,7 +60,10 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 				return null
 		}
 	}
-	
+
+	/**
+	 * Avoids expensive switching of active parts on subsequent withDomainObject operations. 
+	 */	
 	def getCachedEditor(URI elementURI, boolean isSelect, boolean isActivate) {
 		val uri = elementURI.trimFragment
 		val activePage = PlatformUI.getWorkbench.activeWorkbenchWindow.activePage

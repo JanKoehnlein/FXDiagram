@@ -158,6 +158,9 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
     return null;
   }
   
+  /**
+   * Avoids expensive switching of active parts on subsequent withDomainObject operations.
+   */
   public IEditorPart getCachedEditor(final URI elementURI, final boolean isSelect, final boolean isActivate) {
     final URI uri = elementURI.trimFragment();
     IWorkbench _workbench = PlatformUI.getWorkbench();
