@@ -257,8 +257,7 @@ public class FXDiagramTab {
       NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
       NavigateNextAction _navigateNextAction = new NavigateNextAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
-      UndoRedoPlayerAction _undoRedoPlayerAction_1 = new UndoRedoPlayerAction();
-      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction, _undoRedoPlayerAction_1)));
+      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
     };
     return ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
   }

@@ -113,8 +113,7 @@ class FXDiagramTab {
 			new ZoomToFitAction,
 			new NavigatePreviousAction,
 			new NavigateNextAction,
-			new FullScreenAction,
-			new UndoRedoPlayerAction ]
+			new FullScreenAction ]
 		]
 	}
 
