@@ -15,7 +15,7 @@ class LoadAction implements DiagramAction {
 	}
 	
 	override getSymbol() {
-		Symbol.Type.CLOUD
+		Symbol.Type.LOAD
 	}
 	
 	override getTooltip() {

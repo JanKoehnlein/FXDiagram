@@ -112,6 +112,8 @@ public abstract class Symbol {
         VOLUME,
         WEB,
         ZOOM_IN,
-        ZOOM_OUT
+        ZOOM_OUT,
+        SAVE,
+        LOAD
     }
 }

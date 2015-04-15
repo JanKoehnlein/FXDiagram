@@ -34,7 +34,7 @@ public class SaveAction implements DiagramAction {
   
   @Override
   public Symbol.Type getSymbol() {
-    return Symbol.Type.ROCKET;
+    return Symbol.Type.SAVE;
   }
   
   @Override

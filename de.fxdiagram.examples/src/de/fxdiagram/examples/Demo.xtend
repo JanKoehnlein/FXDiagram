@@ -103,7 +103,6 @@ class Demo extends Application {
 			new LayoutAction(LayoutType.DOT),
 			new ExportSvgAction,
 			new RedoAction,
-			new UndoRedoPlayerAction,
 			new UndoAction,
 			new RevealAction,
 			new LoadAction,

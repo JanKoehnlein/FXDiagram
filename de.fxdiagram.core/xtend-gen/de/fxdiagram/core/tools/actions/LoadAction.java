@@ -35,7 +35,7 @@ public class LoadAction implements DiagramAction {
   
   @Override
   public Symbol.Type getSymbol() {
-    return Symbol.Type.CLOUD;
+    return Symbol.Type.LOAD;
   }
   
   @Override

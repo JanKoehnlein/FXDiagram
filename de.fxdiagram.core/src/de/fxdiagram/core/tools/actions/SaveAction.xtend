@@ -15,7 +15,7 @@ class SaveAction implements DiagramAction {
 	}
 	
 	override getSymbol() {
-		Symbol.Type.ROCKET
+		Symbol.Type.SAVE
 	}
 	
 	override getTooltip() {

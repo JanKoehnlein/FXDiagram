@@ -299,6 +299,12 @@ public class SymbolCanvas extends Symbol {
             case DELETE:
                 drawDeleteCanvas(CTX, SIZE, SIZE);
                 break;
+            case SAVE:
+                drawSaveCanvas(CTX, SIZE, SIZE);
+                break;
+            case LOAD:
+                drawLoadCanvas(CTX, SIZE, SIZE);
+                break;
             default:
                 break;
         }
@@ -3757,4 +3763,87 @@ public class SymbolCanvas extends Symbol {
         CTX.fill();
         CTX.restore();
     }
+    
+	public static final void drawSaveCanvas(final GraphicsContext CTX, final double WIDTH, final double HEIGHT) {
+		double w = WIDTH / 100.;
+		double h = HEIGHT / 100.;
+		
+		CTX.save();
+		CTX.beginPath();
+		CTX.moveTo(20.185 * w, 54.728 * h);
+		CTX.lineTo(20.185 * w, 74.938 * h);
+		CTX.bezierCurveTo(21.904 * w, 75.513 * h, 23.749 * w, 75.521 * h, 25.537 * w, 75.585 * h);
+		CTX.lineTo(74.463 * w, 75.585 * h);
+		CTX.bezierCurveTo(76.256 * w, 75.555 * h, 78.086 * w, 75.462 * h, 79.815 * w, 74.938 * h);
+		CTX.lineTo(79.815 * w, 54.728 * h);
+		CTX.lineTo(93.575 * w, 54.728 * h);
+		CTX.lineTo(93.575 * w, 77.843 * h);
+		CTX.bezierCurveTo(93.575 * w, 82.781 * h, 90.216 * w, 85.782 * h, 85.545 * w, 87.548 * h);
+		CTX.bezierCurveTo(82.435 * w, 88.723 * h, 78.538 * w, 89.346 * h, 74.463 * w, 89.346 * h);
+		CTX.lineTo(25.536 * w, 89.346 * h);
+		CTX.bezierCurveTo(21.462 * w, 89.346 * h, 17.565 * w, 88.723 * h, 14.455 * w, 87.548 * h);
+		CTX.bezierCurveTo(9.784 * w, 85.782 * h, 6.425 * w, 82.781 * h, 6.425 * w, 77.843 * h);
+		CTX.lineTo(6.425 * w, 54.728 * h);
+		CTX.lineTo(20.185 * w, 54.728 * h);
+		CTX.closePath();
+		CTX.fill();
+
+		CTX.moveTo(56.761 * w, 11.132 * h);
+		CTX.lineTo(56.828 * w, 35.655 * h);
+		CTX.lineTo(74.453 * w, 35.655 * h);
+		CTX.lineTo(68.182 * w, 43.178 * h);
+		CTX.lineTo(53.523 * w, 60.765 * h);
+		CTX.lineTo(50 * w, 64.992 * h);
+		CTX.lineTo(46.477 * w, 60.765 * h);
+		CTX.lineTo(31.818 * w, 43.178 * h);
+		CTX.lineTo(25.547 * w, 35.655 * h);
+		CTX.lineTo(43.067 * w, 35.655 * h);
+		CTX.lineTo(43.001 * w, 11.17 * h);
+		CTX.lineTo(56.761 * w, 11.132 * h);
+		CTX.closePath();
+		CTX.fill();
+		CTX.restore();
+	}
+	
+	public static final void drawLoadCanvas(final GraphicsContext CTX, final double WIDTH, final double HEIGHT) {
+		double w = WIDTH / 100.;
+		double h = HEIGHT / 100.;
+		
+		CTX.save();
+		CTX.beginPath();
+		CTX.moveTo(20.185 * w, 54.728 * h);
+		CTX.lineTo(20.185 * w, 74.938 * h);
+		CTX.bezierCurveTo(21.904 * w, 75.513 * h, 23.749 * w, 75.521 * h, 25.537 * w, 75.585 * h);
+		CTX.lineTo(74.463 * w, 75.585 * h);
+		CTX.bezierCurveTo(76.256 * w, 75.555 * h, 78.086 * w, 75.462 * h, 79.815 * w, 74.938 * h);
+		CTX.lineTo(79.815 * w, 54.728 * h);
+		CTX.lineTo(93.575 * w, 54.728 * h);
+		CTX.lineTo(93.575 * w, 77.843 * h);
+		CTX.bezierCurveTo(93.575 * w, 82.781 * h, 90.216 * w, 85.782 * h, 85.545 * w, 87.548 * h);
+		CTX.bezierCurveTo(82.435 * w, 88.723 * h, 78.538 * w, 89.346 * h, 74.463 * w, 89.346 * h);
+		CTX.lineTo(25.536 * w, 89.346 * h);
+		CTX.bezierCurveTo(21.462 * w, 89.346 * h, 17.565 * w, 88.723 * h, 14.455 * w, 87.548 * h);
+		CTX.bezierCurveTo(9.784 * w, 85.782 * h, 6.425 * w, 82.781 * h, 6.425 * w, 77.843 * h);
+		CTX.lineTo(6.425 * w, 54.728 * h);
+		CTX.lineTo(20.185 * w, 54.728 * h);
+		CTX.closePath();
+		CTX.fill();
+
+		CTX.moveTo(56.761 * w, 64.992 * h);
+		CTX.lineTo(56.828 * w, 40.469 * h);
+		CTX.lineTo(74.453 * w, 40.469 * h);
+		CTX.lineTo(68.182 * w, 32.946 * h);
+		CTX.lineTo(53.523 * w, 15.359 * h);
+		CTX.lineTo(50 * w, 11.132 * h);
+		CTX.lineTo(46.477 * w, 15.359 * h);
+		CTX.lineTo(31.818 * w, 32.946 * h);
+		CTX.lineTo(25.547 * w, 40.469 * h);
+		CTX.lineTo(43.067 * w, 40.469 * h);
+		CTX.lineTo(43.001 * w, 64.954 * h);
+		CTX.lineTo(56.761 * w, 64.992 * h);	
+		CTX.closePath();
+		CTX.fill();
+		CTX.restore();
+	}
+
 }
