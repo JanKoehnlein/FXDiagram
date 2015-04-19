@@ -70,6 +70,10 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
@@ -77,11 +81,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.keys.IBindingService;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -222,6 +228,32 @@ public class FXDiagramTab {
     IWorkbenchPartSite _site = view.getSite();
     IWorkbenchPage _page = _site.getPage();
     _page.addPartListener(this.listener);
+    this.canvas.addKeyListener(new KeyListener() {
+      @Override
+      public void keyPressed(final KeyEvent e) {
+        InputOutput.<KeyEvent>println(e);
+      }
+      
+      @Override
+      public void keyReleased(final KeyEvent e) {
+        InputOutput.<KeyEvent>println(e);
+      }
+    });
+    this.canvas.addFocusListener(new FocusListener() {
+      @Override
+      public void focusGained(final FocusEvent e) {
+        IWorkbenchPartSite _site = view.getSite();
+        Object _service = _site.getService(IBindingService.class);
+        ((IBindingService) _service).setKeyFilterEnabled(false);
+      }
+      
+      @Override
+      public void focusLost(final FocusEvent e) {
+        IWorkbenchPartSite _site = view.getSite();
+        Object _service = _site.getService(IBindingService.class);
+        ((IBindingService) _service).setKeyFilterEnabled(true);
+      }
+    });
   }
   
   protected XRoot createRoot() {

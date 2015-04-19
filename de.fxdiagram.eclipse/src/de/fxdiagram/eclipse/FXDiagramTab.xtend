@@ -44,12 +44,18 @@ import org.eclipse.jface.text.IDocumentListener
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.CTabFolder
 import org.eclipse.swt.custom.CTabItem
+import org.eclipse.swt.events.FocusEvent
+import org.eclipse.swt.events.FocusListener
+import org.eclipse.swt.events.KeyEvent
+import org.eclipse.swt.events.KeyListener
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPart
 import org.eclipse.ui.IWorkbenchPartReference
+import org.eclipse.ui.keys.IBindingService
 import org.eclipse.ui.texteditor.AbstractTextEditor
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 class FXDiagramTab {
@@ -90,6 +96,24 @@ class FXDiagramTab {
 				tab.text = root.name
 		]
 		view.site.page.addPartListener(listener)
+		canvas.addKeyListener(new KeyListener {
+			override keyPressed(KeyEvent e) {
+				println(e)
+			}
+			
+			override keyReleased(KeyEvent e) {
+				println(e)
+			}
+		})
+		canvas.addFocusListener(new FocusListener {
+			override focusGained(FocusEvent e) {
+				(view.site.getService(IBindingService) as IBindingService).keyFilterEnabled = false
+			}
+			
+			override focusLost(FocusEvent e) {
+				(view.site.getService(IBindingService) as IBindingService).keyFilterEnabled = true
+			}
+		})
 	}
 	
 	protected def createRoot() {
