@@ -1,12 +1,11 @@
 package de.fxdiagram.xtext.xbase
 
-import de.fxdiagram.eclipse.commands.ISelectionExtractor
-import de.fxdiagram.eclipse.commands.ISelectionExtractor.Acceptor
+import de.fxdiagram.eclipse.selection.ISelectionExtractor
+import org.eclipse.jface.text.ITextSelection
 import org.eclipse.ui.IWorkbenchPart
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
-import org.eclipse.jface.text.ITextSelection
 
 class JvmAssociationSelectionExtractor implements ISelectionExtractor {
 	

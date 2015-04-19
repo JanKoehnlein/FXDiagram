@@ -21,7 +21,8 @@ Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.eclipse,
  de.fxdiagram.eclipse.behavior,
  de.fxdiagram.eclipse.commands,
- de.fxdiagram.eclipse.mapping
+ de.fxdiagram.eclipse.mapping,
+ de.fxdiagram.eclipse.selection
 Import-Package: javafx.animation;version="2.2.0",
  javafx.application;version="2.2.0",
  javafx.beans;version="2.2.0",

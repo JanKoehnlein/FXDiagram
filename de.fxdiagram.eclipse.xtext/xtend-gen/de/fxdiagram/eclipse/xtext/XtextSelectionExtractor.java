@@ -1,6 +1,6 @@
 package de.fxdiagram.eclipse.xtext;
 
-import de.fxdiagram.eclipse.commands.ISelectionExtractor;
+import de.fxdiagram.eclipse.selection.ISelectionExtractor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;

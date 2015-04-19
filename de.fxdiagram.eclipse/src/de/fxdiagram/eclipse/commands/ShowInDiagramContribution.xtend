@@ -1,6 +1,7 @@
 package de.fxdiagram.eclipse.commands
 
 import de.fxdiagram.eclipse.FXDiagramView
+import de.fxdiagram.eclipse.selection.ISelectionExtractor
 import de.fxdiagram.mapping.XDiagramConfig
 import org.eclipse.jface.action.ContributionItem
 import org.eclipse.swt.SWT

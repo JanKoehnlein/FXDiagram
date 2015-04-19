@@ -1,7 +1,7 @@
 package de.fxdiagram.pde;
 
 import com.google.common.collect.Iterators;
-import de.fxdiagram.eclipse.commands.ISelectionExtractor;
+import de.fxdiagram.eclipse.selection.ISelectionExtractor;
 import java.util.Iterator;
 import java.util.Set;
 import org.eclipse.core.resources.IProject;

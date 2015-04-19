@@ -55,7 +55,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":de.fxdiagram.eclipse.commands.ISelectionExtractor"/>
+                  <meta.attribute kind="java" basedOn=":de.fxdiagram.eclipse.selection.ISelectionExtractor"/>
                </appinfo>
             </annotation>
          </attribute>

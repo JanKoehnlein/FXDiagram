@@ -1,4 +1,4 @@
-package de.fxdiagram.eclipse.commands;
+package de.fxdiagram.eclipse.selection;
 
 import java.util.List;
 import java.util.function.Consumer;

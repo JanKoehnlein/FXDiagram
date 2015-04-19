@@ -1,6 +1,6 @@
 package de.fxdiagram.pde
 
-import de.fxdiagram.eclipse.commands.ISelectionExtractor
+import de.fxdiagram.eclipse.selection.ISelectionExtractor
 import org.eclipse.core.resources.IProject
 import org.eclipse.core.runtime.IAdaptable
 import org.eclipse.jface.viewers.IStructuredSelection

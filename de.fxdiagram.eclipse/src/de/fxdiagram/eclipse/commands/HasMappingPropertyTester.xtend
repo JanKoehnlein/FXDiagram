@@ -3,6 +3,7 @@ package de.fxdiagram.eclipse.commands
 import de.fxdiagram.mapping.XDiagramConfig
 import org.eclipse.core.expressions.PropertyTester
 import org.eclipse.ui.IWorkbenchPart
+import de.fxdiagram.eclipse.selection.ISelectionExtractor
 
 class HasMappingPropertyTester extends PropertyTester {
 	

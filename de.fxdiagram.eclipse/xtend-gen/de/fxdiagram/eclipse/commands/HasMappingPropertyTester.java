@@ -1,7 +1,7 @@
 package de.fxdiagram.eclipse.commands;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.eclipse.commands.ISelectionExtractor;
+import de.fxdiagram.eclipse.selection.ISelectionExtractor;
 import de.fxdiagram.mapping.MappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
 import org.eclipse.core.expressions.PropertyTester;

@@ -1,6 +1,6 @@
 package de.fxdiagram.xtext.xbase
 
-import de.fxdiagram.eclipse.commands.ISelectionExtractor
+import de.fxdiagram.eclipse.selection.ISelectionExtractor
 import org.eclipse.jdt.core.IJavaElement
 import org.eclipse.jdt.core.dom.PackageDeclaration
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor

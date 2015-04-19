@@ -1,6 +1,6 @@
 package de.fxdiagram.eclipse.xtext
 
-import de.fxdiagram.eclipse.commands.ISelectionExtractor
+import de.fxdiagram.eclipse.selection.ISelectionExtractor
 import org.eclipse.jface.text.ITextSelection
 import org.eclipse.ui.IWorkbenchPart
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper

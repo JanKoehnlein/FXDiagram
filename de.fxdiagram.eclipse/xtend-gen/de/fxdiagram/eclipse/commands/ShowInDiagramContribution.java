@@ -3,7 +3,7 @@ package de.fxdiagram.eclipse.commands;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.eclipse.FXDiagramView;
-import de.fxdiagram.eclipse.commands.ISelectionExtractor;
+import de.fxdiagram.eclipse.selection.ISelectionExtractor;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.MappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
