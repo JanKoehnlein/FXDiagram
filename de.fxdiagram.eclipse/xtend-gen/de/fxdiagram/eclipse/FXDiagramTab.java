@@ -228,17 +228,6 @@ public class FXDiagramTab {
     IWorkbenchPartSite _site = view.getSite();
     IWorkbenchPage _page = _site.getPage();
     _page.addPartListener(this.listener);
-    this.canvas.addKeyListener(new KeyListener() {
-      @Override
-      public void keyPressed(final KeyEvent e) {
-        InputOutput.<KeyEvent>println(e);
-      }
-      
-      @Override
-      public void keyReleased(final KeyEvent e) {
-        InputOutput.<KeyEvent>println(e);
-      }
-    });
     this.canvas.addFocusListener(new FocusListener() {
       @Override
       public void focusGained(final FocusEvent e) {

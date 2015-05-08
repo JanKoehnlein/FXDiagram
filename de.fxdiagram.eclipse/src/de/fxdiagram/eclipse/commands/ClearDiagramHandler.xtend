@@ -1,15 +1,16 @@
 package de.fxdiagram.eclipse.commands
 
+import de.fxdiagram.eclipse.FXDiagramView
 import org.eclipse.core.commands.AbstractHandler
 import org.eclipse.core.commands.ExecutionEvent
 import org.eclipse.core.commands.ExecutionException
-import org.eclipse.ui.PlatformUI
-import de.fxdiagram.eclipse.FXDiagramView
+
+import static extension org.eclipse.ui.handlers.HandlerUtil.*
 
 class ClearDiagramHandler extends AbstractHandler {
 	
 	override execute(ExecutionEvent event) throws ExecutionException {
-		val view = PlatformUI.workbench.activeWorkbenchWindow.activePage.findView("de.fxdiagram.eclipse.FXDiagramView")
+		val view = event.activePart
 		if(view instanceof FXDiagramView)
 			view.clear()
 		null
