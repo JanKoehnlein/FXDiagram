@@ -96,15 +96,6 @@ class FXDiagramTab {
 				tab.text = root.name
 		]
 		view.site.page.addPartListener(listener)
-		canvas.addKeyListener(new KeyListener {
-			override keyPressed(KeyEvent e) {
-				println(e)
-			}
-			
-			override keyReleased(KeyEvent e) {
-				println(e)
-			}
-		})
 		canvas.addFocusListener(new FocusListener {
 			override focusGained(FocusEvent e) {
 				(view.site.getService(IBindingService) as IBindingService).keyFilterEnabled = false
