@@ -238,9 +238,14 @@ public class FlipNode extends XNode {
   }
   
   public void setFront(final Node front) {
+    boolean _notEquals = (!Objects.equal(this.front, null));
+    if (_notEquals) {
+      ObservableList<Node> _children = this.pane.getChildren();
+      _children.remove(this.front);
+    }
     this.front = front;
-    ObservableList<Node> _children = this.pane.getChildren();
-    _children.add(front);
+    ObservableList<Node> _children_1 = this.pane.getChildren();
+    _children_1.add(front);
     front.setVisible(this.isCurrentFront);
   }
   
@@ -249,9 +254,14 @@ public class FlipNode extends XNode {
   }
   
   public void setBack(final Node back) {
+    boolean _notEquals = (!Objects.equal(this.back, null));
+    if (_notEquals) {
+      ObservableList<Node> _children = this.pane.getChildren();
+      _children.remove(this.back);
+    }
     this.back = back;
-    ObservableList<Node> _children = this.pane.getChildren();
-    _children.add(back);
+    ObservableList<Node> _children_1 = this.pane.getChildren();
+    _children_1.add(back);
     back.setVisible((!this.isCurrentFront));
   }
   

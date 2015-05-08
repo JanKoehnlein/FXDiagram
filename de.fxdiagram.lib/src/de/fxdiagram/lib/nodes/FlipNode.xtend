@@ -126,6 +126,8 @@ class FlipNode extends XNode {
 	}
 
 	def setFront(Node front) {
+		if(this.front != null) 
+			pane.children -= this.front
 		this.front = front
 		pane.children += front
 		front.visible = isCurrentFront
@@ -136,6 +138,8 @@ class FlipNode extends XNode {
 	}
 
 	def setBack(Node back) {
+		if(this.back != null) 
+			pane.children -= this.back
 		this.back = back
 		pane.children += back
 		back.visible = !isCurrentFront
