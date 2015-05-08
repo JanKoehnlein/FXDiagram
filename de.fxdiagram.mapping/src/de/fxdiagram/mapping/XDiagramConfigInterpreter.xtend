@@ -106,13 +106,18 @@ class XDiagramConfigInterpreter {
 	}
 
 	def <T,U> Iterable<T> select(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument) {
+		if(domainArgument == null)
+			return #[]
 		if (nodeMappingCall instanceof NodeMappingCall<?,?>) {
 			val nodeMappingCallCasted = nodeMappingCall as NodeMappingCall<T,U>
 			val nodeObject = (nodeMappingCallCasted.selector as (Object)=>T).apply(domainArgument)
-			return #[nodeObject]
+			if(nodeObject == null) 
+				return #[]
+			else
+				return #[nodeObject]
 		} else if (nodeMappingCall instanceof MultiNodeMappingCall<?,?>) {
 			val nodeMappingCallCasted = nodeMappingCall as MultiNodeMappingCall<T,U>
-			return (nodeMappingCallCasted.selector as (Object)=>Iterable<T>).apply(domainArgument)
+			return (nodeMappingCallCasted.selector as (Object)=>Iterable<T>).apply(domainArgument).filterNull
 		}
 	}
 	
@@ -126,13 +131,18 @@ class XDiagramConfigInterpreter {
 	}
 
 	def <T,U> Iterable<T> select(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument) {
+		if(domainArgument == null)
+			return #[]
 		if (connectionMappingCall instanceof ConnectionMappingCall<?,?>) {
 			val connectionMappingCasted = connectionMappingCall as ConnectionMappingCall<T,U>
 			val connectionObject = (connectionMappingCasted.selector as (Object)=>T).apply(domainArgument)
-			return #[connectionObject]
+			if(connectionObject == null)
+				return #[]
+			else 
+				return #[connectionObject]
 		} else if (connectionMappingCall instanceof MultiConnectionMappingCall<?,?>) {
 			val connectionMappingCasted = connectionMappingCall as MultiConnectionMappingCall<T,U>
-			return (connectionMappingCasted.selector as (Object)=>Iterable<T>).apply(domainArgument)
+			return (connectionMappingCasted.selector as (Object)=>Iterable<T>).apply(domainArgument).filterNull
 		}
 	}
 
@@ -162,6 +172,8 @@ class XDiagramConfigInterpreter {
 	def <T,U> XDiagram execute(DiagramMappingCall<T, U> diagramMappingCall, U domainArgument,
 		InterpreterContext context) {
 		val diagramObject = diagramMappingCall.selector.apply(domainArgument)
+		if(diagramObject == null)
+			return null
 		val result = createDiagram(diagramObject, diagramMappingCall, context)
 		return result
 	}

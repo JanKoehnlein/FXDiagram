@@ -239,16 +239,26 @@ public class XDiagramConfigInterpreter {
   }
   
   public <T extends Object, U extends Object> Iterable<T> select(final AbstractNodeMappingCall<T, U> nodeMappingCall, final U domainArgument) {
+    boolean _equals = Objects.equal(domainArgument, null);
+    if (_equals) {
+      return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList());
+    }
     if ((nodeMappingCall instanceof NodeMappingCall<?, ?>)) {
       final NodeMappingCall<T, U> nodeMappingCallCasted = ((NodeMappingCall<T, U>) nodeMappingCall);
       Function1<? super U, ? extends T> _selector = nodeMappingCallCasted.getSelector();
       final T nodeObject = ((Function1<? super Object, ? extends T>) ((Function1<? super Object, ? extends T>)_selector)).apply(domainArgument);
-      return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList(nodeObject));
+      boolean _equals_1 = Objects.equal(nodeObject, null);
+      if (_equals_1) {
+        return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList());
+      } else {
+        return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList(nodeObject));
+      }
     } else {
       if ((nodeMappingCall instanceof MultiNodeMappingCall<?, ?>)) {
         final MultiNodeMappingCall<T, U> nodeMappingCallCasted_1 = ((MultiNodeMappingCall<T, U>) nodeMappingCall);
         Function1<? super U, ? extends Iterable<? extends T>> _selector_1 = nodeMappingCallCasted_1.getSelector();
-        return ((Function1<? super Object, ? extends Iterable<T>>) ((Function1<? super Object, ? extends Iterable<T>>)_selector_1)).apply(domainArgument);
+        Iterable<T> _apply = ((Function1<? super Object, ? extends Iterable<T>>) ((Function1<? super Object, ? extends Iterable<T>>)_selector_1)).apply(domainArgument);
+        return IterableExtensions.<T>filterNull(_apply);
       }
     }
     return null;
@@ -266,16 +276,26 @@ public class XDiagramConfigInterpreter {
   }
   
   public <T extends Object, U extends Object> Iterable<T> select(final AbstractConnectionMappingCall<T, U> connectionMappingCall, final U domainArgument) {
+    boolean _equals = Objects.equal(domainArgument, null);
+    if (_equals) {
+      return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList());
+    }
     if ((connectionMappingCall instanceof ConnectionMappingCall<?, ?>)) {
       final ConnectionMappingCall<T, U> connectionMappingCasted = ((ConnectionMappingCall<T, U>) connectionMappingCall);
       Function1<? super U, ? extends T> _selector = connectionMappingCasted.getSelector();
       final T connectionObject = ((Function1<? super Object, ? extends T>) ((Function1<? super Object, ? extends T>)_selector)).apply(domainArgument);
-      return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList(connectionObject));
+      boolean _equals_1 = Objects.equal(connectionObject, null);
+      if (_equals_1) {
+        return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList());
+      } else {
+        return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList(connectionObject));
+      }
     } else {
       if ((connectionMappingCall instanceof MultiConnectionMappingCall<?, ?>)) {
         final MultiConnectionMappingCall<T, U> connectionMappingCasted_1 = ((MultiConnectionMappingCall<T, U>) connectionMappingCall);
         Function1<? super U, ? extends Iterable<? extends T>> _selector_1 = connectionMappingCasted_1.getSelector();
-        return ((Function1<? super Object, ? extends Iterable<T>>) ((Function1<? super Object, ? extends Iterable<T>>)_selector_1)).apply(domainArgument);
+        Iterable<T> _apply = ((Function1<? super Object, ? extends Iterable<T>>) ((Function1<? super Object, ? extends Iterable<T>>)_selector_1)).apply(domainArgument);
+        return IterableExtensions.<T>filterNull(_apply);
       }
     }
     return null;
@@ -354,6 +374,10 @@ public class XDiagramConfigInterpreter {
   public <T extends Object, U extends Object> XDiagram execute(final DiagramMappingCall<T, U> diagramMappingCall, final U domainArgument, final InterpreterContext context) {
     Function1<? super U, ? extends T> _selector = diagramMappingCall.getSelector();
     final T diagramObject = _selector.apply(domainArgument);
+    boolean _equals = Objects.equal(diagramObject, null);
+    if (_equals) {
+      return null;
+    }
     final XDiagram result = this.<T, U>createDiagram(diagramObject, diagramMappingCall, context);
     return result;
   }
