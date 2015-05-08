@@ -7,8 +7,8 @@
 	<parent>
 		<groupId>de.fxdiagram</groupId>
 		<artifactId>de.fxdiagram.maven</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.4.0</version>
 		<relativePath>../de.fxdiagram.maven</relativePath>
 	</parent>
-<version>0.3.1-SNAPSHOT</version>
+<version>0.4.0-SNAPSHOT</version>
 </project>
