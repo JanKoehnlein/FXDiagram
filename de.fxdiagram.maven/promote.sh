@@ -18,6 +18,9 @@ echo Replacing the standalone jars with the latest build
 pushd .
 cd $FXDIAGRAM_GIT/de.fxdiagram.base.feature/target/FXDiagram
 mv *-lib/*jar .
+for file in *.jar.jar ; do
+  mv $file ${file/.jar.jar/.jar}
+done
 rmdir *-lib
 rm -f org.eclipse.xtext*SNAPSHOT*
 rm -f org.eclipse.xtend*SNAPSHOT*
