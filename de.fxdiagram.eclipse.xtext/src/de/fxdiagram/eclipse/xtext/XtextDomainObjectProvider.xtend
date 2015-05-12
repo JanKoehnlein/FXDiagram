@@ -14,8 +14,10 @@ import org.eclipse.ui.IWorkbenchPage
 import org.eclipse.ui.PlatformUI
 import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.naming.IQualifiedNameProvider
+import org.eclipse.xtext.resource.ILocationInFileProvider
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
+import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.shared.Access
 
 import static org.eclipse.ui.IWorkbenchPage.*
@@ -68,9 +70,20 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 		val uri = elementURI.trimFragment
 		val activePage = PlatformUI.getWorkbench.activeWorkbenchWindow.activePage
 		val cachedEditor = editorCache.get(uri)?.findOn(activePage)
-		if(cachedEditor != null) {
-			if(isActivate) 
-				cachedEditor.site.page.activate(cachedEditor)				
+		if(cachedEditor instanceof XtextEditor) {
+			if(isActivate) {
+				cachedEditor.site.page.activate(cachedEditor)
+				if(isSelect) {
+					cachedEditor.document.readOnly [
+						val eObject = getEObject(elementURI.fragment)
+						val locationInFileProvider = resourceServiceProvider.get(ILocationInFileProvider)
+						val textRegion = locationInFileProvider.getSignificantTextRegion(eObject)
+						if(textRegion != null) 
+							cachedEditor.selectAndReveal(textRegion.offset, textRegion.length)
+						null
+					]
+				}				
+			}
 			return cachedEditor
 		}
 		val activePart = activePage.activePart

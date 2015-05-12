@@ -33,10 +33,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.resource.ILocationInFileProvider;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.IURIEditorOpener;
+import org.eclipse.xtext.ui.editor.XtextEditor;
+import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.shared.Access;
+import org.eclipse.xtext.util.ITextRegion;
+import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -172,12 +177,33 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
       _findOn=_get.findOn(activePage);
     }
     final IEditorPart cachedEditor = _findOn;
-    boolean _notEquals = (!Objects.equal(cachedEditor, null));
-    if (_notEquals) {
+    if ((cachedEditor instanceof XtextEditor)) {
       if (isActivate) {
-        IWorkbenchPartSite _site = cachedEditor.getSite();
+        IWorkbenchPartSite _site = ((XtextEditor)cachedEditor).getSite();
         IWorkbenchPage _page = _site.getPage();
         _page.activate(cachedEditor);
+        if (isSelect) {
+          IXtextDocument _document = ((XtextEditor)cachedEditor).getDocument();
+          final IUnitOfWork<Object, XtextResource> _function = (XtextResource it) -> {
+            Object _xblockexpression = null;
+            {
+              String _fragment = elementURI.fragment();
+              final EObject eObject = it.getEObject(_fragment);
+              IResourceServiceProvider _resourceServiceProvider = it.getResourceServiceProvider();
+              final ILocationInFileProvider locationInFileProvider = _resourceServiceProvider.<ILocationInFileProvider>get(ILocationInFileProvider.class);
+              final ITextRegion textRegion = locationInFileProvider.getSignificantTextRegion(eObject);
+              boolean _notEquals = (!Objects.equal(textRegion, null));
+              if (_notEquals) {
+                int _offset = textRegion.getOffset();
+                int _length = textRegion.getLength();
+                ((XtextEditor)cachedEditor).selectAndReveal(_offset, _length);
+              }
+              _xblockexpression = null;
+            }
+            return _xblockexpression;
+          };
+          _document.<Object>readOnly(_function);
+        }
       }
       return cachedEditor;
     }
