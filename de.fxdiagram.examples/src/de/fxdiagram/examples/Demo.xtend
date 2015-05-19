@@ -19,6 +19,7 @@ import de.fxdiagram.core.tools.actions.NavigateNextAction
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction
 import de.fxdiagram.core.tools.actions.OpenAction
 import de.fxdiagram.core.tools.actions.RedoAction
+import de.fxdiagram.core.tools.actions.RevealAction
 import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.UndoAction
@@ -31,8 +32,8 @@ import de.fxdiagram.examples.lcars.LcarsDiagram
 import de.fxdiagram.examples.lcars.LcarsModelProvider
 import de.fxdiagram.examples.login.LoginNode
 import de.fxdiagram.examples.neonsign.NeonSignNode
-import de.fxdiagram.examples.slides.democamp.DemoCampIntroSlides
-import de.fxdiagram.examples.slides.democamp.DemoCampSummarySlides
+import de.fxdiagram.examples.slides.eclipsecon.IntroductionSlideDeck
+import de.fxdiagram.examples.slides.eclipsecon.SummarySlideDeck
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.lib.media.BrowserNode
 import de.fxdiagram.lib.media.ImageNode
@@ -50,7 +51,6 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
-import de.fxdiagram.core.tools.actions.RevealAction
 
 /**
  * Application to demonstarte the capabilities of FXDiagram in standalone (non-OSGi) mode.
@@ -117,11 +117,11 @@ class Demo extends Application {
 			new UndoRedoPlayerAction
 		]
 		diagram => [
-			nodes += new DemoCampIntroSlides
-//			nodes += new IntroductionSlideDeck
-			nodes += new OpenableDiagramNode('Basic') => [
-				innerDiagram = new LazyExampleDiagram('')
-			]
+//			nodes += new DemoCampIntroSlides
+			nodes += new IntroductionSlideDeck
+//			nodes += new OpenableDiagramNode('Basic') => [
+//				innerDiagram = new LazyExampleDiagram('')
+//			]
 			nodes += new OpenableDiagramNode('JavaFX') => [
 				innerDiagram = new XDiagram => [
 					nodes += newLoginNode
@@ -136,11 +136,12 @@ class Demo extends Application {
 			nodes += openableDiagram('Xtend', newNeonSignNode)
 			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
 			nodes += openableDiagram('Ecore Explorer', newEClassNode)
-//			nodes += newLcarsDiagramNode
-//			nodes += new SimpleNode('Xtext Views')
+			nodes += new SimpleNode('Xtext Views')
 //			nodes += newGalleryDiagramNode()
-			nodes += new DemoCampSummarySlides
-//			nodes += new SummarySlideDeck
+			if(root.getDomainObjectProvider(LcarsModelProvider).canConnect)
+				nodes += newLcarsDiagramNode
+//			nodes += new DemoCampSummarySlides
+			nodes += new SummarySlideDeck
 			val deltaX = scene.width / (nodes.size + 2)
 			val deltaY = scene.height / (nodes.size + 2)
 			nodes.forEach[

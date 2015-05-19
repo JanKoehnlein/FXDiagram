@@ -59,6 +59,19 @@ public class LcarsModelProvider implements DomainObjectProvider {
     return this.lcars.findOne(_doubleArrow);
   }
   
+  public boolean canConnect() {
+    try {
+      return this.db.collectionExists("lcars");
+    } catch (final Throwable _t) {
+      if (_t instanceof Exception) {
+        final Exception e = (Exception)_t;
+        return false;
+      } else {
+        throw Exceptions.sneakyThrow(_t);
+      }
+    }
+  }
+  
   @Override
   public DomainObjectDescriptor createDescriptor(final Object it) {
     boolean _matched = false;

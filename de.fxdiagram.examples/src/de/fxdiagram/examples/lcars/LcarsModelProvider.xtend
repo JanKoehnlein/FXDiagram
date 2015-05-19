@@ -35,6 +35,14 @@ class LcarsModelProvider implements DomainObjectProvider{
 		])
 	}
 	
+	def canConnect() {
+		try {
+			return db.collectionExists('lcars')
+		} catch(Exception e) {
+			return false
+		}
+	}
+	
 	override createDescriptor(Object it) {
 		switch it {
 			DBObject: return createLcarsEntryDescriptor
