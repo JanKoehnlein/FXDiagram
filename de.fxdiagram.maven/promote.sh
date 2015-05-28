@@ -24,6 +24,8 @@ done
 rmdir *-lib
 rm -f org.eclipse.xtext*SNAPSHOT*
 rm -f org.eclipse.xtend*SNAPSHOT*
+rm $FXDIAGRAM_GIT/de.fxdiagram.idea/libs/*
+cp *.jar $FXDIAGRAM_GIT/de.fxdiagram.idea/libs
 cp ../../run-demo.sh .
 cp ../../run-demo.bat .
 cd ..
