@@ -1,0 +1,54 @@
+<idea-plugin version="2">
+  <id>de.fxdiagram.idea</id>
+  <name>FXDIagram IDEA plug-in</name>
+  <version>0.5.0</version>
+  <vendor email="jan.koehnlein@itemis.de" url="http://http://jankoehnlein.github.io/FXDiagram/">FXDiagram</vendor>
+
+  <description><![CDATA[
+      FXDiagram integration into Intellij IDEA
+    ]]></description>
+
+  <change-notes><![CDATA[
+    ]]>
+  </change-notes>
+
+  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="131"/>
+
+  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <projectService serviceInterface="de.fxdiagram.idea.FXDiagramPane"
+                    serviceImplementation="de.fxdiagram.idea.FXDiagramPane"/>
+    <toolWindow id="FXDiagram" icon="/de/fxdiagram/idea/FXDiagram.png" anchor="right" factoryClass="de.fxdiagram.idea.FXDiagramToolWindowFactory"/>
+  </extensions>
+
+  <extensions defaultExtensionNs="de.fxdiagram.idea">
+    <fxDiagramConfig implementation="de.fxdiagram.idea.classdiagram.IdeaClassDiagramConfig"/>
+  </extensions>
+
+  <extensionPoints>
+    <extensionPoint qualifiedName="de.fxdiagram.idea.fxDiagramConfig" interface="de.fxdiagram.mapping.XDiagramConfig"/>
+  </extensionPoints>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+    <group class="de.fxdiagram.idea.ShowInFXDiagramGroup"
+           id="FXDiagram" popup="true" text="Show in FXDiagram as..."
+           icon="/de/fxdiagram/idea/FXDiagram.png">
+      <add-to-group anchor="last" group-id="EditorPopupMenu"/>
+    </group>
+  </actions>
+
+</idea-plugin>
