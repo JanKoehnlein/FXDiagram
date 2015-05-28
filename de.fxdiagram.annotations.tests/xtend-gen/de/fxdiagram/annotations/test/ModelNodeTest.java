@@ -1,7 +1,19 @@
 package de.fxdiagram.annotations.test;
 
+import com.google.common.collect.Iterables;
+import de.fxdiagram.annotations.test.Modeltest4;
+import de.fxdiagram.core.model.ModelLoad;
+import de.fxdiagram.core.model.ModelSave;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Collections;
+import javafx.collections.ObservableList;
 import org.eclipse.xtend.core.compiler.batch.XtendCompilerTester;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.junit.Assert;
 import org.junit.Test;
 
 @SuppressWarnings("all")
@@ -712,5 +724,27 @@ public class ModelNodeTest {
     Class<? extends ModelNodeTest> _class = this.getClass();
     final XtendCompilerTester compilerTester = XtendCompilerTester.newXtendCompilerTester(_class);
     compilerTester.assertCompilesTo(source, target);
+  }
+  
+  @Test
+  public void saveAndLoad() {
+    final StringWriter out = new StringWriter();
+    final ModelSave save = new ModelSave();
+    Modeltest4 _modeltest4 = new Modeltest4();
+    final Procedure1<Modeltest4> _function = (Modeltest4 it) -> {
+      ObservableList<String> _fqn = it.getFqn();
+      Iterables.<String>addAll(_fqn, Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList("foo", "bar", "baz")));
+    };
+    final Modeltest4 saveModel = ObjectExtensions.<Modeltest4>operator_doubleArrow(_modeltest4, _function);
+    save.save(saveModel, out);
+    final ModelLoad load = new ModelLoad();
+    String _string = out.toString();
+    final StringReader in = new StringReader(_string);
+    final Object loadModel = load.load(in);
+    Assert.assertTrue((loadModel instanceof Modeltest4));
+    final Modeltest4 loadModel2 = ((Modeltest4) loadModel);
+    ObservableList<String> _fqn = saveModel.getFqn();
+    ObservableList<String> _fqn_1 = loadModel2.getFqn();
+    Assert.assertEquals(_fqn, _fqn_1);
   }
 }

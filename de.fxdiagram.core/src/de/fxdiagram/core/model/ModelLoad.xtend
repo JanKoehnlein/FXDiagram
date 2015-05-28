@@ -98,7 +98,7 @@ class ModelLoad {
 				val jsonValue = jsonValues.get(i)
 				switch componentType {
 					case String: 
-						(property as List<String>) += (jsonValue as JsonString).toString
+						(property as List<String>) += (jsonValue as JsonString).string
 					case Double: 
 						(property as List<Double>) += (jsonValue as JsonNumber).doubleValue
 					case Float: 

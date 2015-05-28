@@ -35,3 +35,9 @@ class Modeltest2 {
 @ModelNode 
 class Modeltest3 extends XNode {
 }  
+
+@ModelNode('fqn') 
+class Modeltest4 {
+	@FxProperty ObservableList<String> fqn = FXCollections.observableArrayList
+} 
+

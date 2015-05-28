@@ -2,6 +2,11 @@ package de.fxdiagram.annotations.test
 
 import org.eclipse.xtend.core.compiler.batch.XtendCompilerTester
 import org.junit.Test
+import de.fxdiagram.core.model.ModelSave
+import java.io.StringWriter
+import de.fxdiagram.core.model.ModelLoad
+import java.io.StringReader
+import static org.junit.Assert.*
 
 class ModelNodeTest {
 	@Test
@@ -338,5 +343,22 @@ class ModelNodeTest {
 	protected def assertCompilesTo(CharSequence source, CharSequence target) {
 		val compilerTester = XtendCompilerTester.newXtendCompilerTester(class)
 		compilerTester.assertCompilesTo(source, target)
+	}
+	
+	
+	@Test 
+	def void saveAndLoad() {
+		val out = new StringWriter
+		val save = new ModelSave
+		val saveModel = new Modeltest4 => [
+			fqn += #['foo', 'bar', 'baz']
+		]
+		save.save(saveModel, out)
+		val load= new ModelLoad
+		val in = new StringReader(out.toString)
+		val loadModel = load.load(in)
+		assertTrue(loadModel instanceof Modeltest4)
+		val loadModel2 = loadModel as Modeltest4 
+		assertEquals(saveModel.fqn, loadModel2.fqn)
 	}
 }

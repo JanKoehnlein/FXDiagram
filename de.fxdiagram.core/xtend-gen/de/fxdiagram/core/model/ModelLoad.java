@@ -213,7 +213,7 @@ public class ModelLoad {
             if (!_matched) {
               if (Objects.equal(componentType, String.class)) {
                 _matched=true;
-                String _string = ((JsonString) jsonValue).toString();
+                String _string = ((JsonString) jsonValue).getString();
                 ((List<String>) property).add(_string);
               }
             }
