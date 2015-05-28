@@ -68,18 +68,29 @@ public interface XDiagramConfig {
             config.setID(id);
             String _attribute = it.getAttribute("label");
             config.setLabel(_attribute);
-            boolean _containsKey = this.configs.containsKey(id);
-            if (_containsKey) {
-              XDiagramConfig.Registry.LOG.severe(("Duplicate fxDiagramConfig id=" + id));
-            } else {
-              this.configs.put(id, config);
-            }
+            this.addConfig(config);
           } catch (Throwable _e) {
             throw Exceptions.sneakyThrow(_e);
           }
         };
         ((List<IConfigurationElement>)Conversions.doWrapArray(_configurationElementsFor)).forEach(_function);
       }
+    }
+    
+    public XDiagramConfig addConfig(final XDiagramConfig config) {
+      XDiagramConfig _xblockexpression = null;
+      {
+        final String id = config.getID();
+        XDiagramConfig _xifexpression = null;
+        boolean _containsKey = this.configs.containsKey(id);
+        if (_containsKey) {
+          XDiagramConfig.Registry.LOG.severe(("Duplicate fxDiagramConfig id=" + id));
+        } else {
+          _xifexpression = this.configs.put(id, config);
+        }
+        _xblockexpression = _xifexpression;
+      }
+      return _xblockexpression;
     }
     
     public XDiagramConfig getConfigByID(final String configID) {

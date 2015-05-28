@@ -66,12 +66,17 @@ interface XDiagramConfig {
 					val id = getAttribute('id')
 					config.setID(id)
 					config.setLabel(getAttribute('label'))
-					if(configs.containsKey(id))
-						LOG.severe("Duplicate fxDiagramConfig id=" + id)
-					else
-						configs.put(id, config)
+					addConfig(config)
 				]
 			}
+		}
+		
+		def addConfig(XDiagramConfig config) {
+			val id = config.ID
+			if(configs.containsKey(id))
+				LOG.severe("Duplicate fxDiagramConfig id=" + id)
+			else
+				configs.put(id, config)	
 		}
 		
 		def XDiagramConfig getConfigByID(String configID) {
