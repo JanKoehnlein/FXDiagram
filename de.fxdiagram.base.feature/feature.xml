@@ -2,7 +2,7 @@
 <feature
       id="de.fxdiagram.base.feature"
       label="FXDiagram Base Feature"
-      version="0.4.0">
+      version="0.4.2.qualifier">
 
    <description>
       FXDiagram - A diagram framework based on JavaFX. This feature contains the non-equinox functionality.
