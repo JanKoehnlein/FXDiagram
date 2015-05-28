@@ -11,13 +11,13 @@
       <root url="jar://$PROJECT_DIR$/libs/de.cau.cs.kieler.kiml.graphviz.dot-0.7.1.201505281013.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/de.cau.cs.kieler.kiml.graphviz.layouter-0.6.8.201505281013.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/de.cau.cs.kieler.kiml.service-0.7.2.201505281013.jar!/" />
-      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.annotations-0.4.2-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.core-0.4.2-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.examples-0.4.2-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.external-0.4.2-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.lib-0.4.2-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.mapping-0.4.2-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.noeclipse-0.4.2-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.annotations-0.5.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.core-0.5.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.examples-0.5.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.external-0.5.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.lib-0.5.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.mapping-0.5.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/de.fxdiagram.noeclipse-0.5.0-SNAPSHOT.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/javax.inject-1.0.0.v20091030.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/javax.json-1.0.4.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/mongo-java-driver-2.9.3.jar!/" />
@@ -26,10 +26,13 @@
       <root url="jar://$PROJECT_DIR$/libs/org.eclipse.emf.common-2.10.1.v20150123-0348.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/org.eclipse.emf.ecore-2.10.2.v20150123-0348.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/org.eclipse.emf.ecore.xmi-2.10.2.v20150123-0348.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/org.eclipse.xtend.lib-2.8.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/org.eclipse.xtend.lib-2.9.0.v20150428-0819.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/org.eclipse.xtend.lib.macro-2.8.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/org.eclipse.xtend.lib.macro-2.9.0.v20150428-0819.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/org.eclipse.xtext-2.9.0.v20150428-0819.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/org.eclipse.xtext.util-2.9.0.v20150428-0819.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/org.eclipse.xtext.xbase.lib-2.8.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/org.eclipse.xtext.xbase.lib-2.9.0.v20150428-0819.jar!/" />
     </CLASSES>
     <JAVADOC />
