@@ -88,6 +88,8 @@
         name="org.eclipse.fx.ide.feature.feature.group"/>
     <requirement
         name="org.eclipse.egit.feature.group"/>
+    <requirement
+        name="org.eclipse.pde.feature.group"/>
     <repository
         url="${xtext.composite}"/>
     <repository
