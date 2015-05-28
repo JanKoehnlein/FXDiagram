@@ -1,8 +1,8 @@
 package de.fxdiagram.eclipse.mapping
 
-import de.fxdiagram.mapping.AbstractDiagramConfig
 import de.fxdiagram.core.XShape
-import de.fxdiagram.eclipse.behavior.OpenElementInEditorBehavior
+import de.fxdiagram.mapping.AbstractDiagramConfig
+import de.fxdiagram.mapping.behavior.OpenElementInEditorBehavior
 
 abstract class AbstractEclipseDiagramConfig extends AbstractDiagramConfig {
 	

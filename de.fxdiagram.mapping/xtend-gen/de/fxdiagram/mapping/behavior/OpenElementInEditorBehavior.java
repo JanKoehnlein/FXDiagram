@@ -1,4 +1,4 @@
-package de.fxdiagram.eclipse.behavior;
+package de.fxdiagram.mapping.behavior;
 
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XNode;
