@@ -185,6 +185,8 @@
           name="de.fxdiagram.docs"/>
       <requirement
           name="de.fxdiagram.eclipse.updatesite"/>
+      <requirement
+          name="org.eclipse.jdt.feature.group"/>
       <sourceLocator
           rootFolder="${fxdiagram.git.clone.location}"/>
       <sourceLocator
