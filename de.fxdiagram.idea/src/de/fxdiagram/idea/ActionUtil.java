@@ -16,7 +16,7 @@ public class ActionUtil {
     public static PsiElement getPsiElement(AnActionEvent event) {
         Editor editor = getEditor(event);
         if (editor == null)
-            return null;
+            return LangDataKeys.PSI_ELEMENT.getData(event.getDataContext());
         final PsiFile psiFile = getPsiFile(event);
         if (psiFile == null)
             return null;

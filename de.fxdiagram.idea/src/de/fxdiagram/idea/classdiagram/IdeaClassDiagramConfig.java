@@ -69,9 +69,9 @@ public class IdeaClassDiagramConfig extends AbstractPsiDiagramConfig {
     @Override
     protected <ARG> void entryCalls(ARG arg, MappingAcceptor<ARG> mappingAcceptor) {
         if(arg instanceof PsiElement) {
-            PsiClass psiClass = PsiTreeUtil.getParentOfType((PsiElement)arg, PsiClass.class);
+            PsiClass psiClass = PsiTreeUtil.getParentOfType((PsiElement)arg, PsiClass.class, false);
             if(psiClass != null)
-                mappingAcceptor.add(classNode, e -> PsiTreeUtil.getParentOfType((PsiElement)e, PsiClass.class));
+                mappingAcceptor.add(classNode, e -> PsiTreeUtil.getParentOfType((PsiElement)e, PsiClass.class, false));
         }
     }
 

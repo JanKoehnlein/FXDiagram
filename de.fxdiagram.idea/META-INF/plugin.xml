@@ -48,6 +48,8 @@
            id="FXDiagram" popup="true" text="Show in FXDiagram as..."
            icon="/de/fxdiagram/idea/FXDiagram.png">
       <add-to-group anchor="last" group-id="EditorPopupMenu"/>
+      <add-to-group anchor="last" group-id="ProjectViewPopupMenu"/>
+      <add-to-group anchor="last" group-id="StructureViewPopupMenu"/>
     </group>
   </actions>
 
