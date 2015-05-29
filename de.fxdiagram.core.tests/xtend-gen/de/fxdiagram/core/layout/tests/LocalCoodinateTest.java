@@ -111,9 +111,4 @@ public class LocalCoodinateTest {
     Bounds _boundsInLocal = pane.getBoundsInLocal();
     InputOutput.<Bounds>println(_boundsInLocal);
   }
-  
-  @Test
-  public Object testBoundInLocal() {
-    return null;
-  }
 }

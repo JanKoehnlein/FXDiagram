@@ -163,7 +163,7 @@ class UnderstandigLayout extends Application {
 
 		// layout centers the children around (0, 0)
 		assertEquals(-1, stackPane.children.get(0).layoutX, EPS)
-		assertEquals(-0.5, stackPane.children.get(1).layoutX, EPS)
+		assertEquals(0, stackPane.children.get(1).layoutX, EPS)
 		assertEquals(2, stackPane.minWidth(-1), EPS)
 		assertEquals(2, stackPane.minHeight(-1), EPS)
 		assertEquals(2, stackPane.prefWidth(-1), EPS)

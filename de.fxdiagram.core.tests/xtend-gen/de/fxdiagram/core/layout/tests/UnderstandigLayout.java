@@ -232,7 +232,7 @@ public class UnderstandigLayout extends Application {
     ObservableList<Node> _children_3 = stackPane.getChildren();
     Node _get_3 = _children_3.get(1);
     double _layoutX_3 = _get_3.getLayoutX();
-    Assert.assertEquals((-0.5), _layoutX_3, UnderstandigLayout.EPS);
+    Assert.assertEquals(0, _layoutX_3, UnderstandigLayout.EPS);
     double _minWidth_1 = stackPane.minWidth((-1));
     Assert.assertEquals(2, _minWidth_1, UnderstandigLayout.EPS);
     double _minHeight_1 = stackPane.minHeight((-1));

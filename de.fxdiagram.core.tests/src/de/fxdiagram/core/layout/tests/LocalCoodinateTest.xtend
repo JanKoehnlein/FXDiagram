@@ -71,11 +71,6 @@ class LocalCoodinateTest {
 		
 	}
 	
-	@Test 
-	def testBoundInLocal() {
-		
-	}
-	
 }
 
 class TestPane extends Pane {

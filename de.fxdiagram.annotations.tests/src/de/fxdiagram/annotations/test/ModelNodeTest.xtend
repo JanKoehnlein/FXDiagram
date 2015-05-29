@@ -257,7 +257,7 @@ class ModelNodeTest {
 		''', '''
 			MULTIPLE FILES WERE GENERATED
 
-			File 1 : Bar.java
+			File 1 : /myProject/xtend-gen/Bar.java
 			
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
@@ -270,7 +270,7 @@ class ModelNodeTest {
 			  }
 			}
 			
-			File 2 : Foo.java
+			File 2 : /myProject/xtend-gen/Foo.java
 			
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
@@ -307,7 +307,7 @@ class ModelNodeTest {
 		''', '''
 			MULTIPLE FILES WERE GENERATED
 
-			File 1 : Bar.java
+			File 1 : /myProject/xtend-gen/Bar.java
 			
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
@@ -320,7 +320,7 @@ class ModelNodeTest {
 			  }
 			}
 			
-			File 2 : Foo.java
+			File 2 : /myProject/xtend-gen/Foo.java
 			
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;

@@ -565,7 +565,7 @@ public class ModelNodeTest {
     _builder_1.append("MULTIPLE FILES WERE GENERATED");
     _builder_1.newLine();
     _builder_1.newLine();
-    _builder_1.append("File 1 : Bar.java");
+    _builder_1.append("File 1 : /myProject/xtend-gen/Bar.java");
     _builder_1.newLine();
     _builder_1.newLine();
     _builder_1.append("import de.fxdiagram.annotations.properties.ModelNode;");
@@ -591,7 +591,7 @@ public class ModelNodeTest {
     _builder_1.append("}");
     _builder_1.newLine();
     _builder_1.newLine();
-    _builder_1.append("File 2 : Foo.java");
+    _builder_1.append("File 2 : /myProject/xtend-gen/Foo.java");
     _builder_1.newLine();
     _builder_1.newLine();
     _builder_1.append("import de.fxdiagram.annotations.properties.ModelNode;");
@@ -657,7 +657,7 @@ public class ModelNodeTest {
     _builder_1.append("MULTIPLE FILES WERE GENERATED");
     _builder_1.newLine();
     _builder_1.newLine();
-    _builder_1.append("File 1 : Bar.java");
+    _builder_1.append("File 1 : /myProject/xtend-gen/Bar.java");
     _builder_1.newLine();
     _builder_1.newLine();
     _builder_1.append("import de.fxdiagram.annotations.properties.ModelNode;");
@@ -682,7 +682,7 @@ public class ModelNodeTest {
     _builder_1.append("}");
     _builder_1.newLine();
     _builder_1.newLine();
-    _builder_1.append("File 2 : Foo.java");
+    _builder_1.append("File 2 : /myProject/xtend-gen/Foo.java");
     _builder_1.newLine();
     _builder_1.newLine();
     _builder_1.append("import de.fxdiagram.annotations.properties.ModelNode;");
