@@ -1,0 +1,25 @@
+# Site settings
+encoding: UTF-8
+exclude:
+  - Gemfile
+
+# Build settings
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  #auto_ids:       true
+  footnote_nr:    1
+  entity_output:  as_char
+  toc_levels:     1..4
+  smart_quotes:   lsquo,rsquo,ldquo,rdquo
+  enable_coderay: false
+
+  coderay:
+    coderay_wrap:              div
+    coderay_line_numbers:      inline
+    coderay_line_number_start: 1
+    coderay_tab_width:         2
+    coderay_bold_every:        10
+    coderay_css:               style
+

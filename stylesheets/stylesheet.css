@@ -67,26 +67,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
 }
 
 h2 {
-  padding-bottom: 10px;
-  font-size: 32px;
-  background: url('../images/bg_hr.png') repeat-x bottom;
-}
-
-h3 {
   font-size: 24px;
 }
 
+h3 {
+  font-size: 20px;
+}
+
 h4 {
-  font-size: 21px;
+  font-size: 18px;
 }
 
 h5 {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 h6 {
@@ -179,7 +177,7 @@ pre {
 
 code {
   padding: 3px;
-  margin: 0 3px;
+  margin: 0 0px;
   box-shadow: 0 0 10px rgba(0,0,0,.1);
 }
 
@@ -269,6 +267,12 @@ Full-Width Styles
   max-width: 640px;
   padding: 20px 10px;
   margin: 0 auto;
+}
+
+.toc {
+  position: absolute;
+  padding: 30px 10px;
+  list-style-type: none;
 }
 
 #forkme_banner {
@@ -361,13 +365,26 @@ Full-Width Styles
 }
 
 #main_content {
-  padding-top: 40px;
+	padding: 40px 0;
 }
 
 #footer_wrap {
   background: #212121;
 }
 
+
+@media screen and (max-width: 900px) {
+	.toc {
+		position: relative;
+ 		max-width: 640px;
+  		padding: 20px 0 0 0;
+  		margin: 0 auto;
+	}
+	
+	#main_content {
+		padding: 0 0;
+	}
+}
 
 
 /*******************************************************************************
@@ -397,11 +414,11 @@ Small Device Styles
   }
 
   h2 {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   h3 {
-    font-size: 21px;
+    font-size: 20px;
   }
 
   h4 {
@@ -413,7 +430,7 @@ Small Device Styles
   }
 
   h6 {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   code, pre {
