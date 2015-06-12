@@ -5,4 +5,5 @@
 	<li><a href="ide-setup.html">IDE Setup</a></li>	
 	<li><a href="tutorial-hla.html">Tutorial</a></li>	
 	<li><a href="concepts.html">Concepts</a></li>	
+	<li><a href="resources.html">Resources</a></li>	
 </ul>

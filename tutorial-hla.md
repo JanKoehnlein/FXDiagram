@@ -4,18 +4,18 @@ title: Tutorial
 ---
 # {{page.title}} {#diagram-config}
 
-This section guides you to create your own diagram editor with FXDiagram using the high-level mapping API. Both, the Eclipse integration and the IDEA integration, offer an extension point to register your mapping configuration and pick it up automatically. That is, in most cases all you have to do to get a working diagram tool is to write a mapping config.
+This section guides you to create a FXDiagram view for your own models using the high-level mapping API. Both, the Eclipse integration and the IDEA integration, offer an extension point to register your mapping configuration and pick it up automatically. That is, in most cases all you have to do to get a working diagram tool is to write a mapping config.
 
 
 ### Diagram Configuration
 
-A diagram configuration is a class that must implement the `XDiagramConfig` interface. It serves three purposes:
+A diagram configuration serves three purposes:
 
 1. Define how domain objects are mapped to nodes, edges and diagrams.
 2. Define on which domain objects a *Show in FXDiagram* action is available.
 3. Define how the domain objects can be accessed and serialized.
 
-Diagram configs can be most conveniently defined in Xtend, but Java is of course possible as well. This is how a statemachine diagram configuration could look like
+It is specified in a class extending the `XDiagramConfig` interface. Diagram configs can be most conveniently implemented in Xtend, but Java is of course possible as well. This is how a statemachine diagram configuration could look like
 
 ```xtend
 class StatemachineDiagramConfig extends AbstractDiagramConfig {
