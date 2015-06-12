@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Tutorial
+title: Mapping API
 ---
 # {{page.title}} {#diagram-config}
 

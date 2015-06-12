@@ -272,6 +272,7 @@ Full-Width Styles
 .toc {
   position: absolute;
   padding: 30px 10px;
+  width: 100%;
   list-style-type: none;
 }
 
