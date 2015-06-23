@@ -359,7 +359,7 @@ public class FXDiagramTab {
         interpreterContext.executeCommands(_commandStack_1);
       } else {
         if ((mappingCall instanceof ConnectionMappingCall<?, ?>)) {
-          AbstractMapping<?> _mapping = mappingCall.getMapping();
+          AbstractMapping<?> _mapping = ((ConnectionMappingCall<?, ?>)mappingCall).getMapping();
           final ConnectionMapping<?> mapping = ((ConnectionMapping<?>) _mapping);
           boolean _and = false;
           NodeMappingCall<?, ?> _source = mapping.getSource();
@@ -423,7 +423,7 @@ public class FXDiagramTab {
         it.operator_add(_createLayoutCommand);
       }
       final Function1<XShape, Boolean> _function_3 = (XShape it_1) -> {
-        return Boolean.valueOf(Objects.equal(it_1, centerShape));
+        return Boolean.valueOf(Objects.equal(it_1, ((XShape)centerShape)));
       };
       SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_3);
       it.operator_add(_selectAndRevealCommand);
