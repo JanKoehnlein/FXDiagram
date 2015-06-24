@@ -134,7 +134,7 @@ public class SelectAndRevealCommand extends ViewportCommand {
       ObservableList<XConnection> _connections = _diagram_1.getConnections();
       Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
       final Consumer<XShape> _function = (XShape it) -> {
-        boolean _contains = this.originalSelection.contains(((XShape)it));
+        boolean _contains = this.originalSelection.contains(it);
         ((XShape)it).setSelected(_contains);
       };
       _plus.forEach(_function);
