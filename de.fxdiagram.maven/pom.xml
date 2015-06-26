@@ -41,14 +41,14 @@
 			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/${xtext-version}</url>
 		</repository>
 		<repository>
-			<id>luna</id>
+			<id>mars</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/luna/201502271000</url>
+			<url>http://download.eclipse.org/releases/mars</url>
 		</repository>
 		<repository>
 			<id>efxclipse-repo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/efxclipse/updates-released/1.2.0/site</url>
+			<url>http://download.eclipse.org/efxclipse/runtime-released/2.0.0/site</url>
 		</repository>
 		<repository>
 			<id>kieler</id>
