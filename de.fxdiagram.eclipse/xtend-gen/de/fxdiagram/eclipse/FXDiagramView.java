@@ -37,6 +37,8 @@ public class FXDiagramView extends ViewPart {
   
   private List<Pair<EventType<?>, EventHandler<?>>> globalEventHandlers = CollectionLiterals.<Pair<EventType<?>, EventHandler<?>>>newArrayList();
   
+  private boolean linkWithEditor;
+  
   @Override
   public void createPartControl(final Composite parent) {
     CTabFolder _cTabFolder = new CTabFolder(parent, (SWT.BORDER + SWT.BOTTOM));
@@ -64,6 +66,15 @@ public class FXDiagramView extends ViewPart {
       _xblockexpression = diagramTab;
     }
     return _xblockexpression;
+  }
+  
+  public void setLinkWithEditor(final boolean linkWithEditor) {
+    this.linkWithEditor = linkWithEditor;
+    Collection<FXDiagramTab> _values = this.tab2content.values();
+    final Consumer<FXDiagramTab> _function = (FXDiagramTab it) -> {
+      it.setLinkWithEditor(linkWithEditor);
+    };
+    _values.forEach(_function);
   }
   
   private <T extends Event> void addEventHandlerWrapper(final XRoot root, final EventType<T> eventType, final EventHandler<?> handler) {

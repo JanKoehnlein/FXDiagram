@@ -3,14 +3,12 @@ package de.fxdiagram.pde
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor
-import org.apache.log4j.Logger
+import java.util.NoSuchElementException
 
 import static de.fxdiagram.pde.BundleUtil.*
 
 @ModelNode('kind')
 class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<BundleDependency> {
-
-	static val LOG = Logger.getLogger(BundleDependencyDescriptor)
 
 	@FxProperty(readOnly = true) BundleDependency.Kind kind
 
@@ -23,12 +21,9 @@ class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<BundleD
 
 	override <U> withDomainObject((BundleDependency)=>U lambda) {
 		val dependency = findBundleDependency(kind, ownerSymbolicName, ownerVersion, importSymbolicName, importVersionRange)
-		if(dependency != null) {
-			lambda.apply(dependency)
-		} else {
-			LOG.warn('Invalid descriptor ' + this)
-			null
-		}
+		if(dependency == null)
+			throw new NoSuchElementException('Bundle dependency from ' + ownerSymbolicName + ' to ' + importSymbolicName + ' not found')
+		lambda.apply(dependency)
 	}
 
 	def getOwnerSymbolicName() {

@@ -65,7 +65,7 @@ class XNode extends XShape {
  	def getName() {
 		val name = domainObject?.name
  		if(name == null)
- 			LOG.severe("XNodes key is null")
+ 			LOG.severe("XNode's name is null")
  		name
  	}
  		

@@ -28,6 +28,24 @@
             id="de.fxdiagram.eclipse.NewDiagram"
             name="New Diagram">
       </command>
+      <command
+            categoryId="org.eclipse.ui.category.views"
+            defaultHandler="de.fxdiagram.eclipse.commands.UpdateDiagramHandler"
+            description="Update the current FXDiagram"
+            id="de.fxdiagram.eclipse.UpdateDiagram"
+            name="Update Diagram">
+      </command>
+      <command
+            categoryId="org.eclipse.ui.category.views"
+            defaultHandler="de.fxdiagram.eclipse.commands.LinkWithEditorHandler"
+            description="Link with Editor"
+            id="de.fxdiagram.eclipse.LinkWithEditor"
+        	name="Link FXDiagram with editor">
+			<state
+				class="org.eclipse.ui.handlers.RegistryToggleState:false"
+				id="org.eclipse.ui.commands.toggleState">
+			</state>
+      </command>
    </extension>
    <extension point="org.eclipse.ui.menus">
         <menuContribution
@@ -68,6 +86,19 @@
                icon="icons/add.png"
                label="New Diagram"
                style="push">
+         </command>
+         <command
+               commandId="de.fxdiagram.eclipse.UpdateDiagram"
+               icon="icons/update.gif"
+               label="Refresh FXDiagram from model"
+               style="push">
+         </command>
+         <command
+               commandId="de.fxdiagram.eclipse.LinkWithEditor"
+               icon="icons/copycont_r_co.gif"
+               disabledIcon="icons/copycont_r_co_disabled.gif"
+               label="Link with editor"
+               style="toggle">
          </command>
       </menuContribution>
    </extension>

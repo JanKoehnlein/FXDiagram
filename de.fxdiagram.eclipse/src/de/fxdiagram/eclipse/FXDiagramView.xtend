@@ -28,6 +28,8 @@ class FXDiagramView extends ViewPart {
 	
 	List<Pair<EventType<?>, EventHandler<?>>> globalEventHandlers = newArrayList
 	
+	boolean linkWithEditor
+	
 	override createPartControl(Composite parent) {
 		tabFolder = new CTabFolder(parent, SWT.BORDER + SWT.BOTTOM)
 		tabFolder.background = parent.display.getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND)
@@ -41,6 +43,11 @@ class FXDiagramView extends ViewPart {
 			diagramTab.root.addEventHandlerWrapper(key as EventType<? extends Event>, value)
 		]
 		diagramTab
+	}
+	
+	def void setLinkWithEditor(boolean linkWithEditor) {
+		this.linkWithEditor = linkWithEditor
+		tab2content.values.forEach[it.linkWithEditor = linkWithEditor]
 	}
 	
 	private def <T extends Event> addEventHandlerWrapper(XRoot root, EventType<T> eventType, EventHandler<?> handler) {

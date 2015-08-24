@@ -1,168 +1,35 @@
 package de.fxdiagram.xtext.xbase
 
 import com.google.inject.Inject
-import de.fxdiagram.annotations.properties.FxProperty
-import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
-import de.fxdiagram.lib.animations.Inflator
-import de.fxdiagram.lib.nodes.RectangleBorderPane
-import de.fxdiagram.mapping.shapes.BaseFlipNode
-import javafx.beans.property.BooleanProperty
-import javafx.geometry.Insets
-import javafx.geometry.Pos
-import javafx.geometry.VPos
-import javafx.scene.control.CheckBox
-import javafx.scene.control.ColorPicker
-import javafx.scene.control.Label
-import javafx.scene.layout.VBox
-import javafx.scene.paint.Color
-import javafx.scene.text.Font
-import javafx.scene.text.FontWeight
-import javafx.scene.text.Text
-import org.eclipse.emf.common.util.URI
+import de.fxdiagram.lib.nodes.ClassModel
+import de.fxdiagram.mapping.shapes.BaseClassNode
 import org.eclipse.xtext.common.types.JvmDeclaredType
-import org.eclipse.xtext.xbase.validation.UIStrings
 
-import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
+import static extension org.eclipse.emf.common.util.URI.*
 
-@ModelNode("showPackage", "showAttributes", "showMethods", "bgColor")
-class JvmTypeNode extends BaseFlipNode<JvmDeclaredType> {
+class JvmTypeNode extends BaseClassNode<JvmDeclaredType> {
 
-	@FxProperty boolean showPackage = false
-	@FxProperty boolean showAttributes = true
-	@FxProperty boolean showMethods = true
-	@FxProperty Color bgColor = Color.web('#ffe6cc')
-	
 	@Inject extension JvmDomainUtil 
-	@Inject extension UIStrings
-	
-	CheckBox packageBox
-	CheckBox attributesBox
-	CheckBox methodsBox
-	
-	VBox contentArea
-	VBox packageLabel
-	VBox attributeCompartment
-	VBox methodCompartment
-	
-	Inflator inflator
 	
 	new(JvmEObjectDescriptor<JvmDeclaredType> descriptor) {
 		super(descriptor)
 	}
 	
-	override JvmEObjectDescriptor<JvmDeclaredType> getDomainObject() {
-		super.getDomainObject as JvmEObjectDescriptor<JvmDeclaredType>
-	}
-	
-	override createNode() {
-		val pane = super.createNode
-		front = new RectangleBorderPane => [
-			tooltip = 'Right-click to configure'
-			backgroundPaintProperty.bind(bgColorProperty)
-			children += contentArea = new VBox => [
-				padding = new Insets(10, 20, 10, 20)
-				children += new VBox => [
-					alignment = Pos.CENTER
-					children += new Text => [
-						textOrigin = VPos.TOP
-						text = name
-						font = Font.font(font.family, FontWeight.BOLD, font.size * 1.1)
-					]
+	override inferClassModel() {
+		domainObject.withDomainObject[ type |
+			new ClassModel => [
+				fileName = (domainObject as JvmEObjectDescriptor<JvmDeclaredType>)
+					.uri.createURI.lastSegment
+				namespace = type.packageName
+				name = type.simpleName
+				attributes += type.attributes.map [
+					simpleName + ': ' + type.simpleName
+				]
+				operations += type.methods.map [
+					simpleName + '(): ' + returnType.simpleName
 				]
 			]
 		]
-		back = new RectangleBorderPane => [
-			tooltip = 'Right-click to show node'
-			backgroundPaintProperty.bind(bgColorProperty)
-			children += new VBox => [
-				padding = new Insets(10, 20, 10, 20)
-				spacing = 5
-				children += new Label(URI.createURI(domainObject.uri).lastSegment)
-				children += packageBox = new CheckBox('Package')
-				children += attributesBox = new CheckBox('Attributes')
-				children += methodsBox = new CheckBox('Methods')
-				children += new ColorPicker => [ 
-					valueProperty.bindBidirectional(bgColorProperty)
-				]
-			]			
-		]
-		inflator = new Inflator(this, contentArea)
-		packageLabel = new VBox => [
-			alignment = Pos.CENTER
-			children += new Text => [
-				textOrigin = VPos.TOP
-				font = Font.font(font.family, font.size * 0.8)
-				val lastIndexOf = domainObject.fqn.lastIndexOf('.')
-				text = if(lastIndexOf != -1) 
-						domainObject.fqn.substring(0, lastIndexOf)
-					else
-						'<default>'
-			]
-			addInflatable(showPackageProperty, packageBox, 0, inflator)
-		]
-		attributeCompartment = new VBox => [ c |
-			c.padding = new Insets(10,0,0,0)
-			domainObject.withDomainObject[ type |
-				type.attributes.forEach[ field |
-					c.children += new Text => [
-						textOrigin = VPos.TOP
-						text = '''«field.simpleName»: «field.type.simpleName»'''
-						tooltip = field.signature
-					]
-				]
-				null
-			]
-			c.addInflatable(showAttributesProperty, attributesBox, contentArea.children.size, inflator)
-		]
-		methodCompartment = new VBox => [ c |
-			c.padding = new Insets(10,0,0,0)
-			domainObject.withDomainObject[ type |
-				type.methods.forEach[ operation |
-					c.children += new Text => [
-						textOrigin = VPos.TOP
-						text = '''«operation.simpleName»: «operation.returnType.simpleName»'''
-						tooltip = operation.signature
-					]
-				]
-				null
-			]
-			c.addInflatable(showMethodsProperty, methodsBox, contentArea.children.size, inflator)						
-		]
-		pane
 	}
 	
-	override protected createAnchors() {
-		new RoundedRectangleAnchors(this, 6, 6)
-	}
-	
-	override doActivate() {
-		super.doActivate()
-		showPackageProperty.bindCheckbox(packageBox, packageLabel, [ 0 ], inflator)
-		showAttributesProperty.bindCheckbox(attributesBox, attributeCompartment, [if(showPackage) 2 else 1], inflator)
-		showMethodsProperty.bindCheckbox(methodsBox, methodCompartment, [contentArea.children.size], inflator)
-		inflator.inflateAnimation?.play
-	}
-	
-	override getAutoLayoutDimension() {
-		inflator.inflatedSize
-	}
-	
-	protected def addInflatable(VBox compartment, BooleanProperty showProperty, CheckBox box, int index, Inflator inflator) {
-		if(showProperty.get) 
-			inflator.addInflatable(compartment, index)
-	}
-	
-	protected def bindCheckbox(BooleanProperty property, CheckBox box, VBox compartment, ()=>int index, Inflator inflator) {
-		box.selectedProperty.bindBidirectional(property)
-		property.addListener[ p, o, show |
-			if(contentArea.children.contains(compartment)) {
-				if(!show) 
-					inflator.removeInflatable(compartment)							
-			} else {
-				if(show) 
-					inflator.addInflatable(compartment, index.apply)
-			}
-		]
-	}
 }

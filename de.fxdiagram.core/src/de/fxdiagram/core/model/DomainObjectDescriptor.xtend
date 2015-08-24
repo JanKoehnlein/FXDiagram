@@ -2,6 +2,7 @@ package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import java.util.NoSuchElementException
 
 /**
  * Links a domain object (some POJO) to to an {@link XNode} or an {@link XConnection}.
@@ -56,8 +57,10 @@ abstract class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
 	
 	/**
 	 * Recover the domain object and execute the lambda expression on it.
+	 * 
+	 * @throws {@link NoSuchElementException} if the object cannot be recovered.
 	 */
-	def <U> U withDomainObject((T)=>U lambda)
+	def <U> U withDomainObject((T)=>U lambda) 
 }
 
 /**
@@ -76,7 +79,12 @@ abstract class CachedDomainObjectDescriptor<T> extends DomainObjectDescriptorImp
 	}
 	
 	def getDomainObject() {
-		cachedDomainObject ?: (cachedDomainObject = resolveDomainObject())
+		cachedDomainObject ?: {
+			cachedDomainObject = resolveDomainObject()
+			if (cachedDomainObject == null)
+				throw new NoSuchElementException('Element ' + id + ' not found')
+			cachedDomainObject
+		}
 	}
 	
 	override <U> withDomainObject((T)=>U lambda) {

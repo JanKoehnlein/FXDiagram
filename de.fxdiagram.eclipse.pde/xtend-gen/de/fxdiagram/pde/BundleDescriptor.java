@@ -6,6 +6,7 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleUtil;
+import java.util.NoSuchElementException;
 import org.apache.log4j.Logger;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.pde.core.plugin.IMatchRules;
@@ -34,19 +35,14 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
       String _symbolicName = this.getSymbolicName();
       String _version = this.getVersion();
       final BundleDescription bundle = BundleUtil.findBundle(_symbolicName, _version);
-      U _xifexpression = null;
-      boolean _notEquals = (!Objects.equal(bundle, null));
-      if (_notEquals) {
-        _xifexpression = lambda.apply(bundle);
-      } else {
-        Object _xblockexpression_1 = null;
-        {
-          BundleDescriptor.LOG.warn(("Invalid BundleDescriptor " + this));
-          _xblockexpression_1 = null;
-        }
-        _xifexpression = ((U)_xblockexpression_1);
+      boolean _equals = Objects.equal(bundle, null);
+      if (_equals) {
+        String _symbolicName_1 = this.getSymbolicName();
+        String _plus = ("Bundle " + _symbolicName_1);
+        String _plus_1 = (_plus + " not found");
+        throw new NoSuchElementException(_plus_1);
       }
-      _xblockexpression = _xifexpression;
+      _xblockexpression = lambda.apply(bundle);
     }
     return _xblockexpression;
   }

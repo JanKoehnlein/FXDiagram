@@ -4,6 +4,9 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.core.XShape
+import de.fxdiagram.core.behavior.DirtyState
+import de.fxdiagram.core.behavior.DirtyStateBehavior
 import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.layout.LayoutType
@@ -46,8 +49,6 @@ import org.eclipse.swt.custom.CTabFolder
 import org.eclipse.swt.custom.CTabItem
 import org.eclipse.swt.events.FocusEvent
 import org.eclipse.swt.events.FocusListener
-import org.eclipse.swt.events.KeyEvent
-import org.eclipse.swt.events.KeyListener
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.IPartListener2
 import org.eclipse.ui.IWorkbenchPart
@@ -67,11 +68,13 @@ class FXDiagramTab {
 	val Map<IEditorPart, DocumentListener> contributingEditors = newHashMap
 	val listener = new EditorListener(this)
 	val configInterpreter = new XDiagramConfigInterpreter
-	
+
+	boolean isLinkWithEditor
+
 	new(FXDiagramView view, CTabFolder tabFolder) {
 		canvas = new FXCanvas(tabFolder, SWT.NONE)
 		tab = new CTabItem(tabFolder, SWT.CLOSE)
-		tab.control = canvas 
+		tab.control = canvas
 		gestureConverter = new SwtToFXGestureConverter(canvas)
 		root = createRoot
 		tab.text = root.name
@@ -86,11 +89,11 @@ class FXDiagramTab {
 				deregister
 			]
 		]
-		root.nameProperty.addListener[p, o, n |
-			tab.text = n 
+		root.nameProperty.addListener [ p, o, n |
+			tab.text = n
 		]
-		root.needsSaveProperty.addListener[p, o, n |
-			if(n) 
+		root.needsSaveProperty.addListener [ p, o, n |
+			if (n)
 				tab.text = '*' + root.name
 			else
 				tab.text = root.name
@@ -100,50 +103,40 @@ class FXDiagramTab {
 			override focusGained(FocusEvent e) {
 				(view.site.getService(IBindingService) as IBindingService).keyFilterEnabled = false
 			}
-			
+
 			override focusLost(FocusEvent e) {
 				(view.site.getService(IBindingService) as IBindingService).keyFilterEnabled = true
 			}
 		})
 	}
-	
+
 	protected def createRoot() {
-		new XRoot => [
-	 	rootDiagram = new XDiagram()
-	 	getDomainObjectProviders += new ClassLoaderProvider
-	 	getDomainObjectProviders += XDiagramConfig.Registry.getInstance
-	 		.configurations.map[domainObjectProvider].toSet
-		getDiagramActionRegistry += #[
-			new CenterAction,
-			new DeleteAction,
-			new LayoutAction(LayoutType.DOT),
-			new ExportSvgAction,
-			new RedoAction,
-			new UndoRedoPlayerAction,
-			new UndoAction,
-			new RevealAction,
-			new LoadAction,
-			new SaveAction,
-			new SelectAllAction,
-			new ZoomToFitAction,
-			new NavigatePreviousAction,
-			new NavigateNextAction,
-			new FullScreenAction ]
-		]
+		new XRoot =>
+			[
+				rootDiagram = new XDiagram()
+				getDomainObjectProviders += new ClassLoaderProvider
+				getDomainObjectProviders +=
+					XDiagramConfig.Registry.getInstance.configurations.map[domainObjectProvider].toSet
+				getDiagramActionRegistry +=
+					#[new CenterAction, new DeleteAction, new LayoutAction(LayoutType.DOT), new ExportSvgAction,
+						new RedoAction, new UndoRedoPlayerAction, new UndoAction, new RevealAction, new LoadAction,
+						new SaveAction, new SelectAllAction, new ZoomToFitAction, new NavigatePreviousAction,
+						new NavigateNextAction, new FullScreenAction]
+			]
 	}
 
 	def getRoot() { root }
-	
+
 	def getCTabItem() { tab }
-	
+
 	def <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
 		// OMG! the scene's width and height is set asynchronously but needed for centering the selection
-		if(canvas.scene.width == 0) {
+		if (canvas.scene.width == 0) {
 			canvas.scene.widthProperty.addListener [ p, o, n |
 				canvas.scene.widthProperty.removeListener(self)
 				revealElement(element, mappingCall, editor)
 			]
-		} else if(canvas.scene.height == 0) {
+		} else if (canvas.scene.height == 0) {
 			canvas.scene.heightProperty.addListener [ p, o, n |
 				canvas.scene.heightProperty.removeListener(self)
 				revealElement(element, mappingCall, editor)
@@ -151,28 +144,30 @@ class FXDiagramTab {
 		} else {
 			doRevealElement(element, mappingCall, editor)
 		}
-	} 	
+	}
 
 	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
 		val interpreterContext = new InterpreterContext(root.diagram)
-		if(mappingCall instanceof DiagramMappingCall<?, ?>) {
-			interpreterContext.isReplaceRootDiagram = editor == null || register(editor) || changedEditors.remove(editor)
+		if (mappingCall instanceof DiagramMappingCall<?, ?>) {
+			interpreterContext.isReplaceRootDiagram = editor == null || register(editor) ||
+				changedEditors.remove(editor)
 			configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
 			interpreterContext.executeCommands(root.commandStack)
-		} else if(mappingCall instanceof NodeMappingCall<?, ?>) {
+		} else if (mappingCall instanceof NodeMappingCall<?, ?>) {
 			register(editor)
 			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)
 			interpreterContext.executeCommands(root.commandStack)
-		} else if(mappingCall instanceof ConnectionMappingCall<?, ?>) {
+		} else if (mappingCall instanceof ConnectionMappingCall<?, ?>) {
 			val mapping = mappingCall.mapping as ConnectionMapping<?>
-			if(mapping.source != null && mapping.target != null) {
+			if (mapping.source != null && mapping.target != null) {
 				register(editor)
-				configInterpreter.execute(mappingCall as ConnectionMappingCall<?, T>, element, [], interpreterContext, true)
+				configInterpreter.execute(mappingCall as ConnectionMappingCall<?, T>, element, [], interpreterContext,
+					true)
 				interpreterContext.executeCommands(root.commandStack)
 			}
 		}
 		val descriptor = createMappedDescriptor(element)
-		val centerShape = (interpreterContext.diagram.nodes + interpreterContext.diagram.connections).findFirst[
+		val centerShape = (interpreterContext.diagram.nodes + interpreterContext.diagram.connections).findFirst [
 			switch it {
 				XNode:
 					domainObject == descriptor
@@ -183,11 +178,14 @@ class FXDiagramTab {
 			}
 		]
 		root.commandStack.execute(
-			new ParallelAnimationCommand => [
-				if(interpreterContext.needsLayoutCommand)
-					it += new Layouter().createLayoutCommand(LayoutType.DOT, interpreterContext.diagram, 500.millis, centerShape)
-				it += new SelectAndRevealCommand(root, [ it == centerShape ])
-			])
+			new ParallelAnimationCommand =>
+				[
+					if (interpreterContext.needsLayoutCommand)
+						it +=
+							new Layouter().createLayoutCommand(LayoutType.DOT, interpreterContext.diagram, 500.millis,
+								centerShape)
+					it += new SelectAndRevealCommand(root, [it == centerShape])
+				])
 	}
 
 	def clear() {
@@ -196,7 +194,7 @@ class FXDiagramTab {
 		root.diagram = new XDiagram
 		root.commandStack.clear
 	}
-	
+
 	def setFocus() {
 		canvas.setFocus
 	}
@@ -208,8 +206,8 @@ class FXDiagramTab {
 
 	protected def boolean register(IEditorPart editor) {
 		var isNew = false
-		if(!contributingEditors.containsKey(editor)) {
-			if(editor instanceof AbstractTextEditor) {
+		if (!contributingEditors.containsKey(editor)) {
+			if (editor instanceof AbstractTextEditor) {
 				val documentListener = new DocumentListener(this, editor)
 				val document = editor.documentProvider.getDocument(editor.editorInput)
 				document.addDocumentListener(documentListener)
@@ -228,18 +226,39 @@ class FXDiagramTab {
 
 	protected def deregister(IWorkbenchPart part) {
 		changedEditors.remove(part)
-		if(part instanceof AbstractTextEditor) {
+		if (part instanceof AbstractTextEditor) {
 			val documentListener = contributingEditors.get(part)
 			val document = part.documentProvider.getDocument(part.editorInput)
 			document.removeDocumentListener(documentListener)
 		}
 		contributingEditors.remove(part)
-	}		
+	}
 
 	protected def editorChanged(IEditorPart editor) {
 		changedEditors += editor
 	}
-	
+
+	def void setLinkWithEditor(boolean linkWithEditor) {
+		isLinkWithEditor = linkWithEditor
+		refreshUpdateState
+	}
+
+	protected def refreshUpdateState() {
+		val allShapes = <XShape>newArrayList
+		allShapes += root.diagram.nodes
+		allShapes += root.diagram.connections
+		allShapes.forEach [
+			val behavior = getBehavior(DirtyStateBehavior)
+			if (behavior != null) {
+				behavior.showDirtyState(
+					if (isLinkWithEditor)
+						behavior.dirtyState
+					else
+						DirtyState.CLEAN)
+			}
+		]
+	}
+
 	@FinalFieldsConstructor
 	protected static class DocumentListener implements IDocumentListener {
 
@@ -274,13 +293,13 @@ class FXDiagramTab {
 
 		override partHidden(IWorkbenchPartReference partRef) {
 		}
-		
+
 		override partInputChanged(IWorkbenchPartReference partRef) {
 		}
-		
+
 		override partOpened(IWorkbenchPartReference partRef) {
 		}
-		
+
 		override partVisible(IWorkbenchPartReference partRef) {
 		}
 	}

@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
+import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -60,6 +61,8 @@ public abstract class DomainObjectDescriptorImpl<T extends Object> implements Do
   
   /**
    * Recover the domain object and execute the lambda expression on it.
+   * 
+   * @throws {@link NoSuchElementException} if the object cannot be recovered.
    */
   public abstract <U extends Object> U withDomainObject(final Function1<? super T, ? extends U> lambda);
   

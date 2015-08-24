@@ -2,6 +2,7 @@ package de.fxdiagram.pde
 
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor
+import java.util.NoSuchElementException
 import org.apache.log4j.Logger
 import org.eclipse.osgi.service.resolver.BundleDescription
 import org.eclipse.pde.core.plugin.IMatchRules
@@ -22,12 +23,9 @@ class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription
 	
 	override <U> withDomainObject((BundleDescription)=>U lambda) {
 		val bundle = findBundle(symbolicName, version)
-		if(bundle != null) {
-			lambda.apply(bundle)
-		} else {
-			LOG.warn('Invalid BundleDescriptor ' + this) 
-			null			
-		}
+		if(bundle == null) 
+			throw new NoSuchElementException('Bundle ' + symbolicName + ' not found')
+		lambda.apply(bundle)
 	}
 	
 	def <U> withPlugin((IPluginModelBase)=>U lambda) {

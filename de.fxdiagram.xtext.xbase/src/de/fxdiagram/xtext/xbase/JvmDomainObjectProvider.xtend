@@ -18,6 +18,7 @@ import org.eclipse.xtext.common.types.JvmIdentifiableElement
 import org.eclipse.xtext.resource.IResourceServiceProvider
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import java.util.NoSuchElementException
 
 class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 	
@@ -104,8 +105,12 @@ class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableElement>
 	
 	override <T> withDomainObject((JvmIdentifiableElement)=>T lambda) {
 		val javaElement = JavaCore.create(handleIdentifier)
+		if(javaElement == null)
+			throw new NoSuchElementException('Java element ' + handleIdentifier + ' not found')
 		val domainUtil = (provider as JvmDomainObjectProvider).getJvmDomainUtil(URI.createURI(uri))
 		val jvmElement = domainUtil.getJvmElement(javaElement)
+		if(jvmElement == null)
+			throw new NoSuchElementException('JVM element for ' + javaElement.elementName + ' not found')
 		lambda.apply(jvmElement)
 	}
 

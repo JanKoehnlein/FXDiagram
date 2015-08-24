@@ -7,6 +7,8 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.eclipse.xtext.AbstractXtextDescriptor;
 import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
+import java.util.Collection;
+import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -99,8 +101,40 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
             ResourceSet _resourceSet = it.getResourceSet();
             EObject _eObject = _resourceSet.getEObject(uriAsURI, true);
             final ECLASS owner = ((ECLASS) _eObject);
-            int _index = this.getIndex();
-            final ESetting<ECLASS> setting = new ESetting<ECLASS>(owner, this.reference, _index);
+            boolean _equals = Objects.equal(owner, null);
+            if (_equals) {
+              String _uri_1 = this.getUri();
+              String _plus = ("EReference owner " + _uri_1);
+              String _plus_1 = (_plus + " not found");
+              throw new NoSuchElementException(_plus_1);
+            }
+            boolean _or = false;
+            boolean _eIsSet = owner.eIsSet(this.reference);
+            boolean _not = (!_eIsSet);
+            if (_not) {
+              _or = true;
+            } else {
+              boolean _and = false;
+              boolean _isMany = this.reference.isMany();
+              if (!_isMany) {
+                _and = false;
+              } else {
+                Object _eGet = owner.eGet(this.reference);
+                int _size = ((Collection<?>) _eGet).size();
+                int _index = this.getIndex();
+                boolean _lessThan = (_size < _index);
+                _and = _lessThan;
+              }
+              _or = _and;
+            }
+            if (_or) {
+              String _uri_2 = this.getUri();
+              String _plus_2 = ("Referenced element " + _uri_2);
+              String _plus_3 = (_plus_2 + " not found");
+              throw new NoSuchElementException(_plus_3);
+            }
+            int _index_1 = this.getIndex();
+            final ESetting<ECLASS> setting = new ESetting<ECLASS>(owner, this.reference, _index_1);
             _xblockexpression_1 = lambda.apply(setting);
           }
           return _xblockexpression_1;

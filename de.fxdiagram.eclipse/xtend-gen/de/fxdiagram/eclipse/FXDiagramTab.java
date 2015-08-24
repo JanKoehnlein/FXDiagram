@@ -7,6 +7,8 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.behavior.DirtyState;
+import de.fxdiagram.core.behavior.DirtyStateBehavior;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
@@ -172,6 +174,8 @@ public class FXDiagramTab {
   
   private final XDiagramConfigInterpreter configInterpreter = new XDiagramConfigInterpreter();
   
+  private boolean isLinkWithEditor;
+  
   public FXDiagramTab(final FXDiagramView view, final CTabFolder tabFolder) {
     FXCanvas _fXCanvas = new FXCanvas(tabFolder, SWT.NONE);
     this.canvas = _fXCanvas;
@@ -229,14 +233,14 @@ public class FXDiagramTab {
       @Override
       public void focusGained(final FocusEvent e) {
         IWorkbenchPartSite _site = view.getSite();
-        Object _service = _site.getService(IBindingService.class);
+        IBindingService _service = _site.<IBindingService>getService(IBindingService.class);
         ((IBindingService) _service).setKeyFilterEnabled(false);
       }
       
       @Override
       public void focusLost(final FocusEvent e) {
         IWorkbenchPartSite _site = view.getSite();
-        Object _service = _site.getService(IBindingService.class);
+        IBindingService _service = _site.<IBindingService>getService(IBindingService.class);
         ((IBindingService) _service).setKeyFilterEnabled(true);
       }
     });
@@ -275,7 +279,8 @@ public class FXDiagramTab {
       NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
       NavigateNextAction _navigateNextAction = new NavigateNextAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
-      _diagramActionRegistry.operator_add(Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
+      _diagramActionRegistry.operator_add(
+        Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
     };
     return ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
   }
@@ -375,7 +380,8 @@ public class FXDiagramTab {
             this.register(editor);
             final Procedure1<XConnection> _function = (XConnection it) -> {
             };
-            this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext, true);
+            this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext, 
+              true);
             CommandStack _commandStack_2 = this.root.getCommandStack();
             interpreterContext.executeCommands(_commandStack_2);
           }
@@ -509,5 +515,34 @@ public class FXDiagramTab {
   
   protected boolean editorChanged(final IEditorPart editor) {
     return this.changedEditors.add(editor);
+  }
+  
+  public void setLinkWithEditor(final boolean linkWithEditor) {
+    this.isLinkWithEditor = linkWithEditor;
+    this.refreshUpdateState();
+  }
+  
+  protected void refreshUpdateState() {
+    final ArrayList<XShape> allShapes = CollectionLiterals.<XShape>newArrayList();
+    XDiagram _diagram = this.root.getDiagram();
+    ObservableList<XNode> _nodes = _diagram.getNodes();
+    Iterables.<XShape>addAll(allShapes, _nodes);
+    XDiagram _diagram_1 = this.root.getDiagram();
+    ObservableList<XConnection> _connections = _diagram_1.getConnections();
+    Iterables.<XShape>addAll(allShapes, _connections);
+    final Consumer<XShape> _function = (XShape it) -> {
+      final DirtyStateBehavior behavior = it.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+      boolean _notEquals = (!Objects.equal(behavior, null));
+      if (_notEquals) {
+        DirtyState _xifexpression = null;
+        if (this.isLinkWithEditor) {
+          _xifexpression = behavior.getDirtyState();
+        } else {
+          _xifexpression = DirtyState.CLEAN;
+        }
+        behavior.showDirtyState(_xifexpression);
+      }
+    };
+    allShapes.forEach(_function);
   }
 }

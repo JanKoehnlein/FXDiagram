@@ -8,9 +8,9 @@ import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.apache.log4j.Logger;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -19,8 +19,6 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 @ModelNode("kind")
 @SuppressWarnings("all")
 public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<BundleDependency> {
-  private final static Logger LOG = Logger.getLogger(BundleDependencyDescriptor.class);
-  
   public BundleDependencyDescriptor(final BundleDependency.Kind kind, final String ownerSymbolicName, final String ownerVersion, final String importSymbolicName, final String importVersionRange, final String mappingConfigID, final String mappingID, final BundleDescriptorProvider provider) {
     super(IterableExtensions.join(Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList(ownerSymbolicName, ownerVersion, importSymbolicName, importVersionRange)), "#"), 
       ((importSymbolicName + " ") + importVersionRange), mappingConfigID, mappingID, provider);
@@ -37,19 +35,17 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
       String _importSymbolicName = this.getImportSymbolicName();
       String _importVersionRange = this.getImportVersionRange();
       final BundleDependency dependency = BundleUtil.findBundleDependency(_kind, _ownerSymbolicName, _ownerVersion, _importSymbolicName, _importVersionRange);
-      U _xifexpression = null;
-      boolean _notEquals = (!Objects.equal(dependency, null));
-      if (_notEquals) {
-        _xifexpression = lambda.apply(dependency);
-      } else {
-        Object _xblockexpression_1 = null;
-        {
-          BundleDependencyDescriptor.LOG.warn(("Invalid descriptor " + this));
-          _xblockexpression_1 = null;
-        }
-        _xifexpression = ((U)_xblockexpression_1);
+      boolean _equals = Objects.equal(dependency, null);
+      if (_equals) {
+        String _ownerSymbolicName_1 = this.getOwnerSymbolicName();
+        String _plus = ("Bundle dependency from " + _ownerSymbolicName_1);
+        String _plus_1 = (_plus + " to ");
+        String _importSymbolicName_1 = this.getImportSymbolicName();
+        String _plus_2 = (_plus_1 + _importSymbolicName_1);
+        String _plus_3 = (_plus_2 + " not found");
+        throw new NoSuchElementException(_plus_3);
       }
-      _xblockexpression = _xifexpression;
+      _xblockexpression = lambda.apply(dependency);
     }
     return _xblockexpression;
   }

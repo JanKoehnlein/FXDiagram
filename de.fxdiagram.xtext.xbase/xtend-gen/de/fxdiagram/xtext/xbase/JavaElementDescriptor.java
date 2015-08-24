@@ -1,11 +1,13 @@
 package de.fxdiagram.xtext.xbase;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
+import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.emf.common.util.URI;
@@ -41,11 +43,25 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
     {
       String _handleIdentifier = this.getHandleIdentifier();
       final IJavaElement javaElement = JavaCore.create(_handleIdentifier);
+      boolean _equals = Objects.equal(javaElement, null);
+      if (_equals) {
+        String _handleIdentifier_1 = this.getHandleIdentifier();
+        String _plus = ("Java element " + _handleIdentifier_1);
+        String _plus_1 = (_plus + " not found");
+        throw new NoSuchElementException(_plus_1);
+      }
       DomainObjectProvider _provider = this.getProvider();
       String _uri = this.getUri();
       URI _createURI = URI.createURI(_uri);
       final JvmDomainUtil domainUtil = ((JvmDomainObjectProvider) _provider).getJvmDomainUtil(_createURI);
       final JvmIdentifiableElement jvmElement = domainUtil.getJvmElement(javaElement);
+      boolean _equals_1 = Objects.equal(jvmElement, null);
+      if (_equals_1) {
+        String _elementName = javaElement.getElementName();
+        String _plus_2 = ("JVM element for " + _elementName);
+        String _plus_3 = (_plus_2 + " not found");
+        throw new NoSuchElementException(_plus_3);
+      }
       _xblockexpression = lambda.apply(jvmElement);
     }
     return _xblockexpression;

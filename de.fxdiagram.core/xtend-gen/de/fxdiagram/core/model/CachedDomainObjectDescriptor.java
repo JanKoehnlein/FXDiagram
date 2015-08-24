@@ -1,7 +1,9 @@
 package de.fxdiagram.core.model;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.model.DomainObjectDescriptorImpl;
 import de.fxdiagram.core.model.DomainObjectProvider;
+import java.util.NoSuchElementException;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 /**
@@ -25,8 +27,20 @@ public abstract class CachedDomainObjectDescriptor<T extends Object> extends Dom
     if (this.cachedDomainObject != null) {
       _elvis = this.cachedDomainObject;
     } else {
-      T _resolveDomainObject = this.resolveDomainObject();
-      _elvis = (this.cachedDomainObject = _resolveDomainObject);
+      T _xblockexpression = null;
+      {
+        T _resolveDomainObject = this.resolveDomainObject();
+        this.cachedDomainObject = _resolveDomainObject;
+        boolean _equals = Objects.equal(this.cachedDomainObject, null);
+        if (_equals) {
+          String _id = this.getId();
+          String _plus = ("Element " + _id);
+          String _plus_1 = (_plus + " not found");
+          throw new NoSuchElementException(_plus_1);
+        }
+        _xblockexpression = this.cachedDomainObject;
+      }
+      _elvis = _xblockexpression;
     }
     return _elvis;
   }

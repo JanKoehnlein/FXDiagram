@@ -6,6 +6,7 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor
+import java.util.NoSuchElementException
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
@@ -16,6 +17,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor
 
 import static extension org.eclipse.emf.common.util.URI.*
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import java.util.Collection
 
 /**
  * A {@link DomainObjectDescriptor} that points to an {@link EObject} from an Xtext document.
@@ -37,7 +39,10 @@ class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtextDescri
 		val editor = openInEditor(false)
 		if (editor instanceof XtextEditor) {
 			editor.document.readOnly [ XtextResource it |
-				lambda.apply(resourceSet.getEObject(uriAsURI, true) as ECLASS)
+				val domainObject = resourceSet.getEObject(uriAsURI, true)
+				if(domainObject == null)
+					throw new NoSuchElementException('Xtext element ' + fqn + ' does not exist')
+				lambda.apply(domainObject as ECLASS)
 			]
 		}
 	}
@@ -97,6 +102,10 @@ class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescr
 		if (editor instanceof XtextEditor) {
 			editor.document.readOnly [ XtextResource it |
 				val owner = resourceSet.getEObject(uriAsURI, true) as ECLASS
+				if(owner == null) 
+					throw new NoSuchElementException('EReference owner ' + uri + ' not found')
+				if(!owner.eIsSet(reference) || reference.isMany && (owner.eGet(reference) as Collection<?>).size < index)
+					throw new NoSuchElementException('Referenced element ' + uri + ' not found')
 				val setting = new ESetting(owner, reference, index)
 				lambda.apply(setting)
 			]

@@ -30,10 +30,10 @@ public class BundleSelectionExtractor implements ISelectionExtractor {
       Iterator _iterator = ((IStructuredSelection)selection).iterator();
       Iterator<IAdaptable> _filter = Iterators.<IAdaptable>filter(_iterator, IAdaptable.class);
       final Function1<IAdaptable, BundleDescription> _function = (IAdaptable it) -> {
-        Object _adapter = it.getAdapter(IProject.class);
+        IProject _adapter = it.<IProject>getAdapter(IProject.class);
         IPluginModelBase _findModel = null;
         if (((IProject) _adapter)!=null) {
-          Object _adapter_1 = it.getAdapter(IProject.class);
+          IProject _adapter_1 = it.<IProject>getAdapter(IProject.class);
           _findModel=PluginRegistry.findModel(((IProject) _adapter_1));
         }
         BundleDescription _bundleDescription = null;

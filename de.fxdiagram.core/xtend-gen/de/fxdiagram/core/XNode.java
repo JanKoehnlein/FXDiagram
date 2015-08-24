@@ -88,7 +88,7 @@ public class XNode extends XShape implements XModelProvider {
       final String name = _name;
       boolean _equals = Objects.equal(name, null);
       if (_equals) {
-        XNode.LOG.severe("XNodes key is null");
+        XNode.LOG.severe("XNode\'s name is null");
       }
       _xblockexpression = name;
     }

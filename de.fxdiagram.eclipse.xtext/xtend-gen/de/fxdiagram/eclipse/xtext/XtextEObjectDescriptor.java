@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.eclipse.xtext.AbstractXtextDescriptor;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
+import java.util.NoSuchElementException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -42,9 +43,20 @@ public class XtextEObjectDescriptor<ECLASS extends EObject> extends AbstractXtex
       if ((editor instanceof XtextEditor)) {
         IXtextDocument _document = ((XtextEditor)editor).getDocument();
         final IUnitOfWork<T, XtextResource> _function = (XtextResource it) -> {
-          ResourceSet _resourceSet = it.getResourceSet();
-          EObject _eObject = _resourceSet.getEObject(uriAsURI, true);
-          return lambda.apply(((ECLASS) _eObject));
+          T _xblockexpression_1 = null;
+          {
+            ResourceSet _resourceSet = it.getResourceSet();
+            final EObject domainObject = _resourceSet.getEObject(uriAsURI, true);
+            boolean _equals = Objects.equal(domainObject, null);
+            if (_equals) {
+              String _fqn = this.getFqn();
+              String _plus = ("Xtext element " + _fqn);
+              String _plus_1 = (_plus + " does not exist");
+              throw new NoSuchElementException(_plus_1);
+            }
+            _xblockexpression_1 = lambda.apply(((ECLASS) domainObject));
+          }
+          return _xblockexpression_1;
         };
         _xifexpression = _document.<T>readOnly(_function);
       }
