@@ -30,7 +30,7 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-
+import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 /**
  * A line connecting two {@link XNode}s.
  * 
@@ -231,11 +231,12 @@ class XConnection extends XShape {
 	def protected setShapes(List<? extends Shape> shapes) {
 		shapeGroup.children.setAll(shapes)
 		val strokeBoundsInRoot = source.localToRootDiagram(new BoundingBox(0, 0, this.strokeWidth, this.strokeWidth))
-		val strokeInRoot = 0.5 * (strokeBoundsInRoot.width + strokeBoundsInRoot.height) 
+		val strokeInRoot = 0.5 * (strokeBoundsInRoot.width + strokeBoundsInRoot.height)
+		val strokeScale = strokeWidth / strokeInRoot 
 		shapes.forEach [
 			stroke = this.stroke
 			strokeLineCap = StrokeLineCap.ROUND
-			strokeWidth = strokeInRoot
+			it.strokeWidthProperty.bind(strokeWidthProperty * strokeScale)
 			strokeDashArray.setAll(this.strokeDashArray)
 			strokeDashOffset = this.strokeDashOffset
 		]

@@ -65,18 +65,26 @@ public class XConnectionLabel extends XShape implements XModelProvider {
   
   @Override
   protected Node createNode() {
-    Text _text = this.getText();
-    final Procedure1<Text> _function = (Text it) -> {
-      it.setTextOrigin(VPos.TOP);
-      Font _font = it.getFont();
-      String _family = _font.getFamily();
-      Font _font_1 = it.getFont();
-      double _size = _font_1.getSize();
-      double _multiply = (_size * 0.9);
-      Font _font_2 = Font.font(_family, _multiply);
-      it.setFont(_font_2);
-    };
-    return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+    Text _xblockexpression = null;
+    {
+      DoubleProperty _opacityProperty = this.opacityProperty();
+      XConnection _connection = this.getConnection();
+      DoubleProperty _opacityProperty_1 = _connection.opacityProperty();
+      _opacityProperty.bind(_opacityProperty_1);
+      Text _text = this.getText();
+      final Procedure1<Text> _function = (Text it) -> {
+        it.setTextOrigin(VPos.TOP);
+        Font _font = it.getFont();
+        String _family = _font.getFamily();
+        Font _font_1 = it.getFont();
+        double _size = _font_1.getSize();
+        double _multiply = (_size * 0.9);
+        Font _font_2 = Font.font(_family, _multiply);
+        it.setFont(_font_2);
+      };
+      _xblockexpression = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+    }
+    return _xblockexpression;
   }
   
   @Override

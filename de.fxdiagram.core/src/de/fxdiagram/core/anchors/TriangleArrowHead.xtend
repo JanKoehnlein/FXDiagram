@@ -32,6 +32,7 @@ class TriangleArrowHead extends ArrowHead {
 			it.fillProperty.bind(this.fillProperty)
 			it.strokeProperty.bind(this.strokeProperty)
 			strokeWidthProperty.bind(connection.strokeWidthProperty)
+			opacityProperty.bind(connection.opacityProperty)
 			strokeType = StrokeType.CENTERED
 		]
 	}

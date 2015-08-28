@@ -62,6 +62,10 @@ public class TriangleArrowHead extends ArrowHead {
         XConnection _connection_1 = this.getConnection();
         DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
         _strokeWidthProperty.bind(_strokeWidthProperty_1);
+        DoubleProperty _opacityProperty = it.opacityProperty();
+        XConnection _connection_2 = this.getConnection();
+        DoubleProperty _opacityProperty_1 = _connection_2.opacityProperty();
+        _opacityProperty.bind(_opacityProperty_1);
         it.setStrokeType(StrokeType.CENTERED);
       };
       _xblockexpression = ObjectExtensions.<Polygon>operator_doubleArrow(_polygon, _function);

@@ -25,12 +25,14 @@ class LineArrowHead extends ArrowHead {
 				points.setAll(#[0.0, -0.5 * height, width, 0.0, 0.0, 0.5 * height])
 				it.strokeProperty.bind(this.strokeProperty)
 				strokeWidthProperty.bind(connection.strokeWidthProperty)
+				opacityProperty.bind(connection.opacityProperty)
 				strokeType = StrokeType.CENTERED
 			]
 			children += new Polyline => [
 				points.setAll(#[0.0, 0.0, width - connection.strokeWidth, 0.0])
 				it.strokeProperty.bind(this.strokeProperty)
 				strokeWidthProperty.bind(connection.strokeWidthProperty)
+				opacityProperty.bind(connection.opacityProperty)
 				strokeType = StrokeType.CENTERED
 			]
 		]

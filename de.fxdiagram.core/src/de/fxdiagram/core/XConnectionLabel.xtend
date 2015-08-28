@@ -44,6 +44,7 @@ class XConnectionLabel extends XShape {
 	}
 
 	protected override createNode() {
+		opacityProperty.bind(connection.opacityProperty)
 		text => [
 			textOrigin = VPos.TOP
 			font = Font.font(font.family, font.size * 0.9)

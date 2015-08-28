@@ -49,6 +49,10 @@ public class LineArrowHead extends ArrowHead {
         XConnection _connection = this.getConnection();
         DoubleProperty _strokeWidthProperty_1 = _connection.strokeWidthProperty();
         _strokeWidthProperty.bind(_strokeWidthProperty_1);
+        DoubleProperty _opacityProperty = it_1.opacityProperty();
+        XConnection _connection_1 = this.getConnection();
+        DoubleProperty _opacityProperty_1 = _connection_1.opacityProperty();
+        _opacityProperty.bind(_opacityProperty_1);
         it_1.setStrokeType(StrokeType.CENTERED);
       };
       Polyline _doubleArrow = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline, _function_1);
@@ -69,6 +73,10 @@ public class LineArrowHead extends ArrowHead {
         XConnection _connection_1 = this.getConnection();
         DoubleProperty _strokeWidthProperty_1 = _connection_1.strokeWidthProperty();
         _strokeWidthProperty.bind(_strokeWidthProperty_1);
+        DoubleProperty _opacityProperty = it_1.opacityProperty();
+        XConnection _connection_2 = this.getConnection();
+        DoubleProperty _opacityProperty_1 = _connection_2.opacityProperty();
+        _opacityProperty.bind(_opacityProperty_1);
         it_1.setStrokeType(StrokeType.CENTERED);
       };
       Polyline _doubleArrow_1 = ObjectExtensions.<Polyline>operator_doubleArrow(_polyline_1, _function_2);
