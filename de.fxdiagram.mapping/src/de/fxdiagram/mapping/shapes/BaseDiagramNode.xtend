@@ -12,6 +12,7 @@ import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 
 import static de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
+import de.fxdiagram.mapping.behavior.NodeDirtyStateBehavior
 
 /**
  * Base implementation for a {@link XNode} with a nested {@link XDiagram} that belongs to an
@@ -27,7 +28,7 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 		super(descriptor)
 	}
 
-	override getDomainObject() {
+	override IMappedElementDescriptor<T> getDomainObject() {
 		super.getDomainObject() as IMappedElementDescriptor<T>
 	}
 
@@ -44,9 +45,8 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 
 	override doActivate() {
 		super.doActivate()
-		val descriptor = domainObject
-		if(descriptor instanceof IMappedElementDescriptor<?>) 
-			addLazyBehavior(this, descriptor)
+		addLazyBehavior(this, domainObject)
+		addBehavior(new NodeDirtyStateBehavior(this))
 		innerDiagram.layoutOnActivate = LayoutType.DOT
 	}
 }

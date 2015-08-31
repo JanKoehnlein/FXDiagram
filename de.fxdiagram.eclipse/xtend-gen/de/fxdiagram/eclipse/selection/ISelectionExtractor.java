@@ -2,6 +2,7 @@ package de.fxdiagram.eclipse.selection;
 
 import java.util.List;
 import java.util.function.Consumer;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;

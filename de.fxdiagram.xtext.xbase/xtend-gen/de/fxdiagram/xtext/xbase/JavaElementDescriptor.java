@@ -2,8 +2,9 @@ package de.fxdiagram.xtext.xbase;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
+import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
@@ -26,8 +27,8 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
   public JavaElementDescriptor() {
   }
   
-  public JavaElementDescriptor(final String uri, final String fqn, final String javaElementHandle, final String mappingConfigID, final String mappingID, final JvmDomainObjectProvider provider) {
-    super(uri, fqn, mappingConfigID, mappingID, provider);
+  public JavaElementDescriptor(final XtextEObjectID elementID, final String javaElementHandle, final String mappingConfigID, final String mappingID, final JvmDomainObjectProvider provider) {
+    super(elementID, mappingConfigID, mappingID, provider);
     this.handleIdentifierProperty.set(javaElementHandle);
   }
   
@@ -50,10 +51,10 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
         String _plus_1 = (_plus + " not found");
         throw new NoSuchElementException(_plus_1);
       }
-      DomainObjectProvider _provider = this.getProvider();
-      String _uri = this.getUri();
-      URI _createURI = URI.createURI(_uri);
-      final JvmDomainUtil domainUtil = ((JvmDomainObjectProvider) _provider).getJvmDomainUtil(_createURI);
+      XtextDomainObjectProvider _provider = this.getProvider();
+      XtextEObjectID _elementID = this.getElementID();
+      URI _uRI = _elementID.getURI();
+      final JvmDomainUtil domainUtil = ((JvmDomainObjectProvider) _provider).getJvmDomainUtil(_uRI);
       final JvmIdentifiableElement jvmElement = domainUtil.getJvmElement(javaElement);
       boolean _equals_1 = Objects.equal(jvmElement, null);
       if (_equals_1) {

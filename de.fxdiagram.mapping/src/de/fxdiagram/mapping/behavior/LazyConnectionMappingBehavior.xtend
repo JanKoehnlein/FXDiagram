@@ -18,6 +18,7 @@ import javafx.geometry.Side
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import java.util.NoSuchElementException
 
 /**
  * A {@link RapidButtonBehavior} to add lazy connection mappings to a node.
@@ -96,24 +97,28 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 		if(diagram == null) 
 			return false
 		val existingConnectionDescriptors = diagram.connections.map[domainObject].toSet
-		val result = hostDescriptor.withDomainObject[ 
-			domainArgument |
-			val connectionDomainObjects = configInterpreter.select(mappingCall, domainArgument)
-			for(connectionDomainObject: connectionDomainObjects) {
-				val connectionDescriptor = configInterpreter.getDescriptor(connectionDomainObject, mappingCall.connectionMapping)
-				if(existingConnectionDescriptors.add(connectionDescriptor)) {
-					val nodeMappingCall = if(hostIsSource)
-							mappingCall.connectionMapping.target
-						else
-							mappingCall.connectionMapping.source  
-					val nodeDomainObjects = configInterpreter.select(nodeMappingCall, connectionDomainObject)
-					if(!nodeDomainObjects.empty) 
-						return true
+		try {
+			val result = hostDescriptor.withDomainObject[ 
+				domainArgument |
+				val connectionDomainObjects = configInterpreter.select(mappingCall, domainArgument)
+				for(connectionDomainObject: connectionDomainObjects) {
+					val connectionDescriptor = configInterpreter.getDescriptor(connectionDomainObject, mappingCall.connectionMapping)
+					if(existingConnectionDescriptors.add(connectionDescriptor)) {
+						val nodeMappingCall = if(hostIsSource)
+								mappingCall.connectionMapping.target
+							else
+								mappingCall.connectionMapping.source  
+						val nodeDomainObjects = configInterpreter.select(nodeMappingCall, connectionDomainObject)
+						if(!nodeDomainObjects.empty) 
+							return true
+					}
 				}
-			}
+				return false
+			]
+			return if(result == null) false else result
+		} catch(NoSuchElementException e) {
 			return false
-		]
-		return if(result == null) false else result
+		}
 	}
 	
 	override perform(RapidButton button) {

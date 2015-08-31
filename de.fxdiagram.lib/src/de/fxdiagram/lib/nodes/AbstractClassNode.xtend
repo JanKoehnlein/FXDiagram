@@ -7,6 +7,10 @@ import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.animations.Inflator
 import java.util.NoSuchElementException
+import javafx.animation.Animation
+import javafx.animation.KeyFrame
+import javafx.animation.KeyValue
+import javafx.animation.Timeline
 import javafx.beans.property.BooleanProperty
 import javafx.collections.ObservableList
 import javafx.geometry.Insets
@@ -24,6 +28,7 @@ import javafx.scene.text.Text
 import static de.fxdiagram.core.behavior.DirtyState.*
 import static javafx.collections.FXCollections.*
 
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @ModelNode("showPackage", "showAttributes", "showMethods", "bgColor")
@@ -34,26 +39,26 @@ abstract class AbstractClassNode extends FlipNode {
 	@FxProperty boolean showMethods = true
 	@FxProperty Color bgColor
 	@FxProperty ClassModel model
-	
+
 	CheckBox packageBox
 	CheckBox attributesBox
 	CheckBox methodsBox
-	
+
 	VBox contentArea
 	VBox packageLabel
 	VBox attributeCompartment
 	VBox methodCompartment
-	
+
 	Inflator inflator
-	
+
 	new(DomainObjectDescriptor descriptor) {
 		super(descriptor)
 	}
-	
+
 	def getDefaultBgPaint() {
 		Color.web('#ffe6cc')
 	}
-	
+
 	override createNode() {
 		val pane = super.createNode
 		model = inferClassModel
@@ -83,10 +88,10 @@ abstract class AbstractClassNode extends FlipNode {
 				children += packageBox = new CheckBox('Package')
 				children += attributesBox = new CheckBox('Attributes')
 				children += methodsBox = new CheckBox('Methods')
-				children += new ColorPicker => [ 
+				children += new ColorPicker => [
 					valueProperty.bindBidirectional(bgColorProperty)
 				]
-			]			
+			]
 		]
 		inflator = new Inflator(this, contentArea)
 		packageLabel = new VBox => [
@@ -99,8 +104,8 @@ abstract class AbstractClassNode extends FlipNode {
 			addInflatable(showPackageProperty, packageBox, 0, inflator)
 		]
 		attributeCompartment = new VBox => [ c |
-			c.padding = new Insets(10,0,0,0)
-			model.attributes.forEach[ field |
+			c.padding = new Insets(10, 0, 0, 0)
+			model.attributes.forEach [ field |
 				c.children += new Text => [
 					textOrigin = VPos.TOP
 					text = field
@@ -109,55 +114,57 @@ abstract class AbstractClassNode extends FlipNode {
 			c.addInflatable(showAttributesProperty, attributesBox, contentArea.children.size, inflator)
 		]
 		methodCompartment = new VBox => [ c |
-			c.padding = new Insets(10,0,0,0)
-			model.operations.forEach[ operation |
+			c.padding = new Insets(10, 0, 0, 0)
+			model.operations.forEach [ operation |
 				c.children += new Text => [
 					textOrigin = VPos.TOP
 					text = operation
 				]
 			]
-			c.addInflatable(showMethodsProperty, methodsBox, contentArea.children.size, inflator)						
+			c.addInflatable(showMethodsProperty, methodsBox, contentArea.children.size, inflator)
 		]
 		pane
 	}
-	
+
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 6, 6)
 	}
-	
+
 	override doActivate() {
 		super.doActivate()
 		addBehavior(new ModelCompareBehavior(this))
-		showPackageProperty.bindCheckbox(packageBox, packageLabel, [ 0 ], inflator)
+		showPackageProperty.bindCheckbox(packageBox, packageLabel, [0], inflator)
 		showAttributesProperty.bindCheckbox(attributesBox, attributeCompartment, [if(showPackage) 2 else 1], inflator)
 		showMethodsProperty.bindCheckbox(methodsBox, methodCompartment, [contentArea.children.size], inflator)
 		inflator.inflateAnimation?.play
 	}
-	
+
 	override getAutoLayoutDimension() {
 		inflator.inflatedSize
 	}
-	
-	protected def addInflatable(VBox compartment, BooleanProperty showProperty, CheckBox box, int index, Inflator inflator) {
-		if(showProperty.get) 
+
+	protected def addInflatable(VBox compartment, BooleanProperty showProperty, CheckBox box, int index,
+		Inflator inflator) {
+		if (showProperty.get)
 			inflator.addInflatable(compartment, index)
 	}
-	
-	protected def bindCheckbox(BooleanProperty property, CheckBox box, VBox compartment, ()=>int index, Inflator inflator) {
+
+	protected def bindCheckbox(BooleanProperty property, CheckBox box, VBox compartment, ()=>int index,
+		Inflator inflator) {
 		box.selectedProperty.bindBidirectional(property)
-		property.addListener[ p, o, show |
-			if(contentArea.children.contains(compartment)) {
-				if(!show) 
-					inflator.removeInflatable(compartment)							
+		property.addListener [ p, o, show |
+			if (contentArea.children.contains(compartment)) {
+				if (!show)
+					inflator.removeInflatable(compartment)
 			} else {
-				if(show) 
+				if (show)
 					inflator.addInflatable(compartment, index.apply)
 			}
 		]
 	}
-	
+
 	abstract def ClassModel inferClassModel()
-	
+
 }
 
 @ModelNode('namespace', 'name', 'attributes', 'operations')
@@ -167,36 +174,68 @@ class ClassModel {
 	@FxProperty String fileName
 	@FxProperty ObservableList<String> attributes = observableArrayList
 	@FxProperty ObservableList<String> operations = observableArrayList
-	
+
 	override equals(Object other) {
-		 if(other instanceof ClassModel) 
-		 	return namespace == other.namespace 
-		 		&& name == other.name 
-		 		&& fileName == other.fileName
-		 		&& attributes == other.attributes
-		 		&& operations == other.operations  
-		 else
-		 	return false
+		if (other instanceof ClassModel)
+			return namespace == other.namespace && name == other.name && fileName == other.fileName &&
+				attributes == other.attributes && operations == other.operations
+		else
+			return false
 	}
 }
 
 class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractClassNode> {
-	
+
+	Animation dirtyAnimation
+
+	@FxProperty double dirtyAnimationValue
+
+	@FxProperty double dirtyAnimationRotate
+
 	new(AbstractClassNode host) {
 		super(host)
 	}
-	
+
 	override getDirtyState() {
 		try {
 			val newModel = host.inferClassModel
-			if(newModel == null) 
+			if (newModel == null)
 				DANGLING
-			else if(host.model != newModel)
+			else if (host.model != newModel)
 				DIRTY
 			else
 				CLEAN
 		} catch (NoSuchElementException exc) {
 			return DANGLING
-		} 
- 	}
+		}
+	}
+
+	override protected doActivate() {
+		dirtyAnimation = new Timeline => [
+			keyFrames += new KeyFrame(0.millis, new KeyValue(dirtyAnimationValueProperty, 1))
+			keyFrames += new KeyFrame(300.millis, new KeyValue(dirtyAnimationValueProperty, 0.96))
+			keyFrames += new KeyFrame(900.millis, new KeyValue(dirtyAnimationValueProperty, 1.04))
+			keyFrames += new KeyFrame(1200.millis, new KeyValue(dirtyAnimationValueProperty, 1))
+			autoReverse = true
+			cycleCount = Animation.INDEFINITE
+		]
+	}
+	
+	override protected dirtyFeedback(boolean isDirty) {
+		if(isDirty) {
+			host => [ 
+				scaleXProperty.bind(dirtyAnimationValueProperty)
+				scaleYProperty.bind(dirtyAnimationValueProperty)
+			]
+			dirtyAnimation.play
+		} else {
+			host => [ 
+				scaleXProperty.unbind
+				scaleYProperty.unbind
+				scaleX = 1
+				scaleY = 1
+			]	
+			dirtyAnimation.stop
+		}
+	}
 }

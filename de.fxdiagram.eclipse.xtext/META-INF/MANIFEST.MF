@@ -11,5 +11,6 @@ Require-Bundle: de.fxdiagram.eclipse;visibility:=reexport,
  org.eclipse.xtext.ui.shared
 Export-Package: de.fxdiagram.eclipse.xtext,
  de.fxdiagram.eclipse.xtext.hyperlink,
+ de.fxdiagram.eclipse.xtext.ids,
  de.fxdiagram.eclipse.xtext.mapping
 

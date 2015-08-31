@@ -1,6 +1,5 @@
 package de.fxdiagram.xtext.fowlerdsl
 
-import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig
 import de.fxdiagram.mapping.ConnectionMapping
@@ -8,6 +7,7 @@ import de.fxdiagram.mapping.DiagramMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.MappingAcceptor
 import de.fxdiagram.mapping.NodeMapping
+import de.fxdiagram.mapping.shapes.BaseConnection
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
@@ -60,7 +60,7 @@ class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
 	val transitionConnection = new ConnectionMapping<Transition>(this, 'transitionConnection', 'Transition') {
 		override createConnection(IMappedElementDescriptor<Transition> descriptor) {
 			// create a connection with a label denoting the transition's event name
-			new XConnection(descriptor) => [
+			new BaseConnection(descriptor) => [
 				new XConnectionLabel(it) => [ label |
 					label.text.text = descriptor.withDomainObject[event.name]
 				]		

@@ -125,33 +125,35 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 	
 	protected def layout() {
 		val hostBounds = host.localToDiagram(host.layoutBounds)
-		val hostCenter = hostBounds.center
-		for(entry: pos2group.entrySet) {
-			val pos = entry.key
-			val group = entry.value
-			group.autosize
-			val groupBounds = group.boundsInLocal
-			val centered = hostCenter - groupBounds.center
-			group => [
-				layoutX = centered.x +
-					switch(pos) {
-						case LEFT:
-							-0.5 * hostBounds.width - border - groupBounds.width
-						case RIGHT:
-							0.5 * hostBounds.width + border + groupBounds.width
-						default:
-						 	0
-					}
-				layoutY = centered.y +
-					switch(pos) {
-						case TOP:
-							-0.5 * hostBounds.height - border - groupBounds.height
-						case BOTTOM:
-							0.5 * hostBounds.height + border +  groupBounds.height
-						default:
-						 	0
-					}
-			]
+		val hostCenter = hostBounds?.center
+		if(hostCenter != null) {
+			for(entry: pos2group.entrySet) {
+				val pos = entry.key
+				val group = entry.value
+				group.autosize
+				val groupBounds = group.boundsInLocal
+				val centered = hostCenter - groupBounds.center
+				group => [
+					layoutX = centered.x +
+						switch(pos) {
+							case LEFT:
+								-0.5 * hostBounds.width - border - groupBounds.width
+							case RIGHT:
+								0.5 * hostBounds.width + border + groupBounds.width
+							default:
+							 	0
+						}
+					layoutY = centered.y +
+						switch(pos) {
+							case TOP:
+								-0.5 * hostBounds.height - border - groupBounds.height
+							case BOTTOM:
+								0.5 * hostBounds.height + border +  groupBounds.height
+							default:
+							 	0
+						}
+				]
+			}
 		}
 	}
 }

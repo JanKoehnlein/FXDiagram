@@ -10,6 +10,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
+import de.fxdiagram.mapping.behavior.NodeDirtyStateBehavior;
 import java.util.Collections;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -32,7 +33,7 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
   }
   
   @Override
-  public DomainObjectDescriptor getDomainObject() {
+  public IMappedElementDescriptor<T> getDomainObject() {
     DomainObjectDescriptor _domainObject = super.getDomainObject();
     return ((IMappedElementDescriptor<T>) _domainObject);
   }
@@ -55,10 +56,10 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
   @Override
   public void doActivate() {
     super.doActivate();
-    final DomainObjectDescriptor descriptor = this.getDomainObject();
-    if ((descriptor instanceof IMappedElementDescriptor<?>)) {
-      LazyConnectionMappingBehavior.addLazyBehavior(this, ((IMappedElementDescriptor<?>)descriptor));
-    }
+    IMappedElementDescriptor<T> _domainObject = this.getDomainObject();
+    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObject);
+    NodeDirtyStateBehavior _nodeDirtyStateBehavior = new NodeDirtyStateBehavior(this);
+    this.addBehavior(_nodeDirtyStateBehavior);
     XDiagram _innerDiagram = this.getInnerDiagram();
     _innerDiagram.setLayoutOnActivate(LayoutType.DOT);
   }

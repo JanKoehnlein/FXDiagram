@@ -112,13 +112,17 @@ class XNode extends XShape {
 	override selectionFeedback(boolean isSelected) {
 		if (isSelected) {
 			effect = selectionEffect
-			scaleX = 1.05
-			scaleY = 1.05
+			if(!scaleXProperty.bound) {
+				scaleX = 1.05
+				scaleY = 1.05
+			}
 			(outgoingConnections + incomingConnections).forEach[toFront]
 		} else {
 			effect = null
-			scaleX = 1.0
-			scaleY = 1.0
+			if(!scaleXProperty.bound) {
+				scaleX = 1.0
+				scaleY = 1.0
+			}
 		}
 	}
 	

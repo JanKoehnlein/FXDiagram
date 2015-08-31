@@ -3,6 +3,7 @@ package de.fxdiagram.mapping.shapes
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.behavior.ConnectionDirtyStateBehavior
 
 /**
  * Base implementation for a {@link XConnection} that belongs to an {@link IMappedElementDescriptor}.
@@ -19,5 +20,10 @@ class BaseConnection<T> extends XConnection  {
 
 	override getDomainObject() {
 		super.getDomainObject() as IMappedElementDescriptor<T>
+	}
+	
+	override doActivate() {
+		super.doActivate
+		addBehavior(new ConnectionDirtyStateBehavior(this))
 	}
 }

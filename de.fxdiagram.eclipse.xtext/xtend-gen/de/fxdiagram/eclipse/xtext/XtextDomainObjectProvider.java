@@ -9,6 +9,7 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.XtextEObjectDescriptor;
 import de.fxdiagram.eclipse.xtext.XtextESettingDescriptor;
+import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
@@ -18,8 +19,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -30,9 +30,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.xtext.naming.IQualifiedNameConverter;
-import org.eclipse.xtext.naming.IQualifiedNameProvider;
-import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
@@ -90,41 +87,11 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
   
   private Map<URI, XtextDomainObjectProvider.CachedEditor> editorCache = CollectionLiterals.<URI, XtextDomainObjectProvider.CachedEditor>newHashMap();
   
+  private final XtextEObjectID.Factory idFactory = new XtextEObjectID.Factory();
+  
   @Override
   public DomainObjectDescriptor createDescriptor(final Object handle) {
     return null;
-  }
-  
-  public String getFullyQualifiedName(final EObject domainObject) {
-    final Resource resource = domainObject.eResource();
-    IResourceServiceProvider _xifexpression = null;
-    if ((resource instanceof XtextResource)) {
-      _xifexpression = ((XtextResource)resource).getResourceServiceProvider();
-    } else {
-      URI _uRI = resource.getURI();
-      _xifexpression = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_uRI);
-    }
-    final IResourceServiceProvider resourceServiceProvider = _xifexpression;
-    IQualifiedNameProvider _get = null;
-    if (resourceServiceProvider!=null) {
-      _get=resourceServiceProvider.<IQualifiedNameProvider>get(IQualifiedNameProvider.class);
-    }
-    QualifiedName _fullyQualifiedName = null;
-    if (_get!=null) {
-      _fullyQualifiedName=_get.getFullyQualifiedName(domainObject);
-    }
-    final QualifiedName qualifiedName = _fullyQualifiedName;
-    boolean _notEquals = (!Objects.equal(qualifiedName, null));
-    if (_notEquals) {
-      IQualifiedNameConverter _get_1 = resourceServiceProvider.<IQualifiedNameConverter>get(IQualifiedNameConverter.class);
-      String _string = null;
-      if (_get_1!=null) {
-        _string=_get_1.toString(qualifiedName);
-      }
-      return _string;
-    } else {
-      return "unnamed";
-    }
   }
   
   @Override
@@ -134,13 +101,11 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
     if (!_matched) {
       if (it instanceof EObject) {
         _matched=true;
-        URI _uRI = EcoreUtil.getURI(((EObject)it));
-        String _string = _uRI.toString();
-        String _fullyQualifiedName = this.getFullyQualifiedName(((EObject)it));
+        XtextEObjectID _createXtextEObjectID = this.createXtextEObjectID(((EObject)it));
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        XtextEObjectDescriptor<EObject> _xtextEObjectDescriptor = new XtextEObjectDescriptor<EObject>(_string, _fullyQualifiedName, _iD, _iD_1, this);
+        XtextEObjectDescriptor<EObject> _xtextEObjectDescriptor = new XtextEObjectDescriptor<EObject>(_createXtextEObjectID, _iD, _iD_1, this);
         return ((IMappedElementDescriptor<T>) _xtextEObjectDescriptor);
       }
     }
@@ -148,30 +113,34 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
       if (it instanceof ESetting) {
         _matched=true;
         EObject _owner = ((ESetting<?>)it).getOwner();
-        URI _uRI = EcoreUtil.getURI(_owner);
-        String _string = _uRI.toString();
-        EObject _owner_1 = ((ESetting<?>)it).getOwner();
-        String _fullyQualifiedName = this.getFullyQualifiedName(_owner_1);
+        XtextEObjectID _createXtextEObjectID = this.createXtextEObjectID(_owner);
+        EObject _target = ((ESetting<?>)it).getTarget();
+        XtextEObjectID _createXtextEObjectID_1 = this.createXtextEObjectID(_target);
         EReference _reference = ((ESetting<?>)it).getReference();
         int _index = ((ESetting<?>)it).getIndex();
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        return new XtextESettingDescriptor(_string, _fullyQualifiedName, _reference, _index, _iD, _iD_1, this);
+        return new XtextESettingDescriptor(_createXtextEObjectID, _createXtextEObjectID_1, _reference, _index, _iD, _iD_1, this);
       }
     }
     return null;
   }
   
+  public XtextEObjectID createXtextEObjectID(final EObject element) {
+    return this.idFactory.createXtextEObjectID(element);
+  }
+  
   /**
    * Avoids expensive switching of active parts on subsequent withDomainObject operations.
    */
-  public IEditorPart getCachedEditor(final URI elementURI, final boolean isSelect, final boolean isActivate) {
-    final URI uri = elementURI.trimFragment();
+  public IEditorPart getCachedEditor(final XtextEObjectID elementID, final boolean isSelect, final boolean isActivate) {
     IWorkbench _workbench = PlatformUI.getWorkbench();
     IWorkbenchWindow _activeWorkbenchWindow = _workbench.getActiveWorkbenchWindow();
     final IWorkbenchPage activePage = _activeWorkbenchWindow.getActivePage();
-    XtextDomainObjectProvider.CachedEditor _get = this.editorCache.get(uri);
+    URI _uRI = elementID.getURI();
+    final URI resourceURI = _uRI.trimFragment();
+    XtextDomainObjectProvider.CachedEditor _get = this.editorCache.get(resourceURI);
     IEditorPart _findOn = null;
     if (_get!=null) {
       _findOn=_get.findOn(activePage);
@@ -187,8 +156,8 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
           final IUnitOfWork<Object, XtextResource> _function = (XtextResource it) -> {
             Object _xblockexpression = null;
             {
-              String _fragment = elementURI.fragment();
-              final EObject eObject = it.getEObject(_fragment);
+              ResourceSet _resourceSet = it.getResourceSet();
+              final EObject eObject = elementID.resolve(_resourceSet);
               IResourceServiceProvider _resourceServiceProvider = it.getResourceServiceProvider();
               final ILocationInFileProvider locationInFileProvider = _resourceServiceProvider.<ILocationInFileProvider>get(ILocationInFileProvider.class);
               final ITextRegion textRegion = locationInFileProvider.getSignificantTextRegion(eObject);
@@ -210,9 +179,9 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
     final IWorkbenchPart activePart = activePage.getActivePart();
     Provider<IURIEditorOpener> _iURIEditorOpener = Access.getIURIEditorOpener();
     IURIEditorOpener _get_1 = _iURIEditorOpener.get();
-    final IEditorPart editor = _get_1.open(elementURI, isSelect);
+    final IEditorPart editor = _get_1.open(resourceURI, isSelect);
     XtextDomainObjectProvider.CachedEditor _cachedEditor = new XtextDomainObjectProvider.CachedEditor(editor);
-    this.editorCache.put(uri, _cachedEditor);
+    this.editorCache.put(resourceURI, _cachedEditor);
     if ((!isActivate)) {
       activePage.activate(activePart);
     }

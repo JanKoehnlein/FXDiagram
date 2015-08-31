@@ -21,10 +21,12 @@ import de.fxdiagram.mapping.NodeMappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.XDiagramConfigInterpreter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
@@ -60,43 +62,52 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     };
     List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
     final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
-    final Function1<ARG, Boolean> _function_1 = (ARG domainArgument) -> {
-      final Iterable<MODEL> connectionDomainObjects = this.configInterpreter.<MODEL, ARG>select(this.mappingCall, domainArgument);
-      for (final MODEL connectionDomainObject : connectionDomainObjects) {
-        {
-          ConnectionMapping<MODEL> _connectionMapping = this.mappingCall.getConnectionMapping();
-          final IMappedElementDescriptor<MODEL> connectionDescriptor = this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
-          boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
-          if (_add) {
-            NodeMappingCall<?, MODEL> _xifexpression = null;
-            if (this.hostIsSource) {
-              ConnectionMapping<MODEL> _connectionMapping_1 = this.mappingCall.getConnectionMapping();
-              _xifexpression = _connectionMapping_1.getTarget();
-            } else {
-              ConnectionMapping<MODEL> _connectionMapping_2 = this.mappingCall.getConnectionMapping();
-              _xifexpression = _connectionMapping_2.getSource();
-            }
-            final NodeMappingCall<?, MODEL> nodeMappingCall = _xifexpression;
-            final Iterable<?> nodeDomainObjects = this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
-            boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
-            boolean _not = (!_isEmpty);
-            if (_not) {
-              return Boolean.valueOf(true);
+    try {
+      final Function1<ARG, Boolean> _function_1 = (ARG domainArgument) -> {
+        final Iterable<MODEL> connectionDomainObjects = this.configInterpreter.<MODEL, ARG>select(this.mappingCall, domainArgument);
+        for (final MODEL connectionDomainObject : connectionDomainObjects) {
+          {
+            ConnectionMapping<MODEL> _connectionMapping = this.mappingCall.getConnectionMapping();
+            final IMappedElementDescriptor<MODEL> connectionDescriptor = this.configInterpreter.<MODEL>getDescriptor(connectionDomainObject, _connectionMapping);
+            boolean _add = existingConnectionDescriptors.add(connectionDescriptor);
+            if (_add) {
+              NodeMappingCall<?, MODEL> _xifexpression = null;
+              if (this.hostIsSource) {
+                ConnectionMapping<MODEL> _connectionMapping_1 = this.mappingCall.getConnectionMapping();
+                _xifexpression = _connectionMapping_1.getTarget();
+              } else {
+                ConnectionMapping<MODEL> _connectionMapping_2 = this.mappingCall.getConnectionMapping();
+                _xifexpression = _connectionMapping_2.getSource();
+              }
+              final NodeMappingCall<?, MODEL> nodeMappingCall = _xifexpression;
+              final Iterable<?> nodeDomainObjects = this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
+              boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
+              boolean _not = (!_isEmpty);
+              if (_not) {
+                return Boolean.valueOf(true);
+              }
             }
           }
         }
+        return Boolean.valueOf(false);
+      };
+      final Boolean result = hostDescriptor.<Boolean>withDomainObject(_function_1);
+      Boolean _xifexpression = null;
+      boolean _equals_1 = Objects.equal(result, null);
+      if (_equals_1) {
+        _xifexpression = Boolean.valueOf(false);
+      } else {
+        _xifexpression = result;
       }
-      return Boolean.valueOf(false);
-    };
-    final Boolean result = hostDescriptor.<Boolean>withDomainObject(_function_1);
-    Boolean _xifexpression = null;
-    boolean _equals_1 = Objects.equal(result, null);
-    if (_equals_1) {
-      _xifexpression = Boolean.valueOf(false);
-    } else {
-      _xifexpression = result;
+      return (_xifexpression).booleanValue();
+    } catch (final Throwable _t) {
+      if (_t instanceof NoSuchElementException) {
+        final NoSuchElementException e = (NoSuchElementException)_t;
+        return false;
+      } else {
+        throw Exceptions.sneakyThrow(_t);
+      }
     }
-    return (_xifexpression).booleanValue();
   }
   
   @Override

@@ -8,7 +8,6 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
-import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
@@ -18,12 +17,12 @@ import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.shapes.BaseConnection;
 import de.fxdiagram.mapping.shapes.BaseDiagramNode;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
 import de.fxdiagram.xtext.xbase.JvmTypeNode;
-import java.util.ArrayList;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -37,13 +36,11 @@ import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
-import org.eclipse.xtext.common.types.TypesPackage;
 import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -76,26 +73,15 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
         return ButtonExtensions.getArrowButton(it, "Add reference");
       };
       _outConnectionForEach.asButton(_function_1);
-      final Function1<JvmDeclaredType, Iterable<? extends ESetting<JvmDeclaredType>>> _function_2 = (JvmDeclaredType it) -> {
-        ArrayList<ESetting<JvmDeclaredType>> _xblockexpression = null;
-        {
-          final ArrayList<ESetting<JvmDeclaredType>> result = CollectionLiterals.<ESetting<JvmDeclaredType>>newArrayList();
-          for (int i = 0; (i < it.getSuperTypes().size()); i++) {
-            {
-              EList<JvmTypeReference> _superTypes = it.getSuperTypes();
-              final JvmTypeReference superType = _superTypes.get(i);
-              JvmType _type = superType.getType();
-              if ((_type instanceof JvmDeclaredType)) {
-                ESetting<JvmDeclaredType> _eSetting = new ESetting<JvmDeclaredType>(it, TypesPackage.Literals.JVM_DECLARED_TYPE__SUPER_TYPES, i);
-                result.add(_eSetting);
-              }
-            }
-          }
-          _xblockexpression = result;
-        }
-        return _xblockexpression;
+      final Function1<JvmDeclaredType, Iterable<? extends JvmTypeReference>> _function_2 = (JvmDeclaredType it) -> {
+        EList<JvmTypeReference> _superTypes = it.getSuperTypes();
+        final Function1<JvmTypeReference, Boolean> _function_3 = (JvmTypeReference it_1) -> {
+          JvmType _type = it_1.getType();
+          return Boolean.valueOf((_type instanceof JvmDeclaredType));
+        };
+        return IterableExtensions.<JvmTypeReference>filter(_superTypes, _function_3);
       };
-      MultiConnectionMappingCall<ESetting<JvmDeclaredType>, JvmDeclaredType> _outConnectionForEach_1 = this.<ESetting<JvmDeclaredType>>outConnectionForEach(JvmClassDiagramConfig.this.superTypeConnection, _function_2);
+      MultiConnectionMappingCall<JvmTypeReference, JvmDeclaredType> _outConnectionForEach_1 = this.<JvmTypeReference>outConnectionForEach(JvmClassDiagramConfig.this.superTypeConnection, _function_2);
       final Function1<Side, Node> _function_3 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add supertype");
       };
@@ -106,8 +92,8 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
   private final ConnectionMapping<JvmField> referenceConnection = new ConnectionMapping<JvmField>(this, "referenceConnection", "Reference") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<JvmField> descriptor) {
-      XConnection _xConnection = new XConnection(descriptor);
-      final Procedure1<XConnection> _function = (XConnection it) -> {
+      BaseConnection<JvmField> _baseConnection = new BaseConnection<JvmField>(descriptor);
+      final Procedure1<BaseConnection<JvmField>> _function = (BaseConnection<JvmField> it) -> {
         LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
         it.setTargetArrowHead(_lineArrowHead);
         XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
@@ -121,7 +107,7 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
         };
         ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_1);
       };
-      return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+      return ObjectExtensions.<BaseConnection<JvmField>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override
@@ -136,22 +122,21 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<ESetting<JvmDeclaredType>> superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, "superTypeConnection", "Supertype") {
+  private final ConnectionMapping<JvmTypeReference> superTypeConnection = new ConnectionMapping<JvmTypeReference>(this, "superTypeConnection", "Supertype") {
     @Override
-    public XConnection createConnection(final IMappedElementDescriptor<ESetting<JvmDeclaredType>> descriptor) {
-      XConnection _xConnection = new XConnection(descriptor);
-      final Procedure1<XConnection> _function = (XConnection it) -> {
+    public XConnection createConnection(final IMappedElementDescriptor<JvmTypeReference> descriptor) {
+      BaseConnection<JvmTypeReference> _baseConnection = new BaseConnection<JvmTypeReference>(descriptor);
+      final Procedure1<BaseConnection<JvmTypeReference>> _function = (BaseConnection<JvmTypeReference> it) -> {
         TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false);
         it.setTargetArrowHead(_triangleArrowHead);
       };
-      return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+      return ObjectExtensions.<BaseConnection<JvmTypeReference>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override
     public void calls() {
-      final Function1<ESetting<JvmDeclaredType>, JvmDeclaredType> _function = (ESetting<JvmDeclaredType> it) -> {
-        Object _target = it.getTarget();
-        JvmType _type = ((JvmTypeReference) _target).getType();
+      final Function1<JvmTypeReference, JvmDeclaredType> _function = (JvmTypeReference it) -> {
+        JvmType _type = it.getType();
         return JvmClassDiagramConfig.this._jvmDomainUtil.getOriginalJvmType(((JvmDeclaredType) _type));
       };
       this.<JvmDeclaredType>target(JvmClassDiagramConfig.this.typeNode, _function);

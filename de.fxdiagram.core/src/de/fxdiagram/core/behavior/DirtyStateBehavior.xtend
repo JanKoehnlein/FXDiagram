@@ -1,11 +1,6 @@
 package de.fxdiagram.core.behavior
 
 import de.fxdiagram.core.XShape
-import javafx.animation.Animation
-import javafx.animation.RotateTransition
-import javafx.animation.SequentialTransition
-
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 interface DirtyStateBehavior extends Behavior {
 	def DirtyState getDirtyState()
@@ -15,20 +10,10 @@ interface DirtyStateBehavior extends Behavior {
 
 abstract class AbstractDirtyStateBehavior<T extends XShape> extends AbstractHostBehavior<T> implements DirtyStateBehavior {
 	
-	Animation modifiedAnimation
+	DirtyState shownState = DirtyState.CLEAN
 	
 	new(T host) {
 		super(host)
-		modifiedAnimation = new SequentialTransition => [
-			children += new RotateTransition => [
-				fromAngle = -5
-				toAngle = 5
-				duration = 170.millis
-				cycleCount = Animation.INDEFINITE
-				autoReverse = true 
-				node = host
-			]
-		]
 	}
 	
 	override getBehaviorKey() {
@@ -40,28 +25,28 @@ abstract class AbstractDirtyStateBehavior<T extends XShape> extends AbstractHost
 	}
 	
 	override showDirtyState(DirtyState state) {
-		switch state {
-			case CLEAN: showAsClean
-			case DIRTY: showAsDirty
-			case DANGLING: showAsDangling
+		feedback(false)
+		shownState = state
+		feedback(true)
+	}
+	
+	protected def void feedback(boolean show) {
+		switch shownState {
+			case CLEAN: cleanFeedback(show)
+			case DIRTY: dirtyFeedback(show)
+			case DANGLING: danglingFeedback(show)
 		}
 	}
 	
-	protected def void showAsClean() {
-		host.opacity = 1
-		modifiedAnimation.stop
-		host.rotate = 0
-	}
+	protected def void cleanFeedback(boolean isClean) {}
 	
-	protected def void showAsDirty() {
-		host.opacity = 1
-		modifiedAnimation.play
-	}
+	protected def void dirtyFeedback(boolean isDirty) {}
 	
-	protected def void showAsDangling() {
-		host.node.opacity = 0.5
-		modifiedAnimation.stop
-		host.rotate = 0
+	protected def void danglingFeedback(boolean isDangling) {
+		if(isDangling)
+			host.opacity = 0.2
+		else
+			host.opacity = 1
 	}
 }
 

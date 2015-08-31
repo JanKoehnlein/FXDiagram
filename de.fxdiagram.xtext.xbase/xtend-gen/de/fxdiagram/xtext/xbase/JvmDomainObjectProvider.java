@@ -3,6 +3,7 @@ package de.fxdiagram.xtext.xbase;
 import com.google.common.base.Objects;
 import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
+import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.XDiagramConfig;
@@ -14,7 +15,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
@@ -46,6 +46,7 @@ public class JvmDomainObjectProvider extends XtextDomainObjectProvider {
     if (!_matched) {
       if (it instanceof EObject) {
         _matched=true;
+        final XtextEObjectID elementID = this.createXtextEObjectID(((EObject)it));
         boolean _and = false;
         Resource _eResource = ((EObject)it).eResource();
         URI _uRI = _eResource.getURI();
@@ -61,23 +62,17 @@ public class JvmDomainObjectProvider extends XtextDomainObjectProvider {
           URI _uRI_1 = _eResource_1.getURI();
           JvmDomainUtil _jvmDomainUtil = this.getJvmDomainUtil(_uRI_1);
           final IJavaElement javaElement = _jvmDomainUtil.getJavaElement(((JvmIdentifiableElement) it));
-          URI _uRI_2 = EcoreUtil.getURI(((EObject)it));
-          String _string = _uRI_2.toString();
-          String _fullyQualifiedName = this.getFullyQualifiedName(((EObject)it));
           String _handleIdentifier = javaElement.getHandleIdentifier();
           XDiagramConfig _config = mapping.getConfig();
           String _iD = _config.getID();
           String _iD_1 = mapping.getID();
-          JavaElementDescriptor _javaElementDescriptor = new JavaElementDescriptor(_string, _fullyQualifiedName, _handleIdentifier, _iD, _iD_1, this);
+          JavaElementDescriptor _javaElementDescriptor = new JavaElementDescriptor(elementID, _handleIdentifier, _iD, _iD_1, this);
           return ((IMappedElementDescriptor<T>) _javaElementDescriptor);
         }
-        URI _uRI_3 = EcoreUtil.getURI(((EObject)it));
-        String _string_1 = _uRI_3.toString();
-        String _fullyQualifiedName_1 = this.getFullyQualifiedName(((EObject)it));
         XDiagramConfig _config_1 = mapping.getConfig();
         String _iD_2 = _config_1.getID();
         String _iD_3 = mapping.getID();
-        JvmEObjectDescriptor<EObject> _jvmEObjectDescriptor = new JvmEObjectDescriptor<EObject>(_string_1, _fullyQualifiedName_1, _iD_2, _iD_3, this);
+        JvmEObjectDescriptor<EObject> _jvmEObjectDescriptor = new JvmEObjectDescriptor<EObject>(elementID, _iD_2, _iD_3, this);
         return ((IMappedElementDescriptor<T>) _jvmEObjectDescriptor);
       }
     }
@@ -85,16 +80,15 @@ public class JvmDomainObjectProvider extends XtextDomainObjectProvider {
       if (it instanceof ESetting) {
         _matched=true;
         EObject _owner = ((ESetting<?>)it).getOwner();
-        URI _uRI = EcoreUtil.getURI(_owner);
-        String _string = _uRI.toString();
-        EObject _owner_1 = ((ESetting<?>)it).getOwner();
-        String _fullyQualifiedName = this.getFullyQualifiedName(_owner_1);
+        final XtextEObjectID sourceID = this.createXtextEObjectID(_owner);
+        EObject _target = ((ESetting<?>)it).getTarget();
+        final XtextEObjectID targetID = this.createXtextEObjectID(_target);
         EReference _reference = ((ESetting<?>)it).getReference();
         int _index = ((ESetting<?>)it).getIndex();
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        return new JvmESettingDescriptor(_string, _fullyQualifiedName, _reference, _index, _iD, _iD_1, this);
+        return new JvmESettingDescriptor(sourceID, targetID, _reference, _index, _iD, _iD_1, this);
       }
     }
     if (!_matched) {
@@ -103,14 +97,12 @@ public class JvmDomainObjectProvider extends XtextDomainObjectProvider {
         URI _createURI = URI.createURI("dummy.___xbase");
         JvmDomainUtil _jvmDomainUtil = this.getJvmDomainUtil(_createURI);
         final JvmIdentifiableElement jvmType = _jvmDomainUtil.getJvmElement(((IJavaElement)it));
-        URI _uRI = EcoreUtil.getURI(jvmType);
-        String _string = _uRI.toString();
-        String _fullyQualifiedName = this.getFullyQualifiedName(jvmType);
+        final XtextEObjectID elementID = this.createXtextEObjectID(jvmType);
         String _handleIdentifier = ((IJavaElement)it).getHandleIdentifier();
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        JavaElementDescriptor _javaElementDescriptor = new JavaElementDescriptor(_string, _fullyQualifiedName, _handleIdentifier, _iD, _iD_1, this);
+        JavaElementDescriptor _javaElementDescriptor = new JavaElementDescriptor(elementID, _handleIdentifier, _iD, _iD_1, this);
         return ((IMappedElementDescriptor<T>) _javaElementDescriptor);
       }
     }

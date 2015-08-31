@@ -2,6 +2,7 @@ package de.fxdiagram.xtext.xbase;
 
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
+import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.lib.nodes.ClassModel;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.shapes.BaseClassNode;
@@ -36,9 +37,10 @@ public class JvmTypeNode extends BaseClassNode<JvmDeclaredType> {
       ClassModel _classModel = new ClassModel();
       final Procedure1<ClassModel> _function_1 = (ClassModel it) -> {
         IMappedElementDescriptor<JvmDeclaredType> _domainObject_1 = this.getDomainObject();
-        String _uri = ((JvmEObjectDescriptor<JvmDeclaredType>) _domainObject_1).getUri();
-        URI _createURI = URI.createURI(_uri);
-        String _lastSegment = _createURI.lastSegment();
+        XtextEObjectID _elementID = ((JvmEObjectDescriptor<JvmDeclaredType>) _domainObject_1).getElementID();
+        URI _uRI = _elementID.getURI();
+        URI _trimFragment = _uRI.trimFragment();
+        String _lastSegment = _trimFragment.lastSegment();
         it.setFileName(_lastSegment);
         String _packageName = type.getPackageName();
         it.setNamespace(_packageName);

@@ -8,6 +8,7 @@ import de.fxdiagram.eclipse.xtext.XtextEObjectDescriptor
 import de.fxdiagram.eclipse.xtext.XtextESettingDescriptor
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
+import java.util.NoSuchElementException
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
@@ -16,9 +17,7 @@ import org.eclipse.jdt.core.JavaCore
 import org.eclipse.jdt.ui.JavaUI
 import org.eclipse.xtext.common.types.JvmIdentifiableElement
 import org.eclipse.xtext.resource.IResourceServiceProvider
-
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
-import java.util.NoSuchElementException
+import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID
 
 class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 	
@@ -35,19 +34,24 @@ class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
 		switch it: domainObject {
 				EObject: {
+					val elementID = createXtextEObjectID
 					if(eResource.URI.scheme.endsWith('java') && it instanceof JvmIdentifiableElement) {
 						val javaElement = getJvmDomainUtil(eResource.URI).getJavaElement(it as JvmIdentifiableElement)
-						return new JavaElementDescriptor(URI.toString, fullyQualifiedName, javaElement.handleIdentifier, mapping.config.ID, mapping.ID, this)
+						return new JavaElementDescriptor(elementID, javaElement.handleIdentifier, mapping.config.ID, mapping.ID, this)
 							as IMappedElementDescriptor<T>	
 					}
-					return new JvmEObjectDescriptor(URI.toString, fullyQualifiedName, mapping.config.ID, mapping.ID, this)
+					return new JvmEObjectDescriptor(elementID, mapping.config.ID, mapping.ID, this)
 						as IMappedElementDescriptor<T>
 				} 
-				ESetting<?>:
-					return new JvmESettingDescriptor(owner.URI.toString, owner.fullyQualifiedName, reference, index, mapping.config.ID, mapping.ID, this)
+				ESetting<?>: {
+					val sourceID = owner.createXtextEObjectID
+					val targetID = target.createXtextEObjectID
+					return new JvmESettingDescriptor(sourceID, targetID, reference, index, mapping.config.ID, mapping.ID, this)
+				}
 				IJavaElement: {
-					val jvmType = getJvmDomainUtil(URI.createURI('dummy.___xbase')).getJvmElement(it)					
-					return new JavaElementDescriptor(jvmType.URI.toString, jvmType.fullyQualifiedName, handleIdentifier, mapping.config.ID, mapping.ID, this)
+					val jvmType = getJvmDomainUtil(URI.createURI('dummy.___xbase')).getJvmElement(it)
+					val elementID = jvmType.createXtextEObjectID				
+					return new JavaElementDescriptor(elementID, handleIdentifier, mapping.config.ID, mapping.ID, this)
 						as IMappedElementDescriptor<T>
 				}
 				default:
@@ -62,8 +66,8 @@ class JvmEObjectDescriptor<ECLASS extends EObject> extends XtextEObjectDescripto
 	new() {
 	}
 
-	new(String uri, String fqn, String mappingConfigID, String mappingID, JvmDomainObjectProvider provider) {
-		super(uri, fqn, mappingConfigID, mappingID, provider)
+	new(XtextEObjectID elementID, String mappingConfigID, String mappingID, JvmDomainObjectProvider provider) {
+		super(elementID, mappingConfigID, mappingID, provider)
 	}
 	
 	override protected getResourceServiceProvider() {
@@ -77,8 +81,8 @@ class JvmESettingDescriptor<ECLASS extends EObject> extends XtextESettingDescrip
 	new() {
 	}
 
-	new(String uri, String fqn, EReference reference, int index, String mappingConfigID, String mappingID, XtextDomainObjectProvider provider) {
-		super(uri, fqn, reference, index, mappingConfigID, mappingID, provider)
+	new(XtextEObjectID sourceID, XtextEObjectID targetID, EReference reference, int index, String mappingConfigID, String mappingID, XtextDomainObjectProvider provider) {
+		super(sourceID, targetID, reference, index, mappingConfigID, mappingID, provider)
 	}
 	
 	override protected getResourceServiceProvider() {
@@ -94,8 +98,8 @@ class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableElement>
 	new() {
 	}
 
-	new(String uri, String fqn, String javaElementHandle, String mappingConfigID, String mappingID, JvmDomainObjectProvider provider) {
-		super(uri, fqn, mappingConfigID, mappingID, provider)
+	new(XtextEObjectID elementID, String javaElementHandle, String mappingConfigID, String mappingID, JvmDomainObjectProvider provider) {
+		super(elementID, mappingConfigID, mappingID, provider)
 		handleIdentifierProperty.set(javaElementHandle)
 	}
 	
@@ -107,7 +111,7 @@ class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableElement>
 		val javaElement = JavaCore.create(handleIdentifier)
 		if(javaElement == null)
 			throw new NoSuchElementException('Java element ' + handleIdentifier + ' not found')
-		val domainUtil = (provider as JvmDomainObjectProvider).getJvmDomainUtil(URI.createURI(uri))
+		val domainUtil = (provider as JvmDomainObjectProvider).getJvmDomainUtil(elementID.URI)
 		val jvmElement = domainUtil.getJvmElement(javaElement)
 		if(jvmElement == null)
 			throw new NoSuchElementException('JVM element for ' + javaElement.elementName + ' not found')

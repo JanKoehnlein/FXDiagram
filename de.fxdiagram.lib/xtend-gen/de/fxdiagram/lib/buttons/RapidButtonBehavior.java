@@ -213,73 +213,80 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     HOST _host_1 = this.getHost();
     Bounds _layoutBounds = _host_1.getLayoutBounds();
     final Bounds hostBounds = CoreExtensions.localToDiagram(_host, _layoutBounds);
-    final Point2D hostCenter = BoundsExtensions.center(hostBounds);
-    Set<Map.Entry<Side, Pane>> _entrySet = this.pos2group.entrySet();
-    for (final Map.Entry<Side, Pane> entry : _entrySet) {
-      {
-        final Side pos = entry.getKey();
-        final Pane group = entry.getValue();
-        group.autosize();
-        final Bounds groupBounds = group.getBoundsInLocal();
-        Point2D _center = BoundsExtensions.center(groupBounds);
-        final Point2D centered = Point2DExtensions.operator_minus(hostCenter, _center);
-        final Procedure1<Pane> _function = (Pane it) -> {
-          double _x = centered.getX();
-          double _switchResult = (double) 0;
-          if (pos != null) {
-            switch (pos) {
-              case LEFT:
-                double _width = hostBounds.getWidth();
-                double _multiply = ((-0.5) * _width);
-                double _minus = (_multiply - this.border);
-                double _width_1 = groupBounds.getWidth();
-                _switchResult = (_minus - _width_1);
-                break;
-              case RIGHT:
-                double _width_2 = hostBounds.getWidth();
-                double _multiply_1 = (0.5 * _width_2);
-                double _plus = (_multiply_1 + this.border);
-                double _width_3 = groupBounds.getWidth();
-                _switchResult = (_plus + _width_3);
-                break;
-              default:
-                _switchResult = 0;
-                break;
+    Point2D _center = null;
+    if (hostBounds!=null) {
+      _center=BoundsExtensions.center(hostBounds);
+    }
+    final Point2D hostCenter = _center;
+    boolean _notEquals = (!Objects.equal(hostCenter, null));
+    if (_notEquals) {
+      Set<Map.Entry<Side, Pane>> _entrySet = this.pos2group.entrySet();
+      for (final Map.Entry<Side, Pane> entry : _entrySet) {
+        {
+          final Side pos = entry.getKey();
+          final Pane group = entry.getValue();
+          group.autosize();
+          final Bounds groupBounds = group.getBoundsInLocal();
+          Point2D _center_1 = BoundsExtensions.center(groupBounds);
+          final Point2D centered = Point2DExtensions.operator_minus(hostCenter, _center_1);
+          final Procedure1<Pane> _function = (Pane it) -> {
+            double _x = centered.getX();
+            double _switchResult = (double) 0;
+            if (pos != null) {
+              switch (pos) {
+                case LEFT:
+                  double _width = hostBounds.getWidth();
+                  double _multiply = ((-0.5) * _width);
+                  double _minus = (_multiply - this.border);
+                  double _width_1 = groupBounds.getWidth();
+                  _switchResult = (_minus - _width_1);
+                  break;
+                case RIGHT:
+                  double _width_2 = hostBounds.getWidth();
+                  double _multiply_1 = (0.5 * _width_2);
+                  double _plus = (_multiply_1 + this.border);
+                  double _width_3 = groupBounds.getWidth();
+                  _switchResult = (_plus + _width_3);
+                  break;
+                default:
+                  _switchResult = 0;
+                  break;
+              }
+            } else {
+              _switchResult = 0;
             }
-          } else {
-            _switchResult = 0;
-          }
-          double _plus_1 = (_x + _switchResult);
-          it.setLayoutX(_plus_1);
-          double _y = centered.getY();
-          double _switchResult_1 = (double) 0;
-          if (pos != null) {
-            switch (pos) {
-              case TOP:
-                double _height = hostBounds.getHeight();
-                double _multiply_2 = ((-0.5) * _height);
-                double _minus_1 = (_multiply_2 - this.border);
-                double _height_1 = groupBounds.getHeight();
-                _switchResult_1 = (_minus_1 - _height_1);
-                break;
-              case BOTTOM:
-                double _height_2 = hostBounds.getHeight();
-                double _multiply_3 = (0.5 * _height_2);
-                double _plus_2 = (_multiply_3 + this.border);
-                double _height_3 = groupBounds.getHeight();
-                _switchResult_1 = (_plus_2 + _height_3);
-                break;
-              default:
-                _switchResult_1 = 0;
-                break;
+            double _plus_1 = (_x + _switchResult);
+            it.setLayoutX(_plus_1);
+            double _y = centered.getY();
+            double _switchResult_1 = (double) 0;
+            if (pos != null) {
+              switch (pos) {
+                case TOP:
+                  double _height = hostBounds.getHeight();
+                  double _multiply_2 = ((-0.5) * _height);
+                  double _minus_1 = (_multiply_2 - this.border);
+                  double _height_1 = groupBounds.getHeight();
+                  _switchResult_1 = (_minus_1 - _height_1);
+                  break;
+                case BOTTOM:
+                  double _height_2 = hostBounds.getHeight();
+                  double _multiply_3 = (0.5 * _height_2);
+                  double _plus_2 = (_multiply_3 + this.border);
+                  double _height_3 = groupBounds.getHeight();
+                  _switchResult_1 = (_plus_2 + _height_3);
+                  break;
+                default:
+                  _switchResult_1 = 0;
+                  break;
+              }
+            } else {
+              _switchResult_1 = 0;
             }
-          } else {
-            _switchResult_1 = 0;
-          }
-          double _plus_3 = (_y + _switchResult_1);
-          it.setLayoutY(_plus_3);
-        };
-        ObjectExtensions.<Pane>operator_doubleArrow(group, _function);
+            double _plus_3 = (_y + _switchResult_1);
+            it.setLayoutY(_plus_3);
+          };
+          ObjectExtensions.<Pane>operator_doubleArrow(group, _function);
+        }
       }
     }
   }

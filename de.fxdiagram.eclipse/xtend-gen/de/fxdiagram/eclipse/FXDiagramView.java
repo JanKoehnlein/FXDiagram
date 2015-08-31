@@ -1,18 +1,10 @@
 package de.fxdiagram.eclipse;
 
-import com.google.common.base.Objects;
-import de.fxdiagram.core.XRoot;
-import de.fxdiagram.eclipse.FXDiagramTab;
-import de.fxdiagram.mapping.AbstractMapping;
-import de.fxdiagram.mapping.MappingCall;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import javafx.embed.swt.FXCanvas;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -23,6 +15,16 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Pair;
+
+import com.google.common.base.Objects;
+
+import de.fxdiagram.core.XRoot;
+import de.fxdiagram.mapping.AbstractMapping;
+import de.fxdiagram.mapping.MappingCall;
+import javafx.embed.swt.FXCanvas;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.

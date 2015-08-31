@@ -1,6 +1,7 @@
 package de.fxdiagram.xtext.xbase;
 
 import de.fxdiagram.eclipse.xtext.XtextEObjectDescriptor;
+import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -11,8 +12,8 @@ public class JvmEObjectDescriptor<ECLASS extends EObject> extends XtextEObjectDe
   public JvmEObjectDescriptor() {
   }
   
-  public JvmEObjectDescriptor(final String uri, final String fqn, final String mappingConfigID, final String mappingID, final JvmDomainObjectProvider provider) {
-    super(uri, fqn, mappingConfigID, mappingID, provider);
+  public JvmEObjectDescriptor(final XtextEObjectID elementID, final String mappingConfigID, final String mappingID, final JvmDomainObjectProvider provider) {
+    super(elementID, mappingConfigID, mappingID, provider);
   }
   
   @Override

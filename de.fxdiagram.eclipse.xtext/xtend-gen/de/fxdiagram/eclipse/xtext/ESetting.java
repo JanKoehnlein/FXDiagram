@@ -6,10 +6,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtend.lib.annotations.Data;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
-import org.w3c.dom.EntityReference;
 
 /**
- * The value of an {@link EntityReference} in the context of an {@link EObject}.
+ * The value of an {@link EReference} in the context of an {@link EObject}.
  */
 @Data
 @SuppressWarnings("all")
@@ -20,7 +19,7 @@ public class ESetting<ECLASS extends EObject> {
   
   private final int index;
   
-  public Object getTarget() {
+  public EObject getTarget() {
     Object _xifexpression = null;
     boolean _isMany = this.reference.isMany();
     if (_isMany) {
@@ -29,7 +28,7 @@ public class ESetting<ECLASS extends EObject> {
     } else {
       _xifexpression = this.owner.eGet(this.reference);
     }
-    return _xifexpression;
+    return ((EObject) _xifexpression);
   }
   
   public ESetting(final ECLASS owner, final EReference reference, final int index) {

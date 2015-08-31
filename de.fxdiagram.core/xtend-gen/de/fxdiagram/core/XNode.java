@@ -167,8 +167,13 @@ public class XNode extends XShape implements XModelProvider {
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       this.setEffect(this.selectionEffect);
-      this.setScaleX(1.05);
-      this.setScaleY(1.05);
+      DoubleProperty _scaleXProperty = this.scaleXProperty();
+      boolean _isBound = _scaleXProperty.isBound();
+      boolean _not = (!_isBound);
+      if (_not) {
+        this.setScaleX(1.05);
+        this.setScaleY(1.05);
+      }
       ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
       ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
       Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
@@ -178,8 +183,13 @@ public class XNode extends XShape implements XModelProvider {
       _plus.forEach(_function);
     } else {
       this.setEffect(null);
-      this.setScaleX(1.0);
-      this.setScaleY(1.0);
+      DoubleProperty _scaleXProperty_1 = this.scaleXProperty();
+      boolean _isBound_1 = _scaleXProperty_1.isBound();
+      boolean _not_1 = (!_isBound_1);
+      if (_not_1) {
+        this.setScaleX(1.0);
+        this.setScaleY(1.0);
+      }
     }
   }
   

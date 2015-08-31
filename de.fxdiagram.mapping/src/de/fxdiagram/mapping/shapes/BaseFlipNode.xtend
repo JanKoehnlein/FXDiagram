@@ -11,6 +11,7 @@ import static javafx.geometry.Side.*
 import static javafx.scene.input.MouseButton.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
+import de.fxdiagram.mapping.behavior.NodeDirtyStateBehavior
 
 /**
  * Base implementation for a flipable {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
@@ -32,6 +33,7 @@ class BaseFlipNode<T> extends FlipNode implements INodeWithLazyMappings {
 	override doActivate() {
 		super.doActivate()
 		addLazyBehavior(domainObject)
+		addBehavior(new NodeDirtyStateBehavior(this))
 	}
 	
 	override registerOnClick() {

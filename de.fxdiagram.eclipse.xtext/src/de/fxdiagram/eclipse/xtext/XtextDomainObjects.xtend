@@ -1,14 +1,12 @@
 package de.fxdiagram.eclipse.xtext
 
-import de.fxdiagram.mapping.AbstractMapping
 import java.util.List
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtend.lib.annotations.Data
-import org.w3c.dom.EntityReference
 
 /**
- * The value of an {@link EntityReference} in the context of an {@link EObject}.
+ * The value of an {@link EReference} in the context of an {@link EObject}.
  */
 @Data
 class ESetting<ECLASS extends EObject> {
@@ -16,17 +14,11 @@ class ESetting<ECLASS extends EObject> {
 	EReference reference
 	int index
 	
-	def getTarget() {
-		if(reference.many) 
+	def EObject getTarget() {
+		(if(reference.many) 
 			(owner.eGet(reference) as List<?>).get(index)
 		else
-			owner.eGet(reference)
+			owner.eGet(reference)) as EObject
 	}
-}
-
-@Data
-class MappedElement<ECLASS_OR_ESETTING> {
-	ECLASS_OR_ESETTING element	
-	AbstractMapping<ECLASS_OR_ESETTING> mapping
 }
 

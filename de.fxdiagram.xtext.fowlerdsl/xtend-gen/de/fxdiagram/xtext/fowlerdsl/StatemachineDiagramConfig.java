@@ -11,6 +11,7 @@ import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.shapes.BaseConnection;
 import java.util.List;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -88,8 +89,8 @@ public class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
   private final ConnectionMapping<Transition> transitionConnection = new ConnectionMapping<Transition>(this, "transitionConnection", "Transition") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<Transition> descriptor) {
-      XConnection _xConnection = new XConnection(descriptor);
-      final Procedure1<XConnection> _function = (XConnection it) -> {
+      BaseConnection<Transition> _baseConnection = new BaseConnection<Transition>(descriptor);
+      final Procedure1<BaseConnection<Transition>> _function = (BaseConnection<Transition> it) -> {
         XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
         final Procedure1<XConnectionLabel> _function_1 = (XConnectionLabel label) -> {
           Text _text = label.getText();
@@ -102,7 +103,7 @@ public class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
         };
         ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_1);
       };
-      return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+      return ObjectExtensions.<BaseConnection<Transition>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override

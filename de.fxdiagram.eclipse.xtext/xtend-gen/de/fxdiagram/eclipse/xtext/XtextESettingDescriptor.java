@@ -2,15 +2,16 @@ package de.fxdiagram.eclipse.xtext;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
-import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.eclipse.xtext.AbstractXtextDescriptor;
 import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
-import java.util.Collection;
+import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.emf.common.util.URI;
@@ -20,49 +21,121 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
-/**
- * A {@link DomainObjectDescriptor} that points to an {@link ESetting} from an Xtext document.
- * 
- * Xtext objects only exist in a read-only transaction on an Xtext editor's document.
- * They can be recovered from their URI.
- */
-@ModelNode({ "referenceURI", "index" })
+@ModelNode({ "sourceID", "targetID", "eReferenceURI", "index" })
 @SuppressWarnings("all")
 public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescriptor<ESetting<ECLASS>> {
-  private EReference reference;
+  private EReference eReference;
   
-  public XtextESettingDescriptor() {
-  }
-  
-  public XtextESettingDescriptor(final String uri, final String fqn, final EReference reference, final int index, final String mappingConfigID, final String mappingID, final XtextDomainObjectProvider provider) {
-    super(uri, fqn, mappingConfigID, mappingID, provider);
-    this.reference = reference;
+  public XtextESettingDescriptor(final XtextEObjectID sourceID, final XtextEObjectID targetID, final EReference reference, final int index, final String mappingConfigID, final String mappingID, final XtextDomainObjectProvider provider) {
+    super(mappingConfigID, mappingID, provider);
+    this.sourceIDProperty.set(sourceID);
+    this.targetIDProperty.set(targetID);
+    this.eReference = reference;
     URI _uRI = EcoreUtil.getURI(reference);
     String _string = _uRI.toString();
-    this.referenceURIProperty.set(_string);
+    this.eReferenceURIProperty.set(_string);
     this.indexProperty.set(index);
   }
   
-  public EReference getReference() {
+  @Override
+  public <U extends Object> U withDomainObject(final Function1<? super ESetting<ECLASS>, ? extends U> lambda) {
+    U _xblockexpression = null;
+    {
+      XtextDomainObjectProvider _provider = this.getProvider();
+      XtextEObjectID _sourceID = this.getSourceID();
+      final IEditorPart editor = _provider.getCachedEditor(_sourceID, false, false);
+      U _xifexpression = null;
+      if ((editor instanceof XtextEditor)) {
+        IXtextDocument _document = ((XtextEditor)editor).getDocument();
+        final IUnitOfWork<U, XtextResource> _function = (XtextResource it) -> {
+          U _xblockexpression_1 = null;
+          {
+            XtextEObjectID _sourceID_1 = this.getSourceID();
+            ResourceSet _resourceSet = it.getResourceSet();
+            final EObject source = _sourceID_1.resolve(_resourceSet);
+            XtextEObjectID _targetID = this.getTargetID();
+            ResourceSet _resourceSet_1 = it.getResourceSet();
+            final EObject storedTarget = _targetID.resolve(_resourceSet_1);
+            EReference _eReference = this.getEReference();
+            int _index = this.getIndex();
+            final ESetting<ECLASS> setting = new ESetting<ECLASS>(((ECLASS) source), _eReference, _index);
+            final EObject resolvedTarget = setting.getTarget();
+            boolean _notEquals = (!Objects.equal(resolvedTarget, storedTarget));
+            if (_notEquals) {
+              throw new NoSuchElementException("Reference target has changed");
+            }
+            _xblockexpression_1 = lambda.apply(((ESetting<ECLASS>) setting));
+          }
+          return _xblockexpression_1;
+        };
+        _xifexpression = _document.<U>readOnly(_function);
+      } else {
+        XtextEObjectID _sourceID_1 = this.getSourceID();
+        String _plus = ("Cannot open an Xtext editor for " + _sourceID_1);
+        throw new NoSuchElementException(_plus);
+      }
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
+  @Override
+  public Object openInEditor(final boolean select) {
+    XtextDomainObjectProvider _provider = this.getProvider();
+    XtextEObjectID _sourceID = this.getSourceID();
+    return _provider.getCachedEditor(_sourceID, select, select);
+  }
+  
+  @Override
+  public String getName() {
+    XtextEObjectID _sourceID = this.getSourceID();
+    QualifiedName _qualifiedName = _sourceID.getQualifiedName();
+    String _lastSegment = _qualifiedName.getLastSegment();
+    String _plus = (_lastSegment + "--");
+    EReference _eReference = this.getEReference();
+    String _name = _eReference.getName();
+    String _plus_1 = (_plus + _name);
+    String _plus_2 = (_plus_1 + "-->");
+    XtextEObjectID _targetID = this.getTargetID();
+    QualifiedName _qualifiedName_1 = _targetID.getQualifiedName();
+    String _lastSegment_1 = _qualifiedName_1.getLastSegment();
+    return (_plus_2 + _lastSegment_1);
+  }
+  
+  @Override
+  public String getId() {
+    XtextEObjectID _sourceID = this.getSourceID();
+    String _plus = (_sourceID + "--");
+    String _eReferenceURI = this.getEReferenceURI();
+    String _plus_1 = (_plus + _eReferenceURI);
+    String _plus_2 = (_plus_1 + "-->");
+    XtextEObjectID _targetID = this.getTargetID();
+    return (_plus_2 + _targetID);
+  }
+  
+  public EReference getEReference() {
     EReference _elvis = null;
-    if (this.reference != null) {
-      _elvis = this.reference;
+    if (this.eReference != null) {
+      _elvis = this.eReference;
     } else {
       EReference _resolveReference = this.resolveReference();
-      _elvis = (this.reference = _resolveReference);
+      _elvis = (this.eReference = _resolveReference);
     }
     return _elvis;
   }
   
   private EReference resolveReference() {
-    String _referenceURI = this.getReferenceURI();
-    final URI uri = URI.createURI(_referenceURI);
+    String _eReferenceURI = this.getEReferenceURI();
+    final URI uri = URI.createURI(_eReferenceURI);
     URI _trimFragment = uri.trimFragment();
     String _string = _trimFragment.toString();
     final EPackage ePackage = EPackage.Registry.INSTANCE.getEPackage(_string);
@@ -79,133 +152,123 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
     if ((reference instanceof EReference)) {
       return ((EReference)reference);
     } else {
-      String _referenceURI_1 = this.getReferenceURI();
-      String _plus = ("Cannot resolve EReference " + _referenceURI_1);
+      String _eReferenceURI_1 = this.getEReferenceURI();
+      String _plus = ("Cannot resolve EReference " + _eReferenceURI_1);
       throw new IllegalArgumentException(_plus);
     }
   }
   
   @Override
-  public <T extends Object> T withDomainObject(final Function1<? super ESetting<ECLASS>, ? extends T> lambda) {
-    T _xblockexpression = null;
-    {
-      String _uri = this.getUri();
-      final URI uriAsURI = URI.createURI(_uri);
-      final Object editor = this.openInEditor(false);
-      T _xifexpression = null;
-      if ((editor instanceof XtextEditor)) {
-        IXtextDocument _document = ((XtextEditor)editor).getDocument();
-        final IUnitOfWork<T, XtextResource> _function = (XtextResource it) -> {
-          T _xblockexpression_1 = null;
-          {
-            ResourceSet _resourceSet = it.getResourceSet();
-            EObject _eObject = _resourceSet.getEObject(uriAsURI, true);
-            final ECLASS owner = ((ECLASS) _eObject);
-            boolean _equals = Objects.equal(owner, null);
-            if (_equals) {
-              String _uri_1 = this.getUri();
-              String _plus = ("EReference owner " + _uri_1);
-              String _plus_1 = (_plus + " not found");
-              throw new NoSuchElementException(_plus_1);
-            }
-            boolean _or = false;
-            boolean _eIsSet = owner.eIsSet(this.reference);
-            boolean _not = (!_eIsSet);
-            if (_not) {
-              _or = true;
-            } else {
-              boolean _and = false;
-              boolean _isMany = this.reference.isMany();
-              if (!_isMany) {
-                _and = false;
-              } else {
-                Object _eGet = owner.eGet(this.reference);
-                int _size = ((Collection<?>) _eGet).size();
-                int _index = this.getIndex();
-                boolean _lessThan = (_size < _index);
-                _and = _lessThan;
-              }
-              _or = _and;
-            }
-            if (_or) {
-              String _uri_2 = this.getUri();
-              String _plus_2 = ("Referenced element " + _uri_2);
-              String _plus_3 = (_plus_2 + " not found");
-              throw new NoSuchElementException(_plus_3);
-            }
-            int _index_1 = this.getIndex();
-            final ESetting<ECLASS> setting = new ESetting<ECLASS>(owner, this.reference, _index_1);
-            _xblockexpression_1 = lambda.apply(setting);
-          }
-          return _xblockexpression_1;
-        };
-        _xifexpression = _document.<T>readOnly(_function);
-      }
-      _xblockexpression = _xifexpression;
-    }
-    return _xblockexpression;
-  }
-  
-  @Override
   public boolean equals(final Object obj) {
-    boolean _xifexpression = false;
     if ((obj instanceof XtextESettingDescriptor<?>)) {
       boolean _and = false;
       boolean _and_1 = false;
-      String _uri = ((XtextESettingDescriptor<?>)obj).getUri();
-      String _uri_1 = this.getUri();
-      boolean _equals = Objects.equal(_uri, _uri_1);
+      boolean _and_2 = false;
+      boolean _and_3 = false;
+      boolean _equals = super.equals(obj);
       if (!_equals) {
+        _and_3 = false;
+      } else {
+        XtextEObjectID _sourceID = this.getSourceID();
+        XtextEObjectID _sourceID_1 = ((XtextESettingDescriptor<?>)obj).getSourceID();
+        boolean _equals_1 = Objects.equal(_sourceID, _sourceID_1);
+        _and_3 = _equals_1;
+      }
+      if (!_and_3) {
+        _and_2 = false;
+      } else {
+        XtextEObjectID _targetID = this.getTargetID();
+        XtextEObjectID _targetID_1 = ((XtextESettingDescriptor<?>)obj).getTargetID();
+        boolean _equals_2 = Objects.equal(_targetID, _targetID_1);
+        _and_2 = _equals_2;
+      }
+      if (!_and_2) {
         _and_1 = false;
       } else {
-        EReference _reference = this.getReference();
-        EReference _reference_1 = ((XtextESettingDescriptor<?>)obj).getReference();
-        boolean _equals_1 = Objects.equal(_reference, _reference_1);
-        _and_1 = _equals_1;
+        boolean _equals_3 = Objects.equal(this.eReference, ((XtextESettingDescriptor<?>)obj).eReference);
+        _and_1 = _equals_3;
       }
       if (!_and_1) {
         _and = false;
       } else {
         int _index = this.getIndex();
         int _index_1 = ((XtextESettingDescriptor<?>)obj).getIndex();
-        boolean _equals_2 = (_index == _index_1);
-        _and = _equals_2;
+        boolean _equals_4 = (_index == _index_1);
+        _and = _equals_4;
       }
-      _xifexpression = _and;
+      return _and;
     } else {
-      _xifexpression = false;
+      return false;
     }
-    return _xifexpression;
   }
   
   @Override
   public int hashCode() {
-    String _uri = this.getUri();
-    int _hashCode = _uri.hashCode();
-    int _multiply = (103 * _hashCode);
-    EReference _reference = this.getReference();
-    int _hashCode_1 = _reference.hashCode();
-    int _multiply_1 = (37 * _hashCode_1);
-    int _plus = (_multiply + _multiply_1);
+    int _hashCode = super.hashCode();
+    XtextEObjectID _sourceID = this.getSourceID();
+    int _hashCode_1 = _sourceID.hashCode();
+    int _multiply = (13 * _hashCode_1);
+    int _plus = (_hashCode + _multiply);
+    XtextEObjectID _targetID = this.getTargetID();
+    int _hashCode_2 = _targetID.hashCode();
+    int _multiply_1 = (23 * _hashCode_2);
+    int _plus_1 = (_plus + _multiply_1);
+    int _hashCode_3 = this.eReference.hashCode();
+    int _multiply_2 = (31 * _hashCode_3);
+    int _plus_2 = (_plus_1 + _multiply_2);
     int _index = this.getIndex();
-    int _multiply_2 = (11 * _index);
-    return (_plus + _multiply_2);
+    int _multiply_3 = (37 * _index);
+    return (_plus_2 + _multiply_3);
+  }
+  
+  @Override
+  protected IResourceServiceProvider getResourceServiceProvider() {
+    XtextEObjectID _sourceID = this.getSourceID();
+    return _sourceID.getResourceServiceProvider();
+  }
+  
+  /**
+   * Automatically generated by @ModelNode. Needed for deserialization.
+   */
+  public XtextESettingDescriptor() {
   }
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
-    modelElement.addProperty(referenceURIProperty, String.class);
+    modelElement.addProperty(sourceIDProperty, XtextEObjectID.class);
+    modelElement.addProperty(targetIDProperty, XtextEObjectID.class);
+    modelElement.addProperty(eReferenceURIProperty, String.class);
     modelElement.addProperty(indexProperty, Integer.class);
   }
   
-  private ReadOnlyStringWrapper referenceURIProperty = new ReadOnlyStringWrapper(this, "referenceURI");
+  private ReadOnlyObjectWrapper<XtextEObjectID> sourceIDProperty = new ReadOnlyObjectWrapper<XtextEObjectID>(this, "sourceID");
   
-  public String getReferenceURI() {
-    return this.referenceURIProperty.get();
+  public XtextEObjectID getSourceID() {
+    return this.sourceIDProperty.get();
   }
   
-  public ReadOnlyStringProperty referenceURIProperty() {
-    return this.referenceURIProperty.getReadOnlyProperty();
+  public ReadOnlyObjectProperty<XtextEObjectID> sourceIDProperty() {
+    return this.sourceIDProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyObjectWrapper<XtextEObjectID> targetIDProperty = new ReadOnlyObjectWrapper<XtextEObjectID>(this, "targetID");
+  
+  public XtextEObjectID getTargetID() {
+    return this.targetIDProperty.get();
+  }
+  
+  public ReadOnlyObjectProperty<XtextEObjectID> targetIDProperty() {
+    return this.targetIDProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyStringWrapper eReferenceURIProperty = new ReadOnlyStringWrapper(this, "eReferenceURI");
+  
+  public String getEReferenceURI() {
+    return this.eReferenceURIProperty.get();
+  }
+  
+  public ReadOnlyStringProperty eReferenceURIProperty() {
+    return this.eReferenceURIProperty.getReadOnlyProperty();
   }
   
   private ReadOnlyIntegerWrapper indexProperty = new ReadOnlyIntegerWrapper(this, "index");

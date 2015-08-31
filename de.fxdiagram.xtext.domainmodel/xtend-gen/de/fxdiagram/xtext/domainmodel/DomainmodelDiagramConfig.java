@@ -8,7 +8,6 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
-import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
@@ -17,6 +16,7 @@ import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.shapes.BaseConnection;
 import de.fxdiagram.mapping.shapes.BaseDiagramNode;
 import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
 import de.fxdiagram.xtext.domainmodel.EntityNode;
@@ -31,7 +31,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.common.types.JvmParameterizedTypeReference;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
-import org.eclipse.xtext.example.domainmodel.domainmodel.DomainmodelPackage;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Feature;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
@@ -105,24 +104,20 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
         return ButtonExtensions.getArrowButton(it, "Add property");
       };
       _outConnectionForEach.asButton(_function_1);
-      final Function1<Entity, Iterable<? extends ESetting<Entity>>> _function_2 = (Entity entity) -> {
-        List<? extends ESetting<Entity>> _xblockexpression = null;
-        {
-          JvmParameterizedTypeReference _superType = entity.getSuperType();
-          final Entity superEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_superType);
-          List<? extends ESetting<Entity>> _xifexpression = null;
-          boolean _equals = Objects.equal(superEntity, null);
-          if (_equals) {
-            _xifexpression = CollectionLiterals.emptyList();
-          } else {
-            ESetting<Entity> _eSetting = new ESetting<Entity>(entity, DomainmodelPackage.Literals.ENTITY__SUPER_TYPE, 0);
-            _xifexpression = Collections.<ESetting<Entity>>unmodifiableList(CollectionLiterals.<ESetting<Entity>>newArrayList(_eSetting));
-          }
-          _xblockexpression = _xifexpression;
+      final Function1<Entity, Iterable<? extends JvmTypeReference>> _function_2 = (Entity it) -> {
+        List<JvmParameterizedTypeReference> _xifexpression = null;
+        JvmParameterizedTypeReference _superType = it.getSuperType();
+        Entity _referencedEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_superType);
+        boolean _notEquals = (!Objects.equal(_referencedEntity, null));
+        if (_notEquals) {
+          JvmParameterizedTypeReference _superType_1 = it.getSuperType();
+          _xifexpression = Collections.<JvmParameterizedTypeReference>unmodifiableList(CollectionLiterals.<JvmParameterizedTypeReference>newArrayList(_superType_1));
+        } else {
+          _xifexpression = Collections.<JvmParameterizedTypeReference>unmodifiableList(CollectionLiterals.<JvmParameterizedTypeReference>newArrayList());
         }
-        return _xblockexpression;
+        return _xifexpression;
       };
-      MultiConnectionMappingCall<ESetting<Entity>, Entity> _outConnectionForEach_1 = this.<ESetting<Entity>>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_2);
+      MultiConnectionMappingCall<JvmTypeReference, Entity> _outConnectionForEach_1 = this.<JvmTypeReference>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_2);
       final Function1<Side, Node> _function_3 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add superclass");
       };
@@ -133,8 +128,8 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
   private final ConnectionMapping<Property> propertyConnection = new ConnectionMapping<Property>(this, "propertyConnection", "Property") {
     @Override
     public XConnection createConnection(final IMappedElementDescriptor<Property> descriptor) {
-      XConnection _xConnection = new XConnection(descriptor);
-      final Procedure1<XConnection> _function = (XConnection it) -> {
+      BaseConnection<Property> _baseConnection = new BaseConnection<Property>(descriptor);
+      final Procedure1<BaseConnection<Property>> _function = (BaseConnection<Property> it) -> {
         LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
         it.setTargetArrowHead(_lineArrowHead);
         XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
@@ -148,7 +143,7 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
         };
         ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_1);
       };
-      return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+      return ObjectExtensions.<BaseConnection<Property>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override
@@ -161,23 +156,22 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<ESetting<Entity>> superTypeConnection = new ConnectionMapping<ESetting<Entity>>(this, "superTypeConnection", "Supertype") {
+  private final ConnectionMapping<JvmTypeReference> superTypeConnection = new ConnectionMapping<JvmTypeReference>(this, "superTypeConnection", "Supertype") {
     @Override
-    public XConnection createConnection(final IMappedElementDescriptor<ESetting<Entity>> descriptor) {
-      XConnection _xConnection = new XConnection(descriptor);
-      final Procedure1<XConnection> _function = (XConnection it) -> {
+    public XConnection createConnection(final IMappedElementDescriptor<JvmTypeReference> descriptor) {
+      BaseConnection<JvmTypeReference> _baseConnection = new BaseConnection<JvmTypeReference>(descriptor);
+      final Procedure1<BaseConnection<JvmTypeReference>> _function = (BaseConnection<JvmTypeReference> it) -> {
         TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
           null, Color.WHITE, false);
         it.setTargetArrowHead(_triangleArrowHead);
       };
-      return ObjectExtensions.<XConnection>operator_doubleArrow(_xConnection, _function);
+      return ObjectExtensions.<BaseConnection<JvmTypeReference>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override
     public void calls() {
-      final Function1<ESetting<Entity>, Entity> _function = (ESetting<Entity> it) -> {
-        Object _target = it.getTarget();
-        return DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(((JvmTypeReference) _target));
+      final Function1<JvmTypeReference, Entity> _function = (JvmTypeReference it) -> {
+        return DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(it);
       };
       this.<Entity>target(DomainmodelDiagramConfig.this.entityNode, _function);
     }

@@ -1,13 +1,15 @@
 package de.fxdiagram.eclipse.commands;
 
-import com.google.common.base.Objects;
-import de.fxdiagram.eclipse.selection.ISelectionExtractor;
-import de.fxdiagram.mapping.MappingCall;
-import de.fxdiagram.mapping.XDiagramConfig;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+
+import com.google.common.base.Objects;
+
+import de.fxdiagram.eclipse.selection.ISelectionExtractor;
+import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.XDiagramConfig;
 
 @SuppressWarnings("all")
 public class HasMappingPropertyTester extends PropertyTester {

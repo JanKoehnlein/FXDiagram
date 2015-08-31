@@ -5,6 +5,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.behavior.ConnectionDirtyStateBehavior;
 
 /**
  * Base implementation for a {@link XConnection} that belongs to an {@link IMappedElementDescriptor}.
@@ -23,6 +24,13 @@ public class BaseConnection<T extends Object> extends XConnection {
   public DomainObjectDescriptor getDomainObject() {
     DomainObjectDescriptor _domainObject = super.getDomainObject();
     return ((IMappedElementDescriptor<T>) _domainObject);
+  }
+  
+  @Override
+  public void doActivate() {
+    super.doActivate();
+    ConnectionDirtyStateBehavior<Object> _connectionDirtyStateBehavior = new ConnectionDirtyStateBehavior<Object>(this);
+    this.addBehavior(_connectionDirtyStateBehavior);
   }
   
   /**

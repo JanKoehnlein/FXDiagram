@@ -1,14 +1,8 @@
 package de.fxdiagram.eclipse.commands;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Iterables;
-import de.fxdiagram.eclipse.FXDiagramView;
-import de.fxdiagram.eclipse.selection.ISelectionExtractor;
-import de.fxdiagram.mapping.AbstractMapping;
-import de.fxdiagram.mapping.MappingCall;
-import de.fxdiagram.mapping.XDiagramConfig;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.SWT;
@@ -32,6 +26,15 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+
+import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+
+import de.fxdiagram.eclipse.FXDiagramView;
+import de.fxdiagram.eclipse.selection.ISelectionExtractor;
+import de.fxdiagram.mapping.AbstractMapping;
+import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.XDiagramConfig;
 
 @SuppressWarnings("all")
 public class ShowInDiagramContribution extends CompoundContributionItem {

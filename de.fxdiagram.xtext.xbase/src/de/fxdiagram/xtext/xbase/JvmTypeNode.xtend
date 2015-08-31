@@ -5,8 +5,6 @@ import de.fxdiagram.lib.nodes.ClassModel
 import de.fxdiagram.mapping.shapes.BaseClassNode
 import org.eclipse.xtext.common.types.JvmDeclaredType
 
-import static extension org.eclipse.emf.common.util.URI.*
-
 class JvmTypeNode extends BaseClassNode<JvmDeclaredType> {
 
 	@Inject extension JvmDomainUtil 
@@ -19,7 +17,7 @@ class JvmTypeNode extends BaseClassNode<JvmDeclaredType> {
 		domainObject.withDomainObject[ type |
 			new ClassModel => [
 				fileName = (domainObject as JvmEObjectDescriptor<JvmDeclaredType>)
-					.uri.createURI.lastSegment
+					.elementID.URI.trimFragment.lastSegment
 				namespace = type.packageName
 				name = type.simpleName
 				attributes += type.attributes.map [

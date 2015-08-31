@@ -1,17 +1,16 @@
 package de.fxdiagram.xtext.xbase
 
 import com.google.inject.Inject
-import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.anchors.TriangleArrowHead
-import de.fxdiagram.eclipse.xtext.ESetting
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.DiagramMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.MappingAcceptor
 import de.fxdiagram.mapping.NodeMapping
+import de.fxdiagram.mapping.shapes.BaseConnection
 import de.fxdiagram.mapping.shapes.BaseDiagramNode
 import javafx.scene.paint.Color
 import org.eclipse.emf.ecore.EObject
@@ -23,8 +22,6 @@ import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
-
-import static org.eclipse.xtext.common.types.TypesPackage.Literals.*
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 
@@ -44,21 +41,14 @@ class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 				references
 			].asButton[getArrowButton("Add reference")]
 			superTypeConnection.outConnectionForEach [ JvmDeclaredType it | 
-				val result = newArrayList
-				for(var i=0; i<superTypes.size(); i++) {
-					val superType = superTypes.get(i)
-					if(superType.type instanceof JvmDeclaredType) {
-						result.add(new ESetting(it, JVM_DECLARED_TYPE__SUPER_TYPES, i))	
-					}
-				}
-				result
+				superTypes.filter[type instanceof JvmDeclaredType]
 			].asButton[getTriangleButton("Add supertype")]
 		}
 	}
 
 	val referenceConnection = new ConnectionMapping<JvmField>(this, 'referenceConnection', 'Reference') {
 		override createConnection(IMappedElementDescriptor<JvmField> descriptor) {
-			new XConnection(descriptor) => [
+			new BaseConnection(descriptor) => [
 				targetArrowHead = new LineArrowHead(it, false)
 				new XConnectionLabel(it) => [ label |
 					label.text.text = descriptor.withDomainObject[simpleName]
@@ -71,16 +61,16 @@ class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 		}
 	}
 
-	val superTypeConnection = new ConnectionMapping<ESetting<JvmDeclaredType>>(this, 'superTypeConnection', 'Supertype') {
-		override createConnection(IMappedElementDescriptor<ESetting<JvmDeclaredType>> descriptor) {
-			new XConnection(descriptor) => [
+	val superTypeConnection = new ConnectionMapping<JvmTypeReference>(this, 'superTypeConnection', 'Supertype') {
+		override createConnection(IMappedElementDescriptor<JvmTypeReference> descriptor) {
+			new BaseConnection(descriptor) => [
 				targetArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false)
 				// TODO set strokeDashOffset for interfaces			
 			]
 		}
 
 		override calls() {
-			typeNode.target[((target as JvmTypeReference).type as JvmDeclaredType).originalJvmType]
+			typeNode.target[(type as JvmDeclaredType).originalJvmType]
 		}
 	}
 	
