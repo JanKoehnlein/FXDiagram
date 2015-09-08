@@ -148,7 +148,8 @@
       xsi:type="git:GitCloneTask"
       id="kieler.git.clone"
       remoteURI="http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git"
-      checkoutBranch="master">
+      pushURI=""
+      checkoutBranch="releases/pragmatics-2015-02">
     <description>Kieler</description>
   </setupTask>
   <setupTask
