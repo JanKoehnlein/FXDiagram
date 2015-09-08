@@ -30,7 +30,8 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="efxclipse.release"
-      value="http://download.eclipse.org/efxclipse/runtime-released/2.0.0/site"/>
+      value="http://download.eclipse.org/efxclipse/runtime-released/2.1.0/site"
+      label=""/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="kieler.pragmatics"
@@ -147,7 +148,7 @@
       xsi:type="git:GitCloneTask"
       id="kieler.git.clone"
       remoteURI="http://git.rtsys.informatik.uni-kiel.de/scm/kieler/pragmatics.git"
-      checkoutBranch="release-pragmatics-2015-02">
+      checkoutBranch="master">
     <description>Kieler</description>
   </setupTask>
   <setupTask
