@@ -47,8 +47,10 @@ class RelativeXtextEObjectID extends AbstractXtextEObjectID {
 		else
 			parent.URI.fragment + relativeFragment
 		val element = parent.eResource.getEObject(elementFragment)
-		if (!EClass.isInstance(element))
+		if (element == null || element.eIsProxy)
 			throw new NoSuchElementException('Could not resolve element ' + toString)
+		if(!EClass.isInstance(element))
+			throw new NoSuchElementException('Expected ' + EClass.name + ' but got ' + element.eClass.name)
 		return element
 	}
 }

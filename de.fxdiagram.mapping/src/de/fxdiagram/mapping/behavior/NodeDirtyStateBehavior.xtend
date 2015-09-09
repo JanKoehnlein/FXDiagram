@@ -3,6 +3,7 @@ package de.fxdiagram.mapping.behavior
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior
 import de.fxdiagram.core.behavior.DirtyState
+import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import java.util.NoSuchElementException
 
@@ -25,5 +26,10 @@ class NodeDirtyStateBehavior extends AbstractDirtyStateBehavior<XNode> {
 			}
 		}
 		return CLEAN 
+	}
+	
+	override update(UpdateAcceptor acceptor) {
+		if(dirtyState == DANGLING) 
+			 acceptor.delete(host)
 	}
 }

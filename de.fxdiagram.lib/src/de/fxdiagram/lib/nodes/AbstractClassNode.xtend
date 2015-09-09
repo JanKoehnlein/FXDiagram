@@ -3,6 +3,7 @@ package de.fxdiagram.lib.nodes
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior
+import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.animations.Inflator
@@ -237,5 +238,21 @@ class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractClassNode>
 			]	
 			dirtyAnimation.stop
 		}
+	}
+	
+	override update(UpdateAcceptor acceptor) {
+		try {
+			val newModel = host.inferClassModel
+			if (newModel != null) {
+				if (host.model != newModel)
+					// TODO morph to new state
+					return 
+				else
+					return 
+			}
+		} catch (NoSuchElementException exc) {
+			// remove host
+		}
+		acceptor.delete(host)
 	}
 }

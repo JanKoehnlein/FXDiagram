@@ -30,7 +30,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.command.AbstractAnimationCommand;
+import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
@@ -47,6 +47,7 @@ import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
@@ -85,7 +86,7 @@ public class Layouter {
   public LazyCommand createLayoutCommand(final LayoutType type, final XDiagram diagram, final Duration duration, final XShape fixed) {
     final LazyCommand _function = new LazyCommand() {
       @Override
-      protected AbstractAnimationCommand createDelegate() {
+      protected AnimationCommand createDelegate() {
         final HashMap<Object, KGraphElement> cache = Layouter.this.calculateLayout(type, diagram);
         return Layouter.this.composeCommand(cache, duration, fixed, diagram);
       }
@@ -505,9 +506,13 @@ public class Layouter {
     {
       final KNode kNode = this._kGraphFactory.createKNode();
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
-      shapeLayout.setSize(
-        (((float) it.getAutoLayoutDimension().getWidth()) + Layouter.NODE_PADDING), 
-        (((float) it.getAutoLayoutDimension().getHeight()) + Layouter.NODE_PADDING));
+      Dimension2D _autoLayoutDimension = it.getAutoLayoutDimension();
+      double _width = _autoLayoutDimension.getWidth();
+      float _plus = (((float) _width) + Layouter.NODE_PADDING);
+      Dimension2D _autoLayoutDimension_1 = it.getAutoLayoutDimension();
+      double _height = _autoLayoutDimension_1.getHeight();
+      float _plus_1 = (((float) _height) + Layouter.NODE_PADDING);
+      shapeLayout.setSize(_plus, _plus_1);
       EList<KGraphData> _data = kNode.getData();
       _data.add(shapeLayout);
       cache.put(it, kNode);

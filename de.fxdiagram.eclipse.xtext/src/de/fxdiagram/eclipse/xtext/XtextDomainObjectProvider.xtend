@@ -36,9 +36,13 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
 		switch it: domainObject {
 			EObject: {
+				if(eIsProxy)
+					return null
 				return new XtextEObjectDescriptor(createXtextEObjectID, mapping.config.ID, mapping.ID, this) as IMappedElementDescriptor<T>
 			}
 			ESetting<?>: {
+				if(owner == null || owner.eIsProxy)
+					return null
 				return new XtextESettingDescriptor(owner.createXtextEObjectID, target.createXtextEObjectID, reference, index, mapping.config.ID, mapping.ID, this)
 			}
 			default:
@@ -54,7 +58,7 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 	 * Avoids expensive switching of active parts on subsequent withDomainObject operations. 
 	 */	
 	def getCachedEditor(XtextEObjectID elementID, boolean isSelect, boolean isActivate) {
-		val activePage = PlatformUI.getWorkbench.activeWorkbenchWindow.activePage
+		val activePage = PlatformUI.workbench.activeWorkbenchWindow.activePage
 		val resourceURI = elementID.URI.trimFragment
 		val cachedEditor = editorCache.get(resourceURI)?.findOn(activePage)
 		if(cachedEditor instanceof XtextEditor) {

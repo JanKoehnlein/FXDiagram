@@ -104,13 +104,31 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
     final String elementFragment = _xifexpression;
     Resource _eResource = parent.eResource();
     final EObject element = _eResource.getEObject(elementFragment);
+    boolean _or = false;
+    boolean _equals = Objects.equal(element, null);
+    if (_equals) {
+      _or = true;
+    } else {
+      boolean _eIsProxy = element.eIsProxy();
+      _or = _eIsProxy;
+    }
+    if (_or) {
+      String _string = this.toString();
+      String _plus = ("Could not resolve element " + _string);
+      throw new NoSuchElementException(_plus);
+    }
     EClass _eClass = this.getEClass();
     boolean _isInstance = _eClass.isInstance(element);
     boolean _not = (!_isInstance);
     if (_not) {
-      String _string = this.toString();
-      String _plus = ("Could not resolve element " + _string);
-      throw new NoSuchElementException(_plus);
+      EClass _eClass_1 = this.getEClass();
+      String _name = _eClass_1.getName();
+      String _plus_1 = ("Expected " + _name);
+      String _plus_2 = (_plus_1 + " but got ");
+      EClass _eClass_2 = element.eClass();
+      String _name_1 = _eClass_2.getName();
+      String _plus_3 = (_plus_2 + _name_1);
+      throw new NoSuchElementException(_plus_3);
     }
     return element;
   }

@@ -1,11 +1,20 @@
 package de.fxdiagram.core.behavior
 
 import de.fxdiagram.core.XShape
+import de.fxdiagram.core.command.AnimationCommand
 
 interface DirtyStateBehavior extends Behavior {
 	def DirtyState getDirtyState()
 	
 	def void showDirtyState(DirtyState state)
+	
+	def void update(UpdateAcceptor acceptor) 
+}
+
+interface UpdateAcceptor {
+	def void delete(XShape shape)
+	def void add(XShape shape)
+	def void morph(AnimationCommand command)
 }
 
 abstract class AbstractDirtyStateBehavior<T extends XShape> extends AbstractHostBehavior<T> implements DirtyStateBehavior {

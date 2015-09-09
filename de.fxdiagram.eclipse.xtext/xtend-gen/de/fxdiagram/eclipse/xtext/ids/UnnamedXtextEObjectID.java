@@ -27,8 +27,15 @@ public class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
   public EObject resolve(final ResourceSet resourceSet) {
     URI _uRI = this.getURI();
     final EObject element = resourceSet.getEObject(_uRI, true);
+    boolean _or = false;
     boolean _equals = Objects.equal(element, null);
     if (_equals) {
+      _or = true;
+    } else {
+      boolean _eIsProxy = element.eIsProxy();
+      _or = _eIsProxy;
+    }
+    if (_or) {
       URI _uRI_1 = this.getURI();
       String _plus = ("Could not resolve " + _uRI_1);
       throw new NoSuchElementException(_plus);

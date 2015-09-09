@@ -26,6 +26,7 @@ import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
+import de.fxdiagram.eclipse.changes.IChangeListener
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.ConnectionMappingCall
@@ -36,26 +37,16 @@ import de.fxdiagram.mapping.NodeMappingCall
 import de.fxdiagram.mapping.XDiagramConfig
 import de.fxdiagram.mapping.XDiagramConfigInterpreter
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
-import java.util.ArrayList
-import java.util.Map
-import java.util.Set
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
-import org.eclipse.jface.text.DocumentEvent
-import org.eclipse.jface.text.IDocumentListener
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.CTabFolder
 import org.eclipse.swt.custom.CTabItem
 import org.eclipse.swt.events.FocusEvent
 import org.eclipse.swt.events.FocusListener
 import org.eclipse.ui.IEditorPart
-import org.eclipse.ui.IPartListener2
-import org.eclipse.ui.IWorkbenchPart
-import org.eclipse.ui.IWorkbenchPartReference
 import org.eclipse.ui.keys.IBindingService
-import org.eclipse.ui.texteditor.AbstractTextEditor
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
@@ -64,30 +55,32 @@ class FXDiagramTab {
 	val FXCanvas canvas
 	val SwtToFXGestureConverter gestureConverter
 	val XRoot root
-	val Set<IEditorPart> changedEditors = newHashSet
-	val Map<IEditorPart, DocumentListener> contributingEditors = newHashMap
-	val listener = new EditorListener(this)
 	val configInterpreter = new XDiagramConfigInterpreter
 
 	boolean isLinkWithEditor
+
+	IChangeListener changeListener 
 
 	new(FXDiagramView view, CTabFolder tabFolder) {
 		canvas = new FXCanvas(tabFolder, SWT.NONE)
 		tab = new CTabItem(tabFolder, SWT.CLOSE)
 		tab.control = canvas
 		gestureConverter = new SwtToFXGestureConverter(canvas)
+		changeListener = [
+			if (it instanceof IEditorPart) 
+				refreshUpdateState
+		]
+		view.modelChangeBroker.addListener(changeListener)
 		root = createRoot
 		tab.text = root.name
 		canvas.scene = new Scene(root) => [
 			camera = new PerspectiveCamera
 			root.activate
 		]
+		
 		tab.addDisposeListener [
 			gestureConverter.dispose
-			view.site.page.removePartListener(listener)
-			new ArrayList(contributingEditors.keySet).forEach [
-				deregister
-			]
+			view.modelChangeBroker.removeListener(changeListener)
 		]
 		root.nameProperty.addListener [ p, o, n |
 			tab.text = n
@@ -98,7 +91,6 @@ class FXDiagramTab {
 			else
 				tab.text = root.name
 		]
-		view.site.page.addPartListener(listener)
 		canvas.addFocusListener(new FocusListener {
 			override focusGained(FocusEvent e) {
 				(view.site.getService(IBindingService) as IBindingService).keyFilterEnabled = false
@@ -108,6 +100,7 @@ class FXDiagramTab {
 				(view.site.getService(IBindingService) as IBindingService).keyFilterEnabled = true
 			}
 		})
+		
 	}
 
 	protected def createRoot() {
@@ -149,18 +142,15 @@ class FXDiagramTab {
 	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
 		val interpreterContext = new InterpreterContext(root.diagram)
 		if (mappingCall instanceof DiagramMappingCall<?, ?>) {
-			interpreterContext.isReplaceRootDiagram = editor == null || register(editor) ||
-				changedEditors.remove(editor)
+			interpreterContext.isReplaceRootDiagram = true 
 			configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
 			interpreterContext.executeCommands(root.commandStack)
 		} else if (mappingCall instanceof NodeMappingCall<?, ?>) {
-			register(editor)
 			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)
 			interpreterContext.executeCommands(root.commandStack)
 		} else if (mappingCall instanceof ConnectionMappingCall<?, ?>) {
 			val mapping = mappingCall.mapping as ConnectionMapping<?>
 			if (mapping.source != null && mapping.target != null) {
-				register(editor)
 				configInterpreter.execute(mappingCall as ConnectionMappingCall<?, T>, element, [], interpreterContext,
 					true)
 				interpreterContext.executeCommands(root.commandStack)
@@ -190,7 +180,6 @@ class FXDiagramTab {
 
 	def clear() {
 		// TODO: undo support
-		changedEditors.clear
 		root.diagram = new XDiagram
 		root.commandStack.clear
 	}
@@ -202,40 +191,6 @@ class FXDiagramTab {
 	protected def <T, U> createMappedDescriptor(T domainObject) {
 		val mapping = XDiagramConfig.Registry.instance.configurations.map[getMappings(domainObject)].flatten.head
 		mapping.config.domainObjectProvider.createMappedElementDescriptor(domainObject, mapping)
-	}
-
-	protected def boolean register(IEditorPart editor) {
-		var isNew = false
-		if (!contributingEditors.containsKey(editor)) {
-			if (editor instanceof AbstractTextEditor) {
-				val documentListener = new DocumentListener(this, editor)
-				val document = editor.documentProvider.getDocument(editor.editorInput)
-				document.addDocumentListener(documentListener)
-				contributingEditors.put(editor, documentListener)
-			} else {
-				contributingEditors.put(editor, null)
-			}
-			isNew = true
-		}
-		return isNew
-	}
-
-	protected def deregister(IWorkbenchPartReference reference) {
-		reference.getPart(false)?.deregister
-	}
-
-	protected def deregister(IWorkbenchPart part) {
-		changedEditors.remove(part)
-		if (part instanceof AbstractTextEditor) {
-			val documentListener = contributingEditors.get(part)
-			val document = part.documentProvider.getDocument(part.editorInput)
-			document.removeDocumentListener(documentListener)
-		}
-		contributingEditors.remove(part)
-	}
-
-	protected def editorChanged(IEditorPart editor) {
-		changedEditors += editor
 	}
 
 	def void setLinkWithEditor(boolean linkWithEditor) {
@@ -257,50 +212,5 @@ class FXDiagramTab {
 						DirtyState.CLEAN)
 			}
 		]
-	}
-
-	@FinalFieldsConstructor
-	protected static class DocumentListener implements IDocumentListener {
-
-		val FXDiagramTab diagramTab
-		val IEditorPart editor
-
-		override documentAboutToBeChanged(DocumentEvent event) {
-		}
-
-		override documentChanged(DocumentEvent event) {
-			diagramTab.editorChanged(editor)
-		}
-	}
-
-	@FinalFieldsConstructor
-	protected static class EditorListener implements IPartListener2 {
-
-		val FXDiagramTab diagramTab
-
-		override partActivated(IWorkbenchPartReference partRef) {
-		}
-
-		override partBroughtToTop(IWorkbenchPartReference partRef) {
-		}
-
-		override partClosed(IWorkbenchPartReference partRef) {
-			diagramTab.deregister(partRef)
-		}
-
-		override partDeactivated(IWorkbenchPartReference partRef) {
-		}
-
-		override partHidden(IWorkbenchPartReference partRef) {
-		}
-
-		override partInputChanged(IWorkbenchPartReference partRef) {
-		}
-
-		override partOpened(IWorkbenchPartReference partRef) {
-		}
-
-		override partVisible(IWorkbenchPartReference partRef) {
-		}
 	}
 }

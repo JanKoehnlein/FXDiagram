@@ -1,8 +1,10 @@
 package de.fxdiagram.mapping.behavior;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
+import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import java.util.NoSuchElementException;
@@ -35,5 +37,15 @@ public class NodeDirtyStateBehavior extends AbstractDirtyStateBehavior<XNode> {
       }
     }
     return DirtyState.CLEAN;
+  }
+  
+  @Override
+  public void update(final UpdateAcceptor acceptor) {
+    DirtyState _dirtyState = this.getDirtyState();
+    boolean _equals = Objects.equal(_dirtyState, DirtyState.DANGLING);
+    if (_equals) {
+      XNode _host = this.getHost();
+      acceptor.delete(_host);
+    }
   }
 }

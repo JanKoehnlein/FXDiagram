@@ -1,6 +1,7 @@
 package de.fxdiagram.core.command
 
 import javafx.animation.Animation
+import javafx.animation.Timeline
 
 /**
  * Base interface for commands. 
@@ -21,4 +22,26 @@ interface AnimationCommand {
 	 * Consider package private. Clients should not override this.
 	 */
 	def void skipViewportRestore()
+	
+	AnimationCommand NOOP = new AnimationCommand() {
+		
+		override getExecuteAnimation(CommandContext context) {
+			null
+		}
+		
+		override getUndoAnimation(CommandContext context) {
+			null
+		}
+		
+		override getRedoAnimation(CommandContext context) {
+			null
+		}
+		
+		override clearRedoStackOnExecute() {
+			false
+		}
+		
+		override skipViewportRestore() {
+		}
+	}
 }

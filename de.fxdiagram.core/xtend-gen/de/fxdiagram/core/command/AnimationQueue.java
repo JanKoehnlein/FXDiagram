@@ -40,14 +40,11 @@ public class AnimationQueue {
   public void enqueue(final Function0<? extends Animation> animationFactory) {
     boolean _notEquals = (!Objects.equal(animationFactory, null));
     if (_notEquals) {
-      /* this.queue; */
       synchronized (this.queue) {
-        {
-          final boolean isEmpty = this.queue.isEmpty();
-          this.queue.add(animationFactory);
-          if (isEmpty) {
-            this.executeNext();
-          }
+        final boolean isEmpty = this.queue.isEmpty();
+        this.queue.add(animationFactory);
+        if (isEmpty) {
+          this.executeNext();
         }
       }
     }
@@ -69,7 +66,6 @@ public class AnimationQueue {
           ObservableList<Animation> _children = it.getChildren();
           _children.add(animation);
           final EventHandler<ActionEvent> _function_1 = (ActionEvent it_1) -> {
-            /* this.queue; */
             synchronized (this.queue) {
               this.queue.poll();
             }
@@ -80,7 +76,6 @@ public class AnimationQueue {
         };
         ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       } else {
-        /* this.queue; */
         synchronized (this.queue) {
           this.queue.poll();
         }

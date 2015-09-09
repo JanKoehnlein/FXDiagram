@@ -58,7 +58,7 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 			throw new NoSuchElementException('Expected a single element but got ' + eObjectDescriptions.size)
 		val eObjectDescription = eObjectDescriptions.head
 		val element = EcoreUtil.resolve(eObjectDescription.EObjectOrProxy, resource)
-		if (element == null)
+		if (element == null || element.eIsProxy)
 			throw new NoSuchElementException('Cannot resolve element ' + eObjectDescription.EObjectURI)
 		return element
 	}

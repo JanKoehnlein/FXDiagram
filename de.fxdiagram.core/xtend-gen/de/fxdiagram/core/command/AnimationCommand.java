@@ -26,4 +26,30 @@ public interface AnimationCommand {
    * Consider package private. Clients should not override this.
    */
   public abstract void skipViewportRestore();
+  
+  public final static AnimationCommand NOOP = new AnimationCommand() {
+    @Override
+    public Animation getExecuteAnimation(final CommandContext context) {
+      return null;
+    }
+    
+    @Override
+    public Animation getUndoAnimation(final CommandContext context) {
+      return null;
+    }
+    
+    @Override
+    public Animation getRedoAnimation(final CommandContext context) {
+      return null;
+    }
+    
+    @Override
+    public boolean clearRedoStackOnExecute() {
+      return false;
+    }
+    
+    @Override
+    public void skipViewportRestore() {
+    }
+  };
 }

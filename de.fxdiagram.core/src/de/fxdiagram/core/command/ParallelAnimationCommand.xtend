@@ -16,6 +16,12 @@ class ParallelAnimationCommand extends AbstractAnimationCommand {
 		} 
 	} 
 
+	def operator_add(Iterable<AnimationCommand> commands) {
+		commands.forEach[
+			this += it
+		]
+	} 
+
 	override createExecuteAnimation(CommandContext context) {
 		commands.map[getExecuteAnimation(context)].parallelTransition 
 	}
@@ -29,7 +35,7 @@ class ParallelAnimationCommand extends AbstractAnimationCommand {
 	}
 	
 	protected def getParallelTransition(List<Animation> animations) {
-		val validAnimations = animations.filterNull
+		val validAnimations = animations.filterNull.toList
 		if(validAnimations.empty)
 			return null
 		else

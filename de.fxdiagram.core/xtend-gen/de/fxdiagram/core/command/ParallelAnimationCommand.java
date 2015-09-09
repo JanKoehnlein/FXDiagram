@@ -6,6 +6,7 @@ import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
 import javafx.collections.ObservableList;
@@ -26,6 +27,13 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
       this.commands.add(command);
       command.skipViewportRestore();
     }
+  }
+  
+  public void operator_add(final Iterable<AnimationCommand> commands) {
+    final Consumer<AnimationCommand> _function = (AnimationCommand it) -> {
+      this.operator_add(it);
+    };
+    commands.forEach(_function);
   }
   
   @Override
@@ -56,8 +64,9 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
   }
   
   protected ParallelTransition getParallelTransition(final List<Animation> animations) {
-    final Iterable<Animation> validAnimations = IterableExtensions.<Animation>filterNull(animations);
-    boolean _isEmpty = IterableExtensions.isEmpty(validAnimations);
+    Iterable<Animation> _filterNull = IterableExtensions.<Animation>filterNull(animations);
+    final List<Animation> validAnimations = IterableExtensions.<Animation>toList(_filterNull);
+    boolean _isEmpty = validAnimations.isEmpty();
     if (_isEmpty) {
       return null;
     } else {

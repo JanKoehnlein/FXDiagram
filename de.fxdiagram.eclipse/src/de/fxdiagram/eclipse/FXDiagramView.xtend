@@ -1,6 +1,7 @@
 package de.fxdiagram.eclipse
 
 import de.fxdiagram.core.XRoot
+import de.fxdiagram.eclipse.changes.ModelChangeBroker
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.MappingCall
 import java.util.List
@@ -14,7 +15,12 @@ import org.eclipse.swt.custom.CTabFolder
 import org.eclipse.swt.custom.CTabItem
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.ui.IEditorPart
+import org.eclipse.ui.PlatformUI
 import org.eclipse.ui.part.ViewPart
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.ui.commands.ICommandService
+import org.eclipse.ui.handlers.HandlerUtil
+import org.eclipse.ui.handlers.RegistryToggleState
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -30,9 +36,14 @@ class FXDiagramView extends ViewPart {
 	
 	boolean linkWithEditor
 	
+	@Accessors(PUBLIC_GETTER) ModelChangeBroker modelChangeBroker
+	
 	override createPartControl(Composite parent) {
 		tabFolder = new CTabFolder(parent, SWT.BORDER + SWT.BOTTOM)
 		tabFolder.background = parent.display.getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND)
+		modelChangeBroker = new ModelChangeBroker(PlatformUI.workbench)
+		val command = site.getService(ICommandService).getCommand('de.fxdiagram.eclipse.LinkWithEditor')
+		linkWithEditor = command.getState(RegistryToggleState.STATE_ID)?.value as Boolean ?: false
 	}
 
 	def createNewTab() {
@@ -42,6 +53,7 @@ class FXDiagramView extends ViewPart {
 		globalEventHandlers.forEach[
 			diagramTab.root.addEventHandlerWrapper(key as EventType<? extends Event>, value)
 		]
+		diagramTab.linkWithEditor = linkWithEditor
 		diagramTab
 	}
 	

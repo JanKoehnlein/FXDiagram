@@ -7,8 +7,9 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -21,7 +22,7 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -32,9 +33,11 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   
   private XDiagram diagram;
   
-  private List<? extends XShape> shapes;
+  private Set<? extends XShape> shapes;
   
   private Map<XConnection, Pair<XNode, XNode>> connectedNodesMap = CollectionLiterals.<XConnection, Pair<XNode, XNode>>newHashMap();
+  
+  private Map<XShape, Double> shapeOpacities = CollectionLiterals.<XShape, Double>newHashMap();
   
   public static AddRemoveCommand newAddCommand(final XDiagram diagram, final XShape... shapes) {
     return new AddRemoveCommand(true, diagram, shapes);
@@ -47,13 +50,17 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   protected AddRemoveCommand(final boolean isAdd, final XDiagram diagram, final XShape... shapes) {
     this.isAdd = isAdd;
     this.diagram = diagram;
-    this.shapes = ((List<? extends XShape>)Conversions.doWrapArray(shapes));
+    Set<XShape> _set = IterableExtensions.<XShape>toSet(((Iterable<XShape>)Conversions.doWrapArray(shapes)));
+    this.shapes = _set;
   }
   
   @Override
   public Animation createExecuteAnimation(final CommandContext context) {
+    final HashSet<XShape> removeShapes = CollectionLiterals.<XShape>newHashSet();
     Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
     final Consumer<XNode> _function = (XNode it) -> {
+      double _opacity = it.getOpacity();
+      this.shapeOpacities.put(it, Double.valueOf(_opacity));
       if (this.isAdd) {
         ObservableList<XNode> _nodes = this.diagram.getNodes();
         boolean _contains = _nodes.contains(it);
@@ -61,15 +68,25 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         if (_not) {
           ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
           _nodes_1.add(it);
+        } else {
+          removeShapes.add(it);
         }
       } else {
         ObservableList<XNode> _nodes_2 = this.diagram.getNodes();
-        _nodes_2.remove(it);
+        boolean _contains_1 = _nodes_2.contains(it);
+        if (_contains_1) {
+          ObservableList<XNode> _nodes_3 = this.diagram.getNodes();
+          _nodes_3.remove(it);
+        } else {
+          removeShapes.add(it);
+        }
       }
     };
     _filter.forEach(_function);
     Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(this.shapes, XConnection.class);
     final Consumer<XConnection> _function_1 = (XConnection it) -> {
+      double _opacity = it.getOpacity();
+      this.shapeOpacities.put(it, Double.valueOf(_opacity));
       XNode _source = it.getSource();
       XNode _target = it.getTarget();
       Pair<XNode, XNode> _mappedTo = Pair.<XNode, XNode>of(_source, _target);
@@ -81,13 +98,22 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         if (_not) {
           ObservableList<XConnection> _connections_1 = this.diagram.getConnections();
           _connections_1.add(it);
+        } else {
+          removeShapes.add(it);
         }
       } else {
         ObservableList<XConnection> _connections_2 = this.diagram.getConnections();
-        _connections_2.remove(it);
+        boolean _contains_1 = _connections_2.contains(it);
+        if (_contains_1) {
+          ObservableList<XConnection> _connections_3 = this.diagram.getConnections();
+          _connections_3.remove(it);
+        } else {
+          removeShapes.add(it);
+        }
       }
     };
     _filter_1.forEach(_function_1);
+    Iterables.removeAll(this.shapes, removeShapes);
     return null;
   }
   
@@ -121,7 +147,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         Duration _defaultUndoDuration = context.getDefaultUndoDuration();
         return this.disappear(it_1, _defaultUndoDuration);
       };
-      List<Animation> _map = ListExtensions.map(this.shapes, _function_1);
+      Iterable<Animation> _map = IterableExtensions.map(this.shapes, _function_1);
       Iterables.<Animation>addAll(_children, _map);
       final EventHandler<ActionEvent> _function_2 = (ActionEvent it_1) -> {
         Iterable<XConnection> _filter = Iterables.<XConnection>filter(this.shapes, XConnection.class);
@@ -169,7 +195,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
           Duration _defaultUndoDuration = context.getDefaultUndoDuration();
           return this.appear(it_1, _defaultUndoDuration);
         };
-        List<Animation> _map = ListExtensions.map(this.shapes, _function_3);
+        Iterable<Animation> _map = IterableExtensions.map(this.shapes, _function_3);
         Iterables.<Animation>addAll(_children, _map);
       };
       _xblockexpression = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function_2);
@@ -182,7 +208,8 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     final Procedure1<FadeTransition> _function = (FadeTransition it) -> {
       it.setNode(node);
       it.setFromValue(0);
-      it.setToValue(1);
+      Double _get = this.shapeOpacities.get(node);
+      it.setToValue((_get).doubleValue());
       it.setCycleCount(1);
       it.setDuration(duration);
     };
@@ -193,7 +220,8 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
     FadeTransition _fadeTransition = new FadeTransition();
     final Procedure1<FadeTransition> _function = (FadeTransition it) -> {
       it.setNode(node);
-      it.setFromValue(1);
+      Double _get = this.shapeOpacities.get(node);
+      it.setFromValue((_get).doubleValue());
       it.setToValue(0);
       it.setCycleCount(1);
       it.setDuration(duration);

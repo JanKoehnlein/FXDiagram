@@ -36,6 +36,8 @@ import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.UndoAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.eclipse.FXDiagramView;
+import de.fxdiagram.eclipse.changes.IChangeListener;
+import de.fxdiagram.eclipse.changes.ModelChangeBroker;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
@@ -51,7 +53,6 @@ import de.fxdiagram.mapping.XDiagramConfigInterpreter;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
@@ -64,9 +65,6 @@ import javafx.embed.swt.FXCanvas;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.util.Duration;
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -74,17 +72,10 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.keys.IBindingService;
-import org.eclipse.ui.texteditor.AbstractTextEditor;
-import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -93,71 +84,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class FXDiagramTab {
-  @FinalFieldsConstructor
-  protected static class DocumentListener implements IDocumentListener {
-    private final FXDiagramTab diagramTab;
-    
-    private final IEditorPart editor;
-    
-    @Override
-    public void documentAboutToBeChanged(final DocumentEvent event) {
-    }
-    
-    @Override
-    public void documentChanged(final DocumentEvent event) {
-      this.diagramTab.editorChanged(this.editor);
-    }
-    
-    public DocumentListener(final FXDiagramTab diagramTab, final IEditorPart editor) {
-      super();
-      this.diagramTab = diagramTab;
-      this.editor = editor;
-    }
-  }
-  
-  @FinalFieldsConstructor
-  protected static class EditorListener implements IPartListener2 {
-    private final FXDiagramTab diagramTab;
-    
-    @Override
-    public void partActivated(final IWorkbenchPartReference partRef) {
-    }
-    
-    @Override
-    public void partBroughtToTop(final IWorkbenchPartReference partRef) {
-    }
-    
-    @Override
-    public void partClosed(final IWorkbenchPartReference partRef) {
-      this.diagramTab.deregister(partRef);
-    }
-    
-    @Override
-    public void partDeactivated(final IWorkbenchPartReference partRef) {
-    }
-    
-    @Override
-    public void partHidden(final IWorkbenchPartReference partRef) {
-    }
-    
-    @Override
-    public void partInputChanged(final IWorkbenchPartReference partRef) {
-    }
-    
-    @Override
-    public void partOpened(final IWorkbenchPartReference partRef) {
-    }
-    
-    @Override
-    public void partVisible(final IWorkbenchPartReference partRef) {
-    }
-    
-    public EditorListener(final FXDiagramTab diagramTab) {
-      super();
-      this.diagramTab = diagramTab;
-    }
-  }
-  
   private final CTabItem tab;
   
   private final FXCanvas canvas;
@@ -166,15 +92,11 @@ public class FXDiagramTab {
   
   private final XRoot root;
   
-  private final Set<IEditorPart> changedEditors = CollectionLiterals.<IEditorPart>newHashSet();
-  
-  private final Map<IEditorPart, FXDiagramTab.DocumentListener> contributingEditors = CollectionLiterals.<IEditorPart, FXDiagramTab.DocumentListener>newHashMap();
-  
-  private final FXDiagramTab.EditorListener listener = new FXDiagramTab.EditorListener(this);
-  
   private final XDiagramConfigInterpreter configInterpreter = new XDiagramConfigInterpreter();
   
   private boolean isLinkWithEditor;
+  
+  private IChangeListener changeListener;
   
   public FXDiagramTab(final FXDiagramView view, final CTabFolder tabFolder) {
     FXCanvas _fXCanvas = new FXCanvas(tabFolder, SWT.NONE);
@@ -184,38 +106,39 @@ public class FXDiagramTab {
     this.tab.setControl(this.canvas);
     SwtToFXGestureConverter _swtToFXGestureConverter = new SwtToFXGestureConverter(this.canvas);
     this.gestureConverter = _swtToFXGestureConverter;
+    final IChangeListener _function = (IWorkbenchPart it) -> {
+      if ((it instanceof IEditorPart)) {
+        this.refreshUpdateState();
+      }
+    };
+    this.changeListener = _function;
+    ModelChangeBroker _modelChangeBroker = view.getModelChangeBroker();
+    _modelChangeBroker.addListener(this.changeListener);
     XRoot _createRoot = this.createRoot();
     this.root = _createRoot;
     String _name = this.root.getName();
     this.tab.setText(_name);
     Scene _scene = new Scene(this.root);
-    final Procedure1<Scene> _function = (Scene it) -> {
+    final Procedure1<Scene> _function_1 = (Scene it) -> {
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       it.setCamera(_perspectiveCamera);
       this.root.activate();
     };
-    Scene _doubleArrow = ObjectExtensions.<Scene>operator_doubleArrow(_scene, _function);
+    Scene _doubleArrow = ObjectExtensions.<Scene>operator_doubleArrow(_scene, _function_1);
     this.canvas.setScene(_doubleArrow);
-    final DisposeListener _function_1 = (DisposeEvent it) -> {
+    final DisposeListener _function_2 = (DisposeEvent it) -> {
       this.gestureConverter.dispose();
-      IWorkbenchPartSite _site = view.getSite();
-      IWorkbenchPage _page = _site.getPage();
-      _page.removePartListener(this.listener);
-      Set<IEditorPart> _keySet = this.contributingEditors.keySet();
-      ArrayList<IEditorPart> _arrayList = new ArrayList<IEditorPart>(_keySet);
-      final Consumer<IEditorPart> _function_2 = (IEditorPart it_1) -> {
-        this.deregister(it_1);
-      };
-      _arrayList.forEach(_function_2);
+      ModelChangeBroker _modelChangeBroker_1 = view.getModelChangeBroker();
+      _modelChangeBroker_1.removeListener(this.changeListener);
     };
-    this.tab.addDisposeListener(_function_1);
+    this.tab.addDisposeListener(_function_2);
     StringProperty _nameProperty = this.root.nameProperty();
-    final ChangeListener<String> _function_2 = (ObservableValue<? extends String> p, String o, String n) -> {
+    final ChangeListener<String> _function_3 = (ObservableValue<? extends String> p, String o, String n) -> {
       this.tab.setText(n);
     };
-    _nameProperty.addListener(_function_2);
+    _nameProperty.addListener(_function_3);
     BooleanProperty _needsSaveProperty = this.root.needsSaveProperty();
-    final ChangeListener<Boolean> _function_3 = (ObservableValue<? extends Boolean> p, Boolean o, Boolean n) -> {
+    final ChangeListener<Boolean> _function_4 = (ObservableValue<? extends Boolean> p, Boolean o, Boolean n) -> {
       if ((n).booleanValue()) {
         String _name_1 = this.root.getName();
         String _plus = ("*" + _name_1);
@@ -225,10 +148,7 @@ public class FXDiagramTab {
         this.tab.setText(_name_2);
       }
     };
-    _needsSaveProperty.addListener(_function_3);
-    IWorkbenchPartSite _site = view.getSite();
-    IWorkbenchPage _page = _site.getPage();
-    _page.addPartListener(this.listener);
+    _needsSaveProperty.addListener(_function_4);
     this.canvas.addFocusListener(new FocusListener() {
       @Override
       public void focusGained(final FocusEvent e) {
@@ -337,34 +257,18 @@ public class FXDiagramTab {
     XDiagram _diagram = this.root.getDiagram();
     final InterpreterContext interpreterContext = new InterpreterContext(_diagram);
     if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
-      boolean _or = false;
-      boolean _or_1 = false;
-      boolean _equals = Objects.equal(editor, null);
-      if (_equals) {
-        _or_1 = true;
-      } else {
-        boolean _register = this.register(editor);
-        _or_1 = _register;
-      }
-      if (_or_1) {
-        _or = true;
-      } else {
-        boolean _remove = this.changedEditors.remove(editor);
-        _or = _remove;
-      }
-      interpreterContext.setIsReplaceRootDiagram(_or);
+      interpreterContext.setIsReplaceRootDiagram(true);
       this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
       CommandStack _commandStack = this.root.getCommandStack();
       interpreterContext.executeCommands(_commandStack);
     } else {
       if ((mappingCall instanceof NodeMappingCall<?, ?>)) {
-        this.register(editor);
         this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext, true);
         CommandStack _commandStack_1 = this.root.getCommandStack();
         interpreterContext.executeCommands(_commandStack_1);
       } else {
         if ((mappingCall instanceof ConnectionMappingCall<?, ?>)) {
-          AbstractMapping<?> _mapping = mappingCall.getMapping();
+          AbstractMapping<?> _mapping = ((ConnectionMappingCall<?, ?>)mappingCall).getMapping();
           final ConnectionMapping<?> mapping = ((ConnectionMapping<?>) _mapping);
           boolean _and = false;
           NodeMappingCall<?, ?> _source = mapping.getSource();
@@ -377,7 +281,6 @@ public class FXDiagramTab {
             _and = _notEquals_1;
           }
           if (_and) {
-            this.register(editor);
             final Procedure1<XConnection> _function = (XConnection it) -> {
             };
             this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext, 
@@ -429,7 +332,7 @@ public class FXDiagramTab {
         it.operator_add(_createLayoutCommand);
       }
       final Function1<XShape, Boolean> _function_3 = (XShape it_1) -> {
-        return Boolean.valueOf(Objects.equal(it_1, centerShape));
+        return Boolean.valueOf(Objects.equal(it_1, ((XShape)centerShape)));
       };
       SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_3);
       it.operator_add(_selectAndRevealCommand);
@@ -439,7 +342,6 @@ public class FXDiagramTab {
   }
   
   public void clear() {
-    this.changedEditors.clear();
     XDiagram _xDiagram = new XDiagram();
     this.root.setDiagram(_xDiagram);
     CommandStack _commandStack = this.root.getCommandStack();
@@ -466,55 +368,6 @@ public class FXDiagramTab {
       _xblockexpression = _domainObjectProvider.<T>createMappedElementDescriptor(domainObject, mapping);
     }
     return _xblockexpression;
-  }
-  
-  protected boolean register(final IEditorPart editor) {
-    boolean isNew = false;
-    boolean _containsKey = this.contributingEditors.containsKey(editor);
-    boolean _not = (!_containsKey);
-    if (_not) {
-      if ((editor instanceof AbstractTextEditor)) {
-        final FXDiagramTab.DocumentListener documentListener = new FXDiagramTab.DocumentListener(this, editor);
-        IDocumentProvider _documentProvider = ((AbstractTextEditor)editor).getDocumentProvider();
-        IEditorInput _editorInput = ((AbstractTextEditor)editor).getEditorInput();
-        final IDocument document = _documentProvider.getDocument(_editorInput);
-        document.addDocumentListener(documentListener);
-        this.contributingEditors.put(editor, documentListener);
-      } else {
-        this.contributingEditors.put(editor, null);
-      }
-      isNew = true;
-    }
-    return isNew;
-  }
-  
-  protected FXDiagramTab.DocumentListener deregister(final IWorkbenchPartReference reference) {
-    IWorkbenchPart _part = reference.getPart(false);
-    FXDiagramTab.DocumentListener _deregister = null;
-    if (_part!=null) {
-      _deregister=this.deregister(_part);
-    }
-    return _deregister;
-  }
-  
-  protected FXDiagramTab.DocumentListener deregister(final IWorkbenchPart part) {
-    FXDiagramTab.DocumentListener _xblockexpression = null;
-    {
-      this.changedEditors.remove(part);
-      if ((part instanceof AbstractTextEditor)) {
-        final FXDiagramTab.DocumentListener documentListener = this.contributingEditors.get(part);
-        IDocumentProvider _documentProvider = ((AbstractTextEditor)part).getDocumentProvider();
-        IEditorInput _editorInput = ((AbstractTextEditor)part).getEditorInput();
-        final IDocument document = _documentProvider.getDocument(_editorInput);
-        document.removeDocumentListener(documentListener);
-      }
-      _xblockexpression = this.contributingEditors.remove(part);
-    }
-    return _xblockexpression;
-  }
-  
-  protected boolean editorChanged(final IEditorPart editor) {
-    return this.changedEditors.add(editor);
   }
   
   public void setLinkWithEditor(final boolean linkWithEditor) {

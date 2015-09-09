@@ -4,12 +4,12 @@ import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
-import java.util.List
 import java.util.Map
+import java.util.Set
+import javafx.animation.Animation
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
 import javafx.util.Duration
-import javafx.animation.Animation
 
 class AddRemoveCommand extends AbstractAnimationCommand {
 	
@@ -17,9 +17,11 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 	
 	XDiagram diagram
 
-	List<? extends XShape> shapes
+	Set<? extends XShape> shapes
 	
 	Map<XConnection, Pair<XNode, XNode>> connectedNodesMap = newHashMap()
+	
+	Map<XShape, Double> shapeOpacities = newHashMap
 	
 	static def newAddCommand(XDiagram diagram, XShape... shapes) {
 		new AddRemoveCommand(true, diagram, shapes)
@@ -32,27 +34,41 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 	protected new(boolean isAdd, XDiagram diagram, XShape... shapes) {
 		this.isAdd = isAdd
 		this.diagram = diagram
-		this.shapes = shapes
+		this.shapes = shapes.toSet
 	}
 	
 	override createExecuteAnimation(CommandContext context) {
+		val removeShapes = <XShape>newHashSet
 		shapes.filter(XNode).forEach[
+			shapeOpacities.put(it, opacity)
 			if(isAdd) {
 				if(!diagram.nodes.contains(it)) 
 					diagram.nodes += it
+				else 
+					removeShapes += it
 			} else {
-				diagram.nodes -= it
+				if(diagram.nodes.contains(it))				
+					diagram.nodes -= it
+				else 
+					removeShapes += it
 			}
 		]
 		shapes.filter(XConnection).forEach[
+			shapeOpacities.put(it, opacity)
 			connectedNodesMap.put(it, source -> target)					
 			if(isAdd) {
 				if(!diagram.connections.contains(it)) 
 					diagram.connections += it
+				else 
+					removeShapes += it
 			} else {
-				diagram.connections -= it
+				if(diagram.connections.contains(it))
+					diagram.connections -= it
+				else 
+					removeShapes += it
 			}
 		]
+		shapes -= removeShapes
 		return null
 	}
 
@@ -105,7 +121,7 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 		new FadeTransition => [
 			it.node = node
 			fromValue = 0
-			toValue = 1
+			toValue = shapeOpacities.get(node)
 			cycleCount = 1
 			it.duration = duration
 		]
@@ -115,7 +131,7 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 	protected def Animation disappear(XShape node, Duration duration) {
 		new FadeTransition => [
 			it.node = node
-			fromValue = 1
+			fromValue = shapeOpacities.get(node)
 			toValue = 0
 			cycleCount = 1
 			it.duration = duration

@@ -3,6 +3,7 @@ package de.fxdiagram.lib.nodes;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
+import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.lib.nodes.AbstractClassNode;
 import de.fxdiagram.lib.nodes.ClassModel;
@@ -121,6 +122,33 @@ public class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractCla
       ObjectExtensions.<AbstractClassNode>operator_doubleArrow(_host_1, _function_1);
       this.dirtyAnimation.stop();
     }
+  }
+  
+  @Override
+  public void update(final UpdateAcceptor acceptor) {
+    try {
+      AbstractClassNode _host = this.getHost();
+      final ClassModel newModel = _host.inferClassModel();
+      boolean _notEquals = (!Objects.equal(newModel, null));
+      if (_notEquals) {
+        AbstractClassNode _host_1 = this.getHost();
+        ClassModel _model = _host_1.getModel();
+        boolean _notEquals_1 = (!Objects.equal(_model, newModel));
+        if (_notEquals_1) {
+          return;
+        } else {
+          return;
+        }
+      }
+    } catch (final Throwable _t) {
+      if (_t instanceof NoSuchElementException) {
+        final NoSuchElementException exc = (NoSuchElementException)_t;
+      } else {
+        throw Exceptions.sneakyThrow(_t);
+      }
+    }
+    AbstractClassNode _host_2 = this.getHost();
+    acceptor.delete(_host_2);
   }
   
   private SimpleDoubleProperty dirtyAnimationValueProperty = new SimpleDoubleProperty(this, "dirtyAnimationValue");

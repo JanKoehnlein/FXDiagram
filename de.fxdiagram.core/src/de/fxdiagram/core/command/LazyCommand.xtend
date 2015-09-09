@@ -5,9 +5,9 @@ package de.fxdiagram.core.command
  */
 abstract class LazyCommand implements AnimationCommand {
 	
-	AbstractAnimationCommand delegate
+	AnimationCommand delegate
 	
-	protected abstract def AbstractAnimationCommand createDelegate()
+	protected abstract def AnimationCommand createDelegate()
 
 	override clearRedoStackOnExecute() {
 		delegate?.clearRedoStackOnExecute

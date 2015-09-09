@@ -1,6 +1,5 @@
 package de.fxdiagram.core.command;
 
-import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
 import javafx.animation.Animation;
@@ -10,9 +9,9 @@ import javafx.animation.Animation;
  */
 @SuppressWarnings("all")
 public abstract class LazyCommand implements AnimationCommand {
-  private AbstractAnimationCommand delegate;
+  private AnimationCommand delegate;
   
-  protected abstract AbstractAnimationCommand createDelegate();
+  protected abstract AnimationCommand createDelegate();
   
   @Override
   public boolean clearRedoStackOnExecute() {
@@ -34,7 +33,7 @@ public abstract class LazyCommand implements AnimationCommand {
   public Animation getExecuteAnimation(final CommandContext context) {
     Animation _xblockexpression = null;
     {
-      AbstractAnimationCommand _createDelegate = this.createDelegate();
+      AnimationCommand _createDelegate = this.createDelegate();
       this.delegate = _createDelegate;
       _xblockexpression = this.delegate.getExecuteAnimation(context);
     }

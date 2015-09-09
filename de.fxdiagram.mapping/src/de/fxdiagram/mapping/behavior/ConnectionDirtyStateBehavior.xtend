@@ -3,6 +3,7 @@ package de.fxdiagram.mapping.behavior
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior
+import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
@@ -17,8 +18,9 @@ import javafx.animation.Timeline
 
 import static de.fxdiagram.core.behavior.DirtyState.*
 
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.behavior.UpdateAcceptor
 
 class ConnectionDirtyStateBehavior<T> extends AbstractDirtyStateBehavior<XConnection> {
 
@@ -38,11 +40,13 @@ class ConnectionDirtyStateBehavior<T> extends AbstractDirtyStateBehavior<XConnec
 			try {
 				return descriptor.withDomainObject [ domainObject |
 					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
-					val sourceState = checkConnectionEnd(domainObject as T, connectionMapping, true)
-					if(sourceState == CLEAN)
-						return checkConnectionEnd(domainObject as T, connectionMapping, false)
-					else 
-						return sourceState
+					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObject, true)
+					if (resolvedSourceDescriptor == host.source.domainObject) {
+						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObject, false)
+						if(resolvedTarget == host.target.domainObject)								
+							return CLEAN
+					}
+					return DIRTY
 				]
 			} catch (NoSuchElementException exc) {
 				return DANGLING
@@ -52,21 +56,19 @@ class ConnectionDirtyStateBehavior<T> extends AbstractDirtyStateBehavior<XConnec
 		}
 	}
 
-	protected def <U> checkConnectionEnd(T domainObject, ConnectionMapping<T> connectionMapping, boolean isSource) {
+	protected def <U> resolveConnectionEnd(T domainObject, ConnectionMapping<T> connectionMapping, DomainObjectDescriptor nodeDescriptor, boolean isSource) {
 		val interpreter = new XDiagramConfigInterpreter
-		val node = if(isSource) host.source else host.target
 		val nodeMappingCall = (if(isSource) connectionMapping.source else connectionMapping.target) as NodeMappingCall<U, T>
 		if (nodeMappingCall != null) {
 			val nodeObject = interpreter.select(nodeMappingCall, domainObject).head as U
 			if (nodeObject == null)
-				return DIRTY
+				return null
 			val resolvedNodeDescriptor = interpreter.getDescriptor(nodeObject, nodeMappingCall.mapping)
-			if (resolvedNodeDescriptor != node.domainObject)
-				return DIRTY
+			if (resolvedNodeDescriptor != nodeDescriptor)
+				return resolvedNodeDescriptor
 			else
-				return CLEAN
+				return nodeDescriptor
 		} else {
-			val nodeDescriptor = node.domainObject
 			if (nodeDescriptor instanceof IMappedElementDescriptor<?>) {
 				val nodeMapping = nodeDescriptor.mapping
 				if (nodeMapping instanceof NodeMapping<?>) {
@@ -85,16 +87,15 @@ class ConnectionDirtyStateBehavior<T> extends AbstractDirtyStateBehavior<XConnec
 						val nodeObjectCasted = nodeDomainObject as U
 						for (siblingMappingCall : siblingMappingCalls) {
 							if (interpreter.select(siblingMappingCall, nodeObjectCasted).exists[interpreter.getDescriptor(it, siblingMappingCall.mapping) == host.domainObject])
-								return CLEAN
+								return nodeDescriptor
 						}
-						return DIRTY
+						return null
 					]
 				}
 			}
 		}				
 		return DIRTY
 	}
-	
 	
 	override protected doActivate() {
 		dirtyAnimation = new Timeline => [
@@ -131,5 +132,29 @@ class ConnectionDirtyStateBehavior<T> extends AbstractDirtyStateBehavior<XConnec
 			host.strokeWidth = strokeWidth
 			dirtyAnimation.stop
 		}
+	}
+	
+	override update(UpdateAcceptor acceptor) {
+		val descriptor = host.domainObject
+		if (descriptor instanceof IMappedElementDescriptor<?>) {
+			try {
+				descriptor.withDomainObject [ domainObject |
+					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
+					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObject, true)
+					if (resolvedSourceDescriptor != host.source.domainObject) {
+						// TODO: return reconnect source command
+						acceptor.delete(host)
+					} else {
+						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObject, false)
+						if(resolvedTarget != host.target.domainObject)
+							// TODO: retrun reconnect target command
+							acceptor.delete(host)
+					}
+					null
+				]
+			} catch (NoSuchElementException exc) {
+				acceptor.delete(host)
+			}
+		} 
 	}
 }

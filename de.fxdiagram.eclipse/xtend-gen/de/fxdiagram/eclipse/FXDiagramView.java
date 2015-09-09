@@ -1,10 +1,21 @@
 package de.fxdiagram.eclipse;
 
+import com.google.common.base.Objects;
+import de.fxdiagram.core.XRoot;
+import de.fxdiagram.eclipse.FXDiagramTab;
+import de.fxdiagram.eclipse.changes.ModelChangeBroker;
+import de.fxdiagram.mapping.AbstractMapping;
+import de.fxdiagram.mapping.MappingCall;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-
+import javafx.embed.swt.FXCanvas;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.State;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -12,19 +23,17 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Pair;
-
-import com.google.common.base.Objects;
-
-import de.fxdiagram.core.XRoot;
-import de.fxdiagram.mapping.AbstractMapping;
-import de.fxdiagram.mapping.MappingCall;
-import javafx.embed.swt.FXCanvas;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -41,6 +50,9 @@ public class FXDiagramView extends ViewPart {
   
   private boolean linkWithEditor;
   
+  @Accessors(AccessorType.PUBLIC_GETTER)
+  private ModelChangeBroker modelChangeBroker;
+  
   @Override
   public void createPartControl(final Composite parent) {
     CTabFolder _cTabFolder = new CTabFolder(parent, (SWT.BORDER + SWT.BOTTOM));
@@ -48,6 +60,24 @@ public class FXDiagramView extends ViewPart {
     Display _display = parent.getDisplay();
     Color _systemColor = _display.getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND);
     this.tabFolder.setBackground(_systemColor);
+    IWorkbench _workbench = PlatformUI.getWorkbench();
+    ModelChangeBroker _modelChangeBroker = new ModelChangeBroker(_workbench);
+    this.modelChangeBroker = _modelChangeBroker;
+    IWorkbenchPartSite _site = this.getSite();
+    ICommandService _service = _site.<ICommandService>getService(ICommandService.class);
+    final Command command = _service.getCommand("de.fxdiagram.eclipse.LinkWithEditor");
+    Boolean _elvis = null;
+    State _state = command.getState(RegistryToggleState.STATE_ID);
+    Object _value = null;
+    if (_state!=null) {
+      _value=_state.getValue();
+    }
+    if (((Boolean) _value) != null) {
+      _elvis = ((Boolean) _value);
+    } else {
+      _elvis = Boolean.valueOf(false);
+    }
+    this.linkWithEditor = (_elvis).booleanValue();
   }
   
   public FXDiagramTab createNewTab() {
@@ -65,6 +95,7 @@ public class FXDiagramView extends ViewPart {
         this.addEventHandlerWrapper(_root, ((EventType<? extends Event>) _key), _value);
       };
       this.globalEventHandlers.forEach(_function);
+      diagramTab.setLinkWithEditor(this.linkWithEditor);
       _xblockexpression = diagramTab;
     }
     return _xblockexpression;
@@ -158,5 +189,10 @@ public class FXDiagramView extends ViewPart {
       _elvis = _createNewTab;
     }
     _elvis.<T>revealElement(element, mappingCall, editor);
+  }
+  
+  @Pure
+  public ModelChangeBroker getModelChangeBroker() {
+    return this.modelChangeBroker;
   }
 }

@@ -8,6 +8,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
+import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
@@ -58,13 +59,28 @@ public class ConnectionDirtyStateBehavior<T extends Object> extends AbstractDirt
         final Function1<Object, DirtyState> _function = (Object domainObject) -> {
           AbstractMapping<?> _mapping = ((IMappedElementDescriptor<?>)descriptor).getMapping();
           final ConnectionMapping<T> connectionMapping = ((ConnectionMapping<T>) _mapping);
-          final DirtyState sourceState = this.<Object>checkConnectionEnd(((T) domainObject), connectionMapping, true);
-          boolean _equals = Objects.equal(sourceState, DirtyState.CLEAN);
+          XConnection _host_1 = this.getHost();
+          XNode _source = _host_1.getSource();
+          DomainObjectDescriptor _domainObject = _source.getDomainObject();
+          final Object resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObject, true);
+          XConnection _host_2 = this.getHost();
+          XNode _source_1 = _host_2.getSource();
+          DomainObjectDescriptor _domainObject_1 = _source_1.getDomainObject();
+          boolean _equals = Objects.equal(resolvedSourceDescriptor, _domainObject_1);
           if (_equals) {
-            return this.<Object>checkConnectionEnd(((T) domainObject), connectionMapping, false);
-          } else {
-            return sourceState;
+            XConnection _host_3 = this.getHost();
+            XNode _target = _host_3.getTarget();
+            DomainObjectDescriptor _domainObject_2 = _target.getDomainObject();
+            final Object resolvedTarget = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObject_2, false);
+            XConnection _host_4 = this.getHost();
+            XNode _target_1 = _host_4.getTarget();
+            DomainObjectDescriptor _domainObject_3 = _target_1.getDomainObject();
+            boolean _equals_1 = Objects.equal(resolvedTarget, _domainObject_3);
+            if (_equals_1) {
+              return DirtyState.CLEAN;
+            }
           }
+          return DirtyState.DIRTY;
         };
         return ((IMappedElementDescriptor<?>)descriptor).<DirtyState>withDomainObject(_function);
       } catch (final Throwable _t) {
@@ -80,24 +96,15 @@ public class ConnectionDirtyStateBehavior<T extends Object> extends AbstractDirt
     }
   }
   
-  protected <U extends Object> DirtyState checkConnectionEnd(final T domainObject, final ConnectionMapping<T> connectionMapping, final boolean isSource) {
+  protected <U extends Object> Object resolveConnectionEnd(final T domainObject, final ConnectionMapping<T> connectionMapping, final DomainObjectDescriptor nodeDescriptor, final boolean isSource) {
     final XDiagramConfigInterpreter interpreter = new XDiagramConfigInterpreter();
-    XNode _xifexpression = null;
+    NodeMappingCall<?, T> _xifexpression = null;
     if (isSource) {
-      XConnection _host = this.getHost();
-      _xifexpression = _host.getSource();
+      _xifexpression = connectionMapping.getSource();
     } else {
-      XConnection _host_1 = this.getHost();
-      _xifexpression = _host_1.getTarget();
+      _xifexpression = connectionMapping.getTarget();
     }
-    final XNode node = _xifexpression;
-    NodeMappingCall<?, T> _xifexpression_1 = null;
-    if (isSource) {
-      _xifexpression_1 = connectionMapping.getSource();
-    } else {
-      _xifexpression_1 = connectionMapping.getTarget();
-    }
-    final NodeMappingCall<U, T> nodeMappingCall = ((NodeMappingCall<U, T>) _xifexpression_1);
+    final NodeMappingCall<U, T> nodeMappingCall = ((NodeMappingCall<U, T>) _xifexpression);
     boolean _notEquals = (!Objects.equal(nodeMappingCall, null));
     if (_notEquals) {
       Iterable<U> _select = interpreter.<U, T>select(nodeMappingCall, domainObject);
@@ -105,24 +112,22 @@ public class ConnectionDirtyStateBehavior<T extends Object> extends AbstractDirt
       final U nodeObject = ((U) _head);
       boolean _equals = Objects.equal(nodeObject, null);
       if (_equals) {
-        return DirtyState.DIRTY;
+        return null;
       }
       AbstractMapping<U> _mapping = nodeMappingCall.getMapping();
       final IMappedElementDescriptor<U> resolvedNodeDescriptor = interpreter.<U>getDescriptor(nodeObject, _mapping);
-      DomainObjectDescriptor _domainObject = node.getDomainObject();
-      boolean _notEquals_1 = (!Objects.equal(resolvedNodeDescriptor, _domainObject));
+      boolean _notEquals_1 = (!Objects.equal(resolvedNodeDescriptor, nodeDescriptor));
       if (_notEquals_1) {
-        return DirtyState.DIRTY;
+        return resolvedNodeDescriptor;
       } else {
-        return DirtyState.CLEAN;
+        return nodeDescriptor;
       }
     } else {
-      final DomainObjectDescriptor nodeDescriptor = node.getDomainObject();
       if ((nodeDescriptor instanceof IMappedElementDescriptor<?>)) {
         final AbstractMapping<?> nodeMapping = ((IMappedElementDescriptor<?>)nodeDescriptor).getMapping();
         if ((nodeMapping instanceof NodeMapping<?>)) {
           final NodeMapping<U> nodeMappingCasted = ((NodeMapping<U>) nodeMapping);
-          Iterable<AbstractConnectionMappingCall<T, U>> _xifexpression_2 = null;
+          Iterable<AbstractConnectionMappingCall<T, U>> _xifexpression_1 = null;
           if (isSource) {
             List<AbstractConnectionMappingCall<?, U>> _outgoing = nodeMappingCasted.getOutgoing();
             final Function1<AbstractConnectionMappingCall<?, U>, Boolean> _function = (AbstractConnectionMappingCall<?, U> it) -> {
@@ -133,7 +138,7 @@ public class ConnectionDirtyStateBehavior<T extends Object> extends AbstractDirt
             final Function1<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>> _function_1 = (AbstractConnectionMappingCall<?, U> it) -> {
               return ((AbstractConnectionMappingCall<T, U>) it);
             };
-            _xifexpression_2 = IterableExtensions.<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>>map(_filter, _function_1);
+            _xifexpression_1 = IterableExtensions.<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>>map(_filter, _function_1);
           } else {
             List<AbstractConnectionMappingCall<?, U>> _incoming = nodeMappingCasted.getIncoming();
             final Function1<AbstractConnectionMappingCall<?, U>, Boolean> _function_2 = (AbstractConnectionMappingCall<?, U> it) -> {
@@ -144,28 +149,28 @@ public class ConnectionDirtyStateBehavior<T extends Object> extends AbstractDirt
             final Function1<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>> _function_3 = (AbstractConnectionMappingCall<?, U> it) -> {
               return ((AbstractConnectionMappingCall<T, U>) it);
             };
-            _xifexpression_2 = IterableExtensions.<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>>map(_filter_1, _function_3);
+            _xifexpression_1 = IterableExtensions.<AbstractConnectionMappingCall<?, U>, AbstractConnectionMappingCall<T, U>>map(_filter_1, _function_3);
           }
-          final Iterable<AbstractConnectionMappingCall<T, U>> siblingMappingCalls = _xifexpression_2;
-          final Function1<Object, DirtyState> _function_4 = (Object nodeDomainObject) -> {
+          final Iterable<AbstractConnectionMappingCall<T, U>> siblingMappingCalls = _xifexpression_1;
+          final Function1<Object, IMappedElementDescriptor<?>> _function_4 = (Object nodeDomainObject) -> {
             final U nodeObjectCasted = ((U) nodeDomainObject);
             for (final AbstractConnectionMappingCall<T, U> siblingMappingCall : siblingMappingCalls) {
               Iterable<T> _select_1 = interpreter.<T, U>select(siblingMappingCall, nodeObjectCasted);
               final Function1<T, Boolean> _function_5 = (T it) -> {
                 AbstractMapping<T> _mapping_1 = siblingMappingCall.getMapping();
                 IMappedElementDescriptor<T> _descriptor = interpreter.<T>getDescriptor(it, _mapping_1);
-                XConnection _host_2 = this.getHost();
-                DomainObjectDescriptor _domainObject_1 = _host_2.getDomainObject();
-                return Boolean.valueOf(Objects.equal(_descriptor, _domainObject_1));
+                XConnection _host = this.getHost();
+                DomainObjectDescriptor _domainObject = _host.getDomainObject();
+                return Boolean.valueOf(Objects.equal(_descriptor, _domainObject));
               };
               boolean _exists = IterableExtensions.<T>exists(_select_1, _function_5);
               if (_exists) {
-                return DirtyState.CLEAN;
+                return ((IMappedElementDescriptor<?>)nodeDescriptor);
               }
             }
-            return DirtyState.DIRTY;
+            return null;
           };
-          return ((IMappedElementDescriptor<?>)nodeDescriptor).<DirtyState>withDomainObject(_function_4);
+          return ((IMappedElementDescriptor<?>)nodeDescriptor).<IMappedElementDescriptor<?>>withDomainObject(_function_4);
         }
       }
     }
@@ -271,6 +276,59 @@ public class ConnectionDirtyStateBehavior<T extends Object> extends AbstractDirt
       XConnection _host_9 = this.getHost();
       _host_9.setStrokeWidth(this.strokeWidth);
       this.dirtyAnimation.stop();
+    }
+  }
+  
+  @Override
+  public void update(final UpdateAcceptor acceptor) {
+    XConnection _host = this.getHost();
+    final DomainObjectDescriptor descriptor = _host.getDomainObject();
+    if ((descriptor instanceof IMappedElementDescriptor<?>)) {
+      try {
+        final Function1<Object, Object> _function = (Object domainObject) -> {
+          Object _xblockexpression = null;
+          {
+            AbstractMapping<?> _mapping = ((IMappedElementDescriptor<?>)descriptor).getMapping();
+            final ConnectionMapping<T> connectionMapping = ((ConnectionMapping<T>) _mapping);
+            XConnection _host_1 = this.getHost();
+            XNode _source = _host_1.getSource();
+            DomainObjectDescriptor _domainObject = _source.getDomainObject();
+            final Object resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObject, true);
+            XConnection _host_2 = this.getHost();
+            XNode _source_1 = _host_2.getSource();
+            DomainObjectDescriptor _domainObject_1 = _source_1.getDomainObject();
+            boolean _notEquals = (!Objects.equal(resolvedSourceDescriptor, _domainObject_1));
+            if (_notEquals) {
+              XConnection _host_3 = this.getHost();
+              acceptor.delete(_host_3);
+            } else {
+              XConnection _host_4 = this.getHost();
+              XNode _target = _host_4.getTarget();
+              DomainObjectDescriptor _domainObject_2 = _target.getDomainObject();
+              final Object resolvedTarget = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObject_2, false);
+              XConnection _host_5 = this.getHost();
+              XNode _target_1 = _host_5.getTarget();
+              DomainObjectDescriptor _domainObject_3 = _target_1.getDomainObject();
+              boolean _notEquals_1 = (!Objects.equal(resolvedTarget, _domainObject_3));
+              if (_notEquals_1) {
+                XConnection _host_6 = this.getHost();
+                acceptor.delete(_host_6);
+              }
+            }
+            _xblockexpression = null;
+          }
+          return _xblockexpression;
+        };
+        ((IMappedElementDescriptor<?>)descriptor).<Object>withDomainObject(_function);
+      } catch (final Throwable _t) {
+        if (_t instanceof NoSuchElementException) {
+          final NoSuchElementException exc = (NoSuchElementException)_t;
+          XConnection _host_1 = this.getHost();
+          acceptor.delete(_host_1);
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
     }
   }
   

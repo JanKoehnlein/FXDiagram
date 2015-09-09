@@ -89,13 +89,13 @@
          </command>
          <command
                commandId="de.fxdiagram.eclipse.UpdateDiagram"
-               icon="icons/update.gif"
+               icon="icons/copycont_r_co.gif"
                label="Refresh FXDiagram from model"
                style="push">
          </command>
          <command
                commandId="de.fxdiagram.eclipse.LinkWithEditor"
-               icon="icons/copycont_r_co.gif"
+               icon="icons/update.gif"
                disabledIcon="icons/copycont_r_co_disabled.gif"
                label="Link with editor"
                style="toggle">

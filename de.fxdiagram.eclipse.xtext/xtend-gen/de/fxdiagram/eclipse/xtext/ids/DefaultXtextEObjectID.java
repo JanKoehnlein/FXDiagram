@@ -113,8 +113,15 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
     final IEObjectDescription eObjectDescription = IterableExtensions.<IEObjectDescription>head(eObjectDescriptions);
     EObject _eObjectOrProxy = eObjectDescription.getEObjectOrProxy();
     final EObject element = EcoreUtil.resolve(_eObjectOrProxy, resource);
+    boolean _or = false;
     boolean _equals_1 = Objects.equal(element, null);
     if (_equals_1) {
+      _or = true;
+    } else {
+      boolean _eIsProxy = element.eIsProxy();
+      _or = _eIsProxy;
+    }
+    if (_or) {
       URI _eObjectURI = eObjectDescription.getEObjectURI();
       String _plus_1 = ("Cannot resolve element " + _eObjectURI);
       throw new NoSuchElementException(_plus_1);
