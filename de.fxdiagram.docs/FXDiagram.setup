@@ -103,7 +103,7 @@
     <repository
         url="${xtext.composite}"/>
     <repository
-        url="${efxclipse.release}"/>
+        url="${efxclipse.ide.release}"/>
   </setupTask>
   <setupTask
       xsi:type="git:GitCloneTask"
