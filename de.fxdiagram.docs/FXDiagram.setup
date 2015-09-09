@@ -29,7 +29,16 @@
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"
-      name="efxclipse.release"
+      name="xtext.examples"
+      value="http://meysholdt.github.io/xtext_examples/repositories/generated-with-xtext_2_8_4/"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="efxclipse.ide.release"
+      value="http://download.eclipse.org/efxclipse/updates-released/2.1.0/site"
+      label=""/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="efxclipse.runtime.release"
       value="http://download.eclipse.org/efxclipse/runtime-released/2.1.0/site"
       label=""/>
   <setupTask
@@ -172,7 +181,8 @@
       <requirement
           name="org.eclipse.platform.feature.group"/>
       <requirement
-          name="org.eclipse.pde.feature.group"/>
+          name="org.eclipse.pde.feature.group"
+          filter=""/>
       <requirement
           name="de.fxdiagram.sdk.feature.feature.group"/>
       <requirement
@@ -202,9 +212,11 @@
         <repository
             url="${xtext.composite}"/>
         <repository
-            url="${efxclipse.release}"/>
+            url="${efxclipse.runtime.release}"/>
         <repository
-            url="http://meysholdt.github.io/xtext_examples/repositories/generated-with-xtext_2_7_0/"/>
+            url="${efxclipse.ide.release}"/>
+        <repository
+            url="${xtext.examples}"/>
       </repositoryList>
     </targlet>
   </setupTask>
