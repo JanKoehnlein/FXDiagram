@@ -1,7 +1,7 @@
 package de.fxdiagram.mapping.behavior
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior
+import de.fxdiagram.core.behavior.AbstractReconcileBehavior
 import de.fxdiagram.core.behavior.DirtyState
 import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.mapping.IMappedElementDescriptor
@@ -9,7 +9,7 @@ import java.util.NoSuchElementException
 
 import static de.fxdiagram.core.behavior.DirtyState.*
 
-class NodeDirtyStateBehavior extends AbstractDirtyStateBehavior<XNode> {
+class NodeReconcileBehavior extends AbstractReconcileBehavior<XNode> {
 	
 	new(XNode host) {
 		super(host)
@@ -28,7 +28,7 @@ class NodeDirtyStateBehavior extends AbstractDirtyStateBehavior<XNode> {
 		return CLEAN 
 	}
 	
-	override update(UpdateAcceptor acceptor) {
+	override reconcile(UpdateAcceptor acceptor) {
 		if(dirtyState == DANGLING) 
 			 acceptor.delete(host)
 	}

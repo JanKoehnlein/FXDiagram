@@ -10,7 +10,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.mapping.behavior.NodeDirtyStateBehavior;
+import de.fxdiagram.mapping.behavior.NodeReconcileBehavior;
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import java.util.Collections;
 import java.util.List;
@@ -95,8 +95,8 @@ public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMa
     super.doActivate();
     IMappedElementDescriptor<T> _domainObject = this.getDomainObject();
     LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObject);
-    NodeDirtyStateBehavior _nodeDirtyStateBehavior = new NodeDirtyStateBehavior(this);
-    this.addBehavior(_nodeDirtyStateBehavior);
+    NodeReconcileBehavior _nodeReconcileBehavior = new NodeReconcileBehavior(this);
+    this.addBehavior(_nodeReconcileBehavior);
   }
   
   @Override

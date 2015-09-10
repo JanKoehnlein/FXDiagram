@@ -2,7 +2,8 @@ package de.fxdiagram.mapping.behavior
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior
+import de.fxdiagram.core.behavior.AbstractReconcileBehavior
+import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.mapping.ConnectionMapping
@@ -20,9 +21,8 @@ import static de.fxdiagram.core.behavior.DirtyState.*
 
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.core.behavior.UpdateAcceptor
 
-class ConnectionDirtyStateBehavior<T> extends AbstractDirtyStateBehavior<XConnection> {
+class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnection> {
 
 	Animation dirtyAnimation
 	
@@ -134,7 +134,7 @@ class ConnectionDirtyStateBehavior<T> extends AbstractDirtyStateBehavior<XConnec
 		}
 	}
 	
-	override update(UpdateAcceptor acceptor) {
+	override reconcile(UpdateAcceptor acceptor) {
 		val descriptor = host.domainObject
 		if (descriptor instanceof IMappedElementDescriptor<?>) {
 			try {
@@ -147,7 +147,7 @@ class ConnectionDirtyStateBehavior<T> extends AbstractDirtyStateBehavior<XConnec
 					} else {
 						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObject, false)
 						if(resolvedTarget != host.target.domainObject)
-							// TODO: retrun reconnect target command
+							// TODO: return reconnect target command
 							acceptor.delete(host)
 					}
 					null

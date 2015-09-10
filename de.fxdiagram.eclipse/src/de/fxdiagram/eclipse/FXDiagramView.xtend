@@ -16,11 +16,10 @@ import org.eclipse.swt.custom.CTabItem
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.PlatformUI
+import org.eclipse.ui.commands.ICommandService
+import org.eclipse.ui.handlers.RegistryToggleState
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.ui.commands.ICommandService
-import org.eclipse.ui.handlers.HandlerUtil
-import org.eclipse.ui.handlers.RegistryToggleState
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.

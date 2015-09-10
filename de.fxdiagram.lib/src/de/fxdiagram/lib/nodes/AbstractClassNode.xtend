@@ -2,7 +2,8 @@ package de.fxdiagram.lib.nodes
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior
+import de.fxdiagram.core.behavior.AbstractReconcileBehavior
+import de.fxdiagram.core.behavior.ReconcileBehavior
 import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.core.command.AbstractCommand
 import de.fxdiagram.core.command.CommandContext
@@ -35,7 +36,6 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import de.fxdiagram.core.behavior.DirtyStateBehavior
 
 @ModelNode("showPackage", "showAttributes", "showMethods", "bgColor")
 abstract class AbstractClassNode extends FlipNode {
@@ -150,7 +150,7 @@ abstract class AbstractClassNode extends FlipNode {
 
 	override doActivate() {
 		super.doActivate()
-		addBehavior(new ModelCompareBehavior(this))
+		addBehavior(new ClassModelReconcileBehavior(this))
 		showPackageProperty.bindCheckbox(packageBox, packageArea, [0], inflator)
 		showAttributesProperty.bindCheckbox(attributesBox, attributeCompartment, [if(showPackage) 2 else 1], inflator)
 		showMethodsProperty.bindCheckbox(methodsBox, methodCompartment, [contentArea.children.size], inflator)
@@ -190,17 +190,17 @@ abstract class AbstractClassNode extends FlipNode {
 			it += new AbstractCommand() {
 				override execute(CommandContext context) {
 					model = newModel
-					getBehavior(DirtyStateBehavior).showDirtyState(CLEAN)
+					getBehavior(ReconcileBehavior).showDirtyState(CLEAN)
 				}
 				
 				override undo(CommandContext context) {
 					model = oldModel
-					getBehavior(DirtyStateBehavior).showDirtyState(DIRTY)
+					getBehavior(ReconcileBehavior).showDirtyState(DIRTY)
 				}
 				
 				override redo(CommandContext context) {
 					model= newModel
-					getBehavior(DirtyStateBehavior).showDirtyState(CLEAN)
+					getBehavior(ReconcileBehavior).showDirtyState(CLEAN)
 				}
 			}
 			it += inflator.inflateCommand
@@ -227,7 +227,7 @@ class ClassModel {
 }
 
 
-class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractClassNode> {
+class ClassModelReconcileBehavior extends AbstractReconcileBehavior<AbstractClassNode> {
 
 	@FxProperty double dirtyAnimationValue
 	@FxProperty double dirtyAnimationRotate
@@ -281,7 +281,7 @@ class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractClassNode>
 		}
 	}
 	
-	override update(UpdateAcceptor acceptor) {
+	override reconcile(UpdateAcceptor acceptor) {
 		try {
 			val newModel = host.inferClassModel
 			if (newModel != null) {

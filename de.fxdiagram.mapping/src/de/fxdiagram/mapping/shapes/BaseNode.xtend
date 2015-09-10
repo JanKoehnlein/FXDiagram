@@ -6,7 +6,6 @@ import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.NodeDirtyStateBehavior
 import javafx.geometry.Insets
 import javafx.geometry.VPos
 import javafx.scene.layout.StackPane
@@ -21,6 +20,7 @@ import javafx.scene.text.Text
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
+import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
 
 /**
  * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
@@ -64,7 +64,7 @@ class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 	override doActivate() {
 		super.doActivate
 		addLazyBehavior(domainObject)
-		addBehavior(new NodeDirtyStateBehavior(this))
+		addBehavior(new NodeReconcileBehavior(this))
 	}
 	
 	override getButtonSides(ConnectionMapping<?> mapping) {

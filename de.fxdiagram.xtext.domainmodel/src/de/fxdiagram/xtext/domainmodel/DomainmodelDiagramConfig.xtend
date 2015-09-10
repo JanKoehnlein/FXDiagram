@@ -1,6 +1,5 @@
 package de.fxdiagram.xtext.domainmodel
 
-import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.anchors.TriangleArrowHead

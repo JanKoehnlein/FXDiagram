@@ -1,21 +1,21 @@
 package de.fxdiagram.eclipse.commands
 
 import de.fxdiagram.core.XShape
-import de.fxdiagram.core.behavior.DirtyStateBehavior
+import de.fxdiagram.core.behavior.ReconcileBehavior
+import de.fxdiagram.core.behavior.UpdateAcceptor
+import de.fxdiagram.core.command.AddRemoveCommand
+import de.fxdiagram.core.command.AnimationCommand
+import de.fxdiagram.core.command.LazyCommand
+import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.eclipse.FXDiagramView
 import org.eclipse.core.commands.AbstractHandler
 import org.eclipse.core.commands.ExecutionEvent
 import org.eclipse.core.commands.ExecutionException
 
-import static extension org.eclipse.ui.handlers.HandlerUtil.*
-import de.fxdiagram.core.command.ParallelAnimationCommand
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.command.LazyCommand
-import de.fxdiagram.core.behavior.UpdateAcceptor
-import de.fxdiagram.core.command.AnimationCommand
-import de.fxdiagram.core.command.AddRemoveCommand
+import static extension org.eclipse.ui.handlers.HandlerUtil.*
 
-class UpdateDiagramHandler extends AbstractHandler {
+class ReconcileDiagramHandler extends AbstractHandler {
 
 	override execute(ExecutionEvent event) throws ExecutionException {
 		val view = event.activePart
@@ -42,7 +42,7 @@ class UpdateDiagramHandler extends AbstractHandler {
 					}
 				}
 				allShapes.forEach[
-					getBehavior(DirtyStateBehavior)?.update(acceptor)		
+					getBehavior(ReconcileBehavior)?.reconcile(acceptor)		
 				]
 				if(!deleteShapes.empty) 
 					commands += AddRemoveCommand.newRemoveCommand(diagram, deleteShapes) 

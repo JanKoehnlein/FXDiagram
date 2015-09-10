@@ -3,12 +3,12 @@ package de.fxdiagram.core.behavior
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.command.AnimationCommand
 
-interface DirtyStateBehavior extends Behavior {
+interface ReconcileBehavior extends Behavior {
 	def DirtyState getDirtyState()
 	
 	def void showDirtyState(DirtyState state)
 	
-	def void update(UpdateAcceptor acceptor) 
+	def void reconcile(UpdateAcceptor acceptor) 
 }
 
 interface UpdateAcceptor {
@@ -17,7 +17,7 @@ interface UpdateAcceptor {
 	def void morph(AnimationCommand command)
 }
 
-abstract class AbstractDirtyStateBehavior<T extends XShape> extends AbstractHostBehavior<T> implements DirtyStateBehavior {
+abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostBehavior<T> implements ReconcileBehavior {
 	
 	DirtyState shownState = DirtyState.CLEAN
 	
@@ -26,7 +26,7 @@ abstract class AbstractDirtyStateBehavior<T extends XShape> extends AbstractHost
 	}
 	
 	override getBehaviorKey() {
-		DirtyStateBehavior
+		ReconcileBehavior
 	}
 	
 	override protected doActivate() {

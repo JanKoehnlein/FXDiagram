@@ -3,7 +3,7 @@ package de.fxdiagram.lib.nodes;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.behavior.DirtyState;
-import de.fxdiagram.core.behavior.DirtyStateBehavior;
+import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.CommandContext;
@@ -14,8 +14,8 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.nodes.ClassModel;
+import de.fxdiagram.lib.nodes.ClassModelReconcileBehavior;
 import de.fxdiagram.lib.nodes.FlipNode;
-import de.fxdiagram.lib.nodes.ModelCompareBehavior;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.function.Consumer;
 import javafx.animation.Transition;
@@ -267,8 +267,8 @@ public abstract class AbstractClassNode extends FlipNode {
   @Override
   public void doActivate() {
     super.doActivate();
-    ModelCompareBehavior _modelCompareBehavior = new ModelCompareBehavior(this);
-    this.addBehavior(_modelCompareBehavior);
+    ClassModelReconcileBehavior _classModelReconcileBehavior = new ClassModelReconcileBehavior(this);
+    this.addBehavior(_classModelReconcileBehavior);
     final Function0<Integer> _function = () -> {
       return Integer.valueOf(0);
     };
@@ -343,21 +343,21 @@ public abstract class AbstractClassNode extends FlipNode {
           @Override
           public void execute(final CommandContext context) {
             AbstractClassNode.this.setModel(newModel);
-            DirtyStateBehavior _behavior = AbstractClassNode.this.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+            ReconcileBehavior _behavior = AbstractClassNode.this.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
             _behavior.showDirtyState(DirtyState.CLEAN);
           }
           
           @Override
           public void undo(final CommandContext context) {
             AbstractClassNode.this.setModel(oldModel);
-            DirtyStateBehavior _behavior = AbstractClassNode.this.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+            ReconcileBehavior _behavior = AbstractClassNode.this.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
             _behavior.showDirtyState(DirtyState.DIRTY);
           }
           
           @Override
           public void redo(final CommandContext context) {
             AbstractClassNode.this.setModel(newModel);
-            DirtyStateBehavior _behavior = AbstractClassNode.this.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+            ReconcileBehavior _behavior = AbstractClassNode.this.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
             _behavior.showDirtyState(DirtyState.CLEAN);
           }
         });

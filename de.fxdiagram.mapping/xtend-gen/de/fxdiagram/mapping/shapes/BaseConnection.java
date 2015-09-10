@@ -5,7 +5,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
-import de.fxdiagram.mapping.behavior.ConnectionDirtyStateBehavior;
+import de.fxdiagram.mapping.behavior.ConnectionReconcileBehavior;
 
 /**
  * Base implementation for a {@link XConnection} that belongs to an {@link IMappedElementDescriptor}.
@@ -29,8 +29,8 @@ public class BaseConnection<T extends Object> extends XConnection {
   @Override
   public void doActivate() {
     super.doActivate();
-    ConnectionDirtyStateBehavior<Object> _connectionDirtyStateBehavior = new ConnectionDirtyStateBehavior<Object>(this);
-    this.addBehavior(_connectionDirtyStateBehavior);
+    ConnectionReconcileBehavior<Object> _connectionReconcileBehavior = new ConnectionReconcileBehavior<Object>(this);
+    this.addBehavior(_connectionReconcileBehavior);
   }
   
   /**

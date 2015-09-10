@@ -3,7 +3,7 @@ package de.fxdiagram.mapping.shapes
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.ConnectionDirtyStateBehavior
+import de.fxdiagram.mapping.behavior.ConnectionReconcileBehavior
 
 /**
  * Base implementation for a {@link XConnection} that belongs to an {@link IMappedElementDescriptor}.
@@ -24,6 +24,6 @@ class BaseConnection<T> extends XConnection  {
 	
 	override doActivate() {
 		super.doActivate
-		addBehavior(new ConnectionDirtyStateBehavior(this))
+		addBehavior(new ConnectionReconcileBehavior(this))
 	}
 }

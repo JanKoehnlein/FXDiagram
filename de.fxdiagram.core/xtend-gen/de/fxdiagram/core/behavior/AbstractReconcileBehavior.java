@@ -4,19 +4,19 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DirtyState;
-import de.fxdiagram.core.behavior.DirtyStateBehavior;
+import de.fxdiagram.core.behavior.ReconcileBehavior;
 
 @SuppressWarnings("all")
-public abstract class AbstractDirtyStateBehavior<T extends XShape> extends AbstractHostBehavior<T> implements DirtyStateBehavior {
+public abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostBehavior<T> implements ReconcileBehavior {
   private DirtyState shownState = DirtyState.CLEAN;
   
-  public AbstractDirtyStateBehavior(final T host) {
+  public AbstractReconcileBehavior(final T host) {
     super(host);
   }
   
   @Override
   public Class<? extends Behavior> getBehaviorKey() {
-    return DirtyStateBehavior.class;
+    return ReconcileBehavior.class;
   }
   
   @Override

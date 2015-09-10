@@ -6,7 +6,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ArrowHead;
-import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior;
+import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
@@ -41,12 +41,12 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class ConnectionDirtyStateBehavior<T extends Object> extends AbstractDirtyStateBehavior<XConnection> {
+public class ConnectionReconcileBehavior<T extends Object> extends AbstractReconcileBehavior<XConnection> {
   private Animation dirtyAnimation;
   
   private double strokeWidth;
   
-  public ConnectionDirtyStateBehavior(final XConnection host) {
+  public ConnectionReconcileBehavior(final XConnection host) {
     super(host);
   }
   
@@ -280,7 +280,7 @@ public class ConnectionDirtyStateBehavior<T extends Object> extends AbstractDirt
   }
   
   @Override
-  public void update(final UpdateAcceptor acceptor) {
+  public void reconcile(final UpdateAcceptor acceptor) {
     XConnection _host = this.getHost();
     final DomainObjectDescriptor descriptor = _host.getDomainObject();
     if ((descriptor instanceof IMappedElementDescriptor<?>)) {

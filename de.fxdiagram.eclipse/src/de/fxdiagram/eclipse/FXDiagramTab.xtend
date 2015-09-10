@@ -6,7 +6,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.DirtyState
-import de.fxdiagram.core.behavior.DirtyStateBehavior
+import de.fxdiagram.core.behavior.ReconcileBehavior
 import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.layout.LayoutType
@@ -203,7 +203,7 @@ class FXDiagramTab {
 		allShapes += root.diagram.nodes
 		allShapes += root.diagram.connections
 		allShapes.forEach [
-			val behavior = getBehavior(DirtyStateBehavior)
+			val behavior = getBehavior(ReconcileBehavior)
 			if (behavior != null) {
 				behavior.showDirtyState(
 					if (isLinkWithEditor)

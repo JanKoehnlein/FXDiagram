@@ -6,7 +6,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
-import de.fxdiagram.core.behavior.DirtyStateBehavior;
+import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.AnimationCommand;
@@ -30,7 +30,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class UpdateDiagramHandler extends AbstractHandler {
+public class ReconcileDiagramHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     Object _xblockexpression = null;
@@ -69,9 +69,9 @@ public class UpdateDiagramHandler extends AbstractHandler {
                 }
               };
               final Consumer<XShape> _function = (XShape it) -> {
-                DirtyStateBehavior _behavior = it.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+                ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
                 if (_behavior!=null) {
-                  _behavior.update(acceptor);
+                  _behavior.reconcile(acceptor);
                 }
               };
               allShapes.forEach(_function);

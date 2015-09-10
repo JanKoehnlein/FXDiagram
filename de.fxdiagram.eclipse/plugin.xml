@@ -30,7 +30,7 @@
       </command>
       <command
             categoryId="org.eclipse.ui.category.views"
-            defaultHandler="de.fxdiagram.eclipse.commands.UpdateDiagramHandler"
+            defaultHandler="de.fxdiagram.eclipse.commands.ReconcileDiagramHandler"
             description="Update the current FXDiagram"
             id="de.fxdiagram.eclipse.UpdateDiagram"
             name="Update Diagram">

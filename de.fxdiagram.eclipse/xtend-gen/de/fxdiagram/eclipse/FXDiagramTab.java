@@ -8,7 +8,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.DirtyState;
-import de.fxdiagram.core.behavior.DirtyStateBehavior;
+import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
@@ -384,7 +384,7 @@ public class FXDiagramTab {
     ObservableList<XConnection> _connections = _diagram_1.getConnections();
     Iterables.<XShape>addAll(allShapes, _connections);
     final Consumer<XShape> _function = (XShape it) -> {
-      final DirtyStateBehavior behavior = it.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+      final ReconcileBehavior behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
       boolean _notEquals = (!Objects.equal(behavior, null));
       if (_notEquals) {
         DirtyState _xifexpression = null;

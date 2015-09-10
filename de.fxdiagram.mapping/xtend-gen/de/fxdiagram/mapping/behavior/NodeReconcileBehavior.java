@@ -2,7 +2,7 @@ package de.fxdiagram.mapping.behavior;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior;
+import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
@@ -12,8 +12,8 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
-public class NodeDirtyStateBehavior extends AbstractDirtyStateBehavior<XNode> {
-  public NodeDirtyStateBehavior(final XNode host) {
+public class NodeReconcileBehavior extends AbstractReconcileBehavior<XNode> {
+  public NodeReconcileBehavior(final XNode host) {
     super(host);
   }
   
@@ -40,7 +40,7 @@ public class NodeDirtyStateBehavior extends AbstractDirtyStateBehavior<XNode> {
   }
   
   @Override
-  public void update(final UpdateAcceptor acceptor) {
+  public void reconcile(final UpdateAcceptor acceptor) {
     DirtyState _dirtyState = this.getDirtyState();
     boolean _equals = Objects.equal(_dirtyState, DirtyState.DANGLING);
     if (_equals) {

@@ -12,7 +12,7 @@ import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 
 import static de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import de.fxdiagram.mapping.behavior.NodeDirtyStateBehavior
+import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
 
 /**
  * Base implementation for a {@link XNode} with a nested {@link XDiagram} that belongs to an
@@ -46,7 +46,7 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 	override doActivate() {
 		super.doActivate()
 		addLazyBehavior(this, domainObject)
-		addBehavior(new NodeDirtyStateBehavior(this))
+		addBehavior(new NodeReconcileBehavior(this))
 		innerDiagram.layoutOnActivate = LayoutType.DOT
 	}
 }

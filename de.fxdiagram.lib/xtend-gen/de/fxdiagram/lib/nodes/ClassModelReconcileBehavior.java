@@ -1,7 +1,7 @@
 package de.fxdiagram.lib.nodes;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior;
+import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.command.SequentialAnimationCommand;
@@ -22,10 +22,10 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractClassNode> {
+public class ClassModelReconcileBehavior extends AbstractReconcileBehavior<AbstractClassNode> {
   private Animation dirtyAnimation;
   
-  public ModelCompareBehavior(final AbstractClassNode host) {
+  public ClassModelReconcileBehavior(final AbstractClassNode host) {
     super(host);
   }
   
@@ -126,7 +126,7 @@ public class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractCla
   }
   
   @Override
-  public void update(final UpdateAcceptor acceptor) {
+  public void reconcile(final UpdateAcceptor acceptor) {
     try {
       AbstractClassNode _host = this.getHost();
       final ClassModel newModel = _host.inferClassModel();
