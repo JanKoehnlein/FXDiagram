@@ -1,7 +1,6 @@
 package de.fxdiagram.core.command
 
 import javafx.animation.Animation
-import javafx.animation.Timeline
 
 /**
  * Base interface for commands. 

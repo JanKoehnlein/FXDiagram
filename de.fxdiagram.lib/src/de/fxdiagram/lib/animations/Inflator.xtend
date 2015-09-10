@@ -20,6 +20,7 @@ import javafx.scene.shape.Rectangle
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import org.eclipse.xtend.lib.annotations.Accessors
 
 class Inflator {
 
@@ -31,7 +32,7 @@ class Inflator {
 
 	Dimension2D deflatedUnpadded
 
-	boolean isInflated = false
+	@Accessors(PUBLIC_GETTER) boolean isInflated = false
 
 	new(XNode host, Pane container) {
 		this.host = host
@@ -104,6 +105,23 @@ class Inflator {
 				inflateAnimation
 			}
 
+		}
+	}
+	
+	def getDeflateCommand() {
+		return new AbstractAnimationCommand() {
+
+			override createExecuteAnimation(CommandContext context) {
+				deflateAnimation
+			}
+
+			override createUndoAnimation(CommandContext context) {
+				inflateAnimation
+			}
+
+			override createRedoAnimation(CommandContext context) {
+				deflateAnimation
+			}
 		}
 	}
 	

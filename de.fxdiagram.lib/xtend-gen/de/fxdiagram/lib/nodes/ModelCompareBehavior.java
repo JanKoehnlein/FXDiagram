@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.behavior.AbstractDirtyStateBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.UpdateAcceptor;
+import de.fxdiagram.core.command.SequentialAnimationCommand;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.lib.nodes.AbstractClassNode;
 import de.fxdiagram.lib.nodes.ClassModel;
@@ -135,10 +136,11 @@ public class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractCla
         ClassModel _model = _host_1.getModel();
         boolean _notEquals_1 = (!Objects.equal(_model, newModel));
         if (_notEquals_1) {
-          return;
-        } else {
-          return;
+          AbstractClassNode _host_2 = this.getHost();
+          SequentialAnimationCommand _createMorphCommand = _host_2.createMorphCommand(newModel);
+          acceptor.morph(_createMorphCommand);
         }
+        return;
       }
     } catch (final Throwable _t) {
       if (_t instanceof NoSuchElementException) {
@@ -147,8 +149,8 @@ public class ModelCompareBehavior extends AbstractDirtyStateBehavior<AbstractCla
         throw Exceptions.sneakyThrow(_t);
       }
     }
-    AbstractClassNode _host_2 = this.getHost();
-    acceptor.delete(_host_2);
+    AbstractClassNode _host_3 = this.getHost();
+    acceptor.delete(_host_3);
   }
   
   private SimpleDoubleProperty dirtyAnimationValueProperty = new SimpleDoubleProperty(this, "dirtyAnimationValue");

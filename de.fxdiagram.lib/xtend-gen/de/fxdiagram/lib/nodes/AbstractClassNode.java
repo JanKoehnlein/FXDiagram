@@ -2,6 +2,12 @@ package de.fxdiagram.lib.nodes;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.behavior.DirtyState;
+import de.fxdiagram.core.behavior.DirtyStateBehavior;
+import de.fxdiagram.core.command.AbstractAnimationCommand;
+import de.fxdiagram.core.command.AbstractCommand;
+import de.fxdiagram.core.command.CommandContext;
+import de.fxdiagram.core.command.SequentialAnimationCommand;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -35,9 +41,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Functions.Function0;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @ModelNode({ "showPackage", "showAttributes", "showMethods", "bgColor" })
 @SuppressWarnings("all")
@@ -50,12 +59,17 @@ public abstract class AbstractClassNode extends FlipNode {
   
   private VBox contentArea;
   
-  private VBox packageLabel;
+  private VBox packageArea;
   
   private VBox attributeCompartment;
   
   private VBox methodCompartment;
   
+  private Text nameLabel;
+  
+  private Label fileLabel;
+  
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private Inflator inflator;
   
   public AbstractClassNode(final DomainObjectDescriptor descriptor) {
@@ -71,8 +85,6 @@ public abstract class AbstractClassNode extends FlipNode {
     Node _xblockexpression = null;
     {
       final Node pane = super.createNode();
-      ClassModel _inferClassModel = this.inferClassModel();
-      this.setModel(_inferClassModel);
       Color _defaultBgPaint = this.getDefaultBgPaint();
       this.setBgColor(_defaultBgPaint);
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
@@ -93,9 +105,6 @@ public abstract class AbstractClassNode extends FlipNode {
             Text _text = new Text();
             final Procedure1<Text> _function_3 = (Text it_3) -> {
               it_3.setTextOrigin(VPos.TOP);
-              ClassModel _model = this.getModel();
-              String _name = _model.getName();
-              it_3.setText(_name);
               Font _font = it_3.getFont();
               String _family = _font.getFamily();
               Font _font_1 = it_3.getFont();
@@ -105,7 +114,7 @@ public abstract class AbstractClassNode extends FlipNode {
               it_3.setFont(_font_2);
             };
             Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_3);
-            _children_2.add(_doubleArrow);
+            _children_2.add((this.nameLabel = _doubleArrow));
           };
           VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_2);
           _children_1.add(_doubleArrow);
@@ -127,10 +136,8 @@ public abstract class AbstractClassNode extends FlipNode {
           it_1.setPadding(_insets);
           it_1.setSpacing(5);
           ObservableList<Node> _children_1 = it_1.getChildren();
-          ClassModel _model = this.getModel();
-          String _fileName = _model.getFileName();
-          Label _label = new Label(_fileName);
-          _children_1.add(_label);
+          Label _label = new Label();
+          _children_1.add((this.fileLabel = _label));
           ObservableList<Node> _children_2 = it_1.getChildren();
           CheckBox _checkBox = new CheckBox("Package");
           _children_2.add((this.packageBox = _checkBox));
@@ -159,44 +166,14 @@ public abstract class AbstractClassNode extends FlipNode {
       VBox _vBox = new VBox();
       final Procedure1<VBox> _function_2 = (VBox it) -> {
         it.setAlignment(Pos.CENTER);
-        ObservableList<Node> _children = it.getChildren();
-        Text _text = new Text();
-        final Procedure1<Text> _function_3 = (Text it_1) -> {
-          it_1.setTextOrigin(VPos.TOP);
-          Font _font = it_1.getFont();
-          String _family = _font.getFamily();
-          Font _font_1 = it_1.getFont();
-          double _size = _font_1.getSize();
-          double _multiply = (_size * 0.8);
-          Font _font_2 = Font.font(_family, _multiply);
-          it_1.setFont(_font_2);
-          ClassModel _model = this.getModel();
-          String _namespace = _model.getNamespace();
-          it_1.setText(_namespace);
-        };
-        Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_3);
-        _children.add(_doubleArrow_2);
         this.addInflatable(it, this.showPackageProperty, this.packageBox, 0, this.inflator);
       };
       VBox _doubleArrow_2 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_2);
-      this.packageLabel = _doubleArrow_2;
+      this.packageArea = _doubleArrow_2;
       VBox _vBox_1 = new VBox();
       final Procedure1<VBox> _function_3 = (VBox c) -> {
         Insets _insets = new Insets(10, 0, 0, 0);
         c.setPadding(_insets);
-        ClassModel _model = this.getModel();
-        ObservableList<String> _attributes = _model.getAttributes();
-        final Consumer<String> _function_4 = (String field) -> {
-          ObservableList<Node> _children = c.getChildren();
-          Text _text = new Text();
-          final Procedure1<Text> _function_5 = (Text it) -> {
-            it.setTextOrigin(VPos.TOP);
-            it.setText(field);
-          };
-          Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_5);
-          _children.add(_doubleArrow_3);
-        };
-        _attributes.forEach(_function_4);
         ObservableList<Node> _children = this.contentArea.getChildren();
         int _size = _children.size();
         this.addInflatable(c, this.showAttributesProperty, this.attributesBox, _size, this.inflator);
@@ -207,28 +184,79 @@ public abstract class AbstractClassNode extends FlipNode {
       final Procedure1<VBox> _function_4 = (VBox c) -> {
         Insets _insets = new Insets(10, 0, 0, 0);
         c.setPadding(_insets);
-        ClassModel _model = this.getModel();
-        ObservableList<String> _operations = _model.getOperations();
-        final Consumer<String> _function_5 = (String operation) -> {
-          ObservableList<Node> _children = c.getChildren();
-          Text _text = new Text();
-          final Procedure1<Text> _function_6 = (Text it) -> {
-            it.setTextOrigin(VPos.TOP);
-            it.setText(operation);
-          };
-          Text _doubleArrow_4 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_6);
-          _children.add(_doubleArrow_4);
-        };
-        _operations.forEach(_function_5);
         ObservableList<Node> _children = this.contentArea.getChildren();
         int _size = _children.size();
         this.addInflatable(c, this.showMethodsProperty, this.methodsBox, _size, this.inflator);
       };
       VBox _doubleArrow_4 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_2, _function_4);
       this.methodCompartment = _doubleArrow_4;
+      final ChangeListener<ClassModel> _function_5 = (ObservableValue<? extends ClassModel> p, ClassModel o, ClassModel n) -> {
+        this.populateFromModel();
+      };
+      this.modelProperty.addListener(_function_5);
+      ClassModel _inferClassModel = this.inferClassModel();
+      this.setModel(_inferClassModel);
       _xblockexpression = pane;
     }
     return _xblockexpression;
+  }
+  
+  public void populateFromModel() {
+    ClassModel _model = this.getModel();
+    String _name = _model.getName();
+    this.nameLabel.setText(_name);
+    ClassModel _model_1 = this.getModel();
+    String _fileName = _model_1.getFileName();
+    this.fileLabel.setText(_fileName);
+    ObservableList<Node> _children = this.packageArea.getChildren();
+    _children.clear();
+    ObservableList<Node> _children_1 = this.packageArea.getChildren();
+    Text _text = new Text();
+    final Procedure1<Text> _function = (Text it) -> {
+      it.setTextOrigin(VPos.TOP);
+      Font _font = it.getFont();
+      String _family = _font.getFamily();
+      Font _font_1 = it.getFont();
+      double _size = _font_1.getSize();
+      double _multiply = (_size * 0.8);
+      Font _font_2 = Font.font(_family, _multiply);
+      it.setFont(_font_2);
+      ClassModel _model_2 = this.getModel();
+      String _namespace = _model_2.getNamespace();
+      it.setText(_namespace);
+    };
+    Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+    _children_1.add(_doubleArrow);
+    ObservableList<Node> _children_2 = this.attributeCompartment.getChildren();
+    _children_2.clear();
+    ClassModel _model_2 = this.getModel();
+    ObservableList<String> _attributes = _model_2.getAttributes();
+    final Consumer<String> _function_1 = (String field) -> {
+      ObservableList<Node> _children_3 = this.attributeCompartment.getChildren();
+      Text _text_1 = new Text();
+      final Procedure1<Text> _function_2 = (Text it) -> {
+        it.setTextOrigin(VPos.TOP);
+        it.setText(field);
+      };
+      Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_2);
+      _children_3.add(_doubleArrow_1);
+    };
+    _attributes.forEach(_function_1);
+    ObservableList<Node> _children_3 = this.methodCompartment.getChildren();
+    _children_3.clear();
+    ClassModel _model_3 = this.getModel();
+    ObservableList<String> _operations = _model_3.getOperations();
+    final Consumer<String> _function_2 = (String operation) -> {
+      ObservableList<Node> _children_4 = this.methodCompartment.getChildren();
+      Text _text_1 = new Text();
+      final Procedure1<Text> _function_3 = (Text it) -> {
+        it.setTextOrigin(VPos.TOP);
+        it.setText(operation);
+      };
+      Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_3);
+      _children_4.add(_doubleArrow_1);
+    };
+    _operations.forEach(_function_2);
   }
   
   @Override
@@ -244,7 +272,7 @@ public abstract class AbstractClassNode extends FlipNode {
     final Function0<Integer> _function = () -> {
       return Integer.valueOf(0);
     };
-    this.bindCheckbox(this.showPackageProperty, this.packageBox, this.packageLabel, _function, this.inflator);
+    this.bindCheckbox(this.showPackageProperty, this.packageBox, this.packageArea, _function, this.inflator);
     final Function0<Integer> _function_1 = () -> {
       int _xifexpression = (int) 0;
       boolean _showPackage = this.getShowPackage();
@@ -302,6 +330,44 @@ public abstract class AbstractClassNode extends FlipNode {
   }
   
   public abstract ClassModel inferClassModel();
+  
+  protected SequentialAnimationCommand createMorphCommand(final ClassModel newModel) {
+    SequentialAnimationCommand _xblockexpression = null;
+    {
+      final ClassModel oldModel = this.getModel();
+      SequentialAnimationCommand _sequentialAnimationCommand = new SequentialAnimationCommand();
+      final Procedure1<SequentialAnimationCommand> _function = (SequentialAnimationCommand it) -> {
+        AbstractAnimationCommand _deflateCommand = this.inflator.getDeflateCommand();
+        it.operator_add(_deflateCommand);
+        it.operator_add(new AbstractCommand() {
+          @Override
+          public void execute(final CommandContext context) {
+            AbstractClassNode.this.setModel(newModel);
+            DirtyStateBehavior _behavior = AbstractClassNode.this.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+            _behavior.showDirtyState(DirtyState.CLEAN);
+          }
+          
+          @Override
+          public void undo(final CommandContext context) {
+            AbstractClassNode.this.setModel(oldModel);
+            DirtyStateBehavior _behavior = AbstractClassNode.this.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+            _behavior.showDirtyState(DirtyState.DIRTY);
+          }
+          
+          @Override
+          public void redo(final CommandContext context) {
+            AbstractClassNode.this.setModel(newModel);
+            DirtyStateBehavior _behavior = AbstractClassNode.this.<DirtyStateBehavior>getBehavior(DirtyStateBehavior.class);
+            _behavior.showDirtyState(DirtyState.CLEAN);
+          }
+        });
+        AbstractAnimationCommand _inflateCommand = this.inflator.getInflateCommand();
+        it.operator_add(_inflateCommand);
+      };
+      _xblockexpression = ObjectExtensions.<SequentialAnimationCommand>operator_doubleArrow(_sequentialAnimationCommand, _function);
+    }
+    return _xblockexpression;
+  }
   
   /**
    * Automatically generated by @ModelNode. Needed for deserialization.
@@ -397,5 +463,10 @@ public abstract class AbstractClassNode extends FlipNode {
   
   public ObjectProperty<ClassModel> modelProperty() {
     return this.modelProperty;
+  }
+  
+  @Pure
+  public Inflator getInflator() {
+    return this.inflator;
   }
 }

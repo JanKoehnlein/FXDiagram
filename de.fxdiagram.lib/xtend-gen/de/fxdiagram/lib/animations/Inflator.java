@@ -30,11 +30,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class Inflator {
@@ -46,6 +49,7 @@ public class Inflator {
   
   private Dimension2D deflatedUnpadded;
   
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private boolean isInflated = false;
   
   public Inflator(final XNode host, final Pane container) {
@@ -182,6 +186,25 @@ public class Inflator {
       @Override
       public Animation createRedoAnimation(final CommandContext context) {
         return Inflator.this.getInflateAnimation();
+      }
+    };
+  }
+  
+  public AbstractAnimationCommand getDeflateCommand() {
+    return new AbstractAnimationCommand() {
+      @Override
+      public Animation createExecuteAnimation(final CommandContext context) {
+        return Inflator.this.getDeflateAnimation();
+      }
+      
+      @Override
+      public Animation createUndoAnimation(final CommandContext context) {
+        return Inflator.this.getInflateAnimation();
+      }
+      
+      @Override
+      public Animation createRedoAnimation(final CommandContext context) {
+        return Inflator.this.getDeflateAnimation();
       }
     };
   }
@@ -590,5 +613,10 @@ public class Inflator {
       _xblockexpression = new Dimension2D(_width, _height);
     }
     return _xblockexpression;
+  }
+  
+  @Pure
+  public boolean isInflated() {
+    return this.isInflated;
   }
 }
