@@ -6,7 +6,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
@@ -14,14 +14,11 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringDescriptor;
-import de.fxdiagram.core.model.XModelProvider;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -58,9 +55,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * the node.
  */
 @Logging
-@ModelNode({ "layoutX", "layoutY", "domainObject", "width", "height" })
+@ModelNode({ "layoutX", "layoutY", "width", "height" })
 @SuppressWarnings("all")
-public class XNode extends XShape implements XModelProvider {
+public class XNode extends XDomainObjectShape {
   private Effect mouseOverEffect;
   
   private Effect selectionEffect;
@@ -70,7 +67,7 @@ public class XNode extends XShape implements XModelProvider {
   private Anchors anchors;
   
   public XNode(final DomainObjectDescriptor domainObject) {
-    this.domainObjectProperty.set(domainObject);
+    super(domainObject);
   }
   
   public XNode(final String name) {
@@ -80,10 +77,10 @@ public class XNode extends XShape implements XModelProvider {
   public String getName() {
     String _xblockexpression = null;
     {
-      DomainObjectDescriptor _domainObject = this.getDomainObject();
+      DomainObjectDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
       String _name = null;
-      if (_domainObject!=null) {
-        _name=_domainObject.getName();
+      if (_domainObjectDescriptor!=null) {
+        _name=_domainObjectDescriptor.getName();
       }
       final String name = _name;
       boolean _equals = Objects.equal(name, null);
@@ -300,9 +297,9 @@ public class XNode extends XShape implements XModelProvider {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    super.populate(modelElement);
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
-    modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
   }
@@ -333,16 +330,6 @@ public class XNode extends XShape implements XModelProvider {
   
   public DoubleProperty heightProperty() {
     return this.heightProperty;
-  }
-  
-  private ReadOnlyObjectWrapper<DomainObjectDescriptor> domainObjectProperty = new ReadOnlyObjectWrapper<DomainObjectDescriptor>(this, "domainObject");
-  
-  public DomainObjectDescriptor getDomainObject() {
-    return this.domainObjectProperty.get();
-  }
-  
-  public ReadOnlyObjectProperty<DomainObjectDescriptor> domainObjectProperty() {
-    return this.domainObjectProperty.getReadOnlyProperty();
   }
   
   private SimpleListProperty<XConnection> incomingConnectionsProperty = new SimpleListProperty<XConnection>(this, "incomingConnections",_initIncomingConnections());

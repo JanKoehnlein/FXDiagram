@@ -20,7 +20,7 @@ public class NodeReconcileBehavior extends AbstractReconcileBehavior<XNode> {
   @Override
   public DirtyState getDirtyState() {
     XNode _host = this.getHost();
-    final DomainObjectDescriptor descriptor = _host.getDomainObject();
+    final DomainObjectDescriptor descriptor = _host.getDomainObjectDescriptor();
     if ((descriptor instanceof IMappedElementDescriptor<?>)) {
       try {
         final Function1<Object, Object> _function = (Object it) -> {

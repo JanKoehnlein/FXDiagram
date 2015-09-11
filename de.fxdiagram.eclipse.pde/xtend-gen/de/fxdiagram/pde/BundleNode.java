@@ -75,9 +75,9 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
   }
   
   @Override
-  public BundleDescriptor getDomainObject() {
-    IMappedElementDescriptor<BundleDescription> _domainObject = super.getDomainObject();
-    return ((BundleDescriptor) _domainObject);
+  public BundleDescriptor getDomainObjectDescriptor() {
+    IMappedElementDescriptor<BundleDescription> _domainObjectDescriptor = super.getDomainObjectDescriptor();
+    return ((BundleDescriptor) _domainObjectDescriptor);
   }
   
   @Override
@@ -98,14 +98,14 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
           Text _text = new Text();
           final Procedure1<Text> _function_3 = (Text it_3) -> {
             it_3.setTextOrigin(VPos.TOP);
-            BundleDescriptor _domainObject = this.getDomainObject();
-            String _symbolicName = _domainObject.getSymbolicName();
+            BundleDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+            String _symbolicName = _domainObjectDescriptor.getSymbolicName();
             it_3.setText(_symbolicName);
-            BundleDescriptor _domainObject_1 = this.getDomainObject();
+            BundleDescriptor _domainObjectDescriptor_1 = this.getDomainObjectDescriptor();
             final Function1<BundleDescription, Boolean> _function_4 = (BundleDescription it_4) -> {
               return Boolean.valueOf(it_4.isSingleton());
             };
-            final Boolean isSingleton = _domainObject_1.<Boolean>withDomainObject(_function_4);
+            final Boolean isSingleton = _domainObjectDescriptor_1.<Boolean>withDomainObject(_function_4);
             if ((isSingleton).booleanValue()) {
               Font _font = it_3.getFont();
               String _family = _font.getFamily();
@@ -133,11 +133,11 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
       VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
       _children.add((this.contentArea = _doubleArrow));
       List<Stop> _xifexpression = null;
-      BundleDescriptor _domainObject = this.getDomainObject();
+      BundleDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
       final Function1<IPluginModelBase, Boolean> _function_2 = (IPluginModelBase it_1) -> {
         return Boolean.valueOf(it_1.isFragmentModel());
       };
-      Boolean _withPlugin = _domainObject.<Boolean>withPlugin(_function_2);
+      Boolean _withPlugin = _domainObjectDescriptor.<Boolean>withPlugin(_function_2);
       if ((_withPlugin).booleanValue()) {
         Color _rgb = Color.rgb(255, 193, 210);
         Stop _stop = new Stop(0, _rgb);
@@ -172,8 +172,8 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
       Text _text = new Text();
       final Procedure1<Text> _function_1 = (Text it_1) -> {
         it_1.setTextOrigin(VPos.TOP);
-        BundleDescriptor _domainObject = this.getDomainObject();
-        String _version = _domainObject.getVersion();
+        BundleDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+        String _version = _domainObjectDescriptor.getVersion();
         it_1.setText(_version);
         Font _font = it_1.getFont();
         String _family = _font.getFamily();
@@ -199,14 +199,14 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
       Text _text = new Text();
       final Procedure1<Text> _function_2 = (Text it_1) -> {
         it_1.setTextOrigin(VPos.TOP);
-        BundleDescriptor _domainObject = this.getDomainObject();
+        BundleDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
         final Function1<IPluginModelBase, String> _function_3 = (IPluginModelBase it_2) -> {
           IPluginBase _pluginBase = it_2.getPluginBase();
           IPluginBase _pluginBase_1 = it_2.getPluginBase();
           String _name = _pluginBase_1.getName();
           return _pluginBase.getResourceString(_name);
         };
-        String _withPlugin = _domainObject.<String>withPlugin(_function_3);
+        String _withPlugin = _domainObjectDescriptor.<String>withPlugin(_function_3);
         it_1.setText(_withPlugin);
       };
       Text _doubleArrow_1 = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
@@ -215,14 +215,14 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
       Text _text_1 = new Text();
       final Procedure1<Text> _function_3 = (Text it_1) -> {
         it_1.setTextOrigin(VPos.TOP);
-        BundleDescriptor _domainObject = this.getDomainObject();
+        BundleDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
         final Function1<IPluginModelBase, String> _function_4 = (IPluginModelBase it_2) -> {
           IPluginBase _pluginBase = it_2.getPluginBase();
           IPluginBase _pluginBase_1 = it_2.getPluginBase();
           String _providerName = _pluginBase_1.getProviderName();
           return _pluginBase.getResourceString(_providerName);
         };
-        String _withPlugin = _domainObject.<String>withPlugin(_function_4);
+        String _withPlugin = _domainObjectDescriptor.<String>withPlugin(_function_4);
         it_1.setText(_withPlugin);
       };
       Text _doubleArrow_2 = ObjectExtensions.<Text>operator_doubleArrow(_text_1, _function_3);
@@ -231,12 +231,12 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
       Text _text_2 = new Text();
       final Procedure1<Text> _function_4 = (Text it_1) -> {
         it_1.setTextOrigin(VPos.TOP);
-        BundleDescriptor _domainObject = this.getDomainObject();
+        BundleDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
         final Function1<BundleDescription, String> _function_5 = (BundleDescription it_2) -> {
           String[] _executionEnvironments = it_2.getExecutionEnvironments();
           return IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(_executionEnvironments)), ", ");
         };
-        String _withDomainObject = _domainObject.<String>withDomainObject(_function_5);
+        String _withDomainObject = _domainObjectDescriptor.<String>withDomainObject(_function_5);
         it_1.setText(_withDomainObject);
       };
       Text _doubleArrow_3 = ObjectExtensions.<Text>operator_doubleArrow(_text_2, _function_4);

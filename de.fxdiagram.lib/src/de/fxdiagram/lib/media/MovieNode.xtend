@@ -46,7 +46,7 @@ class MovieNode extends FlipNode {
 	
 	protected override createNode() {
 		val node = super.createNode
-		media = new Media((domainObject as ResourceDescriptor).toURI)
+		media = new Media((domainObjectDescriptor as ResourceDescriptor).toURI)
 		player = new MediaPlayer(media)
 		front = new RectangleBorderPane => [
 			children += new Text => [

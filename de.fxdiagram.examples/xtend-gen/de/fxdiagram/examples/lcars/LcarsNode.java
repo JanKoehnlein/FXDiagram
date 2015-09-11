@@ -613,8 +613,8 @@ public class LcarsNode extends XNode {
   }
   
   public DBObject getData() {
-    DomainObjectDescriptor _domainObject = this.getDomainObject();
-    return ((LcarsEntryDescriptor) _domainObject).getDomainObject();
+    DomainObjectDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+    return ((LcarsEntryDescriptor) _domainObjectDescriptor).getDomainObject();
   }
   
   @Override

@@ -28,7 +28,7 @@ class AddDependencyPathAction extends RapidButtonAction {
 	}
 
 	override isEnabled(XNode host) {
-		(host.domainObject as BundleDescriptor).withDomainObject[
+		(host.domainObjectDescriptor as BundleDescriptor).withDomainObject[
 			if(isInverse) 
 				!dependentBundles.empty
 			else 
@@ -37,7 +37,7 @@ class AddDependencyPathAction extends RapidButtonAction {
 	}
 	
 	override perform(RapidButton button) {
-		val descriptor = button.host.domainObject as BundleDescriptor
+		val descriptor = button.host.domainObjectDescriptor as BundleDescriptor
 		descriptor.withDomainObject [
 			doPerform(button, it)
 		]
@@ -59,10 +59,10 @@ class AddDependencyPathAction extends RapidButtonAction {
 					removeConnection
 				val diagram = host.diagram
 				val additionalShapes = <XShape>newLinkedHashSet()
-				val descriptor2node = diagram.nodes.toMap[domainObject]
-				descriptor2node.put(choice.domainObject, choice)
-				val descriptor2connection = diagram.connections.toMap[domainObject] 
-				(choice.domainObject as BundleDescriptor).withDomainObject [
+				val descriptor2node = diagram.nodes.toMap[domainObjectDescriptor]
+				descriptor2node.put(choice.domainObjectDescriptor, choice)
+				val descriptor2connection = diagram.connections.toMap[domainObjectDescriptor] 
+				(choice.domainObjectDescriptor as BundleDescriptor).withDomainObject [
 					chosenBundle |
 					if (isInverse)
 						chosenBundle.getAllBundleDependencies(hostBundle)

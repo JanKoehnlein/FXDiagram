@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -57,7 +58,7 @@ public class CenterAction implements DiagramAction {
     final ViewportCommand _function = new ViewportCommand() {
       @Override
       public ViewportTransition createViewportTransiton(final CommandContext it) {
-        Iterable<XShape> _xifexpression = null;
+        Iterable<? extends XShape> _xifexpression = null;
         Iterable<XShape> _currentSelection = root.getCurrentSelection();
         boolean _isEmpty = IterableExtensions.isEmpty(_currentSelection);
         if (_isEmpty) {
@@ -65,16 +66,16 @@ public class CenterAction implements DiagramAction {
           ObservableList<XNode> _nodes = _diagram.getNodes();
           XDiagram _diagram_1 = root.getDiagram();
           ObservableList<XConnection> _connections = _diagram_1.getConnections();
-          _xifexpression = Iterables.<XShape>concat(_nodes, _connections);
+          _xifexpression = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
         } else {
           _xifexpression = root.getCurrentSelection();
         }
-        final Iterable<XShape> elements = _xifexpression;
+        final Iterable<? extends XShape> elements = _xifexpression;
         final Function1<XShape, Bounds> _function = (XShape it_1) -> {
           Bounds _snapBounds = it_1.getSnapBounds();
           return CoreExtensions.localToRootDiagram(it_1, _snapBounds);
         };
-        Iterable<Bounds> _map = IterableExtensions.<XShape, Bounds>map(elements, _function);
+        Iterable<Bounds> _map = IterableExtensions.map(elements, _function);
         final Function2<Bounds, Bounds, Bounds> _function_1 = (Bounds a, Bounds b) -> {
           return BoundsExtensions.operator_plus(a, b);
         };

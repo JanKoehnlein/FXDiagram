@@ -19,7 +19,7 @@ class ImageNode extends XNode {
 	override protected createNode() {
 		new ImageView => [
 			preserveRatio = true
-			image = new Image((domainObject as ResourceDescriptor).toURI)
+			image = new Image((domainObjectDescriptor as ResourceDescriptor).toURI)
 			fitWidthProperty.bind(widthProperty) 
 			fitHeightProperty.bind(heightProperty)
 		]

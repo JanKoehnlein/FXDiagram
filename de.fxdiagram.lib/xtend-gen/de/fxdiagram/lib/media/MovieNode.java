@@ -59,8 +59,8 @@ public class MovieNode extends FlipNode {
     Node _xblockexpression = null;
     {
       final Node node = super.createNode();
-      DomainObjectDescriptor _domainObject = this.getDomainObject();
-      String _uRI = ((ResourceDescriptor) _domainObject).toURI();
+      DomainObjectDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+      String _uRI = ((ResourceDescriptor) _domainObjectDescriptor).toURI();
       Media _media = new Media(_uRI);
       this.media = _media;
       MediaPlayer _mediaPlayer = new MediaPlayer(this.media);

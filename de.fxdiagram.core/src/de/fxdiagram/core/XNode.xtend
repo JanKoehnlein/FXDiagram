@@ -38,12 +38,11 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
  * the node.
  */
 @Logging
-@ModelNode('layoutX', 'layoutY', 'domainObject', 'width', 'height')
-class XNode extends XShape {
+@ModelNode('layoutX', 'layoutY', 'width', 'height')
+class XNode extends XDomainObjectShape {
 
 	@FxProperty double width
 	@FxProperty double height
-	@FxProperty(readOnly=true) DomainObjectDescriptor domainObject
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
 	@FxProperty Side placementHint
@@ -55,7 +54,7 @@ class XNode extends XShape {
 	Anchors anchors
 	
  	new(DomainObjectDescriptor domainObject) {
- 		domainObjectProperty.set(domainObject)
+ 		super(domainObject)
  	}
  	
  	new(String name) {
@@ -63,7 +62,7 @@ class XNode extends XShape {
  	}
  	
  	def getName() {
-		val name = domainObject?.name
+		val name = domainObjectDescriptor?.name
  		if(name == null)
  			LOG.severe("XNode's name is null")
  		name

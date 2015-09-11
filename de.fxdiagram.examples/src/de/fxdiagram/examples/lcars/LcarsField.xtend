@@ -93,8 +93,8 @@ class LcarsField extends Parent {
 						.filter(LcarsNode)
 						.filter[
 							it != node && data.get(name)==value 
-							&& !outgoingConnections.exists[target == node && domainObject == connectionDescriptor]
-							&& !incomingConnections.exists[source == node && domainObject == connectionDescriptor]
+							&& !outgoingConnections.exists[target == node && domainObjectDescriptor == connectionDescriptor]
+							&& !incomingConnections.exists[source == node && domainObjectDescriptor == connectionDescriptor]
 						]
 						.map[connectionProvider.getConnection(node, it, null)]
 						.toList
@@ -190,10 +190,10 @@ class LcarsQueryTask extends Task<Void> {
 		val chooser = new ConnectedNodeChooser(lcarsNode, Side.BOTTOM, new CoverFlowChoice)
 		chooser.connectionProvider = connectionProvider
 		val alreadyConnected = 
-			(host.lcarsNode.incomingConnections.filter[domainObject == connectionDescriptor].map[source] 
-				+ host.lcarsNode.outgoingConnections.filter[domainObject == connectionDescriptor].map[target])
-			.filter(LcarsNode).map[domainObject.id].toSet
-		alreadyConnected.add(lcarsNode.domainObject.id)
+			(host.lcarsNode.incomingConnections.filter[domainObjectDescriptor == connectionDescriptor].map[source] 
+				+ host.lcarsNode.outgoingConnections.filter[domainObjectDescriptor == connectionDescriptor].map[target])
+			.filter(LcarsNode).map[domainObjectDescriptor.id].toSet
+		alreadyConnected.add(lcarsNode.domainObjectDescriptor.id)
 		siblings
 			.filter[!alreadyConnected.contains(get('_id').toString)]
 			.forEach[it, i | 

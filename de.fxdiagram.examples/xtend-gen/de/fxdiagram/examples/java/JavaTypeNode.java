@@ -90,8 +90,8 @@ public class JavaTypeNode extends XNode {
   }
   
   public Class<?> getJavaType() {
-    DomainObjectDescriptor _domainObject = this.getDomainObject();
-    return ((JavaTypeDescriptor) _domainObject).getDomainObject();
+    DomainObjectDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+    return ((JavaTypeDescriptor) _domainObjectDescriptor).getDomainObject();
   }
   
   public JavaTypeModel getJavaTypeModel() {

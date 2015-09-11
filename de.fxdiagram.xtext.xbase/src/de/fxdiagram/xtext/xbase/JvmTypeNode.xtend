@@ -14,9 +14,9 @@ class JvmTypeNode extends BaseClassNode<JvmDeclaredType> {
 	}
 	
 	override inferClassModel() {
-		domainObject.withDomainObject[ type |
+		domainObjectDescriptor.withDomainObject[ type |
 			new ClassModel => [
-				fileName = (domainObject as JvmEObjectDescriptor<JvmDeclaredType>)
+				fileName = (domainObjectDescriptor as JvmEObjectDescriptor<JvmDeclaredType>)
 					.elementID.URI.trimFragment.lastSegment
 				namespace = type.packageName
 				name = type.simpleName

@@ -158,14 +158,7 @@ class FXDiagramTab {
 		}
 		val descriptor = createMappedDescriptor(element)
 		val centerShape = (interpreterContext.diagram.nodes + interpreterContext.diagram.connections).findFirst [
-			switch it {
-				XNode:
-					domainObject == descriptor
-				XConnection:
-					domainObject == descriptor
-				default:
-					false
-			}
+			domainObjectDescriptor == descriptor
 		]
 		root.commandStack.execute(
 			new ParallelAnimationCommand =>

@@ -7,8 +7,8 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
@@ -20,7 +20,6 @@ import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringDescriptor;
-import de.fxdiagram.core.model.XModelProvider;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -81,9 +80,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * Clients usually don't extend this class, but configure its label and appearance properties.
  */
 @Logging
-@ModelNode({ "domainObject", "source", "target", "kind", "controlPoints", "labels", "sourceArrowHead", "targetArrowHead" })
+@ModelNode({ "source", "target", "kind", "controlPoints", "labels", "sourceArrowHead", "targetArrowHead" })
 @SuppressWarnings("all")
-public class XConnection extends XShape implements XModelProvider {
+public class XConnection extends XDomainObjectShape {
   public enum Kind {
     POLYLINE,
     
@@ -104,8 +103,7 @@ public class XConnection extends XShape implements XModelProvider {
   }
   
   public XConnection(final DomainObjectDescriptor domainObject) {
-    this();
-    this.domainObjectProperty.set(domainObject);
+    super(domainObject);
   }
   
   public XConnection(final XNode source, final XNode target, final DomainObjectDescriptor domainObject) {
@@ -683,7 +681,7 @@ public class XConnection extends XShape implements XModelProvider {
     ;
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(domainObjectProperty, DomainObjectDescriptor.class);
+    super.populate(modelElement);
     modelElement.addProperty(sourceProperty, XNode.class);
     modelElement.addProperty(targetProperty, XNode.class);
     modelElement.addProperty(kindProperty, XConnection.Kind.class);
@@ -852,16 +850,6 @@ public class XConnection extends XShape implements XModelProvider {
   
   public ListProperty<Double> strokeDashArrayProperty() {
     return this.strokeDashArrayProperty;
-  }
-  
-  private ReadOnlyObjectWrapper<DomainObjectDescriptor> domainObjectProperty = new ReadOnlyObjectWrapper<DomainObjectDescriptor>(this, "domainObject");
-  
-  public DomainObjectDescriptor getDomainObject() {
-    return this.domainObjectProperty.get();
-  }
-  
-  public ReadOnlyObjectProperty<DomainObjectDescriptor> domainObjectProperty() {
-    return this.domainObjectProperty.getReadOnlyProperty();
   }
   
   private SimpleObjectProperty<ConnectionRouter> connectionRouterProperty = new SimpleObjectProperty<ConnectionRouter>(this, "connectionRouter");

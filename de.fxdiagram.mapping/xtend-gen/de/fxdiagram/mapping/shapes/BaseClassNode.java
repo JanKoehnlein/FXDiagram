@@ -23,16 +23,16 @@ public abstract class BaseClassNode<T extends Object> extends AbstractClassNode 
   }
   
   @Override
-  public IMappedElementDescriptor<T> getDomainObject() {
-    DomainObjectDescriptor _domainObject = super.getDomainObject();
-    return ((IMappedElementDescriptor<T>) _domainObject);
+  public IMappedElementDescriptor<T> getDomainObjectDescriptor() {
+    DomainObjectDescriptor _domainObjectDescriptor = super.getDomainObjectDescriptor();
+    return ((IMappedElementDescriptor<T>) _domainObjectDescriptor);
   }
   
   @Override
   public void doActivate() {
     super.doActivate();
-    IMappedElementDescriptor<T> _domainObject = this.getDomainObject();
-    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObject);
+    IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
+    LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
   }
   
   @Override

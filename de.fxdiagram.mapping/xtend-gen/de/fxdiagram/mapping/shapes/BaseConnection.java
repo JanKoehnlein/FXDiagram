@@ -21,9 +21,9 @@ public class BaseConnection<T extends Object> extends XConnection {
   }
   
   @Override
-  public DomainObjectDescriptor getDomainObject() {
-    DomainObjectDescriptor _domainObject = super.getDomainObject();
-    return ((IMappedElementDescriptor<T>) _domainObject);
+  public DomainObjectDescriptor getDomainObjectDescriptor() {
+    DomainObjectDescriptor _domainObjectDescriptor = super.getDomainObjectDescriptor();
+    return ((IMappedElementDescriptor<T>) _domainObjectDescriptor);
   }
   
   @Override

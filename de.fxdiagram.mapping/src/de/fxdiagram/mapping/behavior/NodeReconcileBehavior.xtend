@@ -16,7 +16,7 @@ class NodeReconcileBehavior extends AbstractReconcileBehavior<XNode> {
 	}
 	
 	override DirtyState getDirtyState() {
-		val descriptor = host.domainObject 
+		val descriptor = host.domainObjectDescriptor 
 		if(descriptor instanceof IMappedElementDescriptor<?>) {
 			try {
 				descriptor.withDomainObject[

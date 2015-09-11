@@ -48,13 +48,13 @@ abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, MODEL, 
 			createButtons(addConnectionAction).forEach[add]
 			host.diagram.connections.addInitializingListener(new InitializingListListener() => [
 				add = [ XConnection it |
-					if(availableChoiceKeys.remove(domainObject)) {
-						unavailableChoiceKeys.add(domainObject as KEY)
+					if(availableChoiceKeys.remove(domainObjectDescriptor)) {
+						unavailableChoiceKeys.add(domainObjectDescriptor as KEY)
 					}
 				]
 				remove = [ XConnection it |
-					if(unavailableChoiceKeys.remove(domainObject)) {
-						availableChoiceKeys.add(domainObject as KEY)
+					if(unavailableChoiceKeys.remove(domainObjectDescriptor)) {
+						availableChoiceKeys.add(domainObjectDescriptor as KEY)
 					} 
 				]
 			])

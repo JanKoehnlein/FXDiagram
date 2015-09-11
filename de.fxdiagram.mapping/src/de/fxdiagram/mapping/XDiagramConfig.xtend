@@ -1,13 +1,13 @@
 package de.fxdiagram.mapping
 
 import de.fxdiagram.annotations.logging.Logging
+import de.fxdiagram.core.XDomainObjectShape
 import java.util.List
 import java.util.Map
-import org.eclipse.xtend.lib.annotations.Accessors
-import de.fxdiagram.core.XShape
-
-import static extension de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 import org.eclipse.core.runtime.Platform
+import org.eclipse.xtend.lib.annotations.Accessors
+
+import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
 
 /**
  * Stores a set of {@link AbstractMapping}s for a sepecific domain.
@@ -38,7 +38,7 @@ interface XDiagramConfig {
 	
 	def IMappedElementDescriptorProvider getDomainObjectProvider()
 	
-	def void initialize(XShape shape)
+	def void initialize(XDomainObjectShape shape)
 	
 	@Logging  
 	static class Registry {

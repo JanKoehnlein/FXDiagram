@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -296,30 +297,12 @@ public class FXDiagramTab {
     ObservableList<XNode> _nodes = _diagram_1.getNodes();
     XDiagram _diagram_2 = interpreterContext.getDiagram();
     ObservableList<XConnection> _connections = _diagram_2.getConnections();
-    Iterable<XShape> _plus = Iterables.<XShape>concat(_nodes, _connections);
-    final Function1<XShape, Boolean> _function_1 = (XShape it) -> {
-      boolean _switchResult = false;
-      boolean _matched = false;
-      if (!_matched) {
-        if (it instanceof XNode) {
-          _matched=true;
-          DomainObjectDescriptor _domainObject = ((XNode)it).getDomainObject();
-          _switchResult = Objects.equal(_domainObject, descriptor);
-        }
-      }
-      if (!_matched) {
-        if (it instanceof XConnection) {
-          _matched=true;
-          DomainObjectDescriptor _domainObject = ((XConnection)it).getDomainObject();
-          _switchResult = Objects.equal(_domainObject, descriptor);
-        }
-      }
-      if (!_matched) {
-        _switchResult = false;
-      }
-      return Boolean.valueOf(_switchResult);
+    Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
+    final Function1<XDomainObjectShape, Boolean> _function_1 = (XDomainObjectShape it) -> {
+      DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+      return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
-    final XShape centerShape = ((XShape)IterableExtensions.<XShape>findFirst(_plus, _function_1));
+    final XDomainObjectShape centerShape = IterableExtensions.<XDomainObjectShape>findFirst(_plus, _function_1);
     CommandStack _commandStack_3 = this.root.getCommandStack();
     ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
     final Procedure1<ParallelAnimationCommand> _function_2 = (ParallelAnimationCommand it) -> {
@@ -328,11 +311,11 @@ public class FXDiagramTab {
         Layouter _layouter = new Layouter();
         XDiagram _diagram_3 = interpreterContext.getDiagram();
         Duration _millis = DurationExtensions.millis(500);
-        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_3, _millis, ((XShape)centerShape));
+        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_3, _millis, centerShape);
         it.operator_add(_createLayoutCommand);
       }
       final Function1<XShape, Boolean> _function_3 = (XShape it_1) -> {
-        return Boolean.valueOf(Objects.equal(it_1, ((XShape)centerShape)));
+        return Boolean.valueOf(Objects.equal(it_1, centerShape));
       };
       SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_3);
       it.operator_add(_selectAndRevealCommand);

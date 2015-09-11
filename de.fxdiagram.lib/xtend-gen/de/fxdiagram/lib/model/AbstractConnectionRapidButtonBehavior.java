@@ -81,20 +81,20 @@ public abstract class AbstractConnectionRapidButtonBehavior<HOST extends XNode, 
       InitializingListListener<XConnection> _initializingListListener = new InitializingListListener<XConnection>();
       final Procedure1<InitializingListListener<XConnection>> _function_2 = (InitializingListListener<XConnection> it) -> {
         final Procedure1<XConnection> _function_3 = (XConnection it_1) -> {
-          DomainObjectDescriptor _domainObject = it_1.getDomainObject();
-          boolean _remove = this.availableChoiceKeys.remove(_domainObject);
+          DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+          boolean _remove = this.availableChoiceKeys.remove(_domainObjectDescriptor);
           if (_remove) {
-            DomainObjectDescriptor _domainObject_1 = it_1.getDomainObject();
-            this.unavailableChoiceKeys.add(((KEY) _domainObject_1));
+            DomainObjectDescriptor _domainObjectDescriptor_1 = it_1.getDomainObjectDescriptor();
+            this.unavailableChoiceKeys.add(((KEY) _domainObjectDescriptor_1));
           }
         };
         it.setAdd(_function_3);
         final Procedure1<XConnection> _function_4 = (XConnection it_1) -> {
-          DomainObjectDescriptor _domainObject = it_1.getDomainObject();
-          boolean _remove = this.unavailableChoiceKeys.remove(_domainObject);
+          DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+          boolean _remove = this.unavailableChoiceKeys.remove(_domainObjectDescriptor);
           if (_remove) {
-            DomainObjectDescriptor _domainObject_1 = it_1.getDomainObject();
-            this.availableChoiceKeys.add(((KEY) _domainObject_1));
+            DomainObjectDescriptor _domainObjectDescriptor_1 = it_1.getDomainObjectDescriptor();
+            this.availableChoiceKeys.add(((KEY) _domainObjectDescriptor_1));
           }
         };
         it.setRemove(_function_4);

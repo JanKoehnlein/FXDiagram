@@ -60,8 +60,8 @@ public class LcarsQueryTask extends Task<Void> {
       LcarsNode _lcarsNode = this.host.getLcarsNode();
       ObservableList<XConnection> _incomingConnections = _lcarsNode.getIncomingConnections();
       final Function1<XConnection, Boolean> _function = (XConnection it) -> {
-        DomainObjectDescriptor _domainObject = it.getDomainObject();
-        return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
+        DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+        return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, connectionDescriptor));
       };
       Iterable<XConnection> _filter = IterableExtensions.<XConnection>filter(_incomingConnections, _function);
       final Function1<XConnection, XNode> _function_1 = (XConnection it) -> {
@@ -71,8 +71,8 @@ public class LcarsQueryTask extends Task<Void> {
       LcarsNode _lcarsNode_1 = this.host.getLcarsNode();
       ObservableList<XConnection> _outgoingConnections = _lcarsNode_1.getOutgoingConnections();
       final Function1<XConnection, Boolean> _function_2 = (XConnection it) -> {
-        DomainObjectDescriptor _domainObject = it.getDomainObject();
-        return Boolean.valueOf(Objects.equal(_domainObject, connectionDescriptor));
+        DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+        return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, connectionDescriptor));
       };
       Iterable<XConnection> _filter_1 = IterableExtensions.<XConnection>filter(_outgoingConnections, _function_2);
       final Function1<XConnection, XNode> _function_3 = (XConnection it) -> {
@@ -82,13 +82,13 @@ public class LcarsQueryTask extends Task<Void> {
       Iterable<XNode> _plus = Iterables.<XNode>concat(_map, _map_1);
       Iterable<LcarsNode> _filter_2 = Iterables.<LcarsNode>filter(_plus, LcarsNode.class);
       final Function1<LcarsNode, String> _function_4 = (LcarsNode it) -> {
-        DomainObjectDescriptor _domainObject = it.getDomainObject();
-        return _domainObject.getId();
+        DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+        return _domainObjectDescriptor.getId();
       };
       Iterable<String> _map_2 = IterableExtensions.<LcarsNode, String>map(_filter_2, _function_4);
       final Set<String> alreadyConnected = IterableExtensions.<String>toSet(_map_2);
-      DomainObjectDescriptor _domainObject = lcarsNode.getDomainObject();
-      String _id = _domainObject.getId();
+      DomainObjectDescriptor _domainObjectDescriptor = lcarsNode.getDomainObjectDescriptor();
+      String _id = _domainObjectDescriptor.getId();
       alreadyConnected.add(_id);
       final Function1<DBObject, Boolean> _function_5 = (DBObject it) -> {
         Object _get = it.get("_id");

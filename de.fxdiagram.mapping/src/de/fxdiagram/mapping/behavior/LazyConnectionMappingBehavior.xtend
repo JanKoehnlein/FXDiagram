@@ -92,11 +92,11 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 	}
 	
 	override isEnabled(XNode host) {
-		val hostDescriptor = host.domainObject as IMappedElementDescriptor<ARG>
+		val hostDescriptor = host.domainObjectDescriptor as IMappedElementDescriptor<ARG>
 		val diagram = host.diagram
 		if(diagram == null) 
 			return false
-		val existingConnectionDescriptors = diagram.connections.map[domainObject].toSet
+		val existingConnectionDescriptors = diagram.connections.map[domainObjectDescriptor].toSet
 		try {
 			val result = hostDescriptor.withDomainObject[ 
 				domainArgument |
@@ -138,8 +138,8 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 	}
 	
 	protected def populateChooser(ConnectedNodeChooser chooser, XNode host) {
-		val hostDescriptor = host.domainObject as IMappedElementDescriptor<ARG>
-		val existingConnectionDescriptors = host.diagram.connections.map[domainObject].toSet
+		val hostDescriptor = host.domainObjectDescriptor as IMappedElementDescriptor<ARG>
+		val existingConnectionDescriptors = host.diagram.connections.map[domainObjectDescriptor].toSet
 		hostDescriptor.withDomainObject[ 
 			domainArgument |
 			val connectionDomainObjects = configInterpreter.select(mappingCall, domainArgument)

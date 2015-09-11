@@ -47,7 +47,7 @@ class RecursiveImageNode extends XNode implements SvgExportable {
 	}
 	
 	protected override createNode() {
-		image = new Image((domainObject as ResourceDescriptor).toURI)
+		image = new Image((domainObjectDescriptor as ResourceDescriptor).toURI)
 		pivot = new FirstRecursiveImageNode(this)
 		return createPane => [
 			children += pivot

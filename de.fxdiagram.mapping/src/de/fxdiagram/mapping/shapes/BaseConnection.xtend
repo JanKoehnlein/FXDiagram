@@ -18,8 +18,8 @@ class BaseConnection<T> extends XConnection  {
 		super(descriptor)
 	}
 
-	override getDomainObject() {
-		super.getDomainObject() as IMappedElementDescriptor<T>
+	override getDomainObjectDescriptor() {
+		super.domainObjectDescriptor as IMappedElementDescriptor<T>
 	}
 	
 	override doActivate() {

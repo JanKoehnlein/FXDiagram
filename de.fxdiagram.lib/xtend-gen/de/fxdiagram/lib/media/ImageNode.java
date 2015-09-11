@@ -29,8 +29,8 @@ public class ImageNode extends XNode {
     ImageView _imageView = new ImageView();
     final Procedure1<ImageView> _function = (ImageView it) -> {
       it.setPreserveRatio(true);
-      DomainObjectDescriptor _domainObject = this.getDomainObject();
-      String _uRI = ((ResourceDescriptor) _domainObject).toURI();
+      DomainObjectDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+      String _uRI = ((ResourceDescriptor) _domainObjectDescriptor).toURI();
       Image _image = new Image(_uRI);
       it.setImage(_image);
       DoubleProperty _fitWidthProperty = it.fitWidthProperty();

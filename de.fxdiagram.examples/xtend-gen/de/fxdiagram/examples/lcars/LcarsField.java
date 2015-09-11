@@ -188,8 +188,8 @@ public class LcarsField extends Parent {
                 if (!_equals_2) {
                   _and_3 = false;
                 } else {
-                  DomainObjectDescriptor _domainObject = it_3.getDomainObject();
-                  boolean _equals_3 = Objects.equal(_domainObject, connectionDescriptor);
+                  DomainObjectDescriptor _domainObjectDescriptor = it_3.getDomainObjectDescriptor();
+                  boolean _equals_3 = Objects.equal(_domainObjectDescriptor, connectionDescriptor);
                   _and_3 = _equals_3;
                 }
                 return Boolean.valueOf(_and_3);
@@ -209,8 +209,8 @@ public class LcarsField extends Parent {
                 if (!_equals_2) {
                   _and_3 = false;
                 } else {
-                  DomainObjectDescriptor _domainObject = it_3.getDomainObject();
-                  boolean _equals_3 = Objects.equal(_domainObject, connectionDescriptor);
+                  DomainObjectDescriptor _domainObjectDescriptor = it_3.getDomainObjectDescriptor();
+                  boolean _equals_3 = Objects.equal(_domainObjectDescriptor, connectionDescriptor);
                   _and_3 = _equals_3;
                 }
                 return Boolean.valueOf(_and_3);

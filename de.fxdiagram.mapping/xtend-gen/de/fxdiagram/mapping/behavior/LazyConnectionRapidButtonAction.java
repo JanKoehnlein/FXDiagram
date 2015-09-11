@@ -49,8 +49,8 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
   
   @Override
   public boolean isEnabled(final XNode host) {
-    DomainObjectDescriptor _domainObject = host.getDomainObject();
-    final IMappedElementDescriptor<ARG> hostDescriptor = ((IMappedElementDescriptor<ARG>) _domainObject);
+    DomainObjectDescriptor _domainObjectDescriptor = host.getDomainObjectDescriptor();
+    final IMappedElementDescriptor<ARG> hostDescriptor = ((IMappedElementDescriptor<ARG>) _domainObjectDescriptor);
     final XDiagram diagram = CoreExtensions.getDiagram(host);
     boolean _equals = Objects.equal(diagram, null);
     if (_equals) {
@@ -58,7 +58,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     }
     ObservableList<XConnection> _connections = diagram.getConnections();
     final Function1<XConnection, DomainObjectDescriptor> _function = (XConnection it) -> {
-      return it.getDomainObject();
+      return it.getDomainObjectDescriptor();
     };
     List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
     final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
@@ -144,12 +144,12 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
   protected Object populateChooser(final ConnectedNodeChooser chooser, final XNode host) {
     Object _xblockexpression = null;
     {
-      DomainObjectDescriptor _domainObject = host.getDomainObject();
-      final IMappedElementDescriptor<ARG> hostDescriptor = ((IMappedElementDescriptor<ARG>) _domainObject);
+      DomainObjectDescriptor _domainObjectDescriptor = host.getDomainObjectDescriptor();
+      final IMappedElementDescriptor<ARG> hostDescriptor = ((IMappedElementDescriptor<ARG>) _domainObjectDescriptor);
       XDiagram _diagram = CoreExtensions.getDiagram(host);
       ObservableList<XConnection> _connections = _diagram.getConnections();
       final Function1<XConnection, DomainObjectDescriptor> _function = (XConnection it) -> {
-        return it.getDomainObject();
+        return it.getDomainObjectDescriptor();
       };
       List<DomainObjectDescriptor> _map = ListExtensions.<XConnection, DomainObjectDescriptor>map(_connections, _function);
       final Set<DomainObjectDescriptor> existingConnectionDescriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);

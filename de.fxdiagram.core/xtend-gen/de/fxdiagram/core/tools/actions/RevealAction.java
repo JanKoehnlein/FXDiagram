@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -69,7 +70,7 @@ public class RevealAction implements DiagramAction {
     if (this.nodes != null) {
       _elvis = this.nodes;
     } else {
-      Iterable<XShape> _xifexpression = null;
+      Iterable<? extends XShape> _xifexpression = null;
       Iterable<XShape> _currentSelection = root.getCurrentSelection();
       boolean _isEmpty = IterableExtensions.isEmpty(_currentSelection);
       if (_isEmpty) {
@@ -77,7 +78,7 @@ public class RevealAction implements DiagramAction {
         ObservableList<XNode> _nodes = _diagram.getNodes();
         XDiagram _diagram_1 = root.getDiagram();
         ObservableList<XConnection> _connections = _diagram_1.getConnections();
-        _xifexpression = Iterables.<XShape>concat(_nodes, _connections);
+        _xifexpression = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
       } else {
         _xifexpression = root.getCurrentSelection();
       }

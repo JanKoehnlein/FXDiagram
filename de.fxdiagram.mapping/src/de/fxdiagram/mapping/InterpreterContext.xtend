@@ -51,11 +51,11 @@ class InterpreterContext {
 	}
 
 	def <T> getConnection(DomainObjectDescriptor descriptor) {
-		(addedConnections + diagram.connections).findFirst[domainObject == descriptor]
+		(addedConnections + diagram.connections).findFirst[domainObjectDescriptor == descriptor]
 	}
 
 	def <T> getNode(DomainObjectDescriptor descriptor) {
-		(addedNodes + diagram.nodes).findFirst[domainObject == descriptor]
+		(addedNodes + diagram.nodes).findFirst[domainObjectDescriptor == descriptor]
 	}
 	
 	def boolean needsLayoutCommand() {

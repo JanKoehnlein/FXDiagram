@@ -55,8 +55,8 @@ public class EClassNode extends XNode {
   }
   
   public EClass getEClass() {
-    DomainObjectDescriptor _domainObject = this.getDomainObject();
-    return ((EClassDescriptor) _domainObject).getDomainObject();
+    DomainObjectDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+    return ((EClassDescriptor) _domainObjectDescriptor).getDomainObject();
   }
   
   @Override

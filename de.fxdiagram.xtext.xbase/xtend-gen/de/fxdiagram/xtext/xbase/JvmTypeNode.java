@@ -32,12 +32,12 @@ public class JvmTypeNode extends BaseClassNode<JvmDeclaredType> {
   
   @Override
   public ClassModel inferClassModel() {
-    IMappedElementDescriptor<JvmDeclaredType> _domainObject = this.getDomainObject();
+    IMappedElementDescriptor<JvmDeclaredType> _domainObjectDescriptor = this.getDomainObjectDescriptor();
     final Function1<JvmDeclaredType, ClassModel> _function = (JvmDeclaredType type) -> {
       ClassModel _classModel = new ClassModel();
       final Procedure1<ClassModel> _function_1 = (ClassModel it) -> {
-        IMappedElementDescriptor<JvmDeclaredType> _domainObject_1 = this.getDomainObject();
-        XtextEObjectID _elementID = ((JvmEObjectDescriptor<JvmDeclaredType>) _domainObject_1).getElementID();
+        IMappedElementDescriptor<JvmDeclaredType> _domainObjectDescriptor_1 = this.getDomainObjectDescriptor();
+        XtextEObjectID _elementID = ((JvmEObjectDescriptor<JvmDeclaredType>) _domainObjectDescriptor_1).getElementID();
         URI _uRI = _elementID.getURI();
         URI _trimFragment = _uRI.trimFragment();
         String _lastSegment = _trimFragment.lastSegment();
@@ -70,6 +70,6 @@ public class JvmTypeNode extends BaseClassNode<JvmDeclaredType> {
       };
       return ObjectExtensions.<ClassModel>operator_doubleArrow(_classModel, _function_1);
     };
-    return _domainObject.<ClassModel>withDomainObject(_function);
+    return _domainObjectDescriptor.<ClassModel>withDomainObject(_function);
   }
 }

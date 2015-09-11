@@ -85,7 +85,7 @@ public class EntityNode extends BaseNode<Entity> {
         };
         Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_2);
         _children_1.add(_doubleArrow);
-        IMappedElementDescriptor<Entity> _domainObject = this.getDomainObject();
+        IMappedElementDescriptor<Entity> _domainObjectDescriptor = this.getDomainObjectDescriptor();
         final Function1<Entity, Boolean> _function_3 = (Entity entity) -> {
           boolean _xblockexpression = false;
           {
@@ -153,7 +153,7 @@ public class EntityNode extends BaseNode<Entity> {
           }
           return Boolean.valueOf(_xblockexpression);
         };
-        _domainObject.<Boolean>withDomainObject(_function_3);
+        _domainObjectDescriptor.<Boolean>withDomainObject(_function_3);
       };
       VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
       _children.add(_doubleArrow);

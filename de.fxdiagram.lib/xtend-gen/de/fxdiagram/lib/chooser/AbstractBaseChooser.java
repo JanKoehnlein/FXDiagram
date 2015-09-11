@@ -286,8 +286,8 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
   public abstract Point2D getPosition();
   
   public boolean addChoice(final XNode node) {
-    DomainObjectDescriptor _domainObject = node.getDomainObject();
-    return this.addChoice(node, _domainObject);
+    DomainObjectDescriptor _domainObjectDescriptor = node.getDomainObjectDescriptor();
+    return this.addChoice(node, _domainObjectDescriptor);
   }
   
   public boolean addChoice(final XNode node, final DomainObjectDescriptor choiceInfo) {
@@ -512,9 +512,9 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       XDiagram _diagram = this.getDiagram();
       ObservableList<XNode> _nodes_1 = _diagram.getNodes();
       final Function1<XNode, Boolean> _function_1 = (XNode it) -> {
-        DomainObjectDescriptor _domainObject = it.getDomainObject();
-        DomainObjectDescriptor _domainObject_1 = choice.getDomainObject();
-        return Boolean.valueOf(Objects.equal(_domainObject, _domainObject_1));
+        DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+        DomainObjectDescriptor _domainObjectDescriptor_1 = choice.getDomainObjectDescriptor();
+        return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, _domainObjectDescriptor_1));
       };
       XNode existingChoice = IterableExtensions.<XNode>findFirst(_nodes_1, _function_1);
       boolean _equals = Objects.equal(existingChoice, null);

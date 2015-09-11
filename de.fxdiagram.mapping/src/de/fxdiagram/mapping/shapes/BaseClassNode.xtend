@@ -14,13 +14,13 @@ abstract class BaseClassNode<T> extends AbstractClassNode implements INodeWithLa
 		super(descriptor)
 	}
 
-	override IMappedElementDescriptor<T> getDomainObject() {
-		super.getDomainObject() as IMappedElementDescriptor<T>
+	override IMappedElementDescriptor<T> getDomainObjectDescriptor() {
+		super.domainObjectDescriptor as IMappedElementDescriptor<T>
 	}
 
 	override doActivate() {
 		super.doActivate()
-		addLazyBehavior(domainObject)
+		addLazyBehavior(domainObjectDescriptor)
 	}
 
 	override registerOnClick() {

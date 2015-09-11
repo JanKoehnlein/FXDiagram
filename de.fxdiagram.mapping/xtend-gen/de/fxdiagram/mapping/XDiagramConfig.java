@@ -1,7 +1,7 @@
 package de.fxdiagram.mapping;
 
 import de.fxdiagram.annotations.logging.Logging;
-import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.mapping.AbstractDiagramConfig;
 import de.fxdiagram.mapping.AbstractMapping;
@@ -118,5 +118,5 @@ public interface XDiagramConfig {
   
   public abstract IMappedElementDescriptorProvider getDomainObjectProvider();
   
-  public abstract void initialize(final XShape shape);
+  public abstract void initialize(final XDomainObjectShape shape);
 }

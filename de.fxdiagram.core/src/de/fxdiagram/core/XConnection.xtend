@@ -47,8 +47,8 @@ import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.
  * Clients usually don't extend this class, but configure its label and appearance properties. 
  */
 @Logging
-@ModelNode('domainObject', 'source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead')
-class XConnection extends XShape {
+@ModelNode('source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead')
+class XConnection extends XDomainObjectShape {
 	
 	@FxProperty(readOnly=true) XNode source
 	@FxProperty(readOnly=true) XNode target
@@ -63,8 +63,6 @@ class XConnection extends XShape {
 	@FxProperty double strokeDashOffset = 0.0
 	@FxProperty ObservableList<Double> strokeDashArray = observableArrayList 
 
-	@FxProperty(readOnly=true) DomainObjectDescriptor domainObject
-
 	Group controlPointGroup = new Group
 	Group shapeGroup = new Group
 
@@ -77,8 +75,7 @@ class XConnection extends XShape {
 	}
 
 	new(DomainObjectDescriptor domainObject) {
-		this()
-		domainObjectProperty.set(domainObject)
+		super(domainObject)
 	}
 	
 	new(XNode source, XNode target, DomainObjectDescriptor domainObject) {

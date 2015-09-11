@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -92,8 +93,8 @@ public class InterpreterContext {
     ObservableList<XConnection> _connections = this.diagram.getConnections();
     Iterable<XConnection> _plus = Iterables.<XConnection>concat(this.addedConnections, _connections);
     final Function1<XConnection, Boolean> _function = (XConnection it) -> {
-      DomainObjectDescriptor _domainObject = it.getDomainObject();
-      return Boolean.valueOf(Objects.equal(_domainObject, descriptor));
+      DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+      return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
     return IterableExtensions.<XConnection>findFirst(_plus, _function);
   }
@@ -102,8 +103,8 @@ public class InterpreterContext {
     ObservableList<XNode> _nodes = this.diagram.getNodes();
     Iterable<XNode> _plus = Iterables.<XNode>concat(this.addedNodes, _nodes);
     final Function1<XNode, Boolean> _function = (XNode it) -> {
-      DomainObjectDescriptor _domainObject = it.getDomainObject();
-      return Boolean.valueOf(Objects.equal(_domainObject, descriptor));
+      DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+      return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
     return IterableExtensions.<XNode>findFirst(_plus, _function);
   }
@@ -150,7 +151,7 @@ public class InterpreterContext {
       ChangeDiagramCommand _changeDiagramCommand = new ChangeDiagramCommand(_head.diagram);
       commandStack.execute(_changeDiagramCommand);
     }
-    Iterable<XShape> _plus = Iterables.<XShape>concat(this.addedNodes, this.addedConnections);
+    Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(this.addedNodes, this.addedConnections);
     AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(this.diagram, ((XShape[])Conversions.unwrapArray(_plus, XShape.class)));
     commandStack.execute(_newAddCommand);
     final Consumer<InterpreterContext> _function = (InterpreterContext it) -> {

@@ -35,15 +35,15 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 	}
 
 	override getDirtyState() {
-		val descriptor = host.domainObject
+		val descriptor = host.domainObjectDescriptor
 		if (descriptor instanceof IMappedElementDescriptor<?>) {
 			try {
 				return descriptor.withDomainObject [ domainObject |
 					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
-					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObject, true)
-					if (resolvedSourceDescriptor == host.source.domainObject) {
-						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObject, false)
-						if(resolvedTarget == host.target.domainObject)								
+					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObjectDescriptor, true)
+					if (resolvedSourceDescriptor == host.source.domainObjectDescriptor) {
+						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObjectDescriptor, false)
+						if(resolvedTarget == host.target.domainObjectDescriptor)								
 							return CLEAN
 					}
 					return DIRTY
@@ -86,7 +86,10 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 					return nodeDescriptor.withDomainObject [ nodeDomainObject |
 						val nodeObjectCasted = nodeDomainObject as U
 						for (siblingMappingCall : siblingMappingCalls) {
-							if (interpreter.select(siblingMappingCall, nodeObjectCasted).exists[interpreter.getDescriptor(it, siblingMappingCall.mapping) == host.domainObject])
+							if (interpreter.select(siblingMappingCall, nodeObjectCasted)
+								.exists[
+									interpreter.getDescriptor(it, siblingMappingCall.mapping) == host.domainObjectDescriptor
+								])
 								return nodeDescriptor
 						}
 						return null
@@ -135,18 +138,18 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 	}
 	
 	override reconcile(UpdateAcceptor acceptor) {
-		val descriptor = host.domainObject
+		val descriptor = host.domainObjectDescriptor
 		if (descriptor instanceof IMappedElementDescriptor<?>) {
 			try {
 				descriptor.withDomainObject [ domainObject |
 					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
-					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObject, true)
-					if (resolvedSourceDescriptor != host.source.domainObject) {
+					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObjectDescriptor, true)
+					if (resolvedSourceDescriptor != host.source.domainObjectDescriptor) {
 						// TODO: return reconnect source command
 						acceptor.delete(host)
 					} else {
-						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObject, false)
-						if(resolvedTarget != host.target.domainObject)
+						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObjectDescriptor, false)
+						if(resolvedTarget != host.target.domainObjectDescriptor)
 							// TODO: return reconnect target command
 							acceptor.delete(host)
 					}

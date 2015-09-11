@@ -30,7 +30,7 @@ class EClassNode extends XNode {
 	}			
 
 	def getEClass() {
-		(domainObject as EClassDescriptor).domainObject
+		(domainObjectDescriptor as EClassDescriptor).domainObject
 	}
 
 	protected override createNode() {

@@ -28,8 +28,8 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 		super(descriptor)
 	}
 
-	override IMappedElementDescriptor<T> getDomainObject() {
-		super.getDomainObject() as IMappedElementDescriptor<T>
+	override IMappedElementDescriptor<T> getDomainObjectDescriptor() {
+		super.domainObjectDescriptor as IMappedElementDescriptor<T>
 	}
 
 	override initializeGraphics() {
@@ -45,7 +45,7 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 
 	override doActivate() {
 		super.doActivate()
-		addLazyBehavior(this, domainObject)
+		addLazyBehavior(this, domainObjectDescriptor)
 		addBehavior(new NodeReconcileBehavior(this))
 		innerDiagram.layoutOnActivate = LayoutType.DOT
 	}

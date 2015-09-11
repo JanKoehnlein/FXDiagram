@@ -26,13 +26,13 @@ class BaseFlipNode<T> extends FlipNode implements INodeWithLazyMappings {
 		super(descriptor)
 	}
 
-	override IMappedElementDescriptor<T> getDomainObject() {
-		super.getDomainObject() as IMappedElementDescriptor<T> 
+	override IMappedElementDescriptor<T> getDomainObjectDescriptor() {
+		super.domainObjectDescriptor as IMappedElementDescriptor<T> 
 	}
 
 	override doActivate() {
 		super.doActivate()
-		addLazyBehavior(domainObject)
+		addLazyBehavior(domainObjectDescriptor)
 		addBehavior(new NodeReconcileBehavior(this))
 	}
 	

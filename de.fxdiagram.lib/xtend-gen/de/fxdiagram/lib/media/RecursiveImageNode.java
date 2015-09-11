@@ -55,8 +55,8 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
   
   @Override
   protected Node createNode() {
-    DomainObjectDescriptor _domainObject = this.getDomainObject();
-    String _uRI = ((ResourceDescriptor) _domainObject).toURI();
+    DomainObjectDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+    String _uRI = ((ResourceDescriptor) _domainObjectDescriptor).toURI();
     Image _image = new Image(_uRI);
     this.image = _image;
     FirstRecursiveImageNode _firstRecursiveImageNode = new FirstRecursiveImageNode(this);

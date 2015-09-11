@@ -54,8 +54,8 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 		placementHint = Side.BOTTOM
 	}
 	
-	override BundleDescriptor getDomainObject() {
-		super.getDomainObject() as BundleDescriptor
+	override BundleDescriptor getDomainObjectDescriptor() {
+		super.domainObjectDescriptor as BundleDescriptor
 	}
 	
 	override createNode() {
@@ -67,8 +67,8 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 					alignment = Pos.CENTER
 					children += nameLabel = new Text => [
 						textOrigin = VPos.TOP
-						text = domainObject.symbolicName
-						val isSingleton = domainObject.withDomainObject[
+						text = domainObjectDescriptor.symbolicName
+						val isSingleton = domainObjectDescriptor.withDomainObject[
 							isSingleton
 						]
 						if(isSingleton) 
@@ -79,7 +79,7 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 				]
 			]
 			val backgroundStops = 
-				if(domainObject.withPlugin[isFragmentModel]) 
+				if(domainObjectDescriptor.withPlugin[isFragmentModel]) 
 					#[
 						new Stop(0, Color.rgb(255, 193, 210)), 
 						new Stop(1, Color.rgb(255, 215, 215))
@@ -103,7 +103,7 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 			alignment = Pos.CENTER
 			children += versionLabel = new Text => [
 				textOrigin = VPos.TOP
-				text = domainObject.version
+				text = domainObjectDescriptor.version
 				font = Font.font(font.family, font.size * 0.8)
 			]
 		], 1)
@@ -113,19 +113,19 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 			alignment = Pos.CENTER
 			children += new Text => [
 				textOrigin = VPos.TOP
-				text = domainObject.withPlugin[
+				text = domainObjectDescriptor.withPlugin[
 					pluginBase.getResourceString(pluginBase.name)
 				]
 			]
 			children += new Text => [
 				textOrigin = VPos.TOP
-				text = domainObject.withPlugin[
+				text = domainObjectDescriptor.withPlugin[
 					pluginBase.getResourceString(pluginBase.providerName)
 				]
 			]
 			children += new Text => [
 				textOrigin = VPos.TOP
-				text = domainObject.withDomainObject[
+				text = domainObjectDescriptor.withDomainObject[
 					executionEnvironments.join(', ')
 				]
 			]

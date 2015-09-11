@@ -179,7 +179,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 	abstract def Point2D getPosition()
 
 	def addChoice(XNode node) {
-		addChoice(node, node.domainObject)
+		addChoice(node, node.domainObjectDescriptor)
 	}
 	
 	def addChoice(XNode node, DomainObjectDescriptor choiceInfo) {
@@ -284,7 +284,7 @@ abstract class AbstractBaseChooser implements XDiagramTool {
 			getNodes.forEach[onMouseClicked = null]
 			group.children.remove(choice)
 			val shapesToAdd = <XShape>newArrayList
-			var existingChoice = diagram.nodes.findFirst[domainObject == choice.domainObject]
+			var existingChoice = diagram.nodes.findFirst[domainObjectDescriptor == choice.domainObjectDescriptor]
 			if(existingChoice == null) {
 				existingChoice = choice
 				val unlayoutedBounds = choice.layoutBounds

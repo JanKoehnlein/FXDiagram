@@ -53,7 +53,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
   
   @Override
   public boolean isEnabled(final XNode host) {
-    DomainObjectDescriptor _domainObject = host.getDomainObject();
+    DomainObjectDescriptor _domainObjectDescriptor = host.getDomainObjectDescriptor();
     final Function1<BundleDescription, Boolean> _function = (BundleDescription it) -> {
       boolean _xifexpression = false;
       if (this.isInverse) {
@@ -67,14 +67,14 @@ public class AddDependencyPathAction extends RapidButtonAction {
       }
       return Boolean.valueOf(_xifexpression);
     };
-    return (((BundleDescriptor) _domainObject).<Boolean>withDomainObject(_function)).booleanValue();
+    return (((BundleDescriptor) _domainObjectDescriptor).<Boolean>withDomainObject(_function)).booleanValue();
   }
   
   @Override
   public void perform(final RapidButton button) {
     XNode _host = button.getHost();
-    DomainObjectDescriptor _domainObject = _host.getDomainObject();
-    final BundleDescriptor descriptor = ((BundleDescriptor) _domainObject);
+    DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
+    final BundleDescriptor descriptor = ((BundleDescriptor) _domainObjectDescriptor);
     final Function1<BundleDescription, Object> _function = (BundleDescription it) -> {
       return this.doPerform(button, it);
     };
@@ -113,17 +113,17 @@ public class AddDependencyPathAction extends RapidButtonAction {
           final LinkedHashSet<XShape> additionalShapes = CollectionLiterals.<XShape>newLinkedHashSet();
           ObservableList<XNode> _nodes = diagram.getNodes();
           final Function1<XNode, DomainObjectDescriptor> _function = (XNode it_1) -> {
-            return it_1.getDomainObject();
+            return it_1.getDomainObjectDescriptor();
           };
           final Map<DomainObjectDescriptor, XNode> descriptor2node = IterableExtensions.<DomainObjectDescriptor, XNode>toMap(_nodes, _function);
-          DomainObjectDescriptor _domainObject = choice.getDomainObject();
-          descriptor2node.put(_domainObject, choice);
+          DomainObjectDescriptor _domainObjectDescriptor = choice.getDomainObjectDescriptor();
+          descriptor2node.put(_domainObjectDescriptor, choice);
           ObservableList<XConnection> _connections = diagram.getConnections();
           final Function1<XConnection, DomainObjectDescriptor> _function_1 = (XConnection it_1) -> {
-            return it_1.getDomainObject();
+            return it_1.getDomainObjectDescriptor();
           };
           final Map<DomainObjectDescriptor, XConnection> descriptor2connection = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_connections, _function_1);
-          DomainObjectDescriptor _domainObject_1 = choice.getDomainObject();
+          DomainObjectDescriptor _domainObjectDescriptor_1 = choice.getDomainObjectDescriptor();
           final Function1<BundleDescription, ArrayList<BundleDependency>> _function_2 = (BundleDescription chosenBundle) -> {
             ArrayList<BundleDependency> _xifexpression = null;
             if (AddDependencyPathAction.this.isInverse) {
@@ -133,7 +133,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
             }
             return _xifexpression;
           };
-          ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObject_1).<ArrayList<BundleDependency>>withDomainObject(_function_2);
+          ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObjectDescriptor_1).<ArrayList<BundleDependency>>withDomainObject(_function_2);
           final Consumer<BundleDependency> _function_3 = (BundleDependency bundleDependency) -> {
             BundleDescription _owner = bundleDependency.getOwner();
             NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();

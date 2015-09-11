@@ -47,7 +47,7 @@ class EntityNode extends BaseNode<Entity> {
 					text = name
 					font = Font.font(font.family, FontWeight.BOLD, font.size * 1.1)
 				]
-				domainObject.withDomainObject[ entity |
+				domainObjectDescriptor.withDomainObject[ entity |
 					val attributes = entity.features.filter(Property).filter[type.referencedEntity == null]
 					children += new VBox => [ attributeCompartment |
 						attributes.forEach[ attribute |
