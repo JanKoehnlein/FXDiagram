@@ -63,7 +63,6 @@ interface XtextEObjectID {
 				}
 			resourceServiceProvider
 		}
-
 	}
 }
 

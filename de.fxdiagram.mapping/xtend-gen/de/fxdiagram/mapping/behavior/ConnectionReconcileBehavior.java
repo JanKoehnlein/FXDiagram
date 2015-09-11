@@ -22,6 +22,7 @@ import de.fxdiagram.mapping.XDiagramConfigInterpreter;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -62,7 +63,7 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
           XConnection _host_1 = this.getHost();
           XNode _source = _host_1.getSource();
           DomainObjectDescriptor _domainObjectDescriptor = _source.getDomainObjectDescriptor();
-          final Object resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor, true);
+          final DomainObjectDescriptor resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor, true);
           XConnection _host_2 = this.getHost();
           XNode _source_1 = _host_2.getSource();
           DomainObjectDescriptor _domainObjectDescriptor_1 = _source_1.getDomainObjectDescriptor();
@@ -71,7 +72,7 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
             XConnection _host_3 = this.getHost();
             XNode _target = _host_3.getTarget();
             DomainObjectDescriptor _domainObjectDescriptor_2 = _target.getDomainObjectDescriptor();
-            final Object resolvedTarget = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_2, false);
+            final DomainObjectDescriptor resolvedTarget = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_2, false);
             XConnection _host_4 = this.getHost();
             XNode _target_1 = _host_4.getTarget();
             DomainObjectDescriptor _domainObjectDescriptor_3 = _target_1.getDomainObjectDescriptor();
@@ -96,7 +97,7 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
     }
   }
   
-  protected <U extends Object> Object resolveConnectionEnd(final T domainObject, final ConnectionMapping<T> connectionMapping, final DomainObjectDescriptor nodeDescriptor, final boolean isSource) {
+  protected <U extends Object> DomainObjectDescriptor resolveConnectionEnd(final T domainObject, final ConnectionMapping<T> connectionMapping, final DomainObjectDescriptor nodeDescriptor, final boolean isSource) {
     final XDiagramConfigInterpreter interpreter = new XDiagramConfigInterpreter();
     NodeMappingCall<?, T> _xifexpression = null;
     if (isSource) {
@@ -155,17 +156,20 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
           final Function1<Object, IMappedElementDescriptor<?>> _function_4 = (Object nodeDomainObject) -> {
             final U nodeObjectCasted = ((U) nodeDomainObject);
             for (final AbstractConnectionMappingCall<T, U> siblingMappingCall : siblingMappingCalls) {
-              Iterable<T> _select_1 = interpreter.<T, U>select(siblingMappingCall, nodeObjectCasted);
-              final Function1<T, Boolean> _function_5 = (T it) -> {
-                AbstractMapping<T> _mapping_1 = siblingMappingCall.getMapping();
-                IMappedElementDescriptor<T> _descriptor = interpreter.<T>getDescriptor(it, _mapping_1);
+              {
+                Iterable<T> _select_1 = interpreter.<T, U>select(siblingMappingCall, nodeObjectCasted);
+                final Function1<T, IMappedElementDescriptor<T>> _function_5 = (T it) -> {
+                  AbstractMapping<T> _mapping_1 = siblingMappingCall.getMapping();
+                  return interpreter.<T>getDescriptor(it, _mapping_1);
+                };
+                Iterable<IMappedElementDescriptor<T>> _map = IterableExtensions.<T, IMappedElementDescriptor<T>>map(_select_1, _function_5);
+                final Set<IMappedElementDescriptor<T>> siblingDescriptors = IterableExtensions.<IMappedElementDescriptor<T>>toSet(_map);
                 XConnection _host = this.getHost();
                 DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
-                return Boolean.valueOf(Objects.equal(_descriptor, _domainObjectDescriptor));
-              };
-              boolean _exists = IterableExtensions.<T>exists(_select_1, _function_5);
-              if (_exists) {
-                return ((IMappedElementDescriptor<?>)nodeDescriptor);
+                boolean _contains = siblingDescriptors.contains(_domainObjectDescriptor);
+                if (_contains) {
+                  return ((IMappedElementDescriptor<?>)nodeDescriptor);
+                }
               }
             }
             return null;
@@ -174,7 +178,7 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
         }
       }
     }
-    return DirtyState.DIRTY;
+    return null;
   }
   
   @Override
@@ -293,7 +297,7 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
             XConnection _host_1 = this.getHost();
             XNode _source = _host_1.getSource();
             DomainObjectDescriptor _domainObjectDescriptor = _source.getDomainObjectDescriptor();
-            final Object resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor, true);
+            final DomainObjectDescriptor resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor, true);
             XConnection _host_2 = this.getHost();
             XNode _source_1 = _host_2.getSource();
             DomainObjectDescriptor _domainObjectDescriptor_1 = _source_1.getDomainObjectDescriptor();
@@ -305,7 +309,7 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
               XConnection _host_4 = this.getHost();
               XNode _target = _host_4.getTarget();
               DomainObjectDescriptor _domainObjectDescriptor_2 = _target.getDomainObjectDescriptor();
-              final Object resolvedTarget = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_2, false);
+              final DomainObjectDescriptor resolvedTarget = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_2, false);
               XConnection _host_5 = this.getHost();
               XNode _target_1 = _host_5.getTarget();
               DomainObjectDescriptor _domainObjectDescriptor_3 = _target_1.getDomainObjectDescriptor();

@@ -86,10 +86,10 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 					return nodeDescriptor.withDomainObject [ nodeDomainObject |
 						val nodeObjectCasted = nodeDomainObject as U
 						for (siblingMappingCall : siblingMappingCalls) {
-							if (interpreter.select(siblingMappingCall, nodeObjectCasted)
-								.exists[
-									interpreter.getDescriptor(it, siblingMappingCall.mapping) == host.domainObjectDescriptor
-								])
+							val siblingDescriptors = interpreter
+								.select(siblingMappingCall, nodeObjectCasted)
+								.map[interpreter.getDescriptor(it, siblingMappingCall.mapping)].toSet
+							if (siblingDescriptors.contains(host.domainObjectDescriptor))
 								return nodeDescriptor
 						}
 						return null
@@ -97,7 +97,7 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 				}
 			}
 		}				
-		return DIRTY
+		return null
 	}
 	
 	override protected doActivate() {

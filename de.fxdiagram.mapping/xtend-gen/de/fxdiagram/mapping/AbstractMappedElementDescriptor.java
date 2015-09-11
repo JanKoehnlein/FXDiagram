@@ -48,25 +48,16 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
   public boolean equals(final Object obj) {
     if ((obj instanceof AbstractMappedElementDescriptor<?>)) {
       boolean _and = false;
-      boolean _and_1 = false;
-      IMappedElementDescriptorProvider _provider = this.getProvider();
-      IMappedElementDescriptorProvider _provider_1 = ((AbstractMappedElementDescriptor<?>)obj).getProvider();
-      boolean _equals = Objects.equal(_provider, _provider_1);
+      String _mappingConfigID = this.getMappingConfigID();
+      String _mappingConfigID_1 = ((AbstractMappedElementDescriptor<?>)obj).getMappingConfigID();
+      boolean _equals = Objects.equal(_mappingConfigID, _mappingConfigID_1);
       if (!_equals) {
-        _and_1 = false;
-      } else {
-        String _mappingConfigID = this.getMappingConfigID();
-        String _mappingConfigID_1 = ((AbstractMappedElementDescriptor<?>)obj).getMappingConfigID();
-        boolean _equals_1 = Objects.equal(_mappingConfigID, _mappingConfigID_1);
-        _and_1 = _equals_1;
-      }
-      if (!_and_1) {
         _and = false;
       } else {
         String _mappingID = this.getMappingID();
         String _mappingID_1 = ((AbstractMappedElementDescriptor<?>)obj).getMappingID();
-        boolean _equals_2 = Objects.equal(_mappingID, _mappingID_1);
-        _and = _equals_2;
+        boolean _equals_1 = Objects.equal(_mappingID, _mappingID_1);
+        _and = _equals_1;
       }
       return _and;
     } else {
@@ -82,11 +73,7 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
     String _mappingID = this.getMappingID();
     int _hashCode_1 = _mappingID.hashCode();
     int _multiply_1 = (37 * _hashCode_1);
-    int _plus = (_multiply + _multiply_1);
-    IMappedElementDescriptorProvider _provider = this.getProvider();
-    int _hashCode_2 = _provider.hashCode();
-    int _multiply_2 = (79 * _hashCode_2);
-    return (_plus + _multiply_2);
+    return (_multiply + _multiply_1);
   }
   
   /**

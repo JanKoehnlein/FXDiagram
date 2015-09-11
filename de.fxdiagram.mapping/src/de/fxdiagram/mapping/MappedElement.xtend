@@ -47,15 +47,14 @@ abstract class AbstractMappedElementDescriptor<T> implements IMappedElementDescr
 	
 	override equals(Object obj) {
 		if(obj instanceof AbstractMappedElementDescriptor<?>)
-			return provider == obj.provider
-				&& mappingConfigID == obj.mappingConfigID
+			return mappingConfigID == obj.mappingConfigID
 				&& mappingID == obj.mappingID 
 		else 
 			return false
 	}
 	
 	override hashCode() {
-		31 * mappingConfigID.hashCode + 37 * mappingID.hashCode + 79 * provider.hashCode
+		31 * mappingConfigID.hashCode + 37 * mappingID.hashCode
 	}
 	
 }

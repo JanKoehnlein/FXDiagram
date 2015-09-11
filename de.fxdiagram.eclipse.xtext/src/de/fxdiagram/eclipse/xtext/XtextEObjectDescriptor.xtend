@@ -51,4 +51,9 @@ class XtextEObjectDescriptor <T extends EObject> extends AbstractXtextDescriptor
 		elementID.resourceServiceProvider
 	}
 	
+	override toString() {
+		provider + 
+		elementID.toString
+	}
+	
 }
