@@ -39,4 +39,23 @@ class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<BundleD
 
 	override openInEditor(boolean select) {
 	}
+	
+	override equals(Object obj) {
+		if(obj instanceof BundleDependencyDescriptor) 
+			return super.equals(obj) 
+				&& obj.kind == kind
+				&& obj.ownerSymbolicName == ownerSymbolicName
+				&& obj.ownerVersion == ownerVersion
+				&& obj.importSymbolicName == importSymbolicName
+				&& obj.importVersionRange == importVersionRange
+		else
+			return false
+	}
+	
+	override hashCode() {
+		super.hashCode() 
+			+ 71 * kind.hashCode + 73 * ownerSymbolicName.hashCode + 79 * ownerVersion.hashCode
+			+ 83 * importSymbolicName.hashCode + 89 * importVersionRange.hashCode
+	}
+	
 }

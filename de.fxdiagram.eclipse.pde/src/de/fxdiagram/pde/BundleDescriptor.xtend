@@ -54,4 +54,16 @@ class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription
 			ManifestEditor.openPluginEditor(plugin)	
 		]
 	}
+	
+	override equals(Object obj) {
+		if(obj instanceof BundleDescriptor) 
+			return super.equals(obj) && obj.symbolicName == symbolicName && obj.version == version
+		else
+			return false 
+	}
+	
+	override hashCode() {
+		super.hashCode() + 57 * symbolicName.hashCode + 67 * version.hashCode
+	}
+	
 }
