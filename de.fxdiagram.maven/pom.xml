@@ -7,7 +7,7 @@
 	<version>0.6.0-SNAPSHOT</version>
 	<properties>
 		<tycho-version>0.22.0</tycho-version>
-		<xtext-version>2.8.3</xtext-version>
+		<xtext-version>2.8.4</xtext-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<packaging>pom</packaging>
@@ -48,7 +48,7 @@
 		<repository>
 			<id>efxclipse-repo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/efxclipse/runtime-released/2.0.0/site</url>
+			<url>http://download.eclipse.org/efxclipse/runtime-released/2.1.0/site</url>
 		</repository>
 		<repository>
 			<id>kieler</id>
@@ -58,7 +58,7 @@
 		<repository>
 			<id>xtext-examples</id>
 			<layout>p2</layout>
-			<url>http://meysholdt.github.io/xtext_examples/repositories/generated-with-xtext_2_7_0/</url>
+			<url>http://meysholdt.github.io/xtext_examples/repositories/generated-with-xtext_2_8_4/</url>
 		</repository>
 	</repositories>
 
