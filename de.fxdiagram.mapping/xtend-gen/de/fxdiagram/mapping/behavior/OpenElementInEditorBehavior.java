@@ -1,11 +1,11 @@
 package de.fxdiagram.mapping.behavior;
 
-import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.OpenBehavior;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -14,8 +14,8 @@ import javafx.scene.input.MouseEvent;
  * Opens the domain object of this {@link XShape} in th respective Eclipse editor.
  */
 @SuppressWarnings("all")
-public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implements OpenBehavior {
-  public OpenElementInEditorBehavior(final XShape host) {
+public class OpenElementInEditorBehavior extends AbstractHostBehavior<XDomainObjectShape> implements OpenBehavior {
+  public OpenElementInEditorBehavior(final XDomainObjectShape host) {
     super(host);
   }
   
@@ -26,7 +26,7 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
   
   @Override
   protected void doActivate() {
-    XShape _host = this.getHost();
+    XDomainObjectShape _host = this.getHost();
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
       int _clickCount = it.getClickCount();
       boolean _equals = (_clickCount == 2);
@@ -40,30 +40,10 @@ public class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> im
   
   @Override
   public void open() {
-    IMappedElementDescriptor<?> _domainObject = this.getDomainObject();
-    _domainObject.openInEditor(true);
-  }
-  
-  private IMappedElementDescriptor<?> getDomainObject() {
-    Object _switchResult = null;
-    XShape _host = this.getHost();
-    final XShape it = _host;
-    boolean _matched = false;
-    if (!_matched) {
-      if (it instanceof XNode) {
-        _matched=true;
-        _switchResult = this.getDomainObject();
-      }
+    XDomainObjectShape _host = this.getHost();
+    final DomainObjectDescriptor descriptor = _host.getDomainObjectDescriptor();
+    if ((descriptor instanceof IMappedElementDescriptor<?>)) {
+      ((IMappedElementDescriptor<?>)descriptor).openInEditor(true);
     }
-    if (!_matched) {
-      if (it instanceof XConnection) {
-        _matched=true;
-        _switchResult = this.getDomainObject();
-      }
-    }
-    if (!_matched) {
-      _switchResult = null;
-    }
-    return ((IMappedElementDescriptor<?>) _switchResult);
   }
 }

@@ -4,11 +4,18 @@ import de.fxdiagram.lib.nodes.AbstractClassNode
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import javafx.scene.input.MouseEvent
-import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
+
 import static javafx.geometry.Side.*
 import static javafx.scene.input.MouseButton.*
 
+import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
+import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
+
 abstract class BaseClassNode<T> extends AbstractClassNode implements INodeWithLazyMappings {
+
+	new() {
+		initializeLazily
+	}
 
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)

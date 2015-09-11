@@ -4,7 +4,9 @@ import com.google.inject.Inject
 import de.fxdiagram.lib.nodes.ClassModel
 import de.fxdiagram.mapping.shapes.BaseClassNode
 import org.eclipse.xtext.common.types.JvmDeclaredType
+import de.fxdiagram.annotations.properties.ModelNode
 
+@ModelNode
 class JvmTypeNode extends BaseClassNode<JvmDeclaredType> {
 
 	@Inject extension JvmDomainUtil 

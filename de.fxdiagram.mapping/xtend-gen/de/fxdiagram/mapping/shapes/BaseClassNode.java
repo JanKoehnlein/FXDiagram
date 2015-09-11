@@ -6,6 +6,7 @@ import de.fxdiagram.lib.nodes.AbstractClassNode;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
+import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,10 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @SuppressWarnings("all")
 public abstract class BaseClassNode<T extends Object> extends AbstractClassNode implements INodeWithLazyMappings {
+  public BaseClassNode() {
+    BaseShapeInitializer.initializeLazily(this);
+  }
+  
   public BaseClassNode(final IMappedElementDescriptor<T> descriptor) {
     super(descriptor);
   }

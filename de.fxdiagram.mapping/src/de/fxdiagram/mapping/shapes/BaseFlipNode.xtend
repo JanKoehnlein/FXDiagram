@@ -5,13 +5,14 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
 import javafx.scene.input.MouseEvent
 
 import static javafx.geometry.Side.*
 import static javafx.scene.input.MouseButton.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
+import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
 /**
  * Base implementation for a flipable {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
@@ -21,6 +22,10 @@ import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
  */
  @ModelNode
 class BaseFlipNode<T> extends FlipNode implements INodeWithLazyMappings {
+
+	new() {
+		initializeLazily
+	}
 
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)

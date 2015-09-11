@@ -53,7 +53,7 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 			throw new NoSuchElementException('Cannot load resource ' + resourceURI)
 		val resourceDescription = resourceServiceProvider.resourceDescriptionManager.
 			getResourceDescription(resource)
-		val eObjectDescriptions = resourceDescription.getExportedObjects(EClass, qualifiedName, false)
+		val eObjectDescriptions = resourceDescription.getExportedObjects(EClass, getQualifiedName(), false)
 		if (eObjectDescriptions.size != 1)
 			throw new NoSuchElementException('Expected a single element but got ' + eObjectDescriptions.size)
 		val eObjectDescription = eObjectDescriptions.head

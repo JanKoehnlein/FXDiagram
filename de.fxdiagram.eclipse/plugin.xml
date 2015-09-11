@@ -40,7 +40,7 @@
             defaultHandler="de.fxdiagram.eclipse.commands.LinkWithEditorHandler"
             description="Link with Editor"
             id="de.fxdiagram.eclipse.LinkWithEditor"
-        	name="Link FXDiagram with editor">
+        	name="Link FXDiagram with Editor">
 			<state
 				class="org.eclipse.ui.handlers.RegistryToggleState:false"
 				id="org.eclipse.ui.commands.toggleState">

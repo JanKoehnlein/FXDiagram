@@ -1,7 +1,6 @@
 package de.fxdiagram.mapping.behavior
 
-import de.fxdiagram.core.XConnection
-import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XDomainObjectShape
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.AbstractHostBehavior
 import de.fxdiagram.core.behavior.OpenBehavior
@@ -11,9 +10,9 @@ import javafx.scene.input.MouseEvent
 /**
  * Opens the domain object of this {@link XShape} in th respective Eclipse editor. 
  */
-class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implements OpenBehavior {
+class OpenElementInEditorBehavior extends AbstractHostBehavior<XDomainObjectShape> implements OpenBehavior {
 	
-	new(XShape host) {
+	new(XDomainObjectShape host) {
 		super(host)
 	}
 	
@@ -31,14 +30,8 @@ class OpenElementInEditorBehavior extends AbstractHostBehavior<XShape> implement
 	}
 	
 	override open() {
-		domainObject.openInEditor(true)
-	}
-	
-	private def getDomainObject() {
-		switch it: host {
-			XNode: domainObject
-			XConnection: domainObject
-			default: null
-		} as IMappedElementDescriptor<?>
+		val descriptor = host.domainObjectDescriptor
+		if(descriptor instanceof IMappedElementDescriptor<?>)
+			descriptor.openInEditor(true)
 	}
 }

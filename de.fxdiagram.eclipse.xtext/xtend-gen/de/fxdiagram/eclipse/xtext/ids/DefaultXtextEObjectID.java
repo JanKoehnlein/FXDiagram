@@ -102,7 +102,8 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
     IResourceDescription.Manager _resourceDescriptionManager = _resourceServiceProvider.getResourceDescriptionManager();
     final IResourceDescription resourceDescription = _resourceDescriptionManager.getResourceDescription(resource);
     EClass _eClass = this.getEClass();
-    final Iterable<IEObjectDescription> eObjectDescriptions = resourceDescription.getExportedObjects(_eClass, this.qualifiedName, false);
+    QualifiedName _qualifiedName = this.getQualifiedName();
+    final Iterable<IEObjectDescription> eObjectDescriptions = resourceDescription.getExportedObjects(_eClass, _qualifiedName, false);
     int _size = IterableExtensions.size(eObjectDescriptions);
     boolean _notEquals = (_size != 1);
     if (_notEquals) {

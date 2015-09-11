@@ -6,6 +6,7 @@ import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
 import javafx.geometry.Insets
 import javafx.geometry.VPos
 import javafx.scene.layout.StackPane
@@ -20,7 +21,7 @@ import javafx.scene.text.Text
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
+import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
 /**
  * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
@@ -31,6 +32,10 @@ import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
 @ModelNode
 class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 	
+	new() {
+		initializeLazily
+	}
+
 	new(IMappedElementDescriptor<T> descriptor) {
 		super(descriptor)
 	}

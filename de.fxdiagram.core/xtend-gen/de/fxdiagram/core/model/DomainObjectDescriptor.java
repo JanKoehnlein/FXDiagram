@@ -11,6 +11,9 @@ import de.fxdiagram.core.model.XModelProvider;
  * the real domain object. The descriptor must contain all information needed to recover
  * the domain object.
  * 
+ * Subclasses should implement {@link #equals(Object)} and {@link #hashCode()} to detect
+ * equality without the need of a transaction.
+ * 
  * This indirection serves two purposes:
  * <ol>
  * <li>We cannot make assumptions on how a domain object can be serialized. So when we
