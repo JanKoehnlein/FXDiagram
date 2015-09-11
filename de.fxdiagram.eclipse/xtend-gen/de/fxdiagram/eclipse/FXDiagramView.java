@@ -48,6 +48,7 @@ public class FXDiagramView extends ViewPart {
   
   private List<Pair<EventType<?>, EventHandler<?>>> globalEventHandlers = CollectionLiterals.<Pair<EventType<?>, EventHandler<?>>>newArrayList();
   
+  @Accessors
   private boolean linkWithEditor;
   
   @Accessors(AccessorType.PUBLIC_GETTER)
@@ -189,6 +190,11 @@ public class FXDiagramView extends ViewPart {
       _elvis = _createNewTab;
     }
     _elvis.<T>revealElement(element, mappingCall, editor);
+  }
+  
+  @Pure
+  public boolean isLinkWithEditor() {
+    return this.linkWithEditor;
   }
   
   @Pure

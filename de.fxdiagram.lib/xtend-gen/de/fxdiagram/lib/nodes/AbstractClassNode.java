@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.nodes;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.behavior.DirtyState;
@@ -48,7 +49,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
-@ModelNode({ "showPackage", "showAttributes", "showMethods", "bgColor" })
+@ModelNode({ "showPackage", "showAttributes", "showMethods", "bgColor", "model" })
 @SuppressWarnings("all")
 public abstract class AbstractClassNode extends FlipNode {
   private CheckBox packageBox;
@@ -190,12 +191,17 @@ public abstract class AbstractClassNode extends FlipNode {
       };
       VBox _doubleArrow_4 = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_2, _function_4);
       this.methodCompartment = _doubleArrow_4;
+      ClassModel _model = this.getModel();
+      boolean _equals = Objects.equal(_model, null);
+      if (_equals) {
+        ClassModel _inferClassModel = this.inferClassModel();
+        this.setModel(_inferClassModel);
+      }
+      this.populateFromModel();
       final ChangeListener<ClassModel> _function_5 = (ObservableValue<? extends ClassModel> p, ClassModel o, ClassModel n) -> {
         this.populateFromModel();
       };
       this.modelProperty.addListener(_function_5);
-      ClassModel _inferClassModel = this.inferClassModel();
-      this.setModel(_inferClassModel);
       _xblockexpression = pane;
     }
     return _xblockexpression;
@@ -381,6 +387,7 @@ public abstract class AbstractClassNode extends FlipNode {
     modelElement.addProperty(showAttributesProperty, Boolean.class);
     modelElement.addProperty(showMethodsProperty, Boolean.class);
     modelElement.addProperty(bgColorProperty, Color.class);
+    modelElement.addProperty(modelProperty, ClassModel.class);
   }
   
   private SimpleBooleanProperty showPackageProperty = new SimpleBooleanProperty(this, "showPackage",_initShowPackage());

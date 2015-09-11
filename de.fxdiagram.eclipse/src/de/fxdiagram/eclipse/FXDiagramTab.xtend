@@ -1,8 +1,6 @@
 package de.fxdiagram.eclipse
 
-import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
-import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.DirtyState
@@ -17,7 +15,6 @@ import de.fxdiagram.core.tools.actions.DeleteAction
 import de.fxdiagram.core.tools.actions.ExportSvgAction
 import de.fxdiagram.core.tools.actions.FullScreenAction
 import de.fxdiagram.core.tools.actions.LayoutAction
-import de.fxdiagram.core.tools.actions.LoadAction
 import de.fxdiagram.core.tools.actions.NavigateNextAction
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction
 import de.fxdiagram.core.tools.actions.RedoAction
@@ -26,6 +23,7 @@ import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
+import de.fxdiagram.eclipse.actions.EclipseLoadAction
 import de.fxdiagram.eclipse.changes.IChangeListener
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.mapping.ConnectionMapping
@@ -112,7 +110,7 @@ class FXDiagramTab {
 					XDiagramConfig.Registry.getInstance.configurations.map[domainObjectProvider].toSet
 				getDiagramActionRegistry +=
 					#[new CenterAction, new DeleteAction, new LayoutAction(LayoutType.DOT), new ExportSvgAction,
-						new RedoAction, new UndoRedoPlayerAction, new UndoAction, new RevealAction, new LoadAction,
+						new RedoAction, new UndoRedoPlayerAction, new UndoAction, new RevealAction, new EclipseLoadAction,
 						new SaveAction, new SelectAllAction, new ZoomToFitAction, new NavigatePreviousAction,
 						new NavigateNextAction, new FullScreenAction]
 			]

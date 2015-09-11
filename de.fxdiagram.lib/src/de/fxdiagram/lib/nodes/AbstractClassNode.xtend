@@ -37,7 +37,7 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
-@ModelNode("showPackage", "showAttributes", "showMethods", "bgColor")
+@ModelNode("showPackage", "showAttributes", "showMethods", "bgColor", "model")
 abstract class AbstractClassNode extends FlipNode {
 
 	@FxProperty boolean showPackage = false
@@ -112,10 +112,12 @@ abstract class AbstractClassNode extends FlipNode {
 			c.padding = new Insets(10, 0, 0, 0)
 			c.addInflatable(showMethodsProperty, methodsBox, contentArea.children.size, inflator)
 		]
+		if(model == null)
+			model = inferClassModel
+		populateFromModel
 		modelProperty.addListener [ p, o, n |
 			populateFromModel
 		]
-		model = inferClassModel
 		pane
 	}
 	

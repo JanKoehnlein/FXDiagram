@@ -27,7 +27,6 @@ import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
 import de.fxdiagram.core.tools.actions.ExportSvgAction;
 import de.fxdiagram.core.tools.actions.FullScreenAction;
 import de.fxdiagram.core.tools.actions.LayoutAction;
-import de.fxdiagram.core.tools.actions.LoadAction;
 import de.fxdiagram.core.tools.actions.NavigateNextAction;
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
 import de.fxdiagram.core.tools.actions.RedoAction;
@@ -37,6 +36,7 @@ import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.UndoAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.eclipse.FXDiagramView;
+import de.fxdiagram.eclipse.actions.EclipseLoadAction;
 import de.fxdiagram.eclipse.changes.IChangeListener;
 import de.fxdiagram.eclipse.changes.ModelChangeBroker;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
@@ -193,7 +193,7 @@ public class FXDiagramTab {
       UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
       UndoAction _undoAction = new UndoAction();
       RevealAction _revealAction = new RevealAction();
-      LoadAction _loadAction = new LoadAction();
+      EclipseLoadAction _eclipseLoadAction = new EclipseLoadAction();
       SaveAction _saveAction = new SaveAction();
       SelectAllAction _selectAllAction = new SelectAllAction();
       ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
@@ -201,7 +201,7 @@ public class FXDiagramTab {
       NavigateNextAction _navigateNextAction = new NavigateNextAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
       _diagramActionRegistry.operator_add(
-        Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _loadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
+        Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _eclipseLoadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
     };
     return ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
   }

@@ -33,7 +33,7 @@ class FXDiagramView extends ViewPart {
 	
 	List<Pair<EventType<?>, EventHandler<?>>> globalEventHandlers = newArrayList
 	
-	boolean linkWithEditor
+	@Accessors boolean linkWithEditor
 	
 	@Accessors(PUBLIC_GETTER) ModelChangeBroker modelChangeBroker
 	
