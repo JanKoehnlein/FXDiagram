@@ -31,7 +31,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -100,72 +99,77 @@ public class XConnection extends XDomainObjectShape {
   public XConnection() {
     TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
     this.setTargetArrowHead(_triangleArrowHead);
+    this.addSourceTargetListeners();
   }
   
   public XConnection(final DomainObjectDescriptor domainObject) {
     super(domainObject);
+    this.addSourceTargetListeners();
     TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
     this.setTargetArrowHead(_triangleArrowHead);
   }
   
   public XConnection(final XNode source, final XNode target, final DomainObjectDescriptor domainObject) {
     this(domainObject);
-    this.setSource(source);
-    this.setTarget(target);
+    this.sourceProperty.set(source);
+    this.targetProperty.set(target);
   }
   
   public XConnection(final XNode source, final XNode target) {
     this(source, target, new StringDescriptor(((source.getName() + "->") + target.getName())));
   }
   
-  public void setSource(final XNode source) {
-    XNode _source = this.getSource();
-    boolean _notEquals = (!Objects.equal(_source, null));
-    if (_notEquals) {
-      XNode _source_1 = this.getSource();
-      ObservableList<XConnection> _outgoingConnections = _source_1.getOutgoingConnections();
-      _outgoingConnections.remove(this);
-    }
-    this.sourceProperty.set(source);
-    boolean _and = false;
-    boolean _notEquals_1 = (!Objects.equal(source, null));
-    if (!_notEquals_1) {
-      _and = false;
-    } else {
-      ObservableList<XConnection> _outgoingConnections_1 = source.getOutgoingConnections();
-      boolean _contains = _outgoingConnections_1.contains(this);
-      boolean _not = (!_contains);
-      _and = _not;
-    }
-    if (_and) {
-      ObservableList<XConnection> _outgoingConnections_2 = source.getOutgoingConnections();
-      _outgoingConnections_2.add(this);
-    }
-  }
-  
-  public void setTarget(final XNode target) {
-    XNode _target = this.getTarget();
-    boolean _notEquals = (!Objects.equal(_target, null));
-    if (_notEquals) {
-      XNode _target_1 = this.getTarget();
-      ObservableList<XConnection> _incomingConnections = _target_1.getIncomingConnections();
-      _incomingConnections.remove(this);
-    }
-    this.targetProperty.set(target);
-    boolean _and = false;
-    boolean _notEquals_1 = (!Objects.equal(target, null));
-    if (!_notEquals_1) {
-      _and = false;
-    } else {
-      ObservableList<XConnection> _incomingConnections_1 = target.getIncomingConnections();
-      boolean _contains = _incomingConnections_1.contains(this);
-      boolean _not = (!_contains);
-      _and = _not;
-    }
-    if (_and) {
-      ObservableList<XConnection> _incomingConnections_2 = target.getIncomingConnections();
-      _incomingConnections_2.add(this);
-    }
+  protected void addSourceTargetListeners() {
+    final ChangeListener<XNode> _function = (ObservableValue<? extends XNode> p, XNode oldSource, XNode newSource) -> {
+      ObservableList<XConnection> _outgoingConnections = null;
+      if (oldSource!=null) {
+        _outgoingConnections=oldSource.getOutgoingConnections();
+      }
+      if (_outgoingConnections!=null) {
+        _outgoingConnections.remove(this);
+      }
+      boolean _and = false;
+      boolean _notEquals = (!Objects.equal(newSource, null));
+      if (!_notEquals) {
+        _and = false;
+      } else {
+        ObservableList<XConnection> _outgoingConnections_1 = newSource.getOutgoingConnections();
+        boolean _contains = _outgoingConnections_1.contains(this);
+        boolean _not = (!_contains);
+        _and = _not;
+      }
+      if (_and) {
+        ObservableList<XConnection> _outgoingConnections_2 = newSource.getOutgoingConnections();
+        _outgoingConnections_2.add(this);
+      }
+      this.setNeedsLayout(true);
+    };
+    this.sourceProperty.addListener(_function);
+    final ChangeListener<XNode> _function_1 = (ObservableValue<? extends XNode> p, XNode oldTarget, XNode newTarget) -> {
+      ObservableList<XConnection> _incomingConnections = null;
+      if (oldTarget!=null) {
+        _incomingConnections=oldTarget.getIncomingConnections();
+      }
+      if (_incomingConnections!=null) {
+        _incomingConnections.remove(this);
+      }
+      boolean _and = false;
+      boolean _notEquals = (!Objects.equal(newTarget, null));
+      if (!_notEquals) {
+        _and = false;
+      } else {
+        ObservableList<XConnection> _incomingConnections_1 = newTarget.getIncomingConnections();
+        boolean _contains = _incomingConnections_1.contains(this);
+        boolean _not = (!_contains);
+        _and = _not;
+      }
+      if (_and) {
+        ObservableList<XConnection> _incomingConnections_2 = newTarget.getIncomingConnections();
+        _incomingConnections_2.add(this);
+      }
+      this.setNeedsLayout(true);
+    };
+    this.targetProperty.addListener(_function_1);
   }
   
   @Override
@@ -693,24 +697,32 @@ public class XConnection extends XDomainObjectShape {
     modelElement.addProperty(targetArrowHeadProperty, ArrowHead.class);
   }
   
-  private ReadOnlyObjectWrapper<XNode> sourceProperty = new ReadOnlyObjectWrapper<XNode>(this, "source");
+  private SimpleObjectProperty<XNode> sourceProperty = new SimpleObjectProperty<XNode>(this, "source");
   
   public XNode getSource() {
     return this.sourceProperty.get();
   }
   
-  public ReadOnlyObjectProperty<XNode> sourceProperty() {
-    return this.sourceProperty.getReadOnlyProperty();
+  public void setSource(final XNode source) {
+    this.sourceProperty.set(source);
   }
   
-  private ReadOnlyObjectWrapper<XNode> targetProperty = new ReadOnlyObjectWrapper<XNode>(this, "target");
+  public ObjectProperty<XNode> sourceProperty() {
+    return this.sourceProperty;
+  }
+  
+  private SimpleObjectProperty<XNode> targetProperty = new SimpleObjectProperty<XNode>(this, "target");
   
   public XNode getTarget() {
     return this.targetProperty.get();
   }
   
-  public ReadOnlyObjectProperty<XNode> targetProperty() {
-    return this.targetProperty.getReadOnlyProperty();
+  public void setTarget(final XNode target) {
+    this.targetProperty.set(target);
+  }
+  
+  public ObjectProperty<XNode> targetProperty() {
+    return this.targetProperty;
   }
   
   private SimpleListProperty<XConnectionLabel> labelsProperty = new SimpleListProperty<XConnectionLabel>(this, "labels",_initLabels());

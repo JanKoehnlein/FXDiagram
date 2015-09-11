@@ -50,8 +50,8 @@ import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.
 @ModelNode('source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead')
 class XConnection extends XDomainObjectShape {
 	
-	@FxProperty(readOnly=true) XNode source
-	@FxProperty(readOnly=true) XNode target
+	@FxProperty XNode source
+	@FxProperty XNode target
 	@FxProperty ObservableList<XConnectionLabel> labels = observableArrayList
 	@FxProperty ArrowHead sourceArrowHead
 	@FxProperty ArrowHead targetArrowHead
@@ -72,37 +72,38 @@ class XConnection extends XDomainObjectShape {
 
 	new() {
 		targetArrowHead = new TriangleArrowHead(this, false)
+		addSourceTargetListeners
 	}
 
 	new(DomainObjectDescriptor domainObject) {
 		super(domainObject)
+		addSourceTargetListeners
 		targetArrowHead = new TriangleArrowHead(this, false)
 	}
 	
 	new(XNode source, XNode target, DomainObjectDescriptor domainObject) {
 		this(domainObject)
-		this.source = source
-		this.target = target
+		this.sourceProperty.set(source)
+		this.targetProperty.set(target)
 	}
 	
 	new(XNode source, XNode target) {
 		this(source, target, new StringDescriptor(source.name + '->' + target.name))
 	}
 	
-	def void setSource(XNode source) {
-		if(getSource != null)
-			getSource.outgoingConnections.remove(this)
-		sourceProperty.set(source)
-		if(source != null && !source.outgoingConnections.contains(this))
-			source.outgoingConnections.add(this)
-	}
-	
-	def void setTarget(XNode target) {
-		if(getTarget != null)
-			getTarget.incomingConnections.remove(this)
-		targetProperty.set(target)
-		if(target != null && !target.incomingConnections.contains(this))
-			target.incomingConnections.add(this)
+	protected def addSourceTargetListeners() {
+		sourceProperty.addListener [ p, oldSource, newSource |
+			oldSource?.outgoingConnections?.remove(this)
+			if(newSource != null && !newSource.outgoingConnections.contains(this))
+				newSource.outgoingConnections.add(this)
+			needsLayout = true
+		]
+		targetProperty.addListener [ p, oldTarget, newTarget |
+			oldTarget?.incomingConnections?.remove(this)
+			if(newTarget != null && !newTarget.incomingConnections.contains(this))
+				newTarget.incomingConnections.add(this)
+			needsLayout = true
+		]
 	}
 	
 	protected override createNode() {		
