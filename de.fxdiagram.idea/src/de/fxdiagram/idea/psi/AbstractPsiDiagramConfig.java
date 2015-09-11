@@ -1,5 +1,6 @@
 package de.fxdiagram.idea.psi;
 
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.mapping.AbstractDiagramConfig;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
@@ -22,7 +23,7 @@ public abstract class AbstractPsiDiagramConfig extends AbstractDiagramConfig {
     }
 
     @Override
-    public void initialize(XShape shape) {
+    public void initialize(XDomainObjectShape shape) {
         shape.addBehavior(new OpenElementInEditorBehavior(shape));
     }
 }

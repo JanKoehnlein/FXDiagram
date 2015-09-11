@@ -41,11 +41,15 @@ public class PsiDomainObjectDescriptor<T extends PsiNamedElement> extends Abstra
     }
 
     public PsiDomainObjectDescriptor(List<String> fqn, T psiElement, AbstractMapping<PsiNamedElement> mapping, PsiDomainObjectProvider provider) {
-        super(psiElement.getContainingFile().getVirtualFile().getCanonicalPath() + "###" + Strings.concat("##", fqn), psiElement.getName(),
-                mapping.getConfig().getID(), mapping.getID(), provider);
+        super(mapping.getConfig().getID(), mapping.getID(), provider);
         this.fqnProperty.setAll(fqn);
         this.pathProperty.set(psiElement.getContainingFile().getVirtualFile().getCanonicalPath());
         this.psiElement = psiElement;
+    }
+
+    @Override
+    public String getName() {
+        return getPsiElement().getName();
     }
 
     @Override

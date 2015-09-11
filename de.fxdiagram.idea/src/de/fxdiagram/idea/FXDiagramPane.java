@@ -89,10 +89,10 @@ public class FXDiagramPane {
     }
 
     private <T> XShape findShape(XDiagram diagram, IMappedElementDescriptor<T> descriptor) {
-        Optional<XNode> node = diagram.getNodes().stream().filter(n -> n.getDomainObject().equals(descriptor)).findFirst();
+        Optional<XNode> node = diagram.getNodes().stream().filter(n -> n.getDomainObjectDescriptor().equals(descriptor)).findFirst();
         if(node.isPresent())
             return node.get();
-        Optional<XConnection> connection = diagram.getConnections().stream().filter(n -> n.getDomainObject().equals(descriptor)).findFirst();
+        Optional<XConnection> connection = diagram.getConnections().stream().filter(n -> n.getDomainObjectDescriptor().equals(descriptor)).findFirst();
         return connection.isPresent() ? connection.get() : null;
     }
 
