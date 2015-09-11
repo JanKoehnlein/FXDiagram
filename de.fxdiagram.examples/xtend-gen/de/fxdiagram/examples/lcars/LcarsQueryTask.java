@@ -82,12 +82,12 @@ public class LcarsQueryTask extends Task<Void> {
       Iterable<XNode> _plus = Iterables.<XNode>concat(_map, _map_1);
       Iterable<LcarsNode> _filter_2 = Iterables.<LcarsNode>filter(_plus, LcarsNode.class);
       final Function1<LcarsNode, String> _function_4 = (LcarsNode it) -> {
-        DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+        LcarsEntryDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
         return _domainObjectDescriptor.getId();
       };
       Iterable<String> _map_2 = IterableExtensions.<LcarsNode, String>map(_filter_2, _function_4);
       final Set<String> alreadyConnected = IterableExtensions.<String>toSet(_map_2);
-      DomainObjectDescriptor _domainObjectDescriptor = lcarsNode.getDomainObjectDescriptor();
+      LcarsEntryDescriptor _domainObjectDescriptor = lcarsNode.getDomainObjectDescriptor();
       String _id = _domainObjectDescriptor.getId();
       alreadyConnected.add(_id);
       final Function1<DBObject, Boolean> _function_5 = (DBObject it) -> {

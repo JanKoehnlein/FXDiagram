@@ -76,6 +76,7 @@ class XConnection extends XDomainObjectShape {
 
 	new(DomainObjectDescriptor domainObject) {
 		super(domainObject)
+		targetArrowHead = new TriangleArrowHead(this, false)
 	}
 	
 	new(XNode source, XNode target, DomainObjectDescriptor domainObject) {

@@ -105,6 +105,12 @@ public class LcarsNode extends XNode {
   }
   
   @Override
+  public LcarsEntryDescriptor getDomainObjectDescriptor() {
+    DomainObjectDescriptor _domainObjectDescriptor = super.getDomainObjectDescriptor();
+    return ((LcarsEntryDescriptor) _domainObjectDescriptor);
+  }
+  
+  @Override
   protected Node createNode() {
     RectangleBorderPane _xblockexpression = null;
     {
@@ -613,7 +619,7 @@ public class LcarsNode extends XNode {
   }
   
   public DBObject getData() {
-    DomainObjectDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
+    LcarsEntryDescriptor _domainObjectDescriptor = this.getDomainObjectDescriptor();
     return ((LcarsEntryDescriptor) _domainObjectDescriptor).getDomainObject();
   }
   

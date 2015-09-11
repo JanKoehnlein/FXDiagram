@@ -11,7 +11,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 @SuppressWarnings("all")
 public class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaProperty> {
   public JavaPropertyDescriptor(final JavaProperty it, final JavaModelProvider provider) {
-    super(it, ((it.getType().getCanonicalName() + " ") + it.getName()), ((it.getType().getCanonicalName() + " ") + it.getName()), provider);
+    super(it, ((it.getType().getCanonicalName() + " ") + it.getName()), provider);
   }
   
   @Override

@@ -3,6 +3,7 @@ package de.fxdiagram.examples.ecore;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
+import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import org.eclipse.emf.common.util.URI;
@@ -16,7 +17,14 @@ import org.eclipse.xtext.xbase.lib.Extension;
 @SuppressWarnings("all")
 public class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReference> {
   public EReferenceDescriptor(final EReference eReference, @Extension final EcoreDomainObjectProvider provider) {
-    super(eReference, provider.getId(eReference), provider.getFqn(eReference), provider);
+    super(eReference, provider.getId(eReference), provider);
+  }
+  
+  @Override
+  public String getName() {
+    DomainObjectProvider _provider = this.getProvider();
+    EReference _domainObject = this.getDomainObject();
+    return ((EcoreDomainObjectProvider) _provider).getFqn(_domainObject);
   }
   
   @Override

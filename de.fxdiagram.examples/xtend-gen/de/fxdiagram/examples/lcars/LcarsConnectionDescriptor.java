@@ -9,7 +9,7 @@ import de.fxdiagram.examples.lcars.LcarsModelProvider;
 @SuppressWarnings("all")
 public class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<String> {
   public LcarsConnectionDescriptor(final String fieldName, final LcarsModelProvider provider) {
-    super(fieldName, fieldName, fieldName, provider);
+    super(fieldName, fieldName, provider);
   }
   
   @Override

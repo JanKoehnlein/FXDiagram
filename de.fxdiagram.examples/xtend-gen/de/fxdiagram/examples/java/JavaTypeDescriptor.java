@@ -10,7 +10,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 @SuppressWarnings("all")
 public class JavaTypeDescriptor extends CachedDomainObjectDescriptor<Class<?>> {
   public JavaTypeDescriptor(final Class<?> javaClass, final JavaModelProvider provider) {
-    super(javaClass, javaClass.getCanonicalName(), javaClass.getCanonicalName(), provider);
+    super(javaClass, javaClass.getCanonicalName(), provider);
   }
   
   @Override

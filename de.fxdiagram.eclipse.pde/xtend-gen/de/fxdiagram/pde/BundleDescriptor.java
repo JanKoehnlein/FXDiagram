@@ -7,6 +7,8 @@ import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.NoSuchElementException;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import org.apache.log4j.Logger;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.pde.core.plugin.IMatchRules;
@@ -14,18 +16,18 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.osgi.framework.Version;
 
-@ModelNode
+@ModelNode({ "symbolicName", "version" })
 @SuppressWarnings("all")
 public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription> {
   private final static Logger LOG = Logger.getLogger(BundleDescriptor.class);
   
   public BundleDescriptor(final String symbolicName, final String version, final String mappingConfigID, final String mappingID, final BundleDescriptorProvider provider) {
-    super(((symbolicName + "#") + version), symbolicName, mappingConfigID, mappingID, provider);
+    super(mappingConfigID, mappingID, provider);
+    this.symbolicNameProperty.set(symbolicName);
+    this.versionProperty.set(version);
   }
   
   @Override
@@ -45,6 +47,11 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
       _xblockexpression = lambda.apply(bundle);
     }
     return _xblockexpression;
+  }
+  
+  @Override
+  public String getName() {
+    return this.getSymbolicName();
   }
   
   public <U extends Object> U withPlugin(final Function1<? super IPluginModelBase, ? extends U> lambda) {
@@ -68,18 +75,6 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
       _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
-  }
-  
-  public String getSymbolicName() {
-    String _id = this.getId();
-    String[] _split = _id.split("#");
-    return IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(_split)));
-  }
-  
-  public String getVersion() {
-    String _id = this.getId();
-    String[] _split = _id.split("#");
-    return IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
   }
   
   @Override
@@ -106,5 +101,27 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+    modelElement.addProperty(symbolicNameProperty, String.class);
+    modelElement.addProperty(versionProperty, String.class);
+  }
+  
+  private ReadOnlyStringWrapper symbolicNameProperty = new ReadOnlyStringWrapper(this, "symbolicName");
+  
+  public String getSymbolicName() {
+    return this.symbolicNameProperty.get();
+  }
+  
+  public ReadOnlyStringProperty symbolicNameProperty() {
+    return this.symbolicNameProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyStringWrapper versionProperty = new ReadOnlyStringWrapper(this, "version");
+  
+  public String getVersion() {
+    return this.versionProperty.get();
+  }
+  
+  public ReadOnlyStringProperty versionProperty() {
+    return this.versionProperty.getReadOnlyProperty();
   }
 }

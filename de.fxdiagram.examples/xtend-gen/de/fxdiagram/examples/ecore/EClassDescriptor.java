@@ -2,6 +2,7 @@ package de.fxdiagram.examples.ecore;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
+import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.examples.ecore.EcoreDomainObjectProvider;
 import org.eclipse.emf.common.util.URI;
@@ -15,7 +16,14 @@ import org.eclipse.xtext.xbase.lib.Extension;
 @SuppressWarnings("all")
 public class EClassDescriptor extends CachedDomainObjectDescriptor<EClass> {
   public EClassDescriptor(final EClass eClass, @Extension final EcoreDomainObjectProvider provider) {
-    super(eClass, provider.getId(eClass), provider.getFqn(eClass), provider);
+    super(eClass, provider.getId(eClass), provider);
+  }
+  
+  @Override
+  public String getName() {
+    DomainObjectProvider _provider = this.getProvider();
+    EClass _domainObject = this.getDomainObject();
+    return ((EcoreDomainObjectProvider) _provider).getFqn(_domainObject);
   }
   
   @Override

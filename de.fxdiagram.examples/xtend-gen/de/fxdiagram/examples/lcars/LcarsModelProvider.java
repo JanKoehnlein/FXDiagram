@@ -48,7 +48,7 @@ public class LcarsModelProvider implements DomainObjectProvider {
     return IterableExtensions.<DBObject>toList(((Iterable<DBObject>) _find));
   }
   
-  public <T extends Object> DBObject resolveDomainObject(final DomainObjectDescriptor descriptor) {
+  public <T extends Object> DBObject resolveDomainObject(final LcarsEntryDescriptor descriptor) {
     BasicDBObject _basicDBObject = new BasicDBObject();
     final Procedure1<BasicDBObject> _function = (BasicDBObject it) -> {
       String _id = descriptor.getId();

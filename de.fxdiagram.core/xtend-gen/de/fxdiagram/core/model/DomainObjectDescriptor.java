@@ -1,5 +1,7 @@
 package de.fxdiagram.core.model;
 
+import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.model.XModelProvider;
 
 /**
@@ -20,7 +22,8 @@ import de.fxdiagram.core.model.XModelProvider;
  */
 @SuppressWarnings("all")
 public interface DomainObjectDescriptor extends XModelProvider {
+  /**
+   * @returns a human readable name for the associated domain object
+   */
   public abstract String getName();
-  
-  public abstract String getId();
 }

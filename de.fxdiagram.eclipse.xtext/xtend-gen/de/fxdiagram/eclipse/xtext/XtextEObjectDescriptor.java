@@ -74,12 +74,6 @@ public class XtextEObjectDescriptor<T extends EObject> extends AbstractXtextDesc
   }
   
   @Override
-  public String getId() {
-    XtextEObjectID _elementID = this.getElementID();
-    return _elementID.toString();
-  }
-  
-  @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof XtextEObjectDescriptor<?>)) {
       boolean _and = false;

@@ -16,14 +16,6 @@ public class ResourceDescriptor extends ClassLoaderDescriptor {
     this.nameProperty.set(name);
   }
   
-  @Override
-  public String getId() {
-    String _classLoaderID = this.getClassLoaderID();
-    String _plus = (_classLoaderID + "/");
-    String _absolutePath = this.getAbsolutePath();
-    return (_plus + _absolutePath);
-  }
-  
   public String toURI() {
     String _absolutePath = this.getAbsolutePath();
     return super.toURI(_absolutePath);

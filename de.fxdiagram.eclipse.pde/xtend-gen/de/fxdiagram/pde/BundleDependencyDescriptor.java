@@ -7,22 +7,23 @@ import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleUtil;
-import java.util.Collections;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Conversions;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
-@ModelNode("kind")
+@ModelNode({ "kind", "ownerSymbolicName", "ownerVersion", "importSymbolicName", "importVersionRange" })
 @SuppressWarnings("all")
 public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<BundleDependency> {
   public BundleDependencyDescriptor(final BundleDependency.Kind kind, final String ownerSymbolicName, final String ownerVersion, final String importSymbolicName, final String importVersionRange, final String mappingConfigID, final String mappingID, final BundleDescriptorProvider provider) {
-    super(IterableExtensions.join(Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList(ownerSymbolicName, ownerVersion, importSymbolicName, importVersionRange)), "#"), 
-      ((importSymbolicName + " ") + importVersionRange), mappingConfigID, mappingID, provider);
+    super(mappingConfigID, mappingID, provider);
     this.kindProperty.set(kind);
+    this.ownerSymbolicNameProperty.set(ownerSymbolicName);
+    this.ownerVersionProperty.set(ownerVersion);
+    this.importSymbolicNameProperty.set(importSymbolicName);
+    this.importVersionRangeProperty.set(importVersionRange);
   }
   
   @Override
@@ -50,28 +51,12 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
     return _xblockexpression;
   }
   
-  public String getOwnerSymbolicName() {
-    String _id = this.getId();
-    String[] _split = _id.split("#");
-    return IterableExtensions.<String>head(((Iterable<String>)Conversions.doWrapArray(_split)));
-  }
-  
-  public String getOwnerVersion() {
-    String _id = this.getId();
-    String[] _split = _id.split("#");
-    return _split[1];
-  }
-  
-  public String getImportSymbolicName() {
-    String _id = this.getId();
-    String[] _split = _id.split("#");
-    return _split[2];
-  }
-  
-  public String getImportVersionRange() {
-    String _id = this.getId();
-    String[] _split = _id.split("#");
-    return IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
+  @Override
+  public String getName() {
+    String _ownerSymbolicName = this.getOwnerSymbolicName();
+    String _plus = (_ownerSymbolicName + "->");
+    String _importSymbolicName = this.getImportSymbolicName();
+    return (_plus + _importSymbolicName);
   }
   
   @Override
@@ -88,6 +73,10 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(kindProperty, BundleDependency.Kind.class);
+    modelElement.addProperty(ownerSymbolicNameProperty, String.class);
+    modelElement.addProperty(ownerVersionProperty, String.class);
+    modelElement.addProperty(importSymbolicNameProperty, String.class);
+    modelElement.addProperty(importVersionRangeProperty, String.class);
   }
   
   private ReadOnlyObjectWrapper<BundleDependency.Kind> kindProperty = new ReadOnlyObjectWrapper<BundleDependency.Kind>(this, "kind");
@@ -98,5 +87,45 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
   
   public ReadOnlyObjectProperty<BundleDependency.Kind> kindProperty() {
     return this.kindProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyStringWrapper ownerSymbolicNameProperty = new ReadOnlyStringWrapper(this, "ownerSymbolicName");
+  
+  public String getOwnerSymbolicName() {
+    return this.ownerSymbolicNameProperty.get();
+  }
+  
+  public ReadOnlyStringProperty ownerSymbolicNameProperty() {
+    return this.ownerSymbolicNameProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyStringWrapper ownerVersionProperty = new ReadOnlyStringWrapper(this, "ownerVersion");
+  
+  public String getOwnerVersion() {
+    return this.ownerVersionProperty.get();
+  }
+  
+  public ReadOnlyStringProperty ownerVersionProperty() {
+    return this.ownerVersionProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyStringWrapper importSymbolicNameProperty = new ReadOnlyStringWrapper(this, "importSymbolicName");
+  
+  public String getImportSymbolicName() {
+    return this.importSymbolicNameProperty.get();
+  }
+  
+  public ReadOnlyStringProperty importSymbolicNameProperty() {
+    return this.importSymbolicNameProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyStringWrapper importVersionRangeProperty = new ReadOnlyStringWrapper(this, "importVersionRange");
+  
+  public String getImportVersionRange() {
+    return this.importVersionRangeProperty.get();
+  }
+  
+  public ReadOnlyStringProperty importVersionRangeProperty() {
+    return this.importVersionRangeProperty.getReadOnlyProperty();
   }
 }

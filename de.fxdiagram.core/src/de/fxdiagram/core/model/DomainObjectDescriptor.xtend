@@ -2,6 +2,8 @@ package de.fxdiagram.core.model
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
+import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XNode
 import java.util.NoSuchElementException
 
 /**
@@ -11,6 +13,9 @@ import java.util.NoSuchElementException
  * the real domain object. The descriptor must contain all information needed to recover 
  * the domain object.
  * 
+ * Subclasses should implement {@link #equals(Object)} and {@link #hashCode()} to detect
+ * equality without the need of a transaction.
+ *  
  * This indirection serves two purposes:
  * <ol> 
  * <li>We cannot make assumptions on how a domain object can be serialized. So when we
@@ -21,63 +26,44 @@ import java.util.NoSuchElementException
  * </ol>
  */
 interface DomainObjectDescriptor extends XModelProvider {
-	def String getName()
-	def String getId()
-}
-
-/**
- * Base implementation of a {@link DomainObjectDescriptor} that can be serialized and
- * uses its {@link DomainObjectProvider} to recover the domain object and execute a
- * lambda expression on it. 
- */
-@ModelNode('id', 'name', 'provider')
-abstract class DomainObjectDescriptorImpl<T> implements DomainObjectDescriptor {
-	
-	@FxProperty(readOnly=true) String id
-	
-	@FxProperty(readOnly=true) String name
-	
-	@FxProperty(readOnly=true) DomainObjectProvider provider
-
-	new() {}
-	
-	new(String id, String name, DomainObjectProvider provider) {
-		idProperty.set(id)
-		nameProperty.set(name)
-		providerProperty.set(provider)
-	}
-	
-	override equals(Object obj) {
-		return obj != null && class==obj.class && id.equals((obj as DomainObjectDescriptor).id)
-	}
-	
-	override hashCode() {
-		id.hashCode
-	}
 	
 	/**
-	 * Recover the domain object and execute the lambda expression on it.
-	 * 
-	 * @throws {@link NoSuchElementException} if the object cannot be recovered.
+	 * @returns a human readable name for the associated domain object 
 	 */
-	def <U> U withDomainObject((T)=>U lambda) 
+	def String getName()
 }
 
 /**
  * Base class for {@link DomainObjectDescriptor}s whose domain object is constant and can 
  * be cached.
  */
-abstract class CachedDomainObjectDescriptor<T> extends DomainObjectDescriptorImpl<T> {
+@ModelNode('id', 'provider')
+abstract class CachedDomainObjectDescriptor<T> implements DomainObjectDescriptor {
 	
+	@FxProperty(readOnly=true) String id
+	@FxProperty(readOnly=true) DomainObjectProvider provider
+
 	T cachedDomainObject
 
-	new() {}
-		
-	new(T domainObject, String id, String name, DomainObjectProvider provider) {
-		super(id, name, provider) 
+	new(T domainObject, String id, DomainObjectProvider provider) {
+		providerProperty.set(provider)
+		idProperty.set(id)
 		this.cachedDomainObject = domainObject
 	}
 	
+	override getName() {
+		id
+	}
+	
+	override equals(Object obj) {
+		return obj instanceof CachedDomainObjectDescriptor<?> 
+			&& (obj as CachedDomainObjectDescriptor<?>).domainObject == getDomainObject 
+	}
+	
+	override hashCode() {
+		getDomainObject().hashCode
+	}
+
 	def getDomainObject() {
 		cachedDomainObject ?: {
 			cachedDomainObject = resolveDomainObject()
@@ -85,10 +71,6 @@ abstract class CachedDomainObjectDescriptor<T> extends DomainObjectDescriptorImp
 				throw new NoSuchElementException('Element ' + id + ' not found')
 			cachedDomainObject
 		}
-	}
-	
-	override <U> withDomainObject((T)=>U lambda) {
-		lambda.apply(domainObject)
 	}
 	
 	def T resolveDomainObject()
@@ -105,9 +87,5 @@ class StringDescriptor implements DomainObjectDescriptor {
 	
 	new(String name) {
 		nameProperty.set(name)
-	}
-	
-	override getId() {
-		name
 	}
 }

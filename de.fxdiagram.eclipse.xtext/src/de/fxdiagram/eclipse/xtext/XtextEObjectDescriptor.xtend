@@ -36,10 +36,6 @@ class XtextEObjectDescriptor <T extends EObject> extends AbstractXtextDescriptor
 		elementID.qualifiedName.lastSegment
 	}
 	
-	override getId() {
-		elementID.toString
-	}
-	
 	override equals(Object obj) {
 		if(obj instanceof XtextEObjectDescriptor<?>) 
 			return super.equals(obj) && elementID == obj.elementID

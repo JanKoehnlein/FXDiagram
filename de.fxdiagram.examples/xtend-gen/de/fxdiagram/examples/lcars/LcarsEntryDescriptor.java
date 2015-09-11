@@ -11,7 +11,14 @@ import de.fxdiagram.examples.lcars.LcarsModelProvider;
 @SuppressWarnings("all")
 public class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject> {
   public LcarsEntryDescriptor(final String dbId, final String name, final LcarsModelProvider provider) {
-    super(null, dbId, name, provider);
+    super(null, dbId, provider);
+  }
+  
+  @Override
+  public String getName() {
+    DBObject _domainObject = this.getDomainObject();
+    Object _get = _domainObject.get("name");
+    return _get.toString();
   }
   
   @Override

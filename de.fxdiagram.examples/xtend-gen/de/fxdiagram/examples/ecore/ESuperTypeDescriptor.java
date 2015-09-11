@@ -17,7 +17,7 @@ import org.eclipse.xtext.xbase.lib.Extension;
 @SuppressWarnings("all")
 public class ESuperTypeDescriptor extends CachedDomainObjectDescriptor<ESuperTypeHandle> {
   public ESuperTypeDescriptor(final ESuperTypeHandle it, @Extension final EcoreDomainObjectProvider provider) {
-    super(it, ((provider.getId(it.getSubType()) + "=") + Integer.valueOf(it.getSubType().getEAllSuperTypes().indexOf(it.getSuperType()))), 
+    super(it, 
       ((provider.getId(it.getSubType()) + "=") + Integer.valueOf(it.getSubType().getEAllSuperTypes().indexOf(it.getSuperType()))), provider);
   }
   

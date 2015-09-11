@@ -68,6 +68,10 @@ class LcarsNode extends XNode {
 		super(descriptor)
 	}
 	
+	override LcarsEntryDescriptor getDomainObjectDescriptor() {
+		super.getDomainObjectDescriptor() as LcarsEntryDescriptor
+	}
+	
 	protected override createNode() {
 		imageUrls = (data.get("images") as List<DBObject>).map[get('url').toString]
 		vbox = new VBox

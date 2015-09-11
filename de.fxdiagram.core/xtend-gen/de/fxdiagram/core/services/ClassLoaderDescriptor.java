@@ -22,11 +22,6 @@ public class ClassLoaderDescriptor implements DomainObjectDescriptor {
     return this.getClassLoaderID();
   }
   
-  @Override
-  public String getId() {
-    return this.getClassLoaderID();
-  }
-  
   public String toURI(final String resourcePath) {
     ClassLoaderProvider _provider = this.getProvider();
     return _provider.toURI(resourcePath, this);

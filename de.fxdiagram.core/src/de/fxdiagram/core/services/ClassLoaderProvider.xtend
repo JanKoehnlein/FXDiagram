@@ -80,11 +80,7 @@ class ClassLoaderDescriptor implements DomainObjectDescriptor {
 	override getName() {
 		classLoaderID
 	}
-	
-	override getId() {
-		classLoaderID
-	}
-	
+
 	def toURI(String resourcePath) {
 		provider.toURI(resourcePath, this)
 	}
@@ -107,10 +103,6 @@ class ResourceDescriptor extends ClassLoaderDescriptor {
 		nameProperty.set(name)
 	}
 
-	override getId() {
-		classLoaderID + '/' + absolutePath
-	}
-	
 	def toURI() {
 		super.toURI(absolutePath)
 	}

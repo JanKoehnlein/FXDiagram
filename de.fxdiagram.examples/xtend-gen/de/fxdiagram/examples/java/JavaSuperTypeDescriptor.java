@@ -11,8 +11,7 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 @SuppressWarnings("all")
 public class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSuperTypeHandle> {
   public JavaSuperTypeDescriptor(final JavaSuperTypeHandle it, final JavaModelProvider provider) {
-    super(it, ((it.getSubType().getCanonicalName() + "->") + it.getSuperType().getCanonicalName()), 
-      ((it.getSubType().getCanonicalName() + "->") + it.getSuperType().getCanonicalName()), provider);
+    super(it, ((it.getSubType().getCanonicalName() + "->") + it.getSuperType().getCanonicalName()), provider);
   }
   
   @Override

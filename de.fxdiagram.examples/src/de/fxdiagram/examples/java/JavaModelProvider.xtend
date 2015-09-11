@@ -33,7 +33,7 @@ class JavaModelProvider implements DomainObjectProvider {
 class JavaTypeDescriptor extends CachedDomainObjectDescriptor<Class<?>> {
 	
 	new(Class<?> javaClass, JavaModelProvider provider) {
-		super(javaClass, javaClass.canonicalName, javaClass.canonicalName, provider)
+		super(javaClass, javaClass.canonicalName, provider)
 	}
 	
 	override resolveDomainObject() {
@@ -44,9 +44,8 @@ class JavaTypeDescriptor extends CachedDomainObjectDescriptor<Class<?>> {
 @ModelNode
 class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaProperty> {
 	
-	
 	new(JavaProperty it, JavaModelProvider provider) {
-		super(it, type.canonicalName + ' ' + name, type.canonicalName + ' ' + name, provider)
+		super(it, type.canonicalName + ' ' + name, provider)
 	}
 
 	override resolveDomainObject() {
@@ -60,7 +59,6 @@ class JavaSuperTypeDescriptor extends CachedDomainObjectDescriptor<JavaSuperType
 
 	new(JavaSuperTypeHandle it, JavaModelProvider provider) {
 		super(it, subType.canonicalName + '->' + superType.canonicalName,
-			subType.canonicalName + '->' + superType.canonicalName,
 			provider
 		)
 	}

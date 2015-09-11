@@ -56,10 +56,6 @@ class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescr
 		sourceID.qualifiedName.lastSegment + '--' + getEReference.name  + '-->' + targetID.qualifiedName.lastSegment  
 	}
 	
-	override getId() {
-		sourceID + '--' + EReferenceURI + '-->' + targetID
-	}	
-	
 	def getEReference() {
 		eReference ?: (eReference = resolveReference) 
 	}

@@ -27,7 +27,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -55,13 +54,11 @@ public class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidBut
   
   @Override
   protected XNode createNode(final ESuperTypeDescriptor key) {
-    final Function1<ESuperTypeHandle, EClassDescriptor> _function = (ESuperTypeHandle it) -> {
-      EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
-      EClass _superType = it.getSuperType();
-      return _domainObjectProvider.createEClassDescriptor(_superType);
-    };
-    EClassDescriptor _withDomainObject = key.<EClassDescriptor>withDomainObject(_function);
-    return new EClassNode(_withDomainObject);
+    EcoreDomainObjectProvider _domainObjectProvider = this.getDomainObjectProvider();
+    ESuperTypeHandle _domainObject = key.getDomainObject();
+    EClass _superType = _domainObject.getSuperType();
+    EClassDescriptor _createEClassDescriptor = _domainObjectProvider.createEClassDescriptor(_superType);
+    return new EClassNode(_createEClassDescriptor);
   }
   
   protected EcoreDomainObjectProvider getDomainObjectProvider() {

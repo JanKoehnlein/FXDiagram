@@ -104,6 +104,8 @@ public class XConnection extends XDomainObjectShape {
   
   public XConnection(final DomainObjectDescriptor domainObject) {
     super(domainObject);
+    TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
+    this.setTargetArrowHead(_triangleArrowHead);
   }
   
   public XConnection(final XNode source, final XNode target, final DomainObjectDescriptor domainObject) {

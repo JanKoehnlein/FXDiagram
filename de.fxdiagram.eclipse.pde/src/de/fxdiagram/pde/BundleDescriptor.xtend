@@ -1,5 +1,6 @@
 package de.fxdiagram.pde
 
+import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor
 import java.util.NoSuchElementException
@@ -12,13 +13,18 @@ import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor
 
 import static de.fxdiagram.pde.BundleUtil.*
 
-@ModelNode
+@ModelNode('symbolicName', 'version')
 class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription> {
 	
 	static val LOG = Logger.getLogger(BundleDescriptor)
 	
+	@FxProperty(readOnly = true) String symbolicName
+	@FxProperty(readOnly = true) String version
+	
 	new(String symbolicName, String version, String mappingConfigID, String mappingID, BundleDescriptorProvider provider) {
-		super(symbolicName + '#' + version, symbolicName, mappingConfigID, mappingID, provider)
+		super(mappingConfigID, mappingID, provider)
+		symbolicNameProperty.set(symbolicName)
+		versionProperty.set(version)
 	}	
 	
 	override <U> withDomainObject((BundleDescription)=>U lambda) {
@@ -26,6 +32,10 @@ class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription
 		if(bundle == null) 
 			throw new NoSuchElementException('Bundle ' + symbolicName + ' not found')
 		lambda.apply(bundle)
+	}
+	
+	override getName() {
+		symbolicName
 	}
 	
 	def <U> withPlugin((IPluginModelBase)=>U lambda) {
@@ -36,14 +46,6 @@ class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription
 			LOG.warn('Invalid BundleDescriptor ' + this) 
 			null			
 		}
-	}
-	
-	def getSymbolicName() {
-		id.split('#').head
-	}
-	
-	def getVersion() {
-		id.split('#').last
 	}
 	
 	override openInEditor(boolean select) {

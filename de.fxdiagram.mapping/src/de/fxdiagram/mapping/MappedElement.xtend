@@ -3,7 +3,6 @@ package de.fxdiagram.mapping
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
-import de.fxdiagram.core.model.DomainObjectDescriptorImpl
 import de.fxdiagram.core.model.DomainObjectProvider
 
 /**
@@ -23,15 +22,17 @@ interface IMappedElementDescriptor<T> extends DomainObjectDescriptor {
 /**
  * Base implementation of {@link IMappedElementDescriptor}.
  */
-@ModelNode('mappingConfigID', 'mappingID')
-abstract class AbstractMappedElementDescriptor<T> extends DomainObjectDescriptorImpl<T> implements IMappedElementDescriptor<T> {
+@ModelNode('provider', 'mappingConfigID', 'mappingID')
+abstract class AbstractMappedElementDescriptor<T> implements IMappedElementDescriptor<T> {
 	
 	@FxProperty(readOnly=true) String mappingConfigID
 	@FxProperty(readOnly=true) String mappingID
+	@FxProperty(readOnly=true) IMappedElementDescriptorProvider provider
+	
 	AbstractMapping<T> mapping
 	
-	new(String id, String name, String mappingConfigID, String mappingID, IMappedElementDescriptorProvider provider) {
-		super(id, name, provider)
+	new(String mappingConfigID, String mappingID, IMappedElementDescriptorProvider provider) {
+		this.providerProperty.set(provider)
 		this.mappingConfigIDProperty.set(mappingConfigID)
 		this.mappingIDProperty.set(mappingID)
 	}
@@ -43,6 +44,20 @@ abstract class AbstractMappedElementDescriptor<T> extends DomainObjectDescriptor
 		}
 		mapping
 	}
+	
+	override equals(Object obj) {
+		if(obj instanceof AbstractMappedElementDescriptor<?>)
+			return provider == obj.provider
+				&& mappingConfigID == obj.mappingConfigID
+				&& mappingID == obj.mappingID 
+		else 
+			return false
+	}
+	
+	override hashCode() {
+		31 * mappingConfigID.hashCode + 37 * mappingID.hashCode + 79 * provider.hashCode
+	}
+	
 }
 
 /**

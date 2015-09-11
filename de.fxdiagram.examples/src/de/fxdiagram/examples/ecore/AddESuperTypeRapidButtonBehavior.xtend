@@ -32,9 +32,7 @@ class AddESuperTypeRapidButtonBehavior extends AbstractConnectionRapidButtonBeha
 	}
 	
 	override protected createNode(ESuperTypeDescriptor key) {
-		new EClassNode(key.withDomainObject[
-			domainObjectProvider.createEClassDescriptor(it.superType)
-		])
+		new EClassNode(domainObjectProvider.createEClassDescriptor(key.domainObject.superType))
 	}
 	
 	protected def getDomainObjectProvider() {

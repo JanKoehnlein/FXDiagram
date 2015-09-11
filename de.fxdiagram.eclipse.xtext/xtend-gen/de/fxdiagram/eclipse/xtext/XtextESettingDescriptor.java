@@ -111,17 +111,6 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
     return (_plus_2 + _lastSegment_1);
   }
   
-  @Override
-  public String getId() {
-    XtextEObjectID _sourceID = this.getSourceID();
-    String _plus = (_sourceID + "--");
-    String _eReferenceURI = this.getEReferenceURI();
-    String _plus_1 = (_plus + _eReferenceURI);
-    String _plus_2 = (_plus_1 + "-->");
-    XtextEObjectID _targetID = this.getTargetID();
-    return (_plus_2 + _targetID);
-  }
-  
   public EReference getEReference() {
     EReference _elvis = null;
     if (this.eReference != null) {

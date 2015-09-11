@@ -7,7 +7,6 @@ import com.mongodb.DBObject
 import com.mongodb.Mongo
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor
-import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
 import org.bson.types.ObjectId
 
@@ -29,7 +28,7 @@ class LcarsModelProvider implements DomainObjectProvider{
 		]) as Iterable<DBObject>).toList
 	}
 	
-	def <T> resolveDomainObject(DomainObjectDescriptor descriptor) {
+	def <T> resolveDomainObject(LcarsEntryDescriptor descriptor) {
 		lcars.findOne(new BasicDBObject => [
 			put("_id", new ObjectId(descriptor.id))
 		])
@@ -66,7 +65,11 @@ class LcarsModelProvider implements DomainObjectProvider{
 class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject> {
 	
 	new(String dbId, String name, LcarsModelProvider provider) {
-		super(null, dbId, name, provider)
+		super(null, dbId, provider)
+	}
+
+	override getName() {
+		getDomainObject().get('name').toString
 	}
 	
 	override resolveDomainObject() {
@@ -78,7 +81,7 @@ class LcarsEntryDescriptor extends CachedDomainObjectDescriptor<DBObject> {
 class LcarsConnectionDescriptor extends CachedDomainObjectDescriptor<String> {
 	
 	new(String fieldName, LcarsModelProvider provider) {
-		super(fieldName, fieldName, fieldName, provider)  
+		super(fieldName, fieldName, provider)  
 	}
 	
 	override resolveDomainObject() {

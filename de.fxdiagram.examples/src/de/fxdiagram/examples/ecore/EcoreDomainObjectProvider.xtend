@@ -13,7 +13,7 @@ import org.eclipse.xtend.lib.annotations.Data
 
 @ModelNode
 class EcoreDomainObjectProvider implements DomainObjectProvider {
-	
+
 	override createDescriptor(Object domainObject) {
 		switch domainObject {
 			EClass: return createEClassDescriptor(domainObject)
@@ -22,15 +22,15 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 		}
 		return null;
 	}
-	
+
 	def createEClassDescriptor(EClass object) {
 		new EClassDescriptor(object, this)
 	}
-	
+
 	def createEReferenceDescriptor(EReference object) {
 		new EReferenceDescriptor(object, this)
 	}
-	
+
 	def createESuperClassDescriptor(ESuperTypeHandle object) {
 		new ESuperTypeDescriptor(object, this)
 	}
@@ -38,7 +38,7 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 	def String getId(EObject it) {
 		EcoreUtil.getURI(it).toString
 	}
-	
+
 	def String getFqn(EClass it) {
 		EPackage.name + '.' + name
 	}
@@ -50,52 +50,61 @@ class EcoreDomainObjectProvider implements DomainObjectProvider {
 
 @ModelNode
 class EClassDescriptor extends CachedDomainObjectDescriptor<EClass> {
-	
+
 	new(EClass eClass, extension EcoreDomainObjectProvider provider) {
-		super(eClass, eClass.id, eClass.fqn, provider)
+		super(eClass, eClass.id, provider)
+	}
+
+	override getName() {
+		(provider as EcoreDomainObjectProvider).getFqn(getDomainObject())
 	}
 
 	override resolveDomainObject() {
 		val uri = URI.createURI(id)
 		val ePackage = EPackage.Registry.INSTANCE.getEPackage(uri.trimFragment.toString)
 		val posEquals = uri.fragment.indexOf('=')
-		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
+		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals)
 		ePackage.eResource.getEObject(fragment) as EClass
 	}
 }
 
 @ModelNode
 class EReferenceDescriptor extends CachedDomainObjectDescriptor<EReference> {
-	
+
 	new(EReference eReference, extension EcoreDomainObjectProvider provider) {
-		super(eReference, eReference.id, eReference.fqn, provider)
+		super(eReference, eReference.id, provider)
+	}
+
+	override getName() {
+		(provider as EcoreDomainObjectProvider).getFqn(getDomainObject())
 	}
 
 	override resolveDomainObject() {
 		val uri = URI.createURI(id)
 		val ePackage = EPackage.Registry.INSTANCE.getEPackage(uri.trimFragment.toString)
 		val posEquals = uri.fragment.indexOf('=')
-		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
+		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals)
 		ePackage.eResource.getEObject(fragment) as EReference
 	}
-	
+
 	override hashCode() {
-		domainObject.hashCode + (domainObject.EOpposite ?: domainObject).hashCode 
+		domainObject.hashCode + (domainObject.EOpposite ?: domainObject).hashCode
 	}
-	
+
 	override equals(Object other) {
-		if(other instanceof EReferenceDescriptor) 
+		if (other instanceof EReferenceDescriptor)
 			return other.domainObject == this.domainObject || other.domainObject == this.domainObject.EOpposite
-		else 
+		else
 			return false;
 	}
 }
 
 @ModelNode
 class ESuperTypeDescriptor extends CachedDomainObjectDescriptor<ESuperTypeHandle> {
-	
+
 	new(ESuperTypeHandle it, extension EcoreDomainObjectProvider provider) {
-		super(it, subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),
+		super(
+			it,
 			subType.id + '=' + subType.EAllSuperTypes.indexOf(superType),
 			provider
 		)
@@ -105,7 +114,7 @@ class ESuperTypeDescriptor extends CachedDomainObjectDescriptor<ESuperTypeHandle
 		val uri = URI.createURI(id)
 		val ePackage = EPackage.Registry.INSTANCE.getEPackage(uri.trimFragment.toString)
 		val posEquals = uri.fragment.indexOf('=')
-		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals) 
+		val fragment = if(posEquals == -1) uri.fragment else uri.fragment.substring(0, posEquals)
 		val eObject = ePackage.eResource.getEObject(fragment)
 		val eClass = eObject as EClass
 		new ESuperTypeHandle(eClass, eClass.EAllSuperTypes.get(Integer.parseInt(uri.fragment.substring(posEquals + 1))))
