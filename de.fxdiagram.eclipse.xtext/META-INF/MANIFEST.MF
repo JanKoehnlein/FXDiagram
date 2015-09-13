@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Xtext
+Bundle-Name: FXDiagram Xtext Integration
 Bundle-SymbolicName: de.fxdiagram.eclipse.xtext;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -13,4 +13,5 @@ Export-Package: de.fxdiagram.eclipse.xtext,
  de.fxdiagram.eclipse.xtext.hyperlink,
  de.fxdiagram.eclipse.xtext.ids,
  de.fxdiagram.eclipse.xtext.mapping
+Bundle-Vendor: JanKoehnlein
 

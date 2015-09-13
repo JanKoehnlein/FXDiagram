@@ -24,4 +24,5 @@ Export-Package: de.fxdiagram.eclipse,
  de.fxdiagram.eclipse.mapping,
  de.fxdiagram.eclipse.selection
 Import-Package: org.apache.log4j;version="1.2.15"
+Bundle-Vendor: JanKoehnlein
 

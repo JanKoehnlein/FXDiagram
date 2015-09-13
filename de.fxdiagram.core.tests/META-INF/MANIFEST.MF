@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Tests
+Bundle-Name: FXDiagram Core Tests
 Bundle-SymbolicName: de.fxdiagram.core.tests
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -8,3 +8,4 @@ Require-Bundle: org.eclipse.xtend.lib,
  de.fxdiagram.core,
  org.junit;bundle-version="4.0.0",
  org.eclipse.xtext.junit4
+Bundle-Vendor: JanKoehnlein

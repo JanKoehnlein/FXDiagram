@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: FXDiagram Core
 Bundle-SymbolicName: de.fxdiagram.core;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-ClassPath: .,
  lib/javax.json-1.0.4.jar
-Bundle-Vendor: %providerName
+Bundle-Vendor: JanKoehnlein
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
  de.cau.cs.kieler.core.kgraph,

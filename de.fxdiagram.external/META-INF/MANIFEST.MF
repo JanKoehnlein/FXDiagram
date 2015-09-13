@@ -5,3 +5,4 @@ Bundle-SymbolicName: de.fxdiagram.external;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: eu.hansolo.enzo.radialmenu
+Bundle-Vendor: JanKoehnlein

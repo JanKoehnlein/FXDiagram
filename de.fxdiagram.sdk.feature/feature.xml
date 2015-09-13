@@ -2,7 +2,8 @@
 <feature
       id="de.fxdiagram.sdk.feature"
       label="FXDiagram SDK"
-      version="0.7.0.qualifier">
+      version="0.7.0.qualifier"
+      provider-name="JanKoehnlein">
 
    <description>
       FXDiagram - A diagram framework based on JavaFX. Complete SDK.
