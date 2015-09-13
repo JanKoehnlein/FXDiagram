@@ -5,7 +5,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.behavior.CloseBehavior;
 import de.fxdiagram.core.tools.actions.BehaviorProvider;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -19,7 +19,7 @@ public class CloseAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
+  public SymbolType getSymbol() {
     return null;
   }
   

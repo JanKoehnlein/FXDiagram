@@ -10,7 +10,7 @@ import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.collections.ObservableList;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -36,8 +36,8 @@ public class DeleteAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.TRASH;
+  public SymbolType getSymbol() {
+    return SymbolType.TRASH;
   }
   
   @Override

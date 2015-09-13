@@ -3,7 +3,7 @@ package de.fxdiagram.core.tools.actions;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -34,7 +34,7 @@ public class FullScreenAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
+  public SymbolType getSymbol() {
     return null;
   }
   

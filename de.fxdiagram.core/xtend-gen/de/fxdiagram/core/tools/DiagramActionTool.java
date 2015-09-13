@@ -11,7 +11,7 @@ import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
 import eu.hansolo.enzo.radialmenu.MenuItem;
 import eu.hansolo.enzo.radialmenu.Options;
 import eu.hansolo.enzo.radialmenu.RadialMenu;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
@@ -137,14 +137,14 @@ public class DiagramActionTool implements XDiagramTool {
       DiagramActionRegistry _diagramActionRegistry = this.root.getDiagramActionRegistry();
       ArrayList<DiagramAction> _actions = _diagramActionRegistry.getActions();
       final Function1<DiagramAction, Boolean> _function_1 = (DiagramAction it) -> {
-        Symbol.Type _symbol = it.getSymbol();
+        SymbolType _symbol = it.getSymbol();
         return Boolean.valueOf((!Objects.equal(_symbol, null)));
       };
       Iterable<DiagramAction> _filter = IterableExtensions.<DiagramAction>filter(_actions, _function_1);
       final Function1<DiagramAction, MenuItem> _function_2 = (DiagramAction action) -> {
         MenuItem _menuItem = new MenuItem();
         final Procedure1<MenuItem> _function_3 = (MenuItem it) -> {
-          Symbol.Type _symbol = action.getSymbol();
+          SymbolType _symbol = action.getSymbol();
           it.setSymbol(_symbol);
           String _tooltip = action.getTooltip();
           it.setTooltip(_tooltip);
@@ -182,7 +182,7 @@ public class DiagramActionTool implements XDiagramTool {
             boolean _notEquals = (!Objects.equal(this.selection, null));
             if (_notEquals) {
               DiagramActionRegistry _diagramActionRegistry_1 = this.root.getDiagramActionRegistry();
-              Symbol.Type _symbol = this.selection.getSymbol();
+              SymbolType _symbol = this.selection.getSymbol();
               final DiagramAction action = _diagramActionRegistry_1.getBySymbol(_symbol);
               boolean _equals = Objects.equal(action, null);
               if (_equals) {

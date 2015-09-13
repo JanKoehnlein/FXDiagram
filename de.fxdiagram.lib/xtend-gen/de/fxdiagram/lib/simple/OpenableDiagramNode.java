@@ -25,8 +25,8 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.CloseDiagramCommand;
 import de.fxdiagram.lib.simple.DiagramScaler;
 import de.fxdiagram.lib.simple.OpenDiagramCommand;
-import eu.hansolo.enzo.radialmenu.Symbol;
 import eu.hansolo.enzo.radialmenu.SymbolCanvas;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
@@ -265,7 +265,7 @@ public class OpenableDiagramNode extends XNode {
             this.setParentDiagram(_diagram_1);
             ObservableList<Node> _children_2 = this.pane.getChildren();
             _children_2.setAll(this.textNode);
-            Canvas _symbol = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY);
+            Canvas _symbol = SymbolCanvas.getSymbol(SymbolType.ZOOM_OUT, 32, Color.GRAY);
             final Procedure1<Canvas> _function_6 = (Canvas it_3) -> {
               final EventHandler<MouseEvent> _function_7 = (MouseEvent it_4) -> {
                 HeadsUpDisplay _headsUpDisplay = this.root.getHeadsUpDisplay();

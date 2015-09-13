@@ -1,7 +1,7 @@
 package de.fxdiagram.core.tools.actions
 
 import de.fxdiagram.core.XRoot
-import eu.hansolo.enzo.radialmenu.Symbol
+import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 
@@ -12,7 +12,7 @@ class UndoAction implements DiagramAction {
 	}
 	
 	override getSymbol() {
-		Symbol.Type.REWIND
+		SymbolType.REWIND
 	}
 
 	override getTooltip() {
@@ -32,7 +32,7 @@ class RedoAction implements DiagramAction {
 	}
 	
 	override getSymbol() {
-		Symbol.Type.FORWARD
+		SymbolType.FORWARD
 	}
 
 	override getTooltip() {

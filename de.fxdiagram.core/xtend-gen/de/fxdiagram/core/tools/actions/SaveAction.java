@@ -5,7 +5,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.model.ModelSave;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.io.File;
 import java.io.FileWriter;
 import javafx.collections.ObservableList;
@@ -33,8 +33,8 @@ public class SaveAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.SAVE;
+  public SymbolType getSymbol() {
+    return SymbolType.SAVE;
   }
   
   @Override

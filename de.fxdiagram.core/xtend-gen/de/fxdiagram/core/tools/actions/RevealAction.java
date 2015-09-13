@@ -18,7 +18,7 @@ import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.viewport.ViewportMemento;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import de.fxdiagram.core.viewport.ViewportTransition;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -56,7 +56,7 @@ public class RevealAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
+  public SymbolType getSymbol() {
     return null;
   }
   

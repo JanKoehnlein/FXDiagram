@@ -4,7 +4,7 @@ import com.google.common.base.Charsets
 import com.google.common.io.Files
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.export.SvgExporter
-import eu.hansolo.enzo.radialmenu.Symbol
+import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.stage.FileChooser
@@ -16,7 +16,7 @@ class ExportSvgAction implements DiagramAction {
 	}
 	
 	override getSymbol() {
-		Symbol.Type.CAMERA
+		SymbolType.CAMERA
 	}
 
 	override getTooltip() {

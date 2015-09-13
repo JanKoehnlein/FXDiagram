@@ -3,7 +3,7 @@ package de.fxdiagram.core.tools.actions
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
-import eu.hansolo.enzo.radialmenu.Symbol
+import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 
@@ -22,7 +22,7 @@ class LayoutAction implements DiagramAction {
 	}
 	
 	override getSymbol() {
-		Symbol.Type.GRAPH
+		SymbolType.GRAPH
 	}
 
 	override getTooltip() {

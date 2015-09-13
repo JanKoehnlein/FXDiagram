@@ -1,8 +1,9 @@
 package de.fxdiagram.core.tools.actions
 
 import com.google.common.collect.Lists
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
-import eu.hansolo.enzo.radialmenu.Symbol
+import eu.hansolo.enzo.radialmenu.SymbolType
 import java.util.List
 import java.util.Map
 import javafx.scene.input.KeyEvent
@@ -16,7 +17,7 @@ interface DiagramAction {
 	
 	def boolean matches(KeyEvent event) 
 	
-	def Symbol.Type getSymbol() 
+	def SymbolType getSymbol() 
 	
 	def String getTooltip()
 	
@@ -27,7 +28,7 @@ class DiagramActionRegistry {
 	
 	List<DiagramAction> actions = newArrayList 
 	
-	Map<Symbol.Type, DiagramAction> symbol2action = newHashMap 
+	Map<SymbolType, DiagramAction> symbol2action = newHashMap 
 	
 	def void operator_add(Iterable<? extends DiagramAction> diagramActions) {
 		diagramActions.forEach[this += it]
@@ -45,7 +46,7 @@ class DiagramActionRegistry {
 			symbol2action.remove(diagramAction.symbol)
 	} 
 	
-	def DiagramAction getBySymbol(Symbol.Type symbol) {
+	def DiagramAction getBySymbol(SymbolType symbol) {
 		symbol2action.get(symbol)
 	}
 	

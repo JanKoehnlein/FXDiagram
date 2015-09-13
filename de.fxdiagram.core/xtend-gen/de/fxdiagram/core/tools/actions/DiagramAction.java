@@ -1,7 +1,8 @@
 package de.fxdiagram.core.tools.actions;
 
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.scene.input.KeyEvent;
 
 /**
@@ -13,7 +14,7 @@ import javafx.scene.input.KeyEvent;
 public interface DiagramAction {
   public abstract boolean matches(final KeyEvent event);
   
-  public abstract Symbol.Type getSymbol();
+  public abstract SymbolType getSymbol();
   
   public abstract String getTooltip();
   

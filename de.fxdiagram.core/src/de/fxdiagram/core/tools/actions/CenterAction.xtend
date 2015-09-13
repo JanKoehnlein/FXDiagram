@@ -1,7 +1,9 @@
 package de.fxdiagram.core.tools.actions
 
 import de.fxdiagram.core.XRoot
-import eu.hansolo.enzo.radialmenu.Symbol
+import de.fxdiagram.core.command.ViewportCommand
+import de.fxdiagram.core.viewport.ViewportTransition
+import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 
@@ -10,8 +12,6 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.viewport.ViewportTransition
-import de.fxdiagram.core.command.ViewportCommand
 
 class CenterAction implements DiagramAction {
 	
@@ -20,7 +20,7 @@ class CenterAction implements DiagramAction {
 	}
 	
 	override getSymbol() {
-		Symbol.Type.SELECTION2
+		SymbolType.SELECTION2
 	}
 	
 	override getTooltip() {

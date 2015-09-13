@@ -1,7 +1,7 @@
 package de.fxdiagram.core.tools.actions
 
 import de.fxdiagram.core.XRoot
-import eu.hansolo.enzo.radialmenu.Symbol
+import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 
@@ -12,7 +12,7 @@ class SelectAllAction implements DiagramAction {
 	}
 
 	override getSymbol() {
-		Symbol.Type.SELECTION1
+		SymbolType.SELECTION1
 	}
 
 	override getTooltip() {

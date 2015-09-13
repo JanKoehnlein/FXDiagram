@@ -5,7 +5,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.util.function.Consumer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -27,8 +27,8 @@ public class SelectAllAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.SELECTION1;
+  public SymbolType getSymbol() {
+    return SymbolType.SELECTION1;
   }
   
   @Override

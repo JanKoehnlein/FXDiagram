@@ -7,7 +7,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.export.SvgExporter;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.io.File;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -34,8 +34,8 @@ public class ExportSvgAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.CAMERA;
+  public SymbolType getSymbol() {
+    return SymbolType.CAMERA;
   }
   
   @Override

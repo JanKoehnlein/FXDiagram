@@ -3,7 +3,7 @@ package de.fxdiagram.core.tools.actions;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -24,8 +24,8 @@ public class ExitAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.EJECT;
+  public SymbolType getSymbol() {
+    return SymbolType.EJECT;
   }
   
   @Override

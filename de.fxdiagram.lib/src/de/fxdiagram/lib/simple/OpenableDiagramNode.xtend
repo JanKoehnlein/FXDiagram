@@ -16,8 +16,8 @@ import de.fxdiagram.core.viewport.ViewportTransform
 import de.fxdiagram.core.viewport.ViewportTransition
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
-import eu.hansolo.enzo.radialmenu.Symbol
 import eu.hansolo.enzo.radialmenu.SymbolCanvas
+import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.animation.FadeTransition
 import javafx.animation.ParallelTransition
 import javafx.animation.SequentialTransition
@@ -165,7 +165,7 @@ class OpenableDiagramNode extends XNode {
 					diagramScaler.deactivate
 					parentDiagram = root.diagram
 					pane.children.setAll(textNode)
-					val toParentButton = SymbolCanvas.getSymbol(Symbol.Type.ZOOM_OUT, 32, Color.GRAY) => [
+					val toParentButton = SymbolCanvas.getSymbol(SymbolType.ZOOM_OUT, 32, Color.GRAY) => [
 						onMouseClicked = [
 							root.headsUpDisplay.children -= target as Node
 							closeDiagram

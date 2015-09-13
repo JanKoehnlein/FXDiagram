@@ -6,7 +6,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.io.File;
 import java.io.FileReader;
 import javafx.collections.ObservableList;
@@ -34,8 +34,8 @@ public class LoadAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.LOAD;
+  public SymbolType getSymbol() {
+    return SymbolType.LOAD;
   }
   
   @Override

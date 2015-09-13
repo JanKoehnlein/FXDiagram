@@ -16,7 +16,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.viewport.ViewportTransition;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -52,8 +52,8 @@ public class ZoomToFitAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.ZOOM_IN;
+  public SymbolType getSymbol() {
+    return SymbolType.ZOOM_IN;
   }
   
   @Override

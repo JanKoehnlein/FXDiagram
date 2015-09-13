@@ -16,7 +16,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import de.fxdiagram.core.viewport.ViewportTransition;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -44,8 +44,8 @@ public class CenterAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.SELECTION2;
+  public SymbolType getSymbol() {
+    return SymbolType.SELECTION2;
   }
   
   @Override

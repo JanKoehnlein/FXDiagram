@@ -9,7 +9,7 @@ import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
-import eu.hansolo.enzo.radialmenu.Symbol;
+import eu.hansolo.enzo.radialmenu.SymbolType;
 import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,8 +55,8 @@ public class UndoRedoPlayerAction implements DiagramAction {
   }
   
   @Override
-  public Symbol.Type getSymbol() {
-    return Symbol.Type.PLAY;
+  public SymbolType getSymbol() {
+    return SymbolType.PLAY;
   }
   
   @Override
