@@ -5,6 +5,8 @@ import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.DirtyState
 import de.fxdiagram.core.behavior.ReconcileBehavior
+import de.fxdiagram.core.command.AbstractCommand
+import de.fxdiagram.core.command.CommandContext
 import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.layout.LayoutType
@@ -170,9 +172,7 @@ class FXDiagramTab {
 	}
 
 	def clear() {
-		// TODO: undo support
-		root.diagram = new XDiagram
-		root.commandStack.clear
+		root.commandStack.execute(new ClearDiagramCommand)
 	}
 
 	def setFocus() {
@@ -203,5 +203,28 @@ class FXDiagramTab {
 						DirtyState.CLEAN)
 			}
 		]
+	}
+}
+
+class ClearDiagramCommand extends AbstractCommand {
+	
+	XDiagram newDiagram
+	XDiagram oldRootDiagram
+	XDiagram oldDiagram
+
+	override execute(CommandContext context) {
+		oldDiagram = context.root.diagram
+		oldRootDiagram = context.root.rootDiagram
+		context.root.rootDiagram = newDiagram = new XDiagram
+	}
+	
+	override undo(CommandContext context) {
+		context.root.rootDiagram = oldRootDiagram
+		context.root.diagram = oldDiagram
+	}
+	
+	override redo(CommandContext context) {
+		context.root.rootDiagram = newDiagram
+		context.root.diagram = newDiagram
 	}
 }

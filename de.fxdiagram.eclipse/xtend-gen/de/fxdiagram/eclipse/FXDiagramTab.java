@@ -35,6 +35,7 @@ import de.fxdiagram.core.tools.actions.SaveAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.UndoAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
+import de.fxdiagram.eclipse.ClearDiagramCommand;
 import de.fxdiagram.eclipse.FXDiagramView;
 import de.fxdiagram.eclipse.actions.EclipseLoadAction;
 import de.fxdiagram.eclipse.changes.IChangeListener;
@@ -325,10 +326,9 @@ public class FXDiagramTab {
   }
   
   public void clear() {
-    XDiagram _xDiagram = new XDiagram();
-    this.root.setDiagram(_xDiagram);
     CommandStack _commandStack = this.root.getCommandStack();
-    _commandStack.clear();
+    ClearDiagramCommand _clearDiagramCommand = new ClearDiagramCommand();
+    _commandStack.execute(_clearDiagramCommand);
   }
   
   public boolean setFocus() {
