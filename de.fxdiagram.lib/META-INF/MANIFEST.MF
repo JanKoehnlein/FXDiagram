@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FXDiagram Library
 Bundle-SymbolicName: de.fxdiagram.lib
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.6.1.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  de.fxdiagram.core,
  org.eclipse.xtend.lib,
