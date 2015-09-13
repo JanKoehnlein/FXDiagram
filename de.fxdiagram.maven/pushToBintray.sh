@@ -14,13 +14,13 @@ deploy_updatesite
 }
 
 function deploy_updatesite() {
-echo "${BINTRAY_USER}"
-echo "${BINTRAY_API_KEY}"
-echo "${BINTRAY_OWNER}"
-echo "${BINTRAY_REPO}"
-echo "${PCK_NAME}"
-echo "${PCK_VERSION}"
-echo "${PATH_TO_REPOSITORY}"
+#echo "${BINTRAY_USER}"
+#echo "${BINTRAY_API_KEY}"
+#echo "${BINTRAY_OWNER}"
+#echo "${BINTRAY_REPO}"
+#echo "${PCK_NAME}"
+#echo "${PCK_VERSION}"
+#echo "${PATH_TO_REPOSITORY}"
 
 if [ ! -z "$PATH_TO_REPOSITORY" ]; then
    cd $PATH_TO_REPOSITORY
