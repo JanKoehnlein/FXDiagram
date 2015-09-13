@@ -14,6 +14,11 @@ import org.eclipse.core.commands.ExecutionException
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension org.eclipse.ui.handlers.HandlerUtil.*
+import de.fxdiagram.core.command.AbstractCommand
+import de.fxdiagram.core.command.CommandContext
+import de.fxdiagram.core.command.SequentialAnimationCommand
+import de.fxdiagram.core.XDomainObjectShape
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 class ReconcileDiagramHandler extends AbstractHandler {
 
@@ -21,39 +26,63 @@ class ReconcileDiagramHandler extends AbstractHandler {
 		val view = event.activePart
 		if (view instanceof FXDiagramView) {
 			val diagram = view.currentRoot.diagram;
-			val allShapes = <XShape>newArrayList
+			val allShapes = <XDomainObjectShape>newArrayList
 			allShapes += diagram.connections
-			allShapes += diagram.nodes 
+			allShapes += diagram.nodes
 			val LazyCommand lazyCommand = [
 				val deleteShapes = <XShape>newHashSet
 				val addShapes = <XShape>newHashSet
-				val commands = <AnimationCommand>newArrayList 
+				val commands = <AnimationCommand>newArrayList
 				val acceptor = new UpdateAcceptor() {
 					override add(XShape shape) {
 						addShapes += shape
 					}
-					
+
 					override delete(XShape shape) {
 						deleteShapes += shape
 					}
-					
+
 					override morph(AnimationCommand command) {
 						commands += command
 					}
 				}
-				allShapes.forEach[
-					getBehavior(ReconcileBehavior)?.reconcile(acceptor)		
+				allShapes.forEach [
+					getBehavior(ReconcileBehavior)?.reconcile(acceptor)
 				]
-				if(!deleteShapes.empty) 
-					commands += AddRemoveCommand.newRemoveCommand(diagram, deleteShapes) 
-				if(!addShapes.empty) 
-					commands += AddRemoveCommand.newAddCommand(diagram, addShapes) 
-				new ParallelAnimationCommand => [
-					it += commands
-				]		
+				if (!deleteShapes.empty)
+					commands += AddRemoveCommand.newRemoveCommand(diagram, deleteShapes)
+				if (!addShapes.empty)
+					commands += AddRemoveCommand.newAddCommand(diagram, addShapes)
+				new SequentialAnimationCommand => [
+					it += new ParallelAnimationCommand => [
+						it += commands
+					]
+					it += new UpdateDirtyStateCommand(allShapes)
+				]
 			]
 			diagram.root.commandStack.execute(lazyCommand)
 		}
 		null
+	}
+
+	@FinalFieldsConstructor
+	static class UpdateDirtyStateCommand extends AbstractCommand {
+
+		val Iterable<XDomainObjectShape> allShapes
+
+		override execute(CommandContext context) {
+			allShapes.forEach [
+				val reconcile = getBehavior(ReconcileBehavior)
+				reconcile?.showDirtyState(reconcile?.dirtyState)
+			]
+		}
+
+		override undo(CommandContext context) {
+			execute(context)
+		}
+
+		override redo(CommandContext context) {
+			execute(context)
+		}
 	}
 }

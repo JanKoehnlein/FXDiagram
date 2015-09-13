@@ -3,7 +3,6 @@ package de.fxdiagram.lib.nodes
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior
-import de.fxdiagram.core.behavior.ReconcileBehavior
 import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.core.command.AbstractCommand
 import de.fxdiagram.core.command.CommandContext
@@ -12,10 +11,6 @@ import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.animations.Inflator
 import java.util.NoSuchElementException
-import javafx.animation.Animation
-import javafx.animation.KeyFrame
-import javafx.animation.KeyValue
-import javafx.animation.Timeline
 import javafx.beans.property.BooleanProperty
 import javafx.collections.ObservableList
 import javafx.geometry.Insets
@@ -34,7 +29,6 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static de.fxdiagram.core.behavior.DirtyState.*
 import static javafx.collections.FXCollections.*
 
-import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 
 @ModelNode("showPackage", "showAttributes", "showMethods", "bgColor", "model")
@@ -192,17 +186,14 @@ abstract class AbstractClassNode extends FlipNode {
 			it += new AbstractCommand() {
 				override execute(CommandContext context) {
 					model = newModel
-					getBehavior(ReconcileBehavior).showDirtyState(CLEAN)
 				}
 				
 				override undo(CommandContext context) {
 					model = oldModel
-					getBehavior(ReconcileBehavior).showDirtyState(DIRTY)
 				}
 				
 				override redo(CommandContext context) {
 					model= newModel
-					getBehavior(ReconcileBehavior).showDirtyState(CLEAN)
 				}
 			}
 			it += inflator.inflateCommand
@@ -231,11 +222,6 @@ class ClassModel {
 
 class ClassModelReconcileBehavior extends AbstractReconcileBehavior<AbstractClassNode> {
 
-	@FxProperty double dirtyAnimationValue
-	@FxProperty double dirtyAnimationRotate
-
-	Animation dirtyAnimation
-
 	new(AbstractClassNode host) {
 		super(host)
 	}
@@ -254,35 +240,6 @@ class ClassModelReconcileBehavior extends AbstractReconcileBehavior<AbstractClas
 		}
 	}
 
-	override protected doActivate() {
-		dirtyAnimation = new Timeline => [
-			keyFrames += new KeyFrame(0.millis, new KeyValue(dirtyAnimationValueProperty, 1))
-			keyFrames += new KeyFrame(300.millis, new KeyValue(dirtyAnimationValueProperty, 0.96))
-			keyFrames += new KeyFrame(900.millis, new KeyValue(dirtyAnimationValueProperty, 1.04))
-			keyFrames += new KeyFrame(1200.millis, new KeyValue(dirtyAnimationValueProperty, 1))
-			autoReverse = true
-			cycleCount = Animation.INDEFINITE
-		]
-	}
-	
-	override protected dirtyFeedback(boolean isDirty) {
-		if(isDirty) {
-			host => [ 
-				scaleXProperty.bind(dirtyAnimationValueProperty)
-				scaleYProperty.bind(dirtyAnimationValueProperty)
-			]
-			dirtyAnimation.play
-		} else {
-			host => [ 
-				scaleXProperty.unbind
-				scaleYProperty.unbind
-				scaleX = 1
-				scaleY = 1
-			]	
-			dirtyAnimation.stop
-		}
-	}
-	
 	override reconcile(UpdateAcceptor acceptor) {
 		try {
 			val newModel = host.inferClassModel

@@ -10,11 +10,13 @@ import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.InitializingListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -30,7 +32,6 @@ import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @Logging
@@ -41,6 +42,8 @@ public class ConnectionRouter implements XActivatable {
   private ChangeListener<Number> scalarListener;
   
   private ChangeListener<Bounds> boundsListener;
+  
+  private InitializingListener<XNode> connectionEndListener;
   
   private double selfEdgeDist = 60;
   
@@ -54,6 +57,19 @@ public class ConnectionRouter implements XActivatable {
       connection.requestLayout();
     };
     this.boundsListener = _function_1;
+    InitializingListener<XNode> _initializingListener = new InitializingListener<XNode>();
+    final Procedure1<InitializingListener<XNode>> _function_2 = (InitializingListener<XNode> it) -> {
+      final Procedure1<XNode> _function_3 = (XNode it_1) -> {
+        this.bindNode(it_1);
+      };
+      it.setSet(_function_3);
+      final Procedure1<XNode> _function_4 = (XNode it_1) -> {
+        this.unbindNode(it_1);
+      };
+      it.setUnset(_function_4);
+    };
+    InitializingListener<XNode> _doubleArrow = ObjectExtensions.<InitializingListener<XNode>>operator_doubleArrow(_initializingListener, _function_2);
+    this.connectionEndListener = _doubleArrow;
   }
   
   public ObservableList<XControlPoint> getControlPoints() {
@@ -62,14 +78,10 @@ public class ConnectionRouter implements XActivatable {
   
   @Override
   public void activate() {
-    boolean _isActive = this.getIsActive();
-    boolean _not = (!_isActive);
-    if (_not) {
-      XNode _source = this.connection.getSource();
-      this.bindNode(_source);
-      XNode _target = this.connection.getTarget();
-      this.bindNode(_target);
-    }
+    ObjectProperty<XNode> _sourceProperty = this.connection.sourceProperty();
+    CoreExtensions.<XNode>addInitializingListener(_sourceProperty, this.connectionEndListener);
+    ObjectProperty<XNode> _targetProperty = this.connection.targetProperty();
+    CoreExtensions.<XNode>addInitializingListener(_targetProperty, this.connectionEndListener);
     this.isActiveProperty.set(true);
   }
   
@@ -81,6 +93,20 @@ public class ConnectionRouter implements XActivatable {
       {
         ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = current.boundsInParentProperty();
         _boundsInParentProperty.addListener(this.boundsListener);
+        Parent _parent = current.getParent();
+        current = _parent;
+      }
+    }
+  }
+  
+  protected void unbindNode(final XNode host) {
+    Node current = host.getNode();
+    ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = current.layoutBoundsProperty();
+    _layoutBoundsProperty.removeListener(this.boundsListener);
+    while (((!Objects.equal(current, null)) && (!CoreExtensions.isRootDiagram(current)))) {
+      {
+        ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = current.boundsInParentProperty();
+        _boundsInParentProperty.removeListener(this.boundsListener);
         Parent _parent = current.getParent();
         current = _parent;
       }
@@ -253,20 +279,19 @@ public class ConnectionRouter implements XActivatable {
         this.calculateSelfEdge();
       }
     }
-    final Pair<Point2D, Point2D> anchors = this.findClosestAnchors();
+    XNode _source_1 = this.connection.getSource();
+    final Point2D sourcePoint = this.findClosestSourceAnchor(_source_1, true);
+    XNode _target_1 = this.connection.getTarget();
+    final Point2D targetPoint = this.findClosestTargetAnchor(_target_1, true);
     boolean _and = false;
-    Point2D _key = anchors.getKey();
-    boolean _notEquals = (!Objects.equal(_key, null));
+    boolean _notEquals = (!Objects.equal(sourcePoint, null));
     if (!_notEquals) {
       _and = false;
     } else {
-      Point2D _value = anchors.getValue();
-      boolean _notEquals_1 = (!Objects.equal(_value, null));
+      boolean _notEquals_1 = (!Objects.equal(targetPoint, null));
       _and = _notEquals_1;
     }
     if (_and) {
-      final Point2D sourcePoint = anchors.getKey();
-      final Point2D targetPoint = anchors.getValue();
       ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
       int _size_1 = _controlPoints_2.size();
       boolean _lessThan_1 = (_size_1 < 2);
@@ -465,40 +490,63 @@ public class ConnectionRouter implements XActivatable {
     return _xblockexpression;
   }
   
-  protected Pair<Point2D, Point2D> findClosestAnchors() {
-    Pair<Point2D, Point2D> _xifexpression = null;
-    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    int _size = _controlPoints.size();
-    boolean _lessEqualsThan = (_size <= 2);
-    if (_lessEqualsThan) {
-      XNode _source = this.connection.getSource();
-      XNode _target = this.connection.getTarget();
-      Point2D _midPoint = this.midPoint(_target);
-      ArrowHead _sourceArrowHead = this.connection.getSourceArrowHead();
-      Point2D _nearestAnchor = this.getNearestAnchor(_source, _midPoint, _sourceArrowHead);
-      XNode _target_1 = this.connection.getTarget();
-      XNode _source_1 = this.connection.getSource();
-      Point2D _midPoint_1 = this.midPoint(_source_1);
-      ArrowHead _targetArrowHead = this.connection.getTargetArrowHead();
-      Point2D _nearestAnchor_1 = this.getNearestAnchor(_target_1, _midPoint_1, _targetArrowHead);
-      _xifexpression = Pair.<Point2D, Point2D>of(_nearestAnchor, _nearestAnchor_1);
-    } else {
-      XNode _source_2 = this.connection.getSource();
-      ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
-      XControlPoint _get = _controlPoints_1.get(1);
-      ArrowHead _sourceArrowHead_1 = this.connection.getSourceArrowHead();
-      Point2D _nearestAnchor_2 = this.getNearestAnchor(_source_2, _get, _sourceArrowHead_1);
-      XNode _target_2 = this.connection.getTarget();
-      ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-      ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-      int _size_1 = _controlPoints_3.size();
-      int _minus = (_size_1 - 2);
-      XControlPoint _get_1 = _controlPoints_2.get(_minus);
-      ArrowHead _targetArrowHead_1 = this.connection.getTargetArrowHead();
-      Point2D _nearestAnchor_3 = this.getNearestAnchor(_target_2, _get_1, _targetArrowHead_1);
-      _xifexpression = Pair.<Point2D, Point2D>of(_nearestAnchor_2, _nearestAnchor_3);
+  public Point2D findClosestSourceAnchor(final XNode source, final boolean correctArrowHead) {
+    Point2D _xblockexpression = null;
+    {
+      ArrowHead _xifexpression = null;
+      if (correctArrowHead) {
+        _xifexpression = this.connection.getSourceArrowHead();
+      } else {
+        _xifexpression = null;
+      }
+      final ArrowHead arrowHead = _xifexpression;
+      Point2D _xifexpression_1 = null;
+      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+      int _size = _controlPoints.size();
+      boolean _lessEqualsThan = (_size <= 2);
+      if (_lessEqualsThan) {
+        XNode _target = this.connection.getTarget();
+        Point2D _midPoint = this.midPoint(_target);
+        _xifexpression_1 = this.getNearestAnchor(source, _midPoint, arrowHead);
+      } else {
+        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+        XControlPoint _get = _controlPoints_1.get(1);
+        _xifexpression_1 = this.getNearestAnchor(source, _get, arrowHead);
+      }
+      _xblockexpression = _xifexpression_1;
     }
-    return _xifexpression;
+    return _xblockexpression;
+  }
+  
+  public Point2D findClosestTargetAnchor(final XNode target, final boolean correctArrowHead) {
+    Point2D _xblockexpression = null;
+    {
+      ArrowHead _xifexpression = null;
+      if (correctArrowHead) {
+        _xifexpression = this.connection.getTargetArrowHead();
+      } else {
+        _xifexpression = null;
+      }
+      final ArrowHead arrowHead = _xifexpression;
+      Point2D _xifexpression_1 = null;
+      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+      int _size = _controlPoints.size();
+      boolean _lessEqualsThan = (_size <= 2);
+      if (_lessEqualsThan) {
+        XNode _source = this.connection.getSource();
+        Point2D _midPoint = this.midPoint(_source);
+        _xifexpression_1 = this.getNearestAnchor(target, _midPoint, arrowHead);
+      } else {
+        ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
+        ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
+        int _size_1 = _controlPoints_2.size();
+        int _minus = (_size_1 - 2);
+        XControlPoint _get = _controlPoints_1.get(_minus);
+        _xifexpression_1 = this.getNearestAnchor(target, _get, arrowHead);
+      }
+      _xblockexpression = _xifexpression_1;
+    }
+    return _xblockexpression;
   }
   
   protected Point2D midPoint(final XNode node) {

@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
+import de.fxdiagram.core.command.EmptyTransition;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import java.util.Collection;
 import java.util.Map;
@@ -55,20 +56,6 @@ public class Inflator {
   public Inflator(final XNode host, final Pane container) {
     this.host = host;
     this.container = container;
-    final Dimension2D containerSize = this.calculateSize(container);
-    final Insets padding = container.getPadding();
-    double _width = containerSize.getWidth();
-    double _left = padding.getLeft();
-    double _minus = (_width - _left);
-    double _right = padding.getRight();
-    double _minus_1 = (_minus - _right);
-    double _height = containerSize.getHeight();
-    double _top = padding.getTop();
-    double _minus_2 = (_height - _top);
-    double _bottom = padding.getBottom();
-    double _minus_3 = (_minus_2 - _bottom);
-    Dimension2D _dimension2D = new Dimension2D(_minus_1, _minus_3);
-    this.deflatedUnpadded = _dimension2D;
   }
   
   public Rectangle addInflatable(final VBox inflatable, final int index) {
@@ -118,7 +105,7 @@ public class Inflator {
         _or = this.isInflated;
       }
       if (_or) {
-        return this.createEmptyTransition();
+        return new EmptyTransition();
       }
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
@@ -151,7 +138,7 @@ public class Inflator {
         _or = (!this.isInflated);
       }
       if (_or) {
-        return this.createEmptyTransition();
+        return new EmptyTransition();
       }
       SequentialTransition _sequentialTransition = new SequentialTransition();
       final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
@@ -255,81 +242,99 @@ public class Inflator {
   }
   
   protected ParallelTransition inflate() {
-    ParallelTransition _parallelTransition = new ParallelTransition();
-    final Procedure1<ParallelTransition> _function = (ParallelTransition pt) -> {
-      Set<Map.Entry<VBox, Rectangle>> _entrySet = this.inflatable2spacer.entrySet();
-      for (final Map.Entry<VBox, Rectangle> it : _entrySet) {
-        {
-          final VBox inflatable = it.getKey();
-          final Rectangle spacer = it.getValue();
-          final Dimension2D size = this.calculateSize(inflatable);
-          ObservableList<Animation> _children = pt.getChildren();
-          Timeline _timeline = new Timeline();
-          final Procedure1<Timeline> _function_1 = (Timeline it_1) -> {
-            it_1.setCycleCount(1);
-            it_1.setAutoReverse(false);
-            ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
-            Duration _millis = DurationExtensions.millis(0);
-            DoubleProperty _widthProperty = spacer.widthProperty();
-            double _width = this.deflatedUnpadded.getWidth();
-            KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(_width));
-            DoubleProperty _heightProperty = spacer.heightProperty();
-            KeyValue _keyValue_1 = new <Number>KeyValue(_heightProperty, Integer.valueOf(0));
-            KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
-            _keyFrames.add(_keyFrame);
-            ObservableList<KeyFrame> _keyFrames_1 = it_1.getKeyFrames();
-            Duration _millis_1 = DurationExtensions.millis(200);
-            DoubleProperty _widthProperty_1 = spacer.widthProperty();
-            double _width_1 = size.getWidth();
-            KeyValue _keyValue_2 = new <Number>KeyValue(_widthProperty_1, Double.valueOf(_width_1));
-            DoubleProperty _heightProperty_1 = spacer.heightProperty();
-            double _height = size.getHeight();
-            KeyValue _keyValue_3 = new <Number>KeyValue(_heightProperty_1, Double.valueOf(_height));
-            KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_2, _keyValue_3);
-            _keyFrames_1.add(_keyFrame_1);
-          };
-          Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_1);
-          _children.add(_doubleArrow);
-        }
-      }
-      final Point2D inflatedHostPos = this.getInflatedHostPosition();
-      ObservableList<Animation> _children = pt.getChildren();
-      Timeline _timeline = new Timeline();
-      final Procedure1<Timeline> _function_1 = (Timeline it_1) -> {
-        it_1.setAutoReverse(false);
-        ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
-        Duration _millis = DurationExtensions.millis(200);
-        DoubleProperty _layoutXProperty = this.host.layoutXProperty();
-        double _x = inflatedHostPos.getX();
-        KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(_x));
-        DoubleProperty _layoutYProperty = this.host.layoutYProperty();
-        double _y = inflatedHostPos.getY();
-        KeyValue _keyValue_1 = new <Number>KeyValue(_layoutYProperty, Double.valueOf(_y));
-        KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
-        _keyFrames.add(_keyFrame);
-      };
-      Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_1);
-      _children.add(_doubleArrow);
-      final EventHandler<ActionEvent> _function_2 = (ActionEvent it_1) -> {
-        Set<Map.Entry<VBox, Rectangle>> _entrySet_1 = this.inflatable2spacer.entrySet();
-        for (final Map.Entry<VBox, Rectangle> it_2 : _entrySet_1) {
+    ParallelTransition _xblockexpression = null;
+    {
+      final Dimension2D containerSize = this.calculateSize(this.container);
+      final Insets padding = this.container.getPadding();
+      double _width = containerSize.getWidth();
+      double _left = padding.getLeft();
+      double _minus = (_width - _left);
+      double _right = padding.getRight();
+      double _minus_1 = (_minus - _right);
+      double _height = containerSize.getHeight();
+      double _top = padding.getTop();
+      double _minus_2 = (_height - _top);
+      double _bottom = padding.getBottom();
+      double _minus_3 = (_minus_2 - _bottom);
+      Dimension2D _dimension2D = new Dimension2D(_minus_1, _minus_3);
+      this.deflatedUnpadded = _dimension2D;
+      ParallelTransition _parallelTransition = new ParallelTransition();
+      final Procedure1<ParallelTransition> _function = (ParallelTransition pt) -> {
+        Set<Map.Entry<VBox, Rectangle>> _entrySet = this.inflatable2spacer.entrySet();
+        for (final Map.Entry<VBox, Rectangle> it : _entrySet) {
           {
-            final VBox inflatable = it_2.getKey();
-            final Rectangle spacer = it_2.getValue();
-            ObservableList<Node> _children_1 = inflatable.getChildren();
-            final Consumer<Node> _function_3 = (Node it_3) -> {
-              it_3.setOpacity(0);
+            final VBox inflatable = it.getKey();
+            final Rectangle spacer = it.getValue();
+            final Dimension2D size = this.calculateSize(inflatable);
+            ObservableList<Animation> _children = pt.getChildren();
+            Timeline _timeline = new Timeline();
+            final Procedure1<Timeline> _function_1 = (Timeline it_1) -> {
+              it_1.setCycleCount(1);
+              it_1.setAutoReverse(false);
+              ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
+              Duration _millis = DurationExtensions.millis(0);
+              DoubleProperty _widthProperty = spacer.widthProperty();
+              double _width_1 = this.deflatedUnpadded.getWidth();
+              KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(_width_1));
+              DoubleProperty _heightProperty = spacer.heightProperty();
+              KeyValue _keyValue_1 = new <Number>KeyValue(_heightProperty, Integer.valueOf(0));
+              KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
+              _keyFrames.add(_keyFrame);
+              ObservableList<KeyFrame> _keyFrames_1 = it_1.getKeyFrames();
+              Duration _millis_1 = DurationExtensions.millis(200);
+              DoubleProperty _widthProperty_1 = spacer.widthProperty();
+              double _width_2 = size.getWidth();
+              KeyValue _keyValue_2 = new <Number>KeyValue(_widthProperty_1, Double.valueOf(_width_2));
+              DoubleProperty _heightProperty_1 = spacer.heightProperty();
+              double _height_1 = size.getHeight();
+              KeyValue _keyValue_3 = new <Number>KeyValue(_heightProperty_1, Double.valueOf(_height_1));
+              KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_2, _keyValue_3);
+              _keyFrames_1.add(_keyFrame_1);
             };
-            _children_1.forEach(_function_3);
-            final ObservableList<Node> siblings = this.container.getChildren();
-            int _indexOf = siblings.indexOf(spacer);
-            siblings.set(_indexOf, inflatable);
+            Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_1);
+            _children.add(_doubleArrow);
           }
         }
+        final Point2D inflatedHostPos = this.getInflatedHostPosition();
+        ObservableList<Animation> _children = pt.getChildren();
+        Timeline _timeline = new Timeline();
+        final Procedure1<Timeline> _function_1 = (Timeline it_1) -> {
+          it_1.setAutoReverse(false);
+          ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
+          Duration _millis = DurationExtensions.millis(200);
+          DoubleProperty _layoutXProperty = this.host.layoutXProperty();
+          double _x = inflatedHostPos.getX();
+          KeyValue _keyValue = new <Number>KeyValue(_layoutXProperty, Double.valueOf(_x));
+          DoubleProperty _layoutYProperty = this.host.layoutYProperty();
+          double _y = inflatedHostPos.getY();
+          KeyValue _keyValue_1 = new <Number>KeyValue(_layoutYProperty, Double.valueOf(_y));
+          KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
+          _keyFrames.add(_keyFrame);
+        };
+        Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function_1);
+        _children.add(_doubleArrow);
+        final EventHandler<ActionEvent> _function_2 = (ActionEvent it_1) -> {
+          Set<Map.Entry<VBox, Rectangle>> _entrySet_1 = this.inflatable2spacer.entrySet();
+          for (final Map.Entry<VBox, Rectangle> it_2 : _entrySet_1) {
+            {
+              final VBox inflatable = it_2.getKey();
+              final Rectangle spacer = it_2.getValue();
+              ObservableList<Node> _children_1 = inflatable.getChildren();
+              final Consumer<Node> _function_3 = (Node it_3) -> {
+                it_3.setOpacity(0);
+              };
+              _children_1.forEach(_function_3);
+              final ObservableList<Node> siblings = this.container.getChildren();
+              int _indexOf = siblings.indexOf(spacer);
+              siblings.set(_indexOf, inflatable);
+            }
+          }
+        };
+        pt.setOnFinished(_function_2);
       };
-      pt.setOnFinished(_function_2);
-    };
-    return ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
+      _xblockexpression = ObjectExtensions.<ParallelTransition>operator_doubleArrow(_parallelTransition, _function);
+    }
+    return _xblockexpression;
   }
   
   protected ParallelTransition deflate() {
@@ -384,7 +389,7 @@ public class Inflator {
       Transition _xifexpression = null;
       boolean _isEmpty = IterableExtensions.isEmpty(contents);
       if (_isEmpty) {
-        _xifexpression = this.createEmptyTransition();
+        _xifexpression = new EmptyTransition();
       } else {
         SequentialTransition _sequentialTransition = new SequentialTransition();
         final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
@@ -417,14 +422,6 @@ public class Inflator {
     };
     Iterable<ObservableList<Node>> _map = IterableExtensions.<VBox, ObservableList<Node>>map(_keySet, _function);
     return Iterables.<Node>concat(_map);
-  }
-  
-  protected Transition createEmptyTransition() {
-    return new Transition() {
-      @Override
-      protected void interpolate(final double frac) {
-      }
-    };
   }
   
   protected Transition disappear() {

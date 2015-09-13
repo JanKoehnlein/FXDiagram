@@ -2,6 +2,11 @@ package de.fxdiagram.core.behavior
 
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.command.AnimationCommand
+import javafx.animation.Animation
+import javafx.animation.FadeTransition
+import javafx.animation.SequentialTransition
+
+import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
 interface ReconcileBehavior extends Behavior {
 	def DirtyState getDirtyState()
@@ -21,6 +26,8 @@ abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostB
 	
 	DirtyState shownState = DirtyState.CLEAN
 	
+	Animation dirtyAnimation
+	
 	new(T host) {
 		super(host)
 	}
@@ -30,6 +37,21 @@ abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostB
 	}
 	
 	override protected doActivate() {
+		dirtyAnimation = new SequentialTransition => [
+			children += new FadeTransition => [
+				node = host
+				duration = 300.millis
+				fromValue = 1
+				toValue = 0.2
+			]
+			children += new FadeTransition => [
+				node = host
+				duration = 300.millis
+				fromValue = 0.2
+				toValue = 1
+			]
+			cycleCount = Animation.INDEFINITE
+		]
 		showDirtyState(dirtyState)
 	}
 	
@@ -49,7 +71,14 @@ abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostB
 	
 	protected def void cleanFeedback(boolean isClean) {}
 	
-	protected def void dirtyFeedback(boolean isDirty) {}
+	protected def void dirtyFeedback(boolean isDirty) {
+		if(isDirty) {
+			dirtyAnimation.play
+		} else {
+			dirtyAnimation.stop
+			host.opacity = 1			
+		}
+	}
 	
 	protected def void danglingFeedback(boolean isDangling) {
 		if(isDangling)

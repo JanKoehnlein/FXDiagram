@@ -16,7 +16,6 @@ import javafx.collections.ObservableList
 import javafx.geometry.BoundingBox
 import javafx.geometry.Point2D
 import javafx.scene.Group
-import javafx.scene.paint.Color
 import javafx.scene.paint.Paint
 import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.Polyline
@@ -31,6 +30,7 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
+
 /**
  * A line connecting two {@link XNode}s.
  * 
@@ -171,10 +171,7 @@ class XConnection extends XDomainObjectShape {
 					while(curves.size > numSegments) 
 						curves.remove(curves.last)
 					while(curves.size < numSegments)
-						curves += new CubicCurve => [
-							fill = null
-							stroke = Color.BLACK
-						]
+						curves += new CubicCurve 
 					for(i: 0..<numSegments) {
 						val curve = curves.get(i)
 						val offset = i * 3
@@ -198,10 +195,7 @@ class XConnection extends XDomainObjectShape {
 					while(curves.size > numSegments) 
 						curves.remove(curves.last)
 					while(curves.size < numSegments)
-						curves += new QuadCurve => [
-							fill = null
-							stroke = Color.BLACK
-						]
+						curves += new QuadCurve
 					for(i: 0..<numSegments) {
 						val curve = curves.get(i)
 						val offset = i * 2
@@ -218,9 +212,7 @@ class XConnection extends XDomainObjectShape {
 		}
 		if (remainder != 0) {
 			val polyline = shapeGroup.children.filter(Polyline).head 
-				?: new Polyline => [ 
-					stroke = Color.BLACK
-				]
+				?: new Polyline
 			polyline.points.setAll(controlPoints.map[#[layoutX, layoutY]].flatten)
 			shapes = #[polyline]
 		}
@@ -232,12 +224,14 @@ class XConnection extends XDomainObjectShape {
 		val strokeBoundsInRoot = source.localToRootDiagram(new BoundingBox(0, 0, this.strokeWidth, this.strokeWidth))
 		val strokeInRoot = 0.5 * (strokeBoundsInRoot.width + strokeBoundsInRoot.height)
 		val strokeScale = strokeWidth / strokeInRoot 
-		shapes.forEach [
-			stroke = this.stroke
-			strokeLineCap = StrokeLineCap.ROUND
-			it.strokeWidthProperty.bind(strokeWidthProperty * strokeScale)
-			strokeDashArray.setAll(this.strokeDashArray)
-			strokeDashOffset = this.strokeDashOffset
+		shapes.forEach [ shape |
+			shape.fill = null
+			shape.strokeLineCap = StrokeLineCap.ROUND
+			shape.strokeWidthProperty.bind(strokeWidthProperty * strokeScale)
+			shape.opacityProperty.bind(this.opacityProperty)
+			shape.strokeDashArray.setAll(this.strokeDashArray)
+			shape.strokeProperty.bind(this.strokeProperty)
+			shape.strokeDashOffset = this.strokeDashOffset
 		]
 	}
 	
@@ -254,7 +248,7 @@ class XConnection extends XDomainObjectShape {
 			targetArrowHead?.place
 		} catch(Exception exc) {
 			// TODO fix control flow
-			LOG.severe("Exception in XConnection.layoutChildren() " + exc.message)
+			LOG.severe(exc.class.simpleName + " in XConnection.layoutChildren() " + exc.message)
 		}
 	}
 	

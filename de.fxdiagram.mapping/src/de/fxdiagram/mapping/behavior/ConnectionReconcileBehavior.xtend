@@ -2,8 +2,12 @@ package de.fxdiagram.mapping.behavior
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior
 import de.fxdiagram.core.behavior.UpdateAcceptor
+import de.fxdiagram.core.command.AbstractAnimationCommand
+import de.fxdiagram.core.command.CommandContext
+import de.fxdiagram.core.command.EmptyTransition
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.mapping.ConnectionMapping
@@ -15,20 +19,29 @@ import java.util.NoSuchElementException
 import javafx.animation.Animation
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
+import javafx.animation.PathTransition
+import javafx.animation.SequentialTransition
 import javafx.animation.Timeline
+import javafx.geometry.Point2D
+import javafx.scene.Group
+import javafx.scene.Node
+import javafx.scene.shape.LineTo
+import javafx.scene.shape.MoveTo
+import javafx.scene.shape.Path
+import javafx.util.Duration
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static de.fxdiagram.core.behavior.DirtyState.*
 
-import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import javafx.scene.shape.Circle
 
 class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnection> {
 
 	Animation dirtyAnimation
 	
 	@FxProperty double dirtyAnimationValue
-	
-	double strokeWidth
 	
 	new(XConnection host) {
 		super(host)
@@ -103,36 +116,27 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 	override protected doActivate() {
 		dirtyAnimation = new Timeline => [
 			keyFrames += new KeyFrame(0.millis, new KeyValue(dirtyAnimationValueProperty, 1))
-			keyFrames += new KeyFrame(300.millis, new KeyValue(dirtyAnimationValueProperty, 0.96))
-			keyFrames += new KeyFrame(900.millis, new KeyValue(dirtyAnimationValueProperty, 1.04))
-			keyFrames += new KeyFrame(1200.millis, new KeyValue(dirtyAnimationValueProperty, 1))
-			autoReverse = true
+			keyFrames += new KeyFrame(300.millis, new KeyValue(dirtyAnimationValueProperty, 0.2))
+			keyFrames += new KeyFrame(900.millis, new KeyValue(dirtyAnimationValueProperty, 1))
 			cycleCount = Animation.INDEFINITE
 		]
 	}
 	
 	override protected dirtyFeedback(boolean isDirty) {
 		if(isDirty) {
-			strokeWidth = host.strokeWidth;
 			(host.labels + #[host.sourceArrowHead?.node, host.targetArrowHead?.node])
 				.filterNull
 				.forEach[ 
-					scaleXProperty.bind(dirtyAnimationValueProperty)
-					scaleYProperty.bind(dirtyAnimationValueProperty)
+					opacityProperty.bind(dirtyAnimationValueProperty)
 				]
-			host.strokeWidthProperty.bind((dirtyAnimationValueProperty - 1) * 40 + strokeWidth) 
 			dirtyAnimation.play
 		} else {
 			(host.labels + #[host.sourceArrowHead?.node, host.targetArrowHead?.node])
 				.filterNull
 				.forEach[ 
-					scaleXProperty.unbind
-					scaleYProperty.unbind
-					scaleX = 1
-					scaleY = 1
+					opacityProperty.unbind
+					opacity = 1
 				]	
-			host.strokeWidthProperty.unbind
-			host.strokeWidth = strokeWidth
 			dirtyAnimation.stop
 		}
 	}
@@ -145,13 +149,20 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
 					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObjectDescriptor, true)
 					if (resolvedSourceDescriptor != host.source.domainObjectDescriptor) {
-						// TODO: return reconnect source command
-						acceptor.delete(host)
+						val newSource = resolvedSourceDescriptor.findNode
+						if(newSource != null) 
+							acceptor.morph(new ReconnectMorphCommand(host, host.source, newSource, true))
+						else
+							acceptor.delete(host)
 					} else {
 						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObjectDescriptor, false)
-						if(resolvedTarget != host.target.domainObjectDescriptor)
-							// TODO: return reconnect target command
-							acceptor.delete(host)
+						if(resolvedTarget != host.target.domainObjectDescriptor) {
+							val newTarget = resolvedTarget.findNode
+							if(newTarget != null) 
+								acceptor.morph(new ReconnectMorphCommand(host, host.target, newTarget, false))
+							else
+								acceptor.delete(host)
+						}
 					}
 					null
 				]
@@ -160,4 +171,83 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 			}
 		} 
 	}
+	
+	protected def findNode(DomainObjectDescriptor descriptor) {
+		host.diagram.allChildren.filter(XNode).findFirst[domainObjectDescriptor == descriptor]
+	}
+}
+
+@FinalFieldsConstructor
+class ReconnectMorphCommand extends AbstractAnimationCommand {
+	val XConnection connection
+	val XNode oldNode 
+	val XNode newNode 
+	val boolean isSource
+	
+	override createExecuteAnimation(CommandContext context) {
+		morph(newNode, context.defaultExecuteDuration)
+	}
+	
+	override createUndoAnimation(CommandContext context) {
+		morph(oldNode, context.defaultUndoDuration)
+	}
+	
+	override createRedoAnimation(CommandContext context) {
+		morph(newNode, context.defaultUndoDuration)
+	}
+	
+	protected def morph(XNode nodeAfterMorph, Duration duration) {
+		val from = if(isSource)
+				connection.connectionRouter.findClosestSourceAnchor(connection.source, false)
+			else
+				connection.connectionRouter.findClosestTargetAnchor(connection.target, false)
+		val to = if(isSource)
+				connection.connectionRouter.findClosestSourceAnchor(nodeAfterMorph, false)
+			else  
+				connection.connectionRouter.findClosestTargetAnchor(nodeAfterMorph, false)
+		val dummy = new Group => [
+			translateX = from.x
+			translateY = from.y
+		]
+		val dummyNode = new XNode () {
+			override protected createNode() {
+				new Circle(0)
+			}
+		} => [
+			layoutXProperty.bind(dummy.translateXProperty)
+			layoutYProperty.bind(dummy.translateYProperty)
+		]
+		new SequentialTransition => [
+			children += new EmptyTransition => [
+				onFinished = [
+					connection.diagram.nodes += dummyNode 
+					if(isSource)
+						connection.source = dummyNode
+					else 
+						connection.target = dummyNode
+				]
+			]
+			children += createPathTransition(from, to, dummyNode, dummy, nodeAfterMorph, duration)
+		]
+	}
+	
+	protected def createPathTransition(Point2D from, Point2D to, XNode dummyNode, Node dummy, XNode nodeAfterMorph, Duration duration) {
+		new PathTransition => [
+			node = dummy
+			it.duration = duration
+			cycleCount = 1
+			path = new Path => [
+				elements += new MoveTo(from.x, from.y)
+				elements += new LineTo(to.x, to.y)
+			]
+			onFinished = [
+				if(isSource)
+					connection.source = nodeAfterMorph
+				else
+					connection.target = nodeAfterMorph
+				connection.diagram.nodes -= dummyNode 
+			]
+		]
+	}
+	
 }

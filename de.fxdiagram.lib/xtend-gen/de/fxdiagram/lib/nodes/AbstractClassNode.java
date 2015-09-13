@@ -3,8 +3,6 @@ package de.fxdiagram.lib.nodes;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.behavior.DirtyState;
-import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.CommandContext;
@@ -349,22 +347,16 @@ public abstract class AbstractClassNode extends FlipNode {
           @Override
           public void execute(final CommandContext context) {
             AbstractClassNode.this.setModel(newModel);
-            ReconcileBehavior _behavior = AbstractClassNode.this.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-            _behavior.showDirtyState(DirtyState.CLEAN);
           }
           
           @Override
           public void undo(final CommandContext context) {
             AbstractClassNode.this.setModel(oldModel);
-            ReconcileBehavior _behavior = AbstractClassNode.this.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-            _behavior.showDirtyState(DirtyState.DIRTY);
           }
           
           @Override
           public void redo(final CommandContext context) {
             AbstractClassNode.this.setModel(newModel);
-            ReconcileBehavior _behavior = AbstractClassNode.this.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-            _behavior.showDirtyState(DirtyState.CLEAN);
           }
         });
         AbstractAnimationCommand _inflateCommand = this.inflator.getInflateCommand();

@@ -6,6 +6,7 @@ import de.fxdiagram.core.XActivatable
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.extensions.InitializingListener
 import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
@@ -27,8 +28,10 @@ class ConnectionRouter implements XActivatable {
 
 	ChangeListener<Number> scalarListener  
 	ChangeListener<Bounds> boundsListener
+	InitializingListener<XNode> connectionEndListener
 	
 	double selfEdgeDist = 60
+	
 	
 	new(XConnection connection) {
 		this.connection = connection
@@ -38,6 +41,10 @@ class ConnectionRouter implements XActivatable {
 		boundsListener = [ prop, oldVal, newVal |
 			connection.requestLayout
 		]
+		connectionEndListener = new InitializingListener<XNode>() => [
+ 			set = [ bindNode(it) ]
+ 			unset = [ unbindNode(it) ]
+ 		]
 	}
 	
 	def getControlPoints() {
@@ -45,10 +52,8 @@ class ConnectionRouter implements XActivatable {
 	}
 	
 	override activate() {
-		if(!isActive) {
-			bindNode(connection.source)
-			bindNode(connection.target)
-		}
+		connection.sourceProperty.addInitializingListener(connectionEndListener)	
+		connection.targetProperty.addInitializingListener(connectionEndListener)	
 		isActiveProperty.set(true)
 	}
 	
@@ -57,6 +62,15 @@ class ConnectionRouter implements XActivatable {
 		current.layoutBoundsProperty.addListener(boundsListener)
 		while(current != null && !current.isRootDiagram) {
 			current.boundsInParentProperty.addListener(boundsListener)
+			current = current.parent
+		} 
+	}
+	
+	protected def unbindNode(XNode host) {
+		var Node current = host.node
+		current.layoutBoundsProperty.removeListener(boundsListener)
+		while(current != null && !current.isRootDiagram) {
+			current.boundsInParentProperty.removeListener(boundsListener)
 			current = current.parent
 		} 
 	}
@@ -136,10 +150,9 @@ class ConnectionRouter implements XActivatable {
 				calculateSelfEdge()
 			}
 		} 
-		val anchors = findClosestAnchors
-		if(anchors.key != null && anchors.value != null) {
-			val sourcePoint = anchors.key
-			val targetPoint = anchors.value
+		val sourcePoint = findClosestSourceAnchor(connection.source, true)
+		val targetPoint = findClosestTargetAnchor(connection.target, true)
+		if(sourcePoint != null && targetPoint != null) {
 			if (controlPoints.size < 2) {
 				controlPoints.setAll(
 					#[new XControlPoint => [
@@ -222,13 +235,21 @@ class ConnectionRouter implements XActivatable {
 		]
 	}	
 	
- 	protected def findClosestAnchors() {
+ 	def findClosestSourceAnchor(XNode source, boolean correctArrowHead) {
+		val arrowHead = if(correctArrowHead) connection.sourceArrowHead else null
 		if (controlPoints.size <= 2) {
-			getNearestAnchor(connection.source, connection.target.midPoint, connection.sourceArrowHead) 
-			-> getNearestAnchor(connection.target, connection.source.midPoint, connection.targetArrowHead) 
+			getNearestAnchor(source, connection.target.midPoint, arrowHead) 
 		} else {
-			getNearestAnchor(connection.source, controlPoints.get(1), connection.sourceArrowHead) 
-			-> getNearestAnchor(connection.target, controlPoints.get(controlPoints.size - 2), connection.targetArrowHead)
+			getNearestAnchor(source, controlPoints.get(1), arrowHead) 
+		}
+	}
+	
+ 	def findClosestTargetAnchor(XNode target, boolean correctArrowHead) {
+		val arrowHead = if(correctArrowHead) connection.targetArrowHead else null
+		if (controlPoints.size <= 2) {
+			getNearestAnchor(target, connection.source.midPoint, arrowHead) 
+		} else {
+			getNearestAnchor(target, controlPoints.get(controlPoints.size - 2), arrowHead)
 		}
 	}
 	

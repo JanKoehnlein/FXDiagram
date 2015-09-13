@@ -4,12 +4,13 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.UpdateAcceptor;
-import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
@@ -19,6 +20,7 @@ import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
 import de.fxdiagram.mapping.XDiagramConfigInterpreter;
+import de.fxdiagram.mapping.behavior.ReconnectMorphCommand;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,7 +30,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
@@ -44,8 +45,6 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class ConnectionReconcileBehavior<T extends Object> extends AbstractReconcileBehavior<XConnection> {
   private Animation dirtyAnimation;
-  
-  private double strokeWidth;
   
   public ConnectionReconcileBehavior(final XConnection host) {
     super(host);
@@ -192,20 +191,14 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
       _keyFrames.add(_keyFrame);
       ObservableList<KeyFrame> _keyFrames_1 = it.getKeyFrames();
       Duration _millis_1 = DurationExtensions.millis(300);
-      KeyValue _keyValue_1 = new <Number>KeyValue(this.dirtyAnimationValueProperty, Double.valueOf(0.96));
+      KeyValue _keyValue_1 = new <Number>KeyValue(this.dirtyAnimationValueProperty, Double.valueOf(0.2));
       KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_1);
       _keyFrames_1.add(_keyFrame_1);
       ObservableList<KeyFrame> _keyFrames_2 = it.getKeyFrames();
       Duration _millis_2 = DurationExtensions.millis(900);
-      KeyValue _keyValue_2 = new <Number>KeyValue(this.dirtyAnimationValueProperty, Double.valueOf(1.04));
+      KeyValue _keyValue_2 = new <Number>KeyValue(this.dirtyAnimationValueProperty, Integer.valueOf(1));
       KeyFrame _keyFrame_2 = new KeyFrame(_millis_2, _keyValue_2);
       _keyFrames_2.add(_keyFrame_2);
-      ObservableList<KeyFrame> _keyFrames_3 = it.getKeyFrames();
-      Duration _millis_3 = DurationExtensions.millis(1200);
-      KeyValue _keyValue_3 = new <Number>KeyValue(this.dirtyAnimationValueProperty, Integer.valueOf(1));
-      KeyFrame _keyFrame_3 = new KeyFrame(_millis_3, _keyValue_3);
-      _keyFrames_3.add(_keyFrame_3);
-      it.setAutoReverse(true);
       it.setCycleCount(Animation.INDEFINITE);
     };
     Timeline _doubleArrow = ObjectExtensions.<Timeline>operator_doubleArrow(_timeline, _function);
@@ -216,18 +209,15 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
   protected void dirtyFeedback(final boolean isDirty) {
     if (isDirty) {
       XConnection _host = this.getHost();
-      double _strokeWidth = _host.getStrokeWidth();
-      this.strokeWidth = _strokeWidth;
+      ObservableList<XConnectionLabel> _labels = _host.getLabels();
       XConnection _host_1 = this.getHost();
-      ObservableList<XConnectionLabel> _labels = _host_1.getLabels();
-      XConnection _host_2 = this.getHost();
-      ArrowHead _sourceArrowHead = _host_2.getSourceArrowHead();
+      ArrowHead _sourceArrowHead = _host_1.getSourceArrowHead();
       Node _node = null;
       if (_sourceArrowHead!=null) {
         _node=_sourceArrowHead.getNode();
       }
-      XConnection _host_3 = this.getHost();
-      ArrowHead _targetArrowHead = _host_3.getTargetArrowHead();
+      XConnection _host_2 = this.getHost();
+      ArrowHead _targetArrowHead = _host_2.getTargetArrowHead();
       Node _node_1 = null;
       if (_targetArrowHead!=null) {
         _node_1=_targetArrowHead.getNode();
@@ -235,50 +225,34 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
       Iterable<Node> _plus = Iterables.<Node>concat(_labels, Collections.<Node>unmodifiableList(CollectionLiterals.<Node>newArrayList(_node, _node_1)));
       Iterable<Node> _filterNull = IterableExtensions.<Node>filterNull(_plus);
       final Consumer<Node> _function = (Node it) -> {
-        DoubleProperty _scaleXProperty = it.scaleXProperty();
-        _scaleXProperty.bind(this.dirtyAnimationValueProperty);
-        DoubleProperty _scaleYProperty = it.scaleYProperty();
-        _scaleYProperty.bind(this.dirtyAnimationValueProperty);
+        DoubleProperty _opacityProperty = it.opacityProperty();
+        _opacityProperty.bind(this.dirtyAnimationValueProperty);
       };
       _filterNull.forEach(_function);
-      XConnection _host_4 = this.getHost();
-      DoubleProperty _strokeWidthProperty = _host_4.strokeWidthProperty();
-      DoubleBinding _minus = DoubleExpressionExtensions.operator_minus(this.dirtyAnimationValueProperty, 1);
-      DoubleBinding _multiply = DoubleExpressionExtensions.operator_multiply(_minus, 40);
-      DoubleBinding _plus_1 = DoubleExpressionExtensions.operator_plus(_multiply, this.strokeWidth);
-      _strokeWidthProperty.bind(_plus_1);
       this.dirtyAnimation.play();
     } else {
-      XConnection _host_5 = this.getHost();
-      ObservableList<XConnectionLabel> _labels_1 = _host_5.getLabels();
-      XConnection _host_6 = this.getHost();
-      ArrowHead _sourceArrowHead_1 = _host_6.getSourceArrowHead();
+      XConnection _host_3 = this.getHost();
+      ObservableList<XConnectionLabel> _labels_1 = _host_3.getLabels();
+      XConnection _host_4 = this.getHost();
+      ArrowHead _sourceArrowHead_1 = _host_4.getSourceArrowHead();
       Node _node_2 = null;
       if (_sourceArrowHead_1!=null) {
         _node_2=_sourceArrowHead_1.getNode();
       }
-      XConnection _host_7 = this.getHost();
-      ArrowHead _targetArrowHead_1 = _host_7.getTargetArrowHead();
+      XConnection _host_5 = this.getHost();
+      ArrowHead _targetArrowHead_1 = _host_5.getTargetArrowHead();
       Node _node_3 = null;
       if (_targetArrowHead_1!=null) {
         _node_3=_targetArrowHead_1.getNode();
       }
-      Iterable<Node> _plus_2 = Iterables.<Node>concat(_labels_1, Collections.<Node>unmodifiableList(CollectionLiterals.<Node>newArrayList(_node_2, _node_3)));
-      Iterable<Node> _filterNull_1 = IterableExtensions.<Node>filterNull(_plus_2);
+      Iterable<Node> _plus_1 = Iterables.<Node>concat(_labels_1, Collections.<Node>unmodifiableList(CollectionLiterals.<Node>newArrayList(_node_2, _node_3)));
+      Iterable<Node> _filterNull_1 = IterableExtensions.<Node>filterNull(_plus_1);
       final Consumer<Node> _function_1 = (Node it) -> {
-        DoubleProperty _scaleXProperty = it.scaleXProperty();
-        _scaleXProperty.unbind();
-        DoubleProperty _scaleYProperty = it.scaleYProperty();
-        _scaleYProperty.unbind();
-        it.setScaleX(1);
-        it.setScaleY(1);
+        DoubleProperty _opacityProperty = it.opacityProperty();
+        _opacityProperty.unbind();
+        it.setOpacity(1);
       };
       _filterNull_1.forEach(_function_1);
-      XConnection _host_8 = this.getHost();
-      DoubleProperty _strokeWidthProperty_1 = _host_8.strokeWidthProperty();
-      _strokeWidthProperty_1.unbind();
-      XConnection _host_9 = this.getHost();
-      _host_9.setStrokeWidth(this.strokeWidth);
       this.dirtyAnimation.stop();
     }
   }
@@ -303,20 +277,40 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
             DomainObjectDescriptor _domainObjectDescriptor_1 = _source_1.getDomainObjectDescriptor();
             boolean _notEquals = (!Objects.equal(resolvedSourceDescriptor, _domainObjectDescriptor_1));
             if (_notEquals) {
-              XConnection _host_3 = this.getHost();
-              acceptor.delete(_host_3);
+              final XNode newSource = this.findNode(resolvedSourceDescriptor);
+              boolean _notEquals_1 = (!Objects.equal(newSource, null));
+              if (_notEquals_1) {
+                XConnection _host_3 = this.getHost();
+                XConnection _host_4 = this.getHost();
+                XNode _source_2 = _host_4.getSource();
+                ReconnectMorphCommand _reconnectMorphCommand = new ReconnectMorphCommand(_host_3, _source_2, newSource, true);
+                acceptor.morph(_reconnectMorphCommand);
+              } else {
+                XConnection _host_5 = this.getHost();
+                acceptor.delete(_host_5);
+              }
             } else {
-              XConnection _host_4 = this.getHost();
-              XNode _target = _host_4.getTarget();
+              XConnection _host_6 = this.getHost();
+              XNode _target = _host_6.getTarget();
               DomainObjectDescriptor _domainObjectDescriptor_2 = _target.getDomainObjectDescriptor();
               final DomainObjectDescriptor resolvedTarget = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_2, false);
-              XConnection _host_5 = this.getHost();
-              XNode _target_1 = _host_5.getTarget();
+              XConnection _host_7 = this.getHost();
+              XNode _target_1 = _host_7.getTarget();
               DomainObjectDescriptor _domainObjectDescriptor_3 = _target_1.getDomainObjectDescriptor();
-              boolean _notEquals_1 = (!Objects.equal(resolvedTarget, _domainObjectDescriptor_3));
-              if (_notEquals_1) {
-                XConnection _host_6 = this.getHost();
-                acceptor.delete(_host_6);
+              boolean _notEquals_2 = (!Objects.equal(resolvedTarget, _domainObjectDescriptor_3));
+              if (_notEquals_2) {
+                final XNode newTarget = this.findNode(resolvedTarget);
+                boolean _notEquals_3 = (!Objects.equal(newTarget, null));
+                if (_notEquals_3) {
+                  XConnection _host_8 = this.getHost();
+                  XConnection _host_9 = this.getHost();
+                  XNode _target_2 = _host_9.getTarget();
+                  ReconnectMorphCommand _reconnectMorphCommand_1 = new ReconnectMorphCommand(_host_8, _target_2, newTarget, false);
+                  acceptor.morph(_reconnectMorphCommand_1);
+                } else {
+                  XConnection _host_10 = this.getHost();
+                  acceptor.delete(_host_10);
+                }
               }
             }
             _xblockexpression = null;
@@ -334,6 +328,18 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractRecon
         }
       }
     }
+  }
+  
+  protected XNode findNode(final DomainObjectDescriptor descriptor) {
+    XConnection _host = this.getHost();
+    XDiagram _diagram = CoreExtensions.getDiagram(_host);
+    Iterable<? extends Node> _allChildren = CoreExtensions.getAllChildren(_diagram);
+    Iterable<XNode> _filter = Iterables.<XNode>filter(_allChildren, XNode.class);
+    final Function1<XNode, Boolean> _function = (XNode it) -> {
+      DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
+      return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
+    };
+    return IterableExtensions.<XNode>findFirst(_filter, _function);
   }
   
   private SimpleDoubleProperty dirtyAnimationValueProperty = new SimpleDoubleProperty(this, "dirtyAnimationValue");

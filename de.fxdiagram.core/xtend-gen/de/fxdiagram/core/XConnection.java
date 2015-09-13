@@ -45,7 +45,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Polyline;
@@ -305,12 +304,7 @@ public class XConnection extends XDomainObjectShape {
             }
             while ((curves.size() < numSegments)) {
               CubicCurve _cubicCurve = new CubicCurve();
-              final Procedure1<CubicCurve> _function = (CubicCurve it) -> {
-                it.setFill(null);
-                it.setStroke(Color.BLACK);
-              };
-              CubicCurve _doubleArrow = ObjectExtensions.<CubicCurve>operator_doubleArrow(_cubicCurve, _function);
-              curves.add(_doubleArrow);
+              curves.add(_cubicCurve);
             }
             ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, numSegments, true);
             for (final Integer i : _doubleDotLessThan) {
@@ -374,12 +368,7 @@ public class XConnection extends XDomainObjectShape {
             }
             while ((curves_1.size() < numSegments_1)) {
               QuadCurve _quadCurve = new QuadCurve();
-              final Procedure1<QuadCurve> _function = (QuadCurve it) -> {
-                it.setFill(null);
-                it.setStroke(Color.BLACK);
-              };
-              QuadCurve _doubleArrow = ObjectExtensions.<QuadCurve>operator_doubleArrow(_quadCurve, _function);
-              curves_1.add(_doubleArrow);
+              curves_1.add(_quadCurve);
             }
             ExclusiveRange _doubleDotLessThan_1 = new ExclusiveRange(0, numSegments_1, true);
             for (final Integer i_1 : _doubleDotLessThan_1) {
@@ -430,18 +419,15 @@ public class XConnection extends XDomainObjectShape {
         Polyline _polyline = new Polyline();
         _elvis = _polyline;
       }
-      final Procedure1<Polyline> _function = (Polyline it) -> {
-        it.setStroke(Color.BLACK);
-      };
-      final Polyline polyline = ObjectExtensions.<Polyline>operator_doubleArrow(_elvis, _function);
+      final Polyline polyline = _elvis;
       ObservableList<Double> _points = polyline.getPoints();
       ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
-      final Function1<XControlPoint, List<Double>> _function_1 = (XControlPoint it) -> {
+      final Function1<XControlPoint, List<Double>> _function = (XControlPoint it) -> {
         double _layoutX = it.getLayoutX();
         double _layoutY = it.getLayoutY();
         return Collections.<Double>unmodifiableList(CollectionLiterals.<Double>newArrayList(Double.valueOf(_layoutX), Double.valueOf(_layoutY)));
       };
-      List<List<Double>> _map = ListExtensions.<XControlPoint, List<Double>>map(_controlPoints_4, _function_1);
+      List<List<Double>> _map = ListExtensions.<XControlPoint, List<Double>>map(_controlPoints_4, _function);
       Iterable<Double> _flatten = Iterables.<Double>concat(_map);
       _points.setAll(((Double[])Conversions.unwrapArray(_flatten, Double.class)));
       this.setShapes(Collections.<Shape>unmodifiableList(CollectionLiterals.<Shape>newArrayList(polyline)));
@@ -465,18 +451,22 @@ public class XConnection extends XDomainObjectShape {
     final double strokeInRoot = (0.5 * _plus);
     double _strokeWidth_2 = this.getStrokeWidth();
     final double strokeScale = (_strokeWidth_2 / strokeInRoot);
-    final Consumer<Shape> _function = (Shape it) -> {
-      Paint _stroke = this.getStroke();
-      it.setStroke(_stroke);
-      it.setStrokeLineCap(StrokeLineCap.ROUND);
-      DoubleProperty _strokeWidthProperty = it.strokeWidthProperty();
+    final Consumer<Shape> _function = (Shape shape) -> {
+      shape.setFill(null);
+      shape.setStrokeLineCap(StrokeLineCap.ROUND);
+      DoubleProperty _strokeWidthProperty = shape.strokeWidthProperty();
       DoubleBinding _multiply = DoubleExpressionExtensions.operator_multiply(this.strokeWidthProperty, strokeScale);
       _strokeWidthProperty.bind(_multiply);
-      ObservableList<Double> _strokeDashArray = it.getStrokeDashArray();
+      DoubleProperty _opacityProperty = shape.opacityProperty();
+      DoubleProperty _opacityProperty_1 = this.opacityProperty();
+      _opacityProperty.bind(_opacityProperty_1);
+      ObservableList<Double> _strokeDashArray = shape.getStrokeDashArray();
       ObservableList<Double> _strokeDashArray_1 = this.getStrokeDashArray();
       _strokeDashArray.setAll(_strokeDashArray_1);
+      ObjectProperty<Paint> _strokeProperty = shape.strokeProperty();
+      _strokeProperty.bind(this.strokeProperty);
       double _strokeDashOffset = this.getStrokeDashOffset();
-      it.setStrokeDashOffset(_strokeDashOffset);
+      shape.setStrokeDashOffset(_strokeDashOffset);
     };
     shapes.forEach(_function);
   }
@@ -508,9 +498,12 @@ public class XConnection extends XDomainObjectShape {
     } catch (final Throwable _t) {
       if (_t instanceof Exception) {
         final Exception exc = (Exception)_t;
+        Class<? extends Exception> _class = exc.getClass();
+        String _simpleName = _class.getSimpleName();
+        String _plus = (_simpleName + " in XConnection.layoutChildren() ");
         String _message = exc.getMessage();
-        String _plus = ("Exception in XConnection.layoutChildren() " + _message);
-        XConnection.LOG.severe(_plus);
+        String _plus_1 = (_plus + _message);
+        XConnection.LOG.severe(_plus_1);
       } else {
         throw Exceptions.sneakyThrow(_t);
       }
