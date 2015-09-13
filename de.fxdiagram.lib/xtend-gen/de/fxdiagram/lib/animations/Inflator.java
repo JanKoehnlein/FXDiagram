@@ -199,6 +199,7 @@ public class Inflator {
   public Dimension2D getInflatedSize() {
     Dimension2D _xblockexpression = null;
     {
+      this.calculateDeflatedUnpadded();
       final Dimension2D unpadded = this.getInflatedUnpadded();
       final Insets padding = this.container.getPadding();
       double _width = unpadded.getWidth();
@@ -241,8 +242,8 @@ public class Inflator {
     return _xblockexpression;
   }
   
-  protected ParallelTransition inflate() {
-    ParallelTransition _xblockexpression = null;
+  protected Dimension2D calculateDeflatedUnpadded() {
+    Dimension2D _xblockexpression = null;
     {
       final Dimension2D containerSize = this.calculateSize(this.container);
       final Insets padding = this.container.getPadding();
@@ -257,7 +258,15 @@ public class Inflator {
       double _bottom = padding.getBottom();
       double _minus_3 = (_minus_2 - _bottom);
       Dimension2D _dimension2D = new Dimension2D(_minus_1, _minus_3);
-      this.deflatedUnpadded = _dimension2D;
+      _xblockexpression = this.deflatedUnpadded = _dimension2D;
+    }
+    return _xblockexpression;
+  }
+  
+  protected ParallelTransition inflate() {
+    ParallelTransition _xblockexpression = null;
+    {
+      this.calculateDeflatedUnpadded();
       ParallelTransition _parallelTransition = new ParallelTransition();
       final Procedure1<ParallelTransition> _function = (ParallelTransition pt) -> {
         Set<Map.Entry<VBox, Rectangle>> _entrySet = this.inflatable2spacer.entrySet();
@@ -274,8 +283,8 @@ public class Inflator {
               ObservableList<KeyFrame> _keyFrames = it_1.getKeyFrames();
               Duration _millis = DurationExtensions.millis(0);
               DoubleProperty _widthProperty = spacer.widthProperty();
-              double _width_1 = this.deflatedUnpadded.getWidth();
-              KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(_width_1));
+              double _width = this.deflatedUnpadded.getWidth();
+              KeyValue _keyValue = new <Number>KeyValue(_widthProperty, Double.valueOf(_width));
               DoubleProperty _heightProperty = spacer.heightProperty();
               KeyValue _keyValue_1 = new <Number>KeyValue(_heightProperty, Integer.valueOf(0));
               KeyFrame _keyFrame = new KeyFrame(_millis, _keyValue, _keyValue_1);
@@ -283,11 +292,11 @@ public class Inflator {
               ObservableList<KeyFrame> _keyFrames_1 = it_1.getKeyFrames();
               Duration _millis_1 = DurationExtensions.millis(200);
               DoubleProperty _widthProperty_1 = spacer.widthProperty();
-              double _width_2 = size.getWidth();
-              KeyValue _keyValue_2 = new <Number>KeyValue(_widthProperty_1, Double.valueOf(_width_2));
+              double _width_1 = size.getWidth();
+              KeyValue _keyValue_2 = new <Number>KeyValue(_widthProperty_1, Double.valueOf(_width_1));
               DoubleProperty _heightProperty_1 = spacer.heightProperty();
-              double _height_1 = size.getHeight();
-              KeyValue _keyValue_3 = new <Number>KeyValue(_heightProperty_1, Double.valueOf(_height_1));
+              double _height = size.getHeight();
+              KeyValue _keyValue_3 = new <Number>KeyValue(_heightProperty_1, Double.valueOf(_height));
               KeyFrame _keyFrame_1 = new KeyFrame(_millis_1, _keyValue_2, _keyValue_3);
               _keyFrames_1.add(_keyFrame_1);
             };

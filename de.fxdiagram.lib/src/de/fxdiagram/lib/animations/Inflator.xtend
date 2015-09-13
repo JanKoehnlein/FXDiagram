@@ -123,6 +123,7 @@ class Inflator {
 	}
 	
 	def getInflatedSize() {
+		calculateDeflatedUnpadded
 		val unpadded = inflatedUnpadded
 		val padding = container.padding
 		new Dimension2D(unpadded.width + padding.left + padding.right, unpadded.height + padding.top + padding.bottom + deflatedUnpadded.height)
@@ -139,13 +140,16 @@ class Inflator {
 		}
 		new Dimension2D(inflatedWidth, inflatedHeight)
 	}
-
-	protected def inflate() {
+	
+	protected def calculateDeflatedUnpadded() {
 		val containerSize = calculateSize(container)
 		val padding = container.padding
 		deflatedUnpadded = new Dimension2D(containerSize.width - padding.left - padding.right,
 			containerSize.height - padding.top - padding.bottom)
-		
+	}
+
+	protected def inflate() {
+		calculateDeflatedUnpadded
 		new ParallelTransition => [ pt |
 			for (it : inflatable2spacer.entrySet) {
 				val inflatable = key
