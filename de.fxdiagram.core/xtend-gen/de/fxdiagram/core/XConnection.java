@@ -440,6 +440,11 @@ public class XConnection extends XDomainObjectShape {
   protected void setShapes(final List<? extends Shape> shapes) {
     ObservableList<Node> _children = this.shapeGroup.getChildren();
     _children.setAll(shapes);
+    XDiagram _diagram = CoreExtensions.getDiagram(this);
+    boolean _equals = Objects.equal(_diagram, null);
+    if (_equals) {
+      return;
+    }
     XNode _source = this.getSource();
     double _strokeWidth = this.getStrokeWidth();
     double _strokeWidth_1 = this.getStrokeWidth();

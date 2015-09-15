@@ -221,6 +221,8 @@ class XConnection extends XDomainObjectShape {
 	
 	def protected setShapes(List<? extends Shape> shapes) {
 		shapeGroup.children.setAll(shapes)
+		if(diagram == null)
+			return
 		val strokeBoundsInRoot = source.localToRootDiagram(new BoundingBox(0, 0, this.strokeWidth, this.strokeWidth))
 		val strokeInRoot = 0.5 * (strokeBoundsInRoot.width + strokeBoundsInRoot.height)
 		val strokeScale = strokeWidth / strokeInRoot 
@@ -247,7 +249,6 @@ class XConnection extends XDomainObjectShape {
 			sourceArrowHead?.place
 			targetArrowHead?.place
 		} catch(Exception exc) {
-			// TODO fix control flow
 			LOG.severe(exc.class.simpleName + " in XConnection.layoutChildren() " + exc.message)
 		}
 	}
