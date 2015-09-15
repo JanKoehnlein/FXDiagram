@@ -13,8 +13,9 @@ import java.util.List
  class NodeMapping<T> extends AbstractMapping<T> {
 	
 	List<AbstractConnectionMappingCall<?,T>> outgoing = newArrayList
-	List<AbstractConnectionMappingCall<?,T>> incoming = newArrayList()
+	List<AbstractConnectionMappingCall<?,T>> incoming = newArrayList
 	DiagramMappingCall<?,T> nestedDiagram = null
+	List<AbstractLabelMappingCall<?, T>> labels = newArrayList
 	
 	new(XDiagramConfig config, String id, String displayName) {
 		super(config, id, displayName)
@@ -23,6 +24,7 @@ import java.util.List
 	def getOutgoing() { initialize; outgoing }
 	def getIncoming() { initialize; incoming }
 	def getNestedDiagram() { initialize; nestedDiagram } 
+	def getLabels() { initialize; labels } 
 	
 	def XNode createNode(IMappedElementDescriptor<T> descriptor) { new BaseNode(descriptor) }
 	
@@ -51,6 +53,18 @@ import java.util.List
 	def <U> inConnectionForEach(ConnectionMapping<U> connectionMapping, (T)=>Iterable<? extends U> selector) {
 		val call = new MultiConnectionMappingCall(selector, connectionMapping)
 		incoming += call
+		call
+	}
+	
+	def <U> labelForEach(NodeLabelMapping<U> labelMapping, (T)=>Iterable<? extends U> selector) {
+		val call = new MultiLabelMappingCall(selector, labelMapping)
+		labels += call
+		call
+	}
+	
+	def <U> labelFor(NodeLabelMapping<U> labelMapping, (T)=>U selector) {
+		val call = new LabelMappingCall(selector, labelMapping)
+		labels += call
 		call
 	}
 }

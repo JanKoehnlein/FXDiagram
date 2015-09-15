@@ -8,7 +8,9 @@ import de.fxdiagram.core.behavior.UpdateAcceptor;
 public interface ReconcileBehavior extends Behavior {
   public abstract DirtyState getDirtyState();
   
-  public abstract void showDirtyState(final DirtyState state);
+  public abstract void showDirtyState(final DirtyState dirtyState);
+  
+  public abstract void hideDirtyState();
   
   public abstract void reconcile(final UpdateAcceptor acceptor);
 }

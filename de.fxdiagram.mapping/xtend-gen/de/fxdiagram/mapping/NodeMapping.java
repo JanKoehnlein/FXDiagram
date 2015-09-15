@@ -2,13 +2,17 @@ package de.fxdiagram.mapping;
 
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
+import de.fxdiagram.mapping.AbstractLabelMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.ConnectionMappingCall;
 import de.fxdiagram.mapping.DiagramMapping;
 import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.LabelMappingCall;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.mapping.MultiLabelMappingCall;
+import de.fxdiagram.mapping.NodeLabelMapping;
 import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.shapes.BaseNode;
 import java.util.List;
@@ -28,6 +32,8 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
   private List<AbstractConnectionMappingCall<?, T>> incoming = CollectionLiterals.<AbstractConnectionMappingCall<?, T>>newArrayList();
   
   private DiagramMappingCall<?, T> nestedDiagram = null;
+  
+  private List<AbstractLabelMappingCall<?, T>> labels = CollectionLiterals.<AbstractLabelMappingCall<?, T>>newArrayList();
   
   public NodeMapping(final XDiagramConfig config, final String id, final String displayName) {
     super(config, id, displayName);
@@ -56,6 +62,15 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
     {
       this.initialize();
       _xblockexpression = this.nestedDiagram;
+    }
+    return _xblockexpression;
+  }
+  
+  public List<AbstractLabelMappingCall<?, T>> getLabels() {
+    List<AbstractLabelMappingCall<?, T>> _xblockexpression = null;
+    {
+      this.initialize();
+      _xblockexpression = this.labels;
     }
     return _xblockexpression;
   }
@@ -104,6 +119,26 @@ public class NodeMapping<T extends Object> extends AbstractMapping<T> {
     {
       final MultiConnectionMappingCall<U, T> call = new MultiConnectionMappingCall<U, T>(selector, connectionMapping);
       this.incoming.add(call);
+      _xblockexpression = call;
+    }
+    return _xblockexpression;
+  }
+  
+  public <U extends Object> MultiLabelMappingCall<U, T> labelForEach(final NodeLabelMapping<U> labelMapping, final Function1<? super T, ? extends Iterable<? extends U>> selector) {
+    MultiLabelMappingCall<U, T> _xblockexpression = null;
+    {
+      final MultiLabelMappingCall<U, T> call = new MultiLabelMappingCall<U, T>(selector, labelMapping);
+      this.labels.add(call);
+      _xblockexpression = call;
+    }
+    return _xblockexpression;
+  }
+  
+  public <U extends Object> LabelMappingCall<U, T> labelFor(final NodeLabelMapping<U> labelMapping, final Function1<? super T, ? extends U> selector) {
+    LabelMappingCall<U, T> _xblockexpression = null;
+    {
+      final LabelMappingCall<U, T> call = new LabelMappingCall<U, T>(selector, labelMapping);
+      this.labels.add(call);
       _xblockexpression = call;
     }
     return _xblockexpression;

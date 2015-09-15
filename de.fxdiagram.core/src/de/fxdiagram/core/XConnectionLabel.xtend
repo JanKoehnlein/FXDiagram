@@ -3,11 +3,11 @@ package de.fxdiagram.core
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.behavior.MoveBehavior
+import de.fxdiagram.core.model.DomainObjectDescriptor
 import javafx.geometry.VPos
 import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.text.Font
-import javafx.scene.text.Text
 import javafx.scene.transform.Affine
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
@@ -23,32 +23,51 @@ import static extension java.lang.Math.*
  * it is always tangeltial to the curve of the connection at the given position and upside 
  * up.  
  */
-@ModelNode('connection', 'text')
-class XConnectionLabel extends XShape {
+@ModelNode('connection')
+class XConnectionLabel extends XLabel {
 
 	@FxProperty(readOnly=true) XConnection connection
-	@FxProperty Text text = new Text
 	@FxProperty double position = 0.5
 
-	Effect selectionEffect = new DropShadow
+	Effect selectionEffect = new DropShadow		
 
 	new(XConnection connection) {
 		this.connection = connection
 	}
 
+	new(DomainObjectDescriptor domainObjectDescriptor) {
+		super(domainObjectDescriptor)
+	}
+
 	def setConnection(XConnection connection) {
-		if (this.connection != null)
-			throw new IllegalStateException("Cannot reset the connection on a label")
-		connectionProperty.set(connection)
-		connection.labels += this
+		if (this.connection != connection) {
+			if(this.connection != null) 
+				this.connection.labels -= this
+			connectionProperty.set(connection)
+			if(connection != null && !connection.labels.contains(this)) {
+				connection.labels += this
+			}
+		}
 	}
 
 	protected override createNode() {
-		opacityProperty.bind(connection.opacityProperty)
 		text => [
 			textOrigin = VPos.TOP
 			font = Font.font(font.family, font.size * 0.9)
 		]
+	}
+	
+	override selectionFeedback(boolean isSelected) {
+		if (isSelected) {
+			effect = selectionEffect
+			connection.selected = true
+			scaleX = 1.05
+			scaleY = 1.05
+		} else {
+			effect = null
+			scaleX = 1.0
+			scaleY = 1.0
+		}
 	}
 
 	override doActivate() {
@@ -56,19 +75,6 @@ class XConnectionLabel extends XShape {
 		addBehavior(new MoveBehavior(this))
 	}
 
-	override selectionFeedback(boolean isSelected) {
-		if (isSelected) {
-			effect = selectionEffect
-			scaleX = 1.05
-			scaleY = 1.05
-			connection.selected = true
-		} else {
-			effect = null
-			scaleX = 1.0
-			scaleY = 1.0
-		}
-	}
-	
 	def void place(boolean force) {
 		if(!connection.isActive)
 			return
@@ -96,5 +102,9 @@ class XConnectionLabel extends XShape {
 		transform.tx = 0
 		transform.ty = 0
 		transforms.setAll(transform)
+	}
+	
+	override toString() {
+		'XConnectionLabel: ' + text.text
 	}
 }

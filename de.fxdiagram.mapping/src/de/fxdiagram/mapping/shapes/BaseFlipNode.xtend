@@ -5,7 +5,7 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.nodes.FlipNode
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
+import de.fxdiagram.mapping.behavior.DefaultReconcileBehavior
 import javafx.scene.input.MouseEvent
 
 import static javafx.geometry.Side.*
@@ -38,7 +38,7 @@ class BaseFlipNode<T> extends FlipNode implements INodeWithLazyMappings {
 	override doActivate() {
 		super.doActivate()
 		addLazyBehavior(domainObjectDescriptor)
-		addBehavior(new NodeReconcileBehavior(this))
+		addBehavior(new DefaultReconcileBehavior(this))
 	}
 	
 	override registerOnClick() {

@@ -1,13 +1,13 @@
 package de.fxdiagram.xtext.fowlerdsl
 
-import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig
+import de.fxdiagram.mapping.ConnectionLabelMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.DiagramMapping
-import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.MappingAcceptor
+import de.fxdiagram.mapping.NodeLabelMapping
 import de.fxdiagram.mapping.NodeMapping
-import de.fxdiagram.mapping.shapes.BaseConnection
+import org.eclipse.xtext.example.fowlerdsl.statemachine.Event
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
@@ -50,6 +50,7 @@ class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
 	
 	val stateNode = new NodeMapping<State>(this, 'stateNode', 'State') {
 		override protected calls() {
+			stateLabel.labelFor[it]
 			// when adding a state allow to explore its transitions via rapid button
 			transitionConnection.outConnectionForEach[transitions].asButton[
 				getArrowButton('Add transition')
@@ -57,20 +58,24 @@ class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
 		}
 	}
 	
-	val transitionConnection = new ConnectionMapping<Transition>(this, 'transitionConnection', 'Transition') {
-		override createConnection(IMappedElementDescriptor<Transition> descriptor) {
-			// create a connection with a label denoting the transition's event name
-			new BaseConnection(descriptor) => [
-				new XConnectionLabel(it) => [ label |
-					label.text.text = descriptor.withDomainObject[event.name]
-				]		
-			]
+	val stateLabel = new NodeLabelMapping<State>(this, 'stateLabel', '') {
+		override getText(State it) {
+			name
 		}
-		
+	}
+	
+	val transitionConnection = new ConnectionMapping<Transition>(this, 'transitionConnection', 'Transition') {
 		override protected calls() {
+			eventLabel.labelFor[event]
 			// when adding a transition, automatically add its source and target
 			stateNode.source[eContainer as State]
 			stateNode.target[state]
+		}
+	}
+
+	val eventLabel = new ConnectionLabelMapping<Event>(this, 'eventLabel', '') {
+		override getText(Event it) {
+			name
 		}
 	}
 

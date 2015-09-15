@@ -370,13 +370,12 @@ public class FXDiagramTab {
       final ReconcileBehavior behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
       boolean _notEquals = (!Objects.equal(behavior, null));
       if (_notEquals) {
-        DirtyState _xifexpression = null;
         if (this.isLinkWithEditor) {
-          _xifexpression = behavior.getDirtyState();
+          DirtyState _dirtyState = behavior.getDirtyState();
+          behavior.showDirtyState(_dirtyState);
         } else {
-          _xifexpression = DirtyState.CLEAN;
+          behavior.hideDirtyState();
         }
-        behavior.showDirtyState(_xifexpression);
       }
     };
     allShapes.forEach(_function);

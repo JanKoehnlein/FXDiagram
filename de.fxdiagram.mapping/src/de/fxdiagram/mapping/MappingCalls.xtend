@@ -92,6 +92,26 @@ class MultiNodeMappingCall<RESULT, ARG> extends AbstractNodeMappingCall<RESULT, 
 	NodeMapping<RESULT> nodeMapping	
 }
 
+abstract class AbstractLabelMappingCall<RESULT, ARG> implements MappingCall<RESULT, ARG> {
+	def AbstractLabelMapping<RESULT> getLabelMapping()
+	
+	override getMapping() {
+		labelMapping
+	}
+}
+
+@Data
+class LabelMappingCall<RESULT, ARG> extends AbstractLabelMappingCall<RESULT, ARG> {
+	(ARG)=>RESULT selector
+	AbstractLabelMapping<RESULT> labelMapping
+}
+
+@Data
+class MultiLabelMappingCall<RESULT, ARG> extends AbstractLabelMappingCall<RESULT, ARG> {
+	(ARG)=>Iterable<? extends RESULT> selector
+	AbstractLabelMapping<RESULT> labelMapping
+}
+
 @Accessors
 @FinalFieldsConstructor
 @EqualsHashCode

@@ -8,6 +8,8 @@ import java.util.HashSet
 import java.util.Set
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.XLabel
+import de.fxdiagram.core.XConnectionLabel
 
 /**
  * Executes an {@link XDiagramConfig} on a given domain object.
@@ -64,6 +66,43 @@ class XDiagramConfigInterpreter {
 			}
 		}
 	}
+	
+	protected def <T> createLabel(T labelObject, AbstractLabelMapping<T> labelMapping, InterpreterContext context) {
+		if(labelMapping.isApplicable(labelObject)) {
+			val descriptor = labelObject.getDescriptor(labelMapping)
+			if(descriptor != null) {
+				val label = labelMapping.createLabel(descriptor)
+				labelMapping.config.initialize(label)
+				return label
+			}
+		}
+		return null
+	}
+	
+	def <T,U> Iterable<T> select(AbstractLabelMappingCall<T, U> labelMappingCall, U domainArgument) {
+		if(domainArgument == null)
+			return #[]
+		if (labelMappingCall instanceof LabelMappingCall<?,?>) {
+			val labelMappingCallCasted = labelMappingCall as LabelMappingCall<T,U>
+			val labelObject = (labelMappingCallCasted.selector as (Object)=>T).apply(domainArgument)
+			if(labelObject == null) 
+				return #[]
+			else
+				return #[labelObject]
+		} else if (labelMappingCall instanceof MultiLabelMappingCall<?,?>) {
+			val labelMappingCallCasted = labelMappingCall as MultiLabelMappingCall<T,U>
+			return (labelMappingCallCasted.selector as (Object)=>Iterable<T>).apply(domainArgument).filterNull
+		}
+	}
+	
+	def <T,U> Iterable<? extends XLabel> execute(AbstractLabelMappingCall<T, U> labelMappingCall, U domainArgument,
+		InterpreterContext context) {
+		val labelObjects = select(labelMappingCall, domainArgument)
+		val result = newArrayList
+		for (labelObject : labelObjects)
+			result += createLabel(labelObject, labelMappingCall.labelMapping, context)
+		return result		
+	}
 
 	protected def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context, boolean isCreateOnDemand) {
 		if (nodeMapping.isApplicable(nodeObject)) {
@@ -82,6 +121,9 @@ class XDiagramConfigInterpreter {
 				if(!onDemand) 
 					execute(nodeObject, [source = node], context, true)
 			]
+			nodeMapping.labels.forEach [
+				node.labels += execute(nodeObject, context)
+			]
 			if(node instanceof OpenableDiagramNode)
 				node.innerDiagram = nodeMapping.nestedDiagram?.execute(nodeObject, context)
 			return node
@@ -99,6 +141,9 @@ class XDiagramConfigInterpreter {
 				return existingConnection
 			val connection = connectionMappingCasted.createConnection(descriptor)
 			connectionMappingCasted.config.initialize(connection)
+			connectionMapping.labels.forEach [
+				connection.labels += execute(connectionObject, context).filter(XConnectionLabel)
+			]
 			return connection
 		} else {
 			return null

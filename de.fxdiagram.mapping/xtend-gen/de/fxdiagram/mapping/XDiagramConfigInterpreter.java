@@ -1,14 +1,19 @@
 package de.fxdiagram.mapping;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
+import de.fxdiagram.mapping.AbstractLabelMapping;
+import de.fxdiagram.mapping.AbstractLabelMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.AbstractNodeMappingCall;
 import de.fxdiagram.mapping.ConnectionMapping;
@@ -18,7 +23,9 @@ import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.InterpreterContext;
+import de.fxdiagram.mapping.LabelMappingCall;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.mapping.MultiLabelMappingCall;
 import de.fxdiagram.mapping.MultiNodeMappingCall;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
@@ -29,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import javafx.collections.ObservableList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -162,6 +170,58 @@ public class XDiagramConfigInterpreter {
     }
   }
   
+  protected <T extends Object> XLabel createLabel(final T labelObject, final AbstractLabelMapping<T> labelMapping, final InterpreterContext context) {
+    boolean _isApplicable = labelMapping.isApplicable(labelObject);
+    if (_isApplicable) {
+      final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(labelObject, labelMapping);
+      boolean _notEquals = (!Objects.equal(descriptor, null));
+      if (_notEquals) {
+        final XLabel label = labelMapping.createLabel(descriptor);
+        XDiagramConfig _config = labelMapping.getConfig();
+        _config.initialize(label);
+        return label;
+      }
+    }
+    return null;
+  }
+  
+  public <T extends Object, U extends Object> Iterable<T> select(final AbstractLabelMappingCall<T, U> labelMappingCall, final U domainArgument) {
+    boolean _equals = Objects.equal(domainArgument, null);
+    if (_equals) {
+      return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList());
+    }
+    if ((labelMappingCall instanceof LabelMappingCall<?, ?>)) {
+      final LabelMappingCall<T, U> labelMappingCallCasted = ((LabelMappingCall<T, U>) labelMappingCall);
+      Function1<? super U, ? extends T> _selector = labelMappingCallCasted.getSelector();
+      final T labelObject = ((Function1<? super Object, ? extends T>) ((Function1<? super Object, ? extends T>)_selector)).apply(domainArgument);
+      boolean _equals_1 = Objects.equal(labelObject, null);
+      if (_equals_1) {
+        return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList());
+      } else {
+        return Collections.<T>unmodifiableList(CollectionLiterals.<T>newArrayList(labelObject));
+      }
+    } else {
+      if ((labelMappingCall instanceof MultiLabelMappingCall<?, ?>)) {
+        final MultiLabelMappingCall<T, U> labelMappingCallCasted_1 = ((MultiLabelMappingCall<T, U>) labelMappingCall);
+        Function1<? super U, ? extends Iterable<? extends T>> _selector_1 = labelMappingCallCasted_1.getSelector();
+        Iterable<T> _apply = ((Function1<? super Object, ? extends Iterable<T>>) ((Function1<? super Object, ? extends Iterable<T>>)_selector_1)).apply(domainArgument);
+        return IterableExtensions.<T>filterNull(_apply);
+      }
+    }
+    return null;
+  }
+  
+  public <T extends Object, U extends Object> Iterable<? extends XLabel> execute(final AbstractLabelMappingCall<T, U> labelMappingCall, final U domainArgument, final InterpreterContext context) {
+    final Iterable<T> labelObjects = this.<T, U>select(labelMappingCall, domainArgument);
+    final ArrayList<XLabel> result = CollectionLiterals.<XLabel>newArrayList();
+    for (final T labelObject : labelObjects) {
+      AbstractLabelMapping<T> _labelMapping = labelMappingCall.getLabelMapping();
+      XLabel _createLabel = this.<T>createLabel(labelObject, _labelMapping, context);
+      result.add(_createLabel);
+    }
+    return result;
+  }
+  
   protected <T extends Object> XNode createNode(final T nodeObject, final NodeMapping<T> nodeMapping, final InterpreterContext context, final boolean isCreateOnDemand) {
     boolean _isApplicable = nodeMapping.isApplicable(nodeObject);
     if (_isApplicable) {
@@ -205,6 +265,13 @@ public class XDiagramConfigInterpreter {
         }
       };
       _outgoing.forEach(_function_1);
+      List<AbstractLabelMappingCall<?, T>> _labels = nodeMapping.getLabels();
+      final Consumer<AbstractLabelMappingCall<?, T>> _function_2 = (AbstractLabelMappingCall<?, T> it) -> {
+        ObservableList<XLabel> _labels_1 = node.getLabels();
+        Iterable<? extends XLabel> _execute = this.execute(it, nodeObject, context);
+        Iterables.<XLabel>addAll(_labels_1, _execute);
+      };
+      _labels.forEach(_function_2);
       if ((node instanceof OpenableDiagramNode)) {
         DiagramMappingCall<?, T> _nestedDiagram = nodeMapping.getNestedDiagram();
         XDiagram _execute = null;
@@ -232,6 +299,14 @@ public class XDiagramConfigInterpreter {
       final XConnection connection = connectionMappingCasted.createConnection(descriptor);
       XDiagramConfig _config = connectionMappingCasted.getConfig();
       _config.initialize(connection);
+      List<AbstractLabelMappingCall<?, T>> _labels = connectionMapping.getLabels();
+      final Consumer<AbstractLabelMappingCall<?, T>> _function = (AbstractLabelMappingCall<?, T> it) -> {
+        ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
+        Iterable<? extends XLabel> _execute = this.execute(it, connectionObject, context);
+        Iterable<XConnectionLabel> _filter = Iterables.<XConnectionLabel>filter(_execute, XConnectionLabel.class);
+        Iterables.<XConnectionLabel>addAll(_labels_1, _filter);
+      };
+      _labels.forEach(_function);
       return connection;
     } else {
       return null;

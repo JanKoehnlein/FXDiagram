@@ -11,7 +11,9 @@ import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 interface ReconcileBehavior extends Behavior {
 	def DirtyState getDirtyState()
 	
-	def void showDirtyState(DirtyState state)
+	def void showDirtyState(DirtyState dirtyState)
+
+	def void hideDirtyState()
 	
 	def void reconcile(UpdateAcceptor acceptor) 
 }
@@ -59,6 +61,10 @@ abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostB
 		feedback(false)
 		shownState = state
 		feedback(true)
+	}
+	
+	override hideDirtyState() {
+		feedback(false)
 	}
 	
 	protected def void feedback(boolean show) {

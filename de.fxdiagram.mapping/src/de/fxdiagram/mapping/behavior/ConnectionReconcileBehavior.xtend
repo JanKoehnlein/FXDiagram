@@ -2,16 +2,18 @@ package de.fxdiagram.mapping.behavior
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnection
+import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior
+import de.fxdiagram.core.behavior.DirtyState
+import de.fxdiagram.core.behavior.ReconcileBehavior
 import de.fxdiagram.core.behavior.UpdateAcceptor
-import de.fxdiagram.core.command.AbstractAnimationCommand
-import de.fxdiagram.core.command.CommandContext
-import de.fxdiagram.core.command.EmptyTransition
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.mapping.AbstractConnectionMappingCall
+import de.fxdiagram.mapping.AbstractLabelMappingCall
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.InterpreterContext
 import de.fxdiagram.mapping.NodeMapping
 import de.fxdiagram.mapping.NodeMappingCall
 import de.fxdiagram.mapping.XDiagramConfigInterpreter
@@ -19,23 +21,12 @@ import java.util.NoSuchElementException
 import javafx.animation.Animation
 import javafx.animation.KeyFrame
 import javafx.animation.KeyValue
-import javafx.animation.PathTransition
-import javafx.animation.SequentialTransition
 import javafx.animation.Timeline
-import javafx.geometry.Point2D
-import javafx.scene.Group
-import javafx.scene.Node
-import javafx.scene.shape.LineTo
-import javafx.scene.shape.MoveTo
-import javafx.scene.shape.Path
-import javafx.util.Duration
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static de.fxdiagram.core.behavior.DirtyState.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import javafx.scene.shape.Circle
 
 class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnection> {
 
@@ -47,17 +38,73 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 		super(host)
 	}
 
+	override showDirtyState(DirtyState dirtyState) {
+		super.showDirtyState(dirtyState)
+		host.labels.forEach [
+			val descriptor = host.domainObjectDescriptor
+			if(descriptor instanceof IMappedElementDescriptor<?>) {
+				(descriptor as IMappedElementDescriptor<T>).withDomainObject [ domainObject |
+					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
+					compareLabels(connectionMapping, domainObject, new AddRemoveAcceptor {
+						override add(XConnectionLabel label) {
+						}
+						
+						override remove(XConnectionLabel label) {
+							val behavior = label.getBehavior(ReconcileBehavior)
+							if(behavior != null) {
+								switch behavior.dirtyState {
+									case DANGLING:
+										behavior.showDirtyState(DANGLING)
+									default:
+										behavior.showDirtyState(DIRTY)
+								}
+							}
+						}
+						
+						override keep(XConnectionLabel label) {
+							label.getBehavior(ReconcileBehavior)?.showDirtyState(CLEAN)
+						}
+					})
+					null		
+				]
+			}
+		]
+	}
+
+	override hideDirtyState() {
+		super.hideDirtyState()
+		host.labels.forEach [
+			getBehavior(ReconcileBehavior)?.hideDirtyState
+		]
+	}
+
 	override getDirtyState() {
 		val descriptor = host.domainObjectDescriptor
 		if (descriptor instanceof IMappedElementDescriptor<?>) {
 			try {
-				return descriptor.withDomainObject [ domainObject |
+				return (descriptor as IMappedElementDescriptor<T>).withDomainObject [ domainObject |
 					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
 					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObjectDescriptor, true)
 					if (resolvedSourceDescriptor == host.source.domainObjectDescriptor) {
 						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObjectDescriptor, false)
-						if(resolvedTarget == host.target.domainObjectDescriptor)								
-							return CLEAN
+						if(resolvedTarget == host.target.domainObjectDescriptor) {
+							val toBeAdded = newArrayList
+							compareLabels(connectionMapping, domainObject, new AddRemoveAcceptor {
+								override add(XConnectionLabel label) {
+									toBeAdded.add(label)
+								}
+								
+								override remove(XConnectionLabel label) {
+								}
+								
+								override keep(XConnectionLabel label) {
+								}
+							})
+							if(!toBeAdded.empty)
+								return DIRTY
+							else
+								return CLEAN
+						}
 					}
 					return DIRTY
 				]
@@ -124,14 +171,14 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 	
 	override protected dirtyFeedback(boolean isDirty) {
 		if(isDirty) {
-			(host.labels + #[host.sourceArrowHead?.node, host.targetArrowHead?.node])
+			#[host.sourceArrowHead?.node, host.targetArrowHead?.node]
 				.filterNull
 				.forEach[ 
 					opacityProperty.bind(dirtyAnimationValueProperty)
 				]
 			dirtyAnimation.play
 		} else {
-			(host.labels + #[host.sourceArrowHead?.node, host.targetArrowHead?.node])
+			#[host.sourceArrowHead?.node, host.targetArrowHead?.node]
 				.filterNull
 				.forEach[ 
 					opacityProperty.unbind
@@ -145,9 +192,9 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 		val descriptor = host.domainObjectDescriptor
 		if (descriptor instanceof IMappedElementDescriptor<?>) {
 			try {
-				descriptor.withDomainObject [ domainObject |
+				(descriptor as IMappedElementDescriptor<T>).withDomainObject [ domainObject |
 					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
-					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObjectDescriptor, true)
+					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject, connectionMapping, host.source.domainObjectDescriptor, true)
 					if (resolvedSourceDescriptor != host.source.domainObjectDescriptor) {
 						val newSource = resolvedSourceDescriptor.findNode
 						if(newSource != null) 
@@ -155,7 +202,7 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 						else
 							acceptor.delete(host)
 					} else {
-						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObjectDescriptor, false)
+						val resolvedTarget = resolveConnectionEnd(domainObject, connectionMapping, host.target.domainObjectDescriptor, false)
 						if(resolvedTarget != host.target.domainObjectDescriptor) {
 							val newTarget = resolvedTarget.findNode
 							if(newTarget != null) 
@@ -164,6 +211,10 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 								acceptor.delete(host)
 						}
 					}
+					val labelMorphCommand = new ConnectionLabelMorphCommand(host)
+					compareLabels(connectionMapping, domainObject, labelMorphCommand)
+					if(!labelMorphCommand.empty)
+						acceptor.morph(labelMorphCommand)
 					null
 				]
 			} catch (NoSuchElementException exc) {
@@ -172,82 +223,42 @@ class ConnectionReconcileBehavior<T> extends AbstractReconcileBehavior<XConnecti
 		} 
 	}
 	
+	protected def compareLabels(ConnectionMapping<T> connectionMapping, T domainObject, AddRemoveAcceptor acceptor) {
+		val interpreter = new XDiagramConfigInterpreter
+		val context = new InterpreterContext(host.diagram)
+		connectionMapping.labels.forEach [ labelMappingCall |
+			val resolvedLabels = interpreter.execute(labelMappingCall as AbstractLabelMappingCall<?,T>, domainObject, context).filter(XConnectionLabel)
+			val existingLabels = host.labels
+			existingLabels.forEach[ existing |
+				if(!resolvedLabels.exists[equals(it, existing)]) {
+					acceptor.remove(existing)
+				} else {
+					acceptor.keep(existing)
+				} 
+			]
+			resolvedLabels.forEach[ resolved |
+				if(!existingLabels.exists[equals(it, resolved)]) {
+					acceptor.add(resolved)
+				} 
+			]
+		]
+	}
+	
+	def boolean equals(XConnectionLabel one, XConnectionLabel two) {
+		one.domainObjectDescriptor == two.domainObjectDescriptor
+			&& one.text.text == two.text.text
+	}
+	
 	protected def findNode(DomainObjectDescriptor descriptor) {
 		host.diagram.allChildren.filter(XNode).findFirst[domainObjectDescriptor == descriptor]
 	}
 }
 
-@FinalFieldsConstructor
-class ReconnectMorphCommand extends AbstractAnimationCommand {
-	val XConnection connection
-	val XNode oldNode 
-	val XNode newNode 
-	val boolean isSource
+interface AddRemoveAcceptor {
+	def void add(XConnectionLabel label)
 	
-	override createExecuteAnimation(CommandContext context) {
-		morph(newNode, context.defaultExecuteDuration)
-	}
-	
-	override createUndoAnimation(CommandContext context) {
-		morph(oldNode, context.defaultUndoDuration)
-	}
-	
-	override createRedoAnimation(CommandContext context) {
-		morph(newNode, context.defaultUndoDuration)
-	}
-	
-	protected def morph(XNode nodeAfterMorph, Duration duration) {
-		val from = if(isSource)
-				connection.connectionRouter.findClosestSourceAnchor(connection.source, false)
-			else
-				connection.connectionRouter.findClosestTargetAnchor(connection.target, false)
-		val to = if(isSource)
-				connection.connectionRouter.findClosestSourceAnchor(nodeAfterMorph, false)
-			else  
-				connection.connectionRouter.findClosestTargetAnchor(nodeAfterMorph, false)
-		val dummy = new Group => [
-			translateX = from.x
-			translateY = from.y
-		]
-		val dummyNode = new XNode () {
-			override protected createNode() {
-				new Circle(0)
-			}
-		} => [
-			layoutXProperty.bind(dummy.translateXProperty)
-			layoutYProperty.bind(dummy.translateYProperty)
-		]
-		new SequentialTransition => [
-			children += new EmptyTransition => [
-				onFinished = [
-					connection.diagram.nodes += dummyNode 
-					if(isSource)
-						connection.source = dummyNode
-					else 
-						connection.target = dummyNode
-				]
-			]
-			children += createPathTransition(from, to, dummyNode, dummy, nodeAfterMorph, duration)
-		]
-	}
-	
-	protected def createPathTransition(Point2D from, Point2D to, XNode dummyNode, Node dummy, XNode nodeAfterMorph, Duration duration) {
-		new PathTransition => [
-			node = dummy
-			it.duration = duration
-			cycleCount = 1
-			path = new Path => [
-				elements += new MoveTo(from.x, from.y)
-				elements += new LineTo(to.x, to.y)
-			]
-			onFinished = [
-				if(isSource)
-					connection.source = nodeAfterMorph
-				else
-					connection.target = nodeAfterMorph
-				connection.diagram.nodes -= dummyNode 
-			]
-		]
-	}
-	
+	def void remove(XConnectionLabel label)
+
+	def void keep(XConnectionLabel label)
 }
+

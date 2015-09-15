@@ -17,6 +17,8 @@ import javafx.scene.effect.InnerShadow
 import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.extensions.InitializingListListener
 
 /**
  * A node in an {@link XDiagram} that can be connected to other {@link XNode}s via 
@@ -45,6 +47,7 @@ class XNode extends XDomainObjectShape {
 	@FxProperty double height
 	@FxProperty ObservableList<XConnection> incomingConnections = observableArrayList
 	@FxProperty ObservableList<XConnection> outgoingConnections = observableArrayList
+	@FxProperty ObservableList<XLabel> labels = observableArrayList
 	@FxProperty Side placementHint
 	
 	Effect mouseOverEffect
@@ -104,6 +107,9 @@ class XNode extends XDomainObjectShape {
 		onMouseExited = [
 			node.effect = originalEffect
 		]
+		labels.addInitializingListener(new InitializingListListener => [
+			add = [ XLabel it | it.activate ]
+		])
 		if(node instanceof XActivatable)
 			(node as XActivatable).activate
 	}

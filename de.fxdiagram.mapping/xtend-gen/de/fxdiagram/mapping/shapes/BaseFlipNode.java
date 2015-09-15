@@ -8,8 +8,8 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.behavior.DefaultReconcileBehavior;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior;
 import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import java.util.Collections;
@@ -49,8 +49,8 @@ public class BaseFlipNode<T extends Object> extends FlipNode implements INodeWit
     super.doActivate();
     IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
     LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
-    NodeReconcileBehavior _nodeReconcileBehavior = new NodeReconcileBehavior(this);
-    this.addBehavior(_nodeReconcileBehavior);
+    DefaultReconcileBehavior<BaseFlipNode<T>> _defaultReconcileBehavior = new DefaultReconcileBehavior<BaseFlipNode<T>>(this);
+    this.addBehavior(_defaultReconcileBehavior);
   }
   
   @Override

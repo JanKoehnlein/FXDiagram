@@ -7,10 +7,13 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDomainObjectShape;
+import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.RectangleAnchors;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
+import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringDescriptor;
@@ -153,6 +156,16 @@ public class XNode extends XDomainObjectShape {
       _node.setEffect(this.originalEffect);
     };
     this.setOnMouseExited(_function_1);
+    ObservableList<XLabel> _labels = this.getLabels();
+    InitializingListListener<XLabel> _initializingListListener = new InitializingListListener<XLabel>();
+    final Procedure1<InitializingListListener<XLabel>> _function_2 = (InitializingListListener<XLabel> it) -> {
+      final Procedure1<XLabel> _function_3 = (XLabel it_1) -> {
+        it_1.activate();
+      };
+      it.setAdd(_function_3);
+    };
+    InitializingListListener<XLabel> _doubleArrow = ObjectExtensions.<InitializingListListener<XLabel>>operator_doubleArrow(_initializingListListener, _function_2);
+    CoreExtensions.<XLabel>addInitializingListener(_labels, _doubleArrow);
     Node _node = this.getNode();
     if ((_node instanceof XActivatable)) {
       Node _node_1 = this.getNode();
@@ -360,6 +373,21 @@ public class XNode extends XDomainObjectShape {
   
   public ListProperty<XConnection> outgoingConnectionsProperty() {
     return this.outgoingConnectionsProperty;
+  }
+  
+  private SimpleListProperty<XLabel> labelsProperty = new SimpleListProperty<XLabel>(this, "labels",_initLabels());
+  
+  private static final ObservableList<XLabel> _initLabels() {
+    ObservableList<XLabel> _observableArrayList = FXCollections.<XLabel>observableArrayList();
+    return _observableArrayList;
+  }
+  
+  public ObservableList<XLabel> getLabels() {
+    return this.labelsProperty.get();
+  }
+  
+  public ListProperty<XLabel> labelsProperty() {
+    return this.labelsProperty;
   }
   
   private SimpleObjectProperty<Side> placementHintProperty = new SimpleObjectProperty<Side>(this, "placementHint");

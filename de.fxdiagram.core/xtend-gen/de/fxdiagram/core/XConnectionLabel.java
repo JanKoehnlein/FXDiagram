@@ -3,17 +3,16 @@ package de.fxdiagram.core;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.core.model.XModelProvider;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -39,52 +38,85 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * it is always tangeltial to the curve of the connection at the given position and upside
  * up.
  */
-@ModelNode({ "connection", "text" })
+@ModelNode("connection")
 @SuppressWarnings("all")
-public class XConnectionLabel extends XShape implements XModelProvider {
+public class XConnectionLabel extends XLabel {
   private Effect selectionEffect = new DropShadow();
   
   public XConnectionLabel(final XConnection connection) {
     this.setConnection(connection);
   }
   
+  public XConnectionLabel(final DomainObjectDescriptor domainObjectDescriptor) {
+    super(domainObjectDescriptor);
+  }
+  
   public boolean setConnection(final XConnection connection) {
-    boolean _xblockexpression = false;
-    {
-      XConnection _connection = this.getConnection();
-      boolean _notEquals = (!Objects.equal(_connection, null));
-      if (_notEquals) {
-        throw new IllegalStateException("Cannot reset the connection on a label");
+    boolean _xifexpression = false;
+    XConnection _connection = this.getConnection();
+    boolean _notEquals = (!Objects.equal(_connection, connection));
+    if (_notEquals) {
+      boolean _xblockexpression = false;
+      {
+        XConnection _connection_1 = this.getConnection();
+        boolean _notEquals_1 = (!Objects.equal(_connection_1, null));
+        if (_notEquals_1) {
+          XConnection _connection_2 = this.getConnection();
+          ObservableList<XConnectionLabel> _labels = _connection_2.getLabels();
+          _labels.remove(this);
+        }
+        this.connectionProperty.set(connection);
+        boolean _xifexpression_1 = false;
+        boolean _and = false;
+        boolean _notEquals_2 = (!Objects.equal(connection, null));
+        if (!_notEquals_2) {
+          _and = false;
+        } else {
+          ObservableList<XConnectionLabel> _labels_1 = connection.getLabels();
+          boolean _contains = _labels_1.contains(this);
+          boolean _not = (!_contains);
+          _and = _not;
+        }
+        if (_and) {
+          ObservableList<XConnectionLabel> _labels_2 = connection.getLabels();
+          _xifexpression_1 = _labels_2.add(this);
+        }
+        _xblockexpression = _xifexpression_1;
       }
-      this.connectionProperty.set(connection);
-      ObservableList<XConnectionLabel> _labels = connection.getLabels();
-      _xblockexpression = _labels.add(this);
+      _xifexpression = _xblockexpression;
     }
-    return _xblockexpression;
+    return _xifexpression;
   }
   
   @Override
   protected Node createNode() {
-    Text _xblockexpression = null;
-    {
-      DoubleProperty _opacityProperty = this.opacityProperty();
+    Text _text = this.getText();
+    final Procedure1<Text> _function = (Text it) -> {
+      it.setTextOrigin(VPos.TOP);
+      Font _font = it.getFont();
+      String _family = _font.getFamily();
+      Font _font_1 = it.getFont();
+      double _size = _font_1.getSize();
+      double _multiply = (_size * 0.9);
+      Font _font_2 = Font.font(_family, _multiply);
+      it.setFont(_font_2);
+    };
+    return ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+  }
+  
+  @Override
+  public void selectionFeedback(final boolean isSelected) {
+    if (isSelected) {
+      this.setEffect(this.selectionEffect);
       XConnection _connection = this.getConnection();
-      DoubleProperty _opacityProperty_1 = _connection.opacityProperty();
-      _opacityProperty.bind(_opacityProperty_1);
-      Text _text = this.getText();
-      final Procedure1<Text> _function = (Text it) -> {
-        it.setTextOrigin(VPos.TOP);
-        Font _font = it.getFont();
-        String _family = _font.getFamily();
-        Font _font_1 = it.getFont();
-        double _size = _font_1.getSize();
-        double _multiply = (_size * 0.9);
-        Font _font_2 = Font.font(_family, _multiply);
-        it.setFont(_font_2);
-      };
-      _xblockexpression = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+      _connection.setSelected(true);
+      this.setScaleX(1.05);
+      this.setScaleY(1.05);
+    } else {
+      this.setEffect(null);
+      this.setScaleX(1.0);
+      this.setScaleY(1.0);
     }
-    return _xblockexpression;
   }
   
   @Override
@@ -96,21 +128,6 @@ public class XConnectionLabel extends XShape implements XModelProvider {
     _fillProperty.bind(_strokeProperty);
     MoveBehavior<XConnectionLabel> _moveBehavior = new MoveBehavior<XConnectionLabel>(this);
     this.addBehavior(_moveBehavior);
-  }
-  
-  @Override
-  public void selectionFeedback(final boolean isSelected) {
-    if (isSelected) {
-      this.setEffect(this.selectionEffect);
-      this.setScaleX(1.05);
-      this.setScaleY(1.05);
-      XConnection _connection = this.getConnection();
-      _connection.setSelected(true);
-    } else {
-      this.setEffect(null);
-      this.setScaleX(1.0);
-      this.setScaleY(1.0);
-    }
   }
   
   public void place(final boolean force) {
@@ -182,6 +199,13 @@ public class XConnectionLabel extends XShape implements XModelProvider {
     _transforms.setAll(transform);
   }
   
+  @Override
+  public String toString() {
+    Text _text = this.getText();
+    String _text_1 = _text.getText();
+    return ("XConnectionLabel: " + _text_1);
+  }
+  
   /**
    * Automatically generated by @ModelNode. Needed for deserialization.
    */
@@ -189,8 +213,8 @@ public class XConnectionLabel extends XShape implements XModelProvider {
   }
   
   public void populate(final ModelElementImpl modelElement) {
+    super.populate(modelElement);
     modelElement.addProperty(connectionProperty, XConnection.class);
-    modelElement.addProperty(textProperty, Text.class);
   }
   
   private ReadOnlyObjectWrapper<XConnection> connectionProperty = new ReadOnlyObjectWrapper<XConnection>(this, "connection");
@@ -201,25 +225,6 @@ public class XConnectionLabel extends XShape implements XModelProvider {
   
   public ReadOnlyObjectProperty<XConnection> connectionProperty() {
     return this.connectionProperty.getReadOnlyProperty();
-  }
-  
-  private SimpleObjectProperty<Text> textProperty = new SimpleObjectProperty<Text>(this, "text",_initText());
-  
-  private static final Text _initText() {
-    Text _text = new Text();
-    return _text;
-  }
-  
-  public Text getText() {
-    return this.textProperty.get();
-  }
-  
-  public void setText(final Text text) {
-    this.textProperty.set(text);
-  }
-  
-  public ObjectProperty<Text> textProperty() {
-    return this.textProperty;
   }
   
   private SimpleDoubleProperty positionProperty = new SimpleDoubleProperty(this, "position",_initPosition());

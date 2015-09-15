@@ -6,9 +6,8 @@ import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
+import de.fxdiagram.mapping.behavior.DefaultReconcileBehavior
 import javafx.geometry.Insets
-import javafx.geometry.VPos
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
@@ -16,7 +15,6 @@ import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
-import javafx.scene.text.Text
 
 import static javafx.geometry.Side.*
 
@@ -46,12 +44,11 @@ class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 	
 	override protected createNode() {
 		new RectangleBorderPane => [
-			children += new Text => [
-				textOrigin = VPos.TOP
-				text = name
-				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-				font = Font.font(font.family, FontWeight.BOLD, font.size * 1.1)
-			]
+			if(!labels.empty) {
+				children += labels
+				labels.forEach[node] // eagerly initialize nodes
+				styleLabels
+			}
 			backgroundPaint = new LinearGradient(
 				0, 0, 1, 1, 
 				true, CycleMethod.NO_CYCLE,
@@ -62,6 +59,12 @@ class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 		] 
 	}
 	
+	protected def styleLabels() {
+		StackPane.setMargin(labels.head, new Insets(10, 20, 10, 20))
+		val font = labels.head.text.font
+		labels.head.text.font = Font.font(font.family, FontWeight.BOLD, font.size * 1.1)		
+	}
+	
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 6, 6)
 	}
@@ -69,7 +72,7 @@ class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 	override doActivate() {
 		super.doActivate
 		addLazyBehavior(domainObjectDescriptor)
-		addBehavior(new NodeReconcileBehavior(this))
+		addBehavior(new DefaultReconcileBehavior(this))
 	}
 	
 	override getButtonSides(ConnectionMapping<?> mapping) {

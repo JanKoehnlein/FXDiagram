@@ -1,5 +1,6 @@
 package de.fxdiagram.eclipse.commands;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
@@ -44,13 +45,11 @@ public class ReconcileDiagramHandler extends AbstractHandler {
     @Override
     public void execute(final CommandContext context) {
       final Consumer<XDomainObjectShape> _function = (XDomainObjectShape it) -> {
-        final ReconcileBehavior reconcile = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-        if (reconcile!=null) {
-          DirtyState _dirtyState = null;
-          if (reconcile!=null) {
-            _dirtyState=reconcile.getDirtyState();
-          }
-          reconcile.showDirtyState(_dirtyState);
+        final ReconcileBehavior behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+        boolean _notEquals = (!Objects.equal(behavior, null));
+        if (_notEquals) {
+          DirtyState _dirtyState = behavior.getDirtyState();
+          behavior.showDirtyState(_dirtyState);
         }
       };
       this.allShapes.forEach(_function);

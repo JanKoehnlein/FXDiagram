@@ -15,6 +15,7 @@ import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.mapping.NodeLabelMapping;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.shapes.BaseConnection;
 import de.fxdiagram.mapping.shapes.BaseDiagramNode;
@@ -28,11 +29,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.common.types.JvmParameterizedTypeReference;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Feature;
+import org.eclipse.xtext.example.domainmodel.domainmodel.Operation;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -89,22 +92,42 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
     
     @Override
     public void calls() {
-      final Function1<Entity, Iterable<? extends Property>> _function = (Entity it) -> {
+      final Function1<Entity, Entity> _function = (Entity it) -> {
+        return it;
+      };
+      this.<Entity>labelFor(DomainmodelDiagramConfig.this.entityName, _function);
+      final Function1<Entity, Iterable<? extends Property>> _function_1 = (Entity it) -> {
         EList<Feature> _features = it.getFeatures();
         Iterable<Property> _filter = Iterables.<Property>filter(_features, Property.class);
-        final Function1<Property, Boolean> _function_1 = (Property it_1) -> {
+        final Function1<Property, Boolean> _function_2 = (Property it_1) -> {
+          JvmTypeReference _type = it_1.getType();
+          Entity _referencedEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_type);
+          return Boolean.valueOf(Objects.equal(_referencedEntity, null));
+        };
+        return IterableExtensions.<Property>filter(_filter, _function_2);
+      };
+      this.<Property>labelForEach(DomainmodelDiagramConfig.this.attribute, _function_1);
+      final Function1<Entity, Iterable<? extends Operation>> _function_2 = (Entity it) -> {
+        EList<Feature> _features = it.getFeatures();
+        return Iterables.<Operation>filter(_features, Operation.class);
+      };
+      this.<Operation>labelForEach(DomainmodelDiagramConfig.this.operation, _function_2);
+      final Function1<Entity, Iterable<? extends Property>> _function_3 = (Entity it) -> {
+        EList<Feature> _features = it.getFeatures();
+        Iterable<Property> _filter = Iterables.<Property>filter(_features, Property.class);
+        final Function1<Property, Boolean> _function_4 = (Property it_1) -> {
           JvmTypeReference _type = it_1.getType();
           Entity _referencedEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_type);
           return Boolean.valueOf((!Objects.equal(_referencedEntity, null)));
         };
-        return IterableExtensions.<Property>filter(_filter, _function_1);
+        return IterableExtensions.<Property>filter(_filter, _function_4);
       };
-      MultiConnectionMappingCall<Property, Entity> _outConnectionForEach = this.<Property>outConnectionForEach(DomainmodelDiagramConfig.this.propertyConnection, _function);
-      final Function1<Side, Node> _function_1 = (Side it) -> {
+      MultiConnectionMappingCall<Property, Entity> _outConnectionForEach = this.<Property>outConnectionForEach(DomainmodelDiagramConfig.this.propertyConnection, _function_3);
+      final Function1<Side, Node> _function_4 = (Side it) -> {
         return ButtonExtensions.getArrowButton(it, "Add property");
       };
-      _outConnectionForEach.asButton(_function_1);
-      final Function1<Entity, Iterable<? extends JvmTypeReference>> _function_2 = (Entity it) -> {
+      _outConnectionForEach.asButton(_function_4);
+      final Function1<Entity, Iterable<? extends JvmTypeReference>> _function_5 = (Entity it) -> {
         List<JvmParameterizedTypeReference> _xifexpression = null;
         JvmParameterizedTypeReference _superType = it.getSuperType();
         Entity _referencedEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_superType);
@@ -117,11 +140,40 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
         }
         return _xifexpression;
       };
-      MultiConnectionMappingCall<JvmTypeReference, Entity> _outConnectionForEach_1 = this.<JvmTypeReference>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_2);
-      final Function1<Side, Node> _function_3 = (Side it) -> {
+      MultiConnectionMappingCall<JvmTypeReference, Entity> _outConnectionForEach_1 = this.<JvmTypeReference>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_5);
+      final Function1<Side, Node> _function_6 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add superclass");
       };
-      _outConnectionForEach_1.asButton(_function_3);
+      _outConnectionForEach_1.asButton(_function_6);
+    }
+  };
+  
+  private final NodeLabelMapping<Entity> entityName = new NodeLabelMapping<Entity>(this, "entityName", "") {
+    @Override
+    public String getText(final Entity it) {
+      return it.getName();
+    }
+  };
+  
+  private final NodeLabelMapping<Property> attribute = new NodeLabelMapping<Property>(this, "attribute", "") {
+    @Override
+    public String getText(final Property it) {
+      StringConcatenation _builder = new StringConcatenation();
+      String _name = it.getName();
+      _builder.append(_name, "");
+      _builder.append(": ");
+      JvmTypeReference _type = it.getType();
+      String _simpleName = _type.getSimpleName();
+      _builder.append(_simpleName, "");
+      return _builder.toString();
+    }
+  };
+  
+  private final NodeLabelMapping<Operation> operation = new NodeLabelMapping<Operation>(this, "operation", "") {
+    @Override
+    public String getText(final Operation it) {
+      String _name = it.getName();
+      return (_name + "()");
     }
   };
   

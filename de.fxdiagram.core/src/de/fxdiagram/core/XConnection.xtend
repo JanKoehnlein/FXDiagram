@@ -30,6 +30,7 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
+import de.fxdiagram.core.extensions.InitializingListener
 
 /**
  * A line connecting two {@link XNode}s.
@@ -104,6 +105,10 @@ class XConnection extends XDomainObjectShape {
 				newTarget.incomingConnections.add(this)
 			needsLayout = true
 		]
+		labelsProperty.addListener(new InitializingListListener<XConnectionLabel> => [
+			add = [ connection = this ]
+			remove = [ connection = null ]
+		])
 	}
 	
 	protected override createNode() {		
@@ -117,6 +122,27 @@ class XConnection extends XDomainObjectShape {
 	}
 	
 	override doActivate() {
+		val arrowHeadListener = new InitializingListener<ArrowHead> => [
+			set = [ 
+				if(!this.diagram.connectionLayer.children.contains(it)) {
+					it.initializeGraphics
+					this.diagram.connectionLayer.children += it
+				}
+			]
+			unset = [ this.diagram.connectionLayer.children -= it ]
+		]
+		val labelListener = new InitializingListListener<XConnectionLabel> => [
+			add = [ 
+				if(!this.diagram.connectionLayer.children.contains(it)) {
+					it.activate 
+					this.diagram.connectionLayer.children += it
+				}
+			]
+			remove = [ this.diagram.connectionLayer.children -= it ]
+		]
+		labelsProperty.addInitializingListener(labelListener)
+		sourceArrowHeadProperty.addInitializingListener(arrowHeadListener)
+		targetArrowHeadProperty.addInitializingListener(arrowHeadListener)
 		if(stroke == null) 
 			stroke = diagram.connectionPaint
 		controlPointListener = [ prop, oldVal, newVal |

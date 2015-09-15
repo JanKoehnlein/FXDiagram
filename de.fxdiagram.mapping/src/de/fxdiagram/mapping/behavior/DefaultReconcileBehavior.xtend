@@ -1,6 +1,6 @@
 package de.fxdiagram.mapping.behavior
 
-import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XDomainObjectShape
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior
 import de.fxdiagram.core.behavior.DirtyState
 import de.fxdiagram.core.behavior.UpdateAcceptor
@@ -9,9 +9,9 @@ import java.util.NoSuchElementException
 
 import static de.fxdiagram.core.behavior.DirtyState.*
 
-class NodeReconcileBehavior extends AbstractReconcileBehavior<XNode> {
+class DefaultReconcileBehavior<T extends XDomainObjectShape> extends AbstractReconcileBehavior<T> {
 	
-	new(XNode host) {
+	new(T host) {
 		super(host)
 	}
 	

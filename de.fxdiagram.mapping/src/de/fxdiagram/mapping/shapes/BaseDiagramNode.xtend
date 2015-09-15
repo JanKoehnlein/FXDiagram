@@ -6,13 +6,13 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.behavior.DefaultReconcileBehavior
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 
 import static de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
 
 /**
  * Base implementation for a {@link XNode} with a nested {@link XDiagram} that belongs to an
@@ -46,7 +46,7 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 	override doActivate() {
 		super.doActivate()
 		addLazyBehavior(this, domainObjectDescriptor)
-		addBehavior(new NodeReconcileBehavior(this))
+		addBehavior(new DefaultReconcileBehavior(this))
 		innerDiagram.layoutOnActivate = LayoutType.DOT
 	}
 }

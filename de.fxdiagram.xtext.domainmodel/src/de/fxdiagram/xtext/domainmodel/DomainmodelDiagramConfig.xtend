@@ -8,6 +8,7 @@ import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.DiagramMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.MappingAcceptor
+import de.fxdiagram.mapping.NodeLabelMapping
 import de.fxdiagram.mapping.NodeMapping
 import de.fxdiagram.mapping.shapes.BaseConnection
 import de.fxdiagram.mapping.shapes.BaseDiagramNode
@@ -15,6 +16,7 @@ import javafx.scene.paint.Color
 import javax.inject.Inject
 import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
+import org.eclipse.xtext.example.domainmodel.domainmodel.Operation
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property
 
@@ -48,6 +50,9 @@ class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
 		}
 		
 		override calls() {
+			entityName.labelFor[it]
+			attribute.labelForEach[features.filter(Property).filter[type.referencedEntity == null]]
+			operation.labelForEach[features.filter(Operation)]
 			propertyConnection.outConnectionForEach [
 				features
 					.filter(Property)
@@ -61,6 +66,23 @@ class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
 			].asButton[getTriangleButton("Add superclass")]
 		}
 	} 
+	
+	val entityName = new NodeLabelMapping<Entity>(this, 'entityName', '') {
+		override getText(Entity it) {
+			name
+		}
+	}
+	val attribute = new NodeLabelMapping<Property>(this, 'attribute', '') {
+		override getText(Property it) {
+			'''«name»: «type.simpleName»'''			
+		}
+		
+	}
+	val operation = new NodeLabelMapping<Operation>(this, 'operation', '') {
+		override getText(Operation it) {
+			name + '()'
+		}
+	}
 
 	val propertyConnection = new ConnectionMapping<Property>(this, 'propertyConnection', 'Property') {
 		override createConnection(IMappedElementDescriptor<Property> descriptor) {

@@ -72,8 +72,9 @@ class ReconcileDiagramHandler extends AbstractHandler {
 
 		override execute(CommandContext context) {
 			allShapes.forEach [
-				val reconcile = getBehavior(ReconcileBehavior)
-				reconcile?.showDirtyState(reconcile?.dirtyState)
+				val behavior = getBehavior(ReconcileBehavior)
+				if(behavior != null)
+					behavior.showDirtyState(behavior.dirtyState)
 			]
 		}
 

@@ -2,14 +2,12 @@ package de.fxdiagram.core
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
 import de.fxdiagram.core.behavior.Behavior
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior
 import de.fxdiagram.core.behavior.NavigationBehavior
 import de.fxdiagram.core.extensions.CoreExtensions
 import de.fxdiagram.core.extensions.InitializingListListener
-import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.extensions.InitializingMapListener
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
@@ -138,37 +136,16 @@ class XDiagram extends Group implements XActivatable {
 				diagram.getNodeLayer.children -= it
 			]
 		])
-		val arrowHeadListener = new InitializingListener<ArrowHead> => [
-			set = [ 
-				if(!connectionLayer.children.contains(it)) {
-					initializeGraphics					
-					connectionLayer.children += it
-				}
-			]
-			unset = [ connectionLayer.children -= it ]
-		]
-		val labelListener = new InitializingListListener<XConnectionLabel> => [
-			add = [ 
-				if(!connectionLayer.children.contains(it)) 
-					connectionLayer.children += it
-			]
-			remove = [ connectionLayer.children -= it ]
-		]
+		
 		connections.addInitializingListener(new InitializingListListener<XConnection>() => [
 			add = [
 				initializeGraphics
 				getConnectionLayer.children += it
 				if(XDiagram.this.isActive)
 					it.activate
-				labelsProperty.addInitializingListener(labelListener)
-				sourceArrowHeadProperty.addInitializingListener(arrowHeadListener)
-				targetArrowHeadProperty.addInitializingListener(arrowHeadListener)
 			]
 			remove = [
 				diagram.getConnectionLayer.children -= it
-				labelsProperty.removeInitializingListener(labelListener)
-				sourceArrowHeadProperty.removeInitializingListener(arrowHeadListener)
-				targetArrowHeadProperty.removeInitializingListener(arrowHeadListener)
 			]
 			
 		])

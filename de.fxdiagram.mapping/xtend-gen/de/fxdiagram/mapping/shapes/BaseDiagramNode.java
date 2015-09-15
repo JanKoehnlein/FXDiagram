@@ -9,8 +9,8 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.behavior.DefaultReconcileBehavior;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior;
 import java.util.Collections;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -58,8 +58,8 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
     super.doActivate();
     IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
     LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
-    NodeReconcileBehavior _nodeReconcileBehavior = new NodeReconcileBehavior(this);
-    this.addBehavior(_nodeReconcileBehavior);
+    DefaultReconcileBehavior<BaseDiagramNode<T>> _defaultReconcileBehavior = new DefaultReconcileBehavior<BaseDiagramNode<T>>(this);
+    this.addBehavior(_defaultReconcileBehavior);
     XDiagram _innerDiagram = this.getInnerDiagram();
     _innerDiagram.setLayoutOnActivate(LayoutType.DOT);
   }

@@ -1,7 +1,7 @@
 package de.fxdiagram.mapping.behavior;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.UpdateAcceptor;
@@ -12,14 +12,14 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
-public class NodeReconcileBehavior extends AbstractReconcileBehavior<XNode> {
-  public NodeReconcileBehavior(final XNode host) {
+public class DefaultReconcileBehavior<T extends XDomainObjectShape> extends AbstractReconcileBehavior<T> {
+  public DefaultReconcileBehavior(final T host) {
     super(host);
   }
   
   @Override
   public DirtyState getDirtyState() {
-    XNode _host = this.getHost();
+    T _host = this.getHost();
     final DomainObjectDescriptor descriptor = _host.getDomainObjectDescriptor();
     if ((descriptor instanceof IMappedElementDescriptor<?>)) {
       try {
@@ -44,7 +44,7 @@ public class NodeReconcileBehavior extends AbstractReconcileBehavior<XNode> {
     DirtyState _dirtyState = this.getDirtyState();
     boolean _equals = Objects.equal(_dirtyState, DirtyState.DANGLING);
     if (_equals) {
-      XNode _host = this.getHost();
+      T _host = this.getHost();
       acceptor.delete(_host);
     }
   }

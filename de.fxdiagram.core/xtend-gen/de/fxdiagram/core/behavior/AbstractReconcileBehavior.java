@@ -72,6 +72,11 @@ public abstract class AbstractReconcileBehavior<T extends XShape> extends Abstra
     this.feedback(true);
   }
   
+  @Override
+  public void hideDirtyState() {
+    this.feedback(false);
+  }
+  
   protected void feedback(final boolean show) {
     final DirtyState shownState = this.shownState;
     if (shownState != null) {

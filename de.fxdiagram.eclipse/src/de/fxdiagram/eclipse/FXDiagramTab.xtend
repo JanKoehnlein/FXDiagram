@@ -3,7 +3,6 @@ package de.fxdiagram.eclipse
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
-import de.fxdiagram.core.behavior.DirtyState
 import de.fxdiagram.core.behavior.ReconcileBehavior
 import de.fxdiagram.core.command.AbstractCommand
 import de.fxdiagram.core.command.CommandContext
@@ -196,11 +195,10 @@ class FXDiagramTab {
 		allShapes.forEach [
 			val behavior = getBehavior(ReconcileBehavior)
 			if (behavior != null) {
-				behavior.showDirtyState(
-					if (isLinkWithEditor)
-						behavior.dirtyState
-					else
-						DirtyState.CLEAN)
+				if (isLinkWithEditor)
+					behavior.showDirtyState(behavior.dirtyState)
+				else
+					behavior.hideDirtyState
 			}
 		]
 	}
