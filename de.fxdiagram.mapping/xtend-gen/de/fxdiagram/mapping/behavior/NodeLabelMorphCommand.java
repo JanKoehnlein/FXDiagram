@@ -1,9 +1,8 @@
 package de.fxdiagram.mapping.behavior;
 
 import com.google.common.base.Objects;
-import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XLabel;
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.mapping.behavior.AddRemoveAcceptor;
@@ -14,16 +13,16 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @FinalFieldsConstructor
 @SuppressWarnings("all")
-public class ConnectionLabelMorphCommand extends AbstractCommand implements AddRemoveAcceptor {
-  private final XConnection host;
+public class NodeLabelMorphCommand extends AbstractCommand implements AddRemoveAcceptor {
+  private final XNode host;
   
-  private List<XConnectionLabel> oldLabels;
+  private List<XLabel> oldLabels;
   
-  private List<XConnectionLabel> newLabels = CollectionLiterals.<XConnectionLabel>newArrayList();
+  private List<XLabel> newLabels = CollectionLiterals.<XLabel>newArrayList();
   
   @Override
   public void add(final XLabel label) {
-    this.newLabels.add(((XConnectionLabel) label));
+    this.newLabels.add(label);
   }
   
   @Override
@@ -32,15 +31,15 @@ public class ConnectionLabelMorphCommand extends AbstractCommand implements AddR
   
   @Override
   public void keep(final XLabel label) {
-    this.newLabels.add(((XConnectionLabel) label));
+    this.newLabels.add(label);
   }
   
   public boolean isEmpty() {
-    List<XConnectionLabel> _elvis = null;
+    List<XLabel> _elvis = null;
     if (this.oldLabels != null) {
       _elvis = this.oldLabels;
     } else {
-      ObservableList<XConnectionLabel> _labels = this.host.getLabels();
+      ObservableList<XLabel> _labels = this.host.getLabels();
       _elvis = _labels;
     }
     return Objects.equal(this.newLabels, _elvis);
@@ -48,25 +47,25 @@ public class ConnectionLabelMorphCommand extends AbstractCommand implements AddR
   
   @Override
   public void execute(final CommandContext context) {
-    ObservableList<XConnectionLabel> _labels = this.host.getLabels();
+    ObservableList<XLabel> _labels = this.host.getLabels();
     this.oldLabels = _labels;
-    ObservableList<XConnectionLabel> _labels_1 = this.host.getLabels();
+    ObservableList<XLabel> _labels_1 = this.host.getLabels();
     _labels_1.setAll(this.newLabels);
   }
   
   @Override
   public void undo(final CommandContext context) {
-    ObservableList<XConnectionLabel> _labels = this.host.getLabels();
+    ObservableList<XLabel> _labels = this.host.getLabels();
     _labels.setAll(this.oldLabels);
   }
   
   @Override
   public void redo(final CommandContext context) {
-    ObservableList<XConnectionLabel> _labels = this.host.getLabels();
+    ObservableList<XLabel> _labels = this.host.getLabels();
     _labels.setAll(this.newLabels);
   }
   
-  public ConnectionLabelMorphCommand(final XConnection host) {
+  public NodeLabelMorphCommand(final XNode host) {
     super();
     this.host = host;
   }

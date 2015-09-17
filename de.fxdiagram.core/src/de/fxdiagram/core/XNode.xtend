@@ -121,7 +121,7 @@ class XNode extends XDomainObjectShape {
 				scaleX = 1.05
 				scaleY = 1.05
 			}
-			(outgoingConnections + incomingConnections).forEach[toFront]
+			(#[this] + outgoingConnections + incomingConnections).forEach[toFront]
 		} else {
 			effect = null
 			if(!scaleXProperty.bound) {

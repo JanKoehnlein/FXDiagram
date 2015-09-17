@@ -3,18 +3,19 @@ package de.fxdiagram.xtext.domainmodel;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig;
+import de.fxdiagram.mapping.ConnectionLabelMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
 import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.mapping.NodeHeadingMapping;
 import de.fxdiagram.mapping.NodeLabelMapping;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.shapes.BaseConnection;
@@ -26,7 +27,6 @@ import java.util.List;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -39,6 +39,7 @@ import org.eclipse.xtext.example.domainmodel.domainmodel.Operation;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -79,8 +80,21 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
       final Function1<PackageDeclaration, PackageDeclaration> _function = (PackageDeclaration it) -> {
         return it;
       };
-      DiagramMappingCall<?, PackageDeclaration> _nestedDiagramFor = this.<PackageDeclaration>nestedDiagramFor(DomainmodelDiagramConfig.this.packageDiagram, _function);
+      this.<PackageDeclaration>labelFor(DomainmodelDiagramConfig.this.packageNodeName, _function);
+      final Function1<PackageDeclaration, PackageDeclaration> _function_1 = (PackageDeclaration it) -> {
+        return it;
+      };
+      DiagramMappingCall<?, PackageDeclaration> _nestedDiagramFor = this.<PackageDeclaration>nestedDiagramFor(DomainmodelDiagramConfig.this.packageDiagram, _function_1);
       _nestedDiagramFor.onOpen();
+    }
+  };
+  
+  private final NodeHeadingMapping<PackageDeclaration> packageNodeName = new NodeHeadingMapping<PackageDeclaration>(this, BaseDiagramNode.NODE_HEADING) {
+    @Override
+    public String getText(final PackageDeclaration element) {
+      String _name = element.getName();
+      String[] _split = _name.split("\\.");
+      return IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
     }
   };
   
@@ -148,14 +162,14 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
     }
   };
   
-  private final NodeLabelMapping<Entity> entityName = new NodeLabelMapping<Entity>(this, "entityName", "") {
+  private final NodeHeadingMapping<Entity> entityName = new NodeHeadingMapping<Entity>(this, EntityNode.ENTITY_NAME) {
     @Override
     public String getText(final Entity it) {
       return it.getName();
     }
   };
   
-  private final NodeLabelMapping<Property> attribute = new NodeLabelMapping<Property>(this, "attribute", "") {
+  private final NodeLabelMapping<Property> attribute = new NodeLabelMapping<Property>(this, EntityNode.ATTRIBUTE) {
     @Override
     public String getText(final Property it) {
       StringConcatenation _builder = new StringConcatenation();
@@ -169,7 +183,7 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
     }
   };
   
-  private final NodeLabelMapping<Operation> operation = new NodeLabelMapping<Operation>(this, "operation", "") {
+  private final NodeLabelMapping<Operation> operation = new NodeLabelMapping<Operation>(this, EntityNode.OPERATION) {
     @Override
     public String getText(final Operation it) {
       String _name = it.getName();
@@ -184,27 +198,28 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
       final Procedure1<BaseConnection<Property>> _function = (BaseConnection<Property> it) -> {
         LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
         it.setTargetArrowHead(_lineArrowHead);
-        XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-        final Procedure1<XConnectionLabel> _function_1 = (XConnectionLabel label) -> {
-          Text _text = label.getText();
-          final Function1<Property, String> _function_2 = (Property it_1) -> {
-            return it_1.getName();
-          };
-          String _withDomainObject = descriptor.<String>withDomainObject(_function_2);
-          _text.setText(_withDomainObject);
-        };
-        ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_1);
       };
       return ObjectExtensions.<BaseConnection<Property>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override
     public void calls() {
-      final Function1<Property, Entity> _function = (Property it) -> {
+      final Function1<Property, Property> _function = (Property it) -> {
+        return it;
+      };
+      this.<Property>labelFor(DomainmodelDiagramConfig.this.propertyName, _function);
+      final Function1<Property, Entity> _function_1 = (Property it) -> {
         JvmTypeReference _type = it.getType();
         return DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_type);
       };
-      this.<Entity>target(DomainmodelDiagramConfig.this.entityNode, _function);
+      this.<Entity>target(DomainmodelDiagramConfig.this.entityNode, _function_1);
+    }
+  };
+  
+  private final ConnectionLabelMapping<Property> propertyName = new ConnectionLabelMapping<Property>(this, "propertyName") {
+    @Override
+    public String getText(final Property it) {
+      return it.getName();
     }
   };
   
@@ -213,8 +228,7 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
     public XConnection createConnection(final IMappedElementDescriptor<JvmTypeReference> descriptor) {
       BaseConnection<JvmTypeReference> _baseConnection = new BaseConnection<JvmTypeReference>(descriptor);
       final Procedure1<BaseConnection<JvmTypeReference>> _function = (BaseConnection<JvmTypeReference> it) -> {
-        TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, 
-          null, Color.WHITE, false);
+        TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false);
         it.setTargetArrowHead(_triangleArrowHead);
       };
       return ObjectExtensions.<BaseConnection<JvmTypeReference>>operator_doubleArrow(_baseConnection, _function);

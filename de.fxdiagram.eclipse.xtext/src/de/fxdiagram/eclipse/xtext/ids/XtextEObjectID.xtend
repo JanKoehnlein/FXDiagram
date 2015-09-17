@@ -113,7 +113,7 @@ abstract class AbstractXtextEObjectID implements XtextEObjectID {
 	}
 
 	override hashCode() {
-		getURI.hashCode * 29 + getEClass.hashCode * 173
+		getURI.trimFragment.hashCode * 29 + getEClass.hashCode * 173
 	}
 	
 	override def getResourceServiceProvider() {

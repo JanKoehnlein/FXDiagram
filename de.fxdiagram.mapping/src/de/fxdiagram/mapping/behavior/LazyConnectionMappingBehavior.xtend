@@ -13,12 +13,13 @@ import de.fxdiagram.mapping.NodeMapping
 import de.fxdiagram.mapping.XDiagramConfigInterpreter
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings
 import java.util.List
+import java.util.NoSuchElementException
 import javafx.geometry.Side
 
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import java.util.NoSuchElementException
+import de.fxdiagram.core.XConnectionLabel
 
 /**
  * A {@link RapidButtonBehavior} to add lazy connection mappings to a node.
@@ -166,6 +167,11 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 						source = thatNode
 						target = thisNode
 					}
+					mappingCall.connectionMapping.labels.forEach [ labelMappingCall |
+						labels += descriptor.withDomainObject[
+							configInterpreter.execute(labelMappingCall, it)
+						].filter(XConnectionLabel)
+					]
 					mappingCall.connectionMapping.config.initialize(it)
 				]
 			]	
@@ -173,11 +179,14 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 		]
 	}
 	
-	protected def <NODE> createNode(Object nodeDomainObject, NodeMapping<?> nodeMapping) {
+	protected def <NODE> createNode(NODE nodeDomainObject, NodeMapping<?> nodeMapping) {
 		if (nodeMapping.isApplicable(nodeDomainObject)) {
 			val nodeMappingCasted = nodeMapping as NodeMapping<NODE>
 			val descriptor = configInterpreter.getDescriptor(nodeDomainObject as NODE, nodeMappingCasted)
 			val node = nodeMappingCasted.createNode(descriptor)
+			nodeMappingCasted.labels.forEach [
+				node.labels += configInterpreter.execute(it, nodeDomainObject as NODE)
+			]
 			nodeMappingCasted.config.initialize(node)
 			node
 		} else { 

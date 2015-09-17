@@ -115,7 +115,8 @@ public abstract class AbstractXtextEObjectID implements XtextEObjectID, XModelPr
   @Override
   public int hashCode() {
     URI _uRI = this.getURI();
-    int _hashCode = _uRI.hashCode();
+    URI _trimFragment = _uRI.trimFragment();
+    int _hashCode = _trimFragment.hashCode();
     int _multiply = (_hashCode * 29);
     EClass _eClass = this.getEClass();
     int _hashCode_1 = _eClass.hashCode();

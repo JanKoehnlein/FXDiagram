@@ -106,10 +106,15 @@ class CoreExtensions {
 	}
 
 	def static getTargetShape(MouseEvent event) {
-		if (event.target instanceof Node)
-			getContainerShape(event.target as Node)
-		else
+		if (event.target instanceof Node) {
+			var containerShape = getContainerShape(event.target as Node)
+			while(containerShape != null && !containerShape.selectable) {
+				containerShape = getContainerShape(containerShape.parent) 
+			}
+			return containerShape
+		} else {
 			null
+		}
 	}
 
 	def static XShape getContainerShape(Node it) {
@@ -172,10 +177,10 @@ class InitializingMapListener<T,U> implements MapChangeListener<T, U> {
 	@Accessors var (T,U)=>void remove
 	
 	override onChanged(MapChangeListener.Change<? extends T, ? extends U> c) {
-		if(put != null && c.wasAdded) 
-			put.apply(c.key, c.valueAdded)
 		if(remove != null && c.wasRemoved)
 			remove.apply(c.key, c.valueRemoved)
+		if(put != null && c.wasAdded) 
+			put.apply(c.key, c.valueAdded)
 	}
 }	
 
@@ -189,10 +194,10 @@ class InitializingListListener<T> implements ListChangeListener<T> {
 		if(change != null)
 			change.apply(c)
 		while(c.next) 
-			if(add != null && c.wasAdded) 
-				c.addedSubList.forEach[add.apply(it)]
 			if(remove != null && c.wasRemoved)
 				c.removed.forEach[remove.apply(it)]
+			if(add != null && c.wasAdded) 
+				c.addedSubList.forEach[add.apply(it)]
 	}
 }	
 

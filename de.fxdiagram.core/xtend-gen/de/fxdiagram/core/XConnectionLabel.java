@@ -89,6 +89,11 @@ public class XConnectionLabel extends XLabel {
   }
   
   @Override
+  public boolean isSelectable() {
+    return this.getIsActive();
+  }
+  
+  @Override
   protected Node createNode() {
     Text _text = this.getText();
     final Procedure1<Text> _function = (Text it) -> {
@@ -112,6 +117,7 @@ public class XConnectionLabel extends XLabel {
       _connection.setSelected(true);
       this.setScaleX(1.05);
       this.setScaleY(1.05);
+      this.toFront();
     } else {
       this.setEffect(null);
       this.setScaleX(1.0);
@@ -197,13 +203,6 @@ public class XConnectionLabel extends XLabel {
     transform.setTy(0);
     ObservableList<Transform> _transforms = this.getTransforms();
     _transforms.setAll(transform);
-  }
-  
-  @Override
-  public String toString() {
-    Text _text = this.getText();
-    String _text_1 = _text.getText();
-    return ("XConnectionLabel: " + _text_1);
   }
   
   /**

@@ -1,8 +1,11 @@
 package de.fxdiagram.mapping.behavior;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -14,6 +17,7 @@ import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
+import de.fxdiagram.mapping.AbstractLabelMappingCall;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeMapping;
@@ -196,7 +200,19 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
                   it.setTarget(thisNode);
                 }
                 ConnectionMapping<MODEL> _connectionMapping_1 = this.mappingCall.getConnectionMapping();
-                XDiagramConfig _config = _connectionMapping_1.getConfig();
+                List<AbstractLabelMappingCall<?, MODEL>> _labels = _connectionMapping_1.getLabels();
+                final Consumer<AbstractLabelMappingCall<?, MODEL>> _function_5 = (AbstractLabelMappingCall<?, MODEL> labelMappingCall) -> {
+                  ObservableList<XConnectionLabel> _labels_1 = it.getLabels();
+                  final Function1<MODEL, Iterable<? extends XLabel>> _function_6 = (MODEL it_1) -> {
+                    return this.configInterpreter.execute(labelMappingCall, it_1);
+                  };
+                  Iterable<? extends XLabel> _withDomainObject = descriptor.<Iterable<? extends XLabel>>withDomainObject(_function_6);
+                  Iterable<XConnectionLabel> _filter = Iterables.<XConnectionLabel>filter(_withDomainObject, XConnectionLabel.class);
+                  Iterables.<XConnectionLabel>addAll(_labels_1, _filter);
+                };
+                _labels.forEach(_function_5);
+                ConnectionMapping<MODEL> _connectionMapping_2 = this.mappingCall.getConnectionMapping();
+                XDiagramConfig _config = _connectionMapping_2.getConfig();
                 _config.initialize(it);
               };
               _xblockexpression_2 = ObjectExtensions.<XConnection>operator_doubleArrow(_createConnection, _function_4);
@@ -213,7 +229,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
     return _xblockexpression;
   }
   
-  protected <NODE extends Object> XNode createNode(final Object nodeDomainObject, final NodeMapping<?> nodeMapping) {
+  protected <NODE extends Object> XNode createNode(final NODE nodeDomainObject, final NodeMapping<?> nodeMapping) {
     XNode _xifexpression = null;
     boolean _isApplicable = nodeMapping.isApplicable(nodeDomainObject);
     if (_isApplicable) {
@@ -222,6 +238,13 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         final NodeMapping<NODE> nodeMappingCasted = ((NodeMapping<NODE>) nodeMapping);
         final IMappedElementDescriptor<NODE> descriptor = this.configInterpreter.<NODE>getDescriptor(((NODE) nodeDomainObject), nodeMappingCasted);
         final XNode node = nodeMappingCasted.createNode(descriptor);
+        List<AbstractLabelMappingCall<?, NODE>> _labels = nodeMappingCasted.getLabels();
+        final Consumer<AbstractLabelMappingCall<?, NODE>> _function = (AbstractLabelMappingCall<?, NODE> it) -> {
+          ObservableList<XLabel> _labels_1 = node.getLabels();
+          Iterable<? extends XLabel> _execute = this.configInterpreter.execute(it, ((NODE) nodeDomainObject));
+          Iterables.<XLabel>addAll(_labels_1, _execute);
+        };
+        _labels.forEach(_function);
         XDiagramConfig _config = nodeMappingCasted.getConfig();
         _config.initialize(node);
         _xblockexpression = node;

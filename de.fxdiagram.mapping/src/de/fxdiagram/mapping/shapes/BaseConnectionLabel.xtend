@@ -2,7 +2,7 @@ package de.fxdiagram.mapping.shapes
 
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.DefaultReconcileBehavior
+import de.fxdiagram.mapping.behavior.LabelReconcileBehavior
 
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
@@ -21,7 +21,7 @@ class BaseConnectionLabel<T> extends XConnectionLabel {
 	
 	override doActivate() {
 		super.doActivate
-		addBehavior(new DefaultReconcileBehavior(this))
+		addBehavior(new LabelReconcileBehavior(this))
 	}
 	
 	override getType() {

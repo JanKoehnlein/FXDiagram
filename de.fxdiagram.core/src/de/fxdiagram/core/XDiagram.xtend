@@ -29,6 +29,7 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import java.util.List
 
 /**
  * A diagram with {@link XNode}s and {@link XConnection}s.
@@ -133,21 +134,32 @@ class XDiagram extends Group implements XActivatable {
 					it.activate
 			]
 			remove = [
-				diagram.getNodeLayer.children -= it
+				diagram.getNodeLayer.children.safeDelete(it)
 			]
 		])
 		
 		connections.addInitializingListener(new InitializingListListener<XConnection>() => [
 			add = [
+				val clChildren = connectionLayer.children
+				clChildren.safeAdd(it)
 				initializeGraphics
-				getConnectionLayer.children += it
+				clChildren.safeAdd(sourceArrowHead)
+				clChildren.safeAdd(targetArrowHead)
+				labels.forEach [
+					clChildren.safeAdd(it)
+				]
 				if(XDiagram.this.isActive)
 					it.activate
 			]
 			remove = [
-				diagram.getConnectionLayer.children -= it
+				val clChildren = connectionLayer.children
+				clChildren.safeDelete(it)
+				clChildren.safeDelete(sourceArrowHead)
+				clChildren.safeDelete(targetArrowHead)
+				labels.forEach [
+					clChildren.safeDelete(it)
+				]
 			]
-			
 		])
 		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
 		if(getBehavior(NavigationBehavior) == null) 
@@ -155,6 +167,16 @@ class XDiagram extends Group implements XActivatable {
 		behaviors.addInitializingListener(new InitializingMapListener => [
 			put = [ key, Behavior value | value.activate() ]
 		])
+	}
+	
+	protected def <T> safeDelete(List<T> list, T element) {
+		if(element != null && list.contains(element))
+			list -= element
+	}
+	
+	protected def <T> safeAdd(List<T> list, T element) {
+		if(element != null && !list.contains(element))
+			list += element
 	}
 	
 	def void centerDiagram(boolean useForce) {

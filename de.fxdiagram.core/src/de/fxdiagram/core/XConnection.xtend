@@ -73,12 +73,12 @@ class XConnection extends XDomainObjectShape {
 
 	new() {
 		targetArrowHead = new TriangleArrowHead(this, false)
-		addSourceTargetListeners
+		addOppositeListeners
 	}
 
 	new(DomainObjectDescriptor domainObject) {
 		super(domainObject)
-		addSourceTargetListeners
+		addOppositeListeners
 		targetArrowHead = new TriangleArrowHead(this, false)
 	}
 	
@@ -92,7 +92,10 @@ class XConnection extends XDomainObjectShape {
 		this(source, target, new StringDescriptor(source.name + '->' + target.name))
 	}
 	
-	protected def addSourceTargetListeners() {
+	/**
+	 * Adds listeners that keep bi-directional references in sync
+	 */
+	protected def addOppositeListeners() {
 		sourceProperty.addListener [ p, oldSource, newSource |
 			oldSource?.outgoingConnections?.remove(this)
 			if(newSource != null && !newSource.outgoingConnections.contains(this))
@@ -121,7 +124,8 @@ class XConnection extends XDomainObjectShape {
 		node
 	}
 	
-	override doActivate() {
+	override initializeGraphics() {
+		super.initializeGraphics()
 		val arrowHeadListener = new InitializingListener<ArrowHead> => [
 			set = [ 
 				if(!this.diagram.connectionLayer.children.contains(it)) {
@@ -143,6 +147,9 @@ class XConnection extends XDomainObjectShape {
 		labelsProperty.addInitializingListener(labelListener)
 		sourceArrowHeadProperty.addInitializingListener(arrowHeadListener)
 		targetArrowHeadProperty.addInitializingListener(arrowHeadListener)
+	}
+	
+	override doActivate() {
 		if(stroke == null) 
 			stroke = diagram.connectionPaint
 		controlPointListener = [ prop, oldVal, newVal |
@@ -182,6 +189,8 @@ class XConnection extends XDomainObjectShape {
 		if(isSelected) {
 			source.toFront
 			target.toFront
+			labels.forEach[toFront]
+			this.toFront
 		}
 		controlPointGroup.visible = isSelected
 	}

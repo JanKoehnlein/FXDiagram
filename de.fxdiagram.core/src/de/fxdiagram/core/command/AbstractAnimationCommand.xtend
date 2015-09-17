@@ -50,7 +50,8 @@ abstract class AbstractAnimationCommand implements AnimationCommand {
 			new SequentialTransition => [
 				if(toMemento != null)
 					children += new ViewportTransition(context.root, toMemento, context.defaultUndoDuration)
-				children += undoAnimation
+				if(undoAnimation != null)
+					children += undoAnimation
 			]
 		} else {
 			null
@@ -65,7 +66,8 @@ abstract class AbstractAnimationCommand implements AnimationCommand {
 			new SequentialTransition => [
 				if(fromMemento != null)
 					children += new ViewportTransition(context.root, fromMemento, context.defaultUndoDuration)
-				children += redoAnimation
+				if(redoAnimation != null)
+					children += redoAnimation
 			]
 		} else {
 			null

@@ -1,15 +1,18 @@
 package de.fxdiagram.xtext.xbase
 
 import com.google.inject.Inject
-import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig
+import de.fxdiagram.mapping.ConnectionLabelMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.DiagramMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.MappingAcceptor
+import de.fxdiagram.mapping.NodeHeadingMapping
+import de.fxdiagram.mapping.NodeLabelMapping
 import de.fxdiagram.mapping.NodeMapping
+import de.fxdiagram.mapping.shapes.BaseClassNode
 import de.fxdiagram.mapping.shapes.BaseConnection
 import de.fxdiagram.mapping.shapes.BaseDiagramNode
 import javafx.scene.paint.Color
@@ -17,11 +20,14 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.jdt.core.IType
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.common.types.JvmField
+import org.eclipse.xtext.common.types.JvmOperation
 import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
+
+import static de.fxdiagram.mapping.shapes.BaseClassNode.*
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 
@@ -33,10 +39,15 @@ class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 
 	val typeNode = new NodeMapping<JvmDeclaredType>(this, 'typeNode', 'Type') {
 		override createNode(IMappedElementDescriptor<JvmDeclaredType> descriptor) {
-			new JvmTypeNode(descriptor as JvmEObjectDescriptor<JvmDeclaredType>)
+			new BaseClassNode(descriptor)
 		}
 
 		override calls() {
+			typeName.labelFor[it]
+			packageName.labelFor[it]
+			fileName.labelFor[it]
+			attribute.labelForEach[attributes]
+			operation.labelForEach[methods]
 			referenceConnection.outConnectionForEach [
 				references
 			].asButton[getArrowButton("Add reference")]
@@ -45,22 +56,56 @@ class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 			].asButton[getTriangleButton("Add supertype")]
 		}
 	}
+	
+	val typeName = new NodeHeadingMapping<JvmDeclaredType>(this, CLASS_NAME) {
+		override getText(JvmDeclaredType it) {
+			simpleName
+		}
+	}
+
+	val packageName = new NodeLabelMapping<JvmDeclaredType>(this, PACKAGE) {
+		override getText(JvmDeclaredType it) {
+			it.packageName
+		}
+	}
+
+	val fileName = new NodeLabelMapping<JvmDeclaredType>(this, FILE_NAME) {
+		override getText(JvmDeclaredType it) {
+			eResource.URI.lastSegment
+		}
+	}
+
+	val attribute = new NodeLabelMapping<JvmField>(this, ATTRIBUTE) {
+		override getText(JvmField it) {
+			simpleName + ': ' + type.simpleName
+		}
+	}
+
+	val operation = new NodeLabelMapping<JvmOperation>(this, OPERATION) {
+		override getText(JvmOperation it) {
+			simpleName + '(): ' + returnType.simpleName
+		}
+	}
 
 	val referenceConnection = new ConnectionMapping<JvmField>(this, 'referenceConnection', 'Reference') {
 		override createConnection(IMappedElementDescriptor<JvmField> descriptor) {
 			new BaseConnection(descriptor) => [
 				targetArrowHead = new LineArrowHead(it, false)
-				new XConnectionLabel(it) => [ label |
-					label.text.text = descriptor.withDomainObject[simpleName]
-				]
 			]
 		}
 
 		override calls() {
+			referenceName.labelFor[it]
 			typeNode.target[(type.componentType.type as JvmDeclaredType).originalJvmType]
 		}
 	}
 
+	val referenceName = new ConnectionLabelMapping<JvmField>(this, 'referenceName') {
+		override getText(JvmField it) {
+			simpleName
+		}
+	}
+	
 	val superTypeConnection = new ConnectionMapping<JvmTypeReference>(this, 'superTypeConnection', 'Supertype') {
 		override createConnection(IMappedElementDescriptor<JvmTypeReference> descriptor) {
 			new BaseConnection(descriptor) => [

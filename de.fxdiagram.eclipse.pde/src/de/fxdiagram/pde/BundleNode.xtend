@@ -9,44 +9,34 @@ import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior
 import de.fxdiagram.mapping.shapes.BaseNode
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings
-import javafx.animation.ParallelTransition
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.geometry.VPos
+import javafx.geometry.Side
 import javafx.scene.input.MouseButton
-import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
-import javafx.scene.text.Font
-import javafx.scene.text.FontPosture
-import javafx.scene.text.FontWeight
-import javafx.scene.text.Text
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
+import static de.fxdiagram.mapping.behavior.MappingLabelListener.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
-import javafx.geometry.Side
 
 @ModelNode('inflated')
 class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMappings {
 
+	public static val BUNDLE_SYMBOLIC_NAME = 'bundleSymbolicName'
+	public static val BUNDLE_VERSION = 'bundleVersion'
+	public static val BUNDLE_NAME = 'bundleName'
+	public static val BUNDLE_PROVIDER = 'bundleProvider'
+	public static val BUNDLE_EXECUTION_ENVIRONMENT = 'bundleExecutionEnvironment'
+
 	@FxProperty boolean inflated = false
 
-	Pane contentArea
-	
-	VBox titleArea
-	Text nameLabel
-	Text versionLabel
-	
-	VBox detailsArea
-	
-	Inflator titleInflator
-	
 	Inflator detailsInflator
 	
 	new(BundleDescriptor descriptor) {
@@ -59,25 +49,16 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 	}
 	
 	override createNode() {
-		new RectangleBorderPane => [
+		val titleArea = new VBox => [
+			alignment = Pos.CENTER
+		]
+		val contentArea = new VBox => [
+			padding = new Insets(10, 20, 10, 20)
+			children += titleArea
+		]
+		val pane = new RectangleBorderPane => [
 			tooltip = 'Right-click to toggle details'
-			children += contentArea = new VBox => [
-				padding = new Insets(10, 20, 10, 20)
-				children += titleArea = new VBox => [
-					alignment = Pos.CENTER
-					children += nameLabel = new Text => [
-						textOrigin = VPos.TOP
-						text = domainObjectDescriptor.symbolicName
-						val isSingleton = domainObjectDescriptor.withDomainObject[
-							isSingleton
-						]
-						if(isSingleton) 
-							font = Font.font(font.family, FontWeight.BOLD, FontPosture.ITALIC, font.size * 1.1)
-						else 
-							font = Font.font(font.family, FontWeight.BOLD, font.size * 1.1)
-					]
-				]
-			]
+			children += contentArea 
 			val backgroundStops = 
 				if(domainObjectDescriptor.withPlugin[isFragmentModel]) 
 					#[
@@ -94,43 +75,24 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 				true, CycleMethod.NO_CYCLE,
 				backgroundStops)
 		]
+		detailsInflator = new Inflator(this, contentArea)
+		val detailsArea = new VBox => [
+			padding = new Insets(10,0,0,0)
+			alignment = Pos.CENTER
+		]
+		detailsInflator.addInflatable(detailsArea, 1)
+		
+		addMappingListener(labels, 
+			BUNDLE_SYMBOLIC_NAME -> titleArea,
+			BUNDLE_VERSION -> detailsArea,
+			BUNDLE_NAME -> detailsArea,
+			BUNDLE_PROVIDER -> detailsArea,
+			BUNDLE_EXECUTION_ENVIRONMENT -> detailsArea)
+		pane
 	}
 	
 	override doActivate() {
 		super.doActivate()
-		titleInflator = new Inflator(this, titleArea)
-		titleInflator.addInflatable(new VBox => [
-			alignment = Pos.CENTER
-			children += versionLabel = new Text => [
-				textOrigin = VPos.TOP
-				text = domainObjectDescriptor.version
-				font = Font.font(font.family, font.size * 0.8)
-			]
-		], 1)
-		detailsInflator = new Inflator(this, contentArea)
-		detailsArea = new VBox => [
-			padding = new Insets(10,0,0,0)
-			alignment = Pos.CENTER
-			children += new Text => [
-				textOrigin = VPos.TOP
-				text = domainObjectDescriptor.withPlugin[
-					pluginBase.getResourceString(pluginBase.name)
-				]
-			]
-			children += new Text => [
-				textOrigin = VPos.TOP
-				text = domainObjectDescriptor.withPlugin[
-					pluginBase.getResourceString(pluginBase.providerName)
-				]
-			]
-			children += new Text => [
-				textOrigin = VPos.TOP
-				text = domainObjectDescriptor.withDomainObject[
-					executionEnvironments.join(', ')
-				]
-			]
-		]
-		detailsInflator.addInflatable(detailsArea, 1)
 		onMouseClicked = [
 			if(button == MouseButton.SECONDARY) 
 				toggleInflated
@@ -148,18 +110,10 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 	protected def toggleInflated() {
 		if(!inflated) {
 			inflated = true
-			new ParallelTransition => [
-				children += titleInflator.inflateAnimation
-				children += detailsInflator.inflateAnimation
-				play
-			]		
+			detailsInflator.inflateAnimation.play
 		} else {
 			inflated = false
-			new ParallelTransition => [
-				children += titleInflator.deflateAnimation
-				children += detailsInflator.deflateAnimation
-				play
-			]
+			detailsInflator.deflateAnimation.play
 		}
 	}
 	

@@ -1,35 +1,30 @@
 package de.fxdiagram.mapping.behavior
 
-import de.fxdiagram.core.XDomainObjectShape
+import de.fxdiagram.core.XLabel
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior
-import de.fxdiagram.core.behavior.DirtyState
 import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import java.util.NoSuchElementException
-
 import static de.fxdiagram.core.behavior.DirtyState.*
 
-class DefaultReconcileBehavior<T extends XDomainObjectShape> extends AbstractReconcileBehavior<T> {
+class LabelReconcileBehavior extends AbstractReconcileBehavior<XLabel> {
 	
-	new(T host) {
+	new(XLabel host) {
 		super(host)
 	}
 	
-	override DirtyState getDirtyState() {
-		val descriptor = host.domainObjectDescriptor 
+	override getDirtyState() {
+		val descriptor = host.domainObjectDescriptor
 		if(descriptor instanceof IMappedElementDescriptor<?>) {
 			try {
-				descriptor.withDomainObject[
-				]					
+				descriptor.withDomainObject[]
 			} catch(NoSuchElementException e) {
-				return DANGLING
+				return DANGLING	
 			}
 		}
-		return CLEAN 
+		return CLEAN
 	}
 	
 	override reconcile(UpdateAcceptor acceptor) {
-		if(dirtyState == DANGLING) 
-			 acceptor.delete(host)
 	}
 }

@@ -8,6 +8,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DiagramNavigationBehavior;
@@ -22,6 +23,7 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Consumer;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -185,7 +187,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
         XDiagram _diagram = CoreExtensions.getDiagram(it_1);
         Group _nodeLayer = _diagram.getNodeLayer();
         ObservableList<Node> _children = _nodeLayer.getChildren();
-        _children.remove(it_1);
+        this.<Node>safeDelete(_children, it_1);
       };
       it.setRemove(_function_4);
     };
@@ -195,10 +197,19 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     InitializingListListener<XConnection> _initializingListListener_1 = new InitializingListListener<XConnection>();
     final Procedure1<InitializingListListener<XConnection>> _function_3 = (InitializingListListener<XConnection> it) -> {
       final Procedure1<XConnection> _function_4 = (XConnection it_1) -> {
-        it_1.initializeGraphics();
         Group _connectionLayer = this.getConnectionLayer();
-        ObservableList<Node> _children = _connectionLayer.getChildren();
-        _children.add(it_1);
+        final ObservableList<Node> clChildren = _connectionLayer.getChildren();
+        this.<Node>safeAdd(clChildren, it_1);
+        it_1.initializeGraphics();
+        ArrowHead _sourceArrowHead = it_1.getSourceArrowHead();
+        this.<Node>safeAdd(clChildren, _sourceArrowHead);
+        ArrowHead _targetArrowHead = it_1.getTargetArrowHead();
+        this.<Node>safeAdd(clChildren, _targetArrowHead);
+        ObservableList<XConnectionLabel> _labels = it_1.getLabels();
+        final Consumer<XConnectionLabel> _function_5 = (XConnectionLabel it_2) -> {
+          this.<Node>safeAdd(clChildren, it_2);
+        };
+        _labels.forEach(_function_5);
         boolean _isActive = this.getIsActive();
         if (_isActive) {
           it_1.activate();
@@ -206,10 +217,18 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
       };
       it.setAdd(_function_4);
       final Procedure1<XConnection> _function_5 = (XConnection it_1) -> {
-        XDiagram _diagram = CoreExtensions.getDiagram(it_1);
-        Group _connectionLayer = _diagram.getConnectionLayer();
-        ObservableList<Node> _children = _connectionLayer.getChildren();
-        _children.remove(it_1);
+        Group _connectionLayer = this.getConnectionLayer();
+        final ObservableList<Node> clChildren = _connectionLayer.getChildren();
+        this.<Node>safeDelete(clChildren, it_1);
+        ArrowHead _sourceArrowHead = it_1.getSourceArrowHead();
+        this.<Node>safeDelete(clChildren, _sourceArrowHead);
+        ArrowHead _targetArrowHead = it_1.getTargetArrowHead();
+        this.<Node>safeDelete(clChildren, _targetArrowHead);
+        ObservableList<XConnectionLabel> _labels = it_1.getLabels();
+        final Consumer<XConnectionLabel> _function_6 = (XConnectionLabel it_2) -> {
+          this.<Node>safeDelete(clChildren, it_2);
+        };
+        _labels.forEach(_function_6);
       };
       it.setRemove(_function_5);
     };
@@ -232,6 +251,39 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     };
     InitializingMapListener<Class<? extends Behavior>, Behavior> _doubleArrow_2 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>, Behavior>>operator_doubleArrow(_initializingMapListener, _function_4);
     CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow_2);
+  }
+  
+  protected <T extends Object> boolean safeDelete(final List<T> list, final T element) {
+    boolean _xifexpression = false;
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(element, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _contains = list.contains(element);
+      _and = _contains;
+    }
+    if (_and) {
+      _xifexpression = list.remove(element);
+    }
+    return _xifexpression;
+  }
+  
+  protected <T extends Object> boolean safeAdd(final List<T> list, final T element) {
+    boolean _xifexpression = false;
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(element, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _contains = list.contains(element);
+      boolean _not = (!_contains);
+      _and = _not;
+    }
+    if (_and) {
+      _xifexpression = list.add(element);
+    }
+    return _xifexpression;
   }
   
   public void centerDiagram(final boolean useForce) {

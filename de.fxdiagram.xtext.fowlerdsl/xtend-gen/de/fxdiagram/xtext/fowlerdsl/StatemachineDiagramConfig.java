@@ -8,8 +8,9 @@ import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
-import de.fxdiagram.mapping.NodeLabelMapping;
+import de.fxdiagram.mapping.NodeHeadingMapping;
 import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.shapes.BaseNode;
 import java.util.List;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -85,7 +86,7 @@ public class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
     }
   };
   
-  private final NodeLabelMapping<State> stateLabel = new NodeLabelMapping<State>(this, "stateLabel", "") {
+  private final NodeHeadingMapping<State> stateLabel = new NodeHeadingMapping<State>(this, BaseNode.NODE_HEADING) {
     @Override
     public String getText(final State it) {
       return it.getName();
@@ -111,7 +112,7 @@ public class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
     }
   };
   
-  private final ConnectionLabelMapping<Event> eventLabel = new ConnectionLabelMapping<Event>(this, "eventLabel", "") {
+  private final ConnectionLabelMapping<Event> eventLabel = new ConnectionLabelMapping<Event>(this, "eventLabel") {
     @Override
     public String getText(final Event it) {
       return it.getName();

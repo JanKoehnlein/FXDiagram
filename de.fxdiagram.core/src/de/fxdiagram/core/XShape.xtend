@@ -63,7 +63,7 @@ abstract class XShape extends Parent implements XActivatable {
 	/**
 	 * Override this to update your FX node, e.g. on connection or on activation.
 	 * You are now connected to the scenegraph, and can safely use {@link CoreExtensions}
-	 * to access the diagram/root now.
+	 * to access the diagram/root.
 	 */
 	def initializeGraphics() {  
 		if(getNode() == null)
@@ -82,8 +82,6 @@ abstract class XShape extends Parent implements XActivatable {
 			selectedProperty.addInitializingListener (new InitializingListener => [
 				set = [
 					selectionFeedback(it)
-					if(it)
-						toFront
 				]
 			])
 			behaviors.addInitializingListener(new InitializingMapListener => [

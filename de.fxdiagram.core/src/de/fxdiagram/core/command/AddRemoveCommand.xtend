@@ -38,19 +38,14 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 	}
 	
 	override createExecuteAnimation(CommandContext context) {
-		val removeShapes = <XShape>newHashSet
 		shapes.filter(XNode).forEach[
 			shapeOpacities.put(it, opacity)
 			if(isAdd) {
 				if(!diagram.nodes.contains(it)) 
 					diagram.nodes += it
-				else 
-					removeShapes += it
 			} else {
 				if(diagram.nodes.contains(it))				
 					diagram.nodes -= it
-				else 
-					removeShapes += it
 			}
 		]
 		shapes.filter(XConnection).forEach[
@@ -59,16 +54,11 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 			if(isAdd) {
 				if(!diagram.connections.contains(it)) 
 					diagram.connections += it
-				else 
-					removeShapes += it
 			} else {
 				if(diagram.connections.contains(it))
 					diagram.connections -= it
-				else 
-					removeShapes += it
 			}
 		]
-		shapes -= removeShapes
 		return null
 	}
 
@@ -92,10 +82,12 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 			children += shapes.map[disappear(defaultUndoDuration)]
 			onFinished = [
 				shapes.filter(XConnection).forEach[
-					diagram.connections -= it
+					if(diagram.connections.contains(it))
+						diagram.connections -= it
 				]
 				shapes.filter(XNode).forEach[
-					diagram.nodes -= it
+					if(diagram.nodes.contains(it))
+						diagram.nodes -= it
 				]
 			]
 		]
@@ -103,13 +95,15 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 	
 	protected def add(extension CommandContext context) {
 		shapes.filter(XNode).forEach[
-			diagram.nodes += it
+			if(!diagram.nodes.contains(it))
+				diagram.nodes += it
 		]
 		shapes.filter(XConnection).forEach[
 			val nodes = connectedNodesMap.get(it)
 			source = nodes.key
 			target = nodes.value				
-			diagram.connections += it
+			if(!diagram.nodes.contains(it))
+				diagram.connections += it
 		]
 		new ParallelTransition => [ 
 			children += shapes.map[appear(defaultUndoDuration)]

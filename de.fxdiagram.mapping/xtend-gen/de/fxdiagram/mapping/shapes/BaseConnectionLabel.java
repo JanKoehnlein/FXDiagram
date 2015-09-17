@@ -4,7 +4,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
-import de.fxdiagram.mapping.behavior.DefaultReconcileBehavior;
+import de.fxdiagram.mapping.behavior.LabelReconcileBehavior;
 import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
 
 @SuppressWarnings("all")
@@ -26,8 +26,8 @@ public class BaseConnectionLabel<T extends Object> extends XConnectionLabel {
   @Override
   public void doActivate() {
     super.doActivate();
-    DefaultReconcileBehavior<BaseConnectionLabel<T>> _defaultReconcileBehavior = new DefaultReconcileBehavior<BaseConnectionLabel<T>>(this);
-    this.addBehavior(_defaultReconcileBehavior);
+    LabelReconcileBehavior _labelReconcileBehavior = new LabelReconcileBehavior(this);
+    this.addBehavior(_labelReconcileBehavior);
   }
   
   @Override

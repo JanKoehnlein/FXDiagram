@@ -251,15 +251,21 @@ public class CoreExtensions {
   }
   
   public static XShape getTargetShape(final MouseEvent event) {
-    XShape _xifexpression = null;
+    Object _xifexpression = null;
     EventTarget _target = event.getTarget();
     if ((_target instanceof Node)) {
       EventTarget _target_1 = event.getTarget();
-      _xifexpression = CoreExtensions.getContainerShape(((Node) _target_1));
+      XShape containerShape = CoreExtensions.getContainerShape(((Node) _target_1));
+      while (((!Objects.equal(containerShape, null)) && (!containerShape.isSelectable()))) {
+        Parent _parent = containerShape.getParent();
+        XShape _containerShape = CoreExtensions.getContainerShape(_parent);
+        containerShape = _containerShape;
+      }
+      return containerShape;
     } else {
       _xifexpression = null;
     }
-    return _xifexpression;
+    return ((XShape)_xifexpression);
   }
   
   public static XShape getContainerShape(final Node it) {

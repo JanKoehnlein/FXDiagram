@@ -22,6 +22,14 @@ class XLabel extends XDomainObjectShape {
 		]
 	}
 	
+	override isSelectable() {
+		false
+	}
+
 	override protected doActivate() {
+	}
+	
+	override toString() {
+		class.name + ' ' + text.text
 	}
 }

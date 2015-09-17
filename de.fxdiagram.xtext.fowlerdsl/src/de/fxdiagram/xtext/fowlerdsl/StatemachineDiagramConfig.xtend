@@ -5,7 +5,7 @@ import de.fxdiagram.mapping.ConnectionLabelMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.DiagramMapping
 import de.fxdiagram.mapping.MappingAcceptor
-import de.fxdiagram.mapping.NodeLabelMapping
+import de.fxdiagram.mapping.NodeHeadingMapping
 import de.fxdiagram.mapping.NodeMapping
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
@@ -14,6 +14,7 @@ import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
+import static de.fxdiagram.mapping.shapes.BaseNode.*
 
 /**
  * A very simple example how to create a diagram mapping for an the Fowler DSL shipped 
@@ -58,7 +59,7 @@ class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
 		}
 	}
 	
-	val stateLabel = new NodeLabelMapping<State>(this, 'stateLabel', '') {
+	val stateLabel = new NodeHeadingMapping<State>(this, NODE_HEADING) {
 		override getText(State it) {
 			name
 		}
@@ -73,7 +74,7 @@ class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
 		}
 	}
 
-	val eventLabel = new ConnectionLabelMapping<Event>(this, 'eventLabel', '') {
+	val eventLabel = new ConnectionLabelMapping<Event>(this, 'eventLabel') {
 		override getText(Event it) {
 			name
 		}

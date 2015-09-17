@@ -7,7 +7,6 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.CommandContext;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -56,7 +55,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   
   @Override
   public Animation createExecuteAnimation(final CommandContext context) {
-    final HashSet<XShape> removeShapes = CollectionLiterals.<XShape>newHashSet();
     Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
     final Consumer<XNode> _function = (XNode it) -> {
       double _opacity = it.getOpacity();
@@ -68,8 +66,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         if (_not) {
           ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
           _nodes_1.add(it);
-        } else {
-          removeShapes.add(it);
         }
       } else {
         ObservableList<XNode> _nodes_2 = this.diagram.getNodes();
@@ -77,8 +73,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         if (_contains_1) {
           ObservableList<XNode> _nodes_3 = this.diagram.getNodes();
           _nodes_3.remove(it);
-        } else {
-          removeShapes.add(it);
         }
       }
     };
@@ -98,8 +92,6 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         if (_not) {
           ObservableList<XConnection> _connections_1 = this.diagram.getConnections();
           _connections_1.add(it);
-        } else {
-          removeShapes.add(it);
         }
       } else {
         ObservableList<XConnection> _connections_2 = this.diagram.getConnections();
@@ -107,13 +99,10 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         if (_contains_1) {
           ObservableList<XConnection> _connections_3 = this.diagram.getConnections();
           _connections_3.remove(it);
-        } else {
-          removeShapes.add(it);
         }
       }
     };
     _filter_1.forEach(_function_1);
-    Iterables.removeAll(this.shapes, removeShapes);
     return null;
   }
   
@@ -153,13 +142,21 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         Iterable<XConnection> _filter = Iterables.<XConnection>filter(this.shapes, XConnection.class);
         final Consumer<XConnection> _function_3 = (XConnection it_2) -> {
           ObservableList<XConnection> _connections = this.diagram.getConnections();
-          _connections.remove(it_2);
+          boolean _contains = _connections.contains(it_2);
+          if (_contains) {
+            ObservableList<XConnection> _connections_1 = this.diagram.getConnections();
+            _connections_1.remove(it_2);
+          }
         };
         _filter.forEach(_function_3);
         Iterable<XNode> _filter_1 = Iterables.<XNode>filter(this.shapes, XNode.class);
         final Consumer<XNode> _function_4 = (XNode it_2) -> {
           ObservableList<XNode> _nodes = this.diagram.getNodes();
-          _nodes.remove(it_2);
+          boolean _contains = _nodes.contains(it_2);
+          if (_contains) {
+            ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
+            _nodes_1.remove(it_2);
+          }
         };
         _filter_1.forEach(_function_4);
       };
@@ -174,7 +171,12 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
       Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
       final Consumer<XNode> _function = (XNode it) -> {
         ObservableList<XNode> _nodes = this.diagram.getNodes();
-        _nodes.add(it);
+        boolean _contains = _nodes.contains(it);
+        boolean _not = (!_contains);
+        if (_not) {
+          ObservableList<XNode> _nodes_1 = this.diagram.getNodes();
+          _nodes_1.add(it);
+        }
       };
       _filter.forEach(_function);
       Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(this.shapes, XConnection.class);
@@ -184,8 +186,13 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         it.setSource(_key);
         XNode _value = nodes.getValue();
         it.setTarget(_value);
-        ObservableList<XConnection> _connections = this.diagram.getConnections();
-        _connections.add(it);
+        ObservableList<XNode> _nodes = this.diagram.getNodes();
+        boolean _contains = _nodes.contains(it);
+        boolean _not = (!_contains);
+        if (_not) {
+          ObservableList<XConnection> _connections = this.diagram.getConnections();
+          _connections.add(it);
+        }
       };
       _filter_1.forEach(_function_1);
       ParallelTransition _parallelTransition = new ParallelTransition();

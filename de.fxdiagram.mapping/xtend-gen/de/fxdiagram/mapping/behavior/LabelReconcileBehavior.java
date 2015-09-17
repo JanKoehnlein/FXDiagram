@@ -1,7 +1,6 @@
 package de.fxdiagram.mapping.behavior;
 
-import com.google.common.base.Objects;
-import de.fxdiagram.core.XDomainObjectShape;
+import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.UpdateAcceptor;
@@ -12,14 +11,14 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @SuppressWarnings("all")
-public class DefaultReconcileBehavior<T extends XDomainObjectShape> extends AbstractReconcileBehavior<T> {
-  public DefaultReconcileBehavior(final T host) {
+public class LabelReconcileBehavior extends AbstractReconcileBehavior<XLabel> {
+  public LabelReconcileBehavior(final XLabel host) {
     super(host);
   }
   
   @Override
   public DirtyState getDirtyState() {
-    T _host = this.getHost();
+    XLabel _host = this.getHost();
     final DomainObjectDescriptor descriptor = _host.getDomainObjectDescriptor();
     if ((descriptor instanceof IMappedElementDescriptor<?>)) {
       try {
@@ -41,11 +40,5 @@ public class DefaultReconcileBehavior<T extends XDomainObjectShape> extends Abst
   
   @Override
   public void reconcile(final UpdateAcceptor acceptor) {
-    DirtyState _dirtyState = this.getDirtyState();
-    boolean _equals = Objects.equal(_dirtyState, DirtyState.DANGLING);
-    if (_equals) {
-      T _host = this.getHost();
-      acceptor.delete(_host);
-    }
   }
 }

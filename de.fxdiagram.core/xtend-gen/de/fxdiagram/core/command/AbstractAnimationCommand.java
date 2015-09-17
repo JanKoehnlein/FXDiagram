@@ -97,8 +97,11 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
             ViewportTransition _viewportTransition = new ViewportTransition(_root, this.toMemento, _defaultUndoDuration);
             _children.add(_viewportTransition);
           }
-          ObservableList<Animation> _children_1 = it.getChildren();
-          _children_1.add(undoAnimation);
+          boolean _notEquals_3 = (!Objects.equal(undoAnimation, null));
+          if (_notEquals_3) {
+            ObservableList<Animation> _children_1 = it.getChildren();
+            _children_1.add(undoAnimation);
+          }
         };
         _xifexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       } else {
@@ -136,8 +139,11 @@ public abstract class AbstractAnimationCommand implements AnimationCommand {
             ViewportTransition _viewportTransition = new ViewportTransition(_root, this.fromMemento, _defaultUndoDuration);
             _children.add(_viewportTransition);
           }
-          ObservableList<Animation> _children_1 = it.getChildren();
-          _children_1.add(redoAnimation);
+          boolean _notEquals_3 = (!Objects.equal(redoAnimation, null));
+          if (_notEquals_3) {
+            ObservableList<Animation> _children_1 = it.getChildren();
+            _children_1.add(redoAnimation);
+          }
         };
         _xifexpression = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
       } else {

@@ -31,7 +31,22 @@ public class XLabel extends XDomainObjectShape {
   }
   
   @Override
+  public boolean isSelectable() {
+    return false;
+  }
+  
+  @Override
   protected void doActivate() {
+  }
+  
+  @Override
+  public String toString() {
+    Class<? extends XLabel> _class = this.getClass();
+    String _name = _class.getName();
+    String _plus = (_name + " ");
+    Text _text = this.getText();
+    String _text_1 = _text.getText();
+    return (_plus + _text_1);
   }
   
   /**

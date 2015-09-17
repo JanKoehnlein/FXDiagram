@@ -27,35 +27,35 @@ public class InitializingListListener<T extends Object> implements ListChangeLis
     }
     while (c.next()) {
       boolean _and = false;
-      boolean _notEquals_1 = (!Objects.equal(this.add, null));
+      boolean _notEquals_1 = (!Objects.equal(this.remove, null));
       if (!_notEquals_1) {
         _and = false;
       } else {
-        boolean _wasAdded = c.wasAdded();
-        _and = _wasAdded;
+        boolean _wasRemoved = c.wasRemoved();
+        _and = _wasRemoved;
       }
       if (_and) {
-        List<? extends T> _addedSubList = c.getAddedSubList();
+        List<? extends T> _removed = c.getRemoved();
         final Consumer<T> _function = (T it) -> {
-          this.add.apply(it);
+          this.remove.apply(it);
         };
-        _addedSubList.forEach(_function);
+        _removed.forEach(_function);
       }
     }
     boolean _and = false;
-    boolean _notEquals_1 = (!Objects.equal(this.remove, null));
+    boolean _notEquals_1 = (!Objects.equal(this.add, null));
     if (!_notEquals_1) {
       _and = false;
     } else {
-      boolean _wasRemoved = c.wasRemoved();
-      _and = _wasRemoved;
+      boolean _wasAdded = c.wasAdded();
+      _and = _wasAdded;
     }
     if (_and) {
-      List<? extends T> _removed = c.getRemoved();
+      List<? extends T> _addedSubList = c.getAddedSubList();
       final Consumer<T> _function = (T it) -> {
-        this.remove.apply(it);
+        this.add.apply(it);
       };
-      _removed.forEach(_function);
+      _addedSubList.forEach(_function);
     }
   }
   

@@ -50,6 +50,10 @@ class XConnectionLabel extends XLabel {
 		}
 	}
 
+	override boolean isSelectable() {
+		isActive
+	}
+
 	protected override createNode() {
 		text => [
 			textOrigin = VPos.TOP
@@ -63,6 +67,7 @@ class XConnectionLabel extends XLabel {
 			connection.selected = true
 			scaleX = 1.05
 			scaleY = 1.05
+			this.toFront
 		} else {
 			effect = null
 			scaleX = 1.0
@@ -102,9 +107,5 @@ class XConnectionLabel extends XLabel {
 		transform.tx = 0
 		transform.ty = 0
 		transforms.setAll(transform)
-	}
-	
-	override toString() {
-		'XConnectionLabel: ' + text.text
 	}
 }

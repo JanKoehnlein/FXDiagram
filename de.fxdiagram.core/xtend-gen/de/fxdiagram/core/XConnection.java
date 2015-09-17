@@ -99,12 +99,12 @@ public class XConnection extends XDomainObjectShape {
   public XConnection() {
     TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
     this.setTargetArrowHead(_triangleArrowHead);
-    this.addSourceTargetListeners();
+    this.addOppositeListeners();
   }
   
   public XConnection(final DomainObjectDescriptor domainObject) {
     super(domainObject);
-    this.addSourceTargetListeners();
+    this.addOppositeListeners();
     TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
     this.setTargetArrowHead(_triangleArrowHead);
   }
@@ -119,7 +119,10 @@ public class XConnection extends XDomainObjectShape {
     this(source, target, new StringDescriptor(((source.getName() + "->") + target.getName())));
   }
   
-  protected void addSourceTargetListeners() {
+  /**
+   * Adds listeners that keep bi-directional references in sync
+   */
+  protected void addOppositeListeners() {
     final ChangeListener<XNode> _function = (ObservableValue<? extends XNode> p, XNode oldSource, XNode newSource) -> {
       ObservableList<XConnection> _outgoingConnections = null;
       if (oldSource!=null) {
@@ -206,7 +209,8 @@ public class XConnection extends XDomainObjectShape {
   }
   
   @Override
-  public void doActivate() {
+  public void initializeGraphics() {
+    super.initializeGraphics();
     InitializingListener<ArrowHead> _initializingListener = new InitializingListener<ArrowHead>();
     final Procedure1<InitializingListener<ArrowHead>> _function = (InitializingListener<ArrowHead> it) -> {
       final Procedure1<ArrowHead> _function_1 = (ArrowHead it_1) -> {
@@ -262,6 +266,10 @@ public class XConnection extends XDomainObjectShape {
     CoreExtensions.<XConnectionLabel>addInitializingListener(this.labelsProperty, labelListener);
     CoreExtensions.<ArrowHead>addInitializingListener(this.sourceArrowHeadProperty, arrowHeadListener);
     CoreExtensions.<ArrowHead>addInitializingListener(this.targetArrowHeadProperty, arrowHeadListener);
+  }
+  
+  @Override
+  public void doActivate() {
     Paint _stroke = this.getStroke();
     boolean _equals = Objects.equal(_stroke, null);
     if (_equals) {
@@ -269,18 +277,18 @@ public class XConnection extends XDomainObjectShape {
       Paint _connectionPaint = _diagram.getConnectionPaint();
       this.setStroke(_connectionPaint);
     }
-    final ChangeListener<Number> _function_2 = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
+    final ChangeListener<Number> _function = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
       this.updateShapes();
     };
-    this.controlPointListener = _function_2;
+    this.controlPointListener = _function;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
-    InitializingListListener<XControlPoint> _initializingListListener_1 = new InitializingListListener<XControlPoint>();
-    final Procedure1<InitializingListListener<XControlPoint>> _function_3 = (InitializingListListener<XControlPoint> it) -> {
-      final Procedure1<ListChangeListener.Change<? extends XControlPoint>> _function_4 = (ListChangeListener.Change<? extends XControlPoint> it_1) -> {
+    InitializingListListener<XControlPoint> _initializingListListener = new InitializingListListener<XControlPoint>();
+    final Procedure1<InitializingListListener<XControlPoint>> _function_1 = (InitializingListListener<XControlPoint> it) -> {
+      final Procedure1<ListChangeListener.Change<? extends XControlPoint>> _function_2 = (ListChangeListener.Change<? extends XControlPoint> it_1) -> {
         this.updateShapes();
       };
-      it.setChange(_function_4);
-      final Procedure1<XControlPoint> _function_5 = (XControlPoint it_1) -> {
+      it.setChange(_function_2);
+      final Procedure1<XControlPoint> _function_3 = (XControlPoint it_1) -> {
         ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
         final int index = _controlPoints_1.indexOf(it_1);
         boolean _or = false;
@@ -303,27 +311,27 @@ public class XConnection extends XDomainObjectShape {
         DoubleProperty _layoutYProperty = it_1.layoutYProperty();
         _layoutYProperty.addListener(this.controlPointListener);
       };
-      it.setAdd(_function_5);
-      final Procedure1<XControlPoint> _function_6 = (XControlPoint it_1) -> {
+      it.setAdd(_function_3);
+      final Procedure1<XControlPoint> _function_4 = (XControlPoint it_1) -> {
         DoubleProperty _layoutXProperty = it_1.layoutXProperty();
         _layoutXProperty.removeListener(this.controlPointListener);
         DoubleProperty _layoutYProperty = it_1.layoutYProperty();
         _layoutYProperty.removeListener(this.controlPointListener);
       };
-      it.setRemove(_function_6);
+      it.setRemove(_function_4);
     };
-    InitializingListListener<XControlPoint> _doubleArrow = ObjectExtensions.<InitializingListListener<XControlPoint>>operator_doubleArrow(_initializingListListener_1, _function_3);
+    InitializingListListener<XControlPoint> _doubleArrow = ObjectExtensions.<InitializingListListener<XControlPoint>>operator_doubleArrow(_initializingListListener, _function_1);
     CoreExtensions.<XControlPoint>addInitializingListener(_controlPoints, _doubleArrow);
     ObservableList<XConnectionLabel> _labels = this.getLabels();
-    final Consumer<XConnectionLabel> _function_4 = (XConnectionLabel it) -> {
+    final Consumer<XConnectionLabel> _function_2 = (XConnectionLabel it) -> {
       it.activate();
     };
-    _labels.forEach(_function_4);
+    _labels.forEach(_function_2);
     ConnectionRouter _connectionRouter = this.getConnectionRouter();
     _connectionRouter.activate();
     this.updateShapes();
     ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
-    final ChangeListener<Parent> _function_5 = (ObservableValue<? extends Parent> property, Parent oldValue, Parent newValue) -> {
+    final ChangeListener<Parent> _function_3 = (ObservableValue<? extends Parent> property, Parent oldValue, Parent newValue) -> {
       boolean _equals_1 = Objects.equal(newValue, null);
       if (_equals_1) {
         XNode _source = this.getSource();
@@ -334,7 +342,7 @@ public class XConnection extends XDomainObjectShape {
         _incomingConnections.remove(this);
       }
     };
-    _parentProperty.addListener(_function_5);
+    _parentProperty.addListener(_function_3);
   }
   
   @Override
@@ -344,6 +352,12 @@ public class XConnection extends XDomainObjectShape {
       _source.toFront();
       XNode _target = this.getTarget();
       _target.toFront();
+      ObservableList<XConnectionLabel> _labels = this.getLabels();
+      final Consumer<XConnectionLabel> _function = (XConnectionLabel it) -> {
+        it.toFront();
+      };
+      _labels.forEach(_function);
+      this.toFront();
     }
     this.controlPointGroup.setVisible(isSelected);
   }

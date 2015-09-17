@@ -3,12 +3,12 @@ package de.fxdiagram.xtext.xbase;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import de.fxdiagram.core.XConnection;
-import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig;
+import de.fxdiagram.mapping.ConnectionLabelMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
 import de.fxdiagram.mapping.DiagramMappingCall;
@@ -16,17 +16,17 @@ import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
+import de.fxdiagram.mapping.NodeHeadingMapping;
+import de.fxdiagram.mapping.NodeLabelMapping;
 import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.shapes.BaseClassNode;
 import de.fxdiagram.mapping.shapes.BaseConnection;
 import de.fxdiagram.mapping.shapes.BaseDiagramNode;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
-import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;
-import de.fxdiagram.xtext.xbase.JvmTypeNode;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
+import org.eclipse.xtext.common.types.JvmOperation;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.example.domainmodel.domainmodel.AbstractElement;
@@ -60,32 +61,97 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
   private final NodeMapping<JvmDeclaredType> typeNode = new NodeMapping<JvmDeclaredType>(this, "typeNode", "Type") {
     @Override
     public XNode createNode(final IMappedElementDescriptor<JvmDeclaredType> descriptor) {
-      return new JvmTypeNode(((JvmEObjectDescriptor<JvmDeclaredType>) descriptor));
+      return new BaseClassNode<JvmDeclaredType>(descriptor);
     }
     
     @Override
     public void calls() {
-      final Function1<JvmDeclaredType, Iterable<? extends JvmField>> _function = (JvmDeclaredType it) -> {
+      final Function1<JvmDeclaredType, JvmDeclaredType> _function = (JvmDeclaredType it) -> {
+        return it;
+      };
+      this.<JvmDeclaredType>labelFor(JvmClassDiagramConfig.this.typeName, _function);
+      final Function1<JvmDeclaredType, JvmDeclaredType> _function_1 = (JvmDeclaredType it) -> {
+        return it;
+      };
+      this.<JvmDeclaredType>labelFor(JvmClassDiagramConfig.this.packageName, _function_1);
+      final Function1<JvmDeclaredType, JvmDeclaredType> _function_2 = (JvmDeclaredType it) -> {
+        return it;
+      };
+      this.<JvmDeclaredType>labelFor(JvmClassDiagramConfig.this.fileName, _function_2);
+      final Function1<JvmDeclaredType, Iterable<? extends JvmField>> _function_3 = (JvmDeclaredType it) -> {
+        return JvmClassDiagramConfig.this._jvmDomainUtil.getAttributes(it);
+      };
+      this.<JvmField>labelForEach(JvmClassDiagramConfig.this.attribute, _function_3);
+      final Function1<JvmDeclaredType, Iterable<? extends JvmOperation>> _function_4 = (JvmDeclaredType it) -> {
+        return JvmClassDiagramConfig.this._jvmDomainUtil.getMethods(it);
+      };
+      this.<JvmOperation>labelForEach(JvmClassDiagramConfig.this.operation, _function_4);
+      final Function1<JvmDeclaredType, Iterable<? extends JvmField>> _function_5 = (JvmDeclaredType it) -> {
         return JvmClassDiagramConfig.this._jvmDomainUtil.getReferences(it);
       };
-      MultiConnectionMappingCall<JvmField, JvmDeclaredType> _outConnectionForEach = this.<JvmField>outConnectionForEach(JvmClassDiagramConfig.this.referenceConnection, _function);
-      final Function1<Side, Node> _function_1 = (Side it) -> {
+      MultiConnectionMappingCall<JvmField, JvmDeclaredType> _outConnectionForEach = this.<JvmField>outConnectionForEach(JvmClassDiagramConfig.this.referenceConnection, _function_5);
+      final Function1<Side, Node> _function_6 = (Side it) -> {
         return ButtonExtensions.getArrowButton(it, "Add reference");
       };
-      _outConnectionForEach.asButton(_function_1);
-      final Function1<JvmDeclaredType, Iterable<? extends JvmTypeReference>> _function_2 = (JvmDeclaredType it) -> {
+      _outConnectionForEach.asButton(_function_6);
+      final Function1<JvmDeclaredType, Iterable<? extends JvmTypeReference>> _function_7 = (JvmDeclaredType it) -> {
         EList<JvmTypeReference> _superTypes = it.getSuperTypes();
-        final Function1<JvmTypeReference, Boolean> _function_3 = (JvmTypeReference it_1) -> {
+        final Function1<JvmTypeReference, Boolean> _function_8 = (JvmTypeReference it_1) -> {
           JvmType _type = it_1.getType();
           return Boolean.valueOf((_type instanceof JvmDeclaredType));
         };
-        return IterableExtensions.<JvmTypeReference>filter(_superTypes, _function_3);
+        return IterableExtensions.<JvmTypeReference>filter(_superTypes, _function_8);
       };
-      MultiConnectionMappingCall<JvmTypeReference, JvmDeclaredType> _outConnectionForEach_1 = this.<JvmTypeReference>outConnectionForEach(JvmClassDiagramConfig.this.superTypeConnection, _function_2);
-      final Function1<Side, Node> _function_3 = (Side it) -> {
+      MultiConnectionMappingCall<JvmTypeReference, JvmDeclaredType> _outConnectionForEach_1 = this.<JvmTypeReference>outConnectionForEach(JvmClassDiagramConfig.this.superTypeConnection, _function_7);
+      final Function1<Side, Node> _function_8 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add supertype");
       };
-      _outConnectionForEach_1.asButton(_function_3);
+      _outConnectionForEach_1.asButton(_function_8);
+    }
+  };
+  
+  private final NodeHeadingMapping<JvmDeclaredType> typeName = new NodeHeadingMapping<JvmDeclaredType>(this, BaseClassNode.CLASS_NAME) {
+    @Override
+    public String getText(final JvmDeclaredType it) {
+      return it.getSimpleName();
+    }
+  };
+  
+  private final NodeLabelMapping<JvmDeclaredType> packageName = new NodeLabelMapping<JvmDeclaredType>(this, BaseClassNode.PACKAGE) {
+    @Override
+    public String getText(final JvmDeclaredType it) {
+      return it.getPackageName();
+    }
+  };
+  
+  private final NodeLabelMapping<JvmDeclaredType> fileName = new NodeLabelMapping<JvmDeclaredType>(this, BaseClassNode.FILE_NAME) {
+    @Override
+    public String getText(final JvmDeclaredType it) {
+      Resource _eResource = it.eResource();
+      URI _uRI = _eResource.getURI();
+      return _uRI.lastSegment();
+    }
+  };
+  
+  private final NodeLabelMapping<JvmField> attribute = new NodeLabelMapping<JvmField>(this, BaseClassNode.ATTRIBUTE) {
+    @Override
+    public String getText(final JvmField it) {
+      String _simpleName = it.getSimpleName();
+      String _plus = (_simpleName + ": ");
+      JvmTypeReference _type = it.getType();
+      String _simpleName_1 = _type.getSimpleName();
+      return (_plus + _simpleName_1);
+    }
+  };
+  
+  private final NodeLabelMapping<JvmOperation> operation = new NodeLabelMapping<JvmOperation>(this, BaseClassNode.OPERATION) {
+    @Override
+    public String getText(final JvmOperation it) {
+      String _simpleName = it.getSimpleName();
+      String _plus = (_simpleName + "(): ");
+      JvmTypeReference _returnType = it.getReturnType();
+      String _simpleName_1 = _returnType.getSimpleName();
+      return (_plus + _simpleName_1);
     }
   };
   
@@ -96,29 +162,30 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
       final Procedure1<BaseConnection<JvmField>> _function = (BaseConnection<JvmField> it) -> {
         LineArrowHead _lineArrowHead = new LineArrowHead(it, false);
         it.setTargetArrowHead(_lineArrowHead);
-        XConnectionLabel _xConnectionLabel = new XConnectionLabel(it);
-        final Procedure1<XConnectionLabel> _function_1 = (XConnectionLabel label) -> {
-          Text _text = label.getText();
-          final Function1<JvmField, String> _function_2 = (JvmField it_1) -> {
-            return it_1.getSimpleName();
-          };
-          String _withDomainObject = descriptor.<String>withDomainObject(_function_2);
-          _text.setText(_withDomainObject);
-        };
-        ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_xConnectionLabel, _function_1);
       };
       return ObjectExtensions.<BaseConnection<JvmField>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override
     public void calls() {
-      final Function1<JvmField, JvmDeclaredType> _function = (JvmField it) -> {
+      final Function1<JvmField, JvmField> _function = (JvmField it) -> {
+        return it;
+      };
+      this.<JvmField>labelFor(JvmClassDiagramConfig.this.referenceName, _function);
+      final Function1<JvmField, JvmDeclaredType> _function_1 = (JvmField it) -> {
         JvmTypeReference _type = it.getType();
         JvmTypeReference _componentType = JvmClassDiagramConfig.this._jvmDomainUtil.getComponentType(_type);
         JvmType _type_1 = _componentType.getType();
         return JvmClassDiagramConfig.this._jvmDomainUtil.getOriginalJvmType(((JvmDeclaredType) _type_1));
       };
-      this.<JvmDeclaredType>target(JvmClassDiagramConfig.this.typeNode, _function);
+      this.<JvmDeclaredType>target(JvmClassDiagramConfig.this.typeNode, _function_1);
+    }
+  };
+  
+  private final ConnectionLabelMapping<JvmField> referenceName = new ConnectionLabelMapping<JvmField>(this, "referenceName") {
+    @Override
+    public String getText(final JvmField it) {
+      return it.getSimpleName();
     }
   };
   
