@@ -38,8 +38,8 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 	}
 	
 	override createExecuteAnimation(CommandContext context) {
+		shapes.forEach[shapeOpacities.put(it, opacity)]
 		shapes.filter(XNode).forEach[
-			shapeOpacities.put(it, opacity)
 			if(isAdd) {
 				if(!diagram.nodes.contains(it)) 
 					diagram.nodes += it
@@ -49,7 +49,6 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 			}
 		]
 		shapes.filter(XConnection).forEach[
-			shapeOpacities.put(it, opacity)
 			connectedNodesMap.put(it, source -> target)					
 			if(isAdd) {
 				if(!diagram.connections.contains(it)) 

@@ -41,11 +41,15 @@ class XDiagramConfigInterpreter {
 	}
 	
 	protected def <T> populateDiagram(DiagramMapping<T> diagramMapping, T diagramObject, InterpreterContext context) {
-		diagramMapping.nodes.forEach[execute(diagramObject, context, true)]
-		diagramMapping.connections.forEach[execute(diagramObject, [], context, true)]
+		diagramMapping.nodes.forEach[execute(diagramObject, context)]
+		diagramMapping.connections.forEach[execute(diagramObject, [], context)]
+		val eagerConnectionContext = new InterpreterContext(context.diagram) => [
+			isCreateNodes = false
+		]
+		context.addSubContext(eagerConnectionContext)
 		if(!diagramMapping.eagerConnections.empty) {
 			val eagerConnections = new HashSet(diagramMapping.eagerConnections)			
-			diagramMapping.nodes.forEach[connectNodesEagerly(diagramObject, eagerConnections, context)]
+			diagramMapping.nodes.forEach[connectNodesEagerly(diagramObject, eagerConnections, eagerConnectionContext)]
 		}
 	}
 
@@ -58,10 +62,10 @@ class XDiagramConfigInterpreter {
 			val node = context.getNode(descriptor)
 			if(node != null) {
 				nodeMappingCasted.incoming.filter[onDemand && eagerConnections.contains(mapping)].forEach[
-					execute(nodeObject, [target = node], context, false) 
+					execute(nodeObject, [target = node], context) 
 				]
 				nodeMappingCasted.outgoing.filter[onDemand && eagerConnections.contains(mapping)].forEach[
-					execute(nodeObject, [source = node], context, false) 
+					execute(nodeObject, [source = node], context) 
 				]
 			}
 		}
@@ -71,9 +75,7 @@ class XDiagramConfigInterpreter {
 		if(labelMapping.isApplicable(labelObject)) {
 			val descriptor = labelObject.getDescriptor(labelMapping)
 			if(descriptor != null) {
-				val label = labelMapping.createLabel(descriptor)
-				label.text.text = labelMapping.getText(labelObject)
-				labelMapping.styleText(label.text, labelObject)
+				val label = labelMapping.createLabel(descriptor, labelObject)
 				labelMapping.config.initialize(label)
 				return label
 			}
@@ -105,23 +107,27 @@ class XDiagramConfigInterpreter {
 		return result		
 	}
 
-	protected def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context, boolean isCreateOnDemand) {
+	def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context) {
 		if (nodeMapping.isApplicable(nodeObject)) {
 			val descriptor = nodeObject.getDescriptor(nodeMapping)
-			val existingNode = context.getNode(descriptor)
-			if (existingNode != null || !isCreateOnDemand)
-				return existingNode
+			if(!context.isCreateDuplicateNodes) {
+				val existingNode = context.getNode(descriptor)
+				if (existingNode != null || !context.isCreateNodes)
+					return existingNode
+			}
 			val node = nodeMapping.createNode(descriptor)
 			nodeMapping.config.initialize(node)
 			context.addNode(node)
-			nodeMapping.incoming.forEach[
-				if(!onDemand) 
-					execute(nodeObject, [target = node], context, true) 
-			]
-			nodeMapping.outgoing.forEach[
-				if(!onDemand) 
-					execute(nodeObject, [source = node], context, true)
-			]
+			if(context.isCreateConnections) {
+				nodeMapping.incoming.forEach[
+					if(!onDemand) 
+						execute(nodeObject, [target = node], context) 
+				]
+				nodeMapping.outgoing.forEach[
+					if(!onDemand) 
+						execute(nodeObject, [source = node], context)
+				]
+			}
 			nodeMapping.labels.forEach [
 				node.labels += execute(nodeObject)
 			]
@@ -133,22 +139,26 @@ class XDiagramConfigInterpreter {
 		}
 	}
 
-	protected def <T> createConnection(T connectionObject, ConnectionMapping<T> connectionMapping, InterpreterContext context) {
+	def <T> createConnection(T connectionObject, ConnectionMapping<T> connectionMapping, (XConnection)=>void initializer, InterpreterContext context) {
 		if (connectionMapping.isApplicable(connectionObject)) {
 			val connectionMappingCasted = connectionMapping as ConnectionMapping<T>
 			val descriptor = connectionObject.getDescriptor(connectionMappingCasted)
 			val existingConnection = context.getConnection(descriptor)
-			if (existingConnection != null)
+			if (existingConnection != null || !context.isCreateConnections)
 				return existingConnection
 			val connection = connectionMappingCasted.createConnection(descriptor)
 			connectionMappingCasted.config.initialize(connection)
 			connectionMapping.labels.forEach [
 				connection.labels += execute(connectionObject).filter(XConnectionLabel)
 			]
-			return connection
-		} else {
-			return null
-		}
+			initializer.apply(connection)
+			createEndpoints(connectionMapping, connectionObject, connection, context)
+			if(connection.source != null && connection.target != null) {
+				context.addConnection(connection)
+				return connection
+			} 
+		} 
+		return null
 	}
 
 	def <T,U> Iterable<T> select(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument) {
@@ -168,11 +178,11 @@ class XDiagramConfigInterpreter {
 	}
 	
 	def <T,U> Iterable<XNode> execute(AbstractNodeMappingCall<T, U> nodeMappingCall, U domainArgument,
-		InterpreterContext context, boolean isCreateNodeOnDemand) {
+		InterpreterContext context) {
 		val nodeObjects = select(nodeMappingCall, domainArgument)
 		val result = newArrayList
 		for (nodeObject : nodeObjects)
-			result += createNode(nodeObject, nodeMappingCall.nodeMapping, context, isCreateNodeOnDemand)
+			result += createNode(nodeObject, nodeMappingCall.nodeMapping, context)
 		return result
 	}
 
@@ -193,26 +203,22 @@ class XDiagramConfigInterpreter {
 	}
 
 	def <T,U> Iterable<XConnection> execute(AbstractConnectionMappingCall<T, U> connectionMappingCall, U domainArgument,
-		(XConnection)=>void initializer, InterpreterContext context, boolean isCreateEndpointsOnDemand) {
+		(XConnection)=>void initializer, InterpreterContext context) {
 		val connectionObjects = select(connectionMappingCall, domainArgument)
 		val result = newArrayList
 		for (connectionObject : connectionObjects) {
-			val connection = createConnection(connectionObject, connectionMappingCall.connectionMapping, context)
+			val connection = createConnection(connectionObject, connectionMappingCall.connectionMapping, initializer, context)
 			result += connection
-			initializer.apply(connection)
-			createEndpoints(connectionMappingCall.connectionMapping, connectionObject, connection, context, isCreateEndpointsOnDemand)
-			if(connection.source != null && connection.target != null)
-				context.addConnection(connection)
 		}
 		return result
 	}
 
 	protected def <T> createEndpoints(ConnectionMapping<T> connectionMapping, T connectionObject, XConnection connection,
-		InterpreterContext context, boolean isCreateEndpointsOnDemand) {
+		InterpreterContext context) {
 		if(connection.source == null && connectionMapping.source != null) 
-			connection.source = connectionMapping.source?.execute(connectionObject, context, isCreateEndpointsOnDemand).head
+			connection.source = connectionMapping.source?.execute(connectionObject, context).head
 		if(connection.target == null && connectionMapping.target != null) 
-			connection.target = connectionMapping.target?.execute(connectionObject, context, isCreateEndpointsOnDemand).head
+			connection.target = connectionMapping.target?.execute(connectionObject, context).head
 	}
 
 	def <T,U> XDiagram execute(DiagramMappingCall<T, U> diagramMappingCall, U domainArgument,

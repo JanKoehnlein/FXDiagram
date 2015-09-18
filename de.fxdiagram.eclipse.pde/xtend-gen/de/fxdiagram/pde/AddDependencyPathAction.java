@@ -22,26 +22,24 @@ import de.fxdiagram.lib.chooser.ChooserConnectionProvider;
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.mapping.ConnectionMapping;
-import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.InterpreterContext;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.XDiagramConfigInterpreter;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDescriptor;
-import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleDiagramConfig;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.function.Consumer;
-import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.util.Duration;
 import org.eclipse.osgi.service.resolver.BundleDescription;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public class AddDependencyPathAction extends RapidButtonAction {
@@ -86,7 +84,6 @@ public class AddDependencyPathAction extends RapidButtonAction {
     {
       XNode _host = button.getHost();
       final XRoot root = CoreExtensions.getRoot(_host);
-      final BundleDescriptorProvider provider = root.<BundleDescriptorProvider>getDomainObjectProvider(BundleDescriptorProvider.class);
       XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
       XDiagramConfig _configByID = _instance.getConfigByID("de.fxdiagram.pde.BundleDiagramConfig");
       final BundleDiagramConfig config = ((BundleDiagramConfig) _configByID);
@@ -100,6 +97,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
         _xifexpression = new CoverFlowChoice();
       }
       final AbstractChoiceGraphics choiceGraphics = _xifexpression;
+      final XDiagramConfigInterpreter interpreter = new XDiagramConfigInterpreter();
       Side _position_1 = button.getPosition();
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(host, _position_1, choiceGraphics) {
         @Override
@@ -110,21 +108,10 @@ public class AddDependencyPathAction extends RapidButtonAction {
             this.removeConnection(it);
           }
           final XDiagram diagram = CoreExtensions.getDiagram(host);
-          final LinkedHashSet<XShape> additionalShapes = CollectionLiterals.<XShape>newLinkedHashSet();
-          ObservableList<XNode> _nodes = diagram.getNodes();
-          final Function1<XNode, DomainObjectDescriptor> _function = (XNode it_1) -> {
-            return it_1.getDomainObjectDescriptor();
-          };
-          final Map<DomainObjectDescriptor, XNode> descriptor2node = IterableExtensions.<DomainObjectDescriptor, XNode>toMap(_nodes, _function);
+          final InterpreterContext context = new InterpreterContext(diagram);
+          context.addNode(choice);
           DomainObjectDescriptor _domainObjectDescriptor = choice.getDomainObjectDescriptor();
-          descriptor2node.put(_domainObjectDescriptor, choice);
-          ObservableList<XConnection> _connections = diagram.getConnections();
-          final Function1<XConnection, DomainObjectDescriptor> _function_1 = (XConnection it_1) -> {
-            return it_1.getDomainObjectDescriptor();
-          };
-          final Map<DomainObjectDescriptor, XConnection> descriptor2connection = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_connections, _function_1);
-          DomainObjectDescriptor _domainObjectDescriptor_1 = choice.getDomainObjectDescriptor();
-          final Function1<BundleDescription, ArrayList<BundleDependency>> _function_2 = (BundleDescription chosenBundle) -> {
+          final Function1<BundleDescription, ArrayList<BundleDependency>> _function = (BundleDescription chosenBundle) -> {
             ArrayList<BundleDependency> _xifexpression = null;
             if (AddDependencyPathAction.this.isInverse) {
               _xifexpression = BundleUtil.getAllBundleDependencies(chosenBundle, hostBundle);
@@ -133,53 +120,25 @@ public class AddDependencyPathAction extends RapidButtonAction {
             }
             return _xifexpression;
           };
-          ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObjectDescriptor_1).<ArrayList<BundleDependency>>withDomainObject(_function_2);
-          final Consumer<BundleDependency> _function_3 = (BundleDependency bundleDependency) -> {
+          ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObjectDescriptor).<ArrayList<BundleDependency>>withDomainObject(_function);
+          final Consumer<BundleDependency> _function_1 = (BundleDependency bundleDependency) -> {
+            context.setIsCreateConnections(false);
             BundleDescription _owner = bundleDependency.getOwner();
             NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-            IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(_owner, _pluginNode);
-            final BundleDescriptor owner = ((BundleDescriptor) _createMappedElementDescriptor);
-            XNode sourceNode = descriptor2node.get(owner);
-            boolean _equals = Objects.equal(sourceNode, null);
-            if (_equals) {
-              NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
-              XNode _createNode = _pluginNode_1.createNode(owner);
-              sourceNode = _createNode;
-              config.initialize(sourceNode);
-              additionalShapes.add(sourceNode);
-              descriptor2node.put(owner, sourceNode);
-            }
+            final XNode source = interpreter.<BundleDescription>createNode(_owner, _pluginNode, context);
             BundleDescription _dependency = bundleDependency.getDependency();
-            NodeMapping<BundleDescription> _pluginNode_2 = config.getPluginNode();
-            IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor_1 = provider.<BundleDescription>createMappedElementDescriptor(_dependency, _pluginNode_2);
-            final BundleDescriptor dependency = ((BundleDescriptor) _createMappedElementDescriptor_1);
-            XNode targetNode = descriptor2node.get(dependency);
-            boolean _equals_1 = Objects.equal(targetNode, null);
-            if (_equals_1) {
-              NodeMapping<BundleDescription> _pluginNode_3 = config.getPluginNode();
-              XNode _createNode_1 = _pluginNode_3.createNode(dependency);
-              targetNode = _createNode_1;
-              config.initialize(targetNode);
-              additionalShapes.add(targetNode);
-              descriptor2node.put(dependency, targetNode);
-            }
+            NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
+            final XNode target = interpreter.<BundleDescription>createNode(_dependency, _pluginNode_1, context);
+            context.setIsCreateConnections(true);
             ConnectionMapping<BundleDependency> _dependencyConnection = config.getDependencyConnection();
-            final IMappedElementDescriptor<BundleDependency> connectionDescriptor = provider.<BundleDependency>createMappedElementDescriptor(bundleDependency, _dependencyConnection);
-            XConnection connection = descriptor2connection.get(connectionDescriptor);
-            boolean _equals_2 = Objects.equal(connection, null);
-            if (_equals_2) {
-              ConnectionMapping<BundleDependency> _dependencyConnection_1 = config.getDependencyConnection();
-              XConnection _createConnection = _dependencyConnection_1.createConnection(connectionDescriptor);
-              connection = _createConnection;
-              config.initialize(connection);
-              connection.setSource(sourceNode);
-              connection.setTarget(targetNode);
-              additionalShapes.add(connection);
-              descriptor2connection.put(connectionDescriptor, connection);
-            }
+            final Procedure1<XConnection> _function_2 = (XConnection it_1) -> {
+              it_1.setSource(source);
+              it_1.setTarget(target);
+            };
+            interpreter.<BundleDependency>createConnection(bundleDependency, _dependencyConnection, _function_2, context);
           };
-          _withDomainObject.forEach(_function_3);
-          return additionalShapes;
+          _withDomainObject.forEach(_function_1);
+          return context.getAddedShapes();
         }
         
         @Override
@@ -211,16 +170,19 @@ public class AddDependencyPathAction extends RapidButtonAction {
         _xifexpression_1 = BundleUtil.getAllDependencyBundles(hostBundle);
       }
       final HashSet<BundleDescription> candidates = _xifexpression_1;
-      final Consumer<BundleDescription> _function_1 = (BundleDescription it) -> {
+      XDiagram _diagram = CoreExtensions.getDiagram(host);
+      InterpreterContext _interpreterContext = new InterpreterContext(_diagram);
+      final Procedure1<InterpreterContext> _function_1 = (InterpreterContext it) -> {
+        it.setIsCreateConnections(false);
+        it.setIsCreateDuplicateNodes(true);
+      };
+      final InterpreterContext context = ObjectExtensions.<InterpreterContext>operator_doubleArrow(_interpreterContext, _function_1);
+      final Consumer<BundleDescription> _function_2 = (BundleDescription it) -> {
         NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-        IMappedElementDescriptor<BundleDescription> _createMappedElementDescriptor = provider.<BundleDescription>createMappedElementDescriptor(it, _pluginNode);
-        final BundleDescriptor candidate = ((BundleDescriptor) _createMappedElementDescriptor);
-        NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
-        final XNode candidateNode = _pluginNode_1.createNode(candidate);
-        config.initialize(candidateNode);
+        final XNode candidateNode = interpreter.<BundleDescription>createNode(it, _pluginNode, context);
         chooser.addChoice(candidateNode);
       };
-      candidates.forEach(_function_1);
+      candidates.forEach(_function_2);
       root.setCurrentTool(chooser);
       _xblockexpression = null;
     }

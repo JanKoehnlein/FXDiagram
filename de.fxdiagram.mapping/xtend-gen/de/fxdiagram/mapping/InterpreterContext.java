@@ -22,6 +22,7 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
@@ -30,6 +31,15 @@ public class InterpreterContext {
   
   @Accessors
   private boolean isReplaceRootDiagram;
+  
+  @Accessors
+  private boolean isCreateNodes = true;
+  
+  @Accessors
+  private boolean isCreateConnections = true;
+  
+  @Accessors
+  private boolean isCreateDuplicateNodes = false;
   
   private List<InterpreterContext> subContexts = CollectionLiterals.<InterpreterContext>newArrayList();
   
@@ -136,6 +146,16 @@ public class InterpreterContext {
     this.subContexts.forEach(_function);
   }
   
+  public Iterable<XDomainObjectShape> getAddedShapes() {
+    Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(this.addedNodes, this.addedConnections);
+    final Function1<InterpreterContext, Iterable<XDomainObjectShape>> _function = (InterpreterContext it) -> {
+      return it.getAddedShapes();
+    };
+    List<Iterable<XDomainObjectShape>> _map = ListExtensions.<InterpreterContext, Iterable<XDomainObjectShape>>map(this.subContexts, _function);
+    Iterable<XDomainObjectShape> _flatten = Iterables.<XDomainObjectShape>concat(_map);
+    return Iterables.<XDomainObjectShape>concat(_plus, _flatten);
+  }
+  
   public void executeCommands(final CommandStack commandStack) {
     boolean _and = false;
     boolean _isReplaceRootDiagram = this.isReplaceRootDiagram();
@@ -167,5 +187,32 @@ public class InterpreterContext {
   
   public void setIsReplaceRootDiagram(final boolean isReplaceRootDiagram) {
     this.isReplaceRootDiagram = isReplaceRootDiagram;
+  }
+  
+  @Pure
+  public boolean isCreateNodes() {
+    return this.isCreateNodes;
+  }
+  
+  public void setIsCreateNodes(final boolean isCreateNodes) {
+    this.isCreateNodes = isCreateNodes;
+  }
+  
+  @Pure
+  public boolean isCreateConnections() {
+    return this.isCreateConnections;
+  }
+  
+  public void setIsCreateConnections(final boolean isCreateConnections) {
+    this.isCreateConnections = isCreateConnections;
+  }
+  
+  @Pure
+  public boolean isCreateDuplicateNodes() {
+    return this.isCreateDuplicateNodes;
+  }
+  
+  public void setIsCreateDuplicateNodes(final boolean isCreateDuplicateNodes) {
+    this.isCreateDuplicateNodes = isCreateDuplicateNodes;
   }
 }

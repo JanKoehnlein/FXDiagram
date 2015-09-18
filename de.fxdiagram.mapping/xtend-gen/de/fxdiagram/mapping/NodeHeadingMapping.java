@@ -1,5 +1,6 @@
 package de.fxdiagram.mapping;
 
+import de.fxdiagram.core.XLabel;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeLabelMapping;
 import de.fxdiagram.mapping.XDiagramConfig;
@@ -12,6 +13,14 @@ import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+/**
+ * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor}
+ * to a node's {@link XLabel}.
+ * 
+ * As opposed to {@link NodeLabelMapping} this label will use a bigger, bold font.
+ * 
+ * @see AbstractMapping
+ */
 @SuppressWarnings("all")
 public class NodeHeadingMapping<T extends Object> extends NodeLabelMapping<T> {
   public NodeHeadingMapping(final XDiagramConfig config, final String id) {
@@ -19,8 +28,8 @@ public class NodeHeadingMapping<T extends Object> extends NodeLabelMapping<T> {
   }
   
   @Override
-  public BaseNodeLabel<T> createLabel(final IMappedElementDescriptor<T> descriptor) {
-    BaseNodeLabel<T> _createLabel = super.createLabel(descriptor);
+  public BaseNodeLabel<T> createLabel(final IMappedElementDescriptor<T> descriptor, final T labelElement) {
+    BaseNodeLabel<T> _createLabel = super.createLabel(descriptor, labelElement);
     final Procedure1<BaseNodeLabel<T>> _function = (BaseNodeLabel<T> it) -> {
       Insets _insets = new Insets(10, 20, 10, 20);
       StackPane.setMargin(it, _insets);

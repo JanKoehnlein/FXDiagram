@@ -145,13 +145,12 @@ class FXDiagramTab {
 			configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
 			interpreterContext.executeCommands(root.commandStack)
 		} else if (mappingCall instanceof NodeMappingCall<?, ?>) {
-			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext, true)
+			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext)
 			interpreterContext.executeCommands(root.commandStack)
 		} else if (mappingCall instanceof ConnectionMappingCall<?, ?>) {
 			val mapping = mappingCall.mapping as ConnectionMapping<?>
 			if (mapping.source != null && mapping.target != null) {
-				configInterpreter.execute(mappingCall as ConnectionMappingCall<?, T>, element, [], interpreterContext,
-					true)
+				configInterpreter.execute(mappingCall as ConnectionMappingCall<?, T>, element, [], interpreterContext)
 				interpreterContext.executeCommands(root.commandStack)
 			}
 		}

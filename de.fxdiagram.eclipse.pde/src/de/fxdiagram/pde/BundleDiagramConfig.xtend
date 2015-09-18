@@ -15,7 +15,6 @@ import de.fxdiagram.mapping.shapes.BaseNodeLabel
 import javafx.scene.text.Font
 import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
-import javafx.scene.text.Text
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.pde.BundleNode.*
@@ -51,30 +50,32 @@ class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
 	}
 	
 	val pluginSymbolicName = new NodeHeadingMapping<BundleDescription>(this, BUNDLE_SYMBOLIC_NAME) {
-		override getText(BundleDescription bundle) {
-			bundle.symbolicName
-		}
-		
-		override styleText(Text it, BundleDescription bundle) {
-			if(bundle.isSingleton) 
-				font = Font.font(font.family, FontWeight.BOLD, FontPosture.ITALIC, font.size * 1.1)
-			else 
-				font = Font.font(font.family, FontWeight.BOLD, font.size * 1.1)
+		override createLabel(IMappedElementDescriptor<BundleDescription> descriptor, BundleDescription bundle) {
+			super.createLabel(descriptor, bundle) => [
+				text => [
+					text = bundle.symbolicName 
+					if(bundle.isSingleton) 
+						font = Font.font(font.family, FontWeight.BOLD, FontPosture.ITALIC, font.size * 1.1)
+					else 
+						font = Font.font(font.family, FontWeight.BOLD, font.size * 1.1)
+				]
+			]
 		}
 	} 
 	
 	val pluginVersion = new NodeLabelMapping<BundleDescription>(this, BUNDLE_VERSION) {
-		override getText(BundleDescription bundle) {
-			bundle.version.toString
-		}
-		
-		override styleText(Text it, BundleDescription element) {
-			font = Font.font(font.family, font.size * 0.8)
+		override createLabel(IMappedElementDescriptor<BundleDescription> descriptor, BundleDescription bundle) {
+			super.createLabel(descriptor, bundle) => [
+				text => [
+					text = bundle.version.toString 
+					font = Font.font(font.family, font.size * 0.8)
+				]
+			]
 		}
 	} 
 	
 	val pluginName = new NodeLabelMapping<BundleDescription>(this, BUNDLE_NAME) {
-		override createLabel(IMappedElementDescriptor<BundleDescription> descriptor) {
+		override createLabel(IMappedElementDescriptor<BundleDescription> descriptor, BundleDescription it) {
 			new BaseNodeLabel(descriptor) => [
 				text.text = (descriptor as BundleDescriptor).withPlugin [
 					pluginBase.getResourceString(pluginBase.name)
@@ -84,7 +85,7 @@ class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
 	}
 	
 	val pluginProvider = new NodeLabelMapping<BundleDescription>(this, BUNDLE_PROVIDER) {
-		override createLabel(IMappedElementDescriptor<BundleDescription> descriptor) {
+		override createLabel(IMappedElementDescriptor<BundleDescription> descriptor, BundleDescription it) {
 			new BaseNodeLabel(descriptor) => [
 				text.text = (descriptor as BundleDescriptor).withPlugin [
 					pluginBase.getResourceString(pluginBase.providerName)
@@ -136,7 +137,7 @@ class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
 			if(element.versionRange.empty) 
 				''
 			else 
-				versionRange.toString
+				element.versionRange.toString
 		}
 	}
 	

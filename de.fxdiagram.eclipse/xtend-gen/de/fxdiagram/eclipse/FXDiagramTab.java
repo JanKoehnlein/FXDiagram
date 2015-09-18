@@ -265,7 +265,7 @@ public class FXDiagramTab {
       interpreterContext.executeCommands(_commandStack);
     } else {
       if ((mappingCall instanceof NodeMappingCall<?, ?>)) {
-        this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext, true);
+        this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext);
         CommandStack _commandStack_1 = this.root.getCommandStack();
         interpreterContext.executeCommands(_commandStack_1);
       } else {
@@ -285,8 +285,7 @@ public class FXDiagramTab {
           if (_and) {
             final Procedure1<XConnection> _function = (XConnection it) -> {
             };
-            this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext, 
-              true);
+            this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext);
             CommandStack _commandStack_2 = this.root.getCommandStack();
             interpreterContext.executeCommands(_commandStack_2);
           }

@@ -2,7 +2,6 @@ package de.fxdiagram.pde
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.XShape
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.lib.buttons.RapidButton
@@ -10,7 +9,9 @@ import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.chooser.CarusselChoice
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser
 import de.fxdiagram.lib.chooser.CoverFlowChoice
+import de.fxdiagram.mapping.InterpreterContext
 import de.fxdiagram.mapping.XDiagramConfig
+import de.fxdiagram.mapping.XDiagramConfigInterpreter
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.core.layout.LayoutType.*
@@ -45,23 +46,22 @@ class AddDependencyPathAction extends RapidButtonAction {
 	
 	def doPerform(RapidButton button, BundleDescription hostBundle) {
 		val root = button.host.root
-		val provider = root.getDomainObjectProvider(BundleDescriptorProvider)
 		val config = XDiagramConfig.Registry.getInstance.getConfigByID('de.fxdiagram.pde.BundleDiagramConfig') as BundleDiagramConfig
 		val host = button.host
 		val choiceGraphics = if (button.position.vertical)
 				new CarusselChoice
 			else
 				new CoverFlowChoice
+
+		val interpreter = new XDiagramConfigInterpreter
 		val chooser = new ConnectedNodeChooser(host, button.position, choiceGraphics) {
 			override getAdditionalShapesToAdd(XNode choice, DomainObjectDescriptor choiceInfo) {
 				// throw away direct connection
 				for (it : super.getAdditionalShapesToAdd(choice, choiceInfo).filter(XConnection))
 					removeConnection
 				val diagram = host.diagram
-				val additionalShapes = <XShape>newLinkedHashSet()
-				val descriptor2node = diagram.nodes.toMap[domainObjectDescriptor]
-				descriptor2node.put(choice.domainObjectDescriptor, choice)
-				val descriptor2connection = diagram.connections.toMap[domainObjectDescriptor] 
+				val context = new InterpreterContext(diagram) 
+				context.addNode(choice)
 				(choice.domainObjectDescriptor as BundleDescriptor).withDomainObject [
 					chosenBundle |
 					if (isInverse)
@@ -69,35 +69,16 @@ class AddDependencyPathAction extends RapidButtonAction {
 					else
 						hostBundle.getAllBundleDependencies(chosenBundle)
 				].forEach [ bundleDependency |
-					val owner = provider.createMappedElementDescriptor(bundleDependency.owner, config.pluginNode) as BundleDescriptor
-					var sourceNode = descriptor2node.get(owner)
-					if (sourceNode == null) {
-						sourceNode = config.pluginNode.createNode(owner)
-						config.initialize(sourceNode)
-						additionalShapes += sourceNode
-						descriptor2node.put(owner, sourceNode)
-					}
-					val dependency = provider.createMappedElementDescriptor(bundleDependency.dependency, config.pluginNode) as BundleDescriptor
-					var targetNode = descriptor2node.get(dependency)
-					if (targetNode == null) {
-						targetNode = config.pluginNode.createNode(dependency)
-						config.initialize(targetNode)
-						additionalShapes += targetNode
-						descriptor2node.put(dependency, targetNode)
-					}
-					val connectionDescriptor = provider.createMappedElementDescriptor(bundleDependency,
-						config.dependencyConnection)
-					var connection = descriptor2connection.get(connectionDescriptor)
-					if (connection == null) {
-						connection = config.dependencyConnection.createConnection(connectionDescriptor)
-						config.initialize(connection)
-						connection.source = sourceNode
-						connection.target = targetNode
-						additionalShapes += connection
-						descriptor2connection.put(connectionDescriptor, connection)
-					}
+					context.isCreateConnections = false
+					val source = interpreter.createNode(bundleDependency.owner, config.pluginNode, context)
+					val target = interpreter.createNode(bundleDependency.dependency, config.pluginNode, context)
+					context.isCreateConnections = true
+					interpreter.createConnection(bundleDependency, config.dependencyConnection, [
+						it.source = source
+						it.target = target
+					], context)
 				]
-				return additionalShapes
+				return context.addedShapes
 			}
 
 			override protected nodeChosen(XNode choice) {
@@ -119,10 +100,12 @@ class AddDependencyPathAction extends RapidButtonAction {
 				hostBundle.allDependentBundles
 			else 
 				hostBundle.allDependencyBundles
+		val context = new InterpreterContext(host.diagram) => [
+			isCreateConnections = false
+			isCreateDuplicateNodes = true
+		]
 		candidates.forEach [
-			val candidate = provider.createMappedElementDescriptor(it, config.pluginNode) as BundleDescriptor
-			val candidateNode = config.pluginNode.createNode(candidate)
-			config.initialize(candidateNode)
+			val candidateNode = interpreter.createNode(it, config.pluginNode, context)
 			chooser.addChoice(candidateNode)
 		]		
 		root.currentTool = chooser

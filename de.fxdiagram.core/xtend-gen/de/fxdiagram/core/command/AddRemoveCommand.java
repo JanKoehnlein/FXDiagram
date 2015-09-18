@@ -55,10 +55,13 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
   
   @Override
   public Animation createExecuteAnimation(final CommandContext context) {
-    Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
-    final Consumer<XNode> _function = (XNode it) -> {
+    final Consumer<XShape> _function = (XShape it) -> {
       double _opacity = it.getOpacity();
       this.shapeOpacities.put(it, Double.valueOf(_opacity));
+    };
+    this.shapes.forEach(_function);
+    Iterable<XNode> _filter = Iterables.<XNode>filter(this.shapes, XNode.class);
+    final Consumer<XNode> _function_1 = (XNode it) -> {
       if (this.isAdd) {
         ObservableList<XNode> _nodes = this.diagram.getNodes();
         boolean _contains = _nodes.contains(it);
@@ -76,11 +79,9 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         }
       }
     };
-    _filter.forEach(_function);
+    _filter.forEach(_function_1);
     Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(this.shapes, XConnection.class);
-    final Consumer<XConnection> _function_1 = (XConnection it) -> {
-      double _opacity = it.getOpacity();
-      this.shapeOpacities.put(it, Double.valueOf(_opacity));
+    final Consumer<XConnection> _function_2 = (XConnection it) -> {
       XNode _source = it.getSource();
       XNode _target = it.getTarget();
       Pair<XNode, XNode> _mappedTo = Pair.<XNode, XNode>of(_source, _target);
@@ -102,7 +103,7 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
         }
       }
     };
-    _filter_1.forEach(_function_1);
+    _filter_1.forEach(_function_2);
     return null;
   }
   

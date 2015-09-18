@@ -12,12 +12,16 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.command.CommandStack
 import de.fxdiagram.core.command.ChangeDiagramCommand
 import java.util.List
+import de.fxdiagram.core.XDomainObjectShape
 
 class InterpreterContext {
 
 	XDiagram diagram
 	
 	@Accessors boolean isReplaceRootDiagram
+	@Accessors boolean isCreateNodes = true
+	@Accessors boolean isCreateConnections = true
+	@Accessors boolean isCreateDuplicateNodes = false
 
 	List<InterpreterContext> subContexts = newArrayList
 
@@ -68,6 +72,10 @@ class InterpreterContext {
 		subContexts.forEach[
 			applyChanges
 		]
+	}
+	
+	def Iterable<XDomainObjectShape> getAddedShapes() {
+		addedNodes + addedConnections + subContexts.map[addedShapes].flatten
 	}
 	
 	def void executeCommands(CommandStack commandStack) {

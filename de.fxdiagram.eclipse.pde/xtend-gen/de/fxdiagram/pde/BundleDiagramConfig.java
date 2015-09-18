@@ -98,61 +98,71 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
   
   private final NodeHeadingMapping<BundleDescription> pluginSymbolicName = new NodeHeadingMapping<BundleDescription>(this, BundleNode.BUNDLE_SYMBOLIC_NAME) {
     @Override
-    public String getText(final BundleDescription bundle) {
-      return bundle.getSymbolicName();
-    }
-    
-    @Override
-    public void styleText(final Text it, final BundleDescription bundle) {
-      boolean _isSingleton = bundle.isSingleton();
-      if (_isSingleton) {
-        Font _font = it.getFont();
-        String _family = _font.getFamily();
-        Font _font_1 = it.getFont();
-        double _size = _font_1.getSize();
-        double _multiply = (_size * 1.1);
-        Font _font_2 = Font.font(_family, FontWeight.BOLD, FontPosture.ITALIC, _multiply);
-        it.setFont(_font_2);
-      } else {
-        Font _font_3 = it.getFont();
-        String _family_1 = _font_3.getFamily();
-        Font _font_4 = it.getFont();
-        double _size_1 = _font_4.getSize();
-        double _multiply_1 = (_size_1 * 1.1);
-        Font _font_5 = Font.font(_family_1, FontWeight.BOLD, _multiply_1);
-        it.setFont(_font_5);
-      }
+    public BaseNodeLabel<BundleDescription> createLabel(final IMappedElementDescriptor<BundleDescription> descriptor, final BundleDescription bundle) {
+      BaseNodeLabel<BundleDescription> _createLabel = super.createLabel(descriptor, bundle);
+      final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it) -> {
+        Text _text = it.getText();
+        final Procedure1<Text> _function_1 = (Text it_1) -> {
+          String _symbolicName = bundle.getSymbolicName();
+          it_1.setText(_symbolicName);
+          boolean _isSingleton = bundle.isSingleton();
+          if (_isSingleton) {
+            Font _font = it_1.getFont();
+            String _family = _font.getFamily();
+            Font _font_1 = it_1.getFont();
+            double _size = _font_1.getSize();
+            double _multiply = (_size * 1.1);
+            Font _font_2 = Font.font(_family, FontWeight.BOLD, FontPosture.ITALIC, _multiply);
+            it_1.setFont(_font_2);
+          } else {
+            Font _font_3 = it_1.getFont();
+            String _family_1 = _font_3.getFamily();
+            Font _font_4 = it_1.getFont();
+            double _size_1 = _font_4.getSize();
+            double _multiply_1 = (_size_1 * 1.1);
+            Font _font_5 = Font.font(_family_1, FontWeight.BOLD, _multiply_1);
+            it_1.setFont(_font_5);
+          }
+        };
+        ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+      };
+      return ObjectExtensions.<BaseNodeLabel<BundleDescription>>operator_doubleArrow(_createLabel, _function);
     }
   };
   
   private final NodeLabelMapping<BundleDescription> pluginVersion = new NodeLabelMapping<BundleDescription>(this, BundleNode.BUNDLE_VERSION) {
     @Override
-    public String getText(final BundleDescription bundle) {
-      Version _version = bundle.getVersion();
-      return _version.toString();
-    }
-    
-    @Override
-    public void styleText(final Text it, final BundleDescription element) {
-      Font _font = it.getFont();
-      String _family = _font.getFamily();
-      Font _font_1 = it.getFont();
-      double _size = _font_1.getSize();
-      double _multiply = (_size * 0.8);
-      Font _font_2 = Font.font(_family, _multiply);
-      it.setFont(_font_2);
+    public BaseNodeLabel<BundleDescription> createLabel(final IMappedElementDescriptor<BundleDescription> descriptor, final BundleDescription bundle) {
+      BaseNodeLabel<BundleDescription> _createLabel = super.createLabel(descriptor, bundle);
+      final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it) -> {
+        Text _text = it.getText();
+        final Procedure1<Text> _function_1 = (Text it_1) -> {
+          Version _version = bundle.getVersion();
+          String _string = _version.toString();
+          it_1.setText(_string);
+          Font _font = it_1.getFont();
+          String _family = _font.getFamily();
+          Font _font_1 = it_1.getFont();
+          double _size = _font_1.getSize();
+          double _multiply = (_size * 0.8);
+          Font _font_2 = Font.font(_family, _multiply);
+          it_1.setFont(_font_2);
+        };
+        ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
+      };
+      return ObjectExtensions.<BaseNodeLabel<BundleDescription>>operator_doubleArrow(_createLabel, _function);
     }
   };
   
   private final NodeLabelMapping<BundleDescription> pluginName = new NodeLabelMapping<BundleDescription>(this, BundleNode.BUNDLE_NAME) {
     @Override
-    public BaseNodeLabel<BundleDescription> createLabel(final IMappedElementDescriptor<BundleDescription> descriptor) {
+    public BaseNodeLabel<BundleDescription> createLabel(final IMappedElementDescriptor<BundleDescription> descriptor, final BundleDescription it) {
       BaseNodeLabel<BundleDescription> _baseNodeLabel = new BaseNodeLabel<BundleDescription>(descriptor);
-      final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it) -> {
-        Text _text = it.getText();
-        final Function1<IPluginModelBase, String> _function_1 = (IPluginModelBase it_1) -> {
-          IPluginBase _pluginBase = it_1.getPluginBase();
-          IPluginBase _pluginBase_1 = it_1.getPluginBase();
+      final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it_1) -> {
+        Text _text = it_1.getText();
+        final Function1<IPluginModelBase, String> _function_1 = (IPluginModelBase it_2) -> {
+          IPluginBase _pluginBase = it_2.getPluginBase();
+          IPluginBase _pluginBase_1 = it_2.getPluginBase();
           String _name = _pluginBase_1.getName();
           return _pluginBase.getResourceString(_name);
         };
@@ -165,13 +175,13 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
   
   private final NodeLabelMapping<BundleDescription> pluginProvider = new NodeLabelMapping<BundleDescription>(this, BundleNode.BUNDLE_PROVIDER) {
     @Override
-    public BaseNodeLabel<BundleDescription> createLabel(final IMappedElementDescriptor<BundleDescription> descriptor) {
+    public BaseNodeLabel<BundleDescription> createLabel(final IMappedElementDescriptor<BundleDescription> descriptor, final BundleDescription it) {
       BaseNodeLabel<BundleDescription> _baseNodeLabel = new BaseNodeLabel<BundleDescription>(descriptor);
-      final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it) -> {
-        Text _text = it.getText();
-        final Function1<IPluginModelBase, String> _function_1 = (IPluginModelBase it_1) -> {
-          IPluginBase _pluginBase = it_1.getPluginBase();
-          IPluginBase _pluginBase_1 = it_1.getPluginBase();
+      final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it_1) -> {
+        Text _text = it_1.getText();
+        final Function1<IPluginModelBase, String> _function_1 = (IPluginModelBase it_2) -> {
+          IPluginBase _pluginBase = it_2.getPluginBase();
+          IPluginBase _pluginBase_1 = it_2.getPluginBase();
           String _providerName = _pluginBase_1.getProviderName();
           return _pluginBase.getResourceString(_providerName);
         };
@@ -249,7 +259,8 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
       if (_isEmpty) {
         _xifexpression = "";
       } else {
-        _xifexpression = BundleDiagramConfig.this.versionRange.toString();
+        VersionRange _versionRange_1 = element.getVersionRange();
+        _xifexpression = _versionRange_1.toString();
       }
       return _xifexpression;
     }
