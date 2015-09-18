@@ -3,7 +3,7 @@ package de.fxdiagram.mapping;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeLabelMapping;
-import de.fxdiagram.mapping.execution.XDiagramConfig;
+import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.shapes.BaseNodeLabel;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;

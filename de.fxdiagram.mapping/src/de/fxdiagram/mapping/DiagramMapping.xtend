@@ -2,7 +2,6 @@ package de.fxdiagram.mapping
 
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.layout.LayoutType
-import de.fxdiagram.mapping.execution.XDiagramConfig
 import java.util.List
 
 /**

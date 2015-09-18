@@ -6,7 +6,7 @@ import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
 import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
-import de.fxdiagram.mapping.execution.XDiagramConfig;
+import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.xtext.xbase.JavaElementDescriptor;
 import de.fxdiagram.xtext.xbase.JvmDomainUtil;
 import de.fxdiagram.xtext.xbase.JvmEObjectDescriptor;

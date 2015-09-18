@@ -6,8 +6,8 @@ import javafx.geometry.Side
 import javafx.scene.Node
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtend.lib.annotations.EqualsHashCode
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 /**
  * The execution of a {@link AbstractMapping} in a certain context.

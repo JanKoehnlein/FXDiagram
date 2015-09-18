@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping.execution;
+package de.fxdiagram.mapping;
 
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.ConnectionMapping;

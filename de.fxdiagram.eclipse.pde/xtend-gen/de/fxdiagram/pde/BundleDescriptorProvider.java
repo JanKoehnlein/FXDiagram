@@ -7,7 +7,7 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.mapping.execution.XDiagramConfig;
+import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDependencyDescriptor;
 import de.fxdiagram.pde.BundleDescriptor;

@@ -1,11 +1,11 @@
-package de.fxdiagram.mapping.execution;
+package de.fxdiagram.mapping;
 
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
+import de.fxdiagram.mapping.MappingAcceptor;
 import de.fxdiagram.mapping.MappingCall;
-import de.fxdiagram.mapping.execution.MappingAcceptor;
-import de.fxdiagram.mapping.execution.XDiagramConfig;
+import de.fxdiagram.mapping.XDiagramConfig;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +83,7 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
     }
   }
   
-  private static Logger LOG = Logger.getLogger("de.fxdiagram.mapping.execution.AbstractDiagramConfig");
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.mapping.AbstractDiagramConfig");
     ;
   
   @Pure

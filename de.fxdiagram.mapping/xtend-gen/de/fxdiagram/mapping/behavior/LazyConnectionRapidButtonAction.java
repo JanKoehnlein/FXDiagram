@@ -22,7 +22,7 @@ import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
-import de.fxdiagram.mapping.execution.XDiagramConfig;
+import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import java.util.List;
 import java.util.NoSuchElementException;

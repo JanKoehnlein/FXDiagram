@@ -9,9 +9,10 @@ import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.chooser.CarusselChoice
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser
 import de.fxdiagram.lib.chooser.CoverFlowChoice
+import de.fxdiagram.mapping.XDiagramConfig
 import de.fxdiagram.mapping.execution.InterpreterContext
-import de.fxdiagram.mapping.execution.XDiagramConfig
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
+import java.util.NoSuchElementException
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.core.layout.LayoutType.*
@@ -56,29 +57,33 @@ class AddDependencyPathAction extends RapidButtonAction {
 		val interpreter = new XDiagramConfigInterpreter
 		val chooser = new ConnectedNodeChooser(host, button.position, choiceGraphics) {
 			override getAdditionalShapesToAdd(XNode choice, DomainObjectDescriptor choiceInfo) {
-				// throw away direct connection
-				for (it : super.getAdditionalShapesToAdd(choice, choiceInfo).filter(XConnection))
-					removeConnection
-				val diagram = host.diagram
-				val context = new InterpreterContext(diagram) 
-				context.addNode(choice)
-				(choice.domainObjectDescriptor as BundleDescriptor).withDomainObject [
-					chosenBundle |
-					if (isInverse)
-						chosenBundle.getAllBundleDependencies(hostBundle)
-					else
-						hostBundle.getAllBundleDependencies(chosenBundle)
-				].forEach [ bundleDependency |
-					context.isCreateConnections = false
-					val source = interpreter.createNode(bundleDependency.owner, config.pluginNode, context)
-					val target = interpreter.createNode(bundleDependency.dependency, config.pluginNode, context)
-					context.isCreateConnections = true
-					interpreter.createConnection(bundleDependency, config.dependencyConnection, [
-						it.source = source
-						it.target = target
-					], context)
-				]
-				return context.addedShapes
+				try {
+					// throw away direct connection
+					for (it : super.getAdditionalShapesToAdd(choice, choiceInfo).filter(XConnection))
+						removeConnection
+					val diagram = host.diagram
+					val context = new InterpreterContext(diagram) 
+					context.addNode(choice)
+					(choice.domainObjectDescriptor as BundleDescriptor).withDomainObject [
+						chosenBundle |
+						if (isInverse)
+							chosenBundle.getAllBundleDependencies(hostBundle)
+						else
+							hostBundle.getAllBundleDependencies(chosenBundle)
+					].forEach [ bundleDependency |
+						context.isCreateConnections = false
+						val source = interpreter.createNode(bundleDependency.owner, config.pluginNode, context)
+						val target = interpreter.createNode(bundleDependency.dependency, config.pluginNode, context)
+						context.isCreateConnections = true
+						interpreter.createConnection(bundleDependency, config.dependencyConnection, [
+							it.source = source
+							it.target = target
+						], context)
+					]
+					return context.addedShapes
+				} catch(NoSuchElementException exc) {
+					return #[]
+				}
 			}
 
 			override protected nodeChosen(XNode choice) {

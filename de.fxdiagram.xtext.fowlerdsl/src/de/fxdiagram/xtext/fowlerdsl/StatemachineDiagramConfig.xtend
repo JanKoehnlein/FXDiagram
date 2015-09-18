@@ -4,9 +4,9 @@ import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig
 import de.fxdiagram.mapping.ConnectionLabelMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.DiagramMapping
+import de.fxdiagram.mapping.MappingAcceptor
 import de.fxdiagram.mapping.NodeHeadingMapping
 import de.fxdiagram.mapping.NodeMapping
-import de.fxdiagram.mapping.execution.MappingAcceptor
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine

@@ -32,8 +32,8 @@ import de.fxdiagram.mapping.ConnectionMappingCall
 import de.fxdiagram.mapping.DiagramMappingCall
 import de.fxdiagram.mapping.MappingCall
 import de.fxdiagram.mapping.NodeMappingCall
+import de.fxdiagram.mapping.XDiagramConfig
 import de.fxdiagram.mapping.execution.InterpreterContext
-import de.fxdiagram.mapping.execution.XDiagramConfig
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import javafx.embed.swt.FXCanvas

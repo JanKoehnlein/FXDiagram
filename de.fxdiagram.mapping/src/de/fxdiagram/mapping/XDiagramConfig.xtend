@@ -1,16 +1,7 @@
-package de.fxdiagram.mapping.execution
+package de.fxdiagram.mapping
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XDomainObjectShape
-import de.fxdiagram.mapping.AbstractMapping
-import de.fxdiagram.mapping.ConnectionMapping
-import de.fxdiagram.mapping.ConnectionMappingCall
-import de.fxdiagram.mapping.DiagramMapping
-import de.fxdiagram.mapping.DiagramMappingCall
-import de.fxdiagram.mapping.IMappedElementDescriptorProvider
-import de.fxdiagram.mapping.MappingCall
-import de.fxdiagram.mapping.NodeMapping
-import de.fxdiagram.mapping.NodeMappingCall
 import java.util.List
 import java.util.Map
 import org.eclipse.core.runtime.Platform

@@ -3,7 +3,9 @@ package de.fxdiagram.pde
 import de.fxdiagram.eclipse.FXDiagramView
 import de.fxdiagram.lib.chooser.CoverFlowChoice
 import de.fxdiagram.lib.chooser.NodeChooser
-import de.fxdiagram.mapping.execution.XDiagramConfig
+import de.fxdiagram.mapping.XDiagramConfig
+import de.fxdiagram.mapping.execution.InterpreterContext
+import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 import org.eclipse.core.commands.AbstractHandler
@@ -28,9 +30,11 @@ class AddBundleHandler extends AbstractHandler {
 				val root = view.currentRoot
 				val center = root.diagram.sceneToLocal(sceneX, sceneY)
 				val nodeChooser = new NodeChooser(root.diagram, center, new CoverFlowChoice, false)
+				val interpreter = new XDiagramConfigInterpreter
+				val context = new InterpreterContext(root.diagram)
 				allBundles.forEach[
-					val descriptor = config.domainObjectProvider.createMappedElementDescriptor(it, config.pluginNode)
-					nodeChooser.addChoice(config.pluginNode.createNode(descriptor))
+					val choice = interpreter.createNode(it, config.pluginNode, context)
+					nodeChooser.addChoice(choice)
 				]
 				root.currentTool = nodeChooser
 			}

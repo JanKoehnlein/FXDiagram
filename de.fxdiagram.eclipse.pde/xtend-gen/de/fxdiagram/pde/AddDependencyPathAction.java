@@ -23,19 +23,23 @@ import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.chooser.CoverFlowChoice;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.NodeMapping;
+import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.InterpreterContext;
-import de.fxdiagram.mapping.execution.XDiagramConfig;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDescriptor;
 import de.fxdiagram.pde.BundleDiagramConfig;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import javafx.geometry.Side;
 import javafx.util.Duration;
 import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -102,43 +106,52 @@ public class AddDependencyPathAction extends RapidButtonAction {
       final ConnectedNodeChooser chooser = new ConnectedNodeChooser(host, _position_1, choiceGraphics) {
         @Override
         public Iterable<? extends XShape> getAdditionalShapesToAdd(final XNode choice, final DomainObjectDescriptor choiceInfo) {
-          Iterable<? extends XShape> _additionalShapesToAdd = super.getAdditionalShapesToAdd(choice, choiceInfo);
-          Iterable<XConnection> _filter = Iterables.<XConnection>filter(_additionalShapesToAdd, XConnection.class);
-          for (final XConnection it : _filter) {
-            this.removeConnection(it);
-          }
-          final XDiagram diagram = CoreExtensions.getDiagram(host);
-          final InterpreterContext context = new InterpreterContext(diagram);
-          context.addNode(choice);
-          DomainObjectDescriptor _domainObjectDescriptor = choice.getDomainObjectDescriptor();
-          final Function1<BundleDescription, ArrayList<BundleDependency>> _function = (BundleDescription chosenBundle) -> {
-            ArrayList<BundleDependency> _xifexpression = null;
-            if (AddDependencyPathAction.this.isInverse) {
-              _xifexpression = BundleUtil.getAllBundleDependencies(chosenBundle, hostBundle);
-            } else {
-              _xifexpression = BundleUtil.getAllBundleDependencies(hostBundle, chosenBundle);
+          try {
+            Iterable<? extends XShape> _additionalShapesToAdd = super.getAdditionalShapesToAdd(choice, choiceInfo);
+            Iterable<XConnection> _filter = Iterables.<XConnection>filter(_additionalShapesToAdd, XConnection.class);
+            for (final XConnection it : _filter) {
+              this.removeConnection(it);
             }
-            return _xifexpression;
-          };
-          ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObjectDescriptor).<ArrayList<BundleDependency>>withDomainObject(_function);
-          final Consumer<BundleDependency> _function_1 = (BundleDependency bundleDependency) -> {
-            context.setIsCreateConnections(false);
-            BundleDescription _owner = bundleDependency.getOwner();
-            NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
-            final XNode source = interpreter.<BundleDescription>createNode(_owner, _pluginNode, context);
-            BundleDescription _dependency = bundleDependency.getDependency();
-            NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
-            final XNode target = interpreter.<BundleDescription>createNode(_dependency, _pluginNode_1, context);
-            context.setIsCreateConnections(true);
-            ConnectionMapping<BundleDependency> _dependencyConnection = config.getDependencyConnection();
-            final Procedure1<XConnection> _function_2 = (XConnection it_1) -> {
-              it_1.setSource(source);
-              it_1.setTarget(target);
+            final XDiagram diagram = CoreExtensions.getDiagram(host);
+            final InterpreterContext context = new InterpreterContext(diagram);
+            context.addNode(choice);
+            DomainObjectDescriptor _domainObjectDescriptor = choice.getDomainObjectDescriptor();
+            final Function1<BundleDescription, ArrayList<BundleDependency>> _function = (BundleDescription chosenBundle) -> {
+              ArrayList<BundleDependency> _xifexpression = null;
+              if (AddDependencyPathAction.this.isInverse) {
+                _xifexpression = BundleUtil.getAllBundleDependencies(chosenBundle, hostBundle);
+              } else {
+                _xifexpression = BundleUtil.getAllBundleDependencies(hostBundle, chosenBundle);
+              }
+              return _xifexpression;
             };
-            interpreter.<BundleDependency>createConnection(bundleDependency, _dependencyConnection, _function_2, context);
-          };
-          _withDomainObject.forEach(_function_1);
-          return context.getAddedShapes();
+            ArrayList<BundleDependency> _withDomainObject = ((BundleDescriptor) _domainObjectDescriptor).<ArrayList<BundleDependency>>withDomainObject(_function);
+            final Consumer<BundleDependency> _function_1 = (BundleDependency bundleDependency) -> {
+              context.setIsCreateConnections(false);
+              BundleDescription _owner = bundleDependency.getOwner();
+              NodeMapping<BundleDescription> _pluginNode = config.getPluginNode();
+              final XNode source = interpreter.<BundleDescription>createNode(_owner, _pluginNode, context);
+              BundleDescription _dependency = bundleDependency.getDependency();
+              NodeMapping<BundleDescription> _pluginNode_1 = config.getPluginNode();
+              final XNode target = interpreter.<BundleDescription>createNode(_dependency, _pluginNode_1, context);
+              context.setIsCreateConnections(true);
+              ConnectionMapping<BundleDependency> _dependencyConnection = config.getDependencyConnection();
+              final Procedure1<XConnection> _function_2 = (XConnection it_1) -> {
+                it_1.setSource(source);
+                it_1.setTarget(target);
+              };
+              interpreter.<BundleDependency>createConnection(bundleDependency, _dependencyConnection, _function_2, context);
+            };
+            _withDomainObject.forEach(_function_1);
+            return context.getAddedShapes();
+          } catch (final Throwable _t) {
+            if (_t instanceof NoSuchElementException) {
+              final NoSuchElementException exc = (NoSuchElementException)_t;
+              return Collections.<XShape>unmodifiableList(CollectionLiterals.<XShape>newArrayList());
+            } else {
+              throw Exceptions.sneakyThrow(_t);
+            }
+          }
         }
         
         @Override

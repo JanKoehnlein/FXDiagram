@@ -2,7 +2,6 @@ package de.fxdiagram.mapping
 
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XLabel
-import de.fxdiagram.mapping.execution.XDiagramConfig
 import de.fxdiagram.mapping.shapes.BaseConnectionLabel
 import de.fxdiagram.mapping.shapes.BaseNodeLabel
 import javafx.geometry.Insets

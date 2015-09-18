@@ -1,6 +1,6 @@
 package de.fxdiagram.mapping;
 
-import de.fxdiagram.mapping.execution.XDiagramConfig;
+import de.fxdiagram.mapping.XDiagramConfig;
 
 /**
  * Describes a fixed mapping of a domain object represented by a {@link IMappedElementDescriptor}
