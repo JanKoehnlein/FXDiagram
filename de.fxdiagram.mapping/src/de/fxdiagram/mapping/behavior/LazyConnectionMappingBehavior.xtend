@@ -116,7 +116,7 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 				}
 				return false
 			]
-			return if(result == null) false else result
+			return result
 		} catch(NoSuchElementException e) {
 			return false
 		}

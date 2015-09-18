@@ -96,14 +96,7 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
         return Boolean.valueOf(false);
       };
       final Boolean result = hostDescriptor.<Boolean>withDomainObject(_function_1);
-      Boolean _xifexpression = null;
-      boolean _equals_1 = Objects.equal(result, null);
-      if (_equals_1) {
-        _xifexpression = Boolean.valueOf(false);
-      } else {
-        _xifexpression = result;
-      }
-      return (_xifexpression).booleanValue();
+      return (result).booleanValue();
     } catch (final Throwable _t) {
       if (_t instanceof NoSuchElementException) {
         final NoSuchElementException e = (NoSuchElementException)_t;
