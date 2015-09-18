@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping
+package de.fxdiagram.mapping.execution
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
@@ -6,6 +6,21 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XLabel
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.simple.OpenableDiagramNode
+import de.fxdiagram.mapping.AbstractConnectionMappingCall
+import de.fxdiagram.mapping.AbstractLabelMapping
+import de.fxdiagram.mapping.AbstractLabelMappingCall
+import de.fxdiagram.mapping.AbstractMapping
+import de.fxdiagram.mapping.AbstractNodeMappingCall
+import de.fxdiagram.mapping.ConnectionMapping
+import de.fxdiagram.mapping.ConnectionMappingCall
+import de.fxdiagram.mapping.DiagramMapping
+import de.fxdiagram.mapping.DiagramMappingCall
+import de.fxdiagram.mapping.LabelMappingCall
+import de.fxdiagram.mapping.MultiConnectionMappingCall
+import de.fxdiagram.mapping.MultiLabelMappingCall
+import de.fxdiagram.mapping.MultiNodeMappingCall
+import de.fxdiagram.mapping.NodeMapping
+import de.fxdiagram.mapping.NodeMappingCall
 import java.util.HashSet
 import java.util.Set
 

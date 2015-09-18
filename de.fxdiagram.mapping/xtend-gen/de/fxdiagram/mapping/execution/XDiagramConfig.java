@@ -1,12 +1,12 @@
-package de.fxdiagram.mapping;
+package de.fxdiagram.mapping.execution;
 
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
-import de.fxdiagram.mapping.AbstractDiagramConfig;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.execution.AbstractDiagramConfig;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -97,7 +97,7 @@ public interface XDiagramConfig {
       return this.configs.get(configID);
     }
     
-    private static Logger LOG = Logger.getLogger("de.fxdiagram.mapping.XDiagramConfig.Registry");
+    private static Logger LOG = Logger.getLogger("de.fxdiagram.mapping.execution.XDiagramConfig.Registry");
       ;
   }
   

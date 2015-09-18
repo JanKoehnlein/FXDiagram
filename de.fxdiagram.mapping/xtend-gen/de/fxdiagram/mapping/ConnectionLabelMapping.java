@@ -3,7 +3,7 @@ package de.fxdiagram.mapping;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.mapping.AbstractLabelMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import de.fxdiagram.mapping.shapes.BaseConnectionLabel;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;

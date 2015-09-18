@@ -6,10 +6,10 @@ import de.fxdiagram.eclipse.mapping.AbstractEclipseDiagramConfig
 import de.fxdiagram.mapping.ConnectionLabelMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.MappingAcceptor
 import de.fxdiagram.mapping.NodeHeadingMapping
 import de.fxdiagram.mapping.NodeLabelMapping
 import de.fxdiagram.mapping.NodeMapping
+import de.fxdiagram.mapping.execution.MappingAcceptor
 import de.fxdiagram.mapping.shapes.BaseConnection
 import de.fxdiagram.mapping.shapes.BaseNodeLabel
 import javafx.scene.text.Font

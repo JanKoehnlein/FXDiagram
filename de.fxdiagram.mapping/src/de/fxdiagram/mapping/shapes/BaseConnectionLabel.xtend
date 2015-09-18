@@ -2,7 +2,7 @@ package de.fxdiagram.mapping.shapes
 
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.LabelReconcileBehavior
+import de.fxdiagram.mapping.reconcile.LabelReconcileBehavior
 
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 

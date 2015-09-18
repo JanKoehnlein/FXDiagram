@@ -12,7 +12,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
+import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior
 import javafx.beans.property.BooleanProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -28,8 +28,8 @@ import static javafx.scene.input.MouseButton.*
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import static extension de.fxdiagram.mapping.behavior.MappingLabelListener.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
+import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 
 class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
 
@@ -110,7 +110,7 @@ class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
 			c.padding = new Insets(10, 0, 0, 0)
 			c.addInflatable(showMethodsProperty, methodsBox, contentArea.children.size, inflator)
 		]
-		labelsProperty.addMappingListener(
+		labelsProperty.addMappingLabelListener(
 			CLASS_NAME -> nameArea,
 			ATTRIBUTE -> attributeCompartment,
 			OPERATION -> methodCompartment,

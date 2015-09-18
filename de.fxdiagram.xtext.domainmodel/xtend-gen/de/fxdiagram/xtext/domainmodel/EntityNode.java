@@ -5,7 +5,7 @@ import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
-import de.fxdiagram.mapping.behavior.MappingLabelListener;
+import de.fxdiagram.mapping.reconcile.MappingLabelListener;
 import de.fxdiagram.mapping.shapes.BaseNode;
 import java.util.Collections;
 import javafx.beans.property.ListProperty;
@@ -88,7 +88,7 @@ public class EntityNode extends BaseNode<Entity> {
       Pair<String, Pane> _mappedTo = Pair.<String, Pane>of(EntityNode.ENTITY_NAME, this.nameCompartment);
       Pair<String, Pane> _mappedTo_1 = Pair.<String, Pane>of(EntityNode.ATTRIBUTE, this.attributeCompartment);
       Pair<String, Pane> _mappedTo_2 = Pair.<String, Pane>of(EntityNode.OPERATION, this.operationsCompartment);
-      MappingLabelListener.<XLabel>addMappingListener(_labelsProperty, _mappedTo, _mappedTo_1, _mappedTo_2);
+      MappingLabelListener.<XLabel>addMappingLabelListener(_labelsProperty, _mappedTo, _mappedTo_1, _mappedTo_2);
       _xblockexpression = pane;
     }
     return _xblockexpression;

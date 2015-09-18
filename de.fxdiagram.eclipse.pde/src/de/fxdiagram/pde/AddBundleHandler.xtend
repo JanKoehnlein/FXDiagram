@@ -3,7 +3,7 @@ package de.fxdiagram.pde
 import de.fxdiagram.eclipse.FXDiagramView
 import de.fxdiagram.lib.chooser.CoverFlowChoice
 import de.fxdiagram.lib.chooser.NodeChooser
-import de.fxdiagram.mapping.XDiagramConfig
+import de.fxdiagram.mapping.execution.XDiagramConfig
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 import org.eclipse.core.commands.AbstractHandler

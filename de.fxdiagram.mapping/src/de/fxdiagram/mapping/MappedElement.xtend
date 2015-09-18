@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
+import de.fxdiagram.mapping.execution.XDiagramConfig
 
 /**
  * A {@link DomainObjectDescriptor} that describes a domain object that can be mapped 

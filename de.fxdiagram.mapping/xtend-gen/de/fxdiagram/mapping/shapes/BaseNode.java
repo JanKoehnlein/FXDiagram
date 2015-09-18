@@ -11,8 +11,8 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.mapping.behavior.MappingLabelListener;
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior;
+import de.fxdiagram.mapping.reconcile.MappingLabelListener;
+import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior;
 import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import java.util.Collections;
@@ -70,7 +70,7 @@ public class BaseNode<T extends Object> extends XNode implements INodeWithLazyMa
       pane.setBackgroundPaint(_linearGradient);
       ObservableList<XLabel> _labels = this.getLabels();
       Pair<String, Pane> _mappedTo = Pair.<String, Pane>of(BaseNode.NODE_HEADING, pane);
-      MappingLabelListener.<XLabel>addMappingListener(_labels, _mappedTo);
+      MappingLabelListener.<XLabel>addMappingLabelListener(_labels, _mappedTo);
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
   }

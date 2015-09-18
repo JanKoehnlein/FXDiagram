@@ -2,7 +2,7 @@ package de.fxdiagram.mapping.shapes
 
 import de.fxdiagram.core.XDomainObjectShape
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.XDiagramConfig
+import de.fxdiagram.mapping.execution.XDiagramConfig
 
 /**
  * Call {@link XDiagramConfig#initialize()} on load, as soon as the 

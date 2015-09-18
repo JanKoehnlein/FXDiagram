@@ -1,8 +1,9 @@
 package de.fxdiagram.mapping
 
 import de.fxdiagram.core.XDiagram
-import java.util.List
 import de.fxdiagram.core.layout.LayoutType
+import de.fxdiagram.mapping.execution.XDiagramConfig
+import java.util.List
 
 /**
  * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor} 

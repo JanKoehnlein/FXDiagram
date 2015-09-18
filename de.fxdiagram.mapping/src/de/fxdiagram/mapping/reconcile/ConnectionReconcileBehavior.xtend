@@ -1,10 +1,11 @@
-package de.fxdiagram.mapping.behavior
+package de.fxdiagram.mapping.reconcile
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.mapping.AbstractConnectionMappingCall
+import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.NodeMapping
@@ -14,7 +15,6 @@ import java.util.NoSuchElementException
 import static de.fxdiagram.core.behavior.DirtyState.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.mapping.AbstractMapping
 
 class ConnectionReconcileBehavior<T> extends AbstractLabelOwnerReconcileBehavior<T, XConnection> {
 	

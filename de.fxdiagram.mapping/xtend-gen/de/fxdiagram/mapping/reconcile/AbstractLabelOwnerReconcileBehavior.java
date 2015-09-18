@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping.behavior;
+package de.fxdiagram.mapping.reconcile;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
@@ -12,8 +12,8 @@ import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractLabelMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
-import de.fxdiagram.mapping.XDiagramConfigInterpreter;
-import de.fxdiagram.mapping.behavior.AddRemoveAcceptor;
+import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
+import de.fxdiagram.mapping.reconcile.AddRemoveAcceptor;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.NoSuchElementException;

@@ -13,7 +13,7 @@ import de.fxdiagram.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.mapping.MultiNodeMappingCall;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;

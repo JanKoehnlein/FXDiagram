@@ -3,7 +3,7 @@ package de.fxdiagram.mapping;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 
 /**
  * Base class for label mappings.

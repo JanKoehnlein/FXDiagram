@@ -6,7 +6,7 @@ import de.fxdiagram.eclipse.FXDiagramView;
 import de.fxdiagram.eclipse.selection.ISelectionExtractor;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.MappingCall;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import org.eclipse.jface.action.ContributionItem;

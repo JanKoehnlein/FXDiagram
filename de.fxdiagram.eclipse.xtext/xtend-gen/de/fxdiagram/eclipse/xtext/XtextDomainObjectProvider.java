@@ -13,7 +13,7 @@ import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.emf.common.util.URI;

@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping;
+package de.fxdiagram.mapping.execution;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
@@ -22,14 +22,14 @@ import de.fxdiagram.mapping.DiagramMapping;
 import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.mapping.InterpreterContext;
 import de.fxdiagram.mapping.LabelMappingCall;
 import de.fxdiagram.mapping.MultiConnectionMappingCall;
 import de.fxdiagram.mapping.MultiLabelMappingCall;
 import de.fxdiagram.mapping.MultiNodeMappingCall;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.InterpreterContext;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;

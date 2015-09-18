@@ -11,8 +11,8 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.mapping.behavior.MappingLabelListener;
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior;
+import de.fxdiagram.mapping.reconcile.MappingLabelListener;
+import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior;
 import java.util.Collections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -68,7 +68,7 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
       ObservableList<XLabel> _labels = this.getLabels();
       RectangleBorderPane _pane_1 = this.getPane();
       Pair<String, Pane> _mappedTo = Pair.<String, Pane>of(BaseDiagramNode.NODE_HEADING, _pane_1);
-      MappingLabelListener.<XLabel>addMappingListener(_labels, _mappedTo);
+      MappingLabelListener.<XLabel>addMappingLabelListener(_labels, _mappedTo);
       _xblockexpression = this.getPane();
     }
     return _xblockexpression;

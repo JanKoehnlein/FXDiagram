@@ -3,7 +3,7 @@ package de.fxdiagram.mapping.shapes
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.ConnectionReconcileBehavior
+import de.fxdiagram.mapping.reconcile.ConnectionReconcileBehavior
 
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 

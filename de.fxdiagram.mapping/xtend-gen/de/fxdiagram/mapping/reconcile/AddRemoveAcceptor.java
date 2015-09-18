@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping.behavior;
+package de.fxdiagram.mapping.reconcile;
 
 import de.fxdiagram.core.XLabel;
 

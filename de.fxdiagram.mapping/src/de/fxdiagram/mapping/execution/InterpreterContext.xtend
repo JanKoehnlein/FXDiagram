@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping
+package de.fxdiagram.mapping.execution
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram

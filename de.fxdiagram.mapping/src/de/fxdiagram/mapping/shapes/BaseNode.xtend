@@ -6,18 +6,17 @@ import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
+import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 
-import static de.fxdiagram.mapping.behavior.MappingLabelListener.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
-
+import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 /**
  * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
  * 
@@ -50,7 +49,7 @@ class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 					new Stop(0, Color.rgb(158, 188, 227)), 
 					new Stop(1, Color.rgb(220, 230, 255))
 				])
-			addMappingListener(labels, NODE_HEADING -> pane)	
+			addMappingLabelListener(labels, NODE_HEADING -> pane)	
 		] 
 		
 	}

@@ -19,8 +19,8 @@ import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.mapping.behavior.MappingLabelListener;
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior;
+import de.fxdiagram.mapping.reconcile.MappingLabelListener;
+import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior;
 import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import java.util.Collections;
@@ -249,7 +249,7 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
       Pair<String, Pane> _mappedTo_2 = Pair.<String, Pane>of(BaseClassNode.OPERATION, this.methodCompartment);
       Pair<String, Pane> _mappedTo_3 = Pair.<String, Pane>of(BaseClassNode.FILE_NAME, this.fileArea);
       Pair<String, Pane> _mappedTo_4 = Pair.<String, Pane>of(BaseClassNode.PACKAGE, this.packageArea);
-      MappingLabelListener.<XLabel>addMappingListener(_labelsProperty, _mappedTo, _mappedTo_1, _mappedTo_2, _mappedTo_3, _mappedTo_4);
+      MappingLabelListener.<XLabel>addMappingLabelListener(_labelsProperty, _mappedTo, _mappedTo_1, _mappedTo_2, _mappedTo_3, _mappedTo_4);
       _xblockexpression = pane;
     }
     return _xblockexpression;

@@ -11,4 +11,6 @@ Require-Bundle: de.fxdiagram.core,
  org.eclipse.xtend.lib
 Export-Package: de.fxdiagram.mapping,
  de.fxdiagram.mapping.behavior,
+ de.fxdiagram.mapping.execution,
+ de.fxdiagram.mapping.reconcile,
  de.fxdiagram.mapping.shapes

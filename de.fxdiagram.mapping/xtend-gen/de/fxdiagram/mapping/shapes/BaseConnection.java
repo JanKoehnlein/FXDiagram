@@ -5,7 +5,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
-import de.fxdiagram.mapping.behavior.ConnectionReconcileBehavior;
+import de.fxdiagram.mapping.reconcile.ConnectionReconcileBehavior;
 import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
 
 /**

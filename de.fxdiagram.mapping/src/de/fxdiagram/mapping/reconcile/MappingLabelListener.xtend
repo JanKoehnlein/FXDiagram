@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping.behavior
+package de.fxdiagram.mapping.reconcile
 
 import de.fxdiagram.core.XLabel
 import de.fxdiagram.core.extensions.InitializingListListener
@@ -29,9 +29,7 @@ class MappingLabelListener<T extends XLabel> extends InitializingListListener<T>
 			return null
 	}
 	
-	static def <T> addMappingListener(ObservableList<T> labelList, Pair<String, Pane>... labelMappings) {
+	static def <T> addMappingLabelListener(ObservableList<T> labelList, Pair<String, Pane>... labelMappings) {
 		labelList.addInitializingListener(new MappingLabelListener(labelMappings))
 	}
-	
-	
 }

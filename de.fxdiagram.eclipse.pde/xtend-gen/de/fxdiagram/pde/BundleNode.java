@@ -12,7 +12,7 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
-import de.fxdiagram.mapping.behavior.MappingLabelListener;
+import de.fxdiagram.mapping.reconcile.MappingLabelListener;
 import de.fxdiagram.mapping.shapes.BaseNode;
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import de.fxdiagram.pde.AddDependencyPathAction;
@@ -135,7 +135,7 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
       Pair<String, Pane> _mappedTo_2 = Pair.<String, Pane>of(BundleNode.BUNDLE_NAME, detailsArea);
       Pair<String, Pane> _mappedTo_3 = Pair.<String, Pane>of(BundleNode.BUNDLE_PROVIDER, detailsArea);
       Pair<String, Pane> _mappedTo_4 = Pair.<String, Pane>of(BundleNode.BUNDLE_EXECUTION_ENVIRONMENT, detailsArea);
-      MappingLabelListener.<XLabel>addMappingListener(_labels, _mappedTo, _mappedTo_1, _mappedTo_2, _mappedTo_3, _mappedTo_4);
+      MappingLabelListener.<XLabel>addMappingLabelListener(_labels, _mappedTo, _mappedTo_1, _mappedTo_2, _mappedTo_3, _mappedTo_4);
       _xblockexpression = pane;
     }
     return _xblockexpression;

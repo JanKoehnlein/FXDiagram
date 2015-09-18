@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping.behavior;
+package de.fxdiagram.mapping.reconcile;
 
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -64,7 +64,7 @@ public class MappingLabelListener<T extends XLabel> extends InitializingListList
     }
   }
   
-  public static <T extends Object> void addMappingListener(final ObservableList<T> labelList, final Pair<String, Pane>... labelMappings) {
+  public static <T extends Object> void addMappingLabelListener(final ObservableList<T> labelList, final Pair<String, Pane>... labelMappings) {
     MappingLabelListener _mappingLabelListener = new MappingLabelListener(labelMappings);
     CoreExtensions.<T>addInitializingListener(labelList, _mappingLabelListener);
   }

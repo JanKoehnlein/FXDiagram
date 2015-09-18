@@ -9,7 +9,7 @@ import de.fxdiagram.mapping.LabelMappingCall;
 import de.fxdiagram.mapping.MultiLabelMappingCall;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import de.fxdiagram.mapping.shapes.BaseConnection;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;

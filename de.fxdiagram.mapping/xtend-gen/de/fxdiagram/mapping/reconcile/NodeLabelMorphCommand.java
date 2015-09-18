@@ -1,11 +1,11 @@
-package de.fxdiagram.mapping.behavior;
+package de.fxdiagram.mapping.reconcile;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.CommandContext;
-import de.fxdiagram.mapping.behavior.AddRemoveAcceptor;
+import de.fxdiagram.mapping.reconcile.AddRemoveAcceptor;
 import java.util.List;
 import javafx.collections.ObservableList;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;

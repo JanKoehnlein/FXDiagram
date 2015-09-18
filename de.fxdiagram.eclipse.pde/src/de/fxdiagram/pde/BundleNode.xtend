@@ -21,7 +21,7 @@ import javafx.scene.paint.Stop
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.core.extensions.ButtonExtensions.*
-import static de.fxdiagram.mapping.behavior.MappingLabelListener.*
+import static de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
@@ -82,7 +82,7 @@ class BundleNode extends BaseNode<BundleDescription> implements INodeWithLazyMap
 		]
 		detailsInflator.addInflatable(detailsArea, 1)
 		
-		addMappingListener(labels, 
+		addMappingLabelListener(labels, 
 			BUNDLE_SYMBOLIC_NAME -> titleArea,
 			BUNDLE_VERSION -> detailsArea,
 			BUNDLE_NAME -> detailsArea,

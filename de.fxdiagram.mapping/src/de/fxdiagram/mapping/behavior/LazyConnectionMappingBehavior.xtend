@@ -1,5 +1,6 @@
 package de.fxdiagram.mapping.behavior
 
+import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XNode
 import de.fxdiagram.lib.buttons.RapidButton
 import de.fxdiagram.lib.buttons.RapidButtonAction
@@ -10,7 +11,7 @@ import de.fxdiagram.lib.chooser.CoverFlowChoice
 import de.fxdiagram.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.NodeMapping
-import de.fxdiagram.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import de.fxdiagram.mapping.shapes.INodeWithLazyMappings
 import java.util.List
 import java.util.NoSuchElementException
@@ -19,7 +20,6 @@ import javafx.geometry.Side
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.XConnectionLabel
 
 /**
  * A {@link RapidButtonBehavior} to add lazy connection mappings to a node.

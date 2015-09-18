@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping.behavior;
+package de.fxdiagram.mapping.reconcile;
 
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
@@ -6,8 +6,8 @@ import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.mapping.AbstractLabelMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.NodeMapping;
-import de.fxdiagram.mapping.behavior.AbstractLabelOwnerReconcileBehavior;
-import de.fxdiagram.mapping.behavior.NodeLabelMorphCommand;
+import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior;
+import de.fxdiagram.mapping.reconcile.NodeLabelMorphCommand;
 
 @SuppressWarnings("all")
 public class NodeReconcileBehavior<T extends Object> extends AbstractLabelOwnerReconcileBehavior<T, XNode> {

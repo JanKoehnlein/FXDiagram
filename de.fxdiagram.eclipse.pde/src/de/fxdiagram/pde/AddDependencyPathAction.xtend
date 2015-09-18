@@ -9,9 +9,9 @@ import de.fxdiagram.lib.buttons.RapidButtonAction
 import de.fxdiagram.lib.chooser.CarusselChoice
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser
 import de.fxdiagram.lib.chooser.CoverFlowChoice
-import de.fxdiagram.mapping.InterpreterContext
-import de.fxdiagram.mapping.XDiagramConfig
-import de.fxdiagram.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.mapping.execution.InterpreterContext
+import de.fxdiagram.mapping.execution.XDiagramConfig
+import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 import static de.fxdiagram.core.layout.LayoutType.*

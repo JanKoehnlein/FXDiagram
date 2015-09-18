@@ -6,7 +6,7 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;

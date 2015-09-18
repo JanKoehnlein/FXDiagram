@@ -1,24 +1,25 @@
 package de.fxdiagram.eclipse.commands
 
+import de.fxdiagram.core.XDomainObjectShape
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.ReconcileBehavior
 import de.fxdiagram.core.behavior.UpdateAcceptor
+import de.fxdiagram.core.command.AbstractCommand
 import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.command.AnimationCommand
+import de.fxdiagram.core.command.CommandContext
 import de.fxdiagram.core.command.LazyCommand
 import de.fxdiagram.core.command.ParallelAnimationCommand
+import de.fxdiagram.core.command.SequentialAnimationCommand
 import de.fxdiagram.eclipse.FXDiagramView
+import de.fxdiagram.eclipse.commands.ReconcileDiagramHandler.UpdateDirtyStateCommand
 import org.eclipse.core.commands.AbstractHandler
 import org.eclipse.core.commands.ExecutionEvent
 import org.eclipse.core.commands.ExecutionException
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension org.eclipse.ui.handlers.HandlerUtil.*
-import de.fxdiagram.core.command.AbstractCommand
-import de.fxdiagram.core.command.CommandContext
-import de.fxdiagram.core.command.SequentialAnimationCommand
-import de.fxdiagram.core.XDomainObjectShape
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 class ReconcileDiagramHandler extends AbstractHandler {
 

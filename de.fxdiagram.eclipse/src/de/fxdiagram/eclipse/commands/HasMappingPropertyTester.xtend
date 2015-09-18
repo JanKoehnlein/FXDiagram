@@ -1,9 +1,9 @@
 package de.fxdiagram.eclipse.commands
 
-import de.fxdiagram.mapping.XDiagramConfig
+import de.fxdiagram.eclipse.selection.ISelectionExtractor
+import de.fxdiagram.mapping.execution.XDiagramConfig
 import org.eclipse.core.expressions.PropertyTester
 import org.eclipse.ui.IWorkbenchPart
-import de.fxdiagram.eclipse.selection.ISelectionExtractor
 
 class HasMappingPropertyTester extends PropertyTester {
 	

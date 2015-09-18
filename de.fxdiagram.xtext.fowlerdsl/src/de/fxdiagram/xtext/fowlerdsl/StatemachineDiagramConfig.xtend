@@ -4,17 +4,18 @@ import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig
 import de.fxdiagram.mapping.ConnectionLabelMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.DiagramMapping
-import de.fxdiagram.mapping.MappingAcceptor
 import de.fxdiagram.mapping.NodeHeadingMapping
 import de.fxdiagram.mapping.NodeMapping
+import de.fxdiagram.mapping.execution.MappingAcceptor
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Event
 import org.eclipse.xtext.example.fowlerdsl.statemachine.State
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Statemachine
 import org.eclipse.xtext.example.fowlerdsl.statemachine.Transition
 
+import static de.fxdiagram.mapping.shapes.BaseNode.*
+
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
-import static de.fxdiagram.mapping.shapes.BaseNode.*
 
 /**
  * A very simple example how to create a diagram mapping for an the Fowler DSL shipped 

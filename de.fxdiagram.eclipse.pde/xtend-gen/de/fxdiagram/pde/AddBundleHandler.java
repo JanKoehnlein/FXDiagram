@@ -9,7 +9,7 @@ import de.fxdiagram.lib.chooser.NodeChooser;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.NodeMapping;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import de.fxdiagram.pde.BundleDiagramConfig;
 import de.fxdiagram.pde.BundleUtil;
 import de.fxdiagram.pde.HandlerHelper;

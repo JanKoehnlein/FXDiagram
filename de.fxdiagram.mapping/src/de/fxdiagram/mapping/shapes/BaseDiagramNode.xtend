@@ -6,14 +6,14 @@ import de.fxdiagram.core.XNode
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.behavior.NodeReconcileBehavior
+import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior
 import javafx.scene.paint.Color
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 
 import static de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import static extension de.fxdiagram.mapping.behavior.MappingLabelListener.*
+import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 
 /**
  * Base implementation for a {@link XNode} with a nested {@link XDiagram} that belongs to an
@@ -45,7 +45,7 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 					new Stop(1, Color.rgb(255,248,202))
 				]) 
 		]
-		addMappingListener(labels, NODE_HEADING -> pane)	
+		addMappingLabelListener(labels, NODE_HEADING -> pane)	
 		pane
 	}
 

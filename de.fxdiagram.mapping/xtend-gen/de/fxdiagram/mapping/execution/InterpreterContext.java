@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping;
+package de.fxdiagram.mapping.execution;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;

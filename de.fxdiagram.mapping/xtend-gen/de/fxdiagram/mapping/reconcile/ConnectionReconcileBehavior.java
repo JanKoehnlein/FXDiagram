@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping.behavior;
+package de.fxdiagram.mapping.reconcile;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
@@ -17,10 +17,10 @@ import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
-import de.fxdiagram.mapping.XDiagramConfigInterpreter;
-import de.fxdiagram.mapping.behavior.AbstractLabelOwnerReconcileBehavior;
-import de.fxdiagram.mapping.behavior.ConnectionLabelMorphCommand;
-import de.fxdiagram.mapping.behavior.ReconnectMorphCommand;
+import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
+import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior;
+import de.fxdiagram.mapping.reconcile.ConnectionLabelMorphCommand;
+import de.fxdiagram.mapping.reconcile.ReconnectMorphCommand;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;

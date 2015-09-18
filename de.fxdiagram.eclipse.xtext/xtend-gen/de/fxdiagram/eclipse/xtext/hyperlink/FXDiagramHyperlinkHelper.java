@@ -10,7 +10,7 @@ import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingCall;
-import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.XDiagramConfig;
 import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.IRegion;

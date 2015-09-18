@@ -1,4 +1,4 @@
-package de.fxdiagram.mapping.behavior
+package de.fxdiagram.mapping.reconcile
 
 import de.fxdiagram.core.XDomainObjectShape
 import de.fxdiagram.core.XLabel
@@ -9,7 +9,7 @@ import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.mapping.AbstractLabelMappingCall
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.XDiagramConfigInterpreter
+import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import java.util.NoSuchElementException
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor

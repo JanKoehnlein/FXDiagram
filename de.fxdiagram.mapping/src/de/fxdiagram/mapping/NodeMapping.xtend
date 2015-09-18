@@ -1,6 +1,7 @@
 package de.fxdiagram.mapping
 
 import de.fxdiagram.core.XNode
+import de.fxdiagram.mapping.execution.XDiagramConfig
 import de.fxdiagram.mapping.shapes.BaseNode
 import java.util.List
 

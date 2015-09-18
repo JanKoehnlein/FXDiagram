@@ -13,7 +13,7 @@ import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 import org.eclipse.xtext.example.domainmodel.domainmodel.Entity
 
-import static extension de.fxdiagram.mapping.behavior.MappingLabelListener.*
+import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 
 @ModelNode
 class EntityNode extends BaseNode<Entity> {
@@ -50,7 +50,7 @@ class EntityNode extends BaseNode<Entity> {
 				children += operationsCompartment = new VBox
 			]
 		]
-		labelsProperty.addMappingListener(
+		labelsProperty.addMappingLabelListener(
 			ENTITY_NAME -> nameCompartment,
 			ATTRIBUTE -> attributeCompartment,
 			OPERATION -> operationsCompartment)
