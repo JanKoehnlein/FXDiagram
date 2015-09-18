@@ -31,7 +31,6 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -45,7 +44,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Polyline;
@@ -330,19 +328,6 @@ public class XConnection extends XDomainObjectShape {
     ConnectionRouter _connectionRouter = this.getConnectionRouter();
     _connectionRouter.activate();
     this.updateShapes();
-    ReadOnlyObjectProperty<Parent> _parentProperty = this.parentProperty();
-    final ChangeListener<Parent> _function_3 = (ObservableValue<? extends Parent> property, Parent oldValue, Parent newValue) -> {
-      boolean _equals_1 = Objects.equal(newValue, null);
-      if (_equals_1) {
-        XNode _source = this.getSource();
-        ObservableList<XConnection> _outgoingConnections = _source.getOutgoingConnections();
-        _outgoingConnections.remove(this);
-        XNode _target = this.getTarget();
-        ObservableList<XConnection> _incomingConnections = _target.getIncomingConnections();
-        _incomingConnections.remove(this);
-      }
-    };
-    _parentProperty.addListener(_function_3);
   }
   
   @Override

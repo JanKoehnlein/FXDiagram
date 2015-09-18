@@ -10,6 +10,7 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
+import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
@@ -91,11 +92,6 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
   
   @Override
   protected void doActivate() {
-    HOST _host = this.getHost();
-    XDiagram _diagram = CoreExtensions.getDiagram(_host);
-    Group _buttonLayer = _diagram.getButtonLayer();
-    ObservableList<Node> _children = _buttonLayer.getChildren();
-    _children.add(this.allButtons);
     InitializingListListener<RapidButton> _initializingListListener = new InitializingListListener<RapidButton>();
     final Procedure1<InitializingListListener<RapidButton>> _function = (InitializingListListener<RapidButton> it) -> {
       final Procedure1<RapidButton> _function_1 = (RapidButton button) -> {
@@ -111,14 +107,14 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     CoreExtensions.<RapidButton>addInitializingListener(this.buttonsProperty, _doubleArrow);
     this.updateButtons();
     this.layout();
-    HOST _host_1 = this.getHost();
-    Node _node = _host_1.getNode();
+    HOST _host = this.getHost();
+    Node _node = _host.getNode();
     final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
       this.show();
     };
     _node.<MouseEvent>addEventHandler(MouseEvent.MOUSE_ENTERED, _function_1);
-    HOST _host_2 = this.getHost();
-    Node _node_1 = _host_2.getNode();
+    HOST _host_1 = this.getHost();
+    Node _node_1 = _host_1.getNode();
     final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
       this.fade();
     };
@@ -131,8 +127,8 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
       this.fade();
     };
     this.allButtons.setOnMouseExited(_function_4);
-    HOST _host_3 = this.getHost();
-    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _host_3.boundsInParentProperty();
+    HOST _host_2 = this.getHost();
+    ReadOnlyObjectProperty<Bounds> _boundsInParentProperty = _host_2.boundsInParentProperty();
     final ChangeListener<Bounds> _function_5 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
       boolean _isVisible = this.allButtons.isVisible();
       if (_isVisible) {
@@ -140,27 +136,48 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
       }
     };
     _boundsInParentProperty.addListener(_function_5);
-    HOST _host_4 = this.getHost();
-    ReadOnlyObjectProperty<Parent> _parentProperty = _host_4.parentProperty();
-    final ChangeListener<Parent> _function_6 = (ObservableValue<? extends Parent> p, Parent oldParent, Parent newParent) -> {
-      boolean _equals = Objects.equal(newParent, null);
-      if (_equals) {
-        XDiagram _diagram_1 = CoreExtensions.getDiagram(oldParent);
-        Group _buttonLayer_1 = _diagram_1.getButtonLayer();
-        ObservableList<Node> _children_1 = _buttonLayer_1.getChildren();
-        _children_1.remove(this.allButtons);
-      }
+    HOST _host_3 = this.getHost();
+    ReadOnlyObjectProperty<Parent> _parentProperty = _host_3.parentProperty();
+    InitializingListener<Parent> _initializingListener = new InitializingListener<Parent>();
+    final Procedure1<InitializingListener<Parent>> _function_6 = (InitializingListener<Parent> it) -> {
+      final Procedure1<Parent> _function_7 = (Parent it_1) -> {
+        XDiagram _diagram = CoreExtensions.getDiagram(it_1);
+        Group _buttonLayer = _diagram.getButtonLayer();
+        ObservableList<Node> _children = _buttonLayer.getChildren();
+        _children.add(this.allButtons);
+      };
+      it.setSet(_function_7);
+      final Procedure1<Parent> _function_8 = (Parent it_1) -> {
+        boolean _notEquals = (!Objects.equal(it_1, null));
+        if (_notEquals) {
+          XDiagram _diagram = CoreExtensions.getDiagram(it_1);
+          Group _buttonLayer = _diagram.getButtonLayer();
+          ObservableList<Node> _children = _buttonLayer.getChildren();
+          _children.remove(this.allButtons);
+        }
+      };
+      it.setUnset(_function_8);
     };
-    _parentProperty.addListener(_function_6);
+    InitializingListener<Parent> _doubleArrow_1 = ObjectExtensions.<InitializingListener<Parent>>operator_doubleArrow(_initializingListener, _function_6);
+    CoreExtensions.<Parent>addInitializingListener(_parentProperty, _doubleArrow_1);
   }
   
   public Group show() {
     Group _xblockexpression = null;
     {
+      HOST _host = this.getHost();
+      XDiagram _diagram = CoreExtensions.getDiagram(_host);
+      Group _buttonLayer = _diagram.getButtonLayer();
+      final ObservableList<Node> blChildren = _buttonLayer.getChildren();
+      boolean _contains = blChildren.contains(this.allButtons);
+      boolean _not = (!_contains);
+      if (_not) {
+        blChildren.add(this.allButtons);
+      }
       this.fadeTransition.stop();
       boolean _isVisible = this.allButtons.isVisible();
-      boolean _not = (!_isVisible);
-      if (_not) {
+      boolean _not_1 = (!_isVisible);
+      if (_not_1) {
         this.updateButtons();
         this.layout();
       }

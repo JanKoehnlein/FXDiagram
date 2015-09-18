@@ -18,6 +18,7 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
+import de.fxdiagram.core.extensions.InitializingListener
 
 /**
  * Adds rapid buttons to a host {@link XNode}.
@@ -65,7 +66,6 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 	}
 
 	override protected doActivate() {
-		host.diagram.buttonLayer.children += allButtons
 		buttonsProperty.addInitializingListener(new InitializingListListener<RapidButton>() => [
 			add = [ button | 
 				button.activate
@@ -83,14 +83,21 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 			if(allButtons.visible) 
 				layout
 		]
-		host.parentProperty.addListener [
-			p, oldParent, newParent |
-			if(newParent==null)
-				oldParent.diagram.buttonLayer.children -= allButtons
-		]
+		host.parentProperty.addInitializingListener(new InitializingListener => [
+			set = [
+				diagram.buttonLayer.children += allButtons
+			]
+			unset = [
+				if(it != null)
+					diagram.buttonLayer.children -= allButtons				
+			]
+		])
 	}
 	
 	def show() {
+		val blChildren = host.diagram.buttonLayer.children
+		if(!blChildren.contains(allButtons)) 
+			blChildren += allButtons
 		fadeTransition.stop
 		if(!allButtons.visible)  {
 			updateButtons			

@@ -95,6 +95,8 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
           _connections_1.add(it);
         }
       } else {
+        it.setTarget(null);
+        it.setSource(null);
         ObservableList<XConnection> _connections_2 = this.diagram.getConnections();
         boolean _contains_1 = _connections_2.contains(it);
         if (_contains_1) {
@@ -142,6 +144,8 @@ public class AddRemoveCommand extends AbstractAnimationCommand {
       final EventHandler<ActionEvent> _function_2 = (ActionEvent it_1) -> {
         Iterable<XConnection> _filter = Iterables.<XConnection>filter(this.shapes, XConnection.class);
         final Consumer<XConnection> _function_3 = (XConnection it_2) -> {
+          it_2.setTarget(null);
+          it_2.setSource(null);
           ObservableList<XConnection> _connections = this.diagram.getConnections();
           boolean _contains = _connections.contains(it_2);
           if (_contains) {

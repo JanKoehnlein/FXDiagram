@@ -176,13 +176,6 @@ class XConnection extends XDomainObjectShape {
 		labels.forEach[activate]
 		connectionRouter.activate
 		updateShapes
-		parentProperty.addListener [
-			property, oldValue, newValue |
-			if(newValue == null) {
-				source.outgoingConnections.remove(this)
-				target.incomingConnections.remove(this)
-			}
-		]
 	}
 	
 	override selectionFeedback(boolean isSelected) {

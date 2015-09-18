@@ -54,6 +54,8 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 				if(!diagram.connections.contains(it)) 
 					diagram.connections += it
 			} else {
+				target = null
+				source = null
 				if(diagram.connections.contains(it))
 					diagram.connections -= it
 			}
@@ -81,6 +83,8 @@ class AddRemoveCommand extends AbstractAnimationCommand {
 			children += shapes.map[disappear(defaultUndoDuration)]
 			onFinished = [
 				shapes.filter(XConnection).forEach[
+					target = null
+					source = null
 					if(diagram.connections.contains(it))
 						diagram.connections -= it
 				]

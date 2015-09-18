@@ -6,6 +6,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
@@ -48,7 +49,8 @@ public class NodeLabelMorphCommand extends AbstractCommand implements AbstractLa
   @Override
   public void execute(final CommandContext context) {
     ObservableList<XLabel> _labels = this.host.getLabels();
-    this.oldLabels = _labels;
+    ArrayList<XLabel> _arrayList = new ArrayList<XLabel>(_labels);
+    this.oldLabels = _arrayList;
     ObservableList<XLabel> _labels_1 = this.host.getLabels();
     _labels_1.setAll(this.newLabels);
   }

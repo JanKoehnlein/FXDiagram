@@ -7,6 +7,7 @@ import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
@@ -49,7 +50,8 @@ public class ConnectionLabelMorphCommand extends AbstractCommand implements Abst
   @Override
   public void execute(final CommandContext context) {
     ObservableList<XConnectionLabel> _labels = this.host.getLabels();
-    this.oldLabels = _labels;
+    ArrayList<XConnectionLabel> _arrayList = new ArrayList<XConnectionLabel>(_labels);
+    this.oldLabels = _arrayList;
     ObservableList<XConnectionLabel> _labels_1 = this.host.getLabels();
     _labels_1.setAll(this.newLabels);
   }

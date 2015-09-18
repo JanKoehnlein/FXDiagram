@@ -9,6 +9,7 @@ import de.fxdiagram.core.command.CommandContext
 import java.util.List
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior.AddKeepRemoveAcceptor
+import java.util.ArrayList
 
 @FinalFieldsConstructor
 class NodeLabelMorphCommand extends AbstractCommand implements AddKeepRemoveAcceptor {
@@ -33,7 +34,7 @@ class NodeLabelMorphCommand extends AbstractCommand implements AddKeepRemoveAcce
 	}
 	
 	override execute(CommandContext context) {
-		oldLabels = host.labels
+		oldLabels = new ArrayList(host.labels)
 		host.labels.setAll(newLabels)
 	}
 	
@@ -69,7 +70,7 @@ class ConnectionLabelMorphCommand extends AbstractCommand implements AddKeepRemo
 	}
 	
 	override execute(CommandContext context) {
-		oldLabels = host.labels
+		oldLabels = new ArrayList(host.labels)
 		host.labels.setAll(newLabels)
 	}
 	
