@@ -8,6 +8,7 @@ import org.eclipse.osgi.service.resolver.VersionRange
 import org.eclipse.pde.core.plugin.IMatchRules
 import org.eclipse.pde.core.plugin.PluginRegistry
 import org.apache.log4j.Logger
+import org.eclipse.osgi.service.resolver.ExportPackageDescription
 
 class BundleUtil {
 	
@@ -171,7 +172,7 @@ class BundleUtil {
 			}
 			case PACKAGE_IMPORT: {
 				val packageImport = owner.importPackages.findFirst [
-					name == dependencyID && versionRange == dependencyVersionRange
+					(supplier as ExportPackageDescription).exporter.name == dependencyID && versionRange == dependencyVersionRange
 				]
 				if(packageImport != null) 
 					return new PackageImport(owner, packageImport)

@@ -388,7 +388,9 @@ public class BundleUtil {
           ImportPackageSpecification[] _importPackages = owner.getImportPackages();
           final Function1<ImportPackageSpecification, Boolean> _function_1 = (ImportPackageSpecification it) -> {
             boolean _and = false;
-            String _name = it.getName();
+            BaseDescription _supplier = it.getSupplier();
+            BundleDescription _exporter = ((ExportPackageDescription) _supplier).getExporter();
+            String _name = _exporter.getName();
             boolean _equals = Objects.equal(_name, dependencyID);
             if (!_equals) {
               _and = false;
