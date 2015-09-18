@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FXDiagram Xbase Diagram Example
 Bundle-SymbolicName: de.fxdiagram.xtext.xbase;singleton:=true
-Bundle-Version: 0.6.1.qualifier
+Bundle-Version: 0.7.0.qualifier
 Bundle-Vendor: JanKoehnlein
 Fragment-Host: org.eclipse.xtext.xbase.ui;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
