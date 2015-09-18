@@ -11,5 +11,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="BrickBreaker (2)" level="project" />
     <orderEntry type="library" name="fxdiagram" level="project" />
+    <orderEntry type="library" name="FXDiagram" level="project" />
   </component>
 </module>

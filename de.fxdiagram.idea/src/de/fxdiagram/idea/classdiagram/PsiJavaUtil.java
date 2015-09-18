@@ -38,6 +38,7 @@ public class PsiJavaUtil {
         PsiType type = psiField.getType();
         return type instanceof PsiPrimitiveType
                 || (type instanceof PsiClassType
+                && ((PsiClassType) type).resolve() != null
                 && "java.lang.String".equals(((PsiClassType) type).resolve().getQualifiedName()));
 
     }

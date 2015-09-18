@@ -2,6 +2,8 @@ package de.fxdiagram.idea;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiElement;
@@ -33,7 +35,12 @@ public class ShowInFXDiagramAction extends AnAction {
         ToolWindow toolWindow = ToolWindowManager.getInstance(getProject(event)).getToolWindow(FXDiagramToolWindowFactory.ID);
         toolWindow.activate(()-> {
             Platform.runLater(() ->
-                FXDiagramPane.getInstance(getProject(event)).revealElement(psiElement, mappingCall));
+                ApplicationManager.getApplication().runReadAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        FXDiagramPane.getInstance(getProject(event)).revealElement(psiElement, mappingCall);
+                    }
+                }));
         });
     }
 }

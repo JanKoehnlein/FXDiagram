@@ -12,6 +12,8 @@ import de.fxdiagram.core.services.ClassLoaderProvider;
 import de.fxdiagram.core.tools.actions.*;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.mapping.*;
+import de.fxdiagram.mapping.execution.InterpreterContext;
+import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -66,12 +68,12 @@ public class FXDiagramPane {
             configInterpreter.execute((DiagramMappingCall<?, T>)mappingCall, element, interpreterContext);
             interpreterContext.executeCommands(root.getCommandStack());
         } else if(mappingCall instanceof NodeMappingCall<?, ?>) {
-            configInterpreter.execute((NodeMappingCall<?, T>)mappingCall, element, interpreterContext, true);
+            configInterpreter.execute((NodeMappingCall<?, T>)mappingCall, element, interpreterContext);
             interpreterContext.executeCommands(root.getCommandStack());
         } else if(mappingCall instanceof ConnectionMappingCall<?, ?>) {
             ConnectionMapping<?> mapping = (ConnectionMapping<?>) mappingCall.getMapping();
             if(mapping.getSource() != null && mapping.getTarget() != null) {
-                configInterpreter.execute((ConnectionMappingCall<?, T>) mappingCall, element, null, interpreterContext, true);
+                configInterpreter.execute((ConnectionMappingCall<?, T>) mappingCall, element, null, interpreterContext);
                 interpreterContext.executeCommands(root.getCommandStack());
             }
         }
