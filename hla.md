@@ -21,11 +21,13 @@ It is specified in a class extending the `XDiagramConfig` interface. Diagram con
 class StatemachineDiagramConfig extends AbstractDiagramConfig {
   // fields to define mappings (1)
   val stateNode = new NodeMapping<State>...  
+  val stateLabel = new NodeHeadingMapping<State>...
   val transitionConnection = new ConnectionMapping<Transition>...
-  
+  val eventLabel = new ConnectionLabelMapping<Event>...
+
   // method to define entry points (2)
   override protected <ARG> entryCalls...
-  
+
   // method defining the domain object access (3)
   override protected createDomainObjectProvider...
 }
@@ -34,26 +36,27 @@ class StatemachineDiagramConfig extends AbstractDiagramConfig {
 For your convenience, there are a bunch of abstract superclasses you can extend for certain use cases, such as Xtext-based models, Eclipse-based models, and IDEA's PSI models.
 
 
-#### Mappings 
+#### Mappings
 
-A mapping describes how a domain object is mapped to a diagram element. There are three types of mappings: node mapping, connection mapping and diagram mapping. A mapping is  implemented as a field of the respective class in the diagram configuration class. 
+A mapping describes how a domain object is mapped to a diagram element. There are four types of mappings: node mapping, connection mapping, label mapping and diagram mapping. A mapping is  implemented as a field of the respective class in the diagram configuration class.
 
 ```xtend
-val stateNode = new NodeMapping<State>(this, 'stateNode', 'State') 
+val stateNode = new NodeMapping<State>(this, 'stateNode', 'State')
 ```
 
 The type parameter describes the type of the domain object. The constructor arguments are the configuration this mapping belongs to, an identifier and a human readable name for the mapping.
 
-All mappings have a `calls()` method that describes what else to create when this mapping is executed. This is usually done by calling another mapping in a certain role for a given single/collection of related domain object/s. e.g. 
+Most mappings have a `calls()` method that describes what else to create when this mapping is executed. This is usually done by calling another mapping in a certain role for a given single/collection of related domain object/s. e.g.
 
 ```xtend
 val stateNode = new NodeMapping<State>(...) {
   override calls() {
     transitionConnection.outConnectionForEach[transitions]
+    stateLabel.labelFor[it]
   }
 ```
 
-In this case the connection mapping `transitionConnection` is executed for all `transitions` to create a an outgoing connection from the current node. Note that the `transitions` is inside a lambda expression that is executed with the domain object of the current node, so `[transitions]` is in fact a very sugared Xtend version of `State s -> s.getTransitions()` in Java 8 syntax. 
+The connection mapping `transitionConnection` is executed for all `transitions` to create a an outgoing connection from the current node. Note that the `transitions` is inside a lambda expression that is executed with the domain object of the current node, so `[transitions]` is in fact a very sugared Xtend version of `State s -> s.getTransitions()` in Java 8 syntax.
 
 By using `outConnectionForEach` the transition that is created will already have its `source` set. Do not forget to set the `target`:
 
@@ -62,6 +65,7 @@ val transitionConnection = new ConnectionMapping<Transition>(...) {
   ...
   override protected calls() {
     stateNode.target[state] // Transition t -> t.getState()
+    eventLabel.labelFor[event] 
   }
 }
 ```
@@ -78,7 +82,7 @@ val transitionConnection = new ConnectionMapping<Transition>(...) {
     super.createConnection(descriptor) => [
       new XConnectionLabel(it) => [ label |
         label.text.text = descriptor.withDomainObject[event.name]
-      ]    
+      ]
     ]
   }
   ...
@@ -94,14 +98,14 @@ The IDE has to know on what kind of elements the user could execute mappings. Th
 
 ```xtend
 override protected <ARG> entryCalls(
-      ARG element, 
+      ARG element,
       extension MappingAcceptor<ARG> acceptor) {
   switch element {
     State: {
       add(stateNode, [element])
-      add(statemachineDiagram, 
+      add(statemachineDiagram,
         [element.eContainerOfType(Statemachine)])
-    }	
+    }
   }
 }
 ```
@@ -111,7 +115,7 @@ Note that once again, a lambda expression allows you to execute a completely dif
 
 #### Registration
 
-Eventually, the runtime infrastructure of your IDE has to pick your configuration mapping up somehow. In Eclipse, diagram configurations are registered to the extension point `de.fxdiagram.mapping.fxDiagramConfig`, e.g. 
+Eventually, the runtime infrastructure of your IDE has to pick your configuration mapping up somehow. In Eclipse, diagram configurations are registered to the extension point `de.fxdiagram.mapping.fxDiagramConfig`, e.g.
 
 ```xml
 <extension point="de.fxdiagram.mapping.fxDiagramConfig">
@@ -131,7 +135,7 @@ class="....MyDslExecutableExtensionFactory:....MyDslDiagramConfig"
 
 to get all required dependencies injected.
 
-In IDEA, put 
+In IDEA, put
 
 ```xml
 <extensions defaultExtensionNs="de.fxdiagram.idea">

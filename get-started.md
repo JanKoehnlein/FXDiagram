@@ -4,7 +4,7 @@ title: Get Started
 ---
 # {{page.title}} {#getting-started}
 
-If you just want to use FXDiagram or play with the examples follow the instructions on this page. If you want to develop your own diagrams you should install the [common requirements]{#common-requirements} and [setup an entire IDE](ide-setup.html/#setup-ide) instead.
+If you just want to use FXDiagram or play with the examples follow the instructions on this page. If you want to develop your own diagrams you should install the [common requirements](#common-requirements) and [setup an entire IDE](ide-setup.html/#setup-ide) instead.
 
 
 ## Common Requirements {#common-requirements}
@@ -19,9 +19,9 @@ For auto-layout [Graphviz](http://www.graphviz.org/) must be installed on your s
 ## Running FXDiagram in Eclipse {#install}
 
 - Make sure you're running [Eclipse 4.4 (Luna)](http://www.eclipse.org/downloads/) or higher on a [Java 8 JRE](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
-- Point your update manager *(Help > Install New Software)* to the link [http://dl.bintray.com/jankoehnlein/FXDiagram].
+- Point your update manager *(Help > Install New Software)* to the link [http://dl.bintray.com/jankoehnlein/FXDiagram](http://dl.bintray.com/jankoehnlein/FXDiagram).
 - Select *FXDiagram > FXDiagram SDK*.
-- If you want to have the source code as well, additionally select *FXDiagram > FXDiagram SDK Developer Resources*. This will allow you to step through the code 
+- If you want to have the source code as well, additionally select *FXDiagram > FXDiagram SDK Developer Resources*. This will allow you to step through the code
 with a debugger. Note that if you really want to work with FXDiagram, you should rather [setup the IDE](ide-setup.html#setup-ide).
 - Click *Next* and follow the installation wizard. This will automatically install some required plug-ins from the KIELER project and e(fx)clipse, as well as Xtext including the domain model and statemachine example DSLs.
 - Restart Eclipse when prompted to do so.
@@ -34,16 +34,16 @@ The diagram view will automatically be opened and populated once you choose the 
 - on a Java/Xtend/Xbase type in the respective editor.
 - on a plug-in project in the navigator to explore the dependencies of Eclipse plug-ins.
 
-Most nodes can be explored using rapid buttons. Watch out for tooltips. 
+Most nodes can be explored using rapid buttons. Watch out for tooltips.
 
 
 ## Running FXDiagram in plain Java {#install-jars}
 
 - Download the the [latest zip distribution of FXDiagram](http://dl.bintray.com/jankoehnlein/FXDiagram/standalone/) and unpack it. It includes all necessary JARs and some runner scripts.
-- To run the demo application, open *run_demo.bat* (Windows) or *run_demo.sh* (MacOSX, Linux) and make sure the *JAVA_HOME* variable points to the directory where your Java 8 SDK is installed. 
+- To run the demo application, open *run_demo.bat* (Windows) or *run_demo.sh* (MacOSX, Linux) and make sure the *JAVA_HOME* variable points to the directory where your Java 8 SDK is installed.
 - On Windows, double-click on the batch file, on Linux/MacOSX open a terminal, change to the directory where you unzipped the files and enter `./run_demo.sh`.
 
-The demo application includes the slides of a talk I gave at EclipseCon Europe 2013 and demoes various features of FXDiagram. Some nodes can be explored using rapid buttons. Watch out for tooltips. 
+The demo application includes the slides of a talk I gave at EclipseCon Europe 2013 and demoes various features of FXDiagram. Some nodes can be explored using rapid buttons. Watch out for tooltips.
 
 
 ## Running FXDiagram in IntelliJ IDEA (experimental)
@@ -53,4 +53,3 @@ The demo application includes the slides of a talk I gave at EclipseCon Europe 2
 -  Choose *Preferences > Plug-ins > Install plug-in from disk...* to install the plug-in.
 
 After a restart, you will have a class diagram editor for Java classes. Choose *Show in FXDiagram as...* in the context menu of a Java class to take it for a spin.
-
