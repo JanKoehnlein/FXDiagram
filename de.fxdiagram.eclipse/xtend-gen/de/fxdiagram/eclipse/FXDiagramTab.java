@@ -29,6 +29,7 @@ import de.fxdiagram.core.tools.actions.FullScreenAction;
 import de.fxdiagram.core.tools.actions.LayoutAction;
 import de.fxdiagram.core.tools.actions.NavigateNextAction;
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
+import de.fxdiagram.core.tools.actions.ReconcileAction;
 import de.fxdiagram.core.tools.actions.RedoAction;
 import de.fxdiagram.core.tools.actions.RevealAction;
 import de.fxdiagram.core.tools.actions.SaveAction;
@@ -196,13 +197,14 @@ public class FXDiagramTab {
       RevealAction _revealAction = new RevealAction();
       EclipseLoadAction _eclipseLoadAction = new EclipseLoadAction();
       SaveAction _saveAction = new SaveAction();
+      ReconcileAction _reconcileAction = new ReconcileAction();
       SelectAllAction _selectAllAction = new SelectAllAction();
       ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
       NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
       NavigateNextAction _navigateNextAction = new NavigateNextAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
       _diagramActionRegistry.operator_add(
-        Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _eclipseLoadAction, _saveAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
+        Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _eclipseLoadAction, _saveAction, _reconcileAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
     };
     return ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
   }

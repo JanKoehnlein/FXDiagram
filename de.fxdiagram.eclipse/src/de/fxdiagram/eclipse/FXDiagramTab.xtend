@@ -48,6 +48,7 @@ import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.keys.IBindingService
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.core.tools.actions.ReconcileAction
 
 class FXDiagramTab {
 	val CTabItem tab
@@ -112,7 +113,7 @@ class FXDiagramTab {
 				getDiagramActionRegistry +=
 					#[new CenterAction, new DeleteAction, new LayoutAction(LayoutType.DOT), new ExportSvgAction,
 						new RedoAction, new UndoRedoPlayerAction, new UndoAction, new RevealAction, new EclipseLoadAction,
-						new SaveAction, new SelectAllAction, new ZoomToFitAction, new NavigatePreviousAction,
+						new SaveAction, new ReconcileAction, new SelectAllAction, new ZoomToFitAction, new NavigatePreviousAction,
 						new NavigateNextAction, new FullScreenAction]
 			]
 	}
