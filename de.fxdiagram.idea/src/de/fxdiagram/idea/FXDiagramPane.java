@@ -2,7 +2,12 @@ package de.fxdiagram.idea;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiTreeChangeAdapter;
+import com.intellij.psi.PsiTreeChangeEvent;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import de.fxdiagram.core.*;
+import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.command.SelectAndRevealCommand;
 import de.fxdiagram.core.layout.LayoutType;
@@ -15,7 +20,9 @@ import de.fxdiagram.mapping.*;
 import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import javafx.util.Duration;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +60,7 @@ public class FXDiagramPane {
         diagramActionRegistry.operator_add(new RevealAction());
         diagramActionRegistry.operator_add(new LoadAction());
         diagramActionRegistry.operator_add(new SaveAction());
+        diagramActionRegistry.operator_add(new ReconcileAction());
         diagramActionRegistry.operator_add(new SelectAllAction());
         diagramActionRegistry.operator_add(new ZoomToFitAction());
         diagramActionRegistry.operator_add(new NavigatePreviousAction());
@@ -98,4 +106,16 @@ public class FXDiagramPane {
         return connection.isPresent() ? connection.get() : null;
     }
 
+    public void refreshUpdateState() {
+        XDiagram diagram = root.getDiagram();
+        List<XDomainObjectShape> allShapes = new ArrayList<>();
+        allShapes.addAll(diagram.getNodes());
+        allShapes.addAll(diagram.getConnections());
+        allShapes.forEach(it -> {
+            ReconcileBehavior behavior = it.getBehavior(ReconcileBehavior.class);
+            if (behavior != null) {
+                behavior.showDirtyState(behavior.getDirtyState());
+            }
+        });
+    }
 }

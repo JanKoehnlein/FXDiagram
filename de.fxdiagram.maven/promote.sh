@@ -1,8 +1,9 @@
 #!/bin/sh
 #set -x
 echo Replacing the update site with the latest build
-pushd .
-FXDIAGRAM_GIT=`pwd`/..
+pushd ..
+FXDIAGRAM_GIT=`pwd`
+popd
 FXDIAGRAM_BINTRAY=`pwd`/bintray
 
 rm -rf $FXDIAGRAM_BINTRAY
@@ -31,5 +32,12 @@ cp ../../run-demo.bat .
 cd ..
 zip fxdiagram-jars.zip FXDiagram/* 
 cp -f fxdiagram-jars.zip $FXDIAGRAM_BINTRAY/standalone/
+
+echo Copying jars to IDEA plug-in
+cd FXDiagram
+for file in *.jar ; do
+  cp $file $FXDIAGRAM_GIT/de.fxdiagram.idea/libs/
+done
+
 popd
 echo done
