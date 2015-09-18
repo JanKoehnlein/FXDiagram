@@ -7,7 +7,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.behavior.DirtyState;
-import de.fxdiagram.core.behavior.UpdateAcceptor;
+import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
@@ -51,24 +51,34 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
           XNode _source = _host_2.getSource();
           DomainObjectDescriptor _domainObjectDescriptor_2 = _source.getDomainObjectDescriptor();
           final DomainObjectDescriptor resolvedSourceDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_2, true);
-          XConnection _host_3 = this.getHost();
-          XNode _source_1 = _host_3.getSource();
-          DomainObjectDescriptor _domainObjectDescriptor_3 = _source_1.getDomainObjectDescriptor();
-          boolean _equals = Objects.equal(resolvedSourceDescriptor, _domainObjectDescriptor_3);
+          boolean _equals = Objects.equal(resolvedSourceDescriptor, null);
           if (_equals) {
-            XConnection _host_4 = this.getHost();
-            XNode _target = _host_4.getTarget();
-            DomainObjectDescriptor _domainObjectDescriptor_4 = _target.getDomainObjectDescriptor();
-            final DomainObjectDescriptor resolvedTarget = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_4, false);
-            XConnection _host_5 = this.getHost();
-            XNode _target_1 = _host_5.getTarget();
-            DomainObjectDescriptor _domainObjectDescriptor_5 = _target_1.getDomainObjectDescriptor();
-            boolean _equals_1 = Objects.equal(resolvedTarget, _domainObjectDescriptor_5);
+            return DirtyState.DANGLING;
+          } else {
+            XConnection _host_3 = this.getHost();
+            XNode _source_1 = _host_3.getSource();
+            DomainObjectDescriptor _domainObjectDescriptor_3 = _source_1.getDomainObjectDescriptor();
+            boolean _equals_1 = Objects.equal(resolvedSourceDescriptor, _domainObjectDescriptor_3);
             if (_equals_1) {
-              return DirtyState.CLEAN;
+              XConnection _host_4 = this.getHost();
+              XNode _target = _host_4.getTarget();
+              DomainObjectDescriptor _domainObjectDescriptor_4 = _target.getDomainObjectDescriptor();
+              final DomainObjectDescriptor resolvedTargetDescriptor = this.<Object>resolveConnectionEnd(((T) domainObject), connectionMapping, _domainObjectDescriptor_4, false);
+              boolean _equals_2 = Objects.equal(resolvedTargetDescriptor, null);
+              if (_equals_2) {
+                return DirtyState.DANGLING;
+              } else {
+                XConnection _host_5 = this.getHost();
+                XNode _target_1 = _host_5.getTarget();
+                DomainObjectDescriptor _domainObjectDescriptor_5 = _target_1.getDomainObjectDescriptor();
+                boolean _equals_3 = Objects.equal(resolvedTargetDescriptor, _domainObjectDescriptor_5);
+                if (_equals_3) {
+                  return DirtyState.CLEAN;
+                }
+              }
             }
           }
-          return DirtyState.DIRTY;
+          return null;
         };
         return descriptor.<DirtyState>withDomainObject(_function);
       } catch (final Throwable _t) {
@@ -173,7 +183,7 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
   }
   
   @Override
-  protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final UpdateAcceptor acceptor) {
+  protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final ReconcileBehavior.UpdateAcceptor acceptor) {
     final ConnectionMapping<T> connectionMapping = ((ConnectionMapping<T>) mapping);
     XConnection _host = this.getHost();
     XNode _source = _host.getSource();

@@ -8,9 +8,10 @@ import de.fxdiagram.core.command.AbstractCommand
 import de.fxdiagram.core.command.CommandContext
 import java.util.List
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior.AddKeepRemoveAcceptor
 
 @FinalFieldsConstructor
-class NodeLabelMorphCommand extends AbstractCommand implements AddRemoveAcceptor {
+class NodeLabelMorphCommand extends AbstractCommand implements AddKeepRemoveAcceptor {
 	val XNode host
 
 	List<XLabel> oldLabels
@@ -46,7 +47,7 @@ class NodeLabelMorphCommand extends AbstractCommand implements AddRemoveAcceptor
 }
 
 @FinalFieldsConstructor
-class ConnectionLabelMorphCommand extends AbstractCommand implements AddRemoveAcceptor {
+class ConnectionLabelMorphCommand extends AbstractCommand implements AddKeepRemoveAcceptor {
 	val XConnection host
 	
 	List<XConnectionLabel> oldLabels

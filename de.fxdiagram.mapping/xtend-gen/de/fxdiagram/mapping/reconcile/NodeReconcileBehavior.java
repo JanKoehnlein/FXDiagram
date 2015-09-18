@@ -2,7 +2,7 @@ package de.fxdiagram.mapping.reconcile;
 
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.behavior.UpdateAcceptor;
+import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.mapping.AbstractLabelMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.NodeMapping;
@@ -27,7 +27,7 @@ public class NodeReconcileBehavior<T extends Object> extends AbstractLabelOwnerR
   }
   
   @Override
-  protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final UpdateAcceptor acceptor) {
+  protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final ReconcileBehavior.UpdateAcceptor acceptor) {
     XNode _host = this.getHost();
     final NodeLabelMorphCommand nodeMorphCommand = new NodeLabelMorphCommand(_host);
     this.compareLabels(mapping, domainObject, nodeMorphCommand);

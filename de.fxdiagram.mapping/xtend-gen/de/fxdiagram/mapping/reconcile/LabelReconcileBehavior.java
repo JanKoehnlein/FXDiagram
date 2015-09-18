@@ -3,7 +3,7 @@ package de.fxdiagram.mapping.reconcile;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
-import de.fxdiagram.core.behavior.UpdateAcceptor;
+import de.fxdiagram.core.behavior.ReconcileBehavior;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import java.util.NoSuchElementException;
@@ -39,6 +39,6 @@ public class LabelReconcileBehavior extends AbstractReconcileBehavior<XLabel> {
   }
   
   @Override
-  public void reconcile(final UpdateAcceptor acceptor) {
+  public void reconcile(final ReconcileBehavior.UpdateAcceptor acceptor) {
   }
 }

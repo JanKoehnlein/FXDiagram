@@ -5,7 +5,6 @@ import de.fxdiagram.core.XLabel
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior
 import de.fxdiagram.core.behavior.DirtyState
 import de.fxdiagram.core.behavior.ReconcileBehavior
-import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.mapping.AbstractLabelMappingCall
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
@@ -41,7 +40,7 @@ abstract class AbstractLabelOwnerReconcileBehavior<T, SHAPE extends XDomainObjec
 
 	protected def getLabelsDirtyState(AbstractMapping<T> mapping, T domainObject) {
 		val toBeAdded = newArrayList
-		compareLabels(mapping, domainObject, new AddRemoveAcceptor {
+		compareLabels(mapping, domainObject, new AddKeepRemoveAcceptor {
 			override add(XLabel label) {
 				toBeAdded.add(label)
 			}
@@ -65,7 +64,7 @@ abstract class AbstractLabelOwnerReconcileBehavior<T, SHAPE extends XDomainObjec
 				try {
 					val descriptor = host.domainObjectDescriptor as IMappedElementDescriptor<T>
 					descriptor.withDomainObject [ domainObject |
-						compareLabels(descriptor.mapping, domainObject, new AddRemoveAcceptor {
+						compareLabels(descriptor.mapping, domainObject, new AddKeepRemoveAcceptor {
 							override add(XLabel label) {
 								AbstractLabelOwnerReconcileBehavior.super.showDirtyState(DIRTY)
 							}
@@ -116,7 +115,7 @@ abstract class AbstractLabelOwnerReconcileBehavior<T, SHAPE extends XDomainObjec
 		} 
 	}
 
-	protected def compareLabels(AbstractMapping<T> mapping, T domainObject, AddRemoveAcceptor acceptor) {
+	protected def compareLabels(AbstractMapping<T> mapping, T domainObject, AddKeepRemoveAcceptor acceptor) {
 		val existingLabels = getExistingLabels
 			.map[createLabelEntry]
 			.filterNull
@@ -168,13 +167,12 @@ abstract class AbstractLabelOwnerReconcileBehavior<T, SHAPE extends XDomainObjec
 	protected def Iterable<? extends AbstractLabelMappingCall<?, T>> getLabelMappingCalls(AbstractMapping<T> mapping)
 
 	protected def void reconcile(AbstractMapping<T> mapping, T domainObject, UpdateAcceptor acceptor) 
+
+	static interface AddKeepRemoveAcceptor {
+		def void add(XLabel label)
+		def void keep(XLabel label)
+		def void remove(XLabel label)
+	}
 }
 
-interface AddRemoveAcceptor {
-	def void add(XLabel label)
-
-	def void remove(XLabel label)
-
-	def void keep(XLabel label)
-}
 

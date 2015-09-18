@@ -8,6 +8,9 @@ import javafx.animation.SequentialTransition
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 
+/**
+ * A behvaior to compare the shown state of a shape with its current domain model.
+ */
 interface ReconcileBehavior extends Behavior {
 	def DirtyState getDirtyState()
 	
@@ -15,14 +18,15 @@ interface ReconcileBehavior extends Behavior {
 
 	def void hideDirtyState()
 	
-	def void reconcile(UpdateAcceptor acceptor) 
+	def void reconcile(UpdateAcceptor acceptor)
+	 
+	interface UpdateAcceptor {
+		def void delete(XShape shape)
+		def void add(XShape shape)
+		def void morph(AnimationCommand command)
+	}
 }
 
-interface UpdateAcceptor {
-	def void delete(XShape shape)
-	def void add(XShape shape)
-	def void morph(AnimationCommand command)
-}
 
 abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostBehavior<T> implements ReconcileBehavior {
 	
@@ -94,7 +98,12 @@ abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostB
 	}
 }
 
+/**
+ * Describes whether a shape is in sync with its domain model.
+ */
 enum DirtyState {
-	CLEAN, DIRTY, DANGLING
+	CLEAN,    // shape is in sync with domain model
+	DIRTY,    // shape is out of sync but can be reconciled automatically  
+	DANGLING  // shape is out of sync and cannot be reconciled
 } 
 

@@ -2,7 +2,6 @@ package de.fxdiagram.mapping.reconcile
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.mapping.AbstractMapping
@@ -29,13 +28,15 @@ class ConnectionReconcileBehavior<T> extends AbstractLabelOwnerReconcileBehavior
 				return descriptor.withDomainObject [ domainObject |
 					val connectionMapping = descriptor.mapping as ConnectionMapping<T>
 					val resolvedSourceDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.source.domainObjectDescriptor, true)
-					if (resolvedSourceDescriptor == host.source.domainObjectDescriptor) {
-						val resolvedTarget = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObjectDescriptor, false)
-						if(resolvedTarget == host.target.domainObjectDescriptor) {
-							return CLEAN //connectionMapping.getLabelsDirtyState(domainObject)
-						}
+					if(resolvedSourceDescriptor == null) 
+						return DANGLING
+					else if (resolvedSourceDescriptor == host.source.domainObjectDescriptor) {
+						val resolvedTargetDescriptor = resolveConnectionEnd(domainObject as T, connectionMapping, host.target.domainObjectDescriptor, false)
+						if(resolvedTargetDescriptor == null) 
+							return DANGLING
+						else if(resolvedTargetDescriptor == host.target.domainObjectDescriptor) 
+							return CLEAN
 					}
-					return DIRTY
 				]
 			} catch (NoSuchElementException exc) {
 				return DANGLING

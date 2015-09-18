@@ -2,7 +2,7 @@ package de.fxdiagram.mapping.shapes
 
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XShape
-import de.fxdiagram.core.behavior.UpdateAcceptor
+import de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor
 import de.fxdiagram.core.command.AnimationCommand
 import de.fxdiagram.core.command.SequentialAnimationCommand
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
@@ -28,8 +28,8 @@ import static javafx.scene.input.MouseButton.*
 
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
+import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
 class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
 

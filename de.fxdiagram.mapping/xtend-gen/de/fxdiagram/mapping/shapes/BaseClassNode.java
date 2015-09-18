@@ -5,7 +5,6 @@ import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.Anchors;
-import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.command.AbstractAnimationCommand;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.SequentialAnimationCommand;
@@ -72,8 +71,8 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
     }
     
     @Override
-    protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final UpdateAcceptor acceptor) {
-      final UpdateAcceptor fakeAcceptor = new UpdateAcceptor() {
+    protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor acceptor) {
+      final de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor fakeAcceptor = new de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor() {
         @Override
         public void delete(final XShape shape) {
           acceptor.delete(shape);

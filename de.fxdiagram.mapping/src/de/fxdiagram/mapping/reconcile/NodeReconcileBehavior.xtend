@@ -1,7 +1,6 @@
 package de.fxdiagram.mapping.reconcile
 
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.NodeMapping
 

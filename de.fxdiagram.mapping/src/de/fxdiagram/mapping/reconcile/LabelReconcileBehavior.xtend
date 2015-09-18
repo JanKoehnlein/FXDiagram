@@ -2,9 +2,9 @@ package de.fxdiagram.mapping.reconcile
 
 import de.fxdiagram.core.XLabel
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior
-import de.fxdiagram.core.behavior.UpdateAcceptor
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import java.util.NoSuchElementException
+
 import static de.fxdiagram.core.behavior.DirtyState.*
 
 class LabelReconcileBehavior extends AbstractReconcileBehavior<XLabel> {

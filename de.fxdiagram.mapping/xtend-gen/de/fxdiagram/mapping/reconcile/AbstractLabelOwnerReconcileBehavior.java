@@ -7,13 +7,11 @@ import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.ReconcileBehavior;
-import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractLabelMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
-import de.fxdiagram.mapping.reconcile.AddRemoveAcceptor;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -79,6 +77,14 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
     }
   }
   
+  public interface AddKeepRemoveAcceptor {
+    public abstract void add(final XLabel label);
+    
+    public abstract void keep(final XLabel label);
+    
+    public abstract void remove(final XLabel label);
+  }
+  
   @Accessors(AccessorType.PROTECTED_GETTER)
   private final XDiagramConfigInterpreter interpreter = new XDiagramConfigInterpreter();
   
@@ -114,7 +120,7 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
   
   protected DirtyState getLabelsDirtyState(final AbstractMapping<T> mapping, final T domainObject) {
     final ArrayList<XLabel> toBeAdded = CollectionLiterals.<XLabel>newArrayList();
-    this.compareLabels(mapping, domainObject, new AddRemoveAcceptor() {
+    this.compareLabels(mapping, domainObject, new AbstractLabelOwnerReconcileBehavior.AddKeepRemoveAcceptor() {
       @Override
       public void add(final XLabel label) {
         toBeAdded.add(label);
@@ -153,7 +159,7 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
             Object _xblockexpression = null;
             {
               AbstractMapping<T> _mapping = descriptor.getMapping();
-              this.compareLabels(_mapping, domainObject, new AddRemoveAcceptor() {
+              this.compareLabels(_mapping, domainObject, new AbstractLabelOwnerReconcileBehavior.AddKeepRemoveAcceptor() {
                 @Override
                 public void add(final XLabel label) {
                   AbstractLabelOwnerReconcileBehavior.super.showDirtyState(DirtyState.DIRTY);
@@ -219,7 +225,7 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
   }
   
   @Override
-  public void reconcile(final UpdateAcceptor acceptor) {
+  public void reconcile(final ReconcileBehavior.UpdateAcceptor acceptor) {
     SHAPE _host = this.getHost();
     DomainObjectDescriptor _domainObjectDescriptor = _host.getDomainObjectDescriptor();
     if ((_domainObjectDescriptor instanceof IMappedElementDescriptor<?>)) {
@@ -249,7 +255,7 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
     }
   }
   
-  protected void compareLabels(final AbstractMapping<T> mapping, final T domainObject, final AddRemoveAcceptor acceptor) {
+  protected void compareLabels(final AbstractMapping<T> mapping, final T domainObject, final AbstractLabelOwnerReconcileBehavior.AddKeepRemoveAcceptor acceptor) {
     Iterable<? extends XLabel> _existingLabels = this.getExistingLabels();
     final Function1<XLabel, AbstractLabelOwnerReconcileBehavior.LabelEntry> _function = (XLabel it) -> {
       return this.createLabelEntry(it);
@@ -304,7 +310,7 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
   
   protected abstract Iterable<? extends AbstractLabelMappingCall<?, T>> getLabelMappingCalls(final AbstractMapping<T> mapping);
   
-  protected abstract void reconcile(final AbstractMapping<T> mapping, final T domainObject, final UpdateAcceptor acceptor);
+  protected abstract void reconcile(final AbstractMapping<T> mapping, final T domainObject, final ReconcileBehavior.UpdateAcceptor acceptor);
   
   @Pure
   protected XDiagramConfigInterpreter getInterpreter() {

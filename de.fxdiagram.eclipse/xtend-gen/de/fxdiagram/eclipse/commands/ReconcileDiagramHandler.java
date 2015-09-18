@@ -10,7 +10,6 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.ReconcileBehavior;
-import de.fxdiagram.core.behavior.UpdateAcceptor;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.AnimationCommand;
@@ -92,7 +91,7 @@ public class ReconcileDiagramHandler extends AbstractHandler {
               final HashSet<XShape> deleteShapes = CollectionLiterals.<XShape>newHashSet();
               final HashSet<XShape> addShapes = CollectionLiterals.<XShape>newHashSet();
               final ArrayList<AnimationCommand> commands = CollectionLiterals.<AnimationCommand>newArrayList();
-              final UpdateAcceptor acceptor = new UpdateAcceptor() {
+              final ReconcileBehavior.UpdateAcceptor acceptor = new ReconcileBehavior.UpdateAcceptor() {
                 @Override
                 public void add(final XShape shape) {
                   addShapes.add(shape);

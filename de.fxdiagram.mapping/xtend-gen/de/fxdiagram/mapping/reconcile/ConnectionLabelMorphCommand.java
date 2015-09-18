@@ -6,7 +6,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.CommandContext;
-import de.fxdiagram.mapping.reconcile.AddRemoveAcceptor;
+import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior;
 import java.util.List;
 import javafx.collections.ObservableList;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
@@ -14,7 +14,7 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
 @FinalFieldsConstructor
 @SuppressWarnings("all")
-public class ConnectionLabelMorphCommand extends AbstractCommand implements AddRemoveAcceptor {
+public class ConnectionLabelMorphCommand extends AbstractCommand implements AbstractLabelOwnerReconcileBehavior.AddKeepRemoveAcceptor {
   private final XConnection host;
   
   private List<XConnectionLabel> oldLabels;

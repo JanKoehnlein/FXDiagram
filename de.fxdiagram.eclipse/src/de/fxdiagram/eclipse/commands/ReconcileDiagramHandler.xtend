@@ -3,7 +3,7 @@ package de.fxdiagram.eclipse.commands
 import de.fxdiagram.core.XDomainObjectShape
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.ReconcileBehavior
-import de.fxdiagram.core.behavior.UpdateAcceptor
+import de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor
 import de.fxdiagram.core.command.AbstractCommand
 import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.command.AnimationCommand
