@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="de.fxdiagram.eclipse.selectionExtractor">
+      <selectionExtractor
+            class="de.fxdiagram.eclipse.ecore.EcoreSelectionExtractor">
+      </selectionExtractor>
+   </extension>
+   <extension
+         point="de.fxdiagram.mapping.fxDiagramConfig">
+      <config
+            class="de.fxdiagram.eclipse.ecore.EcoreDiagramConfig"
+            id="de.fxdiagram.eclipse.ecore.EcoreDiagram"
+            label="Ecore diagram">
+      </config>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.emf.ecore.presentation.EcoreEditorID?before=additions">
+         	<menu
+                label="Show in FXDiagram as..."
+                icon="icons/FXDiagram.png">
+                <dynamic 
+                      id="de.fxdiagram.eclipse.showInDiagramMenu"
+                      class="de.fxdiagram.eclipse.commands.ShowInDiagramContribution">
+                </dynamic>
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="activePart">
+                      <test
+                            property="de.fxdiagram.eclipse.hasDiagramMapping"
+                            value="true">
+                      </test>
+                   </with>
+                </visibleWhen>
+         	</menu>  
+      </menuContribution>
+   </extension>
+
+</plugin>
