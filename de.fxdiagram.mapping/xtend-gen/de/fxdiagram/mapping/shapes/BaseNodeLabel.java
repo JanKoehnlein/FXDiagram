@@ -4,6 +4,7 @@ import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
+import de.fxdiagram.mapping.reconcile.LabelReconcileBehavior;
 import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
 
 @SuppressWarnings("all")
@@ -25,6 +26,8 @@ public class BaseNodeLabel<T extends Object> extends XLabel {
   @Override
   public void doActivate() {
     super.doActivate();
+    LabelReconcileBehavior _labelReconcileBehavior = new LabelReconcileBehavior(this);
+    this.addBehavior(_labelReconcileBehavior);
   }
   
   @Override

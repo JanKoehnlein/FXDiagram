@@ -1,14 +1,13 @@
 package de.fxdiagram.pde
 
 import de.fxdiagram.annotations.properties.ModelNode
-import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider
 import org.eclipse.osgi.service.resolver.BundleDescription
 
 @ModelNode
-public class BundleDescriptorProvider implements DomainObjectProvider, IMappedElementDescriptorProvider {
+public class BundleDescriptorProvider implements IMappedElementDescriptorProvider {
 	
 	override <T> createDescriptor(T domainObject) {
 	}

@@ -1,5 +1,6 @@
 package de.fxdiagram.mapping.shapes;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XLabel;
@@ -22,6 +23,8 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -72,6 +75,16 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
       _xblockexpression = this.getPane();
     }
     return _xblockexpression;
+  }
+  
+  @Override
+  public Node getTextNode() {
+    ObservableList<XLabel> _labels = this.getLabels();
+    final Function1<XLabel, Boolean> _function = (XLabel it) -> {
+      String _type = it.getType();
+      return Boolean.valueOf(Objects.equal(_type, BaseDiagramNode.NODE_HEADING));
+    };
+    return IterableExtensions.<XLabel>findFirst(_labels, _function);
   }
   
   @Override

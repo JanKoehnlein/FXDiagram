@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
+import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -27,6 +28,7 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class InterpreterContext {
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private XDiagram diagram;
   
   @Accessors
@@ -43,6 +45,8 @@ public class InterpreterContext {
   
   private List<InterpreterContext> subContexts = CollectionLiterals.<InterpreterContext>newArrayList();
   
+  private InterpreterContext superContext;
+  
   private Set<XNode> addedNodes = CollectionLiterals.<XNode>newHashSet();
   
   private Set<XConnection> addedConnections = CollectionLiterals.<XConnection>newHashSet();
@@ -51,19 +55,24 @@ public class InterpreterContext {
     this.diagram = diagram;
   }
   
-  public XDiagram getDiagram() {
-    return this.diagram;
-  }
-  
-  public boolean addSubContext(final InterpreterContext subContext) {
-    return this.subContexts.add(subContext);
+  public InterpreterContext(final XDiagram diagram, final InterpreterContext superContext) {
+    this(diagram);
+    this.superContext = superContext;
+    superContext.subContexts.add(this);
   }
   
   public boolean addNode(final XNode node) {
     boolean _xifexpression = false;
-    XRoot _root = CoreExtensions.getRoot(this.diagram);
-    boolean _notEquals = (!Objects.equal(_root, null));
-    if (_notEquals) {
+    boolean _or = false;
+    boolean _equals = Objects.equal(this.diagram, null);
+    if (_equals) {
+      _or = true;
+    } else {
+      XRoot _root = CoreExtensions.getRoot(this.diagram);
+      boolean _notEquals = (!Objects.equal(_root, null));
+      _or = _notEquals;
+    }
+    if (_or) {
       _xifexpression = this.addedNodes.add(node);
     } else {
       boolean _xifexpression_1 = false;
@@ -81,9 +90,16 @@ public class InterpreterContext {
   
   public boolean addConnection(final XConnection connection) {
     boolean _xifexpression = false;
-    XRoot _root = CoreExtensions.getRoot(this.diagram);
-    boolean _notEquals = (!Objects.equal(_root, null));
-    if (_notEquals) {
+    boolean _or = false;
+    boolean _equals = Objects.equal(this.diagram, null);
+    if (_equals) {
+      _or = true;
+    } else {
+      XRoot _root = CoreExtensions.getRoot(this.diagram);
+      boolean _notEquals = (!Objects.equal(_root, null));
+      _or = _notEquals;
+    }
+    if (_or) {
       _xifexpression = this.addedConnections.add(connection);
     } else {
       boolean _xifexpression_1 = false;
@@ -178,6 +194,11 @@ public class InterpreterContext {
       it.executeCommands(commandStack);
     };
     this.subContexts.forEach(_function);
+  }
+  
+  @Pure
+  public XDiagram getDiagram() {
+    return this.diagram;
   }
   
   @Pure

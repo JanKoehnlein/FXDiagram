@@ -37,7 +37,7 @@ class XDiagramConfigInterpreter {
 			return null
 		val descriptor = diagramObject.getDescriptor(diagramMapping)
 		val diagram = diagramMapping.createDiagram(descriptor)
-		val newContext = new InterpreterContext(diagram)
+		val newContext = new InterpreterContext(diagram, context)
 		if(diagramMappingCall.isOnDemand) {
 			diagram.contentsInitializer = [
 				descriptor.withDomainObject[ domainObject |
@@ -50,7 +50,6 @@ class XDiagramConfigInterpreter {
 			]
 		} else {
 			populateDiagram(diagramMapping, diagramObject, newContext)
-			context.addSubContext(newContext)
 		}
 		diagram
 	}
@@ -58,14 +57,12 @@ class XDiagramConfigInterpreter {
 	protected def <T> populateDiagram(DiagramMapping<T> diagramMapping, T diagramObject, InterpreterContext context) {
 		diagramMapping.nodes.forEach[execute(diagramObject, context)]
 		diagramMapping.connections.forEach[execute(diagramObject, [], context)]
-		val eagerConnectionContext = new InterpreterContext(context.diagram) => [
-			isCreateNodes = false
-		]
-		context.addSubContext(eagerConnectionContext)
+		context.isCreateNodes = false
 		if(!diagramMapping.eagerConnections.empty) {
 			val eagerConnections = new HashSet(diagramMapping.eagerConnections)			
-			diagramMapping.nodes.forEach[connectNodesEagerly(diagramObject, eagerConnections, eagerConnectionContext)]
+			diagramMapping.nodes.forEach[connectNodesEagerly(diagramObject, eagerConnections, context)]
 		}
+		context.isCreateNodes = true
 	}
 
 	protected def <T> connectNodesEagerly(AbstractNodeMappingCall<?,T> it, T diagramObject, 

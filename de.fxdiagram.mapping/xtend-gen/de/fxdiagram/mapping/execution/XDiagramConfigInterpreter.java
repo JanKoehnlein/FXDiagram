@@ -40,7 +40,6 @@ import javafx.collections.ObservableList;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 /**
@@ -59,7 +58,7 @@ public class XDiagramConfigInterpreter {
       }
       final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
       final XDiagram diagram = diagramMapping.createDiagram(descriptor);
-      final InterpreterContext newContext = new InterpreterContext(diagram);
+      final InterpreterContext newContext = new InterpreterContext(diagram, context);
       boolean _isOnDemand = diagramMappingCall.isOnDemand();
       if (_isOnDemand) {
         final Procedure1<XDiagram> _function = (XDiagram it) -> {
@@ -80,7 +79,6 @@ public class XDiagramConfigInterpreter {
         diagram.setContentsInitializer(_function);
       } else {
         this.<T>populateDiagram(diagramMapping, diagramObject, newContext);
-        context.addSubContext(newContext);
       }
       _xblockexpression = diagram;
     }
@@ -100,13 +98,7 @@ public class XDiagramConfigInterpreter {
       this.execute(it, diagramObject, _function_2, context);
     };
     _connections.forEach(_function_1);
-    XDiagram _diagram = context.getDiagram();
-    InterpreterContext _interpreterContext = new InterpreterContext(_diagram);
-    final Procedure1<InterpreterContext> _function_2 = (InterpreterContext it) -> {
-      it.setIsCreateNodes(false);
-    };
-    final InterpreterContext eagerConnectionContext = ObjectExtensions.<InterpreterContext>operator_doubleArrow(_interpreterContext, _function_2);
-    context.addSubContext(eagerConnectionContext);
+    context.setIsCreateNodes(false);
     List<ConnectionMapping<?>> _eagerConnections = diagramMapping.getEagerConnections();
     boolean _isEmpty = _eagerConnections.isEmpty();
     boolean _not = (!_isEmpty);
@@ -114,11 +106,12 @@ public class XDiagramConfigInterpreter {
       List<ConnectionMapping<?>> _eagerConnections_1 = diagramMapping.getEagerConnections();
       final HashSet<ConnectionMapping<?>> eagerConnections = new HashSet<ConnectionMapping<?>>(_eagerConnections_1);
       List<AbstractNodeMappingCall<?, T>> _nodes_1 = diagramMapping.getNodes();
-      final Consumer<AbstractNodeMappingCall<?, T>> _function_3 = (AbstractNodeMappingCall<?, T> it) -> {
-        this.<T>connectNodesEagerly(it, diagramObject, eagerConnections, eagerConnectionContext);
+      final Consumer<AbstractNodeMappingCall<?, T>> _function_2 = (AbstractNodeMappingCall<?, T> it) -> {
+        this.<T>connectNodesEagerly(it, diagramObject, eagerConnections, context);
       };
-      _nodes_1.forEach(_function_3);
+      _nodes_1.forEach(_function_2);
     }
+    context.setIsCreateNodes(true);
   }
   
   protected <T extends Object> void connectNodesEagerly(final AbstractNodeMappingCall<?, T> it, final T diagramObject, final Set<ConnectionMapping<?>> eagerConnections, final InterpreterContext context) {

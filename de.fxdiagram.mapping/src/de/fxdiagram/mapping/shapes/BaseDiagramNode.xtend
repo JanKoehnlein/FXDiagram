@@ -45,8 +45,12 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 					new Stop(1, Color.rgb(255,248,202))
 				]) 
 		]
-		addMappingLabelListener(labels, NODE_HEADING -> pane)	
+		addMappingLabelListener(labels, NODE_HEADING -> pane)
 		pane
+	}
+
+	override getTextNode() {
+		labels.findFirst[type == NODE_HEADING]
 	}
 
 	override doActivate() {

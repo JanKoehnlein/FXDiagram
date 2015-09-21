@@ -2,6 +2,7 @@ package de.fxdiagram.mapping.shapes
 
 import de.fxdiagram.core.XLabel
 import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.mapping.reconcile.LabelReconcileBehavior
 
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
@@ -20,6 +21,7 @@ class BaseNodeLabel<T> extends XLabel {
 	
 	override doActivate() {
 		super.doActivate
+		addBehavior(new LabelReconcileBehavior(this))
 	}
 	
 	override getType() {

@@ -13,13 +13,13 @@ class BundleSelectionExtractor implements ISelectionExtractor {
 	override addSelectedElement(IWorkbenchPart activePart, Acceptor acceptor) {
 		val selection = activePart.site.selectionProvider.selection
 		if(selection instanceof IStructuredSelection) {
-			return selection.iterator
+			val booleans = selection.iterator
 				.filter(IAdaptable)
 				.map[(getAdapter(IProject) as IProject)?.findModel?.bundleDescription]
 				.filterNull
 				.toSet
 				.map[acceptor.accept(it)]
-				.reduce[$0 || $1]
+			return booleans.fold(false, [$0 || $1])
 		}
 		return false
 	}

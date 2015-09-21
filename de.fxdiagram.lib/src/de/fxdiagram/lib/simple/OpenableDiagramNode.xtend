@@ -40,6 +40,7 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * An {@link XNode} containing a diagram that is shown when the user double-clicks.
@@ -61,9 +62,11 @@ class OpenableDiagramNode extends XNode {
 	
 	XRoot root
 	
+	@Accessors(PUBLIC_GETTER)
 	RectangleBorderPane pane = new RectangleBorderPane
 	
-	Text textNode
+	@Accessors(PUBLIC_GETTER)
+	Node textNode
 	 
 	double delayFactor = 0.1
 	
@@ -87,11 +90,15 @@ class OpenableDiagramNode extends XNode {
 	
 	protected override createNode() {
 		pane => [
-			children += textNode = new Text => [
-				textOrigin = VPos.TOP
-				text = name
-				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-			]
+			children += createTextNode
+		]
+	}
+	
+	protected def createTextNode() {
+		textNode = new Text => [
+			textOrigin = VPos.TOP
+			text = name
+			StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 		]
 	}
 	
@@ -103,7 +110,6 @@ class OpenableDiagramNode extends XNode {
 		super.doActivate()
 		pane.tooltip = "Double-click to open"
 		cursor = Cursor.HAND
-		textNode.text = name
 		this.root = getRoot
 		if(innerDiagram == null) {
 			LOG.severe('Nested diagram not set. Deactivating open behavior')
@@ -116,14 +122,6 @@ class OpenableDiagramNode extends XNode {
 		}
 		val AbstractOpenBehavior openBehavior = [| openDiagram ]
 		addBehavior(openBehavior)
-	}
-	
-	 def getPane() {
-		pane
-	} 
-
-	def getTextNode() {
-		textNode
 	}
 	
 	def openDiagram() {
@@ -164,7 +162,7 @@ class OpenableDiagramNode extends XNode {
 				onFinished = [
 					diagramScaler.deactivate
 					parentDiagram = root.diagram
-					pane.children.setAll(textNode)
+					pane.children.setAll(getTextNode)
 					val toParentButton = SymbolCanvas.getSymbol(SymbolType.ZOOM_OUT, 32, Color.GRAY) => [
 						onMouseClicked = [
 							root.headsUpDisplay.children -= target as Node
@@ -181,7 +179,7 @@ class OpenableDiagramNode extends XNode {
 				it.duration = (1 - delayFactor) * duration  
 				fromValue = 1
 				toValue = 0
-				node = textNode
+				node = getTextNode
 			]
 			children += new FadeTransition => [
 				delay = delayFactor * duration 
@@ -210,7 +208,7 @@ class OpenableDiagramNode extends XNode {
 				it.duration = (1 - delayFactor) * duration 
 				fromValue = 0
 				toValue = 1
-				node = textNode
+				node = getTextNode
 			]
 			children += new FadeTransition => [
 				it.duration = (1 - delayFactor) * duration
@@ -235,7 +233,7 @@ class OpenableDiagramNode extends XNode {
 						onFinished = [
 							diagramScaler.deactivate
 							parentDiagram = root.diagram
-							pane.children.setAll(textNode)
+							pane.children.setAll(getTextNode)
 						]
 					])
 				]

@@ -19,6 +19,7 @@ Require-Bundle: de.fxdiagram.annotations,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.eclipse,
+ de.fxdiagram.eclipse.actions,
  de.fxdiagram.eclipse.changes,
  de.fxdiagram.eclipse.commands,
  de.fxdiagram.eclipse.mapping,

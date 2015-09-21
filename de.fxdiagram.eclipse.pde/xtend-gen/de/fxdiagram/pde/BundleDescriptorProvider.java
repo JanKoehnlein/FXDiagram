@@ -2,7 +2,6 @@ package de.fxdiagram.pde;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
@@ -17,7 +16,7 @@ import org.osgi.framework.Version;
 
 @ModelNode
 @SuppressWarnings("all")
-public class BundleDescriptorProvider implements DomainObjectProvider, IMappedElementDescriptorProvider {
+public class BundleDescriptorProvider implements IMappedElementDescriptorProvider {
   @Override
   public <T extends Object> DomainObjectDescriptor createDescriptor(final T domainObject) {
     return null;

@@ -56,12 +56,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 /**
  * An {@link XNode} containing a diagram that is shown when the user double-clicks.
@@ -79,9 +82,11 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class OpenableDiagramNode extends XNode {
   private XRoot root;
   
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private RectangleBorderPane pane = new RectangleBorderPane();
   
-  private Text textNode;
+  @Accessors(AccessorType.PUBLIC_GETTER)
+  private Node textNode;
   
   private double delayFactor = 0.1;
   
@@ -107,19 +112,24 @@ public class OpenableDiagramNode extends XNode {
   protected Node createNode() {
     final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
       ObservableList<Node> _children = it.getChildren();
-      Text _text = new Text();
-      final Procedure1<Text> _function_1 = (Text it_1) -> {
-        it_1.setTextOrigin(VPos.TOP);
-        String _name = this.getName();
-        it_1.setText(_name);
-        Insets _insets = new Insets(10, 20, 10, 20);
-        StackPane.setMargin(it_1, _insets);
-      };
-      Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
-      _children.add((this.textNode = _doubleArrow));
+      Node _createTextNode = this.createTextNode();
+      _children.add(_createTextNode);
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
       this.pane, _function);
+  }
+  
+  protected Node createTextNode() {
+    Text _text = new Text();
+    final Procedure1<Text> _function = (Text it) -> {
+      it.setTextOrigin(VPos.TOP);
+      String _name = this.getName();
+      it.setText(_name);
+      Insets _insets = new Insets(10, 20, 10, 20);
+      StackPane.setMargin(it, _insets);
+    };
+    Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function);
+    return this.textNode = _doubleArrow;
   }
   
   @Override
@@ -132,8 +142,6 @@ public class OpenableDiagramNode extends XNode {
     super.doActivate();
     TooltipExtensions.setTooltip(this.pane, "Double-click to open");
     this.setCursor(Cursor.HAND);
-    String _name = this.getName();
-    this.textNode.setText(_name);
     XRoot _root = CoreExtensions.getRoot(this);
     this.root = _root;
     XDiagram _innerDiagram = this.getInnerDiagram();
@@ -159,14 +167,6 @@ public class OpenableDiagramNode extends XNode {
     };
     final AbstractOpenBehavior openBehavior = _function_1;
     this.addBehavior(openBehavior);
-  }
-  
-  public RectangleBorderPane getPane() {
-    return this.pane;
-  }
-  
-  public Text getTextNode() {
-    return this.textNode;
   }
   
   public boolean openDiagram() {
@@ -264,7 +264,8 @@ public class OpenableDiagramNode extends XNode {
             XDiagram _diagram_1 = this.root.getDiagram();
             this.setParentDiagram(_diagram_1);
             ObservableList<Node> _children_2 = this.pane.getChildren();
-            _children_2.setAll(this.textNode);
+            Node _textNode = this.getTextNode();
+            _children_2.setAll(_textNode);
             Canvas _symbol = SymbolCanvas.getSymbol(SymbolType.ZOOM_OUT, 32, Color.GRAY);
             final Procedure1<Canvas> _function_6 = (Canvas it_3) -> {
               final EventHandler<MouseEvent> _function_7 = (MouseEvent it_4) -> {
@@ -295,7 +296,8 @@ public class OpenableDiagramNode extends XNode {
           it_1.setDuration(_multiply);
           it_1.setFromValue(1);
           it_1.setToValue(0);
-          it_1.setNode(this.textNode);
+          Node _textNode = this.getTextNode();
+          it_1.setNode(_textNode);
         };
         FadeTransition _doubleArrow_3 = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function_5);
         _children_2.add(_doubleArrow_3);
@@ -361,7 +363,8 @@ public class OpenableDiagramNode extends XNode {
           it_1.setDuration(_multiply_1);
           it_1.setFromValue(0);
           it_1.setToValue(1);
-          it_1.setNode(this.textNode);
+          Node _textNode = this.getTextNode();
+          it_1.setNode(_textNode);
         };
         FadeTransition _doubleArrow = ObjectExtensions.<FadeTransition>operator_doubleArrow(_fadeTransition, _function_3);
         _children.add(_doubleArrow);
@@ -407,7 +410,8 @@ public class OpenableDiagramNode extends XNode {
                 XDiagram _diagram = this.root.getDiagram();
                 this.setParentDiagram(_diagram);
                 ObservableList<Node> _children_3 = this.pane.getChildren();
-                _children_3.setAll(this.textNode);
+                Node _textNode = this.getTextNode();
+                _children_3.setAll(_textNode);
               };
               it_3.setOnFinished(_function_8);
             };
@@ -466,5 +470,15 @@ public class OpenableDiagramNode extends XNode {
   
   public ObjectProperty<XDiagram> parentDiagramProperty() {
     return this.parentDiagramProperty;
+  }
+  
+  @Pure
+  public RectangleBorderPane getPane() {
+    return this.pane;
+  }
+  
+  @Pure
+  public Node getTextNode() {
+    return this.textNode;
   }
 }

@@ -16,6 +16,7 @@ import de.fxdiagram.core.XDomainObjectShape
 
 class InterpreterContext {
 
+	@Accessors(PUBLIC_GETTER)
 	XDiagram diagram
 	
 	@Accessors boolean isReplaceRootDiagram
@@ -24,7 +25,8 @@ class InterpreterContext {
 	@Accessors boolean isCreateDuplicateNodes = false
 
 	List<InterpreterContext> subContexts = newArrayList
-
+	InterpreterContext superContext
+	
 	Set<XNode> addedNodes = newHashSet
 	Set<XConnection> addedConnections = newHashSet
 	
@@ -32,23 +34,21 @@ class InterpreterContext {
 		this.diagram = diagram	
 	}
 
-	def getDiagram() {
-		diagram
-	}
-	
-	def addSubContext(InterpreterContext subContext) {
-		subContexts += subContext 	
+	new(XDiagram diagram, InterpreterContext superContext) {
+		this(diagram)
+		this.superContext = superContext
+		superContext.subContexts += this
 	}
 	
 	def addNode(XNode node) {
-		if(diagram.root != null)
+		if(diagram==null || diagram.root != null)
 			addedNodes += node
 		else if(!diagram.nodes.contains(node))
 			diagram.nodes += node
 	}
 
 	def addConnection(XConnection connection) {
-		if(diagram.root != null)
+		if(diagram == null || diagram.root != null)
 			addedConnections += connection
 		else if(!diagram.connections.contains(connection))
 			diagram.connections += connection
