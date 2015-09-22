@@ -37,6 +37,7 @@ class ConnectionReconcileBehavior<T> extends AbstractLabelOwnerReconcileBehavior
 						else if(resolvedTargetDescriptor == host.target.domainObjectDescriptor) 
 							return CLEAN
 					}
+					return DIRTY
 				]
 			} catch (NoSuchElementException exc) {
 				return DANGLING

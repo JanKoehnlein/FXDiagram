@@ -78,7 +78,7 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
               }
             }
           }
-          return null;
+          return DirtyState.DIRTY;
         };
         return descriptor.<DirtyState>withDomainObject(_function);
       } catch (final Throwable _t) {

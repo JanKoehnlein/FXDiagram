@@ -1,5 +1,6 @@
 package de.fxdiagram.core.tools.actions
 
+import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XDomainObjectShape
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
@@ -65,7 +66,7 @@ class ReconcileAction implements DiagramAction {
 				it += new ParallelAnimationCommand => [
 					it += commands
 				]
-				it += new UpdateDirtyStateCommand(allShapes)
+				it += new UpdateDirtyStateCommand(diagram)
 			]
 		]
 		root.commandStack.execute(lazyCommand)
@@ -73,10 +74,13 @@ class ReconcileAction implements DiagramAction {
 	
 	@FinalFieldsConstructor
 	static class UpdateDirtyStateCommand extends AbstractCommand {
-
-		val Iterable<XDomainObjectShape> allShapes
+		
+		val XDiagram diagram
 
 		override execute(CommandContext context) {
+			val allShapes = <XDomainObjectShape>newArrayList
+			allShapes += diagram.connections
+			allShapes += diagram.nodes
 			allShapes.forEach [
 				val behavior = getBehavior(ReconcileBehavior)
 				if(behavior != null)

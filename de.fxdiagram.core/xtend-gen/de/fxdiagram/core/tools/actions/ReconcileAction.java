@@ -36,10 +36,15 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 public class ReconcileAction implements DiagramAction {
   @FinalFieldsConstructor
   public static class UpdateDirtyStateCommand extends AbstractCommand {
-    private final Iterable<XDomainObjectShape> allShapes;
+    private final XDiagram diagram;
     
     @Override
     public void execute(final CommandContext context) {
+      final ArrayList<XDomainObjectShape> allShapes = CollectionLiterals.<XDomainObjectShape>newArrayList();
+      ObservableList<XConnection> _connections = this.diagram.getConnections();
+      Iterables.<XDomainObjectShape>addAll(allShapes, _connections);
+      ObservableList<XNode> _nodes = this.diagram.getNodes();
+      Iterables.<XDomainObjectShape>addAll(allShapes, _nodes);
       final Consumer<XDomainObjectShape> _function = (XDomainObjectShape it) -> {
         final ReconcileBehavior behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
         boolean _notEquals = (!Objects.equal(behavior, null));
@@ -48,7 +53,7 @@ public class ReconcileAction implements DiagramAction {
           behavior.showDirtyState(_dirtyState);
         }
       };
-      this.allShapes.forEach(_function);
+      allShapes.forEach(_function);
     }
     
     @Override
@@ -61,9 +66,9 @@ public class ReconcileAction implements DiagramAction {
       this.execute(context);
     }
     
-    public UpdateDirtyStateCommand(final Iterable<XDomainObjectShape> allShapes) {
+    public UpdateDirtyStateCommand(final XDiagram diagram) {
       super();
-      this.allShapes = allShapes;
+      this.diagram = diagram;
     }
   }
   
@@ -142,7 +147,7 @@ public class ReconcileAction implements DiagramAction {
             };
             ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_2);
             it.operator_add(_doubleArrow);
-            ReconcileAction.UpdateDirtyStateCommand _updateDirtyStateCommand = new ReconcileAction.UpdateDirtyStateCommand(allShapes);
+            ReconcileAction.UpdateDirtyStateCommand _updateDirtyStateCommand = new ReconcileAction.UpdateDirtyStateCommand(diagram);
             it.operator_add(_updateDirtyStateCommand);
           };
           _xblockexpression = ObjectExtensions.<SequentialAnimationCommand>operator_doubleArrow(_sequentialAnimationCommand, _function_1);
