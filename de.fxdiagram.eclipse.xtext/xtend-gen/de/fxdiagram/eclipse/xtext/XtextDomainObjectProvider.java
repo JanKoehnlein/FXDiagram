@@ -117,22 +117,30 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
       if (it instanceof ESetting) {
         _matched=true;
         boolean _or = false;
+        boolean _or_1 = false;
         EObject _owner = ((ESetting<?>)it).getOwner();
         boolean _equals = Objects.equal(_owner, null);
         if (_equals) {
-          _or = true;
+          _or_1 = true;
         } else {
           EObject _owner_1 = ((ESetting<?>)it).getOwner();
           boolean _eIsProxy = _owner_1.eIsProxy();
-          _or = _eIsProxy;
+          _or_1 = _eIsProxy;
+        }
+        if (_or_1) {
+          _or = true;
+        } else {
+          EObject _target = ((ESetting<?>)it).getTarget();
+          boolean _equals_1 = Objects.equal(_target, null);
+          _or = _equals_1;
         }
         if (_or) {
           return null;
         }
         EObject _owner_2 = ((ESetting<?>)it).getOwner();
         XtextEObjectID _createXtextEObjectID = this.createXtextEObjectID(_owner_2);
-        EObject _target = ((ESetting<?>)it).getTarget();
-        XtextEObjectID _createXtextEObjectID_1 = this.createXtextEObjectID(_target);
+        EObject _target_1 = ((ESetting<?>)it).getTarget();
+        XtextEObjectID _createXtextEObjectID_1 = this.createXtextEObjectID(_target_1);
         EReference _reference = ((ESetting<?>)it).getReference();
         int _index = ((ESetting<?>)it).getIndex();
         XDiagramConfig _config = mapping.getConfig();

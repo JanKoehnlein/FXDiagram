@@ -43,16 +43,17 @@ public class DiscreteAnchors implements Anchors {
     return _xblockexpression;
   }
   
+  protected Node getReferenceNode() {
+    return this.host.getNode();
+  }
+  
   protected ArrayList<Point2D> calculatePoints() {
     ArrayList<Point2D> _xblockexpression = null;
     {
-      Node _node = null;
-      if (this.host!=null) {
-        _node=this.host.getNode();
-      }
+      Node _referenceNode = this.getReferenceNode();
       Bounds _boundsInLocal = null;
-      if (_node!=null) {
-        _boundsInLocal=_node.getBoundsInLocal();
+      if (_referenceNode!=null) {
+        _boundsInLocal=_referenceNode.getBoundsInLocal();
       }
       final Bounds bounds = _boundsInLocal;
       ArrayList<Point2D> _xifexpression = null;
@@ -62,39 +63,39 @@ public class DiscreteAnchors implements Anchors {
         {
           double _maxX = bounds.getMaxX();
           double _minX = bounds.getMinX();
-          double _plus = (_maxX + _minX);
-          final double deltaX = (_plus / (this.numAnchorsPerSide + 1));
+          double _minus = (_maxX - _minX);
+          final double deltaX = (_minus / (this.numAnchorsPerSide + 1));
           double _maxY = bounds.getMaxY();
           double _minY = bounds.getMinY();
-          double _plus_1 = (_maxY + _minY);
-          final double deltaY = (_plus_1 / (this.numAnchorsPerSide + 1));
+          double _minus_1 = (_maxY - _minY);
+          final double deltaY = (_minus_1 / (this.numAnchorsPerSide + 1));
           final ArrayList<Point2D> anchors = CollectionLiterals.<Point2D>newArrayList();
           IntegerRange _upTo = new IntegerRange(1, this.numAnchorsPerSide);
           for (final Integer i : _upTo) {
             {
-              Node _node_1 = this.host.getNode();
+              Node _referenceNode_1 = this.getReferenceNode();
               double _minX_1 = bounds.getMinX();
               double _minY_1 = bounds.getMinY();
-              double _plus_2 = (_minY_1 + ((i).intValue() * deltaY));
-              Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(_node_1, _minX_1, _plus_2);
+              double _plus = (_minY_1 + ((i).intValue() * deltaY));
+              Point2D _localToRootDiagram = CoreExtensions.localToRootDiagram(_referenceNode_1, _minX_1, _plus);
               anchors.add(_localToRootDiagram);
-              Node _node_2 = this.host.getNode();
+              Node _referenceNode_2 = this.getReferenceNode();
               double _maxX_1 = bounds.getMaxX();
               double _minY_2 = bounds.getMinY();
-              double _plus_3 = (_minY_2 + ((i).intValue() * deltaY));
-              Point2D _localToRootDiagram_1 = CoreExtensions.localToRootDiagram(_node_2, _maxX_1, _plus_3);
+              double _plus_1 = (_minY_2 + ((i).intValue() * deltaY));
+              Point2D _localToRootDiagram_1 = CoreExtensions.localToRootDiagram(_referenceNode_2, _maxX_1, _plus_1);
               anchors.add(_localToRootDiagram_1);
-              Node _node_3 = this.host.getNode();
+              Node _referenceNode_3 = this.getReferenceNode();
               double _minX_2 = bounds.getMinX();
-              double _plus_4 = (_minX_2 + ((i).intValue() * deltaX));
+              double _plus_2 = (_minX_2 + ((i).intValue() * deltaX));
               double _minY_3 = bounds.getMinY();
-              Point2D _localToRootDiagram_2 = CoreExtensions.localToRootDiagram(_node_3, _plus_4, _minY_3);
+              Point2D _localToRootDiagram_2 = CoreExtensions.localToRootDiagram(_referenceNode_3, _plus_2, _minY_3);
               anchors.add(_localToRootDiagram_2);
-              Node _node_4 = this.host.getNode();
+              Node _referenceNode_4 = this.getReferenceNode();
               double _minX_3 = bounds.getMinX();
-              double _plus_5 = (_minX_3 + ((i).intValue() * deltaX));
+              double _plus_3 = (_minX_3 + ((i).intValue() * deltaX));
               double _maxY_1 = bounds.getMaxY();
-              Point2D _localToRootDiagram_3 = CoreExtensions.localToRootDiagram(_node_4, _plus_5, _maxY_1);
+              Point2D _localToRootDiagram_3 = CoreExtensions.localToRootDiagram(_referenceNode_4, _plus_3, _maxY_1);
               anchors.add(_localToRootDiagram_3);
             }
           }

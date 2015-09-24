@@ -41,7 +41,7 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 				return new XtextEObjectDescriptor(createXtextEObjectID, mapping.config.ID, mapping.ID, this) as IMappedElementDescriptor<T>
 			}
 			ESetting<?>: {
-				if(owner == null || owner.eIsProxy)
+				if(owner == null || owner.eIsProxy || target == null)
 					return null
 				return new XtextESettingDescriptor(owner.createXtextEObjectID, target.createXtextEObjectID, reference, index, mapping.config.ID, mapping.ID, this)
 			}

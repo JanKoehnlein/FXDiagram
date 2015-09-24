@@ -13,7 +13,7 @@ class DiscreteAnchors implements Anchors {
 	
 	new(XNode host, int numAnchorsPerSide) {
 		this.host = host
-		this.numAnchorsPerSide = numAnchorsPerSide  
+		this.numAnchorsPerSide = numAnchorsPerSide 
 	}
 
 	override getAnchor(double x, double y) {
@@ -28,21 +28,24 @@ class DiscreteAnchors implements Anchors {
 		}
 		currentAnchor
 	}
+	
+	protected def getReferenceNode() {
+		host.node
+	}
 
 	protected def calculatePoints() {
-		val bounds = host?.node?.boundsInLocal
+		val bounds = referenceNode?.boundsInLocal
 		if (bounds != null) {
-			val deltaX = (bounds.maxX + bounds.minX) / (numAnchorsPerSide + 1)
-			val deltaY = (bounds.maxY + bounds.minY) / (numAnchorsPerSide + 1)
+			val deltaX = (bounds.maxX - bounds.minX) / (numAnchorsPerSide + 1)
+			val deltaY = (bounds.maxY - bounds.minY) / (numAnchorsPerSide + 1)
 			val anchors = newArrayList
 			for(i: 1..numAnchorsPerSide) {
-				anchors += host.node.localToRootDiagram(bounds.minX, bounds.minY + i * deltaY)
-				anchors += host.node.localToRootDiagram(bounds.maxX, bounds.minY + i * deltaY)
-				anchors += host.node.localToRootDiagram(bounds.minX + i * deltaX, bounds.minY)
-				anchors += host.node.localToRootDiagram(bounds.minX + i * deltaX, bounds.maxY)
+				anchors += referenceNode.localToRootDiagram(bounds.minX, bounds.minY + i * deltaY)
+				anchors += referenceNode.localToRootDiagram(bounds.maxX, bounds.minY + i * deltaY)
+				anchors += referenceNode.localToRootDiagram(bounds.minX + i * deltaX, bounds.minY)
+				anchors += referenceNode.localToRootDiagram(bounds.minX + i * deltaX, bounds.maxY)
 			}
 			anchors
 		}
 	}
-	
 }
