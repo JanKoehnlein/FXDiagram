@@ -121,7 +121,7 @@ class XNode extends XDomainObjectShape {
 				scaleX = 1.05
 				scaleY = 1.05
 			}
-			(#[this] + outgoingConnections + incomingConnections).forEach[toFront]
+			toFront 
 		} else {
 			effect = null
 			if(!scaleXProperty.bound) {
@@ -129,6 +129,11 @@ class XNode extends XDomainObjectShape {
 				scaleY = 1.0
 			}
 		}
+	}
+	
+	override toFront() {
+		super.toFront()
+		(outgoingConnections + incomingConnections).forEach[toFront]
 	}
 	
 	override getSnapBounds() {

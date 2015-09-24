@@ -333,18 +333,27 @@ public class XConnection extends XDomainObjectShape {
   @Override
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
-      XNode _source = this.getSource();
-      _source.toFront();
-      XNode _target = this.getTarget();
-      _target.toFront();
-      ObservableList<XConnectionLabel> _labels = this.getLabels();
-      final Consumer<XConnectionLabel> _function = (XConnectionLabel it) -> {
-        it.toFront();
-      };
-      _labels.forEach(_function);
       this.toFront();
     }
     this.controlPointGroup.setVisible(isSelected);
+  }
+  
+  @Override
+  public void toFront() {
+    super.toFront();
+    ArrowHead _sourceArrowHead = this.getSourceArrowHead();
+    if (_sourceArrowHead!=null) {
+      _sourceArrowHead.toFront();
+    }
+    ArrowHead _targetArrowHead = this.getTargetArrowHead();
+    if (_targetArrowHead!=null) {
+      _targetArrowHead.toFront();
+    }
+    ObservableList<XConnectionLabel> _labels = this.getLabels();
+    final Consumer<XConnectionLabel> _function = (XConnectionLabel it) -> {
+      it.toFront();
+    };
+    _labels.forEach(_function);
   }
   
   public void updateShapes() {

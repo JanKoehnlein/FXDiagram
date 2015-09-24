@@ -25,6 +25,7 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDiagramContainer;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
@@ -48,6 +49,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
@@ -452,6 +454,8 @@ public class Layouter {
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
+      shapeLayout.<Boolean>setProperty(LayoutOptions.DEBUG_MODE, Boolean.valueOf(true));
+      shapeLayout.<Boolean>setProperty(LayoutOptions.LAYOUT_HIERARCHY, Boolean.valueOf(true));
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
       cache.put(it, kRoot);
@@ -462,32 +466,46 @@ public class Layouter {
         _children.add(_kNode);
       };
       _nodes.forEach(_function);
-      double spacing = 60.0;
       ObservableList<XConnection> _connections = it.getConnections();
-      for (final XConnection it_1 : _connections) {
+      double _transformConnections = this.transformConnections(_connections, cache);
+      double _max = Math.max(60.0, _transformConnections);
+      ObservableList<XNode> _nodes_1 = it.getNodes();
+      double _transformNestedConnections = this.transformNestedConnections(_nodes_1, cache);
+      double spacing = Math.max(_max, _transformNestedConnections);
+      shapeLayout.<Float>setProperty(LayoutOptions.SPACING, Float.valueOf(((float) spacing)));
+      _xblockexpression = kRoot;
+    }
+    return _xblockexpression;
+  }
+  
+  protected double transformConnections(final Iterable<XConnection> connections, final Map<Object, KGraphElement> cache) {
+    double _xblockexpression = (double) 0;
+    {
+      double spacing = 0.0;
+      for (final XConnection it : connections) {
         {
-          this.toKEdge(it_1, cache);
+          this.toKEdge(it, cache);
           double minLength = ((double) Layouter.NODE_PADDING);
-          ObservableList<XConnectionLabel> _labels = it_1.getLabels();
+          ObservableList<XConnectionLabel> _labels = it.getLabels();
           for (final XConnectionLabel label : _labels) {
             double _minLength = minLength;
             Bounds _boundsInLocal = label.getBoundsInLocal();
             double _width = _boundsInLocal.getWidth();
             minLength = (_minLength + _width);
           }
-          ArrowHead _sourceArrowHead = it_1.getSourceArrowHead();
+          ArrowHead _sourceArrowHead = it.getSourceArrowHead();
           boolean _notEquals = (!Objects.equal(_sourceArrowHead, null));
           if (_notEquals) {
             double _minLength_1 = minLength;
-            ArrowHead _sourceArrowHead_1 = it_1.getSourceArrowHead();
+            ArrowHead _sourceArrowHead_1 = it.getSourceArrowHead();
             double _width_1 = _sourceArrowHead_1.getWidth();
             minLength = (_minLength_1 + _width_1);
           }
-          ArrowHead _targetArrowHead = it_1.getTargetArrowHead();
+          ArrowHead _targetArrowHead = it.getTargetArrowHead();
           boolean _notEquals_1 = (!Objects.equal(_targetArrowHead, null));
           if (_notEquals_1) {
             double _minLength_2 = minLength;
-            ArrowHead _targetArrowHead_1 = it_1.getTargetArrowHead();
+            ArrowHead _targetArrowHead_1 = it.getTargetArrowHead();
             double _width_2 = _targetArrowHead_1.getWidth();
             minLength = (_minLength_2 + _width_2);
           }
@@ -495,27 +513,90 @@ public class Layouter {
           spacing = _max;
         }
       }
-      shapeLayout.<Float>setProperty(LayoutOptions.SPACING, Float.valueOf(((float) spacing)));
-      _xblockexpression = kRoot;
+      _xblockexpression = spacing;
     }
     return _xblockexpression;
   }
   
-  protected KNode toKNode(final XNode it, final Map<Object, KGraphElement> cache) {
+  protected double transformNestedConnections(final Iterable<XNode> nodes, final Map<Object, KGraphElement> cache) {
+    Iterable<XDiagramContainer> _filter = Iterables.<XDiagramContainer>filter(nodes, XDiagramContainer.class);
+    final Function1<XDiagramContainer, Boolean> _function = (XDiagramContainer it) -> {
+      return Boolean.valueOf(it.isInnerDiagramActive());
+    };
+    Iterable<XDiagramContainer> _filter_1 = IterableExtensions.<XDiagramContainer>filter(_filter, _function);
+    final Function1<XDiagramContainer, Double> _function_1 = (XDiagramContainer it) -> {
+      XDiagram _innerDiagram = it.getInnerDiagram();
+      ObservableList<XConnection> _connections = _innerDiagram.getConnections();
+      double _transformConnections = this.transformConnections(_connections, cache);
+      XDiagram _innerDiagram_1 = it.getInnerDiagram();
+      ObservableList<XNode> _nodes = _innerDiagram_1.getNodes();
+      double _transformNestedConnections = this.transformNestedConnections(_nodes, cache);
+      return Double.valueOf(Math.max(_transformConnections, _transformNestedConnections));
+    };
+    Iterable<Double> _map = IterableExtensions.<XDiagramContainer, Double>map(_filter_1, _function_1);
+    final Function2<Double, Double, Double> _function_2 = (Double $0, Double $1) -> {
+      return Double.valueOf(Math.max(($0).doubleValue(), ($1).doubleValue()));
+    };
+    return (double) IterableExtensions.<Double, Double>fold(_map, Double.valueOf(0.0), _function_2);
+  }
+  
+  protected KNode toKNode(final XNode xNode, final Map<Object, KGraphElement> cache) {
     KNode _xblockexpression = null;
     {
       final KNode kNode = this._kGraphFactory.createKNode();
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
-      Dimension2D _autoLayoutDimension = it.getAutoLayoutDimension();
+      Dimension2D _autoLayoutDimension = xNode.getAutoLayoutDimension();
       double _width = _autoLayoutDimension.getWidth();
       float _plus = (((float) _width) + Layouter.NODE_PADDING);
-      Dimension2D _autoLayoutDimension_1 = it.getAutoLayoutDimension();
+      Dimension2D _autoLayoutDimension_1 = xNode.getAutoLayoutDimension();
       double _height = _autoLayoutDimension_1.getHeight();
       float _plus_1 = (((float) _height) + Layouter.NODE_PADDING);
       shapeLayout.setSize(_plus, _plus_1);
       EList<KGraphData> _data = kNode.getData();
       _data.add(shapeLayout);
-      cache.put(it, kNode);
+      cache.put(xNode, kNode);
+      if ((xNode instanceof XDiagramContainer)) {
+        boolean _isInnerDiagramActive = ((XDiagramContainer)xNode).isInnerDiagramActive();
+        if (_isInnerDiagramActive) {
+          KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
+          final Procedure1<KInsets> _function = (KInsets it) -> {
+            Insets _insets = ((XDiagramContainer)xNode).getInsets();
+            double _left = 0.0;
+            if (_insets!=null) {
+              _left=_insets.getLeft();
+            }
+            it.setLeft(((float) _left));
+            Insets _insets_1 = ((XDiagramContainer)xNode).getInsets();
+            double _right = 0.0;
+            if (_insets_1!=null) {
+              _right=_insets_1.getRight();
+            }
+            it.setRight(((float) _right));
+            Insets _insets_2 = ((XDiagramContainer)xNode).getInsets();
+            double _top = 0.0;
+            if (_insets_2!=null) {
+              _top=_insets_2.getTop();
+            }
+            it.setTop(((float) _top));
+            Insets _insets_3 = ((XDiagramContainer)xNode).getInsets();
+            double _bottom = 0.0;
+            if (_insets_3!=null) {
+              _bottom=_insets_3.getBottom();
+            }
+            it.setBottom(((float) _bottom));
+          };
+          KInsets _doubleArrow = ObjectExtensions.<KInsets>operator_doubleArrow(_createKInsets, _function);
+          shapeLayout.setInsets(_doubleArrow);
+          XDiagram _innerDiagram = ((XDiagramContainer)xNode).getInnerDiagram();
+          ObservableList<XNode> _nodes = _innerDiagram.getNodes();
+          final Consumer<XNode> _function_1 = (XNode it) -> {
+            EList<KNode> _children = kNode.getChildren();
+            KNode _kNode = this.toKNode(it, cache);
+            _children.add(_kNode);
+          };
+          _nodes.forEach(_function_1);
+        }
+      }
       _xblockexpression = kNode;
     }
     return _xblockexpression;

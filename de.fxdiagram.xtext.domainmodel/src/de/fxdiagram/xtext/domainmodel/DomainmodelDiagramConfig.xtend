@@ -66,11 +66,11 @@ class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
 			propertyConnection.outConnectionForEach [
 				features.filter(Property).filter[domainModelUtil.getReferencedEntity(type) != null]
 			].asButton[getArrowButton("Add property")]
-			superTypeConnection.outConnectionForEach [
+			superTypeConnection.outConnectionFor [
 				if (superType.referencedEntity != null)
-					#[superType]
+					superType
 				else
-					#[]
+					null
 			].asButton[getTriangleButton("Add superclass")]
 		}
 	}

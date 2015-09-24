@@ -51,6 +51,14 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
+import de.fxdiagram.lib.simple.ContainerDiagramNode
+import javafx.scene.text.Text
+import javafx.scene.text.Font
+import javafx.scene.text.TextAlignment
+import javafx.scene.layout.Pane
+import javafx.scene.text.FontWeight
+import javafx.scene.control.TextFormatter.Change
+import javafx.scene.paint.Color
 
 /**
  * Application to demonstarte the capabilities of FXDiagram in standalone (non-OSGi) mode.
@@ -116,44 +124,60 @@ class Demo extends Application {
 			new FullScreenAction,
 			new UndoRedoPlayerAction
 		]
+		val ContainerDiagramNode container = new ContainerDiagramNode('container') {
+			override protected createNode() {
+				super.createNode as Pane => [
+					children += new Text => [
+						text = 'FXDiagram Demo'
+						textAlignment = TextAlignment.CENTER
+						font = Font.font('Helvetica', FontWeight.BOLD, 80)
+						fill = Color.GRAY
+					]
+				]
+			}
+			
+		}
 		diagram => [
-//			nodes += new DemoCampIntroSlides
-			nodes += new IntroductionSlideDeck
-//			nodes += new OpenableDiagramNode('Basic') => [
-//				innerDiagram = new LazyExampleDiagram('')
-//			]
-			nodes += new OpenableDiagramNode('JavaFX') => [
-				innerDiagram = new XDiagram => [
-					nodes += newLoginNode
-					nodes += newRecursiveImageNode
-					nodes += newImageNode
-					nodes += newMovieNode
-					nodes += newBrowserNode
-					nodes += newBrickBreakerNode
-					layoutOnActivate = LayoutType.DOT
+			nodes += container => [
+				innerDiagram => [
+		//			nodes += new DemoCampIntroSlides
+					nodes += new IntroductionSlideDeck
+					nodes += new OpenableDiagramNode('Basic') => [
+						innerDiagram = new LazyExampleDiagram('')
+					]
+					nodes += new OpenableDiagramNode('JavaFX') => [
+						innerDiagram = new XDiagram => [
+							nodes += newLoginNode
+							nodes += newRecursiveImageNode
+							nodes += newImageNode
+							nodes += newMovieNode
+							nodes += newBrowserNode
+							nodes += newBrickBreakerNode
+							layoutOnActivate = LayoutType.DOT
+						]
+					]
+					nodes += openableDiagram('Xtend', newNeonSignNode)
+					nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
+					nodes += openableDiagram('Ecore Explorer', newEClassNode)
+					nodes += new SimpleNode('Xtext Views')
+//		//			nodes += newGalleryDiagramNode()
+					if(root.getDomainObjectProvider(LcarsModelProvider).canConnect)
+						nodes += newLcarsDiagramNode
+//		//			nodes += new DemoCampSummarySlides
+					nodes += new SummarySlideDeck
 				]
 			]
-			nodes += openableDiagram('Xtend', newNeonSignNode)
-			nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
-			nodes += openableDiagram('Ecore Explorer', newEClassNode)
-			nodes += new SimpleNode('Xtext Views')
-//			nodes += newGalleryDiagramNode()
-			if(root.getDomainObjectProvider(LcarsModelProvider).canConnect)
-				nodes += newLcarsDiagramNode
-//			nodes += new DemoCampSummarySlides
-			nodes += new SummarySlideDeck
-			val deltaX = scene.width / (nodes.size + 2)
-			val deltaY = scene.height / (nodes.size + 2)
-			nodes.forEach[
-				node, i |
-				node.layoutX = i * deltaX - node.layoutBounds.width / 2
-				node.layoutY = i * deltaY - node.layoutBounds.height / 2
-			]
-			nodes.subList(0, nodes.size - 1).forEach [
-				node, i |
-				connections += new XConnection(node, nodes.get(i+1)) 
-			]
 		]
+		val allNodes = container.innerDiagram.nodes
+		val deltaX = scene.width / (allNodes.size + 2)
+		val deltaY = scene.height / (allNodes.size + 2)
+		allNodes.forEach[
+			node, i |
+			node.layoutX = i * deltaX - node.layoutBounds.width / 2
+			node.layoutY = i * deltaY - node.layoutBounds.height / 2
+		]
+		for(i: 1..<allNodes.size) 
+			diagram.connections += new XConnection(allNodes.get(i-1), allNodes.get(i)) 
 		warmUpLayouter
 		Platform.runLater[|
 			diagram.centerDiagram(true)

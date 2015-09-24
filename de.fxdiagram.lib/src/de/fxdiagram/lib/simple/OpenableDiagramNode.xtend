@@ -41,6 +41,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import org.eclipse.xtend.lib.annotations.Accessors
+import de.fxdiagram.core.XDiagramContainer
 
 /**
  * An {@link XNode} containing a diagram that is shown when the user double-clicks.
@@ -54,7 +55,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
  */
 @Logging
 @ModelNode('innerDiagram')
-class OpenableDiagramNode extends XNode {
+class OpenableDiagramNode extends XNode implements XDiagramContainer {
 	
 	@FxProperty XDiagram innerDiagram
 	
@@ -122,6 +123,14 @@ class OpenableDiagramNode extends XNode {
 		}
 		val AbstractOpenBehavior openBehavior = [| openDiagram ]
 		addBehavior(openBehavior)
+	}
+	
+	override getInsets() {
+		null
+	}
+	
+	override isInnerDiagramActive() {
+		isOpen
 	}
 	
 	def openDiagram() {

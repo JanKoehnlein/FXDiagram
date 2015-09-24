@@ -71,6 +71,27 @@ class LocalCoodinateTest {
 		
 	}
 	
+	
+	@Test def void stackPaneToRoot() {
+		val rect = new Rectangle(-100, -100, 1,1)
+		val group = new Group
+		val pane = new StackPane
+		new Group => [
+			children += pane => [
+				layoutX = 10
+				layoutY = 10
+				children += group => [
+					managed = false
+					children += rect
+				]
+			]
+		]
+		println(rect.boundsInLocal)
+		println(rect.localToParent(rect.boundsInLocal))
+		println(rect.localToParent(rect.boundsInLocal))
+		println(group.localToParent(rect.localToParent(rect.boundsInLocal)))
+		println(pane.localToParent(group.localToParent(rect.localToParent(rect.boundsInLocal))))
+	}
 }
 
 class TestPane extends Pane {

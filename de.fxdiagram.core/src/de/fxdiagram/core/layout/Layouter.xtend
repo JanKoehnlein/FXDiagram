@@ -32,6 +32,7 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
+import de.fxdiagram.core.XDiagramContainer
 
 class Layouter { 
 
@@ -221,12 +222,19 @@ class Layouter {
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
 //		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
+		shapeLayout.setProperty(LayoutOptions.LAYOUT_HIERARCHY, true)
 		kRoot.data += shapeLayout
 		cache.put(it, kRoot)
 		nodes.forEach [
 			kRoot.children += toKNode(cache)
 		]
-		var spacing = 60.0
+		var spacing = max(max(60.0, transformConnections(connections, cache)), transformNestedConnections(nodes, cache))
+		shapeLayout.setProperty(LayoutOptions.SPACING, spacing as float)
+		kRoot
+	}
+	
+	protected def double transformConnections(Iterable<XConnection> connections, Map<Object, KGraphElement> cache) {
+		var spacing = 0.0
 		for(it: connections) {
 			toKEdge(cache)
 			var minLength = NODE_PADDING as double
@@ -238,19 +246,37 @@ class Layouter {
 				minLength += targetArrowHead.width
 			spacing = max(spacing, minLength)
 		}
-		shapeLayout.setProperty(LayoutOptions.SPACING, spacing as float)
-		kRoot
+		spacing
 	}
 	
-	protected def toKNode(XNode it, Map<Object, KGraphElement> cache) {
+	protected def double transformNestedConnections(Iterable<XNode> nodes, Map<Object, KGraphElement> cache) {
+		nodes.filter(XDiagramContainer).filter[isInnerDiagramActive].map[
+			max(transformConnections(innerDiagram.connections, cache), transformNestedConnections(innerDiagram.nodes, cache))
+		].fold(0.0, [max($0,$1)])
+	}
+	
+	protected def KNode toKNode(XNode xNode, Map<Object, KGraphElement> cache) {
 		val kNode = createKNode
 		val shapeLayout = createKShapeLayout
 		shapeLayout.setSize(
-			autoLayoutDimension.width as float + NODE_PADDING, 
-			autoLayoutDimension.height as float + NODE_PADDING
+			xNode.autoLayoutDimension.width as float + NODE_PADDING, 
+			xNode.autoLayoutDimension.height as float + NODE_PADDING
 		)
 		kNode.data += shapeLayout
-		cache.put(it, kNode)
+		cache.put(xNode, kNode)
+		if(xNode instanceof XDiagramContainer) {
+			if(xNode.isInnerDiagramActive) {
+				shapeLayout.insets = createKInsets => [
+					left = xNode.insets?.left as float
+					right = xNode.insets?.right as float
+					top = xNode.insets?.top as float
+					bottom = xNode.insets?.bottom as float
+				]
+				xNode.innerDiagram.nodes.forEach [
+					kNode.children += toKNode(cache)
+				]
+			}
+		} 
 		kNode	
 	}
 	

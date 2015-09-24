@@ -111,4 +111,47 @@ public class LocalCoodinateTest {
     Bounds _boundsInLocal = pane.getBoundsInLocal();
     InputOutput.<Bounds>println(_boundsInLocal);
   }
+  
+  @Test
+  public void stackPaneToRoot() {
+    final Rectangle rect = new Rectangle((-100), (-100), 1, 1);
+    final Group group = new Group();
+    final StackPane pane = new StackPane();
+    Group _group = new Group();
+    final Procedure1<Group> _function = (Group it) -> {
+      ObservableList<Node> _children = it.getChildren();
+      final Procedure1<StackPane> _function_1 = (StackPane it_1) -> {
+        it_1.setLayoutX(10);
+        it_1.setLayoutY(10);
+        ObservableList<Node> _children_1 = it_1.getChildren();
+        final Procedure1<Group> _function_2 = (Group it_2) -> {
+          it_2.setManaged(false);
+          ObservableList<Node> _children_2 = it_2.getChildren();
+          _children_2.add(rect);
+        };
+        Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(group, _function_2);
+        _children_1.add(_doubleArrow);
+      };
+      StackPane _doubleArrow = ObjectExtensions.<StackPane>operator_doubleArrow(pane, _function_1);
+      _children.add(_doubleArrow);
+    };
+    ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+    Bounds _boundsInLocal = rect.getBoundsInLocal();
+    InputOutput.<Bounds>println(_boundsInLocal);
+    Bounds _boundsInLocal_1 = rect.getBoundsInLocal();
+    Bounds _localToParent = rect.localToParent(_boundsInLocal_1);
+    InputOutput.<Bounds>println(_localToParent);
+    Bounds _boundsInLocal_2 = rect.getBoundsInLocal();
+    Bounds _localToParent_1 = rect.localToParent(_boundsInLocal_2);
+    InputOutput.<Bounds>println(_localToParent_1);
+    Bounds _boundsInLocal_3 = rect.getBoundsInLocal();
+    Bounds _localToParent_2 = rect.localToParent(_boundsInLocal_3);
+    Bounds _localToParent_3 = group.localToParent(_localToParent_2);
+    InputOutput.<Bounds>println(_localToParent_3);
+    Bounds _boundsInLocal_4 = rect.getBoundsInLocal();
+    Bounds _localToParent_4 = rect.localToParent(_boundsInLocal_4);
+    Bounds _localToParent_5 = group.localToParent(_localToParent_4);
+    Bounds _localToParent_6 = pane.localToParent(_localToParent_5);
+    InputOutput.<Bounds>println(_localToParent_6);
+  }
 }

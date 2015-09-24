@@ -8,11 +8,11 @@ import de.fxdiagram.core.viewport.ViewportTransition
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
+import static java.lang.Math.*
+
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-
-import static java.lang.Math.*
-import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 
 class RevealAction implements DiagramAction {
 	

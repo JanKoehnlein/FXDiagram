@@ -179,13 +179,16 @@ class XConnection extends XDomainObjectShape {
 	}
 	
 	override selectionFeedback(boolean isSelected) {
-		if(isSelected) {
-			source.toFront
-			target.toFront
-			labels.forEach[toFront]
-			this.toFront
-		}
+		if(isSelected) 
+			toFront
 		controlPointGroup.visible = isSelected
+	}
+	
+	override toFront() {
+		super.toFront()
+		sourceArrowHead?.toFront
+		targetArrowHead?.toFront
+		labels.forEach[toFront]	
 	}
 	
 	def void updateShapes() {

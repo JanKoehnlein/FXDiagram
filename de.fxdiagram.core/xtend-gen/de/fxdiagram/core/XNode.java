@@ -17,7 +17,6 @@ import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringDescriptor;
-import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
@@ -36,7 +35,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -186,14 +184,7 @@ public class XNode extends XDomainObjectShape {
         this.setScaleX(1.05);
         this.setScaleY(1.05);
       }
-      ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
-      Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(Collections.<XNode>unmodifiableList(CollectionLiterals.<XNode>newArrayList(this)), _outgoingConnections);
-      ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
-      Iterable<XDomainObjectShape> _plus_1 = Iterables.<XDomainObjectShape>concat(_plus, _incomingConnections);
-      final Consumer<XDomainObjectShape> _function = (XDomainObjectShape it) -> {
-        it.toFront();
-      };
-      _plus_1.forEach(_function);
+      this.toFront();
     } else {
       this.setEffect(null);
       DoubleProperty _scaleXProperty_1 = this.scaleXProperty();
@@ -204,6 +195,18 @@ public class XNode extends XDomainObjectShape {
         this.setScaleY(1.0);
       }
     }
+  }
+  
+  @Override
+  public void toFront() {
+    super.toFront();
+    ObservableList<XConnection> _outgoingConnections = this.getOutgoingConnections();
+    ObservableList<XConnection> _incomingConnections = this.getIncomingConnections();
+    Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
+    final Consumer<XConnection> _function = (XConnection it) -> {
+      it.toFront();
+    };
+    _plus.forEach(_function);
   }
   
   @Override

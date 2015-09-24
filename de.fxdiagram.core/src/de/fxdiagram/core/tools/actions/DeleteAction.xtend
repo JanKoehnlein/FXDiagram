@@ -6,6 +6,7 @@ import de.fxdiagram.core.command.AddRemoveCommand
 import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import de.fxdiagram.core.XDiagramContainer
 
 class DeleteAction implements DiagramAction {
 	
@@ -23,7 +24,7 @@ class DeleteAction implements DiagramAction {
 	
 	override perform(XRoot root) {
   		val elements = root.currentSelection
-		val nodes = elements.filter(XNode)
+		val nodes = elements.filter(XNode).allContainedNodes
   		val deleteThem = 
 			nodes.map[incomingConnections].flatten + 
 			nodes.map[outgoingConnections].flatten +
@@ -31,4 +32,8 @@ class DeleteAction implements DiagramAction {
 		root.commandStack.execute(AddRemoveCommand.newRemoveCommand(root.diagram, deleteThem))
 	}
 	
+	protected def Iterable<XNode> getAllContainedNodes(Iterable<XNode> nodes) {
+		nodes + nodes.filter(XDiagramContainer).map[innerDiagram.nodes.allContainedNodes].flatten
+		
+	}
 }

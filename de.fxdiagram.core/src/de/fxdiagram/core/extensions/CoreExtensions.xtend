@@ -3,6 +3,7 @@ package de.fxdiagram.core.extensions
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
+import java.util.Collection
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.collections.ListChangeListener
@@ -21,6 +22,20 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 
 class CoreExtensions {
+
+	def static <T> void safeAdd(Collection<? super T> collection, T element) {
+		if(element != null && !collection.contains(element))	
+			collection.add(element)
+	}
+	
+	def static <T> void safeAdd(Collection<? super T> collection, Iterable<T> elements) {
+		elements.forEach[collection.safeAdd(it)]
+	}
+
+	def static <T> safeDelete(Collection<? super T> list, T element) {
+		if(element != null && list.contains(element))
+			list -= element
+	}
 
 	def static isRootDiagram(Node node) {
 		switch node { 
@@ -92,7 +107,7 @@ class CoreExtensions {
 	def static XDiagram getRootDiagram(Node it) {
 		switch it {
 			case null: null
-			XDiagram: if(isRootDiagram) it else getRootDiagram(it.parentDiagram)
+			XDiagram: if(isRootDiagram) it else getRootDiagram(it.parent)
 			default: getRootDiagram(it.parent)
 		}
 	}

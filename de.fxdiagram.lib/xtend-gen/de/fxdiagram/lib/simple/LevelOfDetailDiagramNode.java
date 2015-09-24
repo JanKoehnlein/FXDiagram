@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDiagramContainer;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -36,7 +37,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @Logging
 @ModelNode
 @SuppressWarnings("all")
-public class LevelOfDetailDiagramNode extends XNode {
+public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer {
   private RectangleBorderPane pane = new RectangleBorderPane();
   
   private Text label;
@@ -72,6 +73,29 @@ public class LevelOfDetailDiagramNode extends XNode {
     };
     return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
       this.pane, _function);
+  }
+  
+  @Override
+  public XDiagram getInnerDiagram() {
+    return this.innerDiagram;
+  }
+  
+  @Override
+  public Insets getInsets() {
+    return null;
+  }
+  
+  @Override
+  public boolean isInnerDiagramActive() {
+    boolean _and = false;
+    boolean _isActive = this.innerDiagram.getIsActive();
+    if (!_isActive) {
+      _and = false;
+    } else {
+      boolean _isVisible = this.innerDiagram.isVisible();
+      _and = _isVisible;
+    }
+    return _and;
   }
   
   public DiagramScaler setInnerDiagram(final XDiagram innerDiagram) {

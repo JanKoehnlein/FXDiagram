@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDiagramContainer;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -48,7 +49,8 @@ public class DeleteAction implements DiagramAction {
   @Override
   public void perform(final XRoot root) {
     final Iterable<XShape> elements = root.getCurrentSelection();
-    final Iterable<XNode> nodes = Iterables.<XNode>filter(elements, XNode.class);
+    Iterable<XNode> _filter = Iterables.<XNode>filter(elements, XNode.class);
+    final Iterable<XNode> nodes = this.getAllContainedNodes(_filter);
     final Function1<XNode, ObservableList<XConnection>> _function = (XNode it) -> {
       return it.getIncomingConnections();
     };
@@ -65,5 +67,17 @@ public class DeleteAction implements DiagramAction {
     XDiagram _diagram = root.getDiagram();
     AddRemoveCommand _newRemoveCommand = AddRemoveCommand.newRemoveCommand(_diagram, ((XShape[])Conversions.unwrapArray(deleteThem, XShape.class)));
     _commandStack.execute(_newRemoveCommand);
+  }
+  
+  protected Iterable<XNode> getAllContainedNodes(final Iterable<XNode> nodes) {
+    Iterable<XDiagramContainer> _filter = Iterables.<XDiagramContainer>filter(nodes, XDiagramContainer.class);
+    final Function1<XDiagramContainer, Iterable<XNode>> _function = (XDiagramContainer it) -> {
+      XDiagram _innerDiagram = it.getInnerDiagram();
+      ObservableList<XNode> _nodes = _innerDiagram.getNodes();
+      return this.getAllContainedNodes(_nodes);
+    };
+    Iterable<Iterable<XNode>> _map = IterableExtensions.<XDiagramContainer, Iterable<XNode>>map(_filter, _function);
+    Iterable<XNode> _flatten = Iterables.<XNode>concat(_map);
+    return Iterables.<XNode>concat(nodes, _flatten);
   }
 }

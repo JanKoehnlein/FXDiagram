@@ -29,7 +29,6 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import java.util.List
 
 /**
  * A diagram with {@link XNode}s and {@link XConnection}s.
@@ -55,18 +54,17 @@ class XDiagram extends Group implements XActivatable {
 	@FxProperty ObservableMap<Node, Pos> fixedButtons = observableMap(newHashMap)
 
 	@FxProperty(readOnly=true) boolean isActive
-	@FxProperty(readOnly=true) boolean isRootDiagram
 	@FxProperty LayoutType layoutOnActivate
+	@FxProperty boolean isRootDiagram = true
+	@FxProperty XDiagram parentDiagram
 
 	@FxProperty Paint backgroundPaint = Color.WHITE
 	@FxProperty Paint foregroundPaint = Color.BLACK
 	@FxProperty Paint connectionPaint = Color.gray(0.2)
 	
 	Group nodeLayer = new Group
-	Group buttonLayer = new Group
+	Group buttonLayer = new Group;
 	
-	@FxProperty(readOnly=true) XDiagram parentDiagram
-
 	(XDiagram)=>void contentsInitializer
 
 	AuxiliaryLinesSupport auxiliaryLinesSupport
@@ -80,19 +78,6 @@ class XDiagram extends Group implements XActivatable {
 	new() {
 		children += nodeLayer
 		children += buttonLayer
-		isRootDiagramProperty.set(true)
-		parentProperty.addListener [
-			property, oldValue, newValue |
-			parentDiagramProperty.set(newValue.diagram)
-			isRootDiagramProperty.set(parentDiagram == null)
-		]
-		isRootDiagramProperty.addListener [
-			property, oldValue, newValue |
-			if(newValue) 
-				nodeLayer.children += connections
-			else 
-				nodeLayer.children -= connections
-		]
 		viewportTransform = new ViewportTransform
 		transforms.setAll(viewportTransform.transform)
 		transforms.addListener([ListChangeListener.Change<? extends Transform> change | 
@@ -112,6 +97,23 @@ class XDiagram extends Group implements XActivatable {
 	}
 	
 	def void doActivate() {
+		rootDiagramProperty.addListener [ p, o, n |
+			if(n) { 
+				connections.forEach[
+					nodeLayer.children.safeAdd(it)
+					nodeLayer.children.safeAdd(sourceArrowHead)
+					nodeLayer.children.safeAdd(targetArrowHead)
+					nodeLayer.children.safeAdd(labels)
+				]
+			} else {
+             	connections.forEach[
+					nodeLayer.children -= it
+					nodeLayer.children -= sourceArrowHead
+					nodeLayer.children -= targetArrowHead
+					nodeLayer.children -= labels
+				]
+			}				
+		]
 		contentsInitializer?.apply(this)
 		if(layoutOnActivate != null) {
 			nodes.forEach [
@@ -169,16 +171,6 @@ class XDiagram extends Group implements XActivatable {
 		])
 	}
 	
-	protected def <T> safeDelete(List<T> list, T element) {
-		if(element != null && list.contains(element))
-			list -= element
-	}
-	
-	protected def <T> safeAdd(List<T> list, T element) {
-		if(element != null && !list.contains(element))
-			list += element
-	}
-	
 	def void centerDiagram(boolean useForce) {
 		if(needsCentering || useForce) {
 			layout
@@ -227,16 +219,13 @@ class XDiagram extends Group implements XActivatable {
 		nodeLayer
 	}
 	
-	def getConnectionLayer() {
-		if(isRootDiagram) 
-			nodeLayer
-		else 
-			parentDiagram.nodeLayer		
+	def Group getConnectionLayer() {
+		if(!isRootDiagram && parentDiagram?.connectionLayer != null)
+			return parentDiagram.connectionLayer
+		return nodeLayer		
 	}
 	
 	def getButtonLayer() {
 		buttonLayer
 	}
 }
-
-	

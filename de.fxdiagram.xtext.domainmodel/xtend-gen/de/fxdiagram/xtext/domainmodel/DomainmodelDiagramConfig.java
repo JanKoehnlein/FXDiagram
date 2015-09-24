@@ -10,6 +10,7 @@ import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.eclipse.xtext.mapping.AbstractXtextDiagramConfig;
 import de.fxdiagram.mapping.ConnectionLabelMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
+import de.fxdiagram.mapping.ConnectionMappingCall;
 import de.fxdiagram.mapping.DiagramMapping;
 import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
@@ -22,8 +23,6 @@ import de.fxdiagram.mapping.shapes.BaseConnection;
 import de.fxdiagram.mapping.shapes.BaseDiagramNode;
 import de.fxdiagram.xtext.domainmodel.DomainModelUtil;
 import de.fxdiagram.xtext.domainmodel.EntityNode;
-import java.util.Collections;
-import java.util.List;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -38,7 +37,6 @@ import org.eclipse.xtext.example.domainmodel.domainmodel.Feature;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Operation;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property;
-import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -141,24 +139,23 @@ public class DomainmodelDiagramConfig extends AbstractXtextDiagramConfig {
         return ButtonExtensions.getArrowButton(it, "Add property");
       };
       _outConnectionForEach.asButton(_function_4);
-      final Function1<Entity, Iterable<? extends JvmTypeReference>> _function_5 = (Entity it) -> {
-        List<JvmParameterizedTypeReference> _xifexpression = null;
+      final Function1<Entity, JvmTypeReference> _function_5 = (Entity it) -> {
+        JvmParameterizedTypeReference _xifexpression = null;
         JvmParameterizedTypeReference _superType = it.getSuperType();
         Entity _referencedEntity = DomainmodelDiagramConfig.this.domainModelUtil.getReferencedEntity(_superType);
         boolean _notEquals = (!Objects.equal(_referencedEntity, null));
         if (_notEquals) {
-          JvmParameterizedTypeReference _superType_1 = it.getSuperType();
-          _xifexpression = Collections.<JvmParameterizedTypeReference>unmodifiableList(CollectionLiterals.<JvmParameterizedTypeReference>newArrayList(_superType_1));
+          _xifexpression = it.getSuperType();
         } else {
-          _xifexpression = Collections.<JvmParameterizedTypeReference>unmodifiableList(CollectionLiterals.<JvmParameterizedTypeReference>newArrayList());
+          _xifexpression = null;
         }
         return _xifexpression;
       };
-      MultiConnectionMappingCall<JvmTypeReference, Entity> _outConnectionForEach_1 = this.<JvmTypeReference>outConnectionForEach(DomainmodelDiagramConfig.this.superTypeConnection, _function_5);
+      ConnectionMappingCall<JvmTypeReference, Entity> _outConnectionFor = this.<JvmTypeReference>outConnectionFor(DomainmodelDiagramConfig.this.superTypeConnection, _function_5);
       final Function1<Side, Node> _function_6 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add superclass");
       };
-      _outConnectionForEach_1.asButton(_function_6);
+      _outConnectionFor.asButton(_function_6);
     }
   };
   

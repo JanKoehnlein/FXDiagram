@@ -3,11 +3,11 @@ package de.fxdiagram.core.behavior
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
+import de.fxdiagram.core.command.ViewportCommand
+import de.fxdiagram.core.viewport.ViewportTransition
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.viewport.ViewportTransition
-import de.fxdiagram.core.command.ViewportCommand
 
 interface NavigationBehavior extends Behavior {
 	

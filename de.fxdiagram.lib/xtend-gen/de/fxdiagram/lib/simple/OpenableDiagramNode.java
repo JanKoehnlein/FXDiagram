@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDiagramContainer;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.Anchors;
@@ -79,7 +80,7 @@ import org.eclipse.xtext.xbase.lib.Pure;
 @Logging
 @ModelNode("innerDiagram")
 @SuppressWarnings("all")
-public class OpenableDiagramNode extends XNode {
+public class OpenableDiagramNode extends XNode implements XDiagramContainer {
   private XRoot root;
   
   @Accessors(AccessorType.PUBLIC_GETTER)
@@ -167,6 +168,16 @@ public class OpenableDiagramNode extends XNode {
     };
     final AbstractOpenBehavior openBehavior = _function_1;
     this.addBehavior(openBehavior);
+  }
+  
+  @Override
+  public Insets getInsets() {
+    return null;
+  }
+  
+  @Override
+  public boolean isInnerDiagramActive() {
+    return this.isOpen;
   }
   
   public boolean openDiagram() {

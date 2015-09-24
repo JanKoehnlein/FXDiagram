@@ -9,6 +9,7 @@ import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.extensions.InitializingMapListener;
 import de.fxdiagram.core.extensions.TransformExtensions;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -32,6 +33,44 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
 @SuppressWarnings("all")
 public class CoreExtensions {
+  public static <T extends Object> void safeAdd(final Collection<? super T> collection, final T element) {
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(element, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _contains = collection.contains(element);
+      boolean _not = (!_contains);
+      _and = _not;
+    }
+    if (_and) {
+      collection.add(element);
+    }
+  }
+  
+  public static <T extends Object> void safeAdd(final Collection<? super T> collection, final Iterable<T> elements) {
+    final Consumer<T> _function = (T it) -> {
+      CoreExtensions.<T>safeAdd(collection, it);
+    };
+    elements.forEach(_function);
+  }
+  
+  public static <T extends Object> boolean safeDelete(final Collection<? super T> list, final T element) {
+    boolean _xifexpression = false;
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(element, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _contains = list.contains(element);
+      _and = _contains;
+    }
+    if (_and) {
+      _xifexpression = list.remove(element);
+    }
+    return _xifexpression;
+  }
+  
   public static boolean isRootDiagram(final Node node) {
     boolean _xblockexpression = false;
     {
@@ -215,8 +254,8 @@ public class CoreExtensions {
         if (_isRootDiagram) {
           _xifexpression = ((XDiagram)it);
         } else {
-          XDiagram _parentDiagram = ((XDiagram)it).getParentDiagram();
-          _xifexpression = CoreExtensions.getRootDiagram(_parentDiagram);
+          Parent _parent = ((XDiagram)it).getParent();
+          _xifexpression = CoreExtensions.getRootDiagram(_parent);
         }
         _switchResult = _xifexpression;
       }

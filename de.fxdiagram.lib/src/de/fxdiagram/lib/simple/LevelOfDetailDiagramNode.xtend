@@ -15,13 +15,14 @@ import javafx.scene.text.Text
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
+import de.fxdiagram.core.XDiagramContainer
 
 /**
  * An {@link XNode} containing another diagram that is revealed when the user zooms in.
  */
 @Logging
 @ModelNode
-class LevelOfDetailDiagramNode extends XNode {
+class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer {
 
 	RectangleBorderPane pane = new RectangleBorderPane
 
@@ -49,6 +50,18 @@ class LevelOfDetailDiagramNode extends XNode {
 				StackPane.setMargin(it, new Insets(10, 20, 10, 20))
 			]
 		]
+	}
+	
+	override getInnerDiagram() {
+		innerDiagram
+	}
+	
+	override getInsets() {
+		null
+	}
+	
+	override isInnerDiagramActive() {
+		innerDiagram.isActive && innerDiagram.visible
 	}
 	
 	def setInnerDiagram(XDiagram innerDiagram) {
