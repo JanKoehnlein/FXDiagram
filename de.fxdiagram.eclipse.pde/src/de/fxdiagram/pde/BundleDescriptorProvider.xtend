@@ -12,7 +12,7 @@ public class BundleDescriptorProvider implements IMappedElementDescriptorProvide
 	override <T> createDescriptor(T domainObject) {
 	}
 	
-	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
+	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<? extends T> mapping) {
 		switch domainObject {
 			BundleDescription: {
 				new BundleDescriptor(domainObject.symbolicName, domainObject.version.toString, 

@@ -31,7 +31,7 @@ class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 		resourceServiceProvider.get(JvmDomainUtil)
 	}
 	
-	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
+	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<? extends T> mapping) {
 		switch it: domainObject {
 				EObject: {
 					val elementID = createXtextEObjectID

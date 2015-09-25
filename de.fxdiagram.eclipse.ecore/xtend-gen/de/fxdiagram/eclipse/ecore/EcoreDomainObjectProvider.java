@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 @SuppressWarnings("all")
 public class EcoreDomainObjectProvider implements IMappedElementDescriptorProvider {
   @Override
-  public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
+  public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<? extends T> mapping) {
     IMappedElementDescriptor<T> _switchResult = null;
     boolean _matched = false;
     if (!_matched) {

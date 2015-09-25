@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 @ModelNode
 class EcoreDomainObjectProvider implements IMappedElementDescriptorProvider {
 	
-	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
+	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<? extends T> mapping) {
 		switch domainObject {
 			ENamedElement: new EcoreDomainObjectDescriptor(EcoreUtil.getURI(domainObject).toString, domainObject.name, 
 				mapping.config.ID, mapping.ID, this) as IMappedElementDescriptor<T>
