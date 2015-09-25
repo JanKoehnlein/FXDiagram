@@ -47,10 +47,9 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  */
 @SuppressWarnings("all")
 public class XDiagramConfigInterpreter {
-  public <T extends Object, U extends Object> XDiagram createDiagram(final T diagramObject, final DiagramMappingCall<T, U> diagramMappingCall, final InterpreterContext context) {
+  public <T extends Object, U extends Object> XDiagram createDiagram(final T diagramObject, final DiagramMapping<T> diagramMapping, final boolean isOnDemand, final InterpreterContext context) {
     XDiagram _xblockexpression = null;
     {
-      final DiagramMapping<T> diagramMapping = diagramMappingCall.getDiagramMapping();
       boolean _isApplicable = diagramMapping.isApplicable(diagramObject);
       boolean _not = (!_isApplicable);
       if (_not) {
@@ -59,8 +58,7 @@ public class XDiagramConfigInterpreter {
       final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
       final XDiagram diagram = diagramMapping.createDiagram(descriptor);
       final InterpreterContext newContext = new InterpreterContext(diagram, context);
-      boolean _isOnDemand = diagramMappingCall.isOnDemand();
-      if (_isOnDemand) {
+      if (isOnDemand) {
         final Procedure1<XDiagram> _function = (XDiagram it) -> {
           final Function1<T, Object> _function_1 = (T domainObject) -> {
             Object _xblockexpression_1 = null;
@@ -469,7 +467,9 @@ public class XDiagramConfigInterpreter {
     if (_equals) {
       return null;
     }
-    final XDiagram result = this.<T, U>createDiagram(diagramObject, diagramMappingCall, context);
+    AbstractMapping<T> _mapping = diagramMappingCall.getMapping();
+    boolean _isOnDemand = diagramMappingCall.isOnDemand();
+    final XDiagram result = this.<T, Object>createDiagram(diagramObject, ((DiagramMapping<T>) _mapping), _isOnDemand, context);
     return result;
   }
   

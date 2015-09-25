@@ -38,7 +38,7 @@ class SelectAndRevealCommand extends ViewportCommand {
 		  	root.diagram.nodes + root.diagram.connections
 		else
 		  	selection
-		val selectionBounds = selection.map[localToRootDiagram(snapBounds)].reduce[a,b|a+b]
+		val selectionBounds = selection.map[localToRootDiagram(snapBounds)].filterNull.reduce[a,b|a+b]
 		if(selectionBounds != null && selectionBounds.width > EPSILON && selectionBounds.height > EPSILON) {
 			val targetScale = min(1, 
 					min(root.scene.width / selectionBounds.width, 

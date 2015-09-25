@@ -17,6 +17,7 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
+
 /**
  * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
  * 

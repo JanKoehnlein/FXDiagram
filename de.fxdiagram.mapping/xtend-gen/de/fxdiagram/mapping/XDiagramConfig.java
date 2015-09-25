@@ -6,7 +6,7 @@ import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.mapping.AbstractDiagramConfig;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.execution.EntryCall;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -104,7 +104,7 @@ public interface XDiagramConfig {
   /**
    * @return all possible calls to add a diagram element for the given domain object
    */
-  public abstract <ARG extends Object> Iterable<? extends MappingCall<?, ARG>> getEntryCalls(final ARG domainObject);
+  public abstract <ARG extends Object> Iterable<? extends EntryCall<ARG>> getEntryCalls(final ARG domainObject);
   
   public abstract <ARG extends Object> Iterable<? extends AbstractMapping<ARG>> getMappings(final ARG domainObject);
   

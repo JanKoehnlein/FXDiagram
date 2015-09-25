@@ -87,7 +87,7 @@ public abstract class XShape extends Parent implements XActivatable {
   }
   
   /**
-   * Don't override this unless ou know what you're doing.
+   * Don't override this unless you know what you're doing.
    * Override {@link #doActivate} instead.
    */
   @Override

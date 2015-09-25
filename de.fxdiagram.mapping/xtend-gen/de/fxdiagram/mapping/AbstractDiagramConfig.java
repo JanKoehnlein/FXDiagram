@@ -4,8 +4,8 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingAcceptor;
-import de.fxdiagram.mapping.MappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.EntryCall;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -55,12 +55,12 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   }
   
   @Override
-  public <ARG extends Object> Iterable<? extends MappingCall<?, ARG>> getEntryCalls(final ARG domainArgument) {
-    List<MappingCall<?, ARG>> _xblockexpression = null;
+  public <ARG extends Object> Iterable<? extends EntryCall<ARG>> getEntryCalls(final ARG domainArgument) {
+    List<EntryCall<ARG>> _xblockexpression = null;
     {
       final MappingAcceptor<ARG> acceptor = new MappingAcceptor<ARG>();
       this.<ARG>entryCalls(domainArgument, acceptor);
-      _xblockexpression = acceptor.getMappingCalls();
+      _xblockexpression = acceptor.getEntryCalls();
     }
     return _xblockexpression;
   }

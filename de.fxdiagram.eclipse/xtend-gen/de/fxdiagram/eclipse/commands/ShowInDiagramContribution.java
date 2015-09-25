@@ -4,9 +4,8 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.eclipse.FXDiagramView;
 import de.fxdiagram.eclipse.selection.ISelectionExtractor;
-import de.fxdiagram.mapping.AbstractMapping;
-import de.fxdiagram.mapping.MappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.EntryCall;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import org.eclipse.jface.action.ContributionItem;
@@ -81,38 +80,22 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
     if (_notEquals) {
       XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
       Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-      final Function1<XDiagramConfig, Iterable<? extends MappingCall<?, Object>>> _function = (XDiagramConfig it) -> {
+      final Function1<XDiagramConfig, Iterable<? extends EntryCall<Object>>> _function = (XDiagramConfig it) -> {
         return it.<Object>getEntryCalls(selectedElement);
       };
-      Iterable<Iterable<? extends MappingCall<?, Object>>> _map = IterableExtensions.map(_configurations, _function);
-      final Iterable<MappingCall<?, Object>> mappingCalls = Iterables.<MappingCall<?, Object>>concat(_map);
-      boolean _isEmpty = IterableExtensions.isEmpty(mappingCalls);
+      Iterable<Iterable<? extends EntryCall<Object>>> _map = IterableExtensions.map(_configurations, _function);
+      final Iterable<EntryCall<Object>> entryCalls = Iterables.<EntryCall<Object>>concat(_map);
+      boolean _isEmpty = IterableExtensions.isEmpty(entryCalls);
       boolean _not = (!_isEmpty);
       if (_not) {
-        final Function1<MappingCall<?, Object>, ContributionItem> _function_1 = (MappingCall<?, Object> call) -> {
+        final Function1<EntryCall<Object>, ContributionItem> _function_1 = (EntryCall<Object> call) -> {
           return new ContributionItem() {
-            final ContributionItem _this = this;
             @Override
             public void fill(final Menu menu, final int index) {
               MenuItem _menuItem = new MenuItem(menu, SWT.CHECK, index);
               final Procedure1<MenuItem> _function = (MenuItem it) -> {
-                AbstractMapping<?> _mapping = call.getMapping();
-                String _displayName = _mapping.getDisplayName();
-                String _plus = (_displayName + " (");
-                AbstractMapping<?> _mapping_1 = call.getMapping();
-                XDiagramConfig _config = _mapping_1.getConfig();
-                String _label = _config.getLabel();
-                String _plus_1 = (_plus + _label);
-                String _plus_2 = (_plus_1 + ")");
-                it.setText(_plus_2);
-                AbstractMapping<?> _mapping_2 = call.getMapping();
-                XDiagramConfig _config_1 = _mapping_2.getConfig();
-                String _iD = _config_1.getID();
-                String _plus_3 = (_iD + "#");
-                AbstractMapping<?> _mapping_3 = call.getMapping();
-                String _iD_1 = _mapping_3.getID();
-                String _plus_4 = (_plus_3 + _iD_1);
-                this.setId(_plus_4);
+                String _text = call.getText();
+                it.setText(_text);
                 it.addSelectionListener(new SelectionListener() {
                   @Override
                   public void widgetDefaultSelected(final SelectionEvent e) {
@@ -144,7 +127,7 @@ public class ShowInDiagramContribution extends CompoundContributionItem {
             }
           };
         };
-        return IterableExtensions.<MappingCall<?, Object>, ContributionItem>map(mappingCalls, _function_1);
+        return IterableExtensions.<EntryCall<Object>, ContributionItem>map(entryCalls, _function_1);
       }
     }
     return CollectionLiterals.<ContributionItem>emptyList();

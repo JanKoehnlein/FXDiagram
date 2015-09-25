@@ -24,6 +24,7 @@ class InterpreterContext {
 	@Accessors boolean isCreateConnections = true
 	@Accessors boolean isCreateDuplicateNodes = false
 
+	@Accessors(PUBLIC_GETTER)
 	List<InterpreterContext> subContexts = newArrayList
 	InterpreterContext superContext
 	

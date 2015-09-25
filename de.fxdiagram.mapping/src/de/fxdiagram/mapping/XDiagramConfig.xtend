@@ -8,6 +8,10 @@ import org.eclipse.core.runtime.Platform
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
+import de.fxdiagram.mapping.execution.EntryCall
+import de.fxdiagram.mapping.execution.NodeEntryCall
+import de.fxdiagram.mapping.execution.DiagramEntryCall
+import de.fxdiagram.mapping.execution.ConnectionEntryCall
 
 /**
  * Stores a set of {@link AbstractMapping}s for a sepecific domain.
@@ -24,7 +28,7 @@ interface XDiagramConfig {
 	/**
 	 * @return all possible calls to add a diagram element for the given domain object 
 	 */
-	def <ARG> Iterable<? extends MappingCall<?, ARG>> getEntryCalls(ARG domainObject)
+	def <ARG> Iterable<? extends EntryCall<ARG>> getEntryCalls(ARG domainObject)
 
 	def <ARG> Iterable<? extends AbstractMapping<ARG>> getMappings(ARG domainObject)
 	
@@ -111,7 +115,7 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 	override <ARG> getEntryCalls(ARG domainArgument) {
 		val acceptor = new MappingAcceptor<ARG>
 		entryCalls(domainArgument, acceptor)
-		acceptor.mappingCalls
+		acceptor.entryCalls
 	}
 
 	//TODO: remove and make sure serialization works	
@@ -126,22 +130,27 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 
 class MappingAcceptor<ARG> {
 	
-	val List<MappingCall<?, ARG>> mappingCalls = newArrayList
+	val List<EntryCall<ARG>> entryCalls = newArrayList
 	
 	def add(AbstractMapping<?> mapping) {
 		add(mapping as AbstractMapping<ARG>, [it])
 	}
 	
 	def <T> add(AbstractMapping<T> mapping, (ARG)=>T selector) {
-		mappingCalls.add(switch mapping {
-			NodeMapping<T>: new NodeMappingCall(selector, mapping)
-			DiagramMapping<T>: new DiagramMappingCall(selector, mapping) 
-			ConnectionMapping<T>: new ConnectionMappingCall(selector, mapping) 
-		})
+		entryCalls.add(
+			switch mapping {
+				NodeMapping<T>: new NodeEntryCall(selector, mapping)
+				DiagramMapping<T>: new DiagramEntryCall(selector, mapping) 
+				ConnectionMapping<T>: new ConnectionEntryCall(selector, mapping) 
+			})
 	}
 	
-	def getMappingCalls() {
-		mappingCalls
+	def add(EntryCall<ARG> execution) {
+		entryCalls.add(execution)
+	}
+	
+	def getEntryCalls() {
+		entryCalls
 	}
 }
 

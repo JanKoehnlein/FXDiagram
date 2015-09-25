@@ -48,7 +48,6 @@ import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -454,7 +453,6 @@ public class Layouter {
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
-      shapeLayout.<Boolean>setProperty(LayoutOptions.DEBUG_MODE, Boolean.valueOf(true));
       shapeLayout.<Boolean>setProperty(LayoutOptions.LAYOUT_HIERARCHY, Boolean.valueOf(true));
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
@@ -545,13 +543,9 @@ public class Layouter {
     {
       final KNode kNode = this._kGraphFactory.createKNode();
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
-      Dimension2D _autoLayoutDimension = xNode.getAutoLayoutDimension();
-      double _width = _autoLayoutDimension.getWidth();
-      float _plus = (((float) _width) + Layouter.NODE_PADDING);
-      Dimension2D _autoLayoutDimension_1 = xNode.getAutoLayoutDimension();
-      double _height = _autoLayoutDimension_1.getHeight();
-      float _plus_1 = (((float) _height) + Layouter.NODE_PADDING);
-      shapeLayout.setSize(_plus, _plus_1);
+      shapeLayout.setSize(
+        (((float) xNode.getAutoLayoutDimension().getWidth()) + Layouter.NODE_PADDING), 
+        (((float) xNode.getAutoLayoutDimension().getHeight()) + Layouter.NODE_PADDING));
       EList<KGraphData> _data = kNode.getData();
       _data.add(shapeLayout);
       cache.put(xNode, kNode);

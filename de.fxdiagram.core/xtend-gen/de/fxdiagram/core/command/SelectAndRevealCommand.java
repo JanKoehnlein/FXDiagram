@@ -79,10 +79,11 @@ public class SelectAndRevealCommand extends ViewportCommand {
       return CoreExtensions.localToRootDiagram(it, _snapBounds);
     };
     Iterable<Bounds> _map_1 = IterableExtensions.<XDomainObjectShape, Bounds>map(selection, _function_1);
+    Iterable<Bounds> _filterNull = IterableExtensions.<Bounds>filterNull(_map_1);
     final Function2<Bounds, Bounds, Bounds> _function_2 = (Bounds a, Bounds b) -> {
       return BoundsExtensions.operator_plus(a, b);
     };
-    final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_map_1, _function_2);
+    final Bounds selectionBounds = IterableExtensions.<Bounds>reduce(_filterNull, _function_2);
     boolean _and = false;
     boolean _and_1 = false;
     boolean _notEquals = (!Objects.equal(selectionBounds, null));

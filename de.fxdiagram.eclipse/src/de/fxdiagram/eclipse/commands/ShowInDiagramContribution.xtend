@@ -33,16 +33,15 @@ class ShowInDiagramContribution extends CompoundContributionItem {
 
 	def addMenuItemsForEntryCalls(Object selectedElement, IWorkbenchPart activePart) {
 		if (selectedElement != null) {
-			val mappingCalls = XDiagramConfig.Registry.instance.configurations.map [
+			val entryCalls = XDiagramConfig.Registry.instance.configurations.map [
 				getEntryCalls(selectedElement)
 			].flatten
-			if (!mappingCalls.empty) {
-				return mappingCalls.map [ call |
+			if (!entryCalls.empty) {
+				return entryCalls.map [ call |
 					new ContributionItem() {
 						override fill(Menu menu, int index) {
 							new MenuItem(menu, SWT.CHECK, index) => [
-								text = call.mapping.displayName + ' (' + call.mapping.config.label + ')'
-								id = call.mapping.config.ID + '#' + call.mapping.ID
+								text = call.text
 								addSelectionListener(new SelectionListener() {
 									override widgetDefaultSelected(SelectionEvent e) {}
 

@@ -43,6 +43,7 @@ public class InterpreterContext {
   @Accessors
   private boolean isCreateDuplicateNodes = false;
   
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private List<InterpreterContext> subContexts = CollectionLiterals.<InterpreterContext>newArrayList();
   
   private InterpreterContext superContext;
@@ -235,5 +236,10 @@ public class InterpreterContext {
   
   public void setIsCreateDuplicateNodes(final boolean isCreateDuplicateNodes) {
     this.isCreateDuplicateNodes = isCreateDuplicateNodes;
+  }
+  
+  @Pure
+  public List<InterpreterContext> getSubContexts() {
+    return this.subContexts;
   }
 }

@@ -18,6 +18,7 @@ import de.fxdiagram.core.tools.actions.FullScreenAction
 import de.fxdiagram.core.tools.actions.LayoutAction
 import de.fxdiagram.core.tools.actions.NavigateNextAction
 import de.fxdiagram.core.tools.actions.NavigatePreviousAction
+import de.fxdiagram.core.tools.actions.ReconcileAction
 import de.fxdiagram.core.tools.actions.RedoAction
 import de.fxdiagram.core.tools.actions.RevealAction
 import de.fxdiagram.core.tools.actions.SaveAction
@@ -27,12 +28,8 @@ import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import de.fxdiagram.eclipse.actions.EclipseLoadAction
 import de.fxdiagram.eclipse.changes.IChangeListener
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
-import de.fxdiagram.mapping.ConnectionMapping
-import de.fxdiagram.mapping.ConnectionMappingCall
-import de.fxdiagram.mapping.DiagramMappingCall
-import de.fxdiagram.mapping.MappingCall
-import de.fxdiagram.mapping.NodeMappingCall
 import de.fxdiagram.mapping.XDiagramConfig
+import de.fxdiagram.mapping.execution.EntryCall
 import de.fxdiagram.mapping.execution.InterpreterContext
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
@@ -48,7 +45,6 @@ import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.keys.IBindingService
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.core.tools.actions.ReconcileAction
 
 class FXDiagramTab {
 	val CTabItem tab
@@ -122,39 +118,28 @@ class FXDiagramTab {
 
 	def getCTabItem() { tab }
 
-	def <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
+	def <T> void revealElement(T element, EntryCall<? super T> entryCall, IEditorPart editor) {
 		// OMG! the scene's width and height is set asynchronously but needed for centering the selection
 		if (canvas.scene.width == 0) {
 			canvas.scene.widthProperty.addListener [ p, o, n |
 				canvas.scene.widthProperty.removeListener(self)
-				revealElement(element, mappingCall, editor)
+				revealElement(element, entryCall, editor)
 			]
 		} else if (canvas.scene.height == 0) {
 			canvas.scene.heightProperty.addListener [ p, o, n |
 				canvas.scene.heightProperty.removeListener(self)
-				revealElement(element, mappingCall, editor)
+				revealElement(element, entryCall, editor)
 			]
 		} else {
-			doRevealElement(element, mappingCall, editor)
+			doRevealElement(element, entryCall, editor)
 		}
 	}
 
-	protected def <T> void doRevealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
+	protected def <T> void doRevealElement(T element, EntryCall<? super T> entryCall, IEditorPart editor) {
 		val interpreterContext = new InterpreterContext(root.diagram)
-		if (mappingCall instanceof DiagramMappingCall<?, ?>) {
-			interpreterContext.isReplaceRootDiagram = true 
-			configInterpreter.execute(mappingCall as DiagramMappingCall<?, T>, element, interpreterContext)
-			interpreterContext.executeCommands(root.commandStack)
-		} else if (mappingCall instanceof NodeMappingCall<?, ?>) {
-			configInterpreter.execute(mappingCall as NodeMappingCall<?, T>, element, interpreterContext)
-			interpreterContext.executeCommands(root.commandStack)
-		} else if (mappingCall instanceof ConnectionMappingCall<?, ?>) {
-			val mapping = mappingCall.mapping as ConnectionMapping<?>
-			if (mapping.source != null && mapping.target != null) {
-				configInterpreter.execute(mappingCall as ConnectionMappingCall<?, T>, element, [], interpreterContext)
-				interpreterContext.executeCommands(root.commandStack)
-			}
-		}
+		entryCall.execute(element, configInterpreter, interpreterContext)
+		interpreterContext.executeCommands(root.commandStack)
+
 		val descriptor = createMappedDescriptor(element)
 		val centerShape = (interpreterContext.diagram.nodes + interpreterContext.diagram.connections).findFirst [
 			domainObjectDescriptor == descriptor

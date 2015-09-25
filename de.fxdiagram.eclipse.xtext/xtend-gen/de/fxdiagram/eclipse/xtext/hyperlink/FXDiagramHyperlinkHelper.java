@@ -6,11 +6,11 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.fxdiagram.eclipse.FXDiagramView;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
-import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.EntryCall;
 import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.IRegion;
@@ -44,7 +44,7 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
   public static class FXDiagramHyperlink implements IHyperlink {
     private final IMappedElementDescriptor<EObject> descriptor;
     
-    private final MappingCall<?, ? super EObject> mappingCall;
+    private final EntryCall<EObject> entryCall;
     
     private final ITextRegion region;
     
@@ -59,9 +59,8 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
     
     @Override
     public String getHyperlinkText() {
-      AbstractMapping<?> _mapping = this.mappingCall.getMapping();
-      String _iD = _mapping.getID();
-      return ("Show in FXDiagram as " + _iD);
+      String _text = this.entryCall.getText();
+      return ("Show in FXDiagram as " + _text);
     }
     
     @Override
@@ -101,7 +100,7 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
           final Function1<EObject, Object> _function = (EObject it) -> {
             Object _xblockexpression = null;
             {
-              ((FXDiagramView)view).<EObject>revealElement(it, this.mappingCall, this.editor);
+              ((FXDiagramView)view).<EObject>revealElement(it, this.entryCall, this.editor);
               _xblockexpression = null;
             }
             return _xblockexpression;
@@ -113,10 +112,10 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
       }
     }
     
-    public FXDiagramHyperlink(final IMappedElementDescriptor<EObject> descriptor, final MappingCall<?, ? super EObject> mappingCall, final ITextRegion region, final IEditorPart editor) {
+    public FXDiagramHyperlink(final IMappedElementDescriptor<EObject> descriptor, final EntryCall<EObject> entryCall, final ITextRegion region, final IEditorPart editor) {
       super();
       this.descriptor = descriptor;
-      this.mappingCall = mappingCall;
+      this.entryCall = entryCall;
       this.region = region;
       this.editor = editor;
     }
@@ -127,7 +126,7 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
       final int prime = 31;
       int result = 1;
       result = prime * result + ((this.descriptor== null) ? 0 : this.descriptor.hashCode());
-      result = prime * result + ((this.mappingCall== null) ? 0 : this.mappingCall.hashCode());
+      result = prime * result + ((this.entryCall== null) ? 0 : this.entryCall.hashCode());
       result = prime * result + ((this.region== null) ? 0 : this.region.hashCode());
       result = prime * result + ((this.editor== null) ? 0 : this.editor.hashCode());
       return result;
@@ -148,10 +147,10 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
           return false;
       } else if (!this.descriptor.equals(other.descriptor))
         return false;
-      if (this.mappingCall == null) {
-        if (other.mappingCall != null)
+      if (this.entryCall == null) {
+        if (other.entryCall != null)
           return false;
-      } else if (!this.mappingCall.equals(other.mappingCall))
+      } else if (!this.entryCall.equals(other.entryCall))
         return false;
       if (this.region == null) {
         if (other.region != null)
@@ -171,7 +170,7 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
     public String toString() {
       ToStringBuilder b = new ToStringBuilder(this);
       b.add("descriptor", this.descriptor);
-      b.add("mappingCall", this.mappingCall);
+      b.add("entryCall", this.entryCall);
       b.add("region", this.region);
       b.add("editor", this.editor);
       return b.toString();
@@ -183,8 +182,8 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
     }
     
     @Pure
-    public MappingCall<?, ? super EObject> getMappingCall() {
-      return this.mappingCall;
+    public EntryCall<EObject> getEntryCall() {
+      return this.entryCall;
     }
     
     @Pure
@@ -263,24 +262,26 @@ public class FXDiagramHyperlinkHelper extends HyperlinkHelper {
     if (_notEquals) {
       XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
       Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-      final Function1<XDiagramConfig, Iterable<? extends MappingCall<?, EObject>>> _function = (XDiagramConfig it) -> {
+      final Function1<XDiagramConfig, Iterable<? extends EntryCall<EObject>>> _function = (XDiagramConfig it) -> {
         return it.<EObject>getEntryCalls(selectedElement);
       };
-      Iterable<Iterable<? extends MappingCall<?, EObject>>> _map = IterableExtensions.map(_configurations, _function);
-      final Iterable<MappingCall<?, EObject>> mappingCalls = Iterables.<MappingCall<?, EObject>>concat(_map);
-      boolean _isEmpty = IterableExtensions.isEmpty(mappingCalls);
+      Iterable<Iterable<? extends EntryCall<EObject>>> _map = IterableExtensions.map(_configurations, _function);
+      final Iterable<EntryCall<EObject>> entryCalls = Iterables.<EntryCall<EObject>>concat(_map);
+      boolean _isEmpty = IterableExtensions.isEmpty(entryCalls);
       boolean _not = (!_isEmpty);
       if (_not) {
         final ITextRegion region = this.locationInFileProvider.getSignificantTextRegion(selectedElement);
-        for (final MappingCall<?, EObject> mappingCall : mappingCalls) {
+        for (final EntryCall<EObject> entryCall : entryCalls) {
           {
-            AbstractMapping<?> _mapping = mappingCall.getMapping();
-            XDiagramConfig _config = _mapping.getConfig();
+            XDiagramConfig _config = entryCall.getConfig();
             final IMappedElementDescriptorProvider domainObjectProvider = _config.getDomainObjectProvider();
             if ((domainObjectProvider instanceof XtextDomainObjectProvider)) {
-              AbstractMapping<?> _mapping_1 = mappingCall.getMapping();
-              final IMappedElementDescriptor<EObject> descriptor = ((XtextDomainObjectProvider)domainObjectProvider).<EObject>createMappedElementDescriptor(selectedElement, ((AbstractMapping<EObject>) _mapping_1));
-              FXDiagramHyperlinkHelper.FXDiagramHyperlink _fXDiagramHyperlink = new FXDiagramHyperlinkHelper.FXDiagramHyperlink(descriptor, mappingCall, region, editor);
+              XDiagramConfig _config_1 = entryCall.getConfig();
+              IMappedElementDescriptorProvider _domainObjectProvider = _config_1.getDomainObjectProvider();
+              XDiagramConfig _config_2 = entryCall.getConfig();
+              NodeMapping<EObject> _nodeMapping = new NodeMapping<EObject>(_config_2, "dummy", "dummy");
+              final IMappedElementDescriptor<EObject> descriptor = _domainObjectProvider.<EObject>createMappedElementDescriptor(selectedElement, _nodeMapping);
+              FXDiagramHyperlinkHelper.FXDiagramHyperlink _fXDiagramHyperlink = new FXDiagramHyperlinkHelper.FXDiagramHyperlink(descriptor, entryCall, region, editor);
               acceptor.accept(_fXDiagramHyperlink);
             }
           }

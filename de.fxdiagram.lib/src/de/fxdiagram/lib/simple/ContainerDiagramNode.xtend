@@ -13,6 +13,7 @@ import javafx.scene.Group
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.XDiagramContainer
+import javafx.scene.layout.VBox
 
 /**
  * An {@link XNode} containing another diagram.

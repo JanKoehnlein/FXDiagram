@@ -4,10 +4,10 @@ import com.google.inject.Inject
 import com.google.inject.name.Named
 import de.fxdiagram.eclipse.FXDiagramView
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider
-import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.mapping.MappingCall
+import de.fxdiagram.mapping.NodeMapping
 import de.fxdiagram.mapping.XDiagramConfig
+import de.fxdiagram.mapping.execution.EntryCall
 import java.util.List
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.jface.text.Region
@@ -49,17 +49,16 @@ class FXDiagramHyperlinkHelper extends HyperlinkHelper {
 		val selectedElement = EObjectAtOffsetHelper.resolveElementAt(resource, offset)
 		val editor = workbench?.activeWorkbenchWindow?.activePage?.activeEditor
 		if (selectedElement != null) {
-			val mappingCalls = XDiagramConfig.Registry.instance.configurations
+			val entryCalls = XDiagramConfig.Registry.instance.configurations
 				.map[getEntryCalls(selectedElement)]
 				.flatten
-			if (!mappingCalls.empty) {
+			if (!entryCalls.empty) {
 				val region = locationInFileProvider.getSignificantTextRegion(selectedElement)
-				for (mappingCall : mappingCalls) {
-					val domainObjectProvider = mappingCall.mapping.config.domainObjectProvider
+				for (entryCall : entryCalls) {
+					val domainObjectProvider = entryCall.config.domainObjectProvider
 					if(domainObjectProvider instanceof XtextDomainObjectProvider) {
-						val descriptor = domainObjectProvider
-							.createMappedElementDescriptor(selectedElement, mappingCall.mapping as AbstractMapping<EObject>)
-						acceptor.accept(new FXDiagramHyperlink(descriptor, mappingCall, region, editor))
+						val descriptor = entryCall.config.domainObjectProvider.createMappedElementDescriptor(selectedElement, new NodeMapping(entryCall.config, 'dummy', 'dummy'))
+						acceptor.accept(new FXDiagramHyperlink(descriptor, entryCall, region, editor))
 					}
 				}
 			}
@@ -69,8 +68,8 @@ class FXDiagramHyperlinkHelper extends HyperlinkHelper {
 	@Data
 	static class FXDiagramHyperlink implements IHyperlink {
 
-		val IMappedElementDescriptor<EObject> descriptor
-		val MappingCall<?, ? super EObject> mappingCall
+		val IMappedElementDescriptor<EObject> descriptor 
+		val EntryCall<EObject> entryCall
 		val ITextRegion region
 		val IEditorPart editor
 
@@ -79,7 +78,7 @@ class FXDiagramHyperlinkHelper extends HyperlinkHelper {
 		}
 
 		override getHyperlinkText() {
-			'Show in FXDiagram as ' + mappingCall.mapping.ID
+			'Show in FXDiagram as ' + entryCall.text
 		}
 
 		override getTypeLabel() {
@@ -91,7 +90,7 @@ class FXDiagramHyperlinkHelper extends HyperlinkHelper {
 				?.showView("de.fxdiagram.eclipse.FXDiagramView")
 			if (view instanceof FXDiagramView) {
 				descriptor.withDomainObject [
-					view.revealElement(it, mappingCall, editor)
+					view.revealElement(it, entryCall, editor)
 					null
 				]
 			}

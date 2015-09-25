@@ -115,19 +115,7 @@ class XDiagram extends Group implements XActivatable {
 			}				
 		]
 		contentsInitializer?.apply(this)
-		if(layoutOnActivate != null) {
-			nodes.forEach [
-				node.autosize
-			]
-			connections.forEach [
-				node
-				labels.forEach[
-					node.autosize
-				]
-			]
-			new Layouter().layout(layoutOnActivate, this, null)
-			layoutOnActivate = null
-		}
+		
 		nodes.addInitializingListener(new InitializingListListener<XNode>() => [
 			add = [
 				initializeGraphics
@@ -139,7 +127,6 @@ class XDiagram extends Group implements XActivatable {
 				diagram.getNodeLayer.children.safeDelete(it)
 			]
 		])
-		
 		connections.addInitializingListener(new InitializingListListener<XConnection>() => [
 			add = [
 				val clChildren = connectionLayer.children
@@ -169,6 +156,19 @@ class XDiagram extends Group implements XActivatable {
 		behaviors.addInitializingListener(new InitializingMapListener => [
 			put = [ key, Behavior value | value.activate() ]
 		])
+		if(layoutOnActivate != null) {
+			nodes.forEach [
+				node.autosize
+			]
+			connections.forEach [
+				node
+				labels.forEach[
+					node.autosize
+				]
+			]
+			new Layouter().layout(layoutOnActivate, this, null)
+			layoutOnActivate = null
+		}
 	}
 	
 	def void centerDiagram(boolean useForce) {

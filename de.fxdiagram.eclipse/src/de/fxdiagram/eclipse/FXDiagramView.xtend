@@ -20,6 +20,7 @@ import org.eclipse.ui.commands.ICommandService
 import org.eclipse.ui.handlers.RegistryToggleState
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
+import de.fxdiagram.mapping.execution.EntryCall
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -99,8 +100,8 @@ class FXDiagramView extends ViewPart {
 		currentDiagramTab?.clear
 	}
 	
-	def <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall, IEditorPart editor) {
-		(currentDiagramTab ?: createNewTab).revealElement(element, mappingCall, editor)
+	def <T> void revealElement(T element, EntryCall<? super T> entryCall, IEditorPart editor) {
+		(currentDiagramTab ?: createNewTab).revealElement(element, entryCall, editor)
 	}
 }
 

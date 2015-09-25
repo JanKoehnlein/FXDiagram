@@ -43,14 +43,10 @@ import de.fxdiagram.eclipse.changes.IChangeListener;
 import de.fxdiagram.eclipse.changes.ModelChangeBroker;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.mapping.AbstractMapping;
-import de.fxdiagram.mapping.ConnectionMapping;
-import de.fxdiagram.mapping.ConnectionMappingCall;
-import de.fxdiagram.mapping.DiagramMappingCall;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import de.fxdiagram.mapping.MappingCall;
-import de.fxdiagram.mapping.NodeMappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.EntryCall;
 import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
@@ -217,7 +213,7 @@ public class FXDiagramTab {
     return this.tab;
   }
   
-  public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
+  public <T extends Object> void revealElement(final T element, final EntryCall<? super T> entryCall, final IEditorPart editor) {
     Scene _scene = this.canvas.getScene();
     double _width = _scene.getWidth();
     boolean _equals = (_width == 0);
@@ -230,7 +226,7 @@ public class FXDiagramTab {
           Scene _scene = FXDiagramTab.this.canvas.getScene();
           ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
           _widthProperty.removeListener(this);
-          FXDiagramTab.this.<T>revealElement(element, mappingCall, editor);
+          FXDiagramTab.this.<T>revealElement(element, entryCall, editor);
         }
       };
       _widthProperty.addListener(_function);
@@ -247,67 +243,36 @@ public class FXDiagramTab {
             Scene _scene = FXDiagramTab.this.canvas.getScene();
             ReadOnlyDoubleProperty _heightProperty = _scene.heightProperty();
             _heightProperty.removeListener(this);
-            FXDiagramTab.this.<T>revealElement(element, mappingCall, editor);
+            FXDiagramTab.this.<T>revealElement(element, entryCall, editor);
           }
         };
         _heightProperty.addListener(_function_1);
       } else {
-        this.<T>doRevealElement(element, mappingCall, editor);
+        this.<T>doRevealElement(element, entryCall, editor);
       }
     }
   }
   
-  protected <T extends Object> void doRevealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
+  protected <T extends Object> void doRevealElement(final T element, final EntryCall<? super T> entryCall, final IEditorPart editor) {
     XDiagram _diagram = this.root.getDiagram();
     final InterpreterContext interpreterContext = new InterpreterContext(_diagram);
-    if ((mappingCall instanceof DiagramMappingCall<?, ?>)) {
-      interpreterContext.setIsReplaceRootDiagram(true);
-      this.configInterpreter.execute(((DiagramMappingCall<?, T>) mappingCall), element, interpreterContext);
-      CommandStack _commandStack = this.root.getCommandStack();
-      interpreterContext.executeCommands(_commandStack);
-    } else {
-      if ((mappingCall instanceof NodeMappingCall<?, ?>)) {
-        this.configInterpreter.execute(((NodeMappingCall<?, T>) mappingCall), element, interpreterContext);
-        CommandStack _commandStack_1 = this.root.getCommandStack();
-        interpreterContext.executeCommands(_commandStack_1);
-      } else {
-        if ((mappingCall instanceof ConnectionMappingCall<?, ?>)) {
-          AbstractMapping<?> _mapping = ((ConnectionMappingCall<?, ?>)mappingCall).getMapping();
-          final ConnectionMapping<?> mapping = ((ConnectionMapping<?>) _mapping);
-          boolean _and = false;
-          NodeMappingCall<?, ?> _source = mapping.getSource();
-          boolean _notEquals = (!Objects.equal(_source, null));
-          if (!_notEquals) {
-            _and = false;
-          } else {
-            NodeMappingCall<?, ?> _target = mapping.getTarget();
-            boolean _notEquals_1 = (!Objects.equal(_target, null));
-            _and = _notEquals_1;
-          }
-          if (_and) {
-            final Procedure1<XConnection> _function = (XConnection it) -> {
-            };
-            this.configInterpreter.execute(((ConnectionMappingCall<?, T>) mappingCall), element, _function, interpreterContext);
-            CommandStack _commandStack_2 = this.root.getCommandStack();
-            interpreterContext.executeCommands(_commandStack_2);
-          }
-        }
-      }
-    }
+    entryCall.execute(element, this.configInterpreter, interpreterContext);
+    CommandStack _commandStack = this.root.getCommandStack();
+    interpreterContext.executeCommands(_commandStack);
     final IMappedElementDescriptor<T> descriptor = this.<T, Object>createMappedDescriptor(element);
     XDiagram _diagram_1 = interpreterContext.getDiagram();
     ObservableList<XNode> _nodes = _diagram_1.getNodes();
     XDiagram _diagram_2 = interpreterContext.getDiagram();
     ObservableList<XConnection> _connections = _diagram_2.getConnections();
     Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
-    final Function1<XDomainObjectShape, Boolean> _function_1 = (XDomainObjectShape it) -> {
+    final Function1<XDomainObjectShape, Boolean> _function = (XDomainObjectShape it) -> {
       DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
       return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
-    final XDomainObjectShape centerShape = IterableExtensions.<XDomainObjectShape>findFirst(_plus, _function_1);
-    CommandStack _commandStack_3 = this.root.getCommandStack();
+    final XDomainObjectShape centerShape = IterableExtensions.<XDomainObjectShape>findFirst(_plus, _function);
+    CommandStack _commandStack_1 = this.root.getCommandStack();
     ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
-    final Procedure1<ParallelAnimationCommand> _function_2 = (ParallelAnimationCommand it) -> {
+    final Procedure1<ParallelAnimationCommand> _function_1 = (ParallelAnimationCommand it) -> {
       boolean _needsLayoutCommand = interpreterContext.needsLayoutCommand();
       if (_needsLayoutCommand) {
         Layouter _layouter = new Layouter();
@@ -316,14 +281,14 @@ public class FXDiagramTab {
         LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_3, _millis, centerShape);
         it.operator_add(_createLayoutCommand);
       }
-      final Function1<XShape, Boolean> _function_3 = (XShape it_1) -> {
+      final Function1<XShape, Boolean> _function_2 = (XShape it_1) -> {
         return Boolean.valueOf(Objects.equal(it_1, centerShape));
       };
-      SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_3);
+      SelectAndRevealCommand _selectAndRevealCommand = new SelectAndRevealCommand(this.root, _function_2);
       it.operator_add(_selectAndRevealCommand);
     };
-    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_2);
-    _commandStack_3.execute(_doubleArrow);
+    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_1);
+    _commandStack_1.execute(_doubleArrow);
   }
   
   public void clear() {

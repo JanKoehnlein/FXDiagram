@@ -64,5 +64,5 @@ abstract class AbstractMappedElementDescriptor<T> implements IMappedElementDescr
  * and {@link IMappedElementDescriptor}s.
  */
 interface IMappedElementDescriptorProvider extends DomainObjectProvider {
-	def <T> IMappedElementDescriptor<T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping)
+	def <T> IMappedElementDescriptor<T> createMappedElementDescriptor(T domainObject, AbstractMapping<? extends T> mapping)
 }

@@ -95,7 +95,7 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
   }
   
   @Override
-  public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<T> mapping) {
+  public <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<? extends T> mapping) {
     final T it = domainObject;
     boolean _matched = false;
     if (!_matched) {

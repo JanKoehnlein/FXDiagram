@@ -10,5 +10,5 @@ import de.fxdiagram.mapping.IMappedElementDescriptor;
  */
 @SuppressWarnings("all")
 public interface IMappedElementDescriptorProvider extends DomainObjectProvider {
-  public abstract <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<T> mapping);
+  public abstract <T extends Object> IMappedElementDescriptor<T> createMappedElementDescriptor(final T domainObject, final AbstractMapping<? extends T> mapping);
 }

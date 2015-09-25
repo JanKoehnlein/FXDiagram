@@ -5,7 +5,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.eclipse.FXDiagramTab;
 import de.fxdiagram.eclipse.changes.ModelChangeBroker;
 import de.fxdiagram.mapping.AbstractMapping;
-import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.execution.EntryCall;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +180,7 @@ public class FXDiagramView extends ViewPart {
     }
   }
   
-  public <T extends Object> void revealElement(final T element, final MappingCall<?, ? super T> mappingCall, final IEditorPart editor) {
+  public <T extends Object> void revealElement(final T element, final EntryCall<? super T> entryCall, final IEditorPart editor) {
     FXDiagramTab _elvis = null;
     FXDiagramTab _currentDiagramTab = this.getCurrentDiagramTab();
     if (_currentDiagramTab != null) {
@@ -189,7 +189,7 @@ public class FXDiagramView extends ViewPart {
       FXDiagramTab _createNewTab = this.createNewTab();
       _elvis = _createNewTab;
     }
-    _elvis.<T>revealElement(element, mappingCall, editor);
+    _elvis.<T>revealElement(element, entryCall, editor);
   }
   
   @Pure

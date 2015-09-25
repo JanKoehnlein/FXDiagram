@@ -2,8 +2,8 @@ package de.fxdiagram.eclipse.commands;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.eclipse.selection.ISelectionExtractor;
-import de.fxdiagram.mapping.MappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.EntryCall;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -22,7 +22,7 @@ public class HasMappingPropertyTester extends PropertyTester {
           XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
           Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
           final Function1<XDiagramConfig, Boolean> _function = (XDiagramConfig it) -> {
-            Iterable<? extends MappingCall<?, Object>> _entryCalls = it.<Object>getEntryCalls(selectedElement);
+            Iterable<? extends EntryCall<Object>> _entryCalls = it.<Object>getEntryCalls(selectedElement);
             boolean _isEmpty = IterableExtensions.isEmpty(_entryCalls);
             return Boolean.valueOf((!_isEmpty));
           };
