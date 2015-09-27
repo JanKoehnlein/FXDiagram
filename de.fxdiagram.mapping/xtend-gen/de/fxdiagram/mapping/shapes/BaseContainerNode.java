@@ -25,8 +25,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -116,6 +120,23 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
     LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
     NodeReconcileBehavior<Object> _nodeReconcileBehavior = new NodeReconcileBehavior<Object>(this);
     this.addBehavior(_nodeReconcileBehavior);
+    XDiagram _innerDiagram_2 = this.getInnerDiagram();
+    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram_2.boundsInLocalProperty();
+    final ChangeListener<Bounds> _function_1 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
+      double _layoutX = this.getLayoutX();
+      double _minX = n.getMinX();
+      double _minX_1 = o.getMinX();
+      double _minus = (_minX - _minX_1);
+      double _plus = (_layoutX + _minus);
+      this.setLayoutX(_plus);
+      double _layoutY = this.getLayoutY();
+      double _minY = n.getMinY();
+      double _minY_1 = o.getMinY();
+      double _minus_1 = (_minY - _minY_1);
+      double _plus_1 = (_layoutY + _minus_1);
+      this.setLayoutY(_plus_1);
+    };
+    _boundsInLocalProperty.addListener(_function_1);
   }
   
   @Override

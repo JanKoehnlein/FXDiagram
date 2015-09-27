@@ -73,6 +73,11 @@ class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiag
 		super.doActivate
 		addLazyBehavior(domainObjectDescriptor)
 		addBehavior(new NodeReconcileBehavior(this))
+		// move container node when the inner diagram grows to the upper/left
+		innerDiagram.boundsInLocalProperty.addListener [ p, o, n |
+			layoutX = layoutX  + (n.minX - o.minX)  
+			layoutY = layoutY +  (n.minY - o.minY)
+		]	
 	}
 	
 	override getButtonSides(ConnectionMapping<?> mapping) {

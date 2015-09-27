@@ -17,8 +17,12 @@ import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -89,6 +93,23 @@ public class ContainerDiagramNode extends XNode implements XDiagramContainer {
     super.doActivate();
     XDiagram _innerDiagram = this.getInnerDiagram();
     _innerDiagram.activate();
+    XDiagram _innerDiagram_1 = this.getInnerDiagram();
+    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram_1.boundsInLocalProperty();
+    final ChangeListener<Bounds> _function = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
+      double _layoutX = this.getLayoutX();
+      double _minX = n.getMinX();
+      double _minX_1 = o.getMinX();
+      double _minus = (_minX - _minX_1);
+      double _plus = (_layoutX + _minus);
+      this.setLayoutX(_plus);
+      double _layoutY = this.getLayoutY();
+      double _minY = n.getMinY();
+      double _minY_1 = o.getMinY();
+      double _minus_1 = (_minY - _minY_1);
+      double _plus_1 = (_layoutY + _minus_1);
+      this.setLayoutY(_plus_1);
+    };
+    _boundsInLocalProperty.addListener(_function);
   }
   
   @Override

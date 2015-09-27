@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
@@ -12,8 +13,6 @@ import javafx.geometry.Insets
 import javafx.scene.Group
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.XDiagramContainer
-import javafx.scene.layout.VBox
 
 /**
  * An {@link XNode} containing another diagram.
@@ -63,6 +62,11 @@ class ContainerDiagramNode extends XNode implements XDiagramContainer {
 	override doActivate() {
 		super.doActivate()
 		innerDiagram.activate
+		// move container node when the inner diagram grows to the upper/left
+		innerDiagram.boundsInLocalProperty.addListener [ p, o, n |
+			layoutX = layoutX  + (n.minX - o.minX)  
+			layoutY = layoutY +  (n.minY - o.minY)
+		]		
 	}
 	
 	override getInsets() {
