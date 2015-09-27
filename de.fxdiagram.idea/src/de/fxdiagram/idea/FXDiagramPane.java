@@ -1,5 +1,6 @@
 package de.fxdiagram.idea;
 
+import com.google.common.collect.Iterables;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiManager;
@@ -17,9 +18,11 @@ import de.fxdiagram.core.services.ClassLoaderProvider;
 import de.fxdiagram.core.tools.actions.*;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.mapping.*;
+import de.fxdiagram.mapping.execution.EntryCall;
 import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import javafx.util.Duration;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -69,33 +72,28 @@ public class FXDiagramPane {
         return root;
     }
 
-    public <T> void revealElement(T element, MappingCall<?, ? super T> mappingCall) {
+    public <T> void revealElement(T element, EntryCall<? super T> entryCall) {
         InterpreterContext interpreterContext = new InterpreterContext(root.getDiagram());
-        if(mappingCall instanceof DiagramMappingCall<?, ?>) {
-            interpreterContext.setIsReplaceRootDiagram(false);
-            configInterpreter.execute((DiagramMappingCall<?, T>)mappingCall, element, interpreterContext);
-            interpreterContext.executeCommands(root.getCommandStack());
-        } else if(mappingCall instanceof NodeMappingCall<?, ?>) {
-            configInterpreter.execute((NodeMappingCall<?, T>)mappingCall, element, interpreterContext);
-            interpreterContext.executeCommands(root.getCommandStack());
-        } else if(mappingCall instanceof ConnectionMappingCall<?, ?>) {
-            ConnectionMapping<?> mapping = (ConnectionMapping<?>) mappingCall.getMapping();
-            if(mapping.getSource() != null && mapping.getTarget() != null) {
-                configInterpreter.execute((ConnectionMappingCall<?, T>) mappingCall, element, null, interpreterContext);
-                interpreterContext.executeCommands(root.getCommandStack());
-            }
-        }
-        IMappedElementDescriptor<T> descriptor =
-                mappingCall
-                        .getMapping().getConfig()
-                        .getDomainObjectProvider()
-                        .createMappedElementDescriptor(element, (AbstractMapping<T>)mappingCall.getMapping());
+        entryCall.execute(element, configInterpreter, interpreterContext);
+        interpreterContext.executeCommands(root.getCommandStack());
+
+        IMappedElementDescriptor<T> descriptor = createMappedDescriptor(element);
         XShape centerShape = findShape(interpreterContext.getDiagram(), descriptor);
         ParallelAnimationCommand command = new ParallelAnimationCommand();
         if(interpreterContext.needsLayoutCommand())
             command.operator_add(new Layouter().createLayoutCommand(LayoutType.DOT, interpreterContext.getDiagram(), Duration.millis(500), centerShape));
         command.operator_add(new SelectAndRevealCommand(root, d -> d.equals(centerShape)));
         root.getCommandStack().execute(command);
+    }
+
+    protected <T extends Object, U extends Object> IMappedElementDescriptor<T> createMappedDescriptor(final T domainObject) {
+        IMappedElementDescriptor<T> _xblockexpression = null;
+        for(XDiagramConfig config: XDiagramConfig.Registry.getInstance().getConfigurations()) {
+            AbstractMapping<T> mapping = Iterables.getFirst(config.getMappings(domainObject), null);
+            if(mapping != null)
+              return config.getDomainObjectProvider().createMappedElementDescriptor(domainObject, mapping);
+        }
+        return null;
     }
 
     private <T> XShape findShape(XDiagram diagram, IMappedElementDescriptor<T> descriptor) {

@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class PsiDomainObjectProvider implements IMappedElementDescriptorProvider {
     @Override
-    public <T> IMappedElementDescriptor<T> createMappedElementDescriptor(T domainObject, AbstractMapping<T> mapping) {
+    public <T> IMappedElementDescriptor<T> createMappedElementDescriptor(T domainObject, AbstractMapping<? extends T> mapping) {
         if(domainObject instanceof PsiNamedElement) {
             PsiNamedElement psiNamedElement = (PsiNamedElement) domainObject;
             return (IMappedElementDescriptor<T>)

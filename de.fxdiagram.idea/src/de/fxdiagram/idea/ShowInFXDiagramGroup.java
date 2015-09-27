@@ -8,6 +8,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
 import de.fxdiagram.mapping.MappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.execution.EntryCall;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class ShowInFXDiagramGroup extends ActionGroup {
         }
 
         for (XDiagramConfig config : instance.getConfigurations()) {
-            for (MappingCall<?, PsiElement> mappingCall : config.getEntryCalls(element)) {
-                actions.add(new ShowInFXDiagramAction(mappingCall, element));
+            for (EntryCall<PsiElement> entryCall : config.getEntryCalls(element)) {
+                actions.add(new ShowInFXDiagramAction(entryCall, element));
             }
         }
         return Iterables.toArray(actions, AnAction.class);

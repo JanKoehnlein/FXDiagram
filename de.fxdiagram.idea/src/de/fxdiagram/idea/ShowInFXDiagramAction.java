@@ -8,6 +8,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiElement;
 import de.fxdiagram.mapping.MappingCall;
+import de.fxdiagram.mapping.execution.EntryCall;
 import javafx.application.Platform;
 
 import static de.fxdiagram.idea.ActionUtil.getProject;
@@ -17,17 +18,17 @@ import static de.fxdiagram.idea.ActionUtil.getProject;
  */
 public class ShowInFXDiagramAction extends AnAction {
 
-    private MappingCall<?, PsiElement> mappingCall;
+    private EntryCall<PsiElement> entryCall;
 
     private PsiElement psiElement;
 
     public ShowInFXDiagramAction() {
     }
 
-    public ShowInFXDiagramAction(MappingCall<?, PsiElement> mappingCall, PsiElement psiElement) {
-        super(mappingCall.getMapping().getDisplayName() + " (" + mappingCall.getMapping().getConfig().getLabel() + ")");
-        this.mappingCall = mappingCall;
+    public ShowInFXDiagramAction(EntryCall<PsiElement> entryCall, PsiElement psiElement) {
+        super(entryCall.getText());
         this.psiElement = psiElement;
+        this.entryCall = entryCall;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class ShowInFXDiagramAction extends AnAction {
                 ApplicationManager.getApplication().runReadAction(new Runnable() {
                     @Override
                     public void run() {
-                        FXDiagramPane.getInstance(getProject(event)).revealElement(psiElement, mappingCall);
+                        FXDiagramPane.getInstance(getProject(event)).revealElement(psiElement, entryCall);
                     }
                 }));
         });
