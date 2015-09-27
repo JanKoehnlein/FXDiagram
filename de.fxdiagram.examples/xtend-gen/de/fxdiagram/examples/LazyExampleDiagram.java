@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.text.Text;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -110,7 +111,9 @@ public class LazyExampleDiagram extends XDiagram {
         if (_not) {
           _or = true;
         } else {
-          _or = (!(it.getNode() instanceof SimpleNode));
+          Node _node = it.getNode();
+          boolean _not_1 = (!(_node instanceof SimpleNode));
+          _or = _not_1;
         }
         if (_or) {
           String _nameSuffix_1 = this.getNameSuffix();
