@@ -30,8 +30,9 @@ class ConnectionRouter implements XActivatable {
 	ChangeListener<Bounds> boundsListener
 	InitializingListener<XNode> connectionEndListener
 	
-	double selfEdgeDist = 60
+	SplineShapeKeeper shapeKeeper
 	
+	double selfEdgeDist = 60
 	
 	new(XConnection connection) {
 		this.connection = connection
@@ -43,8 +44,12 @@ class ConnectionRouter implements XActivatable {
 		]
 		connectionEndListener = new InitializingListener<XNode>() => [
  			set = [ bindNode(it) ]
- 			unset = [ unbindNode(it) ]
+ 			unset = [ 
+ 				unbindNode(it)
+ 				shapeKeeper.reset
+ 			]
  		]
+ 		shapeKeeper = new SplineShapeKeeper(connection)
 	}
 	
 	def getControlPoints() {
@@ -150,6 +155,7 @@ class ConnectionRouter implements XActivatable {
 				calculateSelfEdge()
 			}
 		} 
+		shapeKeeper.adjustControlPointsToNodeMove
 		val sourcePoint = findClosestSourceAnchor(connection.source, true)
 		val targetPoint = findClosestTargetAnchor(connection.target, true)
 		if(sourcePoint != null && targetPoint != null) {

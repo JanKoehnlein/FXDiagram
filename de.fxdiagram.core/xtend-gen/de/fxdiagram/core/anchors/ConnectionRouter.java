@@ -8,6 +8,7 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.anchors.ArrowHead;
+import de.fxdiagram.core.anchors.SplineShapeKeeper;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListener;
@@ -45,6 +46,8 @@ public class ConnectionRouter implements XActivatable {
   
   private InitializingListener<XNode> connectionEndListener;
   
+  private SplineShapeKeeper shapeKeeper;
+  
   private double selfEdgeDist = 60;
   
   public ConnectionRouter(final XConnection connection) {
@@ -65,11 +68,14 @@ public class ConnectionRouter implements XActivatable {
       it.setSet(_function_3);
       final Procedure1<XNode> _function_4 = (XNode it_1) -> {
         this.unbindNode(it_1);
+        this.shapeKeeper.reset();
       };
       it.setUnset(_function_4);
     };
     InitializingListener<XNode> _doubleArrow = ObjectExtensions.<InitializingListener<XNode>>operator_doubleArrow(_initializingListener, _function_2);
     this.connectionEndListener = _doubleArrow;
+    SplineShapeKeeper _splineShapeKeeper = new SplineShapeKeeper(connection);
+    this.shapeKeeper = _splineShapeKeeper;
   }
   
   public ObservableList<XControlPoint> getControlPoints() {
@@ -279,6 +285,7 @@ public class ConnectionRouter implements XActivatable {
         this.calculateSelfEdge();
       }
     }
+    this.shapeKeeper.adjustControlPointsToNodeMove();
     XNode _source_1 = this.connection.getSource();
     final Point2D sourcePoint = this.findClosestSourceAnchor(_source_1, true);
     XNode _target_1 = this.connection.getTarget();
