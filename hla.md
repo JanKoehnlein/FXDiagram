@@ -65,7 +65,7 @@ val transitionConnection = new ConnectionMapping<Transition>(...) {
   ...
   override protected calls() {
     stateNode.target[state] // Transition t -> t.getState()
-    eventLabel.labelFor[event] 
+    eventLabel.labelFor[event]
   }
 }
 ```

@@ -24,7 +24,7 @@ Clients usually implement their own subclasses of `XNode` for custom graphics an
 5. The shape is activated (`activate`) to react to user actions.
 6. The shape is removed from the scenegraph.
 
-The diagram is a child of an `XRoot`. It holds an overlay heads up display, the menu or services like the [domain object providers](#domain-object). The root can be directly added to the `javafx.scene.Scene`. 
+The diagram is a child of an `XRoot`. It holds an overlay heads up display, the menu or services like the [domain object providers](#domain-object). The root can be directly added to the `javafx.scene.Scene`.
 
 
 ## FxProperty
@@ -32,9 +32,9 @@ The diagram is a child of an `XRoot`. It holds an overlay heads up display, the 
 FXDiagram defines a number of so called *active annotations*, which allow to participate in the Xtend to Java transpilation step. One of these annotations is `@FxProperty` for fields. This will automatically create a getter and setter with the plain Java type as well as a method to access the JavaFX property. For more details have a look at the generated Java code. Examples:
 
 ```xtend
-@FxProperty double width       
-@FxProperty String name        
-@FxProperty Side placementHint 
+@FxProperty double width
+@FxProperty String name
+@FxProperty Side placementHint
 @FxProperty ObservableList<XConnection> connections = FXCollections.observableArrayList
 @FxProperty ObservableMap<Node, Pos> fixedButtons = FXCollections.observableMap(newHashMap)
 @FxProperty(readOnly=true) boolean isActive
@@ -57,7 +57,7 @@ A `Behavior` is a piece of user interaction provided by an `XShape`. The shape c
 
 Both `XNode`and `XConnection` store a reference to a domain object by means of a `DomainObjectDescriptor`. This indirection is necessary for two reasons: It is often not a good idea to store hard references e.g. to EMF or to database objects, and we need a way to persist arbitrary kinds of domain objects when we store the diagram.
 
-To allow the use of domain objects that can only be safely read in a transaction, there is 
+To allow the use of domain objects that can only be safely read in a transaction, there is
 the `DomainObjectDescriptorImpl.withDomainObject` method. It will open an appropriate transaction execute the given lambda close the transaction and return the result. Whether this method is reentrant or not depends on the specific implementation.
 
 A `DomainObjectProvider` converts between the real domain object and its descriptor. It can store additional information needed to resolve/retrieve the object, such as a database connection or a classpath. Domain object providers are registered to the `XRoot`in order to be resolvable.
@@ -67,25 +67,25 @@ A `DomainObjectProvider` converts between the real domain object and its descrip
 
 FXDiagram does not have its own diagram model. Instead, it uses a reflective method to serialize the JavaFX scenegraph directly in JSON notation. But not every property of a node has to be saved. Many of them can be recovered/calculated from the domain object or some defaults. As users should be able to create arbitrary shapes using the full power of JavaFX, there needs to be a way to tell the system which properties are important for saving.
 
-This is exactly the purpose of the `@ModelNode` annotation. For example the annotation 
+This is exactly the purpose of the `@ModelNode` annotation. For example the annotation
 
 ```xtend
 @ModelNode('layoutX', 'layoutY', 'type')
 class XControlPoint....
 ```
 
-tells FXDiagram to save the values of the properties `layoutX`, `layoutY` and `type` for an object of class `XControlPoint` in the scenegraph. By default, all model node properties of the supertype are serialized as well. 
+tells FXDiagram to save the values of the properties `layoutX`, `layoutY` and `type` for an object of class `XControlPoint` in the scenegraph. By default, all model node properties of the supertype are serialized as well.
 
 Technically, `@ModelNode` is an active annotation for classes that creates a default constructor, adds the interface `XModelProvider` and implements its method `populate()` to populate the model that is saved with the values of the specified properties. If you implement a scenegraph node in Java, you have to do all this by hand.
 
 
 ## Animation Commands
 
-Undo/Redo is implemented by using the command pattern: All modifications are wrapped into command objects that can be executed, undone and redone. These are stored on a command  stack. In FXDiagram the command stack is located in the `XRoot` of the diagram. 
+Undo/Redo is implemented by using the command pattern: All modifications are wrapped into command objects that can be executed, undone and redone. These are stored on a command  stack. In FXDiagram the command stack is located in the `XRoot` of the diagram.
 
 What makes FXDiagram different is that it does not just wrap some model changes, but uses a more user-centric approach: When you undo a change, you want to rewind your work to a specific prior state. FXDiagram restores the viewport you had when that change was finished and then uses a smooth transition undoing the modification. The user does not get lost and can easily identify the right point in time.
 
-To implement that, all commands offer three animations (execute, undo, redo). Animations are queued for sequential playback. That means that when you create your own commands, you have to be aware that the current state of the diagram may not be the same as the one when the animation actually starts. Storing and restoring the viewport happens automatically when you inherit from `AbstractAnimationCommand`. 
+To implement that, all commands offer three animations (execute, undo, redo). Animations are queued for sequential playback. That means that when you create your own commands, you have to be aware that the current state of the diagram may not be the same as the one when the animation actually starts. Storing and restoring the viewport happens automatically when you inherit from `AbstractAnimationCommand`.
 
 A graphical media player panel allows to undo/redo changes. It can be reached via the context menu or by pressing `CTRL-P` (`CMD-P`on Mac).
 

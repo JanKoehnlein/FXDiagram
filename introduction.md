@@ -11,7 +11,7 @@ FXDiagram is a framework for creating graph diagrams (nodes and edges) based on 
 
 These are the values that guide me in the development of FXDiagram:
 
-- **Focus on user experience:** No surprises. Use modern visuals and real-life metaphors fot the most intuitive behavior. No flickering, guide the user's eye with short transitions instead. 
+- **Focus on user experience:** No surprises. Use modern visuals and real-life metaphors fot the most intuitive behavior. No flickering, guide the user's eye with short transitions instead.
 - **Target the real use cases:** Choose diagram contents, layout elements, drill-down, produce scalable pictures.
 - **Skip the bogus use cases:** Diagrams with more than 100 nodes and thousands of connections  which are unreadable anyway. Resizable nodes that only necessary when the automatic layout is broken.
 - **Stay graphical:** Avoid dialogs, property panes etc at all cost. Use the maximum amount of screen space for the diagram.
