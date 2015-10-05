@@ -95,9 +95,9 @@ public abstract class XShape extends Parent implements XActivatable {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
     if (_not) {
+      this.isActiveProperty.set(true);
       this.initializeGraphics();
       this.doActivate();
-      this.isActiveProperty.set(true);
       InitializingListener<Boolean> _initializingListener = new InitializingListener<Boolean>();
       final Procedure1<InitializingListener<Boolean>> _function = (InitializingListener<Boolean> it) -> {
         final Procedure1<Boolean> _function_1 = (Boolean it_1) -> {

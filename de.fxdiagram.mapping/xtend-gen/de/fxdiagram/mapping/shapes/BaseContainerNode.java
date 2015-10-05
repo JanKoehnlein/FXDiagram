@@ -10,6 +10,7 @@ import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
@@ -24,6 +25,7 @@ import de.fxdiagram.mapping.shapes.INodeWithLazyMappings;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -104,37 +106,64 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
   
   @Override
   public void doActivate() {
-    ObservableList<Node> _children = this.diagramGroup.getChildren();
-    XDiagram _innerDiagram = this.getInnerDiagram();
-    final Procedure1<XDiagram> _function = (XDiagram it) -> {
-      it.setIsRootDiagram(false);
-      XDiagram _diagram = CoreExtensions.getDiagram(this);
-      it.setParentDiagram(_diagram);
-    };
-    XDiagram _doubleArrow = ObjectExtensions.<XDiagram>operator_doubleArrow(_innerDiagram, _function);
-    _children.add(_doubleArrow);
-    XDiagram _innerDiagram_1 = this.getInnerDiagram();
-    _innerDiagram_1.activate();
     super.doActivate();
+    InitializingListener<XDiagram> _initializingListener = new InitializingListener<XDiagram>();
+    final Procedure1<InitializingListener<XDiagram>> _function = (InitializingListener<XDiagram> it) -> {
+      final Procedure1<XDiagram> _function_1 = (XDiagram newDiagram) -> {
+        ObservableList<Node> _children = this.diagramGroup.getChildren();
+        _children.clear();
+        final Procedure1<XDiagram> _function_2 = (XDiagram it_1) -> {
+          it_1.setIsRootDiagram(false);
+          XDiagram _diagram = CoreExtensions.getDiagram(this);
+          it_1.setParentDiagram(_diagram);
+        };
+        ObjectExtensions.<XDiagram>operator_doubleArrow(newDiagram, _function_2);
+        ObservableList<Node> _children_1 = this.diagramGroup.getChildren();
+        _children_1.add(newDiagram);
+        newDiagram.activate();
+      };
+      it.setSet(_function_1);
+      final Procedure1<XDiagram> _function_2 = (XDiagram it_1) -> {
+        ObservableList<Node> _children = this.diagramGroup.getChildren();
+        _children.clear();
+      };
+      it.setUnset(_function_2);
+    };
+    InitializingListener<XDiagram> _doubleArrow = ObjectExtensions.<InitializingListener<XDiagram>>operator_doubleArrow(_initializingListener, _function);
+    CoreExtensions.<XDiagram>addInitializingListener(this.innerDiagramProperty, _doubleArrow);
     IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
     LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
     NodeReconcileBehavior<Object> _nodeReconcileBehavior = new NodeReconcileBehavior<Object>(this);
     this.addBehavior(_nodeReconcileBehavior);
-    XDiagram _innerDiagram_2 = this.getInnerDiagram();
-    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram_2.boundsInLocalProperty();
+    XDiagram _innerDiagram = this.getInnerDiagram();
+    ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram.boundsInLocalProperty();
     final ChangeListener<Bounds> _function_1 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
-      double _layoutX = this.getLayoutX();
-      double _minX = n.getMinX();
-      double _minX_1 = o.getMinX();
-      double _minus = (_minX - _minX_1);
-      double _plus = (_layoutX + _minus);
-      this.setLayoutX(_plus);
-      double _layoutY = this.getLayoutY();
-      double _minY = n.getMinY();
-      double _minY_1 = o.getMinY();
-      double _minus_1 = (_minY - _minY_1);
-      double _plus_1 = (_layoutY + _minus_1);
-      this.setLayoutY(_plus_1);
+      boolean _and = false;
+      DoubleProperty _layoutXProperty = this.layoutXProperty();
+      boolean _isBound = _layoutXProperty.isBound();
+      boolean _not = (!_isBound);
+      if (!_not) {
+        _and = false;
+      } else {
+        DoubleProperty _layoutYProperty = this.layoutYProperty();
+        boolean _isBound_1 = _layoutYProperty.isBound();
+        boolean _not_1 = (!_isBound_1);
+        _and = _not_1;
+      }
+      if (_and) {
+        double _layoutX = this.getLayoutX();
+        double _minX = n.getMinX();
+        double _minX_1 = o.getMinX();
+        double _minus = (_minX - _minX_1);
+        double _plus = (_layoutX + _minus);
+        this.setLayoutX(_plus);
+        double _layoutY = this.getLayoutY();
+        double _minY = n.getMinY();
+        double _minY_1 = o.getMinY();
+        double _minus_1 = (_minY - _minY_1);
+        double _plus_1 = (_layoutY + _minus_1);
+        this.setLayoutY(_plus_1);
+      }
     };
     _boundsInLocalProperty.addListener(_function_1);
   }
@@ -177,12 +206,7 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
     super.populate(modelElement);
   }
   
-  private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram",_initInnerDiagram());
-  
-  private static final XDiagram _initInnerDiagram() {
-    XDiagram _xDiagram = new XDiagram();
-    return _xDiagram;
-  }
+  private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram");
   
   public XDiagram getInnerDiagram() {
     return this.innerDiagramProperty.get();

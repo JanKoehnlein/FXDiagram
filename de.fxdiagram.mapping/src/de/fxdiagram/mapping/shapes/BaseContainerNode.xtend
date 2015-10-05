@@ -21,6 +21,7 @@ import static javafx.geometry.Side.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
+import de.fxdiagram.core.extensions.InitializingListener
 
 /**
  * Base implementation for an {@link XNode} that contains other nodes and belongs to an {@link IMappedElementDescriptor}.
@@ -33,7 +34,7 @@ class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiag
 	
 	public static val NODE_HEADING = 'containerNodeHeading'
 	
-	@FxProperty XDiagram innerDiagram = new XDiagram
+	@FxProperty XDiagram innerDiagram
 	
 	Group diagramGroup
 	
@@ -65,18 +66,29 @@ class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiag
 	}
 	
 	override doActivate() {
-		diagramGroup.children += innerDiagram => [
-			isRootDiagram = false
-			parentDiagram = this.diagram 			
-		]
-		innerDiagram.activate
 		super.doActivate
+		innerDiagramProperty.addInitializingListener(new InitializingListener => [
+			set = [ XDiagram newDiagram |
+				diagramGroup.children.clear
+				newDiagram => [
+					isRootDiagram = false
+					parentDiagram = this.diagram 	
+				]
+				diagramGroup.children.add(newDiagram)
+				newDiagram.activate							
+			]
+			unset = [
+				diagramGroup.children.clear
+			]
+		])
 		addLazyBehavior(domainObjectDescriptor)
 		addBehavior(new NodeReconcileBehavior(this))
 		// move container node when the inner diagram grows to the upper/left
 		innerDiagram.boundsInLocalProperty.addListener [ p, o, n |
-			layoutX = layoutX  + (n.minX - o.minX)  
-			layoutY = layoutY +  (n.minY - o.minY)
+			if(!layoutXProperty.bound && !layoutYProperty.bound) {
+				layoutX = layoutX + (n.minX - o.minX)  
+				layoutY = layoutY + (n.minY - o.minY)
+			}
 		]	
 	}
 	

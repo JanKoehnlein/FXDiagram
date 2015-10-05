@@ -98,22 +98,19 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
     return _and;
   }
   
-  public DiagramScaler setInnerDiagram(final XDiagram innerDiagram) {
-    DiagramScaler _xblockexpression = null;
-    {
-      this.innerDiagram = innerDiagram;
-      ObservableList<Node> _children = this.pane.getChildren();
-      Group _group = new Group();
-      final Procedure1<Group> _function = (Group it) -> {
-        ObservableList<Node> _children_1 = it.getChildren();
-        _children_1.setAll(innerDiagram);
-      };
-      Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-      _children.add((this.innerDiagramGroup = _doubleArrow));
-      DiagramScaler _diagramScaler = new DiagramScaler(innerDiagram);
-      _xblockexpression = this.diagramScaler = _diagramScaler;
-    }
-    return _xblockexpression;
+  @Override
+  public void setInnerDiagram(final XDiagram innerDiagram) {
+    this.innerDiagram = innerDiagram;
+    ObservableList<Node> _children = this.pane.getChildren();
+    Group _group = new Group();
+    final Procedure1<Group> _function = (Group it) -> {
+      ObservableList<Node> _children_1 = it.getChildren();
+      _children_1.setAll(innerDiagram);
+    };
+    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
+    _children.add((this.innerDiagramGroup = _doubleArrow));
+    DiagramScaler _diagramScaler = new DiagramScaler(innerDiagram);
+    this.diagramScaler = _diagramScaler;
   }
   
   @Override

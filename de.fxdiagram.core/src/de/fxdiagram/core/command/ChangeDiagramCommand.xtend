@@ -40,6 +40,7 @@ class ChangeDiagramCommand extends AbstractAnimationCommand {
 			] => [ 
 				onFinished = [
 					root.diagram = appear
+					appear.activate
 					appear.opacity = 0
 				]
 			]

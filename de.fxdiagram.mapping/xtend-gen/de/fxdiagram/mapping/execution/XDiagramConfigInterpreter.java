@@ -5,12 +5,12 @@ import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDiagramContainer;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
-import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.mapping.AbstractLabelMapping;
 import de.fxdiagram.mapping.AbstractLabelMappingCall;
@@ -119,7 +119,7 @@ public class XDiagramConfigInterpreter {
     for (final Object nodeObject : nodeObjects) {
       {
         final IMappedElementDescriptor<Object> descriptor = this.<Object>getDescriptor(nodeObject, nodeMappingCasted);
-        final XNode node = context.<Object>getNode(descriptor);
+        final XNode node = context.getNode(descriptor);
         boolean _notEquals = (!Objects.equal(node, null));
         if (_notEquals) {
           List<AbstractConnectionMappingCall<?, Object>> _incoming = nodeMappingCasted.getIncoming();
@@ -228,7 +228,7 @@ public class XDiagramConfigInterpreter {
       boolean _isCreateDuplicateNodes = context.isCreateDuplicateNodes();
       boolean _not = (!_isCreateDuplicateNodes);
       if (_not) {
-        final XNode existingNode = context.<Object>getNode(descriptor);
+        final XNode existingNode = context.getNode(descriptor);
         boolean _or = false;
         boolean _notEquals = (!Objects.equal(existingNode, null));
         if (_notEquals) {
@@ -280,13 +280,13 @@ public class XDiagramConfigInterpreter {
         Iterables.<XLabel>addAll(_labels_1, _execute);
       };
       _labels.forEach(_function_2);
-      if ((node instanceof OpenableDiagramNode)) {
+      if ((node instanceof XDiagramContainer)) {
         DiagramMappingCall<?, T> _nestedDiagram = nodeMapping.getNestedDiagram();
         XDiagram _execute = null;
         if (_nestedDiagram!=null) {
           _execute=this.execute(_nestedDiagram, nodeObject, context);
         }
-        ((OpenableDiagramNode)node).setInnerDiagram(_execute);
+        ((XDiagramContainer)node).setInnerDiagram(_execute);
       }
       return node;
     } else {
@@ -299,7 +299,7 @@ public class XDiagramConfigInterpreter {
     if (_isApplicable) {
       final ConnectionMapping<T> connectionMappingCasted = ((ConnectionMapping<T>) connectionMapping);
       final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(connectionObject, connectionMappingCasted);
-      final XConnection existingConnection = context.<Object>getConnection(descriptor);
+      final XConnection existingConnection = context.getConnection(descriptor);
       boolean _or = false;
       boolean _notEquals = (!Objects.equal(existingConnection, null));
       if (_notEquals) {

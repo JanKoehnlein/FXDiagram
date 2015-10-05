@@ -76,9 +76,9 @@ abstract class XShape extends Parent implements XActivatable {
 	 */
 	override activate() {
 		if(!isActive) {
+			isActiveProperty.set(true)
 			initializeGraphics
 			doActivate
-			isActiveProperty.set(true)
 			selectedProperty.addInitializingListener (new InitializingListener => [
 				set = [
 					selectionFeedback(it)

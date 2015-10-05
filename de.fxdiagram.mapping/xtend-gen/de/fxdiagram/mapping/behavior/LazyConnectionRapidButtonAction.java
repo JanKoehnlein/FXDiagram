@@ -85,9 +85,16 @@ public class LazyConnectionRapidButtonAction<MODEL extends Object, ARG extends O
               }
               final NodeMappingCall<?, MODEL> nodeMappingCall = _xifexpression;
               final Iterable<?> nodeDomainObjects = this.configInterpreter.select(nodeMappingCall, connectionDomainObject);
-              boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
-              boolean _not = (!_isEmpty);
-              if (_not) {
+              boolean _and = false;
+              boolean _notEquals = (!Objects.equal(nodeDomainObjects, null));
+              if (!_notEquals) {
+                _and = false;
+              } else {
+                boolean _isEmpty = IterableExtensions.isEmpty(nodeDomainObjects);
+                boolean _not = (!_isEmpty);
+                _and = _not;
+              }
+              if (_and) {
                 return Boolean.valueOf(true);
               }
             }

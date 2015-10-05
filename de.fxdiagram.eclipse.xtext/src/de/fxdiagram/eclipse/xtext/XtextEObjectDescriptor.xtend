@@ -33,7 +33,7 @@ class XtextEObjectDescriptor <T extends EObject> extends AbstractXtextDescriptor
 	}
 	
 	override getName() {
-		elementID.qualifiedName.lastSegment
+		elementID.qualifiedName?.lastSegment ?: '<unnamed>'
 	}
 	
 	override equals(Object obj) {

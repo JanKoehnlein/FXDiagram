@@ -55,12 +55,30 @@ class InterpreterContext {
 			diagram.connections += connection
 	}
 
-	def <T> getConnection(DomainObjectDescriptor descriptor) {
-		(addedConnections + diagram.connections).findFirst[domainObjectDescriptor == descriptor]
+	def XConnection getConnection(DomainObjectDescriptor descriptor) {
+		if(superContext == null) 
+			doGetConnection(descriptor)
+		else
+			superContext.getConnection(descriptor)
+	}
+	
+	def XConnection doGetConnection(DomainObjectDescriptor descriptor) {
+		(addedConnections + diagram.connections)
+			.findFirst[domainObjectDescriptor == descriptor]
+		?: subContexts.map[it.doGetConnection(descriptor)].filterNull.head
 	}
 
-	def <T> getNode(DomainObjectDescriptor descriptor) {
-		(addedNodes + diagram.nodes).findFirst[domainObjectDescriptor == descriptor]
+	def XNode getNode(DomainObjectDescriptor descriptor) {
+		if(superContext == null) 
+			doGetNode(descriptor)
+		else
+			superContext.getNode(descriptor)
+	}
+	
+	def XNode doGetNode(DomainObjectDescriptor descriptor) {
+		(addedNodes + diagram.nodes)
+			.findFirst[domainObjectDescriptor == descriptor]
+		?: subContexts.map[it.doGetNode(descriptor)].filterNull.head
 	}
 	
 	def boolean needsLayoutCommand() {

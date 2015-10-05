@@ -80,6 +80,7 @@ public class ChangeDiagramCommand extends AbstractAnimationCommand {
       final Procedure1<FadeTransition> _function_2 = (FadeTransition it_1) -> {
         final EventHandler<ActionEvent> _function_3 = (ActionEvent it_2) -> {
           root.setDiagram(appear);
+          appear.activate();
           appear.setOpacity(0);
         };
         it_1.setOnFinished(_function_3);

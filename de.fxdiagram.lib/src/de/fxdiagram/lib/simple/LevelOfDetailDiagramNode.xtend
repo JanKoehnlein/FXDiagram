@@ -64,7 +64,7 @@ class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer {
 		innerDiagram.isActive && innerDiagram.visible
 	}
 	
-	def setInnerDiagram(XDiagram innerDiagram) {
+	override setInnerDiagram(XDiagram innerDiagram) {
 		this.innerDiagram = innerDiagram
 		pane.children += innerDiagramGroup = new Group => [
 			children.setAll(innerDiagram) 

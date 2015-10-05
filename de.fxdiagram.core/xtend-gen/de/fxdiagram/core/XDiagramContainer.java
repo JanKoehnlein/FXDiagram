@@ -10,6 +10,8 @@ import javafx.geometry.Insets;
 public interface XDiagramContainer {
   public abstract XDiagram getInnerDiagram();
   
+  public abstract void setInnerDiagram(final XDiagram diagram);
+  
   public abstract boolean isInnerDiagramActive();
   
   public abstract Insets getInsets();

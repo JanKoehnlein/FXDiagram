@@ -116,24 +116,72 @@ public class InterpreterContext {
     return _xifexpression;
   }
   
-  public <T extends Object> XConnection getConnection(final DomainObjectDescriptor descriptor) {
+  public XConnection getConnection(final DomainObjectDescriptor descriptor) {
+    XConnection _xifexpression = null;
+    boolean _equals = Objects.equal(this.superContext, null);
+    if (_equals) {
+      _xifexpression = this.doGetConnection(descriptor);
+    } else {
+      _xifexpression = this.superContext.getConnection(descriptor);
+    }
+    return _xifexpression;
+  }
+  
+  public XConnection doGetConnection(final DomainObjectDescriptor descriptor) {
+    XConnection _elvis = null;
     ObservableList<XConnection> _connections = this.diagram.getConnections();
     Iterable<XConnection> _plus = Iterables.<XConnection>concat(this.addedConnections, _connections);
     final Function1<XConnection, Boolean> _function = (XConnection it) -> {
       DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
       return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
-    return IterableExtensions.<XConnection>findFirst(_plus, _function);
+    XConnection _findFirst = IterableExtensions.<XConnection>findFirst(_plus, _function);
+    if (_findFirst != null) {
+      _elvis = _findFirst;
+    } else {
+      final Function1<InterpreterContext, XConnection> _function_1 = (InterpreterContext it) -> {
+        return it.doGetConnection(descriptor);
+      };
+      List<XConnection> _map = ListExtensions.<InterpreterContext, XConnection>map(this.subContexts, _function_1);
+      Iterable<XConnection> _filterNull = IterableExtensions.<XConnection>filterNull(_map);
+      XConnection _head = IterableExtensions.<XConnection>head(_filterNull);
+      _elvis = _head;
+    }
+    return _elvis;
   }
   
-  public <T extends Object> XNode getNode(final DomainObjectDescriptor descriptor) {
+  public XNode getNode(final DomainObjectDescriptor descriptor) {
+    XNode _xifexpression = null;
+    boolean _equals = Objects.equal(this.superContext, null);
+    if (_equals) {
+      _xifexpression = this.doGetNode(descriptor);
+    } else {
+      _xifexpression = this.superContext.getNode(descriptor);
+    }
+    return _xifexpression;
+  }
+  
+  public XNode doGetNode(final DomainObjectDescriptor descriptor) {
+    XNode _elvis = null;
     ObservableList<XNode> _nodes = this.diagram.getNodes();
     Iterable<XNode> _plus = Iterables.<XNode>concat(this.addedNodes, _nodes);
     final Function1<XNode, Boolean> _function = (XNode it) -> {
       DomainObjectDescriptor _domainObjectDescriptor = it.getDomainObjectDescriptor();
       return Boolean.valueOf(Objects.equal(_domainObjectDescriptor, descriptor));
     };
-    return IterableExtensions.<XNode>findFirst(_plus, _function);
+    XNode _findFirst = IterableExtensions.<XNode>findFirst(_plus, _function);
+    if (_findFirst != null) {
+      _elvis = _findFirst;
+    } else {
+      final Function1<InterpreterContext, XNode> _function_1 = (InterpreterContext it) -> {
+        return it.doGetNode(descriptor);
+      };
+      List<XNode> _map = ListExtensions.<InterpreterContext, XNode>map(this.subContexts, _function_1);
+      Iterable<XNode> _filterNull = IterableExtensions.<XNode>filterNull(_map);
+      XNode _head = IterableExtensions.<XNode>head(_filterNull);
+      _elvis = _head;
+    }
+    return _elvis;
   }
   
   public boolean needsLayoutCommand() {

@@ -110,7 +110,7 @@ class LazyConnectionRapidButtonAction<MODEL, ARG> extends RapidButtonAction {
 							else
 								mappingCall.connectionMapping.source  
 						val nodeDomainObjects = configInterpreter.select(nodeMappingCall, connectionDomainObject)
-						if(!nodeDomainObjects.empty) 
+						if(nodeDomainObjects != null && !nodeDomainObjects.empty) 
 							return true
 					}
 				}

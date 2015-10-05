@@ -68,9 +68,19 @@ public class XtextEObjectDescriptor<T extends EObject> extends AbstractXtextDesc
   
   @Override
   public String getName() {
+    String _elvis = null;
     XtextEObjectID _elementID = this.getElementID();
     QualifiedName _qualifiedName = _elementID.getQualifiedName();
-    return _qualifiedName.getLastSegment();
+    String _lastSegment = null;
+    if (_qualifiedName!=null) {
+      _lastSegment=_qualifiedName.getLastSegment();
+    }
+    if (_lastSegment != null) {
+      _elvis = _lastSegment;
+    } else {
+      _elvis = "<unnamed>";
+    }
+    return _elvis;
   }
   
   @Override

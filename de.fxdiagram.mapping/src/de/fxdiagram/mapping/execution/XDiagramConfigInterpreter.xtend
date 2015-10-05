@@ -3,9 +3,9 @@ package de.fxdiagram.mapping.execution
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XLabel
 import de.fxdiagram.core.XNode
-import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.mapping.AbstractConnectionMappingCall
 import de.fxdiagram.mapping.AbstractLabelMapping
 import de.fxdiagram.mapping.AbstractLabelMappingCall
@@ -21,6 +21,7 @@ import de.fxdiagram.mapping.MultiLabelMappingCall
 import de.fxdiagram.mapping.MultiNodeMappingCall
 import de.fxdiagram.mapping.NodeMapping
 import de.fxdiagram.mapping.NodeMappingCall
+import de.fxdiagram.mapping.XDiagramConfig
 import java.util.HashSet
 import java.util.Set
 
@@ -143,7 +144,7 @@ class XDiagramConfigInterpreter {
 			nodeMapping.labels.forEach [
 				node.labels += execute(nodeObject)
 			]
-			if (node instanceof OpenableDiagramNode)
+			if (node instanceof XDiagramContainer)
 				node.innerDiagram = nodeMapping.nestedDiagram?.execute(nodeObject, context)
 			return node
 		} else {
