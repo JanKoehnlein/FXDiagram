@@ -40,7 +40,7 @@ public class SplineShapeKeeper {
     return this.connection.getControlPoints();
   }
   
-  protected Point2D adjustControlPointsToNodeMove() {
+  protected Object adjustControlPointsToNodeMove() {
     Point2D _xifexpression = null;
     boolean _and = false;
     boolean _and_1 = false;
