@@ -32,7 +32,6 @@
 							<layout>p2</layout>
 						</repository>
 					</source>
-					<mirrorMetadataOnly>true</mirrorMetadataOnly>
 				</configuration>
 			</plugin>
 		</plugins>
