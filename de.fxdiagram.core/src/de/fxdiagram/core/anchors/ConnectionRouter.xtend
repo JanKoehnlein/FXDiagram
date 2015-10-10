@@ -155,7 +155,6 @@ class ConnectionRouter implements XActivatable {
 				calculateSelfEdge()
 			}
 		} 
-		shapeKeeper.adjustControlPointsToNodeMove
 		val sourcePoint = findClosestSourceAnchor(connection.source, true)
 		val targetPoint = findClosestTargetAnchor(connection.target, true)
 		if(sourcePoint != null && targetPoint != null) {

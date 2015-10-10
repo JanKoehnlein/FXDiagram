@@ -285,7 +285,6 @@ public class ConnectionRouter implements XActivatable {
         this.calculateSelfEdge();
       }
     }
-    this.shapeKeeper.adjustControlPointsToNodeMove();
     XNode _source_1 = this.connection.getSource();
     final Point2D sourcePoint = this.findClosestSourceAnchor(_source_1, true);
     XNode _target_1 = this.connection.getTarget();
