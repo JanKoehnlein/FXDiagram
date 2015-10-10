@@ -119,6 +119,7 @@ class Layouter {
 						xElement.connectionRouter.growToSize(layoutPoints.size)
 					else
 						xElement.connectionRouter.shrinkToSize(layoutPoints.size)
+					xElement.connectionRouter.splineShapeKeeperEnabled = false
 					for(i:1..<layoutPoints.size-1) {
 						val controlPoint = xElement.controlPoints.get(i)
 						controlPoint.layoutX = layoutPoints.get(i).x - delta.x
@@ -162,6 +163,7 @@ class Layouter {
 						default:
 							POLYLINE
 					}
+					xElement.connectionRouter.splineShapeKeeperEnabled = false
 					composite += new ConnectionMorphCommand(xElement, newKind, 
 						layoutPoints.map[new Point2D(x - delta.x, y - delta.y)]
 					) => [

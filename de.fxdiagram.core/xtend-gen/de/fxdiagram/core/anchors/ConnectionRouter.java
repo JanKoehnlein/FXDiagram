@@ -28,12 +28,14 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @Logging
 @SuppressWarnings("all")
@@ -47,6 +49,9 @@ public class ConnectionRouter implements XActivatable {
   private InitializingListener<XNode> connectionEndListener;
   
   private SplineShapeKeeper shapeKeeper;
+  
+  @Accessors
+  private boolean splineShapeKeeperEnabled = false;
   
   private double selfEdgeDist = 60;
   
@@ -284,6 +289,9 @@ public class ConnectionRouter implements XActivatable {
       if (_equals) {
         this.calculateSelfEdge();
       }
+    }
+    if (this.splineShapeKeeperEnabled) {
+      this.shapeKeeper.adjustControlPointsToNodeMove();
     }
     XNode _source_1 = this.connection.getSource();
     final Point2D sourcePoint = this.findClosestSourceAnchor(_source_1, true);
@@ -619,5 +627,14 @@ public class ConnectionRouter implements XActivatable {
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
+  }
+  
+  @Pure
+  public boolean isSplineShapeKeeperEnabled() {
+    return this.splineShapeKeeperEnabled;
+  }
+  
+  public void setSplineShapeKeeperEnabled(final boolean splineShapeKeeperEnabled) {
+    this.splineShapeKeeperEnabled = splineShapeKeeperEnabled;
   }
 }

@@ -1,16 +1,22 @@
 package de.fxdiagram.core.behavior;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -201,6 +207,19 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     double _screenY = it.getScreenY();
     MoveBehavior.DragContext _dragContext = new MoveBehavior.DragContext(_layoutX_1, _layoutY_1, _screenX, _screenY, initialPositionInScene);
     this.dragContext = _dragContext;
+    T _host_5 = this.getHost();
+    if ((_host_5 instanceof XNode)) {
+      T _host_6 = this.getHost();
+      final XNode node = ((XNode) _host_6);
+      ObservableList<XConnection> _incomingConnections = node.getIncomingConnections();
+      ObservableList<XConnection> _outgoingConnections = node.getOutgoingConnections();
+      Iterable<XConnection> _plus = Iterables.<XConnection>concat(_incomingConnections, _outgoingConnections);
+      final Consumer<XConnection> _function = (XConnection it_1) -> {
+        ConnectionRouter _connectionRouter = it_1.getConnectionRouter();
+        _connectionRouter.setSplineShapeKeeperEnabled(true);
+      };
+      _plus.forEach(_function);
+    }
   }
   
   public void mouseDragged(final MouseEvent it) {

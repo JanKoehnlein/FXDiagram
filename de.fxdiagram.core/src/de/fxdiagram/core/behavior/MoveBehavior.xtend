@@ -9,6 +9,7 @@ import org.eclipse.xtend.lib.annotations.Data
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import de.fxdiagram.core.command.AnimationCommand
+import de.fxdiagram.core.XNode
 
 class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	
@@ -58,6 +59,12 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 			screenY,
 			initialPositionInScene
 		)
+		if(host instanceof XNode) {
+			val node = host as XNode
+			(node.incomingConnections + node.outgoingConnections).forEach[
+				connectionRouter.splineShapeKeeperEnabled = true
+			]
+		}
 	}
 	
 	def void mouseDragged(MouseEvent it) {

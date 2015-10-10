@@ -11,6 +11,7 @@ import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static de.fxdiagram.core.XConnection.Kind.*
 import static de.fxdiagram.core.XControlPoint.Type.*
@@ -31,6 +32,9 @@ class ConnectionRouter implements XActivatable {
 	InitializingListener<XNode> connectionEndListener
 	
 	SplineShapeKeeper shapeKeeper
+	
+	@Accessors
+	boolean splineShapeKeeperEnabled = false
 	
 	double selfEdgeDist = 60
 	
@@ -155,6 +159,8 @@ class ConnectionRouter implements XActivatable {
 				calculateSelfEdge()
 			}
 		} 
+		if(splineShapeKeeperEnabled)
+			shapeKeeper.adjustControlPointsToNodeMove
 		val sourcePoint = findClosestSourceAnchor(connection.source, true)
 		val targetPoint = findClosestTargetAnchor(connection.target, true)
 		if(sourcePoint != null && targetPoint != null) {

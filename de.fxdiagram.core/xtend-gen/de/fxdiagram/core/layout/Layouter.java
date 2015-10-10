@@ -218,6 +218,8 @@ public class Layouter {
               int _size_5 = layoutPoints.size();
               _connectionRouter_1.shrinkToSize(_size_5);
             }
+            ConnectionRouter _connectionRouter_2 = ((XConnection)xElement).getConnectionRouter();
+            _connectionRouter_2.setSplineShapeKeeperEnabled(false);
             int _size_6 = layoutPoints.size();
             int _minus_2 = (_size_6 - 1);
             ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus_2, true);
@@ -327,6 +329,8 @@ public class Layouter {
               _switchResult_1 = XConnection.Kind.POLYLINE;
             }
             final XConnection.Kind newKind = _switchResult_1;
+            ConnectionRouter _connectionRouter = ((XConnection)xElement).getConnectionRouter();
+            _connectionRouter.setSplineShapeKeeperEnabled(false);
             final Function1<KVector, Point2D> _function_1 = (KVector it) -> {
               double _x = delta.getX();
               double _minus_2 = (it.x - _x);
