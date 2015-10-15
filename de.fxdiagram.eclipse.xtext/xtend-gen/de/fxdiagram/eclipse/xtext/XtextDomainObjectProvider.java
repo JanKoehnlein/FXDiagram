@@ -205,8 +205,11 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
     Provider<IURIEditorOpener> _iURIEditorOpener = Access.getIURIEditorOpener();
     IURIEditorOpener _get_1 = _iURIEditorOpener.get();
     final IEditorPart editor = _get_1.open(resourceURI, isSelect);
-    XtextDomainObjectProvider.CachedEditor _cachedEditor = new XtextDomainObjectProvider.CachedEditor(editor);
-    this.editorCache.put(resourceURI, _cachedEditor);
+    boolean _notEquals = (!Objects.equal(editor, null));
+    if (_notEquals) {
+      XtextDomainObjectProvider.CachedEditor _cachedEditor = new XtextDomainObjectProvider.CachedEditor(editor);
+      this.editorCache.put(resourceURI, _cachedEditor);
+    }
     if ((!isActivate)) {
       activePage.activate(activePart);
     }

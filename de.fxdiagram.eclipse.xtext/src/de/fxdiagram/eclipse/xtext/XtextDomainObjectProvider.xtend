@@ -79,7 +79,8 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 		}
 		val activePart = activePage.activePart
 		val editor = Access.IURIEditorOpener.get.open(resourceURI, isSelect)
-		editorCache.put(resourceURI, new CachedEditor(editor)) 
+		if(editor != null)
+			editorCache.put(resourceURI, new CachedEditor(editor)) 
 		if(!isActivate)
 			activePage.activate(activePart)
 		return editor
