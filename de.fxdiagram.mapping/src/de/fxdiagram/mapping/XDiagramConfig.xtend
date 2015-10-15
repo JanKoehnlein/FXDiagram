@@ -2,16 +2,16 @@ package de.fxdiagram.mapping
 
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XDomainObjectShape
+import de.fxdiagram.mapping.execution.ConnectionEntryCall
+import de.fxdiagram.mapping.execution.DiagramEntryCall
+import de.fxdiagram.mapping.execution.EntryCall
+import de.fxdiagram.mapping.execution.NodeEntryCall
 import java.util.List
 import java.util.Map
 import org.eclipse.core.runtime.Platform
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static de.fxdiagram.core.extensions.ClassLoaderExtensions.*
-import de.fxdiagram.mapping.execution.EntryCall
-import de.fxdiagram.mapping.execution.NodeEntryCall
-import de.fxdiagram.mapping.execution.DiagramEntryCall
-import de.fxdiagram.mapping.execution.ConnectionEntryCall
 
 /**
  * Stores a set of {@link AbstractMapping}s for a sepecific domain.
@@ -120,10 +120,10 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 
 	//TODO: remove and make sure serialization works	
 	override <ARG> addMapping(AbstractMapping<ARG> mapping) {
-		if(mappings.containsKey(mapping.ID)) {
-			LOG.severe('''Duplicate mapping id=«mapping.ID» in «ID»''')
-		} else {
+		if(mapping instanceof AbstractLabelMapping<?> || !mappings.containsKey(mapping.ID)) {
 			mappings.put(mapping.ID, mapping)
+		} else {
+			LOG.severe('''Duplicate mapping id=«mapping.ID» in «ID»''')
 		}
 	}
 } 

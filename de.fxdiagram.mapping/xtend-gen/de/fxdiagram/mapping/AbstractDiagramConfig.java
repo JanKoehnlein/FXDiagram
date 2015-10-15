@@ -1,6 +1,7 @@
 package de.fxdiagram.mapping;
 
 import de.fxdiagram.annotations.logging.Logging;
+import de.fxdiagram.mapping.AbstractLabelMapping;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.MappingAcceptor;
@@ -67,19 +68,26 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   
   @Override
   public <ARG extends Object> void addMapping(final AbstractMapping<ARG> mapping) {
-    String _iD = mapping.getID();
-    boolean _containsKey = this.mappings.containsKey(_iD);
-    if (_containsKey) {
+    boolean _or = false;
+    if ((mapping instanceof AbstractLabelMapping<?>)) {
+      _or = true;
+    } else {
+      String _iD = mapping.getID();
+      boolean _containsKey = this.mappings.containsKey(_iD);
+      boolean _not = (!_containsKey);
+      _or = _not;
+    }
+    if (_or) {
+      String _iD_1 = mapping.getID();
+      this.mappings.put(_iD_1, mapping);
+    } else {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("Duplicate mapping id=");
-      String _iD_1 = mapping.getID();
-      _builder.append(_iD_1, "");
+      String _iD_2 = mapping.getID();
+      _builder.append(_iD_2, "");
       _builder.append(" in ");
       _builder.append(this.ID, "");
       AbstractDiagramConfig.LOG.severe(_builder.toString());
-    } else {
-      String _iD_2 = mapping.getID();
-      this.mappings.put(_iD_2, mapping);
     }
   }
   
