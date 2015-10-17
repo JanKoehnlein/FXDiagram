@@ -30,6 +30,7 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 import static de.fxdiagram.mapping.shapes.BaseClassNode.*
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
+import org.eclipse.emf.common.util.URI
 
 class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 
@@ -145,11 +146,19 @@ class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 	
 	override protected <ARG> entryCalls(ARG domainArgument, extension MappingAcceptor<ARG> acceptor) {
 		switch domainArgument {
-			JvmDeclaredType, IType:
+			JvmDeclaredType:
 				acceptor.add(typeNode)
+			IType:
+				acceptor.add(typeNode, [domainArgument.jvmType])
 		 	PackageDeclaration:
 		 		acceptor.add(packageNode)
 		}
+	}
+	
+	def getJvmType(IType type) {
+		val resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE
+			.getResourceServiceProvider(URI.createURI('dummy.___xbase'))
+		resourceServiceProvider.get(JvmDomainUtil).getJvmElement(type) as JvmDeclaredType
 	}
 	
 	override protected createDomainObjectProvider() {

@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.JvmField;
+import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.common.types.JvmOperation;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
@@ -269,14 +270,16 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
     if (!_matched) {
       if (domainArgument instanceof JvmDeclaredType) {
         _matched=true;
-      }
-      if (!_matched) {
-        if (domainArgument instanceof IType) {
-          _matched=true;
-        }
-      }
-      if (_matched) {
         acceptor.add(this.typeNode);
+      }
+    }
+    if (!_matched) {
+      if (domainArgument instanceof IType) {
+        _matched=true;
+        final Function1<ARG, JvmDeclaredType> _function = (ARG it) -> {
+          return this.getJvmType(((IType)domainArgument));
+        };
+        acceptor.<JvmDeclaredType>add(this.typeNode, _function);
       }
     }
     if (!_matched) {
@@ -285,6 +288,18 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
         acceptor.add(this.packageNode);
       }
     }
+  }
+  
+  public JvmDeclaredType getJvmType(final IType type) {
+    JvmDeclaredType _xblockexpression = null;
+    {
+      URI _createURI = URI.createURI("dummy.___xbase");
+      final IResourceServiceProvider resourceServiceProvider = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(_createURI);
+      JvmDomainUtil _get = resourceServiceProvider.<JvmDomainUtil>get(JvmDomainUtil.class);
+      JvmIdentifiableElement _jvmElement = _get.getJvmElement(type);
+      _xblockexpression = ((JvmDeclaredType) _jvmElement);
+    }
+    return _xblockexpression;
   }
   
   @Override

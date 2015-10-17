@@ -24,6 +24,28 @@
                 </visibleWhen>
          	</menu> 
          </menuContribution>
+		 <menuContribution
+        	locationURI="popup:org.eclipse.jdt.ui.ClassFileEditor.EditorContext?before=group.edit"
+        	allPopups="true">
+        	<menu
+                label="Show in FXDiagram as..."
+                icon="icons/FXDiagram.png">
+                <dynamic 
+                      id="de.fxdiagram.xtext.xbase.showInDiagramMenu"
+                      class="de.fxdiagram.eclipse.commands.ShowInDiagramContribution">
+                </dynamic>
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="activePart">
+                      <test
+                            property="de.fxdiagram.eclipse.hasDiagramMapping"
+                            value="true">
+                      </test>
+                   </with>
+                </visibleWhen>
+         	</menu> 
+         </menuContribution>
 	</extension>
    <extension
          point="de.fxdiagram.mapping.fxDiagramConfig">
@@ -36,7 +58,7 @@
    <extension
          point="de.fxdiagram.eclipse.selectionExtractor">
       <selectionExtractor
-            class="de.fxdiagram.xtext.xbase.CompilationUnitSelectionExtractor">
+            class="de.fxdiagram.xtext.xbase.JavaEditorSelectionExtractor">
       </selectionExtractor>
       <selectionExtractor
             class="de.fxdiagram.xtext.xbase.JvmAssociationSelectionExtractor">

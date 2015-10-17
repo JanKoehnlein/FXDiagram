@@ -12,6 +12,8 @@ import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaUI;
@@ -23,7 +25,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 @ModelNode("handleIdentifier")
 @SuppressWarnings("all")
-public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableElement> {
+public class JavaElementDescriptor<ECLASS extends EObject> extends JvmEObjectDescriptor<ECLASS> {
   public JavaElementDescriptor() {
   }
   
@@ -39,7 +41,7 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
   }
   
   @Override
-  public <T extends Object> T withDomainObject(final Function1<? super JvmIdentifiableElement, ? extends T> lambda) {
+  public <T extends Object> T withDomainObject(final Function1<? super ECLASS, ? extends T> lambda) {
     T _xblockexpression = null;
     {
       String _handleIdentifier = this.getHandleIdentifier();
@@ -63,7 +65,12 @@ public class JavaElementDescriptor extends JvmEObjectDescriptor<JvmIdentifiableE
         String _plus_3 = (_plus_2 + " not found");
         throw new NoSuchElementException(_plus_3);
       }
-      _xblockexpression = lambda.apply(jvmElement);
+      Resource _eResource = jvmElement.eResource();
+      XtextEObjectID _elementID_1 = this.getElementID();
+      URI _uRI_1 = _elementID_1.getURI();
+      String _fragment = _uRI_1.fragment();
+      final EObject realJvmElement = _eResource.getEObject(_fragment);
+      _xblockexpression = lambda.apply(((ECLASS) realJvmElement));
     }
     return _xblockexpression;
   }
