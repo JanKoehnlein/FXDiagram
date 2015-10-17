@@ -22,6 +22,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 import de.fxdiagram.core.extensions.InitializingListener
+import com.google.common.annotations.Beta
 
 /**
  * Base implementation for an {@link XNode} that contains other nodes and belongs to an {@link IMappedElementDescriptor}.
@@ -29,7 +30,8 @@ import de.fxdiagram.core.extensions.InitializingListener
  * If the descriptor is an {@link AbstractXtextDescriptor}, members are automatically injected using
  * the Xtext language's injector. 
  */
-@ModelNode
+@Beta
+@ModelNode('innerDiagram')
 class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiagramContainer {
 	
 	public static val NODE_HEADING = 'containerNodeHeading'

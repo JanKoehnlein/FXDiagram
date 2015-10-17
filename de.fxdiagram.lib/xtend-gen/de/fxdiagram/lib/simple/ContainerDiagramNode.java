@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.simple;
 
+import com.google.common.annotations.Beta;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
@@ -34,6 +35,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * 
  * The node's border automatically scales around its contents.
  */
+@Beta
 @Logging
 @ModelNode("innerDiagram")
 @SuppressWarnings("all")

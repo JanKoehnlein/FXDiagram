@@ -1,5 +1,6 @@
 package de.fxdiagram.mapping.shapes;
 
+import com.google.common.annotations.Beta;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
@@ -51,7 +52,8 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * If the descriptor is an {@link AbstractXtextDescriptor}, members are automatically injected using
  * the Xtext language's injector.
  */
-@ModelNode
+@Beta
+@ModelNode("innerDiagram")
 @SuppressWarnings("all")
 public class BaseContainerNode<T extends Object> extends XNode implements INodeWithLazyMappings, XDiagramContainer {
   public final static String NODE_HEADING = "containerNodeHeading";
@@ -204,6 +206,7 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+    modelElement.addProperty(innerDiagramProperty, XDiagram.class);
   }
   
   private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram");

@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.simple
 
+import com.google.common.annotations.Beta
 import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
@@ -19,6 +20,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
  *  
  * The node's border automatically scales around its contents.
  */
+@Beta
 @Logging
 @ModelNode('innerDiagram')
 class ContainerDiagramNode extends XNode implements XDiagramContainer {
