@@ -60,8 +60,11 @@ for f in $PLUGINDIR;
 do
    # take action on each file. $f store current file name
   echo "Processing plugin: $f file..."
-  curl -X PUT -T $f -u ${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/${BINTRAY_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${PCK_VERSION}/$f;publish=0
-  echo ""
+  if [[ "$f" == *${PCK_VERSION}* ]]
+  then
+  	curl -X PUT -T $f -u ${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/${BINTRAY_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${PCK_VERSION}/$f;publish=0
+  	echo ""
+  fi
 done
 
 echo "Processing binary dir $BINARYDIR file..."
