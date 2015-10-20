@@ -53,16 +53,15 @@ class ReconcileAction implements DiagramAction {
 				}
 			}
 			val diagramReconcileBehavior = diagram.getBehavior(ReconcileBehavior)
-			if(diagramReconcileBehavior != null) {
+			if(diagramReconcileBehavior != null) 
 				diagramReconcileBehavior.reconcile(acceptor)
-			} else {
-				val allShapes = <XDomainObjectShape>newArrayList
-				allShapes += diagram.connections
-				allShapes += diagram.nodes
-				allShapes.forEach [
-					getBehavior(ReconcileBehavior)?.reconcile(acceptor)
-				]
-			}
+			val allShapes = <XShape>newArrayList
+			allShapes += diagram.connections
+			allShapes += diagram.nodes
+			allShapes -= deleteShapes
+			allShapes.forEach [
+				getBehavior(ReconcileBehavior)?.reconcile(acceptor)
+			]
 			if (!deleteShapes.empty)
 				commands += AddRemoveCommand.newRemoveCommand(diagram, deleteShapes)
 			if (!addShapes.empty)
@@ -83,6 +82,8 @@ class ReconcileAction implements DiagramAction {
 		val XDiagram diagram
 
 		override execute(CommandContext context) {
+			val diagramReconcileBehavior = diagram.getBehavior(ReconcileBehavior)
+			diagramReconcileBehavior?.showDirtyState(diagramReconcileBehavior.dirtyState)
 			val allShapes = <XDomainObjectShape>newArrayList
 			allShapes += diagram.connections
 			allShapes += diagram.nodes

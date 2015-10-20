@@ -40,6 +40,11 @@ public class ReconcileAction implements DiagramAction {
     
     @Override
     public void execute(final CommandContext context) {
+      final ReconcileBehavior diagramReconcileBehavior = this.diagram.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+      if (diagramReconcileBehavior!=null) {
+        DirtyState _dirtyState = diagramReconcileBehavior.getDirtyState();
+        diagramReconcileBehavior.showDirtyState(_dirtyState);
+      }
       final ArrayList<XDomainObjectShape> allShapes = CollectionLiterals.<XDomainObjectShape>newArrayList();
       ObservableList<XConnection> _connections = this.diagram.getConnections();
       Iterables.<XDomainObjectShape>addAll(allShapes, _connections);
@@ -49,8 +54,8 @@ public class ReconcileAction implements DiagramAction {
         final ReconcileBehavior behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
         boolean _notEquals = (!Objects.equal(behavior, null));
         if (_notEquals) {
-          DirtyState _dirtyState = behavior.getDirtyState();
-          behavior.showDirtyState(_dirtyState);
+          DirtyState _dirtyState_1 = behavior.getDirtyState();
+          behavior.showDirtyState(_dirtyState_1);
         }
       };
       allShapes.forEach(_function);
@@ -119,20 +124,20 @@ public class ReconcileAction implements DiagramAction {
           boolean _notEquals = (!Objects.equal(diagramReconcileBehavior, null));
           if (_notEquals) {
             diagramReconcileBehavior.reconcile(acceptor);
-          } else {
-            final ArrayList<XDomainObjectShape> allShapes = CollectionLiterals.<XDomainObjectShape>newArrayList();
-            ObservableList<XConnection> _connections = diagram.getConnections();
-            Iterables.<XDomainObjectShape>addAll(allShapes, _connections);
-            ObservableList<XNode> _nodes = diagram.getNodes();
-            Iterables.<XDomainObjectShape>addAll(allShapes, _nodes);
-            final Consumer<XDomainObjectShape> _function = (XDomainObjectShape it) -> {
-              ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-              if (_behavior!=null) {
-                _behavior.reconcile(acceptor);
-              }
-            };
-            allShapes.forEach(_function);
           }
+          final ArrayList<XShape> allShapes = CollectionLiterals.<XShape>newArrayList();
+          ObservableList<XConnection> _connections = diagram.getConnections();
+          Iterables.<XShape>addAll(allShapes, _connections);
+          ObservableList<XNode> _nodes = diagram.getNodes();
+          Iterables.<XShape>addAll(allShapes, _nodes);
+          Iterables.removeAll(allShapes, deleteShapes);
+          final Consumer<XShape> _function = (XShape it) -> {
+            ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+            if (_behavior!=null) {
+              _behavior.reconcile(acceptor);
+            }
+          };
+          allShapes.forEach(_function);
           boolean _isEmpty = deleteShapes.isEmpty();
           boolean _not = (!_isEmpty);
           if (_not) {

@@ -3,7 +3,7 @@ package de.fxdiagram.eclipse
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.eclipse.changes.ModelChangeBroker
 import de.fxdiagram.mapping.AbstractMapping
-import de.fxdiagram.mapping.MappingCall
+import de.fxdiagram.mapping.execution.EntryCall
 import java.util.List
 import java.util.Map
 import javafx.embed.swt.FXCanvas
@@ -20,7 +20,6 @@ import org.eclipse.ui.commands.ICommandService
 import org.eclipse.ui.handlers.RegistryToggleState
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
-import de.fxdiagram.mapping.execution.EntryCall
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.

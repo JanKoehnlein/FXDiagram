@@ -16,6 +16,7 @@ class ReconcileDiagramHandler extends AbstractHandler {
 			val root = view.currentRoot
 			if(root != null) 
 				new ReconcileAction().perform(view.currentRoot)
+			
 		}
 		null
 	}

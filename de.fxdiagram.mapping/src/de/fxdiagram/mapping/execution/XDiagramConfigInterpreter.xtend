@@ -37,6 +37,8 @@ class XDiagramConfigInterpreter {
 		if (!diagramMapping.isApplicable(diagramObject))
 			return null
 		val descriptor = diagramObject.getDescriptor(diagramMapping)
+		if(descriptor == null)
+			return null
 		val replaceDiagram = context.diagram.domainObjectDescriptor != descriptor
 		context.isReplaceRootDiagram = replaceDiagram
 		val diagram = if(replaceDiagram) 
@@ -131,6 +133,8 @@ class XDiagramConfigInterpreter {
 	def <T> createNode(T nodeObject, NodeMapping<T> nodeMapping, InterpreterContext context) {
 		if (nodeMapping.isApplicable(nodeObject)) {
 			val descriptor = nodeObject.getDescriptor(nodeMapping)
+			if(descriptor == null)
+				return null
 			if (!context.isCreateDuplicateNodes) {
 				val existingNode = context.getNode(descriptor)
 				if (existingNode != null || !context.isCreateNodes)
@@ -165,6 +169,8 @@ class XDiagramConfigInterpreter {
 		if (connectionMapping.isApplicable(connectionObject)) {
 			val connectionMappingCasted = connectionMapping as ConnectionMapping<T>
 			val descriptor = connectionObject.getDescriptor(connectionMappingCasted)
+			if(descriptor == null)
+				return null
 			val existingConnection = context.getConnection(descriptor)
 			if (existingConnection != null || !context.isCreateConnections)
 				return existingConnection

@@ -57,6 +57,10 @@ public class XDiagramConfigInterpreter {
         return null;
       }
       final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
+      boolean _equals = Objects.equal(descriptor, null);
+      if (_equals) {
+        return null;
+      }
       XDiagram _diagram = context.getDiagram();
       DomainObjectDescriptor _domainObjectDescriptor = _diagram.getDomainObjectDescriptor();
       final boolean replaceDiagram = (!Objects.equal(_domainObjectDescriptor, descriptor));
@@ -242,6 +246,10 @@ public class XDiagramConfigInterpreter {
     boolean _isApplicable = nodeMapping.isApplicable(nodeObject);
     if (_isApplicable) {
       final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(nodeObject, nodeMapping);
+      boolean _equals = Objects.equal(descriptor, null);
+      if (_equals) {
+        return null;
+      }
       boolean _isCreateDuplicateNodes = context.isCreateDuplicateNodes();
       boolean _not = (!_isCreateDuplicateNodes);
       if (_not) {
@@ -316,6 +324,10 @@ public class XDiagramConfigInterpreter {
     if (_isApplicable) {
       final ConnectionMapping<T> connectionMappingCasted = ((ConnectionMapping<T>) connectionMapping);
       final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(connectionObject, connectionMappingCasted);
+      boolean _equals = Objects.equal(descriptor, null);
+      if (_equals) {
+        return null;
+      }
       final XConnection existingConnection = context.getConnection(descriptor);
       boolean _or = false;
       boolean _notEquals = (!Objects.equal(existingConnection, null));

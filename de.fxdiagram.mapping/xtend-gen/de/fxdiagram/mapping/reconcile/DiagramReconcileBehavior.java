@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -166,13 +165,14 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
   protected void dirtyFeedback(final boolean isDirty) {
     if (isDirty) {
       XDiagram _host = this.getHost();
-      ObservableMap<Node, Pos> _fixedButtons = _host.getFixedButtons();
-      _fixedButtons.put(this.repairButton, Pos.TOP_RIGHT);
+      XRoot _root = CoreExtensions.getRoot(_host);
+      HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
+      _headsUpDisplay.add(this.repairButton, Pos.TOP_RIGHT);
     } else {
       XDiagram _host_1 = this.getHost();
-      XRoot _root = CoreExtensions.getRoot(_host_1);
-      HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
-      ObservableList<Node> _children = _headsUpDisplay.getChildren();
+      XRoot _root_1 = CoreExtensions.getRoot(_host_1);
+      HeadsUpDisplay _headsUpDisplay_1 = _root_1.getHeadsUpDisplay();
+      ObservableList<Node> _children = _headsUpDisplay_1.getChildren();
       _children.remove(this.repairButton);
     }
   }

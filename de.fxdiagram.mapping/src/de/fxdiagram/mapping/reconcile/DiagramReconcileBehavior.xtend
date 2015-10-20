@@ -80,7 +80,7 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 
 	override protected dirtyFeedback(boolean isDirty) {
 		if(isDirty)
-			host.fixedButtons.put(repairButton, Pos.TOP_RIGHT)
+			host.root.headsUpDisplay.add(repairButton, Pos.TOP_RIGHT)
 		else 
 			host.root.headsUpDisplay.children -= repairButton
 	}

@@ -180,8 +180,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
       };
       it.setAdd(_function_2);
       final Procedure1<XNode> _function_3 = (XNode it_1) -> {
-        XDiagram _diagram = CoreExtensions.getDiagram(it_1);
-        Group _nodeLayer = _diagram.getNodeLayer();
+        Group _nodeLayer = this.getNodeLayer();
         ObservableList<Node> _children = _nodeLayer.getChildren();
         CoreExtensions.<XNode>safeDelete(_children, it_1);
       };

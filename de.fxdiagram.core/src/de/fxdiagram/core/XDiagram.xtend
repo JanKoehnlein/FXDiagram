@@ -131,7 +131,7 @@ class XDiagram extends Group implements XActivatable {
 					it.activate
 			]
 			remove = [
-				diagram.getNodeLayer.children.safeDelete(it)
+				getNodeLayer.children.safeDelete(it)
 			]
 		])
 		connections.addInitializingListener(new InitializingListListener<XConnection>() => [

@@ -330,22 +330,21 @@ public class FXDiagramTab {
     boolean _notEquals = (!Objects.equal(behavior, null));
     if (_notEquals) {
       this.refreshDirtyState(behavior);
-    } else {
-      final ArrayList<XShape> allShapes = CollectionLiterals.<XShape>newArrayList();
-      XDiagram _diagram_1 = this.root.getDiagram();
-      ObservableList<XNode> _nodes = _diagram_1.getNodes();
-      Iterables.<XShape>addAll(allShapes, _nodes);
-      XDiagram _diagram_2 = this.root.getDiagram();
-      ObservableList<XConnection> _connections = _diagram_2.getConnections();
-      Iterables.<XShape>addAll(allShapes, _connections);
-      final Consumer<XShape> _function = (XShape it) -> {
-        ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-        if (_behavior!=null) {
-          this.refreshDirtyState(_behavior);
-        }
-      };
-      allShapes.forEach(_function);
     }
+    final ArrayList<XShape> allShapes = CollectionLiterals.<XShape>newArrayList();
+    XDiagram _diagram_1 = this.root.getDiagram();
+    ObservableList<XNode> _nodes = _diagram_1.getNodes();
+    Iterables.<XShape>addAll(allShapes, _nodes);
+    XDiagram _diagram_2 = this.root.getDiagram();
+    ObservableList<XConnection> _connections = _diagram_2.getConnections();
+    Iterables.<XShape>addAll(allShapes, _connections);
+    final Consumer<XShape> _function = (XShape it) -> {
+      ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+      if (_behavior!=null) {
+        this.refreshDirtyState(_behavior);
+      }
+    };
+    allShapes.forEach(_function);
   }
   
   protected void refreshDirtyState(final ReconcileBehavior behavior) {

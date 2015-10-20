@@ -89,7 +89,7 @@
          </command>
          <command
                commandId="de.fxdiagram.eclipse.UpdateDiagram"
-               icon="icons/copycont_r_co.gif"
+               icon="icons/repair.png"
                label="Refresh FXDiagram from model"
                style="push">
          </command>
