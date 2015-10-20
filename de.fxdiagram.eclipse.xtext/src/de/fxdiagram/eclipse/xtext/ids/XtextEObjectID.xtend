@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.xtext.naming.QualifiedName
+import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 
@@ -48,6 +49,10 @@ interface XtextEObjectID {
 				else
 					'#' + fragment
 			return new RelativeXtextEObjectID(parentID, eClass, URI, relativeFragment)
+		}
+
+		def XtextEObjectID createXtextEObjectID(IEObjectDescription it) {
+			new DefaultXtextEObjectID(qualifiedName, EClass, EObjectURI)
 		}
 
 		protected def getQualifiedName(EObject domainObject) {

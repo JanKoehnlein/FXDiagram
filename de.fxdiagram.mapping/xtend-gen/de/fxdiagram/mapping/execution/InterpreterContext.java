@@ -223,13 +223,20 @@ public class InterpreterContext {
   
   public void executeCommands(final CommandStack commandStack) {
     boolean _and = false;
+    boolean _and_1 = false;
     boolean _isReplaceRootDiagram = this.isReplaceRootDiagram();
     if (!_isReplaceRootDiagram) {
-      _and = false;
+      _and_1 = false;
     } else {
       boolean _isEmpty = this.subContexts.isEmpty();
       boolean _not = (!_isEmpty);
-      _and = _not;
+      _and_1 = _not;
+    }
+    if (!_and_1) {
+      _and = false;
+    } else {
+      boolean _equals = Objects.equal(this.superContext, null);
+      _and = _equals;
     }
     if (_and) {
       InterpreterContext _head = IterableExtensions.<InterpreterContext>head(this.subContexts);

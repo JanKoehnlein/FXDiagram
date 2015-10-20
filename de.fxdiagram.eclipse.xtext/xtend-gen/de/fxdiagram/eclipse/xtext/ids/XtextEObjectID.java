@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 
@@ -58,6 +59,13 @@ public interface XtextEObjectID {
       EClass _eClass_1 = it.eClass();
       URI _uRI_3 = EcoreUtil.getURI(it);
       return new RelativeXtextEObjectID(parentID, _eClass_1, _uRI_3, relativeFragment);
+    }
+    
+    public XtextEObjectID createXtextEObjectID(final IEObjectDescription it) {
+      QualifiedName _qualifiedName = it.getQualifiedName();
+      EClass _eClass = it.getEClass();
+      URI _eObjectURI = it.getEObjectURI();
+      return new DefaultXtextEObjectID(_qualifiedName, _eClass, _eObjectURI);
     }
     
     protected QualifiedName getQualifiedName(final EObject domainObject) {

@@ -13,6 +13,7 @@ import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.IWorkbenchPage
 import org.eclipse.ui.PlatformUI
+import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.resource.ILocationInFileProvider
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.shared.Access
@@ -35,6 +36,9 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 	
 	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<? extends T> mapping) {
 		switch it: domainObject {
+			IEObjectDescription: {
+				return new EObjectDescriptionDescriptor(createXtextEObjectID, mapping.config.ID, mapping.ID, this) as IMappedElementDescriptor<T>
+			}
 			EObject: {
 				if(eIsProxy)
 					return null
@@ -51,6 +55,10 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 	}
 	
 	def createXtextEObjectID(EObject element) {
+		idFactory.createXtextEObjectID(element)
+	}
+	
+	def createXtextEObjectID(IEObjectDescription element) {
 		idFactory.createXtextEObjectID(element)
 	}
 	

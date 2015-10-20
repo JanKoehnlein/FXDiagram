@@ -98,7 +98,7 @@ class InterpreterContext {
 	}
 	
 	def void executeCommands(CommandStack commandStack) {
-		if(replaceRootDiagram && !subContexts.empty) 
+		if(replaceRootDiagram && !subContexts.empty && superContext == null) 
 			commandStack.execute(new ChangeDiagramCommand(subContexts.head.diagram))
 		commandStack.execute(AddRemoveCommand.newAddCommand(diagram, addedNodes + addedConnections))
 		subContexts.forEach [

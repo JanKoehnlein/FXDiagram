@@ -6,6 +6,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.eclipse.xtext.EObjectDescriptionDescriptor;
 import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.XtextEObjectDescriptor;
 import de.fxdiagram.eclipse.xtext.XtextESettingDescriptor;
@@ -30,6 +31,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
@@ -99,6 +101,17 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
     final T it = domainObject;
     boolean _matched = false;
     if (!_matched) {
+      if (it instanceof IEObjectDescription) {
+        _matched=true;
+        XtextEObjectID _createXtextEObjectID = this.createXtextEObjectID(((IEObjectDescription)it));
+        XDiagramConfig _config = mapping.getConfig();
+        String _iD = _config.getID();
+        String _iD_1 = mapping.getID();
+        EObjectDescriptionDescriptor _eObjectDescriptionDescriptor = new EObjectDescriptionDescriptor(_createXtextEObjectID, _iD, _iD_1, this);
+        return ((IMappedElementDescriptor<T>) _eObjectDescriptionDescriptor);
+      }
+    }
+    if (!_matched) {
       if (it instanceof EObject) {
         _matched=true;
         boolean _eIsProxy = ((EObject)it).eIsProxy();
@@ -153,6 +166,10 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
   }
   
   public XtextEObjectID createXtextEObjectID(final EObject element) {
+    return this.idFactory.createXtextEObjectID(element);
+  }
+  
+  public XtextEObjectID createXtextEObjectID(final IEObjectDescription element) {
     return this.idFactory.createXtextEObjectID(element);
   }
   
