@@ -89,6 +89,7 @@
          </command>
          <command
                commandId="de.fxdiagram.eclipse.UpdateDiagram"
+               disabledIcon="icons/repair_disabled.png"
                icon="icons/repair.png"
                label="Refresh FXDiagram from model"
                style="push">
@@ -96,7 +97,6 @@
          <command
                commandId="de.fxdiagram.eclipse.LinkWithEditor"
                icon="icons/update.gif"
-               disabledIcon="icons/copycont_r_co_disabled.gif"
                label="Link with editor"
                style="toggle">
          </command>
