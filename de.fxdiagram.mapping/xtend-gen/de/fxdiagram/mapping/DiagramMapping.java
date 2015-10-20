@@ -14,6 +14,7 @@ import de.fxdiagram.mapping.MultiNodeMappingCall;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.NodeMappingCall;
 import de.fxdiagram.mapping.XDiagramConfig;
+import de.fxdiagram.mapping.shapes.BaseDiagram;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -67,11 +68,11 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
   }
   
   public XDiagram createDiagram(final IMappedElementDescriptor<T> descriptor) {
-    XDiagram _xDiagram = new XDiagram();
-    final Procedure1<XDiagram> _function = (XDiagram it) -> {
+    BaseDiagram<T> _baseDiagram = new BaseDiagram<T>(descriptor);
+    final Procedure1<BaseDiagram<T>> _function = (BaseDiagram<T> it) -> {
       it.setLayoutOnActivate(LayoutType.DOT);
     };
-    return ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function);
+    return ObjectExtensions.<BaseDiagram<T>>operator_doubleArrow(_baseDiagram, _function);
   }
   
   public <U extends Object> boolean nodeFor(final NodeMapping<U> nodeMapping, final Function1<? super T, ? extends U> selector) {

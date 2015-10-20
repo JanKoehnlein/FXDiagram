@@ -3,6 +3,7 @@ package de.fxdiagram.mapping
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.layout.LayoutType
 import java.util.List
+import de.fxdiagram.mapping.shapes.BaseDiagram
 
 /**
  * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor} 
@@ -25,7 +26,7 @@ import java.util.List
 	def getEagerConnections() { initialize; eagerConnections }
 	
 	def XDiagram createDiagram(IMappedElementDescriptor<T> descriptor) { 
-		new XDiagram => [
+		new BaseDiagram(descriptor) => [
 			layoutOnActivate = LayoutType.DOT
 		]
 	}

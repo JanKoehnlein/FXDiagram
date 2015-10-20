@@ -7,6 +7,8 @@ import javafx.animation.FadeTransition
 import javafx.animation.SequentialTransition
 
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import javafx.scene.Node
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * A behvaior to compare the shown state of a shape with its current domain model.
@@ -28,8 +30,9 @@ interface ReconcileBehavior extends Behavior {
 }
 
 
-abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostBehavior<T> implements ReconcileBehavior {
+abstract class AbstractReconcileBehavior<T extends Node> extends AbstractHostBehavior<T> implements ReconcileBehavior {
 	
+	@Accessors(PUBLIC_GETTER)
 	DirtyState shownState = DirtyState.CLEAN
 	
 	Animation dirtyAnimation

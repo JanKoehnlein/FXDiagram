@@ -91,11 +91,6 @@ public class ReconcileAction implements DiagramAction {
   @Override
   public void perform(final XRoot root) {
     final XDiagram diagram = root.getDiagram();
-    final ArrayList<XDomainObjectShape> allShapes = CollectionLiterals.<XDomainObjectShape>newArrayList();
-    ObservableList<XConnection> _connections = diagram.getConnections();
-    Iterables.<XDomainObjectShape>addAll(allShapes, _connections);
-    ObservableList<XNode> _nodes = diagram.getNodes();
-    Iterables.<XDomainObjectShape>addAll(allShapes, _nodes);
     final LazyCommand _function = new LazyCommand() {
       @Override
       protected AnimationCommand createDelegate() {
@@ -120,13 +115,24 @@ public class ReconcileAction implements DiagramAction {
               commands.add(command);
             }
           };
-          final Consumer<XDomainObjectShape> _function = (XDomainObjectShape it) -> {
-            ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-            if (_behavior!=null) {
-              _behavior.reconcile(acceptor);
-            }
-          };
-          allShapes.forEach(_function);
+          final ReconcileBehavior diagramReconcileBehavior = diagram.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+          boolean _notEquals = (!Objects.equal(diagramReconcileBehavior, null));
+          if (_notEquals) {
+            diagramReconcileBehavior.reconcile(acceptor);
+          } else {
+            final ArrayList<XDomainObjectShape> allShapes = CollectionLiterals.<XDomainObjectShape>newArrayList();
+            ObservableList<XConnection> _connections = diagram.getConnections();
+            Iterables.<XDomainObjectShape>addAll(allShapes, _connections);
+            ObservableList<XNode> _nodes = diagram.getNodes();
+            Iterables.<XDomainObjectShape>addAll(allShapes, _nodes);
+            final Consumer<XDomainObjectShape> _function = (XDomainObjectShape it) -> {
+              ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+              if (_behavior!=null) {
+                _behavior.reconcile(acceptor);
+              }
+            };
+            allShapes.forEach(_function);
+          }
           boolean _isEmpty = deleteShapes.isEmpty();
           boolean _not = (!_isEmpty);
           if (_not) {

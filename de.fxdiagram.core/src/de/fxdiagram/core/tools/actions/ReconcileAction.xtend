@@ -35,9 +35,6 @@ class ReconcileAction implements DiagramAction {
 	
 	override perform(XRoot root) {
 		val diagram = root.diagram
-		val allShapes = <XDomainObjectShape>newArrayList
-		allShapes += diagram.connections
-		allShapes += diagram.nodes
 		val LazyCommand lazyCommand = [
 			val deleteShapes = <XShape>newHashSet
 			val addShapes = <XShape>newHashSet
@@ -55,9 +52,17 @@ class ReconcileAction implements DiagramAction {
 					commands += command
 				}
 			}
-			allShapes.forEach [
-				getBehavior(ReconcileBehavior)?.reconcile(acceptor)
-			]
+			val diagramReconcileBehavior = diagram.getBehavior(ReconcileBehavior)
+			if(diagramReconcileBehavior != null) {
+				diagramReconcileBehavior.reconcile(acceptor)
+			} else {
+				val allShapes = <XDomainObjectShape>newArrayList
+				allShapes += diagram.connections
+				allShapes += diagram.nodes
+				allShapes.forEach [
+					getBehavior(ReconcileBehavior)?.reconcile(acceptor)
+				]
+			}
 			if (!deleteShapes.empty)
 				commands += AddRemoveCommand.newRemoveCommand(diagram, deleteShapes)
 			if (!addShapes.empty)

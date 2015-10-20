@@ -174,18 +174,24 @@ class FXDiagramTab {
 	}
 
 	protected def refreshUpdateState() {
-		val allShapes = <XShape>newArrayList
-		allShapes += root.diagram.nodes
-		allShapes += root.diagram.connections
-		allShapes.forEach [
-			val behavior = getBehavior(ReconcileBehavior)
-			if (behavior != null) {
-				if (isLinkWithEditor)
-					behavior.showDirtyState(behavior.dirtyState)
-				else
-					behavior.hideDirtyState
-			}
-		]
+		val behavior = root.diagram.getBehavior(ReconcileBehavior)
+		if(behavior != null) {
+			behavior.refreshDirtyState
+		} else {
+			val allShapes = <XShape>newArrayList
+			allShapes += root.diagram.nodes
+			allShapes += root.diagram.connections
+			allShapes.forEach [
+				getBehavior(ReconcileBehavior)?.refreshDirtyState
+			]
+		}
+	}
+	
+	protected def refreshDirtyState(ReconcileBehavior behavior) {
+		if (isLinkWithEditor)
+			behavior.showDirtyState(behavior.dirtyState)
+		else
+			behavior.hideDirtyState
 	}
 }
 

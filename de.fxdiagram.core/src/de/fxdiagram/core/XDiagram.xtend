@@ -29,6 +29,7 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.model.DomainObjectDescriptor
 
 /**
  * A diagram with {@link XNode}s and {@link XConnection}s.
@@ -45,7 +46,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
  *  
  * A {@link viewportTransform} stores the current viewport of the diagram.
  */
-@ModelNode('nodes', 'connections', 'parentDiagram')
+@ModelNode('nodes', 'connections', 'parentDiagram', 'domainObjectDescriptor')
 class XDiagram extends Group implements XActivatable {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
@@ -61,7 +62,8 @@ class XDiagram extends Group implements XActivatable {
 	@FxProperty Paint backgroundPaint = Color.WHITE
 	@FxProperty Paint foregroundPaint = Color.BLACK
 	@FxProperty Paint connectionPaint = Color.gray(0.2)
-	
+	@FxProperty(readOnly=true) DomainObjectDescriptor domainObjectDescriptor
+
 	Group nodeLayer = new Group
 	Group buttonLayer = new Group;
 	
@@ -75,7 +77,8 @@ class XDiagram extends Group implements XActivatable {
 	
 	boolean needsCentering = true
 
-	new() {
+	new(DomainObjectDescriptor descriptor) {
+		this.domainObjectDescriptorProperty.set(descriptor)
 		children += nodeLayer
 		children += buttonLayer
 		viewportTransform = new ViewportTransform
@@ -83,6 +86,10 @@ class XDiagram extends Group implements XActivatable {
 		transforms.addListener([ListChangeListener.Change<? extends Transform> change | 
 			throw new IllegalStateException("Illegal attempt to change the transforms of an XDiagram")
 		])
+	}
+	
+	new() {
+		this(null)	
 	}
 	
 	def getViewportTransform() {

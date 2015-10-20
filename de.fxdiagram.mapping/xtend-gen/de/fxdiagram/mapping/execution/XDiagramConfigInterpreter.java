@@ -11,6 +11,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.mapping.AbstractLabelMapping;
 import de.fxdiagram.mapping.AbstractLabelMappingCall;
@@ -56,8 +57,24 @@ public class XDiagramConfigInterpreter {
         return null;
       }
       final IMappedElementDescriptor<T> descriptor = this.<T>getDescriptor(diagramObject, diagramMapping);
-      final XDiagram diagram = diagramMapping.createDiagram(descriptor);
-      final InterpreterContext newContext = new InterpreterContext(diagram, context);
+      XDiagram _diagram = context.getDiagram();
+      DomainObjectDescriptor _domainObjectDescriptor = _diagram.getDomainObjectDescriptor();
+      final boolean replaceDiagram = (!Objects.equal(_domainObjectDescriptor, descriptor));
+      context.setIsReplaceRootDiagram(replaceDiagram);
+      XDiagram _xifexpression = null;
+      if (replaceDiagram) {
+        _xifexpression = diagramMapping.createDiagram(descriptor);
+      } else {
+        _xifexpression = context.getDiagram();
+      }
+      final XDiagram diagram = _xifexpression;
+      InterpreterContext _xifexpression_1 = null;
+      if (replaceDiagram) {
+        _xifexpression_1 = new InterpreterContext(diagram, context);
+      } else {
+        _xifexpression_1 = context;
+      }
+      final InterpreterContext newContext = _xifexpression_1;
       if (isOnDemand) {
         final Procedure1<XDiagram> _function = (XDiagram it) -> {
           final Function1<T, Object> _function_1 = (T domainObject) -> {

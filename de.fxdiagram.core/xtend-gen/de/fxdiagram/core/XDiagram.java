@@ -19,6 +19,7 @@ import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.InitializingMapListener;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
+import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.viewport.ViewportTransform;
@@ -30,6 +31,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -68,7 +71,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
  * 
  * A {@link viewportTransform} stores the current viewport of the diagram.
  */
-@ModelNode({ "nodes", "connections", "parentDiagram" })
+@ModelNode({ "nodes", "connections", "parentDiagram", "domainObjectDescriptor" })
 @SuppressWarnings("all")
 public class XDiagram extends Group implements XActivatable, XModelProvider {
   private Group nodeLayer = new Group();
@@ -85,7 +88,8 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   private boolean needsCentering = true;
   
-  public XDiagram() {
+  public XDiagram(final DomainObjectDescriptor descriptor) {
+    this.domainObjectDescriptorProperty.set(descriptor);
     ObservableList<Node> _children = this.getChildren();
     _children.add(this.nodeLayer);
     ObservableList<Node> _children_1 = this.getChildren();
@@ -100,6 +104,10 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
       throw new IllegalStateException("Illegal attempt to change the transforms of an XDiagram");
     };
     _transforms_1.addListener(_function);
+  }
+  
+  public XDiagram() {
+    this(null);
   }
   
   public ViewportTransform getViewportTransform() {
@@ -398,6 +406,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     modelElement.addProperty(nodesProperty, XNode.class);
     modelElement.addProperty(connectionsProperty, XConnection.class);
     modelElement.addProperty(parentDiagramProperty, XDiagram.class);
+    modelElement.addProperty(domainObjectDescriptorProperty, DomainObjectDescriptor.class);
   }
   
   private SimpleListProperty<XNode> nodesProperty = new SimpleListProperty<XNode>(this, "nodes",_initNodes());
@@ -559,5 +568,15 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   
   public ObjectProperty<Paint> connectionPaintProperty() {
     return this.connectionPaintProperty;
+  }
+  
+  private ReadOnlyObjectWrapper<DomainObjectDescriptor> domainObjectDescriptorProperty = new ReadOnlyObjectWrapper<DomainObjectDescriptor>(this, "domainObjectDescriptor");
+  
+  public DomainObjectDescriptor getDomainObjectDescriptor() {
+    return this.domainObjectDescriptorProperty.get();
+  }
+  
+  public ReadOnlyObjectProperty<DomainObjectDescriptor> domainObjectDescriptorProperty() {
+    return this.domainObjectDescriptorProperty.getReadOnlyProperty();
   }
 }

@@ -1,6 +1,5 @@
 package de.fxdiagram.core.behavior;
 
-import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DirtyState;
@@ -10,12 +9,17 @@ import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.SequentialTransition;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.util.Duration;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
-public abstract class AbstractReconcileBehavior<T extends XShape> extends AbstractHostBehavior<T> implements ReconcileBehavior {
+public abstract class AbstractReconcileBehavior<T extends Node> extends AbstractHostBehavior<T> implements ReconcileBehavior {
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private DirtyState shownState = DirtyState.CLEAN;
   
   private Animation dirtyAnimation;
@@ -117,5 +121,10 @@ public abstract class AbstractReconcileBehavior<T extends XShape> extends Abstra
       T _host_1 = this.getHost();
       _host_1.setOpacity(1);
     }
+  }
+  
+  @Pure
+  public DirtyState getShownState() {
+    return this.shownState;
   }
 }

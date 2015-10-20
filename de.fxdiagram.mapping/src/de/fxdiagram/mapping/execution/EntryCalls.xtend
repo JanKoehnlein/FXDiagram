@@ -64,7 +64,6 @@ class DiagramEntryCall<RESULT, ARG> implements EntryCall<ARG> {
 	}
 	
 	override execute(ARG domainObject, XDiagramConfigInterpreter interpreter, InterpreterContext context) {
-		context.isReplaceRootDiagram = true 
 		interpreter.execute(mappingCall, domainObject, context)
 	}
 }

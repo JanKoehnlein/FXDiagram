@@ -1,6 +1,7 @@
 package de.fxdiagram.mapping.shapes;
 
 import com.google.common.base.Objects;
+import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
@@ -10,6 +11,7 @@ import de.fxdiagram.core.command.AnimationCommand;
 import de.fxdiagram.core.command.SequentialAnimationCommand;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
+import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.nodes.FlipNode;
@@ -57,6 +59,7 @@ import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
+@ModelNode({ "showPackage", "showAttributes", "showMethods", "bgColor" })
 @SuppressWarnings("all")
 public class BaseClassNode<T extends Object> extends FlipNode implements INodeWithLazyMappings {
   public static class ReconcileBehavior<T extends Object> extends NodeReconcileBehavior<T> {
@@ -361,6 +364,14 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
   @Override
   public List<Side> getButtonSides(final ConnectionMapping<?> mapping) {
     return Collections.<Side>unmodifiableList(CollectionLiterals.<Side>newArrayList(Side.TOP, Side.BOTTOM, Side.LEFT, Side.RIGHT));
+  }
+  
+  public void populate(final ModelElementImpl modelElement) {
+    super.populate(modelElement);
+    modelElement.addProperty(showPackageProperty, Boolean.class);
+    modelElement.addProperty(showAttributesProperty, Boolean.class);
+    modelElement.addProperty(showMethodsProperty, Boolean.class);
+    modelElement.addProperty(bgColorProperty, Color.class);
   }
   
   private SimpleBooleanProperty showPackageProperty = new SimpleBooleanProperty(this, "showPackage",_initShowPackage());

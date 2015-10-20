@@ -1,6 +1,7 @@
 package de.fxdiagram.mapping.shapes
 
 import de.fxdiagram.annotations.properties.FxProperty
+import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor
 import de.fxdiagram.core.command.AnimationCommand
@@ -31,6 +32,7 @@ import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehav
 import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
 
+@ModelNode('showPackage', 'showAttributes', 'showMethods', 'bgColor')
 class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
 
 	public static val CLASS_NAME = 'className'

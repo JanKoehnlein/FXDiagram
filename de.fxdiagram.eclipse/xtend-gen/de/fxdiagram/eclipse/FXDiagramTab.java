@@ -325,25 +325,35 @@ public class FXDiagramTab {
   }
   
   protected void refreshUpdateState() {
-    final ArrayList<XShape> allShapes = CollectionLiterals.<XShape>newArrayList();
     XDiagram _diagram = this.root.getDiagram();
-    ObservableList<XNode> _nodes = _diagram.getNodes();
-    Iterables.<XShape>addAll(allShapes, _nodes);
-    XDiagram _diagram_1 = this.root.getDiagram();
-    ObservableList<XConnection> _connections = _diagram_1.getConnections();
-    Iterables.<XShape>addAll(allShapes, _connections);
-    final Consumer<XShape> _function = (XShape it) -> {
-      final ReconcileBehavior behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-      boolean _notEquals = (!Objects.equal(behavior, null));
-      if (_notEquals) {
-        if (this.isLinkWithEditor) {
-          DirtyState _dirtyState = behavior.getDirtyState();
-          behavior.showDirtyState(_dirtyState);
-        } else {
-          behavior.hideDirtyState();
+    final ReconcileBehavior behavior = _diagram.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+    boolean _notEquals = (!Objects.equal(behavior, null));
+    if (_notEquals) {
+      this.refreshDirtyState(behavior);
+    } else {
+      final ArrayList<XShape> allShapes = CollectionLiterals.<XShape>newArrayList();
+      XDiagram _diagram_1 = this.root.getDiagram();
+      ObservableList<XNode> _nodes = _diagram_1.getNodes();
+      Iterables.<XShape>addAll(allShapes, _nodes);
+      XDiagram _diagram_2 = this.root.getDiagram();
+      ObservableList<XConnection> _connections = _diagram_2.getConnections();
+      Iterables.<XShape>addAll(allShapes, _connections);
+      final Consumer<XShape> _function = (XShape it) -> {
+        ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+        if (_behavior!=null) {
+          this.refreshDirtyState(_behavior);
         }
-      }
-    };
-    allShapes.forEach(_function);
+      };
+      allShapes.forEach(_function);
+    }
+  }
+  
+  protected void refreshDirtyState(final ReconcileBehavior behavior) {
+    if (this.isLinkWithEditor) {
+      DirtyState _dirtyState = behavior.getDirtyState();
+      behavior.showDirtyState(_dirtyState);
+    } else {
+      behavior.hideDirtyState();
+    }
   }
 }

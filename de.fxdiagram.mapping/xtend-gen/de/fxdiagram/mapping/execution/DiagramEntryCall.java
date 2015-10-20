@@ -38,7 +38,6 @@ public class DiagramEntryCall<RESULT extends Object, ARG extends Object> impleme
   
   @Override
   public void execute(final ARG domainObject, final XDiagramConfigInterpreter interpreter, final InterpreterContext context) {
-    context.setIsReplaceRootDiagram(true);
     interpreter.<RESULT, ARG>execute(this.mappingCall, domainObject, context);
   }
 }
