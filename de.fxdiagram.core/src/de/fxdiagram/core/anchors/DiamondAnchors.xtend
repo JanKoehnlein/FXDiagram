@@ -18,6 +18,8 @@ class DiamondAnchors implements Anchors {
 
 	override getAnchor(double x, double y) {
 		val bounds = shape.localToRootDiagram(shape.boundsInLocal)
+		if(bounds == null)
+			return null
 		val center = bounds.center
 		if (abs(center.x - x) < CORNER_DELTA) {
 			if (center.y < y)

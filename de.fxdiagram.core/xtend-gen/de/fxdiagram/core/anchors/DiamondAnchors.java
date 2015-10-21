@@ -1,5 +1,6 @@
 package de.fxdiagram.core.anchors;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.anchors.Anchors;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
@@ -19,6 +20,10 @@ public class DiamondAnchors implements Anchors {
   public Point2D getAnchor(final double x, final double y) {
     Bounds _boundsInLocal = this.shape.getBoundsInLocal();
     final Bounds bounds = CoreExtensions.localToRootDiagram(this.shape, _boundsInLocal);
+    boolean _equals = Objects.equal(bounds, null);
+    if (_equals) {
+      return null;
+    }
     final Point2D center = BoundsExtensions.center(bounds);
     double _x = center.getX();
     double _minus = (_x - x);
