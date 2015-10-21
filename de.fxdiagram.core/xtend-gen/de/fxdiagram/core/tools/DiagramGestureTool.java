@@ -104,10 +104,36 @@ public class DiagramGestureTool implements XDiagramTool {
     };
     this.zoomHandler = _function_1;
     final EventHandler<ScrollEvent> _function_2 = (ScrollEvent it) -> {
-      ViewportTransform _viewportTransform = root.getViewportTransform();
-      double _deltaX = it.getDeltaX();
-      double _deltaY = it.getDeltaY();
-      _viewportTransform.translateRelative(_deltaX, _deltaY);
+      boolean _isShortcutDown = it.isShortcutDown();
+      if (_isShortcutDown) {
+        XDiagram _diagram = root.getDiagram();
+        double _sceneX = it.getSceneX();
+        double _sceneY = it.getSceneY();
+        final Point2D pivotInLocal = _diagram.sceneToLocal(_sceneX, _sceneY);
+        ViewportTransform _viewportTransform = root.getViewportTransform();
+        double _scale = _viewportTransform.getScale();
+        double _deltaY = it.getDeltaY();
+        double _divide = (_deltaY / 400);
+        double _minus = (1 - _divide);
+        final double scale = (_scale * _minus);
+        ViewportTransform _viewportTransform_1 = root.getViewportTransform();
+        _viewportTransform_1.setScale(scale);
+        XDiagram _diagram_1 = root.getDiagram();
+        final Point2D pivotInScene = _diagram_1.localToScene(pivotInLocal);
+        ViewportTransform _viewportTransform_2 = root.getViewportTransform();
+        double _sceneX_1 = it.getSceneX();
+        double _x = pivotInScene.getX();
+        double _minus_1 = (_sceneX_1 - _x);
+        double _sceneY_1 = it.getSceneY();
+        double _y = pivotInScene.getY();
+        double _minus_2 = (_sceneY_1 - _y);
+        _viewportTransform_2.translateRelative(_minus_1, _minus_2);
+      } else {
+        ViewportTransform _viewportTransform_3 = root.getViewportTransform();
+        double _deltaX = it.getDeltaX();
+        double _deltaY_1 = it.getDeltaY();
+        _viewportTransform_3.translateRelative(_deltaX, _deltaY_1);
+      }
     };
     this.scrollHandler = _function_2;
     final EventHandler<RotateEvent> _function_3 = (RotateEvent it) -> {
