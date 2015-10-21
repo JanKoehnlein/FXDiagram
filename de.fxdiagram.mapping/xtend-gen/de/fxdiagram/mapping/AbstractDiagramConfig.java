@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -30,8 +29,7 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   @Accessors
   private String label;
   
-  @Accessors(AccessorType.PUBLIC_GETTER)
-  private IMappedElementDescriptorProvider domainObjectProvider = this.createDomainObjectProvider();
+  private IMappedElementDescriptorProvider domainObjectProvider;
   
   protected abstract IMappedElementDescriptorProvider createDomainObjectProvider();
   
@@ -91,6 +89,18 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
     }
   }
   
+  @Override
+  public IMappedElementDescriptorProvider getDomainObjectProvider() {
+    IMappedElementDescriptorProvider _elvis = null;
+    if (this.domainObjectProvider != null) {
+      _elvis = this.domainObjectProvider;
+    } else {
+      IMappedElementDescriptorProvider _createDomainObjectProvider = this.createDomainObjectProvider();
+      _elvis = (this.domainObjectProvider = _createDomainObjectProvider);
+    }
+    return _elvis;
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.mapping.AbstractDiagramConfig");
     ;
   
@@ -110,10 +120,5 @@ public abstract class AbstractDiagramConfig implements XDiagramConfig {
   
   public void setLabel(final String label) {
     this.label = label;
-  }
-  
-  @Pure
-  public IMappedElementDescriptorProvider getDomainObjectProvider() {
-    return this.domainObjectProvider;
   }
 }

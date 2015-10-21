@@ -97,8 +97,7 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 	@Accessors String ID
 	@Accessors String label
 	
-	@Accessors(PUBLIC_GETTER)
-	IMappedElementDescriptorProvider domainObjectProvider = createDomainObjectProvider()
+	IMappedElementDescriptorProvider domainObjectProvider
 	
 	protected abstract def IMappedElementDescriptorProvider createDomainObjectProvider()
 	
@@ -125,6 +124,10 @@ abstract class AbstractDiagramConfig implements XDiagramConfig {
 		} else {
 			LOG.severe('''Duplicate mapping id=«mapping.ID» in «ID»''')
 		}
+	}
+	
+	override getDomainObjectProvider() {
+		domainObjectProvider ?: (domainObjectProvider = createDomainObjectProvider) 
 	}
 } 
 
