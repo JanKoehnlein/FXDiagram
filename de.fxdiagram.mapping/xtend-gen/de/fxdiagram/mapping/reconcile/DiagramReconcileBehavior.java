@@ -1,5 +1,6 @@
 package de.fxdiagram.mapping.reconcile;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XConnection;
@@ -61,13 +62,15 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
         final IMappedElementDescriptor<T> descriptor = ((IMappedElementDescriptor<T>) _domainObjectDescriptor_1);
         final Function1<T, DirtyState> _function = (T it) -> {
           final BaseDiagram<T> dummyDiagram = new BaseDiagram<T>(descriptor);
-          final InterpreterContext context = new InterpreterContext(dummyDiagram);
+          XDiagram _host_2 = this.getHost();
+          XDiagram _parentDiagram = _host_2.getParentDiagram();
+          final InterpreterContext context = this.createNestedInterpreterContext(dummyDiagram, _parentDiagram);
           AbstractMapping<T> _mapping = descriptor.getMapping();
           this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping), false, context);
-          XDiagram _host_2 = this.getHost();
-          ObservableList<XNode> _nodes = _host_2.getNodes();
           XDiagram _host_3 = this.getHost();
-          ObservableList<XConnection> _connections = _host_3.getConnections();
+          ObservableList<XNode> _nodes = _host_3.getNodes();
+          XDiagram _host_4 = this.getHost();
+          ObservableList<XConnection> _connections = _host_4.getConnections();
           Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
           final Function1<XDomainObjectShape, DomainObjectDescriptor> _function_1 = (XDomainObjectShape it_1) -> {
             return it_1.getDomainObjectDescriptor();
@@ -111,7 +114,9 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
         Object _xblockexpression = null;
         {
           XDiagram _host_2 = this.getHost();
-          final InterpreterContext currentContext = new InterpreterContext(_host_2);
+          XDiagram _host_3 = this.getHost();
+          XDiagram _parentDiagram = _host_3.getParentDiagram();
+          final InterpreterContext currentContext = this.createNestedInterpreterContext(_host_2, _parentDiagram);
           AbstractMapping<T> _mapping = descriptor.getMapping();
           this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping), false, currentContext);
           Iterable<XDomainObjectShape> _addedShapes = currentContext.getAddedShapes();
@@ -119,13 +124,15 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
             acceptor.add(addedShape);
           }
           final BaseDiagram<T> dummyDiagram = new BaseDiagram<T>(descriptor);
-          final InterpreterContext context = new InterpreterContext(dummyDiagram);
+          XDiagram _host_4 = this.getHost();
+          XDiagram _parentDiagram_1 = _host_4.getParentDiagram();
+          final InterpreterContext context = this.createNestedInterpreterContext(dummyDiagram, _parentDiagram_1);
           AbstractMapping<T> _mapping_1 = descriptor.getMapping();
           this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping_1), false, context);
-          XDiagram _host_3 = this.getHost();
-          ObservableList<XNode> _nodes = _host_3.getNodes();
-          XDiagram _host_4 = this.getHost();
-          ObservableList<XConnection> _connections = _host_4.getConnections();
+          XDiagram _host_5 = this.getHost();
+          ObservableList<XNode> _nodes = _host_5.getNodes();
+          XDiagram _host_6 = this.getHost();
+          ObservableList<XConnection> _connections = _host_6.getConnections();
           Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
           final Function1<XDomainObjectShape, DomainObjectDescriptor> _function_1 = (XDomainObjectShape it_1) -> {
             return it_1.getDomainObjectDescriptor();
@@ -159,6 +166,19 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
       };
       descriptor.<Object>withDomainObject(_function);
     }
+  }
+  
+  protected InterpreterContext createNestedInterpreterContext(final XDiagram hostOrDummy, final XDiagram parent) {
+    InterpreterContext _xifexpression = null;
+    boolean _equals = Objects.equal(parent, null);
+    if (_equals) {
+      return new InterpreterContext(hostOrDummy);
+    } else {
+      XDiagram _parentDiagram = parent.getParentDiagram();
+      InterpreterContext _createNestedInterpreterContext = this.createNestedInterpreterContext(parent, _parentDiagram);
+      _xifexpression = new InterpreterContext(hostOrDummy, _createNestedInterpreterContext);
+    }
+    return _xifexpression;
   }
   
   @Override

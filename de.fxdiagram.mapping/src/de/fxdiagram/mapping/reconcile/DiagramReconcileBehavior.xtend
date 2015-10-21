@@ -35,7 +35,7 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 			val descriptor = host.domainObjectDescriptor as IMappedElementDescriptor<T>
 			descriptor.withDomainObject [
 				val dummyDiagram = new BaseDiagram(descriptor)
-				val context = new InterpreterContext(dummyDiagram)
+				val context = dummyDiagram.createNestedInterpreterContext(host.parentDiagram)
 				interpreter.createDiagram(it, descriptor.mapping as DiagramMapping<T>, false, context)
 				val descriptors = (host.nodes + host.connections).map[domainObjectDescriptor].toSet
 				for (recreatedShape : dummyDiagram.nodes + dummyDiagram.connections) {
@@ -55,14 +55,14 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 			val descriptor = host.domainObjectDescriptor as IMappedElementDescriptor<T>
 			descriptor.withDomainObject [
 				// add new shapes first
-				val currentContext = new InterpreterContext(host)
+				val currentContext = host.createNestedInterpreterContext(host.parentDiagram)
 				interpreter.createDiagram(it, descriptor.mapping as DiagramMapping<T>, false, currentContext)
 				for(addedShape: currentContext.addedShapes) 
 					acceptor.add(addedShape)
 				
 				// create dummy diagram from scratch and remove old shapes from host
 				val dummyDiagram = new BaseDiagram(descriptor)
-				val context = new InterpreterContext(dummyDiagram)
+				val context = dummyDiagram.createNestedInterpreterContext(host.parentDiagram)
 				interpreter.createDiagram(it, descriptor.mapping as DiagramMapping<T>, false, context)
 				val descriptors = (host.nodes + host.connections).toMap[domainObjectDescriptor]
 				(dummyDiagram.nodes + dummyDiagram.connections).forEach[
@@ -78,6 +78,13 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 		}
 	}
 
+	protected def InterpreterContext createNestedInterpreterContext(XDiagram hostOrDummy, XDiagram parent) {
+		if(parent == null)
+			return new InterpreterContext(hostOrDummy)
+		else
+			new InterpreterContext(hostOrDummy, parent.createNestedInterpreterContext(parent.parentDiagram))
+	}
+	
 	override protected dirtyFeedback(boolean isDirty) {
 		if(isDirty)
 			host.root.headsUpDisplay.add(repairButton, Pos.TOP_RIGHT)
