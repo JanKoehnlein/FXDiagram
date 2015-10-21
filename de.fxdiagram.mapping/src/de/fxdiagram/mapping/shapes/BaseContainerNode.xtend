@@ -53,7 +53,9 @@ class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiag
 	}
 	
 	override protected createNode() {
-		val titleArea = new VBox
+		val titleArea = new VBox => [
+			alignment = Pos.CENTER
+		]
 		val pane = new RectangleBorderPane => [
 			padding = this.insets
 			children += new VBox => [

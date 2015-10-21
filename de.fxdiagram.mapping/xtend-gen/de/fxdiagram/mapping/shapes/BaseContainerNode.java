@@ -78,14 +78,18 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
   protected Node createNode() {
     RectangleBorderPane _xblockexpression = null;
     {
-      final VBox titleArea = new VBox();
+      VBox _vBox = new VBox();
+      final Procedure1<VBox> _function = (VBox it) -> {
+        it.setAlignment(Pos.CENTER);
+      };
+      final VBox titleArea = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function);
       RectangleBorderPane _rectangleBorderPane = new RectangleBorderPane();
-      final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
+      final Procedure1<RectangleBorderPane> _function_1 = (RectangleBorderPane it) -> {
         Insets _insets = this.getInsets();
         it.setPadding(_insets);
         ObservableList<Node> _children = it.getChildren();
-        VBox _vBox = new VBox();
-        final Procedure1<VBox> _function_1 = (VBox it_1) -> {
+        VBox _vBox_1 = new VBox();
+        final Procedure1<VBox> _function_2 = (VBox it_1) -> {
           it_1.setAlignment(Pos.CENTER);
           it_1.setSpacing(10);
           ObservableList<Node> _children_1 = it_1.getChildren();
@@ -94,10 +98,10 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
           Group _group = new Group();
           _children_2.add((this.diagramGroup = _group));
         };
-        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox, _function_1);
+        VBox _doubleArrow = ObjectExtensions.<VBox>operator_doubleArrow(_vBox_1, _function_2);
         _children.add(_doubleArrow);
       };
-      final RectangleBorderPane pane = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function);
+      final RectangleBorderPane pane = ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(_rectangleBorderPane, _function_1);
       ObservableList<XLabel> _labels = this.getLabels();
       Pair<String, Pane> _mappedTo = Pair.<String, Pane>of(BaseContainerNode.NODE_HEADING, titleArea);
       MappingLabelListener.<XLabel>addMappingLabelListener(_labels, _mappedTo);
