@@ -28,6 +28,7 @@ abstract class AbstractEntryCall<ARG> implements EntryCall<ARG> {
 
 class NodeEntryCall<RESULT, ARG> implements EntryCall<ARG> {
 	
+	@Accessors(PUBLIC_GETTER)
 	NodeMappingCall<RESULT, ARG> mappingCall
 	
 	new((ARG)=>RESULT selector, NodeMapping<RESULT> mapping) {
@@ -49,6 +50,7 @@ class NodeEntryCall<RESULT, ARG> implements EntryCall<ARG> {
 
 class DiagramEntryCall<RESULT, ARG> implements EntryCall<ARG> {
 	
+	@Accessors(PUBLIC_GETTER)
 	DiagramMappingCall<RESULT, ARG> mappingCall
 	
 	new((ARG)=>RESULT selector, DiagramMapping<RESULT> mapping) {
@@ -70,7 +72,9 @@ class DiagramEntryCall<RESULT, ARG> implements EntryCall<ARG> {
 
 class ConnectionEntryCall<RESULT, ARG> implements EntryCall<ARG> {
 	
+	@Accessors(PUBLIC_GETTER)
 	ConnectionMappingCall<RESULT, ARG> mappingCall
+	
 	ConnectionMapping<RESULT> mapping
 	
 	new((ARG)=>RESULT selector, ConnectionMapping<RESULT> mapping) {

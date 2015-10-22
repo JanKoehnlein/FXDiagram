@@ -7,10 +7,14 @@ import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.EntryCall;
 import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class NodeEntryCall<RESULT extends Object, ARG extends Object> implements EntryCall<ARG> {
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private NodeMappingCall<RESULT, ARG> mappingCall;
   
   public NodeEntryCall(final Function1<? super ARG, ? extends RESULT> selector, final NodeMapping<RESULT> mapping) {
@@ -39,5 +43,10 @@ public class NodeEntryCall<RESULT extends Object, ARG extends Object> implements
   @Override
   public void execute(final ARG domainObject, final XDiagramConfigInterpreter interpreter, final InterpreterContext context) {
     interpreter.<RESULT, ARG>execute(this.mappingCall, domainObject, context);
+  }
+  
+  @Pure
+  public NodeMappingCall<RESULT, ARG> getMappingCall() {
+    return this.mappingCall;
   }
 }

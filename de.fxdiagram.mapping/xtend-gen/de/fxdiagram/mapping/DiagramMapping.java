@@ -98,4 +98,8 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
   public boolean eagerly(final ConnectionMapping<?>... connectionMapping) {
     return Iterables.<ConnectionMapping<?>>addAll(this.eagerConnections, ((Iterable<? extends ConnectionMapping<?>>)Conversions.doWrapArray(connectionMapping)));
   }
+  
+  public String getDefaultFilePath() {
+    return null;
+  }
 }

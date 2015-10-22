@@ -10,24 +10,7 @@ import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
-import de.fxdiagram.core.services.ClassLoaderProvider
-import de.fxdiagram.core.tools.actions.CenterAction
-import de.fxdiagram.core.tools.actions.DeleteAction
-import de.fxdiagram.core.tools.actions.ExportSvgAction
-import de.fxdiagram.core.tools.actions.FullScreenAction
-import de.fxdiagram.core.tools.actions.LayoutAction
-import de.fxdiagram.core.tools.actions.NavigateNextAction
-import de.fxdiagram.core.tools.actions.NavigatePreviousAction
-import de.fxdiagram.core.tools.actions.ReconcileAction
-import de.fxdiagram.core.tools.actions.RedoAction
-import de.fxdiagram.core.tools.actions.RevealAction
-import de.fxdiagram.core.tools.actions.SaveAction
-import de.fxdiagram.core.tools.actions.SelectAllAction
-import de.fxdiagram.core.tools.actions.UndoAction
-import de.fxdiagram.core.tools.actions.ZoomToFitAction
-import de.fxdiagram.eclipse.actions.EclipseLoadAction
 import de.fxdiagram.eclipse.changes.IChangeListener
-import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.mapping.XDiagramConfig
 import de.fxdiagram.mapping.execution.EntryCall
 import de.fxdiagram.mapping.execution.InterpreterContext
@@ -57,7 +40,7 @@ class FXDiagramTab {
 
 	IChangeListener changeListener 
 
-	new(FXDiagramView view, CTabFolder tabFolder) {
+	new(FXDiagramView view, CTabFolder tabFolder, XRoot root) {
 		canvas = new FXCanvas(tabFolder, SWT.NONE)
 		tab = new CTabItem(tabFolder, SWT.CLOSE)
 		tab.control = canvas
@@ -67,7 +50,7 @@ class FXDiagramTab {
 				refreshUpdateState
 		]
 		view.modelChangeBroker.addListener(changeListener)
-		root = createRoot
+		this.root = root
 		tab.text = root.name
 		canvas.scene = new Scene(root) => [
 			camera = new PerspectiveCamera
@@ -97,21 +80,6 @@ class FXDiagramTab {
 			}
 		})
 		
-	}
-
-	protected def createRoot() {
-		new XRoot =>
-			[
-				rootDiagram = new XDiagram()
-				getDomainObjectProviders += new ClassLoaderProvider
-				getDomainObjectProviders +=
-					XDiagramConfig.Registry.getInstance.configurations.map[domainObjectProvider].toSet
-				getDiagramActionRegistry +=
-					#[new CenterAction, new DeleteAction, new LayoutAction(LayoutType.DOT), new ExportSvgAction,
-						new RedoAction, new UndoRedoPlayerAction, new UndoAction, new RevealAction, new EclipseLoadAction,
-						new SaveAction, new ReconcileAction, new SelectAllAction, new ZoomToFitAction, new NavigatePreviousAction,
-						new NavigateNextAction, new FullScreenAction]
-			]
 	}
 
 	def getRoot() { root }
@@ -159,7 +127,7 @@ class FXDiagramTab {
 		root.commandStack.execute(new ClearDiagramCommand)
 	}
 
-	def setFocus() {
+	def boolean setFocus() {
 		canvas.setFocus
 	}
 

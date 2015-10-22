@@ -15,7 +15,8 @@ Require-Bundle: de.fxdiagram.annotations,
  org.eclipse.xtend.lib,
  org.eclipse.core.expressions,
  org.eclipse.ui.workbench.texteditor,
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ org.eclipse.core.resources;bundle-version="3.10.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: de.fxdiagram.eclipse,

@@ -18,30 +18,10 @@ import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.services.ClassLoaderProvider;
-import de.fxdiagram.core.tools.actions.CenterAction;
-import de.fxdiagram.core.tools.actions.DeleteAction;
-import de.fxdiagram.core.tools.actions.DiagramAction;
-import de.fxdiagram.core.tools.actions.DiagramActionRegistry;
-import de.fxdiagram.core.tools.actions.ExportSvgAction;
-import de.fxdiagram.core.tools.actions.FullScreenAction;
-import de.fxdiagram.core.tools.actions.LayoutAction;
-import de.fxdiagram.core.tools.actions.NavigateNextAction;
-import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
-import de.fxdiagram.core.tools.actions.ReconcileAction;
-import de.fxdiagram.core.tools.actions.RedoAction;
-import de.fxdiagram.core.tools.actions.RevealAction;
-import de.fxdiagram.core.tools.actions.SaveAction;
-import de.fxdiagram.core.tools.actions.SelectAllAction;
-import de.fxdiagram.core.tools.actions.UndoAction;
-import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.eclipse.ClearDiagramCommand;
 import de.fxdiagram.eclipse.FXDiagramView;
-import de.fxdiagram.eclipse.actions.EclipseLoadAction;
 import de.fxdiagram.eclipse.changes.IChangeListener;
 import de.fxdiagram.eclipse.changes.ModelChangeBroker;
-import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
@@ -51,8 +31,6 @@ import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
 import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -97,7 +75,7 @@ public class FXDiagramTab {
   
   private IChangeListener changeListener;
   
-  public FXDiagramTab(final FXDiagramView view, final CTabFolder tabFolder) {
+  public FXDiagramTab(final FXDiagramView view, final CTabFolder tabFolder, final XRoot root) {
     FXCanvas _fXCanvas = new FXCanvas(tabFolder, SWT.NONE);
     this.canvas = _fXCanvas;
     CTabItem _cTabItem = new CTabItem(tabFolder, SWT.CLOSE);
@@ -113,15 +91,14 @@ public class FXDiagramTab {
     this.changeListener = _function;
     ModelChangeBroker _modelChangeBroker = view.getModelChangeBroker();
     _modelChangeBroker.addListener(this.changeListener);
-    XRoot _createRoot = this.createRoot();
-    this.root = _createRoot;
-    String _name = this.root.getName();
+    this.root = root;
+    String _name = root.getName();
     this.tab.setText(_name);
-    Scene _scene = new Scene(this.root);
+    Scene _scene = new Scene(root);
     final Procedure1<Scene> _function_1 = (Scene it) -> {
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
       it.setCamera(_perspectiveCamera);
-      this.root.activate();
+      root.activate();
     };
     Scene _doubleArrow = ObjectExtensions.<Scene>operator_doubleArrow(_scene, _function_1);
     this.canvas.setScene(_doubleArrow);
@@ -131,19 +108,19 @@ public class FXDiagramTab {
       _modelChangeBroker_1.removeListener(this.changeListener);
     };
     this.tab.addDisposeListener(_function_2);
-    StringProperty _nameProperty = this.root.nameProperty();
+    StringProperty _nameProperty = root.nameProperty();
     final ChangeListener<String> _function_3 = (ObservableValue<? extends String> p, String o, String n) -> {
       this.tab.setText(n);
     };
     _nameProperty.addListener(_function_3);
-    BooleanProperty _needsSaveProperty = this.root.needsSaveProperty();
+    BooleanProperty _needsSaveProperty = root.needsSaveProperty();
     final ChangeListener<Boolean> _function_4 = (ObservableValue<? extends Boolean> p, Boolean o, Boolean n) -> {
       if ((n).booleanValue()) {
-        String _name_1 = this.root.getName();
+        String _name_1 = root.getName();
         String _plus = ("*" + _name_1);
         this.tab.setText(_plus);
       } else {
-        String _name_2 = this.root.getName();
+        String _name_2 = root.getName();
         this.tab.setText(_name_2);
       }
     };
@@ -163,46 +140,6 @@ public class FXDiagramTab {
         ((IBindingService) _service).setKeyFilterEnabled(true);
       }
     });
-  }
-  
-  protected XRoot createRoot() {
-    XRoot _xRoot = new XRoot();
-    final Procedure1<XRoot> _function = (XRoot it) -> {
-      XDiagram _xDiagram = new XDiagram();
-      it.setRootDiagram(_xDiagram);
-      ObservableList<DomainObjectProvider> _domainObjectProviders = it.getDomainObjectProviders();
-      ClassLoaderProvider _classLoaderProvider = new ClassLoaderProvider();
-      _domainObjectProviders.add(_classLoaderProvider);
-      ObservableList<DomainObjectProvider> _domainObjectProviders_1 = it.getDomainObjectProviders();
-      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
-      Iterable<? extends XDiagramConfig> _configurations = _instance.getConfigurations();
-      final Function1<XDiagramConfig, IMappedElementDescriptorProvider> _function_1 = (XDiagramConfig it_1) -> {
-        return it_1.getDomainObjectProvider();
-      };
-      Iterable<IMappedElementDescriptorProvider> _map = IterableExtensions.map(_configurations, _function_1);
-      Set<IMappedElementDescriptorProvider> _set = IterableExtensions.<IMappedElementDescriptorProvider>toSet(_map);
-      Iterables.<DomainObjectProvider>addAll(_domainObjectProviders_1, _set);
-      DiagramActionRegistry _diagramActionRegistry = it.getDiagramActionRegistry();
-      CenterAction _centerAction = new CenterAction();
-      DeleteAction _deleteAction = new DeleteAction();
-      LayoutAction _layoutAction = new LayoutAction(LayoutType.DOT);
-      ExportSvgAction _exportSvgAction = new ExportSvgAction();
-      RedoAction _redoAction = new RedoAction();
-      UndoRedoPlayerAction _undoRedoPlayerAction = new UndoRedoPlayerAction();
-      UndoAction _undoAction = new UndoAction();
-      RevealAction _revealAction = new RevealAction();
-      EclipseLoadAction _eclipseLoadAction = new EclipseLoadAction();
-      SaveAction _saveAction = new SaveAction();
-      ReconcileAction _reconcileAction = new ReconcileAction();
-      SelectAllAction _selectAllAction = new SelectAllAction();
-      ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
-      NavigatePreviousAction _navigatePreviousAction = new NavigatePreviousAction();
-      NavigateNextAction _navigateNextAction = new NavigateNextAction();
-      FullScreenAction _fullScreenAction = new FullScreenAction();
-      _diagramActionRegistry.operator_add(
-        Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _eclipseLoadAction, _saveAction, _reconcileAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
-    };
-    return ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
   }
   
   public XRoot getRoot() {

@@ -10,11 +10,15 @@ import de.fxdiagram.mapping.XDiagramConfig;
 import de.fxdiagram.mapping.execution.EntryCall;
 import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
+import org.eclipse.xtend.lib.annotations.AccessorType;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class ConnectionEntryCall<RESULT extends Object, ARG extends Object> implements EntryCall<ARG> {
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private ConnectionMappingCall<RESULT, ARG> mappingCall;
   
   private ConnectionMapping<RESULT> mapping;
@@ -60,5 +64,10 @@ public class ConnectionEntryCall<RESULT extends Object, ARG extends Object> impl
       };
       interpreter.<RESULT, ARG>execute(this.mappingCall, domainObject, _function, context);
     }
+  }
+  
+  @Pure
+  public ConnectionMappingCall<RESULT, ARG> getMappingCall() {
+    return this.mappingCall;
   }
 }

@@ -50,6 +50,10 @@ import de.fxdiagram.mapping.shapes.BaseDiagram
 	def eagerly(ConnectionMapping<?>... connectionMapping) {
 		eagerConnections += connectionMapping
 	}
+	
+	def String getDefaultFilePath() {
+		null
+	}
 }
 
 
