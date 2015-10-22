@@ -22,6 +22,9 @@ import javafx.scene.shape.Shape
 import javafx.scene.text.Text
 import javafx.scene.transform.Transform
 import javax.imageio.ImageIO
+import javafx.scene.transform.Translate
+import java.util.Map
+import de.fxdiagram.core.export.SvgLink
 
 /**
  * Exports a given diagram to SVG.
@@ -42,6 +45,8 @@ import javax.imageio.ImageIO
 @Logging
 class SvgExporter {
 	
+	static val PT_TO_PX = 2.0/3.0
+	 
 	int currentID
 	
 	int imageCounter 
@@ -50,8 +55,13 @@ class SvgExporter {
 	
 	File baseDir
 	
-	def toSvg(XDiagram diagram, File baseDir) {
+	SvgLinkProvider linkProvider
+	
+	Map<Node, SvgLink> linkCache = newHashMap
+	
+	def toSvg(XDiagram diagram, File baseDir, SvgLinkProvider linkProvider) {
 		this.baseDir = baseDir
+		this.linkProvider = linkProvider
 		defs = newArrayList
 		currentID = 0
 		val bounds = diagram.boundsInParent
@@ -74,7 +84,24 @@ class SvgExporter {
 		'''
 	}
 	
-	def toSvgElement(Object o) {
+	def toSvg(XDiagram diagram, File baseDir) {
+		diagram.toSvg(baseDir, null)
+	}
+	
+	def toSvgElement(Node o) {
+		val link = o.doGetSvgLink
+		if(link != null && link != SvgLink.NONE) '''
+			<a xlink:href="«link.href»"
+				«toSvgAttribute(link.title, 'xlink:title', null)»
+				«toSvgAttribute(link.targetFrame, 'target', null)»
+				«IF link.openInNewWindow»xlink:show="new"«ENDIF»>
+				«o.toSvgElement2»
+			</a>
+		''' else
+			o.toSvgElement2
+	}
+	
+	protected def toSvgElement2(Node o) {
 		switch o {
 			SvgExportable: o.toSvgElement(this)
 			Text: o.textToSvgElement
@@ -91,15 +118,27 @@ class SvgExporter {
 	def CharSequence textToSvgElement(Text it) '''
 		<!-- «class.name» -->
 		<path d="«toSvgString»"
+			«toSvgString(transformForOrigin)»
 			fill="«fill.toSvgString»"
 			«opacity.toSvgAttribute("opacity", 1.0)»
 			«strokeDashOffset.toSvgAttribute("stroke-dahsoffset", '0.0', 'em')»
 			«strokeLineCap.toSvgAttribute("stroke-linecap", "butt")»
 			«strokeLineJoin.toSvgAttribute("stroke-linejoin", "miter")»
-			«strokeMiterLimit.toSvgAttribute("stroke-miterLimit", 4.0)»
+			«strokeMiterLimit.toSvgAttribute("stroke-miterlimit", 4.0)»
 			stroke-width="0.0"
 		/>
 	'''
+	
+	protected def getTransformForOrigin(Text it) {
+		switch textOrigin {
+			case TOP:
+				new Translate(0, font.size * PT_TO_PX / 2)
+			case BOTTOM:
+				new Translate(0, -font.size * PT_TO_PX / 2)
+			default:
+				new Translate(0, 0)
+		}
+	}
 	
 	def CharSequence shapeToSvgElement(Shape it) '''
 		<!-- «class.name» -->
@@ -111,7 +150,7 @@ class SvgExporter {
 			«strokeDashOffset.toSvgAttribute("stroke-dahsoffset", '0.0', 'em')»
 			«strokeLineCap.toSvgAttribute("stroke-linecap", "butt")»
 			«strokeLineJoin.toSvgAttribute("stroke-linejoin", "miter")»
-			«strokeMiterLimit.toSvgAttribute("stroke-miterLimit", 4.0)»
+			«strokeMiterLimit.toSvgAttribute("stroke-miterlimit", 4.0)»
 			«strokeWidth.toSvgAttribute("stroke-width", 1.0)»
 		/>
 	'''
@@ -121,7 +160,10 @@ class SvgExporter {
 		val fileName = saveImageFile(image, viewport)
 		'''
 		<!-- «class.name» -->
-		<image «toSvgString(localToSceneTransform)» width="«layoutBounds.width»" height="«layoutBounds.height»" xlink:href="«fileName»"/>
+		<image «toSvgString(localToSceneTransform)» 
+			width="«layoutBounds.width»" 
+			height="«layoutBounds.height»" 
+			xlink:href="«fileName»"
 		'''
 	}
 	
@@ -131,7 +173,10 @@ class SvgExporter {
 		val fileName = saveImageFile(image, null)
 		'''
     		<!-- «node.class.name» -->
-    		<image «toSvgString(node.localToSceneTransform)» width="«node.layoutBounds.width»" height="«node.layoutBounds.height»" xlink:href="«fileName»"/>
+    		<image «toSvgString(node.localToSceneTransform)»
+    			width="«node.layoutBounds.width»"
+    			height="«node.layoutBounds.height»"
+    			xlink:href="«fileName»"
     	'''
 	}
 
@@ -174,12 +219,24 @@ class SvgExporter {
 		} else ownSvgCode
 	}
 	
+	protected def SvgLink doGetSvgLink(Node node) {
+		val link = linkCache.get(node)
+		if(link != null)
+			link 
+		else {
+			val newLink = linkProvider.getLink(node) ?: SvgLink.NONE
+			linkCache.put(node, newLink)
+			newLink
+		}
+	}
+	
+	
 	public def toSvgAttribute(Object value, String name, Object defaultValue) {
 		value.toSvgAttribute(name, defaultValue, '')
 	}
 	
 	public def toSvgAttribute(Object value, String name, Object defaultValue, String unit) {
-		if(value.toSvgString != defaultValue.toString)
+		if(value?.toSvgString != defaultValue?.toString)
 			'''«name»="«value.toSvgString»«unit»" '''
 		else 
 			''

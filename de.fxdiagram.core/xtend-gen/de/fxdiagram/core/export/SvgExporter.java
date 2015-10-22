@@ -5,17 +5,21 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.export.ShapeConverterExtensions;
 import de.fxdiagram.core.export.SvgExportable;
+import de.fxdiagram.core.export.SvgLink;
+import de.fxdiagram.core.export.SvgLinkProvider;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -30,8 +34,10 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import javax.imageio.ImageIO;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -58,6 +64,8 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 @Logging
 @SuppressWarnings("all")
 public class SvgExporter {
+  private final static double PT_TO_PX = (2.0 / 3.0);
+  
   private int currentID;
   
   private int imageCounter;
@@ -66,10 +74,15 @@ public class SvgExporter {
   
   private File baseDir;
   
-  public CharSequence toSvg(final XDiagram diagram, final File baseDir) {
+  private SvgLinkProvider linkProvider;
+  
+  private Map<Node, SvgLink> linkCache = CollectionLiterals.<Node, SvgLink>newHashMap();
+  
+  public CharSequence toSvg(final XDiagram diagram, final File baseDir, final SvgLinkProvider linkProvider) {
     CharSequence _xblockexpression = null;
     {
       this.baseDir = baseDir;
+      this.linkProvider = linkProvider;
       ArrayList<String> _newArrayList = CollectionLiterals.<String>newArrayList();
       this.defs = _newArrayList;
       this.currentID = 0;
@@ -145,7 +158,65 @@ public class SvgExporter {
     return _xblockexpression;
   }
   
-  public CharSequence toSvgElement(final Object o) {
+  public CharSequence toSvg(final XDiagram diagram, final File baseDir) {
+    return this.toSvg(diagram, baseDir, null);
+  }
+  
+  public CharSequence toSvgElement(final Node o) {
+    CharSequence _xblockexpression = null;
+    {
+      final SvgLink link = this.doGetSvgLink(o);
+      CharSequence _xifexpression = null;
+      boolean _and = false;
+      boolean _notEquals = (!Objects.equal(link, null));
+      if (!_notEquals) {
+        _and = false;
+      } else {
+        boolean _notEquals_1 = (!Objects.equal(link, SvgLink.NONE));
+        _and = _notEquals_1;
+      }
+      if (_and) {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("<a xlink:href=\"");
+        String _href = link.getHref();
+        _builder.append(_href, "");
+        _builder.append("\"");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        String _title = link.getTitle();
+        CharSequence _svgAttribute = this.toSvgAttribute(_title, "xlink:title", null);
+        _builder.append(_svgAttribute, "\t");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        String _targetFrame = link.getTargetFrame();
+        CharSequence _svgAttribute_1 = this.toSvgAttribute(_targetFrame, "target", null);
+        _builder.append(_svgAttribute_1, "\t");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        {
+          boolean _isOpenInNewWindow = link.isOpenInNewWindow();
+          if (_isOpenInNewWindow) {
+            _builder.append("xlink:show=\"new\"");
+          }
+        }
+        _builder.append(">");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        CharSequence _svgElement2 = this.toSvgElement2(o);
+        _builder.append(_svgElement2, "\t");
+        _builder.newLineIfNotEmpty();
+        _builder.append("</a>");
+        _builder.newLine();
+        _xifexpression = _builder;
+      } else {
+        _xifexpression = this.toSvgElement2(o);
+      }
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
+  protected CharSequence toSvgElement2(final Node o) {
     CharSequence _switchResult = null;
     boolean _matched = false;
     if (!_matched) {
@@ -175,7 +246,7 @@ public class SvgExporter {
     if (!_matched) {
       if (o instanceof MediaView) {
         _matched=true;
-        _switchResult = this.snapshotToSvgElement(((Node)o));
+        _switchResult = this.snapshotToSvgElement(o);
       }
     }
     if (!_matched) {
@@ -187,7 +258,7 @@ public class SvgExporter {
     if (!_matched) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("<!-- ");
-      Class<?> _class = o.getClass();
+      Class<? extends Node> _class = o.getClass();
       String _name = _class.getName();
       _builder.append(_name, "");
       _builder.append(" not exportable -->");
@@ -211,10 +282,15 @@ public class SvgExporter {
     _builder.append("\"");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
+    Translate _transformForOrigin = this.getTransformForOrigin(it);
+    CharSequence _svgString_1 = this.toSvgString(_transformForOrigin);
+    _builder.append(_svgString_1, "\t");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
     _builder.append("fill=\"");
     Paint _fill = it.getFill();
-    CharSequence _svgString_1 = this.toSvgString(_fill);
-    _builder.append(_svgString_1, "\t");
+    CharSequence _svgString_2 = this.toSvgString(_fill);
+    _builder.append(_svgString_2, "\t");
     _builder.append("\"");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
@@ -239,7 +315,7 @@ public class SvgExporter {
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _strokeMiterLimit = it.getStrokeMiterLimit();
-    CharSequence _svgAttribute_4 = this.toSvgAttribute(Double.valueOf(_strokeMiterLimit), "stroke-miterLimit", Double.valueOf(4.0));
+    CharSequence _svgAttribute_4 = this.toSvgAttribute(Double.valueOf(_strokeMiterLimit), "stroke-miterlimit", Double.valueOf(4.0));
     _builder.append(_svgAttribute_4, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
@@ -248,6 +324,36 @@ public class SvgExporter {
     _builder.append("/>");
     _builder.newLine();
     return _builder;
+  }
+  
+  protected Translate getTransformForOrigin(final Text it) {
+    Translate _switchResult = null;
+    VPos _textOrigin = it.getTextOrigin();
+    if (_textOrigin != null) {
+      switch (_textOrigin) {
+        case TOP:
+          Font _font = it.getFont();
+          double _size = _font.getSize();
+          double _multiply = (_size * SvgExporter.PT_TO_PX);
+          double _divide = (_multiply / 2);
+          _switchResult = new Translate(0, _divide);
+          break;
+        case BOTTOM:
+          Font _font_1 = it.getFont();
+          double _size_1 = _font_1.getSize();
+          double _minus = (-_size_1);
+          double _multiply_1 = (_minus * SvgExporter.PT_TO_PX);
+          double _divide_1 = (_multiply_1 / 2);
+          _switchResult = new Translate(0, _divide_1);
+          break;
+        default:
+          _switchResult = new Translate(0, 0);
+          break;
+      }
+    } else {
+      _switchResult = new Translate(0, 0);
+    }
+    return _switchResult;
   }
   
   public CharSequence shapeToSvgElement(final Shape it) {
@@ -304,7 +410,7 @@ public class SvgExporter {
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
     double _strokeMiterLimit = it.getStrokeMiterLimit();
-    CharSequence _svgAttribute_4 = this.toSvgAttribute(Double.valueOf(_strokeMiterLimit), "stroke-miterLimit", Double.valueOf(4.0));
+    CharSequence _svgAttribute_4 = this.toSvgAttribute(Double.valueOf(_strokeMiterLimit), "stroke-miterlimit", Double.valueOf(4.0));
     _builder.append(_svgAttribute_4, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("\t");
@@ -334,17 +440,26 @@ public class SvgExporter {
       Transform _localToSceneTransform = it.getLocalToSceneTransform();
       CharSequence _svgString = this.toSvgString(_localToSceneTransform);
       _builder.append(_svgString, "");
-      _builder.append(" width=\"");
+      _builder.append(" ");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("width=\"");
       Bounds _layoutBounds = it.getLayoutBounds();
       double _width = _layoutBounds.getWidth();
-      _builder.append(_width, "");
-      _builder.append("\" height=\"");
+      _builder.append(_width, "\t");
+      _builder.append("\" ");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("height=\"");
       Bounds _layoutBounds_1 = it.getLayoutBounds();
       double _height = _layoutBounds_1.getHeight();
-      _builder.append(_height, "");
-      _builder.append("\" xlink:href=\"");
-      _builder.append(fileName, "");
-      _builder.append("\"/>");
+      _builder.append(_height, "\t");
+      _builder.append("\" ");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("xlink:href=\"");
+      _builder.append(fileName, "\t");
+      _builder.append("\"");
       _builder.newLineIfNotEmpty();
       _xblockexpression = _builder;
     }
@@ -372,17 +487,25 @@ public class SvgExporter {
       Transform _localToSceneTransform = node.getLocalToSceneTransform();
       CharSequence _svgString = this.toSvgString(_localToSceneTransform);
       _builder.append(_svgString, "");
-      _builder.append(" width=\"");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("width=\"");
       Bounds _layoutBounds_2 = node.getLayoutBounds();
       double _width_1 = _layoutBounds_2.getWidth();
-      _builder.append(_width_1, "");
-      _builder.append("\" height=\"");
+      _builder.append(_width_1, "\t");
+      _builder.append("\"");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("height=\"");
       Bounds _layoutBounds_3 = node.getLayoutBounds();
       double _height_1 = _layoutBounds_3.getHeight();
-      _builder.append(_height_1, "");
-      _builder.append("\" xlink:href=\"");
-      _builder.append(fileName, "");
-      _builder.append("\"/>");
+      _builder.append(_height_1, "\t");
+      _builder.append("\"");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("xlink:href=\"");
+      _builder.append(fileName, "\t");
+      _builder.append("\"");
       _builder.newLineIfNotEmpty();
       _xblockexpression = _builder;
     }
@@ -493,14 +616,49 @@ public class SvgExporter {
     return _xblockexpression;
   }
   
+  protected SvgLink doGetSvgLink(final Node node) {
+    SvgLink _xblockexpression = null;
+    {
+      final SvgLink link = this.linkCache.get(node);
+      SvgLink _xifexpression = null;
+      boolean _notEquals = (!Objects.equal(link, null));
+      if (_notEquals) {
+        _xifexpression = link;
+      } else {
+        SvgLink _xblockexpression_1 = null;
+        {
+          SvgLink _elvis = null;
+          SvgLink _link = this.linkProvider.getLink(node);
+          if (_link != null) {
+            _elvis = _link;
+          } else {
+            _elvis = SvgLink.NONE;
+          }
+          final SvgLink newLink = _elvis;
+          this.linkCache.put(node, newLink);
+          _xblockexpression_1 = newLink;
+        }
+        _xifexpression = _xblockexpression_1;
+      }
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
   public CharSequence toSvgAttribute(final Object value, final String name, final Object defaultValue) {
     return this.toSvgAttribute(value, name, defaultValue, "");
   }
   
   public CharSequence toSvgAttribute(final Object value, final String name, final Object defaultValue, final String unit) {
     CharSequence _xifexpression = null;
-    String _svgString = this.toSvgString(value);
-    String _string = defaultValue.toString();
+    String _svgString = null;
+    if (value!=null) {
+      _svgString=this.toSvgString(value);
+    }
+    String _string = null;
+    if (defaultValue!=null) {
+      _string=defaultValue.toString();
+    }
     boolean _notEquals = (!Objects.equal(_svgString, _string));
     if (_notEquals) {
       StringConcatenation _builder = new StringConcatenation();

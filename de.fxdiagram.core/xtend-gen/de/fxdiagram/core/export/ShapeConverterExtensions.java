@@ -402,24 +402,8 @@ public class ShapeConverterExtensions {
   protected static String _internalToSvgString(final Circle circle) {
     String _xblockexpression = null;
     {
-      double _xifexpression = (double) 0;
-      double _centerX = circle.getCenterX();
-      boolean _equals = (_centerX == 0);
-      if (_equals) {
-        _xifexpression = circle.getRadius();
-      } else {
-        _xifexpression = circle.getCenterX();
-      }
-      final double centerX = _xifexpression;
-      double _xifexpression_1 = (double) 0;
-      double _centerY = circle.getCenterY();
-      boolean _equals_1 = (_centerY == 0);
-      if (_equals_1) {
-        _xifexpression_1 = circle.getRadius();
-      } else {
-        _xifexpression_1 = circle.getCenterY();
-      }
-      final double centerY = _xifexpression_1;
+      final double centerX = circle.getCenterX();
+      final double centerY = circle.getCenterY();
       final double radius = circle.getRadius();
       final double controlDistance = (radius * ShapeConverterExtensions.KAPPA);
       StringConcatenation _builder = new StringConcatenation();

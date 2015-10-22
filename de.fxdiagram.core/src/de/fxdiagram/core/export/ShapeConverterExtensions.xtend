@@ -129,8 +129,8 @@ class ShapeConverterExtensions {
 	}
 
 	protected static def dispatch String internalToSvgString(Circle circle) {
-		val centerX = if(circle.centerX == 0) circle.radius else circle.centerX
-		val centerY = if(circle.centerY == 0) circle.radius else circle.centerY
+		val centerX = circle.centerX
+		val centerY = circle.centerY
 		val radius = circle.radius
 		val controlDistance = radius * KAPPA
 		'''
