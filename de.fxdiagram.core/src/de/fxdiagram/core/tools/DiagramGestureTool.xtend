@@ -41,12 +41,15 @@ class DiagramGestureTool implements XDiagramTool {
 			zoomContext.previousScale = totalZoomFactor
 		]
 		scrollHandler = [
+			// mimic Visio behavior: CTRL-MouseWheel to zoom, SHIFT-MouseWheel to scroll horizontally
 			if(isShortcutDown) {
 				val pivotInLocal = root.diagram.sceneToLocal(sceneX, sceneY)
-				val scale = root.viewportTransform.scale * (1-deltaY/400)
+				val scale = root.viewportTransform.scale * (1+deltaY/400)
 				root.viewportTransform.scale = scale
 				val pivotInScene = root.diagram.localToScene(pivotInLocal)
 				root.viewportTransform.translateRelative(sceneX - pivotInScene.x, sceneY - pivotInScene.y)
+			} else if(isShiftDown) {
+				root.viewportTransform.translateRelative(deltaY, 0)
 			} else {
 				root.viewportTransform.translateRelative(deltaX, deltaY)				
 			}
