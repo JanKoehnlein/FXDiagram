@@ -130,11 +130,18 @@ class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
 	
 	val packageNode = new NodeMapping<PackageDeclaration>(this, 'packageNode', 'Package node') {
 		override createNode(IMappedElementDescriptor<PackageDeclaration> descriptor) {
-			 new BaseDiagramNode(descriptor) 	
+			new BaseDiagramNode(descriptor)
 		}
-		
+
 		override calls() {
-			packageDiagram.nestedDiagramFor[ it ].onOpen	
+			packageNodeName.labelFor[it]
+			packageDiagram.nestedDiagramFor[it].onOpen
+		}
+	}
+
+	val packageNodeName = new NodeHeadingMapping<PackageDeclaration>(this, BaseDiagramNode.NODE_HEADING) {
+		override getText(PackageDeclaration element) {
+			element.name.split('\\.').last
 		}
 	}
 

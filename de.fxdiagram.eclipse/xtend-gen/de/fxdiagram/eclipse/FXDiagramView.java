@@ -21,12 +21,12 @@ import de.fxdiagram.core.tools.actions.NavigatePreviousAction;
 import de.fxdiagram.core.tools.actions.ReconcileAction;
 import de.fxdiagram.core.tools.actions.RedoAction;
 import de.fxdiagram.core.tools.actions.RevealAction;
-import de.fxdiagram.core.tools.actions.SaveAction;
 import de.fxdiagram.core.tools.actions.SelectAllAction;
 import de.fxdiagram.core.tools.actions.UndoAction;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import de.fxdiagram.eclipse.FXDiagramTab;
 import de.fxdiagram.eclipse.actions.EclipseLoadAction;
+import de.fxdiagram.eclipse.actions.EclipseSaveAction;
 import de.fxdiagram.eclipse.changes.ModelChangeBroker;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.mapping.AbstractMapping;
@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swt.FXCanvas;
 import javafx.event.Event;
@@ -128,14 +129,10 @@ public class FXDiagramView extends ViewPart {
   }
   
   public FXDiagramTab createNewTab() {
-    XRoot _createRoot = this.createRoot();
-    return this.createNewTab(_createRoot);
-  }
-  
-  public FXDiagramTab createNewTab(final XRoot root) {
     FXDiagramTab _xblockexpression = null;
     {
-      final FXDiagramTab diagramTab = new FXDiagramTab(this, this.tabFolder, root);
+      XRoot _createRoot = this.createRoot();
+      final FXDiagramTab diagramTab = new FXDiagramTab(this, this.tabFolder, _createRoot);
       CTabItem _cTabItem = diagramTab.getCTabItem();
       this.tab2content.put(_cTabItem, diagramTab);
       CTabItem _cTabItem_1 = diagramTab.getCTabItem();
@@ -151,6 +148,10 @@ public class FXDiagramView extends ViewPart {
       _xblockexpression = diagramTab;
     }
     return _xblockexpression;
+  }
+  
+  protected FXDiagramTab removeTab(final CTabItem tab) {
+    return this.tab2content.remove(tab);
   }
   
   protected XRoot createRoot() {
@@ -180,7 +181,7 @@ public class FXDiagramView extends ViewPart {
       UndoAction _undoAction = new UndoAction();
       RevealAction _revealAction = new RevealAction();
       EclipseLoadAction _eclipseLoadAction = new EclipseLoadAction();
-      SaveAction _saveAction = new SaveAction();
+      EclipseSaveAction _eclipseSaveAction = new EclipseSaveAction();
       ReconcileAction _reconcileAction = new ReconcileAction();
       SelectAllAction _selectAllAction = new SelectAllAction();
       ZoomToFitAction _zoomToFitAction = new ZoomToFitAction();
@@ -188,7 +189,7 @@ public class FXDiagramView extends ViewPart {
       NavigateNextAction _navigateNextAction = new NavigateNextAction();
       FullScreenAction _fullScreenAction = new FullScreenAction();
       _diagramActionRegistry.operator_add(
-        Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _eclipseLoadAction, _saveAction, _reconcileAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
+        Collections.<DiagramAction>unmodifiableList(CollectionLiterals.<DiagramAction>newArrayList(_centerAction, _deleteAction, _layoutAction, _exportSvgAction, _redoAction, _undoRedoPlayerAction, _undoAction, _revealAction, _eclipseLoadAction, _eclipseSaveAction, _reconcileAction, _selectAllAction, _zoomToFitAction, _navigatePreviousAction, _navigateNextAction, _fullScreenAction)));
     };
     return ObjectExtensions.<XRoot>operator_doubleArrow(_xRoot, _function);
   }
@@ -298,8 +299,9 @@ public class FXDiagramView extends ViewPart {
           this.tabFolder.setSelection(_key);
           return;
         }
+        final FXDiagramTab newTab = this.createNewTab();
         AbstractMapping<?> _mapping_1 = mappingCall.getMapping();
-        final String filePath = ((DiagramMapping<?>) _mapping_1).getDefaultFilePath();
+        final String filePath = ((DiagramMapping<Object>) _mapping_1).getDefaultFilePath(diagramElement);
         boolean _notEquals_1 = (!Objects.equal(filePath, null));
         if (_notEquals_1) {
           IWorkspace _workspace = ResourcesPlugin.getWorkspace();
@@ -311,13 +313,31 @@ public class FXDiagramView extends ViewPart {
             ModelLoad _modelLoad = new ModelLoad();
             InputStream _contents = file.getContents();
             InputStreamReader _inputStreamReader = new InputStreamReader(_contents);
-            final Object root = _modelLoad.load(_inputStreamReader);
-            this.createNewTab(((XRoot) root));
-            return;
+            final Object node = _modelLoad.load(_inputStreamReader);
+            if ((node instanceof XRoot)) {
+              final Runnable _function_1 = () -> {
+                XRoot _root_1 = newTab.getRoot();
+                ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();
+                _root_1.replaceDomainObjectProviders(_domainObjectProviders);
+                XRoot _root_2 = newTab.getRoot();
+                XDiagram _diagram = ((XRoot)node).getDiagram();
+                _root_2.setRootDiagram(_diagram);
+                XRoot _root_3 = newTab.getRoot();
+                _root_3.setFileName(filePath);
+              };
+              Platform.runLater(_function_1);
+              return;
+            }
           }
         }
         FXDiagramTab _createNewTab = this.createNewTab();
-        _createNewTab.<T>revealElement(element, entryCall, editor);
+        final Procedure1<FXDiagramTab> _function_2 = (FXDiagramTab it) -> {
+          XRoot _root_1 = it.getRoot();
+          _root_1.setFileName(filePath);
+          it.<T>revealElement(element, entryCall, editor);
+        };
+        ObjectExtensions.<FXDiagramTab>operator_doubleArrow(_createNewTab, _function_2);
+        return;
       }
       FXDiagramTab _elvis = null;
       FXDiagramTab _currentDiagramTab = this.getCurrentDiagramTab();

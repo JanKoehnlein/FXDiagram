@@ -17,6 +17,7 @@ import de.fxdiagram.mapping.NodeHeadingMapping;
 import de.fxdiagram.mapping.NodeLabelMapping;
 import de.fxdiagram.mapping.NodeMapping;
 import de.fxdiagram.mapping.shapes.BaseConnection;
+import de.fxdiagram.mapping.shapes.BaseNodeHeadingLabel;
 import de.fxdiagram.mapping.shapes.BaseNodeLabel;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleDescriptor;
@@ -98,9 +99,9 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
   
   private final NodeHeadingMapping<BundleDescription> pluginSymbolicName = new NodeHeadingMapping<BundleDescription>(this, BundleNode.BUNDLE_SYMBOLIC_NAME) {
     @Override
-    public BaseNodeLabel<BundleDescription> createLabel(final IMappedElementDescriptor<BundleDescription> descriptor, final BundleDescription bundle) {
-      BaseNodeLabel<BundleDescription> _createLabel = super.createLabel(descriptor, bundle);
-      final Procedure1<BaseNodeLabel<BundleDescription>> _function = (BaseNodeLabel<BundleDescription> it) -> {
+    public BaseNodeHeadingLabel<BundleDescription> createLabel(final IMappedElementDescriptor<BundleDescription> descriptor, final BundleDescription bundle) {
+      BaseNodeHeadingLabel<BundleDescription> _createLabel = super.createLabel(descriptor, bundle);
+      final Procedure1<BaseNodeHeadingLabel<BundleDescription>> _function = (BaseNodeHeadingLabel<BundleDescription> it) -> {
         Text _text = it.getText();
         final Procedure1<Text> _function_1 = (Text it_1) -> {
           String _symbolicName = bundle.getSymbolicName();
@@ -126,7 +127,7 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
         };
         ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
       };
-      return ObjectExtensions.<BaseNodeLabel<BundleDescription>>operator_doubleArrow(_createLabel, _function);
+      return ObjectExtensions.<BaseNodeHeadingLabel<BundleDescription>>operator_doubleArrow(_createLabel, _function);
     }
   };
   

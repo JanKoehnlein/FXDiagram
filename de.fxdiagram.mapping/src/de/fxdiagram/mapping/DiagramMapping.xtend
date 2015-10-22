@@ -51,7 +51,7 @@ import de.fxdiagram.mapping.shapes.BaseDiagram
 		eagerConnections += connectionMapping
 	}
 	
-	def String getDefaultFilePath() {
+	def String getDefaultFilePath(T element) {
 		null
 	}
 }

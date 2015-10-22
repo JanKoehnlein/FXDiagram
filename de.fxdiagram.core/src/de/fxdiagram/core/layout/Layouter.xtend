@@ -16,6 +16,7 @@ import de.cau.cs.kieler.kiml.options.LayoutOptions
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XDiagram
+import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.MoveBehavior
@@ -32,7 +33,6 @@ import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
-import de.fxdiagram.core.XDiagramContainer
 
 class Layouter { 
 
@@ -223,7 +223,7 @@ class Layouter {
 		val kRoot = createKNode
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
-//		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
+		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
 		shapeLayout.setProperty(LayoutOptions.LAYOUT_HIERARCHY, true)
 		kRoot.data += shapeLayout
 		cache.put(it, kRoot)
@@ -260,9 +260,10 @@ class Layouter {
 	protected def KNode toKNode(XNode xNode, Map<Object, KGraphElement> cache) {
 		val kNode = createKNode
 		val shapeLayout = createKShapeLayout
+		val autoLayoutDimension = xNode.autoLayoutDimension
 		shapeLayout.setSize(
-			xNode.autoLayoutDimension.width as float + NODE_PADDING, 
-			xNode.autoLayoutDimension.height as float + NODE_PADDING
+			autoLayoutDimension.width as float + NODE_PADDING, 
+			autoLayoutDimension.height as float + NODE_PADDING
 		)
 		kNode.data += shapeLayout
 		cache.put(xNode, kNode)

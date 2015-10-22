@@ -14,7 +14,9 @@ import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.command.SelectAndRevealCommand;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
+import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
@@ -30,8 +32,10 @@ import de.fxdiagram.mapping.execution.EntryCall;
 import de.fxdiagram.mapping.execution.InterpreterContext;
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter;
 import de.fxdiagram.swtfx.SwtToFXGestureConverter;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.StringProperty;
@@ -49,11 +53,13 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.keys.IBindingService;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -92,8 +98,6 @@ public class FXDiagramTab {
     ModelChangeBroker _modelChangeBroker = view.getModelChangeBroker();
     _modelChangeBroker.addListener(this.changeListener);
     this.root = root;
-    String _name = root.getName();
-    this.tab.setText(_name);
     Scene _scene = new Scene(root);
     final Procedure1<Scene> _function_1 = (Scene it) -> {
       PerspectiveCamera _perspectiveCamera = new PerspectiveCamera();
@@ -106,23 +110,24 @@ public class FXDiagramTab {
       this.gestureConverter.dispose();
       ModelChangeBroker _modelChangeBroker_1 = view.getModelChangeBroker();
       _modelChangeBroker_1.removeListener(this.changeListener);
+      view.removeTab(this.tab);
     };
     this.tab.addDisposeListener(_function_2);
-    StringProperty _nameProperty = root.nameProperty();
-    final ChangeListener<String> _function_3 = (ObservableValue<? extends String> p, String o, String n) -> {
-      this.tab.setText(n);
+    StringProperty _fileNameProperty = root.fileNameProperty();
+    InitializingListener<String> _initializingListener = new InitializingListener<String>();
+    final Procedure1<InitializingListener<String>> _function_3 = (InitializingListener<String> it) -> {
+      final Procedure1<String> _function_4 = (String it_1) -> {
+        String _tabName = this.getTabName();
+        this.tab.setText(_tabName);
+      };
+      it.setSet(_function_4);
     };
-    _nameProperty.addListener(_function_3);
+    InitializingListener<String> _doubleArrow_1 = ObjectExtensions.<InitializingListener<String>>operator_doubleArrow(_initializingListener, _function_3);
+    CoreExtensions.<String>addInitializingListener(_fileNameProperty, _doubleArrow_1);
     BooleanProperty _needsSaveProperty = root.needsSaveProperty();
     final ChangeListener<Boolean> _function_4 = (ObservableValue<? extends Boolean> p, Boolean o, Boolean n) -> {
-      if ((n).booleanValue()) {
-        String _name_1 = root.getName();
-        String _plus = ("*" + _name_1);
-        this.tab.setText(_plus);
-      } else {
-        String _name_2 = root.getName();
-        this.tab.setText(_name_2);
-      }
+      String _tabName = this.getTabName();
+      this.tab.setText(_tabName);
     };
     _needsSaveProperty.addListener(_function_4);
     this.canvas.addFocusListener(new FocusListener() {
@@ -140,6 +145,39 @@ public class FXDiagramTab {
         ((IBindingService) _service).setKeyFilterEnabled(true);
       }
     });
+  }
+  
+  protected String getTabName() {
+    String _xifexpression = null;
+    boolean _needsSave = this.root.getNeedsSave();
+    if (_needsSave) {
+      _xifexpression = "*";
+    } else {
+      _xifexpression = "";
+    }
+    final String prefix = _xifexpression;
+    String _fileName = this.root.getFileName();
+    String[] _split = null;
+    if (_fileName!=null) {
+      String _quote = Pattern.quote(File.separator);
+      _split=_fileName.split(_quote);
+    }
+    String _last = null;
+    if (((Iterable<String>)Conversions.doWrapArray(_split))!=null) {
+      _last=IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
+    }
+    final String fileName = _last;
+    boolean _equals = Objects.equal(fileName, null);
+    if (_equals) {
+      return (prefix + "Untitled");
+    }
+    final int dotPos = fileName.lastIndexOf(".");
+    if ((dotPos >= 0)) {
+      String _substring = fileName.substring(0, dotPos);
+      return (prefix + _substring);
+    } else {
+      return (prefix + fileName);
+    }
   }
   
   public XRoot getRoot() {
@@ -285,11 +323,15 @@ public class FXDiagramTab {
   }
   
   protected void refreshDirtyState(final ReconcileBehavior behavior) {
-    if (this.isLinkWithEditor) {
-      DirtyState _dirtyState = behavior.getDirtyState();
-      behavior.showDirtyState(_dirtyState);
-    } else {
-      behavior.hideDirtyState();
-    }
+    Display _default = Display.getDefault();
+    final Runnable _function = () -> {
+      if (this.isLinkWithEditor) {
+        DirtyState _dirtyState = behavior.getDirtyState();
+        behavior.showDirtyState(_dirtyState);
+      } else {
+        behavior.hideDirtyState();
+      }
+    };
+    _default.asyncExec(_function);
   }
 }

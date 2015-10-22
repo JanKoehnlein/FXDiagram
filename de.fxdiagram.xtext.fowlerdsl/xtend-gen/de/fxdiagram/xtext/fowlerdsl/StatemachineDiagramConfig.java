@@ -66,6 +66,11 @@ public class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
       };
       this.<Transition>connectionForEach(StatemachineDiagramConfig.this.transitionConnection, _function_1);
     }
+    
+    @Override
+    public String getDefaultFilePath(final Statemachine element) {
+      return StatemachineDiagramConfig.this.getFilePath(element);
+    }
   };
   
   private final NodeMapping<State> stateNode = new NodeMapping<State>(this, "stateNode", "State") {

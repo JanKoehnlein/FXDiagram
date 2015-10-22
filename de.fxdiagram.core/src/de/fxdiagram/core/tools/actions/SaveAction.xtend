@@ -7,6 +7,7 @@ import java.io.FileWriter
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.stage.FileChooser
+import java.io.File
 
 class SaveAction implements DiagramAction {
 
@@ -24,17 +25,16 @@ class SaveAction implements DiagramAction {
 
 	override perform(XRoot root) {
 		if(root.diagram != null) {
-			val fileChooser = new FileChooser()
-			fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
-			val file = (fileChooser).showSaveDialog(root.scene.window)
+			val file = if(root.fileName != null) {
+				new File(root.fileName)
+			} else {
+				val fileChooser = new FileChooser()
+				fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
+				fileChooser.showSaveDialog(root.scene.window)
+			} 
 			if(file != null) {
 				new ModelSave().save(root, new FileWriter(file))
-				val fileName = file.name
-				val dotPos = fileName.lastIndexOf('.')
-				root.name = if(dotPos >= 0) 
-						fileName.substring(0, dotPos)	
-					else
-						fileName 
+				root.fileName = file.path
 				root.needsSave = false
 			}
 		}

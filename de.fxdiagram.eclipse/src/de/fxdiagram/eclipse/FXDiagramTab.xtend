@@ -8,6 +8,7 @@ import de.fxdiagram.core.command.AbstractCommand
 import de.fxdiagram.core.command.CommandContext
 import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SelectAndRevealCommand
+import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.eclipse.changes.IChangeListener
@@ -16,6 +17,8 @@ import de.fxdiagram.mapping.execution.EntryCall
 import de.fxdiagram.mapping.execution.InterpreterContext
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
+import java.io.File
+import java.util.regex.Pattern
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
@@ -27,7 +30,9 @@ import org.eclipse.swt.events.FocusListener
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.keys.IBindingService
 
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import org.eclipse.swt.widgets.Display
 
 class FXDiagramTab {
 	val CTabItem tab
@@ -51,24 +56,22 @@ class FXDiagramTab {
 		]
 		view.modelChangeBroker.addListener(changeListener)
 		this.root = root
-		tab.text = root.name
 		canvas.scene = new Scene(root) => [
 			camera = new PerspectiveCamera
 			root.activate
 		]
-		
 		tab.addDisposeListener [
 			gestureConverter.dispose
 			view.modelChangeBroker.removeListener(changeListener)
+			view.removeTab(tab)
 		]
-		root.nameProperty.addListener [ p, o, n |
-			tab.text = n
-		]
+		root.fileNameProperty.addInitializingListener(new InitializingListener() => [
+			set = [
+				tab.text = tabName
+			]		
+		])
 		root.needsSaveProperty.addListener [ p, o, n |
-			if (n)
-				tab.text = '*' + root.name
-			else
-				tab.text = root.name
+			tab.text = tabName
 		]
 		canvas.addFocusListener(new FocusListener {
 			override focusGained(FocusEvent e) {
@@ -79,7 +82,18 @@ class FXDiagramTab {
 				(view.site.getService(IBindingService) as IBindingService).keyFilterEnabled = true
 			}
 		})
-		
+	}
+	
+	protected def getTabName() {
+		val prefix = if(root.needsSave) '*' else '' 
+		val fileName = root.fileName?.split(Pattern.quote(File.separator))?.last
+		if(fileName == null)
+			return prefix + 'Untitled'
+		val dotPos = fileName.lastIndexOf('.')
+		if(dotPos >= 0) 
+			return prefix + fileName.substring(0, dotPos)	
+		else
+			return prefix + fileName 
 	}
 
 	def getRoot() { root }
@@ -154,10 +168,12 @@ class FXDiagramTab {
 	}
 	
 	protected def refreshDirtyState(ReconcileBehavior behavior) {
-		if (isLinkWithEditor)
-			behavior.showDirtyState(behavior.dirtyState)
-		else
-			behavior.hideDirtyState
+		Display.^default.asyncExec [
+			if (isLinkWithEditor)
+				behavior.showDirtyState(behavior.dirtyState)
+			else
+				behavior.hideDirtyState
+		]
 	}
 }
 

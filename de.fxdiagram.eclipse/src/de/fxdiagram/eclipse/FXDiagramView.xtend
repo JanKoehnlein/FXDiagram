@@ -15,11 +15,11 @@ import de.fxdiagram.core.tools.actions.NavigatePreviousAction
 import de.fxdiagram.core.tools.actions.ReconcileAction
 import de.fxdiagram.core.tools.actions.RedoAction
 import de.fxdiagram.core.tools.actions.RevealAction
-import de.fxdiagram.core.tools.actions.SaveAction
 import de.fxdiagram.core.tools.actions.SelectAllAction
 import de.fxdiagram.core.tools.actions.UndoAction
 import de.fxdiagram.core.tools.actions.ZoomToFitAction
 import de.fxdiagram.eclipse.actions.EclipseLoadAction
+import de.fxdiagram.eclipse.actions.EclipseSaveAction
 import de.fxdiagram.eclipse.changes.ModelChangeBroker
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction
 import de.fxdiagram.mapping.AbstractMapping
@@ -46,6 +46,7 @@ import org.eclipse.ui.commands.ICommandService
 import org.eclipse.ui.handlers.RegistryToggleState
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
+import javafx.application.Platform
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -72,11 +73,7 @@ class FXDiagramView extends ViewPart {
 	}
 
 	def createNewTab() {
-		createNewTab(createRoot)
-	}
-
-	def createNewTab(XRoot root) {
-		val diagramTab = new FXDiagramTab(this, tabFolder, root)
+		val diagramTab = new FXDiagramTab(this, tabFolder, createRoot)
 		tab2content.put(diagramTab.CTabItem, diagramTab)
 		tabFolder.selection = diagramTab.CTabItem
 		globalEventHandlers.forEach[
@@ -84,6 +81,10 @@ class FXDiagramView extends ViewPart {
 		]
 		diagramTab.linkWithEditor = linkWithEditor
 		diagramTab
+	}
+	
+	protected def removeTab(CTabItem tab) {
+		tab2content.remove(tab)
 	}
 	
 	protected def createRoot() {
@@ -95,7 +96,7 @@ class FXDiagramView extends ViewPart {
 			getDiagramActionRegistry +=
 				#[new CenterAction, new DeleteAction, new LayoutAction(LayoutType.DOT), new ExportSvgAction,
 					new RedoAction, new UndoRedoPlayerAction, new UndoAction, new RevealAction, new EclipseLoadAction,
-					new SaveAction, new ReconcileAction, new SelectAllAction, new ZoomToFitAction, new NavigatePreviousAction,
+					new EclipseSaveAction, new ReconcileAction, new SelectAllAction, new ZoomToFitAction, new NavigatePreviousAction,
 					new NavigateNextAction, new FullScreenAction]
 		]
 	}
@@ -155,16 +156,27 @@ class FXDiagramView extends ViewPart {
 				tabFolder.selection = tab.key
 				return
 			}			
-			val filePath = (mappingCall.mapping as DiagramMapping<?>).defaultFilePath
+			val newTab = createNewTab
+			val filePath = (mappingCall.mapping as DiagramMapping<Object>).getDefaultFilePath(diagramElement)
 			if(filePath != null) {
 				val file = ResourcesPlugin.workspace.root.getFile(new Path(filePath))
 				if(file.exists) {
-					val root = new ModelLoad().load(new InputStreamReader(file.contents))
-					createNewTab(root as XRoot)
-					return		
+					val node = new ModelLoad().load(new InputStreamReader(file.contents))
+					if(node instanceof XRoot) {
+						Platform.runLater [
+							newTab.root.replaceDomainObjectProviders(node.domainObjectProviders)
+							newTab.root.rootDiagram = node.diagram
+							newTab.root.fileName = filePath
+						]
+						return		
+					}
 				}
 			}
-			createNewTab.revealElement(element, entryCall, editor)
+			createNewTab => [
+				root.fileName = filePath
+				revealElement(element, entryCall, editor)
+			]
+			return
 		}
 		(currentDiagramTab ?: createNewTab).revealElement(element, entryCall, editor)
 	}

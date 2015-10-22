@@ -40,7 +40,7 @@ import de.fxdiagram.core.extensions.InitializingListListener
  * the node.
  */
 @Logging
-@ModelNode('layoutX', 'layoutY', 'width', 'height')
+@ModelNode('layoutX', 'layoutY', 'width', 'height', 'labels')
 class XNode extends XDomainObjectShape {
 
 	@FxProperty double width
@@ -112,6 +112,10 @@ class XNode extends XDomainObjectShape {
 		])
 		if(node instanceof XActivatable)
 			(node as XActivatable).activate
+		layoutBoundsProperty.addListener [ p, o, n |
+			width = n.width
+			height = n.height
+		]
 	}
 	
 	override selectionFeedback(boolean isSelected) {

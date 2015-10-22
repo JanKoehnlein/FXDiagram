@@ -22,9 +22,12 @@ import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -58,7 +61,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * the node.
  */
 @Logging
-@ModelNode({ "layoutX", "layoutY", "width", "height" })
+@ModelNode({ "layoutX", "layoutY", "width", "height", "labels" })
 @SuppressWarnings("all")
 public class XNode extends XDomainObjectShape {
   private Effect mouseOverEffect;
@@ -171,6 +174,14 @@ public class XNode extends XDomainObjectShape {
       Node _node_1 = this.getNode();
       ((XActivatable) _node_1).activate();
     }
+    ReadOnlyObjectProperty<Bounds> _layoutBoundsProperty = this.layoutBoundsProperty();
+    final ChangeListener<Bounds> _function_3 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
+      double _width = n.getWidth();
+      this.setWidth(_width);
+      double _height = n.getHeight();
+      this.setHeight(_height);
+    };
+    _layoutBoundsProperty.addListener(_function_3);
   }
   
   @Override
@@ -321,6 +332,7 @@ public class XNode extends XDomainObjectShape {
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
+    modelElement.addProperty(labelsProperty, XLabel.class);
   }
   
   private SimpleDoubleProperty widthProperty = new SimpleDoubleProperty(this, "width");

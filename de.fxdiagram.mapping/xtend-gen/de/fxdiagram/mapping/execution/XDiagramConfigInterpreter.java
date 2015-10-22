@@ -11,6 +11,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
+import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.mapping.AbstractLabelMapping;
@@ -80,6 +81,7 @@ public class XDiagramConfigInterpreter {
       }
       final InterpreterContext newContext = _xifexpression_1;
       if (isOnDemand) {
+        diagram.setLayoutOnActivate(LayoutType.DOT);
         final Procedure1<XDiagram> _function = (XDiagram it) -> {
           final Function1<T, Object> _function_1 = (T domainObject) -> {
             Object _xblockexpression_1 = null;
@@ -309,7 +311,9 @@ public class XDiagramConfigInterpreter {
         DiagramMappingCall<?, T> _nestedDiagram = nodeMapping.getNestedDiagram();
         XDiagram _execute = null;
         if (_nestedDiagram!=null) {
-          _execute=this.execute(_nestedDiagram, nodeObject, context);
+          XDiagram _xDiagram = new XDiagram();
+          InterpreterContext _interpreterContext = new InterpreterContext(_xDiagram, context);
+          _execute=this.execute(_nestedDiagram, nodeObject, _interpreterContext);
         }
         ((XDiagramContainer)node).setInnerDiagram(_execute);
       }

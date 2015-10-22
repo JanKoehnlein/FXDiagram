@@ -99,7 +99,7 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
     return Iterables.<ConnectionMapping<?>>addAll(this.eagerConnections, ((Iterable<? extends ConnectionMapping<?>>)Conversions.doWrapArray(connectionMapping)));
   }
   
-  public String getDefaultFilePath() {
+  public String getDefaultFilePath(final T element) {
     return null;
   }
 }

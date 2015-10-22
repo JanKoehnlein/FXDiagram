@@ -3,11 +3,8 @@ package de.fxdiagram.mapping
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XLabel
 import de.fxdiagram.mapping.shapes.BaseConnectionLabel
+import de.fxdiagram.mapping.shapes.BaseNodeHeadingLabel
 import de.fxdiagram.mapping.shapes.BaseNodeLabel
-import javafx.geometry.Insets
-import javafx.scene.layout.StackPane
-import javafx.scene.text.Font
-import javafx.scene.text.FontWeight
 
 /**
  * Base class for label mappings. 
@@ -84,10 +81,9 @@ class NodeHeadingMapping<T> extends NodeLabelMapping<T> {
 		super(config, id)
 	}
 	
-	override BaseNodeLabel<T> createLabel(IMappedElementDescriptor<T> descriptor, T labelElement) {
-		super.createLabel(descriptor, labelElement) => [
-			StackPane.setMargin(it, new Insets(10, 20, 10, 20))
-			text.font = Font.font(text.font.family, FontWeight.BOLD, text.font.size * 1.1)	
+	override BaseNodeHeadingLabel<T> createLabel(IMappedElementDescriptor<T> descriptor, T labelElement) {
+		new BaseNodeHeadingLabel(descriptor) => [
+			text.text = labelElement.text
 		]
 	}
 }

@@ -43,6 +43,7 @@ import org.eclipse.xtext.example.domainmodel.domainmodel.Entity;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -244,8 +245,21 @@ public class JvmClassDiagramConfig extends AbstractXtextDiagramConfig {
       final Function1<PackageDeclaration, PackageDeclaration> _function = (PackageDeclaration it) -> {
         return it;
       };
-      DiagramMappingCall<?, PackageDeclaration> _nestedDiagramFor = this.<PackageDeclaration>nestedDiagramFor(JvmClassDiagramConfig.this.packageDiagram, _function);
+      this.<PackageDeclaration>labelFor(JvmClassDiagramConfig.this.packageNodeName, _function);
+      final Function1<PackageDeclaration, PackageDeclaration> _function_1 = (PackageDeclaration it) -> {
+        return it;
+      };
+      DiagramMappingCall<?, PackageDeclaration> _nestedDiagramFor = this.<PackageDeclaration>nestedDiagramFor(JvmClassDiagramConfig.this.packageDiagram, _function_1);
       _nestedDiagramFor.onOpen();
+    }
+  };
+  
+  private final NodeHeadingMapping<PackageDeclaration> packageNodeName = new NodeHeadingMapping<PackageDeclaration>(this, BaseDiagramNode.NODE_HEADING) {
+    @Override
+    public String getText(final PackageDeclaration element) {
+      String _name = element.getName();
+      String[] _split = _name.split("\\.");
+      return IterableExtensions.<String>last(((Iterable<String>)Conversions.doWrapArray(_split)));
     }
   };
   

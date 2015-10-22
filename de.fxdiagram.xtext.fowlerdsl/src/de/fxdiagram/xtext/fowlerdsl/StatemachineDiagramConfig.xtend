@@ -40,7 +40,7 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
  * </ol>
  */
 class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
-	 
+
 	val statemachineDiagram = new DiagramMapping<Statemachine>(this, 'statemachineDiagram', 'Statemachine') {
 		override calls() {
 			// when adding a statemachine diagram automatically add a node for each state
@@ -48,6 +48,10 @@ class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
 			stateNode.nodeForEach[states]
 			transitionConnection.connectionForEach[states.map[transitions].flatten]
 		}		
+		
+		override getDefaultFilePath(Statemachine element) {
+			element.filePath
+		}
 	}
 	
 	val stateNode = new NodeMapping<State>(this, 'stateNode', 'State') {
@@ -94,5 +98,5 @@ class StatemachineDiagramConfig extends AbstractXtextDiagramConfig {
 				add(transitionConnection, [domainArgument])
 			}
 		}
-	}	
+	}
 }

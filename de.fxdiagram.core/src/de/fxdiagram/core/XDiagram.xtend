@@ -76,7 +76,7 @@ class XDiagram extends Group implements XActivatable {
 	ViewportTransform viewportTransform
 	
 	boolean needsCentering = true
-
+	
 	new(DomainObjectDescriptor descriptor) {
 		this.domainObjectDescriptorProperty.set(descriptor)
 		children += nodeLayer
@@ -122,7 +122,19 @@ class XDiagram extends Group implements XActivatable {
 			}				
 		]
 		contentsInitializer?.apply(this)
-		
+		if(layoutOnActivate != null) {
+			nodes.forEach [
+				node.autosize
+			]
+			connections.forEach [
+				node
+				labels.forEach[
+					node.autosize
+				]
+			]
+			new Layouter().layout(layoutOnActivate, this, null)
+			layoutOnActivate = null
+		}
 		nodes.addInitializingListener(new InitializingListListener<XNode>() => [
 			add = [
 				initializeGraphics
@@ -163,19 +175,6 @@ class XDiagram extends Group implements XActivatable {
 		behaviors.addInitializingListener(new InitializingMapListener => [
 			put = [ key, Behavior value | value.activate() ]
 		])
-		if(layoutOnActivate != null) {
-			nodes.forEach [
-				node.autosize
-			]
-			connections.forEach [
-				node
-				labels.forEach[
-					node.autosize
-				]
-			]
-			new Layouter().layout(layoutOnActivate, this, null)
-			layoutOnActivate = null
-		}
 	}
 	
 	def void centerDiagram(boolean useForce) {

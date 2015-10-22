@@ -48,27 +48,33 @@ public class SaveAction implements DiagramAction {
       XDiagram _diagram = root.getDiagram();
       boolean _notEquals = (!Objects.equal(_diagram, null));
       if (_notEquals) {
-        final FileChooser fileChooser = new FileChooser();
-        ObservableList<FileChooser.ExtensionFilter> _extensionFilters = fileChooser.getExtensionFilters();
-        FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FXDiagram", "*.fxd");
-        _extensionFilters.add(_extensionFilter);
-        Scene _scene = root.getScene();
-        Window _window = _scene.getWindow();
-        final File file = fileChooser.showSaveDialog(_window);
-        boolean _notEquals_1 = (!Objects.equal(file, null));
+        File _xifexpression = null;
+        String _fileName = root.getFileName();
+        boolean _notEquals_1 = (!Objects.equal(_fileName, null));
         if (_notEquals_1) {
+          String _fileName_1 = root.getFileName();
+          _xifexpression = new File(_fileName_1);
+        } else {
+          File _xblockexpression = null;
+          {
+            final FileChooser fileChooser = new FileChooser();
+            ObservableList<FileChooser.ExtensionFilter> _extensionFilters = fileChooser.getExtensionFilters();
+            FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FXDiagram", "*.fxd");
+            _extensionFilters.add(_extensionFilter);
+            Scene _scene = root.getScene();
+            Window _window = _scene.getWindow();
+            _xblockexpression = fileChooser.showSaveDialog(_window);
+          }
+          _xifexpression = _xblockexpression;
+        }
+        final File file = _xifexpression;
+        boolean _notEquals_2 = (!Objects.equal(file, null));
+        if (_notEquals_2) {
           ModelSave _modelSave = new ModelSave();
           FileWriter _fileWriter = new FileWriter(file);
           _modelSave.save(root, _fileWriter);
-          final String fileName = file.getName();
-          final int dotPos = fileName.lastIndexOf(".");
-          String _xifexpression = null;
-          if ((dotPos >= 0)) {
-            _xifexpression = fileName.substring(0, dotPos);
-          } else {
-            _xifexpression = fileName;
-          }
-          root.setName(_xifexpression);
+          String _path = file.getPath();
+          root.setFileName(_path);
           root.setNeedsSave(false);
         }
       }

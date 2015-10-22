@@ -388,22 +388,22 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     return this.domainObjectProvidersProperty;
   }
   
-  private SimpleStringProperty nameProperty = new SimpleStringProperty(this, "name",_initName());
+  private SimpleStringProperty fileNameProperty = new SimpleStringProperty(this, "fileName",_initFileName());
   
-  private static final String _initName() {
-    return "Untitled";
+  private static final String _initFileName() {
+    return "Untitled.fxd";
   }
   
-  public String getName() {
-    return this.nameProperty.get();
+  public String getFileName() {
+    return this.fileNameProperty.get();
   }
   
-  public void setName(final String name) {
-    this.nameProperty.set(name);
+  public void setFileName(final String fileName) {
+    this.fileNameProperty.set(fileName);
   }
   
-  public StringProperty nameProperty() {
-    return this.nameProperty;
+  public StringProperty fileNameProperty() {
+    return this.fileNameProperty;
   }
   
   private SimpleBooleanProperty needsSaveProperty = new SimpleBooleanProperty(this, "needsSave");

@@ -63,6 +63,8 @@ public class LoadAction implements DiagramAction {
           root.replaceDomainObjectProviders(_domainObjectProviders);
           XDiagram _diagram = ((XRoot)node).getDiagram();
           root.setRootDiagram(_diagram);
+          String _path = file.getPath();
+          root.setFileName(_path);
         }
       }
     } catch (Throwable _e) {

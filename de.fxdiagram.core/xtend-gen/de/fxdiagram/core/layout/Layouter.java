@@ -458,6 +458,7 @@ public class Layouter {
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
+      shapeLayout.<Boolean>setProperty(LayoutOptions.DEBUG_MODE, Boolean.valueOf(true));
       shapeLayout.<Boolean>setProperty(LayoutOptions.LAYOUT_HIERARCHY, Boolean.valueOf(true));
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
@@ -548,11 +549,10 @@ public class Layouter {
     {
       final KNode kNode = this._kGraphFactory.createKNode();
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
-      Dimension2D _autoLayoutDimension = xNode.getAutoLayoutDimension();
-      double _width = _autoLayoutDimension.getWidth();
+      final Dimension2D autoLayoutDimension = xNode.getAutoLayoutDimension();
+      double _width = autoLayoutDimension.getWidth();
       float _plus = (((float) _width) + Layouter.NODE_PADDING);
-      Dimension2D _autoLayoutDimension_1 = xNode.getAutoLayoutDimension();
-      double _height = _autoLayoutDimension_1.getHeight();
+      double _height = autoLayoutDimension.getHeight();
       float _plus_1 = (((float) _height) + Layouter.NODE_PADDING);
       shapeLayout.setSize(_plus, _plus_1);
       EList<KGraphData> _data = kNode.getData();

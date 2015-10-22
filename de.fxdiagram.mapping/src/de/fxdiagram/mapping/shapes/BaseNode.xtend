@@ -12,11 +12,11 @@ import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 
+import static de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 import static javafx.geometry.Side.*
 
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
-import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 
 /**
  * Base implementation for an {@link XNode} that belongs to an {@link IMappedElementDescriptor}.
@@ -52,7 +52,6 @@ class BaseNode<T> extends XNode implements INodeWithLazyMappings {
 				])
 			addMappingLabelListener(labels, NODE_HEADING -> pane)	
 		] 
-		
 	}
 	
 	override protected createAnchors() {

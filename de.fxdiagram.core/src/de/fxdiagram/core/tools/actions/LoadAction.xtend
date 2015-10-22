@@ -31,8 +31,8 @@ class LoadAction implements DiagramAction {
 			if(node instanceof XRoot) {
 				root.replaceDomainObjectProviders(node.domainObjectProviders)
 				root.rootDiagram = node.diagram
+				root.fileName = file.path 
 			}
 		}
 	}
-	
 }

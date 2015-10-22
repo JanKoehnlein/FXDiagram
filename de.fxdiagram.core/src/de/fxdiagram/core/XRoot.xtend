@@ -61,7 +61,7 @@ class XRoot extends Parent implements XActivatable {
 
 	@FxProperty ObservableList<DomainObjectProvider> domainObjectProviders = FXCollections.observableArrayList
 	
-	@FxProperty String name = "Untitled"
+	@FxProperty String fileName = "Untitled.fxd"
 	
 	@FxProperty boolean needsSave
 	
