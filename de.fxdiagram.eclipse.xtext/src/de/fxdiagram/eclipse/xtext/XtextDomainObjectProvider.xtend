@@ -1,5 +1,6 @@
 package de.fxdiagram.eclipse.xtext
 
+import com.google.inject.Inject
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID
@@ -7,6 +8,7 @@ import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider
 import java.util.Map
+import java.util.NoSuchElementException
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.ui.IEditorInput
@@ -15,7 +17,11 @@ import org.eclipse.ui.IWorkbenchPage
 import org.eclipse.ui.PlatformUI
 import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.resource.ILocationInFileProvider
+import org.eclipse.xtext.resource.IResourceDescriptions
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.ui.editor.XtextEditor
+import org.eclipse.xtext.ui.refactoring.impl.ProjectUtil
+import org.eclipse.xtext.ui.resource.IResourceSetProvider
 import org.eclipse.xtext.ui.shared.Access
 
 import static org.eclipse.ui.IWorkbenchPage.*
@@ -60,6 +66,16 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 	
 	def createXtextEObjectID(IEObjectDescription element) {
 		idFactory.createXtextEObjectID(element)
+	}
+	
+	def IResourceDescriptions getIndex(XtextEObjectID context) {
+		val rsp = context.resourceServiceProvider
+		val project = rsp.get(ProjectUtil)?.getProject(context.URI)
+		if(project == null)
+			throw new NoSuchElementException('Project ' + context.URI + ' does not exist')
+		val resourceSet = rsp.get(IResourceSetProvider).get(project)
+		resourceSet.loadOptions.put(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, true)
+		rsp.get(ResourceDescriptionsProvider).getResourceDescriptions(resourceSet)
 	}
 	
 	/**

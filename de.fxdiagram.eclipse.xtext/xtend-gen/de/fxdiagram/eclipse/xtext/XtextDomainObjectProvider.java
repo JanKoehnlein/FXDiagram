@@ -17,6 +17,8 @@ import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.XDiagramConfig;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -33,11 +35,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
+import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.ui.editor.IURIEditorOpener;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
+import org.eclipse.xtext.ui.refactoring.impl.ProjectUtil;
+import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import org.eclipse.xtext.ui.shared.Access;
 import org.eclipse.xtext.util.ITextRegion;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
@@ -171,6 +177,34 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
   
   public XtextEObjectID createXtextEObjectID(final IEObjectDescription element) {
     return this.idFactory.createXtextEObjectID(element);
+  }
+  
+  public IResourceDescriptions getIndex(final XtextEObjectID context) {
+    IResourceDescriptions _xblockexpression = null;
+    {
+      final IResourceServiceProvider rsp = context.getResourceServiceProvider();
+      ProjectUtil _get = rsp.<ProjectUtil>get(ProjectUtil.class);
+      IProject _project = null;
+      if (_get!=null) {
+        URI _uRI = context.getURI();
+        _project=_get.getProject(_uRI);
+      }
+      final IProject project = _project;
+      boolean _equals = Objects.equal(project, null);
+      if (_equals) {
+        URI _uRI_1 = context.getURI();
+        String _plus = ("Project " + _uRI_1);
+        String _plus_1 = (_plus + " does not exist");
+        throw new NoSuchElementException(_plus_1);
+      }
+      IResourceSetProvider _get_1 = rsp.<IResourceSetProvider>get(IResourceSetProvider.class);
+      final ResourceSet resourceSet = _get_1.get(project);
+      Map<Object, Object> _loadOptions = resourceSet.getLoadOptions();
+      _loadOptions.put(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.valueOf(true));
+      ResourceDescriptionsProvider _get_2 = rsp.<ResourceDescriptionsProvider>get(ResourceDescriptionsProvider.class);
+      _xblockexpression = _get_2.getResourceDescriptions(resourceSet);
+    }
+    return _xblockexpression;
   }
   
   /**

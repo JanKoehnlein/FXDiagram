@@ -7,21 +7,14 @@ import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
 import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescriptions;
-import org.eclipse.xtext.resource.IResourceServiceProvider;
-import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
-import org.eclipse.xtext.ui.refactoring.impl.ProjectUtil;
-import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
@@ -34,47 +27,36 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
   }
   
   @Override
+  public XtextDomainObjectProvider getProvider() {
+    IMappedElementDescriptorProvider _provider = super.getProvider();
+    return ((XtextDomainObjectProvider) _provider);
+  }
+  
+  @Override
   public <U extends Object> U withDomainObject(final Function1<? super IEObjectDescription, ? extends U> lambda) {
     U _xblockexpression = null;
     {
+      XtextDomainObjectProvider _provider = this.getProvider();
       XtextEObjectID _elementID = this.getElementID();
-      final IResourceServiceProvider rsp = _elementID.getResourceServiceProvider();
-      ProjectUtil _get = rsp.<ProjectUtil>get(ProjectUtil.class);
+      final IResourceDescriptions index = _provider.getIndex(_elementID);
       XtextEObjectID _elementID_1 = this.getElementID();
-      URI _uRI = _elementID_1.getURI();
-      final IProject project = _get.getProject(_uRI);
-      boolean _equals = Objects.equal(project, null);
-      if (_equals) {
-        XtextEObjectID _elementID_2 = this.getElementID();
-        URI _uRI_1 = _elementID_2.getURI();
-        String _plus = ("Project " + _uRI_1);
-        String _plus_1 = (_plus + " does not exist");
-        throw new NoSuchElementException(_plus_1);
-      }
-      IResourceSetProvider _get_1 = rsp.<IResourceSetProvider>get(IResourceSetProvider.class);
-      final ResourceSet resourceSet = _get_1.get(project);
-      Map<Object, Object> _loadOptions = resourceSet.getLoadOptions();
-      _loadOptions.put(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.valueOf(true));
-      ResourceDescriptionsProvider _get_2 = rsp.<ResourceDescriptionsProvider>get(ResourceDescriptionsProvider.class);
-      final IResourceDescriptions index = _get_2.getResourceDescriptions(resourceSet);
-      XtextEObjectID _elementID_3 = this.getElementID();
-      EClass _eClass = _elementID_3.getEClass();
-      XtextEObjectID _elementID_4 = this.getElementID();
-      QualifiedName _qualifiedName = _elementID_4.getQualifiedName();
+      EClass _eClass = _elementID_1.getEClass();
+      XtextEObjectID _elementID_2 = this.getElementID();
+      QualifiedName _qualifiedName = _elementID_2.getQualifiedName();
       Iterable<IEObjectDescription> _exportedObjects = index.getExportedObjects(_eClass, _qualifiedName, false);
       final Function1<IEObjectDescription, Boolean> _function = (IEObjectDescription it) -> {
         URI _eObjectURI = it.getEObjectURI();
-        XtextEObjectID _elementID_5 = this.getElementID();
-        URI _uRI_2 = _elementID_5.getURI();
-        return Boolean.valueOf(Objects.equal(_eObjectURI, _uRI_2));
+        XtextEObjectID _elementID_3 = this.getElementID();
+        URI _uRI = _elementID_3.getURI();
+        return Boolean.valueOf(Objects.equal(_eObjectURI, _uRI));
       };
       final IEObjectDescription description = IterableExtensions.<IEObjectDescription>findFirst(_exportedObjects, _function);
-      boolean _equals_1 = Objects.equal(description, null);
-      if (_equals_1) {
-        XtextEObjectID _elementID_5 = this.getElementID();
-        String _plus_2 = ("Element " + _elementID_5);
-        String _plus_3 = (_plus_2 + " does not exist");
-        throw new NoSuchElementException(_plus_3);
+      boolean _equals = Objects.equal(description, null);
+      if (_equals) {
+        XtextEObjectID _elementID_3 = this.getElementID();
+        String _plus = ("Element " + _elementID_3);
+        String _plus_1 = (_plus + " does not exist");
+        throw new NoSuchElementException(_plus_1);
       }
       _xblockexpression = lambda.apply(description);
     }
@@ -83,7 +65,7 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
   
   @Override
   public Object openInEditor(final boolean select) {
-    IMappedElementDescriptorProvider _provider = this.getProvider();
+    XtextDomainObjectProvider _provider = this.getProvider();
     XtextEObjectID _elementID = this.getElementID();
     return ((XtextDomainObjectProvider) _provider).getCachedEditor(_elementID, true, true);
   }
