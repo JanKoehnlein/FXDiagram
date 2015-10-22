@@ -85,11 +85,16 @@ class InterpreterContext {
 		!replaceRootDiagram && addedNodes.size + addedConnections.size  > 1		
 	}
 	
-	def void applyChanges() {
+	/**
+	 * Doesn't involve either command stack nor animations
+	 */
+	def void directlyApplyChanges() {
+		if(replaceRootDiagram && !subContexts.empty && superContext == null) 
+			diagram.root.diagram = subContexts.head.diagram
 		diagram.nodes += addedNodes
 		diagram.connections += addedConnections
 		subContexts.forEach[
-			applyChanges
+			directlyApplyChanges
 		]
 	}
 	

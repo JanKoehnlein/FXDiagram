@@ -200,13 +200,37 @@ public class InterpreterContext {
     return _and;
   }
   
-  public void applyChanges() {
+  /**
+   * Doesn't involve either command stack nor animations
+   */
+  public void directlyApplyChanges() {
+    boolean _and = false;
+    boolean _and_1 = false;
+    boolean _isReplaceRootDiagram = this.isReplaceRootDiagram();
+    if (!_isReplaceRootDiagram) {
+      _and_1 = false;
+    } else {
+      boolean _isEmpty = this.subContexts.isEmpty();
+      boolean _not = (!_isEmpty);
+      _and_1 = _not;
+    }
+    if (!_and_1) {
+      _and = false;
+    } else {
+      boolean _equals = Objects.equal(this.superContext, null);
+      _and = _equals;
+    }
+    if (_and) {
+      XRoot _root = CoreExtensions.getRoot(this.diagram);
+      InterpreterContext _head = IterableExtensions.<InterpreterContext>head(this.subContexts);
+      _root.setDiagram(_head.diagram);
+    }
     ObservableList<XNode> _nodes = this.diagram.getNodes();
     Iterables.<XNode>addAll(_nodes, this.addedNodes);
     ObservableList<XConnection> _connections = this.diagram.getConnections();
     Iterables.<XConnection>addAll(_connections, this.addedConnections);
     final Consumer<InterpreterContext> _function = (InterpreterContext it) -> {
-      it.applyChanges();
+      it.directlyApplyChanges();
     };
     this.subContexts.forEach(_function);
   }

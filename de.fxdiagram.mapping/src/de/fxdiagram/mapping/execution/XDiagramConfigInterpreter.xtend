@@ -53,7 +53,7 @@ class XDiagramConfigInterpreter {
 			diagram.contentsInitializer = [
 				descriptor.withDomainObject [ domainObject |
 					populateDiagram(diagramMapping, domainObject, newContext)
-					newContext.applyChanges
+					newContext.directlyApplyChanges
 					val commandStack = diagram.root.commandStack
 					newContext.executeCommands(commandStack)
 					null

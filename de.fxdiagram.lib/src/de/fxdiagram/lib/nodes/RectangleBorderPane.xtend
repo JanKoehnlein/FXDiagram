@@ -72,7 +72,7 @@ class RectangleBorderPane extends StackPane implements SvgExportable {
 				rx="«borderRadius»" ry="«borderRadius»"
 				fill="«backgroundPaint.toSvgString»"
 				stroke="«borderPaint.toSvgString»"
-				strokeWidth="«borderWidth»"
+				stroke-width="«borderWidth»"
 				«opacity.toSvgAttribute("opacity", 1.0)»
 			/>
 		''')»

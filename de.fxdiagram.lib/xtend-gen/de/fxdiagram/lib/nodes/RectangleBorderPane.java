@@ -152,7 +152,7 @@ public class RectangleBorderPane extends StackPane implements SvgExportable {
     _builder_1.append("\"");
     _builder_1.newLineIfNotEmpty();
     _builder_1.append("\t");
-    _builder_1.append("strokeWidth=\"");
+    _builder_1.append("stroke-width=\"");
     double _borderWidth = this.getBorderWidth();
     _builder_1.append(_borderWidth, "\t");
     _builder_1.append("\"");

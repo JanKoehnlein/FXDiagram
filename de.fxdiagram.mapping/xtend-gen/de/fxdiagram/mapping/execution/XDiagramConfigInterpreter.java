@@ -85,7 +85,7 @@ public class XDiagramConfigInterpreter {
             Object _xblockexpression_1 = null;
             {
               this.<T>populateDiagram(diagramMapping, domainObject, newContext);
-              newContext.applyChanges();
+              newContext.directlyApplyChanges();
               XRoot _root = CoreExtensions.getRoot(diagram);
               final CommandStack commandStack = _root.getCommandStack();
               newContext.executeCommands(commandStack);
