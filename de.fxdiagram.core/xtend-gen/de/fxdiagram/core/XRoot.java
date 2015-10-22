@@ -184,17 +184,6 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   public void doActivate() {
     this.commandStack.activate();
-    CompositeTool _compositeTool = new CompositeTool();
-    this.defaultTool = _compositeTool;
-    SelectionTool _selectionTool = new SelectionTool(this);
-    this.defaultTool.operator_add(_selectionTool);
-    DiagramGestureTool _diagramGestureTool = new DiagramGestureTool(this);
-    this.defaultTool.operator_add(_diagramGestureTool);
-    DiagramMouseTool _diagramMouseTool = new DiagramMouseTool(this);
-    this.defaultTool.operator_add(_diagramMouseTool);
-    DiagramActionTool _diagramActionTool = new DiagramActionTool(this);
-    this.defaultTool.operator_add(_diagramActionTool);
-    this.tools.add(this.defaultTool);
     XDiagram _diagram = this.getDiagram();
     if (_diagram!=null) {
       _diagram.activate();
@@ -211,7 +200,21 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     };
     ObjectExtensions.<Pane>operator_doubleArrow(
       this.diagramCanvas, _function);
-    this.setCurrentTool(this.defaultTool);
+    boolean _isInteractive = this.getIsInteractive();
+    if (_isInteractive) {
+      CompositeTool _compositeTool = new CompositeTool();
+      this.defaultTool = _compositeTool;
+      SelectionTool _selectionTool = new SelectionTool(this);
+      this.defaultTool.operator_add(_selectionTool);
+      DiagramGestureTool _diagramGestureTool = new DiagramGestureTool(this);
+      this.defaultTool.operator_add(_diagramGestureTool);
+      DiagramMouseTool _diagramMouseTool = new DiagramMouseTool(this);
+      this.defaultTool.operator_add(_diagramMouseTool);
+      DiagramActionTool _diagramActionTool = new DiagramActionTool(this);
+      this.defaultTool.operator_add(_diagramActionTool);
+      this.tools.add(this.defaultTool);
+      this.setCurrentTool(this.defaultTool);
+    }
   }
   
   public void setCurrentTool(final XDiagramTool tool) {
@@ -330,6 +333,24 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
   
   public ReadOnlyBooleanProperty isActiveProperty() {
     return this.isActiveProperty.getReadOnlyProperty();
+  }
+  
+  private SimpleBooleanProperty isInteractiveProperty = new SimpleBooleanProperty(this, "isInteractive",_initIsInteractive());
+  
+  private static final boolean _initIsInteractive() {
+    return true;
+  }
+  
+  public boolean getIsInteractive() {
+    return this.isInteractiveProperty.get();
+  }
+  
+  public void setIsInteractive(final boolean isInteractive) {
+    this.isInteractiveProperty.set(isInteractive);
+  }
+  
+  public BooleanProperty isInteractiveProperty() {
+    return this.isInteractiveProperty;
   }
   
   private ReadOnlyObjectWrapper<XDiagram> rootDiagramProperty = new ReadOnlyObjectWrapper<XDiagram>(this, "rootDiagram");

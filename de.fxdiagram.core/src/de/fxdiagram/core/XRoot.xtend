@@ -53,6 +53,8 @@ class XRoot extends Parent implements XActivatable {
 	
 	@FxProperty(readOnly=true) boolean isActive
 
+	@FxProperty boolean isInteractive = true
+
 	@FxProperty(readOnly=true) XDiagram rootDiagram
 
 	@FxProperty(readOnly=true) XDiagram diagram
@@ -127,18 +129,20 @@ class XRoot extends Parent implements XActivatable {
 
 	def	doActivate() {
 		commandStack.activate
-		defaultTool = new CompositeTool
-		defaultTool += new SelectionTool(this)
-		defaultTool += new DiagramGestureTool(this)
-		defaultTool += new DiagramMouseTool(this)
-		defaultTool += new DiagramActionTool(this)
-		tools += defaultTool
 		diagram?.activate
 		diagramCanvas => [
 			prefWidthProperty.bind(scene.widthProperty)
 			prefHeightProperty.bind(scene.heightProperty)
 		]
-		setCurrentTool(defaultTool)
+		if(isInteractive) {
+			defaultTool = new CompositeTool
+			defaultTool += new SelectionTool(this)
+			defaultTool += new DiagramGestureTool(this)
+			defaultTool += new DiagramMouseTool(this)
+			defaultTool += new DiagramActionTool(this)
+			tools += defaultTool
+			setCurrentTool(defaultTool)			
+		}
 	}
 	
 	def setCurrentTool(XDiagramTool tool) {
