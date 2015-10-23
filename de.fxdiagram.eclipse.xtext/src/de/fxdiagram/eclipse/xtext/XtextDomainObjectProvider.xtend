@@ -1,7 +1,5 @@
 package de.fxdiagram.eclipse.xtext
 
-import com.google.inject.Inject
-import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectProvider
 import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID
 import de.fxdiagram.mapping.AbstractMapping
@@ -29,7 +27,6 @@ import static org.eclipse.ui.IWorkbenchPage.*
 /**
  * A {@link DomainObjectProvider} for Xtext based domain objects.
  */
-@ModelNode
 class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 
 	Map<URI, CachedEditor> editorCache = newHashMap
@@ -43,17 +40,17 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 	override <T> createMappedElementDescriptor(T domainObject, AbstractMapping<? extends T> mapping) {
 		switch it: domainObject {
 			IEObjectDescription: {
-				return new EObjectDescriptionDescriptor(createXtextEObjectID, mapping.config.ID, mapping.ID, this) as IMappedElementDescriptor<T>
+				return new EObjectDescriptionDescriptor(createXtextEObjectID, mapping.config.ID, mapping.ID) as IMappedElementDescriptor<T>
 			}
 			EObject: {
 				if(eIsProxy)
 					return null
-				return new XtextEObjectDescriptor(createXtextEObjectID, mapping.config.ID, mapping.ID, this) as IMappedElementDescriptor<T>
+				return new XtextEObjectDescriptor(createXtextEObjectID, mapping.config.ID, mapping.ID) as IMappedElementDescriptor<T>
 			}
 			ESetting<?>: {
 				if(owner == null || owner.eIsProxy || target == null)
 					return null
-				return new XtextESettingDescriptor(owner.createXtextEObjectID, target.createXtextEObjectID, reference, index, mapping.config.ID, mapping.ID, this)
+				return new XtextESettingDescriptor(owner.createXtextEObjectID, target.createXtextEObjectID, reference, index, mapping.config.ID, mapping.ID)
 			}
 			default:
 				return null

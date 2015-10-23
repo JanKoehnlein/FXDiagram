@@ -18,6 +18,7 @@ class ModelFactory {
 			valueAdapter.newInstance()
 		} else {
 			val clazz = className.deserialize
+			
 			val node = clazz.newInstance()
 			createElement(node)
 		}

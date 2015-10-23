@@ -5,7 +5,6 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.pde.BundleDependency;
-import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -17,8 +16,8 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 @ModelNode({ "kind", "ownerSymbolicName", "ownerVersion", "importSymbolicName", "importVersionRange" })
 @SuppressWarnings("all")
 public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<BundleDependency> {
-  public BundleDependencyDescriptor(final BundleDependency.Kind kind, final String ownerSymbolicName, final String ownerVersion, final String importSymbolicName, final String importVersionRange, final String mappingConfigID, final String mappingID, final BundleDescriptorProvider provider) {
-    super(mappingConfigID, mappingID, provider);
+  public BundleDependencyDescriptor(final BundleDependency.Kind kind, final String ownerSymbolicName, final String ownerVersion, final String importSymbolicName, final String importVersionRange, final String mappingConfigID, final String mappingID) {
+    super(mappingConfigID, mappingID);
     this.kindProperty.set(kind);
     this.ownerSymbolicNameProperty.set(ownerSymbolicName);
     this.ownerVersionProperty.set(ownerVersion);

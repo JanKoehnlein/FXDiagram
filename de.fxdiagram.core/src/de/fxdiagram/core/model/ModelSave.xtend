@@ -109,9 +109,11 @@ class ModelSave {
 				case Enum.isAssignableFrom(propertyType):
 					gen.write(value.toString)
 				default:
-					gen.write(model.index.get(value), 
-						null, 
-						currentId + '/' + property.name + '.' + i)
+					if(model.index.containsKey(value)) {
+						gen.write(model.index.get(value), 
+							null, 
+							currentId + '/' + property.name + '.' + i)
+					}
 			}
 		}
 		gen.writeEnd()

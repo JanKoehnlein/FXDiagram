@@ -37,10 +37,10 @@ class JvmDomainObjectProvider extends XtextDomainObjectProvider {
 						val identifiableJvmElement = getContainerOfType(JvmIdentifiableElement)
 						val javaElement = getJvmDomainUtil(eResource.URI).getJavaElement(identifiableJvmElement)
 						if(javaElement != null)
-							return new JavaElementDescriptor(elementID, javaElement.handleIdentifier, mapping.config.ID, mapping.ID, this)
+							return new JavaElementDescriptor(elementID, javaElement.handleIdentifier, mapping.config.ID, mapping.ID)
 								as IMappedElementDescriptor<T>	
 					}
-					return new JvmEObjectDescriptor(elementID, mapping.config.ID, mapping.ID, this)
+					return new JvmEObjectDescriptor(elementID, mapping.config.ID, mapping.ID)
 						as IMappedElementDescriptor<T>
 				} 
 				default:
@@ -55,8 +55,8 @@ class JvmEObjectDescriptor<ECLASS extends EObject> extends XtextEObjectDescripto
 	new() {
 	}
 
-	new(XtextEObjectID elementID, String mappingConfigID, String mappingID, JvmDomainObjectProvider provider) {
-		super(elementID, mappingConfigID, mappingID, provider)
+	new(XtextEObjectID elementID, String mappingConfigID, String mappingID) {
+		super(elementID, mappingConfigID, mappingID)
 	}
 	
 	override protected getResourceServiceProvider() {
@@ -83,8 +83,8 @@ class JavaElementDescriptor<ECLASS extends EObject> extends JvmEObjectDescriptor
 	new() {
 	}
 
-	new(XtextEObjectID elementID, String javaElementHandle, String mappingConfigID, String mappingID, JvmDomainObjectProvider provider) {
-		super(elementID, mappingConfigID, mappingID, provider)
+	new(XtextEObjectID elementID, String javaElementHandle, String mappingConfigID, String mappingID) {
+		super(elementID, mappingConfigID, mappingID)
 		handleIdentifierProperty.set(javaElementHandle)
 	}
 	

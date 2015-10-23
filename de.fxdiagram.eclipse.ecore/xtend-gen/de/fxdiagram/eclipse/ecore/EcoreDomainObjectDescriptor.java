@@ -3,7 +3,6 @@ package de.fxdiagram.eclipse.ecore;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
-import de.fxdiagram.eclipse.ecore.EcoreDomainObjectProvider;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -31,8 +30,8 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 @ModelNode("uri")
 @SuppressWarnings("all")
 public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObject> {
-  public EcoreDomainObjectDescriptor(final String uri, final String name, final String mappingConfigID, final String mappingID, final EcoreDomainObjectProvider provider) {
-    super(mappingConfigID, mappingID, provider);
+  public EcoreDomainObjectDescriptor(final String uri, final String name, final String mappingConfigID, final String mappingID) {
+    super(mappingConfigID, mappingID);
     this.uriProperty.set(uri);
     this.nameProperty.set(name);
   }

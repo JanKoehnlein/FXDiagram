@@ -1,8 +1,6 @@
 package de.fxdiagram.eclipse.ecore;
 
-import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.eclipse.ecore.EcoreDomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
@@ -12,7 +10,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-@ModelNode
 @SuppressWarnings("all")
 public class EcoreDomainObjectProvider implements IMappedElementDescriptorProvider {
   @Override
@@ -28,7 +25,7 @@ public class EcoreDomainObjectProvider implements IMappedElementDescriptorProvid
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        EcoreDomainObjectDescriptor _ecoreDomainObjectDescriptor = new EcoreDomainObjectDescriptor(_string, _name, _iD, _iD_1, this);
+        EcoreDomainObjectDescriptor _ecoreDomainObjectDescriptor = new EcoreDomainObjectDescriptor(_string, _name, _iD, _iD_1);
         _switchResult = ((IMappedElementDescriptor<T>) _ecoreDomainObjectDescriptor);
       }
     }
@@ -41,9 +38,5 @@ public class EcoreDomainObjectProvider implements IMappedElementDescriptorProvid
   @Override
   public <T extends Object> DomainObjectDescriptor createDescriptor(final T domainObject) {
     return null;
-  }
-  
-  public void populate(final ModelElementImpl modelElement) {
-    
   }
 }

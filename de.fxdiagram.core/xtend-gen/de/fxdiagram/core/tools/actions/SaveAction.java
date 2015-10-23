@@ -70,6 +70,8 @@ public class SaveAction implements DiagramAction {
         final File file = _xifexpression;
         boolean _notEquals_2 = (!Objects.equal(file, null));
         if (_notEquals_2) {
+          File _parentFile = file.getParentFile();
+          _parentFile.mkdirs();
           ModelSave _modelSave = new ModelSave();
           FileWriter _fileWriter = new FileWriter(file);
           _modelSave.save(root, _fileWriter);

@@ -29,6 +29,9 @@ class Model {
 	}
 
 	package def ModelElement addElement(Object node) {
+		if(node instanceof XModelProvider)
+			if(node.isTransient) 
+				return null
 		val existingElement = index.get(node)
 		if(existingElement != null) 
 			return existingElement

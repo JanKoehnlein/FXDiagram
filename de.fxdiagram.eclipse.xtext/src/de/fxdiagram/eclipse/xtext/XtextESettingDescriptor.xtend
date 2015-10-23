@@ -22,8 +22,8 @@ class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescr
 	
 	EReference eReference
 
-	new(XtextEObjectID sourceID, XtextEObjectID targetID, EReference reference, int index, String mappingConfigID, String mappingID, XtextDomainObjectProvider provider) {
-		super(mappingConfigID, mappingID, provider)
+	new(XtextEObjectID sourceID, XtextEObjectID targetID, EReference reference, int index, String mappingConfigID, String mappingID) {
+		super(mappingConfigID, mappingID)
 		sourceIDProperty.set(sourceID)
 		targetIDProperty.set(targetID)
 		this.eReference = reference

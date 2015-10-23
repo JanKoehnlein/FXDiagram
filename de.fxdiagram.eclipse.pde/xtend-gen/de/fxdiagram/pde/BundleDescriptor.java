@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
-import de.fxdiagram.pde.BundleDescriptorProvider;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -24,8 +23,8 @@ import org.osgi.framework.Version;
 public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription> {
   private final static Logger LOG = Logger.getLogger(BundleDescriptor.class);
   
-  public BundleDescriptor(final String symbolicName, final String version, final String mappingConfigID, final String mappingID, final BundleDescriptorProvider provider) {
-    super(mappingConfigID, mappingID, provider);
+  public BundleDescriptor(final String symbolicName, final String version, final String mappingConfigID, final String mappingID) {
+    super(mappingConfigID, mappingID);
     this.symbolicNameProperty.set(symbolicName);
     this.versionProperty.set(version);
   }

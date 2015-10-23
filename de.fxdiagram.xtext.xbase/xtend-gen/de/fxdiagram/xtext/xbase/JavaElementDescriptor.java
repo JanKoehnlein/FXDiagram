@@ -29,8 +29,8 @@ public class JavaElementDescriptor<ECLASS extends EObject> extends JvmEObjectDes
   public JavaElementDescriptor() {
   }
   
-  public JavaElementDescriptor(final XtextEObjectID elementID, final String javaElementHandle, final String mappingConfigID, final String mappingID, final JvmDomainObjectProvider provider) {
-    super(elementID, mappingConfigID, mappingID, provider);
+  public JavaElementDescriptor(final XtextEObjectID elementID, final String javaElementHandle, final String mappingConfigID, final String mappingID) {
+    super(elementID, mappingConfigID, mappingID);
     this.handleIdentifierProperty.set(javaElementHandle);
   }
   

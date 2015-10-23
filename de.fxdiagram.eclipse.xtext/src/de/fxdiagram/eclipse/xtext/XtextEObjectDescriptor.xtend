@@ -12,8 +12,8 @@ class XtextEObjectDescriptor <T extends EObject> extends AbstractXtextDescriptor
 
 	@FxProperty(readOnly=true) XtextEObjectID elementID
 
-	new(XtextEObjectID elementID, String mappingConfigID, String mappingID, XtextDomainObjectProvider provider) {
-		super(mappingConfigID, mappingID, provider)
+	new(XtextEObjectID elementID, String mappingConfigID, String mappingID) {
+		super(mappingConfigID, mappingID)
 		elementIDProperty.set(elementID)
 	}
 	

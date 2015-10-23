@@ -9,4 +9,10 @@ interface XModelProvider {
 		
 	def void populate(ModelElementImpl element)
 	
+	/**
+	 * Implementing classes can return <code>true</code> if the specific implementation should not be serialized.
+	 */
+	def boolean isTransient() {
+		false
+	}
 }

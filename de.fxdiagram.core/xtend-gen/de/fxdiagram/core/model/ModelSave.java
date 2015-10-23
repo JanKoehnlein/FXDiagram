@@ -252,13 +252,17 @@ public class ModelSave {
           }
           if (!_matched) {
             Map<Object, ModelElement> _index = this.model.getIndex();
-            ModelElement _get = _index.get(value);
-            String _name_1 = property.getName();
-            String _plus = ((currentId + "/") + _name_1);
-            String _plus_1 = (_plus + ".");
-            String _plus_2 = (_plus_1 + i);
-            this.write(gen, _get, 
-              null, _plus_2);
+            boolean _containsKey = _index.containsKey(value);
+            if (_containsKey) {
+              Map<Object, ModelElement> _index_1 = this.model.getIndex();
+              ModelElement _get = _index_1.get(value);
+              String _name_1 = property.getName();
+              String _plus = ((currentId + "/") + _name_1);
+              String _plus_1 = (_plus + ".");
+              String _plus_2 = (_plus_1 + i);
+              this.write(gen, _get, 
+                null, _plus_2);
+            }
           }
         }
       }

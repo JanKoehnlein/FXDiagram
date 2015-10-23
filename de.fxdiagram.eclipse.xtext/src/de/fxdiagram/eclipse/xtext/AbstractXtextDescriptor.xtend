@@ -8,8 +8,8 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 @ModelNode
 abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING> extends AbstractMappedElementDescriptor<ECLASS_OR_ESETTING> {
 
-	new(String mappingConfigID, String mappingID, XtextDomainObjectProvider provider) {
-		super(mappingConfigID, mappingID, provider)
+	new(String mappingConfigID, String mappingID) {
+		super(mappingConfigID, mappingID)
 	}
 	
 	def void injectMembers(Object object) {

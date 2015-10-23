@@ -17,8 +17,8 @@ class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<BundleD
 	@FxProperty(readOnly = true) String importVersionRange
 	
 	new(BundleDependency.Kind kind, String ownerSymbolicName, String ownerVersion, String importSymbolicName, String importVersionRange,
-		String mappingConfigID, String mappingID, BundleDescriptorProvider provider) {
-		super(mappingConfigID, mappingID, provider)
+		String mappingConfigID, String mappingID) {
+		super(mappingConfigID, mappingID)
 		kindProperty.set(kind)
 		ownerSymbolicNameProperty.set(ownerSymbolicName)
 		ownerVersionProperty.set(ownerVersion)

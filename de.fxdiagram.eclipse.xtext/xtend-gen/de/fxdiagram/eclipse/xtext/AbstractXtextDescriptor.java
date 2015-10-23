@@ -11,8 +11,8 @@ import org.eclipse.xtext.resource.IResourceServiceProvider;
 @ModelNode
 @SuppressWarnings("all")
 public abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING extends Object> extends AbstractMappedElementDescriptor<ECLASS_OR_ESETTING> {
-  public AbstractXtextDescriptor(final String mappingConfigID, final String mappingID, final XtextDomainObjectProvider provider) {
-    super(mappingConfigID, mappingID, provider);
+  public AbstractXtextDescriptor(final String mappingConfigID, final String mappingID) {
+    super(mappingConfigID, mappingID);
   }
   
   public void injectMembers(final Object object) {

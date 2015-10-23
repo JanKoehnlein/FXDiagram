@@ -4,6 +4,8 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.DomainObjectProvider
+import de.fxdiagram.core.model.ModelElementImpl
+import de.fxdiagram.core.model.XModelProvider
 
 /**
  * A {@link DomainObjectDescriptor} that describes a domain object that can be mapped 
@@ -22,19 +24,26 @@ interface IMappedElementDescriptor<T> extends DomainObjectDescriptor {
 /**
  * Base implementation of {@link IMappedElementDescriptor}.
  */
-@ModelNode('provider', 'mappingConfigID', 'mappingID')
+@ModelNode('mappingConfigID', 'mappingID')
 abstract class AbstractMappedElementDescriptor<T> implements IMappedElementDescriptor<T> {
 	
 	@FxProperty(readOnly=true) String mappingConfigID
 	@FxProperty(readOnly=true) String mappingID
-	@FxProperty(readOnly=true) IMappedElementDescriptorProvider provider
 	
 	AbstractMapping<T> mapping
+	IMappedElementDescriptorProvider provider
 	
-	new(String mappingConfigID, String mappingID, IMappedElementDescriptorProvider provider) {
-		this.providerProperty.set(provider)
+	new(String mappingConfigID, String mappingID) {
 		this.mappingConfigIDProperty.set(mappingConfigID)
 		this.mappingIDProperty.set(mappingID)
+	}
+	
+	def getProvider() {
+		if(provider == null) {
+			val config = XDiagramConfig.Registry.instance.getConfigByID(mappingConfigID)
+			provider = config.domainObjectProvider 			
+		}
+		return provider
 	}
 	
 	override AbstractMapping<T> getMapping() {
@@ -63,6 +72,10 @@ abstract class AbstractMappedElementDescriptor<T> implements IMappedElementDescr
  * A {@link DomainObjectProvider} that translates between domain objects with a mapping 
  * and {@link IMappedElementDescriptor}s.
  */
-interface IMappedElementDescriptorProvider extends DomainObjectProvider {
+interface IMappedElementDescriptorProvider extends DomainObjectProvider, XModelProvider {
 	def <T> IMappedElementDescriptor<T> createMappedElementDescriptor(T domainObject, AbstractMapping<? extends T> mapping)
+	
+	override isTransient() { true }
+	
+	override populate(ModelElementImpl element) {}
 }

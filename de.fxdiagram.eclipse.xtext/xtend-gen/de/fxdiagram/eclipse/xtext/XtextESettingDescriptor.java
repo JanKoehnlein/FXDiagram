@@ -35,8 +35,8 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXtextDescriptor<ESetting<ECLASS>> {
   private EReference eReference;
   
-  public XtextESettingDescriptor(final XtextEObjectID sourceID, final XtextEObjectID targetID, final EReference reference, final int index, final String mappingConfigID, final String mappingID, final XtextDomainObjectProvider provider) {
-    super(mappingConfigID, mappingID, provider);
+  public XtextESettingDescriptor(final XtextEObjectID sourceID, final XtextEObjectID targetID, final EReference reference, final int index, final String mappingConfigID, final String mappingID) {
+    super(mappingConfigID, mappingID);
     this.sourceIDProperty.set(sourceID);
     this.targetIDProperty.set(targetID);
     this.eReference = reference;

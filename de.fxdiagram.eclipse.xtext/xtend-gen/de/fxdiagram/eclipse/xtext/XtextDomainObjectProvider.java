@@ -2,10 +2,8 @@ package de.fxdiagram.eclipse.xtext;
 
 import com.google.common.base.Objects;
 import com.google.inject.Provider;
-import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
-import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.eclipse.xtext.EObjectDescriptionDescriptor;
 import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.XtextEObjectDescriptor;
@@ -56,7 +54,6 @@ import org.eclipse.xtext.xbase.lib.ListExtensions;
 /**
  * A {@link DomainObjectProvider} for Xtext based domain objects.
  */
-@ModelNode
 @SuppressWarnings("all")
 public class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
   public static class CachedEditor {
@@ -113,7 +110,7 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        EObjectDescriptionDescriptor _eObjectDescriptionDescriptor = new EObjectDescriptionDescriptor(_createXtextEObjectID, _iD, _iD_1, this);
+        EObjectDescriptionDescriptor _eObjectDescriptionDescriptor = new EObjectDescriptionDescriptor(_createXtextEObjectID, _iD, _iD_1);
         return ((IMappedElementDescriptor<T>) _eObjectDescriptionDescriptor);
       }
     }
@@ -128,7 +125,7 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        XtextEObjectDescriptor<EObject> _xtextEObjectDescriptor = new XtextEObjectDescriptor<EObject>(_createXtextEObjectID, _iD, _iD_1, this);
+        XtextEObjectDescriptor<EObject> _xtextEObjectDescriptor = new XtextEObjectDescriptor<EObject>(_createXtextEObjectID, _iD, _iD_1);
         return ((IMappedElementDescriptor<T>) _xtextEObjectDescriptor);
       }
     }
@@ -165,7 +162,7 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        return new XtextESettingDescriptor(_createXtextEObjectID, _createXtextEObjectID_1, _reference, _index, _iD, _iD_1, this);
+        return new XtextESettingDescriptor(_createXtextEObjectID, _createXtextEObjectID_1, _reference, _index, _iD, _iD_1);
       }
     }
     return null;
@@ -267,7 +264,8 @@ public class XtextDomainObjectProvider implements IMappedElementDescriptorProvid
     return editor;
   }
   
-  public void populate(final ModelElementImpl modelElement) {
-    
+  @Override
+  public boolean isTransient() {
+    return true;
   }
 }

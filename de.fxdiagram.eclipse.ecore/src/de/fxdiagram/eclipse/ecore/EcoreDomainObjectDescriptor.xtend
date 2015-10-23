@@ -20,8 +20,8 @@ class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObjec
 	@FxProperty(readOnly = true) val String uri
 	@FxProperty(readOnly = true) val String name
 	
-	new(String uri, String name, String mappingConfigID, String mappingID, EcoreDomainObjectProvider provider) {
-		super(mappingConfigID, mappingID, provider)
+	new(String uri, String name, String mappingConfigID, String mappingID) {
+		super(mappingConfigID, mappingID)
 		this.uriProperty.set(uri)
 		this.nameProperty.set(name)
 	}

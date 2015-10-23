@@ -21,8 +21,8 @@ class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDescription
 	@FxProperty(readOnly = true) String symbolicName
 	@FxProperty(readOnly = true) String version
 	
-	new(String symbolicName, String version, String mappingConfigID, String mappingID, BundleDescriptorProvider provider) {
-		super(mappingConfigID, mappingID, provider)
+	new(String symbolicName, String version, String mappingConfigID, String mappingID) {
+		super(mappingConfigID, mappingID)
 		symbolicNameProperty.set(symbolicName)
 		versionProperty.set(version)
 	}	

@@ -21,8 +21,8 @@ import org.eclipse.xtext.xbase.lib.IterableExtensions;
 @ModelNode("elementID")
 @SuppressWarnings("all")
 public class EObjectDescriptionDescriptor extends AbstractMappedElementDescriptor<IEObjectDescription> {
-  public EObjectDescriptionDescriptor(final XtextEObjectID elementID, final String mappingConfigId, final String mappingId, final XtextDomainObjectProvider provider) {
-    super(mappingConfigId, mappingId, provider);
+  public EObjectDescriptionDescriptor(final XtextEObjectID elementID, final String mappingConfigId, final String mappingId) {
+    super(mappingConfigId, mappingId);
     this.elementIDProperty.set(elementID);
   }
   

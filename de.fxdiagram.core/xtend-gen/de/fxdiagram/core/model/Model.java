@@ -42,6 +42,12 @@ public class Model {
   ModelElement addElement(final Object node) {
     ModelElement _xblockexpression = null;
     {
+      if ((node instanceof XModelProvider)) {
+        boolean _isTransient = ((XModelProvider)node).isTransient();
+        if (_isTransient) {
+          return null;
+        }
+      }
       final ModelElement existingElement = this.index.get(node);
       boolean _notEquals = (!Objects.equal(existingElement, null));
       if (_notEquals) {

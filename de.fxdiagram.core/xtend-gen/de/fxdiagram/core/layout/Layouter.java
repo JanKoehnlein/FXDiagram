@@ -550,11 +550,9 @@ public class Layouter {
       final KNode kNode = this._kGraphFactory.createKNode();
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
       final Dimension2D autoLayoutDimension = xNode.getAutoLayoutDimension();
-      double _width = autoLayoutDimension.getWidth();
-      float _plus = (((float) _width) + Layouter.NODE_PADDING);
-      double _height = autoLayoutDimension.getHeight();
-      float _plus_1 = (((float) _height) + Layouter.NODE_PADDING);
-      shapeLayout.setSize(_plus, _plus_1);
+      shapeLayout.setSize(
+        (((float) autoLayoutDimension.getWidth()) + Layouter.NODE_PADDING), 
+        (((float) autoLayoutDimension.getHeight()) + Layouter.NODE_PADDING));
       EList<KGraphData> _data = kNode.getData();
       _data.add(shapeLayout);
       cache.put(xNode, kNode);

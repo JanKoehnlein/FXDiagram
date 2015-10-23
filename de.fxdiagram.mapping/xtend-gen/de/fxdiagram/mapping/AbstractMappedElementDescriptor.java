@@ -7,23 +7,34 @@ import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import de.fxdiagram.mapping.XDiagramConfig;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
 /**
  * Base implementation of {@link IMappedElementDescriptor}.
  */
-@ModelNode({ "provider", "mappingConfigID", "mappingID" })
+@ModelNode({ "mappingConfigID", "mappingID" })
 @SuppressWarnings("all")
 public abstract class AbstractMappedElementDescriptor<T extends Object> implements IMappedElementDescriptor<T> {
   private AbstractMapping<T> mapping;
   
-  public AbstractMappedElementDescriptor(final String mappingConfigID, final String mappingID, final IMappedElementDescriptorProvider provider) {
-    this.providerProperty.set(provider);
+  private IMappedElementDescriptorProvider provider;
+  
+  public AbstractMappedElementDescriptor(final String mappingConfigID, final String mappingID) {
     this.mappingConfigIDProperty.set(mappingConfigID);
     this.mappingIDProperty.set(mappingID);
+  }
+  
+  public IMappedElementDescriptorProvider getProvider() {
+    boolean _equals = Objects.equal(this.provider, null);
+    if (_equals) {
+      XDiagramConfig.Registry _instance = XDiagramConfig.Registry.getInstance();
+      String _mappingConfigID = this.getMappingConfigID();
+      final XDiagramConfig config = _instance.getConfigByID(_mappingConfigID);
+      IMappedElementDescriptorProvider _domainObjectProvider = config.getDomainObjectProvider();
+      this.provider = _domainObjectProvider;
+    }
+    return this.provider;
   }
   
   @Override
@@ -83,7 +94,6 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
   }
   
   public void populate(final ModelElementImpl modelElement) {
-    modelElement.addProperty(providerProperty, IMappedElementDescriptorProvider.class);
     modelElement.addProperty(mappingConfigIDProperty, String.class);
     modelElement.addProperty(mappingIDProperty, String.class);
   }
@@ -106,15 +116,5 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
   
   public ReadOnlyStringProperty mappingIDProperty() {
     return this.mappingIDProperty.getReadOnlyProperty();
-  }
-  
-  private ReadOnlyObjectWrapper<IMappedElementDescriptorProvider> providerProperty = new ReadOnlyObjectWrapper<IMappedElementDescriptorProvider>(this, "provider");
-  
-  public IMappedElementDescriptorProvider getProvider() {
-    return this.providerProperty.get();
-  }
-  
-  public ReadOnlyObjectProperty<IMappedElementDescriptorProvider> providerProperty() {
-    return this.providerProperty.getReadOnlyProperty();
   }
 }

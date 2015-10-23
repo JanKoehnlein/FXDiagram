@@ -23,8 +23,8 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1;
 @ModelNode("elementID")
 @SuppressWarnings("all")
 public class XtextEObjectDescriptor<T extends EObject> extends AbstractXtextDescriptor<T> {
-  public XtextEObjectDescriptor(final XtextEObjectID elementID, final String mappingConfigID, final String mappingID, final XtextDomainObjectProvider provider) {
-    super(mappingConfigID, mappingID, provider);
+  public XtextEObjectDescriptor(final XtextEObjectID elementID, final String mappingConfigID, final String mappingID) {
+    super(mappingConfigID, mappingID);
     this.elementIDProperty.set(elementID);
   }
   

@@ -61,14 +61,14 @@ public class JvmDomainObjectProvider extends XtextDomainObjectProvider {
             XDiagramConfig _config = mapping.getConfig();
             String _iD = _config.getID();
             String _iD_1 = mapping.getID();
-            JavaElementDescriptor<EObject> _javaElementDescriptor = new JavaElementDescriptor<EObject>(elementID, _handleIdentifier, _iD, _iD_1, this);
+            JavaElementDescriptor<EObject> _javaElementDescriptor = new JavaElementDescriptor<EObject>(elementID, _handleIdentifier, _iD, _iD_1);
             return ((IMappedElementDescriptor<T>) _javaElementDescriptor);
           }
         }
         XDiagramConfig _config_1 = mapping.getConfig();
         String _iD_2 = _config_1.getID();
         String _iD_3 = mapping.getID();
-        JvmEObjectDescriptor<EObject> _jvmEObjectDescriptor = new JvmEObjectDescriptor<EObject>(elementID, _iD_2, _iD_3, this);
+        JvmEObjectDescriptor<EObject> _jvmEObjectDescriptor = new JvmEObjectDescriptor<EObject>(elementID, _iD_2, _iD_3);
         return ((IMappedElementDescriptor<T>) _jvmEObjectDescriptor);
       }
     }

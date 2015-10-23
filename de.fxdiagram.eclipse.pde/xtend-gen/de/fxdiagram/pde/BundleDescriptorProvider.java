@@ -1,8 +1,6 @@
 package de.fxdiagram.pde;
 
-import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
-import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
@@ -14,7 +12,6 @@ import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.Version;
 
-@ModelNode
 @SuppressWarnings("all")
 public class BundleDescriptorProvider implements IMappedElementDescriptorProvider {
   @Override
@@ -35,7 +32,7 @@ public class BundleDescriptorProvider implements IMappedElementDescriptorProvide
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        BundleDescriptor _bundleDescriptor = new BundleDescriptor(_symbolicName, _string, _iD, _iD_1, this);
+        BundleDescriptor _bundleDescriptor = new BundleDescriptor(_symbolicName, _string, _iD, _iD_1);
         _switchResult = ((IMappedElementDescriptor<T>) _bundleDescriptor);
       }
     }
@@ -55,7 +52,7 @@ public class BundleDescriptorProvider implements IMappedElementDescriptorProvide
         XDiagramConfig _config = mapping.getConfig();
         String _iD = _config.getID();
         String _iD_1 = mapping.getID();
-        BundleDependencyDescriptor _bundleDependencyDescriptor = new BundleDependencyDescriptor(_kind, _symbolicName, _string, _symbolicName_1, _string_1, _iD, _iD_1, this);
+        BundleDependencyDescriptor _bundleDependencyDescriptor = new BundleDependencyDescriptor(_kind, _symbolicName, _string, _symbolicName_1, _string_1, _iD, _iD_1);
         _switchResult = ((IMappedElementDescriptor<T>) _bundleDependencyDescriptor);
       }
     }
@@ -63,9 +60,5 @@ public class BundleDescriptorProvider implements IMappedElementDescriptorProvide
       _switchResult = null;
     }
     return _switchResult;
-  }
-  
-  public void populate(final ModelElementImpl modelElement) {
-    
   }
 }

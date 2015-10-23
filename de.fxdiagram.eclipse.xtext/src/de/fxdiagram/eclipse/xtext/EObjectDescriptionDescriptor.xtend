@@ -12,8 +12,8 @@ class EObjectDescriptionDescriptor extends AbstractMappedElementDescriptor<IEObj
 	
 	@FxProperty(readOnly = true) XtextEObjectID elementID
 	
-	new(XtextEObjectID elementID, String mappingConfigId, String mappingId, XtextDomainObjectProvider provider) {
-		super(mappingConfigId, mappingId, provider)
+	new(XtextEObjectID elementID, String mappingConfigId, String mappingId) {
+		super(mappingConfigId, mappingId)
 		this.elementIDProperty.set(elementID)
 	}
 	

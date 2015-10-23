@@ -10,4 +10,11 @@ import de.fxdiagram.core.model.ModelElementImpl;
 @SuppressWarnings("all")
 public interface XModelProvider {
   public abstract void populate(final ModelElementImpl element);
+  
+  /**
+   * Implementing classes can return <code>true</code> if the specific implementation should not be serialized.
+   */
+  public default boolean isTransient() {
+    return false;
+  }
 }
