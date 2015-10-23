@@ -43,6 +43,7 @@ class EclipseSaveAction implements DiagramAction {
 					fileChooser.showSaveDialog(root.scene.window)
 				} 
 				if(file != null) {
+					file.parentFile.mkdirs
 					new ModelSave().save(root, new FileWriter(file))
 					val fileName = file.absolutePath
 					val workspaceDirName = workspaceDir.absolutePath

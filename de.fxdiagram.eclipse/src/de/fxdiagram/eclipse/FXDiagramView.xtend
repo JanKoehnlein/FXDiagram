@@ -47,12 +47,14 @@ import org.eclipse.ui.handlers.RegistryToggleState
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
 import javafx.application.Platform
+import de.fxdiagram.annotations.logging.Logging
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
  * 
  * Uses {@link AbstractMapping} API to map domain objects to diagram elements.
  */
+@Logging
 class FXDiagramView extends ViewPart {
 
 	CTabFolder tabFolder
@@ -83,7 +85,7 @@ class FXDiagramView extends ViewPart {
 		diagramTab
 	}
 	
-	protected def removeTab(CTabItem tab) {
+	public def removeTab(CTabItem tab) {
 		tab2content.remove(tab)
 	}
 	
@@ -164,15 +166,20 @@ class FXDiagramView extends ViewPart {
 					val node = new ModelLoad().load(new InputStreamReader(file.contents))
 					if(node instanceof XRoot) {
 						Platform.runLater [
-							newTab.root.replaceDomainObjectProviders(node.domainObjectProviders)
-							newTab.root.rootDiagram = node.diagram
-							newTab.root.fileName = filePath
+							try {
+								newTab.root.replaceDomainObjectProviders(node.domainObjectProviders)
+								newTab.root.rootDiagram = node.diagram
+								newTab.root.fileName = filePath
+							} catch(Exception exc) {
+								LOG.severe(exc.message)
+								exc.printStackTrace
+							}
 						]
 						return		
 					}
 				}
 			}
-			createNewTab => [
+			newTab => [
 				root.fileName = filePath
 				revealElement(element, entryCall, editor)
 			]

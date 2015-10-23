@@ -2,6 +2,7 @@ package de.fxdiagram.eclipse;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.layout.LayoutType;
@@ -45,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swt.FXCanvas;
@@ -87,6 +89,7 @@ import org.eclipse.xtext.xbase.lib.Pure;
  * 
  * Uses {@link AbstractMapping} API to map domain objects to diagram elements.
  */
+@Logging
 @SuppressWarnings("all")
 public class FXDiagramView extends ViewPart {
   private CTabFolder tabFolder;
@@ -150,7 +153,7 @@ public class FXDiagramView extends ViewPart {
     return _xblockexpression;
   }
   
-  protected FXDiagramTab removeTab(final CTabItem tab) {
+  public FXDiagramTab removeTab(final CTabItem tab) {
     return this.tab2content.remove(tab);
   }
   
@@ -316,27 +319,37 @@ public class FXDiagramView extends ViewPart {
             final Object node = _modelLoad.load(_inputStreamReader);
             if ((node instanceof XRoot)) {
               final Runnable _function_1 = () -> {
-                XRoot _root_1 = newTab.getRoot();
-                ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();
-                _root_1.replaceDomainObjectProviders(_domainObjectProviders);
-                XRoot _root_2 = newTab.getRoot();
-                XDiagram _diagram = ((XRoot)node).getDiagram();
-                _root_2.setRootDiagram(_diagram);
-                XRoot _root_3 = newTab.getRoot();
-                _root_3.setFileName(filePath);
+                try {
+                  XRoot _root_1 = newTab.getRoot();
+                  ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();
+                  _root_1.replaceDomainObjectProviders(_domainObjectProviders);
+                  XRoot _root_2 = newTab.getRoot();
+                  XDiagram _diagram = ((XRoot)node).getDiagram();
+                  _root_2.setRootDiagram(_diagram);
+                  XRoot _root_3 = newTab.getRoot();
+                  _root_3.setFileName(filePath);
+                } catch (final Throwable _t) {
+                  if (_t instanceof Exception) {
+                    final Exception exc = (Exception)_t;
+                    String _message = exc.getMessage();
+                    FXDiagramView.LOG.severe(_message);
+                    exc.printStackTrace();
+                  } else {
+                    throw Exceptions.sneakyThrow(_t);
+                  }
+                }
               };
               Platform.runLater(_function_1);
               return;
             }
           }
         }
-        FXDiagramTab _createNewTab = this.createNewTab();
         final Procedure1<FXDiagramTab> _function_2 = (FXDiagramTab it) -> {
           XRoot _root_1 = it.getRoot();
           _root_1.setFileName(filePath);
           it.<T>revealElement(element, entryCall, editor);
         };
-        ObjectExtensions.<FXDiagramTab>operator_doubleArrow(_createNewTab, _function_2);
+        ObjectExtensions.<FXDiagramTab>operator_doubleArrow(newTab, _function_2);
         return;
       }
       FXDiagramTab _elvis = null;
@@ -344,14 +357,17 @@ public class FXDiagramView extends ViewPart {
       if (_currentDiagramTab != null) {
         _elvis = _currentDiagramTab;
       } else {
-        FXDiagramTab _createNewTab_1 = this.createNewTab();
-        _elvis = _createNewTab_1;
+        FXDiagramTab _createNewTab = this.createNewTab();
+        _elvis = _createNewTab;
       }
       _elvis.<T>revealElement(element, entryCall, editor);
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
     }
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.eclipse.FXDiagramView");
+    ;
   
   @Pure
   public boolean isLinkWithEditor() {
