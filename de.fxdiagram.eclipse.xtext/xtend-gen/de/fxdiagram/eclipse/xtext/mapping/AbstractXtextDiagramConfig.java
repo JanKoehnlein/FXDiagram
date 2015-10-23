@@ -26,7 +26,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
 public abstract class AbstractXtextDiagramConfig extends AbstractEclipseDiagramConfig {
-  @Inject
+  @Inject(optional = true)
   @Extension
   private IStorage2UriMapper _iStorage2UriMapper;
   

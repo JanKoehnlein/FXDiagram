@@ -14,7 +14,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 abstract class AbstractXtextDiagramConfig extends AbstractEclipseDiagramConfig {
 	
-	@Inject extension IStorage2UriMapper
+	@Inject(optional=true) extension IStorage2UriMapper
 	 
 	override initialize(XDomainObjectShape shape) {
 		shape.domainObjectDescriptorProperty?.addInitializingListener(new InitializingListener() => [
