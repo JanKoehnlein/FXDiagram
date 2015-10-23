@@ -77,7 +77,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
  * Clients usually don't extend this class, but configure its label and appearance properties.
  */
 @Logging
-@ModelNode({ "source", "target", "kind", "controlPoints", "labels", "sourceArrowHead", "targetArrowHead" })
+@ModelNode({ "source", "target", "kind", "controlPoints", "labels", "sourceArrowHead", "targetArrowHead", "stroke" })
 @SuppressWarnings("all")
 public class XConnection extends XDomainObjectShape {
   public enum Kind {
@@ -95,8 +95,6 @@ public class XConnection extends XDomainObjectShape {
   private ChangeListener<Number> controlPointListener;
   
   public XConnection() {
-    TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
-    this.setTargetArrowHead(_triangleArrowHead);
     this.addOppositeListeners();
   }
   
@@ -770,6 +768,7 @@ public class XConnection extends XDomainObjectShape {
     modelElement.addProperty(labelsProperty, XConnectionLabel.class);
     modelElement.addProperty(sourceArrowHeadProperty, ArrowHead.class);
     modelElement.addProperty(targetArrowHeadProperty, ArrowHead.class);
+    modelElement.addProperty(strokeProperty, Paint.class);
   }
   
   private SimpleObjectProperty<XNode> sourceProperty = new SimpleObjectProperty<XNode>(this, "source");

@@ -48,7 +48,7 @@ import de.fxdiagram.core.extensions.InitializingListener
  * Clients usually don't extend this class, but configure its label and appearance properties. 
  */
 @Logging
-@ModelNode('source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead')
+@ModelNode('source', 'target', 'kind', 'controlPoints', 'labels', 'sourceArrowHead', 'targetArrowHead', 'stroke')
 class XConnection extends XDomainObjectShape {
 	
 	@FxProperty XNode source
@@ -72,7 +72,6 @@ class XConnection extends XDomainObjectShape {
 	@FxProperty ConnectionRouter connectionRouter
 
 	new() {
-		targetArrowHead = new TriangleArrowHead(this, false)
 		addOppositeListeners
 	}
 
