@@ -124,6 +124,11 @@ class XtextDomainObjectProvider implements IMappedElementDescriptorProvider {
 				?.head
 		}
 	}
+	
+	override isTransient() {
+		true
+	}
+	
 }
 
 
