@@ -6,12 +6,15 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.tools.actions.LoadAction;
+import de.fxdiagram.eclipse.actions.FileExtensions;
 import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -40,27 +43,22 @@ public class EclipseLoadAction extends LoadAction {
       final FileChooser fileChooser = ObjectExtensions.<FileChooser>operator_doubleArrow(_fileChooser, _function);
       Scene _scene = root.getScene();
       Window _window = _scene.getWindow();
-      final File file = fileChooser.showOpenDialog(_window);
+      File _showOpenDialog = fileChooser.showOpenDialog(_window);
+      final IFile file = FileExtensions.toWorkspaceFile(_showOpenDialog);
       boolean _notEquals = (!Objects.equal(file, null));
       if (_notEquals) {
         ModelLoad _modelLoad = new ModelLoad();
-        FileReader _fileReader = new FileReader(file);
-        final Object node = _modelLoad.load(_fileReader);
+        InputStream _contents = file.getContents();
+        InputStreamReader _inputStreamReader = new InputStreamReader(_contents);
+        final Object node = _modelLoad.load(_inputStreamReader);
         if ((node instanceof XRoot)) {
           ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();
           root.replaceDomainObjectProviders(_domainObjectProviders);
           XDiagram _diagram = ((XRoot)node).getDiagram();
           root.setRootDiagram(_diagram);
-          final String fileName = file.getAbsolutePath();
-          final String workspaceDirName = workspaceDir.getAbsolutePath();
-          boolean _startsWith = fileName.startsWith((workspaceDirName + File.separator));
-          if (_startsWith) {
-            int _length = workspaceDirName.length();
-            String _substring = fileName.substring(_length);
-            root.setFileName(_substring);
-          } else {
-            root.setFileName(fileName);
-          }
+          IPath _fullPath = file.getFullPath();
+          String _oSString = _fullPath.toOSString();
+          root.setFileName(_oSString);
         }
       }
     } catch (Throwable _e) {

@@ -3,10 +3,11 @@ package de.fxdiagram.eclipse.actions
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.model.ModelLoad
 import de.fxdiagram.core.tools.actions.LoadAction
-import java.io.File
-import java.io.FileReader
+import java.io.InputStreamReader
 import javafx.stage.FileChooser
 import org.eclipse.core.resources.ResourcesPlugin
+
+import static extension de.fxdiagram.eclipse.actions.FileExtensions.*
 
 class EclipseLoadAction extends LoadAction {
 	
@@ -17,20 +18,14 @@ class EclipseLoadAction extends LoadAction {
 			extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
 			initialDirectory = workspaceDir
 		]
-		val file = fileChooser.showOpenDialog(root.scene.window)
+		val file = fileChooser.showOpenDialog(root.scene.window).toWorkspaceFile
 		if(file != null) {
-			val node = new ModelLoad().load(new FileReader(file))
+			val node = new ModelLoad().load(new InputStreamReader(file.contents))
 			if(node instanceof XRoot) {
 				root.replaceDomainObjectProviders(node.domainObjectProviders)
 				root.rootDiagram = node.diagram
-				val fileName = file.absolutePath
-				val workspaceDirName = workspaceDir.absolutePath
-				if(fileName.startsWith(workspaceDirName + File.separator)) 
-					root.fileName = fileName.substring(workspaceDirName.length)
-				else
-					root.fileName = fileName
+				root.fileName = file.fullPath.toOSString
 			}
 		}
 	}
-	
 }
