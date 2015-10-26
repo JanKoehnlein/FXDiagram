@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent
 class UndoAction implements DiagramAction {
 	
 	override matches(KeyEvent it) {
-		isShortcutDown && !shiftDown && code == KeyCode.Y
+		isShortcutDown && !shiftDown && code.toString.toLowerCase == 'z'
 	}
 	
 	override getSymbol() {
@@ -28,7 +28,7 @@ class UndoAction implements DiagramAction {
 class RedoAction implements DiagramAction {
 	
 	override matches(KeyEvent it) {
-		isShortcutDown && shiftDown && code == KeyCode.Y
+		isShortcutDown && shiftDown && code.toString.toLowerCase == 'z'
 	}
 	
 	override getSymbol() {

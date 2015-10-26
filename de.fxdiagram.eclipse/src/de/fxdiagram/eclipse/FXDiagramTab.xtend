@@ -19,6 +19,7 @@ import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import de.fxdiagram.swtfx.SwtToFXGestureConverter
 import java.io.File
 import java.util.regex.Pattern
+import javafx.application.Platform
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
@@ -27,13 +28,12 @@ import org.eclipse.swt.custom.CTabFolder
 import org.eclipse.swt.custom.CTabItem
 import org.eclipse.swt.events.FocusEvent
 import org.eclipse.swt.events.FocusListener
+import org.eclipse.swt.widgets.Display
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.keys.IBindingService
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import org.eclipse.swt.widgets.Display
-import javafx.application.Platform
 
 class FXDiagramTab {
 	val CTabItem tab

@@ -1,5 +1,6 @@
 package de.fxdiagram.eclipse
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.layout.LayoutType
@@ -30,6 +31,7 @@ import de.fxdiagram.mapping.execution.EntryCall
 import java.io.InputStreamReader
 import java.util.List
 import java.util.Map
+import javafx.application.Platform
 import javafx.embed.swt.FXCanvas
 import javafx.event.Event
 import javafx.event.EventHandler
@@ -46,8 +48,6 @@ import org.eclipse.ui.commands.ICommandService
 import org.eclipse.ui.handlers.RegistryToggleState
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
-import javafx.application.Platform
-import de.fxdiagram.annotations.logging.Logging
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -102,6 +102,7 @@ class FXDiagramView extends ViewPart {
 					new NavigateNextAction, new FullScreenAction]
 		]
 	}
+	
 	def void setLinkWithEditor(boolean linkWithEditor) {
 		this.linkWithEditor = linkWithEditor
 		tab2content.values.forEach[it.linkWithEditor = linkWithEditor]

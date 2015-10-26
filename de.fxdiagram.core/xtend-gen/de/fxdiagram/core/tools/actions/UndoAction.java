@@ -26,7 +26,9 @@ public class UndoAction implements DiagramAction {
       _and = false;
     } else {
       KeyCode _code = it.getCode();
-      boolean _equals = Objects.equal(_code, KeyCode.Y);
+      String _string = _code.toString();
+      String _lowerCase = _string.toLowerCase();
+      boolean _equals = Objects.equal(_lowerCase, "z");
       _and = _equals;
     }
     return _and;
