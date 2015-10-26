@@ -105,9 +105,8 @@ public class EclipseSaveAction implements DiagramAction {
             NullProgressMonitor _nullProgressMonitor = new NullProgressMonitor();
             file.create(_byteArrayInputStream, true, _nullProgressMonitor);
             IPath _fullPath = file.getFullPath();
-            String _string_1 = _fullPath.toString();
-            String _replace = _string_1.replace("/", File.separator);
-            root.setFileName(_replace);
+            String _oSString = _fullPath.toOSString();
+            root.setFileName(_oSString);
             root.setNeedsSave(false);
           }
         } catch (Throwable _e) {
