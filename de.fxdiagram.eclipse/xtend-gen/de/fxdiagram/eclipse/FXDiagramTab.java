@@ -36,6 +36,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.StringProperty;
@@ -189,43 +190,46 @@ public class FXDiagramTab {
   }
   
   public <T extends Object> void revealElement(final T element, final EntryCall<? super T> entryCall, final IEditorPart editor) {
-    Scene _scene = this.canvas.getScene();
-    double _width = _scene.getWidth();
-    boolean _equals = (_width == 0);
-    if (_equals) {
-      Scene _scene_1 = this.canvas.getScene();
-      ReadOnlyDoubleProperty _widthProperty = _scene_1.widthProperty();
-      final ChangeListener<Number> _function = new ChangeListener<Number>() {
-        @Override
-        public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
-          Scene _scene = FXDiagramTab.this.canvas.getScene();
-          ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
-          _widthProperty.removeListener(this);
-          FXDiagramTab.this.<T>revealElement(element, entryCall, editor);
-        }
-      };
-      _widthProperty.addListener(_function);
-    } else {
-      Scene _scene_2 = this.canvas.getScene();
-      double _height = _scene_2.getHeight();
-      boolean _equals_1 = (_height == 0);
-      if (_equals_1) {
-        Scene _scene_3 = this.canvas.getScene();
-        ReadOnlyDoubleProperty _heightProperty = _scene_3.heightProperty();
+    final Runnable _function = () -> {
+      Scene _scene = this.canvas.getScene();
+      double _width = _scene.getWidth();
+      boolean _equals = (_width == 0);
+      if (_equals) {
+        Scene _scene_1 = this.canvas.getScene();
+        ReadOnlyDoubleProperty _widthProperty = _scene_1.widthProperty();
         final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
           @Override
           public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
             Scene _scene = FXDiagramTab.this.canvas.getScene();
-            ReadOnlyDoubleProperty _heightProperty = _scene.heightProperty();
-            _heightProperty.removeListener(this);
+            ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
+            _widthProperty.removeListener(this);
             FXDiagramTab.this.<T>revealElement(element, entryCall, editor);
           }
         };
-        _heightProperty.addListener(_function_1);
+        _widthProperty.addListener(_function_1);
       } else {
-        this.<T>doRevealElement(element, entryCall, editor);
+        Scene _scene_2 = this.canvas.getScene();
+        double _height = _scene_2.getHeight();
+        boolean _equals_1 = (_height == 0);
+        if (_equals_1) {
+          Scene _scene_3 = this.canvas.getScene();
+          ReadOnlyDoubleProperty _heightProperty = _scene_3.heightProperty();
+          final ChangeListener<Number> _function_2 = new ChangeListener<Number>() {
+            @Override
+            public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
+              Scene _scene = FXDiagramTab.this.canvas.getScene();
+              ReadOnlyDoubleProperty _heightProperty = _scene.heightProperty();
+              _heightProperty.removeListener(this);
+              FXDiagramTab.this.<T>revealElement(element, entryCall, editor);
+            }
+          };
+          _heightProperty.addListener(_function_2);
+        } else {
+          this.<T>doRevealElement(element, entryCall, editor);
+        }
       }
-    }
+    };
+    Platform.runLater(_function);
   }
   
   protected <T extends Object> void doRevealElement(final T element, final EntryCall<? super T> entryCall, final IEditorPart editor) {

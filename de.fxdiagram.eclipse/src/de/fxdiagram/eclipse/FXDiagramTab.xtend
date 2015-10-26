@@ -33,6 +33,7 @@ import org.eclipse.ui.keys.IBindingService
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import org.eclipse.swt.widgets.Display
+import javafx.application.Platform
 
 class FXDiagramTab {
 	val CTabItem tab
@@ -101,20 +102,22 @@ class FXDiagramTab {
 	def getCTabItem() { tab }
 
 	def <T> void revealElement(T element, EntryCall<? super T> entryCall, IEditorPart editor) {
-		// OMG! the scene's width and height is set asynchronously but needed for centering the selection
-		if (canvas.scene.width == 0) {
-			canvas.scene.widthProperty.addListener [ p, o, n |
-				canvas.scene.widthProperty.removeListener(self)
-				revealElement(element, entryCall, editor)
-			]
-		} else if (canvas.scene.height == 0) {
-			canvas.scene.heightProperty.addListener [ p, o, n |
-				canvas.scene.heightProperty.removeListener(self)
-				revealElement(element, entryCall, editor)
-			]
-		} else {
-			doRevealElement(element, entryCall, editor)
-		}
+		Platform.runLater [
+			// OMG! the scene's width and height is set asynchronously but needed for centering the selection
+			if (canvas.scene.width == 0) {
+				canvas.scene.widthProperty.addListener [ p, o, n |
+					canvas.scene.widthProperty.removeListener(self)
+					revealElement(element, entryCall, editor)
+				]
+			} else if (canvas.scene.height == 0) {
+				canvas.scene.heightProperty.addListener [ p, o, n |
+					canvas.scene.heightProperty.removeListener(self)
+					revealElement(element, entryCall, editor)
+				]
+			} else {
+				doRevealElement(element, entryCall, editor)
+			}	
+		]
 	}
 
 	protected def <T> void doRevealElement(T element, EntryCall<? super T> entryCall, IEditorPart editor) {
