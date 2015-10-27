@@ -48,7 +48,11 @@ class EclipseSaveAction implements DiagramAction {
 					file.createParents
 					val writer = new StringWriter
 					new ModelSave().save(root, writer)
-					file.create(new ByteArrayInputStream(writer.toString.getBytes(file.getCharset(true))), true, new NullProgressMonitor)
+					val stream = new ByteArrayInputStream(writer.toString.getBytes(file.getCharset(true)))
+					if(file.exists)
+						file.setContents(stream, true, true, new NullProgressMonitor)
+					else
+						file.create(stream, true, new NullProgressMonitor)
 					root.fileName = file.fullPath.toOSString
 					root.needsSave = false
 				}

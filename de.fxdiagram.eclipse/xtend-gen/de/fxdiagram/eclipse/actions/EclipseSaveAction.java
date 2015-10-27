@@ -101,9 +101,15 @@ public class EclipseSaveAction implements DiagramAction {
             String _string = writer.toString();
             String _charset = file.getCharset(true);
             byte[] _bytes = _string.getBytes(_charset);
-            ByteArrayInputStream _byteArrayInputStream = new ByteArrayInputStream(_bytes);
-            NullProgressMonitor _nullProgressMonitor = new NullProgressMonitor();
-            file.create(_byteArrayInputStream, true, _nullProgressMonitor);
+            final ByteArrayInputStream stream = new ByteArrayInputStream(_bytes);
+            boolean _exists = file.exists();
+            if (_exists) {
+              NullProgressMonitor _nullProgressMonitor = new NullProgressMonitor();
+              file.setContents(stream, true, true, _nullProgressMonitor);
+            } else {
+              NullProgressMonitor _nullProgressMonitor_1 = new NullProgressMonitor();
+              file.create(stream, true, _nullProgressMonitor_1);
+            }
             IPath _fullPath = file.getFullPath();
             String _oSString = _fullPath.toOSString();
             root.setFileName(_oSString);
