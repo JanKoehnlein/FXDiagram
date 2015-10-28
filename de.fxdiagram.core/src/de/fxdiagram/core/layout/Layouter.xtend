@@ -259,7 +259,7 @@ class Layouter {
 		val kRoot = createKNode
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
-		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
+//		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
 		shapeLayout.setProperty(LayoutOptions.LAYOUT_HIERARCHY, true)
 //		shapeLayout.setProperty(LayoutOptions.BORDER_SPACING, 20f)
 		kRoot.data += shapeLayout

@@ -623,7 +623,6 @@ public class Layouter {
       final KShapeLayout shapeLayout = this._kLayoutDataFactory.createKShapeLayout();
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
-      shapeLayout.<Boolean>setProperty(LayoutOptions.DEBUG_MODE, Boolean.valueOf(true));
       shapeLayout.<Boolean>setProperty(LayoutOptions.LAYOUT_HIERARCHY, Boolean.valueOf(true));
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
