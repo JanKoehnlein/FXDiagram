@@ -55,6 +55,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -177,9 +178,20 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
     if (_not) {
-      this.doActivate();
+      try {
+        this.doActivate();
+        this.isActiveProperty.set(true);
+      } catch (final Throwable _t) {
+        if (_t instanceof Exception) {
+          final Exception exc = (Exception)_t;
+          String _message = exc.getMessage();
+          XRoot.LOG.severe(_message);
+          exc.printStackTrace();
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
     }
-    this.isActiveProperty.set(true);
   }
   
   public void doActivate() {

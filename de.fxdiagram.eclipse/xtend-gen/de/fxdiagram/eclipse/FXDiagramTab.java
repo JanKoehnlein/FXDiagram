@@ -2,6 +2,7 @@ package de.fxdiagram.eclipse;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XDomainObjectShape;
@@ -35,6 +36,7 @@ import de.fxdiagram.swtfx.SwtToFXGestureConverter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -47,6 +49,7 @@ import javafx.embed.swt.FXCanvas;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.util.Duration;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -55,17 +58,21 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.keys.IBindingService;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
+@Logging
 @SuppressWarnings("all")
 public class FXDiagramTab {
   private final CTabItem tab;
@@ -191,41 +198,61 @@ public class FXDiagramTab {
   
   public <T extends Object> void revealElement(final T element, final EntryCall<? super T> entryCall, final IEditorPart editor) {
     final Runnable _function = () -> {
-      Scene _scene = this.canvas.getScene();
-      double _width = _scene.getWidth();
-      boolean _equals = (_width == 0);
-      if (_equals) {
-        Scene _scene_1 = this.canvas.getScene();
-        ReadOnlyDoubleProperty _widthProperty = _scene_1.widthProperty();
-        final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
-          @Override
-          public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
-            Scene _scene = FXDiagramTab.this.canvas.getScene();
-            ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
-            _widthProperty.removeListener(this);
-            FXDiagramTab.this.<T>revealElement(element, entryCall, editor);
-          }
-        };
-        _widthProperty.addListener(_function_1);
-      } else {
-        Scene _scene_2 = this.canvas.getScene();
-        double _height = _scene_2.getHeight();
-        boolean _equals_1 = (_height == 0);
-        if (_equals_1) {
-          Scene _scene_3 = this.canvas.getScene();
-          ReadOnlyDoubleProperty _heightProperty = _scene_3.heightProperty();
-          final ChangeListener<Number> _function_2 = new ChangeListener<Number>() {
+      try {
+        Scene _scene = this.canvas.getScene();
+        double _width = _scene.getWidth();
+        boolean _equals = (_width == 0);
+        if (_equals) {
+          Scene _scene_1 = this.canvas.getScene();
+          ReadOnlyDoubleProperty _widthProperty = _scene_1.widthProperty();
+          final ChangeListener<Number> _function_1 = new ChangeListener<Number>() {
             @Override
             public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
               Scene _scene = FXDiagramTab.this.canvas.getScene();
-              ReadOnlyDoubleProperty _heightProperty = _scene.heightProperty();
-              _heightProperty.removeListener(this);
+              ReadOnlyDoubleProperty _widthProperty = _scene.widthProperty();
+              _widthProperty.removeListener(this);
               FXDiagramTab.this.<T>revealElement(element, entryCall, editor);
             }
           };
-          _heightProperty.addListener(_function_2);
+          _widthProperty.addListener(_function_1);
         } else {
-          this.<T>doRevealElement(element, entryCall, editor);
+          Scene _scene_2 = this.canvas.getScene();
+          double _height = _scene_2.getHeight();
+          boolean _equals_1 = (_height == 0);
+          if (_equals_1) {
+            Scene _scene_3 = this.canvas.getScene();
+            ReadOnlyDoubleProperty _heightProperty = _scene_3.heightProperty();
+            final ChangeListener<Number> _function_2 = new ChangeListener<Number>() {
+              @Override
+              public void changed(final ObservableValue<? extends Number> p, final Number o, final Number n) {
+                Scene _scene = FXDiagramTab.this.canvas.getScene();
+                ReadOnlyDoubleProperty _heightProperty = _scene.heightProperty();
+                _heightProperty.removeListener(this);
+                FXDiagramTab.this.<T>revealElement(element, entryCall, editor);
+              }
+            };
+            _heightProperty.addListener(_function_2);
+          } else {
+            this.<T>doRevealElement(element, entryCall, editor);
+          }
+        }
+      } catch (final Throwable _t) {
+        if (_t instanceof Exception) {
+          final Exception exc = (Exception)_t;
+          exc.printStackTrace();
+          Display _current = Display.getCurrent();
+          Shell _activeShell = _current.getActiveShell();
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("Error showing element in FXDiagram:");
+          _builder.newLine();
+          String _message = exc.getMessage();
+          _builder.append(_message, "");
+          _builder.newLineIfNotEmpty();
+          _builder.append("See log for details.");
+          _builder.newLine();
+          MessageDialog.openError(_activeShell, "Error", _builder.toString());
+        } else {
+          throw Exceptions.sneakyThrow(_t);
         }
       }
     };
@@ -338,4 +365,7 @@ public class FXDiagramTab {
     };
     _default.asyncExec(_function);
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.eclipse.FXDiagramTab");
+    ;
 }

@@ -1,5 +1,6 @@
 package de.fxdiagram.lib.buttons
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XButton
 import de.fxdiagram.core.XNode
@@ -12,6 +13,7 @@ import javafx.scene.Parent
  * 
  * @see RapidButtonBehavior
  */
+@Logging
 class RapidButton extends Parent implements XButton {
 	
 	@FxProperty(readOnly=true) boolean isActive
@@ -32,8 +34,13 @@ class RapidButton extends Parent implements XButton {
 	
 	override activate() {
 		if(!isActive)
+		try {
 			doActivate
-		isActiveProperty.set(true)
+			isActiveProperty.set(true)
+		} catch (Exception exc) {
+			LOG.severe(exc.message)
+			exc.printStackTrace
+		}
 	}
 
 	def doActivate() {

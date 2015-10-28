@@ -60,12 +60,14 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -75,6 +77,7 @@ import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
@@ -331,9 +334,18 @@ public class FXDiagramView extends ViewPart {
                 } catch (final Throwable _t) {
                   if (_t instanceof Exception) {
                     final Exception exc = (Exception)_t;
-                    String _message = exc.getMessage();
-                    FXDiagramView.LOG.severe(_message);
                     exc.printStackTrace();
+                    Display _current = Display.getCurrent();
+                    Shell _activeShell = _current.getActiveShell();
+                    StringConcatenation _builder = new StringConcatenation();
+                    _builder.append("Error showing element in FXDiagram:");
+                    _builder.newLine();
+                    String _message = exc.getMessage();
+                    _builder.append(_message, "");
+                    _builder.newLineIfNotEmpty();
+                    _builder.append("See log for details.");
+                    _builder.newLine();
+                    MessageDialog.openError(_activeShell, "Error", _builder.toString());
                   } else {
                     throw Exceptions.sneakyThrow(_t);
                   }

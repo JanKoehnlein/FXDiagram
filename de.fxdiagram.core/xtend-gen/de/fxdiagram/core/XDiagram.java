@@ -2,6 +2,7 @@ package de.fxdiagram.core;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
@@ -25,6 +26,7 @@ import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import java.util.HashMap;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -52,6 +54,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
@@ -71,6 +74,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
  * 
  * A {@link viewportTransform} stores the current viewport of the diagram.
  */
+@Logging
 @ModelNode({ "nodes", "connections", "parentDiagram", "domainObjectDescriptor" })
 @SuppressWarnings("all")
 public class XDiagram extends Group implements XActivatable, XModelProvider {
@@ -119,8 +123,19 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
     if (_not) {
-      this.isActiveProperty.set(true);
-      this.doActivate();
+      try {
+        this.isActiveProperty.set(true);
+        this.doActivate();
+      } catch (final Throwable _t) {
+        if (_t instanceof Exception) {
+          final Exception exc = (Exception)_t;
+          String _message = exc.getMessage();
+          XDiagram.LOG.severe(_message);
+          exc.printStackTrace();
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
     }
   }
   
@@ -400,6 +415,9 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
   public Group getButtonLayer() {
     return this.buttonLayer;
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XDiagram");
+    ;
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(nodesProperty, XNode.class);

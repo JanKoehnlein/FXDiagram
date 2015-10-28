@@ -1,8 +1,10 @@
 package de.fxdiagram.lib.buttons;
 
+import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.XButton;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.lib.buttons.RapidButtonAction;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.ObservableList;
@@ -11,12 +13,14 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 
 /**
  * A button that pops up when the mouse hovers over its {@link #host}.
  * 
  * @see RapidButtonBehavior
  */
+@Logging
 @SuppressWarnings("all")
 public class RapidButton extends Parent implements XButton {
   private XNode host;
@@ -38,9 +42,20 @@ public class RapidButton extends Parent implements XButton {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
     if (_not) {
-      this.doActivate();
+      try {
+        this.doActivate();
+        this.isActiveProperty.set(true);
+      } catch (final Throwable _t) {
+        if (_t instanceof Exception) {
+          final Exception exc = (Exception)_t;
+          String _message = exc.getMessage();
+          RapidButton.LOG.severe(_message);
+          exc.printStackTrace();
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
     }
-    this.isActiveProperty.set(true);
   }
   
   public void doActivate() {
@@ -62,6 +77,9 @@ public class RapidButton extends Parent implements XButton {
   public RapidButtonAction getAction() {
     return this.action;
   }
+  
+  private static Logger LOG = Logger.getLogger("de.fxdiagram.lib.buttons.RapidButton");
+    ;
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");
   

@@ -22,6 +22,7 @@ import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
@@ -95,27 +96,38 @@ public abstract class XShape extends Parent implements XActivatable {
     boolean _isActive = this.getIsActive();
     boolean _not = (!_isActive);
     if (_not) {
-      this.isActiveProperty.set(true);
-      this.initializeGraphics();
-      this.doActivate();
-      InitializingListener<Boolean> _initializingListener = new InitializingListener<Boolean>();
-      final Procedure1<InitializingListener<Boolean>> _function = (InitializingListener<Boolean> it) -> {
-        final Procedure1<Boolean> _function_1 = (Boolean it_1) -> {
-          this.selectionFeedback((it_1).booleanValue());
+      try {
+        this.isActiveProperty.set(true);
+        this.initializeGraphics();
+        this.doActivate();
+        InitializingListener<Boolean> _initializingListener = new InitializingListener<Boolean>();
+        final Procedure1<InitializingListener<Boolean>> _function = (InitializingListener<Boolean> it) -> {
+          final Procedure1<Boolean> _function_1 = (Boolean it_1) -> {
+            this.selectionFeedback((it_1).booleanValue());
+          };
+          it.setSet(_function_1);
         };
-        it.setSet(_function_1);
-      };
-      InitializingListener<Boolean> _doubleArrow = ObjectExtensions.<InitializingListener<Boolean>>operator_doubleArrow(_initializingListener, _function);
-      CoreExtensions.<Boolean>addInitializingListener(this.selectedProperty, _doubleArrow);
-      InitializingMapListener<Class<? extends Behavior>, Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
-      final Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>> _function_1 = (InitializingMapListener<Class<? extends Behavior>, Behavior> it) -> {
-        final Procedure2<Class<? extends Behavior>, Behavior> _function_2 = (Class<? extends Behavior> key, Behavior value) -> {
-          value.activate();
+        InitializingListener<Boolean> _doubleArrow = ObjectExtensions.<InitializingListener<Boolean>>operator_doubleArrow(_initializingListener, _function);
+        CoreExtensions.<Boolean>addInitializingListener(this.selectedProperty, _doubleArrow);
+        InitializingMapListener<Class<? extends Behavior>, Behavior> _initializingMapListener = new InitializingMapListener<Class<? extends Behavior>, Behavior>();
+        final Procedure1<InitializingMapListener<Class<? extends Behavior>, Behavior>> _function_1 = (InitializingMapListener<Class<? extends Behavior>, Behavior> it) -> {
+          final Procedure2<Class<? extends Behavior>, Behavior> _function_2 = (Class<? extends Behavior> key, Behavior value) -> {
+            value.activate();
+          };
+          it.setPut(_function_2);
         };
-        it.setPut(_function_2);
-      };
-      InitializingMapListener<Class<? extends Behavior>, Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>, Behavior>>operator_doubleArrow(_initializingMapListener, _function_1);
-      CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow_1);
+        InitializingMapListener<Class<? extends Behavior>, Behavior> _doubleArrow_1 = ObjectExtensions.<InitializingMapListener<Class<? extends Behavior>, Behavior>>operator_doubleArrow(_initializingMapListener, _function_1);
+        CoreExtensions.<Class<? extends Behavior>, Behavior>addInitializingListener(this.behaviors, _doubleArrow_1);
+      } catch (final Throwable _t) {
+        if (_t instanceof Exception) {
+          final Exception exc = (Exception)_t;
+          String _message = exc.getMessage();
+          XShape.LOG.severe(_message);
+          exc.printStackTrace();
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
     }
   }
   

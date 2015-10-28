@@ -48,6 +48,8 @@ import org.eclipse.ui.commands.ICommandService
 import org.eclipse.ui.handlers.RegistryToggleState
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.jface.dialogs.MessageDialog
+import org.eclipse.swt.widgets.Display
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -172,8 +174,12 @@ class FXDiagramView extends ViewPart {
 								newTab.root.rootDiagram = node.diagram
 								newTab.root.fileName = filePath
 							} catch(Exception exc) {
-								LOG.severe(exc.message)
 								exc.printStackTrace
+								MessageDialog.openError(Display.current.activeShell, 'Error', '''
+									Error showing element in FXDiagram:
+									«exc.message»
+									See log for details.
+								''')
 							}
 						]
 						return		

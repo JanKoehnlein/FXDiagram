@@ -34,7 +34,10 @@ import org.eclipse.ui.keys.IBindingService
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import de.fxdiagram.annotations.logging.Logging
+import org.eclipse.jface.dialogs.MessageDialog
 
+@Logging
 class FXDiagramTab {
 	val CTabItem tab
 	val FXCanvas canvas
@@ -103,20 +106,28 @@ class FXDiagramTab {
 
 	def <T> void revealElement(T element, EntryCall<? super T> entryCall, IEditorPart editor) {
 		Platform.runLater [
-			// OMG! the scene's width and height is set asynchronously but needed for centering the selection
-			if (canvas.scene.width == 0) {
-				canvas.scene.widthProperty.addListener [ p, o, n |
-					canvas.scene.widthProperty.removeListener(self)
-					revealElement(element, entryCall, editor)
-				]
-			} else if (canvas.scene.height == 0) {
-				canvas.scene.heightProperty.addListener [ p, o, n |
-					canvas.scene.heightProperty.removeListener(self)
-					revealElement(element, entryCall, editor)
-				]
-			} else {
-				doRevealElement(element, entryCall, editor)
-			}	
+			try {// OMG! the scene's width and height is set asynchronously but needed for centering the selection
+				if (canvas.scene.width == 0) {
+					canvas.scene.widthProperty.addListener [ p, o, n |
+						canvas.scene.widthProperty.removeListener(self)
+						revealElement(element, entryCall, editor)
+					]
+				} else if (canvas.scene.height == 0) {
+					canvas.scene.heightProperty.addListener [ p, o, n |
+						canvas.scene.heightProperty.removeListener(self)
+						revealElement(element, entryCall, editor)
+					]
+				} else {
+					doRevealElement(element, entryCall, editor)
+				}	
+			} catch(Exception exc) {
+				exc.printStackTrace
+				MessageDialog.openError(Display.current.activeShell, 'Error', '''
+					Error showing element in FXDiagram:
+					«exc.message»
+					See log for details.
+				''')
+			}
 		]
 	}
 

@@ -1,5 +1,6 @@
 package de.fxdiagram.core
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport
@@ -11,6 +12,7 @@ import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.extensions.InitializingMapListener
 import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
+import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.viewport.ViewportTransform
 import javafx.beans.property.Property
 import javafx.beans.value.ChangeListener
@@ -29,7 +31,6 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.model.DomainObjectDescriptor
 
 /**
  * A diagram with {@link XNode}s and {@link XConnection}s.
@@ -46,6 +47,7 @@ import de.fxdiagram.core.model.DomainObjectDescriptor
  *  
  * A {@link viewportTransform} stores the current viewport of the diagram.
  */
+@Logging
 @ModelNode('nodes', 'connections', 'parentDiagram', 'domainObjectDescriptor')
 class XDiagram extends Group implements XActivatable {
 	
@@ -98,8 +100,13 @@ class XDiagram extends Group implements XActivatable {
 	
 	override activate() {
 		if(!isActive) {
-			isActiveProperty.set(true);
-			doActivate
+			try {
+				isActiveProperty.set(true);
+				doActivate
+			} catch (Exception exc) {
+				LOG.severe(exc.message)
+				exc.printStackTrace
+			}
 		}
 	}
 	

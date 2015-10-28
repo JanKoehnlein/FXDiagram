@@ -123,8 +123,13 @@ class XRoot extends Parent implements XActivatable {
 	
 	override activate() {		
 		if(!isActive)
-			doActivate
-		isActiveProperty.set(true)
+			try {
+				doActivate
+				isActiveProperty.set(true)
+			} catch (Exception exc) {
+				LOG.severe(exc.message)
+				exc.printStackTrace
+			}
 	}
 
 	def	doActivate() {
