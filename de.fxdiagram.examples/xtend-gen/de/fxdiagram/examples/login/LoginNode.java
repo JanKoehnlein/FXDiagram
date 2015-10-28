@@ -3,6 +3,7 @@ package de.fxdiagram.examples.login;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.StringExpressionExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import javafx.beans.binding.StringExpression;
@@ -137,6 +138,10 @@ public class LoginNode extends FlipNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleStringProperty userNameProperty = new SimpleStringProperty(this, "userName",_initUserName());

@@ -21,6 +21,7 @@ import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringDescriptor;
+import de.fxdiagram.core.model.ToString;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -769,6 +770,10 @@ public class XConnection extends XDomainObjectShape {
     modelElement.addProperty(sourceArrowHeadProperty, ArrowHead.class);
     modelElement.addProperty(targetArrowHeadProperty, ArrowHead.class);
     modelElement.addProperty(strokeProperty, Paint.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleObjectProperty<XNode> sourceProperty = new SimpleObjectProperty<XNode>(this, "source");

@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.services.ResourceDescriptor;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.Node;
@@ -45,5 +46,9 @@ public class ImageNode extends XNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

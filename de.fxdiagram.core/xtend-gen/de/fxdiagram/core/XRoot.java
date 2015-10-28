@@ -14,6 +14,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.tools.CompositeTool;
 import de.fxdiagram.core.tools.DiagramActionTool;
@@ -335,6 +336,10 @@ public class XRoot extends Parent implements XActivatable, XModelProvider {
     modelElement.addProperty(domainObjectProvidersProperty, DomainObjectProvider.class);
     modelElement.addProperty(rootDiagramProperty, XDiagram.class);
     modelElement.addProperty(diagramProperty, XDiagram.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyBooleanWrapper isActiveProperty = new ReadOnlyBooleanWrapper(this, "isActive");

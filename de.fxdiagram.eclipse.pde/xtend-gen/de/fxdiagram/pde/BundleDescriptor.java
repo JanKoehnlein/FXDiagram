@@ -3,6 +3,7 @@ package de.fxdiagram.pde;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.pde.BundleUtil;
 import java.util.NoSuchElementException;
@@ -143,6 +144,10 @@ public class BundleDescriptor extends AbstractMappedElementDescriptor<BundleDesc
     super.populate(modelElement);
     modelElement.addProperty(symbolicNameProperty, String.class);
     modelElement.addProperty(versionProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyStringWrapper symbolicNameProperty = new ReadOnlyStringWrapper(this, "symbolicName");

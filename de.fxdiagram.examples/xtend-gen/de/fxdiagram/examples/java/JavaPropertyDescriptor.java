@@ -3,6 +3,7 @@ package de.fxdiagram.examples.java;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.CachedDomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.examples.java.JavaModelProvider;
 import de.fxdiagram.examples.java.JavaProperty;
 import org.eclipse.xtext.xbase.lib.Exceptions;
@@ -40,5 +41,9 @@ public class JavaPropertyDescriptor extends CachedDomainObjectDescriptor<JavaPro
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

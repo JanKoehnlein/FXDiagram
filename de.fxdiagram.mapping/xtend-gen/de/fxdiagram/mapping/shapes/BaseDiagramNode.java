@@ -8,6 +8,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.OpenableDiagramNode;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
@@ -106,5 +107,9 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

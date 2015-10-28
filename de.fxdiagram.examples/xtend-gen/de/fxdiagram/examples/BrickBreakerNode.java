@@ -7,6 +7,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.nodes.FlipNode;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import java.lang.reflect.Constructor;
@@ -136,5 +137,9 @@ public class BrickBreakerNode extends FlipNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

@@ -3,6 +3,7 @@ package de.fxdiagram.xtext.domainmodel;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.reconcile.MappingLabelListener;
@@ -102,5 +103,9 @@ public class EntityNode extends BaseNode<Entity> {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

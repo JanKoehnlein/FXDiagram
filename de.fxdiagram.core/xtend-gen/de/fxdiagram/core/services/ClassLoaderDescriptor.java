@@ -3,6 +3,7 @@ package de.fxdiagram.core.services;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.services.ClassLoaderProvider;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -41,6 +42,10 @@ public class ClassLoaderDescriptor implements DomainObjectDescriptor {
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(classLoaderIDProperty, String.class);
     modelElement.addProperty(providerProperty, ClassLoaderProvider.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyStringWrapper classLoaderIDProperty = new ReadOnlyStringWrapper(this, "classLoaderID");

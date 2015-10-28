@@ -6,6 +6,7 @@ import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProviderWithState;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.services.ClassLoaderDescriptor;
 import de.fxdiagram.core.services.ResourceDescriptor;
 import de.fxdiagram.core.services.ResourceHandle;
@@ -147,6 +148,10 @@ public class ClassLoaderProvider implements DomainObjectProviderWithState {
   
   public void populate(final ModelElementImpl modelElement) {
     
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   @Pure

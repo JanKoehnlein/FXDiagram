@@ -6,6 +6,7 @@ import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.extensions.ButtonExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.buttons.RapidButton;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
@@ -197,6 +198,10 @@ public class BundleNode extends BaseNode<BundleDescription> implements INodeWith
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(inflatedProperty, Boolean.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleBooleanProperty inflatedProperty = new SimpleBooleanProperty(this, "inflated",_initInflated());

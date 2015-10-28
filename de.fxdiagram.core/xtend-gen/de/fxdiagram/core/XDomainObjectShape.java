@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.model.XModelProvider;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -23,6 +24,10 @@ public abstract class XDomainObjectShape extends XShape implements XModelProvide
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(domainObjectDescriptorProperty, DomainObjectDescriptor.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyObjectWrapper<DomainObjectDescriptor> domainObjectDescriptorProperty = new ReadOnlyObjectWrapper<DomainObjectDescriptor>(this, "domainObjectDescriptor");

@@ -3,6 +3,7 @@ package de.fxdiagram.mapping;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
@@ -96,6 +97,10 @@ public abstract class AbstractMappedElementDescriptor<T extends Object> implemen
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(mappingConfigIDProperty, String.class);
     modelElement.addProperty(mappingIDProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyStringWrapper mappingConfigIDProperty = new ReadOnlyStringWrapper(this, "mappingConfigID");

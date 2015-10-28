@@ -18,6 +18,7 @@ import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.viewport.ViewportMemento;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import de.fxdiagram.core.viewport.ViewportTransition;
@@ -453,6 +454,10 @@ public class OpenableDiagramNode extends XNode implements XDiagramContainer {
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(innerDiagramProperty, XDiagram.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram");

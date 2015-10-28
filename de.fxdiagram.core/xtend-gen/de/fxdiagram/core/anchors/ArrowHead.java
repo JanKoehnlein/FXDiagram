@@ -8,6 +8,7 @@ import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
@@ -190,6 +191,10 @@ public abstract class ArrowHead extends Parent implements XModelProvider {
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
     modelElement.addProperty(strokeProperty, Paint.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.anchors.ArrowHead");

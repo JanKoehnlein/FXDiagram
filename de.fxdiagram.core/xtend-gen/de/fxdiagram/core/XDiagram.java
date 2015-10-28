@@ -22,6 +22,7 @@ import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.model.XModelProvider;
 import de.fxdiagram.core.viewport.ViewportTransform;
 import java.util.HashMap;
@@ -424,6 +425,10 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     modelElement.addProperty(connectionsProperty, XConnection.class);
     modelElement.addProperty(parentDiagramProperty, XDiagram.class);
     modelElement.addProperty(domainObjectDescriptorProperty, DomainObjectDescriptor.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleListProperty<XNode> nodesProperty = new SimpleListProperty<XNode>(this, "nodes",_initNodes());

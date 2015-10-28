@@ -14,6 +14,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.mapping.ConnectionMapping;
@@ -211,6 +212,10 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(innerDiagramProperty, XDiagram.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram");

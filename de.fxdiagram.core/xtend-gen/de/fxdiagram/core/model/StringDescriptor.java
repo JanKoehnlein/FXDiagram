@@ -3,6 +3,7 @@ package de.fxdiagram.core.model;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
@@ -25,6 +26,10 @@ public class StringDescriptor implements DomainObjectDescriptor {
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(nameProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyStringWrapper nameProperty = new ReadOnlyStringWrapper(this, "name",_initName());

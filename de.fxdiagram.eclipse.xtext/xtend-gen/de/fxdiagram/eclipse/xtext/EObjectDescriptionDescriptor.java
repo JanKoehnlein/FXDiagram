@@ -3,6 +3,7 @@ package de.fxdiagram.eclipse.xtext;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
 import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
@@ -118,6 +119,10 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(elementIDProperty, XtextEObjectID.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyObjectWrapper<XtextEObjectID> elementIDProperty = new ReadOnlyObjectWrapper<XtextEObjectID>(this, "elementID");

@@ -3,6 +3,7 @@ package de.fxdiagram.pde;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.pde.BundleDependency;
 import de.fxdiagram.pde.BundleUtil;
@@ -156,6 +157,10 @@ public class BundleDependencyDescriptor extends AbstractMappedElementDescriptor<
     modelElement.addProperty(ownerVersionProperty, String.class);
     modelElement.addProperty(importSymbolicNameProperty, String.class);
     modelElement.addProperty(importVersionRangeProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyObjectWrapper<BundleDependency.Kind> kindProperty = new ReadOnlyObjectWrapper<BundleDependency.Kind>(this, "kind");

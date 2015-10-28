@@ -12,6 +12,7 @@ import de.fxdiagram.core.command.SequentialAnimationCommand;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.animations.Inflator;
 import de.fxdiagram.lib.nodes.FlipNode;
@@ -372,6 +373,10 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
     modelElement.addProperty(showAttributesProperty, Boolean.class);
     modelElement.addProperty(showMethodsProperty, Boolean.class);
     modelElement.addProperty(bgColorProperty, Color.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleBooleanProperty showPackageProperty = new SimpleBooleanProperty(this, "showPackage",_initShowPackage());

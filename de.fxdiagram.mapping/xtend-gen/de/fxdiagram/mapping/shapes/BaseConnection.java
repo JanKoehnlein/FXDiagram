@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.reconcile.ConnectionReconcileBehavior;
 import de.fxdiagram.mapping.shapes.BaseShapeInitializer;
@@ -40,5 +41,9 @@ public class BaseConnection<T extends Object> extends XConnection {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

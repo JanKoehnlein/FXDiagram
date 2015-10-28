@@ -3,6 +3,7 @@ package de.fxdiagram.eclipse.xtext;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.eclipse.xtext.AbstractXtextDescriptor;
 import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
@@ -228,6 +229,10 @@ public class XtextESettingDescriptor<ECLASS extends EObject> extends AbstractXte
     modelElement.addProperty(targetIDProperty, XtextEObjectID.class);
     modelElement.addProperty(eReferenceURIProperty, String.class);
     modelElement.addProperty(indexProperty, Integer.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyObjectWrapper<XtextEObjectID> sourceIDProperty = new ReadOnlyObjectWrapper<XtextEObjectID>(this, "sourceID");

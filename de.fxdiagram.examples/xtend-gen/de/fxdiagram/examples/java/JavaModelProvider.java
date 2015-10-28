@@ -4,6 +4,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.examples.java.JavaProperty;
 import de.fxdiagram.examples.java.JavaPropertyDescriptor;
 import de.fxdiagram.examples.java.JavaSuperTypeDescriptor;
@@ -51,5 +52,9 @@ public class JavaModelProvider implements DomainObjectProvider {
   
   public void populate(final ModelElementImpl modelElement) {
     
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

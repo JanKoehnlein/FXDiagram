@@ -189,9 +189,4 @@ class XNode extends XDomainObjectShape {
 		else
 			super.maxHeight(width)
 	}
-	
-	override toString() {
-		class.name + " (" + name + ")" 
-	}
-	
 }

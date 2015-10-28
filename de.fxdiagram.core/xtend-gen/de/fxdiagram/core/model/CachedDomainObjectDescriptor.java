@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.DomainObjectProvider;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -85,6 +86,10 @@ public abstract class CachedDomainObjectDescriptor<T extends Object> implements 
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(idProperty, String.class);
     modelElement.addProperty(providerProperty, DomainObjectProvider.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyStringWrapper idProperty = new ReadOnlyStringWrapper(this, "id");

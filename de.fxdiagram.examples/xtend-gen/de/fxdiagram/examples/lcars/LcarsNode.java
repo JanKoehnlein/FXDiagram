@@ -11,6 +11,7 @@ import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.lcars.LcarsEntryDescriptor;
 import de.fxdiagram.examples.lcars.LcarsExtensions;
@@ -645,6 +646,10 @@ public class LcarsNode extends XNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleDoubleProperty imageRatioProperty = new SimpleDoubleProperty(this, "imageRatio",_initImageRatio());

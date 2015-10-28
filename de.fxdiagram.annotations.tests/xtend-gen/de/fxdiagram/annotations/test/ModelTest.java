@@ -2,6 +2,7 @@ package de.fxdiagram.annotations.test;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.model.XModelProvider;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.FloatProperty;
@@ -40,5 +41,9 @@ public abstract class ModelTest extends Polygon implements XModelProvider {
     modelElement.addProperty(unprecise, Float.class);
     modelElement.addProperty(names, String.class);
     modelElement.addProperty(selfRef, ModelTest.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

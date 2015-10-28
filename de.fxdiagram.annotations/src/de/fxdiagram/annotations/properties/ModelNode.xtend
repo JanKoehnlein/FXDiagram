@@ -83,6 +83,15 @@ class ModelNodeProcessor extends AbstractClassProcessor {
 				«ENDFOR»
 			'''
 		])
+		
+		if(!annotatedClass.declaredMethods.exists[simpleName == 'toString' && parameters.empty]) {
+			annotatedClass.addMethod('toString') [
+				returnType = newTypeReference(String)
+				body = '''
+					return «'de.fxdiagram.core.model.ToString'.newTypeReference()».toString(this);
+				'''
+			]
+		}
 	}
 	
 	protected def CharSequence getHierarchy(ClassDeclaration clazz) '''

@@ -5,6 +5,7 @@ import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.tools.actions.ZoomToFitAction;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -90,6 +91,10 @@ public class Slide extends XNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleObjectProperty<Image> backgroundImageProperty = new SimpleObjectProperty<Image>(this, "backgroundImage");

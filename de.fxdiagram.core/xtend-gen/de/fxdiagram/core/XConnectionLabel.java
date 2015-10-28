@@ -8,6 +8,7 @@ import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -214,6 +215,10 @@ public class XConnectionLabel extends XLabel {
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(connectionProperty, XConnection.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyObjectWrapper<XConnection> connectionProperty = new ReadOnlyObjectWrapper<XConnection>(this, "connection");

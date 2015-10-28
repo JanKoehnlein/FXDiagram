@@ -2,6 +2,7 @@ package de.fxdiagram.examples.slides.eclipsecon;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.services.ImageCache;
 import de.fxdiagram.examples.slides.Animations;
 import de.fxdiagram.examples.slides.Slide;
@@ -163,5 +164,9 @@ public class SummarySlideDeck extends OpenableDiagramNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

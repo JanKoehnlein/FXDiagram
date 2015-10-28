@@ -2,6 +2,7 @@ package de.fxdiagram.core.services;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.services.ClassLoaderDescriptor;
 import de.fxdiagram.core.services.ClassLoaderProvider;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -31,6 +32,10 @@ public class ResourceDescriptor extends ClassLoaderDescriptor {
     super.populate(modelElement);
     modelElement.addProperty(nameProperty, String.class);
     modelElement.addProperty(absolutePathProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyStringWrapper absolutePathProperty = new ReadOnlyStringWrapper(this, "absolutePath");

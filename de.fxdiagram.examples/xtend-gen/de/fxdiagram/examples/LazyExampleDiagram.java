@@ -6,6 +6,7 @@ import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
 import de.fxdiagram.lib.simple.AddRapidButtonBehavior;
 import de.fxdiagram.lib.simple.LevelOfDetailDiagramNode;
@@ -195,6 +196,10 @@ public class LazyExampleDiagram extends XDiagram {
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(nameSuffixProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleStringProperty nameSuffixProperty = new SimpleStringProperty(this, "nameSuffix");

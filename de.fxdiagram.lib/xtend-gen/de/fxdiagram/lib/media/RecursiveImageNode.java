@@ -11,6 +11,7 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.TooltipExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.services.ResourceDescriptor;
 import de.fxdiagram.core.viewport.ViewportTransition;
 import de.fxdiagram.lib.media.FirstRecursiveImageNode;
@@ -250,6 +251,10 @@ public class RecursiveImageNode extends XNode implements SvgExportable {
     modelElement.addProperty(xProperty, Double.class);
     modelElement.addProperty(yProperty, Double.class);
     modelElement.addProperty(scaleProperty, Double.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleDoubleProperty xProperty = new SimpleDoubleProperty(this, "x");

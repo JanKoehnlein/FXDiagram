@@ -25,6 +25,7 @@ import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableConstructorDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.MutableMethodDeclaration;
+import org.eclipse.xtend.lib.macro.declaration.MutableParameterDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.Type;
 import org.eclipse.xtend.lib.macro.declaration.TypeDeclaration;
 import org.eclipse.xtend.lib.macro.declaration.TypeReference;
@@ -144,6 +145,40 @@ public class ModelNodeProcessor extends AbstractClassProcessor {
       it.setBody(_client);
     };
     annotatedClass.addMethod("populate", _function_2);
+    Iterable<? extends MutableMethodDeclaration> _declaredMethods = annotatedClass.getDeclaredMethods();
+    final Function1<MutableMethodDeclaration, Boolean> _function_3 = (MutableMethodDeclaration it) -> {
+      boolean _and = false;
+      String _simpleName = it.getSimpleName();
+      boolean _equals_1 = Objects.equal(_simpleName, "toString");
+      if (!_equals_1) {
+        _and = false;
+      } else {
+        Iterable<? extends MutableParameterDeclaration> _parameters = it.getParameters();
+        boolean _isEmpty = IterableExtensions.isEmpty(_parameters);
+        _and = _isEmpty;
+      }
+      return Boolean.valueOf(_and);
+    };
+    boolean _exists = IterableExtensions.exists(_declaredMethods, _function_3);
+    boolean _not_1 = (!_exists);
+    if (_not_1) {
+      final Procedure1<MutableMethodDeclaration> _function_4 = (MutableMethodDeclaration it) -> {
+        TypeReference _newTypeReference = this.context.newTypeReference(String.class);
+        it.setReturnType(_newTypeReference);
+        StringConcatenationClient _client = new StringConcatenationClient() {
+          @Override
+          protected void appendTo(StringConcatenationClient.TargetStringConcatenation _builder) {
+            _builder.append("return ");
+            TypeReference _newTypeReference = ModelNodeProcessor.this.context.newTypeReference("de.fxdiagram.core.model.ToString");
+            _builder.append(_newTypeReference, "");
+            _builder.append(".toString(this);");
+            _builder.newLineIfNotEmpty();
+          }
+        };
+        it.setBody(_client);
+      };
+      annotatedClass.addMethod("toString", _function_4);
+    }
   }
   
   protected CharSequence getHierarchy(final ClassDeclaration clazz) {

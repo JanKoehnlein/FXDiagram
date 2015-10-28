@@ -2,6 +2,7 @@ package de.fxdiagram.examples.slides.democamp;
 
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.examples.slides.Animations;
 import de.fxdiagram.examples.slides.Slide;
 import de.fxdiagram.examples.slides.SlideDiagram;
@@ -152,5 +153,9 @@ public class DemoCampSummarySlides extends OpenableDiagramNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

@@ -9,6 +9,7 @@ import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.examples.ecore.AddEReferenceRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.AddESuperTypeRapidButtonBehavior;
 import de.fxdiagram.examples.ecore.EClassDescriptor;
@@ -203,5 +204,9 @@ public class EClassNode extends XNode {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

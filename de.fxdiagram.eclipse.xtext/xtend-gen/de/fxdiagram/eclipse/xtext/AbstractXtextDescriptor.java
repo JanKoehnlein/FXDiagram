@@ -3,6 +3,7 @@ package de.fxdiagram.eclipse.xtext;
 import com.google.inject.Injector;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
@@ -49,5 +50,9 @@ public abstract class AbstractXtextDescriptor<ECLASS_OR_ESETTING extends Object>
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

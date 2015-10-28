@@ -17,6 +17,7 @@ import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.StringDescriptor;
+import de.fxdiagram.core.model.ToString;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
@@ -307,16 +308,6 @@ public class XNode extends XDomainObjectShape {
     return _xifexpression;
   }
   
-  @Override
-  public String toString() {
-    Class<? extends XNode> _class = this.getClass();
-    String _name = _class.getName();
-    String _plus = (_name + " (");
-    String _name_1 = this.getName();
-    String _plus_1 = (_plus + _name_1);
-    return (_plus_1 + ")");
-  }
-  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XNode");
     ;
   
@@ -333,6 +324,10 @@ public class XNode extends XDomainObjectShape {
     modelElement.addProperty(widthProperty, Double.class);
     modelElement.addProperty(heightProperty, Double.class);
     modelElement.addProperty(labelsProperty, XLabel.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleDoubleProperty widthProperty = new SimpleDoubleProperty(this, "width");

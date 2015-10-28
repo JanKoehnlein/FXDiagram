@@ -20,6 +20,7 @@ class ModelNodeTest {
 		''', '''
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
 			import de.fxdiagram.core.model.XModelProvider;
 			
 			@ModelNode
@@ -27,6 +28,10 @@ class ModelNodeTest {
 			public class Foo implements XModelProvider {
 			  public void populate(final ModelElementImpl modelElement) {
 			    
+			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
 			  }
 			}
 		''')
@@ -44,6 +49,7 @@ class ModelNodeTest {
 		''', '''
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
 			import de.fxdiagram.core.model.XModelProvider;
 			
 			@ModelNode
@@ -60,6 +66,10 @@ class ModelNodeTest {
 			  
 			  public void populate(final ModelElementImpl modelElement) {
 			    
+			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
 			  }
 			}
 		''')
@@ -92,6 +102,7 @@ class ModelNodeTest {
 		''', '''
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
 			import de.fxdiagram.core.model.XModelProvider;
 			import javafx.beans.property.BooleanProperty;
 			import javafx.beans.property.FloatProperty;
@@ -131,6 +142,10 @@ class ModelNodeTest {
 			    modelElement.addProperty(names, String.class);
 			    modelElement.addProperty(selfRef, ModelTest.class);
 			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
+			  }
 			}
 		''')
 	}
@@ -153,6 +168,7 @@ class ModelNodeTest {
 		''', '''
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
 			import de.fxdiagram.core.model.XModelProvider;
 			import javafx.beans.property.DoubleProperty;
 			import javafx.beans.property.ListProperty;
@@ -173,6 +189,10 @@ class ModelNodeTest {
 			    modelElement.addProperty(myStringProperty, String.class);
 			    modelElement.addProperty(myObjectProperty, Object.class);
 			    modelElement.addProperty(myListProperty, String.class);
+			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
 			  }
 			  
 			  private SimpleDoubleProperty myDoubleProperty = new SimpleDoubleProperty(this, "myDouble");
@@ -261,6 +281,7 @@ class ModelNodeTest {
 			
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
 			
 			@ModelNode
 			@SuppressWarnings("all")
@@ -268,12 +289,17 @@ class ModelNodeTest {
 			  public void populate(final ModelElementImpl modelElement) {
 			    super.populate(modelElement);
 			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
+			  }
 			}
 			
 			File 2 : /myProject/xtend-gen/Foo.java
 			
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
 			import de.fxdiagram.core.model.XModelProvider;
 			import javafx.beans.property.BooleanProperty;
 			
@@ -284,6 +310,10 @@ class ModelNodeTest {
 			  
 			  public void populate(final ModelElementImpl modelElement) {
 			    modelElement.addProperty(bool, Boolean.class);
+			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
 			  }
 			}
 			
@@ -311,6 +341,7 @@ class ModelNodeTest {
 			
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
 			
 			@ModelNode(inherit = false)
 			@SuppressWarnings("all")
@@ -318,12 +349,17 @@ class ModelNodeTest {
 			  public void populate(final ModelElementImpl modelElement) {
 			    
 			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
+			  }
 			}
 			
 			File 2 : /myProject/xtend-gen/Foo.java
 			
 			import de.fxdiagram.annotations.properties.ModelNode;
 			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.ToString;
 			import de.fxdiagram.core.model.XModelProvider;
 			import javafx.beans.property.BooleanProperty;
 			
@@ -335,8 +371,43 @@ class ModelNodeTest {
 			  public void populate(final ModelElementImpl modelElement) {
 			    modelElement.addProperty(bool, Boolean.class);
 			  }
+			  
+			  public String toString() {
+			    return ToString.toString(this);
+			  }
 			}
 			
+		''')
+	}
+	
+	@Test
+	def void testNoToString() {
+		assertCompilesTo('''
+			import de.fxdiagram.annotations.properties.ModelNode
+			import javafx.beans.property.BooleanProperty
+			
+			@ModelNode
+			class Foo {
+				override toString() {
+					null
+				}
+			}
+		''', '''
+			import de.fxdiagram.annotations.properties.ModelNode;
+			import de.fxdiagram.core.model.ModelElementImpl;
+			import de.fxdiagram.core.model.XModelProvider;
+			
+			@ModelNode
+			@SuppressWarnings("all")
+			public class Foo implements XModelProvider {
+			  public String toString() {
+			    return null;
+			  }
+			  
+			  public void populate(final ModelElementImpl modelElement) {
+			    
+			  }
+			}
 		''')
 	}
 	

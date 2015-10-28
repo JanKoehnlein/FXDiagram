@@ -3,6 +3,7 @@ package de.fxdiagram.xtext.xbase;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.eclipse.xtext.XtextDomainObjectProvider;
 import de.fxdiagram.eclipse.xtext.ids.XtextEObjectID;
 import de.fxdiagram.xtext.xbase.JvmDomainObjectProvider;
@@ -93,6 +94,10 @@ public class JavaElementDescriptor<ECLASS extends EObject> extends JvmEObjectDes
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(handleIdentifierProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyStringWrapper handleIdentifierProperty = new ReadOnlyStringWrapper(this, "handleIdentifier");

@@ -3,6 +3,7 @@ package de.fxdiagram.eclipse.xtext.ids;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.eclipse.xtext.ids.AbstractXtextEObjectID;
 import java.util.NoSuchElementException;
 import org.eclipse.emf.common.util.URI;
@@ -107,5 +108,9 @@ public class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
 }

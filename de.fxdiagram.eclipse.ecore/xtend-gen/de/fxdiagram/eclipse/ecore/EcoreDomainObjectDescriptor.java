@@ -3,6 +3,7 @@ package de.fxdiagram.eclipse.ecore;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -162,6 +163,10 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(uriProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyStringWrapper uriProperty = new ReadOnlyStringWrapper(this, "uri");
