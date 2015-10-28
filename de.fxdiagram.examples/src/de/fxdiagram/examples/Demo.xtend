@@ -127,12 +127,12 @@ class Demo extends Application {
 		val ContainerDiagramNode container = new ContainerDiagramNode('container') {
 			override protected createNode() {
 				super.createNode as Pane => [
-					children += new Text => [
-						text = 'FXDiagram Demo'
-						textAlignment = TextAlignment.CENTER
-						font = Font.font('Helvetica', FontWeight.BOLD, 80)
-						fill = Color.GRAY
-					]
+//					children += new Text => [
+//						text = 'FXDiagram Demo'
+//						textAlignment = TextAlignment.CENTER
+//						font = Font.font('Helvetica', FontWeight.BOLD, 80)
+//						fill = Color.GRAY
+//					]
 				]
 			}
 			
@@ -145,30 +145,34 @@ class Demo extends Application {
 					nodes += new OpenableDiagramNode('Basic') => [
 						innerDiagram = new LazyExampleDiagram('')
 					]
-					nodes += new OpenableDiagramNode('JavaFX') => [
-						innerDiagram = new XDiagram => [
-							nodes += newLoginNode
-							nodes += newRecursiveImageNode
-							nodes += newImageNode
-							nodes += newMovieNode
-							nodes += newBrowserNode
-							nodes += newBrickBreakerNode
-							layoutOnActivate = LayoutType.DOT
-						]
-					]
-					nodes += openableDiagram('Xtend', newNeonSignNode)
-					nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
-					nodes += openableDiagram('Ecore Explorer', newEClassNode)
-					nodes += new SimpleNode('Xtext Views')
-//		//			nodes += newGalleryDiagramNode()
-					if(root.getDomainObjectProvider(LcarsModelProvider).canConnect)
-						nodes += newLcarsDiagramNode
-//		//			nodes += new DemoCampSummarySlides
-					nodes += new SummarySlideDeck
+//					nodes += new OpenableDiagramNode('JavaFX') => [
+//						innerDiagram = new XDiagram => [
+//							nodes += newLoginNode
+//							nodes += newRecursiveImageNode
+//							nodes += newImageNode
+//							nodes += newMovieNode
+//							nodes += newBrowserNode
+//							nodes += newBrickBreakerNode
+//							layoutOnActivate = LayoutType.DOT
+//						]
+//					]
+//					nodes += openableDiagram('Xtend', newNeonSignNode)
+//					nodes += openableDiagram('JavaFX Explorer', newJavaTypeNode)
+//					nodes += openableDiagram('Ecore Explorer', newEClassNode)
+//					nodes += new SimpleNode('Xtext Views')
+////		//			nodes += newGalleryDiagramNode()
+//					if(root.getDomainObjectProvider(LcarsModelProvider).canConnect)
+//						nodes += newLcarsDiagramNode
+////		//			nodes += new DemoCampSummarySlides
+//					nodes += new SummarySlideDeck
 				]
 			]
+			nodes += new OpenableDiagramNode('Basic') => [
+				innerDiagram = new LazyExampleDiagram('')
+			]
+			
 		]
-		val allNodes = container.innerDiagram.nodes
+		val allNodes = container.innerDiagram.nodes + diagram.nodes.tail
 		val deltaX = scene.width / (allNodes.size + 2)
 		val deltaY = scene.height / (allNodes.size + 2)
 		allNodes.forEach[
@@ -177,7 +181,7 @@ class Demo extends Application {
 			node.layoutY = i * deltaY - node.layoutBounds.height / 2
 		]
 		for(i: 1..<allNodes.size) 
-			diagram.connections += new XConnection(allNodes.get(i-1), allNodes.get(i)) 
+			diagram.connections += new XConnection(allNodes.get(i-1), allNodes.get(i % allNodes.size)) 
 		warmUpLayouter
 		Platform.runLater[|
 			diagram.centerDiagram(true)

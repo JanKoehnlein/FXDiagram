@@ -42,7 +42,6 @@ import de.fxdiagram.examples.lcars.LcarsModelProvider;
 import de.fxdiagram.examples.login.LoginNode;
 import de.fxdiagram.examples.neonsign.NeonSignNode;
 import de.fxdiagram.examples.slides.eclipsecon.IntroductionSlideDeck;
-import de.fxdiagram.examples.slides.eclipsecon.SummarySlideDeck;
 import de.fxdiagram.lib.actions.UndoRedoPlayerAction;
 import de.fxdiagram.lib.media.BrowserNode;
 import de.fxdiagram.lib.media.ImageNode;
@@ -64,14 +63,10 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
@@ -157,17 +152,6 @@ public class Demo extends Application {
         protected Node createNode() {
           Node _createNode = super.createNode();
           final Procedure1<Pane> _function = (Pane it) -> {
-            ObservableList<Node> _children = it.getChildren();
-            Text _text = new Text();
-            final Procedure1<Text> _function_1 = (Text it_1) -> {
-              it_1.setText("FXDiagram Demo");
-              it_1.setTextAlignment(TextAlignment.CENTER);
-              Font _font = Font.font("Helvetica", FontWeight.BOLD, 80);
-              it_1.setFont(_font);
-              it_1.setFill(Color.GRAY);
-            };
-            Text _doubleArrow = ObjectExtensions.<Text>operator_doubleArrow(_text, _function_1);
-            _children.add(_doubleArrow);
           };
           return ObjectExtensions.<Pane>operator_doubleArrow(
             ((Pane) _createNode), _function);
@@ -189,76 +173,32 @@ public class Demo extends Application {
             };
             OpenableDiagramNode _doubleArrow_1 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function_4);
             _nodes_2.add(_doubleArrow_1);
-            ObservableList<XNode> _nodes_3 = it_2.getNodes();
-            OpenableDiagramNode _openableDiagramNode_1 = new OpenableDiagramNode("JavaFX");
-            final Procedure1<OpenableDiagramNode> _function_5 = (OpenableDiagramNode it_3) -> {
-              XDiagram _xDiagram = new XDiagram();
-              final Procedure1<XDiagram> _function_6 = (XDiagram it_4) -> {
-                ObservableList<XNode> _nodes_4 = it_4.getNodes();
-                LoginNode _newLoginNode = this.newLoginNode();
-                _nodes_4.add(_newLoginNode);
-                ObservableList<XNode> _nodes_5 = it_4.getNodes();
-                RecursiveImageNode _newRecursiveImageNode = this.newRecursiveImageNode();
-                _nodes_5.add(_newRecursiveImageNode);
-                ObservableList<XNode> _nodes_6 = it_4.getNodes();
-                ImageNode _newImageNode = this.newImageNode();
-                _nodes_6.add(_newImageNode);
-                ObservableList<XNode> _nodes_7 = it_4.getNodes();
-                MovieNode _newMovieNode = this.newMovieNode();
-                _nodes_7.add(_newMovieNode);
-                ObservableList<XNode> _nodes_8 = it_4.getNodes();
-                BrowserNode _newBrowserNode = this.newBrowserNode();
-                _nodes_8.add(_newBrowserNode);
-                ObservableList<XNode> _nodes_9 = it_4.getNodes();
-                BrickBreakerNode _newBrickBreakerNode = this.newBrickBreakerNode();
-                _nodes_9.add(_newBrickBreakerNode);
-                it_4.setLayoutOnActivate(LayoutType.DOT);
-              };
-              XDiagram _doubleArrow_2 = ObjectExtensions.<XDiagram>operator_doubleArrow(_xDiagram, _function_6);
-              it_3.setInnerDiagram(_doubleArrow_2);
-            };
-            OpenableDiagramNode _doubleArrow_2 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode_1, _function_5);
-            _nodes_3.add(_doubleArrow_2);
-            ObservableList<XNode> _nodes_4 = it_2.getNodes();
-            NeonSignNode _newNeonSignNode = this.newNeonSignNode();
-            OpenableDiagramNode _openableDiagram = this.openableDiagram("Xtend", _newNeonSignNode);
-            _nodes_4.add(_openableDiagram);
-            ObservableList<XNode> _nodes_5 = it_2.getNodes();
-            JavaTypeNode _newJavaTypeNode = this.newJavaTypeNode();
-            OpenableDiagramNode _openableDiagram_1 = this.openableDiagram("JavaFX Explorer", _newJavaTypeNode);
-            _nodes_5.add(_openableDiagram_1);
-            ObservableList<XNode> _nodes_6 = it_2.getNodes();
-            EClassNode _newEClassNode = this.newEClassNode();
-            OpenableDiagramNode _openableDiagram_2 = this.openableDiagram("Ecore Explorer", _newEClassNode);
-            _nodes_6.add(_openableDiagram_2);
-            ObservableList<XNode> _nodes_7 = it_2.getNodes();
-            SimpleNode _simpleNode = new SimpleNode("Xtext Views");
-            _nodes_7.add(_simpleNode);
-            LcarsModelProvider _domainObjectProvider = this.root.<LcarsModelProvider>getDomainObjectProvider(LcarsModelProvider.class);
-            boolean _canConnect = _domainObjectProvider.canConnect();
-            if (_canConnect) {
-              ObservableList<XNode> _nodes_8 = it_2.getNodes();
-              OpenableDiagramNode _newLcarsDiagramNode = this.newLcarsDiagramNode();
-              _nodes_8.add(_newLcarsDiagramNode);
-            }
-            ObservableList<XNode> _nodes_9 = it_2.getNodes();
-            SummarySlideDeck _summarySlideDeck = new SummarySlideDeck();
-            _nodes_9.add(_summarySlideDeck);
           };
           ObjectExtensions.<XDiagram>operator_doubleArrow(_innerDiagram, _function_3);
         };
         ContainerDiagramNode _doubleArrow_1 = ObjectExtensions.<ContainerDiagramNode>operator_doubleArrow(container, _function_2);
         _nodes.add(_doubleArrow_1);
+        ObservableList<XNode> _nodes_1 = it.getNodes();
+        OpenableDiagramNode _openableDiagramNode = new OpenableDiagramNode("Basic");
+        final Procedure1<OpenableDiagramNode> _function_3 = (OpenableDiagramNode it_1) -> {
+          LazyExampleDiagram _lazyExampleDiagram = new LazyExampleDiagram("");
+          it_1.setInnerDiagram(_lazyExampleDiagram);
+        };
+        OpenableDiagramNode _doubleArrow_2 = ObjectExtensions.<OpenableDiagramNode>operator_doubleArrow(_openableDiagramNode, _function_3);
+        _nodes_1.add(_doubleArrow_2);
       };
       ObjectExtensions.<XDiagram>operator_doubleArrow(diagram, _function_1);
       XDiagram _innerDiagram = container.getInnerDiagram();
-      final ObservableList<XNode> allNodes = _innerDiagram.getNodes();
+      ObservableList<XNode> _nodes = _innerDiagram.getNodes();
+      ObservableList<XNode> _nodes_1 = diagram.getNodes();
+      Iterable<XNode> _tail = IterableExtensions.<XNode>tail(_nodes_1);
+      final Iterable<XNode> allNodes = Iterables.<XNode>concat(_nodes, _tail);
       double _width = scene.getWidth();
-      int _size = allNodes.size();
+      int _size = IterableExtensions.size(allNodes);
       int _plus = (_size + 2);
       final double deltaX = (_width / _plus);
       double _height = scene.getHeight();
-      int _size_1 = allNodes.size();
+      int _size_1 = IterableExtensions.size(allNodes);
       int _plus_1 = (_size_1 + 2);
       final double deltaY = (_height / _plus_1);
       final Procedure2<XNode, Integer> _function_2 = (XNode node, Integer i) -> {
@@ -274,12 +214,14 @@ public class Demo extends Application {
         node.setLayoutY(_minus_1);
       };
       IterableExtensions.<XNode>forEach(allNodes, _function_2);
-      int _size_2 = allNodes.size();
+      int _size_2 = IterableExtensions.size(allNodes);
       ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _size_2, true);
       for (final Integer i : _doubleDotLessThan) {
         ObservableList<XConnection> _connections = diagram.getConnections();
-        XNode _get = allNodes.get(((i).intValue() - 1));
-        XNode _get_1 = allNodes.get((i).intValue());
+        XNode _get = ((XNode[])Conversions.unwrapArray(allNodes, XNode.class))[((i).intValue() - 1)];
+        int _size_3 = IterableExtensions.size(allNodes);
+        int _modulo = ((i).intValue() % _size_3);
+        XNode _get_1 = ((XNode[])Conversions.unwrapArray(allNodes, XNode.class))[_modulo];
         XConnection _xConnection = new XConnection(_get, _get_1);
         _connections.add(_xConnection);
       }

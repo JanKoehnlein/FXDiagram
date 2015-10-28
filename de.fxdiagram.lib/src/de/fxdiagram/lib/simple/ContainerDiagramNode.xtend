@@ -9,7 +9,7 @@ import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
-import de.fxdiagram.lib.nodes.RectangleBorderPane
+import de.fxdiagram.lib.nodes.RectangleBorderPane2
 import javafx.geometry.Insets
 import javafx.scene.Group
 
@@ -25,11 +25,13 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 @ModelNode('innerDiagram')
 class ContainerDiagramNode extends XNode implements XDiagramContainer {
 
-	RectangleBorderPane pane = new RectangleBorderPane
+	RectangleBorderPane2 pane = new RectangleBorderPane2
 
 	@FxProperty XDiagram innerDiagram = new XDiagram
 
-	val padding = new Insets(20,20,20,20)
+	val padding = new Insets(10,10,10,10)
+	
+	Group group
 	
 	new(String name) {
 		super(name)
@@ -42,13 +44,7 @@ class ContainerDiagramNode extends XNode implements XDiagramContainer {
 	protected override createNode() {
 		pane => [
 			it.padding = this.padding
-		]
-	}
-	
-	override initializeGraphics() {
-		super.initializeGraphics()
-		pane => [
-			children += new Group => [
+			children += group = new Group => [
 				children += innerDiagram => [
 					isRootDiagram = false
 					parentDiagram = this.diagram 			
@@ -56,7 +52,7 @@ class ContainerDiagramNode extends XNode implements XDiagramContainer {
 			]
 		]
 	}
-
+	
 	override protected createAnchors() {
 		new RoundedRectangleAnchors(this, 12, 12)
 	}
@@ -66,9 +62,19 @@ class ContainerDiagramNode extends XNode implements XDiagramContainer {
 		innerDiagram.activate
 		// move container node when the inner diagram grows to the upper/left
 		innerDiagram.boundsInLocalProperty.addListener [ p, o, n |
-			layoutX = layoutX  + (n.minX - o.minX)  
-			layoutY = layoutY +  (n.minY - o.minY)
+			if(!layoutXProperty.bound && !layoutYProperty.bound) {
+				val dx = o.minX - n.minX
+				val dy = o.minY - n.minY
+				layoutX = layoutX - dx
+				layoutY = layoutY - dy
+				group.layoutX = group.layoutX + dx  
+				group.layoutY = group.layoutY + dy  
+			}
 		]		
+	}
+	
+	override protected layoutChildren() {
+		super.layoutChildren()
 	}
 	
 	override getInsets() {

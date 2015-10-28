@@ -14,9 +14,10 @@ import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
-import de.fxdiagram.lib.nodes.RectangleBorderPane;
+import de.fxdiagram.lib.nodes.RectangleBorderPane2;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -40,9 +41,11 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode("innerDiagram")
 @SuppressWarnings("all")
 public class ContainerDiagramNode extends XNode implements XDiagramContainer {
-  private RectangleBorderPane pane = new RectangleBorderPane();
+  private RectangleBorderPane2 pane = new RectangleBorderPane2();
   
-  private final Insets padding = new Insets(20, 20, 20, 20);
+  private final Insets padding = new Insets(10, 10, 10, 10);
+  
+  private Group group;
   
   public ContainerDiagramNode(final String name) {
     super(name);
@@ -54,17 +57,8 @@ public class ContainerDiagramNode extends XNode implements XDiagramContainer {
   
   @Override
   protected Node createNode() {
-    final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
+    final Procedure1<RectangleBorderPane2> _function = (RectangleBorderPane2 it) -> {
       it.setPadding(this.padding);
-    };
-    return ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
-      this.pane, _function);
-  }
-  
-  @Override
-  public void initializeGraphics() {
-    super.initializeGraphics();
-    final Procedure1<RectangleBorderPane> _function = (RectangleBorderPane it) -> {
       ObservableList<Node> _children = it.getChildren();
       Group _group = new Group();
       final Procedure1<Group> _function_1 = (Group it_1) -> {
@@ -79,9 +73,9 @@ public class ContainerDiagramNode extends XNode implements XDiagramContainer {
         _children_1.add(_doubleArrow);
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
-      _children.add(_doubleArrow);
+      _children.add((this.group = _doubleArrow));
     };
-    ObjectExtensions.<RectangleBorderPane>operator_doubleArrow(
+    return ObjectExtensions.<RectangleBorderPane2>operator_doubleArrow(
       this.pane, _function);
   }
   
@@ -98,20 +92,45 @@ public class ContainerDiagramNode extends XNode implements XDiagramContainer {
     XDiagram _innerDiagram_1 = this.getInnerDiagram();
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram_1.boundsInLocalProperty();
     final ChangeListener<Bounds> _function = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {
-      double _layoutX = this.getLayoutX();
-      double _minX = n.getMinX();
-      double _minX_1 = o.getMinX();
-      double _minus = (_minX - _minX_1);
-      double _plus = (_layoutX + _minus);
-      this.setLayoutX(_plus);
-      double _layoutY = this.getLayoutY();
-      double _minY = n.getMinY();
-      double _minY_1 = o.getMinY();
-      double _minus_1 = (_minY - _minY_1);
-      double _plus_1 = (_layoutY + _minus_1);
-      this.setLayoutY(_plus_1);
+      boolean _and = false;
+      DoubleProperty _layoutXProperty = this.layoutXProperty();
+      boolean _isBound = _layoutXProperty.isBound();
+      boolean _not = (!_isBound);
+      if (!_not) {
+        _and = false;
+      } else {
+        DoubleProperty _layoutYProperty = this.layoutYProperty();
+        boolean _isBound_1 = _layoutYProperty.isBound();
+        boolean _not_1 = (!_isBound_1);
+        _and = _not_1;
+      }
+      if (_and) {
+        double _minX = o.getMinX();
+        double _minX_1 = n.getMinX();
+        final double dx = (_minX - _minX_1);
+        double _minY = o.getMinY();
+        double _minY_1 = n.getMinY();
+        final double dy = (_minY - _minY_1);
+        double _layoutX = this.getLayoutX();
+        double _minus = (_layoutX - dx);
+        this.setLayoutX(_minus);
+        double _layoutY = this.getLayoutY();
+        double _minus_1 = (_layoutY - dy);
+        this.setLayoutY(_minus_1);
+        double _layoutX_1 = this.group.getLayoutX();
+        double _plus = (_layoutX_1 + dx);
+        this.group.setLayoutX(_plus);
+        double _layoutY_1 = this.group.getLayoutY();
+        double _plus_1 = (_layoutY_1 + dy);
+        this.group.setLayoutY(_plus_1);
+      }
     };
     _boundsInLocalProperty.addListener(_function);
+  }
+  
+  @Override
+  protected void layoutChildren() {
+    super.layoutChildren();
   }
   
   @Override
