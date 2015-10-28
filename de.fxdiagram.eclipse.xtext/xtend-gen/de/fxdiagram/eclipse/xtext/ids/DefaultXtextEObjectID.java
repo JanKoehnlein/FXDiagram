@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescription;
+import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
@@ -128,6 +129,20 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
       throw new NoSuchElementException(_plus_1);
     }
     return element;
+  }
+  
+  @Override
+  public IEObjectDescription findInIndex(final IResourceDescriptions index) {
+    IEObjectDescription _xblockexpression = null;
+    {
+      URI _uRI = this.getURI();
+      URI _trimFragment = _uRI.trimFragment();
+      final IResourceDescription resourceDescription = index.getResourceDescription(_trimFragment);
+      EClass _eClass = this.getEClass();
+      Iterable<IEObjectDescription> _exportedObjects = resourceDescription.getExportedObjects(_eClass, this.qualifiedName, false);
+      _xblockexpression = IterableExtensions.<IEObjectDescription>head(_exportedObjects);
+    }
+    return _xblockexpression;
   }
   
   /**

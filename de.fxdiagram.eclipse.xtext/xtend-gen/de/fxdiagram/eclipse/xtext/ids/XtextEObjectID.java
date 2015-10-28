@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
+import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 
@@ -43,22 +44,9 @@ public interface XtextEObjectID {
         }
       } while(Objects.equal(currentName, null));
       final XtextEObjectID parentID = this.createXtextEObjectID(currentParent);
-      URI _uRI_1 = EcoreUtil.getURI(it);
-      final String fragment = _uRI_1.fragment();
-      URI _uRI_2 = parentID.getURI();
-      final String namedParentFragment = _uRI_2.fragment();
-      String _xifexpression = null;
-      boolean _startsWith = fragment.startsWith(namedParentFragment);
-      if (_startsWith) {
-        int _length = namedParentFragment.length();
-        _xifexpression = fragment.substring(_length);
-      } else {
-        _xifexpression = ("#" + fragment);
-      }
-      final String relativeFragment = _xifexpression;
       EClass _eClass_1 = it.eClass();
-      URI _uRI_3 = EcoreUtil.getURI(it);
-      return new RelativeXtextEObjectID(parentID, _eClass_1, _uRI_3, relativeFragment);
+      URI _uRI_1 = EcoreUtil.getURI(it);
+      return new RelativeXtextEObjectID(parentID, _eClass_1, _uRI_1);
     }
     
     public XtextEObjectID createXtextEObjectID(final IEObjectDescription it) {
@@ -106,6 +94,8 @@ public interface XtextEObjectID {
   public abstract EClass getEClass();
   
   public abstract EObject resolve(final ResourceSet resourceSet);
+  
+  public abstract IEObjectDescription findInIndex(final IResourceDescriptions index);
   
   public abstract IResourceServiceProvider getResourceServiceProvider();
 }

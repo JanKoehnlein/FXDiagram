@@ -17,13 +17,31 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.resource.IEObjectDescription;
+import org.eclipse.xtext.resource.IResourceDescription;
+import org.eclipse.xtext.resource.IResourceDescriptions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @ModelNode({ "parentID", "relativeFragment" })
 @SuppressWarnings("all")
 public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
-  public RelativeXtextEObjectID(final XtextEObjectID parentID, final EClass eClass, final URI elementURI, final String relativeFragment) {
+  public RelativeXtextEObjectID(final XtextEObjectID parentID, final EClass eClass, final URI elementURI) {
     super(eClass, elementURI);
     this.parentIDProperty.set(parentID);
+    URI _uRI = this.getURI();
+    final String fragment = _uRI.fragment();
+    URI _uRI_1 = parentID.getURI();
+    final String parentFragment = _uRI_1.fragment();
+    String _xifexpression = null;
+    boolean _startsWith = fragment.startsWith(parentFragment);
+    if (_startsWith) {
+      int _length = parentFragment.length();
+      _xifexpression = fragment.substring(_length);
+    } else {
+      _xifexpression = ("#" + fragment);
+    }
+    final String relativeFragment = _xifexpression;
     this.relativeFragmentProperty.set(relativeFragment);
   }
   
@@ -82,6 +100,25 @@ public class RelativeXtextEObjectID extends AbstractXtextEObjectID {
       _parentID.toString();
       String _relativeFragment = this.getRelativeFragment();
       _xblockexpression = ("->" + _relativeFragment);
+    }
+    return _xblockexpression;
+  }
+  
+  @Override
+  public IEObjectDescription findInIndex(final IResourceDescriptions index) {
+    IEObjectDescription _xblockexpression = null;
+    {
+      URI _uRI = this.getURI();
+      URI _trimFragment = _uRI.trimFragment();
+      final IResourceDescription resourceDescription = index.getResourceDescription(_trimFragment);
+      EClass _eClass = this.getEClass();
+      Iterable<IEObjectDescription> _exportedObjectsByType = resourceDescription.getExportedObjectsByType(_eClass);
+      final Function1<IEObjectDescription, Boolean> _function = (IEObjectDescription it) -> {
+        URI _uRI_1 = this.getURI();
+        URI _eObjectURI = it.getEObjectURI();
+        return Boolean.valueOf(Objects.equal(_uRI_1, _eObjectURI));
+      };
+      _xblockexpression = IterableExtensions.<IEObjectDescription>findFirst(_exportedObjectsByType, _function);
     }
     return _xblockexpression;
   }

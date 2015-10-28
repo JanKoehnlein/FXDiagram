@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtext.naming.QualifiedName
 
 import static javafx.collections.FXCollections.*
+import org.eclipse.xtext.resource.IResourceDescriptions
 
 @ModelNode('nameSegments')
 class DefaultXtextEObjectID extends AbstractXtextEObjectID {
@@ -61,6 +62,11 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 		if (element == null || element.eIsProxy)
 			throw new NoSuchElementException('Cannot resolve element ' + eObjectDescription.EObjectURI)
 		return element
+	}
+	
+	override findInIndex(IResourceDescriptions index) {
+		val resourceDescription = index.getResourceDescription(URI.trimFragment)
+		resourceDescription.getExportedObjects(EClass, qualifiedName, false).head
 	}
 
 }

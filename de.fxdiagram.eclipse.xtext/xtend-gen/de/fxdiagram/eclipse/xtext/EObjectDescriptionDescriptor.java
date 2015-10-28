@@ -11,12 +11,10 @@ import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @ModelNode("elementID")
 @SuppressWarnings("all")
@@ -40,21 +38,11 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
       XtextEObjectID _elementID = this.getElementID();
       final IResourceDescriptions index = _provider.getIndex(_elementID);
       XtextEObjectID _elementID_1 = this.getElementID();
-      EClass _eClass = _elementID_1.getEClass();
-      XtextEObjectID _elementID_2 = this.getElementID();
-      QualifiedName _qualifiedName = _elementID_2.getQualifiedName();
-      Iterable<IEObjectDescription> _exportedObjects = index.getExportedObjects(_eClass, _qualifiedName, false);
-      final Function1<IEObjectDescription, Boolean> _function = (IEObjectDescription it) -> {
-        URI _eObjectURI = it.getEObjectURI();
-        XtextEObjectID _elementID_3 = this.getElementID();
-        URI _uRI = _elementID_3.getURI();
-        return Boolean.valueOf(Objects.equal(_eObjectURI, _uRI));
-      };
-      final IEObjectDescription description = IterableExtensions.<IEObjectDescription>findFirst(_exportedObjects, _function);
+      final IEObjectDescription description = _elementID_1.findInIndex(index);
       boolean _equals = Objects.equal(description, null);
       if (_equals) {
-        XtextEObjectID _elementID_3 = this.getElementID();
-        String _plus = ("Element " + _elementID_3);
+        XtextEObjectID _elementID_2 = this.getElementID();
+        String _plus = ("Element " + _elementID_2);
         String _plus_1 = (_plus + " does not exist");
         throw new NoSuchElementException(_plus_1);
       }

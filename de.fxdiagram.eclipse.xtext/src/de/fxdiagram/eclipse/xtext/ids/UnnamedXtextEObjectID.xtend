@@ -5,6 +5,7 @@ import java.util.NoSuchElementException
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.xtext.resource.IResourceDescriptions
 
 @ModelNode
 class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
@@ -14,6 +15,11 @@ class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
 	
 	override getQualifiedName() {
 		null
+	}
+	
+	override findInIndex(IResourceDescriptions index) {
+		val resourceDescription = index.getResourceDescription(URI.trimFragment)
+		resourceDescription.getExportedObjectsByType(EClass).findFirst[URI == EObjectURI]
 	}
 	
 	override resolve(ResourceSet resourceSet) {

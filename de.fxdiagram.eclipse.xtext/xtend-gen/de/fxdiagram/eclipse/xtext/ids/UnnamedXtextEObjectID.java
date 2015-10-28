@@ -10,6 +10,11 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.resource.IEObjectDescription;
+import org.eclipse.xtext.resource.IResourceDescription;
+import org.eclipse.xtext.resource.IResourceDescriptions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @ModelNode
 @SuppressWarnings("all")
@@ -21,6 +26,25 @@ public class UnnamedXtextEObjectID extends AbstractXtextEObjectID {
   @Override
   public QualifiedName getQualifiedName() {
     return null;
+  }
+  
+  @Override
+  public IEObjectDescription findInIndex(final IResourceDescriptions index) {
+    IEObjectDescription _xblockexpression = null;
+    {
+      URI _uRI = this.getURI();
+      URI _trimFragment = _uRI.trimFragment();
+      final IResourceDescription resourceDescription = index.getResourceDescription(_trimFragment);
+      EClass _eClass = this.getEClass();
+      Iterable<IEObjectDescription> _exportedObjectsByType = resourceDescription.getExportedObjectsByType(_eClass);
+      final Function1<IEObjectDescription, Boolean> _function = (IEObjectDescription it) -> {
+        URI _uRI_1 = this.getURI();
+        URI _eObjectURI = it.getEObjectURI();
+        return Boolean.valueOf(Objects.equal(_uRI_1, _eObjectURI));
+      };
+      _xblockexpression = IterableExtensions.<IEObjectDescription>findFirst(_exportedObjectsByType, _function);
+    }
+    return _xblockexpression;
   }
   
   @Override

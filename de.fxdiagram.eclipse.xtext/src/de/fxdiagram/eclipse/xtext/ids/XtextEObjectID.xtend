@@ -17,6 +17,7 @@ import org.eclipse.xtext.resource.XtextResource
 
 import static extension org.eclipse.emf.common.util.URI.*
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import org.eclipse.xtext.resource.IResourceDescriptions
 
 interface XtextEObjectID {
 	def QualifiedName getQualifiedName()
@@ -26,6 +27,8 @@ interface XtextEObjectID {
 	def EClass getEClass()
 
 	def EObject resolve(ResourceSet resourceSet)
+	
+	def IEObjectDescription findInIndex(IResourceDescriptions index)
 	
 	def IResourceServiceProvider getResourceServiceProvider()
 
@@ -42,13 +45,7 @@ interface XtextEObjectID {
 				currentName = currentParent.qualifiedName
 			} while (currentName == null)
 			val parentID = currentParent.createXtextEObjectID
-			val fragment = URI.fragment
-			val namedParentFragment = parentID.URI.fragment
-			val relativeFragment = if (fragment.startsWith(namedParentFragment))
-					fragment.substring(namedParentFragment.length)
-				else
-					'#' + fragment
-			return new RelativeXtextEObjectID(parentID, eClass, URI, relativeFragment)
+			return new RelativeXtextEObjectID(parentID, eClass, URI)
 		}
 
 		def XtextEObjectID createXtextEObjectID(IEObjectDescription it) {
