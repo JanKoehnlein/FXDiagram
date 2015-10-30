@@ -28,6 +28,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.ExclusiveRange;
@@ -50,7 +51,7 @@ public class ConnectionRouter implements XActivatable {
   
   private SplineShapeKeeper shapeKeeper;
   
-  @Accessors
+  @Accessors(AccessorType.PUBLIC_GETTER)
   private boolean splineShapeKeeperEnabled = false;
   
   private double selfEdgeDist = 60;
@@ -122,6 +123,15 @@ public class ConnectionRouter implements XActivatable {
         current = _parent;
       }
     }
+  }
+  
+  public boolean setSplineShapeKeeperEnabled(final boolean isEnabled) {
+    boolean _xblockexpression = false;
+    {
+      this.shapeKeeper.reset();
+      _xblockexpression = this.splineShapeKeeperEnabled = isEnabled;
+    }
+    return _xblockexpression;
   }
   
   public void growToSize(final int newSize) {
@@ -632,9 +642,5 @@ public class ConnectionRouter implements XActivatable {
   @Pure
   public boolean isSplineShapeKeeperEnabled() {
     return this.splineShapeKeeperEnabled;
-  }
-  
-  public void setSplineShapeKeeperEnabled(final boolean splineShapeKeeperEnabled) {
-    this.splineShapeKeeperEnabled = splineShapeKeeperEnabled;
   }
 }

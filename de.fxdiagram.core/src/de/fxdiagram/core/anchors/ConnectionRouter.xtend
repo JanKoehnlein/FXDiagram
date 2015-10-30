@@ -33,7 +33,7 @@ class ConnectionRouter implements XActivatable {
 	
 	SplineShapeKeeper shapeKeeper
 	
-	@Accessors
+	@Accessors(PUBLIC_GETTER)
 	boolean splineShapeKeeperEnabled = false
 	
 	double selfEdgeDist = 60
@@ -82,6 +82,11 @@ class ConnectionRouter implements XActivatable {
 			current.boundsInParentProperty.removeListener(boundsListener)
 			current = current.parent
 		} 
+	}
+	
+	def setSplineShapeKeeperEnabled(boolean isEnabled) {
+		shapeKeeper.reset
+		splineShapeKeeperEnabled = isEnabled
 	}
 	
 	def growToSize(int newSize) {
