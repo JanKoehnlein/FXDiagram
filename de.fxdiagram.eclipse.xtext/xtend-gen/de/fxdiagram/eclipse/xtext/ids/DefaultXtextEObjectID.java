@@ -3,6 +3,7 @@ package de.fxdiagram.eclipse.xtext.ids;
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.eclipse.xtext.ids.AbstractXtextEObjectID;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -64,7 +65,9 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
       if (!_equals) {
         _and = false;
       } else {
-        boolean _equals_1 = Objects.equal(((DefaultXtextEObjectID)obj).qualifiedName, this.qualifiedName);
+        QualifiedName _qualifiedName = ((DefaultXtextEObjectID)obj).getQualifiedName();
+        QualifiedName _qualifiedName_1 = this.getQualifiedName();
+        boolean _equals_1 = Objects.equal(_qualifiedName, _qualifiedName_1);
         _and = _equals_1;
       }
       return _and;
@@ -80,14 +83,6 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
     int _hashCode_1 = _qualifiedName.hashCode();
     int _multiply = (_hashCode_1 * 101);
     return (_hashCode + _multiply);
-  }
-  
-  @Override
-  public String toString() {
-    String _string = this.qualifiedName.toString();
-    String _plus = (_string + "||");
-    String _uriAsString = this.getUriAsString();
-    return (_plus + _uriAsString);
   }
   
   @Override
@@ -139,7 +134,8 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
       URI _trimFragment = _uRI.trimFragment();
       final IResourceDescription resourceDescription = index.getResourceDescription(_trimFragment);
       EClass _eClass = this.getEClass();
-      Iterable<IEObjectDescription> _exportedObjects = resourceDescription.getExportedObjects(_eClass, this.qualifiedName, false);
+      QualifiedName _qualifiedName = this.getQualifiedName();
+      Iterable<IEObjectDescription> _exportedObjects = resourceDescription.getExportedObjects(_eClass, _qualifiedName, false);
       _xblockexpression = IterableExtensions.<IEObjectDescription>head(_exportedObjects);
     }
     return _xblockexpression;
@@ -154,6 +150,10 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(nameSegmentsProperty, String.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private ReadOnlyListWrapper<String> nameSegmentsProperty = new ReadOnlyListWrapper<String>(this, "nameSegments",_initNameSegments());

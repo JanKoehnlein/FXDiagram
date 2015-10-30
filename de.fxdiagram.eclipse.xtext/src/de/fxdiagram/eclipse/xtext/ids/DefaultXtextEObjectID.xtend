@@ -34,17 +34,13 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 
 	override equals(Object obj) {
 		if (obj instanceof DefaultXtextEObjectID)
-			return super.equals(obj) &&  obj.qualifiedName == qualifiedName
+			return super.equals(obj) &&  obj.getQualifiedName == getQualifiedName
 		else
 			return false
 	}
 
 	override hashCode() {
 		super.hashCode + getQualifiedName.hashCode * 101 
-	}
-
-	override toString() {
-		qualifiedName.toString + '||' + uriAsString
 	}
 
 	override resolve(ResourceSet resourceSet) {
@@ -66,7 +62,7 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 	
 	override findInIndex(IResourceDescriptions index) {
 		val resourceDescription = index.getResourceDescription(URI.trimFragment)
-		resourceDescription.getExportedObjects(EClass, qualifiedName, false).head
+		resourceDescription.getExportedObjects(EClass, getQualifiedName, false).head
 	}
 
 }
