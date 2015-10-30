@@ -49,7 +49,8 @@ public class EclipseLoadAction extends LoadAction {
       if (_notEquals) {
         ModelLoad _modelLoad = new ModelLoad();
         InputStream _contents = file.getContents();
-        InputStreamReader _inputStreamReader = new InputStreamReader(_contents);
+        String _charset = file.getCharset();
+        InputStreamReader _inputStreamReader = new InputStreamReader(_contents, _charset);
         final Object node = _modelLoad.load(_inputStreamReader);
         if ((node instanceof XRoot)) {
           ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();

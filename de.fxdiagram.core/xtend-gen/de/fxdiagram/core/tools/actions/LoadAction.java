@@ -8,7 +8,8 @@ import de.fxdiagram.core.model.ModelLoad;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -56,8 +57,9 @@ public class LoadAction implements DiagramAction {
       boolean _notEquals = (!Objects.equal(file, null));
       if (_notEquals) {
         ModelLoad _modelLoad = new ModelLoad();
-        FileReader _fileReader = new FileReader(file);
-        final Object node = _modelLoad.load(_fileReader);
+        FileInputStream _fileInputStream = new FileInputStream(file);
+        InputStreamReader _inputStreamReader = new InputStreamReader(_fileInputStream, "UTF-8");
+        final Object node = _modelLoad.load(_inputStreamReader);
         if ((node instanceof XRoot)) {
           ObservableList<DomainObjectProvider> _domainObjectProviders = ((XRoot)node).getDomainObjectProviders();
           root.replaceDomainObjectProviders(_domainObjectProviders);

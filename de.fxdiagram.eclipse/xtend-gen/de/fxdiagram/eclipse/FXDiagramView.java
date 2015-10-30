@@ -318,7 +318,8 @@ public class FXDiagramView extends ViewPart {
           if (_exists) {
             ModelLoad _modelLoad = new ModelLoad();
             InputStream _contents = file.getContents();
-            InputStreamReader _inputStreamReader = new InputStreamReader(_contents);
+            String _charset = file.getCharset();
+            InputStreamReader _inputStreamReader = new InputStreamReader(_contents, _charset);
             final Object node = _modelLoad.load(_inputStreamReader);
             if ((node instanceof XRoot)) {
               final Runnable _function_1 = () -> {

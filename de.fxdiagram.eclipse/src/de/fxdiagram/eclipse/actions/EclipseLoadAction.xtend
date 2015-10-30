@@ -20,7 +20,7 @@ class EclipseLoadAction extends LoadAction {
 		]
 		val file = fileChooser.showOpenDialog(root.scene.window).toWorkspaceFile
 		if(file != null) {
-			val node = new ModelLoad().load(new InputStreamReader(file.contents))
+			val node = new ModelLoad().load(new InputStreamReader(file.contents, file.charset))
 			if(node instanceof XRoot) {
 				root.replaceDomainObjectProviders(node.domainObjectProviders)
 				root.rootDiagram = node.diagram

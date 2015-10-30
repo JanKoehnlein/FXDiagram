@@ -3,7 +3,8 @@ package de.fxdiagram.core.tools.actions
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.model.ModelLoad
 import eu.hansolo.enzo.radialmenu.SymbolType
-import java.io.FileReader
+import java.io.FileInputStream
+import java.io.InputStreamReader
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.stage.FileChooser
@@ -27,7 +28,7 @@ class LoadAction implements DiagramAction {
 		fileChooser.extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
 		val file = (fileChooser).showOpenDialog(root.scene.window)
 		if(file != null) {
-			val node = new ModelLoad().load(new FileReader(file))
+			val node = new ModelLoad().load(new InputStreamReader(new FileInputStream(file), 'UTF-8'))
 			if(node instanceof XRoot) {
 				root.replaceDomainObjectProviders(node.domainObjectProviders)
 				root.rootDiagram = node.diagram

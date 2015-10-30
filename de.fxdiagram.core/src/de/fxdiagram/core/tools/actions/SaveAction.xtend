@@ -8,6 +8,8 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.stage.FileChooser
 import java.io.File
+import java.io.OutputStreamWriter
+import java.io.FileOutputStream
 
 class SaveAction implements DiagramAction {
 
@@ -34,7 +36,7 @@ class SaveAction implements DiagramAction {
 			} 
 			if(file != null) {
 				file.parentFile.mkdirs
-				new ModelSave().save(root, new FileWriter(file))
+				new ModelSave().save(root, new OutputStreamWriter(new FileOutputStream(file), 'UTF-8'))
 				root.fileName = file.path
 				root.needsSave = false
 			}

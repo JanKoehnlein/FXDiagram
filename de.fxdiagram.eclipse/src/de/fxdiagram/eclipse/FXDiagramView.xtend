@@ -166,7 +166,7 @@ class FXDiagramView extends ViewPart {
 			if(filePath != null) {
 				val file = ResourcesPlugin.workspace.root.getFile(new Path(filePath))
 				if(file.exists) {
-					val node = new ModelLoad().load(new InputStreamReader(file.contents))
+					val node = new ModelLoad().load(new InputStreamReader(file.contents, file.charset))
 					if(node instanceof XRoot) {
 						Platform.runLater [
 							try {
