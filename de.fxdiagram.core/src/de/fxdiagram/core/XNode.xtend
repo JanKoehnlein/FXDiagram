@@ -112,10 +112,10 @@ class XNode extends XDomainObjectShape {
 		])
 		if(node instanceof XActivatable)
 			(node as XActivatable).activate
-		layoutBoundsProperty.addListener [ p, o, n |
-			width = n.width
-			height = n.height
-		]
+//		layoutBoundsProperty.addListener [ p, o, n |
+//			width = n.width
+//			height = n.height
+//		]
 	}
 	
 	override selectionFeedback(boolean isSelected) {
