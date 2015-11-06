@@ -26,7 +26,7 @@ public class PsiDomainObjectProvider implements IMappedElementDescriptorProvider
         if(domainObject instanceof PsiNamedElement) {
             PsiNamedElement psiNamedElement = (PsiNamedElement) domainObject;
             return (IMappedElementDescriptor<T>)
-                    new PsiDomainObjectDescriptor(getFQN(psiNamedElement), psiNamedElement, (AbstractMapping<PsiNamedElement>)mapping, this);
+                    new PsiDomainObjectDescriptor(getFQN(psiNamedElement), psiNamedElement, (AbstractMapping<PsiNamedElement>)mapping);
         }
         return null;
     }

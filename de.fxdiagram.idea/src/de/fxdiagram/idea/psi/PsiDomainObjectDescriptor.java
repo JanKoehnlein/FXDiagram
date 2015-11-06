@@ -40,8 +40,8 @@ public class PsiDomainObjectDescriptor<T extends PsiNamedElement> extends Abstra
     public PsiDomainObjectDescriptor() {
     }
 
-    public PsiDomainObjectDescriptor(List<String> fqn, T psiElement, AbstractMapping<PsiNamedElement> mapping, PsiDomainObjectProvider provider) {
-        super(mapping.getConfig().getID(), mapping.getID(), provider);
+    public PsiDomainObjectDescriptor(List<String> fqn, T psiElement, AbstractMapping<PsiNamedElement> mapping) {
+        super(mapping.getConfig().getID(), mapping.getID());
         this.fqnProperty.setAll(fqn);
         this.pathProperty.set(psiElement.getContainingFile().getVirtualFile().getCanonicalPath());
         this.psiElement = psiElement;
@@ -81,10 +81,14 @@ public class PsiDomainObjectDescriptor<T extends PsiNamedElement> extends Abstra
         return null;
     }
 
+    @Override
+    public PsiDomainObjectProvider getProvider() {
+        return (PsiDomainObjectProvider) super.getProvider();
+    }
+
     protected T getPsiElement() {
         if (psiElement == null)
-            psiElement = (T) ((PsiDomainObjectProvider) providerProperty().get())
-                    .recover(pathProperty.get(), fqnProperty.get());
+            psiElement = (T) getProvider().recover(pathProperty.get(), fqnProperty.get());
         return psiElement;
 
     }
