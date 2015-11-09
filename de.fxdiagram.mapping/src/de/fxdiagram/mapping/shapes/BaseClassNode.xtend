@@ -31,6 +31,7 @@ import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
+import de.fxdiagram.core.XDiagram
 
 @ModelNode('showPackage', 'showAttributes', 'showMethods', 'bgColor')
 class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
@@ -192,12 +193,12 @@ class BaseClassNode<T> extends FlipNode implements INodeWithLazyMappings {
 		override protected reconcile(AbstractMapping<T> mapping, T domainObject, UpdateAcceptor acceptor) {
 			val fakeAcceptor = new UpdateAcceptor {
 				
-				override delete(XShape shape) {
-					acceptor.delete(shape)
+				override delete(XShape shape, XDiagram diagram) {
+					acceptor.delete(shape, diagram)
 				}
 				
-				override add(XShape shape) {
-					acceptor.add(shape)
+				override add(XShape shape, XDiagram diagram) {
+					acceptor.add(shape, diagram)
 				}
 				
 				override morph(AnimationCommand command) {

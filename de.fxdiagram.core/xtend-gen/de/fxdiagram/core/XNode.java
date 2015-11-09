@@ -135,6 +135,11 @@ public class XNode extends XDomainObjectShape {
   }
   
   @Override
+  public void initializeGraphics() {
+    super.initializeGraphics();
+  }
+  
+  @Override
   public void doActivate() {
     MoveBehavior<XNode> _moveBehavior = new MoveBehavior<XNode>(this);
     this.addBehavior(_moveBehavior);
@@ -222,7 +227,12 @@ public class XNode extends XDomainObjectShape {
   }
   
   public Anchors getAnchors() {
-    return this.anchors;
+    Anchors _xblockexpression = null;
+    {
+      this.getNode();
+      _xblockexpression = this.anchors;
+    }
+    return _xblockexpression;
   }
   
   @Override

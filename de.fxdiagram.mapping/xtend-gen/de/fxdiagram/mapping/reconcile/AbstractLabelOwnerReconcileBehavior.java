@@ -2,11 +2,13 @@ package de.fxdiagram.mapping.reconcile;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.ReconcileBehavior;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractLabelMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
@@ -247,7 +249,9 @@ public abstract class AbstractLabelOwnerReconcileBehavior<T extends Object, SHAP
         if (_t instanceof NoSuchElementException) {
           final NoSuchElementException exc = (NoSuchElementException)_t;
           SHAPE _host_2 = this.getHost();
-          acceptor.delete(_host_2);
+          SHAPE _host_3 = this.getHost();
+          XDiagram _diagram = CoreExtensions.getDiagram(_host_3);
+          acceptor.delete(_host_2, _diagram);
         } else {
           throw Exceptions.sneakyThrow(_t);
         }

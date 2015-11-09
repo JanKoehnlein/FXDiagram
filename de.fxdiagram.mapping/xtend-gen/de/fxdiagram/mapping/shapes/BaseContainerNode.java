@@ -1,6 +1,7 @@
 package de.fxdiagram.mapping.shapes;
 
 import com.google.common.annotations.Beta;
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
@@ -10,6 +11,7 @@ import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.Anchors;
+import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListener;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
@@ -17,6 +19,7 @@ import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
+import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.IMappedElementDescriptor;
 import de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior;
@@ -57,6 +60,69 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @ModelNode("innerDiagram")
 @SuppressWarnings("all")
 public class BaseContainerNode<T extends Object> extends XNode implements INodeWithLazyMappings, XDiagramContainer {
+  public static class ReconcileBehavior<T extends Object> extends NodeReconcileBehavior<T> {
+    public ReconcileBehavior(final BaseContainerNode<T> host) {
+      super(host);
+    }
+    
+    @Override
+    public BaseContainerNode<T> getHost() {
+      XNode _host = super.getHost();
+      return ((BaseContainerNode<T>) _host);
+    }
+    
+    @Override
+    public DirtyState getDirtyState() {
+      final DirtyState dirtyFromSuper = super.getDirtyState();
+      de.fxdiagram.core.behavior.ReconcileBehavior _innerDiagramReconcileBehavior = this.getInnerDiagramReconcileBehavior();
+      DirtyState _dirtyState = null;
+      if (_innerDiagramReconcileBehavior!=null) {
+        _dirtyState=_innerDiagramReconcileBehavior.getDirtyState();
+      }
+      final DirtyState dirtyFromInnerDiagram = _dirtyState;
+      boolean _equals = Objects.equal(dirtyFromSuper, DirtyState.CLEAN);
+      if (_equals) {
+        return dirtyFromInnerDiagram;
+      }
+      return null;
+    }
+    
+    @Override
+    protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor acceptor) {
+      super.reconcile(mapping, domainObject, acceptor);
+      de.fxdiagram.core.behavior.ReconcileBehavior _innerDiagramReconcileBehavior = this.getInnerDiagramReconcileBehavior();
+      if (_innerDiagramReconcileBehavior!=null) {
+        _innerDiagramReconcileBehavior.reconcile(acceptor);
+      }
+    }
+    
+    @Override
+    public void hideDirtyState() {
+      super.hideDirtyState();
+      de.fxdiagram.core.behavior.ReconcileBehavior _innerDiagramReconcileBehavior = this.getInnerDiagramReconcileBehavior();
+      if (_innerDiagramReconcileBehavior!=null) {
+        _innerDiagramReconcileBehavior.hideDirtyState();
+      }
+    }
+    
+    @Override
+    public void showDirtyState(final DirtyState dirtyState) {
+      super.showDirtyState(dirtyState);
+      de.fxdiagram.core.behavior.ReconcileBehavior _innerDiagramReconcileBehavior = this.getInnerDiagramReconcileBehavior();
+      if (_innerDiagramReconcileBehavior!=null) {
+        de.fxdiagram.core.behavior.ReconcileBehavior _innerDiagramReconcileBehavior_1 = this.getInnerDiagramReconcileBehavior();
+        DirtyState _dirtyState = _innerDiagramReconcileBehavior_1.getDirtyState();
+        _innerDiagramReconcileBehavior.showDirtyState(_dirtyState);
+      }
+    }
+    
+    protected de.fxdiagram.core.behavior.ReconcileBehavior getInnerDiagramReconcileBehavior() {
+      BaseContainerNode<T> _host = this.getHost();
+      XDiagram _innerDiagram = _host.getInnerDiagram();
+      return _innerDiagram.<de.fxdiagram.core.behavior.ReconcileBehavior>getBehavior(de.fxdiagram.core.behavior.ReconcileBehavior.class);
+    }
+  }
+  
   public final static String NODE_HEADING = "containerNodeHeading";
   
   private Group diagramGroup;
@@ -140,8 +206,8 @@ public class BaseContainerNode<T extends Object> extends XNode implements INodeW
     CoreExtensions.<XDiagram>addInitializingListener(this.innerDiagramProperty, _doubleArrow);
     IMappedElementDescriptor<T> _domainObjectDescriptor = this.getDomainObjectDescriptor();
     LazyConnectionMappingBehavior.<T>addLazyBehavior(this, _domainObjectDescriptor);
-    NodeReconcileBehavior<Object> _nodeReconcileBehavior = new NodeReconcileBehavior<Object>(this);
-    this.addBehavior(_nodeReconcileBehavior);
+    BaseContainerNode.ReconcileBehavior<T> _reconcileBehavior = new BaseContainerNode.ReconcileBehavior<T>(this);
+    this.addBehavior(_reconcileBehavior);
     XDiagram _innerDiagram = this.getInnerDiagram();
     ReadOnlyObjectProperty<Bounds> _boundsInLocalProperty = _innerDiagram.boundsInLocalProperty();
     final ChangeListener<Bounds> _function_1 = (ObservableValue<? extends Bounds> p, Bounds o, Bounds n) -> {

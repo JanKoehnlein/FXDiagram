@@ -1,5 +1,6 @@
 package de.fxdiagram.core.behavior;
 
+import com.google.common.base.Objects;
 import de.fxdiagram.core.behavior.AbstractHostBehavior;
 import de.fxdiagram.core.behavior.Behavior;
 import de.fxdiagram.core.behavior.DirtyState;
@@ -26,22 +27,12 @@ public abstract class AbstractReconcileBehavior<T extends Node> extends Abstract
   
   public AbstractReconcileBehavior(final T host) {
     super(host);
-  }
-  
-  @Override
-  public Class<? extends Behavior> getBehaviorKey() {
-    return ReconcileBehavior.class;
-  }
-  
-  @Override
-  protected void doActivate() {
     SequentialTransition _sequentialTransition = new SequentialTransition();
     final Procedure1<SequentialTransition> _function = (SequentialTransition it) -> {
       ObservableList<Animation> _children = it.getChildren();
       FadeTransition _fadeTransition = new FadeTransition();
       final Procedure1<FadeTransition> _function_1 = (FadeTransition it_1) -> {
-        T _host = this.getHost();
-        it_1.setNode(_host);
+        it_1.setNode(host);
         Duration _millis = DurationExtensions.millis(300);
         it_1.setDuration(_millis);
         it_1.setFromValue(1);
@@ -52,8 +43,7 @@ public abstract class AbstractReconcileBehavior<T extends Node> extends Abstract
       ObservableList<Animation> _children_1 = it.getChildren();
       FadeTransition _fadeTransition_1 = new FadeTransition();
       final Procedure1<FadeTransition> _function_2 = (FadeTransition it_1) -> {
-        T _host = this.getHost();
-        it_1.setNode(_host);
+        it_1.setNode(host);
         Duration _millis = DurationExtensions.millis(300);
         it_1.setDuration(_millis);
         it_1.setFromValue(0.2);
@@ -65,6 +55,15 @@ public abstract class AbstractReconcileBehavior<T extends Node> extends Abstract
     };
     SequentialTransition _doubleArrow = ObjectExtensions.<SequentialTransition>operator_doubleArrow(_sequentialTransition, _function);
     this.dirtyAnimation = _doubleArrow;
+  }
+  
+  @Override
+  public Class<? extends Behavior> getBehaviorKey() {
+    return ReconcileBehavior.class;
+  }
+  
+  @Override
+  protected void doActivate() {
     DirtyState _dirtyState = this.getDirtyState();
     this.showDirtyState(_dirtyState);
   }
@@ -105,7 +104,11 @@ public abstract class AbstractReconcileBehavior<T extends Node> extends Abstract
   
   protected void dirtyFeedback(final boolean isDirty) {
     if (isDirty) {
-      this.dirtyAnimation.play();
+      Animation.Status _status = this.dirtyAnimation.getStatus();
+      boolean _notEquals = (!Objects.equal(_status, Animation.Status.RUNNING));
+      if (_notEquals) {
+        this.dirtyAnimation.play();
+      }
     } else {
       this.dirtyAnimation.stop();
       T _host = this.getHost();

@@ -97,7 +97,7 @@ class ConnectionReconcileBehavior<T> extends AbstractLabelOwnerReconcileBehavior
 			if(newSource != null) 
 				acceptor.morph(new ReconnectMorphCommand(host, host.source, newSource, true))
 			else
-				acceptor.delete(host)
+				acceptor.delete(host, host.diagram)
 		} else {
 			val resolvedTarget = resolveConnectionEnd(domainObject, connectionMapping, host.target.domainObjectDescriptor, false)
 			if(resolvedTarget != host.target.domainObjectDescriptor) {
@@ -105,7 +105,7 @@ class ConnectionReconcileBehavior<T> extends AbstractLabelOwnerReconcileBehavior
 				if(newTarget != null) 
 					acceptor.morph(new ReconnectMorphCommand(host, host.target, newTarget, false))
 				else
-					acceptor.delete(host)
+					acceptor.delete(host, host.diagram)
 			}
 		}
 		val labelMorphCommand = new ConnectionLabelMorphCommand(host)

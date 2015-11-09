@@ -1,9 +1,11 @@
 package de.fxdiagram.core.tools.actions;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDiagramContainer;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
@@ -18,10 +20,12 @@ import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.command.SequentialAnimationCommand;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.scene.input.KeyCode;
@@ -96,78 +100,113 @@ public class ReconcileAction implements DiagramAction {
   @Override
   public void perform(final XRoot root) {
     final XDiagram diagram = root.getDiagram();
+    SequentialAnimationCommand _sequentialAnimationCommand = new SequentialAnimationCommand();
+    final Procedure1<SequentialAnimationCommand> _function = (SequentialAnimationCommand it) -> {
+      LazyCommand _reconcileCommand = this.getReconcileCommand(root);
+      it.operator_add(_reconcileCommand);
+      LazyCommand _reconcileCommand_1 = this.getReconcileCommand(root);
+      it.operator_add(_reconcileCommand_1);
+      ReconcileAction.UpdateDirtyStateCommand _updateDirtyStateCommand = new ReconcileAction.UpdateDirtyStateCommand(diagram);
+      it.operator_add(_updateDirtyStateCommand);
+    };
+    final SequentialAnimationCommand command = ObjectExtensions.<SequentialAnimationCommand>operator_doubleArrow(_sequentialAnimationCommand, _function);
+    CommandStack _commandStack = root.getCommandStack();
+    _commandStack.execute(command);
+  }
+  
+  protected LazyCommand getReconcileCommand(final XRoot root) {
     final LazyCommand _function = new LazyCommand() {
       @Override
       protected AnimationCommand createDelegate() {
-        SequentialAnimationCommand _xblockexpression = null;
-        {
-          final HashSet<XShape> deleteShapes = CollectionLiterals.<XShape>newHashSet();
-          final HashSet<XShape> addShapes = CollectionLiterals.<XShape>newHashSet();
-          final ArrayList<AnimationCommand> commands = CollectionLiterals.<AnimationCommand>newArrayList();
-          final ReconcileBehavior.UpdateAcceptor acceptor = new ReconcileBehavior.UpdateAcceptor() {
-            @Override
-            public void add(final XShape shape) {
-              addShapes.add(shape);
+        final XDiagram diagram = root.getDiagram();
+        final HashMultimap<XDiagram, XShape> deleteShapes = HashMultimap.<XDiagram, XShape>create();
+        final HashMultimap<XDiagram, XShape> addShapes = HashMultimap.<XDiagram, XShape>create();
+        final ArrayList<AnimationCommand> commands = CollectionLiterals.<AnimationCommand>newArrayList();
+        final ReconcileBehavior.UpdateAcceptor acceptor = new ReconcileBehavior.UpdateAcceptor() {
+          final ReconcileBehavior.UpdateAcceptor _this = this;
+          @Override
+          public void add(final XShape shape, final XDiagram diagram) {
+            boolean _notEquals = (!Objects.equal(diagram, null));
+            if (_notEquals) {
+              addShapes.put(diagram, shape);
             }
-            
-            @Override
-            public void delete(final XShape shape) {
-              deleteShapes.add(shape);
-            }
-            
-            @Override
-            public void morph(final AnimationCommand command) {
-              commands.add(command);
-            }
-          };
-          final ReconcileBehavior diagramReconcileBehavior = diagram.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-          boolean _notEquals = (!Objects.equal(diagramReconcileBehavior, null));
-          if (_notEquals) {
-            diagramReconcileBehavior.reconcile(acceptor);
           }
-          final ArrayList<XShape> allShapes = CollectionLiterals.<XShape>newArrayList();
-          ObservableList<XConnection> _connections = diagram.getConnections();
-          Iterables.<XShape>addAll(allShapes, _connections);
-          ObservableList<XNode> _nodes = diagram.getNodes();
-          Iterables.<XShape>addAll(allShapes, _nodes);
-          Iterables.removeAll(allShapes, deleteShapes);
-          final Consumer<XShape> _function = (XShape it) -> {
-            ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
-            if (_behavior!=null) {
-              _behavior.reconcile(acceptor);
+          
+          @Override
+          public void delete(final XShape shape, final XDiagram diagram) {
+            boolean _notEquals = (!Objects.equal(diagram, null));
+            if (_notEquals) {
+              deleteShapes.put(diagram, shape);
             }
-          };
-          allShapes.forEach(_function);
-          boolean _isEmpty = deleteShapes.isEmpty();
-          boolean _not = (!_isEmpty);
-          if (_not) {
-            AddRemoveCommand _newRemoveCommand = AddRemoveCommand.newRemoveCommand(diagram, ((XShape[])Conversions.unwrapArray(deleteShapes, XShape.class)));
-            commands.add(_newRemoveCommand);
+            if ((shape instanceof XNode)) {
+              ObservableList<XConnection> _outgoingConnections = ((XNode)shape).getOutgoingConnections();
+              ObservableList<XConnection> _incomingConnections = ((XNode)shape).getIncomingConnections();
+              Iterable<XConnection> _plus = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
+              final Consumer<XConnection> _function = (XConnection it) -> {
+                XDiagram _diagram = CoreExtensions.getDiagram(it);
+                this.delete(it, _diagram);
+              };
+              _plus.forEach(_function);
+            }
+            if ((shape instanceof XDiagramContainer)) {
+              XDiagram _innerDiagram = ((XDiagramContainer)shape).getInnerDiagram();
+              ObservableList<XNode> _nodes = _innerDiagram.getNodes();
+              XDiagram _innerDiagram_1 = ((XDiagramContainer)shape).getInnerDiagram();
+              ObservableList<XConnection> _connections = _innerDiagram_1.getConnections();
+              Iterable<XDomainObjectShape> _plus_1 = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
+              final Consumer<XDomainObjectShape> _function_1 = (XDomainObjectShape it) -> {
+                XDiagram _diagram = CoreExtensions.getDiagram(it);
+                this.delete(it, _diagram);
+              };
+              _plus_1.forEach(_function_1);
+            }
           }
-          boolean _isEmpty_1 = addShapes.isEmpty();
-          boolean _not_1 = (!_isEmpty_1);
-          if (_not_1) {
-            AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(diagram, ((XShape[])Conversions.unwrapArray(addShapes, XShape.class)));
-            commands.add(_newAddCommand);
+          
+          @Override
+          public void morph(final AnimationCommand command) {
+            commands.add(command);
           }
-          SequentialAnimationCommand _sequentialAnimationCommand = new SequentialAnimationCommand();
-          final Procedure1<SequentialAnimationCommand> _function_1 = (SequentialAnimationCommand it) -> {
-            ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
-            final Procedure1<ParallelAnimationCommand> _function_2 = (ParallelAnimationCommand it_1) -> {
-              it_1.operator_add(commands);
-            };
-            ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_2);
-            it.operator_add(_doubleArrow);
-            ReconcileAction.UpdateDirtyStateCommand _updateDirtyStateCommand = new ReconcileAction.UpdateDirtyStateCommand(diagram);
-            it.operator_add(_updateDirtyStateCommand);
-          };
-          _xblockexpression = ObjectExtensions.<SequentialAnimationCommand>operator_doubleArrow(_sequentialAnimationCommand, _function_1);
+        };
+        final ReconcileBehavior diagramReconcileBehavior = diagram.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+        boolean _notEquals = (!Objects.equal(diagramReconcileBehavior, null));
+        if (_notEquals) {
+          diagramReconcileBehavior.reconcile(acceptor);
         }
-        return _xblockexpression;
+        final ArrayList<XShape> allShapes = CollectionLiterals.<XShape>newArrayList();
+        ObservableList<XConnection> _connections = diagram.getConnections();
+        Iterables.<XShape>addAll(allShapes, _connections);
+        ObservableList<XNode> _nodes = diagram.getNodes();
+        Iterables.<XShape>addAll(allShapes, _nodes);
+        Collection<XShape> _values = deleteShapes.values();
+        Iterables.removeAll(allShapes, _values);
+        final Consumer<XShape> _function = (XShape it) -> {
+          ReconcileBehavior _behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
+          if (_behavior!=null) {
+            _behavior.reconcile(acceptor);
+          }
+        };
+        allShapes.forEach(_function);
+        Set<XDiagram> _keySet = deleteShapes.keySet();
+        final Consumer<XDiagram> _function_1 = (XDiagram it) -> {
+          Set<XShape> _get = deleteShapes.get(it);
+          AddRemoveCommand _newRemoveCommand = AddRemoveCommand.newRemoveCommand(it, ((XShape[])Conversions.unwrapArray(_get, XShape.class)));
+          commands.add(_newRemoveCommand);
+        };
+        _keySet.forEach(_function_1);
+        Set<XDiagram> _keySet_1 = addShapes.keySet();
+        final Consumer<XDiagram> _function_2 = (XDiagram it) -> {
+          Set<XShape> _get = addShapes.get(it);
+          AddRemoveCommand _newAddCommand = AddRemoveCommand.newAddCommand(it, ((XShape[])Conversions.unwrapArray(_get, XShape.class)));
+          commands.add(_newAddCommand);
+        };
+        _keySet_1.forEach(_function_2);
+        ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
+        final Procedure1<ParallelAnimationCommand> _function_3 = (ParallelAnimationCommand it) -> {
+          it.operator_add(commands);
+        };
+        return ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_3);
       }
     };
-    final LazyCommand lazyCommand = _function;
-    CommandStack _commandStack = root.getCommandStack();
-    _commandStack.execute(lazyCommand);
+    return _function;
   }
 }

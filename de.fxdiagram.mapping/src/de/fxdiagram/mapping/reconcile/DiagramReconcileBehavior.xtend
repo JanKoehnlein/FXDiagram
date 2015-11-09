@@ -1,7 +1,6 @@
 package de.fxdiagram.mapping.reconcile
 
 import de.fxdiagram.core.XDiagram
-import de.fxdiagram.core.XNode
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior
 import de.fxdiagram.core.tools.actions.ReconcileAction
 import de.fxdiagram.mapping.DiagramMapping
@@ -58,7 +57,7 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 				val currentContext = host.createNestedInterpreterContext(host.parentDiagram)
 				interpreter.createDiagram(it, descriptor.mapping as DiagramMapping<T>, false, currentContext)
 				for(addedShape: currentContext.addedShapes) 
-					acceptor.add(addedShape)
+					acceptor.add(addedShape, host)
 				
 				// create dummy diagram from scratch and remove old shapes from host
 				val dummyDiagram = new BaseDiagram(descriptor)
@@ -69,9 +68,7 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 					descriptors.remove(domainObjectDescriptor)
 				]
 				descriptors.values.forEach [
-					acceptor.delete(it)
-					if(it instanceof XNode) 
-						(outgoingConnections + incomingConnections).forEach[acceptor.delete(it)]
+					acceptor.delete(it, host)
 				]
 				null
 			]
@@ -86,20 +83,24 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 	}
 	
 	override protected dirtyFeedback(boolean isDirty) {
-		if(isDirty)
-			host.root.headsUpDisplay.add(repairButton, Pos.TOP_RIGHT)
-		else 
-			host.root.headsUpDisplay.children -= repairButton
+		if(host.isRootDiagram) {
+			if(isDirty)
+				host.root.headsUpDisplay.add(repairButton, Pos.TOP_RIGHT)
+			else 
+				host.root.headsUpDisplay.children -= repairButton
+		}
 	}
 	
 	override protected doActivate() {
-		repairButton = SymbolCanvas.getSymbol(SymbolType.TOOL, 32, Color.GRAY) => [
-			onMouseClicked = [
-				new ReconcileAction().perform(host.root)
-				host.root.headsUpDisplay.children -= repairButton
+		if(host.isRootDiagram) {
+			repairButton = SymbolCanvas.getSymbol(SymbolType.TOOL, 32, Color.GRAY) => [
+				onMouseClicked = [
+					new ReconcileAction().perform(host.root)
+					host.root.headsUpDisplay.children -= repairButton
+				]
+				tooltip = "Repair diagram"
 			]
-			tooltip = "Repair diagram"
-		]
-		showDirtyState(dirtyState)
+		}
+		super.doActivate
 	}
 }

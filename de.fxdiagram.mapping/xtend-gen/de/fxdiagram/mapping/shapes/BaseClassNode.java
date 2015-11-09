@@ -2,6 +2,7 @@ package de.fxdiagram.mapping.shapes;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
@@ -78,13 +79,13 @@ public class BaseClassNode<T extends Object> extends FlipNode implements INodeWi
     protected void reconcile(final AbstractMapping<T> mapping, final T domainObject, final de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor acceptor) {
       final de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor fakeAcceptor = new de.fxdiagram.core.behavior.ReconcileBehavior.UpdateAcceptor() {
         @Override
-        public void delete(final XShape shape) {
-          acceptor.delete(shape);
+        public void delete(final XShape shape, final XDiagram diagram) {
+          acceptor.delete(shape, diagram);
         }
         
         @Override
-        public void add(final XShape shape) {
-          acceptor.add(shape);
+        public void add(final XShape shape, final XDiagram diagram) {
+          acceptor.add(shape, diagram);
         }
         
         @Override

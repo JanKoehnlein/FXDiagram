@@ -621,13 +621,9 @@ public abstract class AbstractBaseChooser implements XDiagramTool {
       if ((result < 0)) {
         ArrayList<XNode> _nodes_1 = this.getNodes();
         int _size_1 = _nodes_1.size();
-        double _divide = (result / _size_1);
-        int _plus = (((int) _divide) + 1);
-        ArrayList<XNode> _nodes_2 = this.getNodes();
-        int _size_2 = _nodes_2.size();
-        int _multiply = (_plus * _size_2);
-        double _plus_1 = (result + _multiply);
-        result = _plus_1;
+        int _multiply = ((((int) (result / this.getNodes().size())) + 1) * _size_1);
+        double _plus = (result + _multiply);
+        result = _plus;
       }
       _xblockexpression = result;
     }

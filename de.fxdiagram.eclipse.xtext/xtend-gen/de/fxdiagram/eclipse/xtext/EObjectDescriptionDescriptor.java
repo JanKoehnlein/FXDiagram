@@ -11,7 +11,6 @@ import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescriptions;
@@ -62,33 +61,29 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
   @Override
   public String getName() {
     XtextEObjectID _elementID = this.getElementID();
-    QualifiedName _qualifiedName = _elementID.getQualifiedName();
-    return _qualifiedName.getLastSegment();
+    QualifiedName _qualifiedName = null;
+    if (_elementID!=null) {
+      _qualifiedName=_elementID.getQualifiedName();
+    }
+    String _lastSegment = null;
+    if (_qualifiedName!=null) {
+      _lastSegment=_qualifiedName.getLastSegment();
+    }
+    return _lastSegment;
   }
   
   @Override
   public boolean equals(final Object obj) {
     if ((obj instanceof EObjectDescriptionDescriptor)) {
       boolean _and = false;
-      boolean _and_1 = false;
       boolean _equals = super.equals(obj);
       if (!_equals) {
-        _and_1 = false;
+        _and = false;
       } else {
         XtextEObjectID _elementID = ((EObjectDescriptionDescriptor)obj).getElementID();
         XtextEObjectID _elementID_1 = this.getElementID();
         boolean _equals_1 = Objects.equal(_elementID, _elementID_1);
-        _and_1 = _equals_1;
-      }
-      if (!_and_1) {
-        _and = false;
-      } else {
-        XtextEObjectID _elementID_2 = ((EObjectDescriptionDescriptor)obj).getElementID();
-        URI _uRI = _elementID_2.getURI();
-        XtextEObjectID _elementID_3 = this.getElementID();
-        URI _uRI_1 = _elementID_3.getURI();
-        boolean _equals_2 = Objects.equal(_uRI, _uRI_1);
-        _and = _equals_2;
+        _and = _equals_1;
       }
       return _and;
     } else {
@@ -102,12 +97,7 @@ public class EObjectDescriptionDescriptor extends AbstractMappedElementDescripto
     XtextEObjectID _elementID = this.getElementID();
     int _hashCode_1 = _elementID.hashCode();
     int _multiply = (131 * _hashCode_1);
-    int _plus = (_hashCode + _multiply);
-    XtextEObjectID _elementID_1 = this.getElementID();
-    URI _uRI = _elementID_1.getURI();
-    int _hashCode_2 = _uRI.hashCode();
-    int _multiply_1 = (177 * _hashCode_2);
-    return (_plus + _multiply_1);
+    return (_hashCode + _multiply);
   }
   
   /**

@@ -18,6 +18,11 @@ import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import com.google.common.collect.HashMultimap
+import de.fxdiagram.core.XNode
+
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.XDiagramContainer
 
 class ReconcileAction implements DiagramAction {
 	
@@ -35,17 +40,33 @@ class ReconcileAction implements DiagramAction {
 	
 	override perform(XRoot root) {
 		val diagram = root.diagram
-		val LazyCommand lazyCommand = [
-			val deleteShapes = <XShape>newHashSet
-			val addShapes = <XShape>newHashSet
+		val command = new SequentialAnimationCommand => [
+			it += getReconcileCommand(root)
+			it += getReconcileCommand(root)
+			it += new UpdateDirtyStateCommand(diagram)
+		]
+		root.commandStack.execute(command)
+	}
+	
+	protected def LazyCommand getReconcileCommand(XRoot root) {
+		 [
+		 	val diagram = root.diagram
+			val deleteShapes = HashMultimap.create
+			val addShapes = HashMultimap.create
 			val commands = <AnimationCommand>newArrayList
 			val acceptor = new UpdateAcceptor() {
-				override add(XShape shape) {
-					addShapes += shape
+				override add(XShape shape, XDiagram diagram) {
+					if(diagram != null)
+						addShapes.put(diagram, shape)
 				}
 
-				override delete(XShape shape) {
-					deleteShapes += shape
+				override delete(XShape shape, XDiagram diagram) {
+					if(diagram != null)
+						deleteShapes.put(diagram, shape)
+					if(shape instanceof XNode) 
+						(shape.outgoingConnections + shape.incomingConnections).forEach[delete(it, it.diagram)]
+					if(shape instanceof XDiagramContainer)
+						(shape.innerDiagram.nodes + shape.innerDiagram.connections).forEach[delete(it, it.diagram)]
 				}
 
 				override morph(AnimationCommand command) {
@@ -58,22 +79,20 @@ class ReconcileAction implements DiagramAction {
 			val allShapes = <XShape>newArrayList
 			allShapes += diagram.connections
 			allShapes += diagram.nodes
-			allShapes -= deleteShapes
+			allShapes -= deleteShapes.values
 			allShapes.forEach [
 				getBehavior(ReconcileBehavior)?.reconcile(acceptor)
 			]
-			if (!deleteShapes.empty)
-				commands += AddRemoveCommand.newRemoveCommand(diagram, deleteShapes)
-			if (!addShapes.empty)
-				commands += AddRemoveCommand.newAddCommand(diagram, addShapes)
-			new SequentialAnimationCommand => [
-				it += new ParallelAnimationCommand => [
-					it += commands
-				]
-				it += new UpdateDirtyStateCommand(diagram)
+			deleteShapes.keySet.forEach[
+				commands += AddRemoveCommand.newRemoveCommand(it, deleteShapes.get(it))
+			]
+			addShapes.keySet.forEach [
+				commands += AddRemoveCommand.newAddCommand(it, addShapes.get(it))
+			]
+			return new ParallelAnimationCommand => [
+				it += commands
 			]
 		]
-		root.commandStack.execute(lazyCommand)
 	}
 	
 	@FinalFieldsConstructor

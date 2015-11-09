@@ -97,6 +97,10 @@ class XNode extends XDomainObjectShape {
 	protected override createNode() {
 		null
 	}
+	
+	override initializeGraphics() {
+		super.initializeGraphics()
+	}
 
 	override doActivate() {
 		addBehavior(new MoveBehavior(this))
@@ -112,10 +116,6 @@ class XNode extends XDomainObjectShape {
 		])
 		if(node instanceof XActivatable)
 			(node as XActivatable).activate
-//		layoutBoundsProperty.addListener [ p, o, n |
-//			width = n.width
-//			height = n.height
-//		]
 	}
 	
 	override selectionFeedback(boolean isSelected) {
@@ -145,6 +145,7 @@ class XNode extends XDomainObjectShape {
 	}
 
 	def getAnchors() {
+		getNode
 		anchors
 	}
 

@@ -20,6 +20,7 @@ import javafx.scene.transform.Transform
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
+import de.fxdiagram.core.XConnection
 
 class CoreExtensions {
 
@@ -100,6 +101,15 @@ class CoreExtensions {
 		switch it {
 			case null: null
 			XDiagram: it
+			XConnection: {
+				val sourceDiagram = source.diagram
+				if(sourceDiagram?.connections?.contains(it))
+					return sourceDiagram
+				val targetDiagram = target.diagram
+				if(targetDiagram?.connections?.contains(it))
+					return targetDiagram
+				return getDiagram(it.parent)
+			}
 			default: getDiagram(it.parent)
 		}
 	}

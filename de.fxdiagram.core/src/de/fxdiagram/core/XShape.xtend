@@ -64,12 +64,14 @@ abstract class XShape extends Parent implements XActivatable {
 	 * Override this to update your FX node, e.g. on connection or on activation.
 	 * You are now connected to the scenegraph, and can safely use {@link CoreExtensions}
 	 * to access the diagram/root.
+	 * 
+	 * This method may be called multiple times.
 	 */
-	def initializeGraphics() {  
+	def initializeGraphics() { 
 		if(getNode() == null)
 			LOG.severe("Node is null")
 	}
-
+	
 	/**
 	 * Don't override this unless you know what you're doing. 
 	 * Override {@link #doActivate} instead.

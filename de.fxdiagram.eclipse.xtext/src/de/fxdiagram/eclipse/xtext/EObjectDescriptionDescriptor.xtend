@@ -34,17 +34,17 @@ class EObjectDescriptionDescriptor extends AbstractMappedElementDescriptor<IEObj
 	}
 	
 	override getName() {
-		elementID.qualifiedName.lastSegment
+		elementID?.qualifiedName?.lastSegment
 	}
 	
 	override equals(Object obj) {
 		if(obj instanceof EObjectDescriptionDescriptor)
-			return super.equals(obj) && obj.elementID == elementID && obj.elementID.URI == elementID.URI
+			return super.equals(obj) && obj.elementID == elementID 
 		else
 			return false
 	}
 	
 	override hashCode() {
-		super.hashCode + 131 * elementID.hashCode + 177 * elementID.URI.hashCode
+		super.hashCode + 131 * elementID.hashCode
 	}
 }

@@ -9,9 +9,10 @@ import javafx.animation.SequentialTransition
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import javafx.scene.Node
 import org.eclipse.xtend.lib.annotations.Accessors
+import de.fxdiagram.core.XDiagram
 
 /**
- * A behvaior to compare the shown state of a shape with its current domain model.
+ * A behavior to compare the shown state of a shape with its current domain model.
  */
 interface ReconcileBehavior extends Behavior {
 	def DirtyState getDirtyState()
@@ -23,8 +24,8 @@ interface ReconcileBehavior extends Behavior {
 	def void reconcile(UpdateAcceptor acceptor)
 	 
 	interface UpdateAcceptor {
-		def void delete(XShape shape)
-		def void add(XShape shape)
+		def void delete(XShape shape, XDiagram diagram)
+		def void add(XShape shape, XDiagram diagram)
 		def void morph(AnimationCommand command)
 	}
 }
@@ -39,13 +40,6 @@ abstract class AbstractReconcileBehavior<T extends Node> extends AbstractHostBeh
 	
 	new(T host) {
 		super(host)
-	}
-	
-	override getBehaviorKey() {
-		ReconcileBehavior
-	}
-	
-	override protected doActivate() {
 		dirtyAnimation = new SequentialTransition => [
 			children += new FadeTransition => [
 				node = host
@@ -61,6 +55,13 @@ abstract class AbstractReconcileBehavior<T extends Node> extends AbstractHostBeh
 			]
 			cycleCount = Animation.INDEFINITE
 		]
+	}
+	
+	override getBehaviorKey() {
+		ReconcileBehavior
+	}
+	
+	override protected doActivate() {
 		showDirtyState(dirtyState)
 	}
 	
@@ -86,7 +87,8 @@ abstract class AbstractReconcileBehavior<T extends Node> extends AbstractHostBeh
 	
 	protected def void dirtyFeedback(boolean isDirty) {
 		if(isDirty) {
-			dirtyAnimation.play
+			if(dirtyAnimation.status != Animation.Status.RUNNING)
+				dirtyAnimation.play
 		} else {
 			dirtyAnimation.stop
 			host.opacity = 1			

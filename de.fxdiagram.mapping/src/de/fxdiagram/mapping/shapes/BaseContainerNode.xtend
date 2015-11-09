@@ -1,12 +1,16 @@
 package de.fxdiagram.mapping.shapes
 
+import com.google.common.annotations.Beta
 import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XDiagramContainer
 import de.fxdiagram.core.XNode
+import de.fxdiagram.core.behavior.DirtyState
+import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.lib.anchors.RoundedRectangleAnchors
 import de.fxdiagram.lib.nodes.RectangleBorderPane
+import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior
@@ -17,12 +21,11 @@ import javafx.scene.layout.VBox
 
 import static de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 import static javafx.geometry.Side.*
+import static de.fxdiagram.core.behavior.DirtyState.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
 import static extension de.fxdiagram.mapping.shapes.BaseShapeInitializer.*
-import de.fxdiagram.core.extensions.InitializingListener
-import com.google.common.annotations.Beta
 
 /**
  * Base implementation for an {@link XNode} that contains other nodes and belongs to an {@link IMappedElementDescriptor}.
@@ -86,7 +89,7 @@ class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiag
 			]
 		])
 		addLazyBehavior(domainObjectDescriptor)
-		addBehavior(new NodeReconcileBehavior(this))
+		addBehavior(new ReconcileBehavior(this))
 		// move container node when the inner diagram grows to the upper/left
 		innerDiagram.boundsInLocalProperty.addListener [ p, o, n |
 			if(!layoutXProperty.bound && !layoutYProperty.bound) {
@@ -115,5 +118,44 @@ class BaseContainerNode<T> extends XNode implements INodeWithLazyMappings, XDiag
 	
 	override isInnerDiagramActive() {
 		isActive
+	}
+	
+	static class ReconcileBehavior <T> extends NodeReconcileBehavior<T>  {
+	
+		new(BaseContainerNode<T> host) {
+			super(host)
+		}
+		
+		override BaseContainerNode<T> getHost() {
+			super.getHost() as BaseContainerNode<T>
+		}
+		
+		override getDirtyState() {
+			val dirtyFromSuper = super.dirtyState
+			val dirtyFromInnerDiagram = innerDiagramReconcileBehavior?.dirtyState
+			if(dirtyFromSuper == CLEAN) {
+				return dirtyFromInnerDiagram
+			}
+		}
+	
+		override protected reconcile(AbstractMapping<T> mapping, T domainObject, UpdateAcceptor acceptor) {
+			super.reconcile(mapping, domainObject, acceptor)
+			innerDiagramReconcileBehavior?.reconcile(acceptor)
+		}
+		
+		override hideDirtyState() {
+			super.hideDirtyState
+			innerDiagramReconcileBehavior?.hideDirtyState
+		}
+		
+		override showDirtyState(DirtyState dirtyState) {
+			super.showDirtyState(dirtyState)
+			innerDiagramReconcileBehavior?.showDirtyState(innerDiagramReconcileBehavior.dirtyState)
+		}
+		
+		protected def getInnerDiagramReconcileBehavior() {
+			host.innerDiagram.getBehavior(de.fxdiagram.core.behavior.ReconcileBehavior)
+		}
+		
 	}
 }

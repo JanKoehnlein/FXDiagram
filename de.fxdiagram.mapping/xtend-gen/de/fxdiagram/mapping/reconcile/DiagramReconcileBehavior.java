@@ -121,18 +121,19 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
           this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping), false, currentContext);
           Iterable<XDomainObjectShape> _addedShapes = currentContext.getAddedShapes();
           for (final XDomainObjectShape addedShape : _addedShapes) {
-            acceptor.add(addedShape);
+            XDiagram _host_4 = this.getHost();
+            acceptor.add(addedShape, _host_4);
           }
           final BaseDiagram<T> dummyDiagram = new BaseDiagram<T>(descriptor);
-          XDiagram _host_4 = this.getHost();
-          XDiagram _parentDiagram_1 = _host_4.getParentDiagram();
+          XDiagram _host_5 = this.getHost();
+          XDiagram _parentDiagram_1 = _host_5.getParentDiagram();
           final InterpreterContext context = this.createNestedInterpreterContext(dummyDiagram, _parentDiagram_1);
           AbstractMapping<T> _mapping_1 = descriptor.getMapping();
           this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping_1), false, context);
-          XDiagram _host_5 = this.getHost();
-          ObservableList<XNode> _nodes = _host_5.getNodes();
           XDiagram _host_6 = this.getHost();
-          ObservableList<XConnection> _connections = _host_6.getConnections();
+          ObservableList<XNode> _nodes = _host_6.getNodes();
+          XDiagram _host_7 = this.getHost();
+          ObservableList<XConnection> _connections = _host_7.getConnections();
           Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
           final Function1<XDomainObjectShape, DomainObjectDescriptor> _function_1 = (XDomainObjectShape it_1) -> {
             return it_1.getDomainObjectDescriptor();
@@ -148,16 +149,8 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
           _plus_1.forEach(_function_2);
           Collection<XDomainObjectShape> _values = descriptors.values();
           final Consumer<XDomainObjectShape> _function_3 = (XDomainObjectShape it_1) -> {
-            acceptor.delete(it_1);
-            if ((it_1 instanceof XNode)) {
-              ObservableList<XConnection> _outgoingConnections = ((XNode)it_1).getOutgoingConnections();
-              ObservableList<XConnection> _incomingConnections = ((XNode)it_1).getIncomingConnections();
-              Iterable<XConnection> _plus_2 = Iterables.<XConnection>concat(_outgoingConnections, _incomingConnections);
-              final Consumer<XConnection> _function_4 = (XConnection it_2) -> {
-                acceptor.delete(it_2);
-              };
-              _plus_2.forEach(_function_4);
-            }
+            XDiagram _host_8 = this.getHost();
+            acceptor.delete(it_1, _host_8);
           };
           _values.forEach(_function_3);
           _xblockexpression = null;
@@ -183,41 +176,48 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
   
   @Override
   protected void dirtyFeedback(final boolean isDirty) {
-    if (isDirty) {
-      XDiagram _host = this.getHost();
-      XRoot _root = CoreExtensions.getRoot(_host);
-      HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
-      _headsUpDisplay.add(this.repairButton, Pos.TOP_RIGHT);
-    } else {
-      XDiagram _host_1 = this.getHost();
-      XRoot _root_1 = CoreExtensions.getRoot(_host_1);
-      HeadsUpDisplay _headsUpDisplay_1 = _root_1.getHeadsUpDisplay();
-      ObservableList<Node> _children = _headsUpDisplay_1.getChildren();
-      _children.remove(this.repairButton);
+    XDiagram _host = this.getHost();
+    boolean _isRootDiagram = _host.getIsRootDiagram();
+    if (_isRootDiagram) {
+      if (isDirty) {
+        XDiagram _host_1 = this.getHost();
+        XRoot _root = CoreExtensions.getRoot(_host_1);
+        HeadsUpDisplay _headsUpDisplay = _root.getHeadsUpDisplay();
+        _headsUpDisplay.add(this.repairButton, Pos.TOP_RIGHT);
+      } else {
+        XDiagram _host_2 = this.getHost();
+        XRoot _root_1 = CoreExtensions.getRoot(_host_2);
+        HeadsUpDisplay _headsUpDisplay_1 = _root_1.getHeadsUpDisplay();
+        ObservableList<Node> _children = _headsUpDisplay_1.getChildren();
+        _children.remove(this.repairButton);
+      }
     }
   }
   
   @Override
   protected void doActivate() {
-    Canvas _symbol = SymbolCanvas.getSymbol(SymbolType.TOOL, 32, Color.GRAY);
-    final Procedure1<Canvas> _function = (Canvas it) -> {
-      final EventHandler<MouseEvent> _function_1 = (MouseEvent it_1) -> {
-        ReconcileAction _reconcileAction = new ReconcileAction();
-        XDiagram _host = this.getHost();
-        XRoot _root = CoreExtensions.getRoot(_host);
-        _reconcileAction.perform(_root);
-        XDiagram _host_1 = this.getHost();
-        XRoot _root_1 = CoreExtensions.getRoot(_host_1);
-        HeadsUpDisplay _headsUpDisplay = _root_1.getHeadsUpDisplay();
-        ObservableList<Node> _children = _headsUpDisplay.getChildren();
-        _children.remove(this.repairButton);
+    XDiagram _host = this.getHost();
+    boolean _isRootDiagram = _host.getIsRootDiagram();
+    if (_isRootDiagram) {
+      Canvas _symbol = SymbolCanvas.getSymbol(SymbolType.TOOL, 32, Color.GRAY);
+      final Procedure1<Canvas> _function = (Canvas it) -> {
+        final EventHandler<MouseEvent> _function_1 = (MouseEvent it_1) -> {
+          ReconcileAction _reconcileAction = new ReconcileAction();
+          XDiagram _host_1 = this.getHost();
+          XRoot _root = CoreExtensions.getRoot(_host_1);
+          _reconcileAction.perform(_root);
+          XDiagram _host_2 = this.getHost();
+          XRoot _root_1 = CoreExtensions.getRoot(_host_2);
+          HeadsUpDisplay _headsUpDisplay = _root_1.getHeadsUpDisplay();
+          ObservableList<Node> _children = _headsUpDisplay.getChildren();
+          _children.remove(this.repairButton);
+        };
+        it.setOnMouseClicked(_function_1);
+        TooltipExtensions.setTooltip(it, "Repair diagram");
       };
-      it.setOnMouseClicked(_function_1);
-      TooltipExtensions.setTooltip(it, "Repair diagram");
-    };
-    Canvas _doubleArrow = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);
-    this.repairButton = _doubleArrow;
-    DirtyState _dirtyState = this.getDirtyState();
-    this.showDirtyState(_dirtyState);
+      Canvas _doubleArrow = ObjectExtensions.<Canvas>operator_doubleArrow(_symbol, _function);
+      this.repairButton = _doubleArrow;
+    }
+    super.doActivate();
   }
 }

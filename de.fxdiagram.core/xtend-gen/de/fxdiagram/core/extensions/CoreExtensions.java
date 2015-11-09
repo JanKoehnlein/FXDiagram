@@ -2,7 +2,9 @@ package de.fxdiagram.core.extensions;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
+import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.extensions.InitializingListListener;
@@ -228,6 +230,39 @@ public class CoreExtensions {
       if (it instanceof XDiagram) {
         _matched=true;
         _switchResult = ((XDiagram)it);
+      }
+    }
+    if (!_matched) {
+      if (it instanceof XConnection) {
+        _matched=true;
+        XNode _source = ((XConnection)it).getSource();
+        final XDiagram sourceDiagram = CoreExtensions.getDiagram(_source);
+        ObservableList<XConnection> _connections = null;
+        if (sourceDiagram!=null) {
+          _connections=sourceDiagram.getConnections();
+        }
+        boolean _contains = false;
+        if (_connections!=null) {
+          _contains=_connections.contains(it);
+        }
+        if (_contains) {
+          return sourceDiagram;
+        }
+        XNode _target = ((XConnection)it).getTarget();
+        final XDiagram targetDiagram = CoreExtensions.getDiagram(_target);
+        ObservableList<XConnection> _connections_1 = null;
+        if (targetDiagram!=null) {
+          _connections_1=targetDiagram.getConnections();
+        }
+        boolean _contains_1 = false;
+        if (_connections_1!=null) {
+          _contains_1=_connections_1.contains(it);
+        }
+        if (_contains_1) {
+          return targetDiagram;
+        }
+        Parent _parent = ((XConnection)it).getParent();
+        return CoreExtensions.getDiagram(_parent);
       }
     }
     if (!_matched) {

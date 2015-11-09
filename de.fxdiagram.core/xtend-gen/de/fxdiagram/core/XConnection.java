@@ -95,6 +95,8 @@ public class XConnection extends XDomainObjectShape {
   
   private ChangeListener<Number> controlPointListener;
   
+  private boolean isGraphicsInitialized;
+  
   public XConnection() {
     this.addOppositeListeners();
   }
@@ -207,6 +209,9 @@ public class XConnection extends XDomainObjectShape {
   
   @Override
   public void initializeGraphics() {
+    if (this.isGraphicsInitialized) {
+      return;
+    }
     super.initializeGraphics();
     InitializingListener<ArrowHead> _initializingListener = new InitializingListener<ArrowHead>();
     final Procedure1<InitializingListener<ArrowHead>> _function = (InitializingListener<ArrowHead> it) -> {
@@ -263,6 +268,7 @@ public class XConnection extends XDomainObjectShape {
     CoreExtensions.<XConnectionLabel>addInitializingListener(this.labelsProperty, labelListener);
     CoreExtensions.<ArrowHead>addInitializingListener(this.sourceArrowHeadProperty, arrowHeadListener);
     CoreExtensions.<ArrowHead>addInitializingListener(this.targetArrowHeadProperty, arrowHeadListener);
+    this.isGraphicsInitialized = true;
   }
   
   @Override

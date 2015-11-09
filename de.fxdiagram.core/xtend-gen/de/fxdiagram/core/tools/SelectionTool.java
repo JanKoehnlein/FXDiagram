@@ -61,8 +61,7 @@ public class SelectionTool implements XDiagramTool {
         this.isActionOnDiagram = true;
       } else {
         XButton _targetButton = ButtonExtensions.getTargetButton(event);
-        boolean _not = (!(_targetButton instanceof XButton));
-        if (_not) {
+        if ((!(_targetButton instanceof XButton))) {
           final XShape targetShape = CoreExtensions.getTargetShape(event);
           boolean _isSelectable = false;
           if (targetShape!=null) {
@@ -71,13 +70,13 @@ public class SelectionTool implements XDiagramTool {
           if (_isSelectable) {
             boolean _and = false;
             boolean _selected = targetShape.getSelected();
-            boolean _not_1 = (!_selected);
-            if (!_not_1) {
+            boolean _not = (!_selected);
+            if (!_not) {
               _and = false;
             } else {
               boolean _isShortcutDown = event.isShortcutDown();
-              boolean _not_2 = (!_isShortcutDown);
-              _and = _not_2;
+              boolean _not_1 = (!_isShortcutDown);
+              _and = _not_1;
             }
             if (_and) {
               XShape _switchResult = null;

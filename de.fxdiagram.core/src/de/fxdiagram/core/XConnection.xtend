@@ -70,6 +70,8 @@ class XConnection extends XDomainObjectShape {
 	ChangeListener<Number> controlPointListener
 	
 	@FxProperty ConnectionRouter connectionRouter
+	
+	boolean isGraphicsInitialized 
 
 	new() {
 		addOppositeListeners
@@ -124,6 +126,8 @@ class XConnection extends XDomainObjectShape {
 	}
 	
 	override initializeGraphics() {
+		if(isGraphicsInitialized)
+			return;
 		super.initializeGraphics()
 		val arrowHeadListener = new InitializingListener<ArrowHead> => [
 			set = [ 
@@ -146,6 +150,7 @@ class XConnection extends XDomainObjectShape {
 		labelsProperty.addInitializingListener(labelListener)
 		sourceArrowHeadProperty.addInitializingListener(arrowHeadListener)
 		targetArrowHeadProperty.addInitializingListener(arrowHeadListener)
+		isGraphicsInitialized = true
 	}
 	
 	override doActivate() {

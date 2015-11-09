@@ -204,34 +204,38 @@ public class ConnectionReconcileBehavior<T extends Object> extends AbstractLabel
         acceptor.morph(_reconnectMorphCommand);
       } else {
         XConnection _host_4 = this.getHost();
-        acceptor.delete(_host_4);
+        XConnection _host_5 = this.getHost();
+        XDiagram _diagram = CoreExtensions.getDiagram(_host_5);
+        acceptor.delete(_host_4, _diagram);
       }
     } else {
-      XConnection _host_5 = this.getHost();
-      XNode _target = _host_5.getTarget();
+      XConnection _host_6 = this.getHost();
+      XNode _target = _host_6.getTarget();
       DomainObjectDescriptor _domainObjectDescriptor_2 = _target.getDomainObjectDescriptor();
       final DomainObjectDescriptor resolvedTarget = this.<Object>resolveConnectionEnd(domainObject, connectionMapping, _domainObjectDescriptor_2, false);
-      XConnection _host_6 = this.getHost();
-      XNode _target_1 = _host_6.getTarget();
+      XConnection _host_7 = this.getHost();
+      XNode _target_1 = _host_7.getTarget();
       DomainObjectDescriptor _domainObjectDescriptor_3 = _target_1.getDomainObjectDescriptor();
       boolean _notEquals_2 = (!Objects.equal(resolvedTarget, _domainObjectDescriptor_3));
       if (_notEquals_2) {
         final XNode newTarget = this.findNode(resolvedTarget);
         boolean _notEquals_3 = (!Objects.equal(newTarget, null));
         if (_notEquals_3) {
-          XConnection _host_7 = this.getHost();
           XConnection _host_8 = this.getHost();
-          XNode _target_2 = _host_8.getTarget();
-          ReconnectMorphCommand _reconnectMorphCommand_1 = new ReconnectMorphCommand(_host_7, _target_2, newTarget, false);
+          XConnection _host_9 = this.getHost();
+          XNode _target_2 = _host_9.getTarget();
+          ReconnectMorphCommand _reconnectMorphCommand_1 = new ReconnectMorphCommand(_host_8, _target_2, newTarget, false);
           acceptor.morph(_reconnectMorphCommand_1);
         } else {
-          XConnection _host_9 = this.getHost();
-          acceptor.delete(_host_9);
+          XConnection _host_10 = this.getHost();
+          XConnection _host_11 = this.getHost();
+          XDiagram _diagram_1 = CoreExtensions.getDiagram(_host_11);
+          acceptor.delete(_host_10, _diagram_1);
         }
       }
     }
-    XConnection _host_10 = this.getHost();
-    final ConnectionLabelMorphCommand labelMorphCommand = new ConnectionLabelMorphCommand(_host_10);
+    XConnection _host_12 = this.getHost();
+    final ConnectionLabelMorphCommand labelMorphCommand = new ConnectionLabelMorphCommand(_host_12);
     this.compareLabels(connectionMapping, domainObject, labelMorphCommand);
     boolean _isEmpty = labelMorphCommand.isEmpty();
     boolean _not = (!_isEmpty);

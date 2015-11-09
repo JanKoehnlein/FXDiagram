@@ -9,11 +9,14 @@ import de.fxdiagram.mapping.AbstractLabelMappingCall
 import de.fxdiagram.mapping.AbstractMapping
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
+import de.fxdiagram.mapping.reconcile.AbstractLabelOwnerReconcileBehavior.AddKeepRemoveAcceptor
 import java.util.NoSuchElementException
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static de.fxdiagram.core.behavior.DirtyState.*
+
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 abstract class AbstractLabelOwnerReconcileBehavior<T, SHAPE extends XDomainObjectShape> extends AbstractReconcileBehavior<SHAPE> {
 
@@ -110,7 +113,7 @@ abstract class AbstractLabelOwnerReconcileBehavior<T, SHAPE extends XDomainObjec
 					null
 				]
 			} catch (NoSuchElementException exc) {
-				acceptor.delete(host)
+				acceptor.delete(host, host.diagram)
 			}
 		} 
 	}
