@@ -4,35 +4,72 @@ import com.google.common.base.Objects;
 import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.XModelProvider;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class ToString {
   public static String toString(final XModelProvider modelProvider) {
+    HashMap<XModelProvider, Integer> _newHashMap = CollectionLiterals.<XModelProvider, Integer>newHashMap();
+    return ToString.toString(modelProvider, _newHashMap);
+  }
+  
+  protected static String _toString(final XModelProvider modelProvider, final Map<XModelProvider, Integer> seen) {
     String _xblockexpression = null;
     {
-      final ModelElementImpl modelElement = new ModelElementImpl(null);
-      modelProvider.populate(modelElement);
-      StringConcatenation _builder = new StringConcatenation();
-      Class<? extends XModelProvider> _class = modelProvider.getClass();
-      String _simpleName = _class.getSimpleName();
-      _builder.append(_simpleName, "");
-      _builder.append(" ");
-      String _propertiesToString = ToString.getPropertiesToString(modelElement);
-      _builder.append(_propertiesToString, "");
-      _builder.newLineIfNotEmpty();
-      _xblockexpression = _builder.toString();
+      final Integer number = seen.get(modelProvider);
+      String _xifexpression = null;
+      boolean _equals = Objects.equal(number, null);
+      if (_equals) {
+        String _xblockexpression_1 = null;
+        {
+          final int newNumber = seen.size();
+          seen.put(modelProvider, Integer.valueOf(newNumber));
+          final ModelElementImpl modelElement = new ModelElementImpl(null);
+          modelProvider.populate(modelElement);
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("#");
+          _builder.append(newNumber, "");
+          _builder.append(" ");
+          Class<? extends XModelProvider> _class = modelProvider.getClass();
+          String _simpleName = _class.getSimpleName();
+          _builder.append(_simpleName, "");
+          _builder.append(" ");
+          String _propertiesToString = ToString.getPropertiesToString(modelElement, seen);
+          _builder.append(_propertiesToString, "");
+          _builder.newLineIfNotEmpty();
+          _xblockexpression_1 = _builder.toString();
+        }
+        _xifexpression = _xblockexpression_1;
+      } else {
+        StringConcatenation _builder = new StringConcatenation();
+        Class<? extends XModelProvider> _class = modelProvider.getClass();
+        String _simpleName = _class.getSimpleName();
+        _builder.append(_simpleName, "");
+        _builder.append(" #");
+        _builder.append(number, "");
+        _builder.newLineIfNotEmpty();
+        _xifexpression = _builder.toString();
+      }
+      _xblockexpression = _xifexpression;
     }
     return _xblockexpression;
   }
   
-  protected static String getPropertiesToString(final ModelElement it) {
+  protected static String _toString(final Object element, final Map<XModelProvider, Integer> seen) {
+    return element.toString();
+  }
+  
+  protected static String getPropertiesToString(final ModelElement it, final Map<XModelProvider, Integer> seen) {
     boolean _and = false;
     List<? extends Property<?>> _properties = it.getProperties();
     boolean _isEmpty = _properties.isEmpty();
@@ -67,7 +104,7 @@ public class ToString {
             for(final Object value : _value) {
               _builder.append("\t");
               _builder.append("\t");
-              String _string = value.toString();
+              String _string = ToString.toString(value, seen);
               _builder.append(_string, "\t\t");
               _builder.newLineIfNotEmpty();
             }
@@ -90,7 +127,7 @@ public class ToString {
           _builder.append(_name_1, "\t");
           _builder.append(": ");
           Object _value_1 = p.getValue();
-          String _string_1 = _value_1.toString();
+          String _string_1 = ToString.toString(_value_1, seen);
           _builder.append(_string_1, "\t");
           _builder.newLineIfNotEmpty();
         }
@@ -98,6 +135,17 @@ public class ToString {
       _builder.append("]");
       _builder.newLine();
       return _builder.toString();
+    }
+  }
+  
+  protected static String toString(final Object modelProvider, final Map<XModelProvider, Integer> seen) {
+    if (modelProvider instanceof XModelProvider) {
+      return _toString((XModelProvider)modelProvider, seen);
+    } else if (modelProvider != null) {
+      return _toString(modelProvider, seen);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(modelProvider, seen).toString());
     }
   }
 }

@@ -41,9 +41,10 @@ class ReconcileAction implements DiagramAction {
 	override perform(XRoot root) {
 		val diagram = root.diagram
 		val command = new SequentialAnimationCommand => [
+			it += new UpdateDirtyStateCommand(diagram, false)
 			it += getReconcileCommand(root)
 			it += getReconcileCommand(root)
-			it += new UpdateDirtyStateCommand(diagram)
+			it += new UpdateDirtyStateCommand(diagram, true)
 		]
 		root.commandStack.execute(command)
 	}
@@ -99,6 +100,8 @@ class ReconcileAction implements DiagramAction {
 	static class UpdateDirtyStateCommand extends AbstractCommand {
 		
 		val XDiagram diagram
+		
+		val boolean isShow
 
 		override execute(CommandContext context) {
 			val diagramReconcileBehavior = diagram.getBehavior(ReconcileBehavior)
@@ -108,8 +111,12 @@ class ReconcileAction implements DiagramAction {
 			allShapes += diagram.nodes
 			allShapes.forEach [
 				val behavior = getBehavior(ReconcileBehavior)
-				if(behavior != null)
-					behavior.showDirtyState(behavior.dirtyState)
+				if(behavior != null) {
+					if(isShow)
+						behavior.showDirtyState(behavior.dirtyState)
+					else
+						behavior.hideDirtyState
+				}
 			]
 		}
 

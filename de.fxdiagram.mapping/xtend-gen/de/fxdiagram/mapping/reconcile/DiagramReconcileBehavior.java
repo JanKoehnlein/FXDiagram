@@ -8,6 +8,7 @@ import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XRoot;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.AbstractReconcileBehavior;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.ReconcileBehavior;
@@ -24,8 +25,8 @@ import de.fxdiagram.mapping.shapes.BaseDiagram;
 import eu.hansolo.enzo.radialmenu.SymbolCanvas;
 import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -61,38 +62,106 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
         DomainObjectDescriptor _domainObjectDescriptor_1 = _host_1.getDomainObjectDescriptor();
         final IMappedElementDescriptor<T> descriptor = ((IMappedElementDescriptor<T>) _domainObjectDescriptor_1);
         final Function1<T, DirtyState> _function = (T it) -> {
-          final BaseDiagram<T> dummyDiagram = new BaseDiagram<T>(descriptor);
           XDiagram _host_2 = this.getHost();
-          XDiagram _parentDiagram = _host_2.getParentDiagram();
-          final InterpreterContext context = this.createNestedInterpreterContext(dummyDiagram, _parentDiagram);
-          AbstractMapping<T> _mapping = descriptor.getMapping();
-          this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping), false, context);
-          XDiagram _host_3 = this.getHost();
-          ObservableList<XNode> _nodes = _host_3.getNodes();
-          XDiagram _host_4 = this.getHost();
-          ObservableList<XConnection> _connections = _host_4.getConnections();
-          Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
-          final Function1<XDomainObjectShape, DomainObjectDescriptor> _function_1 = (XDomainObjectShape it_1) -> {
+          ObservableList<XNode> _nodes = _host_2.getNodes();
+          final Function1<XNode, DomainObjectDescriptor> _function_1 = (XNode it_1) -> {
             return it_1.getDomainObjectDescriptor();
           };
-          Iterable<DomainObjectDescriptor> _map = IterableExtensions.<XDomainObjectShape, DomainObjectDescriptor>map(_plus, _function_1);
-          final Set<DomainObjectDescriptor> descriptors = IterableExtensions.<DomainObjectDescriptor>toSet(_map);
-          ObservableList<XNode> _nodes_1 = dummyDiagram.getNodes();
-          ObservableList<XConnection> _connections_1 = dummyDiagram.getConnections();
-          Iterable<XDomainObjectShape> _plus_1 = Iterables.<XDomainObjectShape>concat(_nodes_1, _connections_1);
-          for (final XDomainObjectShape recreatedShape : _plus_1) {
-            DomainObjectDescriptor _domainObjectDescriptor_2 = recreatedShape.getDomainObjectDescriptor();
-            boolean _remove = descriptors.remove(_domainObjectDescriptor_2);
-            boolean _not = (!_remove);
-            if (_not) {
-              return DirtyState.DIRTY;
+          final Map<DomainObjectDescriptor, XNode> localNodes = IterableExtensions.<DomainObjectDescriptor, XNode>toMap(_nodes, _function_1);
+          XDiagram _host_3 = this.getHost();
+          ObservableList<XConnection> _connections = _host_3.getConnections();
+          final Function1<XConnection, DomainObjectDescriptor> _function_2 = (XConnection it_1) -> {
+            return it_1.getDomainObjectDescriptor();
+          };
+          final Map<DomainObjectDescriptor, XConnection> localConnections = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_connections, _function_2);
+          final HashMap<DomainObjectDescriptor, XNode> nodesToBeDeleted = new HashMap<DomainObjectDescriptor, XNode>(localNodes);
+          final HashMap<DomainObjectDescriptor, XConnection> connectionsToBeDeleted = new HashMap<DomainObjectDescriptor, XConnection>(localConnections);
+          XDiagram _host_4 = this.getHost();
+          XDiagram _rootDiagram = CoreExtensions.getRootDiagram(_host_4);
+          Iterable<XShape> _allShapes = _rootDiagram.getAllShapes();
+          final Function1<XShape, Boolean> _function_3 = (XShape it_1) -> {
+            XDiagram _diagram = CoreExtensions.getDiagram(it_1);
+            XDiagram _host_5 = this.getHost();
+            return Boolean.valueOf((!Objects.equal(_diagram, _host_5)));
+          };
+          final Iterable<XShape> allOtherShapes = IterableExtensions.<XShape>filter(_allShapes, _function_3);
+          Iterable<XNode> _filter = Iterables.<XNode>filter(allOtherShapes, XNode.class);
+          final Function1<XNode, DomainObjectDescriptor> _function_4 = (XNode it_1) -> {
+            return it_1.getDomainObjectDescriptor();
+          };
+          final Map<DomainObjectDescriptor, XNode> otherNodes = IterableExtensions.<DomainObjectDescriptor, XNode>toMap(_filter, _function_4);
+          Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(allOtherShapes, XConnection.class);
+          final Function1<XConnection, DomainObjectDescriptor> _function_5 = (XConnection it_1) -> {
+            return it_1.getDomainObjectDescriptor();
+          };
+          final Map<DomainObjectDescriptor, XConnection> otherConnectionsNodes = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_filter_1, _function_5);
+          XDiagram _host_5 = this.getHost();
+          final InterpreterContext flatContext = new InterpreterContext(_host_5) {
+            @Override
+            public XConnection getConnection(final DomainObjectDescriptor descriptor) {
+              XConnection _elvis = null;
+              XConnection _elvis_1 = null;
+              XConnection _remove = connectionsToBeDeleted.remove(descriptor);
+              if (_remove != null) {
+                _elvis_1 = _remove;
+              } else {
+                XConnection _get = localConnections.get(descriptor);
+                _elvis_1 = _get;
+              }
+              if (_elvis_1 != null) {
+                _elvis = _elvis_1;
+              } else {
+                XConnection _get_1 = otherConnectionsNodes.get(descriptor);
+                _elvis = _get_1;
+              }
+              return _elvis;
             }
-          }
-          boolean _isEmpty = descriptors.isEmpty();
-          if (_isEmpty) {
-            return DirtyState.CLEAN;
+            
+            @Override
+            public XNode getNode(final DomainObjectDescriptor descriptor) {
+              XNode _elvis = null;
+              XNode _elvis_1 = null;
+              XNode _remove = nodesToBeDeleted.remove(descriptor);
+              if (_remove != null) {
+                _elvis_1 = _remove;
+              } else {
+                XNode _get = localNodes.get(descriptor);
+                _elvis_1 = _get;
+              }
+              if (_elvis_1 != null) {
+                _elvis = _elvis_1;
+              } else {
+                XNode _get_1 = otherNodes.get(descriptor);
+                _elvis = _get_1;
+              }
+              return _elvis;
+            }
+          };
+          AbstractMapping<T> _mapping = descriptor.getMapping();
+          this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping), false, flatContext);
+          boolean _or = false;
+          boolean _or_1 = false;
+          Iterable<XDomainObjectShape> _addedShapes = flatContext.getAddedShapes();
+          boolean _isEmpty = IterableExtensions.isEmpty(_addedShapes);
+          boolean _not = (!_isEmpty);
+          if (_not) {
+            _or_1 = true;
           } else {
+            boolean _isEmpty_1 = nodesToBeDeleted.isEmpty();
+            boolean _not_1 = (!_isEmpty_1);
+            _or_1 = _not_1;
+          }
+          if (_or_1) {
+            _or = true;
+          } else {
+            boolean _isEmpty_2 = connectionsToBeDeleted.isEmpty();
+            boolean _not_2 = (!_isEmpty_2);
+            _or = _not_2;
+          }
+          if (_or) {
             return DirtyState.DIRTY;
+          } else {
+            return DirtyState.CLEAN;
           }
         };
         _xblockexpression = descriptor.<DirtyState>withDomainObject(_function);
@@ -114,64 +183,101 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
         Object _xblockexpression = null;
         {
           XDiagram _host_2 = this.getHost();
-          XDiagram _host_3 = this.getHost();
-          XDiagram _parentDiagram = _host_3.getParentDiagram();
-          final InterpreterContext currentContext = this.createNestedInterpreterContext(_host_2, _parentDiagram);
-          AbstractMapping<T> _mapping = descriptor.getMapping();
-          this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping), false, currentContext);
-          Iterable<XDomainObjectShape> _addedShapes = currentContext.getAddedShapes();
-          for (final XDomainObjectShape addedShape : _addedShapes) {
-            XDiagram _host_4 = this.getHost();
-            acceptor.add(addedShape, _host_4);
-          }
-          final BaseDiagram<T> dummyDiagram = new BaseDiagram<T>(descriptor);
-          XDiagram _host_5 = this.getHost();
-          XDiagram _parentDiagram_1 = _host_5.getParentDiagram();
-          final InterpreterContext context = this.createNestedInterpreterContext(dummyDiagram, _parentDiagram_1);
-          AbstractMapping<T> _mapping_1 = descriptor.getMapping();
-          this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping_1), false, context);
-          XDiagram _host_6 = this.getHost();
-          ObservableList<XNode> _nodes = _host_6.getNodes();
-          XDiagram _host_7 = this.getHost();
-          ObservableList<XConnection> _connections = _host_7.getConnections();
-          Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_nodes, _connections);
-          final Function1<XDomainObjectShape, DomainObjectDescriptor> _function_1 = (XDomainObjectShape it_1) -> {
+          ObservableList<XNode> _nodes = _host_2.getNodes();
+          final Function1<XNode, DomainObjectDescriptor> _function_1 = (XNode it_1) -> {
             return it_1.getDomainObjectDescriptor();
           };
-          final Map<DomainObjectDescriptor, XDomainObjectShape> descriptors = IterableExtensions.<DomainObjectDescriptor, XDomainObjectShape>toMap(_plus, _function_1);
-          ObservableList<XNode> _nodes_1 = dummyDiagram.getNodes();
-          ObservableList<XConnection> _connections_1 = dummyDiagram.getConnections();
-          Iterable<XDomainObjectShape> _plus_1 = Iterables.<XDomainObjectShape>concat(_nodes_1, _connections_1);
-          final Consumer<XDomainObjectShape> _function_2 = (XDomainObjectShape it_1) -> {
-            DomainObjectDescriptor _domainObjectDescriptor_2 = it_1.getDomainObjectDescriptor();
-            descriptors.remove(_domainObjectDescriptor_2);
+          final Map<DomainObjectDescriptor, XNode> localNodes = IterableExtensions.<DomainObjectDescriptor, XNode>toMap(_nodes, _function_1);
+          XDiagram _host_3 = this.getHost();
+          ObservableList<XConnection> _connections = _host_3.getConnections();
+          final Function1<XConnection, DomainObjectDescriptor> _function_2 = (XConnection it_1) -> {
+            return it_1.getDomainObjectDescriptor();
           };
-          _plus_1.forEach(_function_2);
-          Collection<XDomainObjectShape> _values = descriptors.values();
-          final Consumer<XDomainObjectShape> _function_3 = (XDomainObjectShape it_1) -> {
-            XDiagram _host_8 = this.getHost();
-            acceptor.delete(it_1, _host_8);
+          final Map<DomainObjectDescriptor, XConnection> localConnections = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_connections, _function_2);
+          final HashMap<DomainObjectDescriptor, XNode> nodesToBeDeleted = new HashMap<DomainObjectDescriptor, XNode>(localNodes);
+          final HashMap<DomainObjectDescriptor, XConnection> connectionsToBeDeleted = new HashMap<DomainObjectDescriptor, XConnection>(localConnections);
+          XDiagram _host_4 = this.getHost();
+          XDiagram _rootDiagram = CoreExtensions.getRootDiagram(_host_4);
+          Iterable<XShape> _allShapes = _rootDiagram.getAllShapes();
+          final Function1<XShape, Boolean> _function_3 = (XShape it_1) -> {
+            XDiagram _diagram = CoreExtensions.getDiagram(it_1);
+            XDiagram _host_5 = this.getHost();
+            return Boolean.valueOf((!Objects.equal(_diagram, _host_5)));
           };
-          _values.forEach(_function_3);
+          final Iterable<XShape> allOtherShapes = IterableExtensions.<XShape>filter(_allShapes, _function_3);
+          Iterable<XNode> _filter = Iterables.<XNode>filter(allOtherShapes, XNode.class);
+          final Function1<XNode, DomainObjectDescriptor> _function_4 = (XNode it_1) -> {
+            return it_1.getDomainObjectDescriptor();
+          };
+          final Map<DomainObjectDescriptor, XNode> otherNodes = IterableExtensions.<DomainObjectDescriptor, XNode>toMap(_filter, _function_4);
+          Iterable<XConnection> _filter_1 = Iterables.<XConnection>filter(allOtherShapes, XConnection.class);
+          final Function1<XConnection, DomainObjectDescriptor> _function_5 = (XConnection it_1) -> {
+            return it_1.getDomainObjectDescriptor();
+          };
+          final Map<DomainObjectDescriptor, XConnection> otherConnectionsNodes = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_filter_1, _function_5);
+          XDiagram _host_5 = this.getHost();
+          final InterpreterContext flatContext = new InterpreterContext(_host_5) {
+            @Override
+            public XConnection getConnection(final DomainObjectDescriptor descriptor) {
+              XConnection _elvis = null;
+              XConnection _elvis_1 = null;
+              XConnection _remove = connectionsToBeDeleted.remove(descriptor);
+              if (_remove != null) {
+                _elvis_1 = _remove;
+              } else {
+                XConnection _get = localConnections.get(descriptor);
+                _elvis_1 = _get;
+              }
+              if (_elvis_1 != null) {
+                _elvis = _elvis_1;
+              } else {
+                XConnection _get_1 = otherConnectionsNodes.get(descriptor);
+                _elvis = _get_1;
+              }
+              return _elvis;
+            }
+            
+            @Override
+            public XNode getNode(final DomainObjectDescriptor descriptor) {
+              XNode _elvis = null;
+              XNode _elvis_1 = null;
+              XNode _remove = nodesToBeDeleted.remove(descriptor);
+              if (_remove != null) {
+                _elvis_1 = _remove;
+              } else {
+                XNode _get = localNodes.get(descriptor);
+                _elvis_1 = _get;
+              }
+              if (_elvis_1 != null) {
+                _elvis = _elvis_1;
+              } else {
+                XNode _get_1 = otherNodes.get(descriptor);
+                _elvis = _get_1;
+              }
+              return _elvis;
+            }
+          };
+          AbstractMapping<T> _mapping = descriptor.getMapping();
+          this.interpreter.<T, Object>createDiagram(it, ((DiagramMapping<T>) _mapping), false, flatContext);
+          Iterable<XDomainObjectShape> _addedShapes = flatContext.getAddedShapes();
+          for (final XDomainObjectShape addedShape : _addedShapes) {
+            XDiagram _host_6 = this.getHost();
+            acceptor.add(addedShape, _host_6);
+          }
+          Collection<XNode> _values = nodesToBeDeleted.values();
+          Collection<XConnection> _values_1 = connectionsToBeDeleted.values();
+          Iterable<XDomainObjectShape> _plus = Iterables.<XDomainObjectShape>concat(_values, _values_1);
+          final Consumer<XDomainObjectShape> _function_6 = (XDomainObjectShape it_1) -> {
+            XDiagram _host_7 = this.getHost();
+            acceptor.delete(it_1, _host_7);
+          };
+          _plus.forEach(_function_6);
           _xblockexpression = null;
         }
         return _xblockexpression;
       };
       descriptor.<Object>withDomainObject(_function);
     }
-  }
-  
-  protected InterpreterContext createNestedInterpreterContext(final XDiagram hostOrDummy, final XDiagram parent) {
-    InterpreterContext _xifexpression = null;
-    boolean _equals = Objects.equal(parent, null);
-    if (_equals) {
-      return new InterpreterContext(hostOrDummy);
-    } else {
-      XDiagram _parentDiagram = parent.getParentDiagram();
-      InterpreterContext _createNestedInterpreterContext = this.createNestedInterpreterContext(parent, _parentDiagram);
-      _xifexpression = new InterpreterContext(hostOrDummy, _createNestedInterpreterContext);
-    }
-    return _xifexpression;
   }
   
   @Override

@@ -42,6 +42,8 @@ public class ReconcileAction implements DiagramAction {
   public static class UpdateDirtyStateCommand extends AbstractCommand {
     private final XDiagram diagram;
     
+    private final boolean isShow;
+    
     @Override
     public void execute(final CommandContext context) {
       final ReconcileBehavior diagramReconcileBehavior = this.diagram.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
@@ -58,8 +60,12 @@ public class ReconcileAction implements DiagramAction {
         final ReconcileBehavior behavior = it.<ReconcileBehavior>getBehavior(ReconcileBehavior.class);
         boolean _notEquals = (!Objects.equal(behavior, null));
         if (_notEquals) {
-          DirtyState _dirtyState_1 = behavior.getDirtyState();
-          behavior.showDirtyState(_dirtyState_1);
+          if (this.isShow) {
+            DirtyState _dirtyState_1 = behavior.getDirtyState();
+            behavior.showDirtyState(_dirtyState_1);
+          } else {
+            behavior.hideDirtyState();
+          }
         }
       };
       allShapes.forEach(_function);
@@ -75,9 +81,10 @@ public class ReconcileAction implements DiagramAction {
       this.execute(context);
     }
     
-    public UpdateDirtyStateCommand(final XDiagram diagram) {
+    public UpdateDirtyStateCommand(final XDiagram diagram, final boolean isShow) {
       super();
       this.diagram = diagram;
+      this.isShow = isShow;
     }
   }
   
@@ -102,12 +109,14 @@ public class ReconcileAction implements DiagramAction {
     final XDiagram diagram = root.getDiagram();
     SequentialAnimationCommand _sequentialAnimationCommand = new SequentialAnimationCommand();
     final Procedure1<SequentialAnimationCommand> _function = (SequentialAnimationCommand it) -> {
+      ReconcileAction.UpdateDirtyStateCommand _updateDirtyStateCommand = new ReconcileAction.UpdateDirtyStateCommand(diagram, false);
+      it.operator_add(_updateDirtyStateCommand);
       LazyCommand _reconcileCommand = this.getReconcileCommand(root);
       it.operator_add(_reconcileCommand);
       LazyCommand _reconcileCommand_1 = this.getReconcileCommand(root);
       it.operator_add(_reconcileCommand_1);
-      ReconcileAction.UpdateDirtyStateCommand _updateDirtyStateCommand = new ReconcileAction.UpdateDirtyStateCommand(diagram);
-      it.operator_add(_updateDirtyStateCommand);
+      ReconcileAction.UpdateDirtyStateCommand _updateDirtyStateCommand_1 = new ReconcileAction.UpdateDirtyStateCommand(diagram, true);
+      it.operator_add(_updateDirtyStateCommand_1);
     };
     final SequentialAnimationCommand command = ObjectExtensions.<SequentialAnimationCommand>operator_doubleArrow(_sequentialAnimationCommand, _function);
     CommandStack _commandStack = root.getCommandStack();
