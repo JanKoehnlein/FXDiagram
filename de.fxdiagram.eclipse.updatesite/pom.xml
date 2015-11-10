@@ -7,33 +7,33 @@
 	<parent>
 		<groupId>de.fxdiagram</groupId>
 		<artifactId>de.fxdiagram.maven</artifactId>
-		<version>0.17.0-SNAPSHOT</version>
+		<version>0.17.1-SNAPSHOT</version>
 		<relativePath>../de.fxdiagram.maven</relativePath>
 	</parent>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-p2-extras-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>mirror</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<source>
-						<repository>
-							<url>http://dl.bintray.com/jankoehnlein/FXDiagram</url>
-							<layout>p2</layout>
-						</repository>
-					</source>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+<!-- 	<build> -->
+<!-- 		<plugins> -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.eclipse.tycho.extras</groupId> -->
+<!-- 				<artifactId>tycho-p2-extras-plugin</artifactId> -->
+<!-- 				<version>${tycho-version}</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<phase>prepare-package</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>mirror</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<source> -->
+<!-- 						<repository> -->
+<!-- 							<url>http://dl.bintray.com/jankoehnlein/FXDiagram</url> -->
+<!-- 							<layout>p2</layout> -->
+<!-- 						</repository> -->
+<!-- 					</source> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
+<!-- 		</plugins> -->
+<!-- 	</build> -->
 </project>
