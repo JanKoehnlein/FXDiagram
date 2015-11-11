@@ -5,6 +5,7 @@ import de.fxdiagram.core.XDiagram
 import java.io.File
 import java.io.IOException
 import java.util.List
+import java.util.Map
 import java.util.logging.Level
 import javafx.embed.swing.SwingFXUtils
 import javafx.geometry.Rectangle2D
@@ -21,10 +22,8 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Shape
 import javafx.scene.text.Text
 import javafx.scene.transform.Transform
-import javax.imageio.ImageIO
 import javafx.scene.transform.Translate
-import java.util.Map
-import de.fxdiagram.core.export.SvgLink
+import javax.imageio.ImageIO
 
 /**
  * Exports a given diagram to SVG.
@@ -130,14 +129,15 @@ class SvgExporter {
 	'''
 	
 	protected def getTransformForOrigin(Text it) {
-		switch textOrigin {
+		val deltaY = switch textOrigin {
 			case TOP:
-				new Translate(0, font.size * PT_TO_PX / 2)
+				localToSceneTransform.myy * font.size * PT_TO_PX / 2
 			case BOTTOM:
-				new Translate(0, -font.size * PT_TO_PX / 2)
+				- localToSceneTransform.myy * font.size * PT_TO_PX / 2
 			default:
-				new Translate(0, 0)
+				0
 		}
+		new Translate(0, deltaY)
 	}
 	
 	def CharSequence shapeToSvgElement(Shape it) '''

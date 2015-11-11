@@ -327,33 +327,42 @@ public class SvgExporter {
   }
   
   protected Translate getTransformForOrigin(final Text it) {
-    Translate _switchResult = null;
-    VPos _textOrigin = it.getTextOrigin();
-    if (_textOrigin != null) {
-      switch (_textOrigin) {
-        case TOP:
-          Font _font = it.getFont();
-          double _size = _font.getSize();
-          double _multiply = (_size * SvgExporter.PT_TO_PX);
-          double _divide = (_multiply / 2);
-          _switchResult = new Translate(0, _divide);
-          break;
-        case BOTTOM:
-          Font _font_1 = it.getFont();
-          double _size_1 = _font_1.getSize();
-          double _minus = (-_size_1);
-          double _multiply_1 = (_minus * SvgExporter.PT_TO_PX);
-          double _divide_1 = (_multiply_1 / 2);
-          _switchResult = new Translate(0, _divide_1);
-          break;
-        default:
-          _switchResult = new Translate(0, 0);
-          break;
+    Translate _xblockexpression = null;
+    {
+      double _switchResult = (double) 0;
+      VPos _textOrigin = it.getTextOrigin();
+      if (_textOrigin != null) {
+        switch (_textOrigin) {
+          case TOP:
+            Transform _localToSceneTransform = it.getLocalToSceneTransform();
+            double _myy = _localToSceneTransform.getMyy();
+            Font _font = it.getFont();
+            double _size = _font.getSize();
+            double _multiply = (_myy * _size);
+            double _multiply_1 = (_multiply * SvgExporter.PT_TO_PX);
+            _switchResult = (_multiply_1 / 2);
+            break;
+          case BOTTOM:
+            Transform _localToSceneTransform_1 = it.getLocalToSceneTransform();
+            double _myy_1 = _localToSceneTransform_1.getMyy();
+            double _minus = (-_myy_1);
+            Font _font_1 = it.getFont();
+            double _size_1 = _font_1.getSize();
+            double _multiply_2 = (_minus * _size_1);
+            double _multiply_3 = (_multiply_2 * SvgExporter.PT_TO_PX);
+            _switchResult = (_multiply_3 / 2);
+            break;
+          default:
+            _switchResult = 0;
+            break;
+        }
+      } else {
+        _switchResult = 0;
       }
-    } else {
-      _switchResult = new Translate(0, 0);
+      final double deltaY = _switchResult;
+      _xblockexpression = new Translate(0, deltaY);
     }
-    return _switchResult;
+    return _xblockexpression;
   }
   
   public CharSequence shapeToSvgElement(final Shape it) {
