@@ -195,6 +195,9 @@ class FXDiagramView extends ViewPart {
 		(currentDiagramTab ?: createNewTab).revealElement(element, entryCall, editor)
 	}
 	
-
+	override dispose() {
+		super.dispose
+		tab2content.clear
+	}
 }
 

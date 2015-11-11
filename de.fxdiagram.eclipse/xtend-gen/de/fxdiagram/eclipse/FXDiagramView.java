@@ -379,6 +379,12 @@ public class FXDiagramView extends ViewPart {
     }
   }
   
+  @Override
+  public void dispose() {
+    super.dispose();
+    this.tab2content.clear();
+  }
+  
   private static Logger LOG = Logger.getLogger("de.fxdiagram.eclipse.FXDiagramView");
     ;
   
