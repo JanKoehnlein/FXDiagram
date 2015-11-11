@@ -4,15 +4,11 @@ import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor
 import java.util.Collection
+import java.util.Collections
 import java.util.NoSuchElementException
-import org.eclipse.emf.common.ui.URIEditorInput
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.edit.domain.IEditingDomainProvider
 import org.eclipse.ui.IEditorPart
-
-import static org.eclipse.ui.PlatformUI.*
-import java.util.Collections
 
 @ModelNode('uri')
 class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObject> {
@@ -26,28 +22,21 @@ class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObjec
 		this.nameProperty.set(name)
 	}
 	
+	override EcoreDomainObjectProvider getProvider() {
+		super.provider as EcoreDomainObjectProvider
+	}
+	
 	override <U> withDomainObject((EObject)=>U lambda) {
-		val theURI = URI.createURI(uri)
-		val editorID = workbench.editorRegistry.getDefaultEditor(theURI.lastSegment).id
-		val editor = workbench.activeWorkbenchWindow.activePage.openEditor(new URIEditorInput(theURI.trimFragment), editorID)
-		if(editor instanceof IEditingDomainProvider) {
-			val element = editor.editingDomain.resourceSet.getEObject(theURI, true)
-			if(element instanceof EObject) 
-				return lambda.apply(element)
-		}
-		throw new NoSuchElementException('Cannot resolve EObject ' + uri)
+		val element = provider.resolveEObject(uri)
+		if(element != null) 
+			return lambda.apply(element)
+		else
+			throw new NoSuchElementException('Cannot resolve EObject ' + uri)
 	}
 	
 	override openInEditor(boolean select) {
 		val theURI = URI.createURI(uri)
-		val editorID = workbench.editorRegistry.getDefaultEditor(theURI.lastSegment).id
-		val editor = workbench.activeWorkbenchWindow.activePage.openEditor(new URIEditorInput(theURI.trimFragment), editorID)
-		if(editor instanceof IEditingDomainProvider) {
-			val element = editor.editingDomain.resourceSet.getEObject(theURI, true)
-			editor.setSelection(element)
-			return editor
-		}
-		return null
+		provider.openEditor(theURI, select)
 	}
 	
 	protected def setSelection(IEditorPart editor, EObject selectedElement) {
@@ -71,3 +60,4 @@ class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObjec
 	}
 	
 }
+

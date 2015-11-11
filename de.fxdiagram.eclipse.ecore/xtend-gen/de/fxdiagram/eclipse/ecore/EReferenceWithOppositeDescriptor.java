@@ -4,30 +4,27 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
+import de.fxdiagram.eclipse.ecore.EReferenceWithOpposite;
 import de.fxdiagram.eclipse.ecore.EcoreDomainObjectProvider;
 import de.fxdiagram.mapping.AbstractMappedElementDescriptor;
 import de.fxdiagram.mapping.IMappedElementDescriptorProvider;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.NoSuchElementException;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
-@ModelNode("uri")
+@ModelNode({ "uri", "name", "oppositeUri" })
 @SuppressWarnings("all")
-public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor<EObject> {
-  public EcoreDomainObjectDescriptor(final String uri, final String name, final String mappingConfigID, final String mappingID) {
+public class EReferenceWithOppositeDescriptor extends AbstractMappedElementDescriptor<EReferenceWithOpposite> {
+  public EReferenceWithOppositeDescriptor(final String uri, final String name, final String oppositeUri, final String oppositeName, final String mappingConfigID, final String mappingID) {
     super(mappingConfigID, mappingID);
+    this.oppositeUriProperty.set(uri);
+    this.nameProperty.set(((name + "-") + oppositeName));
     this.uriProperty.set(uri);
-    this.nameProperty.set(name);
   }
   
   @Override
@@ -37,16 +34,16 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
   }
   
   @Override
-  public <U extends Object> U withDomainObject(final Function1<? super EObject, ? extends U> lambda) {
+  public <U extends Object> U withDomainObject(final Function1<? super EReferenceWithOpposite, ? extends U> lambda) {
     EcoreDomainObjectProvider _provider = this.getProvider();
     String _uri = this.getUri();
     final EObject element = _provider.resolveEObject(_uri);
-    boolean _notEquals = (!Objects.equal(element, null));
-    if (_notEquals) {
-      return lambda.apply(element);
+    if ((element instanceof EReference)) {
+      EReferenceWithOpposite _eReferenceWithOpposite = new EReferenceWithOpposite(((EReference)element));
+      return lambda.apply(_eReferenceWithOpposite);
     } else {
       String _uri_1 = this.getUri();
-      String _plus = ("Cannot resolve EObject " + _uri_1);
+      String _plus = ("Cannot resolve EReference " + _uri_1);
       throw new NoSuchElementException(_plus);
     }
   }
@@ -63,44 +60,40 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
     return _xblockexpression;
   }
   
-  protected Object setSelection(final IEditorPart editor, final EObject selectedElement) {
-    Object _xtrycatchfinallyexpression = null;
-    try {
-      Object _xblockexpression = null;
-      {
-        Class<? extends IEditorPart> _class = editor.getClass();
-        final Method method = _class.getMethod("setSelectionToViewer", Collection.class);
-        List<EObject> _singletonList = Collections.<EObject>singletonList(selectedElement);
-        _xblockexpression = method.invoke(editor, _singletonList);
-      }
-      _xtrycatchfinallyexpression = _xblockexpression;
-    } catch (final Throwable _t) {
-      if (_t instanceof Exception) {
-        final Exception exc = (Exception)_t;
-        exc.printStackTrace();
-      } else {
-        throw Exceptions.sneakyThrow(_t);
-      }
-    }
-    return _xtrycatchfinallyexpression;
-  }
-  
   @Override
   public boolean equals(final Object obj) {
-    if ((obj instanceof EcoreDomainObjectDescriptor)) {
+    if ((obj instanceof EReferenceWithOppositeDescriptor)) {
+      boolean _or = false;
       boolean _and = false;
-      String _uri = ((EcoreDomainObjectDescriptor)obj).getUri();
+      String _uri = ((EReferenceWithOppositeDescriptor)obj).getUri();
       String _uri_1 = this.getUri();
       boolean _equals = Objects.equal(_uri, _uri_1);
       if (!_equals) {
         _and = false;
       } else {
-        String _name = ((EcoreDomainObjectDescriptor)obj).getName();
-        String _name_1 = this.getName();
-        boolean _equals_1 = Objects.equal(_name, _name_1);
+        String _oppositeUri = ((EReferenceWithOppositeDescriptor)obj).getOppositeUri();
+        String _oppositeUri_1 = this.getOppositeUri();
+        boolean _equals_1 = Objects.equal(_oppositeUri, _oppositeUri_1);
         _and = _equals_1;
       }
-      return _and;
+      if (_and) {
+        _or = true;
+      } else {
+        boolean _and_1 = false;
+        String _oppositeUri_2 = ((EReferenceWithOppositeDescriptor)obj).getOppositeUri();
+        String _uri_2 = this.getUri();
+        boolean _equals_2 = Objects.equal(_oppositeUri_2, _uri_2);
+        if (!_equals_2) {
+          _and_1 = false;
+        } else {
+          String _uri_3 = ((EReferenceWithOppositeDescriptor)obj).getUri();
+          String _oppositeUri_3 = this.getOppositeUri();
+          boolean _equals_3 = Objects.equal(_uri_3, _oppositeUri_3);
+          _and_1 = _equals_3;
+        }
+        _or = _and_1;
+      }
+      return _or;
     } else {
       return false;
     }
@@ -111,23 +104,27 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
     int _hashCode = super.hashCode();
     String _uri = this.getUri();
     int _hashCode_1 = _uri.hashCode();
-    int _multiply = (563 * _hashCode_1);
-    int _plus = (_hashCode + _multiply);
-    String _name = this.getName();
-    int _hashCode_2 = _name.hashCode();
-    int _multiply_1 = (547 * _hashCode_2);
-    return (_plus + _multiply_1);
+    String _oppositeUri = this.getOppositeUri();
+    int _hashCode_2 = 0;
+    if (_oppositeUri!=null) {
+      _hashCode_2=_oppositeUri.hashCode();
+    }
+    int _plus = (_hashCode_1 + _hashCode_2);
+    int _multiply = (563 * _plus);
+    return (_hashCode + _multiply);
   }
   
   /**
    * Automatically generated by @ModelNode. Needed for deserialization.
    */
-  public EcoreDomainObjectDescriptor() {
+  public EReferenceWithOppositeDescriptor() {
   }
   
   public void populate(final ModelElementImpl modelElement) {
     super.populate(modelElement);
     modelElement.addProperty(uriProperty, String.class);
+    modelElement.addProperty(nameProperty, String.class);
+    modelElement.addProperty(oppositeUriProperty, String.class);
   }
   
   public String toString() {
@@ -142,6 +139,16 @@ public class EcoreDomainObjectDescriptor extends AbstractMappedElementDescriptor
   
   public ReadOnlyStringProperty uriProperty() {
     return this.uriProperty.getReadOnlyProperty();
+  }
+  
+  private ReadOnlyStringWrapper oppositeUriProperty = new ReadOnlyStringWrapper(this, "oppositeUri");
+  
+  public String getOppositeUri() {
+    return this.oppositeUriProperty.get();
+  }
+  
+  public ReadOnlyStringProperty oppositeUriProperty() {
+    return this.oppositeUriProperty.getReadOnlyProperty();
   }
   
   private ReadOnlyStringWrapper nameProperty = new ReadOnlyStringWrapper(this, "name");

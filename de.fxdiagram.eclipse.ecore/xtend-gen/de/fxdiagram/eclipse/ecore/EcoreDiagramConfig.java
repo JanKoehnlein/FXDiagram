@@ -3,14 +3,16 @@ package de.fxdiagram.eclipse.ecore;
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
+import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.anchors.DiamondArrowHead;
 import de.fxdiagram.core.anchors.LineArrowHead;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.extensions.ButtonExtensions;
+import de.fxdiagram.eclipse.ecore.EReferenceWithOpposite;
+import de.fxdiagram.eclipse.ecore.ESuperType;
 import de.fxdiagram.eclipse.ecore.EcoreDomainObjectProvider;
 import de.fxdiagram.eclipse.mapping.AbstractEclipseDiagramConfig;
-import de.fxdiagram.eclipse.xtext.ESetting;
 import de.fxdiagram.mapping.ConnectionLabelMapping;
 import de.fxdiagram.mapping.ConnectionMapping;
 import de.fxdiagram.mapping.DiagramMapping;
@@ -33,22 +35,23 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 
 @SuppressWarnings("all")
 public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
+  private final static double EREFERENCE_LABEL_POS = 0.2;
+  
   private final DiagramMapping<EPackage> ePackageDiagram = new DiagramMapping<EPackage>(this, "ePackageDiagram", "EPackage diagram") {
     @Override
     public void calls() {
@@ -112,24 +115,28 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
         return it.getEOperations();
       };
       this.<EOperation>labelForEach(EcoreDiagramConfig.this.eOperation, _function_2);
-      final Function1<EClass, Iterable<? extends EReference>> _function_3 = (EClass it) -> {
-        return it.getEReferences();
+      final Function1<EClass, Iterable<? extends EReferenceWithOpposite>> _function_3 = (EClass it) -> {
+        EList<EReference> _eReferences = it.getEReferences();
+        final Function1<EReference, EReferenceWithOpposite> _function_4 = (EReference it_1) -> {
+          return new EReferenceWithOpposite(it_1);
+        };
+        return ListExtensions.<EReference, EReferenceWithOpposite>map(_eReferences, _function_4);
       };
-      MultiConnectionMappingCall<EReference, EClass> _outConnectionForEach = this.<EReference>outConnectionForEach(EcoreDiagramConfig.this.eReferenceConnection, _function_3);
+      MultiConnectionMappingCall<EReferenceWithOpposite, EClass> _outConnectionForEach = this.<EReferenceWithOpposite>outConnectionForEach(EcoreDiagramConfig.this.eReferenceConnection, _function_3);
       final Function1<Side, Node> _function_4 = (Side it) -> {
         return ButtonExtensions.getArrowButton(it, "Add EReference");
       };
       _outConnectionForEach.asButton(_function_4);
-      final Function1<EClass, Iterable<? extends ESetting<EClass>>> _function_5 = (EClass subType) -> {
-        ArrayList<ESetting<EClass>> _xblockexpression = null;
+      final Function1<EClass, Iterable<? extends ESuperType>> _function_5 = (EClass subType) -> {
+        ArrayList<ESuperType> _xblockexpression = null;
         {
-          final ArrayList<ESetting<EClass>> superTypes = CollectionLiterals.<ESetting<EClass>>newArrayList();
+          final ArrayList<ESuperType> superTypes = CollectionLiterals.<ESuperType>newArrayList();
           EList<EClass> _eSuperTypes = subType.getESuperTypes();
           final Procedure2<EClass, Integer> _function_6 = (EClass superType, Integer i) -> {
             boolean _notEquals = (!Objects.equal(subType, superType));
             if (_notEquals) {
-              ESetting<EClass> _eSetting = new ESetting<EClass>(subType, EcorePackage.Literals.ECLASS__ESUPER_TYPES, (i).intValue());
-              superTypes.add(_eSetting);
+              ESuperType _eSuperType = new ESuperType(subType, superType);
+              superTypes.add(_eSuperType);
             }
           };
           IterableExtensions.<EClass>forEach(_eSuperTypes, _function_6);
@@ -137,7 +144,7 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
         }
         return _xblockexpression;
       };
-      MultiConnectionMappingCall<ESetting<EClass>, EClass> _outConnectionForEach_1 = this.<ESetting<EClass>>outConnectionForEach(EcoreDiagramConfig.this.eSuperTypeConnection, _function_5);
+      MultiConnectionMappingCall<ESuperType, EClass> _outConnectionForEach_1 = this.<ESuperType>outConnectionForEach(EcoreDiagramConfig.this.eSuperTypeConnection, _function_5);
       final Function1<Side, Node> _function_6 = (Side it) -> {
         return ButtonExtensions.getTriangleButton(it, "Add ESuperClass");
       };
@@ -186,20 +193,22 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
     }
   };
   
-  private final ConnectionMapping<EReference> eReferenceConnection = new ConnectionMapping<EReference>(this, "eReferenceConnection", "EReference") {
+  private final ConnectionMapping<EReferenceWithOpposite> eReferenceConnection = new ConnectionMapping<EReferenceWithOpposite>(this, "eReferenceConnection", "EReference") {
     @Override
-    public XConnection createConnection(final IMappedElementDescriptor<EReference> descriptor) {
-      BaseConnection<EReference> _baseConnection = new BaseConnection<EReference>(descriptor);
-      final Procedure1<BaseConnection<EReference>> _function = (BaseConnection<EReference> conn) -> {
-        final Function1<EReference, Object> _function_1 = (EReference it) -> {
+    public XConnection createConnection(final IMappedElementDescriptor<EReferenceWithOpposite> descriptor) {
+      BaseConnection<EReferenceWithOpposite> _baseConnection = new BaseConnection<EReferenceWithOpposite>(descriptor);
+      final Procedure1<BaseConnection<EReferenceWithOpposite>> _function = (BaseConnection<EReferenceWithOpposite> conn) -> {
+        final Function1<EReferenceWithOpposite, Object> _function_1 = (EReferenceWithOpposite it) -> {
           Object _xblockexpression = null;
           {
-            boolean _isContainment = it.isContainment();
+            EReference _to = it.getTo();
+            boolean _isContainment = _to.isContainment();
             if (_isContainment) {
               DiamondArrowHead _diamondArrowHead = new DiamondArrowHead(conn, false);
               conn.setTargetArrowHead(_diamondArrowHead);
             } else {
-              boolean _isContainer = it.isContainer();
+              EReference _to_1 = it.getTo();
+              boolean _isContainer = _to_1.isContainer();
               if (_isContainer) {
                 DiamondArrowHead _diamondArrowHead_1 = new DiamondArrowHead(conn, true);
                 conn.setSourceArrowHead(_diamondArrowHead_1);
@@ -214,46 +223,75 @@ public class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
         };
         descriptor.<Object>withDomainObject(_function_1);
       };
-      return ObjectExtensions.<BaseConnection<EReference>>operator_doubleArrow(_baseConnection, _function);
+      return ObjectExtensions.<BaseConnection<EReferenceWithOpposite>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override
     public void calls() {
-      final Function1<EReference, EReference> _function = (EReference it) -> {
-        return it;
+      final Function1<EReferenceWithOpposite, EReference> _function = (EReferenceWithOpposite it) -> {
+        return it.getTo();
       };
-      this.<EReference>labelFor(EcoreDiagramConfig.this.eReferenceName, _function);
-      final Function1<EReference, EClass> _function_1 = (EReference it) -> {
-        EClassifier _eType = it.getEType();
+      this.<EReference>labelFor(EcoreDiagramConfig.this.eReferenceToName, _function);
+      final Function1<EReferenceWithOpposite, EReference> _function_1 = (EReferenceWithOpposite it) -> {
+        return it.getFro();
+      };
+      this.<EReference>labelFor(EcoreDiagramConfig.this.eReferenceFroName, _function_1);
+      final Function1<EReferenceWithOpposite, EClass> _function_2 = (EReferenceWithOpposite it) -> {
+        EReference _to = it.getTo();
+        EClassifier _eType = _to.getEType();
         return ((EClass) _eType);
       };
-      this.<EClass>target(EcoreDiagramConfig.this.eClassNode, _function_1);
+      this.<EClass>target(EcoreDiagramConfig.this.eClassNode, _function_2);
     }
   };
   
-  private final ConnectionLabelMapping<EReference> eReferenceName = new ConnectionLabelMapping<EReference>(this, "eReferenceName") {
+  private final ConnectionLabelMapping<EReference> eReferenceToName = new ConnectionLabelMapping<EReference>(this, "eReferenceToName") {
+    @Override
+    public XConnectionLabel createLabel(final IMappedElementDescriptor<EReference> descriptor, final EReference labelElement) {
+      XConnectionLabel _createLabel = super.createLabel(descriptor, labelElement);
+      final Procedure1<XConnectionLabel> _function = (XConnectionLabel it) -> {
+        it.setPosition((1 - EcoreDiagramConfig.EREFERENCE_LABEL_POS));
+      };
+      return ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_createLabel, _function);
+    }
+    
     @Override
     public String getText(final EReference it) {
       return it.getName();
     }
   };
   
-  private final ConnectionMapping<ESetting<EClass>> eSuperTypeConnection = new ConnectionMapping<ESetting<EClass>>(this, "eSuperTypeConnection", "ESuperType") {
+  private final ConnectionLabelMapping<EReference> eReferenceFroName = new ConnectionLabelMapping<EReference>(this, "eReferenceFroName") {
     @Override
-    public XConnection createConnection(final IMappedElementDescriptor<ESetting<EClass>> descriptor) {
-      BaseConnection<ESetting<EClass>> _baseConnection = new BaseConnection<ESetting<EClass>>(descriptor);
-      final Procedure1<BaseConnection<ESetting<EClass>>> _function = (BaseConnection<ESetting<EClass>> it) -> {
+    public XConnectionLabel createLabel(final IMappedElementDescriptor<EReference> descriptor, final EReference labelElement) {
+      XConnectionLabel _createLabel = super.createLabel(descriptor, labelElement);
+      final Procedure1<XConnectionLabel> _function = (XConnectionLabel it) -> {
+        it.setPosition(EcoreDiagramConfig.EREFERENCE_LABEL_POS);
+      };
+      return ObjectExtensions.<XConnectionLabel>operator_doubleArrow(_createLabel, _function);
+    }
+    
+    @Override
+    public String getText(final EReference it) {
+      return it.getName();
+    }
+  };
+  
+  private final ConnectionMapping<ESuperType> eSuperTypeConnection = new ConnectionMapping<ESuperType>(this, "eSuperTypeConnection", "ESuperType") {
+    @Override
+    public XConnection createConnection(final IMappedElementDescriptor<ESuperType> descriptor) {
+      BaseConnection<ESuperType> _baseConnection = new BaseConnection<ESuperType>(descriptor);
+      final Procedure1<BaseConnection<ESuperType>> _function = (BaseConnection<ESuperType> it) -> {
         TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false);
         it.setTargetArrowHead(_triangleArrowHead);
       };
-      return ObjectExtensions.<BaseConnection<ESetting<EClass>>>operator_doubleArrow(_baseConnection, _function);
+      return ObjectExtensions.<BaseConnection<ESuperType>>operator_doubleArrow(_baseConnection, _function);
     }
     
     @Override
     public void calls() {
-      final Function1<ESetting<EClass>, EClass> _function = (ESetting<EClass> it) -> {
-        EObject _target = it.getTarget();
-        return ((EClass) _target);
+      final Function1<ESuperType, EClass> _function = (ESuperType it) -> {
+        return it.getSuperType();
       };
       this.<EClass>target(EcoreDiagramConfig.this.eClassNode, _function);
     }

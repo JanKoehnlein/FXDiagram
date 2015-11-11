@@ -4,7 +4,6 @@ import de.fxdiagram.core.anchors.DiamondArrowHead
 import de.fxdiagram.core.anchors.LineArrowHead
 import de.fxdiagram.core.anchors.TriangleArrowHead
 import de.fxdiagram.eclipse.mapping.AbstractEclipseDiagramConfig
-import de.fxdiagram.eclipse.xtext.ESetting
 import de.fxdiagram.mapping.ConnectionLabelMapping
 import de.fxdiagram.mapping.ConnectionMapping
 import de.fxdiagram.mapping.DiagramMapping
@@ -22,13 +21,14 @@ import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EOperation
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.EReference
-import org.eclipse.emf.ecore.EcorePackage
 
 import static de.fxdiagram.mapping.shapes.BaseClassNode.*
 
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 
 class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
+	
+	static val EREFERENCE_LABEL_POS = 0.2
 	
 	val ePackageDiagram = new DiagramMapping<EPackage>(this, 'ePackageDiagram', 'EPackage diagram') {
 		override calls() {
@@ -64,18 +64,18 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 			eClassName.labelFor[it]
 			eAttribute.labelForEach[EAttributes]
 			eOperation.labelForEach[EOperations]
-			eReferenceConnection.outConnectionForEach[EReferences].asButton[getArrowButton("Add EReference")]
+			eReferenceConnection.outConnectionForEach[EReferences.map[new EReferenceWithOpposite(it)]].asButton[getArrowButton("Add EReference")]
 			eSuperTypeConnection.outConnectionForEach[ subType |
 				val superTypes = newArrayList
 				subType.ESuperTypes.forEach[ superType, i |
 					if(subType != superType)
-						superTypes += new ESetting(subType, EcorePackage.Literals.ECLASS__ESUPER_TYPES, i)
+						superTypes += new ESuperType(subType, superType)
 				]
 				superTypes
 			].asButton[getTriangleButton("Add ESuperClass")]
 		}
 	}
-
+	
 	val eClassName = new NodeHeadingMapping<EClass>(this, CLASS_NAME) {
 		override getText(EClass it) {
 			name
@@ -94,13 +94,13 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 		}
 	}
 
-	val eReferenceConnection = new ConnectionMapping<EReference>(this, 'eReferenceConnection', 'EReference') {
-		override createConnection(IMappedElementDescriptor<EReference> descriptor) {
+	val eReferenceConnection = new ConnectionMapping<EReferenceWithOpposite>(this, 'eReferenceConnection', 'EReference') {
+		override createConnection(IMappedElementDescriptor<EReferenceWithOpposite> descriptor) {
 			new BaseConnection(descriptor) => [ conn |
 				descriptor.withDomainObject[
-					if(containment)
+					if(to.containment)
 						conn.targetArrowHead = new DiamondArrowHead(conn, false)
-					else if(container)
+					else if(to.container)
 						conn.sourceArrowHead = new DiamondArrowHead(conn, true)
 					else	
 						conn.targetArrowHead = new LineArrowHead(conn, false)
@@ -110,26 +110,45 @@ class EcoreDiagramConfig extends AbstractEclipseDiagramConfig {
 		}
 
 		override calls() {
-			eReferenceName.labelFor[it]
-			eClassNode.target[EType as EClass]
+			eReferenceToName.labelFor[to]
+			eReferenceFroName.labelFor[fro]
+			eClassNode.target[to.EType as EClass]
 		}
 	}
 	
-	val eReferenceName = new ConnectionLabelMapping<EReference>(this, 'eReferenceName') {
+	val eReferenceToName = new ConnectionLabelMapping<EReference>(this, 'eReferenceToName') {
+		override createLabel(IMappedElementDescriptor<EReference> descriptor, EReference labelElement) {
+			super.createLabel(descriptor, labelElement) => [ 
+				position = 1 - EREFERENCE_LABEL_POS
+			]
+		}
+		
 		override getText(EReference it) {
 			name
 		}
 	}
 
-	val eSuperTypeConnection = new ConnectionMapping<ESetting<EClass>>(this, 'eSuperTypeConnection', 'ESuperType') {
-		override createConnection(IMappedElementDescriptor<ESetting<EClass>> descriptor) {
+	val eReferenceFroName = new ConnectionLabelMapping<EReference>(this, 'eReferenceFroName') {
+		override createLabel(IMappedElementDescriptor<EReference> descriptor, EReference labelElement) {
+			super.createLabel(descriptor, labelElement) => [ 
+				position = EREFERENCE_LABEL_POS
+			]
+		}
+		
+		override getText(EReference it) {
+			name
+		}
+	}
+
+	val eSuperTypeConnection = new ConnectionMapping<ESuperType>(this, 'eSuperTypeConnection', 'ESuperType') {
+		override createConnection(IMappedElementDescriptor<ESuperType> descriptor) {
 			new BaseConnection(descriptor) => [
 				targetArrowHead = new TriangleArrowHead(it, 10, 15, null, Color.WHITE, false)
 			]
 		}
 
 		override calls() {
-			eClassNode.target[target as EClass]
+			eClassNode.target[superType]
 		}
 	}
 
