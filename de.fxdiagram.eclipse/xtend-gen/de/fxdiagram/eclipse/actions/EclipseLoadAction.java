@@ -1,6 +1,5 @@
 package de.fxdiagram.eclipse.actions;
 
-import com.google.common.base.Objects;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.model.DomainObjectProvider;
@@ -15,10 +14,12 @@ import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -45,8 +46,13 @@ public class EclipseLoadAction extends LoadAction {
       Window _window = _scene.getWindow();
       File _showOpenDialog = fileChooser.showOpenDialog(_window);
       final IFile file = FileExtensions.toWorkspaceFile(_showOpenDialog);
-      boolean _notEquals = (!Objects.equal(file, null));
-      if (_notEquals) {
+      NullProgressMonitor _nullProgressMonitor = new NullProgressMonitor();
+      file.refreshLocal(IResource.DEPTH_ONE, _nullProgressMonitor);
+      boolean _exists = false;
+      if (file!=null) {
+        _exists=file.exists();
+      }
+      if (_exists) {
         ModelLoad _modelLoad = new ModelLoad();
         InputStream _contents = file.getContents();
         String _charset = file.getCharset();

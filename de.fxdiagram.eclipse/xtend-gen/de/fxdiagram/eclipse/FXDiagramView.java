@@ -56,9 +56,11 @@ import javafx.event.EventType;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.State;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -314,6 +316,8 @@ public class FXDiagramView extends ViewPart {
           IWorkspaceRoot _root = _workspace.getRoot();
           Path _path = new Path(filePath);
           final IFile file = _root.getFile(_path);
+          NullProgressMonitor _nullProgressMonitor = new NullProgressMonitor();
+          file.refreshLocal(IResource.DEPTH_ONE, _nullProgressMonitor);
           boolean _exists = file.exists();
           if (_exists) {
             ModelLoad _modelLoad = new ModelLoad();

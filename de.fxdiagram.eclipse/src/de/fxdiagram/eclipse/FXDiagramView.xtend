@@ -50,6 +50,8 @@ import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.jface.dialogs.MessageDialog
 import org.eclipse.swt.widgets.Display
+import org.eclipse.core.resources.IResource
+import org.eclipse.core.runtime.NullProgressMonitor
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -165,6 +167,7 @@ class FXDiagramView extends ViewPart {
 			val filePath = (mappingCall.mapping as DiagramMapping<Object>).getDefaultFilePath(diagramElement)
 			if(filePath != null) {
 				val file = ResourcesPlugin.workspace.root.getFile(new Path(filePath))
+				file.refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor)
 				if(file.exists) {
 					val node = new ModelLoad().load(new InputStreamReader(file.contents, file.charset))
 					if(node instanceof XRoot) {
