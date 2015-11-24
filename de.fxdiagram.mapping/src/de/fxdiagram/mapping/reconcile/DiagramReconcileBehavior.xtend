@@ -44,15 +44,21 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 				val connectionsToBeDeleted = new HashMap(localConnections)
 				val allOtherShapes = host.getRootDiagram.allShapes.filter[diagram != host]
 				val otherNodes = allOtherShapes.filter(XNode).toMap[domainObjectDescriptor]
-				val otherConnectionsNodes = allOtherShapes.filter(XConnection).toMap[domainObjectDescriptor]
+				val otherConnections = allOtherShapes.filter(XConnection).toMap[domainObjectDescriptor]
 				val flatContext = new InterpreterContext(host) {
 					
 					override getConnection(DomainObjectDescriptor descriptor) {
-						connectionsToBeDeleted.remove(descriptor) ?: localConnections.get(descriptor) ?: otherConnectionsNodes.get(descriptor)
+						connectionsToBeDeleted.remove(descriptor) 
+							?: localConnections.get(descriptor) 
+							?: otherConnections.get(descriptor) 
+							?: addedConnections.findFirst[descriptor == domainObjectDescriptor]
 					}
 					
 					override getNode(DomainObjectDescriptor descriptor) {
-						nodesToBeDeleted.remove(descriptor) ?: localNodes.get(descriptor) ?: otherNodes.get(descriptor)
+						nodesToBeDeleted.remove(descriptor) 
+							?: localNodes.get(descriptor) 
+							?: otherNodes.get(descriptor)  
+							?: addedNodes.findFirst[descriptor == domainObjectDescriptor]
 					}
 				}
 				interpreter.createDiagram(it, descriptor.mapping as DiagramMapping<T>, false, flatContext)
@@ -74,15 +80,21 @@ class DiagramReconcileBehavior<T> extends AbstractReconcileBehavior<XDiagram> {
 				val connectionsToBeDeleted = new HashMap(localConnections)
 				val allOtherShapes = host.getRootDiagram.allShapes.filter[diagram != host]
 				val otherNodes = allOtherShapes.filter(XNode).toMap[domainObjectDescriptor]
-				val otherConnectionsNodes = allOtherShapes.filter(XConnection).toMap[domainObjectDescriptor]
+				val otherConnections = allOtherShapes.filter(XConnection).toMap[domainObjectDescriptor]
 				val flatContext = new InterpreterContext(host) {
 					
 					override getConnection(DomainObjectDescriptor descriptor) {
-						connectionsToBeDeleted.remove(descriptor) ?: localConnections.get(descriptor) ?: otherConnectionsNodes.get(descriptor)
+						connectionsToBeDeleted.remove(descriptor) 
+							?: localConnections.get(descriptor) 
+							?: otherConnections.get(descriptor)
+							?: addedConnections.findFirst[descriptor == domainObjectDescriptor]
 					}
 					
 					override getNode(DomainObjectDescriptor descriptor) {
-						nodesToBeDeleted.remove(descriptor) ?: localNodes.get(descriptor) ?: otherNodes.get(descriptor)
+						nodesToBeDeleted.remove(descriptor) 
+							?: localNodes.get(descriptor) 
+							?: otherNodes.get(descriptor)
+							?: addedNodes.findFirst[descriptor == domainObjectDescriptor]
 					}
 				}
 				interpreter.createDiagram(it, descriptor.mapping as DiagramMapping<T>, false, flatContext)

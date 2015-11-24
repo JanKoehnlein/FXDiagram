@@ -28,7 +28,10 @@ class InterpreterContext {
 	List<InterpreterContext> subContexts = newArrayList
 	InterpreterContext superContext
 	
+	@Accessors(PROTECTED_GETTER)
 	Set<XNode> addedNodes = newHashSet
+	
+	@Accessors(PROTECTED_GETTER)
 	Set<XConnection> addedConnections = newHashSet
 	
 	new(XDiagram diagram) {
@@ -62,7 +65,7 @@ class InterpreterContext {
 			superContext.getConnection(descriptor)
 	}
 	
-	def XConnection doGetConnection(DomainObjectDescriptor descriptor) {
+	protected def XConnection doGetConnection(DomainObjectDescriptor descriptor) {
 		(addedConnections + diagram.connections)
 			.findFirst[domainObjectDescriptor == descriptor]
 		?: subContexts.map[it.doGetConnection(descriptor)].filterNull.head
@@ -75,7 +78,7 @@ class InterpreterContext {
 			superContext.getNode(descriptor)
 	}
 	
-	def XNode doGetNode(DomainObjectDescriptor descriptor) {
+	protected def XNode doGetNode(DomainObjectDescriptor descriptor) {
 		(addedNodes + diagram.nodes)
 			.findFirst[domainObjectDescriptor == descriptor]
 		?: subContexts.map[it.doGetNode(descriptor)].filterNull.head

@@ -27,6 +27,7 @@ import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -94,25 +95,37 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
           final Function1<XConnection, DomainObjectDescriptor> _function_5 = (XConnection it_1) -> {
             return it_1.getDomainObjectDescriptor();
           };
-          final Map<DomainObjectDescriptor, XConnection> otherConnectionsNodes = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_filter_1, _function_5);
+          final Map<DomainObjectDescriptor, XConnection> otherConnections = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_filter_1, _function_5);
           XDiagram _host_5 = this.getHost();
           final InterpreterContext flatContext = new InterpreterContext(_host_5) {
             @Override
             public XConnection getConnection(final DomainObjectDescriptor descriptor) {
               XConnection _elvis = null;
               XConnection _elvis_1 = null;
+              XConnection _elvis_2 = null;
               XConnection _remove = connectionsToBeDeleted.remove(descriptor);
               if (_remove != null) {
-                _elvis_1 = _remove;
+                _elvis_2 = _remove;
               } else {
                 XConnection _get = localConnections.get(descriptor);
-                _elvis_1 = _get;
+                _elvis_2 = _get;
+              }
+              if (_elvis_2 != null) {
+                _elvis_1 = _elvis_2;
+              } else {
+                XConnection _get_1 = otherConnections.get(descriptor);
+                _elvis_1 = _get_1;
               }
               if (_elvis_1 != null) {
                 _elvis = _elvis_1;
               } else {
-                XConnection _get_1 = otherConnectionsNodes.get(descriptor);
-                _elvis = _get_1;
+                Set<XConnection> _addedConnections = this.getAddedConnections();
+                final Function1<XConnection, Boolean> _function = (XConnection it_1) -> {
+                  DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+                  return Boolean.valueOf(Objects.equal(descriptor, _domainObjectDescriptor));
+                };
+                XConnection _findFirst = IterableExtensions.<XConnection>findFirst(_addedConnections, _function);
+                _elvis = _findFirst;
               }
               return _elvis;
             }
@@ -121,18 +134,30 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
             public XNode getNode(final DomainObjectDescriptor descriptor) {
               XNode _elvis = null;
               XNode _elvis_1 = null;
+              XNode _elvis_2 = null;
               XNode _remove = nodesToBeDeleted.remove(descriptor);
               if (_remove != null) {
-                _elvis_1 = _remove;
+                _elvis_2 = _remove;
               } else {
                 XNode _get = localNodes.get(descriptor);
-                _elvis_1 = _get;
+                _elvis_2 = _get;
+              }
+              if (_elvis_2 != null) {
+                _elvis_1 = _elvis_2;
+              } else {
+                XNode _get_1 = otherNodes.get(descriptor);
+                _elvis_1 = _get_1;
               }
               if (_elvis_1 != null) {
                 _elvis = _elvis_1;
               } else {
-                XNode _get_1 = otherNodes.get(descriptor);
-                _elvis = _get_1;
+                Set<XNode> _addedNodes = this.getAddedNodes();
+                final Function1<XNode, Boolean> _function = (XNode it_1) -> {
+                  DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+                  return Boolean.valueOf(Objects.equal(descriptor, _domainObjectDescriptor));
+                };
+                XNode _findFirst = IterableExtensions.<XNode>findFirst(_addedNodes, _function);
+                _elvis = _findFirst;
               }
               return _elvis;
             }
@@ -214,25 +239,37 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
           final Function1<XConnection, DomainObjectDescriptor> _function_5 = (XConnection it_1) -> {
             return it_1.getDomainObjectDescriptor();
           };
-          final Map<DomainObjectDescriptor, XConnection> otherConnectionsNodes = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_filter_1, _function_5);
+          final Map<DomainObjectDescriptor, XConnection> otherConnections = IterableExtensions.<DomainObjectDescriptor, XConnection>toMap(_filter_1, _function_5);
           XDiagram _host_5 = this.getHost();
           final InterpreterContext flatContext = new InterpreterContext(_host_5) {
             @Override
             public XConnection getConnection(final DomainObjectDescriptor descriptor) {
               XConnection _elvis = null;
               XConnection _elvis_1 = null;
+              XConnection _elvis_2 = null;
               XConnection _remove = connectionsToBeDeleted.remove(descriptor);
               if (_remove != null) {
-                _elvis_1 = _remove;
+                _elvis_2 = _remove;
               } else {
                 XConnection _get = localConnections.get(descriptor);
-                _elvis_1 = _get;
+                _elvis_2 = _get;
+              }
+              if (_elvis_2 != null) {
+                _elvis_1 = _elvis_2;
+              } else {
+                XConnection _get_1 = otherConnections.get(descriptor);
+                _elvis_1 = _get_1;
               }
               if (_elvis_1 != null) {
                 _elvis = _elvis_1;
               } else {
-                XConnection _get_1 = otherConnectionsNodes.get(descriptor);
-                _elvis = _get_1;
+                Set<XConnection> _addedConnections = this.getAddedConnections();
+                final Function1<XConnection, Boolean> _function = (XConnection it_1) -> {
+                  DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+                  return Boolean.valueOf(Objects.equal(descriptor, _domainObjectDescriptor));
+                };
+                XConnection _findFirst = IterableExtensions.<XConnection>findFirst(_addedConnections, _function);
+                _elvis = _findFirst;
               }
               return _elvis;
             }
@@ -241,18 +278,30 @@ public class DiagramReconcileBehavior<T extends Object> extends AbstractReconcil
             public XNode getNode(final DomainObjectDescriptor descriptor) {
               XNode _elvis = null;
               XNode _elvis_1 = null;
+              XNode _elvis_2 = null;
               XNode _remove = nodesToBeDeleted.remove(descriptor);
               if (_remove != null) {
-                _elvis_1 = _remove;
+                _elvis_2 = _remove;
               } else {
                 XNode _get = localNodes.get(descriptor);
-                _elvis_1 = _get;
+                _elvis_2 = _get;
+              }
+              if (_elvis_2 != null) {
+                _elvis_1 = _elvis_2;
+              } else {
+                XNode _get_1 = otherNodes.get(descriptor);
+                _elvis_1 = _get_1;
               }
               if (_elvis_1 != null) {
                 _elvis = _elvis_1;
               } else {
-                XNode _get_1 = otherNodes.get(descriptor);
-                _elvis = _get_1;
+                Set<XNode> _addedNodes = this.getAddedNodes();
+                final Function1<XNode, Boolean> _function = (XNode it_1) -> {
+                  DomainObjectDescriptor _domainObjectDescriptor = it_1.getDomainObjectDescriptor();
+                  return Boolean.valueOf(Objects.equal(descriptor, _domainObjectDescriptor));
+                };
+                XNode _findFirst = IterableExtensions.<XNode>findFirst(_addedNodes, _function);
+                _elvis = _findFirst;
               }
               return _elvis;
             }

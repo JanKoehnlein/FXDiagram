@@ -48,8 +48,10 @@ public class InterpreterContext {
   
   private InterpreterContext superContext;
   
+  @Accessors(AccessorType.PROTECTED_GETTER)
   private Set<XNode> addedNodes = CollectionLiterals.<XNode>newHashSet();
   
+  @Accessors(AccessorType.PROTECTED_GETTER)
   private Set<XConnection> addedConnections = CollectionLiterals.<XConnection>newHashSet();
   
   public InterpreterContext(final XDiagram diagram) {
@@ -127,7 +129,7 @@ public class InterpreterContext {
     return _xifexpression;
   }
   
-  public XConnection doGetConnection(final DomainObjectDescriptor descriptor) {
+  protected XConnection doGetConnection(final DomainObjectDescriptor descriptor) {
     XConnection _elvis = null;
     ObservableList<XConnection> _connections = this.diagram.getConnections();
     Iterable<XConnection> _plus = Iterables.<XConnection>concat(this.addedConnections, _connections);
@@ -161,7 +163,7 @@ public class InterpreterContext {
     return _xifexpression;
   }
   
-  public XNode doGetNode(final DomainObjectDescriptor descriptor) {
+  protected XNode doGetNode(final DomainObjectDescriptor descriptor) {
     XNode _elvis = null;
     ObservableList<XNode> _nodes = this.diagram.getNodes();
     Iterable<XNode> _plus = Iterables.<XNode>concat(this.addedNodes, _nodes);
@@ -320,5 +322,15 @@ public class InterpreterContext {
   @Pure
   public List<InterpreterContext> getSubContexts() {
     return this.subContexts;
+  }
+  
+  @Pure
+  protected Set<XNode> getAddedNodes() {
+    return this.addedNodes;
+  }
+  
+  @Pure
+  protected Set<XConnection> getAddedConnections() {
+    return this.addedConnections;
   }
 }
