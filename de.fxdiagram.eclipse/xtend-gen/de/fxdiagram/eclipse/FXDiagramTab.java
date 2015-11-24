@@ -11,6 +11,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.behavior.DirtyState;
 import de.fxdiagram.core.behavior.ReconcileBehavior;
+import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
@@ -298,9 +299,20 @@ public class FXDiagramTab {
   }
   
   public void clear() {
-    CommandStack _commandStack = this.root.getCommandStack();
-    ClearDiagramCommand _clearDiagramCommand = new ClearDiagramCommand();
-    _commandStack.execute(_clearDiagramCommand);
+    XDiagram _diagram = this.root.getDiagram();
+    DomainObjectDescriptor _domainObjectDescriptor = _diagram.getDomainObjectDescriptor();
+    if ((_domainObjectDescriptor instanceof IMappedElementDescriptor<?>)) {
+      CommandStack _commandStack = this.root.getCommandStack();
+      XDiagram _diagram_1 = this.root.getDiagram();
+      XDiagram _diagram_2 = this.root.getDiagram();
+      Iterable<XShape> _allShapes = _diagram_2.getAllShapes();
+      AddRemoveCommand _newRemoveCommand = AddRemoveCommand.newRemoveCommand(_diagram_1, ((XShape[])Conversions.unwrapArray(_allShapes, XShape.class)));
+      _commandStack.execute(_newRemoveCommand);
+    } else {
+      CommandStack _commandStack_1 = this.root.getCommandStack();
+      ClearDiagramCommand _clearDiagramCommand = new ClearDiagramCommand();
+      _commandStack_1.execute(_clearDiagramCommand);
+    }
   }
   
   public boolean setFocus() {

@@ -36,6 +36,8 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import de.fxdiagram.annotations.logging.Logging
 import org.eclipse.jface.dialogs.MessageDialog
+import de.fxdiagram.mapping.IMappedElementDescriptor
+import de.fxdiagram.core.command.AddRemoveCommand
 
 @Logging
 class FXDiagramTab {
@@ -152,7 +154,10 @@ class FXDiagramTab {
 	}
 
 	def clear() {
-		root.commandStack.execute(new ClearDiagramCommand)
+		if(root.diagram.domainObjectDescriptor instanceof IMappedElementDescriptor<?>)
+			root.commandStack.execute(AddRemoveCommand.newRemoveCommand(root.diagram, root.diagram.allShapes)) 
+		else
+			root.commandStack.execute(new ClearDiagramCommand)
 	}
 
 	def boolean setFocus() {
