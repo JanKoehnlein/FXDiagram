@@ -51,14 +51,6 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.stage.Stage
 import org.eclipse.emf.ecore.EcorePackage
-import de.fxdiagram.lib.simple.ContainerDiagramNode
-import javafx.scene.text.Text
-import javafx.scene.text.Font
-import javafx.scene.text.TextAlignment
-import javafx.scene.layout.Pane
-import javafx.scene.text.FontWeight
-import javafx.scene.control.TextFormatter.Change
-import javafx.scene.paint.Color
 
 /**
  * Application to demonstarte the capabilities of FXDiagram in standalone (non-OSGi) mode.
@@ -124,23 +116,23 @@ class Demo extends Application {
 			new FullScreenAction,
 			new UndoRedoPlayerAction
 		]
-		val ContainerDiagramNode container = new ContainerDiagramNode('container') {
-			override protected createNode() {
-				super.createNode as Pane => [
-					children += new Text => [
-						text = 'FXDiagram Demo'
-						textAlignment = TextAlignment.CENTER
-						font = Font.font('Helvetica', FontWeight.BOLD, 80)
-						fill = Color.GRAY
-					]
-				]
-			}
-			
-		}
+//		val ContainerDiagramNode container = new ContainerDiagramNode('container') {
+//			override protected createNode() {
+//				super.createNode as Pane => [
+//					children += new Text => [
+//						text = 'FXDiagram Demo'
+//						textAlignment = TextAlignment.CENTER
+//						font = Font.font('Helvetica', FontWeight.BOLD, 80)
+//						fill = Color.GRAY
+//					]
+//				]
+//			}
+//			
+//		}
 		diagram => [
-			nodes += container => [
-				innerDiagram => [
-		//			nodes += new DemoCampIntroSlides
+//			nodes += container => [
+//				innerDiagram => [
+//					nodes += new DemoCampIntroSlides
 					nodes += new IntroductionSlideDeck
 					nodes += new OpenableDiagramNode('Basic') => [
 						innerDiagram = new LazyExampleDiagram('')
@@ -163,12 +155,13 @@ class Demo extends Application {
 //		//			nodes += newGalleryDiagramNode()
 					if(root.getDomainObjectProvider(LcarsModelProvider).canConnect)
 						nodes += newLcarsDiagramNode
-//		//			nodes += new DemoCampSummarySlides
+//					nodes += new DemoCampSummarySlides
 					nodes += new SummarySlideDeck
 				]
-			]
-		]
-		val allNodes = container.innerDiagram.nodes
+//			]
+//		]
+//		val allNodes = container.innerDiagram.nodes
+		val allNodes = diagram.nodes
 		val deltaX = scene.width / (allNodes.size + 2)
 		val deltaY = scene.height / (allNodes.size + 2)
 		allNodes.forEach[
