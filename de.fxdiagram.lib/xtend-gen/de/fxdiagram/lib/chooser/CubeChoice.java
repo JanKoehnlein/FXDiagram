@@ -43,9 +43,10 @@ public class CubeChoice extends AbstractChoiceGraphics {
     int _size = _choiceNodes_1.size();
     final int leftNodeIndex = (((int) interpolatedPosition) % _size);
     this.applyTransform(leftNodeIndex, angle);
+    int _plus_1 = (((int) interpolatedPosition) + 1);
     ArrayList<XNode> _choiceNodes_2 = this.getChoiceNodes();
     int _size_1 = _choiceNodes_2.size();
-    final int rightNodeIndex = ((((int) interpolatedPosition) + 1) % _size_1);
+    final int rightNodeIndex = (_plus_1 % _size_1);
     this.applyTransform(rightNodeIndex, (angle - 90));
     ArrayList<XNode> _choiceNodes_3 = this.getChoiceNodes();
     final Procedure2<XNode, Integer> _function_1 = (XNode node, Integer i) -> {
