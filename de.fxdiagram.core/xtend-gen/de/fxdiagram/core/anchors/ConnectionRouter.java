@@ -148,9 +148,12 @@ public class ConnectionRouter implements XActivatable {
       final ArrayList<XControlPoint> newControlPoints = CollectionLiterals.<XControlPoint>newArrayList();
       final double delta = (1.0 / (nodeDiff + 1));
       ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
-      final XControlPoint first = IterableExtensions.<XControlPoint>head(_controlPoints_2);
       ObservableList<XControlPoint> _controlPoints_3 = this.getControlPoints();
-      final XControlPoint last = IterableExtensions.<XControlPoint>last(_controlPoints_3);
+      int _size_2 = _controlPoints_3.size();
+      int _minus = (_size_2 - 2);
+      final XControlPoint first = _controlPoints_2.get(_minus);
+      ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
+      final XControlPoint last = IterableExtensions.<XControlPoint>last(_controlPoints_4);
       IntegerRange _upTo = new IntegerRange(1, nodeDiff);
       for (final Integer i : _upTo) {
         {
@@ -178,13 +181,13 @@ public class ConnectionRouter implements XActivatable {
           newControlPoints.add(newControlPoint);
         }
       }
-      ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
       ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
-      int _size_2 = _controlPoints_5.size();
-      int _minus = (_size_2 - 1);
-      _controlPoints_4.addAll(_minus, newControlPoints);
-      this.resetPointTypes();
+      ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
+      int _size_3 = _controlPoints_6.size();
+      int _minus_1 = (_size_3 - 1);
+      _controlPoints_5.addAll(_minus_1, newControlPoints);
     }
+    this.resetPointTypes();
   }
   
   public void shrinkToSize(final int newSize) {
@@ -220,8 +223,8 @@ public class ConnectionRouter implements XActivatable {
       }
       ObservableList<XControlPoint> _controlPoints_4 = this.getControlPoints();
       _controlPoints_4.removeAll(toBeRemoved);
-      this.resetPointTypes();
     }
+    this.resetPointTypes();
   }
   
   protected void resetPointTypes() {
@@ -300,22 +303,30 @@ public class ConnectionRouter implements XActivatable {
         this.calculateSelfEdge();
       }
     }
-    if (this.splineShapeKeeperEnabled) {
+    boolean _and = false;
+    if (!this.splineShapeKeeperEnabled) {
+      _and = false;
+    } else {
+      XConnection.Kind _kind = this.connection.getKind();
+      boolean _notEquals = (!Objects.equal(_kind, XConnection.Kind.POLYLINE));
+      _and = _notEquals;
+    }
+    if (_and) {
       this.shapeKeeper.adjustControlPointsToNodeMove();
     }
     XNode _source_1 = this.connection.getSource();
     final Point2D sourcePoint = this.findClosestSourceAnchor(_source_1, true);
     XNode _target_1 = this.connection.getTarget();
     final Point2D targetPoint = this.findClosestTargetAnchor(_target_1, true);
-    boolean _and = false;
-    boolean _notEquals = (!Objects.equal(sourcePoint, null));
-    if (!_notEquals) {
-      _and = false;
+    boolean _and_1 = false;
+    boolean _notEquals_1 = (!Objects.equal(sourcePoint, null));
+    if (!_notEquals_1) {
+      _and_1 = false;
     } else {
-      boolean _notEquals_1 = (!Objects.equal(targetPoint, null));
-      _and = _notEquals_1;
+      boolean _notEquals_2 = (!Objects.equal(targetPoint, null));
+      _and_1 = _notEquals_2;
     }
-    if (_and) {
+    if (_and_1) {
       ObservableList<XControlPoint> _controlPoints_2 = this.getControlPoints();
       int _size_1 = _controlPoints_2.size();
       boolean _lessThan_1 = (_size_1 < 2);
@@ -341,9 +352,9 @@ public class ConnectionRouter implements XActivatable {
         XControlPoint _doubleArrow_1 = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint_1, _function_1);
         _controlPoints_3.setAll(
           Collections.<XControlPoint>unmodifiableList(CollectionLiterals.<XControlPoint>newArrayList(_doubleArrow, _doubleArrow_1)));
-        XConnection.Kind _kind = this.connection.getKind();
-        if (_kind != null) {
-          switch (_kind) {
+        XConnection.Kind _kind_1 = this.connection.getKind();
+        if (_kind_1 != null) {
+          switch (_kind_1) {
             case CUBIC_CURVE:
               this.growToSize(4);
               break;

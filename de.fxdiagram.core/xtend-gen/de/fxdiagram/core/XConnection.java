@@ -742,7 +742,7 @@ public class XConnection extends XDomainObjectShape {
               int _divide = (_size / 2);
               final int numSegments = (_divide - 1);
               final double segment = (t * numSegments);
-              final int index = ((int) segment);
+              final int index = (((int) segment) * 2);
               ObservableList<Double> _points_1 = line.getPoints();
               Double _get = _points_1.get(index);
               ObservableList<Double> _points_2 = line.getPoints();
@@ -752,7 +752,7 @@ public class XConnection extends XDomainObjectShape {
               ObservableList<Double> _points_4 = line.getPoints();
               Double _get_3 = _points_4.get((index + 3));
               _xblockexpression_3 = Point2DExtensions.linear((_get).doubleValue(), (_get_1).doubleValue(), (_get_2).doubleValue(), (_get_3).doubleValue(), 
-                (segment - index));
+                (segment - (index / 2)));
             }
             _switchResult = _xblockexpression_3;
             break;
@@ -821,23 +821,21 @@ public class XConnection extends XDomainObjectShape {
               final int numSegments = (_divide - 1);
               double _xifexpression = (double) 0;
               if ((t == 1)) {
-                ObservableList<Double> _points_1 = line.getPoints();
-                int _size_1 = _points_1.size();
-                _xifexpression = (_size_1 - 4);
+                _xifexpression = (numSegments - 1);
               } else {
                 _xifexpression = (t * numSegments);
               }
               final double segment = _xifexpression;
-              final int index = ((int) segment);
+              final int index = (((int) segment) * 2);
+              ObservableList<Double> _points_1 = line.getPoints();
+              Double _get = _points_1.get((index + 2));
               ObservableList<Double> _points_2 = line.getPoints();
-              Double _get = _points_2.get((index + 2));
-              ObservableList<Double> _points_3 = line.getPoints();
-              Double _get_1 = _points_3.get(index);
+              Double _get_1 = _points_2.get(index);
               double _minus = DoubleExtensions.operator_minus(_get, _get_1);
+              ObservableList<Double> _points_3 = line.getPoints();
+              Double _get_2 = _points_3.get((index + 3));
               ObservableList<Double> _points_4 = line.getPoints();
-              Double _get_2 = _points_4.get((index + 3));
-              ObservableList<Double> _points_5 = line.getPoints();
-              Double _get_3 = _points_5.get((index + 1));
+              Double _get_3 = _points_4.get((index + 1));
               double _minus_1 = DoubleExtensions.operator_minus(_get_2, _get_3);
               _xblockexpression_3 = new Point2D(_minus, _minus_1);
             }

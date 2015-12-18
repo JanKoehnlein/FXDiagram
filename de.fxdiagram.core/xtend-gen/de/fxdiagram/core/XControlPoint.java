@@ -8,6 +8,7 @@ import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.images.Magnet;
 import de.fxdiagram.core.model.ModelElementImpl;
+import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.core.model.XModelProvider;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
@@ -22,7 +23,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -149,20 +149,7 @@ public class XControlPoint extends XShape implements XModelProvider {
     return _and;
   }
   
-  @Override
-  public String toString() {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("XControlPoint at (");
-    double _layoutX = this.getLayoutX();
-    _builder.append(_layoutX, "");
-    _builder.append(",");
-    double _layoutY = this.getLayoutY();
-    _builder.append(_layoutY, "");
-    _builder.append(")");
-    return _builder.toString();
-  }
-  
-  public boolean update(final List<XControlPoint> siblings) {
+  public Boolean update(final List<XControlPoint> siblings) {
     boolean _xifexpression = false;
     XControlPoint.Type _type = this.getType();
     boolean _equals = Objects.equal(_type, XControlPoint.Type.CONTROL_POINT);
@@ -223,14 +210,21 @@ public class XControlPoint extends XShape implements XModelProvider {
         _xblockexpression = _xifexpression_1;
       }
       _xifexpression = _xblockexpression;
+    } else {
+      ObservableList<Transform> _transforms = this.getTransforms();
+      _transforms.clear();
     }
-    return _xifexpression;
+    return Boolean.valueOf(_xifexpression);
   }
   
   public void populate(final ModelElementImpl modelElement) {
     modelElement.addProperty(layoutXProperty(), Double.class);
     modelElement.addProperty(layoutYProperty(), Double.class);
     modelElement.addProperty(typeProperty, XControlPoint.Type.class);
+  }
+  
+  public String toString() {
+    return ToString.toString(this);
   }
   
   private SimpleObjectProperty<XControlPoint.Type> typeProperty = new SimpleObjectProperty<XControlPoint.Type>(this, "type",_initType());

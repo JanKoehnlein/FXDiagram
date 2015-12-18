@@ -3,7 +3,6 @@ package de.fxdiagram.mapping.shapes
 import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
-import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.lib.simple.OpenableDiagramNode
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.reconcile.NodeReconcileBehavior
@@ -13,7 +12,7 @@ import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
 
 import static de.fxdiagram.mapping.behavior.LazyConnectionMappingBehavior.*
-import static extension de.fxdiagram.mapping.reconcile.MappingLabelListener.*
+import static de.fxdiagram.mapping.reconcile.MappingLabelListener.*
 
 /**
  * Base implementation for a {@link XNode} with a nested {@link XDiagram} that belongs to an
@@ -57,6 +56,6 @@ class BaseDiagramNode<T> extends OpenableDiagramNode {
 		super.doActivate()
 		addLazyBehavior(this, domainObjectDescriptor)
 		addBehavior(new NodeReconcileBehavior(this))
-		innerDiagram.layoutOnActivate = LayoutType.DOT
+		innerDiagram.layoutOnActivate = true
 	}
 }

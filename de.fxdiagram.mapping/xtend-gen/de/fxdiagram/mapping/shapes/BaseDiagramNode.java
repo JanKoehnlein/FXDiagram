@@ -5,7 +5,6 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XLabel;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
@@ -96,7 +95,7 @@ public class BaseDiagramNode<T extends Object> extends OpenableDiagramNode {
     NodeReconcileBehavior<Object> _nodeReconcileBehavior = new NodeReconcileBehavior<Object>(this);
     this.addBehavior(_nodeReconcileBehavior);
     XDiagram _innerDiagram = this.getInnerDiagram();
-    _innerDiagram.setLayoutOnActivate(LayoutType.DOT);
+    _innerDiagram.setLayoutOnActivate(true);
   }
   
   /**

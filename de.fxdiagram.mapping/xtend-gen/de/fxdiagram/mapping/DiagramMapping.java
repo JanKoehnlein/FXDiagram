@@ -2,7 +2,6 @@ package de.fxdiagram.mapping;
 
 import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XDiagram;
-import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.mapping.AbstractConnectionMappingCall;
 import de.fxdiagram.mapping.AbstractMapping;
 import de.fxdiagram.mapping.AbstractNodeMappingCall;
@@ -70,7 +69,7 @@ public abstract class DiagramMapping<T extends Object> extends AbstractMapping<T
   public XDiagram createDiagram(final IMappedElementDescriptor<T> descriptor) {
     BaseDiagram<T> _baseDiagram = new BaseDiagram<T>(descriptor);
     final Procedure1<BaseDiagram<T>> _function = (BaseDiagram<T> it) -> {
-      it.setLayoutOnActivate(LayoutType.DOT);
+      it.setLayoutOnActivate(true);
     };
     return ObjectExtensions.<BaseDiagram<T>>operator_doubleArrow(_baseDiagram, _function);
   }

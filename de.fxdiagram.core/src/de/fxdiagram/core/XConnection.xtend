@@ -356,11 +356,11 @@ class XConnection extends XDomainObjectShape {
 				val line = shapeGroup.children.filter(Polyline).head
 				val numSegments = (line.points.size / 2 - 1)
 				val segment = t * numSegments
-				val index = segment as int
+				val index = segment as int * 2
 				linear(
 					line.points.get(index), line.points.get(index + 1), 
 					line.points.get(index + 2), line.points.get(index + 3), 
-					segment - index)
+					segment - index / 2)
 			}
 		}
 	}
@@ -391,10 +391,10 @@ class XConnection extends XDomainObjectShape {
 				val line = shapeGroup.children.filter(Polyline).head
 				val numSegments = (line.points.size / 2 - 1)
 				val segment = if(t == 1)
-						line.points.size -4
+						numSegments - 1 
 					else
 					 	t * numSegments
-				val index = segment as int
+				val index = segment as int * 2
 				new Point2D(line.points.get(index + 2) - line.points.get(index), 
 					line.points.get(index + 3) - line.points.get(index + 1))
 			}

@@ -17,10 +17,11 @@ class LazyExampleDiagram extends XDiagram {
 	@FxProperty String nameSuffix
 	
 	new(String nameSuffix) {
-		this.nameSuffix = nameSuffix	
+		this.nameSuffix = nameSuffix
 	}
 	
 	override doActivate() {
+		layoutParameters.useSplines = false
 		if(nodes.empty) {
 			contentsInitializer = [
 				val simple = newSimpleNode(nameSuffix)

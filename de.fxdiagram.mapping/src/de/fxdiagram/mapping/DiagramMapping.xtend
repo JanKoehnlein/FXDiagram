@@ -1,9 +1,8 @@
 package de.fxdiagram.mapping
 
 import de.fxdiagram.core.XDiagram
-import de.fxdiagram.core.layout.LayoutType
-import java.util.List
 import de.fxdiagram.mapping.shapes.BaseDiagram
+import java.util.List
 
 /**
  * A fixed mapping from a domain object represented by a {@link IMappedElementDescriptor} 
@@ -27,7 +26,7 @@ import de.fxdiagram.mapping.shapes.BaseDiagram
 	
 	def XDiagram createDiagram(IMappedElementDescriptor<T> descriptor) { 
 		new BaseDiagram(descriptor) => [
-			layoutOnActivate = LayoutType.DOT
+			layoutOnActivate = true
 		]
 	}
 	

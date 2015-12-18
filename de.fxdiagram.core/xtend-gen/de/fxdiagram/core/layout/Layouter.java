@@ -36,8 +36,10 @@ import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
+import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.layout.ConnectionRelayoutCommand;
+import de.fxdiagram.core.layout.LayoutParameters;
 import de.fxdiagram.core.layout.LayoutType;
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,51 +79,68 @@ public class Layouter {
   private Map<LayoutType, AbstractLayoutProvider> layoutProviders = CollectionLiterals.<LayoutType, AbstractLayoutProvider>newHashMap();
   
   public Layouter() {
-    this.getLayoutProvider(LayoutType.DOT);
+    LayoutParameters _layoutParameters = new LayoutParameters();
+    this.getLayoutProvider(_layoutParameters);
   }
   
-  public LazyCommand createLayoutCommand(final LayoutType type, final XDiagram diagram, final Duration duration) {
-    return this.createLayoutCommand(type, diagram, duration, null);
+  public LazyCommand createLayoutCommand(final LayoutParameters parameters, final XDiagram diagram, final Duration duration) {
+    return this.createLayoutCommand(parameters, diagram, duration, null);
   }
   
-  public LazyCommand createLayoutCommand(final LayoutType type, final XDiagram diagram, final Duration duration, final XShape fixed) {
+  public LazyCommand createLayoutCommand(final XDiagram diagram, final Duration duration) {
+    LayoutParameters _layoutParameters = diagram.getLayoutParameters();
+    return this.createLayoutCommand(_layoutParameters, diagram, duration, null);
+  }
+  
+  public LazyCommand createLayoutCommand(final LayoutParameters parameters, final XDiagram diagram, final Duration duration, final XShape fixed) {
     final LazyCommand _function = new LazyCommand() {
       @Override
       protected AnimationCommand createDelegate() {
-        final HashMap<Object, KGraphElement> cache = Layouter.this.calculateLayout(type, diagram);
+        final HashMap<Object, KGraphElement> cache = Layouter.this.calculateLayout(parameters, diagram);
         return Layouter.this.composeCommand(cache, duration, fixed, diagram);
       }
     };
     return _function;
   }
   
-  public void layout(final LayoutType type, final XDiagram diagram, final XShape fixed) {
-    final HashMap<Object, KGraphElement> cache = this.calculateLayout(type, diagram);
+  public void layout(final LayoutParameters parameters, final XDiagram diagram, final XShape fixed) {
+    final HashMap<Object, KGraphElement> cache = this.calculateLayout(parameters, diagram);
     this.applyLayout(cache, fixed, diagram);
   }
   
-  protected HashMap<Object, KGraphElement> calculateLayout(final LayoutType type, final XDiagram diagram) {
-    final AbstractLayoutProvider provider = this.getLayoutProvider(type);
+  protected HashMap<Object, KGraphElement> calculateLayout(final LayoutParameters parameters, final XDiagram diagram) {
+    LayoutParameters _elvis = null;
+    if (parameters != null) {
+      _elvis = parameters;
+    } else {
+      LayoutParameters _layoutParameters = new LayoutParameters();
+      _elvis = _layoutParameters;
+    }
+    final LayoutParameters theParameters = _elvis;
+    final AbstractLayoutProvider provider = this.getLayoutProvider(theParameters);
     final HashMap<Object, KGraphElement> cache = CollectionLiterals.<Object, KGraphElement>newHashMap();
     diagram.layout();
-    final KNode kRoot = this.toKRootNode(diagram, cache);
+    final KNode kRoot = this.toKRootNode(diagram, theParameters, cache);
     BasicProgressMonitor _basicProgressMonitor = new BasicProgressMonitor();
     provider.doLayout(kRoot, _basicProgressMonitor);
     return cache;
   }
   
-  protected AbstractLayoutProvider getLayoutProvider(final LayoutType type) {
-    AbstractLayoutProvider layoutProvider = this.layoutProviders.get(type);
+  protected AbstractLayoutProvider getLayoutProvider(final LayoutParameters parameters) {
+    LayoutType _type = parameters.getType();
+    AbstractLayoutProvider layoutProvider = this.layoutProviders.get(_type);
     boolean _equals = Objects.equal(layoutProvider, null);
     if (_equals) {
       GraphvizLayoutProvider _graphvizLayoutProvider = new GraphvizLayoutProvider();
       final Procedure1<GraphvizLayoutProvider> _function = (GraphvizLayoutProvider it) -> {
-        String _string = type.toString();
+        LayoutType _type_1 = parameters.getType();
+        String _string = _type_1.toString();
         it.initialize(_string);
       };
       GraphvizLayoutProvider _doubleArrow = ObjectExtensions.<GraphvizLayoutProvider>operator_doubleArrow(_graphvizLayoutProvider, _function);
       layoutProvider = _doubleArrow;
-      this.layoutProviders.put(type, layoutProvider);
+      LayoutType _type_1 = parameters.getType();
+      this.layoutProviders.put(_type_1, layoutProvider);
     }
     return layoutProvider;
   }
@@ -230,6 +249,18 @@ public class Layouter {
               _switchResult_1 = XConnection.Kind.POLYLINE;
             }
             final XConnection.Kind newKind = _switchResult_1;
+            boolean _equals_2 = Objects.equal(newKind, XConnection.Kind.POLYLINE);
+            if (_equals_2) {
+              for (int i = (layoutPoints.size() - 1); (i > 0); i--) {
+                Point2D _get = layoutPoints.get(i);
+                Point2D _get_1 = layoutPoints.get((i - 1));
+                double _distance = _get.distance(_get_1);
+                boolean _lessThan = (_distance < NumberExpressionExtensions.EPSILON);
+                if (_lessThan) {
+                  layoutPoints.remove(i);
+                }
+              }
+            }
             ((XConnection)xElement).setKind(newKind);
             ObservableList<XControlPoint> _controlPoints = ((XConnection)xElement).getControlPoints();
             int _size_2 = _controlPoints.size();
@@ -377,29 +408,6 @@ public class Layouter {
             EdgeRouting _property = edgeLayout.<EdgeRouting>getProperty(LayoutOptions.EDGE_ROUTING);
             if (_property != null) {
               switch (_property) {
-                case SPLINES:
-                  XConnection.Kind _xifexpression = null;
-                  int _size = layoutPoints.size();
-                  int _minus = (_size - 1);
-                  int _modulo = (_minus % 3);
-                  boolean _equals = (_modulo == 0);
-                  if (_equals) {
-                    _xifexpression = XConnection.Kind.CUBIC_CURVE;
-                  } else {
-                    XConnection.Kind _xifexpression_1 = null;
-                    int _size_1 = layoutPoints.size();
-                    int _minus_1 = (_size_1 - 1);
-                    int _modulo_1 = (_minus_1 % 2);
-                    boolean _equals_1 = (_modulo_1 == 0);
-                    if (_equals_1) {
-                      _xifexpression_1 = XConnection.Kind.QUAD_CURVE;
-                    } else {
-                      _xifexpression_1 = XConnection.Kind.POLYLINE;
-                    }
-                    _xifexpression = _xifexpression_1;
-                  }
-                  _switchResult_1 = _xifexpression;
-                  break;
                 default:
                   _switchResult_1 = XConnection.Kind.POLYLINE;
                   break;
@@ -408,13 +416,25 @@ public class Layouter {
               _switchResult_1 = XConnection.Kind.POLYLINE;
             }
             final XConnection.Kind newKind = _switchResult_1;
+            boolean _equals = Objects.equal(newKind, XConnection.Kind.POLYLINE);
+            if (_equals) {
+              for (int i = (layoutPoints.size() - 1); (i > 0); i--) {
+                Point2D _get = layoutPoints.get(i);
+                Point2D _get_1 = layoutPoints.get((i - 1));
+                double _distance = _get.distance(_get_1);
+                boolean _lessThan = (_distance < NumberExpressionExtensions.EPSILON);
+                if (_lessThan) {
+                  layoutPoints.remove(i);
+                }
+              }
+            }
             ConnectionRouter _connectionRouter = ((XConnection)xElement).getConnectionRouter();
             _connectionRouter.setSplineShapeKeeperEnabled(false);
             final KNode kSource = ((KEdge) kElement).getSource();
-            Point2D _xifexpression_2 = null;
+            Point2D _xifexpression = null;
             boolean _isTopLevel = this.isTopLevel(kSource);
             if (_isTopLevel) {
-              _xifexpression_2 = delta;
+              _xifexpression = delta;
             } else {
               Point2D _xblockexpression = null;
               {
@@ -426,18 +446,18 @@ public class Layouter {
                 if (insets!=null) {
                   _left=insets.getLeft();
                 }
-                double _minus_2 = (_x - _left);
+                double _minus = (_x - _left);
                 double _y = delta.getY();
                 float _top = 0f;
                 if (insets!=null) {
                   _top=insets.getTop();
                 }
-                double _minus_3 = (_y - _top);
-                _xblockexpression = new Point2D(_minus_2, _minus_3);
+                double _minus_1 = (_y - _top);
+                _xblockexpression = new Point2D(_minus, _minus_1);
               }
-              _xifexpression_2 = _xblockexpression;
+              _xifexpression = _xblockexpression;
             }
-            final Point2D correction = _xifexpression_2;
+            final Point2D correction = _xifexpression;
             Iterable<Point2D> _layoutPointsInRoot = this.layoutPointsInRoot(layoutPoints, kSource);
             List<Point2D> _list = IterableExtensions.<Point2D>toList(_layoutPointsInRoot);
             final Function1<Point2D, Point2D> _function_2 = (Point2D it) -> {
@@ -616,7 +636,7 @@ public class Layouter {
     return new Point2D(0, 0);
   }
   
-  protected KNode toKRootNode(final XDiagram it, final Map<Object, KGraphElement> cache) {
+  protected KNode toKRootNode(final XDiagram it, final LayoutParameters parameters, final Map<Object, KGraphElement> cache) {
     KNode _xblockexpression = null;
     {
       final KNode kRoot = this._kGraphFactory.createKNode();
@@ -624,21 +644,27 @@ public class Layouter {
       KInsets _createKInsets = this._kLayoutDataFactory.createKInsets();
       shapeLayout.setInsets(_createKInsets);
       shapeLayout.<Boolean>setProperty(LayoutOptions.LAYOUT_HIERARCHY, Boolean.valueOf(true));
+      boolean _useSplines = parameters.getUseSplines();
+      if (_useSplines) {
+        shapeLayout.<EdgeRouting>setProperty(LayoutOptions.EDGE_ROUTING, EdgeRouting.SPLINES);
+      } else {
+        shapeLayout.<EdgeRouting>setProperty(LayoutOptions.EDGE_ROUTING, EdgeRouting.POLYLINE);
+      }
       EList<KGraphData> _data = kRoot.getData();
       _data.add(shapeLayout);
       cache.put(it, kRoot);
       ObservableList<XNode> _nodes = it.getNodes();
       final Consumer<XNode> _function = (XNode it_1) -> {
         EList<KNode> _children = kRoot.getChildren();
-        KNode _kNode = this.toKNode(it_1, cache);
+        KNode _kNode = this.toKNode(it_1, parameters, cache);
         _children.add(_kNode);
       };
       _nodes.forEach(_function);
       ObservableList<XConnection> _connections = it.getConnections();
-      double _transformConnections = this.transformConnections(_connections, cache);
+      double _transformConnections = this.transformConnections(_connections, parameters, cache);
       double _max = Math.max(60.0, _transformConnections);
       ObservableList<XNode> _nodes_1 = it.getNodes();
-      double _transformNestedConnections = this.transformNestedConnections(_nodes_1, cache);
+      double _transformNestedConnections = this.transformNestedConnections(_nodes_1, parameters, cache);
       double spacing = Math.max(_max, _transformNestedConnections);
       shapeLayout.<Float>setProperty(LayoutOptions.SPACING, Float.valueOf(((float) spacing)));
       _xblockexpression = kRoot;
@@ -646,13 +672,13 @@ public class Layouter {
     return _xblockexpression;
   }
   
-  protected double transformConnections(final Iterable<XConnection> connections, final Map<Object, KGraphElement> cache) {
+  protected double transformConnections(final Iterable<XConnection> connections, final LayoutParameters parameters, final Map<Object, KGraphElement> cache) {
     double _xblockexpression = (double) 0;
     {
       double spacing = 0.0;
       for (final XConnection it : connections) {
         {
-          this.toKEdge(it, cache);
+          this.toKEdge(it, parameters, cache);
           double minLength = 0.0;
           ObservableList<XConnectionLabel> _labels = it.getLabels();
           for (final XConnectionLabel label : _labels) {
@@ -686,7 +712,7 @@ public class Layouter {
     return _xblockexpression;
   }
   
-  protected double transformNestedConnections(final Iterable<XNode> nodes, final Map<Object, KGraphElement> cache) {
+  protected double transformNestedConnections(final Iterable<XNode> nodes, final LayoutParameters parameters, final Map<Object, KGraphElement> cache) {
     Iterable<XDiagramContainer> _filter = Iterables.<XDiagramContainer>filter(nodes, XDiagramContainer.class);
     final Function1<XDiagramContainer, Boolean> _function = (XDiagramContainer it) -> {
       return Boolean.valueOf(it.isInnerDiagramActive());
@@ -695,10 +721,10 @@ public class Layouter {
     final Function1<XDiagramContainer, Double> _function_1 = (XDiagramContainer it) -> {
       XDiagram _innerDiagram = it.getInnerDiagram();
       ObservableList<XConnection> _connections = _innerDiagram.getConnections();
-      double _transformConnections = this.transformConnections(_connections, cache);
+      double _transformConnections = this.transformConnections(_connections, parameters, cache);
       XDiagram _innerDiagram_1 = it.getInnerDiagram();
       ObservableList<XNode> _nodes = _innerDiagram_1.getNodes();
-      double _transformNestedConnections = this.transformNestedConnections(_nodes, cache);
+      double _transformNestedConnections = this.transformNestedConnections(_nodes, parameters, cache);
       return Double.valueOf(Math.max(_transformConnections, _transformNestedConnections));
     };
     Iterable<Double> _map = IterableExtensions.<XDiagramContainer, Double>map(_filter_1, _function_1);
@@ -708,7 +734,7 @@ public class Layouter {
     return (double) IterableExtensions.<Double, Double>fold(_map, Double.valueOf(0.0), _function_2);
   }
   
-  protected KNode toKNode(final XNode xNode, final Map<Object, KGraphElement> cache) {
+  protected KNode toKNode(final XNode xNode, final LayoutParameters parameters, final Map<Object, KGraphElement> cache) {
     KNode _xblockexpression = null;
     {
       final KNode kNode = this._kGraphFactory.createKNode();
@@ -748,7 +774,7 @@ public class Layouter {
           ObservableList<XNode> _nodes = _innerDiagram.getNodes();
           final Consumer<XNode> _function_1 = (XNode it) -> {
             EList<KNode> _children = kNode.getChildren();
-            KNode _kNode = this.toKNode(it, cache);
+            KNode _kNode = this.toKNode(it, parameters, cache);
             _children.add(_kNode);
           };
           _nodes.forEach(_function_1);
@@ -759,7 +785,7 @@ public class Layouter {
     return _xblockexpression;
   }
   
-  protected KEdge toKEdge(final XConnection it, final Map<Object, KGraphElement> cache) {
+  protected KEdge toKEdge(final XConnection it, final LayoutParameters parameters, final Map<Object, KGraphElement> cache) {
     KEdge _xblockexpression = null;
     {
       XNode _source = it.getSource();
@@ -800,7 +826,7 @@ public class Layouter {
     return _xblockexpression;
   }
   
-  protected KLabel toKLabel(final XConnectionLabel it, final Map<Object, KGraphElement> cache) {
+  protected KLabel toKLabel(final XConnectionLabel it, final LayoutParameters parameters, final Map<Object, KGraphElement> cache) {
     KLabel _xblockexpression = null;
     {
       final KLabel kLabel = this._kGraphFactory.createKLabel();

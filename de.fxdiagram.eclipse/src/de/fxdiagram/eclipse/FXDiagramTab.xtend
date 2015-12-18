@@ -1,17 +1,19 @@
 package de.fxdiagram.eclipse
 
+import de.fxdiagram.annotations.logging.Logging
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.ReconcileBehavior
 import de.fxdiagram.core.command.AbstractCommand
+import de.fxdiagram.core.command.AddRemoveCommand
 import de.fxdiagram.core.command.CommandContext
 import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.extensions.InitializingListener
-import de.fxdiagram.core.layout.LayoutType
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.eclipse.changes.IChangeListener
+import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.XDiagramConfig
 import de.fxdiagram.mapping.execution.EntryCall
 import de.fxdiagram.mapping.execution.InterpreterContext
@@ -23,6 +25,7 @@ import javafx.application.Platform
 import javafx.embed.swt.FXCanvas
 import javafx.scene.PerspectiveCamera
 import javafx.scene.Scene
+import org.eclipse.jface.dialogs.MessageDialog
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.CTabFolder
 import org.eclipse.swt.custom.CTabItem
@@ -34,10 +37,6 @@ import org.eclipse.ui.keys.IBindingService
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
-import de.fxdiagram.annotations.logging.Logging
-import org.eclipse.jface.dialogs.MessageDialog
-import de.fxdiagram.mapping.IMappedElementDescriptor
-import de.fxdiagram.core.command.AddRemoveCommand
 
 @Logging
 class FXDiagramTab {
@@ -147,7 +146,7 @@ class FXDiagramTab {
 				[
 					if (interpreterContext.needsLayoutCommand)
 						it +=
-							new Layouter().createLayoutCommand(LayoutType.DOT, interpreterContext.diagram, 500.millis,
+							new Layouter().createLayoutCommand(root.diagram.layoutParameters, interpreterContext.diagram, 500.millis,
 								centerShape)
 					it += new SelectAndRevealCommand(root, [it == centerShape])
 				])

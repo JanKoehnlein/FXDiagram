@@ -88,10 +88,6 @@ class XControlPoint extends XShape {
 		type != ANCHOR && super.isSelectable()
 	}	
 
-	override toString() {
-		'''XControlPoint at («layoutX»,«layoutY»)'''
-	}
-
 	def update(List<XControlPoint> siblings) {
 		if (type == CONTROL_POINT) {
 			val index = siblings.indexOf(this)
@@ -110,6 +106,8 @@ class XControlPoint extends XShape {
 				trafo.rotate(angle)
 				transforms.setAll(trafo)
 			}
+		} else {
+			transforms.clear
 		}
 	}
 

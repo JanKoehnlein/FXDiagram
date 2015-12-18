@@ -26,7 +26,6 @@ import java.util.HashSet
 import java.util.Set
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.layout.LayoutType
 
 /**
  * Executes an {@link XDiagramConfig} on a given domain object.
@@ -51,7 +50,7 @@ class XDiagramConfigInterpreter {
 			else
 				context
 		if (isOnDemand) {
-			diagram.layoutOnActivate = LayoutType.DOT
+			diagram.layoutOnActivate = true
 			diagram.contentsInitializer = [
 				descriptor.withDomainObject [ domainObject |
 					populateDiagram(diagramMapping, domainObject, newContext)

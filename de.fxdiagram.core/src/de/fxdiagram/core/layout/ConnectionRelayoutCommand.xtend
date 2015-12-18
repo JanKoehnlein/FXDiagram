@@ -65,7 +65,6 @@ class ConnectionRelayoutCommand extends AbstractAnimationCommand {
 			connection.controlPoints.forEach [
 				getBehavior(MoveBehavior)?.setIsManuallyPlaced(false)
 			]
-			connection.updateShapes
 		]
 		return morph		
 	}

@@ -19,7 +19,7 @@ import de.fxdiagram.core.command.SelectAndRevealCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
 import de.fxdiagram.core.extensions.InitializingListener;
-import de.fxdiagram.core.layout.LayoutType;
+import de.fxdiagram.core.layout.LayoutParameters;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.eclipse.ClearDiagramCommand;
@@ -283,9 +283,11 @@ public class FXDiagramTab {
       boolean _needsLayoutCommand = interpreterContext.needsLayoutCommand();
       if (_needsLayoutCommand) {
         Layouter _layouter = new Layouter();
-        XDiagram _diagram_3 = interpreterContext.getDiagram();
+        XDiagram _diagram_3 = this.root.getDiagram();
+        LayoutParameters _layoutParameters = _diagram_3.getLayoutParameters();
+        XDiagram _diagram_4 = interpreterContext.getDiagram();
         Duration _millis = DurationExtensions.millis(500);
-        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram_3, _millis, centerShape);
+        LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(_layoutParameters, _diagram_4, _millis, centerShape);
         it.operator_add(_createLayoutCommand);
       }
       final Function1<XShape, Boolean> _function_2 = (XShape it_1) -> {

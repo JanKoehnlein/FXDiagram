@@ -3,13 +3,12 @@ package de.fxdiagram.core.tools.actions
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.model.ModelSave
 import eu.hansolo.enzo.radialmenu.SymbolType
-import java.io.FileWriter
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.stage.FileChooser
-import java.io.File
-import java.io.OutputStreamWriter
-import java.io.FileOutputStream
 
 class SaveAction implements DiagramAction {
 

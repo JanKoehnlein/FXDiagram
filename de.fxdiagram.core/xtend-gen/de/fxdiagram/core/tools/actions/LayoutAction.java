@@ -50,7 +50,7 @@ public class LayoutAction implements DiagramAction {
     Layouter _layouter = new Layouter();
     XDiagram _diagram = root.getDiagram();
     Duration _millis = Duration.millis(1000);
-    final LazyCommand layoutCommand = _layouter.createLayoutCommand(this.layoutType, _diagram, _millis);
+    final LazyCommand layoutCommand = _layouter.createLayoutCommand(_diagram, _millis);
     CommandStack _commandStack = root.getCommandStack();
     _commandStack.execute(layoutCommand);
   }

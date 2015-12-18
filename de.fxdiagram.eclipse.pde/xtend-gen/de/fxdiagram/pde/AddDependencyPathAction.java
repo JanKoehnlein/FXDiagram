@@ -11,7 +11,6 @@ import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DurationExtensions;
-import de.fxdiagram.core.layout.LayoutType;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.lib.buttons.RapidButton;
@@ -165,7 +164,7 @@ public class AddDependencyPathAction extends RapidButtonAction {
             XRoot _root_1 = CoreExtensions.getRoot(host);
             XDiagram _diagram = _root_1.getDiagram();
             Duration _millis = DurationExtensions.millis(500);
-            LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(LayoutType.DOT, _diagram, _millis);
+            LazyCommand _createLayoutCommand = _layouter.createLayoutCommand(_diagram, _millis);
             _commandStack.execute(_createLayoutCommand);
           }
         }

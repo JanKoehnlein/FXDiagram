@@ -10,7 +10,7 @@ import de.fxdiagram.core.behavior.NavigationBehavior
 import de.fxdiagram.core.extensions.CoreExtensions
 import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.extensions.InitializingMapListener
-import de.fxdiagram.core.layout.LayoutType
+import de.fxdiagram.core.layout.LayoutParameters
 import de.fxdiagram.core.layout.Layouter
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.viewport.ViewportTransform
@@ -48,7 +48,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
  * A {@link viewportTransform} stores the current viewport of the diagram.
  */
 @Logging
-@ModelNode('nodes', 'connections', 'parentDiagram', 'domainObjectDescriptor')
+@ModelNode('nodes', 'connections', 'parentDiagram', 'domainObjectDescriptor', 'layoutParameters')
 class XDiagram extends Group implements XActivatable {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
@@ -57,7 +57,8 @@ class XDiagram extends Group implements XActivatable {
 	@FxProperty ObservableMap<Node, Pos> fixedButtons = observableMap(newHashMap)
 
 	@FxProperty(readOnly=true) boolean isActive
-	@FxProperty LayoutType layoutOnActivate
+	@FxProperty boolean layoutOnActivate
+	@FxProperty LayoutParameters layoutParameters = new LayoutParameters
 	@FxProperty boolean isRootDiagram = true
 	@FxProperty XDiagram parentDiagram
 
@@ -129,7 +130,7 @@ class XDiagram extends Group implements XActivatable {
 			}				
 		]
 		contentsInitializer?.apply(this)
-		if(layoutOnActivate != null) {
+		if(layoutOnActivate && layoutParameters != null) {
 			nodes.forEach [
 				node.autosize
 			]
@@ -139,8 +140,8 @@ class XDiagram extends Group implements XActivatable {
 					node.autosize
 				]
 			]
-			new Layouter().layout(layoutOnActivate, this, null)
-			layoutOnActivate = null
+			new Layouter().layout(layoutParameters, this, null)
+			layoutOnActivate = false
 		}
 		nodes.addInitializingListener(new InitializingListListener<XNode>() => [
 			add = [

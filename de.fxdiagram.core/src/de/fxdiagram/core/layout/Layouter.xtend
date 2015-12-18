@@ -32,6 +32,7 @@ import static de.fxdiagram.core.XConnection.Kind.*
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
+import static extension de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
 class Layouter {
@@ -44,41 +45,46 @@ class Layouter {
 
 	new() {
 		// pre-initialize
-		getLayoutProvider(LayoutType.DOT)
+		getLayoutProvider(new LayoutParameters)
 	}
 
-	def LazyCommand createLayoutCommand(LayoutType type, XDiagram diagram, Duration duration) {
-		createLayoutCommand(type, diagram, duration, null)
+	def LazyCommand createLayoutCommand(LayoutParameters parameters, XDiagram diagram, Duration duration) {
+		createLayoutCommand(parameters, diagram, duration, null)
 	}
 
-	def LazyCommand createLayoutCommand(LayoutType type, XDiagram diagram, Duration duration, XShape fixed) {
+	def LazyCommand createLayoutCommand(XDiagram diagram, Duration duration) {
+		createLayoutCommand(diagram.layoutParameters, diagram, duration, null)
+	}
+
+	def LazyCommand createLayoutCommand(LayoutParameters parameters, XDiagram diagram, Duration duration, XShape fixed) {
 		[|
-			val cache = calculateLayout(type, diagram)
+			val cache = calculateLayout(parameters, diagram)
 			return composeCommand(cache, duration, fixed, diagram)
 		]
 	}
 
-	def layout(LayoutType type, XDiagram diagram, XShape fixed) {
-		val cache = calculateLayout(type, diagram)
+	def layout(LayoutParameters parameters, XDiagram diagram, XShape fixed) {
+		val cache = calculateLayout(parameters, diagram)
 		applyLayout(cache, fixed, diagram)
 	}
 
-	protected def calculateLayout(LayoutType type, XDiagram diagram) {
-		val provider = getLayoutProvider(type)
+	protected def calculateLayout(LayoutParameters parameters, XDiagram diagram) {
+		val theParameters = parameters ?: new LayoutParameters
+		val provider = getLayoutProvider(theParameters)
 		val cache = <Object, KGraphElement>newHashMap
 		diagram.layout
-		val kRoot = diagram.toKRootNode(cache)
+		val kRoot = diagram.toKRootNode(theParameters, cache)
 		provider.doLayout(kRoot, new BasicProgressMonitor())
 		return cache
 	}
 
-	protected def AbstractLayoutProvider getLayoutProvider(LayoutType type) {
-		var layoutProvider = layoutProviders.get(type)
+	protected def AbstractLayoutProvider getLayoutProvider(LayoutParameters parameters) {
+		var layoutProvider = layoutProviders.get(parameters.type)
 		if (layoutProvider == null) {
 			layoutProvider = new GraphvizLayoutProvider => [
-				initialize(type.toString)
+				initialize(parameters.type.toString)
 			]
-			layoutProviders.put(type, layoutProvider)
+			layoutProviders.put(parameters.type, layoutProvider)
 		}
 		return layoutProvider
 	}
@@ -116,6 +122,12 @@ class Layouter {
 						}
 						default:
 							POLYLINE
+					}
+					if(newKind == POLYLINE) {
+						for(var i = layoutPoints.size-1; i>0; i--) {
+							if(layoutPoints.get(i).distance(layoutPoints.get(i-1))< EPSILON) 
+								layoutPoints.remove(i)
+						}
 					}
 					xElement.kind = newKind
 					if (xElement.controlPoints.size < layoutPoints.size)
@@ -170,16 +182,22 @@ class Layouter {
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain.map[new Point2D(x, y)]
 					val newKind = switch (edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
-						case EdgeRouting.SPLINES: {
-							if ((layoutPoints.size - 1) % 3 == 0)
-								CUBIC_CURVE
-							else if ((layoutPoints.size - 1) % 2 == 0)
-								QUAD_CURVE
-							else
-								POLYLINE
-						}
+//						case EdgeRouting.SPLINES: {
+//							if ((layoutPoints.size - 1) % 3 == 0)
+//								CUBIC_CURVE
+//							else if ((layoutPoints.size - 1) % 2 == 0)
+//								QUAD_CURVE
+//							else
+//								POLYLINE
+//						}
 						default:
 							POLYLINE
+					}
+					if(newKind == POLYLINE) {
+						for(var i = layoutPoints.size-1; i>0; i--) {
+							if(layoutPoints.get(i).distance(layoutPoints.get(i-1))< EPSILON) 
+								layoutPoints.remove(i)
+						}
 					}
 					xElement.connectionRouter.splineShapeKeeperEnabled = false
 					val kSource = (kElement as KEdge).source
@@ -255,27 +273,32 @@ class Layouter {
 		return new Point2D(0, 0)
 	}
 
-	protected def toKRootNode(XDiagram it, Map<Object, KGraphElement> cache) {
+	protected def toKRootNode(XDiagram it, LayoutParameters parameters, Map<Object, KGraphElement> cache) {
 		val kRoot = createKNode
 		val shapeLayout = createKShapeLayout
 		shapeLayout.insets = createKInsets
 //		shapeLayout.setProperty(LayoutOptions.DEBUG_MODE, true)
 		shapeLayout.setProperty(LayoutOptions.LAYOUT_HIERARCHY, true)
 //		shapeLayout.setProperty(LayoutOptions.BORDER_SPACING, 20f)
+		if(parameters.useSplines) 
+			shapeLayout.setProperty(LayoutOptions.EDGE_ROUTING, EdgeRouting.SPLINES)
+		else 
+			shapeLayout.setProperty(LayoutOptions.EDGE_ROUTING, EdgeRouting.POLYLINE)
+
 		kRoot.data += shapeLayout
 		cache.put(it, kRoot)
 		nodes.forEach [
-			kRoot.children += toKNode(cache)
+			kRoot.children += toKNode(parameters, cache)
 		]
-		var spacing = max(max(60.0, transformConnections(connections, cache)), transformNestedConnections(nodes, cache))
+		var spacing = max(max(60.0, transformConnections(connections, parameters, cache)), transformNestedConnections(nodes, parameters, cache))
 		shapeLayout.setProperty(LayoutOptions.SPACING, spacing as float)
 		kRoot
 	}
 
-	protected def double transformConnections(Iterable<XConnection> connections, Map<Object, KGraphElement> cache) {
+	protected def double transformConnections(Iterable<XConnection> connections, LayoutParameters parameters, Map<Object, KGraphElement> cache) {
 		var spacing = 0.0
 		for (it : connections) {
-			toKEdge(cache)
+			toKEdge(parameters, cache)
 			var minLength = 0.0
 			for (label : labels)
 				minLength += label.boundsInLocal.width
@@ -288,14 +311,14 @@ class Layouter {
 		spacing
 	}
 
-	protected def double transformNestedConnections(Iterable<XNode> nodes, Map<Object, KGraphElement> cache) {
+	protected def double transformNestedConnections(Iterable<XNode> nodes, LayoutParameters parameters, Map<Object, KGraphElement> cache) {
 		nodes.filter(XDiagramContainer).filter[isInnerDiagramActive].map [
-			max(transformConnections(innerDiagram.connections, cache),
-				transformNestedConnections(innerDiagram.nodes, cache))
+			max(transformConnections(innerDiagram.connections, parameters, cache),
+				transformNestedConnections(innerDiagram.nodes, parameters, cache))
 		].fold(0.0, [max($0, $1)])
 	}
 
-	protected def KNode toKNode(XNode xNode, Map<Object, KGraphElement> cache) {
+	protected def KNode toKNode(XNode xNode, LayoutParameters parameters, Map<Object, KGraphElement> cache) {
 		val kNode = createKNode
 		val shapeLayout = createKShapeLayout
 		val autoLayoutDimension = xNode.autoLayoutDimension
@@ -314,14 +337,14 @@ class Layouter {
 					bottom = 0 // xNode.insets?.bottom as float
 				]
 				xNode.innerDiagram.nodes.forEach [
-					kNode.children += toKNode(cache)
+					kNode.children += toKNode(parameters, cache)
 				]
 			}
 		}
 		kNode
 	}
 
-	protected def toKEdge(XConnection it, Map<Object, KGraphElement> cache) {
+	protected def toKEdge(XConnection it, LayoutParameters parameters, Map<Object, KGraphElement> cache) {
 		val kSource = cache.get(source)
 		val kTarget = cache.get(target)
 		if (kSource instanceof KNode && kTarget instanceof KNode) {
@@ -340,7 +363,7 @@ class Layouter {
 		}
 	}
 
-	protected def toKLabel(XConnectionLabel it, Map<Object, KGraphElement> cache) {
+	protected def toKLabel(XConnectionLabel it, LayoutParameters parameters, Map<Object, KGraphElement> cache) {
 		val kLabel = createKLabel
 		kLabel.text = it?.text?.text ?: ''
 		val shapeLayout = createKShapeLayout
@@ -355,10 +378,7 @@ class Layouter {
 		cache.put(it, kLabel)
 		kLabel
 	}
+	
 }
 
-enum LayoutType {
-	DOT,
-	NEATO
-}
 

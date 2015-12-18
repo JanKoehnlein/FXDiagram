@@ -18,7 +18,7 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import de.fxdiagram.core.extensions.InitializingMapListener;
-import de.fxdiagram.core.layout.LayoutType;
+import de.fxdiagram.core.layout.LayoutParameters;
 import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -76,7 +76,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
  * A {@link viewportTransform} stores the current viewport of the diagram.
  */
 @Logging
-@ModelNode({ "nodes", "connections", "parentDiagram", "domainObjectDescriptor" })
+@ModelNode({ "nodes", "connections", "parentDiagram", "domainObjectDescriptor", "layoutParameters" })
 @SuppressWarnings("all")
 public class XDiagram extends Group implements XActivatable, XModelProvider {
   private Group nodeLayer = new Group();
@@ -181,9 +181,16 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     if (this.contentsInitializer!=null) {
       this.contentsInitializer.apply(this);
     }
-    LayoutType _layoutOnActivate = this.getLayoutOnActivate();
-    boolean _notEquals = (!Objects.equal(_layoutOnActivate, null));
-    if (_notEquals) {
+    boolean _and = false;
+    boolean _layoutOnActivate = this.getLayoutOnActivate();
+    if (!_layoutOnActivate) {
+      _and = false;
+    } else {
+      LayoutParameters _layoutParameters = this.getLayoutParameters();
+      boolean _notEquals = (!Objects.equal(_layoutParameters, null));
+      _and = _notEquals;
+    }
+    if (_and) {
       ObservableList<XNode> _nodes = this.getNodes();
       final Consumer<XNode> _function_1 = (XNode it) -> {
         Node _node = it.getNode();
@@ -202,9 +209,9 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
       };
       _connections.forEach(_function_2);
       Layouter _layouter = new Layouter();
-      LayoutType _layoutOnActivate_1 = this.getLayoutOnActivate();
-      _layouter.layout(_layoutOnActivate_1, this, null);
-      this.setLayoutOnActivate(null);
+      LayoutParameters _layoutParameters_1 = this.getLayoutParameters();
+      _layouter.layout(_layoutParameters_1, this, null);
+      this.setLayoutOnActivate(false);
     }
     ObservableList<XNode> _nodes_1 = this.getNodes();
     InitializingListListener<XNode> _initializingListListener = new InitializingListListener<XNode>();
@@ -425,6 +432,7 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     modelElement.addProperty(connectionsProperty, XConnection.class);
     modelElement.addProperty(parentDiagramProperty, XDiagram.class);
     modelElement.addProperty(domainObjectDescriptorProperty, DomainObjectDescriptor.class);
+    modelElement.addProperty(layoutParametersProperty, LayoutParameters.class);
   }
   
   public String toString() {
@@ -491,18 +499,37 @@ public class XDiagram extends Group implements XActivatable, XModelProvider {
     return this.isActiveProperty.getReadOnlyProperty();
   }
   
-  private SimpleObjectProperty<LayoutType> layoutOnActivateProperty = new SimpleObjectProperty<LayoutType>(this, "layoutOnActivate");
+  private SimpleBooleanProperty layoutOnActivateProperty = new SimpleBooleanProperty(this, "layoutOnActivate");
   
-  public LayoutType getLayoutOnActivate() {
+  public boolean getLayoutOnActivate() {
     return this.layoutOnActivateProperty.get();
   }
   
-  public void setLayoutOnActivate(final LayoutType layoutOnActivate) {
+  public void setLayoutOnActivate(final boolean layoutOnActivate) {
     this.layoutOnActivateProperty.set(layoutOnActivate);
   }
   
-  public ObjectProperty<LayoutType> layoutOnActivateProperty() {
+  public BooleanProperty layoutOnActivateProperty() {
     return this.layoutOnActivateProperty;
+  }
+  
+  private SimpleObjectProperty<LayoutParameters> layoutParametersProperty = new SimpleObjectProperty<LayoutParameters>(this, "layoutParameters",_initLayoutParameters());
+  
+  private static final LayoutParameters _initLayoutParameters() {
+    LayoutParameters _layoutParameters = new LayoutParameters();
+    return _layoutParameters;
+  }
+  
+  public LayoutParameters getLayoutParameters() {
+    return this.layoutParametersProperty.get();
+  }
+  
+  public void setLayoutParameters(final LayoutParameters layoutParameters) {
+    this.layoutParametersProperty.set(layoutParameters);
+  }
+  
+  public ObjectProperty<LayoutParameters> layoutParametersProperty() {
+    return this.layoutParametersProperty;
   }
   
   private SimpleBooleanProperty isRootDiagramProperty = new SimpleBooleanProperty(this, "isRootDiagram",_initIsRootDiagram());

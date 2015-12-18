@@ -145,7 +145,7 @@ class Demo extends Application {
 							nodes += newMovieNode
 							nodes += newBrowserNode
 							nodes += newBrickBreakerNode
-							layoutOnActivate = LayoutType.DOT
+							layoutOnActivate = true
 						]
 					]
 					nodes += openableDiagram('Xtend', newNeonSignNode)

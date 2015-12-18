@@ -125,7 +125,6 @@ public class ConnectionRelayoutCommand extends AbstractAnimationCommand {
         }
       };
       _controlPoints.forEach(_function_1);
-      this.connection.updateShapes();
     };
     morph.setOnFinished(_function);
     return morph;

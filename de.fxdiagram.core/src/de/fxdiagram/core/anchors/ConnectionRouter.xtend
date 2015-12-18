@@ -96,7 +96,7 @@ class ConnectionRouter implements XActivatable {
 		if(nodeDiff > 0) {
 			val newControlPoints = newArrayList
 			val delta = 1.0 / (nodeDiff + 1)
-			val first = controlPoints.head
+			val first = controlPoints.get(controlPoints.size - 2)
 			val last = controlPoints.last
 			for(i: 1..nodeDiff) {
 				val newControlPoint = new XControlPoint => [
@@ -109,8 +109,8 @@ class ConnectionRouter implements XActivatable {
 				newControlPoints += newControlPoint
 			} 
 			controlPoints.addAll(controlPoints.size-1, newControlPoints)
-			resetPointTypes
 		}
+		resetPointTypes
 	}
 	
 	def shrinkToSize(int newSize) {
@@ -126,8 +126,8 @@ class ConnectionRouter implements XActivatable {
 				toBeRemoved.add(removeMe)
 			}
 			controlPoints.removeAll(toBeRemoved)
-			resetPointTypes
 		}
+		resetPointTypes
 	}
 	
 	protected def resetPointTypes() {
@@ -164,7 +164,7 @@ class ConnectionRouter implements XActivatable {
 				calculateSelfEdge()
 			}
 		} 
-		if(splineShapeKeeperEnabled)
+		if(splineShapeKeeperEnabled && connection.kind != POLYLINE)
 			shapeKeeper.adjustControlPointsToNodeMove
 		val sourcePoint = findClosestSourceAnchor(connection.source, true)
 		val targetPoint = findClosestTargetAnchor(connection.target, true)
