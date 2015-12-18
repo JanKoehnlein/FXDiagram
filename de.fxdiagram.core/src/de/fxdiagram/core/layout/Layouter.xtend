@@ -23,6 +23,7 @@ import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.command.LazyCommand
 import de.fxdiagram.core.command.MoveCommand
 import de.fxdiagram.core.command.ParallelAnimationCommand
+import java.util.List
 import java.util.Map
 import javafx.geometry.BoundingBox
 import javafx.geometry.Point2D
@@ -123,12 +124,8 @@ class Layouter {
 						default:
 							POLYLINE
 					}
-					if(newKind == POLYLINE) {
-						for(var i = layoutPoints.size-1; i>0; i--) {
-							if(layoutPoints.get(i).distance(layoutPoints.get(i-1))< EPSILON) 
-								layoutPoints.remove(i)
-						}
-					}
+					if(newKind == POLYLINE) 
+						layoutPoints.removeDuplicates
 					xElement.kind = newKind
 					if (xElement.controlPoints.size < layoutPoints.size)
 						xElement.connectionRouter.growToSize(layoutPoints.size)
@@ -150,6 +147,13 @@ class Layouter {
 					}
 				}
 			}
+		}
+	}
+	
+	protected def removeDuplicates(List<Point2D> layoutPoints) {
+		for(var i = layoutPoints.size-1; i>0; i--) {
+			if(layoutPoints.get(i).distance(layoutPoints.get(i-1))< EPSILON) 
+				layoutPoints.remove(i)
 		}
 	}
 
@@ -182,23 +186,19 @@ class Layouter {
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain.map[new Point2D(x, y)]
 					val newKind = switch (edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
-//						case EdgeRouting.SPLINES: {
-//							if ((layoutPoints.size - 1) % 3 == 0)
-//								CUBIC_CURVE
-//							else if ((layoutPoints.size - 1) % 2 == 0)
-//								QUAD_CURVE
-//							else
-//								POLYLINE
-//						}
+						case EdgeRouting.SPLINES: {
+							if ((layoutPoints.size - 1) % 3 == 0)
+								CUBIC_CURVE
+							else if ((layoutPoints.size - 1) % 2 == 0)
+								QUAD_CURVE
+							else
+								POLYLINE
+						}
 						default:
 							POLYLINE
 					}
-					if(newKind == POLYLINE) {
-						for(var i = layoutPoints.size-1; i>0; i--) {
-							if(layoutPoints.get(i).distance(layoutPoints.get(i-1))< EPSILON) 
-								layoutPoints.remove(i)
-						}
-					}
+					if(newKind == POLYLINE) 
+						layoutPoints.removeDuplicates
 					xElement.connectionRouter.splineShapeKeeperEnabled = false
 					val kSource = (kElement as KEdge).source
 					val correction = if (kSource.isTopLevel) {

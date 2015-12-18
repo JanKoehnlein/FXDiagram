@@ -21,7 +21,6 @@ class LazyExampleDiagram extends XDiagram {
 	}
 	
 	override doActivate() {
-		layoutParameters.useSplines = false
 		if(nodes.empty) {
 			contentsInitializer = [
 				val simple = newSimpleNode(nameSuffix)

@@ -251,15 +251,7 @@ public class Layouter {
             final XConnection.Kind newKind = _switchResult_1;
             boolean _equals_2 = Objects.equal(newKind, XConnection.Kind.POLYLINE);
             if (_equals_2) {
-              for (int i = (layoutPoints.size() - 1); (i > 0); i--) {
-                Point2D _get = layoutPoints.get(i);
-                Point2D _get_1 = layoutPoints.get((i - 1));
-                double _distance = _get.distance(_get_1);
-                boolean _lessThan = (_distance < NumberExpressionExtensions.EPSILON);
-                if (_lessThan) {
-                  layoutPoints.remove(i);
-                }
-              }
+              this.removeDuplicates(layoutPoints);
             }
             ((XConnection)xElement).setKind(newKind);
             ObservableList<XControlPoint> _controlPoints = ((XConnection)xElement).getControlPoints();
@@ -328,6 +320,18 @@ public class Layouter {
             }
           }
         }
+      }
+    }
+  }
+  
+  protected void removeDuplicates(final List<Point2D> layoutPoints) {
+    for (int i = (layoutPoints.size() - 1); (i > 0); i--) {
+      Point2D _get = layoutPoints.get(i);
+      Point2D _get_1 = layoutPoints.get((i - 1));
+      double _distance = _get.distance(_get_1);
+      boolean _lessThan = (_distance < NumberExpressionExtensions.EPSILON);
+      if (_lessThan) {
+        layoutPoints.remove(i);
       }
     }
   }
@@ -408,6 +412,29 @@ public class Layouter {
             EdgeRouting _property = edgeLayout.<EdgeRouting>getProperty(LayoutOptions.EDGE_ROUTING);
             if (_property != null) {
               switch (_property) {
+                case SPLINES:
+                  XConnection.Kind _xifexpression = null;
+                  int _size = layoutPoints.size();
+                  int _minus = (_size - 1);
+                  int _modulo = (_minus % 3);
+                  boolean _equals = (_modulo == 0);
+                  if (_equals) {
+                    _xifexpression = XConnection.Kind.CUBIC_CURVE;
+                  } else {
+                    XConnection.Kind _xifexpression_1 = null;
+                    int _size_1 = layoutPoints.size();
+                    int _minus_1 = (_size_1 - 1);
+                    int _modulo_1 = (_minus_1 % 2);
+                    boolean _equals_1 = (_modulo_1 == 0);
+                    if (_equals_1) {
+                      _xifexpression_1 = XConnection.Kind.QUAD_CURVE;
+                    } else {
+                      _xifexpression_1 = XConnection.Kind.POLYLINE;
+                    }
+                    _xifexpression = _xifexpression_1;
+                  }
+                  _switchResult_1 = _xifexpression;
+                  break;
                 default:
                   _switchResult_1 = XConnection.Kind.POLYLINE;
                   break;
@@ -416,25 +443,17 @@ public class Layouter {
               _switchResult_1 = XConnection.Kind.POLYLINE;
             }
             final XConnection.Kind newKind = _switchResult_1;
-            boolean _equals = Objects.equal(newKind, XConnection.Kind.POLYLINE);
-            if (_equals) {
-              for (int i = (layoutPoints.size() - 1); (i > 0); i--) {
-                Point2D _get = layoutPoints.get(i);
-                Point2D _get_1 = layoutPoints.get((i - 1));
-                double _distance = _get.distance(_get_1);
-                boolean _lessThan = (_distance < NumberExpressionExtensions.EPSILON);
-                if (_lessThan) {
-                  layoutPoints.remove(i);
-                }
-              }
+            boolean _equals_2 = Objects.equal(newKind, XConnection.Kind.POLYLINE);
+            if (_equals_2) {
+              this.removeDuplicates(layoutPoints);
             }
             ConnectionRouter _connectionRouter = ((XConnection)xElement).getConnectionRouter();
             _connectionRouter.setSplineShapeKeeperEnabled(false);
             final KNode kSource = ((KEdge) kElement).getSource();
-            Point2D _xifexpression = null;
+            Point2D _xifexpression_2 = null;
             boolean _isTopLevel = this.isTopLevel(kSource);
             if (_isTopLevel) {
-              _xifexpression = delta;
+              _xifexpression_2 = delta;
             } else {
               Point2D _xblockexpression = null;
               {
@@ -446,18 +465,18 @@ public class Layouter {
                 if (insets!=null) {
                   _left=insets.getLeft();
                 }
-                double _minus = (_x - _left);
+                double _minus_2 = (_x - _left);
                 double _y = delta.getY();
                 float _top = 0f;
                 if (insets!=null) {
                   _top=insets.getTop();
                 }
-                double _minus_1 = (_y - _top);
-                _xblockexpression = new Point2D(_minus, _minus_1);
+                double _minus_3 = (_y - _top);
+                _xblockexpression = new Point2D(_minus_2, _minus_3);
               }
-              _xifexpression = _xblockexpression;
+              _xifexpression_2 = _xblockexpression;
             }
-            final Point2D correction = _xifexpression;
+            final Point2D correction = _xifexpression_2;
             Iterable<Point2D> _layoutPointsInRoot = this.layoutPointsInRoot(layoutPoints, kSource);
             List<Point2D> _list = IterableExtensions.<Point2D>toList(_layoutPointsInRoot);
             final Function1<Point2D, Point2D> _function_2 = (Point2D it) -> {

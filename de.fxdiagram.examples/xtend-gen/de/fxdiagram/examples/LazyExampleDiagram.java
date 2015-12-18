@@ -5,7 +5,6 @@ import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.layout.LayoutParameters;
 import de.fxdiagram.core.model.ModelElementImpl;
 import de.fxdiagram.core.model.ToString;
 import de.fxdiagram.lib.chooser.ConnectedNodeChooser;
@@ -32,8 +31,6 @@ public class LazyExampleDiagram extends XDiagram {
   
   @Override
   public void doActivate() {
-    LayoutParameters _layoutParameters = this.getLayoutParameters();
-    _layoutParameters.setUseSplines(false);
     ObservableList<XNode> _nodes = this.getNodes();
     boolean _isEmpty = _nodes.isEmpty();
     if (_isEmpty) {
