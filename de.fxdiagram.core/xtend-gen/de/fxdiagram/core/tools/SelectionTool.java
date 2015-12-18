@@ -3,7 +3,6 @@ package de.fxdiagram.core.tools;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.HeadsUpDisplay;
 import de.fxdiagram.core.XButton;
-import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
@@ -23,7 +22,6 @@ import java.util.function.Consumer;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -69,46 +67,34 @@ public class SelectionTool implements XDiagramTool {
             _isSelectable=targetShape.isSelectable();
           }
           if (_isSelectable) {
-            boolean _and = false;
-            boolean _selected = targetShape.getSelected();
-            boolean _not_1 = (!_selected);
-            if (!_not_1) {
-              _and = false;
-            } else {
-              boolean _isShortcutDown = event.isShortcutDown();
-              boolean _not_2 = (!_isShortcutDown);
-              _and = _not_2;
-            }
-            if (_and) {
-              XShape _switchResult = null;
-              boolean _matched = false;
-              if (!_matched) {
-                if (targetShape instanceof XControlPoint) {
-                  _matched=true;
-                  Parent _parent = ((XControlPoint)targetShape).getParent();
-                  _switchResult = CoreExtensions.getContainerShape(_parent);
-                }
-              }
-              if (!_matched) {
-                _switchResult = null;
-              }
-              final XShape skip = _switchResult;
-              final Function1<XShape, Boolean> _function_1 = (XShape it) -> {
-                return Boolean.valueOf((!Objects.equal(it, skip)));
-              };
-              this.deselect(selection, _function_1);
-            }
-            final Function1<XShape, Boolean> _function_2 = (XShape it) -> {
-              XDiagram _diagram = CoreExtensions.getDiagram(it);
-              XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
-              return Boolean.valueOf((!Objects.equal(_diagram, _diagram_1)));
-            };
-            this.deselect(selection, _function_2);
-            boolean _isShortcutDown_1 = event.isShortcutDown();
-            if (_isShortcutDown_1) {
-              targetShape.toggleSelect(event);
+            final boolean targetWasSelected = targetShape.getSelected();
+            boolean _isShortcutDown = event.isShortcutDown();
+            if (_isShortcutDown) {
+              boolean _selected = targetShape.getSelected();
+              boolean _not_1 = (!_selected);
+              targetShape.setSelected(_not_1);
             } else {
               targetShape.select(event);
+            }
+            boolean _or = false;
+            if (targetWasSelected) {
+              _or = true;
+            } else {
+              boolean _isShortcutDown_1 = event.isShortcutDown();
+              _or = _isShortcutDown_1;
+            }
+            if (_or) {
+              final Function1<XShape, Boolean> _function_1 = (XShape it) -> {
+                XDiagram _diagram = CoreExtensions.getDiagram(it);
+                XDiagram _diagram_1 = CoreExtensions.getDiagram(targetShape);
+                return Boolean.valueOf((!Objects.equal(_diagram, _diagram_1)));
+              };
+              this.deselect(selection, _function_1);
+            } else {
+              final Function1<XShape, Boolean> _function_2 = (XShape it) -> {
+                return Boolean.valueOf(true);
+              };
+              this.deselect(selection, _function_2);
             }
             boolean _selected_1 = targetShape.getSelected();
             if (_selected_1) {

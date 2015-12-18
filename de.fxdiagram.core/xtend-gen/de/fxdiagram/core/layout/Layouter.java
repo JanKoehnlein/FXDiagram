@@ -37,7 +37,7 @@ import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
-import de.fxdiagram.core.layout.ConnectionMorphCommand;
+import de.fxdiagram.core.layout.ConnectionRelayoutCommand;
 import de.fxdiagram.core.layout.LayoutType;
 import java.util.Collection;
 import java.util.HashMap;
@@ -444,11 +444,11 @@ public class Layouter {
               return Point2DExtensions.operator_minus(it, correction);
             };
             final List<Point2D> xLayoutPoints = ListExtensions.<Point2D, Point2D>map(_list, _function_2);
-            ConnectionMorphCommand _connectionMorphCommand = new ConnectionMorphCommand(((XConnection)xElement), newKind, xLayoutPoints);
-            final Procedure1<ConnectionMorphCommand> _function_3 = (ConnectionMorphCommand it) -> {
+            ConnectionRelayoutCommand _connectionRelayoutCommand = new ConnectionRelayoutCommand(((XConnection)xElement), newKind, xLayoutPoints);
+            final Procedure1<ConnectionRelayoutCommand> _function_3 = (ConnectionRelayoutCommand it) -> {
               it.setExecuteDuration(duration);
             };
-            ConnectionMorphCommand _doubleArrow = ObjectExtensions.<ConnectionMorphCommand>operator_doubleArrow(_connectionMorphCommand, _function_3);
+            ConnectionRelayoutCommand _doubleArrow = ObjectExtensions.<ConnectionRelayoutCommand>operator_doubleArrow(_connectionRelayoutCommand, _function_3);
             composite.operator_add(_doubleArrow);
           }
         }

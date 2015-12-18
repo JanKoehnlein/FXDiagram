@@ -127,12 +127,6 @@ abstract class XShape extends Parent implements XActivatable {
 		selected = true
 	}
 
-	def toggleSelect(MouseEvent it) {
-		if (shortcutDown) {
-			selected = !selected
-		}
-	}
-	
 	/**
 	 * The 'real' bounds for layout calculation, i.e. without any scaling caused by selection. 
 	 */

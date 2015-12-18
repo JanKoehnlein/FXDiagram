@@ -6,7 +6,9 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
 import de.fxdiagram.core.anchors.TriangleArrowHead
+import de.fxdiagram.core.command.AddControlPointCommand
 import de.fxdiagram.core.extensions.InitializingListListener
+import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.StringDescriptor
 import java.util.List
@@ -16,6 +18,7 @@ import javafx.collections.ObservableList
 import javafx.geometry.BoundingBox
 import javafx.geometry.Point2D
 import javafx.scene.Group
+import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Paint
 import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.Polyline
@@ -30,7 +33,6 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
-import de.fxdiagram.core.extensions.InitializingListener
 
 /**
  * A line connecting two {@link XNode}s.
@@ -115,6 +117,17 @@ class XConnection extends XDomainObjectShape {
 		])
 	}
 	
+	override getNode() {
+		if(nodeProperty.get == null) {
+			val newNode = createNode
+			if(newNode != null) {
+				nodeProperty.set(newNode)
+				children.add(0, newNode)
+			}
+		}
+		nodeProperty.get
+	}
+	
 	protected override createNode() {		
 		val node = shapeGroup 
 		children += controlPointGroup => [
@@ -159,6 +172,10 @@ class XConnection extends XDomainObjectShape {
 		controlPointListener = [ prop, oldVal, newVal |
 			updateShapes
 		]
+		val ChangeListener<Boolean> controlPointSelectionListener = [  prop, oldVal, newVal |
+			if(!newVal && !controlPoints.exists[selected]) 
+				hideControlPoints
+		]
 		controlPoints.addInitializingListener(new InitializingListListener() => [
 			change = [
 				updateShapes
@@ -171,21 +188,46 @@ class XConnection extends XDomainObjectShape {
 					activate
 				layoutXProperty.addListener(controlPointListener)
 				layoutYProperty.addListener(controlPointListener)
+				selectedProperty.addListener(controlPointSelectionListener)
 			]
 			remove = [
 				layoutXProperty.removeListener(controlPointListener)
 				layoutYProperty.removeListener(controlPointListener)
+				selectedProperty.removeListener(controlPointSelectionListener)
 			]		
-		]);
+		])
 		labels.forEach[activate]
 		connectionRouter.activate
 		updateShapes
 	}
 	
+	override select(MouseEvent it) {
+		if(selected) {
+			val createCommand = AddControlPointCommand.createAddControlPointCommand(
+				this, sceneToLocal(sceneX, sceneY) 
+			)
+			if(createCommand != null)
+				root.commandStack.execute(createCommand)			
+		} else {
+			super.select(it)
+		}
+	}
+	
 	override selectionFeedback(boolean isSelected) {
-		if(isSelected) 
+		if(isSelected) {
 			toFront
-		controlPointGroup.visible = isSelected
+			showControlPoints			
+		} else if(!controlPoints.exists[selected]) {
+			hideControlPoints
+		}
+	}
+	
+	def showControlPoints() {
+		controlPointGroup.visible = true
+	}
+
+	def hideControlPoints() {
+		controlPointGroup.visible = false
 	}
 	
 	override toFront() {
@@ -246,6 +288,7 @@ class XConnection extends XDomainObjectShape {
 			}
 		}
 		if (remainder != 0) {
+			kind = POLYLINE
 			val polyline = shapeGroup.children.filter(Polyline).head 
 				?: new Polyline
 			polyline.points.setAll(controlPoints.map[#[layoutX, layoutY]].flatten)
@@ -285,6 +328,7 @@ class XConnection extends XDomainObjectShape {
 			targetArrowHead?.place
 		} catch(Exception exc) {
 			LOG.severe(exc.class.simpleName + " in XConnection.layoutChildren() " + exc.message)
+			exc.printStackTrace
 		}
 	}
 	

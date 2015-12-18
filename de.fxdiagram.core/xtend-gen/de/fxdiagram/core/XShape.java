@@ -167,15 +167,6 @@ public abstract class XShape extends Parent implements XActivatable {
     this.setSelected(true);
   }
   
-  public void toggleSelect(final MouseEvent it) {
-    boolean _isShortcutDown = it.isShortcutDown();
-    if (_isShortcutDown) {
-      boolean _selected = this.getSelected();
-      boolean _not = (!_selected);
-      this.setSelected(_not);
-    }
-  }
-  
   /**
    * The 'real' bounds for layout calculation, i.e. without any scaling caused by selection.
    */

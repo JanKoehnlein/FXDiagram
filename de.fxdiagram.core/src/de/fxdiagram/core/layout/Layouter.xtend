@@ -190,7 +190,7 @@ class Layouter {
 							new Point2D(delta.x - insets?.left, delta.y - insets?.top)
 						} 
 					val xLayoutPoints = layoutPoints.layoutPointsInRoot(kSource).toList.map[it - correction]
-					composite += new ConnectionMorphCommand(xElement, newKind, xLayoutPoints) => [
+					composite += new ConnectionRelayoutCommand(xElement, newKind, xLayoutPoints) => [ 
 						executeDuration = duration
 					]
 				}

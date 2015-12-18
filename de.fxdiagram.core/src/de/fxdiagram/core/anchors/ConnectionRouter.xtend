@@ -277,7 +277,7 @@ class ConnectionRouter implements XActivatable {
 		getNearestAnchor(node, controlPoint.layoutX, controlPoint.layoutY, arrowHead)
 	}
 	
-	protected def getNearestAnchor(XNode node, Point2D point, ArrowHead arrowHead) {
+	def getNearestAnchor(XNode node, Point2D point, ArrowHead arrowHead) {
 		if(point == null)
 			return node.node.boundsInLocal.center
 		getNearestAnchor(node, point.x, point.y, arrowHead)

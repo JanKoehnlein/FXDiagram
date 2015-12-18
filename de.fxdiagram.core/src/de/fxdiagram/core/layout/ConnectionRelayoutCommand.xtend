@@ -2,6 +2,7 @@ package de.fxdiagram.core.layout
 
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
+import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.command.AbstractAnimationCommand
 import de.fxdiagram.core.command.CommandContext
 import java.util.List
@@ -16,9 +17,8 @@ import javafx.util.Duration
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
-import de.fxdiagram.core.behavior.MoveBehavior
 
-class ConnectionMorphCommand extends AbstractAnimationCommand {
+class ConnectionRelayoutCommand extends AbstractAnimationCommand {
 	
 	XConnection connection
 	
@@ -65,7 +65,8 @@ class ConnectionMorphCommand extends AbstractAnimationCommand {
 			connection.controlPoints.forEach [
 				getBehavior(MoveBehavior)?.setIsManuallyPlaced(false)
 			]
-		] 
+			connection.updateShapes
+		]
 		return morph		
 	}
 	

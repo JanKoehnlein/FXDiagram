@@ -33,7 +33,7 @@ import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
-public class ConnectionMorphCommand extends AbstractAnimationCommand {
+public class ConnectionRelayoutCommand extends AbstractAnimationCommand {
   private XConnection connection;
   
   private XConnection.Kind fromKind;
@@ -44,7 +44,7 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
   
   private List<Point2D> toPoints;
   
-  public ConnectionMorphCommand(final XConnection connection, final XConnection.Kind toKind, final List<Point2D> toPoints) {
+  public ConnectionRelayoutCommand(final XConnection connection, final XConnection.Kind toKind, final List<Point2D> toPoints) {
     this.connection = connection;
     this.toKind = toKind;
     this.toPoints = toPoints;
@@ -125,6 +125,7 @@ public class ConnectionMorphCommand extends AbstractAnimationCommand {
         }
       };
       _controlPoints.forEach(_function_1);
+      this.connection.updateShapes();
     };
     morph.setOnFinished(_function);
     return morph;

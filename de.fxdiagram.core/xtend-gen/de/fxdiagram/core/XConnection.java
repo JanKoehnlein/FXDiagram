@@ -9,9 +9,12 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
+import de.fxdiagram.core.command.AddControlPointCommand;
+import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
@@ -27,6 +30,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -45,6 +49,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Polyline;
@@ -188,6 +193,29 @@ public class XConnection extends XDomainObjectShape {
   }
   
   @Override
+  public Node getNode() {
+    Node _xblockexpression = null;
+    {
+      ObjectProperty<Node> _nodeProperty = this.nodeProperty();
+      Node _get = _nodeProperty.get();
+      boolean _equals = Objects.equal(_get, null);
+      if (_equals) {
+        final Node newNode = this.createNode();
+        boolean _notEquals = (!Objects.equal(newNode, null));
+        if (_notEquals) {
+          ObjectProperty<Node> _nodeProperty_1 = this.nodeProperty();
+          _nodeProperty_1.set(newNode);
+          ObservableList<Node> _children = this.getChildren();
+          _children.add(0, newNode);
+        }
+      }
+      ObjectProperty<Node> _nodeProperty_2 = this.nodeProperty();
+      _xblockexpression = _nodeProperty_2.get();
+    }
+    return _xblockexpression;
+  }
+  
+  @Override
   protected Node createNode() {
     Group _xblockexpression = null;
     {
@@ -284,14 +312,32 @@ public class XConnection extends XDomainObjectShape {
       this.updateShapes();
     };
     this.controlPointListener = _function;
+    final ChangeListener<Boolean> _function_1 = (ObservableValue<? extends Boolean> prop, Boolean oldVal, Boolean newVal) -> {
+      boolean _and = false;
+      if (!(!(newVal).booleanValue())) {
+        _and = false;
+      } else {
+        ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+        final Function1<XControlPoint, Boolean> _function_2 = (XControlPoint it) -> {
+          return Boolean.valueOf(it.getSelected());
+        };
+        boolean _exists = IterableExtensions.<XControlPoint>exists(_controlPoints, _function_2);
+        boolean _not = (!_exists);
+        _and = _not;
+      }
+      if (_and) {
+        this.hideControlPoints();
+      }
+    };
+    final ChangeListener<Boolean> controlPointSelectionListener = _function_1;
     ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
     InitializingListListener<XControlPoint> _initializingListListener = new InitializingListListener<XControlPoint>();
-    final Procedure1<InitializingListListener<XControlPoint>> _function_1 = (InitializingListListener<XControlPoint> it) -> {
-      final Procedure1<ListChangeListener.Change<? extends XControlPoint>> _function_2 = (ListChangeListener.Change<? extends XControlPoint> it_1) -> {
+    final Procedure1<InitializingListListener<XControlPoint>> _function_2 = (InitializingListListener<XControlPoint> it) -> {
+      final Procedure1<ListChangeListener.Change<? extends XControlPoint>> _function_3 = (ListChangeListener.Change<? extends XControlPoint> it_1) -> {
         this.updateShapes();
       };
-      it.setChange(_function_2);
-      final Procedure1<XControlPoint> _function_3 = (XControlPoint it_1) -> {
+      it.setChange(_function_3);
+      final Procedure1<XControlPoint> _function_4 = (XControlPoint it_1) -> {
         ObservableList<XControlPoint> _controlPoints_1 = this.getControlPoints();
         final int index = _controlPoints_1.indexOf(it_1);
         boolean _or = false;
@@ -313,34 +359,75 @@ public class XConnection extends XDomainObjectShape {
         _layoutXProperty.addListener(this.controlPointListener);
         DoubleProperty _layoutYProperty = it_1.layoutYProperty();
         _layoutYProperty.addListener(this.controlPointListener);
+        BooleanProperty _selectedProperty = it_1.selectedProperty();
+        _selectedProperty.addListener(controlPointSelectionListener);
       };
-      it.setAdd(_function_3);
-      final Procedure1<XControlPoint> _function_4 = (XControlPoint it_1) -> {
+      it.setAdd(_function_4);
+      final Procedure1<XControlPoint> _function_5 = (XControlPoint it_1) -> {
         DoubleProperty _layoutXProperty = it_1.layoutXProperty();
         _layoutXProperty.removeListener(this.controlPointListener);
         DoubleProperty _layoutYProperty = it_1.layoutYProperty();
         _layoutYProperty.removeListener(this.controlPointListener);
+        BooleanProperty _selectedProperty = it_1.selectedProperty();
+        _selectedProperty.removeListener(controlPointSelectionListener);
       };
-      it.setRemove(_function_4);
+      it.setRemove(_function_5);
     };
-    InitializingListListener<XControlPoint> _doubleArrow = ObjectExtensions.<InitializingListListener<XControlPoint>>operator_doubleArrow(_initializingListListener, _function_1);
+    InitializingListListener<XControlPoint> _doubleArrow = ObjectExtensions.<InitializingListListener<XControlPoint>>operator_doubleArrow(_initializingListListener, _function_2);
     CoreExtensions.<XControlPoint>addInitializingListener(_controlPoints, _doubleArrow);
     ObservableList<XConnectionLabel> _labels = this.getLabels();
-    final Consumer<XConnectionLabel> _function_2 = (XConnectionLabel it) -> {
+    final Consumer<XConnectionLabel> _function_3 = (XConnectionLabel it) -> {
       it.activate();
     };
-    _labels.forEach(_function_2);
+    _labels.forEach(_function_3);
     ConnectionRouter _connectionRouter = this.getConnectionRouter();
     _connectionRouter.activate();
     this.updateShapes();
   }
   
   @Override
+  public void select(final MouseEvent it) {
+    boolean _selected = this.getSelected();
+    if (_selected) {
+      double _sceneX = it.getSceneX();
+      double _sceneY = it.getSceneY();
+      Point2D _sceneToLocal = this.sceneToLocal(_sceneX, _sceneY);
+      final AddControlPointCommand createCommand = AddControlPointCommand.createAddControlPointCommand(this, _sceneToLocal);
+      boolean _notEquals = (!Objects.equal(createCommand, null));
+      if (_notEquals) {
+        XRoot _root = CoreExtensions.getRoot(this);
+        CommandStack _commandStack = _root.getCommandStack();
+        _commandStack.execute(createCommand);
+      }
+    } else {
+      super.select(it);
+    }
+  }
+  
+  @Override
   public void selectionFeedback(final boolean isSelected) {
     if (isSelected) {
       this.toFront();
+      this.showControlPoints();
+    } else {
+      ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+      final Function1<XControlPoint, Boolean> _function = (XControlPoint it) -> {
+        return Boolean.valueOf(it.getSelected());
+      };
+      boolean _exists = IterableExtensions.<XControlPoint>exists(_controlPoints, _function);
+      boolean _not = (!_exists);
+      if (_not) {
+        this.hideControlPoints();
+      }
     }
-    this.controlPointGroup.setVisible(isSelected);
+  }
+  
+  public void showControlPoints() {
+    this.controlPointGroup.setVisible(true);
+  }
+  
+  public void hideControlPoints() {
+    this.controlPointGroup.setVisible(false);
   }
   
   @Override
@@ -491,6 +578,7 @@ public class XConnection extends XDomainObjectShape {
       }
     }
     if ((remainder != 0)) {
+      this.setKind(XConnection.Kind.POLYLINE);
       Polyline _elvis = null;
       ObservableList<Node> _children_2 = this.shapeGroup.getChildren();
       Iterable<Polyline> _filter_2 = Iterables.<Polyline>filter(_children_2, Polyline.class);
@@ -591,6 +679,7 @@ public class XConnection extends XDomainObjectShape {
         String _message = exc.getMessage();
         String _plus_1 = (_plus + _message);
         XConnection.LOG.severe(_plus_1);
+        exc.printStackTrace();
       } else {
         throw Exceptions.sneakyThrow(_t);
       }

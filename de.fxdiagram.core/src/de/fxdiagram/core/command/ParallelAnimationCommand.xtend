@@ -16,7 +16,7 @@ class ParallelAnimationCommand extends AbstractAnimationCommand {
 		} 
 	} 
 
-	def operator_add(Iterable<AnimationCommand> commands) {
+	def operator_add(Iterable<? extends AnimationCommand> commands) {
 		commands.forEach[
 			this += it
 		]

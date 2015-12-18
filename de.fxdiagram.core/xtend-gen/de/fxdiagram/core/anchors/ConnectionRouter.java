@@ -586,7 +586,7 @@ public class ConnectionRouter implements XActivatable {
     return this.getNearestAnchor(node, _layoutX, _layoutY, arrowHead);
   }
   
-  protected Point2D getNearestAnchor(final XNode node, final Point2D point, final ArrowHead arrowHead) {
+  public Point2D getNearestAnchor(final XNode node, final Point2D point, final ArrowHead arrowHead) {
     Point2D _xblockexpression = null;
     {
       boolean _equals = Objects.equal(point, null);

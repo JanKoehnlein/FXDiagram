@@ -1,7 +1,6 @@
 package de.fxdiagram.core.tools
 
 import de.fxdiagram.core.XButton
-import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
 import de.fxdiagram.core.behavior.MoveBehavior
@@ -41,18 +40,15 @@ class SelectionTool implements XDiagramTool {
 			} else if (!(event.targetButton instanceof XButton)) {
 				val targetShape = event.targetShape
 				if (targetShape?.isSelectable) {
-					if (!targetShape.selected && !event.shortcutDown) {
-						val skip = switch targetShape {
-							XControlPoint: targetShape.parent.containerShape
-							default: null
-						}
-						selection.deselect[it != skip]
-					} 
-					selection.deselect[it.diagram != targetShape.diagram]
+					val targetWasSelected = targetShape.selected
 					if(event.shortcutDown)
-						targetShape.toggleSelect(event)
+						targetShape.selected = ! targetShape.selected
 					else 
 						targetShape.select(event)
+					if (targetWasSelected || event.shortcutDown) 
+						selection.deselect[it.diagram != targetShape.diagram]
+					else  
+						selection.deselect[true]
 					if(targetShape.selected)
 						selection.add(targetShape)
 					selection.forEach [

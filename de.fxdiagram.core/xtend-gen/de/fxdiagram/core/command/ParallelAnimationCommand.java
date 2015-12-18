@@ -29,7 +29,7 @@ public class ParallelAnimationCommand extends AbstractAnimationCommand {
     }
   }
   
-  public void operator_add(final Iterable<AnimationCommand> commands) {
+  public void operator_add(final Iterable<? extends AnimationCommand> commands) {
     final Consumer<AnimationCommand> _function = (AnimationCommand it) -> {
       this.operator_add(it);
     };

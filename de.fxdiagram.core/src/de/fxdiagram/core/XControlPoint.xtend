@@ -74,18 +74,19 @@ class XControlPoint extends XShape {
 				case INTERPOLATED:
 					(node as Circle).fill = Color.RED
 			}
-		else
+		else {
 			switch type {
 				case CONTROL_POINT:
 					node.effect = null
 				case INTERPOLATED:
 					(node as Circle).fill = Color.WHITE
 			}
+		}
 	}
 
 	override isSelectable() {
 		type != ANCHOR && super.isSelectable()
-	}
+	}	
 
 	override toString() {
 		'''XControlPoint at («layoutX»,«layoutY»)'''
