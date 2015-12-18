@@ -71,7 +71,6 @@ public class FXDiagramPane {
         diagramActionRegistry.operator_add(new FullScreenAction());
         return root;
     }
-
     public <T> void revealElement(T element, EntryCall<? super T> entryCall) {
         InterpreterContext interpreterContext = new InterpreterContext(root.getDiagram());
         entryCall.execute(element, configInterpreter, interpreterContext);
@@ -81,7 +80,7 @@ public class FXDiagramPane {
         XShape centerShape = findShape(interpreterContext.getDiagram(), descriptor);
         ParallelAnimationCommand command = new ParallelAnimationCommand();
         if(interpreterContext.needsLayoutCommand())
-            command.operator_add(new Layouter().createLayoutCommand(LayoutType.DOT, interpreterContext.getDiagram(), Duration.millis(500), centerShape));
+            command.operator_add(new Layouter().createLayoutCommand(interpreterContext.getDiagram().getLayoutParameters(), interpreterContext.getDiagram(), Duration.millis(500), centerShape));
         command.operator_add(new SelectAndRevealCommand(root, d -> d.equals(centerShape)));
         root.getCommandStack().execute(command);
     }
