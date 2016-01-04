@@ -28,11 +28,10 @@
 				<configuration>
 					<source>
 						<repository>
-							<url>http://dl.bintray.com/jankoehnlein/FXDiagram</url>
+							<url>${project.baseUri}/../../p2mirror</url>
 							<layout>p2</layout>
 						</repository>
 					</source>
-					<!--  <mirrorMetadataOnly>true</mirrorMetadataOnly> -->
 				</configuration>
 			</plugin>
 		</plugins>
