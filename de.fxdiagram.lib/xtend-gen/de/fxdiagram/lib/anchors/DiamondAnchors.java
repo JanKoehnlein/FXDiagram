@@ -1,4 +1,4 @@
-package de.fxdiagram.core.anchors;
+package de.fxdiagram.lib.anchors;
 
 import com.google.common.base.Objects;
 import de.fxdiagram.core.anchors.Anchors;

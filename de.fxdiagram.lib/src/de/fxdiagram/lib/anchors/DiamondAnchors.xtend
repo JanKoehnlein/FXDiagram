@@ -1,5 +1,6 @@
-package de.fxdiagram.core.anchors
+package de.fxdiagram.lib.anchors
 
+import de.fxdiagram.core.anchors.Anchors
 import javafx.geometry.Point2D
 import javafx.scene.shape.Shape
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
