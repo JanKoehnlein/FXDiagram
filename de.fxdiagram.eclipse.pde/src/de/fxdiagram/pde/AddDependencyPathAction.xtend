@@ -15,8 +15,6 @@ import de.fxdiagram.mapping.execution.XDiagramConfigInterpreter
 import java.util.NoSuchElementException
 import org.eclipse.osgi.service.resolver.BundleDescription
 
-import static de.fxdiagram.core.layout.LayoutType.*
-
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
 import static extension de.fxdiagram.pde.BundleUtil.*

@@ -42,7 +42,6 @@ class JavaEditorSelectionExtractor implements ISelectionExtractor, IChangeSource
 				JavaCore.addElementChangedListener(listener)
 			}
 		} 
-		
 	}
 	
 	override removeChangeListener(IWorkbenchPart part, ModelChangeBroker broker) {
