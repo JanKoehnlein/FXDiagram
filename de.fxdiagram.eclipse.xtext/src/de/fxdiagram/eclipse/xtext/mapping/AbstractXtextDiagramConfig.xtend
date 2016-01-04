@@ -1,7 +1,7 @@
 package de.fxdiagram.eclipse.xtext.mapping
 
 import com.google.inject.Inject
-import de.fxdiagram.core.XDomainObjectShape
+import de.fxdiagram.core.XDomainObjectOwner
 import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.eclipse.mapping.AbstractEclipseDiagramConfig
 import de.fxdiagram.eclipse.xtext.AbstractXtextDescriptor
@@ -16,7 +16,7 @@ abstract class AbstractXtextDiagramConfig extends AbstractEclipseDiagramConfig {
 	
 	@Inject(optional=true) extension IStorage2UriMapper
 	 
-	override initialize(XDomainObjectShape shape) {
+	override initialize(XDomainObjectOwner shape) {
 		shape.domainObjectDescriptorProperty?.addInitializingListener(new InitializingListener() => [
 			set = [
 				if(it instanceof AbstractXtextDescriptor<?>)

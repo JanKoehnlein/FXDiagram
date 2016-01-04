@@ -49,7 +49,7 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
  */
 @Logging
 @ModelNode('nodes', 'connections', 'parentDiagram', 'domainObjectDescriptor', 'layoutParameters')
-class XDiagram extends Group implements XActivatable {
+class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 	
 	@FxProperty ObservableList<XNode> nodes = observableArrayList
 	@FxProperty ObservableList<XConnection> connections = observableArrayList

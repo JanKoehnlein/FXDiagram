@@ -7,6 +7,7 @@ import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XActivatable;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XConnectionLabel;
+import de.fxdiagram.core.XDomainObjectOwner;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.anchors.ArrowHead;
@@ -78,7 +79,7 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure2;
 @Logging
 @ModelNode({ "nodes", "connections", "parentDiagram", "domainObjectDescriptor", "layoutParameters" })
 @SuppressWarnings("all")
-public class XDiagram extends Group implements XActivatable, XModelProvider {
+public class XDiagram extends Group implements XActivatable, XDomainObjectOwner, XModelProvider {
   private Group nodeLayer = new Group();
   
   private Group buttonLayer = new Group();

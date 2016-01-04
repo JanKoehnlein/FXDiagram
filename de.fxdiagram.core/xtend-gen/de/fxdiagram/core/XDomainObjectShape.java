@@ -1,6 +1,7 @@
 package de.fxdiagram.core;
 
 import de.fxdiagram.annotations.properties.ModelNode;
+import de.fxdiagram.core.XDomainObjectOwner;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.core.model.ModelElementImpl;
@@ -11,7 +12,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 
 @ModelNode("domainObjectDescriptor")
 @SuppressWarnings("all")
-public abstract class XDomainObjectShape extends XShape implements XModelProvider {
+public abstract class XDomainObjectShape extends XShape implements XDomainObjectOwner, XModelProvider {
   public XDomainObjectShape(final DomainObjectDescriptor descriptor) {
     this.domainObjectDescriptorProperty.set(descriptor);
   }

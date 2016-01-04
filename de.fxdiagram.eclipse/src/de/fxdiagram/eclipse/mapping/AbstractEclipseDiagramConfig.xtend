@@ -1,13 +1,15 @@
 package de.fxdiagram.eclipse.mapping
 
-import de.fxdiagram.core.XDomainObjectShape
+import de.fxdiagram.core.XDomainObjectOwner
 import de.fxdiagram.mapping.AbstractDiagramConfig
 import de.fxdiagram.mapping.behavior.OpenElementInEditorBehavior
+import de.fxdiagram.core.XDomainObjectShape
 
 abstract class AbstractEclipseDiagramConfig extends AbstractDiagramConfig {
 	
-	override initialize(XDomainObjectShape shape) {
-		shape.addBehavior(new OpenElementInEditorBehavior(shape))
+	override initialize(XDomainObjectOwner shape) {
+		if (shape instanceof XDomainObjectShape) 
+			shape.addBehavior(new OpenElementInEditorBehavior(shape))
 	}
 	
 }

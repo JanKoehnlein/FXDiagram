@@ -1,7 +1,7 @@
 package de.fxdiagram.mapping
 
 import de.fxdiagram.annotations.logging.Logging
-import de.fxdiagram.core.XDomainObjectShape
+import de.fxdiagram.core.XDomainObjectOwner
 import de.fxdiagram.mapping.execution.ConnectionEntryCall
 import de.fxdiagram.mapping.execution.DiagramEntryCall
 import de.fxdiagram.mapping.execution.EntryCall
@@ -42,7 +42,7 @@ interface XDiagramConfig {
 	
 	def IMappedElementDescriptorProvider getDomainObjectProvider()
 	
-	def void initialize(XDomainObjectShape shape)
+	def void initialize(XDomainObjectOwner shape)
 	
 	@Logging  
 	static class Registry {

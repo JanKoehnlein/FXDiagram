@@ -1,5 +1,6 @@
 package de.fxdiagram.mapping.shapes;
 
+import de.fxdiagram.core.XDomainObjectOwner;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.mapping.AbstractMapping;
@@ -15,7 +16,7 @@ import javafx.beans.value.ObservableValue;
  */
 @SuppressWarnings("all")
 public class BaseShapeInitializer {
-  public static void initializeLazily(final XDomainObjectShape shape) {
+  public static void initializeLazily(final XDomainObjectOwner shape) {
     ReadOnlyObjectProperty<DomainObjectDescriptor> _domainObjectDescriptorProperty = shape.domainObjectDescriptorProperty();
     final ChangeListener<DomainObjectDescriptor> _function = new ChangeListener<DomainObjectDescriptor>() {
       @Override
