@@ -11,6 +11,10 @@
 		<relativePath>../de.fxdiagram.maven</relativePath>
 	</parent>
 
+	<properties>
+		<mirroring>never</mirroring>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -19,7 +23,7 @@
 				<version>${tycho-version}</version>
 				<executions>
 					<execution>
-						<phase>prepare-package</phase>
+						<phase>${mirroring}</phase>
 						<goals>
 							<goal>mirror</goal>
 						</goals>

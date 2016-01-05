@@ -275,4 +275,17 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>mirror-exists</id>
+			<activation>
+				<file>
+					<exists>../../p2mirror</exists>
+				</file>
+			</activation>
+			<properties>
+				<mirroring>prepapare-package</mirroring>
+			</properties>			
+		</profile>
+	</profiles>
 </project>
