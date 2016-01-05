@@ -44,7 +44,9 @@ public class XControlPoint extends XShape implements XModelProvider {
     
     INTERPOLATED,
     
-    CONTROL_POINT;
+    CONTROL_POINT,
+    
+    DANGLING;
   }
   
   @Override
@@ -70,6 +72,15 @@ public class XControlPoint extends XShape implements XModelProvider {
             it.setFill(Color.WHITE);
           };
           return ObjectExtensions.<Circle>operator_doubleArrow(_circle_1, _function_1);
+        case DANGLING:
+          Circle _circle_2 = new Circle();
+          final Procedure1<Circle> _function_2 = (Circle it) -> {
+            it.setRadius(5);
+            it.setStroke(Color.RED);
+            it.setFill(Color.RED);
+            it.setOpacity(0.5);
+          };
+          return ObjectExtensions.<Circle>operator_doubleArrow(_circle_2, _function_2);
         default:
           return null;
       }
@@ -87,6 +98,8 @@ public class XControlPoint extends XShape implements XModelProvider {
       ObjectProperty<Node> _nodeProperty = this.nodeProperty();
       _nodeProperty.set(null);
       this.getNode();
+      boolean _selected = this.getSelected();
+      this.selectionFeedback(_selected);
     };
     this.typeProperty.addListener(_function);
     XControlPoint.Type _type = this.getType();
@@ -109,6 +122,7 @@ public class XControlPoint extends XShape implements XModelProvider {
             _node.setEffect(_dropShadow);
             break;
           case INTERPOLATED:
+          case DANGLING:
             Node _node_1 = this.getNode();
             ((Circle) _node_1).setFill(Color.RED);
             break;
@@ -125,6 +139,7 @@ public class XControlPoint extends XShape implements XModelProvider {
             _node_2.setEffect(null);
             break;
           case INTERPOLATED:
+          case DANGLING:
             Node _node_3 = this.getNode();
             ((Circle) _node_3).setFill(Color.WHITE);
             break;

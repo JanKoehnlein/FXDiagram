@@ -1,5 +1,6 @@
 package de.fxdiagram.core.extensions;
 
+import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import javafx.geometry.Point2D;
 import org.eclipse.xtext.xbase.lib.Pure;
 
@@ -130,5 +131,39 @@ public class Point2DExtensions {
   @Pure
   public static boolean isClockwise(final double x0, final double y0, final double x1, final double y1, final double x2, final double y2) {
     return (((((x1 - x0) * (y1 + y0)) + ((x2 - x1) * (y2 + y1))) + ((x0 - x2) * (y0 + y2))) > 0);
+  }
+  
+  public final static int EPSILON_DEGREES = 5;
+  
+  private final static double COS_EPSILON = Math.cos(((Point2DExtensions.EPSILON_DEGREES * Math.PI) / 180));
+  
+  @Pure
+  public static boolean areOnSameLine(final Point2D x0, final Point2D x1, final Point2D x2) {
+    double _x = x0.getX();
+    double _y = x0.getY();
+    double _x_1 = x1.getX();
+    double _y_1 = x1.getY();
+    double _x_2 = x2.getX();
+    double _y_2 = x2.getY();
+    return Point2DExtensions.areOnSameLine(_x, _y, _x_1, _y_1, _x_2, _y_2);
+  }
+  
+  @Pure
+  public static boolean areOnSameLine(final double x0x, final double x0y, final double x1x, final double x1y, final double x2x, final double x2y) {
+    final double d0x = (x0x - x1x);
+    final double d0y = (x0y - x1y);
+    final double norm0 = Point2DExtensions.norm(d0x, d0y);
+    if ((norm0 < NumberExpressionExtensions.EPSILON)) {
+      return true;
+    }
+    final double d1x = (x1x - x2x);
+    final double d1y = (x1y - x2y);
+    final double norm1 = Point2DExtensions.norm(d1x, d1y);
+    if ((norm1 < NumberExpressionExtensions.EPSILON)) {
+      return true;
+    }
+    final double cosTheta = ((((d0x * d1x) + (d0y * d1y)) / norm0) / norm1);
+    double _abs = Math.abs(cosTheta);
+    return (_abs > Point2DExtensions.COS_EPSILON);
   }
 }

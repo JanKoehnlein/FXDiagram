@@ -1,28 +1,62 @@
 package de.fxdiagram.core.behavior
 
+import com.google.common.collect.Maps
 import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XControlPoint
+import de.fxdiagram.core.command.AbstractCommand
+import de.fxdiagram.core.command.CommandContext
+import de.fxdiagram.core.command.MoveCommand
+import de.fxdiagram.core.command.ParallelAnimationCommand
 import java.util.List
+import java.util.Map
 import javafx.collections.ObservableList
 import javafx.geometry.Point2D
+import javafx.scene.input.MouseEvent
 
+import static de.fxdiagram.core.XConnection.Kind.*
 import static de.fxdiagram.core.XControlPoint.Type.*
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import javafx.scene.input.MouseEvent
-import java.util.Map
-import com.google.common.collect.Maps
-import de.fxdiagram.core.command.ParallelAnimationCommand
-import de.fxdiagram.core.command.MoveCommand
 
 class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 
 	new(XControlPoint host) {
 		super(host)
 	}
-
+	
+	override activate() {
+		super.activate
+		host.onMouseExited = [
+			if(connection.kind == POLYLINE) {
+				val siblings = getSiblings
+				val index = siblings.indexOf(host)
+				if(index > 0 && index < siblings.size-1) {
+					val predecessor = siblings.get(index-1)
+					val successor = siblings.get(index+1)
+					if(areOnSameLine(predecessor.layoutX, predecessor.layoutY,
+						host.layoutX, host.layoutY,
+						successor.layoutX, successor.layoutY))
+						host.root.commandStack.execute(new AbstractCommand() {
+							
+							override execute(CommandContext context) {
+								siblings.remove(index)
+							}
+							
+							override undo(CommandContext context) {
+								siblings.add(index, host)
+							}
+							
+							override redo(CommandContext context) {
+								siblings.remove(index)
+							}
+						})
+				}
+			}
+		]
+	}
+	
 	override protected dragTo(Point2D newPositionInDiagram) {
 		if(newPositionInDiagram != null) {
 			val moveDeltaX = newPositionInDiagram.x - host.layoutX			
@@ -30,11 +64,16 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 			super.dragTo(newPositionInDiagram)
 			val siblings = getSiblings
 			val index = siblings.indexOf(host)
-			if (host.type == INTERPOLATED) {
-				adjustBoth(index, siblings, moveDeltaX, moveDeltaY)
-			} else if (host.type == CONTROL_POINT) {
-				adjustLeft(index, siblings, moveDeltaX, moveDeltaY)
-				adjustRight(index, siblings, moveDeltaX, moveDeltaY)
+			switch host.type {
+				case INTERPOLATED: {
+					adjustBoth(index, siblings, moveDeltaX, moveDeltaY)
+					updateDangling(index, siblings)
+				}
+				case DANGLING: updateDangling(index, siblings)
+				case CONTROL_POINT: {
+					adjustLeft(index, siblings, moveDeltaX, moveDeltaY)
+					adjustRight(index, siblings, moveDeltaX, moveDeltaY)
+				}
 			}
 		} 
 	}
@@ -124,13 +163,29 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 			}
 		}
 	}
+	
+	protected def updateDangling(int index, List<XControlPoint> siblings) {
+		val predecessor = siblings.get(index-1)
+		val successor = siblings.get(index+1)
+		if(areOnSameLine(
+			predecessor.layoutX, predecessor.layoutY,
+			host.layoutX, host.layoutY,
+			successor.layoutX, successor.layoutY)) 
+				host.type = DANGLING
+			else
+				host.type = INTERPOLATED
+	}
 
 	protected def getSiblings() {
-		val connection = host.parent?.containerShape
-		if (connection instanceof XConnection)
-			connection.controlPoints
+		connection?.controlPoints
+	}
+	
+	protected def getConnection() {
+		val containerShape = host.parent?.containerShape
+		if(containerShape instanceof XConnection)
+			return containerShape
 		else
-			null
+			return null
 	}
 	
 	Map<XControlPoint, Point2D> initialPositions

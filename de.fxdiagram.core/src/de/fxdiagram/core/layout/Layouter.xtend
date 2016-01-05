@@ -151,8 +151,8 @@ class Layouter {
 	}
 	
 	protected def removeDuplicates(List<Point2D> layoutPoints) {
-		for(var i = layoutPoints.size-1; i>0; i--) {
-			if(layoutPoints.get(i).distance(layoutPoints.get(i-1))< EPSILON) 
+		for(var i = layoutPoints.size-2; i>0; i--) {
+			if(areOnSameLine(layoutPoints.get(i-1), layoutPoints.get(i), layoutPoints.get(i+1))) 
 				layoutPoints.remove(i)
 		}
 	}

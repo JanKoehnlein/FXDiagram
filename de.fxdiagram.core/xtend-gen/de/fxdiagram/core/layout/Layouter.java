@@ -36,7 +36,6 @@ import de.fxdiagram.core.command.LazyCommand;
 import de.fxdiagram.core.command.MoveCommand;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.extensions.BoundsExtensions;
-import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import de.fxdiagram.core.layout.ConnectionRelayoutCommand;
 import de.fxdiagram.core.layout.LayoutParameters;
@@ -325,12 +324,12 @@ public class Layouter {
   }
   
   protected void removeDuplicates(final List<Point2D> layoutPoints) {
-    for (int i = (layoutPoints.size() - 1); (i > 0); i--) {
-      Point2D _get = layoutPoints.get(i);
-      Point2D _get_1 = layoutPoints.get((i - 1));
-      double _distance = _get.distance(_get_1);
-      boolean _lessThan = (_distance < NumberExpressionExtensions.EPSILON);
-      if (_lessThan) {
+    for (int i = (layoutPoints.size() - 2); (i > 0); i--) {
+      Point2D _get = layoutPoints.get((i - 1));
+      Point2D _get_1 = layoutPoints.get(i);
+      Point2D _get_2 = layoutPoints.get((i + 1));
+      boolean _areOnSameLine = Point2DExtensions.areOnSameLine(_get, _get_1, _get_2);
+      if (_areOnSameLine) {
         layoutPoints.remove(i);
       }
     }

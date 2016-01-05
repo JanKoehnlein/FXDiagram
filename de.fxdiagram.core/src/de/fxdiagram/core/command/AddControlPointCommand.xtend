@@ -49,7 +49,8 @@ class AddControlPointCommand extends AbstractCommand {
 		connection.controlPoints.add(index, new XControlPoint => [
 			layoutX = newPoint.x
 			layoutY = newPoint.y
-			type = INTERPOLATED
+			type = DANGLING
+			selected = true
 		])
 		connection.updateShapes
 	}

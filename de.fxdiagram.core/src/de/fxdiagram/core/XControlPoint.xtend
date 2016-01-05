@@ -50,6 +50,14 @@ class XControlPoint extends XShape {
 					fill = Color.WHITE
 				]
 			}
+			case DANGLING: {
+				return new Circle => [
+					radius = 5
+					stroke = Color.RED
+					fill = Color.RED
+					opacity = 0.5
+				]
+			}
 			default:
 				return null
 		}
@@ -61,6 +69,7 @@ class XControlPoint extends XShape {
 			children.remove(node)
 			nodeProperty.set(null)
 			getNode
+			selectionFeedback(selected)
 		]
 		if (type != ANCHOR)
 			addBehavior(new ControlPointMoveBehavior(this))
@@ -71,14 +80,16 @@ class XControlPoint extends XShape {
 			switch type {
 				case CONTROL_POINT:
 					node.effect = new DropShadow
-				case INTERPOLATED:
+				case INTERPOLATED,
+				case DANGLING:
 					(node as Circle).fill = Color.RED
 			}
 		else {
 			switch type {
 				case CONTROL_POINT:
 					node.effect = null
-				case INTERPOLATED:
+				case INTERPOLATED,
+				case DANGLING:
 					(node as Circle).fill = Color.WHITE
 			}
 		}
@@ -114,7 +125,8 @@ class XControlPoint extends XShape {
 	enum Type {
 		ANCHOR,
 		INTERPOLATED,
-		CONTROL_POINT
+		CONTROL_POINT,
+		DANGLING
 	}
 }
 

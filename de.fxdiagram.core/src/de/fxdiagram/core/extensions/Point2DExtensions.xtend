@@ -1,6 +1,8 @@
 package de.fxdiagram.core.extensions
 
 import javafx.geometry.Point2D
+
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static java.lang.Math.*
 
 class Point2DExtensions {
@@ -79,5 +81,29 @@ class Point2DExtensions {
 	@Pure
 	static def isClockwise(double x0, double y0, double x1, double y1, double x2, double y2) {
 		(x1 - x0) * (y1 + y0) + (x2 - x1) * (y2 + y1) + (x0 - x2) * (y0 + y2) > 0
+	}
+	
+	public static val EPSILON_DEGREES = 5
+	static val COS_EPSILON = cos(EPSILON_DEGREES * PI/180)
+
+	@Pure
+	static def areOnSameLine(Point2D x0, Point2D x1, Point2D x2) {
+		return areOnSameLine(x0.x, x0.y, x1.x, x1.y, x2.x, x2.y)
+	}
+		
+	@Pure
+	static def areOnSameLine(double x0x, double x0y, double x1x, double x1y, double x2x, double x2y) {
+		val d0x = x0x-x1x
+		val d0y = x0y-x1y
+		val norm0 = norm(d0x, d0y)
+		if(norm0 < EPSILON)
+			return true
+		val d1x = x1x-x2x
+		val d1y = x1y-x2y
+		val norm1 = norm(d1x, d1y)
+		if(norm1 < EPSILON)
+			return true
+		val cosTheta = (d0x*d1x + d0y*d1y) / norm0 / norm1
+		return abs(cosTheta) > COS_EPSILON 
 	}
 }

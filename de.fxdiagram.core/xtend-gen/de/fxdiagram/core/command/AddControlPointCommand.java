@@ -116,7 +116,8 @@ public class AddControlPointCommand extends AbstractCommand {
       it.setLayoutX(_x);
       double _y = this.newPoint.getY();
       it.setLayoutY(_y);
-      it.setType(XControlPoint.Type.INTERPOLATED);
+      it.setType(XControlPoint.Type.DANGLING);
+      it.setSelected(true);
     };
     XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
     _controlPoints.add(this.index, _doubleArrow);
