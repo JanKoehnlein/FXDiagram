@@ -18,12 +18,10 @@ import java.util.function.Consumer;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -322,24 +320,6 @@ public class CoreExtensions {
       _switchResult = CoreExtensions.getRoot(_parent);
     }
     return _switchResult;
-  }
-  
-  public static XShape getTargetShape(final MouseEvent event) {
-    Object _xifexpression = null;
-    EventTarget _target = event.getTarget();
-    if ((_target instanceof Node)) {
-      EventTarget _target_1 = event.getTarget();
-      XShape containerShape = CoreExtensions.getContainerShape(((Node) _target_1));
-      while (((!Objects.equal(containerShape, null)) && (!containerShape.isSelectable()))) {
-        Parent _parent = containerShape.getParent();
-        XShape _containerShape = CoreExtensions.getContainerShape(_parent);
-        containerShape = _containerShape;
-      }
-      return containerShape;
-    } else {
-      _xifexpression = null;
-    }
-    return ((XShape)_xifexpression);
   }
   
   public static XShape getContainerShape(final Node it) {

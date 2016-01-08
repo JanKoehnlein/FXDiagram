@@ -1,5 +1,6 @@
 package de.fxdiagram.core.extensions
 
+import de.fxdiagram.core.XConnection
 import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XRoot
 import de.fxdiagram.core.XShape
@@ -14,13 +15,11 @@ import javafx.geometry.Bounds
 import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.Parent
-import javafx.scene.input.MouseEvent
 import javafx.scene.transform.Affine
 import javafx.scene.transform.Transform
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
-import de.fxdiagram.core.XConnection
 
 class CoreExtensions {
 
@@ -127,18 +126,6 @@ class CoreExtensions {
 			case null: null
 			XRoot: it
 			default: getRoot(it.parent)
-		}
-	}
-
-	def static getTargetShape(MouseEvent event) {
-		if (event.target instanceof Node) {
-			var containerShape = getContainerShape(event.target as Node)
-			while(containerShape != null && !containerShape.selectable) {
-				containerShape = getContainerShape(containerShape.parent) 
-			}
-			return containerShape
-		} else {
-			null
 		}
 	}
 

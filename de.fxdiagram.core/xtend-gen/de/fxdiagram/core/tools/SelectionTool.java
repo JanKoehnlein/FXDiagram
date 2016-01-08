@@ -6,6 +6,7 @@ import de.fxdiagram.core.XButton;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.XShape;
+import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.auxlines.AuxiliaryLinesSupport;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.BoundsExtensions;
@@ -22,6 +23,8 @@ import java.util.function.Consumer;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -61,7 +64,7 @@ public class SelectionTool implements XDiagramTool {
         XButton _targetButton = ButtonExtensions.getTargetButton(event);
         boolean _not = (!(_targetButton instanceof XButton));
         if (_not) {
-          final XShape targetShape = CoreExtensions.getTargetShape(event);
+          final XShape targetShape = this.getTargetShape(event);
           boolean _isSelectable = false;
           if (targetShape!=null) {
             _isSelectable=targetShape.isSelectable();
@@ -274,5 +277,48 @@ public class SelectionTool implements XDiagramTool {
       _xblockexpression = true;
     }
     return _xblockexpression;
+  }
+  
+  private XShape getTargetShape(final MouseEvent event) {
+    XShape _xblockexpression = null;
+    {
+      final EventTarget target = event.getTarget();
+      XShape _xifexpression = null;
+      if ((target instanceof Node)) {
+        _xifexpression = this.getTargetShape(((Node)target));
+      } else {
+        _xifexpression = null;
+      }
+      _xblockexpression = _xifexpression;
+    }
+    return _xblockexpression;
+  }
+  
+  private XShape getTargetShape(final Node it) {
+    XShape _switchResult = null;
+    boolean _matched = false;
+    if (!_matched) {
+      if (it instanceof XShape) {
+        _matched=true;
+        _switchResult = ((XShape)it);
+      }
+    }
+    if (!_matched) {
+      if (it instanceof ArrowHead) {
+        _matched=true;
+        _switchResult = ((ArrowHead)it).getConnection();
+      }
+    }
+    if (!_matched) {
+      if (Objects.equal(it, null)) {
+        _matched=true;
+        _switchResult = null;
+      }
+    }
+    if (!_matched) {
+      Parent _parent = it.getParent();
+      _switchResult = this.getTargetShape(_parent);
+    }
+    return _switchResult;
   }
 }

@@ -16,6 +16,8 @@ import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.ButtonExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import javafx.scene.Node
+import de.fxdiagram.core.anchors.ArrowHead
 
 class SelectionTool implements XDiagramTool {
 
@@ -125,5 +127,22 @@ class SelectionTool implements XDiagramTool {
 		root.removeEventFilter(MouseEvent.MOUSE_DRAGGED, mouseDraggedHandler)
 		root.removeEventFilter(MouseEvent.MOUSE_RELEASED, mouseReleasedHandler)
 		true
+	}
+	
+	private def getTargetShape(MouseEvent event) {
+		val target = event.target
+		if(target instanceof Node) 
+			target.targetShape 
+		else 
+			null
+	}
+	
+	private def XShape getTargetShape(Node it) {
+		switch it {
+			XShape: it
+			ArrowHead: connection
+			case null: null
+			default: parent.targetShape
+		}
 	}
 }
