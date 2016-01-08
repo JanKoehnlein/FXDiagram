@@ -172,7 +172,8 @@ public class XConnectionLabel extends XLabel {
     double _y = derivative.getY();
     double _x = derivative.getX();
     double angle = Math.atan2(_y, _x);
-    Bounds _boundsInLocal = this.getBoundsInLocal();
+    Node _node = this.getNode();
+    Bounds _boundsInLocal = _node.getBoundsInLocal();
     double _width = _boundsInLocal.getWidth();
     double _minus = (-_width);
     final double labelDx = (_minus / 2);

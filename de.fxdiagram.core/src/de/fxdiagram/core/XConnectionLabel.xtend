@@ -91,7 +91,7 @@ class XConnectionLabel extends XLabel {
 		val center = connection.at(position)
 		val derivative = connection.derivativeAt(position)
 		var angle = atan2(derivative.y, derivative.x)
-		val labelDx = -boundsInLocal.width / 2
+		val labelDx = -node.boundsInLocal.width / 2
 		var labelDy = 1
 		if (abs(angle) > PI / 2) {
 			if (angle < 0)
