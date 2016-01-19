@@ -45,7 +45,7 @@ class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
 			].asButton[getArrowButton("Add dependency")]
 			inverseDependencyConnection.inConnectionForEach [
 				inverseBundleDependencies
-			].asButton[getInverseArrowButton("Add inverse dependency")]
+			].asButton[invert.getArrowButton("Add inverse dependency")]
 		}
 	}
 	

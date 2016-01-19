@@ -91,7 +91,8 @@ public class BundleDiagramConfig extends AbstractEclipseDiagramConfig {
       };
       MultiConnectionMappingCall<BundleDependency, BundleDescription> _inConnectionForEach = this.<BundleDependency>inConnectionForEach(BundleDiagramConfig.this.inverseDependencyConnection, _function_7);
       final Function1<Side, Node> _function_8 = (Side it) -> {
-        return ButtonExtensions.getInverseArrowButton(it, "Add inverse dependency");
+        Side _invert = ButtonExtensions.invert(it);
+        return ButtonExtensions.getArrowButton(_invert, "Add inverse dependency");
       };
       _inConnectionForEach.asButton(_function_8);
     }
