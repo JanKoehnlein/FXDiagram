@@ -2,7 +2,7 @@
 <feature
       id="de.fxdiagram.sdk.feature"
       label="FXDiagram SDK"
-      version="0.21.0.qualifier"
+      version="0.22.0.qualifier"
       provider-name="JanKoehnlein">
 
    <description>
