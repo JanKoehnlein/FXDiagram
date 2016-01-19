@@ -22,14 +22,21 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 
+	XConnection connection
+
 	new(XControlPoint host) {
 		super(host)
 	}
 	
 	override activate() {
 		super.activate
-		host.onMouseExited = [
-			if(connection.kind == POLYLINE) {
+		val containerShape = host.parent?.containerShape
+		if(containerShape instanceof XConnection)
+			connection = containerShape
+		else 
+			throw new IllegalArgumentException('Trying to activate a control point that doesn\'t belong to a connection')
+		host.selectedProperty.addListener [ p, o, newValue |
+			if(!newValue && connection.kind == POLYLINE) {
 				val siblings = getSiblings
 				val index = siblings.indexOf(host)
 				if(index > 0 && index < siblings.size-1) {

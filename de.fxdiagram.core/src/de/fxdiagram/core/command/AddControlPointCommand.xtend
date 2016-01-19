@@ -5,10 +5,12 @@ import de.fxdiagram.core.XControlPoint
 import javafx.geometry.Point2D
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static de.fxdiagram.core.XConnection.Kind.*
 import static de.fxdiagram.core.XControlPoint.Type.*
+import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
+
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
+import de.fxdiagram.core.behavior.MoveBehavior
 
 @FinalFieldsConstructor
 class AddControlPointCommand extends AbstractCommand {
@@ -46,13 +48,16 @@ class AddControlPointCommand extends AbstractCommand {
 	}
 	
 	override execute(CommandContext context) {
-		connection.controlPoints.add(index, new XControlPoint => [
-			layoutX = newPoint.x
-			layoutY = newPoint.y
-			type = DANGLING
-			selected = true
-		])
+		val newControlPoint = new XControlPoint => [
+					layoutX = newPoint.x
+					layoutY = newPoint.y
+					type = DANGLING
+					selected = true
+				]
+		connection.controlPoints.add(index, newControlPoint)
 		connection.updateShapes
+		val mousePos = newControlPoint.parent.localToScreen(newPoint)
+		newControlPoint.getBehavior(MoveBehavior).startDrag(mousePos.x, mousePos.y)
 	}
 	
 	override undo(CommandContext context) {

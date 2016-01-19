@@ -192,6 +192,12 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   }
   
   public void mousePressed(final MouseEvent it) {
+    double _screenX = it.getScreenX();
+    double _screenY = it.getScreenY();
+    this.startDrag(_screenX, _screenY);
+  }
+  
+  public void startDrag(final double screenX, final double screenY) {
     T _host = this.getHost();
     Parent _parent = _host.getParent();
     T _host_1 = this.getHost();
@@ -203,9 +209,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     double _layoutX_1 = _host_3.getLayoutX();
     T _host_4 = this.getHost();
     double _layoutY_1 = _host_4.getLayoutY();
-    double _screenX = it.getScreenX();
-    double _screenY = it.getScreenY();
-    MoveBehavior.DragContext _dragContext = new MoveBehavior.DragContext(_layoutX_1, _layoutY_1, _screenX, _screenY, initialPositionInScene);
+    MoveBehavior.DragContext _dragContext = new MoveBehavior.DragContext(_layoutX_1, _layoutY_1, screenX, screenY, initialPositionInScene);
     this.dragContext = _dragContext;
     T _host_5 = this.getHost();
     if ((_host_5 instanceof XNode)) {
@@ -214,8 +218,8 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
       ObservableList<XConnection> _incomingConnections = node.getIncomingConnections();
       ObservableList<XConnection> _outgoingConnections = node.getOutgoingConnections();
       Iterable<XConnection> _plus = Iterables.<XConnection>concat(_incomingConnections, _outgoingConnections);
-      final Consumer<XConnection> _function = (XConnection it_1) -> {
-        ConnectionRouter _connectionRouter = it_1.getConnectionRouter();
+      final Consumer<XConnection> _function = (XConnection it) -> {
+        ConnectionRouter _connectionRouter = it.getConnectionRouter();
         _connectionRouter.setSplineShapeKeeperEnabled(true);
       };
       _plus.forEach(_function);

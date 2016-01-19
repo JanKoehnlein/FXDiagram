@@ -3,12 +3,14 @@ package de.fxdiagram.core.command;
 import com.google.common.base.Objects;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
+import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.CommandContext;
 import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
 import org.eclipse.xtext.xbase.lib.IntegerRange;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
@@ -109,7 +111,6 @@ public class AddControlPointCommand extends AbstractCommand {
   
   @Override
   public void execute(final CommandContext context) {
-    ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
     XControlPoint _xControlPoint = new XControlPoint();
     final Procedure1<XControlPoint> _function = (XControlPoint it) -> {
       double _x = this.newPoint.getX();
@@ -119,9 +120,16 @@ public class AddControlPointCommand extends AbstractCommand {
       it.setType(XControlPoint.Type.DANGLING);
       it.setSelected(true);
     };
-    XControlPoint _doubleArrow = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
-    _controlPoints.add(this.index, _doubleArrow);
+    final XControlPoint newControlPoint = ObjectExtensions.<XControlPoint>operator_doubleArrow(_xControlPoint, _function);
+    ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+    _controlPoints.add(this.index, newControlPoint);
     this.connection.updateShapes();
+    Parent _parent = newControlPoint.getParent();
+    final Point2D mousePos = _parent.localToScreen(this.newPoint);
+    MoveBehavior _behavior = newControlPoint.<MoveBehavior>getBehavior(MoveBehavior.class);
+    double _x = mousePos.getX();
+    double _y = mousePos.getY();
+    _behavior.startDrag(_x, _y);
   }
   
   @Override

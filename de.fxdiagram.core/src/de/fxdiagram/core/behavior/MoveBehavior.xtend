@@ -51,6 +51,10 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	}
 	
 	def void mousePressed(MouseEvent it) {
+		startDrag(screenX, screenY)
+	}
+	
+	def startDrag(double screenX, double screenY) {
 		val initialPositionInScene = host.parent.localToScene(host.layoutX, host.layoutY)
 		dragContext = new DragContext(
 			host.layoutX,
