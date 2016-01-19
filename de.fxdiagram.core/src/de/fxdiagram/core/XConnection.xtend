@@ -202,15 +202,12 @@ class XConnection extends XDomainObjectShape {
 	}
 	
 	override select(MouseEvent it) {
-		if(selected) {
-			val createCommand = AddControlPointCommand.createAddControlPointCommand(
-				this, sceneToLocal(sceneX, sceneY) 
-			)
-			if(createCommand != null)
-				root.commandStack.execute(createCommand)			
-		} else {
-			super.select(it)
-		}
+		super.select(it)
+		val createCommand = AddControlPointCommand.createAddControlPointCommand(
+			this, sceneToLocal(sceneX, sceneY) 
+		)
+		if(createCommand != null)
+			root.commandStack.execute(createCommand)			
 	}
 	
 	override selectionFeedback(boolean isSelected) {

@@ -387,20 +387,16 @@ public class XConnection extends XDomainObjectShape {
   
   @Override
   public void select(final MouseEvent it) {
-    boolean _selected = this.getSelected();
-    if (_selected) {
-      double _sceneX = it.getSceneX();
-      double _sceneY = it.getSceneY();
-      Point2D _sceneToLocal = this.sceneToLocal(_sceneX, _sceneY);
-      final AddControlPointCommand createCommand = AddControlPointCommand.createAddControlPointCommand(this, _sceneToLocal);
-      boolean _notEquals = (!Objects.equal(createCommand, null));
-      if (_notEquals) {
-        XRoot _root = CoreExtensions.getRoot(this);
-        CommandStack _commandStack = _root.getCommandStack();
-        _commandStack.execute(createCommand);
-      }
-    } else {
-      super.select(it);
+    super.select(it);
+    double _sceneX = it.getSceneX();
+    double _sceneY = it.getSceneY();
+    Point2D _sceneToLocal = this.sceneToLocal(_sceneX, _sceneY);
+    final AddControlPointCommand createCommand = AddControlPointCommand.createAddControlPointCommand(this, _sceneToLocal);
+    boolean _notEquals = (!Objects.equal(createCommand, null));
+    if (_notEquals) {
+      XRoot _root = CoreExtensions.getRoot(this);
+      CommandStack _commandStack = _root.getCommandStack();
+      _commandStack.execute(createCommand);
     }
   }
   
