@@ -57,7 +57,7 @@ class AddControlPointCommand extends AbstractCommand {
 		connection.controlPoints.add(index, newControlPoint)
 		connection.updateShapes
 		val mousePos = newControlPoint.parent.localToScreen(newPoint)
-		newControlPoint.getBehavior(MoveBehavior).startDrag(mousePos.x, mousePos.y)
+		newControlPoint.getBehavior(MoveBehavior)?.startDrag(mousePos.x, mousePos.y)
 	}
 	
 	override undo(CommandContext context) {

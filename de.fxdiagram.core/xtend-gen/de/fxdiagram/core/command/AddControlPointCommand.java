@@ -127,9 +127,11 @@ public class AddControlPointCommand extends AbstractCommand {
     Parent _parent = newControlPoint.getParent();
     final Point2D mousePos = _parent.localToScreen(this.newPoint);
     MoveBehavior _behavior = newControlPoint.<MoveBehavior>getBehavior(MoveBehavior.class);
-    double _x = mousePos.getX();
-    double _y = mousePos.getY();
-    _behavior.startDrag(_x, _y);
+    if (_behavior!=null) {
+      double _x = mousePos.getX();
+      double _y = mousePos.getY();
+      _behavior.startDrag(_x, _y);
+    }
   }
   
   @Override

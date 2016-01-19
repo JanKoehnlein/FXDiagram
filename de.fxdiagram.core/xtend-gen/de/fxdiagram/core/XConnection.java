@@ -13,6 +13,7 @@ import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
+import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.command.AddControlPointCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.BezierExtensions;
@@ -390,13 +391,34 @@ public class XConnection extends XDomainObjectShape {
     super.select(it);
     double _sceneX = it.getSceneX();
     double _sceneY = it.getSceneY();
-    Point2D _sceneToLocal = this.sceneToLocal(_sceneX, _sceneY);
-    final AddControlPointCommand createCommand = AddControlPointCommand.createAddControlPointCommand(this, _sceneToLocal);
-    boolean _notEquals = (!Objects.equal(createCommand, null));
-    if (_notEquals) {
-      XRoot _root = CoreExtensions.getRoot(this);
-      CommandStack _commandStack = _root.getCommandStack();
-      _commandStack.execute(createCommand);
+    final Point2D mousePos = this.sceneToLocal(_sceneX, _sceneY);
+    boolean controlPointPicked = false;
+    ObservableList<XControlPoint> _controlPoints = this.getControlPoints();
+    for (final XControlPoint controlPoint : _controlPoints) {
+      Bounds _boundsInParent = controlPoint.getBoundsInParent();
+      boolean _contains = _boundsInParent.contains(mousePos);
+      if (_contains) {
+        controlPoint.setSelected(true);
+        MoveBehavior _behavior = controlPoint.<MoveBehavior>getBehavior(MoveBehavior.class);
+        if (_behavior!=null) {
+          double _screenX = it.getScreenX();
+          double _screenY = it.getScreenY();
+          _behavior.startDrag(_screenX, _screenY);
+        }
+        controlPointPicked = true;
+      }
+    }
+    if ((!controlPointPicked)) {
+      double _sceneX_1 = it.getSceneX();
+      double _sceneY_1 = it.getSceneY();
+      Point2D _sceneToLocal = this.sceneToLocal(_sceneX_1, _sceneY_1);
+      final AddControlPointCommand createCommand = AddControlPointCommand.createAddControlPointCommand(this, _sceneToLocal);
+      boolean _notEquals = (!Objects.equal(createCommand, null));
+      if (_notEquals) {
+        XRoot _root = CoreExtensions.getRoot(this);
+        CommandStack _commandStack = _root.getCommandStack();
+        _commandStack.execute(createCommand);
+      }
     }
   }
   

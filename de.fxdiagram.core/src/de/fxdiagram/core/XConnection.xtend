@@ -33,6 +33,7 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
+import de.fxdiagram.core.behavior.MoveBehavior
 
 /**
  * A line connecting two {@link XNode}s.
@@ -203,11 +204,22 @@ class XConnection extends XDomainObjectShape {
 	
 	override select(MouseEvent it) {
 		super.select(it)
-		val createCommand = AddControlPointCommand.createAddControlPointCommand(
-			this, sceneToLocal(sceneX, sceneY) 
-		)
-		if(createCommand != null)
-			root.commandStack.execute(createCommand)			
+		val mousePos = sceneToLocal(sceneX, sceneY)
+		var boolean controlPointPicked = false
+		for(controlPoint: controlPoints) {
+			if(controlPoint.boundsInParent.contains(mousePos)) {
+				controlPoint.selected = true
+				controlPoint.getBehavior(MoveBehavior)?.startDrag(screenX, screenY)
+				controlPointPicked = true
+			}
+		}
+		if(!controlPointPicked) {
+			val createCommand = AddControlPointCommand.createAddControlPointCommand(
+				this, sceneToLocal(sceneX, sceneY) 
+			)
+			if(createCommand != null)
+				root.commandStack.execute(createCommand)			
+		}
 	}
 	
 	override selectionFeedback(boolean isSelected) {
