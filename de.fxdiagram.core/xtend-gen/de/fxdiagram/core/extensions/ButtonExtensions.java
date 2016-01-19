@@ -110,38 +110,6 @@ public class ButtonExtensions {
     return ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
   }
   
-  public static SVGPath getInverseArrowButton(final Side side, final String tooltip) {
-    SVGPath _sVGPath = new SVGPath();
-    final Procedure1<SVGPath> _function = (SVGPath it) -> {
-      String _switchResult = null;
-      if (side != null) {
-        switch (side) {
-          case BOTTOM:
-            _switchResult = "m 0,9 7,-9 7,9";
-            break;
-          case TOP:
-            _switchResult = "m 0,0 7,9 7,-9";
-            break;
-          case RIGHT:
-            _switchResult = "m 9,0 -9,7 9,7";
-            break;
-          case LEFT:
-            _switchResult = "m 0,0 9,7 -9,7";
-            break;
-          default:
-            break;
-        }
-      }
-      it.setContent(_switchResult);
-      it.setStroke(Color.DARKGREEN);
-      it.setFill(Color.TRANSPARENT);
-      it.setStrokeWidth(3.5);
-      it.setStrokeLineCap(StrokeLineCap.ROUND);
-      TooltipExtensions.setTooltip(it, tooltip);
-    };
-    return ObjectExtensions.<SVGPath>operator_doubleArrow(_sVGPath, _function);
-  }
-  
   public static XButton getTargetButton(final MouseEvent event) {
     XButton _xifexpression = null;
     EventTarget _target = event.getTarget();
@@ -172,6 +140,32 @@ public class ButtonExtensions {
     if (!_matched) {
       Parent _parent = it.getParent();
       _switchResult = ButtonExtensions.getContainerButton(_parent);
+    }
+    return _switchResult;
+  }
+  
+  public static Side invert(final Side side) {
+    Side _switchResult = null;
+    if (side != null) {
+      switch (side) {
+        case TOP:
+          _switchResult = Side.BOTTOM;
+          break;
+        case BOTTOM:
+          _switchResult = Side.TOP;
+          break;
+        case LEFT:
+          _switchResult = Side.RIGHT;
+          break;
+        case RIGHT:
+          _switchResult = Side.LEFT;
+          break;
+        default:
+          _switchResult = null;
+          break;
+      }
+    } else {
+      _switchResult = null;
     }
     return _switchResult;
   }
