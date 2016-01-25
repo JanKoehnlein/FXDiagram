@@ -32,8 +32,6 @@ import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings("all")
 public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
-  private XConnection connection;
-  
   public ControlPointMoveBehavior(final XControlPoint host) {
     super(host);
   }
@@ -42,56 +40,52 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   public void activate() {
     super.activate();
     XControlPoint _host = this.getHost();
-    Parent _parent = _host.getParent();
-    XShape _containerShape = null;
-    if (_parent!=null) {
-      _containerShape=CoreExtensions.getContainerShape(_parent);
-    }
-    final XShape containerShape = _containerShape;
-    if ((containerShape instanceof XConnection)) {
-      this.connection = ((XConnection)containerShape);
-    } else {
-      throw new IllegalArgumentException("Trying to activate a control point that doesn\'t belong to a connection");
-    }
-    XControlPoint _host_1 = this.getHost();
-    BooleanProperty _selectedProperty = _host_1.selectedProperty();
+    BooleanProperty _selectedProperty = _host.selectedProperty();
     final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> p, Boolean o, Boolean newValue) -> {
+      final XConnection connection = this.getConnection();
       boolean _and = false;
+      boolean _and_1 = false;
       if (!(!(newValue).booleanValue())) {
+        _and_1 = false;
+      } else {
+        boolean _notEquals = (!Objects.equal(connection, null));
+        _and_1 = _notEquals;
+      }
+      if (!_and_1) {
         _and = false;
       } else {
-        XConnection.Kind _kind = this.connection.getKind();
+        XConnection.Kind _kind = connection.getKind();
         boolean _equals = Objects.equal(_kind, XConnection.Kind.POLYLINE);
         _and = _equals;
       }
       if (_and) {
         final ObservableList<XControlPoint> siblings = this.getSiblings();
-        XControlPoint _host_2 = this.getHost();
-        final int index = siblings.indexOf(_host_2);
-        boolean _and_1 = false;
+        XControlPoint _host_1 = this.getHost();
+        final int index = siblings.indexOf(_host_1);
+        boolean _and_2 = false;
         if (!(index > 0)) {
-          _and_1 = false;
+          _and_2 = false;
         } else {
           int _size = siblings.size();
           int _minus = (_size - 1);
           boolean _lessThan = (index < _minus);
-          _and_1 = _lessThan;
+          _and_2 = _lessThan;
         }
-        if (_and_1) {
+        if (_and_2) {
           final XControlPoint predecessor = siblings.get((index - 1));
           final XControlPoint successor = siblings.get((index + 1));
           double _layoutX = predecessor.getLayoutX();
           double _layoutY = predecessor.getLayoutY();
+          XControlPoint _host_2 = this.getHost();
+          double _layoutX_1 = _host_2.getLayoutX();
           XControlPoint _host_3 = this.getHost();
-          double _layoutX_1 = _host_3.getLayoutX();
-          XControlPoint _host_4 = this.getHost();
-          double _layoutY_1 = _host_4.getLayoutY();
+          double _layoutY_1 = _host_3.getLayoutY();
           double _layoutX_2 = successor.getLayoutX();
           double _layoutY_2 = successor.getLayoutY();
           boolean _areOnSameLine = Point2DExtensions.areOnSameLine(_layoutX, _layoutY, _layoutX_1, _layoutY_1, _layoutX_2, _layoutY_2);
           if (_areOnSameLine) {
-            XControlPoint _host_5 = this.getHost();
-            XRoot _root = CoreExtensions.getRoot(_host_5);
+            XControlPoint _host_4 = this.getHost();
+            XRoot _root = CoreExtensions.getRoot(_host_4);
             CommandStack _commandStack = _root.getCommandStack();
             _commandStack.execute(new AbstractCommand() {
               @Override
@@ -374,26 +368,33 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   }
   
   protected ObservableList<XControlPoint> getSiblings() {
+    XConnection _connection = this.getConnection();
     ObservableList<XControlPoint> _controlPoints = null;
-    if (this.connection!=null) {
-      _controlPoints=this.connection.getControlPoints();
+    if (_connection!=null) {
+      _controlPoints=_connection.getControlPoints();
     }
     return _controlPoints;
   }
   
   protected XConnection getConnection() {
-    XControlPoint _host = this.getHost();
-    Parent _parent = _host.getParent();
-    XShape _containerShape = null;
-    if (_parent!=null) {
-      _containerShape=CoreExtensions.getContainerShape(_parent);
+    Object _xblockexpression = null;
+    {
+      XControlPoint _host = this.getHost();
+      Parent _parent = _host.getParent();
+      XShape _containerShape = null;
+      if (_parent!=null) {
+        _containerShape=CoreExtensions.getContainerShape(_parent);
+      }
+      final XShape containerShape = _containerShape;
+      Object _xifexpression = null;
+      if ((containerShape instanceof XConnection)) {
+        return ((XConnection)containerShape);
+      } else {
+        _xifexpression = null;
+      }
+      _xblockexpression = _xifexpression;
     }
-    final XShape containerShape = _containerShape;
-    if ((containerShape instanceof XConnection)) {
-      return ((XConnection)containerShape);
-    } else {
-      return null;
-    }
+    return ((XConnection)_xblockexpression);
   }
   
   private Map<XControlPoint, Point2D> initialPositions;

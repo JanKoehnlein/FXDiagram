@@ -22,21 +22,15 @@ import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 
-	XConnection connection
-
 	new(XControlPoint host) {
 		super(host)
 	}
 	
 	override activate() {
 		super.activate
-		val containerShape = host.parent?.containerShape
-		if(containerShape instanceof XConnection)
-			connection = containerShape
-		else 
-			throw new IllegalArgumentException('Trying to activate a control point that doesn\'t belong to a connection')
 		host.selectedProperty.addListener [ p, o, newValue |
-			if(!newValue && connection.kind == POLYLINE) {
+			val connection = getConnection()
+			if(!newValue && connection != null && connection.kind == POLYLINE) {
 				val siblings = getSiblings
 				val index = siblings.indexOf(host)
 				if(index > 0 && index < siblings.size-1) {
@@ -191,8 +185,8 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 		val containerShape = host.parent?.containerShape
 		if(containerShape instanceof XConnection)
 			return containerShape
-		else
-			return null
+		else 
+			null
 	}
 	
 	Map<XControlPoint, Point2D> initialPositions
