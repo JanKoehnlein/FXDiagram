@@ -185,18 +185,22 @@ class Layouter {
 					xElement.labels.forEach[place(true)]
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain.map[new Point2D(x, y)]
-					val newKind = switch (edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
-						case EdgeRouting.SPLINES: {
-							if ((layoutPoints.size - 1) % 3 == 0)
-								CUBIC_CURVE
-							else if ((layoutPoints.size - 1) % 2 == 0)
-								QUAD_CURVE
-							else
-								POLYLINE
-						}
-						default:
+					val newKind = if(diagram.layoutParameters.useSplines) {
+							switch (edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
+								case EdgeRouting.SPLINES: {
+									if ((layoutPoints.size - 1) % 3 == 0)
+										CUBIC_CURVE
+									else if ((layoutPoints.size - 1) % 2 == 0)
+										QUAD_CURVE
+									else
+										POLYLINE
+								}
+								default:
+									POLYLINE
+							}
+						} else {
 							POLYLINE
-					}
+						}
 					if(newKind == POLYLINE) 
 						layoutPoints.removeDuplicates
 					xElement.connectionRouter.splineShapeKeeperEnabled = false
