@@ -139,7 +139,7 @@ class SelectionTool implements XDiagramTool {
 	
 	private def XShape getTargetShape(Node it) {
 		switch it {
-			XShape: it
+			XShape case selectable: it
 			ArrowHead: connection
 			case null: null
 			default: parent.targetShape
