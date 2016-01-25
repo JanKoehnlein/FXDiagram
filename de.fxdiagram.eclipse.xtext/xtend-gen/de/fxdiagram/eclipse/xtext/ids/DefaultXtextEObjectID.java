@@ -133,6 +133,14 @@ public class DefaultXtextEObjectID extends AbstractXtextEObjectID {
       URI _uRI = this.getURI();
       URI _trimFragment = _uRI.trimFragment();
       final IResourceDescription resourceDescription = index.getResourceDescription(_trimFragment);
+      boolean _equals = Objects.equal(resourceDescription, null);
+      if (_equals) {
+        URI _uRI_1 = this.getURI();
+        URI _trimFragment_1 = _uRI_1.trimFragment();
+        String _plus = ("Resource " + _trimFragment_1);
+        String _plus_1 = (_plus + " does not exist in index");
+        throw new NoSuchElementException(_plus_1);
+      }
       EClass _eClass = this.getEClass();
       QualifiedName _qualifiedName = this.getQualifiedName();
       Iterable<IEObjectDescription> _exportedObjects = resourceDescription.getExportedObjects(_eClass, _qualifiedName, false);

@@ -62,6 +62,8 @@ class DefaultXtextEObjectID extends AbstractXtextEObjectID {
 	
 	override findInIndex(IResourceDescriptions index) {
 		val resourceDescription = index.getResourceDescription(URI.trimFragment)
+		if(resourceDescription == null)
+			throw new NoSuchElementException('Resource ' + URI.trimFragment + ' does not exist in index')
 		resourceDescription.getExportedObjects(EClass, getQualifiedName, false).head
 	}
 
