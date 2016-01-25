@@ -136,7 +136,7 @@ class RemoveControlPointCommand extends AbstractAnimationCommand {
 			connection.connectionRouter.shrinkToSize(to.size)
 			connection.controlPoints -= removeAfter.values
 			connection.controlPoints.forEach [
-				getBehavior(MoveBehavior)?.setIsManuallyPlaced(false)
+				getBehavior(MoveBehavior)?.setManuallyPlaced(false)
 			]
 			connection.updateShapes
 		]

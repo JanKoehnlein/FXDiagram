@@ -63,7 +63,7 @@ class ConnectionRelayoutCommand extends AbstractAnimationCommand {
 		morph.onFinished = [
 			connection.connectionRouter.shrinkToSize(to.size)
 			connection.controlPoints.forEach [
-				getBehavior(MoveBehavior)?.setIsManuallyPlaced(false)
+				getBehavior(MoveBehavior)?.setManuallyPlaced(false)
 			]
 		]
 		return morph		

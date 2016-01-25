@@ -265,7 +265,7 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
       final Consumer<XControlPoint> _function_3 = (XControlPoint it_1) -> {
         MoveBehavior _behavior = it_1.<MoveBehavior>getBehavior(MoveBehavior.class);
         if (_behavior!=null) {
-          _behavior.setIsManuallyPlaced(false);
+          _behavior.setManuallyPlaced(false);
         }
       };
       _controlPoints_1.forEach(_function_3);

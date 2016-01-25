@@ -157,7 +157,7 @@ public class Layouter {
             _matched=true;
             MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
             if (_behavior!=null) {
-              _behavior.setIsManuallyPlaced(false);
+              _behavior.setManuallyPlaced(false);
             }
             EList<KGraphData> _data = kElement.getData();
             Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
@@ -213,41 +213,49 @@ public class Layouter {
               return new Point2D(it.x, it.y);
             };
             final List<Point2D> layoutPoints = ListExtensions.<KVector, Point2D>map(_createVectorChain, _function_1);
-            XConnection.Kind _switchResult_1 = null;
-            EdgeRouting _property = edgeLayout.<EdgeRouting>getProperty(LayoutOptions.EDGE_ROUTING);
-            if (_property != null) {
-              switch (_property) {
-                case SPLINES:
-                  XConnection.Kind _xifexpression = null;
-                  int _size = layoutPoints.size();
-                  int _minus = (_size - 1);
-                  int _modulo = (_minus % 3);
-                  boolean _equals = (_modulo == 0);
-                  if (_equals) {
-                    _xifexpression = XConnection.Kind.CUBIC_CURVE;
-                  } else {
+            XConnection.Kind _xifexpression = null;
+            LayoutParameters _layoutParameters = diagram.getLayoutParameters();
+            boolean _useSplines = _layoutParameters.getUseSplines();
+            if (_useSplines) {
+              XConnection.Kind _switchResult_1 = null;
+              EdgeRouting _property = edgeLayout.<EdgeRouting>getProperty(LayoutOptions.EDGE_ROUTING);
+              if (_property != null) {
+                switch (_property) {
+                  case SPLINES:
                     XConnection.Kind _xifexpression_1 = null;
-                    int _size_1 = layoutPoints.size();
-                    int _minus_1 = (_size_1 - 1);
-                    int _modulo_1 = (_minus_1 % 2);
-                    boolean _equals_1 = (_modulo_1 == 0);
-                    if (_equals_1) {
-                      _xifexpression_1 = XConnection.Kind.QUAD_CURVE;
+                    int _size = layoutPoints.size();
+                    int _minus = (_size - 1);
+                    int _modulo = (_minus % 3);
+                    boolean _equals = (_modulo == 0);
+                    if (_equals) {
+                      _xifexpression_1 = XConnection.Kind.CUBIC_CURVE;
                     } else {
-                      _xifexpression_1 = XConnection.Kind.POLYLINE;
+                      XConnection.Kind _xifexpression_2 = null;
+                      int _size_1 = layoutPoints.size();
+                      int _minus_1 = (_size_1 - 1);
+                      int _modulo_1 = (_minus_1 % 2);
+                      boolean _equals_1 = (_modulo_1 == 0);
+                      if (_equals_1) {
+                        _xifexpression_2 = XConnection.Kind.QUAD_CURVE;
+                      } else {
+                        _xifexpression_2 = XConnection.Kind.POLYLINE;
+                      }
+                      _xifexpression_1 = _xifexpression_2;
                     }
-                    _xifexpression = _xifexpression_1;
-                  }
-                  _switchResult_1 = _xifexpression;
-                  break;
-                default:
-                  _switchResult_1 = XConnection.Kind.POLYLINE;
-                  break;
+                    _switchResult_1 = _xifexpression_1;
+                    break;
+                  default:
+                    _switchResult_1 = XConnection.Kind.POLYLINE;
+                    break;
+                }
+              } else {
+                _switchResult_1 = XConnection.Kind.POLYLINE;
               }
+              _xifexpression = _switchResult_1;
             } else {
-              _switchResult_1 = XConnection.Kind.POLYLINE;
+              _xifexpression = XConnection.Kind.POLYLINE;
             }
-            final XConnection.Kind newKind = _switchResult_1;
+            final XConnection.Kind newKind = _xifexpression;
             boolean _equals_2 = Objects.equal(newKind, XConnection.Kind.POLYLINE);
             if (_equals_2) {
               this.removeDuplicates(layoutPoints);
@@ -269,10 +277,10 @@ public class Layouter {
             ConnectionRouter _connectionRouter_2 = ((XConnection)xElement).getConnectionRouter();
             _connectionRouter_2.setSplineShapeKeeperEnabled(false);
             final KNode kSource = ((KEdge) kElement).getSource();
-            Point2D _xifexpression_2 = null;
+            Point2D _xifexpression_3 = null;
             boolean _isTopLevel = this.isTopLevel(kSource);
             if (_isTopLevel) {
-              _xifexpression_2 = delta;
+              _xifexpression_3 = delta;
             } else {
               Point2D _xblockexpression = null;
               {
@@ -293,9 +301,9 @@ public class Layouter {
                 double _minus_3 = (_y - _top);
                 _xblockexpression = new Point2D(_minus_2, _minus_3);
               }
-              _xifexpression_2 = _xblockexpression;
+              _xifexpression_3 = _xblockexpression;
             }
-            final Point2D correction = _xifexpression_2;
+            final Point2D correction = _xifexpression_3;
             Iterable<Point2D> _layoutPointsInRoot = this.layoutPointsInRoot(layoutPoints, kSource);
             List<Point2D> _list = IterableExtensions.<Point2D>toList(_layoutPointsInRoot);
             final Function1<Point2D, Point2D> _function_2 = (Point2D it) -> {
@@ -348,7 +356,7 @@ public class Layouter {
           if (xElement instanceof XNode) {
             _matched=true;
             MoveBehavior _behavior = ((XNode)xElement).<MoveBehavior>getBehavior(MoveBehavior.class);
-            _behavior.setIsManuallyPlaced(false);
+            _behavior.setManuallyPlaced(false);
             EList<KGraphData> _data = kElement.getData();
             Iterable<KShapeLayout> _filter = Iterables.<KShapeLayout>filter(_data, KShapeLayout.class);
             final KShapeLayout shapeLayout = IterableExtensions.<KShapeLayout>head(_filter);

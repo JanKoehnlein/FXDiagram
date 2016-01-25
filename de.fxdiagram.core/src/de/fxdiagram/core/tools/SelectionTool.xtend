@@ -40,6 +40,7 @@ class SelectionTool implements XDiagramTool {
 			if(event.target == root.diagramCanvas) {
 				isActionOnDiagram = true
 			} else if (!(event.targetButton instanceof XButton)) {
+				isActionOnDiagram = false
 				val targetShape = event.targetShape
 				if (targetShape?.isSelectable) {
 					val targetWasSelected = targetShape.selected
@@ -54,13 +55,12 @@ class SelectionTool implements XDiagramTool {
 					if(targetShape.selected)
 						selection.add(targetShape)
 					selection.forEach [
-						getBehavior(MoveBehavior)?.mousePressed(event)
+						getBehavior(MoveBehavior)?.startDrag(event.screenX, event.screenY)
 					]
-					targetShape.getBehavior(MoveBehavior)?.mousePressed(event)
+					targetShape.getBehavior(MoveBehavior)?.startDrag(event.screenX, event.screenY)
 					updatePositionTooltip(selection, event.sceneX, event.sceneY)
 					defer([|showPositionTooltip], 200.millis)
 				}
-				isActionOnDiagram = false
 			}
 		]
 		this.mouseDraggedHandler = [

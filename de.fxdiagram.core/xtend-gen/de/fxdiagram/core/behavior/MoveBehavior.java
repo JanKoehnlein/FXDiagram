@@ -137,43 +137,40 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     T _host = this.getHost();
     Node _node = _host.getNode();
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
-      this.mousePressed(it);
-    };
-    _node.setOnMousePressed(_function);
-    T _host_1 = this.getHost();
-    Node _node_1 = _host_1.getNode();
-    final EventHandler<MouseEvent> _function_1 = (MouseEvent it) -> {
-      this.mouseDragged(it);
-    };
-    _node_1.setOnMouseDragged(_function_1);
-    T _host_2 = this.getHost();
-    Node _node_2 = _host_2.getNode();
-    final EventHandler<MouseEvent> _function_2 = (MouseEvent it) -> {
-      boolean _notEquals = (!Objects.equal(this.dragContext, null));
-      if (_notEquals) {
-        boolean _or = false;
-        T _host_3 = this.getHost();
-        double _layoutX = _host_3.getLayoutX();
-        boolean _notEquals_1 = (this.dragContext.initialX != _layoutX);
-        if (_notEquals_1) {
-          _or = true;
-        } else {
-          T _host_4 = this.getHost();
-          double _layoutY = _host_4.getLayoutY();
-          boolean _notEquals_2 = (this.dragContext.initialY != _layoutY);
-          _or = _notEquals_2;
-        }
-        if (_or) {
-          T _host_5 = this.getHost();
-          XRoot _root = CoreExtensions.getRoot(_host_5);
-          CommandStack _commandStack = _root.getCommandStack();
-          AnimationCommand _createMoveCommand = this.createMoveCommand();
-          _commandStack.execute(_createMoveCommand);
-          this.setIsManuallyPlaced(true);
-        }
+      boolean _hasMoved = this.hasMoved();
+      if (_hasMoved) {
+        T _host_1 = this.getHost();
+        XRoot _root = CoreExtensions.getRoot(_host_1);
+        CommandStack _commandStack = _root.getCommandStack();
+        AnimationCommand _createMoveCommand = this.createMoveCommand();
+        _commandStack.execute(_createMoveCommand);
+        this.setManuallyPlaced(true);
       }
     };
-    _node_2.setOnMouseReleased(_function_2);
+    _node.setOnMouseReleased(_function);
+  }
+  
+  protected boolean hasMoved() {
+    boolean _and = false;
+    boolean _notEquals = (!Objects.equal(this.dragContext, null));
+    if (!_notEquals) {
+      _and = false;
+    } else {
+      boolean _or = false;
+      T _host = this.getHost();
+      double _layoutX = _host.getLayoutX();
+      boolean _notEquals_1 = (this.dragContext.initialX != _layoutX);
+      if (_notEquals_1) {
+        _or = true;
+      } else {
+        T _host_1 = this.getHost();
+        double _layoutY = _host_1.getLayoutY();
+        boolean _notEquals_2 = (this.dragContext.initialY != _layoutY);
+        _or = _notEquals_2;
+      }
+      _and = _or;
+    }
+    return _and;
   }
   
   protected AnimationCommand createMoveCommand() {
@@ -254,17 +251,17 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
     }
   }
   
-  private SimpleBooleanProperty isManuallyPlacedProperty = new SimpleBooleanProperty(this, "isManuallyPlaced");
+  private SimpleBooleanProperty manuallyPlacedProperty = new SimpleBooleanProperty(this, "manuallyPlaced");
   
-  public boolean getIsManuallyPlaced() {
-    return this.isManuallyPlacedProperty.get();
+  public boolean getManuallyPlaced() {
+    return this.manuallyPlacedProperty.get();
   }
   
-  public void setIsManuallyPlaced(final boolean isManuallyPlaced) {
-    this.isManuallyPlacedProperty.set(isManuallyPlaced);
+  public void setManuallyPlaced(final boolean manuallyPlaced) {
+    this.manuallyPlacedProperty.set(manuallyPlaced);
   }
   
-  public BooleanProperty isManuallyPlacedProperty() {
-    return this.isManuallyPlacedProperty;
+  public BooleanProperty manuallyPlacedProperty() {
+    return this.manuallyPlacedProperty;
   }
 }

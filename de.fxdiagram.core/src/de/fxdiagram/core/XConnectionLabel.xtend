@@ -12,6 +12,7 @@ import javafx.scene.transform.Affine
 
 import static extension de.fxdiagram.core.extensions.TransformExtensions.*
 import static extension java.lang.Math.*
+import de.fxdiagram.core.behavior.ConnectionLabelMoveBehavior
 
 /**
  * A label on an {@link XConnection}.
@@ -77,17 +78,20 @@ class XConnectionLabel extends XLabel {
 
 	override doActivate() {
 		text.fillProperty.bind(connection.strokeProperty)
-		addBehavior(new MoveBehavior(this))
+		addBehavior(new ConnectionLabelMoveBehavior(this))
+		positionProperty.addListener [ p, o, n |
+			place(true)
+		]
 	}
 
 	def void place(boolean force) {
 		if(!connection.isActive)
 			return
 		val moveBehavior = getBehavior(MoveBehavior)
-		if(moveBehavior?.isManuallyPlaced && !force) 
+		if(moveBehavior?.manuallyPlaced && !force) 
 			return;
 		if(force) 
-			moveBehavior?.setIsManuallyPlaced(false)
+			moveBehavior?.setManuallyPlaced(false)
 		val center = connection.at(position)
 		val derivative = connection.derivativeAt(position)
 		var angle = atan2(derivative.y, derivative.x)

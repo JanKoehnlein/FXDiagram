@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import de.fxdiagram.annotations.properties.ModelNode;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XLabel;
+import de.fxdiagram.core.behavior.ConnectionLabelMoveBehavior;
 import de.fxdiagram.core.behavior.MoveBehavior;
 import de.fxdiagram.core.extensions.TransformExtensions;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
@@ -14,6 +15,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -133,8 +136,12 @@ public class XConnectionLabel extends XLabel {
     XConnection _connection = this.getConnection();
     ObjectProperty<Paint> _strokeProperty = _connection.strokeProperty();
     _fillProperty.bind(_strokeProperty);
-    MoveBehavior<XConnectionLabel> _moveBehavior = new MoveBehavior<XConnectionLabel>(this);
-    this.addBehavior(_moveBehavior);
+    ConnectionLabelMoveBehavior _connectionLabelMoveBehavior = new ConnectionLabelMoveBehavior(this);
+    this.addBehavior(_connectionLabelMoveBehavior);
+    final ChangeListener<Number> _function = (ObservableValue<? extends Number> p, Number o, Number n) -> {
+      this.place(true);
+    };
+    this.positionProperty.addListener(_function);
   }
   
   public void place(final boolean force) {
@@ -146,11 +153,11 @@ public class XConnectionLabel extends XLabel {
     }
     final MoveBehavior moveBehavior = this.<MoveBehavior>getBehavior(MoveBehavior.class);
     boolean _and = false;
-    boolean _isManuallyPlaced = false;
+    boolean _manuallyPlaced = false;
     if (moveBehavior!=null) {
-      _isManuallyPlaced=moveBehavior.getIsManuallyPlaced();
+      _manuallyPlaced=moveBehavior.getManuallyPlaced();
     }
-    if (!_isManuallyPlaced) {
+    if (!_manuallyPlaced) {
       _and = false;
     } else {
       _and = (!force);
@@ -160,7 +167,7 @@ public class XConnectionLabel extends XLabel {
     }
     if (force) {
       if (moveBehavior!=null) {
-        moveBehavior.setIsManuallyPlaced(false);
+        moveBehavior.setManuallyPlaced(false);
       }
     }
     XConnection _connection_1 = this.getConnection();

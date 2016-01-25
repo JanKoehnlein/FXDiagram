@@ -33,7 +33,6 @@ import static de.fxdiagram.core.XConnection.Kind.*
 import static java.lang.Math.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
-import static extension de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
 class Layouter {
@@ -97,7 +96,7 @@ class Layouter {
 			val kElement = entry.value
 			switch xElement {
 				XNode: {
-					xElement.getBehavior(MoveBehavior)?.setIsManuallyPlaced(false)
+					xElement.getBehavior(MoveBehavior)?.setManuallyPlaced(false)
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					val correction = if (kElement.isTopLevel) {
 							delta
@@ -112,18 +111,22 @@ class Layouter {
 					xElement.labels.forEach[place(true)]
 					val edgeLayout = kElement.data.filter(KEdgeLayout).head
 					val layoutPoints = edgeLayout.createVectorChain.map[new Point2D(x, y)]
-					val newKind = switch (edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
-						case EdgeRouting.SPLINES: {
-							if ((layoutPoints.size - 1) % 3 == 0)
-								CUBIC_CURVE
-							else if ((layoutPoints.size - 1) % 2 == 0)
-								QUAD_CURVE
-							else
-								POLYLINE
-						}
-						default:
+					val newKind = if(diagram.layoutParameters.useSplines) {
+							switch (edgeLayout.getProperty(LayoutOptions.EDGE_ROUTING)) {
+								case EdgeRouting.SPLINES: {
+									if ((layoutPoints.size - 1) % 3 == 0)
+										CUBIC_CURVE
+									else if ((layoutPoints.size - 1) % 2 == 0)
+										QUAD_CURVE
+									else
+										POLYLINE
+								}
+								default:
+									POLYLINE
+							}
+						} else {
 							POLYLINE
-					}
+						}
 					if(newKind == POLYLINE) 
 						layoutPoints.removeDuplicates
 					xElement.kind = newKind
@@ -165,7 +168,7 @@ class Layouter {
 			val kElement = entry.value
 			switch xElement {
 				XNode: {
-					xElement.getBehavior(MoveBehavior).isManuallyPlaced = false
+					xElement.getBehavior(MoveBehavior).manuallyPlaced = false
 					val shapeLayout = kElement.data.filter(KShapeLayout).head
 					val correction = if (kElement.isTopLevel) {
 							delta					

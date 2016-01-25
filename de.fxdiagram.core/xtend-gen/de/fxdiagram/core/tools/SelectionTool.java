@@ -63,6 +63,7 @@ public class SelectionTool implements XDiagramTool {
       } else {
         XButton _targetButton = ButtonExtensions.getTargetButton(event);
         if ((!(_targetButton instanceof XButton))) {
+          this.isActionOnDiagram = false;
           final XShape targetShape = this.getTargetShape(event);
           boolean _isSelectable = false;
           if (targetShape!=null) {
@@ -105,13 +106,17 @@ public class SelectionTool implements XDiagramTool {
             final Consumer<XShape> _function_3 = (XShape it) -> {
               MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
               if (_behavior!=null) {
-                _behavior.mousePressed(event);
+                double _screenX = event.getScreenX();
+                double _screenY = event.getScreenY();
+                _behavior.startDrag(_screenX, _screenY);
               }
             };
             selection.forEach(_function_3);
             MoveBehavior _behavior = targetShape.<MoveBehavior>getBehavior(MoveBehavior.class);
             if (_behavior!=null) {
-              _behavior.mousePressed(event);
+              double _screenX = event.getScreenX();
+              double _screenY = event.getScreenY();
+              _behavior.startDrag(_screenX, _screenY);
             }
             double _sceneX = event.getSceneX();
             double _sceneY = event.getSceneY();
@@ -122,7 +127,6 @@ public class SelectionTool implements XDiagramTool {
             Duration _millis = DurationExtensions.millis(200);
             TimerExtensions.defer(_function_4, _millis);
           }
-          this.isActionOnDiagram = false;
         }
       }
     };

@@ -15,27 +15,23 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	
 	DragContext dragContext
 	
-	@FxProperty boolean isManuallyPlaced
+	@FxProperty boolean manuallyPlaced
 	
 	new(T host) {
 		super(host)
 	}
 	
 	override doActivate() {
-		host.node.onMousePressed = [
-			mousePressed  
-		]
-		host.node.onMouseDragged = [
-			mouseDragged	
-		]
 		host.node.onMouseReleased = [
-			if(dragContext != null) {
-				if(dragContext.initialX != host.layoutX || dragContext.initialY != host.layoutY) {
-					host.root.commandStack.execute(createMoveCommand)
-					isManuallyPlaced = true
-				}
+			if(hasMoved) {
+				host.root.commandStack.execute(createMoveCommand)
+				manuallyPlaced = true
 			}
 		]
+	}
+	
+	protected def hasMoved() {
+		dragContext != null && (dragContext.initialX != host.layoutX || dragContext.initialY != host.layoutY)
 	}
 	
 	protected def AnimationCommand createMoveCommand() {

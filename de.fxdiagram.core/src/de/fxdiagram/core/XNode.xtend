@@ -6,6 +6,7 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.anchors.Anchors
 import de.fxdiagram.core.anchors.RectangleAnchors
 import de.fxdiagram.core.behavior.MoveBehavior
+import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.model.DomainObjectDescriptor
 import de.fxdiagram.core.model.StringDescriptor
 import javafx.collections.ObservableList
@@ -18,7 +19,6 @@ import static javafx.collections.FXCollections.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import de.fxdiagram.core.extensions.InitializingListListener
 
 /**
  * A node in an {@link XDiagram} that can be connected to other {@link XNode}s via 
