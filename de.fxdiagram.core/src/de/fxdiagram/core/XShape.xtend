@@ -112,7 +112,7 @@ abstract class XShape extends Parent implements XActivatable {
 			behavior.activate
 	}
 	
-	def removeBehavior(String key) {
+	def removeBehavior(Class<? extends Behavior> key) {
 		behaviors.remove(key)
 	}
 	

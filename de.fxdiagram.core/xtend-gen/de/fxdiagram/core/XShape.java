@@ -152,7 +152,7 @@ public abstract class XShape extends Parent implements XActivatable {
     }
   }
   
-  public Behavior removeBehavior(final String key) {
+  public Behavior removeBehavior(final Class<? extends Behavior> key) {
     return this.behaviors.remove(key);
   }
   
