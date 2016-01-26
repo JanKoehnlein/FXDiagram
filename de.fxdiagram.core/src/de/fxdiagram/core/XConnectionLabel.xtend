@@ -21,10 +21,10 @@ import de.fxdiagram.core.behavior.ConnectionLabelMoveBehavior
  *   
  * The label placed next to the connection the given {@link position} which is in between 
  * 0 (start of the connection) and 1 (end of the connection). It is also rotated such that 
- * it is always tangeltial to the curve of the connection at the given position and upside 
+ * it is always tangential to the curve of the connection at the given position and upside 
  * up.  
  */
-@ModelNode('connection')
+@ModelNode('connection', 'position')
 class XConnectionLabel extends XLabel {
 
 	@FxProperty(readOnly=true) XConnection connection
