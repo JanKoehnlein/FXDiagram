@@ -18,6 +18,7 @@ import de.fxdiagram.core.command.AddRemoveCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.command.ParallelAnimationCommand;
 import de.fxdiagram.core.command.RemoveControlPointCommand;
+import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.tools.actions.DiagramAction;
 import eu.hansolo.enzo.radialmenu.SymbolType;
 import java.util.ArrayList;
@@ -107,22 +108,28 @@ public class DeleteAction implements DiagramAction {
       }
     };
     _keySet.forEach(_function_4);
-    XDiagram _diagram = root.getDiagram();
-    final AddRemoveCommand removeNodesAndConnectionsCommand = AddRemoveCommand.newRemoveCommand(_diagram, ((XShape[])Conversions.unwrapArray(deleteThem, XShape.class)));
-    boolean _isEmpty = connectionMorphCommands.isEmpty();
-    if (_isEmpty) {
-      CommandStack _commandStack = root.getCommandStack();
-      _commandStack.execute(removeNodesAndConnectionsCommand);
-    } else {
-      CommandStack _commandStack_1 = root.getCommandStack();
-      ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
-      final Procedure1<ParallelAnimationCommand> _function_5 = (ParallelAnimationCommand it) -> {
-        it.operator_add(removeNodesAndConnectionsCommand);
+    final Function<XShape, XDiagram> _function_5 = (XShape it) -> {
+      return CoreExtensions.getDiagram(it);
+    };
+    final ImmutableListMultimap<XDiagram, XShape> diagram2shape = Multimaps.<XDiagram, XShape>index(deleteThem, _function_5);
+    ImmutableSet<XDiagram> _keySet_1 = diagram2shape.keySet();
+    final Function1<XDiagram, AddRemoveCommand> _function_6 = (XDiagram diagram) -> {
+      ImmutableList<XShape> _get = diagram2shape.get(diagram);
+      return AddRemoveCommand.newRemoveCommand(diagram, ((XShape[])Conversions.unwrapArray(_get, XShape.class)));
+    };
+    final Iterable<AddRemoveCommand> removeCommands = IterableExtensions.<XDiagram, AddRemoveCommand>map(_keySet_1, _function_6);
+    CommandStack _commandStack = root.getCommandStack();
+    ParallelAnimationCommand _parallelAnimationCommand = new ParallelAnimationCommand();
+    final Procedure1<ParallelAnimationCommand> _function_7 = (ParallelAnimationCommand it) -> {
+      it.operator_add(removeCommands);
+      boolean _isEmpty = connectionMorphCommands.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
         it.operator_add(connectionMorphCommands);
-      };
-      ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_5);
-      _commandStack_1.execute(_doubleArrow);
-    }
+      }
+    };
+    ParallelAnimationCommand _doubleArrow = ObjectExtensions.<ParallelAnimationCommand>operator_doubleArrow(_parallelAnimationCommand, _function_7);
+    _commandStack.execute(_doubleArrow);
   }
   
   protected XConnection getConnection(final XControlPoint point) {

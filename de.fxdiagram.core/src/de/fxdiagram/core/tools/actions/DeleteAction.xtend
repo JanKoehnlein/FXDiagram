@@ -12,6 +12,7 @@ import de.fxdiagram.core.command.RemoveControlPointCommand
 import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 
 class DeleteAction implements DiagramAction {
 	
@@ -44,15 +45,15 @@ class DeleteAction implements DiagramAction {
 					controlPoints)
 			}
 		]
-		val removeNodesAndConnectionsCommand = AddRemoveCommand.newRemoveCommand(root.diagram, deleteThem)
-		if(connectionMorphCommands.empty) {
-			root.commandStack.execute(removeNodesAndConnectionsCommand)
-		} else {
-			root.commandStack.execute(new ParallelAnimationCommand => [
-				it += removeNodesAndConnectionsCommand
+		val diagram2shape = Multimaps.index(deleteThem, [diagram])
+		val removeCommands = diagram2shape.keySet.map [ diagram |
+			AddRemoveCommand.newRemoveCommand(diagram, diagram2shape.get(diagram))
+		]
+		root.commandStack.execute(new ParallelAnimationCommand => [
+			it += removeCommands
+			if(!connectionMorphCommands.empty) 
 				it += connectionMorphCommands
-			])
-		}
+		])
 	}
 	
 	protected def getConnection(XControlPoint point) {
