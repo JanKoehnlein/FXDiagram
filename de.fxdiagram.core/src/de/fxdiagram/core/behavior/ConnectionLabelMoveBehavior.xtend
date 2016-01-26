@@ -1,6 +1,5 @@
 package de.fxdiagram.core.behavior
 
-import de.fxdiagram.annotations.properties.FxProperty
 import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XControlPoint
 import de.fxdiagram.core.command.AbstractAnimationCommand
@@ -19,8 +18,6 @@ import static java.lang.Math.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
 class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> {
-	
-	@FxProperty boolean manuallyPlaced 
 	
 	double initialPosition = -1
 	
@@ -81,7 +78,10 @@ class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> {
 			super.startDrag(screenX, screenY)
 		else 
 			initialPosition = host.position
-		
+	}
+	
+	override getManuallyPlaced() {
+		false
 	}
 	
 	override protected createMoveCommand() {

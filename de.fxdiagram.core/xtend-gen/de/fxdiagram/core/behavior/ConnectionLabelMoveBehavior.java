@@ -15,9 +15,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -137,6 +135,11 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
   }
   
   @Override
+  public boolean getManuallyPlaced() {
+    return false;
+  }
+  
+  @Override
   protected AnimationCommand createMoveCommand() {
     abstract class __ConnectionLabelMoveBehavior_1 extends AbstractAnimationCommand {
       final __ConnectionLabelMoveBehavior_1 _this__ConnectionLabelMoveBehavior_1 = this;
@@ -200,19 +203,5 @@ public class ConnectionLabelMoveBehavior extends MoveBehavior<XConnectionLabel> 
       };
     }
     return _xifexpression;
-  }
-  
-  private SimpleBooleanProperty manuallyPlacedProperty = new SimpleBooleanProperty(this, "manuallyPlaced");
-  
-  public boolean getManuallyPlaced() {
-    return this.manuallyPlacedProperty.get();
-  }
-  
-  public void setManuallyPlaced(final boolean manuallyPlaced) {
-    this.manuallyPlacedProperty.set(manuallyPlaced);
-  }
-  
-  public BooleanProperty manuallyPlacedProperty() {
-    return this.manuallyPlacedProperty;
   }
 }
