@@ -422,7 +422,29 @@ public class XDiagram extends Group implements XActivatable, XDomainObjectOwner,
   }
   
   public Group getButtonLayer() {
-    return this.buttonLayer;
+    Group _xblockexpression = null;
+    {
+      boolean _and = false;
+      boolean _isRootDiagram = this.getIsRootDiagram();
+      boolean _not = (!_isRootDiagram);
+      if (!_not) {
+        _and = false;
+      } else {
+        XDiagram _parentDiagram = this.getParentDiagram();
+        Group _buttonLayer = null;
+        if (_parentDiagram!=null) {
+          _buttonLayer=_parentDiagram.buttonLayer;
+        }
+        boolean _notEquals = (!Objects.equal(_buttonLayer, null));
+        _and = _notEquals;
+      }
+      if (_and) {
+        XDiagram _parentDiagram_1 = this.getParentDiagram();
+        return _parentDiagram_1.buttonLayer;
+      }
+      _xblockexpression = this.buttonLayer;
+    }
+    return _xblockexpression;
   }
   
   private static Logger LOG = Logger.getLogger("de.fxdiagram.core.XDiagram");

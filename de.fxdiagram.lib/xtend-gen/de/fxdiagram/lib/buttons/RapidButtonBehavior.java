@@ -229,7 +229,7 @@ public class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavio
     HOST _host = this.getHost();
     HOST _host_1 = this.getHost();
     Bounds _layoutBounds = _host_1.getLayoutBounds();
-    final Bounds hostBounds = CoreExtensions.localToDiagram(_host, _layoutBounds);
+    final Bounds hostBounds = CoreExtensions.localToRootDiagram(_host, _layoutBounds);
     Point2D _center = null;
     if (hostBounds!=null) {
       _center=BoundsExtensions.center(hostBounds);

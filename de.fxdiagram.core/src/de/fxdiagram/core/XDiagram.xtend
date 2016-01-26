@@ -240,6 +240,8 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 	}
 	
 	def getButtonLayer() {
+		if(!isRootDiagram && parentDiagram?.buttonLayer != null)
+			return parentDiagram.buttonLayer
 		buttonLayer
 	}
 }

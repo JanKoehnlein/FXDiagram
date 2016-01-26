@@ -131,7 +131,7 @@ class RapidButtonBehavior<HOST extends XNode> extends AbstractHostBehavior<HOST>
 	}
 	
 	protected def layout() {
-		val hostBounds = host.localToDiagram(host.layoutBounds)
+		val hostBounds = host.localToRootDiagram(host.layoutBounds)
 		val hostCenter = hostBounds?.center
 		if(hostCenter != null) {
 			for(entry: pos2group.entrySet) {
