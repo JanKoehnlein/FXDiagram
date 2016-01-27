@@ -302,7 +302,7 @@ public class FXDiagramView extends ViewPart {
         final DiagramMappingCall<?, T> mappingCall = ((DiagramEntryCall<?, T>) entryCall).getMappingCall();
         Function1<? super T, ?> _selector = mappingCall.getSelector();
         final Object diagramElement = _selector.apply(element);
-        XDiagramConfig _config = ((DiagramEntryCall<?, ?>)entryCall).getConfig();
+        XDiagramConfig _config = entryCall.getConfig();
         IMappedElementDescriptorProvider _domainObjectProvider = _config.getDomainObjectProvider();
         AbstractMapping<?> _mapping = mappingCall.getMapping();
         final IMappedElementDescriptor<Object> diagramDescriptor = _domainObjectProvider.<Object>createMappedElementDescriptor(diagramElement, _mapping);
