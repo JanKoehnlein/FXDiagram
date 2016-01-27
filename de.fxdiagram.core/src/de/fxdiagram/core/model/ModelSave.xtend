@@ -28,6 +28,7 @@ class ModelSave {
 	Model model
 
 	def void save(Object root, Writer out) {
+		new ModelRepairer().repair(root)
 		this.model = new Model(root)
 		if (model.rootElement != null) {
 			idMap = newHashMap

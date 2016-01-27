@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.model.CrossRefData;
 import de.fxdiagram.core.model.ModelElement;
 import de.fxdiagram.core.model.ModelFactory;
+import de.fxdiagram.core.model.ModelRepairer;
 import de.fxdiagram.core.model.ParseException;
 import de.fxdiagram.core.tools.actions.LoadAction;
 import java.io.Reader;
@@ -59,6 +60,8 @@ public class ModelLoad {
       this.resolveCrossReference(it);
     };
     this.crossRefs.forEach(_function);
+    ModelRepairer _modelRepairer = new ModelRepairer();
+    _modelRepairer.repair(node);
     return node;
   }
   

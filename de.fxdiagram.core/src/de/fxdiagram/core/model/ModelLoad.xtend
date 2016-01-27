@@ -40,6 +40,7 @@ class ModelLoad {
 		val jsonObject = reader.readObject
 		val node = readNode(jsonObject, '')
 		crossRefs.forEach[resolveCrossReference]
+		new ModelRepairer().repair(node)
 		return node
 	}
 	

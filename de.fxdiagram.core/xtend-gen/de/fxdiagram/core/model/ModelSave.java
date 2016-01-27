@@ -5,6 +5,7 @@ import de.fxdiagram.annotations.logging.Logging;
 import de.fxdiagram.core.extensions.ClassLoaderExtensions;
 import de.fxdiagram.core.model.Model;
 import de.fxdiagram.core.model.ModelElement;
+import de.fxdiagram.core.model.ModelRepairer;
 import de.fxdiagram.core.tools.actions.SaveAction;
 import java.io.Writer;
 import java.util.Collections;
@@ -40,6 +41,8 @@ public class ModelSave {
   private Model model;
   
   public void save(final Object root, final Writer out) {
+    ModelRepairer _modelRepairer = new ModelRepairer();
+    _modelRepairer.repair(root);
     Model _model = new Model(root);
     this.model = _model;
     ModelElement _rootElement = this.model.getRootElement();
