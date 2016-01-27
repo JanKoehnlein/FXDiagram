@@ -1,6 +1,7 @@
 package de.fxdiagram.core.auxlines;
 
 import com.google.common.collect.Iterables;
+import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
@@ -41,6 +42,20 @@ public class AuxiliaryLinesSupport {
         _children_1.add(_createNode);
       };
       lines.forEach(_function);
+    } else {
+      final Iterable<XControlPoint> selectedControlPoints = Iterables.<XControlPoint>filter(selection, XControlPoint.class);
+      int _size_1 = IterableExtensions.size(selectedControlPoints);
+      boolean _equals_1 = (_size_1 == 1);
+      if (_equals_1) {
+        XControlPoint _head_1 = IterableExtensions.<XControlPoint>head(selectedControlPoints);
+        final Iterable<AuxiliaryLine> lines_1 = this.cache.getAuxiliaryLines(_head_1);
+        final Consumer<AuxiliaryLine> _function_1 = (AuxiliaryLine it) -> {
+          ObservableList<Node> _children_1 = this.group.getChildren();
+          Node _createNode = it.createNode();
+          _children_1.add(_createNode);
+        };
+        lines_1.forEach(_function_1);
+      }
     }
   }
   

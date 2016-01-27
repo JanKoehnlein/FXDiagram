@@ -2,13 +2,13 @@ package de.fxdiagram.core.auxlines
 
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.Multimap
-import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XShape
 import java.util.Map
 
 class AuxiliaryLineMap<T> {
 	
 	Multimap<Integer, AuxiliaryLine> store = HashMultimap.create
-	Map<XNode, AuxiliaryLine> node2entry = newHashMap
+	Map<XShape, AuxiliaryLine> shape2entry = newHashMap
 	
 	double threshold
 	
@@ -21,17 +21,17 @@ class AuxiliaryLineMap<T> {
 	}
 	
 	def add(AuxiliaryLine line) {
-		line.relatedNodes?.forEach[ removeByNode(it) ]
+		line.relatedShapes?.forEach[ removeByShape(it) ]
 		store.put(line.position.getKey, line)
-		line.relatedNodes?.forEach[ node2entry.put(it, line) ]
+		line.relatedShapes?.forEach[ shape2entry.put(it, line) ]
 	}
 
-	def removeByNode(XNode node) {
-		val line = getByNode(node)
+	def removeByShape(XShape shape) {
+		val line = getByShape(shape)
 		if(line != null) {
 			val key = line.position.getKey
 			store.remove(key, line)
-			node2entry.remove(node)
+			shape2entry.remove(shape)
 		}
 	}
 	
@@ -39,8 +39,8 @@ class AuxiliaryLineMap<T> {
 		store.get(position.getKey)
 	}
 	
-	def getByNode(XNode node) {
-		node2entry.get(node)
+	def getByShape(XShape shape) {
+		shape2entry.get(shape)
 	}
 	
 	def containsKey(double position) {

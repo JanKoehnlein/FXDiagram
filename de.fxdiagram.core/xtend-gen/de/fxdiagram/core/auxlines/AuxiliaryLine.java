@@ -1,25 +1,25 @@
 package de.fxdiagram.core.auxlines;
 
-import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XShape;
 import javafx.scene.Node;
 
 @SuppressWarnings("all")
 public abstract class AuxiliaryLine {
   private double position;
   
-  private XNode[] relatedNodes;
+  private XShape[] relatedShapes;
   
-  public AuxiliaryLine(final double position, final XNode[] relatedNodes) {
+  public AuxiliaryLine(final double position, final XShape[] relatedShapes) {
     this.position = position;
-    this.relatedNodes = relatedNodes;
+    this.relatedShapes = relatedShapes;
   }
   
   public double getPosition() {
     return this.position;
   }
   
-  public XNode[] getRelatedNodes() {
-    return this.relatedNodes;
+  public XShape[] getRelatedShapes() {
+    return this.relatedShapes;
   }
   
   public abstract Node createNode();

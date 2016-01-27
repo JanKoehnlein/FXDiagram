@@ -1,6 +1,6 @@
 package de.fxdiagram.core.auxlines
 
-import de.fxdiagram.core.XNode
+import de.fxdiagram.core.XShape
 import javafx.geometry.Bounds
 import javafx.geometry.Orientation
 import javafx.scene.Node
@@ -11,19 +11,19 @@ abstract class AuxiliaryLine {
 	
 	double position
 	
-	XNode[] relatedNodes
+	XShape[] relatedShapes
 
-	new(double position, XNode[] relatedNodes) {
+	new(double position, XShape[] relatedShapes) {
 		this.position = position
-		this.relatedNodes = relatedNodes
+		this.relatedShapes = relatedShapes
 	}
 
 	def double getPosition() {
 		position
 	}
 	
-	def XNode[] getRelatedNodes() {
-		relatedNodes
+	def XShape[] getRelatedShapes() {
+		relatedShapes
 	}
 	
 	def Node createNode() 
@@ -37,8 +37,8 @@ class NodeLine extends AuxiliaryLine {
 	double min
 	double max
 	
-	new(double position, Orientation orientation, XNode node, Bounds boundsInDiagram) {
-		super(position, #[node])
+	new(double position, Orientation orientation, XShape shape, Bounds boundsInDiagram) {
+		super(position, #[shape])
 		this.orientation = orientation
 		switch orientation {
 			case Orientation.HORIZONTAL: {

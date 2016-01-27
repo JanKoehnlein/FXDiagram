@@ -1,6 +1,6 @@
 package de.fxdiagram.core.auxlines;
 
-import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
@@ -20,8 +20,8 @@ public class NodeLine extends AuxiliaryLine {
   
   private double max;
   
-  public NodeLine(final double position, final Orientation orientation, final XNode node, final Bounds boundsInDiagram) {
-    super(position, new XNode[] { node });
+  public NodeLine(final double position, final Orientation orientation, final XShape shape, final Bounds boundsInDiagram) {
+    super(position, new XShape[] { shape });
     this.orientation = orientation;
     if (orientation != null) {
       switch (orientation) {

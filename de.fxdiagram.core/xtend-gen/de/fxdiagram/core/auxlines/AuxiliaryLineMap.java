@@ -3,7 +3,7 @@ package de.fxdiagram.core.auxlines;
 import com.google.common.base.Objects;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import de.fxdiagram.core.XNode;
+import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +16,7 @@ import org.eclipse.xtext.xbase.lib.Conversions;
 public class AuxiliaryLineMap<T extends Object> {
   private Multimap<Integer, AuxiliaryLine> store = HashMultimap.<Integer, AuxiliaryLine>create();
   
-  private Map<XNode, AuxiliaryLine> node2entry = CollectionLiterals.<XNode, AuxiliaryLine>newHashMap();
+  private Map<XShape, AuxiliaryLine> shape2entry = CollectionLiterals.<XShape, AuxiliaryLine>newHashMap();
   
   private double threshold;
   
@@ -29,29 +29,29 @@ public class AuxiliaryLineMap<T extends Object> {
   }
   
   public void add(final AuxiliaryLine line) {
-    XNode[] _relatedNodes = line.getRelatedNodes();
-    if (((List<XNode>)Conversions.doWrapArray(_relatedNodes))!=null) {
-      final Consumer<XNode> _function = (XNode it) -> {
-        this.removeByNode(it);
+    XShape[] _relatedShapes = line.getRelatedShapes();
+    if (((List<XShape>)Conversions.doWrapArray(_relatedShapes))!=null) {
+      final Consumer<XShape> _function = (XShape it) -> {
+        this.removeByShape(it);
       };
-      ((List<XNode>)Conversions.doWrapArray(_relatedNodes)).forEach(_function);
+      ((List<XShape>)Conversions.doWrapArray(_relatedShapes)).forEach(_function);
     }
     double _position = line.getPosition();
     int _key = this.getKey(_position);
     this.store.put(Integer.valueOf(_key), line);
-    XNode[] _relatedNodes_1 = line.getRelatedNodes();
-    if (((List<XNode>)Conversions.doWrapArray(_relatedNodes_1))!=null) {
-      final Consumer<XNode> _function_1 = (XNode it) -> {
-        this.node2entry.put(it, line);
+    XShape[] _relatedShapes_1 = line.getRelatedShapes();
+    if (((List<XShape>)Conversions.doWrapArray(_relatedShapes_1))!=null) {
+      final Consumer<XShape> _function_1 = (XShape it) -> {
+        this.shape2entry.put(it, line);
       };
-      ((List<XNode>)Conversions.doWrapArray(_relatedNodes_1)).forEach(_function_1);
+      ((List<XShape>)Conversions.doWrapArray(_relatedShapes_1)).forEach(_function_1);
     }
   }
   
-  public AuxiliaryLine removeByNode(final XNode node) {
+  public AuxiliaryLine removeByShape(final XShape shape) {
     AuxiliaryLine _xblockexpression = null;
     {
-      final AuxiliaryLine line = this.getByNode(node);
+      final AuxiliaryLine line = this.getByShape(shape);
       AuxiliaryLine _xifexpression = null;
       boolean _notEquals = (!Objects.equal(line, null));
       if (_notEquals) {
@@ -60,7 +60,7 @@ public class AuxiliaryLineMap<T extends Object> {
           double _position = line.getPosition();
           final int key = this.getKey(_position);
           this.store.remove(Integer.valueOf(key), line);
-          _xblockexpression_1 = this.node2entry.remove(node);
+          _xblockexpression_1 = this.shape2entry.remove(shape);
         }
         _xifexpression = _xblockexpression_1;
       }
@@ -74,8 +74,8 @@ public class AuxiliaryLineMap<T extends Object> {
     return this.store.get(Integer.valueOf(_key));
   }
   
-  public AuxiliaryLine getByNode(final XNode node) {
-    return this.node2entry.get(node);
+  public AuxiliaryLine getByShape(final XShape shape) {
+    return this.shape2entry.get(shape);
   }
   
   public boolean containsKey(final double position) {

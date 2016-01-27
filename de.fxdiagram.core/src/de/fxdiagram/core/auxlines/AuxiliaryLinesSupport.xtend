@@ -4,6 +4,7 @@ import de.fxdiagram.core.XDiagram
 import de.fxdiagram.core.XNode
 import de.fxdiagram.core.XShape
 import javafx.scene.Group
+import de.fxdiagram.core.XControlPoint
 
 class AuxiliaryLinesSupport {
 	
@@ -22,7 +23,13 @@ class AuxiliaryLinesSupport {
 		if(selectedNodes.size == 1) {
 			val lines = cache.getAuxiliaryLines(selectedNodes.head)
 			lines.forEach[ group.children += createNode ]
-		}	
+		} else {
+			val selectedControlPoints = selection.filter(XControlPoint)
+			if(selectedControlPoints.size == 1) {
+				val lines = cache.getAuxiliaryLines(selectedControlPoints.head)
+				lines.forEach[ group.children += createNode ]
+			}
+		}
 	}
 	
 	def hide() {
