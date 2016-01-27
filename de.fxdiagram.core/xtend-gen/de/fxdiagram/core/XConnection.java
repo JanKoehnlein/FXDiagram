@@ -112,6 +112,8 @@ public class XConnection extends XDomainObjectShape {
     this.addOppositeListeners();
     TriangleArrowHead _triangleArrowHead = new TriangleArrowHead(this, false);
     this.setTargetArrowHead(_triangleArrowHead);
+    ConnectionRouter _connectionRouter = new ConnectionRouter(this);
+    this.setConnectionRouter(_connectionRouter);
   }
   
   public XConnection(final XNode source, final XNode target, final DomainObjectDescriptor domainObject) {
@@ -227,10 +229,8 @@ public class XConnection extends XDomainObjectShape {
       };
       Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(this.controlPointGroup, _function);
       _children.add(_doubleArrow);
-      ConnectionRouter _connectionRouter = new ConnectionRouter(this);
-      this.setConnectionRouter(_connectionRouter);
-      ConnectionRouter _connectionRouter_1 = this.getConnectionRouter();
-      _connectionRouter_1.calculatePoints();
+      ConnectionRouter _connectionRouter = this.getConnectionRouter();
+      _connectionRouter.calculatePoints();
       _xblockexpression = node;
     }
     return _xblockexpression;

@@ -378,19 +378,23 @@ public class ConnectionRouter implements XActivatable {
         ObservableList<XControlPoint> _controlPoints_5 = this.getControlPoints();
         XControlPoint _head = IterableExtensions.<XControlPoint>head(_controlPoints_5);
         final Procedure1<XControlPoint> _function_2 = (XControlPoint it) -> {
+          DoubleProperty _layoutXProperty = it.layoutXProperty();
           double _x = sourcePoint.getX();
-          it.setLayoutX(_x);
+          CoreExtensions.<Number>setSafely(_layoutXProperty, Double.valueOf(_x));
+          DoubleProperty _layoutYProperty = it.layoutYProperty();
           double _y = sourcePoint.getY();
-          it.setLayoutY(_y);
+          CoreExtensions.<Number>setSafely(_layoutYProperty, Double.valueOf(_y));
         };
         ObjectExtensions.<XControlPoint>operator_doubleArrow(_head, _function_2);
         ObservableList<XControlPoint> _controlPoints_6 = this.getControlPoints();
         XControlPoint _last = IterableExtensions.<XControlPoint>last(_controlPoints_6);
         final Procedure1<XControlPoint> _function_3 = (XControlPoint it) -> {
+          DoubleProperty _layoutXProperty = it.layoutXProperty();
           double _x = targetPoint.getX();
-          it.setLayoutX(_x);
+          CoreExtensions.<Number>setSafely(_layoutXProperty, Double.valueOf(_x));
+          DoubleProperty _layoutYProperty = it.layoutYProperty();
           double _y = targetPoint.getY();
-          it.setLayoutY(_y);
+          CoreExtensions.<Number>setSafely(_layoutYProperty, Double.valueOf(_y));
         };
         ObjectExtensions.<XControlPoint>operator_doubleArrow(_last, _function_3);
       }

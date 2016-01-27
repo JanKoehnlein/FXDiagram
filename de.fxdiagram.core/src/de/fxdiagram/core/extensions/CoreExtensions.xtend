@@ -36,6 +36,11 @@ class CoreExtensions {
 		if(element != null && list.contains(element))
 			list -= element
 	}
+	
+	def static <T> setSafely(javafx.beans.property.Property<T> property, T newValue) {
+		if(!property.isBound) 
+			property.value = newValue
+	}
 
 	def static isRootDiagram(Node node) {
 		switch node { 

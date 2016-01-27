@@ -20,6 +20,6 @@ class SelectAllAction implements DiagramAction {
 	}
 
 	override perform(XRoot root) {
-		root.diagram.allShapes.forEach[if(selectable) selected = true]
+		(root.diagram.connections + root.diagram.nodes).forEach[if(selectable) selected = true]
 	}
 }

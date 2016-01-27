@@ -11,7 +11,6 @@ import java.util.List
 import java.util.Map
 import javafx.collections.ObservableList
 import javafx.geometry.Point2D
-import javafx.scene.input.MouseEvent
 
 import static de.fxdiagram.core.XConnection.Kind.*
 import static de.fxdiagram.core.XControlPoint.Type.*
@@ -191,8 +190,8 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 	
 	Map<XControlPoint, Point2D> initialPositions
 	
-	override mousePressed(MouseEvent it) {
-		super.mousePressed(it)
+	override startDrag(double screenX, double screenY) {
+		super.startDrag(screenX, screenY)
 		initialPositions = Maps.toMap(siblings, [new Point2D(layoutX, layoutY)])
 	}
 	

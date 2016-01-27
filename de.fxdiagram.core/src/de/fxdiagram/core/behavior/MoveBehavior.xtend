@@ -22,7 +22,7 @@ class MoveBehavior <T extends XShape> extends AbstractHostBehavior<T> {
 	}
 	
 	override doActivate() {
-		host.node.onMouseReleased = [
+		host.onMouseReleased = [
 			if(hasMoved) {
 				host.root.commandStack.execute(createMoveCommand)
 				manuallyPlaced = true

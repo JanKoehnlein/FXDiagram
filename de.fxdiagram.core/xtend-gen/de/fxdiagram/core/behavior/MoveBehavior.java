@@ -19,7 +19,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import org.eclipse.xtend.lib.annotations.Data;
@@ -135,7 +134,6 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
   @Override
   public void doActivate() {
     T _host = this.getHost();
-    Node _node = _host.getNode();
     final EventHandler<MouseEvent> _function = (MouseEvent it) -> {
       boolean _hasMoved = this.hasMoved();
       if (_hasMoved) {
@@ -147,7 +145,7 @@ public class MoveBehavior<T extends XShape> extends AbstractHostBehavior<T> {
         this.setManuallyPlaced(true);
       }
     };
-    _node.setOnMouseReleased(_function);
+    _host.setOnMouseReleased(_function);
   }
   
   protected boolean hasMoved() {

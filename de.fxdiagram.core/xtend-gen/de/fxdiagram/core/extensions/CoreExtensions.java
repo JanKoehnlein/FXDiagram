@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -69,6 +70,14 @@ public class CoreExtensions {
       _xifexpression = list.remove(element);
     }
     return _xifexpression;
+  }
+  
+  public static <T extends Object> void setSafely(final Property<T> property, final T newValue) {
+    boolean _isBound = property.isBound();
+    boolean _not = (!_isBound);
+    if (_not) {
+      property.setValue(newValue);
+    }
   }
   
   public static boolean isRootDiagram(final Node node) {

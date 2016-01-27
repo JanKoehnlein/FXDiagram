@@ -28,7 +28,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings("all")
 public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
@@ -400,12 +399,12 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   private Map<XControlPoint, Point2D> initialPositions;
   
   @Override
-  public void mousePressed(final MouseEvent it) {
-    super.mousePressed(it);
+  public void startDrag(final double screenX, final double screenY) {
+    super.startDrag(screenX, screenY);
     ObservableList<XControlPoint> _siblings = this.getSiblings();
-    final Function<XControlPoint, Point2D> _function = (XControlPoint it_1) -> {
-      double _layoutX = it_1.getLayoutX();
-      double _layoutY = it_1.getLayoutY();
+    final Function<XControlPoint, Point2D> _function = (XControlPoint it) -> {
+      double _layoutX = it.getLayoutX();
+      double _layoutY = it.getLayoutY();
       return new Point2D(_layoutX, _layoutY);
     };
     ImmutableMap<XControlPoint, Point2D> _map = Maps.<XControlPoint, Point2D>toMap(_siblings, _function);

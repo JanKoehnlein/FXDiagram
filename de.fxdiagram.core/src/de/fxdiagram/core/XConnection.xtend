@@ -84,6 +84,7 @@ class XConnection extends XDomainObjectShape {
 		super(domainObject)
 		addOppositeListeners
 		targetArrowHead = new TriangleArrowHead(this, false)
+		connectionRouter = new ConnectionRouter(this)
 	}
 	
 	new(XNode source, XNode target, DomainObjectDescriptor domainObject) {
@@ -134,7 +135,6 @@ class XConnection extends XDomainObjectShape {
 		children += controlPointGroup => [
 			visible = false
 		]
-		connectionRouter = new ConnectionRouter(this)
 		connectionRouter.calculatePoints
 		node
 	}

@@ -190,12 +190,12 @@ class ConnectionRouter implements XActivatable {
 				} 
 			} else {
 				controlPoints.head => [
-					layoutX = sourcePoint.x
-					layoutY = sourcePoint.y
+					layoutXProperty.setSafely(sourcePoint.x)
+					layoutYProperty.setSafely(sourcePoint.y)
 				]
 				controlPoints.last => [
-					layoutX = targetPoint.x
-					layoutY = targetPoint.y
+					layoutXProperty.setSafely(targetPoint.x)
+					layoutYProperty.setSafely(targetPoint.y)
 				]
 			}
 			controlPoints.forEach[update(controlPoints)]
