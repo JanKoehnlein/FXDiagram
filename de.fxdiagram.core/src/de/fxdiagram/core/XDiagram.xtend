@@ -177,7 +177,10 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 				]
 			]
 		])
-		auxiliaryLinesSupport = new AuxiliaryLinesSupport(this)
+		auxiliaryLinesSupport = if(!isRootDiagram && parentDiagram?.auxiliaryLinesSupport != null)
+				parentDiagram.auxiliaryLinesSupport
+			else 
+				new AuxiliaryLinesSupport(this)
 		if(getBehavior(NavigationBehavior) == null) 
 			addBehavior(new DiagramNavigationBehavior(this))
 		behaviors.addInitializingListener(new InitializingMapListener => [
@@ -218,7 +221,7 @@ class XDiagram extends Group implements XActivatable, XDomainObjectOwner {
 	} 
 	
 	def getAuxiliaryLinesSupport() {
-		auxiliaryLinesSupport	
+		auxiliaryLinesSupport
 	}
 	
 	def Iterable<XShape> getAllShapes() {

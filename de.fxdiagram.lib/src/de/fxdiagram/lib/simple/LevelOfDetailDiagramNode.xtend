@@ -16,6 +16,7 @@ import javafx.scene.text.Text
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.TooltipExtensions.*
 import de.fxdiagram.core.XDiagramContainer
+import de.fxdiagram.annotations.properties.FxProperty
 
 /**
  * An {@link XNode} containing another diagram that is revealed when the user zooms in.
@@ -30,7 +31,7 @@ class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer {
 
 	Group innerDiagramGroup
 	
-	XDiagram innerDiagram
+	@FxProperty XDiagram innerDiagram
 
 	DiagramScaler diagramScaler
 
@@ -52,24 +53,12 @@ class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer {
 		]
 	}
 	
-	override getInnerDiagram() {
-		innerDiagram
-	}
-	
 	override getInsets() {
 		null
 	}
 	
 	override isInnerDiagramActive() {
 		innerDiagram.isActive && innerDiagram.visible
-	}
-	
-	override setInnerDiagram(XDiagram innerDiagram) {
-		this.innerDiagram = innerDiagram
-		pane.children += innerDiagramGroup = new Group => [
-			children.setAll(innerDiagram) 
-		]
-		diagramScaler = new DiagramScaler(innerDiagram)
 	}
 	
 	override protected createAnchors() {
@@ -85,6 +74,10 @@ class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer {
 		if(innerDiagram == null) {
 			LOG.severe('No inner diagram set on node ' + name + '. LOD behavior deactivated')
 		} else {
+			pane.children += innerDiagramGroup = new Group => [
+				children.setAll(innerDiagram) 
+			]
+			diagramScaler = new DiagramScaler(innerDiagram)
 			diagram.viewportTransform.scaleProperty.addListener [ prop, oldVal, newVal |
 				val bounds = localToScene(boundsInLocal)
 				val area = bounds.width * bounds.height

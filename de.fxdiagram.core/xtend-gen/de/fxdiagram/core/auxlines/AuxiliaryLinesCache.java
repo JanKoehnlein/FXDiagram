@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import de.fxdiagram.core.XConnection;
 import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
+import de.fxdiagram.core.XDiagramContainer;
 import de.fxdiagram.core.XNode;
 import de.fxdiagram.core.XShape;
 import de.fxdiagram.core.auxlines.AuxiliaryLine;
@@ -13,7 +14,9 @@ import de.fxdiagram.core.extensions.BoundsExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.InitializingListListener;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -23,7 +26,9 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ListExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -91,17 +96,14 @@ public class AuxiliaryLinesCache {
     };
     InitializingListListener<XControlPoint> _doubleArrow_2 = ObjectExtensions.<InitializingListListener<XControlPoint>>operator_doubleArrow(_initializingListListener_2, _function_2);
     this.controlPointsListener = _doubleArrow_2;
-    ObservableList<XNode> _nodes = diagram.getNodes();
-    CoreExtensions.<XNode>addInitializingListener(_nodes, this.nodesListener);
-    ObservableList<XConnection> _connections = diagram.getConnections();
-    CoreExtensions.<XConnection>addInitializingListener(_connections, this.connectionsListener);
+    this.watchDiagram(diagram);
   }
   
   public Iterable<AuxiliaryLine> getAuxiliaryLines(final XNode node) {
     Iterable<AuxiliaryLine> _xblockexpression = null;
     {
       Bounds _snapBounds = node.getSnapBounds();
-      final Bounds boundsInDiagram = CoreExtensions.localToDiagram(node, _snapBounds);
+      final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(node, _snapBounds);
       double _minX = boundsInDiagram.getMinX();
       Collection<AuxiliaryLine> _byPosition = this.leftMap.getByPosition(_minX);
       Iterable<AuxiliaryLine> _atLeastTwo = this.atLeastTwo(_byPosition);
@@ -140,7 +142,7 @@ public class AuxiliaryLinesCache {
     {
       Bounds _boundsInLocal = point.getBoundsInLocal();
       Point2D _center = BoundsExtensions.center(_boundsInLocal);
-      final Point2D centerInDiagram = CoreExtensions.localToDiagram(point, _center);
+      final Point2D centerInDiagram = CoreExtensions.localToRootDiagram(point, _center);
       double _x = centerInDiagram.getX();
       Collection<AuxiliaryLine> _byPosition = this.centerXMap.getByPosition(_x);
       Iterable<AuxiliaryLine> _atLeastTwo = this.atLeastTwo(_byPosition);
@@ -164,13 +166,59 @@ public class AuxiliaryLinesCache {
     return _xifexpression;
   }
   
+  protected void watchDiagram(final XDiagram diagram) {
+    ObservableList<XNode> _nodes = diagram.getNodes();
+    CoreExtensions.<XNode>addInitializingListener(_nodes, this.nodesListener);
+    ObservableList<XConnection> _connections = diagram.getConnections();
+    CoreExtensions.<XConnection>addInitializingListener(_connections, this.connectionsListener);
+  }
+  
+  protected void updateDiagram(final XDiagram diagram) {
+    ObservableList<XNode> _nodes = diagram.getNodes();
+    final Consumer<XNode> _function = (XNode it) -> {
+      this.updateNode(it);
+    };
+    _nodes.forEach(_function);
+    ObservableList<XConnection> _connections = diagram.getConnections();
+    final Function1<XConnection, ObservableList<XControlPoint>> _function_1 = (XConnection it) -> {
+      return it.getControlPoints();
+    };
+    List<ObservableList<XControlPoint>> _map = ListExtensions.<XConnection, ObservableList<XControlPoint>>map(_connections, _function_1);
+    Iterable<XControlPoint> _flatten = Iterables.<XControlPoint>concat(_map);
+    final Consumer<XControlPoint> _function_2 = (XControlPoint it) -> {
+      this.updateControlPoint(it);
+    };
+    _flatten.forEach(_function_2);
+  }
+  
+  protected void unwatchDiagram(final XDiagram diagram) {
+    ObservableList<XNode> _nodes = diagram.getNodes();
+    CoreExtensions.<XNode>removeInitializingListener(_nodes, this.nodesListener);
+    ObservableList<XConnection> _connections = diagram.getConnections();
+    CoreExtensions.<XConnection>removeInitializingListener(_connections, this.connectionsListener);
+  }
+  
   protected void watchNode(final XNode node) {
     final ChangeListener<Number> _function = (ObservableValue<? extends Number> scalar, Number oldValue, Number newValue) -> {
       this.updateNode(node);
+      if ((node instanceof XDiagramContainer)) {
+        boolean _isInnerDiagramActive = ((XDiagramContainer)node).isInnerDiagramActive();
+        if (_isInnerDiagramActive) {
+          XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
+          this.updateDiagram(_innerDiagram);
+        }
+      }
     };
     final ChangeListener<Number> scalarListener = _function;
     final ChangeListener<Bounds> _function_1 = (ObservableValue<? extends Bounds> scalar, Bounds oldValue, Bounds newValue) -> {
       this.updateNode(node);
+      if ((node instanceof XDiagramContainer)) {
+        boolean _isInnerDiagramActive = ((XDiagramContainer)node).isInnerDiagramActive();
+        if (_isInnerDiagramActive) {
+          XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
+          this.updateDiagram(_innerDiagram);
+        }
+      }
     };
     final ChangeListener<Bounds> boundsListener = _function_1;
     DoubleProperty _layoutXProperty = node.layoutXProperty();
@@ -182,11 +230,18 @@ public class AuxiliaryLinesCache {
     this.shape2scalarListener.put(node, scalarListener);
     this.node2boundsListener.put(node, boundsListener);
     this.updateNode(node);
+    if ((node instanceof XDiagramContainer)) {
+      boolean _isInnerDiagramActive = ((XDiagramContainer)node).isInnerDiagramActive();
+      if (_isInnerDiagramActive) {
+        XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
+        this.watchDiagram(_innerDiagram);
+      }
+    }
   }
   
   protected void updateNode(final XNode node) {
     Bounds _snapBounds = node.getSnapBounds();
-    final Bounds boundsInDiagram = CoreExtensions.localToDiagram(node, _snapBounds);
+    final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(node, _snapBounds);
     double _minX = boundsInDiagram.getMinX();
     NodeLine _nodeLine = new NodeLine(_minX, 
       Orientation.VERTICAL, node, boundsInDiagram);
@@ -220,6 +275,13 @@ public class AuxiliaryLinesCache {
   }
   
   protected void unwatchNode(final XNode node) {
+    if ((node instanceof XDiagramContainer)) {
+      boolean _isInnerDiagramActive = ((XDiagramContainer)node).isInnerDiagramActive();
+      if (_isInnerDiagramActive) {
+        XDiagram _innerDiagram = ((XDiagramContainer)node).getInnerDiagram();
+        this.unwatchDiagram(_innerDiagram);
+      }
+    }
     this.leftMap.removeByShape(node);
     this.centerXMap.removeByShape(node);
     this.rightMap.removeByShape(node);
@@ -261,7 +323,7 @@ public class AuxiliaryLinesCache {
   
   protected void updateControlPoint(final XControlPoint point) {
     Bounds _boundsInLocal = point.getBoundsInLocal();
-    final Bounds boundsInDiagram = CoreExtensions.localToDiagram(point, _boundsInLocal);
+    final Bounds boundsInDiagram = CoreExtensions.localToRootDiagram(point, _boundsInLocal);
     Point2D _center = BoundsExtensions.center(boundsInDiagram);
     double _x = _center.getX();
     NodeLine _nodeLine = new NodeLine(_x, 

@@ -14,6 +14,7 @@ import javafx.geometry.Orientation
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
+import de.fxdiagram.core.XDiagramContainer
 
 class AuxiliaryLinesCache {
 
@@ -44,12 +45,11 @@ class AuxiliaryLinesCache {
 			add = [ watchControlPoint ]
 			remove = [ unwatchControlPoint ]
 		]
-		diagram.nodes.addInitializingListener(nodesListener)
-		diagram.connections.addInitializingListener(connectionsListener)
+		watchDiagram(diagram)
 	}
 
 	def getAuxiliaryLines(XNode node) {
-		val boundsInDiagram = node.localToDiagram(node.snapBounds)
+		val boundsInDiagram = node.localToRootDiagram(node.snapBounds)
 		leftMap.getByPosition(boundsInDiagram.minX).atLeastTwo
 			+ centerXMap.getByPosition(0.5 * (boundsInDiagram.minX + boundsInDiagram.maxX)).atLeastTwo
 			+ rightMap.getByPosition(boundsInDiagram.maxX).atLeastTwo
@@ -59,7 +59,7 @@ class AuxiliaryLinesCache {
 	}
 	
 	def getAuxiliaryLines(XControlPoint point) {
-		val centerInDiagram = point.localToDiagram(point.boundsInLocal.center)
+		val centerInDiagram = point.localToRootDiagram(point.boundsInLocal.center)
 		centerXMap.getByPosition(centerInDiagram.x).atLeastTwo
 			+ centerYMap.getByPosition(centerInDiagram.y).atLeastTwo
 	}
@@ -70,15 +70,38 @@ class AuxiliaryLinesCache {
 		else 
 			lines
 	}
+	
+	protected def watchDiagram(XDiagram diagram) {
+		diagram.nodes.addInitializingListener(nodesListener)
+		diagram.connections.addInitializingListener(connectionsListener)
+	}
+	
+	protected def updateDiagram(XDiagram diagram) {
+		diagram.nodes.forEach[updateNode]
+		diagram.connections.map[controlPoints].flatten.forEach[updateControlPoint]
+	}
+	
+	protected def unwatchDiagram(XDiagram diagram) {
+		diagram.nodes.removeInitializingListener(nodesListener)
+		diagram.connections.removeInitializingListener(connectionsListener)
+	}
 
 	protected def watchNode(XNode node) {
 		val ChangeListener<Number> scalarListener = [ 
 			ObservableValue<? extends Number> scalar, Number oldValue, Number newValue | 
 			updateNode(node)
+			if(node instanceof XDiagramContainer) {
+				if(node.isInnerDiagramActive) 
+					updateDiagram(node.innerDiagram)
+			}
 		]
 		val ChangeListener<Bounds> boundsListener = [ 
 			ObservableValue<? extends Bounds> scalar, Bounds oldValue, Bounds newValue | 
 			updateNode(node)
+			if(node instanceof XDiagramContainer) {
+				if(node.isInnerDiagramActive) 
+					updateDiagram(node.innerDiagram)
+			}
 		]
 		node.layoutXProperty.addListener(scalarListener)
 		node.layoutYProperty.addListener(scalarListener)
@@ -86,10 +109,14 @@ class AuxiliaryLinesCache {
 		shape2scalarListener.put(node, scalarListener)
 		node2boundsListener.put(node, boundsListener)
 		updateNode(node)
+		if(node instanceof XDiagramContainer) {
+			if(node.isInnerDiagramActive) 
+				watchDiagram(node.innerDiagram)
+		}
 	}
 	
 	protected def updateNode(XNode node) {
-		val boundsInDiagram = node.localToDiagram(node.snapBounds)
+		val boundsInDiagram = node.localToRootDiagram(node.snapBounds)
 		leftMap.add(
 			new NodeLine(
 				boundsInDiagram.minX,
@@ -129,6 +156,10 @@ class AuxiliaryLinesCache {
 	}
 
 	protected def unwatchNode(XNode node) {
+		if(node instanceof XDiagramContainer) {
+			if(node.isInnerDiagramActive) 
+				unwatchDiagram(node.innerDiagram)
+		}
 		leftMap.removeByShape(node)
 		centerXMap.removeByShape(node)
 		rightMap.removeByShape(node)
@@ -162,7 +193,7 @@ class AuxiliaryLinesCache {
 	}
 	
 	protected def updateControlPoint(XControlPoint point) {
-		val boundsInDiagram = point.localToDiagram(point.boundsInLocal)
+		val boundsInDiagram = point.localToRootDiagram(point.boundsInLocal)
 		centerXMap.add(
 			new NodeLine(
 				boundsInDiagram.center.x,

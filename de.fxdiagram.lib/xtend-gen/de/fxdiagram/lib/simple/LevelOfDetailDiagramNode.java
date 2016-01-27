@@ -17,7 +17,9 @@ import de.fxdiagram.lib.anchors.RoundedRectangleAnchors;
 import de.fxdiagram.lib.nodes.RectangleBorderPane;
 import de.fxdiagram.lib.simple.DiagramScaler;
 import java.util.logging.Logger;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -44,8 +46,6 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
   private Text label;
   
   private Group innerDiagramGroup;
-  
-  private XDiagram innerDiagram;
   
   private DiagramScaler diagramScaler;
   
@@ -77,11 +77,6 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
   }
   
   @Override
-  public XDiagram getInnerDiagram() {
-    return this.innerDiagram;
-  }
-  
-  @Override
   public Insets getInsets() {
     return null;
   }
@@ -89,29 +84,16 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
   @Override
   public boolean isInnerDiagramActive() {
     boolean _and = false;
-    boolean _isActive = this.innerDiagram.getIsActive();
+    XDiagram _innerDiagram = this.getInnerDiagram();
+    boolean _isActive = _innerDiagram.getIsActive();
     if (!_isActive) {
       _and = false;
     } else {
-      boolean _isVisible = this.innerDiagram.isVisible();
+      XDiagram _innerDiagram_1 = this.getInnerDiagram();
+      boolean _isVisible = _innerDiagram_1.isVisible();
       _and = _isVisible;
     }
     return _and;
-  }
-  
-  @Override
-  public void setInnerDiagram(final XDiagram innerDiagram) {
-    this.innerDiagram = innerDiagram;
-    ObservableList<Node> _children = this.pane.getChildren();
-    Group _group = new Group();
-    final Procedure1<Group> _function = (Group it) -> {
-      ObservableList<Node> _children_1 = it.getChildren();
-      _children_1.setAll(innerDiagram);
-    };
-    Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function);
-    _children.add((this.innerDiagramGroup = _doubleArrow));
-    DiagramScaler _diagramScaler = new DiagramScaler(innerDiagram);
-    this.diagramScaler = _diagramScaler;
   }
   
   @Override
@@ -129,17 +111,30 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
     };
     ObjectExtensions.<Text>operator_doubleArrow(
       this.label, _function);
-    boolean _equals = Objects.equal(this.innerDiagram, null);
+    XDiagram _innerDiagram = this.getInnerDiagram();
+    boolean _equals = Objects.equal(_innerDiagram, null);
     if (_equals) {
       String _name = this.getName();
       String _plus = ("No inner diagram set on node " + _name);
       String _plus_1 = (_plus + ". LOD behavior deactivated");
       LevelOfDetailDiagramNode.LOG.severe(_plus_1);
     } else {
+      ObservableList<Node> _children = this.pane.getChildren();
+      Group _group = new Group();
+      final Procedure1<Group> _function_1 = (Group it) -> {
+        ObservableList<Node> _children_1 = it.getChildren();
+        XDiagram _innerDiagram_1 = this.getInnerDiagram();
+        _children_1.setAll(_innerDiagram_1);
+      };
+      Group _doubleArrow = ObjectExtensions.<Group>operator_doubleArrow(_group, _function_1);
+      _children.add((this.innerDiagramGroup = _doubleArrow));
+      XDiagram _innerDiagram_1 = this.getInnerDiagram();
+      DiagramScaler _diagramScaler = new DiagramScaler(_innerDiagram_1);
+      this.diagramScaler = _diagramScaler;
       XDiagram _diagram = CoreExtensions.getDiagram(this);
       ViewportTransform _viewportTransform = _diagram.getViewportTransform();
       ReadOnlyDoubleProperty _scaleProperty = _viewportTransform.scaleProperty();
-      final ChangeListener<Number> _function_1 = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
+      final ChangeListener<Number> _function_2 = (ObservableValue<? extends Number> prop, Number oldVal, Number newVal) -> {
         Bounds _boundsInLocal = this.getBoundsInLocal();
         final Bounds bounds = this.localToScene(_boundsInLocal);
         double _width = bounds.getWidth();
@@ -152,8 +147,9 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
         } else {
           this.label.setVisible(false);
           this.innerDiagramGroup.setVisible(true);
-          this.innerDiagram.activate();
-          final Procedure1<DiagramScaler> _function_2 = (DiagramScaler it) -> {
+          XDiagram _innerDiagram_2 = this.getInnerDiagram();
+          _innerDiagram_2.activate();
+          final Procedure1<DiagramScaler> _function_3 = (DiagramScaler it) -> {
             Bounds _layoutBounds = this.label.getLayoutBounds();
             double _width_1 = _layoutBounds.getWidth();
             double _plus_2 = (_width_1 + 40);
@@ -165,12 +161,13 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
             it.activate();
           };
           ObjectExtensions.<DiagramScaler>operator_doubleArrow(
-            this.diagramScaler, _function_2);
-          Paint _backgroundPaint = this.innerDiagram.getBackgroundPaint();
+            this.diagramScaler, _function_3);
+          XDiagram _innerDiagram_3 = this.getInnerDiagram();
+          Paint _backgroundPaint = _innerDiagram_3.getBackgroundPaint();
           this.pane.setBackgroundPaint(_backgroundPaint);
         }
       };
-      _scaleProperty.addListener(_function_1);
+      _scaleProperty.addListener(_function_2);
     }
   }
   
@@ -189,5 +186,19 @@ public class LevelOfDetailDiagramNode extends XNode implements XDiagramContainer
   
   public String toString() {
     return ToString.toString(this);
+  }
+  
+  private SimpleObjectProperty<XDiagram> innerDiagramProperty = new SimpleObjectProperty<XDiagram>(this, "innerDiagram");
+  
+  public XDiagram getInnerDiagram() {
+    return this.innerDiagramProperty.get();
+  }
+  
+  public void setInnerDiagram(final XDiagram innerDiagram) {
+    this.innerDiagramProperty.set(innerDiagram);
+  }
+  
+  public ObjectProperty<XDiagram> innerDiagramProperty() {
+    return this.innerDiagramProperty;
   }
 }
