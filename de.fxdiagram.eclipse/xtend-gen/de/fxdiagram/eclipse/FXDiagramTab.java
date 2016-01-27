@@ -24,6 +24,7 @@ import de.fxdiagram.core.layout.Layouter;
 import de.fxdiagram.core.model.DomainObjectDescriptor;
 import de.fxdiagram.eclipse.ClearDiagramCommand;
 import de.fxdiagram.eclipse.FXDiagramView;
+import de.fxdiagram.eclipse.actions.EclipseSaveAction;
 import de.fxdiagram.eclipse.changes.IChangeListener;
 import de.fxdiagram.eclipse.changes.ModelChangeBroker;
 import de.fxdiagram.mapping.AbstractMapping;
@@ -50,6 +51,7 @@ import javafx.embed.swt.FXCanvas;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.util.Duration;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -87,6 +89,8 @@ public class FXDiagramTab {
   private final XDiagramConfigInterpreter configInterpreter = new XDiagramConfigInterpreter();
   
   private boolean isLinkWithEditor;
+  
+  private boolean dontSave = false;
   
   private IChangeListener changeListener;
   
@@ -126,8 +130,20 @@ public class FXDiagramTab {
     InitializingListener<String> _initializingListener = new InitializingListener<String>();
     final Procedure1<InitializingListener<String>> _function_3 = (InitializingListener<String> it) -> {
       final Procedure1<String> _function_4 = (String it_1) -> {
-        String _tabName = this.getTabName();
-        this.tab.setText(_tabName);
+        boolean _isDisposed = this.tab.isDisposed();
+        boolean _not = (!_isDisposed);
+        if (_not) {
+          String _xifexpression = null;
+          boolean _needsSave = root.getNeedsSave();
+          if (_needsSave) {
+            _xifexpression = "*";
+          } else {
+            _xifexpression = "";
+          }
+          String _tabName = this.getTabName();
+          String _plus = (_xifexpression + _tabName);
+          this.tab.setText(_plus);
+        }
       };
       it.setSet(_function_4);
     };
@@ -135,8 +151,20 @@ public class FXDiagramTab {
     CoreExtensions.<String>addInitializingListener(_fileNameProperty, _doubleArrow_1);
     BooleanProperty _needsSaveProperty = root.needsSaveProperty();
     final ChangeListener<Boolean> _function_4 = (ObservableValue<? extends Boolean> p, Boolean o, Boolean n) -> {
-      String _tabName = this.getTabName();
-      this.tab.setText(_tabName);
+      boolean _isDisposed = this.tab.isDisposed();
+      boolean _not = (!_isDisposed);
+      if (_not) {
+        String _xifexpression = null;
+        boolean _needsSave = root.getNeedsSave();
+        if (_needsSave) {
+          _xifexpression = "*";
+        } else {
+          _xifexpression = "";
+        }
+        String _tabName = this.getTabName();
+        String _plus = (_xifexpression + _tabName);
+        this.tab.setText(_plus);
+      }
     };
     _needsSaveProperty.addListener(_function_4);
     this.canvas.addFocusListener(new FocusListener() {
@@ -156,15 +184,49 @@ public class FXDiagramTab {
     });
   }
   
-  protected String getTabName() {
-    String _xifexpression = null;
+  public boolean confirmClose() {
+    boolean _or = false;
     boolean _needsSave = this.root.getNeedsSave();
-    if (_needsSave) {
-      _xifexpression = "*";
+    boolean _not = (!_needsSave);
+    if (_not) {
+      _or = true;
     } else {
-      _xifexpression = "";
+      _or = this.dontSave;
     }
-    final String prefix = _xifexpression;
+    if (_or) {
+      return true;
+    }
+    CTabFolder _parent = this.tab.getParent();
+    Shell _shell = _parent.getShell();
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("\'");
+    String _tabName = this.getTabName();
+    _builder.append(_tabName, "");
+    _builder.append("\' has been modified.");
+    _builder.newLineIfNotEmpty();
+    _builder.append("Save changes?");
+    _builder.newLine();
+    final MessageDialog dialog = new MessageDialog(_shell, 
+      "Save diagram", 
+      null, _builder.toString(), 
+      MessageDialog.QUESTION_WITH_CANCEL, 
+      new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL, IDialogConstants.CANCEL_LABEL }, 
+      SWT.NONE);
+    int _open = dialog.open();
+    switch (_open) {
+      case 0:
+        EclipseSaveAction _eclipseSaveAction = new EclipseSaveAction();
+        _eclipseSaveAction.doSave(this.root);
+        return true;
+      case 1:
+        this.dontSave = true;
+        return true;
+      default:
+        return false;
+    }
+  }
+  
+  protected String getTabName() {
     String _fileName = this.root.getFileName();
     String[] _split = null;
     if (_fileName!=null) {
@@ -178,14 +240,13 @@ public class FXDiagramTab {
     final String fileName = _last;
     boolean _equals = Objects.equal(fileName, null);
     if (_equals) {
-      return (prefix + "Untitled");
+      return "Untitled";
     }
     final int dotPos = fileName.lastIndexOf(".");
     if ((dotPos >= 0)) {
-      String _substring = fileName.substring(0, dotPos);
-      return (prefix + _substring);
+      return fileName.substring(0, dotPos);
     } else {
-      return (prefix + fileName);
+      return fileName;
     }
   }
   

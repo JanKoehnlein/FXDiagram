@@ -33,30 +33,37 @@ class EclipseSaveAction implements DiagramAction {
 	override perform(XRoot root) {
 		if(root.diagram != null) {
 			Display.^default.asyncExec [
-				val workspaceDir = ResourcesPlugin.workspace.root
-				val file = if(root.fileName != null) {
-					workspaceDir.getFile(new Path(root.fileName))
-				} else {
-					val workspaceJavaFile = workspaceDir.location.toFile
-					val fileChooser = new FileChooser() => [
-						extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
-						initialDirectory = workspaceJavaFile
-					]
-					fileChooser.showSaveDialog(root.scene.window).toWorkspaceFile
-				} 
-				if(file != null) {
-					file.createParents
-					val writer = new StringWriter
-					new ModelSave().save(root, writer)
-					val stream = new ByteArrayInputStream(writer.toString.getBytes(file.getCharset(true)))
-					if(file.exists)
-						file.setContents(stream, true, true, new NullProgressMonitor)
-					else
-						file.create(stream, true, new NullProgressMonitor)
-					root.fileName = file.fullPath.toOSString
-					root.needsSave = false
-				}
+				doSave(root)			
 			]
+		}
+	}
+	
+	/**
+	 * Must be run in Display thread
+	 */
+	def doSave(XRoot root) {
+		val workspaceDir = ResourcesPlugin.workspace.root
+		val file = if(root.fileName != null) {
+			workspaceDir.getFile(new Path(root.fileName))
+		} else {
+			val workspaceJavaFile = workspaceDir.location.toFile
+			val fileChooser = new FileChooser() => [
+				extensionFilters += new FileChooser.ExtensionFilter("FXDiagram", "*.fxd")
+				initialDirectory = workspaceJavaFile
+			]
+			fileChooser.showSaveDialog(root.scene.window).toWorkspaceFile
+		} 
+		if(file != null) {
+			file.createParents
+			val writer = new StringWriter
+			new ModelSave().save(root, writer)
+			val stream = new ByteArrayInputStream(writer.toString.getBytes(file.getCharset(true)))
+			if(file.exists)
+				file.setContents(stream, true, true, new NullProgressMonitor)
+			else
+				file.create(stream, true, new NullProgressMonitor)
+			root.fileName = file.fullPath.toOSString
+			root.needsSave = false
 		}
 	}
 	

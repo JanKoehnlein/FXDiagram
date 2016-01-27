@@ -65,6 +65,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabFolder2Adapter;
+import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -119,6 +121,14 @@ public class FXDiagramView extends ViewPart {
     IWorkbench _workbench = PlatformUI.getWorkbench();
     ModelChangeBroker _modelChangeBroker = new ModelChangeBroker(_workbench);
     this.modelChangeBroker = _modelChangeBroker;
+    this.tabFolder.addCTabFolder2Listener(new CTabFolder2Adapter() {
+      @Override
+      public void close(final CTabFolderEvent event) {
+        final FXDiagramTab tab = FXDiagramView.this.tab2content.get(event.item);
+        boolean _confirmClose = tab.confirmClose();
+        event.doit = _confirmClose;
+      }
+    });
     IWorkbenchPartSite _site = this.getSite();
     ICommandService _service = _site.<ICommandService>getService(ICommandService.class);
     final Command command = _service.getCommand("de.fxdiagram.eclipse.LinkWithEditor");
@@ -159,7 +169,13 @@ public class FXDiagramView extends ViewPart {
   }
   
   public FXDiagramTab removeTab(final CTabItem tab) {
-    return this.tab2content.remove(tab);
+    FXDiagramTab _xblockexpression = null;
+    {
+      FXDiagramTab _get = this.tab2content.get(tab);
+      _get.confirmClose();
+      _xblockexpression = this.tab2content.remove(tab);
+    }
+    return _xblockexpression;
   }
   
   protected XRoot createRoot() {
@@ -286,7 +302,7 @@ public class FXDiagramView extends ViewPart {
         final DiagramMappingCall<?, T> mappingCall = ((DiagramEntryCall<?, T>) entryCall).getMappingCall();
         Function1<? super T, ?> _selector = mappingCall.getSelector();
         final Object diagramElement = _selector.apply(element);
-        XDiagramConfig _config = entryCall.getConfig();
+        XDiagramConfig _config = ((DiagramEntryCall<?, ?>)entryCall).getConfig();
         IMappedElementDescriptorProvider _domainObjectProvider = _config.getDomainObjectProvider();
         AbstractMapping<?> _mapping = mappingCall.getMapping();
         final IMappedElementDescriptor<Object> diagramDescriptor = _domainObjectProvider.<Object>createMappedElementDescriptor(diagramElement, _mapping);

@@ -36,22 +36,24 @@ import javafx.embed.swt.FXCanvas
 import javafx.event.Event
 import javafx.event.EventHandler
 import javafx.event.EventType
+import org.eclipse.core.resources.IResource
 import org.eclipse.core.resources.ResourcesPlugin
+import org.eclipse.core.runtime.NullProgressMonitor
 import org.eclipse.core.runtime.Path
+import org.eclipse.jface.dialogs.MessageDialog
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.CTabFolder
+import org.eclipse.swt.custom.CTabFolder2Adapter
+import org.eclipse.swt.custom.CTabFolderEvent
 import org.eclipse.swt.custom.CTabItem
 import org.eclipse.swt.widgets.Composite
+import org.eclipse.swt.widgets.Display
 import org.eclipse.ui.IEditorPart
 import org.eclipse.ui.PlatformUI
 import org.eclipse.ui.commands.ICommandService
 import org.eclipse.ui.handlers.RegistryToggleState
 import org.eclipse.ui.part.ViewPart
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.jface.dialogs.MessageDialog
-import org.eclipse.swt.widgets.Display
-import org.eclipse.core.resources.IResource
-import org.eclipse.core.runtime.NullProgressMonitor
 
 /**
  * Embeds an {@link FXCanvas} with an {@link XRoot} in an eclipse {@link ViewPart}.
@@ -74,6 +76,12 @@ class FXDiagramView extends ViewPart {
 		tabFolder = new CTabFolder(parent, SWT.BORDER + SWT.BOTTOM)
 		tabFolder.background = parent.display.getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND)
 		modelChangeBroker = new ModelChangeBroker(PlatformUI.workbench)
+		tabFolder.addCTabFolder2Listener(new CTabFolder2Adapter() {
+			override close(CTabFolderEvent event) {
+				val tab = tab2content.get(event.item)
+				event.doit = tab.confirmClose 
+			}
+		})
 		val command = site.getService(ICommandService).getCommand('de.fxdiagram.eclipse.LinkWithEditor')
 		linkWithEditor = command.getState(RegistryToggleState.STATE_ID)?.value as Boolean ?: false
 	}
@@ -90,6 +98,7 @@ class FXDiagramView extends ViewPart {
 	}
 	
 	public def removeTab(CTabItem tab) {
+		tab2content.get(tab).confirmClose
 		tab2content.remove(tab)
 	}
 	

@@ -12,6 +12,7 @@ import de.fxdiagram.core.command.ParallelAnimationCommand
 import de.fxdiagram.core.command.SelectAndRevealCommand
 import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.layout.Layouter
+import de.fxdiagram.eclipse.actions.EclipseSaveAction
 import de.fxdiagram.eclipse.changes.IChangeListener
 import de.fxdiagram.mapping.IMappedElementDescriptor
 import de.fxdiagram.mapping.XDiagramConfig
@@ -37,6 +38,7 @@ import org.eclipse.ui.keys.IBindingService
 
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DurationExtensions.*
+import static org.eclipse.jface.dialogs.IDialogConstants.*
 
 @Logging
 class FXDiagramTab {
@@ -47,6 +49,7 @@ class FXDiagramTab {
 	val configInterpreter = new XDiagramConfigInterpreter
 
 	boolean isLinkWithEditor
+	boolean dontSave = false
 
 	IChangeListener changeListener 
 
@@ -72,11 +75,13 @@ class FXDiagramTab {
 		]
 		root.fileNameProperty.addInitializingListener(new InitializingListener() => [
 			set = [
-				tab.text = tabName
+				if(!tab.disposed)
+					tab.text = (if(root.needsSave) '*' else '') + tabName
 			]		
 		])
 		root.needsSaveProperty.addListener [ p, o, n |
-			tab.text = tabName
+			if(!tab.disposed)
+				tab.text = (if(root.needsSave) '*' else '') + tabName
 		]
 		canvas.addFocusListener(new FocusListener {
 			override focusGained(FocusEvent e) {
@@ -89,16 +94,43 @@ class FXDiagramTab {
 		})
 	}
 	
+	def boolean confirmClose() {
+		if(!root.needsSave|| dontSave) 
+			return true
+		val dialog = new MessageDialog(
+			tab.parent.shell,
+			'Save diagram',
+			null,
+			'''
+				'«tabName»' has been modified.
+				Save changes?
+			''',			
+			MessageDialog.QUESTION_WITH_CANCEL,
+			#[YES_LABEL, NO_LABEL, CANCEL_LABEL], 
+			SWT.NONE)
+		switch dialog.open {
+			case 0: {
+				new EclipseSaveAction().doSave(root)
+				return true					
+			} 
+			case 1:	{
+				dontSave = true				
+				return true
+			}
+			default: 
+				return false			
+		}
+ 	}
+	
 	protected def getTabName() {
-		val prefix = if(root.needsSave) '*' else '' 
 		val fileName = root.fileName?.split(Pattern.quote(File.separator))?.last
 		if(fileName == null)
-			return prefix + 'Untitled'
+			return 'Untitled'
 		val dotPos = fileName.lastIndexOf('.')
 		if(dotPos >= 0) 
-			return prefix + fileName.substring(0, dotPos)	
+			return fileName.substring(0, dotPos)	
 		else
-			return prefix + fileName 
+			return fileName 
 	}
 
 	def getRoot() { root }

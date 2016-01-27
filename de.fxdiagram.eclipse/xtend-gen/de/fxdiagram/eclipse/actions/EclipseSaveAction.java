@@ -61,65 +61,72 @@ public class EclipseSaveAction implements DiagramAction {
     if (_notEquals) {
       Display _default = Display.getDefault();
       final Runnable _function = () -> {
-        try {
-          IWorkspace _workspace = ResourcesPlugin.getWorkspace();
-          final IWorkspaceRoot workspaceDir = _workspace.getRoot();
-          IFile _xifexpression = null;
-          String _fileName = root.getFileName();
-          boolean _notEquals_1 = (!Objects.equal(_fileName, null));
-          if (_notEquals_1) {
-            String _fileName_1 = root.getFileName();
-            Path _path = new Path(_fileName_1);
-            _xifexpression = workspaceDir.getFile(_path);
-          } else {
-            IFile _xblockexpression = null;
-            {
-              IPath _location = workspaceDir.getLocation();
-              final File workspaceJavaFile = _location.toFile();
-              FileChooser _fileChooser = new FileChooser();
-              final Procedure1<FileChooser> _function_1 = (FileChooser it) -> {
-                ObservableList<FileChooser.ExtensionFilter> _extensionFilters = it.getExtensionFilters();
-                FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FXDiagram", "*.fxd");
-                _extensionFilters.add(_extensionFilter);
-                it.setInitialDirectory(workspaceJavaFile);
-              };
-              final FileChooser fileChooser = ObjectExtensions.<FileChooser>operator_doubleArrow(_fileChooser, _function_1);
-              Scene _scene = root.getScene();
-              Window _window = _scene.getWindow();
-              File _showSaveDialog = fileChooser.showSaveDialog(_window);
-              _xblockexpression = FileExtensions.toWorkspaceFile(_showSaveDialog);
-            }
-            _xifexpression = _xblockexpression;
-          }
-          final IFile file = _xifexpression;
-          boolean _notEquals_2 = (!Objects.equal(file, null));
-          if (_notEquals_2) {
-            FileExtensions.createParents(file);
-            final StringWriter writer = new StringWriter();
-            ModelSave _modelSave = new ModelSave();
-            _modelSave.save(root, writer);
-            String _string = writer.toString();
-            String _charset = file.getCharset(true);
-            byte[] _bytes = _string.getBytes(_charset);
-            final ByteArrayInputStream stream = new ByteArrayInputStream(_bytes);
-            boolean _exists = file.exists();
-            if (_exists) {
-              NullProgressMonitor _nullProgressMonitor = new NullProgressMonitor();
-              file.setContents(stream, true, true, _nullProgressMonitor);
-            } else {
-              NullProgressMonitor _nullProgressMonitor_1 = new NullProgressMonitor();
-              file.create(stream, true, _nullProgressMonitor_1);
-            }
-            IPath _fullPath = file.getFullPath();
-            String _oSString = _fullPath.toOSString();
-            root.setFileName(_oSString);
-            root.setNeedsSave(false);
-          }
-        } catch (Throwable _e) {
-          throw Exceptions.sneakyThrow(_e);
-        }
+        this.doSave(root);
       };
       _default.asyncExec(_function);
+    }
+  }
+  
+  /**
+   * Must be run in Display thread
+   */
+  public void doSave(final XRoot root) {
+    try {
+      IWorkspace _workspace = ResourcesPlugin.getWorkspace();
+      final IWorkspaceRoot workspaceDir = _workspace.getRoot();
+      IFile _xifexpression = null;
+      String _fileName = root.getFileName();
+      boolean _notEquals = (!Objects.equal(_fileName, null));
+      if (_notEquals) {
+        String _fileName_1 = root.getFileName();
+        Path _path = new Path(_fileName_1);
+        _xifexpression = workspaceDir.getFile(_path);
+      } else {
+        IFile _xblockexpression = null;
+        {
+          IPath _location = workspaceDir.getLocation();
+          final File workspaceJavaFile = _location.toFile();
+          FileChooser _fileChooser = new FileChooser();
+          final Procedure1<FileChooser> _function = (FileChooser it) -> {
+            ObservableList<FileChooser.ExtensionFilter> _extensionFilters = it.getExtensionFilters();
+            FileChooser.ExtensionFilter _extensionFilter = new FileChooser.ExtensionFilter("FXDiagram", "*.fxd");
+            _extensionFilters.add(_extensionFilter);
+            it.setInitialDirectory(workspaceJavaFile);
+          };
+          final FileChooser fileChooser = ObjectExtensions.<FileChooser>operator_doubleArrow(_fileChooser, _function);
+          Scene _scene = root.getScene();
+          Window _window = _scene.getWindow();
+          File _showSaveDialog = fileChooser.showSaveDialog(_window);
+          _xblockexpression = FileExtensions.toWorkspaceFile(_showSaveDialog);
+        }
+        _xifexpression = _xblockexpression;
+      }
+      final IFile file = _xifexpression;
+      boolean _notEquals_1 = (!Objects.equal(file, null));
+      if (_notEquals_1) {
+        FileExtensions.createParents(file);
+        final StringWriter writer = new StringWriter();
+        ModelSave _modelSave = new ModelSave();
+        _modelSave.save(root, writer);
+        String _string = writer.toString();
+        String _charset = file.getCharset(true);
+        byte[] _bytes = _string.getBytes(_charset);
+        final ByteArrayInputStream stream = new ByteArrayInputStream(_bytes);
+        boolean _exists = file.exists();
+        if (_exists) {
+          NullProgressMonitor _nullProgressMonitor = new NullProgressMonitor();
+          file.setContents(stream, true, true, _nullProgressMonitor);
+        } else {
+          NullProgressMonitor _nullProgressMonitor_1 = new NullProgressMonitor();
+          file.create(stream, true, _nullProgressMonitor_1);
+        }
+        IPath _fullPath = file.getFullPath();
+        String _oSString = _fullPath.toOSString();
+        root.setFileName(_oSString);
+        root.setNeedsSave(false);
+      }
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
     }
   }
 }
