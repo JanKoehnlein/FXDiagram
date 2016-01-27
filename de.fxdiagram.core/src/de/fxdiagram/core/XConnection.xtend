@@ -78,6 +78,7 @@ class XConnection extends XDomainObjectShape {
 
 	new() {
 		addOppositeListeners
+		connectionRouter = new ConnectionRouter(this)
 	}
 
 	new(DomainObjectDescriptor domainObject) {

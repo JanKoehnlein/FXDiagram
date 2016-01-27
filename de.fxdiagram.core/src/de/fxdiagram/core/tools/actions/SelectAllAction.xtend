@@ -1,5 +1,6 @@
 package de.fxdiagram.core.tools.actions
 
+import de.fxdiagram.core.XConnectionLabel
 import de.fxdiagram.core.XRoot
 import eu.hansolo.enzo.radialmenu.SymbolType
 import javafx.scene.input.KeyCode
@@ -20,6 +21,10 @@ class SelectAllAction implements DiagramAction {
 	}
 
 	override perform(XRoot root) {
-		(root.diagram.connections + root.diagram.nodes).forEach[if(selectable) selected = true]
+		root.diagram.allShapes.filter[
+			!(it instanceof XConnectionLabel)
+		].forEach[
+			if(selectable) selected = true
+		]
 	}
 }

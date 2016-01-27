@@ -105,6 +105,8 @@ public class XConnection extends XDomainObjectShape {
   
   public XConnection() {
     this.addOppositeListeners();
+    ConnectionRouter _connectionRouter = new ConnectionRouter(this);
+    this.setConnectionRouter(_connectionRouter);
   }
   
   public XConnection(final DomainObjectDescriptor domainObject) {
