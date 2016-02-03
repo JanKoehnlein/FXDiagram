@@ -6,7 +6,8 @@ import de.fxdiagram.annotations.properties.ModelNode
 import de.fxdiagram.core.anchors.ArrowHead
 import de.fxdiagram.core.anchors.ConnectionRouter
 import de.fxdiagram.core.anchors.TriangleArrowHead
-import de.fxdiagram.core.command.AddControlPointCommand
+import de.fxdiagram.core.behavior.AddControlPointBehavior
+import de.fxdiagram.core.behavior.MoveBehavior
 import de.fxdiagram.core.extensions.InitializingListListener
 import de.fxdiagram.core.extensions.InitializingListener
 import de.fxdiagram.core.model.DomainObjectDescriptor
@@ -33,7 +34,6 @@ import static javafx.collections.FXCollections.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
 import static extension de.fxdiagram.core.extensions.DoubleExpressionExtensions.*
-import de.fxdiagram.core.behavior.MoveBehavior
 
 /**
  * A line connecting two {@link XNode}s.
@@ -200,6 +200,7 @@ class XConnection extends XDomainObjectShape {
 		])
 		labels.forEach[activate]
 		connectionRouter.activate
+		addBehavior(new AddControlPointBehavior(this))
 		updateShapes
 	}
 	
@@ -216,11 +217,8 @@ class XConnection extends XDomainObjectShape {
 			}
 		}
 		if(!controlPointPicked && (kind==POLYLINE || wasSelected)) {
-			val createCommand = AddControlPointCommand.createAddControlPointCommand(
-				this, sceneToLocal(sceneX, sceneY) 
-			)
-			if(createCommand != null)
-				root.commandStack.execute(createCommand)			
+			getBehavior(AddControlPointBehavior)
+				?.addControlPoint(sceneToLocal(sceneX, sceneY))
 		}
 	}
 	

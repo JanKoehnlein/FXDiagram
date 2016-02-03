@@ -9,14 +9,11 @@ import de.fxdiagram.core.XControlPoint;
 import de.fxdiagram.core.XDiagram;
 import de.fxdiagram.core.XDomainObjectShape;
 import de.fxdiagram.core.XNode;
-import de.fxdiagram.core.XRoot;
 import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
+import de.fxdiagram.core.behavior.AddControlPointBehavior;
 import de.fxdiagram.core.behavior.MoveBehavior;
-import de.fxdiagram.core.command.AbstractCommand;
-import de.fxdiagram.core.command.AddControlPointCommand;
-import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.BezierExtensions;
 import de.fxdiagram.core.extensions.CoreExtensions;
 import de.fxdiagram.core.extensions.DoubleExpressionExtensions;
@@ -386,6 +383,8 @@ public class XConnection extends XDomainObjectShape {
     _labels.forEach(_function_3);
     ConnectionRouter _connectionRouter = this.getConnectionRouter();
     _connectionRouter.activate();
+    AddControlPointBehavior _addControlPointBehavior = new AddControlPointBehavior(this);
+    this.addBehavior(_addControlPointBehavior);
     this.updateShapes();
   }
   
@@ -427,15 +426,12 @@ public class XConnection extends XDomainObjectShape {
       _and = _or;
     }
     if (_and) {
-      double _sceneX_1 = it.getSceneX();
-      double _sceneY_1 = it.getSceneY();
-      Point2D _sceneToLocal = this.sceneToLocal(_sceneX_1, _sceneY_1);
-      final AbstractCommand createCommand = AddControlPointCommand.createAddControlPointCommand(this, _sceneToLocal);
-      boolean _notEquals = (!Objects.equal(createCommand, null));
-      if (_notEquals) {
-        XRoot _root = CoreExtensions.getRoot(this);
-        CommandStack _commandStack = _root.getCommandStack();
-        _commandStack.execute(createCommand);
+      AddControlPointBehavior _behavior_1 = this.<AddControlPointBehavior>getBehavior(AddControlPointBehavior.class);
+      if (_behavior_1!=null) {
+        double _sceneX_1 = it.getSceneX();
+        double _sceneY_1 = it.getSceneY();
+        Point2D _sceneToLocal = this.sceneToLocal(_sceneX_1, _sceneY_1);
+        _behavior_1.addControlPoint(_sceneToLocal);
       }
     }
   }

@@ -16,7 +16,7 @@ class SetControlPointsCommand extends AbstractCommand {
 	val Point2D localMousePos
 	
 	boolean splineShapeKeeperState
-	ArrayList<XControlPoint> oldControlPoints
+	List<XControlPoint> oldControlPoints
 			
 	override execute(CommandContext context) {
 		oldControlPoints = new ArrayList(connection.controlPoints)
@@ -26,7 +26,7 @@ class SetControlPointsCommand extends AbstractCommand {
 		if(localMousePos != null) {
 			val mousePos = connection.localToScreen(localMousePos)
 			newControlPoints.filter[selected].forEach[
-				getBehavior(MoveBehavior).startDrag(mousePos.x, mousePos.y)
+				getBehavior(MoveBehavior)?.startDrag(mousePos.x, mousePos.y)
 			]
 		}
 	}

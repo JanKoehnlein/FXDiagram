@@ -27,7 +27,7 @@ public class SetControlPointsCommand extends AbstractCommand {
   
   private boolean splineShapeKeeperState;
   
-  private ArrayList<XControlPoint> oldControlPoints;
+  private List<XControlPoint> oldControlPoints;
   
   @Override
   public void execute(final CommandContext context) {
@@ -50,9 +50,11 @@ public class SetControlPointsCommand extends AbstractCommand {
       Iterable<XControlPoint> _filter = IterableExtensions.<XControlPoint>filter(this.newControlPoints, _function);
       final Consumer<XControlPoint> _function_1 = (XControlPoint it) -> {
         MoveBehavior _behavior = it.<MoveBehavior>getBehavior(MoveBehavior.class);
-        double _x = mousePos.getX();
-        double _y = mousePos.getY();
-        _behavior.startDrag(_x, _y);
+        if (_behavior!=null) {
+          double _x = mousePos.getX();
+          double _y = mousePos.getY();
+          _behavior.startDrag(_x, _y);
+        }
       };
       _filter.forEach(_function_1);
     }

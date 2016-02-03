@@ -1,10 +1,11 @@
 package de.fxdiagram.core.extensions
 
-import javafx.scene.shape.CubicCurve
 import javafx.geometry.Point2D
+import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.QuadCurve
 
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
+
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
 /**
@@ -143,5 +144,4 @@ class BezierExtensions {
 		}
 		return (left + right) / 2
 	}
-
 }
