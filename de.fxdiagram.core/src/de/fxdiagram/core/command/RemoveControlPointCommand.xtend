@@ -15,13 +15,15 @@ import javafx.scene.shape.MoveTo
 import javafx.scene.shape.Path
 import javafx.util.Duration
 
-import static de.fxdiagram.core.XConnection.Kind.*
 import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
+import static de.fxdiagram.core.extensions.Point2DExtensions.*
 import static java.lang.Math.*
+import static de.fxdiagram.core.XConnection.Kind.*
+import static de.fxdiagram.core.XControlPoint.Type.*
 
 import static extension de.fxdiagram.core.extensions.BoundsExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
+import java.util.ArrayList
 
 class RemoveControlPointCommand extends AbstractAnimationCommand {
 	
@@ -40,14 +42,38 @@ class RemoveControlPointCommand extends AbstractAnimationCommand {
 	 */
 	new(XConnection connection, List<XControlPoint> removeControlPoints) {
 		this.connection = connection
-		this.toKind = POLYLINE
 		this.fromKind = connection.kind
 		this.fromPoints = newArrayList(connection.controlPoints.map[new Point2D(layoutX, layoutY)])
-		
 		val controlPoints = connection.controlPoints
 		val reallyRemovedPoints = removeControlPoints.toSet
+		switch fromKind {
+			case QUAD_CURVE:
+				removeControlPoints.forEach[
+					val i = controlPoints.indexOf(it)
+					if(i < controlPoints.size - 2)
+						reallyRemovedPoints += controlPoints.get(i+1)
+					else 
+						reallyRemovedPoints += controlPoints.get(i-1)
+				]
+			case CUBIC_CURVE:
+				removeControlPoints.forEach[
+					val i = controlPoints.indexOf(it)
+					if(i < controlPoints.size - 3) {
+						reallyRemovedPoints += controlPoints.get(i+1)
+						reallyRemovedPoints += controlPoints.get(i+2)
+					} else {
+						reallyRemovedPoints += controlPoints.get(controlPoints.size-2)
+						reallyRemovedPoints += controlPoints.get(controlPoints.size-3)
+						reallyRemovedPoints += controlPoints.get(controlPoints.size-4)
+					}
+				]
+		}
 		reallyRemovedPoints.remove(controlPoints.head)
 		reallyRemovedPoints.remove(controlPoints.last)
+		if(controlPoints.size - reallyRemovedPoints.size == 2) 
+			toKind = POLYLINE
+		else 
+			toKind = connection.kind
 		toPoints = newArrayList
 		var XControlPoint lastRemaining = null
 		var segmentRemoveCount = 0
@@ -83,12 +109,20 @@ class RemoveControlPointCommand extends AbstractAnimationCommand {
 						} else {
 							new Point2D(controlPoint.layoutX, controlPoint.layoutY)
 						}
-					for(j: 1..segmentRemoveCount) 
-						toPoints += linear(
-							segmentStart, 
-							segmentEnd, 
-							j as double / (segmentRemoveCount + 1)
-						)
+					for(j: 1..segmentRemoveCount) {
+						if(toKind == POLYLINE) {
+							toPoints += linear(
+								segmentStart, 
+								segmentEnd, 
+								j as double / (segmentRemoveCount + 1)
+							)
+						} else {
+							if(controlPoint.type != CONTROL_POINT)
+								toPoints += segmentEnd
+							else
+								toPoints += segmentStart
+						}
+					}
 					segmentRemoveCount = 0
 				} 
 				lastRemaining = controlPoint
@@ -122,17 +156,18 @@ class RemoveControlPointCommand extends AbstractAnimationCommand {
 		Duration duration
 	) {
 		val morph = new ParallelTransition
-		connection.kind = toKind
-		addBefore.entrySet.sortBy[key].forEach[connection.controlPoints.add(key, value)]
-		val controlPoints = connection.controlPoints
-		for(i: 1..<controlPoints.size-1) {
+		val newControlPoints = new ArrayList(connection.controlPoints)
+		addBefore.entrySet.sortBy[key].forEach[newControlPoints.add(key, value)]
+		connection.controlPoints.setAll(newControlPoints)
+		for(i: 1..<newControlPoints.size-1) {
 			val fromPoint = from.get(min(from.size-1, i))
 			val toPoint = to.get(min(to.size-1, i))
-			val currentControlPoint = controlPoints.get(i)
+			val currentControlPoint = newControlPoints.get(i)
 			if(fromPoint.distance(toPoint) > EPSILON)
 				morph.children += createMoveTransition(currentControlPoint, fromPoint, toPoint, duration)
 		}
 		morph.onFinished = [
+			connection.kind = toKind
 			connection.connectionRouter.shrinkToSize(to.size)
 			connection.controlPoints -= removeAfter.values
 			connection.controlPoints.forEach [

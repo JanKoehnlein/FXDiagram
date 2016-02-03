@@ -36,8 +36,8 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   }
   
   @Override
-  public void activate() {
-    super.activate();
+  public void doActivate() {
+    super.doActivate();
     XControlPoint _host = this.getHost();
     BooleanProperty _selectedProperty = _host.selectedProperty();
     final ChangeListener<Boolean> _function = (ObservableValue<? extends Boolean> p, Boolean o, Boolean newValue) -> {
@@ -346,23 +346,28 @@ public class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
   }
   
   protected void updateDangling(final int index, final List<XControlPoint> siblings) {
-    final XControlPoint predecessor = siblings.get((index - 1));
-    final XControlPoint successor = siblings.get((index + 1));
-    double _layoutX = predecessor.getLayoutX();
-    double _layoutY = predecessor.getLayoutY();
-    XControlPoint _host = this.getHost();
-    double _layoutX_1 = _host.getLayoutX();
-    XControlPoint _host_1 = this.getHost();
-    double _layoutY_1 = _host_1.getLayoutY();
-    double _layoutX_2 = successor.getLayoutX();
-    double _layoutY_2 = successor.getLayoutY();
-    boolean _areOnSameLine = Point2DExtensions.areOnSameLine(_layoutX, _layoutY, _layoutX_1, _layoutY_1, _layoutX_2, _layoutY_2);
-    if (_areOnSameLine) {
-      XControlPoint _host_2 = this.getHost();
-      _host_2.setType(XControlPoint.Type.DANGLING);
-    } else {
-      XControlPoint _host_3 = this.getHost();
-      _host_3.setType(XControlPoint.Type.INTERPOLATED);
+    XConnection _connection = this.getConnection();
+    XConnection.Kind _kind = _connection.getKind();
+    boolean _equals = Objects.equal(_kind, XConnection.Kind.POLYLINE);
+    if (_equals) {
+      final XControlPoint predecessor = siblings.get((index - 1));
+      final XControlPoint successor = siblings.get((index + 1));
+      double _layoutX = predecessor.getLayoutX();
+      double _layoutY = predecessor.getLayoutY();
+      XControlPoint _host = this.getHost();
+      double _layoutX_1 = _host.getLayoutX();
+      XControlPoint _host_1 = this.getHost();
+      double _layoutY_1 = _host_1.getLayoutY();
+      double _layoutX_2 = successor.getLayoutX();
+      double _layoutY_2 = successor.getLayoutY();
+      boolean _areOnSameLine = Point2DExtensions.areOnSameLine(_layoutX, _layoutY, _layoutX_1, _layoutY_1, _layoutX_2, _layoutY_2);
+      if (_areOnSameLine) {
+        XControlPoint _host_2 = this.getHost();
+        _host_2.setType(XControlPoint.Type.DANGLING);
+      } else {
+        XControlPoint _host_3 = this.getHost();
+        _host_3.setType(XControlPoint.Type.INTERPOLATED);
+      }
     }
   }
   

@@ -25,8 +25,8 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 		super(host)
 	}
 	
-	override activate() {
-		super.activate
+	override doActivate() {
+		super.doActivate
 		host.selectedProperty.addListener [ p, o, newValue |
 			val connection = getConnection()
 			if(!newValue && connection != null && connection.kind == POLYLINE) {
@@ -165,15 +165,17 @@ class ControlPointMoveBehavior extends MoveBehavior<XControlPoint> {
 	}
 	
 	protected def updateDangling(int index, List<XControlPoint> siblings) {
-		val predecessor = siblings.get(index-1)
-		val successor = siblings.get(index+1)
-		if(areOnSameLine(
-			predecessor.layoutX, predecessor.layoutY,
-			host.layoutX, host.layoutY,
-			successor.layoutX, successor.layoutY)) 
-				host.type = DANGLING
-			else
-				host.type = INTERPOLATED
+		if(connection.kind == POLYLINE) {
+			val predecessor = siblings.get(index-1)
+			val successor = siblings.get(index+1)
+			if(areOnSameLine(
+				predecessor.layoutX, predecessor.layoutY,
+				host.layoutX, host.layoutY,
+				successor.layoutX, successor.layoutY)) 
+					host.type = DANGLING
+				else
+					host.type = INTERPOLATED
+		}
 	}
 
 	protected def getSiblings() {

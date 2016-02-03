@@ -10,6 +10,8 @@ import org.eclipse.xtext.xbase.lib.Pure;
 public class NumberExpressionExtensions {
   public static double EPSILON = 1e-9;
   
+  public static double SQRT_EPSILON = Math.sqrt(1e-9);
+  
   @Pure
   public static BooleanBinding operator_lessThan(final NumberExpressionBase a, final ObservableNumberValue b) {
     return a.lessThan(b);

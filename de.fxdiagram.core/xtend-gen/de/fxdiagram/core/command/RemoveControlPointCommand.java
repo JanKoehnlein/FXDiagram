@@ -65,7 +65,6 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
    */
   public RemoveControlPointCommand(final XConnection connection, final List<XControlPoint> removeControlPoints) {
     this.connection = connection;
-    this.toKind = XConnection.Kind.POLYLINE;
     XConnection.Kind _kind = connection.getKind();
     this.fromKind = _kind;
     ObservableList<XControlPoint> _controlPoints = connection.getControlPoints();
@@ -79,16 +78,77 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
     this.fromPoints = _newArrayList;
     final ObservableList<XControlPoint> controlPoints = connection.getControlPoints();
     final Set<XControlPoint> reallyRemovedPoints = IterableExtensions.<XControlPoint>toSet(removeControlPoints);
+    final XConnection.Kind fromKind = this.fromKind;
+    if (fromKind != null) {
+      switch (fromKind) {
+        case QUAD_CURVE:
+          final Consumer<XControlPoint> _function_1 = (XControlPoint it) -> {
+            final int i = controlPoints.indexOf(it);
+            int _size = controlPoints.size();
+            int _minus = (_size - 2);
+            boolean _lessThan = (i < _minus);
+            if (_lessThan) {
+              XControlPoint _get = controlPoints.get((i + 1));
+              reallyRemovedPoints.add(_get);
+            } else {
+              XControlPoint _get_1 = controlPoints.get((i - 1));
+              reallyRemovedPoints.add(_get_1);
+            }
+          };
+          removeControlPoints.forEach(_function_1);
+          break;
+        case CUBIC_CURVE:
+          final Consumer<XControlPoint> _function_2 = (XControlPoint it) -> {
+            final int i = controlPoints.indexOf(it);
+            int _size = controlPoints.size();
+            int _minus = (_size - 3);
+            boolean _lessThan = (i < _minus);
+            if (_lessThan) {
+              XControlPoint _get = controlPoints.get((i + 1));
+              reallyRemovedPoints.add(_get);
+              XControlPoint _get_1 = controlPoints.get((i + 2));
+              reallyRemovedPoints.add(_get_1);
+            } else {
+              int _size_1 = controlPoints.size();
+              int _minus_1 = (_size_1 - 2);
+              XControlPoint _get_2 = controlPoints.get(_minus_1);
+              reallyRemovedPoints.add(_get_2);
+              int _size_2 = controlPoints.size();
+              int _minus_2 = (_size_2 - 3);
+              XControlPoint _get_3 = controlPoints.get(_minus_2);
+              reallyRemovedPoints.add(_get_3);
+              int _size_3 = controlPoints.size();
+              int _minus_3 = (_size_3 - 4);
+              XControlPoint _get_4 = controlPoints.get(_minus_3);
+              reallyRemovedPoints.add(_get_4);
+            }
+          };
+          removeControlPoints.forEach(_function_2);
+          break;
+        default:
+          break;
+      }
+    }
     XControlPoint _head = IterableExtensions.<XControlPoint>head(controlPoints);
     reallyRemovedPoints.remove(_head);
     XControlPoint _last = IterableExtensions.<XControlPoint>last(controlPoints);
     reallyRemovedPoints.remove(_last);
+    int _size = controlPoints.size();
+    int _size_1 = reallyRemovedPoints.size();
+    int _minus = (_size - _size_1);
+    boolean _equals = (_minus == 2);
+    if (_equals) {
+      this.toKind = XConnection.Kind.POLYLINE;
+    } else {
+      XConnection.Kind _kind_1 = connection.getKind();
+      this.toKind = _kind_1;
+    }
     ArrayList<Point2D> _newArrayList_1 = CollectionLiterals.<Point2D>newArrayList();
     this.toPoints = _newArrayList_1;
     XControlPoint lastRemaining = null;
     int segmentRemoveCount = 0;
-    int _size = controlPoints.size();
-    ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size, true);
+    int _size_2 = controlPoints.size();
+    ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, _size_2, true);
     for (final Integer i : _doubleDotLessThan) {
       {
         final XControlPoint controlPoint = controlPoints.get((i).intValue());
@@ -110,8 +170,8 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
             final boolean hasRemainingControlPoints = _or;
             Point2D _xifexpression = null;
             XControlPoint _head_2 = IterableExtensions.<XControlPoint>head(controlPoints);
-            boolean _equals = Objects.equal(lastRemaining, _head_2);
-            if (_equals) {
+            boolean _equals_1 = Objects.equal(lastRemaining, _head_2);
+            if (_equals_1) {
               Point2D _xblockexpression = null;
               {
                 Point2D _xifexpression_1 = null;
@@ -138,8 +198,8 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
             final Point2D segmentStart = _xifexpression;
             Point2D _xifexpression_1 = null;
             XControlPoint _last_2 = IterableExtensions.<XControlPoint>last(controlPoints);
-            boolean _equals_1 = Objects.equal(controlPoint, _last_2);
-            if (_equals_1) {
+            boolean _equals_2 = Objects.equal(controlPoint, _last_2);
+            if (_equals_2) {
               Point2D _xblockexpression_1 = null;
               {
                 Point2D _xifexpression_2 = null;
@@ -166,9 +226,20 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
             final Point2D segmentEnd = _xifexpression_1;
             IntegerRange _upTo = new IntegerRange(1, segmentRemoveCount);
             for (final Integer j : _upTo) {
-              Point2D _linear = Point2DExtensions.linear(segmentStart, segmentEnd, 
-                (((double) (j).intValue()) / (segmentRemoveCount + 1)));
-              this.toPoints.add(_linear);
+              boolean _equals_3 = Objects.equal(this.toKind, XConnection.Kind.POLYLINE);
+              if (_equals_3) {
+                Point2D _linear = Point2DExtensions.linear(segmentStart, segmentEnd, 
+                  (((double) (j).intValue()) / (segmentRemoveCount + 1)));
+                this.toPoints.add(_linear);
+              } else {
+                XControlPoint.Type _type = controlPoint.getType();
+                boolean _notEquals_2 = (!Objects.equal(_type, XControlPoint.Type.CONTROL_POINT));
+                if (_notEquals_2) {
+                  this.toPoints.add(segmentEnd);
+                } else {
+                  this.toPoints.add(segmentStart);
+                }
+              }
             }
             segmentRemoveCount = 0;
           }
@@ -180,10 +251,10 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
         }
       }
     }
-    final Function1<XControlPoint, Integer> _function_1 = (XControlPoint it) -> {
+    final Function1<XControlPoint, Integer> _function_3 = (XControlPoint it) -> {
       return Integer.valueOf(controlPoints.indexOf(it));
     };
-    Map<Integer, XControlPoint> _map_1 = IterableExtensions.<Integer, XControlPoint>toMap(reallyRemovedPoints, _function_1);
+    Map<Integer, XControlPoint> _map_1 = IterableExtensions.<Integer, XControlPoint>toMap(reallyRemovedPoints, _function_3);
     this.removedPoints = _map_1;
   }
   
@@ -217,21 +288,22 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
   
   public ParallelTransition createMorphTransition(final List<Point2D> from, final XConnection.Kind toKind, final List<Point2D> to, final Map<Integer, XControlPoint> addBefore, final Map<Integer, XControlPoint> removeAfter, final Duration duration) {
     final ParallelTransition morph = new ParallelTransition();
-    this.connection.setKind(toKind);
+    ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+    final ArrayList<XControlPoint> newControlPoints = new ArrayList<XControlPoint>(_controlPoints);
     Set<Map.Entry<Integer, XControlPoint>> _entrySet = addBefore.entrySet();
     final Function1<Map.Entry<Integer, XControlPoint>, Integer> _function = (Map.Entry<Integer, XControlPoint> it) -> {
       return it.getKey();
     };
     List<Map.Entry<Integer, XControlPoint>> _sortBy = IterableExtensions.<Map.Entry<Integer, XControlPoint>, Integer>sortBy(_entrySet, _function);
     final Consumer<Map.Entry<Integer, XControlPoint>> _function_1 = (Map.Entry<Integer, XControlPoint> it) -> {
-      ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
       Integer _key = it.getKey();
       XControlPoint _value = it.getValue();
-      _controlPoints.add((_key).intValue(), _value);
+      newControlPoints.add((_key).intValue(), _value);
     };
     _sortBy.forEach(_function_1);
-    final ObservableList<XControlPoint> controlPoints = this.connection.getControlPoints();
-    int _size = controlPoints.size();
+    ObservableList<XControlPoint> _controlPoints_1 = this.connection.getControlPoints();
+    _controlPoints_1.setAll(newControlPoints);
+    int _size = newControlPoints.size();
     int _minus = (_size - 1);
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(1, _minus, true);
     for (final Integer i : _doubleDotLessThan) {
@@ -244,7 +316,7 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
         int _minus_2 = (_size_2 - 1);
         int _min_1 = Math.min(_minus_2, (i).intValue());
         final Point2D toPoint = to.get(_min_1);
-        final XControlPoint currentControlPoint = controlPoints.get((i).intValue());
+        final XControlPoint currentControlPoint = newControlPoints.get((i).intValue());
         double _distance = fromPoint.distance(toPoint);
         boolean _greaterThan = (_distance > NumberExpressionExtensions.EPSILON);
         if (_greaterThan) {
@@ -255,20 +327,21 @@ public class RemoveControlPointCommand extends AbstractAnimationCommand {
       }
     }
     final EventHandler<ActionEvent> _function_2 = (ActionEvent it) -> {
+      this.connection.setKind(toKind);
       ConnectionRouter _connectionRouter = this.connection.getConnectionRouter();
       int _size_1 = to.size();
       _connectionRouter.shrinkToSize(_size_1);
-      ObservableList<XControlPoint> _controlPoints = this.connection.getControlPoints();
+      ObservableList<XControlPoint> _controlPoints_2 = this.connection.getControlPoints();
       Collection<XControlPoint> _values = removeAfter.values();
-      Iterables.removeAll(_controlPoints, _values);
-      ObservableList<XControlPoint> _controlPoints_1 = this.connection.getControlPoints();
+      Iterables.removeAll(_controlPoints_2, _values);
+      ObservableList<XControlPoint> _controlPoints_3 = this.connection.getControlPoints();
       final Consumer<XControlPoint> _function_3 = (XControlPoint it_1) -> {
         MoveBehavior _behavior = it_1.<MoveBehavior>getBehavior(MoveBehavior.class);
         if (_behavior!=null) {
           _behavior.setManuallyPlaced(false);
         }
       };
-      _controlPoints_1.forEach(_function_3);
+      _controlPoints_3.forEach(_function_3);
       this.connection.updateShapes();
     };
     morph.setOnFinished(_function_2);

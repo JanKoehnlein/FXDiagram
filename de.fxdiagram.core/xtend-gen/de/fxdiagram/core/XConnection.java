@@ -14,6 +14,7 @@ import de.fxdiagram.core.anchors.ArrowHead;
 import de.fxdiagram.core.anchors.ConnectionRouter;
 import de.fxdiagram.core.anchors.TriangleArrowHead;
 import de.fxdiagram.core.behavior.MoveBehavior;
+import de.fxdiagram.core.command.AbstractCommand;
 import de.fxdiagram.core.command.AddControlPointCommand;
 import de.fxdiagram.core.command.CommandStack;
 import de.fxdiagram.core.extensions.BezierExtensions;
@@ -390,6 +391,7 @@ public class XConnection extends XDomainObjectShape {
   
   @Override
   public void select(final MouseEvent it) {
+    final boolean wasSelected = this.getSelected();
     super.select(it);
     double _sceneX = it.getSceneX();
     double _sceneY = it.getSceneY();
@@ -410,11 +412,25 @@ public class XConnection extends XDomainObjectShape {
         controlPointPicked = true;
       }
     }
-    if ((!controlPointPicked)) {
+    boolean _and = false;
+    if (!(!controlPointPicked)) {
+      _and = false;
+    } else {
+      boolean _or = false;
+      XConnection.Kind _kind = this.getKind();
+      boolean _equals = Objects.equal(_kind, XConnection.Kind.POLYLINE);
+      if (_equals) {
+        _or = true;
+      } else {
+        _or = wasSelected;
+      }
+      _and = _or;
+    }
+    if (_and) {
       double _sceneX_1 = it.getSceneX();
       double _sceneY_1 = it.getSceneY();
       Point2D _sceneToLocal = this.sceneToLocal(_sceneX_1, _sceneY_1);
-      final AddControlPointCommand createCommand = AddControlPointCommand.createAddControlPointCommand(this, _sceneToLocal);
+      final AbstractCommand createCommand = AddControlPointCommand.createAddControlPointCommand(this, _sceneToLocal);
       boolean _notEquals = (!Objects.equal(createCommand, null));
       if (_notEquals) {
         XRoot _root = CoreExtensions.getRoot(this);

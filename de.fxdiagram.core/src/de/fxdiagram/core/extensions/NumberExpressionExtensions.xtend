@@ -3,10 +3,12 @@ package de.fxdiagram.core.extensions
 import javafx.beans.value.ObservableNumberValue
 import org.eclipse.xtext.xbase.lib.Pure
 import javafx.beans.binding.NumberExpressionBase
+import static java.lang.Math.*
 
 class NumberExpressionExtensions {
 		
 	public static double EPSILON = 1e-9
+	public static double SQRT_EPSILON = sqrt(1e-9)
 	
 	@Pure
 	def static operator_lessThan(NumberExpressionBase a, ObservableNumberValue b) {

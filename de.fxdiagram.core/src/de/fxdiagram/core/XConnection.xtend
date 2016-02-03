@@ -204,6 +204,7 @@ class XConnection extends XDomainObjectShape {
 	}
 	
 	override select(MouseEvent it) {
+		val wasSelected = selected
 		super.select(it)
 		val mousePos = sceneToLocal(sceneX, sceneY)
 		var boolean controlPointPicked = false
@@ -214,7 +215,7 @@ class XConnection extends XDomainObjectShape {
 				controlPointPicked = true
 			}
 		}
-		if(!controlPointPicked) {
+		if(!controlPointPicked && (kind==POLYLINE || wasSelected)) {
 			val createCommand = AddControlPointCommand.createAddControlPointCommand(
 				this, sceneToLocal(sceneX, sceneY) 
 			)
