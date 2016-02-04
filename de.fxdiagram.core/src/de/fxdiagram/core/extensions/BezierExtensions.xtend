@@ -4,9 +4,7 @@ import javafx.geometry.Point2D
 import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.QuadCurve
 
-import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
-
-import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
+import static de.fxdiagram.core.extensions.Point2DExtensions.*
 
 /**
  * De-Casteljau-algorithm
@@ -116,32 +114,5 @@ class BezierExtensions {
 				c.endX, c.endY
 			)
 		]
-	}
-	
-	static def findT(CubicCurve c, Point2D pointOnCurve) {
-		pointOnCurve.findT[c.at(it)]
-	}
-	
-	static def findT(QuadCurve c, Point2D pointOnCurve) {
-		pointOnCurve.findT[c.at(it)]
-	}
-	
-	protected static def findT(Point2D pointOnCurve, (double)=>Point2D curve) {
-		var left = 0.0
-		var right = 1.0
-		var distLeft = norm(curve.apply(left) - pointOnCurve)
-		var distRight= norm(curve.apply(right) - pointOnCurve)
-		while (right - left > EPSILON) {
-			val mid = (left + right) / 2
-			val distMid = norm(curve.apply(mid) - pointOnCurve)
-			if(distLeft < distRight) {
-				right = mid
-				distRight = distMid
-			} else {
-				left = mid
-				distLeft = distMid
-			}
-		}
-		return (left + right) / 2
 	}
 }

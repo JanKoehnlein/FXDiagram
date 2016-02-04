@@ -1,6 +1,5 @@
 package de.fxdiagram.core.extensions;
 
-import de.fxdiagram.core.extensions.NumberExpressionExtensions;
 import de.fxdiagram.core.extensions.Point2DExtensions;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +7,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.QuadCurve;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
 
 /**
  * De-Casteljau-algorithm
@@ -175,46 +173,5 @@ public class BezierExtensions {
     double _endY_1 = c.getEndY();
     QuadCurve _quadCurve_1 = new QuadCurve(splitX, splitY, bcx, bcy, _endX_1, _endY_1);
     return Collections.<QuadCurve>unmodifiableList(CollectionLiterals.<QuadCurve>newArrayList(_quadCurve, _quadCurve_1));
-  }
-  
-  public static double findT(final CubicCurve c, final Point2D pointOnCurve) {
-    final Function1<Double, Point2D> _function = (Double it) -> {
-      return BezierExtensions.at(c, (it).doubleValue());
-    };
-    return BezierExtensions.findT(pointOnCurve, _function);
-  }
-  
-  public static double findT(final QuadCurve c, final Point2D pointOnCurve) {
-    final Function1<Double, Point2D> _function = (Double it) -> {
-      return BezierExtensions.at(c, (it).doubleValue());
-    };
-    return BezierExtensions.findT(pointOnCurve, _function);
-  }
-  
-  protected static double findT(final Point2D pointOnCurve, final Function1<? super Double, ? extends Point2D> curve) {
-    double left = 0.0;
-    double right = 1.0;
-    Point2D _apply = curve.apply(Double.valueOf(left));
-    Point2D _minus = Point2DExtensions.operator_minus(_apply, pointOnCurve);
-    double distLeft = Point2DExtensions.norm(_minus);
-    Point2D _apply_1 = curve.apply(Double.valueOf(right));
-    Point2D _minus_1 = Point2DExtensions.operator_minus(_apply_1, pointOnCurve);
-    double distRight = Point2DExtensions.norm(_minus_1);
-    while (((right - left) > NumberExpressionExtensions.EPSILON)) {
-      {
-        final double mid = ((left + right) / 2);
-        Point2D _apply_2 = curve.apply(Double.valueOf(mid));
-        Point2D _minus_2 = Point2DExtensions.operator_minus(_apply_2, pointOnCurve);
-        final double distMid = Point2DExtensions.norm(_minus_2);
-        if ((distLeft < distRight)) {
-          right = mid;
-          distRight = distMid;
-        } else {
-          left = mid;
-          distLeft = distMid;
-        }
-      }
-    }
-    return ((left + right) / 2);
   }
 }

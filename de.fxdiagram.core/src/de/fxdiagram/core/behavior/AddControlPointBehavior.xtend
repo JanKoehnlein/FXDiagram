@@ -12,11 +12,10 @@ import javafx.scene.shape.CubicCurve
 import javafx.scene.shape.QuadCurve
 
 import static de.fxdiagram.core.XControlPoint.Type.*
-import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
+import static extension de.fxdiagram.core.extensions.ConnectionExtensions.*
 import static extension de.fxdiagram.core.extensions.CoreExtensions.*
-import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 
 class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
 
@@ -51,46 +50,21 @@ class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
 	}
 	
 	protected def createCommandForPolyline(Point2D localPosition) {
-		val controlPoints = host.controlPoints
-		var index = -1
-		var Point2D newPoint = null 
-		for(i: 0..controlPoints.size-2) {
-			val segmentStart = new Point2D(controlPoints.get(i).layoutX, controlPoints.get(i).layoutY)
-			val segmentEnd = new Point2D(controlPoints.get(i+1).layoutX, controlPoints.get(i+1).layoutY)
-			if(localPosition.distance(segmentStart) < EPSILON 
-				|| localPosition.distance(segmentEnd) < EPSILON)
-				return null
-			val delta0 = localPosition - segmentStart
-			val delta1 = segmentEnd - segmentStart
-			val projectionScale = (delta0.x * delta1.x + delta0.y * delta1.y)/(delta1.x*delta1.x + delta1.y*delta1.y) 
-			var testPoint = segmentStart + projectionScale * delta1
-			val delta = testPoint - localPosition
-			if(delta.norm < 1 && projectionScale >= 0 && projectionScale <=1) {
-				index = i+1
-				newPoint = testPoint
-			}
-		}
-		if(index == -1)
+		val nearestPoint = localPosition.getNearestPointOnPolyline(host.controlPoints)
+		if(nearestPoint == null)
 			return null
 		else
-			return new AddControlPointCommand(host, index, newPoint)
+			return new AddControlPointCommand(host, nearestPoint.segmentIndex + 1, nearestPoint.point)
 	}
 	
 	protected def createCommandForQuadCurve(Point2D localPosition) {
-		val splineSegments = (host.node as Group)
-			.children
-			.filter(QuadCurve)
-			.toList
-		val splineSegment =	splineSegments.findFirst[ contains(localPosition) ]
-		if(splineSegment == null)
-			return null
-		val t = splineSegment.findT(localPosition)
-		val splitSegments = splineSegment.splitAt(t)
-		val segmentIndex = splineSegments.indexOf(splineSegment)
+		val nearestPoint = localPosition.getNearestPointOnQuadraticSpline(host.controlPoints)
+		val splineSegment = (host.node as Group).children.filter(QuadCurve).get(nearestPoint.segmentIndex)
+		val splitSegments = splineSegment.splitAt(nearestPoint.parameter)
 		val oldControlPoints = new ArrayList(host.controlPoints)
 		val newControlPoints = newArrayList
 		var cpIndex = 0 
-		for(var i=0; i<segmentIndex; i++) {
+		for(var i=0; i<nearestPoint.segmentIndex; i++) {
 			newControlPoints += oldControlPoints.get(cpIndex++)	
 			newControlPoints += oldControlPoints.get(cpIndex++)	
 		}
@@ -111,20 +85,13 @@ class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
 	}
 	
 	protected def createCommandForCubicCurve(Point2D localPosition) {
-		val splineSegments = (host.node as Group)
-			.children
-			.filter(CubicCurve)
-			.toList
-		val splineSegment =	splineSegments.findFirst[ contains(localPosition) ]
-		if(splineSegment == null)
-			return null
-		val t = splineSegment.findT(localPosition)
-		val splitSegments = splineSegment.splitAt(t)
-		val segmentIndex = splineSegments.indexOf(splineSegment)
+		val nearestPoint = localPosition.getNearestPointOnCubicSpline(host.controlPoints)
+		val splineSegment = (host.node as Group).children.filter(CubicCurve).get(nearestPoint.segmentIndex)
+		val splitSegments = splineSegment.splitAt(nearestPoint.parameter)
 		val oldControlPoints = new ArrayList(host.controlPoints)
 		val newControlPoints = newArrayList
 		var cpIndex = 0 
-		for(var i=0; i<segmentIndex; i++) {
+		for(var i=0; i<nearestPoint.segmentIndex; i++) {
 			newControlPoints += oldControlPoints.get(cpIndex++)	
 			newControlPoints += oldControlPoints.get(cpIndex++)	
 			newControlPoints += oldControlPoints.get(cpIndex++)	
