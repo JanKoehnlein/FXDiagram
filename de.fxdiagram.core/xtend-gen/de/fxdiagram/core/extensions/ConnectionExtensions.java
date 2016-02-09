@@ -24,6 +24,8 @@ public class ConnectionExtensions {
   public static class PointOnCurve {
     private final Point2D point;
     
+    private final double localParameter;
+    
     private final double parameter;
     
     private final int segmentIndex;
@@ -41,9 +43,10 @@ public class ConnectionExtensions {
       return _or;
     }
     
-    public PointOnCurve(final Point2D point, final double parameter, final int segmentIndex, final double distance) {
+    public PointOnCurve(final Point2D point, final double localParameter, final double parameter, final int segmentIndex, final double distance) {
       super();
       this.point = point;
+      this.localParameter = localParameter;
       this.parameter = parameter;
       this.segmentIndex = segmentIndex;
       this.distance = distance;
@@ -55,6 +58,7 @@ public class ConnectionExtensions {
       final int prime = 31;
       int result = 1;
       result = prime * result + ((this.point== null) ? 0 : this.point.hashCode());
+      result = prime * result + (int) (Double.doubleToLongBits(this.localParameter) ^ (Double.doubleToLongBits(this.localParameter) >>> 32));
       result = prime * result + (int) (Double.doubleToLongBits(this.parameter) ^ (Double.doubleToLongBits(this.parameter) >>> 32));
       result = prime * result + this.segmentIndex;
       result = prime * result + (int) (Double.doubleToLongBits(this.distance) ^ (Double.doubleToLongBits(this.distance) >>> 32));
@@ -76,6 +80,8 @@ public class ConnectionExtensions {
           return false;
       } else if (!this.point.equals(other.point))
         return false;
+      if (Double.doubleToLongBits(other.localParameter) != Double.doubleToLongBits(this.localParameter))
+        return false; 
       if (Double.doubleToLongBits(other.parameter) != Double.doubleToLongBits(this.parameter))
         return false; 
       if (other.segmentIndex != this.segmentIndex)
@@ -90,6 +96,7 @@ public class ConnectionExtensions {
     public String toString() {
       ToStringBuilder b = new ToStringBuilder(this);
       b.add("point", this.point);
+      b.add("localParameter", this.localParameter);
       b.add("parameter", this.parameter);
       b.add("segmentIndex", this.segmentIndex);
       b.add("distance", this.distance);
@@ -99,6 +106,11 @@ public class ConnectionExtensions {
     @Pure
     public Point2D getPoint() {
       return this.point;
+    }
+    
+    @Pure
+    public double getLocalParameter() {
+      return this.localParameter;
     }
     
     @Pure
@@ -158,10 +170,10 @@ public class ConnectionExtensions {
     ExclusiveRange _doubleDotLessThan = new ExclusiveRange(0, numSegments, true);
     for (final Integer i : _doubleDotLessThan) {
       {
-        final Point2D start = points.get((2 * (i).intValue()));
-        final Point2D control0 = points.get(((2 * (i).intValue()) + 1));
-        final Point2D control1 = points.get(((2 * (i).intValue()) + 2));
-        final Point2D end = points.get(((2 * (i).intValue()) + 3));
+        final Point2D start = points.get((3 * (i).intValue()));
+        final Point2D control0 = points.get(((3 * (i).intValue()) + 1));
+        final Point2D control1 = points.get(((3 * (i).intValue()) + 2));
+        final Point2D end = points.get(((3 * (i).intValue()) + 3));
         double _x = start.getX();
         double _y = start.getY();
         double _x_1 = control0.getX();
@@ -240,29 +252,50 @@ public class ConnectionExtensions {
     double mid = 0;
     Point2D midPoint = null;
     double distMid = 0;
-    while (((right - left) > NumberExpressionExtensions.EPSILON)) {
+    while (((right - left) > Math.sqrt(NumberExpressionExtensions.EPSILON))) {
       {
-        mid = ((left + right) / 2);
+        double _linear = Point2DExtensions.linear(left, right, 0.5);
+        mid = _linear;
         Point2D _apply_2 = curve.apply(Double.valueOf(mid));
         midPoint = _apply_2;
         Point2D _minus_2 = Point2DExtensions.operator_minus(midPoint, pointInLocal);
         double _norm = Point2DExtensions.norm(_minus_2);
         distMid = _norm;
-        if ((distRight < distLeft)) {
-          left = mid;
-          distLeft = distMid;
+        if ((distMid < NumberExpressionExtensions.EPSILON)) {
+          return new ConnectionExtensions.PointOnCurve(midPoint, mid, ((mid + segmentIndex) / numSegments), segmentIndex, distMid);
+        }
+        Point2D _apply_3 = curve.apply(Double.valueOf((mid - NumberExpressionExtensions.EPSILON)));
+        Point2D _minus_3 = Point2DExtensions.operator_minus(_apply_3, pointInLocal);
+        double _norm_1 = Point2DExtensions.norm(_minus_3);
+        final double dLeftMid = (_norm_1 - distMid);
+        Point2D _apply_4 = curve.apply(Double.valueOf((mid + NumberExpressionExtensions.EPSILON)));
+        Point2D _minus_4 = Point2DExtensions.operator_minus(_apply_4, pointInLocal);
+        double _norm_2 = Point2DExtensions.norm(_minus_4);
+        final double dRightMid = (_norm_2 - distMid);
+        if ((dLeftMid < 0)) {
+          if ((dRightMid < 0)) {
+            return new ConnectionExtensions.PointOnCurve(midPoint, mid, ((mid + segmentIndex) / numSegments), segmentIndex, distMid);
+          } else {
+            right = mid;
+            distRight = distMid;
+          }
         } else {
-          right = mid;
-          distRight = distMid;
+          if ((dRightMid < 0)) {
+            left = mid;
+            distLeft = distMid;
+          } else {
+            return new ConnectionExtensions.PointOnCurve(midPoint, mid, ((mid + segmentIndex) / numSegments), segmentIndex, distMid);
+          }
         }
       }
     }
-    return new ConnectionExtensions.PointOnCurve(midPoint, ((mid + segmentIndex) / numSegments), segmentIndex, distMid);
+    return new ConnectionExtensions.PointOnCurve(midPoint, mid, ((mid + segmentIndex) / numSegments), segmentIndex, distMid);
   }
   
   public static ConnectionExtensions.PointOnCurve getNearestPointOnPolyline(final Point2D pointInLocal, final List<XControlPoint> controlPoints) {
     int _size = controlPoints.size();
     final double numSegments = (_size - 1.0);
+    ConnectionExtensions.PointOnCurve bestMatch = null;
     int _size_1 = controlPoints.size();
     int _minus = (_size_1 - 2);
     IntegerRange _upTo = new IntegerRange(0, _minus);
@@ -276,13 +309,13 @@ public class ConnectionExtensions {
         boolean _lessThan = (_distance < NumberExpressionExtensions.EPSILON);
         if (_lessThan) {
           double _distance_1 = pointInLocal.distance(segmentStart);
-          return new ConnectionExtensions.PointOnCurve(segmentStart, ((i).intValue() / numSegments), (i).intValue(), _distance_1);
+          return new ConnectionExtensions.PointOnCurve(segmentStart, 0, ((i).intValue() / numSegments), (i).intValue(), _distance_1);
         }
         double _distance_2 = pointInLocal.distance(segmentEnd);
         boolean _lessThan_1 = (_distance_2 < NumberExpressionExtensions.EPSILON);
         if (_lessThan_1) {
           double _distance_3 = pointInLocal.distance(segmentEnd);
-          return new ConnectionExtensions.PointOnCurve(segmentEnd, (((i).intValue() + 1) / numSegments), (i).intValue(), _distance_3);
+          return new ConnectionExtensions.PointOnCurve(segmentEnd, 1, (((i).intValue() + 1) / numSegments), (i).intValue(), _distance_3);
         }
         final Point2D delta0 = Point2DExtensions.operator_minus(pointInLocal, segmentStart);
         final Point2D delta1 = Point2DExtensions.operator_minus(segmentEnd, segmentStart);
@@ -305,28 +338,18 @@ public class ConnectionExtensions {
           Point2D _multiply_4 = Point2DExtensions.operator_multiply(projectionScale, delta1);
           Point2D testPoint = Point2DExtensions.operator_plus(segmentStart, _multiply_4);
           final Point2D delta = Point2DExtensions.operator_minus(testPoint, pointInLocal);
-          boolean _and = false;
-          boolean _and_1 = false;
-          double _norm = Point2DExtensions.norm(delta);
-          boolean _lessThan_2 = (_norm < 1);
-          if (!_lessThan_2) {
-            _and_1 = false;
-          } else {
-            _and_1 = (projectionScale >= 0);
-          }
-          if (!_and_1) {
-            _and = false;
-          } else {
-            _and = (projectionScale <= 1);
-          }
-          if (_and) {
-            double _norm_1 = Point2DExtensions.norm(delta);
-            return new ConnectionExtensions.PointOnCurve(testPoint, (((i).intValue() + projectionScale) / numSegments), (i).intValue(), _norm_1);
+          if (((projectionScale >= 0) && (projectionScale <= 1))) {
+            double _norm = Point2DExtensions.norm(delta);
+            final ConnectionExtensions.PointOnCurve match = new ConnectionExtensions.PointOnCurve(testPoint, projectionScale, (((i).intValue() + projectionScale) / numSegments), (i).intValue(), _norm);
+            boolean _isBetterThan = match.isBetterThan(bestMatch);
+            if (_isBetterThan) {
+              bestMatch = match;
+            }
           }
         }
       }
     }
-    return null;
+    return bestMatch;
   }
   
   public static Point2D toPoint2D(final XControlPoint controlPoint) {

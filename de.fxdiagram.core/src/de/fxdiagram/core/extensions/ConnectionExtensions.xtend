@@ -12,6 +12,7 @@ import static de.fxdiagram.core.extensions.NumberExpressionExtensions.*
 import static extension de.fxdiagram.core.extensions.BezierExtensions.*
 import static extension de.fxdiagram.core.extensions.Point2DExtensions.*
 import javafx.scene.shape.CubicCurve
+import static java.lang.Math.*
 
 class ConnectionExtensions {
 	
@@ -33,10 +34,10 @@ class ConnectionExtensions {
 		val points = controlPoints.map[toPoint2D]
 		var PointOnCurve bestMatch = null
 		for(i: 0..<numSegments) {
-			val start = points.get(2 * i)
-			val control0 = points.get(2 * i + 1)
-			val control1 = points.get(2 * i + 2)
-			val end = points.get(2 * i + 3)
+			val start = points.get(3 * i)
+			val control0 = points.get(3 * i + 1)
+			val control1 = points.get(3 * i + 2)
+			val end = points.get(3 * i + 3)
 			val curve = new CubicCurve(start.x, start.y, control0.x, control0.y, control1.x, control1.y, end.x, end.y)
 			val match = findNearestPoint([curve.at(it)], pointInLocal, i, numSegments)
 			if(match.isBetterThan(bestMatch))
@@ -72,31 +73,42 @@ class ConnectionExtensions {
 		var double mid
 		var Point2D midPoint = null
 		var double distMid 
-		while (right-left > EPSILON) {
-			mid = (left + right) / 2 
+		while (right-left > sqrt(EPSILON)) {
+			mid = linear(left, right, 0.5)
 			midPoint = curve.apply(mid)
 		  	distMid = norm(midPoint - pointInLocal)
-		  	if(distRight < distLeft) {
-		  		left = mid
+		  	if(distMid < EPSILON)
+		  		return new PointOnCurve(midPoint, mid, (mid + segmentIndex) / numSegments, segmentIndex, distMid)
+		  	val dLeftMid = norm(curve.apply(mid - EPSILON) - pointInLocal) - distMid
+		  	val dRightMid = norm(curve.apply(mid + EPSILON) - pointInLocal) - distMid
+		  	if(dLeftMid < 0) {
+		  		if(dRightMid < 0) {
+		  			return new PointOnCurve(midPoint, mid, (mid + segmentIndex) / numSegments, segmentIndex, distMid)
+		  		} else {
+		  			right=mid
+		  			distRight = distMid	
+		  		}
+		  	} else if(dRightMid < 0) {
+		  		left=mid
 		  		distLeft = distMid
 		  	} else {
-		  		right = mid
-		  		distRight = distMid
+	  			return new PointOnCurve(midPoint, mid, (mid + segmentIndex) / numSegments, segmentIndex, distMid)
 		  	}
 		}
-		return new PointOnCurve(midPoint, (mid + segmentIndex) / numSegments, segmentIndex, distMid) 
+		return new PointOnCurve(midPoint, mid, (mid + segmentIndex) / numSegments, segmentIndex, distMid) 
 	}
 	
 	
 	def static PointOnCurve getNearestPointOnPolyline(Point2D pointInLocal, List<XControlPoint> controlPoints) {
 		val numSegments =  controlPoints.size - 1.0
+		var PointOnCurve bestMatch = null 
 		for(i: 0..controlPoints.size-2) {
 			val segmentStart = controlPoints.get(i).toPoint2D
 			val segmentEnd = controlPoints.get(i+1).toPoint2D
 			if(pointInLocal.distance(segmentStart) < EPSILON) 
-				return new PointOnCurve(segmentStart, i / numSegments, i, pointInLocal.distance(segmentStart))
+				return new PointOnCurve(segmentStart, 0, i / numSegments, i, pointInLocal.distance(segmentStart))
 			if(pointInLocal.distance(segmentEnd) < EPSILON)
-				return new PointOnCurve(segmentEnd, (i + 1) / numSegments, i, pointInLocal.distance(segmentEnd))
+				return new PointOnCurve(segmentEnd, 1, (i + 1) / numSegments, i, pointInLocal.distance(segmentEnd))
 			val delta0 = pointInLocal - segmentStart
 			val delta1 = segmentEnd - segmentStart
 			val scale = delta1.x*delta1.x + delta1.y*delta1.y
@@ -104,11 +116,14 @@ class ConnectionExtensions {
 				val projectionScale = (delta0.x * delta1.x + delta0.y * delta1.y)/scale 
 				var testPoint = segmentStart + projectionScale * delta1
 				val delta = testPoint - pointInLocal
-				if(delta.norm < 1 && projectionScale >= 0 && projectionScale <=1) {
-					return new PointOnCurve(testPoint, (i + projectionScale) / numSegments, i, delta.norm)
+				if(projectionScale >= 0 && projectionScale <=1) {
+					val match = new PointOnCurve(testPoint, projectionScale, (i + projectionScale) / numSegments, i, delta.norm)
+					if(match.isBetterThan(bestMatch))
+						bestMatch = match
 				}
 			}
 		}
+		return bestMatch
 	}
 	
 	def static toPoint2D(XControlPoint controlPoint) {
@@ -118,6 +133,7 @@ class ConnectionExtensions {
 	@Data
 	static class PointOnCurve {
 		Point2D point
+		double localParameter
 		double parameter
 		int segmentIndex
 		double distance

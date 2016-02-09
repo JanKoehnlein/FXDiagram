@@ -60,7 +60,7 @@ class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
 	protected def createCommandForQuadCurve(Point2D localPosition) {
 		val nearestPoint = localPosition.getNearestPointOnQuadraticSpline(host.controlPoints)
 		val splineSegment = (host.node as Group).children.filter(QuadCurve).get(nearestPoint.segmentIndex)
-		val splitSegments = splineSegment.splitAt(nearestPoint.parameter)
+		val splitSegments = splineSegment.splitAt(nearestPoint.localParameter)
 		val oldControlPoints = new ArrayList(host.controlPoints)
 		val newControlPoints = newArrayList
 		var cpIndex = 0 
@@ -80,14 +80,14 @@ class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
 		]
 		cpIndex += 1
 		while(cpIndex < oldControlPoints.size) 
-			newControlPoints += oldControlPoints.get(cpIndex++)	
+			newControlPoints += oldControlPoints.get(cpIndex++)
 		return new SetControlPointsCommand(host, newControlPoints, host.localToScreen(localPosition))
 	}
 	
 	protected def createCommandForCubicCurve(Point2D localPosition) {
 		val nearestPoint = localPosition.getNearestPointOnCubicSpline(host.controlPoints)
 		val splineSegment = (host.node as Group).children.filter(CubicCurve).get(nearestPoint.segmentIndex)
-		val splitSegments = splineSegment.splitAt(nearestPoint.parameter)
+		val splitSegments = splineSegment.splitAt(nearestPoint.localParameter)
 		val oldControlPoints = new ArrayList(host.controlPoints)
 		val newControlPoints = newArrayList
 		var cpIndex = 0 

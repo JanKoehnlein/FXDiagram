@@ -105,8 +105,8 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
     Iterable<QuadCurve> _filter = Iterables.<QuadCurve>filter(_children, QuadCurve.class);
     int _segmentIndex = nearestPoint.getSegmentIndex();
     final QuadCurve splineSegment = ((QuadCurve[])Conversions.unwrapArray(_filter, QuadCurve.class))[_segmentIndex];
-    double _parameter = nearestPoint.getParameter();
-    final List<QuadCurve> splitSegments = BezierExtensions.splitAt(splineSegment, _parameter);
+    double _localParameter = nearestPoint.getLocalParameter();
+    final List<QuadCurve> splitSegments = BezierExtensions.splitAt(splineSegment, _localParameter);
     XConnection _host_2 = this.getHost();
     ObservableList<XControlPoint> _controlPoints_1 = _host_2.getControlPoints();
     final ArrayList<XControlPoint> oldControlPoints = new ArrayList<XControlPoint>(_controlPoints_1);
@@ -166,8 +166,8 @@ public class AddControlPointBehavior extends AbstractHostBehavior<XConnection> {
     Iterable<CubicCurve> _filter = Iterables.<CubicCurve>filter(_children, CubicCurve.class);
     int _segmentIndex = nearestPoint.getSegmentIndex();
     final CubicCurve splineSegment = ((CubicCurve[])Conversions.unwrapArray(_filter, CubicCurve.class))[_segmentIndex];
-    double _parameter = nearestPoint.getParameter();
-    final List<CubicCurve> splitSegments = BezierExtensions.splitAt(splineSegment, _parameter);
+    double _localParameter = nearestPoint.getLocalParameter();
+    final List<CubicCurve> splitSegments = BezierExtensions.splitAt(splineSegment, _localParameter);
     XConnection _host_2 = this.getHost();
     ObservableList<XControlPoint> _controlPoints_1 = _host_2.getControlPoints();
     final ArrayList<XControlPoint> oldControlPoints = new ArrayList<XControlPoint>(_controlPoints_1);
